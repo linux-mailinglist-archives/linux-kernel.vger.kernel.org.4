@@ -2,109 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA58872D04A
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:15:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F1AD72D04D
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229479AbjFLUPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 16:15:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46112 "EHLO
+        id S232560AbjFLUQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 16:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236137AbjFLUO6 (ORCPT
+        with ESMTP id S229480AbjFLUQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 16:14:58 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C2210F5
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:14:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6BbL2ODIFwkt+lqUgAMEgkVWfvfOK2CnYjX9LOgUDao=; b=Sr5GsWRlBf642yYB2WQx4VNriy
-        O/KE3tt2MWjxmNdj3xPl/Orev5Bp6j14jGxm8ELabpIoul1cfR6ielJsyO2Vl19ICiS6Q6scvVzI6
-        jzolMTgQMhE7gi8Z1H6Es8YC9UL8zRYUTpFLl0E7KISGSsMjAzjwOCRYitDUd3sUcCoUN7Ydrxf7W
-        iXyF5uDkRVkGDViJmH/pib40nSqtBSi1y7GoyZzeM5oYP4exWr9V4fboPEEO5O6cXYQYwHck4yXVp
-        Hak5upkLGmXJcswf8aUJH+26VR/a52uTNFBkWATBHAJjPtH6uWPQl/ClE0sE5C9CbiIJ1CPLyNVca
-        NMoNYeKw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q8nvb-00900q-3A;
-        Mon, 12 Jun 2023 20:14:16 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A4FB3300195;
-        Mon, 12 Jun 2023 22:14:14 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 63C4D245BF230; Mon, 12 Jun 2023 22:14:14 +0200 (CEST)
-Date:   Mon, 12 Jun 2023 22:14:14 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tim Chen <tim.c.chen@linux.intel.com>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shrikanth Hegde <sshegde@linux.vnet.ibm.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        naveen.n.rao@linux.vnet.ibm.com,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        Chen Yu <yu.c.chen@intel.com>, Hillf Danton <hdanton@sina.com>
-Subject: Re: [Patch v2 1/6] sched/fair: Determine active load balance for SMT
- sched groups
-Message-ID: <20230612201414.GG83892@hirez.programming.kicks-ass.net>
-References: <cover.1686263351.git.tim.c.chen@linux.intel.com>
- <253f5272200d3cec3f24427262bb4e95244f681c.1686263351.git.tim.c.chen@linux.intel.com>
- <20230612111359.GI4253@hirez.programming.kicks-ass.net>
- <f7dc49b5fb80b25ad1f3968a623f993da29c0526.camel@linux.intel.com>
+        Mon, 12 Jun 2023 16:16:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B27D1BF
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:16:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8590862946
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 20:16:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDA48C433EF;
+        Mon, 12 Jun 2023 20:16:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686600972;
+        bh=fNy6PCNyZ/ZgFsqHgyUlHwtcbWrxGE7+bJ0hTW50yJ0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JM4j+rgCg86UjFlts7tVah/4iCxfXFWWwazW+5Ni4z5w3VJEKfOzF8/LUCesaD5F5
+         yHWfMQDOng1oy9FksHVr52cLdmk6iMskzueze6sy46oLHsGupEZ8RPk7oikOuenane
+         oqXFEZH18TaWNAMvBDlhgcCMOE/vSAmi3Uq2ymLf0ayDxZ3OXOEZlqY/CFhHOfVK0e
+         52SEK1gJLoACH1RQfwbpruTJjvDg3zVp0Xf1Dg/MrHzFNhEYMS4TgJA0u7hx6RhGZY
+         O87jH9kTrlahMkX46988iMi1O4O4vVrDR0GDBnNupXJZU0zXNtqECyeulWDN1UgQKU
+         JANm7YITiowhw==
+Date:   Mon, 12 Jun 2023 13:16:11 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] f2fs: do more sanity check on inode
+Message-ID: <ZId9Cw8eqgj417gz@google.com>
+References: <20230531014055.3904072-1-chao@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f7dc49b5fb80b25ad1f3968a623f993da29c0526.camel@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230531014055.3904072-1-chao@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 01:12:10PM -0700, Tim Chen wrote:
-> How about making this modification to take care of SMT-4 case?
+On 05/31, Chao Yu wrote:
+> There are several issues in sanity_check_inode():
+> - The code looks not clean, it checks extra_attr related condition
+> dispersively.
+> - It missed to check i_extra_isize w/ lower boundary
+> - It missed to check feature dependency: prjquota, inode_chksum,
+> inode_crtime, compression features rely on extra_attr feature.
+> - It's not necessary to check i_extra_isize due to it will only
+> be assigned to non-zero value if f2fs_has_extra_attr() is true
+> in do_read_inode().
 > 
+> Fix them all in this patch.
+> 
+> Signed-off-by: Chao Yu <chao@kernel.org>
+> ---
+> v2:
+> - describe current problem in commit message
+>  fs/f2fs/f2fs.h  |   2 +
+>  fs/f2fs/inode.c | 108 +++++++++++++++++++++++++++++++-----------------
+>  2 files changed, 72 insertions(+), 38 deletions(-)
+> 
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index 7e406da8b4b3..619ad49993ce 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -3413,6 +3413,8 @@ static inline int get_inline_xattr_addrs(struct inode *inode)
+>  	((is_inode_flag_set(i, FI_ACL_MODE)) ? \
+>  	 (F2FS_I(i)->i_acl_mode) : ((i)->i_mode))
+>  
+> +#define F2FS_MIN_EXTRA_ATTR_SIZE		(sizeof(__le32))
+> +
+>  #define F2FS_TOTAL_EXTRA_ATTR_SIZE			\
+>  	(offsetof(struct f2fs_inode, i_extra_end) -	\
+>  	offsetof(struct f2fs_inode, i_extra_isize))	\
+> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+> index 0a1748444329..1e49009831c1 100644
+> --- a/fs/f2fs/inode.c
+> +++ b/fs/f2fs/inode.c
+> @@ -300,41 +300,79 @@ static bool sanity_check_inode(struct inode *inode, struct page *node_page)
+>  		return false;
+>  	}
+>  
+> -	if (f2fs_sb_has_flexible_inline_xattr(sbi)
+> -			&& !f2fs_has_extra_attr(inode)) {
+> -		set_sbi_flag(sbi, SBI_NEED_FSCK);
+> -		f2fs_warn(sbi, "%s: corrupted inode ino=%lx, run fsck to fix.",
+> -			  __func__, inode->i_ino);
+> -		return false;
+> -	}
+> -
+> -	if (f2fs_has_extra_attr(inode) &&
+> -			!f2fs_sb_has_extra_attr(sbi)) {
+> -		set_sbi_flag(sbi, SBI_NEED_FSCK);
+> -		f2fs_warn(sbi, "%s: inode (ino=%lx) is with extra_attr, but extra_attr feature is off",
+> -			  __func__, inode->i_ino);
+> -		return false;
+> -	}
+> -
+> -	if (fi->i_extra_isize > F2FS_TOTAL_EXTRA_ATTR_SIZE ||
+> +	if (f2fs_has_extra_attr(inode)) {
+> +		if (!f2fs_sb_has_extra_attr(sbi)) {
+> +			set_sbi_flag(sbi, SBI_NEED_FSCK);
+> +			f2fs_warn(sbi, "%s: inode (ino=%lx) is with extra_attr, but extra_attr feature is off",
+> +				  __func__, inode->i_ino);
+> +			return false;
+> +		}
+> +		if (fi->i_extra_isize > F2FS_TOTAL_EXTRA_ATTR_SIZE ||
+> +			fi->i_extra_isize < F2FS_MIN_EXTRA_ATTR_SIZE ||
+>  			fi->i_extra_isize % sizeof(__le32)) {
+> -		set_sbi_flag(sbi, SBI_NEED_FSCK);
+> -		f2fs_warn(sbi, "%s: inode (ino=%lx) has corrupted i_extra_isize: %d, max: %zu",
+> -			  __func__, inode->i_ino, fi->i_extra_isize,
+> -			  F2FS_TOTAL_EXTRA_ATTR_SIZE);
+> -		return false;
+> +			set_sbi_flag(sbi, SBI_NEED_FSCK);
+> +			f2fs_warn(sbi, "%s: inode (ino=%lx) has corrupted i_extra_isize: %d, max: %zu",
+> +				  __func__, inode->i_ino, fi->i_extra_isize,
+> +				  F2FS_TOTAL_EXTRA_ATTR_SIZE);
+> +			return false;
+> +		}
+> +		if (f2fs_sb_has_flexible_inline_xattr(sbi) &&
+> +			f2fs_has_inline_xattr(inode) &&
+> +			(!fi->i_inline_xattr_size ||
+> +			fi->i_inline_xattr_size > MAX_INLINE_XATTR_SIZE)) {
+> +			set_sbi_flag(sbi, SBI_NEED_FSCK);
+> +			f2fs_warn(sbi, "%s: inode (ino=%lx) has corrupted i_inline_xattr_size: %d, max: %zu",
+> +				  __func__, inode->i_ino, fi->i_inline_xattr_size,
+> +				  MAX_INLINE_XATTR_SIZE);
+> +			return false;
+> +		}
+> +		if (f2fs_sb_has_compression(sbi) &&
+> +			fi->i_flags & F2FS_COMPR_FL &&
+> +			F2FS_FITS_IN_INODE(ri, fi->i_extra_isize,
+> +						i_compress_flag)) {
+> +			if (!sanity_check_compress_inode(inode, ri))
+> +				return false;
+> +		}
+> +	} else {
+> +		if (f2fs_sb_has_flexible_inline_xattr(sbi)) {
 
-Yep, that works.
+Modified to combine else if.
 
-> 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 33246dce10db..e2261c24e536 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -9642,11 +9642,11 @@ static bool update_sd_pick_busiest(struct lb_env *env,
->         case group_has_spare:
->                 /*
->                  * Do not pick sg with SMT CPUs over sg with pure CPUs,
-> -                * as we do not want to pull task off half empty SMT core
-> +                * as we do not want to pull task off SMT core with one task
->                  * and make the core idle.
->                  */
->                 if (smt_vs_nonsmt_groups(sds->busiest, sg)) {
-> -                       if (sg->flags & SD_SHARE_CPUCAPACITY)
-> +                       if (sg->flags & SD_SHARE_CPUCAPACITY && sgs->sum_h_nr_running <= 1)
->                                 return false;
->                         else
->                                 return true;
-> 
-> 		
+> +			set_sbi_flag(sbi, SBI_NEED_FSCK);
+> +			f2fs_warn(sbi, "%s: corrupted inode ino=%lx, run fsck to fix.",
+> +				  __func__, inode->i_ino);
+> +			return false;
+> +		}
+>  	}
+>  
+> -	if (f2fs_has_extra_attr(inode) &&
+> -		f2fs_sb_has_flexible_inline_xattr(sbi) &&
+> -		f2fs_has_inline_xattr(inode) &&
+> -		(!fi->i_inline_xattr_size ||
+> -		fi->i_inline_xattr_size > MAX_INLINE_XATTR_SIZE)) {
+> -		set_sbi_flag(sbi, SBI_NEED_FSCK);
+> -		f2fs_warn(sbi, "%s: inode (ino=%lx) has corrupted i_inline_xattr_size: %d, max: %zu",
+> -			  __func__, inode->i_ino, fi->i_inline_xattr_size,
+> -			  MAX_INLINE_XATTR_SIZE);
+> -		return false;
+> +	if (!f2fs_sb_has_extra_attr(sbi)) {
+> +		if (f2fs_sb_has_project_quota(sbi)) {
+> +			set_sbi_flag(sbi, SBI_NEED_FSCK);
+> +			f2fs_warn(sbi, "%s: corrupted inode ino=%lx, wrong feature flag: %u, run fsck to fix.",
+> +				  __func__, inode->i_ino, F2FS_FEATURE_PRJQUOTA);
+> +			return false;
+> +		}
+> +		if (f2fs_sb_has_inode_chksum(sbi)) {
+> +			set_sbi_flag(sbi, SBI_NEED_FSCK);
+> +			f2fs_warn(sbi, "%s: corrupted inode ino=%lx, wrong feature flag: %u, run fsck to fix.",
+> +				  __func__, inode->i_ino, F2FS_FEATURE_INODE_CHKSUM);
+> +			return false;
+> +		}
+> +		if (f2fs_sb_has_flexible_inline_xattr(sbi)) {
+> +			set_sbi_flag(sbi, SBI_NEED_FSCK);
+> +			f2fs_warn(sbi, "%s: corrupted inode ino=%lx, wrong feature flag: %u, run fsck to fix.",
+> +				  __func__, inode->i_ino, F2FS_FEATURE_FLEXIBLE_INLINE_XATTR);
+> +			return false;
+> +		}
+> +		if (f2fs_sb_has_inode_crtime(sbi)) {
+> +			set_sbi_flag(sbi, SBI_NEED_FSCK);
+> +			f2fs_warn(sbi, "%s: corrupted inode ino=%lx, wrong feature flag: %u, run fsck to fix.",
+> +				  __func__, inode->i_ino, F2FS_FEATURE_INODE_CRTIME);
+> +			return false;
+> +		}
+> +		if (f2fs_sb_has_compression(sbi)) {
+> +			set_sbi_flag(sbi, SBI_NEED_FSCK);
+> +			f2fs_warn(sbi, "%s: corrupted inode ino=%lx, wrong feature flag: %u, run fsck to fix.",
+> +				  __func__, inode->i_ino, F2FS_FEATURE_COMPRESSION);
+> +			return false;
+> +		}
+>  	}
+>  
+>  	if (f2fs_sanity_check_inline_data(inode)) {
+> @@ -358,12 +396,6 @@ static bool sanity_check_inode(struct inode *inode, struct page *node_page)
+>  		return false;
+>  	}
+>  
+> -	if (f2fs_has_extra_attr(inode) && f2fs_sb_has_compression(sbi) &&
+> -			fi->i_flags & F2FS_COMPR_FL &&
+> -			F2FS_FITS_IN_INODE(ri, fi->i_extra_isize,
+> -						i_compress_flag))
+> -		return sanity_check_compress_inode(inode, ri);
+> -
+>  	return true;
+>  }
+>  
+> -- 
+> 2.40.1
