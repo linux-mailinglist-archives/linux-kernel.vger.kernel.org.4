@@ -2,230 +2,464 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B9BD72CC0A
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:07:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAD4C72CC0D
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:08:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbjFLRHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 13:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52536 "EHLO
+        id S235011AbjFLRIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 13:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232979AbjFLRHB (ORCPT
+        with ESMTP id S230026AbjFLRII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 13:07:01 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E7110C9
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:06:57 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f7e7fc9fe6so45933485e9.3
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:06:57 -0700 (PDT)
+        Mon, 12 Jun 2023 13:08:08 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9618F113;
+        Mon, 12 Jun 2023 10:08:06 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-25bbf87a2a4so1203923a91.3;
+        Mon, 12 Jun 2023 10:08:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686589616; x=1689181616;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oZ/IrEjFcCV2x/CivdwBWaEryH9Wc7q/asiFBrPanUc=;
-        b=pdd96pl8DNCim3cK0vMZGWh18h572HgJCXrkFdWt47XV6bDajZB8GjYgHMFtouiwja
-         gsjhT1WKucS/dsrwPMLnv4yPJDf8uIdgHCSSfnY90fafkGvFhdOM8T6wLeGl1bli/UB6
-         HyrplWjoYLAfnzNCJRitiRQRxllL/aeLhXkAuyEfthBfO2xVnlS8umjMZqCpq9As6dYK
-         wIIxPlOeFmNnc2z37nfX00WvtrwEEaTJwMg432e8f9QZ8p8qkmuQR/+joF/cxkipwIwQ
-         FF57GYv1kDM4xxNPUUp2q3fOsFqH2eYZ2Wu4foCZmOwGWjGeN3Qw55saAkl+Eldzltxp
-         6QNQ==
+        d=gmail.com; s=20221208; t=1686589686; x=1689181686;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GcF4FVxMUj3uTqeynPgO9bv9/ZK50yjnWtFAyFt01Ew=;
+        b=SfBujUSQHWQLwIOfC/M0Jcsc1+z8x/+iThJilZi1lWn0aB6okbYHg7UPO7ea37fR5l
+         190SWxnYlBHxLJgSgKaE+zUoF4G10E6afviLpS678BwUO7O0DAZKlSFe7CWFDFkchdmL
+         tJLssU/mCrtB9go3aQSkkSvJreXWzC1FmRYTleIKE/Y5FO0rbsj2qREfNmjUY9nwvAnb
+         FD/BxxyXv2uKCl4qrrYGaL5lXnDDNB/RzNxcxw7HGucwPVVauJ+IHTvGWY+mpNElGOog
+         tmAszEzFcD/yLbkgz5exYzi9Ic8xuPmZ/v8nWDOkmH/ULEO5KT6QBji1Ga5j1OJlb+t0
+         wqig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686589616; x=1689181616;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oZ/IrEjFcCV2x/CivdwBWaEryH9Wc7q/asiFBrPanUc=;
-        b=LxmDFSUH2lTTrRrp5aXThIMbqHpSic1Q6BEI6UJlKDyls17+lyD/HHG9vUYzNzr0ig
-         llAEKAiiJrYPdUd3Vq/LUR4gOTeMqgA1wX3TN+DLNOGieww9Ll1phAY/nhF/OV5N1JHl
-         1e9iBf+723wdGy+nWLrRmeZfCza9RZryX85Z6Gk0iUGgmpLS8snP1UVGe9XL8wCd9pMX
-         agTE9pU9JW49PHbHDw2JCJNJG4U8hZLE81KxYAfpU9jq3FCYS7F8yD5919ITLeh9IoCT
-         bW3gDRxb4KfnN/XGs1JHhTP3VjAebTbh+kjN4nuXzrcikd6hFjiOLjSznqjv99Ix4n1p
-         d4Mg==
-X-Gm-Message-State: AC+VfDyK4yMbItjvbkw3esxrff/sqhNdB49aecpECYlKPuivDZjLNrwr
-        P96WUaf8bSxY9QMo2X7WAO3yD+/R5cPSTEA0RhtZvw==
-X-Google-Smtp-Source: ACHHUZ4Oo+5RtePTqbz4//Obk2Tzr5QhfB4BXojrvhaU0n42oTkH3RDF/7ND8Bi5A+eFFTdIdZzuw980EwBm84enBe0=
-X-Received: by 2002:a7b:c8c4:0:b0:3f6:6da:3ad1 with SMTP id
- f4-20020a7bc8c4000000b003f606da3ad1mr7776351wml.34.1686589615908; Mon, 12 Jun
- 2023 10:06:55 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686589686; x=1689181686;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GcF4FVxMUj3uTqeynPgO9bv9/ZK50yjnWtFAyFt01Ew=;
+        b=D9q7IJ17h43SYKJqCKMq/oihR+8AC5HcqJ2uPMZFet3/wD8CEI7yxPetZdk3Tw7RR0
+         CmkntcK3JVYgOZ73Erzp8qzkRqo3RDlHjlGv0NE/kOyt7CwSkXysFIFzTNX0vN5MCLKp
+         hCbmgIaNVVvbzqRxNSmN/lLCB6zSAlzmPUPtWgGY0yaUhHqbNyz7CPiQ5BSFEGibwJ9W
+         6zjmDt+WdlNtBrMy8e18vCm8gOuR1qkpat/ttVnHmlhYMql3hDqoO1WvSZpUUgMCIwOA
+         su/jUQWfEgr4eA4UASJUOZQA1XJlcLTliJJGJtKzf6ds5of8kDzHELvaL9eUFzAzEuLf
+         92Wg==
+X-Gm-Message-State: AC+VfDz/pARSrUCyB6KIKQD5q72+Wl+UANkvhnB/D01NujieLjbmdGiT
+        Dz0eHBwJeh/RByj+7SmOgJ+grUK546fuyvXpTQ8=
+X-Google-Smtp-Source: ACHHUZ7cq9sdUSIwLAA0Oc2QqWJe0YhDBvPsBEHASu+gGBlWyEDCevw+8hPCIgkNFQ1F1modd5FmAecCixiae6UNzMo=
+X-Received: by 2002:a17:90a:7345:b0:25b:8c02:13f4 with SMTP id
+ j5-20020a17090a734500b0025b8c0213f4mr8617752pjs.38.1686589685770; Mon, 12 Jun
+ 2023 10:08:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220405093759.1126835-1-alex.bennee@linaro.org>
- <20230531191007.13460-1-shyamsaini@linux.microsoft.com> <SN7PR11MB6850DA4A185E3429B62531CD84499@SN7PR11MB6850.namprd11.prod.outlook.com>
- <CAC_iWjKAdimEH0SsC_z9QuFS4sGLp2BVzx03s+RKvcLXY25kuQ@mail.gmail.com>
- <CAFA6WYPKeJYTzvnZkoL_dw6uXSkhAh6uxoEOWHYU7oLNRDRWaA@mail.gmail.com> <CAC_iWjLOhUvp5ggCCkHN5MRNfB_h6FZ2Z14yrtR3aqGn0Ovxig@mail.gmail.com>
-In-Reply-To: <CAC_iWjLOhUvp5ggCCkHN5MRNfB_h6FZ2Z14yrtR3aqGn0Ovxig@mail.gmail.com>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Mon, 12 Jun 2023 19:06:45 +0200
-Message-ID: <CAHUa44F4CRM7zr8EevejPcCiGOjNgg7AtPy20L4h5S68SL9-_g@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] rpmb subsystem, uapi and virtio-rpmb driver
-To:     "alex.bennee@linaro.org" <alex.bennee@linaro.org>
-Cc:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        "Zhu, Bing" <bing.zhu@intel.com>,
-        Shyam Saini <shyamsaini@linux.microsoft.com>,
-        "code@tyhicks.com" <code@tyhicks.com>,
-        "Matti.Moell@opensynergy.com" <Matti.Moell@opensynergy.com>,
-        "arnd@linaro.org" <arnd@linaro.org>,
-        "hmo@opensynergy.com" <hmo@opensynergy.com>,
-        "joakim.bech@linaro.org" <joakim.bech@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "maxim.uvarov@linaro.org" <maxim.uvarov@linaro.org>,
-        "ruchika.gupta@linaro.org" <ruchika.gupta@linaro.org>,
-        "Winkler, Tomas" <tomas.winkler@intel.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "Huang, Yang" <yang.huang@intel.com>,
-        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230605223323.578198-1-aford173@gmail.com> <20230605223323.578198-2-aford173@gmail.com>
+ <f821e008-c984-2f60-60c0-46220cada909@kontron.de> <CAHCN7xLR7iGCmnSdJ-bw4sSA9SLc17tC67wfQmri3k22sQJq9g@mail.gmail.com>
+ <CAHCN7xKi7mfy+MFLu2GKbo4WYMAsgyZmmDr4GuDkYoZK-08nGQ@mail.gmail.com>
+In-Reply-To: <CAHCN7xKi7mfy+MFLu2GKbo4WYMAsgyZmmDr4GuDkYoZK-08nGQ@mail.gmail.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Mon, 12 Jun 2023 12:07:54 -0500
+Message-ID: <CAHCN7xL4S3YqC=mT8vD1mn_xh0L_Jo8LHQ7e0qFggePYmrUomQ@mail.gmail.com>
+Subject: Re: [PATCH V2 1/2] arm64: dts: imx8mn-beacon: Add HDMI video with sound
+To:     Frieder Schrempf <frieder.schrempf@kontron.de>
+Cc:     linux-arm-kernel@lists.infradead.org, aford@beaconembedded.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: multipart/mixed; boundary="0000000000001a4a5b05fdf1c3f9"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alex,
+--0000000000001a4a5b05fdf1c3f9
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 2, 2023 at 10:26=E2=80=AFAM Ilias Apalodimas
-<ilias.apalodimas@linaro.org> wrote:
+On Sat, Jun 10, 2023 at 1:11=E2=80=AFPM Adam Ford <aford173@gmail.com> wrot=
+e:
 >
-> On Thu, 1 Jun 2023 at 08:49, Sumit Garg <sumit.garg@linaro.org> wrote:
+> On Tue, Jun 6, 2023 at 7:57=E2=80=AFAM Adam Ford <aford173@gmail.com> wro=
+te:
 > >
-> > On Thu, 1 Jun 2023 at 11:02, Ilias Apalodimas
-> > <ilias.apalodimas@linaro.org> wrote:
+> > On Tue, Jun 6, 2023 at 2:13=E2=80=AFAM Frieder Schrempf
+> > <frieder.schrempf@kontron.de> wrote:
 > > >
-> > > Hi Bing
+> > > Hi Adam,
 > > >
-> > > On Thu, 1 Jun 2023 at 04:03, Zhu, Bing <bing.zhu@intel.com> wrote:
+> > > On 06.06.23 00:33, Adam Ford wrote:
+> > > > The Beacon Embedded imx8mn development kit has a DSI
+> > > > to HDMI bridge chip.  The bridge supports stereo audio
+> > > > and hot-plug detection.
 > > > >
-> > > > As an alternative, Is it possible to change ftpm design not to depe=
-nd on RPMB access at the earlier/boot stage? Because to my understanding, t=
-ypically PCRs don't require persistent/NV storage (for example, before RPMB=
- or tee-supplicant is ready, use TEE memory instead as temporary storage)
+> > > > Signed-off-by: Adam Ford <aford173@gmail.com>
+> > > >
+> > > > diff --git a/arch/arm64/boot/dts/freescale/imx8mn-beacon-kit.dts b/=
+arch/arm64/boot/dts/freescale/imx8mn-beacon-kit.dts
+> > > > index 1392ce02587b..2108ec8c019c 100644
+> > > > --- a/arch/arm64/boot/dts/freescale/imx8mn-beacon-kit.dts
+> > > > +++ b/arch/arm64/boot/dts/freescale/imx8mn-beacon-kit.dts
 > > >
-> > > I am not entirely sure this will solve our problem here.  You are
-> > > right that we shouldn't depend on the supplicant to extend PCRs. But
-> > > what happens if an object is sealed against certain PCR values?  We
-> > > are back to the same problem
+> > > I have to minor comments below, otherwise this looks good to me.
+> > >
+> > > As I'm trying to come up with similar changes for our boards I also h=
+ave
+> > > some questions below. Maybe you could share your knowledge on these.
+> > >
+> > > Thanks!
+> > > Frieder
+> > >
+> > > > @@ -16,4 +16,138 @@ / {
+> > > >       chosen {
+> > > >               stdout-path =3D &uart2;
+> > > >       };
+> > > > +
+> > > > +     connector {
+> > > > +             compatible =3D "hdmi-connector";
+> > > > +             type =3D "a";
+> > > > +
+> > > > +             port {
+> > > > +                     hdmi_connector_in: endpoint {
+> > > > +                             remote-endpoint =3D <&adv7535_out>;
+> > > > +                     };
+> > > > +             };
+> > > > +     };
+> > > > +
+> > > > +     reg_hdmi: regulator-hdmi-dvdd {
+> > > > +             compatible =3D "regulator-fixed";
+> > > > +             pinctrl-names =3D "default";
+> > > > +             pinctrl-0 =3D <&pinctrl_reg_hdmi>;
+> > > > +             regulator-name =3D "hdmi_pwr_en";
+> > > > +             regulator-min-microvolt =3D <3300000>;
+> > > > +             regulator-max-microvolt =3D <3300000>;
+> > > > +             gpio =3D <&gpio2 11 GPIO_ACTIVE_HIGH>;
+> > > > +             enable-active-high;
+> > > > +             startup-delay-us =3D <70000>;
+> > > > +             regulator-always-on;
+> > > > +     };
+> > > > +
+> > > > +     sound-hdmi {
+> > > > +             compatible =3D "simple-audio-card";
+> > > > +             simple-audio-card,name =3D "sound-hdmi";
+> > > > +             simple-audio-card,format =3D "i2s";
+> > > > +
+> > > > +             simple-audio-card,cpu {
+> > > > +                     sound-dai =3D <&sai5 0>;
+> > > > +                     system-clock-direction-out;
+> > > > +             };
+> > > > +
+> > > > +             simple-audio-card,codec {
+> > > > +                     sound-dai =3D <&adv_bridge>;
+> > > > +             };
+> > > > +     };
+> > > > +};
+> > > > +
+> > > > +&i2c2 {
+> > > > +     adv_bridge: hdmi@3d {
+> > > > +             compatible =3D "adi,adv7535";
+> > > > +             pinctrl-names =3D "default";
+> > > > +             pinctrl-0 =3D <&pinctrl_hdmi_bridge>;
+> > > > +             reg =3D <0x3d>, <0x3b>;
+> > > > +             reg-names =3D "main", "cec";
+> > > > +             adi,dsi-lanes =3D <4>;
+> > >
+> > > On our boards we have this working with 4 lanes. But we also have som=
+e
+> > > boards that only have 2 DSI lanes connected. We don't get any image i=
+n
+> > > on the display in this case. Did you ever try 2 lanes or do you have =
+an
+> > > idea what could be wrong?
 > >
-> > +1
-> >
-> > Temporary storage may be a stop gap solution for some use-cases but
-> > having a fast path access to RPMB via kernel should be our final goal.
-> > I would suggest we start small with the MMC subsystem to expose RPMB
-> > access APIs for OP-TEE driver rather than a complete RPMB subsystem.
+
++ Lucas,
+
+> > I didn't try 2-lane, but see below regarding clocks to see if any of
+> > that makes any sense.
 >
-> I discussed with the OP-TEE maintainers about adding parts of the
-> supplicant in the kernel.  The supplicant 'just' sends an ioctl to
-> store/read stuff anyway.  So it would make sense to have a closer and
-> see if that looks reasonable.
-> Thanks
+Frieder,
 
-I was trying to create a setup to test this. I've added the kernel
-patches on top of https://github.com/linaro-swg/linux/tree/optee. The
-QEMU branch is a bit dated and I had to add
-3a845a214b42 target/arm: allow setting SCR_EL3.EnTP2 when FEAT_SME is
-implemented
-d4a7b0ef1a03 hw/arm/boot: set CPTR_EL3.ESM and SCR_EL3.EnTP2 when
-booting Linux with EL3
-9745a003f878 hw/intc/arm_gicv3: fix prio masking on pmr write
-beeec926d24a target/arm: mark SP_EL1 with ARM_CP_EL3_NO_EL2_KEEP
-on top of that branch to be able to boot to the Linux kernel.
+> I tried configuring my hardware for 2-lane operation, and it appears
+> to not function, but I haven't been able to determine why.  Have you
+> made any progress on getting your 2-lane interface operational?
 
-I have the vhost-user-rpmb process running and connected with QEMU,
-but around (guessing really) when the RPMB subsystem is initializing
-the process dies with:
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D Vhost user message =3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-Request: VHOST_USER_SET_VRING_ADDR (9)
-Flags:   0x1
-Size:    40
-vhost-user-rpmb-INFO: 18:58:08.312: vrpmb_process_msg: msg
-VHOST_USER_SET_VRING_ADDR(9)
-vhost_vring_addr:
-    index:  0
-    flags:  0
-    desc_user_addr:   0x00007ff15fa91000
-    used_user_addr:   0x00007ff15fa91080
-    avail_user_addr:  0x00007ff15fa91040
-    log_guest_addr:   0x0000000041c91080
-Setting virtq addresses:
-    vring_desc  at (nil)
-    vring_used  at (nil)
-    vring_avail at (nil)
+I looked at the NXP down-stream code to compare the HBP, HFP, and HSA
+values [1] to what we're generating with this mainline code, but the
+formula to achieve these values doesn't make sense to me.  The
+equations for the 4-lane calculation were pretty straight-forward.
 
-(vhost-user-rpmb:3236474): vhost-user-rpmb-CRITICAL **: 18:58:08.312:
-Invalid vring_addr message
+I tried to do a look-up table similar to the method that NXP did, but
+it was rejected in favor of a formula to calculate values.  You  might
+try to see if using hard-coded values for HFP, HBP and HSA work for
+your display which would at least narrow down where the problem might
+be.  NXP's downstream code also has a work-around for calculating the
+PHY [2] which only appears to affect 720P@60 for some reason.
 
-Among other options, I'm starting QEMU with -machine
-virt,secure=3Don,mte=3Doff,gic-version=3D3,virtualization=3Dfalse to enable
-the secure world.
+If someone has an idea of how to calculate the 2-lane timings for HFP,
+HBP, and HSA, that would be useful.
 
-Do you have an idea of what might be wrong? Where should I start looking?
+720p@60
+HFP     HBP     HSA
+159      324       54 (calculated with current formula)
+159      320       40 (downstream look-up table)
 
-Thanks,
-Jens
+adam
 
+[1] - https://github.com/nxp-imx/linux-imx/blob/lf-6.1.y/drivers/gpu/drm/br=
+idge/sec-dsim.c#L369
+[2] - https://github.com/nxp-imx/linux-imx/blob/lf-6.1.y/drivers/gpu/drm/br=
+idge/sec-dsim.c#L1018
 >
-> /Ilias
+> 2-lane clocks probably require a pixel clock 2x the speed of the
+> 4-lane modes.  I'm really tight on time right now, but I can try to
+> put some time in to investigating the 2-lane operation.
 >
-> >
-> > -Sumit
+> adam
 > >
 > > >
-> > > Thanks
-> > > /Ilias
-> > > >
-> > > > Bing
-> > > >
-> > > > IPAS Security Brown Belt (https://www.credly.com/badges/69ea809f-3a=
-96-4bc7-bb2f-442c1b17af26)
-> > > > System Software Engineering
-> > > > Software and Advanced Technology Group
-> > > > Zizhu Science Park, Shanghai, China
-> > > >
-> > > > -----Original Message-----
-> > > > From: Shyam Saini <shyamsaini@linux.microsoft.com>
-> > > > Sent: Thursday, June 1, 2023 3:10 AM
-> > > > To: alex.bennee@linaro.org
-> > > > Cc: code@tyhicks.com; Matti.Moell@opensynergy.com; arnd@linaro.org;=
- Zhu, Bing <bing.zhu@intel.com>; hmo@opensynergy.com; ilias.apalodimas@lina=
-ro.org; joakim.bech@linaro.org; linux-kernel@vger.kernel.org; linux-mmc@vge=
-r.kernel.org; linux-scsi@vger.kernel.org; maxim.uvarov@linaro.org; ruchika.=
-gupta@linaro.org; Winkler, Tomas <tomas.winkler@intel.com>; ulf.hansson@lin=
-aro.org; Huang, Yang <yang.huang@intel.com>; sumit.garg@linaro.org; jens.wi=
-klander@linaro.org; op-tee@lists.trustedfirmware.org
-> > > > Subject: [PATCH v2 0/4] rpmb subsystem, uapi and virtio-rpmb driver
-> > > >
-> > > > Hi Alex,
-> > > >
-> > > > [ Resending, Sorry for the noise ]
-> > > >
-> > > > Are you still working on it or planning to resubmit it ?
-> > > >
-> > > > [1] The current optee tee kernel driver implementation doesn't work=
- when IMA is used with optee implemented ftpm.
-> > > >
-> > > > The ftpm has dependency on tee-supplicant which comes once the user=
- space is up and running and IMA attestation happens at boot time and it re=
-quires to extend ftpm PCRs.
-> > > >
-> > > > But IMA can't use PCRs if ftpm use secure emmc RPMB partition. As o=
-ptee can only access RPMB via tee-supplicant(user space). So, there should =
-be a fast path to allow optee os to access the RPMB parititon without waiti=
-ng for user-space tee supplicant.
-> > > >
-> > > > To achieve this fast path linux optee driver and mmc driver needs s=
-ome work and finally it will need RPMB driver which you posted.
-> > > >
-> > > > Please let me know what's your plan on this.
-> > > >
-> > > > [1] https://optee.readthedocs.io/en/latest/architecture/secure_stor=
-age.html
-> > > >
-> > > > Best Regards,
-> > > > Shyam
+> > > > +             adi,fixed-lanes;
+> > >
+> > > I think this property comes from downstream and should be removed. I
+> > > don't see it anywhere in the upstream driver or bindings.
+> >
+> > You're right.  This came from some early debugging I was doing for a
+> > patch I was going to propose when someone beat me to it.  I'll submit
+> > a V3 with this removed.
+> > >
+> > > > +             dvdd-supply =3D <&reg_hdmi>;
+> > > > +             v3p3-supply =3D <&reg_hdmi>;
+> > > > +             v1p2-supply =3D <&reg_hdmi>;
+> > > > +             a2vdd-supply =3D <&reg_hdmi>;
+> > > > +             avdd-supply =3D <&reg_hdmi>;
+> > > > +             pvdd-supply =3D <&reg_hdmi>;
+> > >
+> > > Please sort the reg properties above alphabetically.
+> >
+> > OK.
+> >
+> > >
+> > > > +             interrupt-parent =3D <&gpio1>;
+> > > > +             interrupts =3D <9 IRQ_TYPE_LEVEL_LOW>;
+> > > > +             #sound-dai-cells =3D <0>;
+> > > > +
+> > > > +             ports {
+> > > > +                     #address-cells =3D <1>;
+> > > > +                     #size-cells =3D <0>;
+> > > > +
+> > > > +                     port@0 {
+> > > > +                             reg =3D <0>;
+> > > > +
+> > > > +                             adv7535_in: endpoint {
+> > > > +                                     remote-endpoint =3D <&dsi_out=
+>;
+> > > > +                             };
+> > > > +                     };
+> > > > +
+> > > > +                     port@1 {
+> > > > +                             reg =3D <1>;
+> > > > +
+> > > > +                             adv7535_out: endpoint {
+> > > > +                                     remote-endpoint =3D <&hdmi_co=
+nnector_in>;
+> > > > +                             };
+> > > > +                     };
+> > > > +             };
+> > > > +     };
+> > > > +};
+> > > > +
+> > > > +&lcdif {
+> > > > +     assigned-clocks =3D <&clk IMX8MN_VIDEO_PLL1>;
+> > > > +     assigned-clock-rates =3D <594000000>;
+> > >
+> > > Just out of interest: Why do you need to set the video PLL clock here
+> > > and how did you determine the "correct" value? Why is this missing in
+> > > the i.MX8MM dts?
+> >
+> > I am glad you asked this question.  In an ideal world we would not
+> > need to set this, because the display clock would propagate up to the
+> > video_pll, but that's currently not happening yet, so one needs to
+> > find a video-pll clock rate that nicely divides into the maximum
+> > number of resoltions as possible.
+> >
+> > When you run modetest on a display, you'll get a list of resolutions
+> > with their refresh rate and horizontal and vertical timings as well as
+> > the pixel clock.  The mxsfb needs its clock to match the pixel clock
+> > in order for the displays to sync properly.  With 594000000 set for
+> > the video-pll, the disp-clock divdes down to achieve what it can to
+> > hit the required pixel clock.
+> >
+> > Here is an example with some of the extra timing info removed.  The
+> > final column is the 594MHz / pix-clk
+> > name           refresh    pix clk       Divide by 594000000
+> > 1920x1080 60          148500        4000
+> > 1920x1080 59.94    148352         4003.990509
+> > 1920x1080 50         148500         4000
+> > 1920x1080 30          74250          8000
+> > 1920x1080 29.97     74176          8007.981018
+> > 1920x1080 24          74250          8000
+> > 1920x1080 23.98     74176          8007.981018
+> > 1600x900 60            108000        5500
+> > 1280x1024 60.02     108000        5500
+> > 1280x800 59.91       71000          8366.197183
+> > 1152x864 59.97       81579           7281.285625
+> > 1280x720 60            74250          8000
+> > 1280x720 59.94       74176          8007.981018
+> > 1024x768 60            65000          9138.461538
+> > 800x600 60.32         40000          14850
+> > 720x576 50              27000          22000
+> > 720x480 60              27027          21978.02198
+> > 720x480 59.94         27000          22000
+> > 640x480 60              25200          23571.42857
+> > 640x480 59.94         25175          23594.83615
+> >
+> >
+> > As you can see, there are a number of resolutions which divide evenly,
+> > but there are a bunch that do not.  If you wanted to achieve
+> > resolutions that do not divide evenly by 594MHz, you'd need to change
+> > the video-pll clock to something else in order for this clock to
+> > evenly divide but then it would break other resolutions..  I have
+> > tested this, and I can get some of these additional resolutions to
+> > work with a different video-pll clock rate.  NXP's downstream kernel
+> > masks this by blocking out clock rates that didn't divide evenly.
+> >
+> > The Mini has a different clock parent-child relationship, and the
+> > clock appears to default to 594MHz already, but the Nano has a default
+> > of 650MHz which is why I had to add the clock there.  I didn't want to
+> > put it into the imx8mn.dtsi file, because this may not be appropriate
+> > for some people or people with a fixed display running at specific
+> > resltion and/or pixel rate.
+> >
+> > I proposed a solution which would fix both Mini and Nano by allowing
+> > the requested display clock to propagate back up to the video-pll.
+> >
+> > On the Mini and Nano, a patch I proposed can help achieve more accurate
+> > lcdif clocks.   For example, when trying to get a pixel clock of 31.500=
+MHz
+> > on an imx8m Nano, the clocks divided the 594MHz down, but
+> > left the parent rate untouched which caused a calculation error.
+> >
+> > Before:
+> > video_pll              594000000
+> >   video_pll_bypass     594000000
+> >     video_pll_out      594000000
+> >       disp_pixel       31263158
+> >         disp_pixel_clk 31263158
+> >
+> > Variance =3D -236842 Hz
+> >
+> > After this patch:
+> > video_pll               31500000
+> >   video_pll_bypass      31500000
+> >     video_pll_out       31500000
+> >       disp_pixel        31500000
+> >         disp_pixel_clk  31500000
+> >
+> > Variance =3D 0 Hz
+> >
+> > If you want to check out the patch I proposed, look at [1].  I'd love
+> > to get some tracking and/or feedback for this.  This would allow the
+> > Mini and Nano to sync more resolutions and allow people to not have to
+> > specify the video-pll rate.
+> > imx8mp is little more complicated, because there are two different
+> > pixel clocks generated from the same video-pll (the DSI and the
+> > LDB/LVDS)
+> >
+> > >
+> > > > +     status =3D "okay";
+> > > > +};
+> > > > +
+> > > > +&mipi_dsi {
+> > > > +     samsung,esc-clock-frequency =3D <20000000>;
+> > >
+> > > Same here, I'm interested in how you determined the "correct" value f=
+or
+> > > this property. Are there any rules to follow?
+> >
+> > 20MHz was the max clock rate supported by the DSI controller.  It also
+> > appears to be the clock speed set in the NXP downstream kernel, so I
+> > used it.  I wish I had a better explanation.
+> >
+> > adam
+> >
+> > [1] - https://lore.kernel.org/linux-arm-kernel/20230506195325.876871-1-=
+aford173@gmail.com/
+> >
+> > >
+> > > > +     status =3D "okay";
+> > > > +
+> > > > +     ports {
+> > > > +             port@1 {
+> > > > +                     reg =3D <1>;
+> > > > +
+> > > > +                     dsi_out: endpoint {
+> > > > +                             remote-endpoint =3D <&adv7535_in>;
+> > > > +                     };
+> > > > +             };
+> > > > +     };
+> > > > +};
+> > > > +
+> > > > +&sai5 {
+> > > > +     pinctrl-names =3D "default";
+> > > > +     pinctrl-0 =3D <&pinctrl_sai5>;
+> > > > +     assigned-clocks =3D <&clk IMX8MN_CLK_SAI5>;
+> > > > +     assigned-clock-parents =3D <&clk IMX8MN_AUDIO_PLL1_OUT>;
+> > > > +     assigned-clock-rates =3D <24576000>;
+> > > > +     #sound-dai-cells =3D <0>;
+> > > > +     status =3D "okay";
+> > > > +};
+> > > > +
+> > > > +&iomuxc {
+> > > > +     pinctrl_hdmi_bridge: hdmibridgegrp {
+> > > > +             fsl,pins =3D <
+> > > > +                     MX8MN_IOMUXC_GPIO1_IO09_GPIO1_IO9            =
+   0x19
+> > > > +             >;
+> > > > +     };
+> > > > +
+> > > > +     pinctrl_reg_hdmi: reghdmigrp {
+> > > > +             fsl,pins =3D <
+> > > > +                     MX8MN_IOMUXC_SD1_STROBE_GPIO2_IO11           =
+   0x16
+> > > > +             >;
+> > > > +     };
+> > > > +
+> > > > +     pinctrl_sai5: sai5grp {
+> > > > +             fsl,pins =3D <
+> > > > +                     MX8MN_IOMUXC_SAI5_RXD3_SAI5_TX_DATA0    0xd6
+> > > > +                     MX8MN_IOMUXC_SAI5_RXD2_SAI5_TX_BCLK     0xd6
+> > > > +                     MX8MN_IOMUXC_SAI5_RXD1_SAI5_TX_SYNC     0xd6
+> > > > +             >;
+> > > > +     };
+> > > >  };
+
+--0000000000001a4a5b05fdf1c3f9
+Content-Type: image/png; name="image.png"
+Content-Disposition: attachment; filename="image.png"
+Content-Transfer-Encoding: base64
+Content-ID: <f_lit3u7lb0>
+X-Attachment-Id: f_lit3u7lb0
+
+iVBORw0KGgoAAAANSUhEUgAAAgEAAAAVCAYAAADfPj3FAAADrUlEQVR4nO3dsXGjQBgF4MeNSwEH
+titYKhBOFKkECKXEmcPLnEAosksdKTFUICrADgy97AULWHAgI/lGaNn3zShhhYcH4tcPi8ZWnucS
+REREZJwbALi/v596Oybz/v7O/Mw/9WZMhvmZn/nNzv9r6o0gIiKiabAJICIiMhSbACIiIkOxCSAi
+IjIUmwAiIiJDadUElJELy7JguRHKZmmKwLLU8uYVIG2Gg9ZYkPb+6et3LEdnzI3KzsolIrced/HP
+sNa+Of4A5p2fTMH6d0b9KyO4R2vjXAzUuBH5NWkCVEBnkw2/xU8gpaxeWywAtQO8GCIsIGWBUACx
+p+GXQBnB3S1VtiKEABB71YmeBrDqsSpjtnE6J8kLNpmAENNs/kX0Hf+aCflpxlj/zqp/ZQTX2SCr
+9k3i99TGueircSPz69EElG94zQTCRH0Axq/2igzAw60NwMbjSgDI8Pqm2Vlgr7HfVl9r9i0eDscW
+W8h6rMkI5J91xhSBF0OEz1hdaHOvi+n5SXusf2fVvzq/v1Tji6UPAIh3c+sC+mvc2Px6NAH2Gnu5
+x9o5bbXio90527cPA+/USLpDDAD+sn21W6kzqxMfKKPfiOHj+dSdNxOm56cZYP37ckL96+aHc3dS
+E6WLoRo3Nr8eTcAYsfc1L1Td73Du2lfF5Wc+2eb9VDMf6MUAfCTbnlMgDeDFAESIpwUApHjZZBDh
+U+8JMys9x9+o/GQ21r+e+meCn9e4GTQBC2ybuTA1J4TYQ5AC9vpPM0dkWd/MqV05e72vMibwEcPr
+PhxTzf8BPpL9GjaANPCqDtGeaKsvYfj4m5GfzMb6B6C3/pngf9S4GTQBh2zUd7xU92tjvZfNAzNF
+qDrj+la5nhaopnba8/7OBhl8JM1DcSVU469OGMtyoGpAho2j4cNBoxwe/9TA/GQ21r/k4KHg+k5I
+o/hABkDczWVq8HiN33Vv/g/k178JSIODnz2k2MUAILB67H7Q1W0TLW8VtTLWB77OmCKwVDeYtJ6K
+bxeA5ioBAmGxx2wujgeP/8KM/GQ21r+B+gfYjyv1S4LqQbh0F6N/3+jqeI3fPo3Mn+e5vHpFKAUg
+0X35STUsDpYLGRYD64lQFp0/rUV+OZyxvfxY1kKGorN/pD75jxk8/u13zTb/TzC/BvlZ/86vf4nf
+Wl7tsoYu+cfpqXEj8lt5nkvT/5Ui8zO/qZif+Znf7Pz6TwcQERHRWdgEEBERGYpNABERkaGsPM/l
+1BtBREREl/cXOQDModS0shIAAAAASUVORK5CYII=
+--0000000000001a4a5b05fdf1c3f9--
