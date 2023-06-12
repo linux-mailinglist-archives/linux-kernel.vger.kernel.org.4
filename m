@@ -2,87 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6AB72BE49
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:04:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9694772BE4C
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236836AbjFLKDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 06:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37090 "EHLO
+        id S236746AbjFLKDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 06:03:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236430AbjFLKBR (ORCPT
+        with ESMTP id S236401AbjFLKBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 06:01:17 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA32E30E8;
-        Mon, 12 Jun 2023 02:44:24 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 871996606E8A;
-        Mon, 12 Jun 2023 10:44:22 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686563063;
-        bh=L9+Fd1Jt5ie6N8kEME3WfF11akqrl+GDjydWidgLGqs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=EjeOWbbks3EjuI4NqUETG1gV3dsuUDknLu8oMiDShQ4GxbXW7xQj3YKKFjA9UrW7s
-         TWKCgT7xEvM/ZLMaJaA8ioi/nd5KOMUeXkvatvZA5SBMZRrAF3S/FrVNgZLXqcZy2G
-         9f8glb4VkgnBygg+is8v/YUOfHXCm5DYCYHqFLCFWWMyB3nG6bUQoSM28ADbC4w3mX
-         ZmcjyOyS7KYp5A73+mtui4v0QQrCuXljUGDVnwUluz8HNDGKKPAdus/IiaT31aRdnK
-         hjoxB00bnn4TyNsh5WOYOBj5x0QMD4HiFyT6aNthL9VWc9CQETSlBlrGXQKF5a8GPW
-         LYWFxVt78FLhw==
-Message-ID: <61c68bd9-aa3a-bd55-0a06-958e4e3a3be2@collabora.com>
-Date:   Mon, 12 Jun 2023 11:44:19 +0200
+        Mon, 12 Jun 2023 06:01:13 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82BBD30D6
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:44:24 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-514859f3ffbso6259203a12.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:44:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686563063; x=1689155063;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dGS8bUQt/Q6cTb/mgXADh7fF0bhjSopnevV2SXx3L4U=;
+        b=YSSRXRoo0P1z3yM2ZR4wZWKoP3Sl8rZWfiAlQEs4iWFCwZMeuSKRCodcraff+Pq4n2
+         M0ea6UuE2ErAiu0E+2CjqAGfQBQ4frqt4GoAtoJmmz6FJctoEP08nvtLfcw3NOZH6pXz
+         94zqQf3zZGxIJbl+g9NG1MxJgQs22OEoJpdFCafaYXdKG8UJUrbjBLs1jntFngaAbf3S
+         X7Xk1ajH+t3Z9W3Gi+5pWgbVVMD/xS88qAqGHiLqPd7O7AqphbeNl+SftFUcQvNxx7vP
+         GMoKyKgzponxO7CqVvQF9aemJ+fQMqpHxclg0ROSUvlzw9P6vq59btqQ+YzPRC2pfJVF
+         6u+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686563063; x=1689155063;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dGS8bUQt/Q6cTb/mgXADh7fF0bhjSopnevV2SXx3L4U=;
+        b=YqvaM9a27xLlxAjQEfy66DRjkeZ1VbehzVqQQ7Nzv5LNga/h9reaBTHkdhT7/cZ05R
+         0sMceK/2kA1AggjBYTVeZJzKTUibbfMjYNV/RsjZC9QBPsepwvrwDZbo56A/h0sIpOQi
+         Ca7msLB3F/Dk3z0vTWqEu11ZKYoHiHNdg46IDYe7+7AGArSpDt9pdwDsQ3GwKxb3TMHF
+         ANwfao7HHWW+7Pt8hIrKXR5Glczuain2EBjX6TviE9uuoNBlCjG17ZrNX5dL24yLnv3K
+         9tNNA+NOzrgosirT4lOsHE+Sa0UlUAkx9gxVBeLjI3HKen14i5/GwxRBLVZqIKU2Bf9r
+         3dcA==
+X-Gm-Message-State: AC+VfDxBaiYj6hQIi4/yQzdy8Lnt+ihiRg6Ch463kVXbZsxniKmSXoUp
+        IWbBohaV6O4vkiDDNo95w12ibg==
+X-Google-Smtp-Source: ACHHUZ6wyE6QqIeF2j0gJURaZNl3T0vHhDGy/+70UPdIokB7RGA5vADzdJcAIGv55ZlvmTXnTz5xFA==
+X-Received: by 2002:a17:907:7e8c:b0:94a:5d5c:fe6f with SMTP id qb12-20020a1709077e8c00b0094a5d5cfe6fmr8600237ejc.47.1686563063029;
+        Mon, 12 Jun 2023 02:44:23 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id bi9-20020a170906a24900b009745417ca38sm4951012ejb.21.2023.06.12.02.44.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 02:44:22 -0700 (PDT)
+Message-ID: <ab8dfd0f-fa49-6493-d79d-c35f632373f3@linaro.org>
+Date:   Mon, 12 Jun 2023 11:44:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
-Subject: Re: [PATCH v2] dt-bindings: iio: rockchip: Fix 'oneOf' condition
- failed warning
+Subject: Re: [PATCH] arm64: defconfig: Enable HSR by default
+To:     Ravi Gunasekaran <r-gunasekaran@ti.com>, catalin.marinas@arm.com,
+        will@kernel.org
+Cc:     arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20230612094340.13865-1-r-gunasekaran@ti.com>
 Content-Language: en-US
-To:     Shreeya Patel <shreeya.patel@collabora.com>, jic23@kernel.org,
-        lars@metafoo.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        heiko@sntech.de, sebastian.reichel@collabora.com
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, gustavo.padovan@collabora.com,
-        serge.broslavsky@collabora.com
-References: <20230610143601.173307-1-shreeya.patel@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230610143601.173307-1-shreeya.patel@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230612094340.13865-1-r-gunasekaran@ti.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 10/06/23 16:36, Shreeya Patel ha scritto:
-> rk3588-saradc isn't compatible with the rk3399-saradc variant,
-> hence, fix the following dtbs_check warning for 'oneOf' condition
-> failure.
-> 
-> DTC_CHK arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dtb
-> /home/shreeya/linux/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dtb:
-> 	saradc@fec10000: compatible: 'oneOf' conditional failed,
-> 	one must be fixed:
-> 	['rockchip,rk3588-saradc'] is too short
-> 	'rockchip,saradc' was expected
-> 	'rockchip,rk3066-tsadc' was expected
-> 	'rockchip,rk3399-saradc' was expected
-> 
-> Fixes: 2daf2ae9793d ("dt-bindings: iio: adc: Add rockchip,rk3588-saradc string")
-> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
-> Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+On 12/06/2023 11:43, Ravi Gunasekaran wrote:
+> Enable HSR feature in kernel build.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Why? Commit msg should answer to this question.
 
+Best regards,
+Krzysztof
 
