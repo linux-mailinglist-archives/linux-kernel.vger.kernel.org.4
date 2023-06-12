@@ -2,292 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CFA472D432
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 00:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5832872D434
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 00:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233480AbjFLWMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 18:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38768 "EHLO
+        id S237269AbjFLWOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 18:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237269AbjFLWMa (ORCPT
+        with ESMTP id S229621AbjFLWOq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 18:12:30 -0400
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9944510C2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 15:12:29 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id BD1076C1DF8
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 22:12:28 +0000 (UTC)
-Received: from pdx1-sub0-mail-a251.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 333AD6C1B6E
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 22:12:28 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1686607948; a=rsa-sha256;
-        cv=none;
-        b=bTV1UFnAdmXNS8XQiXs+xJsn/W4SiWf+wxEVF9BJ7mQk6hH7LQSGjqiX0acDnr2eSZWj1C
-        cyDwwR79b3M+KTe8SaidVQUFfdZQdixqBo/mWphd5xXlAygVNX6fRAq5TZQ91lfA8r4Vuu
-        9O4pVkCjmuODrLYy1f7qP09iVNJCt5zLBIZf6Zf0ErSXpzupaTAnf0iXo0nexJLPoUW8xO
-        mkJR1vLHdKRe/eyzflTtxNtpnq4Fdmyo3yBuXyta96UYIJa8SMR6NK0RJ8GWUDkGozYxv/
-        1bMv9HbWnoXmxXr0otZlQUSdpPno4c//Gv9ooAL78Ay2pYcOyW5IVMe615mCbQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1686607948;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=Uw+jdfJkDSDc1rZ9hM9IyUE6VppD4X6NU4hjQZ4wAUI=;
-        b=fT/HJCUllDuVFP9bbaW/bInQtHrHy0Db9kw9FZjmraZLLlQL0IIXEEvjJAqTeUFq8J36aX
-        8RUroHSuIOOGDVLcssFcfvhQ1xhv2Gf1m1dav7fBGfxjFK7eWd1aIAbCYK7oXKAzJN1vfX
-        NTh3Nf1vzqb6urBD8NajZZqiv4IAd9mzxcPeIvBmssNo/DfOmVIzYIihcnLZEwiH11woqt
-        hAAPMKXnCEm3pdh4Q0ea6wGv/I1zOB51humLjTybNs7ibEAOB9rU9xI/kbrL5TTgwSNtcF
-        TIXQktTtP4GtpOS+s5Y8NXFwiMs9VET0LTGoHxbkL33TAzxeE4ZHwPjyxv0pYQ==
-ARC-Authentication-Results: i=1;
-        rspamd-6c69b8658d-49kw4;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MailChannels-Auth-Id: dreamhost
-X-Grain-Shoe: 0bf68c0d26b4758d_1686607948460_1280644191
-X-MC-Loop-Signature: 1686607948460:2263035550
-X-MC-Ingress-Time: 1686607948460
-Received: from pdx1-sub0-mail-a251.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.120.163.21 (trex/6.8.1);
-        Mon, 12 Jun 2023 22:12:28 +0000
-Received: from kmjvbox (c-73-93-64-36.hsd1.ca.comcast.net [73.93.64.36])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 12 Jun 2023 18:14:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5406210C2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 15:14:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kjlx@templeofstupid.com)
-        by pdx1-sub0-mail-a251.dreamhost.com (Postfix) with ESMTPSA id 4Qg5XC6R1Fz1W
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 15:12:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
-        s=dreamhost; t=1686607947;
-        bh=Uw+jdfJkDSDc1rZ9hM9IyUE6VppD4X6NU4hjQZ4wAUI=;
-        h=Date:From:To:Cc:Subject:Content-Type:Content-Transfer-Encoding;
-        b=T0L7vk4O69gYcbijBG0CV2wgiyLUD+Egvqf9UPhHzPGDJ0GcwpLzSXWh0Vvgmil2+
-         jJwnAwHCyHep6WqnreF599PvBJAva7xQzkK4zDxQopoKRFfGMCyhKbe6l/L7P/KytS
-         L+veVyzegHpzsbt76DOXBV4n5Rzm8dj+lqDNNKqM=
-Received: from johansen (uid 1000)
-        (envelope-from kjlx@templeofstupid.com)
-        id e0085
-        by kmjvbox (DragonFly Mail Agent v0.12);
-        Mon, 12 Jun 2023 15:12:26 -0700
-Date:   Mon, 12 Jun 2023 15:12:26 -0700
-From:   Krister Johansen <kjlx@templeofstupid.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Ilya Leoshkevich <iii@linux.ibm.com>,
-        Krister Johansen <kjlx@templeofstupid.com>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: add a test for subprogram
- extables
-Message-ID: <20230612221226.GA2077@templeofstupid.com>
-References: <cover.1686268304.git.kjlx@templeofstupid.com>
- <9e3041e182a75f558f1132f915ddf2ee7e859c6e.1686268304.git.kjlx@templeofstupid.com>
- <CAADnVQKAmbb2mTNem+3wvCSS44mvmydDCjWj-4V9VZd93vgksQ@mail.gmail.com>
- <ef33f004f1f20c7a4cc7c963eea628df7bec0c53.camel@linux.ibm.com>
- <CAADnVQLWNt0KsXoYVGFD0i089YMivYJ+ZeWmutUiefcdK=eOrw@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E20EB62C03
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 22:14:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AA97C433D2;
+        Mon, 12 Jun 2023 22:14:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686608084;
+        bh=/4GR9Hf1ASwJkuX0BXgNzC6bOV/3dAkzoO7nR0gcVMo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Tf3wLXVKRuYFAJRgyhnirYHZlD6zj0nqI8Iz1cWqkKsSY0W/Oc7Uc6+c1aedVtb3u
+         fIPtW7zHHHWCNTu0KtyyAcpQfJL2goJieV7p9ysE7kwDVK0nfJ/Y/AX19UQP9EeoWu
+         cAp0wwjx7jbTOY15d5ILJuYz8f4ODEL4arghzgYQE5X18OxfULSjm8MxwZ8QV/6z36
+         TEgBMUwGGNBcV1dToYTIfyOTbs1hYLkWIZcwKC2FlZzCxeADlUfx5f0blhWX/XSG/h
+         GMEqFphosIyzkwUanZVeHqaPfp+q0TAyYqjO8XivKq4jDtaOhsX2SgOcJWrkISVAnt
+         vYA2mhy0+GP4Q==
+Date:   Mon, 12 Jun 2023 15:14:42 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Sheng Yong <shengyong@oppo.com>
+Cc:     chao@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, ebiggers@kernel.org
+Subject: Re: [PATCH v4 1/6] f2fs: add helper to check compression level
+Message-ID: <ZIeY0qNjXgx419NZ@google.com>
+References: <20230612030121.2393541-1-shengyong@oppo.com>
+ <20230612030121.2393541-2-shengyong@oppo.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQLWNt0KsXoYVGFD0i089YMivYJ+ZeWmutUiefcdK=eOrw@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230612030121.2393541-2-shengyong@oppo.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 03:07:22PM -0700, Alexei Starovoitov wrote:
-> On Mon, Jun 12, 2023 at 6:46 AM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
-> >
-> > On Fri, 2023-06-09 at 11:15 -0700, Alexei Starovoitov wrote:
-> > > On Thu, Jun 8, 2023 at 5:11 PM Krister Johansen
-> > > <kjlx@templeofstupid.com> wrote:
-> > > >
-> > > > In certain situations a program with subprograms may have a NULL
-> > > > extable entry.  This should not happen, and when it does, it turns
-> > > > a
-> > > > single trap into multiple.  Add a test case for further debugging
-> > > > and to
-> > > > prevent regressions.  N.b: without any other patches this can panic
-> > > > or
-> > > > oops a kernel.
-> > > >
-> > > > Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
-> > > > ---
-> > > >  .../bpf/prog_tests/subprogs_extable.c         | 31 +++++++++++++
-> > > >  .../bpf/progs/test_subprogs_extable.c         | 46
-> > > > +++++++++++++++++++
-> > > >  2 files changed, 77 insertions(+)
-> > > >  create mode 100644
-> > > > tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-> > > >  create mode 100644
-> > > > tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-> > > >
-> > > > diff --git
-> > > > a/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-> > > > b/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-> > > > new file mode 100644
-> > > > index 000000000000..2201988274a4
-> > > > --- /dev/null
-> > > > +++ b/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-> > > > @@ -0,0 +1,31 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0
-> > > > +
-> > > > +#include <test_progs.h>
-> > > > +#include "test_subprogs_extable.skel.h"
-> > > > +
-> > > > +void test_subprogs_extable(void)
-> > > > +{
-> > > > +       const int READ_SZ = 456;
-> > > > +       struct test_subprogs_extable *skel;
-> > > > +       int err;
-> > > > +
-> > > > +       skel = test_subprogs_extable__open();
-> > > > +       if (!ASSERT_OK_PTR(skel, "skel_open"))
-> > > > +               return;
-> > > > +
-> > > > +       err = test_subprogs_extable__load(skel);
-> > > > +       if (!ASSERT_OK(err, "skel_load"))
-> > > > +               goto cleanup;
-> > > > +
-> > > > +       err = test_subprogs_extable__attach(skel);
-> > > > +       if (!ASSERT_OK(err, "skel_attach"))
-> > > > +               goto cleanup;
-> > > > +
-> > > > +       /* trigger tracepoint */
-> > > > +       ASSERT_OK(trigger_module_test_read(READ_SZ),
-> > > > "trigger_read");
-> > > > +
-> > > > +       test_subprogs_extable__detach(skel);
-> > > > +
-> > > > +cleanup:
-> > > > +       test_subprogs_extable__destroy(skel);
-> > > > +}
-> > > > diff --git
-> > > > a/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-> > > > b/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-> > > > new file mode 100644
-> > > > index 000000000000..c3ff66bf4cbe
-> > > > --- /dev/null
-> > > > +++ b/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-> > > > @@ -0,0 +1,46 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0
-> > > > +
-> > > > +#include "vmlinux.h"
-> > > > +#include <bpf/bpf_helpers.h>
-> > > > +#include <bpf/bpf_tracing.h>
-> > > > +
-> > > > +struct {
-> > > > +       __uint(type, BPF_MAP_TYPE_ARRAY);
-> > > > +       __uint(max_entries, 8);
-> > > > +       __type(key, __u32);
-> > > > +       __type(value, __u64);
-> > > > +} test_array SEC(".maps");
-> > > > +
-> > > > +static __u64 test_cb(struct bpf_map *map, __u32 *key, __u64 *val,
-> > > > void *data)
-> > > > +{
-> > > > +       return 1;
-> > > > +}
-> > > > +
-> > > > +SEC("fexit/bpf_testmod_return_ptr")
-> > > > +int BPF_PROG(handle_fexit_ret_subprogs, int arg, struct file *ret)
-> > > > +{
-> > > > +       *(volatile long *)ret;
-> > > > +       *(volatile int *)&ret->f_mode;
-> > > > +       bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
-> > > > +       return 0;
-> > > > +}
-> > > > +
-> > > > +SEC("fexit/bpf_testmod_return_ptr")
-> > > > +int BPF_PROG(handle_fexit_ret_subprogs2, int arg, struct file
-> > > > *ret)
-> > > > +{
-> > > > +       *(volatile long *)ret;
-> > > > +       *(volatile int *)&ret->f_mode;
-> > > > +       bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
-> > > > +       return 0;
-> > > > +}
-> > > > +
-> > > > +SEC("fexit/bpf_testmod_return_ptr")
-> > > > +int BPF_PROG(handle_fexit_ret_subprogs3, int arg, struct file
-> > > > *ret)
-> > > > +{
-> > > > +       *(volatile long *)ret;
-> > > > +       *(volatile int *)&ret->f_mode;
-> > > > +       bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
-> > > > +       return 0;
-> > > > +}
-> > >
-> > > What is the point of attaching 3 the same progs to the same hook?
-> > > One would be enough to test it, no?
-> > >
-> > > In other news...
-> > > Looks like this test is triggering a bug on s390.
-> > >
-> > > Ilya,
-> > > please take a look:
-> > > https://github.com/kernel-patches/bpf/actions/runs/5216942096/jobs/9416404780
-> > >
-> > > bpf_prog_78c0d4c618ed2df7_handle_fexit_ret_subprogs3
-> > > is crashing the kernel.
-> > > A bug in extable logic on s390?
-> >
-> > I think we also need this:
-> >
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -17664,6 +17664,7 @@ static int jit_subprogs(struct bpf_verifier_env
-> > *env)
-> >         prog->bpf_func = func[0]->bpf_func;
-> >         prog->jited_len = func[0]->jited_len;
-> >         prog->aux->extable = func[0]->aux->extable;
-> > +       prog->aux->num_exentries = func[0]->aux->num_exentries;
-> >         prog->aux->func = func;
-> >         prog->aux->func_cnt = env->subprog_cnt;
-> >         bpf_prog_jit_attempt_done(prog);
-> >
-> > The reason is that s390 JIT doubles the number of extable entries due
-> > to how the hardware works (some exceptions point to the failing insn,
-> > some point to the next one).
-> >
-> > With that:
-> >
-> > Acked-by: Ilya Leoshkevich <iii@linux.ibm.com>
-> > Tested-by: Ilya Leoshkevich <iii@linux.ibm.com>
-> >
-> > for the v4 series.
-> 
-> Great.
-> 
-> Krister,
-> could you please resubmit v5 adding the above change and Ilya's tags to patch 1?
-> 
-> I'd like to see green BPF CI on all platforms before landing.
+Could you please check this version?
 
-Thanks Alexei and Ilya, and yes, absolutely.  I'm hoping to have a v5 out
-a little later this afternoon.
+https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git/commit/?h=dev-test&id=9c84aad379019a0d86655bb50bd7b4bc92683c4b
 
--K
+On 06/12, Sheng Yong wrote:
+> This patch adds a helper function to check if compression level is
+> valid.
+> 
+> Signed-off-by: Sheng Yong <shengyong@oppo.com>
+> ---
+>  fs/f2fs/compress.c | 31 +++++++++++++++++++++++++++++++
+>  fs/f2fs/f2fs.h     |  2 ++
+>  fs/f2fs/super.c    |  4 ++--
+>  3 files changed, 35 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
+> index 1132d3cd8f337..63a496137ebe7 100644
+> --- a/fs/f2fs/compress.c
+> +++ b/fs/f2fs/compress.c
+> @@ -55,6 +55,7 @@ struct f2fs_compress_ops {
+>  	int (*init_decompress_ctx)(struct decompress_io_ctx *dic);
+>  	void (*destroy_decompress_ctx)(struct decompress_io_ctx *dic);
+>  	int (*decompress_pages)(struct decompress_io_ctx *dic);
+> +	bool (*is_level_valid)(int level);
+>  };
+>  
+>  static unsigned int offset_in_cluster(struct compress_ctx *cc, pgoff_t index)
+> @@ -308,11 +309,23 @@ static int lz4_decompress_pages(struct decompress_io_ctx *dic)
+>  	return 0;
+>  }
+>  
+> +static bool lz4_is_level_valid(int lvl)
+> +{
+> +	if (lvl == 0)
+> +		return true;
+> +#ifdef CONFIG_F2FS_FS_LZ4HC
+> +	if (lvl >= LZ4HC_MIN_CLEVEL && lvl <= LZ4HC_MAX_CLEVEL)
+> +		return true;
+> +#endif
+> +	return false;
+> +}
+> +
+>  static const struct f2fs_compress_ops f2fs_lz4_ops = {
+>  	.init_compress_ctx	= lz4_init_compress_ctx,
+>  	.destroy_compress_ctx	= lz4_destroy_compress_ctx,
+>  	.compress_pages		= lz4_compress_pages,
+>  	.decompress_pages	= lz4_decompress_pages,
+> +	.is_level_valid		= lz4_is_level_valid,
+>  };
+>  #endif
+>  
+> @@ -477,6 +490,13 @@ static int zstd_decompress_pages(struct decompress_io_ctx *dic)
+>  	return 0;
+>  }
+>  
+> +static bool zstd_is_level_valid(int lvl)
+> +{
+> +	if (lvl < zstd_min_clevel() || lvl > zstd_max_clevel())
+> +		return false;
+> +	return true;
+> +}
+> +
+>  static const struct f2fs_compress_ops f2fs_zstd_ops = {
+>  	.init_compress_ctx	= zstd_init_compress_ctx,
+>  	.destroy_compress_ctx	= zstd_destroy_compress_ctx,
+> @@ -484,6 +504,7 @@ static const struct f2fs_compress_ops f2fs_zstd_ops = {
+>  	.init_decompress_ctx	= zstd_init_decompress_ctx,
+>  	.destroy_decompress_ctx	= zstd_destroy_decompress_ctx,
+>  	.decompress_pages	= zstd_decompress_pages,
+> +	.is_level_valid		= zstd_is_level_valid,
+>  };
+>  #endif
+>  
+> @@ -542,6 +563,16 @@ bool f2fs_is_compress_backend_ready(struct inode *inode)
+>  	return f2fs_cops[F2FS_I(inode)->i_compress_algorithm];
+>  }
+>  
+> +bool f2fs_is_compress_level_valid(int alg, int lvl)
+> +{
+> +	const struct f2fs_compress_ops *cops = f2fs_cops[alg];
+> +
+> +	if (cops->is_level_valid)
+> +		return cops->is_level_valid(lvl);
+> +
+> +	return lvl == 0;
+> +}
+> +
+>  static mempool_t *compress_page_pool;
+>  static int num_compress_pages = 512;
+>  module_param(num_compress_pages, uint, 0444);
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index 80c783215b5a3..1b17bbe7e8656 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -4236,6 +4236,7 @@ bool f2fs_compress_write_end(struct inode *inode, void *fsdata,
+>  int f2fs_truncate_partial_cluster(struct inode *inode, u64 from, bool lock);
+>  void f2fs_compress_write_end_io(struct bio *bio, struct page *page);
+>  bool f2fs_is_compress_backend_ready(struct inode *inode);
+> +bool f2fs_is_compress_level_valid(int alg, int lvl);
+>  int __init f2fs_init_compress_mempool(void);
+>  void f2fs_destroy_compress_mempool(void);
+>  void f2fs_decompress_cluster(struct decompress_io_ctx *dic, bool in_task);
+> @@ -4300,6 +4301,7 @@ static inline bool f2fs_is_compress_backend_ready(struct inode *inode)
+>  	/* not support compression */
+>  	return false;
+>  }
+> +static inline bool f2fs_is_compress_level_valid(int alg, int lvl) { return false; }
+>  static inline struct page *f2fs_compress_control_page(struct page *page)
+>  {
+>  	WARN_ON_ONCE(1);
+> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+> index 8fd23caa1ed99..023981824d240 100644
+> --- a/fs/f2fs/super.c
+> +++ b/fs/f2fs/super.c
+> @@ -606,7 +606,7 @@ static int f2fs_set_lz4hc_level(struct f2fs_sb_info *sbi, const char *str)
+>  	if (kstrtouint(str + 1, 10, &level))
+>  		return -EINVAL;
+>  
+> -	if (level < LZ4HC_MIN_CLEVEL || level > LZ4HC_MAX_CLEVEL) {
+> +	if (!f2fs_is_compress_level_valid(COMPRESS_LZ4, level)) {
+>  		f2fs_info(sbi, "invalid lz4hc compress level: %d", level);
+>  		return -EINVAL;
+>  	}
+> @@ -640,7 +640,7 @@ static int f2fs_set_zstd_level(struct f2fs_sb_info *sbi, const char *str)
+>  	if (kstrtouint(str + 1, 10, &level))
+>  		return -EINVAL;
+>  
+> -	if (!level || level > zstd_max_clevel()) {
+> +	if (!f2fs_is_compress_level_valid(COMPRESS_ZSTD, level)) {
+>  		f2fs_info(sbi, "invalid zstd compress level: %d", level);
+>  		return -EINVAL;
+>  	}
+> -- 
+> 2.40.1
