@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 997B172D4ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 01:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D81E72D4EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 01:28:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232809AbjFLX2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 19:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34740 "EHLO
+        id S233593AbjFLX2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 19:28:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjFLX2F (ORCPT
+        with ESMTP id S229513AbjFLX2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 19:28:05 -0400
+        Mon, 12 Jun 2023 19:28:10 -0400
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92644E6B
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 16:28:04 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba88ec544ddso7181632276.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 16:28:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 419C9E6B
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 16:28:09 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bc5e2021f00so3645056276.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 16:28:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686612484; x=1689204484;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=B47KW5jxTOZnVNWxUxID6P/+Y+TQgLo1hBb1KHXImro=;
-        b=z4xkjDD0Y064fp/ZbLacHzg7x9kJ8re4ii7lXm4mF4MTs6UxwuEqQyAHhKeHNQkxPE
-         tBOjvs1TKr3JYFY6w5Dr4w6Pv9BGaW/peKwuka9LaQgRfdaXTwjQlTQhbH5KYUlAKEqN
-         IQwKONqJuo/vChP5MTWpmwDkOOh8hzhsEl2m3xzW9ePz2c6nuNnRCFuckU9CeO9nLPjH
-         p5KogcFq3+jwza8RJ9pKCPLTq+zhgodIRkJnzXsN57zc9fG0+mLwp3J5nqx4gzcD5ZDp
-         T8OQh/IltApJ5f7kKm4almvxlaW/MMGwnjHvu1SmbWB7817BjwiavtUKNQoGtob7D0Ci
-         2jbA==
+        d=google.com; s=20221208; t=1686612488; x=1689204488;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=oCytQCDhKbiqioymJHM+7olUPxDWofcnuBl6H0wZRyo=;
+        b=Py2PwKTqVicb+jybRPotQ5wz2OFI2pFdUp6MtBJLqth76DODWnhYirm9qAZFJCn9bW
+         281i9pI0o5ytyHAk3lwEKNiqTZdHZerKxsxxVr2zuW1bpPNd6CKDBPuVeXLo/GlDANDs
+         UcYYo+LEDZ09I9IYPlMsGc7zA82INWsFTQEfpwKFJuEVnvI+FFXyY8/3xuNKFs22pUuJ
+         CXTtdcqpgHkuiPuPAZJd4TQQgJMxitoVmJ6+fVM3kXHBBsscuqnjwYm+PSvdJMZFBI6U
+         2aZ0HEvyH2iWj4NX580tJLx85S1DZD65IwdRg3olcss2TzXVPIL5gwt/JYsvb2ggaPsx
+         DCZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686612484; x=1689204484;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=B47KW5jxTOZnVNWxUxID6P/+Y+TQgLo1hBb1KHXImro=;
-        b=BdzZAfo8T4YQAS5maOF/UBT07LzFBGH1B34Qg6I0IODLnPojP6uZUIcimkzGwMNs6y
-         XL2PAQPib/kB+qR+OCZclH+eSSMnM9rg0X7dMtClXgz8XFNVV5MU8KJl8nP8Z9kWu6ec
-         CL9DbrX7YZaLcxmNXdFCSUxIZlYPBu6ZybhoCLJFDAlYoUe0FtB/+SxDIlrIW4Bbf5Rr
-         aiVtk8a06h/NOj7F8WyNJIdB17C6/TJcUJjlqq66Cx53u2URHyWtQuDfq/Il8NFx9AXE
-         MOa7sJXMO3S5p3V/cB/aeUXkr9Mq+dRj9Qs5z4gfirOBWadtAV5CKX+GWSBIzT2cHNJk
-         kfMw==
-X-Gm-Message-State: AC+VfDxP+mUhbgohosfT9n//I0TkEBTFpw1w/KNwtyziztCVjJM3q3Tf
-        b9Y/+FZbNKJAd0orkHmIlP7fdYGXPwQP
-X-Google-Smtp-Source: ACHHUZ6ma50k+njTRVCfIHC3fZTeAVPcIkiE0ZQLBVLMvon0Wcep28BHvVBx/DdzaaDlnk0vnpp97/Nja/g6
+        d=1e100.net; s=20221208; t=1686612488; x=1689204488;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oCytQCDhKbiqioymJHM+7olUPxDWofcnuBl6H0wZRyo=;
+        b=PbI8Fa9X8EI/kGxsz6wWxiauTmA++ELDxHadwOkQSBJiixrEMwztmoK0vTb+PSx7rv
+         uso7vWuBYJ2nsuHQe4C6e3lzzjJL/9C8He7ovstKSFOVx8V36iHJE4/NdGjLJo0c8I/6
+         KJrPp/r80f5jpnZ7HSOX9mBHpbihwQLf8wHzSN38aub/l5h3TbyokF1wq9KhBQ975CVd
+         Suwdlv6ZriCB8GGZhogr0EBhQP5WtBv8XblPjHjqw5ptbirZEdWcjFDs4ymNVtp3u8YK
+         Uq1OcnJm3EoKrAG4OtxPBf7MX5r4aKvHF/FTQIhjrx4TbUu1mc48HPwYLVwDHLQncUhx
+         Oc2g==
+X-Gm-Message-State: AC+VfDyRff03oRUpaef1Cwx32mLfhOoZ+zPZ2J47R2G6f5wuXNRqRvjC
+        r2bwMURJ8IFqrovNoYISoZ89YzdjOupr
+X-Google-Smtp-Source: ACHHUZ5aWfZkRJ1YyLTuyqv4uxBbw9lQCn8sfsqyRzr5fg1bpKGLpcGj+5iA0uhDd+DG1IRKHaCBiLtCdVgG
 X-Received: from joshdon-desktop.svl.corp.google.com ([2620:15c:2d4:203:5b1e:752c:c184:9d6c])
- (user=joshdon job=sendgmr) by 2002:a25:854e:0:b0:ba8:929a:2073 with SMTP id
- f14-20020a25854e000000b00ba8929a2073mr111898ybn.1.1686612483710; Mon, 12 Jun
- 2023 16:28:03 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 16:27:47 -0700
+ (user=joshdon job=sendgmr) by 2002:a25:4c42:0:b0:bc6:94e5:233e with SMTP id
+ z63-20020a254c42000000b00bc694e5233emr74783yba.13.1686612488469; Mon, 12 Jun
+ 2023 16:28:08 -0700 (PDT)
+Date:   Mon, 12 Jun 2023 16:27:48 -0700
+In-Reply-To: <20230612232748.3948659-1-joshdon@google.com>
 Mime-Version: 1.0
+References: <20230612232748.3948659-1-joshdon@google.com>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Message-ID: <20230612232748.3948659-1-joshdon@google.com>
-Subject: [PATCH v2 1/2] sched: don't account throttle time for empty groups
+Message-ID: <20230612232748.3948659-2-joshdon@google.com>
+Subject: [PATCH v2 2/2] sched: add throttled time stat for throttled children
 From:   Josh Don <joshdon@google.com>
 To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
@@ -70,72 +72,238 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is easy for a cfs_rq to become throttled even when it has no enqueued
-entities (for example, if we have just put_prev()'d the last runnable
-task of the cfs_rq, and the cfs_rq is out of quota).
+We currently export the total throttled time for cgroups that are given
+a bandwidth limit. This patch extends this accounting to also account
+the total time that each children cgroup has been throttled.
 
-Avoid accounting this time towards total throttle time, since it
-otherwise falsely inflates the stats.
+This is useful to understand the degree to which children have been
+affected by the throttling control. Children which are not runnable
+during the entire throttled period, for example, will not show any
+self-throttling time during this period.
 
-Note that the dequeue path is special, since we normally disallow
-migrations when a task is in a throttled hierarchy (see
-throttled_lb_pair()).
+Expose this in a new interface, 'cpu.stat.local', which is similar to
+how non-hierarchical events are accounted in 'memory.events.local'.
 
 Signed-off-by: Josh Don <joshdon@google.com>
 ---
- kernel/sched/fair.c | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+v2:
+- moved export to new cpu.stat.local file, per Tejun's recommendation
 
+ include/linux/cgroup-defs.h |  2 ++
+ kernel/cgroup/cgroup.c      | 34 ++++++++++++++++++++++++++++
+ kernel/sched/core.c         | 44 +++++++++++++++++++++++++++++++++++++
+ kernel/sched/fair.c         | 21 +++++++++++++++++-
+ kernel/sched/sched.h        |  2 ++
+ 5 files changed, 102 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
+index 8a0d5466c7be..ae20dbb885d6 100644
+--- a/include/linux/cgroup-defs.h
++++ b/include/linux/cgroup-defs.h
+@@ -661,6 +661,8 @@ struct cgroup_subsys {
+ 	void (*css_rstat_flush)(struct cgroup_subsys_state *css, int cpu);
+ 	int (*css_extra_stat_show)(struct seq_file *seq,
+ 				   struct cgroup_subsys_state *css);
++	int (*css_local_stat_show)(struct seq_file *seq,
++				   struct cgroup_subsys_state *css);
+ 
+ 	int (*can_attach)(struct cgroup_taskset *tset);
+ 	void (*cancel_attach)(struct cgroup_taskset *tset);
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index b26ae200abef..eafbdb58ee81 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -3726,6 +3726,36 @@ static int cpu_stat_show(struct seq_file *seq, void *v)
+ 	return ret;
+ }
+ 
++static int __maybe_unused cgroup_local_stat_show(struct seq_file *seq,
++						 struct cgroup *cgrp, int ssid)
++{
++	struct cgroup_subsys *ss = cgroup_subsys[ssid];
++	struct cgroup_subsys_state *css;
++	int ret;
++
++	if (!ss->css_local_stat_show)
++		return 0;
++
++	css = cgroup_tryget_css(cgrp, ss);
++	if (!css)
++		return 0;
++
++	ret = ss->css_local_stat_show(seq, css);
++	css_put(css);
++	return ret;
++}
++
++static int cpu_local_stat_show(struct seq_file *seq, void *v)
++{
++	struct cgroup __maybe_unused *cgrp = seq_css(seq)->cgroup;
++	int ret = 0;
++
++#ifdef CONFIG_CGROUP_SCHED
++	ret = cgroup_local_stat_show(seq, cgrp, cpu_cgrp_id);
++#endif
++	return ret;
++}
++
+ #ifdef CONFIG_PSI
+ static int cgroup_io_pressure_show(struct seq_file *seq, void *v)
+ {
+@@ -5276,6 +5306,10 @@ static struct cftype cgroup_base_files[] = {
+ 		.name = "cpu.stat",
+ 		.seq_show = cpu_stat_show,
+ 	},
++	{
++		.name = "cpu.stat.local",
++		.seq_show = cpu_local_stat_show,
++	},
+ 	{ }	/* terminate */
+ };
+ 
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index a68d1276bab0..02e1a1a78bd0 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -11103,6 +11103,27 @@ static int cpu_cfs_stat_show(struct seq_file *sf, void *v)
+ 
+ 	return 0;
+ }
++
++static u64 throttled_time_self(struct task_group *tg)
++{
++	int i;
++	u64 total = 0;
++
++	for_each_possible_cpu(i) {
++		total += READ_ONCE(tg->cfs_rq[i]->throttled_clock_self_time);
++	}
++
++	return total;
++}
++
++static int cpu_cfs_local_stat_show(struct seq_file *sf, void *v)
++{
++	struct task_group *tg = css_tg(seq_css(sf));
++
++	seq_printf(sf, "throttled_time %llu\n", throttled_time_self(tg));
++
++	return 0;
++}
+ #endif /* CONFIG_CFS_BANDWIDTH */
+ #endif /* CONFIG_FAIR_GROUP_SCHED */
+ 
+@@ -11179,6 +11200,10 @@ static struct cftype cpu_legacy_files[] = {
+ 		.name = "stat",
+ 		.seq_show = cpu_cfs_stat_show,
+ 	},
++	{
++		.name = "stat.local",
++		.seq_show = cpu_cfs_local_stat_show,
++	},
+ #endif
+ #ifdef CONFIG_RT_GROUP_SCHED
+ 	{
+@@ -11235,6 +11260,24 @@ static int cpu_extra_stat_show(struct seq_file *sf,
+ 	return 0;
+ }
+ 
++static int cpu_local_stat_show(struct seq_file *sf,
++			       struct cgroup_subsys_state *css)
++{
++#ifdef CONFIG_CFS_BANDWIDTH
++	{
++		struct task_group *tg = css_tg(css);
++		u64 throttled_self_usec;
++
++		throttled_self_usec = throttled_time_self(tg);
++		do_div(throttled_self_usec, NSEC_PER_USEC);
++
++		seq_printf(sf, "throttled_usec %llu\n",
++			   throttled_self_usec);
++	}
++#endif
++	return 0;
++}
++
+ #ifdef CONFIG_FAIR_GROUP_SCHED
+ static u64 cpu_weight_read_u64(struct cgroup_subsys_state *css,
+ 			       struct cftype *cft)
+@@ -11413,6 +11456,7 @@ struct cgroup_subsys cpu_cgrp_subsys = {
+ 	.css_released	= cpu_cgroup_css_released,
+ 	.css_free	= cpu_cgroup_css_free,
+ 	.css_extra_stat_show = cpu_extra_stat_show,
++	.css_local_stat_show = cpu_local_stat_show,
+ #ifdef CONFIG_RT_GROUP_SCHED
+ 	.can_attach	= cpu_cgroup_can_attach,
+ #endif
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 48b6f0ca13ac..ddd5dc18b238 100644
+index ddd5dc18b238..606885fc67be 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -4873,8 +4873,14 @@ enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
- 
- 	if (cfs_rq->nr_running == 1) {
- 		check_enqueue_throttle(cfs_rq);
--		if (!throttled_hierarchy(cfs_rq))
-+		if (!throttled_hierarchy(cfs_rq)) {
+@@ -4877,8 +4877,12 @@ enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
  			list_add_leaf_cfs_rq(cfs_rq);
-+		} else {
-+#ifdef CONFIG_CFS_BANDWIDTH
-+			if (!cfs_rq->throttled_clock)
-+				cfs_rq->throttled_clock = rq_clock(rq_of(cfs_rq));
-+#endif
-+		}
+ 		} else {
+ #ifdef CONFIG_CFS_BANDWIDTH
++			struct rq *rq = rq_of(cfs_rq);
++
+ 			if (!cfs_rq->throttled_clock)
+-				cfs_rq->throttled_clock = rq_clock(rq_of(cfs_rq));
++				cfs_rq->throttled_clock = rq_clock(rq);
++			if (!cfs_rq->throttled_clock_self)
++				cfs_rq->throttled_clock_self = rq_clock(rq);
+ #endif
+ 		}
  	}
- }
+@@ -5385,6 +5389,17 @@ static int tg_unthrottle_up(struct task_group *tg, void *data)
+ 			list_add_leaf_cfs_rq(cfs_rq);
+ 	}
  
-@@ -5480,7 +5486,9 @@ static bool throttle_cfs_rq(struct cfs_rq *cfs_rq)
- 	 * throttled-list.  rq->lock protects completion.
- 	 */
- 	cfs_rq->throttled = 1;
--	cfs_rq->throttled_clock = rq_clock(rq);
-+	SCHED_WARN_ON(cfs_rq->throttled_clock);
-+	if (cfs_rq->nr_running)
-+		cfs_rq->throttled_clock = rq_clock(rq);
- 	return true;
- }
- 
-@@ -5498,7 +5506,10 @@ void unthrottle_cfs_rq(struct cfs_rq *cfs_rq)
- 	update_rq_clock(rq);
- 
- 	raw_spin_lock(&cfs_b->lock);
--	cfs_b->throttled_time += rq_clock(rq) - cfs_rq->throttled_clock;
-+	if (cfs_rq->throttled_clock) {
-+		cfs_b->throttled_time += rq_clock(rq) - cfs_rq->throttled_clock;
-+		cfs_rq->throttled_clock = 0;
++	if (cfs_rq->throttled_clock_self) {
++		u64 delta = rq_clock(rq) - cfs_rq->throttled_clock_self;
++
++		cfs_rq->throttled_clock_self = 0;
++
++		if (SCHED_WARN_ON((s64)delta < 0))
++			delta = 0;
++
++		cfs_rq->throttled_clock_self_time += delta;
 +	}
- 	list_del_rcu(&cfs_rq->throttled_list);
- 	raw_spin_unlock(&cfs_b->lock);
++
+ 	return 0;
+ }
  
+@@ -5400,6 +5415,10 @@ static int tg_throttle_down(struct task_group *tg, void *data)
+ 	}
+ 	cfs_rq->throttle_count++;
+ 
++	SCHED_WARN_ON(cfs_rq->throttled_clock_self);
++	if (cfs_rq->nr_running)
++		cfs_rq->throttled_clock_self = rq_clock(rq);
++
+ 	return 0;
+ }
+ 
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 678446251c35..1d4c2434ec9b 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -642,6 +642,8 @@ struct cfs_rq {
+ 	u64			throttled_clock;
+ 	u64			throttled_clock_pelt;
+ 	u64			throttled_clock_pelt_time;
++	u64			throttled_clock_self;
++	u64			throttled_clock_self_time;
+ 	int			throttled;
+ 	int			throttle_count;
+ 	struct list_head	throttled_list;
 -- 
 2.41.0.162.gfafddb0af9-goog
 
