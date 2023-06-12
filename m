@@ -2,95 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F26E72B645
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 06:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2296872B657
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 06:19:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232314AbjFLEAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 00:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
+        id S232380AbjFLESq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 00:18:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231603AbjFLD76 (ORCPT
+        with ESMTP id S229455AbjFLESp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 23:59:58 -0400
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE3318B;
-        Sun, 11 Jun 2023 20:59:57 -0700 (PDT)
-Received: by mail-ua1-x92a.google.com with SMTP id a1e0cc1a2514c-78cd0c63ae2so94294241.1;
-        Sun, 11 Jun 2023 20:59:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686542396; x=1689134396;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h5eFbd9HFD/KRz0+XmRiub04jDxZ5/25uC97kTShMpE=;
-        b=EHyikn5gRvV78mN0YYf4xUPtAFpwRdYAhXIgBhQsen9zlXyZa6YQlQUu4I0VWvmJh+
-         dhWeExCKRXcTldPlqkBujT4S8hYN9S3Jbd0cMP3UHAxhFpCvnWUtHmMlhjd82cWzsGvU
-         Qb7ARehRdVdQqDwwsuvnhXh3B4toJX9+XvVg9hyMHUdMnCY5RWns/MKwcvTSzaHC+A5z
-         LGWo7zNB0SZBqKipj0F/4Pdmq3YHlJiRJAryzsQ/uZsCXKixJBKSxVNWgBYySL2p8hyI
-         XG2M96nT6JkeIkwNK/tgbq9u68or6XC76h7ZdsAV4l8TrLv8iVPvQyw7+G8nKpB+6EsB
-         ZRJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686542396; x=1689134396;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=h5eFbd9HFD/KRz0+XmRiub04jDxZ5/25uC97kTShMpE=;
-        b=O29izzM6VWi3MIrt9LuOqD2CTZj8NvvtlC6b/4dkY1fO8JY53wJ3Lm91+oDx9A1muw
-         fdTxacKpCx7giw5aNhJfUVVef68mb9+0EiiW8VIBW//e+DyMPZw8o730gQlAWPUV0BhG
-         sWjXLX2OasTjkUtTAMuTG4hLJ9tiwha0yW35z5AuQTZ7331fe2CUIPXdAMQa3isZgRUs
-         c3MitrJ7FoiFgFQW1CdpwAygMEBB+RDK8Nt/4jX0I/MskH9as4bgcSpt8FauuHViY8jD
-         NjqeBbNeSPOY68zTqQD4HaiyF1e++8P4Qgqg41osxRtTtu6GDTu9R6didb2UsQAV2c10
-         sOQQ==
-X-Gm-Message-State: AC+VfDysFHCOwwuhuOPxZjBQccTrVLIs1TWsMpqlyt7p6K6NIInipxnI
-        3yLZTQj+Qnnq3f6w2Cz20ESqFjArNyr+MW0SN+Y=
-X-Google-Smtp-Source: ACHHUZ6USzvroyFg92cZrS7qO9IxCrPShW1dFdqmI83KF4j0hqeLShP/3gCnfuLWhWbnhcZB+F5Mz/kUXDkjrqKPDPY=
-X-Received: by 2002:a67:f906:0:b0:43b:2630:477 with SMTP id
- t6-20020a67f906000000b0043b26300477mr2660495vsq.5.1686542395803; Sun, 11 Jun
- 2023 20:59:55 -0700 (PDT)
+        Mon, 12 Jun 2023 00:18:45 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFF491;
+        Sun, 11 Jun 2023 21:18:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=7VuDlLSYJdW+nNu3X898l9wqFn63pIrv3O6konR/Pjs=; b=l5yxoaiDbF4Ou9V0nCQhlIWYsk
+        RvKJmlX4OqkVLWP/g42QdE1H/0q529Wq0qDLw9jJgvDorAOir6w45u5eJPIeDVquDB4bSpeV4Wl9/
+        jq8OVYC8HWqFZhYN/nJ5OOA+IQijKAlcdHkoX/HSUVd3D3EwkdEM8AB6z3Ioq1yVhzZGL87ip574U
+        EPotdZX9edn5ho9GSBE6c+AtugqdQq7hGTj4ZTTi/S9QQaGA2t3pX62/b6ZsyGj2GTatWNCIdXdNL
+        qG+a+hK6+ORfHc+Bm5FwR1ICJIlN1GtBY/Y2vGS/TsSKKb9S64Ia3hyPR198Qp2r4LjjVghOpzE6B
+        CMjzDNlw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q8Z0b-002Vpz-10;
+        Mon, 12 Jun 2023 04:18:25 +0000
+Date:   Sun, 11 Jun 2023 21:18:25 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Yi He <clangllvm@126.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, rostedt@goodmis.org, mhiramat@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH] Add a sysctl option to disable bpf offensive helpers.
+Message-ID: <ZIackaLpA3APFFvj@infradead.org>
+References: <20230610152618.105518-1-clangllvm@126.com>
 MIME-Version: 1.0
-References: <000000000000da4f6b05eb9bf593@google.com> <000000000000c0951105fde12435@google.com>
- <20230612033023.GA16241@lst.de>
-In-Reply-To: <20230612033023.GA16241@lst.de>
-From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Date:   Mon, 12 Jun 2023 12:59:39 +0900
-Message-ID: <CAKFNMomCUnaB3_3chQm4P8devx2NwAp2hMpYfbyaHKyO2WLEkw@mail.gmail.com>
-Subject: Re: [syzbot] [nilfs?] general protection fault in nilfs_clear_dirty_page
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     syzbot <syzbot+53369d11851d8f26735c@syzkaller.appspotmail.com>,
-        axboe@kernel.dk, dsterba@suse.com, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        wqu@suse.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230610152618.105518-1-clangllvm@126.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 12:30=E2=80=AFPM Christoph Hellwig wrote:
->
-> On Sun, Jun 11, 2023 at 02:18:29PM -0700, syzbot wrote:
-> > syzbot has bisected this issue to:
-> >
-> > commit 4a445b7b6178d88956192c0202463063f52e8667
-> > Author: Qu Wenruo <wqu@suse.com>
-> > Date:   Sat Aug 13 08:06:53 2022 +0000
-> >
-> >     btrfs: don't merge pages into bio if their page offset is not conti=
-guous
->
-> I can't see how that btrfs commit would affect nilfs2..
+On Sat, Jun 10, 2023 at 03:26:18PM +0000, Yi He wrote:
+> The default value of sysctl_offensive_bpf_disabled is 0, which means 
+> all the five helpers are enabled. By setting sysctl_offensive_bpf_disabled 
+> to 1, these helpers cannot be used util a reboot. By setting it to 2, 
+> these helpers cannot be used but privieleged users can modify this flag
+> to 0.
 
-Yeah, I think this bisection result is wrong.
-I have already posted a bug-fix patch titled "nilfs2: prevent general
-protection fault in nilfs_clear_dirty_page()"
-for this issue.
+That's just a nightmare API.  The right thing is to not allow
+program types that can use the helpers from anything but a global
+fully privileged context.
 
-Thanks,
-Ryusuke Konishi
+And offensive is in this context a really weird term.  Nothing is
+offensive here, invasive or allowing to change kernel state might be
+better terms.
