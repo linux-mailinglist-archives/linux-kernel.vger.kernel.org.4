@@ -2,67 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90C5A72C984
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DACA672C988
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:15:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237341AbjFLPO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 11:14:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43252 "EHLO
+        id S238529AbjFLPPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 11:15:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239386AbjFLPOZ (ORCPT
+        with ESMTP id S237099AbjFLPPI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 11:14:25 -0400
-Received: from smtp-bc08.mail.infomaniak.ch (smtp-bc08.mail.infomaniak.ch [IPv6:2001:1600:4:17::bc08])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6D9E51
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:14:21 -0700 (PDT)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4QfwFl4W70zMpnNw;
-        Mon, 12 Jun 2023 15:14:19 +0000 (UTC)
-Received: from unknown by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4QfwFj26wjzMpwVG;
-        Mon, 12 Jun 2023 17:14:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1686582859;
-        bh=32zV36yN5x2nDx52A2mWYWTrvanJozR6EEwrjAiFAb4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=o8mKZ12pH4FMYwuky/MZHnka5tIT/XNt5Rf4dC7KJW6NP2PyGNKFKLKLEYYVSCqGd
-         NodK1Br/hB+6iSN4/wLe1EODMaQ0aXtapP5Ay4htFMySYaL5Q3Sl0DKdOQf7nJNYq8
-         2895bO8QPGVSgs2wLlvsg63xfxTJF8SZXP46NiOM=
-Message-ID: <715fb7f9-4510-7b0e-a641-d7b6335c19df@digikod.net>
-Date:   Mon, 12 Jun 2023 17:14:16 +0200
+        Mon, 12 Jun 2023 11:15:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2A198;
+        Mon, 12 Jun 2023 08:15:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8481861E2D;
+        Mon, 12 Jun 2023 15:15:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A8ACC433D2;
+        Mon, 12 Jun 2023 15:15:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686582905;
+        bh=dGC149c5x01RTzK/Vu79dUHLei19YO73aaltgb70V8k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Yz7WOJ9+2MdrrAB7Pu166c9/NWzPb/G53ppcA3TywMNI0ghx0CvTLpr2SkwqeMS/l
+         zJuAc95rD8LjN4nwHGn0O7wmSH0uxEp+M9z56ZPfhIjkzMtVW7xYq7Bbbg9WuGKqIa
+         ViB9KeD13dEkiLDGZwqGZaaz4my+ePX5gH/HhI7XflKDZmweXD2VPXdgoPLlO475Ni
+         JATJY/Uea9wMGDT6BSa1Di3EBpewvTORQMx8sg2RwpoUf3Eb95VPiMAp/CMbNyu7QT
+         F3RzcJsHxY/yku5H8fFk1c26LoChFrHz+CySAOjRtJRxDDDnzxVKBxZU0NAmBJm7CD
+         lrHA6UZlJ/kuA==
+Date:   Mon, 12 Jun 2023 17:15:03 +0200
+From:   Maxime Ripard <mripard@kernel.org>
+To:     Sui Jingfeng <suijingfeng@loongson.cn>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH] drm: gem: add an option for supporting the dma-coherent
+ hardware.
+Message-ID: <lebytp7civogcw3eluwja74g5w4jvpnjug7jp4ec5rzuch6wu6@inmzzvnaozuq>
+References: <20230607053053.345101-1-suijingfeng@loongson.cn>
+ <d4378aad1cf179d308068ef6072c5c7ff2bf2502.camel@crapouillou.net>
+ <6db23d14-652e-4b13-24cb-bfb92fa3faed@loongson.cn>
+ <e9714a0c29b1c4268081827571ad2545b0e6d5ec.camel@crapouillou.net>
+ <d5494751-0af0-42f6-bcad-f75415e4a6bd@loongson.cn>
+ <2dd4c870a5605a79105fb621c97a5f59a18c8c24.camel@crapouillou.net>
+ <ae085320-c93c-5d96-58ef-c5ee8b58c306@loongson.cn>
+ <i2odidvev3ztxit4iv4ndxcuk4opckgs5fg4jjjfrq5nike35u@mlo7hshexe2n>
+ <f9cef1ed-fc46-bad5-e2d7-b734aaeb16c1@loongson.cn>
 MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [PATCH v1 1/5] hostfs: Fix ephemeral inodes
-Content-Language: en-US
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Richard Weinberger <richard@nod.at>
-Cc:     Christopher Obbard <chris.obbard@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        =?UTF-8?Q?G=c3=bcnther_Noack?= <gnoack3000@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        James Morris <jmorris@namei.org>, Jeff Xu <jeffxu@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Ritesh Raj Sarraf <ritesh@collabora.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sjoerd Simons <sjoerd@collabora.com>,
-        Willem de Bruijn <willemb@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, stable@vger.kernel.org
-References: <20230309165455.175131-1-mic@digikod.net>
- <20230309165455.175131-2-mic@digikod.net>
- <a1aff2baa9f54f534894887d58c470851a945b1f.camel@huaweicloud.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <a1aff2baa9f54f534894887d58c470851a945b1f.camel@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dtzbhhtxjptopns7"
+Content-Disposition: inline
+In-Reply-To: <f9cef1ed-fc46-bad5-e2d7-b734aaeb16c1@loongson.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -70,476 +73,294 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 06/06/2023 15:12, Roberto Sassu wrote:
-> On Thu, 2023-03-09 at 17:54 +0100, Mickaël Salaün wrote:
->> hostfs creates a new inode for each opened or created file, which created
->> useless inode allocations and forbade identifying a host file with a kernel
->> inode.
->>
->> Fix this uncommon filesystem behavior by tying kernel inodes to host
->> file's inode and device IDs.  Even if the host filesystem inodes may be
->> recycled, this cannot happen while a file referencing it is open, which
->> is the case with hostfs.  It should be noted that hostfs inode IDs may
->> not be unique for the same hostfs superblock because multiple host's
->> (backed) superblocks may be used.
-> 
-> I hoped that this patch solved an issue when testing the
-> inode_setsecurity and inode_getsecurity combination. Unfortunately, it
-> does not work, since after inode_setsecurity the inode is dropped. At
-> the time inode_getsecurity is called, the security blob is lost.
+--dtzbhhtxjptopns7
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Indeed, this is because inode[sg]etsecurity() rely on inode's xattr, 
-which are not handled by hostfs. Why not simply use overlayfs with an 
-upper tmpfs that supports xattr? This patch might be needed to such 
-scenario though.
+On Thu, Jun 08, 2023 at 04:17:52PM +0800, Sui Jingfeng wrote:
+> Hi,
+>=20
+> On 2023/6/8 15:39, Maxime Ripard wrote:
+> > On Thu, Jun 08, 2023 at 01:18:38AM +0800, Sui Jingfeng wrote:
+> > > Hi,
+> > >=20
+> > > On 2023/6/8 00:12, Paul Cercueil wrote:
+> > > > Hi Sui,
+> > > >=20
+> > > > Le mercredi 07 juin 2023 =E0 22:38 +0800, Sui Jingfeng a =E9crit=A0:
+> > > > > Hi,=A0 welcome to discussion.
+> > > > >=20
+> > > > >=20
+> > > > > I have limited skills in manipulating English.
+> > > > >=20
+> > > > > It may not express what I'm really means in the short time.
+> > > > >=20
+> > > > > Part of word in the sentence may not as accurate as your.
+> > > > >=20
+> > > > > Well, please don't misunderstand, I'm not doing the rude to you.
+> > > > No problem.
+> > > >=20
+> > > > > I will explain it with more details.
+> > > > >=20
+> > > > > See below:
+> > > > >=20
+> > > > >=20
+> > > > > On 2023/6/7 20:09, Paul Cercueil wrote:
+> > > > > > Hi Sui,
+> > > > > >=20
+> > > > > > Le mercredi 07 juin 2023 =E0 18:30 +0800, Sui Jingfeng a =E9cri=
+t=A0:
+> > > > > > > Hi,
+> > > > > > >=20
+> > > > > > >=20
+> > > > > > > On 2023/6/7 17:36, Paul Cercueil wrote:
+> > > > > > > > Hi Sui,
+> > > > > > > >=20
+> > > > > > > > Le mercredi 07 juin 2023 =E0 13:30 +0800, Sui Jingfeng a =
+=E9crit=A0:
+> > > > > > > > > The single map_noncoherent member of struct
+> > > > > > > > > drm_gem_dma_object
+> > > > > > > > > may
+> > > > > > > > > not
+> > > > > > > > > sufficient for describing the backing memory of the GEM
+> > > > > > > > > buffer
+> > > > > > > > > object.
+> > > > > > > > >=20
+> > > > > > > > > Especially on dma-coherent systems, the backing memory is
+> > > > > > > > > both
+> > > > > > > > > cached
+> > > > > > > > > coherent for multi-core CPUs and dma-coherent for periphe=
+ral
+> > > > > > > > > device.
+> > > > > > > > > Say architectures like X86-64, LoongArch64, Loongson Mips=
+64,
+> > > > > > > > > etc.
+> > > > > > > > >=20
+> > > > > > > > > Whether a peripheral device is dma-coherent or not can be
+> > > > > > > > > implementation-dependent. The single map_noncoherent opti=
+on
+> > > > > > > > > is
+> > > > > > > > > not
+> > > > > > > > > enough
+> > > > > > > > > to reflect real hardware anymore. For example, the Loongs=
+on
+> > > > > > > > > LS3A4000
+> > > > > > > > > CPU
+> > > > > > > > > and LS2K2000/LS2K1000 SoC, peripheral device of such hard=
+ware
+> > > > > > > > > platform
+> > > > > > > > > allways snoop CPU's cache. Doing the allocation with
+> > > > > > > > > dma_alloc_coherent
+> > > > > > > > > function is preferred. The return buffer is cached, it sh=
+ould
+> > > > > > > > > not
+> > > > > > > > > using
+> > > > > > > > > the default write-combine mapping. While with the current
+> > > > > > > > > implement,
+> > > > > > > > > there
+> > > > > > > > > no way to tell the drm core to reflect this.
+> > > > > > > > >=20
+> > > > > > > > > This patch adds cached and coherent members to struct
+> > > > > > > > > drm_gem_dma_object.
+> > > > > > > > > which allow driver implements to inform the core. Introdu=
+cing
+> > > > > > > > > new
+> > > > > > > > > mappings
+> > > > > > > > > while keeping the original default behavior unchanged.
+> > > > > > > > Did you try to simply set the "dma-coherent" property to the
+> > > > > > > > device's
+> > > > > > > > node?
+> > > > > > > But this approach can only be applied for the device driver w=
+ith
+> > > > > > > DT
+> > > > > > > support.
+> > > > > > >=20
+> > > > > > > X86-64, Loongson ls3a4000 mips64, Loongson ls3a5000 CPU typic=
+ally
+> > > > > > > do
+> > > > > > > not
+> > > > > > > have DT support.
+> > > > > > >=20
+> > > > > > > They using ACPI to pass parameter from the firmware to Linux
+> > > > > > > kernel.
+> > > > > > >=20
+> > > > > > > You approach will lost the effectiveness on such a case.
+> > > > > > Well, I don't really know how ACPI handles it - but it should j=
+ust
+> > > > > > be a
+> > > > > > matter of setting dev->dma_coherent. That's basically what the =
+DT
+> > > > > > code
+> > > > > > does.
+> > > > > >=20
+> > > > > > Some MIPS boards set it in their setup code for instance.
+> > > > > >=20
+> > > > > This is a *strategy*, not a *mechanism*.
+> > > > >=20
+> > > > > In this case, DT is just used to describing the hardware.
+> > > > >=20
+> > > > > (It is actually a hardware feature describing language, the
+> > > > > granularity
+> > > > > is large)
+> > > > >=20
+> > > > > It does not changing the state of the hardware.
+> > > > >=20
+> > > > > It's your platform firmware or kernel setting up code who actuall=
+y do
+> > > > > such a things.
+> > > > >=20
+> > > > >=20
+> > > > > It's just that it works on *one* platform, it does not guarantee =
+it
+> > > > > will
+> > > > > works on others.
+> > > > If you add the "dma-coherent" property in a device node in DT, you
+> > > > effectively specify that the device is DMA-coherent; so you describe
+> > > > the hardware, which is what DT is for, and you are not changing the
+> > > > state of the hardware.
+> > > >=20
+> > > > Note that some MIPS platforms (arch/mips/alchemy/common/setup.c)
+> > > > default to DMA-coherent mapping; I believe you could do something
+> > > > similar with your Loongson LS3A4000 CPU and LS2K2000/LS2K1000 SoC.
+> > > >=20
+> > > The preblem is that device driver can have various demand.
+> > >=20
+> > > It probably want to create different kind of buffers for different th=
+ing
+> > > simultaneously.
+> > >=20
+> > > Say, one allocated with dma_alloc_coherent for command buffer or dma
+> > > descriptor
+> > >=20
+> > > another one allocated with=A0 dma_alloc_wc for uploading shader etc.
+> > >=20
+> > > also has the third one allocated with dma_alloc_noncoherent() for doi=
+ng some
+> > > else.
+> > And it will work just fine.
+> >=20
+> > struct device dma_coherent, or DT's dma-coherent property define that
+> > the device doesn't need any kind of cache maintenance, ever. If it's
+> > missing, we need to perform cache maintenance to keep coherency.
+> >=20
+> > dma_alloc_* functions provide guarantees to the driver. With
+> > dma_alloc_wc and dma_alloc_coherent, the buffer is coherent, and thus
+> > you don't need to perform cache maintenance operations by hand in the
+> > driver.
+>=20
+> BO returned by dma_alloc_wc() doesn't works on some platform.
 
+What do you mean by "it doesn't work" ? Because then, it's definitely
+the platform that's broken if it doesn't provide a coherent buffer.
 
-> 
-> Roberto
-> 
->> Delete inodes when dropping them to force backed host's file descriptors
->> closing.
->>
->> This enables to entirely remove ARCH_EPHEMERAL_INODES, and then makes
->> Landlock fully supported by UML.  This is very useful for testing
->> (ongoing and backported) changes.
->>
->> These changes also factor out and simplify some helpers thanks to the
->> new hostfs_inode_update() and the hostfs_iget() revamp: read_name(),
->> hostfs_create(), hostfs_lookup(), hostfs_mknod(), and
->> hostfs_fill_sb_common().
->>
->> A following commit with new Landlock tests check this new hostfs inode
->> consistency.
->>
->> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
->> Cc: Johannes Berg <johannes@sipsolutions.net>
->> Cc: Richard Weinberger <richard@nod.at>
->> Cc: <stable@vger.kernel.org> # 5.15.x: ce72750f04d6: hostfs: Fix writeback of dirty pages
->> Cc: <stable@vger.kernel.org> # 5.15+
->> Signed-off-by: Mickaël Salaün <mic@digikod.net>
->> Link: https://lore.kernel.org/r/20230309165455.175131-2-mic@digikod.net
->> ---
->>   arch/Kconfig              |   7 --
->>   arch/um/Kconfig           |   1 -
->>   fs/hostfs/hostfs.h        |   1 +
->>   fs/hostfs/hostfs_kern.c   | 213 +++++++++++++++++++-------------------
->>   fs/hostfs/hostfs_user.c   |   1 +
->>   security/landlock/Kconfig |   2 +-
->>   6 files changed, 109 insertions(+), 116 deletions(-)
->>
->> diff --git a/arch/Kconfig b/arch/Kconfig
->> index e3511afbb7f2..d5f0841ac3c1 100644
->> --- a/arch/Kconfig
->> +++ b/arch/Kconfig
->> @@ -1156,13 +1156,6 @@ config COMPAT_32BIT_TIME
->>   config ARCH_NO_PREEMPT
->>   	bool
->>   
->> -config ARCH_EPHEMERAL_INODES
->> -	def_bool n
->> -	help
->> -	  An arch should select this symbol if it doesn't keep track of inode
->> -	  instances on its own, but instead relies on something else (e.g. the
->> -	  host kernel for an UML kernel).
->> -
->>   config ARCH_SUPPORTS_RT
->>   	bool
->>   
->> diff --git a/arch/um/Kconfig b/arch/um/Kconfig
->> index 541a9b18e343..4057d5267c6a 100644
->> --- a/arch/um/Kconfig
->> +++ b/arch/um/Kconfig
->> @@ -5,7 +5,6 @@ menu "UML-specific options"
->>   config UML
->>   	bool
->>   	default y
->> -	select ARCH_EPHEMERAL_INODES
->>   	select ARCH_HAS_FORTIFY_SOURCE
->>   	select ARCH_HAS_GCOV_PROFILE_ALL
->>   	select ARCH_HAS_KCOV
->> diff --git a/fs/hostfs/hostfs.h b/fs/hostfs/hostfs.h
->> index 69cb796f6270..0239e3af3945 100644
->> --- a/fs/hostfs/hostfs.h
->> +++ b/fs/hostfs/hostfs.h
->> @@ -65,6 +65,7 @@ struct hostfs_stat {
->>   	unsigned long long blocks;
->>   	unsigned int maj;
->>   	unsigned int min;
->> +	dev_t dev;
->>   };
->>   
->>   extern int stat_file(const char *path, struct hostfs_stat *p, int fd);
->> diff --git a/fs/hostfs/hostfs_kern.c b/fs/hostfs/hostfs_kern.c
->> index 28b4f15c19eb..19496f732016 100644
->> --- a/fs/hostfs/hostfs_kern.c
->> +++ b/fs/hostfs/hostfs_kern.c
->> @@ -26,6 +26,7 @@ struct hostfs_inode_info {
->>   	fmode_t mode;
->>   	struct inode vfs_inode;
->>   	struct mutex open_mutex;
->> +	dev_t dev;
->>   };
->>   
->>   static inline struct hostfs_inode_info *HOSTFS_I(struct inode *inode)
->> @@ -182,14 +183,6 @@ static char *follow_link(char *link)
->>   	return ERR_PTR(n);
->>   }
->>   
->> -static struct inode *hostfs_iget(struct super_block *sb)
->> -{
->> -	struct inode *inode = new_inode(sb);
->> -	if (!inode)
->> -		return ERR_PTR(-ENOMEM);
->> -	return inode;
->> -}
->> -
->>   static int hostfs_statfs(struct dentry *dentry, struct kstatfs *sf)
->>   {
->>   	/*
->> @@ -228,6 +221,7 @@ static struct inode *hostfs_alloc_inode(struct super_block *sb)
->>   		return NULL;
->>   	hi->fd = -1;
->>   	hi->mode = 0;
->> +	hi->dev = 0;
->>   	inode_init_once(&hi->vfs_inode);
->>   	mutex_init(&hi->open_mutex);
->>   	return &hi->vfs_inode;
->> @@ -240,6 +234,7 @@ static void hostfs_evict_inode(struct inode *inode)
->>   	if (HOSTFS_I(inode)->fd != -1) {
->>   		close_file(&HOSTFS_I(inode)->fd);
->>   		HOSTFS_I(inode)->fd = -1;
->> +		HOSTFS_I(inode)->dev = 0;
->>   	}
->>   }
->>   
->> @@ -265,6 +260,7 @@ static int hostfs_show_options(struct seq_file *seq, struct dentry *root)
->>   static const struct super_operations hostfs_sbops = {
->>   	.alloc_inode	= hostfs_alloc_inode,
->>   	.free_inode	= hostfs_free_inode,
->> +	.drop_inode	= generic_delete_inode,
->>   	.evict_inode	= hostfs_evict_inode,
->>   	.statfs		= hostfs_statfs,
->>   	.show_options	= hostfs_show_options,
->> @@ -512,18 +508,31 @@ static const struct address_space_operations hostfs_aops = {
->>   	.write_end	= hostfs_write_end,
->>   };
->>   
->> -static int read_name(struct inode *ino, char *name)
->> +static int hostfs_inode_update(struct inode *ino, const struct hostfs_stat *st)
->> +{
->> +	set_nlink(ino, st->nlink);
->> +	i_uid_write(ino, st->uid);
->> +	i_gid_write(ino, st->gid);
->> +	ino->i_atime =
->> +		(struct timespec64){ st->atime.tv_sec, st->atime.tv_nsec };
->> +	ino->i_mtime =
->> +		(struct timespec64){ st->mtime.tv_sec, st->mtime.tv_nsec };
->> +	ino->i_ctime =
->> +		(struct timespec64){ st->ctime.tv_sec, st->ctime.tv_nsec };
->> +	ino->i_size = st->size;
->> +	ino->i_blocks = st->blocks;
->> +	return 0;
->> +}
->> +
->> +static int hostfs_inode_set(struct inode *ino, void *data)
->>   {
->> +	struct hostfs_stat *st = data;
->>   	dev_t rdev;
->> -	struct hostfs_stat st;
->> -	int err = stat_file(name, &st, -1);
->> -	if (err)
->> -		return err;
->>   
->>   	/* Reencode maj and min with the kernel encoding.*/
->> -	rdev = MKDEV(st.maj, st.min);
->> +	rdev = MKDEV(st->maj, st->min);
->>   
->> -	switch (st.mode & S_IFMT) {
->> +	switch (st->mode & S_IFMT) {
->>   	case S_IFLNK:
->>   		ino->i_op = &hostfs_link_iops;
->>   		break;
->> @@ -535,7 +544,7 @@ static int read_name(struct inode *ino, char *name)
->>   	case S_IFBLK:
->>   	case S_IFIFO:
->>   	case S_IFSOCK:
->> -		init_special_inode(ino, st.mode & S_IFMT, rdev);
->> +		init_special_inode(ino, st->mode & S_IFMT, rdev);
->>   		ino->i_op = &hostfs_iops;
->>   		break;
->>   	case S_IFREG:
->> @@ -547,17 +556,42 @@ static int read_name(struct inode *ino, char *name)
->>   		return -EIO;
->>   	}
->>   
->> -	ino->i_ino = st.ino;
->> -	ino->i_mode = st.mode;
->> -	set_nlink(ino, st.nlink);
->> -	i_uid_write(ino, st.uid);
->> -	i_gid_write(ino, st.gid);
->> -	ino->i_atime = (struct timespec64){ st.atime.tv_sec, st.atime.tv_nsec };
->> -	ino->i_mtime = (struct timespec64){ st.mtime.tv_sec, st.mtime.tv_nsec };
->> -	ino->i_ctime = (struct timespec64){ st.ctime.tv_sec, st.ctime.tv_nsec };
->> -	ino->i_size = st.size;
->> -	ino->i_blocks = st.blocks;
->> -	return 0;
->> +	HOSTFS_I(ino)->dev = st->dev;
->> +	ino->i_ino = st->ino;
->> +	ino->i_mode = st->mode;
->> +	return hostfs_inode_update(ino, st);
->> +}
->> +
->> +static int hostfs_inode_test(struct inode *inode, void *data)
->> +{
->> +	const struct hostfs_stat *st = data;
->> +
->> +	return inode->i_ino == st->ino && HOSTFS_I(inode)->dev == st->dev;
->> +}
->> +
->> +static struct inode *hostfs_iget(struct super_block *sb, char *name)
->> +{
->> +	struct inode *inode;
->> +	struct hostfs_stat st;
->> +	int err = stat_file(name, &st, -1);
->> +
->> +	if (err)
->> +		return ERR_PTR(err);
->> +
->> +	inode = iget5_locked(sb, st.ino, hostfs_inode_test, hostfs_inode_set,
->> +			     &st);
->> +	if (!inode)
->> +		return ERR_PTR(-ENOMEM);
->> +
->> +	if (inode->i_state & I_NEW) {
->> +		unlock_new_inode(inode);
->> +	} else {
->> +		spin_lock(&inode->i_lock);
->> +		hostfs_inode_update(inode, &st);
->> +		spin_unlock(&inode->i_lock);
->> +	}
->> +
->> +	return inode;
->>   }
->>   
->>   static int hostfs_create(struct mnt_idmap *idmap, struct inode *dir,
->> @@ -565,62 +599,48 @@ static int hostfs_create(struct mnt_idmap *idmap, struct inode *dir,
->>   {
->>   	struct inode *inode;
->>   	char *name;
->> -	int error, fd;
->> -
->> -	inode = hostfs_iget(dir->i_sb);
->> -	if (IS_ERR(inode)) {
->> -		error = PTR_ERR(inode);
->> -		goto out;
->> -	}
->> +	int fd;
->>   
->> -	error = -ENOMEM;
->>   	name = dentry_name(dentry);
->>   	if (name == NULL)
->> -		goto out_put;
->> +		return -ENOMEM;
->>   
->>   	fd = file_create(name, mode & 0777);
->> -	if (fd < 0)
->> -		error = fd;
->> -	else
->> -		error = read_name(inode, name);
->> +	if (fd < 0) {
->> +		__putname(name);
->> +		return fd;
->> +	}
->>   
->> +	inode = hostfs_iget(dir->i_sb, name);
->>   	__putname(name);
->> -	if (error)
->> -		goto out_put;
->> +	if (IS_ERR(inode))
->> +		return PTR_ERR(inode);
->>   
->>   	HOSTFS_I(inode)->fd = fd;
->>   	HOSTFS_I(inode)->mode = FMODE_READ | FMODE_WRITE;
->>   	d_instantiate(dentry, inode);
->>   	return 0;
->> -
->> - out_put:
->> -	iput(inode);
->> - out:
->> -	return error;
->>   }
->>   
->>   static struct dentry *hostfs_lookup(struct inode *ino, struct dentry *dentry,
->>   				    unsigned int flags)
->>   {
->> -	struct inode *inode;
->> +	struct inode *inode = NULL;
->>   	char *name;
->> -	int err;
->> -
->> -	inode = hostfs_iget(ino->i_sb);
->> -	if (IS_ERR(inode))
->> -		goto out;
->>   
->> -	err = -ENOMEM;
->>   	name = dentry_name(dentry);
->> -	if (name) {
->> -		err = read_name(inode, name);
->> -		__putname(name);
->> -	}
->> -	if (err) {
->> -		iput(inode);
->> -		inode = (err == -ENOENT) ? NULL : ERR_PTR(err);
->> +	if (name == NULL)
->> +		return ERR_PTR(-ENOMEM);
->> +
->> +	inode = hostfs_iget(ino->i_sb, name);
->> +	__putname(name);
->> +	if (IS_ERR(inode)) {
->> +		if (PTR_ERR(inode) == -ENOENT)
->> +			inode = NULL;
->> +		else
->> +			return ERR_CAST(inode);
->>   	}
->> - out:
->> +
->>   	return d_splice_alias(inode, dentry);
->>   }
->>   
->> @@ -704,35 +724,23 @@ static int hostfs_mknod(struct mnt_idmap *idmap, struct inode *dir,
->>   	char *name;
->>   	int err;
->>   
->> -	inode = hostfs_iget(dir->i_sb);
->> -	if (IS_ERR(inode)) {
->> -		err = PTR_ERR(inode);
->> -		goto out;
->> -	}
->> -
->> -	err = -ENOMEM;
->>   	name = dentry_name(dentry);
->>   	if (name == NULL)
->> -		goto out_put;
->> +		return -ENOMEM;
->>   
->>   	err = do_mknod(name, mode, MAJOR(dev), MINOR(dev));
->> -	if (err)
->> -		goto out_free;
->> +	if (err) {
->> +		__putname(name);
->> +		return err;
->> +	}
->>   
->> -	err = read_name(inode, name);
->> +	inode = hostfs_iget(dir->i_sb, name);
->>   	__putname(name);
->> -	if (err)
->> -		goto out_put;
->> +	if (IS_ERR(inode))
->> +		return PTR_ERR(inode);
->>   
->>   	d_instantiate(dentry, inode);
->>   	return 0;
->> -
->> - out_free:
->> -	__putname(name);
->> - out_put:
->> -	iput(inode);
->> - out:
->> -	return err;
->>   }
->>   
->>   static int hostfs_rename2(struct mnt_idmap *idmap,
->> @@ -929,49 +937,40 @@ static int hostfs_fill_sb_common(struct super_block *sb, void *d, int silent)
->>   	sb->s_maxbytes = MAX_LFS_FILESIZE;
->>   	err = super_setup_bdi(sb);
->>   	if (err)
->> -		goto out;
->> +		return err;
->>   
->>   	/* NULL is printed as '(null)' by printf(): avoid that. */
->>   	if (req_root == NULL)
->>   		req_root = "";
->>   
->> -	err = -ENOMEM;
->>   	sb->s_fs_info = host_root_path =
->>   		kasprintf(GFP_KERNEL, "%s/%s", root_ino, req_root);
->>   	if (host_root_path == NULL)
->> -		goto out;
->> -
->> -	root_inode = new_inode(sb);
->> -	if (!root_inode)
->> -		goto out;
->> +		return -ENOMEM;
->>   
->> -	err = read_name(root_inode, host_root_path);
->> -	if (err)
->> -		goto out_put;
->> +	root_inode = hostfs_iget(sb, host_root_path);
->> +	if (IS_ERR(root_inode))
->> +		return PTR_ERR(root_inode);
->>   
->>   	if (S_ISLNK(root_inode->i_mode)) {
->> -		char *name = follow_link(host_root_path);
->> -		if (IS_ERR(name)) {
->> -			err = PTR_ERR(name);
->> -			goto out_put;
->> -		}
->> -		err = read_name(root_inode, name);
->> +		char *name;
->> +
->> +		iput(root_inode);
->> +		name = follow_link(host_root_path);
->> +		if (IS_ERR(name))
->> +			return PTR_ERR(name);
->> +
->> +		root_inode = hostfs_iget(sb, name);
->>   		kfree(name);
->> -		if (err)
->> -			goto out_put;
->> +		if (IS_ERR(root_inode))
->> +			return PTR_ERR(root_inode);
->>   	}
->>   
->> -	err = -ENOMEM;
->>   	sb->s_root = d_make_root(root_inode);
->>   	if (sb->s_root == NULL)
->> -		goto out;
->> +		return -ENOMEM;
->>   
->>   	return 0;
->> -
->> -out_put:
->> -	iput(root_inode);
->> -out:
->> -	return err;
->>   }
->>   
->>   static struct dentry *hostfs_read_sb(struct file_system_type *type,
->> diff --git a/fs/hostfs/hostfs_user.c b/fs/hostfs/hostfs_user.c
->> index 5ecc4706172b..840619e39a1a 100644
->> --- a/fs/hostfs/hostfs_user.c
->> +++ b/fs/hostfs/hostfs_user.c
->> @@ -36,6 +36,7 @@ static void stat64_to_hostfs(const struct stat64 *buf, struct hostfs_stat *p)
->>   	p->blocks = buf->st_blocks;
->>   	p->maj = os_major(buf->st_rdev);
->>   	p->min = os_minor(buf->st_rdev);
->> +	p->dev = buf->st_dev;
->>   }
->>   
->>   int stat_file(const char *path, struct hostfs_stat *p, int fd)
->> diff --git a/security/landlock/Kconfig b/security/landlock/Kconfig
->> index 8e33c4e8ffb8..c1e862a38410 100644
->> --- a/security/landlock/Kconfig
->> +++ b/security/landlock/Kconfig
->> @@ -2,7 +2,7 @@
->>   
->>   config SECURITY_LANDLOCK
->>   	bool "Landlock support"
->> -	depends on SECURITY && !ARCH_EPHEMERAL_INODES
->> +	depends on SECURITY
->>   	select SECURITY_PATH
->>   	help
->>   	  Landlock is a sandboxing mechanism that enables processes to restrict
-> 
+> This may only guarantee for the CPU side. There is no guarantee for
+> the GPU side.
+>=20
+> For example, the GPU always snoop CPU's cache. The GPU fetch data from
+> the CPU's cache if hit.
+>=20
+> if not hit, the GPU fetch the data from the system RAM.
+
+Right, that's still a coherent buffer.
+
+> But when call dma_alloc_wc(), the BO at cpu side is marked as write
+> combine property.
+>=20
+> The write buffer within the CPU will gather the CPU side write access.
+>=20
+> This is to say, there may have some data reside(stall) in the write buffe=
+r.
+>=20
+> while the GPU will fetch data from the system RAM or CPU's cache.
+>=20
+> the GPU will fetch wrong data.
+
+If that's the case, your buffer isn't coherent, and your platform
+probably breaks the expectations of the DMA API.
+
+> This is the condition for our hardware, I don't know how does the ARM
+> platform guarantee
+>=20
+> the coherency in this case.
+>
+> If it relay on software to guarantee, then it is still non hardware
+> maintained coherency.
+>=20
+>=20
+> When it relay on software, I called it implement-dependent.
+>=20
+> there are some archs without the implement or don't know how to implement.
+>=20
+>=20
+> If it can't even snoop cpu's cache, I don't believe it can snoop cpu's wr=
+ite
+> buffer.
+>=20
+> I not sure dma api can do guarantee for all arch.
+>=20
+>=20
+> > With dma_alloc_noncoherent, the buffer is non-coherent and the driver
+> > needs to perform them when relevant.
+> >=20
+> > How those buffers are created is platform specific, but the guarantees
+> > provided *to the driver* are always there.
+> >=20
+> > A buffer allocated with dma_alloc_coherent might be provided by
+> > different means (at the hardware level with a coherency unit, by mapping
+> > it non-cacheable), but as far as the driver is concerned it's always
+> > going to be coherent.
+> >=20
+> > Similarly, a driver using dma_alloc_noncoherent will always require
+> > cache maintenance operations to use the API properly, even if the
+> > hardware provides coherency (in which case, those operations will be
+> > nop).
+> >=20
+> > So, yeah, like I was saying in the other mail, it looks like you're
+> > confusing a bunch of things. dma_alloc_* functions are about the driver
+> > expectations and guarantees. DT's dma-coherent property is about how we
+> > can implement them on a given platform.
+>=20
+> That is ideal situation.
+>=20
+> You don't have seen the actual bugs.
+
+Probably not :)
+
+> Yeah, I do have a bit confusing about the DMA api.
+>=20
+> Maybe you and Paul can continue work on this.
+
+As far as I'm concerned, there's nothing to fix but your platform
+support. I won't work on that.
+
+> But DT's dma-coherent property is definitely not a system level
+> solution.
+>=20
+> drm/amdgpu, drm/radeon and drm/i915 don't support DT.
+>=20
+> If ARM is dma-noncoherent, I suspect drm/amdgpu, drm/radeon will not
+> works on ARM.
+>=20
+> there no function call dma_sync_for_device() dma_sync_for_cpu() etc
+>=20
+> These driver assume dma-coherent hardware.
+
+No, these drivers assume they have a dma-coherent *buffer*. Which on
+devices that don't get hardware coherency mean that they probably get a
+non-cacheable buffer.
+
+Maxime
+
+--dtzbhhtxjptopns7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZIc2dwAKCRDj7w1vZxhR
+xX+KAP0f01Nyls5VR0A4BOxlsfmnHMEa2CQZB8CAewfcNEhfwgD9GFfwHIQI4Wy1
+nJs179eAwl3YIf5EMc3ffWlphla2SQU=
+=SfdS
+-----END PGP SIGNATURE-----
+
+--dtzbhhtxjptopns7--
