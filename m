@@ -2,248 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48CDB72D42E
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 00:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CFA472D432
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 00:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234353AbjFLWLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 18:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37820 "EHLO
+        id S233480AbjFLWMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 18:12:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238503AbjFLWLA (ORCPT
+        with ESMTP id S237269AbjFLWMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 18:11:00 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CB0E0;
-        Mon, 12 Jun 2023 15:10:59 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35CLwqfo007881;
-        Mon, 12 Jun 2023 22:10:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=U8376kYwvNcLdvrh9ei6usddcwH1fXpA+G/yhvlgDh0=;
- b=dehpolmnKuIjl9bWSGOLoyv4FlXpZcwDj7Ch9iArPZZmhUjk9cvrcUpmi6Gex9kZSAKZ
- Lzl/g/z3ubv9ZmuT6XfYBGGzUzdksrA/Z3anm/EymIxPKhEeTPpQU0rkQme7QUmJzjUQ
- 3TFEn4/EqmHkB4KEETSiff1vSC2l8J4/YozebhGdaXpP+AYVWpyqKbBjqQ+s7Re7Fx+9
- gmSIEQGtUBJPVvM8HorM3B7VZMVHdhLeIqO9RRTc/wlGf7i3yyrUsgveJXIz1jQ/mKrO
- yCwkoi5OIR3X73+dYSKTwxVYBSmRE2XcWN+xOIDJRH048eX0BDR36cAV0BRDNohtbS6U cg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r69gx07c2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jun 2023 22:10:53 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35CMAqCi017477
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jun 2023 22:10:52 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 12 Jun 2023 15:10:52 -0700
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-CC:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] drm/msm/dpu: Configure DP INTF/PHY selector
-Date:   Mon, 12 Jun 2023 15:10:47 -0700
-Message-ID: <20230612221047.1886709-1-quic_bjorande@quicinc.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 12 Jun 2023 18:12:30 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9944510C2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 15:12:29 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id BD1076C1DF8
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 22:12:28 +0000 (UTC)
+Received: from pdx1-sub0-mail-a251.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 333AD6C1B6E
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 22:12:28 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1686607948; a=rsa-sha256;
+        cv=none;
+        b=bTV1UFnAdmXNS8XQiXs+xJsn/W4SiWf+wxEVF9BJ7mQk6hH7LQSGjqiX0acDnr2eSZWj1C
+        cyDwwR79b3M+KTe8SaidVQUFfdZQdixqBo/mWphd5xXlAygVNX6fRAq5TZQ91lfA8r4Vuu
+        9O4pVkCjmuODrLYy1f7qP09iVNJCt5zLBIZf6Zf0ErSXpzupaTAnf0iXo0nexJLPoUW8xO
+        mkJR1vLHdKRe/eyzflTtxNtpnq4Fdmyo3yBuXyta96UYIJa8SMR6NK0RJ8GWUDkGozYxv/
+        1bMv9HbWnoXmxXr0otZlQUSdpPno4c//Gv9ooAL78Ay2pYcOyW5IVMe615mCbQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1686607948;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=Uw+jdfJkDSDc1rZ9hM9IyUE6VppD4X6NU4hjQZ4wAUI=;
+        b=fT/HJCUllDuVFP9bbaW/bInQtHrHy0Db9kw9FZjmraZLLlQL0IIXEEvjJAqTeUFq8J36aX
+        8RUroHSuIOOGDVLcssFcfvhQ1xhv2Gf1m1dav7fBGfxjFK7eWd1aIAbCYK7oXKAzJN1vfX
+        NTh3Nf1vzqb6urBD8NajZZqiv4IAd9mzxcPeIvBmssNo/DfOmVIzYIihcnLZEwiH11woqt
+        hAAPMKXnCEm3pdh4Q0ea6wGv/I1zOB51humLjTybNs7ibEAOB9rU9xI/kbrL5TTgwSNtcF
+        TIXQktTtP4GtpOS+s5Y8NXFwiMs9VET0LTGoHxbkL33TAzxeE4ZHwPjyxv0pYQ==
+ARC-Authentication-Results: i=1;
+        rspamd-6c69b8658d-49kw4;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
+X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
+X-MailChannels-Auth-Id: dreamhost
+X-Grain-Shoe: 0bf68c0d26b4758d_1686607948460_1280644191
+X-MC-Loop-Signature: 1686607948460:2263035550
+X-MC-Ingress-Time: 1686607948460
+Received: from pdx1-sub0-mail-a251.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.120.163.21 (trex/6.8.1);
+        Mon, 12 Jun 2023 22:12:28 +0000
+Received: from kmjvbox (c-73-93-64-36.hsd1.ca.comcast.net [73.93.64.36])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kjlx@templeofstupid.com)
+        by pdx1-sub0-mail-a251.dreamhost.com (Postfix) with ESMTPSA id 4Qg5XC6R1Fz1W
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 15:12:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
+        s=dreamhost; t=1686607947;
+        bh=Uw+jdfJkDSDc1rZ9hM9IyUE6VppD4X6NU4hjQZ4wAUI=;
+        h=Date:From:To:Cc:Subject:Content-Type:Content-Transfer-Encoding;
+        b=T0L7vk4O69gYcbijBG0CV2wgiyLUD+Egvqf9UPhHzPGDJ0GcwpLzSXWh0Vvgmil2+
+         jJwnAwHCyHep6WqnreF599PvBJAva7xQzkK4zDxQopoKRFfGMCyhKbe6l/L7P/KytS
+         L+veVyzegHpzsbt76DOXBV4n5Rzm8dj+lqDNNKqM=
+Received: from johansen (uid 1000)
+        (envelope-from kjlx@templeofstupid.com)
+        id e0085
+        by kmjvbox (DragonFly Mail Agent v0.12);
+        Mon, 12 Jun 2023 15:12:26 -0700
+Date:   Mon, 12 Jun 2023 15:12:26 -0700
+From:   Krister Johansen <kjlx@templeofstupid.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Ilya Leoshkevich <iii@linux.ibm.com>,
+        Krister Johansen <kjlx@templeofstupid.com>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: add a test for subprogram
+ extables
+Message-ID: <20230612221226.GA2077@templeofstupid.com>
+References: <cover.1686268304.git.kjlx@templeofstupid.com>
+ <9e3041e182a75f558f1132f915ddf2ee7e859c6e.1686268304.git.kjlx@templeofstupid.com>
+ <CAADnVQKAmbb2mTNem+3wvCSS44mvmydDCjWj-4V9VZd93vgksQ@mail.gmail.com>
+ <ef33f004f1f20c7a4cc7c963eea628df7bec0c53.camel@linux.ibm.com>
+ <CAADnVQLWNt0KsXoYVGFD0i089YMivYJ+ZeWmutUiefcdK=eOrw@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: qc1nfnW5ECYxH0bUVto41Lz2HY7qM3d-
-X-Proofpoint-GUID: qc1nfnW5ECYxH0bUVto41Lz2HY7qM3d-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-12_16,2023-06-12_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 lowpriorityscore=0 clxscore=1015 mlxscore=0
- suspectscore=0 mlxlogscore=999 bulkscore=0 adultscore=0 phishscore=0
- spamscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306120191
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAADnVQLWNt0KsXoYVGFD0i089YMivYJ+ZeWmutUiefcdK=eOrw@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bjorn Andersson <bjorn.andersson@linaro.org>
+On Mon, Jun 12, 2023 at 03:07:22PM -0700, Alexei Starovoitov wrote:
+> On Mon, Jun 12, 2023 at 6:46 AM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
+> >
+> > On Fri, 2023-06-09 at 11:15 -0700, Alexei Starovoitov wrote:
+> > > On Thu, Jun 8, 2023 at 5:11 PM Krister Johansen
+> > > <kjlx@templeofstupid.com> wrote:
+> > > >
+> > > > In certain situations a program with subprograms may have a NULL
+> > > > extable entry.  This should not happen, and when it does, it turns
+> > > > a
+> > > > single trap into multiple.  Add a test case for further debugging
+> > > > and to
+> > > > prevent regressions.  N.b: without any other patches this can panic
+> > > > or
+> > > > oops a kernel.
+> > > >
+> > > > Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
+> > > > ---
+> > > >  .../bpf/prog_tests/subprogs_extable.c         | 31 +++++++++++++
+> > > >  .../bpf/progs/test_subprogs_extable.c         | 46
+> > > > +++++++++++++++++++
+> > > >  2 files changed, 77 insertions(+)
+> > > >  create mode 100644
+> > > > tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
+> > > >  create mode 100644
+> > > > tools/testing/selftests/bpf/progs/test_subprogs_extable.c
+> > > >
+> > > > diff --git
+> > > > a/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
+> > > > b/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
+> > > > new file mode 100644
+> > > > index 000000000000..2201988274a4
+> > > > --- /dev/null
+> > > > +++ b/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
+> > > > @@ -0,0 +1,31 @@
+> > > > +// SPDX-License-Identifier: GPL-2.0
+> > > > +
+> > > > +#include <test_progs.h>
+> > > > +#include "test_subprogs_extable.skel.h"
+> > > > +
+> > > > +void test_subprogs_extable(void)
+> > > > +{
+> > > > +       const int READ_SZ = 456;
+> > > > +       struct test_subprogs_extable *skel;
+> > > > +       int err;
+> > > > +
+> > > > +       skel = test_subprogs_extable__open();
+> > > > +       if (!ASSERT_OK_PTR(skel, "skel_open"))
+> > > > +               return;
+> > > > +
+> > > > +       err = test_subprogs_extable__load(skel);
+> > > > +       if (!ASSERT_OK(err, "skel_load"))
+> > > > +               goto cleanup;
+> > > > +
+> > > > +       err = test_subprogs_extable__attach(skel);
+> > > > +       if (!ASSERT_OK(err, "skel_attach"))
+> > > > +               goto cleanup;
+> > > > +
+> > > > +       /* trigger tracepoint */
+> > > > +       ASSERT_OK(trigger_module_test_read(READ_SZ),
+> > > > "trigger_read");
+> > > > +
+> > > > +       test_subprogs_extable__detach(skel);
+> > > > +
+> > > > +cleanup:
+> > > > +       test_subprogs_extable__destroy(skel);
+> > > > +}
+> > > > diff --git
+> > > > a/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
+> > > > b/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
+> > > > new file mode 100644
+> > > > index 000000000000..c3ff66bf4cbe
+> > > > --- /dev/null
+> > > > +++ b/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
+> > > > @@ -0,0 +1,46 @@
+> > > > +// SPDX-License-Identifier: GPL-2.0
+> > > > +
+> > > > +#include "vmlinux.h"
+> > > > +#include <bpf/bpf_helpers.h>
+> > > > +#include <bpf/bpf_tracing.h>
+> > > > +
+> > > > +struct {
+> > > > +       __uint(type, BPF_MAP_TYPE_ARRAY);
+> > > > +       __uint(max_entries, 8);
+> > > > +       __type(key, __u32);
+> > > > +       __type(value, __u64);
+> > > > +} test_array SEC(".maps");
+> > > > +
+> > > > +static __u64 test_cb(struct bpf_map *map, __u32 *key, __u64 *val,
+> > > > void *data)
+> > > > +{
+> > > > +       return 1;
+> > > > +}
+> > > > +
+> > > > +SEC("fexit/bpf_testmod_return_ptr")
+> > > > +int BPF_PROG(handle_fexit_ret_subprogs, int arg, struct file *ret)
+> > > > +{
+> > > > +       *(volatile long *)ret;
+> > > > +       *(volatile int *)&ret->f_mode;
+> > > > +       bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
+> > > > +       return 0;
+> > > > +}
+> > > > +
+> > > > +SEC("fexit/bpf_testmod_return_ptr")
+> > > > +int BPF_PROG(handle_fexit_ret_subprogs2, int arg, struct file
+> > > > *ret)
+> > > > +{
+> > > > +       *(volatile long *)ret;
+> > > > +       *(volatile int *)&ret->f_mode;
+> > > > +       bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
+> > > > +       return 0;
+> > > > +}
+> > > > +
+> > > > +SEC("fexit/bpf_testmod_return_ptr")
+> > > > +int BPF_PROG(handle_fexit_ret_subprogs3, int arg, struct file
+> > > > *ret)
+> > > > +{
+> > > > +       *(volatile long *)ret;
+> > > > +       *(volatile int *)&ret->f_mode;
+> > > > +       bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
+> > > > +       return 0;
+> > > > +}
+> > >
+> > > What is the point of attaching 3 the same progs to the same hook?
+> > > One would be enough to test it, no?
+> > >
+> > > In other news...
+> > > Looks like this test is triggering a bug on s390.
+> > >
+> > > Ilya,
+> > > please take a look:
+> > > https://github.com/kernel-patches/bpf/actions/runs/5216942096/jobs/9416404780
+> > >
+> > > bpf_prog_78c0d4c618ed2df7_handle_fexit_ret_subprogs3
+> > > is crashing the kernel.
+> > > A bug in extable logic on s390?
+> >
+> > I think we also need this:
+> >
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -17664,6 +17664,7 @@ static int jit_subprogs(struct bpf_verifier_env
+> > *env)
+> >         prog->bpf_func = func[0]->bpf_func;
+> >         prog->jited_len = func[0]->jited_len;
+> >         prog->aux->extable = func[0]->aux->extable;
+> > +       prog->aux->num_exentries = func[0]->aux->num_exentries;
+> >         prog->aux->func = func;
+> >         prog->aux->func_cnt = env->subprog_cnt;
+> >         bpf_prog_jit_attempt_done(prog);
+> >
+> > The reason is that s390 JIT doubles the number of extable entries due
+> > to how the hardware works (some exceptions point to the failing insn,
+> > some point to the next one).
+> >
+> > With that:
+> >
+> > Acked-by: Ilya Leoshkevich <iii@linux.ibm.com>
+> > Tested-by: Ilya Leoshkevich <iii@linux.ibm.com>
+> >
+> > for the v4 series.
+> 
+> Great.
+> 
+> Krister,
+> could you please resubmit v5 adding the above change and Ilya's tags to patch 1?
+> 
+> I'd like to see green BPF CI on all platforms before landing.
 
-Some platforms provides a mechanism for configuring the mapping between
-(one or two) DisplayPort intfs and their PHYs.
+Thanks Alexei and Ilya, and yes, absolutely.  I'm hoping to have a v5 out
+a little later this afternoon.
 
-In particular SC8180X provides this functionality, without a default
-configuration, resulting in no connection between its two external
-DisplayPort controllers and any PHYs.
-
-The change implements the logic for optionally configuring which phy
-each of the intfs should be connected to, provides a new entry in the
-DPU catalog for specifying how many intfs to configure and marks the
-SC8180X DPU to program 2 entries.
-
-For now the request is simply to program the mapping 1:1, any support
-for alternative mappings is left until the use case arrise.
-
-Note that e.g. msm-4.14 unconditionally maps intf 0 to phy 0 on all
-rlatforms, so perhaps this is needed in order to get DisplayPort working
-on some other platforms as well.
-
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
----
- .../msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h   |  1 +
- .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    |  2 ++
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c    | 23 +++++++++++++++++++
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.h    |  8 +++++++
- drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h      |  1 +
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c       | 10 ++++++++
- 6 files changed, 45 insertions(+)
-
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
-index 8ed2b263c5ea..9da952692a69 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
-@@ -19,6 +19,7 @@ static const struct dpu_caps sc8180x_dpu_caps = {
- 	.pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
- 	.max_hdeci_exp = MAX_HORZ_DECIMATION,
- 	.max_vdeci_exp = MAX_VERT_DECIMATION,
-+	.num_dp_intf_sel = 2,
- };
- 
- static const struct dpu_ubwc_cfg sc8180x_ubwc_cfg = {
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-index ac4a9e73705c..4cb8d096d8ec 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-@@ -357,6 +357,7 @@ struct dpu_rotation_cfg {
-  * @pixel_ram_size     size of latency hiding and de-tiling buffer in bytes
-  * @max_hdeci_exp      max horizontal decimation supported (max is 2^value)
-  * @max_vdeci_exp      max vertical decimation supported (max is 2^value)
-+ * @num_dp_intf_sel    number of DP intfs to configure PHY selection for
-  */
- struct dpu_caps {
- 	u32 max_mixer_width;
-@@ -371,6 +372,7 @@ struct dpu_caps {
- 	u32 pixel_ram_size;
- 	u32 max_hdeci_exp;
- 	u32 max_vdeci_exp;
-+	u32 num_dp_intf_sel;
- };
- 
- /**
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c
-index 963bdb5e0252..5afa99cb148c 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c
-@@ -250,6 +250,27 @@ static void dpu_hw_intf_audio_select(struct dpu_hw_mdp *mdp)
- 	DPU_REG_WRITE(c, HDMI_DP_CORE_SELECT, 0x1);
- }
- 
-+static void dpu_hw_dp_phy_intf_sel(struct dpu_hw_mdp *mdp, unsigned int *phys,
-+				   unsigned int num_intfs)
-+{
-+	struct dpu_hw_blk_reg_map *c = &mdp->hw;
-+	unsigned int intf;
-+	u32 sel = 0;
-+
-+	if (!num_intfs)
-+		return;
-+
-+	for (intf = 0; intf < num_intfs; intf++) {
-+		/* Specify the PHY (1-indexed) for @intf */
-+		sel |= (phys[intf] + 1) << (intf * 3);
-+
-+		/* Specify the @intf (1-indexed) of targeted PHY */
-+		sel |= (intf + 1) << (6 + phys[intf] * 3);
-+	}
-+
-+	DPU_REG_WRITE(c, DP_PHY_INTF_SEL, sel);
-+}
-+
- static void _setup_mdp_ops(struct dpu_hw_mdp_ops *ops,
- 		unsigned long cap)
- {
-@@ -264,6 +285,8 @@ static void _setup_mdp_ops(struct dpu_hw_mdp_ops *ops,
- 
- 	ops->get_safe_status = dpu_hw_get_safe_status;
- 
-+	ops->dp_phy_intf_sel = dpu_hw_dp_phy_intf_sel;
-+
- 	if (cap & BIT(DPU_MDP_AUDIO_SELECT))
- 		ops->intf_audio_select = dpu_hw_intf_audio_select;
- }
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.h
-index a1a9e44bed36..8446d74d59b0 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.h
-@@ -125,6 +125,14 @@ struct dpu_hw_mdp_ops {
- 	void (*get_safe_status)(struct dpu_hw_mdp *mdp,
- 			struct dpu_danger_safe_status *status);
- 
-+	/**
-+	 * dp_phy_intf_sel - configure intf to phy mapping
-+	 * @mdp: mdp top context driver
-+	 * @phys: list of phys the @num_intfs intfs should be connected to
-+	 * @num_intfs: number of intfs to configure
-+	 */
-+	void (*dp_phy_intf_sel)(struct dpu_hw_mdp *mdp, unsigned int *phys,
-+			        unsigned int num_intfs);
- 	/**
- 	 * intf_audio_select - select the external interface for audio
- 	 * @mdp: mdp top context driver
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h
-index 5acd5683d25a..6d31bdc7269c 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h
-@@ -59,6 +59,7 @@
- #define MDP_WD_TIMER_4_CTL2             0x444
- #define MDP_WD_TIMER_4_LOAD_VALUE       0x448
- #define DCE_SEL                         0x450
-+#define DP_PHY_INTF_SEL                 0x460
- 
- #define MDP_PERIPH_TOP0			MDP_WD_TIMER_0_CTL
- #define MDP_PERIPH_TOP0_END		CLK_CTRL3
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-index aa8499de1b9f..5dbe5d164c01 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-@@ -1011,6 +1011,14 @@ unsigned long dpu_kms_get_clk_rate(struct dpu_kms *dpu_kms, char *clock_name)
- 	return clk_get_rate(clk);
- }
- 
-+static void dpu_kms_dp_phy_intf_sel(struct dpu_kms *dpu_kms)
-+{
-+	const unsigned int num_intfs = dpu_kms->catalog->caps->num_dp_intf_sel;
-+	static unsigned int phy_map[] = {0, 1, 2};
-+
-+	dpu_kms->hw_mdp->ops.dp_phy_intf_sel(dpu_kms->hw_mdp, phy_map, num_intfs);
-+}
-+
- static int dpu_kms_hw_init(struct msm_kms *kms)
- {
- 	struct dpu_kms *dpu_kms;
-@@ -1122,6 +1130,8 @@ static int dpu_kms_hw_init(struct msm_kms *kms)
- 		goto perf_err;
- 	}
- 
-+	dpu_kms_dp_phy_intf_sel(dpu_kms);
-+
- 	dpu_kms->hw_intr = dpu_hw_intr_init(dpu_kms->mmio, dpu_kms->catalog);
- 	if (IS_ERR_OR_NULL(dpu_kms->hw_intr)) {
- 		rc = PTR_ERR(dpu_kms->hw_intr);
--- 
-2.25.1
-
+-K
