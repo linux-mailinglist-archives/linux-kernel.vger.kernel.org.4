@@ -2,114 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ECD872D053
+	by mail.lfdr.de (Postfix) with ESMTP id C9D5072D054
 	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233486AbjFLURD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 16:17:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
+        id S229716AbjFLURG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 16:17:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230467AbjFLURB (ORCPT
+        with ESMTP id S230353AbjFLURD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 16:17:01 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780511BF
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:16:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686601015; x=1718137015;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=jJcLMAcSmqVtvgK1Jq9rsW+3+3BxRpUOu7dfbaj6WLw=;
-  b=bZMi5fel2G9HcR9lbvgucvLpBOA2MSoehIyF6BMhUpkeXOSup5a/Rk/q
-   0azwsXYAZ1krWAFsB7MkIelk3GpPlCYktZoXPnLGSzQnEQbrd6cDIedl9
-   oJ+gH0h5DxV1SRaURAv1nODTKFeVeJmhDwwoAmj+R0eEMU1QjxPb51/ZX
-   KvmWyygL2eHHlsyS+auiYBFOBkB2vH1AzgN8hIxICYBWtIg44J8N2yxw/
-   Qp5dLgTa/dpPneC+KWw/qGzk7sf3hBYqoIxEwzENv/kHuUHaMi1sbdEgf
-   ZzdS2MRI35xjA7hf6yn5K4iKpDEkSnh/gLWGHUrBuHODyGmuojFePtJA8
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="361516777"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="361516777"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 13:16:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="1041479391"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="1041479391"
-Received: from fwbrewes-mobl.amr.corp.intel.com (HELO [10.255.230.147]) ([10.255.230.147])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 13:16:53 -0700
-Message-ID: <f493a770e15a81aaad2e13d8afe1daf939b8267a.camel@linux.intel.com>
-Subject: Re: [Patch v2 2/6] sched/topology: Record number of cores in sched
- group
-From:   Tim Chen <tim.c.chen@linux.intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shrikanth Hegde <sshegde@linux.vnet.ibm.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        naveen.n.rao@linux.vnet.ibm.com,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        Chen Yu <yu.c.chen@intel.com>, Hillf Danton <hdanton@sina.com>
-Date:   Mon, 12 Jun 2023 13:16:52 -0700
-In-Reply-To: <20230612112945.GK4253@hirez.programming.kicks-ass.net>
-References: <cover.1686263351.git.tim.c.chen@linux.intel.com>
-         <a8acc91631a1c044ee16081bc80c1b044827c7b2.1686263351.git.tim.c.chen@linux.intel.com>
-         <20230612112945.GK4253@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 12 Jun 2023 16:17:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CF710CE
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:17:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E3D1620F0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 20:16:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D4E2C433D2;
+        Mon, 12 Jun 2023 20:16:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1686601019;
+        bh=8YwIQ32/ViY707FKKgvZp3YPJFrRZ0aMF4dQkzNJeeo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AvnloMMfQhyspWTCXbJI1zH2gVyj95+f4+W4RGfmmaNXGhaPd8jHRwHw0Qm3Hrjhr
+         0KW0YJ2+03iBgS4RJ/y9BmopWmjpF2nTfpBvGg6frcCf09oU0NfTSdWhQ83Tf+iWA5
+         TOaCwaJX+ZTwKgd5PeSmQeuGsXO7qxaGwalFpJKw=
+Date:   Mon, 12 Jun 2023 13:16:56 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Ryan Roberts <ryan.roberts@arm.com>
+Cc:     SeongJae Park <sj@kernel.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Mike Rapoport <rppt@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        =?ISO-8859-1?Q?J=E9r=F4me?= Glisse <jglisse@redhat.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        damon@lists.linux.dev
+Subject: Re: [PATCH v3 0/3] Encapsulate PTE contents from non-arch code
+Message-Id: <20230612131656.2ba4f95865f27e6b3b984936@linux-foundation.org>
+In-Reply-To: <20230612151545.3317766-1-ryan.roberts@arm.com>
+References: <20230612151545.3317766-1-ryan.roberts@arm.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-06-12 at 13:29 +0200, Peter Zijlstra wrote:
-> On Thu, Jun 08, 2023 at 03:32:28PM -0700, Tim Chen wrote:
-> >=20
-> >  		sg->group_weight =3D cpumask_weight(sched_group_span(sg));
-> > =20
-> > +		cpumask_copy(mask, sched_group_span(sg));
-> > +		for_each_cpu(cpu, mask) {
-> > +			cores++;
-> > +			cpumask_andnot(mask, mask, cpu_smt_mask(cpu));
-> > +		}
-> > +		sg->cores =3D cores;
-> > +
-> >  		if (!(sd->flags & SD_ASYM_PACKING))
-> >  			goto next;
->=20
-> Just a note; not sure we want or can do anything about this, but
-> consider someone doing partitions like:
->=20
-> 	[0,1] [2,3] [3,6]
-> 	[------] [------]
->=20
-> That is, 3 SMT cores, and 2 partitions splitting an SMT core in two.
->=20
-> Then the domain trees will see either 2 or 3 but not the fully core.
->=20
-> I'm perfectly fine with saying: don't do that then.
+On Mon, 12 Jun 2023 16:15:42 +0100 Ryan Roberts <ryan.roberts@arm.com> wrote:
 
-I also can't see a reason to split SMT between two domains.
+> Hi All,
+> 
+> (Including wider audience this time since changes touch a fair few subsystems)
+> 
+> This is the second half of v3 of a series to improve the encapsulation of pte
+> entries by disallowing non-arch code from directly dereferencing pte_t pointers.
 
-Tim
+That's basically all we have here for [0/N] cover letter content.  I
+stole some words from the [3/3] changelog, so we now have:
+
+: A series to improve the encapsulation of pte entries by disallowing
+: non-arch code from directly dereferencing pte_t pointers.
+: 
+: This means that by default, the accesses change from a C dereference to a
+: READ_ONCE().  This is technically the correct thing to do since where
+: pgtables are modified by HW (for access/dirty) they are volatile and
+: therefore we should always ensure READ_ONCE() semantics.
+: 
+: But more importantly, by always using the helper, it can be overridden by
+: the architecture to fully encapsulate the contents of the pte.  Arch code
+: is deliberately not converted, as the arch code knows best.  It is
+: intended that arch code (arm64) will override the default with its own
+: implementation that can (e.g.) hide certain bits from the core code, or
+: determine young/dirty status by mixing in state from another source.
+
+
+> Based on earlier feedback, I split the series in 2; the first part, fixes for
+> existing bugs, was already posted at [3] and merged into mm-stable. This second
+> part contains the conversion from direct dereferences to instead use
+> ptep_get()/ptep_get_lockless().
+> 
+> See the v1 cover letter at [1] for rationale for this work.
+> 
+> Based on feedback at v2, I've removed the new ptep_deref() helper I originally
+> added, and am now using the existing ptep_get() and ptep_get_lockless() helpers.
+> Testing on Ampere Altra (arm64) showed no difference in performance when using
+> ptep_deref() (*pte) vs ptep_get() (READ_ONCE(*pte)).
+> 
+> Patches are based on mm-unstable (49e038b1919e) and a branch is available at [4]
+> (Let me know if this is the wrong branch to target - I'm still not familiar with
+> the details of the mm- dev process!). Note that Hugh Dickins's "mm: allow
+> pte_offset_map[_lock]() to fail" (now in mm-unstable) patch set caused a number
+> of conflicts which I've resolved. But due to that, you won't be able to apply
+> these patches on top of Linus's tree. I have an alternate branch on top of
+> v6.4-rc6 at [5].
+
+Yep, that's all great, thanks.
+
+
+Is there some clever trick we can do to prevent new open-coded derefs
+of pte_t* from being introduced?
+
+I suppose we could convert pte_t to a single-member struct to force a
+compile error.  That struct will get passed by value to ptep_get() so
+that's OK.  But this isn't viable unless/until all architectures are
+converted :(
+
+Or we rely upon Ryan to grep the tree occasionally ;)
