@@ -2,165 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C46472CB00
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 18:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8685E72CB01
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 18:08:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231440AbjFLQHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 12:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49114 "EHLO
+        id S232329AbjFLQH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 12:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjFLQHw (ORCPT
+        with ESMTP id S229450AbjFLQH4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 12:07:52 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60074187
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 09:07:51 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-bc43a73ab22so3380438276.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 09:07:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686586070; x=1689178070;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WQi6jtfU5Lynaf+sn5nkLvTDsBxdvtzSQejpmjCr2Yk=;
-        b=ldreut73mQ7n/9Rvm35cqn0sTfKZnyPz57sJzkjPKlUTacxjPpUB5qkwnYpLz04nWi
-         etFQJKZhaKM8I3MOmegKu7fthVQ/JMQuXCm6jC38J9kuoI/EMC3pMvYK+vY9AR2Ql5Xa
-         2dlFgBYdbZf7n2dEgfiM9BGZ2Tpj4YP/zi0kGVstPMQMpehVlj50D1EdTzepJ62GTwup
-         FW7M5iNYbJHM0V6JmYakSx4GA32k7dqw2SItmTaCXruIDP1rVcX9geye6IGVemMdhv2O
-         6NNRFtmxfN2FO6ThSPmu98Sg0XT9rAhG+dD5vcE3CDKtgx9wopSLfGr6RrhBAUJAG4uw
-         wXSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686586070; x=1689178070;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WQi6jtfU5Lynaf+sn5nkLvTDsBxdvtzSQejpmjCr2Yk=;
-        b=GEgilWe+VQWaIE1VsQMo0PsLUnyv8LdnsF/bIPB+VHds28bSG4fglt/a3NCiHAgn2r
-         lnzX/Gpe9tPnVIxLoBLLVBmaMi9URXHpfbMA+4uxto7gReNtQeRs99mvYNW/UKHDDOTz
-         X68FsUhdGZHbK76CtPuvD5zsjNSytYNIr8F9NvLTAgZ8QLuowikNbzS2fvHHXNxwLt34
-         18Oqry/uM0bxvFD6pdRzdv2VwGBSZ1B/21oYV0VM+I4ugkvcAFtYJUr/IJjqY7ZeprpT
-         ZXb8ARXY7iu9DxhXsrzZfUP/Cs05zXPHmmWOZTvMJWTbQgE4TrVY9+oNbmjqWbB06met
-         WpUA==
-X-Gm-Message-State: AC+VfDwuL0OCWtsvtnxObLXhrvVLrxsgknMD05D6xLLyvDs8QbaLRfNw
-        zMCXt3v3Up9ZTh/wqIU/rzvgPpNGheYssNY0QPerBA==
-X-Google-Smtp-Source: ACHHUZ474Hgkm1DqxTKXCEkmV8DS7fOJrZgwzR9YLV3SLZ9qbXmX0kgeF+jqhDiNpwtfbLybFp7wetScHd2KnZPaMEw=
-X-Received: by 2002:a5b:a06:0:b0:bb1:76ca:d1f9 with SMTP id
- k6-20020a5b0a06000000b00bb176cad1f9mr11770295ybq.20.1686586070336; Mon, 12
- Jun 2023 09:07:50 -0700 (PDT)
+        Mon, 12 Jun 2023 12:07:56 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E64187
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 09:07:55 -0700 (PDT)
+Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35CFprtR010773;
+        Mon, 12 Jun 2023 16:07:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=5LHI5t0StJcJrbHOtOpufQOCNbXC/Bb5sjF/Qx21CiQ=;
+ b=toe3rVYt7CvozLKS4tCQ9kMNnEBbuqwyt142XMc9+OftOfB4ZrNV/olWoCLU4D2IJc5l
+ +56DU7CymIcA5qiDA1IAjB9X1E3Y4HWT7WFNN0BSlnsJMMPTBBJBJUGqQcrBQ4WldfcJ
+ s6dQF3SWBi1FMKwzLJ18AT9sOZ3PtWTazDlfkKH9swbr00wH2Q8GQ4JceV0VsQFk86Il
+ nsaE8q9hN0HaQgwZPsxRk+7LuFUTyoZ7lYYE3ViUm0k2x/xrp+je0Qyi9YX+FLR5sKjA
+ zM+InFVFUungmByZT5+EDcncyR2R/mfO//UPFOUgT9mBGa7EEoGe/LoiVYhtB3Q+h2rg bQ== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r66cn0gyq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Jun 2023 16:07:53 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35C1mpvR017394;
+        Mon, 12 Jun 2023 16:07:51 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3r4gee1kh4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Jun 2023 16:07:51 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35CG7nRO21365484
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 12 Jun 2023 16:07:49 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 42A562004F;
+        Mon, 12 Jun 2023 16:07:49 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 32BB02004E;
+        Mon, 12 Jun 2023 16:07:49 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Mon, 12 Jun 2023 16:07:49 +0000 (GMT)
+Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 55390)
+        id E8A17E12CB; Mon, 12 Jun 2023 18:07:48 +0200 (CEST)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] tracing: fix memcpy size when copying stack entries
+Date:   Mon, 12 Jun 2023 18:07:48 +0200
+Message-Id: <20230612160748.4082850-1-svens@linux.ibm.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230609005158.2421285-1-surenb@google.com> <20230609005158.2421285-5-surenb@google.com>
- <ZIOOmC26qh4EXUEX@x1n> <CAJuCfpHKUjAwgWbxvJQDyEnneRD03p2M6247Q6=3-oOq_FL7zA@mail.gmail.com>
- <CAJuCfpG3PrbGxpDAEkyGQXW88+otb=FsbrhPJ4ePN7Xhn0a+_A@mail.gmail.com> <ZIcfYQ1c5teMSHAX@x1n>
-In-Reply-To: <ZIcfYQ1c5teMSHAX@x1n>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 12 Jun 2023 09:07:38 -0700
-Message-ID: <CAJuCfpGZvhBUdfNHojXwqZbspuhy0bstjT+-JMfwgmnqTnkoHA@mail.gmail.com>
-Subject: Re: [PATCH v2 4/6] mm: drop VMA lock before waiting for migration
-To:     Peter Xu <peterx@redhat.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
-        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
-        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
-        apopple@nvidia.com, ying.huang@intel.com, david@redhat.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        viro@zeniv.linux.org.uk, brauner@kernel.org,
-        pasha.tatashin@soleen.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: -wj8A83xApT9KRWtwZj54Y5oaG279GPw
+X-Proofpoint-ORIG-GUID: -wj8A83xApT9KRWtwZj54Y5oaG279GPw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-12_06,2023-06-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ lowpriorityscore=0 mlxscore=0 clxscore=1015 mlxlogscore=848
+ impostorscore=0 malwarescore=0 priorityscore=1501 spamscore=0 adultscore=0
+ suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2306120138
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 6:36=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote:
->
-> On Fri, Jun 09, 2023 at 06:29:43PM -0700, Suren Baghdasaryan wrote:
-> > On Fri, Jun 9, 2023 at 3:30=E2=80=AFPM Suren Baghdasaryan <surenb@googl=
-e.com> wrote:
-> > >
-> > > On Fri, Jun 9, 2023 at 1:42=E2=80=AFPM Peter Xu <peterx@redhat.com> w=
-rote:
-> > > >
-> > > > On Thu, Jun 08, 2023 at 05:51:56PM -0700, Suren Baghdasaryan wrote:
-> > > > > migration_entry_wait does not need VMA lock, therefore it can be =
-dropped
-> > > > > before waiting. Introduce VM_FAULT_VMA_UNLOCKED to indicate that =
-VMA
-> > > > > lock was dropped while in handle_mm_fault().
-> > > > > Note that once VMA lock is dropped, the VMA reference can't be us=
-ed as
-> > > > > there are no guarantees it was not freed.
-> > > >
-> > > > Then vma lock behaves differently from mmap read lock, am I right? =
- Can we
-> > > > still make them match on behaviors, or there's reason not to do so?
-> > >
-> > > I think we could match their behavior by also dropping mmap_lock here
-> > > when fault is handled under mmap_lock (!(fault->flags &
-> > > FAULT_FLAG_VMA_LOCK)).
-> > > I missed the fact that VM_FAULT_COMPLETED can be used to skip droppin=
-g
-> > > mmap_lock in do_page_fault(), so indeed, I might be able to use
-> > > VM_FAULT_COMPLETED to skip vma_end_read(vma) for per-vma locks as wel=
-l
-> > > instead of introducing FAULT_FLAG_VMA_LOCK. I think that was your ide=
-a
-> > > of reusing existing flags?
-> > Sorry, I meant VM_FAULT_VMA_UNLOCKED, not FAULT_FLAG_VMA_LOCK in the
-> > above reply.
-> >
-> > I took a closer look into using VM_FAULT_COMPLETED instead of
-> > VM_FAULT_VMA_UNLOCKED but when we fall back from per-vma lock to
-> > mmap_lock we need to retry with an indication that the per-vma lock
-> > was dropped. Returning (VM_FAULT_RETRY | VM_FAULT_COMPLETE) to
-> > indicate such state seems strange to me ("retry" and "complete" seem
->
-> Not relevant to this migration patch, but for the whole idea I was thinki=
-ng
-> whether it should just work if we simply:
->
->         fault =3D handle_mm_fault(vma, address, flags | FAULT_FLAG_VMA_LO=
-CK, regs);
-> -       vma_end_read(vma);
-> +       if (!(fault & (VM_FAULT_RETRY | VM_FAULT_COMPLETED)))
-> +               vma_end_read(vma);
->
-> ?
+Noticed the following warning during boot:
 
-Today when we can't handle a page fault under per-vma locks we return
-VM_FAULT_RETRY, in which case per-vma lock is dropped and the fault is
-retried under mmap_lock. The condition you suggest above would not
-drop per-vma lock for VM_FAULT_RETRY case and would break the current
-fallback mechanism.
-However your suggestion gave me an idea. I could indicate that per-vma
-lock got dropped using vmf structure (like Matthew suggested before)
-and once handle_pte_fault(vmf) returns I could check if it returned
-VM_FAULT_RETRY but per-vma lock is still held. If that happens I can
-call vma_end_read() before returning from __handle_mm_fault(). That
-way any time handle_mm_fault() returns VM_FAULT_RETRY per-vma lock
-will be already released, so your condition in do_page_fault() will
-work correctly. That would eliminate the need for a new
-VM_FAULT_VMA_UNLOCKED flag. WDYT?
+[    2.316341] Testing tracer wakeup:
+[    2.383512] ------------[ cut here ]------------
+[    2.383517] memcpy: detected field-spanning write (size 104) of single field "&entry->caller" at kernel/trace/trace.c:3167 (size 64)
 
->
-> GUP may need more caution on NOWAIT, but vma lock is only in fault paths =
-so
-> IIUC it's fine?
->
-> --
-> Peter Xu
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kernel-team+unsubscribe@android.com.
->
+The reason seems to be that the maximum number of entries is calculated
+from the size of the fstack->calls array which is 128. But later the same
+size is used to memcpy() the entries to entry->callers, which has only
+room for eight elements. Therefore use the minimum of both arrays as limit.
+
+Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+---
+ kernel/trace/trace.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index 64a4dde073ef..988d664c13ec 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -3146,7 +3146,7 @@ static void __ftrace_trace_stack(struct trace_buffer *buffer,
+ 	barrier();
+ 
+ 	fstack = this_cpu_ptr(ftrace_stacks.stacks) + stackidx;
+-	size = ARRAY_SIZE(fstack->calls);
++	size = min(ARRAY_SIZE(entry->caller), ARRAY_SIZE(fstack->calls));
+ 
+ 	if (regs) {
+ 		nr_entries = stack_trace_save_regs(regs, fstack->calls,
+-- 
+2.39.2
+
