@@ -2,49 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9984572C26A
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F285472BE9C
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237946AbjFLLF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 07:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42416 "EHLO
+        id S231998AbjFLKSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 06:18:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238931AbjFLLF2 (ORCPT
+        with ESMTP id S233668AbjFLKRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 07:05:28 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 31EE4A266;
-        Mon, 12 Jun 2023 03:53:37 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 869F81FB;
-        Mon, 12 Jun 2023 02:57:42 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.27.163])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1998B3F663;
-        Mon, 12 Jun 2023 02:56:54 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 10:56:52 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Ingo Molnar <mingo@kernel.org>, Song Liu <song@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: Re: [PATCH v2] ftrace: Allow inline functions not inlined to be
- traced
-Message-ID: <ZIbr5Ou1Q1Aqf2vg@FVFF77S0Q05N>
-References: <20230609174422.04824a9e@gandalf.local.home>
+        Mon, 12 Jun 2023 06:17:43 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7B7A5F8
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:58:25 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-977c72b116fso627641466b.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:58:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686563842; x=1689155842;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PJzV8k8PINg1fP+cCISdw3LZJs7BP96rMaIUJI+fFlI=;
+        b=pRDueYu/tRrKVqAPFSh1p62giJ9RVa7Yo9TLHpe2QX9ej46v2Wogo2mbh8849n8ogB
+         dPaaUGzBADFJyl2t/WTZoC9MXCBEcexqjVbxR6vrW6EIOjo7OcwcMmGnoeQHS9tsuP3V
+         +SV3tFKnreUnzF5WizOcX6cgvGNUFx7u/HP4ksaOqhr9Y/xKjqqHkronwZocWhANGLnQ
+         u7uGuobDV9pirCr16hxp4/FuXchXADQaY/oUHuBvvblot3QCIG/e399R+nOEQkAxRb79
+         28F3DN+VoBrvYWoaQVzB68j0CNl6cshrt9LPh3QcFnNB9W7cQ9bra0Iff70wbfJu698t
+         M1pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686563842; x=1689155842;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PJzV8k8PINg1fP+cCISdw3LZJs7BP96rMaIUJI+fFlI=;
+        b=ft2BPO7LSBy6gSyoBPXUFnh78PP7niUZ5+47Kv10I2hF9u7Hu/oauGl3vItavUvJ+N
+         QFHyPA0Y4GWbehWNIGcuLQXIgWdKep3AzmN5XSUPMTCbHB/LVYZM705+QNmYfj8FPvif
+         HDQR6XhWKmUA54rGFhF2qVmmBzSI7cRxt0AN8mQVfb1Aq8QzfZQ6Y/ea1yO9lomaV/Em
+         Too6nZegxJdbKj7qLzyurOjUl8qzmXbei8qWECy+ikGBTUNZdB9rzrUGxs4bXUvixwUB
+         LbAvcRWOZjkoVuDtFgz0/Tgqy8GvyIBWcFf0pb38gBWKyP7LYU3gJn0lxeiB1cBcGdkd
+         6q2A==
+X-Gm-Message-State: AC+VfDzdkigul7Rpc4GAj9SppGovQmVEWrquuO7SmhovZ5MkZRPnNohU
+        OVCi1Bq53kgPQOCJh8qxcdJhRg==
+X-Google-Smtp-Source: ACHHUZ6pRYxendYgoWbyLTl7w4hnUEIQzwT9hEIK8twkyXzDMp6cMGP7pSNdEbVfvpmiucwLWMNLKQ==
+X-Received: by 2002:a17:907:3182:b0:974:1eb9:f74f with SMTP id xe2-20020a170907318200b009741eb9f74fmr7847298ejb.15.1686563842037;
+        Mon, 12 Jun 2023 02:57:22 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id u1-20020a170906780100b00977cad140a8sm4949175ejm.218.2023.06.12.02.57.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 02:57:21 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Patrick Lai <quic_plai@quicinc.com>
+Subject: [PATCH v3 1/2] ASoC: dt-bindings: qcom,wsa8840: Add WSA884x family of speakers
+Date:   Mon, 12 Jun 2023 11:57:15 +0200
+Message-Id: <20230612095716.118631-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230609174422.04824a9e@gandalf.local.home>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,132 +82,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 05:44:22PM -0400, Steven Rostedt wrote:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> 
-> Over 10 years ago there were many bugs that caused function tracing to
-> crash because some inlined function was not inlined and should not have
-> been traced. This made it hard to debug because when the developer tried
-> to reproduce it, if their compiler still inlined the function, the bug
-> would not trigger. The solution back then was simply to add "notrace" to
-> "inline" which would make sure all functions that are marked inline are
-> never traced even when the compiler decides to not inline them.
-> 
-> A lot has changed over the last 10 years.
-> 
-> 1) ftrace_test_recursion_trylock() is now used by all ftrace hooks which
->    will prevent the recursive crashes from happening that was caused by
->    inlined functions being traced.
-> 
-> 2) noinstr is now used to mark pretty much all functions that would also
->    cause problems if they are traced.
-> 
-> Today, it is no longer a problem if an inlined function is not inlined and
-> is traced, at least on x86. Removing notrace from inline has been requested
-> several times over the years. I believe it is now safe to do so.
-> 
-> Currently only x86 uses this.
-> 
-> Acked-by: Song Liu <song@kernel.org>
-> Acked-by: Josh Poimboeuf <jpoimboe@kernel.org>
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Add binding for WSA8840/WSA8845/WSA8845H smart speaker amplifiers used
+in Qualcomm QRD8550 board with SM8550 SoC.
 
-Acked-by: Mark Rutland <mark.rutland@arm.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> ---
-> Changes since v1: https://lore.kernel.org/linux-trace-kernel/20230502164102.1a51cdb4@gandalf.local.home
-> 
->  - have it opted in by architecture. Currently only x86 adds it. (Mark Rutland)
+---
 
-I'll add auditing/fixing arm64 on my queue of things to do; thanks for adding
-the config option in the mean time!
+Changes in v3:
+1. None.
 
-Mark.
+Changes in v2:
+1. Correct compatible (sdw version 1 -> 2).
 
-> 
->  arch/x86/Kconfig               |  1 +
->  include/linux/compiler_types.h | 16 +++++++++++++---
->  kernel/trace/Kconfig           |  7 +++++++
->  3 files changed, 21 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index da5c081d64a5..1ddebf832534 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -61,6 +61,7 @@ config X86
->  	select ACPI_LEGACY_TABLES_LOOKUP	if ACPI
->  	select ACPI_SYSTEM_POWER_STATES_SUPPORT	if ACPI
->  	select ARCH_32BIT_OFF_T			if X86_32
-> +	select ARCH_CAN_TRACE_INLINE
->  	select ARCH_CLOCKSOURCE_INIT
->  	select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE
->  	select ARCH_ENABLE_HUGEPAGE_MIGRATION if X86_64 && HUGETLB_PAGE && MIGRATION
-> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-> index 547ea1ff806e..f827e2a98500 100644
-> --- a/include/linux/compiler_types.h
-> +++ b/include/linux/compiler_types.h
-> @@ -169,6 +169,16 @@ struct ftrace_likely_data {
->  #define notrace			__attribute__((__no_instrument_function__))
->  #endif
->  
-> +/*
-> + * If all inline code not marked as __always_inline is safe to trace,
-> + * then allow the architecture to do so.
-> + */
-> +#ifdef CONFIG_ARCH_CAN_TRACE_INLINE
-> +#define __notrace_inline
-> +#else
-> +#define __notrace_inline	notrace
-> +#endif
-> +
->  /*
->   * it doesn't make sense on ARM (currently the only user of __naked)
->   * to trace naked functions because then mcount is called without
-> @@ -184,7 +194,7 @@ struct ftrace_likely_data {
->   * of extern inline functions at link time.
->   * A lot of inline functions can cause havoc with function tracing.
->   */
-> -#define inline inline __gnu_inline __inline_maybe_unused notrace
-> +#define inline inline __gnu_inline __inline_maybe_unused __notrace_inline
->  
->  /*
->   * gcc provides both __inline__ and __inline as alternate spellings of
-> @@ -230,7 +240,7 @@ struct ftrace_likely_data {
->   *     https://gcc.gnu.org/bugzilla/show_bug.cgi?id=67368
->   * '__maybe_unused' allows us to avoid defined-but-not-used warnings.
->   */
-> -# define __no_kasan_or_inline __no_sanitize_address notrace __maybe_unused
-> +# define __no_kasan_or_inline __no_sanitize_address __notrace_inline __maybe_unused
->  # define __no_sanitize_or_inline __no_kasan_or_inline
->  #else
->  # define __no_kasan_or_inline __always_inline
-> @@ -247,7 +257,7 @@ struct ftrace_likely_data {
->   * disable all instrumentation. See Kconfig.kcsan where this is mandatory.
->   */
->  # define __no_kcsan __no_sanitize_thread __disable_sanitizer_instrumentation
-> -# define __no_sanitize_or_inline __no_kcsan notrace __maybe_unused
-> +# define __no_sanitize_or_inline __no_kcsan __notrace_inline __maybe_unused
->  #else
->  # define __no_kcsan
->  #endif
-> diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-> index abe5c583bd59..b66ab0e6ce19 100644
-> --- a/kernel/trace/Kconfig
-> +++ b/kernel/trace/Kconfig
-> @@ -106,6 +106,13 @@ config HAVE_BUILDTIME_MCOUNT_SORT
->           An architecture selects this if it sorts the mcount_loc section
->  	 at build time.
->  
-> +config ARCH_CAN_TRACE_INLINE
-> +       bool
-> +       help
-> +         It is safe for an architecture to trace any function marked
-> +	 as inline (not __always_inline) that the compiler decides to
-> +	 not inline.
-> +
->  config BUILDTIME_MCOUNT_SORT
->         bool
->         default y
-> -- 
-> 2.39.2
-> 
+Cc: Patrick Lai <quic_plai@quicinc.com>
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+---
+ .../bindings/sound/qcom,wsa8840.yaml          | 66 +++++++++++++++++++
+ 1 file changed, 66 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/qcom,wsa8840.yaml
+
+diff --git a/Documentation/devicetree/bindings/sound/qcom,wsa8840.yaml b/Documentation/devicetree/bindings/sound/qcom,wsa8840.yaml
+new file mode 100644
+index 000000000000..e6723c9e312a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/sound/qcom,wsa8840.yaml
+@@ -0,0 +1,66 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/sound/qcom,wsa8840.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm WSA8840/WSA8845/WSA8845H smart speaker amplifier
++
++maintainers:
++  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
++  - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
++
++description:
++  WSA884X is a family of Qualcomm Aqstic smart speaker amplifiers using
++  SoundWire digital audio interface.
++
++allOf:
++  - $ref: dai-common.yaml#
++
++properties:
++  compatible:
++    const: sdw20217020400
++
++  reg:
++    maxItems: 1
++
++  powerdown-gpios:
++    description: Powerdown/Shutdown line to use (pin SD_N)
++    maxItems: 1
++
++  '#sound-dai-cells':
++    const: 0
++
++  vdd-1p8-supply: true
++  vdd-io-supply: true
++
++required:
++  - compatible
++  - reg
++  - powerdown-gpios
++  - '#sound-dai-cells'
++  - vdd-1p8-supply
++  - vdd-io-supply
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    soundwire-controller {
++        #address-cells = <2>;
++        #size-cells = <0>;
++
++        speaker@0,1 {
++            compatible = "sdw20217020400";
++            reg = <0 1>;
++            pinctrl-names = "default";
++            pinctrl-0 = <&spkr_2_sd_n_active>;
++            powerdown-gpios = <&lpass_tlmm 18 GPIO_ACTIVE_LOW>;
++            #sound-dai-cells = <0>;
++            sound-name-prefix = "SpkrRight";
++            vdd-1p8-supply = <&vreg_l15b_1p8>;
++            vdd-io-supply = <&vreg_l3g_1p2>;
++        };
++    };
+-- 
+2.34.1
+
