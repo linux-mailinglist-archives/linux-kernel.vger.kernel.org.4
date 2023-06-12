@@ -2,68 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC52872CA8B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:45:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F09472CA8A
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:45:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239661AbjFLPpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 11:45:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37464 "EHLO
+        id S239615AbjFLPo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 11:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239684AbjFLPor (ORCPT
+        with ESMTP id S239689AbjFLPor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 12 Jun 2023 11:44:47 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB7E10E2;
-        Mon, 12 Jun 2023 08:44:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686584682; x=1718120682;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mA/68H48x8hWu82F/Ja97GwHQawxRn+pP/gPATMBwfY=;
-  b=e1FZX8dknvYDf0KoAujqjePprGptrwOl56El7kl5L4EIpQXSEKvw+ZFq
-   Qc54oUDRC+WW9KyAZ+ICHrWWbXNVOMqnW0ap7utulbpE66EZe6Ayjmnae
-   LXisPQhFQC4tPKLqucQxve4gmiZyeX3kvYIRQAV6IWJvRaVsZhT1UujOO
-   plFnr4ycNeBxoA8RxfXkFxminSWhpTNbLsNKkWfFzsAyDlk8Eo6bFWqrJ
-   UEx5Pc9MOn1d5kpWdR1G29NfWxKvgDOMxkQwR24cJr/GLgL225kL+TXDn
-   HLBvT0YjFoCUFn3VxwORZTcEuBtIj4J5QnUZ2W23uKeHfXoFAwMr4NGI3
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="423961618"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="423961618"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 08:44:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="688680173"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="688680173"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP; 12 Jun 2023 08:44:39 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1q8jif-0039ON-1M;
-        Mon, 12 Jun 2023 18:44:37 +0300
-Date:   Mon, 12 Jun 2023 18:44:37 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/8] rtc: isl12022: add support for trip level DT bindings
-Message-ID: <ZIc9ZUsEt+KNaiKD@smile.fi.intel.com>
-References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
- <20230612113059.247275-5-linux@rasmusvillemoes.dk>
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B0F19C
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:44:44 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D6852201CA;
+        Mon, 12 Jun 2023 15:44:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1686584682; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=17atOqn7TUYDCnzDYeFz31heYTXfkLqafdxQqG9pN2E=;
+        b=G882Nc/ChI7nAOWeLzrbZFop4mWc7QzBHavOgV1/KK25GEc4l4rGKMCxxNTxNMgv/pUCuG
+        i7xhsrRPrQLgikKtNpxpRSutExJroaTiJVRGRCHa9TFNYH5PQZ/vEzFSbCSgG29aIJKYF8
+        fxxrseq+UqE2zN0jqrRMFLZEBVNfd58=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 99B2C138EC;
+        Mon, 12 Jun 2023 15:44:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id NVBuImo9h2ROQgAAMHmgww
+        (envelope-from <nik.borisov@suse.com>); Mon, 12 Jun 2023 15:44:42 +0000
+From:   Nikolay Borisov <nik.borisov@suse.com>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Nikolay Borisov <nik.borisov@suse.com>
+Subject: [PATCH] x86: Remove dead declarations in ia32.h
+Date:   Mon, 12 Jun 2023 18:44:38 +0300
+Message-Id: <20230612154438.638491-1-nik.borisov@suse.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612113059.247275-5-linux@rasmusvillemoes.dk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,25 +58,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 01:30:54PM +0200, Rasmus Villemoes wrote:
-> Implement support for using the values given in the
-> isil,trip-level[87]5-microvolt properties to set appropriate values in
-> the VB[87]5TP bits in the PWR_VBAT register.
+ia32_pick_mmap_layout got removed in 675a0813609f ("x86: unify mmap_{32|64}.c")
+and ia32_setup_arg_pages was removed as part of
+32974ad4907c ("[IA64] Remove COMPAT_IA32 support").
 
-...
+Signed-off-by: Nikolay Borisov <nik.borisov@suse.com>
+---
+ arch/x86/include/asm/ia32.h | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-> +	for (x85 = 0; x85 < ARRAY_SIZE(trip_level85) - 1; ++x85)
-> +		if (level85 <= trip_level85[x85])
-> +			break;
-> +
-> +	for (x75 = 0; x75 < ARRAY_SIZE(trip_level75) - 1; ++x75)
-> +		if (level75 <= trip_level75[x75])
-> +			break;
-
-Does preincrement give us anything in comparison to postincrement?
-
+diff --git a/arch/x86/include/asm/ia32.h b/arch/x86/include/asm/ia32.h
+index fada857f0a1e..068f6227dfdb 100644
+--- a/arch/x86/include/asm/ia32.h
++++ b/arch/x86/include/asm/ia32.h
+@@ -59,15 +59,6 @@ struct stat64 {
+ 
+ #define IA32_STACK_TOP IA32_PAGE_OFFSET
+ 
+-#ifdef __KERNEL__
+-struct linux_binprm;
+-extern int ia32_setup_arg_pages(struct linux_binprm *bprm,
+-				unsigned long stack_top, int exec_stack);
+-struct mm_struct;
+-extern void ia32_pick_mmap_layout(struct mm_struct *mm);
+-
+-#endif
+-
+ #endif /* CONFIG_IA32_EMULATION */
+ 
+ #endif /* _ASM_X86_IA32_H */
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1
 
