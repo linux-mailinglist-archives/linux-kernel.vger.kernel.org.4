@@ -2,82 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC02E72BD17
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C112F72BD18
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:51:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233235AbjFLJvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 05:51:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32898 "EHLO
+        id S233416AbjFLJvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 05:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232833AbjFLJvI (ORCPT
+        with ESMTP id S229994AbjFLJvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 05:51:08 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153798F7E
+        Mon, 12 Jun 2023 05:51:11 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72530276F1
         for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:35:57 -0700 (PDT)
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35C9J1go017905;
-        Mon, 12 Jun 2023 09:35:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=eAd/ZbrDRWWwhMVabTIuXiM/RkSvKKwFTmIb0+8WaHQ=;
- b=ET/lHAm+VdQl/AbvkIKN3V/eY0fT2XVttoZIyFHB8m0c84mdzZ3J61r/QgimBlIxJ+zU
- Vd+71IBRKFDPe6xkfWacXEDyx8eeKU88Ht1aysNGyDIcXEM8h7PD1eY/11pZHUcD46eM
- D9FXBQygpQg3JyArH6M9mmxdBLPZvGqy2erR3iDS7CYS4+Gt1J3UCtANDQ+CVP49fXAv
- qq6Gia83Vu9hcqkR+UComjHWsvf1ryWT9n0c+sotxhSFE70Ek5S4pTMryo36tDIVBtK8
- gF05Ue1CnUICiSUzAW8KdnCQQsuWnWvAgxskJZGVvMoD6/QcyEQeCRURmgUWFaqpyPjr nA== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r60m80bv8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jun 2023 09:35:25 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35C4pESU007408;
-        Mon, 12 Jun 2023 09:35:23 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3r4gt4s0gk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jun 2023 09:35:23 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35C9ZJah43450946
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 12 Jun 2023 09:35:19 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 809C32004E;
-        Mon, 12 Jun 2023 09:35:19 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EAA1A20040;
-        Mon, 12 Jun 2023 09:35:16 +0000 (GMT)
-Received: from tarunpc.in.ibm.com (unknown [9.199.157.25])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 12 Jun 2023 09:35:16 +0000 (GMT)
-From:   Tarun Sahu <tsahu@linux.ibm.com>
-To:     linux-mm@kvack.org
-Cc:     akpm@linux-foundation.org, muchun.song@linux.dev,
-        mike.kravetz@oracle.com, aneesh.kumar@linux.ibm.com,
-        willy@infradead.org, sidhartha.kumar@oracle.com,
-        gerald.schaefer@linux.ibm.com, linux-kernel@vger.kernel.org,
-        jaypatel@linux.ibm.com, tsahu@linux.ibm.com
-Subject: [PATCH] [mm-unstable] mm/folio: Replace set_compound_order with folio_set_order
-Date:   Mon, 12 Jun 2023 15:05:14 +0530
-Message-Id: <20230612093514.689846-1-tsahu@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: xO9wizThQfX7V6ZNG_HgVPesIQ6ZLK_J
-X-Proofpoint-GUID: xO9wizThQfX7V6ZNG_HgVPesIQ6ZLK_J
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f61d79b0f2so4912370e87.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:35:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686562555; x=1689154555;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EVRsoBw2mYIKseG/0Qd8GC6oHBJlAAcz7DAhIfqh+7s=;
+        b=Rwr9kl19lrfXZO0AeqyotRMwrSFgHnX2AoP9H6w4oq+N6tErLHtVV+lzHKFYdeULvb
+         0pmtApmxu/AUW/D4E+4XdehvlfPdV8hcOHKPHv6o37u4RTUzH7lrEQO6A6RrJA4LYSTe
+         cuerQiT4YbiV5uOghU2r35CX6IQAn0XlgVO84KYd+2mU1hLnzNIEtKPudu4D2NKk9DOC
+         tXKGnDD35U+C60x+tSU/qUHuRH9UI3YphmR8XP8r0xRKbFH1o2Fo+8syvQtxj8Tqp66k
+         vW8fcMPyDnIddHxQ8A7AVPkk+qmP55MTnznHaLlLWG7lpCu53xpBBjSugjQFeU9dB4jH
+         7Apw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686562555; x=1689154555;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EVRsoBw2mYIKseG/0Qd8GC6oHBJlAAcz7DAhIfqh+7s=;
+        b=eh8EFO3eelQyKL/hSNqYAotw17EzRpNhHGSHUtflN4wNWKINTU3wkKgK7lJ7m4EET1
+         LWBh2hnpuzmshWcp0YtJ+YBakaKT9XlMeOBO2L2gcGT2Q3e5/QgOegYnXBgUwWZcgPii
+         WZ3EymuwT3DFgix/f0h7UUDfBdHT/inme7c6Xo0DFCyrx4dxOUVCjA06Fj2HJRRDXDRX
+         tlz97jdJPeCfzFFxJF97gjgyhPO6QKwwZIwrAUPFvpUrminKbuLbBPnWP0GYg+3z5CM1
+         UDT7/N9iKjiUamwBKLSDjCYqFmAGLkFj8U7jUeWfsEwAm5yC/EkIK6XXUK7AAJ12UZdN
+         iNPg==
+X-Gm-Message-State: AC+VfDz3wAOOTS4GkMCq1UbQwF8aiZuxNUyVZjYxE/O9MsEa3BhOaV7S
+        8J4krG7bJ39d5g/SG4Zsu36FbA==
+X-Google-Smtp-Source: ACHHUZ4XIHc31aI7Yz7vxkZ7gA16gu5nwoiLxWZswPLz9iLHvgp3AlnZy1KH+hfVh/JFNYj+qnFqdw==
+X-Received: by 2002:a05:6512:1ce:b0:4f6:1154:deba with SMTP id f14-20020a05651201ce00b004f61154debamr4261756lfp.65.1686562554980;
+        Mon, 12 Jun 2023 02:35:54 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id i9-20020ac25229000000b004f2b6a203aasm1386474lfl.224.2023.06.12.02.35.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 02:35:54 -0700 (PDT)
+Message-ID: <9562db04-ef2e-b32e-9fd6-1396798f28e5@linaro.org>
+Date:   Mon, 12 Jun 2023 11:35:52 +0200
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-12_06,2023-06-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- impostorscore=0 priorityscore=1501 malwarescore=0 spamscore=0
- lowpriorityscore=0 mlxscore=0 clxscore=1015 mlxlogscore=565 suspectscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306120082
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 22/26] arm64: dts: qcom: sa8775p-ride: add the SGMII PHY
+ node
+Content-Language: en-US
+To:     Bartosz Golaszewski <brgl@bgdev.pl>, Vinod Koul <vkoul@kernel.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>
+Cc:     netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230612092355.87937-1-brgl@bgdev.pl>
+ <20230612092355.87937-23-brgl@bgdev.pl>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230612092355.87937-23-brgl@bgdev.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,99 +95,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The patch [1] removed the need for special handling of order = 0
-in folio_set_order. Now, folio_set_order and set_compound_order becomes
-similar function. This patch removes the set_compound_order and uses
-folio_set_order instead.
 
-[1] https://lore.kernel.org/all/20230609183032.13E08C433D2@smtp.kernel.org/
 
-Signed-off-by: Tarun Sahu <tsahu@linux.ibm.com>
----
-Moved folio_set_order to the top instead of moving prep_compound_head below
-to it so that git blame can show the proper change in prep_compound_head
-which is replacement of set_compound_order with folio_set_order.
+On 12.06.2023 11:23, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> 
+> Add the internal SGMII/SerDes PHY node for sa8775p platforms.
+> 
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sa8775p.dtsi | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> index b130136acffe..0e59000a0c82 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> @@ -1837,6 +1837,15 @@ adreno_smmu: iommu@3da0000 {
+>  				     <GIC_SPI 687 IRQ_TYPE_LEVEL_HIGH>;
+>  		};
+>  
+> +		serdes_phy: phy@8901000 {
+> +			compatible = "qcom,sa8775p-dwmac-sgmii-phy";
+> +			reg = <0 0x08901000 0 0xe10>;
+The usage of 0 is inconsistent with 0x0 everywhere else
 
- include/linux/mm.h | 10 ----------
- mm/internal.h      | 32 ++++++++++++++++----------------
- 2 files changed, 16 insertions(+), 26 deletions(-)
-
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 27ce77080c79..61d75e0e5b40 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1229,16 +1229,6 @@ static inline void folio_set_compound_dtor(struct folio *folio,
- 
- void destroy_large_folio(struct folio *folio);
- 
--static inline void set_compound_order(struct page *page, unsigned int order)
--{
--	struct folio *folio = (struct folio *)page;
--
--	folio->_folio_order = order;
--#ifdef CONFIG_64BIT
--	folio->_folio_nr_pages = 1U << order;
--#endif
--}
--
- /* Returns the number of bytes in this potentially compound page. */
- static inline unsigned long page_size(struct page *page)
- {
-diff --git a/mm/internal.h b/mm/internal.h
-index c59fe08c5b39..c460b2fde977 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -378,12 +378,27 @@ extern void memblock_free_pages(struct page *page, unsigned long pfn,
- 					unsigned int order);
- extern void __free_pages_core(struct page *page, unsigned int order);
- 
-+/*
-+ * This will have no effect, other than possibly generating a warning, if the
-+ * caller passes in a non-large folio.
-+ */
-+static inline void folio_set_order(struct folio *folio, unsigned int order)
-+{
-+	if (WARN_ON_ONCE(!order || !folio_test_large(folio)))
-+		return;
-+
-+	folio->_folio_order = order;
-+#ifdef CONFIG_64BIT
-+	folio->_folio_nr_pages = 1U << order;
-+#endif
-+}
-+
- static inline void prep_compound_head(struct page *page, unsigned int order)
- {
- 	struct folio *folio = (struct folio *)page;
- 
- 	set_compound_page_dtor(page, COMPOUND_PAGE_DTOR);
--	set_compound_order(page, order);
-+	folio_set_order(folio, order);
- 	atomic_set(&folio->_entire_mapcount, -1);
- 	atomic_set(&folio->_nr_pages_mapped, 0);
- 	atomic_set(&folio->_pincount, 0);
-@@ -419,21 +434,6 @@ extern void *memmap_alloc(phys_addr_t size, phys_addr_t align,
- int split_free_page(struct page *free_page,
- 			unsigned int order, unsigned long split_pfn_offset);
- 
--/*
-- * This will have no effect, other than possibly generating a warning, if the
-- * caller passes in a non-large folio.
-- */
--static inline void folio_set_order(struct folio *folio, unsigned int order)
--{
--	if (WARN_ON_ONCE(!order || !folio_test_large(folio)))
--		return;
--
--	folio->_folio_order = order;
--#ifdef CONFIG_64BIT
--	folio->_folio_nr_pages = 1U << order;
--#endif
--}
--
- #if defined CONFIG_COMPACTION || defined CONFIG_CMA
- 
- /*
--- 
-2.31.1
-
+Konrad
+> +			clocks = <&gcc GCC_SGMI_CLKREF_EN>;
+> +			clock-names = "sgmi_ref";
+> +			#phy-cells = <0>;
+> +			status = "disabled";
+> +		};
+> +
+>  		pdc: interrupt-controller@b220000 {
+>  			compatible = "qcom,sa8775p-pdc", "qcom,pdc";
+>  			reg = <0x0 0x0b220000 0x0 0x30000>,
