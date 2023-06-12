@@ -2,212 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2979472B6FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 07:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8146D72B660
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 06:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235759AbjFLE6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 00:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
+        id S232705AbjFLE1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 00:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235797AbjFLE6N (ORCPT
+        with ESMTP id S229455AbjFLE0y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 00:58:13 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2067.outbound.protection.outlook.com [40.107.95.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA7832D6B;
-        Sun, 11 Jun 2023 21:57:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=h7QwnoHsLQAel88XQqN7XTNHE5m4nCWOLANeKr5Qi+aGYKRz5NJNLVdA2YrW2YnWlyb9Vg3glh5KCiCvpJBoRYL/2z5IknPPhSnhiJE+ClY7h+VR3zIXKpOd/VvX+CZTAdciMwTMDFFaxEKn6URJ8q/HBky1KptBKrxevUrP1cbIN8Y9GpsciH403CfvgacW9xCkt6nHpqmXmlefmv74blUCRDJr7X0spG4c9vVaTpl9z6a0cXYL9/npk+ovLE73w+9rplzXwNbx2cMfT7HNmXD3F34IG757DsjqBa3R+R0ztOKiZ9IhXmHVuwXOCZNuZKA4xsM7r0A7AjLHN/4tCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RjrtDRnX4hUbBvCvwo1i1y/QPZ+dHBYmNvNtfJMhRak=;
- b=EkDCqPgU43oi3TPjnEN5S+ijm64HMCu/0+rYqzBFReN+N5+Nc31Ff7jy57+Gx2CHolXAfo/yTAq//S35Tn0/5kHDhBItxYZ8OVO44tmSI8Vdjj0sOqcmMQy4KUIxvwPCckTD4uqKFfWTOg7Qo5qLLRzjpL10iCupQfPotJYXrR8TCFBuN/8guNOUrlRq8PJqT90Ly+Em4doy38VOEWk3binJfDKeIceeLLfzv9wZGx4mOGbIr38AW1LLEgixZ3MF80KrHDdzvqOfCBEB7FAbXqe0HY3Na1TALXBBbptiotmjXHw+1z1Q9M5VxSKNILLNMm0HEdITngpQkipgxJAw/w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RjrtDRnX4hUbBvCvwo1i1y/QPZ+dHBYmNvNtfJMhRak=;
- b=md+6pjLMK2ykrkM0a/b+89M7rIa2mvsvbVjUWPp4T4lkWySrLx3VYg636nFoMpZFdH2H9xE2PLvnMI2d2rz3SpEpZiwboB9yyPzxF6kXHNg9PYhBzICl1PgQFh9HTx6hpnZtMwWc1hJbhkonz+tl6hH+1V4NMOpMGl6DwJvkxX8=
-Received: from CYXPR03CA0077.namprd03.prod.outlook.com (2603:10b6:930:d3::19)
- by CH0PR12MB5249.namprd12.prod.outlook.com (2603:10b6:610:d0::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.42; Mon, 12 Jun
- 2023 04:57:10 +0000
-Received: from CY4PEPF0000E9D6.namprd05.prod.outlook.com
- (2603:10b6:930:d3:cafe::d5) by CYXPR03CA0077.outlook.office365.com
- (2603:10b6:930:d3::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.33 via Frontend
- Transport; Mon, 12 Jun 2023 04:57:09 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000E9D6.mail.protection.outlook.com (10.167.241.80) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6500.22 via Frontend Transport; Mon, 12 Jun 2023 04:57:09 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Sun, 11 Jun
- 2023 23:57:07 -0500
-From:   Michael Roth <michael.roth@amd.com>
-To:     <kvm@vger.kernel.org>
-CC:     <linux-coco@lists.linux.dev>, <linux-mm@kvack.org>,
-        <linux-crypto@vger.kernel.org>, <x86@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <tglx@linutronix.de>,
-        <mingo@redhat.com>, <jroedel@suse.de>, <thomas.lendacky@amd.com>,
-        <hpa@zytor.com>, <ardb@kernel.org>, <pbonzini@redhat.com>,
-        <seanjc@google.com>, <vkuznets@redhat.com>, <jmattson@google.com>,
-        <luto@kernel.org>, <dave.hansen@linux.intel.com>, <slp@redhat.com>,
-        <pgonda@google.com>, <peterz@infradead.org>,
-        <srinivas.pandruvada@linux.intel.com>, <rientjes@google.com>,
-        <dovmurik@linux.ibm.com>, <tobin@ibm.com>, <bp@alien8.de>,
-        <vbabka@suse.cz>, <kirill@shutemov.name>, <ak@linux.intel.com>,
-        <tony.luck@intel.com>, <marcorr@google.com>,
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        <alpergun@google.com>, <dgilbert@redhat.com>, <jarkko@kernel.org>,
-        <ashish.kalra@amd.com>, <nikunj.dadhania@amd.com>,
-        <liam.merwick@oracle.com>, <zhi.a.wang@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>
-Subject: [PATCH RFC v9 51/51] crypto: ccp: Add debug support for decrypting pages
-Date:   Sun, 11 Jun 2023 23:25:59 -0500
-Message-ID: <20230612042559.375660-52-michael.roth@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230612042559.375660-1-michael.roth@amd.com>
-References: <20230612042559.375660-1-michael.roth@amd.com>
+        Mon, 12 Jun 2023 00:26:54 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A10D01A5;
+        Sun, 11 Jun 2023 21:26:50 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35C4QW5m068010;
+        Sun, 11 Jun 2023 23:26:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1686543992;
+        bh=VEhVRvB/ezKAemLvJsdtQR3iIrWDnvFJDWF+f5A78/c=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=XSUOuWUzCAYjvv18CrV/xcJWn2oL2C+hxzXMI/Ygf8ktLNdv2Wpx4yLWHOHjcv0+i
+         95vCdxpMZUwrZLMO1BdWIKHp6TsiGIvqd5Gxo6J83WFKp7sy+5t4OQPjQQvoXwSUk4
+         M7EKV1jhWQ1ntF4A7ThN8lirPoaHJwaV/I3XtIQ0=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35C4QWsw022109
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sun, 11 Jun 2023 23:26:32 -0500
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Sun, 11
+ Jun 2023 23:26:32 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Sun, 11 Jun 2023 23:26:32 -0500
+Received: from [172.24.145.61] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35C4QR6b027739;
+        Sun, 11 Jun 2023 23:26:28 -0500
+Message-ID: <b91f1df7-7b36-bfee-2182-44ccfb900952@ti.com>
+Date:   Mon, 12 Jun 2023 09:56:27 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D6:EE_|CH0PR12MB5249:EE_
-X-MS-Office365-Filtering-Correlation-Id: 499dbd1a-db19-494a-8345-08db6b017a88
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 71t+1axCyvSl/V6S59kONElavhM4jLvegT9GfJXF519MRl0ZhzWRf0RmHqL0U8U4jv/iq52DGbgm13fWzwMeLlhu3mB7SikkcGkuUhUm6l0pDcMcY0eR7hoys9oP3+hHbNtFRJKT63oDbzmDcqq32Qq2UaYQmxx1D4TWtChYzkmqK5A9bSWxQ1r/t7eePnSryFBcNiPxKX3bgP9pb0A0T7+3Gmnveqau5X+QRvhVyESyhzeIRK9kS87j8fyFGgxRKGOj0t+gEpDQ/sZQPxiRiM0xsx0KPSADx+fu+44Yir5r/W6Kot34PCo4TPG733wY3DIFF5P7YlvKiPiu5WyCRumeGXaU5mUHCSqZszyhdVb8RTICGh8le46ezuUebuTom1Xpo9tpDEsTMh9VmM3Rs23jdtXT/NT3QedmaviPX9MMGyl0l6TiDoUIAvAZYw8yYp1cpyD6HC7E5mV8Rul9SjcQneujZ7VwD5MHu7fCvI+0pRD40060pbBvgpOOFTD6ZNPLQKPdHBwpedaED+5+JAzSy8AKLFOLuxL9X1IWDlDWY3c2XR7ChDnMSCZXgOpJ0HkWooKevUmPFiefWi+CZSFTpS9QeyJLwrmrbp76nLwr6XShajkaNUiVpv+RLHD5ixEPFGbJZ9jlCJJSfXGfu6jggqWwAvftDe2pxUO+vzTjzsXPuaP2nNlVgXmeuoNtpHLEcd7C2VlpnvGeCzA0ZaUkGEvJbLsysPwUzbtcOVqh+wULmBvm2PIcJRLvSmicr4UTVjP0yQNS1ijQRcBGDnYo1UPZwr92wlHvbZRk0bI=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(136003)(346002)(376002)(451199021)(36840700001)(40470700004)(46966006)(2616005)(36756003)(2906002)(7406005)(82310400005)(86362001)(44832011)(7416002)(40480700001)(6666004)(47076005)(16526019)(36860700001)(186003)(83380400001)(40460700003)(5660300002)(336012)(26005)(426003)(1076003)(82740400003)(356005)(81166007)(478600001)(54906003)(70586007)(4326008)(70206006)(6916009)(41300700001)(316002)(8676002)(8936002)(36900700001)(134885004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 04:57:09.6400
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 499dbd1a-db19-494a-8345-08db6b017a88
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000E9D6.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5249
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+CC:     <tjoseph@cadence.com>, <lpieralisi@kernel.org>, <robh@kernel.org>,
+        <kw@linux.com>, <bhelgaas@google.com>, <nadeem@cadence.com>,
+        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <vigneshr@ti.com>,
+        <srk@ti.com>, <nm@ti.com>, <s-vadapalli@ti.com>
+Subject: Re: [PATCH v3] PCI: cadence: Fix Gen2 Link Retraining process
+To:     Bjorn Helgaas <helgaas@kernel.org>
+References: <20230609173940.GA1252506@bhelgaas>
+Content-Language: en-US
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <20230609173940.GA1252506@bhelgaas>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brijesh Singh <brijesh.singh@amd.com>
 
-Add support to decrypt guest encrypted memory. These API interfaces can
-be used for example to dump VMCBs on SNP guest exit.
 
-Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
-[mdr: minor commit fixups]
-Signed-off-by: Michael Roth <michael.roth@amd.com>
----
- drivers/crypto/ccp/sev-dev.c | 32 ++++++++++++++++++++++++++++++++
- include/linux/psp-sev.h      | 19 +++++++++++++++++++
- 2 files changed, 51 insertions(+)
+On 09/06/23 23:09, Bjorn Helgaas wrote:
+> On Wed, Jun 07, 2023 at 02:44:27PM +0530, Siddharth Vadapalli wrote:
+>> The Link Retraining process is initiated to account for the Gen2 defect in
+>> the Cadence PCIe controller in J721E SoC. The errata corresponding to this
+>> is i2085, documented at:
+>> https://www.ti.com/lit/er/sprz455c/sprz455c.pdf
+>>
+>> The existing workaround implemented for the errata waits for the Data Link
+>> initialization to complete and assumes that the link retraining process
+>> at the Physical Layer has completed. However, it is possible that the
+>> Physical Layer training might be ongoing as indicated by the
+>> PCI_EXP_LNKSTA_LT bit in the PCI_EXP_LNKSTA register.
+>>
+>> Fix the existing workaround, to ensure that the Physical Layer training
+>> has also completed, in addition to the Data Link initialization.
+>>
+>> Fixes: 4740b969aaf5 ("PCI: cadence: Retrain Link to work around Gen2 training defect")
+>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+>> Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
+>> ---
+>>
+>> Hello,
+>>
+>> This patch is based on linux-next tagged next-20230606.
+>>
+>> v2:
+>> https://lore.kernel.org/r/20230315070800.1615527-1-s-vadapalli@ti.com/
+>> Changes since v2:
+>> - Merge the cdns_pcie_host_training_complete() function with the
+>>   cdns_pcie_host_wait_for_link() function, as suggested by Bjorn
+>>   for the v2 patch.
+>> - Add dev_err() to notify when Link Training fails, since this is a
+>>   fatal error and proceeding from this point will almost always crash
+>>   the kernel.
+>>
+>> v1:
+>> https://lore.kernel.org/r/20230102075656.260333-1-s-vadapalli@ti.com/
+>> Changes since v1:
+>> - Collect Reviewed-by tag from Vignesh Raghavendra.
+>> - Rebase on next-20230315.
+>>
+>> Regards,
+>> Siddharth.
+>>
+>>  .../controller/cadence/pcie-cadence-host.c    | 20 +++++++++++++++++++
+>>  1 file changed, 20 insertions(+)
+>>
+>> diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
+>> index 940c7dd701d6..70a5f581ff4f 100644
+>> --- a/drivers/pci/controller/cadence/pcie-cadence-host.c
+>> +++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
+>> @@ -12,6 +12,8 @@
+>>  
+>>  #include "pcie-cadence.h"
+>>  
+>> +#define LINK_RETRAIN_TIMEOUT HZ
+>> +
+>>  static u64 bar_max_size[] = {
+>>  	[RP_BAR0] = _ULL(128 * SZ_2G),
+>>  	[RP_BAR1] = SZ_2G,
+>> @@ -80,8 +82,26 @@ static struct pci_ops cdns_pcie_host_ops = {
+>>  static int cdns_pcie_host_wait_for_link(struct cdns_pcie *pcie)
+>>  {
+>>  	struct device *dev = pcie->dev;
+>> +	unsigned long end_jiffies;
+>> +	u16 link_status;
+>>  	int retries;
+>>  
+>> +	/* Wait for link training to complete */
+>> +	end_jiffies = jiffies + LINK_RETRAIN_TIMEOUT;
+>> +	do {
+>> +		link_status = cdns_pcie_rp_readw(pcie, CDNS_PCIE_RP_CAP_OFFSET + PCI_EXP_LNKSTA);
+>> +		if (!(link_status & PCI_EXP_LNKSTA_LT))
+>> +			break;
+>> +		usleep_range(0, 1000);
+>> +	} while (time_before(jiffies, end_jiffies));
+>> +
+>> +	if (!(link_status & PCI_EXP_LNKSTA_LT)) {
+>> +		dev_info(dev, "Link training complete\n");
+>> +	} else {
+>> +		dev_err(dev, "Fatal! Link training incomplete\n");
+>> +		return -ETIMEDOUT;
+>> +	}
+> 
+> Can I have a brown paper bag, please?  I totally blew it here, and I'm
+> sorry.
+> 
+> You took my advice by combining this with the existing
+> cdns_pcie_host_wait_for_link(), but I think my advice was poor because
+> (a) now this additional wait is not clearly connected with the
+> erratum, and (b) it affects devices that don't have the erratum.
+> 
+> IIUC, this is all part of a workaround for the i2085 erratum.  The
+> original workaround, 4740b969aaf5 ("PCI: cadence: Retrain Link to work
+> around Gen2 training defect"), added this:
+> 
+>   if (!ret && rc->quirk_retrain_flag)
+>     ret = cdns_pcie_retrain(pcie);
+> 
+> I think the wait for link train to complete should also be in
+> cdns_pcie_retrain() so it's clearly connected with the quirk, which
+> also means we'd only do the wait for devices with the erratum.
+> 
+> Which is EXACTLY what your first patch did, and I missed it.  I am
+> very sorry.  I guess maybe I thought cdns_pcie_retrain() was a
+> general-purpose thing, but in fact it's only used for this quirk.
 
-diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-index 096ba15d0740..3c8cd2d20016 100644
---- a/drivers/crypto/ccp/sev-dev.c
-+++ b/drivers/crypto/ccp/sev-dev.c
-@@ -2061,6 +2061,38 @@ int sev_guest_df_flush(int *error)
- }
- EXPORT_SYMBOL_GPL(sev_guest_df_flush);
- 
-+int snp_guest_dbg_decrypt_page(u64 gctx_pfn, u64 src_pfn, u64 dst_pfn, int *error)
-+{
-+	struct sev_data_snp_dbg data = {0};
-+	struct sev_device *sev;
-+	int ret;
-+
-+	if (!psp_master || !psp_master->sev_data)
-+		return -ENODEV;
-+
-+	sev = psp_master->sev_data;
-+
-+	if (!sev->snp_initialized)
-+		return -EINVAL;
-+
-+	data.gctx_paddr = sme_me_mask | (gctx_pfn << PAGE_SHIFT);
-+	data.src_addr = sme_me_mask | (src_pfn << PAGE_SHIFT);
-+	data.dst_addr = sme_me_mask | (dst_pfn << PAGE_SHIFT);
-+
-+	/* The destination page must be in the firmware state. */
-+	if (rmp_mark_pages_firmware(data.dst_addr, 1, false))
-+		return -EIO;
-+
-+	ret = sev_do_cmd(SEV_CMD_SNP_DBG_DECRYPT, &data, error);
-+
-+	/* Restore the page state */
-+	if (snp_reclaim_pages(data.dst_addr, 1, false))
-+		ret = -EIO;
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(snp_guest_dbg_decrypt_page);
-+
- static void sev_snp_certs_release(struct kref *kref)
- {
- 	struct sev_snp_certs *certs = container_of(kref, struct sev_snp_certs, kref);
-diff --git a/include/linux/psp-sev.h b/include/linux/psp-sev.h
-index 1235eb3110cb..55f6dfc2580d 100644
---- a/include/linux/psp-sev.h
-+++ b/include/linux/psp-sev.h
-@@ -916,6 +916,20 @@ int sev_guest_decommission(struct sev_data_decommission *data, int *error);
-  */
- int sev_do_cmd(int cmd, void *data, int *psp_ret);
- 
-+/**
-+ * snp_guest_dbg_decrypt_page - perform SEV SNP_DBG_DECRYPT command
-+ *
-+ * @sev_ret: sev command return code
-+ *
-+ * Returns:
-+ * 0 if the SEV successfully processed the command
-+ * -%ENODEV    if the SEV device is not available
-+ * -%ENOTSUPP  if the SEV does not support SEV
-+ * -%ETIMEDOUT if the SEV command timed out
-+ * -%EIO       if the SEV returned a non-zero return code
-+ */
-+int snp_guest_dbg_decrypt_page(u64 gctx_pfn, u64 src_pfn, u64 dst_pfn, int *error);
-+
- void *psp_copy_user_blob(u64 uaddr, u32 len);
- void *snp_alloc_firmware_page(gfp_t mask);
- void snp_free_firmware_page(void *addr);
-@@ -946,6 +960,11 @@ sev_issue_cmd_external_user(struct file *filep, unsigned int id, void *data, int
- 
- static inline void *psp_copy_user_blob(u64 __user uaddr, u32 len) { return ERR_PTR(-EINVAL); }
- 
-+static inline int snp_guest_dbg_decrypt_page(u64 gctx_pfn, u64 src_pfn, u64 dst_pfn, int *error)
-+{
-+	return -ENODEV;
-+}
-+
- static inline void *snp_alloc_firmware_page(gfp_t mask)
- {
- 	return NULL;
+With the current approach implemented in this patch, I could do the following:
+In the cdns_pcie_host_wait_for_link() function, I obtain the reference to the
+struct cdns_pcie_rc *rc, using:
+struct cdns_pcie_rc *rc = container_of(pcie, struct cdns_pcie_rc, pcie);
+followed by checking if the quirk "quirk_retrain_flag" is set, before proceeding
+with the Link Training check added by this patch. With this, only the
+controllers with the quirk will check for the Link Training completion before
+proceeding. However, the difference with this new approach compared to the
+approach in the v2 patch is that in this new approach, even in the Link Training
+Phase, the Link Training check is performed for the controllers with the quirk,
+unlike the v2 patch where the Link Training check was performed only during the
+Link Retraining Phase through the cdns_pcie_retrain() function.
+
+Also, based on Mani's suggestion, I have measured the latency introduced by the
+Link Training check for both quirky and non-quirky controllers at:
+https://lore.kernel.org/r/a63fc8b0-581b-897f-cac6-cb0a0e82c63e@ti.com/
+If the latency is acceptable, then the current implementation in this v3 patch
+could be fine too.
+
+Kindly let me know which approach among the following seems to be the best one:
+1. The approach implemented in v2 patch (I will make minor changes to the patch
+to print out the "Fatal" error, so that users will be informed of the cause of
+the crash, followed by posting a v4 patch with this change).
+2. The current implementation in the v3 patch with a check added to see if the
+controller has the quirk_retrain_flag set, before proceeding with the Link
+Training check.
+3. The current implementation in the v3 patch as is, without any modification,
+if the latency introduced is not a concern and the sanity check for Link
+Training completion for non-quirky controllers appears acceptable.
+
+> 
+> Bjorn
+
 -- 
-2.25.1
-
+Regards,
+Siddharth.
