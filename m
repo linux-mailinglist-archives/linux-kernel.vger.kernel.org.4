@@ -2,150 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6B0772CC55
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1799B72CC5B
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235127AbjFLRXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 13:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34802 "EHLO
+        id S235862AbjFLRX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 13:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233399AbjFLRXW (ORCPT
+        with ESMTP id S235736AbjFLRXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 13:23:22 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A63571A5
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:23:21 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686590600;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ndr+IFVihX0wTQU0pRCS9MpzNfxeaUdLr88C71hGhcQ=;
-        b=towGF8UnI2SFEkIU8GuVBcblSZQWc6ulxnxIUepyUxoo4WAZmsRfSzAmW/q8BCUsxKasQd
-        SI7Ome+hLhcv89291jftUd6Q/G28oOQjIr+jOkC0BsGzXvEBcnJnRwQV9/mqEYG/FV94XH
-        tNgAc02i5ZRf5QcO2SswEJo38CWOz9nIM7RRU0c+luRszvxkkwLxy89jXkuMFExnnssWgI
-        l6jqynSz4Qd0U9ewT6COoXLMdXVWzCD75eiNkWtNllpCjSObp7o6jheF4KbUruAPjDMAai
-        rS9V7CvnaFA8Q0EGnUxt1U1Bo6WjIHroWxPKpYY/u/ldtcWRh56ichWTDDE8cQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686590600;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ndr+IFVihX0wTQU0pRCS9MpzNfxeaUdLr88C71hGhcQ=;
-        b=hZr4vTHJmXO4fadtmAH4KWflFF8oByuhcpwFqQo/3Fk59b9Xj7DmMObGkNVNtgBrUPARCv
-        roWXQKAnVDUhmJAg==
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] x86/microcode: Add a "microcode=" command line option
-In-Reply-To: <20230612154246.GLZIc89v6Q2THgsY8N@fat_crate.local>
-References: <20230605141332.25948-1-bp@alien8.de>
- <20230605141332.25948-2-bp@alien8.de> <87ilbs7lcr.ffs@tglx>
- <20230612154246.GLZIc89v6Q2THgsY8N@fat_crate.local>
-Date:   Mon, 12 Jun 2023 19:23:19 +0200
-Message-ID: <87a5x47fy0.ffs@tglx>
+        Mon, 12 Jun 2023 13:23:47 -0400
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A84E134;
+        Mon, 12 Jun 2023 10:23:46 -0700 (PDT)
+Received: by mail-ua1-x931.google.com with SMTP id a1e0cc1a2514c-78a57844f42so39373241.2;
+        Mon, 12 Jun 2023 10:23:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20221208; t=1686590625; x=1689182625;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rA+ci5q7KngMrgSNRGMsKGeEczzZ7geqfDeJER8xBNU=;
+        b=poiTRiRKV+rQUvKEQWPCKkayUJeadCGisamTi5BFtvDxIxlIQLx4UD5tMOwWIKvhOz
+         D5gYNrHMuc8+4rTZa38ySlrWG2L150bP+zqM2guNpHEkwHNhX/Oaf/mu9P9z7tb9l0KY
+         2jAuuroPKezw3Giu32AUzcXh7QGK/YL+lNF/ckxr80Jj1CS2oF0xcZdUul7blyRoPRfS
+         3kv30pCcOsH7alX/S5c+RVbCjSUFLizgOtkdErc5Al4/0Y1Q2HjKUyuukjIigf9USjde
+         istDARceJt9S5N4oh+CXI+P+6zb6Y9cl/bhyOFZlYcby6tJAwblUnmCXQt48LQWrD+UO
+         4PfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686590625; x=1689182625;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rA+ci5q7KngMrgSNRGMsKGeEczzZ7geqfDeJER8xBNU=;
+        b=d8NAxCGZUsKlmfjYSrh2kmzpwMqKdBJF3TOV13Qtig6zVnX1XTxSIVWmu7fP7yb6iw
+         VkrncCJZBmyrrBB9YAV6uJ7HgF7FQZaAtTx1QnOiS0T1udmUEnpVutaJlAuR7w3PPHuF
+         F+mTUrAzn/LNbhQvi5PUJEXddiApqAmZkmR9nwviwE1pyocTT/5u4Wcrlsqf6st1XiYj
+         Wi+/a8bLz5kYbsEJmXTxhiRa4Ue5/352f8F4wSMwUE7yhv9UWZN+cnVnrmrJUm4JDFiy
+         SvpO0DtbQtoHt0DOtjzWLhBXt+5X4KahscFBJfTeAGLh36AGWUi8Y3iI1ILdCHorgVuT
+         G7BA==
+X-Gm-Message-State: AC+VfDyA8bM5Zw3GKlvgX87Gy1WnU63iSu0f0z8blehrN+QtOnnDsAE1
+        BkEckbV+0mo9CuALwnjL36njkBJfrNry/b4vb6Q=
+X-Google-Smtp-Source: ACHHUZ5GqQIYYUOyKXLFbfhZ1XIZ3B3rcn4sOPD62BfndrT2VVq1FFCDEUHlCYWMi1ZI+6T+s2zZJ9xGwxJqlzpESdI=
+X-Received: by 2002:a67:e893:0:b0:43d:dfb3:5edb with SMTP id
+ x19-20020a67e893000000b0043ddfb35edbmr3313502vsn.25.1686590625467; Mon, 12
+ Jun 2023 10:23:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230606111042.96855-1-franziska.naepelt@gmail.com>
+ <20230611105331.16570-1-franziska.naepelt@gmail.com> <1c00f4aa-e696-a071-68a7-cdd62d8ba894@infradead.org>
+In-Reply-To: <1c00f4aa-e696-a071-68a7-cdd62d8ba894@infradead.org>
+From:   =?UTF-8?Q?Franziska_N=C3=A4pelt?= 
+        <franziska.naepelt@googlemail.com>
+Date:   Mon, 12 Jun 2023 19:23:34 +0200
+Message-ID: <CAAUT3iN3fxN3OE5XB5H1C4xNwo91dF9QMmhDiviHmbwaD1KrVQ@mail.gmail.com>
+Subject: Re: [PATCH v2] crypto: fcrypt: Fix block comment
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     davem@davemloft.net, herbert@gondor.apana.org.au,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bagasdotme@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12 2023 at 17:42, Borislav Petkov wrote:
-> On Mon, Jun 12, 2023 at 05:26:28PM +0200, Thomas Gleixner wrote:
->> Why is it suddenly required to prevent late loading on SMT threads?
+Am So., 11. Juni 2023 um 16:56 Uhr schrieb Randy Dunlap <rdunlap@infradead.org>:
 >
-> The intent is, like a chicken bit, to revert to the *old* behavior which
-> would not load on both threads. In *case* some old configuration of CPU
-> and microcode cannot handle loading on both threads. Which is from
-> Bulldozer onwards but I don't think anyone uses Bulldozer anymore.
-
-So why not making the late loading thing depend on >= bulldozer?
-
-Also I'm failing to see how this is different from the early loader:
-
->> That's the exact opposite of what e7ad18d1169c ("x86/microcode/AMD:
->> Apply the patch early on every logical thread") is doing.
-
-That changelogs says:
-
-  "Btw, change only the early paths. On the late loading paths, there's
-   no point in doing per-thread modification because if is it some case
-   like in the bugzilla below - removing a CPUID flag - the kernel cannot
-   go and un-use features it has detected are there early. For that, one
-   should use early loading anyway."
-
-which makes sense to some extent, but obviously there is a use case for
-late loading on both threads. So what are you worried about breaking
-here?
-
-If the late load does a behavioural change, then it does not matter
-whether you make sure both threads are hosed in the same way or not. If
-the late load is harmless and just addressing some correctness issue
-then loading on the secondary thread should be a noop, right?
-
-> No, see patch 1 - it does exactly the same what this commit does but for
-> late loading.
-
-Sorry no. Patch 1 brings the late loading decision in line with the
-early loading decision, i.e. ensure that microcode is loaded on both
-threads. That condition
-
-	/* need to apply patch? */
--	if (rev >= mc_amd->hdr.patch_id) {
-+	if (rev > mc_amd->hdr.patch_id) {
-
-really could do with a proper comment which explains why loading the
-same revision makes sense.
-
-> Bottomline: on AMD, we should load on both threads by default.
-
-Fine. Then what is this about? If it survives early loading on both
-threads then why do we need a chickenbit for late loading?
-
-So if someone turns that on needlessly then in the worst case the
-primary thread behaves differently than the secondary thread, right?
-
->> Aside of that why is this a kernel side chicken bit and not communicated
->> by the microcode header?
+> Hi--
 >
-> See above. This chicken bit is there, just in case, to help in the case
-> where the user cannot do anything else. It should not be used, judging
-> by all the combinations I've tested here.
-
-If it should not be used, then where is the big fat warning emitted when
-it is actually enabled?
-
-The more I read this the less I'm convinced that this makes any sense at
-all:
-
-  1) You did not add a chicken bit when you made this change for the
-     early loader. Why needs late loading suddenly one?
-
-  2) Late loading is "use at your own peril" up to the point where the
-     minimum revision field is in place. So why do we need a bandaid
-     chickenbit for something which is considered unsafe anyway?
-
-  3) The microcode people @AMD should be able to figure out whether
-     unconditionally (late) loading on the secondary thread is safe or
-     not.
-
-I told Intel to make microcode loading something sane. It's not any
-different for AMD. This hastily cobbled together chickenbit thing
-without a fundamental technical justification definitely does not
-quality for sane.
-
->> Why ULL bits for a unsigned long variable?
+> On 6/11/23 03:53, Franziska Naepelt wrote:
+> > Fix the following checkpatch issue:
+> > - WARNING: Block comments use a trailing */ on a separate line
+> >
+> > Signed-off-by: Franziska Naepelt <franziska.naepelt@gmail.com>
+> > ---
+> > v2:
+> >  - Revert SPDX change to address only one logical change
+> > ---
+> >  crypto/fcrypt.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/crypto/fcrypt.c b/crypto/fcrypt.c
+> > index 95a16e88899b..e9e119bab784 100644
+> > --- a/crypto/fcrypt.c
+> > +++ b/crypto/fcrypt.c
+> > @@ -303,7 +303,8 @@ static int fcrypt_setkey(struct crypto_tfm *tfm, const u8 *key, unsigned int key
+> >
+> >  #if BITS_PER_LONG == 64  /* the 64-bit version can also be used for 32-bit
+> >                         * kernels - it seems to be faster but the code is
+> > -                       * larger */
+> > +                       * larger
+> > +                       */
 >
-> There's no BIT_UL() macro.
+> The comment doesn't begin with a /* on a line by itself either.
+>
+> checkpatch isn't always correct.
+> Maybe it isn't in this case.
+>
+> I would either make it a correct multi-line comment or not make a change
+> at all here.
+>
+> >
+> >       u64 k;  /* k holds all 56 non-parity bits */
+> >
+> >
+> > base-commit: 9561de3a55bed6bdd44a12820ba81ec416e705a7
+>
+> --
+> ~Randy
 
-git grep '#define BIT(' include/
-
-Thanks,
-
-        tglx
+Hi Randy,
+thanks for the heads up. I'll leave it for now and won't make a change.
+Thanks, Franziska
