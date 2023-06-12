@@ -2,100 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D43EB72BE6D
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:12:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35BD572BE74
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235639AbjFLKMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 06:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49010 "EHLO
+        id S233293AbjFLKMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 06:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231951AbjFLKLW (ORCPT
+        with ESMTP id S232850AbjFLKM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 06:11:22 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E8A64228
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:51:23 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9788faaca2dso701537966b.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:51:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686563482; x=1689155482;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=p73p8iBF8aXDQgFdOMI5kr8I00UMbWdp8nhLok7wZbE=;
-        b=kaBQyxEJjsN1+xKoTCuWznHkrGfi24IjYupmx3KNL49JI8TcnKOm3gzqPs4xKKSZ8P
-         LxuWnwpAGq37k88T1nK0WwLd4azQNkH1m8eSVpl5akD8ywZx96Qr00DZCjpKdF/ngw4X
-         TsrDjF9h/M/5bGxwZFuPGTYfdFF6lkf65E/bTYT8wfa+tnxOEkXhf6XdJdN0+Na0Nrvp
-         WNWXuIb6b4L/HhvuUCX/8uqrTTjfgzMuyFrT8HI9elIGIH5J3bYSYxVQNgS6kYskGiaL
-         bCzihQyJ879LMowmgq0Y7n8D63YUqmaSrvIoT/Ra7A93VD6Aeeud3m11zOGL8VL6SHuU
-         jpwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686563482; x=1689155482;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p73p8iBF8aXDQgFdOMI5kr8I00UMbWdp8nhLok7wZbE=;
-        b=BoBDSjbHHp+IQXwkUuOV/oGlvetBv/6oP/BGv/ELYEcL9EDccx3mlOtxBe58263zZp
-         iDqB1uhCfPFcX5dO2/fMl6PyVBOvr/7Qxu3+9uwdZFOlv/ZtT1FTdKpgqo874IN39W7f
-         2X2GHRyA97Lld+1WBw1hmRvK2hP5XodGyTDWzWp5Yqq+ti4nd2jJXZhbE9QtcDfwylx0
-         bap2twRW4sS6pGrXJbxBZQuwWss9WhQ13u8izOfEpoKfsBFvuEiept4i8cUgJ/ji/Lw2
-         MhjKnrsc3hvNcfjnFYOH/ZIStk6pOnyeEBAz1rO21Ud/myvJ7xoGwajMHz+QBQaJptZA
-         fCtA==
-X-Gm-Message-State: AC+VfDzbTrg2snlIP57+AHS2VU4Q9cA9WqAJ4kwa5Chs9mPGrBTPQSyy
-        MAyjdc2hJ4sRbJEdqp/kXahniA==
-X-Google-Smtp-Source: ACHHUZ4rvqW+RXF5ZByOUxAp90+FZQtXk5GA+J2fVeqLdy9oIQxUyIWww+3XSb16dju+/3m1aea4bg==
-X-Received: by 2002:a17:906:6a1c:b0:978:ab6b:afe9 with SMTP id qw28-20020a1709066a1c00b00978ab6bafe9mr8699754ejc.66.1686563482008;
-        Mon, 12 Jun 2023 02:51:22 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id kf10-20020a17090776ca00b00965f6ad266bsm4850797ejc.119.2023.06.12.02.51.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 02:51:21 -0700 (PDT)
-Message-ID: <3ac37e54-0633-37d2-2ba7-f06abcb9a5a7@linaro.org>
-Date:   Mon, 12 Jun 2023 11:51:19 +0200
+        Mon, 12 Jun 2023 06:12:27 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A10DF44A0;
+        Mon, 12 Jun 2023 02:52:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=HSJpGOrjCtJnZnFroylDCf7Rjcbog3OzeJBiNYZJX7o=; b=o+pkq7ygLjhrbdBlWofvqd8xnx
+        vWl+lMxecy+qVMaEDoNSt+ATt7ETwAhhR5OUYDWlVf2miE7SL46ItJcSZGLApmQnVBPcrS0PKOiHr
+        tSE4D7Rb2Eixoh0+PGG61PoONPZ8KdIi4JGrEw91Ebrlc6guacC2Pifl5wYD+aRnj1beiVs7DJ0Q+
+        hCbOB1F1Y6PLp8fYU7DvjOjLYEdz6qr0vqFc+alciEj6+zLggoFd3luXnDaYLQsaioq+ogCTorb3k
+        ymVcbYVg66hz8tmyaY90x+TGbG+i202Rsb3uG120iV91GmHLjVXkzxobA5cSjS4157KKdT/Yt59gz
+        VM/hIidw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q8eDP-002QJR-Ni; Mon, 12 Jun 2023 09:51:59 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 55C3830058D;
+        Mon, 12 Jun 2023 11:51:59 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2F59F2C17E189; Mon, 12 Jun 2023 11:51:59 +0200 (CEST)
+Date:   Mon, 12 Jun 2023 11:51:59 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     torvalds@linux-foundation.org, keescook@chromium.org,
+        gregkh@linuxfoundation.org, pbonzini@redhat.com
+Cc:     masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+        nicolas@fjasle.eu, catalin.marinas@arm.com, will@kernel.org,
+        vkoul@kernel.org, trix@redhat.com, ojeda@kernel.org,
+        mingo@redhat.com, longman@redhat.com, boqun.feng@gmail.com,
+        dennis@kernel.org, tj@kernel.org, cl@linux.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
+        adrian.hunter@intel.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, paulmck@kernel.org,
+        frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
+        42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
+        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
+        john.johansen@canonical.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
+        rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
+        tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
+        luc.vanoostenryck@gmail.com
+Subject: Re: [PATCH v3 00/57] Scope-based Resource Management
+Message-ID: <20230612095159.GH4253@hirez.programming.kicks-ass.net>
+References: <20230612090713.652690195@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [EXTERNAL] Re: [PATCH] arm64: defconfig: Enable HSR by default
-Content-Language: en-US
-To:     Ravi Gunasekaran <r-gunasekaran@ti.com>, catalin.marinas@arm.com,
-        will@kernel.org
-Cc:     arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20230612094340.13865-1-r-gunasekaran@ti.com>
- <ab8dfd0f-fa49-6493-d79d-c35f632373f3@linaro.org>
- <e3e409c5-56b5-570d-e962-a7c0a1c05fa3@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <e3e409c5-56b5-570d-e962-a7c0a1c05fa3@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230612090713.652690195@infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/06/2023 11:49, Ravi Gunasekaran wrote:
+On Mon, Jun 12, 2023 at 11:07:13AM +0200, Peter Zijlstra wrote:
+> Hi,
 > 
+> After a wee bit of bike-shedding on the syntax/API of the thing I think we're
+> in a reasonable shape.
 > 
-> On 6/12/23 3:14 PM, Krzysztof Kozlowski wrote:
->> On 12/06/2023 11:43, Ravi Gunasekaran wrote:
->>> Enable HSR feature in kernel build.
->>
->> Why? Commit msg should answer to this question.
+> There's still the no_free_ptr() vs take_ptr() thing, but that can be easily
+> sorted with a little script over the patches if we reach consensus.
 > 
-> I apologize for incomplete description. I will send out a v2.
+> I've taken to converting kernel/sched/core.c and kernel/events/core.c to see
+> how well this stuff actually works. Unlike last time, I've split them up into a
+> gazillion little patches. Both for my sanity -- bisect is genius when you're
+> trying to debug stuff in the middle of the night as well as reviewer sanity.
 > 
-> HSR protocol is implemented by the network stack at /net/hsr/*
-> In order to create HSR interface, HSR module needs to be loaded.
+> These are by no means 'complete' convertions, I've mostly focussed on functions
+> that had 'goto' in them. Since that's a large part of why I started on all this.
+> 
+> x86_x64-defconfig boots and passes perf test. I'll go figure out how to point
+> syzcaller at it.
+> 
+> The patches have gone through a few cycles of 0day over the weekend, and mostly
+> builds fine now.
+> 
+> Dan Carpenter poked me about how sparse doesn't yet understand the __cleanup__
+> attribute and seems to suffer from decl-after-stmt issues, so that might be
+> something that needs attention.
+> 
+> Anyway, does this look like something we can live with?
 
-You described what HSR is, but I want to know why do we need it in our
-development arm64 kernel. You might want to enable anything and explain
-what is this "anything" but this does not solve any of the concerns.
+Forgot to mention; also available at:
 
-Best regards,
-Krzysztof
+  git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git core/guards2
 
+(core/guards also exists, but that is a previous version that I kept
+because I wanted to discuss some 'interesting' clang build fails)
+
+> 
+> ---
+>  Makefile                            |    6 +-
+>  arch/arm64/kernel/vdso32/Makefile   |    2 -
+>  drivers/dma/ioat/dma.c              |   12 +-
+>  include/linux/cleanup.h             |  167 ++++
+>  include/linux/compiler-clang.h      |    9 +
+>  include/linux/compiler_attributes.h |    6 +
+>  include/linux/cpu.h                 |    2 +
+>  include/linux/device.h              |    7 +
+>  include/linux/file.h                |   11 +
+>  include/linux/irqflags.h            |    7 +
+>  include/linux/mutex.h               |    4 +
+>  include/linux/percpu.h              |    4 +
+>  include/linux/perf_event.h          |   14 +-
+>  include/linux/preempt.h             |    5 +
+>  include/linux/rcupdate.h            |    3 +
+>  include/linux/rwsem.h               |    8 +
+>  include/linux/sched/task.h          |    2 +
+>  include/linux/slab.h                |    3 +
+>  include/linux/spinlock.h            |   31 +
+>  include/linux/srcu.h                |    5 +
+>  kernel/events/core.c                | 1642 +++++++++++++++--------------------
+>  kernel/sched/core.c                 |  931 +++++++++-----------
+>  kernel/sched/sched.h                |   40 +
+>  scripts/checkpatch.pl               |    2 +-
+>  security/apparmor/include/lib.h     |    6 +-
+>  25 files changed, 1433 insertions(+), 1496 deletions(-)
+> 
