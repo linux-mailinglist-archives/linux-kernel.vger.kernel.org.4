@@ -2,73 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D50572B6D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 06:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D2872B6F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 06:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233237AbjFLEqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 00:46:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
+        id S235188AbjFLEtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 00:49:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235696AbjFLEpg (ORCPT
+        with ESMTP id S235251AbjFLEsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 00:45:36 -0400
-Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A93810F
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 21:45:33 -0700 (PDT)
-Received: by mail-oo1-xc35.google.com with SMTP id 006d021491bc7-558a7faa989so2576380eaf.1
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 21:45:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686545133; x=1689137133;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B8PjX/aOXa3D/DnSIe/K9/s+OsmRXVqzcni+yFefbXo=;
-        b=SiM+aG3JrJbkzgBR0VBVug7fBxoWkJMWBYaON6CcIT1cIB2IMsknprPYSLSVZtGt6a
-         K/p6m/eBIsDmlzxNPkCe/gneRcrBLANYXoOZW9AUOkwmYSagXnnlNWJz7z2zYr4JcLdk
-         E6Gf7ia1Mx76DK7wwOY9f1xRXHya2IQuaZMXo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686545133; x=1689137133;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=B8PjX/aOXa3D/DnSIe/K9/s+OsmRXVqzcni+yFefbXo=;
-        b=jx0gJ/bTMTm0Y0dejFOVC6kmxhyuDEa2We6I+5gBtVxk/HI97Yv/6ispvP92Rhh64n
-         gHbYaD4itBopuKAEahzNPTOIHFNQT2WrePhRs4P3ZvIZaNerKt0QOGEd60Us5X3e9qll
-         CAL21V2b52vlxEyYQ8if8wAKSQZMqzwIHlAad9a500SnNyRD2/Q8bFEXnfSxqaQReEkV
-         vqU1rP80I/Dz7O3Bu58fr9IZqe4RYFaPj8qHwe3KkmetGHy7jX6FrkwXg6Wm8J7M+FE8
-         rBswiYVJPTODvNHME2sgOwgVyUVqOPL/pOB/0FLUR4ROrZgXXwHmCsFbTe3R40Tq0Bch
-         n8/w==
-X-Gm-Message-State: AC+VfDx0vw1KX9iVU03o5prLpDHam68N2IUrCPUn/LosdIwFbB+SMrXQ
-        nhcaCCNhk3eHWrfFUsPLRT2+Uq/2/XfhiJaaIEp5PA==
-X-Google-Smtp-Source: ACHHUZ59qM3qtQdWanFUYraxh4tCd+HRdsqwvAeH16+bcYuPxn5Z5kNdapzrWdVRi/Y9P+z48jlOBEOHfRnsOZ/ruBI=
-X-Received: by 2002:aca:c41:0:b0:39b:d6f1:36e5 with SMTP id
- i1-20020aca0c41000000b0039bd6f136e5mr3313176oiy.50.1686545132808; Sun, 11 Jun
- 2023 21:45:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230609083009.2822259-1-wenst@chromium.org> <20230609083009.2822259-5-wenst@chromium.org>
- <a7b7476d-3bbd-5503-db3d-5d57356764f8@collabora.com>
-In-Reply-To: <a7b7476d-3bbd-5503-db3d-5d57356764f8@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Mon, 12 Jun 2023 12:45:21 +0800
-Message-ID: <CAGXv+5FskpxjATk5aJA4CG0GyarO55XXYSYkvxWd-40d4ML8RQ@mail.gmail.com>
-Subject: Re: [PATCH 4/9] regulator: mt6358: Drop *_SSHUB regulators
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Gene Chen <gene_chen@richtek.com>,
-        Johnson Wang <johnson.wang@mediatek.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Mon, 12 Jun 2023 00:48:13 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76A910E5
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 21:47:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686545246; x=1718081246;
+  h=date:from:to:cc:subject:message-id;
+  bh=UI/jlebxX4lshBWCqt7EGK7noIqa0jBQJhQzyQhN+qs=;
+  b=UKBtSkzU9KUJbvNT0Wqwz2yfUUFVtTZ4AQtNRxRQBK1oo9ZbGG44oRUX
+   r7tJmpn11cPfTAWeDiBrNpWmX/+mCfJ1qE+y1srE+DmS7wkxBD1spgN1V
+   K357X+BdLFm7rqs5p/x8aOBW6ktl//6n8TEHpJ2ZIuVY8Zj3gel3hK3yD
+   A0CoKdSDOx3qELveP83fte7jF969kP4/rOe+86jt7Ud842U+GehHnWFbI
+   e4p7Y/Qpj3Xjdx7DlqanYcTzYokd0jfQ7xGUCbHnSq8MMnL8SpcZRdKPk
+   1juPvBCnzxtrRNmvt6WV9ymr4AWfUHrLbNPLFpLUXNAqIG/2BK91hNE7Z
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="444313974"
+X-IronPort-AV: E=Sophos;i="6.00,235,1681196400"; 
+   d="scan'208";a="444313974"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2023 21:46:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="823825699"
+X-IronPort-AV: E=Sophos;i="6.00,235,1681196400"; 
+   d="scan'208";a="823825699"
+Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 11 Jun 2023 21:46:58 -0700
+Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q8ZSD-00004K-36;
+        Mon, 12 Jun 2023 04:46:57 +0000
+Date:   Mon, 12 Jun 2023 12:46:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ 1ecd3a9b5c7acc4428ae0b349396e626a905be65
+Message-ID: <202306121210.ZXaGsUHm-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,138 +60,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 5:03=E2=80=AFPM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Il 09/06/23 10:30, Chen-Yu Tsai ha scritto:
-> > The *_SSHUB regulators are actually alternate configuration interfaces
-> > for their non *_SSHUB counterparts. They are not separate regulator
-> > outputs. These registers are intended for the companion processor to
-> > use to configure the power rails while the main processor is sleeping.
-> > They are not intended for the main operating system to use.
-> >
-> > Since they are not real outputs they shouldn't be modeled separately.
-> > Remove them. Luckily no device tree actually uses them.
-> >
->
-> I'm not sure that MT6358/6366 are used only on Chromebook SoCs, and that =
-this SSHUB
-> mechanism (companion processor) is the same across all firmwares.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: 1ecd3a9b5c7acc4428ae0b349396e626a905be65  Merge branch into tip/master: 'x86/sev'
 
-AFAICT from Internet sources there's also the MT6771 and MT6781, which
-are used on some phones.
+elapsed time: 720m
 
-But what part are you concerned about? The upstream regulator driver does
-not actually have any code to switch to/from normal operation and SSHUB
-mode.
+configs tested: 121
+configs skipped: 5
 
-In a downstream kernel I found that the SSHUB mode is only used if SCP is
-doing DVFS [1]. In that same kernel, the regulator driver [2] doesn't even
-list the *_SSHUB versions. So if SCP DVFS is used, the regulator driver
-has no idea what's going on, and can't interfere either, which I think is
-actually a good thing. Only one side should have complete control of one
-output.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-ChenYu
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                     nsimosci_hs_defconfig   gcc  
+arc                  randconfig-r043-20230612   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                     am200epdkit_defconfig   clang
+arm                                 defconfig   gcc  
+arm                      integrator_defconfig   gcc  
+arm                         lpc18xx_defconfig   gcc  
+arm                             mxs_defconfig   clang
+arm                       netwinder_defconfig   clang
+arm                  randconfig-r015-20230612   clang
+arm                  randconfig-r022-20230612   clang
+arm                  randconfig-r046-20230612   clang
+arm                           stm32_defconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64        buildonly-randconfig-r003-20230612   clang
+arm64                               defconfig   gcc  
+csky         buildonly-randconfig-r002-20230612   gcc  
+csky                                defconfig   gcc  
+hexagon              randconfig-r001-20230612   clang
+hexagon              randconfig-r013-20230612   clang
+hexagon              randconfig-r014-20230612   clang
+hexagon              randconfig-r041-20230612   clang
+hexagon              randconfig-r045-20230612   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230612   clang
+i386                 randconfig-i002-20230612   clang
+i386                 randconfig-i003-20230612   clang
+i386                 randconfig-i004-20230612   clang
+i386                 randconfig-i005-20230612   clang
+i386                 randconfig-i006-20230612   clang
+i386                 randconfig-i011-20230612   gcc  
+i386                 randconfig-i012-20230612   gcc  
+i386                 randconfig-i013-20230612   gcc  
+i386                 randconfig-i014-20230612   gcc  
+i386                 randconfig-i015-20230612   gcc  
+i386                 randconfig-i016-20230612   gcc  
+i386                 randconfig-r012-20230612   gcc  
+i386                 randconfig-r035-20230612   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r036-20230612   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                          amiga_defconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                       m5475evb_defconfig   gcc  
+m68k                 randconfig-r025-20230612   gcc  
+microblaze           randconfig-r011-20230612   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r026-20230612   clang
+mips                        vocore2_defconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r003-20230612   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                      bamboo_defconfig   gcc  
+powerpc                    gamecube_defconfig   clang
+powerpc                    ge_imp3a_defconfig   clang
+powerpc                     kmeter1_defconfig   clang
+powerpc              randconfig-r005-20230612   clang
+powerpc              randconfig-r033-20230612   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv        buildonly-randconfig-r006-20230612   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r021-20230612   gcc  
+riscv                randconfig-r024-20230612   gcc  
+riscv                randconfig-r032-20230612   clang
+riscv                randconfig-r034-20230612   clang
+riscv                randconfig-r042-20230612   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r016-20230612   gcc  
+s390                 randconfig-r044-20230612   gcc  
+sh                               allmodconfig   gcc  
+sh                        edosk7760_defconfig   gcc  
+sh                 kfr2r09-romimage_defconfig   gcc  
+sh                          landisk_defconfig   gcc  
+sh                           se7619_defconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc        buildonly-randconfig-r001-20230612   gcc  
+sparc        buildonly-randconfig-r004-20230612   gcc  
+sparc                               defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   clang
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230612   clang
+x86_64               randconfig-a002-20230612   clang
+x86_64               randconfig-a003-20230612   clang
+x86_64               randconfig-a004-20230612   clang
+x86_64               randconfig-a005-20230612   clang
+x86_64               randconfig-a006-20230612   clang
+x86_64               randconfig-a011-20230612   gcc  
+x86_64               randconfig-a012-20230612   gcc  
+x86_64               randconfig-a013-20230612   gcc  
+x86_64               randconfig-a014-20230612   gcc  
+x86_64               randconfig-a015-20230612   gcc  
+x86_64               randconfig-a016-20230612   gcc  
+x86_64               randconfig-r006-20230612   clang
+x86_64               randconfig-r023-20230612   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                              defconfig   gcc  
+xtensa               randconfig-r002-20230612   gcc  
 
-[1] https://github.com/nokia-dev/android_kernel_nokia_mt6771/blob/android-9=
-.0/drivers/misc/mediatek/scp/mt6771/scp_dvfs.c
-[2] https://github.com/nokia-dev/android_kernel_nokia_mt6771/blob/android-9=
-.0/drivers/misc/mediatek/pmic/mt6358/v1/regulator_codegen.c
-
-> I'd like someone from MediaTek to confirm that this is valid for both Chr=
-omebook
-> and Smartphone firmwares.
->
-> Regards,
-> Angelo
->
-> > Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-> > ---
-> >   drivers/regulator/mt6358-regulator.c       | 14 --------------
-> >   include/linux/regulator/mt6358-regulator.h |  4 ----
-> >   2 files changed, 18 deletions(-)
-> >
-> > diff --git a/drivers/regulator/mt6358-regulator.c b/drivers/regulator/m=
-t6358-regulator.c
-> > index faf6b0757019..946a251a8b3a 100644
-> > --- a/drivers/regulator/mt6358-regulator.c
-> > +++ b/drivers/regulator/mt6358-regulator.c
-> > @@ -505,9 +505,6 @@ static struct mt6358_regulator_info mt6358_regulato=
-rs[] =3D {
-> >       MT6358_BUCK("buck_vcore", VCORE, 500000, 1293750, 6250,
-> >                   buck_volt_range1, 0x7f, MT6358_BUCK_VCORE_DBG0, 0x7f,
-> >                   MT6358_VCORE_VGPU_ANA_CON0, 1),
-> > -     MT6358_BUCK("buck_vcore_sshub", VCORE_SSHUB, 500000, 1293750, 625=
-0,
-> > -                 buck_volt_range1, 0x7f, MT6358_BUCK_VCORE_SSHUB_ELR0,=
- 0x7f,
-> > -                 MT6358_VCORE_VGPU_ANA_CON0, 1),
-> >       MT6358_BUCK("buck_vpa", VPA, 500000, 3650000, 50000,
-> >                   buck_volt_range3, 0x3f, MT6358_BUCK_VPA_DBG0, 0x3f,
-> >                   MT6358_VPA_ANA_CON0, 3),
-> > @@ -583,10 +580,6 @@ static struct mt6358_regulator_info mt6358_regulat=
-ors[] =3D {
-> >       MT6358_LDO1("ldo_vsram_others", VSRAM_OTHERS, 500000, 1293750, 62=
-50,
-> >                   buck_volt_range1, MT6358_LDO_VSRAM_OTHERS_DBG0, 0x7f0=
-0,
-> >                   MT6358_LDO_VSRAM_CON2, 0x7f),
-> > -     MT6358_LDO1("ldo_vsram_others_sshub", VSRAM_OTHERS_SSHUB, 500000,
-> > -                 1293750, 6250, buck_volt_range1,
-> > -                 MT6358_LDO_VSRAM_OTHERS_SSHUB_CON1, 0x7f,
-> > -                 MT6358_LDO_VSRAM_OTHERS_SSHUB_CON1, 0x7f),
-> >       MT6358_LDO1("ldo_vsram_gpu", VSRAM_GPU, 500000, 1293750, 6250,
-> >                   buck_volt_range1, MT6358_LDO_VSRAM_GPU_DBG0, 0x7f00,
-> >                   MT6358_LDO_VSRAM_CON3, 0x7f),
-> > @@ -603,9 +596,6 @@ static struct mt6358_regulator_info mt6366_regulato=
-rs[] =3D {
-> >       MT6366_BUCK("buck_vcore", VCORE, 500000, 1293750, 6250,
-> >                   buck_volt_range1, 0x7f, MT6358_BUCK_VCORE_DBG0, 0x7f,
-> >                   MT6358_VCORE_VGPU_ANA_CON0, 1),
-> > -     MT6366_BUCK("buck_vcore_sshub", VCORE_SSHUB, 500000, 1293750, 625=
-0,
-> > -                 buck_volt_range1, 0x7f, MT6358_BUCK_VCORE_SSHUB_ELR0,=
- 0x7f,
-> > -                 MT6358_VCORE_VGPU_ANA_CON0, 1),
-> >       MT6366_BUCK("buck_vpa", VPA, 500000, 3650000, 50000,
-> >                   buck_volt_range3, 0x3f, MT6358_BUCK_VPA_DBG0, 0x3f,
-> >                   MT6358_VPA_ANA_CON0, 3),
-> > @@ -670,10 +660,6 @@ static struct mt6358_regulator_info mt6366_regulat=
-ors[] =3D {
-> >       MT6366_LDO1("ldo_vsram_others", VSRAM_OTHERS, 500000, 1293750, 62=
-50,
-> >                   buck_volt_range1, MT6358_LDO_VSRAM_OTHERS_DBG0, 0x7f0=
-0,
-> >                   MT6358_LDO_VSRAM_CON2, 0x7f),
-> > -     MT6366_LDO1("ldo_vsram_others_sshub", VSRAM_OTHERS_SSHUB, 500000,
-> > -                 1293750, 6250, buck_volt_range1,
-> > -                 MT6358_LDO_VSRAM_OTHERS_SSHUB_CON1, 0x7f,
-> > -                 MT6358_LDO_VSRAM_OTHERS_SSHUB_CON1, 0x7f),
-> >       MT6366_LDO1("ldo_vsram_gpu", VSRAM_GPU, 500000, 1293750, 6250,
-> >                   buck_volt_range1, MT6358_LDO_VSRAM_GPU_DBG0, 0x7f00,
-> >                   MT6358_LDO_VSRAM_CON3, 0x7f),
-> > diff --git a/include/linux/regulator/mt6358-regulator.h b/include/linux=
-/regulator/mt6358-regulator.h
-> > index a4307cd9edd6..c71a6a9fce7a 100644
-> > --- a/include/linux/regulator/mt6358-regulator.h
-> > +++ b/include/linux/regulator/mt6358-regulator.h
-> > @@ -47,8 +47,6 @@ enum {
-> >       MT6358_ID_VLDO28,
-> >       MT6358_ID_VAUD28,
-> >       MT6358_ID_VSIM2,
-> > -     MT6358_ID_VCORE_SSHUB,
-> > -     MT6358_ID_VSRAM_OTHERS_SSHUB,
-> >       MT6358_ID_RG_MAX,
-> >   };
-> >
-> > @@ -88,8 +86,6 @@ enum {
-> >       MT6366_ID_VMC,
-> >       MT6366_ID_VAUD28,
-> >       MT6366_ID_VSIM2,
-> > -     MT6366_ID_VCORE_SSHUB,
-> > -     MT6366_ID_VSRAM_OTHERS_SSHUB,
-> >       MT6366_ID_RG_MAX,
-> >   };
-> >
->
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
