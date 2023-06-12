@@ -2,218 +2,354 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 757EC72BB94
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B398E72BB7A
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233587AbjFLJCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 05:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57342 "EHLO
+        id S232992AbjFLJCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 05:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235054AbjFLJAz (ORCPT
+        with ESMTP id S229823AbjFLJBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 05:00:55 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B2135B6
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 01:57:13 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-98220bb31c6so71767066b.3
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 01:57:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1686560232; x=1689152232;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Vq/s2M0H1YpBEWwWc84/BK1dGfh4JEMbe1jCjTxpQG8=;
-        b=Zvx3pTxmhOCcdamy0jWfgspLI2c3P25QDH2fEU6KcaeNBB6wCOvuCsH1DfCXlY2rix
-         GrwNavx2wp06jiwkRSKkY0N5B2CJfz55RsHEgCIsDB3+MxNeZjdXEhFet1Xw+Y67EmwQ
-         K3Zab7ithsSmsFQ+z/qGmc+xLIZJmCPFrejmURK9QPWLkpm2U8CoXlxYW7BO4TnXyqEr
-         XoE1E14eGPqZvGCegno53VJkXOqjTQwLAyadxhZGk1AWPRKR0WnMFXAa7tXgdbgq2A5W
-         Aqanwi7bsKdI/iUh2wwfo7IuP5Dq+f8i+kydMxd2M2oShZ+176nddxHBzoxVQGr2esz6
-         VdvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686560232; x=1689152232;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vq/s2M0H1YpBEWwWc84/BK1dGfh4JEMbe1jCjTxpQG8=;
-        b=QBzdH4fFeVvdNYlzJscqNPJA4reyu+SXACHFEm4QMFkyEZIjEyuSPAEiCwlyPBC4vz
-         UsdAOgG3UiP227jJZFSv2Uzncvye/mK4ZuJFzy5Ya1Gy8RKolCDMAms5/C4Xl4dbsTHB
-         suZMtw+86AaLg3+MQ4lJnVpG8VUshDcp9uy2u6SLHafJL4Ctac89PbG6/0Wbuiu4Ot0h
-         YV9K8F9lWu1hIJ7Xulcte2zrkA63wakp2/7fRwC3qBnDlh4xc0ee2A8OKgPXV2NFwm8R
-         uJOaU/aShx9Qg445Cs64/0N63Vq4xburZ9VR0s0sf/+iHRu8d3Y8zzilE+2+ksxg60zV
-         WD+Q==
-X-Gm-Message-State: AC+VfDy1nWQcRDXw4oigSV3KszCIodpRAn4s+s9H7EkVGLXK9DPmYw7P
-        nkGdHo6KAGmXFryX5jwSm5DyHQ==
-X-Google-Smtp-Source: ACHHUZ4FOO/LVl8AgQkKecgccHHS4sYRKVgWaVzPYmir3ayy2BYmRbvmSwzE3ppomAG9QgpBstEahg==
-X-Received: by 2002:a17:906:7945:b0:978:8e58:e1b9 with SMTP id l5-20020a170906794500b009788e58e1b9mr9960520ejo.74.1686560231841;
-        Mon, 12 Jun 2023 01:57:11 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id e25-20020a170906081900b0094ee3e4c934sm4849967ejd.221.2023.06.12.01.57.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 01:57:11 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 10:57:10 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Haibo Xu <xiaobo55x@gmail.com>
-Cc:     Haibo Xu <haibo1.xu@intel.com>, maz@kernel.org,
-        oliver.upton@linux.dev, seanjc@google.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Subject: Re: [PATCH v3 09/10] KVM: riscv: selftests: Skip some registers set
- operation
-Message-ID: <20230612-05314de3b73277af1ee729b0@orel>
-References: <cover.1686275310.git.haibo1.xu@intel.com>
- <73045958d9ab71d5266d012f1e13061afa8c5331.1686275310.git.haibo1.xu@intel.com>
- <20230609-05521f954b0485c69612f00b@orel>
- <CAJve8omPV_XgCSvw8POZwisb6uTOFMJU4FyAKArryui2SAsqtw@mail.gmail.com>
+        Mon, 12 Jun 2023 05:01:13 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 891CA3C0E
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 01:57:42 -0700 (PDT)
+Received: from loongson.cn (unknown [10.180.13.124])
+        by gateway (Coremail) with SMTP id _____8CxPusE3oZkdpkDAA--.7906S3;
+        Mon, 12 Jun 2023 16:57:40 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.180.13.124])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxC8oC3oZk_WoVAA--.52737S4;
+        Mon, 12 Jun 2023 16:57:39 +0800 (CST)
+From:   YingKun Meng <mengyingkun@loongson.cn>
+To:     broonie@kernel.org, lgirdwood@gmail.com
+Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn,
+        Yingkun Meng <mengyingkun@loongson.cn>
+Subject: [ PATCH v2 2/3] ASoC: loongson: Add Loongson ASoC Sound Card Support
+Date:   Mon, 12 Jun 2023 16:57:29 +0800
+Message-Id: <20230612085729.3039512-1-mengyingkun@loongson.cn>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJve8omPV_XgCSvw8POZwisb6uTOFMJU4FyAKArryui2SAsqtw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8BxC8oC3oZk_WoVAA--.52737S4
+X-CM-SenderInfo: 5phqw55lqjy33q6o00pqjv00gofq/1tbiAQAADGSFuYEEQQAOsf
+X-Coremail-Antispam: 1Uk129KBj93XoW3Ww1DCr4DJw47Zw4fXryfXwc_yoWfCr1xpa
+        nxZay5KrWrJr4fCr1FqrWrAF1a934xuFnrXay7Gw1xKr9rA3s8WwnrGF1UZF4fAr98KFWU
+        XFW5GFW8KFyDGacCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUU9Yb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVWxJr0_GcWln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q
+        6rW5McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_
+        Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
+        AY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Xr0_Ar1lIxAI
+        cVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
+        IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIev
+        Ja73UjIFyTuYvjxU4AhLUUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 10, 2023 at 10:35:24AM +0800, Haibo Xu wrote:
-> On Fri, Jun 9, 2023 at 5:24 PM Andrew Jones <ajones@ventanamicro.com> wrote:
-> >
-> > On Fri, Jun 09, 2023 at 10:12:17AM +0800, Haibo Xu wrote:
-> > > Set operation on some riscv registers(mostly pesudo ones) was not
-> > > supported and should be skipped in the get-reg-list test. Just
-> > > reuse the rejects_set utilities to handle it in riscv.
-> > >
-> > > Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
-> > > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> > > ---
-> > >  tools/testing/selftests/kvm/get-reg-list.c | 20 +++++++++++++-------
-> > >  1 file changed, 13 insertions(+), 7 deletions(-)
-> > >
-> > > diff --git a/tools/testing/selftests/kvm/get-reg-list.c b/tools/testing/selftests/kvm/get-reg-list.c
-> > > index c4bd5a5259da..abacb95c21c6 100644
-> > > --- a/tools/testing/selftests/kvm/get-reg-list.c
-> > > +++ b/tools/testing/selftests/kvm/get-reg-list.c
-> > > @@ -211,16 +211,22 @@ static void run_test(struct vcpu_reg_list *c)
-> > >                       ++failed_get;
-> > >               }
-> > >
-> > > -             /* rejects_set registers are rejected after KVM_ARM_VCPU_FINALIZE */
-> > > +             /*
-> > > +              * rejects_set registers are rejected after KVM_ARM_VCPU_FINALIZE on aarch64,
-> > > +              * or registers that should skip set operation on riscv.
-> > > +              */
-> > >               for_each_sublist(c, s) {
-> > >                       if (s->rejects_set && find_reg(s->rejects_set, s->rejects_set_n, reg.id)) {
-> > >                               reject_reg = true;
-> > > -                             ret = __vcpu_ioctl(vcpu, KVM_SET_ONE_REG, &reg);
-> > > -                             if (ret != -1 || errno != EPERM) {
-> > > -                                     printf("%s: Failed to reject (ret=%d, errno=%d) ", config_name(c), ret, errno);
-> > > -                                     print_reg(config_name(c), reg.id);
-> > > -                                     putchar('\n');
-> > > -                                     ++failed_reject;
-> > > +                             if ((reg.id & KVM_REG_ARCH_MASK) == KVM_REG_ARM64) {
-> > > +                                     ret = __vcpu_ioctl(vcpu, KVM_SET_ONE_REG, &reg);
-> > > +                                     if (ret != -1 || errno != EPERM) {
-> > > +                                             printf("%s: Failed to reject (ret=%d, errno=%d) ",
-> > > +                                                             config_name(c), ret, errno);
-> > > +                                             print_reg(config_name(c), reg.id);
-> > > +                                             putchar('\n');
-> > > +                                             ++failed_reject;
-> > > +                                     }
-> >
-> > Thinking about this some more, shouldn't we attempt the set ioctl for
-> > riscv reject registers as well, but look for different error numbers?
-> >
-> 
-> Yes, we can. Currently, 2 different errno(EOPNOTSUPP/EINVAL) would be
-> reported for the rejected registers in risc-v.
-> These 2 errnos can be handled specially like below:
-> 
-> diff --git a/tools/testing/selftests/kvm/get-reg-list.c
-> b/tools/testing/selftests/kvm/get-reg-list.c
-> index 73f40e0842b8..f3f2c4519318 100644
-> --- a/tools/testing/selftests/kvm/get-reg-list.c
-> +++ b/tools/testing/selftests/kvm/get-reg-list.c
-> @@ -255,6 +255,15 @@ static void run_test(struct vcpu_reg_list *c)
->                                                 putchar('\n');
->                                                 ++failed_reject;
->                                         }
-> +                } else {
-> +                                       ret = __vcpu_ioctl(vcpu,
-> KVM_SET_ONE_REG, &reg);
-> +                                       if (ret != -1 || (errno !=
-> EINVAL && errno != EOPNOTSUPP)) {
-> +                                               printf("%s: Failed to
-> reject (ret=%d, errno=%d) ",
-> +
-> config_name(c), ret, errno);
-> +
-> print_reg(config_name(c), reg.id);
-> +                                               putchar('\n');
-> +                                               ++failed_reject;
-> +                                       }
+From: Yingkun Meng <mengyingkun@loongson.cn>
 
-Instead of duplicating the code Arm uses, we just need an errno check
-function, preferably one that takes the register as an input, so we
-can check for specific errnos for specific registers.
+The Loongson ASoC Sound Card is a general ASoC DAI Link driver that
+can be used for Loongson CPU DAI drivers and external CODECs.
 
-> 
-> One possible issue for the above change is that when new registers
-> that don't support sets were added, we need
-> to add them to the reject registers list, or the test would fail.
-> 
-> Initially, in the v1 patch, the design was to just skip the EOPNOTSUPP
-> errno in set operations for all registers
-> since it's a known errno for registers that don't support sets. This
-> change cover all the registers even for future
-> new ones.
-> 
-> What's your opinion?
+The driver supports the use of ACPI table to describe device resources.
+On loongson 7axxx platforms, the audio device is an ACPI device.
 
-I think we should only do the get/set tests on present, blessed list
-registers, since if it's a new register we don't know its capabilities.
+Signed-off-by: Yingkun Meng <mengyingkun@loongson.cn>
+---
+ sound/soc/loongson/Kconfig         |  10 ++
+ sound/soc/loongson/Makefile        |   4 +
+ sound/soc/loongson/loongson_card.c | 237 +++++++++++++++++++++++++++++
+ 3 files changed, 251 insertions(+)
+ create mode 100644 sound/soc/loongson/loongson_card.c
 
-So, instead of
+diff --git a/sound/soc/loongson/Kconfig b/sound/soc/loongson/Kconfig
+index 4478ac91e402..c175f9de19a8 100644
+--- a/sound/soc/loongson/Kconfig
++++ b/sound/soc/loongson/Kconfig
+@@ -13,4 +13,14 @@ config SND_SOC_LOONGSON_I2S_PCI
+ 	  The controller is found in loongson bridge chips or SoCs,
+ 	  and work as a PCI device.
+ 
++config SND_SOC_LOONGSON_CARD
++	tristate "Loongson Sound Card Driver"
++	select SND_SOC_LOONGSON_I2S_PCI
++	help
++	  Say Y or M if you want to add support for SoC audio using
++	  loongson I2S controller.
++
++	  The driver add support for ALSA SoC Audio support using
++	  loongson I2S controller.
++
+ endmenu
+diff --git a/sound/soc/loongson/Makefile b/sound/soc/loongson/Makefile
+index cfd0de1b1b22..a173a0fe17fe 100644
+--- a/sound/soc/loongson/Makefile
++++ b/sound/soc/loongson/Makefile
+@@ -2,3 +2,7 @@
+ #Platform Support
+ snd-soc-loongson-i2s-pci-objs := loongson_i2s_pci.o loongson_i2s.o
+ obj-$(CONFIG_SND_SOC_LOONGSON_I2S_PCI) += snd-soc-loongson-i2s-pci.o
++
++#Machine Support
++snd-soc-loongson-card-objs := loongson_card.o
++obj-$(CONFIG_SND_SOC_LOONGSON_CARD) += snd-soc-loongson-card.o
+diff --git a/sound/soc/loongson/loongson_card.c b/sound/soc/loongson/loongson_card.c
+new file mode 100644
+index 000000000000..7f0ce8957a4f
+--- /dev/null
++++ b/sound/soc/loongson/loongson_card.c
+@@ -0,0 +1,237 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Loongson ASoC Audio driver
++ *
++ * Copyright (C) 2022 Loongson Technology Corporation Limited
++ */
++
++#include <linux/module.h>
++#include <sound/soc.h>
++#include <sound/soc-acpi.h>
++#include <linux/acpi.h>
++#include <linux/pci.h>
++#include <sound/pcm_params.h>
++
++static char codec_name[SND_ACPI_I2C_ID_LEN];
++
++struct loongson_card_data {
++	struct snd_soc_card snd_card;
++	unsigned int mclk_fs;
++};
++
++static int loongson_card_hw_params(struct snd_pcm_substream *substream,
++				   struct snd_pcm_hw_params *params)
++{
++	struct snd_soc_pcm_runtime *rtd = substream->private_data;
++	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(rtd, 0);
++	struct snd_soc_dai *codec_dai = asoc_rtd_to_codec(rtd, 0);
++	struct loongson_card_data *ls_card = snd_soc_card_get_drvdata(rtd->card);
++	int ret, mclk;
++
++	if (ls_card->mclk_fs) {
++		mclk = ls_card->mclk_fs * params_rate(params);
++		ret = snd_soc_dai_set_sysclk(cpu_dai, 0, mclk,
++					     SND_SOC_CLOCK_OUT);
++		if (ret < 0) {
++			dev_err(codec_dai->dev, "cpu_dai clock not set\n");
++			return ret;
++		}
++
++		ret = snd_soc_dai_set_sysclk(codec_dai, 0, mclk,
++					     SND_SOC_CLOCK_IN);
++		if (ret < 0) {
++			dev_err(codec_dai->dev, "codec_dai clock not set\n");
++			return ret;
++		}
++	}
++	return 0;
++}
++
++static const struct snd_soc_ops loongson_ops = {
++	.hw_params = loongson_card_hw_params,
++};
++
++SND_SOC_DAILINK_DEFS(analog,
++	DAILINK_COMP_ARRAY(COMP_CPU("loongson-i2s")),
++	DAILINK_COMP_ARRAY(COMP_EMPTY()),
++	DAILINK_COMP_ARRAY(COMP_EMPTY()));
++
++static struct snd_soc_dai_link loongson_dai_links[] = {
++	{
++		.name = "HiFi PAIF TX",
++		.stream_name = "Playback",
++		.dai_fmt = SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_IB_NF
++			| SND_SOC_DAIFMT_CBC_CFC,
++		SND_SOC_DAILINK_REG(analog),
++		.ops = &loongson_ops,
++	},
++	{
++		.name = "HiFi PAIF RX",
++		.stream_name = "Capture",
++		.dai_fmt = SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_IB_NF
++			| SND_SOC_DAIFMT_CBC_CFC,
++		SND_SOC_DAILINK_REG(analog),
++		.ops = &loongson_ops,
++	},
++};
++
++static int loongson_card_parse_acpi(struct loongson_card_data *data)
++{
++	struct snd_soc_card *card = &data->snd_card;
++	struct fwnode_handle *fwnode = card->dev->fwnode;
++	struct fwnode_reference_args args;
++	const char *codec_dai_name;
++	struct acpi_device *adev;
++	struct device *phy_dev;
++	int ret, i;
++
++	/* fixup platform name based on reference node */
++	memset(&args, 0, sizeof(args));
++	ret = acpi_node_get_property_reference(fwnode, "cpu", 0, &args);
++	if (ACPI_FAILURE(ret) || !is_acpi_device_node(args.fwnode)) {
++		dev_err(card->dev, "No matching phy in ACPI table\n");
++		return ret;
++	}
++	adev = to_acpi_device_node(args.fwnode);
++	phy_dev = acpi_get_first_physical_node(adev);
++	if (!phy_dev)
++		return -EPROBE_DEFER;
++	for (i = 0; i < card->num_links; i++)
++		loongson_dai_links[i].platforms->name = dev_name(phy_dev);
++
++	/* fixup codec name based on reference node */
++	memset(&args, 0, sizeof(args));
++	ret = acpi_node_get_property_reference(fwnode, "codec", 0, &args);
++	if (ACPI_FAILURE(ret) || !is_acpi_device_node(args.fwnode)) {
++		dev_err(card->dev, "No matching phy in ACPI table\n");
++		return ret;
++	}
++	adev = to_acpi_device_node(args.fwnode);
++	snprintf(codec_name, sizeof(codec_name), "i2c-%s", acpi_dev_name(adev));
++	for (i = 0; i < card->num_links; i++)
++		loongson_dai_links[i].codecs->name = codec_name;
++
++	device_property_read_string(card->dev, "codec-dai-name",
++				    &codec_dai_name);
++	for (i = 0; i < card->num_links; i++)
++		loongson_dai_links[i].codecs->dai_name = codec_dai_name;
++
++	return 0;
++}
++
++static int loongson_card_parse_of(struct loongson_card_data *data)
++{
++	const char *cpu_dai_name, *codec_dai_name;
++	struct device_node *cpu, *codec;
++	struct snd_soc_card *card = &data->snd_card;
++	struct device *dev = card->dev;
++	struct of_phandle_args args;
++	int ret, i;
++
++	cpu = of_get_child_by_name(dev->of_node, "cpu");
++	if (!cpu) {
++		dev_err(dev, "platform property missing or invalid\n");
++		return -EINVAL;
++	}
++	codec = of_get_child_by_name(dev->of_node, "codec");
++	if (!codec) {
++		dev_err(dev, "audio-codec property missing or invalid\n");
++		ret = -EINVAL;
++		goto err;
++	}
++
++	ret = of_parse_phandle_with_args(cpu, "sound-dai",
++					 "#sound-dai-cells", 0, &args);
++	if (ret) {
++		dev_err(dev, "codec node missing #sound-dai-cells\n");
++		goto err;
++	}
++	for (i = 0; i < card->num_links; i++)
++		loongson_dai_links[i].cpus->of_node = args.np;
++
++	ret = of_parse_phandle_with_args(codec, "sound-dai",
++					 "#sound-dai-cells", 0, &args);
++	if (ret) {
++		dev_err(dev, "codec node missing #sound-dai-cells\n");
++		goto err;
++	}
++	for (i = 0; i < card->num_links; i++)
++		loongson_dai_links[i].codecs->of_node = args.np;
++
++	snd_soc_of_get_dai_name(cpu, &cpu_dai_name);
++	snd_soc_of_get_dai_name(codec, &codec_dai_name);
++	for (i = 0; i < card->num_links; i++) {
++		loongson_dai_links[i].cpus->dai_name = cpu_dai_name;
++		loongson_dai_links[i].codecs->dai_name = codec_dai_name;
++	}
++	of_node_put(cpu);
++	of_node_put(codec);
++
++	return 0;
++
++err:
++	of_node_put(cpu);
++	of_node_put(codec);
++	return ret;
++}
++
++static int loongson_asoc_card_probe(struct platform_device *pdev)
++{
++	struct loongson_card_data *ls_priv;
++	struct snd_soc_card *card;
++	int ret;
++
++	ls_priv = devm_kzalloc(&pdev->dev, sizeof(*ls_priv), GFP_KERNEL);
++	if (!ls_priv)
++		return -ENOMEM;
++
++	card = &ls_priv->snd_card;
++
++	card->dev = &pdev->dev;
++	card->owner = THIS_MODULE;
++	card->dai_link = loongson_dai_links;
++	card->num_links = ARRAY_SIZE(loongson_dai_links);
++	snd_soc_card_set_drvdata(card, ls_priv);
++
++	ret = device_property_read_string(&pdev->dev, "model", &card->name);
++	if (ret) {
++		dev_err(&pdev->dev, "Error parsing card name: %d\n", ret);
++		return ret;
++	}
++	ret = device_property_read_u32(&pdev->dev, "mclk-fs", &ls_priv->mclk_fs);
++	if (ret) {
++		dev_err(&pdev->dev, "Error parsing mclk-fs: %d\n", ret);
++		return ret;
++	}
++
++	if (has_acpi_companion(&pdev->dev))
++		ret = loongson_card_parse_acpi(ls_priv);
++	else
++		ret = loongson_card_parse_of(ls_priv);
++	if (ret < 0)
++		return ret;
++
++	ret = devm_snd_soc_register_card(&pdev->dev, card);
++
++	return ret;
++}
++
++static const struct of_device_id loongson_asoc_dt_ids[] = {
++	{ .compatible = "loongson,ls-audio-card" },
++	{ /* sentinel */ },
++};
++MODULE_DEVICE_TABLE(of, loongson_asoc_dt_ids);
++
++static struct platform_driver loongson_audio_driver = {
++	.probe = loongson_asoc_card_probe,
++	.driver = {
++		.name = "loongson-asoc-card",
++		.pm = &snd_soc_pm_ops,
++		.of_match_table = of_match_ptr(loongson_asoc_dt_ids),
++	},
++};
++module_platform_driver(loongson_audio_driver);
++
++MODULE_DESCRIPTION("Loongson ASoc Sound Card driver");
++MODULE_AUTHOR("Loongson Technology Corporation Limited");
++MODULE_LICENSE("GPL");
+-- 
+2.33.0
 
-  for_each_reg(i) {
-     /* get/set tests */
-  }
-
-we do
-  
-  for_each_present_blessed_reg(i) {
-     /* get/set tests */
-  }
-
-where we have
-
- #define for_each_present_blessed_reg(i) \
-     for ((i) = 0; (i) < blessed_n; ++(i)) \
-         if (find_reg(reg_list->reg, reg_list->n, blessed_reg[i]))
-
-
-Changing run_test() to work this way should be a separate patch.
-
-Thanks,
-drew
