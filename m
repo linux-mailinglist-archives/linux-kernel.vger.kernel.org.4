@@ -2,194 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB12E72B55E
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 04:22:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31EBD72B561
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 04:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233449AbjFLCWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 22:22:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32830 "EHLO
+        id S231910AbjFLCZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 22:25:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233374AbjFLCV7 (ORCPT
+        with ESMTP id S229531AbjFLCZC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 22:21:59 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB4812D
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 19:21:58 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1b3be39e666so5787075ad.0
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 19:21:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1686536517; x=1689128517;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iX82bm2JR5hf31jvqQXI5M30/jYJ7ofydTO4Qj8cvNo=;
-        b=z7erw18PvcrfZfglEVH8DIj5dHPJk0icF8vZvtykLDC0GNcIaU2UJwrY79kmqyA+K9
-         fwkBTh0p6r8dn4LxuicxlJ0TAy3OSf063OHtTrXp3fvIkSx6xXVWHYDFJUFz6cn9NEhS
-         bNpsVbMB+HqnXhCqnYtM8Bdjht7yrDLLx1+mxGK/Gn4JwfDTq5S+jms/+w5IJMc/vGkf
-         zV7pVRjnfKOW5Nzd3MfHDF6m+AUle9t88nBDhU04dQ642zyGgDuCZuGcMkLxu4Psy5XK
-         0Wmqvcz1zwy7/omIQzKQUhKuzDdX5t7nqhQuR/qHubhSqbT1EHNJGJ07SiEfj02yQegC
-         W8Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686536517; x=1689128517;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iX82bm2JR5hf31jvqQXI5M30/jYJ7ofydTO4Qj8cvNo=;
-        b=ltmjijhD+GH7QKpYA2OdB63iMBlL64tdLiswmG8x41yThBsQM8caziLeYOzjZz+m+C
-         DxcYsILLpmKwFlTR3bqlAvqy2/OWCb5jHy+Fvnm1J4QZlfqtvBtp76ef9dxTxsbP39qm
-         9MRlr7aU73yIE+DmtSVhttqo9MQ6+NcfrGWfGXp16voEZCZ24ZdcupBrDuyo4s3K6peu
-         mk8cc3hHSzomdiBClYYVd46jDlZn/GS9i+kzdHwz2PSQaze9S3J8pnPX9crVB80ULB59
-         QBDa2gJClapy3FmKE36keCLo8Y27jF3cmEY30CfyLRFvb7pkzZJjIwaYDhMdEhqudMrx
-         dZFA==
-X-Gm-Message-State: AC+VfDyiossONMmCiBbQa/7yOgvkybR3FSKWrQoYO9W94klzcfVRtYT4
-        xBSWKw8mDne8tHTouRqwwGeagQ==
-X-Google-Smtp-Source: ACHHUZ6vhNu3NFgDTmoZTWzNtx+/+VuKS9FEcg8/rZI09qodWnvLKcqYn9rwL0zN8J+JzkHPTy3EfA==
-X-Received: by 2002:a17:903:2349:b0:1ad:ea13:1914 with SMTP id c9-20020a170903234900b001adea131914mr5763417plh.30.1686536517551;
-        Sun, 11 Jun 2023 19:21:57 -0700 (PDT)
-Received: from dread.disaster.area (pa49-179-79-151.pa.nsw.optusnet.com.au. [49.179.79.151])
-        by smtp.gmail.com with ESMTPSA id s23-20020a170902989700b001b04772d33esm6914646plp.165.2023.06.11.19.21.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jun 2023 19:21:57 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1q8XBq-00Ahpl-1K;
-        Mon, 12 Jun 2023 12:21:54 +1000
-Date:   Mon, 12 Jun 2023 12:21:54 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Zorro Lang <zlang@redhat.com>, linux-xfs@vger.kernel.org,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: [6.5-rc5 regression] core dump hangs (was Re: [Bug report] fstests
- generic/051 (on xfs) hang on latest linux v6.5-rc5+)
-Message-ID: <ZIaBQnCKJ6NsqGhd@dread.disaster.area>
-References: <20230611124836.whfktwaumnefm5z5@zlang-mailbox>
- <ZIZSPyzReZkGBEFy@dread.disaster.area>
- <20230612015145.GA11441@frogsfrogsfrogs>
+        Sun, 11 Jun 2023 22:25:02 -0400
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260F812D;
+        Sun, 11 Jun 2023 19:25:00 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Qfb9z1xzVz4f3lwM;
+        Mon, 12 Jun 2023 10:24:55 +0800 (CST)
+Received: from [10.174.178.129] (unknown [10.174.178.129])
+        by APP2 (Coremail) with SMTP id Syh0CgD3Buj3gYZk2Z2qLQ--.63697S2;
+        Mon, 12 Jun 2023 10:24:57 +0800 (CST)
+Subject: Re: [PATCH v4 13/19] ext4: call ext4_mb_mark_group_bb in
+ ext4_free_blocks_simple
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     adilger.kernel@dilger.ca, ojaswin@linux.ibm.com,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230603150327.3596033-1-shikemeng@huaweicloud.com>
+ <20230603150327.3596033-14-shikemeng@huaweicloud.com>
+ <20230611050532.GE1436857@mit.edu>
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+Message-ID: <cd236fdb-c48c-69b0-10a3-3df8a34f0a6e@huaweicloud.com>
+Date:   Mon, 12 Jun 2023 10:24:55 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612015145.GA11441@frogsfrogsfrogs>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230611050532.GE1436857@mit.edu>
+Content-Type: text/plain; charset=gbk
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: Syh0CgD3Buj3gYZk2Z2qLQ--.63697S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxtryUtw1UWFWxKFWxGFyUWrg_yoW7Xw47pr
+        15GFnxCr48G345AFsrJr1Yq348tw48A3WUXryfGr1xCF1kW34UXFy7tr4UCrykArW5ZFy3
+        tF1qqw40qryjqaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1CPfJUUUUU==
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 11, 2023 at 06:51:45PM -0700, Darrick J. Wong wrote:
-> On Mon, Jun 12, 2023 at 09:01:19AM +1000, Dave Chinner wrote:
-> > On Sun, Jun 11, 2023 at 08:48:36PM +0800, Zorro Lang wrote:
-> > > Hi,
-> > > 
-> > > When I tried to do fstests regression test this weekend on latest linux
-> > > v6.5-rc5+ (HEAD=64569520920a3ca5d456ddd9f4f95fc6ea9b8b45), nearly all
-> > > testing jobs on xfs hang on generic/051 (more than 24 hours, still blocked).
-> > > No matter 1k or 4k blocksize, general disk or pmem dev, or any architectures,
-> > > or any mkfs/mount options testing, all hang there.
-> > 
-> > Yup, I started seeing this on upgrade to 6.5-rc5, too. xfs/079
-> > generates it, because the fsstress process is crashing when the
-> > XFS filesystems shuts down (maybe a SIGBUS from a mmap page fault?)
-> > I don't know how reproducable it is yet; these only showed up in my
-> > thrusday night testing so I haven't had a chance to triage it yet.
-> > 
-> > > Someone console log as below (a bit long), the call trace doesn't contains any
-> > > xfs functions, it might be not a xfs bug, but it can't be reproduced on ext4.
-> > 
-> > AFAICT, the coredump is being done on the root drive (where fsstress
-> > is being executed from), not the XFS test/scratch devices that
-> > fsstress processes are exercising. I have ext3 root drives for my
-> > test machines, so at this point I'm not sure that this is even a
-> > filesystem related regression. i.e. it may be a recent regression in
-> > the coredump or signal handling code....
+
+
+on 6/11/2023 1:05 PM, Theodore Ts'o wrote:
+> On Sat, Jun 03, 2023 at 11:03:21PM +0800, Kemeng Shi wrote:
+>> call ext4_mb_mark_group_bb in ext4_free_blocks_simple to:
+>> 1. remove repeat code
+>> 2. pair update of free_clusters in ext4_mb_new_blocks_simple.
+>> 3. add missing ext4_lock_group/ext4_unlock_group protection.
+>>
+>> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
+>> Reviewed-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
 > 
-> Willy was complaining about the same thing on Friday.  Oddly I've not
-> seen any problems with coredumps on 6.4-rc5, so .... <shrug>
+> Note: after bisecting, I've found that this commit is causing a OOPS
+> when running "kvm-xfstests -c ext4/adv generic/468".  It appears to be
+> an issue with the fast commit feature not playing nice with this
+> patch.  The stack trace looks like this:
+> 
+> [    7.409663] ------------[ cut here ]------------
+> [    7.409969] WARNING: CPU: 0 PID: 3069 at fs/ext4/mballoc.c:3801 ext4_mb_mark_group_bb+0x48e/0x4a0
+> [    7.410480] CPU: 0 PID: 3069 Comm: mount Not tainted 6.4.0-rc5-xfstests-lockdep-00021-g60ba685c5998 #146
+> [    7.411067] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+> [    7.411639] RIP: 0010:ext4_mb_mark_group_bb+0x48e/0x4a0
+> [    7.411968] Code: 48 c7 c7 35 b0 88 82 c6 05 16 f4 9b 01 01 e8 f9 16 c9 ff e9 7f fe ff ff 8b 45 08 c7 44 24 10 00 00 00 00 31 c9 e9 ef fc ff ff <0f> 0b e9 76 fc ff ff e8 96 64 b6 00 66 0f 1f 44 00 00 90 90 90 90
+> [    7.413128] RSP: 0018:ffffc90003b0f9f8 EFLAGS: 00010246
+> [    7.413458] RAX: 0000000000000003 RBX: 0000000000006002 RCX: 0000000000000001
+> [    7.413902] RDX: ffff88800965b000 RSI: 0000000000000000 RDI: ffff88800d690100
+> [    7.414346] RBP: ffffc90003b0fa68 R08: 000000000aebbd6e R09: 0000000000000246
+> [    7.414791] R10: 00000000d148c994 R11: 00000000941da2bb R12: ffff88800d7fd000
+> [    7.415234] R13: 0000000000000000 R14: ffff88800f3e4080 R15: ffff88800b5ca160
+> [    7.415724] FS:  00007f3d04516840(0000) GS:ffff88807da00000(0000) knlGS:0000000000000000
+> [    7.416227] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [    7.416588] CR2: 00007ffcb3979ac8 CR3: 000000000f290003 CR4: 0000000000770ef0
+> [    7.417032] PKRU: 55555554
+> [    7.417205] Call Trace:
+> [    7.417363]  <TASK>
+> [    7.417502]  ? ext4_mb_mark_group_bb+0x48e/0x4a0
+> [    7.417807]  ? __warn+0x80/0x170
+> [    7.418051]  ? ext4_mb_mark_group_bb+0x48e/0x4a0
+> [    7.418337]  ? report_bug+0x173/0x1d0
+> [    7.418567]  ? handle_bug+0x3c/0x70
+> [    7.418797]  ? exc_invalid_op+0x17/0x70
+> [    7.419037]  ? asm_exc_invalid_op+0x1a/0x20
+> [    7.419226]  ? ext4_mb_mark_group_bb+0x48e/0x4a0
+> [    7.419437]  ? ext4_mb_mark_group_bb+0xae/0x4a0
+> [    7.419708]  ext4_mb_mark_bb+0xc0/0x120
+> [    7.419946]  ext4_ext_clear_bb+0x210/0x280
+> [    7.420198]  ext4_fc_replay_inode+0xa1/0x380
+> [    7.420466]  ext4_fc_replay+0x435/0x880
+> [    7.420703]  ? __getblk_gfp+0x37/0x110
+> [    7.420938]  ? jread+0x7a/0x180
+> [    7.421138]  do_one_pass+0x7df/0x1040
+> [    7.421365]  jbd2_journal_recover+0x150/0x250
+> [    7.421637]  jbd2_journal_load+0xbe/0x190
+> [    7.421886]  ext4_load_journal+0x214/0x610
+> [    7.422152]  ext4_load_and_init_journal+0x29/0x380
+> [    7.422490]  __ext4_fill_super+0x15ca/0x15e0
+> [    7.422756]  ? __pfx_ext4_fill_super+0x10/0x10
+> [    7.423032]  ext4_fill_super+0xcf/0x280
+> [    7.423270]  get_tree_bdev+0x188/0x290
+> [    7.423505]  vfs_get_tree+0x29/0xe0
+> [    7.423723]  ? capable+0x37/0x70
+> [    7.423927]  do_new_mount+0x174/0x300
+> [    7.424157]  __x64_sys_mount+0x11a/0x150
+> [    7.424401]  do_syscall_64+0x3b/0x90
+> [    7.424624]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+> [    7.424935] RIP: 0033:0x7f3d0475562a
+> [    7.425160] Code: 48 8b 0d 69 18 0d 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 36 18 0d 00 f7 d8 64 89 01 48
+> [    7.426298] RSP: 002b:00007ffcb397aaf8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
+> [    7.426761] RAX: ffffffffffffffda RBX: 00007f3d04889264 RCX: 00007f3d0475562a
+> [    7.427197] RDX: 0000558ea381db90 RSI: 0000558ea381dbb0 RDI: 0000558ea381dbd0
+> [    7.427631] RBP: 0000558ea381d960 R08: 0000558ea381dbf0 R09: 00007f3d04827be0
+> [    7.428063] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+> [    7.428499] R13: 0000558ea381dbd0 R14: 0000558ea381db90 R15: 0000558ea381d960
+> [    7.428941]  </TASK>
+> [    7.429083] irq event stamp: 10951
+> [    7.429296] hardirqs last  enabled at (10959): [<ffffffff811643c2>] __up_console_sem+0x52/0x60
+> [    7.429824] hardirqs last disabled at (10966): [<ffffffff811643a7>] __up_console_sem+0x37/0x60
+> [    7.430325] softirqs last  enabled at (10574): [<ffffffff8204a529>] __do_softirq+0x2d9/0x39e
+> [    7.430839] softirqs last disabled at (10407): [<ffffffff810dcc57>] __irq_exit_rcu+0x87/0xb0
+> [    7.431354] ---[ end trace 0000000000000000 ]---
+> 
+> 
+Hi ted, sorry for this issue. This patch added a WARN_ON for case that we free block
+to uninitialized block group which should be invalid.
+We can simply remove the WARN_ON to allow free on uninitialized block group as old
+way for emergency fix and I will find out why we free blocks to uninitialized block
+group in fast commit code path and is it a valid behavior.
 
-A quick check against xfs/179 (the case I was seeing) indicates that
-it is a regression between v6.4-rc4 and v6.4-rc5.
-
-Looking at the kernel/ changelog, I'm expecting that it is a
-regression introduced by this commit:
-
-commit f9010dbdce911ee1f1af1398a24b1f9f992e0080
-Author: Mike Christie <michael.christie@oracle.com>
-Date:   Thu Jun 1 13:32:32 2023 -0500
-
-    fork, vhost: Use CLONE_THREAD to fix freezer/ps regression
-    
-    When switching from kthreads to vhost_tasks two bugs were added:
-    1. The vhost worker tasks's now show up as processes so scripts doing
-    ps or ps a would not incorrectly detect the vhost task as another
-    process.  2. kthreads disabled freeze by setting PF_NOFREEZE, but
-    vhost tasks's didn't disable or add support for them.
-    
-    To fix both bugs, this switches the vhost task to be thread in the
-    process that does the VHOST_SET_OWNER ioctl, and has vhost_worker call
-    get_signal to support SIGKILL/SIGSTOP and freeze signals. Note that
-    SIGKILL/STOP support is required because CLONE_THREAD requires
-    CLONE_SIGHAND which requires those 2 signals to be supported.
-    
-    This is a modified version of the patch written by Mike Christie
-    <michael.christie@oracle.com> which was a modified version of patch
-    originally written by Linus.
-    
-    Much of what depended upon PF_IO_WORKER now depends on PF_USER_WORKER.
-    Including ignoring signals, setting up the register state, and having
-    get_signal return instead of calling do_group_exit.
-    
-    Tidied up the vhost_task abstraction so that the definition of
-    vhost_task only needs to be visible inside of vhost_task.c.  Making
-    it easier to review the code and tell what needs to be done where.
-    As part of this the main loop has been moved from vhost_worker into
-    vhost_task_fn.  vhost_worker now returns true if work was done.
-    
-    The main loop has been updated to call get_signal which handles
-    SIGSTOP, freezing, and collects the message that tells the thread to
-    exit as part of process exit.  This collection clears
-    __fatal_signal_pending.  This collection is not guaranteed to
-    clear signal_pending() so clear that explicitly so the schedule()
-    sleeps.
-    
-    For now the vhost thread continues to exist and run work until the
-    last file descriptor is closed and the release function is called as
-    part of freeing struct file.  To avoid hangs in the coredump
-    rendezvous and when killing threads in a multi-threaded exec.  The
-    coredump code and de_thread have been modified to ignore vhost threads.
-    
-    Remvoing the special case for exec appears to require teaching
-    vhost_dev_flush how to directly complete transactions in case
-    the vhost thread is no longer running.
-    
-    Removing the special case for coredump rendezvous requires either the
-    above fix needed for exec or moving the coredump rendezvous into
-    get_signal.
-    
-    Fixes: 6e890c5d5021 ("vhost: use vhost_tasks for worker threads")
-    Signed-off-by: Eric W. Biederman <ebiederm@xmission.com>
-    Co-developed-by: Mike Christie <michael.christie@oracle.com>
-    Signed-off-by: Mike Christie <michael.christie@oracle.com>
-    Acked-by: Michael S. Tsirkin <mst@redhat.com>
-    Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-
-I'm just building a v6.5-rc5 with this one commit reverted to test
-it right now.....
-
-<a few minutes later>
-
-Yup, 6.5-rc5 with that patch reverted doesn't hang at all. That's
-the problem.
-
-I guess the regression fix needs a regression fix....
-
-Cheers,
-
-Dave.
 -- 
-Dave Chinner
-david@fromorbit.com
+Best wishes
+Kemeng Shi
+
