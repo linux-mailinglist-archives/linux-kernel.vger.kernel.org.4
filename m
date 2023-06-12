@@ -2,118 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 006C372D511
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 01:41:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA0FD72D515
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 01:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238217AbjFLXlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 19:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40788 "EHLO
+        id S233085AbjFLXne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 19:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238039AbjFLXlK (ORCPT
+        with ESMTP id S231126AbjFLXnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 19:41:10 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BB7124;
-        Mon, 12 Jun 2023 16:41:07 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-1a6b7060862so191157fac.2;
-        Mon, 12 Jun 2023 16:41:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686613267; x=1689205267;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2idTz1dI6R8Bw9mKAT+NEGNVBgEcKr2rXGyUpAj9+VU=;
-        b=mB7cvxaim/8ZW9lHIU6lPRBtBVdQGyUyF7w/Ves7I7UzY9aln8lv2zFB8x6FiAsoQx
-         evbQJQlxpWjEMLrfL05DdfpvfCKwiCayTx8Cihk32yBvYSvP6vUkjx5kX6Ulaq5L4i2o
-         iflgiWkANNwHQrkF59utzROQChv2vSRy47uBfgVsNt/aUHDprnSjyx6qOzEATxjsXSSf
-         ZQSE7au3F3SwDnx9Z7EDfc4TQl0jMqmBh4HGj8cVygjsOs5zb9ShcNDij2Lt2gQHAInF
-         LZZZq/4JvuOkTln9n5GXrLwd6CDpMURymHyBXCYeKBaHOPaignGE83NFu8k1M5B0G9Qc
-         6VrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686613267; x=1689205267;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=2idTz1dI6R8Bw9mKAT+NEGNVBgEcKr2rXGyUpAj9+VU=;
-        b=K0p0lA5Bk0JLLaiIegJV9rqz+q/tBPBXjgzyCJFqby03MAo9QQR2Pi3C5LbEskUgIz
-         HHJEWd/wO8HabovFCqexTd+p58NqqgkAovYMB9XxgUkBvSMcLFMh/lvXQxypHJIPdrvi
-         x4DIlM2T3bG+jYcnL0csXDqYNv/Wn7sUnZkdOzEUvqk/a2e+bW2Q/+XeuCinDQaojlEN
-         qsNeVBkYcpjYomIagsSsg/1EoGHseHEX87/9mz0hxHbfDJbtbYj53uS6WdybUbcWNldm
-         rOsSwERSQQvOuoq942TfsiEUz1Dt75J+v/6Ii9pauuqUDUk143x/d+8soUKLZyzXr05n
-         4Ufw==
-X-Gm-Message-State: AC+VfDzAWThQyAb7elIbvZ8G16EUXyC5/FenfzjvxqT+eTGSrvH+eVQj
-        g/aZLsaxgwhzMkt+8XCc/KjQtOF/Iac=
-X-Google-Smtp-Source: ACHHUZ7HqPKNH19sewXwfiGUfXwY44Aclu+I1FQs4blBB3V2M4vlAWC878Vcx4n1rF33vjkSM6fkwA==
-X-Received: by 2002:a05:6871:555:b0:177:809e:ead3 with SMTP id t21-20020a056871055500b00177809eead3mr7199845oal.41.1686613266879;
-        Mon, 12 Jun 2023 16:41:06 -0700 (PDT)
-Received: from moohyul.svl.corp.google.com ([2620:15c:2a3:200:1e19:385a:b5d0:f4a2])
-        by smtp.gmail.com with ESMTPSA id t12-20020a62ea0c000000b00643355ff6a6sm7565619pfh.99.2023.06.12.16.41.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 16:41:06 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH 2/2] perf dwarf-aux: Allow unnamed struct/union/enum
-Date:   Mon, 12 Jun 2023 16:41:02 -0700
-Message-ID: <20230612234102.3909116-2-namhyung@kernel.org>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-In-Reply-To: <20230612234102.3909116-1-namhyung@kernel.org>
-References: <20230612234102.3909116-1-namhyung@kernel.org>
+        Mon, 12 Jun 2023 19:43:32 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9733C10F9;
+        Mon, 12 Jun 2023 16:43:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=ZlWLeOXVICCHBRrKKLqL9aWEONQcjjN3Lm4aBMgVQww=; b=afaSMC5RX3j1M7bncFgFM7mWmn
+        mrpuVvRDOOxncD9USgGUmd40J82MMdkJFzoygBevKnC4I9Am7YuqcUQFy8xn0+f2pQm4LOMA5rMrh
+        g45HyceqwYRuW/3HlSbM9RohnR4Hr+YD2c6EV3EBr9YCf97J2K4OKIlEkhqbJXl/yeDdqCQ9K7gPd
+        USWddYyVs0xCuREGfQ9wM30iKR83Pr597FExFJMKMgZaWqB3O+CLIglpG3CTCCVA3rl8OvE5sdCNJ
+        Qgw8LdSAsFcHr4aArexARNQ+2pUSnJxUXTQcpnLUIkC2gs9GV8ZFa22OMT+c9UAaVkzZghWmoWG3q
+        AGI+tATQ==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q8rBn-006Azs-1T;
+        Mon, 12 Jun 2023 23:43:11 +0000
+Message-ID: <499ded51-3fb8-f11b-8776-08ab2e9a8812@infradead.org>
+Date:   Mon, 12 Jun 2023 16:43:09 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v4 11/11] blksnap: Kconfig and Makefile
+Content-Language: en-US
+To:     Sergei Shtepa <sergei.shtepa@veeam.com>, axboe@kernel.dk,
+        hch@infradead.org, corbet@lwn.net, snitzer@kernel.org
+Cc:     viro@zeniv.linux.org.uk, brauner@kernel.org, willy@infradead.org,
+        dlemoal@kernel.org, wsa@kernel.org,
+        heikki.krogerus@linux.intel.com, ming.lei@redhat.com,
+        gregkh@linuxfoundation.org, linux-block@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+References: <20230609115858.4737-1-sergei.shtepa@veeam.com>
+ <20230609115858.4737-11-sergei.shtepa@veeam.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230609115858.4737-11-sergei.shtepa@veeam.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's possible some struct/union/enum type don't have type name.  Allow
-the empty name after "struct"/"union"/"enum" string rather than fail.
 
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- tools/perf/util/dwarf-aux.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/tools/perf/util/dwarf-aux.c b/tools/perf/util/dwarf-aux.c
-index 1ac88b79687d..759434552653 100644
---- a/tools/perf/util/dwarf-aux.c
-+++ b/tools/perf/util/dwarf-aux.c
-@@ -1074,16 +1074,18 @@ int die_get_typename(Dwarf_Die *vr_die, struct strbuf *buf)
- 		/* Function pointer */
- 		return strbuf_add(buf, "(function_type)", 15);
- 	} else {
--		if (!dwarf_diename(&type))
--			return -ENOENT;
-+		const char *name = dwarf_diename(&type);
-+
- 		if (tag == DW_TAG_union_type)
- 			tmp = "union ";
- 		else if (tag == DW_TAG_structure_type)
- 			tmp = "struct ";
- 		else if (tag == DW_TAG_enumeration_type)
- 			tmp = "enum ";
-+		else if (name == NULL)
-+			return -ENOENT;
- 		/* Write a base name */
--		return strbuf_addf(buf, "%s%s", tmp, dwarf_diename(&type));
-+		return strbuf_addf(buf, "%s%s", tmp, name ?: "");
- 	}
- 	ret = die_get_typename(&type, buf);
- 	return ret ? ret : strbuf_addstr(buf, tmp);
+On 6/9/23 04:58, Sergei Shtepa wrote:
+> diff --git a/drivers/block/blksnap/Kconfig b/drivers/block/blksnap/Kconfig
+> new file mode 100644
+> index 000000000000..14081359847b
+> --- /dev/null
+> +++ b/drivers/block/blksnap/Kconfig
+> @@ -0,0 +1,12 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# Block device snapshot module configuration
+> +#
+> +
+> +config BLKSNAP
+> +	tristate "Block Devices Snapshots Module (blksnap)"
+> +	help
+> +	  Allow to create snapshots and track block changes for block devices.
+> +	  Designed for creating backups for simple block devices. Snapshots are
+> +	  temporary and are released then backup is completed. Change block
+
+	                             when backup is completed.
+
+or is the order of operations as listed: release snapshots and then backup
+can be completed?
+
+> +	  tracking allows to create incremental or differential backups.
+
 -- 
-2.41.0.162.gfafddb0af9-goog
-
+~Randy
