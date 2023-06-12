@@ -2,69 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77D9272CC21
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:13:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8654E72CC2C
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:13:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbjFLRNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 13:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56012 "EHLO
+        id S237410AbjFLRN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 13:13:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbjFLRNh (ORCPT
+        with ESMTP id S233336AbjFLRNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 13:13:37 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F54188;
-        Mon, 12 Jun 2023 10:13:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686590016; x=1718126016;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0IhzFlc0JSqsC8g90Ed8ErIHbGi6v7rirVUCLlYWgTI=;
-  b=kd0p6GilJH70mqsdst+DgKhzTlwTO/vveuLVPVy+dYef0DGZAZtYU4wA
-   LEFkDn/2D4xgcJAUGFt+53yqep1+DwBelEkVQaYmQjox4jFAuTVzeS1cp
-   omG4WYaEbZX9c/N6/IMH+8INGeHAwyG1cOiFNtQ3QHP5clKGh3VlKVH2x
-   9XIYPjTNVkfZyld6F3wpi1ViqohHC3EOF/ORja5bkfKsqi/TiKu7lUnpC
-   wJtsixCf0WsouvlIgqEqrqdF4wXrEFlpWgbZFVfOsD0cEqTsS80aC9gnV
-   NLH9UASy+H196T6C9RGGlw9+jsiPZ+BYKAjG8O8yffla4AtvRkcMMjI+f
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="360590940"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="360590940"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 10:13:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="688714744"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="688714744"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP; 12 Jun 2023 10:13:32 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1q8l6h-003Ai5-0z;
-        Mon, 12 Jun 2023 20:13:31 +0300
-Date:   Mon, 12 Jun 2023 20:13:31 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mehdi Djait <mehdi.djait.k@gmail.com>
-Cc:     jic23@kernel.org, mazziesaccount@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        lars@metafoo.de, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 5/7] iio: accel: kionix-kx022a: Refactor driver and
- add chip_info structure
-Message-ID: <ZIdSO7MGk3K/R2u1@smile.fi.intel.com>
-References: <cover.1686578553.git.mehdi.djait.k@gmail.com>
- <3a41a5ae9857cacdb062c398715a5938ccd47014.1686578554.git.mehdi.djait.k@gmail.com>
- <ZIc/uvB1zxNRnuRS@smile.fi.intel.com>
- <ZIdIev+evQUvX5Rg@carbian>
+        Mon, 12 Jun 2023 13:13:44 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034D710DA;
+        Mon, 12 Jun 2023 10:13:42 -0700 (PDT)
+Received: from jupiter.universe (dyndsl-091-248-210-131.ewe-ip-backbone.de [91.248.210.131])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0FFA76606ECF;
+        Mon, 12 Jun 2023 18:13:41 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686590021;
+        bh=Bf6eekQkfS+tNXR2hhMUzuVzPovEGfpI2wuTSi/+qNc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NKDg3R0ad4nTEofp9OPAxRwYSdVaJxwT44lcjFXKI4d7Xi+5x+bUQeGodtmYcg7lZ
+         CihWkGiV4YQGWK0XibuOsYBhPhKvBq5n2q++XkW34XRUU7hjedZvPWK45C6asQeytv
+         7HIznFxvsgFI2iSPYWq2Og73UhKwcKR99m82VmfFF9xtDaK7ErRHrShNnGe3Dv/OLq
+         BxYQbL67gBRVTOiG6Ts2iXwQgF5eUKvIU8/JItn9ZnimR5FsMTOqmWhysOgYFujqvh
+         Erp6KzRT109vU4ITvW+boUVxDRrWiJ9BODaLFbxN2cl7ZFC/CkhdyMdhf/3wftK5xL
+         wqxHgQwAIUznw==
+Received: by jupiter.universe (Postfix, from userid 1000)
+        id A23304805CC; Mon, 12 Jun 2023 19:13:38 +0200 (CEST)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-ide@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        kernel@collabora.com
+Subject: [PATCH v4 0/5] Add RK3588 SATA support
+Date:   Mon, 12 Jun 2023 19:13:32 +0200
+Message-Id: <20230612171337.74576-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZIdIev+evQUvX5Rg@carbian>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,36 +62,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 06:31:54PM +0200, Mehdi Djait wrote:
-> On Mon, Jun 12, 2023 at 06:54:34PM +0300, Andy Shevchenko wrote:
-> > On Mon, Jun 12, 2023 at 04:22:08PM +0200, Mehdi Djait wrote:
+Hi,
 
-...
+This enables SATA support for RK3588.
 
-> > >  struct kx022a_data {
-> > > +	const struct kx022a_chip_info *chip_info;
-> > >  	struct regmap *regmap;
-> > 
-> > I would suggest to run bloat-o-meter with this version and if you place
-> > chip_info after regmap. Does it gain us some memory?
-> 
-> I used the bloat-o-meter on the two .ko files (this version and the the
-> one where chip_info after regamp) Is this what you asked for ?
+Changes since PATCHv3:
+ * https://lore.kernel.org/all/20230608162238.50078-1-sebastian.reichel@collabora.com/
+ * Add Reviewed-by from Serge and Krzysztof to patch 1
+ * Update patch 2
+   - Add maxItems to 'clocks' property; without specifying minItems it's
+     implied to be the same
+   - Keep allOf above the properties in snps,dwc-ahci.yaml
+   - Add 'sata-port@0' to list of allowed properties
+   - Replace sata-port pattern property, so that it disallows using any
+     sata-port nodes besides @0 to override the pattern property from the
+     common binding
+ * Add Reviewed-by from Krzysztof to patch 3
 
-Yes. I assume the old one is the current as in this patch?
-If so, you know what to do in the next version :-)
+Changes since PATCHv2:
+ * https://lore.kernel.org/all/20230522173423.64691-1-sebastian.reichel@collabora.com/
+ * Drop patch 1 (applied by Heiko)
+ * Update SATA DT binding to split Rockchip into its own file
+ * Enforce correct resets numbers for the rk3568/rk3588 combo PHY
 
-> add/remove: 0/0 grow/shrink: 0/5 up/down: 0/-20 (-20)
-> Function                                     old     new   delta
-> kx132_get_fifo_bytes                         148     144      -4
-> kx022a_trigger_set_state                     352     348      -4
-> kx022a_read_raw                              380     376      -4
-> kx022a_buffer_predisable                     248     244      -4
-> kx022a_buffer_postenable                     296     292      -4
-> Total: Before=11244, After=11224, chg -0.18%
+Changes since PATCHv1:
+ * https://lore.kernel.org/all/20230413182345.92557-1-sebastian.reichel@collabora.com/
+ * Rebase to v6.4-rc1
+ * Collect Acked-by for syscon DT binding update
+ * Use ASIC clock description suggested by Serge Semin
+ * Also add RBC clock (not used by RK3588)
+ * Add extra patch narrowing down the allowed clocks for RK356x and RK3588
+
+-- Sebastian
+
+Sebastian Reichel (5):
+  dt-bindings: ata: dwc-ahci: add PHY clocks
+  dt-bindings: ata: dwc-ahci: add Rockchip RK3588
+  dt-bindings: phy: rockchip: rk3588 has two reset lines
+  arm64: dts: rockchip: rk3588: add combo PHYs
+  arm64: dts: rockchip: rk3588: add SATA support
+
+ .../bindings/ata/rockchip,dwc-ahci.yaml       | 124 ++++++++++++++++++
+ .../bindings/ata/snps,dwc-ahci-common.yaml    |   8 +-
+ .../bindings/ata/snps,dwc-ahci.yaml           |  13 +-
+ .../phy/phy-rockchip-naneng-combphy.yaml      |  34 ++++-
+ arch/arm64/boot/dts/rockchip/rk3588.dtsi      |  44 +++++++
+ arch/arm64/boot/dts/rockchip/rk3588s.dtsi     |  90 +++++++++++++
+ 6 files changed, 306 insertions(+), 7 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/ata/rockchip,dwc-ahci.yaml
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.39.2
 
