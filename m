@@ -2,188 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB92572CD68
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F2EF72CD6D
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:03:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236935AbjFLSCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 14:02:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60850 "EHLO
+        id S235555AbjFLSD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 14:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231678AbjFLSCs (ORCPT
+        with ESMTP id S233486AbjFLSDy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 14:02:48 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B83FE63;
-        Mon, 12 Jun 2023 11:02:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686592967; x=1718128967;
-  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=oe8Ey0rLI5aMtfcU82JWfELso1XEdXyzqck9HhvkkjY=;
-  b=KgnhfTtR7Qs1JBeeql73/gFMIVmlPr0WWbryRzalES4+doqMWBjEP6F9
-   lKHFxkuZR190/f2CTRWG00+aKqDBhxOreefMrTj8JF/Qb3bFZsIUHbHw6
-   DeygMzm2Pj2TRwnCFQ2kwEK/7DxRs2587gQTwPgeinX1dPnsFx2xLbRS3
-   cPXZ7AHRWaS0bwhNPvJxpLHcblcsv5KUv7qDmz/YuS+7qLuxSVQrbOHoG
-   kSVNVG0uSY5L7iF8Sw6/6Bm+8BGPLIJZ3egf2fRtSFbBn4JDODy9Ibi3b
-   MmL71dSK0zX7y9tLyMTdz+EaXLgrWp5l0nAD049PYUJL8zucsaBe5YfDb
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="360604070"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="360604070"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 11:02:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="824055755"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="824055755"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga002.fm.intel.com with ESMTP; 12 Jun 2023 11:02:38 -0700
-Received: from [10.54.75.144] (debox1-desk1.jf.intel.com [10.54.75.144])
-        by linux.intel.com (Postfix) with ESMTP id 437E6580D43;
-        Mon, 12 Jun 2023 11:02:38 -0700 (PDT)
-Message-ID: <fa84b0098551123f34a68b3c0d9c7aa12f592bbf.camel@linux.intel.com>
-Subject: Re: [PATCH V2 2/2] platform/x86/intel/pmc/mtl: Put devices in D3
- during resume
-From:   "David E. Box" <david.e.box@linux.intel.com>
-Reply-To: david.e.box@linux.intel.com
-To:     Hans de Goede <hdegoede@redhat.com>, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Cc:     markgross@kernel.org, irenic.rajneesh@gmail.com,
-        ilpo.jarvinen@linux.intel.com, xi.pardee@intel.com,
-        rajvi.jingar@linux.intel.com
-Date:   Mon, 12 Jun 2023 11:02:38 -0700
-In-Reply-To: <e5fce103-fbb6-0eb6-f6ff-4bfeadd89c90@redhat.com>
-References: <20230607233849.239047-1-david.e.box@linux.intel.com>
-         <20230607233849.239047-2-david.e.box@linux.intel.com>
-         <e5fce103-fbb6-0eb6-f6ff-4bfeadd89c90@redhat.com>
-Organization: David E. Box
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-3.fc36) 
+        Mon, 12 Jun 2023 14:03:54 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7FC3E69
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:03:51 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-977e7d6945aso822903866b.2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:03:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686593030; x=1689185030;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+gBq/t0JN3IzKswRA94RxVh/S2cDbwUrf8NJSpnNdH8=;
+        b=Pw8r5MbGovGypHmtBmz6yfhQEnE+zUeLQ2WrirrWlxDjY+Aa/GR882ginIgV7EVeZR
+         br86bMhYeKThvzp+ijHJIOzfkudyrCQgNEeI1xZPfJpUWA9zHTYufZK1o4L34Y3+wauY
+         +LRr3vGFamsvz3GrEHI5t0TjS/UnwvcdkK7Ttg9Xwe7VA6LI6Iy97c8UEXAYEGgMCwpC
+         TDC3sSa8xRknm9JvynmXNuOFlWIoV+x11A/BihgqxvM5YSBCWoIr2PjcfQiAfbIiW/rM
+         +ouAZt1X1wqeE8eJhWRkvj7xu2jlCvbs8/vpRLwlxcS0ntoqAXDW5kQoVvl5B3S0mP7Q
+         k0rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686593030; x=1689185030;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+gBq/t0JN3IzKswRA94RxVh/S2cDbwUrf8NJSpnNdH8=;
+        b=bFdzqzTl4bKvGYfF0k1usMu0lb5cbJjtjh+xd99idakzT/BHTw45xM+Ls4IO/IluNh
+         LJ4D0qKhOCCHcCisW1ItlePH1amzb5q9oE3QsHgZPTDMXAIZGsVr0FRSulVbdA9UJ3Lw
+         0xBlHjaFtDAyLC/HVMTHoZhJsTl5gvsGA4THE/gSy6GWTkAov14I482bFJMGVF6XMN8A
+         +2fa1sLw8ZJfZS94j4RbQNgIq99I+HtZ16b+5X7y9vCOgeI3vDskNQ+tbddzqzFl4R0g
+         mdR9/D3DS+2tr1qJ9UN7csBWI6OaDhjPw2+0+PMLKIbKFdvpsAXv1s1xT4gvkeUB+nFb
+         wqVA==
+X-Gm-Message-State: AC+VfDz/sNj42Y4FM1sXYcOPAVE2yRsX3sOk1fI+80MBJF6KI+KDV+sS
+        SxAnDRrWV7cDz2QWA5j6yoXE5A==
+X-Google-Smtp-Source: ACHHUZ6r1a+S4U278JHtoJCXri2PKwOvWFUCGuQzut1SdnewBrBtda3IbFuJC7OwiaB1N2wI/WMZYw==
+X-Received: by 2002:a17:907:6d23:b0:96f:b8a0:6cfe with SMTP id sa35-20020a1709076d2300b0096fb8a06cfemr10181499ejc.54.1686593030299;
+        Mon, 12 Jun 2023 11:03:50 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id e26-20020a1709062c1a00b00974556e50a6sm5524182ejh.114.2023.06.12.11.03.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 11:03:49 -0700 (PDT)
+Message-ID: <28e776f8-1e37-79f4-5c10-a57c5cd7d4e4@linaro.org>
+Date:   Mon, 12 Jun 2023 20:03:47 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v12 1/2] spi: add loongson spi bindings
+To:     zhuyinbo <zhuyinbo@loongson.cn>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+References: <20230608072819.25930-1-zhuyinbo@loongson.cn>
+ <20230608072819.25930-2-zhuyinbo@loongson.cn>
+ <6ebed84c-2b42-c981-7b3f-e71cc88e4c2c@linaro.org>
+ <4bf747c4-b767-b20c-e00f-724b50f44edb@loongson.cn>
+ <6bfc2a22-6901-0858-7b90-bc4c52c66810@linaro.org>
+ <bd2d7830-3ab6-0906-b06a-83d3e0a96749@loongson.cn>
+ <11ca2b90-544d-18c2-fb15-7909ca60507f@linaro.org>
+ <f6d4ecb5-e9df-346e-4aab-772fd01689c8@loongson.cn>
+ <a9952e76-1204-5bc7-7856-0c7f8a411d76@linaro.org>
+ <9c94397d-1e31-02fa-bdbe-af888c72eac4@loongson.cn>
+ <657f8d19-de83-8be6-4a9d-5f13b1df7383@linaro.org>
+ <b0e5e13e-6746-bd90-2a49-31ee6dd3e8a2@loongson.cn>
+ <84ccf4cc-072d-adbf-0361-95ceae13f333@linaro.org>
+ <5d060cac-ff28-60e9-98a8-f2bd4d378455@loongson.cn>
+ <4e30870d-86e2-8536-8e0d-aab4ce5027d2@linaro.org>
+ <0c532e09-4821-5e07-92e6-7bc3cd79869e@loongson.cn>
+ <d24f1e60-0ef3-2cb9-9675-846d861ef0c8@linaro.org>
+ <9fec9cfa-0686-91d8-cba4-91ea67243b47@loongson.cn>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <9fec9cfa-0686-91d8-cba4-91ea67243b47@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
+On 12/06/2023 13:29, zhuyinbo wrote:
+> 
+> 
+> 在 2023/6/12 下午4:16, Krzysztof Kozlowski 写道:
+>>>>>>>>> 在 2023/6/8 下午7:45, Krzysztof Kozlowski 写道:
+>>>>>>>>>> On 08/06/2023 13:42, zhuyinbo wrote:
+>>>>>>>>>>> --- a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>>>>>>>>>>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>>>>>>>>>>> @@ -16,6 +16,7 @@ properties:
+>>>>>>>>>>>          compatible:
+>>>>>>>>>>>            enum:
+>>>>>>>>>>>              - loongson,ls2k1000-spi
+>>>>>>>>>>> +      - loongson,ls2k0500-spi
+>>>>>>>>>>
+>>>>>>>>>> Aren't they compatible?
+>>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> Are you saying that the spi driver is compatible with 2k0500 ?
+>>>>>>>>
+>>>>>>>> Didn't you say this through 11 previous revisions?
+>>>>>>>
+>>>>>>>
+>>>>>>> Yes, did I understand your meaning incorrectly ?
+>>>>>>
+>>>>>> If they are compatible, then they are not part of one enum. They could
+>>>>>> not be as this would easily fail in testing of your DTS.
+>>>>>>
+>>>>>
+>>>>>
+>>>>> The "loongson,ls2k0500-spi" wasn't a compatible in previous version and
+>>>>> I will add "loongson,ls2k0500-spi" as a compatible in spi driver and
+>>>>> added it as a part of the one enum in dt-binding.
+>>>>
+>>>> No, because you claimed - if I understood correctly - that they are
+>>>> compatible. Don't add fake entries to the driver.
+>>>>
+>>>
+>>>
+>>> I'm a bit confused, and I just need to add 'loongson,ls2k0500-spi' as
+>>> one enum in dt-bindings, but driver don't add this entry ?
+>>
+>> Compatibility is expressed with a list:
+>> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#compatible
+>> so it cannot be just one enum, but "items". There are hundreds of
+>> examples including example-schema.
+> 
+> 
+> Is it a description like the following?
+> 
+>   properties:
+>     compatible:
+> -    enum:
+> -      - loongson,ls2k1000-spi
+> +    oneOf:
+> +      - enum:
+> +          - loongson,ls2k1000-spi
+> +      - items:
+> +          - enum:
+> +              - loongson,ls2k1000-spi
+> +          - const: loongson,ls2k1000-spi
 
-On Mon, 2023-06-12 at 11:42 +0200, Hans de Goede wrote:
-> Hi David,
->=20
-> On 6/8/23 01:38, David E. Box wrote:
-> > An earlier commit placed some driverless devices in D3 during boot so t=
-hat
-> > they don't block package cstate entry on Meteor Lake. Also place these
-> > devices in D3 after resume from suspend.
-> >=20
-> > Fixes: 336ba968d3e3 ("platform/x86/intel/pmc/mtl: Put GNA/IPU/VPU devic=
-es in
-> > D3")
-> > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
->=20
-> Thank you for your patch.
->=20
-> There is one thing which has me worried here:
->=20
-> What about when real proper drivers show up for these blocks?
->=20
-> I know that at least some people will likely be using the out of tree IPU=
-6
-> driver with the IPU block.
->=20
-> And having 2 different drivers poke at the hw state seems like a bad idea=
- to
-> me.
->=20
-> Maybe we can add a check if no driver is bound and only set the state to =
-D3 if
-> no driver is bound?
+Remove this items part - it does not make sense. Device is not
+compatible with itself. Rest looks ok.
 
-This check exists but is not shown in the patch. mtl_set_device_d3() gets t=
-he
-device lock and checks to see if dev.driver is NULL before putting in D3. T=
-his
-was checked with the GNA driver installed.
 
-David
 
->=20
-> Regards,
->=20
-> Hans
->=20
->=20
->=20
-> > ---
-> >=20
-> > V2 - rename mtl_fixup to mtl_d3_fixup. Call it from new mtl_resume
-> > =C2=A0=C2=A0=C2=A0=C2=A0 function, followed by the common resume. Sugge=
-sted by Ilpo.
-> >=20
-> > =C2=A0drivers/platform/x86/intel/pmc/mtl.c | 29 ++++++++++++++++++++---=
------
-> > =C2=A01 file changed, 21 insertions(+), 8 deletions(-)
-> >=20
-> > diff --git a/drivers/platform/x86/intel/pmc/mtl.c
-> > b/drivers/platform/x86/intel/pmc/mtl.c
-> > index e8cc156412ce..2b00ad9da621 100644
-> > --- a/drivers/platform/x86/intel/pmc/mtl.c
-> > +++ b/drivers/platform/x86/intel/pmc/mtl.c
-> > @@ -68,16 +68,29 @@ static void mtl_set_device_d3(unsigned int device)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-> > =C2=A0}
-> > =C2=A0
-> > -void mtl_core_init(struct pmc_dev *pmcdev)
-> > +/*
-> > + * Set power state of select devices that do not have drivers to D3
-> > + * so that they do not block Package C entry.
-> > + */
-> > +static void mtl_d3_fixup(void)
-> > =C2=A0{
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pmcdev->map =3D &mtl_reg_map=
-;
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pmcdev->core_configure =3D m=
-tl_core_configure;
-> > -
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Set power state of select=
- devices that do not have drivers to D3
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * so that they do not block=
- Package C entry.
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mtl_set_device_d3(MTL_G=
-NA_PCI_DEV);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mtl_set_device_d3(MTL_I=
-PU_PCI_DEV);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mtl_set_device_d3(MTL_V=
-PU_PCI_DEV);
-> > =C2=A0}
-> > +
-> > +static int mtl_resume(struct pmc_dev *pmcdev)
-> > +{
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mtl_d3_fixup();
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return pmc_core_resume_commo=
-n(pmcdev);
-> > +}
-> > +
-> > +void mtl_core_init(struct pmc_dev *pmcdev)
-> > +{
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pmcdev->map =3D &mtl_reg_map=
-;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pmcdev->core_configure =3D m=
-tl_core_configure;
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mtl_d3_fixup();
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pmcdev->resume =3D mtl_resum=
-e;
-> > +}
->=20
+Best regards,
+Krzysztof
 
