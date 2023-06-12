@@ -2,97 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 867E472BB8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:02:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3686A72BB98
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:03:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233572AbjFLJCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 05:02:45 -0400
+        id S232373AbjFLJDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 05:03:40 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231477AbjFLJBu (ORCPT
+        with ESMTP id S231425AbjFLJC2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 05:01:50 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C7A10D3;
-        Mon, 12 Jun 2023 01:58:30 -0700 (PDT)
-X-UUID: 4970199408ff11eeb20a276fd37b9834-20230612
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=3bPV3faArjbPVgphJnhcHIHAQgxTala/qVga1KpcNUQ=;
-        b=Sw1ghY64WTMwKuoqenRsKgyBs2kW3VZ0Q/wGNqj3ApY9b5bQfv9hLtiKBRUwsbeGnX5pIpCImP/Og/yVb8mSvVa/aOQsHYpZTbrO7Va8Vjwn55RE0pq9fUFN/3Jr/8NDWG+t2dV0lQeH24XsmgVtH+GoWxojdhWXPU9+gR8sBE4=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.26,REQID:1d89173d-e31e-4694-a55e-ea4a3bd3a482,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:cb9a4e1,CLOUDID:5bf9253e-de1e-4348-bc35-c96f92f1dcbb,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 4970199408ff11eeb20a276fd37b9834-20230612
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
-        (envelope-from <powen.kao@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 729206788; Mon, 12 Jun 2023 16:58:23 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 12 Jun 2023 16:58:23 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Mon, 12 Jun 2023 16:58:23 +0800
-From:   Po-Wen Kao <powen.kao@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     <wsd_upstream@mediatek.com>, <peter.wang@mediatek.com>,
-        <powen.kao@mediatek.com>, <alice.chao@mediatek.com>,
-        <naomi.chu@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <cc.chou@mediatek.com>, <eddie.huang@mediatek.com>
-Subject: [PATCH v1 4/4] scsi: ufs: ufs-mediatek: Set UFSHCD_QUIRK_MCQ_BROKEN_RTC quirk
-Date:   Mon, 12 Jun 2023 16:58:12 +0800
-Message-ID: <20230612085817.12275-5-powen.kao@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230612085817.12275-1-powen.kao@mediatek.com>
-References: <20230612085817.12275-1-powen.kao@mediatek.com>
+        Mon, 12 Jun 2023 05:02:28 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D3919A8
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 01:59:28 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id af79cd13be357-7608aae9355so28997085a.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 01:59:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686560367; x=1689152367;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=udMb5vmbnzKeYF+uhRJyDPkoUsUtpYvMhzpQU9v4Emw=;
+        b=VBPd4R/l7owkryOiqKleS18B7QN/h7sMestTsfq19/fQKe41wLAHs0M28XjG58+gWY
+         /QhySNjh+cwBQsi2JYl3kfH2yj6pIsEg/gNtI7tYB2kPo2ghxyXogYLMSzBYg7h6mHKq
+         lps6YFtoralS3pXHYTBAREIrmMOhMED5d8kHIRRNeM+HVm0dfT3x23mV+0AbygYIzRDS
+         RbEzS6ozc1aS1vxqF0xgUo1fKmdHk9+C3P7sRqUhApie9a3aZXx1UQGhfxM4KTK47lS9
+         ZcQ8NxhUzd4xbmuyfM+F4ohP9Af8GufF5TYgcSHYj1Sp3H+CzLe5b7PsrVA8X32BWwtM
+         M2NA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686560367; x=1689152367;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=udMb5vmbnzKeYF+uhRJyDPkoUsUtpYvMhzpQU9v4Emw=;
+        b=MJqia8UhC38Bt99XshkzuRM+yGO1BQsWckKBm1cZtw34bx5ZZwuHGDEFtTcFqwUdlp
+         aqdEpDkcNR8nVzdP15uczmvGXqw3jdd7t9yzkSYQasNLTQ7LtNa9NFojEQF+K5Wo0Usi
+         JkWa6n8lKcNRFVjEkUAL6fVSvmE+uU3dzFf8l69gwhch00Qv9XtBQFJQ5hwTa8rysJG9
+         xR6bQJRCZqKmqgUXxurhskDLsOmfJgcD9rUHSztxS6Tst2G2lsNYsN2rkIpZDPKsdCGV
+         mSDjPMeifDdpoI4JXiCJ9nXjvsiMT6klz+MQe1dBzwMHpWEFKXUPSBAiU2JIB0nX31tI
+         4tUw==
+X-Gm-Message-State: AC+VfDxaAOdVxrze7kJNAWVoWPBxJCAlCY65AYhZCktRNwzSjtGbUY/S
+        jvfgOvXCXHeY+uOpzLKqMNv13lMnn6wvAQH9+5E=
+X-Google-Smtp-Source: ACHHUZ5yQlmjjZ1Orl7B5mFqvYqADAM/MoutFK6d+W8RE7d7gqY8SB3GtWw8yOpt7fylU8HIzD4WGFRF1zBG7+0dXeQ=
+X-Received: by 2002:a05:620a:4309:b0:75e:c8d7:dc68 with SMTP id
+ u9-20020a05620a430900b0075ec8d7dc68mr9777207qko.62.1686560367270; Mon, 12 Jun
+ 2023 01:59:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Received: by 2002:ab0:35d4:0:b0:786:6524:cddd with HTTP; Mon, 12 Jun 2023
+ 01:59:26 -0700 (PDT)
+Reply-To: trustfundsloancompany50@gmail.com
+From:   Mrs Donna <kasdpaul@gmail.com>
+Date:   Mon, 12 Jun 2023 10:59:26 +0200
+Message-ID: <CAGu963Ha5b6G6qbKpWUV0L6hczDErhhie3mS9MXX_A=QZ+QRbg@mail.gmail.com>
+Subject: Re..
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FILL_THIS_FORM,
+        FILL_THIS_FORM_LONG,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:744 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5002]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [trustfundsloancompany50[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [kasdpaul[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.0 FILL_THIS_FORM Fill in a form with personal information
+        *  2.0 FILL_THIS_FORM_LONG Fill in a form with personal information
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable UFSHCD_QUIRK_MCQ_BROKEN_RTC for MediaTek host
-
-Signed-off-by: Po-Wen Kao <powen.kao@mediatek.com>
----
- drivers/ufs/host/ufs-mediatek.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index 269a26d72784..e68b05976f9e 100644
---- a/drivers/ufs/host/ufs-mediatek.c
-+++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -899,6 +899,7 @@ static int ufs_mtk_init(struct ufs_hba *hba)
- 
- 	hba->quirks |= UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL;
- 	hba->quirks |= UFSHCD_QUIRK_MCQ_BROKEN_INTR;
-+	hba->quirks |= UFSHCD_QUIRK_MCQ_BROKEN_RTC;
- 	hba->vps->wb_flush_threshold = UFS_WB_BUF_REMAIN_PERCENT(80);
- 
- 	if (host->caps & UFS_MTK_CAP_DISABLE_AH8)
 -- 
-2.18.0
+LOAN AS FAST AS POSSIBLE WITHIN 2DAYS
+,
+Do you need an urgent loan at 2%? To pay your bills? if yes contact us
+today at: trustfundsloancompany50@gmail.com
 
+FILL BELOW LOAN APPLICATION FORM
+
+Name:
+Country:
+State:
+Phone Number:
+Age:
+ID Card:
+Occupation:
+Amount Needed as a Loan:
+Duration:
+
+NOTE THAT All Email should be forwarded to:
+trustfundsloancompany50@gmail.com
