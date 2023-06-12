@@ -2,213 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F33A72BBE6
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:18:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 116A972BBE7
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:18:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234222AbjFLJSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 05:18:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39646 "EHLO
+        id S234287AbjFLJS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 05:18:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233213AbjFLJRh (ORCPT
+        with ESMTP id S229942AbjFLJRo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 05:17:37 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E99A635AD
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:10:53 -0700 (PDT)
-X-UUID: 046d2146090111eeb20a276fd37b9834-20230612
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=Az7f+Ost5QmjERi6cAztioIBUPOiEqanmp9H0A4AieM=;
-        b=gLCGRVZS8mRTrG1AHgcBUcsGhhcwY3ZDXtZTaITcKqiE/0txAaaEjNPBpaXwkY0Dzs9NhNWaPQmrbsg4OOof9RQmxDLw/Rm93yWoLPiEV97KpWU+CiWUYb3TIugjFmi8yrU6HX+ZvSsPZe2Dy69ADm6PeGMVFjmjUxF1DcKrS10=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.26,REQID:ab9fbbb7-5fe1-4887-9aff-3a518bdf3fd9,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:45
-X-CID-INFO: VERSION:1.1.26,REQID:ab9fbbb7-5fe1-4887-9aff-3a518bdf3fd9,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-        elease,TS:45
-X-CID-META: VersionHash:cb9a4e1,CLOUDID:e752573e-7aa7-41f3-a6bd-0433bee822f3,B
-        ulkID:230612162204ULKW7ZHP,BulkQuantity:16,Recheck:0,SF:28|17|19|48|38|29|
-        102,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:41,QS:nil,BEC:nil,C
-        OL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_OBB,TF_CID_SPAM_SNR,TF_CID_SPAM_SDM,TF_CID_SPAM_FAS,
-        TF_CID_SPAM_FSD
-X-UUID: 046d2146090111eeb20a276fd37b9834-20230612
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 390875334; Mon, 12 Jun 2023 17:10:46 +0800
-Received: from mtkmbs10n2.mediatek.inc (172.21.101.183) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 12 Jun 2023 17:10:45 +0800
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (172.21.101.237)
- by mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Mon, 12 Jun 2023 17:10:45 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iDB21EEn5o5jwYdll77J0V2HvV7VHYBV1BTkn47Ej2/6cBJ7sPZ+eQY0yMX2NAOXYnplOZj9de+hS9Kdc6+KaKp9azkC1ktCVn2hYkbRPBaohKgt974Ki4MvUTl6LMtaqUbzuhB4HocjeTYWRW9dbwiU1vmISByEU/BbhUldfB0Otj5/Dy0afX/mc20ZQTEqiEQKZhu/hIJjJWaw3YNpflPhORmmhgU21PCozUEXTA0BemAeWhSYaAl/OyYS8XuJE0nujd/aqauAiKJRPrD7PK1yjPkzVUEM6w21MYVnK4+6nOchyF0TCuyvUGgvRG7VUiL1Wl5L+JhCkjkoNIEFcg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Az7f+Ost5QmjERi6cAztioIBUPOiEqanmp9H0A4AieM=;
- b=VVwmEHXdXC9YaLD7+LE0J5ebjCQUsnvSfXQGUfbg7fAxJaQ1ZlRhJoaMmEwSCaA0vibX1SyiPTbHLD2g/Ujg0mIvDzFxU+HwZ4/KMgMy4Pi40ug5I6D2z+XGUBexWeIiwQExsMrNfP/HseJkdo/FfWgOJyn/EYQ6fSoFndwwiZXCeAzaaZwsdZdoy1VF6pDGoTYoUp40yx1+mJi33xJpaN33BN+NV/EmCZPJUJC/VE2WLhNBUzkl5cWjA+4/9yEm9UsK2o//7RbpTxW/za27WftxM5fLH640wmPpTfa5IjXNybsrtVwtMKATun6zTluFrBlsmGj5uGNdbYUS9BzWQQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
- dkim=pass header.d=mediatek.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Az7f+Ost5QmjERi6cAztioIBUPOiEqanmp9H0A4AieM=;
- b=Gq0GhmKimPLyUG59qlk9Xg1lQ9MXT/wzPbJtCRcSYCg7MpeQyWGkXZfnPkaqLz7HUTycXmj20ve5jn4QwwmUM+LJiMBeP/NpjCz2DPjy5SFujxNLVUOpQfReKzH+9vFrK0l68PPi8owKTq1+WVytXnOqMKTOBWczs3LzXHC7rQ4=
-Received: from TYZPR03MB6624.apcprd03.prod.outlook.com (2603:1096:400:1f4::13)
- by KL1PR03MB6058.apcprd03.prod.outlook.com (2603:1096:820:87::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Mon, 12 Jun
- 2023 09:10:40 +0000
-Received: from TYZPR03MB6624.apcprd03.prod.outlook.com
- ([fe80::6fdb:ba2c:bcfc:d5ed]) by TYZPR03MB6624.apcprd03.prod.outlook.com
- ([fe80::6fdb:ba2c:bcfc:d5ed%6]) with mapi id 15.20.6455.037; Mon, 12 Jun 2023
- 09:10:40 +0000
-From:   =?utf-8?B?Q0sgSHUgKOiDoeS/iuWFiSk=?= <ck.hu@mediatek.com>
-To:     =?utf-8?B?SmFzb24tSkggTGluICjmnpfnnb/npaUp?= 
-        <Jason-JH.Lin@mediatek.com>,
-        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?utf-8?B?U2luZ28gQ2hhbmcgKOW8teiIiOWciyk=?= 
-        <Singo.Chang@mediatek.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        =?utf-8?B?SmFzb24tY2ggQ2hlbiAo6Zmz5bu66LGqKQ==?= 
-        <Jason-ch.Chen@mediatek.com>,
-        =?utf-8?B?U2hhd24gU3VuZyAo5a6L5a2d6KyZKQ==?= 
-        <Shawn.Sung@mediatek.com>,
-        =?utf-8?B?TmFuY3kgTGluICjmnpfmrKPonqIp?= <Nancy.Lin@mediatek.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        =?utf-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
-        <Rex-BC.Chen@mediatek.com>
-Subject: Re: [PATCH 5/5] drm/mediatek: Fix dereference before null check
-Thread-Topic: [PATCH 5/5] drm/mediatek: Fix dereference before null check
-Thread-Index: AQHZaR0ZxHqGDI/IdEKFPDQOz0fsx6+HSUkA
-Date:   Mon, 12 Jun 2023 09:10:40 +0000
-Message-ID: <4ea5f2579f802e886eab057cc2635e91766ac45a.camel@mediatek.com>
-References: <20230407064657.12350-1-jason-jh.lin@mediatek.com>
-         <20230407064657.12350-6-jason-jh.lin@mediatek.com>
-In-Reply-To: <20230407064657.12350-6-jason-jh.lin@mediatek.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mediatek.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYZPR03MB6624:EE_|KL1PR03MB6058:EE_
-x-ms-office365-filtering-correlation-id: 674d6260-dcb8-414d-be48-08db6b24e4fb
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: z/PbjZmk3dElzK7EH4PBch+qd6XuYqLkeDe97fu1NkW0hCen81UMjF7O3tO3iXsnB3wqKA1NWsX+d1lfX8ZBEBPx8oF8ie6wwyz7XlPvxE/eQl98jlp6ww2WK5BOu8HeCGek5js3V7NkJxa4EZHpqozMg5EXMNSZXR9Bx3OqIufPmMxqNP8DX/3ahp5QX/d7K+IrQxt+EnAF1O3D0xwNG4WSvfAJmNsqrq/YpCiqE/F9EmB1Jui/Y4X3klqSyFUafPvtmkea3TzWU7KUA1la4zqqHyqBcyF9vE1LmmTA5U1WMLYSyKQAQjVOE4j/gQiiUBScryf1jwHnuDXWRZDmcE5w8znSOHYJxNOVjfbflgqBaFZa9zOgRBEs607O/OSgT/sKriwzqzUnRXvQoyozSQ/G44Z4rMd9eh/nI2NKGztKmWk6MyDRM3/f1xcSJYTAKFtKO/lnpc/5Jdjme7dcvt8C4vKjLwojahkVU3nDPou+3l8rugan8w5fHNRPV2EQjzm3VuH6m+RxWIvL++CCz4H1s4TiFbU7U0nqjRUbX6zi7waSI+oiFZBnV0Z9nYKPsF6EwYJEsswLrUPC5rwxICKgNs/qp7zyf4yr/YHzMww29OKrjXHX3BSx9V4Oo83BUW6UPYZulA6OFs4FLRzh5OmS2lOh+0zHcuvWnGCnMfE=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR03MB6624.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(39860400002)(136003)(396003)(366004)(451199021)(107886003)(6486002)(36756003)(85182001)(83380400001)(2616005)(38100700002)(86362001)(38070700005)(122000001)(6506007)(6512007)(26005)(186003)(2906002)(110136005)(54906003)(66476007)(4326008)(64756008)(316002)(66446008)(66556008)(76116006)(41300700001)(5660300002)(71200400001)(66946007)(478600001)(8936002)(8676002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cUs2UDhUb0NzNmFvWFpmNVA5L3U0bDBiQys3V0cwY0J4aTVZaFlpYVk3QkRY?=
- =?utf-8?B?VnZBalZ1R3NyN1F3NWxIdDVvaWQxVDJtWFpxdWxZZ1Y4UkYwOFZoUFJ3VCtP?=
- =?utf-8?B?REgydGhGZUE2cHg1aDlWcjIzaWlQTkFuYmpwdXNoZjVOTitDRVBwT3M2OVYr?=
- =?utf-8?B?eVBqT3lMUWxrdTI0NmpZTVRoS1Q0SU5JVEJwUnNhWER0L0ZCUXdVSUtzSXJ0?=
- =?utf-8?B?UVcrM3J1RzYwQTdMTnFLbWg4R25KZ015d2FKOUtDNzg1NXlPOEIxSmlDbWhL?=
- =?utf-8?B?R1VpZnZNS3NVanE0VVF5ZWRTMUxNU0xCUHpjNzBXQndPdDQ0NmV2NjVZTXRV?=
- =?utf-8?B?SmJCQlVyTVptU29xRGlNTXRPdkRFNHdSa0Vic0Y4RTJJeXovM3Z4WUFTOHlC?=
- =?utf-8?B?bERuc29ZdS9mY3JQL3JQSzEyWWY4bGtFY2gxdUU1U01mTG95NkJzQnJBbjNa?=
- =?utf-8?B?NElLcWMyWjZQSHlETU9FSWRvRGRuRC9VdDFnL29wZy9xZXk3TUdDNlNZc0VI?=
- =?utf-8?B?M0JQOGE1VjVhWFZTYzFVdmFORWZvOFB3N3lvb05VR3ZuL0hmanNJTnhCVzFa?=
- =?utf-8?B?akVPbzdUV0k2U3g1ZHdXTmJJYXpMcWF1dllBYzRncUM2eFdSb2huMkhMck9W?=
- =?utf-8?B?TDByaWxnRWNjbXM1RXZnRnlCT1ZEWXlpSDhCV0ZMU2h5Mm96b0RTN0xZb3Y1?=
- =?utf-8?B?QnZIcXdzazNUNGltYjJqY2MvNE1OeHBhaHJuODQrQ051eFBrWGk5YnVNMHN5?=
- =?utf-8?B?UGVQVWs2L21GMU5YcGFUWjZ5V3JhYUZsZjNITnJiSU9xUThURkFyV0RGWUVB?=
- =?utf-8?B?emFwbVdFUmlQYXo4ZFUxaERVZXRIUi9NUGVnSEZRUngrelZDd3pNMk4ySDdX?=
- =?utf-8?B?eXR3Tk9HYUxXR2lCYTAzY1pGSFVFb0lwYlBiRWZ1emhRZWFXYXNhUCtycU9V?=
- =?utf-8?B?RWhHbm4yVHk2RC8zNUp4bThOUHNIL2lUb1VnbVhEeHVTQjM4MXVxUDhPbEtO?=
- =?utf-8?B?WkFBTmFxUTducGtSU3VMTjlNbEdySHhpenVvRG5zdXM4MVorNnZrSzVRUmd1?=
- =?utf-8?B?cWFVdTVIODN1dnNmZU50NndkeEcyYkhIdko3cXJrVmF5QmlmRUlVNWFUdktX?=
- =?utf-8?B?K0FsdEVzYVlsdVNwV1Y4SExoZzZVSFBhaElBRnV0bEVNQzFaS01ZY1lZUTZX?=
- =?utf-8?B?bmFJS1NUK0lxZDVCYkpVQUVLdEhJdHdHWWRINFpHbmd6SzIvWk13RElRWXhr?=
- =?utf-8?B?amFhODB2dnY1RVovOHBub2RyUUtVSTVVNDhqQWlzcDhlV3Nvc1dTaWp6U1pL?=
- =?utf-8?B?UnRGc21obWlWMjlZVnNsRjlUL3oyVDVUQ0MxRGdSWlhveUFDamVSOGY5RHh2?=
- =?utf-8?B?a245eVU0eG43UFFWcXAvZ295N2NPYkNMRnVuODB1VFFLR0VkRmVQVzNMYTZy?=
- =?utf-8?B?WXZXM081dXNBZHdWWXVKTmZkVUE1K2Ezc3l0VXVmMjEyL2thUUNoUy8zNndO?=
- =?utf-8?B?Nk1Wb1ZYOEJqS3JoU3plYVQ1T1hwR3dla1VrNG4vRk5DcFdzTVltQUdRWXFH?=
- =?utf-8?B?LzhZaWxvYVdPNVo4aTFYYVJlUlFpUXI1NngwWjcwQklLZFZnVE5zRjBicGdo?=
- =?utf-8?B?ZGoyZTF0a1VIVUp0VFpjQjBtbG1OUGpIRFhQNVh1cGVLd2tTZVN4MWtIekdh?=
- =?utf-8?B?Zi83ODFESjR5czZlS1pMNjFrYXRRZDRTMEJPa21XdkcySXFqZHdFY3cyWGlR?=
- =?utf-8?B?SWJyYnZST3VqOHJab0VHQnczU2lYVC9oTnZxenpUZm9XUCt5YjlIcStaM3BV?=
- =?utf-8?B?d0FBd1BVNGFmMEIxL0pHQmRkajUrdGw0MjVGV0tPL0dUNFhGSTMrMTI3Kyth?=
- =?utf-8?B?YmZ1RmJUaXNQSjNZalBtWHZSRndmMGgyQS9BaVRBWGhCODVpR3FQdWNoOFpB?=
- =?utf-8?B?L0RVQmlHTlZLZC9yQmljNEoxSXF4QTZXV2IzUzhIZTVGcG1qT085MlFORHNm?=
- =?utf-8?B?aXBCS2Jqa1g1eHdPVkFIcXhwK0NIbkdxazJHdjRiZkRvZk52MFQwTTVMMUhx?=
- =?utf-8?B?aUpXeVRIYkZCemgvdm5weDZvYytBWmZhczlHM3lSanpUZG1lRWgzWGtVT3J6?=
- =?utf-8?Q?rImA825e8RtfrvirG1Y3e3ZA0?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <65C715A026432746919D788B59F07A58@apcprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 12 Jun 2023 05:17:44 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0CC81420E
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:10:57 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E60EE1FB;
+        Mon, 12 Jun 2023 02:11:41 -0700 (PDT)
+Received: from [192.168.68.121] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EDF8E3F663;
+        Mon, 12 Jun 2023 02:10:51 -0700 (PDT)
+Message-ID: <65a42ee0-170c-ec7c-519b-e66cdd901a52@arm.com>
+Date:   Mon, 12 Jun 2023 10:10:50 +0100
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR03MB6624.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 674d6260-dcb8-414d-be48-08db6b24e4fb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jun 2023 09:10:40.7425
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +djDFyntPqYzMNpbzs93om4xWAz7CayeqYIc+bVSAXVhwNh+Nq86MhOY8nZmlk/riOq+Q7Aw+ZuO2l/uzGKGog==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR03MB6058
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.2
+Subject: Re: [PATCH v2 28/32] mm/memory: allow pte_offset_map[_lock]() to fail
+To:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
+ <bb548d50-e99a-f29e-eab1-a43bef2a1287@google.com>
+ <20230609130632.ec6ffe72fc5f7952af4a3e54@linux-foundation.org>
+ <11a9744a-e7f-33d0-474-c2f2eb7e079@google.com>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <11a9744a-e7f-33d0-474-c2f2eb7e079@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGksIEphc29uOg0KDQpPbiBGcmksIDIwMjMtMDQtMDcgYXQgMTQ6NDYgKzA4MDAsIEphc29uLUpI
-LkxpbiB3cm90ZToNCj4gTnVsbC1jaGVja2luZyBzdGF0ZSBzdWdnZXN0cyB0aGF0IGl0IG1heSBi
-ZSBudWxsLCBidXQgaXQgaGFzIGFscmVhZHkNCj4gYmVlbiBkZXJlZmVyZW5jZWQgb24gZHJtX2F0
-b21pY19nZXRfbmV3X3BsYW5lX3N0YXRlKHN0YXRlLCBwbGFuZSkuDQo+IA0KPiBUaGUgcGFyYW1l
-dGVyIHN0YXRlIHdpbGwgbmV2ZXIgYmUgTlVMTCBjdXJyZW50bHksIHNvIGp1c3QgcmVtb3ZlIHRo
-ZQ0KPiBzdGF0ZSBpcyBOVUxMIGZsb3cgaW4gdGhpcyBmdW5jdGlvbi4NCj4gDQo+IFNpZ25lZC1v
-ZmYtYnk6IEphc29uLUpILkxpbiA8amFzb24tamgubGluQG1lZGlhdGVrLmNvbT4NCj4gRml4ZXM6
-IDVkZGIwYmQ0ZGRjMyAoImRybS9hdG9taWM6IFBhc3MgdGhlIGZ1bGwgc3RhdGUgdG8gcGxhbmVz
-IGFzeW5jDQo+IGF0b21pYyBjaGVjayBhbmQgdXBkYXRlIikNCj4gLS0tDQo+ICBkcml2ZXJzL2dw
-dS9kcm0vbWVkaWF0ZWsvbXRrX2RybV9wbGFuZS5jIHwgOSArKy0tLS0tLS0NCj4gIDEgZmlsZSBj
-aGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDcgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0
-IGEvZHJpdmVycy9ncHUvZHJtL21lZGlhdGVrL210a19kcm1fcGxhbmUuYw0KPiBiL2RyaXZlcnMv
-Z3B1L2RybS9tZWRpYXRlay9tdGtfZHJtX3BsYW5lLmMNCj4gaW5kZXggYTEzMzdmMzg2YmJmLi5l
-MTRiMjkyMGQyNDIgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9tZWRpYXRlay9tdGtf
-ZHJtX3BsYW5lLmMNCj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL21lZGlhdGVrL210a19kcm1fcGxh
-bmUuYw0KPiBAQCAtMTAzLDggKzEwMyw3IEBAIHN0YXRpYyB2b2lkIG10a19kcm1fcGxhbmVfZGVz
-dHJveV9zdGF0ZShzdHJ1Y3QNCj4gZHJtX3BsYW5lICpwbGFuZSwNCj4gIHN0YXRpYyBpbnQgbXRr
-X3BsYW5lX2F0b21pY19hc3luY19jaGVjayhzdHJ1Y3QgZHJtX3BsYW5lICpwbGFuZSwNCj4gIAkJ
-CQkJc3RydWN0IGRybV9hdG9taWNfc3RhdGUgKnN0YXRlKQ0KPiAgew0KPiAtCXN0cnVjdCBkcm1f
-cGxhbmVfc3RhdGUgKm5ld19wbGFuZV9zdGF0ZSA9DQo+IGRybV9hdG9taWNfZ2V0X25ld19wbGFu
-ZV9zdGF0ZShzdGF0ZSwNCj4gLQkJCQkJCQkJCQ0KPiAJIHBsYW5lKTsNCj4gKwlzdHJ1Y3QgZHJt
-X3BsYW5lX3N0YXRlICpuZXdfcGxhbmVfc3RhdGUgPQ0KPiBkcm1fYXRvbWljX2dldF9uZXdfcGxh
-bmVfc3RhdGUoc3RhdGUsIHBsYW5lKTsNCg0KVGhpcyBpcyBub3QgcmVsYXRlZCB0byB0aGlzIHBh
-dGNoLCBzbyBtb3ZlIHRvIGFub3RoZXIgcGF0Y2guDQoNClJlZ2FyZHMsDQpDSw0KDQo+ICAJc3Ry
-dWN0IGRybV9jcnRjX3N0YXRlICpjcnRjX3N0YXRlOw0KPiAgCWludCByZXQ7DQo+ICANCj4gQEAg
-LTEyMiwxMSArMTIxLDcgQEAgc3RhdGljIGludCBtdGtfcGxhbmVfYXRvbWljX2FzeW5jX2NoZWNr
-KHN0cnVjdA0KPiBkcm1fcGxhbmUgKnBsYW5lLA0KPiAgCWlmIChyZXQpDQo+ICAJCXJldHVybiBy
-ZXQ7DQo+ICANCj4gLQlpZiAoc3RhdGUpDQo+IC0JCWNydGNfc3RhdGUgPSBkcm1fYXRvbWljX2dl
-dF9leGlzdGluZ19jcnRjX3N0YXRlKHN0YXRlLA0KPiAtCQkJCQkJCQluZXdfcGxhDQo+IG5lX3N0
-YXRlLT5jcnRjKTsNCj4gLQllbHNlIC8qIFNwZWNpYWwgY2FzZSBmb3IgYXN5bmNocm9ub3VzIGN1
-cnNvciB1cGRhdGVzLiAqLw0KPiAtCQljcnRjX3N0YXRlID0gbmV3X3BsYW5lX3N0YXRlLT5jcnRj
-LT5zdGF0ZTsNCj4gKwljcnRjX3N0YXRlID0gZHJtX2F0b21pY19nZXRfZXhpc3RpbmdfY3J0Y19z
-dGF0ZShzdGF0ZSwNCj4gbmV3X3BsYW5lX3N0YXRlLT5jcnRjKTsNCj4gIA0KPiAgCXJldHVybiBk
-cm1fYXRvbWljX2hlbHBlcl9jaGVja19wbGFuZV9zdGF0ZShwbGFuZS0+c3RhdGUsDQo+IGNydGNf
-c3RhdGUsDQo+ICAJCQkJCQkgICBEUk1fUExBTkVfTk9fU0NBTElORw0KPiAsDQo=
+On 09/06/2023 21:11, Hugh Dickins wrote:
+> On Fri, 9 Jun 2023, Andrew Morton wrote:
+>> On Thu, 8 Jun 2023 18:43:38 -0700 (PDT) Hugh Dickins <hughd@google.com> wrote:
+>>
+>>> copy_pte_range(): use pte_offset_map_nolock(), and allow for it to fail;
+>>> but with a comment on some further assumptions that are being made there.
+>>>
+>>> zap_pte_range() and zap_pmd_range(): adjust their interaction so that
+>>> a pte_offset_map_lock() failure in zap_pte_range() leads to a retry in
+>>> zap_pmd_range(); remove call to pmd_none_or_trans_huge_or_clear_bad().
+>>>
+>>> Allow pte_offset_map_lock() to fail in many functions.  Update comment
+>>> on calling pte_alloc() in do_anonymous_page().  Remove redundant calls
+>>> to pmd_trans_unstable(), pmd_devmap_trans_unstable(), pmd_none() and
+>>> pmd_bad(); but leave pmd_none_or_clear_bad() calls in free_pmd_range()
+>>> and copy_pmd_range(), those do simplify the next level down.
+>>>
+>>> ...
+>>>
+>>> @@ -3728,11 +3737,9 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+>>>  			vmf->page = pfn_swap_entry_to_page(entry);
+>>>  			vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd,
+>>>  					vmf->address, &vmf->ptl);
+>>> -			if (unlikely(!pte_same(*vmf->pte, vmf->orig_pte))) {
+>>> -				spin_unlock(vmf->ptl);
+>>> -				goto out;
+>>> -			}
+>>> -
+>>> +			if (unlikely(!vmf->pte ||
+>>> +				     !pte_same(*vmf->pte, vmf->orig_pte)))
+>>> +				goto unlock;
+>>>  			/*
+>>>  			 * Get a page reference while we know the page can't be
+>>>  			 * freed.
+>>
+>> This hunk falls afoul of
+>> https://lkml.kernel.org/r/20230602092949.545577-5-ryan.roberts@arm.com.
+>>
+>> I did this:
+>>
+>> @@ -3729,7 +3738,8 @@ vm_fault_t do_swap_page(struct vm_fault
+>>  			vmf->page = pfn_swap_entry_to_page(entry);
+>>  			vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd,
+>>  					vmf->address, &vmf->ptl);
+>> -			if (unlikely(!pte_same(*vmf->pte, vmf->orig_pte)))
+>> +			if (unlikely(!vmf->pte ||
+>> +				     !pte_same(*vmf->pte, vmf->orig_pte)))
+>>  				goto unlock;
+>>  
+>>  			/*
+> 
+> Yes, that's exactly right: thanks, Andrew.
+
+FWIW, I agree.
+
+Thanks,
+Ryan
+
+
+> 
+> Hugh
+
