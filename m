@@ -2,63 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF22D72CD10
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D9FB72CD11
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232637AbjFLRlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 13:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48168 "EHLO
+        id S233174AbjFLRmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 13:42:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbjFLRlB (ORCPT
+        with ESMTP id S233371AbjFLRlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 13:41:01 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6A798
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:41:00 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686591659;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DoTTbNvXBcUurbyeVpwbVMaij7JPELHRhQTKrmBNGoU=;
-        b=dWOsGXQmoytY91UDXwndQC5STH0UWix9hZNTK5WTNFfo+is61jJkMNrbH7NZ0ypdb7YzH+
-        sTcxF80ntZrI3Zj2DlX2xN/VWp4qJov3BKk3GQqrinXhpF3raefjDXCVFiOKziMpFRO0va
-        7GpqvqGjXVhHnx5wCUutU95bL/iXELermj5QQrxjp+fCiL1Fvqy3IB7x3Dc21AWlh0V/MH
-        I53bJgvIgZ1qivq9npwlFRosVoEmAOt1seJpJfUKLVdOQmXbXuoIVs2H8EeDMLVaZb1c1K
-        uZNhEN4+YS72ia5Hjy6zFjL43tjV+vZQSjkgrbnEdN9DvB4aHzPIIVWUhkA5Kg==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 388001C0007;
-        Mon, 12 Jun 2023 17:40:58 +0000 (UTC)
-Date:   Mon, 12 Jun 2023 19:40:56 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     richard@nod.at, vigneshr@ti.com, heiko@sntech.de,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, yifeng.zhao@rock-chips.com
-Subject: Re: [PATCH v2 1/5] mtd: nand: raw: rockchip-nand-controller: copy
- hwecc PA data to oob_poi buffer
-Message-ID: <20230612194056.7b27edc5@xps-13>
-In-Reply-To: <b4e73d0f-d3de-b3e1-26a4-cce5337fe07e@gmail.com>
-References: <11e16c3b-6f7b-a6a9-b0ed-b7ac0cd703e3@gmail.com>
-        <b4e73d0f-d3de-b3e1-26a4-cce5337fe07e@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Mon, 12 Jun 2023 13:41:44 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61EFC192
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:41:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=sNl+hcryem5Y2/j0f2cuNCgFGRudQH14t8rQ8cm/MbI=; b=ouxD9IGfTfZnLyn9OTfUsnd8nV
+        ikl5mOZEPvINin0YG/uuz8Vmd3EmL3v2JrtasamcPwgkgZZK/lk3QLAq2qvnJYvNLweiZv4wa70yf
+        U/1hkqg9xQDVeMIRJdSCNc3p4etLodMrI93p263iJ19Qtn7F/0C4yIK/3v9lSmNT0TVV3+KgBCBuy
+        DDmexoIeChjyIrP81oD4HDoQogjvxhX9DZ+jEnZPpNhqauI2l7fswV5JUFMNHugWFh+MyHHTdxWL4
+        A21JLUyH1UmN9jwKXSPBpnCH17v4bdGh4xIn6Jc684SEL/UvxfQZxJyyIohyhubr7uhEwvhD9NDyi
+        VYdTM8CQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q8lXp-002sqC-KJ; Mon, 12 Jun 2023 17:41:33 +0000
+Date:   Mon, 12 Jun 2023 18:41:33 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, songmuchun@bytedance.com,
+        mike.kravetz@oracle.com, almasrymina@google.com,
+        linmiaohe@huawei.com, minhquangbui99@gmail.com,
+        aneesh.kumar@linux.ibm.com
+Subject: Re: [PATCH v2 5/9] mm/hugetlb: convert isolate_or_dissolve_huge_page
+ to folios
+Message-ID: <ZIdYzZGSUzYumrCT@casper.infradead.org>
+References: <20221101223059.460937-1-sidhartha.kumar@oracle.com>
+ <20221101223059.460937-6-sidhartha.kumar@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221101223059.460937-6-sidhartha.kumar@oracle.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,123 +54,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Johan,
+On Tue, Nov 01, 2022 at 03:30:55PM -0700, Sidhartha Kumar wrote:
+> +++ b/mm/hugetlb.c
+> @@ -2815,7 +2815,7 @@ static int alloc_and_dissolve_huge_page(struct hstate *h, struct page *old_page,
+>  int isolate_or_dissolve_huge_page(struct page *page, struct list_head *list)
+>  {
+>  	struct hstate *h;
+> -	struct page *head;
+> +	struct folio *folio = page_folio(page);
 
-jbx6244@gmail.com wrote on Mon, 12 Jun 2023 17:02:40 +0200:
+Is this safe?  I was reviewing a different patch today, and I spotted
+this.  With THP, we can relatively easily hit this case:
 
-> Rockchip boot blocks are written per 4 x 512 byte sectors per page.
-> Each page must have a page address (PA) pointer in OOB to the next page.
-> Pages are written in a pattern depending on the NAND chip ID.
-> This logic used to build a page pattern table is not fully disclosed and
-> is not easy to fit in the MTD framework.
-> The formula in rk_nfc_write_page_hwecc() function is not correct.
-> Make hwecc and raw behavior identical.
-> Generate boot block page address and pattern for hwecc in user space
-> and copy PA data to/from the last 4 bytes in the
-> chip->oob_poi data layout.
->=20
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
-> ---
->  .../mtd/nand/raw/rockchip-nand-controller.c   | 34 ++++++++++++-------
->  1 file changed, 21 insertions(+), 13 deletions(-)
->=20
-> diff --git a/drivers/mtd/nand/raw/rockchip-nand-controller.c b/drivers/mt=
-d/nand/raw/rockchip-nand-controller.c
-> index 2312e2736..cafccc324 100644
-> --- a/drivers/mtd/nand/raw/rockchip-nand-controller.c
-> +++ b/drivers/mtd/nand/raw/rockchip-nand-controller.c
-> @@ -597,7 +597,7 @@ static int rk_nfc_write_page_hwecc(struct nand_chip *=
-chip, const u8 *buf,
->  	int pages_per_blk =3D mtd->erasesize / mtd->writesize;
->  	int ret =3D 0, i, boot_rom_mode =3D 0;
->  	dma_addr_t dma_data, dma_oob;
-> -	u32 reg;
-> +	u32 tmp;
->  	u8 *oob;
->=20
->  	nand_prog_page_begin_op(chip, page, 0, NULL, 0);
-> @@ -624,6 +624,13 @@ static int rk_nfc_write_page_hwecc(struct nand_chip =
-*chip, const u8 *buf,
->  	 *
->  	 *   0xFF 0xFF 0xFF 0xFF | BBM OOB1 OOB2 OOB3 | ...
->  	 *
-> +	 * The code here just swaps the first 4 bytes with the last
-> +	 * 4 bytes without losing any data.
+struct page points to a page with pfn 0x40305, in a folio of order 2.
+We call page_folio() on it and the resulting pointer is for the folio
+with pfn 0x40304.
+If we don't have our own refcount (or some other protection ...) against
+freeing, the folio can now be freed and reallocated.  Say it's now part
+of an order-3 folio.
+Our 'folio' pointer is now actually a pointer to a tail page, and we
+have various assertions that a folio pointer doesn't point to a tail
+page, so they trigger.
 
-Maybe you don't loose any data, but you basically break all existing
-jffs2 users, right? Is this page address only useful on your rk SoC or
-are all the SoCs using the same logic?
+It seems to me that this ...
 
-I think it would be best to flag where this is required and avoid a
-massive incompatible change like this one (and the previous one). BTW,
-any reason not to merge the two first patches? It seems like the series
-would not be bisectable between the two first commits.
+        /*
+         * The page might have been dissolved from under our feet, so make sure
+         * to carefully check the state under the lock.
+         * Return success when racing as if we dissolved the page ourselves.
+         */
+        spin_lock_irq(&hugetlb_lock);
+        if (folio_test_hugetlb(folio)) {
+                h = folio_hstate(folio);
+        } else {
+                spin_unlock_irq(&hugetlb_lock);
+                return 0;
+        }
 
-Patches 4 and 5 look good as they are not directly related, I'll queue
-them, you can avoid re-sending them.
+implies that we don't have our own reference on the folio, so we might
+find a situation where the folio pointer we have is no longer a folio
+pointer.
 
-> +	 *
-> +	 * The chip->oob_poi data layout:
-> +	 *
-> +	 *    BBM  OOB1 OOB2 OOB3 |......|  PA0  PA1  PA2  PA3
-> +	 *
->  	 * Configure the ECC algorithm supported by the boot ROM.
->  	 */
->  	if ((page < (pages_per_blk * rknand->boot_blks)) &&
-> @@ -634,21 +641,17 @@ static int rk_nfc_write_page_hwecc(struct nand_chip=
- *chip, const u8 *buf,
->  	}
->=20
->  	for (i =3D 0; i < ecc->steps; i++) {
-> -		if (!i) {
-> -			reg =3D 0xFFFFFFFF;
-> -		} else {
-> +		if (!i)
-> +			oob =3D chip->oob_poi + (ecc->steps - 1) * NFC_SYS_DATA_SIZE;
-> +		else
->  			oob =3D chip->oob_poi + (i - 1) * NFC_SYS_DATA_SIZE;
-> -			reg =3D oob[0] | oob[1] << 8 | oob[2] << 16 |
-> -			      oob[3] << 24;
-> -		}
->=20
-> -		if (!i && boot_rom_mode)
-> -			reg =3D (page & (pages_per_blk - 1)) * 4;
-> +		tmp =3D oob[0] | oob[1] << 8 | oob[2] << 16 | oob[3] << 24;
->=20
->  		if (nfc->cfg->type =3D=3D NFC_V9)
-> -			nfc->oob_buf[i] =3D reg;
-> +			nfc->oob_buf[i] =3D tmp;
->  		else
-> -			nfc->oob_buf[i * (oob_step / 4)] =3D reg;
-> +			nfc->oob_buf[i * (oob_step / 4)] =3D tmp;
->  	}
->=20
->  	dma_data =3D dma_map_single(nfc->dev, (void *)nfc->page_buf,
-> @@ -811,12 +814,17 @@ static int rk_nfc_read_page_hwecc(struct nand_chip =
-*chip, u8 *buf, int oob_on,
->  		goto timeout_err;
->  	}
->=20
-> -	for (i =3D 1; i < ecc->steps; i++) {
-> -		oob =3D chip->oob_poi + (i - 1) * NFC_SYS_DATA_SIZE;
-> +	for (i =3D 0; i < ecc->steps; i++) {
-> +		if (!i)
-> +			oob =3D chip->oob_poi + (ecc->steps - 1) * NFC_SYS_DATA_SIZE;
-> +		else
-> +			oob =3D chip->oob_poi + (i - 1) * NFC_SYS_DATA_SIZE;
-> +
->  		if (nfc->cfg->type =3D=3D NFC_V9)
->  			tmp =3D nfc->oob_buf[i];
->  		else
->  			tmp =3D nfc->oob_buf[i * (oob_step / 4)];
-> +
->  		*oob++ =3D (u8)tmp;
->  		*oob++ =3D (u8)(tmp >> 8);
->  		*oob++ =3D (u8)(tmp >> 16);
-> --
-> 2.30.2
->=20
+Maybe the page_folio() call should be moved inside the hugetlb_lock
+protection?  Is that enough?  I don't know enough about how hugetlb
+pages are split, freed & allocated to know what's going on.
 
+But then we _drop_ the lock, and keep referring to ...
 
-Thanks,
-Miqu=C3=A8l
+> @@ -2841,10 +2840,10 @@ int isolate_or_dissolve_huge_page(struct page *page, struct list_head *list)
+>  	if (hstate_is_gigantic(h))
+>  		return -ENOMEM;
+>  
+> -	if (page_count(head) && !isolate_hugetlb(head, list))
+> +	if (folio_ref_count(folio) && !isolate_hugetlb(&folio->page, list))
+>  		ret = 0;
+> -	else if (!page_count(head))
+> -		ret = alloc_and_dissolve_huge_page(h, head, list);
+> +	else if (!folio_ref_count(folio))
+> +		ret = alloc_and_dissolve_huge_page(h, &folio->page, list);
+
+And I fall back to saying "I don't know enough to know if this is safe".
