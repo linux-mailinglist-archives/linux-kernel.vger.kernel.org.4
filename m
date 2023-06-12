@@ -2,82 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CD7272B638
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 05:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F26E72B645
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 06:00:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234178AbjFLDuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 23:50:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59454 "EHLO
+        id S232314AbjFLEAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 00:00:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234234AbjFLDuD (ORCPT
+        with ESMTP id S231603AbjFLD76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 23:50:03 -0400
-Received: from out0-206.mail.aliyun.com (out0-206.mail.aliyun.com [140.205.0.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6DA136;
-        Sun, 11 Jun 2023 20:49:59 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R511e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047209;MF=changxian.cqs@antgroup.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---.TRZt.83_1686541792;
-Received: from 30.177.51.58(mailfrom:changxian.cqs@antgroup.com fp:SMTPD_---.TRZt.83_1686541792)
-          by smtp.aliyun-inc.com;
-          Mon, 12 Jun 2023 11:49:53 +0800
-Message-ID: <37513fcd-b371-cc2f-b7f9-e94b045d8c5c@antgroup.com>
-Date:   Mon, 12 Jun 2023 11:49:51 +0800
+        Sun, 11 Jun 2023 23:59:58 -0400
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE3318B;
+        Sun, 11 Jun 2023 20:59:57 -0700 (PDT)
+Received: by mail-ua1-x92a.google.com with SMTP id a1e0cc1a2514c-78cd0c63ae2so94294241.1;
+        Sun, 11 Jun 2023 20:59:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686542396; x=1689134396;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h5eFbd9HFD/KRz0+XmRiub04jDxZ5/25uC97kTShMpE=;
+        b=EHyikn5gRvV78mN0YYf4xUPtAFpwRdYAhXIgBhQsen9zlXyZa6YQlQUu4I0VWvmJh+
+         dhWeExCKRXcTldPlqkBujT4S8hYN9S3Jbd0cMP3UHAxhFpCvnWUtHmMlhjd82cWzsGvU
+         Qb7ARehRdVdQqDwwsuvnhXh3B4toJX9+XvVg9hyMHUdMnCY5RWns/MKwcvTSzaHC+A5z
+         LGWo7zNB0SZBqKipj0F/4Pdmq3YHlJiRJAryzsQ/uZsCXKixJBKSxVNWgBYySL2p8hyI
+         XG2M96nT6JkeIkwNK/tgbq9u68or6XC76h7ZdsAV4l8TrLv8iVPvQyw7+G8nKpB+6EsB
+         ZRJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686542396; x=1689134396;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=h5eFbd9HFD/KRz0+XmRiub04jDxZ5/25uC97kTShMpE=;
+        b=O29izzM6VWi3MIrt9LuOqD2CTZj8NvvtlC6b/4dkY1fO8JY53wJ3Lm91+oDx9A1muw
+         fdTxacKpCx7giw5aNhJfUVVef68mb9+0EiiW8VIBW//e+DyMPZw8o730gQlAWPUV0BhG
+         sWjXLX2OasTjkUtTAMuTG4hLJ9tiwha0yW35z5AuQTZ7331fe2CUIPXdAMQa3isZgRUs
+         c3MitrJ7FoiFgFQW1CdpwAygMEBB+RDK8Nt/4jX0I/MskH9as4bgcSpt8FauuHViY8jD
+         NjqeBbNeSPOY68zTqQD4HaiyF1e++8P4Qgqg41osxRtTtu6GDTu9R6didb2UsQAV2c10
+         sOQQ==
+X-Gm-Message-State: AC+VfDysFHCOwwuhuOPxZjBQccTrVLIs1TWsMpqlyt7p6K6NIInipxnI
+        3yLZTQj+Qnnq3f6w2Cz20ESqFjArNyr+MW0SN+Y=
+X-Google-Smtp-Source: ACHHUZ6USzvroyFg92cZrS7qO9IxCrPShW1dFdqmI83KF4j0hqeLShP/3gCnfuLWhWbnhcZB+F5Mz/kUXDkjrqKPDPY=
+X-Received: by 2002:a67:f906:0:b0:43b:2630:477 with SMTP id
+ t6-20020a67f906000000b0043b26300477mr2660495vsq.5.1686542395803; Sun, 11 Jun
+ 2023 20:59:55 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [PATCH v3 0/3] Rust scatterlist abstractions
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     <linux-kernel@vger.kernel.org>,
-        "=?UTF-8?B?55Sw5rSq5Lqu?=" <tate.thl@antgroup.com>,
-        "Miguel Ojeda" <ojeda@kernel.org>,
-        "Alex Gaynor" <alex.gaynor@gmail.com>,
-        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
-        "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
-        "=?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?=" <bjorn3_gh@protonmail.com>,
-        "Benno Lossin" <benno.lossin@proton.me>,
-        <rust-for-linux@vger.kernel.org>
-References: <20230610104909.3202958-1-changxian.cqs@antgroup.com>
- <2023061017-usable-bountiful-3f59@gregkh>
- <2023061001-immovable-mongoose-7546@gregkh>
-From:   "Qingsong Chen" <changxian.cqs@antgroup.com>
-In-Reply-To: <2023061001-immovable-mongoose-7546@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000da4f6b05eb9bf593@google.com> <000000000000c0951105fde12435@google.com>
+ <20230612033023.GA16241@lst.de>
+In-Reply-To: <20230612033023.GA16241@lst.de>
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Date:   Mon, 12 Jun 2023 12:59:39 +0900
+Message-ID: <CAKFNMomCUnaB3_3chQm4P8devx2NwAp2hMpYfbyaHKyO2WLEkw@mail.gmail.com>
+Subject: Re: [syzbot] [nilfs?] general protection fault in nilfs_clear_dirty_page
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     syzbot <syzbot+53369d11851d8f26735c@syzkaller.appspotmail.com>,
+        axboe@kernel.dk, dsterba@suse.com, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        wqu@suse.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/10/23 11:35 PM, Greg KH wrote:
-> On Sat, Jun 10, 2023 at 05:33:47PM +0200, Greg KH wrote:
->> On Sat, Jun 10, 2023 at 06:49:06PM +0800, Qingsong Chen wrote:
->>> Hi All!
->>>
->>> This is a version of scatterlist abstractions for Rust drivers.
->>>
->>> Scatterlist is used for efficient management of memory buffers, which is
->>> essential for many kernel-level operations such as Direct Memory Access
->>> (DMA) transfers and crypto APIs.
->>>
->>> This patch should be a good start to introduce the crypto APIs for Rust
->>> drivers and to develop cipher algorithms in Rust later.
->>
->> I thought we were getting rid of the scatter list api for the crypto
->> drivers, so this shouldn't be needed going forward, right?  Why not just
->> use the direct apis instead?
-> 
-> See https://lore.kernel.org/r/ZH2hgrV6po9dkxi+@gondor.apana.org.au for
-> the details of that (sorry I forgot the link first time...)
+On Mon, Jun 12, 2023 at 12:30=E2=80=AFPM Christoph Hellwig wrote:
+>
+> On Sun, Jun 11, 2023 at 02:18:29PM -0700, syzbot wrote:
+> > syzbot has bisected this issue to:
+> >
+> > commit 4a445b7b6178d88956192c0202463063f52e8667
+> > Author: Qu Wenruo <wqu@suse.com>
+> > Date:   Sat Aug 13 08:06:53 2022 +0000
+> >
+> >     btrfs: don't merge pages into bio if their page offset is not conti=
+guous
+>
+> I can't see how that btrfs commit would affect nilfs2..
 
-Thanks for the information. I agree that turning simple buffers into
-sg-bufs is not a good idea. If I were implementing a new cipher
-algorithm, I would definitely follow the `struct cipher_alg`, which
-takes simple `u8 *` pointer as parameter. However, if we'd like to
-utilize some existing ciphers, such as aead, we still need scatterlists
-to construct an `aead_request` for further operations, util changes are
-made to the underlying interface.
+Yeah, I think this bisection result is wrong.
+I have already posted a bug-fix patch titled "nilfs2: prevent general
+protection fault in nilfs_clear_dirty_page()"
+for this issue.
 
-Qingsong Chen
+Thanks,
+Ryusuke Konishi
