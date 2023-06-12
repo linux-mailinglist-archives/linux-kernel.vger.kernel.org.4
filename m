@@ -2,138 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 510D172D06B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA0372D067
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231755AbjFLUZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 16:25:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50346 "EHLO
+        id S237695AbjFLUZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 16:25:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237325AbjFLUZ2 (ORCPT
+        with ESMTP id S237261AbjFLUZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 16:25:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177E6171F
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:24:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686601481;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=S42fl/HoNEU97xotwFSAjJfWCsSnH9zjSpzpvH3McME=;
-        b=XbGvS7DFB81vZcz9I4UhVIyY1v6qVH0rgmyNhMTUl/OQdwuz7bbfJsjLYoNnOV7hyiN4zy
-        M9GIMSoybOrhMHsNzDtyv9Vb05sSRx5vBvXLacRWAJjJYVxdkrXYgiZ4Qd2+Aebx8XmNIe
-        TJ/kuwTUdTAFCS9qEQkLS43tfiZefFw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-139-xzVXP3XYOhqICv2yzeVXDA-1; Mon, 12 Jun 2023 16:24:38 -0400
-X-MC-Unique: xzVXP3XYOhqICv2yzeVXDA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 230618037AA;
-        Mon, 12 Jun 2023 20:24:37 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A51B12956;
-        Mon, 12 Jun 2023 20:24:34 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>, David Hildenbrand <david@redhat.com>,
-        kernel test robot <oliver.sang@intel.com>
-cc:     dhowells@redhat.com, Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-mm@kvack.org, oe-lkp@lists.linux.dev, lkp@intel.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] block: Fix dio_bio_alloc() to set BIO_PAGE_PINNED
+        Mon, 12 Jun 2023 16:25:01 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C23D19B;
+        Mon, 12 Jun 2023 13:25:00 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-977c89c47bdso861230366b.2;
+        Mon, 12 Jun 2023 13:25:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20221208; t=1686601498; x=1689193498;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P5rGJiRfcY9q4io21i6v5+UGLN2TIvQIc+ZeIBoHNMI=;
+        b=rsq5aBp+h543P3f1o3uOlrJ8+ZkTet7FJQe0k6hVEjPCXqE28A45C5qoCMSyUA6G5n
+         OqpttFi85EOTuvmrZ+ZfUgEtFjNl15FF1rsJknRqFK6XivcOL9BEdGsUZtp5j41IdKES
+         P1g5rhE3yY3mhyU+DeojvzCdFMoKrbu0n86CfXvZj5yWxGkNH2nRgHQjErj9oNsu8T+J
+         FFnA7Rlbg8DBc6b6I3qcwaWrSTwmMbG7JkxxecO9Xwe3TMs4QOEAIjTvvI72DmTqHGGS
+         /edOsT5igvHJ2n+Y7nzLroR1k5ywT5n+yfUwRVda0Kbx/fJVZZQiYD58mEMRbL9Iph1u
+         ZHLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686601498; x=1689193498;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=P5rGJiRfcY9q4io21i6v5+UGLN2TIvQIc+ZeIBoHNMI=;
+        b=Z5v85VKCQwZMJPC1jvZz9UULMlN1iu5jlBYDhvyS0pRJg9dvYwTk/xU1/eaOCKrPsk
+         7Szs0h07ATZ9eRqhKBliZDt4h0h+nNhdl32HwjuYERMb0lmdrdE7DLWXG2ocux71gj6u
+         nefZJ2QercfMrUu5urErXwIqMuOH3sNVXzyTIPT2PUsSOzNQJpJPe9DQ7/NTCqh3wP/d
+         ZCfYKnRqG2NmRf3CI0cbeVT/p1t5yDoVDEnqRmUeJ0in7ITuwUGtxRIE2lqtwL/x1en2
+         LEREoCI5IvISqzVWk9SYCS4SGA80Xkg8787e2Ow/pbHsgPUKEEPn4aAdsx2TBO9lBi8r
+         AqbA==
+X-Gm-Message-State: AC+VfDw7Ef0ol74mq0a6CT71Weou7iQObAHNtiymv1QRWVfBuTRciTmP
+        yh9oFIzm0XmjU5M8v/mYAnKNqSRDUyeLvoefzf4=
+X-Google-Smtp-Source: ACHHUZ4E0TWnsoyvUR7I33Kr/9TqSPqf+D2KoUdwkY2FAuQN2/ySPcvpG1fooy3zg7oLEm0Lwr/W0Iinb3bBwvZut0o=
+X-Received: by 2002:a17:907:60cd:b0:982:26c4:e4b0 with SMTP id
+ hv13-20020a17090760cd00b0098226c4e4b0mr1806618ejc.6.1686601498264; Mon, 12
+ Jun 2023 13:24:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <545462.1686601473.1@warthog.procyon.org.uk>
+References: <9d28466de1808ccc756b4cc25fc72c482d133d13.1686403934.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <9d28466de1808ccc756b4cc25fc72c482d133d13.1686403934.git.christophe.jaillet@wanadoo.fr>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Mon, 12 Jun 2023 22:24:47 +0200
+Message-ID: <CAFBinCBC3Cg_1UaYTxqq21-1pQ+cnT6VfL7kmQn0+v+26hiv_w@mail.gmail.com>
+Subject: Re: [PATCH] usb: dwc3-meson-g12a: Fix an error handling path in dwc3_meson_g12a_probe()
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Yue Wang <yue.wang@amlogic.com>,
+        Hanjie Lin <hanjie.lin@amlogic.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date:   Mon, 12 Jun 2023 21:24:33 +0100
-Message-ID: <545463.1686601473@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-    =
+On Sat, Jun 10, 2023 at 3:32=E2=80=AFPM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+>
+> If dwc3_meson_g12a_otg_init() fails, resources allocated by the previous
+> of_platform_populate() call should be released, as already done in the
+> error handling path.
+>
+> Fixes: 1e355f21d3fb ("usb: dwc3: Add Amlogic A1 DWC3 glue")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-Fix dio_bio_alloc() to set BIO_PAGE_PINNED, not BIO_PAGE_REFFED, so that
-the bio code unpins the pinned pages rather than putting a ref on them.
-
-The issue was causing:
-
-        WARNING: CPU: 6 PID: 2220 at mm/gup.c:76 try_get_folio
-
-This can be caused by creating a file on a loopback UDF filesystem, openin=
-g
-it O_DIRECT and making two writes to it from the same source buffer.
-
-Fixes: 1ccf164ec866 ("block: Use iov_iter_extract_pages() and page pinning=
- in direct-io.c")
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Closes: https://lore.kernel.org/oe-lkp/202306120931.a9606b88-oliver.sang@i=
-ntel.com
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Christoph Hellwig <hch@infradead.org>
-cc: David Hildenbrand <david@redhat.com>
-cc: Andrew Morton <akpm@linux-foundation.org>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Al Viro <viro@zeniv.linux.org.uk>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: Jan Kara <jack@suse.cz>
-cc: Jeff Layton <jlayton@kernel.org>
-cc: Jason Gunthorpe <jgg@nvidia.com>
-cc: Logan Gunthorpe <logang@deltatee.com>
-cc: Hillf Danton <hdanton@sina.com>
-cc: Christian Brauner <brauner@kernel.org>
-cc: Linus Torvalds <torvalds@linux-foundation.org>
-cc: linux-fsdevel@vger.kernel.org
-cc: linux-block@vger.kernel.org
-cc: linux-kernel@vger.kernel.org
-cc: linux-mm@kvack.org
----
-
-Notes:
-    ver #2)
-     - Remove comment on requiring references for all pages.
-
- fs/direct-io.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/fs/direct-io.c b/fs/direct-io.c
-index 14049204cac8..5d4c5be0fb41 100644
---- a/fs/direct-io.c
-+++ b/fs/direct-io.c
-@@ -414,8 +414,8 @@ dio_bio_alloc(struct dio *dio, struct dio_submit *sdio=
-,
- 		bio->bi_end_io =3D dio_bio_end_aio;
- 	else
- 		bio->bi_end_io =3D dio_bio_end_io;
--	/* for now require references for all pages */
--	bio_set_flag(bio, BIO_PAGE_REFFED);
-+	if (dio->need_unpin)
-+		bio_set_flag(bio, BIO_PAGE_PINNED);
- 	sdio->bio =3D bio;
- 	sdio->logical_offset_in_bio =3D sdio->cur_page_fs_offset;
- }
-
+We should move to devm_of_platform_populate() mid term.
+That said, this fix is good for now because it's simple and can be backport=
+ed.
