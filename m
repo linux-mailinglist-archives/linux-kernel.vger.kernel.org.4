@@ -2,119 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1799B72CC5B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C48372CC5A
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235862AbjFLRX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 13:23:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
+        id S235771AbjFLRXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 13:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235736AbjFLRXr (ORCPT
+        with ESMTP id S233399AbjFLRXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 13:23:47 -0400
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A84E134;
-        Mon, 12 Jun 2023 10:23:46 -0700 (PDT)
-Received: by mail-ua1-x931.google.com with SMTP id a1e0cc1a2514c-78a57844f42so39373241.2;
-        Mon, 12 Jun 2023 10:23:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20221208; t=1686590625; x=1689182625;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rA+ci5q7KngMrgSNRGMsKGeEczzZ7geqfDeJER8xBNU=;
-        b=poiTRiRKV+rQUvKEQWPCKkayUJeadCGisamTi5BFtvDxIxlIQLx4UD5tMOwWIKvhOz
-         D5gYNrHMuc8+4rTZa38ySlrWG2L150bP+zqM2guNpHEkwHNhX/Oaf/mu9P9z7tb9l0KY
-         2jAuuroPKezw3Giu32AUzcXh7QGK/YL+lNF/ckxr80Jj1CS2oF0xcZdUul7blyRoPRfS
-         3kv30pCcOsH7alX/S5c+RVbCjSUFLizgOtkdErc5Al4/0Y1Q2HjKUyuukjIigf9USjde
-         istDARceJt9S5N4oh+CXI+P+6zb6Y9cl/bhyOFZlYcby6tJAwblUnmCXQt48LQWrD+UO
-         4PfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686590625; x=1689182625;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rA+ci5q7KngMrgSNRGMsKGeEczzZ7geqfDeJER8xBNU=;
-        b=d8NAxCGZUsKlmfjYSrh2kmzpwMqKdBJF3TOV13Qtig6zVnX1XTxSIVWmu7fP7yb6iw
-         VkrncCJZBmyrrBB9YAV6uJ7HgF7FQZaAtTx1QnOiS0T1udmUEnpVutaJlAuR7w3PPHuF
-         F+mTUrAzn/LNbhQvi5PUJEXddiApqAmZkmR9nwviwE1pyocTT/5u4Wcrlsqf6st1XiYj
-         Wi+/a8bLz5kYbsEJmXTxhiRa4Ue5/352f8F4wSMwUE7yhv9UWZN+cnVnrmrJUm4JDFiy
-         SvpO0DtbQtoHt0DOtjzWLhBXt+5X4KahscFBJfTeAGLh36AGWUi8Y3iI1ILdCHorgVuT
-         G7BA==
-X-Gm-Message-State: AC+VfDyA8bM5Zw3GKlvgX87Gy1WnU63iSu0f0z8blehrN+QtOnnDsAE1
-        BkEckbV+0mo9CuALwnjL36njkBJfrNry/b4vb6Q=
-X-Google-Smtp-Source: ACHHUZ5GqQIYYUOyKXLFbfhZ1XIZ3B3rcn4sOPD62BfndrT2VVq1FFCDEUHlCYWMi1ZI+6T+s2zZJ9xGwxJqlzpESdI=
-X-Received: by 2002:a67:e893:0:b0:43d:dfb3:5edb with SMTP id
- x19-20020a67e893000000b0043ddfb35edbmr3313502vsn.25.1686590625467; Mon, 12
- Jun 2023 10:23:45 -0700 (PDT)
+        Mon, 12 Jun 2023 13:23:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC828B2;
+        Mon, 12 Jun 2023 10:23:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 721F862905;
+        Mon, 12 Jun 2023 17:23:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F868C433A1;
+        Mon, 12 Jun 2023 17:23:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686590624;
+        bh=num+HBDgMxiuiJVhhkLVPXPpTBWWc1dgJNLDNOGS0Fk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uE12zDMfqRoci4thscAdp3EhSwgKJovJnYvOw3krcV88NGXiZRfF9rOltrCAswAXN
+         TfhY5m2ULY71VP3EtGag4nbFEWKPxzFyMuPG3QaaBg/FgP+axXyraqmxKkRVEr1jrU
+         F66fBJdtR7u5XF+bUxf0nc+uNB6UiSdxpS8WPdPSdUngO54Nwdyul+O0NltvPBgBM8
+         TvC8+1fybwIMNUxG4m6semSiG+yDfRzznvXhkjSxhCVJnuQm8vMTm8aA0J1tYNM/j8
+         U+YEG8QI3Byfa1wCkMeiCHNt8OmLMklpSKeGCgZAzvJPIay/RL6ThyyfZw0zP4XgJK
+         1ODSUu14Pl9WA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id D1BF540692; Mon, 12 Jun 2023 14:23:41 -0300 (-03)
+Date:   Mon, 12 Jun 2023 14:23:41 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        German Gomez <german.gomez@arm.com>,
+        Ali Saidi <alisaidi@amazon.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Dmitrii Dolgov <9erthalion6@gmail.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Changbin Du <changbin.du@huawei.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Steinar H. Gunderson" <sesse@google.com>,
+        Yuan Can <yuancan@huawei.com>,
+        Brian Robbins <brianrob@linux.microsoft.com>,
+        liuwenyu <liuwenyu7@huawei.com>,
+        Ivan Babrou <ivan@cloudflare.com>,
+        Fangrui Song <maskray@google.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, coresight@lists.linaro.org
+Subject: Re: [PATCH v2 26/26] perf hist: Fix srcline memory leak
+Message-ID: <ZIdUncwTt2fBzxKh@kernel.org>
+References: <20230608232823.4027869-1-irogers@google.com>
+ <20230608232823.4027869-27-irogers@google.com>
+ <ZIcoJytUEz4UgQYR@kernel.org>
+ <ZIcorZVu1z8jaPL/@kernel.org>
+ <CAP-5=fXby-Yk3U4LCQeYkGU_E22kd92=dCnfb7DkN5iPYvCDGA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230606111042.96855-1-franziska.naepelt@gmail.com>
- <20230611105331.16570-1-franziska.naepelt@gmail.com> <1c00f4aa-e696-a071-68a7-cdd62d8ba894@infradead.org>
-In-Reply-To: <1c00f4aa-e696-a071-68a7-cdd62d8ba894@infradead.org>
-From:   =?UTF-8?Q?Franziska_N=C3=A4pelt?= 
-        <franziska.naepelt@googlemail.com>
-Date:   Mon, 12 Jun 2023 19:23:34 +0200
-Message-ID: <CAAUT3iN3fxN3OE5XB5H1C4xNwo91dF9QMmhDiviHmbwaD1KrVQ@mail.gmail.com>
-Subject: Re: [PATCH v2] crypto: fcrypt: Fix block comment
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     davem@davemloft.net, herbert@gondor.apana.org.au,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bagasdotme@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP-5=fXby-Yk3U4LCQeYkGU_E22kd92=dCnfb7DkN5iPYvCDGA@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am So., 11. Juni 2023 um 16:56 Uhr schrieb Randy Dunlap <rdunlap@infradead.org>:
->
-> Hi--
->
-> On 6/11/23 03:53, Franziska Naepelt wrote:
-> > Fix the following checkpatch issue:
-> > - WARNING: Block comments use a trailing */ on a separate line
+Em Mon, Jun 12, 2023 at 07:46:14AM -0700, Ian Rogers escreveu:
+> On Mon, Jun 12, 2023 at 7:16 AM Arnaldo Carvalho de Melo
+> <acme@kernel.org> wrote:
 > >
-> > Signed-off-by: Franziska Naepelt <franziska.naepelt@gmail.com>
-> > ---
-> > v2:
-> >  - Revert SPDX change to address only one logical change
-> > ---
-> >  crypto/fcrypt.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > Em Mon, Jun 12, 2023 at 11:13:59AM -0300, Arnaldo Carvalho de Melo escreveu:
+> > > Em Thu, Jun 08, 2023 at 04:28:23PM -0700, Ian Rogers escreveu:
+> > > > srcline isn't freed if it is SRCLINE_UNKNOWN. Avoid strduping in this
+> > > > case as such strdups are redundant and leak memory.
+> > >
+> > > The patch is ok as its what the rest of the code is doing, i.e. strcmp()
+> > > to check if a srcline is the unknown one, but how about the following
+> > > patch on top of yours?
 > >
-> > diff --git a/crypto/fcrypt.c b/crypto/fcrypt.c
-> > index 95a16e88899b..e9e119bab784 100644
-> > --- a/crypto/fcrypt.c
-> > +++ b/crypto/fcrypt.c
-> > @@ -303,7 +303,8 @@ static int fcrypt_setkey(struct crypto_tfm *tfm, const u8 *key, unsigned int key
-> >
-> >  #if BITS_PER_LONG == 64  /* the 64-bit version can also be used for 32-bit
-> >                         * kernels - it seems to be faster but the code is
-> > -                       * larger */
-> > +                       * larger
-> > +                       */
->
-> The comment doesn't begin with a /* on a line by itself either.
->
-> checkpatch isn't always correct.
-> Maybe it isn't in this case.
->
-> I would either make it a correct multi-line comment or not make a change
-> at all here.
->
-> >
-> >       u64 k;  /* k holds all 56 non-parity bits */
-> >
-> >
-> > base-commit: 9561de3a55bed6bdd44a12820ba81ec416e705a7
->
-> --
-> ~Randy
+> > [acme@quaco perf-tools-next]$ strings ~/bin/perf | grep '??:0'
+> > ??:0
+> > SRCLINE_UNKNOWN ((char *) "??:0")
+> > [acme@quaco perf-tools-next]$
+> 
+> Agreed, the strcmps make me nervous as they won't distinguish heap
+> from a global meaning we could end up with things like pointers to
+> freed memory. The comparison with the global is always going to be
+> same imo.
+> 
+> Acked-by: Ian Rogers <irogers@google.com>
 
-Hi Randy,
-thanks for the heads up. I'll leave it for now and won't make a change.
-Thanks, Franziska
+Thanks, applied and added your Acked-by.
+
+- Arnaldo
