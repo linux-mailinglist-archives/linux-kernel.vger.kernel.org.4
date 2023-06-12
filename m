@@ -2,113 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD19272CA1A
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F040D72CA2E
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237362AbjFLPaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 11:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56664 "EHLO
+        id S235312AbjFLPdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 11:33:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237032AbjFLPaI (ORCPT
+        with ESMTP id S232421AbjFLPdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 11:30:08 -0400
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881001B8;
-        Mon, 12 Jun 2023 08:30:07 -0700 (PDT)
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1b3cc77ccbfso7285315ad.1;
-        Mon, 12 Jun 2023 08:30:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686583807; x=1689175807;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qt1TPwchcj2VuqrNTLbU1dI0zylo16OsUsxj0udlo1g=;
-        b=LACI8dK6zyguXqfSuRhBMgacWIxDFOiIlKuWiEGI9nRXzKUBoYuoY3Qzp5RLzea3vT
-         KngVfSTbq6B3LGU9zJxC0KV/iJNzpxuVMQX2mEcCGXWfZGQpUenoypaD1JY5hWcQZUkA
-         NbgBBQWs/wL36/X5xP1fMsoBbQZ9rxNiv8MXfSNdmhr/5dlx6TLUZXhLFSF/4mZRdRXs
-         leetK5TNVLy2r0Rnfv0qmXSUVzq2C+M0cWxOS7QlDjDsgELMNS0yzsCgF+WW3IREHFAP
-         Z/ncCYv4H/PsoMY1Z2QAK03R4cWDQWPs1K16zmrEmaQhvso8GhxZnIlNEpUBoWQWYrMh
-         rFMg==
-X-Gm-Message-State: AC+VfDwadUGramQnMowR+ym69z8ftHouyy7UT/RVPfv6yW8FJQhsWFUr
-        uMhjES1QZRhfCDxAqoTehME=
-X-Google-Smtp-Source: ACHHUZ56brA+YWWAEz8TU4PAVsV02R+SWgJ96a3WKlbirAIjvLSNbBO5cimblvEo6LG/ezoxWr2djQ==
-X-Received: by 2002:a17:903:2347:b0:1b1:99c9:8ce1 with SMTP id c7-20020a170903234700b001b199c98ce1mr7581876plh.51.1686583806811;
-        Mon, 12 Jun 2023 08:30:06 -0700 (PDT)
-Received: from [192.168.51.14] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id jl1-20020a170903134100b001a245b49731sm6989724plb.128.2023.06.12.08.30.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 08:30:06 -0700 (PDT)
-Message-ID: <de920a42-0d72-c5ec-1af9-8bfa4b954cfd@acm.org>
-Date:   Mon, 12 Jun 2023 08:30:03 -0700
+        Mon, 12 Jun 2023 11:33:06 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DF610C2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:33:05 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1686583984;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/UvyXBdVxxlWWcERZKAMVV5yubMV3jI1ppNTGKsWYiI=;
+        b=zRxDqcB1bbxwXuD6IdH/eUc2JgtDOHtuelxT7cHs9p7/LBYdSSJSYPUK6IiASdmMVkiuNA
+        nQbMuhWY+rpEGs4LohEmyvVDMHCLxfSvralNZBOCLH312drG+lWzA0j2ZSJ5Cx4VvIirQJ
+        El8BBomwvszQLnA6E7VEnhc/WNjKgpgJOcikMpnSbMafhxvE3FhX2m4jCV5tryss9TxrgA
+        UgJZlQpI5j2H5Q2WPtOs/PGhLFmhjsFu3vERiQBk/tBY4PYIQmE0jqgw+VjDSZG93B6bq3
+        7Bb66KQ+Sc96H9mrhDh+O+i6MHU/er1x4ZOTspyclcLbZiGMbZTtMO3tpCjR3g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1686583984;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/UvyXBdVxxlWWcERZKAMVV5yubMV3jI1ppNTGKsWYiI=;
+        b=t3xGRQnHyYTPJ0S7b9oM1lvaZpVGlKkeC/bkSDsxAaMqmokVU9h3elI8lYjocjb2vKkxiU
+        PEzUe8iIFIUFLqAA==
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH] MAINTAINERS: Add CPU HOTPLUG entry
+In-Reply-To: <c4ec2d2e-309a-50e3-c584-d9375416c771@infradead.org>
+References: <87o7ll6ogo.ffs@tglx>
+ <c4ec2d2e-309a-50e3-c584-d9375416c771@infradead.org>
+Date:   Mon, 12 Jun 2023 17:33:03 +0200
+Message-ID: <87fs6w7l1s.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [RFC PATCH v8 01/10] dpll: documentation on DPLL subsystem
- interface
-Content-Language: en-US
-To:     Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
-        kuba@kernel.org, jiri@resnulli.us, vadfed@meta.com,
-        jonathan.lemon@gmail.com, pabeni@redhat.com
-Cc:     corbet@lwn.net, davem@davemloft.net, edumazet@google.com,
-        vadfed@fb.com, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, saeedm@nvidia.com, leon@kernel.org,
-        richardcochran@gmail.com, sj@kernel.org, javierm@redhat.com,
-        ricardo.canuelo@collabora.com, mst@redhat.com, tzimmermann@suse.de,
-        michal.michalik@intel.com, gregkh@linuxfoundation.org,
-        jacek.lawrynowicz@linux.intel.com, airlied@redhat.com,
-        ogabbay@kernel.org, arnd@arndb.de, nipun.gupta@amd.com,
-        axboe@kernel.dk, linux@zary.sk, masahiroy@kernel.org,
-        benjamin.tissoires@redhat.com, geert+renesas@glider.be,
-        milena.olech@intel.com, kuniyu@amazon.com, liuhangbin@gmail.com,
-        hkallweit1@gmail.com, andy.ren@getcruise.com, razor@blackwall.org,
-        idosch@nvidia.com, lucien.xin@gmail.com, nicolas.dichtel@6wind.com,
-        phil@nwl.cc, claudiajkang@gmail.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-rdma@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, poros@redhat.com,
-        mschmidt@redhat.com, linux-clk@vger.kernel.org,
-        vadim.fedorenko@linux.dev
-References: <20230609121853.3607724-1-arkadiusz.kubalewski@intel.com>
- <20230609121853.3607724-2-arkadiusz.kubalewski@intel.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230609121853.3607724-2-arkadiusz.kubalewski@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/9/23 05:18, Arkadiusz Kubalewski wrote:
-> diff --git a/Documentation/driver-api/dpll.rst b/Documentation/driver-api/dpll.rst
-> new file mode 100644
-> index 000000000000..8caa4af022ad
-> --- /dev/null
-> +++ b/Documentation/driver-api/dpll.rst
-> @@ -0,0 +1,458 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +===============================
-> +The Linux kernel dpll subsystem
-> +===============================
-> +
-> +The main purpose of dpll subsystem is to provide general interface
-> +to configure devices that use any kind of Digital PLL and could use
-> +different sources of signal to synchronize to as well as different
-> +types of outputs.
-> +The main interface is NETLINK_GENERIC based protocol with an event
-> +monitoring multicast group defined.
+On Mon, Jun 12 2023 at 08:14, Randy Dunlap wrote:
+>> +CPU HOTPLUG
+>> +M:	Thomas Gleixner <tglx@linutronix.de>
+>> +M:	Peter Zijlstra <peterz@infradead.org>
+>> +L:	linux-kernel@vger.kernel.org
+>> +S:	Maintained
+>> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git smp/core
+>> +F:	kernel/cpu.c
+>> +F:	kernel/smpboot.*
+>> +F:	include/linux/cpu.h
+>> +F:	include/linux/cpuhotplug.h
+>> +F:	include/linux/smpboot.h
+>> +
+>
+> The new entry should be before CPU IDLE, not after it.
 
-A section that explains what "DPLL" stands for is missing. Please add 
-such a section.
+Duh. I clearly need a refresh course at primary school.
 
-Thanks,
-
-Bart.
+> Otherwise LGTM, thanks for adding this. I was looking for it recently.
+>
+> Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
