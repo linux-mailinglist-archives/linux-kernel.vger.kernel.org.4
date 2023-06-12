@@ -2,94 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A896972CB33
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 18:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9334072C975
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234257AbjFLQOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 12:14:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53202 "EHLO
+        id S238471AbjFLPLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 11:11:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234295AbjFLQNv (ORCPT
+        with ESMTP id S237481AbjFLPLJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 12:13:51 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027A210C9;
-        Mon, 12 Jun 2023 09:13:36 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id 46e09a7af769-6b13e2af122so2564076a34.2;
-        Mon, 12 Jun 2023 09:13:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686586411; x=1689178411;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2E8I5KlscgLz/BhO77eZ+L4gqpBYzJDI1R3+cPj0I8s=;
-        b=Vp8j+xtvbtcr38c4i9kgY07aKi70cuRJoJ1r5fNcvaYJCecHElPDE9o5ZhigbxAYLe
-         7FiA11UeEjLbwfkoe82KpBi73huIeeO+PVNLPD09iLhLJT1zboDEbQI6AEoeLxE3B6wp
-         6D4X2Xl3HWtMf/xR+LYA8hJesP3DQ7g0rlJGJm9fNW8p9TcNFskp8QmBfmKj2WS1E7Zs
-         v03sEW1hKX+18aB8UO8Ef9wD9yZQ0cPuwF89GbsJqBVfxEIQKNS0HUK695QHNQYEBGhw
-         TZgLfZTYJHRn6rmoCMfiT4WTeeua66yXA1jdSM+3yJTA/eFJ9MeVz8a6dGq9XxW7kq1W
-         GYZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686586411; x=1689178411;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2E8I5KlscgLz/BhO77eZ+L4gqpBYzJDI1R3+cPj0I8s=;
-        b=HCEjLvcaI9rywmJP4+zfunVOcrvw9p9/gvAqQVX3z2qCOihYVnibzem7nzjbtVofzw
-         Xc06QqyLdLPPlEDJXbi7SsKYGkRcTB5x5PKKMeLA1NDBg+vGZC8E+Dm3k2jwnNH3LAvu
-         FAnir/udt8/mbtypYG4iW3Z3YwKuKKPrGNKLgYNnAHPTbItSMjjnL1YlWQCagNXOKKoC
-         Huz5c7cCVVoEdLAJk9gaskfeNa8mCdLy7s0aIVJMuJ9DBXSq00HUW5LSckpQni3PokZ8
-         XQIzaiCKdbj0h9YeWh5DqafhMK6KVrY04tnimiCbLBBmlEkCf/Y8njnCJ6YOkSpQ2DDp
-         MswQ==
-X-Gm-Message-State: AC+VfDwAl1lWTapLHBk/EjTYZ5im+HNpX48A5Jbs0ZXPTRJP2KtQVDgA
-        eRkwIi2V76SyB5YxOUyltxdQGNY5kFY=
-X-Google-Smtp-Source: ACHHUZ6p6vY/8R1Kw0CwyLEo1ZKr8GIYnv5lol3y1h97CHTAydEPo3R/INzFScpRVkxHnkJG+Em7GQ==
-X-Received: by 2002:a9d:6a09:0:b0:6ab:2fb1:92d8 with SMTP id g9-20020a9d6a09000000b006ab2fb192d8mr7845807otn.12.1686586411260;
-        Mon, 12 Jun 2023 09:13:31 -0700 (PDT)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id c8-20020a9d4808000000b006b296562566sm3996663otf.79.2023.06.12.09.13.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 09:13:30 -0700 (PDT)
-Message-ID: <eac2d2bd-d9df-f463-8c33-af8e83d214d2@gmail.com>
-Date:   Mon, 12 Jun 2023 12:10:41 -0300
+        Mon, 12 Jun 2023 11:11:09 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB38E51;
+        Mon, 12 Jun 2023 08:10:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=2uMMNFJJF4olltfr7iLvbGkW7AOBL0zwm41SdvTlXZg=; b=w4fZFWQ5FYvSae2k0j24foRueM
+        7VriXTeScn0AOWm/RyPTwjulLiEHTTkImCHW+EM/0Rirc9c7gniaDWSoQY/Clpan7Lwk0JhgR/4aF
+        SrkkEDqTOhX/bsJsol1IO9sgjNy2B/v+6wyeNfL3o/beAcAskGYdIX+FXGFPPl8pi9XHAM7D+g54m
+        x0t3RDWJBnWgkTo/wPdSXLUXp42nMqhPrhAXDI+seai5N3/WWFSaAwyvDu/1Bzvz3IfQd+cVmljMg
+        ndhwTeSUm9RNASB9UU3tRBZ7pmUV7Ews75eEQVL9cUJYwHnjblhx7Hop2dQ1GfQWr6rO6Y6GRqCIB
+        oyt447YQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:41860)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1q8jC1-0005vl-QO; Mon, 12 Jun 2023 16:10:53 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1q8jC1-000554-6q; Mon, 12 Jun 2023 16:10:53 +0100
+Date:   Mon, 12 Jun 2023 16:10:53 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Jianhui Zhao <zhaojh329@gmail.com>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: phy: Assign the c45 id to phy_id property when
+ matched.
+Message-ID: <ZIc1fZOavCB//fd6@shell.armlinux.org.uk>
+References: <20230612143320.2077-1-zhaojh329@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3 2/3] rust: kernel: implement iterators for ScatterList
-Content-Language: en-US
-To:     Qingsong Chen <changxian.cqs@antgroup.com>,
-        linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?B?55Sw5rSq5Lqu?= <tate.thl@antgroup.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        rust-for-linux@vger.kernel.org
-References: <20230610104909.3202958-1-changxian.cqs@antgroup.com>
- <20230610104909.3202958-3-changxian.cqs@antgroup.com>
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <20230610104909.3202958-3-changxian.cqs@antgroup.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230612143320.2077-1-zhaojh329@gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/10/23 07:49, Qingsong Chen wrote:
-> ScatterList could be transmuted from raw pointers of a valid
-> `sg_table`. Then we can use those iterators to access the
-> following normal entries.
+On Mon, Jun 12, 2023 at 10:33:20PM +0800, Jianhui Zhao wrote:
+> If a phydevice use c45, its phy_id property is always 0 previously.
+> This change make the phy_id property has a valid value assigned from
+> c45 id.
 > 
-> Signed-off-by: Qingsong Chen <changxian.cqs@antgroup.com>
-> ---
-> [...]
+> Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
 
-Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Please see my replies to your proposal. I don't think this is a good
+solution.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
