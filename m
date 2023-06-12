@@ -2,135 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A4BB72C416
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 14:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 205EE72C420
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 14:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232769AbjFLMaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 08:30:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52608 "EHLO
+        id S233811AbjFLMaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 08:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232089AbjFLM37 (ORCPT
+        with ESMTP id S233345AbjFLMaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 08:29:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6011C8F
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 05:29:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686572951;
+        Mon, 12 Jun 2023 08:30:00 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6EAC1AD;
+        Mon, 12 Jun 2023 05:29:56 -0700 (PDT)
+X-GND-Sasl: herve.codina@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686572995;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/dgg0OgOJU12ZjehTSKhsrI3f8hl+PZj/5z+qfu7sGs=;
-        b=N8+oW2ar9N1VBobdYGwAxnIZBf+VYjn2d9wv10lBsFqdnxTvJTo6F3EWcgrlare9i4NeoW
-        OOFI3zda7FKtz0GlCJuMOv5GgXnHbuoBqrRJbpRThuteFmjdSlspfkEUzKSxuDud5Xro9t
-        zxwqrkyPcDvwdjY1poTOoEX75SB2q2M=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-90-1C81iwXwOsK982tNaWzE2w-1; Mon, 12 Jun 2023 08:29:10 -0400
-X-MC-Unique: 1C81iwXwOsK982tNaWzE2w-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-30fb891c5e3so2963451f8f.2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 05:29:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686572949; x=1689164949;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/dgg0OgOJU12ZjehTSKhsrI3f8hl+PZj/5z+qfu7sGs=;
-        b=bzyf8QkGaQoqVuzZszmiyoqPP46oB5TWhjTGVoTyL/l9WGibF5mJFeJKXYnOh4uTlz
-         99jSlyMDyXQ0aXyHjzNCfF3RCnNC9xY8yjlakoy+uGeawXRETr5QjjAny/7xIcD+nbin
-         WtBTwk6WCfgL0rKVVgDT+zIt3THVlNpj8p5T4KJXrB8XdJ2bvT150KPivSUMDtItD2HE
-         AebLcHtbLkJ2gVClTb8/aKbx+4JOddVjHwNEXVXFEY/94S0meYDQSyDyT2PEXUSQk7ig
-         +Q8S5US+Cxs9Fe9ua4sBLCqLVDJIurspkRLCretz7jSOZKbZndgHFVqv7H9TxRL0RA6t
-         VrGg==
-X-Gm-Message-State: AC+VfDxTi7nPIyNkIQ8ChP/NphWcJdaT3SKc/2MXVgEnsDLy6A5UYkq1
-        8ebEkYNQlR+MV2k/1/sedbtonQabWvt1Epj4V5zOxouU9spZOLh8x+bcdGgRDRZT7yPnklzXD6r
-        dGlht/TsVf3AuiO3cd80X+kpF
-X-Received: by 2002:a05:6000:46:b0:301:8551:446a with SMTP id k6-20020a056000004600b003018551446amr5487577wrx.2.1686572949305;
-        Mon, 12 Jun 2023 05:29:09 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7fBLeRHNV68IRWXYyURn+/HcT7IJFIXUfu/3QIa+LzCGdz9usgp/jdi45lJIFln4oX75UC+w==
-X-Received: by 2002:a05:6000:46:b0:301:8551:446a with SMTP id k6-20020a056000004600b003018551446amr5487541wrx.2.1686572948916;
-        Mon, 12 Jun 2023 05:29:08 -0700 (PDT)
-Received: from [10.32.176.150] (nat-pool-mxp-t.redhat.com. [149.6.153.186])
-        by smtp.googlemail.com with ESMTPSA id v18-20020a5d43d2000000b0030ae93bd196sm12301884wrr.21.2023.06.12.05.29.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 05:29:08 -0700 (PDT)
-Message-ID: <29924c50-cf96-13bb-ef84-4813caa3aef3@redhat.com>
-Date:   Mon, 12 Jun 2023 14:29:05 +0200
+         content-transfer-encoding:content-transfer-encoding;
+        bh=p4tcOdHX+ungtSgc31Cpu7UkGmJ60srYPCpwdKdyR2A=;
+        b=jDQ9H2B05hirZBSuJyug3dIWqyPrUunC1IAyDPWNpsUzpreBIhWKQn+nGG/aegcS65R+6C
+        GudUQH0K9QQEhxRscRm2LFI2zruqmLWFkSEL4JYw7A0Nn7vD2GI6/oTcAGKKvpwTycenyu
+        1qpcPQiEySFlk62Kz2XbXqR9NQJ5Bu0MAxw1WdSlYlgSgPxz09e2uX7r4UxFNmCUinpiKt
+        oBGH7eHRmCzyzhpA17b2alNTf4sTZwiQqmvmBsRmciPHiAO8nAapYkWaHT22aHvOoqzAFU
+        V0ruqXLDab7VpS2Ub+vKeadi3UUX6N2crrEpVpxJfV0VGSFy2eSfn5RoKTWPdQ==
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPA id 2573B240015;
+        Mon, 12 Jun 2023 12:29:51 +0000 (UTC)
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Herve Codina <herve.codina@bootlin.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH v3 00/12] Add support for IIO devices in ASoC
+Date:   Mon, 12 Jun 2023 14:29:14 +0200
+Message-Id: <20230612122926.107333-1-herve.codina@bootlin.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     torvalds@linux-foundation.org, keescook@chromium.org,
-        masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-        nicolas@fjasle.eu, catalin.marinas@arm.com, will@kernel.org,
-        vkoul@kernel.org, trix@redhat.com, ojeda@kernel.org,
-        mingo@redhat.com, longman@redhat.com, boqun.feng@gmail.com,
-        dennis@kernel.org, tj@kernel.org, cl@linux.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
-        adrian.hunter@intel.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, paulmck@kernel.org,
-        frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
-        42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
-        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
-        john.johansen@canonical.com, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
-        rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
-        tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
-        luc.vanoostenryck@gmail.com
-References: <20230612090713.652690195@infradead.org>
- <20230612093540.850386350@infradead.org>
- <20230612094400.GG4253@hirez.programming.kicks-ass.net>
- <2023061213-knapsack-moonlike-e595@gregkh>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v3 46/57] perf: Simplify pmu_dev_alloc()
-In-Reply-To: <2023061213-knapsack-moonlike-e595@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/12/23 14:18, Greg KH wrote:
-> Yeah, it's a pain, but you are trying to hand-roll code that is not a
-> "normal" path for a struct device, sorry.
-> 
-> I don't know if you really can encode all of that crazy logic in the
-> cleanup api, UNLESS you can "switch" the cleanup function at a point in
-> time (i.e. after device_add() is successful).  Is that possible?
+Several weeks ago, I sent a series [1] for adding a potentiometer as an
+auxiliary device in ASoC. The feedback was that the potentiometer should
+be directly handled in IIO (as other potentiometers) and something more
+generic should be present in ASoC in order to have a binding to import
+some IIO devices into sound cards.
 
-What _could_ make sense is that device_add() completely takes ownership 
-of the given pointer, and takes care of calling put_device() on failure.
+The series related to the IIO potentiometer device is already applied.
 
-Then you can have
+This series introduces audio-iio-aux. Its goal is to offer the binding
+between IIO and ASoC.
+It exposes attached IIO devices as ASoC auxiliary devices and allows to
+control them through mixer controls.
 
-	struct device *dev_struct __free(put_device) =
-		kzalloc(sizeof(struct device), GFP_KERNEL);
+On my system, the IIO device is a potentiometer and it is present in an
+amplifier design present in the audio path.
 
-	struct device *dev __free(device_del) =
-		device_add(no_free_ptr(dev_struct));
+Compare to the previous iteration
+  https://lore.kernel.org/linux-kernel/20230523151223.109551-1-herve.codina@bootlin.com/
+This v3 series mainly:
+ - Reworks/Simplifies some IIO code.
+ - Reworks/Simplified the audio-iio-aux driver.
+ - Removes an already applied patch.
 
-	/* dev_struct is NULL now */
+Best regards,
+Hervé
 
-	pmu->dev = no_free_ptr(dev);
+[1] https://lore.kernel.org/linux-kernel/20230203111422.142479-1-herve.codina@bootlin.com/
+[2] https://lore.kernel.org/linux-kernel/20230421085245.302169-1-herve.codina@bootlin.com/
 
-Paolo
+Changes v2 -> v3
+  - Patches 1, 2
+    No changes.
+
+  - Patch 3, 4
+    Add 'Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>'.
+
+  - Patch 5 (new in v3)
+    Removed the 'unused' variable and check the null pointer when used.
+
+  - Patch 6 (new in v3)
+    Introduce {min,max}_array().
+
+  - Patch 7 (new in v3)
+    Use max_array() in iio_channel_read_max().
+
+  - Patch 8 (new in v3)
+    Replace a FIXME comment by a TODO one.
+
+  - Patch 9 (patch 5 in v2)
+    Removed the 'unused' variable and check the null pointer when used.
+    Use min_array().
+    Remplace a FIXME comment by a TODO one.
+
+  - Patch 10 (patch 6 in v2)
+    Convert existing macros to return a compound litteral instead of
+    adding a new helper.
+
+  - Patch 11 (patch 7 in v2)
+    Remove the file name from the C file header.
+    Use directly converted DAPM macros.
+    Replace <linux/module.h> by <linux/mod_devicetable.h>.
+    Add <linux/platform_device.h>.
+    Be sure that min <= max. Swap values if it is not the case.
+    Move the bool structure member after the int ones.
+    Remove unneeded assignements.
+    Use dev_err_probe() when relevant.
+    Use str_on_off().
+    Use static_assert() instead of BUILD_BUG_ON().
+    Remove unneeded comma and blank line.
+    Use device_property_*() instead of the OF API.
+
+  - patch 8 available in v2 removed as already applied
+
+  - Patch 12 (patch 9 in v2)
+    Use devm_add_action_or_reset().
+    Call simple_populate_aux() from simple_parse_of().
+
+Changes v1 -> v2
+  - Patch 1
+    Rename simple-iio-aux to audio-iio-aux
+    Rename invert to snd-control-invert-range
+    Remove the /schemas/iio/iio-consumer.yaml reference
+    Remove the unneeded '|' after description
+
+  - Patch 2 (new in v2)
+    Introduce the simple-audio-card additional-devs subnode
+
+  - Patch 3 (new in v2)
+    Check err before switch() in iio_channel_read_max()
+
+  - Patch 4 (new in v2)
+    Fix raw reads and raw writes documentation
+
+  - Patch 5 (patch 2 in v1)
+    Check err before switch() in iio_channel_read_min()
+    Fix documentation
+
+  - Patch 6 (path 3 in v1)
+    No changes
+
+  - Patch 7 (patch 4 in v1)
+    Rename simple-iio-aux to audio-iio-aux
+    Rename invert to snd-control-invert-range
+    Remove the mask usage from audio_iio_aux_{get,put}_volsw helpers
+    Use directly PTR_ERR() in dev_err_probe() parameter
+    Remove the '!!' construction
+    Remove of_match_ptr()
+
+  - Patch 8 (new in v2)
+    Add a missing of_node_put() in the simple-card driver
+
+  - Patch 9 (new in v2)
+    Handle additional-devs in the simple-card driver
+
+Herve Codina (12):
+  ASoC: dt-bindings: Add audio-iio-aux
+  ASoC: dt-bindings: simple-card: Add additional-devs subnode
+  iio: inkern: Check error explicitly in iio_channel_read_max()
+  iio: consumer.h: Fix raw values documentation notes
+  iio: inkern: Remove the 'unused' variable usage in
+    iio_channel_read_max()
+  minmax: Introduce {min,max}_array()
+  iio: inkern: Use max_array() to get the maximum value from an array
+  iio: inkern: Replace a FIXME comment by a TODO one
+  iio: inkern: Add a helper to query an available minimum raw value
+  ASoC: soc-dapm.h: Convert macros to return a compound litteral
+  ASoC: codecs: Add support for the generic IIO auxiliary devices
+  ASoC: simple-card: Handle additional devices
+
+ .../bindings/sound/audio-iio-aux.yaml         |  64 ++++
+ .../bindings/sound/simple-card.yaml           |  53 +++
+ drivers/iio/inkern.c                          |  84 ++++-
+ include/linux/iio/consumer.h                  |  37 +-
+ include/linux/minmax.h                        |  26 ++
+ include/sound/soc-dapm.h                      | 138 +++++---
+ sound/soc/codecs/Kconfig                      |  12 +
+ sound/soc/codecs/Makefile                     |   2 +
+ sound/soc/codecs/audio-iio-aux.c              | 334 ++++++++++++++++++
+ sound/soc/generic/simple-card.c               |  46 ++-
+ 10 files changed, 726 insertions(+), 70 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/sound/audio-iio-aux.yaml
+ create mode 100644 sound/soc/codecs/audio-iio-aux.c
+
+-- 
+2.40.1
 
