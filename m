@@ -2,232 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A32E72BAAD
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 10:31:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D03C72BAA4
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 10:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232416AbjFLIam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 04:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35660 "EHLO
+        id S232014AbjFLIai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 04:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233265AbjFLI3v (ORCPT
+        with ESMTP id S233352AbjFLI3w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 04:29:51 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2049.outbound.protection.outlook.com [40.107.6.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A99910F4;
-        Mon, 12 Jun 2023 01:29:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ihwqeKk3GchlKKxnl+jiHLmKF/YHbpkeZcqkKH3o1J7Z58Na1jNkFaJtakD/B+x0glwXCFDvATsXAfp7vNYq7lbgIIMrQKzK31NSqQvemL3HcWmFz5d4M1PRm/yxZELiIhMf56W91X8haysnWEGBezawnB2NBuv/FpKOfzF2xw0zQ+hkQp05Y1bh5ePgiwTpTeZgN8Ll5xUQgteUGgOt2IPNdQ5OHZkLVmwSaQswmOFKWz+Ipo2R7nZ168gBAnsakF0KXjqPcr8KQG0Y9Y2lwJbdkm44rQ5ISaEc4pjiMxVzS9Cs+MS+ALXoel+KWTcUciCS+CdHtGQR1BWnhOdfzw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZT20YquAVRG743V/0VbcgjKU/PYU914WrSUYqYN9gNY=;
- b=m18vAYcGb6u/6pS1EAOHOvrYdZTAmkHMUA3EP83UP5PAPoGRkZZ9dUEDetcdkETXSK+xIx/qQJkkWxgq0v7+17FcZh/Du+SGQ78AoySpvNXndZeqsGtfQ5hSfDVC9bP0LcFHliRbsVTmpZJTMgJNtwseKAtkhPAKTOBPBVm6zwdAUoLO4C/LdseRvmZlHxM7FbW6CIiQzz1nvcn5mnFwUO5fFYijr00yA4vFdeAQvVZ9yraBAm1rz2HZTuS9d16A2ALmuDlTeqpDB2V6yebiYhCB9GqoGUsUwVk5HZswV2AL9u1xs/X37t7OTzk48Z9qp8Ac2Fe5RTEXnKN6f+1ZXg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZT20YquAVRG743V/0VbcgjKU/PYU914WrSUYqYN9gNY=;
- b=pk2LQj8AyimR0LObYTF7O4y/QFeJnoN48xtx3Ih/y3pvG62F8MSpsH7pQlNPzTwvHzaj315DF7Bg6/zzmozgxzNOLXz5uqRli6TALz/OH3Z7ZQnOMWlC14VljcJ1VlIq3DL7MNryyCqEVCl6NP7d6MDbjMLREJA1lo6lHcjv3D8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU0PR04MB9563.eurprd04.prod.outlook.com (2603:10a6:10:314::7)
- by AS5PR04MB9971.eurprd04.prod.outlook.com (2603:10a6:20b:67f::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.38; Mon, 12 Jun
- 2023 08:29:03 +0000
-Received: from DU0PR04MB9563.eurprd04.prod.outlook.com
- ([fe80::adc3:90c7:4b37:392c]) by DU0PR04MB9563.eurprd04.prod.outlook.com
- ([fe80::adc3:90c7:4b37:392c%5]) with mapi id 15.20.6477.028; Mon, 12 Jun 2023
- 08:29:03 +0000
-From:   meenakshi.aggarwal@nxp.com
-To:     horia.geanta@nxp.com, V.sethi@nxp.com, pankaj.gupta@nxp.com,
-        gaurav.jain@nxp.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     "Victoria Milhoan (b42089)" <vicki.milhoan@freescale.com>,
-        Dan Douglass <dan.douglass@nxp.com>,
-        Vipul Kumar <vipul_kumar@mentor.com>,
-        Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
-Subject: [PATCH] crypto: caam - add a test for the RNG
-Date:   Mon, 12 Jun 2023 10:28:42 +0200
-Message-Id: <20230612082842.1256507-1-meenakshi.aggarwal@nxp.com>
-X-Mailer: git-send-email 2.25.1
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AM0PR01CA0115.eurprd01.prod.exchangelabs.com
- (2603:10a6:208:168::20) To DU0PR04MB9563.eurprd04.prod.outlook.com
- (2603:10a6:10:314::7)
+        Mon, 12 Jun 2023 04:29:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845DC4206;
+        Mon, 12 Jun 2023 01:29:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC0F762125;
+        Mon, 12 Jun 2023 08:29:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17A6AC4339B;
+        Mon, 12 Jun 2023 08:29:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686558548;
+        bh=7P7phndunueYEv+4irY6tmeVzrPPEMoV3e4JltrN8Rw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TZo7R6JRjC0MOV6tFurOdHL0XNjkZaXytpxrYL74iiVkqbpO8wZgadPGMuX+enDoV
+         LE/0WDqfxwkF8N8W2EBRuP/aSG6Z3qETCPs6huhJ7feCHoDaAxbMzSpwPrGI2fqPRG
+         TWF57ZXgCjfWRCsh9gOzVGrstinUueN39iuu+WAldr+7iHMr074v1LqKVPEnBJgHnX
+         nRrL3uQVyQPZQe5VVgQuhG3Q8sF95PNkX5fd4OJcrn+XxjwxuIrpfo+9Hv7/L+QeZJ
+         G7C/ffV49s12Orhun54l6WmJ2/sCFaQ6N6A16MHLmnFcQENWAqocOjcqWPXUd5zHCN
+         XxjctW06YkzdA==
+Date:   Mon, 12 Jun 2023 10:29:00 +0200
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, tjoseph@cadence.com,
+        robh@kernel.org, kw@linux.com, bhelgaas@google.com,
+        nadeem@cadence.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        vigneshr@ti.com, srk@ti.com, nm@ti.com
+Subject: Re: [PATCH v3] PCI: cadence: Fix Gen2 Link Retraining process
+Message-ID: <ZIbXTMlPKGdLfoRF@lpieralisi>
+References: <20230609173940.GA1252506@bhelgaas>
+ <b91f1df7-7b36-bfee-2182-44ccfb900952@ti.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9563:EE_|AS5PR04MB9971:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3991e881-7de8-45b6-6f3b-08db6b1f1410
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ow2tlIGw0Okq+Ci3ywcx18PX7w6yJhnmL281wglw5KZb6yOjTCqYk+iXlXmn6c+wQHQMLNbR3V13uQ9wwdJmNfEERTt5C4MBfDILcGFICtNLzlyJdpFbPuyIH+utB9BoPMmIGI2B59DQGAqKiO0/4E2taZlOEw2doRc+dx9fhdLioiZZbhVmN3fXg1kPwZXFuz+TdPTDlcTuJdXvR/5N8kfO3TdsrxCy7fsDayKikCRXKaoAHI9ewfgEuVfKe2zsSpXMPuTciMMl4+TKPIeSz8KgEp6LnwKuqq1tM7988vQaUK/0bcFXlk+85IAr7bcEL0H+6jzQulhrZNYPQ8f1OCEwU/atyjxaA5fr9K3N3R9DfqJzDlkGvhKAydWHpa/Li+sk/6AKquU/K+LjTaUq/MEJiSEpJgeCZsk3+KmrKvOf2E3AsMQ5a6dGDUolWdrQ0Z4Y6GRmvmzE/u5ZIpdhGFdt6Nxsl/fOKKsLQSeEVJP6HfjSSb+4Cid0Rl+J7UEMFM5DEWYtryohXSHfnJcqWYdly7w47dKQiy2pS0IBrNsWTo/t+mAV1oLEbPcQMLjxLNkR24+Mup1HNz9O6/pEv0UhFi8o3DYQgvULF8UA0tGMaKi7TnlxgZBC/K1Q8XzQ
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9563.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(136003)(396003)(376002)(39860400002)(451199021)(9686003)(26005)(6506007)(6512007)(1076003)(2616005)(83380400001)(36756003)(86362001)(38100700002)(38350700002)(186003)(54906003)(478600001)(5660300002)(2906002)(41300700001)(66946007)(8936002)(8676002)(66556008)(66476007)(4326008)(52116002)(6486002)(6666004)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dmNVYWtkQVhaWXBzTnAySEE1UmVXWEtPejNJR1I4dVlyc0ZHQ2F3NGJ4Zlhy?=
- =?utf-8?B?ekdRcnpaeXM3eGd1S0x4ZHM2TmttVU45ajJZTFZ2RjFVdExSTmgzRitZNWZm?=
- =?utf-8?B?czQxOWFhQmNIdEI0RmF6cXVmcTBMUTArbkJnTjgzVHhMdTlrSVlublZ2VHRY?=
- =?utf-8?B?ejZkRWVzdGgvT0NuRHJIYytyRG9Yd2QvYnpVK1ZVS1AyODk2d1NYK1hnVU5n?=
- =?utf-8?B?TDByNjlOWmtUL25wTGluQ1BtMTc0QWdML3Iwak1QNGh3OGxCNkJNcC82a1pz?=
- =?utf-8?B?VlVzcnBmNG82L25CTW8xQU05UXZMOTZPRTloSUZkQytFdXY2d3ZGbzViYXdM?=
- =?utf-8?B?TC91RVBOU1Badm1YUTFYMUh6aEpiV01TdlJSeERzREhvbEFqYkhYLzhCL1Ju?=
- =?utf-8?B?UXFia1JLU1cySkdIbU0yeWFxMWZmNjcxNjJ0Vk1oNTNZSWhnS0ozMG53ZHdv?=
- =?utf-8?B?OElDNTV3cGF4ZDBHMDlIU3AyWnFpNjQ1Sjllc1JoSFpJQ2l6anF0WW5hSUF2?=
- =?utf-8?B?RFVuMTJCM2tyVEN4TGNQUDdGb1Myb1JNVFB4RVhrK09WZGxNVktqVldHYkth?=
- =?utf-8?B?WjdiVkxrU0ZLajFLVDdCREZWbWZvNjZST1FSYkd6WWFBL2JNNHZ0eWJOQmJ2?=
- =?utf-8?B?VE40TmU5VEN4MUpZR05FT3pjd2RMOExlaEpURVBrdTVxellKeTBWVjlkQ3VY?=
- =?utf-8?B?ZzNwVW9JbUV5czRaaW05bGQvRTRrNUdRUUdETTU2dVluOU81azViaUNYS0w1?=
- =?utf-8?B?eGV4NkJicHhqMVdxTEVpM1JjTjI5Q0QzTmxOTWtGcVZ2MExuSmVoT1BQM1VD?=
- =?utf-8?B?b3V1VUd2ekcwMEJKeFN0cmd6cUlRVG9XM2NJelFYNWlESjBUOUpTTHJmOVhs?=
- =?utf-8?B?UWpOSmlFbFBWRkIyYVJPTWVpeXd0dER6OXlIYnRWL0h1TUQxQVlLbXBnUFF0?=
- =?utf-8?B?Vk5QOWIxNDRxbGRGaWFwMTVOQTB6b0l2VWgxYy96S0pyMW5tR3YxRDFsSHNt?=
- =?utf-8?B?SjhpdEd5YjIyR1dadU90SE1KakE2SXpZajJhVmlXMkovV0FLNXl2N0NJOWxU?=
- =?utf-8?B?S0Z4aVVxTVdUSFNGQnNhaWFSMHhuckN0NW5rNzRUNmR1WVdMZndidGxFQUlQ?=
- =?utf-8?B?clVpQ1J0T20wNzZtZ2xKQ3VyWm13dTljem5sSHpHR1hBajRWeEhCTlkyYjBp?=
- =?utf-8?B?WkJVemhGTlo4SmQrZ0syTkJHSWhENWJIWmlMKzg2clYxTlNremphNERnMEpk?=
- =?utf-8?B?T2ZJVG5GUW9uY1p4YkNDZ0pIZmh0dEd0ZkczcW1GUDY3MGxGWmIrVlkrMEZp?=
- =?utf-8?B?SEwzZGdzS2xyRytLQXdGM1JCcHNBVVRTYWo3V01MZEk5cFVVQzFsVXVxdHRG?=
- =?utf-8?B?Z1p2V2Y1eHhELzVVa01tdUxNbzA3bjJWdElwZW9ybDN2cUF5S0tXQ0p4cmZH?=
- =?utf-8?B?WEVoekozWE5kZXlZcE81SUZzaS9pV0JtT3E1aWhOVW1acEtkbzNSeVVsSGRm?=
- =?utf-8?B?ZWJLRWtZM0xUZnU3Q1J5V3ZydTg2OGwzZFdxalM3dUdLcHI2eFFtWUFGcDJO?=
- =?utf-8?B?dGFFZkx5dURVU0lyRGdjdGxIaHl0UXN2a0FKSUp1am1tY2FENkI4T0VCcktx?=
- =?utf-8?B?dUlXK3VKZnE2U001ZklyZXZFVlJHM2s2NDZVVkMyMW5UQ3dESlU1ejdnaWc5?=
- =?utf-8?B?STVhK1REbVI5TUNkcHlVTU8yYXNGTjRhVkxNS1ZWUlRmdWc1T1I2aGZod2RJ?=
- =?utf-8?B?a3lIVjRVNWpRUy9zQUxFRFA1aWE0Yk83NTdJUFRPeUFtcWJoV05IRGE3ZUho?=
- =?utf-8?B?WW0vR293RXhQWDdoenhpRDVRZnNYVFNlSGNRZHRTdUZHRVMyNzlvNHpFTVds?=
- =?utf-8?B?Unl3a3pFUTg2RDM2Vm40SkpaMmZsQytMdlJaQVlFdFV0RUovTE1JZEw4bDly?=
- =?utf-8?B?UzdBSlR3LzNrM3g3ZzdSTWNkb0h1Z0dqS0VMcFMvNzlTTXZ5dnV2ZWtPSmlD?=
- =?utf-8?B?T2NOWDY3RHg3OUZobXRzdzB5QmN0YWZWK0RTWWVFcStWTlNYc2dBdHp2MHpI?=
- =?utf-8?B?T2ppL2phRTZNQlFVZy9BWXlYTW11QjAvRzRWbDJ2UXU1azQ5OXpJVXJBTlVB?=
- =?utf-8?B?djJleXFoMXpJUjVibkVRLzh4WDdJaExyWFVHTGpKN0EwRlROK0tFdm4xd043?=
- =?utf-8?B?b0E9PQ==?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3991e881-7de8-45b6-6f3b-08db6b1f1410
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9563.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 08:29:02.9409
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Dp6W0xgr33cJEk0YwHABMmxVe5TODLqpTR0MwS5T7KRhp/8KI6owmCUJCszr2U8k+vw44cus3HZHtUHXQgwQdSlMcBN67pw10LE3TS9QUUE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS5PR04MB9971
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b91f1df7-7b36-bfee-2182-44ccfb900952@ti.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Victoria Milhoan (b42089)" <vicki.milhoan@freescale.com>
+On Mon, Jun 12, 2023 at 09:56:27AM +0530, Siddharth Vadapalli wrote:
+> 
+> 
+> On 09/06/23 23:09, Bjorn Helgaas wrote:
+> > On Wed, Jun 07, 2023 at 02:44:27PM +0530, Siddharth Vadapalli wrote:
+> >> The Link Retraining process is initiated to account for the Gen2 defect in
+> >> the Cadence PCIe controller in J721E SoC. The errata corresponding to this
+> >> is i2085, documented at:
+> >> https://www.ti.com/lit/er/sprz455c/sprz455c.pdf
+> >>
+> >> The existing workaround implemented for the errata waits for the Data Link
+> >> initialization to complete and assumes that the link retraining process
+> >> at the Physical Layer has completed. However, it is possible that the
+> >> Physical Layer training might be ongoing as indicated by the
+> >> PCI_EXP_LNKSTA_LT bit in the PCI_EXP_LNKSTA register.
+> >>
+> >> Fix the existing workaround, to ensure that the Physical Layer training
+> >> has also completed, in addition to the Data Link initialization.
+> >>
+> >> Fixes: 4740b969aaf5 ("PCI: cadence: Retrain Link to work around Gen2 training defect")
+> >> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> >> Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
+> >> ---
+> >>
+> >> Hello,
+> >>
+> >> This patch is based on linux-next tagged next-20230606.
+> >>
+> >> v2:
+> >> https://lore.kernel.org/r/20230315070800.1615527-1-s-vadapalli@ti.com/
+> >> Changes since v2:
+> >> - Merge the cdns_pcie_host_training_complete() function with the
+> >>   cdns_pcie_host_wait_for_link() function, as suggested by Bjorn
+> >>   for the v2 patch.
+> >> - Add dev_err() to notify when Link Training fails, since this is a
+> >>   fatal error and proceeding from this point will almost always crash
+> >>   the kernel.
+> >>
+> >> v1:
+> >> https://lore.kernel.org/r/20230102075656.260333-1-s-vadapalli@ti.com/
+> >> Changes since v1:
+> >> - Collect Reviewed-by tag from Vignesh Raghavendra.
+> >> - Rebase on next-20230315.
+> >>
+> >> Regards,
+> >> Siddharth.
+> >>
+> >>  .../controller/cadence/pcie-cadence-host.c    | 20 +++++++++++++++++++
+> >>  1 file changed, 20 insertions(+)
+> >>
+> >> diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
+> >> index 940c7dd701d6..70a5f581ff4f 100644
+> >> --- a/drivers/pci/controller/cadence/pcie-cadence-host.c
+> >> +++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
+> >> @@ -12,6 +12,8 @@
+> >>  
+> >>  #include "pcie-cadence.h"
+> >>  
+> >> +#define LINK_RETRAIN_TIMEOUT HZ
+> >> +
+> >>  static u64 bar_max_size[] = {
+> >>  	[RP_BAR0] = _ULL(128 * SZ_2G),
+> >>  	[RP_BAR1] = SZ_2G,
+> >> @@ -80,8 +82,26 @@ static struct pci_ops cdns_pcie_host_ops = {
+> >>  static int cdns_pcie_host_wait_for_link(struct cdns_pcie *pcie)
+> >>  {
+> >>  	struct device *dev = pcie->dev;
+> >> +	unsigned long end_jiffies;
+> >> +	u16 link_status;
+> >>  	int retries;
+> >>  
+> >> +	/* Wait for link training to complete */
+> >> +	end_jiffies = jiffies + LINK_RETRAIN_TIMEOUT;
+> >> +	do {
+> >> +		link_status = cdns_pcie_rp_readw(pcie, CDNS_PCIE_RP_CAP_OFFSET + PCI_EXP_LNKSTA);
+> >> +		if (!(link_status & PCI_EXP_LNKSTA_LT))
+> >> +			break;
+> >> +		usleep_range(0, 1000);
+> >> +	} while (time_before(jiffies, end_jiffies));
+> >> +
+> >> +	if (!(link_status & PCI_EXP_LNKSTA_LT)) {
+> >> +		dev_info(dev, "Link training complete\n");
+> >> +	} else {
+> >> +		dev_err(dev, "Fatal! Link training incomplete\n");
+> >> +		return -ETIMEDOUT;
+> >> +	}
+> > 
+> > Can I have a brown paper bag, please?  I totally blew it here, and I'm
+> > sorry.
+> > 
+> > You took my advice by combining this with the existing
+> > cdns_pcie_host_wait_for_link(), but I think my advice was poor because
+> > (a) now this additional wait is not clearly connected with the
+> > erratum, and (b) it affects devices that don't have the erratum.
+> > 
+> > IIUC, this is all part of a workaround for the i2085 erratum.  The
+> > original workaround, 4740b969aaf5 ("PCI: cadence: Retrain Link to work
+> > around Gen2 training defect"), added this:
+> > 
+> >   if (!ret && rc->quirk_retrain_flag)
+> >     ret = cdns_pcie_retrain(pcie);
+> > 
+> > I think the wait for link train to complete should also be in
+> > cdns_pcie_retrain() so it's clearly connected with the quirk, which
+> > also means we'd only do the wait for devices with the erratum.
+> > 
+> > Which is EXACTLY what your first patch did, and I missed it.  I am
+> > very sorry.  I guess maybe I thought cdns_pcie_retrain() was a
+> > general-purpose thing, but in fact it's only used for this quirk.
+> 
+> With the current approach implemented in this patch, I could do the following:
+> In the cdns_pcie_host_wait_for_link() function, I obtain the reference to the
+> struct cdns_pcie_rc *rc, using:
+> struct cdns_pcie_rc *rc = container_of(pcie, struct cdns_pcie_rc, pcie);
+> followed by checking if the quirk "quirk_retrain_flag" is set, before proceeding
+> with the Link Training check added by this patch. With this, only the
+> controllers with the quirk will check for the Link Training completion before
+> proceeding. However, the difference with this new approach compared to the
+> approach in the v2 patch is that in this new approach, even in the Link Training
+> Phase, the Link Training check is performed for the controllers with the quirk,
+> unlike the v2 patch where the Link Training check was performed only during the
+> Link Retraining Phase through the cdns_pcie_retrain() function.
+> 
+> Also, based on Mani's suggestion, I have measured the latency introduced by the
+> Link Training check for both quirky and non-quirky controllers at:
+> https://lore.kernel.org/r/a63fc8b0-581b-897f-cac6-cb0a0e82c63e@ti.com/
+> If the latency is acceptable, then the current implementation in this v3 patch
+> could be fine too.
+> 
+> Kindly let me know which approach among the following seems to be the best one:
+> 1. The approach implemented in v2 patch (I will make minor changes to the patch
+> to print out the "Fatal" error, so that users will be informed of the cause of
+> the crash, followed by posting a v4 patch with this change).
+> 2. The current implementation in the v3 patch with a check added to see if the
+> controller has the quirk_retrain_flag set, before proceeding with the Link
+> Training check.
+> 3. The current implementation in the v3 patch as is, without any modification,
+> if the latency introduced is not a concern and the sanity check for Link
+> Training completion for non-quirky controllers appears acceptable.
 
-CAAM includes a Random Number Generator.  This change adds
-a kernel configuration option to test the RNG's capabilities via the
-hw_random framework.
+The point is, you stated it yourself that the non-quirky path is broken
+too in its *current* form, I don't think there is any other option on
+the table other than (3) (unless we want to rely on probe time timing
+to hide the issue; that to me it is not even considerable as an option).
 
-Signed-off-by: Victoria Milhoan <vicki.milhoan@freescale.com>
-Signed-off-by: Dan Douglass <dan.douglass@nxp.com>
-Signed-off-by: Vipul Kumar <vipul_kumar@mentor.com>
-Signed-off-by: Horia Geantă <horia.geanta@nxp.com>
-Signed-off-by: Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
----
- drivers/crypto/caam/Kconfig   |  9 +++++++
- drivers/crypto/caam/caamrng.c | 48 +++++++++++++++++++++++++++++++++++
- 2 files changed, 57 insertions(+)
-
-diff --git a/drivers/crypto/caam/Kconfig b/drivers/crypto/caam/Kconfig
-index ec6a9e6ad4d2..c631f99e415f 100644
---- a/drivers/crypto/caam/Kconfig
-+++ b/drivers/crypto/caam/Kconfig
-@@ -162,6 +162,15 @@ config CRYPTO_DEV_FSL_CAAM_PRNG_API
- config CRYPTO_DEV_FSL_CAAM_BLOB_GEN
- 	bool
- 
-+config CRYPTO_DEV_FSL_CAAM_RNG_TEST
-+	bool "Test caam rng"
-+	select CRYPTO_DEV_FSL_CAAM_RNG_API
-+	help
-+	  Selecting this will enable a self-test to run for the
-+	  caam RNG.
-+	  This test is several minutes long and executes
-+	  just before the RNG is registered with the hw_random API.
-+
- endif # CRYPTO_DEV_FSL_CAAM_JR
- 
- endif # CRYPTO_DEV_FSL_CAAM
-diff --git a/drivers/crypto/caam/caamrng.c b/drivers/crypto/caam/caamrng.c
-index 50eb55da45c2..b3d14a7f4dd1 100644
---- a/drivers/crypto/caam/caamrng.c
-+++ b/drivers/crypto/caam/caamrng.c
-@@ -172,6 +172,50 @@ static void caam_cleanup(struct hwrng *rng)
- 	kfifo_free(&ctx->fifo);
- }
- 
-+#ifdef CONFIG_CRYPTO_DEV_FSL_CAAM_RNG_TEST
-+static inline void test_len(struct hwrng *rng, size_t len, bool wait)
-+{
-+	u8 *buf;
-+	int read_len;
-+	struct caam_rng_ctx *ctx = to_caam_rng_ctx(rng);
-+	struct device *dev = ctx->ctrldev;
-+
-+	buf = kcalloc(CAAM_RNG_MAX_FIFO_STORE_SIZE, sizeof(u8), GFP_KERNEL);
-+
-+	while (len > 0) {
-+		read_len = rng->read(rng, buf, len, wait);
-+
-+		if (read_len < 0 || (read_len == 0 && wait)) {
-+			dev_err(dev, "RNG Read FAILED received %d bytes\n",
-+				read_len);
-+			kfree(buf);
-+			return;
-+		}
-+
-+		print_hex_dump_debug("random bytes@: ",
-+			DUMP_PREFIX_ADDRESS, 16, 4,
-+			buf, read_len, 1);
-+
-+		len = len - read_len;
-+	}
-+
-+	kfree(buf);
-+}
-+
-+static inline void test_mode_once(struct hwrng *rng, bool wait)
-+{
-+	test_len(rng, 32, wait);
-+	test_len(rng, 64, wait);
-+	test_len(rng, 128, wait);
-+}
-+
-+static void self_test(struct hwrng *rng)
-+{
-+	pr_info("Executing RNG SELF-TEST with wait\n");
-+	test_mode_once(rng, true);
-+}
-+#endif
-+
- static int caam_init(struct hwrng *rng)
- {
- 	struct caam_rng_ctx *ctx = to_caam_rng_ctx(rng);
-@@ -258,6 +302,10 @@ int caam_rng_init(struct device *ctrldev)
- 		return ret;
- 	}
- 
-+#ifdef CONFIG_CRYPTO_DEV_FSL_CAAM_RNG_TEST
-+	self_test(&ctx->rng);
-+#endif
-+
- 	devres_close_group(ctrldev, caam_rng_init);
- 	return 0;
- }
--- 
-2.25.1
-
+Lorenzo
