@@ -2,99 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC4DA72CDD4
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:23:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2C372CDD7
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237540AbjFLSXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 14:23:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43676 "EHLO
+        id S229507AbjFLSXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 14:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbjFLSXU (ORCPT
+        with ESMTP id S237551AbjFLSXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 14:23:20 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12824EC;
-        Mon, 12 Jun 2023 11:23:20 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2b1a7e31dcaso55121271fa.2;
-        Mon, 12 Jun 2023 11:23:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686594198; x=1689186198;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Fi7DZObmpxIKmE75DEGH66N1cjPuHUykTIHuF+M6PWY=;
-        b=l0P0pVkWWaVD0QyJH6BNQSYoXa6yYhsNyLKwobP02ljoI6/t8kqRqZ+DaIhWbyNyxp
-         nlCV65vwNkkTN+yuIDsEblCbwQ9t9W3BVUX76zuL+TM6fXXz8UVVybzriQfAnj243JB5
-         P1k4okBtC/HJN0VqkiTntBB2VUED9PoPQQlTa+InAWnvHfPDmcY7eO/1N9yHmzaKhPBq
-         Vco8+wBXrSOtPi0EZ4rBVI83iB5x2fxl8/ZYsRql/jGs/EMLat3ojq5vL3GrFohuCuDJ
-         ErS8DzcnbL2TNo3IJhlyPY3bkDZHkwdHLsHp+X35NHGqZySAbSGhdJ23BmQ4SSM4WnmL
-         VkCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686594198; x=1689186198;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Fi7DZObmpxIKmE75DEGH66N1cjPuHUykTIHuF+M6PWY=;
-        b=l3LPgBX/M/RDf9bVKmp88ZAevgx8ovxoj5U+oq3UYLIZpm0YiLn/G11b3P/iWCxOOj
-         Inz0CP98zbNPDSuQNG4Z5tZlX3J8CIFy1tKqPc/HKu22haVK30llk/QfFwnlV5p0QCdM
-         GZE7upw+4D+JmAadQz5whIWfPXiCykZINTbSVc7D1aHodomhym9Ba8Qwi/FymdD5gimK
-         2PCIINBJpEmGNZ5gh1j338HDgKoHlESuEzV9RD+OOBGxwOI0Q3CEr1r1By01JOSiDxbU
-         vTYRxgJXMtIxNaW308Od3Cz7X/INzruoINGinT8618maPST3Tj3Cc8iFDekhNwSChX24
-         fyYQ==
-X-Gm-Message-State: AC+VfDzd+SiegqZFWaLTpmb/iImYy56eMiu7ib8CV7TYdnzBBc8BBK1w
-        x5fQE5Wt0rVgDb0zFMNCMvEb1+4D7mlW5tE/B6s=
-X-Google-Smtp-Source: ACHHUZ486uvk9Krh2TcyuQ5OEWd5eLkyRBL7R0/ZbqVj7fwvk4ON8mbAVa1d2QNjRdZ8AWkJwRd1Sv+wIhOUI/5DePI=
-X-Received: by 2002:a2e:a165:0:b0:2ae:e214:482f with SMTP id
- u5-20020a2ea165000000b002aee214482fmr3361021ljl.52.1686594198050; Mon, 12 Jun
- 2023 11:23:18 -0700 (PDT)
+        Mon, 12 Jun 2023 14:23:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156E5E0;
+        Mon, 12 Jun 2023 11:23:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B86862CC9;
+        Mon, 12 Jun 2023 18:23:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5B7CC433D2;
+        Mon, 12 Jun 2023 18:23:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686594214;
+        bh=0ia4DOXRQlpxbsvixuJZP92w3Mu5z3zc9q4s1AOUnDc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=iQqK/iw2pw+Igfn7d9j8xQ8+HbK07/0/uCJLT6erT9jqHOqpdOn9NLk+g8CuYNCIp
+         zRILIyb9jt7Um7NA0jf1/018qJ4cHKP1K1XrZ0Bkgo/LsXFh9e0Uvq+r19R+DXvCup
+         Dlcnn1YvVWcA2gELwVl+8UOR4Ha3nbFT1G5z2KMXTcqYdypN1w06bu4jkz/HXT+8bh
+         UbUnn6HR8NBceZEsdxxBIOr06jf6DxbTAUE8ggsN3wHzYYBRY8mvHuHSLYB1DjqtDf
+         9qxjQrPiAmiq+t55MDSRr7UVJm2Yew0Zu7NhzEaNSwwz5YDeWt5UcMFZZNcKZCMIIH
+         5lpIh0hQ4acuA==
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        patches@lists.linux.dev, Jian Hu <jian.hu@amlogic.com>,
+        Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jerome Brunet <jbrunet@baylibre.com>
+Subject: [PATCH] clk: meson: a1: Staticize rtc clk
+Date:   Mon, 12 Jun 2023 11:23:32 -0700
+Message-ID: <20230612182332.371003-1-sboyd@kernel.org>
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
 MIME-Version: 1.0
-References: <20230609141812.297521-1-alexis.lothore@bootlin.com>
- <20230609141812.297521-3-alexis.lothore@bootlin.com> <d196f8c7-19f7-4a7c-9024-e97001c21b90@lunn.ch>
- <dbec77de-ee34-e281-3dd4-2332116a0910@bootlin.com> <176f073a-b5ab-4d8a-8850-fcd8eff65aa7@lunn.ch>
- <bb799b06-8ca8-8a29-3873-af09c859ae88@bootlin.com> <CA+sq2CcG4pQDLcw+fTkcEfTZv6zPY3pcGCKeOy8owiaRF2HELA@mail.gmail.com>
- <20230612094321.vjvj3jnyw7bcnjmw@skbuf>
-In-Reply-To: <20230612094321.vjvj3jnyw7bcnjmw@skbuf>
-From:   Sunil Kovvuri <sunil.kovvuri@gmail.com>
-Date:   Mon, 12 Jun 2023 23:53:06 +0530
-Message-ID: <CA+sq2CdkfuMWE4jf0QEQc4w-2Nb45nER64BV8EbSroJcYi=__Q@mail.gmail.com>
-Subject: Re: [PATCH net-next 2/2] net: dsa: mv88e6xxx: implement egress tbf
- qdisc for 6393x family
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        paul.arola@telus.com, scott.roberts@telus.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 3:13=E2=80=AFPM Vladimir Oltean <olteanv@gmail.com>=
- wrote:
->
-> Hi Sunil,
->
-> On Mon, Jun 12, 2023 at 12:04:56PM +0530, Sunil Kovvuri wrote:
-> > For setting up simple per-port ratelimit, instead of TBF isn't "egress
-> > matchall" suitable here ?
->
-> "matchall" is a filter. What would be the associated action for a
-> port-level shaper?
+Sparse rightly complains that this symbol is supposed to be static.
 
-As Alexis mentioned I was referring to "matchall + policer".
+Cc: Jian Hu <jian.hu@amlogic.com>
+Cc: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: Jerome Brunet <jbrunet@baylibre.com>
+Fixes: 84af914404db ("clk: meson: a1: add Amlogic A1 Peripherals clock controller driver")
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+---
+ drivers/clk/meson/a1-peripherals.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-Sunil.
+diff --git a/drivers/clk/meson/a1-peripherals.c b/drivers/clk/meson/a1-peripherals.c
+index b320134fefeb..75dfae210fe5 100644
+--- a/drivers/clk/meson/a1-peripherals.c
++++ b/drivers/clk/meson/a1-peripherals.c
+@@ -218,7 +218,7 @@ static struct clk_regmap rtc_32k_sel = {
+ 	},
+ };
+ 
+-struct clk_regmap rtc = {
++static struct clk_regmap rtc = {
+ 	.data = &(struct clk_regmap_gate_data){
+ 		.offset = RTC_BY_OSCIN_CTRL0,
+ 		.bit_idx = 30,
+-- 
+https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
+
