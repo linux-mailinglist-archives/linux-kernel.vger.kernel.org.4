@@ -2,73 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A8F72CA15
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD19272CA1A
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232954AbjFLPaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 11:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56632 "EHLO
+        id S237362AbjFLPaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 11:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239676AbjFLPaA (ORCPT
+        with ESMTP id S237032AbjFLPaI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 11:30:00 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F0319B
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:29:59 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b3cc77ccbfso7283985ad.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:29:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686583799; x=1689175799;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y2QgIS7pLD4XVIlZGs/jDBse1MbhCO8Plvo0pYCDiA0=;
-        b=oAGceFVsJBvfaFdtGWoeorzP3AExgXR2vb1mSBpsqhC5Vt0kbHv/dbbKUq4Pty+7zT
-         QyuiJOVPnIA0ZpXWUC/cNDYiKc7M+yHGcRfiVAIeNUil0brxM1FV8oRp2ZRiXm6jC6x6
-         Dvp5+ri+nQ5uWXiPgY3FBo6KSkNj7x9cjsitTlIkrs8valkmCKZQ9oBuINLI5o3k+rTz
-         DoSw5pyKgD4GWTqiBtBNiePPRokrI+jpOAilQ6IwTCeAXNnHyhYg0M5qon+Kp2wDCf+V
-         kh5QZglg5SBW/sOVqqGeAvEFX23X0In/F6luFn42tLSk8V6KPWiJGH5+hhNR113jWYcs
-         SK4g==
+        Mon, 12 Jun 2023 11:30:08 -0400
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881001B8;
+        Mon, 12 Jun 2023 08:30:07 -0700 (PDT)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1b3cc77ccbfso7285315ad.1;
+        Mon, 12 Jun 2023 08:30:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686583799; x=1689175799;
-        h=to:subject:message-id:date:from:reply-to:mime-version
+        d=1e100.net; s=20221208; t=1686583807; x=1689175807;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y2QgIS7pLD4XVIlZGs/jDBse1MbhCO8Plvo0pYCDiA0=;
-        b=kaXTmfXqXUfu8DTmNp/RDB5JtdUJE6pHE16/5Qza+NeEGrwJrQVXbePIJMnx2Etf/F
-         LdTpe/ssq2IOsdMnwxarq8Ax1+XsT1IKsB8W4m5NFn9OpIDyYCvVPR6eyOgVIXXxnaL+
-         ideVN9pDAa+sP5sTE2wRUni033mpeV4D+Biag96OA3Bg5kYlLcxdQ+TJdqidcwMaKmdP
-         iIa8TGn2CYR69N6sj/85lrV1pBRgiY/jajz7kaUj0HmyMd0Qc6+tW6ICyRAp2Y8CyoBg
-         GBTyz9zySGQDzc9b+58dSaw7WOci2WfQ6r6do4EyaamSXVifZw2MbCI+umBvGCMxX7o5
-         sjvg==
-X-Gm-Message-State: AC+VfDwiicDPzCjLFh6MjyU9D0p3HPdZU7ge2nX2sOSbqGLUyuB904uk
-        jBmCS7eI9iXZ25GNhpBLb9JiInc87IOxTPqeb/U=
-X-Google-Smtp-Source: ACHHUZ4L4iWVXXe1or3PU2wONN9Kqazf7OhVFiJ7H6uIGKTF+ykqCpuO7EJOsOWzwEeW2DrqPh+vopnAmNImgFqsex0=
-X-Received: by 2002:a17:902:bd94:b0:1b3:d6c8:7008 with SMTP id
- q20-20020a170902bd9400b001b3d6c87008mr1693346pls.57.1686583798888; Mon, 12
- Jun 2023 08:29:58 -0700 (PDT)
+        bh=qt1TPwchcj2VuqrNTLbU1dI0zylo16OsUsxj0udlo1g=;
+        b=LACI8dK6zyguXqfSuRhBMgacWIxDFOiIlKuWiEGI9nRXzKUBoYuoY3Qzp5RLzea3vT
+         KngVfSTbq6B3LGU9zJxC0KV/iJNzpxuVMQX2mEcCGXWfZGQpUenoypaD1JY5hWcQZUkA
+         NbgBBQWs/wL36/X5xP1fMsoBbQZ9rxNiv8MXfSNdmhr/5dlx6TLUZXhLFSF/4mZRdRXs
+         leetK5TNVLy2r0Rnfv0qmXSUVzq2C+M0cWxOS7QlDjDsgELMNS0yzsCgF+WW3IREHFAP
+         Z/ncCYv4H/PsoMY1Z2QAK03R4cWDQWPs1K16zmrEmaQhvso8GhxZnIlNEpUBoWQWYrMh
+         rFMg==
+X-Gm-Message-State: AC+VfDwadUGramQnMowR+ym69z8ftHouyy7UT/RVPfv6yW8FJQhsWFUr
+        uMhjES1QZRhfCDxAqoTehME=
+X-Google-Smtp-Source: ACHHUZ56brA+YWWAEz8TU4PAVsV02R+SWgJ96a3WKlbirAIjvLSNbBO5cimblvEo6LG/ezoxWr2djQ==
+X-Received: by 2002:a17:903:2347:b0:1b1:99c9:8ce1 with SMTP id c7-20020a170903234700b001b199c98ce1mr7581876plh.51.1686583806811;
+        Mon, 12 Jun 2023 08:30:06 -0700 (PDT)
+Received: from [192.168.51.14] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id jl1-20020a170903134100b001a245b49731sm6989724plb.128.2023.06.12.08.30.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 08:30:06 -0700 (PDT)
+Message-ID: <de920a42-0d72-c5ec-1af9-8bfa4b954cfd@acm.org>
+Date:   Mon, 12 Jun 2023 08:30:03 -0700
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:a44f:b0:47e:dbbc:5b45 with HTTP; Mon, 12 Jun 2023
- 08:29:58 -0700 (PDT)
-Reply-To: cynthiamatanga80000000@gmail.com
-From:   cynthia <cynthiamatanga40@gmail.com>
-Date:   Mon, 12 Jun 2023 08:29:58 -0700
-Message-ID: <CAC2w+jJ-o4hpLQqOAObPH9PtxLHYmcFT0=CziL7mMsyyJ5O6KA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [RFC PATCH v8 01/10] dpll: documentation on DPLL subsystem
+ interface
+Content-Language: en-US
+To:     Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
+        kuba@kernel.org, jiri@resnulli.us, vadfed@meta.com,
+        jonathan.lemon@gmail.com, pabeni@redhat.com
+Cc:     corbet@lwn.net, davem@davemloft.net, edumazet@google.com,
+        vadfed@fb.com, jesse.brandeburg@intel.com,
+        anthony.l.nguyen@intel.com, saeedm@nvidia.com, leon@kernel.org,
+        richardcochran@gmail.com, sj@kernel.org, javierm@redhat.com,
+        ricardo.canuelo@collabora.com, mst@redhat.com, tzimmermann@suse.de,
+        michal.michalik@intel.com, gregkh@linuxfoundation.org,
+        jacek.lawrynowicz@linux.intel.com, airlied@redhat.com,
+        ogabbay@kernel.org, arnd@arndb.de, nipun.gupta@amd.com,
+        axboe@kernel.dk, linux@zary.sk, masahiroy@kernel.org,
+        benjamin.tissoires@redhat.com, geert+renesas@glider.be,
+        milena.olech@intel.com, kuniyu@amazon.com, liuhangbin@gmail.com,
+        hkallweit1@gmail.com, andy.ren@getcruise.com, razor@blackwall.org,
+        idosch@nvidia.com, lucien.xin@gmail.com, nicolas.dichtel@6wind.com,
+        phil@nwl.cc, claudiajkang@gmail.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, linux-rdma@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, poros@redhat.com,
+        mschmidt@redhat.com, linux-clk@vger.kernel.org,
+        vadim.fedorenko@linux.dev
+References: <20230609121853.3607724-1-arkadiusz.kubalewski@intel.com>
+ <20230609121853.3607724-2-arkadiusz.kubalewski@intel.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230609121853.3607724-2-arkadiusz.kubalewski@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Friend.
+On 6/9/23 05:18, Arkadiusz Kubalewski wrote:
+> diff --git a/Documentation/driver-api/dpll.rst b/Documentation/driver-api/dpll.rst
+> new file mode 100644
+> index 000000000000..8caa4af022ad
+> --- /dev/null
+> +++ b/Documentation/driver-api/dpll.rst
+> @@ -0,0 +1,458 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +===============================
+> +The Linux kernel dpll subsystem
+> +===============================
+> +
+> +The main purpose of dpll subsystem is to provide general interface
+> +to configure devices that use any kind of Digital PLL and could use
+> +different sources of signal to synchronize to as well as different
+> +types of outputs.
+> +The main interface is NETLINK_GENERIC based protocol with an event
+> +monitoring multicast group defined.
 
-I have something very important i will like to discuss with you
-reply back for more details
-Cynthia
+A section that explains what "DPLL" stands for is missing. Please add 
+such a section.
+
+Thanks,
+
+Bart.
+
