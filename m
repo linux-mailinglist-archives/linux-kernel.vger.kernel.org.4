@@ -2,115 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B3B72CC1A
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C9272CC1E
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234803AbjFLRLc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 12 Jun 2023 13:11:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
+        id S233861AbjFLRL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 13:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbjFLRLb (ORCPT
+        with ESMTP id S231252AbjFLRLz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 13:11:31 -0400
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B06113;
-        Mon, 12 Jun 2023 10:11:30 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:56964)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1q8l4i-008G1Y-7Y; Mon, 12 Jun 2023 11:11:28 -0600
-Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:35692 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1q8l4h-00GGD8-4b; Mon, 12 Jun 2023 11:11:27 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
+        Mon, 12 Jun 2023 13:11:55 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54263F1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:11:54 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1b3cab3a48dso12035945ad.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:11:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686589914; x=1689181914;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w/I8oU5lBx7O0AVCpvbGtKKitom6tdJ7McWrPGypDC4=;
+        b=wVF0xEYGM/V+zCU80xvyq4qwV0yj1hOdLFRqOeBG6rNq1mZS9axHGYBLeBI0WMdRIv
+         hkzXG+DQqyxUG3ZNJwhk4nvHa7dTDdVmUbtUbv0KonjLnpMhwIR++Zn+JYGYF4qpACy0
+         TBguC9jF/7RXSTOZFdVTFwDFoUFeZKO/TxKQvxwyOSfFBR1hlTDCsLQF3gJGrQKh0dM1
+         dnbBs1N9sWbWV7gnyAH3EvCgPH/tTgIbVrgHLUeG6DI/qTktPkH3U4iZQSPo6hQIH+Hn
+         C7b43aUeXSO/Vmzkm31QiJeIjfT3Lil1qVykh5WcPDzbPCKU8j1R2gFpw17raF0Nay2u
+         ptyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686589914; x=1689181914;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=w/I8oU5lBx7O0AVCpvbGtKKitom6tdJ7McWrPGypDC4=;
+        b=kZuraGytbWme8ABjf/60Ucnhx7QvkdycdfEA13/kRyqYYyPE5KJgK/BAigwl1G1o2b
+         pPr/8OEjVvSEyImoVK+papuiMZWNasYBIQ/xHif6GzLy6iJ3gKZEOBy/Ag2FO8zXKDyu
+         ApREuT3msvoRhb2IpBB92uj+oWKYZMvnNKhbsxTKVMe06L2Jw1HOVa1u1xhMEQ9r4ga+
+         v0BpB80ETmBHPNb/5HdYzGymu3uYkHLiZCNkGghkYOzldlq6YgRDGZFSM2ElOGjWuaKa
+         zK0C/9R/TUBK5tcaGrqrQQI+N7kUGgzOEQNp7TFrE94W0c5ELRgKCyDRuMWbDvC9v8oY
+         6Gwg==
+X-Gm-Message-State: AC+VfDzQKJvLEFat5BI+JwILhufDQ0z9c9f2rFIDwHjAOoLJazuFxXJ1
+        8aiSTNU67sHJqhtIrp8qY+7tveidmaE=
+X-Google-Smtp-Source: ACHHUZ5v1c+CqyBwYivhK+DSqau5kQVmVjEZH0nAYmDaNR5inKzg30hD4xw/4ZnGEEzgZLpMXuBMN4uPSsY=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:8d81:b0:1b3:95a9:3fc3 with SMTP id
+ v1-20020a1709028d8100b001b395a93fc3mr1303122plo.10.1686589913639; Mon, 12 Jun
+ 2023 10:11:53 -0700 (PDT)
+Date:   Mon, 12 Jun 2023 10:11:51 -0700
+In-Reply-To: <CAHk-=wh6JEk7wYECcMdbXHf5ST8PAkOyUXhE8x2kqT6to+Gn9Q@mail.gmail.com>
+Mime-Version: 1.0
+References: <20230612090713.652690195@infradead.org> <20230612093541.598260416@infradead.org>
+ <CAHk-=wh6JEk7wYECcMdbXHf5ST8PAkOyUXhE8x2kqT6to+Gn9Q@mail.gmail.com>
+Message-ID: <ZIdR18xG1jy8WdEp@google.com>
+Subject: Re: [PATCH v3 56/57] perf: Simplify perf_pmu_output_stop()
+From:   Sean Christopherson <seanjc@google.com>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Zorro Lang <zlang@redhat.com>, linux-xfs@vger.kernel.org,
-        Mike Christie <michael.christie@oracle.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, linux-kernel@vger.kernel.org
-References: <20230611124836.whfktwaumnefm5z5@zlang-mailbox>
-        <ZIZSPyzReZkGBEFy@dread.disaster.area>
-        <20230612015145.GA11441@frogsfrogsfrogs>
-        <ZIaBQnCKJ6NsqGhd@dread.disaster.area>
-        <CAHk-=whJqZLKPR-cpX-V4wJTXVX-_tG5Vjuj2q9knvKGCPdfkg@mail.gmail.com>
-        <20230612153629.GA11427@frogsfrogsfrogs>
-        <CAHk-=wiN-JcUh4uhDNmA4hp26Mg+c2DTuzgWY2fZ6hytDtOMCg@mail.gmail.com>
-        <af31cadf-8c15-8d88-79fb-066dc87f0324@kernel.dk>
-        <13d9e4f2-17c5-0709-0cc0-6f92bfe9f30d@kernel.dk>
-        <CAHk-=wgdBfqyNHk0iNyYpEuBUdVgq1KMzHMuEqn=ADtfyK_pkQ@mail.gmail.com>
-        <212a190c-f81e-2876-cf14-6d1e37d47192@kernel.dk>
-        <CAHk-=wh0hrFjcU5C8uHvLBThrT5vQsFHb7Jk6HRP3LAJqdNx1A@mail.gmail.com>
-Date:   Mon, 12 Jun 2023 12:11:19 -0500
-In-Reply-To: <CAHk-=wh0hrFjcU5C8uHvLBThrT5vQsFHb7Jk6HRP3LAJqdNx1A@mail.gmail.com>
-        (Linus Torvalds's message of "Mon, 12 Jun 2023 09:57:51 -0700")
-Message-ID: <87wn08ppvs.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-XM-SPF: eid=1q8l4h-00GGD8-4b;;;mid=<87wn08ppvs.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=pass
-X-XM-AID: U2FsdGVkX19EY7Ho9kfWEUAJ7nVOKAACcXVbaQOg1IQ=
-X-SA-Exim-Connect-IP: 68.110.29.46
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Cc:     Peter Zijlstra <peterz@infradead.org>, keescook@chromium.org,
+        gregkh@linuxfoundation.org, pbonzini@redhat.com,
+        masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+        nicolas@fjasle.eu, catalin.marinas@arm.com, will@kernel.org,
+        vkoul@kernel.org, trix@redhat.com, ojeda@kernel.org,
+        mingo@redhat.com, longman@redhat.com, boqun.feng@gmail.com,
+        dennis@kernel.org, tj@kernel.org, cl@linux.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
+        adrian.hunter@intel.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, paulmck@kernel.org,
+        frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
+        42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
+        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
+        john.johansen@canonical.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
+        rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
+        tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
+        luc.vanoostenryck@gmail.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;Linus Torvalds <torvalds@linux-foundation.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 526 ms - load_scoreonly_sql: 0.08 (0.0%),
-        signal_user_changed: 12 (2.3%), b_tie_ro: 10 (2.0%), parse: 1.27
-        (0.2%), extract_message_metadata: 17 (3.2%), get_uri_detail_list: 1.26
-        (0.2%), tests_pri_-2000: 18 (3.3%), tests_pri_-1000: 2.7 (0.5%),
-        tests_pri_-950: 1.30 (0.2%), tests_pri_-900: 1.08 (0.2%),
-        tests_pri_-200: 0.89 (0.2%), tests_pri_-100: 4.4 (0.8%),
-        tests_pri_-90: 56 (10.7%), check_bayes: 55 (10.4%), b_tokenize: 6
-        (1.1%), b_tok_get_all: 6 (1.2%), b_comp_prob: 2.1 (0.4%),
-        b_tok_touch_all: 37 (7.0%), b_finish: 0.93 (0.2%), tests_pri_0: 178
-        (33.8%), check_dkim_signature: 0.61 (0.1%), check_dkim_adsp: 2.5
-        (0.5%), poll_dns_idle: 218 (41.5%), tests_pri_10: 2.1 (0.4%),
-        tests_pri_500: 228 (43.3%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [6.5-rc5 regression] core dump hangs (was Re: [Bug report]
- fstests generic/051 (on xfs) hang on latest linux v6.5-rc5+)
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus Torvalds <torvalds@linux-foundation.org> writes:
+On Mon, Jun 12, 2023, Linus Torvalds wrote:
+> This patch looks completely broken to me.
+>=20
+> You now do
+>=20
+>                 if (err =3D=3D -EAGAIN)
+>                         goto restart;
+>=20
+> *within* the RCU-guarded section, and the "goto restart" will guard it ag=
+ain.
 
-> On Mon, Jun 12, 2023 at 9:45 AM Jens Axboe <axboe@kernel.dk> wrote:
->>
->> You snipped the suspicion in my reply on why that exists, to avoid
->> io_wq_worker_sleeping() triggering.
->
-> I'm not seeing why triggering io_wq_worker_sleeping() should even be a
-> problem in the first place.
->
-> I suspect that is entirely historical too, and has to do with how it
-> used to do that
->
->         struct io_worker *worker = kthread_data(tsk);
->         struct io_wqe *wqe = worker->wqe;
->
-> back in the bad old days of kthreads.
->
-> But yeah, I don't know that code.
+What if we require that all guarded sections have explicit scoping?  E.g. d=
+rop
+the current version of guard() and rename scoped_guard() =3D> guard().  And=
+ then
+figure out macro magic to guard an entire function?  E.g. something like
 
-If it is a problem it looks like the thread shutdown can clear
-"worker->flags & IO_WORKER_F_UP" rather than
-"current->flags & PF_IO_WORKER".
+  static void perf_pmu_output_stop(struct perf_event *event) fn_guard(rcu)
+  {
+	...
+  }
 
-I don't see how it makes sense for the load balancing logic for
-a per-process thread pool to be running at that point.
+or just "guard(rcu)" if possible.  IIUC, function scopes like that will be =
+possible
+once -Wdeclaration-after-statement goes away.
 
-Eric
+Bugs aside, IMO guards that are buried in the middle of a function and impl=
+icitly
+scoped to the function are all too easy to overlook.  Requiring explicit sc=
+oping
+would make bugs like this easier to spot since the goto would jump out of s=
+cope
+(and I assume prematurely release the resource/lock?).  As a bonus, annotat=
+ing
+the function itself would also serve as documentation.
+
+The only downside is that the code for function-scoped locks that are acqui=
+red
+partway through the function would be more verbose and/or cumbersome to wri=
+te,
+but that can be mitigated to some extent, e.g. by moving the locked portion=
+ to a
+separate helper.
+
+> On Mon, Jun 12, 2023 at 2:39=E2=80=AFAM Peter Zijlstra <peterz@infradead.=
+org> wrote:
+> >
+> > --- a/kernel/events/core.c
+> > +++ b/kernel/events/core.c
+> > @@ -7977,7 +7977,8 @@ static void perf_pmu_output_stop(struct
+> >         int err, cpu;
+> >
+> >  restart:
+> > -       rcu_read_lock();
+> > +       /* cannot have a label in front of a decl */;
+> > +       guard(rcu)();
+> >         list_for_each_entry_rcu(iter, &event->rb->event_list, rb_entry)=
+ {
+> >                 /*
+> >                  * For per-CPU events, we need to make sure that neithe=
+r they
+> > @@ -7993,12 +7994,9 @@ static void perf_pmu_output_stop(struct
+> >                         continue;
+> >
+> >                 err =3D cpu_function_call(cpu, __perf_pmu_output_stop, =
+event);
+> > -               if (err =3D=3D -EAGAIN) {
+> > -                       rcu_read_unlock();
+> > +               if (err =3D=3D -EAGAIN)
+> >                         goto restart;
+> > -               }
+> >         }
+> > -       rcu_read_unlock();
+> >  }
