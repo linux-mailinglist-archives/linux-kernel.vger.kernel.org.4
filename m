@@ -2,173 +2,491 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C74B72C41F
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 14:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1544072C440
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 14:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233665AbjFLMaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 08:30:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52692 "EHLO
+        id S235004AbjFLMbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 08:31:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233224AbjFLMaA (ORCPT
+        with ESMTP id S234985AbjFLMbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 08:30:00 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92FA318C
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 05:29:27 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 14:29:25 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686572966;
+        Mon, 12 Jun 2023 08:31:01 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469241BC8;
+        Mon, 12 Jun 2023 05:30:27 -0700 (PDT)
+X-GND-Sasl: herve.codina@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686573026;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EnIGxyCzH2Bgu9IDHI1uaYgbgALe2T60xMPIq5c3BAk=;
-        b=Fj66CTuBwWspLsTZgZy8EDEGpbqEgY6C0fvEyuR/FjGqlZbQzZYJfGtAHxIovsZzKIxD/0
-        onZBDiA+U1bFEMksy2sQiky6CBijD5dF8vZZa18CQFoW26NLqxiDy/VQp8SU8WlAQ8fI10
-        heGF1fvNanW9B0xNjIMV06CNv8npJMM/cjdGh8towwdaPsx2hxB4l9sSaFLHRGi/PXcBYd
-        vdwCGVHTCMjQb35dcU2AaUaIedVJ8zJ+yx5gectp9F2K7+FWkdt/Ix+4Nu6wR6J1lMB8Wr
-        cxnhKoj0DYtFuz84PS0QfMiXttm3n2hyEdULUwpmSAsfmbsajVGlEGB625F+YA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686572966;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EnIGxyCzH2Bgu9IDHI1uaYgbgALe2T60xMPIq5c3BAk=;
-        b=rGQ9fpGCfd3F9VQ1ROqXyCGjjdHLLXUsQavhX1f5QxSKlxxJIeCdTIa6oD3K1mM+ZMytUm
-        9aqGsOCsiGTyU2BA==
-From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
-To:     Frederic Weisbecker <frederic@kernel.org>
-cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Eric Dumazet <edumazet@google.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Arjan van de Ven <arjan@infradead.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Rik van Riel <riel@surriel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        "Gautham R . Shenoy" <gautham.shenoy@amd.com>
-Subject: Re: [PATCH v7 19/21] timer: Implement the hierarchical pull model
-In-Reply-To: <ZICMBw-Fo-nzqGXb@2a01cb0980007dab8d6b2773c13fd2df.ipv6.abo.wanadoo.fr>
-Message-ID: <46bb6830-660-f9ff-db1c-f67d680ea8c@linutronix.de>
-References: <20230524070629.6377-1-anna-maria@linutronix.de> <20230524070629.6377-20-anna-maria@linutronix.de> <ZICMBw-Fo-nzqGXb@2a01cb0980007dab8d6b2773c13fd2df.ipv6.abo.wanadoo.fr>
+        bh=o7hzrCzJvMfgpuAj6RCIq58H21Fr69uRkNlz3Q+GBYU=;
+        b=NbWoG03fN5BMxNgnijGjkNxpBhLeauEA6YgjCeU23hA+lUH5io4ipaJEiRJbRNzeH1nWSo
+        bsCJh+XTEPxIzWrkaXD1sKWUcJpr8i1KQxk8cRgLySLUTqMZFhp3h30++CY7OtS9ZJ0A4r
+        tV5qitvSjV7MV3zPTlM6+LVWGAEBRL0ZRFBbCmL1LbqpY5WUF/YQnUFTFo9hhbTb7Qmera
+        jSrWZ0ZDislKPQmiVvPviQavMTF/UHW68+zM3skwIkZ+nglqzsODftCVTcCJ7Kn6jZJFdh
+        OC+30B6qwPNzq52DWn1i08BP0aSmsWDSXPsLJeIp9lCH7AERbACSD3WI94XHGg==
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPA id 34BA1240017;
+        Mon, 12 Jun 2023 12:30:24 +0000 (UTC)
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Herve Codina <herve.codina@bootlin.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH v3 11/12] ASoC: codecs: Add support for the generic IIO auxiliary devices
+Date:   Mon, 12 Jun 2023 14:29:25 +0200
+Message-Id: <20230612122926.107333-12-herve.codina@bootlin.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230612122926.107333-1-herve.codina@bootlin.com>
+References: <20230612122926.107333-1-herve.codina@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1942744613-1686572966=:2279"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Industrial I/O devices can be present in the audio path.
+These devices needs to be used as audio components in order to be fully
+integrated in the audio path.
 
---8323329-1942744613-1686572966=:2279
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
+This support allows to consider these Industrial I/O devices as auxliary
+audio devices and allows to control them using mixer controls.
 
-On Wed, 7 Jun 2023, Frederic Weisbecker wrote:
+Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+---
+ sound/soc/codecs/Kconfig         |  12 ++
+ sound/soc/codecs/Makefile        |   2 +
+ sound/soc/codecs/audio-iio-aux.c | 334 +++++++++++++++++++++++++++++++
+ 3 files changed, 348 insertions(+)
+ create mode 100644 sound/soc/codecs/audio-iio-aux.c
 
-> Le Wed, May 24, 2023 at 09:06:27AM +0200, Anna-Maria Behnsen a écrit :
-> > +/*
-> > + * Returns true, if there is nothing to be propagated to the next level
-> > + *
-> > + * @data->nextexp is reset to KTIME_MAX; it is reused for first global
-> > + * event which needs to be handled by migrator (in toplevel group)
-> > + *
-> > + * This is the only place where group event expiry value is set.
-> > + */
-> > +static bool tmigr_update_events(struct tmigr_group *group,
-> > +				struct tmigr_group *child,
-> > +				struct tmigr_walk *data)
-> > +{
-> > +	struct tmigr_event *evt, *first_childevt;
-> > +	bool walk_done, remote = data->remote;
-> > +	u64 nextexp;
-> > +
-> > +	if (child) {
-> > +		if (data->childstate.active)
-> > +			return true;
-> > +
-> > +		raw_spin_lock(&child->lock);
-> > +		raw_spin_lock_nested(&group->lock, SINGLE_DEPTH_NESTING);
-> > +
-> > +		first_childevt = tmigr_next_groupevt(child);
-> > +		nextexp = child->next_expiry;
-> > +		evt = &child->groupevt;
-> > +	} else {
-> > +		nextexp = data->nextexp;
-> > +
-> > +		/*
-> > +		 * Set @data->nextexp to KTIME_MAX; it is reused for first
-> > +		 * global event which needs to be handled by migrator (in
-> > +		 * toplevel group)
-> > +		 */
-> > +		data->nextexp = KTIME_MAX;
-> > +
-> > +		first_childevt = evt = data->evt;
-> > +
-> > +		/*
-> > +		 * Walking the hierarchy is required in any case, when a
-> > +		 * remote expiry was done before.
-> 
-> You can probably remove that comma because it feels like breaking the condition link.
-> 
-> > +		 * This ensures to not lost
-> 
-> lose
-> 
-> > +		 * already queued events in non active groups (see section
-> > +		 * "Required event and timerqueue update after remote
-> > +		 * expiry" in documentation at the top).
-> > +		 */
-> > +		if (evt->ignore && !remote)
-> 
-> It looks like in the case of !remote, this branch will never end up
-> stopping the propagation up because either:
-> 
-> * We come here from tmigr_inactive_up() which takes care of the propagation.
-> 
-> or
-> 
-> * We come here from tmigr_new_timer() and ->ignore can't be set.
-> 
-> If I'm right, can we add a comment about that so that the poor reviewer
-> doesn't stutter on that for too long?
-> 
+diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
+index 44806bfe8ee5..92b7c417f1b2 100644
+--- a/sound/soc/codecs/Kconfig
++++ b/sound/soc/codecs/Kconfig
+@@ -53,6 +53,7 @@ config SND_SOC_ALL_CODECS
+ 	imply SND_SOC_AK5558
+ 	imply SND_SOC_ALC5623
+ 	imply SND_SOC_ALC5632
++	imply SND_SOC_AUDIO_IIO_AUX
+ 	imply SND_SOC_AW8738
+ 	imply SND_SOC_AW88395
+ 	imply SND_SOC_BT_SCO
+@@ -608,6 +609,17 @@ config SND_SOC_ALC5632
+ 	tristate
+ 	depends on I2C
+ 
++config SND_SOC_AUDIO_IIO_AUX
++	tristate "Audio IIO Auxiliary device"
++	depends on IIO
++	help
++	  Enable support for Industrial I/O devices as audio auxiliary devices.
++	  This allows to have an IIO device present in the audio path and
++	  controlled using mixer controls.
++
++	  To compile this driver as a module, choose M here: the module
++	  will be called snd-soc-audio-iio-aux.
++
+ config SND_SOC_AW8738
+ 	tristate "Awinic AW8738 Audio Amplifier"
+ 	select GPIOLIB
+diff --git a/sound/soc/codecs/Makefile b/sound/soc/codecs/Makefile
+index 2c45c2f97e4e..f2828d3616c5 100644
+--- a/sound/soc/codecs/Makefile
++++ b/sound/soc/codecs/Makefile
+@@ -45,6 +45,7 @@ snd-soc-ak4671-objs := ak4671.o
+ snd-soc-ak5386-objs := ak5386.o
+ snd-soc-ak5558-objs := ak5558.o
+ snd-soc-arizona-objs := arizona.o arizona-jack.o
++snd-soc-audio-iio-aux-objs := audio-iio-aux.o
+ snd-soc-aw8738-objs := aw8738.o
+ snd-soc-aw88395-lib-objs := aw88395/aw88395_lib.o
+ snd-soc-aw88395-objs := aw88395/aw88395.o \
+@@ -421,6 +422,7 @@ obj-$(CONFIG_SND_SOC_AK5558)	+= snd-soc-ak5558.o
+ obj-$(CONFIG_SND_SOC_ALC5623)    += snd-soc-alc5623.o
+ obj-$(CONFIG_SND_SOC_ALC5632)	+= snd-soc-alc5632.o
+ obj-$(CONFIG_SND_SOC_ARIZONA)	+= snd-soc-arizona.o
++obj-$(CONFIG_SND_SOC_AUDIO_IIO_AUX)	+= snd-soc-audio-iio-aux.o
+ obj-$(CONFIG_SND_SOC_AW8738)	+= snd-soc-aw8738.o
+ obj-$(CONFIG_SND_SOC_AW88395_LIB) += snd-soc-aw88395-lib.o
+ obj-$(CONFIG_SND_SOC_AW88395)	+=snd-soc-aw88395.o
+diff --git a/sound/soc/codecs/audio-iio-aux.c b/sound/soc/codecs/audio-iio-aux.c
+new file mode 100644
+index 000000000000..94fc8b6767d0
+--- /dev/null
++++ b/sound/soc/codecs/audio-iio-aux.c
+@@ -0,0 +1,334 @@
++// SPDX-License-Identifier: GPL-2.0-only
++//
++// ALSA SoC glue to use IIO devices as audio components
++//
++// Copyright 2023 CS GROUP France
++//
++// Author: Herve Codina <herve.codina@bootlin.com>
++
++#include <linux/iio/consumer.h>
++#include <linux/minmax.h>
++#include <linux/mod_devicetable.h>
++#include <linux/platform_device.h>
++#include <linux/slab.h>
++#include <sound/soc.h>
++#include <linux/string_helpers.h>
++#include <sound/tlv.h>
++
++struct audio_iio_aux_chan {
++	struct iio_channel *iio_chan;
++	const char *name;
++	int max;
++	int min;
++	bool is_invert_range;
++};
++
++struct audio_iio_aux {
++	struct device *dev;
++	struct audio_iio_aux_chan *chans;
++	unsigned int num_chans;
++};
++
++static int audio_iio_aux_info_volsw(struct snd_kcontrol *kcontrol,
++				    struct snd_ctl_elem_info *uinfo)
++{
++	struct audio_iio_aux_chan *chan = (struct audio_iio_aux_chan *)kcontrol->private_value;
++
++	uinfo->count = 1;
++	uinfo->value.integer.min = 0;
++	uinfo->value.integer.max = chan->max - chan->min;
++	uinfo->type = (uinfo->value.integer.max == 1) ?
++			SNDRV_CTL_ELEM_TYPE_BOOLEAN : SNDRV_CTL_ELEM_TYPE_INTEGER;
++	return 0;
++}
++
++static int audio_iio_aux_get_volsw(struct snd_kcontrol *kcontrol,
++				   struct snd_ctl_elem_value *ucontrol)
++{
++	struct audio_iio_aux_chan *chan = (struct audio_iio_aux_chan *)kcontrol->private_value;
++	int max = chan->max;
++	int min = chan->min;
++	bool invert_range = chan->is_invert_range;
++	int ret;
++	int val;
++
++	ret = iio_read_channel_raw(chan->iio_chan, &val);
++	if (ret < 0)
++		return ret;
++
++	ucontrol->value.integer.value[0] = val - min;
++	if (invert_range)
++		ucontrol->value.integer.value[0] = max - ucontrol->value.integer.value[0];
++
++	return 0;
++}
++
++static int audio_iio_aux_put_volsw(struct snd_kcontrol *kcontrol,
++				   struct snd_ctl_elem_value *ucontrol)
++{
++	struct audio_iio_aux_chan *chan = (struct audio_iio_aux_chan *)kcontrol->private_value;
++	int max = chan->max;
++	int min = chan->min;
++	bool invert_range = chan->is_invert_range;
++	int val;
++	int ret;
++	int tmp;
++
++	val = ucontrol->value.integer.value[0];
++	if (val < 0)
++		return -EINVAL;
++	if (val > max - min)
++		return -EINVAL;
++
++	val = val + min;
++	if (invert_range)
++		val = max - val;
++
++	ret = iio_read_channel_raw(chan->iio_chan, &tmp);
++	if (ret < 0)
++		return ret;
++
++	if (tmp == val)
++		return 0;
++
++	ret = iio_write_channel_raw(chan->iio_chan, val);
++	if (ret)
++		return ret;
++
++	return 1; /* The value changed */
++}
++
++static int audio_iio_aux_add_controls(struct snd_soc_component *component,
++				      struct audio_iio_aux_chan *chan)
++{
++	struct snd_kcontrol_new control = {0};
++
++	control.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
++	control.name = chan->name;
++	control.info = audio_iio_aux_info_volsw;
++	control.get = audio_iio_aux_get_volsw;
++	control.put = audio_iio_aux_put_volsw;
++	control.private_value = (unsigned long)chan;
++
++	return snd_soc_add_component_controls(component, &control, 1);
++}
++
++/*
++ * These data could be on stack but they are pretty big.
++ * As ASoC internally copy them and protect them against concurrent accesses
++ * (snd_soc_bind_card() protects using client_mutex), keep them in the global
++ * data area.
++ */
++static struct snd_soc_dapm_widget widgets[3];
++static struct snd_soc_dapm_route routes[2];
++
++/* Be sure sizes are correct (need 3 widgets and 2 routes) */
++static_assert(ARRAY_SIZE(widgets) >= 3, "3 widgets are needed");
++static_assert(ARRAY_SIZE(routes) >= 2, "2 routes are needed");
++
++static int audio_iio_aux_add_dapms(struct snd_soc_component *component,
++				   struct audio_iio_aux_chan *chan)
++{
++	struct snd_soc_dapm_context *dapm = snd_soc_component_get_dapm(component);
++	char *input_name = NULL;
++	char *output_name = NULL;
++	char *pga_name = NULL;
++	int ret;
++
++	input_name = kasprintf(GFP_KERNEL, "%s IN", chan->name);
++	if (!input_name) {
++		ret = -ENOMEM;
++		goto out;
++	}
++	output_name = kasprintf(GFP_KERNEL, "%s OUT", chan->name);
++	if (!output_name) {
++		ret = -ENOMEM;
++		goto out_free_input_name;
++	}
++	pga_name = kasprintf(GFP_KERNEL, "%s PGA", chan->name);
++	if (!pga_name) {
++		ret = -ENOMEM;
++		goto out_free_output_name;
++	}
++
++	widgets[0] = SND_SOC_DAPM_INPUT(input_name);
++	widgets[1] = SND_SOC_DAPM_OUTPUT(output_name);
++	widgets[2] = SND_SOC_DAPM_PGA(pga_name, SND_SOC_NOPM, 0, 0, NULL, 0);
++	ret = snd_soc_dapm_new_controls(dapm, widgets, 3);
++	if (ret)
++		goto out_free_pga_name;
++
++	routes[0].sink = pga_name;
++	routes[0].control = NULL;
++	routes[0].source = input_name;
++	routes[1].sink = output_name;
++	routes[1].control = NULL;
++	routes[1].source = pga_name;
++	ret = snd_soc_dapm_add_routes(dapm, routes, 2);
++
++	/* Allocated names are no more needed (duplicated in ASoC internals) */
++
++out_free_pga_name:
++	kfree(pga_name);
++out_free_output_name:
++	kfree(output_name);
++out_free_input_name:
++	kfree(input_name);
++out:
++	return ret;
++}
++
++static int audio_iio_aux_component_probe(struct snd_soc_component *component)
++{
++	struct audio_iio_aux *iio_aux = snd_soc_component_get_drvdata(component);
++	struct audio_iio_aux_chan *chan;
++	int ret;
++	int i;
++
++	for (i = 0; i < iio_aux->num_chans; i++) {
++		chan = iio_aux->chans + i;
++
++		ret = iio_read_max_channel_raw(chan->iio_chan, &chan->max);
++		if (ret)
++			return dev_err_probe(component->dev, ret,
++					     "chan[%d] %s: Cannot get max raw value\n",
++					     i, chan->name);
++
++		ret = iio_read_min_channel_raw(chan->iio_chan, &chan->min);
++		if (ret)
++			return dev_err_probe(component->dev, ret,
++					     "chan[%d] %s: Cannot get min raw value\n",
++					     i, chan->name);
++
++		if (chan->min > chan->max) {
++			dev_dbg(component->dev, "chan[%d] %s: Swap min and max\n",
++				i, chan->name);
++			swap(chan->min, chan->max);
++		}
++
++		/* Set initial value */
++		ret = iio_write_channel_raw(chan->iio_chan,
++					    chan->is_invert_range ? chan->max : chan->min);
++		if (ret)
++			return dev_err_probe(component->dev, ret,
++					     "chan[%d] %s: Cannot set initial value\n",
++					     i, chan->name);
++
++		ret = audio_iio_aux_add_controls(component, chan);
++		if (ret)
++			return ret;
++
++		ret = audio_iio_aux_add_dapms(component, chan);
++		if (ret)
++			return ret;
++
++		dev_dbg(component->dev, "chan[%d]: Added %s (min=%d, max=%d, invert=%s)\n",
++			i, chan->name, chan->min, chan->max,
++			str_on_off(chan->is_invert_range));
++	}
++
++	return 0;
++}
++
++static const struct snd_soc_component_driver audio_iio_aux_component_driver = {
++	.probe = audio_iio_aux_component_probe,
++};
++
++static int audio_iio_aux_probe(struct platform_device *pdev)
++{
++	struct audio_iio_aux_chan *iio_aux_chan;
++	struct audio_iio_aux *iio_aux;
++	const char **names;
++	u32 *invert_ranges;
++	int count;
++	int ret;
++	int i;
++
++	iio_aux = devm_kzalloc(&pdev->dev, sizeof(*iio_aux), GFP_KERNEL);
++	if (!iio_aux)
++		return -ENOMEM;
++
++	iio_aux->dev = &pdev->dev;
++
++	count = device_property_string_array_count(iio_aux->dev, "io-channel-names");
++	if (count < 0)
++		return dev_err_probe(iio_aux->dev, count, "failed to count io-channel-names\n");
++
++	iio_aux->num_chans = count;
++
++	iio_aux->chans = devm_kmalloc_array(iio_aux->dev, iio_aux->num_chans,
++					    sizeof(*iio_aux->chans), GFP_KERNEL);
++	if (!iio_aux->chans)
++		return -ENOMEM;
++
++	names = kcalloc(iio_aux->num_chans, sizeof(*names), GFP_KERNEL);
++	if (!names)
++		return -ENOMEM;
++
++	invert_ranges = kcalloc(iio_aux->num_chans, sizeof(*invert_ranges), GFP_KERNEL);
++	if (!invert_ranges) {
++		ret = -ENOMEM;
++		goto out_free_names;
++	}
++
++	ret = device_property_read_string_array(iio_aux->dev, "io-channel-names",
++						names, iio_aux->num_chans);
++	if (ret < 0) {
++		dev_err_probe(iio_aux->dev, ret, "failed to read io-channel-names\n");
++		goto out_free_invert_ranges;
++	}
++
++	/*
++	 * snd-control-invert-range is optional and can contain fewer items
++	 * than the number of channel. Unset values default to 0.
++	 */
++	count = device_property_count_u32(iio_aux->dev, "snd-control-invert-range");
++	if (count > 0) {
++		count = min_t(unsigned int, count, iio_aux->num_chans);
++		device_property_read_u32_array(iio_aux->dev, "snd-control-invert-range",
++					       invert_ranges, count);
++	}
++
++	for (i = 0; i < iio_aux->num_chans; i++) {
++		iio_aux_chan = iio_aux->chans + i;
++		iio_aux_chan->name = names[i];
++		iio_aux_chan->is_invert_range = invert_ranges[i];
++
++		iio_aux_chan->iio_chan = devm_iio_channel_get(iio_aux->dev, iio_aux_chan->name);
++		if (IS_ERR(iio_aux_chan->iio_chan)) {
++			ret = PTR_ERR(iio_aux_chan->iio_chan);
++			dev_err_probe(iio_aux->dev, ret, "get IIO channel '%s' failed\n",
++				      iio_aux_chan->name);
++			goto out_free_invert_ranges;
++		}
++	}
++
++	platform_set_drvdata(pdev, iio_aux);
++
++	ret = devm_snd_soc_register_component(iio_aux->dev, &audio_iio_aux_component_driver,
++					      NULL, 0);
++out_free_invert_ranges:
++	kfree(invert_ranges);
++out_free_names:
++	kfree(names);
++	return ret;
++}
++
++static const struct of_device_id audio_iio_aux_ids[] = {
++	{ .compatible = "audio-iio-aux" },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, audio_iio_aux_ids);
++
++static struct platform_driver audio_iio_aux_driver = {
++	.driver = {
++		.name = "audio-iio-aux",
++		.of_match_table = audio_iio_aux_ids,
++	},
++	.probe = audio_iio_aux_probe,
++};
++module_platform_driver(audio_iio_aux_driver);
++
++MODULE_AUTHOR("Herve Codina <herve.codina@bootlin.com>");
++MODULE_DESCRIPTION("IIO ALSA SoC aux driver");
++MODULE_LICENSE("GPL");
+-- 
+2.40.1
 
-Right. It will never stop the propagation - but the condition could be
-fulfilled when call site is tmigr_inactive_up(). My proposal for expanding
-the comment is the following:
-
-	/*
-	 * Walking the hierarchy is required in any case when a
-	 * remote expiry was done before. This ensures to not lose
-	 * already queued events in non active groups (see section
-	 * "Required event and timerqueue update after remote
-	 * expiry" in documentation at the top).
-	 *
-	 * The two call sites which are executed without a remote expiry
-	 * before, are not prevented from propagating changes through
-	 * the hierarchy by the return:
-	 *  - When entering this path by tmigr_new_timer(), evt->ignore
-	 *    is never set.
-	 *  - tmigr_inactive_up() takes care of propagation by itself
-	 *    and ignores return value. But an immediate return is
-	 *    required because nothing has to be done in this level as
-	 *    event could be ignored.
-	 */
-
-Thanks,
-
-	Anna-Maria
-
---8323329-1942744613-1686572966=:2279--
