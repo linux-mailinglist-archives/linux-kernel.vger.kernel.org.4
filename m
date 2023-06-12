@@ -2,74 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5829A72BC02
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:23:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5172072BC03
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234384AbjFLJXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 05:23:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41838 "EHLO
+        id S234447AbjFLJXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 05:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234118AbjFLJWq (ORCPT
+        with ESMTP id S234406AbjFLJXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 05:22:46 -0400
+        Mon, 12 Jun 2023 05:23:03 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882DE4C28
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:15:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22DA4ED4
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:15:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686561302;
+        s=mimecast20190719; t=1686561343;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ddtqvQOlKG9g77NyVakbRMl+OTaGq4kB/lzy17Rd0KE=;
-        b=JF2WKL3DYgQtFoBe1pFaBaGean0ZFfbwN29QlwmJ8HtkupMfbSyMhuodDLh9f4ZJ3RwlKO
-        fGMhN5kG6DWJi2pzzZmS6q0AsPANEM80GoMEnocQVRDYRolwTCdQvEGWVhqlfFTDHmQj+0
-        LR1nTlYTvPuAIa7nN9okK5ofnucHtbc=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=czIpL4TLoK5D3eKZvmop6buHX7NGH22btauuZM6tsDY=;
+        b=I9euZ0VsYfFrhS3f1H1Ol5udLRkZwfUTohARwFi8+cgfU8/Kj8YDaiY1CBIHWxZksnqRS3
+        hnCDnoKxxqSyFhe3Dc5YQ9b46kK1an5G3zvaMX/TgR/9pd1tLMTOgLHZ40HgpM3NGHIAJB
+        xrkfqMAwVYXW9mQqqcEpOUpIpJAEgZg=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-649-eIuqGKscMVWbdJOTRbJADQ-1; Mon, 12 Jun 2023 05:15:01 -0400
-X-MC-Unique: eIuqGKscMVWbdJOTRbJADQ-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f81bdf4716so2644295e9.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:15:01 -0700 (PDT)
+ us-mta-257-vBM9q_eHN72s-npoYdpVcA-1; Mon, 12 Jun 2023 05:15:41 -0400
+X-MC-Unique: vBM9q_eHN72s-npoYdpVcA-1
+Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-4f59c4df0f9so2556026e87.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:15:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686561300; x=1689153300;
+        d=1e100.net; s=20221208; t=1686561340; x=1689153340;
         h=content-transfer-encoding:in-reply-to:organization:from:references
          :cc:to:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ddtqvQOlKG9g77NyVakbRMl+OTaGq4kB/lzy17Rd0KE=;
-        b=PYWQX9dzNYrT57lBljBBKmy9FG9UUx3LQE8ykCxxY1XGnDlLkVtV2mX/fadsbeBigc
-         yG+CJ7shKFOjXDLxbGzvzNH+/+/0h2gHQUOaldEki3bx7BOPo4ordV07+w/9xk6sb0ft
-         tpVVmkAqwgAGWV98JKt3LZZgmWt1WsgFb7F56vzl+78b/0hmW2rWMIkqFRHmqu4s81zU
-         NqcmyI+1RpX4bVPP9xOZWs1nJE3ncoNVzmMWKmG5+sv1KH1ZStxJib1P4roCS56IISMA
-         HBCw1ak/P6qNx8twxkYsdW27E1d2wX+n48tKsFe6c89BbeHkd6oMkmggBFxetjsYDa7f
-         kGuQ==
-X-Gm-Message-State: AC+VfDxkYWmfREvXUGsoA9V0DNslwwN+d1oBAAUzR03zAm+H3H8IVgLk
-        TxO1wZi4soqmTvCI/+Zn0JE40e3CQdXBzZ+h8QyTQ0rw907v4pTgCNG8prqsrzO7/qtVRSo7cqf
-        7vd00Y0DNa891RNIsU5VhxAzI
-X-Received: by 2002:a7b:c00d:0:b0:3f1:731e:cdb1 with SMTP id c13-20020a7bc00d000000b003f1731ecdb1mr7095433wmb.6.1686561300279;
-        Mon, 12 Jun 2023 02:15:00 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4VWm5/FLy2C5UROjZAJjwvqbuVZiWP2Qi/rUUG+qsi/ggVP2kjNBG8UkEn0nJg4f50vHSOfQ==
-X-Received: by 2002:a7b:c00d:0:b0:3f1:731e:cdb1 with SMTP id c13-20020a7bc00d000000b003f1731ecdb1mr7095419wmb.6.1686561299929;
-        Mon, 12 Jun 2023 02:14:59 -0700 (PDT)
+        bh=czIpL4TLoK5D3eKZvmop6buHX7NGH22btauuZM6tsDY=;
+        b=ZlanGPAAV5PQ1TwwElL3icvZtqYsfifF1JcIWBq2Uky4qiZSZOyANWRHCUbJwx7vFX
+         e37gUgxIYSK1oUtkKDdP2U/Lqo4RsBf4J2W16lWBjVBcGSeJQX+too+tTQNhbKWaJ1ex
+         T7qbWGGB0kccrARigN0kFIN43P3XURPnsh3TbrSHAYY6aBv7OpzPJLIbtV1uH3DB0nER
+         68K+LYN9jdeMH3IbUwAlcbU+v+qTMcDIHXCE4x1NCIaN0TY3qugtLARoY5B1kdUmPSoI
+         jvZSUc/DeQUUAfWrFR4ywPekKSUFKnTsoq7qEqCc/khJflOBezE0f3iPhj8B8oaYs6mm
+         AL8Q==
+X-Gm-Message-State: AC+VfDzLlaqK1C1Un73vm/QKfpPbIrXOzZZ2nEBke3EgSGH3u3L/q8zD
+        rUVNIS2Ec03upRjdT3otX8yHrfRMc2VeNn0WTEBUBKXPA80VS1+BuxnDOTaTYmIvMe+nX3XlWaS
+        RGc4Ej+khzFwXpgN8kwkB/viv
+X-Received: by 2002:a19:4f18:0:b0:4f3:a87f:a87b with SMTP id d24-20020a194f18000000b004f3a87fa87bmr3504053lfb.39.1686561339851;
+        Mon, 12 Jun 2023 02:15:39 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ692EK075LkrM2aK7Sk6hg48xxbKzREkGNPfKmmEece5RfX1J3soc0tEyP1ciiAPpRBlBrJbQ==
+X-Received: by 2002:a19:4f18:0:b0:4f3:a87f:a87b with SMTP id d24-20020a194f18000000b004f3a87fa87bmr3504044lfb.39.1686561339637;
+        Mon, 12 Jun 2023 02:15:39 -0700 (PDT)
 Received: from ?IPV6:2003:cb:c74e:1600:4f67:25b2:3e8c:2a4e? (p200300cbc74e16004f6725b23e8c2a4e.dip0.t-ipconnect.de. [2003:cb:c74e:1600:4f67:25b2:3e8c:2a4e])
-        by smtp.gmail.com with ESMTPSA id p7-20020a05600c204700b003f7a562ff31sm10779189wmg.6.2023.06.12.02.14.59
+        by smtp.gmail.com with ESMTPSA id l19-20020a7bc453000000b003f42328b5d9sm10745958wmi.39.2023.06.12.02.15.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 02:14:59 -0700 (PDT)
-Message-ID: <ab62da22-e4f2-da99-bcb8-5238ee638c87@redhat.com>
-Date:   Mon, 12 Jun 2023 11:14:58 +0200
+        Mon, 12 Jun 2023 02:15:39 -0700 (PDT)
+Message-ID: <15095aec-4ed3-c16b-55b3-e7122652a897@redhat.com>
+Date:   Mon, 12 Jun 2023 11:15:38 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH -next] mm: Remove unused vma_init_lock()
+Subject: Re: [PATCH] memory tier: remove unneeded
+ !IS_ENABLED(CONFIG_MIGRATION) check
 Content-Language: en-US
-To:     YueHaibing <yuehaibing@huawei.com>, akpm@linux-foundation.org
+To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20230610101956.20592-1-yuehaibing@huawei.com>
+References: <20230610034114.981861-1-linmiaohe@huawei.com>
 From:   David Hildenbrand <david@redhat.com>
 Organization: Red Hat
-In-Reply-To: <20230610101956.20592-1-yuehaibing@huawei.com>
+In-Reply-To: <20230610034114.981861-1-linmiaohe@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -82,27 +83,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10.06.23 12:19, YueHaibing wrote:
-> commit c7f8f31c00d1 ("mm: separate vma->lock from vm_area_struct")
-> left this behind.
+On 10.06.23 05:41, Miaohe Lin wrote:
+> establish_demotion_targets() is defined while CONFIG_MIGRATION is
+> enabled. There's no need to check it again.
 > 
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 > ---
->   include/linux/mm.h | 1 -
->   1 file changed, 1 deletion(-)
+>   mm/memory-tiers.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 0db09639dd2d..1970772c07bb 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -725,7 +725,6 @@ struct vm_area_struct *lock_vma_under_rcu(struct mm_struct *mm,
+> diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
+> index dd04f0ce5277..a516e303e304 100644
+> --- a/mm/memory-tiers.c
+> +++ b/mm/memory-tiers.c
+> @@ -366,7 +366,7 @@ static void establish_demotion_targets(void)
 >   
->   #else /* CONFIG_PER_VMA_LOCK */
+>   	lockdep_assert_held_once(&memory_tier_lock);
 >   
-> -static inline void vma_init_lock(struct vm_area_struct *vma) {}
->   static inline bool vma_start_read(struct vm_area_struct *vma)
->   		{ return false; }
->   static inline void vma_end_read(struct vm_area_struct *vma) {}
+> -	if (!node_demotion || !IS_ENABLED(CONFIG_MIGRATION))
+> +	if (!node_demotion)
+>   		return;
+>   
+>   	disable_all_demotion_targets();
 
 Reviewed-by: David Hildenbrand <david@redhat.com>
 
