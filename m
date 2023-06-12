@@ -2,142 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A03972C01F
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:50:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0232372C011
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233646AbjFLKuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 06:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51670 "EHLO
+        id S234846AbjFLKta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 06:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjFLKt3 (ORCPT
+        with ESMTP id S234671AbjFLKtN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 06:49:29 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1134A7DBD;
-        Mon, 12 Jun 2023 03:34:21 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5C32F2F4;
-        Mon, 12 Jun 2023 03:34:37 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.27.163])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5BAC03F663;
-        Mon, 12 Jun 2023 03:33:47 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 11:33:41 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        kgdb-bugreport@lists.sourceforge.net,
-        Stephane Eranian <eranian@google.com>, mpe@ellerman.id.au,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        linuxppc-dev@lists.ozlabs.org, Sumit Garg <sumit.garg@linaro.org>,
-        npiggin@gmail.com, davem@davemloft.net,
-        Marc Zyngier <maz@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>, sparclinux@vger.kernel.org,
-        christophe.leroy@csgroup.eu,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        ravi.v.shankar@intel.com, Randy Dunlap <rdunlap@infradead.org>,
-        Pingfan Liu <kernelfans@gmail.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        Ian Rogers <irogers@google.com>, ito-yuichi@fujitsu.com,
-        ricardo.neri@intel.com, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, linux-kernel@vger.kernel.org,
-        Masayoshi Mizuma <msys.mizuma@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>
-Subject: Re: [PATCH v5 15/18] watchdog/perf: Add a weak function for an arch
- to detect if perf can use NMIs
-Message-ID: <ZIb0hd8djM+jJviF@FVFF77S0Q05N>
-References: <20230519101840.v5.18.Ia44852044cdcb074f387e80df6b45e892965d4a1@changeid>
- <20230519101840.v5.15.Ic55cb6f90ef5967d8aaa2b503a4e67c753f64d3a@changeid>
+        Mon, 12 Jun 2023 06:49:13 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D4849E1;
+        Mon, 12 Jun 2023 03:33:50 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-544c0d768b9so2823150a12.0;
+        Mon, 12 Jun 2023 03:33:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686566029; x=1689158029;
+        h=content-transfer-encoding:content-disposition:mime-version
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bfpZtHxfMfNOA+nAShm6Lv54zYUDy4unPqc7jTzW5IY=;
+        b=g5MQrV06tGnu5T49c+fqlRVbz+4vl6lTs+B5PSv26UDs8SmwuUjbtgpYvi4XYvsfXs
+         g3Wc2jiZquREb5ZwSnwRH1DOO0gSmxP4ZhQb3LUz6RactKq1Qh1tXR07KR1JZ3n9uWCT
+         OmsqK5utFoC85oyQFK3hSzIZZeudEFukchwPhsPYdiKrxiULBo149J62DCxM9rqD41OP
+         2n7nwRHR5sp/jW8AFmWtySZQaZxDatBrFk8cg247NVR8wSaZAu6PlfoyvC/ViMgBDKkk
+         RAaGZwoamqew0CIJp9D6bhGrbvVd7HtX1+WQ2KrieFtv7QreWGEkuOXnHV8eTeMGwGfH
+         vGLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686566029; x=1689158029;
+        h=content-transfer-encoding:content-disposition:mime-version
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bfpZtHxfMfNOA+nAShm6Lv54zYUDy4unPqc7jTzW5IY=;
+        b=klHY3KT7nsVYH+OCPVC1Ij0lO+Bvv+rJHOh+YuF14SskOsX9HrNW/NMZiwes24SjGO
+         2RgE3n2OleroGM4C7yxbey27X/cd0nJS+NtAsi+ar5xh01uT3MuVCF9xk3e0JMGDEyXD
+         sTtTwmff0CCWfFaLLCMh120PeNZ7HXea7p8457JA12Qp4xJOpNKg6HjAs4fXfSt4Ev1o
+         PDBtQNlMRbb0CdkB3X3X7fjVcC7+g7xTUVRUeCTMoi4igQPn0RKKKp+NTH7PthHONQRQ
+         uTbhLzycgfnQVkhJYSKuQJewy35+m/JN33vC7yd4y5Hwx7W7PhwJdCUiglBOcm/X72ME
+         W08A==
+X-Gm-Message-State: AC+VfDwhdoGDcY6xVuGWRbCxVgYzbfLdXlJ1fv/DlCsLnfJR/O2uPu9o
+        iJI7toM3BuFOZDzfzyg4XIo=
+X-Google-Smtp-Source: ACHHUZ7KCgzwwzt/+U5B3rtE7WuKTwMKF7qrktbVjO71FDDyDZXzkAmBeySxeqnVrqprjbrMQuTzgQ==
+X-Received: by 2002:a17:902:8d8a:b0:1b1:9d14:1537 with SMTP id v10-20020a1709028d8a00b001b19d141537mr5845271plo.55.1686566029363;
+        Mon, 12 Jun 2023 03:33:49 -0700 (PDT)
+Received: from sumitra.com ([117.212.94.125])
+        by smtp.gmail.com with ESMTPSA id n3-20020a170902968300b001b0266579ebsm7866299plp.194.2023.06.12.03.33.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 03:33:48 -0700 (PDT)
+Date:   Mon, 12 Jun 2023 03:33:41 -0700
+From:   Sumitra Sharma <sumitraartsy@gmail.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Ira Weiny <ira.weiny@intel.com>, Fabio <fmdefrancesco@gmail.com>,
+        Deepak R Varma <drv@mailo.com>
+Subject: [PATCH] lib/test_bpf: Replace kmap() with kmap_local_page()
+Message-ID: <20230612103341.GA354790@sumitra.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230519101840.v5.15.Ic55cb6f90ef5967d8aaa2b503a4e67c753f64d3a@changeid>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 10:18:39AM -0700, Douglas Anderson wrote:
-> On arm64, NMI support needs to be detected at runtime. Add a weak
-> function to the perf hardlockup detector so that an architecture can
-> implement it to detect whether NMIs are available.
-> 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-> While I won't object to this patch landing, I consider it part of the
-> arm64 perf hardlockup effort. I would be OK with the earlier patches
-> in the series landing and then not landing ${SUBJECT} patch nor
-> anything else later.
+kmap() has been deprecated in favor of the kmap_local_page()
+due to high cost, restricted mapping space, the overhead of
+a global lock for synchronization, and making the process
+sleep in the absence of free slots.
 
-FWIW, everything prior to this looks fine to me, so I reckon it'd be worth
-splitting the series here and getting the buddy lockup detector in first, to
-avoid a log-jam on all the subsequent NMI bits.
+kmap_local_page() is faster than kmap() and offers thread-local
+and CPU-local mappings, take pagefaults in a local kmap region
+and preserves preemption by saving the mappings of outgoing
+tasks and restoring those of the incoming one during a context
+switch.
 
-Thanks,
-Mark.
+The mapping is kept thread local in the function
+“generate_test_data” in test_bpf.c
 
-> I'll also note that, as an alternative to this, it would be nice if we
-> could figure out how to make perf_event_create_kernel_counter() fail
-> on arm64 if NMIs aren't available. Maybe we could add a "must_use_nmi"
-> element to "struct perf_event_attr"?
-> 
-> (no changes since v4)
-> 
-> Changes in v4:
-> - ("Add a weak function for an arch to detect ...") new for v4.
-> 
->  include/linux/nmi.h    |  1 +
->  kernel/watchdog_perf.c | 12 +++++++++++-
->  2 files changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/nmi.h b/include/linux/nmi.h
-> index 47db14e7da52..eb616fc07c85 100644
-> --- a/include/linux/nmi.h
-> +++ b/include/linux/nmi.h
-> @@ -210,6 +210,7 @@ static inline bool trigger_single_cpu_backtrace(int cpu)
->  
->  #ifdef CONFIG_HARDLOCKUP_DETECTOR_PERF
->  u64 hw_nmi_get_sample_period(int watchdog_thresh);
-> +bool arch_perf_nmi_is_available(void);
->  #endif
->  
->  #if defined(CONFIG_HARDLOCKUP_CHECK_TIMESTAMP) && \
-> diff --git a/kernel/watchdog_perf.c b/kernel/watchdog_perf.c
-> index 349fcd4d2abc..8ea00c4a24b2 100644
-> --- a/kernel/watchdog_perf.c
-> +++ b/kernel/watchdog_perf.c
-> @@ -234,12 +234,22 @@ void __init hardlockup_detector_perf_restart(void)
->  	}
->  }
->  
-> +bool __weak __init arch_perf_nmi_is_available(void)
-> +{
-> +	return true;
-> +}
-> +
->  /**
->   * watchdog_hardlockup_probe - Probe whether NMI event is available at all
->   */
->  int __init watchdog_hardlockup_probe(void)
->  {
-> -	int ret = hardlockup_detector_event_create();
-> +	int ret;
-> +
-> +	if (!arch_perf_nmi_is_available())
-> +		return -ENODEV;
-> +
-> +	ret = hardlockup_detector_event_create();
->  
->  	if (ret) {
->  		pr_info("Perf NMI watchdog permanently disabled\n");
-> -- 
-> 2.40.1.698.g37aff9b760-goog
-> 
+Therefore, replace kmap() with kmap_local_page() and use
+memcpy_to_page() to avoid open coding kmap_local_page()
++ memcpy() + kunmap_local().
+
+Remove the unused variable “ptr”.
+
+Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+---
+ lib/test_bpf.c | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
+
+diff --git a/lib/test_bpf.c b/lib/test_bpf.c
+index ade9ac672adb..3bb94727d83b 100644
+--- a/lib/test_bpf.c
++++ b/lib/test_bpf.c
+@@ -14381,25 +14381,17 @@ static void *generate_test_data(struct bpf_test *test, int sub)
+ 		 * single fragment to the skb, filled with
+ 		 * test->frag_data.
+ 		 */
+-		void *ptr;
+-
+ 		page = alloc_page(GFP_KERNEL);
+ 
+ 		if (!page)
+ 			goto err_kfree_skb;
+ 
+-		ptr = kmap(page);
+-		if (!ptr)
+-			goto err_free_page;
+-		memcpy(ptr, test->frag_data, MAX_DATA);
+-		kunmap(page);
++		memcpy_to_page(page, 0, test->frag_data, MAX_DATA);
+ 		skb_add_rx_frag(skb, 0, page, 0, MAX_DATA, MAX_DATA);
+ 	}
+ 
+ 	return skb;
+ 
+-err_free_page:
+-	__free_page(page);
+ err_kfree_skb:
+ 	kfree_skb(skb);
+ 	return NULL;
+-- 
+2.25.1
+
