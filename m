@@ -2,169 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CEA472BE95
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D67C72BECD
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:23:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233717AbjFLKQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 06:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53124 "EHLO
+        id S233112AbjFLKXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 06:23:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234542AbjFLKPm (ORCPT
+        with ESMTP id S234784AbjFLKWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 06:15:42 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2048.outbound.protection.outlook.com [40.107.243.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397DB4C22
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:56:33 -0700 (PDT)
+        Mon, 12 Jun 2023 06:22:46 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA4A12353
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 03:01:55 -0700 (PDT)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 35C6eNS5019182
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 03:00:21 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : content-type : content-id : mime-version;
+ s=s2048-2021-q4; bh=ztytaLGnz7JkCZGHFYbRVuKwtFUpL1/NAozwvA3ONmY=;
+ b=FrMUlfTV2X1fYaqcvyyADVKy6ybE3XTpXFezSL4hlau7dWPYKT9m6zQ/K8qf6DkT9pbv
+ hF9O+WzJ8R0dqjKAPpFh0v9YRZZNspLqc8Ma/usXSt7b/KgsdBWztGEWQ2RNZrYSjOqZ
+ /ZzlfKE91MQOPJQ2uoeKMZCK7s9acpVB4IknTvyDXhpYr7svSDR58aDtGmukp8fzMh6x
+ gLn3TUxzxWIyLIWX3PLmtZzHTQ4NCrmHKtswIvcI8hQGHRJCk3xImvu9ogLSbEd04SeA
+ 14TuXuWV7R8nox94Wp0Xi6YhvGjbwOcQZgwftlQcNzYdofo4OV6NpjMI5Uz1r6oGXg8M JA== 
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2174.outbound.protection.outlook.com [104.47.56.174])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3r5xa5gw4g-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 03:00:21 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FqWnKjhEmLS02nigvZnancpDuvjhzU7VYgJMOytYTmVdBgW6FujLHP3FYxoiSuAdPSXIF39YkET/qh17qC85ttmETUVuZB2VjpMQ5VFn7cEOGZGkXRzGeg2DLKMkmlmyKxVc9rJPX9GMMVRfwO5AUHEzozt5eZRSv7sZi+4XO4Vhz/BwCRyWUhCkHIxbohD3nFhoSycV7z65a/ZmpcJ8l40YaYv0F1rXWD6Gm2jDlcBgZgsdJBQhyIYb2FoQJCCSBoda4UqHCy+hXnEMz5OpL4+Ys1iqZlTU27tnf2Mdw7Rts5u5LYIffVkkV+lsIHM9uBvxAhMbqPMC6ujkRoDA2g==
+ b=jLl3/mR3Ruayjhv6DngPfrNuh+hn8nzvJsJdlZ325OxQpQUd6ELG6dg1wvl4Z6K819okB2MzR2qQiPYjdXbK3kHQDQg65Qm6D8HtsGthhJ5ahrEm+w4wWuXPkFOdc2wl6MQr2T0Uq29QahZtjfyu9mQLcvHOUdo1Vkd03N6WGBevl8UaiHt5EYK0/7aBC/0ATTDq84TYL2Ym2p11i/tfDr+AN586KuPjSdn8ohp9W6ztvx5n6ei7OzcdgMIaQ4U/iO3ahmyMN36R7faoIoOlvPLUzr+U51FtFVnQYZ5BmQZgsXGR71y3M5b5UTrTDxzaGaZyMV/zWPCp2IxIKdm/gg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=inpX2LjsuHMkWbSLnz82y1+NSnshQjmZxdZ+pLLDCEc=;
- b=TnPB6fQYeOJ/seOcrNK6xyHPqeISBey3H5ts4g2Qpdbn1Ke2jbfrTBWjGdxI131XpSU2Sq0reCE0kfzYtgGNfgfpS06uQ0BsFhaxcvUfs0kaQj56DWa57bBdpOWtZgmQ3ttVL20ZNDhjLtiGhseeSRpwEDbjhvVfxNDMRDYfYCtFNukB/mImR0XctnsnTszVM+5qLHyKaDznnkXCMMzNLsGzk6qAQADpdcjMVHxLZqnDJIuMp/MtQspMDohfX37ceO2oxTEeKtlkVZyGoD2XrxO0jo36WVCWvvq3b7xZs27i2Dze3zPWigr9NAHv+VFLqUEKnIXlud4TqFdpheGasA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=inpX2LjsuHMkWbSLnz82y1+NSnshQjmZxdZ+pLLDCEc=;
- b=kNLrYMeqgwgter723WfqeBCNr06nJMbjMcR/aYlXR3Om9zFQGMfHsGAMdQ0BytvBVpPyRMEF6HItD0g2XF+tnBWXG6hHjSdt2s/hpU626Zj01tzUNybU7NzxFfMdm+O6PrexLr8bUK9Q2Qku/bhyfmQXSwL0L1S+3ttzdYuIsNY=
-Received: from CY8PR10CA0008.namprd10.prod.outlook.com (2603:10b6:930:4f::17)
- by SJ2PR12MB8649.namprd12.prod.outlook.com (2603:10b6:a03:53c::10) with
+ bh=ztytaLGnz7JkCZGHFYbRVuKwtFUpL1/NAozwvA3ONmY=;
+ b=YdVXVGaVgZjqPPW2xPG7rn/bI8N6zQML34AylnCLGFPbtkjWsSZNoOp/l1wF2ZxU3WhLOReMYfgcHNUyT9kLdh3Svs7fP0DucTOHWeetWZb9Jc930hNctt9o7AZWLPPMCGzpxCi7JbjnVoAd3+K2HYb9s1tJlFTw6Rd6p4GD32rj/dOllvmAxwABAyodhrbUYvF5LVQ9zy1h5uvUJoINSrVeRZ9FHoMHJA4o6nzl763g97upp4AHBBbLr00tJA9kIREltE4cPwqDW5GmkEgOuwQimVt9WzGnaAvDdp8DJV1POOhh4LP49BOUOlaywe4U0rSVJ+eq8fkynnx4fgUMBA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SA0PR15MB3997.namprd15.prod.outlook.com (2603:10b6:806:84::21)
+ by PH0PR15MB4182.namprd15.prod.outlook.com (2603:10b6:510:25::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.39; Mon, 12 Jun
- 2023 09:56:16 +0000
-Received: from CY4PEPF0000E9D8.namprd05.prod.outlook.com
- (2603:10b6:930:4f:cafe::16) by CY8PR10CA0008.outlook.office365.com
- (2603:10b6:930:4f::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.34 via Frontend
- Transport; Mon, 12 Jun 2023 09:56:16 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CY4PEPF0000E9D8.mail.protection.outlook.com (10.167.241.83) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6500.22 via Frontend Transport; Mon, 12 Jun 2023 09:56:16 +0000
-Received: from SATLEXMB07.amd.com (10.181.41.45) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Mon, 12 Jun
- 2023 04:56:01 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB07.amd.com
- (10.181.41.45) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.6; Mon, 12 Jun
- 2023 02:55:47 -0700
-Received: from vijendar-X570-GAMING-X.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.23
- via Frontend Transport; Mon, 12 Jun 2023 04:55:43 -0500
-From:   Vijendar Mukunda <Vijendar.Mukunda@amd.com>
-To:     <broonie@kernel.org>
-CC:     <alsa-devel@alsa-project.org>,
-        <pierre-louis.bossart@linux.intel.com>,
-        <Basavaraj.Hiregoudar@amd.com>, <Sunil-kumar.Dommati@amd.com>,
-        <Mastan.Katragadda@amd.com>, <Arungopal.kondaveeti@amd.com>,
-        <mario.limonciello@amd.com>,
-        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH V4 9/9] ASoC: amd: ps: add acp_reset flag check in acp pci driver pm ops.
-Date:   Mon, 12 Jun 2023 15:29:03 +0530
-Message-ID: <20230612095903.2113464-10-Vijendar.Mukunda@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230612095903.2113464-1-Vijendar.Mukunda@amd.com>
-References: <20230612095903.2113464-1-Vijendar.Mukunda@amd.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D8:EE_|SJ2PR12MB8649:EE_
-X-MS-Office365-Filtering-Correlation-Id: c10dad78-bf12-4a54-78a6-08db6b2b4372
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 728Q2gib57Dk0YkIcDHu8WMNSKOjxbv4gItGDeOQfz0Tck3HnqXLncSba1RRPlGVQL54OnLlobZvv699HYWHxM7NaLfdGfmbUqPrKjMukVCJyawxBcbzlm3mPyCR3hXIBkWjQL/pYnhpgoY0nUMRR8d2oDaLzinRDRx16uDcbET66Nn61mhNI7uHLLgc8VSHPUZGUXmow25PN19nkTzhnSCr8fQCbaMecb2L6NPzvtEtCxQ0O0Cu5PUazUKqVnEzJ+/1GDN4KLSklsjBRmD1Fu/escdcPm5hpvUx92xml5PmnE5CYPzBAScJJB6h/PNnoyn92OiLLdS7Wod3MpSaSz9WluRUDVE0KaOqjXjjWUSm2j+WqsA+T/M3XiTu+CRCCpSv7Vi2eHHHbyRBXOZEFGIzxWnlVgL38YUyT6JroK1Cln6UxpW5YgrIMrtdn/TW+jK7XjbBPpbGxTgEI+aHG5Re+6pay8nNH7wjH0lOzFZ6RrfWSuEFX4PyiGlE6exMiM7+UVxQOUfTPrm+KksjTMLYCSQ8iBZgyj1FvUpaC5CmQcTzc95fpRYqt6K3cAqhr2NhnkR+UH+QzWxfE5ik1eOUe8jxIpxh24II9davwh4afpezbmb+HNB0whySqwVEx0uwG5vs+myGPJr7HDE3jlGWsULwHnhL72u3zUqF2HCoIb9gOgqxazhFg/l9kda44MA6AhwhQiCLhKBTTD6iP3ic2VIjnKEtR6AzXHuP0GOqKxn8oRMq9QqKkpGYzXEwC7y6m/EXxjJWcN5O1f+dxA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(376002)(346002)(396003)(451199021)(40470700004)(36840700001)(46966006)(478600001)(70586007)(356005)(81166007)(82740400003)(36756003)(70206006)(4326008)(6916009)(54906003)(8936002)(8676002)(40480700001)(86362001)(5660300002)(2906002)(316002)(41300700001)(83380400001)(40460700003)(2616005)(336012)(426003)(47076005)(1076003)(26005)(186003)(6666004)(36860700001)(7696005)(82310400005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 09:56:16.0523
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Mon, 12 Jun
+ 2023 09:59:50 +0000
+Received: from SA0PR15MB3997.namprd15.prod.outlook.com
+ ([fe80::7366:b7ac:5a7c:968]) by SA0PR15MB3997.namprd15.prod.outlook.com
+ ([fe80::7366:b7ac:5a7c:968%4]) with mapi id 15.20.6455.043; Mon, 12 Jun 2023
+ 09:59:50 +0000
+From:   Jonathan McDowell <noodles@meta.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Kay Sievers <kay.sievers@vrfy.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: [PATCH] firmware: dmi: Don't restrict access to serial number / UUID
+Thread-Topic: [PATCH] firmware: dmi: Don't restrict access to serial number /
+ UUID
+Thread-Index: AQHZnRSgbC5BfmvI5025YFjNaR+wNg==
+Date:   Mon, 12 Jun 2023 09:59:50 +0000
+Message-ID: <ZIbslWZev/Ayoug5@noodles-fedora.dhcp.thefacebook.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA0PR15MB3997:EE_|PH0PR15MB4182:EE_
+x-ms-office365-filtering-correlation-id: 6e0ec677-70c0-4db5-e17d-08db6b2bc314
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: zRWdKaoDL1iaoiTge1BQrmDU/5bQ6H/Zt4eVj1mLSala+12PxsiN4LQBiHoNDQuA4qFojVCoFTGVZB6PnYRZX1mvOi42BAGatrhkK+VISqC7kJxs/xOytwoohrZoXy9crDj4XtxNZoqYCHxhuq4znID0tBsneKPWqp3FgvP5ZZVFDlX7WecMQQGUwuZvbUpktQAjGzeeV2SgtkYsOjFV+bmXTMcCXA0hPTPlE+sN1YfDnxNzJNhPcLI3p3dYGIHDQaCzbtLMg1YzUkA4RrF4Q2Gn+4taqezH8cw4P9rKdXIm9uRwGo80Ej52lR2sw7//U2eIDHh9Kd1TaCx7QuJrOAv9u14OwqlxmaLNL2wS3ggsrT4KEP2lTUtCd4Aa3sZQ2XVWXgA/dDBMK+1kid4yfptd+0Us1fFjQfTW784CMdqUmOUpyMPeDiEv9lD/MiDyjuMvPoFfNumufR12tHqHnFj5IEcpjSbIm5nzOqbRmct+K4zp++LChCOw/k1GOuLCXPvmQH87IblFBaa7p5DtTUG+P+65qM3UecGTv9CMMJsgzE/5NJ0FiP2x+PN1zbLmti97S0M6eAYYsVD3ZPibGP0bAb88hV6rm6N968NNLDQ=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA0PR15MB3997.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(366004)(376002)(39860400002)(396003)(451199021)(186003)(8676002)(8936002)(478600001)(110136005)(71200400001)(5660300002)(966005)(41300700001)(316002)(6486002)(26005)(66556008)(91956017)(6506007)(66476007)(66446008)(66946007)(64756008)(76116006)(9686003)(4326008)(6512007)(83380400001)(2906002)(122000001)(38100700002)(86362001)(38070700005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?uVCON+jQZhnB+btpU3qH1cdmmqet+upkuxwvazflBc4hresFXO05KsH/Konb?=
+ =?us-ascii?Q?l+w1LMBw3xa5AwW3dCMrultcTV1l2tVBRKtE38ZmvSdB8fdI+pgJJzVJhW+t?=
+ =?us-ascii?Q?7vIEaH5L1TByvLkag4Zo357dRKT+InxcBWeIuGi5hvdF5as8pPykz8TxhcRj?=
+ =?us-ascii?Q?JYOvCnOZJQ5Fyc/tL4hO5u6kolxyEWPe/o7289xNpATupv4NZHfbqgYYGmhf?=
+ =?us-ascii?Q?+RpjJU8/KDBJmCxIwzwO/wVaCarPXV/JiLL6m1HA1my1W8+uqlDsYHcTwOhy?=
+ =?us-ascii?Q?p0nBqhl5qDxt7gQcLePLcEZLCdiXBFRccM7HDm2PO1qISbzbKsOvsZ74wK0Y?=
+ =?us-ascii?Q?TcqLhmmTCZ2uE+KBmDxgp420SmSB5KTqs4u0PI406DzCoxCXa65Zi2BKRuxx?=
+ =?us-ascii?Q?D+r7iLQyeTRlTAqAleSCXZjcoF7Oe7StEpcu9CR5OGxa63OAbshdqryVV+ZD?=
+ =?us-ascii?Q?Y/GC1ugmahpGRXS48Pd3VcE5HF05mPhgdPCUSt/h+AParhoVyGmHhOL7JG5I?=
+ =?us-ascii?Q?nJyfq2GbQnNbCYMtRVXn3UR8gBYutEOZ8k9sbCBw812iyYE+t2BQqLC8L453?=
+ =?us-ascii?Q?T+//N5610uuUksiWTVJbVh3gjHb5Ig0KLR/MlggSwSYRwCLnVkXPWD+6rPfD?=
+ =?us-ascii?Q?WNElWxhZzjgxVXymxpeywnOSWhctL+RhcEM7mt02RbWD+enPRdf4t50ViQEn?=
+ =?us-ascii?Q?mJ1A5TvVApLbV99vOZLB5oAg9cTiXiD6iF74XCB9vLnAEdzFwvS0pQqFVOxG?=
+ =?us-ascii?Q?MiIQ/qfRU1lC/XtH8LsRoNej0RtAuy14IEhvtndISBFdceiOuq83pvSFtwnN?=
+ =?us-ascii?Q?HFwDCo5qaYgJh72LbohIYu+egl7A6vn35qXt24RvHn8R8i1SOZ23YWT1flvD?=
+ =?us-ascii?Q?lLBX+6uX3Hti+2rtUeQIQr3uSmhabpwn410efoS2TFSEgsAES8ElBjUwRdKT?=
+ =?us-ascii?Q?CXq2wpiqwHrzMAHzRjOX8L1n9CYHy8mBLTEcAl35GnVFHoOpCx+uZkcH8d4h?=
+ =?us-ascii?Q?9vpt9tTzaeh4PpM0X6RdklE7YN7y0tOzBYPbRp/d5exbAc2kB/CCanirgSe+?=
+ =?us-ascii?Q?Xtn1A0KWqNspxoXP5YtukViLSoN2wh8l4pV5Gva9HeyNTLEROPBNUJpVQU7M?=
+ =?us-ascii?Q?E6LeNSrvXOwh6RZmyIdR9NQUJCj8BxJDoUcG5yx3LUy3YgfPcbg9vfUcVPiS?=
+ =?us-ascii?Q?h3ny0Of+7L9LHer10BTJRAqrnfIOgbHStUTVGnIJfmfAqh5+1dtXdMqPWMvZ?=
+ =?us-ascii?Q?eBpnWwLKddANkm48hg8N7cOpxfHVSw74MkbcqearLHLQ0k9FafItKFZqgz6Z?=
+ =?us-ascii?Q?Ho08acfEDmTtiEVPI4nG8z9OCxzeTnM+rEmkWdnW0C3tY0aHFl2Fz0Iw0cS6?=
+ =?us-ascii?Q?d4vM/JB5PRHXg9xSdU6QQ1XbgRtkUMhdGs9NTtlnIALFUaHNjfbNm+D670ZJ?=
+ =?us-ascii?Q?jWcccrsQQibg+87k+XbPsX1CGaRRSxwZJ3nKjdWXSo9a4jpD95Resl2B+tab?=
+ =?us-ascii?Q?31wvETctMKngcbuODhoUKculMeXJMdrRxxOZF/9DMScY2hmJAjpq6Eju29r7?=
+ =?us-ascii?Q?BLbWRJaX0y+lQQq9HRa6lpYJVDUBC0ySHJoLbRO6?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <850F49339C8A1D4CB828761608F42520@namprd15.prod.outlook.com>
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA0PR15MB3997.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6e0ec677-70c0-4db5-e17d-08db6b2bc314
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jun 2023 09:59:50.3304
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c10dad78-bf12-4a54-78a6-08db6b2b4372
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000E9D8.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8649
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0MbaDO5+ZLUOmMAfCfsyXDT0XZzVGIY0ov697KHTeeIUGNynJNL0MNHvrOCFcBQgTCHsjFAoKgZUoWASY6u6RQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR15MB4182
+X-Proofpoint-GUID: Y1EjdHx_FMbdVVpgfl65Ig7Dulv_i1VO
+X-Proofpoint-ORIG-GUID: Y1EjdHx_FMbdVVpgfl65Ig7Dulv_i1VO
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-12_06,2023-06-09_01,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AMD SoundWire manager supports different power modes.
-acp_reset flag will be set to false only when SoundWire manager power
-mode is selected as ClockStop Mode. For rest of the combinations
-(ACP PDM + SDW), acp_reset flag will be set to true.
-When acp_reset flag is set, acp de-init and acp init sequence should
-be invoked during suspend/resume callbacks.
+The /sys/devices/virtual/dmi/id/*_serial + product_uuid files are
+currently only readable by root. There's no clear rationale for this;
+Windows + OS X both allow regular users to access the information, so
+there appears to be no expectation on the manufacturer side that it
+should be kept secret.
 
-Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
+Having the information easily available helps with automated tools that
+collect system information for the purposes of fault diagnosis/tracking
+without requiring the tools have root access.
+
+(I've tried to look for context on the initial patch submission about
+why these were root-only but didn't find any; hopefully Lennart or Kay
+can provide details if I'm missing something.)
+
+Signed-off-by: Jonathan McDowell <noodles@meta.com>
+Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=103601
 ---
- sound/soc/amd/ps/pci-ps.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+ drivers/firmware/dmi-id.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/sound/soc/amd/ps/pci-ps.c b/sound/soc/amd/ps/pci-ps.c
-index ff734a90951b..5b46dc8573f8 100644
---- a/sound/soc/amd/ps/pci-ps.c
-+++ b/sound/soc/amd/ps/pci-ps.c
-@@ -669,24 +669,28 @@ static int snd_acp63_probe(struct pci_dev *pci,
- static int __maybe_unused snd_acp63_suspend(struct device *dev)
- {
- 	struct acp63_dev_data *adata;
--	int ret;
-+	int ret = 0;
+diff --git a/drivers/firmware/dmi-id.c b/drivers/firmware/dmi-id.c
+index 5f3a3e913d28..ae700c09d7de 100644
+--- a/drivers/firmware/dmi-id.c
++++ b/drivers/firmware/dmi-id.c
+@@ -46,19 +46,19 @@ DEFINE_DMI_ATTR_WITH_SHOW(bios_release,		0444, DMI_BIOS_RELEASE);
+ DEFINE_DMI_ATTR_WITH_SHOW(ec_firmware_release,	0444, DMI_EC_FIRMWARE_RELEASE);
+ DEFINE_DMI_ATTR_WITH_SHOW(product_name,		0444, DMI_PRODUCT_NAME);
+ DEFINE_DMI_ATTR_WITH_SHOW(product_version,	0444, DMI_PRODUCT_VERSION);
+-DEFINE_DMI_ATTR_WITH_SHOW(product_serial,	0400, DMI_PRODUCT_SERIAL);
+-DEFINE_DMI_ATTR_WITH_SHOW(product_uuid,		0400, DMI_PRODUCT_UUID);
++DEFINE_DMI_ATTR_WITH_SHOW(product_serial,	0444, DMI_PRODUCT_SERIAL);
++DEFINE_DMI_ATTR_WITH_SHOW(product_uuid,		0444, DMI_PRODUCT_UUID);
+ DEFINE_DMI_ATTR_WITH_SHOW(product_sku,		0444, DMI_PRODUCT_SKU);
+ DEFINE_DMI_ATTR_WITH_SHOW(product_family,	0444, DMI_PRODUCT_FAMILY);
+ DEFINE_DMI_ATTR_WITH_SHOW(board_vendor,		0444, DMI_BOARD_VENDOR);
+ DEFINE_DMI_ATTR_WITH_SHOW(board_name,		0444, DMI_BOARD_NAME);
+ DEFINE_DMI_ATTR_WITH_SHOW(board_version,	0444, DMI_BOARD_VERSION);
+-DEFINE_DMI_ATTR_WITH_SHOW(board_serial,		0400, DMI_BOARD_SERIAL);
++DEFINE_DMI_ATTR_WITH_SHOW(board_serial,		0444, DMI_BOARD_SERIAL);
+ DEFINE_DMI_ATTR_WITH_SHOW(board_asset_tag,	0444, DMI_BOARD_ASSET_TAG);
+ DEFINE_DMI_ATTR_WITH_SHOW(chassis_vendor,	0444, DMI_CHASSIS_VENDOR);
+ DEFINE_DMI_ATTR_WITH_SHOW(chassis_type,		0444, DMI_CHASSIS_TYPE);
+ DEFINE_DMI_ATTR_WITH_SHOW(chassis_version,	0444, DMI_CHASSIS_VERSION);
+-DEFINE_DMI_ATTR_WITH_SHOW(chassis_serial,	0400, DMI_CHASSIS_SERIAL);
++DEFINE_DMI_ATTR_WITH_SHOW(chassis_serial,	0444, DMI_CHASSIS_SERIAL);
+ DEFINE_DMI_ATTR_WITH_SHOW(chassis_asset_tag,	0444, DMI_CHASSIS_ASSET_TAG);
  
- 	adata = dev_get_drvdata(dev);
--	ret = acp63_deinit(adata->acp63_base, dev);
--	if (ret)
--		dev_err(dev, "ACP de-init failed\n");
-+	if (adata->acp_reset) {
-+		ret = acp63_deinit(adata->acp63_base, dev);
-+		if (ret)
-+			dev_err(dev, "ACP de-init failed\n");
-+	}
- 	return ret;
- }
- 
- static int __maybe_unused snd_acp63_resume(struct device *dev)
- {
- 	struct acp63_dev_data *adata;
--	int ret;
-+	int ret = 0;
- 
- 	adata = dev_get_drvdata(dev);
--	ret = acp63_init(adata->acp63_base, dev);
--	if (ret)
--		dev_err(dev, "ACP init failed\n");
-+	if (adata->acp_reset) {
-+		ret = acp63_init(adata->acp63_base, dev);
-+		if (ret)
-+			dev_err(dev, "ACP init failed\n");
-+	}
- 	return ret;
- }
- 
+ static void ascii_filter(char *d, const char *s)
 -- 
-2.34.1
-
+2.40.1
