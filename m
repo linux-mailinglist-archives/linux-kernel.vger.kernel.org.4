@@ -2,156 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C1D72BBA5
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B838A72BBA8
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233930AbjFLJEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 05:04:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60818 "EHLO
+        id S233744AbjFLJFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 05:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232029AbjFLJEE (ORCPT
+        with ESMTP id S232310AbjFLJFX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 05:04:04 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22C3DE71;
-        Mon, 12 Jun 2023 02:01:06 -0700 (PDT)
-Received: from loongson.cn (unknown [10.180.13.124])
-        by gateway (Coremail) with SMTP id _____8DxAOnO3oZkvZkDAA--.6054S3;
-        Mon, 12 Jun 2023 17:01:02 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.13.124])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxPMrM3oZkqmwVAA--.52803S4;
-        Mon, 12 Jun 2023 17:01:01 +0800 (CST)
-From:   YingKun Meng <mengyingkun@loongson.cn>
-To:     krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        conor+dt@kernel.org
-Cc:     broonie@kernel.org, lgirdwood@gmail.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org, loongarch@lists.linux.dev,
-        loongson-kernel@lists.loongnix.cn,
-        Yingkun Meng <mengyingkun@loongson.cn>
-Subject: [ PATCH v2 3/3] ASoC: dt-bindings: Add support for Loongson audio card
-Date:   Mon, 12 Jun 2023 17:00:58 +0800
-Message-Id: <20230612090058.3039546-1-mengyingkun@loongson.cn>
-X-Mailer: git-send-email 2.33.0
+        Mon, 12 Jun 2023 05:05:23 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E821B3C02
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:02:03 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BB56866056AA;
+        Mon, 12 Jun 2023 10:02:01 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686560522;
+        bh=7oxMNTbloKgt3ufFjwheFe+Sm5DenM+mJvuQ6Eo92T4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jODar/9ILGQ61B8Y3oo3ExipDRt7J6vpfQGjKl4iQveBivCoWoHFXtkG9bypmTq0A
+         PBXw3GetSREvMKFTU71vM8qInMFNRtHbrHXMDVSGc6X8Gt2wKQ/0exnaKqj3zRsgvl
+         2Buc+CI3FVx4Xn7wGfsbKYRFwFk34Py26e31KSZYkzScRSCtwyV7SPUCB+npK4ZAyF
+         zQMhoglF8g/vMb2teAz8L6QRnGgQIQhJ++wurGOk2xLOy4j5FRgWreE8kt5ENDAtTX
+         dgpCntX4btMwiNy/qQz+WiSYybgAYjrShkbHZpns9LvNX5Wd9A4ux4JyV90eaa4ui/
+         Ohsy4AsphxLqA==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     chunkuang.hu@kernel.org
+Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, wenst@chromium.org,
+        kernel@collabora.com
+Subject: [PATCH v6 00/11] MediaTek DDP GAMMA - 12-bit LUT support
+Date:   Mon, 12 Jun 2023 11:01:46 +0200
+Message-Id: <20230612090157.68205-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxPMrM3oZkqmwVAA--.52803S4
-X-CM-SenderInfo: 5phqw55lqjy33q6o00pqjv00gofq/1tbiAQAADGSFuYEEQQAWsH
-X-Coremail-Antispam: 1Uk129KBj93XoW7tF4fAFWfCrWUAFWUKr4xZrc_yoW8Kr15pw
-        s3C347Gr48t3W7C395ZFyxJw4fZasayFsrXr42q34UCFZ8Ka4Fqw4ak3WUu3W2kF1kJay7
-        uFyFkw18Gas3CwcCm3ZEXasCq-sJn29KB7ZKAUJUUUUJ529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUBIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVWxJr0_GcWln4kS14v26r1q6r43M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26rWY
-        6Fy7McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-        Jr0_Gr1l4IxYO2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-        xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
-        cI8IcVAFwI0_Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8V
-        AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWxJVW8Jr1lIxAIcVC2z280aVCY1x02
-        67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU5rUUUUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yingkun Meng <mengyingkun@loongson.cn>
+Changes in v6:
+ - Fixed smatch warning in patch 11/11, ref.:
+   https://lore.kernel.org/all/202306101458.lRXHEE0Z-lkp@intel.com/
 
-The audio card uses loongson I2S controller present in
-7axxx/2kxxx chips to transfer audio data.
+Changes in v5:
+ - Removed incorrect comment on default LUT size and bits
+ - Removed useless check for num_lut_banks
+ - Added comment about CMDQ implementation on patch 5
+ - Evaluated passing lut size/bits from AAL, idea discarded as
+   the implementation would be rather tricky while bringing no
+   benefits.
 
-On loongson platform, the chip has only one I2S controller.
+Changes in v4:
+ - Fixed assignment typo appeared in v3
 
-Signed-off-by: Yingkun Meng <mengyingkun@loongson.cn>
----
- .../sound/loongson,ls-audio-card.yaml         | 70 +++++++++++++++++++
- 1 file changed, 70 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/sound/loongson,ls-audio-card.yaml
+Changes in v3:
+ - Fixed issues due to variables renaming during cleanup (oops)
+ - This is actually the right series, since v2 was taken from the
+   wrong kernel tree.... :-)
 
-diff --git a/Documentation/devicetree/bindings/sound/loongson,ls-audio-card.yaml b/Documentation/devicetree/bindings/sound/loongson,ls-audio-card.yaml
-new file mode 100644
-index 000000000000..61e8babed402
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/loongson,ls-audio-card.yaml
-@@ -0,0 +1,70 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/loongson,ls-audio-card.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Loongson 7axxx/2kxxx ASoC audio sound card driver
-+
-+maintainers:
-+  - Yingkun Meng <mengyingkun@loongson.cn>
-+
-+description:
-+  The binding describes the sound card present in loongson
-+  7axxx/2kxxx platform. The sound card is an ASoC component
-+  which uses Loongson I2S controller to transfer the audio data.
-+
-+properties:
-+  compatible:
-+    const: loongson,ls-audio-card
-+
-+  model:
-+    $ref: /schemas/types.yaml#/definitions/string
-+    description: User specified audio sound card name
-+
-+  mclk-fs:
-+    $ref: simple-card.yaml#/definitions/mclk-fs
-+
-+  cpu:
-+    description: Holds subnode which indicates cpu dai.
-+    type: object
-+    additionalProperties: false
-+    properties:
-+      sound-dai:
-+        maxItems: 1
-+    required:
-+      - sound-dai
-+
-+  codec:
-+    description: Holds subnode which indicates codec dai.
-+    type: object
-+    additionalProperties: false
-+    properties:
-+      sound-dai:
-+        maxItems: 1
-+    required:
-+      - sound-dai
-+
-+required:
-+  - compatible
-+  - model
-+  - mclk-fs
-+  - cpu
-+  - codec
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    sound {
-+        compatible = "loongson,ls-audio-card";
-+        model = "loongson-audio";
-+        mclk-fs = <512>;
-+
-+        cpu {
-+            sound-dai = <&i2s>;
-+        };
-+        codec {
-+             sound-dai = <&es8323>;
-+        };
-+    };
+Changes in v2:
+ - Added explicit inclusion of linux/bitfield.h in patch [06/11]
+
+This series adds support for GAMMA IP requiring and/or supporting
+a 12-bits LUT using a slightly different register layout and programming
+sequence for multiple LUT banks: this IP version is currently found
+on a number of SoCs, not only including the Chromebook/IoT oriented
+Kompanio 1200/1380 MT8195/MT8195T, but also Smartphone chips such as
+the Dimensity 9200 (MT6985) and others.
+
+This series was tested on MT8195, MT8192, MT8173, MT6795:
+ * MT6795, MT8192, MT8173: No regression, works fine.
+ * MT8195: Color correction is finally working!
+
+AngeloGioacchino Del Regno (10):
+  drm/mediatek: gamma: Reduce indentation in mtk_gamma_set_common()
+  drm/mediatek: gamma: Support SoC specific LUT size
+  drm/mediatek: gamma: Improve and simplify HW LUT calculation
+  drm/mediatek: gamma: Enable the Gamma LUT table only after programming
+  drm/mediatek: gamma: Use bitfield macros
+  drm/mediatek: gamma: Support specifying number of bits per LUT
+    component
+  drm/mediatek: gamma: Support multi-bank gamma LUT
+  drm/mediatek: gamma: Add support for 12-bit LUT and MT8195
+  drm/mediatek: gamma: Make sure relay mode is disabled
+  drm/mediatek: gamma: Program gamma LUT type for descending or rising
+
+Jason-JH.Lin (1):
+  drm/mediatek: gamma: Adjust mtk_drm_gamma_set_common parameters
+
+ drivers/gpu/drm/mediatek/mtk_disp_aal.c     |   2 +-
+ drivers/gpu/drm/mediatek/mtk_disp_drv.h     |   3 +-
+ drivers/gpu/drm/mediatek/mtk_disp_gamma.c   | 193 ++++++++++++++++----
+ drivers/gpu/drm/mediatek/mtk_drm_crtc.c     |   4 +-
+ drivers/gpu/drm/mediatek/mtk_drm_crtc.h     |   1 -
+ drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c |   1 +
+ drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h |   9 +
+ 7 files changed, 177 insertions(+), 36 deletions(-)
+
 -- 
-2.33.0
+2.40.1
 
