@@ -2,120 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0139F72CBEA
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 18:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C456872CBEF
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 18:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231921AbjFLQ5R convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 12 Jun 2023 12:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47898 "EHLO
+        id S235848AbjFLQ6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 12:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbjFLQ5P (ORCPT
+        with ESMTP id S235149AbjFLQ6M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 12:57:15 -0400
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDD619C;
-        Mon, 12 Jun 2023 09:57:14 -0700 (PDT)
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-3f7364c2ed8so11397445e9.0;
-        Mon, 12 Jun 2023 09:57:14 -0700 (PDT)
+        Mon, 12 Jun 2023 12:58:12 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1571B8
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 09:58:10 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-977e83d536fso656641966b.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 09:58:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1686589089; x=1689181089;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lLoz7lxagH1eY4McVsEAypsnIWtE+LF5c+YFhdajR34=;
+        b=LTQ3mmXY7CFskPvLfzwhsGbO1Hku7HHasdMxY0rwMTLbcY8JtsoTn8I0XjryAbAstB
+         mmVXMdMrPHxbqX07dzk6qVSFdqR6WPzD68w3bKbp+rKWHQDCl2mhFPCrb8thRgkKzw2m
+         nPnwyy3ZHxsgLz9mFZN4K+ktiBN0nRbrLNHMw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686589032; x=1689181032;
+        d=1e100.net; s=20221208; t=1686589089; x=1689181089;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/fdthmW3uN8vm/z0fYcR0kZV9BTQdLtqnyjec8VowSA=;
-        b=F8kPyM0WZj95oRzQx1yfLfDmF+pzHFQlKysPiMf6SUyd7ylmznWuLLqNNE7oj9susr
-         OhEZBxV9uxpe2ZyrTFJDSKwx3iWcCX9akdoFvLHiO6gNyNEATb83eKqe+dAES3Sq9ztV
-         JKyP2G+DYdhIGkJgWFYCbgTFPGop8TrkJDzKuqnUl5VolY4cKJo0kxtUcqCH8Ly3dro6
-         YEiNpgpQCPnvhK/srnkkMH129ln2Xov4im+ecLuIjDxkNumLvlP+5N2ZWTCy+CYsbvze
-         Q0gvukLUILEvqxw90/z1kuJfdkg+G3YNWxWMhYxD1Rhb3rwjYzVTAjCsq01EQV3ayDQu
-         cqxw==
-X-Gm-Message-State: AC+VfDxHHvKnNqkR4dYCr/CCoKgRx1la1K55NNtT5QXoYfY0q8JSIJCT
-        N+f44BiRdvvna6sYrdtz0+WYJQwNeO5GQi+Ythu7+LVK
-X-Google-Smtp-Source: ACHHUZ65gnKfYcpfpwnZX1IYq/N10F99bzWWdkwUBfUZkrTQoGAXV/b0lYyby/w6hqMeOnUSHUgbn4ezALjlh7MkLTM=
-X-Received: by 2002:adf:e9d2:0:b0:30c:fdac:ef57 with SMTP id
- l18-20020adfe9d2000000b0030cfdacef57mr6152290wrn.0.1686589032388; Mon, 12 Jun
- 2023 09:57:12 -0700 (PDT)
+        bh=lLoz7lxagH1eY4McVsEAypsnIWtE+LF5c+YFhdajR34=;
+        b=DuSQx034NmeZTRbl7/jmhY3Ps9BIkOSgfg40TtjPBSVwEZcse1jCDm/2JPJYDlU8jU
+         +nVMulCMfziNqFIfytjsw/y9EbrLFy02hAxa3yB7Hhh34nml5EUaUU42b6LzVoocOsfN
+         2JUohgBEk9LNOUUOiSj59seWJ2vzyxfKGtJiGufOOYpAV3AuOQOcuoo9E2GZRVhHzh09
+         RRwJAK/OGjY0ROQM8kxHwS/QoyRemT/evEmATWOVFPD3JZ8yXXtRc4Pt94Mi2/gK+pWO
+         BMQcli40731YkcGFrr/k7HRXNto/DBhHp4aDENAiMxK928iga1uVOh5WYE4OmFkiLNRV
+         918g==
+X-Gm-Message-State: AC+VfDwZB+FCYkS+ZmlZPDX/qEYsp+3pl4lH+1LdaQ5b5jWxr7ovCiow
+        dYUURxzCobdjVdBMiO8F3BQRbeGajxbppAZlypJ3hvVh
+X-Google-Smtp-Source: ACHHUZ4d5/rfNRVDIoJWsspfiOaqV2oF7yBZ5IqCI1u0w3sgjJnMrY1eDxLuK0mA11V4XNd97OTlMQ==
+X-Received: by 2002:a17:907:1b1c:b0:978:70e1:f02e with SMTP id mp28-20020a1709071b1c00b0097870e1f02emr8786058ejc.22.1686589089342;
+        Mon, 12 Jun 2023 09:58:09 -0700 (PDT)
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
+        by smtp.gmail.com with ESMTPSA id gj13-20020a170906e10d00b00965a56f82absm5425124ejb.212.2023.06.12.09.58.08
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 09:58:08 -0700 (PDT)
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-51870e2dc48so59389a12.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 09:58:08 -0700 (PDT)
+X-Received: by 2002:aa7:c90a:0:b0:516:4e6b:fa46 with SMTP id
+ b10-20020aa7c90a000000b005164e6bfa46mr4635225edt.31.1686589087811; Mon, 12
+ Jun 2023 09:58:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230607034403.2885-1-james.liu@hpe.com> <CAJZ5v0hTsEzFKvRf-MHpUxyJdFDUqc2ZL63s6BkyJyFtEzxvhw@mail.gmail.com>
- <ZIGbBF+GxHAlTqGk@ILEIUN5Z4B.asiapacific.hpqcorp.net>
-In-Reply-To: <ZIGbBF+GxHAlTqGk@ILEIUN5Z4B.asiapacific.hpqcorp.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 12 Jun 2023 18:57:01 +0200
-Message-ID: <CAJZ5v0iR+CAOwip0zPV1uug-0duJXFS4YMxwNWDntUnK6a+oQQ@mail.gmail.com>
-Subject: Re: [PATCH v1] ACPI: reboot: Increase the delay to avoid racing after
- writing to ACPI RESET_REG on AMD Milan platforms.
-To:     James Liu <james.liu@hpe.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mlangsdo@redhat.com, craig.lamparter@hpe.com
+References: <20230611124836.whfktwaumnefm5z5@zlang-mailbox>
+ <ZIZSPyzReZkGBEFy@dread.disaster.area> <20230612015145.GA11441@frogsfrogsfrogs>
+ <ZIaBQnCKJ6NsqGhd@dread.disaster.area> <CAHk-=whJqZLKPR-cpX-V4wJTXVX-_tG5Vjuj2q9knvKGCPdfkg@mail.gmail.com>
+ <20230612153629.GA11427@frogsfrogsfrogs> <CAHk-=wiN-JcUh4uhDNmA4hp26Mg+c2DTuzgWY2fZ6hytDtOMCg@mail.gmail.com>
+ <af31cadf-8c15-8d88-79fb-066dc87f0324@kernel.dk> <13d9e4f2-17c5-0709-0cc0-6f92bfe9f30d@kernel.dk>
+ <CAHk-=wgdBfqyNHk0iNyYpEuBUdVgq1KMzHMuEqn=ADtfyK_pkQ@mail.gmail.com> <212a190c-f81e-2876-cf14-6d1e37d47192@kernel.dk>
+In-Reply-To: <212a190c-f81e-2876-cf14-6d1e37d47192@kernel.dk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 12 Jun 2023 09:57:51 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh0hrFjcU5C8uHvLBThrT5vQsFHb7Jk6HRP3LAJqdNx1A@mail.gmail.com>
+Message-ID: <CAHk-=wh0hrFjcU5C8uHvLBThrT5vQsFHb7Jk6HRP3LAJqdNx1A@mail.gmail.com>
+Subject: Re: [6.5-rc5 regression] core dump hangs (was Re: [Bug report]
+ fstests generic/051 (on xfs) hang on latest linux v6.5-rc5+)
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Zorro Lang <zlang@redhat.com>, linux-xfs@vger.kernel.org,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 8, 2023 at 11:14 AM James Liu <james.liu@hpe.com> wrote:
+On Mon, Jun 12, 2023 at 9:45=E2=80=AFAM Jens Axboe <axboe@kernel.dk> wrote:
 >
-> On Wed, Jun 07, 2023 at 01:19:42PM +0200, Rafael J. Wysocki wrote:
-> > On Wed, Jun 7, 2023 at 5:44 AM James Liu <james.liu@hpe.com> wrote:
-> > >
-> > > For AMD Milan platforms, the delay of 15ms is insufficient to avoid racing
-> > > of reboot mechanisms. That said, the AMD Milan processors don't reboot
-> > > in 15ms after invoking acpi_reset().
-> > >
-> > > The proposed 50ms delay can effectively work around this issue.
-> > > This extended delay aligns better with ACPI v6.4 (i.e., sec. 4.8.4.6),
-> > > which indicates that ideally OSPM should execute spin loops on the CPUs
-> > > in the system following a write to this register.
-> > >
-> > > Signed-off-by: James Liu <james.liu@hpe.com>
-> >
-> > Why do you want to affect everyone (including guest kernels running in
-> > virtual machines AFAICS) in order to address a problem specific to one
-> > platform?
->
-> I hoped to address this issue for any platform requiring a longer delay to
-> complete ACPI reset in time for any (maybe silicon-level) reasons. Some AMD Milan
-> platforms were the cases that we've found so far.
+> You snipped the suspicion in my reply on why that exists, to avoid
+> io_wq_worker_sleeping() triggering.
 
-Do you know about any other?
+I'm not seeing why triggering io_wq_worker_sleeping() should even be a
+problem in the first place.
 
-> Except that, since ACPI spec indicates there should be a spin loop (long enough)
-> after the write instruction to Reset Register, I thought it should be no harms to
-> the other systems which well consider this spin loop when they claim to support
-> ACPI reboot.
->
-> Btw, I am just curious, why is the virtual machine mentioned here?
+I suspect that is entirely historical too, and has to do with how it
+used to do that
 
-The new delay would be over 3 times larger, so some users might be
-surprised by it at least potentially.
+        struct io_worker *worker =3D kthread_data(tsk);
+        struct io_wqe *wqe =3D worker->wqe;
 
-> is the 50ms delay in acpi_reboot() for a guest OS on VM so long that some
-> unexpected behavior might happen?
->
-> > Wouldn't it be better to quirk that platform and document the quirk properly?
->
-> Yeah, it could be. Actually we considered this, and we will consider it again.
->
-> > > ---
-> > >  drivers/acpi/reboot.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/acpi/reboot.c b/drivers/acpi/reboot.c
-> > > index b79b7c99c237..002f7c7814a1 100644
-> > > --- a/drivers/acpi/reboot.c
-> > > +++ b/drivers/acpi/reboot.c
-> > > @@ -78,5 +78,5 @@ void acpi_reboot(void)
-> > >          * The 15ms delay has been found to be long enough for the system
-> > >          * to reboot on the affected platforms.
-> > >          */
-> > > -       mdelay(15);
-> > > +       mdelay(50);
-> > >  }
-> > > --
+back in the bad old days of kthreads.
+
+But yeah, I don't know that code.
+
+              Linus
