@@ -2,65 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4A5D72C6C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A5672C6C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:00:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233710AbjFLOAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 10:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
+        id S234527AbjFLOAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 10:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236492AbjFLN7x (ORCPT
+        with ESMTP id S233871AbjFLOAp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 09:59:53 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ABE25198E;
-        Mon, 12 Jun 2023 06:59:27 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AA4FB1FB;
-        Mon, 12 Jun 2023 07:00:10 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.27.163])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CB8E63F71E;
-        Mon, 12 Jun 2023 06:59:20 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 14:59:13 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        kgdb-bugreport@lists.sourceforge.net,
-        Stephane Eranian <eranian@google.com>, mpe@ellerman.id.au,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        linuxppc-dev@lists.ozlabs.org, Sumit Garg <sumit.garg@linaro.org>,
-        npiggin@gmail.com, davem@davemloft.net,
-        Marc Zyngier <maz@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>, sparclinux@vger.kernel.org,
-        christophe.leroy@csgroup.eu,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        ravi.v.shankar@intel.com, Randy Dunlap <rdunlap@infradead.org>,
-        Pingfan Liu <kernelfans@gmail.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        Ian Rogers <irogers@google.com>, ito-yuichi@fujitsu.com,
-        ricardo.neri@intel.com, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, linux-kernel@vger.kernel.org,
-        Masayoshi Mizuma <msys.mizuma@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>
-Subject: Re: [PATCH v5 15/18] watchdog/perf: Add a weak function for an arch
- to detect if perf can use NMIs
-Message-ID: <ZIckscgmirrgxZ75@FVFF77S0Q05N>
-References: <20230519101840.v5.18.Ia44852044cdcb074f387e80df6b45e892965d4a1@changeid>
- <20230519101840.v5.15.Ic55cb6f90ef5967d8aaa2b503a4e67c753f64d3a@changeid>
- <ZIb0hd8djM+jJviF@FVFF77S0Q05N>
- <CAD=FV=WyLKygSsArCaSzid47Rz5=ozR6Yh9L6Q3JStpzF9Tn9w@mail.gmail.com>
+        Mon, 12 Jun 2023 10:00:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CA71B4
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 06:59:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686578380;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GKBfBKTeVMZb+dt8ekYcaXAyT4nwQrKdK59Oup6XbjM=;
+        b=G36P5n/+PwztKP0/O9iJc6P3m3+tsrp/GerrjZdk9xUaxU/31MVfgDcNB1mYXEZ0aFDBk2
+        FrL0AyX5BLKab29WPxUG4yHGDn3yR+t44f4g0kkcS6nYq9aKGLrlchx6VnP8lJJgDH1v9P
+        KzKx2WJxuMKd2BZ8k7/4zeALXT575xk=
+Received: from mail-vk1-f197.google.com (mail-vk1-f197.google.com
+ [209.85.221.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-493-LwIUAKDzMZ-o8x7E8OwVSg-1; Mon, 12 Jun 2023 09:59:33 -0400
+X-MC-Unique: LwIUAKDzMZ-o8x7E8OwVSg-1
+Received: by mail-vk1-f197.google.com with SMTP id 71dfb90a1353d-4644c388212so105129e0c.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 06:59:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686578363; x=1689170363;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GKBfBKTeVMZb+dt8ekYcaXAyT4nwQrKdK59Oup6XbjM=;
+        b=H9pBYthLSoOKNu8S2kZf3xYmgieKId9jO6oEuM00c52dOfQAb88bXVgYgP9JrnFGJG
+         xm+PsxsWcAQxaLMa2f27kJEb5oIzaqIKBkXQ/tkVal8ju85r0BJMpyXG/BMmGA5+7kv8
+         j/595FjNRlDasKQsSrrP+4HYsiswEYCkDobD3sgL+8Hm4S5yodlMqx5ho7XhFq+FdYJt
+         1wCWcQpSA7n5tJ9PqjqL4Sxg8vbWHGVkVRB2hpTgR3MbjwHe/hOZxA/CLhSXNK1e8XfC
+         79MAMidSrtNvvpp4Pa4C4KhuKe6US0ZA2Ta4SU6BJbVoAs2NVzd+kA+UA5eG8Sc43z2h
+         5SGw==
+X-Gm-Message-State: AC+VfDzsUhVecdlGzlp92mShd8VXGl55aTMFb6HxzNCt/SrKSssjpMZK
+        /bsgiiyFzQ8Ql6tDbmzcgn7oiPFT67ayVcR6kL9EeQ1Q8DnI2s5FsJ0KGwaloJrCgvhZ9RRk7Kq
+        +v54eNjmZmqxSCtwuVwLyOf8H
+X-Received: by 2002:ac5:c858:0:b0:457:3a45:38d2 with SMTP id g24-20020ac5c858000000b004573a4538d2mr3539469vkm.1.1686578363649;
+        Mon, 12 Jun 2023 06:59:23 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5TlkHrlSDfBgWo12KHaFjakxWZQ6CGtAWvz+eNVHFMNBM4VurWIdxp0q7dBJcjBu3sxsTD9w==
+X-Received: by 2002:ac5:c858:0:b0:457:3a45:38d2 with SMTP id g24-20020ac5c858000000b004573a4538d2mr3539453vkm.1.1686578363405;
+        Mon, 12 Jun 2023 06:59:23 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id t18-20020a0cea32000000b005ef54657ea0sm3221971qvp.126.2023.06.12.06.59.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 06:59:22 -0700 (PDT)
+Date:   Mon, 12 Jun 2023 09:59:19 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, akpm@linux-foundation.org,
+        hannes@cmpxchg.org, mhocko@suse.com, josef@toxicpanda.com,
+        jack@suse.cz, ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
+        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
+        apopple@nvidia.com, ying.huang@intel.com, david@redhat.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        viro@zeniv.linux.org.uk, brauner@kernel.org,
+        pasha.tatashin@soleen.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v2 2/6] mm: handle swap page faults under VMA lock if
+ page is uncontended
+Message-ID: <ZIcktx8DPYxtV2Sd@x1n>
+References: <20230609005158.2421285-1-surenb@google.com>
+ <20230609005158.2421285-3-surenb@google.com>
+ <ZIOKxoTlRzWQtQQR@x1n>
+ <ZIONJQGuhYiDnFdg@casper.infradead.org>
+ <ZIOPeNAy7viKNU5Z@x1n>
+ <CAJuCfpFAh2KOhpCQ-4b+pzY+1GxOGk=eqj6pBj04gc_8eqB6QQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAD=FV=WyLKygSsArCaSzid47Rz5=ozR6Yh9L6Q3JStpzF9Tn9w@mail.gmail.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAJuCfpFAh2KOhpCQ-4b+pzY+1GxOGk=eqj6pBj04gc_8eqB6QQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,45 +95,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 06:55:37AM -0700, Doug Anderson wrote:
-> Mark,
-> 
-> On Mon, Jun 12, 2023 at 3:33 AM Mark Rutland <mark.rutland@arm.com> wrote:
+On Fri, Jun 09, 2023 at 03:34:34PM -0700, Suren Baghdasaryan wrote:
+> On Fri, Jun 9, 2023 at 1:45 PM Peter Xu <peterx@redhat.com> wrote:
 > >
-> > On Fri, May 19, 2023 at 10:18:39AM -0700, Douglas Anderson wrote:
-> > > On arm64, NMI support needs to be detected at runtime. Add a weak
-> > > function to the perf hardlockup detector so that an architecture can
-> > > implement it to detect whether NMIs are available.
+> > On Fri, Jun 09, 2023 at 09:35:49PM +0100, Matthew Wilcox wrote:
+> > > On Fri, Jun 09, 2023 at 04:25:42PM -0400, Peter Xu wrote:
+> > > > >  bool __folio_lock_or_retry(struct folio *folio, struct mm_struct *mm,
+> > > > >                    unsigned int flags)
+> > > > >  {
+> > > > > + /* Can't do this if not holding mmap_lock */
+> > > > > + if (flags & FAULT_FLAG_VMA_LOCK)
+> > > > > +         return false;
+> > > >
+> > > > If here what we need is the page lock, can we just conditionally release
+> > > > either mmap lock or vma lock depending on FAULT_FLAG_VMA_LOCK?
 > > >
-> > > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > > ---
-> > > While I won't object to this patch landing, I consider it part of the
-> > > arm64 perf hardlockup effort. I would be OK with the earlier patches
-> > > in the series landing and then not landing ${SUBJECT} patch nor
-> > > anything else later.
+> > > See patch 5 ...
 > >
-> > FWIW, everything prior to this looks fine to me, so I reckon it'd be worth
-> > splitting the series here and getting the buddy lockup detector in first, to
-> > avoid a log-jam on all the subsequent NMI bits.
+> > Just reaching.. :)
+> >
+> > Why not in one shot, then?
 > 
-> I think the whole series has already landed in Andrew's tree,
-> including the arm64 "perf" lockup detector bits. I saw all the
-> notifications from Andrew go through over the weekend that they were
-> moved from an "unstable" branch to a "stable" one and I see them at:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/log/?h=mm-nonmm-stable
-> 
-> When I first saw Anderw land the arm64 perf lockup detector bits in
-> his unstable branch several weeks ago, I sent a private message to the
-> arm64 maintainers (yourself included) to make sure you were aware of
-> it and that it hadn't been caught in mail filters. I got the
-> impression that everything was OK. Is that not the case?
+> I like small incremental changes, but I can squash them if that helps
+> in having a complete picture.
 
-Sorry; I'm slowly catching up with a backlog of email, and I'm just behind.
+Yes that'll be appreciated.  IMHO keeping changing semantics of
+FAULT_FLAG_VMA_LOCK for the folio lock function in the same small series is
+confusing.
 
-Feel free to ignore this; sorry for the noise!
+-- 
+Peter Xu
 
-If we spot anything going wrong in testing we can look at fixing those up.
-
-Thanks,
-Mark.
