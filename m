@@ -2,278 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E812672C8D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 339F072C8D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235308AbjFLOlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 10:41:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52954 "EHLO
+        id S237999AbjFLOlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 10:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232341AbjFLOlT (ORCPT
+        with ESMTP id S235675AbjFLOlV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 10:41:19 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2074.outbound.protection.outlook.com [40.107.223.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83D1A8
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 07:41:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ACDmJxmg+tEcliI78RUVQP0NHkFpwUEg7KCqxClVdnot3HJs0J69q7hjAo/Ef55p4e8diMt8kz0sxv+t/35lqO/x0pw3xr+/E+xo1qgVFpt9049LwGQBN/a3hQf3qkiMQFrChUHa3XUIN0MVvjhLIph9/jA32T4zt7nK+mT2pioqXbSJyOPs0jqpm5T3nJgjBoSsC6ISBD4YpKNg0Y3NXdgoVVaYwwqOFQ9Ux47zv8kKMNMgMYDnFNFEA82rBKsWJ3eugO8b70cz/XReaIdMPl4odum0YAcZqyUIHw80L1HJnp/5zRaYKFZc+3ICXoo3FP/4UMaj+9+QknGajLmzrQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zr7CaUb78zxGkBWlzeLtrB+SiTsZ0i0eMEPIJmAQsEI=;
- b=ESFXpJSRa83YmAB6rW1v3SwFd//2TAsDxTuH4hXG1aR6PalQiQjKuv0iYWAQzX9EEOrd6l9HXzWgRDqz1UtO/8EeF+yZgl+R+GbnrbVsK8za0CvxF5ya2poXuaWya+SaVRM7SeKysXovOBz+hki65u+k0B3YxcwTppwzVOt6o0uRqB7wJI7O0FyEOk+31H6Wbre+B1qBPffeaFUX5KPhEYc/tWWoetZwnVMk1COuHBmc980NKoBFNd72kTDY9knQYWpiiLQPiOM53fZSxM7RAzASI0QXH4UklmxjiFUfsWF2pXs0t/19TkQcHANzu0pdRMnL1Z5OmtH+YUIEE8B5XA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zr7CaUb78zxGkBWlzeLtrB+SiTsZ0i0eMEPIJmAQsEI=;
- b=oTjBnLzrh6wsXOxdR2F7am1YNEdXECRLBYuTZsGL3MzqpMGleXk1a5y+/K95Oqi+bhf7rlmKVWqtuUJBY/ncPGMaEUuqAsIo1AagdwDmg14vhPCiX9ybSbkAuLOh9HtwqvgEj845s70nr/RPnnktYhMiC4LIUE+n8rLmqGcFnyU=
-Received: from BL1PR12MB5144.namprd12.prod.outlook.com (2603:10b6:208:316::6)
- by CY8PR12MB8213.namprd12.prod.outlook.com (2603:10b6:930:71::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.36; Mon, 12 Jun
- 2023 14:41:15 +0000
-Received: from BL1PR12MB5144.namprd12.prod.outlook.com
- ([fe80::c549:4aeb:a02f:56b2]) by BL1PR12MB5144.namprd12.prod.outlook.com
- ([fe80::c549:4aeb:a02f:56b2%4]) with mapi id 15.20.6455.043; Mon, 12 Jun 2023
- 14:41:15 +0000
-From:   "Deucher, Alexander" <Alexander.Deucher@amd.com>
-To:     Sui Jingfeng <suijingfeng@loongson.cn>,
-        "Wentland, Harry" <Harry.Wentland@amd.com>,
-        "Li, Sun peng (Leo)" <Sunpeng.Li@amd.com>,
-        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "Lee, Alvin" <Alvin.Lee2@amd.com>, "Lei, Jun" <Jun.Lei@amd.com>,
-        "Zhuo, Qingqing (Lillian)" <Qingqing.Zhuo@amd.com>,
-        "Liu, Wenjing" <Wenjing.Liu@amd.com>,
-        "Tam, Samson" <Samson.Tam@amd.com>,
-        "Varone, Dillon" <Dillon.Varone@amd.com>,
-        "Liu, HaoPing (Alan)" <HaoPing.Liu@amd.com>
-CC:     "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] drm/amdgpu: Add error reporting code for the display
- core
-Thread-Topic: [PATCH v2] drm/amdgpu: Add error reporting code for the display
- core
-Thread-Index: AQHZnHjExsUIRS/8wUetf1h9p3C+Wa+HPmgw
-Date:   Mon, 12 Jun 2023 14:41:14 +0000
-Message-ID: <BL1PR12MB5144EE0E3EB0D30F27D5F824F754A@BL1PR12MB5144.namprd12.prod.outlook.com>
-References: <20230611152351.24569-1-suijingfeng@loongson.cn>
-In-Reply-To: <20230611152351.24569-1-suijingfeng@loongson.cn>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=39c04b06-bf1c-4570-a52f-dfc09840778d;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=0;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP
- 2.0;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2023-06-12T14:39:31Z;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR12MB5144:EE_|CY8PR12MB8213:EE_
-x-ms-office365-filtering-correlation-id: a809e64c-4c83-4224-8ef6-08db6b531322
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: PrPwZCwF2gTjFGF3qcBFexwmowVMd6hjbqOiHcUl/fVFYRTmedMYKrJl6IWIlYzBY36bhGrY6RjUtufnWTpLVNZ/dAttHqtAmyG04ezC7LIHnmjIqqSTmxS4y5KLMEn3F1QF19rLkDGMOaUo+1IPoItHiw9OrxFlVpXsWLKq2x9aWu23q9EAGRb8rnuzXbUr+OAvILtu+hnedfqMPqPoSSg28fcbkeR/oVXY9C8rPopATYIQoIobbE/p5/nm6sUPCEl7JFDfOaxPsHG10VVclRMAT7ko7GXc2R/2SedlgAe/EJVKcP25rC/2DYnDnAvPU7ylEtrwXAtglVw3h8HI4t+a6S+xCiHugZ19gG6SAd//BzunlVPkdHuFQqL7zDfuK0a2RFjlA2Y+M0/0yM5UogAM+UnSNd12N69qunXL+grD+0h31POYYqXoLOh5Kmsp7xHs4hWhVyvJte0WwovnH8vsXrUZLetKi/XLpHpxi/RKHwuIYOEbQtEE5Dl4ilFpgk6DARIXlB3G1/27EojT8bBK2dqLY6CbPQP6gFpW6w6MpSPdNA0oxOTt0qCdIgjpBIBkoql041F/lL38QdtErjbFSIkQZMonQDSNbtywRPcRwpUXMLF0KQyQ5Dgm3e320UA4HYgrfhhqRfuh4oJpjA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5144.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(376002)(39860400002)(396003)(346002)(451199021)(6506007)(7696005)(71200400001)(55016003)(33656002)(86362001)(122000001)(9686003)(921005)(38100700002)(38070700005)(26005)(186003)(53546011)(83380400001)(8676002)(5660300002)(41300700001)(316002)(52536014)(2906002)(54906003)(110136005)(8936002)(66476007)(478600001)(76116006)(66446008)(64756008)(66556008)(4326008)(6636002)(66946007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?7EnNWRiiWBO07CzxfFjvY2HxsmwtdL7CNVblmD76yM+l9LP2Q9si/UbMiMFE?=
- =?us-ascii?Q?AN9X8aLIRcvwkQSmW0BTNiOissvPVEofkYXTQgfJY/A6HjUrdWy/rCkWz7wz?=
- =?us-ascii?Q?uN+L1JvRSpntEFZ20WGLHs6n9tR8QGMcokUqDs1fjsq4yfH4mg4z60dGXs0h?=
- =?us-ascii?Q?HwQiV9wAtEY6WKWZlRktZPWlJBxRaOHAnbw+uP54OaDppngc8kcwOgXl1W35?=
- =?us-ascii?Q?neVLRHJX4FQgjwh2sgd++TlkqdOqPkAFpzlo+/q/vFc3k7dPBQA6gfeOQUqs?=
- =?us-ascii?Q?lnrj0vs6gI0EkGBaUmVmWGlg8VYbpH/P3UI7co4YFP4DPCaFmfhafidOviAv?=
- =?us-ascii?Q?6hapCe3i5/wlPHTHDimtv8EwGV2TAtqdfvu8e2Txh49wPud1MjBvWJI6WqOE?=
- =?us-ascii?Q?C563x2XHboBUrW9BzkCRCJjoIQL3YvKZDzsBePjEgpresx1xdo/1Gq6sd8B/?=
- =?us-ascii?Q?7mhrao8rmeu1iz6WcuCs1E+BeBxjD6xWbRTTXuvpulELxwQOy+dMsQgUQN1J?=
- =?us-ascii?Q?kIuusxk/hfsInNQdmtxnwfklO1/YMgPevQ/Q7L0HMzw0h8Cw2wSMzKOiUD2X?=
- =?us-ascii?Q?AUuGzhwL6angxEWzsRTUmJzcegZCk7R7lvU0kQi+CNAVlTorDsmqeCLu/kHV?=
- =?us-ascii?Q?nYdH7aKVuQ5t2JjY/nHBzJVSQj8xV2CpZfSh3KjcbqtPY7bVSdFxZup2JlYY?=
- =?us-ascii?Q?thbRFnLLC9oe4BPHDQlWO1CWPj35uaiAtXIzRBdoNVEfnGzS1KutekDOSkVX?=
- =?us-ascii?Q?bankVzJldn/3pzaEo7+kS8XC6B/jJqXe/GhekcGGIBDPV3Nb7l5x673LZWtE?=
- =?us-ascii?Q?wTstcOrco26TT6wWYqCp4pEva32aPvuhUtK1K1FVmGZ4O5EdQjBk7R8o9g0t?=
- =?us-ascii?Q?vEYViwGrEdLrAqXL4Ke2H2WJWvi7V6REOJX87l/6jqfNJ0bpSeczo76w9zFo?=
- =?us-ascii?Q?iCUXRe2Qv+r/wQOCPpacw4zD1N2cMz3rkOr2LtAPdmJHZmku5hGcObhAJcLo?=
- =?us-ascii?Q?oN7PgNrcdn1H4VMVJ3Cu9xwevYtWNbuXJccZx149TwoWT54lavyzQDxeQ6oe?=
- =?us-ascii?Q?wIN6ODJIT/ZDL51aDi27QqobfKTxVITtyTprqKeEHZBTKB/zqTviVp39PDcU?=
- =?us-ascii?Q?oFEy+pmr6cNFUPNMiqtYGlz1x6k0mEfs4bckN4HlBBhp5M/UjUaxcbl/aJAy?=
- =?us-ascii?Q?oR7+3UrmxF5zDfv5QEG55qvL0DnbfttPCLPB5lKm1aGts+NJXxPdxDhKyqhW?=
- =?us-ascii?Q?wuZ8i0AjU37exs7aKh4Amx5DcT4SuqZWk0tS17JwCYOvy1IAGcotu61BTuNW?=
- =?us-ascii?Q?HwuffoTB0sukzy2GxKPDbXUkjFF7r+Rqfh9NZGZ97UYtukHCU50U0/nthUDB?=
- =?us-ascii?Q?39P9KwaWH5MSLvpPCaDSzEbJz2n9qHFzcD4JGoPrgRFbRAcNhcBfkagUcZ83?=
- =?us-ascii?Q?Wb+r/Uw4n5YCz+3Mv7Q0+kVxyymLbNoBEJEuPmygCBcLeroCmcPwpHtZubDN?=
- =?us-ascii?Q?HOMi68JGQAIi7HzrY7Pi54Zg5szu98sDlN+GUhP3VhmthgcXQDOrK25FJ/K4?=
- =?us-ascii?Q?z7Vn5RGYT1w25dyko8Q=3D?=
+        Mon, 12 Jun 2023 10:41:21 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F082FBD
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 07:41:19 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bb85b2bac4eso6597660276.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 07:41:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686580879; x=1689172879;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=r96CKlC+BBXhesVFXxXqygeyQq0poKy+xHh5QJBs4Hs=;
+        b=y5PvZbyvq4ur+SImkmV6DIR+nXay4q20zUtWROecR8NkFyPCbRlfzlSXb08VHyg/vM
+         dOWUJGqoSQckjKNyaz+pnvlIbc/677Wf4OzrLTPm1+LO4/mptCVJ4e/Uk+aHgUwJ+qSO
+         6q3pBgeV/DXdB2SrpAoZHsul6MRWS/ngRQx7PvnfSncRT+IhtiBjR2O5HaFqcuUji5y/
+         DOi2db5ZPa4WjG6g0fnovTI6kQ3PEcYEB8tswr99owkyAhvk3/tSEErpWrgDXQt9LTPZ
+         /nTtyzShFuyCqIkJg63tnvrN+wl2h1zgCd7ffB+m3fyoqhO7Xk893eGC+g3501H5ycqW
+         mSIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686580879; x=1689172879;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=r96CKlC+BBXhesVFXxXqygeyQq0poKy+xHh5QJBs4Hs=;
+        b=jolsEjZRM0vZFcIbSEdjEhfVy3sFcOV0QTalqGG5uBElmXv4zk5Liz+ikwtJn4Jfky
+         mjcnVdVoQydpOtMHe4Uezt0LvG8TyspMXMDxSpSrC5xZGvEIwgDVHknTixa9ZrPhy6N8
+         N/zZDCP53S5bIbKa77eD/Z9nxeebmRFrrMx8ZXBXX1E14QqLqNp5BfkvWzcU81KyqxFf
+         L5j7tOIwHnGwmu03ckmdnH5B0sA8uprBscX5ulCTX3NthqOJp5/Wgots4WnaNJwMVU/X
+         M6RE55kxKGSJq4fpQYsWQI/244bAjY3h1OAGfoN5PYmLvCWobLQf9bwQO/8TxpeqUdp5
+         3uZg==
+X-Gm-Message-State: AC+VfDzfBRK2X+NltHsgcp7Tw5fb5A4WSFW0iMOAJTmeJwtSu1oiwOFF
+        ATipT/j7H/37LMx/JrlN9z4sE5wbubc=
+X-Google-Smtp-Source: ACHHUZ6zdAuLarXFuermSwK+q6naBdSNEG8tLfWV/XWK13b5XH60U7w3+nxNcTpXxK1HrGqXhuWbcHMQm9g=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:bc2:0:b0:ba6:e7ee:bb99 with SMTP id
+ 185-20020a250bc2000000b00ba6e7eebb99mr5041142ybl.12.1686580879112; Mon, 12
+ Jun 2023 07:41:19 -0700 (PDT)
+Date:   Mon, 12 Jun 2023 07:41:16 -0700
+In-Reply-To: <20230608090348.414990-1-gshan@redhat.com>
+Mime-Version: 1.0
+References: <20230608090348.414990-1-gshan@redhat.com>
+Message-ID: <ZIcujNKVosLeQEqR@google.com>
+Subject: Re: [PATCH] KVM: Avoid illegal stage2 mapping on invalid memory slot
+From:   Sean Christopherson <seanjc@google.com>
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com,
+        oliver.upton@linux.dev, maz@kernel.org, hshuai@redhat.com,
+        zhenyzha@redhat.com, shan.gavin@gmail.com
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5144.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a809e64c-4c83-4224-8ef6-08db6b531322
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jun 2023 14:41:15.0109
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 13aq6m7eFMTfJ4I2lwGBsnd6W/2WD4MwxZrpneA0xa7pyZyDm6pvCEG3XVwigYJOWbLd4017OLHptDphniWtlA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8213
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Public]
+On Thu, Jun 08, 2023, Gavin Shan wrote:
+> We run into guest hang in edk2 firmware when KSM is kept as running
+> on the host. The edk2 firmware is waiting for status 0x80 from QEMU's
+> pflash device (TYPE_PFLASH_CFI01) during the operation for sector
+> erasing or buffered write. The status is returned by reading the
+> memory region of the pflash device and the read request should
+> have been forwarded to QEMU and emulated by it. Unfortunately, the
+> read request is covered by an illegal stage2 mapping when the guest
+> hang issue occurs. The read request is completed with QEMU bypassed and
+> wrong status is fetched.
+> 
+> The illegal stage2 mapping is populated due to same page mering by
+> KSM at (C) even the associated memory slot has been marked as invalid
+> at (B).
+> 
+>   CPU-A                    CPU-B
+>   -----                    -----
+>                            ioctl(kvm_fd, KVM_SET_USER_MEMORY_REGION)
+>                            kvm_vm_ioctl_set_memory_region
+>                            kvm_set_memory_region
+>                            __kvm_set_memory_region
+>                            kvm_set_memslot(kvm, old, NULL, KVM_MR_DELETE)
+>                              kvm_invalidate_memslot
+>                                kvm_copy_memslot
+>                                kvm_replace_memslot
+>                                kvm_swap_active_memslots        (A)
+>                                kvm_arch_flush_shadow_memslot   (B)
+>   same page merging by KSM
+>   kvm_mmu_notifier_change_pte
+>   kvm_handle_hva_range
+>   __kvm_handle_hva_range       (C)
+> 
+> Fix the issue by skipping the invalid memory slot at (C) to avoid the
+> illegal stage2 mapping. Without the illegal stage2 mapping, the read
+> request for the pflash's status is forwarded to QEMU and emulated by
+> it. The correct pflash's status can be returned from QEMU to break
+> the infinite wait in edk2 firmware.
+> 
+> Cc: stable@vger.kernel.org # v5.13+
+> Fixes: 3039bcc74498 ("KVM: Move x86's MMU notifier memslot walkers to generic code")
 
-> -----Original Message-----
-> From: Sui Jingfeng <suijingfeng@loongson.cn>
-> Sent: Sunday, June 11, 2023 11:24 AM
-> To: Wentland, Harry <Harry.Wentland@amd.com>; Li, Sun peng (Leo)
-> <Sunpeng.Li@amd.com>; Siqueira, Rodrigo <Rodrigo.Siqueira@amd.com>;
-> Deucher, Alexander <Alexander.Deucher@amd.com>; Koenig, Christian
-> <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; David
-> Airlie <airlied@gmail.com>; Daniel Vetter <daniel@ffwll.ch>; Lee, Alvin
-> <Alvin.Lee2@amd.com>; Lei, Jun <Jun.Lei@amd.com>; Zhuo, Qingqing (Lillian=
-)
-> <Qingqing.Zhuo@amd.com>; Liu, Wenjing <Wenjing.Liu@amd.com>; Tam,
-> Samson <Samson.Tam@amd.com>; Varone, Dillon
-> <Dillon.Varone@amd.com>; Liu, HaoPing (Alan) <HaoPing.Liu@amd.com>
-> Cc: amd-gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; linux=
--
-> kernel@vger.kernel.org
-> Subject: [PATCH v2] drm/amdgpu: Add error reporting code for the display
-> core
->
-> [why]
->
-> Because the drm/amdgpu drivers do not work with Navi 10 [RX 5700] series
-> GPUs on non-x86 platforms, this patch helps find out where the drivers fa=
-il.
-> After applying his patch, the following error message can be found:
->
-> [drm:dc_create [amdgpu]] *ERROR* dc_construct: failed to create resource
-> pool [drm:dc_create [amdgpu]] *ERROR* dc_create: dc construct failed [drm=
-]
-> Display Core failed to initialize with v3.2.230!
+This Fixes isn't correct.  That change only affected x86, which doesn't have this
+bug.  And looking at commit cd4c71835228 ("KVM: arm64: Convert to the gfn-based MMU
+notifier callbacks"), arm64 did NOT skip invalid slots
 
-Curious what the failure was on your platform.  Resource create is mostly j=
-ust allocating structures.
+        slots = kvm_memslots(kvm);
 
-Alex
+        /* we only care about the pages that the guest sees */
+        kvm_for_each_memslot(memslot, slots) {
+                unsigned long hva_start, hva_end;
+                gfn_t gpa;
 
->
-> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+                hva_start = max(start, memslot->userspace_addr);
+                hva_end = min(end, memslot->userspace_addr +
+                                        (memslot->npages << PAGE_SHIFT));
+                if (hva_start >= hva_end)
+                        continue;
+
+                gpa = hva_to_gfn_memslot(hva_start, memslot) << PAGE_SHIFT;
+                ret |= handler(kvm, gpa, (u64)(hva_end - hva_start), data);
+        }
+
+#define kvm_for_each_memslot(memslot, slots)                            \
+        for (memslot = &slots->memslots[0];                             \
+             memslot < slots->memslots + slots->used_slots; memslot++)  \
+                if (WARN_ON_ONCE(!memslot->npages)) {                   \
+                } else
+
+Unless I'm missing something, this goes all the way back to initial arm64 support
+added by commit d5d8184d35c9 ("KVM: ARM: Memory virtualization setup").
+
+> Reported-by: Shuai Hu <hshuai@redhat.com>
+> Reported-by: Zhenyu Zhang <zhenyzha@redhat.com>
+> Signed-off-by: Gavin Shan <gshan@redhat.com>
 > ---
->  drivers/gpu/drm/amd/display/dc/core/dc.c | 29 ++++++++++++++++--------
->  1 file changed, 20 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c
-> b/drivers/gpu/drm/amd/display/dc/core/dc.c
-> index 52564b93f7eb..d33b78aa3e58 100644
-> --- a/drivers/gpu/drm/amd/display/dc/core/dc.c
-> +++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
-> @@ -951,7 +951,7 @@ static bool dc_construct(struct dc *dc,
->               goto fail;
->       }
->
-> -        dc_ctx =3D dc->ctx;
-> +     dc_ctx =3D dc->ctx;
->
->       /* Resource should construct all asic specific resources.
->        * This should be the only place where we need to parse the asic id
-> @@ -990,16 +990,21 @@ static bool dc_construct(struct dc *dc,
->       }
->
->       dc->res_pool =3D dc_create_resource_pool(dc, init_params, dc_ctx-
-> >dce_version);
-> -     if (!dc->res_pool)
-> +     if (!dc->res_pool) {
-> +             dm_error("%s: failed to create resource pool\n", __func__);
->               goto fail;
-> +     }
->
->       /* set i2c speed if not done by the respective dcnxxx__resource.c *=
-/
->       if (dc->caps.i2c_speed_in_khz_hdcp =3D=3D 0)
->               dc->caps.i2c_speed_in_khz_hdcp =3D dc-
-> >caps.i2c_speed_in_khz;
->
->       dc->clk_mgr =3D dc_clk_mgr_create(dc->ctx, dc->res_pool->pp_smu, dc=
--
-> >res_pool->dccg);
-> -     if (!dc->clk_mgr)
-> +     if (!dc->clk_mgr) {
-> +             dm_error("%s: failed to create clk manager\n", __func__);
->               goto fail;
-> +     }
-> +
->  #ifdef CONFIG_DRM_AMD_DC_FP
->       dc->clk_mgr->force_smu_not_present =3D init_params-
-> >force_smu_not_present;
->
-> @@ -1022,14 +1027,18 @@ static bool dc_construct(struct dc *dc,
->               goto fail;
->       }
->
-> -     if (!create_links(dc, init_params->num_virtual_links))
-> +     if (!create_links(dc, init_params->num_virtual_links)) {
-> +             dm_error("%s: failed to create links\n", __func__);
->               goto fail;
-> +     }
->
->       /* Create additional DIG link encoder objects if fewer than the
-> platform
->        * supports were created during link construction.
->        */
-> -     if (!create_link_encoders(dc))
-> +     if (!create_link_encoders(dc)) {
-> +             dm_error("%s: failed to create link encoders\n", __func__);
->               goto fail;
-> +     }
->
->       dc_resource_state_construct(dc, dc->current_state);
->
-> @@ -1314,11 +1323,15 @@ struct dc *dc_create(const struct dc_init_data
-> *init_params)
->               return NULL;
->
->       if (init_params->dce_environment =3D=3D DCE_ENV_VIRTUAL_HW) {
-> -             if (!dc_construct_ctx(dc, init_params))
-> +             if (!dc_construct_ctx(dc, init_params)) {
-> +                     DC_LOG_ERROR("%s: dc construct failed\n",
-> __func__);
->                       goto destruct_dc;
-> +             }
->       } else {
-> -             if (!dc_construct(dc, init_params))
-> +             if (!dc_construct(dc, init_params)) {
-> +                     DC_LOG_ERROR("%s: dc construct failed\n",
-> __func__);
->                       goto destruct_dc;
-> +             }
->
->               full_pipe_count =3D dc->res_pool->pipe_count;
->               if (dc->res_pool->underlay_pipe_index !=3D
-> NO_UNDERLAY_PIPE) @@ -1349,8 +1362,6 @@ struct dc *dc_create(const
-> struct dc_init_data *init_params)
->
->       DC_LOG_DC("Display Core initialized\n");
->
-> -
-> -
->       return dc;
->
->  destruct_dc:
-> --
-> 2.25.1
+>  virt/kvm/kvm_main.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 479802a892d4..7f81a3a209b6 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -598,6 +598,9 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
+>  			unsigned long hva_start, hva_end;
+>  
+>  			slot = container_of(node, struct kvm_memory_slot, hva_node[slots->node_idx]);
+> +			if (slot->flags & KVM_MEMSLOT_INVALID)
+> +				continue;
 
+Skipping the memslot will lead to use-after-free.  E.g. if an invalidate_range_start()
+comes along between installing the invalid slot and zapping SPTEs, KVM will
+return from kvm_mmu_notifier_invalidate_range_start() without having dropped all
+references to the range.
+
+I.e.
+
+	kvm_copy_memslot(invalid_slot, old);
+	invalid_slot->flags |= KVM_MEMSLOT_INVALID;
+	kvm_replace_memslot(kvm, old, invalid_slot);
+
+	/*
+	 * Activate the slot that is now marked INVALID, but don't propagate
+	 * the slot to the now inactive slots. The slot is either going to be
+	 * deleted or recreated as a new slot.
+	 */
+	kvm_swap_active_memslots(kvm, old->as_id);
+
+
+==> invalidate_range_start()
+
+	/*
+	 * From this point no new shadow pages pointing to a deleted, or moved,
+	 * memslot will be created.  Validation of sp->gfn happens in:
+	 *	- gfn_to_hva (kvm_read_guest, gfn_to_pfn)
+	 *	- kvm_is_visible_gfn (mmu_check_root)
+	 */
+	kvm_arch_flush_shadow_memslot(kvm, old);
+
+And even for change_pte(), skipping the memslot is wrong, as KVM would then fail
+unmap the prior SPTE.  Of course, that can't happen in the current code base
+because change_pte() is wrapped with invalidate_range_{start,end}(), but that's
+more of a bug than a design choice (see c13fda237f08 "KVM: Assert that notifier
+count is elevated in .change_pte()" for details).  That's also why this doesn't
+show up on x86; x86 installs a SPTE for the change_pte() notifier iff an existing
+SPTE is present, which is never true due to the invalidation.
+
+I'd honestly love to just delete the change_pte() callback, but my opinion is more
+than a bit biased since we don't use KSM.  Assuming we keep change_pte(), the best
+option is probably to provide a wrapper around kvm_set_spte_gfn() to skip the
+memslot, but with a sanity check and comment explaining the dependency on there
+being no SPTEs due to the invalidation.  E.g.
+
+---
+ virt/kvm/kvm_main.c | 20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
+
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 479802a892d4..b4987b49fac3 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -686,6 +686,24 @@ static __always_inline int kvm_handle_hva_range_no_flush(struct mmu_notifier *mn
+ 
+ 	return __kvm_handle_hva_range(kvm, &range);
+ }
++
++static bool kvm_change_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
++{
++	/*
++	 * Skipping invalid memslots is correct if and only change_pte() is
++	 * surrounded by invalidate_range_{start,end}(), which is currently
++	 * guaranteed by the primary MMU.  If that ever changes, KVM needs to
++	 * unmap the memslot instead of skipping the memslot to ensure that KVM
++	 * doesn't hold references to the old PFN.
++	 */
++	WARN_ON_ONCE(!READ_ONCE(kvm->mn_active_invalidate_count));
++
++        if (range->slot->flags & KVM_MEMSLOT_INVALID)
++		return false;
++
++	return kvm_set_spte_gfn(kvm, range);
++}
++
+ static void kvm_mmu_notifier_change_pte(struct mmu_notifier *mn,
+ 					struct mm_struct *mm,
+ 					unsigned long address,
+@@ -707,7 +725,7 @@ static void kvm_mmu_notifier_change_pte(struct mmu_notifier *mn,
+ 	if (!READ_ONCE(kvm->mmu_invalidate_in_progress))
+ 		return;
+ 
+-	kvm_handle_hva_range(mn, address, address + 1, pte, kvm_set_spte_gfn);
++	kvm_handle_hva_range(mn, address, address + 1, pte, kvm_change_spte_gfn);
+ }
+ 
+ void kvm_mmu_invalidate_begin(struct kvm *kvm, unsigned long start,
+
+base-commit: 94cdeebd82111d7b7da5bd4da053eed9e0f65d72
+--
