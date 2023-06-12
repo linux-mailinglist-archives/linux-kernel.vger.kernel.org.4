@@ -2,72 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9792772C772
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:14:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3993B72C6F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237567AbjFLOOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 10:14:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55012 "EHLO
+        id S236966AbjFLOHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 10:07:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237278AbjFLOOA (ORCPT
+        with ESMTP id S236919AbjFLOHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 10:14:00 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD9219C;
-        Mon, 12 Jun 2023 07:13:58 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7D9902283A;
-        Mon, 12 Jun 2023 14:13:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1686579237; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+        Mon, 12 Jun 2023 10:07:51 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C197A1;
+        Mon, 12 Jun 2023 07:07:50 -0700 (PDT)
+X-GND-Sasl: alexandre.belloni@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686578868;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=V05YqbcHFkVh40/g+io2C7/2OJyvLIuQRZ3y/TKygo8=;
-        b=T2euGdcQaW2rmPvlyCi7lJ1mkZrEd72+/fhhzMqgppXGBGopdDkJK5SKyCyb5T/C+loCv+
-        6OFAZDBPYb9PXIQchvOTpxeU9n8u/plj9XOG+ofNWocbJ3JWwHNvJJoyI503bSSjY9p9DA
-        e4teRawwOgNlbVcSg2ZLnL3ImsMqKBI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1686579237;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=V05YqbcHFkVh40/g+io2C7/2OJyvLIuQRZ3y/TKygo8=;
-        b=vNbQs/Lji8VC4za6ijU1bMo1lBLxsxsTBPEICggoy20po+PG44rdnjGCWFShw4SwgP10Qb
-        7r4NlZRpNRfDSWAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2F94A13A67;
-        Mon, 12 Jun 2023 14:13:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id OMbTCiUoh2RwGQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 12 Jun 2023 14:13:57 +0000
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     daniel@ffwll.ch, javierm@redhat.com, sam@ravnborg.org,
-        deller@gmx.de, geert+renesas@glider.be, lee@kernel.org,
-        daniel.thompson@linaro.org, jingoohan1@gmail.com,
-        dan.carpenter@linaro.org, michael.j.ruhl@intel.com
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-sh@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v2 08/38] fbdev/atyfb: Use hardware device as backlight parent
+        bh=8aq38QKEdBNE3WxYWJheQyTs9iqtlahhv2aTRlxzgBk=;
+        b=jX/+gtEvZoMiCDMJQBDkRjnIA75s/XfCX8/t5AcvlG7vXZeNRBoaBtjXehnuNVWxuohyLU
+        03L7RexpLqk48DZWg1hLmnd2vmAX9ONYNrQa4jg+lMtPDNPsDrHQYZJXwxOoY/cH593v6R
+        FX3w4WIkWFu7CVNLKf3g0ulSeMYS3OCnNiWABqg2o1pm7cbl5v0Z6Ex9ok6lsaHJYw0Qcf
+        yeX0fVBTTVFRBejk8pEcOwaRStQYG8w8XUyk6JN3jDS9Z4BxLmVZgKK1n7/Jn9rIwiR1VW
+        gZvFczwipksArk6wYIfVUWCaQ749oQkODZFfTcb5S5N4fRFHoa7yW88DR2mKGg==
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 187BA1C0012;
+        Mon, 12 Jun 2023 14:07:46 +0000 (UTC)
 Date:   Mon, 12 Jun 2023 16:07:46 +0200
-Message-ID: <20230612141352.29939-9-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230612141352.29939-1-tzimmermann@suse.de>
-References: <20230612141352.29939-1-tzimmermann@suse.de>
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/8] rtc: isl12022: implement RTC_VL_READ and RTC_VL_CLR
+ ioctls
+Message-ID: <2023061214074623dcc0cf@mail.local>
+References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
+ <20230612113059.247275-6-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230612113059.247275-6-linux@rasmusvillemoes.dk>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,29 +65,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the hardware device in struct fb_info.device as parent of the
-backlight device. Aligns the driver with the rest of the codebase
-and prepares fbdev for making struct fb_info.dev optional.
+On 12/06/2023 13:30:55+0200, Rasmus Villemoes wrote:
+> Hook up support for reading the values of the SR_LBAT85 and SR_LBAT75
+> bits. Translate the former to "battery low", and the latter to
+> "battery empty or not-present".
+> 
+> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> ---
+>  drivers/rtc/rtc-isl12022.c | 41 ++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+> 
+> diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
+> index cb8f1d92e116..1b6659a9b33a 100644
+> --- a/drivers/rtc/rtc-isl12022.c
+> +++ b/drivers/rtc/rtc-isl12022.c
+> @@ -203,7 +203,48 @@ static int isl12022_rtc_set_time(struct device *dev, struct rtc_time *tm)
+>  	return regmap_bulk_write(regmap, ISL12022_REG_SC, buf, sizeof(buf));
+>  }
+>  
+> +static int isl12022_read_sr(struct regmap *regmap)
+> +{
+> +	int ret;
+> +	u32 val;
+> +
+> +	ret = regmap_read(regmap, ISL12022_REG_SR, &val);
+> +	if (ret < 0)
+> +		return ret;
+> +	return val;
+> +}
+> +
+> +static int isl12022_rtc_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
+> +{
+> +	struct regmap *regmap = dev_get_drvdata(dev);
+> +	u32 user = 0;
+> +	int ret;
+> +
+> +	switch (cmd) {
+> +	case RTC_VL_READ:
+> +		ret = isl12022_read_sr(regmap);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		if (ret & ISL12022_SR_LBAT85)
+> +			user |= RTC_VL_BACKUP_LOW;
+> +
+> +		if (ret & ISL12022_SR_LBAT75)
+> +			user |= RTC_VL_BACKUP_EMPTY;
+> +
+> +		return put_user(user, (u32 __user *)arg);
+> +
+> +	case RTC_VL_CLR:
+> +		return regmap_clear_bits(regmap, ISL12022_REG_SR,
+> +					 ISL12022_SR_LBAT85 | ISL12022_SR_LBAT75);
 
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
----
- drivers/video/fbdev/aty/atyfb_base.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'm against using RTC_VL_CLR for this as it deletes important
+information (i.e. the date is probably invalid). You should let the RTC
+clear the bits once the battery has been changed:
 
-diff --git a/drivers/video/fbdev/aty/atyfb_base.c b/drivers/video/fbdev/aty/atyfb_base.c
-index 51504fe39054c..e1602e3fbc66b 100644
---- a/drivers/video/fbdev/aty/atyfb_base.c
-+++ b/drivers/video/fbdev/aty/atyfb_base.c
-@@ -2255,7 +2255,7 @@ static void aty_bl_init(struct atyfb_par *par)
- 	memset(&props, 0, sizeof(struct backlight_properties));
- 	props.type = BACKLIGHT_RAW;
- 	props.max_brightness = FB_BACKLIGHT_LEVELS - 1;
--	bd = backlight_device_register(name, info->dev, par, &aty_bl_data,
-+	bd = backlight_device_register(name, info->device, par, &aty_bl_data,
- 				       &props);
- 	if (IS_ERR(bd)) {
- 		info->bl_dev = NULL;
+"The LBAT75 bit is set when the
+VBAT has dropped below the pre-selected trip level, and will self
+clear when the VBAT is above the pre-selected trip level at the
+next detection cycle either by manual or automatic trigger."
+
+> +
+> +	default:
+> +		return -ENOIOCTLCMD;
+> +	}
+> +}
+> +
+>  static const struct rtc_class_ops isl12022_rtc_ops = {
+> +	.ioctl		= isl12022_rtc_ioctl,
+>  	.read_time	= isl12022_rtc_read_time,
+>  	.set_time	= isl12022_rtc_set_time,
+>  };
+> -- 
+> 2.37.2
+> 
+
 -- 
-2.41.0
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
