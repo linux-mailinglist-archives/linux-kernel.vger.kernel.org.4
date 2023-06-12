@@ -2,112 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED99772B8C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 09:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6245372B8F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 09:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234879AbjFLHkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 03:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49534 "EHLO
+        id S234690AbjFLHoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 03:44:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234963AbjFLHkB (ORCPT
+        with ESMTP id S235271AbjFLHoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 03:40:01 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E176F1998;
-        Mon, 12 Jun 2023 00:39:24 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8DxzOqHxYZk34QDAA--.7725S3;
-        Mon, 12 Jun 2023 15:13:11 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax6OSFxYZkjTQVAA--.61011S3;
-        Mon, 12 Jun 2023 15:13:10 +0800 (CST)
-Subject: Re: [PATCH v12 1/2] spi: add loongson spi bindings
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        zhuyinbo@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-References: <20230608072819.25930-1-zhuyinbo@loongson.cn>
- <20230608072819.25930-2-zhuyinbo@loongson.cn>
- <6ebed84c-2b42-c981-7b3f-e71cc88e4c2c@linaro.org>
- <4bf747c4-b767-b20c-e00f-724b50f44edb@loongson.cn>
- <6bfc2a22-6901-0858-7b90-bc4c52c66810@linaro.org>
- <bd2d7830-3ab6-0906-b06a-83d3e0a96749@loongson.cn>
- <11ca2b90-544d-18c2-fb15-7909ca60507f@linaro.org>
- <f6d4ecb5-e9df-346e-4aab-772fd01689c8@loongson.cn>
- <a9952e76-1204-5bc7-7856-0c7f8a411d76@linaro.org>
- <9c94397d-1e31-02fa-bdbe-af888c72eac4@loongson.cn>
- <657f8d19-de83-8be6-4a9d-5f13b1df7383@linaro.org>
- <b0e5e13e-6746-bd90-2a49-31ee6dd3e8a2@loongson.cn>
- <84ccf4cc-072d-adbf-0361-95ceae13f333@linaro.org>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <5d060cac-ff28-60e9-98a8-f2bd4d378455@loongson.cn>
-Date:   Mon, 12 Jun 2023 15:13:09 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Mon, 12 Jun 2023 03:44:08 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2331C199B
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 00:43:35 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b227fdda27so29269801fa.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 00:43:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1686555742; x=1689147742;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wQ71bt9b3FYUgSPlOf8FiPxADV6UnEaiTW42jFRDtmk=;
+        b=P722nCiaq2yIdg/3iiugSvm9is7X0mEyUj3q4fADu2UGqsPP1ozMs/8BBqloMTM71+
+         V4yxp5rLchwYfC6TETyyIEKsS+yGBv2M+WfdensYdpqkJPcX3zPeE5VoXujeh8q0aovJ
+         lzRkgNQAWxiFrlsEpWLd8fCH5/sJw6vOIw48MisYrEhyjqnf5bW3crdrG+0qUa5OBROw
+         7PnNZyqSqNu/a9YjoynTVlEt8oKsj1ZNFXeXAVAcw8+rVeDnFfjoWep8m9EpuviTvHbt
+         93/6iKJMTHH+wgDWp+tlL7IldkISFcv6923dTJjf2litTAOtdWkZMYlACaK0MzSjdxPX
+         Y9eQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686555742; x=1689147742;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wQ71bt9b3FYUgSPlOf8FiPxADV6UnEaiTW42jFRDtmk=;
+        b=QIxQWMe6fLKOTmA8vwWZTUh6Het5Pf407vPRHRT/Xac2yEoztsNftcQzeEtKERAGJ6
+         8s3YBb3o4EQ3T43W5oIeKk0Tb48Ks0mLOygjku0H4UHyfDnoFKSVk5wTREFQVLieOSQE
+         CzNXZ0duQpenBGkzKRVyarlX9naF7QFsxs6ws25KPUAOPDWBGeEIjMMt5FxYW4vcJpa9
+         LTgZ0KBy7YNj7mTNI6GykFhj1+McNZLLuOQofUusEjbIuqyV+i6qWbXfZUtPoAQCA6oP
+         IPai0TOJMG1mvgyFwo44+PVB0g6PVKLPUKaTJemw5DCuAR0Uti5a19+yrmTQCB5OZGtm
+         ZNSw==
+X-Gm-Message-State: AC+VfDzM86JfXq/TekmLrndnlJ0J4qmr/UeR0PRyFf7c1OZlmtnUOf+y
+        rIgMUgF01ehY4kcufju4n6DP8Sx6vIJ401R4oeN0r3NwPhjXsIR1h7Q=
+X-Google-Smtp-Source: ACHHUZ5uY0mHfdIyxOS33Tx+basV/6dyKGu5gb0l5C4gE5e3VvPBE71lr30zNoEEprrb7OYY4jKBZVkFREq38dYDrJ8=
+X-Received: by 2002:adf:e403:0:b0:30a:ea65:6676 with SMTP id
+ g3-20020adfe403000000b0030aea656676mr4578723wrm.23.1686554148766; Mon, 12 Jun
+ 2023 00:15:48 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <84ccf4cc-072d-adbf-0361-95ceae13f333@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Ax6OSFxYZkjTQVAA--.61011S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-        nUUI43ZEXa7xR_UUUUUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <tencent_D656D683705F41324657ED3393C3384C7408@qq.com>
+In-Reply-To: <tencent_D656D683705F41324657ED3393C3384C7408@qq.com>
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+Date:   Mon, 12 Jun 2023 09:15:38 +0200
+Message-ID: <CAHVXubiYHQCYkymde2y_okNb2XcE-xVBMj8iZ7kM5d08bhqxiQ@mail.gmail.com>
+Subject: Re: [PATCH] riscv: move memblock_allow_resize() after lm is ready
+To:     Woody Zhang <woodylab@foxmail.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Woody,
 
+On Sat, Jun 10, 2023 at 1:49=E2=80=AFAM Woody Zhang <woodylab@foxmail.com> =
+wrote:
+>
+> The initial memblock metadata is accessed from kernel image mapping. The
+> regions arrays need to "reallocated" from memblock and accessed through
+> linear mapping to cover more memblock regions. So the resizing should
+> not be allowed until linear mapping is ready. Note that there are
+> memblock allocations when building linear mapping.
+>
+> Signed-off-by: Woody Zhang <woodylab@foxmail.com>
+> ---
+>  arch/riscv/mm/init.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index 9e9da69720ce..8a33ecbb4d0f 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -258,7 +258,6 @@ static void __init setup_bootmem(void)
+>         dma_contiguous_reserve(dma32_phys_limit);
+>         if (IS_ENABLED(CONFIG_64BIT))
+>                 hugetlb_cma_reserve(PUD_SHIFT - PAGE_SHIFT);
+> -       memblock_allow_resize();
+>  }
+>
+>  #ifdef CONFIG_MMU
+> @@ -1250,6 +1249,9 @@ static void __init setup_vm_final(void)
+>         csr_write(CSR_SATP, PFN_DOWN(__pa_symbol(swapper_pg_dir)) | satp_=
+mode);
+>         local_flush_tlb_all();
+>
+> +       /* Depend on that Linear Mapping is ready */
+> +       memblock_allow_resize();
+> +
+>         pt_ops_set_late();
+>  }
+>  #else
+> --
+> 2.39.2
+>
 
-在 2023/6/10 上午12:45, Krzysztof Kozlowski 写道:
-> On 09/06/2023 05:13, zhuyinbo wrote:
->>
->>
->> 在 2023/6/8 下午9:26, Krzysztof Kozlowski 写道:
->>> On 08/06/2023 14:10, zhuyinbo wrote:
->>>>
->>>>
->>>> 在 2023/6/8 下午7:45, Krzysztof Kozlowski 写道:
->>>>> On 08/06/2023 13:42, zhuyinbo wrote:
->>>>>> --- a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
->>>>>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
->>>>>> @@ -16,6 +16,7 @@ properties:
->>>>>>        compatible:
->>>>>>          enum:
->>>>>>            - loongson,ls2k1000-spi
->>>>>> +      - loongson,ls2k0500-spi
->>>>>
->>>>> Aren't they compatible?
->>>>>
->>>>
->>>>
->>>> Are you saying that the spi driver is compatible with 2k0500 ?
->>>
->>> Didn't you say this through 11 previous revisions?
->>
->>
->> Yes, did I understand your meaning incorrectly ?
-> 
-> If they are compatible, then they are not part of one enum. They could
-> not be as this would easily fail in testing of your DTS.
-> 
+The commit log does not describe the issue thoroughly enough to me,
+maybe you could point to the arm64 commit that did the same? I mean
+commit 24cc61d8cb5a ("arm64: memblock: don't permit memblock resizing
+until linear mapping is up").
 
+Another point is that I would not put this call into setup_vm_final(),
+I'd rather add it in paging_init() as it does not seem like a good fit
+for setup_vm_final(). But that's a nit so up to you of course.
 
-The "loongson,ls2k0500-spi" wasn't a compatible in previous version and
-I will add "loongson,ls2k0500-spi" as a compatible in spi driver and
-added it as a part of the one enum in dt-binding.
+Anyway, that's a good catch, thanks!
 
-Thanks,
-Yinbo
-
+Alex
