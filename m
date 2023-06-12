@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90FF972B990
+	by mail.lfdr.de (Postfix) with ESMTP id 03CD772B98F
 	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 10:01:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbjFLIBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 04:01:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38466 "EHLO
+        id S232783AbjFLIBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 04:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232365AbjFLIAy (ORCPT
+        with ESMTP id S232732AbjFLIA5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 04:00:54 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F16610D4;
-        Mon, 12 Jun 2023 01:00:18 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f642a24568so4571281e87.2;
-        Mon, 12 Jun 2023 01:00:18 -0700 (PDT)
+        Mon, 12 Jun 2023 04:00:57 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EFD410E0;
+        Mon, 12 Jun 2023 01:00:22 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f63006b4e3so4657799e87.1;
+        Mon, 12 Jun 2023 01:00:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686556816; x=1689148816;
+        d=gmail.com; s=20221208; t=1686556819; x=1689148819;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lvRcwdwKF23WlBw1GQDVWmiphaH9UUywqfX3Q4qWYTI=;
-        b=h90xNNQDima1Afxzqwau5EjgZTBuL3HNXA9h4zI5Y+ZrBm5i6QfGtXw62sLjz0xZRU
-         JP+H2R8aGaPyGedxjkqA0aE7MzWQOsIsn3WvdRIQwRWiydYho5gJ1HOTWhBL1LxmvANc
-         VVxGEVLJMnEvPSquEsDb1heE8dwgWoIZx7GMkbCGBE/0o7TPJvV95xjug8xELKSzAJDa
-         e0VPBX9XyuCMtmDIuNUwXo0E44eco7YfZIeQQGRJi137DB1r7MUXpaNrnXp05l1unjnI
-         Yah5246xGZjakb1MU/vbeixuOENQ0JhTL9YyJ7j/jX3ME/wk2+eAGo0iRT2YOgjl/aSV
-         k98w==
+        bh=AIVXF0NWT+mxXgpNldoq9Ep8Ze5GWaI0IQCYTwDNGis=;
+        b=DnTvzYh/fYzUzxkqBzhHKbj25ROthxEX6h0AV5AOLpd7J9tvQU+utodDahOTLwOZCu
+         ZKBjB3YfRca0QVG3aSHP/IrXGjnrQC8Us5Cnb+AXXV9Hib5rANQWeyEcU/NpvW8RRz9n
+         WrlqW5aaOwqtffCtPqA1Qb9OAtYLlfiSBzVbCshpTprHWhM2D2ZBvcqZ1nSrh+75J0H8
+         AuY+EVYKLSE9xJettCoideYcrrVkEfYQYElcVug8a6Cpdg1ukp4XDV0TXbW822w/LsJA
+         KfXZLnBmCQoXiNZViYYZnkwJoebGw+C6tNgGdFzHFsxXDk7hwbXmlUhS7xiP++lJ3p86
+         0sTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686556816; x=1689148816;
+        d=1e100.net; s=20221208; t=1686556819; x=1689148819;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lvRcwdwKF23WlBw1GQDVWmiphaH9UUywqfX3Q4qWYTI=;
-        b=VZe6dRz/IKitzt3T16qcYNZjutswME7iIe9ewpGuQFLsYBbPXOO86mstqECEXmm2os
-         wjDzkuZJc/EV1WnXhYFiZCuHdAuKZNSFp6wRMS53nZw/ttJS7oHd9h0DMFD6Ipgyekii
-         Hb8b7h8ToQxas5WvH6QNmZUIzL55nJPt5JUL4C1vPS6WiJfdOBw6oatzEJcrv50V8ZCq
-         G5VCNI/k0hySWMAhUQdSLMW5s2u3yoNgF2dlIQ+gS3YCQHU0h6bvX8oRPUwXkSUWTO/M
-         Ti53/8/MHKyf8ll9o31ZGc5mwXUU8vF7M0/hTcOxIJ3n7KeltqvHfBWSmHGA4PagmiF2
-         QL8A==
-X-Gm-Message-State: AC+VfDyRUAYZUiRebeJCfNDuZ1qO/ay88EAeD6jFcCxYc3aEXH7vKVZb
-        TY09zblNUmyWGKGvpCv0C3b7aUhrPas=
-X-Google-Smtp-Source: ACHHUZ4ClpVZM0YENkqEyxPU2Tp9GT8Dlmin9l43fMlLsl9n8UMu2bRKCaQVTKrU/akFqfOSH3+Wgw==
-X-Received: by 2002:a19:e306:0:b0:4f6:2b21:ece1 with SMTP id a6-20020a19e306000000b004f62b21ece1mr3640826lfh.43.1686556816145;
-        Mon, 12 Jun 2023 01:00:16 -0700 (PDT)
+        bh=AIVXF0NWT+mxXgpNldoq9Ep8Ze5GWaI0IQCYTwDNGis=;
+        b=P/ZFjL9AXtvq1//CP9ekW6hFPnoP7XsYpXX73wRnGXECDVUegE7UjyRUo6b0gawXII
+         WLqwBJG+uvkunuV2iIuZIf237A+yTTSTcOq3xlAVCQJJumdtJQF5kJn62WxHRvCa4+Ug
+         kBbSNcacYTNomsed4ZrJP0OoR1bX8+DovtcsE2Me9aFqM2g68AlQC52eKLt+iFQ8x7PZ
+         SdVc7QQGHTREYnVT2AS2bPh5wVG2ZnsxfpB5A3/96danG69rHyGCEZUUNS/niJ5Df7/q
+         GMXYhFgS3NeFVQfO9GgYeRwZ/YXSRHBYpzXYLosyZt3MeP3+tOHninb21osKd/EA5VUF
+         X4pQ==
+X-Gm-Message-State: AC+VfDwL2zPmwmc9ZarbFl985foevy8ed4uM8dum5mdPG9uFg0G+10DM
+        8JPZEOMg9ype0hu9RQO5yGE=
+X-Google-Smtp-Source: ACHHUZ7rH24bSvXH68grWUUGmZeBJyddzDfqq2bN6iaVfLMn/bSdgzwUU/lcR0jP8SVBmxzLrMFDsg==
+X-Received: by 2002:a19:6d08:0:b0:4f6:3000:4d4d with SMTP id i8-20020a196d08000000b004f630004d4dmr3267707lfc.38.1686556818709;
+        Mon, 12 Jun 2023 01:00:18 -0700 (PDT)
 Received: from arinc9-Xeront.lan (178-147-169-233.haap.dm.cosmote.net. [178.147.169.233])
-        by smtp.gmail.com with ESMTPSA id y22-20020a7bcd96000000b003f7f2a1484csm10552195wmj.5.2023.06.12.01.00.13
+        by smtp.gmail.com with ESMTPSA id y22-20020a7bcd96000000b003f7f2a1484csm10552195wmj.5.2023.06.12.01.00.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 01:00:15 -0700 (PDT)
+        Mon, 12 Jun 2023 01:00:18 -0700 (PDT)
 From:   arinc9.unal@gmail.com
 X-Google-Original-From: arinc.unal@arinc9.com
 To:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
@@ -75,9 +75,9 @@ Cc:     Landen Chao <landen.chao@mediatek.com>,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH net v4 6/7] net: dsa: introduce preferred_default_local_cpu_port and use on MT7530
-Date:   Mon, 12 Jun 2023 10:59:44 +0300
-Message-Id: <20230612075945.16330-7-arinc.unal@arinc9.com>
+Subject: [PATCH net v4 7/7] MAINTAINERS: add me as maintainer of MEDIATEK SWITCH DRIVER
+Date:   Mon, 12 Jun 2023 10:59:45 +0300
+Message-Id: <20230612075945.16330-8-arinc.unal@arinc9.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230612075945.16330-1-arinc.unal@arinc9.com>
 References: <20230612075945.16330-1-arinc.unal@arinc9.com>
@@ -94,166 +94,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <olteanv@gmail.com>
+From: Arınç ÜNAL <arinc.unal@arinc9.com>
 
-Since the introduction of the OF bindings, DSA has always had a policy that
-in case multiple CPU ports are present in the device tree, the numerically
-smallest one is always chosen.
+Add me as a maintainer of the MediaTek MT7530 DSA subdriver.
 
-The MT7530 switch family, except the switch on the MT7988 SoC, has 2 CPU
-ports, 5 and 6, where port 6 is preferable on the MT7531BE switch because
-it has higher bandwidth.
+List maintainers in alphabetical order by first name.
 
-The MT7530 driver developers had 3 options:
-- to modify DSA when the MT7531 switch support was introduced, such as to
-  prefer the better port
-- to declare both CPU ports in device trees as CPU ports, and live with the
-  sub-optimal performance resulting from not preferring the better port
-- to declare just port 6 in the device tree as a CPU port
-
-Of course they chose the path of least resistance (3rd option), kicking the
-can down the road. The hardware description in the device tree is supposed
-to be stable - developers are not supposed to adopt the strategy of
-piecemeal hardware description, where the device tree is updated in
-lockstep with the features that the kernel currently supports.
-
-Now, as a result of the fact that they did that, any attempts to modify the
-device tree and describe both CPU ports as CPU ports would make DSA change
-its default selection from port 6 to 5, effectively resulting in a
-performance degradation visible to users with the MT7531BE switch as can be
-seen below.
-
-Without preferring port 6:
-
-[ ID][Role] Interval           Transfer     Bitrate         Retr
-[  5][TX-C]   0.00-20.00  sec   374 MBytes   157 Mbits/sec  734    sender
-[  5][TX-C]   0.00-20.00  sec   373 MBytes   156 Mbits/sec    receiver
-[  7][RX-C]   0.00-20.00  sec  1.81 GBytes   778 Mbits/sec    0    sender
-[  7][RX-C]   0.00-20.00  sec  1.81 GBytes   777 Mbits/sec    receiver
-
-With preferring port 6:
-
-[ ID][Role] Interval           Transfer     Bitrate         Retr
-[  5][TX-C]   0.00-20.00  sec  1.99 GBytes   856 Mbits/sec  273    sender
-[  5][TX-C]   0.00-20.00  sec  1.99 GBytes   855 Mbits/sec    receiver
-[  7][RX-C]   0.00-20.00  sec  1.72 GBytes   737 Mbits/sec   15    sender
-[  7][RX-C]   0.00-20.00  sec  1.71 GBytes   736 Mbits/sec    receiver
-
-Using one port for WAN and the other ports for LAN is a very popular use
-case which is what this test emulates.
-
-As such, this change proposes that we retroactively modify stable kernels
-to keep the mt7530 driver preferring port 6 even with device trees where
-the hardware is more fully described.
-
-Fixes: c288575f7810 ("net: dsa: mt7530: Add the support of MT7531 switch")
-Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
 Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
 ---
- drivers/net/dsa/mt7530.c | 15 +++++++++++++++
- include/net/dsa.h        |  8 ++++++++
- net/dsa/dsa.c            | 24 +++++++++++++++++++++++-
- 3 files changed, 46 insertions(+), 1 deletion(-)
+ MAINTAINERS | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-index 8388b058fbe4..4c44fc664419 100644
---- a/drivers/net/dsa/mt7530.c
-+++ b/drivers/net/dsa/mt7530.c
-@@ -399,6 +399,20 @@ static void mt7530_pll_setup(struct mt7530_priv *priv)
- 	core_set(priv, CORE_TRGMII_GSW_CLK_CG, REG_GSWCK_EN);
- }
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a73e5a98503a..c58d7fbb40ed 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13259,10 +13259,11 @@ F:	drivers/memory/mtk-smi.c
+ F:	include/soc/mediatek/smi.h
  
-+/* If port 6 is available as a CPU port, always prefer that as the default,
-+ * otherwise don't care.
-+ */
-+static struct dsa_port *
-+mt753x_preferred_default_local_cpu_port(struct dsa_switch *ds)
-+{
-+	struct dsa_port *cpu_dp = dsa_to_port(ds, 6);
-+
-+	if (dsa_port_is_cpu(cpu_dp))
-+		return cpu_dp;
-+
-+	return NULL;
-+}
-+
- /* Setup port 6 interface mode and TRGMII TX circuit */
- static int
- mt7530_pad_clk_setup(struct dsa_switch *ds, phy_interface_t interface)
-@@ -3122,6 +3136,7 @@ static int mt7988_setup(struct dsa_switch *ds)
- const struct dsa_switch_ops mt7530_switch_ops = {
- 	.get_tag_protocol	= mtk_get_tag_protocol,
- 	.setup			= mt753x_setup,
-+	.preferred_default_local_cpu_port = mt753x_preferred_default_local_cpu_port,
- 	.get_strings		= mt7530_get_strings,
- 	.get_ethtool_stats	= mt7530_get_ethtool_stats,
- 	.get_sset_count		= mt7530_get_sset_count,
-diff --git a/include/net/dsa.h b/include/net/dsa.h
-index 8903053fa5aa..ab0f0a5b0860 100644
---- a/include/net/dsa.h
-+++ b/include/net/dsa.h
-@@ -958,6 +958,14 @@ struct dsa_switch_ops {
- 			       struct phy_device *phy);
- 	void	(*port_disable)(struct dsa_switch *ds, int port);
- 
-+	/*
-+	 * Compatibility between device trees defining multiple CPU ports and
-+	 * drivers which are not OK to use by default the numerically smallest
-+	 * CPU port of a switch for its local ports. This can return NULL,
-+	 * meaning "don't know/don't care".
-+	 */
-+	struct dsa_port *(*preferred_default_local_cpu_port)(struct dsa_switch *ds);
-+
- 	/*
- 	 * Port's MAC EEE settings
- 	 */
-diff --git a/net/dsa/dsa.c b/net/dsa/dsa.c
-index ab1afe67fd18..1afed89e03c0 100644
---- a/net/dsa/dsa.c
-+++ b/net/dsa/dsa.c
-@@ -403,6 +403,24 @@ static int dsa_tree_setup_default_cpu(struct dsa_switch_tree *dst)
- 	return 0;
- }
- 
-+static struct dsa_port *
-+dsa_switch_preferred_default_local_cpu_port(struct dsa_switch *ds)
-+{
-+	struct dsa_port *cpu_dp;
-+
-+	if (!ds->ops->preferred_default_local_cpu_port)
-+		return NULL;
-+
-+	cpu_dp = ds->ops->preferred_default_local_cpu_port(ds);
-+	if (!cpu_dp)
-+		return NULL;
-+
-+	if (WARN_ON(!dsa_port_is_cpu(cpu_dp) || cpu_dp->ds != ds))
-+		return NULL;
-+
-+	return cpu_dp;
-+}
-+
- /* Perform initial assignment of CPU ports to user ports and DSA links in the
-  * fabric, giving preference to CPU ports local to each switch. Default to
-  * using the first CPU port in the switch tree if the port does not have a CPU
-@@ -410,12 +428,16 @@ static int dsa_tree_setup_default_cpu(struct dsa_switch_tree *dst)
-  */
- static int dsa_tree_setup_cpu_ports(struct dsa_switch_tree *dst)
- {
--	struct dsa_port *cpu_dp, *dp;
-+	struct dsa_port *preferred_cpu_dp, *cpu_dp, *dp;
- 
- 	list_for_each_entry(cpu_dp, &dst->ports, list) {
- 		if (!dsa_port_is_cpu(cpu_dp))
- 			continue;
- 
-+		preferred_cpu_dp = dsa_switch_preferred_default_local_cpu_port(cpu_dp->ds);
-+		if (preferred_cpu_dp && preferred_cpu_dp != cpu_dp)
-+			continue;
-+
- 		/* Prefer a local CPU port */
- 		dsa_switch_for_each_port(dp, cpu_dp->ds) {
- 			/* Prefer the first local CPU port found */
+ MEDIATEK SWITCH DRIVER
+-M:	Sean Wang <sean.wang@mediatek.com>
++M:	Arınç ÜNAL <arinc.unal@arinc9.com>
++M:	Daniel Golle <daniel@makrotopia.org>
+ M:	Landen Chao <Landen.Chao@mediatek.com>
+ M:	DENG Qingfang <dqfext@gmail.com>
+-M:	Daniel Golle <daniel@makrotopia.org>
++M:	Sean Wang <sean.wang@mediatek.com>
+ L:	netdev@vger.kernel.org
+ S:	Maintained
+ F:	drivers/net/dsa/mt7530-mdio.c
 -- 
 2.39.2
 
