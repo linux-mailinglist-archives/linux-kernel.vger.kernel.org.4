@@ -2,221 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71EDD72D325
+	by mail.lfdr.de (Postfix) with ESMTP id 192CB72D324
 	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 23:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232515AbjFLVUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 17:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39482 "EHLO
+        id S234130AbjFLVUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 17:20:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237224AbjFLVTu (ORCPT
+        with ESMTP id S237801AbjFLVTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 17:19:50 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1D67D9C;
-        Mon, 12 Jun 2023 14:13:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686604435; x=1718140435;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=LDvta32C8U093yFYl9aBBIv8p68NdjGIwpz57OjwFpM=;
-  b=OsAw3Rm/rf7H1q8oa0vDHIXyg97GpssA5nXKXibcmkzoATnvmHiw/3NM
-   oAJIMMyhoa00d+wNxTfkpfm5gjtMa3kbz7VcxO2KJhLHijKSormzd7DD6
-   JCQgy00Bxo6oYUWJOUzU7a8Tgxem/Birc3maNtG5O5h8hlqsjHiQzHDbv
-   hUcm07eUqVwey9WsChFNDNQWUwyO07sFBrAc6ZsAj6NF5FZT6DbrMKLYj
-   iT0FBjEENV9oahG/Lzwko44DPdqCggI/RhVW2lyG/E8QTgKC/LldFXEVr
-   QnZIbhbYA24D/yZ8dGJEhYjD+dWjA36JpwcwRRBBuw+DbEE7QkEtw7hxY
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="342849604"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="342849604"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 14:12:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="855819029"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="855819029"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga001.fm.intel.com with ESMTP; 12 Jun 2023 14:12:07 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 12 Jun 2023 14:12:07 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 12 Jun 2023 14:12:06 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Mon, 12 Jun 2023 14:12:06 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.175)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Mon, 12 Jun 2023 14:12:06 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BqtLxhhyqB8oYH3HawJy+vmaffezumQ0K5lgp60S/xrzxWpsqufGfAyX6UVrk9dLYRt8aQa1RXeGhDjD+VFxdlmn6n5F3aF9Z3SkZzbFlLnE9JXWoETM7YD46P/LhsDA83Tu9vkdIVbBDwBTApFLfKFEwiqn6T2MADpLejk15Oe0JpgAPSLurIfreJKTFa7Z7RRWHirTi9rEMUHrnpyvN7tnoE1MUlI4kr6UjlimdgCf0s/3P8xL8iK6C0Wo8J8egNST4iudyQ0aEXbVp6NIYJw9+EO0kMz7hq5Mob97xZPMb1l2wVHpFtKtf8ra56UsYm6VWnN2Ii14OYEcd7xZ2Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oLYmB49atYAp/XWuCM/7auChBGGhg+l0hKtG89ypVPE=;
- b=MpqmwNIU9m/r+TtAVdxzMZvLl41FkJdsvrbQALmyq0YgIngOorp98PfPdJ38UYW4Tf1Tmn0x0q4eAER/KT6LfOhNmd4sfouXmXa/etwQxjMLDXTK7MXrLLjYtartRsnN/JxfuzwqOu8vPBPnK33zoIEup0fpCZxJuqpCdbSN2cvNiV4EA6rgb3fO+U5v1m+xS7CgRsPSnSOXRc31Vw5FxHYE+qkPVA3ATBVSFRqRUgOr1hU7ABifUlFbKOAmt1+dsZDA2x7LSTL4wBSJabAeFujoEVNox1AVE1Rw9aFBHQN9QQu+JFsnQuMZyOhjMR7hGBL+8GUWkykhXt+Y66FIaA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
- by DM4PR11MB5327.namprd11.prod.outlook.com (2603:10b6:5:392::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Mon, 12 Jun
- 2023 21:12:04 +0000
-Received: from PH8PR11MB8107.namprd11.prod.outlook.com
- ([fe80::95c6:c77e:733b:eee5]) by PH8PR11MB8107.namprd11.prod.outlook.com
- ([fe80::95c6:c77e:733b:eee5%5]) with mapi id 15.20.6455.030; Mon, 12 Jun 2023
- 21:12:04 +0000
-Date:   Mon, 12 Jun 2023 14:12:01 -0700
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Terry Bowman <terry.bowman@amd.com>, <alison.schofield@intel.com>,
-        <vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
-        <bwidawsk@kernel.org>, <dan.j.williams@intel.com>,
-        <dave.jiang@intel.com>, <Jonathan.Cameron@huawei.com>,
-        <linux-cxl@vger.kernel.org>
-CC:     <terry.bowman@amd.com>, <rrichter@amd.com>,
-        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
-Subject: RE: [PATCH v5 21/26] cxl/pci: Update CXL error logging to use RAS
- register address
-Message-ID: <64878a219f3d6_142af8294c1@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20230607221651.2454764-1-terry.bowman@amd.com>
- <20230607221651.2454764-22-terry.bowman@amd.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230607221651.2454764-22-terry.bowman@amd.com>
-X-ClientProxiedBy: BYAPR05CA0050.namprd05.prod.outlook.com
- (2603:10b6:a03:74::27) To PH8PR11MB8107.namprd11.prod.outlook.com
- (2603:10b6:510:256::6)
+        Mon, 12 Jun 2023 17:19:54 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE187DBF
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 14:14:01 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-5162d2373cdso8450229a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 14:14:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1686604439; x=1689196439;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=piafe3QLAC9LHm4AYATazedwVeQ9NAHsKdbJCFfjx24=;
+        b=De77MTLdwcVLw5EY8OWaLdGMKb2xNnmIqfEZpmDnz/ZP+CffxOBrvrelVonPE1Jks6
+         3jPt15Cvwb6i/H+Xk8XdNNQ3ynS46Je7N/ssPSRmiJZD+KtpTSsZFVCZszlx7Y85Eryl
+         Yml8OobMpGNqck07D6fNMm7nWAV2uw0j5GquM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686604439; x=1689196439;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=piafe3QLAC9LHm4AYATazedwVeQ9NAHsKdbJCFfjx24=;
+        b=aaoKLOBSDs8+uz8kv5tx6nxSPxEzlu78eTG9al/w5CJbxenuLaZyie2aX80ewHEQbX
+         X10CiY2TnwZ8VdWdbHE5p+aEgaOg2iBTVsLS1S5Et7kHRJ7lwttezOjdrdBS50eepjSX
+         RpfNNLYkPL3zxSfSFFHuZ3Qb3kunxD7S2jlU5UZh9nrDOY90C8f8i7IxhUZ0i5ZkmSHH
+         UnAQFygXpRJd9FTW5SJ+byK4Glq/3LwmCijhSbTJj2z7evU64xEDk4Cea1a9GxUwpEFa
+         QAzO62P2k1w4SLBxTllMmgAP6TJU2ew5aiimB9iHPexzlm29fuTfjdtOJbmo7uRZLwVs
+         uu4w==
+X-Gm-Message-State: AC+VfDxiT/0YmSf7+bLknyzAnaIiyg5ZGnxdBA0n2QkXlA4g2NEYf8zi
+        M2C+aPBsWMzWa5VjPyMH5K/Xr7Q+pE7JgvQehygraA==
+X-Google-Smtp-Source: ACHHUZ67CSVhBiX+Wra9Wybj7PDtVkbipeb+1zDHvccVwh9nHiCVDElzNzf6ReEIsNh+RtuJbJh7eg==
+X-Received: by 2002:a17:906:519a:b0:973:a685:10cf with SMTP id y26-20020a170906519a00b00973a68510cfmr9994129ejk.77.1686604439108;
+        Mon, 12 Jun 2023 14:13:59 -0700 (PDT)
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
+        by smtp.gmail.com with ESMTPSA id i24-20020a17090671d800b00967004187b8sm5652090ejk.36.2023.06.12.14.13.58
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 14:13:59 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-514ad92d1e3so1163a12.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 14:13:58 -0700 (PDT)
+X-Received: by 2002:a50:9e81:0:b0:514:95d4:c2bb with SMTP id
+ a1-20020a509e81000000b0051495d4c2bbmr51305edf.2.1686604438620; Mon, 12 Jun
+ 2023 14:13:58 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|DM4PR11MB5327:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2d405bb0-5673-4d3d-6b02-08db6b89abc3
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fuxyhcZARwRzp1XVxJPHAmcU7DgzsPwhH1cA4/tqkFbcIXhKcBCEDDvXtoAAOp/Pge4JfYeXBB1PURN48Z2aAdrxtF38RR9srCvxVEUJBUmbdf/UK2WG+c7oydFvQ8ZnbvqyU5KVLGSOLH3Q6JTjjSqj1YD0UCsTASGHcq7EMjjN4G2vP2Q3ksXzB5AmTOF1y8qKQcwlVrzk/gdOCef0VtgbYtLsApjK9T8VJ5Obj1OpQOs/B22xIJAnAMARlXNb3DzllMthAiiMaCgEurKqd+j2uY2IyQtzVff2SAvIIjk2LaMOnXxg4bzZUR90mjPsdvHo613X17fBkkM5+Sjmz6Ckko7qN0FsbwC7jTWvyt4kuOg2iywaCEz0wUMihK6SLBaUW6S27mv3j9vV3w7WiEdpkH2u78Fcci4Wd0chSDAZDBakze9aBe1ldhoGImIRFybRWfpIKSlThmWWArQa9nl94Nn8XL6Qi55Pi7pBvfHImarl333p7KdlM/uSFcHcXhv1ghBN4hoyWFxP1U07ONaEnOVSWB7N7x4zkX20Q6BFSWjMGxSot/Ot4h6xdCuZ
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(376002)(346002)(396003)(136003)(366004)(451199021)(5660300002)(4326008)(66946007)(66556008)(8936002)(8676002)(41300700001)(316002)(186003)(2906002)(15650500001)(478600001)(66476007)(6666004)(6486002)(6506007)(6512007)(26005)(83380400001)(9686003)(82960400001)(86362001)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sfJ0NweIvXBEY/T8LLWyZQdYbli7NkBwz4l+Toi2PM5ZYscvtiMmFrysz0jm?=
- =?us-ascii?Q?CtolJ1evyW+BAsSCJ0Pf6Dt1RVVwf1qsZ15v4UEz3Wgow/t7I0iXq8Ckf+DW?=
- =?us-ascii?Q?2pBCUnL7qa1i0aeIC2mBWzp5mGSwS4WYoiv6LZwbH7j3I1A50DcD9ulIOfIY?=
- =?us-ascii?Q?4yilIlJgYh5FQWRtwvaeP02fXvbKtxmbHNIwwMuM7SHhR0HVCH30JIZNdpVr?=
- =?us-ascii?Q?uxZQmhBHvtkT3W1Gz2kDoZxZRY1kvQGF3q418Z1hnCncHWHSpjxXUc7sFSYd?=
- =?us-ascii?Q?4g+J9lwzm8ZzsSiWEvg3hHDBSVblQoLLM982nFqYs2clEKYoOozYoW3Co2bJ?=
- =?us-ascii?Q?058AjVBEC2Ch/vp+U/Q9d9RfGZuXxUVqafAO0N8QwpL4gCs1vhs8fZwR6tqK?=
- =?us-ascii?Q?EjK5dFLubWtEa1cUEtM67W9JqUaUIgGgQdnwKoXVGCYhQGLXJv7EmmaUamxi?=
- =?us-ascii?Q?EqufCGxZj/Eyo2wI2iqqcrf76S2BJfYZuldg0KK7pGkeL6+6cMFNVrMgp5fI?=
- =?us-ascii?Q?m2sOr7vGB9TIZj1EAHxw4n3p15RJOpdZRbcKvlf1pqQ13ksSN2Pwwp8FnVzh?=
- =?us-ascii?Q?ymef6aH0CYpPCxYZUH2eyviFPqGYGlLXE5Vc3phMHf3KR3XBFKc8qc17jEUN?=
- =?us-ascii?Q?F2sVEPYCYtbnZbBXg0iDTZzbsddnRs4IRr8dbNX7KAOkurwThXYjC4caXx+d?=
- =?us-ascii?Q?EL0jrM1r4KDtvm/uuusn/NoP3SJ0DvyRD9cYry9M3DvhWaNJZRxpATbHU591?=
- =?us-ascii?Q?V7wK5cTRXNLkZrtfGc+ebx1Nebz4brf97+UVCGQdmO16PGy+1CbC8JXAsBhi?=
- =?us-ascii?Q?m/6s0SuEtvc3GkIGLoKiCdl2xNE7LiEhA25Banmxvo7KV1PuBRe9hVq/tPFm?=
- =?us-ascii?Q?JA22GpOKrU+IEJsFp6W8nUd9cVsXXpCuGUmFdaeOoo/8TYHCMX0hpWxEzZaP?=
- =?us-ascii?Q?WMRNM//ZwxocYOoNRVz6hKncCXxbUqpKhaEdJKn6lJIlcWX3mum5AuRXim7N?=
- =?us-ascii?Q?3Pw9CUiPqiFvpbUVEJo3IX3MQVQnT0z6YIST8KNWKH3Jumg3vm4hp7Ab2d2o?=
- =?us-ascii?Q?GxQFkUTjN8IkhMRAwOGtzEWp8Gv8vY0bbIlFyjEtu6XRRy0Up+y3SUs6qM5+?=
- =?us-ascii?Q?ASgKoYGXrC/zp8gjlVA2MIW90cBXD0/fTX61TWr4XNIlHO9iYhxY4svK+EgJ?=
- =?us-ascii?Q?Bh2/onRuXm7Eu5VCrMXfhWu9jJP3cf+1Ho81KjNHtFQHYoG2DtONdX3sb2Q/?=
- =?us-ascii?Q?eBaAyn5phshr6vmOxGOWrjua+R+HaGMd2tjOSDLRQUoJ/Abry5jTSZnbUsmV?=
- =?us-ascii?Q?4f0MJRacztrDJlwKjiAshy+Y/QkUKBZ1oInV2dUK3KSW22YS1IQeINOoIFmx?=
- =?us-ascii?Q?IwtERQAx4/W2WiHqUOINuI4cl/Khj5TX8JsEHfsvE6G51OP5NQMxCnJ2ZWir?=
- =?us-ascii?Q?feMhqEZyBATSPodZahnzXDRm39vPYSFiYrOmIeWxDCzhYlaOOWwhjaxGisvj?=
- =?us-ascii?Q?2alpKy5QXJiUI2fCJEKffuocEDAhBro1jWSODYfjHqNu1PLtzmiWVP9MHUuS?=
- =?us-ascii?Q?ZZc11wsYF2o6nx+6I4NkWzSxkOMH2gAXNNbzyzMcE6Pr46TJIb6urAT+m5zC?=
- =?us-ascii?Q?VQ=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2d405bb0-5673-4d3d-6b02-08db6b89abc3
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 21:12:04.2611
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wAydKopyogQEMVtsJSfNmcMTW7aeKI3Bz1kli/b7siDPqZi8cwkRsEO22xHQjuUNa7sxbRzlB9Irfxx2XR1hcj5uKWxGpS9c5xlC75xbuw4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5327
-X-OriginatorOrg: intel.com
+References: <20230607215224.2067679-1-dianders@chromium.org>
+ <jehxiy3z4aieop5qgzmlon4u76n7gvt3kc6knxhb5yqkiz3rsp@mx27m75sx43r>
+ <CAD=FV=Wr7Xatw1LsofiZ5Xx7WBvAuMMdq4D5Po1yJUC1VdtZdg@mail.gmail.com> <z7wi4z4lxpkhvooqhihlkpubyvueb37gvrpmwk6v7xwj2lm6jn@b7rwyr5ic5x5>
+In-Reply-To: <z7wi4z4lxpkhvooqhihlkpubyvueb37gvrpmwk6v7xwj2lm6jn@b7rwyr5ic5x5>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 12 Jun 2023 14:13:46 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XnANRM=+2D9+DzcXx9Gw6iKKQsgkAiq8=izNEN-91f_Q@mail.gmail.com>
+Message-ID: <CAD=FV=XnANRM=+2D9+DzcXx9Gw6iKKQsgkAiq8=izNEN-91f_Q@mail.gmail.com>
+Subject: Re: [PATCH v2 00/10] drm/panel and i2c-hid: Allow panels and
+ touchscreens to power sequence together
+To:     Maxime Ripard <mripard@kernel.org>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        linux-kernel@vger.kernel.org, hsinyi@google.com,
+        cros-qcom-dts-watchers@chromium.org, devicetree@vger.kernel.org,
+        yangcong5@huaqin.corp-partner.google.com,
+        linux-arm-msm@vger.kernel.org,
+        Chris Morgan <macroalpha82@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Terry Bowman wrote:
-> The CXL error handler currently only logs endpoint RAS status. The CXL
-> topology includes several components providing RAS details to be logged
-> during error handling.[1] Update the current handler's RAS logging to use a
-> RAS register address. This will allow for adding support to log other CXL
-> component's RAS details in the future.
-> 
-> [1] CXL3.0 Table 8-22 CXL_Capability_ID Assignment
-> 
-> Co-developed-by: Robert Richter <rrichter@amd.com>
-> Signed-off-by: Robert Richter <rrichter@amd.com>
-> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> ---
->  drivers/cxl/core/pci.c | 42 ++++++++++++++++++++++++++++++------------
->  1 file changed, 30 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/cxl/core/pci.c b/drivers/cxl/core/pci.c
-> index 67f4ab6daa34..def6ee5ab4f5 100644
-> --- a/drivers/cxl/core/pci.c
-> +++ b/drivers/cxl/core/pci.c
-> @@ -665,32 +665,36 @@ void read_cdat_data(struct cxl_port *port)
->  }
->  EXPORT_SYMBOL_NS_GPL(read_cdat_data, CXL);
->  
-> -void cxl_cor_error_detected(struct pci_dev *pdev)
-> +static void __cxl_log_correctable_ras(struct cxl_dev_state *cxlds,
-> +				      void __iomem *ras_base)
->  {
-> -	struct cxl_dev_state *cxlds = pci_get_drvdata(pdev);
->  	void __iomem *addr;
->  	u32 status;
->  
-> -	if (!cxlds->regs.ras)
-> +	if (!ras_base)
->  		return;
->  
-> -	addr = cxlds->regs.ras + CXL_RAS_CORRECTABLE_STATUS_OFFSET;
-> +	addr = ras_base + CXL_RAS_CORRECTABLE_STATUS_OFFSET;
->  	status = readl(addr);
->  	if (status & CXL_RAS_CORRECTABLE_STATUS_MASK) {
->  		writel(status & CXL_RAS_CORRECTABLE_STATUS_MASK, addr);
->  		trace_cxl_aer_correctable_error(cxlds->cxlmd, status);
->  	}
->  }
-> -EXPORT_SYMBOL_NS_GPL(cxl_cor_error_detected, CXL);
-> +
-> +static void cxl_log_correctable_ras_endpoint(struct cxl_dev_state *cxlds)
-> +{
-> +	return __cxl_log_correctable_ras(cxlds, cxlds->regs.ras);
-> +}
+Hi,
 
-As I review patch 24 it leads me back here to grumble about some naming
-choices. We now have:
+On Mon, Jun 12, 2023 at 9:03=E2=80=AFAM Maxime Ripard <mripard@kernel.org> =
+wrote:
+>
+> > > I guess we can have
+> > > something much simpler with a bunch of helpers that would register a
+> > > i2c-hid device and would be called by the panel driver itself.
+> > >
+> > > And then, since everything is self-contained managing the power state
+> > > becomes easier as well.
+> >
+> > Can you give me more details about how you think this would work?
+> >
+> > When you say that the panel would register an i2c-hid device itself,
+> > do you mean that we'd do something like give a phandle to the i2c bus
+> > to the panel and then the panel would manually instantiate the i2c-hid
+> > device on it? ...and I guess it would need to be a "subclass" of
+> > i2c-hid that knew about the connection to the panel code? This
+> > subclass and the panel code would communicate with each other about
+> > power sequencing needs through some private API (like MFD devices
+> > usually do?). Assuming I'm understanding correctly, I think that could
+> > work.
+>
+> I guess what I had in mind is to do something similar to what we're
+> doing with hdmi-codec already for example.
 
-cxl_cor_error_detected()
-__cxl_log_correctable_ras()
-cxl_report_and_clear()
+By this you mean "rockchip,hdmi-codec" and "mediatek,hdmi-codec", right?
 
-Which of those clear the status? What is the difference between "report"
-and a "log"? I don't much care what name gets chosen but these three
-functions at least need to give the impression they were written with a
-common vision. The term "handle" would not surprise me in the names of
-functions that emit messages and clear register status bits.
+
+> We have several logical components already, in separate drivers, that
+> still need some cooperation.
+>
+> If the panel and touchscreen are on the same i2c bus, I think we could
+> even just get a reference to the panel i2c adapter, get a reference, and
+> pass that to i2c-hid (with a nice layer of helpers).
+
+Just for reference: the panel and touchscreen aren't on the same i2c
+bus. In the cases that I've looked at the panel is either controlled
+entirely by eDP or MIPI signals and isn't on any i2c bus at all. The
+touchscreen is on the i2c bus in the cases I've looked at, though I
+suppose I could imagine one that used a different bus.
+
+
+> What I'm trying to say is: could we just make it work by passing a bunch
+> of platform_data, 2-3 callbacks and a device registration from the panel
+> driver directly?
+
+I think I'm still confused about what you're proposing. Sorry! :( Let
+me try rephrasing why I'm confused and perhaps we can get on the same
+page. :-)
+
+First, I guess I'm confused about how you have one of these devices
+"register" the other device.
+
+I can understand how one device might "register" its sub-devices in
+the MFD case. To make it concrete, we can look at a PMIC like
+max77686.c. The parent MFD device gets probed and then it's in charge
+of creating all of its sub-devices. These sub-devices are intimately
+tied to one another. They have shared data structures and can
+coordinate power sequencing and whatnot. All good.
+
+...but here, we really have something different in two fundamental ways:
+
+a) In this case, the two components (panel and touchscreen) both use
+separate primary communication methods. In DT the primary
+communication method determines where the device is described in the
+hierarchy. For eDP, this means that the DT node for the panel should
+be under the eDP controller. For an i2c touchscreen, this means that
+the DT node for the touchscreen should be under the i2c controller.
+Describing things like this causes the eDP controller to "register"
+the panel and the i2c controller to "register" the touchscreen. If we
+wanted the panel driver to "register" the touchscreen then it would
+get really awkward. Do we leave the touchscreen DT node under the i2c
+controller but somehow tell the i2c subsytem not to register it? Do we
+try to dynamically construct the touchscreen i2c node? Do we make a
+fake i2c controller under our panel DT node and somehow tell the i2c
+core to look at it?
+
+b) Things are different because the two devices here are not nearly as
+intimately tied to one another. At least in the case of "homestar",
+the only reason that the devices were tied to one another was because
+the board designers chose to share power rails, but otherwise the
+drivers were both generic.
+
+
+In any case, is there any chance that we're in violent agreement and
+that if you dig into my design more you might like it? Other than the
+fact that the panel doesn't "register" the touchscreen device, it
+kinda sounds as if what my patches are already doing is roughly what
+you're describing. The touchscreen and panel driver are really just
+coordinating with each other through a shared data structure (struct
+drm_panel_follower) that has a few callback functions. Just like with
+"hdmi-codec", the devices probe separately but find each other through
+a phandle. The coordination between the two happens through a few
+simple helper functions.
+
+
+> > Is it cleaner than my current approach, though?
+>
+> "cleaner" is subjective, really, but it's a more "mainstream" approach
+> that one can follow more easily through function calls.
+>
+> > I guess, alternatively, we could put the "panel" directly under the
+> > i2c bus in this case. That would probably work for Cong Yang's current
+> > needs, but we'd end up in trouble if we ever had a similar situation
+> > with an eDP panel since eDP panels need to be under the DP-AUX bus.
+>
+> I don't know DP-AUX very well, what is the issue that you're mentioning?
+
+Hopefully I've explained what I meant above (see point "a)").
