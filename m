@@ -2,117 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3686A72BB98
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA66372BB9B
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232373AbjFLJDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 05:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57532 "EHLO
+        id S232531AbjFLJEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 05:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231425AbjFLJC2 (ORCPT
+        with ESMTP id S229732AbjFLJDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 05:02:28 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D3919A8
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 01:59:28 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id af79cd13be357-7608aae9355so28997085a.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 01:59:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686560367; x=1689152367;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=udMb5vmbnzKeYF+uhRJyDPkoUsUtpYvMhzpQU9v4Emw=;
-        b=VBPd4R/l7owkryOiqKleS18B7QN/h7sMestTsfq19/fQKe41wLAHs0M28XjG58+gWY
-         /QhySNjh+cwBQsi2JYl3kfH2yj6pIsEg/gNtI7tYB2kPo2ghxyXogYLMSzBYg7h6mHKq
-         lps6YFtoralS3pXHYTBAREIrmMOhMED5d8kHIRRNeM+HVm0dfT3x23mV+0AbygYIzRDS
-         RbEzS6ozc1aS1vxqF0xgUo1fKmdHk9+C3P7sRqUhApie9a3aZXx1UQGhfxM4KTK47lS9
-         ZcQ8NxhUzd4xbmuyfM+F4ohP9Af8GufF5TYgcSHYj1Sp3H+CzLe5b7PsrVA8X32BWwtM
-         M2NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686560367; x=1689152367;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=udMb5vmbnzKeYF+uhRJyDPkoUsUtpYvMhzpQU9v4Emw=;
-        b=MJqia8UhC38Bt99XshkzuRM+yGO1BQsWckKBm1cZtw34bx5ZZwuHGDEFtTcFqwUdlp
-         aqdEpDkcNR8nVzdP15uczmvGXqw3jdd7t9yzkSYQasNLTQ7LtNa9NFojEQF+K5Wo0Usi
-         JkWa6n8lKcNRFVjEkUAL6fVSvmE+uU3dzFf8l69gwhch00Qv9XtBQFJQ5hwTa8rysJG9
-         xR6bQJRCZqKmqgUXxurhskDLsOmfJgcD9rUHSztxS6Tst2G2lsNYsN2rkIpZDPKsdCGV
-         mSDjPMeifDdpoI4JXiCJ9nXjvsiMT6klz+MQe1dBzwMHpWEFKXUPSBAiU2JIB0nX31tI
-         4tUw==
-X-Gm-Message-State: AC+VfDxaAOdVxrze7kJNAWVoWPBxJCAlCY65AYhZCktRNwzSjtGbUY/S
-        jvfgOvXCXHeY+uOpzLKqMNv13lMnn6wvAQH9+5E=
-X-Google-Smtp-Source: ACHHUZ5yQlmjjZ1Orl7B5mFqvYqADAM/MoutFK6d+W8RE7d7gqY8SB3GtWw8yOpt7fylU8HIzD4WGFRF1zBG7+0dXeQ=
-X-Received: by 2002:a05:620a:4309:b0:75e:c8d7:dc68 with SMTP id
- u9-20020a05620a430900b0075ec8d7dc68mr9777207qko.62.1686560367270; Mon, 12 Jun
- 2023 01:59:27 -0700 (PDT)
+        Mon, 12 Jun 2023 05:03:43 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627C64221;
+        Mon, 12 Jun 2023 01:59:46 -0700 (PDT)
+X-GND-Sasl: kory.maincent@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686560385;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cO14zcOxiDtyCfggm0ZmyKFEk1cAqg+L0MJg9mmmLXA=;
+        b=EAx7dXfxNEBqD4fGyCMO1OXqwqMZa1zGGZfX4BGkt1A0KO4KCXzb2UlSxieMdfU7CZmtux
+        PVAbpRpZWubf36NUaKNoOBEwbrB+3FKXxKoGJTBuieInszGut2lOxnPDuup6EVFHyLAbG9
+        fpBu4UlapEYEM3UFPC1DiJkUifjsAGpvQ47wkFWOi2JADQjt2/pSwkUkEzV7w39FWENkMr
+        xBIKLn7ZdBtR4F/2KjsLt9HVZGxpkOHOaEhQUlu4gS0j/UAMXmv3hNERO7YGrZuJC3jABu
+        l9qsINOpjW9Fu7edJrWFgmYiGjhSQziqoeUP4Wv7FrGWDfXv3euhlPf5TYijMQ==
+X-GND-Sasl: kory.maincent@bootlin.com
+X-GND-Sasl: kory.maincent@bootlin.com
+X-GND-Sasl: kory.maincent@bootlin.com
+X-GND-Sasl: kory.maincent@bootlin.com
+X-GND-Sasl: kory.maincent@bootlin.com
+X-GND-Sasl: kory.maincent@bootlin.com
+X-GND-Sasl: kory.maincent@bootlin.com
+X-GND-Sasl: kory.maincent@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 97657E000F;
+        Mon, 12 Jun 2023 08:59:44 +0000 (UTC)
+Date:   Mon, 12 Jun 2023 10:59:42 +0200
+From:   =?UTF-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
+To:     Cai Huoqing <cai.huoqing@linux.dev>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>
+Subject: Re: [PATCH 0/9] Fix support of dw-edma HDMA NATIVE IP in remote
+ setup
+Message-ID: <20230612105942.039b6fc0@kmaincent-XPS-13-7390>
+In-Reply-To: <20230609081654.330857-1-kory.maincent@bootlin.com>
+References: <20230609081654.330857-1-kory.maincent@bootlin.com>
+Organization: bootlin
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Received: by 2002:ab0:35d4:0:b0:786:6524:cddd with HTTP; Mon, 12 Jun 2023
- 01:59:26 -0700 (PDT)
-Reply-To: trustfundsloancompany50@gmail.com
-From:   Mrs Donna <kasdpaul@gmail.com>
-Date:   Mon, 12 Jun 2023 10:59:26 +0200
-Message-ID: <CAGu963Ha5b6G6qbKpWUV0L6hczDErhhie3mS9MXX_A=QZ+QRbg@mail.gmail.com>
-Subject: Re..
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FILL_THIS_FORM,
-        FILL_THIS_FORM_LONG,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:744 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5002]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [trustfundsloancompany50[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [kasdpaul[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.0 FILL_THIS_FORM Fill in a form with personal information
-        *  2.0 FILL_THIS_FORM_LONG Fill in a form with personal information
-X-Spam-Level: ******
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-LOAN AS FAST AS POSSIBLE WITHIN 2DAYS
-,
-Do you need an urgent loan at 2%? To pay your bills? if yes contact us
-today at: trustfundsloancompany50@gmail.com
+On Fri,  9 Jun 2023 10:16:45 +0200
+K=C3=B6ry Maincent <kory.maincent@bootlin.com> wrote:
 
-FILL BELOW LOAN APPLICATION FORM
+> From: Kory Maincent <kory.maincent@bootlin.com>
+>=20
+> This patch series fix the support of dw-edma HDMA NATIVE IP.
+> I can only test it in remote HDMA IP setup with single dma transfer, but
+> with these fixes it works properly.
+>=20
+> Few fixes has also been added for eDMA version. Similarly to HDMA I have
+> tested only eDMA in remote setup.
 
-Name:
-Country:
-State:
-Phone Number:
-Age:
-ID Card:
-Occupation:
-Amount Needed as a Loan:
-Duration:
+FYI it seems several patches of this series has been categorized as spam.
+I think it is because the code of these patches are quite similar.
 
-NOTE THAT All Email should be forwarded to:
-trustfundsloancompany50@gmail.com
+K=C3=B6ry
