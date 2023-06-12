@@ -2,143 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C95F72C305
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5D0872C303
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:38:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234615AbjFLLiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 07:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55104 "EHLO
+        id S235988AbjFLLiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 07:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235764AbjFLLhy (ORCPT
+        with ESMTP id S235701AbjFLLhy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 12 Jun 2023 07:37:54 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 063F77D94;
-        Mon, 12 Jun 2023 04:20:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=TV21Jmzs5HQxIuTayrf/mU1uRUNmyAiPllP7jU37Xqc=; b=ymw/V7OeZAEdwfvrsdF0h7hem3
-        P2MsH19HdcpAUn5jgAqvtrHcr1v+prQ6HGwnZwNY5HGIVTVMqR8bJpG8QL+R6BsExpfurAJoFyzgO
-        mTOQryoWtvarDKOfsLxbMNlY4uYZLfspASeOE9nXQEDK8Dfo1lMqnEB3HZL8Sowmp65K7AVBv/EzY
-        aasIUJmN6gAT0nfrFXjq4ZYcQTn5A69DWGB9x9Ukm4IF6hFiazutEUzl5rSluwnVo1UP1EfNzIIz1
-        ibt+BUxG04j1w8PNhucatldK7t5a+HV4nsd0n4ZVyMTW2R7omrRh8b3EhZFgs+t11VfcRezgoQ0R8
-        4NRkg+oA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36050)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q8faY-0005e2-JP; Mon, 12 Jun 2023 12:19:58 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q8faS-0004v7-27; Mon, 12 Jun 2023 12:19:52 +0100
-Date:   Mon, 12 Jun 2023 12:19:52 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sam Shih <Sam.Shih@mediatek.com>
-Subject: Re: [PATCH net-next 5/8] net: ethernet: mtk_eth_soc: add
- MTK_NETSYS_V3 capability bit
-Message-ID: <ZIb/WKKNlzjTIu2h@shell.armlinux.org.uk>
-References: <ZIUXf9APDFCNaUG1@makrotopia.org>
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7493D7D93;
+        Mon, 12 Jun 2023 04:20:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C2EA6134B;
+        Mon, 12 Jun 2023 11:20:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 517FEC433EF;
+        Mon, 12 Jun 2023 11:19:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686568803;
+        bh=23JwlmTrqv4IR+K4vNf3mjg3Y1quit9pjndWhP+WBVQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WbVmaT/k2NJ431omJScx8rn6Tr4xCwHvNKr6toopgTYPT/LQMqMpo7FBV6vIGJ4Ih
+         +HSkHHWJ35Kcb4B/GPixREIZZBfO6jCqVm2Oj7ei4Ar3Tq5VdX+HzY8hRcQXP/+huS
+         OJbyhn41f3IULnSq0wd/dz2lHKMxj8853QNGxSQmcax6UBGdjg1/NwAF+VG6M3OHL2
+         ZzOOn7hwX4hqHpXo5AUa9bZN9l3F97lPwSQv46KeDu8M33XqdrFtdbw9tq1DG+/U0P
+         7qVFwPAn09GyfkCtFxQ5HZGZsXWZZPEQgoJDyew2d9LSRvZgIIxDgS8gSf/0U6hnid
+         f8spn2rSpOb/Q==
+Date:   Mon, 12 Jun 2023 12:19:55 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Demi Marie Obenour <demi@invisiblethingslab.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org
+Subject: Re: [PATCH v3 1/4] limits.h: add UCHAR_MAX, SCHAR_MAX, and SCHAR_MIN
+Message-ID: <20230612111955.GM3635807@google.com>
+References: <20230610204044.3653-1-demi@invisiblethingslab.com>
+ <20230610204044.3653-2-demi@invisiblethingslab.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZIUXf9APDFCNaUG1@makrotopia.org>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230610204044.3653-2-demi@invisiblethingslab.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 11, 2023 at 01:38:23AM +0100, Daniel Golle wrote:
-> @@ -1333,8 +1354,13 @@ static int mtk_tx_map(struct sk_buff *skb, struct net_device *dev,
->  	mtk_tx_set_dma_desc(dev, itxd, &txd_info);
+On Sat, 10 Jun 2023, Demi Marie Obenour wrote:
+
+> Some drivers already defined these, and they will be used by sscanf()
+> for overflow checks later.  Also add SSIZE_MIN to limits.h, which will
+> also be needed later.
+> 
+> Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
+> ---
+>  .../media/atomisp/pci/hive_isp_css_include/platform_support.h  | 1 -
+>  include/linux/limits.h                                         | 1 +
+>  include/linux/mfd/wl1273-core.h                                | 3 ---
+
+Acked-by: Lee Jones <lee@kernel.org>
+
+>  include/vdso/limits.h                                          | 3 +++
+>  4 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/staging/media/atomisp/pci/hive_isp_css_include/platform_support.h b/drivers/staging/media/atomisp/pci/hive_isp_css_include/platform_support.h
+> index 0cdef4a5e8b1bed9884133f1a0b9d853d59d43a4..e29b96d8bebf14839f6dd48fdc6c0f8b029ef31d 100644
+> --- a/drivers/staging/media/atomisp/pci/hive_isp_css_include/platform_support.h
+> +++ b/drivers/staging/media/atomisp/pci/hive_isp_css_include/platform_support.h
+> @@ -27,7 +27,6 @@
 >  
->  	itx_buf->flags |= MTK_TX_FLAGS_SINGLE0;
-> -	itx_buf->flags |= (!mac->id) ? MTK_TX_FLAGS_FPORT0 :
-> -			  MTK_TX_FLAGS_FPORT1;
-> +	if (mac->id == MTK_GMAC1_ID)
-> +		itx_buf->flags |= MTK_TX_FLAGS_FPORT0;
-> +	else if (mac->id == MTK_GMAC2_ID)
-> +		itx_buf->flags |= MTK_TX_FLAGS_FPORT1;
-> +	else
-> +		itx_buf->flags |= MTK_TX_FLAGS_FPORT2;
-
-There appears to be two places that this code structure appears, and
-this is in the path for packet transmission. I wonder if it would be
-more efficient to instead do:
-
-	itx_buf->flags |= MTK_TX_FLAGS_SINGLE0 | mac->tx_flags;
-
-with mac->tx_flags appropriately initialised?
-
-> @@ -2170,7 +2214,9 @@ static int mtk_poll_tx_qdma(struct mtk_eth *eth, int budget,
->  		tx_buf = mtk_desc_to_tx_buf(ring, desc,
->  					    eth->soc->txrx.txd_size);
->  		if (tx_buf->flags & MTK_TX_FLAGS_FPORT1)
-> -			mac = 1;
-> +			mac = MTK_GMAC2_ID;
-> +		else if (tx_buf->flags & MTK_TX_FLAGS_FPORT2)
-> +			mac = MTK_GMAC3_ID;
-
-This has me wondering whether the flags are used for hardware or just
-for the driver's purposes. If it's the latter, can we instead store the
-MAC index in tx_buf, rather than having to decode a bitfield?
-
-I suspect these are just for the driver given that the addition of
-MTK_TX_FLAGS_FPORT2 changes all subsequent bit numbers in this struct
-member.
-
+>  #define UINT16_MAX USHRT_MAX
+>  #define UINT32_MAX UINT_MAX
+> -#define UCHAR_MAX  (255)
 >  
->  		if (!tx_buf->data)
->  			break;
-> @@ -3783,7 +3829,26 @@ static int mtk_hw_init(struct mtk_eth *eth, bool reset)
->  	mtk_w32(eth, eth->soc->txrx.rx_irq_done_mask, reg_map->qdma.int_grp + 4);
->  	mtk_w32(eth, 0x21021000, MTK_FE_INT_GRP);
+>  #define CSS_ALIGN(d, a) d __attribute__((aligned(a)))
 >  
-> -	if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2)) {
-> +	if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V3)) {
-> +		/* PSE should not drop port1, port8 and port9 packets */
-> +		mtk_w32(eth, 0x00000302, PSE_DROP_CFG);
-> +
-> +		/* GDM and CDM Threshold */
-> +		mtk_w32(eth, 0x00000707, MTK_CDMW0_THRES);
-> +		mtk_w32(eth, 0x00000077, MTK_CDMW1_THRES);
-> +
-> +		/* Disable GDM1 RX CRC stripping */
-> +		val = mtk_r32(eth, MTK_GDMA_FWD_CFG(0));
-> +		val &= ~MTK_GDMA_STRP_CRC;
-> +		mtk_w32(eth, val, MTK_GDMA_FWD_CFG(0));
-
-mtk_m32() ?
-
-Thanks!
+> diff --git a/include/linux/limits.h b/include/linux/limits.h
+> index f6bcc936901071f496e3e85bb6e1d93905b12e32..8f7fd85b41fb46e6992d9e5912da00424119227a 100644
+> --- a/include/linux/limits.h
+> +++ b/include/linux/limits.h
+> @@ -8,6 +8,7 @@
+>  
+>  #define SIZE_MAX	(~(size_t)0)
+>  #define SSIZE_MAX	((ssize_t)(SIZE_MAX >> 1))
+> +#define SSIZE_MIN	(-SSIZE_MAX - 1)
+>  #define PHYS_ADDR_MAX	(~(phys_addr_t)0)
+>  
+>  #define U8_MAX		((u8)~0U)
+> diff --git a/include/linux/mfd/wl1273-core.h b/include/linux/mfd/wl1273-core.h
+> index c28cf76d5c31ee1c94a9319a2e2d318bf00283a6..b81a229135ed9f756c749122a8341816031c8311 100644
+> --- a/include/linux/mfd/wl1273-core.h
+> +++ b/include/linux/mfd/wl1273-core.h
+> @@ -204,9 +204,6 @@
+>  				 WL1273_IS2_TRI_OPT | \
+>  				 WL1273_IS2_RATE_48K)
+>  
+> -#define SCHAR_MIN (-128)
+> -#define SCHAR_MAX 127
+> -
+>  #define WL1273_FR_EVENT			BIT(0)
+>  #define WL1273_BL_EVENT			BIT(1)
+>  #define WL1273_RDS_EVENT		BIT(2)
+> diff --git a/include/vdso/limits.h b/include/vdso/limits.h
+> index 0197888ad0e00b2f853d3f25ffa764f61cca7385..0cad0a2490e5efc194d874025eb3e3b846a5c7b4 100644
+> --- a/include/vdso/limits.h
+> +++ b/include/vdso/limits.h
+> @@ -2,6 +2,9 @@
+>  #ifndef __VDSO_LIMITS_H
+>  #define __VDSO_LIMITS_H
+>  
+> +#define UCHAR_MAX	((unsigned char)~0U)
+> +#define SCHAR_MAX	((signed char)(UCHAR_MAX >> 1))
+> +#define SCHAR_MIN	((signed char)(-SCHAR_MAX - 1))
+>  #define USHRT_MAX	((unsigned short)~0U)
+>  #define SHRT_MAX	((short)(USHRT_MAX >> 1))
+>  #define SHRT_MIN	((short)(-SHRT_MAX - 1))
+> -- 
+> Sincerely,
+> Demi Marie Obenour (she/her/hers)
+> Invisible Things Lab
+> 
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Lee Jones [李琼斯]
