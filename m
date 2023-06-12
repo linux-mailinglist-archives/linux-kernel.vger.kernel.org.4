@@ -2,143 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C3D72BBC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDB1772BBCE
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:12:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233961AbjFLJLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 05:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37048 "EHLO
+        id S233133AbjFLJMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 05:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232614AbjFLJLH (ORCPT
+        with ESMTP id S233034AbjFLJMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 05:11:07 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31C359E0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:06:09 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-5151934a4e3so6093657a12.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:06:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686560768; x=1689152768;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kY+WBQ4nCNMkOm+dsWka5XZ07KlSQo9hmsWmmoRsa2U=;
-        b=D/FV+MyUBaCM3IKM4xkwpx9FWzBrg6NGsYOcVTfAQJTPdosotXa3jIfj/+r38tQxI+
-         7+ldoE/VbKwiDBVYZ5HDh6ED+ZnbXiXVjVUcxRy9uhra3dRevtgTMI+T+zGVeU4XpEag
-         WVWd1n2zMl9LSMBxCJbzIqMlkTSr+eReQJVPE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686560768; x=1689152768;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kY+WBQ4nCNMkOm+dsWka5XZ07KlSQo9hmsWmmoRsa2U=;
-        b=P87pKbgqzuwfneU6NEERTK1tFIMz8xX8i7ybBTonZXWXhHS/hKlgo+65DkvAzs0OvM
-         TbS+GrEcEm0/JLixTBdcuJJjwF6P0ohA2dMFvppwwI1MRbiXyRPHvtackNPtgMGPgooY
-         J3pvZOk64pQrE93lI9XoTr7q/3nkDKmiAc83pxqKvgxrHWX1zRoqu4B9eD+rVx4tQlbN
-         63ehMf/j6RtZKgnR49KkC+ktCORiALad0S01d9+ctzIiYZHOy0a2Gfe7gwuI4u+w5W0V
-         KYJ/Vt30vGh54nLCkQrhs4TPBELpEM/463WWIq7X126DRnw2fmDx+feL5v6BneAFfvdF
-         HdgQ==
-X-Gm-Message-State: AC+VfDzvVcby5fvpMQ/a1bsJy6hSLz2QI6yPROBosWlLcuKpwUUei/x/
-        0TxhQemAIAnnumo63BxGHJdDBA==
-X-Google-Smtp-Source: ACHHUZ7a8jPTUOkb1YxMy6Q3DErGRuymN9KwkCEHdB9Brblou3evSACnVlv+NKkp5rTB5TcjBWoPVg==
-X-Received: by 2002:a17:906:eec3:b0:96a:63d4:2493 with SMTP id wu3-20020a170906eec300b0096a63d42493mr9479085ejb.40.1686560768406;
-        Mon, 12 Jun 2023 02:06:08 -0700 (PDT)
-Received: from alco.roam.corp.google.com ([2620:0:1059:10:82e9:e3cf:d6f0:4c6a])
-        by smtp.gmail.com with ESMTPSA id o10-20020a1709061d4a00b0096a742beb68sm4867275ejh.201.2023.06.12.02.06.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 02:06:07 -0700 (PDT)
-From:   Ricardo Ribalda Delgado <ribalda@chromium.org>
-Date:   Mon, 12 Jun 2023 11:05:32 +0200
-Subject: [PATCH v2 2/2] ASoC: mediatek: mt8173: Fix irq error path
+        Mon, 12 Jun 2023 05:12:01 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73A95BB1;
+        Mon, 12 Jun 2023 02:06:31 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35C96Ba4060496;
+        Mon, 12 Jun 2023 04:06:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1686560771;
+        bh=JfaicpRwllusUZWo+3kz7fT5xaJH/f4481KrDusEmB4=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=SI0XpRvOLVD3kjtBnJgOf7cIINwoDhjQb81YvlWDPda73etRHQDnS5yIyMS5PpUQC
+         xPzvI/PqieUgcOc8iTK9KHSyk5KZVUUwfjRK3ckQzkrK99YYVaTK6RFDYZI++82hK4
+         GlVnpuhNzviWAK3+FotCtqTZT3DcJCNJFYlupHMw=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35C96BoQ069618
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 12 Jun 2023 04:06:11 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 12
+ Jun 2023 04:06:10 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 12 Jun 2023 04:06:10 -0500
+Received: from [172.24.145.61] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35C96629086624;
+        Mon, 12 Jun 2023 04:06:07 -0500
+Message-ID: <a42a35fc-1ec9-afab-a61b-0ea283f4a8c3@ti.com>
+Date:   Mon, 12 Jun 2023 14:36:05 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+CC:     Bjorn Helgaas <helgaas@kernel.org>, <tjoseph@cadence.com>,
+        <robh@kernel.org>, <kw@linux.com>, <bhelgaas@google.com>,
+        <nadeem@cadence.com>, <linux-pci@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <vigneshr@ti.com>,
+        <srk@ti.com>, <nm@ti.com>, <s-vadapalli@ti.com>
+Subject: Re: [PATCH v3] PCI: cadence: Fix Gen2 Link Retraining process
+Content-Language: en-US
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
+References: <20230609173940.GA1252506@bhelgaas>
+ <b91f1df7-7b36-bfee-2182-44ccfb900952@ti.com> <ZIbXTMlPKGdLfoRF@lpieralisi>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <ZIbXTMlPKGdLfoRF@lpieralisi>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230612-mt8173-fixup-v2-2-432aa99ce24d@chromium.org>
-References: <20230612-mt8173-fixup-v2-0-432aa99ce24d@chromium.org>
-In-Reply-To: <20230612-mt8173-fixup-v2-0-432aa99ce24d@chromium.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Ricardo Ribalda Delgado <ribalda@chromium.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>, stable@kernel.org
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1601; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=FuOIzKqJLwG9hXBBeHMxHbhQlBDg6wGyDQM7J3HtDFw=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBkht/6RtNidnnzWFvIX6ID1lzhHxvqegz1CZUmV
- u0KTXtZhwiJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCZIbf+gAKCRDRN9E+zzrE
- iI6qD/9WuMsBy28BDqRklrMZs1zMwNmB6km8F0J5xnGYfBZKfhx0KO3Qf4CjjYp2tzvddMaeisX
- LleVvftuzAVp+ddSoEyGNitooKWpJgSR5dlgSi+ga+eD0mNMkq+wXeNOhBvDrFV1PCj87x3EkZa
- 1evfQQDCE5xliJzbqVQ0mbopQsI7nHqEKtauzC9POVpa0LlvoJdXuuSFRlR0u/bouTHe73ef0l1
- vvK1l/DwaL25mPrKDlt1anBHCoZAcHub7nfAY1bNqDOo27n9pTOmw5K0lmoAJCs7r3be04W25pM
- m4tXlQMi3ua+Q6A5Y9l3rSklTSuVzUWLcuLVgK9QQtXwLF+IQESkD99IFUovazf4zOccU6lpCDs
- jfaiaH3wKUUvBPe0gYwEBMk+3bxfypBHIQ+KQfJUGdGZlF7RYIQ99ty1HU8sX2cJnCmUifXFgCv
- uK5oWbWb9vTs6i5XOK7auzTS5t/T4vHJp8ABatHp/17WmwrJZd90T6JjYsjCYDEW6sdM+8hJcS5
- i+DNYGENfBwR+KsgJHKFq3zDqpOFLymJ7QSlNwnLU+U2yDG+auTdZJNz6Zyt9f6lbPB3zfC2fsT
- ewya7Wod3/w8v87ZxtYhIIBAChXZzAN4PHk5mE9LxcuJh4MT25CQWfCg3Mm2VYzkPwU1GU2RVgE
- mlbQnqcwI0gq11Q==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After reordering the irq probe, the error path was not properly done.
-Lets fix it.
 
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: stable@kernel.org
-Fixes: 4cbb264d4e91 ("ASoC: mediatek: mt8173: Enable IRQ when pdata is ready")
-Signed-off-by: Ricardo Ribalda Delgado <ribalda@chromium.org>
----
- sound/soc/mediatek/mt8173/mt8173-afe-pcm.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/sound/soc/mediatek/mt8173/mt8173-afe-pcm.c b/sound/soc/mediatek/mt8173/mt8173-afe-pcm.c
-index ff25c44070a3..06269f7e3756 100644
---- a/sound/soc/mediatek/mt8173/mt8173-afe-pcm.c
-+++ b/sound/soc/mediatek/mt8173/mt8173-afe-pcm.c
-@@ -1070,6 +1070,10 @@ static int mt8173_afe_pcm_dev_probe(struct platform_device *pdev)
- 
- 	afe->dev = &pdev->dev;
- 
-+	irq_id = platform_get_irq(pdev, 0);
-+	if (irq_id <= 0)
-+		return irq_id < 0 ? irq_id : -ENXIO;
-+
- 	afe->base_addr = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(afe->base_addr))
- 		return PTR_ERR(afe->base_addr);
-@@ -1175,14 +1179,11 @@ static int mt8173_afe_pcm_dev_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto err_cleanup_components;
- 
--	irq_id = platform_get_irq(pdev, 0);
--	if (irq_id <= 0)
--		return irq_id < 0 ? irq_id : -ENXIO;
- 	ret = devm_request_irq(afe->dev, irq_id, mt8173_afe_irq_handler,
- 			       0, "Afe_ISR_Handle", (void *)afe);
- 	if (ret) {
- 		dev_err(afe->dev, "could not request_irq\n");
--		goto err_pm_disable;
-+		goto err_cleanup_components;
- 	}
- 
- 	dev_info(&pdev->dev, "MT8173 AFE driver initialized.\n");
+On 12/06/23 13:59, Lorenzo Pieralisi wrote:
+> On Mon, Jun 12, 2023 at 09:56:27AM +0530, Siddharth Vadapalli wrote:
+>>
+>>
+>> On 09/06/23 23:09, Bjorn Helgaas wrote:
+>>> On Wed, Jun 07, 2023 at 02:44:27PM +0530, Siddharth Vadapalli wrote:
+>>>> The Link Retraining process is initiated to account for the Gen2 defect in
+>>>> the Cadence PCIe controller in J721E SoC. The errata corresponding to this
+>>>> is i2085, documented at:
+>>>> https://www.ti.com/lit/er/sprz455c/sprz455c.pdf
+>>>>
+>>>> The existing workaround implemented for the errata waits for the Data Link
+>>>> initialization to complete and assumes that the link retraining process
+>>>> at the Physical Layer has completed. However, it is possible that the
+>>>> Physical Layer training might be ongoing as indicated by the
+>>>> PCI_EXP_LNKSTA_LT bit in the PCI_EXP_LNKSTA register.
+>>>>
+>>>> Fix the existing workaround, to ensure that the Physical Layer training
+>>>> has also completed, in addition to the Data Link initialization.
+>>>>
+>>>> Fixes: 4740b969aaf5 ("PCI: cadence: Retrain Link to work around Gen2 training defect")
+>>>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+>>>> Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
+>>>> ---
+>>>>
+>>>> Hello,
+>>>>
+>>>> This patch is based on linux-next tagged next-20230606.
+>>>>
+>>>> v2:
+>>>> https://lore.kernel.org/r/20230315070800.1615527-1-s-vadapalli@ti.com/
+>>>> Changes since v2:
+>>>> - Merge the cdns_pcie_host_training_complete() function with the
+>>>>   cdns_pcie_host_wait_for_link() function, as suggested by Bjorn
+>>>>   for the v2 patch.
+>>>> - Add dev_err() to notify when Link Training fails, since this is a
+>>>>   fatal error and proceeding from this point will almost always crash
+>>>>   the kernel.
+>>>>
+>>>> v1:
+>>>> https://lore.kernel.org/r/20230102075656.260333-1-s-vadapalli@ti.com/
+>>>> Changes since v1:
+>>>> - Collect Reviewed-by tag from Vignesh Raghavendra.
+>>>> - Rebase on next-20230315.
+>>>>
+>>>> Regards,
+>>>> Siddharth.
+>>>>
+>>>>  .../controller/cadence/pcie-cadence-host.c    | 20 +++++++++++++++++++
+>>>>  1 file changed, 20 insertions(+)
+>>>>
+>>>> diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
+>>>> index 940c7dd701d6..70a5f581ff4f 100644
+>>>> --- a/drivers/pci/controller/cadence/pcie-cadence-host.c
+>>>> +++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
+>>>> @@ -12,6 +12,8 @@
+>>>>  
+>>>>  #include "pcie-cadence.h"
+>>>>  
+>>>> +#define LINK_RETRAIN_TIMEOUT HZ
+>>>> +
+>>>>  static u64 bar_max_size[] = {
+>>>>  	[RP_BAR0] = _ULL(128 * SZ_2G),
+>>>>  	[RP_BAR1] = SZ_2G,
+>>>> @@ -80,8 +82,26 @@ static struct pci_ops cdns_pcie_host_ops = {
+>>>>  static int cdns_pcie_host_wait_for_link(struct cdns_pcie *pcie)
+>>>>  {
+>>>>  	struct device *dev = pcie->dev;
+>>>> +	unsigned long end_jiffies;
+>>>> +	u16 link_status;
+>>>>  	int retries;
+>>>>  
+>>>> +	/* Wait for link training to complete */
+>>>> +	end_jiffies = jiffies + LINK_RETRAIN_TIMEOUT;
+>>>> +	do {
+>>>> +		link_status = cdns_pcie_rp_readw(pcie, CDNS_PCIE_RP_CAP_OFFSET + PCI_EXP_LNKSTA);
+>>>> +		if (!(link_status & PCI_EXP_LNKSTA_LT))
+>>>> +			break;
+>>>> +		usleep_range(0, 1000);
+>>>> +	} while (time_before(jiffies, end_jiffies));
+>>>> +
+>>>> +	if (!(link_status & PCI_EXP_LNKSTA_LT)) {
+>>>> +		dev_info(dev, "Link training complete\n");
+>>>> +	} else {
+>>>> +		dev_err(dev, "Fatal! Link training incomplete\n");
+>>>> +		return -ETIMEDOUT;
+>>>> +	}
+>>>
+>>> Can I have a brown paper bag, please?  I totally blew it here, and I'm
+>>> sorry.
+>>>
+>>> You took my advice by combining this with the existing
+>>> cdns_pcie_host_wait_for_link(), but I think my advice was poor because
+>>> (a) now this additional wait is not clearly connected with the
+>>> erratum, and (b) it affects devices that don't have the erratum.
+>>>
+>>> IIUC, this is all part of a workaround for the i2085 erratum.  The
+>>> original workaround, 4740b969aaf5 ("PCI: cadence: Retrain Link to work
+>>> around Gen2 training defect"), added this:
+>>>
+>>>   if (!ret && rc->quirk_retrain_flag)
+>>>     ret = cdns_pcie_retrain(pcie);
+>>>
+>>> I think the wait for link train to complete should also be in
+>>> cdns_pcie_retrain() so it's clearly connected with the quirk, which
+>>> also means we'd only do the wait for devices with the erratum.
+>>>
+>>> Which is EXACTLY what your first patch did, and I missed it.  I am
+>>> very sorry.  I guess maybe I thought cdns_pcie_retrain() was a
+>>> general-purpose thing, but in fact it's only used for this quirk.
+>>
+>> With the current approach implemented in this patch, I could do the following:
+>> In the cdns_pcie_host_wait_for_link() function, I obtain the reference to the
+>> struct cdns_pcie_rc *rc, using:
+>> struct cdns_pcie_rc *rc = container_of(pcie, struct cdns_pcie_rc, pcie);
+>> followed by checking if the quirk "quirk_retrain_flag" is set, before proceeding
+>> with the Link Training check added by this patch. With this, only the
+>> controllers with the quirk will check for the Link Training completion before
+>> proceeding. However, the difference with this new approach compared to the
+>> approach in the v2 patch is that in this new approach, even in the Link Training
+>> Phase, the Link Training check is performed for the controllers with the quirk,
+>> unlike the v2 patch where the Link Training check was performed only during the
+>> Link Retraining Phase through the cdns_pcie_retrain() function.
+>>
+>> Also, based on Mani's suggestion, I have measured the latency introduced by the
+>> Link Training check for both quirky and non-quirky controllers at:
+>> https://lore.kernel.org/r/a63fc8b0-581b-897f-cac6-cb0a0e82c63e@ti.com/
+>> If the latency is acceptable, then the current implementation in this v3 patch
+>> could be fine too.
+>>
+>> Kindly let me know which approach among the following seems to be the best one:
+>> 1. The approach implemented in v2 patch (I will make minor changes to the patch
+>> to print out the "Fatal" error, so that users will be informed of the cause of
+>> the crash, followed by posting a v4 patch with this change).
+>> 2. The current implementation in the v3 patch with a check added to see if the
+>> controller has the quirk_retrain_flag set, before proceeding with the Link
+>> Training check.
+>> 3. The current implementation in the v3 patch as is, without any modification,
+>> if the latency introduced is not a concern and the sanity check for Link
+>> Training completion for non-quirky controllers appears acceptable.
+> 
+> The point is, you stated it yourself that the non-quirky path is broken
+> too in its *current* form, I don't think there is any other option on
+> the table other than (3) (unless we want to rely on probe time timing
+> to hide the issue; that to me it is not even considerable as an option).
+
+If option 3 is the best one, should I post another patch implementing your
+suggestion of using the boolean variable (link_trained) for storing the link
+training status as suggested by you at:
+https://lore.kernel.org/r/ZIBanRGGPeFw90NZ@lpieralisi/
+
+Also, I can drop the:
+dev_info(dev, "Link training complete\n");
+message as suggested by Mani at:
+https://lore.kernel.org/r/20230608154206.GI5672@thinkpad/
+
+Please let me know.
+
+> 
+> Lorenzo
 
 -- 
-2.41.0.162.gfafddb0af9-goog
-
+Regards,
+Siddharth.
