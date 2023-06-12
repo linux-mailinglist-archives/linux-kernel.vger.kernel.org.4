@@ -2,132 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2825172CBE0
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 18:52:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E41B272CBE2
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 18:53:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237297AbjFLQwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 12:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
+        id S234922AbjFLQxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 12:53:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233617AbjFLQwR (ORCPT
+        with ESMTP id S232421AbjFLQxR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 12:52:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD300E6F
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 09:51:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686588689;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=KUdFKCdBRtXD70pPEw8UKzishmgLHxiTnsybrG/P/8Q=;
-        b=LyT4Bx8HjK2zeDdlO3+4FRUOMjdfrRBwjYs687oYbXa02ne5vqikoz1fgLF4oosYfBbfK1
-        OYGj962QOQzLPe20JRFU1JzMoob4hEDkT7cafUEYLJiELX2oO30yMjN7Jqh9zwq5AGvDVn
-        Ht2eq/4H7c2tv1t01MKIxGMNesnvef8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-557-3Bd9b2jJP1qS--WMQacq3A-1; Mon, 12 Jun 2023 12:51:25 -0400
-X-MC-Unique: 3Bd9b2jJP1qS--WMQacq3A-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D2BFA85A5AA;
-        Mon, 12 Jun 2023 16:51:24 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1088720234B3;
-        Mon, 12 Jun 2023 16:51:21 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>, David Hildenbrand <david@redhat.com>,
-        kernel test robot <oliver.sang@intel.com>
-cc:     dhowells@redhat.com, Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-mm@kvack.org, oe-lkp@lists.linux.dev, lkp@intel.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] block: Fix dio_bio_alloc() to set BIO_PAGE_PINNED
+        Mon, 12 Jun 2023 12:53:17 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657B6E78;
+        Mon, 12 Jun 2023 09:53:15 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b3ca7d007bso8890455ad.1;
+        Mon, 12 Jun 2023 09:53:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686588795; x=1689180795;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8ozLmxcHZko0uff1gJa7G1QuMp/af47NfMEu+aumDRk=;
+        b=asziyJYziIWdTbh13EtSN26YuTiEk9fqzksOwuGlBXMDRQlxXgFKs0Cmz8sA0AQvQI
+         te9sSY4n2RSu097TwpQepts33BOL4AM4tWhSoq16SFnU/pUi4Gh9GV4O3FXl8uMZI4Kc
+         PuO8tC367euVqlNHJthw0XZD4jTE7GPu3ZBE6ZCxK6iAaz22sJ+hbgv3oMcaSM/qvJPo
+         m1GKXkaX0/tTej1Ev5OnP599v1D0QEgJAUf8werx4bdtAc9GUfy7fdC7hVu22CipHpaL
+         AMb/5zNHy/HHh5G6pgp1SvC96x0k03yWCQ/jTmtnIqF0dwU9VflYqlslyDwyXtDw6l1n
+         ZKCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686588795; x=1689180795;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8ozLmxcHZko0uff1gJa7G1QuMp/af47NfMEu+aumDRk=;
+        b=mCV0H3ExgpyE5LG6oi6yFfH7QK0/CKXr7zVgL3cVqWTNw9szn6tVE/6WAJ+Q/bNRXN
+         jXRXAfyBAvRn/CZlgEV7vd1SqJW+nAMytCKvQ44x/eF0Ofn+2zwa3mTIb+MTO3jx6hIs
+         r62NyU23gXZdh76IbF6W1WOue7vgh7LqSoETpvhFBmniJmdYmAMQSA6hdKwjI0l2fOAa
+         A61v4QZWDnl0ojNYeWsMexUtA5z8TUaXQyWqg8bEOW4ZvOuX7rZ749l0087ZL31rsSw3
+         K2GnVrqfjYayQ9HhSKYXZvZirjvvKqcjLkQ9fRPyWN+AILQSUCmJ7L8xBDghF811A9HG
+         vLmg==
+X-Gm-Message-State: AC+VfDxe3WiUWDghGdhM51k/jJTWcGGAHu2246vuGaStEW83OxQax+9s
+        1WmnvE+8QHFm717Ln3YrYt8=
+X-Google-Smtp-Source: ACHHUZ5h9IkDbJWAzZrxwod1hhhHIkxZ2hCK60hHe9qC+4vzB1j4g6pYzjgZfbfoTLr96avHEsgTNA==
+X-Received: by 2002:a17:903:2341:b0:1b2:28ca:d30 with SMTP id c1-20020a170903234100b001b228ca0d30mr8760757plh.10.1686588794624;
+        Mon, 12 Jun 2023 09:53:14 -0700 (PDT)
+Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
+        by smtp.gmail.com with ESMTPSA id bi8-20020a170902bf0800b001b3d7205401sm1710882plb.303.2023.06.12.09.53.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 09:53:14 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 12 Jun 2023 06:53:17 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     longman@redhat.com, hannes@cmpxchg.org, lizefan.x@bytedance.com,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cgroup/cpuset: remove unneeded header files
+Message-ID: <ZIdNfTyyoaZ5Ybpr@slm.duckdns.org>
+References: <20230610064138.1472319-1-linmiaohe@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <431928.1686588681.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Mon, 12 Jun 2023 17:51:21 +0100
-Message-ID: <431929.1686588681@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230610064138.1472319-1-linmiaohe@huawei.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-    =
+On Sat, Jun 10, 2023 at 02:41:38PM +0800, Miaohe Lin wrote:
+> Remove some unnecessary header files. No functional change intended.
+> 
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 
-Fix dio_bio_alloc() to set BIO_PAGE_PINNED, not BIO_PAGE_REFFED, so that
-the bio code unpins the pinned pages rather than putting a ref on them.
+Applied to cgroup/for-6.5.
 
-The issue was causing:
+Thanks.
 
-        WARNING: CPU: 6 PID: 2220 at mm/gup.c:76 try_get_folio
-
-This can be caused by creating a file on a loopback UDF filesystem, openin=
-g
-it O_DIRECT and making two writes to it from the same source buffer.
-
-Fixes: 1ccf164ec866 ("block: Use iov_iter_extract_pages() and page pinning=
- in direct-io.c")
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Closes: https://lore.kernel.org/oe-lkp/202306120931.a9606b88-oliver.sang@i=
-ntel.com
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Christoph Hellwig <hch@infradead.org>
-cc: David Hildenbrand <david@redhat.com>
-cc: Andrew Morton <akpm@linux-foundation.org>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Al Viro <viro@zeniv.linux.org.uk>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: Jan Kara <jack@suse.cz>
-cc: Jeff Layton <jlayton@kernel.org>
-cc: Jason Gunthorpe <jgg@nvidia.com>
-cc: Logan Gunthorpe <logang@deltatee.com>
-cc: Hillf Danton <hdanton@sina.com>
-cc: Christian Brauner <brauner@kernel.org>
-cc: Linus Torvalds <torvalds@linux-foundation.org>
-cc: linux-fsdevel@vger.kernel.org
-cc: linux-block@vger.kernel.org
-cc: linux-kernel@vger.kernel.org
-cc: linux-mm@kvack.org
----
- fs/direct-io.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/fs/direct-io.c b/fs/direct-io.c
-index 14049204cac8..04e810826ee8 100644
---- a/fs/direct-io.c
-+++ b/fs/direct-io.c
-@@ -415,7 +415,8 @@ dio_bio_alloc(struct dio *dio, struct dio_submit *sdio=
-,
- 	else
- 		bio->bi_end_io =3D dio_bio_end_io;
- 	/* for now require references for all pages */
--	bio_set_flag(bio, BIO_PAGE_REFFED);
-+	if (dio->need_unpin)
-+		bio_set_flag(bio, BIO_PAGE_PINNED);
- 	sdio->bio =3D bio;
- 	sdio->logical_offset_in_bio =3D sdio->cur_page_fs_offset;
- }
-
+-- 
+tejun
