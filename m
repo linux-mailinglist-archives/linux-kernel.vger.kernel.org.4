@@ -2,58 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E88D72BCF8
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:47:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0787172BD06
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:49:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235019AbjFLJrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 05:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59008 "EHLO
+        id S232295AbjFLJtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 05:49:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbjFLJrI (ORCPT
+        with ESMTP id S232296AbjFLJr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 05:47:08 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261E75261
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:34:11 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-973bf581759so731800066b.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:34:11 -0700 (PDT)
+        Mon, 12 Jun 2023 05:47:58 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658E1558A
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:34:37 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-977c72b116fso623753966b.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:34:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686562382; x=1689154382;
+        d=linaro.org; s=google; t=1686562402; x=1689154402;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Wsfv8tU8typbArcFFZ3RmodVuhSCsV+o3+M2ATwIwoQ=;
-        b=TUVRaQrj978yj3MbisxqkjQ+TD0JBBm+EutSEaAHeOCuts1Q0j2OuxULpIx2+Bsi15
-         ltrB5Na0agI4WZIIGzJAK7rc6fkrTgH3/y+DbfbT7KocetCj2XbBDy8QAae/kCI03fcV
-         qqb5R0jk/XnngPe6DCxaj7C2MBSVu7X4Sf2Lbyc3+h624qAUhkiURnZDcXbFrOMcI8Go
-         OVnmbrHSlbfViKCQXu3P8DpOOaekybyyjRU7ezTIAYuQczHEHfthZeWLR0Nld+mrVTxZ
-         +9dWL+Vn5v8E4pBCcKXcmRdNfkln8Dycfdu6ib76K8yO27yfeZVCqD1kFtV+CUf5pmqW
-         wOIQ==
+        bh=fNA3pQAUnl5SwQH9eSGE6UJxUpnHbr8UA8zS8MrGEdo=;
+        b=S9ulLI6aWH4YWOkhKy47/q5SnI1L9ABRfn9txvV/Rsl022Krs+53C3JV7sEWiYQuEj
+         akU7FdTk4tPqBllOX7IAHz+cIfLrZVbm+bP19ATMoSJhrSVqvsQ7IhS0prPCXfrcOH+N
+         cj/XVwC94HuYfCB8ipUqNXkTUoNn0mEldWY7CKroL8ISzKQLn1BDUnV8yxbn1RRfD2xt
+         O12oxCShyKkaPF9KAvflSvkKeXkJhfN84RWZSqzpDjD8QUoz8B+iufd5hBu9n75udRgF
+         A+gGTT7/SSP19Ie9y4GiFCaO1c95Cd1P5uFDjryYCx5oc0PQyLjVCJVUGcm+gNRNz3JH
+         s/UA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686562382; x=1689154382;
+        d=1e100.net; s=20221208; t=1686562402; x=1689154402;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Wsfv8tU8typbArcFFZ3RmodVuhSCsV+o3+M2ATwIwoQ=;
-        b=fOlPl9/Qs/BeWIjdXMf7EkKXOjs/l+cpZ0QDZu2U6xBawdVmJgm7QzR68SFzVtcMrR
-         8PbBUigg1rhwi2HJAgfJzNmFxwRbFWOyKVE8trIfM4/E+ZoFXKyp6dgc+WVeTZIgD1cb
-         ojDI4rSfS0NZ12Us/+2sZjyj1oQka8YcclXlp782sQRANknDayTW+0+wjYLvqFJB0xOp
-         UU0CW7Uf+yN8XTwQGU1zcdgUAHSVXXSisW8oWQcF+0tXdp92+bm7X8kf4deL4I6UZbAp
-         uN8oVw+QhxXlfyD+Rb6Af0l8MRjVT+4OMiJ6bvPYpPChzZ+3hR8wiFoBMIfqlEs4/rwM
-         4wYA==
-X-Gm-Message-State: AC+VfDxXbaECy+Qe7zLvq44ekTYCfVYYBBdtEVTX9dmgqWIPxWZTjQWw
-        H38MZoC4cLqzSS7f6LNS3onh8A==
-X-Google-Smtp-Source: ACHHUZ4FRCeN8jvFzEJ3tb+8GoTw8KH3QdvMi+2BF4JcQt89B9Ozs9bBPixR/raWCid1tZtHQT9T4Q==
-X-Received: by 2002:a17:906:4796:b0:973:fd02:a41f with SMTP id cw22-20020a170906479600b00973fd02a41fmr10476799ejc.40.1686562382087;
-        Mon, 12 Jun 2023 02:33:02 -0700 (PDT)
+        bh=fNA3pQAUnl5SwQH9eSGE6UJxUpnHbr8UA8zS8MrGEdo=;
+        b=ja/M/6KbW+DSy73p09Q92Sb2MQLDuwOTivWaidpwkLG4alXuEUA61+QfNidOVu0EWb
+         yJjGpbSUISF7xUPCbFbgFe8Bd0vOtqYm7aBT66L5Z4iv57xkpKdE5NMNOOVS4n92VKnC
+         /CZlK32VRjXn2sMuP2YGpXW/98ddPULXGR60dL8pxNKJEZb3KU6gjNQLgxr1wRKZXTya
+         tqL8C7r/CQsAC00IHni6mSaMYKZlVEPfrLeix2GuDxVLMrU7nRYRLaDLmEtiRJoB4Mbl
+         R2CZADEUw9L8N3scA6UlZ1wXIqp5Qd4WYFyhwDd42iVTcCN8FDdibNsaujJUjlqe7fj5
+         Vb6w==
+X-Gm-Message-State: AC+VfDyElvbr2MKS8iOsAj19XYbGEOIBirTWd/gxy1YGBy1mikcvJMmE
+        JRrHoB4yLP3ljuLqFoN6+gaKlg==
+X-Google-Smtp-Source: ACHHUZ5xY/K6uqeggb7LAo0ieXQqhWmKB1pYCpBBY4cTeTnzfHALpqhjWDsCUnEiJkEnwfUYbNdMXw==
+X-Received: by 2002:a17:907:7da9:b0:973:946d:96ba with SMTP id oz41-20020a1709077da900b00973946d96bamr8620449ejc.69.1686562402724;
+        Mon, 12 Jun 2023 02:33:22 -0700 (PDT)
 Received: from hackbox.lan ([86.121.163.20])
-        by smtp.gmail.com with ESMTPSA id gj13-20020a170906e10d00b00965a56f82absm4908151ejb.212.2023.06.12.02.33.00
+        by smtp.gmail.com with ESMTPSA id gj13-20020a170906e10d00b00965a56f82absm4908151ejb.212.2023.06.12.02.33.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 02:33:01 -0700 (PDT)
+        Mon, 12 Jun 2023 02:33:22 -0700 (PDT)
 From:   Abel Vesa <abel.vesa@linaro.org>
-To:     linux-clk@vger.kernel.org, Adam Ford <aford173@gmail.com>
-Cc:     aford@beaconembedded.com, Abel Vesa <abelvesa@kernel.org>,
-        Peng Fan <peng.fan@nxp.com>,
+To:     Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Shawn Guo <shawnguo@kernel.org>,
@@ -61,13 +59,16 @@ Cc:     aford@beaconembedded.com, Abel Vesa <abelvesa@kernel.org>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
+        Jesse Taube <mr.bossman075@gmail.com>,
+        Kai Ma <kaima@hust.edu.cn>
+Cc:     hust-os-kernel-patches@googlegroups.com, linux-clk@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: imx: composite-8m: Add imx8m_divider_determine_rate
-Date:   Mon, 12 Jun 2023 12:32:35 +0300
-Message-Id: <168656228135.662397.14806433100721864469.b4-ty@linaro.org>
+Subject: Re: [PATCH] clk: imx: clk-imxrt1050: fix memory leak in imxrt1050_clocks_probe
+Date:   Mon, 12 Jun 2023 12:32:37 +0300
+Message-Id: <168656228136.662397.997641301782961079.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230506195325.876871-1-aford173@gmail.com>
-References: <20230506195325.876871-1-aford173@gmail.com>
+In-Reply-To: <20230418113451.151312-1-kaima@hust.edu.cn>
+References: <20230418113451.151312-1-kaima@hust.edu.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -82,26 +83,21 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Sat, 06 May 2023 14:53:25 -0500, Adam Ford wrote:
-> Currently, certain clocks are derrived as a divider from their
-> parent clock.  For some clocks, even when CLK_SET_RATE_PARENT
-> is set, the parent clock is not properly set which can lead
-> to some relatively inaccurate clock values.
+On Tue, 18 Apr 2023 11:34:51 +0000, Kai Ma wrote:
+> Use devm_of_iomap() instead of of_iomap() to automatically
+> handle the unused ioremap region. If any error occurs, regions allocated by
+> kzalloc() will leak, but using devm_kzalloc() instead will automatically
+> free the memory using devm_kfree().
 > 
-> Unlike imx/clk-composite-93 and imx/clk-divider-gate, it
-> cannot rely on calling a standard determine_rate function,
-> because the 8m composite clocks have a pre-divider and
-> post-divider. Because of this, a custom determine_rate
-> function is necessary to determine the maximum clock
-> division which is equivalent to pre-divider * the
-> post-divider.
+> Also, fix error handling of hws by adding unregister_hws label, which
+> unregisters remaining hws when iomap failed.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] clk: imx: composite-8m: Add imx8m_divider_determine_rate
-      commit: 8208181fe536bba3b411508f81c4426fc9c71d9a
+[1/1] clk: imx: clk-imxrt1050: fix memory leak in imxrt1050_clocks_probe
+      commit: 1b280598ab3bd8a2dc8b96a12530d5b1ee7a8f4a
 
 Best regards,
 -- 
