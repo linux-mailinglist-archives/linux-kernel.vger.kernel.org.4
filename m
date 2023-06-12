@@ -2,152 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33BF872C61C
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 15:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 678DE72C620
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 15:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236630AbjFLNg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 09:36:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60160 "EHLO
+        id S236651AbjFLNha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 09:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234673AbjFLNgQ (ORCPT
+        with ESMTP id S236636AbjFLNhT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 09:36:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF0E107;
-        Mon, 12 Jun 2023 06:35:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 780246219F;
-        Mon, 12 Jun 2023 13:35:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3F29C433EF;
-        Mon, 12 Jun 2023 13:35:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686576952;
-        bh=dbjfLeRVVirIIBHlnay6kcWtyYVF/I6R+13hE9mByOU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GOMIAVxt+cyHIvr19eAJhFqIonbIYoOBgtK0PmpiwwErwzHNjg53T2EvRBWUWnN7Y
-         nw4LRWpOsOib5ObTNG02xKUCB4SJjBlz9gROxWbPJnHEBkHtn3pWdU4rVzf8RkD/BJ
-         a2zbuugsDFWGViql8PldWWeDryGp/ZpEBo9/RFC0=
-Date:   Mon, 12 Jun 2023 15:35:49 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     torvalds@linux-foundation.org, keescook@chromium.org,
-        pbonzini@redhat.com, masahiroy@kernel.org, nathan@kernel.org,
-        ndesaulniers@google.com, nicolas@fjasle.eu,
-        catalin.marinas@arm.com, will@kernel.org, vkoul@kernel.org,
-        trix@redhat.com, ojeda@kernel.org, mingo@redhat.com,
-        longman@redhat.com, boqun.feng@gmail.com, dennis@kernel.org,
-        tj@kernel.org, cl@linux.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
-        42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
-        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
-        john.johansen@canonical.com, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
-        rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
-        tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
-        luc.vanoostenryck@gmail.com
-Subject: Re: [PATCH v3 46/57] perf: Simplify pmu_dev_alloc()
-Message-ID: <2023061226-grumpily-entire-f06a@gregkh>
-References: <20230612090713.652690195@infradead.org>
- <20230612093540.850386350@infradead.org>
- <20230612094400.GG4253@hirez.programming.kicks-ass.net>
+        Mon, 12 Jun 2023 09:37:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754FCE9
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 06:36:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686576997;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=V0n3wcj950ttVhtkf85CAuqAYgXIsYoCoCNz8vu5g/s=;
+        b=D2owf5eWzNmzRJVjNHV27ezrN8KZuT2qpS4C3ISS1CMXSWPLXQM5ubKbX7r6CRSFdxyDv1
+        7bgldJSNTIW6cCDWGJfpi3Ro/JzTZ0v2Fm0p0i1bZ6OKtER1neawyBsz7bHcsQq+fiSwGP
+        BbQesmOSYUQEpQkFFSlhGLFKRxJ0UhM=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-640-3BO_Luk6MQ-h6jmcBEUl6Q-1; Mon, 12 Jun 2023 09:36:36 -0400
+X-MC-Unique: 3BO_Luk6MQ-h6jmcBEUl6Q-1
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-75ec325d255so52434085a.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 06:36:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686576996; x=1689168996;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V0n3wcj950ttVhtkf85CAuqAYgXIsYoCoCNz8vu5g/s=;
+        b=HMSX5lNRfzvHw5RzTGwt65NtFNbltXGV8SAaBHzyAXmsQwPFrBtGwlH+g4FQvjRDoy
+         hVgkvutpA1kONWuZ4p4wq33P9xTHeuY41hM5BtWC/Hws8+km0Xu+n48RCMN7fk9AVmIn
+         eN2nq/CFt/r668b8lLqWEoEZrO1F+vq/j7X9J7aLDYdDThlGX+jDiN14SWaC5e7c99ah
+         RFGyrh9shoRcrJitIF73omN6EWFH15rFcYZGSSVM1HYMvq1ul8CgbzeLWtzmCnnT7PIU
+         J7hVRrv+94LSIE3LMK2wI7iub2X3MQyttdTrYTILNm1xojUYzurBy8LmEkJDRGI1/K4c
+         MgJg==
+X-Gm-Message-State: AC+VfDwaCrJg7GVzRmGp2JfHbexjLmDrrpfulpVlDjbBebfrC4/w6VfH
+        rAqkUhTgGFnl5BwEAFDsWcdVQwpzUim7mq5rywXhcg90RjNlx6Oj4V6sZhWrbVYKcSc/QUk8MXw
+        QHf/LHJQoWv1zBEjyv5rp2GK0
+X-Received: by 2002:a05:620a:3c8d:b0:75b:23a1:82a4 with SMTP id tp13-20020a05620a3c8d00b0075b23a182a4mr9843370qkn.5.1686576995867;
+        Mon, 12 Jun 2023 06:36:35 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ68MRm0+7BTnkIe15Rm95OkhI4lciEW6zZvGiDk4zA59PumzG77bi1ZVsiiKv1F8+eYeHA+sQ==
+X-Received: by 2002:a05:620a:3c8d:b0:75b:23a1:82a4 with SMTP id tp13-20020a05620a3c8d00b0075b23a182a4mr9843352qkn.5.1686576995644;
+        Mon, 12 Jun 2023 06:36:35 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id d19-20020a05620a167300b0075b23e55640sm2844871qko.123.2023.06.12.06.36.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 06:36:35 -0700 (PDT)
+Date:   Mon, 12 Jun 2023 09:36:33 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
+        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
+        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
+        apopple@nvidia.com, ying.huang@intel.com, david@redhat.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        viro@zeniv.linux.org.uk, brauner@kernel.org,
+        pasha.tatashin@soleen.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v2 4/6] mm: drop VMA lock before waiting for migration
+Message-ID: <ZIcfYQ1c5teMSHAX@x1n>
+References: <20230609005158.2421285-1-surenb@google.com>
+ <20230609005158.2421285-5-surenb@google.com>
+ <ZIOOmC26qh4EXUEX@x1n>
+ <CAJuCfpHKUjAwgWbxvJQDyEnneRD03p2M6247Q6=3-oOq_FL7zA@mail.gmail.com>
+ <CAJuCfpG3PrbGxpDAEkyGQXW88+otb=FsbrhPJ4ePN7Xhn0a+_A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230612094400.GG4253@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJuCfpG3PrbGxpDAEkyGQXW88+otb=FsbrhPJ4ePN7Xhn0a+_A@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 11:44:00AM +0200, Peter Zijlstra wrote:
-> On Mon, Jun 12, 2023 at 11:07:59AM +0200, Peter Zijlstra wrote:
-> > 
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > ---
-> >  kernel/events/core.c |   65 ++++++++++++++++++++++++---------------------------
-> >  1 file changed, 31 insertions(+), 34 deletions(-)
-> > 
-> > --- a/kernel/events/core.c
-> > +++ b/kernel/events/core.c
-> > @@ -11285,49 +11285,46 @@ static void pmu_dev_release(struct devic
-> >  
-> >  static int pmu_dev_alloc(struct pmu *pmu)
-> >  {
-> > +	int ret;
-> >  
-> > +	struct device *dev __free(put_device) =
-> > +		kzalloc(sizeof(struct device), GFP_KERNEL);
-> > +	if (!dev)
-> > +		return -ENOMEM;
-> >  
-> > +	dev->groups = pmu->attr_groups;
-> > +	device_initialize(dev);
-> >  
-> > +	dev_set_drvdata(dev, pmu);
-> > +	dev->bus = &pmu_bus;
-> > +	dev->release = pmu_dev_release;
-> >  
-> > +	ret = dev_set_name(dev, "%s", pmu->name);
-> >  	if (ret)
-> > +		return ret;
-> >  
-> > +	ret = device_add(dev);
-> >  	if (ret)
-> > +		return ret;
-> >  
-> > +	struct device *del __free(device_del) = dev;
+On Fri, Jun 09, 2023 at 06:29:43PM -0700, Suren Baghdasaryan wrote:
+> On Fri, Jun 9, 2023 at 3:30 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> >
+> > On Fri, Jun 9, 2023 at 1:42 PM Peter Xu <peterx@redhat.com> wrote:
+> > >
+> > > On Thu, Jun 08, 2023 at 05:51:56PM -0700, Suren Baghdasaryan wrote:
+> > > > migration_entry_wait does not need VMA lock, therefore it can be dropped
+> > > > before waiting. Introduce VM_FAULT_VMA_UNLOCKED to indicate that VMA
+> > > > lock was dropped while in handle_mm_fault().
+> > > > Note that once VMA lock is dropped, the VMA reference can't be used as
+> > > > there are no guarantees it was not freed.
+> > >
+> > > Then vma lock behaves differently from mmap read lock, am I right?  Can we
+> > > still make them match on behaviors, or there's reason not to do so?
+> >
+> > I think we could match their behavior by also dropping mmap_lock here
+> > when fault is handled under mmap_lock (!(fault->flags &
+> > FAULT_FLAG_VMA_LOCK)).
+> > I missed the fact that VM_FAULT_COMPLETED can be used to skip dropping
+> > mmap_lock in do_page_fault(), so indeed, I might be able to use
+> > VM_FAULT_COMPLETED to skip vma_end_read(vma) for per-vma locks as well
+> > instead of introducing FAULT_FLAG_VMA_LOCK. I think that was your idea
+> > of reusing existing flags?
+> Sorry, I meant VM_FAULT_VMA_UNLOCKED, not FAULT_FLAG_VMA_LOCK in the
+> above reply.
 > 
-> Greg, I'm not much familiar with the whole device model, but it seems
-> unfortunate to me that one has to call device_del() explicitly if we
-> already have a put_device() queued.
-> 
-> Is there a saner way to write this?
+> I took a closer look into using VM_FAULT_COMPLETED instead of
+> VM_FAULT_VMA_UNLOCKED but when we fall back from per-vma lock to
+> mmap_lock we need to retry with an indication that the per-vma lock
+> was dropped. Returning (VM_FAULT_RETRY | VM_FAULT_COMPLETE) to
+> indicate such state seems strange to me ("retry" and "complete" seem
 
-Ok, to answer my other question, yes, you are changing the free call
-here in the "middle" of the function, sorry, I missed "del" vs. "dev"
-and was wondering how this would work...
+Not relevant to this migration patch, but for the whole idea I was thinking
+whether it should just work if we simply:
 
-This should work, it's tricky, especially:
+        fault = handle_mm_fault(vma, address, flags | FAULT_FLAG_VMA_LOCK, regs);
+-       vma_end_read(vma);
++       if (!(fault & (VM_FAULT_RETRY | VM_FAULT_COMPLETED)))
++               vma_end_read(vma);
 
-> > +	no_free_ptr(del);
-> > +	pmu->dev = no_free_ptr(dev);
+?
 
-this.
+GUP may need more caution on NOWAIT, but vma lock is only in fault paths so
+IIUC it's fine?
 
-I had to stare at it for a while to realize that yes, you are calling
-the two different "cleanup" functions prior to thes lines, on the same
-pointer, and that the order is correct.
+-- 
+Peter Xu
 
-Ick, this is going to be a rough audit for bus code that gets converted
-to this, BUT bonus is that once it's done, any changes to the middle of
-the function should "just work", and it's a good task for an intern to
-do :)
-
-
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-Mind if I try this series to convert a more "normal" driver to see how
-it works with that?  That's going to be the true test, see if the
-changes make sense to someone who doesn't really know the internals of
-the driver core like this...
-
-thanks,
-
-greg k-h
