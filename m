@@ -2,72 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA2F72C2FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:37:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C95F72C305
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbjFLLha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 07:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53740 "EHLO
+        id S234615AbjFLLiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 07:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbjFLLg7 (ORCPT
+        with ESMTP id S235764AbjFLLhy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 07:36:59 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0B11982
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 04:16:46 -0700 (PDT)
+        Mon, 12 Jun 2023 07:37:54 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 063F77D94;
+        Mon, 12 Jun 2023 04:20:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=UNgxxIWKRNKpQwlHP1KcC4wpeFs5yQtKdY9XE7EOhUE=; b=r+hVUwUSdXB1J2bferuwIur7xv
-        ReGSTN8VeVUxt3ghjhiXvnbBclv/A4Byh+KIAjwD20pcSLAnvy8VimybcOT815fKi62BzWQe7hxMV
-        PSvwmmI0BqSpfktmk8sMwPUsO71vU/c1jeZcyXNVKxx+P07ERp+BtnbaPBSyTIzwe7b4b/BJ+7DOc
-        6TSQF8HYknfSGbx16MA1isKPXPeqJSzIo5Xstc9zlNFRpim7Bq3AXuKVdZOwxrodBZMALumlMj4aW
-        8PF5WV94/YVduMcsDFX57njjeUsU1btsOBp/qMSGmHdGlfhlupDYO9hyGXSJRWpXol0naooTohNcb
-        arVJMdvQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q8fWl-002Z8u-IK; Mon, 12 Jun 2023 11:16:03 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6EDCA3002A9;
-        Mon, 12 Jun 2023 13:16:02 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5263024513501; Mon, 12 Jun 2023 13:16:02 +0200 (CEST)
-Date:   Mon, 12 Jun 2023 13:16:02 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tim Chen <tim.c.chen@linux.intel.com>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shrikanth Hegde <sshegde@linux.vnet.ibm.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        naveen.n.rao@linux.vnet.ibm.com,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        Chen Yu <yu.c.chen@intel.com>, Hillf Danton <hdanton@sina.com>
-Subject: Re: [Patch v2 1/6] sched/fair: Determine active load balance for SMT
- sched groups
-Message-ID: <20230612111602.GJ4253@hirez.programming.kicks-ass.net>
-References: <cover.1686263351.git.tim.c.chen@linux.intel.com>
- <253f5272200d3cec3f24427262bb4e95244f681c.1686263351.git.tim.c.chen@linux.intel.com>
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=TV21Jmzs5HQxIuTayrf/mU1uRUNmyAiPllP7jU37Xqc=; b=ymw/V7OeZAEdwfvrsdF0h7hem3
+        P2MsH19HdcpAUn5jgAqvtrHcr1v+prQ6HGwnZwNY5HGIVTVMqR8bJpG8QL+R6BsExpfurAJoFyzgO
+        mTOQryoWtvarDKOfsLxbMNlY4uYZLfspASeOE9nXQEDK8Dfo1lMqnEB3HZL8Sowmp65K7AVBv/EzY
+        aasIUJmN6gAT0nfrFXjq4ZYcQTn5A69DWGB9x9Ukm4IF6hFiazutEUzl5rSluwnVo1UP1EfNzIIz1
+        ibt+BUxG04j1w8PNhucatldK7t5a+HV4nsd0n4ZVyMTW2R7omrRh8b3EhZFgs+t11VfcRezgoQ0R8
+        4NRkg+oA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36050)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1q8faY-0005e2-JP; Mon, 12 Jun 2023 12:19:58 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1q8faS-0004v7-27; Mon, 12 Jun 2023 12:19:52 +0100
+Date:   Mon, 12 Jun 2023 12:19:52 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sam Shih <Sam.Shih@mediatek.com>
+Subject: Re: [PATCH net-next 5/8] net: ethernet: mtk_eth_soc: add
+ MTK_NETSYS_V3 capability bit
+Message-ID: <ZIb/WKKNlzjTIu2h@shell.armlinux.org.uk>
+References: <ZIUXf9APDFCNaUG1@makrotopia.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <253f5272200d3cec3f24427262bb4e95244f681c.1686263351.git.tim.c.chen@linux.intel.com>
+In-Reply-To: <ZIUXf9APDFCNaUG1@makrotopia.org>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -78,19 +75,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 03:32:27PM -0700, Tim Chen wrote:
-> @@ -10371,6 +10436,11 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
->  			 */
->  			goto out_balanced;
+On Sun, Jun 11, 2023 at 01:38:23AM +0100, Daniel Golle wrote:
+> @@ -1333,8 +1354,13 @@ static int mtk_tx_map(struct sk_buff *skb, struct net_device *dev,
+>  	mtk_tx_set_dma_desc(dev, itxd, &txd_info);
 >  
-> +		if (busiest->group_type == group_smt_balance &&
-> +		    smt_vs_nonsmt_groups(sds.local, sds.busiest))
-> +			/* Let non SMT CPU pull from SMT CPU sharing with sibling */
-> +			goto force_balance;
-> +
->  		if (busiest->group_weight > 1 &&
->  		    local->idle_cpus <= (busiest->idle_cpus + 1))
->  			/*
+>  	itx_buf->flags |= MTK_TX_FLAGS_SINGLE0;
+> -	itx_buf->flags |= (!mac->id) ? MTK_TX_FLAGS_FPORT0 :
+> -			  MTK_TX_FLAGS_FPORT1;
+> +	if (mac->id == MTK_GMAC1_ID)
+> +		itx_buf->flags |= MTK_TX_FLAGS_FPORT0;
+> +	else if (mac->id == MTK_GMAC2_ID)
+> +		itx_buf->flags |= MTK_TX_FLAGS_FPORT1;
+> +	else
+> +		itx_buf->flags |= MTK_TX_FLAGS_FPORT2;
 
-Could you please add {} for all of them? The comment makes them all
-multi-line.
+There appears to be two places that this code structure appears, and
+this is in the path for packet transmission. I wonder if it would be
+more efficient to instead do:
+
+	itx_buf->flags |= MTK_TX_FLAGS_SINGLE0 | mac->tx_flags;
+
+with mac->tx_flags appropriately initialised?
+
+> @@ -2170,7 +2214,9 @@ static int mtk_poll_tx_qdma(struct mtk_eth *eth, int budget,
+>  		tx_buf = mtk_desc_to_tx_buf(ring, desc,
+>  					    eth->soc->txrx.txd_size);
+>  		if (tx_buf->flags & MTK_TX_FLAGS_FPORT1)
+> -			mac = 1;
+> +			mac = MTK_GMAC2_ID;
+> +		else if (tx_buf->flags & MTK_TX_FLAGS_FPORT2)
+> +			mac = MTK_GMAC3_ID;
+
+This has me wondering whether the flags are used for hardware or just
+for the driver's purposes. If it's the latter, can we instead store the
+MAC index in tx_buf, rather than having to decode a bitfield?
+
+I suspect these are just for the driver given that the addition of
+MTK_TX_FLAGS_FPORT2 changes all subsequent bit numbers in this struct
+member.
+
+>  
+>  		if (!tx_buf->data)
+>  			break;
+> @@ -3783,7 +3829,26 @@ static int mtk_hw_init(struct mtk_eth *eth, bool reset)
+>  	mtk_w32(eth, eth->soc->txrx.rx_irq_done_mask, reg_map->qdma.int_grp + 4);
+>  	mtk_w32(eth, 0x21021000, MTK_FE_INT_GRP);
+>  
+> -	if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2)) {
+> +	if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V3)) {
+> +		/* PSE should not drop port1, port8 and port9 packets */
+> +		mtk_w32(eth, 0x00000302, PSE_DROP_CFG);
+> +
+> +		/* GDM and CDM Threshold */
+> +		mtk_w32(eth, 0x00000707, MTK_CDMW0_THRES);
+> +		mtk_w32(eth, 0x00000077, MTK_CDMW1_THRES);
+> +
+> +		/* Disable GDM1 RX CRC stripping */
+> +		val = mtk_r32(eth, MTK_GDMA_FWD_CFG(0));
+> +		val &= ~MTK_GDMA_STRP_CRC;
+> +		mtk_w32(eth, val, MTK_GDMA_FWD_CFG(0));
+
+mtk_m32() ?
+
+Thanks!
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
