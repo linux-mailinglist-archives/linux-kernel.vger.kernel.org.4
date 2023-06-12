@@ -2,135 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CB0972C2EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB88072C2F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235016AbjFLLgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 07:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53724 "EHLO
+        id S237487AbjFLLhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 07:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232254AbjFLLgH (ORCPT
+        with ESMTP id S237809AbjFLLg2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 07:36:07 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C615D8C02;
-        Mon, 12 Jun 2023 04:14:18 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7FE6E1FB;
-        Mon, 12 Jun 2023 04:15:03 -0700 (PDT)
-Received: from e127643.broadband (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D5F593F587;
-        Mon, 12 Jun 2023 04:14:14 -0700 (PDT)
-From:   James Clark <james.clark@arm.com>
-To:     coresight@lists.linaro.org
-Cc:     James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/5] perf cs-etm: Use previous thread for branch sample source IP
-Date:   Mon, 12 Jun 2023 12:13:59 +0100
-Message-Id: <20230612111403.100613-3-james.clark@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230612111403.100613-1-james.clark@arm.com>
-References: <20230612111403.100613-1-james.clark@arm.com>
+        Mon, 12 Jun 2023 07:36:28 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348B510E6
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 04:14:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=pl7chRYk/uyru+lQcBj9K0R9DWBsRbU5ZH1ZZl8pMdA=; b=IclETesgPyZyl+LdaUeoizqTxu
+        ApimhlJ7qUFdXRHjSHXRsl+pcfSuzXDroVtLy4K5bHqU35+8IZ1isfITE6R8sXpNNCABqYuhy8QEJ
+        QJU4vUAvv0U/Ulw4kMoiKKctKZ/b3n8wZq2uXmjTixK2xAaz12vRWrBa414QiX5BK5FVhEt/c2j2G
+        qnq557qzlt1K3hW4yqDxvJ6JVLRrNZVjigxG1hu3vmiF1zfz1p+pPhSuLCD5Mme1CONrsohJOoqdK
+        o+YcUSkISMTN6rPXMjtNgDjeiHXLtkoobufHre+WCyxBlHTyabZRHEp0f147urQRY7YHMnqUpbRZz
+        QOMUwe1Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q8fUr-008mw5-0T;
+        Mon, 12 Jun 2023 11:14:08 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5D08C3002A9;
+        Mon, 12 Jun 2023 13:13:59 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4130424513501; Mon, 12 Jun 2023 13:13:59 +0200 (CEST)
+Date:   Mon, 12 Jun 2023 13:13:59 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Tim Chen <tim.c.chen@linux.intel.com>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shrikanth Hegde <sshegde@linux.vnet.ibm.com>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        naveen.n.rao@linux.vnet.ibm.com,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Barry Song <v-songbaohua@oppo.com>,
+        Chen Yu <yu.c.chen@intel.com>, Hillf Danton <hdanton@sina.com>
+Subject: Re: [Patch v2 1/6] sched/fair: Determine active load balance for SMT
+ sched groups
+Message-ID: <20230612111359.GI4253@hirez.programming.kicks-ass.net>
+References: <cover.1686263351.git.tim.c.chen@linux.intel.com>
+ <253f5272200d3cec3f24427262bb4e95244f681c.1686263351.git.tim.c.chen@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <253f5272200d3cec3f24427262bb4e95244f681c.1686263351.git.tim.c.chen@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Branch samples currently use the IP of the previous packet as the from
-IP, and the IP of the current packet as the to IP. But it incorrectly
-uses the current thread. In some cases like a jump into a different
-exception level this will attribute to the incorrect process.
+On Thu, Jun 08, 2023 at 03:32:27PM -0700, Tim Chen wrote:
 
-Fix it by tracking the previous thread in the same way the previous
-packet is tracked.
+> +/* One group has more than one SMT CPU while the other group does not */
+> +static inline bool smt_vs_nonsmt_groups(struct sched_group *sg1,
+> +				    struct sched_group *sg2)
+> +{
+> +	if (!sg1 || !sg2)
+> +		return false;
+> +
+> +	return (sg1->flags & SD_SHARE_CPUCAPACITY) !=
+> +		(sg2->flags & SD_SHARE_CPUCAPACITY);
+> +}
+> +
+> +static inline bool smt_balance(struct lb_env *env, struct sg_lb_stats *sgs,
+> +			       struct sched_group *group)
+> +{
+> +	if (env->idle == CPU_NOT_IDLE)
+> +		return false;
+> +
+> +	/*
+> +	 * For SMT source group, it is better to move a task
+> +	 * to a CPU that doesn't have multiple tasks sharing its CPU capacity.
+> +	 * Note that if a group has a single SMT, SD_SHARE_CPUCAPCITY
+> +	 * will not be on.
+> +	 */
+> +	if (group->flags & SD_SHARE_CPUCAPACITY &&
+> +	    sgs->sum_h_nr_running > 1)
+> +		return true;
 
-Reviewed-by: Mike Leach <mike.leach@linaro.org>
-Signed-off-by: James Clark <james.clark@arm.com>
----
- tools/perf/util/cs-etm.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+AFAICT this does the right thing for SMT>2
 
-diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
-index ebffc9052561..5b909bca294e 100644
---- a/tools/perf/util/cs-etm.c
-+++ b/tools/perf/util/cs-etm.c
-@@ -86,6 +86,7 @@ struct cs_etm_traceid_queue {
- 	size_t last_branch_pos;
- 	union perf_event *event_buf;
- 	struct thread *thread;
-+	struct thread *prev_packet_thread;
- 	struct branch_stack *last_branch;
- 	struct branch_stack *last_branch_rb;
- 	struct cs_etm_packet *prev_packet;
-@@ -480,6 +481,7 @@ static int cs_etm__init_traceid_queue(struct cs_etm_queue *etmq,
- 	tidq->trace_chan_id = trace_chan_id;
- 	tidq->thread = machine__findnew_thread(&etm->session->machines.host, -1,
- 					       queue->tid);
-+	tidq->prev_packet_thread = machine__idle_thread(&etm->session->machines.host);
- 
- 	tidq->packet = zalloc(sizeof(struct cs_etm_packet));
- 	if (!tidq->packet)
-@@ -612,10 +614,20 @@ static void cs_etm__packet_swap(struct cs_etm_auxtrace *etm,
- 		/*
- 		 * Swap PACKET with PREV_PACKET: PACKET becomes PREV_PACKET for
- 		 * the next incoming packet.
-+		 *
-+		 * Threads and exception levels are also tracked for both the
-+		 * previous and current packets. This is because the previous
-+		 * packet is used for the 'from' IP for branch samples, so the
-+		 * thread at that time must also be assigned to that sample.
-+		 * Across discontinuity packets the thread can change, so by
-+		 * tracking the thread for the previous packet the branch sample
-+		 * will have the correct info.
- 		 */
- 		tmp = tidq->packet;
- 		tidq->packet = tidq->prev_packet;
- 		tidq->prev_packet = tmp;
-+		thread__put(tidq->prev_packet_thread);
-+		tidq->prev_packet_thread = thread__get(tidq->thread);
- 	}
- }
- 
-@@ -791,6 +803,7 @@ static void cs_etm__free_traceid_queues(struct cs_etm_queue *etmq)
- 		/* Free this traceid_queue from the array */
- 		tidq = etmq->traceid_queues[idx];
- 		thread__zput(tidq->thread);
-+		thread__zput(tidq->prev_packet_thread);
- 		zfree(&tidq->event_buf);
- 		zfree(&tidq->last_branch);
- 		zfree(&tidq->last_branch_rb);
-@@ -1450,8 +1463,8 @@ static int cs_etm__synth_branch_sample(struct cs_etm_queue *etmq,
- 	sample.time = cs_etm__resolve_sample_time(etmq, tidq);
- 
- 	sample.ip = ip;
--	sample.pid = tidq->thread->pid_;
--	sample.tid = tidq->thread->tid;
-+	sample.pid = tidq->prev_packet_thread->pid_;
-+	sample.tid = tidq->prev_packet_thread->tid;
- 	sample.addr = cs_etm__first_executed_instr(tidq->packet);
- 	sample.id = etmq->etm->branches_id;
- 	sample.stream_id = etmq->etm->branches_id;
--- 
-2.34.1
+> +
+> +	return false;
+> +}
+> +
+>  static inline bool
+>  sched_reduced_capacity(struct rq *rq, struct sched_domain *sd)
+>  {
+
+> @@ -9537,6 +9581,18 @@ static bool update_sd_pick_busiest(struct lb_env *env,
+>  		break;
+>  
+>  	case group_has_spare:
+> +		/*
+> +		 * Do not pick sg with SMT CPUs over sg with pure CPUs,
+> +		 * as we do not want to pull task off half empty SMT core
+> +		 * and make the core idle.
+> +		 */
+> +		if (smt_vs_nonsmt_groups(sds->busiest, sg)) {
+> +			if (sg->flags & SD_SHARE_CPUCAPACITY)
+> +				return false;
+> +			else
+> +				return true;
+> +		}
+
+However, here I'm not at all sure. Consider SMT-4 with 2 active CPUs, we
+still very much would like to pull one task off if we have an idle core
+somewhere, no?
 
