@@ -2,60 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C0272BFA9
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D600672BF5D
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234866AbjFLKqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 06:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
+        id S235065AbjFLKmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 06:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234614AbjFLKp6 (ORCPT
+        with ESMTP id S233967AbjFLKmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 06:45:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0254BF7EF;
-        Mon, 12 Jun 2023 03:30:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D474561500;
-        Mon, 12 Jun 2023 10:30:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAF7FC4339B;
-        Mon, 12 Jun 2023 10:30:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686565831;
-        bh=9nSCSTE5NIfNzjYPmIfyOiQi8ozTX+gnpJ6Raw0QLi0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=S4GrFvMA9y3QpZhHHq76RuYiv2W7SltlHFdTECg5q6100m1sWQSaEg/R8gIclABY5
-         c8RAiHGVkDX6GdPPqZ8bmCErBd5nHVsC8ngLfZU/oRTn10P8R//jN546FYcJS8nvYx
-         H4ofbYTUjSo+4ex1S9UR4aTusLxCX/L26zJW6CCo=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: [PATCH 4.19 00/23] 4.19.286-rc1 review
-Date:   Mon, 12 Jun 2023 12:26:01 +0200
-Message-ID: <20230612101651.138592130@linuxfoundation.org>
-X-Mailer: git-send-email 2.41.0
+        Mon, 12 Jun 2023 06:42:04 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0228231;
+        Mon, 12 Jun 2023 03:26:27 -0700 (PDT)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Qfnrk72zNzTl2n;
+        Mon, 12 Jun 2023 18:25:42 +0800 (CST)
+Received: from [10.67.111.205] (10.67.111.205) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 12 Jun 2023 18:26:10 +0800
+From:   Yang Jihong <yangjihong1@huawei.com>
+Subject: [RFC] Adding support for setting the affinity of the recording
+ process
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+CC:     Yang Jihong <yangjihong1@huawei.com>
+Message-ID: <159de73b-fdd6-6df8-4f77-73c628fe641f@huawei.com>
+Date:   Mon, 12 Jun 2023 18:26:10 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.286-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.19.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.19.286-rc1
-X-KernelTest-Deadline: 2023-06-14T10:16+00:00
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,129 +58,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 4.19.286 release.
-There are 23 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+Hello everyone,
 
-Responses should be made by Wed, 14 Jun 2023 10:16:41 +0000.
-Anything received after that time might be too late.
+Currently, perf-record supports profiling an existing process, thread, 
+or a specified command.
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.286-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-and the diffstat can be found below.
+Sometimes we may need to set CPU affinity of the target process before 
+recording:
 
-thanks,
+   # taskset -pc <cpus> <pid>
+   # perf record -p <pid> -- sleep 10
 
-greg k-h
+or:
 
--------------
-Pseudo-Shortlog of commits:
+   # perf record -- `taskset -c <cpus> COMMAND`
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 4.19.286-rc1
+I'm thinking about getting perf to support setting the affinity of the 
+recording process, for example:
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Revert "staging: rtl8192e: Replace macro RTL_PCI_DEVICE with PCI_DEVICE"
+1. set the CPU affinity of the <pid1> process to <cpus1>, <pid2> process 
+to <cpus2>,  and record:
 
-Zixuan Fu <r33s3n6@gmail.com>
-    btrfs: unset reloc control if transaction commit fails in prepare_to_relocate()
+   # perf record -p <pid1>/<cpus1>:<pid2>/<cpus2> -- sleep 10
 
-Josef Bacik <josef@toxicpanda.com>
-    btrfs: check return value of btrfs_commit_transaction in relocation
+and
 
-Theodore Ts'o <tytso@mit.edu>
-    ext4: only check dquot_initialize_needed() when debugging
+2. set CPU affinity of the COMMAND and record:
 
-Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-    i2c: sprd: Delete i2c adapter in .remove's error path
+   # perf record --taskset-command <cpus> COMMAND
 
-Martin Hundebøll <martin@geanix.com>
-    pinctrl: meson-axg: add missing GPIOA_18 gpio group
-
-Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-    Bluetooth: Fix use-after-free in hci_remove_ltk/hci_remove_irk
-
-Xiubo Li <xiubli@redhat.com>
-    ceph: fix use-after-free bug for inodes when flushing capsnaps
-
-Chia-I Wu <olvaffe@gmail.com>
-    drm/amdgpu: fix xclk freq on CHIP_STONEY
-
-Dmitry Torokhov <dmitry.torokhov@gmail.com>
-    Input: psmouse - fix OOB access in Elantech protocol
-
-Ismael Ferreras Morezuelas <swyterzone@gmail.com>
-    Input: xpad - delete a Razer DeathAdder mouse VID/PID entry
-
-Vladislav Efanov <VEfanov@ispras.ru>
-    batman-adv: Broken sync while rescheduling delayed work
-
-Ben Hutchings <ben@decadent.org.uk>
-    lib: cpu_rmap: Fix potential use-after-free in irq_cpu_rmap_release()
-
-Hangyu Hua <hbh25y@gmail.com>
-    net: sched: fix possible refcount leak in tc_chain_tmplt_add()
-
-Eric Dumazet <edumazet@google.com>
-    net: sched: move rtm_tca_policy declaration to include file
-
-Eric Dumazet <edumazet@google.com>
-    rfs: annotate lockless accesses to RFS sock flow table
-
-Eric Dumazet <edumazet@google.com>
-    rfs: annotate lockless accesses to sk->sk_rxhash
-
-Sungwoo Kim <iam@sung-woo.kim>
-    Bluetooth: L2CAP: Add missing checks for invalid DCID
-
-Ying Hsu <yinghsu@chromium.org>
-    Bluetooth: Fix l2cap_disconnect_req deadlock
-
-Alexander Sverdlin <alexander.sverdlin@siemens.com>
-    net: dsa: lan9303: allow vid != 0 in port_fdb_{add|del} methods
-
-Stephan Gerhold <stephan@gerhold.net>
-    spi: qup: Request DMA before enabling clocks
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    i40e: fix build warnings in i40e_alloc.h
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    i40iw: fix build warning in i40iw_manage_apbvt()
+In doing so, perf, as an observer, actually changes some of the 
+properties of the target process, which may be contrary to the purpose 
+of perf tool.
 
 
--------------
+Will we consider accepting this approach?
 
-Diffstat:
-
- Makefile                                     |  4 +--
- drivers/gpu/drm/amd/amdgpu/vi.c              | 11 +++++++--
- drivers/i2c/busses/i2c-sprd.c                |  6 +++--
- drivers/infiniband/hw/i40iw/i40iw.h          |  5 ++--
- drivers/input/joystick/xpad.c                |  1 -
- drivers/input/mouse/elantech.c               |  9 ++++---
- drivers/net/dsa/lan9303-core.c               |  4 ---
- drivers/net/ethernet/intel/i40e/i40e_alloc.h | 17 +++++--------
- drivers/pinctrl/meson/pinctrl-meson-axg.c    |  1 +
- drivers/spi/spi-qup.c                        | 37 ++++++++++++++--------------
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c |  6 ++---
- drivers/staging/rtl8192e/rtl8192e/rtl_core.h |  5 ++++
- fs/btrfs/relocation.c                        | 14 ++++++++---
- fs/ceph/caps.c                               |  6 +++++
- fs/ceph/snap.c                               |  4 ++-
- fs/ext4/xattr.c                              |  6 +++--
- include/linux/netdevice.h                    |  7 ++++--
- include/net/pkt_sched.h                      |  2 ++
- include/net/sock.h                           | 18 ++++++++++----
- lib/cpu_rmap.c                               |  2 +-
- net/batman-adv/distributed-arp-table.c       |  2 +-
- net/bluetooth/hci_core.c                     |  8 +++---
- net/bluetooth/l2cap_core.c                   | 13 ++++++++++
- net/core/dev.c                               |  6 +++--
- net/sched/cls_api.c                          |  3 +--
- 25 files changed, 122 insertions(+), 75 deletions(-)
-
-
+Thanks,
+Yang.
