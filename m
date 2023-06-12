@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0963672B5D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 05:15:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A1D72B5D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 05:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234335AbjFLDP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 23:15:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49462 "EHLO
+        id S234470AbjFLDPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 23:15:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234573AbjFLDPA (ORCPT
+        with ESMTP id S234593AbjFLDPA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 11 Jun 2023 23:15:00 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8587210D1
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 20:14:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00502E77
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 20:14:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686539687; x=1718075687;
+  t=1686539690; x=1718075690;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=RcAGWFoO9nSBfI/X1vef7WgnMxUZjubEZI94Z23Z+44=;
-  b=KkoQWcrhpPgTpKiDPjjlnWbf955XRkK9m+dkn3yyAYlNBQ1TVKEc3IJy
-   7eGUdj7r1a/tgzNVwRw3zgTurqHO7vVRrTz5uL56TQzv3MuX+z7qEHFyS
-   dT/lMoh8ZmoC1OPt4P6CVdRcV7jnchhh3ME8MIN1IPMrg3znnmBEZbIcm
-   iNk8zp704zPsHk7vgVrC0ZckPhXA8gWZ5Qflw7kPOoSgKiTtrrpYW+67a
-   /BwCEhTzHAmOVJsmLisNCqxHkF57YKR6UJ3nPWp1CbpRPju92dPkgI+2i
-   fSFGswoolV5xwzzm+syumUhgPOr+PwaGzCpRqAc0AhszZR8Qwnh+NiJZk
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="347578886"
+  bh=n4WljQzl2VdpQPd3iTWOpWki7dTWlXg8XREKcKcC5Fk=;
+  b=VhM5jSVwHyGGvU/BuoooMXq8qddrksl0178UsSlV6T22a2gVmrqET66R
+   EK3jyXBksQRqIml/sUzbLFHsYOM+qlo6BkVVW8jS+1cOm2i9Qr8sbOzQr
+   12JuTY4IbeRi9WvOAG8Cewx/1YuraU3ZIzwZ2ovRAevbjvwx64hTZEBhD
+   pvhli5d6/mNBISgNhW4Yndu4KjtsE0clGECy20g5N7xWu8KjYzQijNQJL
+   9/dkZ90n8p2WxD8AHI8BUhDycvI4Bfj4iZmJ0QASV7935DMXekLHAY2Og
+   619hf7EOqf658zSQ+iFzSigNUFlYKB5g6avBi7xYuFCJHIqpLB6K+QAfw
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="347578899"
 X-IronPort-AV: E=Sophos;i="6.00,235,1681196400"; 
-   d="scan'208";a="347578886"
+   d="scan'208";a="347578899"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2023 20:14:47 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2023 20:14:49 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="776191875"
+X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="776191885"
 X-IronPort-AV: E=Sophos;i="6.00,235,1681196400"; 
-   d="scan'208";a="776191875"
+   d="scan'208";a="776191885"
 Received: from brentlu-desktop.itwn.intel.com ([10.5.252.92])
-  by fmsmga008.fm.intel.com with ESMTP; 11 Jun 2023 20:14:44 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 11 Jun 2023 20:14:47 -0700
 From:   Brent Lu <brent.lu@intel.com>
 To:     alsa-devel@alsa-project.org
 Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
@@ -55,9 +55,9 @@ Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
         <amadeuszx.slawinski@linux.intel.com>,
         Brent Lu <brent.lu@intel.com>, linux-kernel@vger.kernel.org,
         Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Subject: [PATCH 01/12] ASoC: Intel: avs-da7219: remove redundant dapm routes
-Date:   Mon, 12 Jun 2023 19:09:47 +0800
-Message-Id: <20230612110958.592674-2-brent.lu@intel.com>
+Subject: [PATCH 02/12] ASoC: Intel: avs-dmic: remove redundant dapm routes
+Date:   Mon, 12 Jun 2023 19:09:48 +0800
+Message-Id: <20230612110958.592674-3-brent.lu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230612110958.592674-1-brent.lu@intel.com>
 References: <20230612110958.592674-1-brent.lu@intel.com>
@@ -74,98 +74,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Two routes "Playback<-sspX Tx" and "sspX Rx<-Capture" are created by
-snd_soc_dapm_connect_dai_link_widgets() automatically. Remove the
+Two routes "DMIC Rx<-Capture" and "DMIC WoV Rx<-Capture" are created
+by snd_soc_dapm_connect_dai_link_widgets() automatically. Remove the
 duplicate routes.
 
 Signed-off-by: Brent Lu <brent.lu@intel.com>
 ---
- sound/soc/intel/avs/boards/da7219.c | 45 ++---------------------------
- 1 file changed, 3 insertions(+), 42 deletions(-)
+ sound/soc/intel/avs/boards/dmic.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/sound/soc/intel/avs/boards/da7219.c b/sound/soc/intel/avs/boards/da7219.c
-index 1a1d572cc1d0..964a763732ab 100644
---- a/sound/soc/intel/avs/boards/da7219.c
-+++ b/sound/soc/intel/avs/boards/da7219.c
-@@ -181,38 +181,6 @@ static int avs_create_dai_link(struct device *dev, const char *platform_name, in
- 	return 0;
- }
+diff --git a/sound/soc/intel/avs/boards/dmic.c b/sound/soc/intel/avs/boards/dmic.c
+index 90a921638572..c270646faf86 100644
+--- a/sound/soc/intel/avs/boards/dmic.c
++++ b/sound/soc/intel/avs/boards/dmic.c
+@@ -44,8 +44,6 @@ static const struct snd_soc_dapm_widget card_widgets[] = {
  
--static int avs_create_dapm_routes(struct device *dev, int ssp_port,
--				  struct snd_soc_dapm_route **routes, int *num_routes)
--{
--	struct snd_soc_dapm_route *dr;
--	const int num_base = ARRAY_SIZE(card_base_routes);
--	const int num_dr = num_base + 2;
--	int idx;
--
--	dr = devm_kcalloc(dev, num_dr, sizeof(*dr), GFP_KERNEL);
--	if (!dr)
--		return -ENOMEM;
--
--	memcpy(dr, card_base_routes, num_base * sizeof(*dr));
--
--	idx = num_base;
--	dr[idx].sink = devm_kasprintf(dev, GFP_KERNEL, "Playback");
--	dr[idx].source = devm_kasprintf(dev, GFP_KERNEL, "ssp%d Tx", ssp_port);
--	if (!dr[idx].sink || !dr[idx].source)
--		return -ENOMEM;
--
--	idx++;
--	dr[idx].sink = devm_kasprintf(dev, GFP_KERNEL, "ssp%d Rx", ssp_port);
--	dr[idx].source = devm_kasprintf(dev, GFP_KERNEL, "Capture");
--	if (!dr[idx].sink || !dr[idx].source)
--		return -ENOMEM;
--
--	*routes = dr;
--	*num_routes = num_dr;
--
--	return 0;
--}
--
- static int avs_card_suspend_pre(struct snd_soc_card *card)
- {
- 	struct snd_soc_dai *codec_dai = snd_soc_card_get_codec_dai(card, DA7219_DAI_NAME);
-@@ -230,14 +198,13 @@ static int avs_card_resume_post(struct snd_soc_card *card)
+ static const struct snd_soc_dapm_route card_routes[] = {
+ 	{"DMic", NULL, "SoC DMIC"},
+-	{"DMIC Rx", NULL, "Capture"},
+-	{"DMIC WoV Rx", NULL, "Capture"},
+ };
  
- static int avs_da7219_probe(struct platform_device *pdev)
- {
--	struct snd_soc_dapm_route *routes;
- 	struct snd_soc_dai_link *dai_link;
- 	struct snd_soc_acpi_mach *mach;
- 	struct snd_soc_card *card;
- 	struct snd_soc_jack *jack;
- 	struct device *dev = &pdev->dev;
- 	const char *pname;
--	int num_routes, ssp_port, ret;
-+	int ssp_port, ret;
- 
- 	mach = dev_get_platdata(dev);
- 	pname = mach->mach_params.platform;
-@@ -249,12 +216,6 @@ static int avs_da7219_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	ret = avs_create_dapm_routes(dev, ssp_port, &routes, &num_routes);
--	if (ret) {
--		dev_err(dev, "Failed to create dapm routes: %d", ret);
--		return ret;
--	}
--
- 	jack = devm_kzalloc(dev, sizeof(*jack), GFP_KERNEL);
- 	card = devm_kzalloc(dev, sizeof(*card), GFP_KERNEL);
- 	if (!jack || !card)
-@@ -271,8 +232,8 @@ static int avs_da7219_probe(struct platform_device *pdev)
- 	card->num_controls = ARRAY_SIZE(card_controls);
- 	card->dapm_widgets = card_widgets;
- 	card->num_dapm_widgets = ARRAY_SIZE(card_widgets);
--	card->dapm_routes = routes;
--	card->num_dapm_routes = num_routes;
-+	card->dapm_routes = card_base_routes;
-+	card->num_dapm_routes = ARRAY_SIZE(card_base_routes);
- 	card->fully_routed = true;
- 	snd_soc_card_set_drvdata(card, jack);
- 
+ static int avs_dmic_probe(struct platform_device *pdev)
 -- 
 2.34.1
 
