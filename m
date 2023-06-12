@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 076F572BC71
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8600472BC78
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233145AbjFLJaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 05:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44416 "EHLO
+        id S233580AbjFLJa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 05:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233172AbjFLJ3h (ORCPT
+        with ESMTP id S233717AbjFLJ3j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 05:29:37 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685D41B3
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:24:28 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f738f579ceso29730165e9.3
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:24:28 -0700 (PDT)
+        Mon, 12 Jun 2023 05:29:39 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A26E4C
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:24:29 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f122ff663eso4643731e87.2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:24:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1686561867; x=1689153867;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1686561868; x=1689153868;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=F1RtgufzwN5zkIc6lOIXx9j+jgAzsHOFWAyMRveQqLo=;
-        b=jxFUBvkZ4Lg20XupS3NzkHFqhu8SEtVVfcnXOO+b6K6/t0uzorkTHwYRDrMhd2dJIU
-         tdhzK6iKF6+sYaQwrNwnE3nbalQyEeuelBYndZA4Zlh1ic3fnVO7sRut7VoIEBGZqyTT
-         j7X7mK1z0w+BQ2GjWcZZVMaxzDmSNJFStDd6l63u1LsPuVC+IR1W1QtTzlOsR9JLI+Vp
-         /C2z7U/al+XLw+5ktMrKm6sW96aoMXXs83R5MH7rwPztSggbFtGmzEURIWOz4sSzPa4R
-         7fu5lNM2p2uS5s2x+WETMW9u7Bl5Y9cMoLBsyEonGg0j/q1FpAfYpaSsN/KMSudrABVj
-         RkUg==
+        bh=8Mia4wdvtEWv/Mc70nqXVtPO13y7zNqSpwQ13vNSfLE=;
+        b=W7uLoIKXS7PAmiTERywWDbaMLHABZeojjIbT0BpPdVw/szDoWSLAhsDjiDhXxl4o0B
+         N+mM9elzSP3JqtAq5iBMalhVzDLZAT3pgGrA4YH0qnHkzC5chXAFtZOuI8iB8RtRWpUk
+         qOX25KL/ZPJsjCHVNrK5xFzMKBouPr39wPrNCJ/B1IYO0a5h4wx7RMpAIK3l/E/UnFKe
+         dz6B6SoSKkxozrS8aYGNXN9zhyKDjdGgp5mZXmbuaHnXa5w2D/IMPaqTthkKHu/a1eea
+         vPl6cgK054K85I0UCom0Hd9nIDiLDaTWrOXGQNcrNBsVHaU55BET5lMHbubFFmbZ6tzN
+         s+SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686561867; x=1689153867;
+        d=1e100.net; s=20221208; t=1686561868; x=1689153868;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=F1RtgufzwN5zkIc6lOIXx9j+jgAzsHOFWAyMRveQqLo=;
-        b=l9SxPKasxh3c5DpNRM/k2EYBQe+m+Zjp1imCXDPP/ayx30zxA6vsKRaoBWJ8HN8EIY
-         8ze+cNXhkHA2KEKKJ0rhN6SHl5D0aIQrlKd+F+iPPH2hqy5i5UU0JHTtU3b+xduFU8Xl
-         Qo39XBATPkhd5no8LJM0FoRYeWv6GlOb+scflScOHYgt+93I93oHhVSqzV9fstDj5skY
-         A1SMvmHIuGXsgeoKW10OxTvmnohOf+8LCS1gC/RjZKJeJy+g2+qBILaeol7Kg7RXcvUZ
-         2v7Ax1pKA7r7l2gcVg8PuHicBJ85LrfB78MXNOw449Ac4BNyVycVAyCxAEGkvO4Uh6v8
-         1E5Q==
-X-Gm-Message-State: AC+VfDwWrD8kt7+/iTEN07FViJLXu8PnmMQERfvxOoOyWtnIO+h7/SKa
-        StVH+gO5IjysCyaHIlIlaaN5VA==
-X-Google-Smtp-Source: ACHHUZ4X9DW5v3nm9ETabAEnO/zHuXwpBxjwwwHIiRMD9OibOaCyO+b+AitZRY7pXVt/6xW+wsS/3g==
-X-Received: by 2002:a1c:4b13:0:b0:3f7:f264:3edc with SMTP id y19-20020a1c4b13000000b003f7f2643edcmr5877256wma.14.1686561866564;
-        Mon, 12 Jun 2023 02:24:26 -0700 (PDT)
+        bh=8Mia4wdvtEWv/Mc70nqXVtPO13y7zNqSpwQ13vNSfLE=;
+        b=FUHdDxJMHpz+zmS36BE77yjY7UTspxrl6ksrxEZYmt2gkGa80AaW0j2OB0ZROEk5+x
+         0oFM0E+c8dnirwCkDpF769uHBqzoPJjVlT071jNdrIUyaKhJkFcuKAIQKDfzmsDOqAmp
+         uxkQpJSBjfK+fLrbiSjww1B413EV/ti27rlp87Jmkh85koJmrxzYPagyvD7ve2vcaKxA
+         J4CsNsVzrAwGQlCabi+7NfbtjkklPnKSwmDJYlqwTYi+/yW76KXrwrp5kvN7Xgp0B9RQ
+         BKhEgPuwSGW/gGwIbMQwXttmlMfIz/bZJmSdUIuaAMnhJmznfOPA+uPaKfEOj0CmATeZ
+         B/5g==
+X-Gm-Message-State: AC+VfDzN/MTm/SOScJP9qeeraO594SWJPvNvkttqAs2U2HUTVLUczNja
+        ZzsFhrI7seRCpXrsQL5s9ixh6enPHcPPBWNgW4w=
+X-Google-Smtp-Source: ACHHUZ7sNkFi76jykx6ZssCKdKti/71IHMljosCZWSu5MIy1k9ySFhWKg0cfjewEgtofPNt8VsdKgQ==
+X-Received: by 2002:ac2:464d:0:b0:4f4:c972:981f with SMTP id s13-20020ac2464d000000b004f4c972981fmr4212236lfo.54.1686561868039;
+        Mon, 12 Jun 2023 02:24:28 -0700 (PDT)
 Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:a222:bbe9:c688:33ae])
-        by smtp.gmail.com with ESMTPSA id p14-20020a7bcc8e000000b003f727764b10sm10892044wma.4.2023.06.12.02.24.25
+        by smtp.gmail.com with ESMTPSA id p14-20020a7bcc8e000000b003f727764b10sm10892044wma.4.2023.06.12.02.24.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 02:24:25 -0700 (PDT)
+        Mon, 12 Jun 2023 02:24:27 -0700 (PDT)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Vinod Koul <vkoul@kernel.org>,
         Bhupesh Sharma <bhupesh.sharma@linaro.org>,
@@ -73,9 +73,9 @@ Cc:     netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-stm32@st-md-mailman.stormreply.com,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH 01/26] phy: qualcomm: fix indentation in Makefile
-Date:   Mon, 12 Jun 2023 11:23:30 +0200
-Message-Id: <20230612092355.87937-2-brgl@bgdev.pl>
+Subject: [PATCH 02/26] dt-bindings: phy: describe the Qualcomm SGMII PHY
+Date:   Mon, 12 Jun 2023 11:23:31 +0200
+Message-Id: <20230612092355.87937-3-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230612092355.87937-1-brgl@bgdev.pl>
 References: <20230612092355.87937-1-brgl@bgdev.pl>
@@ -93,23 +93,72 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Align all entries in Makefile.
+Describe the SGMII/SerDes PHY present on the sa8775p platforms.
 
 Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 ---
- drivers/phy/qualcomm/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../phy/qcom,sa8775p-dwmac-sgmii-phy.yaml     | 52 +++++++++++++++++++
+ 1 file changed, 52 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/phy/qcom,sa8775p-dwmac-sgmii-phy.yaml
 
-diff --git a/drivers/phy/qualcomm/Makefile b/drivers/phy/qualcomm/Makefile
-index de3dc9ccf067..5fb33628566b 100644
---- a/drivers/phy/qualcomm/Makefile
-+++ b/drivers/phy/qualcomm/Makefile
-@@ -20,4 +20,4 @@ obj-$(CONFIG_PHY_QCOM_USB_HSIC) 	+= phy-qcom-usb-hsic.o
- obj-$(CONFIG_PHY_QCOM_USB_HS_28NM)	+= phy-qcom-usb-hs-28nm.o
- obj-$(CONFIG_PHY_QCOM_USB_SS)		+= phy-qcom-usb-ss.o
- obj-$(CONFIG_PHY_QCOM_USB_SNPS_FEMTO_V2)+= phy-qcom-snps-femto-v2.o
--obj-$(CONFIG_PHY_QCOM_IPQ806X_USB)		+= phy-qcom-ipq806x-usb.o
-+obj-$(CONFIG_PHY_QCOM_IPQ806X_USB)	+= phy-qcom-ipq806x-usb.o
+diff --git a/Documentation/devicetree/bindings/phy/qcom,sa8775p-dwmac-sgmii-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sa8775p-dwmac-sgmii-phy.yaml
+new file mode 100644
+index 000000000000..ba8d2bee1563
+--- /dev/null
++++ b/Documentation/devicetree/bindings/phy/qcom,sa8775p-dwmac-sgmii-phy.yaml
+@@ -0,0 +1,52 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/phy/qcom,sa8775p-dwmac-sgmii-phy.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm SerDes/SGMII ethernet PHY controller
++
++maintainers:
++  - Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
++
++description:
++  The SerDes PHY sits between the MAC and the external PHY and provides
++  separate Rx Tx lines.
++
++properties:
++  compatible:
++    const: qcom,sa8775p-dwmac-sgmii-phy
++
++  reg:
++    items:
++      - description: serdes
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    const: sgmi_ref
++
++  "#phy-cells":
++    const: 0
++
++additionalProperties: false
++
++required:
++  - compatible
++  - reg
++  - "#phy-cells"
++  - clocks
++  - clock-names
++
++examples:
++  - |
++    #include <dt-bindings/clock/qcom,sa8775p-gcc.h>
++    serdes_phy: phy@8901000 {
++        compatible = "qcom,sa8775p-dwmac-sgmii-phy";
++        reg = <0x08901000 0xe10>;
++        clocks = <&gcc GCC_SGMI_CLKREF_EN>;
++        clock-names = "sgmi_ref";
++        #phy-cells = <0>;
++        status = "disabled";
++    };
 -- 
 2.39.2
 
