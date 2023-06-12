@@ -2,52 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EDC972CE99
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:39:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72F3172CE9F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233767AbjFLSjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 14:39:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
+        id S235503AbjFLSks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 14:40:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231951AbjFLSjW (ORCPT
+        with ESMTP id S234857AbjFLSkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 14:39:22 -0400
-Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42318E69
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:39:20 -0700 (PDT)
-Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-76c6c1b16d2so623138139f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:39:20 -0700 (PDT)
+        Mon, 12 Jun 2023 14:40:45 -0400
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB546E6F
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:40:42 -0700 (PDT)
+Received: by mail-vs1-xe2a.google.com with SMTP id ada2fe7eead31-43b3e2cce3eso132582137.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:40:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686595242; x=1689187242;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kPF8uPb56GviGY9KiREimI3Llex5+RzsOybBEO8RgOE=;
+        b=bSub8knI2My+mzdaIppR7khjRkqEOAJYxAgrpaHsB74yBrmaVGcnccW2fkxC4RD4Er
+         Dj36HtgZm64aau1F0geqCqra5BKcQhORteB3ZvxW7jGgx9alss4uXQlntCEmhf0+qUBP
+         SMaknbSSY9pftOMeU3KeaORgEvCbHS2kVgp5UnYdRQoz/IZowDK88X9xNypKonMdKix0
+         +fifpmPPyY2IT9deMsOL7TohKu/WS+pDiOf0xNRBYb3SFiJ0KMRv2wPud7uFV5CVg/9F
+         xnyR9o/n6O3XXziSeQDA8q522aR7h1Ea5bKDFX/e+SRceRhvlRHctdALXvVMGW7pQolc
+         tX4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686595159; x=1689187159;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eON7cc11u21omHxGw6Vg5HORe0VkQcRAxXCDWieUCs4=;
-        b=Z4QWAZpDGKxzfpJxBR+kXv1hO0Ur5kx7W71s3KTp0BI4LeLRo7DCOIf39s/ONThxxV
-         0Ie8suZLzJhIzMAdQU+ZcRD4RGQbbObEy1UzfqQzzuNYluEpbXFNeMo7g12WZRUy19nj
-         ArhbaneRkJiGI6WSDOPyF+nkgYrkhcs5Kpg5xa15MgkgirCUpM3iz7cQIh71wHhnwXRL
-         LWsBvelW02haTwafBQ439Jne+14H/1Ocnc949PKkedv5eSElbXcesJSx7h8gpGv0jT2m
-         QNOv2+B72m8QjsUZclBqj9dwfxlA4VnlqFHS3DuYYmuIRVOWxuejcCFEsAkRq849z2Ls
-         k+9Q==
-X-Gm-Message-State: AC+VfDyp/arwGi+oGSOppbtNYPoFxvMZjfn2Zzo+R5k60p56ZLCqjirC
-        Tbhq+dho8R1Hee3/rwLSQThQRuFb0f6WKeEsTYUKF3RnLEO3
-X-Google-Smtp-Source: ACHHUZ7MqGYu/KAO2iw42HoWO85NlY5h+v56KszQcoRuI+0tMdJ6dpgyVd+hwNEY/zP8lm/3K5eUa4Q7vWN6jNNtf1n8P+5mn+/U
+        d=1e100.net; s=20221208; t=1686595242; x=1689187242;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kPF8uPb56GviGY9KiREimI3Llex5+RzsOybBEO8RgOE=;
+        b=BSt3Slr/hLekIVOCmVnawREmw6BaLNZNPsrJqZcYvJ0ZvQi+FEvic1/6Kml9q63T+6
+         foQXCq11wBmOBJyNXkhwpDIaSau/3c1UfCp5x9Hv0lnNwXO4Dr1LLHvEM890JwN2ncjm
+         QFWUzC5V6donfp8i10Oc8JY6geH7UpFlJizmlyTKx1r3U2LWwomNTAq1pkR3uT/Uz7Wf
+         qxRWZdF7ZemcjaLanu8qf84ndtpqKrtvaPtKINhTmaKKanFkKuatUC+ZdC0fQWuOmhFI
+         Yn7mxU8FGkIxZwsrS5n0PEUXD2LwSgZNY1sHlNvSWSgd33pCYK9NH1P6XhvTQlI0gQ9U
+         PAZg==
+X-Gm-Message-State: AC+VfDxU6gBdOiD8jT9ZnPd8uVJ01FCTox5JCqAo6GxMGfZDHYhzdVxZ
+        sS9e7TvTOZrznn4RABJ25RrvQAJjP9l8iRI8Os9VWPsZM98TEWaZ3+koGQ==
+X-Google-Smtp-Source: ACHHUZ6+WeYQrAwQgl9qOclJRU4IgMRZR5i2j3aydWORpX0W6M+7rLZHhZ1sf5W41WNq+KeYignkj7N34hIkFAod87o=
+X-Received: by 2002:a05:6102:5106:b0:43b:1dd8:76b4 with SMTP id
+ bm6-20020a056102510600b0043b1dd876b4mr5677539vsb.11.1686595241684; Mon, 12
+ Jun 2023 11:40:41 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a02:330c:0:b0:41a:902f:70d0 with SMTP id
- c12-20020a02330c000000b0041a902f70d0mr4580796jae.6.1686595159654; Mon, 12 Jun
- 2023 11:39:19 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 11:39:19 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005f0b2f05fdf309b3@google.com>
-Subject: [syzbot] [reiserfs?] kernel BUG in flush_journal_list
-From:   syzbot <syzbot+7cc52cbcdeb02a4b0828@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, reiserfs-devel@vger.kernel.org,
-        roberto.sassu@huawei.com, syzkaller-bugs@googlegroups.com
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 13 Jun 2023 00:10:30 +0530
+Message-ID: <CA+G9fYsJq0sPC+q6vLNKUgBqCGmmjDrfeP4R1-95Eu28FJRY_A@mail.gmail.com>
+Subject: =?UTF-8?Q?clang=3A_Powerpc=3A_clang=2Dnightly=2Dmaple=5Fdefconfig_=E2=80=94_FA?=
+        =?UTF-8?Q?IL?=
+To:     clang-built-linux <llvm@lists.linux.dev>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-stable <stable@vger.kernel.org>,
+        lkft-triage@lists.linaro.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,129 +72,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+[Please ignore if it is already reported]
 
-syzbot found the following issue on:
+Following two builds failed on stable-rc 6.1.34-rc1.
 
-HEAD commit:    64569520920a Merge tag 'block-6.4-2023-06-09' of git://git..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=17a5713b280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7474de833c217bf4
-dashboard link: https://syzkaller.appspot.com/bug?extid=7cc52cbcdeb02a4b0828
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=121cc4ab280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15d27f95280000
+  - Powerpc: clang-nightly-maple_defconfig =E2=80=94 FAIL
+  - Powerpc: clang-nightly-cell_defconfig =E2=80=94 FAIL
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/3239cb3f0553/disk-64569520.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/d90e42dca619/vmlinux-64569520.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/e0f88764a9f6/bzImage-64569520.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/c9148e64e137/mount_0.gz
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-The issue was bisected to:
+make --silent --keep-going --jobs=3D8
+O=3D/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=3Dpowerpc
+CROSS_COMPILE=3Dpowerpc64le-linux-gnu- HOSTCC=3Dclang CC=3Dclang LLVM=3D1
+LLVM_IAS=3D0 LD=3Dpowerpc64le-linux-gnu-ld
 
-commit d82dcd9e21b77d338dc4875f3d4111f0db314a7c
-Author: Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Fri Mar 31 12:32:18 2023 +0000
-
-    reiserfs: Add security prefix to xattr name in reiserfs_security_write()
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13f94263280000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=10054263280000
-console output: https://syzkaller.appspot.com/x/log.txt?x=17f94263280000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+7cc52cbcdeb02a4b0828@syzkaller.appspotmail.com
-Fixes: d82dcd9e21b7 ("reiserfs: Add security prefix to xattr name in reiserfs_security_write()")
-
-------------[ cut here ]------------
-kernel BUG at fs/reiserfs/journal.c:1452!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 4991 Comm: syz-executor756 Not tainted 6.4.0-rc5-syzkaller-00245-g64569520920a #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-RIP: 0010:flush_journal_list+0x1c33/0x1c70 fs/reiserfs/journal.c:1452
-Code: dc 38 85 8c 48 c7 c1 c0 07 fc 8a e8 07 58 fb ff e8 d2 13 59 ff 0f 0b e8 cb 13 59 ff 0f 0b e8 c4 13 59 ff 0f 0b e8 bd 13 59 ff <0f> 0b e8 b6 13 59 ff 0f 0b e8 af 13 59 ff 0f 0b e8 a8 13 59 ff 0f
-RSP: 0018:ffffc900039ff5f0 EFLAGS: 00010293
-RAX: ffffffff82326be3 RBX: 0000000000000001 RCX: ffff888021d43b80
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffffffff82325675 R09: ffffed100e89fd06
-R10: 0000000000000000 R11: dffffc0000000001 R12: ffff8880744fe828
-R13: ffffc90003a930d8 R14: 1ffff1100e89fd05 R15: 1ffff9200075261d
-FS:  0000555555bbb300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000555555bc4628 CR3: 0000000019345000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- flush_older_journal_lists fs/reiserfs/journal.c:1318 [inline]
- flush_journal_list+0xea7/0x1c70 fs/reiserfs/journal.c:1575
- do_journal_end+0x3170/0x4770 fs/reiserfs/journal.c:4301
- do_journal_release+0x47c/0x4d0 fs/reiserfs/journal.c:1940
- journal_release+0x1f/0x30 fs/reiserfs/journal.c:1971
- reiserfs_put_super+0x23b/0x4c0 fs/reiserfs/super.c:616
- generic_shutdown_super+0x134/0x340 fs/super.c:500
- kill_block_super+0x84/0xf0 fs/super.c:1407
- deactivate_locked_super+0xa4/0x110 fs/super.c:331
- cleanup_mnt+0x426/0x4c0 fs/namespace.c:1177
- task_work_run+0x24a/0x300 kernel/task_work.c:179
- ptrace_notify+0x2cd/0x380 kernel/signal.c:2371
- ptrace_report_syscall include/linux/ptrace.h:411 [inline]
- ptrace_report_syscall_exit include/linux/ptrace.h:473 [inline]
- syscall_exit_work kernel/entry/common.c:252 [inline]
- syscall_exit_to_user_mode_prepare kernel/entry/common.c:279 [inline]
- __syscall_exit_to_user_mode_work kernel/entry/common.c:284 [inline]
- syscall_exit_to_user_mode+0x157/0x280 kernel/entry/common.c:297
- do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f7d17bbaf57
-Code: 07 00 48 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff15fe9e38 EFLAGS: 00000202 ORIG_RAX: 00000000000000a6
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f7d17bbaf57
-RDX: 00007fff15fe9ef9 RSI: 000000000000000a RDI: 00007fff15fe9ef0
-RBP: 00007fff15fe9ef0 R08: 00000000ffffffff R09: 00007fff15fe9cd0
-R10: 0000555555bbc653 R11: 0000000000000202 R12: 00007fff15feaf60
-R13: 0000555555bbc5f0 R14: 00007fff15fe9e60 R15: 0000000000000001
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:flush_journal_list+0x1c33/0x1c70 fs/reiserfs/journal.c:1452
-Code: dc 38 85 8c 48 c7 c1 c0 07 fc 8a e8 07 58 fb ff e8 d2 13 59 ff 0f 0b e8 cb 13 59 ff 0f 0b e8 c4 13 59 ff 0f 0b e8 bd 13 59 ff <0f> 0b e8 b6 13 59 ff 0f 0b e8 af 13 59 ff 0f 0b e8 a8 13 59 ff 0f
-RSP: 0018:ffffc900039ff5f0 EFLAGS: 00010293
-RAX: ffffffff82326be3 RBX: 0000000000000001 RCX: ffff888021d43b80
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffffffff82325675 R09: ffffed100e89fd06
-R10: 0000000000000000 R11: dffffc0000000001 R12: ffff8880744fe828
-R13: ffffc90003a930d8 R14: 1ffff1100e89fd05 R15: 1ffff9200075261d
-FS:  0000555555bbb300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000000045bd60 CR3: 0000000019345000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+arch/powerpc/lib/copypage_power7.S: Assembler messages:
+arch/powerpc/lib/copypage_power7.S:34: Error: junk at end of line: `0b01000=
+'
+arch/powerpc/lib/copypage_power7.S:35: Error: junk at end of line: `0b01010=
+'
+arch/powerpc/lib/copypage_power7.S:37: Error: junk at end of line: `0b01000=
+'
+arch/powerpc/lib/copypage_power7.S:38: Error: junk at end of line: `0b01010=
+'
+arch/powerpc/lib/copypage_power7.S:40: Error: junk at end of line: `0b01010=
+'
+clang: error: assembler command failed with exit code 1 (use -v to see
+invocation)
+make[4]: *** [scripts/Makefile.build:382:
+arch/powerpc/lib/copypage_power7.o] Error 1
+make[4]: Target 'arch/powerpc/lib/' not remade because of errors.
+make[3]: *** [scripts/Makefile.build:500: arch/powerpc/lib] Error 2
+arch/powerpc/kernel/exceptions-64s.S: Assembler messages:
+arch/powerpc/kernel/exceptions-64s.S:2959: Error: junk at end of line: `0b0=
+1010'
+arch/powerpc/kernel/exceptions-64s.S:2979: Error: junk at end of line: `0b0=
+1010'
+arch/powerpc/kernel/exceptions-64s.S:2994: Error: junk at end of line: `0b0=
+1010'
+arch/powerpc/kernel/exceptions-64s.S:3012: Error: junk at end of line: `0b0=
+1010'
+arch/powerpc/kernel/exceptions-64s.S:3032: Error: junk at end of line: `0b0=
+1010'
+arch/powerpc/kernel/exceptions-64s.S:3079: Error: junk at end of line: `0b0=
+1010'
+clang: error: assembler command failed with exit code 1 (use -v to see
+invocation)
+make[4]: *** [scripts/Makefile.build:382: arch/powerpc/kernel/head_64.o] Er=
+ror 1
+arch/powerpc/kernel/entry_64.S: Assembler messages:
+arch/powerpc/kernel/entry_64.S:172: Error: junk at end of line: `0b01010'
+clang: error: assembler command failed with exit code 1 (use -v to see
+invocation)
+make[4]: *** [scripts/Makefile.build:382:
+arch/powerpc/kernel/entry_64.o] Error 1
+make[4]: Target 'arch/powerpc/kernel/' not remade because of errors.
+make[3]: *** [scripts/Makefile.build:500: arch/powerpc/kernel] Error 2
+make[3]: Target 'arch/powerpc/' not remade because of errors.
+make[2]: *** [scripts/Makefile.build:500: arch/powerpc] Error 2
+make[2]: Target './' not remade because of errors.
+make[1]: *** [Makefile:2012: .] Error 2
+make[1]: Target '__all' not remade because of errors.
+make: *** [Makefile:238: __sub-make] Error 2
+make: Target '__all' not remade because of errors.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Links,
+- https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1=
+.33-133-g08f336c8c68d/testrun/17475368/suite/build/test/clang-nightly-cell_=
+defconfig/history/
+- https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1=
+.33-133-g08f336c8c68d/testrun/17475373/suite/build/test/clang-nightly-maple=
+_defconfig/history/
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
 
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+--
+Linaro LKFT
+https://lkft.linaro.org
