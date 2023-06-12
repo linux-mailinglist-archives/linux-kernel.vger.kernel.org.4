@@ -2,190 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFB5972B959
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 09:57:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9581272B8FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 09:46:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235652AbjFLH5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 03:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35638 "EHLO
+        id S234935AbjFLHqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 03:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235077AbjFLH4k (ORCPT
+        with ESMTP id S235398AbjFLHqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 03:56:40 -0400
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A761BEB
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 00:55:53 -0700 (PDT)
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-51669dd574aso1047650a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 00:55:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686556534; x=1689148534;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8atXZoT1043zoF0AV+s/iPvTpj1b62bruyUjnsB0cvs=;
-        b=CKt4pg+tCee9u06Ds+Fu+MbcN1s7jnkuZtumq+olB2GDUakEcf5SiYSXTmr9VGojbU
-         nu3W3l6md4zR68lvux88+m2GISkwUrPMgpFEbS8Gtv8Ft8QHoTZtdHJuqmhMzqFGGW8L
-         c8vEtrTIUG53exLIVKl6iKqCw8egrvquBH14er132jC4O95tmZCBSep+bqmpGZwebD2C
-         U6mxQAycKMpJJieekbZt72NPuXBy/wvcN/nUJe1BGwOHJ7OWl3YGwfUAuC9t5Ta84Pto
-         T00Bghv/cAId86bDiB6SZ0D0UDcvPuZaJEuPebildz/zeivRKtlhmo6amDIwdGdHrNGf
-         8gFw==
-X-Gm-Message-State: AC+VfDz97QnzPCcjy30NX3CA3eJPffKx8mc9ubMDs6zW0fAdlSJJpK7r
-        vjvJz10QIFMfP5eFcZuxM+eAWwmAIJc=
-X-Google-Smtp-Source: ACHHUZ7maAbmSth6MfGoaJGsA2c1PpprEyO0wMcPcFlkjZp1P6ViPI3nHS+BLQDEuXbQr9VIBU1b7Q==
-X-Received: by 2002:a05:600c:3843:b0:3f7:1483:b229 with SMTP id s3-20020a05600c384300b003f71483b229mr6538633wmr.3.1686551814910;
-        Sun, 11 Jun 2023 23:36:54 -0700 (PDT)
-Received: from [192.168.64.192] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
-        by smtp.gmail.com with ESMTPSA id y24-20020a05600c365800b003f735ba7736sm10268780wmq.46.2023.06.11.23.36.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 11 Jun 2023 23:36:54 -0700 (PDT)
-Message-ID: <7a17d0f9-c624-2b30-476e-1a039f978c4e@grimberg.me>
-Date:   Mon, 12 Jun 2023 09:36:53 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [RFC PATCH 0/4] nvme-tcp: fix hung issues for deleting
-Content-Language: en-US
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     =?UTF-8?B?6K645pil5YWJ?= <brookxu.cn@gmail.com>, kbusch@kernel.org,
-        axboe@kernel.dk, hch@lst.de, linux-nvme@lists.infradead.org,
+        Mon, 12 Jun 2023 03:46:45 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E041729
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 00:46:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686555972; x=1718091972;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=SAQMgb3bEhPtdx+c6WuJkLQHwIW8d3NCrLoMI96JZRU=;
+  b=nn85LcOWC6p1IBbdQ0D2bxGuEVn9yA9LT5My8vJier8uMLQSjQp/z2Ol
+   aUoP9CgOCTGgJU1bPiH5MpJhc6aAKA+g3VVUoy3WnOf+83ZzYBK+Y8NXR
+   l38KhaViYiU8nkCOr3LJKnrMMBeZsdeot8aUWS/T8xUBnPoTawFqSU0RS
+   QXRW3+zsw3Lq0PZk6OlQqD1HjVMFA9GlcrhNpq8u0WBoOM3RrOK0CAxj9
+   plAD5+xPYOISNVcsCXZttE2jYkYO5wNKOllQ1EFn0meRCZpPB06orFCwu
+   xBfWQAa4gt1uuUkc4+97wfd9VYu3sicbg8AAEfYFcj66ax1PS45chRkVG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="423839310"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="423839310"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2023 23:40:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="776234058"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="776234058"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2023 23:40:11 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     akpm@linux-foundation.org, mgorman@techsingularity.net,
+        vbabka@suse.cz, david@redhat.com, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-References: <cover.1685350577.git.chunguang.xu@shopee.com>
- <ZH9NcBtrDxwq5xRU@ovpn-8-17.pek2.redhat.com>
- <CADtkEeeVWZ_b9mDWzwaq_5hdfZ53-RX2rd1SDDem=YsSBQ_g8A@mail.gmail.com>
- <ZIEnQpAgeqm0xcQP@ovpn-8-23.pek2.redhat.com>
- <febff498-63e6-efe2-2f5a-9a9fa7e767c0@grimberg.me>
- <ZIZ10UGQOJCWgjkX@ovpn-8-23.pek2.redhat.com>
-From:   Sagi Grimberg <sagi@grimberg.me>
-In-Reply-To: <ZIZ10UGQOJCWgjkX@ovpn-8-23.pek2.redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH] mm: compaction: skip memory hole rapidly when isolating
+ migratable pages
+References: <8cc668b77c8eb2fa78058b3d81386ebed9c5a9cd.1686294549.git.baolin.wang@linux.alibaba.com>
+Date:   Mon, 12 Jun 2023 14:39:03 +0800
+In-Reply-To: <8cc668b77c8eb2fa78058b3d81386ebed9c5a9cd.1686294549.git.baolin.wang@linux.alibaba.com>
+        (Baolin Wang's message of "Fri, 9 Jun 2023 17:45:54 +0800")
+Message-ID: <87sfax6v7c.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Baolin Wang <baolin.wang@linux.alibaba.com> writes:
 
->>>> Hi Ming:
->>>>
->>>> Ming Lei <ming.lei@redhat.com> 于2023年6月6日周二 23:15写道：
->>>>>
->>>>> Hello Chunguang,
->>>>>
->>>>> On Mon, May 29, 2023 at 06:59:22PM +0800, brookxu.cn wrote:
->>>>>> From: Chunguang Xu <chunguang.xu@shopee.com>
->>>>>>
->>>>>> We found that nvme_remove_namespaces() may hang in flush_work(&ctrl->scan_work)
->>>>>> while removing ctrl. The root cause may due to the state of ctrl changed to
->>>>>> NVME_CTRL_DELETING while removing ctrl , which intterupt nvme_tcp_error_recovery_work()/
->>>>>> nvme_reset_ctrl_work()/nvme_tcp_reconnect_or_remove().  At this time, ctrl is
->>>>>
->>>>> I didn't dig into ctrl state check in these error handler yet, but error
->>>>> handling is supposed to provide forward progress for any controller state.
->>>>>
->>>>> Can you explain a bit how switching to DELETING interrupts the above
->>>>> error handling and breaks the forward progress guarantee?
->>>>
->>>> Here we freezed ctrl, if ctrl state has changed to DELETING or
->>>> DELETING_NIO(by nvme disconnect),  we will break up and lease ctrl
->>>> freeze, so nvme_remove_namespaces() hang.
->>>>
->>>> static void nvme_tcp_error_recovery_work(struct work_struct *work)
->>>> {
->>>>           ...
->>>>           if (!nvme_change_ctrl_state(ctrl, NVME_CTRL_CONNECTING)) {
->>>>                   /* state change failure is ok if we started ctrl delete */
->>>>                   WARN_ON_ONCE(ctrl->state != NVME_CTRL_DELETING &&
->>>>                                ctrl->state != NVME_CTRL_DELETING_NOIO);
->>>>                   return;
->>>>           }
->>>>
->>>>           nvme_tcp_reconnect_or_remove(ctrl);
->>>> }
->>>>
->>>>
->>>> Another path, we will check ctrl state while reconnecting, if it changes to
->>>> DELETING or DELETING_NIO, we will break up and lease ctrl freeze and
->>>> queue quiescing (through reset path), as a result Hang occurs.
->>>>
->>>> static void nvme_tcp_reconnect_or_remove(struct nvme_ctrl *ctrl)
->>>> {
->>>>           /* If we are resetting/deleting then do nothing */
->>>>           if (ctrl->state != NVME_CTRL_CONNECTING) {
->>>>                   WARN_ON_ONCE(ctrl->state == NVME_CTRL_NEW ||
->>>>                           ctrl->state == NVME_CTRL_LIVE);
->>>>                   return;
->>>>           }
->>>>           ...
->>>> }
->>>>
->>>>>> freezed and queue is quiescing . Since scan_work may continue to issue IOs to
->>>>>> load partition table, make it blocked, and lead to nvme_tcp_error_recovery_work()
->>>>>> hang in flush_work(&ctrl->scan_work).
->>>>>>
->>>>>> After analyzation, we found that there are mainly two case:
->>>>>> 1. Since ctrl is freeze, scan_work hang in __bio_queue_enter() while it issue
->>>>>>      new IO to load partition table.
->>>>>
->>>>> Yeah, nvme freeze usage is fragile, and I suggested to move
->>>>> nvme_start_freeze() from nvme_tcp_teardown_io_queues to
->>>>> nvme_tcp_configure_io_queues(), such as the posted change on rdma:
->>>>>
->>>>> https://lore.kernel.org/linux-block/CAHj4cs-4gQHnp5aiekvJmb6o8qAcb6nLV61uOGFiisCzM49_dg@mail.gmail.com/T/#ma0d6bbfaa0c8c1be79738ff86a2fdcf7582e06b0
->>>>
->>>> While drive reconnecting, I think we should freeze ctrl or quiescing queue,
->>>> otherwise nvme_fail_nonready_command()may return BLK_STS_RESOURCE,
->>>> and the IOs may retry frequently. So I think we may better freeze ctrl
->>>> while entering
->>>> error_recovery/reconnect, but need to unfreeze it while exit.
->>>
->>> quiescing is always done in error handling, and freeze is actually
->>> not a must, and it is easier to cause race by calling freeze & unfreeze
->>> from different contexts.
->>>
->>> But yes, unquiesce should have been done after exiting error handling, or
->>> simply do it in nvme_unquiesce_io_queues().
->>>
->>> And the following patch should cover all these hangs:
->>>
->>
->> Ming, are you sending a formal patchset for this?
-> 
-> Not yet, will do it.
+> On some machines, the normal zone can have a large memory hole like
+> below memory layout, and we can see the range from 0x100000000 to
+> 0x1800000000 is a hole. So when isolating some migratable pages, the
+> scanner can meet the hole and it will take more time to skip the large
+> hole. From my measurement, I can see the isolation scanner will take
+> 80us ~ 100us to skip the large hole [0x100000000 - 0x1800000000].
+>
+> So adding a new helper to fast search next online memory section
+> to skip the large hole can help to find next suitable pageblock
+> efficiently. With this patch, I can see the large hole scanning only
+> takes < 1us.
+>
+> [    0.000000] Zone ranges:
+> [    0.000000]   DMA      [mem 0x0000000040000000-0x00000000ffffffff]
+> [    0.000000]   DMA32    empty
+> [    0.000000]   Normal   [mem 0x0000000100000000-0x0000001fa7ffffff]
+> [    0.000000] Movable zone start for each node
+> [    0.000000] Early memory node ranges
+> [    0.000000]   node   0: [mem 0x0000000040000000-0x0000000fffffffff]
+> [    0.000000]   node   0: [mem 0x0000001800000000-0x0000001fa3c7ffff]
+> [    0.000000]   node   0: [mem 0x0000001fa3c80000-0x0000001fa3ffffff]
+> [    0.000000]   node   0: [mem 0x0000001fa4000000-0x0000001fa402ffff]
+> [    0.000000]   node   0: [mem 0x0000001fa4030000-0x0000001fa40effff]
+> [    0.000000]   node   0: [mem 0x0000001fa40f0000-0x0000001fa73cffff]
+> [    0.000000]   node   0: [mem 0x0000001fa73d0000-0x0000001fa745ffff]
+> [    0.000000]   node   0: [mem 0x0000001fa7460000-0x0000001fa746ffff]
+> [    0.000000]   node   0: [mem 0x0000001fa7470000-0x0000001fa758ffff]
+> [    0.000000]   node   0: [mem 0x0000001fa7590000-0x0000001fa7ffffff]
+>
+> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> ---
+>  include/linux/mmzone.h | 10 ++++++++++
+>  mm/compaction.c        | 23 ++++++++++++++++++++++-
+>  2 files changed, 32 insertions(+), 1 deletion(-)
+>
+> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+> index 5a7ada0413da..87e6c535d895 100644
+> --- a/include/linux/mmzone.h
+> +++ b/include/linux/mmzone.h
+> @@ -2000,6 +2000,16 @@ static inline unsigned long next_present_section_nr(unsigned long section_nr)
+>  	return -1;
+>  }
+>  
+> +static inline unsigned long next_online_section_nr(unsigned long section_nr)
+> +{
+> +	while (++section_nr <= __highest_present_section_nr) {
+> +		if (online_section_nr(section_nr))
+> +			return section_nr;
+> +	}
+> +
+> +	return -1UL;
+> +}
+> +
+>  /*
+>   * These are _only_ used during initialisation, therefore they
+>   * can use __initdata ...  They could have names to indicate
+> diff --git a/mm/compaction.c b/mm/compaction.c
+> index 3398ef3a55fe..3a55fdd20c49 100644
+> --- a/mm/compaction.c
+> +++ b/mm/compaction.c
+> @@ -229,6 +229,21 @@ static void reset_cached_positions(struct zone *zone)
+>  				pageblock_start_pfn(zone_end_pfn(zone) - 1);
+>  }
+>  
+> +static unsigned long skip_hole_pageblock(unsigned long start_pfn)
+> +{
+> +	unsigned long next_online_nr;
+> +	unsigned long start_nr = pfn_to_section_nr(start_pfn);
+> +
+> +	if (online_section_nr(start_nr))
+> +		return -1UL;
 
-Would like it to get to the next pull request going out this week...
+Define a macro for the maigic "-1UL"?  Which is used for multiple times
+in the patch.
 
->>> diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
->>> index 3ec38e2b9173..83d3818fc60b 100644
->>> --- a/drivers/nvme/host/core.c
->>> +++ b/drivers/nvme/host/core.c
->>> @@ -4692,6 +4692,9 @@ void nvme_remove_namespaces(struct nvme_ctrl *ctrl)
->>>    	 */
->>>    	nvme_mpath_clear_ctrl_paths(ctrl);
->>> +	/* unquiesce io queues so scan work won't hang */
->>> +	nvme_unquiesce_io_queues(ctrl);
->>
->> What guarantees that the queues won't be quiesced right after this
->> by the transport?
-> 
-> Please see nvme_change_ctrl_state(), if controller state is in
-> DELETING, new NVME_CTRL_RESETTING/NVME_CTRL_CONNECTING can be entered
-> any more.
+> +
+> +	next_online_nr = next_online_section_nr(start_nr);
+> +	if (next_online_nr != -1UL)
+> +		return section_nr_to_pfn(next_online_nr);
+> +
+> +	return -1UL;
+> +}
+> +
+>  /*
+>   * Compound pages of >= pageblock_order should consistently be skipped until
+>   * released. It is always pointless to compact pages of such order (if they are
+> @@ -1991,8 +2006,14 @@ static isolate_migrate_t isolate_migratepages(struct compact_control *cc)
+>  
+>  		page = pageblock_pfn_to_page(block_start_pfn,
+>  						block_end_pfn, cc->zone);
+> -		if (!page)
+> +		if (!page) {
+> +			unsigned long next_pfn;
+> +
+> +			next_pfn = skip_hole_pageblock(block_start_pfn);
+> +			if (next_pfn != -1UL)
+> +				block_end_pfn = next_pfn;
+>  			continue;
+> +		}
+>  
+>  		/*
+>  		 * If isolation recently failed, do not retry. Only check the
 
-Yes, this relies on the fact that nvme_remove_namespaces is only called
-after DELETING state was set. ok.
+Do we need to do similar change in isolate_freepages()?
 
->> I'm still unclear why this affects the scan_work?
-> 
-> As Chunguang mentioned, if error recover is terminated by nvme deletion,
-> the controller can be kept in quiesced state, then in-queue IOs can'tu
-> move on, meantime new error recovery can't be started successfully because
-> controller state is NVME_CTRL_DELETING, so any pending IOs(include those
-> from scan context) can't be completed.
-
-Yes. please separate to individual patches when submitting though.
+Best Regards,
+Huang, Ying
