@@ -2,93 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EA5572CD35
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B0FD72CD3A
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236135AbjFLRuj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 12 Jun 2023 13:50:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53790 "EHLO
+        id S236071AbjFLRvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 13:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234475AbjFLRug (ORCPT
+        with ESMTP id S235386AbjFLRvp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 13:50:36 -0400
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460D8A1;
-        Mon, 12 Jun 2023 10:50:32 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-9787d11a410so98279666b.0;
-        Mon, 12 Jun 2023 10:50:32 -0700 (PDT)
+        Mon, 12 Jun 2023 13:51:45 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4B498
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:51:44 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9745d99cfccso806949166b.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:51:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1686592302; x=1689184302;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HgioPKcaHc+2ScCYWNcCop9oGPk4yLITypWHe3V71TQ=;
+        b=ZITGtXB29M2sUayESWUa4yYDVHxmeRumG3nNzNMoACaIgIv9DKL3lms2+WphPAMwo9
+         nqmPR9r8HDoOikRrGFyhIJlqgbyEHUfHwA8Nbtar8VVlX2+H6BxJzkaFq4760a61t3KQ
+         YVWsuDad5G/oZ8MWSQwr8X2XJHqQ9zvF4tZYk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686592231; x=1689184231;
+        d=1e100.net; s=20221208; t=1686592302; x=1689184302;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Wvyyw0RH8M6wqUGKw3iOenKs+/MxXTFepExt8iHfBqM=;
-        b=iA39MQU5re4n+sweXAr064qhrHr+XJx8jIhpRZJ3dnBFZaohWC/DqAAnPYP/mWxZTK
-         dti6XmXam9QQtoXae7slArIVhS+/LvvallbUfTGjWdGiN4acAyTjsXZlshL8GYbJ5U3q
-         aa12I422OCK/YvpbgsKzV+D82jVMuX3EMARHG94qvFj4Ki4KcyoMm5h5sP6a1jXsjrJq
-         InkU5C6nUYpC4zRK1flBCHNsjmBEDtAP9d1rcGHEPk/4+FOY+FpZOkUlv4b2Gl0k9rs6
-         b2doU5nlQlrvkzVxyVI7u6EbUwOrZsJ4ouOFUvqNJbtYQQ66sJ/YfU55L1ZAVp35nFxi
-         RcUg==
-X-Gm-Message-State: AC+VfDyEoReiC/U7vUwIZWvUBTe7AfJZ3tk3bSS7fXu8/EawpQWq4USn
-        zDs4R7eaOxt/1dbE3xkxkR43nFDEe7Wuv3VPHfLyWIt8
-X-Google-Smtp-Source: ACHHUZ48EwYeJ/hSMZnwj4sh7Sw3R37wzvPOsSt8Oh7LDPDCuTIxgM51IrMmr4+YgLo/RDdy9XTvKwb38fBxVT1NRiM=
-X-Received: by 2002:a17:906:7a03:b0:977:cbc4:5d8 with SMTP id
- d3-20020a1709067a0300b00977cbc405d8mr8767410ejo.4.1686592230594; Mon, 12 Jun
- 2023 10:50:30 -0700 (PDT)
+        bh=HgioPKcaHc+2ScCYWNcCop9oGPk4yLITypWHe3V71TQ=;
+        b=CMaRqZKPUvenIEQsDs6eezQsYj8C7Zk+gxWz54MGzBLzH8102G0CPtGX7k4BCIMfDC
+         LWdNBk1zsd4Eb52QLqPoAv7B0QLAJlWp1M8mgX3Obv0Qat/ET+t+xJmQpPq3ZDEtlFuR
+         qcBt7PJuv+PxofFk5b+LWdxgPRBfvWsYqSZpAbTnGaWZdOOcdKbXJJpQwMqo1Jw8FHDy
+         nqw+h/szgDL5G8CiqCkx4qPnBw7bhbcn+FmBv4DsKQ1tWQxUE59JB48cXU8zo2OGFYjJ
+         S5kWuTAmqn5lxl065BiJnRPLJSERLEayNSoEAQBwBy21VK0c8OKs5+gtEbs1KzgYgTR2
+         BFbg==
+X-Gm-Message-State: AC+VfDxxaE723Diax25JcBf2Z/8vFl0mfrKDB0tGuFZaxeFqcmeqZe03
+        Ujjf3WXsP4mTN8uvEU73610MO7P7OhrTiMcH0ls/iFtO
+X-Google-Smtp-Source: ACHHUZ7WDoT7njQmrLphpNUnarsxnf/JQZAQv25XM59ReDRf2UOSo7P534Qdta6qzby4BzI0A/gojQ==
+X-Received: by 2002:a17:907:70a:b0:96f:a935:8997 with SMTP id xb10-20020a170907070a00b0096fa9358997mr10864309ejb.12.1686592302298;
+        Mon, 12 Jun 2023 10:51:42 -0700 (PDT)
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
+        by smtp.gmail.com with ESMTPSA id n24-20020a170906165800b00977c7566ccbsm5482386ejd.164.2023.06.12.10.51.41
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 10:51:41 -0700 (PDT)
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5149b63151aso7804441a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:51:41 -0700 (PDT)
+X-Received: by 2002:aa7:d753:0:b0:516:af22:bccc with SMTP id
+ a19-20020aa7d753000000b00516af22bcccmr5384633eds.21.1686592301040; Mon, 12
+ Jun 2023 10:51:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230606140000.385223-1-rui.zhang@intel.com> <202306062334.5Z1NkD1F-lkp@intel.com>
- <62b7e97ede85927cd523578be0b702723043d92b.camel@intel.com>
-In-Reply-To: <62b7e97ede85927cd523578be0b702723043d92b.camel@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 12 Jun 2023 19:50:19 +0200
-Message-ID: <CAJZ5v0higwL64NP4tFfOwVog1daSBsUTdh+M5ocZqDi14cYVDQ@mail.gmail.com>
-Subject: Re: [PATCH] powercap: intel_rapl: Fix CONFIG_IOSF_MBI dependency
-To:     "Zhang, Rui" <rui.zhang@intel.com>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        lkp <lkp@intel.com>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
-        "arnd@arndb.de" <arnd@arndb.de>
+References: <20230611124836.whfktwaumnefm5z5@zlang-mailbox>
+ <ZIZSPyzReZkGBEFy@dread.disaster.area> <20230612015145.GA11441@frogsfrogsfrogs>
+ <ZIaBQnCKJ6NsqGhd@dread.disaster.area> <CAHk-=whJqZLKPR-cpX-V4wJTXVX-_tG5Vjuj2q9knvKGCPdfkg@mail.gmail.com>
+ <20230612153629.GA11427@frogsfrogsfrogs> <CAHk-=wiN-JcUh4uhDNmA4hp26Mg+c2DTuzgWY2fZ6hytDtOMCg@mail.gmail.com>
+ <af31cadf-8c15-8d88-79fb-066dc87f0324@kernel.dk> <13d9e4f2-17c5-0709-0cc0-6f92bfe9f30d@kernel.dk>
+ <CAHk-=wgdBfqyNHk0iNyYpEuBUdVgq1KMzHMuEqn=ADtfyK_pkQ@mail.gmail.com>
+ <212a190c-f81e-2876-cf14-6d1e37d47192@kernel.dk> <CAHk-=wh0hrFjcU5C8uHvLBThrT5vQsFHb7Jk6HRP3LAJqdNx1A@mail.gmail.com>
+ <ff34a007-fdd0-8575-8482-919ead39fc88@kernel.dk>
+In-Reply-To: <ff34a007-fdd0-8575-8482-919ead39fc88@kernel.dk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 12 Jun 2023 10:51:24 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whXt9+-YfhgjBYxT9_ATjHbMDZ0yJdK7umrJGU8zBVZ9w@mail.gmail.com>
+Message-ID: <CAHk-=whXt9+-YfhgjBYxT9_ATjHbMDZ0yJdK7umrJGU8zBVZ9w@mail.gmail.com>
+Subject: Re: [6.5-rc5 regression] core dump hangs (was Re: [Bug report]
+ fstests generic/051 (on xfs) hang on latest linux v6.5-rc5+)
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Zorro Lang <zlang@redhat.com>, linux-xfs@vger.kernel.org,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 7, 2023 at 4:23 AM Zhang, Rui <rui.zhang@intel.com> wrote:
+On Mon, Jun 12, 2023 at 10:29=E2=80=AFAM Jens Axboe <axboe@kernel.dk> wrote=
+:
 >
-> On Tue, 2023-06-06 at 23:45 +0800, kernel test robot wrote:
-> > Hi Zhang,
-> >
-> > kernel test robot noticed the following build errors:
-> >
-> > [auto build test ERROR on rafael-pm/linux-next]
-> > [also build test ERROR on next-20230606]
-> > [cannot apply to linus/master v6.4-rc5]
-> > [If your patch is applied to the wrong git tree, kindly drop us a
-> > note.
-> > And when submitting patch, we suggest to use '--base' as documented
-> > in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> >
-> > url:
-> > https://github.com/intel-lab-lkp/linux/commits/Zhang-Rui/powercap-intel_rapl-Fix-CONFIG_IOSF_MBI-dependency/20230606-220222
->
-> This is a false alarm from the robot.
-> It applied Arnd' patch first and then applied this patch on top.
->
-> I think we can ignore the lkp robot warnings for this thread.
+> Looks fine to me to just kill it indeed, whatever we did need this
+> for is definitely no longer the case. I _think_ we used to have
+> something in the worker exit that would potentially sleep which
+> is why we killed it before doing that, now it just looks like dead
+> code.
 
-OK
+Ok, can you (and the fsstress people) confirm that this
+whitespace-damaged patch fixes the coredump issue:
 
-Applied as 6.5 material, thanks!
+
+  --- a/io_uring/io-wq.c
+  +++ b/io_uring/io-wq.c
+  @@ -221,9 +221,6 @@ static void io_worker_exit(..
+        raw_spin_unlock(&wq->lock);
+        io_wq_dec_running(worker);
+        worker->flags =3D 0;
+  -     preempt_disable();
+  -     current->flags &=3D ~PF_IO_WORKER;
+  -     preempt_enable();
+
+        kfree_rcu(worker, rcu);
+        io_worker_ref_put(wq);
+
+Jens, I think that the two lines above there, ie the whole
+
+        io_wq_dec_running(worker);
+        worker->flags =3D 0;
+
+thing may actually be the (partial?) reason for those PF_IO_WORKER
+games. It's basically doing "now I'm doing stats by hand", and I
+wonder if now it decrements the running worker one time too much?
+
+Ie when the finally *dead* worker schedules away, never to return,
+that's when that io_wq_worker_sleeping() case triggers and decrements
+things one more time.
+
+So there might be some bookkeeping reason for those games, but it
+looks like if that's the case, then that
+
+        worker->flags =3D 0;
+
+will have already taken care of it.
+
+I wonder if those two lines could just be removed too. But I think
+that's separate from the "let's fix the core dumping" issue.
+
+           Linus
