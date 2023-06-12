@@ -2,218 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFCC772D087
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0431172D08A
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:35:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236928AbjFLUdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 16:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53686 "EHLO
+        id S236757AbjFLUet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 16:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235027AbjFLUds (ORCPT
+        with ESMTP id S231726AbjFLUem (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 16:33:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA013E53
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:33:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686601981;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=43J77l2MjvOeufIj2deKwRG8u6kAZJyfknPdAW9w59s=;
-        b=eBMuakVeMcC3eJgG5Srv803mdjUq+MiQNbICVR9CFATsN7bs5PiH8N9HBpWsW5Ptfjk0kU
-        diXw7VK5JvY3PSuNcv2DYlAeYvLsr1QleXvhcPPE1UwUnJ2bD90YJaXiNx7nYE8HpbVUJH
-        UG+ptB9jN0lWuhlsMfebI61vZusdmpc=
-Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
- [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-159-nsecc5YtOP6TlzSZR7Ch8w-1; Mon, 12 Jun 2023 16:33:00 -0400
-X-MC-Unique: nsecc5YtOP6TlzSZR7Ch8w-1
-Received: by mail-oo1-f70.google.com with SMTP id 006d021491bc7-55b0868fb32so2550929eaf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:32:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686601979; x=1689193979;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=43J77l2MjvOeufIj2deKwRG8u6kAZJyfknPdAW9w59s=;
-        b=adxPClkpSsJ+CM7eGDJVunXBPfbuTcSfHLBRqIbGNPRBUMCd99CosTN3LLsLvp+0C/
-         Nb7vDNxh4ho60w8QBxqsZDa6w65H3hWYa3d71N47v7Fv3VWALnywEXgJ1f4pBHZtKKAO
-         HwzFspugH/CeddYP4O/6p1MSUqDnT7fwXEnGAOloeDC0EJDuWPE7DmftMRUOZ+C/iRcw
-         4OLIKkR5fy8VclUefqgx/N1QeAve/XoxWI1hAQEQF8Rsmv5cvB2B3AQT0F6dEOA6vAmL
-         UWX/Vpf/xa6jFXrtBDa6bOAd1dkCcaeK+HO+Zqi3ieXzMxZfE072R58qwS/6GbSrcsXa
-         BXUQ==
-X-Gm-Message-State: AC+VfDx5U9aN0BI6MOvJozyXU3jALOCzPFX5aEr2iaZuNkXEevBf/czn
-        Yj39/pn1jZ+GT5I5dRBdxzYL7vxsMqDQUbCBcI0t8OYmYeZvbm1Km85QMm3wDfH8ZXT/y1tTmL/
-        v+5COEm+qWuJqULDiW+4aNobq
-X-Received: by 2002:a4a:eac3:0:b0:558:b3f1:1081 with SMTP id s3-20020a4aeac3000000b00558b3f11081mr5365955ooh.9.1686601979256;
-        Mon, 12 Jun 2023 13:32:59 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4vKyZqmPyAlZrIvh+fzGMNtvVVMAbuUA5odR16L7SaZeByU3UDtpAZGSfSXxbwRc/TkU6rpw==
-X-Received: by 2002:a4a:eac3:0:b0:558:b3f1:1081 with SMTP id s3-20020a4aeac3000000b00558b3f11081mr5365934ooh.9.1686601978975;
-        Mon, 12 Jun 2023 13:32:58 -0700 (PDT)
-Received: from halaney-x13s ([2600:1700:1ff0:d0e0::45])
-        by smtp.gmail.com with ESMTPSA id o4-20020a4aa804000000b0055affd1ca3csm3556530oom.1.2023.06.12.13.32.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 13:32:58 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 15:32:55 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH 12/26] net: stmmac: dwmac-qcom-ethqos: add support for
- the optional serdes phy
-Message-ID: <20230612203255.72t52ucry7zzq3em@halaney-x13s>
-References: <20230612092355.87937-1-brgl@bgdev.pl>
- <20230612092355.87937-13-brgl@bgdev.pl>
+        Mon, 12 Jun 2023 16:34:42 -0400
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2083.outbound.protection.outlook.com [40.107.104.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEAC9E54;
+        Mon, 12 Jun 2023 13:34:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VpMfclg851gubK6p2KKJhXK4unn1+QnY09MocKPO2MxwkzlPGBU+5dbffHniVozj0nHkeDdNomrSx7qht14zWxQ7sC82T3XeGraXTxFCldKeXnE2c5ciPnG1anssl3da6k5mnkMhB+gwp2aDOgkfKSyfGJYvIf6QOLHFvoAtgQPUP+MeWSwBhIBtl1JR+pOJIWTn0KxnnvkiD+5X3kDZt4S1cCGAn4g/fFtoh7/HaAqqwiQapN6EUbE4+0Y6OSRightOliFCXu+CB/W1u9z+mBJsciQg3GqeJXZMhZwb6thkXsHum0ZTzVRCs33xTWh9sb3S2b48d+P68as/rKSfpA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EBYYC5bby3Ju0K/sB1Q5Q20b9AxJBQlcwpNRxPQQF+Y=;
+ b=KmSAzLackMCYn26tlujGPFteKr+Gb27T5A2WPwnsB2vxd3qwhnmBTFUCXPJf1yXLga0hSx3TyQhG+FWljWRqH0OoNtfFiv+beXrUjOcdWOZG1rsrHsSGQRQJhB65dyuyYb53I4TFutJPuQSYWB/VAATF0F/L9rtlN8rbFX4KmnoZmUNGFu8pemdzAdgxQgnkCe+4LDh2vdPWGKB7ps5IPWvTV/Nyr+Cah0ukDNARxlCjAAas816vvhXEe6ogcHBBNNdpZCN9TJQqwWR4+JBqaJeVXek+Mk10BmOhmGS4nGu2+/5FSLROETVHy1764y3qq8BVHQOnorKJOC4IpqW5kA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EBYYC5bby3Ju0K/sB1Q5Q20b9AxJBQlcwpNRxPQQF+Y=;
+ b=WvxM64ZT8JdoN44sNDCJTWOCi9U3tQAMPzQ8zGIs786npAzt7ILVKoUDwgBu9Tjtfc3n1pFLdaoyBo4273Odo0Sc5QktmRd2bz9RNxfBGhyTqb+9JHL6UVL+Qkyphujd1TlIgWlbE7n+OXw6LQFIiwIloQWS+ESRHT9q+zHZU8Y=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB4845.eurprd04.prod.outlook.com (2603:10a6:803:51::30)
+ by AM9PR04MB8907.eurprd04.prod.outlook.com (2603:10a6:20b:40a::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Mon, 12 Jun
+ 2023 20:34:37 +0000
+Received: from VI1PR04MB4845.eurprd04.prod.outlook.com
+ ([fe80::602f:42ad:882a:5ca7]) by VI1PR04MB4845.eurprd04.prod.outlook.com
+ ([fe80::602f:42ad:882a:5ca7%3]) with mapi id 15.20.6455.045; Mon, 12 Jun 2023
+ 20:34:36 +0000
+From:   Frank Li <Frank.Li@nxp.com>
+To:     vkoul@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peng.fan@nxp.com, joy.zou@nxp.com, shenwei.wang@nxp.com,
+        imx@lists.linux.dev
+Subject: [PATCH v4 00/12] dmaengine: edma: add freescale edma v3 support
+Date:   Mon, 12 Jun 2023 16:34:06 -0400
+Message-Id: <20230612203418.2017769-1-Frank.Li@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ2PR07CA0016.namprd07.prod.outlook.com
+ (2603:10b6:a03:505::16) To VI1PR04MB4845.eurprd04.prod.outlook.com
+ (2603:10a6:803:51::30)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612092355.87937-13-brgl@bgdev.pl>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB4845:EE_|AM9PR04MB8907:EE_
+X-MS-Office365-Filtering-Correlation-Id: fbbce232-5291-47d2-21e7-08db6b847031
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tHg9zA4Y4goUKZHiSPhXW/w5Ib0pATBsy7AgHl/1J3Yl0+GY7rHWjHjnWRHFnT+zHZBeXMWLItL83GD3OLjNNGyHBYtB+cTFXo//4TeEonEqeduI3zw4/3pK0eZsc4ohjaoxDI98Bgn8A/JrQO/UhzQidC7E9R/WUcPAN1SqLpa3cYaj4ysIJK8QkxwTDTgmGwngcmtubHX/9mfje1XxUy0CRNXE70Hc0cMjvR9HvYow6X3Kg3AHU+2vJM9vpFSjf83F9VoFCEGa3AEL08E5Bqk9t+bVX7TBxUcQVCAS4IrNKxb53l6seVLt4/IxfNlkeF+dJF8RZUx04gDeJ2YjGRj5teBwIJDmHlgnOl/afYgiO4Gq8Pr6bcsFdaf4819pFZY8hYYuFEBaXlVgHWgVuZ3O+zuNcJDRBDlv0o/9XIfHCIHhlIS/AbH+/N/CKW/k4sS+yNEIoHLZ5JGFkeIT7+Gcpme5p5Pw++4OEtFxDRtrSyB+1BvRxrLFNCpomyACdFq3PrGMYpiIGgWnGFOx0KnUg86g9gPHHTf/NA8en9JZisngx1Kg9gMudNdy6GH/c4A4ICfkqVJO2s5uoQ6VRETBQJHmRbVUyVigRrAe5wTOTsTz1cJs09Ymo7PmgtFJ/3zfAF17AQvuQG/PYYseXw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4845.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(366004)(376002)(346002)(136003)(451199021)(66946007)(66476007)(66556008)(36756003)(186003)(478600001)(2616005)(2906002)(8676002)(316002)(41300700001)(86362001)(6486002)(921005)(6666004)(6506007)(1076003)(8936002)(83380400001)(5660300002)(26005)(52116002)(38100700002)(6512007)(38350700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cvD+wEpfTu2S+1rXr6xFj8czdDvWBbjF7YTt2UAt/t86TSCf7PfKpiERIw5A?=
+ =?us-ascii?Q?K9sYw10Ufr0aJraUNU8ohr6j2tnxbpDE48B60af2kvgDLCFJmlZuGO65hU8/?=
+ =?us-ascii?Q?94VC3TPDyOgLE5Rak67S1ooTiCEvaI1ZrktrtFxtCDVoMu/4zHlVeHOdWDnG?=
+ =?us-ascii?Q?pt/bP1STHnQWcBTBpg9UM2BgVxpcJufNRldzmBtaRZZvCsEklRruXJIm/MX0?=
+ =?us-ascii?Q?Q2LcoGur268+Y5ZRb4U6lHR8vguV70F1LL4qIM/W4s/o1RLH+tOT7nnspFi/?=
+ =?us-ascii?Q?+2kGyzPwGsukKT9bh/hIg0DMfn63n5uswzyv24T2jJrh//ejeKYuHZcSJPkG?=
+ =?us-ascii?Q?XklHsyRf4SBZbx6u8KQJJZr9djM8O/yO/Bp3bIhvzNEyUIVXzxLKLDUqxXuZ?=
+ =?us-ascii?Q?exrPE8MLvd9iIofygBE+VW0K9ASdR25o28f4EMkwq0W7YKLUQy8TsTxPxRtr?=
+ =?us-ascii?Q?DqxUkwONGIh883tYnyn11qTk3vANZ7IqHfUnsR8cCRFj0tcySe+reCaXht49?=
+ =?us-ascii?Q?RSL7xDyY/R1A7gq0Kvbm8mNnXCqvsiM/OdUF+zqIWZDDDeMy6fxJjQSwVRj0?=
+ =?us-ascii?Q?GfZNtn562TIskobQ9EP12tw+3jRUhyu0oJpg5/Y5XwDWivb6a+ytz+pK2c8R?=
+ =?us-ascii?Q?ZoPPh/32XW6OQ+DUdueGVBNBk+tPxEPscVSk52Kd6l+Pkkzn/yL7uDk9o0R0?=
+ =?us-ascii?Q?M66pWnW24TyYkf/Ok07RVxfXY8+mJZ805X3K/mIaH76kMlNVsOKxZkCAAdSs?=
+ =?us-ascii?Q?Hq4cupzAtz6I25XJNE1icaBUsymtir9NjbtRiHQzgMf165jYe6QHNV9Bg3Tx?=
+ =?us-ascii?Q?YcIa9V3ud7ls2C6rCQV2lLkD59fdlGremxRcLqKlcs9atQrADYbYtn1V3T2B?=
+ =?us-ascii?Q?nO0Tj37z0CclVHYPGGWYoiE4VxJN8VQSUM/pPr01uTeDGzqOtIXGdLEoeC+O?=
+ =?us-ascii?Q?Q5YcFz8QSRgDgFB1uFxEjPNjAnQabtJ8FwBSZaBEe1f0XjuRJgXE9ERxQQ/f?=
+ =?us-ascii?Q?jaB87uveq5gqBC/yD6qLilC2KJBFtQ/k1WgoYqoItdwhFa6MOR2+pATOrKcc?=
+ =?us-ascii?Q?uQar/RRaHwUV9PRPjkkyPUbpPlDZRlhVgIZXYDS6qJYIgMVKBfqLZTur1AGU?=
+ =?us-ascii?Q?06nOzURxUsc69oJwuaMZDBWMB+LjLZYzlkRsQ436K4/ElA8iDFKGPGpBR6BC?=
+ =?us-ascii?Q?ZBCpNBZmIZmjafZ/Fupk9mmfgV+HqAJxDiUvvv6EDB/YEQ8lqPP/BG7cTNG8?=
+ =?us-ascii?Q?93pHdZ6WuMCQKm41AkBtgC8HIwSfOw4PZTaeQXLm+JWXUVUCQf2xBZ/oTlHs?=
+ =?us-ascii?Q?tXlAbdy/byCr3SdfoypbZZaSCjYUmWZgaWaaLx3CQ8B3peI2KgG3FJ4YshTg?=
+ =?us-ascii?Q?LXeJh0590zw27kBHdpP50G0IB4XYUUUnoV2AKoW9rxQgJjCKZHHbNAjeMfIW?=
+ =?us-ascii?Q?Y+v6pLZBdOmPZCG1QrHcOe25NRKO6C7U6dgGMPfVHE1nSUkJqv/H3s7giNmJ?=
+ =?us-ascii?Q?Mv93C6F87QD8ewjvWd9FY9/TQ6rTQgKSFp6eCLGNdfH2eAPqqR4NzjHLDoYv?=
+ =?us-ascii?Q?ReWEJHlH31b1936u7OY=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fbbce232-5291-47d2-21e7-08db6b847031
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4845.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 20:34:36.7435
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZtQ0hHrkJM91JJnv7v564iGMjEEjhTY/eV+BkqCiHDMcqyNRTV5yGZD/RKAxRK/5+7mbqAlU8DtyF4Zcs9cZHA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8907
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 11:23:41AM +0200, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> On sa8775p platforms, there's a SGMII SerDes PHY between the MAC and
-> external PHY that we need to enable and configure.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
->  .../stmicro/stmmac/dwmac-qcom-ethqos.c        | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
-> 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-> index 8ed05f29fe8b..3438b6229351 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-> @@ -6,6 +6,7 @@
->  #include <linux/of_device.h>
->  #include <linux/platform_device.h>
->  #include <linux/phy.h>
-> +#include <linux/phy/phy.h>
->  #include <linux/property.h>
->  
->  #include "stmmac.h"
-> @@ -93,6 +94,7 @@ struct qcom_ethqos {
->  
->  	unsigned int rgmii_clk_rate;
->  	struct clk *rgmii_clk;
-> +	struct phy *serdes_phy;
->  	unsigned int speed;
->  
->  	const struct ethqos_emac_por *por;
-> @@ -566,6 +568,30 @@ static void ethqos_fix_mac_speed(void *priv, unsigned int speed)
->  	ethqos_configure(ethqos);
->  }
->  
-> +static int qcom_ethqos_serdes_powerup(struct net_device *ndev, void *priv)
-> +{
-> +	struct qcom_ethqos *ethqos = priv;
-> +	int ret;
-> +
-> +	ret = phy_set_speed(ethqos->serdes_phy, ethqos->speed);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = phy_init(ethqos->serdes_phy);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return phy_power_on(ethqos->serdes_phy);
+This patch series introduces support for the eDMA version 3 from
+Freescale. The eDMA v3 brings alterations in the register layout,
+particularly, the separation of channel control registers into
+different channels. The Transfer Control Descriptor (TCD) layout,
+however, remains identical with only the offset being changed.
 
-The docs say (phy.rst):
+The first ten patches aim at tidying up the existing Freescale
+eDMA code and laying the groundwork for the integration of eDMA v3
+support.
 
-    The general order of calls should be::
+Patch 1-10:
+These patches primarily focus on cleaning up and refactoring the existing
+fsl_edma driver code. This is to accommodate the upcoming changes and new
+features introduced with the eDMA v3.
 
-        [devm_][of_]phy_get()
-        phy_init()
-        phy_power_on()
-        [phy_set_mode[_ext]()]
-        ...
-        phy_power_off()
-        phy_exit()
-        [[of_]phy_put()]
+Patch 11:
+This patch introduces support for eDMA v3. In addition, this patch has
+been designed with an eye towards future upgradability, specifically for
+transitioning to eDMA v5. The latter involves a significant upgrade
+where the TCD address would need to support 64 bits.
 
-    Some PHY drivers may not implement :c:func:`phy_init` or :c:func:`phy_power_on`,
-    but controllers should always call these functions to be compatible with other
-    PHYs. Some PHYs may require :c:func:`phy_set_mode <phy_set_mode_ext>`, while
-    others may use a default mode (typically configured via devicetree or other
-    firmware). For compatibility, you should always call this function if you know
-    what mode you will be using. Generally, this function should be called after
-    :c:func:`phy_power_on`, although some PHY drivers may allow it at any time.
+Patch 12:
+This patch focuses on the device tree bindings and their modifications
+to properly handle and integrate the changes brought about by eDMA v3
 
-Not really dictating you need to do that order, but if possible I think
-calling phy_set_speed after init + power_on is more generic. Not sure if
-that plays nice with the phy driver in this series or not.
+Change from v3 to v4.
+- use dma-channel-mask instead of fsl,channel-mask
+- don't use dmamux after v3. only use flags to distinguish the IP
+difference
+- fixed 8qm and imx93 have not CH_MUX register. Previous can work
+because dmamux is 0.
 
-Otherwise, I think this looks good.
+Change from v2 to v3
+- dt-binding: add interrupt-names
+- dt-binding: add minItems
+- dt-binding: add missed property: fsl,channel-mask
+- rework patch 4, removed edma_version to avoid confuse with hardware
+IP version.
 
-> +}
-> +
-> +static void qcom_ethqos_serdes_powerdown(struct net_device *ndev, void *priv)
-> +{
-> +	struct qcom_ethqos *ethqos = priv;
-> +
-> +	phy_power_off(ethqos->serdes_phy);
-> +	phy_exit(ethqos->serdes_phy);
-> +}
-> +
->  static int ethqos_clks_config(void *priv, bool enabled)
->  {
->  	struct qcom_ethqos *ethqos = priv;
-> @@ -651,6 +677,12 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
->  	if (ret)
->  		goto out_config_dt;
->  
-> +	ethqos->serdes_phy = devm_phy_optional_get(dev, "serdes");
-> +	if (IS_ERR(ethqos->serdes_phy)) {
-> +		ret = PTR_ERR(ethqos->serdes_phy);
-> +		goto out_config_dt;
-> +	}
-> +
->  	ethqos->speed = SPEED_1000;
->  	ethqos_update_rgmii_clk(ethqos, SPEED_1000);
->  	ethqos_set_func_clk_en(ethqos);
-> @@ -666,6 +698,11 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
->  	if (of_device_is_compatible(np, "qcom,qcs404-ethqos"))
->  		plat_dat->rx_clk_runs_in_lpi = 1;
->  
-> +	if (ethqos->serdes_phy) {
-> +		plat_dat->serdes_powerup = qcom_ethqos_serdes_powerup;
-> +		plat_dat->serdes_powerdown  = qcom_ethqos_serdes_powerdown;
-> +	}
-> +
->  	ret = stmmac_dvr_probe(dev, plat_dat, &stmmac_res);
->  	if (ret)
->  		goto out_config_dt;
-> -- 
-> 2.39.2
-> 
+Change from v1 to v2
+- fixed issue found by make DT_CHECKER_FLAGS=-m dt_binding_check
+- fixed warning found by kernel test robot
+
+Frank Li (12):
+1   dmaengine: fsl-edma: clean up EXPORT_SYMBOL_GPL in fsl-edma-common.c
+2   dmaengine: fsl-edma: clean up fsl_edma_irq_exit()
+3   dmaengine: fsl-edma: transition from bool fields to bitmask flags in
+     drvdata
+4   dmaengine: fsl-edma: remove v3 from enum edma_version
+5   dmaengine: fsl-edma: move common IRQ handler to common.c
+6   dmaengine: fsl-edma: simply ATTR_DSIZE and ATTR_SSIZE by using ffs()
+7   dmaengine: fsl-edma: refactor using devm_clk_get_enabled
+8   dmaengine: fsl-edma: move clearing of register interrupt into
+     setup_irq function
+9   dmaengine: fsl-edma: refactor chan_name setup and safety
+10  dmaengine: fsl-edma: move tcd into struct fsl_dma_chan
+11  dmaengine: fsl-edma: integrate v3 support
+12  dt-bindings: fsl-dma: fsl-edma: add edma3 compatible string
+
+ .../devicetree/bindings/dma/fsl,edma.yaml     |  19 ++
+ drivers/dma/Makefile                          |   6 +-
+ drivers/dma/fsl-edma-common.c                 | 267 +++++++++++----
+ drivers/dma/fsl-edma-common.h                 | 119 ++++++-
+ drivers/dma/{fsl-edma.c => fsl-edma-main.c}   | 323 ++++++++++++++----
+ drivers/dma/{mcf-edma.c => mcf-edma-main.c}   |  34 +-
+ 6 files changed, 578 insertions(+), 190 deletions(-)
+ rename drivers/dma/{fsl-edma.c => fsl-edma-main.c} (62%)
+ rename drivers/dma/{mcf-edma.c => mcf-edma-main.c} (91%)
+
+-- 
+2.34.1
 
