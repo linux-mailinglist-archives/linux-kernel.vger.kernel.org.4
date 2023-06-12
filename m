@@ -2,57 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA0FD72D515
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 01:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33AA772D51A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 01:45:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233085AbjFLXne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 19:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
+        id S237691AbjFLXpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 19:45:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbjFLXnc (ORCPT
+        with ESMTP id S234190AbjFLXpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 19:43:32 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9733C10F9;
-        Mon, 12 Jun 2023 16:43:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=ZlWLeOXVICCHBRrKKLqL9aWEONQcjjN3Lm4aBMgVQww=; b=afaSMC5RX3j1M7bncFgFM7mWmn
-        mrpuVvRDOOxncD9USgGUmd40J82MMdkJFzoygBevKnC4I9Am7YuqcUQFy8xn0+f2pQm4LOMA5rMrh
-        g45HyceqwYRuW/3HlSbM9RohnR4Hr+YD2c6EV3EBr9YCf97J2K4OKIlEkhqbJXl/yeDdqCQ9K7gPd
-        USWddYyVs0xCuREGfQ9wM30iKR83Pr597FExFJMKMgZaWqB3O+CLIglpG3CTCCVA3rl8OvE5sdCNJ
-        Qgw8LdSAsFcHr4aArexARNQ+2pUSnJxUXTQcpnLUIkC2gs9GV8ZFa22OMT+c9UAaVkzZghWmoWG3q
-        AGI+tATQ==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q8rBn-006Azs-1T;
-        Mon, 12 Jun 2023 23:43:11 +0000
-Message-ID: <499ded51-3fb8-f11b-8776-08ab2e9a8812@infradead.org>
-Date:   Mon, 12 Jun 2023 16:43:09 -0700
+        Mon, 12 Jun 2023 19:45:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF5110F9;
+        Mon, 12 Jun 2023 16:45:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09359617D1;
+        Mon, 12 Jun 2023 23:45:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6862DC433EF;
+        Mon, 12 Jun 2023 23:45:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686613518;
+        bh=wiSNyZ18E7j0+vGKZGV00souZm1bq4VUlxQ/AgkGk+M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=J/MbfG7MqX/927qmjvcVnKooeZ6fLV4ndi1AMb2SvblEdbUjlOz3OsBYSj7Hb2YxX
+         p1UDScovbSf5bMhh7Wj5E9CIrguJ/9jISL1SL83WoQmh0XafXF+1pYkc/JWTCq0QZP
+         w8RNro1J+vNs9ODuH5Ry+9ABjZh9vMybvqv3FnW/Xa1DFv4gHlkZUV3ONDL42+45kw
+         9NkF5K7GWjvQHRD84IifFKUHQefevWPmINHyeKebUTarV7OZnETKsrrZdIvVFml7YD
+         Q5pXXPFTmIdOttGbUj2lZ+nxblghEnDRRXezc++cLqoqTE3lmI61WYh+dktineV29n
+         VYg0dlPUojOKg==
+Date:   Mon, 12 Jun 2023 16:45:15 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
+Cc:     jiri@resnulli.us, vadfed@meta.com, jonathan.lemon@gmail.com,
+        pabeni@redhat.com, corbet@lwn.net, davem@davemloft.net,
+        edumazet@google.com, vadfed@fb.com, jesse.brandeburg@intel.com,
+        anthony.l.nguyen@intel.com, saeedm@nvidia.com, leon@kernel.org,
+        richardcochran@gmail.com, sj@kernel.org, javierm@redhat.com,
+        ricardo.canuelo@collabora.com, mst@redhat.com, tzimmermann@suse.de,
+        michal.michalik@intel.com, gregkh@linuxfoundation.org,
+        jacek.lawrynowicz@linux.intel.com, airlied@redhat.com,
+        ogabbay@kernel.org, arnd@arndb.de, nipun.gupta@amd.com,
+        axboe@kernel.dk, linux@zary.sk, masahiroy@kernel.org,
+        benjamin.tissoires@redhat.com, geert+renesas@glider.be,
+        milena.olech@intel.com, kuniyu@amazon.com, liuhangbin@gmail.com,
+        hkallweit1@gmail.com, andy.ren@getcruise.com, razor@blackwall.org,
+        idosch@nvidia.com, lucien.xin@gmail.com, nicolas.dichtel@6wind.com,
+        phil@nwl.cc, claudiajkang@gmail.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, linux-rdma@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, poros@redhat.com,
+        mschmidt@redhat.com, linux-clk@vger.kernel.org,
+        vadim.fedorenko@linux.dev
+Subject: Re: [RFC PATCH v8 03/10] dpll: core: Add DPLL framework base
+ functions
+Message-ID: <20230612164515.6eacefb1@kernel.org>
+In-Reply-To: <20230609121853.3607724-4-arkadiusz.kubalewski@intel.com>
+References: <20230609121853.3607724-1-arkadiusz.kubalewski@intel.com>
+        <20230609121853.3607724-4-arkadiusz.kubalewski@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v4 11/11] blksnap: Kconfig and Makefile
-Content-Language: en-US
-To:     Sergei Shtepa <sergei.shtepa@veeam.com>, axboe@kernel.dk,
-        hch@infradead.org, corbet@lwn.net, snitzer@kernel.org
-Cc:     viro@zeniv.linux.org.uk, brauner@kernel.org, willy@infradead.org,
-        dlemoal@kernel.org, wsa@kernel.org,
-        heikki.krogerus@linux.intel.com, ming.lei@redhat.com,
-        gregkh@linuxfoundation.org, linux-block@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-References: <20230609115858.4737-1-sergei.shtepa@veeam.com>
- <20230609115858.4737-11-sergei.shtepa@veeam.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230609115858.4737-11-sergei.shtepa@veeam.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,33 +74,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/9/23 04:58, Sergei Shtepa wrote:
-> diff --git a/drivers/block/blksnap/Kconfig b/drivers/block/blksnap/Kconfig
-> new file mode 100644
-> index 000000000000..14081359847b
-> --- /dev/null
-> +++ b/drivers/block/blksnap/Kconfig
-> @@ -0,0 +1,12 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# Block device snapshot module configuration
-> +#
+On Fri,  9 Jun 2023 14:18:46 +0200 Arkadiusz Kubalewski wrote:
+> +	xa_for_each(xa_pins, i, ref) {
+> +		if (ref->pin != pin)
+> +			continue;
+> +		reg = dpll_pin_registration_find(ref, ops, priv);
+> +		if (reg) {
+> +			refcount_inc(&ref->refcount);
+> +			return 0;
+> +		}
+> +		ref_exists = true;
+> +		break;
+> +	}
 > +
-> +config BLKSNAP
-> +	tristate "Block Devices Snapshots Module (blksnap)"
-> +	help
-> +	  Allow to create snapshots and track block changes for block devices.
-> +	  Designed for creating backups for simple block devices. Snapshots are
-> +	  temporary and are released then backup is completed. Change block
+> +	if (!ref_exists) {
+> +		ref = kzalloc(sizeof(*ref), GFP_KERNEL);
+> +		if (!ref)
+> +			return -ENOMEM;
+> +		ref->pin = pin;
+> +		INIT_LIST_HEAD(&ref->registration_list);
+> +		ret = xa_insert(xa_pins, pin->pin_idx, ref, GFP_KERNEL);
+> +		if (ret) {
+> +			kfree(ref);
+> +			return ret;
+> +		}
+> +		refcount_set(&ref->refcount, 1);
+> +	}
+> +
+> +	reg = kzalloc(sizeof(*reg), GFP_KERNEL);
 
-	                             when backup is completed.
+Why do we have two structures - ref and reg?
 
-or is the order of operations as listed: release snapshots and then backup
-can be completed?
+> +	if (!reg) {
+> +		if (!ref_exists)
+> +			kfree(ref);
 
-> +	  tracking allows to create incremental or differential backups.
+ref has already been inserted into xa_pins
 
--- 
-~Randy
+> +		return -ENOMEM;
