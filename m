@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 561BF72D2FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 23:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACDAD72D305
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 23:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238495AbjFLVOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 17:14:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35274 "EHLO
+        id S229517AbjFLVP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 17:15:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238233AbjFLVNY (ORCPT
+        with ESMTP id S237775AbjFLVOT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 17:13:24 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 725791BE8;
-        Mon, 12 Jun 2023 14:08:13 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35CKO6sr029783;
-        Mon, 12 Jun 2023 21:07:44 GMT
+        Mon, 12 Jun 2023 17:14:19 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2EF22976;
+        Mon, 12 Jun 2023 14:08:22 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35CKNtED003133;
+        Mon, 12 Jun 2023 21:07:46 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version;
- s=corp-2023-03-30; bh=q9yPQDWoY3RWIM9fWPlBbfnDA8cyQY7I5wErjxCIeok=;
- b=FUzXfIqD19TzUYnsowVNea4NvRMk40/wYGiWmXFbjN0XomtYBORFnolVuBXOeTfddkEf
- b42BtiIZmXxDlYpvXzT2QzWvSYOqwtp8VmQeNLpYYPPZEJUs5xDfR5pmBXTYXD2qdYNP
- C1i3F9YC2agxiJ88Ax5enAawlp091wrFjpdECbxePqfZMQkaNKxh/3n7GVdkjZN4rT96
- wYDnydIkzk5rcmw0gmvI/HN3xuJRaXynwVj85uH4uZiyLgLh3KlXqrBtY3FDIE7W7ARd
- IlPDqhW78qCmOHjeR6glSvlyl0LVJkWGmFdLSWupfcD7lDhEO/YIUJ+JJaF5O50/euyf Lg== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r4h2akwk5-1
+ s=corp-2023-03-30; bh=xuGX5VAufC9o5VNhQVzEJroQvU83AHxOwU7kTgRqNnk=;
+ b=ePrlhCffLV6nz0kYKx9xaVqVvMspo2/YPI0k634E1ZfQmw0eL5TwAL8Eeh1/pNeMgVmU
+ xib/iIqFhD9QfldO75V4lpCbnPR5VEkD+uz4XvvuE3eRH5VXmKXaPekQXBdh6OTdlaRa
+ ISPBojU+880eUR0DNgBa21BAVarHkgaYzHvIxUYt9LFNwCYEiFdvjPmEK/vgdFF8wzZB
+ zJmv0Wjs/EECmkgp3kRcEk7VoeM6RX9SPMM3DpJrD9UaQCmQr6UKMC4yk9QXWFKloJPJ
+ 5TkiQiZJ6gHgUrC/zEkpfoqdpXI6FyAmDWtdAR3sCsuoPlyj/RyBrfoFscuWv82tC4Kh SQ== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r4fkdkv62-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 12 Jun 2023 21:07:43 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35CKTjab014117;
-        Mon, 12 Jun 2023 21:07:43 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2168.outbound.protection.outlook.com [104.47.59.168])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3r4fm321jv-1
+        Mon, 12 Jun 2023 21:07:46 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35CKU0X8008319;
+        Mon, 12 Jun 2023 21:07:45 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2170.outbound.protection.outlook.com [104.47.59.170])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3r4fm9j9p8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 12 Jun 2023 21:07:43 +0000
+        Mon, 12 Jun 2023 21:07:45 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gKPET375jjOpfgoKKdjGf1/Iup4Rn6vd+yhMK+D4vjK0UNxwNn8h4fA0KBRxWi0FM0HycILY48xfWjvYOnQh9YpFOv9soCOIUFnTFRAPj6lUvOWVWB93zF2TaDmT+5E00ktAupXh8XOaAFCd8L4O6RL5oYD1jJ45MCrlOn0oWu4ocTgwUmqPn5/fjTw7TUA1eg3mj6bMMkr0PO9tjP+s9B2vAqoRKXSBze7AjFwPcr48VEloJAx9vvH+6OBz+W023cmhBeB+OOgsiTOchIkZX1KbhFGplMK4zd085HsyGxhm9H7Z4rsbRID2Iaq9LGlt1Oz9X1JjF9SkHIs8kY1ssQ==
+ b=E0DtPhQmV56BZ3DoQfoQdUyqNUQqLSjph+MEXWqeeiBDulSO837aOwktOEydrKQGSF9paLFKaIqBRSZpc18E15Urd9xIsq58UvV7cW8TxJ3HnBj1O5DoguOHOs+Ffw1JKLXDEQdL2U/7Cbl07P9URDJVumI7jbWOoKVyGAXhSMK5sTVhRRnlz1vYpTBtFnUGiOgruItnXgKy2Aqn4oN0C1QTSCE82j98bpsflmpLuClta7Zoinjk8SsA7Vv5oLErQdWNeUkigxMv0GjjC5Ktz/iSgpbCtbeRzxAFlXXPxQnLhaYbyHnhilboRIjdI+/QMtrcnFSW969X6r4HIbPklw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q9yPQDWoY3RWIM9fWPlBbfnDA8cyQY7I5wErjxCIeok=;
- b=T7lYjQWP42uarfB+1UFzK/evnXhRyz5V0mYEupscYjIauTr0wjet3bbQ1nVgK26oigveyixIrConAW5QGfxi0WGEMHJklE65R5KG6cRuNohpBFXmF78jIqQXwQ0kGr14KdvE2YwaC8HYnpCuFSy7wasNlaf8l3391foTygJFYQVHTGim0iE1Iv9BxaS0GG6K5fb3v2q9fieWdjGveJ64Vz4gF9Gm+azlgnlvU/mavCbXE+fMkerqskSAkRc+b+68Udx3QDZHAAozSxaLUsPDte79+YTv33mlF2KhpsINZydpbeK10Tp9FoEooVJ2ydpEDHpoYdRD+pvcljlACQNpwQ==
+ bh=xuGX5VAufC9o5VNhQVzEJroQvU83AHxOwU7kTgRqNnk=;
+ b=YdXY4WJ5K1opytkFag5VirbCCGfLQchij5PiYdknPbWDB14VMrPnGmWqOrzvJRL8GaZaMyCbGFRNiETmL5WLmPsLpLzYbc2+MNJy0ZLfe/h20YyO1hsBVE5v7eVy3arKuITgX9daJKU/9zqt5+siQRQRmLigLhhFRKUInOeMQGx2bdQ78AgD09vB6yOkN3KG7+vN8UNtVgDXv43MUm2W+MbRqLxNsXeLGX8ZyGIHhCWsa+ptoHW6HKZdqA/vkI1Bl/7qUjxylm6SeppXHGHnhtoOKgJRJtIu9Rb2VvCVbtSGHwnf3CE2UJnU10BvZ2tYox7YVLYEqfVyLTo5ppZyCQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q9yPQDWoY3RWIM9fWPlBbfnDA8cyQY7I5wErjxCIeok=;
- b=dDmse79R1VteIcC0HGz3qmuWrpX3Wt7Owv90IEbcGzRfmIiFXdbtSzJkABGMOV+oh243zUOI9K8pMVgN/k7HSpVLcv8s4zlAPmB83C+QMCa6MzoUT9DR9WZKq5bgpF98m4i30Ly0X6QgSKqeyDCeYIyUpT/iJyX9XNTfRVum924=
+ bh=xuGX5VAufC9o5VNhQVzEJroQvU83AHxOwU7kTgRqNnk=;
+ b=hi5ONUpQFyelxkAZ5sQWOivJ0fYKV7yydmiizbTOfCJ/JQSEGkPnG9vfLAnqZRTcgWJZtfAoFffay1NbWeW3yREnhDX8GCk3y08MspspX87c8HHr2AP09D8lSlyJ+LqSMGMzO32In9arVjrkyXQDsv8iPpK6UZXdmkGtMvzD75M=
 Received: from CO1PR10MB4531.namprd10.prod.outlook.com (2603:10b6:303:6c::22)
  by BY5PR10MB4371.namprd10.prod.outlook.com (2603:10b6:a03:210::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.42; Mon, 12 Jun
- 2023 21:07:40 +0000
+ 2023 21:07:43 +0000
 Received: from CO1PR10MB4531.namprd10.prod.outlook.com
  ([fe80::8b8f:b4b1:bb78:b048]) by CO1PR10MB4531.namprd10.prod.outlook.com
  ([fe80::8b8f:b4b1:bb78:b048%5]) with mapi id 15.20.6477.028; Mon, 12 Jun 2023
- 21:07:40 +0000
+ 21:07:42 +0000
 From:   Eric DeVolder <eric.devolder@oracle.com>
 To:     linux-kernel@vger.kernel.org, david@redhat.com, osalvador@suse.de,
         corbet@lwn.net, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
@@ -75,100 +75,101 @@ Cc:     hpa@zytor.com, gregkh@linuxfoundation.org, rafael@kernel.org,
         vschneid@redhat.com, linux-mm@kvack.org, linux-doc@vger.kernel.org,
         sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
         boris.ostrovsky@oracle.com, eric.devolder@oracle.com
-Subject: [PATCH v23 3/8] kexec: exclude elfcorehdr from the segment digest
-Date:   Mon, 12 Jun 2023 17:07:07 -0400
-Message-Id: <20230612210712.683175-4-eric.devolder@oracle.com>
+Subject: [PATCH v23 4/8] crash: memory and CPU hotplug sysfs attributes
+Date:   Mon, 12 Jun 2023 17:07:08 -0400
+Message-Id: <20230612210712.683175-5-eric.devolder@oracle.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20230612210712.683175-1-eric.devolder@oracle.com>
 References: <20230612210712.683175-1-eric.devolder@oracle.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: DS7PR05CA0081.namprd05.prod.outlook.com (2603:10b6:8:57::6)
- To CO1PR10MB4531.namprd10.prod.outlook.com (2603:10b6:303:6c::22)
+X-ClientProxiedBy: DM6PR10CA0017.namprd10.prod.outlook.com
+ (2603:10b6:5:60::30) To CO1PR10MB4531.namprd10.prod.outlook.com
+ (2603:10b6:303:6c::22)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: CO1PR10MB4531:EE_|BY5PR10MB4371:EE_
-X-MS-Office365-Filtering-Correlation-Id: f1e8c023-456e-42aa-66d4-08db6b890eae
+X-MS-Office365-Filtering-Correlation-Id: b38c7dd6-bb28-417e-e14a-08db6b89101f
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: eyC49St4D9ZCTJ/BAaCIo7GiqXZq4pQsgswgaGEximbIuLkJtJN3Hnem5abfTmfcmyhNxhUhW9cP5Y9dYLZpYzp51I72qZ9by3LVJZRmrmK3lz3Ho3wnWd3LAwHzh1j7rhgtHSQI/SDUxGeGg3GJw519AT8N0pLLW9XJQe9i0y1ul4zXypjK94CCMb9EF0HnSgt++65fi/mJFytV0ayGKxozQTygKgUQT7WO5lCzwUQDzVA7hOkSYqZfV4mKJm9Yx8A2mV3MsCM3Yl4g73+GS0aC1CUeEax3SIkRCbww0B2w31enye9H2LJ76tBu8y+oHPtAAM0Ik3eAzha6t0Oq4Xuik6NWGiL/LG5/r8tEiT5dialfvERgngdv6wMtWAHT1qTWRXRhqQrTH3W1K/Ub06SwIYmjm8EpSoxo4jneEWQGCVlUTeRlrpA6ZPIkNBwg8LgoYZsE6/1A/14VZd9AUTqX8d0pkAYj7L9AWL0UeYaoPzSU/b7B8DF+qmBrfpqh8vI0nRV319lfO7y3Uc/yAfgOyLqGP7hKS+zEAj/Te4hXZWYS+DC1V2YfJ9I2HMPIgxMCziXtyAyxM1I0i+KtJnn9L4d+mHkTicem29Kxx0g=
+X-Microsoft-Antispam-Message-Info: 78PRJ2YgnxiBNmNLxTq9OCLteZgzVkqkMCnmLnPBF4e+oFvm0Ssk///gOvgnYwOUIm9MMUDKNNVUlxxkBKAhnU2mgLhZ7mXWP1b9SyBVeY0nwdWGPoFmNgr10cSfRWdanYZedXaIDOzKzgVX0zKyswqWDgO/Kvv3pcwmwMabl6YHWedfiKO1qc9cYS0bCUYmrphghaWCo90+zcw71+O+HhWKQAh0stCjzeXbZxY4u/Vviha6oIrunLWCXIHfUwlQYluRmcDmHafDIG1LpXJNyLC2c9u4fdiXGyFS7i9w5Gj5A+dwlPdJVkOlsl4Yz6GJvAZOSALU+uxNasJsb9qGzvfyNBVEroecw6rTt5meD40E9XD+5/ttFD/jLg7QOi1JzFy7QAeKj3TirxrYAKwMDMn3MoEs50Qvr8N4vejRm3SnTlFwPl0myF7HdD2EJE0pqPBgA+h0nETKSAD9vOmK9vK/6wHQcKxqPS/xqb6uM3+j7JD+3EK438Bd4+Wb5xBCBseUeyZoJt2m+n4tJVnE85wywTvKIRq0J8clNP7sKp82lG3qK9OzSSRu12TlB6OzK2gfrpQGNYOPuOeTsMtQneMj8my3KXrBryLaW2e2tLo=
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4531.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(366004)(346002)(136003)(39860400002)(396003)(451199021)(6666004)(478600001)(7416002)(5660300002)(7406005)(8936002)(8676002)(36756003)(86362001)(2906002)(66476007)(66946007)(4326008)(316002)(66556008)(921005)(186003)(41300700001)(38100700002)(107886003)(1076003)(6506007)(6512007)(26005)(6486002)(2616005)(83380400001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xbM2Mi/ggvtnSsqoidxVIOWXvkaOksmNsBQytgGegge1+ZLGfHalUhUCVb7B?=
- =?us-ascii?Q?uml6YqJbrKTZzfZJt6Ub2XpzIxphcgm64uwDYImDEsd+H2VGncFjY/H+vwkX?=
- =?us-ascii?Q?74r9qUPY0gYVDhuA4aPVLLHtCpmptT1skjssWh8cjQ+nchNRrcugnDx9K1FM?=
- =?us-ascii?Q?0zfHJ2fhk4LZF6x9nl3PaEeP56Spa6ReHicGWevuRh0TdSjajkH0ZaNhP5Pw?=
- =?us-ascii?Q?nEJ8xH5c4KNcoRlhvVFHyD8dmj5rlPszf87FXXQ0aY65hPDYsg+MteLIhRuT?=
- =?us-ascii?Q?UB8kzPs4C2BR5n4+XtriiRhXlLAq1BY2LgCbODFE+slGHXNhln3x3Oz3Mwwi?=
- =?us-ascii?Q?z/OGQ1enU5H7VTojWupnas/z2KaCHfz0vZDYJNasmknMhwTqsMeqC1Wp6xpL?=
- =?us-ascii?Q?1cDoZVl5giKeXh0fSmEojZTxTEL65HfX1DyUgAkRqqSs/qAn/X+JjyRSEQi3?=
- =?us-ascii?Q?YSoqkoRRoeFBC7QQ2S5tsb3gLuyyzu+yWfyz2J0k3DVNmOXQzYN1HQg+5U51?=
- =?us-ascii?Q?koXyMW4G/wjzuZEI6FVdSOxwBB8UrkVFusDrCk0jSmcqx6h0PcPtHFad78yX?=
- =?us-ascii?Q?G0oXqBj5wdFKOpmuvc7wDffCS8gR6rXQYv5F6WlU9RSAhhkAUZ3gYQXVQK+y?=
- =?us-ascii?Q?nNqAxgP9qFf3icJIsd77EZwGhUcLp4HzxlO1GwjzdcHGTzp2PmjFpgmzhGiz?=
- =?us-ascii?Q?XrIvgBh3kZmCUhBfPOkPA3uggwh5y7t0l34MZGc4kJpDYxqXDnxubm2Hibcs?=
- =?us-ascii?Q?kWadtd2YCrlGYE7FJzZbAmXLZQmfbQ8/Q/5jUNCppKYAy4jpKWcTXQZWAlMr?=
- =?us-ascii?Q?lcE98H8mMW+sH0Da2zz8l2dTQc+i9WYhaf81WjC0pX6RdtFHQLlC+pi/2UAQ?=
- =?us-ascii?Q?s+M1Ak+rb7+MeHFJ1l8kiqa2kTrLNQ3EF8iCQR0toVUEdAkZ4vbp18vvcRqs?=
- =?us-ascii?Q?kZRVaFJrLU5d4YI/AtciROA53DI9jnf7bFjOMYXJT/efrS2aMteVKjk/NDKh?=
- =?us-ascii?Q?jjASV5llJmq8El7boavG1/IECC+Ewjq4QXWhtS2vT5loeZbhgZAAZGnbek5/?=
- =?us-ascii?Q?oSGSvexoo3WZj2JqXYTwIE0hcQNFgM6EQrKgJMbG8DuN411fCvR2dutKobMp?=
- =?us-ascii?Q?7rpMbynWXAQI+FA228ywB2g6qcx1JSEXc3EEPrkkUOhmV2gUa22z6fcpPNAD?=
- =?us-ascii?Q?VJ4+JYNzh6kTQbVy6LTKvYK3MCiuQs3Z8GX8P4lgKzc2PyIo9bcNf7kGj829?=
- =?us-ascii?Q?cTmIDo1Hh0VjMIJEnzof0l3XaLit2dbcGHXZEpIIOX3MpO51iaf5h0Jz4nwK?=
- =?us-ascii?Q?WfCGJbn6Kye4jTMJfZ6W1CGEb5YEf/8b464bPjOxqVvuwlb2E+bOI8b2YwEV?=
- =?us-ascii?Q?Nmv4cbRO3t+/gR1+ZFkzbPTsvsYc3wRGz1odTXEkPGY4L+tOVDUt+pp6J+ij?=
- =?us-ascii?Q?NGISuAn+IeloLs/0vX5gYFTQlg9dxF8lV+PvAUIcJdaRkM5EBmceq+c1NOxW?=
- =?us-ascii?Q?HJPTQ6a2y89+62n0QFbWWDw3ApMkKgLuIjNeaGhd0kqXnFg6negXGG+Uq8wE?=
- =?us-ascii?Q?ZQJo1niOJCAePncZpdSY+bx11w6Poz1wArcIyhBeMRBb1Np6nOMs9xVUpK/a?=
- =?us-ascii?Q?nA=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Qq2h9hbiwQTBpfuNBG1q0J1DaUR2Zh9mK5OtxcWmcgc0FjFJKNjMEka9w6z5?=
+ =?us-ascii?Q?DmWCatDtltPYYE3LBOJMIihSJIWSasg3AdtNX/ba/ojJwl/63Z8TDY+KWLBR?=
+ =?us-ascii?Q?CDTaqHyB8SHkIOIQZIOnAFfDMAw5ahhCFR2ObRJVmE4URcBpJoZctYUN78Qb?=
+ =?us-ascii?Q?C9ZY2NOC4ywjBlz5DVST95AkkDo+w3m61jc4Qi7YeN1f7estS7R4DoAaAkYP?=
+ =?us-ascii?Q?/to17U5JMnkpoyfj1jWFwdlStw41cTTNybaSt92DBfwhi3f+IQMe6cyCxiq7?=
+ =?us-ascii?Q?k8GUMQ0uQdIwiL6jgAczKxEH2sDvvzyqC+FHNV9TDj8CvlFi7fPqhX18z+vH?=
+ =?us-ascii?Q?TkuyQ0cw59SxSN957NhpeZFmMh/aOpdHqatutaP7gMLa0sKS6cd94FP5vx5K?=
+ =?us-ascii?Q?GkJ+hGRWMvszxROpjUuLDyhjncNpRQJVsY7/JtRhj4HIu9O9D079Fbb7PbtZ?=
+ =?us-ascii?Q?y3xk2tdTklMt7nKK6u61/Tso3ccyPV09HGyronTjC1Qc2DGjHkgBk5msz0aD?=
+ =?us-ascii?Q?s6+z7QQXLvpH3BUuvEHW7TBvTMZEsWZo94yftyspab0c+bGUKx6L5YA+i8S8?=
+ =?us-ascii?Q?23Q93hqj9U1TnfjPtFE9klAasmnRa9BC2TjVIVAtrPRxqWnmiNDbTuaRwgZP?=
+ =?us-ascii?Q?3hrakABJopkeFzk1xdAoDuBR5m7SE8U9xSqwFeJcZs8eJoUkKOZUsoev08bm?=
+ =?us-ascii?Q?MhVmBAlPpy13irn0SU7MgMfsIZjFYcXkjLNGBXRE+ix2guZ2QbXLfcKZZuW+?=
+ =?us-ascii?Q?gjS5xT248d/vnl88bP2wZ0KpEwJgA7uzMr1yDTaqhWHIdtOLkH5eio6v821r?=
+ =?us-ascii?Q?v1dGyCdpp35OlKIJsoVlLAIEBfPzyf4WsbbyVXVcehZt2z6JAow752pmJ73B?=
+ =?us-ascii?Q?GitNwtoqksrKsl5/+pzjalPkqi2dGk5C9BwyIyNC6M6XMvoHxL12lBKHsQjw?=
+ =?us-ascii?Q?Yo+89Ne3PvasatmbngSmvE5XOBhIAe87hNbBhNGOirV0/97sMJPIc46iBq6W?=
+ =?us-ascii?Q?IYg3nPo+yleO3PRwsFeiu285kc8zmvAXnPjIjP24tSXPZyHH+1xbgW5vcUW3?=
+ =?us-ascii?Q?PLiNRXvN+8Pk7fKkjwIQKXjRAcYk8E94b2G/gZBhYBPzLGYCfOFBrcIznOZw?=
+ =?us-ascii?Q?aZTSgDD/JZlmjUEgc3XdGJMQt6hCWilzwvzyj33zEZhDjCk1tJ7SetDv3lUC?=
+ =?us-ascii?Q?+Gdiprsye6APNSlT5j76tMcoVIrC1Yxz75Y7WZDdUjyuMSBw3ILV7cHt0sjp?=
+ =?us-ascii?Q?laJ4KGoKoLgnyOD7+mn92dogXi3zjCkwGtJKVQnWxyuZ8pcHcCkVlZ1mtLxW?=
+ =?us-ascii?Q?to7XEns+VDEHZVkop/j/7/UGst94FwFQr2Vbil9HKArfXvR0gXA31o4lEfq6?=
+ =?us-ascii?Q?2WpZpx81BGXP71yysExl/q1q3V3ik63CZOfpfoJqlKPQrfn4XYzymr+G49iw?=
+ =?us-ascii?Q?BR3+9iBARFcvj90D7ARYfCHr8Ld1t7iZHybzohvbz6jvSWjrQR5CiYYDDFmL?=
+ =?us-ascii?Q?vXJNMHNQT7RzK5xK2tsXcodrB5vb+nG1MSLsRZeq7c1ktj7UY6nNu21fuOrm?=
+ =?us-ascii?Q?+Gu5y25OWWmkxENE9SuG8xGtDKTiTztwWbtzlwVbPVSnQBPPq0qNM1W+xx3c?=
+ =?us-ascii?Q?ww=3D=3D?=
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?rVfdkKwQ7gCWjIIxEPW8aZIeaSmBXeuOyKBXJG3F+HS8g6dbHdPTw3hSay4u?=
- =?us-ascii?Q?vxxNt58z6B79pPQ3Pf4USlkNTfApmJVf8Ry8mEH+63wa/Gmt3ENATqOcqm4M?=
- =?us-ascii?Q?nTCEfswnqH+uHUxCQ9nGtpEBADVji3KRQoktuKqzaOhBIjNoxsBdd8cUpYPh?=
- =?us-ascii?Q?TaeIaIJrJZ7p/lSj675Y48yFM4jzjfUnle5Ce4+l41xa73XzH27cgj+/Yzlq?=
- =?us-ascii?Q?axDMafoUwuCIDTRWFPMpqUrnqOh1yb/w0W1zkZTcFBWdDZExdW++/7lBYpUY?=
- =?us-ascii?Q?gP3iyaHyvX+fS/bZbIV06FaSt+DYrxjmW407Ew9a15X+xjFt/BCvI4azPjFh?=
- =?us-ascii?Q?k0rHbGFRC9J0G+i+H/KRFtXmKptjuf6d/lKMhY4X1WO3ghXXsfduzRil6Y0j?=
- =?us-ascii?Q?oJXzFPyxA/fWiRAMjPfrj1oO+UtOHVOyWSWaLkyjPTEb37f6LEAPQuDgt/xn?=
- =?us-ascii?Q?6jhQjx8Sj07w+PK3eSq9XqzuRdbJqNndUSyfsJv7/lInmtTikhr62bvmc2fm?=
- =?us-ascii?Q?aw35LJhSng9DW/vK2Us/kcHStZpfknSY4zTW6gFOKiDZhSkLbidPYhJsGiDG?=
- =?us-ascii?Q?DYqqG4FGJakdEj9TmzAFrZjjyeItNuS85/3gIP8W+FSiPxUFjZ5TBIIpX8YE?=
- =?us-ascii?Q?UEjxsZ8hYvnEwIbAOHU3FeD+1wL3mxGQGVjkJCzfIGBAKWr53sQd736jrnOW?=
- =?us-ascii?Q?Oy/OFjW+7I3KX+XilcUP3GdBOafHY4cDSxs8cg7jGPMVi/JtoLfvMEfSq9V9?=
- =?us-ascii?Q?oPuAUrDu8zCnUWnV2aeXXTWsZmNS0ZZVrJUegemJ7QcqMKlFdNPOqexikXJJ?=
- =?us-ascii?Q?MkQK8Ts4NLP1YN0GKc7hBGxDaGh3NxSEvC1KzeI7zZxq779oLN4TLaCIUTTI?=
- =?us-ascii?Q?0T0Me+Xs5WkfXByePfetP7/XJN/DwtRRyXetgDRnUIr82TUm2oYZR2A2wLTz?=
- =?us-ascii?Q?fC71SIyWKKrLh47IxWTacOsMN3C+UBdt04Wq/TR5MpZb5v9v4LhGnENEa1Pz?=
- =?us-ascii?Q?GsrwsTIcoS8bT0MHh/M+V/Ayz/mk2QTlDcvJqPo9GDo3CwRw/tQEK67/5uHI?=
- =?us-ascii?Q?q0wtQQvFK7/KEiHLQ9setCC3+P6Fz8xvQFlhKiOx793iOb1UZyNNHTtgaPzz?=
- =?us-ascii?Q?g9fXRDRyNplslZ86N2iTaQHmEsXGRQVOMSne2MrUFyvh6lRmkx4HmdmW9L0R?=
- =?us-ascii?Q?+jNiIyjG26NMUFh6cwwY99A/GuUOmiTdqpcN+ay/x/mVt1SUdNSAsYBABgVM?=
- =?us-ascii?Q?S9YSu55+smOrxLL99+qPCM+OIY9dnKWho9RctMSr6QdgqbvqZ+ZCwJbBqdZu?=
- =?us-ascii?Q?G8pjDmJZMhaOfVplTwphbVK79z/K3O0ViCK2RGG3aroYWPRRQiRMADlapqUx?=
- =?us-ascii?Q?HUWxe7bIUq3yTL6AN6Fl0q1gDdUKwvYN6X3CqRHKocO17V3RrulBZ1IG93s7?=
- =?us-ascii?Q?E6iGzIVy6BM=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?qRP3s9J5Ffxqc+Jh89sZ3y2Joglnus8y5p8mYqgUgEywGDu51J2pIGH2i5oC?=
+ =?us-ascii?Q?Rhl+cFjUFpoGswniU66NlRdgY3LY+2w5j4KYSouuNZBaqvRbvz+W48YNnqSS?=
+ =?us-ascii?Q?4Iwa19NLXjnyWPfRuZSS7dXJS/DM2AWVfbaDry3C2dnx67kDOwDnZ5/lb08X?=
+ =?us-ascii?Q?VHk3X0s4VHb5oUVtfxoRflhS/wav/+x/668jzS5W/C1+QeB6AADff9ThoOCj?=
+ =?us-ascii?Q?5ZvIbYyxjBoa6TdH/ON/vq5LfJ6xugPvjpxeKobb91AB9lFlUlbNC230TpIf?=
+ =?us-ascii?Q?58rWG6wAzquQ/Tm/W99i9KMnyKd98zkTFpcyrlogdY8yLbsYi07aKL8VoO70?=
+ =?us-ascii?Q?+mfVafG1eZ54TM7cyK2XG27feoJCmvTzSGlpxroMpGhW1WWBDI4KTHYL9zFE?=
+ =?us-ascii?Q?pjveYJxLW/YZOXde6Y++kxBPLReqTqJt9ZmbdNjMYuJTTFSWXsZsNRs/EWQS?=
+ =?us-ascii?Q?Z7/Gp687Krh6o16dzCnTwNAbR2fp/orywOYLpoHV0r0kL02m00r6NGXz3Btc?=
+ =?us-ascii?Q?h/OIYACE/HuarAJmL/0mr3v1ee3pOso60u1nXKgofSSh7bse1S7pyi4Ve84w?=
+ =?us-ascii?Q?eM2RbVUEvF6gc/3+RZ2NTcwSczybdi23UcvYfVt0WuCkVeaCbPsstqR5Ddqt?=
+ =?us-ascii?Q?N57bl7z805yYLrhUOHUEjgXXbgttprLwH0VWNCVAnRpfgORlqIxHvfC1U2+T?=
+ =?us-ascii?Q?nY4VmNlEB46o+BKac298vhubFqDXDMyp4H167/OQ0dsDPg5kdyjwlSbbeRVP?=
+ =?us-ascii?Q?3nYw20AWcfWU6uAdiGd2JjwdDJpoOLwPqEBZwe7cv2uIt5wsUPb7atYmwLkG?=
+ =?us-ascii?Q?ce1OJzXXfR7G9+aGAsTTfzqUw5LT5GNZKRQe/Eicq3cIKSA2K5bS1OEHOUIf?=
+ =?us-ascii?Q?LwWFz3jSOokkRu0wfcXvOxpJBXqc1aGmKbB3wnudObxwsdXr3oAB03GkunAN?=
+ =?us-ascii?Q?SwQb3YfEAzoEY+qb69ynmXXAGYo/zV6XjM8L6Gi6jsuWSBVD7rzbFlaVqq0B?=
+ =?us-ascii?Q?naudjgZLvjm7JGprP+zWHg4a2oEGvGjoHFm7aB+5Veq4BEWCbmng47l13Fuc?=
+ =?us-ascii?Q?5EzhrUK/vrjguPwLQfztzeQ3wsZxRymA6D8GR8rYfxk67MWm1iitPIUcVcLQ?=
+ =?us-ascii?Q?F15v1XZP3bsF/RLtO4ZAYx/nBiZfBECjGBBV+G1rUyGaIeKwewIJgPrreFaF?=
+ =?us-ascii?Q?oGxXq01OmBqfTUanN9af6ajI40/emd4vRmRGiqohu+WhWYs3IGABmWwc+WLV?=
+ =?us-ascii?Q?RKI7ZApdqFrYTTVDvA3l4C7O0j6xeWSKWqCIY1UaAKb9sS8Ah5JDnePLiuh6?=
+ =?us-ascii?Q?kRhcKhb9XJ3lJL6N5g2exxbXbqmG6AGyETkx6Ob3z9MWvLcFs68rI/AeebMO?=
+ =?us-ascii?Q?57DD8QZqkUEa8Wstg7BgozjNgyaQvMeCGUlJBZN10SzdAzgLf7SAlgJW78k4?=
+ =?us-ascii?Q?3bt+ZuYd0Ic=3D?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f1e8c023-456e-42aa-66d4-08db6b890eae
+X-MS-Exchange-CrossTenant-Network-Message-Id: b38c7dd6-bb28-417e-e14a-08db6b89101f
 X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4531.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 21:07:40.5055
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 21:07:42.9069
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uZCTu8XpNzGnhX+zOw56XAxkHJMfymyNCoVVOkowwv8jow2e6nkMgfi4kUQcb+tW+aqf7cZOYj4JHhm4CkxFT5hFk2ZTeub8IEjTss65/VQ=
+X-MS-Exchange-CrossTenant-UserPrincipalName: ri6EsE5JARBEhIO1saPfP5X/AA6NGB43Y0BaRIc2eRSD6/zLUU4m+QuOJHDH8WhDLeTCVAJn/hEidNwcaABWOLplPtVLAPQmq+sbmKmVcL0=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB4371
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
  definitions=2023-06-12_16,2023-06-12_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
- mlxscore=0 adultscore=0 spamscore=0 phishscore=0 bulkscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
+ malwarescore=0 mlxscore=0 adultscore=0 bulkscore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2305260000 definitions=main-2306120180
-X-Proofpoint-ORIG-GUID: RPei6WxFTXeQyZsfCSfWju8RRLBUkS3w
-X-Proofpoint-GUID: RPei6WxFTXeQyZsfCSfWju8RRLBUkS3w
+X-Proofpoint-ORIG-GUID: d_jhI1J6LcfavGSSKTyPs9UTEd3feC9n
+X-Proofpoint-GUID: d_jhI1J6LcfavGSSKTyPs9UTEd3feC9n
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -179,45 +180,227 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a crash kernel is loaded via the kexec_file_load() syscall, the
-kernel places the various segments (ie crash kernel, crash initrd,
-boot_params, elfcorehdr, purgatory, etc) in memory. For those
-architectures that utilize purgatory, a hash digest of the segments
-is calculated for integrity checking. The digest is embedded into
-the purgatory image prior to placing in memory.
+Introduce the crash_hotplug attribute for memory and CPUs for
+use by userspace.  These attributes directly facilitate the udev
+rule for managing userspace re-loading of the crash kernel upon
+hot un/plug changes.
 
-Updates to the elfcorehdr in response to CPU and memory changes
-would cause the purgatory integrity checking to fail (at crash time,
-and no vmcore created). Therefore, the elfcorehdr segment is
-explicitly excluded from the purgatory digest, enabling updates to
-the elfcorehdr while also avoiding the need to recompute the hash
-digest and reload purgatory.
+For memory, expose the crash_hotplug attribute to the
+/sys/devices/system/memory directory. For example:
+
+ # udevadm info --attribute-walk /sys/devices/system/memory/memory81
+  looking at device '/devices/system/memory/memory81':
+    KERNEL=="memory81"
+    SUBSYSTEM=="memory"
+    DRIVER==""
+    ATTR{online}=="1"
+    ATTR{phys_device}=="0"
+    ATTR{phys_index}=="00000051"
+    ATTR{removable}=="1"
+    ATTR{state}=="online"
+    ATTR{valid_zones}=="Movable"
+
+  looking at parent device '/devices/system/memory':
+    KERNELS=="memory"
+    SUBSYSTEMS==""
+    DRIVERS==""
+    ATTRS{auto_online_blocks}=="offline"
+    ATTRS{block_size_bytes}=="8000000"
+    ATTRS{crash_hotplug}=="1"
+
+For CPUs, expose the crash_hotplug attribute to the
+/sys/devices/system/cpu directory. For example:
+
+ # udevadm info --attribute-walk /sys/devices/system/cpu/cpu0
+  looking at device '/devices/system/cpu/cpu0':
+    KERNEL=="cpu0"
+    SUBSYSTEM=="cpu"
+    DRIVER=="processor"
+    ATTR{crash_notes}=="277c38600"
+    ATTR{crash_notes_size}=="368"
+    ATTR{online}=="1"
+
+  looking at parent device '/devices/system/cpu':
+    KERNELS=="cpu"
+    SUBSYSTEMS==""
+    DRIVERS==""
+    ATTRS{crash_hotplug}=="1"
+    ATTRS{isolated}==""
+    ATTRS{kernel_max}=="8191"
+    ATTRS{nohz_full}=="  (null)"
+    ATTRS{offline}=="4-7"
+    ATTRS{online}=="0-3"
+    ATTRS{possible}=="0-7"
+    ATTRS{present}=="0-3"
+
+With these sysfs attributes in place, it is possible to efficiently
+instruct the udev rule to skip crash kernel reloading for kernels
+configured with crash hotplug support.
+
+For example, the following is the proposed udev rule change for RHEL
+system 98-kexec.rules (as the first lines of the rule file):
+
+ # The kernel updates the crash elfcorehdr for CPU and memory changes
+ SUBSYSTEM=="cpu", ATTRS{crash_hotplug}=="1", GOTO="kdump_reload_end"
+ SUBSYSTEM=="memory", ATTRS{crash_hotplug}=="1", GOTO="kdump_reload_end"
+
+When examined in the context of 98-kexec.rules, the above rules
+test if crash_hotplug is set, and if so, the userspace initiated
+unload-then-reload of the crash kernel is skipped.
+
+CPU and memory checks are separated in accordance with
+CONFIG_HOTPLUG_CPU and CONFIG_MEMORY_HOTPLUG kernel config options.
+If an architecture supports, for example, memory hotplug but not
+CPU hotplug, then the /sys/devices/system/memory/crash_hotplug
+attribute file is present, but the /sys/devices/system/cpu/crash_hotplug
+attribute file will NOT be present. Thus the udev rule skips
+userspace processing of memory hot un/plug events, but the udev
+rule will evaluate false for CPU events, thus allowing userspace to
+process CPU hot un/plug events (ie the unload-then-reload of the kdump
+capture kernel).
 
 Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
 Reviewed-by: Sourabh Jain <sourabhjain@linux.ibm.com>
 Acked-by: Hari Bathini <hbathini@linux.ibm.com>
 Acked-by: Baoquan He <bhe@redhat.com>
 ---
- kernel/kexec_file.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ .../admin-guide/mm/memory-hotplug.rst          |  8 ++++++++
+ Documentation/core-api/cpu_hotplug.rst         | 18 ++++++++++++++++++
+ drivers/base/cpu.c                             | 14 ++++++++++++++
+ drivers/base/memory.c                          | 13 +++++++++++++
+ include/linux/kexec.h                          |  8 ++++++++
+ 5 files changed, 61 insertions(+)
 
-diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-index f8b1797b3ec9..1d2cfc869a75 100644
---- a/kernel/kexec_file.c
-+++ b/kernel/kexec_file.c
-@@ -726,6 +726,12 @@ static int kexec_calculate_store_digests(struct kimage *image)
- 	for (j = i = 0; i < image->nr_segments; i++) {
- 		struct kexec_segment *ksegment;
+diff --git a/Documentation/admin-guide/mm/memory-hotplug.rst b/Documentation/admin-guide/mm/memory-hotplug.rst
+index 1b02fe5807cc..eb99d79223a3 100644
+--- a/Documentation/admin-guide/mm/memory-hotplug.rst
++++ b/Documentation/admin-guide/mm/memory-hotplug.rst
+@@ -291,6 +291,14 @@ The following files are currently defined:
+ 		       Availability depends on the CONFIG_ARCH_MEMORY_PROBE
+ 		       kernel configuration option.
+ ``uevent``	       read-write: generic udev file for device subsystems.
++``crash_hotplug``      read-only: when changes to the system memory map
++		       occur due to hot un/plug of memory, this file contains
++		       '1' if the kernel updates the kdump capture kernel memory
++		       map itself (via elfcorehdr), or '0' if userspace must update
++		       the kdump capture kernel memory map.
++
++		       Availability depends on the CONFIG_MEMORY_HOTPLUG kernel
++		       configuration option.
+ ====================== =========================================================
  
-+#ifdef CONFIG_CRASH_HOTPLUG
-+		/* Exclude elfcorehdr segment to allow future changes via hotplug */
-+		if (j == image->elfcorehdr_index)
-+			continue;
+ .. note::
+diff --git a/Documentation/core-api/cpu_hotplug.rst b/Documentation/core-api/cpu_hotplug.rst
+index f75778d37488..0c8dc3fe5f94 100644
+--- a/Documentation/core-api/cpu_hotplug.rst
++++ b/Documentation/core-api/cpu_hotplug.rst
+@@ -750,6 +750,24 @@ will receive all events. A script like::
+ 
+ can process the event further.
+ 
++When changes to the CPUs in the system occur, the sysfs file
++/sys/devices/system/cpu/crash_hotplug contains '1' if the kernel
++updates the kdump capture kernel list of CPUs itself (via elfcorehdr),
++or '0' if userspace must update the kdump capture kernel list of CPUs.
++
++The availability depends on the CONFIG_HOTPLUG_CPU kernel configuration
++option.
++
++To skip userspace processing of CPU hot un/plug events for kdump
++(ie the unload-then-reload to obtain a current list of CPUs), this sysfs
++file can be used in a udev rule as follows:
++
++ SUBSYSTEM=="cpu", ATTRS{crash_hotplug}=="1", GOTO="kdump_reload_end"
++
++For a cpu hot un/plug event, if the architecture supports kernel updates
++of the elfcorehdr (which contains the list of CPUs), then the rule skips
++the unload-then-reload of the kdump capture kernel.
++
+ Kernel Inline Documentations Reference
+ ======================================
+ 
+diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
+index c1815b9dae68..06a0c22b37b8 100644
+--- a/drivers/base/cpu.c
++++ b/drivers/base/cpu.c
+@@ -282,6 +282,17 @@ static ssize_t print_cpus_nohz_full(struct device *dev,
+ static DEVICE_ATTR(nohz_full, 0444, print_cpus_nohz_full, NULL);
+ #endif
+ 
++#ifdef CONFIG_HOTPLUG_CPU
++#include <linux/kexec.h>
++static ssize_t crash_hotplug_show(struct device *dev,
++				     struct device_attribute *attr,
++				     char *buf)
++{
++	return sprintf(buf, "%d\n", crash_hotplug_cpu_support());
++}
++static DEVICE_ATTR_ADMIN_RO(crash_hotplug);
 +#endif
 +
- 		ksegment = &image->segment[i];
- 		/*
- 		 * Skip purgatory as it will be modified once we put digest
+ static void cpu_device_release(struct device *dev)
+ {
+ 	/*
+@@ -469,6 +480,9 @@ static struct attribute *cpu_root_attrs[] = {
+ #ifdef CONFIG_NO_HZ_FULL
+ 	&dev_attr_nohz_full.attr,
+ #endif
++#ifdef CONFIG_HOTPLUG_CPU
++	&dev_attr_crash_hotplug.attr,
++#endif
+ #ifdef CONFIG_GENERIC_CPU_AUTOPROBE
+ 	&dev_attr_modalias.attr,
+ #endif
+diff --git a/drivers/base/memory.c b/drivers/base/memory.c
+index b456ac213610..24b8ef4c830c 100644
+--- a/drivers/base/memory.c
++++ b/drivers/base/memory.c
+@@ -490,6 +490,16 @@ static ssize_t auto_online_blocks_store(struct device *dev,
+ 
+ static DEVICE_ATTR_RW(auto_online_blocks);
+ 
++#ifdef CONFIG_MEMORY_HOTPLUG
++#include <linux/kexec.h>
++static ssize_t crash_hotplug_show(struct device *dev,
++				       struct device_attribute *attr, char *buf)
++{
++	return sprintf(buf, "%d\n", crash_hotplug_memory_support());
++}
++static DEVICE_ATTR_RO(crash_hotplug);
++#endif
++
+ /*
+  * Some architectures will have custom drivers to do this, and
+  * will not need to do it from userspace.  The fake hot-add code
+@@ -889,6 +899,9 @@ static struct attribute *memory_root_attrs[] = {
+ 
+ 	&dev_attr_block_size_bytes.attr,
+ 	&dev_attr_auto_online_blocks.attr,
++#ifdef CONFIG_MEMORY_HOTPLUG
++	&dev_attr_crash_hotplug.attr,
++#endif
+ 	NULL
+ };
+ 
+diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+index b9903dd48e24..6a8a724ac638 100644
+--- a/include/linux/kexec.h
++++ b/include/linux/kexec.h
+@@ -501,6 +501,14 @@ static inline void arch_kexec_pre_free_pages(void *vaddr, unsigned int pages) {
+ static inline void arch_crash_handle_hotplug_event(struct kimage *image) { }
+ #endif
+ 
++#ifndef crash_hotplug_cpu_support
++static inline int crash_hotplug_cpu_support(void) { return 0; }
++#endif
++
++#ifndef crash_hotplug_memory_support
++static inline int crash_hotplug_memory_support(void) { return 0; }
++#endif
++
+ #else /* !CONFIG_KEXEC_CORE */
+ struct pt_regs;
+ struct task_struct;
 -- 
 2.31.1
 
