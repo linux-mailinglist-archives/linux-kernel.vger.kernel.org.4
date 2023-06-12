@@ -2,97 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 276EA72BE5B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 652F072BE6A
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:11:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232734AbjFLKJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 06:09:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48978 "EHLO
+        id S233342AbjFLKK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 06:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239069AbjFLKIv (ORCPT
+        with ESMTP id S236747AbjFLKJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 06:08:51 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA1F55B2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:49:58 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R991e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VkwjQ3o_1686563395;
-Received: from 30.97.48.52(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VkwjQ3o_1686563395)
-          by smtp.aliyun-inc.com;
-          Mon, 12 Jun 2023 17:49:56 +0800
-Message-ID: <3e97e1a2-47e8-9223-426d-5089f8802ae5@linux.alibaba.com>
-Date:   Mon, 12 Jun 2023 17:50:14 +0800
+        Mon, 12 Jun 2023 06:09:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD4E7280
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:50:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AD1E622BE
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 09:50:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 44269C433B3;
+        Mon, 12 Jun 2023 09:50:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686563421;
+        bh=CezdVL33asTp+QCAsDrtsg3Oq74MmAINSOzqCnmZfIU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=d3JaJT5sf8uBfMGJTZ2DbEYdYIVpDLExSESatpg+QlWFRPeARnXaQdNiVzGtnYSNe
+         40V0TD5MhuVCCqHE9O/G2WvZwD1bFSBDo0O8mC2vtg0az0OvK3T0R7QhiA95tw9ZDQ
+         LrQePyfApalrUrEbhI3cLIs8EvmcSTE6Jl+X8TcMOUvL2TTcC+YO9uCWY/KZc6pAp6
+         R3UleSRQtkxcxkHw+0IDAUUgLEwQhVrV4av8+QA9uCu1nOusmTQKa0UcdF45cUMMvf
+         gEI2HcNCv/+BTRcvEoE/zOZ79B8x2xS5UV4oCF6PclotXQ/Ci88QhIjt+aUWhryiYw
+         sCQkWN4jyHIbg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DAAE7E1CF31;
+        Mon, 12 Jun 2023 09:50:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] mm: compaction: mark kcompactd_run() and kcompactd_stop()
- __meminit
-To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20230610034615.997813-1-linmiaohe@huawei.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20230610034615.997813-1-linmiaohe@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v7 0/4] Add SCM_PIDFD and SO_PEERPIDFD
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168656342089.25012.9925385632760123942.git-patchwork-notify@kernel.org>
+Date:   Mon, 12 Jun 2023 09:50:20 +0000
+References: <20230608202628.837772-1-aleksandr.mikhalitsyn@canonical.com>
+In-Reply-To: <20230608202628.837772-1-aleksandr.mikhalitsyn@canonical.com>
+To:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, leon@kernel.org, dsahern@kernel.org,
+        arnd@arndb.de, keescook@chromium.org, brauner@kernel.org,
+        kuniyu@amazon.com, mzxreary@0pointer.de, bluca@debian.org,
+        daniel@iogearbox.net, sdf@google.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
+This series was applied to netdev/net-next.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-On 6/10/2023 11:46 AM, Miaohe Lin wrote:
-> Add __meminit to kcompactd_run() and kcompactd_stop() to ensure they're
-> default to __init when memory hotplug is not enabled.
+On Thu,  8 Jun 2023 22:26:24 +0200 you wrote:
+> 1. Implement SCM_PIDFD, a new type of CMSG type analogical to SCM_CREDENTIALS,
+> but it contains pidfd instead of plain pid, which allows programmers not
+> to care about PID reuse problem.
 > 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-
-LGTM.
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-
-> ---
->   include/linux/compaction.h | 4 ++--
->   mm/compaction.c            | 4 ++--
->   2 files changed, 4 insertions(+), 4 deletions(-)
+> 2. Add SO_PEERPIDFD which allows to get pidfd of peer socket holder pidfd.
+> This thing is direct analog of SO_PEERCRED which allows to get plain PID.
 > 
-> diff --git a/include/linux/compaction.h b/include/linux/compaction.h
-> index 57b16e69c19a..e94776496049 100644
-> --- a/include/linux/compaction.h
-> +++ b/include/linux/compaction.h
-> @@ -98,8 +98,8 @@ extern void compaction_defer_reset(struct zone *zone, int order,
->   bool compaction_zonelist_suitable(struct alloc_context *ac, int order,
->   					int alloc_flags);
->   
-> -extern void kcompactd_run(int nid);
-> -extern void kcompactd_stop(int nid);
-> +extern void __meminit kcompactd_run(int nid);
-> +extern void __meminit kcompactd_stop(int nid);
->   extern void wakeup_kcompactd(pg_data_t *pgdat, int order, int highest_zoneidx);
->   
->   #else
-> diff --git a/mm/compaction.c b/mm/compaction.c
-> index 3398ef3a55fe..8859cc91062f 100644
-> --- a/mm/compaction.c
-> +++ b/mm/compaction.c
-> @@ -3086,7 +3086,7 @@ static int kcompactd(void *p)
->    * This kcompactd start function will be called by init and node-hot-add.
->    * On node-hot-add, kcompactd will moved to proper cpus if cpus are hot-added.
->    */
-> -void kcompactd_run(int nid)
-> +void __meminit kcompactd_run(int nid)
->   {
->   	pg_data_t *pgdat = NODE_DATA(nid);
->   
-> @@ -3104,7 +3104,7 @@ void kcompactd_run(int nid)
->    * Called by memory hotplug when all memory in a node is offlined. Caller must
->    * be holding mem_hotplug_begin/done().
->    */
-> -void kcompactd_stop(int nid)
-> +void __meminit kcompactd_stop(int nid)
->   {
->   	struct task_struct *kcompactd = NODE_DATA(nid)->kcompactd;
->   
+> [...]
+
+Here is the summary with links:
+  - [net-next,v7,1/4] scm: add SO_PASSPIDFD and SCM_PIDFD
+    https://git.kernel.org/netdev/net-next/c/5e2ff6704a27
+  - [net-next,v7,2/4] net: core: add getsockopt SO_PEERPIDFD
+    https://git.kernel.org/netdev/net-next/c/7b26952a91cf
+  - [net-next,v7,3/4] selftests: net: add SCM_PIDFD / SO_PEERPIDFD test
+    https://git.kernel.org/netdev/net-next/c/ec80f488252b
+  - [net-next,v7,4/4] af_unix: Kconfig: make CONFIG_UNIX bool
+    https://git.kernel.org/netdev/net-next/c/97154bcf4d1b
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
