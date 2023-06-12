@@ -2,95 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDAE72D03B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:11:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89FCA72D03D
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236905AbjFLUKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 16:10:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43930 "EHLO
+        id S237125AbjFLUMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 16:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjFLUKf (ORCPT
+        with ESMTP id S235078AbjFLUM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 16:10:35 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DA3107
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:10:34 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-9788faaca2dso788032666b.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:10:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686600633; x=1689192633;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tpuzEvfKwfzbfk8K6DkABkAcSBXLdYg/EBl9ao3GFl4=;
-        b=jW2L5HaOFSwPmAe1FuBRkEMRlcdterbh3EmlzNdnllG9rjvbRJRXSPcCjBVVpxIhtv
-         OoTc+mjfQqv6j3/hcx6ha7geqpcs4ZgITPa666jeMil3fIWyps5+x/8qE7n72EaUwrsw
-         zZv1OME5rSJNbn6R+sRcAr/Xlj8NeU3udqa8/oUEMRxHJwTGbF3Wv+dEHRIJh7ozYHeR
-         FmUg7wF8zNY1Ph+k+Ds9AATY9TSeYDZ2W/1BKznZoDKzy9IcwljiFf7v7uygwE/Jp3cU
-         zTtDzOqb54yVwFbgmJnuMqJTbPFXlp9WjXzRgYGIKsn9gbowsXg8WUYUVPTQLEwxE/A2
-         5Gmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686600633; x=1689192633;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tpuzEvfKwfzbfk8K6DkABkAcSBXLdYg/EBl9ao3GFl4=;
-        b=EsxAMYgiwut50ZXF9RTDPLLMFdJ/V2NG6vRQl92K3Ur2S136rA+0/2rEKlCx/HLJEc
-         /5IjMoXZuIq2wLXriIOT/lvO7UaR56ecrG0hhtQLpjN41ZCE92SyaxnSwXrfmx2O16Wn
-         ANO4HH+rUml8YaWcOvFW9oqPhSDmsxHIinhA56Z9wS+EmumyttgfBhP0P5LpMuBRdtOz
-         5Qb1/zev4Ueqi1TNLkYr1Qakr2vnFtqvxHgguDBITgANuGtT5zU4d0WGujG7PpYmOaIS
-         0vyvRCoTmXLgKTO9KaUQIw1T3BjAsZ3qVl8QMrs693C+IMsNYkk9jVHd88hOVehv/1Hk
-         eDEg==
-X-Gm-Message-State: AC+VfDxpu0qe7ZloMENc38kjd3B7cD/jc7sTtnZaalo10Wxyn95YHNNC
-        vLNaBAoQHv7ps1rR3mzj88YAjg==
-X-Google-Smtp-Source: ACHHUZ52f+8BHAN5M3G+G5uogFT+frGi0I+BR4/O7lowpDkKSKSpowggXDr/YYiCAFy8sa5naxdVGQ==
-X-Received: by 2002:a17:906:6a1c:b0:978:ab6b:afe9 with SMTP id qw28-20020a1709066a1c00b00978ab6bafe9mr9992679ejc.66.1686600632773;
-        Mon, 12 Jun 2023 13:10:32 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id oq19-20020a170906cc9300b00977e0bcff1esm5712483ejb.10.2023.06.12.13.10.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 13:10:32 -0700 (PDT)
-Message-ID: <6d76105f-daa1-1cd0-35b3-1727aa967bcc@linaro.org>
-Date:   Mon, 12 Jun 2023 22:10:30 +0200
+        Mon, 12 Jun 2023 16:12:29 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397E51B4
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:12:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686600748; x=1718136748;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=QOA2isvCKOWOA1WSnCIQ1SVooDORDWrcDc1dFgH63Uc=;
+  b=Ac/ZYmibyTfbQ5L9oZG37DoGeQgerFTSFoCi5t0sUnq4f6IY1cf+VFvz
+   7CS+cbPYM64EtQ2vR6hgVoC5wTb9ni8vtP38YO1iXl5fOjPwjNL6IBYrF
+   /2V85oaybNgIYOvWUmtSsYUX+GDnAy2SEo1CeqBBsgZX+HcxisCyvLtQr
+   dmoP68zoMBiwb54Tx96ivOk4Vvs8gyKhBfyFYVt/yKzK7eck/bl5Ri4xv
+   HGtSRn6WTGxSJAxMUdeTofvN0Re++Z1E8dtJguyNA1+ydko9iTBsws6wg
+   uI1Oq4fFkFtLbgxCgouqOCs1uKKk5/83NjMx2UaUJ5kSXLjKhIc48cGkt
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="357037937"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="357037937"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 13:12:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="835615986"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="835615986"
+Received: from fwbrewes-mobl.amr.corp.intel.com (HELO [10.255.230.147]) ([10.255.230.147])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 13:12:10 -0700
+Message-ID: <f7dc49b5fb80b25ad1f3968a623f993da29c0526.camel@linux.intel.com>
+Subject: Re: [Patch v2 1/6] sched/fair: Determine active load balance for
+ SMT sched groups
+From:   Tim Chen <tim.c.chen@linux.intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shrikanth Hegde <sshegde@linux.vnet.ibm.com>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        naveen.n.rao@linux.vnet.ibm.com,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Barry Song <v-songbaohua@oppo.com>,
+        Chen Yu <yu.c.chen@intel.com>, Hillf Danton <hdanton@sina.com>
+Date:   Mon, 12 Jun 2023 13:12:10 -0700
+In-Reply-To: <20230612111359.GI4253@hirez.programming.kicks-ass.net>
+References: <cover.1686263351.git.tim.c.chen@linux.intel.com>
+         <253f5272200d3cec3f24427262bb4e95244f681c.1686263351.git.tim.c.chen@linux.intel.com>
+         <20230612111359.GI4253@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] w1: ds2482: Switch back to use struct i2c_driver's
- .probe()
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de
-References: <20230612072807.839689-1-u.kleine-koenig@pengutronix.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230612072807.839689-1-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/06/2023 09:28, Uwe Kleine-König wrote:
-> After commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
-> call-back type"), all drivers being converted to .probe_new() and then
-> commit 03c835f498b5 ("i2c: Switch .probe() to not take an id parameter")
-> convert back to (the new) .probe() to be able to eventually drop
-> .probe_new() from struct i2c_driver.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
->  drivers/w1/masters/ds2482.c | 2 +-
+On Mon, 2023-06-12 at 13:13 +0200, Peter Zijlstra wrote:
+>=20
+>=20
+>=20
+> > @@ -9537,6 +9581,18 @@ static bool update_sd_pick_busiest(struct lb_env=
+ *env,
+> >  		break;
+> > =20
+> >  	case group_has_spare:
+> > +		/*
+> > +		 * Do not pick sg with SMT CPUs over sg with pure CPUs,
+> > +		 * as we do not want to pull task off half empty SMT core
+> > +		 * and make the core idle.
+> > +		 */
+> > +		if (smt_vs_nonsmt_groups(sds->busiest, sg)) {
+> > +			if (sg->flags & SD_SHARE_CPUCAPACITY)
+> > +				return false;
+> > +			else
+> > +				return true;
+> > +		}
+>=20
+> However, here I'm not at all sure. Consider SMT-4 with 2 active CPUs, we
+> still very much would like to pull one task off if we have an idle core
+> somewhere, no?
+>=20
 
-Thank you for the patch.
-It is too late in the cycle for me to pick it up. I will take it after
-the merge window.
+How about making this modification to take care of SMT-4 case?
 
+Tim
 
-Best regards,
-Krzysztof
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 33246dce10db..e2261c24e536 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -9642,11 +9642,11 @@ static bool update_sd_pick_busiest(struct lb_env *e=
+nv,
+        case group_has_spare:
+                /*
+                 * Do not pick sg with SMT CPUs over sg with pure CPUs,
+-                * as we do not want to pull task off half empty SMT core
++                * as we do not want to pull task off SMT core with one tas=
+k
+                 * and make the core idle.
+                 */
+                if (smt_vs_nonsmt_groups(sds->busiest, sg)) {
+-                       if (sg->flags & SD_SHARE_CPUCAPACITY)
++                       if (sg->flags & SD_SHARE_CPUCAPACITY && sgs->sum_h_=
+nr_running <=3D 1)
+                                return false;
+                        else
+                                return true;
 
+	=09
