@@ -2,91 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AD4672B9C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 10:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E194172B9CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 10:08:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234046AbjFLIG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 04:06:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43952 "EHLO
+        id S232260AbjFLIIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 04:08:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233879AbjFLIGk (ORCPT
+        with ESMTP id S229877AbjFLIHq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 04:06:40 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF29C1980
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 01:05:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686557151; x=1718093151;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=7A21HmaRay4LWuG9bVQutg9tF4DSDeHyHi3nObJLshQ=;
-  b=eginvoy9W4PcIdGdsEGT0czS1x0zI4takNaqDbR6yVvO9ahbVh4VhUue
-   ZNZyRihi9p8rLMTrRWGrH5ZfFgJtmXFyMi4+Ud+DbpTT/etaLnBnP+JRe
-   JZuZmVNT08PuiidFJ9cOiFKVwhQaJLNN977iMVqfwPs7s7LRMsvdAKjG7
-   eNxDxJpJQAXV24cuGbpl0MavjqQBpxQcdPoYKosC08+tBCgEauK/+ntXJ
-   j17Scqd/qQNaVFNCTkSegx3VRR0KC9HSPmhMSLfa/ipap9k8VJRuZxper
-   Y5VkR5SspkHRwwXRTn8rHmmSmHheN4WjtlXI8wMq6vndnGyiZF8TuAjYO
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="421568195"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="421568195"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 01:04:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="823886922"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="823886922"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 01:04:20 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2 31/32] mm/swap: swap_vma_readahead() do the
- pte_offset_map()
-References: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
-        <b7c64ab3-9e44-aac0-d2b-c57de578af1c@google.com>
-Date:   Mon, 12 Jun 2023 16:03:18 +0800
-In-Reply-To: <b7c64ab3-9e44-aac0-d2b-c57de578af1c@google.com> (Hugh Dickins's
-        message of "Thu, 8 Jun 2023 18:52:17 -0700 (PDT)")
-Message-ID: <87legp6rax.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 12 Jun 2023 04:07:46 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D432910F3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 01:06:59 -0700 (PDT)
+X-UUID: 1604a7d408f811eeb20a276fd37b9834-20230612
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=8HH9zLb3Gy7rOvad9zB0nHtjORohOCRdqXHYRb0pLKE=;
+        b=INmty2KV3oKNnkPxtyYTDnk9bNB1QlzoSM+TUaPSFwNiGsHrPf14fMb4JEZS+aJgBWFLUpfTpq2xMUrllfLQ3iywfctAawcBLbRjITN/q4Hy27d9Ph80yWTBGZBFdL0rHFGj0X31PGcOUsjZjKuqQb9GhFHPtl6/UaoMJU20A30=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.26,REQID:5ed192c1-28e8-4549-a4a7-e252d0fd6398,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:cb9a4e1,CLOUDID:dd15243e-de1e-4348-bc35-c96f92f1dcbb,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 1604a7d408f811eeb20a276fd37b9834-20230612
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1690894677; Mon, 12 Jun 2023 16:06:50 +0800
+Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Mon, 12 Jun 2023 16:06:49 +0800
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (172.21.101.237)
+ by mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Mon, 12 Jun 2023 16:06:49 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eAdYOLADa1KeQLHExsJ3tY5csBJJRB52PHr/qIsjdmwSL6gQlwaQ1lBty3XTLF3cxHueLdmZyvGoOKtiMOTRvqzq1OQlmihBjtSZjBJQ8ok0dkZHsADlYCKbsWv4kIFPVCij6Hgqw3ynAoBUtpm0GbOIC0n6NDTl+P/nkrwgmnc2oMYgQO6sCiyOrE1p/xjZGQVg9PZk7jUYjM05aDW8aE/tvNjB+dpM8vJyGHAtb4F9bTIYn4T+81xkCmrVn8UgShFYRUJ2Moe9og0t7Lfcv8y7DnaPKyIgt55L+i5EEACjx+v2osa0Xwy1xsKhkjetM50vFramvAD/rLRgN7RWZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8HH9zLb3Gy7rOvad9zB0nHtjORohOCRdqXHYRb0pLKE=;
+ b=J4t/0CDm5Bx7BdYywoP3lGG9NmBK1ldLjXuK4ycaBwtIYqbkrcCj7tF0qA7ny4k0aAzmvDVJCDFlKqkTomkFHZfWajCLkYhcMCDsjE3zpmD96u/04LVs4z8kGjCpagXbzbA7tR7cC0U0SGCk7ZV2MXtuhCtb1QxhdHtRGNZZdFTD8CQ/g2U/bUinkhXRQSDZmLyAAqOaq4obB1h/jkEKiK/rjLrJC4ksMO69trQiTOM/uiGJvKWuEipdnGTanGFocmEZdlbtw8BqGkn13mKO+BiZeVZVX2PJspOMHnonEgVdMU9aVt3+QiP/+mgDG9QFVD+Mj4j2cBNORDJ/x6HyRg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
+ dkim=pass header.d=mediatek.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8HH9zLb3Gy7rOvad9zB0nHtjORohOCRdqXHYRb0pLKE=;
+ b=bEcDmFwTE9OKp0oXzqIYaWEEc1aK6QK1MuwigplryLqBLCyoW1QNOSqqg1oTMgqYxzxzdiRRus5FKWmY47BKRfmzIJJsATnPt3dx5hgRHOTXQ7RJm68oSLsB5YexvH5pmxpJKgZTqZcSSYbiDbR7fzBFoi5P+fRQ1Q3pIyKAf2g=
+Received: from TYZPR03MB6624.apcprd03.prod.outlook.com (2603:1096:400:1f4::13)
+ by TYZPR03MB7954.apcprd03.prod.outlook.com (2603:1096:400:465::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.38; Mon, 12 Jun
+ 2023 08:06:47 +0000
+Received: from TYZPR03MB6624.apcprd03.prod.outlook.com
+ ([fe80::6fdb:ba2c:bcfc:d5ed]) by TYZPR03MB6624.apcprd03.prod.outlook.com
+ ([fe80::6fdb:ba2c:bcfc:d5ed%6]) with mapi id 15.20.6455.037; Mon, 12 Jun 2023
+ 08:06:47 +0000
+From:   =?utf-8?B?Q0sgSHUgKOiDoeS/iuWFiSk=?= <ck.hu@mediatek.com>
+To:     =?utf-8?B?SmFzb24tSkggTGluICjmnpfnnb/npaUp?= 
+        <Jason-JH.Lin@mediatek.com>,
+        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        =?utf-8?B?U2luZ28gQ2hhbmcgKOW8teiIiOWciyk=?= 
+        <Singo.Chang@mediatek.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        =?utf-8?B?SmFzb24tY2ggQ2hlbiAo6Zmz5bu66LGqKQ==?= 
+        <Jason-ch.Chen@mediatek.com>,
+        =?utf-8?B?U2hhd24gU3VuZyAo5a6L5a2d6KyZKQ==?= 
+        <Shawn.Sung@mediatek.com>,
+        =?utf-8?B?TmFuY3kgTGluICjmnpfmrKPonqIp?= <Nancy.Lin@mediatek.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        =?utf-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
+        <Rex-BC.Chen@mediatek.com>
+Subject: Re: [PATCH 1/5] drm/mediatek: Remove freeing not dynamic allocated
+ memory
+Thread-Topic: [PATCH 1/5] drm/mediatek: Remove freeing not dynamic allocated
+ memory
+Thread-Index: AQHZaRzwMJJDPOPx3km55eBytHqn8q+HN3CA
+Date:   Mon, 12 Jun 2023 08:06:47 +0000
+Message-ID: <2ff94f781b17c25229d547e763f74ef43aac35f6.camel@mediatek.com>
+References: <20230407064657.12350-1-jason-jh.lin@mediatek.com>
+         <20230407064657.12350-2-jason-jh.lin@mediatek.com>
+In-Reply-To: <20230407064657.12350-2-jason-jh.lin@mediatek.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=mediatek.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYZPR03MB6624:EE_|TYZPR03MB7954:EE_
+x-ms-office365-filtering-correlation-id: a1a1c007-08ff-4ab6-3335-08db6b1bf829
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: BQtcVuI/L0+5zKPg9O2ohXyKB2PkHIpU3XbhDXkVPlJMMRDH+AVaViuLAzwfQ6/NH51xQNj3Vl+yUCzecRx871JnUzi094taUFI1H3hDWTURWpShYeeZz48cUuXz4q31wL7mCluUplaBcGELq61PnePOu9cbdQ5UoMPOn91ZIaavVScg6wBcm3UXbBrULLQ1RJ4jRpC2iflJqnGGITzxMRbxPKLKkmliNt4mhRZhAyFeSOCAG0+IqKQNYtcjGCdi/T+syjwXVeL0m/V85OT7yV1WMvuq0aAU8fY6iEBKcOML5KmBH1g1YmGF7hHF+y+yLqpLMkKfC9x48kYOPCjyvD47K+U0DnNtqsXsuM2yG6CgzlZx+73JYwiz+rTgmqVURfK00mLIUCBdWd/9o/9LPKgPh8YD8nUeVKYZFXgSw4IMHD3sTkNcGrIx/5Bxs8cM2QvCa+GZdvor+0ggwNPft6BhiMedHysCWMGnF8qH+682sRb7NqOjIM5KgU5WnvUhmeSzU3ZXyJiR3tuvbf/5HGBjgm7+IvbQs7HVtMONT9iiTwR6H/2LW+NVGNS9gwFWuVwnEg6qJJ1kb1YOd0akTqsKMHmYT5Tbez7JSphp6RKN9fqyhlpA2kQ3sCpwZSR0No9pjmczDQ+qrDreKaSVOA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR03MB6624.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(376002)(39860400002)(366004)(346002)(451199021)(66476007)(66446008)(66556008)(85182001)(36756003)(86362001)(66946007)(8936002)(41300700001)(4326008)(8676002)(64756008)(76116006)(316002)(6486002)(478600001)(54906003)(71200400001)(2906002)(5660300002)(110136005)(4744005)(38070700005)(38100700002)(186003)(122000001)(83380400001)(2616005)(26005)(6506007)(6512007)(107886003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RjdKY3crQ3ZMTFVqM2dsaTBiVFhHQ1JHZW9yWE9mSm4vell2bkJObXplQnFV?=
+ =?utf-8?B?c21MUkpORHlrTHZmRUVZUDlPWnU3Sk5EdmUzc2ozcWZ3amxkejBCdHNkVVlP?=
+ =?utf-8?B?aXlEWlRuV3Z0bC9oekY3T2xSOHo0N3BSaW9vYXJRUksxOFNvSlBCa3RCWWlW?=
+ =?utf-8?B?NUUwODllNjBaVStxRXltc1JSMHNpTENEcExGWm5vQkVWczg4bnZWRDc2NERC?=
+ =?utf-8?B?ZGlHdDlOVENmMmNJcnhnczV5cGpNNHB5ekhBMDZSRUg2UFZMRFRBQ281eDho?=
+ =?utf-8?B?ajU0Y1JVRWNDcUw4RnZYL09mTW1Gdk5lZlV1YWJLSXZVT0RVVi90ZzFxK281?=
+ =?utf-8?B?VFpycWt0SHJ1ZXExWDdXeG55Sm5EZ2Q1V3ZkUEU3UzJ1bDhvYTRGTUl0L2N0?=
+ =?utf-8?B?S3BDRlV6eGVvY1dpelNsKzJEZ0g1UTJKU3RVNkNKVjBNei9ZMVZERnh3amFV?=
+ =?utf-8?B?WWxaaTcxZGJIdk10QzRtdmR1M0VrNSt1Q0RkZEYvbUhmd25nYld4WWg0YTY5?=
+ =?utf-8?B?MldmRHB3L0F6aC9UbWtHWVN3RjdpREN1bzk0WjZxb3ozV2UrYWhrQWpPL0Fz?=
+ =?utf-8?B?MFhQL1lMeXFUNzY0YlNmVzVMTkRaQXlJSXE4aTBXdytpZlRXM3FUUHY5MkVK?=
+ =?utf-8?B?cHJCVDZ2b2YzamFDZWZGVjl5NmdPdTlIZGk1c3R6RTBwaEZ3VStubnBRZVdn?=
+ =?utf-8?B?ZVRqQTFWWlIzbTlmMmVMYk5tN1VRQ0lEM0xLcjU2UkZMOUR6eDVQelhSMElR?=
+ =?utf-8?B?QTZqYmtadEM1dUlsRnJoRzIyREtRcFFIRkNqakU5VzB1U0FrSTJHVVpNdXRN?=
+ =?utf-8?B?WXpzMHFRVnJKOTFGblZOMWxFanRJS0dZdEpGT2t2bzhtdms3TjI0Wis5ZWs5?=
+ =?utf-8?B?WnZOQlRyT1dPNk1KYXJXWVNyYm9DYmM5UXh6dGVxdmh4eFNBcDl6V0NxMmVq?=
+ =?utf-8?B?SmhySzNrYWhBODRpOHo1Wk1LTUxYVkFSdDNHcGxrV3RHTWZDUFV6TCt1STVw?=
+ =?utf-8?B?eW94Sk50cE9EMW8wSnV5OFBPL2J0bXY0S0NLNGlKc3RrZWd2L3dJRmJFdkZT?=
+ =?utf-8?B?TWpEU1drMEVNbEJabGlRR3ZZOFBOKzVQQnVaMkVRZHFDRjRmVU8yRWpnVG9P?=
+ =?utf-8?B?Q1pCbzhpQXJnQ0c5UWE2QjE2bEJqVVdkN0ozYWEvZlBWQjA0bmJ0ZDdsMzdG?=
+ =?utf-8?B?TkM2OTg3ZWZBenNMRUZSbDV5QURHWjhxbFRMdUhZZVY1RUUzeTdtU1ZqOTZY?=
+ =?utf-8?B?N093dU42U3BNbkxscVUyeXp1OTk5dW91VTlwTkkwZDRudkJTMWVmQ1JsTzRT?=
+ =?utf-8?B?Qm13My9keE5IaVQ3QTVFalZiMTlEYXpyOVF6VWVhdmx2aTVERC9EdGJReVJx?=
+ =?utf-8?B?VXJucWpLdVVPVVpjNFpkUTdEVG5NVWJQWmI3d3RvaTZiYlh2Y29LeFVxSmJp?=
+ =?utf-8?B?L1dqcUVicWEyWmsvM1Q3a3V3emZWdjBPNjhNdGtqc2d1OVFCRTgrbDFEZUpN?=
+ =?utf-8?B?L3pOOURqUFJ4bkhSbVJQemZjTFEydHE4ZzBRaWNiMTU0Q0dKcWkwd1hIVSs5?=
+ =?utf-8?B?SHEvcHlpRVRhdmtnN1RkSjI5ZXNMTUV6NFZrOTVkbitoVDR0VWRpRnh6YXU5?=
+ =?utf-8?B?UnJjd3VrQ2l4MWkwcmlVYVFIaW4yV0FOcldsVGZSTEYrY3B1TXVISzhnd2dC?=
+ =?utf-8?B?K3htTkhOdFMrVkFNMU9vWHE3VWpFR2JEb1I0d0QxVUxIaU83dHlITTRKM3FV?=
+ =?utf-8?B?U0dxYWZOZlZNNkhmU1ZRK2RyTUJoOUZZREpNRjVDNUVaZEp5V0w3aFVqbHdF?=
+ =?utf-8?B?K2NmSjBnS3hPVUhvU3VpSjU1bTY3UVRWdy9Ka0pDcWVwS0t6Y1J4c1B2UjQr?=
+ =?utf-8?B?cEtOa3Z4Mnoyby8rQXkrbWlwTCtVT0NTNVQvWUx4ZVZXWU1DZ1M2dFZ0SHVm?=
+ =?utf-8?B?SXByYm05clY5bVNydS8vS0JxaHY2M3RGVlVQYVZxdlBqWFRmMU5mbEE5VXZI?=
+ =?utf-8?B?aURYUUJ5RzR3SlFvZUlxcDhldzBmRnhtNzFzaFVzcXhaV0NWc3lwN1ZYNGRV?=
+ =?utf-8?B?VC9xTXNOL3JIZEN0WGQ4RUFoV0FwcWswY1dYcThndldpVWkydTRZejhsZkxa?=
+ =?utf-8?Q?KCwlWVppavibuq/eu8REqltkg?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A45876CB71367F4FA8FF7A5FB0511E5F@apcprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR03MB6624.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a1a1c007-08ff-4ab6-3335-08db6b1bf829
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jun 2023 08:06:47.4432
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: kPBKevBT4g8Y+U3Z+h7nsFIFhuVyCTb+hGbJjr0+W/sujrkksaNdTeQEG9ECXMN8BbL+B7ywpE5s/zujNscdsg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR03MB7954
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,193 +174,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Hugh,
-
-Sorry for late reply.
-
-Hugh Dickins <hughd@google.com> writes:
-
-> swap_vma_readahead() has been proceeding in an unconventional way, its
-> preliminary swap_ra_info() doing the pte_offset_map() and pte_unmap(),
-> then relying on that pte pointer even after the pte_unmap() - in its
-> CONFIG_64BIT case (I think !CONFIG_HIGHPTE was intended; whereas 32-bit
-> copied ptes to stack while they were mapped, but had to limit how many).
->
-> Though it would be difficult to construct a failing testcase, accessing
-> page table after pte_unmap() will become bad practice, even on 64-bit:
-> an rcu_read_unlock() in pte_unmap() will allow page table to be freed.
->
-> Move relevant definitions from include/linux/swap.h to mm/swap_state.c,
-> nothing else used them.  Delete the CONFIG_64BIT distinction and buffer,
-> delete all reference to ptes from swap_ra_info(), use pte_offset_map()
-> repeatedly in swap_vma_readahead(), breaking from the loop if it fails.
->
-> (Will the repeated "map" and "unmap" show up as a slowdown anywhere?
-> If so, maybe modify __read_swap_cache_async() to do the pte_unmap()
-> only when it does not find the page already in the swapcache.)
->
-> Use ptep_get_lockless(), mainly for its READ_ONCE().  Correctly advance
-> the address passed down to each call of __read__swap_cache_async().
->
-> Signed-off-by: Hugh Dickins <hughd@google.com>
-> ---
->  include/linux/swap.h | 19 -------------------
->  mm/swap_state.c      | 45 +++++++++++++++++++++++---------------------
->  2 files changed, 24 insertions(+), 40 deletions(-)
->
-> diff --git a/include/linux/swap.h b/include/linux/swap.h
-> index 3c69cb653cb9..1b9f2d92fc10 100644
-> --- a/include/linux/swap.h
-> +++ b/include/linux/swap.h
-> @@ -337,25 +337,6 @@ struct swap_info_struct {
->  					   */
->  };
->  
-> -#ifdef CONFIG_64BIT
-> -#define SWAP_RA_ORDER_CEILING	5
-> -#else
-> -/* Avoid stack overflow, because we need to save part of page table */
-> -#define SWAP_RA_ORDER_CEILING	3
-> -#define SWAP_RA_PTE_CACHE_SIZE	(1 << SWAP_RA_ORDER_CEILING)
-> -#endif
-> -
-> -struct vma_swap_readahead {
-> -	unsigned short win;
-> -	unsigned short offset;
-> -	unsigned short nr_pte;
-> -#ifdef CONFIG_64BIT
-> -	pte_t *ptes;
-> -#else
-> -	pte_t ptes[SWAP_RA_PTE_CACHE_SIZE];
-> -#endif
-> -};
-> -
->  static inline swp_entry_t folio_swap_entry(struct folio *folio)
->  {
->  	swp_entry_t entry = { .val = page_private(&folio->page) };
-> diff --git a/mm/swap_state.c b/mm/swap_state.c
-> index b76a65ac28b3..a43b41975da2 100644
-> --- a/mm/swap_state.c
-> +++ b/mm/swap_state.c
-> @@ -698,6 +698,14 @@ void exit_swap_address_space(unsigned int type)
->  	swapper_spaces[type] = NULL;
->  }
->  
-> +#define SWAP_RA_ORDER_CEILING	5
-> +
-> +struct vma_swap_readahead {
-> +	unsigned short win;
-> +	unsigned short offset;
-> +	unsigned short nr_pte;
-> +};
-> +
-
-Because we don't deal with PTEs in struct vma_swap_readahead anymore, it
-appears simpler to record addresses directly, for example,
-
-struct vma_swap_readahead {
-	unsigned long start;
-	unsigned long end;
-};
-
-we can make ra_info.win to be the return value of swap_ra_info().
-
-Anyway, this can be a separate cleanup patch based on this patch.
-
-For the patch itself, feel free to add,
-
-Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
-
->  static void swap_ra_info(struct vm_fault *vmf,
->  			 struct vma_swap_readahead *ra_info)
->  {
-> @@ -705,11 +713,7 @@ static void swap_ra_info(struct vm_fault *vmf,
->  	unsigned long ra_val;
->  	unsigned long faddr, pfn, fpfn, lpfn, rpfn;
->  	unsigned long start, end;
-> -	pte_t *pte, *orig_pte;
->  	unsigned int max_win, hits, prev_win, win;
-> -#ifndef CONFIG_64BIT
-> -	pte_t *tpte;
-> -#endif
->  
->  	max_win = 1 << min_t(unsigned int, READ_ONCE(page_cluster),
->  			     SWAP_RA_ORDER_CEILING);
-> @@ -728,12 +732,9 @@ static void swap_ra_info(struct vm_fault *vmf,
->  					       max_win, prev_win);
->  	atomic_long_set(&vma->swap_readahead_info,
->  			SWAP_RA_VAL(faddr, win, 0));
-> -
->  	if (win == 1)
->  		return;
->  
-> -	/* Copy the PTEs because the page table may be unmapped */
-> -	orig_pte = pte = pte_offset_map(vmf->pmd, faddr);
->  	if (fpfn == pfn + 1) {
->  		lpfn = fpfn;
->  		rpfn = fpfn + win;
-> @@ -753,15 +754,6 @@ static void swap_ra_info(struct vm_fault *vmf,
->  
->  	ra_info->nr_pte = end - start;
->  	ra_info->offset = fpfn - start;
-> -	pte -= ra_info->offset;
-> -#ifdef CONFIG_64BIT
-> -	ra_info->ptes = pte;
-> -#else
-> -	tpte = ra_info->ptes;
-> -	for (pfn = start; pfn != end; pfn++)
-> -		*tpte++ = *pte++;
-> -#endif
-> -	pte_unmap(orig_pte);
->  }
->  
->  /**
-> @@ -785,7 +777,8 @@ static struct page *swap_vma_readahead(swp_entry_t fentry, gfp_t gfp_mask,
->  	struct swap_iocb *splug = NULL;
->  	struct vm_area_struct *vma = vmf->vma;
->  	struct page *page;
-> -	pte_t *pte, pentry;
-> +	pte_t *pte = NULL, pentry;
-> +	unsigned long addr;
->  	swp_entry_t entry;
->  	unsigned int i;
->  	bool page_allocated;
-> @@ -797,17 +790,25 @@ static struct page *swap_vma_readahead(swp_entry_t fentry, gfp_t gfp_mask,
->  	if (ra_info.win == 1)
->  		goto skip;
->  
-> +	addr = vmf->address - (ra_info.offset * PAGE_SIZE);
-> +
->  	blk_start_plug(&plug);
-> -	for (i = 0, pte = ra_info.ptes; i < ra_info.nr_pte;
-> -	     i++, pte++) {
-> -		pentry = *pte;
-> +	for (i = 0; i < ra_info.nr_pte; i++, addr += PAGE_SIZE) {
-> +		if (!pte++) {
-> +			pte = pte_offset_map(vmf->pmd, addr);
-> +			if (!pte)
-> +				break;
-> +		}
-> +		pentry = ptep_get_lockless(pte);
->  		if (!is_swap_pte(pentry))
->  			continue;
->  		entry = pte_to_swp_entry(pentry);
->  		if (unlikely(non_swap_entry(entry)))
->  			continue;
-> +		pte_unmap(pte);
-> +		pte = NULL;
->  		page = __read_swap_cache_async(entry, gfp_mask, vma,
-> -					       vmf->address, &page_allocated);
-> +					       addr, &page_allocated);
->  		if (!page)
->  			continue;
->  		if (page_allocated) {
-> @@ -819,6 +820,8 @@ static struct page *swap_vma_readahead(swp_entry_t fentry, gfp_t gfp_mask,
->  		}
->  		put_page(page);
->  	}
-> +	if (pte)
-> +		pte_unmap(pte);
->  	blk_finish_plug(&plug);
->  	swap_read_unplug(splug);
->  	lru_add_drain();
+SGksIEphc29uOg0KDQpPbiBGcmksIDIwMjMtMDQtMDcgYXQgMTQ6NDYgKzA4MDAsIEphc29uLUpI
+LkxpbiB3cm90ZToNCj4gRml4aW5nIHRoZSBjb3Zlcml0eSBpc3N1ZSBvZjoNCj4gbXRrX2RybV9j
+bWRxX3BrdF9kZXN0cm95IGZyZWVzIGFkZHJlc3Mgb2YgbXRrX2NydGMtPmNtZHFfaGFuZGxlDQo+
+IA0KPiBTbyByZW1vdmUgdGhlIGZyZWUgZnVuY3Rpb24uDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBK
+YXNvbi1KSC5MaW4gPGphc29uLWpoLmxpbkBtZWRpYXRlay5jb20+DQo+IEZpeGVzOiA3NjI3MTIy
+ZmQxYzAgKCJkcm0vbWVkaWF0ZWs6IEFkZCBjbWRxX2hhbmRsZSBpbiBtdGtfY3J0YyIpDQo+IC0t
+LQ0KPiAgZHJpdmVycy9ncHUvZHJtL21lZGlhdGVrL210a19kcm1fY3J0Yy5jIHwgMSAtDQo+ICAx
+IGZpbGUgY2hhbmdlZCwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMv
+Z3B1L2RybS9tZWRpYXRlay9tdGtfZHJtX2NydGMuYw0KPiBiL2RyaXZlcnMvZ3B1L2RybS9tZWRp
+YXRlay9tdGtfZHJtX2NydGMuYw0KPiBpbmRleCA0YmM0NWNkYmRkZjEuLmM3YjAzZTU2NDA5NSAx
+MDA2NDQNCj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL21lZGlhdGVrL210a19kcm1fY3J0Yy5jDQo+
+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9tZWRpYXRlay9tdGtfZHJtX2NydGMuYw0KPiBAQCAtMTQ4
+LDcgKzE0OCw2IEBAIHN0YXRpYyB2b2lkIG10a19kcm1fY21kcV9wa3RfZGVzdHJveShzdHJ1Y3QN
+Cj4gY21kcV9wa3QgKnBrdCkNCj4gIAlkbWFfdW5tYXBfc2luZ2xlKGNsaWVudC0+Y2hhbi0+bWJv
+eC0+ZGV2LCBwa3QtPnBhX2Jhc2UsIHBrdC0NCj4gPmJ1Zl9zaXplLA0KPiAgCQkJIERNQV9UT19E
+RVZJQ0UpOw0KPiAgCWtmcmVlKHBrdC0+dmFfYmFzZSk7DQo+IC0Ja2ZyZWUocGt0KTsNCg0KDQpB
+bHNvIGZpeCB0aGUgc2FtZSBwcm9ibGVtIGluIG10a19kcm1fY21kcV9wa3RfY3JlYXRlKCkuDQoN
+ClJlZ2FyZHMsDQpDSw0KDQo+ICB9DQo+ICAjZW5kaWYNCj4gIA0K
