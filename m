@@ -2,81 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 916C472D010
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:02:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54D3172D018
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:05:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232494AbjFLUCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 16:02:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40134 "EHLO
+        id S234867AbjFLUF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 16:05:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbjFLUCj (ORCPT
+        with ESMTP id S234891AbjFLUEm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 16:02:39 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62600118;
-        Mon, 12 Jun 2023 13:02:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=pxkiBpX/jKL5fDu+bPABhlXr0//9Lho2ZyF5gMf+wnU=; b=YE5cJbLdVZV9PIHrx4tBv08lZx
-        QSYHEJWO1MpAuhw42QCCjHt/VjPVWsDm9s+u55fqbBeABzUnQBVsSlh2L+ituWNyN3T46KWVD9vks
-        bbI8vIOnRcUIpyT/SDszF/Mi6utLS00YvmEtBFHbi+Lo2tFu+6BrCewpdECrJeO6RJwJiBZkWLNZl
-        OvgWWjDTIsQqesRzGliidqy3dPAYen6WPMvkkSyTqGz+/O3tItjrXDxIUUXuSbtg7lF6hfVS+TZQR
-        fdR4gQ2kcnekYTWSfwfK8uM/4Y+aX96zevoGSsdTz+GXLJ0gUd+CIgGmkrp59j/83fmqMK2G5dQBw
-        8Otb00PQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q8nkF-008zpL-2Y;
-        Mon, 12 Jun 2023 20:02:32 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 860C130058D;
-        Mon, 12 Jun 2023 22:02:30 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id ED3042460EAE4; Mon, 12 Jun 2023 22:02:29 +0200 (CEST)
-Date:   Mon, 12 Jun 2023 22:02:29 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     torvalds@linux-foundation.org, keescook@chromium.org,
-        gregkh@linuxfoundation.org, pbonzini@redhat.com,
-        masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-        nicolas@fjasle.eu, catalin.marinas@arm.com, will@kernel.org,
-        vkoul@kernel.org, trix@redhat.com, ojeda@kernel.org,
-        mingo@redhat.com, longman@redhat.com, dennis@kernel.org,
-        tj@kernel.org, cl@linux.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
-        42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
-        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
-        john.johansen@canonical.com, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
-        rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
-        tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
-        luc.vanoostenryck@gmail.com
-Subject: Re: [PATCH v3 08/57] sched: Simplify wake_up_if_idle()
-Message-ID: <20230612200229.GN4253@hirez.programming.kicks-ass.net>
-References: <20230612090713.652690195@infradead.org>
- <20230612093537.977924652@infradead.org>
- <ZIddtMiTj8Kktq1z@boqun-archlinux>
+        Mon, 12 Jun 2023 16:04:42 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62AF5186
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:04:40 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-30fc6b513afso766824f8f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:04:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1686600279; x=1689192279;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=YzNsZC6f0ahxcqJoEVkr3mmh3LhtJkgOMa+jSW4jW4w=;
+        b=Bf7pNtCF/I7e3eWMOv6SyG52CdpbOvoHwSlm74rGPTi0sdpPC5Xm2EU1eb2u2exmi5
+         VQYrRpwns3q4FMFWvCysI1lQC78YYuPi41xQ5jbvO78hzMN/IC6uoBDK/9RHY5chnSPP
+         v4Y76tVi+eYetxsQmh8lVUkyls4uhh3oH7n2FCjYv3DVqHjz6HmByWfLgI1xSma3GsvV
+         n6CEGg/H2X4y5vHSMKug5EY8rkNH/8EajTI/1t6BhbAUucSiY54Ce3wnRGXHe9N0/1vy
+         kVGvZX2QYB2KPKR7cOLweqyKOg61L9MJrPm1cfK5iiUBZteYlHJEkM0wkQ8sHVFlepS1
+         Jo4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686600279; x=1689192279;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YzNsZC6f0ahxcqJoEVkr3mmh3LhtJkgOMa+jSW4jW4w=;
+        b=fAavlqgkG9TOtytefjO8FjfGXZeiEmp1kXzSnOc0vQXSMEttvRaniJXLj96YSvljVq
+         5RdfQ0ZKfdbx+cTZopwbzofia8VBnp5VduRHfGqK7H5UGAQwdr+yoCW0qBHTHnBUtsDq
+         SFyZRhLSnlCDaHI6zQsazH/GPr+0AbqyhT/EO3BHX9nOzC80NgrVhGZmwLa6qN6QSeAl
+         oCbDVH3Blr0omO/o72QEek0x83JIlR9Qhgd47JH8h5kBGAvqqEROnaEOL64AS7CdMPWM
+         L9xzhkSMyB99pprRlyCePENnpJXwwYXcNzJI5CEXokW2CmYvLJUK7ptmtNWaawxDLFI9
+         r4Bg==
+X-Gm-Message-State: AC+VfDymnKIZvxGSFgxdQ5x+rXZdoVSBuu6nFXE9DM2ahM+Tt3oSpf+p
+        hopbwOACiYDDbNyXjoRpcXRSLQ==
+X-Google-Smtp-Source: ACHHUZ4u9yNXmp6fhE5G8NnIfX3V5/d6Zvn8rSRouBJFVjUSo4oN1ZFCeTUbWQfFUxGOVTVzl54GQg==
+X-Received: by 2002:adf:f410:0:b0:30f:bc8f:6d49 with SMTP id g16-20020adff410000000b0030fbc8f6d49mr4131648wro.13.1686600278783;
+        Mon, 12 Jun 2023 13:04:38 -0700 (PDT)
+Received: from localhost (82-65-169-74.subs.proxad.net. [82.65.169.74])
+        by smtp.gmail.com with ESMTPSA id i17-20020a5d6311000000b0030fae360f14sm8035712wru.68.2023.06.12.13.04.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 13:04:37 -0700 (PDT)
+References: <20230612182332.371003-1-sboyd@kernel.org>
+User-agent: mu4e 1.8.13; emacs 28.2
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        patches@lists.linux.dev, Jian Hu <jian.hu@amlogic.com>,
+        Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: Re: [PATCH] clk: meson: a1: Staticize rtc clk
+Date:   Mon, 12 Jun 2023 22:03:11 +0200
+In-reply-to: <20230612182332.371003-1-sboyd@kernel.org>
+Message-ID: <1jzg54fnvw.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZIddtMiTj8Kktq1z@boqun-archlinux>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,46 +74,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 11:02:28AM -0700, Boqun Feng wrote:
-> On Mon, Jun 12, 2023 at 11:07:21AM +0200, Peter Zijlstra wrote:
-> > Use guards to reduce gotos and simplify control flow.
-> > 
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > ---
-> >  kernel/sched/core.c  |   20 ++++++--------------
-> >  kernel/sched/sched.h |   15 +++++++++++++++
-> >  2 files changed, 21 insertions(+), 14 deletions(-)
-> > 
-> > --- a/kernel/sched/core.c
-> > +++ b/kernel/sched/core.c
-> > @@ -3872,21 +3872,13 @@ static void __ttwu_queue_wakelist(struct
-> >  void wake_up_if_idle(int cpu)
-> >  {
-> >  	struct rq *rq = cpu_rq(cpu);
-> > -	struct rq_flags rf;
-> >  
-> > -	rcu_read_lock();
-> > -
-> > -	if (!is_idle_task(rcu_dereference(rq->curr)))
-> > -		goto out;
-> > -
-> > -	rq_lock_irqsave(rq, &rf);
-> > -	if (is_idle_task(rq->curr))
-> > -		resched_curr(rq);
-> > -	/* Else CPU is not idle, do nothing here: */
-> > -	rq_unlock_irqrestore(rq, &rf);
-> > -
-> > -out:
-> > -	rcu_read_unlock();
-> > +	guard(rcu)();
-> > +	if (is_idle_task(rcu_dereference(rq->curr))) {
-> > +		guard(rq_lock)(rq);
-> 
-> We assume that irq must be disabled when this function called?
-> Otherwise, I don't understand why this is not
-> 
-> 	guard(rq_lock_irqsave)(rq);
-> 
 
-You're quite right, I messed that up.
+On Mon 12 Jun 2023 at 11:23, Stephen Boyd <sboyd@kernel.org> wrote:
+
+> Sparse rightly complains that this symbol is supposed to be static.
+>
+> Cc: Jian Hu <jian.hu@amlogic.com>
+> Cc: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Cc: Jerome Brunet <jbrunet@baylibre.com>
+> Fixes: 84af914404db ("clk: meson: a1: add Amlogic A1 Peripherals clock controller driver")
+> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+
+Reviewed-by: Jerome Brunet <jbrunet@baylibre.com>
+
+Sorry this got through.
+
+> ---
+>  drivers/clk/meson/a1-peripherals.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/clk/meson/a1-peripherals.c b/drivers/clk/meson/a1-peripherals.c
+> index b320134fefeb..75dfae210fe5 100644
+> --- a/drivers/clk/meson/a1-peripherals.c
+> +++ b/drivers/clk/meson/a1-peripherals.c
+> @@ -218,7 +218,7 @@ static struct clk_regmap rtc_32k_sel = {
+>  	},
+>  };
+>  
+> -struct clk_regmap rtc = {
+> +static struct clk_regmap rtc = {
+>  	.data = &(struct clk_regmap_gate_data){
+>  		.offset = RTC_BY_OSCIN_CTRL0,
+>  		.bit_idx = 30,
 
