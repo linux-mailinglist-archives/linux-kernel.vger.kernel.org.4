@@ -2,125 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 557DB72C940
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:03:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BA2A72C943
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:03:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239115AbjFLPDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 11:03:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
+        id S239171AbjFLPDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 11:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239171AbjFLPDW (ORCPT
+        with ESMTP id S239244AbjFLPDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 11:03:22 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B056E191
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:03:21 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9786fc23505so656880166b.2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:03:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686582200; x=1689174200;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=C6UuLqkfXOKHkrI1ad2tdmANY5TMlVXBKHyBVpKDDNs=;
-        b=fQoS3tSGn8MnsOHfhsD6U5U64Fu3Nmsz50Zwg30oq03i6E9Ezn91hqw2g7JpPIfkYa
-         eMxsDjRIBq9G0jJGBcWaDnePtVmfbNPUTYXkxtjP670BBPDpCwJOCK3L/KPB4zt36UjW
-         kdt6PlviG3u9oMqOmGxqCLIMkk1SKvUtpzyC+hd9ztU8insHBNXyIOokRBp0ctanexIY
-         NJp9NQSsohcxBpxh49DM4vi0azYuVugTJ838AKT94gn1TeK2cUx1267WJIPahLF1PDIo
-         F5UQNY4dJJR83Egpjg+3rjY6RUlKmsbFha9n3Bejl45Oi6Vq1kE4K81JkzKG5nkdhNwm
-         P2ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686582200; x=1689174200;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C6UuLqkfXOKHkrI1ad2tdmANY5TMlVXBKHyBVpKDDNs=;
-        b=i4m0hNFu+4eR/d1Dn7tY1IfAgb4t9fBpYt5n38krGaDZrSwxqL5Y+v8MQ67ecBgWzc
-         zpaaPQDH6QJ40KTKV0I/+zSYaVodg+xb7mpVQAZhYNIJJkycSfemLGOLOlGFWeSBhc3N
-         TcRj2BvMUwOpPm2qEz2KTZZP/ngUfzbhr+tr3N2cjS/rAqt3uZ6mGk1qEztzuKaoSIbl
-         9BjsmEP3UlkxlVD1nf9Z4nqbtzv2R0ogTCtZFWXU8xZAkHhc2rzHOZ93WlefRNp42Rtb
-         HDw4qVaFx89e9kbRrGciroiNPZjynd2r3UsFYZMcdMR1hxNAo1bnPl1rlpbdxZr+IyvV
-         MXsA==
-X-Gm-Message-State: AC+VfDxRsccjVyuCOv2FvIAu5UGbB8ViJswANctxVDoaJnN4Yz+y4sue
-        fPRu6+BSjujjd0K07pWv3xY=
-X-Google-Smtp-Source: ACHHUZ4K+07M7JwoUNnwyZygd7mJqgEw47AtVBH7IL8iAes/yi0KtHWRtUq/gJqHa6/nh/N6rjJouQ==
-X-Received: by 2002:a17:907:3603:b0:96a:19d8:f082 with SMTP id bk3-20020a170907360300b0096a19d8f082mr9821093ejc.25.1686582199969;
-        Mon, 12 Jun 2023 08:03:19 -0700 (PDT)
-Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id k14-20020a1709061c0e00b0096f6e2f4d9esm5264570ejg.83.2023.06.12.08.03.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 08:03:19 -0700 (PDT)
-Message-ID: <f2cebf54-a16c-c849-a988-bfd98c502748@gmail.com>
-Date:   Mon, 12 Jun 2023 17:03:18 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v2 3/5] mtd: nand: raw: rockchip-nand-controller: fix oobfree
- offset and description
-To:     miquel.raynal@bootlin.com
-Cc:     richard@nod.at, vigneshr@ti.com, heiko@sntech.de,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, yifeng.zhao@rock-chips.com
-References: <11e16c3b-6f7b-a6a9-b0ed-b7ac0cd703e3@gmail.com>
-Content-Language: en-US
-In-Reply-To: <11e16c3b-6f7b-a6a9-b0ed-b7ac0cd703e3@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 12 Jun 2023 11:03:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C337C12A
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:03:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C6A461671
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 15:03:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6296C433D2;
+        Mon, 12 Jun 2023 15:03:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686582206;
+        bh=8d5q953vla0AfsjXttAZJ/ISVUHuzC9Shw3Q1PG8UPU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=i8cvUNbtedQ2UTp9IkMt/aFBwSQrLpEp2qWtRRdB90cgHyi8/e0PMRNHoZDUFhxka
+         50Naqpxnmwvc7ZSX0NkXKXL6zsSdB4go6z7o+TzQFtyoLCSahwXuC4RYlThlKlBwIb
+         44HDeScNkfhIB2IPFBcR7HBaa8aXHEG8Gkpdkk9kGsEgkEaxAgeWlVC39UJ5y6CZ8W
+         Bb7kMAJOig9lZKIJbmjklPDjzS5SVAtT4tW3jf12MpzcdJy36mwXLWAmnJVtlBJ6+1
+         ghHq+ocNpSmCibxUvSFneGfbWifuFflvWFzqwXSeEWraQm8Okq9+ZZuujGDQqkl21Y
+         qKOKBmN6u/ynQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1q8j4m-004ova-Ma;
+        Mon, 12 Jun 2023 16:03:24 +0100
+Date:   Mon, 12 Jun 2023 16:03:24 +0100
+Message-ID: <86r0qgbu4j.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
+        Reiji Watanabe <reijiw@google.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH] perf/core: Drop __weak attribute from arch_perf_update_userpage() prototype
+In-Reply-To: <20230612145423.GC83892@hirez.programming.kicks-ass.net>
+References: <20230603082519.1088285-1-maz@kernel.org>
+        <ZIcarHx0qbfC2iyy@FVFF77S0Q05N>
+        <20230612145423.GC83892@hirez.programming.kicks-ass.net>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: peterz@infradead.org, mark.rutland@arm.com, linux-kernel@vger.kernel.org, reijiw@google.com, will@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The MTD framework reserves 1 or 2 bytes for the bad block marker
-depending on the bus size. The rockchip-nand-controller driver
-currently only supports a 8 bit bus, but reserves standard 2 bytes
-for the BBM. The first free OOB byte is therefore OOB2 at offset 2.
-Page address(PA) bytes are moved to the last 4 positions before
-ECC. Update the description for Linux.
+On Mon, 12 Jun 2023 15:54:23 +0100,
+Peter Zijlstra <peterz@infradead.org> wrote:
+> 
+> On Mon, Jun 12, 2023 at 02:16:28PM +0100, Mark Rutland wrote:
+> > On Sat, Jun 03, 2023 at 09:25:19AM +0100, Marc Zyngier wrote:
+> > > Reiji reports that the arm64 implementation of arch_perf_update_userpage()
+> > > is now ignored and replaced by the dummy stub in core code.
+> > > This seems to happen since the PMUv3 driver was moved to driver/perf.
+> > 
+> > I guess we should have a Cc stable then?
+> > 
+> > The below implies this has always been on dodgy ground, and so it's probably
+> > inaccurate to give this a Fixes tag pointing to the move.
+> > 
+> > > As it turns out, dropping the __weak attribute from the *prototype*
+> > > of the function solves the problem. You're right, this doesn't seem
+> > > to make much sense. And yet... It appears that both symbols get
+> > > flagged as weak, and that the first one to appear in the link order
+> > > wins:
+> > > 
+> > > $ nm drivers/perf/arm_pmuv3.o|grep arch_perf_update_userpage
+> > > 0000000000001db0 W arch_perf_update_userpage
+> > 
+> > Ah, so having it on th *declaration* will apply to any *definition*. :/
+> 
+> Yikes..
+> 
+> > That suggests this is a bad pattern generally, and we should probably remove
+> > the other __weak instances in headers. Lukcily it seems there aren't that many:
+> > 
+> > [mark@lakrids:~/src/linux]% git grep __weak -- **/*.h | wc -l
+> > 50
+> > 
+> > IMO we'd should aim to remove __weak entirely; it causes a number of weird
+> > things like this and it'd be much easier to manage with a small amount of
+> > ifdeffery.
+> > 
+> > Peter, thoughts?
+> 
+> Not a fan of __weak myself, after having had to deal with how the
+> compilers actually make it work.
+> 
+> Where do I queue this? perf/urgent?
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
- drivers/mtd/nand/raw/rockchip-nand-controller.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+That'd be my preference, as arm64 is currently a bit broken and I'd
+like 6.4 to be functional.
 
-diff --git a/drivers/mtd/nand/raw/rockchip-nand-controller.c b/drivers/mtd/nand/raw/rockchip-nand-controller.c
-index 31d8c7a87..fcda4c760 100644
---- a/drivers/mtd/nand/raw/rockchip-nand-controller.c
-+++ b/drivers/mtd/nand/raw/rockchip-nand-controller.c
-@@ -566,9 +566,10 @@ static int rk_nfc_write_page_raw(struct nand_chip *chip, const u8 *buf,
- 		 *    BBM  OOB1 OOB2 OOB3 |......|  PA0  PA1  PA2  PA3
- 		 *
- 		 * The rk_nfc_ooblayout_free() function already has reserved
--		 * these 4 bytes with:
-+		 * these 4 bytes together with 2 bytes for BBM
-+		 * by reducing it's length:
- 		 *
--		 * oob_region->offset = NFC_SYS_DATA_SIZE + 2;
-+		 * oob_region->length = rknand->metadata_size - NFC_SYS_DATA_SIZE - 2;
- 		 */
- 		if (!i)
- 			memcpy(rk_nfc_oob_ptr(chip, i),
-@@ -945,12 +946,8 @@ static int rk_nfc_ooblayout_free(struct mtd_info *mtd, int section,
- 	if (section)
- 		return -ERANGE;
+Thanks,
 
--	/*
--	 * The beginning of the OOB area stores the reserved data for the NFC,
--	 * the size of the reserved data is NFC_SYS_DATA_SIZE bytes.
--	 */
- 	oob_region->length = rknand->metadata_size - NFC_SYS_DATA_SIZE - 2;
--	oob_region->offset = NFC_SYS_DATA_SIZE + 2;
-+	oob_region->offset = 2;
+	M.
 
- 	return 0;
- }
---
-2.30.2
-
+-- 
+Without deviation from the norm, progress is not possible.
