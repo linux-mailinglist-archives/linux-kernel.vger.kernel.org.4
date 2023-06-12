@@ -2,78 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 992F072C508
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 14:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4804472C4FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 14:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235707AbjFLMv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 08:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39174 "EHLO
+        id S235561AbjFLMvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 08:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235691AbjFLMvp (ORCPT
+        with ESMTP id S230039AbjFLMvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 08:51:45 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF32172B
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 05:51:35 -0700 (PDT)
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com [209.85.161.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 5FBE23F235
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 12:51:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1686574293;
-        bh=omMsUqmf+wDARTSBLeWKvRxM4zligfqqpbMttBMt0pg=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=UA/fdTTAIioDD+O770I8naogOwvF/EA0aLYblU1j+xnd6Z1Tj5UqYXMsJ/eShk1/X
-         D13BJQ4A8RMETmWj0NJYefoaCrhikX5Ygov0W1zmEidfrS9q8BjabQEe/6LR6WZNza
-         Ob36v2TOKP8ov88b1BxBbcCodNuGGOT07eIyBByBtpkX+DwaIKJCGmiEUkqUMft1r/
-         u+ylTox6X7SrBCyZOqgL3hwvIaMFRZ7MLkZD8mjfzSRBLSpKgi67HEpf67QFK9+WXW
-         u7hreeTeFeHdqGHLR/3ZBb76RYD+jQ1QLX9LPcfu5bHqkmBnTIgHgs9iRpSUe5qgEe
-         R84EcMbX9VLVw==
-Received: by mail-oo1-f72.google.com with SMTP id 006d021491bc7-55b15c956e2so2949698eaf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 05:51:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686574292; x=1689166292;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        Mon, 12 Jun 2023 08:51:19 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83AB0E52
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 05:51:17 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f60a27c4a2so4751132e87.2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 05:51:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686574276; x=1689166276;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=omMsUqmf+wDARTSBLeWKvRxM4zligfqqpbMttBMt0pg=;
-        b=kpKa9gELfVDwEnThawug7l/Tw5912/NqbpE4EDKWdCziGnm9Yo6m/rh5ZAZh6eWLSV
-         OxjceGbtGbnwsE8n2oGBqLyx88DvEteaIG2Usr3Jwwkrk3pXz3fZkRgDV0AkZrAd2Kb3
-         y6J9+C3NayWBQENE0YCm4LdjBLAr0r/ZFJCVJBvb9qhyXiEc7a2WLW0cD3AlUB0Kw9H0
-         RowuIw6mFrrP1icWwDDRujjiApJvfpDd4B6SGehSE0V2F2jzOgaCx5kQpD+ch0ELLr2M
-         5s8s21S24/kR5wa6nXTwoBbhtvmr3bMxlV220CSGJqHcB5uHMbBSxzpTaP3Ia2ipT1Kw
-         v1PQ==
-X-Gm-Message-State: AC+VfDyTDW7OMgpRyZNauivzpZtYcvINmZ3YyuccwHiu+rfZSUHIFLUy
-        ufDX2+epzx7Xo0swNbdBSYqa4vda1R45wTaDktDve6gqt9hlseAo01L1GFYlTLBicapBkJ0wZ/y
-        VvzSwrFEBBiA93QwhwpHmYPoysoZZWdT7Z1rKE1dSFA==
-X-Received: by 2002:a4a:dccc:0:b0:54b:ce85:490a with SMTP id h12-20020a4adccc000000b0054bce85490amr4906217oou.0.1686574292103;
-        Mon, 12 Jun 2023 05:51:32 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7zLTOWJnv96ffTmwdgO+vzkEG8P4Mwm7wW1mYTKkUTXLGwXHNy9GMezl/BTJdLH++Nny4/Vg==
-X-Received: by 2002:a4a:dccc:0:b0:54b:ce85:490a with SMTP id h12-20020a4adccc000000b0054bce85490amr4906211oou.0.1686574291870;
-        Mon, 12 Jun 2023 05:51:31 -0700 (PDT)
-Received: from magali.. ([2804:14c:bbe3:4606:d612:b95d:6bdc:8f6d])
-        by smtp.gmail.com with ESMTPSA id j22-20020a4ad196000000b00529cc3986c8sm3157193oor.40.2023.06.12.05.51.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 05:51:31 -0700 (PDT)
-From:   Magali Lemes <magali.lemes@canonical.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, shuah@kernel.org, dsahern@gmail.com
-Cc:     andrei.gherzan@canonical.com, netdev@vger.kernel.org,
-        David Ahern <dsahern@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 4/4] selftests: net: fcnal-test: check if FIPS mode is enabled
-Date:   Mon, 12 Jun 2023 09:51:07 -0300
-Message-Id: <20230612125107.73795-5-magali.lemes@canonical.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230612125107.73795-1-magali.lemes@canonical.com>
-References: <20230612125107.73795-1-magali.lemes@canonical.com>
+        bh=zgwZC/fxj61d9KTBgFP5Kn5ATX0ChBWpqER31ij5MWs=;
+        b=iKkMVv1gMGAM4M647rTVushhgFRLCOWK0KKXHS/OiM+lyUNxctDtJcexd397dLnHKq
+         lH94LVZUgAsw3oTpddRbOfgCXmVKW821Ol76UVrhGrzCr07yc6Iyb+ATBN8u9aAMYI/t
+         Mz6hgETo0r2hzAEv0O3zZVTGoTm1zb2mG5itZLlsmQrL/UDhXl5Z31y5FiNveyn6giKN
+         8MwD7Gjhly94rfiOnsn7k8ZQ2jbWByyPdNRCDrik5/3SaKO23SUjxhSGghQCHUFCMIRh
+         03iAhx59I4vV3BUwzJZZx/EX4C0qbkoT9AK80VPsIzZE8TV0JV7bchMWBBUAepsgDqXM
+         XJGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686574276; x=1689166276;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zgwZC/fxj61d9KTBgFP5Kn5ATX0ChBWpqER31ij5MWs=;
+        b=e/H9SOpXpNEnExDaI0+5Z5CVV3zUDX12aiO45ApULYLTCBqEH/Z+usAfeuXiYjRJqF
+         jkOTz6txKfLmbVF42I1bJ6JuMeuB5oQHgUOlSERGWSHLhQ24gltBbm4mHPs6SVPlj3zI
+         pcDSCNGRsbdnK3rcxxArK8VmypYYzwnhXFG2y/cAlI9HYx6x77fbUGj+einv9RyIT9VJ
+         pxM8qkezaNNTnO1KzEUQcWzykCCObQWyu2zaTpTvFjP04HlGooqy9iLpakRBgpiHvtuG
+         U8ITXBivc2boNtU7iRMYvDB3e1zu0x5oQjA5iFneiV/qPEQOiqSd9v8XTOrJZcJYioRg
+         2F9w==
+X-Gm-Message-State: AC+VfDy8rRg+TvACoaZX5Y4yClpeqytwtNOEdfhpoxl24LePHhcZBXt2
+        24uSf++efu1rZfQeCxsAG8Axeg==
+X-Google-Smtp-Source: ACHHUZ4wtBMALjIQGGhGnVpzvKtRatNMeWKK/mFRat5tb6NMydba02+WNqzcPJHf21TB5rWzKql3xg==
+X-Received: by 2002:ac2:465b:0:b0:4f6:4f9a:706e with SMTP id s27-20020ac2465b000000b004f64f9a706emr4471143lfo.15.1686574275777;
+        Mon, 12 Jun 2023 05:51:15 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id d18-20020ac25452000000b004f4ce1d4df6sm1443390lfn.47.2023.06.12.05.51.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 05:51:15 -0700 (PDT)
+Message-ID: <b700b444-0b14-7cee-4edc-d2f1183c66bb@linaro.org>
+Date:   Mon, 12 Jun 2023 14:51:14 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Content-Language: en-US
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20230526-topic-smd_icc-v2-0-e5934b07d813@linaro.org>
+ <20230526-topic-smd_icc-v2-4-e5934b07d813@linaro.org>
+ <ZIRgGXwKD6mcgTRY@gerhold.net>
+ <40f937bb-0d7e-a237-1672-5905983622ce@linaro.org>
+ <b7b1d19c-b87d-b3fd-36aa-374065a45ede@linaro.org>
+ <ZITOR3Y25Bv4msdm@gerhold.net>
+ <c52f0311-a8a0-79af-2a08-51a8564a8b25@linaro.org>
+ <ZIWR7uVHJ-eJWhHw@gerhold.net>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: Re: [PATCH v2 04/22] clk: qcom: smd-rpm: Export clock scaling
+ availability
+In-Reply-To: <ZIWR7uVHJ-eJWhHw@gerhold.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,89 +91,238 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are some MD5 tests which fail when the kernel is in FIPS mode,
-since MD5 is not FIPS compliant. Add a check and only run those tests
-if FIPS mode is not enabled.
+On 11.06.2023 11:20, Stephan Gerhold wrote:
+> On Sat, Jun 10, 2023 at 09:39:00PM +0200, Konrad Dybcio wrote:
+>> On 10.06.2023 21:25, Stephan Gerhold wrote:
+>>> On Sat, Jun 10, 2023 at 08:53:05PM +0200, Konrad Dybcio wrote:
+>>>> On 10.06.2023 14:15, Konrad Dybcio wrote:
+>>>>> On 10.06.2023 13:35, Stephan Gerhold wrote:
+>>>>>> On Fri, Jun 09, 2023 at 10:19:09PM +0200, Konrad Dybcio wrote:
+>>>>>>> Before we issue a call to RPM through clk_smd_rpm_enable_scaling() the
+>>>>>>> clock rate requests will not be commited in hardware. This poses a
+>>>>>>> race threat since we're accessing the bus clocks directly from within
+>>>>>>> the interconnect framework.
+>>>>>>>
+>>>>>>> Add a marker to indicate that we're good to go with sending new requests
+>>>>>>> and export it so that it can be referenced from icc.
+>>>>>>>
+>>>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>>>>>> ---
+>>>>>>>  drivers/clk/qcom/clk-smd-rpm.c   | 9 +++++++++
+>>>>>>>  include/linux/soc/qcom/smd-rpm.h | 2 ++
+>>>>>>>  2 files changed, 11 insertions(+)
+>>>>>>>
+>>>>>>> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
+>>>>>>> index 937cb1515968..482fe30ee6f0 100644
+>>>>>>> --- a/drivers/clk/qcom/clk-smd-rpm.c
+>>>>>>> +++ b/drivers/clk/qcom/clk-smd-rpm.c
+>>>>>>> @@ -151,6 +151,7 @@
+>>>>>>>  #define to_clk_smd_rpm(_hw) container_of(_hw, struct clk_smd_rpm, hw)
+>>>>>>>  
+>>>>>>>  static struct qcom_smd_rpm *rpmcc_smd_rpm;
+>>>>>>> +static bool smd_rpm_clk_scaling;
+>>>>>>>  
+>>>>>>>  struct clk_smd_rpm {
+>>>>>>>  	const int rpm_res_type;
+>>>>>>> @@ -385,6 +386,12 @@ static unsigned long clk_smd_rpm_recalc_rate(struct clk_hw *hw,
+>>>>>>>  	return r->rate;
+>>>>>>>  }
+>>>>>>>  
+>>>>>>> +bool qcom_smd_rpm_scaling_available(void)
+>>>>>>> +{
+>>>>>>> +	return smd_rpm_clk_scaling;
+>>>>>>> +}
+>>>>>>> +EXPORT_SYMBOL_GPL(qcom_smd_rpm_scaling_available);
+>>>>>>> +
+>>>>>>>  static int clk_smd_rpm_enable_scaling(void)
+>>>>>>>  {
+>>>>>>>  	int ret;
+>>>>>>> @@ -410,6 +417,8 @@ static int clk_smd_rpm_enable_scaling(void)
+>>>>>>>  		return ret;
+>>>>>>>  	}
+>>>>>>>  
+>>>>>>> +	smd_rpm_clk_scaling = true;
+>>>>>>> +
+>>>>>>
+>>>>>> If you move the platform_device_register_data(&rpdev->dev,
+>>>>>> "icc_smd_rpm", ...) from drivers/soc/qcom/smd-rpm.c to here you can
+>>>>>> avoid the race completely and drop this API. I think that would be
+>>>>>> cleaner. And it will likely probe much faster because probe deferral
+>>>>>> is slow. :)
+>>>>> Sounds like an idea.. especially since it's pretty much the only
+>>>>> dependency other than SMDRPM itself!
+>>>> It sounds great, but to not break bisecting one has to:
+>>>>
+>>>> 1. change the registration in soc/smd-rpm to store rpm ptr in driver
+>>>>    data, in addition to parent driver data
+>>>>
+>>>> 2. change icc/smd-rpm to use the device and not parent data
+>>>>
+>>>> 3. add a platform_device_register_data call in clk-smd-rpm that will
+>>>>    always fail because the device is always registered
+>>>>
+>>>> 4. remove the registration from soc/smd-rpm
+>>>>
+>>>
+>>> Logically the icc_smd_rpm device still fits better as child of
+>>> smd-rpm and not clk-smd-rpm. So I would probably just continue
+>>> registering it on the parent device from clk-smd-rpm.
+>>> Then there are no changes necessary in icc_smd_rpm.
+>>>
+>>> You could use this. Both touched files are Bjorn-maintained so should be
+>>> manageable to have it in one commit. (note: compile-tested only)
+>>>
+>>> Thanks,
+>>> Stephan
+>>>
+>>> From a2610adb2551b01e76b9de8e4cbcc89853814a8f Mon Sep 17 00:00:00 2001
+>>> From: Stephan Gerhold <stephan@gerhold.net>
+>>> Date: Sat, 10 Jun 2023 21:19:48 +0200
+>>> Subject: [PATCH] soc: qcom: smd-rpm: Move icc_smd_rpm registration to
+>>>  clk-smd-rpm
+>>>
+>>> icc_smd_rpm will do bus clock votes itself rather than taking the
+>>> unnecessary detour through the clock subsystem. However, it can only
+>>> do that after the clocks have been handed off and scaling has been
+>>> enabled in the RPM in clk-smd-rpm.
+>>>
+>>> Move the icc_smd_rpm registration from smd-rpm.c to clk-smd-rpm.c
+>>> to avoid any possible races. icc_smd_rpm gets the driver data from
+>>> the smd-rpm device, so still register the platform device on the
+>>> smd-rpm parent device.
+>>>
+>>> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+>>> ---
+>> Generally it looks good.. I'll give it a spin next week. One
+>> thing below.
+>>
+>>>  drivers/clk/qcom/clk-smd-rpm.c | 21 +++++++++++++++++++++
+>>>  drivers/soc/qcom/smd-rpm.c     | 23 +----------------------
+>>>  2 files changed, 22 insertions(+), 22 deletions(-)
+>>>
+>>> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
+>>> index e4de74b68797..91adb16889b3 100644
+>>> --- a/drivers/clk/qcom/clk-smd-rpm.c
+>>> +++ b/drivers/clk/qcom/clk-smd-rpm.c
+>>> @@ -1302,12 +1302,20 @@ static struct clk_hw *qcom_smdrpm_clk_hw_get(struct of_phandle_args *clkspec,
+>>>  	return desc->clks[idx] ? &desc->clks[idx]->hw : ERR_PTR(-ENOENT);
+>>>  }
+>>>  
+>>> +static void rpm_smd_unregister_icc(void *data)
+>>> +{
+>>> +	struct platform_device *icc_pdev = data;
+>>> +
+>>> +	platform_device_unregister(icc_pdev);
+>>> +}
+>>> +
+>>>  static int rpm_smd_clk_probe(struct platform_device *pdev)
+>>>  {
+>>>  	int ret;
+>>>  	size_t num_clks, i;
+>>>  	struct clk_smd_rpm **rpm_smd_clks;
+>>>  	const struct rpm_smd_clk_desc *desc;
+>>> +	struct platform_device *icc_pdev;
+>>>  
+>>>  	rpmcc_smd_rpm = dev_get_drvdata(pdev->dev.parent);
+>>>  	if (!rpmcc_smd_rpm) {
+>>> @@ -1357,6 +1365,19 @@ static int rpm_smd_clk_probe(struct platform_device *pdev)
+>>>  	if (ret)
+>>>  		goto err;
+>>>  
+>>> +	icc_pdev = platform_device_register_data(pdev->dev.parent,
+>>> +						 "icc_smd_rpm", -1, NULL, 0);
+>>> +	if (IS_ERR(icc_pdev)) {
+>>> +		dev_err(&pdev->dev, "Failed to register icc_smd_rpm device: %pE\n",
+>>> +			icc_pdev);
+>>> +		/* No need to unregister clocks because of this */
+>>> +	} else {
+>>> +		ret = devm_add_action_or_reset(&pdev->dev, rpm_smd_unregister_icc,
+>>> +					       icc_pdev);
+>>> +		if (ret)
+>>> +			goto err;
+>>> +	}
+>>> +
+>>>  	return 0;
+>>>  err:
+>>>  	dev_err(&pdev->dev, "Error registering SMD clock driver (%d)\n", ret);
+>>> diff --git a/drivers/soc/qcom/smd-rpm.c b/drivers/soc/qcom/smd-rpm.c
+>>> index 0c1aa809cc4e..427dd5392b82 100644
+>>> --- a/drivers/soc/qcom/smd-rpm.c
+>>> +++ b/drivers/soc/qcom/smd-rpm.c
+>>> @@ -19,7 +19,6 @@
+>>>  /**
+>>>   * struct qcom_smd_rpm - state of the rpm device driver
+>>>   * @rpm_channel:	reference to the smd channel
+>>> - * @icc:		interconnect proxy device
+>>>   * @dev:		rpm device
+>>>   * @ack:		completion for acks
+>>>   * @lock:		mutual exclusion around the send/complete pair
+>>> @@ -27,7 +26,6 @@
+>>>   */
+>>>  struct qcom_smd_rpm {
+>>>  	struct rpmsg_endpoint *rpm_channel;
+>>> -	struct platform_device *icc;
+>>>  	struct device *dev;
+>>>  
+>>>  	struct completion ack;
+>>> @@ -197,7 +195,6 @@ static int qcom_smd_rpm_callback(struct rpmsg_device *rpdev,
+>>>  static int qcom_smd_rpm_probe(struct rpmsg_device *rpdev)
+>>>  {
+>>>  	struct qcom_smd_rpm *rpm;
+>>> -	int ret;
+>>>  
+>>>  	rpm = devm_kzalloc(&rpdev->dev, sizeof(*rpm), GFP_KERNEL);
+>>>  	if (!rpm)
+>>> @@ -210,24 +207,7 @@ static int qcom_smd_rpm_probe(struct rpmsg_device *rpdev)
+>>>  	rpm->rpm_channel = rpdev->ept;
+>>>  	dev_set_drvdata(&rpdev->dev, rpm);
+>>>  
+>>> -	rpm->icc = platform_device_register_data(&rpdev->dev, "icc_smd_rpm", -1,
+>>> -						 NULL, 0);
+>>> -	if (IS_ERR(rpm->icc))
+>>> -		return PTR_ERR(rpm->icc);
+>>> -
+>>> -	ret = of_platform_populate(rpdev->dev.of_node, NULL, NULL, &rpdev->dev);
+>>> -	if (ret)
+>>> -		platform_device_unregister(rpm->icc);
+>>> -
+>>> -	return ret;
+>>> -}
+>>> -
+>>> -static void qcom_smd_rpm_remove(struct rpmsg_device *rpdev)
+>>> -{
+>>> -	struct qcom_smd_rpm *rpm = dev_get_drvdata(&rpdev->dev);
+>>> -
+>>> -	platform_device_unregister(rpm->icc);
+>>> -	of_platform_depopulate(&rpdev->dev);
+>>> +	return devm_of_platform_populate(&rpdev->dev);
+>>>  }
+>>>  
+>>>  static const struct of_device_id qcom_smd_rpm_of_match[] = {
+>>> @@ -256,7 +236,6 @@ MODULE_DEVICE_TABLE(of, qcom_smd_rpm_of_match);
+>>>  
+>>>  static struct rpmsg_driver qcom_smd_rpm_driver = {
+>>>  	.probe = qcom_smd_rpm_probe,
+>>> -	.remove = qcom_smd_rpm_remove,
+>> This reaches over the removal of the icc registration, the depopulate
+>> call should stay.
+>>
+> 
+> I switched the of_platform_populate() to devm_of_platform_populate(),
+> that's why the remove callback is no longer necessary. It's a bit
+> hidden, perhaps it would be enough to add to the commit message:
+> 
+> "While at it, switch the remaining of_platform_populate() call to the
+>  devm variant and remove the remove callback."
+> 
+> Or maybe it should be split into two patches.
+Gave it a spin, I think it ends up being worse if an IPA rpm clock is
+consumed by one of the icc providers, and that's sadly the case
+for almost all platforms (or supposed to be).. :/ Only qcm2290 doesn't
+seem to care if we poke the network interface units with half the soc
+off :P
 
-Fixes: f0bee1ebb5594 ("fcnal-test: Add TCP MD5 tests")
-Fixes: 5cad8bce26e01 ("fcnal-test: Add TCP MD5 tests for VRF")
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Signed-off-by: Magali Lemes <magali.lemes@canonical.com>
----
-No change in v3.
- 
-Changes in v2:
- - Add R-b tag.
-
- tools/testing/selftests/net/fcnal-test.sh | 27 ++++++++++++++++-------
- 1 file changed, 19 insertions(+), 8 deletions(-)
-
-diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
-index 21ca91473c09..ee6880ac3e5e 100755
---- a/tools/testing/selftests/net/fcnal-test.sh
-+++ b/tools/testing/selftests/net/fcnal-test.sh
-@@ -92,6 +92,13 @@ NSC_CMD="ip netns exec ${NSC}"
- 
- which ping6 > /dev/null 2>&1 && ping6=$(which ping6) || ping6=$(which ping)
- 
-+# Check if FIPS mode is enabled
-+if [ -f /proc/sys/crypto/fips_enabled ]; then
-+	fips_enabled=`cat /proc/sys/crypto/fips_enabled`
-+else
-+	fips_enabled=0
-+fi
-+
- ################################################################################
- # utilities
- 
-@@ -1216,7 +1223,7 @@ ipv4_tcp_novrf()
- 	run_cmd nettest -d ${NSA_DEV} -r ${a}
- 	log_test_addr ${a} $? 1 "No server, device client, local conn"
- 
--	ipv4_tcp_md5_novrf
-+	[ "$fips_enabled" = "1" ] || ipv4_tcp_md5_novrf
- }
- 
- ipv4_tcp_vrf()
-@@ -1270,9 +1277,11 @@ ipv4_tcp_vrf()
- 	log_test_addr ${a} $? 1 "Global server, local connection"
- 
- 	# run MD5 tests
--	setup_vrf_dup
--	ipv4_tcp_md5
--	cleanup_vrf_dup
-+	if [ "$fips_enabled" = "0" ]; then
-+		setup_vrf_dup
-+		ipv4_tcp_md5
-+		cleanup_vrf_dup
-+	fi
- 
- 	#
- 	# enable VRF global server
-@@ -2772,7 +2781,7 @@ ipv6_tcp_novrf()
- 		log_test_addr ${a} $? 1 "No server, device client, local conn"
- 	done
- 
--	ipv6_tcp_md5_novrf
-+	[ "$fips_enabled" = "1" ] || ipv6_tcp_md5_novrf
- }
- 
- ipv6_tcp_vrf()
-@@ -2842,9 +2851,11 @@ ipv6_tcp_vrf()
- 	log_test_addr ${a} $? 1 "Global server, local connection"
- 
- 	# run MD5 tests
--	setup_vrf_dup
--	ipv6_tcp_md5
--	cleanup_vrf_dup
-+	if [ "$fips_enabled" = "0" ]; then
-+		setup_vrf_dup
-+		ipv6_tcp_md5
-+		cleanup_vrf_dup
-+	fi
- 
- 	#
- 	# enable VRF global server
--- 
-2.34.1
-
+Konrad
+> 
+> Thanks,
+> Stephan
