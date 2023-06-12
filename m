@@ -2,105 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E22A72CE7E
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:34:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69CA072CE89
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:35:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbjFLSeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 14:34:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53960 "EHLO
+        id S234630AbjFLSfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 14:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237125AbjFLSeZ (ORCPT
+        with ESMTP id S237900AbjFLSfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 14:34:25 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19B7171F;
-        Mon, 12 Jun 2023 11:34:10 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-977d6aa3758so846760366b.0;
-        Mon, 12 Jun 2023 11:34:10 -0700 (PDT)
+        Mon, 12 Jun 2023 14:35:03 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C44D1990
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:34:48 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f620583bc2so5469596e87.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:34:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686594849; x=1689186849;
+        d=linux-foundation.org; s=google; t=1686594886; x=1689186886;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HjxKYpDykfJHHAFMlYnHgt/KtNfNEauymoXHInEP4vM=;
-        b=fdYVg3CrHfYmOH+yQnThlmPuy5K7Ec9e+rHetrmfAE8U3jCTdYy30Lz22r6JK/dUWO
-         fGXiUbALgxdGn2lw2KSzhZYVZ1cEYH6M8+p8bbAR5d7mr/T2LqrOGv2cmf/Rt8SPBagW
-         zIVLfGcnCEGk0C/e6R76r6ovMDsRaFgQmgmwLTtA1i3UzQHEfQHkqdSwYK6fLpm4xFgE
-         mjrdut3xCamDSyzfp1xFRAs+hmGZ5wKc+D5rE7joQF4E8WiovvkeVt8Wq0Ce7QoKtd00
-         f50SP5YRSF2zVFRDJ/jPYFMRfoITlONYXDYUSNMbdOm8fFNXBrZBWelj/LNME/yZlee8
-         3uBw==
+        bh=Dd62pmi6vde4J9GeAbTB+1XNz/5Y4SFzi53ndiAQrHU=;
+        b=NS7S4u5cz2qj3dc1Gt+QteeddIkMeO0wFy7nbS5DDIEKxk1gy/jQ7u3VmHA2s4Rpsr
+         X1KywOGQ0ozpRy9W71JPfF1PXSkGXjDh8bj0CTRYDsrP83t5VUuSju8bB+j4bFogaG0b
+         LBT94dzCGD66JPiXPowtCOrNHQkQMI3GMvYn4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686594849; x=1689186849;
+        d=1e100.net; s=20221208; t=1686594886; x=1689186886;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HjxKYpDykfJHHAFMlYnHgt/KtNfNEauymoXHInEP4vM=;
-        b=ZtZ4lEcyxBElQb655qg0t2JRlbeh84ONsPYPDgY5B7nr+BNX/FHwCo0B0HWNrlo+yN
-         P7jE6/bXZaJPLrHSs3MlSj2iEQM+rRJuXJDhoblJ89KhrLmUA3T3IhsDgVpJPPj82Qsu
-         V9z2uJGhW0B7WlEZ1W/RdFS+zfoX9qop7uNpZ4U/ieMBtV5tc6LkExY+nyb81pho66Zb
-         9AYUmmGaCj8Ub7aFHEi4ZIqdTryQmETjZWyza5+dqYIc3COxk1kOWofywY1wzqfIiXMx
-         Q6zNf5AFVICBqDLfvWFcjaUZ6TErMaTjdM2/0ofWDHVtXq2Zhp6nGWSdo3nNa0i94UF3
-         pYEg==
-X-Gm-Message-State: AC+VfDw4R83fE5hNIiqQkAe+rL98y0egt4+oF51HjlHXelqn/MiUNtaj
-        YXoRnpJtzuIG12D0TwaoD6VxAOb8W3cmtPjl4TY=
-X-Google-Smtp-Source: ACHHUZ6HVJPNDxoxp2Cvdq8Nf48yX+kPMvxENdK/HbCk4P4iVuj89/INjrfgS3cZ3HvNthb6VJXM7cJI0toaf9QtkR0=
-X-Received: by 2002:a17:907:320a:b0:975:942e:81d5 with SMTP id
- xg10-20020a170907320a00b00975942e81d5mr10759652ejb.1.1686594848974; Mon, 12
- Jun 2023 11:34:08 -0700 (PDT)
+        bh=Dd62pmi6vde4J9GeAbTB+1XNz/5Y4SFzi53ndiAQrHU=;
+        b=FbSpHj072frc6r+pnxrLHftz4B2LXy4zEBmLJLh6Wj1dE02zHFbaSxVkDfukVSD7zE
+         HRicvju/l6uJ2OFuOFB7l2bj1pBk4rWNjLQOKPMUndNFJKEF9EAkHb0TUEakG2yc7tAM
+         omYDN95BY5VLf3OwLWgZoJNbW9m0NeA31c+RcEE2pHfoo1+algHpEYxhY9kEdyAhLBSA
+         qTasv38GXNsupL1Nwz1A5ycNjbAKUECgvwAhL9i1wOP75aFDHW/rUp3e/ecBiPMcdMNb
+         bBi1QLkPgxBTKfVTuDunuCDu2M5u6jU9KJHgj+uziJW0IsdTpLinMFPZ+TPd2VopoexA
+         u1aQ==
+X-Gm-Message-State: AC+VfDzbP9I+VWAJcFouFfBFL6O58uGbBdu7MWUnuOj2coLy2JCOyZP4
+        2rfmefk86+ydXNOW7ExnfTq7E28ZIAIP0YISso0p+43L
+X-Google-Smtp-Source: ACHHUZ43K0Scaj36bbtwECDSWfcjZK8O7PDONL0FVz9wGd/n1oSGRM2rDA8ya19vYC05v+hiN+JBiA==
+X-Received: by 2002:a05:6512:32a4:b0:4f7:5408:ba89 with SMTP id q4-20020a05651232a400b004f75408ba89mr79264lfe.1.1686594886291;
+        Mon, 12 Jun 2023 11:34:46 -0700 (PDT)
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
+        by smtp.gmail.com with ESMTPSA id ot25-20020a170906ccd900b00965f5d778e3sm5485721ejb.120.2023.06.12.11.34.45
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 11:34:45 -0700 (PDT)
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5149390b20aso8006748a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:34:45 -0700 (PDT)
+X-Received: by 2002:aa7:c0d6:0:b0:514:8e4a:15a9 with SMTP id
+ j22-20020aa7c0d6000000b005148e4a15a9mr5698676edp.5.1686594885420; Mon, 12 Jun
+ 2023 11:34:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230610203549.1127334-1-bigunclemax@gmail.com> <13282074.uLZWGnKmhe@jernej-laptop>
-In-Reply-To: <13282074.uLZWGnKmhe@jernej-laptop>
-From:   Maxim Kiselev <bigunclemax@gmail.com>
-Date:   Mon, 12 Jun 2023 21:33:57 +0300
-Message-ID: <CALHCpMi9h_KGJKJ4qH44kypePsMpqjgDke-A1LiBgiSOnXjXLA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] Add D1/T113s thermal sensor controller support
-To:     =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-riscv@lists.infradead.org
+References: <20230611124836.whfktwaumnefm5z5@zlang-mailbox>
+ <ZIZSPyzReZkGBEFy@dread.disaster.area> <20230612015145.GA11441@frogsfrogsfrogs>
+ <ZIaBQnCKJ6NsqGhd@dread.disaster.area> <CAHk-=whJqZLKPR-cpX-V4wJTXVX-_tG5Vjuj2q9knvKGCPdfkg@mail.gmail.com>
+ <20230612153629.GA11427@frogsfrogsfrogs> <CAHk-=wiN-JcUh4uhDNmA4hp26Mg+c2DTuzgWY2fZ6hytDtOMCg@mail.gmail.com>
+ <af31cadf-8c15-8d88-79fb-066dc87f0324@kernel.dk> <13d9e4f2-17c5-0709-0cc0-6f92bfe9f30d@kernel.dk>
+ <CAHk-=wgdBfqyNHk0iNyYpEuBUdVgq1KMzHMuEqn=ADtfyK_pkQ@mail.gmail.com>
+ <212a190c-f81e-2876-cf14-6d1e37d47192@kernel.dk> <CAHk-=wh0hrFjcU5C8uHvLBThrT5vQsFHb7Jk6HRP3LAJqdNx1A@mail.gmail.com>
+ <ff34a007-fdd0-8575-8482-919ead39fc88@kernel.dk> <CAHk-=whXt9+-YfhgjBYxT9_ATjHbMDZ0yJdK7umrJGU8zBVZ9w@mail.gmail.com>
+In-Reply-To: <CAHk-=whXt9+-YfhgjBYxT9_ATjHbMDZ0yJdK7umrJGU8zBVZ9w@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 12 Jun 2023 11:34:28 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjqVEdigZWMoOUMr0J179vfA4G=MwafFh8UStsA-3mHBw@mail.gmail.com>
+Message-ID: <CAHk-=wjqVEdigZWMoOUMr0J179vfA4G=MwafFh8UStsA-3mHBw@mail.gmail.com>
+Subject: Re: [6.5-rc5 regression] core dump hangs (was Re: [Bug report]
+ fstests generic/051 (on xfs) hang on latest linux v6.5-rc5+)
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Zorro Lang <zlang@redhat.com>, linux-xfs@vger.kernel.org,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=D0=BF=D0=BD, 12 =D0=B8=D1=8E=D0=BD. 2023=E2=80=AF=D0=B3. =D0=B2 21:22, Jer=
-nej =C5=A0krabec <jernej.skrabec@gmail.com>:
+On Mon, Jun 12, 2023 at 10:51=E2=80=AFAM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> Dne sobota, 10. junij 2023 ob 22:35:41 CEST je Maksim Kiselev napisal(a):
-> > This series adds support for Allwinner D1/T113s thermal sensor controll=
-er.
-> > THIS controller is similar to the one on H6, but with only one sensor a=
-nd
-> > uses a different scale and offset values.
-> >
-> > v2:
-> > - Fixed SoB tag
->
-> It doesn't seems you fixed that.
+> Ok, can you (and the fsstress people) confirm that this
+> whitespace-damaged patch fixes the coredump issue:
 
-Sorry for that. I accidentally sent the wrong version of patches . And
-immediately after that I sent v3.
+The proper patch from Jens is now in my tree, and I'm archiving this
+thread on the assumption that it's all good.
+
+Dave/Zorro - if you still see any issues with that patch in place, holler.
+
+                   Linus
