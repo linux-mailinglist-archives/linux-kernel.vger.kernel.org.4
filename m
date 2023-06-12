@@ -2,186 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59E5672B5AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 05:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EDBD72B5CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 05:14:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232456AbjFLDHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 23:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45058 "EHLO
+        id S233487AbjFLDO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 23:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjFLDG4 (ORCPT
+        with ESMTP id S233567AbjFLDOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 23:06:56 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782C0136;
-        Sun, 11 Jun 2023 20:06:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686539212; x=1718075212;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=0/5rc4ZOuvdgWUWZKaXR2Nn7ih+qQIQXMxd/IwqxbG4=;
-  b=cUS+NTPJRGAO8K0lIAZFeXTg6aqx1cgoTaSIgC1lh6BR+tPGdNBvkoHc
-   5Jzo7kzaSF1pqEM7V43DuSV+zQCewModvEk9pRrxalfm2EgSVcY4Fzw4t
-   09rFFACGLW0jHrirrmM1d4s5948a6RCo19mQe8r5LzZe3xgwaCQb/QPKe
-   /hkyhuKIfxiTLJTfmRyh+GKilSixX7NYPXt2K9b1QPGwlAGRpFxOn3m63
-   fI8awekn4uK3MD88egCb9Ihk+dxMcrMLlsIbjfB7WjgM3RxqwpfnsqwW2
-   3l7z+NrPlrljC6gVbWIOdkLt9wLT2Fnjjr2vIn1ufKx7AFwusFHY/kZCT
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="444303112"
-X-IronPort-AV: E=Sophos;i="6.00,235,1681196400"; 
-   d="scan'208";a="444303112"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2023 20:06:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="1041170485"
-X-IronPort-AV: E=Sophos;i="6.00,235,1681196400"; 
-   d="scan'208";a="1041170485"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga005.fm.intel.com with ESMTP; 11 Jun 2023 20:06:51 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Sun, 11 Jun 2023 20:06:51 -0700
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Sun, 11 Jun 2023 20:06:50 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Sun, 11 Jun 2023 20:06:50 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.170)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Sun, 11 Jun 2023 20:06:50 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Vadk2fK8Ee21sFwFkDegiIsVc0xftISrNbzWgvzlpoK/Y+pGyea/2fyMkjpHBjlECnev1fUppXvJAjYt3P6Smi13Skz+COZQnMpFOQX4/k0l+RJwgi+2RxWPIW2dQoqZ5SA1vvAmjn8TvwAm1riLPPJRsv+qW+I+pkYVZqyW1lMihsgdl5uEHt2DTr0bfVs9f/MIMP2CxfddJbFSQvfm7wwijv04pJksvTwNea/lkOA813yZqHCftnL7u62FcTnmSAMZzzjzUqUA84aUENbNDgJVES3gMqqYC7d1qpVvzbnEKYRmPVwqR/unDLGIDmN/Sl1hr0e4z+ztdjvHj+NbQg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0/5rc4ZOuvdgWUWZKaXR2Nn7ih+qQIQXMxd/IwqxbG4=;
- b=iUyeiktIn6/zIWnLs1CFRCo1bNbNlgOy3j7yRcWm63h5FFjTl/rtvZdTmDgUQ0+i+3RXEOPHxed19Liu9FcmjKLq0qzZ9Y2fi1Y/BJKCY149hqxfxVHC1JqytD8+sOgOrFbAS1PxjpsUV7q7tyG6HNGFx7lII3PIQwMopo+aZYCJzn2L/JFaYo3Wa/phJASXL999EmPPV0UO0SOkg37YYG7XOUgOZYtRadIeefwbyv3QOsOnZ6FkPXWPzaMlU3AZyaPgtQ9xlqiV+ozofOy3Qy2vLcHiTPSaiedZB/GwrInAcWzbPfdNJgWaIz34oEloz5NJHr1VRU7obDvUhTTPpw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
- by SA3PR11MB8004.namprd11.prod.outlook.com (2603:10b6:806:2f8::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.38; Mon, 12 Jun
- 2023 03:06:48 +0000
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::19b7:466f:32ac:b764]) by BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::19b7:466f:32ac:b764%3]) with mapi id 15.20.6455.043; Mon, 12 Jun 2023
- 03:06:48 +0000
-From:   "Huang, Kai" <kai.huang@intel.com>
-To:     "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
-CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-Subject: Re: [PATCH v11 18/20] x86: Handle TDX erratum to reset TDX private
- memory during kexec() and reboot
-Thread-Topic: [PATCH v11 18/20] x86: Handle TDX erratum to reset TDX private
- memory during kexec() and reboot
-Thread-Index: AQHZlu+7CCb5RYnzE0SLr6ZWSpg4cK+CfSeAgAQK0IA=
-Date:   Mon, 12 Jun 2023 03:06:48 +0000
-Message-ID: <58f34b4b81b6d6b37d3386dec0f073e6eb7a97ff.camel@intel.com>
-References: <cover.1685887183.git.kai.huang@intel.com>
-         <5aa7506d4fedbf625e3fe8ceeb88af3be1ce97ea.1685887183.git.kai.huang@intel.com>
-         <20230609132301.uvvp27yr5kpenl6f@box.shutemov.name>
-In-Reply-To: <20230609132301.uvvp27yr5kpenl6f@box.shutemov.name>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.48.2 (3.48.2-1.fc38) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|SA3PR11MB8004:EE_
-x-ms-office365-filtering-correlation-id: 76c06d77-b6f4-418e-b26f-08db6af20fb6
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: QeO3fzPNo2loIFo26jX/HCpjPEncukNo9L7WmuHIOw9Fqef3dfGtufO5RldoMN+BU95Am6kSa1PuU3ytHN04HK0CZQ7fIRDJbc6OVSDQn+FYSEagi6g8ZQBPEMgeBlLnT4HmMj3Bhlg/X45Unq1HKs0ptAw6oFr+sALejy2N95H2avGutSmyeZoSSZSs6FfjsqsqliHdlChIfGIAltFSw/FtWetfez8NKZ1hKeG7gaE/BSyGsHFkpqg5lqve0QOJ6JJutx/bHmkVNhDJmgAMBx6AYjJOTapU9uC3whNZzdsmZ+o0FaL9jtrXfBGSFYEt3KQRL5iwgxemJFOsFROji96dyuhxuj95Oz8DXK1Tn3v65wFHisvJYLtDMDIsvRbRywA0QnA+wFgiKl/cLi3w4kds/FZw359/yi2/xr2CUltUp+yOuKXoI9CMkIwO4/rlnldZxUBL8uu0VfKZ206clXrMCroIyA92nqwEATDBfyKgXprq1C4q1tv2QG4EtrPy5EF8cz/+vV69VU6cz8NK6Fswvi9xI/dcEwNuX8VgDx9ibBBlLwuPehVs7bBIXjFh/04qP8j91rOKBBZQEcLPO8tVlyYyOaG9lIA6v9VlWwjd53EvL5mf4f8g4L+pUcSc
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(136003)(396003)(39860400002)(346002)(366004)(451199021)(5660300002)(316002)(478600001)(2906002)(41300700001)(54906003)(7416002)(71200400001)(66476007)(91956017)(8936002)(66946007)(8676002)(4326008)(76116006)(66556008)(6916009)(66446008)(64756008)(6486002)(26005)(6506007)(6512007)(2616005)(82960400001)(186003)(83380400001)(36756003)(38100700002)(122000001)(86362001)(38070700005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SzVBdXROcUNLcndjR0hCY0ZSdUFVdHJCNmcvMmE2NjhUL0Ryeks2QkpNTXZl?=
- =?utf-8?B?VEtkaUVCOS9CWWY3ek1NYVQ1MVhWQU5IMnV2dFlVR1UyMnpLekE3K0FQTHl0?=
- =?utf-8?B?RzZmT1NNRWFJUVUvalBCODhyUVlUY2pORER4YU9IYm9ieFl4TVplYXk3L2V0?=
- =?utf-8?B?QkorNUNDa01vd0tKUTQvb3RBVUZ5MUVndEJMT2syN1lsdDk5RWFqdEZsS2FH?=
- =?utf-8?B?Zkk1Vk1oWkpoV3MwVmIyZ0F2MnNPRFd1d1pjRlhwSFg2d2F5QVl5UmxBL2N5?=
- =?utf-8?B?NlllQ1ZtZ0d2ZmNjY1k1M1I1TlNPWXYxWTVOeFcreThVS0JGcDR4TWsxYWZq?=
- =?utf-8?B?RE9yTVB0TEpkdlk4SjdLTnl3bEpWTkRGMFdoenJWSDhrOFVyREZWdjJSdkdC?=
- =?utf-8?B?MXpSakZUb1VXelVRMFRZWXpjemIzbmdWS0pjbHhqZ1B6eUJOVlQ5MGN3RnAx?=
- =?utf-8?B?d2tIRTJTbmlRM2xZbzlHNW5LWUpBd2NMTjBFcnJKcGpzR25LOG9qcmU2S0U1?=
- =?utf-8?B?YnFTOGZ3dEk1ZGNTOHJTVGxUbloyWG1UWUZVWk1tRFEwM2JoeUR5dkNLVnNR?=
- =?utf-8?B?UEtVNnNlSzdqeVk4Q0VFajhZaWEvY1o4c1BLc01lVEFLRzhTdFo1Uk9aSUNF?=
- =?utf-8?B?ZHNNQmZXRStYVHVVYVJNVEdqTnh2Y0UweGpJWUFlQnlwdUdFNVY0NEZkOUh3?=
- =?utf-8?B?bkRxWkRreWVPRThzR1Bsc2FZNzFkY0dxRlp5SDhWWmYyRVVnbVNHZzZqcWwx?=
- =?utf-8?B?YmNHZDlKeVAvWjd3bUpjYlVqR214ckpENGRYMCtRaVMyZHNsTnJVbGM2bDhi?=
- =?utf-8?B?czNNeFEzTTFoSzY5REloUkp4U0dueU1RNDE4L01HTDV2d012bEhvSlVGVjhs?=
- =?utf-8?B?MHhUSkpYQkdPc2c5REpYQjdrdVlwbDh6SXBYWGhFVEZWTWNSVFRvN2l6bjVG?=
- =?utf-8?B?RkRoek94YUNWVW13aWFQT0dWWWJvRm94M1k1LzJsUlF6emw3cUkyb1l3c3dN?=
- =?utf-8?B?RG4rcVhTL0NFSFFXdm4wc2E1Y3UzQ1dmZXBLV2hSK25qTTZ0WUFTTVdxQWZw?=
- =?utf-8?B?a1RHTVpUMWs5dC9oeDJ3dGRKc3o4ZVJsUnVCNTRRU1ZDeHo5M2tNZ2s3NTVR?=
- =?utf-8?B?dGZSTHcwanhUVko2YkZRSlZ3bVlPYW9tMW84SjJDK0FObU0xZU9IejZmSVpW?=
- =?utf-8?B?R0l5dFBPekE5bXNzaWlrbGNJRzZtWXh4MkhpT2swdmkvYmM1bjhnMlBxUTlY?=
- =?utf-8?B?V0Qxa2pUVk9reUc5a1J1ODF1WjBxQysvUVRJNUJwK3RrSWJUaXVISFYwbWN5?=
- =?utf-8?B?cmlXQjhBUlM2Ry9HYVZlZFRzdVZNVWRTRmM1VzIwRDFPcjJxbVpPSzRreVBa?=
- =?utf-8?B?YXh6cVFXWHBHamc1QjFVaWJSMnR5TXN0OEVLNGpsMUZxd1RLRFJjOHZKTUc1?=
- =?utf-8?B?emVJeUY4dE5RcFd4d0N1QldnblVmSXptZFVmQ2EwZ21MQy9mSUtWekYxVzRw?=
- =?utf-8?B?aEp6YlNZd2Vpcnd3L21uQmRIR205NFEzUzlUYUx0Z0dHa1UwRlhhRndPeDA1?=
- =?utf-8?B?U3M2MHE0bVpYc09sWWZjd1d6VTBNak1IM0ROajZaNXU1NjJ5em53WEdYQjBX?=
- =?utf-8?B?YkxXa0p0S0hhbmMvSjQ3Vk52T3U2TXhLNXI1bWt0OGRHYzc2WVNpU2pTOWl2?=
- =?utf-8?B?ajFhTnpVM3BBVjI1UmtoRlhNNlRjWWNYb2cwSUkveDZOMjI2R0diVVc4T0pt?=
- =?utf-8?B?eElHTDFRMHJUSjlkQmllVGNmYXJPU2U0M3JyL29RbUQ4STlXY3krZlljY0l0?=
- =?utf-8?B?TXp6WTF2cCtJSTJ2QlYwV0hyOGZ0Q1EwbWRoNkR5VEh5bWxabmptbjlqSURI?=
- =?utf-8?B?eGt3UkVTeE5WNkpuTjY4RkpxeWZPTklnNGRBZElBOXFmQld0TmdKQ1hQWUFs?=
- =?utf-8?B?OFUrQVpuK2Z6eFhCczdPQkxIZDNqTHVVR2IyaU9Jd3Nzd3dINGpaOFh6bG9B?=
- =?utf-8?B?NUtJenB3d3RmdDAvYXBnZFM1aFJydzIyclc3ckRGYUc4UzBLZmtCNzJxRkc3?=
- =?utf-8?B?ZUFodGhPdEJld3NabVB5REk1ZVd6OU5DeEdvbCs5TDBqK0VocTFnakhYekR0?=
- =?utf-8?Q?KHrQ6ESOnT4Sacv6agVIpNbcQ?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <11A64713248C444CBBF47A021A8A5EA8@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Sun, 11 Jun 2023 23:14:24 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2626A10D;
+        Sun, 11 Jun 2023 20:14:19 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 3F27182CA;
+        Mon, 12 Jun 2023 11:14:05 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 12 Jun
+ 2023 11:09:06 +0800
+Received: from [192.168.125.128] (113.72.145.34) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 12 Jun
+ 2023 11:09:05 +0800
+Message-ID: <b693397d-b8d6-ec79-098a-528919786e49@starfivetech.com>
+Date:   Mon, 12 Jun 2023 11:06:49 +0800
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 76c06d77-b6f4-418e-b26f-08db6af20fb6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jun 2023 03:06:48.1063
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xzOBvGdtjoSQ9Rv6LR4hu6w2mnTHD8NC+fysGMFEGUhjPxE0cpLZqye7VlLudaCnOoPYNEvrHLEtjhot6vWFOw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR11MB8004
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 1/7] dt-bindings: clock: Add StarFive JH7110 PLL clock
+ generator
+To:     Conor Dooley <conor.dooley@microchip.com>,
+        Torsten Duwe <duwe@lst.de>
+CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <yanhong.wang@starfivetech.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Conor Dooley <conor@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Hal Feng" <hal.feng@starfivetech.com>,
+        William Qiu <william.qiu@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <u-boot@lists.denx.de>
+References: <20230512022036.97987-2-xingyu.wu@starfivetech.com>
+ <20230519135733.GA10188@lst.de>
+ <20230519-smokeless-guileless-2a71cae06509@wendy>
+ <df43411e-8982-74f5-6148-e7281c37dada@starfivetech.com>
+ <20230523-fondue-monotype-0c751a8f0c13@wendy>
+ <20230523131006.46997d84@blackhole.lan>
+ <20230523-saturate-axis-f46b78b7b82b@wendy>
+ <38a9cb77-18b3-4daa-724b-9f2282f7d948@starfivetech.com>
+ <20230524-jittery-sway-41b578b24153@wendy>
+ <20230526093432.4682eab8@blackhole.lan>
+ <20230526-unwashed-musty-dee883f1d6a7@wendy>
+Content-Language: en-US
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+In-Reply-To: <20230526-unwashed-musty-dee883f1d6a7@wendy>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.145.34]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -189,39 +80,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIzLTA2LTA5IGF0IDE2OjIzICswMzAwLCBraXJpbGwuc2h1dGVtb3ZAbGludXgu
-aW50ZWwuY29tIHdyb3RlOg0KPiBPbiBNb24sIEp1biAwNSwgMjAyMyBhdCAwMjoyNzozMUFNICsx
-MjAwLCBLYWkgSHVhbmcgd3JvdGU6DQo+ID4gZGlmZiAtLWdpdCBhL2FyY2gveDg2L3ZpcnQvdm14
-L3RkeC90ZHguYyBiL2FyY2gveDg2L3ZpcnQvdm14L3RkeC90ZHguYw0KPiA+IGluZGV4IDhmZjA3
-MjU2YTUxNS4uMGFhNDEzYjcxMmU4IDEwMDY0NA0KPiA+IC0tLSBhL2FyY2gveDg2L3ZpcnQvdm14
-L3RkeC90ZHguYw0KPiA+ICsrKyBiL2FyY2gveDg2L3ZpcnQvdm14L3RkeC90ZHguYw0KPiA+IEBA
-IC01ODcsNiArNTg3LDE0IEBAIHN0YXRpYyBpbnQgdGRtcl9zZXRfdXBfcGFtdChzdHJ1Y3QgdGRt
-cl9pbmZvICp0ZG1yLA0KPiA+ICAJCXRkbXJfcGFtdF9iYXNlICs9IHBhbXRfc2l6ZVtwZ3N6XTsN
-Cj4gPiAgCX0NCj4gPiAgDQo+ID4gKwkvKg0KPiA+ICsJICogdGR4X21lbW9yeV9zaHV0ZG93bigp
-IGFsc28gcmVhZHMgVERNUidzIFBBTVQgZHVyaW5nDQo+ID4gKwkgKiBrZXhlYygpIG9yIHJlYm9v
-dCwgd2hpY2ggY291bGQgaGFwcGVuIGF0IGFueXRpbWUsIGV2ZW4NCj4gPiArCSAqIGR1cmluZyB0
-aGlzIHBhcnRpY3VsYXIgY29kZS4gIE1ha2Ugc3VyZSBwYW10XzRrX2Jhc2UNCj4gPiArCSAqIGlz
-IGZpcnN0bHkgc2V0IG90aGVyd2lzZSB0ZHhfbWVtb3J5X3NodXRkb3duKCkgbWF5DQo+ID4gKwkg
-KiBnZXQgYW4gaW52YWxpZCBQQU1UIGJhc2Ugd2hlbiBpdCBzZWVzIGEgdmFsaWQgbnVtYmVyDQo+
-ID4gKwkgKiBvZiBQQU1UIHBhZ2VzLg0KPiA+ICsJICovDQo+IA0KPiBIbW0/IFdoYXQgcHJldmVu
-dHMgY29tcGlsZXIgZnJvbSBtZXNzaW5nIHRoaXMgdXAuIEl0IGNhbiByZW9yZGVyIGFzIGl0DQo+
-IHdpc2hlcywgbm8/DQoNCkhtbS4uIFJpZ2h0LiBTb3JyeSBJIG1pc3NlZC4NCg0KPiANCj4gTWF5
-YmUgYWRkIGEgcHJvcGVyIGxvY2tpbmc/IEFueXRoaW5nIHRoYXQgcHJldmVudCBwcmVlbXB0aW9u
-IHdvdWxkIGRvLA0KPiByaWdodD8NCj4gDQo+ID4gIAl0ZG1yLT5wYW10XzRrX2Jhc2UgPSBwYW10
-X2Jhc2VbVERYX1BTXzRLXTsNCj4gPiAgCXRkbXItPnBhbXRfNGtfc2l6ZSA9IHBhbXRfc2l6ZVtU
-RFhfUFNfNEtdOw0KPiA+ICAJdGRtci0+cGFtdF8ybV9iYXNlID0gcGFtdF9iYXNlW1REWF9QU18y
-TV07DQo+IA0KDQpJIHRoaW5rIGEgc2ltcGxlIG1lbW9yeSBiYXJyaWVyIHdpbGwgZG8uICBIb3cg
-ZG9lcyBiZWxvdyBsb29rPw0KDQotLS0gYS9hcmNoL3g4Ni92aXJ0L3ZteC90ZHgvdGR4LmMNCisr
-KyBiL2FyY2gveDg2L3ZpcnQvdm14L3RkeC90ZHguYw0KQEAgLTU5MSwxMSArNTkxLDEyIEBAIHN0
-YXRpYyBpbnQgdGRtcl9zZXRfdXBfcGFtdChzdHJ1Y3QgdGRtcl9pbmZvICp0ZG1yLA0KICAgICAg
-ICAgKiB0ZHhfbWVtb3J5X3NodXRkb3duKCkgYWxzbyByZWFkcyBURE1SJ3MgUEFNVCBkdXJpbmcN
-CiAgICAgICAgICoga2V4ZWMoKSBvciByZWJvb3QsIHdoaWNoIGNvdWxkIGhhcHBlbiBhdCBhbnl0
-aW1lLCBldmVuDQogICAgICAgICAqIGR1cmluZyB0aGlzIHBhcnRpY3VsYXIgY29kZS4gIE1ha2Ug
-c3VyZSBwYW10XzRrX2Jhc2UNCi0gICAgICAgICogaXMgZmlyc3RseSBzZXQgb3RoZXJ3aXNlIHRk
-eF9tZW1vcnlfc2h1dGRvd24oKSBtYXkNCi0gICAgICAgICogZ2V0IGFuIGludmFsaWQgUEFNVCBi
-YXNlIHdoZW4gaXQgc2VlcyBhIHZhbGlkIG51bWJlcg0KLSAgICAgICAgKiBvZiBQQU1UIHBhZ2Vz
-Lg0KKyAgICAgICAgKiBpcyBmaXJzdGx5IHNldCBhbmQgcGxhY2UgYSBfX21iKCkgYWZ0ZXIgaXQg
-b3RoZXJ3aXNlDQorICAgICAgICAqIHRkeF9tZW1vcnlfc2h1dGRvd24oKSBtYXkgZ2V0IGFuIGlu
-dmFsaWQgUEFNVCBiYXNlDQorICAgICAgICAqIHdoZW4gaXQgc2VlcyBhIHZhbGlkIG51bWJlciBv
-ZiBQQU1UIHBhZ2VzLg0KICAgICAgICAgKi8NCiAgICAgICAgdGRtci0+cGFtdF80a19iYXNlID0g
-cGFtdF9iYXNlW1REWF9QU180S107DQorICAgICAgIF9fbWIoKTsNCg==
+On 2023/5/26 20:23, Conor Dooley wrote:
+> On Fri, May 26, 2023 at 09:34:32AM +0200, Torsten Duwe wrote:
+>> On Wed, 24 May 2023 11:19:48 +0100
+>> Conor Dooley <conor.dooley@microchip.com> wrote:
+>> 
+>> > On Wed, May 24, 2023 at 05:00:02PM +0800, Xingyu Wu wrote:
+>> > > On 2023/5/23 19:28, Conor Dooley wrote:
+>> > > > On Tue, May 23, 2023 at 01:10:06PM +0200, Torsten Duwe wrote:
+>> > > >> On Tue, 23 May 2023 09:28:39 +0100
+>> > > >> Conor Dooley <conor.dooley@microchip.com> wrote:
+>> > > >> 
+>> > > >> > On Tue, May 23, 2023 at 10:56:43AM +0800, Xingyu Wu wrote:
+>> > > >> > > On 2023/5/19 22:16, Conor Dooley wrote:
+>> > > >> > > > On Fri, May 19, 2023 at 03:57:33PM +0200, Torsten Duwe
+>> > > >> > > > wrote:
+>> > > >> > > >> On Fri, May 12, 2023 at 10:20:30AM +0800, Xingyu Wu wrote:
+>> [...]
+>> 
+>> > > >> > > Because PLL driver is separated from SYSCRG drivers in
+>> > > >> > > Linux, the numbering starts from 0. But in Uboot, the PLL
+>> > > >> > > driver is included in the SYSCRG driver, and the number
+>> > > >> > > follows the SYSCRG.
+>> > > >> > 
+>> > > >> > Unfortunately, how you choose to construct your drivers has
+>> > > >> > nothing to do with this.
+>> 
+>> Exactly. As I wrote (quote below), the PLLx frequencies are controlled
+>> by the I/O block SYS_SYSCON (starting there at offset 0x18), according
+>> to the public datasheets. All(?) other clocks are derived from those in
+>> the *_CRG units. That *is* the hardware to be described, in *the* (one
+>> and only!) DT. U-Boot, and any OS, are free to reorganise their driver
+>> framework around that, but the hardware description is quite clear.
+> 
+> The dt-binding that is in this series specifies that the pll clock
+> controller is a child of the syscon:
+> https://lore.kernel.org/linux-riscv/20230512022036.97987-1-xingyu.wu@starfivetech.com/T/#Z2e.:..:20230512022036.97987-6-xingyu.wu::40starfivetech.com:1soc:starfive:starfive::2cjh7110-syscon.yaml
+> 
+> That seems correct to me & U-Boot's devicetree is not compliant.
+> 
+>> > > >> > These defines/numbers appear in the dts and are part of the DT
+>> > > >> > ABI. The same dts is supposed to work for Linux & U-Boot.
+>> > > >> 
+>> > > >> The JH7110 has 6 blocks of 64k iomem in that functional area:
+>> > > >> {SYS,STG,AON} x {CRG,SYSCON}. None of these has 190 clocks.
+>> > > >> The good news: the current DTS, as proposed here and in U-Boot
+>> > > >> master, provides nodes for all 6 entities. The bad news is that
+>> > > >> the clock assignments to those nodes and their numbering is
+>> > > >> messed up.
+>> > > >> 
+>> > > >> AFAICT PLL{0,1,2} _are_ generated in SYS_SYSCON and thus U-Boot
+>> > > >> gets it wrong, in addition to the erroneous DTS.
+>> > > > 
+>> > > > The numbers are kinda hocus-pocus anyway, they are just made up
+>> > > > since the clock numbering usually isn't something with a nice TRM
+>> > > > to go and reference (unlike interrupts which usually are
+>> > > > documented in that way). It is very helpful to make them aligned
+>> > > > some register/bit positions or, but that is not required.
+>> > > > IOW U-Boot is not wrong per se to use 190 instead of 0, but it is
+>> > > > wrong to have different numbers in both places.
+>> 
+>> U-Boot reuses the Common Clock Framework from Linux, and I'm not sure
+>> whether the clock IDs need to be unique in order for the appropriate
+>> clock to be found.
+> 
+> Unique within the clock controller, otherwise it is impossible to tell
+> the difference between <&cctrl 1> and <&cctrl 1> apart! (The same
+> follows even with increased #clock-cells, something must be unique).
+> That's besides the point of this particular issue though.
+> 
+>> But that would be the only restriction, if it
+>> applies. Even then, each driver could register a clock with its own,
+>> arbitrarily chosen base offset with the CCF, so each CRG unit could
+>> still have its own clocks enumerated starting with 0 in the DTB.
+>> 
+>> > > > It sounds like you're saying that (and I have not looked) the
+>> > > > U-Boot dts actually has structural difference w.r.t. what
+>> > > > provides which clock? If so, that'll need to be fixed
+>> > > > independently of the numbering problem.
+>> 
+>> > > 
+>> > > Oh, unfortunately, the 7110 can not support to mix the uboot dtb
+>> > > and linux dtb up.
+>> > 
+>> > What does "cannot support" mean? It's normal and desirable for the
+>> 
+>> IMHO "desirable" is too weak.
+> 
+> Yeah, agreed. I just don't like being prescriptive about what happens in
+> projects that I do not maintain things for I guess.
+> 
+>> > same dtb to be usable for both. The Linux kernel's dt-bindings are
+>> > used for multiple projects, not just Linux - it'd be silly for
+>> > U-Boot, FreeBSD etc etc to go off and each have their open set of
+>> > (incompatible) bindings.
+>> > 
+>> > > If boot the Linux and should use the linux dtb instead of the uboot
+>> > > dtb. Because all clock ids and reset ids in Linux and Uboot are
+>> > > different include PLL, and some modules can work in Linux but not
+>> > > in uboot.
+>> [...]
+>> > 
+>> > > I suggest to boot Linux with its own linux dtb.
+>> 
+>> This is a fragile band-aid, to be used only as a last resort. It
+>> creates more problems than it solves. Your DTB will then match your
+>> kernel, but whether it describes the actual hardware is a game of
+>> chance. Doesn't the VisionFive2 have an RPi connector... ?
+>> 
+>> One of the IMO few valid use cases of adding a DTB to the kernel
+>> at boot is OpenWRT, when you build an OS Image for a particular piece
+>> of hardware you have at hand.
+>> 
+>> > I suggest to make sure that you can use the same dtb for both.
+>> 
+>> Interestingly enough, U-Boot already has the PLL driver in a separate
+>> file. I have a half-baked patch here that moves the sys_syscon DT
+>> matching into that file...
+> 
+> If you have patches that fix the devicetree & drivers in U-Boot, please
+> post them. I don't really care at all which set of arbitrary numbers are
+> chosen (as long as there is one and one only) but it looks like U-Boot's
+> devicetree has an incorrect description of the clock controllers.
+> 
+
+Hi Conor and Torsten,
+After our internal discussions, it was decided to make the change on Uboot.
+The clock id in Uboot are changed to be same with Linux and the PLL clocks become the child node of SYSCON.
+And we will send this patch on Uboot soon.
+
+Best Regards,
+Xingyu Wu
