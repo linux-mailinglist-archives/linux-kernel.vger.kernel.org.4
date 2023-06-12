@@ -2,126 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 171C872CEE4
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 21:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BB4A72CEE6
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 21:02:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237159AbjFLTBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 15:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39972 "EHLO
+        id S236093AbjFLTCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 15:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjFLTBn (ORCPT
+        with ESMTP id S237548AbjFLTCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 15:01:43 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C27EAD;
-        Mon, 12 Jun 2023 12:01:41 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b1b66a8fd5so55640191fa.0;
-        Mon, 12 Jun 2023 12:01:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686596500; x=1689188500;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tPslRpjpmso2MPWsMdmL6DPNcLL5+xYYi4A+RaMyHFw=;
-        b=OFjQA+J1W/PiFJbxvsBMuO3m4v+HYcWQu3J7f1mJiJsbSrwRY3LBoQDxiWYo44n5VO
-         AjNI+g+Bk7GNcbBDW7OA54Un72JOyw9qSUTaF/VlWJvH8ivGvkrq5HMqMHk8EkyAoZZq
-         C+rNM9XKByrOgp9aTfJPMGNhRAOTGHy6k+NfrGFT4Z3j0NQZuNROOJeMlj2LduVPXvIc
-         R5mQNv/b4OjFEk2OY+j2hTovfX+tvaK7MxW8TIvMRWlKSyoZqu2ihwS1Te6HFIIADLGr
-         Ywjmgazpz0XOYrz20R5/ETz2ia2vl2NIxFvcTrhF6wXA9DyNLwgsgIE/24QslqoTiFFb
-         SBwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686596500; x=1689188500;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tPslRpjpmso2MPWsMdmL6DPNcLL5+xYYi4A+RaMyHFw=;
-        b=g3bgXAUQRvfl8xHnEXNxHtsDXXnG+I7YUr+1REoZDhIFaix8f+XgaNoika/m/P5euA
-         h6hvAdEVL+H4l8nFYYNCuh97lptotP2VdW4LMt47yH5gHLoogSUQ3j5o4N+GONRK+Akm
-         ipfj9td6B5VjDPYygCSzRbbBuLNk1KBwMK5JiLCxhlKY7rDhDdzi5NY63vyLv830iaKP
-         Qp/juRXeMN6sfQ96XW/Us1Fb9agHiGMwJ4aZPKbpRlL0Hbj6bomwnURfLIu1zzlGDDfY
-         l04uePzdsS24JdrKT0HK5U44NVz+7iZL6O6Hpq1n5JIMriZkDeppPLUZAzE90YKOMEfQ
-         vQzw==
-X-Gm-Message-State: AC+VfDy1ErLTFLnKlAi1m2shawyTMefv81pEM6bIMGekU7ehj7zEo2qw
-        a6gcwG8BoBMO5ZS5zw3sB0s=
-X-Google-Smtp-Source: ACHHUZ76YBcUqtOty80aUfVOuOpZXEETG9HpkQWQR/6rrihf6bQA4ouF6F8X9gV8CcPfKkQKE3kN6w==
-X-Received: by 2002:a2e:9b8b:0:b0:2b1:df8a:1451 with SMTP id z11-20020a2e9b8b000000b002b1df8a1451mr3176914lji.47.1686596499245;
-        Mon, 12 Jun 2023 12:01:39 -0700 (PDT)
-Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id r11-20020a2eb60b000000b002b2289d2c24sm1593034ljn.85.2023.06.12.12.01.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 12:01:38 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 22:01:31 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Rob Herring <robh@kernel.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v7 00/11] PCI: dwc: Relatively simple fixes and
- cleanups
-Message-ID: <20230612190131.otvaqvpwumncdufk@mobilestation>
-References: <20230612164124.ytqn5lfeaxds6ywq@mobilestation>
- <20230612171608.GA1339616@bhelgaas>
+        Mon, 12 Jun 2023 15:02:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7446F191;
+        Mon, 12 Jun 2023 12:02:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05F5361E69;
+        Mon, 12 Jun 2023 19:02:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DBD3C4339B;
+        Mon, 12 Jun 2023 19:02:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686596521;
+        bh=IhObLeclTmvSH1UpIW27KQ0g0HG4GLrPKfddXj9eH9o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=g8Xpb8A7laktpyIDDzwdsLltNKMnBZf1+QmyIiv0dz2gh+RE/gQ/6ktdZgU4e10qn
+         Rq3yjTdnvx4S8b7vxv/CYoPEHG2RtE2/TBhD20hefrhCJCcV8XSOFoXUpmcKtk4hz1
+         ByKXd7xwz//kcgmtvfTrbhUeCz8j2+YJ16TA2h/cExahq9CTR1QYtTjoMDaHkDUoOW
+         4OhxsrHtkEET/IWBpl8y1qT1M6zSmgRkiRMqA1pm1Ml173Dx18s4vfT8CEKDOybcZu
+         7SY73riBV7oDEC0ZgCNxB5Tv1XJ0BsZQAjqGTJXnwI3NL1IuSuqeVn14lzhtVlMFZb
+         5Bhiq/Yy6+y1Q==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 252C940692; Mon, 12 Jun 2023 16:01:59 -0300 (-03)
+Date:   Mon, 12 Jun 2023 16:01:59 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 0/4]  Avoid some large stack allocations
+Message-ID: <ZIdrp9OzTjQU32xZ@kernel.org>
+References: <20230527034324.2597593-1-irogers@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230612171608.GA1339616@bhelgaas>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230527034324.2597593-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 12:16:08PM -0500, Bjorn Helgaas wrote:
-> On Mon, Jun 12, 2023 at 07:41:24PM +0300, Serge Semin wrote:
-> > On Mon, Jun 12, 2023 at 10:41:27AM -0500, Bjorn Helgaas wrote:
-> > > On Sun, Jun 11, 2023 at 10:19:54PM +0300, Serge Semin wrote:
-> > > > It turns out the recent DW PCIe-related patchset was merged in with
-> > > > several relatively trivial issues left unsettled (noted by Bjorn and
-> > > > Manivannan). All of these lefovers have been fixed in this patchset.
-> > > > Namely the series starts with two bug-fixes. The first one concerns the
-> > > > improper link-mode initialization in case if the CDM-check is enabled. The
-> > > > second unfortunate mistake I made in the IP-core version type helper. In
-> > > > particular instead of testing the IP-core version type the macro function
-> > > > referred to the just IP-core version which obviously wasn't what I
-> > > > intended.
-> > > > ...
-> > 
-> > > I am unable to do anything with this series.
-> > > 
-> > > Google's legal team is reviewing this matter under applicable laws and
-> > > regulations.
-> > 
-> > I don't get it, how come Google gets to decide anything about what to
-> > do with this patchset?
+Em Fri, May 26, 2023 at 08:43:18PM -0700, Ian Rogers escreveu:
+> Following on cleaning up .data and .bss in:
+> https://lore.kernel.org/lkml/20230526183401.2326121-1-irogers@google.com/
+> Look for some probably too large stack allocations with -Wstack-usage=20000
+> and pahole.
+
+Thanks, applied.
+
+- Arnaldo
+
+ 
+> Don't attempt to cleanup variable length arrays like in:
+> ```
+> util/header.c: In function ‘write_cache’:
+> util/header.c:1269:12: warning: stack usage might be unbounded [-Wstack-usage=]
+>  1269 | static int write_cache(struct feat_fd *ff,
+>       |            ^~~~~~~~~~~
+> ```
+> 
+> Also leave two allocations relating to session/event processing:
+> ```
+> util/auxtrace.c: In function ‘auxtrace_queues__add_indexed_event’:
+> util/auxtrace.c:424:12: warning: stack usage is 65616 bytes [-Wstack-usage=]
+>   424 | static int auxtrace_queues__add_indexed_event(struct auxtrace_queues *queues,
+>       |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> util/session.c: In function ‘perf_session__peek_events’:
+> util/session.c:1822:5: warning: stack usage is 65648 bytes [-Wstack-usage=]
+>  1822 | int perf_session__peek_events(struct perf_session *session, u64 offset,
+>       |     ^~~~~~~~~~~~~~~~~~~~~~~~~
+> ```
+> 
+> The biggest win is for perf inject where 128kb becomes lazily
+> allocated when aux or guest data is encountered.
+> 
+> Ian Rogers (4):
+>   perf sched: Avoid large stack allocations
+>   perf script: Remove some large stack allocations
+>   perf inject: Lazily allocate event_copy
+>   perf inject: Lazily allocate guest_event event_buf
+> 
+>  tools/perf/builtin-inject.c | 31 +++++++++++++++++++++++++------
+>  tools/perf/builtin-sched.c  | 26 ++++++++++++++++++++++----
+>  tools/perf/builtin-script.c | 17 +++++++++++++----
+>  3 files changed, 60 insertions(+), 14 deletions(-)
+> 
+> -- 
+> 2.41.0.rc0.172.g3f132b7071-goog
 > 
 
-> I am employed by Google, and my Linux work is part of my job
-> responsibility, so Google sets some boundaries on my activities.
+-- 
 
-Are you saying that Google can just like that affect the kernel
-maintaining procedure by forcing their employees to ignore some other
-developers work?  Nice, well done Google in "evolving" the open-source
-community.
-
-What do you suggest for us to do then? There are PCIe host and
-endpoints drivers maintainers who aren't obligated by the Google
-regulations: Lorenzo, Krzysztof, Rob. They are still able to merge the
-series in to the PCI (or their own) repo since you are blocked by your
-Google employer, right?
-
--Serge(y)
-
-> 
-> Bjorn
+- Arnaldo
