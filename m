@@ -2,85 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C709272CEF3
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 21:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB2B72CEF7
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 21:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237732AbjFLTEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 15:04:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41160 "EHLO
+        id S236885AbjFLTFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 15:05:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237677AbjFLTEE (ORCPT
+        with ESMTP id S237798AbjFLTEy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 15:04:04 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC880114
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 12:04:01 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-3f9e207f5f0so1587971cf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 12:04:01 -0700 (PDT)
+        Mon, 12 Jun 2023 15:04:54 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6A111B;
+        Mon, 12 Jun 2023 12:04:45 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1a2c85ef3c2so3253255fac.0;
+        Mon, 12 Jun 2023 12:04:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1686596641; x=1689188641;
-        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
-         :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=PD3JywImtGOly4TxyTZawkzBTaVE7JaZYEoOwYsrers=;
-        b=SS+pdXWrD5kiZeKanQrr8PGbWNwZ/gZzBULs8NRmGiU1hNBO+7ByTnRg1B5chwfGwk
-         CSQG72f8/XP+tQEgdlv4lIvEADZVrWO/lmpNvOZrurMfAYOr7io1N+vkMcBjHbInyazi
-         2Lz0VS5Lr1etv+OOsqKZNtKbSufgGMwdUMQYc=
+        d=gmail.com; s=20221208; t=1686596684; x=1689188684;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8OOA/ytQLN+B3gWqHcQscrH2RGfHUDPpsGBgPoTwMwU=;
+        b=mqmplgHYcbdHCEUJBJPwAOzEH/KkA5KlZpIohsz5YZEbmJGpEnMObhD9cebeOTpo+E
+         uuIT92aZjFYZivmy5hQVJHX8fJFJDPUVMx1aYMVEHgA4At2pgLE3V053Wb/t2L8Gb8GO
+         a/kwFV/O3Ef/8b2fADgHY32cyyyO/dTmTsutoQYiejCaccDScUBH60nXHRTlfjTl3LGt
+         AF/pb/yU9DYO+kjNLenmrA1nRXJMpNwQggfrSTbC+9AS0m92c9DL6Ms+A3/wOVAej0EK
+         lNybC0/qHKkH+rFA9cMlXEE4QLyS6CVZXzSTYOyHm3XMG24Mjiq5BfndBHNwMyXlQ/Mg
+         QLKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686596641; x=1689188641;
-        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
-         :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PD3JywImtGOly4TxyTZawkzBTaVE7JaZYEoOwYsrers=;
-        b=AVstuy1TVZWg3cnDqrJure+GWZVnwjf4OThHmRVA/9RrsPLg5ShnWU1x5412vJgFBr
-         iIktpwdASp2QTzStxBFX/T7ZuIy4WKOp2gv30II+QXY+yh8aMgPe6CTeSLdgO266GzgD
-         zcQNNkF8QpRW6hUWpFmJHJWZ24ly7wnfCwF7765SS4TxKZfCBjlAEmUywczEa+zlbuCP
-         vgIs5RUZtAHUjjRNXREZEkGV95mXrO98aFR6RZfttAXvJHPwLJkBsESMTZjP0zN37vvm
-         A14XKgQ+E7wvTjeY+TrvunDWyD4FtpP/+yYrjz19jRBr5uEVubSpoM+dTvvUkE0Nd/Dx
-         rGrQ==
-X-Gm-Message-State: AC+VfDz+Y/oluCJAz1D1J8gcVGB7nYL9M2KGqgXQB9K/LKRopo8+mUf0
-        RJMjhSFQBu1e0ayGasjwaG+kgA==
-X-Google-Smtp-Source: ACHHUZ7dbJXyPTOU8g73A6GtndyP7+Fk4YpLSwfN3xY/TAvcQYHTksSEE/z0Emsn83dxUtp+5m88Nw==
-X-Received: by 2002:a05:622a:184:b0:3fb:42cb:1c85 with SMTP id s4-20020a05622a018400b003fb42cb1c85mr47217qtw.15.1686596640814;
-        Mon, 12 Jun 2023 12:04:00 -0700 (PDT)
-Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id cr17-20020a05622a429100b003f0a79e6a8bsm3616492qtb.28.2023.06.12.12.03.57
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 12 Jun 2023 12:03:59 -0700 (PDT)
-Subject: Re: [PATCH 10/12] mtd: rawnand: brcmnand: Add BCMBCA read data bus
- interface
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        Linux MTD List <linux-mtd@lists.infradead.org>,
-        f.fainelli@gmail.com, rafal@milecki.pl, kursad.oney@broadcom.com,
-        joel.peshkin@broadcom.com, computersforpeace@gmail.com,
-        anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
-        tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
-        linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-References: <20230606231252.94838-1-william.zhang@broadcom.com>
- <20230606231252.94838-11-william.zhang@broadcom.com>
- <20230607102232.17c4a27b@xps-13>
- <7b393f47-4053-a8c7-f32e-3881d8130d80@broadcom.com>
- <20230608081821.1de5a50b@xps-13>
- <4ab08e3e-3be4-8b8b-6eb8-03a62337f46f@broadcom.com>
- <20230609103544.0f00f799@xps-13>
- <3d3b471b-c555-ee1c-96d6-c04d76979e76@broadcom.com>
- <20230612194908.5465bc56@xps-13>
-From:   William Zhang <william.zhang@broadcom.com>
-Message-ID: <cd4878e1-c8bf-813e-3a0f-697df364fa24@broadcom.com>
-Date:   Mon, 12 Jun 2023 12:03:56 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.4.0
+        d=1e100.net; s=20221208; t=1686596684; x=1689188684;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8OOA/ytQLN+B3gWqHcQscrH2RGfHUDPpsGBgPoTwMwU=;
+        b=bQeaM7WuhSfNUMkNM6a4s9icGV3liCB0YOv3PjjQaTgkh3f2mL4M9uULN64hsSnzs9
+         DrZgD9EhYZfLIWQTrRhDLT6X+knxcqwyh1raokhbzqRBgvBzzZZE5tmFFutMG1IB87HL
+         wLf5GvsLuKTOQGiHTbjHfCmyFSbXZpFP7S0binHSbcCtHuXi/MHuCyIt1lMnVuOJs21Y
+         ND+oaWattSv8uum6EpKOsEkK6YA1KM7na+lNYAG3Nq1aVhhayzs8ZGz2Zq8DB1STdYcY
+         hzKZEWXRTyUn5nRVBaIQ8KvrIP95VOn2BmxH8z672W8cI3dFzomq4h92fKxb7KsZFMj7
+         16rQ==
+X-Gm-Message-State: AC+VfDy1ANo56wKD/rYx2M5KAb262JcLQj0Gi90TZ0Dp7kekE3aMjY5X
+        3Jlp7M8S74E1e/Wx5APuAJxGGez3ITu6gkfbjy+xtHSW
+X-Google-Smtp-Source: ACHHUZ5kJ9Ts8hH1r36b3HYZo25DalArBDj1PkqRJv6R/2FQYkSp/gjvpguhX/6PkBYsyURQiz7scSpqX4offUdreoc=
+X-Received: by 2002:a9d:7acb:0:b0:6b0:73fe:cf10 with SMTP id
+ m11-20020a9d7acb000000b006b073fecf10mr7185541otn.5.1686596684199; Mon, 12 Jun
+ 2023 12:04:44 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20230612194908.5465bc56@xps-13>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000ae0af105fdf36145"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20230531174450.3733220-1-aliceryhl@google.com> <CAGngYiW_3HfebWZO5S=RXFqhNnsbnix-NaA0UGYRnRLd4SK65w@mail.gmail.com>
+In-Reply-To: <CAGngYiW_3HfebWZO5S=RXFqhNnsbnix-NaA0UGYRnRLd4SK65w@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Mon, 12 Jun 2023 21:04:32 +0200
+Message-ID: <CANiq72=DJBW82L44icrrTo=_jrv=BS3cd10s6WuraXX7suW4tg@mail.gmail.com>
+Subject: Re: [PATCH v1] rust: error: integrate Rust error type with `errname`
+To:     Sven Van Asbroeck <thesven73@gmail.com>
+Cc:     Alice Ryhl <aliceryhl@google.com>, rust-for-linux@vger.kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Wedson Almeida Filho <walmeida@microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,350 +76,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000ae0af105fdf36145
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+On Wed, May 31, 2023 at 11:27=E2=80=AFPM Sven Van Asbroeck <thesven73@gmail=
+.com> wrote:
+>
+> Hello Alice, as we discussed through a separate channel,
+> you have my permission to use my name in
+> Co-Developed-by and Signed-off-by tags.
 
+Thanks a lot Sven for the confirmation!
 
+Applied to `rust-next` -- reworded for clarity. Thanks!
 
-On 06/12/2023 10:49 AM, Miquel Raynal wrote:
-> Hi William,
-> 
-> william.zhang@broadcom.com wrote on Fri, 9 Jun 2023 12:16:27 -0700:
-> 
->> Hi Miquel,
->>
->> On 06/09/2023 01:35 AM, Miquel Raynal wrote:
->>> Hi William,
->>>
->>> william.zhang@broadcom.com wrote on Thu, 8 Jun 2023 12:10:06 -0700:
->>>    
->>>> On 06/07/2023 11:18 PM, Miquel Raynal wrote:
->>>>> Hi William,
->>>>>
->>>>> william.zhang@broadcom.com wrote on Wed, 7 Jun 2023 13:24:23 -0700:
->>>>>     >>>> Hi Miquel,
->>>>>>
->>>>>> On 06/07/2023 01:22 AM, Miquel Raynal wrote:
->>>>>>> Hi William,
->>>>>>>
->>>>>>> william.zhang@broadcom.com wrote on Tue,  6 Jun 2023 16:12:50 -0700:
->>>>>>>      >>>> The BCMBCA broadband SoC integrates the NAND controller differently than
->>>>>>>> STB, iProc and other SoCs.  It has different endianness for NAND cache
->>>>>>>> data and ONFI parameter data.
->>>>>>>>
->>>>>>>> Add a SoC read data bus shim for BCMBCA to meet the specific SoC need
->>>>>>>> and performance improvement using the optimized memcpy function on NAND
->>>>>>>> cache memory.
->>>>>>>>
->>>>>>>> Signed-off-by: William Zhang <william.zhang@broadcom.com>
->>>>>>>> ---
->>>>>>>>
->>>>>>>>      drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c | 36 +++++++++++++++++
->>>>>>>>      drivers/mtd/nand/raw/brcmnand/brcmnand.c    | 44 ++++++++++++++-------
->>>>>>>>      drivers/mtd/nand/raw/brcmnand/brcmnand.h    |  2 +
->>>>>>>>      3 files changed, 68 insertions(+), 14 deletions(-)
->>>>>>>>
->>>>>>>> diff --git a/drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c b/drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c
->>>>>>>> index 7e48b6a0bfa2..899103a62c98 100644
->>>>>>>> --- a/drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c
->>>>>>>> +++ b/drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c
->>>>>>>> @@ -26,6 +26,18 @@ enum {
->>>>>>>>      	BCMBCA_CTLRDY		= BIT(4),
->>>>>>>>      };
->>>>>>>>      >> +#if defined(CONFIG_ARM64)
->>>>>>>> +#define ALIGN_REQ		8
->>>>>>>> +#else
->>>>>>>> +#define ALIGN_REQ		4
->>>>>>>> +#endif
->>>>>>>> +
->>>>>>>> +static inline bool bcmbca_nand_is_buf_aligned(void *flash_cache,  void *buffer)
->>>>>>>> +{
->>>>>>>> +	return IS_ALIGNED((uintptr_t)buffer, ALIGN_REQ) &&
->>>>>>>> +				IS_ALIGNED((uintptr_t)flash_cache, ALIGN_REQ);
->>>>>>>> +}
->>>>>>>> +
->>>>>>>>      static bool bcmbca_nand_intc_ack(struct brcmnand_soc *soc)
->>>>>>>>      {
->>>>>>>>      	struct bcmbca_nand_soc *priv =
->>>>>>>> @@ -56,6 +68,29 @@ static void bcmbca_nand_intc_set(struct brcmnand_soc *soc, bool en)
->>>>>>>>      	brcmnand_writel(val, mmio);
->>>>>>>>      }
->>>>>>>>      >> +static void bcmbca_read_data_bus(struct brcmnand_soc *soc,
->>>>>>>> +				 void __iomem *flash_cache,  u32 *buffer,
->>>>>>>> +				 int fc_words, bool is_param)
->>>>>>>> +{
->>>>>>>> +	int i;
->>>>>>>> +
->>>>>>>> +	if (!is_param) {
->>>>>>>> +		/*
->>>>>>>> +		 * memcpy can do unaligned aligned access depending on source
->>>>>>>> +		 * and dest address, which is incompatible with nand cache. Fallback
->>>>>>>> +		 * to the memcpy for io version
->>>>>>>> +		 */
->>>>>>>> +		if (bcmbca_nand_is_buf_aligned(flash_cache, buffer))
->>>>>>>> +			memcpy((void *)buffer, (void *)flash_cache, fc_words * 4);
->>>>>>>> +		else
->>>>>>>> +			memcpy_fromio((void *)buffer, (void *)flash_cache, fc_words * 4);
->>>>>>>> +	} else {
->>>>>>>> +		/* Flash cache has same endian as the host for parameter pages */
->>>>>>>> +		for (i = 0; i < fc_words; i++, buffer++)
->>>>>>>> +			*buffer = __raw_readl(flash_cache + i * 4);
->>>>>>>> +	}
->>>>>>>> +}
->>>>>>>> +
->>>>>>>>      static int bcmbca_nand_probe(struct platform_device *pdev)
->>>>>>>>      {
->>>>>>>>      	struct device *dev = &pdev->dev;
->>>>>>>> @@ -75,6 +110,7 @@ static int bcmbca_nand_probe(struct platform_device *pdev)
->>>>>>>>      >>   	soc->ctlrdy_ack = bcmbca_nand_intc_ack;
->>>>>>>>      	soc->ctlrdy_set_enabled = bcmbca_nand_intc_set;
->>>>>>>> +	soc->read_data_bus = bcmbca_read_data_bus;
->>>>>>>>      >>   	return brcmnand_probe(pdev, soc);
->>>>>>>>      }
->>>>>>>> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
->>>>>>>> index d920e88c7f5b..656be4d73016 100644
->>>>>>>> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
->>>>>>>> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
->>>>>>>> @@ -814,6 +814,30 @@ static inline u32 edu_readl(struct brcmnand_controller *ctrl,
->>>>>>>>      	return brcmnand_readl(ctrl->edu_base + offs);
->>>>>>>>      }
->>>>>>>>      >> +static inline void brcmnand_read_data_bus(struct brcmnand_controller *ctrl,
->>>>>>>> +					   void __iomem *flash_cache, u32 *buffer,
->>>>>>>> +					   int fc_words, bool is_param)
->>>>>>>> +{
->>>>>>>> +	struct brcmnand_soc *soc = ctrl->soc;
->>>>>>>> +	int i;
->>>>>>>> +
->>>>>>>> +	if (soc->read_data_bus) {
->>>>>>>> +		soc->read_data_bus(soc, flash_cache, buffer, fc_words, is_param);
->>>>>>>> +	} else {
->>>>>>>> +		if (!is_param) {
->>>>>>>> +			for (i = 0; i < fc_words; i++, buffer++)
->>>>>>>> +				*buffer = brcmnand_read_fc(ctrl, i);
->>>>>>>> +		} else {
->>>>>>>> +			for (i = 0; i < fc_words; i++)
->>>>>>>> +				/*
->>>>>>>> +				 * Flash cache is big endian for parameter pages, at
->>>>>>>> +				 * least on STB SoCs
->>>>>>>> +				 */
->>>>>>>> +				buffer[i] = be32_to_cpu(brcmnand_read_fc(ctrl, i));
->>>>>>>> +		}
->>>>>>>> +	}
->>>>>>>
->>>>>>> Perhaps we could have a single function that is statically assigned at
->>>>>>> probe time instead of a first helper with two conditions which calls in
->>>>>>> one case another hook... This can be simplified I guess.
->>>>>>>      >> Well this will need to be done at the SoC specific implementation level (bcm<xxx>_nand.c) and each SoC will need to have either general data bus read func with is_param option or data_bus_read_page, data_bus_read_param.
->>>>>
->>>>> You told me in case we would use exec_op we could avoid the param
->>>>> cache. If that's true then the whole support can be simplified.
->>>>>     >> Correct we may possibly unified the parameter data read but exec_op is long shot and we are not fully ready for that yet. It also depends on if the low level data register has endianess difference for the parameter data between difference SoCs.
->>>>
->>>> So I would like to push the current implementation and we can explore the exec_op option late which will be a much big and complete different implementation.
->>>
->>> I am sorry but this series is totally backwards, you're trying to guess
->>> what comes next with the 'is_param' thing, it's exactly what we are
->>> fighting against since 2017. There are plenty of ->exec_op()
->>> conversions out there, I don't believe this one will be harder. You
->>> need to convert the driver to this new API and get rid of this whole
->>> endianness non-sense to simplify a lot the driver.
->>>    
->> I am not guessing anything but just factor out the existing common nand cache read logic into the single default function(or one for page read and another for parameter read as I mentioned in another thread) and allow SoC to overrides the implementation when needed.
-> 
-> No, you are trying to guess what type of read the core is performing,
-> either a regular data page read or a parameter page read.
-> 
-Okay this is what you mean by guessing. I didn't realize that ;)
-
->> I agree ->exec_op can possibly get rid of the parameter page read function and is the way to go. But it won't help on the page read for endianess.
-> 
-> You told me there is no endianess issue with the data pages, so why it
-> won't help on the page read?
-> 
-Even with exec_op, the page read path for brcmand(chip->ecc.read_page) 
-will still need brcmnand_read_page function which eventually I need per 
-SoC implementation at least for bcmbca for now besides different 
-endianess between SoC. For bcmbca, I also use the memcpy in the patch as 
-the nand cache in bcmbca chip can handled the optimized copy code as 
-long as the buffer is aligned for better performance.
-
->> It's not that I am against exec_op but I want to take one step a time
->> and I'd like to get these fixes
-> 
-> I don't see any fix here? Let me know if I am missing something but
-> right now I see a new version of the controller being supported with
-> its own constraints. If you are fixing existing code for already
-> supported platform, then make it clear and we can discuss this. But if
-> you just want to support the bcmbca flavor, then there is no risk
-> mitigation involved here, and a conversion is the right step :)
-> 
-I mean the patch 1 to 4 in this series.
-
-The exec_op will apply to all the five SoCs under brcmnand folder, not 
-just bcmbca. It will take lot of time even just find people to 
-test/debug all of them as I don't have access to other SoC and boards, 
-on top of the nature of this big change.
-
->> and support for bcmbca soc first and
->> then work on the exec_op API to minimize the change and reduce the
->> risk.
->>
->>>>   
->>>>>>     Not sure how much this can be simplified... Or we have default
->>>>>> implementation in brcmnand.c but then there is one condition check
->>>>>> too. Page read is done at 512 bytes burst. One or two conditions
->>>>>> check outside of the per 512 bytes read loop does not sounds too bad
->>>>>> if performance is concern.
->>>>>
->>>>> It is unreadable. That is my main concern.
->>>>>     >>>>   >>>>>> +}
->>>>>>>> +
->>>>>>>>      static void brcmnand_clear_ecc_addr(struct brcmnand_controller *ctrl)
->>>>>>>>      {
->>>>>>>>      >> @@ -1811,20 +1835,11 @@ static void brcmnand_cmdfunc(struct nand_chip *chip, unsigned command,
->>>>>>>>      			native_cmd == CMD_PARAMETER_CHANGE_COL) {
->>>>>>>>      		/* Copy flash cache word-wise */
->>>>>>>>      		u32 *flash_cache = (u32 *)ctrl->flash_cache;
->>>>>>>> -		int i;
->>>>>>>>      >>   		brcmnand_soc_data_bus_prepare(ctrl->soc, true);
->>>>>>>>      >> -		/*
->>>>>>>> -		 * Must cache the FLASH_CACHE now, since changes in
->>>>>>>> -		 * SECTOR_SIZE_1K may invalidate it
->>>>>>>> -		 */
->>>>>>>> -		for (i = 0; i < FC_WORDS; i++)
->>>>>>>> -			/*
->>>>>>>> -			 * Flash cache is big endian for parameter pages, at
->>>>>>>> -			 * least on STB SoCs
->>>>>>>> -			 */
->>>>>>>> -			flash_cache[i] = be32_to_cpu(brcmnand_read_fc(ctrl, i));
->>>>>>>> +		brcmnand_read_data_bus(ctrl, ctrl->nand_fc, flash_cache,
->>>>>>>> +				   FC_WORDS, true);
->>>>>>>>      >>   		brcmnand_soc_data_bus_unprepare(ctrl->soc, true);
->>>>>>>>      >> @@ -2137,7 +2152,7 @@ static int brcmnand_read_by_pio(struct mtd_info *mtd, struct nand_chip *chip,
->>>>>>>>      {
->>>>>>>>      	struct brcmnand_host *host = nand_get_controller_data(chip);
->>>>>>>>      	struct brcmnand_controller *ctrl = host->ctrl;
->>>>>>>> -	int i, j, ret = 0;
->>>>>>>> +	int i, ret = 0;
->>>>>>>>      >>   	brcmnand_clear_ecc_addr(ctrl);
->>>>>>>>      >> @@ -2150,8 +2165,9 @@ static int brcmnand_read_by_pio(struct mtd_info *mtd, struct nand_chip *chip,
->>>>>>>>      		if (likely(buf)) {
->>>>>>>>      			brcmnand_soc_data_bus_prepare(ctrl->soc, false);
->>>>>>>>      >> -			for (j = 0; j < FC_WORDS; j++, buf++)
->>>>>>>> -				*buf = brcmnand_read_fc(ctrl, j);
->>>>>>>> +			brcmnand_read_data_bus(ctrl, ctrl->nand_fc, buf,
->>>>>>>> +					FC_WORDS, false);
->>>>>>>> +			buf += FC_WORDS;
->>>>>>>>      >>   			brcmnand_soc_data_bus_unprepare(ctrl->soc, false);
->>>>>>>>      		}
->>>>>>>> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.h b/drivers/mtd/nand/raw/brcmnand/brcmnand.h
->>>>>>>> index f1f93d85f50d..88819bc395f8 100644
->>>>>>>> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.h
->>>>>>>> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.h
->>>>>>>> @@ -24,6 +24,8 @@ struct brcmnand_soc {
->>>>>>>>      	void (*ctlrdy_set_enabled)(struct brcmnand_soc *soc, bool en);
->>>>>>>>      	void (*prepare_data_bus)(struct brcmnand_soc *soc, bool prepare,
->>>>>>>>      				 bool is_param);
->>>>>>>> +	void (*read_data_bus)(struct brcmnand_soc *soc, void __iomem *flash_cache,
->>>>>>>> +				 u32 *buffer, int fc_words, bool is_param);
->>>>>>>>      	const struct brcmnand_io_ops *ops;
->>>>>>>>      };
->>>>>>>>      > >
->>>>>>> Thanks,
->>>>>>> Miquèl
->>>>>>>      > >
->>>>> Thanks,
->>>>> Miquèl
->>>>>     > >
->>> Thanks,
->>> Miquèl
->>>    
-> 
-> 
-> Thanks,
-> Miquèl
-> 
-
---000000000000ae0af105fdf36145
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-YDZuuBJwnyCzevMoPtVYPharioL5H3BRnQi8YoTXH7/uRo33dewYFm474yFjwwnt82TFtveVZkVq
-6h4WIQ4wTcwFfET8zMkELnGzS5SHCl8sPD+lNxxJ1JDZYwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUq65GzwZxydFHjjYEU/9h
-xHhPWlwwDQYJKoZIhvcNAQELBQADggEBAA2hGG3JPAdGPH0ZdohGUCIVjKz+U+EFuIDbS6A/5jqX
-VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
-/ppSz3WoflVyFFQ5YXniZ+eU+2/cdnYZg4aVUnFjimOF5o3NfMLzOkhQNxbaDjFUfUYD8hKmU6v4
-0vUBj8KZ9Gi1LIagLKUREn8jku0lcLsRbnJ5Ey5ScajC/FESPyYWasOW8j8/1EoJksmhbYGKNS6C
-urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIIuZ3SZiEfB+1oZttp90nQgwOUEz
-96rFKgvI2vyrpdvpMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDYxMjE5MDQwMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQBuknoPQiT7y5hvW9t7kB5eLLrC8Thc5i8QjjFL4R5QZMGv
-xF+lOM8+xjyqjSTCPzd31K1pWSwds31nuI1md5mudawZZOBliiqf1uYG6tUjcpDnw9uVn2y0IkJV
-vawgIx9D+bVOco4ef8LhR1HMGB6mOdNbmDb0ikPPIHhnWLZONEVbH4bhwJoQxxfGena05eB7fZyt
-QG1ECXtWr/r/5X6Nlq6Ns0hIg22DTJupf/HbDzB5PuPUz647epCbtTNtn+Pod9jJpBBQdQbOD8E5
-rLAJgrxAtDg+7pXbK7jvqHeqmMOUIDEKVknS16G03HOy2CmLCHZXoKmMjca7eGYho2fv
---000000000000ae0af105fdf36145--
+Cheers,
+Miguel
