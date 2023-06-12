@@ -2,318 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8445B72C4DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 14:49:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAA1E72C4E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 14:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234146AbjFLMtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 08:49:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36896 "EHLO
+        id S235345AbjFLMt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 08:49:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbjFLMtO (ORCPT
+        with ESMTP id S229887AbjFLMtZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 08:49:14 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476E6E51
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 05:49:13 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-30fbf253dc7so875101f8f.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 05:49:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686574152; x=1689166152;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=W77hc+vW/SLtEALpj6kM4e0EwWOEhnh6lTso6VOBO0k=;
-        b=vXzbrrV98MN9XtCTKAz1653dVPRsjGbh1cVRwhPJg2ecgdMoMe2KmxibigbsN1WtR2
-         6IAQ0Hp5nsMGAphdfMP06HjdEisW0hx/W1MWD22wX8ow/HCsu0y5msJhK+eTHypFeGYc
-         C+MF99VGD504oPh/1QYrmlP3+L0OAGZ/rFqGh+DD/8jdVG1Lz0M5TcSVd1wBCGFPK5li
-         QVwt90bnUoiDpqn947SvmmAncCdiO3fllcGfSADkGSuYEkLxbmphB3zF/NH4uzlTQjbk
-         DRKCqXzcGY26W9hNoUBn0wDOI9RTV6pp0yiPcchFyb07kjZGGCTAKfSS33Dpa0QoQwth
-         yrjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686574152; x=1689166152;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W77hc+vW/SLtEALpj6kM4e0EwWOEhnh6lTso6VOBO0k=;
-        b=LZ6Tz8VJ/z5oQopsXBqiizwnU4hMs0Pkn28i+7IJNciSEfQhZH+4mBJCtZWDye+6Ce
-         VBxSEuITJ5l0OwPiQI0NPKrvRHKlCS5rUcDBdfd0pozWlpMcrhQFg19fcY26y6BZOWeX
-         cmselG55hgvBlhFInltMCJDE8Au5GQ54W7SeUOZ5YvBvX6L7oW2IeuYoAoWijkOooJx1
-         /ikBp8G/tCx6ugAGTZKdIyx37FyOXXOGXCGqmcvvcgsSJ/z/k7aM/Imdffq2f1O8lpZ+
-         LfKqjjSMe6Rf0W8rnOuko33K+I2tJ1VCXeokIkLzfl8vu8bPztEeTcHbb4wK8NSG2eaG
-         68HQ==
-X-Gm-Message-State: AC+VfDztOr4wG8i86K8IQY4b+BUm25nHAnbp1O9teTcm8cMulNN06Xh8
-        li+oeo8rV991ROlPX3kf7uebmoSRb7DKeGGFZAU=
-X-Google-Smtp-Source: ACHHUZ6t8inJ47Ew7FRMA6iUbadvwDEvu88VCo/2rv3xQvWZzWYsO4YvB8WOG2ttcLBSv1E1n9gXzQ==
-X-Received: by 2002:adf:f0c9:0:b0:307:95c9:c010 with SMTP id x9-20020adff0c9000000b0030795c9c010mr4802811wro.34.1686574151657;
-        Mon, 12 Jun 2023 05:49:11 -0700 (PDT)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id r17-20020a5d52d1000000b002c71b4d476asm12358871wrv.106.2023.06.12.05.49.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 05:49:10 -0700 (PDT)
-Message-ID: <fa2b4ed5-64b5-b05b-0eee-6f61c7ba4baa@linaro.org>
-Date:   Mon, 12 Jun 2023 13:49:10 +0100
+        Mon, 12 Jun 2023 08:49:25 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339CDE71
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 05:49:22 -0700 (PDT)
+Received: from dggpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Qfs1v5S5CzTkwx;
+        Mon, 12 Jun 2023 20:48:51 +0800 (CST)
+Received: from [10.174.179.5] (10.174.179.5) by dggpemm500002.china.huawei.com
+ (7.185.36.229) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Mon, 12 Jun
+ 2023 20:49:19 +0800
+Subject: Re: [Question] report a race condition between CPU hotplug state
+ machine and hrtimer 'sched_cfs_period_timer' for cfs bandwidth throttling
+To:     Thomas Gleixner <tglx@linutronix.de>, <vschneid@redhat.com>,
+        Phil Auld <pauld@redhat.com>, <vdonnefort@google.com>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Wei Li <liwei391@huawei.com>,
+        "liaoyu (E)" <liaoyu15@huawei.com>, <zhangqiao22@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@kernel.org>
+References: <8e785777-03aa-99e1-d20e-e956f5685be6@huawei.com>
+ <87mt18it1y.ffs@tglx>
+From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Message-ID: <68baeac9-9fa7-5594-b5e7-4baf8ac86b77@huawei.com>
+Date:   Mon, 12 Jun 2023 20:49:19 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v1 2/2] misc: fastrpc: detect privileged processes based
- on group ID
-Content-Language: en-US
-To:     Ekansh Gupta <quic_ekangupt@quicinc.com>,
-        linux-arm-msm@vger.kernel.org
-Cc:     ekangupt@qti.qualcomm.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, fastrpc.upstream@qti.qualcomm.com
-References: <1686138864-17136-1-git-send-email-quic_ekangupt@quicinc.com>
- <1686138864-17136-3-git-send-email-quic_ekangupt@quicinc.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <1686138864-17136-3-git-send-email-quic_ekangupt@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <87mt18it1y.ffs@tglx>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.179.5]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500002.china.huawei.com (7.185.36.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ekansh,
-thankyou for your email.
 
-On 07/06/2023 12:54, Ekansh Gupta wrote:
-> Get the information on privileged group IDs during rpmsg probing based
-> on DT property. Check if the process requesting an offload to remote
-> subsystem is privileged by comparing it's group ID with privileged
 
-policy management should be dealt in the user-space not in the kernel.
-
-The patch is not correct approach!
-
-In this particular case the fastrpc library can take the right call 
-based on the group id of the process along with system policy and set 
-attr with correct flags while sending a invoke request.
-
---srini
-
-> group ID. Initialization process attributes are updated for a
-> privileged process which is sent to remote process for resource
-> management.
+On 2023/6/9 22:55, Thomas Gleixner wrote:
+> On Fri, Jun 09 2023 at 19:24, Xiongfeng Wang wrote:
 > 
-> Signed-off-by: Ekansh Gupta <quic_ekangupt@quicinc.com>
-> ---
->   drivers/misc/fastrpc.c | 124 +++++++++++++++++++++++++++++++++++++++++++++++++
->   1 file changed, 124 insertions(+)
+> Cc+ scheduler people, leave context intact
 > 
-> diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-> index 30d4d04..6c7db0b 100644
-> --- a/drivers/misc/fastrpc.c
-> +++ b/drivers/misc/fastrpc.c
-> @@ -21,6 +21,7 @@
->   #include <linux/firmware/qcom/qcom_scm.h>
->   #include <uapi/misc/fastrpc.h>
->   #include <linux/of_reserved_mem.h>
-> +#include <linux/cred.h>
->   
->   #define ADSP_DOMAIN_ID (0)
->   #define MDSP_DOMAIN_ID (1)
-> @@ -166,6 +167,11 @@ struct fastrpc_mem_unmap_req_msg {
->   	u64 len;
->   };
->   
-> +struct gid_list {
-> +	u32 *gids;
-> +	u32 gidcount;
-> +};
-> +
->   struct fastrpc_msg {
->   	int pid;		/* process group id */
->   	int tid;		/* thread id */
-> @@ -277,6 +283,7 @@ struct fastrpc_channel_ctx {
->   	struct fastrpc_device *fdevice;
->   	struct fastrpc_buf *remote_heap;
->   	struct list_head invoke_interrupted_mmaps;
-> +	struct gid_list gidlist;
->   	bool secure;
->   	bool unsigned_support;
->   	u64 dma_mask;
-> @@ -305,6 +312,7 @@ struct fastrpc_user {
->   	spinlock_t lock;
->   	/* lock for allocations */
->   	struct mutex mutex;
-> +	struct gid_list gidlist;
->   };
->   
->   static void fastrpc_free_map(struct kref *ref)
-> @@ -522,6 +530,31 @@ static void fastrpc_context_put_wq(struct work_struct *work)
->   }
->   
->   #define CMP(aa, bb) ((aa) == (bb) ? 0 : (aa) < (bb) ? -1 : 1)
-> +
-> +static u32 sorted_lists_intersection(u32 *listA,
-> +		u32 lenA, u32 *listB, u32 lenB)
-> +{
-> +	u32 i = 0, j = 0;
-> +
-> +	while (i < lenA && j < lenB) {
-> +		if (listA[i] < listB[j])
-> +			i++;
-> +		else if (listA[i] > listB[j])
-> +			j++;
-> +		else
-> +			return listA[i];
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int uint_cmp_func(const void *p1, const void *p2)
-> +{
-> +	u32 a1 = *((u32 *)p1);
-> +	u32 a2 = *((u32 *)p2);
-> +
-> +	return CMP(a1, a2);
-> +}
-> +
->   static int olaps_cmp(const void *a, const void *b)
->   {
->   	struct fastrpc_buf_overlap *pa = (struct fastrpc_buf_overlap *)a;
-> @@ -1230,6 +1263,50 @@ static bool is_session_rejected(struct fastrpc_user *fl, bool unsigned_pd_reques
->   	return false;
->   }
->   
-> +static int fastrpc_get_process_gids(struct gid_list *gidlist)
-> +{
-> +	struct group_info *group_info = get_current_groups();
-> +	int i, num_gids;
-> +	u32 *gids = NULL;
-> +
-> +	if (!group_info)
-> +		return -EFAULT;
-> +
-> +	num_gids = group_info->ngroups + 1;
-> +	gids = kcalloc(num_gids, sizeof(u32), GFP_KERNEL);
-> +	if (!gids)
-> +		return -ENOMEM;
-> +
-> +	/* Get the real GID */
-> +	gids[0] = __kgid_val(current_gid());
-> +
-> +	/* Get the supplemental GIDs */
-> +	for (i = 1; i < num_gids; i++)
-> +		gids[i] = __kgid_val(group_info->gid[i - 1]);
-> +
-> +	sort(gids, num_gids, sizeof(*gids), uint_cmp_func, NULL);
-> +	gidlist->gids = gids;
-> +	gidlist->gidcount = num_gids;
-> +
-> +	return 0;
-> +}
-> +
-> +static void fastrpc_check_privileged_process(struct fastrpc_user *fl,
-> +				struct fastrpc_init_create *init)
-> +{
-> +	u32 gid = sorted_lists_intersection(fl->gidlist.gids,
-> +			fl->gidlist.gidcount, fl->cctx->gidlist.gids,
-> +			fl->cctx->gidlist.gidcount);
-> +
-> +	/* disregard any privilege bits from userspace */
-> +	init->attrs &= (~FASTRPC_MODE_PRIVILEGED);
-> +	if (gid) {
-> +		dev_info(&fl->cctx->rpdev->dev, "%s: %s (PID %d, GID %u) is a privileged process\n",
-> +				__func__, current->comm, fl->tgid, gid);
-> +		init->attrs |= FASTRPC_MODE_PRIVILEGED;
-> +	}
-> +}
-> +
->   static int fastrpc_init_create_static_process(struct fastrpc_user *fl,
->   					      char __user *argp)
->   {
-> @@ -1386,6 +1463,8 @@ static int fastrpc_init_create_process(struct fastrpc_user *fl,
->   		goto err;
->   	}
->   
-> +	fastrpc_get_process_gids(&fl->gidlist);
-> +
->   	inbuf.pgid = fl->tgid;
->   	inbuf.namelen = strlen(current->comm) + 1;
->   	inbuf.filelen = init.filelen;
-> @@ -1400,6 +1479,8 @@ static int fastrpc_init_create_process(struct fastrpc_user *fl,
->   			goto err;
->   	}
->   
-> +	fastrpc_check_privileged_process(fl, &init);
-> +
->   	memlen = ALIGN(max(INIT_FILELEN_MAX, (int)init.filelen * 4),
->   		       1024 * 1024);
->   	err = fastrpc_buf_alloc(fl, fl->sctx->dev, memlen,
-> @@ -1519,6 +1600,7 @@ static int fastrpc_device_release(struct inode *inode, struct file *file)
->   	spin_lock_irqsave(&cctx->lock, flags);
->   	list_del(&fl->user);
->   	spin_unlock_irqrestore(&cctx->lock, flags);
-> +	kfree(fl->gidlist.gids);
->   
->   	if (fl->init_mem)
->   		fastrpc_buf_free(fl->init_mem);
-> @@ -2118,6 +2200,43 @@ static long fastrpc_device_ioctl(struct file *file, unsigned int cmd,
->   	return err;
->   }
->   
-> +static int fastrpc_init_privileged_gids(struct device *dev, char *prop_name,
-> +						struct gid_list *gidlist)
-> +{
-> +	int err = 0;
-> +	u32 len = 0, i;
-> +	u32 *gids = NULL;
-> +
-> +	if (!of_find_property(dev->of_node, prop_name, &len))
-> +		return 0;
-> +	if (len == 0)
-> +		return 0;
-> +
-> +	len /= sizeof(u32);
-> +	gids = kcalloc(len, sizeof(u32), GFP_KERNEL);
-> +	if (!gids)
-> +		return -ENOMEM;
-> +
-> +	for (i = 0; i < len; i++) {
-> +		err = of_property_read_u32_index(dev->of_node, prop_name,
-> +								i, &gids[i]);
-> +		if (err) {
-> +			dev_err(dev, "%s: failed to read GID %u\n",
-> +					__func__, i);
-> +			goto read_error;
-> +		}
-> +		dev_info(dev, "adsprpc: %s: privileged GID: %u\n", __func__, gids[i]);
-> +	}
-> +	sort(gids, len, sizeof(*gids), uint_cmp_func, NULL);
-> +	gidlist->gids = gids;
-> +	gidlist->gidcount = len;
-> +
-> +	return 0;
-> +read_error:
-> +	kfree(gids);
-> +	return err;
-> +}
-> +
->   static const struct file_operations fastrpc_fops = {
->   	.open = fastrpc_device_open,
->   	.release = fastrpc_device_release,
-> @@ -2277,6 +2396,10 @@ static int fastrpc_rpmsg_probe(struct rpmsg_device *rpdev)
->   	if (!data)
->   		return -ENOMEM;
->   
-> +	err = fastrpc_init_privileged_gids(rdev, "qcom,fastrpc-gids", &data->gidlist);
-> +	if (err)
-> +		dev_err(rdev, "Privileged gids init failed.\n");
-> +
->   	if (vmcount) {
->   		data->vmcount = vmcount;
->   		data->perms = BIT(QCOM_SCM_VMID_HLOS);
-> @@ -2382,6 +2505,7 @@ static void fastrpc_rpmsg_remove(struct rpmsg_device *rpdev)
->   	if (cctx->remote_heap)
->   		fastrpc_buf_free(cctx->remote_heap);
->   
-> +	kfree(cctx->gidlist.gids);
->   	of_platform_depopulate(&rpdev->dev);
->   
->   	fastrpc_channel_ctx_put(cctx);
+>> Hello,
+>>  When I do some low power tests, the following hung task is printed.
+>>
+>>   Call trace:
+>>    __switch_to+0xd4/0x160
+>>    __schedule+0x38c/0x8c4
+>>    __cond_resched+0x24/0x50
+>>    unmap_kernel_range_noflush+0x210/0x240
+>>    kretprobe_trampoline+0x0/0xc8
+>>    __vunmap+0x70/0x31c
+>>    __vfree+0x34/0x8c
+>>    vfree+0x40/0x58
+>>    free_vm_stack_cache+0x44/0x74
+>>    cpuhp_invoke_callback+0xc4/0x71c
+>>    _cpu_down+0x108/0x284
+>>    kretprobe_trampoline+0x0/0xc8
+>>    suspend_enter+0xd8/0x8ec
+>>    suspend_devices_and_enter+0x1f0/0x360
+>>    pm_suspend.part.1+0x428/0x53c
+>>    pm_suspend+0x3c/0xa0
+>>    devdrv_suspend_proc+0x148/0x248 [drv_devmng]
+>>    devdrv_manager_set_power_state+0x140/0x680 [drv_devmng]
+>>    devdrv_manager_ioctl+0xcc/0x210 [drv_devmng]
+>>    drv_ascend_intf_ioctl+0x84/0x248 [drv_davinci_intf]
+>>    __arm64_sys_ioctl+0xb4/0xf0
+>>    el0_svc_common.constprop.0+0x140/0x374
+>>    do_el0_svc+0x80/0xa0
+>>    el0_svc+0x1c/0x28
+>>    el0_sync_handler+0x90/0xf0
+>>    el0_sync+0x168/0x180
+>>
+>> After some analysis, I found it is caused by the following race condition.
+>>
+>> 1. A task running on CPU1 is throttled for cfs bandwidth. CPU1 starts the
+>> hrtimer cfs_bandwidth 'period_timer' and enqueue the hrtimer on CPU1's rbtree.
+>> 2. Then the task is migrated to CPU2 and starts to offline CPU1. CPU1 starts
+>> CPUHP AP steps, and then the hrtimer 'period_timer' expires and re-enqueued on CPU1.
+>> 3. CPU1 runs to take_cpu_down() and disable irq. After CPU1 finished CPUHP AP
+>> steps, CPU2 starts the rest CPUHP step.
+>> 4. When CPU2 runs to free_vm_stack_cache(), it is sched out in __vunmap()
+>> because it run out of CPU quota. start_cfs_bandwidth() does not restart the
+>> hrtimer because 'cfs_b->period_active' is set.
+>> 5. The task waits the hrtimer 'period_timer' to expire to wake itself up, but
+>> CPU1 has disabled irq and the hrtimer won't expire until it is migrated to CPU2
+>> in hrtimers_dead_cpu(). But the task is blocked and cannot proceed to
+>> hrtimers_dead_cpu() step. So the task hungs.
+>>
+>>     CPU1      			                 	 CPU2
+>> Task set cfs_quota
+>> start hrtimer cfs_bandwidth 'period_timer'
+>> 						start to offline CPU1
+>> CPU1 start CPUHP AP step
+>> ...
+>> 'period_timer' expired and re-enqueued on CPU1
+>> ...
+>> disable irq in take_cpu_down()
+>> ...
+>> 						CPU2 start the rest CPUHP steps
+>> 						...
+>> 					      sched out in free_vm_stack_cache()
+>> 						wait for 'period_timer' expires
+>>
+>>
+>> Appreciate it a lot if anyone can give some suggestion on how fix this problem !
+>>
+>> Thanks,
+>> Xiongfeng
+> .
+> 
+
+Test script:
+taskset -cp 1 $$
+mkdir /sys/fs/cgroup/cpu/test
+echo $$ > /sys/fs/cgroup/cpu/test/tasks
+echo 80000 > /sys/fs/cgroup/cpu/test/cpu.cfs_quota_us
+echo 100000 > /sys/fs/cgroup/cpu/test/cpu.cfs_period_us
+taskset -cp 2 $$
+echo 0 > /sys/devices/system/cpu/cpu1/online
+
+
+Tests show that the following modification can solve the problem of above test
+scripts. But I am not sure if there exists some other issues.
+
+diff --cc kernel/sched/fair.c
+index d9d6519fae01,bd6624353608..000000000000
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@@ -5411,10 -5411,16 +5411,15 @@@ void start_cfs_bandwidth(struct cfs_ban
+  {
+        lockdep_assert_held(&cfs_b->lock);
+
+-       if (cfs_b->period_active)
++       if (cfs_b->period_active) {
++               struct hrtimer_clock_base *clock_base = cfs_b->period_timer.base;
++               int cpu = clock_base->cpu_base->cpu;
++               if (!cpu_active(cpu) && cpu != smp_processor_id())
++                       hrtimer_start_expires(&cfs_b->period_timer,
+HRTIMER_MODE_ABS_PINNED);
+                return;
++       }
+
+        cfs_b->period_active = 1;
+ -
+        hrtimer_forward_now(&cfs_b->period_timer, cfs_b->period);
+        hrtimer_start_expires(&cfs_b->period_timer, HRTIMER_MODE_ABS_PINNED);
+  }
+
+Thanks,
+Xiongfeng
