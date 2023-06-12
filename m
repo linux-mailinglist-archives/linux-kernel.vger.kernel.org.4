@@ -2,116 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDE8B72D3A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 23:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE26672D3AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 23:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235390AbjFLV4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 17:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58542 "EHLO
+        id S237100AbjFLV6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 17:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237380AbjFLV4N (ORCPT
+        with ESMTP id S230095AbjFLV6L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 17:56:13 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7211E7B
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 14:56:11 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id ca18e2360f4ac-77ae75c75deso33796339f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 14:56:11 -0700 (PDT)
+        Mon, 12 Jun 2023 17:58:11 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA551E41
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 14:58:10 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-54fb1bbc3f2so357801a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 14:58:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1686606971; x=1689198971;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ml29fkL0hSCj84Mk28f10C7ABSuBvDu49wOHkLyniAQ=;
-        b=IuDlcxanG+l9vb81mL1RI/VWq8sfXv6ES9L9wa7sHRPbxtBZmXS/jLrc/5YcoFL33L
-         vtE+FpdW+o4LqyOdcshRpuxxcgNHVjYTUMZEY/VhjhBsYDaJ6qWiiGSyLOWs7NTg+MgG
-         DZZ6EgKS/quWH4Vf1Rd144ZjBTdnOhVdCJkTA=
+        d=gmail.com; s=20221208; t=1686607090; x=1689199090;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/5eEw1L+15ry6U4Pjjiy2xa5UbjIi1vlwGFKCgVY01g=;
+        b=od+5GOwqnjdySkprgJDd461UY1jYfkrNx5K228+Gm0JYXuxu5dRXnEhs2uqKBoau/P
+         Cnq+b3yUVsuK6WbjZ+UEbxhf59qXkV1gnRojP5Sxt0PGau7jRFUHXQTSVYW8vvPoeRZM
+         oqzbZfL/e+WKNREciEdqjHl36r3nMByViRTDVUBp07MvCTa486Fm3u6uzTW761CeAryj
+         GBf6ClEl2/kHdm16qbSqlp+h22aXjW7d5wqaWtSwRmb8ZNP+kplXWdEdKO1pXRmMNsLG
+         UqXHaMUXNTu7gF8XPb71bC7cKl849Swbo69Mz7bZEUffE5TJe8ozck/4nZdv974RQAYA
+         1UXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686606971; x=1689198971;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ml29fkL0hSCj84Mk28f10C7ABSuBvDu49wOHkLyniAQ=;
-        b=KoHSI/2YKFR4gPtTjOPsKIuxQm6z9B0f5hsh2uXO4Odw1Udld+BKdWfyqJShYTcqca
-         HgsFtYkolT+k4Db1ogElkYcF3iUh+2JvGkyEOt1yK83f3xv+NCVLmqWEM3onisXvFYvQ
-         82v2VYMOzd8UD/biYwxIC8lDfhZ3n6tn019UgMmV3js2++cEpuhV/Cn2tMFsS5GX568z
-         nZ3/YcY32HNKqiRIJFNtTy9ZPcleee27Sm3J+D8AlifktNLzRWkZ019eDQv9iQSgbYbk
-         ZDur8apDuhwTCue10KnGH5zgnB0r4MH9T3YE2VGfwft2MTMszcC0BfBNQu13D2CGuf2q
-         yAqg==
-X-Gm-Message-State: AC+VfDzliUeQo0Don/8PzSGVpb6wi0kjJv5IkyiJuLual0G6wch3jwcj
-        iXSvNYvOt0yNvyUR2jjunYRE5w==
-X-Google-Smtp-Source: ACHHUZ49EsFBr4joLqlez0MU1b8frpGHM3Lo3FQAKIhMpGXoC3Ok/ObXJeVdaqOusoxG1mZ4KjDO/g==
-X-Received: by 2002:a05:6602:15d1:b0:775:78ff:4fff with SMTP id f17-20020a05660215d100b0077578ff4fffmr8682142iow.1.1686606970969;
-        Mon, 12 Jun 2023 14:56:10 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id o8-20020a02cc28000000b004186bea7f51sm3014623jap.54.2023.06.12.14.56.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 14:56:10 -0700 (PDT)
-Message-ID: <3c03e28b-8006-a4ac-30bc-6aaf83ccb5d5@linuxfoundation.org>
-Date:   Mon, 12 Jun 2023 15:56:10 -0600
+        d=1e100.net; s=20221208; t=1686607090; x=1689199090;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/5eEw1L+15ry6U4Pjjiy2xa5UbjIi1vlwGFKCgVY01g=;
+        b=J7IjEVzi9Kd+brMR/tTnElgoqUCTOJ/sdm0x903an4TOY1cI7ngE8GQxtQ1gIrXjvD
+         g3pK+23VvWm539rP71VsbKLT0KuRvrFHfhxDTT375Fvvg/4/MWVEEiCFZaNgB76hHH5N
+         RhtfmtkS9+Os4j0e7J4eU5nDK8uhjLcoy55ksiKKRZga/8+OwdhkQnxgmgPZaE5Dcwge
+         GRXJjA1d85nEVQ+LsWYgAIboXue4lQR6Qf3P7Q4CUoXxfD0yR0wwE3vhkieVUtNK9o1w
+         B8HY71YxyDBBzC+WquOsvLSSjiNPgiv5bsqeNSnF8o4mqcy/zsyTY5b5QRxRFx+ILaO9
+         gkSQ==
+X-Gm-Message-State: AC+VfDwW/eSCqymUOzIpiqRgsbqoOc5auZXMcDqGD59Mn6Gow1Egkdvo
+        O9rR5nUjuXA6nQUkd4f8M1FxImCqXVtTr1GM7jE=
+X-Google-Smtp-Source: ACHHUZ79QtDxan/84RbUmRYJUrtnUMHFsswon5Y2H4Adu7u5YDjKAIXJ7GM6bZX6u/HGGeikemCFg5ReKX41QDldP+k=
+X-Received: by 2002:a17:90a:1a05:b0:255:8fd0:fbf4 with SMTP id
+ 5-20020a17090a1a0500b002558fd0fbf4mr9578415pjk.5.1686607090068; Mon, 12 Jun
+ 2023 14:58:10 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2] selftests: prctl: Add new prctl test for PR_SET_NAME
-Content-Language: en-US
-To:     Osama Muhammad <osmtendev@gmail.com>
-Cc:     shuah@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230607153600.15816-1-osmtendev@gmail.com>
- <b7a3219e-4e0a-7a08-439a-a8a6e35271ca@linuxfoundation.org>
- <CAK6rUAMODPLQeUawXMW_RNiJFdukOqdhS5GA5XRAq4U9bnQdNg@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <CAK6rUAMODPLQeUawXMW_RNiJFdukOqdhS5GA5XRAq4U9bnQdNg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230610034114.981861-1-linmiaohe@huawei.com>
+In-Reply-To: <20230610034114.981861-1-linmiaohe@huawei.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Mon, 12 Jun 2023 14:57:58 -0700
+Message-ID: <CAHbLzkpnkZwmbigEp19dH+Q1tH_VWs6fuivKY=nNY7aUmTfEsg@mail.gmail.com>
+Subject: Re: [PATCH] memory tier: remove unneeded !IS_ENABLED(CONFIG_MIGRATION)
+ check
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/10/23 07:01, Osama Muhammad wrote:
-> Hi all,
-> 
-> I looked into it and tried to use TASK_COMM_LEN in the test. Even
-> though I included "linux/sched.h '', I was not able to compile the
-> test because it couldn't find it in the header file.
-> I dived deep into the issue and turns out header file mapped in
-> /usr/include/linux/sched.h is actually mapped to
-> /include/uapi/linux/sched.h[1] in linux source,
-> where TASK_COMM_LEN is not even defined. Instead TASK_COMM_LEN is
-> defined in /include/linux/sched.h which is not mapped to any header
-> files in
-> userspace(/(/usr/include/linux).
-> I also tried to find the TASK_COM_LEN in /usr/include/linux/ but I
-> couldn't find it. Following are the search results.
-> grep -rnw '/usr/include/linux/' -e 'TASK_COMM_LEN"
-> RESULTS OF COMMAND :- /usr/include/linux/taskstats.h:38:#define
-> TS_COMM_LEN 32 /* should be >= TASK_COMM_LEN
-> Based on this information, I have two questions:
-> 1. Would this require a fix to move 'TASK_COMM_LEN' macro from
-> /include/linux/sched.h to UAPI headers /include/uapi/linux/sched.h.
-> 2. Is there any other way to access TASK_COMM_LEN in the selftest that
-> I'm not aware of?
-> 
-> [1]:-https://elixir.bootlin.com/linux/v5.15.116/source/include/uapi/linux/sched.h
-> 
+On Fri, Jun 9, 2023 at 8:41=E2=80=AFPM Miaohe Lin <linmiaohe@huawei.com> wr=
+ote:
+>
+> establish_demotion_targets() is defined while CONFIG_MIGRATION is
+> enabled. There's no need to check it again.
+>
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 
-The best source is Linux mainline.
+Reviewed-by: Yang Shi <shy828301@gmail.com>
 
-Take a look at test files that include linux/sched.h
-
-arm64/abi/tpidr2.c is one of them.
-
-Did you install headers before compiling the test?
-  make headers_install
-
-thanks,
--- Shuah
-
-
+> ---
+>  mm/memory-tiers.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
+> index dd04f0ce5277..a516e303e304 100644
+> --- a/mm/memory-tiers.c
+> +++ b/mm/memory-tiers.c
+> @@ -366,7 +366,7 @@ static void establish_demotion_targets(void)
+>
+>         lockdep_assert_held_once(&memory_tier_lock);
+>
+> -       if (!node_demotion || !IS_ENABLED(CONFIG_MIGRATION))
+> +       if (!node_demotion)
+>                 return;
+>
+>         disable_all_demotion_targets();
+> --
+> 2.27.0
+>
+>
