@@ -2,156 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE5E472C382
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AFCB72C383
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:54:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbjFLLxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 07:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37146 "EHLO
+        id S229718AbjFLLyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 07:54:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbjFLLxA (ORCPT
+        with ESMTP id S232468AbjFLLxs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 07:53:00 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3592E4C3B;
-        Mon, 12 Jun 2023 04:50:01 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-30fa23e106bso1817617f8f.3;
-        Mon, 12 Jun 2023 04:50:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686570599; x=1689162599;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P/J8UNpFRKb+vdSdTYK+cVatgKOvNZz8OPhwwJZ4scw=;
-        b=MC+q+musMttbXHmCDlg7+dcGRW7ew4bANWVV4tfHOnCO6rqi9oyJleaw8JgiV+Y8nL
-         U3fY9mLDZUlGF8/uc2DakN//J3RYExrpwNWx9sYnLS9QQjMfiCdLx9n9A/B9Pjpx6IeK
-         4N2fyNjly7ijtA3K4zY3aa5RxfE/PD9ck3QRhQyx1YbFJgAbeOm8Bl5wgwe6KgviVypd
-         5lmgE1Idg5RBidEE9Dm1JAbVV1G94xiahyVLTV+ZSHEN36zpSx7Hlw9BQACzmOuGYZdr
-         FcXsBlE4Rebk4T4s8llORZXvSQp6id0yCbUAIDBcU7KK2FrBcZOGUyFfEG828Le8SboN
-         w9tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686570599; x=1689162599;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P/J8UNpFRKb+vdSdTYK+cVatgKOvNZz8OPhwwJZ4scw=;
-        b=A0b2vcirYAqzbD6XMmwx6EwiYZ/wWvjZyhPXFqRFTqbEJQPCnAPNUyXzmrtGYZFP2J
-         GfAsUKt7z945ixsFvQbj4+l7U7VhHKk7r2l7B5F+BFrsZCJE+3BvgP1mdXyaEC4qkgWS
-         QFWfIYczZulEFU7b4YAuWl1AcyM+rQBNrQ5QNQsGZ+nI6Vzk4nZn2eTob+pBm9Cojwkx
-         S1ERISsQXSkcPMDNNfvutmg4cULre/YKJRpxEiujrHE2PYy7itQiF2Jvxn8oU+7YiXp4
-         BJw/kXwmnnNzniwn+Vg/1S4i78ZIGGfKTDAmGlysog/e6RyJTwzLXkTPux/QMWIuxFIC
-         kDGA==
-X-Gm-Message-State: AC+VfDzqXfJvbdsrKnlZtBlkXP1X4UDUugk9rglI6RhzjoFZGfOBcLyf
-        xRoTeazxCu3kXx9Qo3/S4gA=
-X-Google-Smtp-Source: ACHHUZ6VBcR+Ty7Mom1NSdu1wR1KVDWU+jaNtLkh5kLigcwkBrq4J0vbehItCLSFNr2av/Bn1wrkFQ==
-X-Received: by 2002:adf:f087:0:b0:306:2d15:fc35 with SMTP id n7-20020adff087000000b003062d15fc35mr3519788wro.37.1686570599279;
-        Mon, 12 Jun 2023 04:49:59 -0700 (PDT)
-Received: from suse.localnet (host-95-252-166-216.retail.telecomitalia.it. [95.252.166.216])
-        by smtp.gmail.com with ESMTPSA id a9-20020a5d5089000000b0030ae973c2e7sm12239136wrt.83.2023.06.12.04.49.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 04:49:58 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Sumitra Sharma <sumitraartsy@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ira Weiny <ira.weiny@intel.com>, Deepak R Varma <drv@mailo.com>
-Subject: Re: [PATCH] lib/test_bpf: Replace kmap() with kmap_local_page()
-Date:   Mon, 12 Jun 2023 13:49:56 +0200
-Message-ID: <3744835.kQq0lBPeGt@suse>
-In-Reply-To: <20230612103341.GA354790@sumitra.com>
-References: <20230612103341.GA354790@sumitra.com>
+        Mon, 12 Jun 2023 07:53:48 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068C32978
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 04:52:10 -0700 (PDT)
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 627671EC0398;
+        Mon, 12 Jun 2023 13:52:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1686570729;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=iZhYZTS/exJyQzB19qwAl5pWglF7rQ+U0ac4FoA1V0o=;
+        b=XVcrfz6BPJmjxxeE7zmvLg7fVp+QfuQsOAa5JHKaDnyA0RqaO9ii5XxE6XXN0wWBxBLRV5
+        OcJ/jO5yUNji7n3K8am2Pj/5L5fOjUm9Zlw1KlGBXS9pbgm0EQLlXWtARM17T7HG2eJ+c/
+        Gg3KZp/2bcrVXWa+aX7qxGGtpcedgho=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+        t=1686570728; bh=iZhYZTS/exJyQzB19qwAl5pWglF7rQ+U0ac4FoA1V0o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YgVEB7LG4HuBaQtF6S4ZM7/wNFWh7MfVuzwLB8AHvvBWUUMq3MhKSPcZTSt+RxSFX
+         k8+W9ooRa3zFjFQcHcsqqxkSO+Ru4U+AQ5qtLzFHQeXuK7/oKJ72aajFf+pA2MHiA1
+         lmPqj88NU8d8QVLRxT5pVUcVVQKvsck201/rUlWqofSAP8oqGQ7nzXf7gQDMssPQh3
+         JFgBSgGxuxyvP6AvC7cNANx95QdqXgxB8qCjXW+AJ+i0fheozRNft5j8f3xPq1sQJR
+         aZuIdqRmKsvlvxJiI8e68dDicFT+TXwWTWk2P/IH/OaSeF1BgVjX2o1tIVr7ZkCL8e
+         V+FLFDd4p9uhXjfmxj6r+R2IzpqMni/0U8UUkv2xlnS9fuuTXHq5D/njtyp0HSCG+9
+         ySxNAn/xgXyPzy4YilSWA43jE+fkWc6avS63iW2VqJyNDZ4PXz33zCX3DV86GGk9sb
+         U9QTMSvjxsO2H4uTIC3IX6ohpFw1DCwI6U29VAIWAA3an69Rbvfj2ZdSBCt06jZoCG
+         vsxORkKaJxQen+w7/CBRfRnxaJ0DJa2rHGCYp+1O8MCd2jCZKaszG/7LH82bInyG50
+         bPBQ6oGHx1/mKtmEXo8IJIRHhYf4xQSy2poAqEYOYD87CBoXfa5VZEn7XLQwe4Y9Gr
+         LBR6xZtonGtrk8xVNyiYdO/A=
+X-Virus-Scanned: Debian amavisd-new at mail.maysoba.com
+Received: from mail.alien8.de ([127.0.0.1])
+        by localhost (mail.maysoba.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 9u111MmGTE7Z; Mon, 12 Jun 2023 11:52:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+        t=1686570727; bh=iZhYZTS/exJyQzB19qwAl5pWglF7rQ+U0ac4FoA1V0o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GVrPaWdDHVI0pof13JevT+8ZOsYsSiFPpx9knYCK3CUYE4P1ZtMMoAjqnhvgWooN6
+         9FRyeF7inJOJbDZCp0cFV9j2qMYxZshnaym7MCLvYbpKlB/qz1tMDSfZlwCvY9lenJ
+         31k9zRMy3PlRTccDJjATwnVV3zxxgsZVjaSUlmq1UK+he86BsDGOyBbzIyuCU4qEja
+         6C9b/2isL4sMaRBtgW0daAid/jOXWrEk+Uj29v/dnNKCAv0lS1Ia2nn1bpV0WzGpHP
+         YNx4sZtDKnGe0bNG4eA1jzwSEuBmnK/Iiuh37fOXmsl2B0GPs1+rlJYdm7vOOhr624
+         L3/myjSnPf0F+SF9Gk8Hici91stppDUSgBqKX27EhbTXxkZY+m5dpDHUZvSwSzfC9h
+         C/09TK532kvAyCatFkzz3xZss3xHK+4lPCipuE4wacAbLKurccpRAu+Lo6fsQrKRJN
+         X9QZvgnm1xCngrV1VRoJ7KwhC78lC+Vdjc8xTCdRhae5ClF7VS/aK3qtjHs1NM5zDV
+         HbphiBvevJZ4hPn2JooRB/KKnqvb70GlI68uuzGR5WZaJIFcC/jbVS5GEtOTWHxqsl
+         M+++8pu2nvJ5/t1EclwcpI1UCJSsOdAbPAJCEFUIHTO9avkWy8N/vZ0Lz3JLBpEpp7
+         dRDdfwjlZRDdIU0wZy89PxPU=
+Received: from zn.tnic (p200300Ea971Dc508329C23FFFEA6A903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c508:329c:23ff:fea6:a903])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+        (No client certificate requested)
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 19EDE40E018C;
+        Mon, 12 Jun 2023 11:51:59 +0000 (UTC)
+Date:   Mon, 12 Jun 2023 13:51:54 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Breno Leitao <leitao@debian.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "pawan.kumar.gupta@linux.intel.com" 
+        <pawan.kumar.gupta@linux.intel.com>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "leit@meta.com" <leit@meta.com>, "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] cpu/bugs: Disable CPU mitigations at compilation time
+Message-ID: <20230612115154.GEZIcG2tWkn8I0+E2t@fat_crate.local>
+References: <20230203120615.1121272-1-leitao@debian.org>
+ <20230609173343.GDZINid4EgJGnkW7HK@fat_crate.local>
+ <543116e1a8cf4b7a8b086c850374f99e@AcuMS.aculab.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <543116e1a8cf4b7a8b086c850374f99e@AcuMS.aculab.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On luned=C3=AC 12 giugno 2023 12:33:41 CEST Sumitra Sharma wrote:
-> kmap() has been deprecated in favor of the kmap_local_page()
-> due to high cost, restricted mapping space, the overhead of
-> a global lock for synchronization, and making the process
-> sleep in the absence of free slots.
->=20
-> kmap_local_page() is faster than kmap() and offers thread-local
-> and CPU-local mappings, take pagefaults in a local kmap region
-> and preserves preemption by saving the mappings of outgoing
-> tasks and restoring those of the incoming one during a context
-> switch.
->=20
-> The mapping is kept thread local in the function
-> =E2=80=9Cgenerate_test_data=E2=80=9D in test_bpf.c
->=20
-> Therefore, replace kmap() with kmap_local_page() and use
-> memcpy_to_page() to avoid open coding kmap_local_page()
-> + memcpy() + kunmap_local().
->=20
-> Remove the unused variable =E2=80=9Cptr=E2=80=9D.
+On Mon, Jun 12, 2023 at 11:22:15AM +0000, David Laight wrote:
+> I can definitely justify compiling them all out.
+> For instance embedded systems with limited userspace and
+> (pretty much) everything running as root.
 
-Sumitra,
+Nothing's stopping you from adding "mitigations=off" to your grub
+config.
 
-Please Cc your mentors while in the internship.
-It's not mandatory but it would expedite comments and reviews :-)
+-- 
+Regards/Gruss,
+    Boris.
 
->=20
-> Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
-> ---
->  lib/test_bpf.c | 10 +---------
->  1 file changed, 1 insertion(+), 9 deletions(-)
->=20
-> diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-> index ade9ac672adb..3bb94727d83b 100644
-> --- a/lib/test_bpf.c
-> +++ b/lib/test_bpf.c
-> @@ -14381,25 +14381,17 @@ static void *generate_test_data(struct bpf_test
-> *test, int sub) * single fragment to the skb, filled with
->  		 * test->frag_data.
->  		 */
-> -		void *ptr;
-> -
->  		page =3D alloc_page(GFP_KERNEL);
->=20
->  		if (!page)
->  			goto err_kfree_skb;
->=20
-> -		ptr =3D kmap(page);
-> -		if (!ptr)
-> -			goto err_free_page;
-> -		memcpy(ptr, test->frag_data, MAX_DATA);
-> -		kunmap(page);
-> +		memcpy_to_page(page, 0, test->frag_data, MAX_DATA);
-
-Why are you temporary mapping a page allocated with the GFP_KERNEL flag?=20
-It cannot come from ZONE_HIGHMEM.=20
-
-=46abio
-
->  		skb_add_rx_frag(skb, 0, page, 0, MAX_DATA, MAX_DATA);
->  	}
->=20
->  	return skb;
->=20
-> -err_free_page:
-> -	__free_page(page);
->  err_kfree_skb:
->  	kfree_skb(skb);
->  	return NULL;
-> --
-> 2.25.1
-
-
-
+https://people.kernel.org/tglx/notes-about-netiquette
