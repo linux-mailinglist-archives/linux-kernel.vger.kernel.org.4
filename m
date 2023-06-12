@@ -2,132 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C090F72C630
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 15:40:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE6F72C632
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 15:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232098AbjFLNkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 09:40:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34356 "EHLO
+        id S233654AbjFLNkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 09:40:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236792AbjFLNkD (ORCPT
+        with ESMTP id S235919AbjFLNkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 09:40:03 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C5C8F9;
-        Mon, 12 Jun 2023 06:40:02 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35CBTGKk016177;
-        Mon, 12 Jun 2023 13:39:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=dTh/cPZmvz7n2CRHX7vIMDQfnSsCXzDIiq1YM27NImI=;
- b=PdXDCv8jhS/2MpfekdQUYKYIrArqusHS/IBOd5c76lr6scYho/n2fscpxrPj0Mbpth6w
- 84aQToHVSCEhWMIyL5zB+qBWGgXV/sp+PbP4A2jAVN/dYmY631k9qhvRrgPtUd61F+Fz
- vMJzPK2W8MZb7JlJaVtM13UR6HJEou7zoWyz0tI8lVNLMeAGCxaQyKo+SrBROphDJHjg
- oH2zZOxQX6t/2zu5IrUd6UlKmeZuzRAr8pdVUR7SONJck1B0lKtgZqZYXTQdOh4agAQi
- Y5+Qt2+5lpQpZaqQfBc3Qm4Ej0iON6uO2OJNRc6Kgs7x/1Xi2rRPXmOpwr+jVDelSK7s Ww== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r4jfe3e16-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jun 2023 13:39:58 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35CDdwxs024526
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jun 2023 13:39:58 GMT
-Received: from [10.217.219.131] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 12 Jun
- 2023 06:39:55 -0700
-Message-ID: <af4c131a-b97d-a8e8-957d-77c31d3c816a@quicinc.com>
-Date:   Mon, 12 Jun 2023 19:09:52 +0530
+        Mon, 12 Jun 2023 09:40:35 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBEA91A1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 06:40:31 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-56d07c7cf03so19362997b3.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 06:40:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1686577230; x=1689169230;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=HCfCynw9maP7T2H3b6SF9iHZLNkIpnhfq4BKVNG+mcU=;
+        b=bB2klCXowkeQCD7ydffQk/ZCdLueoAPlGFLh0UW/eDaaGUo7U54xEAZK4yPHjSgTHy
+         fQkASPKV8JqwsUTj6YeP7WD+QD5RYptoHZfjRgBGF3LApYvU4ykIQDJ5OIuCCtOCHMq5
+         6mz41hc1YGWNG/Yp3Qi99kNgEEwNLMiaQ/+Kepo/WYlRYGPcGzff+/PakBWtRxZy+F8m
+         ra5bKyJgpECKcwrxAJUl0AgN6ykHIc16bgYc4J0eF7HyMRg2OavrwALZP/ggHW82C6yF
+         HAr/QxjILfjcgqa750YIgyva/6iRVSX/Wxc5Uqoehb9ACtZpPUtrIWSJNbMwA5Soym3l
+         lJig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686577230; x=1689169230;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HCfCynw9maP7T2H3b6SF9iHZLNkIpnhfq4BKVNG+mcU=;
+        b=hPs4NuGxsd2+MWleBUI2r1fLt6ZMC5OJRm7NmmF8sxwhSUb0iq/v0BMJe+GM2oMcDM
+         pqYlOlzT3vIT6Cq8PHWVxy2URSrxUQjmuTi+1okGOOPcLV/pdZF2qTO6nLEt41tZR1Bs
+         2/OG+JVJV7XjYhySM/sKTu6XCpNJ36sVdNvLIE1kXiFkVOW9F14f50BpScgTo8vDrX2m
+         Sla9aTYICh7llc11bFvJHnEF8o52pStl//oqWukkYwoUFLztgwQNox/JPr4N8Z7bYcSH
+         Mh0giyTk65BFLK5FhV4c5NqZaMenDJfcVzapG4Fmq92p7dkDT7XFBf3JdORx3GaYrxUT
+         6FWg==
+X-Gm-Message-State: AC+VfDyoqbJQjBDI0EKByuRUz5gZFsRfK4idV8jBxsQ637WsUC3rEWD0
+        52vRrmt/eOBFYPSchGkBda6veA==
+X-Google-Smtp-Source: ACHHUZ7QxRcEIS1oGnewylXZV/6b8P1kGCITgoNYLFT1cO0xOtFzTDCoXYpXWh4FwFTUmVk7YcH5wg==
+X-Received: by 2002:a25:cf92:0:b0:bc7:be38:41f2 with SMTP id f140-20020a25cf92000000b00bc7be3841f2mr4941692ybg.49.1686577230740;
+        Mon, 12 Jun 2023 06:40:30 -0700 (PDT)
+Received: from localhost ([2601:58a:8200:2b0::e699])
+        by smtp.gmail.com with ESMTPSA id m14-20020a819e0e000000b0055a21492192sm2476446ywj.115.2023.06.12.06.40.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 06:40:30 -0700 (PDT)
+Date:   Mon, 12 Jun 2023 09:40:28 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Charan Teja Kalla <quic_charante@quicinc.com>,
+        akpm@linux-foundation.org, minchan@kernel.org,
+        quic_pkondeti@quicinc.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: madvise: fix uneven accounting of psi
+Message-ID: <ZIcgTEvxeAJ5SHuy@cmpxchg.org>
+References: <1685531374-6091-1-git-send-email-quic_charante@quicinc.com>
+ <20230531221955.GD102494@cmpxchg.org>
+ <230e45e8-8cd8-3668-bbfa-a95212b4cb99@quicinc.com>
+ <20230605180013.GD221380@cmpxchg.org>
+ <f3f15b6a-8618-f755-f21c-4193c502e65c@quicinc.com>
+ <CAJuCfpFB33GLbwvYspg966b6AGMopS3ca68hjL94kgpM7et7CQ@mail.gmail.com>
+ <4543c4e5-43f1-bae2-245e-951437e4bd07@quicinc.com>
+ <CAJuCfpE42OJZur-1u2hvvXmPkRdV1uOfK-Aqm2POmvrDpRwg0Q@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] soc: qcom: geni-se: Do not bother about enable/disable of
- interrupts in secondary sequencer for non-uart modes
-Content-Language: en-CA
-To:     Doug Anderson <dianders@chromium.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_msavaliy@quicinc.com>,
-        <mka@chromium.org>, <swboyd@chromium.org>,
-        <quic_vtanuku@quicinc.com>
-References: <1685729609-26871-1-git-send-email-quic_vnivarth@quicinc.com>
- <CAD=FV=Uy=ELwg2jhtFSrpndw-GxUO=0NTKotNymi3sqwG=ggnQ@mail.gmail.com>
-From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-In-Reply-To: <CAD=FV=Uy=ELwg2jhtFSrpndw-GxUO=0NTKotNymi3sqwG=ggnQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: oaa35-xyGBgWOsKsYED45dn4O7BwJkvL
-X-Proofpoint-GUID: oaa35-xyGBgWOsKsYED45dn4O7BwJkvL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-12_06,2023-06-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=28 impostorscore=0
- priorityscore=1501 malwarescore=0 adultscore=0 lowpriorityscore=0
- phishscore=0 spamscore=28 clxscore=1015 bulkscore=0 mlxlogscore=41
- suspectscore=0 mlxscore=28 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306120117
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAJuCfpE42OJZur-1u2hvvXmPkRdV1uOfK-Aqm2POmvrDpRwg0Q@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Jun 09, 2023 at 04:13:14PM -0700, Suren Baghdasaryan wrote:
+> On Fri, Jun 9, 2023 at 5:42 AM Charan Teja Kalla
+> <quic_charante@quicinc.com> wrote:
+> >
+> > Thanks Suren & Johannes,
+> >
+> > On 6/7/2023 1:18 AM, Suren Baghdasaryan wrote:
+> > > Hi Folks. Sorry for being late to the party.
+> > > Yeah, userspace does not have a crystal ball to predict future user
+> > > behavior, so there will always be pathological cases when usual
+> > > assumptions and resulting madvise() would make things worse.
+> > >
+> > > I think this discussion can be split into several questions/issues:
+> > > 1. Inconsistency in how madvise(MADV_PAGEOUT) would affect PSI
+> > > calculation when the page is refaulted, based on the path it took
+> > > before being evicted by madvise(). In your initial description case
+> > > (a) is inconsistent with (b) and (c) and it's probably worth fixing.
+> > > IMHO (a) should be made consistent with others, not the other way
+> > > around. My reasoning is that page was expelled from the active list,
+> > > so it was part of the active workingset.
+> > >
+> > That means we should be setting Workingset on the page while it is on
+> > the active list and when it is being pageout through madvising. Right? I
+> > see, this makes it consistent.
+> 
+> This was my opinion but others might think otherwise, like I found out
+> in some recent conversations. So, it would be great to get some more
+> feedback before making the change.
 
-Thank you very much for the review...
-
-
-On 6/7/2023 9:41 PM, Doug Anderson wrote:
-> Hi,
->
-> On Fri, Jun 2, 2023 at 11:13 AM Vijaya Krishna Nivarthi
-> <quic_vnivarth@quicinc.com> wrote:
->> The select_fifo/dma_mode() functions in geni driver enable/disable
->> interrupts (secondary included) conditionally for non-uart modes, while
->> uart is supposed to manage this internally.
->> However, only uart uses secondary IRQs while spi, i2c do not care about
->> these at all making their enablement (or disablement) totally unnecessary
->> for these protos.
->>
->> Drop enabling/disabling secondary IRQs for non-uart modes.
->> This doesn't solve any observed problem but only gets rid of code pieces
->> that are not required.
->>
->> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
->> ---
->>   drivers/soc/qcom/qcom-geni-se.c | 24 ++++--------------------
->>   1 file changed, 4 insertions(+), 20 deletions(-)
-> This seems like a nice cleanup to me. It's still odd that the general
-> code has a special case for UART, but I guess the alternative is to
-> duplicate the exact same logic for both the i2c and SPI drivers. I
-> won't insist on that, though I wouldn't be opposed to it either.
->
-> I guess one comment, though: should we also remove the code that
-> messes with "SE_GENI_S_IRQ_EN" in geni_se_select_gpi_mode()?
-
-
-Right now we have gpi-dma mode support for i2c and spi but not for uart.
-
-Even when gpi-dma support is added, uart driver's interrupt handler 
-would not be invoked so I believe it would be safe to drop that code 
-from geni_se_select_gpi_mode() too.
-
-I will post v2 dropping same after some more lookup.
-
--Vijay/
-
-
->
-> -Doug
+I also agree with the consistency fix: it should set Workingset when
+madvise zaps pages from the active list.
