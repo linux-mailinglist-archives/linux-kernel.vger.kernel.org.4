@@ -2,160 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF8D372D06D
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E51172D073
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:27:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236955AbjFLU0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 16:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
+        id S237342AbjFLU1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 16:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236948AbjFLU0O (ORCPT
+        with ESMTP id S229604AbjFLU1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 16:26:14 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B135E19B;
-        Mon, 12 Jun 2023 13:25:57 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-97881a996a0so847463366b.0;
-        Mon, 12 Jun 2023 13:25:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686601556; x=1689193556;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vdv3vzNPkrrapPOhx9OkW0gebiaW56nR0p2AcI7Bl0s=;
-        b=YtKUkr7aYmpsscebasGh8jqgUj5/RFK5S0z5Vojx92Ai+P7xlRaZJZZw08ZgOJaAh9
-         tYprzwpmWpRnaVbG5+ooVLNyL6fKx9LI46l6r/JZ7IrIUwgqjc6R4onX0se8NTB9XYva
-         /YFRBczWG//nlp3Vw71eUQ01RVjG8xcrP305D6e2MJyt6nP6WoLY+u/AzPF9e3ZwrHh/
-         0Q7k9wqT1FyfVOMfj5mD5WxppPbYiFp2j7gf85nDVb2DcYf+rDNKIN72McnVeSfu3hZY
-         u5dVqvCwxgKgZ0sxbn+8TgjY1raC8UUQF/go2LnfZOkTkoCgwVXb7/V0IU88eq4LwdcA
-         MDvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686601556; x=1689193556;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Vdv3vzNPkrrapPOhx9OkW0gebiaW56nR0p2AcI7Bl0s=;
-        b=Pb8q7FOoOEMxYeAwugMbkllq8bzn3+GmLzGZlJJxG4tk7soQB3cXI1FHMIc6VckzLQ
-         4PCvJxVEuIilWoiBjTPQacD4b9Lqqi2ZxMPPYOMgoB/Y6U/KSKqseIxSzha3tPCCxfM9
-         EA0Tm2FXdNxfYyuU9WOL+peZiNydPGcxd23UoX3RexNcpJ+Z18VRgBGlMESfkRqiKx0e
-         Zt1aeklECtgwks2l+h1eUmWuj/23LBFI4ocUKNenlRAxw3bfYdU8eFTV4m1vfzbHPEWJ
-         RUcR3nQrhDBp5Q8XqdTaL1l/wqPlsWsAPJfRANWa+ne5CEQ0vnHNiiJRnwprk/W8nkX3
-         2Z3Q==
-X-Gm-Message-State: AC+VfDw7ewjLVM1gkP/JQLkwTTigWRqMQhaAC26BDELtYjk1npa/dz34
-        XmWb2ocvOa5gPN09+Z/umk0=
-X-Google-Smtp-Source: ACHHUZ68tbqVprHJAzbsOB+yLTYiQ1Lh4TimLjN9ifwSPBOKlpqNOeM8ktKZXpxvMRzjr/SWYGnNKg==
-X-Received: by 2002:a17:907:728b:b0:97d:a87a:f4db with SMTP id dt11-20020a170907728b00b0097da87af4dbmr8539757ejc.66.1686601555829;
-        Mon, 12 Jun 2023 13:25:55 -0700 (PDT)
-Received: from krava ([83.240.63.222])
-        by smtp.gmail.com with ESMTPSA id sa1-20020a170906eda100b009745a6d1b37sm5574871ejb.202.2023.06.12.13.25.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 13:25:55 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Mon, 12 Jun 2023 22:25:52 +0200
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Yonghong Song <yhs@meta.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Jackie Liu <liu.yun@linux.dev>
-Subject: Re: [PATCHv2] ftrace: Show all functions with addresses in
- available_filter_functions_addrs
-Message-ID: <ZId/UL/iujOdgel+@krava>
-References: <20230611130029.1202298-1-jolsa@kernel.org>
- <53a11f31-256d-e7bc-eca5-597571076dc5@meta.com>
- <20230611225407.3e9b8ad2@gandalf.local.home>
- <20230611225754.01350a50@gandalf.local.home>
- <d5ffd64c-65b7-e28c-b8ee-0d2ff9dcd78b@meta.com>
- <20230612110222.50c254f3@gandalf.local.home>
+        Mon, 12 Jun 2023 16:27:33 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8D210CE;
+        Mon, 12 Jun 2023 13:27:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686601648; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=dKK6kjE1B9fmBToDUA2Af/B1GpTk1veKlKpNTto1m4ynYjY0yFQkpmHseD//1KTuF0
+    r9qt1IUJAcvkx3nA/5EGZ3SmYITvXQbIXrcaL7N5wqeC30HL/FVhRzuJokBzfaxCMGWP
+    c8kZUWccP13DlGPpuTS7ldPeTYMgZZvs7oJWqJe/yKAHsdcAfTlcCyjv9s8YW9os4Jh5
+    tv8jLWaKSKoXgT6RO4NGZ95xU1SmE6PfxuNdrJg4plWx2aLiXF3Hsi3bpdjHLFJ9Q062
+    rLV3jPIs4H7gDeyus5aWcsi23ytqDr+pC50GJElzaXu+sXE3HuUn6mp3pYFIp8FXHVfP
+    Mf5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686601648;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=+/8pzuF1RImyxQe66AcePgrM+A8lzFkbVzl6+XoBoOY=;
+    b=kBjyXkWOpnWADPjnl4OFtW/eMTVANOKXEuhK1gc/nXZQ5cVEZYRH0tsUGI9m8N9aWx
+    V4P0y3LA9CyRmA0AW5KOOkjZtFZIk4HNW7erxJLUf5nQ2774hTe9z6SC5BkBZYyawgKR
+    XtxZjm/bEBb1X8DeRpo9zVar6RudAuthqurfNbnNERFr3evKiyrJQf8I5btVI8mIJday
+    ofYbQAFxBnexKG5K1E9lU2SlITqNxTDPKrohO2laybB7Y4VEEhfBrUAAkpnogvUKK7I7
+    Aqd/5pwv/qh/YHwsC37LwQxbBU1YgTAQezoCvnjh3JPyuDF/6XI1M+ch49eKcbLQVPZz
+    cvdQ==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686601648;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=+/8pzuF1RImyxQe66AcePgrM+A8lzFkbVzl6+XoBoOY=;
+    b=pKjldxal4PRRIJ+9ul9M6EeretRV+TYTtRw3kcITbSUonTvsSUVZLxC4W/ZFAG92A/
+    x+7AnDxKqmo2EfKPVSQ/5shuGvkorvViLkn9ZSI0E2GWiP61n0YkBYfxdR7I+4BgC1NL
+    yVCEE0KmNJX6LKGHOkfRO0ZkiUTGLt0gpdnMg1TF0WFpL1QiYNGfWUGL2mGoytf+JAGx
+    YPbugP++A1FXH5rpWzjEHmGpWccK31gf2QTyBXJn45kuOmdqeoI9xGgfW/3rpcv+pasb
+    eQp3fuNnz+ut1tz3aggEg+2ysNCtiM+i1cFENZi9BvfbNOqMGVw1gQBtzhKfSgL6p7M8
+    wi3A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686601648;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=+/8pzuF1RImyxQe66AcePgrM+A8lzFkbVzl6+XoBoOY=;
+    b=PL8zx/bkOEbcc6BWEnW8D/sGpkdcfIjr/oBX8siNMwvdaso5zth69I7c1G6y1EaSya
+    HrQou0LEwrGk7Ha5NmBQ==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4peA8peN1A=="
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.5.3 DYNA|AUTH)
+    with ESMTPSA id Z82ec2z5CKRSVyQ
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 12 Jun 2023 22:27:28 +0200 (CEST)
+Date:   Mon, 12 Jun 2023 22:27:20 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 07/23] interconnect: qcom: icc-rpm: Allow negative QoS
+ offset
+Message-ID: <ZId_qIAL8dvJOwai@gerhold.net>
+References: <20230526-topic-smd_icc-v3-0-5fb7d39b874f@linaro.org>
+ <20230526-topic-smd_icc-v3-7-5fb7d39b874f@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230612110222.50c254f3@gandalf.local.home>
+In-Reply-To: <20230526-topic-smd_icc-v3-7-5fb7d39b874f@linaro.org>
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 11:02:22AM -0400, Steven Rostedt wrote:
-> On Mon, 12 Jun 2023 07:49:53 -0700
-> Yonghong Song <yhs@meta.com> wrote:
+On Mon, Jun 12, 2023 at 08:24:24PM +0200, Konrad Dybcio wrote:
+> In some very very very very unfortunate cases, the correct offset of
+> the QoS registers will be.. negative. One such case is MSM8998, where
+> The DDR BWMON occupies what-would-be-the-BIMC-base which we usually
+> take into account with the register calculation, making the actual
+> BIMC node start at what-would-be-the-BIMC-base+0x300.
 > 
-> > I am actually interested in how available_filter_functions_addrs
-> > will be used. For example, bpf_program__attach_kprobe_multi_opts()
-> > can already take addresses from kallsyms. How to use
-> > available_filter_functions_addrs to facilitate kprobe_multi?
-
-the problem is that we need to do 2 passes:
-
- - through available_filter_functions and find out if the function is traceable
- - through /proc/kallsyms to get the address for traceable function
-
-having available_filter_functions symbols together with addresses allow
-us to skip the kallsyms step
-
-and we are ok with the address in available_filter_functions_addr not being the
-function entry, because kprobe_multi uses fprobe and that handles both entry and
-patch-site address properly
-
-> > Do we need to change kernel APIs? It would be great at least we
-> > got a RFC patch to answer these questions.
+> In order to keep the calculation code sane, the simplest - however
+> ugly it may be - solution is to allow the offset to be negative.
 > 
-> I agree, having that information would also be useful to me.
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+I'm a bit confused why this patch is part of this series. It doesn't
+seem to be directly related.
+
+Can you send it as part of the series that adds the MSM8998 interconnect
+driver?
+
+Thanks,
+Stephan
+
+> ---
+>  drivers/interconnect/qcom/icc-rpm.h | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> Jiri? Andrii?
-
-so we have 2 interfaces how to create kprobe_multi link:
-
-  a) passing symbols to kernel
-
-     1) user gathers symbols and need to ensure that they are
-        trace-able -> pass through available_filter_functions file
-
-     2) kernel takes those symbols and translates them to addresses
-        through kallsyms api
-
-     3) addresses are passed to fprobe/ftrace through:
-
-         register_fprobe_ips
-         -> ftrace_set_filter_ips
-
-  b) passing addresses to kernel
-
-     1) user gathers symbols and needs to ensure that they are
-        trace-able -> pass through available_filter_functions file
-
-     2) user takes those symbols and translates them to addresses
-       through /proc/kallsyms
-
-     3) addresses are passed to the kernel and kernel calls:
-
-         register_fprobe_ips
-         -> ftrace_set_filter_ips
-
-
-The new available_filter_functions_addrs file helps us with option b),
-because we can make 'b 1' and 'b 2' in one step - while filtering traceable
-functions, we get the address directly.
-
-I tested the new available_filter_functions_addrs changes with some hacked
-selftest changes, you can check it in here [1].
-
-I assume Jackie Liu will send new version of her patchset [2] based on this
-new available_filter_functions_addrs file.
-
-I think we should have these changes coming together and add some perf
-measurements from before and after to make the benefit apparent.
-
-jirka
-
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?h=bpf/avail_addrs&id=fecaeeaf40bae034715ab2e9a46ca1dc16371e8e
-[2] https://lore.kernel.org/bpf/20230526155026.1419390-1-liu.yun@linux.dev/#r
+> diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
+> index d2c04c400cad..ba840a436cc0 100644
+> --- a/drivers/interconnect/qcom/icc-rpm.h
+> +++ b/drivers/interconnect/qcom/icc-rpm.h
+> @@ -29,10 +29,10 @@ enum qcom_icc_type {
+>   * @num_intf_clks: the total number of intf_clks clk_bulk_data entries
+>   * @type: the ICC provider type
+>   * @regmap: regmap for QoS registers read/write access
+> - * @qos_offset: offset to QoS registers
+>   * @bus_clk_rate: bus clock rate in Hz
+>   * @bus_clks: the clk_bulk_data table of bus clocks
+>   * @intf_clks: a clk_bulk_data array of interface clocks
+> + * @qos_offset: offset to QoS registers
+>   * @keep_alive: whether to always keep a minimum vote on the bus clocks
+>   * @is_on: whether the bus is powered on
+>   */
+> @@ -42,7 +42,7 @@ struct qcom_icc_provider {
+>  	int num_intf_clks;
+>  	enum qcom_icc_type type;
+>  	struct regmap *regmap;
+> -	unsigned int qos_offset;
+> +	int qos_offset;
+>  	u64 bus_clk_rate[NUM_BUS_CLKS];
+>  	struct clk_bulk_data bus_clks[NUM_BUS_CLKS];
+>  	struct clk_bulk_data *intf_clks;
+> @@ -108,7 +108,7 @@ struct qcom_icc_desc {
+>  	bool no_clk_scaling;
+>  	enum qcom_icc_type type;
+>  	const struct regmap_config *regmap_cfg;
+> -	unsigned int qos_offset;
+> +	int qos_offset;
+>  };
+>  
+>  /* Valid for all bus types */
+> 
+> -- 
+> 2.41.0
+> 
