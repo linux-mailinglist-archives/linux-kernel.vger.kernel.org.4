@@ -2,125 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D9C72CDD0
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C3772CDDA
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:23:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236858AbjFLSWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 14:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43346 "EHLO
+        id S237584AbjFLSXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 14:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232341AbjFLSWs (ORCPT
+        with ESMTP id S237561AbjFLSXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 14:22:48 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BBE7E0;
-        Mon, 12 Jun 2023 11:22:47 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-9745ba45cd1so705306366b.1;
-        Mon, 12 Jun 2023 11:22:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686594165; x=1689186165;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QKqLQJH1mqzuRzsiJTvJ04rfDSsqHrrA3iBCbUsSHOI=;
-        b=T/UJRDl9pOyQ3VKr8bq+HySE8u53jPaikn0peb1zVwX9CuhAUw4k3534zSzLozIQ9N
-         HjwDar/76Lpgu9u93/0q1djWVtidybQ842u0ZOQ9wcRR1SVPweBamtp4hVueu7CmckxZ
-         oFa/h95Nui+af9J+pwpmVGOq9kdaUrtHzqakK7OELmRk537vkUhpgvueF71cMHQQWdDB
-         8rB7mwoKQgDvY4M5lkbqqbAV4239QPN+025gzlzz8M4R6Tcd4y8ZyFzcVC+wgEiXrum7
-         z7U0coETkDZnD64r54ssnqfMLxX9lNsY2Lvpeyfh5XB4Ao71wKaevaCNFCV/jWe2rpDg
-         XZag==
+        Mon, 12 Jun 2023 14:23:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D77E7B
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:23:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686594182;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WuZqmtvd4WjoknFOrkLRYxUsHp5/t5pNlhuMb2dd9d8=;
+        b=Ptgnm/zcPxh2qyvS8qltOjVRhNbDAAvI7EAtTH2NJb1Ha/K2xYBYiyD/YrumENKo1HBem3
+        gj4fMo5afQ4d4ESDS6UJutNcjBWPi3onKqQoSd+olWlMqzlkCIZNbO2NCSXCJMp5IRYPlx
+        tr/Kzf+m3cz+BSKhYKzD2MtmbK/2tr8=
+Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com
+ [209.85.160.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-266-y0tEEWpYNimn8HksmNJwlg-1; Mon, 12 Jun 2023 14:23:00 -0400
+X-MC-Unique: y0tEEWpYNimn8HksmNJwlg-1
+Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-1a68ea38be2so1187363fac.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:23:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686594165; x=1689186165;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QKqLQJH1mqzuRzsiJTvJ04rfDSsqHrrA3iBCbUsSHOI=;
-        b=hYu5pio1+PDhQrO52E39JfDO5OgP5Q+vxrUVA0le7Ac9Sm0zj0OL3WEtafG06pztk3
-         fZyM6j14KkboBnXv+qt6mIfg7oajQRzQdbsjEuLFpyGuVNZu0HJZgEqbqbcAY83/DN6+
-         B0wj+o2FfttufP/kRU263AqwWXLZ7zPhUu3CI7E3l1BAN/hi8YdwtqwBR5EpdR6dSt1j
-         f932WB4d9XyfsI0VXeWX31U7Exi/YwMp9bzR9pifFvoepnmcqeLQdGb93rDNlWMd4jYY
-         iuvqII54xow235vSQbBZlD9PQ39ex2nF7zWb7j6Tg0mPa8vTisL3O8OZMxmA3DUMaukM
-         aqdA==
-X-Gm-Message-State: AC+VfDxDE2xGuuLyPO6IsC9k/4ZPoc1l3ODhYlhFi+17N4Qt+hhrtHj3
-        6Ls/fxWaLYjnAGSnmKt7PIm5pmUbNPPNdL0p
-X-Google-Smtp-Source: ACHHUZ7SIa1EObO/QHbeisX6ifIqewTz5w73pxUAYksizGq0x9vX6Bwlibfza1dl8IakcSAsMmJE1g==
-X-Received: by 2002:a17:906:fe43:b0:978:9235:d428 with SMTP id wz3-20020a170906fe4300b009789235d428mr9303920ejb.36.1686594165554;
-        Mon, 12 Jun 2023 11:22:45 -0700 (PDT)
-Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id c19-20020a170906925300b0096f67b55b0csm5575839ejx.115.2023.06.12.11.22.44
+        d=1e100.net; s=20221208; t=1686594180; x=1689186180;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WuZqmtvd4WjoknFOrkLRYxUsHp5/t5pNlhuMb2dd9d8=;
+        b=LbpcWwLSQLWB0UldRP4JhaBPFmr7MWHz06mRUyikDCA7vP/lQAuDci0nvmsyi+v5oI
+         T4c0Vy2UsITHZ6ake9kywL0r1HAr/4b/XQu1R8IHTFtHh3VfuwX0RGsbrjnJ+48XYo9c
+         1fhHxLbalKM5Md9fqE3V+XMlzB8VZXtoqPfLHTilfxyV1iXizGVyG6Z4IgfNoX3VzMdG
+         dmhHmtyhb63kfPK3PyPHs9DXAvEzAjYlL/9Pr/X2Guhe78AQaSXzjtTjqQ620HSVGSFE
+         dkqcqwY4dytz5mX3u66qzNlmJ16wsueDLh/YaJXJZI8pE9ocovyniZ/1VpyJLd83fQ5I
+         Gdcw==
+X-Gm-Message-State: AC+VfDxG/8xjJRl5TCLI3RYuSuAkQAX+cv5TNqmZILUQPANssuGWwlHd
+        FtEFi2KpJKL2xptjI5Dt6D4VlBEP26xvTEHOk7TrfX0Qou7CXzUMChYjyOpRq0VOcARA9yMjoRm
+        9FZHuVaSvueIOJApGJyRX5rxP
+X-Received: by 2002:a05:6870:3403:b0:1a6:a28b:6e4 with SMTP id g3-20020a056870340300b001a6a28b06e4mr1424754oah.37.1686594180230;
+        Mon, 12 Jun 2023 11:23:00 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4ojOAZsqcF6bnSAgTcknWHmKu5ibIbDyN5vE0vwVE23kVcIn47oSmy77InfhxOlx0UQ4BxKw==
+X-Received: by 2002:a05:6870:3403:b0:1a6:a28b:6e4 with SMTP id g3-20020a056870340300b001a6a28b06e4mr1424739oah.37.1686594179927;
+        Mon, 12 Jun 2023 11:22:59 -0700 (PDT)
+Received: from halaney-x13s ([2600:1700:1ff0:d0e0::45])
+        by smtp.gmail.com with ESMTPSA id r34-20020a05687108a200b001a68feb9440sm1579964oaq.9.2023.06.12.11.22.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 11:22:45 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     linux-kernel@vger.kernel.org,
-        Maksim Kiselev <bigunclemax@gmail.com>
-Cc:     Maksim Kiselev <bigunclemax@gmail.com>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
+        Mon, 12 Jun 2023 11:22:59 -0700 (PDT)
+Date:   Mon, 12 Jun 2023 13:22:56 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 0/3] Add D1/T113s thermal sensor controller support
-Date:   Mon, 12 Jun 2023 20:22:43 +0200
-Message-ID: <13282074.uLZWGnKmhe@jernej-laptop>
-In-Reply-To: <20230610203549.1127334-1-bigunclemax@gmail.com>
-References: <20230610203549.1127334-1-bigunclemax@gmail.com>
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>, netdev@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH 05/26] net: stmmac: dwmac-qcom-ethqos: shrink clock code
+ with devres
+Message-ID: <20230612182256.7cc3goqwid32fdn6@halaney-x13s>
+References: <20230612092355.87937-1-brgl@bgdev.pl>
+ <20230612092355.87937-6-brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230612092355.87937-6-brgl@bgdev.pl>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne sobota, 10. junij 2023 ob 22:35:41 CEST je Maksim Kiselev napisal(a):
-> This series adds support for Allwinner D1/T113s thermal sensor controller.
-> THIS controller is similar to the one on H6, but with only one sensor and
-> uses a different scale and offset values.
+On Mon, Jun 12, 2023 at 11:23:34AM +0200, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
-> v2:
-> - Fixed SoB tag
-
-It doesn't seems you fixed that.
-
-Best regards,
-Jernej
-
-> - Moved binding patch before driver changes
+> We can use a devm action to completely drop the remove callback and use
+> stmmac_pltfr_remove() directly for remove. We can also drop one of the
+> goto labels.
 > 
-> v1:
-> - Initial version
-> 
-> Maxim Kiselev (3):
->   dt-bindings: thermal: sun8i: Add binding for D1/T113s THS controller
->   thermal: sun8i: Add D1/T113s THS controller support
->   riscv: dts: allwinner: d1: Add thermal sensor and thermal zone
-> 
->  .../thermal/allwinner,sun8i-a83t-ths.yaml     | 20 +++++++++++++-
->  .../boot/dts/allwinner/sunxi-d1s-t113.dtsi    | 26 +++++++++++++++++++
->  drivers/thermal/sun8i_thermal.c               | 13 ++++++++++
->  3 files changed, 58 insertions(+), 1 deletion(-)
-> 
-> 
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
+I think using the remove callback seems more direct to a reader, but
+that's pretty opinionated. The change itself looks good so:
 
+Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
 
+> ---
+>  .../stmicro/stmmac/dwmac-qcom-ethqos.c        | 24 +++++++++----------
+>  1 file changed, 11 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
+> index c801838fae2a..2da0738eed24 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
+> @@ -586,6 +586,11 @@ static int ethqos_clks_config(void *priv, bool enabled)
+>  	return ret;
+>  }
+>  
+> +static void ethqos_clks_disable(void *data)
+> +{
+> +	ethqos_clks_config(data, false);
+> +}
+> +
+>  static int qcom_ethqos_probe(struct platform_device *pdev)
+>  {
+>  	struct device_node *np = pdev->dev.of_node;
+> @@ -636,6 +641,10 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		goto err_mem;
+>  
+> +	ret = devm_add_action_or_reset(&pdev->dev, ethqos_clks_disable, ethqos);
+> +	if (ret)
+> +		goto err_mem;
+> +
+>  	ethqos->speed = SPEED_1000;
+>  	ethqos_update_rgmii_clk(ethqos, SPEED_1000);
+>  	ethqos_set_func_clk_en(ethqos);
+> @@ -653,27 +662,16 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
+>  
+>  	ret = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
+>  	if (ret)
+> -		goto err_clk;
+> +		goto err_mem;
+>  
+>  	return ret;
+>  
+> -err_clk:
+> -	ethqos_clks_config(ethqos, false);
+> -
+>  err_mem:
+>  	stmmac_remove_config_dt(pdev, plat_dat);
+>  
+>  	return ret;
+>  }
+>  
+> -static void qcom_ethqos_remove(struct platform_device *pdev)
+> -{
+> -	struct qcom_ethqos *ethqos = get_stmmac_bsp_priv(&pdev->dev);
+> -
+> -	stmmac_pltfr_remove(pdev);
+> -	ethqos_clks_config(ethqos, false);
+> -}
+> -
+>  static const struct of_device_id qcom_ethqos_match[] = {
+>  	{ .compatible = "qcom,qcs404-ethqos", .data = &emac_v2_3_0_data},
+>  	{ .compatible = "qcom,sc8280xp-ethqos", .data = &emac_v3_0_0_data},
+> @@ -684,7 +682,7 @@ MODULE_DEVICE_TABLE(of, qcom_ethqos_match);
+>  
+>  static struct platform_driver qcom_ethqos_driver = {
+>  	.probe  = qcom_ethqos_probe,
+> -	.remove_new = qcom_ethqos_remove,
+> +	.remove_new = stmmac_pltfr_remove,
+>  	.driver = {
+>  		.name           = "qcom-ethqos",
+>  		.pm		= &stmmac_pltfr_pm_ops,
+> -- 
+> 2.39.2
+> 
 
