@@ -2,173 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D70D72CD0F
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF22D72CD10
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232370AbjFLRlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 13:41:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48130 "EHLO
+        id S232637AbjFLRlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 13:41:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjFLRki (ORCPT
+        with ESMTP id S231731AbjFLRlB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 13:40:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D152DB;
-        Mon, 12 Jun 2023 10:40:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5A4B62C5D;
-        Mon, 12 Jun 2023 17:40:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEB9DC433D2;
-        Mon, 12 Jun 2023 17:40:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686591636;
-        bh=DBOArNbl1Gan2eVetkUGytlr1Ev3uY469ssfcHd7XhM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sGFvoH3vAImrBE2n2TAYr9cne12VdZuPDzNKkd0y9oCt1WC818DoUOkPc8+vwee1O
-         wXYGoY7HiZ3kd3poKmzalHKIV8HK7aK9C3RFxieBKGRvfG7V1L6In8BVt+5olkEpoM
-         GW5taIhNUN+BuJagSRIJtGwPlMmbhTxJAIvhiNBiFoCgztvXZHnkggMlkUxc/6soSX
-         lcxBeBeOjYSMYudOQmskNn2eJSCM0xXG/K8eM0wGvDf94vGyskk7mZxgKmQrx1ERwO
-         qkTR1XLN8RcOM1kmEH0s9BeiQ9k2TXKpaAVazT1Z+ueQalULjXE/RcXPEZku1GN5F1
-         JB/TNRY8Nqukw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 4850140692; Mon, 12 Jun 2023 14:40:33 -0300 (-03)
-Date:   Mon, 12 Jun 2023 14:40:33 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     James Clark <james.clark@arm.com>,
-        linux-perf-users@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] perf map: Fix refcount errors on Arm with
- -DREFCNT_CHECKING=1
-Message-ID: <ZIdYkRHj8tkaxgED@kernel.org>
-References: <20230612150424.198914-1-james.clark@arm.com>
- <CAP-5=fWu0yCSCB__prps2g=JRDScbhWuimPJHUsU0S_c0ywDhg@mail.gmail.com>
- <ZIdWBl+MZYKI83Mb@kernel.org>
+        Mon, 12 Jun 2023 13:41:01 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6A798
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:41:00 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686591659;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DoTTbNvXBcUurbyeVpwbVMaij7JPELHRhQTKrmBNGoU=;
+        b=dWOsGXQmoytY91UDXwndQC5STH0UWix9hZNTK5WTNFfo+is61jJkMNrbH7NZ0ypdb7YzH+
+        sTcxF80ntZrI3Zj2DlX2xN/VWp4qJov3BKk3GQqrinXhpF3raefjDXCVFiOKziMpFRO0va
+        7GpqvqGjXVhHnx5wCUutU95bL/iXELermj5QQrxjp+fCiL1Fvqy3IB7x3Dc21AWlh0V/MH
+        I53bJgvIgZ1qivq9npwlFRosVoEmAOt1seJpJfUKLVdOQmXbXuoIVs2H8EeDMLVaZb1c1K
+        uZNhEN4+YS72ia5Hjy6zFjL43tjV+vZQSjkgrbnEdN9DvB4aHzPIIVWUhkA5Kg==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 388001C0007;
+        Mon, 12 Jun 2023 17:40:58 +0000 (UTC)
+Date:   Mon, 12 Jun 2023 19:40:56 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     richard@nod.at, vigneshr@ti.com, heiko@sntech.de,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, yifeng.zhao@rock-chips.com
+Subject: Re: [PATCH v2 1/5] mtd: nand: raw: rockchip-nand-controller: copy
+ hwecc PA data to oob_poi buffer
+Message-ID: <20230612194056.7b27edc5@xps-13>
+In-Reply-To: <b4e73d0f-d3de-b3e1-26a4-cce5337fe07e@gmail.com>
+References: <11e16c3b-6f7b-a6a9-b0ed-b7ac0cd703e3@gmail.com>
+        <b4e73d0f-d3de-b3e1-26a4-cce5337fe07e@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZIdWBl+MZYKI83Mb@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Jun 12, 2023 at 02:29:42PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Mon, Jun 12, 2023 at 09:32:30AM -0700, Ian Rogers escreveu:
-> > On Mon, Jun 12, 2023 at 8:05 AM James Clark <james.clark@arm.com> wrote:
-> > >
-> > > When quitting after running a perf report, the refcount checker finds
-> > > some double frees. The issue is that map__put() is called on a function
-> > > argument so it removes the refcount wrapper that someone else was using.
-> > >
-> > > Fix it by only calling map__put() on a reference that is owned by this
-> > > function.
-> > >
-> > > Signed-off-by: James Clark <james.clark@arm.com>
-> > 
-> > Acked-by: Ian Rogers <irogers@google.com>
-> > 
-> > > ---
-> > >  tools/perf/util/symbol-elf.c | 9 +++++----
-> > >  tools/perf/util/symbol.c     | 9 +++++----
-> > >  2 files changed, 10 insertions(+), 8 deletions(-)
-> > >
-> > > diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
-> > > index 63882a4db5c7..ec0d7810bbb0 100644
-> > > --- a/tools/perf/util/symbol-elf.c
-> > > +++ b/tools/perf/util/symbol-elf.c
-> > > @@ -1365,6 +1365,7 @@ static int dso__process_kernel_symbol(struct dso *dso, struct map *map,
-> > >         struct dso *curr_dso = *curr_dsop;
-> > >         struct map *curr_map;
-> > >         char dso_name[PATH_MAX];
-> > > +       struct map *map_ref;
-> > 
-> > nit: can we narrow the scope of this by moving it to the scope where it is used.
-> 
-> Which is what you did in a patch I already processed, its only in
-> tmp.perf-tools-next as I was going thru the other patches, but this one
-> is there already.
-> 
-> I'm checking the tools/perf/util/symbol.c part.
+Hi Johan,
 
-I narrowed the scope and removed the symbol-elf.c part, end result:
+jbx6244@gmail.com wrote on Mon, 12 Jun 2023 17:02:40 +0200:
 
-From 6fd34445b8c94aa7f519fb0b1ed45c7ef9f6cc4e Mon Sep 17 00:00:00 2001
-From: James Clark <james.clark@arm.com>
-Date: Mon, 12 Jun 2023 16:04:24 +0100
-Subject: [PATCH 1/1] perf map: Fix double 'struct map' reference free found
- with -DREFCNT_CHECKING=1
+> Rockchip boot blocks are written per 4 x 512 byte sectors per page.
+> Each page must have a page address (PA) pointer in OOB to the next page.
+> Pages are written in a pattern depending on the NAND chip ID.
+> This logic used to build a page pattern table is not fully disclosed and
+> is not easy to fit in the MTD framework.
+> The formula in rk_nfc_write_page_hwecc() function is not correct.
+> Make hwecc and raw behavior identical.
+> Generate boot block page address and pattern for hwecc in user space
+> and copy PA data to/from the last 4 bytes in the
+> chip->oob_poi data layout.
+>=20
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> ---
+>  .../mtd/nand/raw/rockchip-nand-controller.c   | 34 ++++++++++++-------
+>  1 file changed, 21 insertions(+), 13 deletions(-)
+>=20
+> diff --git a/drivers/mtd/nand/raw/rockchip-nand-controller.c b/drivers/mt=
+d/nand/raw/rockchip-nand-controller.c
+> index 2312e2736..cafccc324 100644
+> --- a/drivers/mtd/nand/raw/rockchip-nand-controller.c
+> +++ b/drivers/mtd/nand/raw/rockchip-nand-controller.c
+> @@ -597,7 +597,7 @@ static int rk_nfc_write_page_hwecc(struct nand_chip *=
+chip, const u8 *buf,
+>  	int pages_per_blk =3D mtd->erasesize / mtd->writesize;
+>  	int ret =3D 0, i, boot_rom_mode =3D 0;
+>  	dma_addr_t dma_data, dma_oob;
+> -	u32 reg;
+> +	u32 tmp;
+>  	u8 *oob;
+>=20
+>  	nand_prog_page_begin_op(chip, page, 0, NULL, 0);
+> @@ -624,6 +624,13 @@ static int rk_nfc_write_page_hwecc(struct nand_chip =
+*chip, const u8 *buf,
+>  	 *
+>  	 *   0xFF 0xFF 0xFF 0xFF | BBM OOB1 OOB2 OOB3 | ...
+>  	 *
+> +	 * The code here just swaps the first 4 bytes with the last
+> +	 * 4 bytes without losing any data.
 
-When quitting after running a 'perf report', the refcount checker finds
-some double frees. The issue is that map__put() is called on a function
-argument so it removes the refcount wrapper that someone else was using.
+Maybe you don't loose any data, but you basically break all existing
+jffs2 users, right? Is this page address only useful on your rk SoC or
+are all the SoCs using the same logic?
 
-Fix it by only calling map__put() on a reference that is owned by this
-function.
+I think it would be best to flag where this is required and avoid a
+massive incompatible change like this one (and the previous one). BTW,
+any reason not to merge the two first patches? It seems like the series
+would not be bisectable between the two first commits.
 
-Committer notes:
+Patches 4 and 5 look good as they are not directly related, I'll queue
+them, you can avoid re-sending them.
 
-Narrowed the map_ref scope as suggested by Ian, removed the symbol-elf
-part as it was already fixed by another patch, from Ian.
+> +	 *
+> +	 * The chip->oob_poi data layout:
+> +	 *
+> +	 *    BBM  OOB1 OOB2 OOB3 |......|  PA0  PA1  PA2  PA3
+> +	 *
+>  	 * Configure the ECC algorithm supported by the boot ROM.
+>  	 */
+>  	if ((page < (pages_per_blk * rknand->boot_blks)) &&
+> @@ -634,21 +641,17 @@ static int rk_nfc_write_page_hwecc(struct nand_chip=
+ *chip, const u8 *buf,
+>  	}
+>=20
+>  	for (i =3D 0; i < ecc->steps; i++) {
+> -		if (!i) {
+> -			reg =3D 0xFFFFFFFF;
+> -		} else {
+> +		if (!i)
+> +			oob =3D chip->oob_poi + (ecc->steps - 1) * NFC_SYS_DATA_SIZE;
+> +		else
+>  			oob =3D chip->oob_poi + (i - 1) * NFC_SYS_DATA_SIZE;
+> -			reg =3D oob[0] | oob[1] << 8 | oob[2] << 16 |
+> -			      oob[3] << 24;
+> -		}
+>=20
+> -		if (!i && boot_rom_mode)
+> -			reg =3D (page & (pages_per_blk - 1)) * 4;
+> +		tmp =3D oob[0] | oob[1] << 8 | oob[2] << 16 | oob[3] << 24;
+>=20
+>  		if (nfc->cfg->type =3D=3D NFC_V9)
+> -			nfc->oob_buf[i] =3D reg;
+> +			nfc->oob_buf[i] =3D tmp;
+>  		else
+> -			nfc->oob_buf[i * (oob_step / 4)] =3D reg;
+> +			nfc->oob_buf[i * (oob_step / 4)] =3D tmp;
+>  	}
+>=20
+>  	dma_data =3D dma_map_single(nfc->dev, (void *)nfc->page_buf,
+> @@ -811,12 +814,17 @@ static int rk_nfc_read_page_hwecc(struct nand_chip =
+*chip, u8 *buf, int oob_on,
+>  		goto timeout_err;
+>  	}
+>=20
+> -	for (i =3D 1; i < ecc->steps; i++) {
+> -		oob =3D chip->oob_poi + (i - 1) * NFC_SYS_DATA_SIZE;
+> +	for (i =3D 0; i < ecc->steps; i++) {
+> +		if (!i)
+> +			oob =3D chip->oob_poi + (ecc->steps - 1) * NFC_SYS_DATA_SIZE;
+> +		else
+> +			oob =3D chip->oob_poi + (i - 1) * NFC_SYS_DATA_SIZE;
+> +
+>  		if (nfc->cfg->type =3D=3D NFC_V9)
+>  			tmp =3D nfc->oob_buf[i];
+>  		else
+>  			tmp =3D nfc->oob_buf[i * (oob_step / 4)];
+> +
+>  		*oob++ =3D (u8)tmp;
+>  		*oob++ =3D (u8)(tmp >> 8);
+>  		*oob++ =3D (u8)(tmp >> 16);
+> --
+> 2.30.2
+>=20
 
-Signed-off-by: James Clark <james.clark@arm.com>
-Acked-by: Ian Rogers <irogers@google.com>
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20230612150424.198914-1-james.clark@arm.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/perf/util/symbol.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-index 6b9c55784b56a4be..d275d3bef7d54a40 100644
---- a/tools/perf/util/symbol.c
-+++ b/tools/perf/util/symbol.c
-@@ -1458,16 +1458,18 @@ static int dso__load_kcore(struct dso *dso, struct map *map,
- 		list_del_init(&new_node->node);
- 
- 		if (RC_CHK_ACCESS(new_map) == RC_CHK_ACCESS(replacement_map)) {
-+			struct map *map_ref;
-+
- 			map__set_start(map, map__start(new_map));
- 			map__set_end(map, map__end(new_map));
- 			map__set_pgoff(map, map__pgoff(new_map));
- 			map__set_map_ip(map, map__map_ip_ptr(new_map));
- 			map__set_unmap_ip(map, map__unmap_ip_ptr(new_map));
- 			/* Ensure maps are correctly ordered */
--			map__get(map);
--			maps__remove(kmaps, map);
--			err = maps__insert(kmaps, map);
--			map__put(map);
-+			map_ref = map__get(map);
-+			maps__remove(kmaps, map_ref);
-+			err = maps__insert(kmaps, map_ref);
-+			map__put(map_ref);
- 			map__put(new_map);
- 			if (err)
- 				goto out_err;
--- 
-2.37.1
-
+Thanks,
+Miqu=C3=A8l
