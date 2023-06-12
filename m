@@ -2,68 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DF7572BCCE
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:36:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E785772BCD0
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232417AbjFLJep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 05:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49236 "EHLO
+        id S230212AbjFLJgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 05:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231716AbjFLJeJ (ORCPT
+        with ESMTP id S235846AbjFLJf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 05:34:09 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1224D559F
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:26:16 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-977e0fbd742so602630066b.2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:26:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686561974; x=1689153974;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pZgj9wvv613Msqi5j0pNGHar4gpn1QPcjVJUf+RkefE=;
-        b=i2TCaqhZmtxqKa2FTr8J4p+zAFI/+lVqsWQ5y7bdE6iNVyw+L98nByQq/SFsTHNxKZ
-         hZLWCXh1+WWkSdGx67v8v58MUcGnJEtmW5f4QTZ4Hcej2Y226Aim935GXxaTT+5CEObh
-         i8G17mDBpJWZGh/CtQBuFeznNW0GzNd8YCCmYnWsx0n5LZwXpAMZnfIIXSFlOxXt4yFc
-         trstfV5qnwQU4B16XRPfFhq8tsUjmF6lHyFA3pnjFmByIqhdmx3qU6Q0CGf5sn4wBovU
-         I1TSwjQm027D5TUoiQwmvCRjLYj0bDkAyAYyrkqfufQRUuv5i/M+PcmpvCNlYAbHNM41
-         Lmug==
+        Mon, 12 Jun 2023 05:35:28 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E75E5B8B
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:27:06 -0700 (PDT)
+Received: from mail-yb1-f197.google.com (mail-yb1-f197.google.com [209.85.219.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 496B83F36E
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 09:27:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1686562025;
+        bh=amvoj5+Gnj9e1Rhhe2pyCXjUM4LbjfgQaWycSbeLkIw=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=a6DzK9ENHXkiMDJvXQ7a6nVtMOuop/YY0NpAfthtroTPZJM+pxvkDHXLWeg6EtVfH
+         gUxbwkjiM2gOVrl/czbtsBKgbM4KIpubDyi4lGxwJjQownLygfuWkEtLOmWG6pMYjB
+         KvBDc5o2yHy8RsQp5qg7cFMBfMd00IEGDPqw4Gvp9KwAndlkr6Ml+WyJ6cm+m4r/5S
+         igCbZa62lP5B+atG+j/xke8zLguAPirk3PHNwZH+LaM3C56zYAI/eUGXzVe8PI4LQ8
+         nVrbLsLfNXjBj5E/Rhn4M5Fk7rjvjZrDnIfGyK/uxKZ8F8LxiaXTIW/aPqEiB5k06y
+         YIv0LCTtmHs1g==
+Received: by mail-yb1-f197.google.com with SMTP id 3f1490d57ef6-bc4c832c501so2673895276.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:27:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686561974; x=1689153974;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pZgj9wvv613Msqi5j0pNGHar4gpn1QPcjVJUf+RkefE=;
-        b=S1VTkas24E5QLSdV/IucHc7zuk4pEE9UXxAm6J79CrP3nHmRWjmZ2DOmPx1d1hrZsW
-         JhFxEflJoycKiivsBoKqWbhF51miBS2Q27BZcFoQ5TOsVPu27hlTFU+040JzcbW3O1oN
-         dBtaG4IvjOIhSgtzzsU8i7yTqVuLOb9RVsLrX003bnk99h8sPB74oET6t/S1e/WSPBSi
-         4IxWshMVPdQbk/YWFNCid+iAVCtyEOQYzodrfcei//V5gdS7q7d8Op02syE1Vt1ya6PT
-         58GpgKVgcVyU0N8mrzTXhGjADb0U9EBqXYEipqsFzNEycQk/H346Qfu6oyM7Z/oss0It
-         ghpw==
-X-Gm-Message-State: AC+VfDzQse/NSCLsZIsT3/AQ/qD5yJkVOfyHNnJ0dOTeNGJ+aMOsb4al
-        Sqi1M+JXd1bmmeCiyHWG+DDVLg==
-X-Google-Smtp-Source: ACHHUZ5/TSH+NnE5zaLXzI48jDVBI9q7FBbcwiHpWan/hFHxb2/LmYxEPMrVPOY5GOABNato6EZyNQ==
-X-Received: by 2002:a17:907:94ce:b0:973:dbcd:52d4 with SMTP id dn14-20020a17090794ce00b00973dbcd52d4mr8177843ejc.37.1686561974430;
-        Mon, 12 Jun 2023 02:26:14 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id kt5-20020a170906aac500b00978868cb24csm5035900ejb.144.2023.06.12.02.26.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 02:26:14 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: example-schema: don't use enum as fallback, explain clock-names
-Date:   Mon, 12 Jun 2023 11:26:11 +0200
-Message-Id: <20230612092611.12385-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20221208; t=1686562024; x=1689154024;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=amvoj5+Gnj9e1Rhhe2pyCXjUM4LbjfgQaWycSbeLkIw=;
+        b=eUaHSvpGeUa6VEGyKXhjJuUcleTorEJHOhcgcRW3dQzsNmr9HMEs3DfD3P/VMhikQI
+         D5PEPRtN+nDgSfhAirMM25TugoyKHdi3t1BnIMlswbdfohNXNofywVTfQHo0KPfq4chs
+         PKL8wtTOQL9ZUCRpQ1LlUJA3fxnJQIlm7UkkC3uQ8Nqc4IHUkPELUf+x9Hxs7w+OKugx
+         YT1Hr8XfWjWSCzALYxupzTpsGExkFJrcM3WOcKEH9EsLuP3AAwLcILDc13tICODOXNN9
+         RKUmSxFzFjgCKtbOVZWG87Cj3Q3qMSAE6eViIdlytcc+cFQZaguxsfskYf6BaRVOiME5
+         BApA==
+X-Gm-Message-State: AC+VfDz6Lg8XMtSceRMuztweTtwvTRlH3tuVvlQwzovQbtg+I30tDmXE
+        SPo8Vh0yQMX8sYvex8SSFUTBWLYAL2HR4cDAiRFf4uwTpdNMzlgLFAjZER4k676BSAxRErqCd/w
+        N/GWJTU3LBSKZ+y9HqtLjDMu9rslSGDqOUI5BTGWUWCHn5CF9MKdqqJNzZw==
+X-Received: by 2002:a25:d009:0:b0:bc6:1cac:a4a with SMTP id h9-20020a25d009000000b00bc61cac0a4amr6005490ybg.3.1686562024333;
+        Mon, 12 Jun 2023 02:27:04 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ72kRI/rhtDax/6I6nDQcgeRzwMCN8pOeJQ8my5S0dxky1/EzJyvjq2vW3t/PsJO5nRD4UTXPAOha2ZFie9248=
+X-Received: by 2002:a25:d009:0:b0:bc6:1cac:a4a with SMTP id
+ h9-20020a25d009000000b00bc61cac0a4amr6005476ybg.3.1686562024051; Mon, 12 Jun
+ 2023 02:27:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230608202628.837772-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230608202628.837772-2-aleksandr.mikhalitsyn@canonical.com> <CANn89iLhQYHLxGYefhzVOxWx7BA_qk4uxuPjvZOGGnaJNESYXQ@mail.gmail.com>
+In-Reply-To: <CANn89iLhQYHLxGYefhzVOxWx7BA_qk4uxuPjvZOGGnaJNESYXQ@mail.gmail.com>
+From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Date:   Mon, 12 Jun 2023 11:26:53 +0200
+Message-ID: <CAEivzxcreyGD=sB_OLDx+69U_+M5MQrJQZ71Rq4HyDS9cxNXQA@mail.gmail.com>
+Subject: Re: [PATCH net-next v7 1/4] scm: add SO_PASSPIDFD and SCM_PIDFD
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Luca Boccassi <bluca@debian.org>, linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,41 +87,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Compatibles with multiple entries should have usually only one fallback
-compatible thus enum followed by enum is not a common case.  Use 'const'
-as second compatible to show the recommended approach.
+On Mon, Jun 12, 2023 at 11:19=E2=80=AFAM Eric Dumazet <edumazet@google.com>=
+ wrote:
+>
+> On Thu, Jun 8, 2023 at 10:26=E2=80=AFPM Alexander Mikhalitsyn
+> <aleksandr.mikhalitsyn@canonical.com> wrote:
+> >
+> > Implement SCM_PIDFD, a new type of CMSG type analogical to SCM_CREDENTI=
+ALS,
+> > but it contains pidfd instead of plain pid, which allows programmers no=
+t
+> > to care about PID reuse problem.
+> >
+> > We mask SO_PASSPIDFD feature if CONFIG_UNIX is not builtin because
+> > it depends on a pidfd_prepare() API which is not exported to the kernel
+> > modules.
+> >
+> > Idea comes from UAPI kernel group:
+> > https://uapi-group.org/kernel-features/
+> >
+> > Big thanks to Christian Brauner and Lennart Poettering for productive
+> > discussions about this.
+> >
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: Eric Dumazet <edumazet@google.com>
+> > Cc: Jakub Kicinski <kuba@kernel.org>
+> > Cc: Paolo Abeni <pabeni@redhat.com>
+> > Cc: Leon Romanovsky <leon@kernel.org>
+> > Cc: David Ahern <dsahern@kernel.org>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Kees Cook <keescook@chromium.org>
+> > Cc: Christian Brauner <brauner@kernel.org>
+> > Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
+> > Cc: Lennart Poettering <mzxreary@0pointer.de>
+> > Cc: Luca Boccassi <bluca@debian.org>
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: netdev@vger.kernel.org
+> > Cc: linux-arch@vger.kernel.org
+> > Tested-by: Luca Boccassi <bluca@debian.org>
+> > Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+> > Reviewed-by: Christian Brauner <brauner@kernel.org>
+> > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.c=
+om>
+> > ---
+>
+> Reviewed-by: Eric Dumazet <edumazet@google.com>
 
-Explain also when clock-names are not really necessary.
+Thanks, Eric!
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- Documentation/devicetree/bindings/example-schema.yaml | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/example-schema.yaml b/Documentation/devicetree/bindings/example-schema.yaml
-index f4eec4c42fb3..a41f9b9a196b 100644
---- a/Documentation/devicetree/bindings/example-schema.yaml
-+++ b/Documentation/devicetree/bindings/example-schema.yaml
-@@ -52,8 +52,7 @@ properties:
-               - vendor,soc4-ip
-               - vendor,soc3-ip
-               - vendor,soc2-ip
--          - enum:
--              - vendor,soc1-ip
-+          - const: vendor,soc1-ip
-         # additionalItems being false is implied
-         # minItems/maxItems equal to 2 is implied
-       - items:
-@@ -85,6 +84,9 @@ properties:
-       discouraged.
- 
-   clock-names:
-+    # For single-entry lists in clocks, resets etc., the xxx-names often do not
-+    # bring any value, especially if they copy the IP block name.  In such case
-+    # just skip the xxx-names.
-     items:
-       - const: bus
- 
--- 
-2.34.1
-
+Kind regards,
+Alex
