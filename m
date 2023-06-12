@@ -2,93 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9706472BB2C
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 10:50:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F1872BB35
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 10:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231822AbjFLIus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 04:50:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50540 "EHLO
+        id S233564AbjFLIwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 04:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233291AbjFLIuo (ORCPT
+        with ESMTP id S230296AbjFLIv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 04:50:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D129D113
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 01:50:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 443C8621AB
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:50:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 988B1C433EF;
-        Mon, 12 Jun 2023 08:50:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686559840;
-        bh=b+bn7leRxDoiLBJRTdyK2xdyjGCVByaugJwrw4baSm8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ZtlT3oW6O+0aWyhdGUkxSbE2ij+9u7rDtrmftaiLjBAS+cxIXqTnwz2w25aYFFmAB
-         Z4BL5BqUnT1oYE3HWF5nkWw4L8sBb7OYboeXQH5xJbrAfvcb8ooNJM3My+dyGlXEGf
-         CMBko6iEZTc2MXLc3zg13pjvaFVRE8/6ygjk0lAhKGleOoAXra+u0rR3x8+Kz0tW/Q
-         aXAu2ROwczNdF18UnhPXuTmsUAcVC49knZa/PlbGhABLkBBuoNhFKUVmlWfaewu4e/
-         4pMNp5cIFK9FtOWhGVw1gldQpsu9/WIKtedR2Myqppgl4coeuQi0HQ1NdlN4h5gofu
-         VzbwAk33h9l1w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 75965E29F37;
-        Mon, 12 Jun 2023 08:50:40 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 12 Jun 2023 04:51:57 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A8C2F5
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 01:51:53 -0700 (PDT)
+Received: from loongson.cn (unknown [10.180.13.124])
+        by gateway (Coremail) with SMTP id _____8BxZ+ml3IZkWpgDAA--.5900S3;
+        Mon, 12 Jun 2023 16:51:49 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.180.13.124])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxXMqj3IZkl2cVAA--.53102S4;
+        Mon, 12 Jun 2023 16:51:47 +0800 (CST)
+From:   YingKun Meng <mengyingkun@loongson.cn>
+To:     broonie@kernel.org, lgirdwood@gmail.com
+Cc:     krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, loongarch@lists.linux.dev,
+        loongson-kernel@lists.loongnix.cn,
+        YingKun Meng <mengyingkun@loongson.cn>
+Subject: [ PATCH v2 0/3] Add Loongson I2S controller support
+Date:   Mon, 12 Jun 2023 16:50:48 +0800
+Message-Id: <20230612085048.3039471-1-mengyingkun@loongson.cn>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/2] Fixes for taprio xstats
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168655984047.8602.3715939689092508081.git-patchwork-notify@kernel.org>
-Date:   Mon, 12 Jun 2023 08:50:40 +0000
-References: <20230609135917.1084327-1-vladimir.oltean@nxp.com>
-In-Reply-To: <20230609135917.1084327-1-vladimir.oltean@nxp.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, jhs@mojatatu.com,
-        xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        vinicius.gomes@intel.com, kurt@linutronix.de,
-        xiaoliang.yang_1@nxp.com, mohammad.athari.ismail@intel.com,
-        linux-kernel@vger.kernel.org, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, intel-wired-lan@lists.osuosl.org,
-        muhammad.husaini.zulkifli@intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8CxXMqj3IZkl2cVAA--.53102S4
+X-CM-SenderInfo: 5phqw55lqjy33q6o00pqjv00gofq/1tbiAQAADGSFuYEEQQAGsX
+X-Coremail-Antispam: 1Uk129KBj93XoWxJr4fXF1UKr1ftw1fCr17Arc_yoW8Zw4xpa
+        nxC393WFW5tF4ayFn3tFy8JrWrAryrCFsxJanrX34UGr9Fv3WUu343tF15ZFW3CryUKFyq
+        9ry8G3y8G3ZxG3XCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUB2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVWxJr0_GcWln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
+        6r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+        Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+        xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
+        cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
+        AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E
+        14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUcbAwUUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi all,
 
-This series was applied to netdev/net-next.git (main)
-by David S. Miller <davem@davemloft.net>:
+This patchset adds support for Loongson I2S controller, and
+introduce a ASoC machine driver for loongson platform.
 
-On Fri,  9 Jun 2023 16:59:15 +0300 you wrote:
-> 1. Taprio classes correspond to TXQs, and thus, class stats are TXQ
->    stats not TC stats.
-> 2. Drivers reporting taprio xstats should report xstats for *this*
->    taprio, not for a previous one.
-> 
-> Vladimir Oltean (2):
->   net/sched: taprio: report class offload stats per TXQ, not per TC
->   net: enetc: reset taprio stats when taprio is deleted
-> 
-> [...]
+The Loongson I2S controller is available on Loongson
+7a2000/2k2000 chips, works as a PCI device. It has two
+private DMA controllers used to playback and capture.
+Each DMA controller has one channel.
 
-Here is the summary with links:
-  - [net-next,1/2] net/sched: taprio: report class offload stats per TXQ, not per TC
-    https://git.kernel.org/netdev/net-next/c/2b84960fc5dd
-  - [net-next,2/2] net: enetc: reset taprio stats when taprio is deleted
-    https://git.kernel.org/netdev/net-next/c/f1e668d29c57
+The ASoC machine driver adds support for audio device which
+using loongson I2S controller to tranfser the audio data.
+The audio device uses "PRP0001" as its ACPI device ID, which
+provides a means to use the existing DT-compatible device
+identification in ACPI.
 
-You are awesome, thank you!
+
+Thanks.
+
+---
+v2:
+* Use ACPI bindings to reference I2S and codec nodes.
+* Add 'required' restriction for sound-dai property in
+  dt-bindings.
+* Fix build errors from lkp@intel.com.
+* Replace pci_xxx() APIs with pcim_xxx() APIs.
+* mirror changes in log printing.
+
+v1:
+* Add support for Loongson I2S controller.
+
+Yingkun Meng (3):
+  ASoC: Add support for Loongson I2S controller
+  ASoC: loongson: Add Loongson ASoC Sound Card Support
+  ASoC: dt-bindings: Add support for Loongson audio card
+
+ .../sound/loongson,ls-audio-card.yaml         |  70 +++
+ sound/soc/Kconfig                             |   1 +
+ sound/soc/Makefile                            |   1 +
+ sound/soc/loongson/Kconfig                    |  26 +
+ sound/soc/loongson/Makefile                   |   8 +
+ sound/soc/loongson/loongson_card.c            | 237 +++++++++
+ sound/soc/loongson/loongson_i2s.c             | 213 ++++++++
+ sound/soc/loongson/loongson_i2s.h             |  70 +++
+ sound/soc/loongson/loongson_i2s_pci.c         | 500 ++++++++++++++++++
+ 9 files changed, 1126 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/loongson,ls-audio-card.yaml
+ create mode 100644 sound/soc/loongson/Kconfig
+ create mode 100644 sound/soc/loongson/Makefile
+ create mode 100644 sound/soc/loongson/loongson_card.c
+ create mode 100644 sound/soc/loongson/loongson_i2s.c
+ create mode 100644 sound/soc/loongson/loongson_i2s.h
+ create mode 100644 sound/soc/loongson/loongson_i2s_pci.c
+
+
+base-commit: 62a97bea5cce5317d6d7630f7bcf0cdf5333e269
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.33.0
 
