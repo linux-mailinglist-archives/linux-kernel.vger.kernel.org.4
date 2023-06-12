@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA26272D119
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E75AC72D11C
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238334AbjFLUu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 16:50:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
+        id S238398AbjFLUvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 16:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232117AbjFLUsR (ORCPT
+        with ESMTP id S238014AbjFLUs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 16:48:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABBF919B3
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:46:49 -0700 (PDT)
+        Mon, 12 Jun 2023 16:48:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4622610DC
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:46:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D792762F20
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E217E62F22
         for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 20:45:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58847C43333;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63406C4339E;
         Mon, 12 Jun 2023 20:45:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1686602717;
-        bh=ujkkeF6CcwcL8JLlTc5iUkI9cAxPzJGXzBROQQtoy1s=;
+        bh=Ztog5VulF0m7oJUFFCX3inDjV0jHrtLC2NTdl6UI15w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=de0Ij0MsBENh8xMB3pYY6EZViEWela8BfBAsysvMNUIvg2yZhKeyFYZiEwkXrWuv8
-         ge54p3sKsyTZWknh/NpW1yHg1sDETCOQBOwBAg0uGI76I5P01s3iDiVJmvo35uHbYr
-         BUHxY8RsIUEFNtb5TxIo29lr2IvvxkXad9ALk67kKZ4jxZMWjjf4JEa+VLgQ4ARP1g
-         oISwYta3Dk97PsSA6mikU55RwTZejoLyv7KavLt2CgP7IP52bdAuaHW9u/f6hC4vfR
-         C5xin0VMtowPRnosRed+L+rryBO7+ii5Ozt3dcriHIqL8bgWKzmUWHCdedGZUwRu4c
-         Az5SzCrPvrIOw==
+        b=GViwPJckT5wfjzpiiSHs4J+q62lMGTpuSLIgPFUTk7YT6Ps9gLKM0a583L7rwRY0V
+         yRwERywFicxoSU0Mayl0N8XpcDEOCQZm9vE3W7mXaXTahaxKQZtuEgMPH13DFEIIzS
+         R7a23FMC5YK5NCyKn5rqjsMS+iyO7CV77pnxteu2Xkwa+pKPr53C3PgojrGQnuxlwn
+         QNxFm/asS5HzAH56mDqZ5fKVTTigEQyWEuGeE6y3+9cF1sR3fypWYrsKgb0iVFrHaL
+         PkNe0ncwdXZ+C2OJvTElBGw0VLLIVnb4pIbOBE41AfnHJbCeW1hdv50dfMHL6tIz4b
+         6lt24zdyo5EzQ==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 20401CE3A90; Mon, 12 Jun 2023 13:45:16 -0700 (PDT)
+        id 22678CE3A91; Mon, 12 Jun 2023 13:45:16 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     gwml@vger.gnuweeb.org, kernel-team@meta.com, w@lwt.eu,
         Zhangjin Wu <falcon@tinylab.org>,
-        Arnd Bergmann <arnd@arndb.de>,
         =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
         Willy Tarreau <w@1wt.eu>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH v2 nolibc 47/53] tools/nolibc: arm: add missing my_syscall6
-Date:   Mon, 12 Jun 2023 13:45:08 -0700
-Message-Id: <20230612204514.292087-47-paulmck@kernel.org>
+Subject: [PATCH v2 nolibc 48/53] tools/nolibc: open: fix up compile warning for arm
+Date:   Mon, 12 Jun 2023 13:45:09 -0700
+Message-Id: <20230612204514.292087-48-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <8b757cc0-3719-4e63-a755-9710384137bc@paulmck-laptop>
 References: <8b757cc0-3719-4e63-a755-9710384137bc@paulmck-laptop>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,55 +62,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Zhangjin Wu <falcon@tinylab.org>
 
-This is required by the coming removal of the oldselect and newselect
-support.
+    In function ‘open’:
+    nolibc/sysroot/arm/include/sys.h:919:23: warning: ‘mode_t’ {aka ‘short unsigned int’} is promoted to ‘int’ when passed through ‘...’
+      919 |   mode = va_arg(args, mode_t);
+          |                       ^
+    nolibc/sysroot/arm/include/sys.h:919:23: note: (so you should pass ‘int’ not ‘mode_t’ {aka ‘short unsigned int’} to ‘va_arg’)
+    nolibc/sysroot/arm/include/sys.h:919:23: note: if this code is reached, the program will abort
 
-pselect6/pselect6_time64 will be used unconditionally, they have 6
-arguments.
-
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Link: https://lore.kernel.org/linux-riscv/bf3e07c1-75f5-425b-9124-f3f2b230e63a@app.fastmail.com/
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- tools/include/nolibc/arch-arm.h | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ tools/include/nolibc/sys.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
-index 45b89ffe8247..ca4c66987497 100644
---- a/tools/include/nolibc/arch-arm.h
-+++ b/tools/include/nolibc/arch-arm.h
-@@ -198,6 +198,29 @@ struct sys_stat_struct {
- 	_arg1;                                                                \
- })
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index 0160605444e7..856249a11890 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -862,7 +862,7 @@ int open(const char *path, int flags, ...)
+ 		va_list args;
  
-+#define my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6)                  \
-+({                                                                            \
-+	register long _num  __asm__(_NOLIBC_SYSCALL_REG) = (num);             \
-+	register long _arg1 __asm__ ("r0") = (long)(arg1);                    \
-+	register long _arg2 __asm__ ("r1") = (long)(arg2);                    \
-+	register long _arg3 __asm__ ("r2") = (long)(arg3);                    \
-+	register long _arg4 __asm__ ("r3") = (long)(arg4);                    \
-+	register long _arg5 __asm__ ("r4") = (long)(arg5);                    \
-+	register long _arg6 __asm__ ("r5") = (long)(arg6);                    \
-+	                                                                      \
-+	__asm__  volatile (                                                   \
-+		_NOLIBC_THUMB_SET_R7                                          \
-+		"svc #0\n"                                                    \
-+		_NOLIBC_THUMB_RESTORE_R7                                      \
-+		: "=r"(_arg1), "=r" (_num)                                    \
-+		: "r"(_arg1), "r"(_arg2), "r"(_arg3), "r"(_arg4), "r"(_arg5), \
-+		  "r"(_arg6), "r"(_num)                                       \
-+		: "memory", "cc", "lr"                                        \
-+	);                                                                    \
-+	_arg1;                                                                \
-+})
-+
-+
- char **environ __attribute__((weak));
- const unsigned long *_auxv __attribute__((weak));
+ 		va_start(args, flags);
+-		mode = va_arg(args, mode_t);
++		mode = va_arg(args, int);
+ 		va_end(args);
+ 	}
  
 -- 
 2.40.1
