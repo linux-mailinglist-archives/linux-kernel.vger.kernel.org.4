@@ -2,77 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A5072BF01
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:30:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1E9672BF2A
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233988AbjFLKaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 06:30:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39120 "EHLO
+        id S232491AbjFLKep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 06:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235495AbjFLK3w (ORCPT
+        with ESMTP id S232559AbjFLKe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 06:29:52 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50A5F7DE;
-        Mon, 12 Jun 2023 03:10:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=+yjKKzdnGV2UUsk+B6shVDCi3BDA94ELYFsM4QUhQB0=; b=Q9gFFEqBJOoqsKLY+1HuM+QoVW
-        esIoL5PNJsyp5o0kQ7sCIo6rBNpWJA0C4ZR6IssVf8AGR1cmTzDj3yUus70hPty1PuVkq2Yo4iccw
-        oNvlotm6b5P62z4/jwNxaIc+hIgCUE6hRyozSs/QJiMiNr+9w0cc9oDGH0p30pnCHlU/utsD352bs
-        cswMCUjp3aE0AGGUiBh4Du0xu5460W9Q+q44WDlxsFsXDM/49r977+cct8GQ2M/U0UZ1s0RII75WL
-        YAXGsjMJFN/dyxpgnsjuMQWUFGNxOtrJmpZg3Pt91fwwpiDJODPPMohE4EluptIL9uH7fSv251BvW
-        1C1wTYrQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:43862)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q8eU9-0005V0-P3; Mon, 12 Jun 2023 11:09:17 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q8eU2-0004rh-NT; Mon, 12 Jun 2023 11:09:10 +0100
-Date:   Mon, 12 Jun 2023 11:09:10 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net v2 1/7] net: dsa: mt7530: fix trapping frames with
- multiple CPU ports on MT7531
-Message-ID: <ZIbuxohDqHA0S7QP@shell.armlinux.org.uk>
-References: <20230611081547.26747-1-arinc.unal@arinc9.com>
- <ZIXwc0V5Ye6xrpmn@shell.armlinux.org.uk>
- <9d571682-7271-2a5e-8079-900d14a5d7cd@arinc9.com>
+        Mon, 12 Jun 2023 06:34:28 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C5210E6
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 03:16:34 -0700 (PDT)
+Received: from [IPV6:2405:201:0:21ea:e49:10dd:40c0:e842] (unknown [IPv6:2405:201:0:21ea:e49:10dd:40c0:e842])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: shreeya)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 40CF366058B2;
+        Mon, 12 Jun 2023 11:10:22 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686564626;
+        bh=dNUyljDJjaR0rrWhWk1Fy1aQiXjj6NBuMzXL8HS0YwA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=TPfwOimf6Q6c1SuHD1GaIfhHJlltr7QfxRCZGGd+HBfjslFtzwo0pd9SaVltxcT9r
+         71VvIs8QF2ab39T+/5W8bFk+CGFxMhUednyKQ/Au1Qhah19RwP1PZhDkxebV121yHG
+         uTb6KDJLdV9H+Hc6kmUXhOtp0lXqsB9yy2qLpDNUtGqXHbmN3a6HVE+Hrv0qhY5O5l
+         ZRnJEAfCRkeJJmckqFRQR4K+13YA4GvKuuMqGkSa1RbDlQy3UMxXeoz0txXPI4KRoE
+         rNYrymcuIW+vk8AdX2tUJeTAHAS99netW9HhLI/DbGmEpTmLwLw9h//HzrPfS7yVPT
+         oMB7PnVqqRdjQ==
+Message-ID: <a037a08c-44c4-24e8-1cba-7e4e8b21ffaa@collabora.com>
+Date:   Mon, 12 Jun 2023 15:40:18 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
+ compiler-specific macros
+Content-Language: en-US
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Maksim Panchenko <maks@meta.com>,
+        =?UTF-8?Q?Ricardo_Ca=c3=b1uelo?= <ricardo.canuelo@collabora.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Bill Wendling <morbo@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        regressions@lists.linux.dev,
+        "gustavo.padovan@collabora.com" <gustavo.padovan@collabora.com>,
+        Guillaume Charles Tucker <guillaume.tucker@collabora.com>,
+        denys.f@collabora.com, Nick Desaulniers <ndesaulniers@google.com>,
+        kernelci@lists.linux.dev,
+        Collabora Kernel ML <kernel@collabora.com>
+References: <CAKwvOd=4hBcU4fAkddU0b-GOZc9FzTZoj3PFW6ZZrX0jS8x+bg@mail.gmail.com>
+ <17c91d37-7d9c-0df4-2438-2b30ca0b5777@collabora.com>
+ <CAKwvOdk4QO8x_bs64fFRCsMu__AjhXd4Ew2KfgzQOb9Q3FMqSA@mail.gmail.com>
+ <b5d0cf82-0e42-f6a1-c9f5-c145fdc4c622@collabora.com>
+ <CAKwvOdkFxu9hYSL_RCXadpR0dQd1+dZmAUVXdfFiLUfxg4D_Xw@mail.gmail.com>
+ <878rdlk9bi.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
+ <CAKwvOd=8LVU+iANkFx18Wm1jg7gYiAXovAmo9t5ZZaVdMULn-Q@mail.gmail.com>
+ <875y8ok9b5.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
+ <CAKwvOdmJJibt6sHSp91v2s7BxUWBC6xG7F7+3C6gUxNMzZ2xRA@mail.gmail.com>
+ <87353ok78h.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
+ <2023052247-bobtail-factsheet-d104@gregkh>
+ <CAKwvOd=2zAV_mizvzLFdyHE_4OzBY5OVu6KLWuQPOMZK37vsmQ@mail.gmail.com>
+ <cff33e12-3d80-7e62-1993-55411ccabc01@collabora.com>
+ <CAKwvOd=F29-UkNO7FtUWpVV=POOZLb6QgD=mhLMWtRfkRSSi2A@mail.gmail.com>
+From:   Shreeya Patel <shreeya.patel@collabora.com>
+In-Reply-To: <CAKwvOd=F29-UkNO7FtUWpVV=POOZLb6QgD=mhLMWtRfkRSSi2A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <9d571682-7271-2a5e-8079-900d14a5d7cd@arinc9.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,110 +83,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 09:40:45AM +0300, Arınç ÜNAL wrote:
-> On 11.06.2023 19:04, Russell King (Oracle) wrote:
-> > On Sun, Jun 11, 2023 at 11:15:41AM +0300, Arınç ÜNAL wrote:
-> > > Every bit of the CPU port bitmap for MT7531 and the switch on the MT7988
-> > > SoC represents a CPU port to trap frames to. These switches trap frames to
-> > > the CPU port the user port, which the frames are received from, is affine
-> > > to.
-> > 
-> > I think you need to reword that, because at least I went "err what" -
-> > especially the second sentence!
-> 
-> Sure, how does this sound:
-> 
-> These switches trap frames to the CPU port that is affine to the user port
-> from which the frames are received.
-
-"... to the inbound user port." I think that's a better way to describe
-"user port from which the frames are received."
-
-However, I'm still struggling to understand what the overall message for
-this entire commit log actually is.
-
-The actual affinity of the user ports seems to be not relevant, but this
-commit is more about telling the switch which of its ports are CPU
-ports.
-
-So, if the problem is that we only end up with a single port set as a
-CPU port when there are multiple, isn't it going to be better to say
-something like:
-
-"For MT7531 and the switch on MT7988, we are not correctly indicating
-which ports are CPU ports when we have more than one CPU port. In order
-to solve this, we need to set multiple bits in the XYZ register so the
-switch will trap frames to the appropriate CPU port for frames received
-on the inbound user port.
-
-> > > Currently, only the bit that corresponds to the first found CPU port is set
-> > > on the bitmap.
-> > 
-> > Ok.
-> > 
-> > > When multiple CPU ports are being used, frames from the user
-> > > ports affine to the other CPU port which are set to be trapped will be
-> > > dropped as the affine CPU port is not set on the bitmap.
-> > 
-> > Hmm. I think this is trying to say:
-> > 
-> > "When multiple CPU ports are being used, trapped frames from user ports
-> > not affine to the first CPU port will be dropped we do not set these
-> > ports as being affine to the second CPU port."
-> 
-> Yes but it's not the affinity we set here. It's to enable the CPU port for
-> trapping.
-
-In light of that, is the problem that we only enable one CPU port to
-receive trapped frames from their affine user ports?
-
-> > > Only the MT7531
-> > > switch is affected as there's only one port to be used as a CPU port on the
-> > > switch on the MT7988 SoC.
-> > 
-> > Erm, hang on. The previous bit indicated there was a problem when there
-> > are multiple CPU ports, but here you're saying that only one switch is
-> > affected - and that switch has only one CPU port. This at the very least
-> > raises eyebrows, because it's just contradicted the first part
-> > explaining when there's a problem.
-> 
-> I meant to say, since I already explained at the start of the patch log that
-> this patch changes the bits of the CPU port bitmap for MT7531 and the switch
-> on the MT7988 SoC, only MT7531 is affected as there's only a single CPU port
-> on the switch on the MT7988 SoC. So the switch on the MT7988 SoC cannot be
-> affected.
+Hi Masahiro,
 
 
+On 24/05/23 02:57, Nick Desaulniers wrote:
+> On Tue, May 23, 2023 at 3:27 AM Shreeya Patel
+> <shreeya.patel@collabora.com> wrote:
+>> Hi Nick and Masahiro,
+>>
+>> On 23/05/23 01:22, Nick Desaulniers wrote:
+>>> On Mon, May 22, 2023 at 9:52 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>>>> On Mon, May 22, 2023 at 12:09:34PM +0200, Ricardo Cañuelo wrote:
+>>>>> On vie, may 19 2023 at 08:57:24, Nick Desaulniers <ndesaulniers@google.com> wrote:
+>>>>>> It could be; if the link order was changed, it's possible that this
+>>>>>> target may be hitting something along the lines of:
+>>>>>> https://isocpp.org/wiki/faq/ctors#static-init-order i.e. the "static
+>>>>>> initialization order fiasco"
+>>>>>>
+>>>>>> I'm struggling to think of how this appears in C codebases, but I
+>>>>>> swear years ago I had a discussion with GKH (maybe?) about this. I
+>>>>>> think I was playing with converting Kbuild to use Ninja rather than
+>>>>>> Make; the resulting kernel image wouldn't boot because I had modified
+>>>>>> the order the object files were linked in.  If you were to randomly
+>>>>>> shuffle the object files in the kernel, I recall some hazard that may
+>>>>>> prevent boot.
+>>>>> I thought that was specifically a C++ problem? But then again, the
+>>>>> kernel docs explicitly say that the ordering of obj-y goals in kbuild is
+>>>>> significant in some instances [1]:
+>>>> Yes, it matters, you can not change it.  If you do, systems will break.
+>>>> It is the only way we have of properly ordering our init calls within
+>>>> the same "level".
+>>> Ah, right it was the initcall ordering. Thanks for the reminder.
+>>>
+>>> (There's a joke in there similar to the use of regexes to solve a
+>>> problem resulting in two new problems; initcalls have levels for
+>>> ordering, but we still have (unexpressed) dependencies between calls
+>>> of the same level; brittle!).
+>>>
+>>> +Maksim, since that might be relevant info for the BOLT+Kernel work.
+>>>
+>>> Ricardo,
+>>> https://elinux.org/images/e/e8/2020_ELCE_initcalls_myjosserand.pdf
+>>> mentions that there's a kernel command line param `initcall_debug`.
+>>> Perhaps that can be used to see if
+>>> 5750121ae7382ebac8d47ce6d68012d6cd1d7926 somehow changed initcall
+>>> ordering, resulting in a config that cannot boot?
+>>
+>> Here are the links to Lava jobs ran with initcall_debug added to the
+>> kernel command line.
+>>
+>> 1. Where regression happens (5750121ae7382ebac8d47ce6d68012d6cd1d7926)
+>> https://lava.collabora.dev/scheduler/job/10417706
+>> <https://lava.collabora.dev/scheduler/job/10417706>
+>>
+>> 2. With a revert of the commit 5750121ae7382ebac8d47ce6d68012d6cd1d7926
+>> https://lava.collabora.dev/scheduler/job/10418012
+>> <https://lava.collabora.dev/scheduler/job/10418012>
+> Thanks!
+>
+> Yeah, I can see a diff in the initcall ordering as a result of
+> commit 5750121ae738 ("kbuild: list sub-directories in ./Kbuild")
+>
+> https://gist.github.com/nickdesaulniers/c09db256e42ad06b90842a4bb85cc0f4
+>
+> Not just different orderings, but some initcalls seem unique to the
+> before vs. after, which is troubling. (example init_events and
+> init_fs_sysctls respectively)
+>
+> That isn't conclusive evidence that changes to initcall ordering are
+> to blame, but I suspect confirming that precisely to be very very time
+> consuming.
+>
+> Masahiro, what are your thoughts on reverting 5750121ae738? There are
+> conflicts in Kbuild and Makefile when reverting 5750121ae738 on
+> mainline.
 
-> 
-> > 
-> > > diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-> > > index 9bc54e1348cb..8ab4718abb06 100644
-> > > --- a/drivers/net/dsa/mt7530.c
-> > > +++ b/drivers/net/dsa/mt7530.c
-> > > @@ -1010,6 +1010,14 @@ mt753x_cpu_port_enable(struct dsa_switch *ds, int port)
-> > >   	if (priv->id == ID_MT7621)
-> > >   		mt7530_rmw(priv, MT7530_MFC, CPU_MASK, CPU_EN | CPU_PORT(port));
-> > > +	/* Add the CPU port to the CPU port bitmap for MT7531 and the switch on
-> > > +	 * the MT7988 SoC. Any frames set for trapping to CPU port will be
-> > > +	 * trapped to the CPU port the user port, which the frames are received
-> > > +	 * from, is affine to.
-> > 
-> > Please reword the second sentence.
-> 
-> Any frames set for trapping to CPU port will be trapped to the CPU port that
-> is affine to the user port from which the frames are received.
+I'm not sure if you followed the conversation but we are still seeing 
+this regression with the latest kernel builds and would like to know if 
+you plan to revert 5750121ae738?
 
-Too many "port"s. Would:
 
-"Add this port to the CPU port bitmap for the MT7531 and switch on the
-MT7988. Trapped frames will be sent to the CPU port that is affine to
-the inbound user port."
+Thanks,
+Shreeya Patel
 
-explain it better?
-
-Thanks.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+>>
+>> Thanks,
+>> Shreeya Patel
+>>
+>
