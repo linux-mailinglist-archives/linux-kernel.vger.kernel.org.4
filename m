@@ -2,77 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC2072BA59
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 10:24:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9452972BA6F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 10:27:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230257AbjFLIYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 04:24:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
+        id S232238AbjFLI1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 04:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232086AbjFLIX6 (ORCPT
+        with ESMTP id S232734AbjFLIZG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 04:23:58 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C9B115
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 01:23:49 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f7ebb2b82cso42126125e9.2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 01:23:49 -0700 (PDT)
+        Mon, 12 Jun 2023 04:25:06 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58642AD
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 01:24:11 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-970028cfb6cso752204166b.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 01:24:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686558227; x=1689150227;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3syFK18W0x1MXZeXQYRchVrFaPqAMr+pqA7DuRcsYMA=;
-        b=ylTAA8QlrBqMuraIbm1w7bKvtYTyva4XcKAYVkJWL9v2NSi6BuH0RwJtMXZllapArk
-         C+wTtynfpchd648WB6+TWK7SGU8Vi8o2VJ8rPKTwdwVz/FKg49th3RtCE4YD63n38JUF
-         VbE6Fn4AFfviuqGRWiWcTmlfY3bychJtBtcbWxkgMuYscw5daM8ckZgGC3ub9xcLuqUW
-         WZ4P1CyYMUQI5DTiRoSe5lYPbkR16yW8VI17lbH4s6V/w012JmV2M/1XOxcK5Cqa17QZ
-         rJg3kNeiPf3Ko3hRftQrrS1FwIju8d9sPI0SayMtrcBvXxTaTXvK8Km7MxfHPDIukxmi
-         HR4Q==
+        d=linaro.org; s=google; t=1686558249; x=1689150249;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=n6FRK4HFfgPWBirVfYDPjb6CoRt7wCHoD3lKJRadNg8=;
+        b=BcAOefkle/LHxvI52wscsD1HqlHwY9cHn03i0Pabfkmt86hqe0+VxKBNAR76O5qI4U
+         oLqb8BKDueIqWm4GSNHhEGDfoNaQbexuP1m7eBPGb8a2Uxj21DbG+GEMJ1BVRGNrnshz
+         eQZYMbseNSJgiAwZtB4UBKG/1G/8A+CBIuekb3tKyIP3UfzSSE4azrwQuqMhArBrH+Tw
+         2Snlj34SSBqT1VBYFj9ybvAo3gdaOviM2VsT4VqqoNaMfR1nr8P58VEisOVy9Thf79wo
+         TZc2mycYXjO1khtlD2A4o+g2VT2kYFhviWnFmxhUt7L/aHKCUVjl9DZpSoXTsSMzogDO
+         ri2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686558227; x=1689150227;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3syFK18W0x1MXZeXQYRchVrFaPqAMr+pqA7DuRcsYMA=;
-        b=hMUMJnZFF5fZSXgRzbRQGY5ZdTr/ki8/2vfOryEf1YpMHMNqtj5iwllzS8dPtxNwI1
-         C+9b2bnvtK79+VWnv6b1cwp7uJSza0AebFpg1cCjmfpdeafg4E6FCBwzYVWL2X448njs
-         ljx+21qf4nlMZ+5CcGRvIdgouf5m5oEh4musA8rr4aBLn2oQeDTY9jk+Ljh7XxmdXgpK
-         4G1ZDXVFvH6QHmJl7VyzrLP9EcZNvv04p6CtlBSPMP1P7e5xsbszOoyal8xBKt1gm2aP
-         Ny3hfPYm1AyvGqU4s3zEHgV1BRriVaW/f4rtj8h6CQCnMyh6o9XFFgEdcoxCwD4YJ2SX
-         tkIg==
-X-Gm-Message-State: AC+VfDwCU/9Nt42KvUBfGGHT0Vb3JiSbveZRjKGkkEQpk0b2raUNYtgx
-        pFIiwIBWRVRyJRTbcpM58AnspQ==
-X-Google-Smtp-Source: ACHHUZ6Ynod2i9gs6NbQKZFbzx3ODJoQ+VZ1ZQXuEQh4aOJesHajKIm1t1uIdfbd6P2o8CDLR1ZEPw==
-X-Received: by 2002:a5d:522b:0:b0:30f:c1f5:e91e with SMTP id i11-20020a5d522b000000b0030fc1f5e91emr1390141wra.27.1686558227544;
-        Mon, 12 Jun 2023 01:23:47 -0700 (PDT)
-Received: from linaro.org ([86.121.163.20])
-        by smtp.gmail.com with ESMTPSA id v18-20020a5d43d2000000b0030ae93bd196sm11655199wrr.21.2023.06.12.01.23.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 01:23:47 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 11:23:45 +0300
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Zhanhao Hu <zero12113@hust.edu.cn>
-Cc:     Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        hust-os-kernel-patches@googlegroups.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] clk: imx93: fix memory leak and missing unwind goto
- in imx93_clocks_probe
-Message-ID: <ZIbWEW7MNCaqXq+k@linaro.org>
-References: <20230601033825.336558-1-zero12113@hust.edu.cn>
+        d=1e100.net; s=20221208; t=1686558249; x=1689150249;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=n6FRK4HFfgPWBirVfYDPjb6CoRt7wCHoD3lKJRadNg8=;
+        b=bT5PMpI19V/xSwd6nFVZK0fi42PFMf2UcVjqWD9fikBZ3xiSPDb9sSNaI+UzL+fwHB
+         qn4E/bAwh4QcmViw9pA3/YVJKKCgy5ww7A6Oxweu3V2rfvQZNJiPpTXEFENkmOviW46f
+         ODV9p4ZznrANkgNL2Cz6i3XLg2uJ5I+G5DxyVoOfn/yuGoXgCz5A1Oek0R4pWV2+/V5s
+         djkslzblM2dY2Llle2puz2Ayp+c5YeS0yqxERTDlSU/O9MQTD1/RljOQqOyJFN6VjHgr
+         RZg2oyVGumyEMf4UHeGdb3y8Ok2qJHnt0/PlJRtTFOiiepZfdBOcukearA8jCP0TFGhm
+         PpgA==
+X-Gm-Message-State: AC+VfDyInwSVdU+pXkAPGQrOYbIWgCLPuhDpZqOiGHST1qddu7G7WZdW
+        AfZP2Ydkb9lzPh2CyYPhU9Yb17aUjvuSoQMB6/c=
+X-Google-Smtp-Source: ACHHUZ6Pww7aFvpQWCcMrF5FzzrD5cGi0zKemQAOXPVxhZItaOEvFniBweIG13CsZzvJN+qjGnAFjA==
+X-Received: by 2002:a17:907:9710:b0:96a:ff7f:692 with SMTP id jg16-20020a170907971000b0096aff7f0692mr11003551ejc.68.1686558249516;
+        Mon, 12 Jun 2023 01:24:09 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id pv12-20020a170907208c00b0096b4ec45e10sm4824008ejb.139.2023.06.12.01.24.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 01:24:08 -0700 (PDT)
+Message-ID: <4c914503-c2e5-a5d8-97af-daaee0b4ec7c@linaro.org>
+Date:   Mon, 12 Jun 2023 10:24:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230601033825.336558-1-zero12113@hust.edu.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v3 2/5] dt-bindings: ata: dwc-ahci: add Rockchip RK3588
+Content-Language: en-US
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-ide@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+References: <20230608162238.50078-1-sebastian.reichel@collabora.com>
+ <20230608162238.50078-3-sebastian.reichel@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230608162238.50078-3-sebastian.reichel@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,80 +84,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-06-01 03:38:25, Zhanhao Hu wrote:
-> In function probe(), it returns directly without unregistered hws
-> when error occurs.
+On 08/06/2023 18:22, Sebastian Reichel wrote:
+> This adds Rockchip RK3588 AHCI binding. In order to narrow down the
+> allowed clocks without bloating the generic binding, the description
+> of Rockchip's AHCI controllers has been moved to its own file.
 > 
-> Fix this by adding 'goto unregister_hws;' on line 295 and
-> line 310.
-> 
-> Use devm_kzalloc() instead of kzalloc() to automatically
-> free the memory using devm_kfree() when error occurs.
-> 
-> Replace of_iomap() with devm_of_iomap() to automatically
-> handle the unused ioremap region and delete 'iounmap(anatop_base);'
-> in unregister_hws.
-> 
-> Fixes: 24defbe194b6 ("clk: imx: add i.MX93 clk")
-> Signed-off-by: Zhanhao Hu <zero12113@hust.edu.cn>
-
-Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
-
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 > ---
-> V1 -> V2 : Rephrase commit message in imperative mood.
-> This issue is found by static analysis and remains untested.
-> ---
->  drivers/clk/imx/clk-imx93.c | 15 ++++++++-------
->  1 file changed, 8 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/clk/imx/clk-imx93.c b/drivers/clk/imx/clk-imx93.c
-> index 07b4a043e449..b6c7c2725906 100644
-> --- a/drivers/clk/imx/clk-imx93.c
-> +++ b/drivers/clk/imx/clk-imx93.c
-> @@ -264,7 +264,7 @@ static int imx93_clocks_probe(struct platform_device *pdev)
->  	void __iomem *base, *anatop_base;
->  	int i, ret;
->  
-> -	clk_hw_data = kzalloc(struct_size(clk_hw_data, hws,
-> +	clk_hw_data = devm_kzalloc(dev, struct_size(clk_hw_data, hws,
->  					  IMX93_CLK_END), GFP_KERNEL);
->  	if (!clk_hw_data)
->  		return -ENOMEM;
-> @@ -288,10 +288,12 @@ static int imx93_clocks_probe(struct platform_device *pdev)
->  								    "sys_pll_pfd2", 1, 2);
->  
->  	np = of_find_compatible_node(NULL, NULL, "fsl,imx93-anatop");
-> -	anatop_base = of_iomap(np, 0);
-> +	anatop_base = devm_of_iomap(dev, np, 0, NULL);
->  	of_node_put(np);
-> -	if (WARN_ON(!anatop_base))
-> -		return -ENOMEM;
-> +	if (WARN_ON(IS_ERR(anatop_base))) {
-> +		ret = PTR_ERR(base);
-> +		goto unregister_hws;
-> +	}
->  
->  	clks[IMX93_CLK_ARM_PLL] = imx_clk_fracn_gppll_integer("arm_pll", "osc_24m",
->  							      anatop_base + 0x1000,
-> @@ -304,8 +306,8 @@ static int imx93_clocks_probe(struct platform_device *pdev)
->  	np = dev->of_node;
->  	base = devm_platform_ioremap_resource(pdev, 0);
->  	if (WARN_ON(IS_ERR(base))) {
-> -		iounmap(anatop_base);
-> -		return PTR_ERR(base);
-> +		ret = PTR_ERR(base);
-> +		goto unregister_hws;
->  	}
->  
->  	for (i = 0; i < ARRAY_SIZE(root_array); i++) {
-> @@ -345,7 +347,6 @@ static int imx93_clocks_probe(struct platform_device *pdev)
->  
->  unregister_hws:
->  	imx_unregister_hw_clocks(clks, IMX93_CLK_END);
-> -	iounmap(anatop_base);
->  
->  	return ret;
->  }
-> -- 
-> 2.34.1
-> 
+
+...
+
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - rockchip,rk3568-dwc-ahci
+> +          - rockchip,rk3588-dwc-ahci
+> +      - const: snps,dwc-ahci
+> +
+> +  ports-implemented:
+> +    const: 1
+> +
+> +patternProperties:
+> +  "^sata-port@[0-9a-e]$":
+> +    $ref: /schemas/ata/snps,dwc-ahci-common.yaml#/$defs/dwc-ahci-port
+> +
+> +    unevaluatedProperties: false
+
+You should be able to skip this patternProperties entirely, because it
+comes from dwc-ahci-common -> ahci-common schema. Did you try the patch
+without it?
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +  - ports-implemented
+> +
+
+
+Best regards,
+Krzysztof
+
