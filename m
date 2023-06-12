@@ -2,347 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E49172CA94
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5F072CA9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237111AbjFLPrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 11:47:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39542 "EHLO
+        id S230449AbjFLPr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 11:47:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230449AbjFLPrI (ORCPT
+        with ESMTP id S236659AbjFLPrZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 11:47:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E6DCA
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:47:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 75A8D61E99
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 15:47:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEC85C433D2;
-        Mon, 12 Jun 2023 15:47:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686584825;
-        bh=ng4NcAv7Bg3W3tmF1h5jtSAaleUESGi5n+V3tZwTWEU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Uo+iMwMFzqnknsT6HcnYRjvEGXEYWlvF+x2bv6cuzX88g4K2GbTE1mP7NGI8KdbdZ
-         RBsd5ZalxQDYYUs7cqCb/dLNuwMLggb3L64mLygYdCgjUJ4qsxP3UGsFuNTKZIs9fA
-         u0yFlfb8dNx9WsJpsTj4vmARvgeqGphcIkgeuJOZ3O8hUoidPzWd09gK06l4+hOL8q
-         kedrKQj8v0bV8reN2wlCaYfZX0tkOQUm44H0RMmlfR4rudqFNBsMZVQ95s035pCGCy
-         HOkdcirQzZJxS21/scJryJWuHWqiJ9epaNrciI1Fa54gf4ezTGO1rghVzxRs2uANgZ
-         1/JQ0JWu4rS1A==
-Date:   Mon, 12 Jun 2023 08:47:04 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Sheng Yong <shengyong@oppo.com>
-Cc:     chao@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, ebiggers@kernel.org
-Subject: Re: [PATCH v4 5/6] f2fs: add f2fs_ioc_[get|set]_extra_attr
-Message-ID: <ZIc9+N2GIQepZcCq@google.com>
-References: <20230612030121.2393541-1-shengyong@oppo.com>
- <20230612030121.2393541-6-shengyong@oppo.com>
+        Mon, 12 Jun 2023 11:47:25 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C20710CC;
+        Mon, 12 Jun 2023 08:47:24 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35CE01lY011062;
+        Mon, 12 Jun 2023 15:47:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=c87XOzdDuRMdz3dpGgxfIYZgND1DCuLkfZzv0++v1uQ=;
+ b=Bw1VU3NyyUzzZXgDPJtYb1QzyRI5ndvSOaVuUfYZFjHJOMivGYq8BZ+XRqvL5KFa+hob
+ lZ/R2XYH/gZzyBU8TG2jGZHGhqY0vAcbJMGpcCOscxSpRn5WHYs0QTfFR9jMXrvrvd5U
+ Fzx+ZzOaz7idvR9IizWyRBvN0lCICSt6b5cZoZZyRRvHk9gOgdTBHBYIjxRNRVNGDODW
+ EJkUU/siqw4FRtjNY6t8zUnzofNrwT2FuHFGs9ExJ+9NbYQe8v6EpGeL7GZg9m9YRSTT
+ 8l8jrhdw8x31STuJ3hV2Re0mJGfHX2veWxaFXi1+FjzZYMTcIpfxqMTOpIXs+3zOotAs eQ== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r4ehtux5f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Jun 2023 15:47:14 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35CFlD68015398
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Jun 2023 15:47:13 GMT
+Received: from [10.50.14.38] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 12 Jun
+ 2023 08:47:09 -0700
+Message-ID: <d4476c3b-9923-dde2-8338-9f67ebfc729f@quicinc.com>
+Date:   Mon, 12 Jun 2023 21:17:07 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612030121.2393541-6-shengyong@oppo.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] accel/qaic: Fix dereferencing freed memory
+Content-Language: en-US
+To:     Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Sukrut Bellary <sukrut.bellary@linux.com>,
+        "Oded Gabbay" <ogabbay@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linaro-mm-sig@lists.linaro.org>, <linux-media@vger.kernel.org>
+References: <20230610021200.377452-1-sukrut.bellary@linux.com>
+ <fc979a4e-c30a-2606-9eec-afbba4fdd774@amd.com>
+ <e3a867a8-284b-7250-b1b2-1956f533f6b0@quicinc.com>
+ <ff196b04-e8c5-52d9-852b-9a9cc7eecdd0@amd.com>
+ <b5e5c141-b5df-e24d-8fa4-94297d561cec@quicinc.com>
+From:   Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>
+In-Reply-To: <b5e5c141-b5df-e24d-8fa4-94297d561cec@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: H6edwVznO1IQawd9XFNZmgfKwTUAO_qQ
+X-Proofpoint-ORIG-GUID: H6edwVznO1IQawd9XFNZmgfKwTUAO_qQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-12_06,2023-06-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 mlxscore=0 bulkscore=0 impostorscore=0
+ lowpriorityscore=0 malwarescore=0 spamscore=0 mlxlogscore=999 adultscore=0
+ suspectscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2306120136
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/12, Sheng Yong wrote:
-> This patch introduces two ioctls:
->   * f2fs_ioc_get_extra_attr
->   * f2fs_ioc_set_extra_attr
-> to get or modify values in f2fs_inode's extra attribute area.
 
-What'd be the main purpose of this new ioctl? Use-cases or examples?
 
+On 6/12/2023 8:39 PM, Jeffrey Hugo wrote:
+> On 6/12/2023 7:21 AM, Christian König wrote:
+>> Am 12.06.23 um 15:03 schrieb Pranjal Ramajor Asha Kanojiya:
+>>>
+>>>
+>>> On 6/12/2023 4:52 PM, Christian König wrote:
+>>>>
+>>>>
+>>>> Am 10.06.23 um 04:12 schrieb Sukrut Bellary:
+>>>>> smatch warning:
+>>>>>     drivers/accel/qaic/qaic_data.c:620 qaic_free_object() error:
+>>>>>         dereferencing freed memory 'obj->import_attach'
+>>>>>
+>>>>> obj->import_attach is detached and freed using dma_buf_detach().
+>>>>> But used after free to decrease the dmabuf ref count using
+>>>>> dma_buf_put().
+>>>>>
+>>>>> Fixes: ff13be830333 ("accel/qaic: Add datapath")
+>>>>> Signed-off-by: Sukrut Bellary <sukrut.bellary@linux.com>
+>>>>> ---
+>>>>>   drivers/accel/qaic/qaic_data.c | 4 +++-
+>>>>>   1 file changed, 3 insertions(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/drivers/accel/qaic/qaic_data.c 
+>>>>> b/drivers/accel/qaic/qaic_data.c
+>>>>> index e42c1f9ffff8..7cba4d680ea8 100644
+>>>>> --- a/drivers/accel/qaic/qaic_data.c
+>>>>> +++ b/drivers/accel/qaic/qaic_data.c
+>>>>> @@ -613,11 +613,13 @@ static int qaic_gem_object_mmap(struct 
+>>>>> drm_gem_object *obj, struct vm_area_struc
+>>>>>   static void qaic_free_object(struct drm_gem_object *obj)
+>>>>>   {
+>>>>>       struct qaic_bo *bo = to_qaic_bo(obj);
+>>>>> +    struct dma_buf *dmabuf;
+>>>>
+>>>> Maybe move that variable into the if.
+>>>>
+>>>>>       if (obj->import_attach) {
+>>>>>           /* DMABUF/PRIME Path */
+>>>>> +        dmabuf = obj->import_attach->dmabuf;
+>>>>>           dma_buf_detach(obj->import_attach->dmabuf, 
+>>>>> obj->import_attach);
+>>>>> -        dma_buf_put(obj->import_attach->dmabuf);
+>>>>> +        dma_buf_put(dmabuf);
+>>>>
+>>>> I strongly assume you are not using the GEM prime helpers for this?
+>>>>
+>>>> Christian.
+>>>
+>>> Driver uses drm_gem_prime_fd_to_handle() helper function but it also 
+>>> registers for ->gem_prime_import() which is internally called by 
+>>> drm_gem_prime_fd_to_handle(). All the operations done in 
+>>> gem_prime_import() are undone here.
+>>
+>> Then why don't you use drm_prime_gem_destroy() which is the cleanup 
+>> helper for imports created by ->gem_prime_import() ?
+>>
+>> That looks pretty much identical to what you do here manually.
 > 
-> The argument of these two ioctls is `struct f2fs_extra_attr', which has
-> three members:
->   * field: indicates which field in extra attribute area is handled
->   * attr: value or userspace pointer
->   * attr_size: size of `attr'
+> I think destroy() wasn't used because we are new to DRM and sometimes 
+> confused by the multitude of options.  I appreciate the suggestion and 
+> will follow up to see if destroy() will work here, or identify what 
+> would prevent the use of it.
 > 
-> The `field' member could help extend functionality of these two ioctls
-> without modify or add new interfaces, if more fields are added into
-> extra attributes ares in the feture.
-> 
-> Signed-off-by: Sheng Yong <shengyong@oppo.com>
-> ---
->  fs/f2fs/file.c            | 205 ++++++++++++++++++++++++++++++++++++++
->  include/uapi/linux/f2fs.h |  25 +++++
->  2 files changed, 230 insertions(+)
-> 
-> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-> index f8aa842b5d233..39d04f8f0bb6b 100644
-> --- a/fs/f2fs/file.c
-> +++ b/fs/f2fs/file.c
-> @@ -4179,6 +4179,207 @@ static int f2fs_ioc_compress_file(struct file *filp)
->  	return ret;
->  }
->  
-> +static bool extra_attr_fits_in_inode(struct inode *inode, int field)
-> +{
-> +	struct f2fs_inode_info *fi = F2FS_I(inode);
-> +	struct f2fs_inode *ri;
-> +
-> +	switch (field) {
-> +	case F2FS_EXTRA_ATTR_TOTAL_SIZE:
-> +	case F2FS_EXTRA_ATTR_ISIZE:
-> +	case F2FS_EXTRA_ATTR_INLINE_XATTR_SIZE:
-> +		return true;
-> +	case F2FS_EXTRA_ATTR_PROJID:
-> +		if (!F2FS_FITS_IN_INODE(ri, fi->i_extra_isize, i_projid))
-> +			return false;
-> +		return true;
-> +	case F2FS_EXTRA_ATTR_INODE_CHKSUM:
-> +		if (!F2FS_FITS_IN_INODE(ri, fi->i_extra_isize, i_inode_checksum))
-> +			return false;
-> +		return true;
-> +	case F2FS_EXTRA_ATTR_CRTIME:
-> +		if (!F2FS_FITS_IN_INODE(ri, fi->i_extra_isize, i_crtime))
-> +			return false;
-> +		return true;
-> +	case F2FS_EXTRA_ATTR_COMPR_BLOCKS:
-> +	case F2FS_EXTRA_ATTR_COMPR_OPTION:
-> +		if (!F2FS_FITS_IN_INODE(ri, fi->i_extra_isize, i_compr_blocks))
-> +			return false;
-> +		return true;
-> +	default:
-> +		BUG_ON(1);
-> +		return false;
-> +	}
-> +}
-> +
-> +static int f2fs_ioc_get_extra_attr(struct file *filp, unsigned long arg)
-> +{
-> +	struct inode *inode = file_inode(filp);
-> +	struct f2fs_inode_info *fi = F2FS_I(inode);
-> +	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
-> +	struct f2fs_extra_attr attr;
-> +	u32 chksum;
-> +	int ret = 0;
-> +
-> +	if (!f2fs_has_extra_attr(inode))
-> +		return -EOPNOTSUPP;
-> +
-> +	if (copy_from_user(&attr, (void __user *)arg, sizeof(attr)))
-> +		return -EFAULT;
-> +
-> +	if (attr.field >= F2FS_EXTRA_ATTR_MAX)
-> +		return -EINVAL;
-> +
-> +	if (!extra_attr_fits_in_inode(inode, attr.field))
-> +		return -EOPNOTSUPP;
-> +
-> +	switch (attr.field) {
-> +	case F2FS_EXTRA_ATTR_TOTAL_SIZE:
-> +		attr.attr = F2FS_TOTAL_EXTRA_ATTR_SIZE;
-> +		break;
-> +	case F2FS_EXTRA_ATTR_ISIZE:
-> +		attr.attr = fi->i_extra_isize;
-> +		break;
-> +	case F2FS_EXTRA_ATTR_INLINE_XATTR_SIZE:
-> +		if (!f2fs_has_inline_xattr(inode))
-> +			return -EOPNOTSUPP;
-> +		attr.attr = get_inline_xattr_addrs(inode);
-> +		break;
-> +	case F2FS_EXTRA_ATTR_PROJID:
-> +		if (!f2fs_sb_has_project_quota(F2FS_I_SB(inode)))
-> +			return -EOPNOTSUPP;
-> +		attr.attr = from_kprojid(&init_user_ns, fi->i_projid);
-> +		break;
-> +	case F2FS_EXTRA_ATTR_INODE_CHKSUM:
-> +		ret = f2fs_inode_chksum_get(sbi, inode, &chksum);
-> +		if (ret)
-> +			return ret;
-> +		attr.attr = chksum;
-> +		break;
-> +	case F2FS_EXTRA_ATTR_CRTIME:
-> +		if (!f2fs_sb_has_inode_crtime(sbi))
-> +			return -EOPNOTSUPP;
-> +		if (attr.attr_size == sizeof(struct timespec64)) {
-> +			if (put_timespec64(&fi->i_crtime,
-> +					(void __user *)(uintptr_t)attr.attr))
-> +				return -EFAULT;
-> +		} else if (attr.attr_size == sizeof(struct old_timespec32)) {
-> +			if (put_old_timespec32(&fi->i_crtime,
-> +					(void __user *)(uintptr_t)attr.attr))
-> +				return -EFAULT;
-> +		} else {
-> +			return -EINVAL;
-> +		}
-> +		break;
-> +	case F2FS_EXTRA_ATTR_COMPR_BLOCKS:
-> +		if (attr.attr_size != sizeof(__u64))
-> +			return -EINVAL;
-> +		ret = f2fs_get_compress_blocks(inode, &attr.attr);
-> +		break;
-> +	case F2FS_EXTRA_ATTR_COMPR_OPTION:
-> +		ret = f2fs_ioc_get_compress_option(filp, attr.attr);
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (copy_to_user((void __user *)arg, &attr, sizeof(attr)))
-> +		return -EFAULT;
-> +
-> +	return 0;
-> +}
-> +
-> +static int f2fs_ioc_set_extra_attr(struct file *filp, unsigned long arg)
-> +{
-> +	struct inode *inode = file_inode(filp);
-> +	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
-> +	struct f2fs_extra_attr attr;
-> +	struct page *ipage;
-> +	void *inline_addr;
-> +	int ret;
-> +
-> +	if (!f2fs_has_extra_attr(inode))
-> +		return -EOPNOTSUPP;
-> +
-> +	if (copy_from_user(&attr, (void __user *)arg, sizeof(attr)))
-> +		return -EFAULT;
-> +
-> +	if (attr.field >= F2FS_EXTRA_ATTR_MAX)
-> +		return -EINVAL;
-> +
-> +	if (!extra_attr_fits_in_inode(inode, attr.field))
-> +		return -EOPNOTSUPP;
-> +
-> +	switch (attr.field) {
-> +	case F2FS_EXTRA_ATTR_TOTAL_SIZE:
-> +	case F2FS_EXTRA_ATTR_ISIZE:
-> +	case F2FS_EXTRA_ATTR_PROJID:
-> +	case F2FS_EXTRA_ATTR_INODE_CHKSUM:
-> +	case F2FS_EXTRA_ATTR_CRTIME:
-> +	case F2FS_EXTRA_ATTR_COMPR_BLOCKS:
-> +		/* read only attribtues */
-> +		return -EOPNOTSUPP;
-> +	case F2FS_EXTRA_ATTR_INLINE_XATTR_SIZE:
-> +		if (!f2fs_sb_has_flexible_inline_xattr(sbi) ||
-> +		    !f2fs_has_inline_xattr(inode))
-> +			return -EOPNOTSUPP;
-> +		if (attr.attr < MIN_INLINE_XATTR_SIZE ||
-> +		    attr.attr > MAX_INLINE_XATTR_SIZE)
-> +			return -EINVAL;
-> +		inode_lock(inode);
-> +		f2fs_lock_op(sbi);
-> +		f2fs_down_write(&F2FS_I(inode)->i_xattr_sem);
-> +		if (i_size_read(inode) || F2FS_I(inode)->i_xattr_nid) {
-> +			/*
-> +			 * it is not allowed to set this field if the inode
-> +			 * has data or xattr node
-> +			 */
-> +			ret = -EFBIG;
-> +			goto xattr_out_unlock;
-> +		}
-> +		ipage = f2fs_get_node_page(sbi, inode->i_ino);
-> +		if (IS_ERR(ipage)) {
-> +			ret = PTR_ERR(ipage);
-> +			goto xattr_out_unlock;
-> +		}
-> +		inline_addr = inline_xattr_addr(inode, ipage);
-> +		if (!IS_XATTR_LAST_ENTRY(XATTR_FIRST_ENTRY(inline_addr))) {
-> +			ret = -EFBIG;
-> +		} else {
-> +			struct f2fs_xattr_header *hdr;
-> +			struct f2fs_xattr_entry *ent;
-> +
-> +			F2FS_I(inode)->i_inline_xattr_size = (int)attr.attr;
-> +			inline_addr = inline_xattr_addr(inode, ipage);
-> +			hdr = XATTR_HDR(inline_addr);
-> +			ent = XATTR_FIRST_ENTRY(inline_addr);
-> +			hdr->h_magic = cpu_to_le32(F2FS_XATTR_MAGIC);
-> +			hdr->h_refcount = cpu_to_le32(1);
-> +			memset(ent, 0, attr.attr - sizeof(*hdr));
-> +			set_page_dirty(ipage);
-> +			ret = 0;
-> +		}
-> +		f2fs_put_page(ipage, 1);
-> +xattr_out_unlock:
-> +		f2fs_up_write(&F2FS_I(inode)->i_xattr_sem);
-> +		f2fs_unlock_op(sbi);
-> +		inode_unlock(inode);
-> +		if (!ret)
-> +			f2fs_balance_fs(sbi, true);
-> +		break;
-> +	case F2FS_EXTRA_ATTR_COMPR_OPTION:
-> +		ret = f2fs_ioc_set_compress_option(filp, attr.attr);
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
->  static long __f2fs_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
->  {
->  	switch (cmd) {
-> @@ -4265,6 +4466,10 @@ static long __f2fs_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
->  		return f2fs_ioc_decompress_file(filp);
->  	case F2FS_IOC_COMPRESS_FILE:
->  		return f2fs_ioc_compress_file(filp);
-> +	case F2FS_IOC_GET_EXTRA_ATTR:
-> +		return f2fs_ioc_get_extra_attr(filp, arg);
-> +	case F2FS_IOC_SET_EXTRA_ATTR:
-> +		return f2fs_ioc_set_extra_attr(filp, arg);
->  	default:
->  		return -ENOTTY;
->  	}
-> diff --git a/include/uapi/linux/f2fs.h b/include/uapi/linux/f2fs.h
-> index 955d440be1046..2b53e90421bfc 100644
-> --- a/include/uapi/linux/f2fs.h
-> +++ b/include/uapi/linux/f2fs.h
-> @@ -43,6 +43,10 @@
->  #define F2FS_IOC_DECOMPRESS_FILE	_IO(F2FS_IOCTL_MAGIC, 23)
->  #define F2FS_IOC_COMPRESS_FILE		_IO(F2FS_IOCTL_MAGIC, 24)
->  #define F2FS_IOC_START_ATOMIC_REPLACE	_IO(F2FS_IOCTL_MAGIC, 25)
-> +#define F2FS_IOC_GET_EXTRA_ATTR		_IOR(F2FS_IOCTL_MAGIC, 26,	\
-> +						struct f2fs_extra_attr)
-> +#define F2FS_IOC_SET_EXTRA_ATTR		_IOW(F2FS_IOCTL_MAGIC, 27,	\
-> +						struct f2fs_extra_attr)
->  
->  /*
->   * should be same as XFS_IOC_GOINGDOWN.
-> @@ -96,4 +100,25 @@ struct f2fs_comp_option {
->  	__u8 log_cluster_size;
->  };
->  
-> +enum {
-> +	F2FS_EXTRA_ATTR_TOTAL_SIZE,		/* ro, size of extra attr area */
-> +	F2FS_EXTRA_ATTR_ISIZE,			/* ro, i_extra_isize */
-> +	F2FS_EXTRA_ATTR_INLINE_XATTR_SIZE,	/* rw, i_inline_xattr_size */
-> +	F2FS_EXTRA_ATTR_PROJID,			/* ro, i_projid */
-> +	F2FS_EXTRA_ATTR_INODE_CHKSUM,		/* ro, i_inode_chksum */
-> +	F2FS_EXTRA_ATTR_CRTIME,			/* ro, i_crtime, i_crtime_nsec */
-> +	F2FS_EXTRA_ATTR_COMPR_BLOCKS,		/* ro, i_compr_blocks */
-> +	F2FS_EXTRA_ATTR_COMPR_OPTION,		/* rw, i_compress_algorithm,
-> +						 *     i_log_cluster_size
-> +						 */
-> +	F2FS_EXTRA_ATTR_MAX,
-> +};
-> +
-> +struct f2fs_extra_attr {
-> +	__u8 field;		/* F2FS_EXTRA_ATTR_* */
-> +	__u8 rsvd1;
-> +	__u16 attr_size;	/* size of @attr */
-> +	__u32 rsvd2;
-> +	__u64 attr;		/* attr value or pointer */
-> +};
->  #endif /* _UAPI_LINUX_F2FS_H */
-> -- 
-> 2.40.1
+> -Jeff
+
+Thank you Christian for your suggestion. I agree with you driver can use 
+  drm_prime_gem_destroy() here.
