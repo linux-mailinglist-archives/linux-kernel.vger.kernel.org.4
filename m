@@ -2,82 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14DD672CA74
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:41:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8FDD72CA76
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:41:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236552AbjFLPlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 11:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35222 "EHLO
+        id S238135AbjFLPlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 11:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237509AbjFLPlb (ORCPT
+        with ESMTP id S238148AbjFLPlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 11:41:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998C310CE;
-        Mon, 12 Jun 2023 08:41:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3494B62AC4;
-        Mon, 12 Jun 2023 15:41:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D2CCC433D2;
-        Mon, 12 Jun 2023 15:41:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686584489;
-        bh=9Qi4c1lGYTVMPrraUDnsp/LLn9Kth1gYnUJrruGCAmQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=MIPa32SJ43PjhrHK/No8+VaO0YCCSyFwd0v4BSWSTmrsvbSgeLqI4X75ZLqM+QNR/
-         40bnptgk0Y9mLOwarhLt4N5vmZT4f/UX9bAR9ammdr71f37yUdMYAzmK2BVXTWGqEp
-         3lDfERt11fZXOe63V4BpQK7CZi3TZF2mi5dJln/Ki4UWbCih3kIIgojhSUxyI8U2NM
-         UG8rKARY4oOWA9yMH0qOov7WaxSZ9MTZWC+j1bxNCZA1u+rdCaTI4E6ZGDiki57ZI+
-         DD4b9e9HM7Xz5wKYLLw/0kvZ68v7j5dS3Ohyb7CFIgviLqAIgu7LKcov+Xdg1oscR8
-         dsBbrkzV8vskQ==
-Date:   Mon, 12 Jun 2023 10:41:27 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Rob Herring <robh@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v7 00/11] PCI: dwc: Relatively simple fixes and
- cleanups
-Message-ID: <20230612154127.GA1335023@bhelgaas>
+        Mon, 12 Jun 2023 11:41:50 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8B510E2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:41:49 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-bc4ed01b5d4so1303362276.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:41:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686584508; x=1689176508;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kbcWWy6lgJlv49u77NIuToLcJ7w9+T3qZB5UWslqyxQ=;
+        b=A41ks5sFHka57K4fqfE86JUZi8sVGCoTPYI5ynNaLuhHWaVD5wnyI5E/THeG9ezv9h
+         hFUN9NeXdSmdLTfV6cU6RhW6ixeXdJmtNq2y0OhafeE0g900sSc3BM37utl2iCvyu3pS
+         xxfgQmQbYso5DjWghSSS8E/l89+tAaOV68U9KiGP2g9j1jE4hB6T8R6++UPP4RumZMV8
+         LAmAF8KoJr8GavbZrW2RE1zZc3QKRPJhjcCzs5R0EgwiMcU56m0L3HM4XYn+eViUJpyI
+         8vqYxeegj//ny6HzAJhC8KTZYUOxcFLk2OUJoaoVW3wydskZ3x20ve8D1Xwk+AB12dwu
+         q0mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686584508; x=1689176508;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kbcWWy6lgJlv49u77NIuToLcJ7w9+T3qZB5UWslqyxQ=;
+        b=EuQXlApWE91T0ItUl0PC3EzdUSh7C//F4uecmIw4J4uY64+tXmgcdXqVKmEhWhtcav
+         TYL14Z3PyyQ2joR8rir99AVxW9slE5eCakOcMAP7a08Miz7nCMOUzZ1NUtFBuD/8MSu7
+         XeJoS8eUJLuEsUwg/UhxoHfnlVxA1kTAfVzxp2p23j2jS1KbiLYUMnNv6HRmPWW5z65k
+         n3i3e6IJ/p1ER66UI/xxFNqETmilTfr4oTSVBEyFOkkeGchqpr8P9ldjzjnoYue0nFbK
+         5spte3vLCx7VitxJXfNGhUXDiwMRUYDqU11pl1/xzI3fhz3yvCmKYyT00rU6o86mDNch
+         8zHQ==
+X-Gm-Message-State: AC+VfDyXpDat20vVnIl/r0W/QexsubSXHu0BpLjXTYwrUxDU97HOVWQ6
+        m/AMHPFd9hbiLL9KsIlerpgpoOHCnPVGy1uLsERAkQ==
+X-Google-Smtp-Source: ACHHUZ6i33Zt6lBAsGFhBQjcAHgEqwffZrn+lh/Sa7XfqbavLy9BGOHe+OV0wQUJlUl+nF7rG6XcZNDeJbNZHnhEQ4U=
+X-Received: by 2002:a25:c744:0:b0:bc4:3e4e:12 with SMTP id w65-20020a25c744000000b00bc43e4e0012mr4781374ybe.36.1686584508078;
+ Mon, 12 Jun 2023 08:41:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230611192005.25636-1-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230609005158.2421285-1-surenb@google.com> <20230609005158.2421285-5-surenb@google.com>
+ <ZIOOmC26qh4EXUEX@x1n> <CAJuCfpHKUjAwgWbxvJQDyEnneRD03p2M6247Q6=3-oOq_FL7zA@mail.gmail.com>
+ <ZIcddoWjYlDXNKJA@x1n>
+In-Reply-To: <ZIcddoWjYlDXNKJA@x1n>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Mon, 12 Jun 2023 08:41:37 -0700
+Message-ID: <CAJuCfpE_1S9bXPDxz-4i2oCNwrsrP8V8q5=H4rxPtZ0kZk3cjw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] mm: drop VMA lock before waiting for migration
+To:     Peter Xu <peterx@redhat.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
+        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
+        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
+        apopple@nvidia.com, ying.huang@intel.com, david@redhat.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        viro@zeniv.linux.org.uk, brauner@kernel.org,
+        pasha.tatashin@soleen.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 11, 2023 at 10:19:54PM +0300, Serge Semin wrote:
-> It turns out the recent DW PCIe-related patchset was merged in with
-> several relatively trivial issues left unsettled (noted by Bjorn and
-> Manivannan). All of these lefovers have been fixed in this patchset.
-> Namely the series starts with two bug-fixes. The first one concerns the
-> improper link-mode initialization in case if the CDM-check is enabled. The
-> second unfortunate mistake I made in the IP-core version type helper. In
-> particular instead of testing the IP-core version type the macro function
-> referred to the just IP-core version which obviously wasn't what I
-> intended.
-> ...
+On Mon, Jun 12, 2023 at 6:28=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Fri, Jun 09, 2023 at 03:30:10PM -0700, Suren Baghdasaryan wrote:
+> > On Fri, Jun 9, 2023 at 1:42=E2=80=AFPM Peter Xu <peterx@redhat.com> wro=
+te:
+> > >
+> > > On Thu, Jun 08, 2023 at 05:51:56PM -0700, Suren Baghdasaryan wrote:
+> > > > migration_entry_wait does not need VMA lock, therefore it can be dr=
+opped
+> > > > before waiting. Introduce VM_FAULT_VMA_UNLOCKED to indicate that VM=
+A
+> > > > lock was dropped while in handle_mm_fault().
+> > > > Note that once VMA lock is dropped, the VMA reference can't be used=
+ as
+> > > > there are no guarantees it was not freed.
+> > >
+> > > Then vma lock behaves differently from mmap read lock, am I right?  C=
+an we
+> > > still make them match on behaviors, or there's reason not to do so?
+> >
+> > I think we could match their behavior by also dropping mmap_lock here
+> > when fault is handled under mmap_lock (!(fault->flags &
+> > FAULT_FLAG_VMA_LOCK)).
+> > I missed the fact that VM_FAULT_COMPLETED can be used to skip dropping
+> > mmap_lock in do_page_fault(), so indeed, I might be able to use
+> > VM_FAULT_COMPLETED to skip vma_end_read(vma) for per-vma locks as well
+> > instead of introducing FAULT_FLAG_VMA_LOCK. I think that was your idea
+> > of reusing existing flags?
+>
+> Yes.
+>
+> I'd suggest we move this patch out of the series as it's not really part =
+of
+> it on enabling swap + uffd.  It can be a separate patch and hopefully it'=
+ll
+> always change both vma+mmap lock cases, and with proper reasonings.
 
-I am unable to do anything with this series.
+Ok, I can move it out with mmap_lock support only and then add per-vma
+lock support in my patchset (because this path is still part of
+do_swap_page and my patchset enables swap support for per-vma locks).
 
-Google's legal team is reviewing this matter under applicable laws and
-regulations.
-
-Bjorn
+>
+> Thanks,
+>
+> --
+> Peter Xu
+>
