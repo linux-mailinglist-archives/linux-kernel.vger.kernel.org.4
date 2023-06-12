@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99AD872CC34
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3282272CC35
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbjFLRP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 13:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
+        id S232089AbjFLRQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 13:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236488AbjFLRPu (ORCPT
+        with ESMTP id S236556AbjFLRPv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 13:15:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D00B10D8
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:15:41 -0700 (PDT)
+        Mon, 12 Jun 2023 13:15:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E4210D3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:15:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E97A620E0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 17:15:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05D6EC433EF;
-        Mon, 12 Jun 2023 17:15:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12D5062087
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 17:15:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F37DBC4339C;
+        Mon, 12 Jun 2023 17:15:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686590140;
-        bh=UUhLelpNrov24l5Qxg3Mphji/Za6TJvjNh0gZoB34PE=;
+        s=k20201202; t=1686590141;
+        bh=vHXhCQfo2Qv8OkSgBZ68ejlcCbap+8Qo+S8iDqOIRtE=;
         h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=mOvK48yH39zyEq4f7gU2hu2znzNkhhWgdLiu6FYog8k0T2s+rcG9pSl5BUhMVOhBl
-         9oVFUP6isYRZ6puuGjV1UnmxX7FuVfS3umnHNr5q1dW6llCqUsujnAyp3uzhltU5u8
-         IBEVh+kpw24LuB0o5X2WSYqMt5H5d/VNaD/9z/oSOTgBdDgfZga8gtUaNb9ZJdJnsm
-         UVSLpUbXp3uq1IFTkfA/GgYestamMjeBmY33fpH3n1NBtO7F/cvEUkGCOG0IlI8JXy
-         ltb8mVw0xgh1ETtqLm0MbqId7z32mF6Lo/hqV+wmfcX3zpsZr0qlLhqwhgSP1XfbNX
-         keI68asCDRRQQ==
+        b=fVzEz+B1tGYk7932tYv05Z07Yu9vGfyrL9SAc6v3t3SjGlZG1O8/J5vSM8O2SIOUp
+         y21S9worRZejvuQG6Wr3CZKtio0BjV1j5LnWFgoAQAncBYlwciHjrr+CXspJc/tysJ
+         MefEh+C4hYO+W9UxJARdVzxg3V+UX6uiexa+4TGPRzcMncjRYwsohlI+iZxDOQCgTr
+         HMM1FyxdPCV2RSAp7vvZd2S58hNNxNjZoX7piFIB4V2Zeg0tstO8SsYmEisqWTDgcl
+         0N2NNzYx6aGMRjCGVPJ20GFHrPsfUrYdFKXjgMHHwD9wgXAysbVKQKSSFc3RI8TQ9S
+         1D5iusEuZxxdw==
 From:   Mark Brown <broonie@kernel.org>
 To:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-In-Reply-To: <20230609-regcache-set-val-no-ret-v1-1-9a6932760cf8@kernel.org>
-References: <20230609-regcache-set-val-no-ret-v1-1-9a6932760cf8@kernel.org>
-Subject: Re: [PATCH] regmap: Don't check for changes in regcache_set_val()
-Message-Id: <168659013974.85655.8352029953272516969.b4-ty@kernel.org>
-Date:   Mon, 12 Jun 2023 18:15:39 +0100
+In-Reply-To: <20230609-regcache-maple-sync-raw-v1-1-8ddeb4e2b9ab@kernel.org>
+References: <20230609-regcache-maple-sync-raw-v1-1-8ddeb4e2b9ab@kernel.org>
+Subject: Re: [PATCH] regmap: maple: Implement block sync for the maple tree
+ cache
+Message-Id: <168659014071.85655.7107903749952317283.b4-ty@kernel.org>
+Date:   Mon, 12 Jun 2023 18:15:40 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13-dev-bfdf5
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,12 +54,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 10 Jun 2023 15:05:54 +0100, Mark Brown wrote:
-> The only user of regcache_set_val() ignores the return value so we may as
-> well not bother checking if the value we are trying to set is the same as
-> the value already stored.
+On Sun, 11 Jun 2023 13:06:07 +0100, Mark Brown wrote:
+> For register maps where we can write multiple values in a single bus
+> operation it is generally much faster to do so. Improve the performance of
+> maple tree cache syncs on such devices by identifying blocks of adjacent
+> registers that need to be written out and combining them into a single
+> operation.
 > 
+> Combining writes does mean that we need to allocate a scratch buffer and
+> format the data into it but it is expected that for most cases where caches
+> are in use the cost of I/O will be much greater than the cost of doing the
+> allocation and format.
 > 
+> [...]
 
 Applied to
 
@@ -66,8 +74,8 @@ Applied to
 
 Thanks!
 
-[1/1] regmap: Don't check for changes in regcache_set_val()
-      commit: d32758acbd4eee8ce95b705a6760526b4d26c2aa
+[1/1] regmap: maple: Implement block sync for the maple tree cache
+      commit: bfa0b38c148379c8a8c52e23bbdcb086414fb354
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
