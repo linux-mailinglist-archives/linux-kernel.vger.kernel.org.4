@@ -2,106 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8BD72C7E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:15:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D2B372C7DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237346AbjFLOPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 10:15:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
+        id S237802AbjFLOPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 10:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237411AbjFLOOL (ORCPT
+        with ESMTP id S237389AbjFLOOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 10:14:11 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECDE1709;
+        Mon, 12 Jun 2023 10:14:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FAD1701;
         Mon, 12 Jun 2023 07:14:03 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id 46e09a7af769-6b2e1023f30so1363691a34.1;
-        Mon, 12 Jun 2023 07:14:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686579243; x=1689171243;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CuzmliRM3Z6qQlxotmDo0oeWU8xNbS6I5a97pZAhtyE=;
-        b=M7WfC4yCwJ2YDGJJkD823r9fRUt+8aurr+lqzVcujSa3THtOwVpEsauT2ReCI3vaxB
-         UzjRvgiCpxx//v8/4/1K3hioZ6pIZJgzdbc4RgMxLyxFxlbrlxxuBsE5nw98I5v8IAOw
-         dFSUMAMR2bZA8DxUDhkrgn0RoHpyX/qzMPJaY2pJZSr3iy6nC/F5pnOW+O2Op9tmqw5N
-         lgyjDD78zDLCkiJe3AfEiWea934oy4EP7n9HvcfcGQin3Iq6w33c1kcGR2ZUUVwxxBlO
-         WFxGwcBmXX1I5hNli8luDPTegSvRPAa7nCsb4QA9k+nl0ZG0ZuzIu6cOMYOZvyipMcpQ
-         4R4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686579243; x=1689171243;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CuzmliRM3Z6qQlxotmDo0oeWU8xNbS6I5a97pZAhtyE=;
-        b=U39Dtib0TXn8BYPlkEDhpPMINzH73bXYgVa/597B+jAq+WvBpVH3tl7Ek3FaGzKzK1
-         dABhicvl2YhiufWjxOVSaElVSTSRyHElpL4NTkw+v25E7ENXBGjEZJDQhxsNK6aTpagE
-         Bl+5Sv7K/mikdztC72ZZC1ZLCgyFIwGVBORAmjEaJNDXNX+PUYQcbimaEzpEE0w0gITP
-         yuXzywZdjGa0Jqbph4hjTM1sNE1yGZCY+cqZpYE+Cq1PQRESjZN0AfXF+3T741t8AJJe
-         BMi6CwDrK6bhhlmm9UnpCR4rqzm8hCwhcN3gnVUqFUPHUj7o+9CvD4ZnV6k9EnreNauI
-         iR6A==
-X-Gm-Message-State: AC+VfDzoSZGNNghYm1L//RCno0NHy30/5dM2jcx1w+FX2gi658H+y+5o
-        iQH/ODbVTy99M8vQZcmLn9qzcPR0uF1jBTVv/2Q=
-X-Google-Smtp-Source: ACHHUZ6GDjRB6a7GeZmGws/Bjkr9EkSN//3dhbcM8V2dDNq7CI1HSltpWh9yz2Kq73NpxUogHj4+EvOYTQJkwZpySUQ=
-X-Received: by 2002:a05:6808:1a10:b0:39c:6a30:cc7f with SMTP id
- bk16-20020a0568081a1000b0039c6a30cc7fmr5331405oib.21.1686579241636; Mon, 12
- Jun 2023 07:14:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B4196270D;
+        Mon, 12 Jun 2023 14:14:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9839C433A4;
+        Mon, 12 Jun 2023 14:14:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686579242;
+        bh=XKAc4oEQwFOunEp6+0l4oCNn34lssdjYl3TNCxaYBp0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ku7V6j+mf2IydhmeppDY6x8/yaAzXpvQUe3dk6jDEW/+hNYO2qUb6GttGzoxqjXeI
+         54mqZwpI9mKOVqzKXV4KxDBnAaBIJMagy+Qa93bRAVyRYtK3R4Lja+I7NhwPU6iYNq
+         saCh0Gt5du4FnYUTzypjWrqGFGwIIgCQtCQDWMZ7TairS0olB2LAQla4AKGM5AOGEh
+         fGPTl0ZgvoW0b/6PON1iq/fpWXFMgtVoP8S2sqXThZ0lkkQUYwxQgxFsu2BBC6zEXV
+         hGCx3fEb/FwZsXkjTELiEWtXhEWLJa3L7H+f7WaokbkksEs2Wsi/ImEfjMa5xJSPuj
+         G9SODAOXDHswA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 1D6ED40692; Mon, 12 Jun 2023 11:13:59 -0300 (-03)
+Date:   Mon, 12 Jun 2023 11:13:59 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        German Gomez <german.gomez@arm.com>,
+        Ali Saidi <alisaidi@amazon.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Dmitrii Dolgov <9erthalion6@gmail.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Changbin Du <changbin.du@huawei.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Steinar H. Gunderson" <sesse@google.com>,
+        Yuan Can <yuancan@huawei.com>,
+        Brian Robbins <brianrob@linux.microsoft.com>,
+        liuwenyu <liuwenyu7@huawei.com>,
+        Ivan Babrou <ivan@cloudflare.com>,
+        Fangrui Song <maskray@google.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, coresight@lists.linaro.org
+Subject: Re: [PATCH v2 26/26] perf hist: Fix srcline memory leak
+Message-ID: <ZIcoJytUEz4UgQYR@kernel.org>
+References: <20230608232823.4027869-1-irogers@google.com>
+ <20230608232823.4027869-27-irogers@google.com>
 MIME-Version: 1.0
-References: <20230612122926.107333-1-herve.codina@bootlin.com>
- <20230612122926.107333-8-herve.codina@bootlin.com> <CAHp75Ve8BVO50TqhUV9YWkRBvYARNOAapZ21X=FehaBBfcC2jw@mail.gmail.com>
-In-Reply-To: <CAHp75Ve8BVO50TqhUV9YWkRBvYARNOAapZ21X=FehaBBfcC2jw@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 12 Jun 2023 17:13:25 +0300
-Message-ID: <CAHp75VcrXhwa19yg328L9vAhCB3vzk4Dy--fEpWd9qZR7oZ-AA@mail.gmail.com>
-Subject: Re: [PATCH v3 07/12] iio: inkern: Use max_array() to get the maximum
- value from an array
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230608232823.4027869-27-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 5:12=E2=80=AFPM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Mon, Jun 12, 2023 at 3:30=E2=80=AFPM Herve Codina <herve.codina@bootli=
-n.com> wrote:
+Em Thu, Jun 08, 2023 at 04:28:23PM -0700, Ian Rogers escreveu:
+> srcline isn't freed if it is SRCLINE_UNKNOWN. Avoid strduping in this
+> case as such strdups are redundant and leak memory.
 
-...
+The patch is ok as its what the rest of the code is doing, i.e. strcmp()
+to check if a srcline is the unknown one, but how about the following
+patch on top of yours?
 
-> >  #include <linux/property.h>
-> >  #include <linux/slab.h>
-> >  #include <linux/mutex.h>
-> > +#include <linux/minmax.h>
+From 5163e54c1ed3d476f6b4e7f938861039bd4eec7c Mon Sep 17 00:00:00 2001
+From: Arnaldo Carvalho de Melo <acme@redhat.com>
+Date: Mon, 12 Jun 2023 11:10:46 -0300
+Subject: [PATCH 1/1] perf srcline: Optimize comparision against
+ SRCLINE_UNKNOWN
 
-But can you try to preserve order (to some extent, perhaps invisible
-here context is even better, I would assume mutex was added
-unordered)?
+This is a string constant that gets returned and then strcmp() around,
+we can instead just do a pointer comparision.
 
-> >  #include <linux/iio/iio.h>
-> >  #include <linux/iio/iio-opaque.h>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Link: https://lore.kernel.org/lkml/
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/perf/builtin-diff.c    | 4 ++--
+ tools/perf/util/block-info.c | 4 ++--
+ tools/perf/util/hist.c       | 2 +-
+ tools/perf/util/map.c        | 2 +-
+ tools/perf/util/sort.c       | 2 +-
+ tools/perf/util/srcline.c    | 2 +-
+ 6 files changed, 8 insertions(+), 8 deletions(-)
 
---=20
-With Best Regards,
-Andy Shevchenko
+diff --git a/tools/perf/builtin-diff.c b/tools/perf/builtin-diff.c
+index eec89567ae483604..e8a1b16aa5f83f4f 100644
+--- a/tools/perf/builtin-diff.c
++++ b/tools/perf/builtin-diff.c
+@@ -1378,8 +1378,8 @@ static int cycles_printf(struct hist_entry *he, struct hist_entry *pair,
+ 	end_line = map__srcline(he->ms.map, bi->sym->start + bi->end,
+ 				he->ms.sym);
+ 
+-	if ((strncmp(start_line, SRCLINE_UNKNOWN, strlen(SRCLINE_UNKNOWN)) != 0) &&
+-	    (strncmp(end_line, SRCLINE_UNKNOWN, strlen(SRCLINE_UNKNOWN)) != 0)) {
++	if (start_line != SRCLINE_UNKNOWN &&
++	    end_line != SRCLINE_UNKNOWN) {
+ 		scnprintf(buf, sizeof(buf), "[%s -> %s] %4ld",
+ 			  start_line, end_line, block_he->diff.cycles);
+ 	} else {
+diff --git a/tools/perf/util/block-info.c b/tools/perf/util/block-info.c
+index 08279b1b65e5a4b0..fe4c17248799f0a2 100644
+--- a/tools/perf/util/block-info.c
++++ b/tools/perf/util/block-info.c
+@@ -296,8 +296,8 @@ static int block_range_entry(struct perf_hpp_fmt *fmt, struct perf_hpp *hpp,
+ 	end_line = map__srcline(he->ms.map, bi->sym->start + bi->end,
+ 				he->ms.sym);
+ 
+-	if ((strncmp(start_line, SRCLINE_UNKNOWN, strlen(SRCLINE_UNKNOWN)) != 0) &&
+-	    (strncmp(end_line, SRCLINE_UNKNOWN, strlen(SRCLINE_UNKNOWN)) != 0)) {
++	if (start_line != SRCLINE_UNKNOWN) &&
++	    end_line != SRCLINE_UNKNOWN) {
+ 		scnprintf(buf, sizeof(buf), "[%s -> %s]",
+ 			  start_line, end_line);
+ 	} else {
+diff --git a/tools/perf/util/hist.c b/tools/perf/util/hist.c
+index 0a10bcc6ec95b5e0..3dc8a4968beb9c01 100644
+--- a/tools/perf/util/hist.c
++++ b/tools/perf/util/hist.c
+@@ -484,7 +484,7 @@ static int hist_entry__init(struct hist_entry *he,
+ 			goto err_infos;
+ 	}
+ 
+-	if (he->srcline && strcmp(he->srcline, SRCLINE_UNKNOWN)) {
++	if (he->srcline && he->srcline != SRCLINE_UNKNOWN) {
+ 		he->srcline = strdup(he->srcline);
+ 		if (he->srcline == NULL)
+ 			goto err_rawdata;
+diff --git a/tools/perf/util/map.c b/tools/perf/util/map.c
+index c77e2fce6a379e7f..f30d34903aa4eabe 100644
+--- a/tools/perf/util/map.c
++++ b/tools/perf/util/map.c
+@@ -496,7 +496,7 @@ int map__fprintf_srcline(struct map *map, u64 addr, const char *prefix,
+ 
+ 	if (dso) {
+ 		char *srcline = map__srcline(map, addr, NULL);
+-		if (strncmp(srcline, SRCLINE_UNKNOWN, strlen(SRCLINE_UNKNOWN)) != 0)
++		if (srcline != SRCLINE_UNKNOWN)
+ 			ret = fprintf(fp, "%s%s", prefix, srcline);
+ 		zfree_srcline(&srcline);
+ 	}
+diff --git a/tools/perf/util/sort.c b/tools/perf/util/sort.c
+index 047c3606802f5b7f..6aa1c7f2b4448b30 100644
+--- a/tools/perf/util/sort.c
++++ b/tools/perf/util/sort.c
+@@ -643,7 +643,7 @@ static char *hist_entry__get_srcfile(struct hist_entry *e)
+ 
+ 	sf = __get_srcline(map__dso(map), map__rip_2objdump(map, e->ip),
+ 			 e->ms.sym, false, true, true, e->ip);
+-	if (!strcmp(sf, SRCLINE_UNKNOWN))
++	if (sf == SRCLINE_UNKNOWN)
+ 		return no_srcfile;
+ 	p = strchr(sf, ':');
+ 	if (p && *sf) {
+diff --git a/tools/perf/util/srcline.c b/tools/perf/util/srcline.c
+index b8e596528d7e7e5e..48a04f42b308b080 100644
+--- a/tools/perf/util/srcline.c
++++ b/tools/perf/util/srcline.c
+@@ -809,7 +809,7 @@ void zfree_srcline(char **srcline)
+ 	if (*srcline == NULL)
+ 		return;
+ 
+-	if (strcmp(*srcline, SRCLINE_UNKNOWN))
++	if (*srcline != SRCLINE_UNKNOWN)
+ 		free(*srcline);
+ 
+ 	*srcline = NULL;
+-- 
+2.39.2
+
+ 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/util/hist.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/perf/util/hist.c b/tools/perf/util/hist.c
+> index 77cb2cc83bb9..cc6f7f51faa5 100644
+> --- a/tools/perf/util/hist.c
+> +++ b/tools/perf/util/hist.c
+> @@ -484,7 +484,7 @@ static int hist_entry__init(struct hist_entry *he,
+>  			goto err_infos;
+>  	}
+>  
+> -	if (he->srcline) {
+> +	if (he->srcline && strcmp(he->srcline, SRCLINE_UNKNOWN)) {
+>  		he->srcline = strdup(he->srcline);
+>  		if (he->srcline == NULL)
+>  			goto err_rawdata;
+> -- 
+> 2.41.0.162.gfafddb0af9-goog
+> 
+
+-- 
+
+- Arnaldo
