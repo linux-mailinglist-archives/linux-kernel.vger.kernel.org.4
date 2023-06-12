@@ -2,208 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5243572CC40
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CBA572CC4B
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:21:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235688AbjFLRRy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 12 Jun 2023 13:17:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60088 "EHLO
+        id S233651AbjFLRVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 13:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232628AbjFLRRo (ORCPT
+        with ESMTP id S232963AbjFLRVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 13:17:44 -0400
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CF010F3;
-        Mon, 12 Jun 2023 10:17:37 -0700 (PDT)
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-97ea801b0d0so49101566b.1;
-        Mon, 12 Jun 2023 10:17:37 -0700 (PDT)
+        Mon, 12 Jun 2023 13:21:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E444F1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:20:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686590442;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7qlKft7mE4b2kNS3x9A8djvNWYAtiYtMSSZe9V4o7Ek=;
+        b=fdEYm5ePBJz8/sLLgUVBm+R801+8LnD8NjUGHFbjdaf27oyWXenG6Z3ZUtVNGn5uvySK78
+        B+Osf9UhBiADVQH0iH08VioSP5Jl7ZV/lF6l1B9+FAMENolBKIZoRjRAKHGcmqluj2us/r
+        IAZNz1smwBpSZ6pB4EzfEgUQEJJRgDs=
+Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com
+ [209.85.128.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-190-nJwe2xOQPDG9Ytw1sUr5Sw-1; Mon, 12 Jun 2023 13:20:41 -0400
+X-MC-Unique: nJwe2xOQPDG9Ytw1sUr5Sw-1
+Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-56938733c13so65630797b3.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:20:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686590255; x=1689182255;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LhUmdQnfi0GqNSRcqyI8HlOzdT8gEARQN6Ki8wJOOtU=;
-        b=Q3ALGHJ8LATbelgLdPXiphnyphfGamlSX9nQO+zv2yePVnD2B3yu88tdgNhTRY/9XX
-         8iJjYdJVMqWMOmOHGqNZP3SqgBm3Smpgnj7shrskcmcvv+kIHE1KnlOGhA2MsHtsN+ED
-         lDe20UBwsvJDJzb+RlWvG3jwUz1ggZUT5pv3NbJLb1J7ZcFppAuyFh/6X+WMxE4X3nfd
-         Ft8tuwoh5+KUxpO54TJM95QrnR2MgG9i7fJRcsMHT5EV/5YQcaK/jOTTLqrvbLeqOuXS
-         U5cJbHT3U7vg/aEyb6AnClC2sViRlsRH5YdeyUQUpy1+vgW2tYmpKwVMKiRQdttmAcGY
-         EhHA==
-X-Gm-Message-State: AC+VfDydXXXzwLP9RfP3vMchDe3oq6NdRv8EPLNb/C5wLPu9rai2tWdx
-        k4eOWhwiBulVLH/QtOKIybzj9Z4QCK7duM24NQk=
-X-Google-Smtp-Source: ACHHUZ6ZIRCVBDnfwfbNvrL01g++Xec9QUSL50It3xoN3gK5H50U71VMlL9ICBvlI9hpAX1207znlbccloVGQIAljRo=
-X-Received: by 2002:a17:906:7785:b0:976:7c67:4bf8 with SMTP id
- s5-20020a170906778500b009767c674bf8mr7978496ejm.5.1686590255587; Mon, 12 Jun
- 2023 10:17:35 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686590440; x=1689182440;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7qlKft7mE4b2kNS3x9A8djvNWYAtiYtMSSZe9V4o7Ek=;
+        b=ht/KsTG1i9NgE7mFi1ZWljaCzxIn3GVf6p9mBuGDyt7Ma9o/UBtvjNVNT4mRktHbW9
+         oC9F4Ay/NLDhiJGmo2w2FCDORfW10JkE+qgjapZjSY5RoIWMcc7ilmB75nQTGQS38TBt
+         2aZ/trEhUfFKkFPFyKJDt46pHjh1ypg98RSg606KirUKcIc4hVMND6Z5FyuGIZ7O3Vkz
+         fLo+NjtVzc7KLXi41Kl+9BIXounYcTiZRm+TCBV3CmYsqRpkmMHFONVELz4dIIdk6NoW
+         S9UNDmlyUYOazYgswehrbwZjYXPsdYbrdIPtGSt1qmrKniIaq+xEHejSpih64JhDN3uM
+         z7Aw==
+X-Gm-Message-State: AC+VfDzgPNx7N3cZFVvPcoMdUA1Id9kCBBM1Hq/YBumA5fkyZ07sX0Rr
+        jEo5tDRzqu26u8oe0NljRjxpXgvTtlpY3naZhSI0JXjXsN6py0jqXi7Z+zleiNKxu4BDpH8Hrae
+        nRH7SpkgQDH984Uk1fi35Aq1m
+X-Received: by 2002:a81:8047:0:b0:565:c888:1d09 with SMTP id q68-20020a818047000000b00565c8881d09mr11436044ywf.30.1686590440568;
+        Mon, 12 Jun 2023 10:20:40 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6pK0EspHiEwXLJwZSnTgF0PmnWrSSsx5/e6T7JNdTcNpiEDXWG/J7snMtSub/jvW4XBEs/gg==
+X-Received: by 2002:a81:8047:0:b0:565:c888:1d09 with SMTP id q68-20020a818047000000b00565c8881d09mr11436028ywf.30.1686590440315;
+        Mon, 12 Jun 2023 10:20:40 -0700 (PDT)
+Received: from halaney-x13s ([2600:1700:1ff0:d0e0::45])
+        by smtp.gmail.com with ESMTPSA id t7-20020a815f07000000b0054f9e7fed7asm2622065ywb.137.2023.06.12.10.20.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 10:20:39 -0700 (PDT)
+Date:   Mon, 12 Jun 2023 12:20:36 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>, netdev@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH 01/26] phy: qualcomm: fix indentation in Makefile
+Message-ID: <20230612172036.ztvjdzblh6bvmxp2@halaney-x13s>
+References: <20230612092355.87937-1-brgl@bgdev.pl>
+ <20230612092355.87937-2-brgl@bgdev.pl>
 MIME-Version: 1.0
-References: <20230607025718.29636-1-mario.limonciello@amd.com>
-In-Reply-To: <20230607025718.29636-1-mario.limonciello@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 12 Jun 2023 19:17:24 +0200
-Message-ID: <CAJZ5v0gd=1qijdxrz=yF3Tf972XGTesJyto1ezVTXqov9ZOnmQ@mail.gmail.com>
-Subject: Re: [PATCH v3] PCI: Call _REG when transitioning D-states
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230612092355.87937-2-brgl@bgdev.pl>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 7, 2023 at 6:05 PM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
->
-> Section 6.5.4 of the ACPI 6.4 spec describes how AML is unable to access
-> an OperationRegion unless `_REG` has been called.
->
-> "The OS runs _REG control methods to inform AML code of a change in the
-> availability of an operation region. When an operation region handler
-> is unavailable, AML cannot access data fields in that region.
-> (Operation region writes will be ignored and reads will return
-> indeterminate data.)"
->
-> The PCI core does not call `_REG` at anytime, leading to the undefined
-> behavior mentioned in the spec.
->
-> The spec explains that _REG should be executed to indicate whether a
-> given region can be accessed.
->
-> "Once _REG has been executed for a particular operation region, indicating
-> that the operation region handler is ready, a control method can
-> access fields in the operation region. Conversely, control methods
-> must not access fields in operation regions when _REG method execution
-> has not indicated that the operation region handler is ready."
->
-> An example included in the spec demonstrates calling _REG when devices are
-> turned off: "when the host controller or bridge controller is turned off
-> or disabled, PCI Config Space Operation Regions for child devices are
-> no longer available. As such, ETH0’s _REG method will be run when it
-> is turned off and will again be run when PCI1 is turned off.".
->
-> It is reported that ASMedia PCIe GPIO controllers fail functional tests
-> after the system has returning from suspend (S3 or s2idle). This is
-> because the BIOS checks whether the OSPM has called the `_REG` method
-> to determine whether it can interact with the OperationRegion assigned
-> to the device as part of the other AML called for the device.
->
-> To fix this issue, call acpi_evaluate_reg() when devices are
-> transitioning between power states.
->
-> Link: https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/06_Device_Configuration/Device_Configuration.html#reg-region
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+On Mon, Jun 12, 2023 at 11:23:30AM +0200, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> 
+> Align all entries in Makefile.
+> 
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+
+Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
+
 > ---
-> v2->v3:
->  * Move call site
->  * Rename static function to better describe behavior
->  * call _REG with disconnect /before/ going into D3
->  * call _REG with connect /after/ going into D0/D1/D2
->  * Update commit message
-> v1->v2:
->  * Handle case of no CONFIG_ACPI
->  * Rename function
->  * Update commit message
->  * Move ACPI calling code into pci-acpi.c instead
->  * Cite the ACPI spec
-> ---
->  drivers/pci/pci-acpi.c | 42 +++++++++++++++++++++++++++++-------------
->  1 file changed, 29 insertions(+), 13 deletions(-)
->
-> diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
-> index 1698205dd73c..2c80ae4ed362 100644
-> --- a/drivers/pci/pci-acpi.c
-> +++ b/drivers/pci/pci-acpi.c
-> @@ -1043,6 +1043,16 @@ bool acpi_pci_bridge_d3(struct pci_dev *dev)
->         return false;
->  }
->
-> +static void acpi_pci_config_space_access(struct pci_dev *dev, bool enable)
-> +{
-> +       int val = enable ? ACPI_REG_CONNECT : ACPI_REG_DISCONNECT;
-> +       int ret = acpi_evaluate_reg(ACPI_HANDLE(&dev->dev),
-> +                                   ACPI_ADR_SPACE_PCI_CONFIG, val);
-> +       if (ret)
-> +               pci_dbg(dev, "ACPI _REG %s evaluation failed (%d)\n",
-> +                       enable ? "connect" : "disconnect", ret);
-> +}
-> +
->  int acpi_pci_set_power_state(struct pci_dev *dev, pci_power_t state)
->  {
->         struct acpi_device *adev = ACPI_COMPANION(&dev->dev);
-> @@ -1053,32 +1063,38 @@ int acpi_pci_set_power_state(struct pci_dev *dev, pci_power_t state)
->                 [PCI_D3hot] = ACPI_STATE_D3_HOT,
->                 [PCI_D3cold] = ACPI_STATE_D3_COLD,
->         };
-> -       int error = -EINVAL;
-> +       int ret;
->
->         /* If the ACPI device has _EJ0, ignore the device */
->         if (!adev || acpi_has_method(adev->handle, "_EJ0"))
->                 return -ENODEV;
->
->         switch (state) {
-> +       case PCI_POWER_ERROR:
-> +       case PCI_UNKNOWN:
-> +               return -EINVAL;
->         case PCI_D3cold:
->                 if (dev_pm_qos_flags(&dev->dev, PM_QOS_FLAG_NO_POWER_OFF) ==
-> -                               PM_QOS_FLAGS_ALL) {
-> -                       error = -EBUSY;
-> -                       break;
-> -               }
-> +                                    PM_QOS_FLAGS_ALL)
-> +                       return -EBUSY;
->                 fallthrough;
-> -       case PCI_D0:
-> -       case PCI_D1:
-> -       case PCI_D2:
->         case PCI_D3hot:
+>  drivers/phy/qualcomm/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/phy/qualcomm/Makefile b/drivers/phy/qualcomm/Makefile
+> index de3dc9ccf067..5fb33628566b 100644
+> --- a/drivers/phy/qualcomm/Makefile
+> +++ b/drivers/phy/qualcomm/Makefile
+> @@ -20,4 +20,4 @@ obj-$(CONFIG_PHY_QCOM_USB_HSIC) 	+= phy-qcom-usb-hsic.o
+>  obj-$(CONFIG_PHY_QCOM_USB_HS_28NM)	+= phy-qcom-usb-hs-28nm.o
+>  obj-$(CONFIG_PHY_QCOM_USB_SS)		+= phy-qcom-usb-ss.o
+>  obj-$(CONFIG_PHY_QCOM_USB_SNPS_FEMTO_V2)+= phy-qcom-snps-femto-v2.o
+> -obj-$(CONFIG_PHY_QCOM_IPQ806X_USB)		+= phy-qcom-ipq806x-usb.o
+> +obj-$(CONFIG_PHY_QCOM_IPQ806X_USB)	+= phy-qcom-ipq806x-usb.o
+> -- 
+> 2.39.2
+> 
 
-The PCI PM spec (which should be followed by all PCIe devices AFAICS)
-mandates that the config space be available in D3hot as well as in
-D1-2.  I guess this is not the case on the affected systems?
-
-Or is this about the config space of devices below dev, which is a bridge?
-
-> -               error = acpi_device_set_power(adev, state_conv[state]);
-> +               /* Notify AML lack of PCI config space availability */
-> +               acpi_pci_config_space_access(dev, false);
-> +               break;
->         }
->
-> -       if (!error)
-> -               pci_dbg(dev, "power state changed by ACPI to %s\n",
-> -                       acpi_power_state_string(adev->power.state));
-> +       ret = acpi_device_set_power(adev, state_conv[state]);
-> +       if (ret)
-> +               return ret;
-> +       pci_dbg(dev, "power state changed by ACPI to %s\n",
-> +               acpi_power_state_string(adev->power.state));
->
-> -       return error;
-> +       /* Notify AML of PCI config space availability */
-> +       if (state < PCI_D3hot)
-> +               acpi_pci_config_space_access(dev, true);
-
-I would be careful here.
-
-I'm not sure why it is necessary to do this on transitions, say, from
-D0 into D1.
-
-It looks like it would be sufficient to do it only when state == D0.
-
-> +
-> +       return 0;
->  }
->
->  pci_power_t acpi_pci_get_power_state(struct pci_dev *dev)
-> --
