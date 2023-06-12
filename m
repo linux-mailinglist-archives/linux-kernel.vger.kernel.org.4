@@ -2,591 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E3B72C6E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C394172C735
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236914AbjFLOGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 10:06:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49726 "EHLO
+        id S237335AbjFLOOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 10:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236880AbjFLOGH (ORCPT
+        with ESMTP id S237228AbjFLON5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 10:06:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47882A1;
-        Mon, 12 Jun 2023 07:06:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 12 Jun 2023 10:13:57 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E6D10E6;
+        Mon, 12 Jun 2023 07:13:55 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B60916299A;
-        Mon, 12 Jun 2023 14:06:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 846A3C433D2;
-        Mon, 12 Jun 2023 14:06:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686578764;
-        bh=uLqyqxD/9IhBKEZaxugIUrvoO6jx00t64M+mDxwyjAI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=d6CuA0ouuekx/0n3pYEXbEm/dNvT7l8ZpihmKPASY/LvaLV4qeGftT1UtCB/Esfud
-         N7ty5BCguycdFafR8l6pBCovphP89qc5PXOf/KpI1J4UYBuzCXSJtqnjBy0deQWc/v
-         Ni6BgD30Z7fsPwnri2jMW04zOcOeeQvFBtjow3I95HoabEL3XqkGq3HEuQ+/h0L+AP
-         26/QzElOH/JCHMPTT/oTDue2b81z4obe5law3aTUtLUNPEE2uqR3nB+JfRByhA9/P/
-         tHl+zk9YVKvwHRipZQ5hbevCakr8ri7yVYdIBGtKJs4opRyDpPu5j6B87+XhtC7602
-         nrqrvj4oeYmrg==
-Date:   Mon, 12 Jun 2023 23:06:00 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-doc@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
-        William White <chwhite@redhat.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH V3 02/11] rtla: Add --house-keeping option
-Message-Id: <20230612230600.7e009782e8365cd5f1bce444@kernel.org>
-In-Reply-To: <6a6c78a579a96ba8b02ae67ee1e0ba2cb5e03c4a.1686066600.git.bristot@kernel.org>
-References: <cover.1686066600.git.bristot@kernel.org>
-        <6a6c78a579a96ba8b02ae67ee1e0ba2cb5e03c4a.1686066600.git.bristot@kernel.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 72AD420106;
+        Mon, 12 Jun 2023 14:13:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1686579234; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=z7dGpkXmZ1MfbxtagH80qGavP+RHSS66/+CwDajBR0s=;
+        b=YI33JDQ10YAljTnA8Tctm63UXvDy8q7QV4VcwbX+gZXqgDXmENsqzNKdeVOGPwlliJ10WI
+        EN3X/MDkvbED3690RIyC3XHJMacel7AscvvIwG9/Hny83VsY4CrWGWyE3rMK3W4NlI4jSZ
+        f818aW0YUWJ8GTqeQHP+gGQuwKnFHeA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1686579234;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=z7dGpkXmZ1MfbxtagH80qGavP+RHSS66/+CwDajBR0s=;
+        b=UkPvNcz/xVjq0OitTWLLLKr4FMAKi3L9V3wwhZGP60EY0+JsR7NEjWm5AgsmqN15+H3Osz
+        ZhSSspNSd+M9SUDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0D17A1357F;
+        Mon, 12 Jun 2023 14:13:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Mh8cAiIoh2RwGQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 12 Jun 2023 14:13:54 +0000
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+To:     daniel@ffwll.ch, javierm@redhat.com, sam@ravnborg.org,
+        deller@gmx.de, geert+renesas@glider.be, lee@kernel.org,
+        daniel.thompson@linaro.org, jingoohan1@gmail.com,
+        dan.carpenter@linaro.org, michael.j.ruhl@intel.com
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-sh@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH v2 00/38] fbdev: Make userspace interfaces optional
+Date:   Mon, 12 Jun 2023 16:07:38 +0200
+Message-ID: <20230612141352.29939-1-tzimmermann@suse.de>
+X-Mailer: git-send-email 2.41.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  6 Jun 2023 18:12:16 +0200
-Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
+Add the new config option FB_DEVICE. If enabled, fbdev provides
+traditional userspace interfaces in devfs, sysfs and procfs, such
+as /dev/fb0 or /proc/fb.
 
-> To avoid having rtla interfering with the measurement threads, add an
-> option for the user to set the CPUs in which rtla should run. For
-> instance:
-> 
->   # rtla timerlat top -H 0 -C 1-7
+Modern Linux distrobutions have adopted DRM drivers for graphics
+output and use fbdev only for the kernel's framebuffer console.
+Userspace has also moved on, with no new fbdev code being written
+and existing support being removed.
 
-Isn't it '-c 1-7' instead of '-C', because -C is for cgroup name?
+OTOH, fbdev provides userspace a way of accessing kernel or I/O
+memory, which might compromise the system's security. See the recent
+commit c8687694bb1f ("drm/fbdev-generic: prohibit potential
+out-of-bounds access") for an example. Disabling fbdev userspace
+interfaces is therefore a useful feature to limit unnecessary
+exposure of fbdev code to processes of low privilegues.
 
-Thanks,
+Patches 1 to 31 fix various bugs and issues in fbdev-related code.
+In most cases the code uses the fbdev device where it should use
+the Linux hardware device or something else. Most of these patches
+fix existing problems and should therefore be considered in any case.
 
-> 
-> Will place rtla in the CPU 0, while running the measurement threads in
-> the CPU 1-7.
-> 
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
-> Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Suggested-by: Juri Lelli <juri.lelli@redhat.com>
-> Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
-> ---
->  Documentation/tools/rtla/common_options.rst |  4 ++
->  tools/tracing/rtla/src/osnoise_hist.c       | 29 +++++++++--
->  tools/tracing/rtla/src/osnoise_top.c        | 27 +++++++++-
->  tools/tracing/rtla/src/timerlat_hist.c      | 27 +++++++++-
->  tools/tracing/rtla/src/timerlat_top.c       | 27 +++++++++-
->  tools/tracing/rtla/src/utils.c              | 58 +++++++++++++++++++++
->  tools/tracing/rtla/src/utils.h              |  3 ++
->  7 files changed, 166 insertions(+), 9 deletions(-)
-> 
-> diff --git a/Documentation/tools/rtla/common_options.rst b/Documentation/tools/rtla/common_options.rst
-> index ede07359d93c..aeb91ff3bd68 100644
-> --- a/Documentation/tools/rtla/common_options.rst
-> +++ b/Documentation/tools/rtla/common_options.rst
-> @@ -2,6 +2,10 @@
->  
->          Set the osnoise tracer to run the sample threads in the cpu-list.
->  
-> +**-H**, **--house-keeping** *cpu-list*
-> +
-> +        Run rtla control threads only on the given cpu-list.
-> +
->  **-d**, **--duration** *time[s|m|h|d]*
->  
->          Set the duration of the session.
-> diff --git a/tools/tracing/rtla/src/osnoise_hist.c b/tools/tracing/rtla/src/osnoise_hist.c
-> index 076f4c6af3dd..d2b68177ffac 100644
-> --- a/tools/tracing/rtla/src/osnoise_hist.c
-> +++ b/tools/tracing/rtla/src/osnoise_hist.c
-> @@ -3,6 +3,7 @@
->   * Copyright (C) 2021 Red Hat Inc, Daniel Bristot de Oliveira <bristot@kernel.org>
->   */
->  
-> +#define _GNU_SOURCE
->  #include <getopt.h>
->  #include <stdlib.h>
->  #include <string.h>
-> @@ -11,6 +12,7 @@
->  #include <errno.h>
->  #include <stdio.h>
->  #include <time.h>
-> +#include <sched.h>
->  
->  #include "utils.h"
->  #include "osnoise.h"
-> @@ -30,6 +32,8 @@ struct osnoise_hist_params {
->  	int			set_sched;
->  	int			output_divisor;
->  	int			cgroup;
-> +	int			hk_cpus;
-> +	cpu_set_t		hk_cpu_set;
->  	struct sched_attr	sched_param;
->  	struct trace_events	*events;
->  
-> @@ -434,8 +438,8 @@ static void osnoise_hist_usage(char *usage)
->  		"",
->  		"  usage: rtla osnoise hist [-h] [-D] [-d s] [-a us] [-p us] [-r us] [-s us] [-S us] \\",
->  		"	  [-T us] [-t[=file]] [-e sys[:event]] [--filter <filter>] [--trigger <trigger>] \\",
-> -		"	  [-c cpu-list] [-P priority] [-b N] [-E N] [--no-header] [--no-summary] [--no-index] \\",
-> -		"	  [--with-zeros] [-C[=cgroup_name]]",
-> +		"	  [-c cpu-list] [-H cpu-list] [-P priority] [-b N] [-E N] [--no-header] [--no-summary] \\",
-> +		"	  [--no-index] [--with-zeros] [-C[=cgroup_name]]",
->  		"",
->  		"	  -h/--help: print this menu",
->  		"	  -a/--auto: set automatic trace mode, stopping the session if argument in us sample is hit",
-> @@ -445,6 +449,7 @@ static void osnoise_hist_usage(char *usage)
->  		"	  -S/--stop-total us: stop trace if the total sample is higher than the argument in us",
->  		"	  -T/--threshold us: the minimum delta to be considered a noise",
->  		"	  -c/--cpus cpu-list: list of cpus to run osnoise threads",
-> +		"	  -H/--house-keeping cpus: run rtla control threads only on the given cpus",
->  		"	  -C/--cgroup[=cgroup_name]: set cgroup, if no cgroup_name is passed, the rtla's cgroup will be inherited",
->  		"	  -d/--duration time[s|m|h|d]: duration of the session",
->  		"	  -D/--debug: print debug info",
-> @@ -507,6 +512,7 @@ static struct osnoise_hist_params
->  			{"cgroup",		optional_argument,	0, 'C'},
->  			{"debug",		no_argument,		0, 'D'},
->  			{"duration",		required_argument,	0, 'd'},
-> +			{"house-keeping",	required_argument,		0, 'H'},
->  			{"help",		no_argument,		0, 'h'},
->  			{"period",		required_argument,	0, 'p'},
->  			{"priority",		required_argument,	0, 'P'},
-> @@ -528,7 +534,7 @@ static struct osnoise_hist_params
->  		/* getopt_long stores the option index here. */
->  		int option_index = 0;
->  
-> -		c = getopt_long(argc, argv, "a:c:C::b:d:e:E:Dhp:P:r:s:S:t::T:01234:5:",
-> +		c = getopt_long(argc, argv, "a:c:C::b:d:e:E:DhH:p:P:r:s:S:t::T:01234:5:",
->  				 long_options, &option_index);
->  
->  		/* detect the end of the options. */
-> @@ -597,6 +603,14 @@ static struct osnoise_hist_params
->  		case '?':
->  			osnoise_hist_usage(NULL);
->  			break;
-> +		case 'H':
-> +			params->hk_cpus = 1;
-> +			retval = parse_cpu_set(optarg, &params->hk_cpu_set);
-> +			if (retval) {
-> +				err_msg("Error parsing house keeping CPUs\n");
-> +				exit(EXIT_FAILURE);
-> +			}
-> +			break;
->  		case 'p':
->  			params->period = get_llong_from_str(optarg);
->  			if (params->period > 10000000)
-> @@ -732,6 +746,15 @@ osnoise_hist_apply_config(struct osnoise_tool *tool, struct osnoise_hist_params
->  		}
->  	}
->  
-> +	if (params->hk_cpus) {
-> +		retval = sched_setaffinity(getpid(), sizeof(params->hk_cpu_set),
-> +					   &params->hk_cpu_set);
-> +		if (retval == -1) {
-> +			err_msg("Failed to set rtla to the house keeping CPUs\n");
-> +			goto out_err;
-> +		}
-> +	}
-> +
->  	return 0;
->  
->  out_err:
-> diff --git a/tools/tracing/rtla/src/osnoise_top.c b/tools/tracing/rtla/src/osnoise_top.c
-> index 139d8d392540..fcf6c14ce1bc 100644
-> --- a/tools/tracing/rtla/src/osnoise_top.c
-> +++ b/tools/tracing/rtla/src/osnoise_top.c
-> @@ -3,6 +3,7 @@
->   * Copyright (C) 2021 Red Hat Inc, Daniel Bristot de Oliveira <bristot@kernel.org>
->   */
->  
-> +#define _GNU_SOURCE
->  #include <getopt.h>
->  #include <stdlib.h>
->  #include <string.h>
-> @@ -10,6 +11,7 @@
->  #include <unistd.h>
->  #include <stdio.h>
->  #include <time.h>
-> +#include <sched.h>
->  
->  #include "osnoise.h"
->  #include "utils.h"
-> @@ -37,6 +39,8 @@ struct osnoise_top_params {
->  	int			quiet;
->  	int			set_sched;
->  	int			cgroup;
-> +	int			hk_cpus;
-> +	cpu_set_t		hk_cpu_set;
->  	struct sched_attr	sched_param;
->  	struct trace_events	*events;
->  	enum osnoise_mode	mode;
-> @@ -278,7 +282,7 @@ static void osnoise_top_usage(struct osnoise_top_params *params, char *usage)
->  	static const char * const msg[] = {
->  		" [-h] [-q] [-D] [-d s] [-a us] [-p us] [-r us] [-s us] [-S us] \\",
->  		"	  [-T us] [-t[=file]] [-e sys[:event]] [--filter <filter>] [--trigger <trigger>] \\",
-> -		"	  [-c cpu-list] [-P priority] [-C[=cgroup_name]]",
-> +		"	  [-c cpu-list] [-H cpu-list] [-P priority] [-C[=cgroup_name]]",
->  		"",
->  		"	  -h/--help: print this menu",
->  		"	  -a/--auto: set automatic trace mode, stopping the session if argument in us sample is hit",
-> @@ -288,6 +292,7 @@ static void osnoise_top_usage(struct osnoise_top_params *params, char *usage)
->  		"	  -S/--stop-total us: stop trace if the total sample is higher than the argument in us",
->  		"	  -T/--threshold us: the minimum delta to be considered a noise",
->  		"	  -c/--cpus cpu-list: list of cpus to run osnoise threads",
-> +		"	  -H/--house-keeping cpus: run rtla control threads only on the given cpus",
->  		"	  -C/--cgroup[=cgroup_name]: set cgroup, if no cgroup_name is passed, the rtla's cgroup will be inherited",
->  		"	  -d/--duration time[s|m|h|d]: duration of the session",
->  		"	  -D/--debug: print debug info",
-> @@ -354,6 +359,7 @@ struct osnoise_top_params *osnoise_top_parse_args(int argc, char **argv)
->  			{"debug",		no_argument,		0, 'D'},
->  			{"duration",		required_argument,	0, 'd'},
->  			{"event",		required_argument,	0, 'e'},
-> +			{"house-keeping",	required_argument,	0, 'H'},
->  			{"help",		no_argument,		0, 'h'},
->  			{"period",		required_argument,	0, 'p'},
->  			{"priority",		required_argument,	0, 'P'},
-> @@ -371,7 +377,7 @@ struct osnoise_top_params *osnoise_top_parse_args(int argc, char **argv)
->  		/* getopt_long stores the option index here. */
->  		int option_index = 0;
->  
-> -		c = getopt_long(argc, argv, "a:c:C::d:De:hp:P:qr:s:S:t::T:0:1:",
-> +		c = getopt_long(argc, argv, "a:c:C::d:De:hH:p:P:qr:s:S:t::T:0:1:",
->  				 long_options, &option_index);
->  
->  		/* Detect the end of the options. */
-> @@ -430,6 +436,14 @@ struct osnoise_top_params *osnoise_top_parse_args(int argc, char **argv)
->  		case '?':
->  			osnoise_top_usage(params, NULL);
->  			break;
-> +		case 'H':
-> +			params->hk_cpus = 1;
-> +			retval = parse_cpu_set(optarg, &params->hk_cpu_set);
-> +			if (retval) {
-> +				err_msg("Error parsing house keeping CPUs\n");
-> +				exit(EXIT_FAILURE);
-> +			}
-> +			break;
->  		case 'p':
->  			params->period = get_llong_from_str(optarg);
->  			if (params->period > 10000000)
-> @@ -561,6 +575,15 @@ osnoise_top_apply_config(struct osnoise_tool *tool, struct osnoise_top_params *p
->  		}
->  	}
->  
-> +	if (params->hk_cpus) {
-> +		retval = sched_setaffinity(getpid(), sizeof(params->hk_cpu_set),
-> +					   &params->hk_cpu_set);
-> +		if (retval == -1) {
-> +			err_msg("Failed to set rtla to the house keeping CPUs\n");
-> +			goto out_err;
-> +		}
-> +	}
-> +
->  	return 0;
->  
->  out_err:
-> diff --git a/tools/tracing/rtla/src/timerlat_hist.c b/tools/tracing/rtla/src/timerlat_hist.c
-> index 459c159923e8..d48c05d238f9 100644
-> --- a/tools/tracing/rtla/src/timerlat_hist.c
-> +++ b/tools/tracing/rtla/src/timerlat_hist.c
-> @@ -3,6 +3,7 @@
->   * Copyright (C) 2021 Red Hat Inc, Daniel Bristot de Oliveira <bristot@kernel.org>
->   */
->  
-> +#define _GNU_SOURCE
->  #include <getopt.h>
->  #include <stdlib.h>
->  #include <string.h>
-> @@ -10,6 +11,7 @@
->  #include <unistd.h>
->  #include <stdio.h>
->  #include <time.h>
-> +#include <sched.h>
->  
->  #include "utils.h"
->  #include "osnoise.h"
-> @@ -31,6 +33,8 @@ struct timerlat_hist_params {
->  	int			set_sched;
->  	int			dma_latency;
->  	int			cgroup;
-> +	int			hk_cpus;
-> +	cpu_set_t		hk_cpu_set;
->  	struct sched_attr	sched_param;
->  	struct trace_events	*events;
->  	char			no_irq;
-> @@ -432,7 +436,7 @@ static void timerlat_hist_usage(char *usage)
->  	char *msg[] = {
->  		"",
->  		"  usage: [rtla] timerlat hist [-h] [-q] [-d s] [-D] [-n] [-a us] [-p us] [-i us] [-T us] [-s us] \\",
-> -		"         [-t[=file]] [-e sys[:event]] [--filter <filter>] [--trigger <trigger>] [-c cpu-list] \\",
-> +		"         [-t[=file]] [-e sys[:event]] [--filter <filter>] [--trigger <trigger>] [-c cpu-list] [-H cpu-list]\\",
->  		"	  [-P priority] [-E N] [-b N] [--no-irq] [--no-thread] [--no-header] [--no-summary] \\",
->  		"	  [--no-index] [--with-zeros] [--dma-latency us] [-C[=cgroup_name]]",
->  		"",
-> @@ -443,6 +447,7 @@ static void timerlat_hist_usage(char *usage)
->  		"	  -T/--thread us: stop trace if the thread latency is higher than the argument in us",
->  		"	  -s/--stack us: save the stack trace at the IRQ if a thread latency is higher than the argument in us",
->  		"	  -c/--cpus cpus: run the tracer only on the given cpus",
-> +		"	  -H/--house-keeping cpus: run rtla control threads only on the given cpus",
->  		"	  -C/--cgroup[=cgroup_name]: set cgroup, if no cgroup_name is passed, the rtla's cgroup will be inherited",
->  		"	  -d/--duration time[m|h|d]: duration of the session in seconds",
->  		"	  -D/--debug: print debug info",
-> @@ -513,6 +518,7 @@ static struct timerlat_hist_params
->  			{"debug",		no_argument,		0, 'D'},
->  			{"entries",		required_argument,	0, 'E'},
->  			{"duration",		required_argument,	0, 'd'},
-> +			{"house-keeping",	required_argument,	0, 'H'},
->  			{"help",		no_argument,		0, 'h'},
->  			{"irq",			required_argument,	0, 'i'},
->  			{"nano",		no_argument,		0, 'n'},
-> @@ -537,7 +543,7 @@ static struct timerlat_hist_params
->  		/* getopt_long stores the option index here. */
->  		int option_index = 0;
->  
-> -		c = getopt_long(argc, argv, "a:c:C::b:d:e:E:Dhi:np:P:s:t::T:0123456:7:8:",
-> +		c = getopt_long(argc, argv, "a:c:C::b:d:e:E:DhH:i:np:P:s:t::T:0123456:7:8:",
->  				 long_options, &option_index);
->  
->  		/* detect the end of the options. */
-> @@ -608,6 +614,14 @@ static struct timerlat_hist_params
->  		case '?':
->  			timerlat_hist_usage(NULL);
->  			break;
-> +		case 'H':
-> +			params->hk_cpus = 1;
-> +			retval = parse_cpu_set(optarg, &params->hk_cpu_set);
-> +			if (retval) {
-> +				err_msg("Error parsing house keeping CPUs\n");
-> +				exit(EXIT_FAILURE);
-> +			}
-> +			break;
->  		case 'i':
->  			params->stop_us = get_llong_from_str(optarg);
->  			break;
-> @@ -755,6 +769,15 @@ timerlat_hist_apply_config(struct osnoise_tool *tool, struct timerlat_hist_param
->  		}
->  	}
->  
-> +	if (params->hk_cpus) {
-> +		retval = sched_setaffinity(getpid(), sizeof(params->hk_cpu_set),
-> +					   &params->hk_cpu_set);
-> +		if (retval == -1) {
-> +			err_msg("Failed to set rtla to the house keeping CPUs\n");
-> +			goto out_err;
-> +		}
-> +	}
-> +
->  	return 0;
->  
->  out_err:
-> diff --git a/tools/tracing/rtla/src/timerlat_top.c b/tools/tracing/rtla/src/timerlat_top.c
-> index a19cbc2aa1f4..5395d1c5921e 100644
-> --- a/tools/tracing/rtla/src/timerlat_top.c
-> +++ b/tools/tracing/rtla/src/timerlat_top.c
-> @@ -3,6 +3,7 @@
->   * Copyright (C) 2021 Red Hat Inc, Daniel Bristot de Oliveira <bristot@kernel.org>
->   */
->  
-> +#define _GNU_SOURCE
->  #include <getopt.h>
->  #include <stdlib.h>
->  #include <string.h>
-> @@ -11,6 +12,7 @@
->  #include <stdio.h>
->  #include <time.h>
->  #include <errno.h>
-> +#include <sched.h>
->  
->  #include "utils.h"
->  #include "osnoise.h"
-> @@ -37,6 +39,8 @@ struct timerlat_top_params {
->  	int			aa_only;
->  	int			dump_tasks;
->  	int			cgroup;
-> +	int			hk_cpus;
-> +	cpu_set_t		hk_cpu_set;
->  	struct sched_attr	sched_param;
->  	struct trace_events	*events;
->  };
-> @@ -286,7 +290,7 @@ static void timerlat_top_usage(char *usage)
->  	static const char *const msg[] = {
->  		"",
->  		"  usage: rtla timerlat [top] [-h] [-q] [-a us] [-d s] [-D] [-n] [-p us] [-i us] [-T us] [-s us] \\",
-> -		"	  [[-t[=file]] [-e sys[:event]] [--filter <filter>] [--trigger <trigger>] [-c cpu-list] \\",
-> +		"	  [[-t[=file]] [-e sys[:event]] [--filter <filter>] [--trigger <trigger>] [-c cpu-list] [-H cpu-list]\\",
->  		"	  [-P priority] [--dma-latency us] [--aa-only us] [-C[=cgroup_name]]",
->  		"",
->  		"	  -h/--help: print this menu",
-> @@ -297,6 +301,7 @@ static void timerlat_top_usage(char *usage)
->  		"	  -T/--thread us: stop trace if the thread latency is higher than the argument in us",
->  		"	  -s/--stack us: save the stack trace at the IRQ if a thread latency is higher than the argument in us",
->  		"	  -c/--cpus cpus: run the tracer only on the given cpus",
-> +		"	  -H/--house-keeping cpus: run rtla control threads only on the given cpus",
->  		"	  -C/--cgroup[=cgroup_name]: set cgroup, if no cgroup_name is passed, the rtla's cgroup will be inherited",
->  		"	  -d/--duration time[m|h|d]: duration of the session in seconds",
->  		"	  -D/--debug: print debug info",
-> @@ -360,6 +365,7 @@ static struct timerlat_top_params
->  			{"duration",		required_argument,	0, 'd'},
->  			{"event",		required_argument,	0, 'e'},
->  			{"help",		no_argument,		0, 'h'},
-> +			{"house-keeping",	required_argument,	0, 'H'},
->  			{"irq",			required_argument,	0, 'i'},
->  			{"nano",		no_argument,		0, 'n'},
->  			{"period",		required_argument,	0, 'p'},
-> @@ -380,7 +386,7 @@ static struct timerlat_top_params
->  		/* getopt_long stores the option index here. */
->  		int option_index = 0;
->  
-> -		c = getopt_long(argc, argv, "a:c:C::d:De:hi:np:P:qs:t::T:0:1:2:345:",
-> +		c = getopt_long(argc, argv, "a:c:C::d:De:hH:i:np:P:qs:t::T:0:1:2:345:",
->  				 long_options, &option_index);
->  
->  		/* detect the end of the options. */
-> @@ -454,6 +460,14 @@ static struct timerlat_top_params
->  		case '?':
->  			timerlat_top_usage(NULL);
->  			break;
-> +		case 'H':
-> +			params->hk_cpus = 1;
-> +			retval = parse_cpu_set(optarg, &params->hk_cpu_set);
-> +			if (retval) {
-> +				err_msg("Error parsing house keeping CPUs\n");
-> +				exit(EXIT_FAILURE);
-> +			}
-> +			break;
->  		case 'i':
->  			params->stop_us = get_llong_from_str(optarg);
->  			break;
-> @@ -598,6 +612,15 @@ timerlat_top_apply_config(struct osnoise_tool *top, struct timerlat_top_params *
->  		}
->  	}
->  
-> +	if (params->hk_cpus) {
-> +		retval = sched_setaffinity(getpid(), sizeof(params->hk_cpu_set),
-> +					   &params->hk_cpu_set);
-> +		if (retval == -1) {
-> +			err_msg("Failed to set rtla to the house keeping CPUs\n");
-> +			goto out_err;
-> +		}
-> +	}
-> +
->  	return 0;
->  
->  out_err:
-> diff --git a/tools/tracing/rtla/src/utils.c b/tools/tracing/rtla/src/utils.c
-> index bcc0a9f39cfe..ee6fab09acae 100644
-> --- a/tools/tracing/rtla/src/utils.c
-> +++ b/tools/tracing/rtla/src/utils.c
-> @@ -3,6 +3,7 @@
->   * Copyright (C) 2021 Red Hat Inc, Daniel Bristot de Oliveira <bristot@kernel.org>
->   */
->  
-> +#define _GNU_SOURCE
->  #include <dirent.h>
->  #include <stdarg.h>
->  #include <stdlib.h>
-> @@ -150,6 +151,63 @@ int parse_cpu_list(char *cpu_list, char **monitored_cpus)
->  	return 1;
->  }
->  
-> +/*
-> + * parse_cpu_set - parse a cpu_list filling cpu_set_t argument
-> + *
-> + * Receives a cpu list, like 1-3,5 (cpus 1, 2, 3, 5), and then set
-> + * filling cpu_set_t argument.
-> + *
-> + * Returns 1 on success, 0 otherwise.
-> + */
-> +int parse_cpu_set(char *cpu_list, cpu_set_t *set)
-> +{
-> +	const char *p;
-> +	int end_cpu;
-> +	int nr_cpus;
-> +	int cpu;
-> +	int i;
-> +
-> +	CPU_ZERO(set);
-> +
-> +	nr_cpus = sysconf(_SC_NPROCESSORS_CONF);
-> +
-> +	for (p = cpu_list; *p; ) {
-> +		cpu = atoi(p);
-> +		if (cpu < 0 || (!cpu && *p != '0') || cpu >= nr_cpus)
-> +			goto err;
-> +
-> +		while (isdigit(*p))
-> +			p++;
-> +		if (*p == '-') {
-> +			p++;
-> +			end_cpu = atoi(p);
-> +			if (end_cpu < cpu || (!end_cpu && *p != '0') || end_cpu >= nr_cpus)
-> +				goto err;
-> +			while (isdigit(*p))
-> +				p++;
-> +		} else
-> +			end_cpu = cpu;
-> +
-> +		if (cpu == end_cpu) {
-> +			debug_msg("cpu_set: adding cpu %d\n", cpu);
-> +			CPU_SET(cpu, set);
-> +		} else {
-> +			for (i = cpu; i <= end_cpu; i++) {
-> +				debug_msg("cpu_set: adding cpu %d\n", i);
-> +				CPU_SET(i, set);
-> +			}
-> +		}
-> +
-> +		if (*p == ',')
-> +			p++;
-> +	}
-> +
-> +	return 0;
-> +err:
-> +	debug_msg("Error parsing the cpu set %s\n", cpu_list);
-> +	return 1;
-> +}
-> +
->  /*
->   * parse_duration - parse duration with s/m/h/d suffix converting it to seconds
->   */
-> diff --git a/tools/tracing/rtla/src/utils.h b/tools/tracing/rtla/src/utils.h
-> index 42b6f099d10a..9ab2f0d7bc1c 100644
-> --- a/tools/tracing/rtla/src/utils.h
-> +++ b/tools/tracing/rtla/src/utils.h
-> @@ -1,6 +1,8 @@
->  // SPDX-License-Identifier: GPL-2.0
-> +
->  #include <stdint.h>
->  #include <time.h>
-> +#include <sched.h>
->  
->  /*
->   * '18446744073709551615\0'
-> @@ -54,6 +56,7 @@ struct sched_attr {
->  };
->  
->  int parse_prio(char *arg, struct sched_attr *sched_param);
-> +int parse_cpu_set(char *cpu_list, cpu_set_t *set);
->  int set_comm_sched_attr(const char *comm_prefix, struct sched_attr *attr);
->  int set_comm_cgroup(const char *comm_prefix, const char *cgroup);
->  int set_cpu_dma_latency(int32_t latency);
-> -- 
-> 2.38.1
-> 
+Patches 32 to 37 refactor the fbdev core code. The patches move
+support for backlights, sysfs, procfs and devfs into separate files
+and hide it behind simple interfaces. These changes will allow to
+easily build the userspace support conditionally.
+
+Patch 38 introduces the config option FB_DEVICE and adapts the fbdev
+core to support it. The field struct fb_info.dev is now optional,
+hence the name of the config option.
+
+Tested on simpledrm and i915, including the device handover.
+
+Future directions: With the support for disabling fbdev userspace
+interfaces in place, it will be possible to make most fbdev drivers'
+file-I/O code in struct fb_ops optional as well. 
+
+v2:
+	* fix fsl-diu-fb and sh7760fb
+	* split backlight patches
+	* set 'default y' for FB_CONFIG
+	* minor fixes and corrections
+
+Thomas Zimmermann (38):
+  backlight/bd6107: Compare against struct fb_info.device
+  backlight/bd6107: Rename struct bd6107_platform_data.fbdev to 'dev'
+  backlight/gpio_backlight: Compare against struct fb_info.device
+  backlight/gpio_backlight: Rename field 'fbdev' to 'dev'
+  backlight/lv5207lp: Compare against struct fb_info.device
+  backlight/lv5207lp: Rename struct lv5207lp_platform_data.fbdev to
+    'dev'
+  fbdev/atyfb: Reorder backlight and framebuffer init/cleanup
+  fbdev/atyfb: Use hardware device as backlight parent
+  fbdev/aty128fb: Reorder backlight and framebuffer init/cleanup
+  fbdev/aty128fb: Use hardware device as backlight parent
+  fbdev/broadsheetfb: Call device_remove_file() with hardware device
+  fbdev/ep93xx-fb: Alloc DMA memory from hardware device
+  fbdev/ep93xx-fb: Output messages with fb_info() and fb_err()
+  fbdev/ep93xx-fb: Do not assign to struct fb_info.dev
+  fbdev/fsl-diu-fb: Output messages with fb_*() helpers
+  fbdev/mb862xxfb: Output messages with fb_dbg()
+  fbdev/metronomefb: Use hardware device for dev_err()
+  fbdev/nvidiafb: Reorder backlight and framebuffer init/cleanup
+  fbdev/nvidiafb: Use hardware device as backlight parent
+  fbdev/pxa168fb: Do not assign to struct fb_info.dev
+  fbdev/radeonfb: Reorder backlight and framebuffer cleanup
+  fbdev/radeonfb: Use hardware device as backlight parent
+  fbdev/rivafb: Reorder backlight and framebuffer init/cleanup
+  fbdev/rivafb: Use hardware device as backlight parent
+  fbdev/sh7760fb: Use fb_dbg() in sh7760fb_get_color_info()
+  fbdev/sh7760fb: Output messages with fb_dbg()
+  fbdev/sh7760fb: Alloc DMA memory from hardware device
+  fbdev/sh7760fb: Use hardware device with dev_() output during probe
+  fbdev/sm501fb: Output message with fb_err()
+  fbdev/smscufx: Detect registered fb_info from refcount
+  fbdev/tdfxfb: Set i2c adapter parent to hardware device
+  fbdev/core: Pass Linux device to pm_vt_switch_*() functions
+  fbdev/core: Move framebuffer and backlight helpers into separate files
+  fbdev/core: Add fb_device_{create,destroy}()
+  fbdev/core: Move procfs code to separate file
+  fbdev/core: Move file-I/O code into separate file
+  fbdev/core: Rework fb init code
+  fbdev: Make support for userspace interfaces configurable
+
+ Documentation/gpu/todo.rst                   |  13 +
+ arch/sh/boards/mach-ecovec24/setup.c         |   2 +-
+ arch/sh/boards/mach-kfr2r09/setup.c          |   2 +-
+ drivers/staging/fbtft/Kconfig                |   1 +
+ drivers/video/backlight/bd6107.c             |   2 +-
+ drivers/video/backlight/gpio_backlight.c     |   6 +-
+ drivers/video/backlight/lv5207lp.c           |   2 +-
+ drivers/video/fbdev/Kconfig                  |  13 +
+ drivers/video/fbdev/aty/aty128fb.c           |  12 +-
+ drivers/video/fbdev/aty/atyfb_base.c         |  18 +-
+ drivers/video/fbdev/aty/radeon_backlight.c   |   2 +-
+ drivers/video/fbdev/aty/radeon_base.c        |   3 +-
+ drivers/video/fbdev/broadsheetfb.c           |   2 +-
+ drivers/video/fbdev/core/Makefile            |   7 +-
+ drivers/video/fbdev/core/fb_backlight.c      |  33 ++
+ drivers/video/fbdev/core/fb_info.c           |  78 +++
+ drivers/video/fbdev/core/fb_internal.h       |  67 +++
+ drivers/video/fbdev/core/fb_procfs.c         |  62 ++
+ drivers/video/fbdev/core/fbcon.c             |   1 +
+ drivers/video/fbdev/core/fbmem.c             | 592 +------------------
+ drivers/video/fbdev/core/fbsysfs.c           | 134 +----
+ drivers/video/fbdev/ep93xx-fb.c              |  21 +-
+ drivers/video/fbdev/fsl-diu-fb.c             |  26 +-
+ drivers/video/fbdev/mb862xx/mb862xxfbdrv.c   |   9 +-
+ drivers/video/fbdev/metronomefb.c            |   2 +-
+ drivers/video/fbdev/nvidia/nv_backlight.c    |   2 +-
+ drivers/video/fbdev/nvidia/nvidia.c          |   8 +-
+ drivers/video/fbdev/omap2/omapfb/Kconfig     |   2 +-
+ drivers/video/fbdev/pxa168fb.c               |   2 +-
+ drivers/video/fbdev/riva/fbdev.c             |  10 +-
+ drivers/video/fbdev/sh7760fb.c               |  50 +-
+ drivers/video/fbdev/sm501fb.c                |   2 +-
+ drivers/video/fbdev/smscufx.c                |   4 +-
+ drivers/video/fbdev/tdfxfb.c                 |   4 +-
+ include/linux/fb.h                           |   6 +-
+ include/linux/platform_data/bd6107.h         |   2 +-
+ include/linux/platform_data/gpio_backlight.h |   2 +-
+ include/linux/platform_data/lv5207lp.h       |   2 +-
+ 38 files changed, 437 insertions(+), 769 deletions(-)
+ create mode 100644 drivers/video/fbdev/core/fb_backlight.c
+ create mode 100644 drivers/video/fbdev/core/fb_info.c
+ create mode 100644 drivers/video/fbdev/core/fb_internal.h
+ create mode 100644 drivers/video/fbdev/core/fb_procfs.c
 
 
+base-commit: 63a468ec7c7652afa80e3fa6ad203f9e64d04e83
+prerequisite-patch-id: 0aa359f6144c4015c140c8a6750be19099c676fb
+prerequisite-patch-id: c67e5d886a47b7d0266d81100837557fda34cb24
+prerequisite-patch-id: cbc453ee02fae02af22fbfdce56ab732c7a88c36
+prerequisite-patch-id: 7c401614cf55c033f742bced317575b9f5b77bb1
+prerequisite-patch-id: d3145eae4b35a1290199af6ff6cd5abfebc82033
+prerequisite-patch-id: 242b6bc45675f1f1a62572542d75c89d4864f15a
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.41.0
+
