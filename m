@@ -2,165 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E826772C8FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:53:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D8DD72C8AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238137AbjFLOxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 10:53:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59338 "EHLO
+        id S236758AbjFLOfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 10:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjFLOxj (ORCPT
+        with ESMTP id S235319AbjFLOfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 10:53:39 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 89FFFC5
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 07:53:37 -0700 (PDT)
-Received: (qmail 394521 invoked by uid 1000); 12 Jun 2023 10:33:35 -0400
-Date:   Mon, 12 Jun 2023 10:33:35 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Damien Le Moal <dlemoal@kernel.org>
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Joe Breuer <linux-kernel@jmbreuer.net>,
-        Linux Power Management <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Hardening <linux-hardening@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux SCSI <linux-scsi@vger.kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>
-Subject: Re: Fwd: Waking up from resume locks up on sr device
-Message-ID: <1bc3eff1-6f86-4546-9360-19b6d0236bc4@rowland.harvard.edu>
-References: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
- <5513e29d-955a-f795-21d6-ec02a2e2e128@gmail.com>
- <ZIQ6bkau3j6qGef8@duo.ucw.cz>
- <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com>
- <02e4f87a-80e8-dc5d-0d6e-46939f2c74ac@acm.org>
- <4005a768-9e45-0707-509d-98ce0d2769bd@kernel.org>
- <0505654c-e487-6b91-57cf-fa7996f5c738@suse.de>
- <6957a93c-b933-9b08-2f9f-901c4782cd40@kernel.org>
- <CAAd53p5CsAAX5G1J2WH5N5JT5dZB_BD2AW8WL-S=pHZtGXr1sw@mail.gmail.com>
- <433015f6-9ca6-e4ce-e070-a75378419564@kernel.org>
+        Mon, 12 Jun 2023 10:35:46 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D920BAA;
+        Mon, 12 Jun 2023 07:35:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686580536; x=1718116536;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UV/2h6fqgbTSA+6nmz5EI6zXiJFLRye4hW68DS9EZqo=;
+  b=HpbqCkok+pVDmwG7yB5/WvZDlqCwd/MyZibYrkmRhczsDhEde1vXxPHR
+   fYmZbUmNAtQTJrBLZBbAqq/TrpOsa1iQewreRjw4mT05tLiaqHLJthAG5
+   blNWWMYn3YEqaVcQFtXaHz4NQMDz4/+sOb+mBeJ/nIvGMH8bCBDn672xs
+   MjD9FEzpzPp9VE2NsQ4if40msT/AnWDz1sUnf6Kivys/RFRRIeyJ6jsx0
+   iudTq3t/aUDbdyzfO3aB5Jfdv2Ru1BNmUvfEKdFvURaqC6y6tSn7qJUDF
+   Cw1Paqv2SWAoBzjcSGtP6pIdGWIliT3eWfH33+5LU3K62yBkyLHzqg+U1
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="338419480"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="338419480"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 07:34:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="711224041"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="711224041"
+Received: from smizr3x-mobl3.ger.corp.intel.com (HELO box.shutemov.name) ([10.249.43.127])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 07:33:58 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 3E33710CE1A; Mon, 12 Jun 2023 17:33:55 +0300 (+03)
+Date:   Mon, 12 Jun 2023 17:33:55 +0300
+From:   "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+Subject: Re: [PATCH v11 11/20] x86/virt/tdx: Fill out TDMRs to cover all TDX
+ memory regions
+Message-ID: <20230612143355.sur7zc7byu7omxal@box.shutemov.name>
+References: <cover.1685887183.git.kai.huang@intel.com>
+ <927ec9871721d2a50f1aba7d1cf7c3be50e4f49b.1685887183.git.kai.huang@intel.com>
+ <0600959d-9e10-fb1f-b3a9-862a51b9d8e1@intel.com>
+ <ddbcadf36016bb60a695f54b28f5c9e9af53a07f.camel@intel.com>
+ <201af662-f700-9145-c113-563e378074ad@intel.com>
+ <89c99e7360dc2acfe5fb56c2bbb40e074e1f94d5.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <433015f6-9ca6-e4ce-e070-a75378419564@kernel.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <89c99e7360dc2acfe5fb56c2bbb40e074e1f94d5.camel@intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 04:47:09PM +0900, Damien Le Moal wrote:
-> On 6/12/23 16:36, Kai-Heng Feng wrote:
-> > On Mon, Jun 12, 2023 at 3:22 PM Damien Le Moal <dlemoal@kernel.org> wrote:
-> >>
-> >> On 6/12/23 15:09, Hannes Reinecke wrote:
-> >>> On 6/12/23 05:09, Damien Le Moal wrote:
-> >>>> On 6/11/23 00:03, Bart Van Assche wrote:
-> >>>>> On 6/10/23 06:27, Bagas Sanjaya wrote:
-> >>>>>> On 6/10/23 15:55, Pavel Machek wrote:
-> >>>>>>>>> #regzbot introduced: v5.0..v6.4-rc5 https://bugzilla.kernel.org/show_bug.cgi?id=217530
-> >>>>>>>>> #regzbot title: Waking up from resume locks up on SCSI CD/DVD drive
-> >>>>>>>>>
-> >>>>>>>> The reporter had found the culprit (via bisection), so:
-> >>>>>>>>
-> >>>>>>>> #regzbot introduced: a19a93e4c6a98c
-> >>>>>>> Maybe cc the authors of that commit?
-> >>>>>>
-> >>>>>> Ah! I forgot to do that! Thanks anyway.
-> >>>>>
-> >>>>> Hi Damien,
-> >>>>>
-> >>>>> Why does the ATA code call scsi_rescan_device() before system resume has
-> >>>>> finished? Would ATA devices still work with the patch below applied?
-> >>>>
-> >>>> I do not know the PM code well at all, need to dig into it. But your patch
-> >>>> worries me as it seems it would prevent rescan of the device on a resume, which
-> >>>> can be an issue if the device has changed.
-> >>>>
-> >>>> I am not yet 100% clear on the root cause for this, but I think it comes from
-> >>>> the fact that ata_port_pm_resume() runs before the sci device resume is done, so
-> >>>> with scsi_dev->power.is_suspended still true. And ata_port_pm_resume() calls
-> >>>> ata_port_resume_async() which triggers EH (which will do reset + rescan)
-> >>>> asynchronously. So it looks like we have scsi device resume and libata EH for
-> >>>> rescan fighting each others for the scan mutex and device lock, leading to deadlock.
-> >>>>
-> >>>> Trying to recreate this issue now to confirm and debug further. But I suspect
-> >>>> the solution to this may be best implemented in libata, not in scsi.
-> >>>> This looks definitely related to this thread:
-> >>>>
-> >>>> https://lore.kernel.org/linux-scsi/7b553268-69d3-913a-f9de-28f8d45bdb1e@acm.org/
-> >>>>
-> >>>> Similaraly to your comment on that thread, having to look at
-> >>>> dev->power.is_suspended is not ideal I think. What we need is to have ata and
-> >>>> scsi pm resume be synchronized, but I am not yet 100% clear on the scsi layer side.
-> >>>>
-> >>> Which is my feeling, too.
-> >>> libata runs rescan as part of the device discovery, so really it will
-> >>> run after resume. And consequently resume really cannot wait for rescan
-> >>> to finish.
-> >>>
-> >>> What I would be looking at is to decouple resume from libata device
-> >>> rescan, and have resume to complete before libata EH runs.
-> >>
-> >> That is the case now, for the ata port at least, even though that is not super
-> >> explicit, and not reliable. See ata_port_pm_resume(): I think that the call to
-> >> EH in ata_port_pm_resume() -> ata_port_resume_async() -> ata_port_request_pm()
-> >> -> ata_port_schedule_eh() should instead use a sync resume, leading to a sync EH
-> >> call.
-> >>
-> >> That EH execution essentially does ata_eh_handle_port_resume(), which calls into
-> >> the adapter resume operation. That in itself does not do much beside some
-> >> registers accesses to wakeup the port. There should be no issues doing that
-> >> synchronously.
-> >>
-> >> The problem is that after that is done, ata EH calls ata_std_error_handler() ->
-> >> ata_do_eh() -> ata_eh_recover() -> ata_eh_revalidate_and_attach() ->
-> >> schedule_work(&(ap->scsi_rescan_task)). And the rescan work calls
-> >> scsi_rescan_device() (yet in another context than EH) which causes the problem
-> >> when the scsi disk device has not been resumed yet (dev->power_is_suspended
-> >> still true).
-> >>
-> >> So it really looks like the solution should be to have ata_scsi_dev_rescan()
-> >> wait for the scsi device to resume first, but not sure how to do that with the
-> >> pm API. Digging...
-> > 
-> > Probably use dpm_wait_for_children()? Right now it's an internal PM API.
+On Mon, Jun 12, 2023 at 02:33:58AM +0000, Huang, Kai wrote:
 > 
-> But I am not sure if there is a relationship between ata_device and its
-> scsi_device (dev->sdev)... Need to clarify that.
 > > 
-> > Rafael,
-> > What do you think?
+> > Maybe not even a pr_warn(), but something that's a bit ominous and has a
+> > chance of getting users to act.
+> 
+> Sorry I am not sure how to do.  Could you give some suggestion?
 
-Look into the device_pm_wait_for_dev() API.  It's the appropriate thing 
-to use when you want to wait for another device to complete a system PM 
-transition.  (However, it's not appropriate for runtime PM.)
+Maybe something like this would do?
 
-Of course, if there is a parent-child relationship between two devices 
-then waiting is never necessary.  The PM core guarantees that a parent 
-will always be at full power when a child changes its power state, 
-unless pm_suspend_ignore_children() has been called for the parent 
-device.
+I'm struggle with the warning message. Any suggestion is welcome.
 
-Alan Stern
+diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
+index 9cd4f6b58d4a..cc141025b249 100644
+--- a/arch/x86/virt/vmx/tdx/tdx.c
++++ b/arch/x86/virt/vmx/tdx/tdx.c
+@@ -627,6 +627,15 @@ static int fill_out_tdmrs(struct list_head *tmb_list,
+ 	/* @tdmr_idx is always the index of last valid TDMR. */
+ 	tdmr_list->nr_consumed_tdmrs = tdmr_idx + 1;
+ 
++	/*
++	 * Warn early that kernel is about to run out of TDMRs.
++	 *
++	 * This is indication that TDMR allocation has to be reworked to be
++	 * smarter to not run into an issue.
++	 */
++	if (tdmr_list->max_tdmrs - tdmr_list->nr_consumed_tdmrs < TDMR_NR_WARN)
++		pr_warn("Low number of spare TDMRs\n");
++
+ 	return 0;
+ }
+ 
+diff --git a/arch/x86/virt/vmx/tdx/tdx.h b/arch/x86/virt/vmx/tdx/tdx.h
+index 323ce744b853..17efe33847ae 100644
+--- a/arch/x86/virt/vmx/tdx/tdx.h
++++ b/arch/x86/virt/vmx/tdx/tdx.h
+@@ -98,6 +98,9 @@ struct tdx_memblock {
+ 	int nid;
+ };
+ 
++/* Warn if kernel has less than TDMR_NR_WARN TDMRs after allocation */
++#define TDMR_NR_WARN 4
++
+ struct tdmr_info_list {
+ 	void *tdmrs;	/* Flexible array to hold 'tdmr_info's */
+ 	int nr_consumed_tdmrs;	/* How many 'tdmr_info's are in use */
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
