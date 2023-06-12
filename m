@@ -2,77 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 922EF72BC4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:28:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 530A172BC63
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234552AbjFLJ2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 05:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44574 "EHLO
+        id S232730AbjFLJ3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 05:29:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234600AbjFLJ10 (ORCPT
+        with ESMTP id S232267AbjFLJ2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 05:27:26 -0400
+        Mon, 12 Jun 2023 05:28:34 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732F43C1B
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:21:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBDE749E1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:22:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686561693;
+        s=mimecast20190719; t=1686561727;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hnu3/QPSGt0lKd7FefZ8+rPfK1k++XFGKwyXW2/fFXY=;
-        b=OWD1HHyWObeOouyX8eBjVY7XDOByvtQAwtgfHG66WFU2QgQM9nm9lZwfULZ6EQ73e3AsYQ
-        E/3dCIdXoRoRL40gAp3d5L6l8Hx+Kl/6iZvReTdjoNKCtiMDDk2g5El2cJl+2mjIz8cfVH
-        np1ZcrsSgidYuGhcylBBJohCMRJ34zw=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=jmiYL5ekUeYsbYDrWaIYmx1UrfmarTSRZzI2A2Eq1R4=;
+        b=U1KPCiolCD/ZJ9XsuFwFN3uisY8a1Pbw7L091tl9HocvxfKXuZqoHI7Wm8wxMjUBQpLDP5
+        RArq8JtEIyGD1KDYSPONjhDGsv/Or/nrqyspI/ppTNATT3n6xcX7qbD05iRIrhHU+HLPLt
+        DKlSkfijP0fgL2N5ovMfkZhbcC3qau8=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-451-aapA-waqNiSFZCEP9CtWqg-1; Mon, 12 Jun 2023 05:21:27 -0400
-X-MC-Unique: aapA-waqNiSFZCEP9CtWqg-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f7ecfccf2eso17440435e9.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:21:26 -0700 (PDT)
+ us-mta-467-weMTkgLzMS6YjZD8Fl7U5Q-1; Mon, 12 Jun 2023 05:22:05 -0400
+X-MC-Unique: weMTkgLzMS6YjZD8Fl7U5Q-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f7e835ce65so17402135e9.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:22:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686561686; x=1689153686;
+        d=1e100.net; s=20221208; t=1686561724; x=1689153724;
         h=content-transfer-encoding:in-reply-to:organization:from:references
          :cc:to:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hnu3/QPSGt0lKd7FefZ8+rPfK1k++XFGKwyXW2/fFXY=;
-        b=XApdZ7VyXw+0Ivc1gy3+O/tenjZGl4LV2iQIC8nHLyl0SIwLyYhJ7gou+yrr4v1IIQ
-         YdDe56uRDNFVcKo8iO50xfYJvj0FK882QW8TdssiFcg8KRuiLmxFWg8Eaukyx0oKmIk8
-         I4YVWpOYzm2LmF0jsyoKUi5NktuUc4rBCY9vhJ//AeIodBOaOLT3IBX+4jWhiI3TXKkq
-         DrPgSv+exRBSJaHQyOJr8u+qN8AZ2nKvVp9eqz2m9rzhXnGxttW9ZAKD5hPEM2sXLyfJ
-         KV7MbRYBnBjJyRfT49ncv28sLzxQYSgY2yvvrHtYnUd7FNdFWJr250WuiAd37OfvOr1X
-         AdFQ==
-X-Gm-Message-State: AC+VfDy8RLxYSh4kT37O6d9vGg9RxDMckEQpx4yHWIHaQcfc1UPg/H3f
-        6XDJgIfpE2atCPa38p4FP7CcAqll6pdo6/Z49FBWJ2JVDZqC6jIP+utNvgXwpC7eFv9jgfd5m34
-        Ou0EEs3wkmKu8Se2xZ5DC0z/k
-X-Received: by 2002:a7b:cb9a:0:b0:3f7:38e2:d87a with SMTP id m26-20020a7bcb9a000000b003f738e2d87amr5754229wmi.37.1686561685954;
-        Mon, 12 Jun 2023 02:21:25 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ78K8Ar/PLApSM4ycn+pKomHOo10eegYWWatJnTfNr/yJHP6s5qeBwxqrUaw1tO9E2QWCJuQg==
-X-Received: by 2002:a7b:cb9a:0:b0:3f7:38e2:d87a with SMTP id m26-20020a7bcb9a000000b003f738e2d87amr5754216wmi.37.1686561685579;
-        Mon, 12 Jun 2023 02:21:25 -0700 (PDT)
+        bh=jmiYL5ekUeYsbYDrWaIYmx1UrfmarTSRZzI2A2Eq1R4=;
+        b=W9D+N0Pu7/Qb34SXrv/AquWdvSj0OIgrM//lvkHPRn6A0eBgIJqWWdPwWMf28RTUoN
+         x2WDAEnHbeTfJsIbpVTbp45lJ0Jr6VehxR0uWXNjgYp9UWtMDZIhbEbh+K6fUX4BVJen
+         Dm3snHIfGFFnl2ftAmPD/6vFQdRNKPl6vwEadP04IyKVk3fo+kGQ4D/DMs7wtEHuxuud
+         lRiueIwdb6TzeSTLNBtdRj8uOu3ZxCojiCQaaBIHs4lNGhTaEgIfOU/m30ukV9iWC+ys
+         LpgRMCOCUK0ZNXzLQkMhUxQxKwEBQkSMp6IxHXEGDgt7t2U2sJ7i2XU/zICo/QFNyMjU
+         aBoA==
+X-Gm-Message-State: AC+VfDyZbfbvCiIUx+Bt3pJHLs0xCjB6Yf5jS2kkbWyXo8LiJwHnnZib
+        d+2ndfHv9UDX4XhgaadZmHNXbGaRRtoN1XALDkGqf0CK/k0+75RineEdA5Mav3iWsIbiVV2dqkP
+        KFz8sU8a0xvdSITvTUFP5ZqXL
+X-Received: by 2002:adf:f84e:0:b0:30a:e66d:25b7 with SMTP id d14-20020adff84e000000b0030ae66d25b7mr3699347wrq.13.1686561724450;
+        Mon, 12 Jun 2023 02:22:04 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4aSaKMrUoLClL2yCKclHi5IHBVSe5TPx0z3eq3RsU4ebM4GMlPhs7avKHXJFSTqWa8aRrulg==
+X-Received: by 2002:adf:f84e:0:b0:30a:e66d:25b7 with SMTP id d14-20020adff84e000000b0030ae66d25b7mr3699326wrq.13.1686561724064;
+        Mon, 12 Jun 2023 02:22:04 -0700 (PDT)
 Received: from ?IPV6:2003:cb:c74e:1600:4f67:25b2:3e8c:2a4e? (p200300cbc74e16004f6725b23e8c2a4e.dip0.t-ipconnect.de. [2003:cb:c74e:1600:4f67:25b2:3e8c:2a4e])
-        by smtp.gmail.com with ESMTPSA id o11-20020a05600c058b00b003f8146ac7f7sm5522622wmd.28.2023.06.12.02.21.24
+        by smtp.gmail.com with ESMTPSA id c1-20020a5d5281000000b0030aded83385sm11909047wrv.27.2023.06.12.02.22.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 02:21:25 -0700 (PDT)
-Message-ID: <d63da17e-78cf-22ec-a134-a2a2b4bf52e4@redhat.com>
-Date:   Mon, 12 Jun 2023 11:21:24 +0200
+        Mon, 12 Jun 2023 02:22:03 -0700 (PDT)
+Message-ID: <7e2144b1-23f3-68ec-b4b1-f4ed9025b476@redhat.com>
+Date:   Mon, 12 Jun 2023 11:22:02 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH] scripts: fix the gfp flags header path in gfp-translate
+Subject: Re: [PATCH v2] mm/vmalloc: Replace the ternary conditional operator
+ with min()
 Content-Language: en-US
-To:     Prathu Baronia <prathubaronia2011@gmail.com>,
-        akpm@linux-foundation.org, masahiroy@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, nathan@kernel.org, ndesaulniers@google.com,
-        nicolas@fjasle.eu
-References: <20230608154450.21758-1-prathubaronia2011@gmail.com>
+To:     Lu Hongfei <luhongfei@vivo.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        "open list:VMALLOC" <linux-mm@kvack.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     opensource.kernel@vivo.com
+References: <20230609092602.26412-1-luhongfei@vivo.com>
 From:   David Hildenbrand <david@redhat.com>
 Organization: Red Hat
-In-Reply-To: <20230608154450.21758-1-prathubaronia2011@gmail.com>
+In-Reply-To: <20230609092602.26412-1-luhongfei@vivo.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -85,38 +89,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08.06.23 17:44, Prathu Baronia wrote:
-> Since gfp flags have been shifted to gfp_types.h so update the path in
-> the gfp-translate script.
+On 09.06.23 11:26, Lu Hongfei wrote:
+> It would be better to replace the traditional ternary conditional
+> operator with min() in zero_iter
 > 
-> Signed-off-by: Prathu Baronia <prathubaronia2011@gmail.com>
+> Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
+> Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
 > ---
->   scripts/gfp-translate | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
+>   mm/vmalloc.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/scripts/gfp-translate b/scripts/gfp-translate
-> index b2ce416d944b..6c9aed17cf56 100755
-> --- a/scripts/gfp-translate
-> +++ b/scripts/gfp-translate
-> @@ -63,11 +63,11 @@ fi
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index 29077d61ff81..6125ed506895
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -3571,7 +3571,7 @@ static size_t zero_iter(struct iov_iter *iter, size_t count)
+>   	while (remains > 0) {
+>   		size_t num, copied;
 >   
->   # Extract GFP flags from the kernel source
->   TMPFILE=`mktemp -t gfptranslate-XXXXXX` || exit 1
-> -grep -q ___GFP $SOURCE/include/linux/gfp.h
-> +grep -q ___GFP $SOURCE/include/linux/gfp_types.h
->   if [ $? -eq 0 ]; then
-> -	grep "^#define ___GFP" $SOURCE/include/linux/gfp.h | sed -e 's/u$//' | grep -v GFP_BITS > $TMPFILE
-> +	grep "^#define ___GFP" $SOURCE/include/linux/gfp_types.h | sed -e 's/u$//' | grep -v GFP_BITS > $TMPFILE
->   else
-> -	grep "^#define __GFP" $SOURCE/include/linux/gfp.h | sed -e 's/(__force gfp_t)//' | sed -e 's/u)/)/' | grep -v GFP_BITS | sed -e 's/)\//) \//' > $TMPFILE
-> +	grep "^#define __GFP" $SOURCE/include/linux/gfp_types.h | sed -e 's/(__force gfp_t)//' | sed -e 's/u)/)/' | grep -v GFP_BITS | sed -e 's/)\//) \//' > $TMPFILE
->   fi
+> -		num = remains < PAGE_SIZE ? remains : PAGE_SIZE;
+> +		num = min_t(size_t, remains, PAGE_SIZE);
+>   		copied = copy_page_to_iter_nofault(ZERO_PAGE(0), 0, num, iter);
+>   		remains -= copied;
 >   
->   # Parse the flags
-> 
-> base-commit: 44c026a73be8038f03dbdeef028b642880cf1511
-
-Yes, works for me then
 
 Reviewed-by: David Hildenbrand <david@redhat.com>
 
