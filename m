@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D86272B5D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 05:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D287B72B5D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 05:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234496AbjFLDPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 23:15:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49708 "EHLO
+        id S234425AbjFLDPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 23:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234651AbjFLDPB (ORCPT
+        with ESMTP id S234688AbjFLDPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 23:15:01 -0400
+        Sun, 11 Jun 2023 23:15:03 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C50B10E0
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 20:14:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE0CE63
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 20:15:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686539697; x=1718075697;
+  t=1686539700; x=1718075700;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=oLPs9XeZPB29Gk2q8nALmTV059usJ3RGv1ZaTgGsjRQ=;
-  b=OrPsiMuaCf5CZRG7pzWF0axa+9lMJEa/9SY28FwMiwQ5sgD92NlorY1g
-   TKv5NvjZqA56j8X6UYn4SeNVctpTn5Q3NNY+hZuJi07GOWcpjEiSHt3mv
-   SfEYmPcG3OW1kpw2tbw7FAlBz6xfg4isSsTztC+uSRRO2appcI/OcFRlx
-   s53yND/VFtXfN3kJiw+iev9XBxRfGRmZDLh/cmHHjlXT/G2P4Yy8jacTL
-   Brt6EwDp1D4L5PY0RAzZn30o2Q31RqVRwlDZfBrJs2IYV32Jx/z5iuyA6
-   hG+ZJoAoG1eIuBE+83o5dFb+AIiVlTm79Cl2gH4jPHChwMeSk5R4Zr+Fj
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="347578950"
+  bh=POMQMoF5yCzfeN4V70o3A5GGX/JVr+bQ1FqtXyqQk74=;
+  b=IO1ArgO/ACBVfo/rfvbuCuvz3nTnisVfM/Htag6MG6xmBxjq+g+Zjuse
+   TRdQ9utxk9lt4u5/JvDs7EtBhlZYyQaOUE7XV1zHdAjHotFykzHhHtv41
+   1wYoGp/FHKlWhW4ddMwIcZ3woZg9LfBIk8oD0RFVrxu+IomYuKMWgtDOP
+   R6/vDFYMrmu1+DCD+vxeBb7X9Mz+WPcsB1FKqDLI7W4iuwDNH2/a0nYw/
+   RMVjrLCJ58x+BZ6xJEudPstYrjON6rY0atDSdLulSw/JFV2RzUENtVm8B
+   +p7/Ou5JK8kIFJWbT1eEavb/zgBL+k8YbNqVtlgJv/GJ/7JE2ltYsttj5
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="347578967"
 X-IronPort-AV: E=Sophos;i="6.00,235,1681196400"; 
-   d="scan'208";a="347578950"
+   d="scan'208";a="347578967"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2023 20:14:57 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2023 20:14:59 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="776191923"
+X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="776191928"
 X-IronPort-AV: E=Sophos;i="6.00,235,1681196400"; 
-   d="scan'208";a="776191923"
+   d="scan'208";a="776191928"
 Received: from brentlu-desktop.itwn.intel.com ([10.5.252.92])
-  by fmsmga008.fm.intel.com with ESMTP; 11 Jun 2023 20:14:54 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 11 Jun 2023 20:14:57 -0700
 From:   Brent Lu <brent.lu@intel.com>
 To:     alsa-devel@alsa-project.org
 Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
@@ -55,9 +55,9 @@ Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
         <amadeuszx.slawinski@linux.intel.com>,
         Brent Lu <brent.lu@intel.com>, linux-kernel@vger.kernel.org,
         Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Subject: [PATCH 05/12] ASoC: Intel: avs-max98373: remove redundant dapm routes
-Date:   Mon, 12 Jun 2023 19:09:51 +0800
-Message-Id: <20230612110958.592674-6-brent.lu@intel.com>
+Subject: [PATCH 06/12] ASoC: Intel: avs-max98927: remove redundant dapm routes
+Date:   Mon, 12 Jun 2023 19:09:52 +0800
+Message-Id: <20230612110958.592674-7-brent.lu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230612110958.592674-1-brent.lu@intel.com>
 References: <20230612110958.592674-1-brent.lu@intel.com>
@@ -81,14 +81,14 @@ duplicate routes.
 
 Signed-off-by: Brent Lu <brent.lu@intel.com>
 ---
- sound/soc/intel/avs/boards/max98373.c | 45 ++-------------------------
+ sound/soc/intel/avs/boards/max98927.c | 45 ++-------------------------
  1 file changed, 3 insertions(+), 42 deletions(-)
 
-diff --git a/sound/soc/intel/avs/boards/max98373.c b/sound/soc/intel/avs/boards/max98373.c
-index 8e221ecd34b0..3833251ade26 100644
---- a/sound/soc/intel/avs/boards/max98373.c
-+++ b/sound/soc/intel/avs/boards/max98373.c
-@@ -141,47 +141,14 @@ static int avs_create_dai_link(struct device *dev, const char *platform_name, in
+diff --git a/sound/soc/intel/avs/boards/max98927.c b/sound/soc/intel/avs/boards/max98927.c
+index 7cccce99f92e..09b231bf4e6d 100644
+--- a/sound/soc/intel/avs/boards/max98927.c
++++ b/sound/soc/intel/avs/boards/max98927.c
+@@ -138,47 +138,14 @@ static int avs_create_dai_link(struct device *dev, const char *platform_name, in
  	return 0;
  }
  
@@ -124,7 +124,7 @@ index 8e221ecd34b0..3833251ade26 100644
 -	return 0;
 -}
 -
- static int avs_max98373_probe(struct platform_device *pdev)
+ static int avs_max98927_probe(struct platform_device *pdev)
  {
 -	struct snd_soc_dapm_route *routes;
  	struct snd_soc_dai_link *dai_link;
@@ -137,7 +137,7 @@ index 8e221ecd34b0..3833251ade26 100644
  
  	mach = dev_get_platdata(dev);
  	pname = mach->mach_params.platform;
-@@ -193,12 +160,6 @@ static int avs_max98373_probe(struct platform_device *pdev)
+@@ -190,12 +157,6 @@ static int avs_max98927_probe(struct platform_device *pdev)
  		return ret;
  	}
  
@@ -150,7 +150,7 @@ index 8e221ecd34b0..3833251ade26 100644
  	card = devm_kzalloc(dev, sizeof(*card), GFP_KERNEL);
  	if (!card)
  		return -ENOMEM;
-@@ -214,8 +175,8 @@ static int avs_max98373_probe(struct platform_device *pdev)
+@@ -211,8 +172,8 @@ static int avs_max98927_probe(struct platform_device *pdev)
  	card->num_controls = ARRAY_SIZE(card_controls);
  	card->dapm_widgets = card_widgets;
  	card->num_dapm_widgets = ARRAY_SIZE(card_widgets);
