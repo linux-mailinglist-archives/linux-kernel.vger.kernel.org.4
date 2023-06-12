@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B039C72D0F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:49:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2536272D102
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:49:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238149AbjFLUtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 16:49:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35654 "EHLO
+        id S238179AbjFLUtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 16:49:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235962AbjFLUrh (ORCPT
+        with ESMTP id S237673AbjFLUrq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 16:47:37 -0400
+        Mon, 12 Jun 2023 16:47:46 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A201981
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:46:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D52C1BE5
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:46:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A91AD62F14
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A99C062F16
         for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 20:45:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2284FC43324;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BDEBC43325;
         Mon, 12 Jun 2023 20:45:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1686602717;
-        bh=651zibUdG42x8RfDbrif5fkpzpSwW8yz5Rd3sGWo/wk=;
+        bh=N9vHg92hQf/Gt8IdTsnnfWQj4zqBnDUs4128W6vih/M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a82OsQVlu7us9TzK3FQuGOYW/U69y0waSi8CHJl+1cQ/k8Zrh2qSO6nyHbJbtGOo/
-         U738RkKgw7v9ZZlrNS+SDLTXUZ0TB8/KqSDtfoQxK0hPrtyyFDULmNCtmKD4WtqAQL
-         Akg0Sg4YXl6jaMbbLkFs9iLuw+vo+VkCnknM+Z6KagWZpn+bfkjnRd+vB7jEyB0Yks
-         xc1l1aB3YpbB1pjK6UVysvg4CautgASiGi5Ym7FByQf/X+Ttb9EordiGoJz8hLiE40
-         CIn0GU7VNKfudSq4tbFS7ujQokszZK+F2zYTSiq/VZR5ER//IVK+Q6OVIJVtA+tWq7
-         sBo+bB2MYKaFw==
+        b=iBqkFKk36EhtaWtPZU3rgUuxmTtfv97JaYZTgokAM7xcRt/22Jd6rGrNGFPWOBG63
+         xO4W8Cww3Yh5hfTupDtDNm0birqBzS4PNmnAtJpZnPST7SAICqEIZPgQO6HIoAp0qG
+         H2F2Yt6Ef/HxDEyry02VutbT0YRSKV1RnwldHrd+caLpGfUxGTULdxUZUtbDHZF0WU
+         +Z7ltdnbFdZvH7aPjVONZJQVNBWSg1QqWspwR+//JJQSslcD1lklBs/5DpQ0ZNQ4G7
+         TjlsYXhWa3n0PN1oLzbza6wdU3Z8zjZVYgai71XbHhyAiUQUfyhAHYpeilM1hrOhSj
+         uNLF9+M2qEsCA==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id F3E23CE3A7C; Mon, 12 Jun 2023 13:45:15 -0700 (PDT)
+        id 01E0ACE3A7D; Mon, 12 Jun 2023 13:45:16 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     gwml@vger.gnuweeb.org, kernel-team@meta.com, w@lwt.eu,
         =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
         Willy Tarreau <w@1wt.eu>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH v2 nolibc 33/53] tools/nolibc: s390: disable stackprotector in _start
-Date:   Mon, 12 Jun 2023 13:44:54 -0700
-Message-Id: <20230612204514.292087-33-paulmck@kernel.org>
+Subject: [PATCH v2 nolibc 34/53] tools/nolibc: add support for prctl()
+Date:   Mon, 12 Jun 2023 13:44:55 -0700
+Message-Id: <20230612204514.292087-34-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <8b757cc0-3719-4e63-a755-9710384137bc@paulmck-laptop>
 References: <8b757cc0-3719-4e63-a755-9710384137bc@paulmck-laptop>
@@ -61,45 +61,82 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Thomas Weißschuh <linux@weissschuh.net>
 
-s390 does not support the "global" stack protector mode that is
-implemented in nolibc.
-
-Now that nolibc detects if stack protectors are enabled at runtime it
-could happen that a future compiler does indeed use global mode on
-and nolibc would compile but segfault at runtime.
-
-To avoid this hypothetic case and to align s390 with the other
-architectures disable stack protectors when compiling _start().
+It will be used to disable core dumps from the child spawned to validate
+the stack protector functionality.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- tools/include/nolibc/arch-s390.h | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/include/nolibc/sys.h                   | 27 ++++++++++++++++++++
+ tools/testing/selftests/nolibc/nolibc-test.c |  2 ++
+ 2 files changed, 29 insertions(+)
 
-diff --git a/tools/include/nolibc/arch-s390.h b/tools/include/nolibc/arch-s390.h
-index a738e7f3f8e8..516dff5bff8b 100644
---- a/tools/include/nolibc/arch-s390.h
-+++ b/tools/include/nolibc/arch-s390.h
-@@ -8,6 +8,8 @@
- #include <asm/signal.h>
- #include <asm/unistd.h>
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index d5792a5de70b..c688b410f9e4 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -22,6 +22,7 @@
+ #include <linux/fcntl.h> /* for O_* and AT_* */
+ #include <linux/stat.h>  /* for statx() */
+ #include <linux/reboot.h> /* for LINUX_REBOOT_* */
++#include <linux/prctl.h>
  
-+#include "compiler.h"
+ #include "arch.h"
+ #include "errno.h"
+@@ -875,6 +876,32 @@ int open(const char *path, int flags, ...)
+ }
+ 
+ 
++/*
++ * int prctl(int option, unsigned long arg2, unsigned long arg3,
++ *                       unsigned long arg4, unsigned long arg5);
++ */
 +
- /* The struct returned by the stat() syscall, equivalent to stat64(). The
-  * syscall returns 116 bytes and stops in the middle of __unused.
++static __attribute__((unused))
++int sys_prctl(int option, unsigned long arg2, unsigned long arg3,
++		          unsigned long arg4, unsigned long arg5)
++{
++	return my_syscall5(__NR_prctl, option, arg2, arg3, arg4, arg5);
++}
++
++static __attribute__((unused))
++int prctl(int option, unsigned long arg2, unsigned long arg3,
++		      unsigned long arg4, unsigned long arg5)
++{
++	int ret = sys_prctl(option, arg2, arg3, arg4, arg5);
++
++	if (ret < 0) {
++		SET_ERRNO(-ret);
++		ret = -1;
++	}
++	return ret;
++}
++
++
+ /*
+  * int pivot_root(const char *new, const char *old);
   */
-@@ -164,7 +166,7 @@ char **environ __attribute__((weak));
- const unsigned long *_auxv __attribute__((weak));
- 
- /* startup code */
--void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
-+void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
- {
- 	__asm__ volatile (
- 		"lg	%r2,0(%r15)\n"		/* argument count */
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index b50b5a8bcc90..6db788603a34 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -22,6 +22,7 @@
+ #include <sys/ioctl.h>
+ #include <sys/mman.h>
+ #include <sys/mount.h>
++#include <sys/prctl.h>
+ #include <sys/reboot.h>
+ #include <sys/stat.h>
+ #include <sys/syscall.h>
+@@ -580,6 +581,7 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(poll_null);         EXPECT_SYSZR(1, poll(NULL, 0, 0)); break;
+ 		CASE_TEST(poll_stdout);       EXPECT_SYSNE(1, ({ struct pollfd fds = { 1, POLLOUT, 0}; poll(&fds, 1, 0); }), -1); break;
+ 		CASE_TEST(poll_fault);        EXPECT_SYSER(1, poll((void *)1, 1, 0), -1, EFAULT); break;
++		CASE_TEST(prctl);             EXPECT_SYSER(1, prctl(PR_SET_NAME, (unsigned long)NULL, 0, 0, 0), -1, EFAULT); break;
+ 		CASE_TEST(read_badf);         EXPECT_SYSER(1, read(-1, &tmp, 1), -1, EBADF); break;
+ 		CASE_TEST(sched_yield);       EXPECT_SYSZR(1, sched_yield()); break;
+ 		CASE_TEST(select_null);       EXPECT_SYSZR(1, ({ struct timeval tv = { 0 }; select(0, NULL, NULL, NULL, &tv); })); break;
 -- 
 2.40.1
 
