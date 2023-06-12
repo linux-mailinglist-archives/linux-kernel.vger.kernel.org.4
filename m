@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 833E372BF7D
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C0272BFA9
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233809AbjFLKoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 06:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50882 "EHLO
+        id S234866AbjFLKqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 06:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232749AbjFLKoT (ORCPT
+        with ESMTP id S234614AbjFLKp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 06:44:19 -0400
+        Mon, 12 Jun 2023 06:45:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6133E35757;
-        Mon, 12 Jun 2023 03:29:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0254BF7EF;
+        Mon, 12 Jun 2023 03:30:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C24961372;
-        Mon, 12 Jun 2023 10:29:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 283F7C433D2;
-        Mon, 12 Jun 2023 10:29:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D474561500;
+        Mon, 12 Jun 2023 10:30:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAF7FC4339B;
+        Mon, 12 Jun 2023 10:30:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686565741;
-        bh=XDXcC36LKPzKj9E5jetNkX26wc544KcY+i7kldo4gCw=;
+        s=korg; t=1686565831;
+        bh=9nSCSTE5NIfNzjYPmIfyOiQi8ozTX+gnpJ6Raw0QLi0=;
         h=From:To:Cc:Subject:Date:From;
-        b=TeW8wHoNFUySXbaa7GTy8ZloIjBjYk/jCZimUOe57+74m75ljLlWI1agqjO8zAruK
-         5Ptp4Hx5ou89CB+2VLMpUFFkUIssNUlGGAvJ2OUCxL0qIwH4s9ClfB+Nj3yjM5k4JG
-         0CVNbOzOYBo9h6vsaaOX4hcDvxwrhydM2UizokBk=
+        b=S4GrFvMA9y3QpZhHHq76RuYiv2W7SltlHFdTECg5q6100m1sWQSaEg/R8gIclABY5
+         c8RAiHGVkDX6GdPPqZ8bmCErBd5nHVsC8ngLfZU/oRTn10P8R//jN546FYcJS8nvYx
+         H4ofbYTUjSo+4ex1S9UR4aTusLxCX/L26zJW6CCo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -38,19 +38,19 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
         f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
         srw@sladewatkins.net, rwarsow@gmx.de
-Subject: [PATCH 4.14 00/21] 4.14.318-rc1 review
-Date:   Mon, 12 Jun 2023 12:25:55 +0200
-Message-ID: <20230612101651.048240731@linuxfoundation.org>
+Subject: [PATCH 4.19 00/23] 4.19.286-rc1 review
+Date:   Mon, 12 Jun 2023 12:26:01 +0200
+Message-ID: <20230612101651.138592130@linuxfoundation.org>
 X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.318-rc1.gz
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.286-rc1.gz
 X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.14.y
+X-KernelTest-Branch: linux-4.19.y
 X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.14.318-rc1
+X-KernelTest-Version: 4.19.286-rc1
 X-KernelTest-Deadline: 2023-06-14T10:16+00:00
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -64,8 +64,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 4.14.318 release.
-There are 21 patches in this series, all will be posted as a response
+This is the start of the stable review cycle for the 4.19.286 release.
+There are 23 patches in this series, all will be posted as a response
 to this one.  If anyone has any issues with these being applied, please
 let me know.
 
@@ -73,9 +73,9 @@ Responses should be made by Wed, 14 Jun 2023 10:16:41 +0000.
 Anything received after that time might be too late.
 
 The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.318-rc1.gz
+	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.286-rc1.gz
 or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
 and the diffstat can be found below.
 
 thanks,
@@ -86,7 +86,7 @@ greg k-h
 Pseudo-Shortlog of commits:
 
 Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 4.14.318-rc1
+    Linux 4.19.286-rc1
 
 Greg Kroah-Hartman <gregkh@linuxfoundation.org>
     Revert "staging: rtl8192e: Replace macro RTL_PCI_DEVICE with PCI_DEVICE"
@@ -102,6 +102,9 @@ Theodore Ts'o <tytso@mit.edu>
 
 Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
     i2c: sprd: Delete i2c adapter in .remove's error path
+
+Martin Hundebøll <martin@geanix.com>
+    pinctrl: meson-axg: add missing GPIOA_18 gpio group
 
 Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
     Bluetooth: Fix use-after-free in hci_remove_ltk/hci_remove_irk
@@ -121,11 +124,11 @@ Ismael Ferreras Morezuelas <swyterzone@gmail.com>
 Vladislav Efanov <VEfanov@ispras.ru>
     batman-adv: Broken sync while rescheduling delayed work
 
-Somnath Kotur <somnath.kotur@broadcom.com>
-    bnxt_en: Query default VLAN before VNIC setup on a VF
-
 Ben Hutchings <ben@decadent.org.uk>
     lib: cpu_rmap: Fix potential use-after-free in irq_cpu_rmap_release()
+
+Hangyu Hua <hbh25y@gmail.com>
+    net: sched: fix possible refcount leak in tc_chain_tmplt_add()
 
 Eric Dumazet <edumazet@google.com>
     net: sched: move rtm_tca_policy declaration to include file
@@ -141,6 +144,9 @@ Sungwoo Kim <iam@sung-woo.kim>
 
 Ying Hsu <yinghsu@chromium.org>
     Bluetooth: Fix l2cap_disconnect_req deadlock
+
+Alexander Sverdlin <alexander.sverdlin@siemens.com>
+    net: dsa: lan9303: allow vid != 0 in port_fdb_{add|del} methods
 
 Stephan Gerhold <stephan@gerhold.net>
     spi: qup: Request DMA before enabling clocks
@@ -162,8 +168,9 @@ Diffstat:
  drivers/infiniband/hw/i40iw/i40iw.h          |  5 ++--
  drivers/input/joystick/xpad.c                |  1 -
  drivers/input/mouse/elantech.c               |  9 ++++---
- drivers/net/ethernet/broadcom/bnxt/bnxt.c    |  3 +++
+ drivers/net/dsa/lan9303-core.c               |  4 ---
  drivers/net/ethernet/intel/i40e/i40e_alloc.h | 17 +++++--------
+ drivers/pinctrl/meson/pinctrl-meson-axg.c    |  1 +
  drivers/spi/spi-qup.c                        | 37 ++++++++++++++--------------
  drivers/staging/rtl8192e/rtl8192e/rtl_core.c |  6 ++---
  drivers/staging/rtl8192e/rtl8192e/rtl_core.h |  5 ++++
@@ -179,7 +186,7 @@ Diffstat:
  net/bluetooth/hci_core.c                     |  8 +++---
  net/bluetooth/l2cap_core.c                   | 13 ++++++++++
  net/core/dev.c                               |  6 +++--
- net/sched/cls_api.c                          |  2 --
- 24 files changed, 123 insertions(+), 71 deletions(-)
+ net/sched/cls_api.c                          |  3 +--
+ 25 files changed, 122 insertions(+), 75 deletions(-)
 
 
