@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA1972BD23
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:54:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31D9072BD31
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:55:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232893AbjFLJyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 05:54:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33540 "EHLO
+        id S232011AbjFLJyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 05:54:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbjFLJx7 (ORCPT
+        with ESMTP id S231425AbjFLJyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 05:53:59 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A8710D4
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:38:23 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-5149429c944so7240512a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:38:23 -0700 (PDT)
+        Mon, 12 Jun 2023 05:54:01 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16AA5FF1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:38:24 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9741caaf9d4so612377866b.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:38:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686562702; x=1689154702;
+        d=gmail.com; s=20221208; t=1686562703; x=1689154703;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ovwqjP88DLJU174wX93bEruUbTnFh4DciYUv65znDHc=;
-        b=KZfdk105SVW1ZlUxEwaUHuC2cQAmWKzBmQ2NNpCN4F3/Qm43WAlHWWV3ZtTSbNAihm
-         p/oy3xv28rDYE9OelY/atO/IhnMW0LnAxswzBt3BBluRaJPJhflX1fAuPHKNl4QabPnL
-         /zX/+xDo7pqMY9INVkzGlS3GF/+a6aJ9/dcCU/2uKOsDojvqrzLi9W8lMq8ROjICCmAU
-         IPQPF5kpHn+H1Jvnlh0lJK0QMPzPcLeSllzhYMeaSY5YYMp46GgDI65x5/ra8wpgkTNx
-         J05FuZ2c3f4xqHcZrD/Xq1x9+4K5ss3hewqNuytZuxN8/2L2aXrnj6RQhSVphksTW9xp
-         B1lg==
+        bh=BYQpKJ28RkPZW3NObwb2r+lw4fKc8lZ4o5qJebIhoW0=;
+        b=BS47izYkA4or+JYwN3wR0jWIAr7/ME4QNRglwncxoAQO9o+6LY1zTB3kY03hwJHju2
+         WMBjUOjW/qkJNlH28JdJ+xMVSh3pUuJFN7OzEc0McBsreP74hbwgjYAzIoGkOnD0l5R+
+         r6QSkkJ2vh72n0/AFNniae1QDv+V4M4vYBiYrsQlOafLteiOGGVzFeSu2+DZXGjsCezo
+         vZkT2lVVm5g49PS8kRftdY2RJiwWYCJJN6sI2bNJ/eySFQ2SQIXXzmm2FAJNYtOdFqxO
+         6oq2UZjsDZ+09NG2OC5ZxQn26q5+eO6dFGX0+U+ujkJT9Lajq6pG9FJYc1FbfqSwS/t0
+         N3Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686562702; x=1689154702;
+        d=1e100.net; s=20221208; t=1686562703; x=1689154703;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ovwqjP88DLJU174wX93bEruUbTnFh4DciYUv65znDHc=;
-        b=bWyP+c/HeJ15/7iR1fnjHjbHB8vAFgR+Izb/3vLCpHSQjADqyhusvJpzj9wJ0KjlAn
-         7mcZbUvmBVDJBvwfYrqzjP0tOpBUttdxssQtFEa8HAPOIpDuM47squKOt0JZPDQRhuoC
-         GIseWBQFQbEg9a/9+sY9+Yb/373fwb8DzA4sNd0xkW+PtYDSPLKLrBHcocnqUCpUkBxk
-         ogATaJMNh4sfWlusZYvcLZpoiBm4ekxRlXteU67O4mzmWME+JS8ltF9exzD2dconMow7
-         j2P4jQMTncCq7mtIkRsyMFpiqL4+v3wFe5uxCX5/NqNIbKKWVu7HLz7WljwFIX26yUj6
-         HDgw==
-X-Gm-Message-State: AC+VfDy+Tt7SYUqQEsMRxsRMTVquTBy2phq5x89ua94NIudCQ7MZPNg7
-        undYJesfC1wiHllYfHCQYis=
-X-Google-Smtp-Source: ACHHUZ6od08fUS5Y5YBcxZ9WTfK/OI6dT7FI8Sb1oVaF31Hk1VrgKGdgSM0hpkvAGBFP0SFa0Z/byw==
-X-Received: by 2002:a17:907:1c93:b0:97d:f8aa:6d37 with SMTP id nb19-20020a1709071c9300b0097df8aa6d37mr8045773ejc.61.1686562701654;
-        Mon, 12 Jun 2023 02:38:21 -0700 (PDT)
+        bh=BYQpKJ28RkPZW3NObwb2r+lw4fKc8lZ4o5qJebIhoW0=;
+        b=jcfLaSuzjE5GyaQwoMMjdEQl1mbDz53cw4l21og27wZ1NRY+8fB9Pj7s4OuiHdi7tZ
+         KeP26AO7IuRYpqPdQs0Gf/w3H20LUzXGqe9mFcSJP5opjlCGusG3QBTr1BCA7JsLqsSN
+         aqVD6kJDUwyQvR2EnXPHVxByOXOcr1ygnqiOAV1j3SR8Q127rUXC+bf+SGrgc4+xASyK
+         PgCWrh4zkEO5WMSWiKb0Idyk+Bir3AU+Jc21fYqaJZrbHM6CNFjREjQOZhS0i2Pxj/zC
+         8xTq9Y+7GlVKEm/q1cTXCoCftcQk6VV+zfcbuI3SEyGl6G2ABHtKBEYfHMiO3UXOE/1r
+         04TQ==
+X-Gm-Message-State: AC+VfDyXFPeBE1qnFS3kCrP5U8jT+OK8OmNL9lgjKSWtNGVfn2gUwXLN
+        RsA+DZi4XGI287xsOFW3F9haVcNpqlyI/lM0
+X-Google-Smtp-Source: ACHHUZ6Ig9GsZfwV+Y9+P73Dv4hJNyxOlnWH4bLFoYv6LKiG4MBKz3X8HRd4297KFDPeb/M14sM/3w==
+X-Received: by 2002:a17:907:6da5:b0:974:4a33:83a7 with SMTP id sb37-20020a1709076da500b009744a3383a7mr8294900ejc.12.1686562702987;
+        Mon, 12 Jun 2023 02:38:22 -0700 (PDT)
 Received: from lelloman-5950.homenet.telecomitalia.it (host-212-171-43-8.retail.telecomitalia.it. [212.171.43.8])
-        by smtp.gmail.com with ESMTPSA id ce23-20020a170906b25700b0097887b68c17sm4951358ejb.98.2023.06.12.02.38.20
+        by smtp.gmail.com with ESMTPSA id ce23-20020a170906b25700b0097887b68c17sm4951358ejb.98.2023.06.12.02.38.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 02:38:21 -0700 (PDT)
+        Mon, 12 Jun 2023 02:38:22 -0700 (PDT)
 From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
 To:     vitaly.wool@konsulko.com, minchan@kernel.org,
         senozhatsky@chromium.org, yosryahmed@google.com, linux-mm@kvack.org
@@ -57,9 +57,9 @@ Cc:     ddstreet@ieee.org, sjenning@redhat.com, nphamcs@gmail.com,
         hannes@cmpxchg.org, akpm@linux-foundation.org,
         linux-kernel@vger.kernel.org, kernel-team@meta.com,
         Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Subject: [PATCH v3 1/7] mm: zswap: add pool shrinking mechanism
-Date:   Mon, 12 Jun 2023 11:38:09 +0200
-Message-Id: <20230612093815.133504-2-cerasuolodomenico@gmail.com>
+Subject: [PATCH v3 2/7] mm: zswap: remove page reclaim logic from zbud
+Date:   Mon, 12 Jun 2023 11:38:10 +0200
+Message-Id: <20230612093815.133504-3-cerasuolodomenico@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230612093815.133504-1-cerasuolodomenico@gmail.com>
 References: <20230612093815.133504-1-cerasuolodomenico@gmail.com>
@@ -75,214 +75,279 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Each zpool driver (zbud, z3fold and zsmalloc) implements its own shrink
-function, which is called from zpool_shrink. However, with this commit,
-a unified shrink function is added to zswap. The ultimate goal is to
-eliminate the need for zpool_shrink once all zpool implementations have
-dropped their shrink code.
+Switch zbud to the new generic zswap LRU and remove its custom
+implementation.
 
-To ensure the functionality of each commit, this change focuses solely
-on adding the mechanism itself. No modifications are made to
-the backends, meaning that functionally, there are no immediate changes.
-The zswap mechanism will only come into effect once the backends have
-removed their shrink code. The subsequent commits will address the
-modifications needed in the backends.
-
-Acked-by: Nhat Pham <nphamcs@gmail.com>
-Tested-by: Yosry Ahmed <yosryahmed@google.com>
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
 Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
 ---
- mm/zswap.c | 97 +++++++++++++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 92 insertions(+), 5 deletions(-)
+ mm/zbud.c | 163 +-----------------------------------------------------
+ 1 file changed, 1 insertion(+), 162 deletions(-)
 
-diff --git a/mm/zswap.c b/mm/zswap.c
-index 9fa86265f6dd..0024ec5ed574 100644
---- a/mm/zswap.c
-+++ b/mm/zswap.c
-@@ -154,6 +154,12 @@ struct crypto_acomp_ctx {
- 	struct mutex *mutex;
- };
- 
-+/*
-+ * The lock ordering is zswap_tree.lock -> zswap_pool.lru_lock.
-+ * The only case where lru_lock is not acquired while holding tree.lock is
-+ * when a zswap_entry is taken off the lru for writeback, in that case it
-+ * needs to be verified that it's still valid in the tree.
-+ */
- struct zswap_pool {
- 	struct zpool *zpool;
- 	struct crypto_acomp_ctx __percpu *acomp_ctx;
-@@ -163,6 +169,8 @@ struct zswap_pool {
- 	struct work_struct shrink_work;
- 	struct hlist_node node;
- 	char tfm_name[CRYPTO_MAX_ALG_NAME];
-+	struct list_head lru;
-+	spinlock_t lru_lock;
+diff --git a/mm/zbud.c b/mm/zbud.c
+index 3acd26193920..9d35fd4091ed 100644
+--- a/mm/zbud.c
++++ b/mm/zbud.c
+@@ -83,11 +83,7 @@ struct zbud_pool;
+  *		its free region.
+  * @buddied:	list tracking the zbud pages that contain two buddies;
+  *		these zbud pages are full
+- * @lru:	list tracking the zbud pages in LRU order by most recently
+- *		added buddy.
+  * @pages_nr:	number of zbud pages in the pool.
+- * @zpool:	zpool driver
+- * @zpool_ops:	zpool operations structure with an evict callback
+  *
+  * This structure is allocated at pool creation time and maintains metadata
+  * pertaining to a particular zbud pool.
+@@ -102,26 +98,20 @@ struct zbud_pool {
+ 		struct list_head buddied;
+ 		struct list_head unbuddied[NCHUNKS];
+ 	};
+-	struct list_head lru;
+ 	u64 pages_nr;
+-	struct zpool *zpool;
+-	const struct zpool_ops *zpool_ops;
  };
  
  /*
-@@ -180,10 +188,12 @@ struct zswap_pool {
-  *            be held while changing the refcount.  Since the lock must
-  *            be held, there is no reason to also make refcount atomic.
-  * length - the length in bytes of the compressed page data.  Needed during
-- *          decompression. For a same value filled page length is 0.
-+ *          decompression. For a same value filled page length is 0, and both
-+ *          pool and lru are invalid and must be ignored.
-  * pool - the zswap_pool the entry's data is in
-  * handle - zpool allocation handle that stores the compressed page data
-  * value - value of the same-value filled pages which have same content
-+ * lru - handle to the pool's lru used to evict pages.
+  * struct zbud_header - zbud page metadata occupying the first chunk of each
+  *			zbud page.
+  * @buddy:	links the zbud page into the unbuddied/buddied lists in the pool
+- * @lru:	links the zbud page into the lru list in the pool
+  * @first_chunks:	the size of the first buddy in chunks, 0 if free
+  * @last_chunks:	the size of the last buddy in chunks, 0 if free
   */
- struct zswap_entry {
- 	struct rb_node rbnode;
-@@ -196,6 +206,7 @@ struct zswap_entry {
- 		unsigned long value;
- 	};
- 	struct obj_cgroup *objcg;
-+	struct list_head lru;
+ struct zbud_header {
+ 	struct list_head buddy;
+-	struct list_head lru;
+ 	unsigned int first_chunks;
+ 	unsigned int last_chunks;
+-	bool under_reclaim;
  };
  
- struct zswap_header {
-@@ -368,6 +379,12 @@ static void zswap_free_entry(struct zswap_entry *entry)
- 	if (!entry->length)
- 		atomic_dec(&zswap_same_filled_pages);
- 	else {
-+		/* zpool_evictable will be removed once all 3 backends have migrated */
-+		if (!zpool_evictable(entry->pool->zpool)) {
-+			spin_lock(&entry->pool->lru_lock);
-+			list_del(&entry->lru);
-+			spin_unlock(&entry->pool->lru_lock);
-+		}
- 		zpool_free(entry->pool->zpool, entry->handle);
- 		zswap_pool_put(entry->pool);
- 	}
-@@ -588,14 +605,72 @@ static struct zswap_pool *zswap_pool_find_get(char *type, char *compressor)
- 	return NULL;
+ /*****************
+@@ -149,8 +139,6 @@ static struct zbud_header *init_zbud_page(struct page *page)
+ 	zhdr->first_chunks = 0;
+ 	zhdr->last_chunks = 0;
+ 	INIT_LIST_HEAD(&zhdr->buddy);
+-	INIT_LIST_HEAD(&zhdr->lru);
+-	zhdr->under_reclaim = false;
+ 	return zhdr;
  }
  
-+static int zswap_reclaim_entry(struct zswap_pool *pool)
-+{
-+	struct zswap_header *zhdr;
-+	struct zswap_entry *entry;
-+	struct zswap_tree *tree;
-+	pgoff_t swpoffset;
-+	int ret;
-+
-+	/* Get an entry off the LRU */
-+	spin_lock(&pool->lru_lock);
-+	if (list_empty(&pool->lru)) {
-+		spin_unlock(&pool->lru_lock);
-+		return -EINVAL;
-+	}
-+	entry = list_last_entry(&pool->lru, struct zswap_entry, lru);
-+	list_del_init(&entry->lru);
-+	zhdr = zpool_map_handle(pool->zpool, entry->handle, ZPOOL_MM_RO);
-+	tree = zswap_trees[swp_type(zhdr->swpentry)];
-+	zpool_unmap_handle(pool->zpool, entry->handle);
-+	/*
-+	 * Once the lru lock is dropped, the entry might get freed. The
-+	 * swpoffset is copied to the stack, and entry isn't deref'd again
-+	 * until the entry is verified to still be alive in the tree.
-+	 */
-+	swpoffset = swp_offset(zhdr->swpentry);
-+	spin_unlock(&pool->lru_lock);
-+
-+	/* Check for invalidate() race */
-+	spin_lock(&tree->lock);
-+	if (entry != zswap_rb_search(&tree->rbroot, swpoffset)) {
-+		ret = -EAGAIN;
-+		goto unlock;
-+	}
-+	/* Hold a reference to prevent a free during writeback */
-+	zswap_entry_get(entry);
-+	spin_unlock(&tree->lock);
-+
-+	ret = zswap_writeback_entry(pool->zpool, entry->handle);
-+
-+	spin_lock(&tree->lock);
-+	if (ret) {
-+		/* Writeback failed, put entry back on LRU */
-+		spin_lock(&pool->lru_lock);
-+		list_move(&entry->lru, &pool->lru);
-+		spin_unlock(&pool->lru_lock);
-+	}
-+
-+	/* Drop local reference */
-+	zswap_entry_put(tree, entry);
-+unlock:
-+	spin_unlock(&tree->lock);
-+	return ret ? -EAGAIN : 0;
-+}
-+
- static void shrink_worker(struct work_struct *w)
+@@ -221,7 +209,6 @@ static struct zbud_pool *zbud_create_pool(gfp_t gfp)
+ 	for_each_unbuddied_list(i, 0)
+ 		INIT_LIST_HEAD(&pool->unbuddied[i]);
+ 	INIT_LIST_HEAD(&pool->buddied);
+-	INIT_LIST_HEAD(&pool->lru);
+ 	pool->pages_nr = 0;
+ 	return pool;
+ }
+@@ -310,11 +297,6 @@ static int zbud_alloc(struct zbud_pool *pool, size_t size, gfp_t gfp,
+ 		list_add(&zhdr->buddy, &pool->buddied);
+ 	}
+ 
+-	/* Add/move zbud page to beginning of LRU */
+-	if (!list_empty(&zhdr->lru))
+-		list_del(&zhdr->lru);
+-	list_add(&zhdr->lru, &pool->lru);
+-
+ 	*handle = encode_handle(zhdr, bud);
+ 	spin_unlock(&pool->lock);
+ 
+@@ -325,11 +307,6 @@ static int zbud_alloc(struct zbud_pool *pool, size_t size, gfp_t gfp,
+  * zbud_free() - frees the allocation associated with the given handle
+  * @pool:	pool in which the allocation resided
+  * @handle:	handle associated with the allocation returned by zbud_alloc()
+- *
+- * In the case that the zbud page in which the allocation resides is under
+- * reclaim, as indicated by the PG_reclaim flag being set, this function
+- * only sets the first|last_chunks to 0.  The page is actually freed
+- * once both buddies are evicted (see zbud_reclaim_page() below).
+  */
+ static void zbud_free(struct zbud_pool *pool, unsigned long handle)
  {
- 	struct zswap_pool *pool = container_of(w, typeof(*pool),
- 						shrink_work);
- 	int ret, failures = 0;
+@@ -345,18 +322,11 @@ static void zbud_free(struct zbud_pool *pool, unsigned long handle)
+ 	else
+ 		zhdr->first_chunks = 0;
  
-+	/* zpool_evictable will be removed once all 3 backends have migrated */
- 	do {
--		ret = zpool_shrink(pool->zpool, 1, NULL);
-+		if (zpool_evictable(pool->zpool))
-+			ret = zpool_shrink(pool->zpool, 1, NULL);
-+		else
-+			ret = zswap_reclaim_entry(pool);
- 		if (ret) {
- 			zswap_reject_reclaim_fail++;
- 			if (ret != -EAGAIN)
-@@ -659,6 +734,8 @@ static struct zswap_pool *zswap_pool_create(char *type, char *compressor)
- 	 */
- 	kref_init(&pool->kref);
- 	INIT_LIST_HEAD(&pool->list);
-+	INIT_LIST_HEAD(&pool->lru);
-+	spin_lock_init(&pool->lru_lock);
- 	INIT_WORK(&pool->shrink_work, shrink_worker);
+-	if (zhdr->under_reclaim) {
+-		/* zbud page is under reclaim, reclaim will free */
+-		spin_unlock(&pool->lock);
+-		return;
+-	}
+-
+ 	/* Remove from existing buddy list */
+ 	list_del(&zhdr->buddy);
  
- 	zswap_pool_debug("created", pool);
-@@ -1274,7 +1351,7 @@ static int zswap_frontswap_store(unsigned type, pgoff_t offset,
- 	}
+ 	if (zhdr->first_chunks == 0 && zhdr->last_chunks == 0) {
+ 		/* zbud page is empty, free */
+-		list_del(&zhdr->lru);
+ 		free_zbud_page(zhdr);
+ 		pool->pages_nr--;
+ 	} else {
+@@ -368,110 +338,6 @@ static void zbud_free(struct zbud_pool *pool, unsigned long handle)
+ 	spin_unlock(&pool->lock);
+ }
  
- 	/* store */
--	hlen = zpool_evictable(entry->pool->zpool) ? sizeof(zhdr) : 0;
-+	hlen = sizeof(zhdr);
- 	gfp = __GFP_NORETRY | __GFP_NOWARN | __GFP_KSWAPD_RECLAIM;
- 	if (zpool_malloc_support_movable(entry->pool->zpool))
- 		gfp |= __GFP_HIGHMEM | __GFP_MOVABLE;
-@@ -1317,6 +1394,12 @@ static int zswap_frontswap_store(unsigned type, pgoff_t offset,
- 			zswap_entry_put(tree, dupentry);
- 		}
- 	} while (ret == -EEXIST);
-+	/* zpool_evictable will be removed once all 3 backends have migrated */
-+	if (entry->length && !zpool_evictable(entry->pool->zpool)) {
-+		spin_lock(&entry->pool->lru_lock);
-+		list_add(&entry->lru, &entry->pool->lru);
-+		spin_unlock(&entry->pool->lru_lock);
-+	}
- 	spin_unlock(&tree->lock);
+-/**
+- * zbud_reclaim_page() - evicts allocations from a pool page and frees it
+- * @pool:	pool from which a page will attempt to be evicted
+- * @retries:	number of pages on the LRU list for which eviction will
+- *		be attempted before failing
+- *
+- * zbud reclaim is different from normal system reclaim in that the reclaim is
+- * done from the bottom, up.  This is because only the bottom layer, zbud, has
+- * information on how the allocations are organized within each zbud page. This
+- * has the potential to create interesting locking situations between zbud and
+- * the user, however.
+- *
+- * To avoid these, this is how zbud_reclaim_page() should be called:
+- *
+- * The user detects a page should be reclaimed and calls zbud_reclaim_page().
+- * zbud_reclaim_page() will remove a zbud page from the pool LRU list and call
+- * the user-defined eviction handler with the pool and handle as arguments.
+- *
+- * If the handle can not be evicted, the eviction handler should return
+- * non-zero. zbud_reclaim_page() will add the zbud page back to the
+- * appropriate list and try the next zbud page on the LRU up to
+- * a user defined number of retries.
+- *
+- * If the handle is successfully evicted, the eviction handler should
+- * return 0 _and_ should have called zbud_free() on the handle. zbud_free()
+- * contains logic to delay freeing the page if the page is under reclaim,
+- * as indicated by the setting of the PG_reclaim flag on the underlying page.
+- *
+- * If all buddies in the zbud page are successfully evicted, then the
+- * zbud page can be freed.
+- *
+- * Returns: 0 if page is successfully freed, otherwise -EINVAL if there are
+- * no pages to evict or an eviction handler is not registered, -EAGAIN if
+- * the retry limit was hit.
+- */
+-static int zbud_reclaim_page(struct zbud_pool *pool, unsigned int retries)
+-{
+-	int i, ret, freechunks;
+-	struct zbud_header *zhdr;
+-	unsigned long first_handle = 0, last_handle = 0;
+-
+-	spin_lock(&pool->lock);
+-	if (list_empty(&pool->lru)) {
+-		spin_unlock(&pool->lock);
+-		return -EINVAL;
+-	}
+-	for (i = 0; i < retries; i++) {
+-		zhdr = list_last_entry(&pool->lru, struct zbud_header, lru);
+-		list_del(&zhdr->lru);
+-		list_del(&zhdr->buddy);
+-		/* Protect zbud page against free */
+-		zhdr->under_reclaim = true;
+-		/*
+-		 * We need encode the handles before unlocking, since we can
+-		 * race with free that will set (first|last)_chunks to 0
+-		 */
+-		first_handle = 0;
+-		last_handle = 0;
+-		if (zhdr->first_chunks)
+-			first_handle = encode_handle(zhdr, FIRST);
+-		if (zhdr->last_chunks)
+-			last_handle = encode_handle(zhdr, LAST);
+-		spin_unlock(&pool->lock);
+-
+-		/* Issue the eviction callback(s) */
+-		if (first_handle) {
+-			ret = pool->zpool_ops->evict(pool->zpool, first_handle);
+-			if (ret)
+-				goto next;
+-		}
+-		if (last_handle) {
+-			ret = pool->zpool_ops->evict(pool->zpool, last_handle);
+-			if (ret)
+-				goto next;
+-		}
+-next:
+-		spin_lock(&pool->lock);
+-		zhdr->under_reclaim = false;
+-		if (zhdr->first_chunks == 0 && zhdr->last_chunks == 0) {
+-			/*
+-			 * Both buddies are now free, free the zbud page and
+-			 * return success.
+-			 */
+-			free_zbud_page(zhdr);
+-			pool->pages_nr--;
+-			spin_unlock(&pool->lock);
+-			return 0;
+-		} else if (zhdr->first_chunks == 0 ||
+-				zhdr->last_chunks == 0) {
+-			/* add to unbuddied list */
+-			freechunks = num_free_chunks(zhdr);
+-			list_add(&zhdr->buddy, &pool->unbuddied[freechunks]);
+-		} else {
+-			/* add to buddied list */
+-			list_add(&zhdr->buddy, &pool->buddied);
+-		}
+-
+-		/* add to beginning of LRU */
+-		list_add(&zhdr->lru, &pool->lru);
+-	}
+-	spin_unlock(&pool->lock);
+-	return -EAGAIN;
+-}
+-
+ /**
+  * zbud_map() - maps the allocation associated with the given handle
+  * @pool:	pool in which the allocation resides
+@@ -518,14 +384,7 @@ static void *zbud_zpool_create(const char *name, gfp_t gfp,
+ 			       const struct zpool_ops *zpool_ops,
+ 			       struct zpool *zpool)
+ {
+-	struct zbud_pool *pool;
+-
+-	pool = zbud_create_pool(gfp);
+-	if (pool) {
+-		pool->zpool = zpool;
+-		pool->zpool_ops = zpool_ops;
+-	}
+-	return pool;
++	return zbud_create_pool(gfp);
+ }
  
- 	/* update stats */
-@@ -1398,8 +1481,7 @@ static int zswap_frontswap_load(unsigned type, pgoff_t offset,
- 	/* decompress */
- 	dlen = PAGE_SIZE;
- 	src = zpool_map_handle(entry->pool->zpool, entry->handle, ZPOOL_MM_RO);
--	if (zpool_evictable(entry->pool->zpool))
--		src += sizeof(struct zswap_header);
-+	src += sizeof(struct zswap_header);
+ static void zbud_zpool_destroy(void *pool)
+@@ -543,25 +402,6 @@ static void zbud_zpool_free(void *pool, unsigned long handle)
+ 	zbud_free(pool, handle);
+ }
  
- 	if (!zpool_can_sleep_mapped(entry->pool->zpool)) {
- 		memcpy(tmp, src, entry->length);
-@@ -1432,6 +1514,11 @@ static int zswap_frontswap_load(unsigned type, pgoff_t offset,
- 	if (!ret && zswap_exclusive_loads_enabled) {
- 		zswap_invalidate_entry(tree, entry);
- 		*exclusive = true;
-+	} else if (entry->length && !zpool_evictable(entry->pool->zpool)) {
-+		/* zpool_evictable will be removed once all 3 backends have migrated */
-+		spin_lock(&entry->pool->lru_lock);
-+		list_move(&entry->lru, &entry->pool->lru);
-+		spin_unlock(&entry->pool->lru_lock);
- 	}
- 	spin_unlock(&tree->lock);
- 
+-static int zbud_zpool_shrink(void *pool, unsigned int pages,
+-			unsigned int *reclaimed)
+-{
+-	unsigned int total = 0;
+-	int ret = -EINVAL;
+-
+-	while (total < pages) {
+-		ret = zbud_reclaim_page(pool, 8);
+-		if (ret < 0)
+-			break;
+-		total++;
+-	}
+-
+-	if (reclaimed)
+-		*reclaimed = total;
+-
+-	return ret;
+-}
+-
+ static void *zbud_zpool_map(void *pool, unsigned long handle,
+ 			enum zpool_mapmode mm)
+ {
+@@ -585,7 +425,6 @@ static struct zpool_driver zbud_zpool_driver = {
+ 	.destroy =	zbud_zpool_destroy,
+ 	.malloc =	zbud_zpool_malloc,
+ 	.free =		zbud_zpool_free,
+-	.shrink =	zbud_zpool_shrink,
+ 	.map =		zbud_zpool_map,
+ 	.unmap =	zbud_zpool_unmap,
+ 	.total_size =	zbud_zpool_total_size,
 -- 
 2.34.1
 
