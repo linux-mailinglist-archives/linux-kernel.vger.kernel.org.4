@@ -2,113 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1547372BD21
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3174C72BD22
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:54:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232999AbjFLJyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 05:54:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60492 "EHLO
+        id S232496AbjFLJyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 05:54:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232097AbjFLJx3 (ORCPT
+        with ESMTP id S232004AbjFLJx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 05:53:29 -0400
-X-Greylist: delayed 123053 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 12 Jun 2023 02:38:06 PDT
-Received: from out203-205-251-59.mail.qq.com (out203-205-251-59.mail.qq.com [203.205.251.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4CD46BE
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:38:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1686562683;
-        bh=s6XBGJLFDIA4i1XdtLnkKdSXoeV5/zfMkKiTPC68IaU=;
-        h=From:To:Cc:Subject:Date;
-        b=PIcws3IVLjS6vd7yr8lLVTf5q7B4awTJCZg+R3Hjq9QfJkICQRbz3fOdnLK4Pm1EW
-         5gehc2/OJ4cRP8aEqookz/cojD5FTCn09gqDc+ZsWLNHi65386Mj8u2djODCG2rT7s
-         5OktNaWSJsxHpIjQkzNjwzZprCkSVzOHS5q2AC+4=
-Received: from localhost ([101.224.149.128])
-        by newxmesmtplogicsvrszb1-0.qq.com (NewEsmtp) with SMTP
-        id 981AAA17; Mon, 12 Jun 2023 17:38:01 +0800
-X-QQ-mid: xmsmtpt1686562681tjmlmxqn2
-Message-ID: <tencent_97F6C19BAF7C99B22BB1199FE16B266C2B07@qq.com>
-X-QQ-XMAILINFO: NojR6Ao/DkEDhsybSq2JeQyE0+0bI18FwXwaK3SWz5OdqeG6o9vE1E6fMXzdAG
-         WtfYjUyEkGG2kZ14Ux4Ds+SAYYn3tA1jK2J2Th6oBcNFRMAYe4U3wKZthLKYN4TmIDxtoCUxCqFQ
-         obBnH5kBhUuuHfCwAuw7cMhcX4rPLEXMn+VIZ2RXvrkxQZjICrpFh+w7HDqGMZ/tRqC9JzPwZPla
-         bPTAva+duFdFKI6+aeYjyl/91pzeXkvo3zuORq1Dz2wHPACu2TNLL4G+bufjNTLMsSwApZa5DSwU
-         jexK2Di8dtTTX6dQKvQJfg0n3FYYTNbUrlwUFKQNfMDyQJo8STar2kXJbDxswORVqfVxbc2zqUv0
-         Hel+gqFlMPc7VrlHM0i2fdTBgECgMbi379AzR7eeQcZ5lk4R1mch4Fg5azoEHgnZiOK6TePQGOXX
-         +XEUDFThdMXNetyYVzMGkxu/wRUQU4zqwzwKn6Hag2U+DzgEsaF08jmRZ8jL1MdWgmXaOQaA6KU8
-         ANZwnHTQYrvCIb182YEHPbodDy1Yl0IDDXr4mkWZf1C7s4x8Z+0VMXLN3rmFWxoPPcf+iBchIVyi
-         KDYEHw/QUUwEKHdkXeWQORhD2mmPeNEE6vf/JYyPQYk95Xg+8kn+PuUAfMSXP2iXLCAEO5H1CihT
-         WJ0U8xRD1tQ3lTs12+8eFXaDZA2zjWBMCljsZ+XK/aqsNrWzN7evmi2IECGcTTSfIb86iTgwFun6
-         cJ3rGimBxn06eCA2mejs1gbp2w3XkyzrnBoT6shwjAXadEsxujsgkFHCXXYBGyIsFMwNEsViz7Yo
-         8kD9uf33+Xrdcf/E0yIka1HcJw8VGRrNho9wznheKJF6z4QPClH4jRuW9yUrCeaqabb5bbZtnPkR
-         mynX81zfGRW1MFKyjDwHPG31p/31+ogQxlLHmh4kZNz3OJyg8kbdsRwcEfgwqyAHUvmQcQ0ofEbV
-         SQsv7aKXwdzUKbu5ylek+vtn570fIo
-X-QQ-XMAILREADINFO: ONta/cS8wke6NG0jKFLbKjU=
-From:   Woody Zhang <woodylab@foxmail.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Conor Dooley <conor.dooley@microchip.com>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Woody Zhang <woodylab@foxmail.com>
-Subject: [PATCH v2] riscv: move memblock_allow_resize() after linear mapping is ready
-Date:   Mon, 12 Jun 2023 17:37:38 +0800
-X-OQ-MSGID: <20230612093738.1793433-1-woodylab@foxmail.com>
-X-Mailer: git-send-email 2.39.2
+        Mon, 12 Jun 2023 05:53:58 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238A05FEE
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:38:22 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-5147dce372eso6155891a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:38:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686562700; x=1689154700;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XfQ5vz07/mwEtSuWTr+saoqBNiKtLGt2UshbSYxHSJg=;
+        b=F+XqBLr/1WjE7Ug2RtuXe2SdhSpBlzDj3oGQnRyVt1d/dtCaD+XXpwXcDrZw4+n2MZ
+         QcEloaAnK59jSL/5pZxzXeDNBVnna91t1rbQmJuA1G5y4xNfdWcL6PKmxm0QoCCV/qu2
+         mNGA+kPy4057ftxU0VgtHcN01tER2TP3wdJwspu25m7B0kpb1bY3KfUsP438ktxuSIda
+         e/vrpHFjfXX6hV5LCpYJDUeE8eYFpVZ1TvmC58OO/oBmiHAWcTatJ2pO9X9L8k3QwE6P
+         qz0nSOPl576ztcw/4bZysXhbje4eRw7CgIJcxnpHZe38MTpgslcyzdYI+CnbHUGjrMbu
+         ccvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686562700; x=1689154700;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XfQ5vz07/mwEtSuWTr+saoqBNiKtLGt2UshbSYxHSJg=;
+        b=lqc9trwNz02n5D5Cdyesu61pbdpEu18iCrCD55xAyVRTjDjz6W+Z6te9b7WO/i4E7p
+         GFyPHx/d/kTFVpsyqMqNsoZtvW7mD/XE6K3Am5SB0lkMwItcdm0dcCGVLE091/0nREiE
+         8nLZcF/UJ4zFgfmnkfL3s6HS7oT/IfDEejUeKReGk/UqfY/x5soY4FPE3H4C+Kh8yxZJ
+         KfhvFwrTxrnGZLankF36Dh+22su4vo1wNAcDjzY5ETfmp0NLW/1Km8UpWaZ32n8ldPNj
+         UVoyv6FB4+pPS7Z7UBwqe63ndOCJCcTWm5HBe2H5O1fYzPcvX7T2Lm1/xNQUlQF2g7Ju
+         bH9Q==
+X-Gm-Message-State: AC+VfDz5UiwIAQFHW1ayiLEdnaElcKkM4dD8DSO5yq1wBw8Ra4pFWZpC
+        1m6/hPFyvO2cTDaLt/aMv4k=
+X-Google-Smtp-Source: ACHHUZ6kT4+nqOwRUSv2g8qLyoK/ZLbw0Hrp5QDubdNrVy0Gdaq60JjrgieMiw4EYdkUPFCgb34eIQ==
+X-Received: by 2002:a17:907:1b1c:b0:966:5730:c3fe with SMTP id mp28-20020a1709071b1c00b009665730c3femr8843144ejc.52.1686562700314;
+        Mon, 12 Jun 2023 02:38:20 -0700 (PDT)
+Received: from lelloman-5950.homenet.telecomitalia.it (host-212-171-43-8.retail.telecomitalia.it. [212.171.43.8])
+        by smtp.gmail.com with ESMTPSA id ce23-20020a170906b25700b0097887b68c17sm4951358ejb.98.2023.06.12.02.38.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 02:38:19 -0700 (PDT)
+From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+To:     vitaly.wool@konsulko.com, minchan@kernel.org,
+        senozhatsky@chromium.org, yosryahmed@google.com, linux-mm@kvack.org
+Cc:     ddstreet@ieee.org, sjenning@redhat.com, nphamcs@gmail.com,
+        hannes@cmpxchg.org, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Subject: [PATCH v3 0/7] mm: zswap: move writeback LRU from zpool to zswap
+Date:   Mon, 12 Jun 2023 11:38:08 +0200
+Message-Id: <20230612093815.133504-1-cerasuolodomenico@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The initial memblock metadata is accessed from kernel image mapping. The
-regions arrays need to "reallocated" from memblock and accessed through
-linear mapping to cover more memblock regions. So the resizing should
-not be allowed until linear mapping is ready. Note that there are
-memblock allocations when building linear mapping.
+This series aims to improve the zswap reclaim mechanism by reorganizing
+the LRU management. In the current implementation, the LRU is maintained
+within each zpool driver, resulting in duplicated code across the three
+drivers. The proposed change consists in moving the LRU management from
+the individual implementations up to the zswap layer.
 
-This patch is similar to 24cc61d8cb5a ("arm64: memblock: don't permit
-memblock resizing until linear mapping is up").
+The primary objective of this refactoring effort is to simplify the
+codebase. By unifying the reclaim loop and consolidating LRU handling
+within zswap, we can eliminate redundant code and improve
+maintainability. Additionally, this change enables the reclamation of
+stored pages in their actual LRU order. Presently, the zpool drivers
+link backing pages in an LRU, causing compressed pages with different
+LRU positions to be written back simultaneously.
 
-Fixes: 671f9a3e2e24 ("RISC-V: Setup initial page tables in two stages")
-Signed-off-by: Woody Zhang <woodylab@foxmail.com>
----
-Changes in v2:
- - Refine commit log
+The series consists of several patches. The first patch implements the
+LRU and the reclaim loop in zswap, but it is not used yet because all
+three driver implementations are marked as zpool_evictable.
+The following three commits modify each zpool driver to be not
+zpool_evictable, allowing the use of the reclaim loop in zswap.
+As the drivers removed their shrink functions, the zpool interface is
+then trimmed by removing zpool_evictable, zpool_ops, and zpool_shrink.
+Finally, the code in zswap is further cleaned up by simplifying the
+writeback function and removing the now unnecessary zswap_header.
 
----
- arch/riscv/mm/init.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Based on mm-stable + commit 414fb1ae68b7("mm: zswap: support exclusive
+loads") currently in mm-unstable.
 
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index 4fa420faa780..57874f89dce2 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -267,7 +267,6 @@ static void __init setup_bootmem(void)
- 	dma_contiguous_reserve(dma32_phys_limit);
- 	if (IS_ENABLED(CONFIG_64BIT))
- 		hugetlb_cma_reserve(PUD_SHIFT - PAGE_SHIFT);
--	memblock_allow_resize();
- }
- 
- #ifdef CONFIG_MMU
-@@ -1284,6 +1283,9 @@ static void __init setup_vm_final(void)
- 	csr_write(CSR_SATP, PFN_DOWN(__pa_symbol(swapper_pg_dir)) | satp_mode);
- 	local_flush_tlb_all();
- 
-+	/* Depend on that Linear Mapping is ready */
-+	memblock_allow_resize();
-+
- 	pt_ops_set_late();
- }
- #else
+V2:
+- fixed lru list init/del/del_init (Johannes)
+- renamed pool.lock to lru_lock and added lock ordering comment (Yosry)
+- trimmed zsmalloc even more (Johannes | Nhat)
+- moved ref drop out of writeback function  (Johannes)
+
+V3:
+- rebased on commit 414fb1ae68b7 ("mm: zswap: support exclusive loads")
+- renamed zswap_shrink to zswap_reclaim_entry (Yosry)
+- compacted reclaim entry function dropping tree_entry (Johannes)
+- deleted .shrink = NULL from driver-specific patches and re-worded
+commit messages (Minchan and Johannes)
+- fixed some indentations and comments (Johannes)
+
+Domenico Cerasuolo (7):
+  mm: zswap: add pool shrinking mechanism
+  mm: zswap: remove page reclaim logic from zbud
+  mm: zswap: remove page reclaim logic from z3fold
+  mm: zswap: remove page reclaim logic from zsmalloc
+  mm: zswap: remove shrink from zpool interface
+  mm: zswap: simplify writeback function
+  mm: zswap: remove zswap_header
+
+ include/linux/zpool.h |  20 +--
+ mm/z3fold.c           | 249 +-------------------------
+ mm/zbud.c             | 167 +-----------------
+ mm/zpool.c            |  48 +----
+ mm/zsmalloc.c         | 396 ++----------------------------------------
+ mm/zswap.c            | 190 +++++++++++---------
+ 6 files changed, 134 insertions(+), 936 deletions(-)
+
 -- 
-2.39.2
+2.34.1
 
