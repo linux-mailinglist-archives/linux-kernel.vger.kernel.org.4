@@ -2,73 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22B1572D3AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 23:58:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8937472D3F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 00:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237905AbjFLV6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 17:58:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59322 "EHLO
+        id S238193AbjFLV7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 17:59:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbjFLV6Q (ORCPT
+        with ESMTP id S233166AbjFLV7k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 17:58:16 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E015E57;
-        Mon, 12 Jun 2023 14:58:15 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35CLQcvP022484;
-        Mon, 12 Jun 2023 21:58:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=GvpUNUTqDJw6RO67A1tGd9vE8eGrmzVy7qyHvij5e3A=;
- b=O9UaAIX6D6jaFWj7Qi5ePpWfV7VxDo4UAXVMUyUSvLE4j9pr4Ef6poXW0SdPzY3eylUp
- 62IDDNwd/cOgNYS/6WK1aqaBBNI6yx/kffUHhBd4h4+Md9ZgxpGDDyGZXFUDRnG8IXJ3
- /nYZ9GIShd//qe7wtbe+btHFh/4R15CySj7zrMc0/4d9gINFwvloHh4ZL0bMTjy7jK3X
- LSzs36y7J9FBMkg/fDjPT1Rlsq6hUX1YMg3w5q4nQkKIrjPIml9U+ZdxWsrd5MaHiJQQ
- LKK39JD+VWEulPNYj/dJb4KDt7Ajomv3K1wI8wv05Wolvwq3IW0SWh5ldv8SwQEkRa0W Tw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r60peseqn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jun 2023 21:58:11 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35CLwA7q001795
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jun 2023 21:58:10 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 12 Jun 2023 14:58:10 -0700
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        "Gokul krishna Krishnakumar" <quic_gokukris@quicinc.com>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] soc: qcom: mdt_loader: Fix split image detection
-Date:   Mon, 12 Jun 2023 14:58:04 -0700
-Message-ID: <20230612215804.1883458-1-quic_bjorande@quicinc.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 12 Jun 2023 17:59:40 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32CCE65
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 14:59:39 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-543d32eed7cso2128636a12.2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 14:59:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686607179; x=1689199179;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qLgFlmrwGHFojofRCOBcCy0uqVKvL62eTYXx07rbD5s=;
+        b=myc3EmpZMXXYpMTpTggL4Lnje9n7a/UxxmFD5LgWcQhVipEpkH7qFsXBEmfCeJX5vH
+         uEASlz2XNaxfdybThNtmgP9FngfJaUajLWde2BJyt3c0XTjbAFAGOU8QokRL/R/TcNWh
+         0XOtCE7eL9I1ohexZmXMyBSjoJPJdD61SxF5CGrpnSJl/Q2V0qV48evebb3n0P/TRL83
+         vGOdacV8SUS7jj0q7fd0pu12VpVN5jxxFwfI4y8PLJN6QE4w5mFLCPwT6hMS9Q0YPIJi
+         CPxhhVGdth3XWjgQ+z8mDT7/K8qClg7SC0rsyRBur9/eVH+dhzJ56HYXZSOjwlykasFP
+         12YA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686607179; x=1689199179;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qLgFlmrwGHFojofRCOBcCy0uqVKvL62eTYXx07rbD5s=;
+        b=HqX3fJ8Rrt8T3BlZ8lW/thf+BWAvGsmNcjo2SnfDsKyzmOXC3K/x6BK/iCfAQ1u1J4
+         hOEc55nUElFoI1fSEhriAiNaM/9HSa6YsH7WXI3rkYHSfwfl84e9Y0KmZcOQnto16zNF
+         YpfRgzgiT32GHYbpM3vFj1T//tf1jzpXvJmZiwZ2OWN5UfbWPzLts/KE35nLMpwVbFte
+         wXYFy5eeKCW+NqcoIHBGFVaaZFG4KsIt+Um8e4lmSjHkMtEVzmsmU5LT2dD+CbbTmt5n
+         OXLhTG/b/ugn84OfYHYFIT1L3lYlkHvdVzq+ypXWws4jf6w0EXuC6x1QU2bINSiOU9FX
+         CAfQ==
+X-Gm-Message-State: AC+VfDz0OKYmObPIFlLwqucqiHhQajFPyhyEtMapwH9HPYyHcF7z/Wxl
+        IDSXy7fiq8jFOWR+bDfd4aOu+WlFoq4Ll2L3u5E=
+X-Google-Smtp-Source: ACHHUZ4hHouejIGEFo/58CX4x8uXkC6mOkfNn1V1t1hCCorbIfjuyAVwq3PNOZJrDl9CvwTcyWY5BWqwQTzRfAsY3lI=
+X-Received: by 2002:a17:90b:ec7:b0:25b:ce40:7dd6 with SMTP id
+ gz7-20020a17090b0ec700b0025bce407dd6mr4989957pjb.33.1686607179324; Mon, 12
+ Jun 2023 14:59:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: OfPwkohd_37N73SZ8pnjdGfUxrDmsC6Z
-X-Proofpoint-ORIG-GUID: OfPwkohd_37N73SZ8pnjdGfUxrDmsC6Z
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-12_16,2023-06-12_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 lowpriorityscore=0 clxscore=1015 spamscore=0
- adultscore=0 suspectscore=0 mlxlogscore=999 impostorscore=0 mlxscore=0
- phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306120188
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+References: <20230609-khugepage-v1-1-dad4e8382298@google.com>
+In-Reply-To: <20230609-khugepage-v1-1-dad4e8382298@google.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Mon, 12 Jun 2023 14:59:28 -0700
+Message-ID: <CAHbLzkr4cf7XqsCR29_-qLysuELaaFvThJ3eoNd-nvkhVdKrYg@mail.gmail.com>
+Subject: Re: [PATCH] mm/khugepaged: use DEFINE_READ_MOSTLY_HASHTABLE macro
+To:     ndesaulniers@google.com
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,43 +69,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The enhanced detection introduced in commit '210d12c8197a ("soc: qcom:
-mdt_loader: Enhance split binary detection")' requires that all segments
-lies within the file on disk.
+On Fri, Jun 9, 2023 at 4:44=E2=80=AFPM <ndesaulniers@google.com> wrote:
+>
+> These are equivalent, but DEFINE_READ_MOSTLY_HASHTABLE exists to define
+> a hashtable in the .data..read_mostly section.
+>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 
-But the Qualcomm firmware files consistently has a BSS-like segment at
-the end, with a p_offset aligned to the next 4k boundary. As the p_size
-is 0 and there's nothing to load, the image is not padded to cover this
-(empty) segment.
+Reviewed-by: Yang Shi <shy828301@gmail.com>
 
-Ignore zero-sized segments when determining if the image is split, to
-avoid this problem.
-
-Fixes: 210d12c8197a ("soc: qcom: mdt_loader: Enhance split binary detection")
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
----
- drivers/soc/qcom/mdt_loader.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/drivers/soc/qcom/mdt_loader.c b/drivers/soc/qcom/mdt_loader.c
-index 9418993a3a92..6f177e46fa0f 100644
---- a/drivers/soc/qcom/mdt_loader.c
-+++ b/drivers/soc/qcom/mdt_loader.c
-@@ -275,6 +275,14 @@ static bool qcom_mdt_bins_are_split(const struct firmware *fw, const char *fw_na
- 	phdrs = (struct elf32_phdr *)(ehdr + 1);
- 
- 	for (i = 0; i < ehdr->e_phnum; i++) {
-+		/*
-+		 * The size of the MDT file is not padded to include any
-+		 * zero-sized segments at the end. Ignore these, as they should
-+		 * not affect the decision about image being split or not.
-+		 */
-+		if (!phdrs[i].p_filesz)
-+			continue;
-+
- 		seg_start = phdrs[i].p_offset;
- 		seg_end = phdrs[i].p_offset + phdrs[i].p_filesz;
- 		if (seg_start > fw->size || seg_end > fw->size)
--- 
-2.25.1
-
+> ---
+>  mm/khugepaged.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> index 6b9d39d65b73..e7dc49214413 100644
+> --- a/mm/khugepaged.c
+> +++ b/mm/khugepaged.c
+> @@ -88,7 +88,7 @@ static unsigned int khugepaged_max_ptes_swap __read_mos=
+tly;
+>  static unsigned int khugepaged_max_ptes_shared __read_mostly;
+>
+>  #define MM_SLOTS_HASH_BITS 10
+> -static __read_mostly DEFINE_HASHTABLE(mm_slots_hash, MM_SLOTS_HASH_BITS)=
+;
+> +static DEFINE_READ_MOSTLY_HASHTABLE(mm_slots_hash, MM_SLOTS_HASH_BITS);
+>
+>  static struct kmem_cache *mm_slot_cache __read_mostly;
+>
+>
+> ---
+> base-commit: 64569520920a3ca5d456ddd9f4f95fc6ea9b8b45
+> change-id: 20230609-khugepage-09ea340b378e
+>
+> Best regards,
+> --
+> Nick Desaulniers <ndesaulniers@google.com>
+>
+>
