@@ -2,90 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E61772CA91
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC52872CA8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239726AbjFLPpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 11:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37456 "EHLO
+        id S239661AbjFLPpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 11:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235366AbjFLPpc (ORCPT
+        with ESMTP id S239684AbjFLPor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 11:45:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8176E10F7
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:44:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686584678;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=03Uv8p5M7gEkdkNdSPyShEzWZ6NYMd5z8nkRrTJAMPo=;
-        b=FeEk1W1veFezITsBgt9tp7FUs4IbFxfGEl6ulNBys5bSlABei25ACfCbfuj+aO13t796fy
-        Z29bds4O+0SlpFFr4e3G82fe0QLfeEr8kuIRNB46H/ST5jltvB0OPtkChhJKeQPaLMcgNV
-        oLcPRb4RMh5ueQ2URQvcBRDs+pRb77M=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-301-26wjdDJJMDicMIQ0bGewog-1; Mon, 12 Jun 2023 11:44:37 -0400
-X-MC-Unique: 26wjdDJJMDicMIQ0bGewog-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f7f2d9a660so17709635e9.2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:44:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686584676; x=1689176676;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=03Uv8p5M7gEkdkNdSPyShEzWZ6NYMd5z8nkRrTJAMPo=;
-        b=bdT0P9kbK3B+6/UDF/2HqXP9Xc7Pu4v8c+m0pdgD4E5fIMN9dEWaybstEQG9SRXT3I
-         WHwa91zisAvkZmJJz0sgQqixlIZz8r88ePQ28yS0EYXAl08ZsT+SKkpefXppzbNG1IGL
-         45iFvrbmKwKQTNaJ6EbpEvYrJJ8px2Bndhy2gUebK+Bsv6NYDZwHVOJL6wP9bc9M24PN
-         U2RO+Nbjw76gVBQOL8LscVK9o+vFkcACfBe2pmcPv+0V5LiQaweyLnaIZ4l8PiRZJ6IZ
-         /Ji2zHBMYNDI/epGbM6Z2eRycG9FPCZY4Z5Ef/dRKBXf5peKMyMJ91uHkvXXRBFkppvD
-         oiaA==
-X-Gm-Message-State: AC+VfDzQQW0H/rGaTjRIvlvgITEGAyITLeyTTVuA42T0fZdlAPEizt8v
-        zxnN2N9UTJfA6Bc+O/3IhgiXWydpP5R122PIiTDL/sLz14wrHFg7zP3tKKgDB2WYCHSErQ+K4lt
-        gUxvlydjAI2X5Jc1I1SMYm6vQ
-X-Received: by 2002:a7b:c40a:0:b0:3f8:648:bba with SMTP id k10-20020a7bc40a000000b003f806480bbamr6931481wmi.8.1686584676467;
-        Mon, 12 Jun 2023 08:44:36 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7FI4Pwq0RUxTT3pNIr4YUH59cE+pcVu7iXi0Bb9mxYOjQmH9+JAQ3num+d8SybuhV+6pZhXQ==
-X-Received: by 2002:a7b:c40a:0:b0:3f8:648:bba with SMTP id k10-20020a7bc40a000000b003f806480bbamr6931459wmi.8.1686584676188;
-        Mon, 12 Jun 2023 08:44:36 -0700 (PDT)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id s12-20020a7bc38c000000b003f7ba52eeccsm11810463wmj.7.2023.06.12.08.44.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 08:44:35 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Tom Rix <trix@redhat.com>, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com
-Cc:     linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: Re: [PATCH] sched/fair: rename variable cpu_util eff_util
-In-Reply-To: <20230611122535.183654-1-trix@redhat.com>
-References: <20230611122535.183654-1-trix@redhat.com>
-Date:   Mon, 12 Jun 2023 16:44:34 +0100
-Message-ID: <xhsmhilbsy9b1.mognet@vschneid.remote.csb>
+        Mon, 12 Jun 2023 11:44:47 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB7E10E2;
+        Mon, 12 Jun 2023 08:44:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686584682; x=1718120682;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mA/68H48x8hWu82F/Ja97GwHQawxRn+pP/gPATMBwfY=;
+  b=e1FZX8dknvYDf0KoAujqjePprGptrwOl56El7kl5L4EIpQXSEKvw+ZFq
+   Qc54oUDRC+WW9KyAZ+ICHrWWbXNVOMqnW0ap7utulbpE66EZe6Ayjmnae
+   LXisPQhFQC4tPKLqucQxve4gmiZyeX3kvYIRQAV6IWJvRaVsZhT1UujOO
+   plFnr4ycNeBxoA8RxfXkFxminSWhpTNbLsNKkWfFzsAyDlk8Eo6bFWqrJ
+   UEx5Pc9MOn1d5kpWdR1G29NfWxKvgDOMxkQwR24cJr/GLgL225kL+TXDn
+   HLBvT0YjFoCUFn3VxwORZTcEuBtIj4J5QnUZ2W23uKeHfXoFAwMr4NGI3
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="423961618"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="423961618"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 08:44:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="688680173"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="688680173"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 12 Jun 2023 08:44:39 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1q8jif-0039ON-1M;
+        Mon, 12 Jun 2023 18:44:37 +0300
+Date:   Mon, 12 Jun 2023 18:44:37 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/8] rtc: isl12022: add support for trip level DT bindings
+Message-ID: <ZIc9ZUsEt+KNaiKD@smile.fi.intel.com>
+References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
+ <20230612113059.247275-5-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230612113059.247275-5-linux@rasmusvillemoes.dk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/06/23 08:25, Tom Rix wrote:
-> cppcheck reports
-> kernel/sched/fair.c:7436:17: style: Local variable 'cpu_util' shadows outer function [shadowFunction]
->   unsigned long cpu_util;
->                 ^
->
-> Clean this up by renaming the variable to eff_util
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
+On Mon, Jun 12, 2023 at 01:30:54PM +0200, Rasmus Villemoes wrote:
+> Implement support for using the values given in the
+> isil,trip-level[87]5-microvolt properties to set appropriate values in
+> the VB[87]5TP bits in the PWR_VBAT register.
 
-Reviewed-by: Valentin Schneider <vschneid@redhat.com>
+...
+
+> +	for (x85 = 0; x85 < ARRAY_SIZE(trip_level85) - 1; ++x85)
+> +		if (level85 <= trip_level85[x85])
+> +			break;
+> +
+> +	for (x75 = 0; x75 < ARRAY_SIZE(trip_level75) - 1; ++x75)
+> +		if (level75 <= trip_level75[x75])
+> +			break;
+
+Does preincrement give us anything in comparison to postincrement?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
