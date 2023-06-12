@@ -2,132 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A27C372BBDF
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:16:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C90372BBD2
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:14:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230330AbjFLJQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 05:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39660 "EHLO
+        id S229825AbjFLJOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 05:14:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbjFLJQN (ORCPT
+        with ESMTP id S229725AbjFLJNs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 05:16:13 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40EF910F6;
-        Mon, 12 Jun 2023 02:08:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686560920; x=1718096920;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=J/S7V8+HVwkpJMLv53fZLJ/jvv80wurEbD2/hKCUU1o=;
-  b=bK74TQ0Tt4Zay8w1tAsa69ggTMKAgNS+kwHPkzYM6lovCcphNmgz9cHd
-   o+M9YEH3dW7xQDA1JSQSqALeMcHy/rucMIbk/CWrr84YhFmgWLI/qu+KN
-   rJqyIwPD9139y2VFw7qaQ36UYSrPPzcKkV4zlT76u4tNRbjZVk/5+hOlv
-   KbNrkIe6ztNMuma4J3o9LH91Uy0gtXjqJQGF+eS5ccG9HLda+ofQw48M0
-   rgFtFEP7T0mkJL3B+RVgmbUeW3/fmO4VzBpEe4kHt2qp7bQj/CLDVEolG
-   Wrw4898YETlGNuro31a0lbHoYqHsSs/jdrLsgG/k+X7vHAgzNjPkHDM1u
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="355484770"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="355484770"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 02:06:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="885347093"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="885347093"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 02:06:55 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id 500C7120BE1;
-        Mon, 12 Jun 2023 12:06:52 +0300 (EEST)
-Date:   Mon, 12 Jun 2023 09:06:52 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Damien Le Moal <dlemoal@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Subject: Re: [PATCH v2 3/3] ata: ahci_platform: Make code agnostic to OF/ACPI
-Message-ID: <ZIbgLIEylgZsxXAB@kekkonen.localdomain>
-References: <20230609154900.43024-1-andriy.shevchenko@linux.intel.com>
- <20230609154900.43024-4-andriy.shevchenko@linux.intel.com>
+        Mon, 12 Jun 2023 05:13:48 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387234C1D
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:07:22 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-30ae141785bso3800379f8f.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:07:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686560829; x=1689152829;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1ALIq+EfBjjDuq9C6qScccN3SzZCAcSKnABbFzkS/tA=;
+        b=jUQCmi8C9INCz6PusbgHt8ozZvFHq+MkPgx7w99W4qdxMwkqzIwQrAgZX10wHogWs+
+         MWqQAbhHBX+xg/ZvKkgKnt/qT2htAo0Q/Lz/giT7tXbLvrY60RsRkyJrFFx1iwBbmFIf
+         7OSzNbu/aQ6B2qg3Ks4Cz8UsWIfaMACUoAW9EZEYdA9voeXu+M925i5D9RZ793o155aZ
+         OYZQs5LfjoTjIYefaKaClzFCSD6CO9f4HaFBjAaZgi75KLYfS2IgTsg8Ofha0xuEqVGl
+         gFUBi5OhX+evzMPkextYpITqK5+4MlD/S2nuEZYFzR/CJlbn89iAKBaEvWELDGNrN1A6
+         IgPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686560829; x=1689152829;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1ALIq+EfBjjDuq9C6qScccN3SzZCAcSKnABbFzkS/tA=;
+        b=VIQrxGQZ3nQVh+yG69po8q375uS8ET2169haOXXJegPYpCe+wofx5tSPFPMdTbfXDS
+         BlHx9tw/xkwc/+EAI0BbgTiVqLeSeV0MlYX3ncr3QtK0xHIBKozF/LEfWCCoAvgEmSTq
+         COvAqd1QXZH7pQeh2GbiOXhoBmKXezN/qIbEibhvdIC4dqCiZOMOb/Ud21OF8B0VPTNT
+         ADo/aP7zrg5VgMeq+pQph4OfmTt25wWDKr2essv+B2mJF3BBgr/Senby8PcRNL13Ms5j
+         Y3qgPLG0mqexx1Gg0DTZyVC7l3YYYuBxXZdBEbJve1yzOQ8U9fzfvNDdR/Ra/DiUjeEj
+         htMw==
+X-Gm-Message-State: AC+VfDwligS0gbFN2jVv/Oced1hyI29u1SBH7CPzQrq4bB1LWptSLwng
+        o8YXYNrBnpw8emMJMoxBByNuiw==
+X-Google-Smtp-Source: ACHHUZ7zgf6EwcNan6tjDOVOTBgZ8Y8StQPZIaCrQwu+Z8SzaRmyK4CUlJlcW4Lvqec79vSW7GduCA==
+X-Received: by 2002:a5d:5050:0:b0:30f:c56c:b5a6 with SMTP id h16-20020a5d5050000000b0030fc56cb5a6mr887326wrt.4.1686560828937;
+        Mon, 12 Jun 2023 02:07:08 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:bb02:9baa:82d1:2486? ([2a05:6e02:1041:c10:bb02:9baa:82d1:2486])
+        by smtp.googlemail.com with ESMTPSA id u8-20020adfeb48000000b003062b2c5255sm11875361wrn.40.2023.06.12.02.07.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 02:07:08 -0700 (PDT)
+Message-ID: <3c501536-2620-0022-df93-415d490fc1a5@linaro.org>
+Date:   Mon, 12 Jun 2023 11:07:07 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230609154900.43024-4-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] thermal: Allow selecting the bang-bang governor as
+ default
+Content-Language: en-US
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230609124408.3788680-1-thierry.reding@gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230609124408.3788680-1-thierry.reding@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
 
-On Fri, Jun 09, 2023 at 06:49:00PM +0300, Andy Shevchenko wrote:
-> With the help of a new device_is_compatible() make
-> the driver code agnostic to the OF/ACPI. This makes
-> it neater. As a side effect the header inclusions is
-> corrected (seems mod_devicetable.h was implicitly
-> included).
+Hi Thierry,
+
+On 09/06/2023 14:44, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> For many setups the bang-bang governor is exactly what we want. Many
+> ARM SoC-based devices use fans to cool down the entire SoC and that
+> works well only with the bang-bang governor because it uses the
+> hysteresis in order to let the fan run for a while to cool the SoC
+> down below the trip point before switching it off again.
+
+Yeah, that trip point detection is screwed up at the moment, but we are 
+on the way to solve that. From there, we should be able to have the 
+step_wise governor working as the bang-bang governor and remove this one.
+
+Meanwhile, the change sounds ok for me.
+
+Rafael, may I pick this change?
+
+
+
+> The step-wise governor will behave strangely in these situations. It
+> doesn't use the hysteresis, so it can lead to situations where the fan
+> is turned on for only a very brief period and then is switched back off,
+> only to get switched back on again very quickly because the SoC hasn't
+> cooled down very much.
+> 
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
 > ---
->  drivers/ata/ahci_platform.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>   drivers/thermal/Kconfig        | 8 ++++++++
+>   drivers/thermal/thermal_core.h | 2 ++
+>   2 files changed, 10 insertions(+)
 > 
-> diff --git a/drivers/ata/ahci_platform.c b/drivers/ata/ahci_platform.c
-> index ab30c7138d73..81fc63f6b008 100644
-> --- a/drivers/ata/ahci_platform.c
-> +++ b/drivers/ata/ahci_platform.c
-> @@ -9,14 +9,14 @@
->   */
->  
->  #include <linux/kernel.h>
-> +#include <linux/mod_devicetable.h>
->  #include <linux/module.h>
->  #include <linux/pm.h>
->  #include <linux/device.h>
-> -#include <linux/of_device.h>
->  #include <linux/platform_device.h>
-> +#include <linux/property.h>
->  #include <linux/libata.h>
->  #include <linux/ahci_platform.h>
-> -#include <linux/acpi.h>
->  #include <linux/pci_ids.h>
->  #include "ahci.h"
->  
-> @@ -56,10 +56,10 @@ static int ahci_probe(struct platform_device *pdev)
->  	if (rc)
->  		return rc;
->  
-> -	if (of_device_is_compatible(dev->of_node, "hisilicon,hisi-ahci"))
-> +	if (device_is_compatible(dev, "hisilicon,hisi-ahci"))
->  		hpriv->flags |= AHCI_HFLAG_NO_FBS | AHCI_HFLAG_NO_NCQ;
->  
-> -	port = acpi_device_get_match_data(dev);
-> +	port = device_get_match_data(dev);
-
-There are just a handful of users for acpi_device_get_match_data() in the
-tree. The code could be moved to acpi_fwnode_device_get_match_data() after
-coverting these. May be out of scope of this set though.
-
->  	if (!port)
->  		port = &ahci_port_info;
->  
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index 4cd7ab707315..19a4b33cb564 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -130,6 +130,14 @@ config THERMAL_DEFAULT_GOV_POWER_ALLOCATOR
+>   	  system and device power allocation. This governor can only
+>   	  operate on cooling devices that implement the power API.
+>   
+> +config THERMAL_DEFAULT_GOV_BANG_BANG
+> +	bool "bang_bang"
+> +	depends on THERMAL_GOV_BANG_BANG
+> +	help
+> +	  Use the bang_bang governor as default. This throttles the
+> +	  devices one step at the time, taking into account the trip
+> +	  point hysteresis.
+> +
+>   endchoice
+>   
+>   config THERMAL_GOV_FAIR_SHARE
+> diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
+> index 3d4a787c6b28..17c1bbed734d 100644
+> --- a/drivers/thermal/thermal_core.h
+> +++ b/drivers/thermal/thermal_core.h
+> @@ -23,6 +23,8 @@
+>   #define DEFAULT_THERMAL_GOVERNOR       "user_space"
+>   #elif defined(CONFIG_THERMAL_DEFAULT_GOV_POWER_ALLOCATOR)
+>   #define DEFAULT_THERMAL_GOVERNOR       "power_allocator"
+> +#elif defined(CONFIG_THERMAL_DEFAULT_GOV_BANG_BANG)
+> +#define DEFAULT_THERMAL_GOVERNOR       "bang_bang"
+>   #endif
+>   
+>   /* Initial state of a cooling device during binding */
 
 -- 
-Kind regards,
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Sakari Ailus
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
