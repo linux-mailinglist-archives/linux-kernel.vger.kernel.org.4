@@ -2,169 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5047D72D0AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 247CC72D0A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237493AbjFLUgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 16:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55052 "EHLO
+        id S237714AbjFLUgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 16:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236848AbjFLUfv (ORCPT
+        with ESMTP id S237704AbjFLUgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 16:35:51 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2051.outbound.protection.outlook.com [40.107.8.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD77110C9;
-        Mon, 12 Jun 2023 13:35:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ABmMXSxgJYVJHKz1gCGwSbxegbydzXfZZZ0bYjEAgMUpvtlkMFtsb1ZQel1sn4KIwKCwnCQt9KEEeXWrsOFDusWA4nXeLvzHL9OvJHP8qS9cD6Jxz2tBtBt+tRhHR9QM+WjnUNz4EQhcXxJfBwOkN9Mx8eLXSUUzmK36YVh4IsyKP3Z45g49CoXmaPPE4slEyOo4f0w96yACoWAIQ0sxdvxNd5g36L4AA2lnaUoCaLrZlWLqYdy6L4zmiMS2UmRcXbx8la2j//0ifkRUmp0Njtyv/HiyOrvqqCWe6fpZBF9B6SYev9K0Ud0Y6lWLs2H+phLoqkIvfXFhcfl5mzP+mw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9YUtCt2NXQUa21be/5g3CxLSwJ5IiHqX81mEMIh1qcQ=;
- b=WtIPYdD7bUe9Oohqe6vzplSeWTmbJzH7Va3BFslQo9bv4rLTN595D+FJrru4ndxxOGcHA3V+/rXWKcd2UGWm47iYra6N7i8BvRHg7ryC4VGqXYwYL4EDNnZnDsM0qVJwCZs5eLROG1VHIxN1zpFbiRoMesg4l6Ygd4X1RND40KiIEztAsxMYvVCEJwBq6A7u2krkhlcztCRgwXRQk+AqHLPeMTP0mg+zPiEpyaJL2ei33pwRde3rUilPFUoBUE2R1fcuesDnSgzy7SPOYgCDYa+InpOcwbqjSWQ/F/0TInBDeHz/YTbsh1X3ykQYmmtOAQ68xU0TxXEqzRVljG757Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9YUtCt2NXQUa21be/5g3CxLSwJ5IiHqX81mEMIh1qcQ=;
- b=KdXfe2Gy/5H9zJssbmDRSAbBGf4/DqpuKq2lCX41pl0BVftrJk5fHJXcwCPvl+6MK5yRmlEFb7PMIH6uARHxV0WjK2bcj1fhInfmxvHwJG5jjwAcT1guLLFYGtrI11lyDClFpzE+I1yXjkySn7+sKwXkPGYWlf63eLj8Lt1VwH4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB4845.eurprd04.prod.outlook.com (2603:10a6:803:51::30)
- by AS8PR04MB7975.eurprd04.prod.outlook.com (2603:10a6:20b:2a4::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.36; Mon, 12 Jun
- 2023 20:35:13 +0000
-Received: from VI1PR04MB4845.eurprd04.prod.outlook.com
- ([fe80::602f:42ad:882a:5ca7]) by VI1PR04MB4845.eurprd04.prod.outlook.com
- ([fe80::602f:42ad:882a:5ca7%3]) with mapi id 15.20.6455.045; Mon, 12 Jun 2023
- 20:35:13 +0000
-From:   Frank Li <Frank.Li@nxp.com>
-To:     vkoul@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        peng.fan@nxp.com, joy.zou@nxp.com, shenwei.wang@nxp.com,
-        imx@lists.linux.dev
-Subject: [PATCH v4 12/12] dt-bindings: fsl-dma: fsl-edma: add edma3 compatible string
-Date:   Mon, 12 Jun 2023 16:34:18 -0400
-Message-Id: <20230612203418.2017769-13-Frank.Li@nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230612203418.2017769-1-Frank.Li@nxp.com>
-References: <20230612203418.2017769-1-Frank.Li@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SJ2PR07CA0016.namprd07.prod.outlook.com
- (2603:10b6:a03:505::16) To VI1PR04MB4845.eurprd04.prod.outlook.com
- (2603:10a6:803:51::30)
+        Mon, 12 Jun 2023 16:36:04 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1EC1BC3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:35:22 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-bc7ebb912dcso2098444276.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:35:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1686602121; x=1689194121;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Tna/5MCpfh2CQQ+MigqWyTaJ1L9g7ThuMJA32e33y4A=;
+        b=uPpOK67x/N/0dc7FRfJMGN81wHOiBPP7oDiOdsaD2qzpV+B/MTdEuYG39oOXu6v2gr
+         JgevcePW5R1c5j7nMJXFkhpJ6BguEKUjC2vWog8KmEpSwxXPP7lOjzwK+Y2qLmn2Ixhq
+         x737RZxkBLsn9MrwiUjsL2CBe7fs7JxdrA5ts=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686602121; x=1689194121;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Tna/5MCpfh2CQQ+MigqWyTaJ1L9g7ThuMJA32e33y4A=;
+        b=aoZCtTBXr05RelVMl6HujbmKCh+KTGWq1TacKc2Fjo3i8xWjcjq0RCW5cv0SCS1t/B
+         q0zOaIrcuPaMCYA4lLI1F6i4M+AgYOBO1YXkJWdPyh0kbif+lZ1AXwlwjJ+jiDGr/gST
+         yus16C18Mu8StItigVEXwAO9irSSzQnLmQjr1rXc82w0ymocND4ZRbmVz7x9k4k/isyF
+         GIAgXFiAk+vTBddM4/5ELObdJDLenv4fF/5Rkm9e9KCUKUPxu6ovxsjPYtZBcK7RN0be
+         AfVM0cmBiFAaDL/h6cfgVIOxZ4aySYnrjNPcrhJSfstFHSGWTyLW0LfbMUP/Zj7AdsTV
+         lHiA==
+X-Gm-Message-State: AC+VfDwiTtTDE/sWpAYpmRj5OCc8T+1AWIBfv2GOskDaz9nV31Bz1U7u
+        RqXqfmibCdVtypn78shwxk9RqQTl4M/wPE9GBPWMu3lzUzJ8srji
+X-Google-Smtp-Source: ACHHUZ5KcAQLLhVj7lmkq1gne9ElkQhjBzZ4S38AHrzzjOqMReAkePS2tJqdbLBT1dpZWqeO5d0fbOOH7l9Xn+lZaRI=
+X-Received: by 2002:a25:b46:0:b0:bc4:72c4:b8e2 with SMTP id
+ 67-20020a250b46000000b00bc472c4b8e2mr7930703ybl.21.1686602121296; Mon, 12 Jun
+ 2023 13:35:21 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB4845:EE_|AS8PR04MB7975:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7a9e8a85-9d4a-480a-eb8e-08db6b848634
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CR4dwtrJHp2y+MSBvpTxfUqA0w4TQgtYwF+rtG3AQD63eV7Zwq6MIJ4k25rqEf6QSmTmJjla7i1OvPp9VyqQhJO6Vvlu/j4NwXD7FKrUQdiK8MFAHlrEcPvB5eHIlzYsbx1qDkCc+v8OhOOLenScAKc99oQiZj0Z74pV+rQqxmnzU7WxIE8swG+njCron/eMPDDMFaGNdvH6oJM40tb0pbZG4GYTdsDDEEIp5IBi1roi57aNBBJFQiMbvoKnyGVyTAJiJCh9G+8Xy9vzhV1FLGXj4AYn33x3hhLEeciO0nhvclLQdoD3yBGQIrIFR70kzDU6IjS1hdGy9N2slLjqwsKr4k6++XGQVqG+kZ5qOdyRoI1NmBlEG+JgVP2uRGeBTpLKloSRQJAq9lAeQvUqacdUZVlEESoZEjdYYhrS6eus9BGKG3PxLLug3lBroYE11eIX/mFG1cMpp5iEUqndJo9zejzcFXSsyjtrRVD6mM6WJ/ALjRjZxE7opqHBd/sPVStDlQS6toEzB13QqYl3PnUTV2V60wXYMt82dE63mTpTOsy45kNuWFli4BYXbHSkm1okmlR53x+bWYh00CyErUn9bPUnHIGtyUx+L1gTK0kYJ7KWSg25cBr/iX2ek3tn
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4845.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(366004)(136003)(346002)(396003)(451199021)(36756003)(1076003)(26005)(6512007)(186003)(5660300002)(41300700001)(6506007)(478600001)(8676002)(2616005)(66556008)(66946007)(83380400001)(66476007)(8936002)(2906002)(6486002)(38350700002)(38100700002)(316002)(86362001)(52116002)(921005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?umhrPbfitj6gzVV4+hbrQPZSAlSx3yzMgBWCaqbk55qpW8fmYk6uY9XF3SXZ?=
- =?us-ascii?Q?aDjdN1I754Jaw/LCBJcX23mqCLthpqsKyS3kQetvaeA1IwegWhZiX1js7wXt?=
- =?us-ascii?Q?zRHlg9814cKZTLynQ3qThsFHeqvZ3OlKvXyzQIIf4+/a2HHzVi2x56+Oo1Hw?=
- =?us-ascii?Q?4jLqaXa0DPiSEVT2V6jpM/x499z5vAOj+bMmuHO3lZUTr4oS/UHMTLvCMiRf?=
- =?us-ascii?Q?0Bm6ln79Rxg+NoYX7kF6ccWCT5s5A2JJ35nCp7VG2sP1bMrihakfjPievSJA?=
- =?us-ascii?Q?GpHMVKtKw/eb22oHDEZhAdotrLeDQ7uDBzI049eIZ/E/+SMRUJvXxuFto9Si?=
- =?us-ascii?Q?KWdwpKK4IQW5EtL1utId4u/3VJITQQZOH2vU380QJQ/4l4KhgkcaWB9XLgEq?=
- =?us-ascii?Q?S5PLZxxxEux8kP5RzGg5EJ/XJwUXBFIRTUlxczqNw8cJfmtlnjSJ6Abpqhuv?=
- =?us-ascii?Q?o4pp+vm8posmNfEln01+7mhRpb8fh34FlDNC+rkdRTDMiLsG6vKNLC2px8BH?=
- =?us-ascii?Q?jKgeMtQd1zAO3zHBEetES7YjdAkL6gKMxfV8aQ0l+/qaR0+sOTrLw9DZOfPL?=
- =?us-ascii?Q?JbkDZEd8oT52ljrULQ0HuJ5zvhFmBBOE/bC4RG+LEia0yuljJ7iHLnMV194I?=
- =?us-ascii?Q?KBgY3rGyw/igzWU5HlwTFUQbeItoe4eb6zGRkK7PYgIU9GywtV+0hXlEqaZX?=
- =?us-ascii?Q?kv5vNGVfIVwvBXaz4ZxCOhZf0I4CF2h/bzYT4cguVk/ftL6y1ear8TSqbruq?=
- =?us-ascii?Q?7JbRUTg5rL6Z/8wk1bPqgJ4EzoHI+D5kTJ3d9DKIGG7Pgv0gqHPgIxxYV9Go?=
- =?us-ascii?Q?YLCc2lr30ET/8E4z9eVU+PVVCcWAB2xhixfDOy0OU1/stsr0LgHYybCRIjJi?=
- =?us-ascii?Q?PogobCVJF+mEIGRTYt4Xm7Y0ZorJlzac3DeqBd4wnod+tY8BmIrVaBr930JP?=
- =?us-ascii?Q?v+tnwbwUXPdr/ZaRborZVKLmuSELmlyqm9jZoM5awW0bTaCO+Xibf8534Ner?=
- =?us-ascii?Q?79Lt/6N2ufbPjU6+ltzMdUwLBQgd+6VvHOaZjLYiG3IRG1CKV9AdRX3c9DKm?=
- =?us-ascii?Q?1mngPHag0sBnXIDZ7ta995+LQMM2WaHFgW/LiFeCKjsG26FKQMC9zIlZ1y4W?=
- =?us-ascii?Q?vF/k+xtggmWL/foMMkVkO6xTXxsIzOj5fdvRiQ7W9zNXqexcv357Z6fD9uIw?=
- =?us-ascii?Q?rgt6PEMlntoGjR2kHe0/e9vjz71oCJpgsGAZq4Z+XVyhSOCJO8oxjPCLgnDt?=
- =?us-ascii?Q?Hhkt9oiFxNcpXZrcPocN09x60qMePZwC0uV4wzKewAPi/OJl5e2rVyErc0SV?=
- =?us-ascii?Q?tvMbZWzHVvT5XWNk0Pp45RynDjipKtOHpIhBc3efIFCjnEl9/yqFK0wMwQ3D?=
- =?us-ascii?Q?jIXo56h69eG1QpeXKYJGPiunDcOrrKYSbM5yI8h22OeqJoWtHoUtlutiP9BC?=
- =?us-ascii?Q?lnD/WZm0kaCBl4/f1/GrilKPBgS2ApQ/LJ0AwzVoNCNGcMllnyoqmHM+x1rl?=
- =?us-ascii?Q?phJCjxflEjDHCzpBQZfyxWMA5Q7bF49DJ21XNrIpXWuHZWdepflxiX72HaL5?=
- =?us-ascii?Q?lQsu+tuL/6+vHMCvDvHiU5dYUFIFqt6MM/SnpJzY?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7a9e8a85-9d4a-480a-eb8e-08db6b848634
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4845.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 20:35:13.6135
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GHFNYSUdF/hqP5e3jIG3nvF3rwBE2sorlCNhwQEI3xtS39bY0R51NkH0Fb36UgVMwitG+x7cR4Z/YbpmBs228g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7975
+References: <cover.1686239016.git.bristot@kernel.org> <bd9977efff8cc3e002c4b2db02f611167905a99f.1686239016.git.bristot@kernel.org>
+ <CAEXW_YT0DmvQo_gfCq5uzpZpf36HmfzXozo9+=sYJp-hZx4qTQ@mail.gmail.com> <b2cd0072-d226-4adb-ddf5-958d9635f881@kernel.org>
+In-Reply-To: <b2cd0072-d226-4adb-ddf5-958d9635f881@kernel.org>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Mon, 12 Jun 2023 16:35:10 -0400
+Message-ID: <CAEXW_YR9Tfw5KyFU7TQtYE02k+DpaMXH=osx9Ws5w_j1YpHxhg@mail.gmail.com>
+Subject: Re: [RFC PATCH V3 6/6] sched/fair: Implement starvation monitor
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Luca Abeni <luca.abeni@santannapisa.it>,
+        Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vineeth Pillai <vineeth@bitbyteword.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extend Freescale eDMA driver bindings to support eDMA3 IP blocks in
-i.MX8QM and i.MX8QXP SoCs. In i.MX93, both eDMA3 and eDMA4 are now.
+Hello Daniel!
 
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
----
- .../devicetree/bindings/dma/fsl,edma.yaml     | 24 +++++++++++++++++++
- 1 file changed, 24 insertions(+)
+On Mon, Jun 12, 2023 at 1:21=E2=80=AFPM Daniel Bristot de Oliveira
+<bristot@kernel.org> wrote:
+[...]
+> > On Thu, Jun 8, 2023 at 11:58=E2=80=AFAM Daniel Bristot de Oliveira
+> > <bristot@kernel.org> wrote:
+> >>
+> >> From: Juri Lelli <juri.lelli@redhat.com>
+> >>
+> >> Starting deadline server for lower priority classes right away when
+> >> first task is enqueued might break guarantees, as tasks belonging to
+> >> intermediate priority classes could be uselessly preempted. E.g., a we=
+ll
+> >> behaving (non hog) FIFO task can be preempted by NORMAL tasks even if
+> >> there are still CPU cycles available for NORMAL tasks to run, as they'=
+ll
+> >> be running inside the fair deadline server for some period of time.
+> >>
+> >> To prevent this issue, implement a starvation monitor mechanism that
+> >> starts the deadline server only if a (fair in this case) task hasn't
+> >> been scheduled for some interval of time after it has been enqueued.
+> >> Use pick/put functions to manage starvation monitor status.
+> >
+> > Me and Vineeth were discussing that another way of resolving this
+> > issue is to use a DL-server for RT as well, and then using a smaller
+> > deadline  for RT. That way the RT is more likely to be selected due to
+> > its earlier deadline/period.
+>
+> It would not be that different from what we have now.
+>
+> One of the problems of throttling nowadays is that it accounts for a larg=
+e window
+> of time, and any "imprecision" can cause the mechanism not to work as exp=
+ected.
+>
+> For example, we work on a fully-isolated CPU scenario, where some very sp=
+oradic
+> workload can be placed on the isolated CPU because of per-cpu kernel acti=
+vities,
+> e.g., kworkers... We need to let them run, but for a minimal amount of ti=
+me, for
+> instance, 20 us, to bound the interference.
+>
+> The current mechanism does not give this precision because the IRQ accoun=
+ting
+> does not account for runtime for the rt throttling (which makes sense).
 
-diff --git a/Documentation/devicetree/bindings/dma/fsl,edma.yaml b/Documentation/devicetree/bindings/dma/fsl,edma.yaml
-index 5fd8fc604261..14cea8a3f442 100644
---- a/Documentation/devicetree/bindings/dma/fsl,edma.yaml
-+++ b/Documentation/devicetree/bindings/dma/fsl,edma.yaml
-@@ -21,6 +21,10 @@ properties:
-       - enum:
-           - fsl,vf610-edma
-           - fsl,imx7ulp-edma
-+          - fsl,imx8qm-edma
-+          - fsl,imx8qm-adma
-+          - fsl,imx93-edma3
-+          - fsl,imx93-edma4
-       - items:
-           - const: fsl,ls1028a-edma
-           - const: fsl,vf610-edma
-@@ -101,6 +105,26 @@ allOf:
-         reg:
-           maxItems: 2
- 
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            anyOf:
-+              - const: fsl,imx8qm-edma
-+              - const: fsl,imx8qm-adma
-+              - const: fsl,imx93-edma3
-+              - const: fsl,imx93-edma4
-+    then:
-+      properties:
-+        reg:
-+          maxItems: 1
-+        interrupts:
-+          minItems: 1
-+          maxItems: 64
-+        interrupt-names:
-+          minItems: 1
-+          maxItems: 64
-+
- unevaluatedProperties: false
- 
- examples:
--- 
-2.34.1
+I lost you here, "Runtime for the rt throttling" does not make much
+sense to me as a statement.
 
+> So the
+> RT throttling has the 20 us stolen from IRQs and keeps running. The same =
+will
+> happen if we swap the current mechanism with a DL server for the RT.
+
+I read this about 10 times to learn that *maybe* you mean that IRQs
+stole time from the "Well behaved running time" of the RT class. I am
+not seeing how that is related to creation of a DL-server for the RT
+class. Maybe describe your point a bit more clearly?
+
+>
+> Also, thinking about short deadlines to fake a fixed priority is... not s=
+tarting
+> well. A fixed-priority higher instance is not a property of a deadline-ba=
+sed
+> scheduler, and Linux has a fixed-priority hierarchy: STOP -> DL -> RT -> =
+CFS...
+> It is simple, and that is good.
+>
+> That is why it is better to boost CFS instead of throttling RT. By boosti=
+ng
+> CFS, you do not need a server for RT, and we account for anything on top =
+of CFS
+> for free (IRQ/DL/FIFO...).
+
+I did mention in my last email that it is not ideal. I just brought it
+up as an option. It might reduce the problem being seen and is better
+than not having it.
+
+> > Another approach could be to implement the 0-laxity scheduling as a
+> > general SCHED_DEADLINE feature, perhaps through a flag. And allow DL
+> > tasks to opt-in to 0-laxity scheduling unless there are idle cycles.
+> > And then opt-in the feature for the CFS deadline server task.
+>
+> A 0-laxity scheduler is not as simple as it sounds, as the priority also =
+depends
+> on the "C" (runtime, generally WCET), which is hard to find and embeds
+> pessimism. Also, having such a feature would make other mechanisms harder=
+, as
+> well as debugging things. For example, proxy-execution or a more precise
+> schedulability test...
+
+I think you did not read my email properly, I was saying make the
+0-laxity default-off and the opt-in for certain DL tasks. That may
+work perfectly well for a system like ChromeOS where likely we will
+use the DL server as the sole deadline task and opt-in for the
+0-laxity. Then we don't need watchdog hacks at all and it all cleanly
+works within the DL class itself. There are the drawbacks of the
+pessimism/locking  etc (I already knew that by the way as the obvious
+drawbacks of 0-laxity) but I am not immediately seeing how this
+CFS-watchdog with 0-laxity is any different from the DL-server itself
+having such a property. If you really have a concrete point on why
+that won't work, and if you could clarify that more clearly why a
+watchdog is better than it, that would be great.
+
+> In a paper, the scheduler alone is the solution. In real life, the soluti=
+on
+> for problems like locking is as fundamental as the scheduler. We need to =
+keep
+> things simple to expand on these other topics as well.
+>
+> So, I do not think we need all the drawbacks of a mixed solution to just =
+fix
+> the throttling problem, and EDF is more capable and explored for the
+> general case.
+
+Again, I was saying making it opt-in seems like a reasonable approach
+and just enabling such property for the DL server.
+
+> With this patch's idea (and expansions), we can fix the throttling proble=
+m
+> without breaking other behaviors like scheduling order...
+
+I don't mind the watchdog patch as such, of course. I presented its
+mechanics at OSSNA and I know how it works, but I feel the DL server
+opting-in for 0-laxity would be cleaner while keeping such behavior as
+default-off for regular DL uses, that's my opinion -- but what else am
+I missing?  Either way, no harm in discussing alternate approaches as
+well even if we are settling for the watchdog.
+
+> > Lastly, if the goal is to remove RT throttling code eventually, are
+> > you also planning to remove RT group scheduling as well? Are there
+> > users of RT group scheduling that might be impacted? On the other
+> > hand, RT throttling / group scheduling code can be left as it is
+> > (perhaps documenting it as deprecated) and the server stuff can be
+> > implemented via a CONFIG option.
+>
+> I think that the idea is to have the DL servers eventually replace the gr=
+oup
+> schedule. But I also believe that it is better to start by solving the
+> throttling and then moving to other constructions on top of the mechanism=
+.
+
+Hmm. For throttling at the root level yes, but  I am not seeing how
+you can replace the group scheduling code for existing users of RT
+Cgroups with this. The throttling in the RT group scheduling code is
+not exactly only about "not starving CFS", it is more related to
+letting RT groups run with certain bandwidth. So you cannot really
+delete it if there are real users of that code -- you'll have to
+migrate those users away first (to an alternate implementation like
+DL).  If there are no users of RT group scheduling, that's lovely
+though. We don't use it in ChromeOS fwiw.
+
+- Joel
