@@ -2,78 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFAE372BE51
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2C1F72BE5C
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:10:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbjFLKEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 06:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38542 "EHLO
+        id S234746AbjFLKJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 06:09:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236047AbjFLKCV (ORCPT
+        with ESMTP id S236764AbjFLKDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 06:02:21 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B38199E
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:46:22 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-51640b9ed95so7355146a12.2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:46:22 -0700 (PDT)
+        Mon, 12 Jun 2023 06:03:13 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617654EC8
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:47:43 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-5162d2373cdso7427988a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:47:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686563181; x=1689155181;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rnqmA+7ejKEoumRQXbD2dFEOAECIRvpjBrpsIvzDcXE=;
-        b=bOqMAWA6FUl3Hh/1bSBMJUcM9sm069+DjKDb1oLjnPvY5UgqDC1il+j0+f+xDL9AgZ
-         Aa3KEkhRPwnAnoEZqbgeeE2NNX86t3CLIVE0CiRC9idETncR41HJTM4OuTE135G7Dowa
-         X0h157eD9Xxt3VxABSxrtlWe8wvSsk7Aezp53lImnMpy0to9SRH0KxXKZ6YN1sOF6MvG
-         ScopxONIbmAV4eynWU/TrIA/+nQLS4uDqMYHfOqgjHeml45Mw25Jc0EcgxPnCnU2TP5j
-         8aCt3FKRV2E7LLUlhQDWwFVjUrOnOXTeHU3zeeWGbr56bMGPIGVJuLezWpjNwwWbZNbf
-         KnQQ==
+        d=linaro.org; s=google; t=1686563262; x=1689155262;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=swDmGDg9NuCM2bjbOR+WpvDnl7t732pcpG/NR4aJRv4=;
+        b=YXGYto9u8W82vnEKnTap55GQJyfR+pWShm9QBSQO2LrSJNtKo05ZAWOB16fk7flQCh
+         /b4DMKE7UTiad31KITiLK3scP6Oszmw6GwqzFMPpy9c4U6sRGAcNhgy1ODbgVjWT9O06
+         niVMr0SakePRGDfOfne0LnkRiTxVw76d/XAxTPyk7/D6gLLeV5Ai/DToqssNU5SuiJ38
+         oZ8Ol73QSOQQbSTinCn+IF8j034Hiha12T1t+Pug66fx+ZAfNnrexutvL4LUFrjenOt5
+         cYZsAeiRq5guM3JXxnXZ+HNnFjQUiXcYlB9O7MvT7wcouZFEUSA2GJGI+Ano98NkkmLL
+         1tXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686563181; x=1689155181;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rnqmA+7ejKEoumRQXbD2dFEOAECIRvpjBrpsIvzDcXE=;
-        b=TRLYHFYfBOkdTibYeoSZwaZfWir0t+zlQ05Bt5qvfoiMss6n5URFj/vrlBqqR+EKtD
-         L0IsIf7Cjtfux1EYnuQbX8fp7XeGfiquYwdsu+C2W2Oys3V1/qEPJEDh3et3eJL2PLIR
-         Gmoid0343ULg03CDqXlPAAx6o9rsqLPPH0C5/wmtviT20zrvBs8YQUMnUXhwTNwSJ7p5
-         EF/y0tbu9zXw9eHg5Q57HQ6z9XiIU6uGui7R7NyfjdE7hmnabnUytndQmmUMnEh1YkDB
-         IqfjgQQhBwAUUdAyGF/JHH9xnHuTZlps87FNMNI3/Dsrb+CmsFpCgsJgZBmeK++KXg/r
-         7hGg==
-X-Gm-Message-State: AC+VfDzwKH/FVMKOKEHe4eEg7lgQRtbiShOwY2FU1uHmtra0prTKSwLz
-        f+ktA7H9qQZpX5Y3CG/Q2DFJJQ==
-X-Google-Smtp-Source: ACHHUZ7gljOgj8UwPzUL30K6OmKyd1MUnGAknF36UNkZCc2YhbA7YGfJVoCe5QV3YNo7/U5O9ILjNg==
-X-Received: by 2002:a17:907:9349:b0:977:eed1:4510 with SMTP id bv9-20020a170907934900b00977eed14510mr9264925ejc.21.1686563180852;
-        Mon, 12 Jun 2023 02:46:20 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id kd14-20020a17090798ce00b00965a0f30fbfsm4968696ejc.186.2023.06.12.02.46.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 02:46:20 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: samsung: add CONFIG_OF dependency
-Date:   Mon, 12 Jun 2023 11:46:17 +0200
-Message-Id: <168656316761.117073.3267717876811541520.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230609081559.915867-1-arnd@kernel.org>
-References: <20230609081559.915867-1-arnd@kernel.org>
+        d=1e100.net; s=20221208; t=1686563262; x=1689155262;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=swDmGDg9NuCM2bjbOR+WpvDnl7t732pcpG/NR4aJRv4=;
+        b=V9decTlf9dw3Mxbpv6enjOXXUIHI4pdkD6O3ZaVbRqT6czvcdu4BKnWCTud06XorI8
+         DlEIad9oRkrWuJ2AG0C8sxDUmmSl7Ixyz7TaVav50EaayOo1Z7WMny/wDHNTkO9gu8Ot
+         RTTaVRC+Y+Rivc9M0YHYWaoff0fn/yCAACdrwqerJclIEVE8+6FLhR6P4h/kP7wPjryJ
+         WfRnboAdkc40kgTnRecvpPEsRrUz5cf66YQVqL3DLhkQ8b1iSQRv4iSY2TptWAPPhyZa
+         FifBgkZ6i4tVYxAf9wyid7ZL9gBZJ+gzU1yu20MOURMc7tdXzJBc2ExvCymvK4TaWhCr
+         jviQ==
+X-Gm-Message-State: AC+VfDzRgNeKQD/Of4QjWxKgRIdQtsXcZ5qs8CkKKb9YvNxuwctazrvw
+        Yd9cB6bBYCIDpaFAdPA2S1/ZHKS25ttA7skflrY=
+X-Google-Smtp-Source: ACHHUZ6mmtUIKzjbMdNCrJV5FA8uz7fKoiY13HgNWQYwj+87ouaFyCA+erWiLWbdyX6P8AhKPUX8LQ==
+X-Received: by 2002:a05:6402:10d8:b0:50b:c630:a956 with SMTP id p24-20020a05640210d800b0050bc630a956mr4045191edu.17.1686563261847;
+        Mon, 12 Jun 2023 02:47:41 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id n17-20020aa7c691000000b005105f002fd1sm4798496edq.66.2023.06.12.02.47.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 02:47:41 -0700 (PDT)
+Message-ID: <22cbfb03-1959-3883-0c10-cde5233334ab@linaro.org>
+Date:   Mon, 12 Jun 2023 11:47:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] arm64: defconfig: Enable USB audio driver
+Content-Language: en-US
+To:     Ravi Gunasekaran <r-gunasekaran@ti.com>, catalin.marinas@arm.com,
+        will@kernel.org
+Cc:     arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20230612082150.20767-1-r-gunasekaran@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230612082150.20767-1-r-gunasekaran@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,24 +76,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12/06/2023 10:21, Ravi Gunasekaran wrote:
+> Enable the USB audio driver so that USB audio devices
+> can be detected by apps such as aplay.
 
-On Fri, 09 Jun 2023 10:15:49 +0200, Arnd Bergmann wrote:
-> When CONFIG_OF is disabled, build testing on x86 runs into a couple of
-> objtool warnings from functions that unconditionally call panic() but
-> have no __noreturn annotation:
-> 
-> vmlinux.o: warning: objtool: exynos3250_cmu_isp_probe+0x17: samsung_cmu_register_one() is missing a __noreturn annotation
-> vmlinux.o: warning: objtool: exynos7885_cmu_probe+0x16: exynos_arm64_register_cmu() is missing a __noreturn annotation
-> vmlinux.o: warning: objtool: exynos850_cmu_probe+0x16: exynos_arm64_register_cmu() is missing a __noreturn annotation
-> vmlinux.o: warning: objtool: exynosautov9_cmu_probe+0x16: exynos_arm64_register_cmu() is missing a __noreturn annotation
-> 
-> [...]
+defconfig is for development, not for using by distro. Why do you need
+for development of arm64 kernel USB audio? Commit msg should explain this.
 
-Applied, thanks!
-
-[1/1] clk: samsung: add CONFIG_OF dependency
-      https://git.kernel.org/krzk/linux/c/2aac2d8b95923203e683c60124877ab434133679
 
 Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Krzysztof
+
