@@ -2,82 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4611472C60E
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 15:34:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2FBF72C60F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 15:34:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232917AbjFLNeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 09:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58984 "EHLO
+        id S236374AbjFLNek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 09:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235757AbjFLNeJ (ORCPT
+        with ESMTP id S232135AbjFLNei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 09:34:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C6F109;
-        Mon, 12 Jun 2023 06:34:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9900F611CC;
-        Mon, 12 Jun 2023 13:34:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 530B3C433D2;
-        Mon, 12 Jun 2023 13:34:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686576847;
-        bh=CducP5IqvGJjjNpSYSzFQgS1ZXIbd1XVtQqmaXSf5+k=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NfuuHD0hlIev++OR8YgKdYFsgVfHgLpZ+6YlIDIhHxrxkYWW6DzVOBTw4QZJpIvJX
-         tHTh0u2rofzfb+4CbAfJm1bMP0JRliL28g6l+FjXn7//y2sVPGBHpHjpzD6R/6jckR
-         osF62zNBDHGbLfzVqnPt7WNoj0IZaqFz44nyLGBKTTfSBLxyoZKJFs9D8yM34krDvD
-         8ojlXgRBzPOIo9Y9PpHCfMGXYgcZ5VMaZVOldTtSsG9yaC7ukTPkWfb0NN7ef/MU0U
-         JnaaKfU+Om+/g40todryJ5Cp1xqJ+mwvCM/bUxm9ug7N6oCw+MIlI+hTtE2fGRECtW
-         rgFr3JZOUz6Ag==
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>, NeilBrown <neilb@suse.de>
-Cc:     stable@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] nfs: don't report STATX_BTIME in ->getattr
-Date:   Mon, 12 Jun 2023 09:34:04 -0400
-Message-Id: <20230612133404.181166-1-jlayton@kernel.org>
-X-Mailer: git-send-email 2.40.1
+        Mon, 12 Jun 2023 09:34:38 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D993EE9
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 06:34:35 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-56d0dbbfc61so15224337b3.2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 06:34:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1686576875; x=1689168875;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aMMaef3Y60326NhZy/qWmHpGv13Bdt3/sfuPwhyQrG8=;
+        b=qo/LCq3V6W9H8ZqcrKE+1BEpRtS3SQziChm1wZYHkNZHswS6VyxdrYu4tsmptGOQZD
+         pLgwNRNsabIqLCE4eZLpgT4LEtvTKlxZ/1NsmA1Ys+hdB6Hx0ZAA/Ozm2kTo3x/GY0q3
+         ZEi1p6YgnBtST2Jt05FFop2qwmGmbpgZKHVpc8Kyq57jKz2lAlWKYm4uKSql/1A9jpki
+         vepdBAE7Z0CbRmoLiVqqQhLcP6iVxLLI+pzo8E1bAPi5RLgzectmiHI7sG7+A6UQCSDN
+         ahEDASgtklR6wXvn8GoOfOhb87/KfKR50bAny/2xocKDfOz85y8aOx/VFQ0BVg9JaMVE
+         7KUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686576875; x=1689168875;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aMMaef3Y60326NhZy/qWmHpGv13Bdt3/sfuPwhyQrG8=;
+        b=dPZRFVKLKOctWoW6cVhl7x1saRj912b2+g79gQsWsVrt1y13jJtFEiLqrOJXQ5nXpU
+         6oILqTdR4po+olb85I+AwERdTsr7QLqJuIkUM3fFOmUyYrGFSQTtwfidFHfU8Wyvo4WT
+         M4HVuWN02fzKX/mRriuSDYIeybl8lDc6z7ODB6sKrIIhGqX53801ZqdowMiupU0vAVzs
+         1kYnLjR+Mp6NlAY1sCt4Om5PiyIsO4qsMcktfOkegXWICRJqszkV+BP5sVtYude5WHcr
+         xgeqa1eBoPcVFYbOUSL67dzuSzlm1l7Ke8VEpLfHLArgP/QAtOp/F7QWRiu+caVF9K9G
+         Mykw==
+X-Gm-Message-State: AC+VfDw2X2T86aqlGVbN461aairsmatWENX5DnRlh4O3ezDiJgR6YSs4
+        SLwJcAyFG2WPBHM0hv+YSsbo0g==
+X-Google-Smtp-Source: ACHHUZ66qeBuLiP1Ymc3dOrLiebqS62YEcnWkWx+eDLbUv9eVOBQDzyDmiQAfTijmp2nvlkEZn4RjA==
+X-Received: by 2002:a81:83c9:0:b0:56c:fe54:4183 with SMTP id t192-20020a8183c9000000b0056cfe544183mr5383352ywf.52.1686576875054;
+        Mon, 12 Jun 2023 06:34:35 -0700 (PDT)
+Received: from localhost ([2601:58a:8200:2b0::e699])
+        by smtp.gmail.com with ESMTPSA id o124-20020a0dfe82000000b00555df877a4csm2466149ywf.102.2023.06.12.06.34.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 06:34:34 -0700 (PDT)
+Date:   Mon, 12 Jun 2023 09:34:33 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Cc:     vitaly.wool@konsulko.com, minchan@kernel.org,
+        senozhatsky@chromium.org, yosryahmed@google.com,
+        linux-mm@kvack.org, ddstreet@ieee.org, sjenning@redhat.com,
+        nphamcs@gmail.com, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v3 1/7] mm: zswap: add pool shrinking mechanism
+Message-ID: <ZIce6TZchvLZsk5_@cmpxchg.org>
+References: <20230612093815.133504-1-cerasuolodomenico@gmail.com>
+ <20230612093815.133504-2-cerasuolodomenico@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230612093815.133504-2-cerasuolodomenico@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-NFS doesn't properly support reporting the btime in getattr (yet), but
-61a968b4f05e mistakenly added it to the request_mask. This causes statx
-for STATX_BTIME to report a zeroed out btime instead of properly
-clearing the flag.
+On Mon, Jun 12, 2023 at 11:38:09AM +0200, Domenico Cerasuolo wrote:
+> Each zpool driver (zbud, z3fold and zsmalloc) implements its own shrink
+> function, which is called from zpool_shrink. However, with this commit,
+> a unified shrink function is added to zswap. The ultimate goal is to
+> eliminate the need for zpool_shrink once all zpool implementations have
+> dropped their shrink code.
+> 
+> To ensure the functionality of each commit, this change focuses solely
+> on adding the mechanism itself. No modifications are made to
+> the backends, meaning that functionally, there are no immediate changes.
+> The zswap mechanism will only come into effect once the backends have
+> removed their shrink code. The subsequent commits will address the
+> modifications needed in the backends.
+> 
+> Acked-by: Nhat Pham <nphamcs@gmail.com>
+> Tested-by: Yosry Ahmed <yosryahmed@google.com>
+> Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
 
-Cc: stable@vger.kernel.org # v6.3+
-Fixes: 61a968b4f05e ("nfs: report the inode version in getattr if requested")
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
----
- fs/nfs/inode.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/nfs/inode.c b/fs/nfs/inode.c
-index bc4cac08bb24..9b51ffd7281d 100644
---- a/fs/nfs/inode.c
-+++ b/fs/nfs/inode.c
-@@ -846,7 +846,7 @@ int nfs_getattr(struct mnt_idmap *idmap, const struct path *path,
- 
- 	request_mask &= STATX_TYPE | STATX_MODE | STATX_NLINK | STATX_UID |
- 			STATX_GID | STATX_ATIME | STATX_MTIME | STATX_CTIME |
--			STATX_INO | STATX_SIZE | STATX_BLOCKS | STATX_BTIME |
-+			STATX_INO | STATX_SIZE | STATX_BLOCKS |
- 			STATX_CHANGE_COOKIE;
- 
- 	if ((query_flags & AT_STATX_DONT_SYNC) && !force_sync) {
--- 
-2.40.1
-
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
