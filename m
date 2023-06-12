@@ -2,181 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59AA772C640
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 15:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D4472C647
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 15:45:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232133AbjFLNly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 09:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35716 "EHLO
+        id S233692AbjFLNp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 09:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233692AbjFLNlu (ORCPT
+        with ESMTP id S232364AbjFLNpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 09:41:50 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2074.outbound.protection.outlook.com [40.107.244.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6CD109;
-        Mon, 12 Jun 2023 06:41:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Y3TIK19yKu90JcKDCDR2Dg1MdSJF37REj69ZGEWULiV3DYtbzsZAZr8F2QIu1buWYBUgBvve7Rv0XKyKScEYuE1MG7M6eM6BjRw+nShL7sMv8dubV5d4kgvyCf0Cy1n5+SdAjE+OWaih3yJ+nIrsQOLnOyyYAEqpyJ3Yu+bEVdbTXHwUpDL4NB/n5adNfS56OLsqfQosWilghj7+BzITSa7VFDcYGDaQLaifD0gNjgJf9bNbaudiyIWJqGeUqh8aRMkorQ8UzDzKfsP7tqiMmJkeQfWNr3clQiVtDkaBMG9uHCrD2MyHk6+kdHjpW26jm2y1U3zyFl7OhsL+e1QCEw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=B/WheizpUOuCqeT6wYF6UD5tsow/zt0HjUIBAV9LN/M=;
- b=ZQCuFngm6rZ8h6puVwySkR9cHQylMhjaz3xi/jjGJppxYuhWWqaZM8wZR/5XwnZmWRIMiTq7GMBvr9PDGQ5AItFlk81SCMCPRqTDhy0AefixxgVA6/sw/3D74UC27MZBoQZrxkjqsQzmfjrUlNcs6GomCPy1GAFDA9YyJ4/HEonSQNMv2tHr47QWAWd6NpdC4m6PwgMEh1wnHhwZ7j+xyq8M4TJEFIoNatAU6lRFKMMSIp6cjEHiqJIUn9e7Q1201IIOENyBTtBH6o1UC9nhbLVX7xrpNN2RTsH+X4Od3VR7DzZFLVPeJIyzMWd9rFEP9efuJUCaiJUX15xvRgViZg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=talpey.com; dmarc=pass action=none header.from=talpey.com;
- dkim=pass header.d=talpey.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=talpey.com;
-Received: from SN6PR01MB4445.prod.exchangelabs.com (2603:10b6:805:e2::33) by
- MW4PR01MB6338.prod.exchangelabs.com (2603:10b6:303:7b::15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.44; Mon, 12 Jun 2023 13:41:45 +0000
-Received: from SN6PR01MB4445.prod.exchangelabs.com
- ([fe80::17e9:7e30:6603:23bc]) by SN6PR01MB4445.prod.exchangelabs.com
- ([fe80::17e9:7e30:6603:23bc%5]) with mapi id 15.20.6455.039; Mon, 12 Jun 2023
- 13:41:44 +0000
-Message-ID: <a34b598a-374b-5dbf-dd36-4b62e52fe36c@talpey.com>
-Date:   Mon, 12 Jun 2023 09:41:38 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 8/8] cifs: update the ctime on a partial page write
-Content-Language: en-US
-To:     Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Brad Warrum <bwarrum@linux.ibm.com>,
-        Ritu Agarwal <rituagar@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ian Kent <raven@themaw.net>,
-        "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
-        Jeremy Kerr <jk@ozlabs.org>, Ard Biesheuvel <ardb@kernel.org>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        Steve French <sfrench@samba.org>,
-        Paulo Alcantara <pc@manguebit.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Ruihan Li <lrh2000@pku.edu.cn>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        autofs@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, apparmor@lists.ubuntu.com,
-        linux-security-module@vger.kernel.org
-References: <20230612104524.17058-1-jlayton@kernel.org>
- <20230612104524.17058-9-jlayton@kernel.org>
-From:   Tom Talpey <tom@talpey.com>
-In-Reply-To: <20230612104524.17058-9-jlayton@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BLAP220CA0024.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:208:32c::29) To SN6PR01MB4445.prod.exchangelabs.com
- (2603:10b6:805:e2::33)
+        Mon, 12 Jun 2023 09:45:22 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD47102;
+        Mon, 12 Jun 2023 06:45:21 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1b02fcde49aso22300925ad.0;
+        Mon, 12 Jun 2023 06:45:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686577521; x=1689169521;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xp+ysS/v9KjrS28d21jERvbnIuHl+Kng4UDxOGkkdY0=;
+        b=bfDbHZvF1XV0x+cey7Oft91rGZaLWrcKVuUguVzSUpZKXsnR7qMOqzr82YmdFFDIZa
+         oUt5UVhPuej4Fc0VwahKHok28jzeXJ95/caW8bd3y0toAhgQccgeOi5nG0H4ILHePXwT
+         sjentxDcMJbFiQ/eZpDOIiy9upFLMhTWW7RCFwhGKfKEBTi8ilQpzFgb2rUCWnqZuahc
+         G6AnJ3VZRbb33v+82ouW4oKEbVmcz8CoyNTNHtDZBwkrQMVepZ3MlRsJyccpjIUyaVf/
+         4UDGknkiqfvQze3DaHc/+Dla0Z+REc1jrfApjav7aw2sPBEusX80kIgz4WPbD35oh/Qs
+         47ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686577521; x=1689169521;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xp+ysS/v9KjrS28d21jERvbnIuHl+Kng4UDxOGkkdY0=;
+        b=V2CDLg7qPC9GGu8LwBymoon1vE3uRMbJgi9rolGcKIJM9D5MriB/B01Rvz6/8HEJBC
+         RqPP0rqLc2sCcOjDYTgImXVjOnJ2eco30pl4wouwSPC281JH/5VtKOl2Lz00ix8AP+AZ
+         6zs2MLmgehOkSrKYr0652ap4leUWIowMrMae6dv5I2+fFmEUM9XWxSwfCQ/EkcnO+nAx
+         YAnTf1tcu7+OLRlIC5qXumbxqdc28YckZu84spOItuACcb0Y58qompSX9yzg/9k1Gq3t
+         iXJWjje8x8I8Mg1eUZ/4232Iqj/QR/8kufAIVTdo2NY+ycpn5k34rmljIrtAvwiVdNt2
+         +uvw==
+X-Gm-Message-State: AC+VfDx11PxitSCkhSk3CiYLNs+wJCFXf5c5LVPseV7TzNjGFMfDtqR4
+        TyY5yQ62ceQHXeVTrJ6zF8I=
+X-Google-Smtp-Source: ACHHUZ4e7YHs8lzAsa4Zx6aQaXABlBueRy897bpfyCBonC8Uci1An3iD9iSrmd9c7Ze8MNNht1oCzQ==
+X-Received: by 2002:a17:902:d2c9:b0:1b1:e6a4:2797 with SMTP id n9-20020a170902d2c900b001b1e6a42797mr7516147plc.45.1686577520853;
+        Mon, 12 Jun 2023 06:45:20 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u2-20020a17090341c200b001b3d7499141sm1478482ple.72.2023.06.12.06.45.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 06:45:20 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <c88abaaa-6df9-ed27-698e-568357449393@roeck-us.net>
+Date:   Mon, 12 Jun 2023 06:45:18 -0700
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR01MB4445:EE_|MW4PR01MB6338:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4a5607b0-0f73-4b03-eebb-08db6b4ac19a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Ya5XKPcBWekEZdw1jgAQZhCRC6oCdMod6fBUEqZongwZE4e7pYiHP7rouXww8PMCGiI5ETv+1FubdoGeS9bHLj8NqGdKiGfKMjDLUTChM+fli01Vz2QaneCyY4Iv81RDeagLVN+SxngUgtKUfcqv9/46H9bn1OCZKjRaXEn1N3cSurntWLPnGzKJ0bGRmHORbQl0XX21TWHBKV2uuHFiaohplF5hAnYZJoxjjWq46jfckpsvDbHTp6wDUnt5K676I9yvWcZ7mEN1bJpB9OecvgbVAzsbQLMbCVt5Z35t2ypOHXf7dA9DNNFnvsIbtwiJb9zEUxREpIhL6vq3Ll3AjcJreZZvagcI2j+/gU2+owSAFWW+g3Hm0coMqZPl5hjojQ0JuMOCwO5URpjIXFk6M9snamRC+zx58YuFr9t/uK3PM0EPnPzKMorB+5PIa2odMUT8mHorYEwRBxC9g1scOOj4T4YpngHRD10H86Z2GTt8Sc+2M7pZGQuQPgm+vI9dqak9ouW2IDPjea9aCheuj/9DZusiXBodhN2ksKopal1hrNyvMnV6eT1whKfiR5ABJUVPEcu3oN5hS9XbrK+nmOtOWFT2KB0mQaNvPDd0FTR3girKVY6Kbn824sIEuOY3BJBHGXzrQ4O9T/RprMdFc3Bfk8wtwYzsAMJEMPavpLM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR01MB4445.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230028)(39840400004)(376002)(346002)(366004)(396003)(136003)(451199021)(110136005)(921005)(478600001)(66556008)(8676002)(8936002)(41300700001)(5660300002)(66946007)(66476007)(316002)(38100700002)(38350700002)(2616005)(186003)(83380400001)(6666004)(6486002)(52116002)(53546011)(6512007)(6506007)(26005)(31696002)(86362001)(7406005)(7416002)(15650500001)(2906002)(36756003)(31686004)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VzU2SzV5R2w4cERPWXExNTRYMVpOUGVxWUhkV1VLMVNXelp5WVIwaDFWbmJr?=
- =?utf-8?B?UUZXTjhNeTMyTWswUHVGQk14YU41WGtiTFU5MGNWSE9MZDk5a2dZRWI2OFRS?=
- =?utf-8?B?MGRtc0txbmg1NWdJRC84UXFpV0I3QmZ2VUIvQTBzZmNyRWRPUDRiRDdSYnhm?=
- =?utf-8?B?RWtiOWhEd1p4aE8yNlIrRjI4dWphZG11Y3k5ODhlRHEwS1RvUkgxSSttVUdY?=
- =?utf-8?B?UVB2bkQzdWFqSUI4TjFjdGpoVVoxY2xvTVFPZ1Vxa3hSVGk4QXVJVm5EeCta?=
- =?utf-8?B?YVMyVUdrbjJwN2lCeDJIK1NYZWhmdDUyQ2tZSWlUUTVuVUsrd2F2NVpOUnEz?=
- =?utf-8?B?SFV5Z053aWlkNVVFVzY2S3pMUjZnaExVamVpczhLNkgyMlBjdmVka205c2RF?=
- =?utf-8?B?dHpwVXR0bVlINzVhUTJZdTVlMFpLS0E3RUU0MjZLSEhJZ1RuTG5hRVZlQzF0?=
- =?utf-8?B?ams1cmMzY2IzNVBxZDBRYmE2czNqNjl0ZEtCWXpPQWhzUnBoK24xejM2R1Yr?=
- =?utf-8?B?QjJrVVE3WEdGK054a0xtbEJDbit5azQ0UTNyeTdFU1hsUHYxclY2ZTExTUZR?=
- =?utf-8?B?MmU5Ums4K2lnam1VZWN6UmxFK29Pcm5jWU1aUS83eG9kNzEweUNvZHJ4dm0w?=
- =?utf-8?B?cTBCTWxBYTYwcGlPZ08rOEVtNG1KT3RjcEJlNzg3T25YZ2RKTGJVNDMrZDl5?=
- =?utf-8?B?NHpnanZLSklMbnlZMDdrSG1tSmgvVVVqNEdYa0xuVGY0dkZUQTV3YTBCM0Na?=
- =?utf-8?B?RFhLZVdjWmRhcWVWNGM0VlU3djU2RlYvM2JoTjN2WkxQSkZBOXJBeU0xOHJW?=
- =?utf-8?B?bWRtOUE2QW81c2dSMjJDUHFKSStCdW1jVmNkR1lRSkV2dmNtM3dITDdOQmp3?=
- =?utf-8?B?ZGVLODVBdVBXYXhRTVlQdS9lNUVrYlE2c2tRMzFCQUJ1cy9pbFZ3cnp3RitY?=
- =?utf-8?B?Y2daZUc5QkJuc3ZoeHhmWmlJbWYzbDN1amN3ZVJWZEJVcjc3TWI2ZDBHSzdV?=
- =?utf-8?B?NkRMMlVLZUs4YVZSRTNpYUsyLzNPY00vdG82MXBFOGVDMXlUbnhwQ3E0all2?=
- =?utf-8?B?eE9GdXdnQmhpbjlzTVNYQ1JpQzJtYjUwUHFmSE80NTA4M0E3dXdBclljbGhv?=
- =?utf-8?B?eFdvVGxpYlMrTUdOeVhtU0JJWWhhajQwSnlLbGRRSUVRN1p4RFAzZElOSWFa?=
- =?utf-8?B?cnBXWWIrWE1kRWFuQkpEN3FQS29iczc3Vjl0RnZEc0xOQmRrcmFtVDFnK3Jl?=
- =?utf-8?B?dWU4dzR1aWNPa3dUZEVwelJlenJpZ2NIT2RHMTlnUU13Ykl5SGY3aFFpK1ln?=
- =?utf-8?B?R3BxblIyR2FTUWtuZU1JSFppanFscE5pSTBtbkUzMEdNdG5PK0Zwa3JEL3R2?=
- =?utf-8?B?OU9SRVBsRi9LSTJPVzE2L1EwUlZaempMMVA5U0NJaUVyYU1SSThINjdPZEFT?=
- =?utf-8?B?ckFuS2p3Rm0xSkFENTRkdStKeUpmWHJ4U2Z4QVUrRmtFQ3kyRDYxTUlhWWFP?=
- =?utf-8?B?MTAzZmxXcGpqM0xDZytkRHBlNWJLWk5WeEpmYWhmNUh5ZUh2S1hPcmpOSVVa?=
- =?utf-8?B?NjBmemVOTWRyL2w0ekJ6eFBQRWlKQXhteDNxc2RpdnJmYWlhUXd6VXVsSWEx?=
- =?utf-8?B?WXdDdEZtRStwaUdoS29adXJYTDYxWk1qR21xOG52V1pFY1lyMG4vdzVLeWFH?=
- =?utf-8?B?SUdYd2FRODE4VXV3WFJJajNERjA0azZTOFVOOS9sYU1sZmY4eVNNT0dpdWVI?=
- =?utf-8?B?WjdrdC95Wm15ZFlBM05XLzJFdXRBMjYwcUFzdDlPNDh6ZjdZVjJrUnBFQ0pV?=
- =?utf-8?B?MFl1Sms2OFJlNmN1dnVTS0NtdnN2NGpnUDFaUzd2R01EYjByRHRoNUVCWVlw?=
- =?utf-8?B?WTlvMmtORmZsN0YxeWthUFZSeFJiWk9RR09xaFN3TFhoV3BabTlsbFpHeWN0?=
- =?utf-8?B?RzhXeWFmS0w4T2RscmtSYVNMYmwvVGErMUtYZW52Um83em9xeVNqU3VZM0Zo?=
- =?utf-8?B?aWdLWDNMWnFrNVZjeFNSU3FNME1VNHZmbGc5YXY1UXVkL1J3czBkeEdKaGFC?=
- =?utf-8?B?T1pmQzRib1hGL2NWVnVHajZZeUxVcGNPd2lTZVBwUHMwbGgwemxNbVdqd0ZP?=
- =?utf-8?Q?72Sjp0RvCpBp5V8m2UqDa4VYh?=
-X-OriginatorOrg: talpey.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4a5607b0-0f73-4b03-eebb-08db6b4ac19a
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR01MB4445.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 13:41:44.6979
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 2b2dcae7-2555-4add-bc80-48756da031d5
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WjGX/3G4SJ3mAjCjgyTNGLVvHFI3PgGglHHug+FAqKPcH+Mefj8Q1o1aIOENTpuL
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR01MB6338
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US
+To:     JuenKit Yip <JuenKit_Yip@hotmail.com>, jdelvare@suse.com
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <DB4PR10MB62612F917CF1BF8FB03927609254A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+ <898a6ebb-b0cc-5a48-30da-c4a5dc19d1a4@roeck-us.net>
+ <DB4PR10MB6261BFA04779E6BCFF7A07799254A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [RFC] sht3x code modifcation
+In-Reply-To: <DB4PR10MB6261BFA04779E6BCFF7A07799254A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/12/2023 6:45 AM, Jeff Layton wrote:
-> POSIX says:
+On 6/12/23 02:58, JuenKit Yip wrote:
+> The original code only support two mode: high-precision mode(high repeatability and
+> 10Hz periodic measurement) and low-power mode(low repeatability and 0.5Hz measurement),
+> but in fact this sensor support 5 periodic measurement duration(and single shot) and
+> 3 repeatability which are not fully implemented.
+> High-precision mode was defined manually so that I think that we should reserve the
+> right to user to choose which one repeatability and periodic measurement is the best.
+> I just put the patch for reference and hope you could give any comments.
+> Medium-repeatability was not added into code and I hope put it later.
 > 
->      "Upon successful completion, where nbyte is greater than 0, write()
->       shall mark for update the last data modification and last file status
->       change timestamps of the file..."
+> If you have any other further question, kindly contact to me.
+> Thanks
 > 
-> Add the missing ctime update.
+> Juen Kit Yip
 > 
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> Signed-off-by: JuenKit Yip <JuenKit_Yip@hotmail.com>
+> 
+
+So this patch replaces the term "high precision" with "high repeatability",
+"low power" with "low repeatability", and it removes the ability to select
+high vs. low precision / repeatability from platform data.
+
+I would accept a patch removing platform data entirely since there is
+no in-tree driver supporting it. The ability to select precision
+(or reliability) should still be supported, possibly with a non-standard
+sysfs attribute. You might consider sending a series of patches.
+
+1) Remove platform data support
+2) (optional) Convert driver to with_info API
+3) Replace "precision" with "repeatability" to match datasheet
+    terminology
+4) Implement a non-standard sysfs attribute such as "repeatability"
+    to support selecting high/medium/low repeatability.
+5) (optional) Implement devicetree support.
+
+Guenter
+
 > ---
->   fs/smb/client/file.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>   Documentation/hwmon/sht3x.rst       |  6 ++----
+>   drivers/hwmon/sht3x.c               | 27 +++++++++++++++++----------
+>   include/linux/platform_data/sht3x.h |  1 -
+>   3 files changed, 19 insertions(+), 15 deletions(-)
 > 
-> diff --git a/fs/smb/client/file.c b/fs/smb/client/file.c
-> index df88b8c04d03..a00038a326cf 100644
-> --- a/fs/smb/client/file.c
-> +++ b/fs/smb/client/file.c
-> @@ -2596,7 +2596,7 @@ static int cifs_partialpagewrite(struct page *page, unsigned from, unsigned to)
->   					   write_data, to - from, &offset);
->   		cifsFileInfo_put(open_file);
->   		/* Does mm or vfs already set times? */
-> -		inode->i_atime = inode->i_mtime = current_time(inode);
-> +		inode->i_atime = inode->i_mtime = inode->i_ctime = current_time(inode);
+> diff --git a/Documentation/hwmon/sht3x.rst b/Documentation/hwmon/sht3x.rst
+> index 95a850d5b..c6b7a1aa5 100644
+> --- a/Documentation/hwmon/sht3x.rst
+> +++ b/Documentation/hwmon/sht3x.rst
+> @@ -28,15 +28,13 @@ The device communicates with the I2C protocol. Sensors can have the I2C
+>   addresses 0x44 or 0x45, depending on the wiring. See
+>   Documentation/i2c/instantiating-devices.rst for methods to instantiate the device.
+> 
+> -There are two options configurable by means of sht3x_platform_data:
+> +There is only one option configurable by means of sht3x_platform_data:
+> 
+> -1. blocking (pull the I2C clock line down while performing the measurement) or
+> +   blocking (pull the I2C clock line down while performing the measurement) or
+>      non-blocking mode. Blocking mode will guarantee the fastest result but
+>      the I2C bus will be busy during that time. By default, non-blocking mode
+>      is used. Make sure clock-stretching works properly on your device if you
+>      want to use blocking mode.
+> -2. high or low accuracy. High accuracy is used by default and using it is
+> -   strongly recommended.
+> 
+>   The sht3x sensor supports a single shot mode as well as 5 periodic measure
+>   modes, which can be controlled with the update_interval sysfs interface.
+> diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
+> index 8305e44d9..6065312ae 100644
+> --- a/drivers/hwmon/sht3x.c
+> +++ b/drivers/hwmon/sht3x.c
+> @@ -22,11 +22,11 @@
+>   #include <linux/jiffies.h>
+>   #include <linux/platform_data/sht3x.h>
+> 
+> -/* commands (high precision mode) */
+> +/* commands (high repeatability mode) */
+>   static const unsigned char sht3x_cmd_measure_blocking_hpm[]    = { 0x2c, 0x06 };
+>   static const unsigned char sht3x_cmd_measure_nonblocking_hpm[] = { 0x24, 0x00 };
+> 
+> -/* commands (low power mode) */
+> +/* commands (low repeatability mode) */
+>   static const unsigned char sht3x_cmd_measure_blocking_lpm[]    = { 0x2c, 0x10 };
+>   static const unsigned char sht3x_cmd_measure_nonblocking_lpm[] = { 0x24, 0x16 };
+> 
+> @@ -69,9 +69,14 @@ enum sht3x_limits {
+>       limit_min_hyst,
+>   };
+> 
+> +enum sht3x_repeatability {
+> +    high_repeatability,
+> +    low_repeatability,
+> +};
+> +
+>   DECLARE_CRC8_TABLE(sht3x_crc8_table);
+> 
+> -/* periodic measure commands (high precision mode) */
+> +/* periodic measure commands (high repeatability mode) */
+>   static const char periodic_measure_commands_hpm[][SHT3X_CMD_LENGTH] = {
+>       /* 0.5 measurements per second */
+>       {0x20, 0x32},
+> @@ -85,7 +90,7 @@ static const char periodic_measure_commands_hpm[][SHT3X_CMD_LENGTH] = {
+>       {0x27, 0x37},
+>   };
+> 
+> -/* periodic measure commands (low power mode) */
+> +/* periodic measure commands (low repeatability mode) */
+>   static const char periodic_measure_commands_lpm[][SHT3X_CMD_LENGTH] = {
+>       /* 0.5 measurements per second */
+>       {0x20, 0x2f},
+> @@ -132,6 +137,7 @@ struct sht3x_data {
+>       struct mutex data_lock; /* lock for updating driver data */
+> 
+>       u8 mode;
+> +    enum sht3x_repeatability repeatability;
+>       const unsigned char *command;
+>       u32 wait_time;            /* in us*/
+>       unsigned long last_update;    /* last update in periodic mode*/
+> @@ -442,12 +448,13 @@ static void sht3x_select_command(struct sht3x_data *data)
+>           data->command = sht3x_cmd_measure_periodic_mode;
+>           data->wait_time = 0;
+>       } else if (data->setup.blocking_io) {
+> -        data->command = data->setup.high_precision ?
+> -                sht3x_cmd_measure_blocking_hpm :
+> -                sht3x_cmd_measure_blocking_lpm;
+> +        if(data->repeatability == high_repeatability)
+> +            data->command = sht3x_cmd_measure_blocking_hpm;
+> +        else if(data->repeatability == low_repeatability)
+> +            data->command = sht3x_cmd_measure_blocking_lpm;
+>           data->wait_time = 0;
+>       } else {
+> -        if (data->setup.high_precision) {
+> +        if (data->repeatability == high_repeatability) {
+>               data->command = sht3x_cmd_measure_nonblocking_hpm;
+>               data->wait_time = SHT3X_NONBLOCKING_WAIT_TIME_HPM;
+>           } else {
+> @@ -595,7 +602,7 @@ static ssize_t update_interval_store(struct device *dev,
+>       }
+> 
+>       if (mode > 0) {
+> -        if (data->setup.high_precision)
+> +        if (data->repeatability == high_repeatability)
+>               command = periodic_measure_commands_hpm[mode - 1];
+>           else
+>               command = periodic_measure_commands_lpm[mode - 1];
+> @@ -691,7 +698,7 @@ static int sht3x_probe(struct i2c_client *client)
+>           return -ENOMEM;
+> 
+>       data->setup.blocking_io = false;
+> -    data->setup.high_precision = true;
+> +    data->repeatability = high_repeatability;
+>       data->mode = 0;
+>       data->last_update = jiffies - msecs_to_jiffies(3000);
+>       data->client = client;
+> diff --git a/include/linux/platform_data/sht3x.h b/include/linux/platform_data/sht3x.h
+> index 14680d2a9..626c1404a 100644
+> --- a/include/linux/platform_data/sht3x.h
+> +++ b/include/linux/platform_data/sht3x.h
+> @@ -10,6 +10,5 @@
+> 
+>   struct sht3x_platform_data {
+>       bool blocking_io;
+> -    bool high_precision;
+>   };
+>   #endif /* __SHT3X_H_ */
 
-Question. It appears that roughly half the filesystems in this series
-don't touch the i_atime in this case. And the other half do. Which is
-correct? Did they incorrectly set i_atime instead of i_ctime?
-
-Tom.
-
->   		if ((bytes_written > 0) && (offset))
->   			rc = 0;
->   		else if (bytes_written < 0)
