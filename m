@@ -2,262 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9906372BE34
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D4272BE39
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236639AbjFLKCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 06:02:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33558 "EHLO
+        id S236313AbjFLKDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 06:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235296AbjFLJzM (ORCPT
+        with ESMTP id S235965AbjFLJ5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 05:55:12 -0400
-Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3A81729
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:40:52 -0700 (PDT)
-Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-777ab76f328so360767539f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:40:52 -0700 (PDT)
+        Mon, 12 Jun 2023 05:57:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0431D4C2B
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:42:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686562926;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=D3WIPm4z3+5JGaYbfhg2L2EMz9XADf68AcDZRHShQv4=;
+        b=GJTV87DUEE67fLmNtfs8yr86FU2ZUcWP8xlW5N2HC9hh5Ad4rb9n0FmDghQuh5aV9e0t6t
+        p8JkpdNhEae6Yxr+iD58FBPHBwHrLNRSL7d2hyJrCCGxT/S4zdq70DrTt7D1twshfjOx/+
+        fQLb6QNGdp4zNKcTl4R13yJNad2Wv+o=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-296-WHiiV8xsOKmrj6eVzeUj2g-1; Mon, 12 Jun 2023 05:41:59 -0400
+X-MC-Unique: WHiiV8xsOKmrj6eVzeUj2g-1
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f5df65f9f4so17553025e9.2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:41:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686562852; x=1689154852;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kfYqGXcZCJG3QZnCnhuyj9cVlmftF9FOW17Z0xBS6XU=;
-        b=h4ZrO+FMCs+mPyGL0hRhG8GIif06+KH57wtOt9XhTwEQtzXskKmplVw88jRXW7JVbZ
-         wVF3Vaq6/ExCt3FYnrozYuTIjjyZPAxZWpgKSAm34JXOCIdZCEkGde4CU/CL38nE/63X
-         1q11Nfc4fnC+Hkj7uL9IMpKS32ZHjrQpdP2UguCQ7B1S/8r17oSYK5O2nPBKfzVZvKfF
-         ji3d6Nd9Ir27KGrKGbvpliBk5abo7ZgEVQpabpO7itVB0CQjY9AmZybZhUlMP2cdzkjN
-         ogorQUkppfGB51M0U4wDTiZIssFzr1h2F2CALMphtG19DoBu8LF4X2t7K9cFHM5Fvtix
-         jZ7w==
-X-Gm-Message-State: AC+VfDyBKym3DkxOWZmdBfJN0mBbc9aGtZPT7S23kLNldsJSKA0ehLpF
-        HDJlBq59wGIpt/FhDiDIJuqVNLahpqcqMOYEzzNWh0tyAbAM
-X-Google-Smtp-Source: ACHHUZ4c0nOVnqZMoMWM/bLdD3IBiTtYor/ZM78/8EBD8eAUxbtBI8T0b1ttjP8fuarSqOaoO5u5Ld7pv0vkUUAIl8hmFGMiGb24
+        d=1e100.net; s=20221208; t=1686562918; x=1689154918;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D3WIPm4z3+5JGaYbfhg2L2EMz9XADf68AcDZRHShQv4=;
+        b=mBu3VSNj155IrDlxQmiWjoM6rr37qfRYqvIIJmlq+BRcENz1LIutpb4FN93XnIwqeg
+         kZ8equ5qzpxinmGtLJnChugSj9n7A33h3T7OdFU2SjM6CgWT51nL3mpB/M9JAk52czHf
+         3yIui1UmuhB8PbVyNX1gYez1aSN1zySCL0I3xwJcbuhXdtHKJkupZEEbZCmN+Q/GJIQp
+         V/sQnoLrgXikbO44PLoue8uvQsF/EtiqjQSFcHCxfLNB8TbjCD2kyk7y+V4LJ5ju0tur
+         eQBB3CpCpeS/ia597FLaIiHehMU4KHg/ctqPaN0c+rkkRoXw8tUVjDlzbo/ByZk0du9o
+         Cjpw==
+X-Gm-Message-State: AC+VfDwOu+ycsABu1aYMcxmhzsX1bYHqbypT+8bJSTHuGbS1afe3IauI
+        AoTdcQF9WyNJnlJzQdJkrbEIYxfS91p/B8ySEDwszv+jbPqPET57fUazF1mbp+//ek6HcQQgk4G
+        aORg650oMFHM6tySbRwfxMqGT
+X-Received: by 2002:a05:600c:2254:b0:3f7:e535:ff3b with SMTP id a20-20020a05600c225400b003f7e535ff3bmr5477921wmm.3.1686562918184;
+        Mon, 12 Jun 2023 02:41:58 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7Sm436YTX68TNCme7HngotSe4eDUtAGeZuBK92RHWCc1ajo1ryGkbEfHpBQKOiPAD0EO+q1A==
+X-Received: by 2002:a05:600c:2254:b0:3f7:e535:ff3b with SMTP id a20-20020a05600c225400b003f7e535ff3bmr5477906wmm.3.1686562917812;
+        Mon, 12 Jun 2023 02:41:57 -0700 (PDT)
+Received: from localhost.localdomain ([151.29.46.22])
+        by smtp.gmail.com with ESMTPSA id y10-20020a1c4b0a000000b003f5ffba9ae1sm10886705wma.24.2023.06.12.02.41.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 02:41:57 -0700 (PDT)
+Date:   Mon, 12 Jun 2023 11:41:55 +0200
+From:   Juri Lelli <juri.lelli@redhat.com>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-doc@vger.kernel.org, William White <chwhite@redhat.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [PATCH V3 00/11] rtla improvements
+Message-ID: <ZIboY08U6SMS1tiO@localhost.localdomain>
+References: <cover.1686066600.git.bristot@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2b15:b0:774:8680:b95b with SMTP id
- p21-20020a0566022b1500b007748680b95bmr6980256iov.1.1686562852195; Mon, 12 Jun
- 2023 02:40:52 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 02:40:52 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b2585a05fdeb8379@google.com>
-Subject: [syzbot] [crypto?] KASAN: slab-out-of-bounds Read in extract_iter_to_sg
-From:   syzbot <syzbot+6efc50cc1f8d718d6cb7@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, dhowells@redhat.com,
-        herbert@gondor.apana.org.au, kuba@kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1686066600.git.bristot@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi,
 
-syzbot found the following issue on:
+On 06/06/23 18:12, Daniel Bristot de Oliveira wrote:
+> This is a series of improvements for rtla, mainly as a result of our
+> daily usage of the tool debugging problems at red hat.
+> 
+> The cgroup support and house keeping options are from our usage
+> of the tool debugging containers.
+> 
+> The auto-analysis overhead reduction is needed when we go to
+> large boxes - but it is really hand in practice, as it gives an idea
+> of the problem without having to look at the trace.
+> 
+> Running hwnoise 100 % of CPU time might cause some systems
+> to slow down too much. Reduce its utilization to 75% by default to
+> avoid problems for people using it for the first time.
+> 
+> Finally, it adds support for running timerlat user-space threads,
+> and to collect the additional field via rtla timerlat top/hist.
+> 
+> Changes from V2:
+>   - Add timerlat hist -u option
+>   - Link: https://lore.kernel.org/lkml/cover.1684863094.git.bristot@kernel.org/
+> Changes from V1:
+>   - Add the user-space thread support to rtla timerlat top
+>   - Link: https://lore.kernel.org/lkml/cover.1683827510.git.bristot@kernel.org/
+> 
+> Daniel Bristot de Oliveira (11):
+>   rtla: Add -C cgroup support
+>   rtla: Add --house-keeping option
+>   rtla: Change monitored_cpus from char * to cpu_set_t
+>   rtla: Automatically move rtla to a house-keeping cpu
+>   rtla/timerlat: Give timerlat auto analysis its own instance
+>   rtla/timerlat_hist: Add auto-analysis support
+>   rtla: Start the tracers after creating all instances
+>   rtla/hwnoise: Reduce runtime to 75%
+>   rtla: Add timerlat user-space support for timerlat top
+>   rtla: Add timerlat user-space support for
+>   Documentation: Add tools/rtla timerlat -u option documentation
+> 
+>  Documentation/tools/rtla/common_options.rst   |   8 +
+>  .../tools/rtla/common_timerlat_aa.rst         |   7 -
+>  .../tools/rtla/common_timerlat_options.rst    |   7 +
+>  .../tools/rtla/rtla-timerlat-hist.rst         |   7 +-
+>  .../tools/rtla/rtla-timerlat-top.rst          |   7 +
+>  tools/tracing/rtla/src/osnoise.c              |  65 ++++
+>  tools/tracing/rtla/src/osnoise.h              |   5 +
+>  tools/tracing/rtla/src/osnoise_hist.c         |  90 ++++-
+>  tools/tracing/rtla/src/osnoise_top.c          |  83 ++++-
+>  tools/tracing/rtla/src/timerlat_aa.c          |  35 +-
+>  tools/tracing/rtla/src/timerlat_aa.h          |   5 +-
+>  tools/tracing/rtla/src/timerlat_hist.c        | 262 ++++++++++++--
+>  tools/tracing/rtla/src/timerlat_top.c         | 229 +++++++++++--
+>  tools/tracing/rtla/src/timerlat_u.c           | 224 ++++++++++++
+>  tools/tracing/rtla/src/timerlat_u.h           |  18 +
+>  tools/tracing/rtla/src/utils.c                | 324 +++++++++++++++++-
+>  tools/tracing/rtla/src/utils.h                |   7 +
+>  17 files changed, 1277 insertions(+), 106 deletions(-)
+>  create mode 100644 tools/tracing/rtla/src/timerlat_u.c
+>  create mode 100644 tools/tracing/rtla/src/timerlat_u.h
+> 
+> -- 
 
-HEAD commit:    e7c5433c5aaa tools: ynl: Remove duplicated include in hand..
-git tree:       net-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=112cc875280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=526f919910d4a671
-dashboard link: https://syzkaller.appspot.com/bug?extid=6efc50cc1f8d718d6cb7
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=104f3fa5280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=176d012d280000
+I've been heavily relying on these for debugging various issues with
+latency sensitive workloads and they work like a charm.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/13c08af1fd21/disk-e7c5433c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/35820511752b/vmlinux-e7c5433c.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6a8cbec0d40f/bzImage-e7c5433c.xz
+Tested-by: Juri Lelli <juri.lelli@redhat.com>
 
-The issue was bisected to:
+Best,
+Juri
 
-commit 2dc334f1a63a8839b88483a3e73c0f27c9c1791c
-Author: David Howells <dhowells@redhat.com>
-Date:   Wed Jun 7 18:19:09 2023 +0000
-
-    splice, net: Use sendmsg(MSG_SPLICE_PAGES) rather than ->sendpage()
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12c10c75280000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=11c10c75280000
-console output: https://syzkaller.appspot.com/x/log.txt?x=16c10c75280000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6efc50cc1f8d718d6cb7@syzkaller.appspotmail.com
-Fixes: 2dc334f1a63a ("splice, net: Use sendmsg(MSG_SPLICE_PAGES) rather than ->sendpage()")
-
-==================================================================
-BUG: KASAN: slab-out-of-bounds in sg_assign_page include/linux/scatterlist.h:109 [inline]
-BUG: KASAN: slab-out-of-bounds in sg_set_page include/linux/scatterlist.h:139 [inline]
-BUG: KASAN: slab-out-of-bounds in extract_bvec_to_sg lib/scatterlist.c:1183 [inline]
-BUG: KASAN: slab-out-of-bounds in extract_iter_to_sg lib/scatterlist.c:1352 [inline]
-BUG: KASAN: slab-out-of-bounds in extract_iter_to_sg+0x17a6/0x1960 lib/scatterlist.c:1339
-Read of size 8 at addr ffff88807e016ff8 by task syz-executor415/5028
-
-CPU: 1 PID: 5028 Comm: syz-executor415 Not tainted 6.4.0-rc5-syzkaller-00915-ge7c5433c5aaa #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:351
- print_report mm/kasan/report.c:462 [inline]
- kasan_report+0x11c/0x130 mm/kasan/report.c:572
- sg_assign_page include/linux/scatterlist.h:109 [inline]
- sg_set_page include/linux/scatterlist.h:139 [inline]
- extract_bvec_to_sg lib/scatterlist.c:1183 [inline]
- extract_iter_to_sg lib/scatterlist.c:1352 [inline]
- extract_iter_to_sg+0x17a6/0x1960 lib/scatterlist.c:1339
- af_alg_sendmsg+0x1917/0x2990 crypto/af_alg.c:1045
- sock_sendmsg_nosec net/socket.c:724 [inline]
- sock_sendmsg+0xde/0x190 net/socket.c:747
- splice_to_socket+0x954/0xe30 fs/splice.c:917
- do_splice_from fs/splice.c:969 [inline]
- direct_splice_actor+0x114/0x180 fs/splice.c:1157
- splice_direct_to_actor+0x34a/0x9c0 fs/splice.c:1103
- do_splice_direct+0x1ad/0x280 fs/splice.c:1209
- do_sendfile+0xb19/0x12c0 fs/read_write.c:1254
- __do_sys_sendfile64 fs/read_write.c:1316 [inline]
- __se_sys_sendfile64 fs/read_write.c:1308 [inline]
- __x64_sys_sendfile64+0x14d/0x210 fs/read_write.c:1308
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f8d65191a89
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f8d65101308 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
-RAX: ffffffffffffffda RBX: 00007f8d65219428 RCX: 00007f8d65191a89
-RDX: 0000000020000180 RSI: 0000000000000003 RDI: 0000000000000005
-RBP: 00007f8d65219420 R08: 00007f8d65101700 R09: 0000000000000000
-R10: 00000000ffffffff R11: 0000000000000246 R12: 00007f8d6521942c
-R13: 00007f8d651e7064 R14: 7265687069636b73 R15: 0000000000022000
- </TASK>
-
-Allocated by task 5028:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- ____kasan_kmalloc mm/kasan/common.c:374 [inline]
- ____kasan_kmalloc mm/kasan/common.c:333 [inline]
- __kasan_kmalloc+0xa2/0xb0 mm/kasan/common.c:383
- kasan_kmalloc include/linux/kasan.h:196 [inline]
- __do_kmalloc_node mm/slab_common.c:966 [inline]
- __kmalloc+0x5e/0x190 mm/slab_common.c:979
- kmalloc include/linux/slab.h:563 [inline]
- sock_kmalloc+0xb2/0x100 net/core/sock.c:2630
- af_alg_alloc_tsgl crypto/af_alg.c:614 [inline]
- af_alg_sendmsg+0x17a4/0x2990 crypto/af_alg.c:1028
- sock_sendmsg_nosec net/socket.c:724 [inline]
- sock_sendmsg+0xde/0x190 net/socket.c:747
- splice_to_socket+0x954/0xe30 fs/splice.c:917
- do_splice_from fs/splice.c:969 [inline]
- direct_splice_actor+0x114/0x180 fs/splice.c:1157
- splice_direct_to_actor+0x34a/0x9c0 fs/splice.c:1103
- do_splice_direct+0x1ad/0x280 fs/splice.c:1209
- do_sendfile+0xb19/0x12c0 fs/read_write.c:1254
- __do_sys_sendfile64 fs/read_write.c:1316 [inline]
- __se_sys_sendfile64 fs/read_write.c:1308 [inline]
- __x64_sys_sendfile64+0x14d/0x210 fs/read_write.c:1308
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-The buggy address belongs to the object at ffff88807e016000
- which belongs to the cache kmalloc-4k of size 4096
-The buggy address is located 0 bytes to the right of
- allocated 4088-byte region [ffff88807e016000, ffff88807e016ff8)
-
-The buggy address belongs to the physical page:
-page:ffffea0001f80400 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7e010
-head:ffffea0001f80400 order:3 entire_mapcount:0 nr_pages_mapped:0 pincount:0
-flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-page_type: 0xffffffff()
-raw: 00fff00000010200 ffff888012442140 dead000000000122 0000000000000000
-raw: 0000000000000000 0000000080040004 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd2040(__GFP_IO|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 5019, tgid 5019 (modprobe), ts 80491362379, free_ts 80455993447
- set_page_owner include/linux/page_owner.h:31 [inline]
- post_alloc_hook+0x2db/0x350 mm/page_alloc.c:1731
- prep_new_page mm/page_alloc.c:1738 [inline]
- get_page_from_freelist+0xf41/0x2c00 mm/page_alloc.c:3502
- __alloc_pages+0x1cb/0x4a0 mm/page_alloc.c:4768
- alloc_pages+0x1aa/0x270 mm/mempolicy.c:2279
- alloc_slab_page mm/slub.c:1851 [inline]
- allocate_slab+0x25f/0x390 mm/slub.c:1998
- new_slab mm/slub.c:2051 [inline]
- ___slab_alloc+0xa91/0x1400 mm/slub.c:3192
- __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3291
- __slab_alloc_node mm/slub.c:3344 [inline]
- slab_alloc_node mm/slub.c:3441 [inline]
- __kmem_cache_alloc_node+0x136/0x320 mm/slub.c:3490
- __do_kmalloc_node mm/slab_common.c:965 [inline]
- __kmalloc+0x4e/0x190 mm/slab_common.c:979
- kmalloc include/linux/slab.h:563 [inline]
- tomoyo_realpath_from_path+0xc3/0x600 security/tomoyo/realpath.c:251
- tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
- tomoyo_path_perm+0x230/0x430 security/tomoyo/file.c:822
- security_inode_getattr+0xd3/0x140 security/security.c:2114
- vfs_getattr fs/stat.c:167 [inline]
- vfs_statx+0x16e/0x430 fs/stat.c:242
- vfs_fstatat+0x90/0xb0 fs/stat.c:276
- __do_sys_newfstatat+0x8a/0x110 fs/stat.c:446
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1302 [inline]
- free_unref_page_prepare+0x62e/0xcb0 mm/page_alloc.c:2564
- free_unref_page+0x33/0x370 mm/page_alloc.c:2659
- __folio_put_large mm/swap.c:119 [inline]
- __folio_put+0x109/0x140 mm/swap.c:127
- folio_put include/linux/mm.h:1430 [inline]
- put_page+0x21b/0x280 include/linux/mm.h:1499
- page_to_skb+0x810/0xa10 drivers/net/virtio_net.c:560
- receive_mergeable drivers/net/virtio_net.c:1469 [inline]
- receive_buf+0x1128/0x5020 drivers/net/virtio_net.c:1590
- virtnet_receive drivers/net/virtio_net.c:1888 [inline]
- virtnet_poll+0x742/0x14b0 drivers/net/virtio_net.c:1960
- __napi_poll+0xb7/0x6f0 net/core/dev.c:6501
- napi_poll net/core/dev.c:6568 [inline]
- net_rx_action+0x8a9/0xcb0 net/core/dev.c:6701
- __do_softirq+0x1d4/0x905 kernel/softirq.c:571
-
-Memory state around the buggy address:
- ffff88807e016e80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff88807e016f00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffff88807e016f80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 fc
-                                                                ^
- ffff88807e017000: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff88807e017080: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
