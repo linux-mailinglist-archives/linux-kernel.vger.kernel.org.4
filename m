@@ -2,174 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CCA572C33B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C923B72C33D
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:41:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235511AbjFLLks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 07:40:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56526 "EHLO
+        id S237198AbjFLLlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 07:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235371AbjFLLiz (ORCPT
+        with ESMTP id S237306AbjFLLja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 07:38:55 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D6827EFC
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 04:31:15 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f65779894eso4082206e87.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 04:31:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1686569473; x=1689161473;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zVISWVLRgW0K7WAKXrrtHEIUr0IbbMXljAPQm1SU8cU=;
-        b=GUirDWmfHeI1PQqvm31QSDtYOSZU83I1TUeXFUGgB/IDFtareX0LOnPd3d4MHo+SvB
-         /LriIHBvcpXzsvClIDa/fc3We2zpJVGoy8P+UZa977vOiVipohu/T/bqQtLI3dndRweE
-         fEQPS78uw6+XpzyHIeyu5jhU2lVehHPDZUZOY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686569473; x=1689161473;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zVISWVLRgW0K7WAKXrrtHEIUr0IbbMXljAPQm1SU8cU=;
-        b=L6RffE/rIYnFxiBXu6PAihLyGam+1HSo50FJ/Dw6bxa7SdTTaP1DOUANV9jS//2uY/
-         CduGdq6yfKYX9ErjSb0VKWx4a4hiAktRoL6sVwiPpPm9oAYDR2ct1kKVQDdsFvvwhmJP
-         V62tKawWaZe1JqbpiFbOyTk/x9PsGKHRRCRd5dSOLmfko9Todwzl99hOyqOOg3K2AGOK
-         AiRU6CPr19ZKUchYHkjdMcR6380BShrJQTUyYQEpTu3/bAUSU5Zum4l6xxl6Vi6Edbxb
-         kZkPaUh9JcRGAzg+KUn2IOMp/0JK/TSH1FMzy7MukOGN1Mex/YqsGWOzNr7faOG5+rc0
-         DPTA==
-X-Gm-Message-State: AC+VfDzUy08O1oMQ32q7ZisXb3mfFDFrfnv+3vQYCYbFaOC+qq7Xysn9
-        ZVqj2pgkJcqDaCrAeCk7JBr4Dg==
-X-Google-Smtp-Source: ACHHUZ4DO2f4AqARomXkmwy7A7bD4vgSbeOpkJmstbgRVEc/JnlEHVFXdAUVaNOIfvdiIbVhuxyX0g==
-X-Received: by 2002:ac2:465d:0:b0:4f4:b28d:73e8 with SMTP id s29-20020ac2465d000000b004f4b28d73e8mr3067413lfo.17.1686569473683;
-        Mon, 12 Jun 2023 04:31:13 -0700 (PDT)
-Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id w26-20020a19c51a000000b004edb8fac1cesm1399320lfe.215.2023.06.12.04.31.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 04:31:13 -0700 (PDT)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Mon, 12 Jun 2023 07:39:30 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC62BBD;
+        Mon, 12 Jun 2023 04:33:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=36XT+W2jk5CIFa+WG0Q2ZcCHn/yHT0eHq3gE6BLySHQ=; b=U1lQrQVH5nBqDOyuohzmMYHg5j
+        X8OJVBhjV1g+IZlMta6smtL5UyG5THn0GEpnDDC1GX5OLBe/7FyN6hw9VL1f4SNyzn7aKSq7PSp7G
+        rxuRWlALT6mNIbCyeOh9uXuQMMwfduQiRgCR1tJXpcXsAfCsLDatmemMgCbEN3csev3SCSEOZbbZ4
+        vfEIfita03v846CVuFGdpr4rnEADICC1l2nIC21h0sWEwRLuS/TxAB/5LDw/T/NVxbonuHCY/CP3h
+        sLLXiFczoHwtDxrsIqydkENI/eQwKPRd9ZZa2MywV75dqpMCVzQQhJEYqkda1Xa/uYoKPl/Tyjaq3
+        tmiMSjGQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:38822)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1q8fnd-0005fn-Pp; Mon, 12 Jun 2023 12:33:29 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1q8fna-0004va-3b; Mon, 12 Jun 2023 12:33:26 +0100
+Date:   Mon, 12 Jun 2023 12:33:25 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        Conor Dooley <conor+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 8/8] rtc: isl12022: implement support for the #clock-cells DT property
-Date:   Mon, 12 Jun 2023 13:30:58 +0200
-Message-Id: <20230612113059.247275-9-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
-References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sam Shih <Sam.Shih@mediatek.com>
+Subject: Re: [PATCH net-next 8/8] net: ethernet: mtk_eth_soc: add basic
+ support for MT7988 SoC
+Message-ID: <ZIcChW9FTHm+HbYV@shell.armlinux.org.uk>
+References: <ZIUYubFtVGYHhlMt@makrotopia.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZIUYubFtVGYHhlMt@makrotopia.org>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If device tree implies that the chip's IRQ/F_OUT pin is used as a
-clock, expose that in the driver. For now, pretend it is a
-fixed-rate (32kHz) clock; if other use cases appear the driver can be
-updated to provide its own clk_ops etc.
+On Sun, Jun 11, 2023 at 01:43:37AM +0100, Daniel Golle wrote:
+>  	if (updated) {
+> -		val = mtk_r32(eth, MTK_MAC_MISC);
+> +		val = mtk_r32(eth, reg);
+>  		val = (val & mask) | set;
+> -		mtk_w32(eth, val, MTK_MAC_MISC);
+> +		mtk_w32(eth, val, reg);
 
-When the clock output is not used on a given board, one can prolong
-the battery life by ensuring that the FOx bits are 0. For the hardware
-I'm currently working on, the RTC draws 1.2uA with the FOx bits at
-their default 0001 value, dropping to 0.88uA when those bits are
-cleared.
+mtk_m32() ?
 
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
----
- drivers/rtc/rtc-isl12022.c | 41 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+> +	/* Force Port1 XGMAC Link Up */
+> +	val = mtk_r32(eth, MTK_XGMAC_STS(MTK_GMAC1_ID));
+> +	mtk_w32(eth, val | MTK_XGMAC_FORCE_LINK(MTK_GMAC1_ID),
+> +		MTK_XGMAC_STS(MTK_GMAC1_ID));
+> +
+> +	/* Adjust GSW bridge IPG to 11 */
+> +	val = mtk_r32(eth, MTK_GSW_CFG);
+> +	val &= ~(GSWTX_IPG_MASK | GSWRX_IPG_MASK);
+> +	val |= (GSW_IPG_11 << GSWTX_IPG_SHIFT) |
+> +	       (GSW_IPG_11 << GSWRX_IPG_SHIFT);
+> +	mtk_w32(eth, val, MTK_GSW_CFG);
 
-diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
-index 690dbb446d1a..0054300b744b 100644
---- a/drivers/rtc/rtc-isl12022.c
-+++ b/drivers/rtc/rtc-isl12022.c
-@@ -9,6 +9,7 @@
-  */
- 
- #include <linux/bcd.h>
-+#include <linux/clk-provider.h>
- #include <linux/err.h>
- #include <linux/hwmon.h>
- #include <linux/i2c.h>
-@@ -43,6 +44,9 @@
- #define ISL12022_SR_LBAT75	(1 << 1)
- 
- #define ISL12022_INT_WRTC	(1 << 6)
-+#define ISL12022_INT_FO_MASK	GENMASK(3, 0)
-+#define ISL12022_INT_FO_OFF	0x0
-+#define ISL12022_INT_FO_32K	0x1
- 
- #define ISL12022_REG_VB85_MASK	GENMASK(5, 3)
- #define ISL12022_REG_VB75_MASK	GENMASK(2, 0)
-@@ -255,6 +259,38 @@ static const struct regmap_config regmap_config = {
- 	.use_single_write = true,
- };
- 
-+static int isl12022_register_clock(struct device *dev)
-+{
-+	struct regmap *regmap = dev_get_drvdata(dev);
-+	struct clk_hw *hw;
-+	int ret;
-+
-+	if (!device_property_present(dev, "#clock-cells")) {
-+		/*
-+		 * Disabling the F_OUT pin reduces the power
-+		 * consumption in battery mode by ~25%.
-+		 */
-+		ret = regmap_update_bits(regmap, ISL12022_REG_INT, ISL12022_INT_FO_MASK,
-+					 ISL12022_INT_FO_OFF);
-+		if (ret)
-+			dev_warn(dev, "failed to clear FOx bits in INT register: %d", ret);
-+		return 0;
-+	}
-+
-+	/*
-+	 * For now, only support a fixed clock of 32768Hz (the reset default).
-+	 */
-+	ret = regmap_update_bits(regmap, ISL12022_REG_INT, ISL12022_INT_FO_MASK, ISL12022_INT_FO_32K);
-+	if (ret)
-+		return ret;
-+
-+	hw = devm_clk_hw_register_fixed_rate(dev, "isl12022_32kHz", NULL, 0, 32768);
-+	if (IS_ERR(hw))
-+		return PTR_ERR(hw);
-+
-+	return devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get, hw);
-+}
-+
- static const u32 trip_level85[] = { 2125000, 2295000, 2550000, 2805000, 3060000, 4250000, 4675000 };
- static const u32 trip_level75[] = { 1875000, 2025000, 2250000, 2475000, 2700000, 3750000, 4125000 };
- 
-@@ -305,6 +341,7 @@ static int isl12022_probe(struct i2c_client *client)
- {
- 	struct rtc_device *rtc;
- 	struct regmap *regmap;
-+	int ret;
- 
- 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
- 		return -ENODEV;
-@@ -317,6 +354,10 @@ static int isl12022_probe(struct i2c_client *client)
- 
- 	dev_set_drvdata(&client->dev, regmap);
- 
-+	ret = isl12022_register_clock(&client->dev);
-+	if (ret)
-+		return ret;
-+
- 	isl12022_set_trip_levels(&client->dev);
- 	isl12022_hwmon_register(&client->dev);
- 
+mtk_m32() for both these?
+
+> +	/* Setup gmac */
+> +	if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V3) &&
+> +	    mac->interface == PHY_INTERFACE_MODE_INTERNAL) {
+> +		mtk_w32(mac->hw, MTK_GDMA_XGDM_SEL, MTK_GDMA_EG_CTRL(mac->id));
+> +		mtk_w32(mac->hw, MAC_MCR_FORCE_LINK_DOWN, MTK_MAC_MCR(mac->id));
+> +
+> +		mtk_setup_bridge_switch(eth);
+
+
+I think this should be documented somewhere - that
+PHY_INTERFACE_MODE_INTERNAL means the MAC is connected to a switch.
+However, I'm not sure that's the best condition to use - don't we have a
+way for a MAC to test if it's connected to a DSA switch?
+
+> +	/* Configure MDC Turbo Mode */
+> +	if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V3)) {
+> +		val = mtk_r32(eth, MTK_MAC_MISC_V3);
+> +		val |= MISC_MDC_TURBO;
+> +		mtk_w32(eth, val, MTK_MAC_MISC_V3);
+> +	}
+>  	val = mtk_r32(eth, MTK_PPSC);
+> +	if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V1) ||
+> +	    MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2))
+> +		val |= PPSC_MDC_TURBO;
+> +
+> +	/* Configure MDC Divider */
+>  	val &= ~PPSC_MDC_CFG;
+> -	val |= FIELD_PREP(PPSC_MDC_CFG, divider) | PPSC_MDC_TURBO;
+> +	val |= FIELD_PREP(PPSC_MDC_CFG, divider);
+>  	mtk_w32(eth, val, MTK_PPSC);
+
+More opportunities for mtk_m32().
+
+> +	if (MTK_HAS_CAPS(mac->hw->soc->caps, MTK_NETSYS_V3_BIT) &&
+> +	    MTK_HAS_CAPS(mac->hw->soc->caps, MTK_ESW_BIT) &&
+> +	    id == MTK_GMAC1_ID) {
+> +		mac->phylink_config.mac_capabilities = MAC_ASYM_PAUSE |
+> +						       MAC_SYM_PAUSE |
+> +						       MAC_10000FD;
+> +		phy_interface_zero(mac->phylink_config.supported_interfaces);
+
+Were there bits set that you don't want?
+
+Thanks!
+
 -- 
-2.37.2
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
