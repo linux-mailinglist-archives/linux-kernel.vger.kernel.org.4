@@ -2,149 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 363BD72CEDC
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:59:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2254872CEE1
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 21:00:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234845AbjFLS7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 14:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
+        id S237561AbjFLTAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 15:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjFLS7Q (ORCPT
+        with ESMTP id S236140AbjFLTAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 14:59:16 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3349313A;
-        Mon, 12 Jun 2023 11:59:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686596355; x=1718132355;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VZa1fYkJlOSJPNfqG8vxxOmpB4Z55y+Js6DTs8pgAj4=;
-  b=MOPLBkzPlZTP0DbGBZi8WmXlvGBp6P+EYEC+Zz2kfTnzbrv7Wn68sHnH
-   gPtsxHSF46qQloZp6LNeaVQnKz2f1cDMx3IX5xk3Oc4nqpGZZ9lzqsfsT
-   hlVqi1Wm1grmxoTfZ7GZXwZhgxi/SNVs2FEhYbIKLmE/xbhieZxu520LR
-   YXJbec/mVHBQeBHjgs74G1lG1y/ubV2wCClJuGym57+dkjyXUu/pCUICh
-   yoDOItDinHIHQvlRSl460Ah0iuB9MdTNiLtd2LiazhsBWiLfEWwcyBqen
-   kTjz64Ebxp+h+TxiqRrFnef00A4qDFENQOpo4MAM4kFd37Z3KHmhkwKxb
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="342820431"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="342820431"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 11:59:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="801125292"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="801125292"
-Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 12 Jun 2023 11:59:11 -0700
-Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q8mkw-0000aG-34;
-        Mon, 12 Jun 2023 18:59:10 +0000
-Date:   Tue, 13 Jun 2023 02:58:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Mon, 12 Jun 2023 15:00:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5D1114
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:59:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686596390;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RdqrcPQ7BBl4ytQNpaqxmu9LSFYsD/XjC2NBSLHQ2VA=;
+        b=i2OVGaCtUmu4n4k5K0Cy6TEZTNbswCP2JF6wh8MqbwhVzvmU5c9TW3otcjBGhXTsARBhkK
+        y8XgRfAKzdBn98kXUjwP1JzSZ9wgZRaunX00u+Qhacnb30mpCYBsLqbw/0DHwB+/duxchI
+        EHOqJgmCz46/LijRiuy+VWGegrhtcKc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-41-KoHFH9iyOfC9QeDV-WPW4w-1; Mon, 12 Jun 2023 14:59:44 -0400
+X-MC-Unique: KoHFH9iyOfC9QeDV-WPW4w-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7C83D3C0ED5C;
+        Mon, 12 Jun 2023 18:59:43 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E033B492C38;
+        Mon, 12 Jun 2023 18:59:40 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <f50b438f-90bc-36b1-c943-18d7a4b3f441@redhat.com>
+References: <f50b438f-90bc-36b1-c943-18d7a4b3f441@redhat.com> <431929.1686588681@warthog.procyon.org.uk>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     dhowells@redhat.com, Jens Axboe <axboe@kernel.dk>,
+        kernel test robot <oliver.sang@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-mm@kvack.org, oe-lkp@lists.linux.dev, lkp@intel.com,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/8] rtc: isl12022: add support for trip level DT bindings
-Message-ID: <202306130201.ai7ck1mx-lkp@intel.com>
-References: <20230612113059.247275-5-linux@rasmusvillemoes.dk>
+Subject: Re: [PATCH] block: Fix dio_bio_alloc() to set BIO_PAGE_PINNED
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612113059.247275-5-linux@rasmusvillemoes.dk>
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <513560.1686596380.1@warthog.procyon.org.uk>
+Date:   Mon, 12 Jun 2023 19:59:40 +0100
+Message-ID: <513561.1686596380@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rasmus,
+David Hildenbrand <david@redhat.com> wrote:
 
-kernel test robot noticed the following build errors:
+> >   	/* for now require references for all pages */
+> 
+> Does the comment still hold?
 
-[auto build test ERROR on abelloni/rtc-next]
-[also build test ERROR on robh/for-next linus/master v6.4-rc6 next-20230609]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Actually, no.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rasmus-Villemoes/rtc-isl12022-remove-wrong-warning-for-low-battery-level/20230612-211434
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
-patch link:    https://lore.kernel.org/r/20230612113059.247275-5-linux%40rasmusvillemoes.dk
-patch subject: [PATCH 4/8] rtc: isl12022: add support for trip level DT bindings
-config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20230613/202306130201.ai7ck1mx-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add abelloni https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git
-        git fetch abelloni rtc-next
-        git checkout abelloni/rtc-next
-        b4 shazam https://lore.kernel.org/r/20230612113059.247275-5-linux@rasmusvillemoes.dk
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=alpha olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash drivers/
+David
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306130201.ai7ck1mx-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/rtc/rtc-isl12022.c: In function 'isl12022_set_trip_levels':
->> drivers/rtc/rtc-isl12022.c:238:15: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
-     238 |         val = FIELD_PREP(ISL12022_REG_VB85_MASK, x85) | FIELD_PREP(ISL12022_REG_VB75_MASK, x75);
-         |               ^~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +/FIELD_PREP +238 drivers/rtc/rtc-isl12022.c
-
-   219	
-   220	static void isl12022_set_trip_levels(struct device *dev)
-   221	{
-   222		struct regmap *regmap = dev_get_drvdata(dev);
-   223		u32 level85 = 0, level75 = 0;
-   224		int ret, x85, x75;
-   225		u8 val, mask;
-   226	
-   227		device_property_read_u32(dev, "isil,trip-level85-microvolt", &level85);
-   228		device_property_read_u32(dev, "isil,trip-level75-microvolt", &level75);
-   229	
-   230		for (x85 = 0; x85 < ARRAY_SIZE(trip_level85) - 1; ++x85)
-   231			if (level85 <= trip_level85[x85])
-   232				break;
-   233	
-   234		for (x75 = 0; x75 < ARRAY_SIZE(trip_level75) - 1; ++x75)
-   235			if (level75 <= trip_level75[x75])
-   236				break;
-   237	
- > 238		val = FIELD_PREP(ISL12022_REG_VB85_MASK, x85) | FIELD_PREP(ISL12022_REG_VB75_MASK, x75);
-   239		mask = ISL12022_REG_VB85_MASK | ISL12022_REG_VB75_MASK;
-   240	
-   241		ret = regmap_update_bits(regmap, ISL12022_REG_PWR_VBAT, mask, val);
-   242		if (ret)
-   243			dev_warn(dev, "unable to set battery alarm levels: %d\n", ret);
-   244	}
-   245	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
