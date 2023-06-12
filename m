@@ -2,107 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7BD672B61F
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 05:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABCD372B623
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 05:39:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234015AbjFLDf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 23:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56546 "EHLO
+        id S233250AbjFLDjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 23:39:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbjFLDfX (ORCPT
+        with ESMTP id S229601AbjFLDje (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 23:35:23 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AEA0F5
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 20:35:21 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-75d4dd6f012so393391085a.2
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 20:35:21 -0700 (PDT)
+        Sun, 11 Jun 2023 23:39:34 -0400
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2921114
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 20:39:30 -0700 (PDT)
+Received: by mail-ua1-x935.google.com with SMTP id a1e0cc1a2514c-783eef15004so1038246241.3
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 20:39:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686540920; x=1689132920;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=13wsVNDxAZaF4hfb/peWxhJE5uamDpPrqEy4mn/h2BI=;
-        b=KQnr5xGoMlKKSGmOAC6jhuNnwZxpoXkXmccClIm8F0EwQfjAc0w4ko8/yH0nCjbzXT
-         cHk+393MMYOicZ3XlgPWk0krMighNb910/vwL+LJjLITAFWPY/PoZQr2Our7uFs015u/
-         ySxDoItQnpen88LObdmevgGZm+00n6RVsMKLiQc6wZKIf6J9b2O/lCAl1lbpUdVuLQBd
-         9CmXoOYv6Bw+O2rOHMvkFNm0ANPiteFYnV2c4vpejJMLRjrjhrxTOXUE/oZh2eS9Nv82
-         //eloe0mz1w7QI+f4K8nRuQmPgMuPp2zt9qXmtCG0wMGEI2seCI1+16cMScbMCKaUMbE
-         6KXQ==
+        d=chromium.org; s=google; t=1686541170; x=1689133170;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ebvYpO0F+u/gYndYVszi7JYWZMT92l/StikrCYwVr/Q=;
+        b=DfiHa7OMFW8jDMmQFzxjjDd/wHo4AhI4eN/xuXsi4TY0Z8GEbzZHIXZqhLuCMvjTmc
+         GSwZ81WAgVIxQ2GAi5juHf5aCaQATRmHOwwl5HmtFqjyFCSr9ZTr0Ltou5iXw2UDqBG1
+         QYV5HluDzZWe8c+/M4dzsuvYbkETa18qAIN/s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686540920; x=1689132920;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=13wsVNDxAZaF4hfb/peWxhJE5uamDpPrqEy4mn/h2BI=;
-        b=Y58tYaMnHIh6gzDV6MUQ0pm33Z9HY5KmNfhh1SJDeyj5L9tIJd4Sy6xvExijxB3YD9
-         WlVQsQZaNltAmGbgukf/8jya9brZQS/13j+COHjBazbNwsdscATuNoOlboMbEwpqLK1Y
-         SwDYiuVBVlTbC7P/qc3nrPZYWjzPwCnXEAPFtL2FTdubZlC69WWYyN/Nux5jopoBGRYs
-         khCJNYBfTgrk5hG2JtV6XPfW5sKkihrHz4Ar2/4iNvrSx9QD6iU0YOQoy8mfxIBNvj3j
-         uxbgqcpMtCK/rSBEYgcibp7PeRwquUrB0izq3YtFYYNUsNAXDo80fjG/PrVCFGtZIJuD
-         Z9UA==
-X-Gm-Message-State: AC+VfDytm2V+GQfwsL/pxPxBya3Lmm7sPpsre+4D0NwjuRf1Iul1xktZ
-        +rfkLzcwHHlCRn0+vB51ltI=
-X-Google-Smtp-Source: ACHHUZ4IKkViKhJTGm0lMa0NO6oiRgewIL5/WI8E6t9BM6RE1Rx1ZQIkRZ7J+N4OTKt0E4jUIpMjyA==
-X-Received: by 2002:a05:620a:871a:b0:75c:b919:b4e5 with SMTP id px26-20020a05620a871a00b0075cb919b4e5mr7828850qkn.32.1686540920564;
-        Sun, 11 Jun 2023 20:35:20 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.10])
-        by smtp.googlemail.com with ESMTPSA id jk14-20020a170903330e00b001b050df0a93sm7019107plb.93.2023.06.11.20.35.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jun 2023 20:35:20 -0700 (PDT)
-From:   Ze Gao <zegao2021@gmail.com>
-X-Google-Original-From: Ze Gao <zegao@tencent.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org, Ze Gao <zegao@tencent.com>
-Subject: [PATCH] sched_fork: Use READ_ONCE() for lockless read of current->normal_prio
-Date:   Mon, 12 Jun 2023 11:35:05 +0800
-Message-Id: <20230612033505.8148-1-zegao@tencent.com>
-X-Mailer: git-send-email 2.40.1
+        d=1e100.net; s=20221208; t=1686541170; x=1689133170;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ebvYpO0F+u/gYndYVszi7JYWZMT92l/StikrCYwVr/Q=;
+        b=BSkIBpQEgvynyTUf0Ov+iUVyn5KcyUFFmH9WKyyvQBMFqTlNh+qKtP+OB2HAjaIl9M
+         7tOtIDoSQhvKMsUZ4dvFq3Js9Q+zryiUQQlpE/oBuZTwEv3irY4eqlgYq0j6cB/i7uKe
+         fjVcyAs/J4mtc46B5wQBPdN7deWtg+1r1EXUOsh7QCdWRMg0WrOiahXdf6/dcgsrs0wS
+         AJJPLAB2naS2qnJ4gHwflSGM1eVGla0QSRDApVT49J84gugQRsB0B0DqKF9+W7eHFb79
+         mh8jlAdtTgj+YKEmiUNOqa64OFl2O+aia3EnEo4GsSdtboyIGJNNR86ZuPLkYE4gsufU
+         B4jw==
+X-Gm-Message-State: AC+VfDw/W9M9NPmp2PaTJuT2V/X0795CxUUfF1plHLbOf1df6nRnlZjz
+        qTRuSFY4ASj9eN39I3is5m+exaNoqFqSwpRAMC5Wzw==
+X-Google-Smtp-Source: ACHHUZ47kwyUvVJowTEBOgc8w9/bLyQ8fdjTcVtYWb61OD85CsmXfvhz77UhIZ1asoftsYVkaV+sx2b+IROxk7T5gzo=
+X-Received: by 2002:a05:6102:34f4:b0:430:1fa:87c5 with SMTP id
+ bi20-20020a05610234f400b0043001fa87c5mr2280202vsb.32.1686541170026; Sun, 11
+ Jun 2023 20:39:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230608075651.3214540-1-wenst@chromium.org> <ce04685b7c4840b683add0bdd4404da6@AcuMS.aculab.com>
+In-Reply-To: <ce04685b7c4840b683add0bdd4404da6@AcuMS.aculab.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Mon, 12 Jun 2023 11:39:18 +0800
+Message-ID: <CAGXv+5EtdhkMq916LLOfpz8ok_xump5tv+oeNBvPq-_3-93oqQ@mail.gmail.com>
+Subject: Re: [PATCH] regulator: Use bitfield values for range selectors
+To:     David Laight <David.Laight@aculab.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        "linux-actions@lists.infradead.org" 
+        <linux-actions@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current->normal_prio is locklessly accessed from sched_fork and
-child's scheduler related initialization procedures heavily rely on
-the value loaded. Thus we mark this load as READ_ONCE in case of
-possible load tearing due to concurrent access from other paths, for
-example if changes of parent's normal_prio happens to be requested
-via some syscall.
+On Sun, Jun 11, 2023 at 1:10=E2=80=AFAM David Laight <David.Laight@aculab.c=
+om> wrote:
+>
+> From: Chen-Yu Tsai
+> > Sent: 08 June 2023 08:57
+> >
+> > Right now the regulator helpers expect raw register values for the rang=
+e
+> > selectors. This is different from the voltage selectors, which are
+> > normalized as bitfield values. This leads to a bit of confusion. Also,
+> > raw values are harder to copy from datasheets or match up with them,
+> > as datasheets will typically have bitfield values.
+> >
+> > Make the helpers expect bitfield values, and convert existing users.
+> > Include bitops.h explicitly for ffs(), and reorder the header include
+> > statements. While at it, also replace module.h with export.h, since the
+> > only use is EXPORT_SYMBOL_GPL.
+> >
+> ...
+> >  static const unsigned int atc260x_ldo_voltage_range_sel[] =3D {
+> > -     0x0, 0x20,
+> > +     0x0, 0x1,
+> >  };
+>
+> Is there any way the change can be done so that un-edited
+> modules fail to compile?
+> Otherwise the whole thing is an accident waiting to happen.
 
-Signed-off-by: Ze Gao <zegao@tencent.com>
----
- kernel/sched/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I think we could change the field name in the regulator description?
+But unsuspecting end users / developers might just edit the name and not
+see that the scheme has changed.
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 944c3ae39861..37a13e4b734d 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -4699,7 +4699,7 @@ int sched_fork(unsigned long clone_flags, struct task_struct *p)
- 	/*
- 	 * Make sure we do not leak PI boosting priority to the child.
- 	 */
--	p->prio = current->normal_prio;
-+	p->prio = READ_ONCE(current->normal_prio);
- 
- 	uclamp_fork(p);
- 
--- 
-2.40.1
+Or we could add a sanity check at runtime that checks the values during
+regulator registration. How does that sound?
 
+Mark, is this something you'd like?
+
+
+ChenYu
