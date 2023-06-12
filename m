@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D287B72B5D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 05:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5BA772B5DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 05:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234425AbjFLDPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 23:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
+        id S231889AbjFLDP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 23:15:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234688AbjFLDPD (ORCPT
+        with ESMTP id S234707AbjFLDPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 11 Jun 2023 23:15:03 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE0CE63
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 20:15:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9A1BB
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 20:15:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686539700; x=1718075700;
+  t=1686539702; x=1718075702;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=POMQMoF5yCzfeN4V70o3A5GGX/JVr+bQ1FqtXyqQk74=;
-  b=IO1ArgO/ACBVfo/rfvbuCuvz3nTnisVfM/Htag6MG6xmBxjq+g+Zjuse
-   TRdQ9utxk9lt4u5/JvDs7EtBhlZYyQaOUE7XV1zHdAjHotFykzHhHtv41
-   1wYoGp/FHKlWhW4ddMwIcZ3woZg9LfBIk8oD0RFVrxu+IomYuKMWgtDOP
-   R6/vDFYMrmu1+DCD+vxeBb7X9Mz+WPcsB1FKqDLI7W4iuwDNH2/a0nYw/
-   RMVjrLCJ58x+BZ6xJEudPstYrjON6rY0atDSdLulSw/JFV2RzUENtVm8B
-   +p7/Ou5JK8kIFJWbT1eEavb/zgBL+k8YbNqVtlgJv/GJ/7JE2ltYsttj5
+  bh=J5+q5OqTn3NUhd2KAcv2OeDPqTsFvVodE6kntNgJTpc=;
+  b=ntNbQk752H1oYZNn/KQPfpVzLHgLHBulSliFcWb5+R8n98th3qJyI8H3
+   0NTWWqeA6Q4rL45jwm/ouYKmO7BqtIGT+WOMVE0sdRMm4NxSUALAMRZLT
+   IhdzKtzJGGeeembz+3Zqj1Jq3gLvnty53HjR/fCkkZRR5z8DUhCTZZJKg
+   BmOi3QA5OcTYgLX6jhEhlPtIYuKW3zvniUH7BLHW8F/NBIwvN3iMWVHWh
+   iBY5sa0v81d8VfXbkoGsVMS1TiABbO55A7epBLDtkRH5yHRFHdGEDTUUQ
+   z5j1ZWWUTFwtabnjUji63bT/qf77ZmIEThMc16B4Wh7YqsH2t6Veky5qb
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="347578967"
+X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="347578983"
 X-IronPort-AV: E=Sophos;i="6.00,235,1681196400"; 
-   d="scan'208";a="347578967"
+   d="scan'208";a="347578983"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2023 20:14:59 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2023 20:15:02 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="776191928"
+X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="776191950"
 X-IronPort-AV: E=Sophos;i="6.00,235,1681196400"; 
-   d="scan'208";a="776191928"
+   d="scan'208";a="776191950"
 Received: from brentlu-desktop.itwn.intel.com ([10.5.252.92])
-  by fmsmga008.fm.intel.com with ESMTP; 11 Jun 2023 20:14:57 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 11 Jun 2023 20:14:59 -0700
 From:   Brent Lu <brent.lu@intel.com>
 To:     alsa-devel@alsa-project.org
 Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
@@ -55,9 +55,9 @@ Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
         <amadeuszx.slawinski@linux.intel.com>,
         Brent Lu <brent.lu@intel.com>, linux-kernel@vger.kernel.org,
         Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Subject: [PATCH 06/12] ASoC: Intel: avs-max98927: remove redundant dapm routes
-Date:   Mon, 12 Jun 2023 19:09:52 +0800
-Message-Id: <20230612110958.592674-7-brent.lu@intel.com>
+Subject: [PATCH 07/12] ASoC: Intel: avs-nau8825: remove redundant dapm routes
+Date:   Mon, 12 Jun 2023 19:09:53 +0800
+Message-Id: <20230612110958.592674-8-brent.lu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230612110958.592674-1-brent.lu@intel.com>
 References: <20230612110958.592674-1-brent.lu@intel.com>
@@ -74,21 +74,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Two routes "Left HiFi Playback<-sspX Tx" and
-"Right HiFi Playback<-sspX Tx" are created by
+Two routes "Playback<-sspX Tx" and "sspX Rx<-Capture" are created by
 snd_soc_dapm_connect_dai_link_widgets() automatically. Remove the
 duplicate routes.
 
 Signed-off-by: Brent Lu <brent.lu@intel.com>
 ---
- sound/soc/intel/avs/boards/max98927.c | 45 ++-------------------------
+ sound/soc/intel/avs/boards/nau8825.c | 45 ++--------------------------
  1 file changed, 3 insertions(+), 42 deletions(-)
 
-diff --git a/sound/soc/intel/avs/boards/max98927.c b/sound/soc/intel/avs/boards/max98927.c
-index 7cccce99f92e..09b231bf4e6d 100644
---- a/sound/soc/intel/avs/boards/max98927.c
-+++ b/sound/soc/intel/avs/boards/max98927.c
-@@ -138,47 +138,14 @@ static int avs_create_dai_link(struct device *dev, const char *platform_name, in
+diff --git a/sound/soc/intel/avs/boards/nau8825.c b/sound/soc/intel/avs/boards/nau8825.c
+index b69fc5567135..38c5087d98e9 100644
+--- a/sound/soc/intel/avs/boards/nau8825.c
++++ b/sound/soc/intel/avs/boards/nau8825.c
+@@ -215,38 +215,6 @@ static int avs_create_dai_link(struct device *dev, const char *platform_name, in
  	return 0;
  }
  
@@ -107,14 +106,14 @@ index 7cccce99f92e..09b231bf4e6d 100644
 -	memcpy(dr, card_base_routes, num_base * sizeof(*dr));
 -
 -	idx = num_base;
--	dr[idx].sink = devm_kasprintf(dev, GFP_KERNEL, "Left HiFi Playback");
+-	dr[idx].sink = devm_kasprintf(dev, GFP_KERNEL, "Playback");
 -	dr[idx].source = devm_kasprintf(dev, GFP_KERNEL, "ssp%d Tx", ssp_port);
 -	if (!dr[idx].sink || !dr[idx].source)
 -		return -ENOMEM;
 -
 -	idx++;
--	dr[idx].sink = devm_kasprintf(dev, GFP_KERNEL, "Right HiFi Playback");
--	dr[idx].source = devm_kasprintf(dev, GFP_KERNEL, "ssp%d Tx", ssp_port);
+-	dr[idx].sink = devm_kasprintf(dev, GFP_KERNEL, "ssp%d Rx", ssp_port);
+-	dr[idx].source = devm_kasprintf(dev, GFP_KERNEL, "Capture");
 -	if (!dr[idx].sink || !dr[idx].source)
 -		return -ENOMEM;
 -
@@ -124,12 +123,18 @@ index 7cccce99f92e..09b231bf4e6d 100644
 -	return 0;
 -}
 -
- static int avs_max98927_probe(struct platform_device *pdev)
+ static int avs_card_suspend_pre(struct snd_soc_card *card)
+ {
+ 	struct snd_soc_dai *codec_dai = snd_soc_card_get_codec_dai(card, SKL_NUVOTON_CODEC_DAI);
+@@ -274,14 +242,13 @@ static int avs_card_resume_post(struct snd_soc_card *card)
+ 
+ static int avs_nau8825_probe(struct platform_device *pdev)
  {
 -	struct snd_soc_dapm_route *routes;
  	struct snd_soc_dai_link *dai_link;
  	struct snd_soc_acpi_mach *mach;
  	struct snd_soc_card *card;
+ 	struct snd_soc_jack *jack;
  	struct device *dev = &pdev->dev;
  	const char *pname;
 -	int num_routes, ssp_port, ret;
@@ -137,7 +142,7 @@ index 7cccce99f92e..09b231bf4e6d 100644
  
  	mach = dev_get_platdata(dev);
  	pname = mach->mach_params.platform;
-@@ -190,12 +157,6 @@ static int avs_max98927_probe(struct platform_device *pdev)
+@@ -293,12 +260,6 @@ static int avs_nau8825_probe(struct platform_device *pdev)
  		return ret;
  	}
  
@@ -147,10 +152,10 @@ index 7cccce99f92e..09b231bf4e6d 100644
 -		return ret;
 -	}
 -
+ 	jack = devm_kzalloc(dev, sizeof(*jack), GFP_KERNEL);
  	card = devm_kzalloc(dev, sizeof(*card), GFP_KERNEL);
- 	if (!card)
- 		return -ENOMEM;
-@@ -211,8 +172,8 @@ static int avs_max98927_probe(struct platform_device *pdev)
+ 	if (!jack || !card)
+@@ -315,8 +276,8 @@ static int avs_nau8825_probe(struct platform_device *pdev)
  	card->num_controls = ARRAY_SIZE(card_controls);
  	card->dapm_widgets = card_widgets;
  	card->num_dapm_widgets = ARRAY_SIZE(card_widgets);
@@ -159,8 +164,8 @@ index 7cccce99f92e..09b231bf4e6d 100644
 +	card->dapm_routes = card_base_routes;
 +	card->num_dapm_routes = ARRAY_SIZE(card_base_routes);
  	card->fully_routed = true;
+ 	snd_soc_card_set_drvdata(card, jack);
  
- 	ret = snd_soc_fixup_dai_links_platform_name(card, pname);
 -- 
 2.34.1
 
