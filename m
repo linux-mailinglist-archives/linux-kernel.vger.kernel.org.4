@@ -2,71 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1CF172CD95
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6C4372CD96
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236949AbjFLSMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 14:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36816 "EHLO
+        id S235849AbjFLSNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 14:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237238AbjFLSML (ORCPT
+        with ESMTP id S229507AbjFLSNF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 14:12:11 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D5CE65
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:12:03 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id ca18e2360f4ac-77af9ee36d0so25118539f.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:12:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1686593523; x=1689185523;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ArfEG/zwX+Qu50yqWsLLeIAObXJ440FdnIJFkcDTwak=;
-        b=MLP11eaKUEnWnr3tT1G+bXrAxvIdMysvDLDleTr5mkuPZ36uaDGL2Je1SVO4kE04V3
-         soI6QyDs6AeFA3069KRUJLtHcH2vjFA6dUvVAsChzuEhgInftIf5lu2bg8EepdHvJjKA
-         Om6d0ekCWiPoud0ZKBplUDnOtgoBYHDfR0zB5FFYL95yaHDuCJEn9C3LuVUudjuheDp/
-         sJLBRsIED9B5UNHCMsKzPlZi9uZ/b/YrNFLea5gAsJWnda61ZV5DkQyQ4ub1btYKGT4u
-         yx9GI8Ps0gzwM7IporZ1U+utTG6kQDy8VsyaFxbLSUZyWR/VpaNTHzcjNvX3kfXb/zHJ
-         P7oQ==
+        Mon, 12 Jun 2023 14:13:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AD3E73
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:12:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686593530;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WfC+fA7QHuUg+7zV3oJP34eZ8O1o0OXP59IbCjsY+f8=;
+        b=JZRXBvCPkQ0cvlrCxdDniboiCRx/KRkuNM4cMrG20tcDvQbu9uwl5CByR68dTrbNFKNnC3
+        CR1een9yjFM60SVCofyy+xEgJmNvCU7rv6ZNZDXFf5kKpcOc4bqsJQ4U381gw0ux0JGuad
+        JFrYPvSe06VicfwIdGS6yJoglTCMpjU=
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
+ [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-48-pb1OOchDNjOFsa1bjgJVWA-1; Mon, 12 Jun 2023 14:12:09 -0400
+X-MC-Unique: pb1OOchDNjOFsa1bjgJVWA-1
+Received: by mail-oo1-f70.google.com with SMTP id 006d021491bc7-558a4d70fa9so3816365eaf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:12:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686593523; x=1689185523;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ArfEG/zwX+Qu50yqWsLLeIAObXJ440FdnIJFkcDTwak=;
-        b=CjGvX1/l9Hu3fCco9NsAGeLj7GBS8nxRhhrPclWRw7/A+H77eO+nx/iJt5QHeD2ROe
-         OF1ZdwkWqy2T0h4XlkHtPhMeTu22JGWEgtKgZS+2LU4NQcsHuW6Fc/JWHtlJcvmxgMet
-         NH9rwERY04sjDKxpUhZ1h5bqBob4H+Ot4GlyQLI9sRq8L4GgblU6UaiI2FaRf9hzXzGD
-         Gxa6dyy9mGXgtE73greLin/yVQLiOqBUgrG9TVzz0B6fRZbJbY6AbhKuSBFvu986UKR8
-         7vrCi5yas/C4uEvnvrwXMezQMc9G6jFdShydurluCmz0tH94l5rG8AYNHLlPXg8393Pz
-         kK2A==
-X-Gm-Message-State: AC+VfDwFUGWuz2mZLx1rqw3ox4RTS+zA5xSx7Q7LWB0ZMXBhWJjlUcTe
-        l8eeIDZaQ0xURNk3LVgGcAzZZQ==
-X-Google-Smtp-Source: ACHHUZ6ynp4ZRI2CJT+g4J7cX44RSKygn3bUSTJEdhwij4+cpgkRDSrDA9Oya0lzjLcgBwQ0SgVx3g==
-X-Received: by 2002:a6b:5810:0:b0:777:b7c8:ad32 with SMTP id m16-20020a6b5810000000b00777b7c8ad32mr6714667iob.0.1686593523175;
-        Mon, 12 Jun 2023 11:12:03 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id z3-20020a5ec903000000b0077ac811b20dsm3352116iol.38.2023.06.12.11.11.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 11:11:58 -0700 (PDT)
-Message-ID: <2392dcb4-71f4-1109-614b-4e2083c0941e@kernel.dk>
-Date:   Mon, 12 Jun 2023 12:11:57 -0600
+        d=1e100.net; s=20221208; t=1686593529; x=1689185529;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WfC+fA7QHuUg+7zV3oJP34eZ8O1o0OXP59IbCjsY+f8=;
+        b=J78F/w3q92fbf6Q0Zfx3MjUomCOUuo7NKaEQtemZCuSiC6xwHsy025CPzUypsVgbdO
+         ghFyk0Uxig8PCRTC3zkncweujNak6XFnjJ2BYeQGF91ubfQ/6BrJymdfHwk5QPaEFEpd
+         asBbIFbVLwdSKo0xIvoiZ6gANnQHtVp0WsaRCt8JvOhrUAgrssuG/C/Dth27KFJKG5SY
+         ZIMGoIpWHhsTP2dTHe+VDYfDIzAVYxzJ9x1XoEcZEyz7hSUuG8KXntLRLT3cpNJETozu
+         HY7xfnKvQIYt33ZkjD6U3dyyLqeNtkEtKR1rlE9ajcG1oPJRls45NSGiX5qwOvZo1wte
+         DDkg==
+X-Gm-Message-State: AC+VfDzX2j9qWYO4RSCjeRds6C1WbgqWsvXyXPegQuzqxY9Y+T/HwcsK
+        IS78LGcv8c+64VdapStwAO2xKlWEMPONsDroJBSIN8WrDFc/lZ7wA8iNQc+NEQihIjd53ZEzpqc
+        UoXdAAuliLRfUP9WKrq+GuGFD
+X-Received: by 2002:a05:6808:bce:b0:39c:5ef9:a287 with SMTP id o14-20020a0568080bce00b0039c5ef9a287mr5838740oik.28.1686593528938;
+        Mon, 12 Jun 2023 11:12:08 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5siJQtPBzzmM7yK6WLPkp0yQIVivZKClJMlvcgOVp6oXj9tBIggGZOzsc2/5O0+BibBQWFng==
+X-Received: by 2002:a05:6808:bce:b0:39c:5ef9:a287 with SMTP id o14-20020a0568080bce00b0039c5ef9a287mr5838723oik.28.1686593528694;
+        Mon, 12 Jun 2023 11:12:08 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id ay9-20020a05622a228900b003f7a54fa72fsm3617904qtb.0.2023.06.12.11.12.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 11:12:08 -0700 (PDT)
+Date:   Mon, 12 Jun 2023 11:12:06 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Su Hui <suhui@nfschina.com>
+Cc:     Joerg Roedel <joro@8bytes.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, kevin.tian@intel.com,
+        vasant.hegde@amd.com, jgg@ziepe.ca, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] iommu/amd: Fix possible memory leak of 'domain'
+Message-ID: <g6iqzwutmdtmi2enfogchhs3toduy4e2hs45hjipuuybcawbhh@uuzohezj3ryj>
+References: <20230608021933.856045-1-suhui@nfschina.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     io-uring <io-uring@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Zorro Lang <zlang@redhat.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH] io_uring/io-wq: don't clear PF_IO_WORKER on exit
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230608021933.856045-1-suhui@nfschina.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,41 +81,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A recent commit gated the core dumping task exit logic on current->flags
-remaining consistent in terms of PF_{IO,USER}_WORKER at task exit time.
-This exposed a problem with the io-wq handling of that, which explicitly
-clears PF_IO_WORKER before calling do_exit().
+On Thu, Jun 08, 2023 at 10:19:34AM +0800, Su Hui wrote:
+> Move allocation code down to avoid memory leak.
+> 
+> Fixes: 29f54745f245 ("iommu/amd: Add missing domain type checks")
+> Signed-off-by: Su Hui <suhui@nfschina.com>
 
-The reasons for this manual clear of PF_IO_WORKER is historical, where
-io-wq used to potentially trigger a sleep on exit. As the io-wq thread
-is exiting, it should not participate any further accounting. But these
-days we don't need to rely on current->flags anymore, so we can safely
-remove the PF_IO_WORKER clearing.
+Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
 
-Reported-by: Zorro Lang <zlang@redhat.com>
-Reported-by: Dave Chinner <david@fromorbit.com>
-Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-Link: https://lore.kernel.org/all/ZIZSPyzReZkGBEFy@dread.disaster.area/
-Fixes: f9010dbdce91 ("fork, vhost: Use CLONE_THREAD to fix freezer/ps regression")
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-
----
-
-diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
-index b2715988791e..fe38eb0cbc82 100644
---- a/io_uring/io-wq.c
-+++ b/io_uring/io-wq.c
-@@ -221,9 +221,6 @@ static void io_worker_exit(struct io_worker *worker)
- 	raw_spin_unlock(&wq->lock);
- 	io_wq_dec_running(worker);
- 	worker->flags = 0;
--	preempt_disable();
--	current->flags &= ~PF_IO_WORKER;
--	preempt_enable();
- 
- 	kfree_rcu(worker, rcu);
- 	io_worker_ref_put(wq);
-
--- 
-Jens Axboe
+> ---
+> Changes in v2:
+> 	change code order is better and more consistent with other
+> drivers. 
+>  drivers/iommu/amd/iommu.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
+> index dc1ec6849775..e8a2e5984acb 100644
+> --- a/drivers/iommu/amd/iommu.c
+> +++ b/drivers/iommu/amd/iommu.c
+> @@ -2078,10 +2078,6 @@ static struct protection_domain *protection_domain_alloc(unsigned int type)
+>  	int mode = DEFAULT_PGTABLE_LEVEL;
+>  	int ret;
+>  
+> -	domain = kzalloc(sizeof(*domain), GFP_KERNEL);
+> -	if (!domain)
+> -		return NULL;
+> -
+>  	/*
+>  	 * Force IOMMU v1 page table when iommu=pt and
+>  	 * when allocating domain for pass-through devices.
+> @@ -2097,6 +2093,10 @@ static struct protection_domain *protection_domain_alloc(unsigned int type)
+>  		return NULL;
+>  	}
+>  
+> +	domain = kzalloc(sizeof(*domain), GFP_KERNEL);
+> +	if (!domain)
+> +		return NULL;
+> +
+>  	switch (pgtable) {
+>  	case AMD_IOMMU_V1:
+>  		ret = protection_domain_init_v1(domain, mode);
+> -- 
+> 2.30.2
+> 
 
