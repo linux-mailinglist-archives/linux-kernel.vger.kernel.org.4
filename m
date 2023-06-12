@@ -2,224 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CEAD72C8EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC3C472C8EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237926AbjFLOs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 10:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57660 "EHLO
+        id S237992AbjFLOuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 10:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237746AbjFLOst (ORCPT
+        with ESMTP id S237746AbjFLOuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 10:48:49 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9868EBD
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 07:48:40 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8AxGupHMIdkL94DAA--.8422S3;
-        Mon, 12 Jun 2023 22:48:39 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxC8pGMIdkC3IWAA--.55549S3;
-        Mon, 12 Jun 2023 22:48:38 +0800 (CST)
-Message-ID: <3ca51fbe-391c-7428-4cf0-20a20ab294d9@loongson.cn>
-Date:   Mon, 12 Jun 2023 22:48:38 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2] drm/amdgpu: Add error reporting code for the display
- core
+        Mon, 12 Jun 2023 10:50:12 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4FAB2;
+        Mon, 12 Jun 2023 07:50:11 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35C6cNFt030663;
+        Mon, 12 Jun 2023 07:49:59 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=s2048-2021-q4;
+ bh=wrWaTdfxqfXRlIs42cGQ1NBhSEmRQfgqK2gKGpqeG/U=;
+ b=Oq8M2tAH04/zwSgyuOPofKTAzUolzYkbyfa4cjxahu3/M1n7hrJ0h/wERMXNtca3QD1h
+ fkbhJ51ZqcSmzQqK96KNBlTNYHvTsmWdChoTlrWfNePypgQIYd40XHlC42hR5Irbx1Iz
+ 6UezTMxyPfwxqbl2ADexGOmEp3lUK1E/pemsuoKGLMlR5dpYxbguK4fm0YcDMsfNrBNv
+ BZkgGD7da1J6623EzwDTafx4RCZVRq1u/3PT217Dl8mIMP7q5VwEU3QfC8YtG+ZlmkYU
+ dpGVyFD4JBoZfyFk966Yt+x6OUeDGLUiS5OWElANTozCFaXhF+ldUrGhsv0OxmPbR9by +w== 
+Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam04lp2043.outbound.protection.outlook.com [104.47.74.43])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3r5x8yjkm5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Jun 2023 07:49:59 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZBJWJBXY9+LdnLTK3tYc6yJXRPjJvc+3Kcv+Oz1F5qYrZ/cQVwGgsYAOBjp/xG24aScZ7/siVJ4UdmT1yjvMTzadxd/Dy934/TaRWHA4/5oqdaX+VRxn+4bWf0kVdchjhgsiPQQ2v2WjE8awW0Z+rOPR3vdEUW1LuzNwkBsNiN7L4YcjTyt3v9EkaaVu8N+ox7IJ/DCkiSz2X44Dxp5nzsSOltlm9XWss9nN7jERf6SqjlpSnrw0w2TGxDyMAs2my4YEjYUccYZiqp+cNituawg6svrNDjLsuHQDuEK7x5pMdMoz++StDI3PivCu7KjZasMIF8G79cyO5vwdjt4nUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wrWaTdfxqfXRlIs42cGQ1NBhSEmRQfgqK2gKGpqeG/U=;
+ b=QkS93rdPlk2DUjzs5Bof24XAl55MrHtsDYOzEcAzIv2KfrHt9YgNUta8ykK6Ca6EEjQpdO9X0wqWP+hBGeIKycerkY+ALLoPYyyTQ8yeFALPQ0d3fV42tbnOwGMkurXGEDboUp056E+NVuti3ndnYiNjaGvQRc6EJ75rR0YXKOzId6iahhEj4MHDKERA+V3GQBGXG/mfbK5+thkMxyqqf7IFMwkv3AaUXjafPxXeaXQkKXTAyPl/zVEuBeejwqgfGk9+xSnDRXB/Rn85J0J2Lk2lSA2VG5Y55Jc/KiShjWkS+sVBJ55B330xEkaZq4bzm09cQ78g9A3QDSkBWNTYNQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by DS0PR15MB5922.namprd15.prod.outlook.com (2603:10b6:8:f9::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Mon, 12 Jun
+ 2023 14:49:56 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::428f:acec:2c1f:c812]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::428f:acec:2c1f:c812%6]) with mapi id 15.20.6455.043; Mon, 12 Jun 2023
+ 14:49:56 +0000
+Message-ID: <d5ffd64c-65b7-e28c-b8ee-0d2ff9dcd78b@meta.com>
+Date:   Mon, 12 Jun 2023 07:49:53 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCHv2] ftrace: Show all functions with addresses in
+ available_filter_functions_addrs
 Content-Language: en-US
-To:     "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Wentland, Harry" <Harry.Wentland@amd.com>,
-        "Li, Sun peng (Leo)" <Sunpeng.Li@amd.com>,
-        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "Lee, Alvin" <Alvin.Lee2@amd.com>, "Lei, Jun" <Jun.Lei@amd.com>,
-        "Zhuo, Qingqing (Lillian)" <Qingqing.Zhuo@amd.com>,
-        "Liu, Wenjing" <Wenjing.Liu@amd.com>,
-        "Tam, Samson" <Samson.Tam@amd.com>,
-        "Varone, Dillon" <Dillon.Varone@amd.com>,
-        "Liu, HaoPing (Alan)" <HaoPing.Liu@amd.com>
-Cc:     "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230611152351.24569-1-suijingfeng@loongson.cn>
- <BL1PR12MB5144EE0E3EB0D30F27D5F824F754A@BL1PR12MB5144.namprd12.prod.outlook.com>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <BL1PR12MB5144EE0E3EB0D30F27D5F824F754A@BL1PR12MB5144.namprd12.prod.outlook.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Jackie Liu <liu.yun@linux.dev>
+References: <20230611130029.1202298-1-jolsa@kernel.org>
+ <53a11f31-256d-e7bc-eca5-597571076dc5@meta.com>
+ <20230611225407.3e9b8ad2@gandalf.local.home>
+ <20230611225754.01350a50@gandalf.local.home>
+From:   Yonghong Song <yhs@meta.com>
+In-Reply-To: <20230611225754.01350a50@gandalf.local.home>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8BxC8pGMIdkC3IWAA--.55549S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxCF1kAr13Ww15Cw48JF48Xwc_yoW7JFyUpr
-        4fGF4Y9rWUZw1aqry3JFyjvF4ay3WfKF4FyrWUGw1Sv3sFyr1fJF48Kr43u3y3uFsrWw1I
-        qFWjgF4xuF12krXCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6F4UJVW0owAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
-        Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_
-        WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrw
-        CYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48J
-        MxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI
-        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y
-        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-        W8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1l
-        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8EPfPUUUU
-        U==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: BY5PR16CA0003.namprd16.prod.outlook.com
+ (2603:10b6:a03:1a0::16) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|DS0PR15MB5922:EE_
+X-MS-Office365-Filtering-Correlation-Id: e87f1a05-aac2-4e08-e80b-08db6b5449e9
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /tQiIKOcApPpWgo+Ko2o5luVgzWKaPw6l5q1c8vit539SGOZTfNHon1Mew2EsSrWI5zlhzeYTy858Ab4RGF5u+AdccoJUaQyfBEKD4goiVcS9l+n+RA3jXQ4f00v4wGcgjekj7znQfOIETRKEY6JGALeztTVml2usJs5dZUmA6nh7auJhwWVlBuiZLKQvpVQuO5qhHt8RWSg0PeCuNbMRKc+D20eF0CC+POxEKOrB4Y/ODygvtxkSlwcIwXPki090j2M4q8piWH5gScSICWGQq1h9ZHyHw9no2o7lHCNSoJcst/h8SYgCk9/grkfb8lTK7zrJ2Lth19jsW0mw8/100DNScbos1IelY8HJWQ4BAJoTS3fyKZLCWvGztZ+wNhwVjqkEdu2IiY88XG2GypYbrrLApbijHVowPp0UuLZ1YLDcPINhavEDjngIcYL6wXqWt2IiioRHJIbuAWjHbCk4wOLqf7SNrId8adqblIkOVa0U6CkG7Pl+1VsXg5GN3nYqbvBdZaVk8fcXzI5PYH42J814knlffhSWZIlCpja89u7f3zsdZBHJiyUEwmwRGhLR0bnI4nLWERc58lHVhPystTxaFA1GfHpdICLCecCa7WMvxjvJbjbpXAozexrvf++2EBlfgjkOrHqeLij4e13yg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(376002)(136003)(366004)(39860400002)(451199021)(31686004)(2616005)(54906003)(6506007)(186003)(6512007)(53546011)(478600001)(41300700001)(4326008)(36756003)(7416002)(66556008)(66476007)(2906002)(6916009)(38100700002)(66946007)(8936002)(6486002)(8676002)(316002)(6666004)(31696002)(5660300002)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QjdqM0g1czYyMEdXV29RVlVwSFdQOUE4L2FiWnQ4c09YZUtyNU5LOEJCOHU3?=
+ =?utf-8?B?SEFqNjlITWo0TXlHYUM0ZjB5TjhrU1dVaG1EcTBFUm1wbG9pM0ZDTEpsZVdD?=
+ =?utf-8?B?WDZwNDBIdDFibTNRNVV5TjI0UmZsbEtuYVRsK0syelYzeGNDMk02RXp6SUx2?=
+ =?utf-8?B?aVlzbm1ETlRKMlVucTk1UVpiUDRxeWZRUmc1UkJFL0VMU3NaUmw2eDBJSFdp?=
+ =?utf-8?B?M1VWM3VUNWU1VWEvYzR0cml3dWlXaUc3dlk4S3llOUJwMHhpVlVyN0JkbzdD?=
+ =?utf-8?B?dnMwMGtqSERraHhMTC9LWEtsME9BNmFSMTNieWdoSHZicU5vSzViTUMxWVBi?=
+ =?utf-8?B?a2dMcHljSnphQktjU0RuTjk1TTJqckl0Z3hmcUcrZ0k1aUFZZzFqOEFvbmQz?=
+ =?utf-8?B?NXVqV3BWWmV1QXd3RFpuNXFKcTJEYmc0K21IVFl5dGx1aERreExrY3puRmth?=
+ =?utf-8?B?UkFtUHQ4a0cxVlgwQ1oxeW5CandHODNPNkZoR3J1TmFLbGpNOUNCWlA3MlhY?=
+ =?utf-8?B?M3JNcDl0R2pXL1RvcUpUMEtZYWhWTE5EL0hVcDhVQjNuLzQ4cDBDcHB2RGNk?=
+ =?utf-8?B?ZEZ4MndsMXlPMGRCdjJVYXR2aElSNUtXSS9zUnBwV1NTRUFyN1ZzZUJ2YVJv?=
+ =?utf-8?B?aVVYbFhzbjBFbDNZUGRzYjVVcWswSFVLSm9sdGJwQVhBb2JOWlh1YU5jdlh5?=
+ =?utf-8?B?MXdqSHFYYVZQbk9OYzhXbHRNblpVWWtxU2l1R25QbkVCdnM3NWlPYjRWaDR2?=
+ =?utf-8?B?aks3OVVHdU1MUlVQeGh2ZktwaENtTGIreExISFVzdkZvYjZuNUpQSUNsaU1M?=
+ =?utf-8?B?MTNhc3AvTHlhaXo0Nkk3ems3MklGUnBreC9JMXE3MWNxOGZIY3M3NGFMTWFq?=
+ =?utf-8?B?SDU3YmlkNmxTcGNuV1FVVG4xbVN2bHo3UXh4Y2Y3TTVYcW0zRHNpa0ZTU2xT?=
+ =?utf-8?B?a0ZJNFl3MVo3RXp6eGlNY1RiYWpuZkR3aU1IK0pqaFdkdnljSldFZ0wvNFEx?=
+ =?utf-8?B?UDlyYy9YYXJ1bGZNbVFxN3pkMStiVExwSzk3T09ScHB3LzBtbGhzZXIxZHg3?=
+ =?utf-8?B?bmp4dTJWSWdWSnAxQUN5Smxiem9WK3FNUDBsNWN1SEtVRTlvTUZYYUNYTHZt?=
+ =?utf-8?B?MlQzSVpzaWxUckg1RWpZZGhhWHR0d2VhZngydmZWa2VRTGdwM21UTkdFTlZ1?=
+ =?utf-8?B?bHd6b0JRRHBXTE9YVVcwVUZwaTNUT2NxRVVSbXQyeEZ0Y0NxT2hPeHBJYkdE?=
+ =?utf-8?B?aVQ2VE5qUDQrcTZTMUs1VDZrdFBnRUFaZFgzWFlteEl2SC8yOW5IMS9Rb2Vv?=
+ =?utf-8?B?a3VGdjVjd1RHNnY3T2pSOGc0Zk5Pc2tQZC9UTVIzMnNqQ2FNTHN1cU9HZTlk?=
+ =?utf-8?B?UnhXSjNrL2I5NFB6NzJhaVdTL0hxNTVyZ1lzK2JPc01wREorMkY5T2xWdlBr?=
+ =?utf-8?B?Q3V6aEhINndRemxLaGl1bVFuV1NZWGkwYy8zOWNRL1FlNzZGenpsRXcyblpQ?=
+ =?utf-8?B?VXVvSGlrcHUzaEJhRDllMjl2a3IwQjQyTFMwZEZLVjBvQ3o1anpkV3cwRE1O?=
+ =?utf-8?B?aDhUSGFqaGphb0htWldFcE5vTWZ6Vjg2ZWVta095SGN2WDFkSUVoYjBIdWtU?=
+ =?utf-8?B?RlgvdXk0a3VJSE5kZExQMUhXVWJDVk9FK25YT2JxSzVqczF2NFcrYzlvVzRx?=
+ =?utf-8?B?WVp1MFh4bU5NOTlvZXozYS8venFLakx0QVlaUUhPUWtHYitFbzZ1aEtieGZK?=
+ =?utf-8?B?OTVLODZGbnM2anQ0dmUzVXB3MnpoQ2JYTlpDOW9vOFQxR2N2MEJRSkhBYnRp?=
+ =?utf-8?B?WGpsT0lQVVJZTUtFSXhkai9XQmh1ZDUvV1ppZEhlUmNaWVY4aW1vWElhNitK?=
+ =?utf-8?B?bHRILzBiK0xvcFM0SW15L3ZwS3FxV0xVbHBBNERDVXhjaDlPd1FseGtNUjAv?=
+ =?utf-8?B?T1lsdHprZXBnaW11RXVZNDNLUVdNTnV3VnA2ZWRTYXMxRHo0L2Jzd2U2THRt?=
+ =?utf-8?B?MHU3c3JpZ2QwMGtrYmFkZG5Hc002RnhndUx3UEZqcmJHRkVOQ0JodndjNnhX?=
+ =?utf-8?B?dW1Uakx2cHA1UlJlRGM0OU4yWmNOSmQ1VkRiUFdTUHl4WTU4cllyMkZKam55?=
+ =?utf-8?B?djJ4R2xIQllpUGF6cTBQcUZzQjcrMnJMSXd4Uys5QVptVkJSRFljL0VWbnky?=
+ =?utf-8?B?L0E9PQ==?=
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e87f1a05-aac2-4e08-e80b-08db6b5449e9
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 14:49:56.7404
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AFsAMy4Df+iHKG+iY3yemvJ58yod9IYlmb8JxvBcQPRELVnieOWqIemONgvytRr9
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR15MB5922
+X-Proofpoint-GUID: pIahGWN-3FEScoBgy7dt2KywqPmG5rm_
+X-Proofpoint-ORIG-GUID: pIahGWN-3FEScoBgy7dt2KywqPmG5rm_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-12_06,2023-06-09_01,2023-05-22_02
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 2023/6/12 22:41, Deucher, Alexander wrote:
-> [Public]
->
->> -----Original Message-----
->> From: Sui Jingfeng <suijingfeng@loongson.cn>
->> Sent: Sunday, June 11, 2023 11:24 AM
->> To: Wentland, Harry <Harry.Wentland@amd.com>; Li, Sun peng (Leo)
->> <Sunpeng.Li@amd.com>; Siqueira, Rodrigo <Rodrigo.Siqueira@amd.com>;
->> Deucher, Alexander <Alexander.Deucher@amd.com>; Koenig, Christian
->> <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; David
->> Airlie <airlied@gmail.com>; Daniel Vetter <daniel@ffwll.ch>; Lee, Alvin
->> <Alvin.Lee2@amd.com>; Lei, Jun <Jun.Lei@amd.com>; Zhuo, Qingqing (Lillian)
->> <Qingqing.Zhuo@amd.com>; Liu, Wenjing <Wenjing.Liu@amd.com>; Tam,
->> Samson <Samson.Tam@amd.com>; Varone, Dillon
->> <Dillon.Varone@amd.com>; Liu, HaoPing (Alan) <HaoPing.Liu@amd.com>
->> Cc: amd-gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; linux-
->> kernel@vger.kernel.org
->> Subject: [PATCH v2] drm/amdgpu: Add error reporting code for the display
->> core
->>
->> [why]
->>
->> Because the drm/amdgpu drivers do not work with Navi 10 [RX 5700] series
->> GPUs on non-x86 platforms, this patch helps find out where the drivers fail.
->> After applying his patch, the following error message can be found:
->>
->> [drm:dc_create [amdgpu]] *ERROR* dc_construct: failed to create resource
->> pool [drm:dc_create [amdgpu]] *ERROR* dc_create: dc construct failed [drm]
->> Display Core failed to initialize with v3.2.230!
-> Curious what the failure was on your platform.  Resource create is mostly just allocating structures.
-This is because the DRM_AMD_DC_FP configuration does not get selected on 
-my hardware platform.
->
-> Alex
->
->> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->> ---
->>   drivers/gpu/drm/amd/display/dc/core/dc.c | 29 ++++++++++++++++--------
->>   1 file changed, 20 insertions(+), 9 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c
->> b/drivers/gpu/drm/amd/display/dc/core/dc.c
->> index 52564b93f7eb..d33b78aa3e58 100644
->> --- a/drivers/gpu/drm/amd/display/dc/core/dc.c
->> +++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
->> @@ -951,7 +951,7 @@ static bool dc_construct(struct dc *dc,
->>                goto fail;
->>        }
->>
->> -        dc_ctx = dc->ctx;
->> +     dc_ctx = dc->ctx;
->>
->>        /* Resource should construct all asic specific resources.
->>         * This should be the only place where we need to parse the asic id
->> @@ -990,16 +990,21 @@ static bool dc_construct(struct dc *dc,
->>        }
->>
->>        dc->res_pool = dc_create_resource_pool(dc, init_params, dc_ctx-
->>> dce_version);
->> -     if (!dc->res_pool)
->> +     if (!dc->res_pool) {
->> +             dm_error("%s: failed to create resource pool\n", __func__);
->>                goto fail;
->> +     }
->>
->>        /* set i2c speed if not done by the respective dcnxxx__resource.c */
->>        if (dc->caps.i2c_speed_in_khz_hdcp == 0)
->>                dc->caps.i2c_speed_in_khz_hdcp = dc-
->>> caps.i2c_speed_in_khz;
->>        dc->clk_mgr = dc_clk_mgr_create(dc->ctx, dc->res_pool->pp_smu, dc-
->>> res_pool->dccg);
->> -     if (!dc->clk_mgr)
->> +     if (!dc->clk_mgr) {
->> +             dm_error("%s: failed to create clk manager\n", __func__);
->>                goto fail;
->> +     }
->> +
->>   #ifdef CONFIG_DRM_AMD_DC_FP
->>        dc->clk_mgr->force_smu_not_present = init_params-
->>> force_smu_not_present;
->> @@ -1022,14 +1027,18 @@ static bool dc_construct(struct dc *dc,
->>                goto fail;
->>        }
->>
->> -     if (!create_links(dc, init_params->num_virtual_links))
->> +     if (!create_links(dc, init_params->num_virtual_links)) {
->> +             dm_error("%s: failed to create links\n", __func__);
->>                goto fail;
->> +     }
->>
->>        /* Create additional DIG link encoder objects if fewer than the
->> platform
->>         * supports were created during link construction.
->>         */
->> -     if (!create_link_encoders(dc))
->> +     if (!create_link_encoders(dc)) {
->> +             dm_error("%s: failed to create link encoders\n", __func__);
->>                goto fail;
->> +     }
->>
->>        dc_resource_state_construct(dc, dc->current_state);
->>
->> @@ -1314,11 +1323,15 @@ struct dc *dc_create(const struct dc_init_data
->> *init_params)
->>                return NULL;
->>
->>        if (init_params->dce_environment == DCE_ENV_VIRTUAL_HW) {
->> -             if (!dc_construct_ctx(dc, init_params))
->> +             if (!dc_construct_ctx(dc, init_params)) {
->> +                     DC_LOG_ERROR("%s: dc construct failed\n",
->> __func__);
->>                        goto destruct_dc;
->> +             }
->>        } else {
->> -             if (!dc_construct(dc, init_params))
->> +             if (!dc_construct(dc, init_params)) {
->> +                     DC_LOG_ERROR("%s: dc construct failed\n",
->> __func__);
->>                        goto destruct_dc;
->> +             }
->>
->>                full_pipe_count = dc->res_pool->pipe_count;
->>                if (dc->res_pool->underlay_pipe_index !=
->> NO_UNDERLAY_PIPE) @@ -1349,8 +1362,6 @@ struct dc *dc_create(const
->> struct dc_init_data *init_params)
->>
->>        DC_LOG_DC("Display Core initialized\n");
->>
->> -
->> -
->>        return dc;
->>
->>   destruct_dc:
->> --
->> 2.25.1
 
--- 
-Jingfeng
+On 6/11/23 7:57 PM, Steven Rostedt wrote:
+> On Sun, 11 Jun 2023 22:54:07 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
+> 
+>>> Also, if there are multiple same static functions with
+>>> different addresses, user space might need to check dwarf or
+>>> proposed BTF_KIND_KFUNC (which encode kallsyms addresses)
+>>> to find whether entry in available_filter_functions_addrs
+>>> to be used. But addresses may not match. How this issue could
+>>> be resolved?
+>>
+>> Easy, you use the address between two other addresses in kallsyms. The
+>> address is still in the function. The addresses in kallsyms is the starting
+>> address, but there's cases that the patch location is not at the start.
+> 
+> Not to mention, you can still use the kallsyms address. If you did the work
+> to find it, then use it (it may not be as efficient as I mentioned before).
+> That's basically what is done today (so I am told), and this patch was to
+> create a file where you don't need to look up kallsyms when you know which
+> function to use. The functions are sorted by address, so if you know of a
+> unique function near the duplicate, you just find the duplicate that's near
+> the unique function name.
 
+Thanks for explanation. IIUC, typically with endbr enabled, the patch
+address typically is the entry_addr + 4. So it is indeed easy to
+correlate the entry in available_filter_functions_addrs and in
+kallsyms.
+
+I am actually interested in how available_filter_functions_addrs
+will be used. For example, bpf_program__attach_kprobe_multi_opts()
+can already take addresses from kallsyms. How to use
+available_filter_functions_addrs to facilitate kprobe_multi?
+Do we need to change kernel APIs? It would be great at least we
+got a RFC patch to answer these questions.
+
+> 
+> -- Steve
