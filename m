@@ -2,251 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2408672B5BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 05:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2FA372B5C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 05:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234337AbjFLDKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 23:10:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45878 "EHLO
+        id S234618AbjFLDL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 23:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234583AbjFLDJv (ORCPT
+        with ESMTP id S234488AbjFLDKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 23:09:51 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920A9E64;
-        Sun, 11 Jun 2023 20:09:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686539344; x=1718075344;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=AaY3rEwcTWBg4RYwvfBc35Easjh7Y2frli+aZsI/wrw=;
-  b=QVguKpYogavIjeY/8S2uGqHj+usUJJZbqm+sPqrjX9ntJvG53kwOLZD2
-   FqFu8+R/rskfwKAVc96cSCaeZ6C9nwAGGbTDLTemjDChlk7taCpB/Ok0t
-   lncz2TIAJsEsqVRgCLIbqm5AK6+VtfZG0B0Nrh7xYLpwvjU4wfDIpCHCH
-   zKovlr1jpsmLMU2XtfC5rTYox8Q0YwNiSwzRwUyrokjg6ZvJFGhVlv5M3
-   c/Qtm+Jq5pLZ8UWdUsEv7WLLNW6vm/8+Lko8w4gf++aiHvX746YbWMi3K
-   D7k58SoAjl3ScfJXJl6T0QFRn2P1IMl58q1YP8N6ZaT2Lcef1+dPdz9Ia
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="361296048"
-X-IronPort-AV: E=Sophos;i="6.00,235,1681196400"; 
-   d="scan'208";a="361296048"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2023 20:08:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="957838988"
-X-IronPort-AV: E=Sophos;i="6.00,235,1681196400"; 
-   d="scan'208";a="957838988"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga006.fm.intel.com with ESMTP; 11 Jun 2023 20:08:46 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Sun, 11 Jun 2023 20:08:44 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Sun, 11 Jun 2023 20:08:44 -0700
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.48) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Sun, 11 Jun 2023 20:08:44 -0700
+        Sun, 11 Jun 2023 23:10:54 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2084.outbound.protection.outlook.com [40.107.92.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2061730;
+        Sun, 11 Jun 2023 20:09:37 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=i096xas1J0Sm1NZ+XB+Uu3v/TuZe/8cZugpTRG3IQB8BGAz4PjDFNXmcZxLeStIsIlkOh3IhWykE9n5kIMS7qbx9+WQ9TE9HwaVm4YcuHtyV6c5E92ApzPYQVazvYprhXJ2JjjpDVEgpR3y6/CWR3LBMq3lxZL0Vszm5G0sdmr/m4vVw9Yt2tE1sQO/cgEmTun1ZmOeaUclBucYpp5e8WmNxtzgUXIaGXuNR5T8KFr4R2ieIsMl77qJRukRlbEbJBEQi8wxBHsQd3ragQbYrvYLmiOJiXzJQkwNpsY7IihXhV4TDVRhOdEEZzA35Gh3andVbDOZ3u/g1CBZfw5fdXQ==
+ b=P4wH3vqqEsnIytGHa75/5l+8tx9ugHHj2bRUeb5h5oZ5EYRyOmy7YFFtGJWmRnsmnuIbDBBRy6oKF1iohEOEVhV8/cnEFran3/J59Rfqt5TXlofRt+eALpHC3F4mjeKdOpWpdprJA7meNR8xCAubBGhMvnbNGwUhuN1xS8XYNTcSd0tEGSmGz5dGE4StklanRmttYCQxLaGV500BfZJYr7aNOg0AetypDvciISjyD2UXA0DsAD4qvdft3CMsVp5/Hhny2of9pJUyp/9sJVROxnz7UELT3YCvPmbUHq3OCTEF2thWTjQELyI18ZABNtrpOPoBsvUmlGTiySrcWig+ZA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AaY3rEwcTWBg4RYwvfBc35Easjh7Y2frli+aZsI/wrw=;
- b=CY9xySewgErfUA7CJXhUaFQaOUheFtyhJCz0oxdqEMdz2lu7dLLrs4q1WmFcIq1qIRBnVSZZZqrhggJ8O6xK8iP1a6AqNYCude7cbXiozOE4CtJZ1wU4J+PfwTMgN/35u29VZdi7N/Yqv3bUayLm6JX9fba5n1DvIfoX02A4Wu5thzNAhXR/jai5MFVhZCzy8TbfKPPtnYATzfmDBri1sHF/oyH8hhsKPVp2nUYq2+NTTm1eJ/oW2z5Q1D2KGMTdDgeE4ltCODWUcPfb1fPq49Gh5hiwqkTuHsgt54VGGpKogGKUUVUiTIwAcwObSZ+QCCExJoY2VGgL3i8e/CSeaw==
+ bh=YVJTx+fjiFGpzllsNLnnWS63Pb+XxmTyuWNx665jsLw=;
+ b=IWFnSELr4eEvLrbLoeBKuZ0Uat/u01mmFzReSYvMLjhaRHpZlnKtOqh3D6DO/h78EIl12qEFtkNL7nDUULfPcxagR/z0fWjSVnJSd/yxNToqUuQE7rnJ/b6J8B24Qjny6lQorhTkET2rSczWKiJQbyNmSLQ1/Q7E/EpoIarWCW9VplR9P2QuoRYPzwMkuS5YF8vv3qktNlhrmedDwIRSFqkIMSkSBLjXRQCFqHCvY670ofw++NSJCarEbqXZdicDsSTP5wXBHkRCSPSWhBGLyFDQ3LyaEUIoFrrVl/9Pz+cj2ALt/lJzb27s1UWeATLLtAE1BWSQHC2E5vxDICuMhA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
- by DM4PR11MB8131.namprd11.prod.outlook.com (2603:10b6:8:190::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Mon, 12 Jun
- 2023 03:08:41 +0000
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::19b7:466f:32ac:b764]) by BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::19b7:466f:32ac:b764%3]) with mapi id 15.20.6455.043; Mon, 12 Jun 2023
- 03:08:40 +0000
-From:   "Huang, Kai" <kai.huang@intel.com>
-To:     "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
-CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-Subject: Re: [PATCH v11 19/20] x86/mce: Improve error log of kernel space TDX
- #MC due to erratum
-Thread-Topic: [PATCH v11 19/20] x86/mce: Improve error log of kernel space TDX
- #MC due to erratum
-Thread-Index: AQHZlu+6CL+cHWwyoE2KpZjKTZv14K+Ce7kAgAQMw4A=
-Date:   Mon, 12 Jun 2023 03:08:40 +0000
-Message-ID: <90aefcfd663c654197c5878e410f55cc4473eb79.camel@intel.com>
-References: <cover.1685887183.git.kai.huang@intel.com>
-         <116cafb15625ac0bcda7b47143921d0c42061b69.1685887183.git.kai.huang@intel.com>
-         <20230609131754.dhii5ctfwtzx667o@box.shutemov.name>
-In-Reply-To: <20230609131754.dhii5ctfwtzx667o@box.shutemov.name>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.48.2 (3.48.2-1.fc38) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|DM4PR11MB8131:EE_
-x-ms-office365-filtering-correlation-id: 7885d431-9955-481f-7aa9-08db6af252ba
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hrkSV6awUtGSVKL6mSNlc9CcxqW/KWvqzuz9SEiGju4i7qfvNcUss3R0sY5uSyxO415eSkoJEKufEsIHejd8tIoK8RX6QUJcncXIJ8FspPpc3BvFMGXIIpp0prFA0caYnfpN13J4yY9OHuMIZ4tapXcJgdQlHo1PRx3XWevF1oq4v/rdVmJBzru5o3gAlv4uf/Qk5hLY8MiqJm+87iSeRsHmotBEQTSj3kguVOH9vqFfSmB2Yu8dBye4MtDgHuGhTzR4kRhwlBjfOplneDXq2WRjGfqPJXZ+gVO7tkzr5Q4g+f10lcpte7sAOjNhcRbnzXGaExdIdhfpdYXhWqFpsJlOdEhIUcWFCJ5MJgwNTt4nFKGrtbW9efBmxsMHJiJDFVqd/xWBTq/K/eFezhmGX4mgGnbiuBCp+8J3/F2bIUcMumfzD5X4XrtF5QkG5KkBnjRfy1mZ6z7c+kO79fe4OFRDbBnW0zPzZdB5sWHkGftnU0kP6Zs8JsDLyEwG/Smcu2yEZJtIH4tVF9BLGfQdopXFZLeVgAcAAhSUttpJsM5xdS6cpJUv1FPVeJokkWY4C0ndkB1kGVBa88DMHNRKGVd0i2Nh7NA0rirn/tR4Wx/7jNB2KuDIWO/9+qOZFJB0
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(39860400002)(346002)(396003)(376002)(136003)(451199021)(8936002)(8676002)(91956017)(5660300002)(7416002)(6916009)(4326008)(64756008)(76116006)(66946007)(66446008)(66476007)(66556008)(316002)(54906003)(66899021)(2906002)(41300700001)(71200400001)(478600001)(6486002)(122000001)(26005)(6506007)(6512007)(36756003)(83380400001)(186003)(2616005)(82960400001)(38070700005)(86362001)(38100700002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dGlnSzZLUmQ3VWZnTXFycXE3ZklnVkszOWdJdjhHY0hHM0crSndGWjhDOGNE?=
- =?utf-8?B?bVZ3dnpXT2dFM3k5T0lXNTJnMThlelJhbkxGUVc5SnV6cVNYNm1IbngzTXMv?=
- =?utf-8?B?VXQ1NTZnVnVIYUZweTNnNVZ0U3VZTzUwUUVLKzNnMGhEZVJjTDB1S29teEh2?=
- =?utf-8?B?YUZmbWk2NjZ4VkluYU9BcU5XV200OVlQSmRrWUVSaTdqdFZzQzhDMlRyV3Br?=
- =?utf-8?B?YXFDZ0pwNzEya0h3YXptY2d5NHZldmVLemdVK3I3T1FDV3Q2VTREYks3Q2xW?=
- =?utf-8?B?SU42UzlOZlJ3dlRNNkMwZnRIeExpNUNYS2d3MGx1TFYzNksrMXBSenF1aVFL?=
- =?utf-8?B?SzJnaDkwYmVBYVBsSDNtUEFBRkF1R2tsTlIrbzRiQ0lIRFhEanRrUFFZVzVm?=
- =?utf-8?B?OEdUVVY3UmdpSEo1c01HdXQyUGxDdFYzNlhyMEpnVmtyMnZza2U0RDRDQVhZ?=
- =?utf-8?B?YzI5WHNIdTJRV2Z4QVZJZFZGOGViNVAxRXR1VTZDbXp1N2J4K0dwR2dhRjQ5?=
- =?utf-8?B?MGFXbGNXS3VpZzVpUXVtU3RZcDdmazZkbll1c040QXlzUXVSQkZjTTI2VEJp?=
- =?utf-8?B?d3IwdndET3pZN2pyaUc2bWJuVjNLUG9wUit4eE9IWDhoc2VTTHRkZ3JXKzgv?=
- =?utf-8?B?dWJjdnRvSGlPUnpLNm9sUXFQMzFVeEVaTTRNamo4QU14bnZnZWdMbGpUT3Nt?=
- =?utf-8?B?NHJ6RXE1dXFIWFozVkc3aW4xWm9DenUzWENQTnFVcFYyR0xnUXVWVDlGOS9s?=
- =?utf-8?B?M2Z2OXUwMTd6TzRqclNmbzhtVTBQTlJTVnU2QTJQOFlhQURDMU5NM09KSGsz?=
- =?utf-8?B?b3VILzFoSjUzVzVXdUdTZHJLSDdyck5TQzM2STdSa1ppSzBxTENkN0RaWHZw?=
- =?utf-8?B?bTZhTkxUeWIwRGlXOE04TkNvY2xaRzdTVlhrUS8rbzBXUldSVjIzSXY2cldw?=
- =?utf-8?B?NEtxYk5OS3QzUjlVbTEvNmlvS1JJQ25vZjU0ZFRVem9SelA0RFltaS8zODAv?=
- =?utf-8?B?ajU0WmZDQVVuR0RCT01nUGNxUTByY056K1E0RGdMeHkvalJjTzE2bXRKVUZR?=
- =?utf-8?B?bmp0eFJ3RG5lZG9VM2hLdGhQNkxrZW9IODdkUXhBOVZNVFFraCswcVhtVVRz?=
- =?utf-8?B?a1BkOWFCUU9FWlEwSWlxcHB4MXdYdWhWQnFjQjNPVTdOQWJ6Zm9aODdpemIr?=
- =?utf-8?B?NXFkc2NhWUFLLzQxakdWUjlhWjRyOENlOXowZ2o4bWJtVUZZOVRmTmEyNzdE?=
- =?utf-8?B?ZW04L3BsYitSUGp1UzRzcUgwRG0yNlJmem5rZnJ6RUpTbldtZitaN3BsVWtX?=
- =?utf-8?B?MkcrMUlJZTBzUzJVTEV1dU1OaXp5Ym05eEFVd1VQTGhFZzYyd05wVjJPRTR2?=
- =?utf-8?B?L1J4VUxOY2Vsb2x6SXlaWUw2QVV6dmtFSEhVdDkxOGxzcmhJTEt3WEthcnNR?=
- =?utf-8?B?ZUdDSy9QMTFXdnZDTnAwcmhNdmRHR2hGOHUwOEZpRFhmZStSMDBVSW1wNkYr?=
- =?utf-8?B?RmRXZXY3Q3l1R2JYaDhFam5sMWNFNVdkdHV6VU1yRWdXOW5TRGVuTkVuczRY?=
- =?utf-8?B?YlhNbzJ4NWQwbzhyNGEwNzNvQnk4SW1jN3hjZHg2NEh3ZW5NOTB5WUVpRDBR?=
- =?utf-8?B?cGt2aEFWb2NFdVpScWs5blZuUGM5U1BTRUpWWW00dWJFMXpHRjhXR0t6SUlK?=
- =?utf-8?B?YXlkU054UmN3MGF1VmdCMWd4SExUWEJIcHRnN2hoK1JBcW1aTnI0OGRMS1Fl?=
- =?utf-8?B?c0VBOXkxWjZXR2hyeDdIK21GRmRiUkpHNWd1N0xJVFpPdndnWEF5OU0wMzVR?=
- =?utf-8?B?S2FaSEFTNHgvME1uRkVVbmRkRHNGNW9HaHV6eGlDNkY0dWV1ZUQrZVVpdU1o?=
- =?utf-8?B?bWErU014OUQxck1LZy9DbjlUTERZZGpQVHpjVHNXWWdxNXQ3MFF2VjZmUnBK?=
- =?utf-8?B?UFRqTUtxNmI2c05MUzlZMUdicDlwWmZETHhGZURmRFNmdkQrYWlYdmpqM3RF?=
- =?utf-8?B?ZXJjUUNyZkRjeXYwMXpNa3RWQzZ0cVRDaC9PNGoyTkc3bzl5L2FtemVOWktN?=
- =?utf-8?B?WC9BTzNseEJCZ25HeE1RWmJwbHV3WUVQZ3FYam9iSzcvSTJNSUd4NjIzalVL?=
- =?utf-8?Q?Dm9P9QHUtns4eLqf2tsJi6bJx?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <B74C2FEEDA78804EB610543C80D99AF7@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ smtp.mailfrom=labundy.com; dmarc=pass action=none header.from=labundy.com;
+ dkim=pass header.d=labundy.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=NETORG5796793.onmicrosoft.com; s=selector1-NETORG5796793-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YVJTx+fjiFGpzllsNLnnWS63Pb+XxmTyuWNx665jsLw=;
+ b=fHTQN+XXp/XlcDA3CLwheFtNSz0nc68LGWYNbsoxn5m91FOMOg3iECyNnFEY6H5XYvQ6RsmqroMckvYam8fTEm29MEh8sOqEgqHi5ijSlPjLEJELPjojXnoPB+IAQRhOgg2IOwxccsMNhNCjNAPyk13HG3ws1C5QCPvv3AQNmKw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=labundy.com;
+Received: from SN4PR0801MB3774.namprd08.prod.outlook.com
+ (2603:10b6:803:43::21) by PH0PR08MB7700.namprd08.prod.outlook.com
+ (2603:10b6:510:db::5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Mon, 12 Jun
+ 2023 03:09:09 +0000
+Received: from SN4PR0801MB3774.namprd08.prod.outlook.com
+ ([fe80::ca3a:84ac:381c:1506]) by SN4PR0801MB3774.namprd08.prod.outlook.com
+ ([fe80::ca3a:84ac:381c:1506%4]) with mapi id 15.20.6455.043; Mon, 12 Jun 2023
+ 03:09:09 +0000
+Date:   Sun, 11 Jun 2023 22:09:03 -0500
+From:   Jeff LaBundy <jeff@labundy.com>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC 3/4] input: touchscreen: add I2C support for Goodix
+ Berlin Touchscreen IC
+Message-ID: <ZIaMT0ALwAoasSvu@nixie71>
+References: <20230606-topic-goodix-berlin-upstream-initial-v1-0-4a0741b8aefd@linaro.org>
+ <20230606-topic-goodix-berlin-upstream-initial-v1-3-4a0741b8aefd@linaro.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230606-topic-goodix-berlin-upstream-initial-v1-3-4a0741b8aefd@linaro.org>
+X-ClientProxiedBy: SN6PR08CA0016.namprd08.prod.outlook.com
+ (2603:10b6:805:66::29) To SN4PR0801MB3774.namprd08.prod.outlook.com
+ (2603:10b6:803:43::21)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN4PR0801MB3774:EE_|PH0PR08MB7700:EE_
+X-MS-Office365-Filtering-Correlation-Id: b3a3e4c8-3aea-4380-a611-08db6af26394
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: EuAW6RPrM3HNWzOCoAeiFQt12mOKJIp2jeE50Lyd5ozzmZv9/tPKAEFYz1Ap6IXIP/YFl5HMkl0+/+HGCkVOiKrh4wUKm38PMzBUJBNH0tF1S72vreLT1f4lkDE7A7WlxdI3v8s78iALwMQnvtQySdAdlH1sJj3xc8023vD2crODmwKyTlV8YGiecGHBcNnIlXEJ+cLZCfiincYduoynncKNgkA/DY9aPbXv3xSMCsn6qmmCwyS5UwQpaZV1HjCTjHKig5iyidzP7dPLBSuC39AIz7p09sm4ng1lOtBO6xJFeIaAIsv1Dg+wnUl+1At7t72WzDpFew8KcMyCrzpGhr6FUY6R6ImTnQEN061J7BEFbgtB1xFCIIAjsz0+E+ifuhir3afuS7t88mybkPLEqXLXrqpAYmaZEXLSkISp8PugqshSCiSLUBMsJhn8y9qlYY/ins2yhSVilQAYqAbA/Ffo60dEYvd5bEo/xEioLKRhkrK8CB2xHPzVuBhPWeFnbmMMU4GRr5D4EhjKn6+VD5QP21uJOcIBooaVRCcipAA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR0801MB3774.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(396003)(346002)(39830400003)(136003)(366004)(376002)(451199021)(5660300002)(7416002)(66946007)(66556008)(66476007)(4326008)(6916009)(2906002)(316002)(41300700001)(6666004)(54906003)(8676002)(966005)(8936002)(9686003)(186003)(26005)(6512007)(6506007)(83380400001)(33716001)(86362001)(478600001)(6486002)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RMZzxrddVvkNMyBr8qDLWJemrK02DQaORYD6iXUIIzs9PP9z5kCV+YIeEE9h?=
+ =?us-ascii?Q?pRr55zvyjF+lq7nFoscXaU3XIYN4UFUdFhzzZV9OpOFbaG6i9vZ+cmberLx4?=
+ =?us-ascii?Q?VTU5Mli0FL9Q+ziTvBeZNGq7H9/Tg1zGN1UaFaPWITdV1QXv0dy3OjISwmvS?=
+ =?us-ascii?Q?j55mX4HaRlFYOI9qh287e49vL/jYzsylf2kTkOuJGRe+EpAoBBhGmx+6fvgI?=
+ =?us-ascii?Q?Cij86r5EEUxxOC6qsvYE+9hqpeM1wdQkpZljphDpSJs3+IbLdFBCkW72u4jR?=
+ =?us-ascii?Q?uTHvx3g7yIElAXMDQukcHfqfEBq4SsqO/WalfuIPGmSvCFn4cTrzbH2qX7Y2?=
+ =?us-ascii?Q?NsZgrxZCy+31jwo3gejqVVPA/lDvcCH7Wo9iMbZHDdEEdK5Jsz1XRJVFVz2v?=
+ =?us-ascii?Q?49Wo9q3GPHau/cSlSzb4lysZpN53I2lBMzqoAv2K2Iq2yv9vq326JSWUJ27C?=
+ =?us-ascii?Q?34RFKDKyGLiXut96tIWVu5CJPiRC/F7GT2k1Idu9fT9kK6ZzlUxzscTXlp7G?=
+ =?us-ascii?Q?CQb44Jd/66uISfSlgTzCXhqG5WBff5GSme/q94BBwAMvy11C3WCowYsGRZIP?=
+ =?us-ascii?Q?+KF2YK9J7YypG2kfXWvsttufGVocsJAKC2cHuXPrYEKvw6O4rqOr6A7ETZfp?=
+ =?us-ascii?Q?RImngUFujOoNUIJCQeMS9yvip9casY3yAT2xPM2RVjiyR3wXj+AcOOTbfrHN?=
+ =?us-ascii?Q?2wpPg2mqLJzZW/INoI5SxGq2KnSJvyIvFDZziCXoxkfAdlaXVBv0cZ5ZBhE5?=
+ =?us-ascii?Q?0Lo9Z2JeQ06Hrul7frFOzXfFRIA42Zemu6gWYH5FTiux+xU1RTf454+Qblh9?=
+ =?us-ascii?Q?YcNdY8wxDF7CyoZgSWcmixp/aNNHw1HasThPiM6f5mUPbbZKWvTkKngBiQ1v?=
+ =?us-ascii?Q?GB7idQhpcpIJe1D0zC1ZuPEt1IO3ynN4u65JwTUKqFMtZJxXDauMkAWlTZXy?=
+ =?us-ascii?Q?Taifet3tUt+0Zlku6jAppfMqFfyzIk1G+SBYrkG6ZYX37V6fVoXeQggKCI1S?=
+ =?us-ascii?Q?oKJylWDVvERV8o+vIqNUeSI0+qP2jV5Ny5mndG2VoL8QrXYupB6DHmkTJ93e?=
+ =?us-ascii?Q?ptAvKY3U+gLuCUKpNJfzyZHinepJQaL425oQgbBzWUt7ZAcC0UIBXfYkPcv3?=
+ =?us-ascii?Q?2P7EWRB9loxgAXgcQuI8sLTeBqNzqBIJXuXgz4tqzaJSEMhT7tCyNYtKVwy8?=
+ =?us-ascii?Q?koCSYiZN9p08UzZ7sGI1R2V1O5ciU1BJaGqygHuh0WJuPL8KZhLIg5qJb9Us?=
+ =?us-ascii?Q?6FI33ItI75CN2pkDuV7xXG2AXCCbl93qOZAbOaA66ckwM5LfVK/sReWZPR8F?=
+ =?us-ascii?Q?5320BZYsecz6ggo7p8yFtVJr6e3lGK5PGrzLVL7iF7PRa1ErIENI8NoZG9DE?=
+ =?us-ascii?Q?wSsr7atTxKzhwhJ8iCgJMFr9bj7dGX6PZfPLKCCRw0q8uXq4osZRuOWkMOMB?=
+ =?us-ascii?Q?F74AwgHDw8Pv2O2whlRhRd9nlOeHI2aczIfvt1qr8y9KJA1OQfGAZGkDGTQk?=
+ =?us-ascii?Q?klyj1kQWGQqqfcZ/pHDFo32not9ipPjYjk6M7wvxXbx5XgENmFMjUirXTRyi?=
+ =?us-ascii?Q?PnK8x1LXGRrGRSNcdbaT5rDEkJyIGKRFVeVRBhbu?=
+X-OriginatorOrg: labundy.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b3a3e4c8-3aea-4380-a611-08db6af26394
+X-MS-Exchange-CrossTenant-AuthSource: SN4PR0801MB3774.namprd08.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7885d431-9955-481f-7aa9-08db6af252ba
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jun 2023 03:08:40.5384
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 03:09:09.0683
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: y6OkbQil2z5KoIHGQ7c6dkVQFxPzOeF6/8qNFbV/F7Ae/yvpgLs/pnNhgkgTYPrmOZMilPOFVWbQ7vr1B+ouFg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB8131
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 00b69d09-acab-4585-aca7-8fb7c6323e6f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +FA7Xpc06mC3vSLi039gGNM+HY9sIQBhU8c3J54hpFFvYOpXl/obqgUNo6JnFJ7nHxvV6ErEpElPyOe1babWMQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR08MB7700
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIzLTA2LTA5IGF0IDE2OjE3ICswMzAwLCBraXJpbGwuc2h1dGVtb3ZAbGludXgu
-aW50ZWwuY29tIHdyb3RlOg0KPiBPbiBNb24sIEp1biAwNSwgMjAyMyBhdCAwMjoyNzozMkFNICsx
-MjAwLCBLYWkgSHVhbmcgd3JvdGU6DQo+ID4gVGhlIGZpcnN0IGZldyBnZW5lcmF0aW9ucyBvZiBU
-RFggaGFyZHdhcmUgaGF2ZSBhbiBlcnJhdHVtLiAgVHJpZ2dlcmluZw0KPiA+IGl0IGluIExpbnV4
-IHJlcXVpcmVzIHNvbWUga2luZCBvZiBrZXJuZWwgYnVnIGludm9sdmluZyByZWxhdGl2ZWx5IGV4
-b3RpYw0KPiA+IG1lbW9yeSB3cml0ZXMgdG8gVERYIHByaXZhdGUgbWVtb3J5IGFuZCB3aWxsIG1h
-bmlmZXN0IHZpYQ0KPiA+IHNwdXJpb3VzLWxvb2tpbmcgbWFjaGluZSBjaGVja3Mgd2hlbiByZWFk
-aW5nIHRoZSBhZmZlY3RlZCBtZW1vcnkuDQo+ID4gDQo+ID4gPT0gQmFja2dyb3VuZCA9PQ0KPiA+
-IA0KPiA+IFZpcnR1YWxseSBhbGwga2VybmVsIG1lbW9yeSBhY2Nlc3NlcyBvcGVyYXRpb25zIGhh
-cHBlbiBpbiBmdWxsDQo+ID4gY2FjaGVsaW5lcy4gIEluIHByYWN0aWNlLCB3cml0aW5nIGEgImJ5
-dGUiIG9mIG1lbW9yeSB1c3VhbGx5IHJlYWRzIGEgNjQNCj4gPiBieXRlIGNhY2hlbGluZSBvZiBt
-ZW1vcnksIG1vZGlmaWVzIGl0LCB0aGVuIHdyaXRlcyB0aGUgd2hvbGUgbGluZSBiYWNrLg0KPiA+
-IFRob3NlIG9wZXJhdGlvbnMgZG8gbm90IHRyaWdnZXIgdGhpcyBwcm9ibGVtLg0KPiA+IA0KPiA+
-IFRoaXMgcHJvYmxlbSBpcyB0cmlnZ2VyZWQgYnkgInBhcnRpYWwiIHdyaXRlcyB3aGVyZSBhIHdy
-aXRlIHRyYW5zYWN0aW9uDQo+ID4gb2YgbGVzcyB0aGFuIGNhY2hlbGluZSBsYW5kcyBhdCB0aGUg
-bWVtb3J5IGNvbnRyb2xsZXIuICBUaGUgQ1BVIGRvZXMNCj4gPiB0aGVzZSB2aWEgbm9uLXRlbXBv
-cmFsIHdyaXRlIGluc3RydWN0aW9ucyAobGlrZSBNT1ZOVEkpLCBvciB0aHJvdWdoDQo+ID4gVUMv
-V0MgbWVtb3J5IG1hcHBpbmdzLiAgVGhlIGlzc3VlIGNhbiBhbHNvIGJlIHRyaWdnZXJlZCBhd2F5
-IGZyb20gdGhlDQo+ID4gQ1BVIGJ5IGRldmljZXMgZG9pbmcgcGFydGlhbCB3cml0ZXMgdmlhIERN
-QS4NCj4gPiANCj4gPiA9PSBQcm9ibGVtID09DQo+ID4gDQo+ID4gQSBwYXJ0aWFsIHdyaXRlIHRv
-IGEgVERYIHByaXZhdGUgbWVtb3J5IGNhY2hlbGluZSB3aWxsIHNpbGVudGx5ICJwb2lzb24iDQo+
-ID4gdGhlIGxpbmUuICBTdWJzZXF1ZW50IHJlYWRzIHdpbGwgY29uc3VtZSB0aGUgcG9pc29uIGFu
-ZCBnZW5lcmF0ZSBhDQo+ID4gbWFjaGluZSBjaGVjay4gIEFjY29yZGluZyB0byB0aGUgVERYIGhh
-cmR3YXJlIHNwZWMsIG5laXRoZXIgb2YgdGhlc2UNCj4gPiB0aGluZ3Mgc2hvdWxkIGhhdmUgaGFw
-cGVuZWQuDQo+ID4gDQo+ID4gVG8gYWRkIGluc3VsdCB0byBpbmp1cnksIHRoZSBMaW51eCBtYWNo
-aW5lIGNvZGUgd2lsbCBwcmVzZW50IHRoZXNlIGFzIGENCj4gPiBsaXRlcmFsICJIYXJkd2FyZSBl
-cnJvciIgd2hlbiB0aGV5IHdlcmUsIGluIGZhY3QsIGEgc29mdHdhcmUtdHJpZ2dlcmVkDQo+ID4g
-aXNzdWUuDQo+ID4gDQo+ID4gPT0gU29sdXRpb24gPT0NCj4gPiANCj4gPiBJbiB0aGUgZW5kLCB0
-aGlzIGlzc3VlIGlzIGhhcmQgdG8gdHJpZ2dlci4gIFJhdGhlciB0aGFuIGRvIHNvbWV0aGluZw0K
-PiA+IHJhc2ggKGFuZCBpbmNvbXBsZXRlKSBsaWtlIHVubWFwIFREWCBwcml2YXRlIG1lbW9yeSBm
-cm9tIHRoZSBkaXJlY3QgbWFwLA0KPiA+IGltcHJvdmUgdGhlIG1hY2hpbmUgY2hlY2sgaGFuZGxl
-ci4NCj4gPiANCj4gPiBDdXJyZW50bHksIHRoZSAjTUMgaGFuZGxlciBkb2Vzbid0IGRpc3Rpbmd1
-aXNoIHdoZXRoZXIgdGhlIG1lbW9yeSBpcw0KPiA+IFREWCBwcml2YXRlIG1lbW9yeSBvciBub3Qg
-YnV0IGp1c3QgZHVtcCwgZm9yIGluc3RhbmNlLCBiZWxvdyBtZXNzYWdlOg0KPiA+IA0KPiA+ICBb
-Li4uXSBtY2U6IFtIYXJkd2FyZSBFcnJvcl06IENQVSAxNDc6IE1hY2hpbmUgQ2hlY2sgRXhjZXB0
-aW9uOiBmIEJhbmsgMTogYmQ4MDAwMDAwMDEwMDEzNA0KPiA+ICBbLi4uXSBtY2U6IFtIYXJkd2Fy
-ZSBFcnJvcl06IFJJUCAxMDo8ZmZmZmZmZmZhZGI2OTg3MD4ge19fdGxiX3JlbW92ZV9wYWdlX3Np
-emUrMHgxMC8weGEwfQ0KPiA+ICAJLi4uDQo+ID4gIFsuLi5dIG1jZTogW0hhcmR3YXJlIEVycm9y
-XTogUnVuIHRoZSBhYm92ZSB0aHJvdWdoICdtY2Vsb2cgLS1hc2NpaScNCj4gPiAgWy4uLl0gbWNl
-OiBbSGFyZHdhcmUgRXJyb3JdOiBNYWNoaW5lIGNoZWNrOiBEYXRhIGxvYWQgaW4gdW5yZWNvdmVy
-YWJsZSBhcmVhIG9mIGtlcm5lbA0KPiA+ICBbLi4uXSBLZXJuZWwgcGFuaWMgLSBub3Qgc3luY2lu
-ZzogRmF0YWwgbG9jYWwgbWFjaGluZSBjaGVjaw0KPiA+IA0KPiA+IFdoaWNoIHNheXMgIkhhcmR3
-YXJlIEVycm9yIiBhbmQgIkRhdGEgbG9hZCBpbiB1bnJlY292ZXJhYmxlIGFyZWEgb2YNCj4gPiBr
-ZXJuZWwiLg0KPiA+IA0KPiA+IElkZWFsbHksIGl0J3MgYmV0dGVyIGZvciB0aGUgbG9nIHRvIHNh
-eSAic29mdHdhcmUgYnVnIGFyb3VuZCBURFggcHJpdmF0ZQ0KPiA+IG1lbW9yeSIgaW5zdGVhZCBv
-ZiAiSGFyZHdhcmUgRXJyb3IiLiAgQnV0IGluIHJlYWxpdHkgdGhlIHJlYWwgaGFyZHdhcmUNCj4g
-PiBtZW1vcnkgZXJyb3IgY2FuIGhhcHBlbiwgYW5kIHNhZGx5IHN1Y2ggc29mdHdhcmUtdHJpZ2dl
-cmVkICNNQyBjYW5ub3QgYmUNCj4gPiBkaXN0aW5ndWlzaGVkIGZyb20gdGhlIHJlYWwgaGFyZHdh
-cmUgZXJyb3IuICBBbHNvLCB0aGUgZXJyb3IgbWVzc2FnZSBpcw0KPiA+IHVzZWQgYnkgdXNlcnNw
-YWNlIHRvb2wgJ21jZWxvZycgdG8gcGFyc2UsIHNvIGNoYW5naW5nIHRoZSBvdXRwdXQgbWF5DQo+
-ID4gYnJlYWsgdXNlcnNwYWNlLg0KPiA+IA0KPiA+IFNvIGtlZXAgdGhlICJIYXJkd2FyZSBFcnJv
-ciIuICBUaGUgIkRhdGEgbG9hZCBpbiB1bnJlY292ZXJhYmxlIGFyZWEgb2YNCj4gPiBrZXJuZWwi
-IGlzIGFsc28gaGVscGZ1bCwgc28ga2VlcCBpdCB0b28uDQo+ID4gDQo+ID4gSW5zdGVhZCBvZiBt
-b2RpZnlpbmcgYWJvdmUgZXJyb3IgbG9nLCBpbXByb3ZlIHRoZSBlcnJvciBsb2cgYnkgcHJpbnRp
-bmcNCj4gPiBhZGRpdGlvbmFsIFREWCByZWxhdGVkIG1lc3NhZ2UgdG8gbWFrZSB0aGUgbG9nIGxp
-a2U6DQo+ID4gDQo+ID4gICAuLi4NCj4gPiAgWy4uLl0gbWNlOiBbSGFyZHdhcmUgRXJyb3JdOiBN
-YWNoaW5lIGNoZWNrOiBEYXRhIGxvYWQgaW4gdW5yZWNvdmVyYWJsZSBhcmVhIG9mIGtlcm5lbA0K
-PiA+ICBbLi4uXSBtY2U6IFtIYXJkd2FyZSBFcnJvcl06IE1hY2hpbmUgQ2hlY2s6IE1lbW9yeSBl
-cnJvciBmcm9tIFREWCBwcml2YXRlIG1lbW9yeS4gTWF5IGJlIHJlc3VsdCBvZiBDUFUgZXJyYXR1
-bS4NCj4gDQo+IFRoZSBtZXNzYWdlIG1lbnRpb25zIG9uZSBwYXJ0IG9mIGlzc3VlIC0tIENQVSBl
-cnJhdHVtIC0tIGJ1dCBtaXNzZXMgdGhlDQo+IG90aGVyIHJlcXVpcmVkIHBhcnQgLS0ga2VybmVs
-IGJ1ZyB0aGF0IG1ha2VzIGtlcm5lbCBhY2Nlc3MgdGhlIG1lbW9yeSBpdA0KPiBub3Qgc3VwcG9z
-ZSB0by4NCj4gDQoNCkhvdyBhYm91dCBiZWxvdz8NCg0KIk1lbW9yeSBlcnJvciBmcm9tIFREWCBw
-cml2YXRlIG1lbW9yeS4gTWF5IGJlIHJlc3VsdCBvZiBDUFUgZXJyYXR1bSBjYXVzZWQgYnkNCmtl
-cm5lbCBidWcuIg0KDQoNCg0K
+Hi Neil,
+
+Excellent work; just a few nits on this particular instance.
+
+On Tue, Jun 06, 2023 at 04:31:58PM +0200, Neil Armstrong wrote:
+> Add initial support for the new Goodix "Berlin" touchscreen ICs
+> over the I2C interface.
+> 
+> This initial driver is derived from the Goodix goodix_ts_berlin
+> available at [1] and [2] and only supports the GT9916 IC
+> present on the Qualcomm SM8550 MTP & QRD touch panel.
+> 
+> The current implementation only supports BerlinD, aka GT9916.
+> 
+> [1] https://github.com/goodix/goodix_ts_berlin
+> [2] https://git.codelinaro.org/clo/la/platform/vendor/opensource/touch-drivers
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>  drivers/input/touchscreen/Kconfig             | 14 +++++
+>  drivers/input/touchscreen/Makefile            |  1 +
+>  drivers/input/touchscreen/goodix_berlin_i2c.c | 76 +++++++++++++++++++++++++++
+>  3 files changed, 91 insertions(+)
+> 
+> diff --git a/drivers/input/touchscreen/Kconfig b/drivers/input/touchscreen/Kconfig
+> index 1a6f6f6da991..da6d5d75c42d 100644
+> --- a/drivers/input/touchscreen/Kconfig
+> +++ b/drivers/input/touchscreen/Kconfig
+> @@ -421,6 +421,20 @@ config TOUCHSCREEN_GOODIX_BERLIN_CORE
+>  	depends on REGMAP
+>  	tristate
+>  
+> +config TOUCHSCREEN_GOODIX_BERLIN_I2C
+> +	tristate "Goodix Berlin I2C touchscreen"
+> +	depends on I2C
+> +	depends on REGMAP_I2C
+
+As you already depend upon REGMAP, I think you can simply select REGMAP_I2C
+here instead of depending upon it as well.
+
+> +	select TOUCHSCREEN_GOODIX_BERLIN_CORE
+> +	help
+> +	  Say Y here if you have the a touchscreen connected to your
+> +	  system using the Goodix Berlin IC connection via I2C.
+
+This language was a bit of a tongue-twister; perhaps it is better to say
+"...if you have a Goodix Berlin IC connected to your system via I2C."
+
+> +
+> +	  If unsure, say N.
+> +
+> +	  To compile this driver as a module, choose M here: the
+> +	  module will be called goodix_berlin_i2c.
+> +
+>  config TOUCHSCREEN_HIDEEP
+>  	tristate "HiDeep Touch IC"
+>  	depends on I2C
+> diff --git a/drivers/input/touchscreen/Makefile b/drivers/input/touchscreen/Makefile
+> index 29cdb042e104..921a2da0c2be 100644
+> --- a/drivers/input/touchscreen/Makefile
+> +++ b/drivers/input/touchscreen/Makefile
+> @@ -48,6 +48,7 @@ obj-$(CONFIG_TOUCHSCREEN_EXC3000)	+= exc3000.o
+>  obj-$(CONFIG_TOUCHSCREEN_FUJITSU)	+= fujitsu_ts.o
+>  obj-$(CONFIG_TOUCHSCREEN_GOODIX)	+= goodix_ts.o
+>  obj-$(CONFIG_TOUCHSCREEN_GOODIX_BERLIN_CORE)	+= goodix_berlin_core.o
+> +obj-$(CONFIG_TOUCHSCREEN_GOODIX_BERLIN_I2C)	+= goodix_berlin_i2c.o
+>  obj-$(CONFIG_TOUCHSCREEN_HIDEEP)	+= hideep.o
+>  obj-$(CONFIG_TOUCHSCREEN_HYNITRON_CSTXXX)	+= hynitron_cstxxx.o
+>  obj-$(CONFIG_TOUCHSCREEN_ILI210X)	+= ili210x.o
+> diff --git a/drivers/input/touchscreen/goodix_berlin_i2c.c b/drivers/input/touchscreen/goodix_berlin_i2c.c
+> new file mode 100644
+> index 000000000000..fc32b8077287
+> --- /dev/null
+> +++ b/drivers/input/touchscreen/goodix_berlin_i2c.c
+> @@ -0,0 +1,76 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Goodix Berlin Touchscreen Driver
+> + *
+> + * Copyright (C) 2020 - 2021 Goodix, Inc.
+> + * Copyright (C) 2023 Linaro Ltd.
+> + *
+> + * Based on goodix_ts_berlin driver.
+> + */
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/i2c.h>
+> +#include <linux/regmap.h>
+> +#include <asm/unaligned.h>
+
+This last include does not seem to provide anything.
+
+> +
+> +#include "goodix_berlin.h"
+> +
+> +#define I2C_MAX_TRANSFER_SIZE		256
+> +
+> +static const struct regmap_config goodix_berlin_i2c_regmap_conf = {
+> +	.reg_bits = 32,
+> +	.val_bits = 8,
+> +	.max_raw_read = I2C_MAX_TRANSFER_SIZE,
+> +	.max_raw_write = I2C_MAX_TRANSFER_SIZE,
+> +};
+> +
+> +static const struct input_id goodix_berlin_i2c_input_id = {
+> +	.bustype = BUS_I2C,
+> +	.vendor = 0x0416,
+> +	.product = 0x1001,
+> +};
+> +
+> +static int goodix_berlin_i2c_probe(struct i2c_client *client)
+> +{
+> +	struct regmap *map;
+
+'regmap' tends to be more common than simply 'map'.
+
+> +
+> +	map = devm_regmap_init_i2c(client, &goodix_berlin_i2c_regmap_conf);
+> +	if (IS_ERR(map))
+> +		return PTR_ERR(map);
+> +
+> +	return goodix_berlin_probe(&client->dev, client->irq,
+> +				   &goodix_berlin_i2c_input_id, map);
+> +}
+> +
+> +static void goodix_berlin_i2c_remove(struct i2c_client *client)
+> +{
+> +	goodix_berlin_remove(&client->dev);
+> +}
+> +
+> +static const struct i2c_device_id goodix_berlin_i2c_id[] = {
+> +	{ "gt9916", 0 },
+> +	{ }
+> +};
+> +
+> +MODULE_DEVICE_TABLE(i2c, goodix_berlin_i2c_id);
+> +
+> +static const struct of_device_id goodix_berlin_i2c_of_match[] = {
+> +	{ .compatible = "goodix,gt9916", },
+> +	{ },
+
+No need for a trailing comma following the sentinel.
+
+> +};
+> +
+> +static struct i2c_driver goodix_berlin_i2c_driver = {
+> +	.driver = {
+> +		.name = "goodix-berlin-i2c",
+> +		.of_match_table = goodix_berlin_i2c_of_match,
+> +		.pm = pm_sleep_ptr(&goodix_berlin_pm_ops),
+> +	},
+> +	.probe = goodix_berlin_i2c_probe,
+> +	.remove = goodix_berlin_i2c_remove,
+> +	.id_table = goodix_berlin_i2c_id,
+> +};
+> +module_i2c_driver(goodix_berlin_i2c_driver);
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("Goodix Berlin I2C Touchscreen driver");
+> +MODULE_AUTHOR("Neil Armstrong <neil.armstrong@linaro.org>");
+> 
+> -- 
+> 2.34.1
+> 
+
+Kind regards,
+Jeff LaBundy
