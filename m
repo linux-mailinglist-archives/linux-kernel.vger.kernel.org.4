@@ -2,170 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89C9272CC1E
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:12:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D9272CC21
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233861AbjFLRL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 13:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55192 "EHLO
+        id S229565AbjFLRNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 13:13:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbjFLRLz (ORCPT
+        with ESMTP id S230077AbjFLRNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 13:11:55 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54263F1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:11:54 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1b3cab3a48dso12035945ad.3
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:11:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686589914; x=1689181914;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w/I8oU5lBx7O0AVCpvbGtKKitom6tdJ7McWrPGypDC4=;
-        b=wVF0xEYGM/V+zCU80xvyq4qwV0yj1hOdLFRqOeBG6rNq1mZS9axHGYBLeBI0WMdRIv
-         hkzXG+DQqyxUG3ZNJwhk4nvHa7dTDdVmUbtUbv0KonjLnpMhwIR++Zn+JYGYF4qpACy0
-         TBguC9jF/7RXSTOZFdVTFwDFoUFeZKO/TxKQvxwyOSfFBR1hlTDCsLQF3gJGrQKh0dM1
-         dnbBs1N9sWbWV7gnyAH3EvCgPH/tTgIbVrgHLUeG6DI/qTktPkH3U4iZQSPo6hQIH+Hn
-         C7b43aUeXSO/Vmzkm31QiJeIjfT3Lil1qVykh5WcPDzbPCKU8j1R2gFpw17raF0Nay2u
-         ptyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686589914; x=1689181914;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=w/I8oU5lBx7O0AVCpvbGtKKitom6tdJ7McWrPGypDC4=;
-        b=kZuraGytbWme8ABjf/60Ucnhx7QvkdycdfEA13/kRyqYYyPE5KJgK/BAigwl1G1o2b
-         pPr/8OEjVvSEyImoVK+papuiMZWNasYBIQ/xHif6GzLy6iJ3gKZEOBy/Ag2FO8zXKDyu
-         ApREuT3msvoRhb2IpBB92uj+oWKYZMvnNKhbsxTKVMe06L2Jw1HOVa1u1xhMEQ9r4ga+
-         v0BpB80ETmBHPNb/5HdYzGymu3uYkHLiZCNkGghkYOzldlq6YgRDGZFSM2ElOGjWuaKa
-         zK0C/9R/TUBK5tcaGrqrQQI+N7kUGgzOEQNp7TFrE94W0c5ELRgKCyDRuMWbDvC9v8oY
-         6Gwg==
-X-Gm-Message-State: AC+VfDzQKJvLEFat5BI+JwILhufDQ0z9c9f2rFIDwHjAOoLJazuFxXJ1
-        8aiSTNU67sHJqhtIrp8qY+7tveidmaE=
-X-Google-Smtp-Source: ACHHUZ5v1c+CqyBwYivhK+DSqau5kQVmVjEZH0nAYmDaNR5inKzg30hD4xw/4ZnGEEzgZLpMXuBMN4uPSsY=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:8d81:b0:1b3:95a9:3fc3 with SMTP id
- v1-20020a1709028d8100b001b395a93fc3mr1303122plo.10.1686589913639; Mon, 12 Jun
- 2023 10:11:53 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 10:11:51 -0700
-In-Reply-To: <CAHk-=wh6JEk7wYECcMdbXHf5ST8PAkOyUXhE8x2kqT6to+Gn9Q@mail.gmail.com>
-Mime-Version: 1.0
-References: <20230612090713.652690195@infradead.org> <20230612093541.598260416@infradead.org>
- <CAHk-=wh6JEk7wYECcMdbXHf5ST8PAkOyUXhE8x2kqT6to+Gn9Q@mail.gmail.com>
-Message-ID: <ZIdR18xG1jy8WdEp@google.com>
-Subject: Re: [PATCH v3 56/57] perf: Simplify perf_pmu_output_stop()
-From:   Sean Christopherson <seanjc@google.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>, keescook@chromium.org,
-        gregkh@linuxfoundation.org, pbonzini@redhat.com,
-        masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-        nicolas@fjasle.eu, catalin.marinas@arm.com, will@kernel.org,
-        vkoul@kernel.org, trix@redhat.com, ojeda@kernel.org,
-        mingo@redhat.com, longman@redhat.com, boqun.feng@gmail.com,
-        dennis@kernel.org, tj@kernel.org, cl@linux.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
-        adrian.hunter@intel.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, paulmck@kernel.org,
-        frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
-        42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
-        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
-        john.johansen@canonical.com, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
-        rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
-        tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
-        luc.vanoostenryck@gmail.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 12 Jun 2023 13:13:37 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F54188;
+        Mon, 12 Jun 2023 10:13:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686590016; x=1718126016;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0IhzFlc0JSqsC8g90Ed8ErIHbGi6v7rirVUCLlYWgTI=;
+  b=kd0p6GilJH70mqsdst+DgKhzTlwTO/vveuLVPVy+dYef0DGZAZtYU4wA
+   LEFkDn/2D4xgcJAUGFt+53yqep1+DwBelEkVQaYmQjox4jFAuTVzeS1cp
+   omG4WYaEbZX9c/N6/IMH+8INGeHAwyG1cOiFNtQ3QHP5clKGh3VlKVH2x
+   9XIYPjTNVkfZyld6F3wpi1ViqohHC3EOF/ORja5bkfKsqi/TiKu7lUnpC
+   wJtsixCf0WsouvlIgqEqrqdF4wXrEFlpWgbZFVfOsD0cEqTsS80aC9gnV
+   NLH9UASy+H196T6C9RGGlw9+jsiPZ+BYKAjG8O8yffla4AtvRkcMMjI+f
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="360590940"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="360590940"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 10:13:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="688714744"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="688714744"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 12 Jun 2023 10:13:32 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1q8l6h-003Ai5-0z;
+        Mon, 12 Jun 2023 20:13:31 +0300
+Date:   Mon, 12 Jun 2023 20:13:31 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mehdi Djait <mehdi.djait.k@gmail.com>
+Cc:     jic23@kernel.org, mazziesaccount@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        lars@metafoo.de, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 5/7] iio: accel: kionix-kx022a: Refactor driver and
+ add chip_info structure
+Message-ID: <ZIdSO7MGk3K/R2u1@smile.fi.intel.com>
+References: <cover.1686578553.git.mehdi.djait.k@gmail.com>
+ <3a41a5ae9857cacdb062c398715a5938ccd47014.1686578554.git.mehdi.djait.k@gmail.com>
+ <ZIc/uvB1zxNRnuRS@smile.fi.intel.com>
+ <ZIdIev+evQUvX5Rg@carbian>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZIdIev+evQUvX5Rg@carbian>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023, Linus Torvalds wrote:
-> This patch looks completely broken to me.
->=20
-> You now do
->=20
->                 if (err =3D=3D -EAGAIN)
->                         goto restart;
->=20
-> *within* the RCU-guarded section, and the "goto restart" will guard it ag=
-ain.
+On Mon, Jun 12, 2023 at 06:31:54PM +0200, Mehdi Djait wrote:
+> On Mon, Jun 12, 2023 at 06:54:34PM +0300, Andy Shevchenko wrote:
+> > On Mon, Jun 12, 2023 at 04:22:08PM +0200, Mehdi Djait wrote:
 
-What if we require that all guarded sections have explicit scoping?  E.g. d=
-rop
-the current version of guard() and rename scoped_guard() =3D> guard().  And=
- then
-figure out macro magic to guard an entire function?  E.g. something like
+...
 
-  static void perf_pmu_output_stop(struct perf_event *event) fn_guard(rcu)
-  {
-	...
-  }
+> > >  struct kx022a_data {
+> > > +	const struct kx022a_chip_info *chip_info;
+> > >  	struct regmap *regmap;
+> > 
+> > I would suggest to run bloat-o-meter with this version and if you place
+> > chip_info after regmap. Does it gain us some memory?
+> 
+> I used the bloat-o-meter on the two .ko files (this version and the the
+> one where chip_info after regamp) Is this what you asked for ?
 
-or just "guard(rcu)" if possible.  IIUC, function scopes like that will be =
-possible
-once -Wdeclaration-after-statement goes away.
+Yes. I assume the old one is the current as in this patch?
+If so, you know what to do in the next version :-)
 
-Bugs aside, IMO guards that are buried in the middle of a function and impl=
-icitly
-scoped to the function are all too easy to overlook.  Requiring explicit sc=
-oping
-would make bugs like this easier to spot since the goto would jump out of s=
-cope
-(and I assume prematurely release the resource/lock?).  As a bonus, annotat=
-ing
-the function itself would also serve as documentation.
+> add/remove: 0/0 grow/shrink: 0/5 up/down: 0/-20 (-20)
+> Function                                     old     new   delta
+> kx132_get_fifo_bytes                         148     144      -4
+> kx022a_trigger_set_state                     352     348      -4
+> kx022a_read_raw                              380     376      -4
+> kx022a_buffer_predisable                     248     244      -4
+> kx022a_buffer_postenable                     296     292      -4
+> Total: Before=11244, After=11224, chg -0.18%
 
-The only downside is that the code for function-scoped locks that are acqui=
-red
-partway through the function would be more verbose and/or cumbersome to wri=
-te,
-but that can be mitigated to some extent, e.g. by moving the locked portion=
- to a
-separate helper.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-> On Mon, Jun 12, 2023 at 2:39=E2=80=AFAM Peter Zijlstra <peterz@infradead.=
-org> wrote:
-> >
-> > --- a/kernel/events/core.c
-> > +++ b/kernel/events/core.c
-> > @@ -7977,7 +7977,8 @@ static void perf_pmu_output_stop(struct
-> >         int err, cpu;
-> >
-> >  restart:
-> > -       rcu_read_lock();
-> > +       /* cannot have a label in front of a decl */;
-> > +       guard(rcu)();
-> >         list_for_each_entry_rcu(iter, &event->rb->event_list, rb_entry)=
- {
-> >                 /*
-> >                  * For per-CPU events, we need to make sure that neithe=
-r they
-> > @@ -7993,12 +7994,9 @@ static void perf_pmu_output_stop(struct
-> >                         continue;
-> >
-> >                 err =3D cpu_function_call(cpu, __perf_pmu_output_stop, =
-event);
-> > -               if (err =3D=3D -EAGAIN) {
-> > -                       rcu_read_unlock();
-> > +               if (err =3D=3D -EAGAIN)
-> >                         goto restart;
-> > -               }
-> >         }
-> > -       rcu_read_unlock();
-> >  }
+
