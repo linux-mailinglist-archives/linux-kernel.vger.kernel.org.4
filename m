@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C047D72C70D
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABD9972C719
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237082AbjFLOLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 10:11:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53188 "EHLO
+        id S237173AbjFLOM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 10:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236463AbjFLOL2 (ORCPT
+        with ESMTP id S236889AbjFLOM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 10:11:28 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDBF10F2;
-        Mon, 12 Jun 2023 07:11:17 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id af79cd13be357-75f07dee22cso162172485a.2;
-        Mon, 12 Jun 2023 07:11:17 -0700 (PDT)
+        Mon, 12 Jun 2023 10:12:56 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D9810C4;
+        Mon, 12 Jun 2023 07:12:55 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id af79cd13be357-75da00a1eddso433835485a.3;
+        Mon, 12 Jun 2023 07:12:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686579076; x=1689171076;
+        d=gmail.com; s=20221208; t=1686579174; x=1689171174;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EJQ+L6XrHRjNmHJu0KSlBODFfH7Ghg6JGFmz6a5x+ks=;
-        b=ZUc6sxNRBAQ8xbX6AppejPyNMJJ9vsAbCmSZXAXJ+9uk+Ut11Ci70gGfKeCF6IdCYT
-         0Npc6f438t0uTZnI96FsJGIPUr95LlFSa7BTMGsXKqAPr/uS1Gd0FExFSCuCQESBowVo
-         UHu6ECTAF+m1SBtTZXBI/1yAUv9v6izlKf+yjVPKh/IzhBhQzv27yLbTGfoSSUcGyXPy
-         BwfM8c3AbVWzckrG/d9VGxLDN5Tqj8OgcS8NktKVgeIJq9GaLzTzZNSeUPep/JBkJmo9
-         cxUfmKHtDmA4HfbwfbZdAkmDSCfoZPeuXwkRNY9YARnk/VloxLigmPyPw0y9qBjNCk7G
-         Xhdw==
+        bh=TwQG10OvI6bp5Np0f72lU7cLcijGe7ymruPqF2GZDRs=;
+        b=JpCmZrgGbnD0/gw+qdwVRXyOpwtR59MoNMneUFCy3FczoF66ffM5Psp2Bc7Rb63I0a
+         UbCL1I+I5HoEGCFcLC/EJxn0FJDEGvkKDbMEs0yGqBP97pRzIfCfJBrRGEEKPfGGY7zR
+         O0KtRFFDqWQnOEiAEZcrPlJwPzH43j1KW6h62gSt0cp3ryIphp7xo8RD/c5/Rzw2IXuS
+         aQB00DGEzDaz451ciZpPqK/Ygj0CTxdrKd8vGG43oWeIKPlgRQlnInEGUuh+FEdwvnqd
+         jI76t5oXepYl/ZvJgQGWCZ/Pbyo4o3ai9XRqSxEDHCiYarYWQjg7vW3nPicZu6NGW88P
+         eSXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686579076; x=1689171076;
+        d=1e100.net; s=20221208; t=1686579174; x=1689171174;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EJQ+L6XrHRjNmHJu0KSlBODFfH7Ghg6JGFmz6a5x+ks=;
-        b=en7g3xAJ10IxtAUC9G/A1JhQgp56hO7pb2iAgittW5eHX6eeOxtHR5gXZaUwtow1yG
-         u6AI1g5ZaifnvhkFFvbJfA/Iy4SiOHqP6CSVr1wAij6okbfTprc91z0JH1N2mazU2jwf
-         tkwQAD6Go+Cm3SUiU6S2XZw5W+1GpolxO2BaKy9QNXql27o91pE8orITi9N75Ef+2LbS
-         JEf4UnGK2L48iblPMTJ0K7F+Y5hMASbHyzqSl93P2vzNgW3x8v2P7GmHgqYDMDwV6z/X
-         W9wdmTMVUMSvFbqlpWJVDi2drFNrvKmswL5G2GojzlGEhPTDF7+bcKj2OLx8fATGdMxo
-         rlyA==
-X-Gm-Message-State: AC+VfDwKJwkI56UTsKQLeM/WeokesCaSl8AiUvif1UkzVuHpKU1XnmXl
-        lPfhz8Efo7Adp86vqPt8K+ayu4TJwByzoYEXZNs=
-X-Google-Smtp-Source: ACHHUZ6XGswSinQMLW4VOPw+M6UjTIW5TYmForv0/8aMKQbhebyUxQ8+nfu1DnD/XddolUzFXKXLi6r/lySzLnim53A=
-X-Received: by 2002:a05:6214:2268:b0:623:9218:58e5 with SMTP id
- gs8-20020a056214226800b00623921858e5mr11664934qvb.39.1686579076245; Mon, 12
- Jun 2023 07:11:16 -0700 (PDT)
+        bh=TwQG10OvI6bp5Np0f72lU7cLcijGe7ymruPqF2GZDRs=;
+        b=LnVzBMwOwELHeH1BfUrc+klBm6zpaMno1epzKWsEjzFnGrUUH6/52O/LwD9jGoD1Hs
+         eXgEMW2zoHehqftQXhfP80Tqo6IUCBVU1UTQtSm3jJpUxpvq8i9vD5/S29KyGifLKzT7
+         Q/CN+mKGMjq42LHknoZykgAhKjhAJM3VwxDTdckrjX7JnbZZ8/DDSEjSyhjrt3MPm+7W
+         LGWOGH3F2yjs7BMM6OcR6TJ9U60EqaTOcciHN9ocA/MqV4OTNCaynOtc7HyKBjseRRia
+         /w8mQeEGeFdzN0xHiwzp9L/rmT9xsMilAP+D+18fAYuEaEkSb0Bbe27XNvtk4/9iAiCV
+         zKyg==
+X-Gm-Message-State: AC+VfDzyIcV+lTmkfdsGs10OGZ3FGHFBGbKTl0goyXAxjl/Px+J3pacU
+        EKEAeglJ0/s9sqfw2frMCqCvtW0gNbHYWx0IkzC0JYpZQr4OjN8h
+X-Google-Smtp-Source: ACHHUZ7IfxVmmdzaBuW9CEDKaY7PegOwFcPmL2PZJELzk6uKmhCxAC6L6jKrxcH4wML32Rr1mb49PunadVLIKjgJfGc=
+X-Received: by 2002:ad4:5b8a:0:b0:62d:edf6:6dc3 with SMTP id
+ 10-20020ad45b8a000000b0062dedf66dc3mr2330187qvp.37.1686579174003; Mon, 12 Jun
+ 2023 07:12:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230612122926.107333-1-herve.codina@bootlin.com> <20230612122926.107333-7-herve.codina@bootlin.com>
-In-Reply-To: <20230612122926.107333-7-herve.codina@bootlin.com>
+References: <20230612122926.107333-1-herve.codina@bootlin.com> <20230612122926.107333-8-herve.codina@bootlin.com>
+In-Reply-To: <20230612122926.107333-8-herve.codina@bootlin.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 12 Jun 2023 17:10:40 +0300
-Message-ID: <CAHp75Vf2dmAS9VD-pgyZwVopVCFy8yFjhPWEj8sym=pfE7uxSA@mail.gmail.com>
-Subject: Re: [PATCH v3 06/12] minmax: Introduce {min,max}_array()
+Date:   Mon, 12 Jun 2023 17:12:18 +0300
+Message-ID: <CAHp75Ve8BVO50TqhUV9YWkRBvYARNOAapZ21X=FehaBBfcC2jw@mail.gmail.com>
+Subject: Re: [PATCH v3 07/12] iio: inkern: Use max_array() to get the maximum
+ value from an array
 To:     Herve Codina <herve.codina@bootlin.com>
 Cc:     Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>,
@@ -84,68 +85,47 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Mon, Jun 12, 2023 at 3:30=E2=80=AFPM Herve Codina <herve.codina@bootlin.=
 com> wrote:
 >
-> Introduce min_array() (resp max_array()) in order to get the
-> minimal (resp maximum) of values present in an array.
+> Use max_array() to get the maximum value from an array instead of a
+> custom local loop.
 
-Some comments below, after addressing them,
+Looks really good, thank you!
 Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
 > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 > ---
->  include/linux/minmax.h | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
+>  drivers/iio/inkern.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
 >
-> diff --git a/include/linux/minmax.h b/include/linux/minmax.h
-> index 396df1121bff..37a211f22404 100644
-> --- a/include/linux/minmax.h
-> +++ b/include/linux/minmax.h
-> @@ -133,6 +133,32 @@
->   */
->  #define max_t(type, x, y)      __careful_cmp((type)(x), (type)(y), >)
+> diff --git a/drivers/iio/inkern.c b/drivers/iio/inkern.c
+> index ce537b4ca6ca..ae1a41d3a559 100644
+> --- a/drivers/iio/inkern.c
+> +++ b/drivers/iio/inkern.c
+> @@ -8,6 +8,7 @@
+>  #include <linux/property.h>
+>  #include <linux/slab.h>
+>  #include <linux/mutex.h>
+> +#include <linux/minmax.h>
 >
-> +#define __minmax_array(op, array, len) ({                      \
+>  #include <linux/iio/iio.h>
+>  #include <linux/iio/iio-opaque.h>
+> @@ -875,11 +876,7 @@ static int iio_channel_read_max(struct iio_channel *=
+chan,
+>                         return -EINVAL;
+>                 switch (*type) {
+>                 case IIO_VAL_INT:
+> -                       *val =3D vals[--length];
+> -                       while (length) {
+> -                               if (vals[--length] > *val)
+> -                                       *val =3D vals[length];
+> -                       }
+> +                       *val =3D max_array(vals, length);
+>                         break;
+>                 default:
+>                         /* FIXME: learn about max for other iio values */
+> --
+> 2.40.1
+>
 
-Maybe it's my MUA, maybe the code contains spaces, can you switch to
-TABs if it's the case?
-
-> +       typeof(array) __array =3D (array);                        \
-
-We have __must_be_array()
-
-You will need to fix the inclusions in minmax.h at the same time, it needs
-linux/build_bug.h (which includes compiler.h needed for __UNIQUE_ID()
-and for the above mentioned one).
-
-> +       typeof(len) __len =3D (len);                              \
-> +       typeof(*__array + 0) __element =3D __array[--__len];      \
-
-After above, this can be written as __array[0].
-
-> +       while (__len--)                                         \
-> +               __element =3D op(__element, __array[__len]);      \
-> +       __element; })
-> +
-> +/**
-> + * min_array - return minimum of values present in an array
-> + * @array: array
-> + * @len: array length
-> + *
-> + * Note that @len must not be zero (empty array).
-> + */
-> +#define min_array(array, len) __minmax_array(min, array, len)
-> +
-> +/**
-> + * max_array - return maximum of values present in an array
-> + * @array: array
-> + * @len: array length
-> + *
-> + * Note that @len must not be zero (empty array).
-> + */
-> +#define max_array(array, len) __minmax_array(max, array, len)
-> +
->  /**
->   * clamp_t - return a value clamped to a given range using a given type
->   * @type: the type of variable to use
 
 --=20
 With Best Regards,
