@@ -2,53 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E8B172E360
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8136E72E367
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242008AbjFMMxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 08:53:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50044 "EHLO
+        id S239462AbjFMMzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 08:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbjFMMw6 (ORCPT
+        with ESMTP id S239139AbjFMMzk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 08:52:58 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354AF10D9;
-        Tue, 13 Jun 2023 05:52:57 -0700 (PDT)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QgT3V5DLQzTl6g;
-        Tue, 13 Jun 2023 20:52:22 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 13 Jun
- 2023 20:52:52 +0800
-Subject: Re: [PATCH]
- drivers/thunder:improve-warning-message-in-device_for_each_child_node()
-To:     Wang Ming <machel@vivo.com>, Sunil Goutham <sgoutham@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        <linux-arm-kernel@lists.infradead.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <opensource.kernel@vivo.com>
-References: <20230613123826.558-1-machel@vivo.com>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <4aa86edd-5526-929d-8576-9d2b6f828eb0@huawei.com>
-Date:   Tue, 13 Jun 2023 20:52:52 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        Tue, 13 Jun 2023 08:55:40 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC00173E;
+        Tue, 13 Jun 2023 05:55:38 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f6170b1486so6682620e87.0;
+        Tue, 13 Jun 2023 05:55:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686660936; x=1689252936;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=7W4Ko7B93IyT3dfDQ20KvPSlqIiHOiBygYp9QycGPqs=;
+        b=nRlCBrjUCbQYb/IV7ca5ZWxF4mIazYwhIIOhnxiMieuweYM8m1KLxoDqTKPsenscqE
+         NXw8H6iao41gaI8Lg/5p4XKred2dJPaVOKj3hhIQDaUgeuoVKR7LWglPLX0FPaKDPth6
+         mDInWTkkApDulCDMZBlMho4gsnXecb+PDMC57fPausljNELnJsszsBzbtWuZaT6J/QUr
+         avx7QWXKEGae1rHK7rs06lok9x7Qgx7fnHHrRV+rBFIWGYhF1ul9P5qVbdJ/9G0wT4bm
+         tn8IhXeVqbTTACz8vC2iCmp/uqPWqtqJw+mgSY0pn4hSnoJN0zz2n/mXm/BZFzN2jfhY
+         0lNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686660936; x=1689252936;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7W4Ko7B93IyT3dfDQ20KvPSlqIiHOiBygYp9QycGPqs=;
+        b=VMVT2zqD9YU8A3zYlGHeXJDuYkGoGvMfBTwanGI91djqp7Kc5pVU+EBbKqhNVxs8b9
+         5TrcBwMt9q6Eqtv8U4zPsJATLX7s4c4apB10l3c4g5GuW8n/aGkWAdj3Zb/jv1Sp9H1H
+         tmMNB0WD1xoJdgYVhRPwg7zuWoHBLNl/FoLUypfWDaZZfijIIOWM1H/tLiUzUzrLpoC4
+         P52Ram6pCYG0F17sdLJeLDOq/cyzk/fwJ7JQD1eJkZLH1uCcaGWcwYdKw6X/J8lZqkVl
+         mGwYIAwQ48EwyQWxN/EhogiIovWc7PIDNegbqqzzoX6TZlbEE3DBUYz3/2ga2lQwpvnn
+         ElGA==
+X-Gm-Message-State: AC+VfDyZNooupQkZkzaoHCJ3+GxOa+Le+EFHuw51JlRCfMiNuifIVjTj
+        4BFX3LNevnj5gnZPAVUKtUk=
+X-Google-Smtp-Source: ACHHUZ5aEihzgwDHTfPgw2C4xeRI9zWQt88zi7pcD1IPMvrLDYIuZFevQCvhsGhyvFAtw3uIfC+Bjw==
+X-Received: by 2002:a19:e057:0:b0:4f4:d60a:e387 with SMTP id g23-20020a19e057000000b004f4d60ae387mr4045663lfj.1.1686660936507;
+        Tue, 13 Jun 2023 05:55:36 -0700 (PDT)
+Received: from ?IPV6:2a0b:6204:4302:5f00:4dab:3483:4506:9a0e? ([2a0b:6204:4302:5f00:4dab:3483:4506:9a0e])
+        by smtp.gmail.com with ESMTPSA id g12-20020a19ee0c000000b004eff6c7bc08sm1759382lfb.75.2023.06.13.05.55.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 05:55:36 -0700 (PDT)
+From:   "bibo, mao" <bibo.mao@gmail.com>
+X-Google-Original-From: "bibo, mao" <maobibo@loongson.cn>
+Message-ID: <a4b3a4cc-b424-d1cf-5583-16de24d58873@loongson.cn>
+Date:   Tue, 13 Jun 2023 20:55:32 +0800
 MIME-Version: 1.0
-In-Reply-To: <20230613123826.558-1-machel@vivo.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v13 07/30] LoongArch: KVM: Implement vcpu run interface
+To:     Tianrui Zhao <zhaotianrui@loongson.cn>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Xi Ruoyao <xry111@xry111.site>, tangyouling@loongson.cn,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20230609090832.2131037-1-zhaotianrui@loongson.cn>
+ <20230609090832.2131037-8-zhaotianrui@loongson.cn>
+In-Reply-To: <20230609090832.2131037-8-zhaotianrui@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,84 +84,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/13 20:38, Wang Ming wrote:
-> In device_for_each_child_node(), it should have fwnode_handle_put()
-> before break to prevent stale device node references from being
-> left behind.
+Reviewed-by: Bibo Mao <maobibo@loongson.cn>
+
+
+Regards
+Bibo, Mao
+
+在 2023/6/9 17:08, Tianrui Zhao 写道:
+> Implement vcpu run interface, handling mmio, iocsr reading fault
+> and deliver interrupt, lose fpu before vcpu enter guest.
 > 
-> Signed-off-by: Wang Ming <machel@vivo.com>
-
-A Fixes tag seems necessary according to the commit log, and should
-target the net branch using:
-
-[PATCH net] drivers/thunder: improve-warning-message-in-device_for_each_child_node()
-
-Also it seems confusing the 'improve' in the title suggest that it is not
-a fix.
-
+> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
 > ---
->  .../net/ethernet/cavium/thunder/thunder_bgx.c | 37 ++++++++++---------
->  1 file changed, 20 insertions(+), 17 deletions(-)
+>   arch/loongarch/kvm/vcpu.c | 83 +++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 83 insertions(+)
 > 
-> diff --git a/drivers/net/ethernet/cavium/thunder/thunder_bgx.c b/drivers/net/ethernet/cavium/thunder/thunder_bgx.c
-> index a317feb8d..d37ee2872 100644
-> --- a/drivers/net/ethernet/cavium/thunder/thunder_bgx.c
-> +++ b/drivers/net/ethernet/cavium/thunder/thunder_bgx.c
-> @@ -90,7 +90,7 @@ static const struct pci_device_id bgx_id_table[] = {
-> 
->  MODULE_AUTHOR("Cavium Inc");
->  MODULE_DESCRIPTION("Cavium Thunder BGX/MAC Driver");
-> -MODULE_LICENSE("GPL v2");
-> +MODULE_LICENSE("GPL");
-
-Is there any reason you changing the license here?
-
->  MODULE_VERSION(DRV_VERSION);
->  MODULE_DEVICE_TABLE(pci, bgx_id_table);
-> 
-> @@ -174,10 +174,10 @@ static struct bgx *get_bgx(int node, int bgx_idx)
->  }
-> 
->  /* Return number of BGX present in HW */
-> -unsigned bgx_get_map(int node)
-> +unsigned int bgx_get_map(int node)
-
-It seems to be unrelated change here, is the changing related to the
-problem you are fixing?
-
->  {
->         int i;
-> -       unsigned map = 0;
-> +       unsigned int map = 0;
-
-Same here.
-
-> 
->         for (i = 0; i < max_bgx_per_node; i++) {
->                 if (bgx_vnic[(node * max_bgx_per_node) + i])
-> @@ -600,9 +600,9 @@ static void bgx_lmac_handler(struct net_device *netdev)
->                 link_changed = -1;
-> 
->         if (phydev->link &&
-> -           (lmac->last_duplex != phydev->duplex ||
-> -            lmac->last_link != phydev->link ||
-> -            lmac->last_speed != phydev->speed)) {
-> +               (lmac->last_duplex != phydev->duplex ||
-> +               lmac->last_link != phydev->link ||
-> +               lmac->last_speed != phydev->speed)) {
-
-Same here.
-
->                         link_changed = 1;
->         }
-> 
-> @@ -783,7 +783,7 @@ static int bgx_lmac_xaui_init(struct bgx *bgx, struct lmac *lmac)
->                 bgx_reg_write(bgx, lmacid, BGX_SPUX_BR_PMD_LD_REP, 0x00);
->                 /* training enable */
->                 bgx_reg_modify(bgx, lmacid,
-> -                              BGX_SPUX_BR_PMD_CRTL, SPU_PMD_CRTL_TRAIN_EN);
-> +                                        BGX_SPUX_BR_PMD_CRTL, SPU_PMD_CRTL_TRAIN_EN);
-
-Same here.
-Please make sure it only contain change related to fixing the
-problem.
+> diff --git a/arch/loongarch/kvm/vcpu.c b/arch/loongarch/kvm/vcpu.c
+> index 24b5b00266a1..eba5c07b8be3 100644
+> --- a/arch/loongarch/kvm/vcpu.c
+> +++ b/arch/loongarch/kvm/vcpu.c
+> @@ -17,6 +17,41 @@ int kvm_arch_vcpu_precreate(struct kvm *kvm, unsigned int id)
+>   	return 0;
+>   }
+>   
+> +/* Returns 1 if the guest TLB may be clobbered */
+> +static int _kvm_check_requests(struct kvm_vcpu *vcpu)
+> +{
+> +	int ret = 0;
+> +
+> +	if (!kvm_request_pending(vcpu))
+> +		return 0;
+> +
+> +	if (kvm_check_request(KVM_REQ_TLB_FLUSH, vcpu)) {
+> +		/* Drop vpid for this vCPU */
+> +		vcpu->arch.vpid = 0;
+> +		/* This will clobber guest TLB contents too */
+> +		ret = 1;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static void kvm_pre_enter_guest(struct kvm_vcpu *vcpu)
+> +{
+> +	/*
+> +	 * handle vcpu timer, interrupts, check requests and
+> +	 * check vmid before vcpu enter guest
+> +	 */
+> +	kvm_acquire_timer(vcpu);
+> +	_kvm_deliver_intr(vcpu);
+> +	/* make sure the vcpu mode has been written */
+> +	smp_store_mb(vcpu->mode, IN_GUEST_MODE);
+> +	_kvm_check_requests(vcpu);
+> +	_kvm_check_vmid(vcpu);
+> +	vcpu->arch.host_eentry = csr_read64(LOONGARCH_CSR_EENTRY);
+> +	/* clear KVM_LARCH_CSR as csr will change when enter guest */
+> +	vcpu->arch.aux_inuse &= ~KVM_LARCH_CSR;
+> +}
+> +
+>   int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+>   {
+>   	unsigned long timer_hz;
+> @@ -86,3 +121,51 @@ void kvm_arch_vcpu_destroy(struct kvm_vcpu *vcpu)
+>   			context->last_vcpu = NULL;
+>   	}
+>   }
+> +
+> +int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+> +{
+> +	int r = -EINTR;
+> +	struct kvm_run *run = vcpu->run;
+> +
+> +	vcpu_load(vcpu);
+> +
+> +	kvm_sigset_activate(vcpu);
+> +
+> +	if (vcpu->mmio_needed) {
+> +		if (!vcpu->mmio_is_write)
+> +			_kvm_complete_mmio_read(vcpu, run);
+> +		vcpu->mmio_needed = 0;
+> +	}
+> +
+> +	if (run->exit_reason == KVM_EXIT_LOONGARCH_IOCSR) {
+> +		if (!run->iocsr_io.is_write)
+> +			_kvm_complete_iocsr_read(vcpu, run);
+> +	}
+> +
+> +	/* clear exit_reason */
+> +	run->exit_reason = KVM_EXIT_UNKNOWN;
+> +	if (run->immediate_exit)
+> +		goto out;
+> +
+> +	lose_fpu(1);
+> +
+> +	local_irq_disable();
+> +	guest_timing_enter_irqoff();
+> +
+> +	kvm_pre_enter_guest(vcpu);
+> +	trace_kvm_enter(vcpu);
+> +
+> +	guest_state_enter_irqoff();
+> +	r = kvm_loongarch_ops->enter_guest(run, vcpu);
+> +
+> +	/* guest_state_exit_irqoff() already done.  */
+> +	trace_kvm_out(vcpu);
+> +	guest_timing_exit_irqoff();
+> +	local_irq_enable();
+> +
+> +out:
+> +	kvm_sigset_deactivate(vcpu);
+> +
+> +	vcpu_put(vcpu);
+> +	return r;
+> +}
