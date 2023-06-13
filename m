@@ -2,136 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D187072E9ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:35:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF46672E9FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236202AbjFMRfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 13:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60356 "EHLO
+        id S239109AbjFMRgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 13:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232554AbjFMRfJ (ORCPT
+        with ESMTP id S238213AbjFMRgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 13:35:09 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9B41FE5;
-        Tue, 13 Jun 2023 10:34:44 -0700 (PDT)
-X-GND-Sasl: herve.codina@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686677683;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=86rh1f0HBKfOE+lzuTwLJdkE+7pPjEWV2pIeiL0qQXk=;
-        b=pF/oK2cwuHCGuxVOM6DoseXfu83gnXuDTUpUvA9KEn0otsbNNzAA4pJPLVlJc5JrD3dGbr
-        V0NpyMNa0sSRNqbb3yOvL0S10jM9O8IGKL+jAbnAuDQZB9SQpm9XrkvoIKG3brJIIhGRRM
-        EcNFZEmvFvUb5QYmp9+Wd5Pnrf2Y8tv7aXv/Y/3hALFfIF356bK6jdj3nthmcCefNokuhy
-        Hb+vEuC8h9JBolygcQDRKCAAo5m2LFYvNdRcu0hbzUjh9vP3fRhNAs2jKaGxdoL6X7iBMm
-        pvVGec+DO94oFRPp6mXKfp+Og4FmeHRt4ldea3l3CoU9Q1/zxbN5bzyXeUX3Jg==
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3B8E8E0003;
-        Tue, 13 Jun 2023 17:34:41 +0000 (UTC)
-Date:   Tue, 13 Jun 2023 19:34:40 +0200
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v3 06/12] minmax: Introduce {min,max}_array()
-Message-ID: <20230613193440.1940c3a7@bootlin.com>
-In-Reply-To: <CAHp75Vcr5Owjn0HK-+D0mpPJAkAxG7F8bEO=sqvhT8w=_xnF7w@mail.gmail.com>
-References: <20230612122926.107333-1-herve.codina@bootlin.com>
-        <20230612122926.107333-7-herve.codina@bootlin.com>
-        <CAHp75Vf2dmAS9VD-pgyZwVopVCFy8yFjhPWEj8sym=pfE7uxSA@mail.gmail.com>
-        <20230613100000.6bd9e690@bootlin.com>
-        <CAHp75Vcr5Owjn0HK-+D0mpPJAkAxG7F8bEO=sqvhT8w=_xnF7w@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+        Tue, 13 Jun 2023 13:36:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5581BF0;
+        Tue, 13 Jun 2023 10:36:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B18F86391B;
+        Tue, 13 Jun 2023 17:36:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F954C433F0;
+        Tue, 13 Jun 2023 17:36:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686677787;
+        bh=xy1yTj6seRW8BuGw7Z4OCxdr4C+LviTrNPkRVIZHTPw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h7aWFk0ucExIQgy7aMeu+4TxMdzseTHtuhvDXVoD691Io1Fs3SDY9WteJt/Qauzxq
+         OM9b3Y7ApZG/qD8ky+cQV8o91ZF4nWkOSXYmKn9vFm01zxWciDkdUh0a5vf0MIBdyb
+         CAlZWjp8iLL+uWNZySqzSk+t1lRB4HDzIDS5ZdNk=
+Date:   Tue, 13 Jun 2023 19:36:24 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.10 00/68] 5.10.184-rc1 review
+Message-ID: <2023061300-cardstock-buckshot-0ccc@gregkh>
+References: <20230612101658.437327280@linuxfoundation.org>
+ <ab4e5232-ccc4-144a-cb72-2a0cce825f31@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ab4e5232-ccc4-144a-cb72-2a0cce825f31@roeck-us.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 13 Jun 2023 20:08:08 +0300
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+On Tue, Jun 13, 2023 at 09:35:37AM -0700, Guenter Roeck wrote:
+> On 6/12/23 03:25, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 5.10.184 release.
+> > There are 68 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> > 
+> > Responses should be made by Wed, 14 Jun 2023 10:16:41 +0000.
+> > Anything received after that time might be too late.
+> > 
+> 
+> Am I the only one seeing this problem ?
+> 
+> Build reference: v5.10.183-69-g32cae866b182
+> Compiler version: x86_64-linux-gcc (GCC) 11.3.0
+> Assembler version: GNU assembler (GNU Binutils) 2.39
+> 
+> Building x86_64:allyesconfig ... failed
+> --------------
+> Error log:
+> x86_64-linux-objcopy: vmlinux: unsupported relocation type 0x44
+> x86_64-linux-objcopy: vmlinux[.text]: relocation count is negative: bad value
+> make[3]: *** [arch/x86/boot/compressed/Makefile:114: arch/x86/boot/compressed/vmlinux.bin] Error 1
+> make[3]: *** Waiting for unfinished jobs....
+> Unsupported relocation type: unknown type rel type name (-1939958716)
+> make[3]: *** [arch/x86/boot/compressed/Makefile:122: arch/x86/boot/compressed/vmlinux.relocs] Error 1
+> make[3]: *** Deleting file 'arch/x86/boot/compressed/vmlinux.relocs'
+> make[2]: *** [arch/x86/boot/Makefile:115: arch/x86/boot/compressed/vmlinux] Error 2
+> make[1]: *** [arch/x86/Makefile:274: bzImage] Error 2
+> make: *** [Makefile:192: __sub-make] Error 2
+> 
+> It affects 5.4.y and 5.10.y for me.
 
-> On Tue, Jun 13, 2023 at 11:00 AM Herve Codina <herve.codina@bootlin.com> wrote:
-> > On Mon, 12 Jun 2023 17:10:40 +0300
-> > Andy Shevchenko <andy.shevchenko@gmail.com> wrote:  
-> > > On Mon, Jun 12, 2023 at 3:30 PM Herve Codina <herve.codina@bootlin.com> wrote:  
-> > > >
-> > > > Introduce min_array() (resp max_array()) in order to get the
-> > > > minimal (resp maximum) of values present in an array.  
-> > >
-> > > Some comments below, after addressing them,
-> > > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>  
-> 
-> ...
-> 
-> > > > +       typeof(array) __array = (array);                        \  
-> > >
-> > > We have __must_be_array()  
-> >
-> > Using __must_be_array() will lead to some failure.
-> > Indeed, we can have:
-> >   --- 8< ---
-> >   int *buff
-> >   ...
-> >   min = min_array(buff, nb_item);
-> >   --- 8< ---
-> >
-> > In this case, __must_be_array() will report that buff is not an array.  
-> 
-> Oh, I missed that.
-> 
-> > To avoid any confusion, what do you think if I renamed {min,max}_array()
-> > to {min,max}_buffer() and replace __array by __buff and use *(__buff + xxx)
-> > instead of array[xxx] in the macro.  
-> 
-> But functionally it's still against an array.
-> 
-> I would stick with "array" in the name, but add a comment why
-> __must_be_array() is not used. If we need a stricter variant, we may
-> add a new wrapper with that check. That said, I think we can use
-> __array[0] and similar indexed accesses.
-> 
+Odd.  Let me go build with gcc-11, I have just moved to gcc-12 on those
+two branches locally...
 
-Right, I will provide an updated version on the next iteration.
+thanks,
 
-Thanks for your feedback.
-Hervé
+greg k-h
