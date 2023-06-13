@@ -2,153 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C7972D9C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 08:21:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F4D72D9C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 08:22:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239839AbjFMGVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 02:21:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33252 "EHLO
+        id S239968AbjFMGVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 02:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240216AbjFMGUp (ORCPT
+        with ESMTP id S240278AbjFMGVY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 02:20:45 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF93E6B;
-        Mon, 12 Jun 2023 23:20:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686637242; x=1718173242;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UM3IHuTsa6izrIPK7yHaYSJMoWtyJyQyl1XOgL5IY6g=;
-  b=jjPtLr6yee17BFO5ayDOktnSgknBEylQwBLzFr2ZeFK34LQGp93zgiYi
-   R14OEIKUE8YbOE+akuO7L1tuGsJmuV6h2Wc9tENB30Lcff9gHYi4EfADX
-   0WdWyH9iL1QS/KI+4x2gBtaLMdOzeuVP/SknpcbozUiD+FVZogbQ+HR+q
-   Z2OZ9T45lCbEg5so9bbnpaRKGIn7ziGTFSVceJqGS4wqpQM3ZDK3c5iYK
-   0cwjPiX9psIbVjMjpCkS56qwErFzJWPQu6orKWh83KbuoAZWiv9LrFf5u
-   y63rjDG7S2YV1NTigWgYI61xw9F8Bu4LKOGa7J9O0q3cajjYL383RSFml
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="357125171"
-X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
-   d="scan'208";a="357125171"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 23:19:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="781516543"
-X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
-   d="scan'208";a="781516543"
-Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 12 Jun 2023 23:19:36 -0700
-Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q8xNP-00013c-1j;
-        Tue, 13 Jun 2023 06:19:35 +0000
-Date:   Tue, 13 Jun 2023 14:19:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-kernel@vger.kernel.org, Trilok Soni <quic_tsoni@quicinc.com>,
-        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Guru Das Srinagesh <quic_gurus@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
-Subject: Re: [PATCH v5 2/2] remoteproc: qcom: Add remoteproc tracing
-Message-ID: <202306131424.QEYiIiQA-lkp@intel.com>
-References: <12b533c73b8c6b039e90f20afef1c8dcd30b80de.1686606835.git.quic_gokukris@quicinc.com>
+        Tue, 13 Jun 2023 02:21:24 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985D3E47;
+        Mon, 12 Jun 2023 23:21:22 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QgJNJ3Ywbz4x3y;
+        Tue, 13 Jun 2023 16:21:20 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1686637281;
+        bh=09oLrHGEmpgpyTpLPSc4jHEwyd/VNs8IHZbmFF1qxD0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=p257LeXXti8Ytj43puEZXiR0jOqqbg0HzOPzCYhgkkV3Umbssxt9OYv6TIyHfy8sP
+         rlbDjbti7oFaeDP7lv5IZugyvCsDKiwrYRo6CWzoFiM/cJkmyfhUL0efoXJHC53Q+5
+         WtRuofXTdsvB/FRX8aWjwmKEUx8empsTq6wNg7DoQJ2iqeMoI2vcdiUS5gvDGJnxM7
+         DdKqGhm//56jaI/4d++oZ0aHn8qJAgO0YWF7IAyM4Ff835NO2FxseN6yiE7Vp5p0HZ
+         AhobZSuNsaYkLYCcPG9cqWFtmzTe658dKg9ncvgD992nkIkg16w2V5BF49DXsqkLGv
+         FyE6vTLL9DLxA==
+Date:   Tue, 13 Jun 2023 16:21:19 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Subject: linux-next: build failure after merge of the mm tree
+Message-ID: <20230613162119.4a7a7d3c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <12b533c73b8c6b039e90f20afef1c8dcd30b80de.1686606835.git.quic_gokukris@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/IxEZ4RJthVOEGv9b4i2lpKw";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gokul,
+--Sig_/IxEZ4RJthVOEGv9b4i2lpKw
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-kernel test robot noticed the following build errors:
+Hi all,
 
-[auto build test ERROR on 1ca04f21b204e99dd704146231adfb79ea2fb366]
+After merging the mm tree, today's linux-next build (powerpc
+ppc44x_defconfig) failed like this:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Gokul-krishna-Krishnakumar/remoteproc-Introduce-traces-for-remoteproc-events/20230613-060527
-base:   1ca04f21b204e99dd704146231adfb79ea2fb366
-patch link:    https://lore.kernel.org/r/12b533c73b8c6b039e90f20afef1c8dcd30b80de.1686606835.git.quic_gokukris%40quicinc.com
-patch subject: [PATCH v5 2/2] remoteproc: qcom: Add remoteproc tracing
-config: hexagon-randconfig-r041-20230612 (https://download.01.org/0day-ci/archive/20230613/202306131424.QEYiIiQA-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git checkout 1ca04f21b204e99dd704146231adfb79ea2fb366
-        b4 shazam https://lore.kernel.org/r/12b533c73b8c6b039e90f20afef1c8dcd30b80de.1686606835.git.quic_gokukris@quicinc.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+In file included from arch/powerpc/include/asm/page.h:247,
+                 from arch/powerpc/include/asm/thread_info.h:13,
+                 from include/linux/thread_info.h:60,
+                 from include/asm-generic/preempt.h:5,
+                 from ./arch/powerpc/include/generated/asm/preempt.h:1,
+                 from include/linux/preempt.h:78,
+                 from include/linux/spinlock.h:56,
+                 from include/linux/ipc.h:5,
+                 from include/uapi/linux/sem.h:5,
+                 from include/linux/sem.h:5,
+                 from include/linux/compat.h:14,
+                 from arch/powerpc/kernel/asm-offsets.c:12:
+arch/powerpc/include/asm/page_32.h:16: warning: "ARCH_DMA_MINALIGN" redefin=
+ed
+   16 | #define ARCH_DMA_MINALIGN       L1_CACHE_BYTES
+      |=20
+In file included from include/linux/time.h:5,
+                 from include/linux/compat.h:10:
+include/linux/cache.h:104: note: this is the location of the previous defin=
+ition
+  104 | #define ARCH_DMA_MINALIGN __alignof__(unsigned long long)
+      |=20
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306131424.QEYiIiQA-lkp@intel.com/
+(lots of theses)
 
-All errors (new ones prefixed by >>):
+Caused by commit
 
->> ld.lld: error: undefined symbol: __tracepoint_rproc_start_event
-   >>> referenced by jump_label.h:260 (include/linux/jump_label.h:260)
-   >>>               drivers/remoteproc/remoteproc_core.o:(rproc_boot) in archive vmlinux.a
-   >>> referenced by jump_label.h:260 (include/linux/jump_label.h:260)
-   >>>               drivers/remoteproc/remoteproc_core.o:(rproc_boot) in archive vmlinux.a
-   >>> referenced by jump_label.h:260 (include/linux/jump_label.h:260)
-   >>>               drivers/remoteproc/remoteproc_core.o:(rproc_boot) in archive vmlinux.a
-   >>> referenced 1 more times
---
->> ld.lld: error: undefined symbol: __traceiter_rproc_start_event
-   >>> referenced by remoteproc_tracepoints.h:63 (include/trace/events/remoteproc_tracepoints.h:63)
-   >>>               drivers/remoteproc/remoteproc_core.o:(rproc_boot) in archive vmlinux.a
-   >>> referenced by remoteproc_tracepoints.h:63 (include/trace/events/remoteproc_tracepoints.h:63)
-   >>>               drivers/remoteproc/remoteproc_core.o:(rproc_boot) in archive vmlinux.a
-   >>> referenced by remoteproc_tracepoints.h:63 (include/trace/events/remoteproc_tracepoints.h:63)
-   >>>               drivers/remoteproc/remoteproc_core.o:(rproc_boot) in archive vmlinux.a
-   >>> referenced 1 more times
---
->> ld.lld: error: undefined symbol: __tracepoint_rproc_load_segment_event
-   >>> referenced by remoteproc_internal.h:178 (drivers/remoteproc/remoteproc_internal.h:178)
-   >>>               drivers/remoteproc/remoteproc_core.o:(rproc_start) in archive vmlinux.a
-   >>> referenced by remoteproc_internal.h:178 (drivers/remoteproc/remoteproc_internal.h:178)
-   >>>               drivers/remoteproc/remoteproc_core.o:(rproc_start) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: __traceiter_rproc_load_segment_event
-   >>> referenced by remoteproc_tracepoints.h:17 (include/trace/events/remoteproc_tracepoints.h:17)
-   >>>               drivers/remoteproc/remoteproc_core.o:(rproc_start) in archive vmlinux.a
-   >>> referenced by remoteproc_tracepoints.h:17 (include/trace/events/remoteproc_tracepoints.h:17)
-   >>>               drivers/remoteproc/remoteproc_core.o:(rproc_start) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: __tracepoint_rproc_stop_event
-   >>> referenced by jump_label.h:260 (include/linux/jump_label.h:260)
-   >>>               drivers/remoteproc/remoteproc_core.o:(trace_rproc_stop_event) in archive vmlinux.a
-   >>> referenced by jump_label.h:260 (include/linux/jump_label.h:260)
-   >>>               drivers/remoteproc/remoteproc_core.o:(trace_rproc_stop_event) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: __traceiter_rproc_stop_event
-   >>> referenced by remoteproc_tracepoints.h:82 (include/trace/events/remoteproc_tracepoints.h:82)
-   >>>               drivers/remoteproc/remoteproc_core.o:(trace_rproc_stop_event) in archive vmlinux.a
-   >>> referenced by remoteproc_tracepoints.h:82 (include/trace/events/remoteproc_tracepoints.h:82)
-   >>>               drivers/remoteproc/remoteproc_core.o:(trace_rproc_stop_event) in archive vmlinux.a
+  cc7335787e73 ("mm/slab: decouple ARCH_KMALLOC_MINALIGN from ARCH_DMA_MINA=
+LIGN")
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I have applied the following hack for today - we need something better.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 13 Jun 2023 16:07:16 +1000
+Subject: [PATCH] fix up for "mm/slab: decouple ARCH_KMALLOC_MINALIGN from A=
+RCH_DMA_MINALIGN"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ arch/powerpc/include/asm/cache.h | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/arch/powerpc/include/asm/cache.h b/arch/powerpc/include/asm/ca=
+che.h
+index ae0a68a838e8..e9be1396dfd1 100644
+--- a/arch/powerpc/include/asm/cache.h
++++ b/arch/powerpc/include/asm/cache.h
+@@ -142,5 +142,14 @@ static inline void iccci(void *addr)
+ }
+=20
+ #endif /* !__ASSEMBLY__ */
++
++#ifndef __powerpc64__
++#ifdef CONFIG_NOT_COHERENT_CACHE
++#ifndef ARCH_DMA_MINALIGN
++#define ARCH_DMA_MINALIGN	L1_CACHE_BYTES
++#endif
++#endif
++#endif
++
+ #endif /* __KERNEL__ */
+ #endif /* _ASM_POWERPC_CACHE_H */
+--=20
+2.39.2
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/IxEZ4RJthVOEGv9b4i2lpKw
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSICt8ACgkQAVBC80lX
+0Gyh2gf/VSu16R9zpGg+AreGcHAXLfhTsn75srJGOYEEWqZPPHTW9DZUzOz1IavK
+bf4fb8hYVMrLMHrDMJyLENSBxgTdflaDLrifPRkZymuWhkIwRChFPz7na1i8LY93
+xo1yrKyYQqH1OEz5lJ3Kd3aXqIRH5dnnpT7Y1LxpmSPVPE+rQvg7PStaokJhgpeX
+o6Lv3dnNFwCPtse2bB1EugDaZL+tm9Jj7c8srAT/qtJHjtT6U9NvOnAhWDdB9S+B
+Xn7SxZBTA2W0ehVqHFdQtYiXoQONYiG8ILx3MIvGzwKN1YoO2XgsmC70uuVCUzUO
+s6MVpN2Bz305ZseGeBP1mzdz2YPl6w==
+=p8mM
+-----END PGP SIGNATURE-----
+
+--Sig_/IxEZ4RJthVOEGv9b4i2lpKw--
