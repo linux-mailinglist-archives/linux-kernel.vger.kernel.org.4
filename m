@@ -2,123 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC5272DCFC
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 718F072DD00
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:49:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241719AbjFMItb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 04:49:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56276 "EHLO
+        id S240268AbjFMItg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 04:49:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241526AbjFMItY (ORCPT
+        with ESMTP id S241090AbjFMIta (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 04:49:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38475C0;
-        Tue, 13 Jun 2023 01:49:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 13 Jun 2023 04:49:30 -0400
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BBA9F1;
+        Tue, 13 Jun 2023 01:49:27 -0700 (PDT)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C985B62B6F;
-        Tue, 13 Jun 2023 08:49:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1677C433D2;
-        Tue, 13 Jun 2023 08:49:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686646160;
-        bh=13QxIeZfhU5GLFvayprb0+agNd+CZDWoGxFWOWD3MhM=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=ZNOh2FB1/xMCR9XW9z3iU/U+scSh5i+/NQHd/VfoS2b4vP9bEuKOPbNpGjW3QE3UQ
-         QtOo67gei1ki9H6yJ94Z7MdlZ4pyOwSL/+xkAJ1VM2kQqmWIwP8HE3LBAglu9+a+3l
-         JE5+q5ZA7J/Yesfi1oBZCT/h9BlH/pwjSI9c42gtIDrbyxq/Sr36kkRqOT4e2lAanC
-         e5OtFco8ih63s64epRhj6/Cf57d2BvXQD4ELyJ+zn7PJpk0xf8PJ9Qkm/PvhtjBDYP
-         08X5c5thabZbROWDQATmBsCoCuU9Cyh+u7Wo7aUWVXVK+s2N1DVDTcRG2WkjtaWukF
-         vN7a5K7fw5hTQ==
-Message-ID: <7bf1395a-eba8-fe27-a359-9c50af7add2a@kernel.org>
-Date:   Tue, 13 Jun 2023 10:49:13 +0200
+        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4QgMg82g5cz9sdK;
+        Tue, 13 Jun 2023 10:49:24 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
+        s=MBO0001; t=1686646164;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dKOsikHuaIxLmnX7LMFU7lxyfkWIITufUYLJEhwma08=;
+        b=Tg0prYrFLmm3TK1RL2DIhXYXPzA4ERHcq6g/Qv2oJ9RXJ2jCrCHxQ6/l+Qj+AybFvdKTfj
+        g1ku6Q9T4pExxcTpo/xUnNyjeNsxMfadlxigEiqdgLLUIK2d7FVDXqW2HhclLuGZzzTtmg
+        /j/CCKMlE+T+Gk3oPa1Vn/yEqSotGkeI7CTog/PPYrhMaerAEyZnSdWzwpFgTHTZEKLQ9J
+        FEzNuAgRcsBddjDAKxnec9F2Pd1mKGLU86CFysrlVrTe9kChjXMKk0dcQ+j6kfQmRuq10e
+        ve+utR9jq6Oz6orV3YSMI+nhRSoWlX4kxqp8qcc84KxdyXpIamPbal1vD7ElDQ==
+References: <20230613083626.227476-1-frank@oltmanns.dev>
+ <20230613083626.227476-3-frank@oltmanns.dev>
+From:   Frank Oltmanns <frank@oltmanns.dev>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        "A.s. Dong" <aisheng.dong@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: Re: [PATCH v2 2/2] clk: tests: Add tests for fractional divisor
+ approximation
+In-reply-to: <20230613083626.227476-3-frank@oltmanns.dev>
+Date:   Tue, 13 Jun 2023 10:49:20 +0200
+Message-ID: <871qif21db.fsf@oltmanns.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 6/7] ASoC: dt-bindings: mediatek,mt79xx-wm8960: add
- mt79xx-wm8960 document
-Content-Language: en-US
-To:     Maso Hunag <maso.huang@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Trevor Wu <trevor.wu@mediatek.com>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        Ren Zhijie <renzhijie2@huawei.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230612105250.15441-1-maso.huang@mediatek.com>
- <20230612105250.15441-7-maso.huang@mediatek.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20230612105250.15441-7-maso.huang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Rspamd-Queue-Id: 4QgMg82g5cz9sdK
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/06/2023 12:52, Maso Hunag wrote:
-> From: Maso Huang <maso.huang@mediatek.com>
-> 
-> Add document for mt79xx board with wm8960.
+Hi Stephen,
 
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC.  It might happen, that command when run on an older
-kernel, gives you outdated entries.  Therefore please be sure you base
-your patches on recent Linux kernel.
-
-> 
-> Signed-off-by: Maso Huang <maso.huang@mediatek.com>
+On 2023-06-13 at 10:36:26 +0200, Frank Oltmanns <frank@oltmanns.dev> wrote:
+> In light of the recent discovery that the fractional divisor
+> approximation does not utilize the full available range for clocks that
+> are flagged CLK_FRAC_DIVIDER_ZERO_BASED, implement tests for the edge
+> cases of this clock type.
+>
+> Signed-off-by: Frank Oltmanns <frank@oltmanns.dev>
+> Link: https://lore.kernel.org/lkml/20230529133433.56215-1-frank@oltmanns.dev
 > ---
->  .../sound/mediatek,mt79xx-wm8960.yaml         | 53 +++++++++++++++++++
->  1 file changed, 53 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/mediatek,mt79xx-wm8960.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/mediatek,mt79xx-wm8960.yaml b/Documentation/devicetree/bindings/sound/mediatek,mt79xx-wm8960.yaml
-> new file mode 100644
-> index 000000000000..26b38bb629da
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/mediatek,mt79xx-wm8960.yaml
-> @@ -0,0 +1,53 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/mediatek,mt79xx-wm8960.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>  drivers/clk/clk_test.c | 69 +++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 68 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/clk/clk_test.c b/drivers/clk/clk_test.c
+> index f9a5c2964c65..b247ba841cbd 100644
+> --- a/drivers/clk/clk_test.c
+> +++ b/drivers/clk/clk_test.c
+> @@ -8,6 +8,9 @@
+>  /* Needed for clk_hw_get_clk() */
+>  #include "clk.h"
+>
+> +/* Needed for clk_fractional_divider_general_approximation */
+> +#include "clk-fractional-divider.h"
 > +
-> +title: MediaTek MT79xx ASOC sound card with WM8960 codec
+>  #include <kunit/test.h>
+>
+>  #define DUMMY_CLOCK_INIT_RATE	(42 * 1000 * 1000)
+> @@ -2394,6 +2397,69 @@ static struct kunit_suite clk_mux_notifier_test_suite = {
+>  	.test_cases = clk_mux_notifier_test_cases,
+>  };
+>
+> +
+> +/*
+> + * Test that clk_fractional_divider_general_approximation will work with the
+> + * highest available numerator and denominator.
+> + */
+> +static void clk_fd_test_round_rate_max_mn(struct kunit *test)
+> +{
+> +	struct clk_fractional_divider *fd;
+> +	struct clk_hw *hw;
+> +	unsigned long rate, parent_rate, m, n;
+> +
+> +	fd = kunit_kzalloc(test, sizeof(*fd), GFP_KERNEL);
+> +	KUNIT_ASSERT_NOT_NULL(test, fd);
+> +
+> +	fd->mwidth = 3;
+> +	fd->nwidth = 3;
+> +
+> +	hw = &fd->hw;
+> +
+> +	rate = DUMMY_CLOCK_RATE_1;
+> +
+> +	// Highest denominator, no flags
+> +	parent_rate = 10 * DUMMY_CLOCK_RATE_1;
+> +	clk_fractional_divider_general_approximation(hw, rate, &parent_rate, &m, &n);
+> +	KUNIT_EXPECT_EQ(test, m, 1);
+> +	KUNIT_EXPECT_EQ(test, n, 7);
+> +
+> +	// Highest numerator, no flags
+> +	parent_rate = DUMMY_CLOCK_RATE_1 / 10;
+> +	clk_fractional_divider_general_approximation(hw, rate, &parent_rate, &m, &n);
+> +	KUNIT_EXPECT_EQ(test, m, 7);
+> +	KUNIT_EXPECT_EQ(test, n, 1);
 
-What is a MT79xx ASOC? Is it some specific SoC name? What does "A"
-stands for in SoC? XX also looks odd, I thought Mediatek uses only numbers.
+The two calls above aim at proving that the change does not break
+existing functionality.
 
 > +
-> +maintainers:
-> +  - Maso Huang <maso.huang@mediatek.com>
+> +	// Highest denominator, zero based
+> +	parent_rate = 10 * DUMMY_CLOCK_RATE_1;
+> +	fd->flags = CLK_FRAC_DIVIDER_ZERO_BASED;
+> +	clk_fractional_divider_general_approximation(hw, rate, &parent_rate, &m, &n);
+> +	KUNIT_EXPECT_EQ(test, m, 1);
+> +	KUNIT_EXPECT_EQ(test, n, 8);
 > +
-> +properties:
-> +  compatible:
-> +    const: mediatek,mt79xx-wm8960-machine
+> +	// Highest numerator, zero based
+> +	parent_rate = DUMMY_CLOCK_RATE_1 / 10;
+> +	clk_fractional_divider_general_approximation(hw, rate, &parent_rate, &m, &n);
+> +	KUNIT_EXPECT_EQ(test, m, 8);
+> +	KUNIT_EXPECT_EQ(test, n, 1);
+> +}
 > +
-> +  mediatek,platform:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: The phandle of MT79xx ASoC platform.
+> +static struct kunit_case clk_fd_test_cases[] = {
+> +	KUNIT_CASE(clk_fd_test_round_rate_max_mn),
+> +	{}
+> +};
+> +
+> +/*
+> + * Test suite for a fractional divider clock.
+> + *
+> + * These tests exercise the fractional divider API: clk_recalc_rate,
+> + * clk_set_rate(), clk_round_rate().
+> + */
+> +static struct kunit_suite clk_fd_test_suite = {
+> +	.name = "clk-fd-test",
+> +	.test_cases = clk_fd_test_cases,
+> +};
 
-What is MT79xx ASoC platform?
+Unfortunately, the style of the tests does not really match with the
+style of the existing tests, because those where all aimed at the
+framework itself and not at specific functions.
 
+Please let me know, if you require any changes.
 
+Thanks,
+  Frank
 
-Best regards,
-Krzysztof
-
+> +
+>  kunit_test_suites(
+>  	&clk_leaf_mux_set_rate_parent_test_suite,
+>  	&clk_test_suite,
+> @@ -2406,6 +2472,7 @@ kunit_test_suites(
+>  	&clk_range_maximize_test_suite,
+>  	&clk_range_minimize_test_suite,
+>  	&clk_single_parent_mux_test_suite,
+> -	&clk_uncached_test_suite
+> +	&clk_uncached_test_suite,
+> +	&clk_fd_test_suite
+>  );
+>  MODULE_LICENSE("GPL v2");
