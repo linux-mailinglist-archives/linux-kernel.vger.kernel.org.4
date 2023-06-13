@@ -2,177 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6589572ECDF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:26:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC4872ECE0
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231573AbjFMU03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 16:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36642 "EHLO
+        id S232224AbjFMU0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 16:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbjFMU02 (ORCPT
+        with ESMTP id S230189AbjFMU0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 16:26:28 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4451B98
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 13:26:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686687987; x=1718223987;
-  h=date:from:to:cc:subject:message-id;
-  bh=NCh9noXCedO6iye5WGJ1xwExr9Cxl4KQiYMnBQzPoDA=;
-  b=VDEDa3hYuwBg1sgwT51VVWW2c84e2kqsIO3Aba324HTmZnOtmDeUpNds
-   G3IESxQeeOhh/4zu2oSX5a8DRSZEc3MTMMTV8qSMMRb/YnaE5p7VVWC+9
-   Opy32S41rSj2smI39LV7VXlOR/0gFwUB9QiMTJHjikZ9arHOFPduaMH6t
-   7KQKzH0wnnKDW0BVSujFZ7nWd1wjWQ36mZ3btfbsmBvDFJiEakxFpc3UI
-   1N6VK+opvWVbUNIDop7JFJQQjQ/wc5T0yNrY7i5aOGtO1RApSsZt11KPb
-   CX/F7EhmaINEVwOPjSoCgI0NlCuE+YUKbbo4jL5j3h/FXNj7s6jq87vtR
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="357323514"
-X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
-   d="scan'208";a="357323514"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 13:26:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="689151825"
-X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
-   d="scan'208";a="689151825"
-Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 13 Jun 2023 13:26:20 -0700
-Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q9Aap-0001kG-1y;
-        Tue, 13 Jun 2023 20:26:19 +0000
-Date:   Wed, 14 Jun 2023 04:26:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:smp/core] BUILD SUCCESS
- 60be49bdf1d4ddb9e2deb7aa718d5b8bc167ee4e
-Message-ID: <202306140411.UY7ScgTS-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 13 Jun 2023 16:26:42 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FBC199E
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 13:26:39 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id d75a77b69052e-3f9b7de94e7so68631cf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 13:26:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686687999; x=1689279999;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8MXw7AgKsvFMy/rEG8zyX+PB5rmlGQ9LjQTd+dl4O+8=;
+        b=lUltOv572sTPL14yhqAPP//gpwwea0YBue5CxvuCnK0TEd91pumFfC59ni5dCSZlj0
+         bGeoWu9B9eAdfl/ccIwNKuUuN17NtlShCMPv7KQMQKlMpw2/cF0CaEfZRO9/ZwWFd3Xt
+         O39NEw126P0E3KhEaXwZQLT9Ru/7hBJ8FvjN3gNIGEy0IFm6rIB1ujF97g5sk9I567Lz
+         nnLln+XSy5/9OG4TexiZFPgx8nQqSJhJK3yaEjpbCP/qSGPqZTft01cA3q/jgUgWwOje
+         5QH6sr1LL1116EMSv4t4rGJ47QepHXF0JpC1sTHe16LzaFdylW93jjr/5KrXT5eXoSRQ
+         ViwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686687999; x=1689279999;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8MXw7AgKsvFMy/rEG8zyX+PB5rmlGQ9LjQTd+dl4O+8=;
+        b=XKspLFaXjLl2NoIkzRabEJbWZKOs8jOVQhjMqdJK4WFnQOJQfguy/EbdZAteTJTBbU
+         qSd6bT90y+P9gZUBdIInrY1/fsvvXbVQsfXU52+RXx0/AsmQxqPGnoSkDAG8FhmN1UZT
+         KKuU6gN0hgG4DXwizEYWQehpsa6g3OzJbmeWs36ZRY4MRWtQKVoqSvr1pJIF+DMzGkON
+         CJlO7hjrPN5xnPwqezeAn94cmdyjgZJdiQj1nVUXhCKLXuyI19/yPXosom+MLgF9p1n7
+         f3x52Cya6KVr3W9ItFKehG925kXntUxzdJKkTno8yur1oIJgY/Jfux/i792puFaEd1G+
+         YcXA==
+X-Gm-Message-State: AC+VfDxIoWaVwm2pZh09y4QkRzDgPtk3+VPmiPNxTZnov1kqzGJ2BJG+
+        gczOsNzXR81dPHgXvOMWENx7LTohLAa/mVZNZ9IQyQ==
+X-Google-Smtp-Source: ACHHUZ4uQZuhSTOe4dTOs18MKUj5/O5R7ff8xb8zaTfOd0WzF7q+UubK+8ZgqTP3Yj/W6mlieKDKTPOispTcpb38SDE=
+X-Received: by 2002:ac8:7e8b:0:b0:3f9:a986:f3a4 with SMTP id
+ w11-20020ac87e8b000000b003f9a986f3a4mr47357qtj.25.1686687998646; Tue, 13 Jun
+ 2023 13:26:38 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230613182629.1500317-1-irogers@google.com> <ZIjGd79uWxgRF0og@kernel.org>
+In-Reply-To: <ZIjGd79uWxgRF0og@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 13 Jun 2023 13:26:27 -0700
+Message-ID: <CAP-5=fVfHGm3hcJ=AMAGnhAA=bYSH47a77yw5-9N49RuuSw37A@mail.gmail.com>
+Subject: Re: [PATCH v1] perf parse-events: Avoid string for PE_BP_COLON, PE_BP_SLASH
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Rob Herring <robh@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git smp/core
-branch HEAD: 60be49bdf1d4ddb9e2deb7aa718d5b8bc167ee4e  MAINTAINERS: Add CPU HOTPLUG entry
+On Tue, Jun 13, 2023 at 12:41=E2=80=AFPM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Tue, Jun 13, 2023 at 11:26:29AM -0700, Ian Rogers escreveu:
+> > There's no need to read the string ':' or '/' for PE_BP_COLON or
+> > PE_BP_SLASH and doing so causes parse-events.y to leak memory.
+> >
+> > The original patch has a committer note about not using these tokens
+> > presumably as yacc spotted they were a memory leak because no
+> > %destructor could be run. Remove the unused token workaround as there
+> > is now no value associated with these tokens.
+>
+> It looked like the compiler was the one warning (-Wother) about args not
+> being used, didn't made it clear those were possible memory leaks :-\
+>
+>  util/parse-events.y:508.24-34: warning: unused value: $3 [-Wother]
+>    508 | PE_PREFIX_MEM PE_VALUE PE_BP_SLASH PE_VALUE PE_BP_COLON PE_MODIF=
+IER_BP opt_event_config
+>
+> Anyway, I'll apply and test your patch.
+>
+> - Arnaldo
 
-elapsed time: 722m
+Thanks, I couldn't repro the problem but I know that's because I don't
+have your full container set up. Given my ignorance please help me fix
+the commit message, or I can update it in a v2 set, or possibly we'll
+need to bring back the unused logic.
 
-configs tested: 100
-configs skipped: 7
+Ian
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r005-20230612   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r004-20230612   gcc  
-alpha                randconfig-r022-20230612   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r001-20230612   gcc  
-arc                  randconfig-r012-20230612   gcc  
-arc                  randconfig-r043-20230612   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r046-20230612   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r011-20230612   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r015-20230612   gcc  
-hexagon              randconfig-r041-20230612   clang
-hexagon              randconfig-r045-20230612   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r006-20230612   clang
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230612   clang
-i386                 randconfig-i002-20230612   clang
-i386                 randconfig-i003-20230612   clang
-i386                 randconfig-i004-20230612   clang
-i386                 randconfig-i005-20230612   clang
-i386                 randconfig-i006-20230612   clang
-i386                 randconfig-i011-20230612   gcc  
-i386                 randconfig-i012-20230612   gcc  
-i386                 randconfig-i013-20230612   gcc  
-i386                 randconfig-i014-20230612   gcc  
-i386                 randconfig-i015-20230612   gcc  
-i386                 randconfig-i016-20230612   gcc  
-i386                 randconfig-r036-20230612   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r002-20230612   gcc  
-loongarch            randconfig-r005-20230612   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r021-20230612   clang
-nios2                               defconfig   gcc  
-nios2                randconfig-r006-20230612   gcc  
-openrisc             randconfig-r014-20230612   gcc  
-openrisc             randconfig-r024-20230612   gcc  
-openrisc             randconfig-r035-20230612   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230612   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r003-20230612   clang
-s390                 randconfig-r025-20230612   gcc  
-s390                 randconfig-r044-20230612   gcc  
-sh                               allmodconfig   gcc  
-sh           buildonly-randconfig-r004-20230612   gcc  
-sparc                            allyesconfig   gcc  
-sparc        buildonly-randconfig-r003-20230612   gcc  
-sparc                               defconfig   gcc  
-sparc64              randconfig-r033-20230612   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230612   clang
-x86_64               randconfig-a002-20230612   clang
-x86_64               randconfig-a003-20230612   clang
-x86_64               randconfig-a004-20230612   clang
-x86_64               randconfig-a005-20230612   clang
-x86_64               randconfig-a006-20230612   clang
-x86_64               randconfig-a011-20230612   gcc  
-x86_64               randconfig-a012-20230612   gcc  
-x86_64               randconfig-a013-20230612   gcc  
-x86_64               randconfig-a014-20230612   gcc  
-x86_64               randconfig-a015-20230612   gcc  
-x86_64               randconfig-a016-20230612   gcc  
-x86_64               randconfig-r032-20230612   clang
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r002-20230612   gcc  
-xtensa               randconfig-r013-20230612   gcc  
-xtensa               randconfig-r031-20230612   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+> > Fixes: f0617f526cb0 ("perf parse: Allow config terms with breakpoints")
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/perf/util/parse-events.h | 4 ----
+> >  tools/perf/util/parse-events.l | 4 ++--
+> >  tools/perf/util/parse-events.y | 9 ---------
+> >  3 files changed, 2 insertions(+), 15 deletions(-)
+> >
+> > diff --git a/tools/perf/util/parse-events.h b/tools/perf/util/parse-eve=
+nts.h
+> > index 5fdc1f33f57e..b0eb95f93e9c 100644
+> > --- a/tools/perf/util/parse-events.h
+> > +++ b/tools/perf/util/parse-events.h
+> > @@ -228,10 +228,6 @@ void parse_events_error__handle(struct parse_event=
+s_error *err, int idx,
+> >  void parse_events_error__print(struct parse_events_error *err,
+> >                              const char *event);
+> >
+> > -static inline void parse_events_unused_value(const void *x __maybe_unu=
+sed)
+> > -{
+> > -}
+> > -
+> >  #ifdef HAVE_LIBELF_SUPPORT
+> >  /*
+> >   * If the probe point starts with '%',
+> > diff --git a/tools/perf/util/parse-events.l b/tools/perf/util/parse-eve=
+nts.l
+> > index 7629af3d5c7c..99335ec586ae 100644
+> > --- a/tools/perf/util/parse-events.l
+> > +++ b/tools/perf/util/parse-events.l
+> > @@ -315,13 +315,13 @@ r0x{num_raw_hex}        { return str(yyscanner, P=
+E_RAW); }
+> >        * are the same, so trailing context can be used disambiguate the=
+ two
+> >        * cases.
+> >        */
+> > -":"/{modifier_bp}    { return str(yyscanner, PE_BP_COLON); }
+> > +":"/{modifier_bp}    { return PE_BP_COLON; }
+> >       /*
+> >        * The slash before memory length can get mixed up with the slash=
+ before
+> >        * config terms. Fortunately config terms do not start with a num=
+eric
+> >        * digit, so trailing context can be used disambiguate the two ca=
+ses.
+> >        */
+> > -"/"/{digit}          { return str(yyscanner, PE_BP_SLASH); }
+> > +"/"/{digit}          { return PE_BP_SLASH; }
+> >  "/"/{non_digit}              { BEGIN(config); return '/'; }
+> >  {num_dec}            { return value(yyscanner, 10); }
+> >  {num_hex}            { return value(yyscanner, 16); }
+> > diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-eve=
+nts.y
+> > index 0c3d086cc22a..9f28d4b5502f 100644
+> > --- a/tools/perf/util/parse-events.y
+> > +++ b/tools/perf/util/parse-events.y
+> > @@ -80,8 +80,6 @@ static void free_list_evsel(struct list_head* list_ev=
+sel)
+> >  %type <str> PE_LEGACY_CACHE
+> >  %type <str> PE_MODIFIER_EVENT
+> >  %type <str> PE_MODIFIER_BP
+> > -%type <str> PE_BP_COLON
+> > -%type <str> PE_BP_SLASH
+> >  %type <str> PE_EVENT_NAME
+> >  %type <str> PE_KERNEL_PMU_EVENT PE_PMU_EVENT_FAKE
+> >  %type <str> PE_DRV_CFG_TERM
+> > @@ -510,9 +508,6 @@ PE_PREFIX_MEM PE_VALUE PE_BP_SLASH PE_VALUE PE_BP_C=
+OLON PE_MODIFIER_BP opt_event
+> >       struct list_head *list;
+> >       int err;
+> >
+> > -     parse_events_unused_value(&$3);
+> > -     parse_events_unused_value(&$5);
+> > -
+> >       list =3D alloc_list();
+> >       ABORT_ON(!list);
+> >       err =3D parse_events_add_breakpoint(_parse_state, list,
+> > @@ -531,8 +526,6 @@ PE_PREFIX_MEM PE_VALUE PE_BP_SLASH PE_VALUE opt_eve=
+nt_config
+> >       struct list_head *list;
+> >       int err;
+> >
+> > -     parse_events_unused_value(&$3);
+> > -
+> >       list =3D alloc_list();
+> >       ABORT_ON(!list);
+> >       err =3D parse_events_add_breakpoint(_parse_state, list,
+> > @@ -550,8 +543,6 @@ PE_PREFIX_MEM PE_VALUE PE_BP_COLON PE_MODIFIER_BP o=
+pt_event_config
+> >       struct list_head *list;
+> >       int err;
+> >
+> > -     parse_events_unused_value(&$3);
+> > -
+> >       list =3D alloc_list();
+> >       ABORT_ON(!list);
+> >       err =3D parse_events_add_breakpoint(_parse_state, list,
+> > --
+> > 2.41.0.162.gfafddb0af9-goog
+> >
+>
+> --
+>
+> - Arnaldo
