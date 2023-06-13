@@ -2,88 +2,446 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A9B72E7BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 18:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 681A572E7C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 18:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241525AbjFMQCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 12:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
+        id S242552AbjFMQCx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 13 Jun 2023 12:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235140AbjFMQCA (ORCPT
+        with ESMTP id S241029AbjFMQCj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 12:02:00 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C53A1727
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 09:01:59 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-25bbcf3c0acso1872693a91.2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 09:01:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686672119; x=1689264119;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wapCm2hOazX/LWg9cChCceZuhZiGkHyzjGVVgP4LkzI=;
-        b=emAi+wytugNGE4PLtRWr5PwUHIdv4M3VLuZtaZ4PslBqwXEYy23tGyqBPOSwfVS0c0
-         0QQhG2zblFHLVeccET9SjMAhAsbvAJaiYENNMStrjOi9R+ambH8brILrSHXs+QIxLPVz
-         r5tSTYvt2ImyWy23H81HvoUMIIMxJMJomGPcCG5iL/PvSuZ5mP7eO7sT4lKMi7C9eXD2
-         7VCcATXVJ4oLzCGEQVOQvfEgEO/NRSeFgKxARP+z2pIaWjqKWuSfvIrB9GQN6S0SsUHr
-         VBfdBMkBBXtrtdvQtZocELwTs65iW6MzEUYQSzfvm1v4rhHosxVaHvpADSIWmhrTI+ne
-         FigA==
+        Tue, 13 Jun 2023 12:02:39 -0400
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1BAD199C;
+        Tue, 13 Jun 2023 09:02:36 -0700 (PDT)
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-4f14e14dc00so1066030e87.1;
+        Tue, 13 Jun 2023 09:02:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686672119; x=1689264119;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wapCm2hOazX/LWg9cChCceZuhZiGkHyzjGVVgP4LkzI=;
-        b=UsBCXVkjv09pRwPjMygiqm6yjCdlG2tUBZUAAGCX+IsTZqw1hUb/FysVjmn4+nCLSU
-         216yXntGRoULtE6xCdm1jP6ywOWwpqT7MlYBFZbe7VFhatlJPYedK/C54VJ2P9V98a1H
-         REzhCoUB5sRJjeQ4JOuXsA6A5IrQTA4CVMX8FXhGGetvybjvOkPlDgtz44mSVj0JSud0
-         itieQjLJ9ZTonpH1w/gFW3G5OLaJuVsu7euHoXTpaUgYZymsmWpwjmnPBiLW5808nRzs
-         r/n583sP6R+1yABpVVPcs9GQA8TMJtCWhScG9kQk3N7StNWEUutc+g5pqg23nEpEdkun
-         ysRQ==
-X-Gm-Message-State: AC+VfDw4MoQxpvZhv183N/gWmXyk6b+tGvNQcmmmOxawKCN+FcK9uSd0
-        bNphy180rHsUHIirj9I4TWg=
-X-Google-Smtp-Source: ACHHUZ73Xo1+cZsPEIo3XJxoktYekEXvd+rhISKMUdnp07CNvu/MsjsEXQvD6qaq84i4F4dt5/rz9A==
-X-Received: by 2002:a17:90a:4293:b0:259:30e7:7349 with SMTP id p19-20020a17090a429300b0025930e77349mr10423696pjg.8.1686672118891;
-        Tue, 13 Jun 2023 09:01:58 -0700 (PDT)
-Received: from redkillpc ([49.207.203.99])
-        by smtp.gmail.com with ESMTPSA id h16-20020a17090adb9000b002560ab7a15fsm9407509pjv.36.2023.06.13.09.01.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 09:01:58 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 21:31:51 +0530
-From:   Prathu Baronia <prathubaronia2011@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Khadija Kamran <kamrankhadijadj@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dan.carpenter@linaro.org, error27@gmail.com, lkp@intel.com,
-        oe-kbuild-all@lists.linux.dev, oe-kbuild@lists.linux.dev
-Subject: Re: [PATCH v4 3/3] axis-fifo: cleanup space issues with fops struct
-Message-ID: <ZIiS72stdaX71qGG@redkillpc>
-References: <ZHHE/H2p4Go/Igc/@redkillpc>
- <20230527115101.47569-1-prathubaronia2011@gmail.com>
- <20230527115101.47569-3-prathubaronia2011@gmail.com>
- <20230527223111.jidik3ffcsxdkenb@pengutronix.de>
- <2023052808-predefine-thrive-d84a@gregkh>
+        d=1e100.net; s=20221208; t=1686672155; x=1689264155;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=y+VSKYeHY4jtjHGC2rxW4fhYdXqNS83QGvwE06OXYpE=;
+        b=VLcbplNcOcthC+pBC3CLgh/nNE7f6lCwQpzlZZumgsNKv6/r/n135AzF6hPm1jnky/
+         2X7KL6PiOM0wp70JiBBfFnK7ImzsW00YgF18RZN8OHYSU6bNyIzkPwqu1YxPYerortX5
+         twfZf/M/XA2dGSKKSnpZKO9Tlrx+r+DoakXmJafZDb2E3bXyNC6BQINM9bKp0GjcQNNd
+         WEONt7CLnlB2R3MKI0i3zgML44EO5tXwHAt0gLwpz2KAShLl4pdcRJxjd3GJL++o2d9W
+         2biTRVFuiNSVDjHs+3Zn8Pz0vFzrNch2bBnbXrLjNMuQoJILq94FLMUIg0yTOFkScNXH
+         dL3w==
+X-Gm-Message-State: AC+VfDwoSRoNJahh42cgBPLwq2q/8tO0FSKP8EsDw3TD4UW8TBvLRAWR
+        RsmZG50gsDSYLtH9ah8hqIFi53XZk3X7tO6EhxCUb+Vv
+X-Google-Smtp-Source: ACHHUZ6OfDWXZXR6Noxyv8f8WxXbNF9TE1rG1wK0XEw0VTp18JiddfaFfSi4OBk8tjDCneXOj8Dp2U4dpzzahfR7HuE=
+X-Received: by 2002:ac2:43c4:0:b0:4f3:ab15:aea with SMTP id
+ u4-20020ac243c4000000b004f3ab150aeamr5452146lfl.2.1686672154678; Tue, 13 Jun
+ 2023 09:02:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023052808-predefine-thrive-d84a@gregkh>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230524125131.2413379-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20230524125131.2413379-1-srinivas.pandruvada@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 13 Jun 2023 18:02:23 +0200
+Message-ID: <CAJZ5v0jJK21u-W1VKOWM3KJQf7LQrHZP-ZMd=WG=AFReRCJfXg@mail.gmail.com>
+Subject: Re: [PATCH v2] thermal: intel: int340x_thermal: New IOCTLs for
+ thermal tables
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 28, 2023 at 09:57:52AM +0100, Greg Kroah-Hartman wrote:
-> I agree, there is no "requirement" that these fields are aligned at all,
-> so I would stick to the real fixes that are needed for this code to be
-> able to be moved out of staging instead.
-Sure greg, leaving out the cleanup fixes for later.
+On Wed, May 24, 2023 at 2:51 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> Export Passive version 2 table similar to the way _TRT and _ART tables
+> via IOCTLs.
+>
+> This removes need for binary utility to read ACPI Passive 2 table by
+> providing open source support. This table already has open source
+> implementation in the user space thermald, when the table is part of
+> data vault exported by the int3400 sysfs.
+>
+> This table is supported in some older platforms before Ice Lake
+> generation.
+>
+> Passive 2 tables contain multiple entries. Each entry has following
+> fields:
+>
+> Source: Named Reference (String). This is the source device for
+> temperature.
+> Target: Named Reference (String). This is the target device to control.
+> Priority: Priority of this device compared to others.
+> SamplingPeriod: Time Period in 1/10 of seconds unit.
+> PassiveTemp: Passive Temperature in 1/10 of Kelvin.
+> SourceDomain: Domain for the source (00:Processor, others reserved).
+> ControlKnob: Type of control knob (00:Power Limit 1, others: reserved)
+> Limit: The target state to set on reaching passive temperature.
+> This can be a string "max", "min" or a power limit value.
+> LimitStepSize: Step size during activation.
+> UnLimitStepSize: Step size during deactivation.
+> Reserved1: Reserved
+>
+> Four IOCTLs are added similar to IOCTLs for reading TRT:
+>
+> ACPI_THERMAL_GET_PSVT_COUNT: Number of passive 2 entries.
+> ACPI_THERMAL_GET_PSVT_LEN: Total return data size (count x each
+> passive 2 entry size).
+> ACPI_THERMAL_GET_PSVT: Get the data as an array of objects with
+> passive 2 entries.
+>
+> This change is based on original development done by:
+> Todd Brandt <todd.e.brandt@linux.intel.com>
+>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> ---
+> v2:
+> - Fix issues reported by kernel test robot <lkp@intel.com>
+> - Some minor change for name of destination in sizeof
+>
+>  .../intel/int340x_thermal/acpi_thermal_rel.c  | 218 ++++++++++++++++++
+>  .../intel/int340x_thermal/acpi_thermal_rel.h  |  57 +++++
+>  2 files changed, 275 insertions(+)
+>
+> diff --git a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
+> index 01b80331eab6..dc519a665c18 100644
+> --- a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
+> +++ b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
+> @@ -203,6 +203,151 @@ int acpi_parse_art(acpi_handle handle, int *art_count, struct art **artp,
+>  }
+>  EXPORT_SYMBOL(acpi_parse_art);
+>
+> +/*
+> + * acpi_parse_psvt - Passive Table (PSVT) for passive cooling
+> + *
+> + * @handle: ACPI handle of the device which contains PSVT
+> + * @psvt_count: the number of valid entries resulted from parsing PSVT
+> + * @psvtp: pointer to array of psvt entries
+> + *
+> + */
+> +static int acpi_parse_psvt(acpi_handle handle, int *psvt_count, struct psvt **psvtp)
+> +{
+> +       struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+> +       int nr_bad_entries = 0, revision = 0;
+> +       union acpi_object *p;
+> +       acpi_status status;
+> +       int i, result = 0;
+> +       struct psvt *psvts;
+> +
+> +       if (!acpi_has_method(handle, "PSVT"))
+> +               return -ENODEV;
+> +
+> +       status = acpi_evaluate_object(handle, "PSVT", NULL, &buffer);
+> +       if (ACPI_FAILURE(status))
+> +               return -ENODEV;
+> +
+> +       p = buffer.pointer;
+> +       if (!p || (p->type != ACPI_TYPE_PACKAGE)) {
+> +               result = -EFAULT;
+> +               goto end;
+> +       }
+> +
+> +       /* first package is the revision number */
+> +       if (p->package.count > 0) {
+> +               union acpi_object *prev = &(p->package.elements[0]);
+> +
+> +               if (prev->type == ACPI_TYPE_INTEGER)
+> +                       revision = (int)prev->integer.value;
+> +       } else {
+> +               result = -EFAULT;
+> +               goto end;
+> +       }
+> +
+> +       /* Support only version 2 */
+> +       if (revision != 2) {
+> +               result = -EFAULT;
+> +               goto end;
+> +       }
+> +
+> +       *psvt_count = p->package.count - 1;
+> +       if (!*psvt_count) {
+> +               result = -EFAULT;
+> +               goto end;
+> +       }
+> +
+> +       psvts = kcalloc(*psvt_count, sizeof(*psvts), GFP_KERNEL);
+> +       if (!psvts) {
+> +               result = -ENOMEM;
+> +               goto end;
+> +       }
+> +
+> +       /* Start index is 1 because the first package is the revision number */
+> +       for (i = 1; i < p->package.count; i++) {
+> +               struct acpi_buffer psvt_int_format = { sizeof("RRNNNNNNNNNN"), "RRNNNNNNNNNN" };
+> +               struct acpi_buffer psvt_str_format = { sizeof("RRNNNNNSNNNN"), "RRNNNNNSNNNN" };
+> +               union acpi_object *package = &(p->package.elements[i]);
+> +               struct psvt *psvt = &psvts[i - 1 - nr_bad_entries];
+> +               struct acpi_buffer *psvt_format = &psvt_int_format;
+> +               struct acpi_buffer element = { 0, NULL };
+> +               union acpi_object *knob;
+> +               struct acpi_device *res;
+> +               struct psvt *psvt_ptr;
+> +
+> +               element.length = ACPI_ALLOCATE_BUFFER;
+> +               element.pointer = NULL;
+> +
+> +               if (package->package.count >= ACPI_NR_PSVT_ELEMENTS) {
+> +                       knob = &(package->package.elements[ACPI_PSVT_CONTROL_KNOB]);
+> +               } else {
+> +                       nr_bad_entries++;
+> +                       pr_info("PSVT package %d is invalid, ignored\n", i);
+> +                       continue;
+> +               }
+> +
+> +               if (knob->type == ACPI_TYPE_STRING) {
+> +                       psvt_format = &psvt_str_format;
+> +                       if (knob->string.length > ACPI_LIMIT_STR_MAX_LEN - 1) {
+> +                               pr_info("PSVT package %d limit string len exceeds max\n", i);
+> +                               knob->string.length = ACPI_LIMIT_STR_MAX_LEN - 1;
+> +                       }
+> +               }
+> +
+> +               status = acpi_extract_package(&(p->package.elements[i]), psvt_format, &element);
+> +               if (ACPI_FAILURE(status)) {
+> +                       nr_bad_entries++;
+> +                       pr_info("PSVT package %d is invalid, ignored\n", i);
+> +                       continue;
+> +               }
+> +
+> +               psvt_ptr = (struct psvt *)element.pointer;
+> +
+> +               memcpy(psvt, psvt_ptr, sizeof(*psvt));
+> +
+> +               /* The limit element can be string or U64 */
+> +               psvt->control_knob_type = (u64)knob->type;
+> +
+> +               if (knob->type == ACPI_TYPE_STRING) {
+> +                       memset(&psvt->limit, 0, sizeof(u64));
+> +                       strncpy(psvt->limit.string, psvt_ptr->limit.str_ptr, knob->string.length);
+> +               } else {
+> +                       psvt->limit.integer = psvt_ptr->limit.integer;
+> +               }
+> +
+> +               kfree(element.pointer);
+> +
+> +               res = acpi_fetch_acpi_dev(psvt->source);
+> +               if (!res) {
+> +                       nr_bad_entries++;
+> +                       pr_info("Failed to get source ACPI device\n");
+> +                       continue;
+> +               }
+> +
+> +               res = acpi_fetch_acpi_dev(psvt->target);
+> +               if (!res) {
+> +                       nr_bad_entries++;
+> +                       pr_info("Failed to get target ACPI device\n");
+> +                       continue;
+> +               }
+> +       }
+> +
+> +       /* don't count bad entries */
+> +       *psvt_count -= nr_bad_entries;
+> +
+> +       if (!*psvt_count) {
+> +               result = -EFAULT;
+> +               kfree(psvts);
+> +               goto end;
+> +       }
+> +
+> +       *psvtp = psvts;
+> +
+> +       return 0;
+> +
+> +end:
+> +       kfree(buffer.pointer);
+> +       return result;
+> +}
+>
+>  /* get device name from acpi handle */
+>  static void get_single_name(acpi_handle handle, char *name)
+> @@ -289,6 +434,57 @@ static int fill_trt(char __user *ubuf)
+>         return ret;
+>  }
+>
+> +static int fill_psvt(char __user *ubuf)
+> +{
+> +       int i, ret, count, psvt_len;
+> +       union psvt_object *psvt_user;
+> +       struct psvt *psvts;
+> +
+> +       ret = acpi_parse_psvt(acpi_thermal_rel_handle, &count, &psvts);
+> +       if (ret)
+> +               return ret;
+> +
+> +       psvt_len = count * sizeof(*psvt_user);
+> +
+> +       psvt_user = kzalloc(psvt_len, GFP_KERNEL);
+> +       if (!psvt_user) {
+> +               ret = -ENOMEM;
+> +               goto free_psvt;
+> +       }
+> +
+> +       /* now fill in user psvt data */
+> +       for (i = 0; i < count; i++) {
+> +               /* userspace psvt needs device name instead of acpi reference */
+> +               get_single_name(psvts[i].source, psvt_user[i].source_device);
+> +               get_single_name(psvts[i].target, psvt_user[i].target_device);
+> +
+> +               psvt_user[i].priority = psvts[i].priority;
+> +               psvt_user[i].sample_period = psvts[i].sample_period;
+> +               psvt_user[i].passive_temp = psvts[i].passive_temp;
+> +               psvt_user[i].source_domain = psvts[i].source_domain;
+> +               psvt_user[i].control_knob = psvts[i].control_knob;
+> +               psvt_user[i].step_size = psvts[i].step_size;
+> +               psvt_user[i].limit_coeff = psvts[i].limit_coeff;
+> +               psvt_user[i].unlimit_coeff = psvts[i].unlimit_coeff;
+> +               psvt_user[i].control_knob_type = psvts[i].control_knob_type;
+> +               if (psvt_user[i].control_knob_type == ACPI_TYPE_STRING)
+> +                       strncpy(psvt_user[i].limit.string, psvts[i].limit.string,
+> +                               ACPI_LIMIT_STR_MAX_LEN);
+> +               else
+> +                       psvt_user[i].limit.integer = psvts[i].limit.integer;
+> +
+> +       }
+> +
+> +       if (copy_to_user(ubuf, psvt_user, psvt_len))
+> +               ret = -EFAULT;
+> +
+> +       kfree(psvt_user);
+> +
+> +free_psvt:
+> +       kfree(psvts);
+> +       return ret;
+> +}
+> +
+>  static long acpi_thermal_rel_ioctl(struct file *f, unsigned int cmd,
+>                                    unsigned long __arg)
+>  {
+> @@ -298,6 +494,7 @@ static long acpi_thermal_rel_ioctl(struct file *f, unsigned int cmd,
+>         char __user *arg = (void __user *)__arg;
+>         struct trt *trts = NULL;
+>         struct art *arts = NULL;
+> +       struct psvt *psvts;
+>
+>         switch (cmd) {
+>         case ACPI_THERMAL_GET_TRT_COUNT:
+> @@ -336,6 +533,27 @@ static long acpi_thermal_rel_ioctl(struct file *f, unsigned int cmd,
+>         case ACPI_THERMAL_GET_ART:
+>                 return fill_art(arg);
+>
+> +       case ACPI_THERMAL_GET_PSVT_COUNT:
+> +               ret = acpi_parse_psvt(acpi_thermal_rel_handle, &count, &psvts);
+> +               if (!ret) {
+> +                       kfree(psvts);
+> +                       return put_user(count, (unsigned long __user *)__arg);
+> +               }
+> +               return ret;
+> +
+> +       case ACPI_THERMAL_GET_PSVT_LEN:
+> +               /* total length of the data retrieved (count * PSVT entry size) */
+> +               ret = acpi_parse_psvt(acpi_thermal_rel_handle, &count, &psvts);
+> +               length = count * sizeof(union psvt_object);
+> +               if (!ret) {
+> +                       kfree(psvts);
+> +                       return put_user(length, (unsigned long __user *)__arg);
+> +               }
+> +               return ret;
+> +
+> +       case ACPI_THERMAL_GET_PSVT:
+> +               return fill_psvt(arg);
+> +
+>         default:
+>                 return -ENOTTY;
+>         }
+> diff --git a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.h b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.h
+> index 78d942477035..ac376d8f9ee4 100644
+> --- a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.h
+> +++ b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.h
+> @@ -14,6 +14,16 @@
+>  #define ACPI_THERMAL_GET_TRT   _IOR(ACPI_THERMAL_MAGIC, 5, unsigned long)
+>  #define ACPI_THERMAL_GET_ART   _IOR(ACPI_THERMAL_MAGIC, 6, unsigned long)
+>
+> +/*
+> + * ACPI_THERMAL_GET_PSVT_COUNT = Number of PSVT entries
+> + * ACPI_THERMAL_GET_PSVT_LEN = Total return data size (PSVT count x each
+> + * PSVT entry size)
+> + * ACPI_THERMAL_GET_PSVT = Get the data as an array of psvt_objects
+> + */
+> +#define ACPI_THERMAL_GET_PSVT_LEN _IOR(ACPI_THERMAL_MAGIC, 7, unsigned long)
+> +#define ACPI_THERMAL_GET_PSVT_COUNT _IOR(ACPI_THERMAL_MAGIC, 8, unsigned long)
+> +#define ACPI_THERMAL_GET_PSVT  _IOR(ACPI_THERMAL_MAGIC, 9, unsigned long)
+> +
+>  struct art {
+>         acpi_handle source;
+>         acpi_handle target;
+> @@ -43,6 +53,32 @@ struct trt {
+>         u64 reserved4;
+>  } __packed;
+>
+> +#define ACPI_NR_PSVT_ELEMENTS  12
+> +#define ACPI_PSVT_CONTROL_KNOB 7
+> +#define ACPI_LIMIT_STR_MAX_LEN 8
+> +
+> +struct psvt {
+> +       acpi_handle source;
+> +       acpi_handle target;
+> +       u64 priority;
+> +       u64 sample_period;
+> +       u64 passive_temp;
+> +       u64 source_domain;
+> +       u64 control_knob;
+> +       union {
+> +               /* For limit_type = ACPI_TYPE_INTEGER */
+> +               u64 integer;
+> +               /* For limit_type = ACPI_TYPE_STRING */
+> +               char string[ACPI_LIMIT_STR_MAX_LEN];
+> +               char *str_ptr;
+> +       } limit;
+> +       u64 step_size;
+> +       u64 limit_coeff;
+> +       u64 unlimit_coeff;
+> +       /* Spec calls this field reserved, so we borrow it for type info */
+> +       u64 control_knob_type; /* ACPI_TYPE_STRING or ACPI_TYPE_INTEGER */
+> +} __packed;
+> +
+>  #define ACPI_NR_ART_ELEMENTS 13
+>  /* for usrspace */
+>  union art_object {
+> @@ -77,6 +113,27 @@ union trt_object {
+>         u64 __data[8];
+>  };
+>
+> +union psvt_object {
+> +       struct {
+> +               char source_device[8];
+> +               char target_device[8];
+> +               u64 priority;
+> +               u64 sample_period;
+> +               u64 passive_temp;
+> +               u64 source_domain;
+> +               u64 control_knob;
+> +               union {
+> +                       u64 integer;
+> +                       char string[ACPI_LIMIT_STR_MAX_LEN];
+> +               } limit;
+> +               u64 step_size;
+> +               u64 limit_coeff;
+> +               u64 unlimit_coeff;
+> +               u64 control_knob_type;
+> +       };
+> +       u64 __data[ACPI_NR_PSVT_ELEMENTS];
+> +};
+> +
+>  #ifdef __KERNEL__
+>  int acpi_thermal_rel_misc_device_add(acpi_handle handle);
+>  int acpi_thermal_rel_misc_device_remove(acpi_handle handle);
+> --
 
-Prathu
+Applied as 6.5 material, thanks!
