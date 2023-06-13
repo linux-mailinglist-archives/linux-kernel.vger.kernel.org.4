@@ -2,95 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D66AA72DEC8
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 12:11:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4224372DECD
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 12:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240218AbjFMKLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 06:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46014 "EHLO
+        id S240635AbjFMKMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 06:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232386AbjFMKLG (ORCPT
+        with ESMTP id S232386AbjFMKM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 06:11:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C1A188
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 03:10:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686651021;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EQ8qG3I5WaG3P52JxI3Wd7lusGu6FrfknhfgsuNOgLo=;
-        b=JNIb6L+LuDPMItWpxwSOP7WcwiPIwgg+qPSuIqXHE7zpSDKZOkXHdLz3krIXU6OqkQNQbc
-        Dtz4TDJqrC8pla9A4sbwT6ORCJg8+1WvsLXdXrlwtsIwKi+INWU34URORolh49znffId7V
-        r73kgzSm3WSHuE9AUmbPwvJyNg75EAU=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-639-Zi8bs2RoOcagb6CIc834ug-1; Tue, 13 Jun 2023 06:10:19 -0400
-X-MC-Unique: Zi8bs2RoOcagb6CIc834ug-1
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-982180ac15cso236099666b.2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 03:10:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686651018; x=1689243018;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EQ8qG3I5WaG3P52JxI3Wd7lusGu6FrfknhfgsuNOgLo=;
-        b=Pz18mE4o2QrOzHHgJ9VlimBphHcWMAWAF+7kO+VuDAGkT8h8rrblUd5CmwGSfHKKZ2
-         V8sG/F+prZ4pdsztxLSUKMM69Z3wzClWse+9Yb0dZ1MJY7DhX7otmtO03CO57xOFcnZW
-         yxAP43NygSS9LQ+3K0yh8iheD5O1JmS5t3B4PNrvArD7ZexkERuwODLguUI5RhRzZcbE
-         znSaVAjxTgdmDTwcQZMScYk2JR1sMIASjIEluqxG4CDAYKrDM+sFZON04AqhgY2EH+1M
-         WXQ1s8t8aTmbWqiX4mCx6tQ7bhwC2G1+5bcwiW+9eIVdyesCPRLGd0H/pLGs37cfe4A4
-         cl+Q==
-X-Gm-Message-State: AC+VfDyXwUrqpIwOReS8K3B98wE9lmSuV80GWFAgZUOGxHBtp6Gollq2
-        Az7q2PEUyNJBrBghnEHBzkm3zoE1iHaNgBT4gnYmWfBSOZh7tDDVXgX4RuDiTlYN7wyalvOefvu
-        0gGWiVcNLxcCRpDQgFs2EKnzQ
-X-Received: by 2002:a17:907:9306:b0:974:1e85:6a69 with SMTP id bu6-20020a170907930600b009741e856a69mr12573591ejc.16.1686651018073;
-        Tue, 13 Jun 2023 03:10:18 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4x+CLF7oh9OSNrlseseUZsRMaCbeVralIJHlINtpA+bhMhcdCKdtmrONK76OG4HPKF+L9oAg==
-X-Received: by 2002:a17:907:9306:b0:974:1e85:6a69 with SMTP id bu6-20020a170907930600b009741e856a69mr12573565ejc.16.1686651017718;
-        Tue, 13 Jun 2023 03:10:17 -0700 (PDT)
-Received: from localhost (net-130-25-106-149.cust.vodafonedsl.it. [130.25.106.149])
-        by smtp.gmail.com with ESMTPSA id y21-20020a170906471500b00974564fa7easm6492031ejq.5.2023.06.13.03.10.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 03:10:17 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 12:10:15 +0200
-From:   Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sam Shih <Sam.Shih@mediatek.com>
-Subject: Re: [PATCH net-next 6/8] net: ethernet: mtk_eth_soc: convert caps in
- mtk_soc_data struct to u64
-Message-ID: <ZIhAh2mzrYHOq2v1@lore-desk>
-References: <ZIUX1AkjbSHdiMUc@makrotopia.org>
- <ZIcBQCqeMc424mv6@shell.armlinux.org.uk>
+        Tue, 13 Jun 2023 06:12:29 -0400
+Received: from mx4.veeam.com (mx4.veeam.com [104.41.138.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D92EE6;
+        Tue, 13 Jun 2023 03:12:28 -0700 (PDT)
+Received: from mail.veeam.com (prgmbx01.amust.local [172.24.128.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx4.veeam.com (Postfix) with ESMTPS id 029085E916;
+        Tue, 13 Jun 2023 13:12:26 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com;
+        s=mx4-2022; t=1686651146;
+        bh=JCHZt/RMowuGTByB3i6nzG7sEtmRHmsCzYrBdaBijZI=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To:From;
+        b=Ldg8lEVWEws8TO7hjHusUvJGlpUZa8S+jCqgCPdO4Ys98qGhfGY4Gguib1I/paiaw
+         aI+LM2y3S+e5E1AKlmTBkgQttAfdnEfCoW/RYJAQSfMC7Ra9y/jCXBj6sEXL4nDuww
+         izMq3hnu3F0AmcoOxz1yhvFZA2QV7w6kGHy1Tf0Hrl5e+Lvm9oy22RabvLHV+GYVuG
+         HTGHY8jK2T/VxTJx9hhCa0cuwLgradoJ2LVFvmjSAu/y+V2n+cEH/s+USGmZrsp14h
+         ZFR4NLvZAOxmijJ9IHtvvXtiJbY1gjpF+xxAXwo5WskeyUG2gilkLLRWaPFJiIS4pU
+         4UHRowkWky1cQ==
+Received: from [172.24.10.107] (172.24.10.107) by prgmbx01.amust.local
+ (172.24.128.102) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Tue, 13 Jun
+ 2023 12:12:24 +0200
+Message-ID: <20a5802d-424d-588a-c497-1d1236c52880@veeam.com>
+Date:   Tue, 13 Jun 2023 12:12:19 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cszZz60J0MnGgC6u"
-Content-Disposition: inline
-In-Reply-To: <ZIcBQCqeMc424mv6@shell.armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v5 00/11] blksnap - block devices snapshots module
+Content-Language: en-US
+To:     Eric Biggers <ebiggers@kernel.org>
+CC:     "axboe@kernel.dk" <axboe@kernel.dk>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "snitzer@kernel.org" <snitzer@kernel.org>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "dchinner@redhat.com" <dchinner@redhat.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "dlemoal@kernel.org" <dlemoal@kernel.org>,
+        "linux@weissschuh.net" <linux@weissschuh.net>,
+        "jack@suse.cz" <jack@suse.cz>,
+        "ming.lei@redhat.com" <ming.lei@redhat.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
+References: <20230612135228.10702-1-sergei.shtepa@veeam.com>
+ <20230612161911.GA1200@sol.localdomain>
+From:   Sergei Shtepa <sergei.shtepa@veeam.com>
+In-Reply-To: <20230612161911.GA1200@sol.localdomain>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.24.10.107]
+X-ClientProxiedBy: prgmbx02.amust.local (172.24.128.103) To
+ prgmbx01.amust.local (172.24.128.102)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A29240315546D766B
+X-Veeam-MMEX: True
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -98,55 +82,54 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---cszZz60J0MnGgC6u
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-> On Sun, Jun 11, 2023 at 01:39:48AM +0100, Daniel Golle wrote:
-> > From: Lorenzo Bianconi <lorenzo@kernel.org>
-> >=20
-> > This is a preliminary patch to introduce support for MT7988 SoC.
-> >=20
-> > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
->=20
-> At some point, I'd really like to unpick this and see whether there's a
-> better structure to it - so that mac_config() doesn't have to save the
-> syscfg0 value, and restore it in mac_finish(). Given that syscfg0 is a
-> shared register, are we sure the code that updates this register is safe
-> from races caused by two MACs going through the config progress in two
-> separate CPUs at the same time?
+On 6/12/23 18:19, Eric Biggers wrote:
+> This is the first time you've received an email from this sender 
+> ebiggers@kernel.org, please exercise caution when clicking on links or opening 
+> attachments.
+> 
+> 
+> On Mon, Jun 12, 2023 at 03:52:17PM +0200, Sergei Shtepa wrote:
+>  > Hi all.
+>  >
+>  > I am happy to offer a improved version of the Block Devices Snapshots
+>  > Module. It allows to create non-persistent snapshots of any block devices.
+>  > The main purpose of such snapshots is to provide backups of block devices.
+>  > See more in Documentation/block/blksnap.rst.
+> 
+> How does blksnap interact with blk-crypto?
+> 
+> I.e., what happens if a bio with a ->bi_crypt_context set is submitted to a
+> block device that has blksnap active?
+> 
+> If you are unfamiliar with blk-crypto, please read
+> Documentation/block/inline-encryption.rst
 
-Agree, this seems a bit racy. However it does not seem related to this patc=
-h.
-I would say we can address it with a follow-up patch.
+Thank you, this is an important point. Yes, that's right.
+The current version of blksnap can cause blk-crypto to malfunction while
+holding a snapshot. When handling bios from the file system, the
+->bi_crypt_context is preserved. But the bio requests serving the snapshot
+are executed without context. I think that the snapshot will be unreadable.
 
-Regards,
-Lorenzo
+But I don't see any obstacles in the way of blksnap and blk-crypto
+compatibility. If DM implements support for blk-crypto, then the same
+principle can be applied for blksnap. I think that the integration of
+blksnap with blk-crypto may be one of the stages of further development.
 
->=20
-> Is there anything which prevents two or more MACs wanting to mess with
-> the contents of the SYSCFG0_SGMII_MASK bits? It's difficult to tell with
-> the current code.
->=20
-> Thanks.
->=20
-> --=20
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
->=20
+The dm-crypto should work properly. 
 
---cszZz60J0MnGgC6u
-Content-Type: application/pgp-signature; name="signature.asc"
+It is noteworthy that in 7 years of using the out-of-tree module to take
+a snapshot, I have not encountered cases of such problems.
+But incompatibility with blk-crypto is possible, this is already a pain
+for some users. I will request this information from our support team.
 
------BEGIN PGP SIGNATURE-----
+> 
+> It looks like blksnap hooks into the block layer directly, via the new
+> "blkfilter" mechanism. I'm concerned that it might ignore ->bi_crypt_context
+> and write data to the disk in plaintext, when it is supposed to be encrypted.
 
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCZIhAhwAKCRA6cBh0uS2t
-rKWRAQD8bHaqtDus4I0VAesGyVWRDufLK3pPr+pM1DFTIDlkHQEA/9/+RWG7ZPoC
-FpXYqhMD3z7v/+rNvWTD2rV8IbnfLg8=
-=Cfik
------END PGP SIGNATURE-----
-
---cszZz60J0MnGgC6u--
-
+No. The "blkfilter" mechanism should not affect the operation of blk-crypto.
+It does not change the bio.
+Only a module that has been attached and provides its own filtering algorithm,
+such as blksnap, can violate the logic of blk-crypto.
+Therefore, until the blksnap module is loaded, blk-crypto should work as before.
