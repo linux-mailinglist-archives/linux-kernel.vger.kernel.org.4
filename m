@@ -2,98 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E2FE72EAF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 20:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A1372EAF2
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 20:28:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240578AbjFMSZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 14:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58782 "EHLO
+        id S232803AbjFMS0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 14:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240421AbjFMSZQ (ORCPT
+        with ESMTP id S232081AbjFMS0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 14:25:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5E610CC;
-        Tue, 13 Jun 2023 11:25:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2264462F59;
-        Tue, 13 Jun 2023 18:25:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DAFEC433D9;
-        Tue, 13 Jun 2023 18:25:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686680714;
-        bh=jWg/New539N3VJZmMOxA0JmnZ0dZKjTSIx6uuvCsdhI=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=rOE+V+qajgMj+P/lK8M5eMIy2GTKb+x/c2ma4s9l0HcJSxQMRqhVoHuMN+Nd9Z5wJ
-         TTYLYg60gMIe2301mrSF5ksa//TwB7chF6kq1bKGWxYOZxXkudv5KwetNnrGodNSj6
-         xSkIhPmQEcO+OM92lGJGYGK6y0VLvkYhGomJYgeZzb21A/favFYh6wTZB9XD7243TJ
-         HbU9275R5T8GUstYO7zGEVyKP9mYnho0HWPMXGHvBQrPcdYqatGTcrakCo3epHBMQo
-         a2y401vEd2aXXj1oMakGquU97mTx5KHKVmiQnx6nv5yLAEUKuTm30EFxWVO1bJ5u4t
-         m9Ury5lgR17+Q==
-Message-ID: <86d58c6b131028a71964a0bcb135f01f.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <7s2xdk43a2lhyezgj6bbwxaekbtgym2rin7t432m4pos4j6v74@qaxm3htjak4a>
-References: <20230526171057.66876-1-sebastian.reichel@collabora.com> <20230526171057.66876-2-sebastian.reichel@collabora.com> <2f3328c4be9db6feef2cc662ede70f92.sboyd@kernel.org> <7s2xdk43a2lhyezgj6bbwxaekbtgym2rin7t432m4pos4j6v74@qaxm3htjak4a>
-Subject: Re: [PATCH v2 1/2] clk: composite: Fix handling of high clock rates
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Christopher Obbard <chris.obbard@collabora.com>,
-        David Laight <David.Laight@aculab.com>, kernel@collabora.com,
-        stable@vger.kernel.org
-To:     Maxime Ripard <maxime@cerno.tech>
-Date:   Tue, 13 Jun 2023 11:25:12 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 13 Jun 2023 14:26:41 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7571610CC
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 11:26:38 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-56fffdea2d0so946367b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 11:26:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686680797; x=1689272797;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=WvMVfl1WbDxqaWJUP4jTOe+ztVEZmNwWPMXr+gZbHUE=;
+        b=G39YdJ8wOdM1C69yLTN8U8l+iNpDIl3Id0EXeBecT65zG5PZZ2mXqaDwneqDVxK9Wz
+         BPAudXpNDQHC7Qbu4ydbg1xt83/Y0vc5zeyQXEfnt1jodtn3sviJu2FfiILRPIUV6KUy
+         jlE57YbOGwV6Y82Lj1lpyuGmLmxvRxRt6Vs4JBcaS9f4McaJTqXJMy8g1xcFpHXR8sd8
+         d73bkaYS3fbsopqvO98U2Xbq7WfvKTvoOTjjgK2tAKl2aGJcexX432QAHJqnC9+H2DJc
+         rXuIftkkWxYxubgqbRraziqH7Z6jkAwZKHHOR6tXWuueo+G6q/E8e56RXk9n4rbp/JQS
+         O/KA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686680797; x=1689272797;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WvMVfl1WbDxqaWJUP4jTOe+ztVEZmNwWPMXr+gZbHUE=;
+        b=YZ4p5K7epqdfULSAD34nvaNDIF3jOrhnkgTjGIVaVCWrgNVkgOSxai9DfQ3mK9o68w
+         8MhMHnfSaK8g4YVUZ7hGawgnEY3wAQJ6A5mTWE3/G5JQv5KeK6IPbbPOfP8Cey/9Y7K2
+         nJJfHIhM1pml1Z5Z/EWR8AqYqXsOrXfwoBABvebdBfn0T5bAdPagxk+gMzyzslx0PKaF
+         82sO1dUK+upzEDGzYM3v3qB/AzgnveLN2jb7aTNNTJFOHA8CACTQcGe9un3LOefJglAx
+         EY9NWOqk8KBf1Q+AsvAI8oxAD1DGI6UQvGv0W1fNCCN8V1rN45A+pCrrrX5r34QpFaYu
+         S4DQ==
+X-Gm-Message-State: AC+VfDy/SfZKBXog+mUt1835PyOnIZXQHBg3P7XzUFI+glrjNGOVHU97
+        H4u4JEHFd6TRO8b5btPJe7PvOSgo+Eb7
+X-Google-Smtp-Source: ACHHUZ5i6ml3ujak5mKh6Gh2Grqy408xn/nvtw8YEQKjViFjGcQWC+CTovKVHYcktruzNX4apdMyjTjctLv+
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:a704:56d6:f79d:33e7])
+ (user=irogers job=sendgmr) by 2002:a05:6902:160b:b0:bcc:bc25:7296 with SMTP
+ id bw11-20020a056902160b00b00bccbc257296mr13317ybb.9.1686680797759; Tue, 13
+ Jun 2023 11:26:37 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 11:26:29 -0700
+Message-Id: <20230613182629.1500317-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Subject: [PATCH v1] perf parse-events: Avoid string for PE_BP_COLON, PE_BP_SLASH
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Rob Herring <robh@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Maxime Ripard (2023-06-13 05:14:25)
-> On Mon, Jun 12, 2023 at 05:10:35PM -0700, Stephen Boyd wrote:
-> > Quoting Sebastian Reichel (2023-05-26 10:10:56)
-> > > diff --git a/drivers/clk/clk-composite.c b/drivers/clk/clk-composite.c
-> > > index edfa94641bbf..66759fe28fad 100644
-> > > --- a/drivers/clk/clk-composite.c
-> > > +++ b/drivers/clk/clk-composite.c
-> > > @@ -119,7 +119,10 @@ static int clk_composite_determine_rate(struct c=
-lk_hw *hw,
-> > >                         if (ret)
-> > >                                 continue;
-> > > =20
-> > > -                       rate_diff =3D abs(req->rate - tmp_req.rate);
-> > > +                       if (req->rate >=3D tmp_req.rate)
-> > > +                               rate_diff =3D req->rate - tmp_req.rat=
-e;
-> > > +                       else
-> > > +                               rate_diff =3D tmp_req.rate - req->rat=
-e;
-> >=20
-> > This problem is widespread
-> >=20
-> >  $ git grep abs\(.*- -- drivers/clk/ | wc -l
-> >  52
-> >=20
-> > so we may have a bigger problem here. Maybe some sort of coccinelle
-> > script or smatch checker can be written to look for abs() usage with an
-> > unsigned long type or a subtraction expression. This may also be worse
-> > after converting drivers to clk_hw_forward_rate_request() and
-> > clk_hw_init_rate_request() because those set the rate to ULONG_MAX.
-> > +Maxime for that as an FYI.
->=20
-> We set max_rate to ULONG_MAX in those functions, and I don't think we
-> have a lot of driver that will call clk_round_rate on the max rate, so
-> we should be somewhat ok?
+There's no need to read the string ':' or '/' for PE_BP_COLON or
+PE_BP_SLASH and doing so causes parse-events.y to leak memory.
 
-Good point. I haven't looked to see if any drivers are using the
-max_rate directly. Hopefully they aren't.
+The original patch has a committer note about not using these tokens
+presumably as yacc spotted they were a memory leak because no
+%destructor could be run. Remove the unused token workaround as there
+is now no value associated with these tokens.
+
+Fixes: f0617f526cb0 ("perf parse: Allow config terms with breakpoints")
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/util/parse-events.h | 4 ----
+ tools/perf/util/parse-events.l | 4 ++--
+ tools/perf/util/parse-events.y | 9 ---------
+ 3 files changed, 2 insertions(+), 15 deletions(-)
+
+diff --git a/tools/perf/util/parse-events.h b/tools/perf/util/parse-events.h
+index 5fdc1f33f57e..b0eb95f93e9c 100644
+--- a/tools/perf/util/parse-events.h
++++ b/tools/perf/util/parse-events.h
+@@ -228,10 +228,6 @@ void parse_events_error__handle(struct parse_events_error *err, int idx,
+ void parse_events_error__print(struct parse_events_error *err,
+ 			       const char *event);
+ 
+-static inline void parse_events_unused_value(const void *x __maybe_unused)
+-{
+-}
+-
+ #ifdef HAVE_LIBELF_SUPPORT
+ /*
+  * If the probe point starts with '%',
+diff --git a/tools/perf/util/parse-events.l b/tools/perf/util/parse-events.l
+index 7629af3d5c7c..99335ec586ae 100644
+--- a/tools/perf/util/parse-events.l
++++ b/tools/perf/util/parse-events.l
+@@ -315,13 +315,13 @@ r0x{num_raw_hex}	{ return str(yyscanner, PE_RAW); }
+ 	 * are the same, so trailing context can be used disambiguate the two
+ 	 * cases.
+ 	 */
+-":"/{modifier_bp}	{ return str(yyscanner, PE_BP_COLON); }
++":"/{modifier_bp}	{ return PE_BP_COLON; }
+ 	/*
+ 	 * The slash before memory length can get mixed up with the slash before
+ 	 * config terms. Fortunately config terms do not start with a numeric
+ 	 * digit, so trailing context can be used disambiguate the two cases.
+ 	 */
+-"/"/{digit}		{ return str(yyscanner, PE_BP_SLASH); }
++"/"/{digit}		{ return PE_BP_SLASH; }
+ "/"/{non_digit}		{ BEGIN(config); return '/'; }
+ {num_dec}		{ return value(yyscanner, 10); }
+ {num_hex}		{ return value(yyscanner, 16); }
+diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
+index 0c3d086cc22a..9f28d4b5502f 100644
+--- a/tools/perf/util/parse-events.y
++++ b/tools/perf/util/parse-events.y
+@@ -80,8 +80,6 @@ static void free_list_evsel(struct list_head* list_evsel)
+ %type <str> PE_LEGACY_CACHE
+ %type <str> PE_MODIFIER_EVENT
+ %type <str> PE_MODIFIER_BP
+-%type <str> PE_BP_COLON
+-%type <str> PE_BP_SLASH
+ %type <str> PE_EVENT_NAME
+ %type <str> PE_KERNEL_PMU_EVENT PE_PMU_EVENT_FAKE
+ %type <str> PE_DRV_CFG_TERM
+@@ -510,9 +508,6 @@ PE_PREFIX_MEM PE_VALUE PE_BP_SLASH PE_VALUE PE_BP_COLON PE_MODIFIER_BP opt_event
+ 	struct list_head *list;
+ 	int err;
+ 
+-	parse_events_unused_value(&$3);
+-	parse_events_unused_value(&$5);
+-
+ 	list = alloc_list();
+ 	ABORT_ON(!list);
+ 	err = parse_events_add_breakpoint(_parse_state, list,
+@@ -531,8 +526,6 @@ PE_PREFIX_MEM PE_VALUE PE_BP_SLASH PE_VALUE opt_event_config
+ 	struct list_head *list;
+ 	int err;
+ 
+-	parse_events_unused_value(&$3);
+-
+ 	list = alloc_list();
+ 	ABORT_ON(!list);
+ 	err = parse_events_add_breakpoint(_parse_state, list,
+@@ -550,8 +543,6 @@ PE_PREFIX_MEM PE_VALUE PE_BP_COLON PE_MODIFIER_BP opt_event_config
+ 	struct list_head *list;
+ 	int err;
+ 
+-	parse_events_unused_value(&$3);
+-
+ 	list = alloc_list();
+ 	ABORT_ON(!list);
+ 	err = parse_events_add_breakpoint(_parse_state, list,
+-- 
+2.41.0.162.gfafddb0af9-goog
+
