@@ -2,310 +2,486 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 777BF72ED1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D74F72ED1F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233635AbjFMUg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 16:36:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43454 "EHLO
+        id S237786AbjFMUgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 16:36:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbjFMUgY (ORCPT
+        with ESMTP id S234648AbjFMUgj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 16:36:24 -0400
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F9F199E;
-        Tue, 13 Jun 2023 13:36:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1686688577; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=R3xoC1KxkcHgVEZHcXBZxn2Fynp26ehITwjwmIKx4YtzstGVb5Qf3AvMzQ5rayAO4R
-    7/UAaGDYEcDd/ddj14ug2x2PFZ36wGS9CY8awxBWmnyNTZQPX9ty0HGVrK28df3srnVz
-    5kRmGxRlGqzR4GU/eTp/LuT9b5oPG/yXHwsPKSgqNdzQw8bqn77G9TsJ9cuKTVcxGQJB
-    xrcCJ+z7ED98zKIegn8liaQTJWie7PnTjFLek1s0y56E1ioAmzcZDrr10zllhVT1KLqe
-    NrMTf8mb2To5mxEGFylwm9cYAo618c71fye4lg+Yv/+1w2UbR+7yIMk5n1+jQsOpNxT2
-    5hKA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686688577;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=V0+sJnkGMESsx0NvIT+WUq+urVO42D4j8ULARDoxuXU=;
-    b=hu+kKnEtEVHgt+imKbD0VNvGiMXLvcH8OonXX9af/tybOymToMp/JCE6LJTknsTtp2
-    15a8UXK/GDUhUdNOEOKA+/DaS3M58OwQ3QTNGwXn8WFQB/6M41TUM+XevkBL/6yFfS6N
-    DYb7OReglexeDAGKvPDu4ItWXefnKxYMI6TdBbAUkMdwbbvHzGsEMPn9ZeatNknPJFBZ
-    Tzd4yOWlFdBRB15U8nFHJYV0F+6By5Q3DmbDf0NWH+tEYHknz8ydfrU++iD9iYQq153R
-    jeJ3vi1DpkcSznUjGCmBG5wIWIl35CeOVsy3msUkmycEDNX6lZZNNGhJRxOtT60z++Rd
-    JVWQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686688577;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=V0+sJnkGMESsx0NvIT+WUq+urVO42D4j8ULARDoxuXU=;
-    b=ZilnH7DGFG6xq8mUnrRUIM83iRhaPSoXdvRMpXOdOhfIGPrsOyeadh+Zk/wob+Os61
-    Flb94Y+Q5gdIegWLM7MfimsFWUjX/YhNADeKoatImx8wPq67AJrBlPk2C4pKQTERn3S6
-    0rQd2ydjcJzdpU1sJV+JIiCpgOIm+09DYlC2mCKXv4LvtvEI/B1eljZQ7S3wcFbhMSKR
-    dFi+GEKPYjUoHRPPxY0RE9rc3iBwxqF3sKknw0QJqmrfqw/2oTU2xfIDSGshGZ1JpQmV
-    aMbN0pYPSD4/LFMz3FCsYEZ0hqhk7kbAnvHmmPK8LDEVDe+2YIMch68xXDgwtJl7fpHz
-    b4+g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686688577;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=V0+sJnkGMESsx0NvIT+WUq+urVO42D4j8ULARDoxuXU=;
-    b=gXiI6QpPFdTD7wHQSu4SKN6IuJH3oDHf1MbhxIARdaGGy3TaEQD18SjRvzyNuvBm7X
-    waXf3sqZFDX3k5V6E0Aw==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4peA8Z3h"
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.5.3 DYNA|AUTH)
-    with ESMTPSA id Z82ec2z5DKaGa9e
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Tue, 13 Jun 2023 22:36:16 +0200 (CEST)
-Date:   Tue, 13 Jun 2023 22:36:15 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Evan Green <evgreen@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 17/22] interconnect: qcom: icc-rpm: Control bus rpmcc
- from icc
-Message-ID: <ZIjTPyOfuVM7S1O1@gerhold.net>
-References: <20230526-topic-smd_icc-v4-0-5ba82b6fbba2@linaro.org>
- <20230526-topic-smd_icc-v4-17-5ba82b6fbba2@linaro.org>
+        Tue, 13 Jun 2023 16:36:39 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4837A19A5
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 13:36:36 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-516500163b2so399a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 13:36:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686688595; x=1689280595;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pvp9VR53NHMx2Nxwbwha6epkjNmHsrcFhnkId01Oo0w=;
+        b=beCOcsGYIxROiL5XAxO1XzUMpzOsANRBocVO/xvektfIJWY51KIR6JMzdJsLWqwrI+
+         /1EdSaPwQcYmAxDkaA3FB4YUYFjliszrbHDs5q/p4AhKFgLPor4sR45K8DVG5fojYyU7
+         wyIeZcnB4I7bp6sm6GAxEAQRFBbRjpG1cNDY4A9M8rcTptV8TY+LxjHA0pth2NIJRgFi
+         uEXub08vswUnTBo+pRSjVTd0tQK7akSED9BJMFnFzi3dl/6ak32eC+VHqRwxEAXbmwZ1
+         tXz1BI7nFU06M4/YcO3WcGnTb8mlwpVur+9aUqRY2/trXy875pacsQXj67/JJ8pGsgXZ
+         QFAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686688595; x=1689280595;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pvp9VR53NHMx2Nxwbwha6epkjNmHsrcFhnkId01Oo0w=;
+        b=NCv4dOKz15HjGNQI2EVmnYVK7g+XTfy8/bCkuAwg1CWddyobl2/BW/lomnGBULtzug
+         +Cvzna/FJnJEenN8B3u6WGJRWaXnoWI4gAJ8TtKp3KvUGTpwxA5AhZqQaOI1ICTivvdT
+         Kg7L43o7As/doXLaL4T9j1glQOZQ6rmAasRGsLwwA4SXMl2oKf80SY29JI+rdv7ja0Mm
+         clf4kdNzn3dWkBnmYM7LDTkLFE6OwIGPSpTheXXPa8HVo3UR35H+hZxp0W/7bWA7rEAp
+         g6/GwW+M+Qc+oMUuc5RL1GlO3f0//Hc1vozYo8Un/0Xwakoow/05X+CgqR61DR/Rke+N
+         mtvg==
+X-Gm-Message-State: AC+VfDyJzH0B8iL6JbnYBXXM5Xk1C0jd8bw+/fXm/1nP27zeg2Mn0Wyh
+        mklavkxkDNLhY9nlvuWQFAZUvQwfy4wC2W1TwID7IA==
+X-Google-Smtp-Source: ACHHUZ6BnKLIFHWWTEmcQAa6gHjCULW9tDWGzSsEIcba9Wo8ccTHEPeAlaY3jArVycxwPUZpkF6w9fnLqD7JFhh3xUo=
+X-Received: by 2002:a50:cd57:0:b0:50d:bb88:a80c with SMTP id
+ d23-20020a50cd57000000b0050dbb88a80cmr22553edj.3.1686688594596; Tue, 13 Jun
+ 2023 13:36:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230526-topic-smd_icc-v4-17-5ba82b6fbba2@linaro.org>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230610005149.1145665-1-rmoar@google.com> <20230610005149.1145665-2-rmoar@google.com>
+ <CABVgOS=PS1VAX7KwKE77foM0ZVbenKwJ25uZR1XOUhwwyJ4Ydw@mail.gmail.com>
+In-Reply-To: <CABVgOS=PS1VAX7KwKE77foM0ZVbenKwJ25uZR1XOUhwwyJ4Ydw@mail.gmail.com>
+From:   Rae Moar <rmoar@google.com>
+Date:   Tue, 13 Jun 2023 16:36:22 -0400
+Message-ID: <CA+GJov45Y2_8Yyg0CJMRkymNKeY_AL0YHedat5JBg893MG=jaw@mail.gmail.com>
+Subject: Re: [RFC v1 1/6] kunit: Add test attributes API structure
+To:     David Gow <davidgow@google.com>
+Cc:     shuah@kernel.org, dlatypov@google.com, brendan.higgins@linux.dev,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        linux-hardening@vger.kernel.org, jstultz@google.com,
+        tglx@linutronix.de, sboyd@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 04:03:17PM +0200, Konrad Dybcio wrote:
-> The sole purpose of bus clocks that were previously registered with
-> rpmcc was to convey the aggregated bandwidth to RPM. There's no good
-> reason to keep them outside the interconnect framework, as it only
-> adds to the plentiful complexity.
-> 
-> Add the required code to handle these clocks from within SMD RPM ICC.
-> 
-> RPM-owned bus clocks are no longer considered a thing, but sadly we
-> have to allow for the existence of HLOS-owned bus clocks, as some
-> (mostly older) SoCs (ab)use these for bus scaling (e.g. MSM8998 and
-> &mmcc AHB_CLK_SRC).
-> 
-> This in turn is trivially solved with a single *clk, which is filled
-> and used iff qp.bus_clk_desc is absent and we have a "bus" clock-names
-> entry in the DT node.
-> 
-> This change should(tm) be fully compatible with all sorts of old
-> Device Trees as far as the interconnect functionality goes (modulo
-> abusing bus clock handles or wrongly using the qcom,icc.h binding,
-> but that's a mistake in and of itself).
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  drivers/interconnect/qcom/icc-rpm.c | 119 ++++++++++++++++++++----------------
->  drivers/interconnect/qcom/icc-rpm.h |  13 ++--
->  drivers/interconnect/qcom/msm8996.c |   1 -
->  drivers/interconnect/qcom/sdm660.c  |   1 -
->  4 files changed, 71 insertions(+), 63 deletions(-)
-> 
-> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-> index b8ecf9538ab9..f9d0ecba5631 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.c
-> +++ b/drivers/interconnect/qcom/icc-rpm.c
-> @@ -49,7 +49,7 @@
->  #define NOC_QOS_MODE_FIXED_VAL		0x0
->  #define NOC_QOS_MODE_BYPASS_VAL		0x2
->  
-> -#define ICC_BUS_CLK_MIN_RATE		19200000ULL
-> +#define ICC_BUS_CLK_MIN_RATE		19200ULL /* kHz */
->  
->  static int qcom_icc_set_qnoc_qos(struct icc_node *src)
->  {
-> @@ -338,11 +338,10 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->  	struct qcom_icc_node *src_qn = NULL, *dst_qn = NULL;
->  	struct icc_provider *provider;
->  	u64 sum_bw;
-> -	u64 rate;
-> +	u64 active_rate, sleep_rate;
->  	u64 agg_avg[QCOM_ICC_NUM_BUCKETS], agg_peak[QCOM_ICC_NUM_BUCKETS];
->  	u64 max_agg_avg;
-> -	int ret, i;
-> -	int bucket;
-> +	int ret;
->  
->  	src_qn = src->data;
->  	if (dst)
-> @@ -364,49 +363,59 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->  			return ret;
->  	}
->  
-> -	for (i = 0; i < qp->num_bus_clks; i++) {
-> -		/*
-> -		 * Use WAKE bucket for active clock, otherwise, use SLEEP bucket
-> -		 * for other clocks.  If a platform doesn't set interconnect
-> -		 * path tags, by default use sleep bucket for all clocks.
-> -		 *
-> -		 * Note, AMC bucket is not supported yet.
-> -		 */
-> -		if (!strcmp(qp->bus_clks[i].id, "bus_a"))
-> -			bucket = QCOM_ICC_BUCKET_WAKE;
-> -		else
-> -			bucket = QCOM_ICC_BUCKET_SLEEP;
-> -
-> -		rate = icc_units_to_bps(max(agg_avg[bucket], agg_peak[bucket]));
-> -		do_div(rate, src_qn->buswidth);
-> -		rate = min_t(u64, rate, LONG_MAX);
-> -
-> -		/*
-> -		 * Downstream checks whether the requested rate is zero, but it makes little sense
-> -		 * to vote for a value that's below the lower threshold, so let's not do so.
-> -		 */
-> -		if (bucket == QCOM_ICC_BUCKET_WAKE && qp->keep_alive)
-> -			rate = max(ICC_BUS_CLK_MIN_RATE, rate);
-> -
-> -		if (qp->bus_clk_rate[i] == rate)
-> -			continue;
-> -
-> -		ret = clk_set_rate(qp->bus_clks[i].clk, rate);
-> -		if (ret) {
-> -			pr_err("%s clk_set_rate error: %d\n",
-> -			       qp->bus_clks[i].id, ret);
-> +	/* Some providers don't have a bus clock to scale */
-> +	if (!qp->bus_clk_desc && !qp->bus_clk)
-> +		return 0;
-> +
-> +	/* Intentionally keep the rates in kHz as that's what RPM accepts */
-> +	active_rate = max(agg_avg[QCOM_SMD_RPM_ACTIVE_STATE],
-> +			  agg_peak[QCOM_SMD_RPM_ACTIVE_STATE]);
-> +	do_div(active_rate, src_qn->buswidth);
-> +
-> +	sleep_rate = max(agg_avg[QCOM_SMD_RPM_SLEEP_STATE],
-> +			 agg_peak[QCOM_SMD_RPM_SLEEP_STATE]);
-> +	do_div(sleep_rate, src_qn->buswidth);
-> +
-> +	/*
-> +	 * Downstream checks whether the requested rate is zero, but it makes little sense
-> +	 * to vote for a value that's below the lower threshold, so let's not do so.
-> +	 */
-> +	if (qp->keep_alive)
-> +		active_rate = max(ICC_BUS_CLK_MIN_RATE, active_rate);
-> +
-> +	/* Some providers have a non-RPM-owned bus clock - convert kHz->Hz for the CCF */
-> +	if (qp->bus_clk) {
-> +		active_rate = max_t(u64, active_rate, sleep_rate);
-> +		/* ARM32 caps clk_set_rate arg to u32.. Nothing we can do about that! */
-> +		active_rate = min_t(u64, 1000ULL * active_rate, ULONG_MAX);
-> +		return clk_set_rate(qp->bus_clk, active_rate);
-> +	}
-> +
-> +	/* RPM only accepts <=INT_MAX rates */
-> +	active_rate = min_t(u32, active_rate, INT_MAX);
-> +	sleep_rate = min_t(u32, sleep_rate, INT_MAX);
+On Sat, Jun 10, 2023 at 4:29=E2=80=AFAM David Gow <davidgow@google.com> wro=
+te:
+>
+> On Sat, 10 Jun 2023 at 08:52, Rae Moar <rmoar@google.com> wrote:
+> >
+> > Add the basic structure of the test attribute API to KUnit, which can b=
+e
+> > used to save and access test associated data.
+> >
+> > Add attributes.c and attributes.h to hold associated structs and functi=
+ons
+> > for the API.
+> >
+> > Create a struct that holds a variety of associated helper functions for
+> > each test attribute. These helper functions will be used to get the
+> > attribute value, convert the value to a string, and filter based on the
+> > value. This struct is flexible by design to allow for attributes of
+> > numerous types and contexts.
+> >
+> > Add a method to print test attributes in the format of "# [<test_name i=
+f
+> > not suite>.]<attribute_name>: <attribute_value>".
+> >
+> > Example for a suite: "# speed: slow"
+> >
+> > Example for a test case: "# test_case.speed: very_slow"
+> >
+> > Use this method to report attributes in the KTAP output and _list_tests
+> > output.
+>
+> Can we have a link to the draft KTAP spec for this?
+>
 
-Realized this by coincidence while playing with the code changes for the
-comment below: This doesn't work as intended similar to the ARM32 cap
-above but it's broken even on ARM64:
+Here is the link: https://docs.kernel.org/dev-tools/ktap.html. I will
+also add a link in the next version.
 
-Take this example:
+> Also, by _list_tests, I assume we're talking about the
+> kunit.action=3Dlist option. That's been an "internal" feature for the
+> kunit script thus far, but kunit.py doesn't use this attribute info
+> anywhere yet, apart from to print it out via --list_tests. Maybe we
+> should make including the attributes optional, as the raw list of
+> tests is currently more useful.
+>
 
-	u64 active_rate = 4294967296ULL;
-	active_rate = min_t(u32, active_rate, INT_MAX);
+Oh this is an interesting idea. I could pass in the option to include
+or not include attributes. Maybe the flag could then be
+--list_tests_attrs? I could also remove the plain test information in
+this new option. However, I do like seeing tests that have no set
+attributes in the output. I'll work on this implementation.
 
-This should result into active_rate = INT_MAX.
-But it actually results in rate = 0.
+> >
+> > In test.h, add fields and associated helper functions to test cases and
+> > suites to hold user-inputted test attributes.
+> >
+> > Signed-off-by: Rae Moar <rmoar@google.com>
+> > ---
+> >  include/kunit/attributes.h | 19 +++++++++++
+> >  include/kunit/test.h       | 33 +++++++++++++++++++
+> >  lib/kunit/Makefile         |  3 +-
+> >  lib/kunit/attributes.c     | 65 ++++++++++++++++++++++++++++++++++++++
+> >  lib/kunit/executor.c       | 10 +++++-
+> >  lib/kunit/test.c           | 17 ++++++----
+> >  6 files changed, 138 insertions(+), 9 deletions(-)
+> >  create mode 100644 include/kunit/attributes.h
+> >  create mode 100644 lib/kunit/attributes.c
+> >
+> > diff --git a/include/kunit/attributes.h b/include/kunit/attributes.h
+> > new file mode 100644
+> > index 000000000000..9fcd184cce36
+> > --- /dev/null
+> > +++ b/include/kunit/attributes.h
+> > @@ -0,0 +1,19 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * KUnit API to save and access test attributes
+> > + *
+> > + * Copyright (C) 2023, Google LLC.
+> > + * Author: Rae Moar <rmoar@google.com>
+> > + */
+> > +
+> > +#ifndef _KUNIT_ATTRIBUTES_H
+> > +#define _KUNIT_ATTRIBUTES_H
+> > +
+> > +/*
+> > + * Print all test attributes for a test case or suite.
+> > + * Output format for test cases: "# <test_name>.<attribute>: <value>"
+> > + * Output format for test suites: "# <attribute>: <value>"
+> > + */
+> > +void kunit_print_attr(void *test_or_suite, bool is_test, unsigned int =
+test_level);
+> > +
+> > +#endif /* _KUNIT_ATTRIBUTES_H */
+> > diff --git a/include/kunit/test.h b/include/kunit/test.h
+> > index 23120d50499e..1fc9155988e9 100644
+> > --- a/include/kunit/test.h
+> > +++ b/include/kunit/test.h
+> > @@ -63,12 +63,16 @@ enum kunit_status {
+> >         KUNIT_SKIPPED,
+> >  };
+> >
+> > +/* Holds attributes for each test case and suite */
+> > +struct kunit_attributes {};
+>
+> This is a placeholder as attributes won't be included until patch 2, righ=
+t?
 
-Why?
+Yes, this is just a placeholder until the next patch. Should I add a
+temporary comment?
 
-	min_t(u32, rate, INT_MAX)
-	= min((u32)rate, (u32)INT_MAX)
-	= min((u32)4294967296ULL, (u32)INT_MAX)
-	= min(0, INT_MAX)
-	= 0
+>
+> > +
+> >  /**
+> >   * struct kunit_case - represents an individual test case.
+> >   *
+> >   * @run_case: the function representing the actual test case.
+> >   * @name:     the name of the test case.
+> >   * @generate_params: the generator function for parameterized tests.
+> > + * @attr:     the attributes associated with the test
+> >   *
+> >   * A test case is a function with the signature,
+> >   * ``void (*)(struct kunit *)``
+> > @@ -104,6 +108,7 @@ struct kunit_case {
+> >         void (*run_case)(struct kunit *test);
+> >         const char *name;
+> >         const void* (*generate_params)(const void *prev, char *desc);
+> > +       struct kunit_attributes attr;
+> >
+> >         /* private: internal use only. */
+> >         enum kunit_status status;
+> > @@ -133,6 +138,18 @@ static inline char *kunit_status_to_ok_not_ok(enum=
+ kunit_status status)
+> >   */
+> >  #define KUNIT_CASE(test_name) { .run_case =3D test_name, .name =3D #te=
+st_name }
+> >
+> > +/**
+> > + * KUNIT_CASE_ATTR - A helper for creating a &struct kunit_case
+> > + * with attributes
+> > + *
+> > + * @test_name: a reference to a test case function.
+> > + * @attributes: a reference to a struct kunit_attributes object contai=
+ning
+> > + * test attributes
+> > + */
+> > +#define KUNIT_CASE_ATTR(test_name, attributes)                 \
+> > +               { .run_case =3D test_name, .name =3D #test_name,    \
+> > +                 .attr =3D attributes }
+> > +
+>
+> This is a bit awkward, as the attributes are either entirely unset
+> (i.e., zero-initialised), or have to be specified here. I assume the
+> plan is to use designated initialisers, e.g.:
+> KUNIT_CASE_ATTR(foo_test, {.speed =3D KUNIT_SPEED_SLOW, .flaky =3D true})=
+.
+>
+> That at least makes it reasonably user-friendly, though the whole need
+> to make sure zero-initialised values are the defaults is a bit icky.
+>
 
-This needs to be min_t(u64 to work properly :)
+Yeah there seem to be positives and negatives to this approach. If we
+allow attributes to be uninitialized, the user experience is slightly
+better and it is evident if the attribute is set or not.
 
-> +
-> +	if (active_rate != qp->bus_clk_rate[QCOM_SMD_RPM_ACTIVE_STATE]) {
-> +		ret = qcom_icc_rpm_set_bus_rate(qp->bus_clk_desc, active_rate, true);
-> +		if (ret)
->  			return ret;
-> -		}
-> -		qp->bus_clk_rate[i] = rate;
-> +
-> +		/* Cache the rate after we've successfully commited it to RPM */
-> +		qp->bus_clk_rate[QCOM_SMD_RPM_ACTIVE_STATE] = active_rate;
-> +	}
-> +
-> +	if (sleep_rate != qp->bus_clk_rate[QCOM_SMD_RPM_SLEEP_STATE]) {
-> +		ret = qcom_icc_rpm_set_bus_rate(qp->bus_clk_desc, sleep_rate, false);
-> +		if (ret)
-> +			return ret;
-> +
-> +		/* Cache the rate after we've successfully commited it to RPM */
-> +		qp->bus_clk_rate[QCOM_SMD_RPM_SLEEP_STATE] = sleep_rate;
->  	}
+However, this results in the negative implication that attributes with
+a zero-equivalent value are treated as if they are unset. This results
+in requiring enum values to have an unset option at the zero-index
+(which I think is a fine solution) and it requires boolean attributes
+to allow false values to act as the default (a little bit messier, but
+a solution to this is switching booleans to enums when necessary).
 
-With my suggestion on the other patch to pass in the ctx/state number
-directly into qcom_icc_rpm_set_bus_rate() I wonder if it would be nicer
-to write as loop similar to the all others.
-
-It's a bit shorter, although the line wrapping for the keep_alive is
-also more ugly. I leave it up to you :)
-
-Not even compile tested this time!
-
-Thanks,
-Stephan
-
-	/*
-	 * Downstream checks whether the requested rate is zero, but it makes little sense
-	 * to vote for a value that's below the lower threshold, so let's not do so.
-	 */
-	if (qp->keep_alive)
-		agg_clk_rate[QCOM_SMD_RPM_ACTIVE_STATE]
-			= max(ICC_BUS_CLK_MIN_RATE, agg_clk_rate[QCOM_SMD_RPM_ACTIVE_STATE]);
-
-	/* Some providers have a non-RPM-owned bus clock - convert kHz->Hz for the CCF */
-	if (qp->bus_clk) {
-		rate = max_t(u64, agg_clk_rate[QCOM_SMD_RPM_ACTIVE_STATE],
-			     agg_clk_rate[QCOM_SMD_RPM_SLEEP_STATE]);
-		/* ARM32 caps clk_set_rate arg to u32.. Nothing we can do about that! */
-		reate = min_t(u64, 1000ULL * rate, ULONG_MAX);
-		return clk_set_rate(qp->bus_clk, rate);
-	}
-
-	for (i = 0; i < QCOM_SMD_RPM_STATE_NUM; i++) {
-		/* RPM only accepts <=INT_MAX rates */
-		rate = min_t(u64, active_rate, INT_MAX);
-		if (rate == qp->bus_clk_rate[i])
-			continue;
-
-		ret = qcom_icc_rpm_set_bus_rate(qp->bus_clk_desc, rate, i);
-		if (ret)
-			return ret;
-
-		/* Cache the rate after we've successfully commited it to RPM */
-		qp->bus_clk_rate[i] = rate;
-	}
+>
+>
+> >  /**
+> >   * KUNIT_CASE_PARAM - A helper for creation a parameterized &struct ku=
+nit_case
+> >   *
+> > @@ -154,6 +171,20 @@ static inline char *kunit_status_to_ok_not_ok(enum=
+ kunit_status status)
+> >                 { .run_case =3D test_name, .name =3D #test_name,    \
+> >                   .generate_params =3D gen_params }
+> >
+> > +/**
+> > + * KUNIT_CASE_PARAM_ATTR - A helper for creating a parameterized &stru=
+ct
+> > + * kunit_case with attributes
+> > + *
+> > + * @test_name: a reference to a test case function.
+> > + * @gen_params: a reference to a parameter generator function.
+> > + * @attributes: a reference to a struct kunit_attributes object contai=
+ning
+> > + * test attributes
+> > + */
+> > +#define KUNIT_CASE_PARAM_ATTR(test_name, gen_params, attributes)      =
+ \
+> > +               { .run_case =3D test_name, .name =3D #test_name,    \
+> > +                 .generate_params =3D gen_params,                     =
+           \
+> > +                 .attr =3D attributes }
+> > +
+> >  /**
+> >   * struct kunit_suite - describes a related collection of &struct kuni=
+t_case
+> >   *
+> > @@ -163,6 +194,7 @@ static inline char *kunit_status_to_ok_not_ok(enum =
+kunit_status status)
+> >   * @init:      called before every test case.
+> >   * @exit:      called after every test case.
+> >   * @test_cases:        a null terminated array of test cases.
+> > + * @attr:      the attributes associated with the test suite
+> >   *
+> >   * A kunit_suite is a collection of related &struct kunit_case s, such=
+ that
+> >   * @init is called before every test case and @exit is called after ev=
+ery
+> > @@ -182,6 +214,7 @@ struct kunit_suite {
+> >         int (*init)(struct kunit *test);
+> >         void (*exit)(struct kunit *test);
+> >         struct kunit_case *test_cases;
+> > +       struct kunit_attributes attr;
+> >
+> >         /* private: internal use only */
+> >         char status_comment[KUNIT_STATUS_COMMENT_SIZE];
+> > diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
+> > index cb417f504996..46f75f23dfe4 100644
+> > --- a/lib/kunit/Makefile
+> > +++ b/lib/kunit/Makefile
+> > @@ -6,7 +6,8 @@ kunit-objs +=3D                           test.o \
+> >                                         string-stream.o \
+> >                                         assert.o \
+> >                                         try-catch.o \
+> > -                                       executor.o
+> > +                                       executor.o \
+> > +                                       attributes.o
+> >
+> >  ifeq ($(CONFIG_KUNIT_DEBUGFS),y)
+> >  kunit-objs +=3D                          debugfs.o
+> > diff --git a/lib/kunit/attributes.c b/lib/kunit/attributes.c
+> > new file mode 100644
+> > index 000000000000..0ea641be795f
+> > --- /dev/null
+> > +++ b/lib/kunit/attributes.c
+> > @@ -0,0 +1,65 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * KUnit API to save and access test attributes
+> > + *
+> > + * Copyright (C) 2023, Google LLC.
+> > + * Author: Rae Moar <rmoar@google.com>
+> > + */
+> > +
+> > +#include <kunit/test.h>
+> > +#include <kunit/attributes.h>
+> > +
+> > +/**
+> > + * struct kunit_attr - represents a test attribute and holds flexible
+> > + * helper functions to interact with attribute.
+> > + *
+> > + * @name: name of test attribute, eg. speed
+> > + * @get_attr: function to return attribute value given a test
+> > + * @to_string: function to return string representation of given
+> > + * attribute value
+> > + * @filter: function to indicate whether a given attribute value passe=
+s a
+> > + * filter
+> > + */
+> > +struct kunit_attr {
+> > +       const char *name;
+> > +       void *(*get_attr)(void *test_or_suite, bool is_test);
+> > +       const char *(*to_string)(void *attr, bool *to_free);
+> > +       int (*filter)(void *attr, const char *input, int *err);
+> > +       void *attr_default;
+> > +};
+> > +
+> > +/* List of all Test Attributes */
+> > +
+> > +static struct kunit_attr kunit_attr_list[1] =3D {};
+> > +
+> > +/* Helper Functions to Access Attributes */
+> > +
+> > +void kunit_print_attr(void *test_or_suite, bool is_test, unsigned int =
+test_level)
+> > +{
+> > +       int i;
+> > +       bool to_free;
+> > +       void *attr;
+> > +       const char *attr_name, *attr_str;
+> > +       struct kunit_suite *suite =3D is_test ? NULL : test_or_suite;
+> > +       struct kunit_case *test =3D is_test ? test_or_suite : NULL;
+> > +
+> > +       for (i =3D 0; i < ARRAY_SIZE(kunit_attr_list); i++) {
+> > +               attr =3D kunit_attr_list[i].get_attr(test_or_suite, is_=
+test);
+> > +               if (attr) {
+> > +                       attr_name =3D kunit_attr_list[i].name;
+> > +                       attr_str =3D kunit_attr_list[i].to_string(attr,=
+ &to_free);
+> > +                       if (test) {
+> > +                               kunit_log(KERN_INFO, test, "%*s# %s.%s:=
+ %s",
+> > +                                       KUNIT_INDENT_LEN * test_level, =
+"", test->name,
+> > +                                       attr_name, attr_str);
+> > +                       } else {
+> > +                               kunit_log(KERN_INFO, suite, "%*s# %s: %=
+s",
+> > +                                       KUNIT_INDENT_LEN * test_level, =
+"", attr_name, attr_str);
+> > +                       }
+> > +
+> > +                       /* Free to_string of attribute if needed */
+> > +                       if (to_free)
+> > +                               kfree(attr_str);
+> > +               }
+> > +       }
+> > +}
+> > diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+> > index 74982b83707c..767a84e32f06 100644
+> > --- a/lib/kunit/executor.c
+> > +++ b/lib/kunit/executor.c
+> > @@ -2,6 +2,7 @@
+> >
+> >  #include <linux/reboot.h>
+> >  #include <kunit/test.h>
+> > +#include <kunit/attributes.h>
+> >  #include <linux/glob.h>
+> >  #include <linux/moduleparam.h>
+> >
+> > @@ -180,10 +181,17 @@ static void kunit_exec_list_tests(struct suite_se=
+t *suite_set)
+> >         /* Hack: print a ktap header so kunit.py can find the start of =
+KUnit output. */
+> >         pr_info("KTAP version 1\n");
+> >
+> > -       for (suites =3D suite_set->start; suites < suite_set->end; suit=
+es++)
+> > +       for (suites =3D suite_set->start; suites < suite_set->end; suit=
+es++) {
+> > +               /* Print suite name and suite attributes */
+> > +               pr_info("%s\n", (*suites)->name);
+> > +               kunit_print_attr((void *)(*suites), false, 0);
+> > +
+> > +               /* Print test case name and attributes in suite */
+> >                 kunit_suite_for_each_test_case((*suites), test_case) {
+> >                         pr_info("%s.%s\n", (*suites)->name, test_case->=
+name);
+> > +                       kunit_print_attr((void *)test_case, true, 0);
+> >                 }
+> > +       }
+> >  }
+> >
+> >  int kunit_run_all_tests(void)
+> > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> > index 84e4666555c9..9ee55139ecd1 100644
+> > --- a/lib/kunit/test.c
+> > +++ b/lib/kunit/test.c
+> > @@ -9,6 +9,7 @@
+> >  #include <kunit/resource.h>
+> >  #include <kunit/test.h>
+> >  #include <kunit/test-bug.h>
+> > +#include <kunit/attributes.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/module.h>
+> >  #include <linux/moduleparam.h>
+> > @@ -168,6 +169,13 @@ size_t kunit_suite_num_test_cases(struct kunit_sui=
+te *suite)
+> >  }
+> >  EXPORT_SYMBOL_GPL(kunit_suite_num_test_cases);
+> >
+> > +/* Currently supported test levels */
+> > +enum {
+> > +       KUNIT_LEVEL_SUITE =3D 0,
+> > +       KUNIT_LEVEL_CASE,
+> > +       KUNIT_LEVEL_CASE_PARAM,
+> > +};
+> > +
+> >  static void kunit_print_suite_start(struct kunit_suite *suite)
+> >  {
+> >         /*
+> > @@ -181,17 +189,11 @@ static void kunit_print_suite_start(struct kunit_=
+suite *suite)
+> >         pr_info(KUNIT_SUBTEST_INDENT "KTAP version 1\n");
+> >         pr_info(KUNIT_SUBTEST_INDENT "# Subtest: %s\n",
+> >                   suite->name);
+> > +       kunit_print_attr((void *)suite, false, KUNIT_LEVEL_CASE);
+> >         pr_info(KUNIT_SUBTEST_INDENT "1..%zd\n",
+> >                   kunit_suite_num_test_cases(suite));
+> >  }
+> >
+> > -/* Currently supported test levels */
+> > -enum {
+> > -       KUNIT_LEVEL_SUITE =3D 0,
+> > -       KUNIT_LEVEL_CASE,
+> > -       KUNIT_LEVEL_CASE_PARAM,
+> > -};
+> > -
+> >  static void kunit_print_ok_not_ok(struct kunit *test,
+> >                                   unsigned int test_level,
+> >                                   enum kunit_status status,
+> > @@ -651,6 +653,7 @@ int kunit_run_tests(struct kunit_suite *suite)
+> >                         }
+> >                 }
+> >
+> > +               kunit_print_attr((void *)test_case, true, KUNIT_LEVEL_C=
+ASE);
+> >
+> >                 kunit_print_test_stats(&test, param_stats);
+> >
+> > --
+> > 2.41.0.162.gfafddb0af9-goog
+> >
