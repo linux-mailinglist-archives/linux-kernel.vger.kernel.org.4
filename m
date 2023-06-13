@@ -2,135 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D957C72E8B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 18:43:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDA2372E8BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 18:44:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231989AbjFMQmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 12:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60248 "EHLO
+        id S233111AbjFMQo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 12:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbjFMQmp (ORCPT
+        with ESMTP id S229601AbjFMQoz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 12:42:45 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-pr2fra01on2089.outbound.protection.outlook.com [40.107.12.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A04511D;
-        Tue, 13 Jun 2023 09:42:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R0MEtg3ZQhZiRh74+UxXyNc666gOpSbIJ8KbcDpb+FNMjEkvrdaG+1589ObryQ11tpN8u137KGRCYv808lfiaFGSjEBa4jH7EhnI79palqRhyfYv/KJKo1l9cLAvm9Dv/hcgGriNo/I4/noKXjffCqwoDVlFuWH6IOKUEttLF3dX9MjNS9xyCZZMsDsP73THYPOJyMixqAV7tg5WIp+ZlNwDzYtG+ZC8XgrqD1GVwRlq4BhwassYna000E/6Yo6htaWNPXcwOURgTku0OfNN5fAQtvxZ9SyX0hm7eCtolFXa8cVw5M//eUhRqCEtfikNG1fGla+vqNixI7PSh+fXPA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4FjFaRZLOeND6fx5bm+35Nfr+HTPF9UjRyQKuXFpDso=;
- b=Oc4Fl8yBQjIFxGYRCgHyR1RbYez4ug28tQrqSKzqj9dPpGDg6qj+xOHWK9lEQryqFg3WXBjPcLlbCBVQI9+ZhN5tZvZuQwiJyfMMU1uW4x2c0pogMaY7DJXv5V//5zceAzKsHPHnFIM0HFqpHj+/I/UNa1NVioQDP63eY5orTqL68tRqG2VziLMUx3DhQDYS6wQ9EOqWuGxzFk8oXe9TFDCnBjiOMY1r9SKnP4dQpE5s5zQDSu7UujsOQJ6LxiEnQLBlxM6Uhlt0SmFCZpObYqVF0PnmN3cWxJVCR9Y3zBeqbcN5s1IZF2//5rNkc/ZXd8/DsIIpGH21V296pploag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4FjFaRZLOeND6fx5bm+35Nfr+HTPF9UjRyQKuXFpDso=;
- b=mPos4U/nwmvAx6EumXtwis9c2hhNrhJLqdy2yT4JSjUPLgwCgm/L49MX2feb+nEmdIqbz0BDLhqNKEZDLQ85u7NEJqEQcGTTlCN4SZ3StnQa2Af8BFttKgOj8cMmpESehoxL3oIqzCijbl07DmwpSu6z0VYYYCCMsjeKqjJFeCk9wo2FctZJFYfMPo7Nht9gYLJ6OANlRmwELwXAfj0BnK5cSUElhG04a+/mcBe9kJzBjvKDm1iZxS9ZrqF1/1lWWW8J5BovctMG1C/+AzgYIedGjTH9715jk6SGGsDDD4p4JPFEVwR0FFubvKrYwgSmL0xomJoBpfXC82Qm+TnhVA==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR0P264MB2886.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1d1::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Tue, 13 Jun
- 2023 16:42:40 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::802b:33:561c:4217]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::802b:33:561c:4217%4]) with mapi id 15.20.6477.028; Tue, 13 Jun 2023
- 16:42:40 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-CC:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Tue, 13 Jun 2023 12:44:55 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461B89C;
+        Tue, 13 Jun 2023 09:44:51 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id af79cd13be357-75d536afa43so72727585a.1;
+        Tue, 13 Jun 2023 09:44:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686674690; x=1689266690;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:feedback-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=IdNyT3h/2Lj1GbQumw7eHKxO5LcFAdyfwGjCcOob+Zo=;
+        b=lTe2j27ro7nHxwhpMNVMaiaqsf4h8H9Q/qLOKjmvScJxCAHq1286pDm9kGwx1Wlvgn
+         xmyViIgptANeoO7AQV2B5sp4LEOOF4lfarWLeXHPIxInTmN+6ryQEUFD/6tu8M1orOxu
+         hZwdlAxBJpy7ljsHMKQIjzPhlgZ28MEq85t+VshZ4QjCeQtGHxzh5pMioiw0BU3UWGsD
+         OYRGhDbbwU7lVsc09Kc+Vg/PLTwpOMB89vA2wUOpyC78UJ5ZIiMLe3ylNprTuYNjLeWH
+         KWImR8JsSnnpr6bzg8QEmOXKdtsV6ua/C8h7fRVX8QtNUfmzk376Xr+D4TBpO3mhJJnZ
+         LRmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686674690; x=1689266690;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:feedback-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IdNyT3h/2Lj1GbQumw7eHKxO5LcFAdyfwGjCcOob+Zo=;
+        b=DzVod5mSYo/G8Tu3Tjx569EtHvq3GunqpM5fAgqGyVt+VbEwItYenQBJhxcjH1z57F
+         Hi9G2SMUm97jlM/dQbUtrTBWbgdejjkqXhfl0MclhLc8vxyBasiCFUoQ3dfGEyW2m4FK
+         14QDk/hU1Ae9/3NAcj8qpNO06dOpn4+tz0KS0vD5Zhnom4YXMyHLcvI8VoDmgQi9M238
+         6pH7i1C6+UvFgNzfuv12Yd5mwN+pGXU4Uimldn8uOHZC2fH2X+L1lNlFxyJvWpttmAve
+         lfooTa9JCkyUbIH44x/hrvtYqB3YRJxy7rVWl29wLmYEgbhP9ju9MCTjnebF5SEg0Wme
+         ohOA==
+X-Gm-Message-State: AC+VfDx99m84V/6xO1SLGMhk9TFExmcuG4bvRVjvmJCjW/hFuiiYCpiD
+        MkBQyQLaA4aYi1fbcPSR61c=
+X-Google-Smtp-Source: ACHHUZ4xnn+16fUiAKlxfeCVeOhanJqobW3OzNkpPJDwLznYPOp0hNxDwK7UD1IIJuplfx+fgqczwA==
+X-Received: by 2002:a37:511:0:b0:75e:b8ae:a4dd with SMTP id 17-20020a370511000000b0075eb8aea4ddmr14101150qkf.13.1686674690343;
+        Tue, 13 Jun 2023 09:44:50 -0700 (PDT)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id c16-20020a05620a135000b0075aff6f835bsm3746625qkl.19.2023.06.13.09.44.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 09:44:49 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 92A5D27C0054;
+        Tue, 13 Jun 2023 12:44:48 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Tue, 13 Jun 2023 12:44:48 -0400
+X-ME-Sender: <xms:_ZyIZCEMpKU3-0FQezo9hIr467C7165mPS6_leTnoG_hcXlBsQdw4A>
+    <xme:_ZyIZDXsIP48kLEAol0ApxB2Ct_MvTYpIUc-IwlXBzEIp5nxs25-ya-_ezy6xkB1s
+    XrMDpMwCJjNLAm63w>
+X-ME-Received: <xmr:_ZyIZMKIeHYCuwQFSbzwClCCq57qpEjQEnWPm28vakOP_Vyw-c4eDwzAlcM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedujedguddtudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeeuohhquhhn
+    ucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrth
+    htvghrnhepfeekieejhfevhfffgfeftdektdevueelgffgjeefhfduheeljeeiieekvdef
+    hfehnecuffhomhgrihhnpehruhhsthdqlhgrnhhgrdhorhhgnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghu
+    thhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqh
+    hunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:_ZyIZMHy609JHLuw-CGaHlviIaJq9EF5Za9rmGWUXMhgmdiQMbWVMQ>
+    <xmx:_ZyIZIWGv2dL329uWW1nEu3yzcMIY7gSBZFr1cqWNfYEGSzNs25heA>
+    <xmx:_ZyIZPNg6hhPotxbNG4wHr1CSBeNcSROi_GLpyj-5ID9SlkgJfZ_Yw>
+    <xmx:AJ2IZC_t6OmZoq9xsmiOl8jjfC6rLsw97goNv-8JHfsiThOjA6soBA>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 13 Jun 2023 12:44:45 -0400 (EDT)
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        Geoffrey Thomas <geofft@ldpreload.com>,
+        Fox Chen <foxhlchen@gmail.com>,
+        John Baublitz <john.m.baublitz@gmail.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Vlastimil Babka <vbabka@suse.cz>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michal Simek <monstr@monstr.eu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/3] Move the ARCH_DMA_MINALIGN definition to asm/cache.h
-Thread-Topic: [PATCH 0/3] Move the ARCH_DMA_MINALIGN definition to asm/cache.h
-Thread-Index: AQHZng8ej9W0KyGZMk+LfVAZvihuNq+I8AOA
-Date:   Tue, 13 Jun 2023 16:42:40 +0000
-Message-ID: <5cc13519-e606-4dca-b22c-2dcb7bf06d32@csgroup.eu>
-References: <20230613155245.1228274-1-catalin.marinas@arm.com>
-In-Reply-To: <20230613155245.1228274-1-catalin.marinas@arm.com>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR0P264MB2886:EE_
-x-ms-office365-filtering-correlation-id: 864f692b-4f3a-4cd4-c49b-08db6c2d33bc
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: v4ihIqQMXRG5DaD4KJJw4tLFJYp2aZ4fY40qL304rE75fl8ZNYEErkCFOUnTiPqOw8EAYOpJxNhW2qnDJ1vtTKs4mC0oAaPjys3Z0pyLo/axSA5u+Mhz+vD6TFANAkqdehpUvdgw7sqTYJoXw+Gn0MCzPZGSbX/62TPKh/XxrpjfpQjndKK6oxX2QOc2nPofn2HIGSBFwKJDDGEFig4P8MQv/gjcJwJU6dSfc/8cp032HfUKv2k2+Pt0DJnxZY2+ozqad0yN+A9NPTv7elZTDqHywYOPXfoIQgsfv8mPsdACTjwgWbM6s5D+UKYBONSrhezODNlKtQf1qLgRA0USK0hkUgi2sev+H5q1x3Vqq6/xUMh13ZpFfcBX/6jKmPYfLrihCt8mGtKSCCAPh+dVO/k9Hr7aKoGFqC3y83iPiW3LHPuEFQRUjNBkFmnVGQgyJ2LchwbpKRMspv7Nnvt3o35+R2Mc5QAAC0VULVTZcLKObPmsncuxOenVPfKl3qMlOjZscol5SBxHJlg2vPnQyM2HMVWFL6Z/LaxA5Lo7CrnB8UCXsJ+acqV1OU47ULblMQc4Xrh7A07c5CqsWoHIGw0qor8y87mK/oaSMbkH0vXHS85UHH1WwR6uqMXGUT8zRFFxEv5QicvEup52yFHwu4d2o9+gYn/4vM7DoiQx99M=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(136003)(376002)(396003)(346002)(451199021)(2616005)(66574015)(83380400001)(86362001)(122000001)(38070700005)(38100700002)(36756003)(31696002)(478600001)(110136005)(54906003)(71200400001)(44832011)(4326008)(6486002)(966005)(8936002)(8676002)(2906002)(5660300002)(7416002)(64756008)(66946007)(91956017)(66446008)(66476007)(66556008)(76116006)(31686004)(316002)(186003)(41300700001)(6512007)(26005)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SHlWZmN1UjBtMXRIM2JRVEh6dXBjZndtUm1hZlUwcTIvOUUwZHRiRHJKTkhD?=
- =?utf-8?B?Qm1mMzVMSjRPakdLQlRzaWYvMVAzWHV1N0ZVV2RDRGRDZElZSTRiU2N2a1o2?=
- =?utf-8?B?UUhxVjlFczJHZ1lFQ2pCRUFRQk1CU2VMS0ZmYnQxZTFJdzRRci9kWE5NbHhG?=
- =?utf-8?B?b3dXWWIwSjBBRGhvZmFsNm9yUExLVVZlRU4yV3FxUnpxaWkvU1RSalpZd0ZD?=
- =?utf-8?B?a0RoWXQvY200NjhTYkJKVXRKWURTdGNySCtNWlpMTUJSVUk2YkdDNWZMMmxI?=
- =?utf-8?B?clQ4UXd2TnJ3OW4zd25jTDJMNzgzNjZOSnpvcGxvRGhncjMwRHhNRGN1MzQw?=
- =?utf-8?B?SCtrSVNlQStFb21WWVhMY3ZUaHVTUWcvSXE5anVJT3lmK2ptMXFGTGxra3Jo?=
- =?utf-8?B?MVlsa2tSSHZWalpIazl4ZHFISW1Oa1VaZEFscnZ5eDY2bk5FK1Noc1M0T2JM?=
- =?utf-8?B?bHN2WTNSZkUrSndabXgxblIrS3FWdXZ6ZVpNbDRzQ2s4T1dNZHFNbzhWQU5H?=
- =?utf-8?B?QllBMk5Ed005Y1dtditEdmZkUW8xOGZVREl3OVh2UUd1L1lmMjU4M3FjMWlF?=
- =?utf-8?B?UmFVbFFjbXc2TDErRDZDSElnYVA0djdDUkFuTStKcVBtQkRiQkNtWWlWSWxy?=
- =?utf-8?B?OTg1OFhJSThrZEFHam1yZi9tY3JtaGF6Q0FjSVRhNnJPRjZHcG5TOXNDLzBP?=
- =?utf-8?B?bmZSU3MwdGNaV1BPejN5S282MXl6cktNR0VXZFp0anp4RHlGTkg0MDZOU00r?=
- =?utf-8?B?SC9URTNaakFZUndPRWFWQnVZMDU5NVYyTVpiU3VSeXE5UDBtNXFGMndPWFNV?=
- =?utf-8?B?ajB4aGVGQjlOdHRTRXgzTVA3Mm41NUxBNVhaYTBWdmduUDlBRzFOTzVPMzU2?=
- =?utf-8?B?Q3hmOTdVeGFRTldZWmRsNEZPc0J6cGNOdFVnWnAyUk1DWVlRb1drSmNYQ1VD?=
- =?utf-8?B?QXlVbWFjVFhYaXFSZm1Ja3lyV3l0WTB6RjhJVEM1RUZRT2pOLzVTWmphczZD?=
- =?utf-8?B?cGxQeHpYbjl3bUg3K1NyVFJLbTRqY0h3TTZUZ2Zkbm91cCtnNEpOQ3ZaWDFX?=
- =?utf-8?B?NkRpUlFlZ1FObE55WnNtN0lqcDJtVjhYeDFkM0ZrSU5ZeWhpclFNWGVLaE1m?=
- =?utf-8?B?ZmVwZVpTZ3Azb1ZLZjZBb0ZXVVYzNlV4OHd4K3BtbFJHRHBsUVlRZGx1OWty?=
- =?utf-8?B?cENvWFFoa1RxanpwbzBNR2hidm1qWGZ5ZzZQSFlrenRPcnNjZjBGeEk5ek91?=
- =?utf-8?B?bWhQVHU5VzJMclpyMU93NWRuVUgvckVhRW9xT1kxT1Z4QVRWNEh1Y1QwZFFE?=
- =?utf-8?B?TW00OU42ZU03aTl1ZTVlRXhRYWpPMUZMR0FQdWpEY2R4M3JWM0NQR1ZBN3Rk?=
- =?utf-8?B?UVRoM1lYK3M3aGRWdXlqSTBKZFRWRUlydnVXU0MvNm9QWUV5eWt3ckt1Qng1?=
- =?utf-8?B?MVF6S0FrY2RjRVZWTU1vamlsNlM0c0tCTmNSTGQ1dlNBbUpWMjEvYWwwMzVq?=
- =?utf-8?B?bCtjRCtMaHVnS3UvYWt5T2s3YXl1K3RXODRPRmtzczd1T0NCMi85LzR6K2NV?=
- =?utf-8?B?amdOVElMOEx6WlNaTlplb3M4dHArZjNXRDRyOGZsbEpoZDZhQ3BWa21yL2p6?=
- =?utf-8?B?ZXV2YVJ5Zko2c3Y2bzFTZFdKcllmendydDhiZkhyejZ1bjl1ZjBnaGJ6ZFQ5?=
- =?utf-8?B?RTd1aitFWS93VzZwdWVua0k2V3YwUXFpckJGUmNBOVZ2ckt5UlhHWCtHR2tE?=
- =?utf-8?B?dnkxK0lYL0lab29OYjd5WDhVUmdpWWpxYkF3Wm5iLzl5dHZpS0tFeUp3WG5W?=
- =?utf-8?B?TGNIOVRJQkYxZ2ViaDJNOHJiTDIrcUdYZGtscEE2Q1VwUkkxLzYvNGNzdlI2?=
- =?utf-8?B?dk4xTCtETjZHdWM1bWlGYmRVNWtxUWNNZ2pXVHJwQkJJQ2xjeHNwZmxCV0Rv?=
- =?utf-8?B?ZVNZUU02RSswQVRzTFI0dUZSMmhRUWFuSGJTeXJ5bUdzRmk3ZmVmL1ZCZkk5?=
- =?utf-8?B?Q3dSRnpXdFBGZUYyemZxcDQ5K0hHeFBtNlNMNGc5STlqY1dHdmtaOThtTkF3?=
- =?utf-8?B?aENWVzJ4ZWxwOWMyQUpUcUYxNjg4a3NiUEFJcWFjbUJ6YW9DbkZZS1o3cDVn?=
- =?utf-8?Q?DRKYs40jCFwjfZhWpkAfW5t0P?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <8D54FF9D4044104CA9DC8EC1AA6D636F@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andreas Hindborg <nmi@metaspace.dk>, stable@vger.kernel.org
+Subject: [PATCH] rust: allocator: Prevents mis-aligned allocation
+Date:   Tue, 13 Jun 2023 09:42:58 -0700
+Message-Id: <20230613164258.3831917-1-boqun.feng@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 864f692b-4f3a-4cd4-c49b-08db6c2d33bc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jun 2023 16:42:40.0174
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: GVMHb7G9gtsRGG1Rw3/Sc1VShXqaLRLyLMvVn9iMsrN8LVO91l15xRzAnsKTzCOTpaMINZa4uhsU0O3ereFmI949nhHnKVuXWB5LX9CX5Gs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB2886
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -138,35 +116,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDEzLzA2LzIwMjMgw6AgMTc6NTIsIENhdGFsaW4gTWFyaW5hcyBhIMOpY3JpdMKgOg0K
-PiBIaSwNCj4gDQo+IFRoZSBBUkNIX0tNQUxMT0NfTUlOQUxJR04gcmVkdWN0aW9uIHNlcmllcyBk
-ZWZpbmVzIGEgZ2VuZXJpYw0KPiBBUkNIX0RNQV9NSU5BTElHTiBpbiBsaW51eC9jYWNoZS5oOg0K
-PiANCj4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvci8yMDIzMDYxMjE1MzIwMS41NTQ3NDItMi1j
-YXRhbGluLm1hcmluYXNAYXJtLmNvbS8NCj4gDQo+IFVuZm9ydHVuYXRlbHksIHRoaXMgY2F1c2Vz
-IGEgZHVwbGljYXRlIGRlZmluaXRpb24gd2FybmluZyBmb3INCj4gbWljcm9ibGF6ZSwgcG93ZXJw
-YyAoMzItYml0IG9ubHkpIGFuZCBzaCBhcyB0aGVzZSBhcmNoaXRlY3R1cmVzIGRlZmluZQ0KPiBB
-UkNIX0RNQV9NSU5BTElHTiBpbiBhIGRpZmZlcmVudCBmaWxlIHRoYW4gYXNtL2NhY2hlLmguIE1v
-dmUgdGhlIG1hY3JvDQo+IHRvIGFzbS9jYWNoZS5oIHRvIGF2b2lkIHRoaXMgaXNzdWUgYW5kIGFs
-c28gYnJpbmcgdGhlbSBpbiBsaW5lIHdpdGggdGhlDQo+IG90aGVyIGFyY2hpdGVjdHVyZXMuDQoN
-CldoYXQgYWJvdXQgbWlwcyA/DQoNCmFyY2gvbWlwcy9pbmNsdWRlL2FzbS9tYWNoLWdlbmVyaWMv
-a21hbGxvYy5oOiNkZWZpbmUgQVJDSF9ETUFfTUlOQUxJR04JMTI4DQphcmNoL21pcHMvaW5jbHVk
-ZS9hc20vbWFjaC1pcDMyL2ttYWxsb2MuaDojZGVmaW5lIEFSQ0hfRE1BX01JTkFMSUdOCTMyDQph
-cmNoL21pcHMvaW5jbHVkZS9hc20vbWFjaC1pcDMyL2ttYWxsb2MuaDojZGVmaW5lIEFSQ0hfRE1B
-X01JTkFMSUdOCTEyOA0KYXJjaC9taXBzL2luY2x1ZGUvYXNtL21hY2gtbjY0L2ttYWxsb2MuaDoj
-ZGVmaW5lIEFSQ0hfRE1BX01JTkFMSUdOIA0KTDFfQ0FDSEVfQllURVMNCmFyY2gvbWlwcy9pbmNs
-dWRlL2FzbS9tYWNoLXR4NDl4eC9rbWFsbG9jLmg6I2RlZmluZSBBUkNIX0RNQV9NSU5BTElHTiAN
-CkwxX0NBQ0hFX0JZVEVTDQoNCg0KPiANCj4gQW5kcmV3LCBpZiB0aGUgYXJjaCBtYWludGFpbmVy
-cyBjYydlZCBhcmUgZmluZSB3aXRoIHN1Y2ggY2hhbmdlLCBjb3VsZA0KPiB5b3UgcGxlYXNlIHRh
-a2UgdGhlc2UgdGhyZWUgcGF0Y2hlcyB0b2dldGhlciB3aXRoIHRoZQ0KPiBBUkNIX0tNQUxMT0Nf
-TUlOQUxJR04gc2VyaWVzPw0KPiANCj4gVGhhbmsgeW91Lg0KPiANCj4gQ2F0YWxpbiBNYXJpbmFz
-ICgzKToNCj4gICAgcG93ZXJwYzogTW92ZSB0aGUgQVJDSF9ETUFfTUlOQUxJR04gZGVmaW5pdGlv
-biB0byBhc20vY2FjaGUuaA0KPiAgICBtaWNyb2JsYXplOiBNb3ZlIHRoZSBBUkNIX3tETUEsU0xB
-Qn1fTUlOQUxJR04gZGVmaW5pdGlvbnMgdG8NCj4gICAgICBhc20vY2FjaGUuaA0KPiAgICBzaDog
-TW92ZSB0aGUgQVJDSF9ETUFfTUlOQUxJR04gZGVmaW5pdGlvbiB0byBhc20vY2FjaGUuaA0KPiAN
-Cj4gICBhcmNoL21pY3JvYmxhemUvaW5jbHVkZS9hc20vY2FjaGUuaCB8IDUgKysrKysNCj4gICBh
-cmNoL21pY3JvYmxhemUvaW5jbHVkZS9hc20vcGFnZS5oICB8IDUgLS0tLS0NCj4gICBhcmNoL3Bv
-d2VycGMvaW5jbHVkZS9hc20vY2FjaGUuaCAgICB8IDQgKysrKw0KPiAgIGFyY2gvcG93ZXJwYy9p
-bmNsdWRlL2FzbS9wYWdlXzMyLmggIHwgNCAtLS0tDQo+ICAgYXJjaC9zaC9pbmNsdWRlL2FzbS9j
-YWNoZS5oICAgICAgICAgfCA2ICsrKysrKw0KPiAgIGFyY2gvc2gvaW5jbHVkZS9hc20vcGFnZS5o
-ICAgICAgICAgIHwgNiAtLS0tLS0NCj4gICA2IGZpbGVzIGNoYW5nZWQsIDE1IGluc2VydGlvbnMo
-KyksIDE1IGRlbGV0aW9ucygtKQ0KPiANCg==
+Currently the KernelAllocator simply passes the size of the type Layout
+to krealloc(), and in theory the alignment requirement from the type
+Layout may be larger than the guarantee provided by SLAB, which means
+the allocated object is mis-aligned.
+
+Fixes this by adjusting the allocation size to the nearest power of two,
+which SLAB always guarantees a size-aligned allocation. And because Rust
+guarantees that original size must be a multiple of alignment and the
+alignment must be a power of two, then the alignment requirement is
+satisfied.
+
+Suggested-by: Vlastimil Babka <vbabka@suse.cz>
+Co-developed-by: Andreas Hindborg (Samsung) <nmi@metaspace.dk>
+Signed-off-by: Andreas Hindborg (Samsung) <nmi@metaspace.dk>
+Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+Cc: stable@vger.kernel.org # v6.1+
+---
+Some more explanation:
+
+* Layout is a data structure describing a particular memory layout,
+  conceptionally it has two fields: align and size.
+
+  * align is guaranteed to be a power of two.
+  * size can be smaller than align (only when the Layout is created via
+    Layout::from_align_size())
+  * After pad_to_align(), the size is guaranteed to be a multiple of
+    align
+
+For more information, please see: 
+
+	https://doc.rust-lang.org/stable/std/alloc/struct.Layout.html
+
+ rust/bindings/bindings_helper.h |  1 +
+ rust/kernel/allocator.rs        | 17 ++++++++++++++++-
+ 2 files changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
+index 3e601ce2548d..6619ce95dd37 100644
+--- a/rust/bindings/bindings_helper.h
++++ b/rust/bindings/bindings_helper.h
+@@ -15,3 +15,4 @@
+ /* `bindgen` gets confused at certain things. */
+ const gfp_t BINDINGS_GFP_KERNEL = GFP_KERNEL;
+ const gfp_t BINDINGS___GFP_ZERO = __GFP_ZERO;
++const size_t BINDINGS_ARCH_SLAB_MINALIGN = ARCH_SLAB_MINALIGN;
+diff --git a/rust/kernel/allocator.rs b/rust/kernel/allocator.rs
+index 397a3dd57a9b..66575cf87ce2 100644
+--- a/rust/kernel/allocator.rs
++++ b/rust/kernel/allocator.rs
+@@ -11,9 +11,24 @@
+ 
+ unsafe impl GlobalAlloc for KernelAllocator {
+     unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
++        // Customized layouts from `Layout::from_size_align()` can have size < align, so pads first.
++        let layout = layout.pad_to_align();
++
++        let mut size = layout.size();
++
++        if layout.align() > bindings::BINDINGS_ARCH_SLAB_MINALIGN {
++            // The alignment requirement exceeds the slab guarantee, then tries to enlarges the size
++            // to use the "power-of-two" size/alignment guarantee (see comments in kmalloc() for
++            // more information).
++            //
++            // Note that `layout.size()` (after padding) is guaranteed to be muliples of
++            // `layout.align()`, so `next_power_of_two` gives enough alignment guarantee.
++            size = size.next_power_of_two();
++        }
++
+         // `krealloc()` is used instead of `kmalloc()` because the latter is
+         // an inline function and cannot be bound to as a result.
+-        unsafe { bindings::krealloc(ptr::null(), layout.size(), bindings::GFP_KERNEL) as *mut u8 }
++        unsafe { bindings::krealloc(ptr::null(), size, bindings::GFP_KERNEL) as *mut u8 }
+     }
+ 
+     unsafe fn dealloc(&self, ptr: *mut u8, _layout: Layout) {
+-- 
+2.39.2
+
