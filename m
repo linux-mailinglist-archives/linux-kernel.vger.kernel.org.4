@@ -2,242 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7D9572E3FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:23:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0F4A72E3FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242524AbjFMNWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 09:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36646 "EHLO
+        id S242341AbjFMNYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 09:24:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242520AbjFMNWm (ORCPT
+        with ESMTP id S238753AbjFMNYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 09:22:42 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C7C1B0;
-        Tue, 13 Jun 2023 06:22:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686662560; x=1718198560;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=iTN/9KhoPSZOXiQNvRTzJKESu5zFQUsvhnmUcEyqMBc=;
-  b=gc5ABRwNGXukVLTD7O3N46WGN/8t88L1JX3WK4rRVdfNzCM+ngYuMrqU
-   nSRZrGFOgTsCXOyYpm4mtLxdM8ddpYGtn4cnq9JhT6S6favVPAfvKxtV3
-   ll+CheSucouyqIkzohSWFRMqje1vYXE/D9hiRhwuUYSIFwp8Ucm2Bxsdf
-   nGYC/GwfpstBZERgpuBjMa1kmEd/W0rXBQuMFFMHX+WR6RI7nLV5IuE+l
-   TZJ0rbtw4sTerzpG+JV+YQ1cQeIY8daSnk12yXrLPeld1CdiuYt/a6Obz
-   cTh4pInV5FOpzmiUtQrm99qTgZ5dL+vBF7QjhCN2XmvM5k43u45tI/X3o
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="386725889"
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="scan'208";a="386725889"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 06:22:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="741425107"
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="scan'208";a="741425107"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.251.212.213])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 06:22:31 -0700
-Message-ID: <683fea7c-f5e9-fa20-f96b-f6233ed5d2a7@intel.com>
-Date:   Tue, 13 Jun 2023 16:22:26 +0300
+        Tue, 13 Jun 2023 09:24:41 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000C31AA;
+        Tue, 13 Jun 2023 06:24:39 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f8d2bfec3bso4409405e9.2;
+        Tue, 13 Jun 2023 06:24:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686662678; x=1689254678;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7XW9rh4jUldX1UD/nk0BgegxHJcL2wRG/tuF1MFv9Nc=;
+        b=qmt3yPAItBp5Leswgr+iV8olSEMC29DPV49p+1DpTPn4HI+QdqTomAGa7LTX97VRfD
+         U79hAQNmJAQipoFY3i2ZNhAk9J1LyPNcDlV1Q4rvzFMFrYIUy/p3W7OImFrgKE1FKS3b
+         lQFbZwYxlRGSytAewkTIMHYqV5aIx7tJyXyI+uuXgI0d+zP36/yI+luh4bSu0bnnRSBE
+         c4J6Kd3aBrRs4/wsuRkvnpDBwUIprjS7wAn3NrflPgyIAWWXw0lEbbg5v+ilL28P2Com
+         jFzzy/thS7b0qfsn6NqnmIWjltvuecvfCowa8Ul6AC1kDTKG+6Beg9mgST0HjHYMiDTJ
+         1VVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686662678; x=1689254678;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7XW9rh4jUldX1UD/nk0BgegxHJcL2wRG/tuF1MFv9Nc=;
+        b=QQ20F7zMakV3/FUch9BYqIRaZu+dYWleEvTKv7o1EGaKJl8wBvyYFUn4vmWOQrH1Sz
+         iTyGuv8acZSjdcuvdqXVgIPnUYJuqFhNSBetn3XVrCB7dRKoussYd5XETxgjDUhxZw62
+         lp8448+xfvlNMCB3Y2MsQgYM6yANY0mgZbXR/0JD0pYzmHi+kjGtwcbPoB839hozOznS
+         7No60pvqrseqMjWgpEiYlWTzZ0rQFjhoR9P01iu2TDKkuF7rw20kIY3gs3DgTkLYB0Zx
+         T2vevGk/L84kwOfR/3tt20Nt6V7IQ3/TmGfXFNKiHG9I2Rit04ZacTCWeh1XfFjxsp1M
+         eIOw==
+X-Gm-Message-State: AC+VfDw9PN78H9NWWTweBC4aRJE77WmeXweMbXoN+89xCb1dGRAD1biq
+        iH/aJk4TB9zsfe+fYdMLZAQ=
+X-Google-Smtp-Source: ACHHUZ4ZArX1XRPgz5kr7OpNljmKS21m1ctlMDTCGRb52v2HpifiBaaxnMNFu9qpPCrRm7/KNUx/4A==
+X-Received: by 2002:a1c:7906:0:b0:3f7:f2d0:b904 with SMTP id l6-20020a1c7906000000b003f7f2d0b904mr10595351wme.8.1686662678012;
+        Tue, 13 Jun 2023 06:24:38 -0700 (PDT)
+Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation (mob-5-90-65-61.net.vodafone.it. [5.90.65.61])
+        by smtp.gmail.com with ESMTPSA id t11-20020a7bc3cb000000b003f60eb72cf5sm14542378wmj.2.2023.06.13.06.24.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 06:24:37 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 15:24:33 +0200
+From:   Tommaso Merciai <tomm.merciai@gmail.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        jacopo.mondi@ideasonboard.com, martin.hecht@avnet.eu,
+        linuxfancy@googlegroups.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        Nicholas Roth <nicholas@rothemail.net>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH v2 2/2] media: i2c: Add support for alvium camera
+Message-ID: <ZIhuEcUGdK4spvoy@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+References: <20230526173955.797226-1-tomm.merciai@gmail.com>
+ <20230526173955.797226-3-tomm.merciai@gmail.com>
+ <20230529074018.GD25984@pendragon.ideasonboard.com>
+ <ZHcd09f5wOKjQdHX@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+ <20230531113331.GC27043@pendragon.ideasonboard.com>
+ <ZHjPyxColttdARQm@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+ <20230602043126.GM22609@pendragon.ideasonboard.com>
+ <ZIhaYk1v69Sp+Xqd@kekkonen.localdomain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.12.0
-Subject: Re: [PATCH v1 1/2] perf tests x86: Generate entire instruction struct
- in C files
-Content-Language: en-US
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andi Kleen <ak@linux.intel.com>
-References: <20230531154333.364167-1-irogers@google.com>
- <ZIdtO9xVsP6Ytb0q@kernel.org>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <ZIdtO9xVsP6Ytb0q@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZIhaYk1v69Sp+Xqd@kekkonen.localdomain>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/06/23 22:08, Arnaldo Carvalho de Melo wrote:
-> Em Wed, May 31, 2023 at 08:43:32AM -0700, Ian Rogers escreveu:
->> Generate the entire struct in the C files. Later changes will break
->> apart the struct and so two phases of output are necessary, this isn't
->> possible if part of the struct is declared in insn-x86.c.
+Hi Sakari, Laurent,
+
+
+On Tue, Jun 13, 2023 at 12:00:34PM +0000, Sakari Ailus wrote:
+> Hi Laurent, Tommaso,
 > 
-> Adrian,
+> On Fri, Jun 02, 2023 at 07:31:26AM +0300, Laurent Pinchart wrote:
+> > > > > > > diff --git a/drivers/media/i2c/alvium.c b/drivers/media/i2c/alvium.c
+> > > > > > > new file mode 100644
+> > > > > > > index 000000000000..e77fb6bda64b
+> > > > > > > --- /dev/null
+> > > > > > > +++ b/drivers/media/i2c/alvium.c
+> > > > > > > @@ -0,0 +1,3547 @@
+> > 
+> > [snip]
+> > 
+> > > > > > > +static int alvium_probe(struct i2c_client *client)
+> > > > > > > +{
+> > > > > > > +	struct device *dev = &client->dev;
+> > > > > > > +	struct v4l2_subdev *sd;
+> > > > > > > +	struct alvium_dev *alvium;
+> > > > > > > +	int ret;
+> > > > > > > +
+> > > > > > > +	alvium = devm_kzalloc(dev, sizeof(*alvium), GFP_KERNEL);
+> > > > > > > +	if (!alvium)
+> > > > > > > +		return -ENOMEM;
+> > > > > > > +
+> > > > > > > +	alvium->i2c_client = client;
+> > > > > > > +	ret = alvium_get_dt_data(alvium);
+> > > > > > > +	if (ret)
+> > > > > > > +		return ret;
+> > > > > > > +
+> > > > > > > +	mutex_init(&alvium->lock);
+> > > > > > > +
+> > > > > > > +	sd = &alvium->sd;
+> > > > > > > +
+> > > > > > > +	/* init alvium sd */
+> > > > > > > +	v4l2_i2c_subdev_init(sd, client, &alvium_subdev_ops);
+> > > > > > > +
+> > > > > > > +	sd->flags |= V4L2_SUBDEV_FL_HAS_EVENTS | V4L2_SUBDEV_FL_HAS_DEVNODE;
+> > > > > > > +	alvium->pad.flags = MEDIA_PAD_FL_SOURCE;
+> > > > > > > +	sd->entity.function = MEDIA_ENT_F_CAM_SENSOR;
+> > > > > > > +	sd->entity.ops = &alvium_sd_media_ops;
+> > > > > > > +
+> > > > > > > +	ret = media_entity_pads_init(&sd->entity, 1, &alvium->pad);
+> > > > > > > +	if (ret)
+> > > > > > > +		return ret;
+> > > > > > > +
+> > > > > > > +	sd->dev = dev;
+> > > > > > > +
+> > > > > > > +	ret = alvium_power_on(alvium);
+> > > > > > 
+> > > > > > The driver should use runtime PM (with autosuspend), and power on/off in
+> > > > > > the .s_stream() handler.
+> > > > > 
+> > > > > Can we delay the pm implementation as a future patchset?
+> > > > > Alvium pm would be tricky (cause is the boot time of the camera)
+> > > > > and if is possible I want work on pm later.
+> > > > > Let me know. Thanks! :)
+> > > > 
+> > > > With autosuspend the camera can remain powered up between stream stop
+> > > > and stream start, if they happen quickly enough. An autosuspend delay of
+> > > > a few seconds is usually a good value. It should be fairly easy to
+> > > > implement runtime PM support, you just need to
+> > > > 
+> > > > - Call alvium_power_on() from the runtime PM resume handler and
+> > > >   alvium_power_off() from the runtime PM suspend handler.
+> > > > 
+> > > > - Call pm_runtime_resume_and_get() and stream on time, and
+> > > >   pm_runtime_mark_last_busy() and pm_runtime_put_autosuspend() at stream
+> > > >   stop time.
+> > > > 
+> > > > - Initialize runtime PM at probe time (and clean up at remove time).
+> > > >   There's a bit of boilerplate code needed to get that right, but it's
+> > > >   not difficult. You can copy it from the imx290 driver.
+> > > 
+> > > Back to you to clarify this point.
+> > > 
+> > > Plan as you suggest is handling pm of camera using external
+> > > regulator. Problem is that the boot time of the camera is around 5s.
+> > 
+> > 5s ? Ouch !!
+> > 
+> > This has two consequences:
+> > 
+> > - Just probing the camera would take 5s, which is insanely long.
+> > - There will be a 5s delay when starting video capture.
+> > 
+> > There's no 5s delay in the current code, so I assume things work fine
+> > because the power regulator is always on, and turned on 5s or more
+> > before the driver is loaded. That's pretty fragile.
+> > 
+> > That camera is clearly not a good fit for an embedded system that cares
+> > about power consumption and performance, but we still have to support
+> > it. The probe time issue isn't something we can fix, a 5s delay is
+> > required.
+> > 
+> > The stream start issue can be alleviated by keeping the camera on, or
+> > offering a way for userspace to turn it on ahead of stream start.
+> > Runtime PM autosuspend will help with the former, and I would push the
+> > autosuspend delay up as a result of the huge camera boot time. We don't
+> > have a good solution of the latter at the moment, it used to be that
+> > opening video nodes would power up the whole pipeline, but that has been
+> > dropped some time ago in V4L2. Another API extension for this kind of
 > 
-> 	Could you please take a look at these two patches?
+> And that was never a good solution.
+> 
+> > use cases would be useful I think. Sakari, any opinion ?
 
-One of the considerations when adding the generated code
-was that it wouldn't have to be changed because the instructions
-do not change.
+:'(
 
-I would much prefer to move the test out of the default perf build.
+> 
+> I'd approach this with autosuspend, but going forward we could research
+> adding an API for V4L2 sub-devices to access PM QoS. This way the device
+> could be powered down while the user would have a way to ensure resuming
+> the device wouldn't take excessively long.
 
-Here is a patch to do that:
+What's the plan? :)
 
+I test regulator/pm implementation in v5
+Take your time to check that.
 
-From: Adrian Hunter <adrian.hunter@intel.com>
-Date: Tue, 13 Jun 2023 15:15:58 +0300
-Subject: [PATCH] perf tests: Make x86 new instructions test optional at build
- time
+(I'm waiting for your feedback on some questions on
+first review of v5) :)
 
-The "x86 instruction decoder - new instructions" test takes up space but
-is only really useful to developers. Make it optional at build time.
+If you have better ideas to handle this
+very long boot time please don't esitate to share
+with me. I can test on my side.
 
-Add variable EXTRA_TESTS which must be defined in order to build perf
-with the test.
+In my opinion using regulator and skipping power up
+if regulator is already enabled as suggested by Laurent,
+is not a so bad idea :)
 
-Example:
+Tests on the real hw are giving good results.
 
-  Before:
+Let me know. Many thanks!
 
-    $ make -C tools/perf clean >/dev/null
-    $ make -C tools/perf >/dev/null
-    Makefile.config:650: No libunwind found. Please install libunwind-dev[el] >= 1.1 and/or set LIBUNWIND_DIR
-    Makefile.config:1149: libpfm4 not found, disables libpfm4 support. Please install libpfm4-dev
-      PERF_VERSION = 6.4.rc3.gd15b8c76c964
-    $ readelf -SW tools/perf/perf | grep '\.rela.dyn\|.rodata\|\.data.rel.ro'
-      [10] .rela.dyn         RELA            000000000002fcb0 02fcb0 0748b0 18   A  6   0  8
-      [18] .rodata           PROGBITS        00000000002eb000 2eb000 6bac00 00   A  0   0 32
-      [25] .data.rel.ro      PROGBITS        00000000009ea180 9e9180 04b540 00  WA  0   0 32
+Regards,
+Tommaso
 
-  After:
-
-    $ make -C tools/perf clean >/dev/null
-    $ make -C tools/perf >/dev/null
-    Makefile.config:650: No libunwind found. Please install libunwind-dev[el] >= 1.1 and/or set LIBUNWIND_DIR
-    Makefile.config:1154: libpfm4 not found, disables libpfm4 support. Please install libpfm4-dev
-      PERF_VERSION = 6.4.rc3.g4ea9c1569ea4
-    $ readelf -SW tools/perf/perf | grep '\.rela.dyn\|.rodata\|\.data.rel.ro'
-      [10] .rela.dyn         RELA            000000000002f3c8 02f3c8 036d68 18   A  6   0  8
-      [18] .rodata           PROGBITS        00000000002ac000 2ac000 68da80 00   A  0   0 32
-      [25] .data.rel.ro      PROGBITS        000000000097d440 97c440 022280 00  WA  0   0 32
-
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
----
- tools/perf/Makefile.config               | 5 +++++
- tools/perf/Makefile.perf                 | 4 ++++
- tools/perf/arch/x86/include/arch-tests.h | 2 ++
- tools/perf/arch/x86/tests/Build          | 5 ++++-
- tools/perf/arch/x86/tests/arch-tests.c   | 4 ++++
- tools/perf/tests/make                    | 1 +
- 6 files changed, 20 insertions(+), 1 deletion(-)
-
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index a794d9eca93d..9c5aa14a44cf 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -1075,6 +1075,11 @@ ifndef NO_AUXTRACE
-   endif
- endif
- 
-+ifdef EXTRA_TESTS
-+    $(call detected,CONFIG_EXTRA_TESTS)
-+    CFLAGS += -DHAVE_EXTRA_TESTS
-+endif
-+
- ifndef NO_JVMTI
-   ifneq (,$(wildcard /usr/sbin/update-java-alternatives))
-     JDIR=$(shell /usr/sbin/update-java-alternatives -l | head -1 | awk '{print $$3}')
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index f48794816d82..b1e62a621f92 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -128,6 +128,10 @@ include ../scripts/utilities.mak
- #
- # Define BUILD_NONDISTRO to enable building an linking against libbfd and
- # libiberty distribution license incompatible libraries.
-+#
-+# Define EXTRA_TESTS to enable building extra tests useful mainly to perf
-+# developers, such as:
-+#	x86 instruction decoder - new instructions test
- 
- # As per kernel Makefile, avoid funny character set dependencies
- unexport LC_ALL
-diff --git a/tools/perf/arch/x86/include/arch-tests.h b/tools/perf/arch/x86/include/arch-tests.h
-index 33d39c1d3e64..df133020d582 100644
---- a/tools/perf/arch/x86/include/arch-tests.h
-+++ b/tools/perf/arch/x86/include/arch-tests.h
-@@ -6,7 +6,9 @@ struct test_suite;
- 
- /* Tests */
- int test__rdpmc(struct test_suite *test, int subtest);
-+#ifdef HAVE_EXTRA_TESTS
- int test__insn_x86(struct test_suite *test, int subtest);
-+#endif
- int test__intel_pt_pkt_decoder(struct test_suite *test, int subtest);
- int test__intel_pt_hybrid_compat(struct test_suite *test, int subtest);
- int test__bp_modify(struct test_suite *test, int subtest);
-diff --git a/tools/perf/arch/x86/tests/Build b/tools/perf/arch/x86/tests/Build
-index 08cc8b9c931e..394771c00dca 100644
---- a/tools/perf/arch/x86/tests/Build
-+++ b/tools/perf/arch/x86/tests/Build
-@@ -4,5 +4,8 @@ perf-$(CONFIG_DWARF_UNWIND) += dwarf-unwind.o
- perf-y += arch-tests.o
- perf-y += sample-parsing.o
- perf-y += hybrid.o
--perf-$(CONFIG_AUXTRACE) += insn-x86.o intel-pt-test.o
-+perf-$(CONFIG_AUXTRACE) += intel-pt-test.o
-+ifeq ($(CONFIG_EXTRA_TESTS),y)
-+perf-$(CONFIG_AUXTRACE) += insn-x86.o
-+endif
- perf-$(CONFIG_X86_64) += bp-modify.o
-diff --git a/tools/perf/arch/x86/tests/arch-tests.c b/tools/perf/arch/x86/tests/arch-tests.c
-index 147ad0638bbb..3f2b90c59f92 100644
---- a/tools/perf/arch/x86/tests/arch-tests.c
-+++ b/tools/perf/arch/x86/tests/arch-tests.c
-@@ -4,7 +4,9 @@
- #include "arch-tests.h"
- 
- #ifdef HAVE_AUXTRACE_SUPPORT
-+#ifdef HAVE_EXTRA_TESTS
- DEFINE_SUITE("x86 instruction decoder - new instructions", insn_x86);
-+#endif
- 
- static struct test_case intel_pt_tests[] = {
- 	TEST_CASE("Intel PT packet decoder", intel_pt_pkt_decoder),
-@@ -37,7 +39,9 @@ struct test_suite *arch_tests[] = {
- 	&suite__dwarf_unwind,
- #endif
- #ifdef HAVE_AUXTRACE_SUPPORT
-+#ifdef HAVE_EXTRA_TESTS
- 	&suite__insn_x86,
-+#endif
- 	&suite__intel_pt,
- #endif
- #if defined(__x86_64__)
-diff --git a/tools/perf/tests/make b/tools/perf/tests/make
-index 8dd3f8090352..885cd321d67b 100644
---- a/tools/perf/tests/make
-+++ b/tools/perf/tests/make
-@@ -69,6 +69,7 @@ make_clean_all      := clean all
- make_python_perf_so := $(python_perf_so)
- make_debug          := DEBUG=1
- make_nondistro      := BUILD_NONDISTRO=1
-+make_extra_tests    := EXTRA_TESTS=1
- make_no_libperl     := NO_LIBPERL=1
- make_no_libpython   := NO_LIBPYTHON=1
- make_no_scripts     := NO_LIBPYTHON=1 NO_LIBPERL=1
--- 
-2.34.1
-
-
+> 
+> -- 
+> Kind regards,
+> 
+> Sakari Ailus
