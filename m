@@ -2,59 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 722BC72DA58
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 09:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DAA672DA5A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 09:05:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239104AbjFMHEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 03:04:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
+        id S234970AbjFMHFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 03:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234905AbjFMHEc (ORCPT
+        with ESMTP id S240487AbjFMHFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 03:04:32 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164A410F7;
-        Tue, 13 Jun 2023 00:04:29 -0700 (PDT)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QgKCp6wPXzqTMw;
-        Tue, 13 Jun 2023 14:59:02 +0800 (CST)
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+        Tue, 13 Jun 2023 03:05:00 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C107810F9;
+        Tue, 13 Jun 2023 00:04:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1686639897; x=1718175897;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2AtW6y3EN8O+q/fnZWh+rQwVGxKOSUVLNaK9VlQDLHg=;
+  b=kSwpxEXu/LxluCk0Nws7fDAtOsvy5vsbQ/TW0/tZzsflN1GD0NLLNrAR
+   r+kQN+m5pGFkpW5d7lfHKphJ7TAzbgqz7p5cHnvtJs4Fgv5nXdmFBBnbM
+   XdP9hZVdkdmmoZuQ/7oURboFbKaECyWn5urC00q9CvzpK8e2xMTlAFsP6
+   YK/LKznNnat+S+LnJgLte32uIDaXFrVxYIpk2BuJyTyo6RqHs8nSAFdaz
+   D/UT7jwiKYLUVeWL7ssipFJrpsfqKt2pKD5g1NqKkAR/bYxmwKUY2Bazv
+   ZXmD5cC0xode2Fix1zyeiLUaYFSRQHkQg6m62EL6sW+pw/Qi3VV7BXByP
+   w==;
+X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
+   d="scan'208";a="215783313"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Jun 2023 00:04:56 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 13 Jun 2023 15:03:58 +0800
-Subject: Re: [RFC] Adding support for setting the affinity of the recording
- process
-To:     Namhyung Kim <namhyung@kernel.org>
-CC:     James Clark <james.clark@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>
-References: <159de73b-fdd6-6df8-4f77-73c628fe641f@huawei.com>
- <a24634f7-be80-6ca2-9df7-1624fe11c281@arm.com>
- <c291692c-7db8-b4cc-e17a-422c75ad8daa@huawei.com>
- <CAM9d7chqy-RztC943JOgRLcEHvKZN8rS542q3xxW63==KGY3CQ@mail.gmail.com>
-From:   Yang Jihong <yangjihong1@huawei.com>
-Message-ID: <c2f82ca1-8fda-bd0c-4162-3a9e5d867a75@huawei.com>
-Date:   Tue, 13 Jun 2023 15:03:58 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+ 15.1.2507.21; Tue, 13 Jun 2023 00:04:55 -0700
+Received: from che-lt-i67131.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Tue, 13 Jun 2023 00:04:47 -0700
+From:   Manikandan Muralidharan <manikandan.m@microchip.com>
+To:     <lee@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <claudiu.beznea@microchip.com>, <sam@ravnborg.org>,
+        <bbrezillon@kernel.org>, <airlied@gmail.com>, <daniel@ffwll.ch>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>
+CC:     <Hari.PrasathGE@microchip.com>,
+        <Balamanikandan.Gunasundar@microchip.com>,
+        <Durai.ManickamKR@microchip.com>, <Nayabbasha.Sayed@microchip.com>,
+        <Dharma.B@microchip.com>, <Varshini.Rajendran@microchip.com>,
+        <Balakrishnan.S@microchip.com>,
+        Manikandan <manikandan.m@microchip.com>
+Subject: [PATCH 0/9] Add support for XLCDC to sam9x7 SoC family.
+Date:   Tue, 13 Jun 2023 12:34:17 +0530
+Message-ID: <20230613070426.467389-1-manikandan.m@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <CAM9d7chqy-RztC943JOgRLcEHvKZN8rS542q3xxW63==KGY3CQ@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,106 +72,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: Manikandan <manikandan.m@microchip.com>
 
-On 2023/6/13 13:50, Namhyung Kim wrote:
-> Hello,
-> 
-> On Mon, Jun 12, 2023 at 7:28 PM Yang Jihong <yangjihong1@huawei.com> wrote:
->>
->> Hello,
->>
->> On 2023/6/12 23:27, James Clark wrote:
->>>
->>>
->>> On 12/06/2023 11:26, Yang Jihong wrote:
->>>> Hello everyone,
->>>>
->>>> Currently, perf-record supports profiling an existing process, thread,
->>>> or a specified command.
->>>>
->>>> Sometimes we may need to set CPU affinity of the target process before
->>>> recording:
->>>>
->>>>     # taskset -pc <cpus> <pid>
->>>>     # perf record -p <pid> -- sleep 10
->>>>
->>>> or:
->>>>
->>>>     # perf record -- `taskset -c <cpus> COMMAND`
->>>>
->>>> I'm thinking about getting perf to support setting the affinity of the
->>>> recording process, for example:
->>>>
->>>> 1. set the CPU affinity of the <pid1> process to <cpus1>, <pid2> process
->>>> to <cpus2>,  and record:
->>>>
->>>>     # perf record -p <pid1>/<cpus1>:<pid2>/<cpus2> -- sleep 10
->>>>
->>>
->>> I'm not sure if this is necessary. You can already do this with taskset
->>> when you launch the processes or for existing ones.
->>
->> Yes, that's what we're doing now, and I'm thinking about whether perf
->> can support this "taskset" feature.
-> 
-> I agree with James that it looks out of scope of perf tools.
-> You can always use `taskset` for external processes.
-> 
-OK, so let's not consider this scenario.
->>
->>>
->>>> and
->>>>
->>>> 2. set CPU affinity of the COMMAND and record:
->>>>
->>>>     # perf record --taskset-command <cpus> COMMAND
->>>>
->>>> In doing so, perf, as an observer, actually changes some of the
->>>> properties of the target process, which may be contrary to the purpose
->>>> of perf tool.
->>>>
->>>>
->>>> Will we consider accepting this approach?
->>>>
->>>
->>> For #2 I do this sometimes, but I prefix the perf command with taskset
->>> because otherwise there is a small time between when taskset does its
->>> thing and launching the child process that it runs in the wrong place.
->>>
->>> Then one issue with the above method is that perf itself gets pinned to
->>> those CPUs as well. I suppose that could influence your application but
->>> I've never had an issue with it.
->>>
->>> If you really can't live with perf also being pinned to those CPUs I
->>> would say it makes sense to add options for #2. Otherwise I would just
->>> run everything under taskset and no changes are needed.
->>
->> If "perf" process and the target process are pinned to the same CPU,
->> and the CPU usage of the target process is high, the perf data
->> collection may be affected. Therefore, in this case, we may need to pin
->> the target process and "perf" to different CPUs.
->>
->>>
->>> I think you would still need to have perf itself pinned to the CPUs just
->>> before it does the fork and exec, and then after that it can undo its
->>> pinning. Otherwise you'd still get that small time running on the wrong
->>> cores.
->>>
->>
->> Thanks for your advice, or we can support setting different affinities
->> for the "perf" process and the target process.
-> 
-> When it comes to controlling `perf`, you can use --threads=<spec>
-> option which supports fairly complex control for parallelism and
-> affinity.
-> 
-Yes, we can ues --threads=<spec>
+This patch series aims to add support for XLCDC IP of sam9x7 SoC family
+to the DRM subsystem.XLCDC IP has additional registers and new
+configuration bits compared to the existing register set of HLCDC IP.
+The compatible string "microchip,sam9x7-xlcdc", defined for sam9x7 SoC
+family helps to differentiate the XLCDC and existing HLCDC code
+within the same driver.
 
-In addition to the above, or we can simply add a parameter to pin the 
-COMMAND to specific cpus.
+Durai Manickam KR (2):
+  drm: atmel-hlcdc: Define SAM9X7 XLCDC specific registers
+  drm: atmel-hlcdc: add compatible string check for XLCDC and HLCDC
 
-Thank you for your reply.
+Manikandan Muralidharan (7):
+  dt-bindings: mfd: Add bindings for SAM9X7 LCD controller
+  mfd: atmel-hlcdc: Add compatible for SAM9X7 HLCD controller
+  drm: atmel-hlcdc: add LCD controller layer definition for SAM9X7
+  drm: atmel_hlcdc: Add support for XLCDC in atmel LCD driver
+  drm: atmel-hlcdc: add DPI mode support for XLCDC
+  drm: atmel-hlcdc: add vertical and horizontal scaling support for
+    XLCDC
+  drm: atmel-hlcdc: add support for DSI output formats
 
-Thanks,
-Yang.
+ .../devicetree/bindings/mfd/atmel-hlcdc.txt   |   1 +
+ .../gpu/drm/atmel-hlcdc/atmel_hlcdc_crtc.c    | 167 ++++++++--
+ drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_dc.c  | 105 ++++++
+ drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_dc.h  | 113 +++++++
+ .../gpu/drm/atmel-hlcdc/atmel_hlcdc_plane.c   | 315 ++++++++++++++----
+ drivers/mfd/atmel-hlcdc.c                     |   1 +
+ include/linux/mfd/atmel-hlcdc.h               |  10 +
+ 7 files changed, 609 insertions(+), 103 deletions(-)
+
+-- 
+2.25.1
+
