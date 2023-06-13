@@ -2,227 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0522172DE17
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 11:45:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58CD572DE14
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 11:45:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239647AbjFMJp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 05:45:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58894 "EHLO
+        id S240753AbjFMJpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 05:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240311AbjFMJpn (ORCPT
+        with ESMTP id S240365AbjFMJpk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 05:45:43 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2694BC7;
-        Tue, 13 Jun 2023 02:45:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1686649542; x=1718185542;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=qJQeseeqfzRkx2UamfjiFAmR9bAcSJQnuMvDwJdRk8U=;
-  b=ZI0q2/iRSnAxaNQPQUW4dvOGxyRq35y+xskIDcHFwt9GYTCr+/0G1Bhc
-   RwULrhC5lqDl2+pXMG3LRp1vYXInvly5XrNB96VgXqe4mBD3GQNUxpfjw
-   QMmNtN9qlUPWJlpJwJ82nBjE7zy/B0s6WyRwp98ibMWlyKd1HtmVck2qv
-   RYWYljj8Dj9xnonovJhs+v7cI3wwabfV6wuBPGnmA7/bbW6/bWelPX5tE
-   OA0+mE6nfVHk/dOkrLUDMaQYi93vFrb7UddR1FuYjjOR8xlQfisU1PLXU
-   3lIQYaSqVgKoUU9Kbk2uND9a8T8SsnDo1jrWKIZOogk3YxUIvmJriU3Z5
-   w==;
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="scan'208";a="218210686"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Jun 2023 02:45:41 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 13 Jun 2023 02:45:41 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Tue, 13 Jun 2023 02:45:39 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next v2 2/2] net: micrel: Schedule work to read seconds for lan8841
-Date:   Tue, 13 Jun 2023 11:45:26 +0200
-Message-ID: <20230613094526.69532-3-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20230613094526.69532-1-horatiu.vultur@microchip.com>
-References: <20230613094526.69532-1-horatiu.vultur@microchip.com>
+        Tue, 13 Jun 2023 05:45:40 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7612210DC
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 02:45:39 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id ada2fe7eead31-43d10b0bf6cso329991137.3
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 02:45:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1686649538; x=1689241538;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WNzEy8MVZ8x+tq8g5HpTGHyfMbdsero480OR63gtbqs=;
+        b=JqovgFXbuPli7l7dXgrvY2uK2toI88NT4EQUXx9xL277TDuDVuUsigZAlZym0kP1Gw
+         +Vkj3qFPQJLzYF01DNdbp/er3p7k41SuJbOh3djnkhtLbRYwUUEn0XtjZkEMlgGXyXvs
+         VG58Thb3QgKI+nNf0ESL9uzb49wcH63/TM03m3rCC6ah5eNsyZlPwsWIx0P4WbY9j5Qx
+         4T42NAx9ZyQhi1MTO+XnvaEIoBNST+XdJi968DSnAGkvAV++cHij8m98UJ4kL9Jjb3Tw
+         EmDkK4ftX07oljM16Nx1tC5scU9XmZBblhuBbBL+Adw/W3mNJ7XwexFexxjI32gne4xo
+         86pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686649538; x=1689241538;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WNzEy8MVZ8x+tq8g5HpTGHyfMbdsero480OR63gtbqs=;
+        b=aifQ2NxH/bl7F7qsOqSOv+SdFg9RXGgNv/GarP4NK58/5yzoB9GfXebI9qdA4XWc/b
+         9wwzj07Sa2bXBjTR3Yc3WEkpXQXPEuWXpX2NIh0VwzpwxgzyruHbRjpO/Kfm6zhWCVh2
+         61k3FCeMVAxXfhKaxUjpPNCGHhHZBjQDzyk5nV0h7obdJtUfUO4vnKEeyjhwuULojWpn
+         GtWDF9ub6s8PXdROP5Tuqs+SSsj4sKrUL/QVMgdvpe5Sjgu9yt/n3cjhsZGr/myxhX7E
+         UH8/Oza3JXJMBg04RNu6jsjjxcCrSHCdX3PNgE7JN46tsZ6374zGK1Nyg64I3d/T3iWS
+         P2KQ==
+X-Gm-Message-State: AC+VfDz27RKolYD2mI47k+sq2aSjBFsra+q5NwjohGY/Nr/DuP7RPxnC
+        jN1NERM045smWTqYECErK2CtTnOkRa1dbTZHOwIEYyt8VIH9osFO
+X-Google-Smtp-Source: ACHHUZ5BClJpHM+qfOHUCII/gtseIclhD5cLFyAvfZbs1pkdUKkye/6TFiKstlGZMdsqAlWSwJlGQlKreUgG3xlQcuQ=
+X-Received: by 2002:a67:fd52:0:b0:43c:8c56:14a9 with SMTP id
+ g18-20020a67fd52000000b0043c8c5614a9mr5882483vsr.9.1686649538668; Tue, 13 Jun
+ 2023 02:45:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230609121649.88147-1-minhuadotchen@gmail.com>
+In-Reply-To: <20230609121649.88147-1-minhuadotchen@gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 13 Jun 2023 11:45:27 +0200
+Message-ID: <CAMRc=Md9utfFY3Uimnn7XTiHma7GBBmKLPAc9Y735Mxt1McBWw@mail.gmail.com>
+Subject: Re: [PATCH] gpio: davinci: make davinci_gpio_dev_pm_ops static
+To:     Min-Hua Chen <minhuadotchen@gmail.com>
+Cc:     Keerthy <j-keerthy@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of reading the seconds part of the received frame for each of
-the frames, schedule a workqueue to read the seconds part every 500ms
-and then for each of the received frames use this information instead of
-reading again the seconds part. Because if for example running with 512
-frames per second, there is no point to read 512 times the second part.
-Of course care needs to be taken in case of the less two significant
-bits are 0 or 3, to make sure there are no seconds wraparound.
-This will improve the CPU usage by ~20% and also it is possible to receive
-1024 Sync frames per second.
+On Fri, Jun 9, 2023 at 2:16=E2=80=AFPM Min-Hua Chen <minhuadotchen@gmail.co=
+m> wrote:
+>
+> This patch fixes the following sprse warnings:
+>
+> drivers/gpio/gpio-davinci.c:695:1: sparse: warning: symbol 'davinci_gpio_=
+dev_pm_ops' was not declared. Should it be static?
+>
+> No functional change intended.
+>
+> Signed-off-by: Min-Hua Chen <minhuadotchen@gmail.com>
+> ---
+>  drivers/gpio/gpio-davinci.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpio/gpio-davinci.c b/drivers/gpio/gpio-davinci.c
+> index aaaf61dc2632..1aed3ace0240 100644
+> --- a/drivers/gpio/gpio-davinci.c
+> +++ b/drivers/gpio/gpio-davinci.c
+> @@ -692,7 +692,7 @@ static int davinci_gpio_resume(struct device *dev)
+>         return 0;
+>  }
+>
+> -DEFINE_SIMPLE_DEV_PM_OPS(davinci_gpio_dev_pm_ops, davinci_gpio_suspend,
+> +static DEFINE_SIMPLE_DEV_PM_OPS(davinci_gpio_dev_pm_ops, davinci_gpio_su=
+spend,
+>                          davinci_gpio_resume);
+>
+>  static const struct of_device_id davinci_gpio_ids[] =3D {
+> --
+> 2.34.1
+>
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- drivers/net/phy/micrel.c | 49 ++++++++++++++++++++++++++++++++++++----
- 1 file changed, 45 insertions(+), 4 deletions(-)
+Applied, thanks!
 
-diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
-index 28365006b2067..9832eea404377 100644
---- a/drivers/net/phy/micrel.c
-+++ b/drivers/net/phy/micrel.c
-@@ -33,6 +33,7 @@
- #include <linux/ptp_classify.h>
- #include <linux/net_tstamp.h>
- #include <linux/gpio/consumer.h>
-+#include <linux/workqueue.h>
- 
- /* Operation Mode Strap Override */
- #define MII_KSZPHY_OMSO				0x16
-@@ -254,6 +255,9 @@
- #define PS_TO_REG				200
- #define FIFO_SIZE				8
- 
-+/* Delay used to get the second part from the LTC */
-+#define LAN8841_GET_SEC_LTC_DELAY		(500 * NSEC_PER_MSEC)
-+
- struct kszphy_hw_stat {
- 	const char *string;
- 	u8 reg;
-@@ -321,6 +325,9 @@ struct kszphy_ptp_priv {
- 	/* Lock for ptp_clock */
- 	struct mutex ptp_lock;
- 	struct ptp_pin_desc *pin_config;
-+
-+	s64 seconds;
-+	struct delayed_work seconds_work;
- };
- 
- struct kszphy_priv {
-@@ -3840,6 +3847,12 @@ static void lan8841_ptp_enable_processing(struct kszphy_ptp_priv *ptp_priv,
- 			       LAN8841_PTP_INSERT_TS_32BIT,
- 			       LAN8841_PTP_INSERT_TS_EN |
- 			       LAN8841_PTP_INSERT_TS_32BIT);
-+
-+		/* Schedule the work to read the seconds, which will be used in
-+		 * the received timestamp
-+		 */
-+		schedule_delayed_work(&ptp_priv->seconds_work,
-+				      nsecs_to_jiffies(LAN8841_GET_SEC_LTC_DELAY));
- 	} else {
- 		/* Disable interrupts on the TX side */
- 		phy_modify_mmd(phydev, 2, LAN8841_PTP_INT_EN,
-@@ -3853,6 +3866,11 @@ static void lan8841_ptp_enable_processing(struct kszphy_ptp_priv *ptp_priv,
- 			       LAN8841_PTP_INSERT_TS_32BIT, 0);
- 
- 		ptp_cancel_worker_sync(ptp_priv->ptp_clock);
-+
-+		/* Stop the work, as there is no reason to continue to read the
-+		 * seconds if there is no timestamping enabled
-+		 */
-+		cancel_delayed_work_sync(&ptp_priv->seconds_work);
- 	}
- }
- 
-@@ -4062,6 +4080,8 @@ static int lan8841_ptp_settime64(struct ptp_clock_info *ptp,
- 	phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_SET_NS_LO, lower_16_bits(ts->tv_nsec));
- 	phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_SET_NS_HI, upper_16_bits(ts->tv_nsec) & 0x3fff);
- 
-+	ptp_priv->seconds = ts->tv_sec;
-+
- 	/* Set the command to load the LTC */
- 	phy_write_mmd(phydev, 2, LAN8841_PTP_CMD_CTL,
- 		      LAN8841_PTP_CMD_CTL_PTP_LTC_LOAD);
-@@ -4116,7 +4136,6 @@ static void lan8841_ptp_getseconds(struct ptp_clock_info *ptp,
- 	struct phy_device *phydev = ptp_priv->phydev;
- 	time64_t s;
- 
--	mutex_lock(&ptp_priv->ptp_lock);
- 	/* Issue the command to read the LTC */
- 	phy_write_mmd(phydev, 2, LAN8841_PTP_CMD_CTL,
- 		      LAN8841_PTP_CMD_CTL_PTP_LTC_READ);
-@@ -4127,7 +4146,6 @@ static void lan8841_ptp_getseconds(struct ptp_clock_info *ptp,
- 	s |= phy_read_mmd(phydev, 2, LAN8841_PTP_LTC_RD_SEC_MID);
- 	s <<= 16;
- 	s |= phy_read_mmd(phydev, 2, LAN8841_PTP_LTC_RD_SEC_LO);
--	mutex_unlock(&ptp_priv->ptp_lock);
- 
- 	set_normalized_timespec64(ts, s, 0);
- }
-@@ -4644,15 +4662,20 @@ static long lan8841_ptp_do_aux_work(struct ptp_clock_info *ptp)
- 	u32 ts_header;
- 
- 	while ((skb = skb_dequeue(&ptp_priv->rx_queue)) != NULL) {
--		lan8841_ptp_getseconds(ptp, &ts);
-+		mutex_lock(&ptp_priv->ptp_lock);
-+		ts.tv_sec = ptp_priv->seconds;
-+		mutex_unlock(&ptp_priv->ptp_lock);
-+
- 		ts_header = __be32_to_cpu(LAN8841_SKB_CB(skb)->header->reserved2);
- 
- 		shhwtstamps = skb_hwtstamps(skb);
- 		memset(shhwtstamps, 0, sizeof(*shhwtstamps));
- 
- 		/* Check for any wrap arounds for the second part */
--		if ((ts.tv_sec & GENMASK(1, 0)) < ts_header >> 30)
-+		if ((ts.tv_sec & GENMASK(1, 0)) == 0 && (ts_header >> 30) == 3)
- 			ts.tv_sec -= GENMASK(1, 0) + 1;
-+		else if ((ts.tv_sec & GENMASK(1, 0)) == 3 && (ts_header >> 30) == 0)
-+			ts.tv_sec += 1;
- 
- 		shhwtstamps->hwtstamp =
- 			ktime_set((ts.tv_sec & ~(GENMASK(1, 0))) | ts_header >> 30,
-@@ -4665,6 +4688,21 @@ static long lan8841_ptp_do_aux_work(struct ptp_clock_info *ptp)
- 	return -1;
- }
- 
-+static void lan8841_ptp_seconds_work(struct work_struct *seconds_work)
-+{
-+	struct kszphy_ptp_priv *ptp_priv =
-+		container_of(seconds_work, struct kszphy_ptp_priv, seconds_work.work);
-+	struct timespec64 ts;
-+
-+	mutex_lock(&ptp_priv->ptp_lock);
-+	lan8841_ptp_getseconds(&ptp_priv->ptp_clock_info, &ts);
-+	ptp_priv->seconds = ts.tv_sec;
-+	mutex_unlock(&ptp_priv->ptp_lock);
-+
-+	schedule_delayed_work(&ptp_priv->seconds_work,
-+			      nsecs_to_jiffies(LAN8841_GET_SEC_LTC_DELAY));
-+}
-+
- static struct ptp_clock_info lan8841_ptp_clock_info = {
- 	.owner		= THIS_MODULE,
- 	.name		= "lan8841 ptp",
-@@ -4749,6 +4787,8 @@ static int lan8841_probe(struct phy_device *phydev)
- 
- 	phydev->mii_ts = &ptp_priv->mii_ts;
- 
-+	INIT_DELAYED_WORK(&ptp_priv->seconds_work, lan8841_ptp_seconds_work);
-+
- 	return 0;
- }
- 
-@@ -4758,6 +4798,7 @@ static int lan8841_suspend(struct phy_device *phydev)
- 	struct kszphy_ptp_priv *ptp_priv = &priv->ptp_priv;
- 
- 	ptp_cancel_worker_sync(ptp_priv->ptp_clock);
-+	cancel_delayed_work_sync(&ptp_priv->seconds_work);
- 
- 	return genphy_suspend(phydev);
- }
--- 
-2.38.0
-
+Bart
