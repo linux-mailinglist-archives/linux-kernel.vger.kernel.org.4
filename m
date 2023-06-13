@@ -2,142 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DA8F72EA01
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:37:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82CA672EA2B
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238213AbjFMRhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 13:37:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34784 "EHLO
+        id S231876AbjFMRo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 13:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbjFMRhn (ORCPT
+        with ESMTP id S240140AbjFMRoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 13:37:43 -0400
-Received: from smtp11.infineon.com (smtp11.infineon.com [IPv6:2a00:18f0:1e00:4::5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF7192;
-        Tue, 13 Jun 2023 10:37:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1686677862; x=1718213862;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=VxLwfDAWnXzDoi+kxjEz7uUqZcBPwXcL07uF35QSu+E=;
-  b=h7Z1uSKNqOjt+3+SqCiuRN43BoWPHNTlJrgQS8vQolOgYrqfQdoi9RMI
-   tS2kXm6WcSI0hLOepHjDLxhgn6GuEat6xFSfmH4R04xS5g7wDncEyfJ2M
-   fYWojpZTBeMEY3uFr/nVnnEBwAE2fh8KgAfNQHC7TLqPLbePVhe8eCLXD
-   A=;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="18548631"
-X-IronPort-AV: E=Sophos;i="6.00,240,1681164000"; 
-   d="scan'208";a="18548631"
-Received: from unknown (HELO MUCSE805.infineon.com) ([172.23.29.31])
-  by smtp11.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 19:37:40 +0200
-Received: from KLUSE818.infineon.com (172.28.156.171) by MUCSE805.infineon.com
- (172.23.29.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 13 Jun
- 2023 19:37:40 +0200
-Received: from [10.165.68.85] (10.165.68.85) by KLUSE818.infineon.com
- (172.28.156.171) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 13 Jun
- 2023 19:37:39 +0200
-Message-ID: <81e9b7a3-ec2a-435c-1e4d-2112e2d000a5@infineon.com>
-Date:   Tue, 13 Jun 2023 19:37:39 +0200
+        Tue, 13 Jun 2023 13:44:54 -0400
+X-Greylist: delayed 398 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 13 Jun 2023 10:44:52 PDT
+Received: from mx3.wp.pl (mx1.wp.pl [212.77.101.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA8BE6
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 10:44:52 -0700 (PDT)
+Received: (wp-smtpd smtp.wp.pl 16475 invoked from network); 13 Jun 2023 19:38:10 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
+          t=1686677890; bh=tqrOnhUqBSSsn9DlIaYHlugnQjEi/zvdG1LzqC/nqdM=;
+          h=From:To:Cc:Subject;
+          b=ooUufiOF3S/gX2T/vLbzkCkzpOPK9R34asDzgcP8+K/oR+s87L0rWJcMzISXvwgmM
+           9iWdwoB9HNvQBQdFkfH6ZL/QAw8yt1NckAMrI+JuUyYj5IhObzoZKRAMhcuMBS5clJ
+           JkvOAQREaiGCoOP5Vp9SZdlscRi5EEyZlaL5YhZE=
+Received: from 89-64-14-253.dynamic.chello.pl (HELO localhost) (stf_xl@wp.pl@[89.64.14.253])
+          (envelope-sender <stf_xl@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <wangdeming@inspur.com>; 13 Jun 2023 19:38:10 +0200
+Date:   Tue, 13 Jun 2023 19:38:11 +0200
+From:   Stanislaw Gruszka <stf_xl@wp.pl>
+To:     Deming Wang <wangdeming@inspur.com>
+Cc:     helmut.schaa@googlemail.com, kvalo@kernel.org,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rt2x00: fix the typo in comments
+Message-ID: <20230613173811.GA305477@wp.pl>
+References: <20230612114612.1640-1-wangdeming@inspur.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 3/4] tpm_tis: Use responseRetry to recover from data
- transfer errors
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230605175959.2131-1-Alexander.Steffen@infineon.com>
- <20230605175959.2131-4-Alexander.Steffen@infineon.com>
- <CT5VOWDNIK5S.1549VUD23JWWB@suppilovahvero>
- <34f01f17-3091-0ce2-f0c3-b0cd25ea61ce@infineon.com>
- <CT7BN97ICGN7.37I0H14NKKMYR@suppilovahvero>
-From:   Alexander Steffen <Alexander.Steffen@infineon.com>
-In-Reply-To: <CT7BN97ICGN7.37I0H14NKKMYR@suppilovahvero>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.165.68.85]
-X-ClientProxiedBy: MUCSE820.infineon.com (172.23.29.46) To
- KLUSE818.infineon.com (172.28.156.171)
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230612114612.1640-1-wangdeming@inspur.com>
+X-WP-MailID: b0b96eb4450f14852bbf4387fc221b21
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 0000000 [wVNl]                               
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08.06.23 16:00, Jarkko Sakkinen wrote:
-> On Wed Jun 7, 2023 at 8:14 PM EEST, Alexander Steffen wrote:
->>>> -     if (status & TPM_STS_DATA_AVAIL) {      /* retry? */
->>>> +     if (status & TPM_STS_DATA_AVAIL) {
->>>
->>> Please remove (no-op).
->>
->> You mean I shouldn't change the line and leave the comment in? To me it
->> looked like a very brief TODO comment "should we retry here?", and since
->> with this change it now actually does retry, I removed it.
+On Mon, Jun 12, 2023 at 07:46:12AM -0400, Deming Wang wrote:
+> Fix typo in the description of 'non-succesfull'.
 > 
-> Right, ok, point taken, you can keep it.
+> Signed-off-by: Deming Wang <wangdeming@inspur.com>
+Acked-by: Stanislaw Gruszka <stf_xl@wp.pl>
+> ---
+>  drivers/net/wireless/ralink/rt2x00/rt2x00link.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->>>>                 dev_err(&chip->dev, "Error left over data\n");
->>>>                 size = -EIO;
->>>>                 goto out;
->>>> @@ -396,10 +391,39 @@ static int tpm_tis_recv(struct tpm_chip *chip, u8 *buf, size_t count)
->>>>         }
->>>>
->>>>    out:
->>>> -     tpm_tis_ready(chip);
->>>>         return size;
->>>>    }
->>>>
->>>> +static int tpm_tis_recv_with_retries(struct tpm_chip *chip, u8 *buf, size_t count)
->>>
->>> This *substitutes* the curent tpm_tis_recv(), right?
->>>
->>> So it *is* tpm_tis_recv(), i.e. no renames thank you :-)
->>>
->>>> +{
->>>> +     struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
->>>> +     unsigned int try;
->>>> +     int rc = 0;
->>>> +
->>>> +     if (count < TPM_HEADER_SIZE) {
->>>> +             rc = -EIO;
->>>> +             goto out;
->>>> +     }
->>>> +
->>>> +     for (try = 0; try < TPM_RETRY; try++) {
->>>> +             rc = tpm_tis_recv(chip, buf, count);
->>>
->>> I would rename single shot tpm_tis_recv() as tpm_tis_try_recv().
->>>
->>>> +
->>>> +             if (rc == -EIO) {
->>>> +                     /* Data transfer errors, indicated by EIO, can be
->>>> +                      * recovered by rereading the response.
->>>> +                      */
->>>> +                     tpm_tis_write8(priv, TPM_STS(priv->locality),
->>>> +                                    TPM_STS_RESPONSE_RETRY);
->>>> +             } else {
->>>> +                     break;
->>>> +             }
->>>
->>> And if this should really be managed inside tpm_tis_try_recv(), and
->>> then return zero (as the code block consumes the return value).
->>
->> What exactly should be done in tpm_tis_try_recv()? It could set
->> TPM_STS_RESPONSE_RETRY, but then it would still need to return an error
->> code, so that this loop knows whether to call it again or not.
+> diff --git a/drivers/net/wireless/ralink/rt2x00/rt2x00link.c b/drivers/net/wireless/ralink/rt2x00/rt2x00link.c
+> index b052c96347d6..6cf7e7c997c2 100644
+> --- a/drivers/net/wireless/ralink/rt2x00/rt2x00link.c
+> +++ b/drivers/net/wireless/ralink/rt2x00/rt2x00link.c
+> @@ -192,7 +192,7 @@ void rt2x00link_update_stats(struct rt2x00_dev *rt2x00dev,
+>  		return;
+>  
+>  	/*
+> -	 * Frame was received successfully since non-succesfull
+> +	 * Frame was received successfully since non-successful
+>  	 * frames would have been dropped by the hardware.
+>  	 */
+>  	qual->rx_success++;
+> -- 
+> 2.27.0
 > 
-> So my thinking was to:
-> 
-> - Rename tpm_tis_recv() as tpm_tis_try_recv()
-> - Rename this new function as tpm_tis_recv().
-
-Sounds good, thanks. Will be done in v3.
-
-> BR, Jarkko
