@@ -2,98 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 806BF72EAC4
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 20:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83AAA72EAC8
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 20:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238304AbjFMSV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 14:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56086 "EHLO
+        id S238745AbjFMSWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 14:22:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232056AbjFMSVW (ORCPT
+        with ESMTP id S238619AbjFMSWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 14:21:22 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BEBA19A;
-        Tue, 13 Jun 2023 11:21:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=juq72744bbt+1tC+EywAD76Jb+ygPBpQeICaFLDnKjA=; b=fnu/ramaMmpZB3NQux+azFlCUV
-        7ga0av+e/3rtiILUmleFCt1GPwNUtWULBocPwYbvySIeeC5cuk8s3TrgtjdM3fpqhwGI35UE6T/lk
-        08Td2WsZB6+GtFnTWXetz3DRETQYP3CgXn8lrowJz45q5s4GdcKWotueTfEbNEkf9BkOvvWRbwWA6
-        +mUhv5eaC3H+yHXFrXU2wwFnQZwA/aR9DAJpfWGdJFCMwLWHjh74GB/DdBMeKEfPnNEtZSdUN3vjM
-        vDivOSHV4VgtUxs91Snk0T3LT91xWSf/CHh22iqxEJJHfLOW8VztLUoFRqGR7K2DI2DrlRnUBUN4p
-        UPcUkAlw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56914)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q98da-0000YQ-LR; Tue, 13 Jun 2023 19:21:02 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q98dU-0006Ff-6l; Tue, 13 Jun 2023 19:20:56 +0100
-Date:   Tue, 13 Jun 2023 19:20:56 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net v2 2/7] net: dsa: mt7530: fix trapping frames with
- multiple CPU ports on MT7530
-Message-ID: <ZIiziJ6Os+QScfMj@shell.armlinux.org.uk>
-References: <20230611081547.26747-1-arinc.unal@arinc9.com>
- <20230611081547.26747-2-arinc.unal@arinc9.com>
- <20230613150815.67uoz3cvvwgmhdp2@skbuf>
- <a91e88a8-c528-0392-1237-fc8417931170@arinc9.com>
- <20230613171858.ybhtlwxqwp7gyrfs@skbuf>
- <20230613172402.grdpgago6in4jogq@skbuf>
- <ca78b2f9-bf98-af26-0267-60d2638f7f00@arinc9.com>
- <20230613173908.iuofbuvkanwyr7as@skbuf>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230613173908.iuofbuvkanwyr7as@skbuf>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 13 Jun 2023 14:22:44 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5486690
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 11:22:42 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba88ec544ddso8396907276.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 11:22:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686680561; x=1689272561;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EXVuBob+0SnyKZatfXrUWZoqQLyDxveDSVB+zD1ibDM=;
+        b=id85ldk4n8HN5QzD14071she5h8N1rHlmeqY3RWOE3md2iPJfHRvxnDZC07/3qpC36
+         /BKhb7do2QF/t0iHzEB36e01IzE5zmaY9+HYQmZtVnx4ITLrCVgaPu8KU3SQBElzrASj
+         uwNzZAf3EyFoOTQk2kBTNev4Z7pcOKlVpKSxF4eASDOwpWfI6P3aSj18suKF3wp7CLci
+         Ot6p5k80XtOL6P67exHbAsKkSMBcKk7grY1unQ6K9fgX9imYopk+x6Gjnv7ZBqpDaVva
+         bhD8VBnf3kyXVMTFvM3aw7tFnIyqwWyOA5rJwKDJd+GGiv5OM+YwSA88fzRkBUYdZy+H
+         viRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686680561; x=1689272561;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EXVuBob+0SnyKZatfXrUWZoqQLyDxveDSVB+zD1ibDM=;
+        b=FHtO57LlF8obtrTGY68DyU57iumEaK60OE3vsEgEQupueE6lRe/tx1r+Iuy/7Wv2VN
+         lxTPcmXPf6odSS7LaEyjF+GIEoARQEAT9Nmc1uX/tR0TfzrKgF9vbQ8ymQCz+PBv/Gn7
+         EgmEjzpNxdXiItHnBUbQjdRNlAxVa81NQ9z65bsDtw7ngcnXLLlmTCoylmIP5O7ZmQ8/
+         +0ZKDw9CIwAYDUReyr0seGZW+jMGnnG8vTDgZ4DiVGurCt8o0DWj4YVbz3UNKCB1FQi5
+         NtVdcK1okEi0PScCpFK0wg+9nmporFe27G1wydmNVfkZ3QDBSDU911EAwNVqMgR4u0je
+         wN8Q==
+X-Gm-Message-State: AC+VfDwqBanMdfebgVRg/RRhFcsTVAquV82HuRjM+JBoVx5hKr5zQUWo
+        WGg8PXnQsbEiJloKd1Q2Fj81YWJc1zI=
+X-Google-Smtp-Source: ACHHUZ7CM6p/5nCxeUfVQdMmxRHqJB5W0/BYt3xn73uGN+kqngA6b6vyk1VojGId5+q9gV7ht9oYEZxd3O0=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:1384:b0:bca:295e:f9bf with SMTP id
+ x4-20020a056902138400b00bca295ef9bfmr1102242ybu.7.1686680561629; Tue, 13 Jun
+ 2023 11:22:41 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Tue, 13 Jun 2023 11:21:19 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230613182117.1942693-3-seanjc@google.com>
+Subject: [ANNOUNCE / CFP] KVM Microconference at LPC 2023
+From:   Sean Christopherson <seanjc@google.com>
+To:     kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 08:39:08PM +0300, Vladimir Oltean wrote:
-> Ok. I see Russell has commented on v4, though I don't see that he particularly
-> pointed out that this fixes a problem which isn't yet a problem. I got lost in
-> all the versions. v2 and v3 are out of my inbox now :)
+Hi all!  The KVM Microconference for LPC 2023 has been accepted!
 
-I didn't really get to that level of detail (which is why I haven't
-given any r-b's) - I was more focused on trying to understand what
-each commit was doing, and trying to get easier to parse commit
-messages.
+Proposals/abstracts can be submitted (link below) under the "KVM MC" track.
+Very tenatively assume that each slot will be 20 minutes.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+The exact timing, location, etc. are TBD.  We (Paolo and/or I) will follow-up
+with more info as it's available, and as we ourselves get more organized.  In
+the meantime, I wanted to give everyone a heads up that the KVM MC is a go!
+
+Logistics: https://lpc.events/event/17/page/198-lpc-2023-overview
+KVM MC:    https://lpc.events/event/17/contributions/1413/
+Abstracts: https://lpc.events/event/17/abstracts/
