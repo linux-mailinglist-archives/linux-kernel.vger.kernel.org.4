@@ -2,127 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4AAD72D7F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 05:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 883AC72D7F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 05:05:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239474AbjFMDFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 23:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51630 "EHLO
+        id S239692AbjFMDFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 23:05:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239386AbjFMDEG (ORCPT
+        with ESMTP id S239405AbjFMDEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 23:04:06 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4AE8210A;
-        Mon, 12 Jun 2023 20:03:07 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:47948.1267835893
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id 2B88B1002F4;
-        Tue, 13 Jun 2023 11:02:26 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-75648544bd-7vx9t with ESMTP id 9b21112c8a744a598e4680c08d0d9487 for bhelgaas@google.com;
-        Tue, 13 Jun 2023 11:02:30 CST
-X-Transaction-ID: 9b21112c8a744a598e4680c08d0d9487
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-From:   Sui Jingfeng <15330273260@189.cn>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian Konig <christian.koenig@amd.com>,
-        Pan Xinhui <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Subject: [PATCH v7 8/8] drm/radeon: Implement the is_boot_device callback function
-Date:   Tue, 13 Jun 2023 11:01:51 +0800
-Message-Id: <20230613030151.216625-9-15330273260@189.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230613030151.216625-1-15330273260@189.cn>
-References: <20230613030151.216625-1-15330273260@189.cn>
+        Mon, 12 Jun 2023 23:04:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB1BB2117;
+        Mon, 12 Jun 2023 20:03:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 184E3630DF;
+        Tue, 13 Jun 2023 03:02:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25F47C433EF;
+        Tue, 13 Jun 2023 03:02:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686625338;
+        bh=QE/bJwOrqp//Jql9+14/MwBTyhw4er96hvgONGtQRQA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fmFutB7UJyIqIvyYtzg1AhRZiCqep9yi7UDUTZD+BRwy69iezaNkdsmMzjfXkNDkF
+         uq1944kIbErb3We3MTv2UfHDOJhnAakKbShcn8gxn9Ek6+a93OlDiNM3W8XbAOc5Mb
+         eACE/U6o9yjpFlxF02c7JlDOccZjNV8T9K/sg6ZWGR1paTU3AgwWRErDIhSBSkP7Z7
+         nBO64y9c/jjjL/RVX3c3kY1uym4Lh4PP4MACduOmXaZEEJqCEPU5xfBbC60Gj7xT0c
+         p5iL/yfQtr88Y2hO5W/gGWwB5jAKyTgwz9L6CUZmw6Tg78mKJQ7Aqnu89AETEYoJTZ
+         IHUWlMs3YxGIA==
+Date:   Mon, 12 Jun 2023 20:02:16 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, herbert@gondor.apana.org.au,
+        davem@davemloft.net, conor.dooley@microchip.com,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, christoph.muellner@vrull.eu,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>
+Subject: Re: [PATCH v5 0/4] Implement GCM ghash using Zbc and Zbkb extensions
+Message-ID: <20230613030216.GC883@sol.localdomain>
+References: <20230612210442.1805962-1-heiko.stuebner@vrull.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230612210442.1805962-1-heiko.stuebner@vrull.eu>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sui Jingfeng <suijingfeng@loongson.cn>
+Hi Heiko,
 
-[why]
+On Mon, Jun 12, 2023 at 11:04:38PM +0200, Heiko Stuebner wrote:
+> From: Heiko Stuebner <heiko.stuebner@vrull.eu>
+> 
+> This was originally part of my vector crypto series, but was part
+> of a separate openssl merge request implementing GCM ghash as using
+> non-vector extensions.
+> 
+> As that pull-request
+>     https://github.com/openssl/openssl/pull/20078
+> got merged recently into openssl, we could also check if this could
+> go into the kernel as well and provide a base for further accelerated
+> cryptographic support.
 
-The vga_is_firmware_default() defined in drivers/pci/vgaarb.c is
-arch-dependent, it's a dummy on non-x86 architectures currently.
-This made VGAARB lost an important condition for the arbitration.
-It could still be wrong even if we remove the #ifdef and #endif guards.
-because the PCI bar will move (resource re-allocation).
+I'm still a bit skeptical of the usefulness of a standalone "ghash"
+implementation, when in practice it will only be used as part of "gcm(aes)".
+Directly implementing "gcm(aes)" (instead of relying on crypto/gcm.c to compose
+"ghash" and "ctr(aes)") also allows some performance optimizations.
 
-[how]
+I asked about this on v4
+(https://lore.kernel.org/linux-crypto/ZCSG71bRuTzVutdm@gmail.com/),
+but I didn't receive a response.
 
-The device that owns the firmware framebuffer should be the default boot
-device. This patch adds an arch-independent function to enforce this rule.
-The vgaarb subsystem will call back to radeon_is_boot_device() function
-when drm/radeon is successfully bound to a radeon GPU device.
+Any thoughts on this?
 
-Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: Christian Konig <christian.koenig@amd.com>
-Cc: Pan Xinhui <Xinhui.Pan@amd.com>
-Cc: David Airlie <airlied@gmail.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
----
- drivers/gpu/drm/radeon/radeon_device.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/radeon/radeon_device.c b/drivers/gpu/drm/radeon/radeon_device.c
-index 71f2ff39d6a1..afb49000830c 100644
---- a/drivers/gpu/drm/radeon/radeon_device.c
-+++ b/drivers/gpu/drm/radeon/radeon_device.c
-@@ -34,6 +34,7 @@
- #include <linux/vga_switcheroo.h>
- #include <linux/vgaarb.h>
- 
-+#include <drm/drm_aperture.h>
- #include <drm/drm_cache.h>
- #include <drm/drm_crtc_helper.h>
- #include <drm/drm_device.h>
-@@ -1263,6 +1264,15 @@ static const struct vga_switcheroo_client_ops radeon_switcheroo_ops = {
- 	.can_switch = radeon_switcheroo_can_switch,
- };
- 
-+static bool radeon_is_boot_device(struct pci_dev *pdev)
-+{
-+	struct drm_device *dev = pci_get_drvdata(pdev);
-+	struct radeon_device *rdev = dev->dev_private;
-+	struct radeon_mc *gmc = &rdev->mc;
-+
-+	return drm_aperture_contain_firmware_fb(gmc->aper_base, gmc->aper_size);
-+}
-+
- /**
-  * radeon_device_init - initialize the driver
-  *
-@@ -1425,7 +1435,7 @@ int radeon_device_init(struct radeon_device *rdev,
- 	/* if we have > 1 VGA cards, then disable the radeon VGA resources */
- 	/* this will fail for cards that aren't VGA class devices, just
- 	 * ignore it */
--	vga_client_register(rdev->pdev, radeon_vga_set_decode, NULL);
-+	vga_client_register(rdev->pdev, radeon_vga_set_decode, radeon_is_boot_device);
- 
- 	if (rdev->flags & RADEON_IS_PX)
- 		runtime = true;
--- 
-2.25.1
-
+- Eric
