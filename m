@@ -2,217 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 482CB72E496
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:51:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF73172E4A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242652AbjFMNu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 09:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50650 "EHLO
+        id S236500AbjFMNwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 09:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242609AbjFMNuh (ORCPT
+        with ESMTP id S239880AbjFMNw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 09:50:37 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42CB310DA;
-        Tue, 13 Jun 2023 06:50:35 -0700 (PDT)
+        Tue, 13 Jun 2023 09:52:28 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916231FEF
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 06:52:00 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f7378a75c0so42245165e9.3
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 06:52:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1686664235;
-  x=1718200235;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=MMSaPsOtCtamt1Sq6HblLoFD8AE1zNYqILjXC0xJvh0=;
-  b=CeZXZWcIm/VCW+FhQUmMv4aqaTvVETc0ywR4ifn8ojUuedYY6MdQ8PD7
-   bYLtyGwDH7e4LqrRvAc15q6Z0zgqJbQ0q1et4XYQt1uLQNy28Yz84zNbf
-   0PM1GuORpJFWv+yEBbBulx1w2uEpchA8xmTqVF9Qk85der6BntSKuOsVG
-   emreORUxtZXDxB9/vbMpnRJ8dRkfeFldBED1Y2O87c1A4wJPhB+j2veth
-   mZ5L8aEMRpuzvRal/PQvaMyB33cQxUjX+u0rwv7mXjmGgOUDXkRl+ZAdS
-   1ILeu5l8+9fmuhFMBAIkzGfsp7YSw3053mykkP4bMbLWyJQntpLHdUIFx
-   w==;
-From:   Astrid Rost <astrid.rost@axis.com>
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-CC:     <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@axis.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mathieu Othacehe <m.othacehe@gmail.com>,
-        Astrid Rost <astrid.rost@axis.com>
-Subject: [PATCH v6 8/8] iio: light: vcnl4000: Add calibration bias for 4040/4200
-Date:   Tue, 13 Jun 2023 15:50:24 +0200
-Message-ID: <20230613135025.2596641-9-astrid.rost@axis.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230613135025.2596641-1-astrid.rost@axis.com>
-References: <20230613135025.2596641-1-astrid.rost@axis.com>
+        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1686664317; x=1689256317;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=WaeJYs/uG6fynkKfa9zh2deKdFZIe8/Di6A1zgej6LU=;
+        b=Q1TcKKMKKnZe7DzIPaTDFI6gquigAuW8XeW4+klDezAjpwuO6fGCnJ1f7r/u6KZ0ER
+         O9dM1DXba6jhcO9WyqBBbXkOHVH51o+LTctGbKiFGcSH95isneJQPVjB5zHyiodmtN3Q
+         iiKAFQe47MdbZTDN7b34IMWXoX3zXEDuCXxkBRbmTYHrBDa3wPpgoRjui2Igf2KIbXxJ
+         LQWjxywaHFKOJAd0qWNhlGfaGxanYdhKtQUL87ogp+qDZ0PVjsxPh/zmXDXpLVRlr1QP
+         CsMUeQ2Eo5dTH5eOxqCdjEV+d9P6uNSTayFwtj3BByZuvQAvlobd7CngPX5JuQ9zHbHY
+         fMiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686664317; x=1689256317;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WaeJYs/uG6fynkKfa9zh2deKdFZIe8/Di6A1zgej6LU=;
+        b=kyhWBmaDWZ1OksnG3zLE0h386AZoL+a69bObWbwl9v3V7+cjtOwltCLSlVwisCV9GJ
+         8FvUVBSBov7LjAbr+mAsGFl9hL8K3veJeo0wAiaPTlcN5BWvZNR8worL79gK2iGTACZd
+         VGQpENzyY2c7PtVZ0v0ZJ57LAD/Qc81Uj/aS9wK9NYs6xYTd6F+3Z8TNtFdL0ph2AsqP
+         RENi3vuc4DKeOVc2yKCPcCtqykTwxhMdVpdFn20on1cxgU9ONaTfmzijqjgTE834s9j0
+         B6eC04HwpgRCIiVbHuXZGiPt0wI8mDx1PjQJU/RWIIJYAgNZ56K9Km/tdi8JXO5BzU4M
+         bnjg==
+X-Gm-Message-State: AC+VfDzpnMPyMswiHp2G38DR0lYZ3gp/Xo+uY5pad9TXfqovY5+TT2vn
+        NfP8VMZI+U5KnN3LNMfSaMEYdQ==
+X-Google-Smtp-Source: ACHHUZ6tbmwrKTMNvbpuPLgT+1R9lK2K8a7nds1UQDOt+PvY6ORk2+AOkeh44wiUBJm89/taQrjyYQ==
+X-Received: by 2002:adf:f548:0:b0:30e:1103:2e39 with SMTP id j8-20020adff548000000b0030e11032e39mr6622276wrp.58.1686664317375;
+        Tue, 13 Jun 2023 06:51:57 -0700 (PDT)
+Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
+        by smtp.gmail.com with ESMTPSA id n16-20020adfe350000000b0030e5b1fffc3sm15502558wrj.9.2023.06.13.06.51.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 06:51:56 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 15:51:55 +0200
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Petr Oros <poros@redhat.com>
+Cc:     Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
+        kuba@kernel.org, vadfed@meta.com, jonathan.lemon@gmail.com,
+        pabeni@redhat.com, corbet@lwn.net, davem@davemloft.net,
+        edumazet@google.com, vadfed@fb.com, jesse.brandeburg@intel.com,
+        anthony.l.nguyen@intel.com, saeedm@nvidia.com, leon@kernel.org,
+        richardcochran@gmail.com, sj@kernel.org, javierm@redhat.com,
+        ricardo.canuelo@collabora.com, mst@redhat.com, tzimmermann@suse.de,
+        michal.michalik@intel.com, gregkh@linuxfoundation.org,
+        jacek.lawrynowicz@linux.intel.com, airlied@redhat.com,
+        ogabbay@kernel.org, arnd@arndb.de, nipun.gupta@amd.com,
+        axboe@kernel.dk, linux@zary.sk, masahiroy@kernel.org,
+        benjamin.tissoires@redhat.com, geert+renesas@glider.be,
+        milena.olech@intel.com, kuniyu@amazon.com, liuhangbin@gmail.com,
+        hkallweit1@gmail.com, andy.ren@getcruise.com, razor@blackwall.org,
+        idosch@nvidia.com, lucien.xin@gmail.com, nicolas.dichtel@6wind.com,
+        phil@nwl.cc, claudiajkang@gmail.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, linux-rdma@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, mschmidt@redhat.com,
+        linux-clk@vger.kernel.org, vadim.fedorenko@linux.dev,
+        Jiri Pirko <jiri@nvidia.com>
+Subject: Re: [RFC PATCH v8 06/10] netdev: expose DPLL pin handle for netdevice
+Message-ID: <ZIh0e5b/xp6H85pN@nanopsycho>
+References: <20230609121853.3607724-1-arkadiusz.kubalewski@intel.com>
+ <20230609121853.3607724-7-arkadiusz.kubalewski@intel.com>
+ <343e2638d2e9b3d13216235f85c2d1dae2634881.camel@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <343e2638d2e9b3d13216235f85c2d1dae2634881.camel@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The calibration bias is setting the LED current to change the detection
-distance. Add read/write attribute for proximity calibration bias and
-read attribute for available values. This is supported for vcnl4040 and
-vcnl4200.
+Mon, Jun 12, 2023 at 11:17:23AM CEST, poros@redhat.com wrote:
+>Arkadiusz Kubalewski píše v Pá 09. 06. 2023 v 14:18 +0200:
+>> From: Jiri Pirko <jiri@nvidia.com>
 
-Signed-off-by: Astrid Rost <astrid.rost@axis.com>
----
- drivers/iio/light/vcnl4000.c | 93 +++++++++++++++++++++++++++++++++++-
- 1 file changed, 91 insertions(+), 2 deletions(-)
+[...]
 
-diff --git a/drivers/iio/light/vcnl4000.c b/drivers/iio/light/vcnl4000.c
-index ebe9b5343bb3..d0246bcca2df 100644
---- a/drivers/iio/light/vcnl4000.c
-+++ b/drivers/iio/light/vcnl4000.c
-@@ -92,6 +92,7 @@
- #define VCNL4040_CONF1_PS_PERS	GENMASK(5, 4) /* Proximity interrupt persistence setting */
- #define VCNL4040_PS_CONF2_PS_INT	GENMASK(9, 8) /* Proximity interrupt mode */
- #define VCNL4040_PS_CONF3_MPS		GENMASK(6, 5) /* Proximity multi pulse number */
-+#define VCNL4040_PS_MS_LED_I		GENMASK(10, 8) /* Proximity current */
- #define VCNL4040_PS_IF_AWAY		BIT(8) /* Proximity event cross low threshold */
- #define VCNL4040_PS_IF_CLOSE		BIT(9) /* Proximity event cross high threshold */
- #define VCNL4040_ALS_RISING		BIT(12) /* Ambient Light cross high threshold */
-@@ -158,6 +159,17 @@ static const int vcnl4200_als_it_times[][2] = {
- 	{0, 400000},
- };
+
+>> +static size_t rtnl_dpll_pin_size(const struct net_device *dev)
+>> +{
+>> +       size_t size = nla_total_size(0); /* nest IFLA_DPLL_PIN */
+>> +
+>> +       if (dev->dpll_pin)
+>> +               size += dpll_msg_pin_handle_size(dev->dpll_pin);
+>
+>Hi Arkadiusz,
+>
+>net_device->dpll_pin is only valid if IS_ENABLED(CONFIG_DPLL)
+>But the code in net/core/rtnetlink.c doesn't respect that.
+>If CONFIG_DPLL is not set, net/core/rtnetlink.c cannot be compiled.
+>
+>Regards,
+>Petr 
+
+You are correct. Here's the squash-patch to fix this. Arkadiusz, could
+you please make the squash? Thanks!
+
+diff --git a/drivers/dpll/dpll_netlink.c b/drivers/dpll/dpll_netlink.c
+index e6efc17aaf26..00dc96c3ade4 100644
+--- a/drivers/dpll/dpll_netlink.c
++++ b/drivers/dpll/dpll_netlink.c
+@@ -303,12 +303,14 @@ dpll_cmd_pin_fill_details(struct sk_buff *msg, struct dpll_pin *pin,
  
-+static const int vcnl4040_ps_calibbias_ua[][2] = {
-+	{0, 50000},
-+	{0, 75000},
-+	{0, 100000},
-+	{0, 120000},
-+	{0, 140000},
-+	{0, 160000},
-+	{0, 180000},
-+	{0, 200000},
-+};
-+
- static const int vcnl4040_als_persistence[] = {1, 2, 4, 8};
- static const int vcnl4040_ps_persistence[] = {1, 2, 3, 4};
- static const int vcnl4040_ps_oversampling_ratio[] = {1, 2, 4, 8};
-@@ -820,6 +832,54 @@ static ssize_t vcnl4040_write_ps_oversampling_ratio(struct vcnl4000_data *data,
- 	return ret;
+ size_t dpll_msg_pin_handle_size(struct dpll_pin *pin)
+ {
+-	return nla_total_size(4); /* DPLL_A_PIN_ID */
++	return pin ? nla_total_size(4) : 0; /* DPLL_A_PIN_ID */
  }
+ EXPORT_SYMBOL_GPL(dpll_msg_pin_handle_size);
  
-+static ssize_t vcnl4040_read_ps_calibbias(struct vcnl4000_data *data, int *val, int *val2)
+ int dpll_msg_add_pin_handle(struct sk_buff *msg, struct dpll_pin *pin)
+ {
++	if (!pin)
++		return 0;
+ 	if (nla_put_u32(msg, DPLL_A_PIN_ID, pin->id))
+ 		return -EMSGSIZE;
+ 	return 0;
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index b002e3cc9943..82ad12fd4266 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -3967,6 +3967,16 @@ int dev_get_port_parent_id(struct net_device *dev,
+ bool netdev_port_same_parent_id(struct net_device *a, struct net_device *b);
+ void netdev_dpll_pin_set(struct net_device *dev, struct dpll_pin *dpll_pin);
+ void netdev_dpll_pin_clear(struct net_device *dev);
++
++static inline struct dpll_pin *netdev_dpll_pin(const struct net_device *dev)
 +{
-+	int ret;
-+
-+	ret = i2c_smbus_read_word_data(data->client, VCNL4200_PS_CONF3);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = FIELD_GET(VCNL4040_PS_MS_LED_I, ret);
-+	if (ret >= ARRAY_SIZE(vcnl4040_ps_calibbias_ua))
-+		return -EINVAL;
-+
-+	*val = vcnl4040_ps_calibbias_ua[ret][0];
-+	*val2 = vcnl4040_ps_calibbias_ua[ret][1];
-+
-+	return ret;
++#if IS_ENABLED(CONFIG_DPLL)
++	return dev->dpll_pin;
++#else
++	return NULL;
++#endif
 +}
 +
-+static ssize_t vcnl4040_write_ps_calibbias(struct vcnl4000_data *data, int val)
-+{
-+	unsigned int i;
-+	int ret;
-+	u16 regval;
-+
-+	for (i = 0; i < ARRAY_SIZE(vcnl4040_ps_calibbias_ua); i++) {
-+		if (val == vcnl4040_ps_calibbias_ua[i][1])
-+			break;
-+	}
-+
-+	if (i >= ARRAY_SIZE(vcnl4040_ps_calibbias_ua))
-+		return -EINVAL;
-+
-+	mutex_lock(&data->vcnl4000_lock);
-+
-+	ret = i2c_smbus_read_word_data(data->client, VCNL4200_PS_CONF3);
+ struct sk_buff *validate_xmit_skb_list(struct sk_buff *skb, struct net_device *dev, bool *again);
+ struct sk_buff *dev_hard_start_xmit(struct sk_buff *skb, struct net_device *dev,
+ 				    struct netdev_queue *txq, int *ret);
+diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
+index ebe9ae8608fc..67dd455e15c7 100644
+--- a/net/core/rtnetlink.c
++++ b/net/core/rtnetlink.c
+@@ -1056,8 +1056,7 @@ static size_t rtnl_dpll_pin_size(const struct net_device *dev)
+ {
+ 	size_t size = nla_total_size(0); /* nest IFLA_DPLL_PIN */
+ 
+-	if (dev->dpll_pin)
+-		size += dpll_msg_pin_handle_size(dev->dpll_pin);
++	size += dpll_msg_pin_handle_size(netdev_dpll_pin(dev));
+ 
+ 	return size;
+ }
+@@ -1790,11 +1789,9 @@ static int rtnl_fill_dpll_pin(struct sk_buff *skb,
+ 	if (!dpll_pin_nest)
+ 		return -EMSGSIZE;
+ 
+-	if (dev->dpll_pin) {
+-		ret = dpll_msg_add_pin_handle(skb, dev->dpll_pin);
+-		if (ret < 0)
+-			goto nest_cancel;
+-	}
++	ret = dpll_msg_add_pin_handle(skb, netdev_dpll_pin(dev));
 +	if (ret < 0)
-+		goto out_unlock;
-+
-+	regval = (ret & ~VCNL4040_PS_MS_LED_I);
-+	regval |= FIELD_PREP(VCNL4040_PS_MS_LED_I, i);
-+	ret = i2c_smbus_write_word_data(data->client, VCNL4200_PS_CONF3,
-+					regval);
-+
-+out_unlock:
-+	mutex_unlock(&data->vcnl4000_lock);
-+	return ret;
-+}
-+
- static int vcnl4000_read_raw(struct iio_dev *indio_dev,
- 				struct iio_chan_spec const *chan,
- 				int *val, int *val2, long mask)
-@@ -880,6 +940,16 @@ static int vcnl4000_read_raw(struct iio_dev *indio_dev,
- 		default:
- 			return -EINVAL;
- 		}
-+	case IIO_CHAN_INFO_CALIBBIAS:
-+		switch (chan->type) {
-+		case IIO_PROXIMITY:
-+			ret = vcnl4040_read_ps_calibbias(data, val, val2);
-+			if (ret < 0)
-+				return ret;
-+			return IIO_VAL_INT_PLUS_MICRO;
-+		default:
-+			return -EINVAL;
-+		}
- 	default:
- 		return -EINVAL;
- 	}
-@@ -910,6 +980,13 @@ static int vcnl4040_write_raw(struct iio_dev *indio_dev,
- 		default:
- 			return -EINVAL;
- 		}
-+	case IIO_CHAN_INFO_CALIBBIAS:
-+		switch (chan->type) {
-+		case IIO_PROXIMITY:
-+			return vcnl4040_write_ps_calibbias(data, val2);
-+		default:
-+			return -EINVAL;
-+		}
- 	default:
- 		return -EINVAL;
- 	}
-@@ -948,6 +1025,16 @@ static int vcnl4040_read_avail(struct iio_dev *indio_dev,
- 		default:
- 			return -EINVAL;
- 		}
-+	case IIO_CHAN_INFO_CALIBBIAS:
-+		switch (chan->type) {
-+		case IIO_PROXIMITY:
-+			*vals = (int *)vcnl4040_ps_calibbias_ua;
-+			*length = 2 * ARRAY_SIZE(vcnl4040_ps_calibbias_ua);
-+			*type = IIO_VAL_INT_PLUS_MICRO;
-+			return IIO_AVAIL_LIST;
-+		default:
-+			return -EINVAL;
-+		}
- 	default:
- 		return -EINVAL;
- 	}
-@@ -1721,9 +1808,11 @@ static const struct iio_chan_spec vcnl4040_channels[] = {
- 		.type = IIO_PROXIMITY,
- 		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |
- 			BIT(IIO_CHAN_INFO_INT_TIME) |
--			BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO),
-+			BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO) |
-+			BIT(IIO_CHAN_INFO_CALIBBIAS),
- 		.info_mask_separate_available = BIT(IIO_CHAN_INFO_INT_TIME) |
--			BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO),
-+			BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO) |
-+			BIT(IIO_CHAN_INFO_CALIBBIAS),
- 		.ext_info = vcnl4000_ext_info,
- 		.event_spec = vcnl4040_event_spec,
- 		.num_event_specs = ARRAY_SIZE(vcnl4040_event_spec),
--- 
-2.30.2
++		goto nest_cancel;
+ 
+ 	nla_nest_end(skb, dpll_pin_nest);
+ 	return 0;
 
