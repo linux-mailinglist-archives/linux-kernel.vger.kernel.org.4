@@ -2,80 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7200772E77F
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:41:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 119EA72E778
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:41:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242573AbjFMPkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 11:40:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56362 "EHLO
+        id S239579AbjFMPlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 11:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243034AbjFMPkE (ORCPT
+        with ESMTP id S239942AbjFMPlE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 11:40:04 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7553819B6;
-        Tue, 13 Jun 2023 08:39:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=2SJDWDPhp0gjXKO83sRx30AxnfsPbJ+TkvDdczAUaQw=; b=Oquei1SzdLbi2O5mcqwSutVp2j
-        gjN0clYhJNLxNP6AUsoZfSQtRr1hEpOv/RK5AU+U+LwsD+zx1Ykma7KlsLiETRk5wYp0q05GObM7K
-        zN0N4Qk0K6fQ2A64kU6kmuwix/HCvS0Mw6NI7IzDpfJi0EWQbQvVUoblLjxd8pI2m/qtzvpcoeSjr
-        BbvKT6bKeNstFkpRO2F3J0/dadfEUPIQPlpt1b/KRbrwqjM2km/VUpNg53kpfJYXJMh6/0JHepwLv
-        LR7fBTwOLpL/5wdeey+YxaFINMO3bzbUWV+K9mizYcJUmMatXdROJ04ca+6VhyiXHLtcw2QLr2S74
-        VwwLHNrw==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q967U-008V3j-2b;
-        Tue, 13 Jun 2023 15:39:44 +0000
-Message-ID: <89adc1ac-25a0-6eb6-4cc9-ab6cc8d49730@infradead.org>
-Date:   Tue, 13 Jun 2023 08:39:44 -0700
+        Tue, 13 Jun 2023 11:41:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5597B1A5;
+        Tue, 13 Jun 2023 08:40:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF11B6253F;
+        Tue, 13 Jun 2023 15:40:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1E1FC433F0;
+        Tue, 13 Jun 2023 15:40:51 +0000 (UTC)
+Date:   Tue, 13 Jun 2023 11:40:49 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Ingo Molnar <mingo@kernel.org>, Song Liu <song@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: Re: [PATCH v2] ftrace: Allow inline functions not inlined to be
+ traced
+Message-ID: <20230613114049.096a8844@gandalf.local.home>
+In-Reply-To: <87lego7m50.ffs@tglx>
+References: <20230609174422.04824a9e@gandalf.local.home>
+        <87lego7m50.ffs@tglx>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: linux-next: Tree for Jun 13 (drivers/gpu/drm/i915/display/)
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        intel-gfx@lists.freedesktop.org
-References: <20230613165903.5cc10e58@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230613165903.5cc10e58@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 12 Jun 2023 17:09:31 +0200
+Thomas Gleixner <tglx@linutronix.de> wrote:
 
-
-On 6/12/23 23:59, Stephen Rothwell wrote:
-> Hi all,
+> >
+> > Currently only x86 uses this.  
 > 
-> Changes since 20230609:
+> I assume this passes the objtool noinstr validation. If so, if would be
+> helpful to document that.
+
+I haven't run this through the full test suite. But I will check.
+
+> >  /*
+> >   * gcc provides both __inline__ and __inline as alternate spellings of
+> > @@ -230,7 +240,7 @@ struct ftrace_likely_data {
+> >   *     https://gcc.gnu.org/bugzilla/show_bug.cgi?id=67368
+> >   * '__maybe_unused' allows us to avoid defined-but-not-used warnings.
+> >   */
+> > -# define __no_kasan_or_inline __no_sanitize_address notrace __maybe_unused
+> > +# define __no_kasan_or_inline __no_sanitize_address __notrace_inline __maybe_unused  
 > 
+> I'm not convinced that this is correct
+> 
+> >  # define __no_sanitize_or_inline __no_kasan_or_inline
+> >  #else  
+> 
+> given that the !__SANITIZE_ADDRESS__ variant is:
+> 
+> >  # define __no_kasan_or_inline __always_inline  
+> 
+> which cannot be traced.
+> 
+> > @@ -247,7 +257,7 @@ struct ftrace_likely_data {
+> >   * disable all instrumentation. See Kconfig.kcsan where this is mandatory.
+> >   */
+> >  # define __no_kcsan __no_sanitize_thread __disable_sanitizer_instrumentation
+> > -# define __no_sanitize_or_inline __no_kcsan notrace __maybe_unused
+> > +# define __no_sanitize_or_inline __no_kcsan __notrace_inline  __maybe_unused  
+> 
+> Ditto. 
 
-In file included from <command-line>:
-./../drivers/gpu/drm/i915/display/intel_display_power.h:255:70: error: 'struct seq_file' declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
-  255 | void intel_display_power_debug(struct drm_i915_private *i915, struct seq_file *m);
-      |                                                                      ^~~~~~~~
-cc1: all warnings being treated as errors
-In file included from ./../drivers/gpu/drm/i915/display/intel_display_power_well.h:10,
-                 from <command-line>:
-./../drivers/gpu/drm/i915/display/intel_display_power.h:255:70: error: 'struct seq_file' declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
-  255 | void intel_display_power_debug(struct drm_i915_private *i915, struct seq_file *m);
-      |                                                                      ^~~~~~~~
-cc1: all warnings being treated as errors
+I'll just keep the notrace on these.
 
+> 
+> >  #else
+> >  # define __no_kcsan
+> >  #endif
+> > diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+> > index abe5c583bd59..b66ab0e6ce19 100644
+> > --- a/kernel/trace/Kconfig
+> > +++ b/kernel/trace/Kconfig
+> > @@ -106,6 +106,13 @@ config HAVE_BUILDTIME_MCOUNT_SORT
+> >           An architecture selects this if it sorts the mcount_loc section
+> >  	 at build time.
+> >  
+> > +config ARCH_CAN_TRACE_INLINE
+> > +       bool
+> > +       help
+> > +         It is safe for an architecture to trace any function marked  
+> 
+> Spaces instead of tab.
 
--- 
-~Randy
+Bah, I noticed that my emacs is doing this on other configs I just added.
+It adds spaces for the first entry, then tabs for the rest.
+
+> 
+> > +	 as inline (not __always_inline) that the compiler decides to  
+> 
+> and this one has a tab.
+> 
+> > +	 not inline.
+> > +
+> >  config BUILDTIME_MCOUNT_SORT
+> >         bool
+> >         default y  
+
+Thanks for the review!
+
+-- Steve
