@@ -2,122 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC7AD72E3B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1ACE72E3C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242591AbjFMNEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 09:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57398 "EHLO
+        id S240346AbjFMNIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 09:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242575AbjFMNDx (ORCPT
+        with ESMTP id S233941AbjFMNIw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 09:03:53 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 470A11BC3;
-        Tue, 13 Jun 2023 06:03:50 -0700 (PDT)
-Received: from loongson.cn (unknown [10.180.13.22])
-        by gateway (Coremail) with SMTP id _____8AxW+o1aYhkhaYEAA--.9900S3;
-        Tue, 13 Jun 2023 21:03:49 +0800 (CST)
-Received: from [10.180.13.22] (unknown [10.180.13.22])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axfco0aYhkZTEZAA--.63228S3;
-        Tue, 13 Jun 2023 21:03:48 +0800 (CST)
-Message-ID: <58b70e1b-d292-ec45-2309-e237a4a43d0d@loongson.cn>
-Date:   Tue, 13 Jun 2023 21:03:23 +0800
-MIME-Version: 1.0
+        Tue, 13 Jun 2023 09:08:52 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45FE127;
+        Tue, 13 Jun 2023 06:08:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686661731; x=1718197731;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=bJ6tlP4k6eR5mpUS5qgOVIQ3zChNbM9G/oxzpPg4E5c=;
+  b=HY2qwnDITe5vTYsqLr0zbaMmJX4E3hb9jLID9I/pADzvOc49eEL5gKl4
+   MzJVP1zp++JDMGlxfStCOyyBFWJkcuWOz0nzKPgl+sbznWgBKu4GCSo7n
+   MjS7KW0AgHPhtPxDOXwXntOHal/AurMaJPlzjB1csK0tdn/un+7Hr87A2
+   CJ8hAfndbAV7NtCM6rOF8q6PU2Mv8BUcc0Smc9X3w6wG6iYqO0UBRIG0Z
+   UOb3xTh4mQqV4TY4j2sObyrIlLRe5u0JKwAH0B5yLYj6Bq3XPnvFqm8ff
+   UPyEbAbYQ8JtasuYh0HLpXga9/g8AQBzCVKQfB0tokDsXrqL4oAbTGy+W
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="343011639"
+X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
+   d="scan'208";a="343011639"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 06:08:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="714791848"
+X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
+   d="scan'208";a="714791848"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmsmga007.fm.intel.com with ESMTP; 13 Jun 2023 06:08:50 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 13 Jun 2023 06:08:49 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Tue, 13 Jun 2023 06:08:49 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.109)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Tue, 13 Jun 2023 06:08:49 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OiqqbUOXi09C3MVhgVYGwtCuNE7u7Rzu7pZ3/bmSGBfzzASVLYfg52iQ+hLonSGKDz6oNJoZrzK3Mu/yjljeEcUvwWrYq8Gowkr/oO7KIebPym5Dj9sCI93wkgrs2XvhSftgChZeViRZchcS/AtjUcwqZiEDRgYRf42ndeSwDhL92ktCeHUdUTAXGROUKSADM/GJ9RXQoDKjvnVHBjurXUq66/ZO1NuSCYmaxnt70SLY85maqyx7rTX8pPADMYusz6Lc8zBdgGJ79pYv5biRF+gj3stox03WR6yky4eSA/oHBCPlz9OQGvMYc6oG3cyWCMmNWcgQj01aNJG4BMQWyw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CV6KZBEWjqzqY9Kl/MjvS6/N8tTHhBWIRGkqhfCLyi4=;
+ b=NfzrgI5NWkPBHHToQXWc1OtjkTIYerP7m2ylpXP6ZtFXjcz/nTBaxJKvIVA5DzPJD+QG2k2vQjJrlEald7w6Ja9EJljPUdMu1wz1xagTgqTIHaBo2zTahYIPsH/fpbUBXSMwagd+OD8u39HHJbVROP1yqf7/Y41qYNFPUr/TfMblj83dulIn5Hj1N92YgyntLuYGG9H0JrQ2SSFVMwkiLopXAgmi3w8CBmCOvn2Hajm6Cv5WvDTt4pvaQYRSAAIRfdLoMET8ZPoabC9h+Gx8im06wtHMpJXPyWC7M4sURZ2gxmeKpvjQdu8nnSnWzW+4MGKYepBk6G4Q4ykcU1GqyQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
+ by BN9PR11MB5515.namprd11.prod.outlook.com (2603:10b6:408:104::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Tue, 13 Jun
+ 2023 13:08:47 +0000
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::82b6:7b9d:96ce:9325]) by DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::82b6:7b9d:96ce:9325%6]) with mapi id 15.20.6455.030; Tue, 13 Jun 2023
+ 13:08:47 +0000
+Message-ID: <d4424b60-9a9c-a741-86e3-e712960cdf44@intel.com>
+Date:   Tue, 13 Jun 2023 15:08:41 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [ PATCH v2 3/3] ASoC: dt-bindings: Add support for Loongson audio
- card
+ Thunderbird/102.11.1
+Subject: Re: [PATCH net-next v4 3/5] page_pool: introduce page_pool_alloc()
+ API
 Content-Language: en-US
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Conor Dooley <conor@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, conor+dt@kernel.org, broonie@kernel.org,
-        lgirdwood@gmail.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn
-References: <20230612085614.3039498-1-mengyingkun@loongson.cn>
- <20230612-booted-french-186dd95e78a9@spud>
- <bda7c25f-65cf-d45f-3ac0-f2471e3aacf8@loongson.cn>
- <20230613-zoologist-panorama-a87858bba075@wendy>
- <887f9cc4-6457-9d14-8aef-011ff4c9aeda@loongson.cn>
- <20230613-depletion-garnet-ccc2009111c3@wendy>
-From:   Yingkun Meng <mengyingkun@loongson.cn>
-In-Reply-To: <20230613-depletion-garnet-ccc2009111c3@wendy>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Axfco0aYhkZTEZAA--.63228S3
-X-CM-SenderInfo: 5phqw55lqjy33q6o00pqjv00gofq/1tbiAQABDGSIXIIBbgABsQ
-X-Coremail-Antispam: 1Uk129KBj93XoW7tF1kWF1DKr4DAF47uFykZwc_yoW8uw1fpF
-        W8Ja47KFn5Kw15Cr9Yvw18Jr42vFWftFZxXr4DXr17G390gry3Gr13tF1Fk3srCr18X342
-        vFWFka47J3Z8JagCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUBFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVWxJr0_GcWln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
-        6r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
-        1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWU
-        JVW8JwCFI7km07C267AKxVW8ZVWrXwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
-        vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IY
-        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
-        xKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAF
-        wI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jF4E_UUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Yunsheng Lin <linyunsheng@huawei.com>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        "Jesper Dangaard Brouer" <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Eric Dumazet <edumazet@google.com>
+References: <20230612130256.4572-1-linyunsheng@huawei.com>
+ <20230612130256.4572-4-linyunsheng@huawei.com>
+From:   Alexander Lobakin <aleksander.lobakin@intel.com>
+In-Reply-To: <20230612130256.4572-4-linyunsheng@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR0P281CA0268.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:b5::12) To DM6PR11MB3625.namprd11.prod.outlook.com
+ (2603:10b6:5:13a::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|BN9PR11MB5515:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5c565d08-7340-4861-cea1-08db6c0f52c8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HCzSHAlTpA7FmZgRgB4aeS9Ay80RCAExi7qHihHxxc3GUXkk15HYsIm8JSrZQwySU0QPe9Bj0AV7Jrf6trhltPNYawwlYP2Xj859ahCorZ5LPKe54zT5ew9oZUqI1tA6rPDto9PHDGW0IlLjXahb1RqkBcXESg2L6J7D5bpBw2ZXpJ0uTpht1d3grFg4RSBj8NsTc64c9x/Ipbcl+nNoq1ZKf4Feg/stVfCBZJigZZsNdub1evHHNzcgp7Mlipc3N5DF1ZA75xu6BS3w/eckUARPlVK7mYL+EMEiacsukYZqKTrxaPpRuqIqc3uO3fWKquEdzkg6ipP3NOl90PdfENzUAMHrw6aO6MNSgAM6OnZFf3T1W/DIQvqb3di5IaHaXNl41xNSAehofSj7PYexOeAKlsU4YLJtdEqjorn12u+tJls4wek4qMQcw0QqE4LaZp4baEW36hhlZySbUaMBw4btkMxoUzZ70sGe7B91jKjwYBqTLMcQlXeWr3IgxPTe4SgBC4xqv+1N5aXF0VY7KBuV0zXBI/XlcpjuleM2SQhcfVCo+zK2mWWOH2OmVu02sRg88wYcLYPcPd6QEaU3lwDbIGpti8yn4QcSc4dDP5vuu5rFGjr3viyeSELwKJF1g9nPhCJqL8byY6daDtK0TZzPrSv6SY4M5KHd+fhV8jISxplKIjAT005RfTkmvKRj
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(366004)(346002)(136003)(376002)(396003)(451199021)(66946007)(66476007)(66556008)(478600001)(54906003)(5660300002)(8676002)(8936002)(36756003)(6916009)(6666004)(31686004)(4326008)(316002)(41300700001)(966005)(6486002)(38100700002)(82960400001)(83380400001)(186003)(6506007)(7416002)(86362001)(2906002)(26005)(2616005)(31696002)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MGowQng3bzhkTEthMnRiZnFlcEJBZnlrTmZyLzNKanVRNmVSZzcwZXF3VkNu?=
+ =?utf-8?B?aGRFMUx4TjBFNFE2S293Y1k4aExXemMyWjRHcEVsS1VsanU2dEJQV2ZXS21a?=
+ =?utf-8?B?dTg3anVXWWc3TFlCa2FEenI5MEFYdUx4ekh5a1VIZ0Z1a09xQ0FNbjZIbG10?=
+ =?utf-8?B?QnBmNk1lZ2Zuc2NPbEk3K2c3dFU2c2RXa0VBeHFUOG9jZzRTRGJDeGwrSTBH?=
+ =?utf-8?B?elpVWVYxajJnNkpzcVBVQnpsMW5LZ3hoUmdCVlB4T210ald3WUhBeU5iME5s?=
+ =?utf-8?B?Z21WeVdZZFM2dzBsOXNZR2dGWUN0cEFtY0tBUGw1SDR2czJCU1hMOWlyc241?=
+ =?utf-8?B?QWtzbXlFdGo5U0dCcTBZbzdMdURzaThPczU0OGlNbDZYak45Sk11bDlIV2dW?=
+ =?utf-8?B?N2w2MTYycGhVNnJxQnVOZm5nWDVsVTNoMmZGNTRMM0swSWozYVNPc3ltSEdQ?=
+ =?utf-8?B?TDFiaFY5MEtGU1h5UUxJYjRPOFlJbHlPVHdRQWw4ZThLdmkyU3ZUTVRYV0R5?=
+ =?utf-8?B?NEVIanNqUE8yOEJrRmZpRVlyQURkOG5mVkhkVkxzVVlXYzhRVUo2cytqbWhV?=
+ =?utf-8?B?QUJIVzlBZkduVnBMbU4rSFlTbFU3YmRlZXBKWXFXQm9Wd3owZ3ZSUWkyWEk1?=
+ =?utf-8?B?dHYzejc5VTlieW9Vejg3WWJ4OUVqQmRheE5hRmZDSkx3QXZxaEhsV0xQNUpI?=
+ =?utf-8?B?dzNGenpLb0JiOHpDT1pnczBkRCtMbGRQUzBSeGRuNkI3bStzaDNaVDJZeGJ6?=
+ =?utf-8?B?OStac2N5RGJTUG80Yk4zcDBRWTNmbXA5dzdtZlZYbnFKSVlZZStjTXNZYng4?=
+ =?utf-8?B?RW8zam9PMC9WYk5UZVFqdlhxeWt2Y0lqSll3MEovZURqLzd1bnFuUXJCZmlT?=
+ =?utf-8?B?V0xleWFMZUtrQUxHbGpMakF0NkxPOUhXUXpCdWs5LzE2U1QwSGd5NHZJYWtN?=
+ =?utf-8?B?ZURHbTRhYXpkd0RTMThkcFdDRmYrTHJNeHRvRUJ1TkZrOWtsZDlVaXY5MjJw?=
+ =?utf-8?B?S0NnL3F1RDE1eUNLMW94TGtGeDdVK25PNDEvQUhRN0lKNEZITjhpRlFKcXRZ?=
+ =?utf-8?B?S1ZycGQ1MmlBNWdDeTFzaENVTjZUeG04Y2pRcTJNWjg3cUhUemdHV29EdDhi?=
+ =?utf-8?B?aVBqeVNmNXRrWi9KNVZZdE9WcTF3UDExT2llYUhONVV1VGw2RERNamJXWWVr?=
+ =?utf-8?B?emg1QlFrYWtqMlVLajhKK1JhQThWYmI3U2tHa0UzbkVhb1VBQ01ScU5ZdnJq?=
+ =?utf-8?B?SDZJd3ZZT1F3cUZzWktNcGQzc0tFWFhDZnlONkppT2QzTENOL1VWMWhPZitU?=
+ =?utf-8?B?SU5VNlBsS0JTUGhOc0dkK2ZWOXUwOEZMTkZrMHczMjR0bStaMjNvUUlzTmkz?=
+ =?utf-8?B?d0tzcWVwdGJ2R0RFN1REWm82bkdNNEMzUzd1YnEzTEdCa3lSUUNYZDlocEdY?=
+ =?utf-8?B?a2h0MXFwb1V3OXBqY0huY2pZREx5Mmd1c1VLdEtGV05mdkFZUi9OVTJ4cXRo?=
+ =?utf-8?B?Z0l6NmNOaXpjSks5K3BoanVxMzYrV2NaQnRLNForL1BiM3hIZ3hTUlZxelRE?=
+ =?utf-8?B?V2hSZXJLNnhTbzhyMjVwcWV3azhhV3MzRFlwazNoaVl4YlM3dzN0SWllakd0?=
+ =?utf-8?B?a09DU0ZsSktNMG1GTjVhS1VJVHZEV2IyRUJHUzdPelZQTkZnTkpmc0lXNjJN?=
+ =?utf-8?B?TExndXdablFmNzk3a21idnlaY3RrTExhdHNObVRaL2pxNGVlV0QyR0lIVWF6?=
+ =?utf-8?B?OFZ3NmpIa2QzYnNTZk1rOW9EdVcvVkdiOXY0WTlpTWdYb0k4MitvQi95MkJC?=
+ =?utf-8?B?SWQwV2xvSTBKcFlVbUwxOTFlaFlBLzA3ZHNkZDh0aVpRSE53dmJyeFN5OXRZ?=
+ =?utf-8?B?V3ZLQnB2dDhMZXhRMzNHWTg2TmNpRHhhb3R4OG5KVUNyakNYc3FTakI3RXNp?=
+ =?utf-8?B?dndXcGk4VjBIa3NOdGZHeDR2d2dKSnpTT0xzV0VPRy9vZy9NRW1SNUN4dGJS?=
+ =?utf-8?B?b1RvcEZwelg3MHNZTXQ1T2JtNzFWb3dmN3czQlJvWXZhWmtGNUwrTk1HQ1Ry?=
+ =?utf-8?B?UEJ6dU5FQkU5QWN5UGNvaml1bEhiai9oais3bnhZTHRvT0J6SmZBd0thbXNV?=
+ =?utf-8?B?TG5NTitMQnV5VnBMNVljeC9hdkdGdE94MHJrZ0duOUliZ2h3YU1rVlRjaWw0?=
+ =?utf-8?B?MEE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5c565d08-7340-4861-cea1-08db6c0f52c8
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2023 13:08:47.4546
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: B1AwyzPxEkvOYgdqRQ18XhH1y0Mr8sZFbIEJNHLRkWmEaJmrtMQP1fVadb5muupjJTfeT4Q+/aD91cWn+ZQK/1yEwn3kX23f0x2uzlsoqc0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5515
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Yunsheng Lin <linyunsheng@huawei.com>
+Date: Mon, 12 Jun 2023 21:02:54 +0800
 
-On 2023/6/13 20:46, Conor Dooley wrote:
-> On Tue, Jun 13, 2023 at 08:38:59PM +0800, Yingkun Meng wrote:
->> On 2023/6/13 20:28, Conor Dooley wrote:
->>> On Tue, Jun 13, 2023 at 08:23:58PM +0800, Yingkun Meng wrote:
->>>> On 2023/6/13 01:24, Conor Dooley wrote:
->>>>> On Mon, Jun 12, 2023 at 04:56:14PM +0800, YingKun Meng wrote:
->>>>>> From: Yingkun Meng <mengyingkun@loongson.cn>
->>>>>>
->>>>>> The audio card uses loongson I2S controller present in
->>>>>> 7axxx/2kxxx chips to transfer audio data.
->>>>>>
->>>>>> On loongson platform, the chip has only one I2S controller.
->>>>>> +description:
->>>>>> +  The binding describes the sound card present in loongson
->>>>>> +  7axxx/2kxxx platform. The sound card is an ASoC component
->>>>>> +  which uses Loongson I2S controller to transfer the audio data.
->>>>>> +
->>>>>> +properties:
->>>>>> +  compatible:
->>>>>> +    const: loongson,ls-audio-card
->>>>> Reviewing sound stuff is beyond my pay grade, so forgive me if I am off
->>>>> the rails here, but this (and the "x"s in the description) look a bit
->>>>> odd. Recently, we've noticed quite a few loongson dt-bindings attempting
->>>>> to use a single compatible for many different chips.
->>>>> Usually you have individual compatibles for the various SoCs with this
->>>>> core, which can fall back to a generic one, rather than just adding a
->>>>> generic compatible for all devices.
->>>>> As far as I know, there's several SoCs fitting 2kxxx, and the format
->>>>> being used elsewhere is "loongson,ls2k1000" etc.
->>>> Currently, Loongson has 2K0500/2K1000LA/2K1500/2K2000 chips.
->>>>
->>>> Here, its' possible to use a single compatible for different chips,
->>>>
->>>> as the audio device is a logical device, not dependent on chip model.
->>> What, may I ask, is a "logical device"?
->>
->> I means it's not a physical one, like "platform bus".
-> So it is entirely a software construct? Why does it need a dt-binding
-> then? Your commit message says the controller is present on the device!
+> Currently page pool supports the below use cases:
+> use case 1: allocate page without page splitting using
+>             page_pool_alloc_pages() API if the driver knows
+>             that the memory it need is always bigger than
+>             half of the page allocated from page pool.
+> use case 2: allocate page frag with page splitting using
+>             page_pool_alloc_frag() API if the driver knows
+>             that the memory it need is always smaller than
+>             or equal to the half of the page allocated from
+>             page pool.
+> 
+> There is emerging use case [1] & [2] that is a mix of the
+> above two case: the driver doesn't know the size of memory it
+> need beforehand, so the driver may use something like below to
+> allocate memory with least memory utilization and performance
+> penalty:
+> 
+> if (size << 1 > max_size)
+> 	page = page_pool_alloc_pages();
+> else
+> 	page = page_pool_alloc_frag();
+> 
+> To avoid the driver doing something like above, add the
+> page_pool_alloc() API to support the above use case, and update
+> the true size of memory that is acctually allocated by updating
+> '*size' back to the driver in order to avoid the truesize
+> underestimate problem.
+> 
+> 1. https://lore.kernel.org/all/d3ae6bd3537fbce379382ac6a42f67e22f27ece2.1683896626.git.lorenzo@kernel.org/
+> 2. https://lore.kernel.org/all/20230526054621.18371-3-liangchen.linux@gmail.com/
+> 
+> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+> CC: Lorenzo Bianconi <lorenzo@kernel.org>
+> CC: Alexander Duyck <alexander.duyck@gmail.com>
+> ---
+>  include/net/page_pool.h | 43 +++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 43 insertions(+)
+> 
+> diff --git a/include/net/page_pool.h b/include/net/page_pool.h
+> index 0b8cd2acc1d7..c135cd157cea 100644
+> --- a/include/net/page_pool.h
+> +++ b/include/net/page_pool.h
+> @@ -260,6 +260,49 @@ static inline struct page *page_pool_dev_alloc_frag(struct page_pool *pool,
+>  	return page_pool_alloc_frag(pool, offset, size, gfp);
+>  }
+>  
+> +static inline struct page *page_pool_alloc(struct page_pool *pool,
+> +					   unsigned int *offset,
+> +					   unsigned int *size, gfp_t gfp)
 
-It's not. The audio device consists of an i2s controller and codec.
+Oh, really nice. Wouldn't you mind if I base my series on top of this? :)
 
-The dt-binding is for the audio device, not for i2s controller.
+Also, with %PAGE_SIZE of 32k+ and default MTU, there is truesize
+underestimation. I haven't looked at the latest conversations as I had a
+small vacation, sowwy :s What's the current opinion on this?
 
-> Confused,
-> Conor.
+[...]
 
+Thanks,
+Olek
