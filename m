@@ -2,190 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F4E72DF25
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 12:20:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 676D172DF26
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 12:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240129AbjFMKUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 06:20:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51542 "EHLO
+        id S241349AbjFMKUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 06:20:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241203AbjFMKUN (ORCPT
+        with ESMTP id S239797AbjFMKUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 06:20:13 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 771031996;
-        Tue, 13 Jun 2023 03:19:55 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f658a17aa4so5629039e87.0;
-        Tue, 13 Jun 2023 03:19:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686651594; x=1689243594;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ea+jMsMQ/htkjKLyTsdd7SMmdtpqccg73G5Yjc+Wabg=;
-        b=WqSWnZPGE2rZnf/HFs6LcaRUDQZQU6r3o2NT0UveUZ58G+2A3EecxeeSmHmc9dOJF0
-         2ESIxKKnz0kloDiDveyFERofJQtI9+fOm7u/quPhv9q5aTj0mLMQP7LYN3IPJULSK/kp
-         tRUH7uWVXlX/1jibwqiRadQFA57y15XIAEERcgj2KmpHDoIAkVHzw8m23HKm69mtjQyK
-         BXDS/jao/9riLj13/atKBfkq8ro74seu+pIOTMdddDPZ4CTLPtTi/mM22aG3ck6I0xBK
-         4bAky6uhT8dLpehzRfgxM4+CN0YVvMg92HBp7u9XB73yiYAklrTQ+6LYGQOYSF+U8jVK
-         2rHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686651594; x=1689243594;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ea+jMsMQ/htkjKLyTsdd7SMmdtpqccg73G5Yjc+Wabg=;
-        b=NqjptMNLMncmOI8yVYhzeAZdMu4DY2eg8Pmg45wrh/DaNo8Sh7dttljU1NZTzgwN+F
-         EA5x5Qc9D56ks/5npzzEr5sCoq0jiqUWsK4FOcSvtRrbWuC1QLXslbypkGakvf0Q0FF3
-         uwhHzVONRF59m1smRg9LcnZAh64XAdWbdV2Zl06LRK6co0E9QmoxeMOMTMH+w4JbSU2q
-         uKudkRNmqtXNg6TiSDkfWaKKm1RGYCZcbR+CWKIrd0mXYmPzptPEMuGbj+1j9l04tc+E
-         wuBHWgj3yBOdRLWIyyZCxdS5r3pmLTIu7fVoahF020e04A/o837v+a2/pm8YJcQLveQj
-         jBJg==
-X-Gm-Message-State: AC+VfDxcwOnbOY9JSWO0r7gv/OOts+VNNNhxj7pMLVq4kFDC54uxH9LT
-        lzD1dXSRux7qnrsxbmh9ZSw=
-X-Google-Smtp-Source: ACHHUZ7KugAREAncyLDx0G7YLkWa5nDS7KoMFYgkfVRpzT++2fUm0JqFQ+1k5Vanj/zv++iUsUyPbA==
-X-Received: by 2002:a19:7104:0:b0:4f6:3000:4d5a with SMTP id m4-20020a197104000000b004f630004d5amr4530707lfc.38.1686651593412;
-        Tue, 13 Jun 2023 03:19:53 -0700 (PDT)
-Received: from dc78bmyyyyyyyyyyyyyyt-3.rev.dnainternet.fi (dc78bmyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f8:1500::1])
-        by smtp.gmail.com with ESMTPSA id y3-20020ac24463000000b004f381a71f26sm1734715lfl.46.2023.06.13.03.19.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 03:19:52 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 13:19:49 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] dt-bindings: ROHM BU27010 RGBC + flickering sensor
-Message-ID: <98e0b6fba7ff7515b541a517296d5b89dc73ce5b.1686651445.git.mazziesaccount@gmail.com>
-References: <cover.1686650184.git.mazziesaccount@gmail.com>
+        Tue, 13 Jun 2023 06:20:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A2119A5;
+        Tue, 13 Jun 2023 03:20:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A2CE61FD4;
+        Tue, 13 Jun 2023 10:20:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78C5DC433D2;
+        Tue, 13 Jun 2023 10:20:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686651600;
+        bh=AylGOATF1LVVg/sKw8VgAR2CSRs7TZewth5ZQwB0RCQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=acRjVlccpr4ssoI9bbyErBEa9BkcpDwhigiXMp4OPWd8uV6xQKyEMhdvqH5DNoXE+
+         0fEUBz2TOR1lMg0lUgXIifh7DPnLvVmBXfZ0CuzUJjXpnooN+aPxkw7Tn0/dzb0Soe
+         uRo+RBCOegClLZTEZN/Wfp6H2AfSHST4fI0lZ+VY=
+Date:   Tue, 13 Jun 2023 12:19:58 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     zhuyinbo <zhuyinbo@loongson.cn>
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH v2] usb: dwc2: add pci_device_id driver_data parse support
+Message-ID: <2023061354-rectify-delta-5dd2@gregkh>
+References: <20230609025047.691-1-zhuyinbo@loongson.cn>
+ <2023060915-uneasy-pedicure-35f4@gregkh>
+ <1e2a07a4-f81f-3672-f29c-144d1a12ea21@loongson.cn>
+ <2023060958-unvocal-flattery-256a@gregkh>
+ <2023060912-shun-work-a667@gregkh>
+ <d260aae0-2ce2-ed72-e680-8ec2d50335cc@loongson.cn>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="WmYTfxGs9jNxBRbv"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <cover.1686650184.git.mazziesaccount@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d260aae0-2ce2-ed72-e680-8ec2d50335cc@loongson.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jun 12, 2023 at 02:51:05PM +0800, zhuyinbo wrote:
+> 
+> 
+> 在 2023/6/9 下午5:31, Greg Kroah-Hartman 写道:
+> > On Fri, Jun 09, 2023 at 11:25:15AM +0200, Greg Kroah-Hartman wrote:
+> > > On Fri, Jun 09, 2023 at 05:07:03PM +0800, zhuyinbo wrote:
+> > > > 
+> > > > 
+> > > > 在 2023/6/9 下午2:13, Greg Kroah-Hartman 写道:
+> > > > > On Fri, Jun 09, 2023 at 10:50:47AM +0800, Yinbo Zhu wrote:
+> > > > > > The dwc2 driver has everything we need to run in PCI mode except
+> > > > > > for pci_device_id driver_data parse.  With that to set Loongson
+> > > > > > dwc2 element and added identified as PCI_VENDOR_ID_LOONGSON
+> > > > > > and PCI_DEVICE_ID_LOONGSON_DWC2 in dwc2_pci_ids, the Loongson
+> > > > > > dwc2 controller will work.
+> > > > > > 
+> > > > > > Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> > > > > > ---
+> > > > > > Change in v2:
+> > > > > > 		1. Move the dwc2 pci ID from pci_ids.h to params.c.
+> > > > > > 		2. Add some code logic to ensure that the current device is
+> > > > > > 		   a PCI device.
+> > > > > > 		3. Fix the compile issue when dwc2 pci driver as module.
+> > > > > > 
+> > > > > >    drivers/usb/dwc2/core.h   |  1 +
+> > > > > >    drivers/usb/dwc2/params.c | 39 ++++++++++++++++++++++++++++++++++++++-
+> > > > > >    drivers/usb/dwc2/pci.c    | 14 +-------------
+> > > > > >    3 files changed, 40 insertions(+), 14 deletions(-)
+> > > > > > 
+> > > > > > diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+> > > > > > index 0bb4c0c845bf..c92a1da46a01 100644
+> > > > > > --- a/drivers/usb/dwc2/core.h
+> > > > > > +++ b/drivers/usb/dwc2/core.h
+> > > > > > @@ -1330,6 +1330,7 @@ irqreturn_t dwc2_handle_common_intr(int irq, void *dev);
+> > > > > >    /* The device ID match table */
+> > > > > >    extern const struct of_device_id dwc2_of_match_table[];
+> > > > > >    extern const struct acpi_device_id dwc2_acpi_match[];
+> > > > > > +extern const struct pci_device_id dwc2_pci_ids[];
+> > > > > >    int dwc2_lowlevel_hw_enable(struct dwc2_hsotg *hsotg);
+> > > > > >    int dwc2_lowlevel_hw_disable(struct dwc2_hsotg *hsotg);
+> > > > > > diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
+> > > > > > index 21d16533bd2f..6b68a8830781 100644
+> > > > > > --- a/drivers/usb/dwc2/params.c
+> > > > > > +++ b/drivers/usb/dwc2/params.c
+> > > > > > @@ -7,9 +7,14 @@
+> > > > > >    #include <linux/module.h>
+> > > > > >    #include <linux/of_device.h>
+> > > > > >    #include <linux/usb/of.h>
+> > > > > > +#include <linux/pci_ids.h>
+> > > > > > +#include <linux/pci.h>
+> > > > > >    #include "core.h"
+> > > > > > +#define PCI_PRODUCT_ID_HAPS_HSOTG	0xabc0
+> > > > > > +#define PCI_DEVICE_ID_LOONGSON_DWC2	0x7a04
+> > > > > > +
+> > > > > >    static void dwc2_set_bcm_params(struct dwc2_hsotg *hsotg)
+> > > > > >    {
+> > > > > >    	struct dwc2_core_params *p = &hsotg->params;
+> > > > > > @@ -55,6 +60,14 @@ static void dwc2_set_jz4775_params(struct dwc2_hsotg *hsotg)
+> > > > > >    		!device_property_read_bool(hsotg->dev, "disable-over-current");
+> > > > > >    }
+> > > > > > +static void dwc2_set_loongson_params(struct dwc2_hsotg *hsotg)
+> > > > > > +{
+> > > > > > +	struct dwc2_core_params *p = &hsotg->params;
+> > > > > > +
+> > > > > > +	p->phy_utmi_width = 8;
+> > > > > > +	p->power_down = DWC2_POWER_DOWN_PARAM_PARTIAL;
+> > > > > > +}
+> > > > > > +
+> > > > > >    static void dwc2_set_x1600_params(struct dwc2_hsotg *hsotg)
+> > > > > >    {
+> > > > > >    	struct dwc2_core_params *p = &hsotg->params;
+> > > > > > @@ -281,6 +294,23 @@ const struct acpi_device_id dwc2_acpi_match[] = {
+> > > > > >    };
+> > > > > >    MODULE_DEVICE_TABLE(acpi, dwc2_acpi_match);
+> > > > > > +const struct pci_device_id dwc2_pci_ids[] = {
+> > > > > > +	{
+> > > > > > +		PCI_DEVICE(PCI_VENDOR_ID_SYNOPSYS, PCI_PRODUCT_ID_HAPS_HSOTG),
+> > > > > > +	},
+> > > > > > +	{
+> > > > > > +		PCI_DEVICE(PCI_VENDOR_ID_STMICRO,
+> > > > > > +			   PCI_DEVICE_ID_STMICRO_USB_OTG),
+> > > > > > +	},
+> > > > > > +	{
+> > > > > > +		PCI_DEVICE(PCI_VENDOR_ID_LOONGSON, PCI_DEVICE_ID_LOONGSON_DWC2),
+> > > > > > +		.driver_data = (unsigned long)dwc2_set_loongson_params,
+> > > > > > +	},
+> > > > > > +	{ /* end: all zeroes */ }
+> > > > > > +};
+> > > > > > +MODULE_DEVICE_TABLE(pci, dwc2_pci_ids);
+> > > > > > +EXPORT_SYMBOL_GPL(dwc2_pci_ids);
+> > > > > > +
+> > > > > >    static void dwc2_set_param_otg_cap(struct dwc2_hsotg *hsotg)
+> > > > > >    {
+> > > > > >    	switch (hsotg->hw_params.op_mode) {
+> > > > > > @@ -927,13 +957,20 @@ int dwc2_init_params(struct dwc2_hsotg *hsotg)
+> > > > > >    	if (match && match->data) {
+> > > > > >    		set_params = match->data;
+> > > > > >    		set_params(hsotg);
+> > > > > > -	} else {
+> > > > > > +	} else if (!match) {
+> > > > > >    		const struct acpi_device_id *amatch;
+> > > > > > +		const struct pci_device_id *pmatch = NULL;
+> > > > > >    		amatch = acpi_match_device(dwc2_acpi_match, hsotg->dev);
+> > > > > >    		if (amatch && amatch->driver_data) {
+> > > > > >    			set_params = (set_params_cb)amatch->driver_data;
+> > > > > >    			set_params(hsotg);
+> > > > > > +		} else if (!amatch)
+> > > > > > +			pmatch = pci_match_id(dwc2_pci_ids, to_pci_dev(hsotg->dev->parent));
+> > > > > 
+> > > > > At this point in time, how can you guarantee that the parent device
+> > > > > really is a PCI one?  This function is being called from a platform
+> > > > > device callback, and platform devices should NEVER be a child of a PCI
+> > > > > device, as that's not how PCI or platform devices work.
+> > > > > 
+> > > > > So how is this even possible?
+> > > > > 
+> > > > > confused,
+> > > > > 
+> > > > 
+> > > > 
+> > > > Hi greg k-h,
+> > > > 
+> > > > My current considerations are based on that the dwc2 drivers support
+> > > > three types of devices, they are Platform device / ACPI device / PCI
+> > > > device, and The dwc2/platform.c can all cover the three type dwc2
+> > > > device, no matter how it is registered.
+> > > > 
+> > > > So, when a dwc2 device wasn't platform device and acpi device and It
+> > > > will be a PCI device, and the the dwc2/pci.c will register a dwc2
+> > > > platform device that dwc2 device is a device that in dwc2/platform.c's
+> > > > dwc2_driver_probe.  the "&dwc2->dev->parent" is the "hsotg->dev->parent"
+> > > > and it was also the &pci->dev.
+> > > 
+> > > That's wrong, a PCI device should NEVER register a platform device under
+> > > it, as obviously it's not a platform device at all.
+> > > 
+> > > So please work to fix that layering violation here, as that's not
+> > > correct and will cause problems as you are showing here.
+> > > 
+> > > > So, We can use "to_pci_dev(hsotg->dev->parent)" to gain a dwc2 pci
+> > > > device.
+> > > 
+> > > No, not if the parent is something else as you have no way of knowing
+> > > this at this point in time.
+> > > 
+> > > > 
+> > > > 1)  DWC2 PCI device driver (drivers/usb/dwc2/pci.c) :
+> > > > 
+> > > > static int dwc2_pci_probe(struct pci_dev *pci,
+> > > >                            const struct pci_device_id *id)
+> > > > {
+> > > > ...
+> > > >          struct platform_device  *dwc2;
+> > > > ...
+> > > >          struct device           *dev = &pci->dev;
+> > > > ...
+> > > > 	dwc2 = platform_device_alloc("dwc2", PLATFORM_DEVID_AUTO);
+> > > > 	              //"dwc2" was used to match dwc2 platform driver
+> > > 
+> > > This needs to be fixed, it's not ok at all.  Just use the real PCI
+> > > device here please.
+> > 
+> > Also, to be fair, you didn't cause this problem, I missed it previously.
+> > But fixing it is essential, and will be required in order to get your
+> > changes to work properly.  Sorry about that.
+> > 
+> 
+> 
+> Hi greg k-h,
+> 
+> Actually,  the dwc2/pci.c's  platform_device_add(dwc2) was create a
+> platform device called "dwc2"  ensure dwc2/platform's dwc2_driver_probe
+> function can be called. After all, the dwc2/platform's dwc2_driver_probe
+> is the one that truly initializes the dwc2 controller. In addition, the
+> same applies to dwc3 code.
 
---WmYTfxGs9jNxBRbv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yes, it does create a platform device, but ALSO a real platform device
+could be present in the system for the driver, one that is NOT a child
+of a PCI device, right?
 
-The ROHM BU27010 is a sensor with 6 photodiodes (red, green, blue, clear,
-IR and flickering detection) with five configurable channels. Red, green
-and flickering detection being always available and two out of the rest
-three (blue, clear, IR) can be selected to be simultaneously measured.
-Typical application is adjusting LCD/OLED backlight of TVs, mobile phones
-and tablet PCs.
+It's not this way with your system, but it could be that way for many
+others, right?  And if so, the assumption that you can just poke around
+in the parent device and assume that you know what bus it is on is just
+wrong and will break things.
 
-Add binding document for ROHM BU27010.
+You should NEVER be poking around in the information for the parent
+device, UNLESS you have just created the child device yourself and the
+ONLY code path is one that you have full control over.
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
----
- .../bindings/iio/light/rohm,bu27010.yaml      | 49 +++++++++++++++++++
- 1 file changed, 49 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/iio/light/rohm,bu2701=
-0.yaml
+Does that make more sense?
 
-diff --git a/Documentation/devicetree/bindings/iio/light/rohm,bu27010.yaml =
-b/Documentation/devicetree/bindings/iio/light/rohm,bu27010.yaml
-new file mode 100644
-index 000000000000..2bde9d2f1def
---- /dev/null
-+++ b/Documentation/devicetree/bindings/iio/light/rohm,bu27010.yaml
-@@ -0,0 +1,49 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/iio/light/rohm,bu27010.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: ROHM BU27010 color sensor
-+
-+maintainers:
-+  - Matti Vaittinen <mazziesaccount@gmail.com>
-+
-+description: |
-+  The ROHM BU27010 is a sensor with 6 photodiodes (red, green, blue, clear,
-+  IR and flickering detection) with five configurable channels. Red, green
-+  and flickering detection being always available and two out of the rest
-+  three (blue, clear, IR) can be selected to be simultaneously measured.
-+  Typical application is adjusting LCD/OLED backlight of TVs, mobile phones
-+  and tablet PCs.
-+
-+properties:
-+  compatible:
-+    const: rohm,bu27010
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  vdd-supply: true
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+      #address-cells =3D <1>;
-+      #size-cells =3D <0>;
-+
-+      light-sensor@38 {
-+        compatible =3D "rohm,bu27010";
-+        reg =3D <0x38>;
-+      };
-+    };
-+
---=20
-2.40.1
+thanks,
 
-
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---WmYTfxGs9jNxBRbv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmSIQrkACgkQeFA3/03a
-ocVBHAf/S6NOXltJJc4vDappg6HVyiJvKbPZRUax4mmP0cdOTVfEy3ldC+WmxI5z
-3/JRXuPU3DUgR6NLZGhV30Ms2xBBm0pY4Cy7XYLXdBlVLHAohDyPYwQpd9/DDd3X
-fL9PU+Fur+3tEWNMHNv7DcYfmI8pQenizwZG/h737Ymfe7oxSxogkt6846TM7TFH
-swX7a9nqy6apb5vNGfslIutSMs7sxN4HLtV6/ymz41dPkI1Vf/XkAtS5TcXTVu7c
-WJGDV+8AhCRlrjvwC2FhgOwfupbSYO4sy5lUUGVJGgNMl7qWBOwA51Dj2LwJEWyj
-1vcpjx5NKMQlecfWWQ1CV/DRHbI6XQ==
-=j9Jf
------END PGP SIGNATURE-----
-
---WmYTfxGs9jNxBRbv--
+greg k-h
