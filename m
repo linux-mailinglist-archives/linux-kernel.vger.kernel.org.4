@@ -2,181 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB6F72E4E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 16:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A84372E4B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242851AbjFMOGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 10:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58354 "EHLO
+        id S240538AbjFMN6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 09:58:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242741AbjFMOFH (ORCPT
+        with ESMTP id S240426AbjFMN6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 10:05:07 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260151726
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 07:04:36 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-517bdc9e81dso2401498a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 07:04:36 -0700 (PDT)
+        Tue, 13 Jun 2023 09:58:42 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B961FF4
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 06:58:39 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b1c30a1653so68108121fa.2
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 06:58:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686665052; x=1689257052;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wV1ZBCQjYQHvbeHi8yLp3xmcTHgw1kfbgJnzsS6tlZo=;
-        b=H8J5ul4PsRZcJmgBe7iCXSLoFpCYGhsNk4GLdmK1Xn99j8m++RJzRzeQHBisfcYkKW
-         0k2gvVhPYWZYS4TPS3sWH1ZzJ8B/iz1Em0rZZLsSpPPnvNU6fQO/E1897mbZcQydhYl7
-         7/HOTMIW3+YhQCOovwaUh+EZQZJ62/R1UoITg=
+        d=linaro.org; s=google; t=1686664718; x=1689256718;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eYEjJGS1UUCjJyusiKu9spXvZVC2LuJOiUk5VQb5qBg=;
+        b=uNjYiaaXwGbisnriVGiyDPW7ZI45SzlN8FOVeTNbbxQb4PXZ+AuM66H4Yerp0ztmPX
+         01S78XYRrc7zNj88Pxcc1yV1tTzr3QBXuGBkzGMuS5uOyENuRaUoUFwpH+pm9eLJ7JcF
+         nWUUkS/MhD+1NGnKuogt5np26PCxhwF8tUjQehy+RMFNIpeT8xZ7TNB5Yyfs31jl2spX
+         eQ4xds7UIgd9KNJZNU/vGmbBV0mM0Uo+h6hq5N6tBa+uN2xA+BUbCVCu9DHBrde3BGKR
+         tUWBvko6KywEIxeFVBGndQm556lwHleld9lw81gVJE6FplEQBzWSvAPE/dAPBGTeHwL2
+         sc6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686665052; x=1689257052;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wV1ZBCQjYQHvbeHi8yLp3xmcTHgw1kfbgJnzsS6tlZo=;
-        b=SOXw4ylH/RR65EUWU4wiVu+FaBs1JKqt6CpbpnP6+2sV1QFGzvbweVDqWgMt05XmaK
-         he9tjdDqk9FUsUyhp39A0Cx1oOEIgA/Xrb5aUT0sAuu02f6tzGkdJ3u72610uYnOzdl/
-         1GDqYRu6UcAg8o/a/83295VFCRRv4pDslyW4Nwih0pqWZhzA0nw9Wo5GukKLu/eLFNdh
-         G3I/Su/6I/9NIf77+CyqnBE+HParZ7ItzKEIa5ywNas3Tfhq5UHqMlifP00PgNAhaSX5
-         cpc2CfB1tFOfbXSfEDP9QtqLZhwBM8zEmDZ6gZBy99ZxkORizE2vN+bVuB6vn/UY63/n
-         OIlA==
-X-Gm-Message-State: AC+VfDwV/rnZXzrWsfF+tfQEf+PxHV9W8ylT+v1acI8J16eR9DL54h8N
-        hJxXuO02Qp8iZxTfuaOMOcXDaw==
-X-Google-Smtp-Source: ACHHUZ5VvQYmTmmIQqWjBevrcuv0PqFAFA2sN0IEpIr8oW0LWuYdqhdjUi7u9PR3BVPRxpCxdUTN4Q==
-X-Received: by 2002:a17:90a:d304:b0:25b:e081:54e6 with SMTP id p4-20020a17090ad30400b0025be08154e6mr5037015pju.37.1686665051648;
-        Tue, 13 Jun 2023 07:04:11 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:1995:7db0:daf3:2c2a])
-        by smtp.gmail.com with ESMTPSA id 18-20020a17090a1a5200b0025c058be940sm2259230pjl.0.2023.06.13.07.04.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 07:04:10 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] drm/bridge: ti-sn65dsi86: Fix auxiliary bus lifetime
-Date:   Tue, 13 Jun 2023 06:58:13 -0700
-Message-ID: <20230613065812.v2.1.I24b838a5b4151fb32bccd6f36397998ea2df9fbb@changeid>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+        d=1e100.net; s=20221208; t=1686664718; x=1689256718;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eYEjJGS1UUCjJyusiKu9spXvZVC2LuJOiUk5VQb5qBg=;
+        b=k69xtoKP2VoYOIv+uBns62JOxeYWPgQZp9H98oLx7Q+NBRQL3DoNs5/s/qdsf+e8pB
+         lRZq5WJ2dP4koyX/jbZ+5UXIyfBYpCkCV0qu4C5EQBRr1R4fiCqlczkSs0py+1zTEdPn
+         TEkvBhk2WrkpD5NUMEKeIHczpptwIr/848JUbsu9Ie46mqUN4qSey3zqHIAv80S8nZrs
+         inGDbxYU1es4eBdMNNotvBHeMutBn3g9sDYhiFqrpS0UkS5xSrDPOoMaFK1RY3duDn65
+         ZCF4B4lcGX9iPOCS8tbx8Cad8YmpvJ7eZmUDnJERQ9oz9cCLZfcelSPQ8UFWa9KR3mcb
+         b9rQ==
+X-Gm-Message-State: AC+VfDwgvS5uXimaY6F40HxSjHIqVy9prB1qZ2dtJBZkc1q+QgITvYNs
+        pq01TjDo8LIPafPYu1IVWOrDzt5nfxfGc8cSV4M=
+X-Google-Smtp-Source: ACHHUZ4SeTgZwVp9xbt9r8WkNO8LW+MR7fA9doV9DSkOr/bC5m6r+nBHbjgHbz+tZM+MSk/aawBhBw==
+X-Received: by 2002:a2e:88d8:0:b0:2af:c9d8:87b4 with SMTP id a24-20020a2e88d8000000b002afc9d887b4mr4444624ljk.29.1686664717906;
+        Tue, 13 Jun 2023 06:58:37 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id z6-20020a2e3506000000b002adb98fdf81sm2162821ljz.7.2023.06.13.06.58.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 06:58:37 -0700 (PDT)
+Message-ID: <9c3db237-9bec-36e0-8b0c-28062c631068@linaro.org>
+Date:   Tue, 13 Jun 2023 15:58:35 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v3 5/8] qcom: pmic_glink: enable altmode for SM8550
+Content-Language: en-US
+To:     neil.armstrong@linaro.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20230601-topic-sm8550-upstream-type-c-v3-0-22c9973012b6@linaro.org>
+ <20230601-topic-sm8550-upstream-type-c-v3-5-22c9973012b6@linaro.org>
+ <5851627e-2972-f860-e965-dc8e73b01225@linaro.org>
+ <8f9c549a-e37b-2877-be74-f25304a476fd@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <8f9c549a-e37b-2877-be74-f25304a476fd@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Memory for the "struct device" for any given device isn't supposed to
-be released until the device's release() is called. This is important
-because someone might be holding a kobject reference to the "struct
-device" and might try to access one of its members even after any
-other cleanup/uninitialization has happened.
 
-Code analysis of ti-sn65dsi86 shows that this isn't quite right. When
-the code was written, it was believed that we could rely on the fact
-that the child devices would all be freed before the parent devices
-and thus we didn't need to worry about a release() function. While I
-still believe that the parent's "struct device" is guaranteed to
-outlive the child's "struct device" (because the child holds a kobject
-reference to the parent), the parent's "devm" allocated memory is a
-different story. That appears to be freed much earlier.
 
-Let's make this better for ti-sn65dsi86 by allocating each auxiliary
-with kzalloc and then free that memory in the release().
+On 13.06.2023 15:43, Neil Armstrong wrote:
+> On 13/06/2023 13:54, Krzysztof Kozlowski wrote:
+>> On 13/06/2023 09:55, Neil Armstrong wrote:
+>>> Altmode is also supported for SM8550, allow it.
+>>>
+>>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>>> ---
+>>>   drivers/soc/qcom/pmic_glink.c | 6 +-----
+>>>   1 file changed, 1 insertion(+), 5 deletions(-)
+>>>
+>>> diff --git a/drivers/soc/qcom/pmic_glink.c b/drivers/soc/qcom/pmic_glink.c
+>>> index c87056769ebd..8af06bdc6f5a 100644
+>>> --- a/drivers/soc/qcom/pmic_glink.c
+>>> +++ b/drivers/soc/qcom/pmic_glink.c
+>>> @@ -342,13 +342,9 @@ static const unsigned long pmic_glink_sm8450_client_mask = BIT(PMIC_GLINK_CLIENT
+>>>                                  BIT(PMIC_GLINK_CLIENT_ALTMODE) |
+>>>                                  BIT(PMIC_GLINK_CLIENT_UCSI);
+>>>   -/* Do not handle altmode for now on those platforms */
+>>> -static const unsigned long pmic_glink_sm8550_client_mask = BIT(PMIC_GLINK_CLIENT_BATT) |
+>>> -                               BIT(PMIC_GLINK_CLIENT_UCSI);
+>>> -
+>>>   static const struct of_device_id pmic_glink_of_match[] = {
+>>>       { .compatible = "qcom,sm8450-pmic-glink", .data = &pmic_glink_sm8450_client_mask },
+>>
+>> Orientation and maybe all of the USB-related properties do not look like
+>> sm8450 specific, but PM8350B. That's where CC_OUT pin is. I don't think
+>> we represented this correctly, but rather copy-pasted downstream solution...
+> 
+> We do not interact directly with PM8350B or PM8550B but with pmic_glink who
+> does the work work for use, and this is platform specific.
+Yep, pmic_glink is totally a firmware construct and not all platforms with
+pm8350b or so implement it.
 
-Fixes: bf73537f411b ("drm/bridge: ti-sn65dsi86: Break GPIO and MIPI-to-eDP bridge into sub-drivers")
-Suggested-by: Stephen Boyd <swboyd@chromium.org>
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
-
-Changes in v2:
-- Check for allocation failure.
-- Delete a blank line.
-
- drivers/gpu/drm/bridge/ti-sn65dsi86.c | 35 +++++++++++++++++----------
- 1 file changed, 22 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
-index 597ceb7024e0..e3de68f226e8 100644
---- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
-+++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
-@@ -170,10 +170,10 @@
-  * @pwm_refclk_freq: Cache for the reference clock input to the PWM.
-  */
- struct ti_sn65dsi86 {
--	struct auxiliary_device		bridge_aux;
--	struct auxiliary_device		gpio_aux;
--	struct auxiliary_device		aux_aux;
--	struct auxiliary_device		pwm_aux;
-+	struct auxiliary_device		*bridge_aux;
-+	struct auxiliary_device		*gpio_aux;
-+	struct auxiliary_device		*aux_aux;
-+	struct auxiliary_device		*pwm_aux;
- 
- 	struct device			*dev;
- 	struct regmap			*regmap;
-@@ -464,27 +464,34 @@ static void ti_sn65dsi86_delete_aux(void *data)
- 	auxiliary_device_delete(data);
- }
- 
--/*
-- * AUX bus docs say that a non-NULL release is mandatory, but it makes no
-- * sense for the model used here where all of the aux devices are allocated
-- * in the single shared structure. We'll use this noop as a workaround.
-- */
--static void ti_sn65dsi86_noop(struct device *dev) {}
-+static void ti_sn65dsi86_aux_device_release(struct device *dev)
-+{
-+	struct auxiliary_device *aux = container_of(dev, struct auxiliary_device, dev);
-+
-+	kfree(aux);
-+}
- 
- static int ti_sn65dsi86_add_aux_device(struct ti_sn65dsi86 *pdata,
--				       struct auxiliary_device *aux,
-+				       struct auxiliary_device **aux_out,
- 				       const char *name)
- {
- 	struct device *dev = pdata->dev;
-+	struct auxiliary_device *aux;
- 	int ret;
- 
-+	aux = kzalloc(sizeof(*aux), GFP_KERNEL);
-+	if (!aux)
-+		return -ENOMEM;
-+
- 	aux->name = name;
- 	aux->dev.parent = dev;
--	aux->dev.release = ti_sn65dsi86_noop;
-+	aux->dev.release = ti_sn65dsi86_aux_device_release;
- 	device_set_of_node_from_dev(&aux->dev, dev);
- 	ret = auxiliary_device_init(aux);
--	if (ret)
-+	if (ret) {
-+		kfree(aux);
- 		return ret;
-+	}
- 	ret = devm_add_action_or_reset(dev, ti_sn65dsi86_uninit_aux, aux);
- 	if (ret)
- 		return ret;
-@@ -493,6 +500,8 @@ static int ti_sn65dsi86_add_aux_device(struct ti_sn65dsi86 *pdata,
- 	if (ret)
- 		return ret;
- 	ret = devm_add_action_or_reset(dev, ti_sn65dsi86_delete_aux, aux);
-+	if (!ret)
-+		*aux_out = aux;
- 
- 	return ret;
- }
--- 
-2.41.0.162.gfafddb0af9-goog
-
+Konrad
+> 
+> Neil
+> 
+>>
+>> Best regards,
+>> Krzysztof
+>>
+> 
