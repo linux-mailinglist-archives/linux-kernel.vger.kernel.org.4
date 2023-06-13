@@ -2,142 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E74E72D70B
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 03:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC1C72D6FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 03:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238475AbjFMBiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 21:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57818 "EHLO
+        id S238136AbjFMBfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 21:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbjFMBiK (ORCPT
+        with ESMTP id S230353AbjFMBfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 21:38:10 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DBC1726
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 18:38:04 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QgB5L4WM8z4f3mKx
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 09:37:58 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.104.67])
-        by APP4 (Coremail) with SMTP id gCh0CgD3mp52yIdkGIRNLg--.33211S4;
-        Tue, 13 Jun 2023 09:38:00 +0800 (CST)
-From:   linan666@huaweicloud.com
-To:     agk@redhat.com, snitzer@kernel.org, dm-devel@redhat.com
-Cc:     linux-kernel@vger.kernel.org, linan122@huawei.com,
-        yukuai3@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
-        yangerkun@huawei.com
-Subject: [PATCH] dm: Support turning off io stat accounting
-Date:   Tue, 13 Jun 2023 09:33:32 +0800
-Message-Id: <20230613013332.4078896-1-linan666@huaweicloud.com>
-X-Mailer: git-send-email 2.39.2
+        Mon, 12 Jun 2023 21:35:07 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C633171A
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 18:35:06 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-977d55ac17bso902409066b.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 18:35:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1686620105; x=1689212105;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tYiTdDH+VW2jwUSsmDMc3DKz+ntmwZ8u/+J88WoZGfI=;
+        b=LZIc3f3SaPkO69Ni+BwEuzALApcWVFl0vZfRxm9l/1Tcq84J18DLFo6uutvyLDl8I3
+         AgRlQYvoSyVAoDB+ZcOxMMaw+8IhdOSd+XAfgSS3P1rbY58//03hXFcBpqd0lzUUU26T
+         0YaYMZMUD0hf1DjlMW1DjqgcbujaNPln4rBZY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686620105; x=1689212105;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tYiTdDH+VW2jwUSsmDMc3DKz+ntmwZ8u/+J88WoZGfI=;
+        b=SEd3A2W0dBXavDOIjr03mJt7Y8AB8OUlD0iX5lxxl2CzRCtiQHRsLvdTXCfoqgCrFt
+         MMp/mpVzJWtA7/QJ7ky7AuJxNkFDA9pE7AZdomWsLduUE+d1UvLf5L4uI/cR/BLH3V4T
+         Byi1oWqisyvccz5cBmlc76ETuWnZup7ERUykgYaLhknN4L9l8IW0F0076sLN0ro/Aw/D
+         muM7CKmLDgwpqjUpcgo/qSWMTJZ851FQw9fhAanM5ryOBqs6XswI9lVryhV0ZKhPtDd5
+         GtjmAAkYlQ/sXdV9Nybpw84D8T1P+hOMi9Rhr6gScrqnm15pCNgYhqjB+MbfF8E9WVot
+         RcaQ==
+X-Gm-Message-State: AC+VfDx2lr2dhZNMHG2SnrRAEIKnmX9XXfAacnwDTxmHgL/ZLeDbCRUH
+        1lQuw0M/h6kuV69h95lXVdXliLthtKjctMqhHOY5VXgT
+X-Google-Smtp-Source: ACHHUZ6yoAzKdQItJFSa/4IDxLWOroKkSeFG+yNj0oCK/mr8O6758ELfSDkXBGg/Q4pGgiaqwrZkJA==
+X-Received: by 2002:a17:906:d54b:b0:978:94b1:25ac with SMTP id cr11-20020a170906d54b00b0097894b125acmr13826543ejc.40.1686620104816;
+        Mon, 12 Jun 2023 18:35:04 -0700 (PDT)
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com. [209.85.208.49])
+        by smtp.gmail.com with ESMTPSA id ce23-20020a170906b25700b0097887b68c17sm5919341ejb.98.2023.06.12.18.35.02
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 18:35:02 -0700 (PDT)
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5149c76f4dbso8680205a12.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 18:35:02 -0700 (PDT)
+X-Received: by 2002:a05:6402:31f3:b0:514:9e61:e7b8 with SMTP id
+ dy19-20020a05640231f300b005149e61e7b8mr5620947edb.40.1686620102024; Mon, 12
+ Jun 2023 18:35:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgD3mp52yIdkGIRNLg--.33211S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxJF45KFyfZr4kZrWkuw4xXrb_yoW5XryDpF
-        WDW34Syr4rWa12ga1UW3y7ua4Fga93KryUCrW3C39a9a1UKryDAr4UtFW3Xr1kJFyxCFy2
-        qF10kFyDCayrArUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkCb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487
-        Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aV
-        AFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4kE6xkIj40E
-        w7xC0wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
-        Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUwc_TUU
-        UUU
-X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
+In-Reply-To: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 12 Jun 2023 18:34:45 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh0UNRn96k3XLh2AYOo0iz1k_Qk-rQXv8kYjXkKBzUMWA@mail.gmail.com>
+Message-ID: <CAHk-=wh0UNRn96k3XLh2AYOo0iz1k_Qk-rQXv8kYjXkKBzUMWA@mail.gmail.com>
+Subject: Re: [PATCH v9 00/42] Shadow stacks for userspace
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        david@redhat.com, debug@rivosinc.com, szabolcs.nagy@arm.com,
+        broonie@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Li Nan <linan122@huawei.com>
+On Mon, Jun 12, 2023 at 5:14=E2=80=AFPM Rick Edgecombe
+<rick.p.edgecombe@intel.com> wrote:
+>
+> This series implements Shadow Stacks for userspace using x86's Control-fl=
+ow
+> Enforcement Technology (CET).
 
-Commit bc58ba9468d9 ("block: add sysfs file for controlling io stats
-accounting") allowed user to turn off disk stat accounting completely by
-queue flag QUEUE_FLAG_IO_STAT. In dm, this flag is not set. io stats
-is continuously counted and cannot be turn off.
+Do you have this in a git tree somewhere? For series with this many
+patches, I find it easier to just do a "git fetch" and "gitk
+..FETCH_HEAD" these days, and then reply by email on anything I find.
 
-Support turning off io stat accounting for dm. Set QUEUE_FLAG_IO_STAT for
-dm request_queue. When the io starts, we account the io using DM_IO_STAT
-dm_io flag to avoid io stats disable in the middle of the io. DM statistics
-is independent of block io stat and remains unchanged.
+That's partly because it makes it really easy to zoom in on some
+particular area (eg "let's look at just mm/ and the generic include
+files")
 
-Signed-off-by: Li Nan <linan122@huawei.com>
----
- drivers/md/dm-core.h  |  3 ++-
- drivers/md/dm-table.c |  1 +
- drivers/md/dm.c       | 15 ++++++++++-----
- 3 files changed, 13 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/md/dm-core.h b/drivers/md/dm-core.h
-index aecab0c0720f..8b0af3e1331a 100644
---- a/drivers/md/dm-core.h
-+++ b/drivers/md/dm-core.h
-@@ -307,7 +307,8 @@ struct dm_io {
-  */
- enum {
- 	DM_IO_ACCOUNTED,
--	DM_IO_WAS_SPLIT
-+	DM_IO_WAS_SPLIT,
-+	DM_IO_STAT
- };
- 
- static inline bool dm_io_flagged(struct dm_io *io, unsigned int bit)
-diff --git a/drivers/md/dm-table.c b/drivers/md/dm-table.c
-index 1398f1d6e83e..bd5e16a3f2b1 100644
---- a/drivers/md/dm-table.c
-+++ b/drivers/md/dm-table.c
-@@ -1936,6 +1936,7 @@ int dm_table_set_restrictions(struct dm_table *t, struct request_queue *q,
- 	 */
- 	q->limits = *limits;
- 
-+	blk_queue_flag_set(QUEUE_FLAG_IO_STAT, q);
- 	if (dm_table_supports_nowait(t))
- 		blk_queue_flag_set(QUEUE_FLAG_NOWAIT, q);
- 	else
-diff --git a/drivers/md/dm.c b/drivers/md/dm.c
-index 3b694ba3a106..82b73536bd93 100644
---- a/drivers/md/dm.c
-+++ b/drivers/md/dm.c
-@@ -511,11 +511,14 @@ static void dm_io_acct(struct dm_io *io, bool end)
- 	else
- 		sectors = io->sectors;
- 
--	if (!end)
--		bdev_start_io_acct(bio->bi_bdev, bio_op(bio), start_time);
--	else
--		bdev_end_io_acct(bio->bi_bdev, bio_op(bio), sectors,
--				 start_time);
-+	if (dm_io_flagged(io, DM_IO_STAT)) {
-+		if (!end)
-+			bdev_start_io_acct(bio->bi_bdev, bio_op(bio),
-+					   start_time);
-+		else
-+			bdev_end_io_acct(bio->bi_bdev, bio_op(bio),
-+					 sectors, start_time);
-+	}
- 
- 	if (static_branch_unlikely(&stats_enabled) &&
- 	    unlikely(dm_stats_used(&md->stats))) {
-@@ -592,6 +595,8 @@ static struct dm_io *alloc_io(struct mapped_device *md, struct bio *bio)
- 	spin_lock_init(&io->lock);
- 	io->start_time = jiffies;
- 	io->flags = 0;
-+	if (blk_queue_io_stat(bio->bi_bdev->bd_disk->queue))
-+		dm_io_set_flag(io, DM_IO_STAT);
- 
- 	if (static_branch_unlikely(&stats_enabled))
- 		dm_stats_record_start(&md->stats, &io->stats_aux);
--- 
-2.39.2
-
+                  Linus
