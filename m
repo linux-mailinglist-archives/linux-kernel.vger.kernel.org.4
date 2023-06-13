@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C6372DDD3
+	by mail.lfdr.de (Postfix) with ESMTP id 9D73572DDD4
 	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 11:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240873AbjFMJfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 05:35:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53070 "EHLO
+        id S237306AbjFMJfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 05:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240727AbjFMJeo (ORCPT
+        with ESMTP id S241941AbjFMJfE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 05:34:44 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC3310C6;
-        Tue, 13 Jun 2023 02:34:42 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f5f728c4aaso6180723e87.0;
-        Tue, 13 Jun 2023 02:34:42 -0700 (PDT)
+        Tue, 13 Jun 2023 05:35:04 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8803610DE;
+        Tue, 13 Jun 2023 02:35:01 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f642a24568so6432082e87.2;
+        Tue, 13 Jun 2023 02:35:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686648881; x=1689240881;
+        d=gmail.com; s=20221208; t=1686648900; x=1689240900;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=o6Psb5RzioVdv/upXxW5xP0CZJnFju9Mn7noJG9metU=;
-        b=U0qFk2NHmdFHLVYK1fC29dJoOLEi5nDNoxvVWPiYdXeeJcOK6yjfONOq90JJ95jKis
-         NKPJtFtJzZwCSdiR4kcOVURutAlHbK3eStqyD9xMpChTMmjlpxIvmEshZS941a78iPBw
-         1SKkileQ/L4oOiDbM24gdHR5PeapqxGzJB64mnMd29sja9F3qpjZVY+CIEFQnVg7YJLG
-         mq+0uUzvwPuC1TkHZFX13EAQME75E5FnJ9B5SNoIH8YlHH2z3Lmve13S0vLFSJFIWquQ
-         2E/k7eFT9tJXimdIl/dQG1EihPnlhf+MR0i/+Wyf55boBoqh8tgN8CgyEi1oqGNQ2ymz
-         tW5g==
+        bh=oKSIUrG32f08MFv02xTotJtCAWI/Mr97EQR5Ga4cpVM=;
+        b=B+2aL3qmIsa0vDLr8SiPBpJu3gqTyGGPDdEiyfLAm7ojIxcfDdzb99Kk56so0Eeg4E
+         LaHsApWadMm6oFEXfO4lBw5Agao1TwdPwCCbjYdPRenb8iS8VbSa5DL3lQGkBT7r3dSZ
+         sEYsIY82nIqPnqdu5EEFtp5aTHIjLMTuraU6hta77AHC5t4T3gZRMGJYJTRK1Rfvpy61
+         f5+J6diqQ3nO51s0xNXOE4jiePyf+TPWak8VEMyR1Z6wALxvIdmCuYtPRzQqxLm/7786
+         YpEdebJXAwPQjgA4fW2xMAinzF+ha4QqSNgAe1kmgmqxQ2vw0gqSE4bPtC325yAwpzOq
+         f3lQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686648881; x=1689240881;
+        d=1e100.net; s=20221208; t=1686648900; x=1689240900;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=o6Psb5RzioVdv/upXxW5xP0CZJnFju9Mn7noJG9metU=;
-        b=BaemCsn4vnIUWskAOcyPaPkcBDViz0adpeVoDUOHdqauvjl51yNO5lCY1GU4Ns4PKQ
-         O7C9ZnQhr4pXeK7iJA9NNgBw4vrne21MERBQtQueGdDjGRHhIZoqAT5/DgteOHcZyaXU
-         dNUpVP6eQzpVEe5T0CEq2GRY3zvt/5UUmE3wMvWmcSQez3pV39MpzCwAVfnsj96F83U8
-         xB5QgazxK6YqjYc9tmMFI9P6+731a5Ow0mwVSfJ5//UByflzRP/WCOjrYfgSNfxH8RDO
-         Nd7QUQr3lhDLGlktvHqKuo3ixDrlVU5GvVyxwjK0JDCF5013lPnxIOPOlzSZ1RS4xW3f
-         su3g==
-X-Gm-Message-State: AC+VfDwxXbPTbZans3QZ3xe6864R1pgfb2/wz3aX1f5EnFaU42bg6nZX
-        1QFd8vwrKX7ScyuAzgVU26A=
-X-Google-Smtp-Source: ACHHUZ4DvdS43yV7tz2knsJSxTI8isfz/lmehbyv4sDn9SZb2UJ6w/yaUUDhDu6nTh9DrolxDEKvhw==
-X-Received: by 2002:a19:4f15:0:b0:4f6:5473:7bf0 with SMTP id d21-20020a194f15000000b004f654737bf0mr3802608lfb.21.1686648880585;
-        Tue, 13 Jun 2023 02:34:40 -0700 (PDT)
+        bh=oKSIUrG32f08MFv02xTotJtCAWI/Mr97EQR5Ga4cpVM=;
+        b=SMV9qJwlZ0XPPvMhryPKMjYMG9sZFa2MVfjbW81mw+W9PJ88THMcCf6AoAHWrmn7jC
+         n6hVmVtTxZAnO+eD56CA460KBDavP6RIsehUUqo5/RQGQgEn3PIF/KIGPtEdKpGXeVVb
+         tcsT5ywgL3+7HfHeEEGb02gkB9OdYDz/zR+r0vMtNLjOlRQbomPa3rAsDB0ELnxJXr9m
+         Nm9iIM87cHg/kAhEGCwxsG20OWCWS4+8b7v+K9HtaMWZLpd8Wo1lbYAVKFpix7Y2DpgA
+         Nf5cSL1x/8b7EMVrYSEJN18XNWigsNUHEXRlwJV5U9F7OfMktNBbxVzT6hyROkgskHKJ
+         9Itw==
+X-Gm-Message-State: AC+VfDzKbqMdfpeVcNIwSTtfqg62Oq9inlH+hWJGV5JQb4/p3YDhqJOV
+        JUKnFREk4MwIF1Qf5GP10Q9zO7KLdPk=
+X-Google-Smtp-Source: ACHHUZ45oIsxO/H3gPCB+qwNMtRcE1YV78oGM+P6l/w8IlLjKFyyKh+xcyOfBkPDq0FxghLosuGmtg==
+X-Received: by 2002:ac2:464a:0:b0:4f6:1160:b956 with SMTP id s10-20020ac2464a000000b004f61160b956mr5067416lfo.54.1686648899686;
+        Tue, 13 Jun 2023 02:34:59 -0700 (PDT)
 Received: from dc78bmyyyyyyyyyyyyyyt-3.rev.dnainternet.fi (dc78bmyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f8:1500::1])
-        by smtp.gmail.com with ESMTPSA id o14-20020a056512050e00b004f517c21ef0sm1722501lfb.82.2023.06.13.02.34.39
+        by smtp.gmail.com with ESMTPSA id q28-20020ac24a7c000000b004f00189e1dcsm1707261lfp.117.2023.06.13.02.34.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 02:34:39 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 12:34:36 +0300
+        Tue, 13 Jun 2023 02:34:59 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 12:34:55 +0300
 From:   Matti Vaittinen <mazziesaccount@gmail.com>
 To:     Matti Vaittinen <mazziesaccount@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
@@ -57,12 +57,12 @@ Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
         Jonathan Cameron <jic23@kernel.org>,
         Lars-Peter Clausen <lars@metafoo.de>,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] iio: light: bu27034: Fix scale format
-Message-ID: <5369117315cf05b88cf0ccb87373fd77190f6ca2.1686648422.git.mazziesaccount@gmail.com>
+Subject: [PATCH 2/3] iio: light: bu27008: Fix scale format
+Message-ID: <e4778b74cde41431f77bc8dd88ec18605da0b400.1686648422.git.mazziesaccount@gmail.com>
 References: <cover.1686648422.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="nu5zW1gmaBLRAMXS"
+        protocol="application/pgp-signature"; boundary="8eb3CYBD1iP+J9nU"
 Content-Disposition: inline
 In-Reply-To: <cover.1686648422.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,7 +76,7 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---nu5zW1gmaBLRAMXS
+--8eb3CYBD1iP+J9nU
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
@@ -90,51 +90,42 @@ Fix this by implementing the .write_raw_get_fmt callback to use NANO
 accuracy for writes of IIO_CHAN_INFO_SCALE.
 
 Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-Fixes: e52afbd61039 ("iio: light: ROHM BU27034 Ambient Light Sensor")
----
- drivers/iio/light/rohm-bu27034.c | 22 +++++++++++++++++++---
- 1 file changed, 19 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iio/light/rohm-bu27034.c b/drivers/iio/light/rohm-bu27=
-034.c
-index 846c3d43aa34..f737d62bdf92 100644
---- a/drivers/iio/light/rohm-bu27034.c
-+++ b/drivers/iio/light/rohm-bu27034.c
-@@ -572,7 +572,7 @@ static int bu27034_set_scale(struct bu27034_data *data,=
- int chan,
- 		return -EINVAL;
-=20
- 	if (chan =3D=3D BU27034_CHAN_ALS) {
--		if (val =3D=3D 0 && val2 =3D=3D 1000)
-+		if (val =3D=3D 0 && val2 =3D=3D 1000000)
- 			return 0;
-=20
- 		return -EINVAL;
-@@ -584,7 +584,7 @@ static int bu27034_set_scale(struct bu27034_data *data,=
- int chan,
+---
+Fixes tag not added because AFACS the bu27008 is not yet in any releases.
+---
+ drivers/iio/light/rohm-bu27008.c | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/iio/light/rohm-bu27008.c b/drivers/iio/light/rohm-bu27=
+008.c
+index 489902bed7f0..80eb14ea8193 100644
+--- a/drivers/iio/light/rohm-bu27008.c
++++ b/drivers/iio/light/rohm-bu27008.c
+@@ -633,7 +633,7 @@ static int bu27008_try_find_new_time_gain(struct bu2700=
+8_data *data, int val,
+ 	for (i =3D 0; i < data->gts.num_itime; i++) {
+ 		new_time_sel =3D data->gts.itime_table[i].sel;
+ 		ret =3D iio_gts_find_gain_sel_for_scale_using_time(&data->gts,
+-					new_time_sel, val, val2 * 1000, gain_sel);
++					new_time_sel, val, val2, gain_sel);
+ 		if (!ret)
+ 			break;
+ 	}
+@@ -662,7 +662,7 @@ static int bu27008_set_scale(struct bu27008_data *data,
  		goto unlock_out;
 =20
  	ret =3D iio_gts_find_gain_sel_for_scale_using_time(&data->gts, time_sel,
 -						val, val2 * 1000, &gain_sel);
 +						val, val2, &gain_sel);
  	if (ret) {
- 		/*
- 		 * Could not support scale with given time. Need to change time.
-@@ -621,7 +621,7 @@ static int bu27034_set_scale(struct bu27034_data *data,=
- int chan,
-=20
- 			/* Can we provide requested scale with this time? */
- 			ret =3D iio_gts_find_gain_sel_for_scale_using_time(
--				&data->gts, new_time_sel, val, val2 * 1000,
-+				&data->gts, new_time_sel, val, val2,
- 				&gain_sel);
- 			if (ret)
- 				continue;
-@@ -1213,6 +1213,21 @@ static int bu27034_read_raw(struct iio_dev *idev,
- 	}
+ 		ret =3D bu27008_try_find_new_time_gain(data, val, val2, &gain_sel);
+ 		if (ret)
+@@ -677,6 +677,21 @@ static int bu27008_set_scale(struct bu27008_data *data,
+ 	return ret;
  }
 =20
-+static int bu27034_write_raw_get_fmt(struct iio_dev *indio_dev,
++static int bu27008_write_raw_get_fmt(struct iio_dev *indio_dev,
 +				     struct iio_chan_spec const *chan,
 +				     long mask)
 +{
@@ -149,17 +140,18 @@ index 846c3d43aa34..f737d62bdf92 100644
 +	}
 +}
 +
- static int bu27034_write_raw(struct iio_dev *idev,
+ static int bu27008_write_raw(struct iio_dev *idev,
  			     struct iio_chan_spec const *chan,
  			     int val, int val2, long mask)
-@@ -1260,6 +1275,7 @@ static int bu27034_read_avail(struct iio_dev *idev,
- static const struct iio_info bu27034_info =3D {
- 	.read_raw =3D &bu27034_read_raw,
- 	.write_raw =3D &bu27034_write_raw,
-+	.write_raw_get_fmt =3D &bu27034_write_raw_get_fmt,
- 	.read_avail =3D &bu27034_read_avail,
- };
-=20
+@@ -756,6 +771,7 @@ static int bu27008_update_scan_mode(struct iio_dev *ide=
+v,
+ static const struct iio_info bu27008_info =3D {
+ 	.read_raw =3D &bu27008_read_raw,
+ 	.write_raw =3D &bu27008_write_raw,
++	.write_raw_get_fmt =3D &bu27008_write_raw_get_fmt,
+ 	.read_avail =3D &bu27008_read_avail,
+ 	.update_scan_mode =3D bu27008_update_scan_mode,
+ 	.validate_trigger =3D iio_validate_own_trigger,
 --=20
 2.40.1
 
@@ -176,19 +168,19 @@ Simon says - in Latin please.
 ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
 Thanks to Simon Glass for the translation =3D]=20
 
---nu5zW1gmaBLRAMXS
+--8eb3CYBD1iP+J9nU
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmSIOCwACgkQeFA3/03a
-ocXCAAf9ERi4KO6rwKLhEuFdPFdT/FdFqLaO52sZGLctWan4v97H2FXMfxftrlIF
-qwpKynSIi8iXl4FHVqxqw6JfCjKbYhb77DOsxKiHdbGNRDDr2TtVzffT5iLZgUSY
-vLnnA/QLdjYx1w9oRdP3TOWBW3rz+9oyhyvRerhYYbc2t3pq9Z6dLENHJ+nvvfD4
-yN4i7EGiX/T1hEbTakYp142ZIv9eaLex4PV0yjpaCoTNwZPbYBZFrvAunAeJrnJB
-HmczDnxqxn2YQc2Iiyb3ETv1qlqZgf1ata7edS3po8XAUPrxuP9bvlTA6Yzpl/ZH
-TsoO/9EnLc2PCK1kt5cpCqe1+McSlg==
-=jbbw
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmSIOD8ACgkQeFA3/03a
+ocWAnwf/QwkW5XP56+q9/tOHL6thmq5bbQeoCwKDeWcLMuj9HiOQ7WQ67ekPswtI
+aj2b/g0btom6/OY6kGxcHMFlGQ85MI/tFekupitxGrGnB+u7z6lRneh3d0ZSOp+j
+oPF1PbUjC7pLDdv2udeFhWrlRNg0zAD+g40eAlDZcLwCKdqbvnWebJq6eka3gZaP
+NFVucs8oC1eJHhuVRcW9o82+neadTfDljGxpG+Kiv/pxA6MXbUCH0TSB5eoOBBBt
+C5/YtZTpbPE3BCDAuyEoW9eE1rdRszdZErD8Tdgjqp6HC4hUoBy3ymHokgmYuy5n
+GiaLoLgDa9MGpyO6RJEO58kaYFzUcA==
+=uMZ4
 -----END PGP SIGNATURE-----
 
---nu5zW1gmaBLRAMXS--
+--8eb3CYBD1iP+J9nU--
