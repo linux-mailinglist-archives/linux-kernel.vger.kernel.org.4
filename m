@@ -2,120 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC1C72D6FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 03:35:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEEFC72D703
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 03:36:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238136AbjFMBfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 21:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56200 "EHLO
+        id S235018AbjFMBfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 21:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230353AbjFMBfH (ORCPT
+        with ESMTP id S230039AbjFMBft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 21:35:07 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C633171A
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 18:35:06 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-977d55ac17bso902409066b.3
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 18:35:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1686620105; x=1689212105;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tYiTdDH+VW2jwUSsmDMc3DKz+ntmwZ8u/+J88WoZGfI=;
-        b=LZIc3f3SaPkO69Ni+BwEuzALApcWVFl0vZfRxm9l/1Tcq84J18DLFo6uutvyLDl8I3
-         AgRlQYvoSyVAoDB+ZcOxMMaw+8IhdOSd+XAfgSS3P1rbY58//03hXFcBpqd0lzUUU26T
-         0YaYMZMUD0hf1DjlMW1DjqgcbujaNPln4rBZY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686620105; x=1689212105;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tYiTdDH+VW2jwUSsmDMc3DKz+ntmwZ8u/+J88WoZGfI=;
-        b=SEd3A2W0dBXavDOIjr03mJt7Y8AB8OUlD0iX5lxxl2CzRCtiQHRsLvdTXCfoqgCrFt
-         MMp/mpVzJWtA7/QJ7ky7AuJxNkFDA9pE7AZdomWsLduUE+d1UvLf5L4uI/cR/BLH3V4T
-         Byi1oWqisyvccz5cBmlc76ETuWnZup7ERUykgYaLhknN4L9l8IW0F0076sLN0ro/Aw/D
-         muM7CKmLDgwpqjUpcgo/qSWMTJZ851FQw9fhAanM5ryOBqs6XswI9lVryhV0ZKhPtDd5
-         GtjmAAkYlQ/sXdV9Nybpw84D8T1P+hOMi9Rhr6gScrqnm15pCNgYhqjB+MbfF8E9WVot
-         RcaQ==
-X-Gm-Message-State: AC+VfDx2lr2dhZNMHG2SnrRAEIKnmX9XXfAacnwDTxmHgL/ZLeDbCRUH
-        1lQuw0M/h6kuV69h95lXVdXliLthtKjctMqhHOY5VXgT
-X-Google-Smtp-Source: ACHHUZ6yoAzKdQItJFSa/4IDxLWOroKkSeFG+yNj0oCK/mr8O6758ELfSDkXBGg/Q4pGgiaqwrZkJA==
-X-Received: by 2002:a17:906:d54b:b0:978:94b1:25ac with SMTP id cr11-20020a170906d54b00b0097894b125acmr13826543ejc.40.1686620104816;
-        Mon, 12 Jun 2023 18:35:04 -0700 (PDT)
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com. [209.85.208.49])
-        by smtp.gmail.com with ESMTPSA id ce23-20020a170906b25700b0097887b68c17sm5919341ejb.98.2023.06.12.18.35.02
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 18:35:02 -0700 (PDT)
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5149c76f4dbso8680205a12.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 18:35:02 -0700 (PDT)
-X-Received: by 2002:a05:6402:31f3:b0:514:9e61:e7b8 with SMTP id
- dy19-20020a05640231f300b005149e61e7b8mr5620947edb.40.1686620102024; Mon, 12
- Jun 2023 18:35:02 -0700 (PDT)
+        Mon, 12 Jun 2023 21:35:49 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F849E56
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 18:35:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
+ s=s31663417; t=1686620129; x=1687224929; i=w_armin@gmx.de;
+ bh=J0pf1cXUiaFD57OWtNP+P+YW1hjLD8enAD7/1aYVyks=;
+ h=X-UI-Sender-Class:Subject:From:To:Cc:References:Date:In-Reply-To;
+ b=Vx3RGqCVuRqEVWnPpMxsHeAD7enZgfJu3aVRLkf5Gap5LEKdN+oeYJRQsuKDN9rvg3zxyx6
+ vOHAErHeSwIddA5nYgIR6J6ShE7dPkWqIgRmiCJCSCJlb6DAq+UAeSAPK4EoEsjIOYAqElJ+u
+ C4vdnyZwCbeSTibs87jBLi7+PiMH4PHtgjGze3DQEBVdW+xi9VnwY6DBerdDH8CUZvz2BjgfD
+ ha9iqPWbAsNtBDuqVbzCjF21TgTn9IRNb35x2Ef+HRux739cP8KFL90yp0rNS/8Xp8kKbarhf
+ 1Ubu4gxue9HlUIz9iflt+vBQl/koDsHc2gIb7Ga6iVv/gir/NUYg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MS3mz-1qad3q1Z7r-00TU0r; Tue, 13
+ Jun 2023 03:35:29 +0200
+Subject: Re: [PATCH] pcmcia: rsrc_nonstatic: Fix memory leak in
+ nonstatic_release_resource_db()
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     linux@dominikbrodowski.net
+Cc:     logang@deltatee.com, gregkh@linuxfoundation.org, rafael@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230512184529.5094-1-W_Armin@gmx.de>
+Message-ID: <f2f66f6a-8917-1b48-c598-f7b42868a7b9@gmx.de>
+Date:   Tue, 13 Jun 2023 03:35:26 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
-In-Reply-To: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 12 Jun 2023 18:34:45 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh0UNRn96k3XLh2AYOo0iz1k_Qk-rQXv8kYjXkKBzUMWA@mail.gmail.com>
-Message-ID: <CAHk-=wh0UNRn96k3XLh2AYOo0iz1k_Qk-rQXv8kYjXkKBzUMWA@mail.gmail.com>
-Subject: Re: [PATCH v9 00/42] Shadow stacks for userspace
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com, szabolcs.nagy@arm.com,
-        broonie@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230512184529.5094-1-W_Armin@gmx.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Provags-ID: V03:K1:qn3HIILsBooumwuX0/huD3Kd7J0YSr+T4wGu3L6Ydlc61qd9x4y
+ XxXkDN2Q6DcEjzTqy16/lL4QafllLc6D6CqYzHz7HOt4m87GlUqzud7DF/HW/M4sFClf7an
+ 5aao3aYGYjvdAkwRhIoShDJe5quzG3+F1yVogPshN6a6PW3J0Gc59iZ64H8RCh/hJOIFJMb
+ NFjxcH1M5FROosUtxZMZA==
+UI-OutboundReport: notjunk:1;M01:P0:7aUdcedJp1c=;kD4QCksw3Z0JxA8jW/H4SxdMGu8
+ ok9MOuZz/pMTWoOXmh87GcmIfTCnhC0I7uKgsXXGo1Ys3MeQ5eqCWBoWc72ywUlm/iNU2meZ4
+ xM9bDTxmtxiK+N0Vusb26ODqJ5EJ+9rsjkCZZsPwUbRyB48VRMw06B4H1kdTbUv3C/dpViMIT
+ aHMKFFEJnUEvdBKpSeGoZOLOjQai+XTGdhrxbvNCjNitqFYLBTkeK/0uE0DgUpmCBtV2XE2tB
+ DIwwYgu9GcR2XJ6hzxg90P9eL4uG8B3Nylc303DOCNQXAHku7Y85IA6xtMUsfrlrit+mRMOJC
+ 8MiJcHYrTpZYuhsJh7ZKLB6eTlgAkOH0Pajp+b3MlR1PpFCPgEujB13Tk57NSmuV7rl9LoD5O
+ /3jnVcaBCsVBQxAV0Cz/DMKo7mO8T3xckDJA1tOKbtX+lpd+pnXFCpVomCdh9OOFHsyLnRd8o
+ mYP7WfnDs0N+WKn2PfJb05waldfW2pLF71gMw5pS01MzXCDbDGG9ynlc9yg+Uq+mAtYCknk7p
+ vYvTDq73w4L2GqqAdwSdAMeJVBlSozD9J0u6MuH+J2GK8yQ7vpsuGB24pol1YbmW4pQ88xd6r
+ k77d8pjEy6Ydc7jQkgdEsOm5ixyClfeBXK//XN19NfDLN3K/G3MVpcGinE2U4Um46wSQSLzsH
+ rLe6YgVaVS54Xk5HR296g96zEpX6E81KXh6Knpy78h+MNyBUBdd8xYpFayeJap8tj11hWr/2T
+ m6Rt/l1u7+dryKlROIDHxJL1EG5YRRtQxfaQqfL+tx04z9qlifRuG5EUCUNshS3ZI2iGKyAU2
+ 2NFy9fakng2cknmdpkS9daIthwpQH2Q0OWQ4JxrmBdcIn51ezgliMWEv1N2AFIiTrqxffpq8T
+ Kfm1lwi4sAZuZpnjwAJd9eJtLCGgaFNXaahrhTREU8gdT68zOYfBxENOSniSAelz4k5F+90EJ
+ QEKW99U1SfYa4iqU/GisQ3CgDvA=
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 5:14=E2=80=AFPM Rick Edgecombe
-<rick.p.edgecombe@intel.com> wrote:
+Am 12.05.23 um 20:45 schrieb Armin Wolf:
+
+> When nonstatic_release_resource_db() frees all resources associated
+> with an PCMCIA socket, it forgets to free socket_data too, causing
+> a memory leak observable with kmemleak:
 >
-> This series implements Shadow Stacks for userspace using x86's Control-fl=
-ow
-> Enforcement Technology (CET).
+> unreferenced object 0xc28d1000 (size 64):
+>    comm "systemd-udevd", pid 297, jiffies 4294898478 (age 194.484s)
+>    hex dump (first 32 bytes):
+>      00 00 00 00 00 00 00 00 f0 85 0e c3 00 00 00 00  ................
+>      00 00 00 00 0c 10 8d c2 00 00 00 00 00 00 00 00  ................
+>    backtrace:
+>      [<ffda4245>] __kmem_cache_alloc_node+0x2d7/0x4a0
+>      [<7e51f0c8>] kmalloc_trace+0x31/0xa4
+>      [<d52b4ca0>] nonstatic_init+0x24/0x1a4 [pcmcia_rsrc]
+>      [<a2f13e08>] pcmcia_register_socket+0x200/0x35c [pcmcia_core]
+>      [<a728be1b>] yenta_probe+0x4d8/0xa70 [yenta_socket]
+>      [<c48fac39>] pci_device_probe+0x99/0x194
+>      [<84b7c690>] really_probe+0x181/0x45c
+>      [<8060fe6e>] __driver_probe_device+0x75/0x1f4
+>      [<b9b76f43>] driver_probe_device+0x28/0xac
+>      [<648b766f>] __driver_attach+0xeb/0x1e4
+>      [<6e9659eb>] bus_for_each_dev+0x61/0xb4
+>      [<25a669f3>] driver_attach+0x1e/0x28
+>      [<d8671d6b>] bus_add_driver+0x102/0x20c
+>      [<df0d323c>] driver_register+0x5b/0x120
+>      [<942cd8a4>] __pci_register_driver+0x44/0x4c
+>      [<e536027e>] __UNIQUE_ID___addressable_cleanup_module188+0x1c/0xfffff000 [iTCO_vendor_support]
+>
+> Fix this by freeing socket_data too.
+>
+> Tested on a Acer Travelmate 4002WLMi by manually binding/unbinding
+> the yenta_cardbus driver (yenta_socket).
+>
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> ---
+>   drivers/pcmcia/rsrc_nonstatic.c | 2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/pcmcia/rsrc_nonstatic.c b/drivers/pcmcia/rsrc_nonstatic.c
+> index 471e0c5815f3..bf9d070a4496 100644
+> --- a/drivers/pcmcia/rsrc_nonstatic.c
+> +++ b/drivers/pcmcia/rsrc_nonstatic.c
+> @@ -1053,6 +1053,8 @@ static void nonstatic_release_resource_db(struct pcmcia_socket *s)
+>   		q = p->next;
+>   		kfree(p);
+>   	}
+> +
+> +	kfree(data);
+>   }
+>
+>
+> --
+> 2.30.2
 
-Do you have this in a git tree somewhere? For series with this many
-patches, I find it easier to just do a "git fetch" and "gitk
-..FETCH_HEAD" these days, and then reply by email on anything I find.
+Any progress on this one?
 
-That's partly because it makes it really easy to zoom in on some
-particular area (eg "let's look at just mm/ and the generic include
-files")
+Armin Wolf
 
-                  Linus
