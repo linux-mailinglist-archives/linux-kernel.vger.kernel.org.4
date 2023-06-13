@@ -2,67 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1287F72D6B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 03:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A936072D6B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 03:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbjFMBHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 21:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47286 "EHLO
+        id S237099AbjFMBJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 21:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232574AbjFMBHe (ORCPT
+        with ESMTP id S231946AbjFMBJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 21:07:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E487D3
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 18:06:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686618409;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pp2v4JGg/azUMKE4ngBrTREnGkx7OP+Tpx1fYNaDsgg=;
-        b=SOHqUTq7Hwdiepg5dprKFIhR0dULWPXURWKBt+c7emxlM1B8k3VOZgxxU7TvZfjxyNPizx
-        bZupK0Yvp5HMeI1G20jzoZJJmJB6bfn6UnD1oUrOe90yOkJQGy1K6RQiXtw9eBEavJb+Db
-        OdYixuvktobMbyHSj/EAh6/tkDfINN4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-396-rKSvumxhOQaDYJhfz4Fpow-1; Mon, 12 Jun 2023 21:06:45 -0400
-X-MC-Unique: rKSvumxhOQaDYJhfz4Fpow-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B3CE61C06EC2;
-        Tue, 13 Jun 2023 01:06:44 +0000 (UTC)
-Received: from [10.64.54.138] (vpn2-54-138.bne.redhat.com [10.64.54.138])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id BA249C1604C;
-        Tue, 13 Jun 2023 01:06:41 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH] KVM: Avoid illegal stage2 mapping on invalid memory slot
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvmarm@lists.linux.dev, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pbonzini@redhat.com,
-        oliver.upton@linux.dev, maz@kernel.org, hshuai@redhat.com,
-        zhenyzha@redhat.com, shan.gavin@gmail.com
-References: <20230608090348.414990-1-gshan@redhat.com>
- <ZIcujNKVosLeQEqR@google.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <6e335f13-01bd-2972-ead2-3081819aa151@redhat.com>
-Date:   Tue, 13 Jun 2023 11:06:39 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Mon, 12 Jun 2023 21:09:17 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE8B101
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 18:09:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686618556; x=1718154556;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=yYYeR72UE/HCu+Yb/b6ve+hZAEqD/EERuOmUYcR8bXs=;
+  b=gsjktVGiVVj95CwIepAKuJ8Z5roobeHKJBjkcfPlLopkpFY1PBl6s0IY
+   suJBejNh9ZVXo23t6jj6/vZWeXn7hI/7Rtn3joqPv/2Yj+lIGtY6vQBOb
+   DNCkXY3KL2W1HggqsZgG+l0/GvOY+bF0JoMjCwmUcMJjvi0S3/0LwXth7
+   Gt+q29lOw7q9p9BFNxmcrXdYONLb3hEOy7ksqblpmt067xHZ3XMZqR44i
+   MCsaFLa0UyDFIRW6fIJCwn8D9VNoPfJLbMpzV3nu8lnf7eIyAiUxqaPSY
+   d2aAynHGpQRX220vxRdZy0OSRtnLpKF+IS4J/MIc1rlbbd++L5EDquGog
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="386590091"
+X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
+   d="scan'208";a="386590091"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 18:09:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="958221558"
+X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
+   d="scan'208";a="958221558"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 18:09:14 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     <akpm@linux-foundation.org>, <mgorman@techsingularity.net>,
+        <vbabka@suse.cz>, <david@redhat.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mm: compaction: skip memory hole rapidly when isolating
+ migratable pages
+References: <8cc668b77c8eb2fa78058b3d81386ebed9c5a9cd.1686294549.git.baolin.wang@linux.alibaba.com>
+        <87sfax6v7c.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <d8444045-9497-1073-5cf9-e2959197701d@linux.alibaba.com>
+Date:   Tue, 13 Jun 2023 09:08:01 +0800
+In-Reply-To: <d8444045-9497-1073-5cf9-e2959197701d@linux.alibaba.com> (Baolin
+        Wang's message of "Mon, 12 Jun 2023 17:36:43 +0800")
+Message-ID: <87h6rc6ufi.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <ZIcujNKVosLeQEqR@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,201 +67,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sean,
+Baolin Wang <baolin.wang@linux.alibaba.com> writes:
 
-On 6/13/23 12:41 AM, Sean Christopherson wrote:
-> On Thu, Jun 08, 2023, Gavin Shan wrote:
->> We run into guest hang in edk2 firmware when KSM is kept as running
->> on the host. The edk2 firmware is waiting for status 0x80 from QEMU's
->> pflash device (TYPE_PFLASH_CFI01) during the operation for sector
->> erasing or buffered write. The status is returned by reading the
->> memory region of the pflash device and the read request should
->> have been forwarded to QEMU and emulated by it. Unfortunately, the
->> read request is covered by an illegal stage2 mapping when the guest
->> hang issue occurs. The read request is completed with QEMU bypassed and
->> wrong status is fetched.
->>
->> The illegal stage2 mapping is populated due to same page mering by
->> KSM at (C) even the associated memory slot has been marked as invalid
->> at (B).
->>
->>    CPU-A                    CPU-B
->>    -----                    -----
->>                             ioctl(kvm_fd, KVM_SET_USER_MEMORY_REGION)
->>                             kvm_vm_ioctl_set_memory_region
->>                             kvm_set_memory_region
->>                             __kvm_set_memory_region
->>                             kvm_set_memslot(kvm, old, NULL, KVM_MR_DELETE)
->>                               kvm_invalidate_memslot
->>                                 kvm_copy_memslot
->>                                 kvm_replace_memslot
->>                                 kvm_swap_active_memslots        (A)
->>                                 kvm_arch_flush_shadow_memslot   (B)
->>    same page merging by KSM
->>    kvm_mmu_notifier_change_pte
->>    kvm_handle_hva_range
->>    __kvm_handle_hva_range       (C)
->>
->> Fix the issue by skipping the invalid memory slot at (C) to avoid the
->> illegal stage2 mapping. Without the illegal stage2 mapping, the read
->> request for the pflash's status is forwarded to QEMU and emulated by
->> it. The correct pflash's status can be returned from QEMU to break
->> the infinite wait in edk2 firmware.
->>
->> Cc: stable@vger.kernel.org # v5.13+
->> Fixes: 3039bcc74498 ("KVM: Move x86's MMU notifier memslot walkers to generic code")
-> 
-> This Fixes isn't correct.  That change only affected x86, which doesn't have this
-> bug.  And looking at commit cd4c71835228 ("KVM: arm64: Convert to the gfn-based MMU
-> notifier callbacks"), arm64 did NOT skip invalid slots
-> 
->          slots = kvm_memslots(kvm);
-> 
->          /* we only care about the pages that the guest sees */
->          kvm_for_each_memslot(memslot, slots) {
->                  unsigned long hva_start, hva_end;
->                  gfn_t gpa;
-> 
->                  hva_start = max(start, memslot->userspace_addr);
->                  hva_end = min(end, memslot->userspace_addr +
->                                          (memslot->npages << PAGE_SHIFT));
->                  if (hva_start >= hva_end)
->                          continue;
-> 
->                  gpa = hva_to_gfn_memslot(hva_start, memslot) << PAGE_SHIFT;
->                  ret |= handler(kvm, gpa, (u64)(hva_end - hva_start), data);
->          }
-> 
-> #define kvm_for_each_memslot(memslot, slots)                            \
->          for (memslot = &slots->memslots[0];                             \
->               memslot < slots->memslots + slots->used_slots; memslot++)  \
->                  if (WARN_ON_ONCE(!memslot->npages)) {                   \
->                  } else
-> 
-> Unless I'm missing something, this goes all the way back to initial arm64 support
-> added by commit d5d8184d35c9 ("KVM: ARM: Memory virtualization setup").
-> 
+> On 6/12/2023 2:39 PM, Huang, Ying wrote:
+>> Baolin Wang <baolin.wang@linux.alibaba.com> writes:
+>> 
+>>> On some machines, the normal zone can have a large memory hole like
+>>> below memory layout, and we can see the range from 0x100000000 to
+>>> 0x1800000000 is a hole. So when isolating some migratable pages, the
+>>> scanner can meet the hole and it will take more time to skip the large
+>>> hole. From my measurement, I can see the isolation scanner will take
+>>> 80us ~ 100us to skip the large hole [0x100000000 - 0x1800000000].
+>>>
+>>> So adding a new helper to fast search next online memory section
+>>> to skip the large hole can help to find next suitable pageblock
+>>> efficiently. With this patch, I can see the large hole scanning only
+>>> takes < 1us.
+>>>
+>>> [    0.000000] Zone ranges:
+>>> [    0.000000]   DMA      [mem 0x0000000040000000-0x00000000ffffffff]
+>>> [    0.000000]   DMA32    empty
+>>> [    0.000000]   Normal   [mem 0x0000000100000000-0x0000001fa7ffffff]
+>>> [    0.000000] Movable zone start for each node
+>>> [    0.000000] Early memory node ranges
+>>> [    0.000000]   node   0: [mem 0x0000000040000000-0x0000000fffffffff]
+>>> [    0.000000]   node   0: [mem 0x0000001800000000-0x0000001fa3c7ffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa3c80000-0x0000001fa3ffffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa4000000-0x0000001fa402ffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa4030000-0x0000001fa40effff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa40f0000-0x0000001fa73cffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa73d0000-0x0000001fa745ffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa7460000-0x0000001fa746ffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa7470000-0x0000001fa758ffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa7590000-0x0000001fa7ffffff]
+>>>
+>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>>> ---
+>>>   include/linux/mmzone.h | 10 ++++++++++
+>>>   mm/compaction.c        | 23 ++++++++++++++++++++++-
+>>>   2 files changed, 32 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+>>> index 5a7ada0413da..87e6c535d895 100644
+>>> --- a/include/linux/mmzone.h
+>>> +++ b/include/linux/mmzone.h
+>>> @@ -2000,6 +2000,16 @@ static inline unsigned long next_present_section_nr(unsigned long section_nr)
+>>>   	return -1;
+>>>   }
+>>>   +static inline unsigned long next_online_section_nr(unsigned long
+>>> section_nr)
+>>> +{
+>>> +	while (++section_nr <= __highest_present_section_nr) {
+>>> +		if (online_section_nr(section_nr))
+>>> +			return section_nr;
+>>> +	}
+>>> +
+>>> +	return -1UL;
+>>> +}
+>>> +
+>>>   /*
+>>>    * These are _only_ used during initialisation, therefore they
+>>>    * can use __initdata ...  They could have names to indicate
+>>> diff --git a/mm/compaction.c b/mm/compaction.c
+>>> index 3398ef3a55fe..3a55fdd20c49 100644
+>>> --- a/mm/compaction.c
+>>> +++ b/mm/compaction.c
+>>> @@ -229,6 +229,21 @@ static void reset_cached_positions(struct zone *zone)
+>>>   				pageblock_start_pfn(zone_end_pfn(zone) - 1);
+>>>   }
+>>>   +static unsigned long skip_hole_pageblock(unsigned long
+>>> start_pfn)
+>>> +{
+>>> +	unsigned long next_online_nr;
+>>> +	unsigned long start_nr = pfn_to_section_nr(start_pfn);
+>>> +
+>>> +	if (online_section_nr(start_nr))
+>>> +		return -1UL;
+>> Define a macro for the maigic "-1UL"?  Which is used for multiple
+>> times
+>> in the patch.
+>
+> I am struggling to find a readable macro for these '-1UL', since the
+> '-1UL' in next_online_section_nr() indicates that it can not find an 
+> online section. However the '-1' in skip_hole_pageblock() indicates
+> that it can not find an online pfn.
+>
+> So after more thinking, I will change to return 'NR_MEM_SECTIONS' if
+> can not find next online section in next_online_section_nr(). And in 
+> skip_hole_pageblock(), I will change to return 0 if can not find next
+> online pfn. What do you think?
+>
+> static unsigned long skip_hole_pageblock(unsigned long start_pfn)
+> {
+>         unsigned long next_online_nr;
+>         unsigned long start_nr = pfn_to_section_nr(start_pfn);
+>
+>         if (online_section_nr(start_nr))
+>                 return 0;
+>
+>         next_online_nr = next_online_section_nr(start_nr);
+>         if (next_online_nr < NR_MEM_SECTIONS)
+>                 return section_nr_to_pfn(next_online_nr);
+>
+>         return 0;
+> }
 
-The fixes tag was sorted out based on 'git-bisect', not static code analysis. I
-agree it should be d5d8184d35c9 ("KVM: ARM: Memory virtualization setup") from
-the code. From the 'git-bisect', we found the issue disappears when the head is
-commit 3039bcc74498 ("KVM: Move x86's MMU notifier memslot walkers to generic code").
-And yes, the fixes tag should be cd4c71835228 ("KVM: arm64: Convert to the gfn-based
-MMU notifier callbacks").
+Sounds good to me.
 
-I'm declined to fix the issue only for ARM64, more details are given below. If we're
-going to limit the issue to ARM64 and fix it for ARM64 only, the fixes tag should be
-the one as you pointed. Lets correct it in next revision with:
+Best Regards,
+Huang, Ying
 
-   Cc: stable@vger.kernel.org # v3.9+
-   Fixes: d5d8184d35c9 ("KVM: ARM: Memory virtualization setup")
-
->> Reported-by: Shuai Hu <hshuai@redhat.com>
->> Reported-by: Zhenyu Zhang <zhenyzha@redhat.com>
->> Signed-off-by: Gavin Shan <gshan@redhat.com>
->> ---
->>   virt/kvm/kvm_main.c | 3 +++
->>   1 file changed, 3 insertions(+)
->>
->> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
->> index 479802a892d4..7f81a3a209b6 100644
->> --- a/virt/kvm/kvm_main.c
->> +++ b/virt/kvm/kvm_main.c
->> @@ -598,6 +598,9 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
->>   			unsigned long hva_start, hva_end;
->>   
->>   			slot = container_of(node, struct kvm_memory_slot, hva_node[slots->node_idx]);
->> +			if (slot->flags & KVM_MEMSLOT_INVALID)
->> +				continue;
-> 
-> Skipping the memslot will lead to use-after-free.  E.g. if an invalidate_range_start()
-> comes along between installing the invalid slot and zapping SPTEs, KVM will
-> return from kvm_mmu_notifier_invalidate_range_start() without having dropped all
-> references to the range.
-> 
-> I.e.
-> 
-> 	kvm_copy_memslot(invalid_slot, old);
-> 	invalid_slot->flags |= KVM_MEMSLOT_INVALID;
-> 	kvm_replace_memslot(kvm, old, invalid_slot);
-> 
-> 	/*
-> 	 * Activate the slot that is now marked INVALID, but don't propagate
-> 	 * the slot to the now inactive slots. The slot is either going to be
-> 	 * deleted or recreated as a new slot.
-> 	 */
-> 	kvm_swap_active_memslots(kvm, old->as_id);
-> 
-> 
-> ==> invalidate_range_start()
-> 
-> 	/*
-> 	 * From this point no new shadow pages pointing to a deleted, or moved,
-> 	 * memslot will be created.  Validation of sp->gfn happens in:
-> 	 *	- gfn_to_hva (kvm_read_guest, gfn_to_pfn)
-> 	 *	- kvm_is_visible_gfn (mmu_check_root)
-> 	 */
-> 	kvm_arch_flush_shadow_memslot(kvm, old);
-> 
-> And even for change_pte(), skipping the memslot is wrong, as KVM would then fail
-> unmap the prior SPTE.  Of course, that can't happen in the current code base
-> because change_pte() is wrapped with invalidate_range_{start,end}(), but that's
-> more of a bug than a design choice (see c13fda237f08 "KVM: Assert that notifier
-> count is elevated in .change_pte()" for details).  That's also why this doesn't
-> show up on x86; x86 installs a SPTE for the change_pte() notifier iff an existing
-> SPTE is present, which is never true due to the invalidation.
-> 
-
-Right, those architectural dependencies are really something I worried about.
-It's safe to skip the invalid memory slots for ARM64, but it may be unsafe to
-do so for other architectures. You've listed the potential risks to do so for
-x86. It might be risky with PowerPC's reverse mapping stuff either. I didn't
-look into the code for the left architectures. In order to escape from the
-architectural conflicts, I would move the check and skip the invalid memory
-slot in arch/arm64/kvm/mmu.c::kvm_set_spte_gfn(), something like below. In
-this way, the guest hang issue in ARM64 guest is fixed. We may have similar
-issue on other architectures, but we can figure out the fix when we have to.
-Sean, please let me know if you're happy with this?
-
-arch/arm64/kvm/mmu.c::kvm_set_spte_gfn()
-----------------------------------------
-
-bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
-{
-         kvm_pfn_t pfn = pte_pfn(range->pte);
-
-         if (!kvm->arch.mmu.pgt)
-                 return false;
-
-         /*
-          * The memory slot can become invalid temporarily or permanently
-          * when it's being moved or deleted. Avoid the stage2 mapping so
-          * that all the read and write requests to the region of the memory
-          * slot can be forwarded to VMM and emulated there.
-          */
-          if (range->slot->flags & KVM_MEMSLOT_INVALID)
-              return false;
-
-          WARN_ON(range->end - range->start != 1);
-
-          :
-}
-
-> I'd honestly love to just delete the change_pte() callback, but my opinion is more
-> than a bit biased since we don't use KSM.  Assuming we keep change_pte(), the best
-> option is probably to provide a wrapper around kvm_set_spte_gfn() to skip the
-> memslot, but with a sanity check and comment explaining the dependency on there
-> being no SPTEs due to the invalidation.  E.g.
-> 
-
-It's good idea, but I'm afraid other architectures like PowerPC will still be
-affected. So I would like to limit this issue to ARM64 and fix it in its
-kvm_set_spte_gfn() variant, as above. One question about "we don't use KSM":
-could you please share more information about this? I'm blindly guessing you're
-saying KSM isn't used in google cloud?
-
-[...]
-
-Thanks,
-Gavin
-
+>>> +
+>>> +	next_online_nr = next_online_section_nr(start_nr);
+>>> +	if (next_online_nr != -1UL)
+>>> +		return section_nr_to_pfn(next_online_nr);
+>>> +
+>>> +	return -1UL;
+>>> +}
+>>> +
+>>>   /*
+>>>    * Compound pages of >= pageblock_order should consistently be skipped until
+>>>    * released. It is always pointless to compact pages of such order (if they are
+>>> @@ -1991,8 +2006,14 @@ static isolate_migrate_t isolate_migratepages(struct compact_control *cc)
+>>>     		page = pageblock_pfn_to_page(block_start_pfn,
+>>>   						block_end_pfn, cc->zone);
+>>> -		if (!page)
+>>> +		if (!page) {
+>>> +			unsigned long next_pfn;
+>>> +
+>>> +			next_pfn = skip_hole_pageblock(block_start_pfn);
+>>> +			if (next_pfn != -1UL)
+>>> +				block_end_pfn = next_pfn;
+>>>   			continue;
+>>> +		}
+>>>     		/*
+>>>   		 * If isolation recently failed, do not retry. Only check the
+>> Do we need to do similar change in isolate_freepages()?
+>
+> Yes, it's in my todo list with some measurement data.
+>
+> Thanks for your comments.
