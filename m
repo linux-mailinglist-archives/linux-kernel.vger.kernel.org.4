@@ -2,176 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D797972DA25
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 08:49:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BEE172DA24
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 08:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239470AbjFMGtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 02:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42860 "EHLO
+        id S239360AbjFMGtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 02:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232063AbjFMGtE (ORCPT
+        with ESMTP id S234840AbjFMGtD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 02:49:04 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 214C7E6B
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 23:49:03 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B2C1D1FB;
-        Mon, 12 Jun 2023 23:49:47 -0700 (PDT)
-Received: from a077209.arm.com (unknown [10.57.28.38])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id EB7BD3F71E;
-        Mon, 12 Jun 2023 23:49:00 -0700 (PDT)
-From:   Chaitanya S Prakash <chaitanyas.prakash@arm.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, Anshuman.Khandual@arm.com,
-        chaitanyas.prakash@arm.com
-Subject: [PATCH] Documentation/arm64: Add ptdump documentation
-Date:   Tue, 13 Jun 2023 12:18:45 +0530
-Message-Id: <20230613064845.1882177-1-chaitanyas.prakash@arm.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 13 Jun 2023 02:49:03 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CDD10F7
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 23:49:00 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-51493ec65d8so9125937a12.2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 23:49:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686638939; x=1689230939;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JByW78XRxwt99QO8bpQ4dJ/f+SnJIwQTPeLVoUbaf6E=;
+        b=CUH5io/2NXK9bJPrQ4CKLbyiev/+CzqQvIpxpYkdcdhl8VKlJAtIAR3zbZeeDJhwUo
+         PmPCw4FMiDLSLeHE8jfh8vP0EJlCropcNp61+eZu8GixJ/X8b24NFSe0xwlge9s9ZmPV
+         iWDfhWMG+TROBBgM+luWc8nFxaUlrI4uhLqNL5pQ7LGr55lHcq2xrI0rLO/xCpqGEVDi
+         IQA4F+G5QfiB1peiDeR9gVwkO/ZhOsd24gsGjdHZdcOhBKmxXVgCK39J/kNwqcXHpcSY
+         g6pTwqiHmIi9nGLeNJniSOH2UiJ5QKC29S1YYNqGPQUNeZweulAQIazq6K1aNmMPXIIt
+         Qy/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686638939; x=1689230939;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JByW78XRxwt99QO8bpQ4dJ/f+SnJIwQTPeLVoUbaf6E=;
+        b=akPGg5P15F6IcugqPotavPde7RmeeBR6lcvHHVkO5kkYt9tnuGhtb1YaHmDvuM31wC
+         zNZOSaB3Rw5LqpVB9dQPOpuZ1jCyU0HkC0nVK/zpU63KxBf7Dl+a30zFqLWcB+GyIToD
+         9y7dU4HOYQi/ZJJhQYU5HkaIq+TWtTiaMXIQ1w5VdL/7CJJXP37QVcnUKFJlzhTDT6t0
+         GHb4NKha3ptBb5NkfPkNkXsXEdixi5nwsUGylRdrIejsq3QPwagdNfW43qsMFJjsnKJp
+         nZ0wPifJvoz0hy+uqamG8EIbBlP8iiea5C6tuOrXVkb9NjYGlf+53GTisftdiQqlYjKf
+         GWBQ==
+X-Gm-Message-State: AC+VfDwoWOzKpZJ5ktKyXLcmh+Np2FkWFaiMS8VwhSgf7y90K0xZouzf
+        0/uA7w3n05I6iMuj4r2AAAZaeg==
+X-Google-Smtp-Source: ACHHUZ5/M9JVbjysecegMnbOiZeUTZSN0jbLGBBwN5EOdmZ+O/uJf1KT064tupN6w0UPiJ5xdqKdyw==
+X-Received: by 2002:a17:906:dc90:b0:969:faf3:7dba with SMTP id cs16-20020a170906dc9000b00969faf37dbamr12740249ejc.52.1686638939343;
+        Mon, 12 Jun 2023 23:48:59 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id s15-20020a170906960f00b009783791b1a1sm6211872ejx.121.2023.06.12.23.48.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 23:48:58 -0700 (PDT)
+Message-ID: <5064f8aa-7aff-bf51-212c-e4d7e465b36a@linaro.org>
+Date:   Tue, 13 Jun 2023 08:48:57 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] dt-bindings: pinctrl: qcom,pmic-mpp: Fix schema for
+ "qcom,paired"
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230418150606.1528107-1-robh@kernel.org>
+ <9543f619-88fa-8e54-6e9a-4334750e51b4@linaro.org>
+ <CAL_Jsq+ZVAZc1nYJVLPQt=KM1qOZrZCrRC4q_o8XQjDdo_NuKA@mail.gmail.com>
+ <CAL_JsqJMpjW6a4Q6xUX6TEZ+vyLJJn5bDtwEdf_-E=BeA-Z_tA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAL_JsqJMpjW6a4Q6xUX6TEZ+vyLJJn5bDtwEdf_-E=BeA-Z_tA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ptdump is a debugfs interface used to dump the kernel page tables. It
-provides a comprehensive overview about the kernel's virtual memory
-layout, page table entries and associated page attributes. A document
-detailing how to enable ptdump in the kernel and analyse its output has
-been added.
+On 09/06/2023 23:34, Rob Herring wrote:
+> On Fri, Apr 21, 2023 at 1:48 PM Rob Herring <robh@kernel.org> wrote:
+>>
+>> On Wed, Apr 19, 2023 at 2:56 PM Krzysztof Kozlowski
+>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>
+>>> On 18/04/2023 17:06, Rob Herring wrote:
+>>>> The "qcom,paired" schema is all wrong. First, it's a list rather than an
+>>>> object(dictionary). Second, it is missing a required type. The meta-schema
+>>>> normally catches this, but schemas under "$defs" was not getting checked.
+>>>> A fix for that is pending.
+>>>>
+>>>> Signed-off-by: Rob Herring <robh@kernel.org>
+>>>> ---
+>>>>  Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml | 5 +++--
+>>>>  1 file changed, 3 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
+>>>> index 9412b9362328..4c3e9ff82105 100644
+>>>> --- a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
+>>>> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
+>>>> @@ -144,8 +144,9 @@ $defs:
+>>>>          enum: [0, 1, 2, 3, 4, 5, 6, 7]
+>>>>
+>>>>        qcom,paired:
+>>>> -        - description:
+>>>> -            Indicates that the pin should be operating in paired mode.
+>>>> +        type: boolean
+>>>> +        description:
+>>>> +          Indicates that the pin should be operating in paired mode.
+>>>
+>>> Current Linux implementation uses it as a generic pinconf param
+>>> pinconf_generic_params which is parsed by:
+>>>
+>>> pinconf_generic_parse_dt_config() -> parse_dt_cfg() ->
+>>> of_property_read_u32()
+>>>
+>>>
+>>> The pinctrl-spmi-mpp.c driver, using this schema, treat it as a bool,
+>>> but I still wonder how the code will parse bool with
+>>> of_property_read_u32(). Maybe it should be uint32 with value of 0 and 1?
+>>
+>> That should be an error because the length is too short so it should
+>> go with some default from the code.
+>>
+>> Looks like there is no user, though no property could mean keep the
+>> default/bootloader setting. Can you sort out which type is really
+>> desired here and hopefully we can get rid of the other type. It's not
+>> the first case of pinctrl properties with multiple types, but we don't
+>> really need more.
+> 
+> Still an issue here. Please sort out what functionality QCom wants here.
+> 
+> dtschema (main br) will now throw a warning on it.
 
-Cc: Catalin Marinas <catalin.marinas@arm.com> 
-Cc: Will Deacon <will@kernel.org> 
-Cc: Jonathan Corbet <corbet@lwn.net> 
-CC: linux-arm-kernel@lists.infradead.org 
-Cc: linux-doc@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Chaitanya S Prakash <chaitanyas.prakash@arm.com>
----
- Documentation/arm64/index.rst  |  1 +
- Documentation/arm64/ptdump.rst | 94 ++++++++++++++++++++++++++++++++++
- 2 files changed, 95 insertions(+)
- create mode 100644 Documentation/arm64/ptdump.rst
+I think we can go with your patch, after double checking my previous
+concerns are not relevant here - driver reads it as bool just like other
+bool properties.
 
-diff --git a/Documentation/arm64/index.rst b/Documentation/arm64/index.rst
-index ae21f8118830..e0bda3ec2090 100644
---- a/Documentation/arm64/index.rst
-+++ b/Documentation/arm64/index.rst
-@@ -15,6 +15,7 @@ ARM64 Architecture
-     cpu-feature-registers
-     elf_hwcaps
-     hugetlbpage
-+    ptdump
-     legacy_instructions
-     memory
-     memory-tagging-extension
-diff --git a/Documentation/arm64/ptdump.rst b/Documentation/arm64/ptdump.rst
-new file mode 100644
-index 000000000000..296a5fe217b0
---- /dev/null
-+++ b/Documentation/arm64/ptdump.rst
-@@ -0,0 +1,94 @@
-+======================
-+Kernel page table dump
-+======================
-+
-+ptdump is a debugfs interface that provides a detailed dump of the kernel's
-+page tables. It offers a comprehensive overview of the kernel’s virtual
-+memory layout as well as the attributes associated with the various regions
-+in a human-readable format. It is useful to dump the kernel page tables to
-+verify permissions and memory types. Examining the page table entries and
-+permissions helps identify potential security vulnerabilities such as
-+mappings with overly permissive access rights or improper memory
-+protections.
-+
-+Memory hotplug allows dynamic expansion or contraction of available memory
-+without requiring a system reboot. To maintain consistency and integrity of
-+memory management data structures, arm64 makes use of mem_hotplug_lock in
-+write mode. Additionally, in read mode mem_hotplug_lock supports efficient
-+implementation of get_online_mems and put_online_mems. This protects the
-+offlining of memory being accessed by code.
-+
-+In order to dump the kernel page tables you will need to have the following
-+configurations enabled and follow it up by mounting debugfs.::
-+
-+ CONFIG_GENERIC_PTDUMP=y
-+ CONFIG_PTDUMP_CORE=y
-+ CONFIG_PTDUMP_DEBUGFS=y
-+
-+ mount -t debugfs nodev /sys/kernel/debug
-+ cat /sys/kernel/debug/kernel_page_tables
-+
-+On analysing the output of cat /sys/kernel/debug/kernel_page_tables you can
-+derive information about the virtual address range of the entry, followed
-+by size of the memory region covered by this entry, the hierarchical
-+structure of the page tables and finally the attributes associated with
-+each page. The page attributes provide information about access permissions,
-+execution capability, type of mapping such as leaf level PTE or block level
-+PGD, PMD and PUD, and access status of a page within the kernel memory.
-+Assessing these attributes can assist in understanding the memory layout,
-+access patterns, and security characteristics of the kernel pages.
-+
-+Kernel virtual memory layout::
-+
-+ start address        end address         size             attributes
-+ +---------------------------------------------------------------------------------------+
-+ | ---[ Linear Mapping start ]---------------------------------------------------------- |
-+ | ..................                                                                    |
-+ | 0xfff0000000000000-0xfff0000000210000  2112K PTE RW NX SHD AF  UXN  MEM/NORMAL-TAGGED |
-+ | 0xfff0000000210000-0xfff0000001c00000 26560K PTE ro NX SHD AF  UXN  MEM/NORMAL        |
-+ | ..................                                                                    |
-+ | ---[ Linear Mapping end ]------------------------------------------------------------ |
-+ +---------------------------------------------------------------------------------------+
-+ | ---[ Modules start ]----------------------------------------------------------------- |
-+ | ..................                                                                    |
-+ | 0xffff800000000000-0xffff800008000000   128M PTE                                      |
-+ | ..................                                                                    |
-+ | ---[ Modules end ]------------------------------------------------------------------- |
-+ +---------------------------------------------------------------------------------------+
-+ | ---[ vmalloc() area ]---------------------------------------------------------------- |
-+ | ..................                                                                    |
-+ | 0xffff800008010000-0xffff800008200000  1984K PTE ro x  SHD AF       UXN  MEM/NORMAL   |
-+ | 0xffff800008200000-0xffff800008e00000    12M PTE ro x  SHD AF  CON  UXN  MEM/NORMAL   |
-+ | ..................                                                                    |
-+ | ---[ vmalloc() end ]----------------------------------------------------------------- |
-+ +---------------------------------------------------------------------------------------+
-+ | ---[ Fixmap start ]------------------------------------------------------------------ |
-+ | ..................                                                                    |
-+ | 0xfffffbfffdb80000-0xfffffbfffdb90000    64K PTE ro x  SHD AF  UXN  MEM/NORMAL        |
-+ | 0xfffffbfffdb90000-0xfffffbfffdba0000    64K PTE ro NX SHD AF  UXN  MEM/NORMAL        |
-+ | ..................                                                                    |
-+ | ---[ Fixmap end ]-------------------------------------------------------------------- |
-+ +---------------------------------------------------------------------------------------+
-+ | ---[ PCI I/O start ]----------------------------------------------------------------- |
-+ | ..................                                                                    |
-+ | 0xfffffbfffe800000-0xfffffbffff800000    16M PTE                                      |
-+ | ..................                                                                    |
-+ | ---[ PCI I/O end ]------------------------------------------------------------------- |
-+ +---------------------------------------------------------------------------------------+
-+ | ---[ vmemmap start ]----------------------------------------------------------------- |
-+ | ..................                                                                    |
-+ | 0xfffffc0002000000-0xfffffc0002200000     2M PTE RW NX SHD AF  UXN  MEM/NORMAL        |
-+ | 0xfffffc0002200000-0xfffffc0020000000   478M PTE                                      |
-+ | ..................                                                                    |
-+ | ---[ vmemmap end ]------------------------------------------------------------------- |
-+ +---------------------------------------------------------------------------------------+
-+
-+cat /sys/kernel/debug/kernel_page_table::
-+
-+ 0xfff0000001c00000-0xfff0000080000000     2020M PTE  RW NX SHD AF   UXN    MEM/NORMAL-TAGGED
-+ 0xfff0000080000000-0xfff0000800000000       30G PMD
-+ 0xfff0000800000000-0xfff0000800700000        7M PTE  RW NX SHD AF   UXN    MEM/NORMAL-TAGGED
-+ 0xfff0000800700000-0xfff0000800710000       64K PTE  ro NX SHD AF   UXN    MEM/NORMAL-TAGGED
-+ 0xfff0000800710000-0xfff0000880000000  2089920K PTE  RW NX SHD AF   UXN    MEM/NORMAL-TAGGED
-+ 0xfff0000880000000-0xfff0040000000000     4062G PMD
-+ 0xfff0040000000000-0xffff800000000000     3964T PGD
--- 
-2.25.1
+Best regards,
+Krzysztof
 
