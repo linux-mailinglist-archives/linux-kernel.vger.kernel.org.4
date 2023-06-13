@@ -2,240 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DA4672EC4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:51:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4049172EC4F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229469AbjFMTuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 15:50:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46216 "EHLO
+        id S233134AbjFMTuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 15:50:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240687AbjFMTuE (ORCPT
+        with ESMTP id S229674AbjFMTug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 15:50:04 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74153B3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:50:03 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id d75a77b69052e-3f9a81da5d7so60891cf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:50:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686685802; x=1689277802;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uiwK+c3shku5mREPjPPIbDPLp06FmfIkxVv/peYpdhg=;
-        b=TnAAGQCbLALzkKEvlkhYbhXMQWZ4Ctqb6kwyvm4gDD4BLinxVQnGzj00bq7SwHwFNj
-         4nUfooS3H/bkNjIAtogGygRqYR4UBhr7IuwpynnLZwvTtFWtX3H8SfBxKVVeu3OCc5UA
-         t2AQJeLg8R+vtrcPQVn/vkOtleD9ztm1pJ5u49VY84/7hx1pSdqL2rKAvOex9sRaCLdw
-         N5a5RLpgVvI1ZwCnR0dZtXvTKn3LWt+yFdqNNZYH7nM+Ww2srGlZf3VdWTZPG5B5umMk
-         ADEbAHt2HkE98Czpkok7S0CMtniE+w5zdAbh3W5MfO1ka2NuEliH/RFa/S9rTg/X1Qzp
-         0ZGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686685802; x=1689277802;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uiwK+c3shku5mREPjPPIbDPLp06FmfIkxVv/peYpdhg=;
-        b=buO8rr6Su+o3kef0SvWPrEIJneE2ud/8uS/ILeqbtPZqmHi3fM0SQ+HF574y6CrP/7
-         14aEDJBdvzNVs9CVzUwJN8I9Rf0TK/ZS79tWk4adZxznc1mGQYK6tfuc/fAv57eRPDyS
-         HDkboq7lDnHXSBBGg8KMfwBJmRhZ7XPBu9INNk7MJF6oCpYq3UAp4r4e2Wep9ettGjAg
-         Th7JWxnlhk6zoNyQI8s+F+M+JImwPXE/6lahYLMT4sbr4fKGGvUKMC1ZbtBYFKr/8T3W
-         Zf68ljlWoTDqICTHEFQMuFutc2o7ND85eyD8eNfp8k35pjTEBWCXtaUqMuYqg/jQCsJF
-         QH7g==
-X-Gm-Message-State: AC+VfDwx3/Px8ubG02MTmbEPPtbMnUyOZrIXq51B3v8kzaLUxzp9qtl7
-        9wNRUpuq3d179N4YAhXjH9KN/Pdj7y1PRc34m5tcWA==
-X-Google-Smtp-Source: ACHHUZ6E77oZrHBGCT+3cFfRXukoJ0ixAtMWb7//DIzfjXGb4cOr1QzOZAgC6CNJrGOT0pLplID6VDvqa33GJyRMqMA=
-X-Received: by 2002:a05:622a:40d:b0:3f8:e0a:3e66 with SMTP id
- n13-20020a05622a040d00b003f80e0a3e66mr26083qtx.3.1686685802435; Tue, 13 Jun
- 2023 12:50:02 -0700 (PDT)
+        Tue, 13 Jun 2023 15:50:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5FFA12A;
+        Tue, 13 Jun 2023 12:50:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3550F61554;
+        Tue, 13 Jun 2023 19:50:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7041BC433D9;
+        Tue, 13 Jun 2023 19:50:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686685834;
+        bh=xMKCKLypia4H3d+FkIf7L/MfI9HK2ZYXnemiSXrqvvI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rz8sVmWOqpl0q1eCrKhIitzlf0wQZf9Dvnn0l4GNSj6MzgTgQnQL1tTtRAd7ozeeY
+         8yy7ZgijaD+4UKMGI4D/PVMWnklsPkSAcx9BsFQRKdlhAY+f3CFHnGIygrmknTmSmb
+         9soAMptXL+iy3tF75h8Ic+MneZK5LqlY5nVtk/OiJbB98NvUBoQM1HxO9rKhb9Q0pu
+         A2WTkPMjTUftA1C0nMGJeq045xbnGOIdrfiMYXYpLuxspyXcc1K7TyYpdApbN0ykAf
+         05qMvnQ/b36/Mkh+t7sS/YE3xv7+zHY1FjstsUDACeKGRjWyUJNS+lMXiSAHR2OLI5
+         KUer+Xg7mYDHg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 4348D40692; Tue, 13 Jun 2023 16:50:32 -0300 (-03)
+Date:   Tue, 13 Jun 2023 16:50:32 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] perf util: asprintf helper for leak sanitizer
+Message-ID: <ZIjIiPAfTwL/P1dt@kernel.org>
+References: <20230613191639.1547925-1-irogers@google.com>
 MIME-Version: 1.0
-References: <20230613095506.547-1-ravi.bangoria@amd.com> <20230613095506.547-3-ravi.bangoria@amd.com>
-In-Reply-To: <20230613095506.547-3-ravi.bangoria@amd.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 13 Jun 2023 12:49:50 -0700
-Message-ID: <CAP-5=fUDng69kYZ5ecA_5FBKZWNxtMCUSM+BxO-7ndesG7xrvQ@mail.gmail.com>
-Subject: Re: [PATCH 2/4] perf tool x86: Consolidate is_amd check into single function
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     acme@kernel.org, jolsa@kernel.org, namhyung@kernel.org,
-        mark.rutland@arm.com, peterz@infradead.org,
-        adrian.hunter@intel.com, kan.liang@linux.intel.com,
-        james.clark@arm.com, alisaidi@amazon.com, leo.yan@linaro.org,
-        maddy@linux.ibm.com, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sandipan.das@amd.com,
-        ananth.narayan@amd.com, santosh.shukla@amd.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230613191639.1547925-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 2:56=E2=80=AFAM Ravi Bangoria <ravi.bangoria@amd.co=
-m> wrote:
->
-> There are multiple places where x86 specific code determines AMD vs
-> Intel arch and acts based on that. Consolidate those checks into a
-> single function.
->
-> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
+Em Tue, Jun 13, 2023 at 12:16:38PM -0700, Ian Rogers escreveu:
+> asprintf is a source of memory leaks but produces bad stack traces on
+> my Debian linux. This patch adds a simple asprintf implementation to
+> util.c that works around it.
 
-Acked-by: Ian Rogers <irogers@google.com>
+So is this something to report to the glibc maintainers or debian?
 
-Thanks,
-Ian
-
+- Arnaldo
+ 
+> Before output:
+> ```
+> ==1541752==ERROR: LeakSanitizer: detected memory leaks
+> 
+> Direct leak of 10 byte(s) in 1 object(s) allocated from:
+>     #0 0x7f90c76b89cf in __interceptor_malloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:69
+>     #1 0x7f90c649d2c7 in __vasprintf_internal libio/vasprintf.c:71
+>     #2 0x55ad9b79afbf  (/tmp/perf/perf+0x850fbf)
+> 
+> SUMMARY: AddressSanitizer: 10 byte(s) leaked in 1 allocation(s).
+> ```
+> 
+> After output:
+> ```
+> ==1545918==ERROR: LeakSanitizer: detected memory leaks
+> 
+> Direct leak of 10 byte(s) in 1 object(s) allocated from:
+>     #0 0x7f2755a7077b in __interceptor_strdup ../../../../src/libsanitizer/asan/asan_interceptors.cpp:439
+>     #1 0x564986a8df31 in asprintf util/util.c:566
+>     #2 0x5649869b5901 in metricgroup__lookup_default_metricgroup util/metricgroup.c:1520
+>     #3 0x5649869b5e57 in metricgroup__lookup_create util/metricgroup.c:1579
+>     #4 0x5649869b6ddc in parse_groups util/metricgroup.c:1698
+>     #5 0x5649869b7714 in metricgroup__parse_groups util/metricgroup.c:1771
+>     #6 0x5649867da9d5 in add_default_attributes tools/perf/builtin-stat.c:2164
+>     #7 0x5649867ddbfb in cmd_stat tools/perf/builtin-stat.c:2707
+>     #8 0x5649868fa5a2 in run_builtin tools/perf/perf.c:323
+>     #9 0x5649868fab13 in handle_internal_command tools/perf/perf.c:377
+>     #10 0x5649868faedb in run_argv tools/perf/perf.c:421
+>     #11 0x5649868fb443 in main tools/perf/perf.c:537
+>     #12 0x7f2754846189 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58
+> 
+> SUMMARY: AddressSanitizer: 10 byte(s) leaked in 1 allocation(s).
+> ```
+> 
+> RFC: is this useful for others? Should we have a build flag for it?
 > ---
->  tools/perf/arch/x86/util/Build        |  1 +
->  tools/perf/arch/x86/util/env.c        | 19 +++++++++++++++++++
->  tools/perf/arch/x86/util/env.h        |  7 +++++++
->  tools/perf/arch/x86/util/evsel.c      | 16 ++--------------
->  tools/perf/arch/x86/util/mem-events.c | 19 ++-----------------
->  5 files changed, 31 insertions(+), 31 deletions(-)
->  create mode 100644 tools/perf/arch/x86/util/env.c
->  create mode 100644 tools/perf/arch/x86/util/env.h
->
-> diff --git a/tools/perf/arch/x86/util/Build b/tools/perf/arch/x86/util/Bu=
-ild
-> index 195ccfdef7aa..005907cb97d8 100644
-> --- a/tools/perf/arch/x86/util/Build
-> +++ b/tools/perf/arch/x86/util/Build
-> @@ -10,6 +10,7 @@ perf-y +=3D evlist.o
->  perf-y +=3D mem-events.o
->  perf-y +=3D evsel.o
->  perf-y +=3D iostat.o
-> +perf-y +=3D env.o
->
->  perf-$(CONFIG_DWARF) +=3D dwarf-regs.o
->  perf-$(CONFIG_BPF_PROLOGUE) +=3D dwarf-regs.o
-> diff --git a/tools/perf/arch/x86/util/env.c b/tools/perf/arch/x86/util/en=
-v.c
-> new file mode 100644
-> index 000000000000..33b87f8ac1cc
-> --- /dev/null
-> +++ b/tools/perf/arch/x86/util/env.c
-> @@ -0,0 +1,19 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include "linux/string.h"
-> +#include "util/env.h"
-> +#include "env.h"
+>  tools/perf/util/util.c | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+> 
+> diff --git a/tools/perf/util/util.c b/tools/perf/util/util.c
+> index c1fd9ba6d697..57eb528c5fed 100644
+> --- a/tools/perf/util/util.c
+> +++ b/tools/perf/util/util.c
+> @@ -552,3 +552,22 @@ int sched_getcpu(void)
+>  	return -1;
+>  }
+>  #endif
 > +
-> +bool x86__is_amd_cpu(void)
+> +int asprintf(char **restrict strp, const char *restrict fmt, ...)
 > +{
-> +       struct perf_env env =3D { .total_mem =3D 0, };
-> +       static int is_amd; /* 0: Uninitialized, 1: Yes, -1: No */
+> +	char buf[1024];
+> +	va_list ap;
+> +	int size;
+> +	char *result;
 > +
-> +       if (is_amd)
-> +               goto ret;
+> +	va_start(ap, fmt);
+> +	size = vsnprintf(buf, sizeof(buf), fmt, ap);
+> +	if (size < (int)sizeof(buf))
+> +		result = strdup(buf);
+> +	else
+> +		size = vasprintf(&result, fmt, ap);
 > +
-> +       perf_env__cpuid(&env);
-> +       is_amd =3D env.cpuid && strstarts(env.cpuid, "AuthenticAMD") ? 1 =
-: -1;
-> +
-> +ret:
-> +       return is_amd >=3D 1 ? true : false;
+> +	*strp = result;
+> +	va_end(ap);
+> +	return size;
 > +}
-> diff --git a/tools/perf/arch/x86/util/env.h b/tools/perf/arch/x86/util/en=
-v.h
-> new file mode 100644
-> index 000000000000..d78f080b6b3f
-> --- /dev/null
-> +++ b/tools/perf/arch/x86/util/env.h
-> @@ -0,0 +1,7 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _X86_ENV_H
-> +#define _X86_ENV_H
-> +
-> +bool x86__is_amd_cpu(void);
-> +
-> +#endif /* _X86_ENV_H */
-> diff --git a/tools/perf/arch/x86/util/evsel.c b/tools/perf/arch/x86/util/=
-evsel.c
-> index 25da46c8cca9..512c2d885d24 100644
-> --- a/tools/perf/arch/x86/util/evsel.c
-> +++ b/tools/perf/arch/x86/util/evsel.c
-> @@ -8,6 +8,7 @@
->  #include "linux/string.h"
->  #include "evsel.h"
->  #include "util/debug.h"
-> +#include "env.h"
->
->  #define IBS_FETCH_L3MISSONLY   (1ULL << 59)
->  #define IBS_OP_L3MISSONLY      (1ULL << 16)
-> @@ -78,23 +79,10 @@ void arch__post_evsel_config(struct evsel *evsel, str=
-uct perf_event_attr *attr)
->  {
->         struct perf_pmu *evsel_pmu, *ibs_fetch_pmu, *ibs_op_pmu;
->         static int warned_once;
-> -       /* 0: Uninitialized, 1: Yes, -1: No */
-> -       static int is_amd;
->
-> -       if (warned_once || is_amd =3D=3D -1)
-> +       if (warned_once || !x86__is_amd_cpu())
->                 return;
->
-> -       if (!is_amd) {
-> -               struct perf_env *env =3D evsel__env(evsel);
-> -
-> -               if (!perf_env__cpuid(env) || !env->cpuid ||
-> -                   !strstarts(env->cpuid, "AuthenticAMD")) {
-> -                       is_amd =3D -1;
-> -                       return;
-> -               }
-> -               is_amd =3D 1;
-> -       }
-> -
->         evsel_pmu =3D evsel__find_pmu(evsel);
->         if (!evsel_pmu)
->                 return;
-> diff --git a/tools/perf/arch/x86/util/mem-events.c b/tools/perf/arch/x86/=
-util/mem-events.c
-> index 32879d12a8d5..a8a782bcb121 100644
-> --- a/tools/perf/arch/x86/util/mem-events.c
-> +++ b/tools/perf/arch/x86/util/mem-events.c
-> @@ -5,6 +5,7 @@
->  #include "map_symbol.h"
->  #include "mem-events.h"
->  #include "linux/string.h"
-> +#include "env.h"
->
->  static char mem_loads_name[100];
->  static bool mem_loads_name__init;
-> @@ -27,28 +28,12 @@ static struct perf_mem_event perf_mem_events_amd[PERF=
-_MEM_EVENTS__MAX] =3D {
->         E("mem-ldst",   "ibs_op//",     "ibs_op"),
->  };
->
-> -static int perf_mem_is_amd_cpu(void)
-> -{
-> -       struct perf_env env =3D { .total_mem =3D 0, };
-> -
-> -       perf_env__cpuid(&env);
-> -       if (env.cpuid && strstarts(env.cpuid, "AuthenticAMD"))
-> -               return 1;
-> -       return -1;
-> -}
-> -
->  struct perf_mem_event *perf_mem_events__ptr(int i)
->  {
-> -       /* 0: Uninitialized, 1: Yes, -1: No */
-> -       static int is_amd;
-> -
->         if (i >=3D PERF_MEM_EVENTS__MAX)
->                 return NULL;
->
-> -       if (!is_amd)
-> -               is_amd =3D perf_mem_is_amd_cpu();
-> -
-> -       if (is_amd =3D=3D 1)
-> +       if (x86__is_amd_cpu())
->                 return &perf_mem_events_amd[i];
->
->         return &perf_mem_events_intel[i];
-> --
-> 2.40.1
->
+> -- 
+> 2.41.0.162.gfafddb0af9-goog
+> 
+
+-- 
+
+- Arnaldo
