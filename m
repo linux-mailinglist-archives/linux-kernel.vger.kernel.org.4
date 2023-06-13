@@ -2,71 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E686872E34C
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A91B72E34F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242084AbjFMMrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 08:47:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
+        id S242349AbjFMMtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 08:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238753AbjFMMrL (ORCPT
+        with ESMTP id S235210AbjFMMtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 08:47:11 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02938E4;
-        Tue, 13 Jun 2023 05:47:09 -0700 (PDT)
+        Tue, 13 Jun 2023 08:49:00 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7508DE4;
+        Tue, 13 Jun 2023 05:48:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1686660429; x=1718196429;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686660539; x=1718196539;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=9KV3amG53H3ns2W2UWEPrWJRjgAoTih55p2OZIWk4nM=;
-  b=IYnhILDagPWgl5o0h9SR3hVu8dhzZviVmHZT7qtjROYenV4COsMd1PYQ
-   BHBjLBl8q28TBispGWmitvFT6JTdU4lnmKNiLKTMOi3ZntIW9VsiJfveW
-   3l3swOZ5fyirqLMh76GqevN9bMjBkzpP6dMg4VgATEmKpuMq+Z63Jhykm
-   3/xfdPN2tXBRAg+eOjVgTbERRzOzfG5yKZ0utGEOaM1D5mwDn6IEM/+F7
-   e4x6rCu2WUOV1d5cwae80YiPs3FUhrgrky5oLh3PC0tZgeHG+vbfzcnnv
-   oIeIRzjCQY5mdLy59alMZOOxh6LgAWU1sgqadFsTN4eFKRQn37kc0c2BF
+  bh=4DIaRf5rR2wt24OZUbm+fHnDkQb9/kC9L8KgnQRTvrM=;
+  b=CAHyQW2SOPC5tbRuPxtFuURDFCtdYqkg9UawoA+DxB/UF5YofSOAWIVE
+   KlqhER3Dg9QZW8EV2JYEkzygo5Xqte+irRDBFlYQcuDARhIbTj+Wq/kS9
+   5L2va+vIWUD7nrrTeBB53TneqBEq16TL1QKnYS+gYBEH1V2T8iSe1O+Z0
+   0hMeYrqrJKDMWT90dZPg+SAw93JnJdiUjRhzqXz7DZrpMImw9lGoceaK4
+   yZUqJUT16YrtBkfCoPXOgeRCBAHtuVO8eRXhylxUQzpAqyBAy3Bc5iAXb
+   q2yd1C7tJNFZzbvlJZE6GyAmqBgOU4VOx5Jkh1AZBXhNVpUC4oBAy71Pl
    w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="358316913"
 X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="asc'?scan'208";a="229858885"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Jun 2023 05:47:08 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 13 Jun 2023 05:47:08 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Tue, 13 Jun 2023 05:47:06 -0700
-Date:   Tue, 13 Jun 2023 13:46:41 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Yingkun Meng <mengyingkun@loongson.cn>
-CC:     Conor Dooley <conor@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
-        <conor+dt@kernel.org>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <loongarch@lists.linux.dev>,
-        <loongson-kernel@lists.loongnix.cn>
-Subject: Re: [ PATCH v2 3/3] ASoC: dt-bindings: Add support for Loongson
- audio card
-Message-ID: <20230613-depletion-garnet-ccc2009111c3@wendy>
-References: <20230612085614.3039498-1-mengyingkun@loongson.cn>
- <20230612-booted-french-186dd95e78a9@spud>
- <bda7c25f-65cf-d45f-3ac0-f2471e3aacf8@loongson.cn>
- <20230613-zoologist-panorama-a87858bba075@wendy>
- <887f9cc4-6457-9d14-8aef-011ff4c9aeda@loongson.cn>
+   d="scan'208";a="358316913"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 05:48:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="714785617"
+X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
+   d="scan'208";a="714785617"
+Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 13 Jun 2023 05:48:56 -0700
+Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q93SB-0001M8-1M;
+        Tue, 13 Jun 2023 12:48:55 +0000
+Date:   Tue, 13 Jun 2023 20:48:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Frank Oltmanns <frank@oltmanns.dev>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, Frank Oltmanns <frank@oltmanns.dev>,
+        "A.s. Dong" <aisheng.dong@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: Re: [PATCH v2 2/2] clk: tests: Add tests for fractional divisor
+ approximation
+Message-ID: <202306132038.nUB6hmCv-lkp@intel.com>
+References: <20230613083626.227476-3-frank@oltmanns.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="aKk1AB1djxJIjJ7/"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <887f9cc4-6457-9d14-8aef-011ff4c9aeda@loongson.cn>
+In-Reply-To: <20230613083626.227476-3-frank@oltmanns.dev>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,72 +76,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---aKk1AB1djxJIjJ7/
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Frank,
 
-On Tue, Jun 13, 2023 at 08:38:59PM +0800, Yingkun Meng wrote:
-> On 2023/6/13 20:28, Conor Dooley wrote:
-> > On Tue, Jun 13, 2023 at 08:23:58PM +0800, Yingkun Meng wrote:
-> > > On 2023/6/13 01:24, Conor Dooley wrote:
-> > > > On Mon, Jun 12, 2023 at 04:56:14PM +0800, YingKun Meng wrote:
-> > > > > From: Yingkun Meng <mengyingkun@loongson.cn>
-> > > > >=20
-> > > > > The audio card uses loongson I2S controller present in
-> > > > > 7axxx/2kxxx chips to transfer audio data.
-> > > > >=20
-> > > > > On loongson platform, the chip has only one I2S controller.
+kernel test robot noticed the following build errors:
 
-> > > > > +description:
-> > > > > +  The binding describes the sound card present in loongson
-> > > > > +  7axxx/2kxxx platform. The sound card is an ASoC component
-> > > > > +  which uses Loongson I2S controller to transfer the audio data.
-> > > > > +
-> > > > > +properties:
-> > > > > +  compatible:
-> > > > > +    const: loongson,ls-audio-card
+[auto build test ERROR on v6.4-rc6]
+[also build test ERROR on linus/master]
+[cannot apply to clk/clk-next next-20230613]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> > > > Reviewing sound stuff is beyond my pay grade, so forgive me if I am=
- off
-> > > > the rails here, but this (and the "x"s in the description) look a b=
-it
-> > > > odd. Recently, we've noticed quite a few loongson dt-bindings attem=
-pting
-> > > > to use a single compatible for many different chips.
-> > > > Usually you have individual compatibles for the various SoCs with t=
-his
-> > > > core, which can fall back to a generic one, rather than just adding=
- a
-> > > > generic compatible for all devices.
-> > > > As far as I know, there's several SoCs fitting 2kxxx, and the format
-> > > > being used elsewhere is "loongson,ls2k1000" etc.
-> > >=20
-> > > Currently, Loongson has 2K0500/2K1000LA/2K1500/2K2000 chips.
-> > >=20
-> > > Here, its' possible to use a single compatible for different chips,
-> > >=20
-> > > as the audio device is a logical device, not dependent on chip model.
-> > What, may I ask, is a "logical device"?
->=20
->=20
-> I means it's not a physical one, like "platform bus".
+url:    https://github.com/intel-lab-lkp/linux/commits/Frank-Oltmanns/clk-fractional-divider-Improve-approximation-when-zero-based/20230613-163903
+base:   v6.4-rc6
+patch link:    https://lore.kernel.org/r/20230613083626.227476-3-frank%40oltmanns.dev
+patch subject: [PATCH v2 2/2] clk: tests: Add tests for fractional divisor approximation
+config: csky-randconfig-r011-20230612 (https://download.01.org/0day-ci/archive/20230613/202306132038.nUB6hmCv-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 12.3.0
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git checkout v6.4-rc6
+        b4 shazam https://lore.kernel.org/r/20230613083626.227476-3-frank@oltmanns.dev
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=csky olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=csky SHELL=/bin/bash
 
-So it is entirely a software construct? Why does it need a dt-binding
-then? Your commit message says the controller is present on the device!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306132038.nUB6hmCv-lkp@intel.com/
 
-Confused,
-Conor.
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
---aKk1AB1djxJIjJ7/
-Content-Type: application/pgp-signature; name="signature.asc"
+>> ERROR: modpost: "clk_fractional_divider_general_approximation" [drivers/clk/clk_test.ko] undefined!
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIhlMQAKCRB4tDGHoIJi
-0k/DAQCasCv+M+mHIyy3THECy16Hhwe7ITu/f3lb4MVy64A/CwD7BlnAWtgAfv7H
-IktHIHxxC6ITwBVp8qA9b1IE2/XejAA=
-=INbA
------END PGP SIGNATURE-----
-
---aKk1AB1djxJIjJ7/--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
