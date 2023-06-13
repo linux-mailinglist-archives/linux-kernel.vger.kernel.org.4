@@ -2,67 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B5372DDB5
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 11:31:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5171F72DDB8
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 11:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240944AbjFMJbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 05:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51630 "EHLO
+        id S238833AbjFMJcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 05:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233715AbjFMJbN (ORCPT
+        with ESMTP id S239532AbjFMJcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 05:31:13 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A0618E
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 02:31:11 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-650352b89f6so4053501b3a.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 02:31:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686648671; x=1689240671;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gc080pZonONkhSsubLG/knzeXyUNBhLK5ILmHhWW6gY=;
-        b=F5lwH/cp1FKK1VmvuKHlk391kR8oaI/Gw53UTVgdZp4Bvu5DWRhyYKwbhIxte7QsXo
-         aTcMjBXzirBtr5LzsxRvjqXnou8A4EvWuAx0Ja+JVeLThbN63hlwoXfUnnl/PX7XnIZf
-         pn9NbU31FXmX9FA0w1O/4zA0Y8vTxsnMH9MSo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686648671; x=1689240671;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Gc080pZonONkhSsubLG/knzeXyUNBhLK5ILmHhWW6gY=;
-        b=CrMoBhjT+UTZx19yvxeGE+06zFmq4xCCWLQLckZWCk0dvz6BB7UQ9kbndBvoOiC+KG
-         RPL5T04XIHFi7Pkg6Bv+T50uHV6LEcug87BvHDoQhEVW8vFCJbKWubVAOO2HZYN9TSDA
-         WIa/UuFebGrwNIgBn3FNsXY2z6P9Umr9sFUPkqmN5VYBMlTykPL0GdSY262YhBqckkZc
-         A4r819Gh0G5JW/zn06Ck0lp7jOagaS0iYFPc4eepGAclvO/+t1JEUo9qbgfCwglcsBsG
-         ChviWdnTG9oxVoOd5+SJQFlxhm9HQNgRzbRTJlmMpeN7/JGDbItdlCNa1TJGEOs9605n
-         mqng==
-X-Gm-Message-State: AC+VfDwiYUNpMEJHbUGVhkDRe66PwGet3+uN/KKUhs9KWgx+nMTaHdvw
-        0jOd2lojDy3Qk5f4NSi1Z+WKEA==
-X-Google-Smtp-Source: ACHHUZ6x1E9VGgJFIYX58bAoFbw/BYTrc7hIUdhOm9wToy03SWtIstRj+QyZ89bKldxsz8tk+tRqgg==
-X-Received: by 2002:a05:6a21:99aa:b0:114:6f3c:4332 with SMTP id ve42-20020a056a2199aa00b001146f3c4332mr13451371pzb.24.1686648670764;
-        Tue, 13 Jun 2023 02:31:10 -0700 (PDT)
-Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:2d00:6d98:ebb3:585])
-        by smtp.gmail.com with ESMTPSA id d5-20020a170902c18500b001b3df3ae3f8sm2160680pld.281.2023.06.13.02.31.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 02:31:10 -0700 (PDT)
-From:   Chen-Yu Tsai <wenst@chromium.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH] thermal/drivers/generic-adc: Register thermal zones as hwmon sensors
-Date:   Tue, 13 Jun 2023 17:30:52 +0800
-Message-ID: <20230613093054.2067340-1-wenst@chromium.org>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+        Tue, 13 Jun 2023 05:32:09 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B267D13E;
+        Tue, 13 Jun 2023 02:32:07 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8CxOuqWN4hk9o0EAA--.9907S3;
+        Tue, 13 Jun 2023 17:32:06 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxJeSRN4hkRNAYAA--.5565S3;
+        Tue, 13 Jun 2023 17:32:02 +0800 (CST)
+Message-ID: <f0e88e6d-b2bf-8bff-0cbd-8d864391adf4@loongson.cn>
+Date:   Tue, 13 Jun 2023 17:32:01 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v14 0/2] drm: add kms driver for loongson display
+ controller
+To:     Maxime Ripard <mripard@kernel.org>
+Cc:     Sui Jingfeng <15330273260@189.cn>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        loongson-kernel@lists.loongnix.cn
+References: <20230520105718.325819-1-15330273260@189.cn>
+ <d4e647d8-294c-abd7-40c6-37381796203d@loongson.cn>
+ <a23d6mgl4fbfa4ucgjvwgw7l3somxo4tkhit7ygy55fldlum56@vm3tyjdsx24l>
+ <d2f744b6-e4c9-d1b5-d4ca-470b801c670d@189.cn>
+ <hvfr6qkepf6l3ymqtp6vhlneeqihnli7g5v7nzd6rirwleffk6@4ernj6xng5rt>
+ <42c54caf-0ab9-a075-b641-9e3e21b2a2f3@loongson.cn>
+ <7rbtdidyfpctz22pw2mnt2a6yp34hwp2bdp7usp52ft5mfrfud@nokbyxjip5by>
+Content-Language: en-US
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+Organization: Loongson
+In-Reply-To: <7rbtdidyfpctz22pw2mnt2a6yp34hwp2bdp7usp52ft5mfrfud@nokbyxjip5by>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-CM-TRANSID: AQAAf8AxJeSRN4hkRNAYAA--.5565S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoW7KF1UArW8Kr1rGr48tF1fAFc_yoW8Gr17pr
+        WUJF18KF4ktr4fJrZYvw1IqF1Fvwn3JF17uw1qgr17urWqvr13GF4Ikr4YkF9xXrn7Ca17
+        tF45XFy3tr45C3gCm3ZEXasCq-sJn29KB7ZKAUJUUUUP529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2kKe7AKxVWUtVW8ZwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        tVWrXwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
+        xGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAK
+        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r4a6rW5MI8I3I0E5I8CrV
+        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCI
+        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267
+        AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Cr0_
+        Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUxO
+        zsDUUUU
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,40 +83,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Register thermal zones as hwmon sensors to let userspace read
-temperatures using standard hwmon interface.
+Hi,
 
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
----
- drivers/thermal/thermal-generic-adc.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+On 2023/6/13 17:28, Maxime Ripard wrote:
+> On Tue, Jun 13, 2023 at 05:17:00PM +0800, Sui Jingfeng wrote:
+>> On 2023/6/13 17:10, Maxime Ripard wrote:
+>>> On Tue, Jun 13, 2023 at 04:35:44PM +0800, Sui Jingfeng wrote:
+>>>> Hi,
+>>>>
+>>>> On 2023/6/13 16:30, Maxime Ripard wrote:
+>>>>> Hi,
+>>>>>
+>>>>> On Mon, Jun 12, 2023 at 10:58:54PM +0800, Sui Jingfeng wrote:
+>>>>>> Hi,
+>>>>>>
+>>>>>>
+>>>>>> Any ideas for this trivial DC driver? Sorry about my broken English.
+>>>>>>
+>>>>>> What to do next? Send a new version?
+>>>>> Thomas already told you to merge it in the previous version:
+>>>>> https://lore.kernel.org/dri-devel/7b77020f-d543-13bf-e178-bc416bcc728d@suse.de/
+>>>>>
+>>>>> So.. do that?
+>>>> Yes, that sound fine.
+>>>>
+>>>> But I can't do it myself, would you like to help?
+>>> Why can't you do it yourself?
+>> I don't have a commit access to the drm-misc,
+>>
+>> I think, I can get the commit access in a letter time when I good enough,
+>>
+>> But get the code merged, just merge the latest version is OK.
+> Look at the link in Thomas mail, it's the documentation on how to get
+> commit access.
 
-diff --git a/drivers/thermal/thermal-generic-adc.c b/drivers/thermal/thermal-generic-adc.c
-index 017b0ce52122..e95dc354f192 100644
---- a/drivers/thermal/thermal-generic-adc.c
-+++ b/drivers/thermal/thermal-generic-adc.c
-@@ -13,6 +13,8 @@
- #include <linux/slab.h>
- #include <linux/thermal.h>
- 
-+#include "thermal_hwmon.h"
-+
- struct gadc_thermal_info {
- 	struct device *dev;
- 	struct thermal_zone_device *tz_dev;
-@@ -153,6 +155,12 @@ static int gadc_thermal_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
-+	ret = devm_thermal_add_hwmon_sysfs(&pdev->dev, gti->tz_dev);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Failed to add hwmon sysfs attributes\n");
-+		return ret;
-+	}
-+
- 	return 0;
- }
- 
+I have already submit the commit access  request [1], would you like to 
+agree?
+
+Thanks for you and thomas.
+
+[1] 
+https://gitlab.freedesktop.org/freedesktop/freedesktop/-/issues/673#note_1932024
+
+> Maxime
+
 -- 
-2.41.0.162.gfafddb0af9-goog
+Jingfeng
 
