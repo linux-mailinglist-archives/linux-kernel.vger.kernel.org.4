@@ -2,61 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF7C72D8A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 06:32:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18A5272D8A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 06:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239864AbjFMEcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 00:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49994 "EHLO
+        id S239926AbjFMEc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 00:32:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239839AbjFMEbt (ORCPT
+        with ESMTP id S239587AbjFMEcg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 00:31:49 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD38B1FCF;
-        Mon, 12 Jun 2023 21:28:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=ryKq7bxbg4ef0qaI3pTxqxm2yR
-        wnJe8TefRz5dM8wTiP1PZa5jAfwkSHI+Kutb7CBC3tn8uDXxMbAPctSdwTwgb2TJ1gfO7SIL/USQb
-        sWS1V7HkEHNjrsK82hmPN3C/b86JPAEwpEGv9eiSp+HA/W+HsNWMBz6Hkng9Pcbg1fidb1Tlp+Cvn
-        rovj+9ljujRL+uZAWQCkZDGBKctdAyeaaT6A66Yv/NC58zmOOeMlAaO1fVYWZ3QUqjl0nkKXVJDFZ
-        pGIqFl8euIRh92xKG/vCFa3DhBPhfyB4yYQxjU7QV91W668MDAnPSXJNahsxVT7C8goRVhUtRa4+q
-        ZlQ+HqPA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q8vdf-006sZD-2p;
-        Tue, 13 Jun 2023 04:28:15 +0000
-Date:   Mon, 12 Jun 2023 21:28:15 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, David Hildenbrand <david@redhat.com>,
-        kernel test robot <oliver.sang@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-mm@kvack.org, oe-lkp@lists.linux.dev, lkp@intel.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] block: Fix dio_bio_alloc() to set BIO_PAGE_PINNED
-Message-ID: <ZIfwX7Fo+CWjbAYr@infradead.org>
-References: <545463.1686601473@warthog.procyon.org.uk>
+        Tue, 13 Jun 2023 00:32:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A59810DF
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 21:30:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0EFD5630EC
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 04:30:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 74E11C433D2;
+        Tue, 13 Jun 2023 04:30:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686630620;
+        bh=3Upkbk78RnWCWTUOh1brAeXyaxKfWIHLIVC+3iNAk74=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=BqA2m9Zx4FEhwshAkHiXSD+pfHpiHJlIohjOP6C4LzV2tJ+UBCEboGyaGlG8l5e0U
+         FHVavOCnum1+SJZjZ1n9k4WPim1HLokkOjVpfEBrJ/6L8NPPYrUej549bwrymT2yUu
+         6tm3O8iY9NECd/8ORqo1znnIozKnDQYZ7IhB9yJePQTkFuTLd0zs0xQEdO3yUY8HrW
+         JeG15KD7PoRNp2mgEz32PixNbxJRB5Q267C6jjgJYP+LrjEB/XSTqVVrzXLOayoX0E
+         M1eBLtK7MyWWVp+6MouLfWQh6CFC5kRn0SdjoCvG9geD4d53R3WTWLw5VV4xIVRgyY
+         osl2c5GfIkByA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5914BE21EC0;
+        Tue, 13 Jun 2023 04:30:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <545463.1686601473@warthog.procyon.org.uk>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v1 1/1] platform/chrome: cros_ec_spi: Use %*ph for printing
+ hexdump of a small buffer
+From:   patchwork-bot+chrome-platform@kernel.org
+Message-Id: <168663062036.801.9347920578627986681.git-patchwork-notify@kernel.org>
+Date:   Tue, 13 Jun 2023 04:30:20 +0000
+References: <20230612212336.4961-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230612212336.4961-1-andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        bleung@chromium.org, groeck@chromium.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,7 +58,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good:
+Hello:
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+This patch was applied to chrome-platform/linux.git (for-kernelci)
+by Tzung-Bi Shih <tzungbi@kernel.org>:
+
+On Tue, 13 Jun 2023 00:23:36 +0300 you wrote:
+> The kernel already has a helper to print a hexdump of a small
+> buffer via pointer extension. Use that instead of open coded
+> variant.
+> 
+> In long term it helps to kill pr_cont() or at least narrow down
+> its use.
+> 
+> [...]
+
+Here is the summary with links:
+  - [v1,1/1] platform/chrome: cros_ec_spi: Use %*ph for printing hexdump of a small buffer
+    https://git.kernel.org/chrome-platform/c/2b8cc5858a07
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
