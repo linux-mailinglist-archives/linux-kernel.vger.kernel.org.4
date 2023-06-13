@@ -2,78 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C10F72DBFF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A31672DC05
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240861AbjFMIGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 04:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57500 "EHLO
+        id S240458AbjFMIGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 04:06:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234044AbjFMIGJ (ORCPT
+        with ESMTP id S240925AbjFMIGw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 04:06:09 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F35EE
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 01:06:06 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-561b7729a12so91655417b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 01:06:06 -0700 (PDT)
+        Tue, 13 Jun 2023 04:06:52 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D333510E9
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 01:06:49 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-977e7d6945aso934302166b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 01:06:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1686643565; x=1689235565;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1k/4HquP2HeWTu3gqyEqAfIouxpypkLo7uElSrv6hWc=;
-        b=awkBk+howhXC9J91GGN+gEhLJqzy4lI2+Nm2ME0HsBbRSUGNzB9llZL0mmuInqWVYv
-         goSHwsqToUzZst/eUhuADOvGa79vijbWRbT4TcdQ2JmJleqsoTRcCvxuusNEuv6phnbg
-         RcFVy5pFpePMCFA0meViSbb2mb42Bx5rqvMemzvomS6qHphXqCA6RmLGATsD2HzrkCA1
-         BkLuRJCoQE77Ziur1z4yQgYkJD1IJuA9j7kkcYm63Qc/WQZ672nsx8jaG3lyN5ld0Qc/
-         D3GNmDLwiLZE+jQJmHUTQzfaOhAFnuIcRdTgLn9/Ia/jM4+weREaTvv8hYftc1NWFSLr
-         EJGA==
+        d=linaro.org; s=google; t=1686643608; x=1689235608;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oh9FMASx+40RIFRTYw/y+LLrrdSrxB/p4X2a4zp9Ws4=;
+        b=cqEKvVFfHDYoJgMarpDsGYd3s2g3FDEOBAy4sjzhpE26l/fw+vmu2nYWvxbMrLyulm
+         WwFPfPMLMH0hfqH433hC7mMq6rdmFDsgKt1VbEZ/DSVpBAeos7ZKHX/fThfCz3E8KUYp
+         +X3FoOqAlFf8bQ7SVPezV7PyjMi8tWcOD7d7OPLjCmNmpqgb1rXfixxydvKNzH/OAc2L
+         2a7SIAiKMaJJYNYHaQg7b/3LgvlwQMrhO4BvcFIcxYGiOjrtwRGDiQtL5byU8mMuZo1k
+         hDIgEczP5q7QDoAuAbOVv34PaIGmhBEsMtR9exkUus1zRfHW0UpTSXzECxTnhoR76HjW
+         0WFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686643565; x=1689235565;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1k/4HquP2HeWTu3gqyEqAfIouxpypkLo7uElSrv6hWc=;
-        b=fPP84P3gw66Azhy3Et2FpDSrcf/G5/M5Lujz0hOk5Ey4CUTGbbEUrHuVfgTlBQ4gVF
-         jn9OLeV1zumWW7XTK7KLMC8M8HY75vq5kpJnqolt9AqeXDh5F59lS4RPfX3O/I4Z4vD6
-         QuUNA/0jRcnYXgZFjm0eESpZ9tZE0DowW9PB1v4AvFvNKiG/I8kB4QM+oPcjcx9K7X8+
-         UKaRbQo1pDA2SVPvoAcRnsp5X+sM7TG4qX5OsOXRafF7r4a9361D1Tt30LWwztRuAdEJ
-         2P87M0PDZvk0f6k0PmRKMl8kEEO6Eqo2uVxpT3cMhXNHiooXQfUDFHy0nLIexDAtlxBK
-         q1aQ==
-X-Gm-Message-State: AC+VfDx7a2fDkT21Sttt5OEWEX7lRfQAJux2HnmdCHXwfgXRzNByFhcf
-        cwZzOQPikw2BQiB6dxOyhYdsPPxQHU/eOmTBtxv6Zw==
-X-Google-Smtp-Source: ACHHUZ6duDMZEOxgSlCrtpBwenRyzgNSxW6ESMhkrTlkPUSo6LUwj8CSY7DYsQmwkus4eMXqhFWEsLczZTipIuenZig=
-X-Received: by 2002:a25:a423:0:b0:bc4:77a:22a0 with SMTP id
- f32-20020a25a423000000b00bc4077a22a0mr878350ybi.15.1686643565505; Tue, 13 Jun
- 2023 01:06:05 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686643608; x=1689235608;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oh9FMASx+40RIFRTYw/y+LLrrdSrxB/p4X2a4zp9Ws4=;
+        b=cpmbq4EfGDPkbJwG38iNNXdj/bl5xrwvlJpIr8Dq34Jq2HgE7FmmaUtnCy4ZCgrqqU
+         gdTlizxsimStK8rte4rBiJP6WAXoDOK9x6Az7auNRoeWioIPNz0pr2tDfi+B/ksAJyae
+         a1qvZTN1k+7LaLyw7OaO4cbWaJV7Lv2AeI7zIWpO8s7eZ1KSeKro8CQaf71HjUCLaijK
+         3L2fM3HWLjlMOUQBjFXw4oqoyd3MlbWpuaVLZY4yNRfsu30wWeZ0wqeS+faTS3KPvo59
+         C4M2rJGSblRgYqkqRloe/ziUYGR3ZD2hVB4qJzRLjoOL2erjx+0RRekiziRi4iitywte
+         mwWA==
+X-Gm-Message-State: AC+VfDzjr+OXd04xuKudR54va3+hGFNYua47NlnsWQDZjE17ghsCShRo
+        l0MP2dUMN9onmJ0uOxRn868yjhnoQ4QTQIjLazI=
+X-Google-Smtp-Source: ACHHUZ7ZvoKbB/eR5zPGEdQjV/KEn2jaUSHVtC7Y8ed0326mNJhgj90KYBg6vspasSbY983Naq5Pyg==
+X-Received: by 2002:a17:907:36c3:b0:974:7713:293f with SMTP id bj3-20020a17090736c300b009747713293fmr13715718ejc.41.1686643608167;
+        Tue, 13 Jun 2023 01:06:48 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id i8-20020a170906a28800b009655eb8be26sm6300308ejz.73.2023.06.13.01.06.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 01:06:47 -0700 (PDT)
+Message-ID: <dcc99c16-3807-1f81-03b8-86095f08258e@linaro.org>
+Date:   Tue, 13 Jun 2023 10:06:46 +0200
 MIME-Version: 1.0
-References: <20230508142842.854564-1-apatel@ventanamicro.com>
- <20230508142842.854564-2-apatel@ventanamicro.com> <20230510-squealing-pruning-2c94b85785b0@wendy>
-In-Reply-To: <20230510-squealing-pruning-2c94b85785b0@wendy>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Tue, 13 Jun 2023 13:35:54 +0530
-Message-ID: <CAK9=C2VqAX+xGH0oPhda1ygMu4umhNAXbPAQ+Z4q+fGR0R54ug@mail.gmail.com>
-Subject: Re: [PATCH v3 01/11] RISC-V: Add riscv_fw_parent_hartid() function
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, iommu@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] w1: ds2482: Switch back to use struct i2c_driver's
+ .probe()
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
+References: <20230612072807.839689-1-u.kleine-koenig@pengutronix.de>
+ <6d76105f-daa1-1cd0-35b3-1727aa967bcc@linaro.org>
+ <20230613070237.srqd3sy2c3lp7u5p@pengutronix.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230613070237.srqd3sy2c3lp7u5p@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,80 +78,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 6:15=E2=80=AFPM Conor Dooley <conor.dooley@microchi=
-p.com> wrote:
->
-> On Mon, May 08, 2023 at 07:58:32PM +0530, Anup Patel wrote:
-> > We add common riscv_fw_parent_hartid() which help device drivers
-> > to get parent hartid of the INTC (i.e. local interrupt controller)
-> > fwnode. Currently, this new function only supports device tree
-> > but it can be extended to support ACPI as well.
-> >
-> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > ---
-> >  arch/riscv/include/asm/processor.h |  3 +++
-> >  arch/riscv/kernel/cpu.c            | 12 ++++++++++++
-> >  2 files changed, 15 insertions(+)
-> >
-> > diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/as=
-m/processor.h
-> > index 94a0590c6971..6fb8bbec8459 100644
-> > --- a/arch/riscv/include/asm/processor.h
-> > +++ b/arch/riscv/include/asm/processor.h
-> > @@ -77,6 +77,9 @@ struct device_node;
-> >  int riscv_of_processor_hartid(struct device_node *node, unsigned long =
-*hartid);
-> >  int riscv_of_parent_hartid(struct device_node *node, unsigned long *ha=
-rtid);
-> >
-> > +struct fwnode_handle;
-> > +int riscv_fw_parent_hartid(struct fwnode_handle *node, unsigned long *=
-hartid);
-> > +
-> >  extern void riscv_fill_hwcap(void);
-> >  extern int arch_dup_task_struct(struct task_struct *dst, struct task_s=
-truct *src);
-> >
-> > diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> > index 5de6fb703cc2..1adbe48b2b58 100644
-> > --- a/arch/riscv/kernel/cpu.c
-> > +++ b/arch/riscv/kernel/cpu.c
-> > @@ -73,6 +73,18 @@ int riscv_of_parent_hartid(struct device_node *node,=
- unsigned long *hartid)
-> >       return -1;
-> >  }
-> >
-> > +/* Find hart ID of the CPU fwnode under which given fwnode falls. */
-> > +int riscv_fw_parent_hartid(struct fwnode_handle *node, unsigned long *=
-hartid)
-> > +{
-> > +     /*
-> > +      * Currently, this function only supports DT but it can be
-> > +      * extended to support ACPI as well.
-> > +      */
->
-> Statement of the obvious here, no?
-> Although, it seems a little odd to read this comment & the corresponding
-> statement in the commit message, when the series appears to have been
-> based on the ACPI?
->
-> Perhaps by the time v4 comes around, ACPI support will have been merged
-> & that'll be moot.
+On 13/06/2023 09:02, Uwe Kleine-König wrote:
+> Hello Krzysztof,
+> 
+> On Mon, Jun 12, 2023 at 10:10:30PM +0200, Krzysztof Kozlowski wrote:
+>> On 12/06/2023 09:28, Uwe Kleine-König wrote:
+>>> After commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
+>>> call-back type"), all drivers being converted to .probe_new() and then
+>>> commit 03c835f498b5 ("i2c: Switch .probe() to not take an id parameter")
+>>> convert back to (the new) .probe() to be able to eventually drop
+>>> .probe_new() from struct i2c_driver.
+>>>
+>>> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+>>> ---
+>>>  drivers/w1/masters/ds2482.c | 2 +-
+>>
+>> Thank you for the patch.
+>> It is too late in the cycle for me to pick it up. I will take it after
+>> the merge window.
+> 
+> This is one of only 19 patches that are still needed on top of what is
+> currently in next before I can drop .probe_new() which I intended to
+> tackle after the upcoming merge window. I expect that most of these 19
+> patches will still be picked up and go into v6.5-rc1.
+> 
+> Assuming there are only less than 10 patches remaining on top of
+> v6.5-rc1, I intend to create a pull request for Wolfram with the
+> remaining bits and a patch doing
 
-Yes, I was anyway going to update this in v4 to support both DT and ACPI.
+Sure, go ahead:
 
->
-> > +     if (!is_of_node(node))
-> > +             return -EINVAL;
-> > +     return riscv_of_parent_hartid(to_of_node(node), hartid);
->
-> nit: blank line before the return here please.
 
-Okay, I will update.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
->
-> Thanks,
-> Conor.
+Best regards,
+Krzysztof
 
-Regards,
-Anup
