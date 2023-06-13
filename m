@@ -2,180 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE2B72E4AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8697872E4B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238839AbjFMNzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 09:55:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54234 "EHLO
+        id S239731AbjFMN46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 09:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233859AbjFMNzl (ORCPT
+        with ESMTP id S239868AbjFMN44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 09:55:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBD4A6;
-        Tue, 13 Jun 2023 06:55:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D44C063149;
-        Tue, 13 Jun 2023 13:55:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2F6AC433D9;
-        Tue, 13 Jun 2023 13:55:38 +0000 (UTC)
-Date:   Tue, 13 Jun 2023 09:55:37 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: [PATCH v2] tracing: Add a debug_trace_printk() function
-Message-ID: <20230613095537.0ecf2459@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 13 Jun 2023 09:56:56 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95CF1CA;
+        Tue, 13 Jun 2023 06:56:54 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35DDucch028956;
+        Tue, 13 Jun 2023 08:56:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1686664598;
+        bh=AisEUQFN6qXK+ZgbfXrx9CrTIJoeUeeHyqEZJKH9pKM=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=PsJvvz5XS41tAsGYDTqgIlugg1p3do7L3bGivru8HYzOGi4LLcdSbaNU3oi5jDpTl
+         L+pNu0JZn7Ov2KQDK+OWZ3MYDiXiUfQKkCaLLdN/cJfVNkea3afwdYmEh8koGE6bvJ
+         ExP7htS3QjYq3ilWqDiysNwxkF7t9tSvwmQLECsw=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35DDucY1033792
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 13 Jun 2023 08:56:38 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 13
+ Jun 2023 08:56:38 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 13 Jun 2023 08:56:38 -0500
+Received: from [10.249.141.75] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35DDuZbr051552;
+        Tue, 13 Jun 2023 08:56:35 -0500
+Message-ID: <22b67e80-1f5f-d8e0-3c85-c69d97ea0d39@ti.com>
+Date:   Tue, 13 Jun 2023 19:26:34 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 6/9] arm64: dts: ti: k3-j721e-beagleboneai64: Add
+ wakeup_uart pinmux
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>, Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Neha Malcom Francis <n-francis@ti.com>
+References: <20230601183151.1000157-1-nm@ti.com>
+ <20230601183151.1000157-7-nm@ti.com>
+From:   "Kumar, Udit" <u-kumar1@ti.com>
+In-Reply-To: <20230601183151.1000157-7-nm@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Hi Nishanth,
 
-While doing some tracing and kernel debugging, I found that some of my
-trace_printk()s were being lost in the noise of the other code that was
-being traced. Having a way to write trace_printk() not in the top level
-trace buffer would have been useful.
+On 6/2/2023 12:01 AM, Nishanth Menon wrote:
+> Define the wakeup uart pin-mux for completeness. This allows the
+> device tree usage in bootloader and firmwares that can configure the
+> same appropriately.
+>
+> Signed-off-by: Nishanth Menon <nm@ti.com>
+> ---
+>   arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dts | 9 +++++++++
+>   1 file changed, 9 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dts b/arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dts
+> index c13246a9ed8f..bc53ca566a68 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dts
+> +++ b/arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dts
+> @@ -531,6 +531,13 @@ J721E_WKUP_IOPAD(0xfc, PIN_INPUT_PULLUP, 0) /* (H24) WKUP_I2C0_SDA */
+>   		>;
+>   	};
+>   
+> +	wkup_uart0_pins_default: wkup-uart0-pins-default {
+> +		pinctrl-single,pins = <
+> +			J721E_WKUP_IOPAD(0xa0, PIN_INPUT, 0) /* (J29) WKUP_UART0_RXD */
+> +			J721E_WKUP_IOPAD(0xa4, PIN_OUTPUT, 0) /* (J28) WKUP_UART0_TXD */
+> +		>;
+> +	};
+> +
+>   	mcu_usbss1_pins_default: mcu-usbss1-pins-default {
+>   		pinctrl-single,pins = <
+>   			J721E_WKUP_IOPAD(0x3c, PIN_OUTPUT_PULLUP, 5) /* (A23) MCU_OSPI1_LBCLKO.WKUP_GPIO0_30 */
+> @@ -541,6 +548,8 @@ J721E_WKUP_IOPAD(0x3c, PIN_OUTPUT_PULLUP, 5) /* (A23) MCU_OSPI1_LBCLKO.WKUP_GPIO
+>   &wkup_uart0 {
+>   	/* Wakeup UART is used by TIFS firmware. */
+>   	status = "reserved";
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&wkup_uart0_pins_default>;
+>   };
 
-There was also a time I needed to debug ftrace itself, where
-trace_printk() did not hit the paths that were being debugged. But because
-the trace that was being debugged, was going into the top level ring
-buffer, it was causing issues for seeing what is to be traced.
 
-To solve both of the above, add a debug_trace_printk() that can be used
-just like trace_printk() except that it goes into a "debug" instance
-buffer instead. This can be used at boot up as well.
+If you like to consider alias for wkup_uart0 for this board ,
 
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
-Changes since v1: https://lore.kernel.org/linux-trace-kernel/20230612193337.0fb0d3ca@gandalf.local.home/
+Just to align with other boards for this SOC family.  I understand 
+wkup_uart0 is not being used.
 
-  - I had added a prompt to the kconfig but never committed it.
-    It's now part of the patch.
 
- include/linux/kernel.h | 14 ++++++++++++++
- kernel/trace/Kconfig   | 20 ++++++++++++++++++++
- kernel/trace/trace.c   | 29 +++++++++++++++++++++++++++++
- 3 files changed, 63 insertions(+)
-
-diff --git a/include/linux/kernel.h b/include/linux/kernel.h
-index 0d91e0af0125..594c9ba17fd4 100644
---- a/include/linux/kernel.h
-+++ b/include/linux/kernel.h
-@@ -432,6 +432,20 @@ __ftrace_vbprintk(unsigned long ip, const char *fmt, va_list ap);
- extern __printf(2, 0) int
- __ftrace_vprintk(unsigned long ip, const char *fmt, va_list ap);
- 
-+#ifdef CONFIG_FTRACE_DEBUG_PRINT
-+extern __printf(2,0) void do_debug_trace_printk(unsigned long ip, const char *fmt, ...);
-+#define debug_trace_printk(fmt, ...) \
-+do {							\
-+	do_debug_trace_printk(_THIS_IP_, fmt, ##__VA_ARGS__);	\
-+} while (0)
-+
-+extern void debug_tracing_stop(void);
-+#else
-+#define debug_trace_printk(fmt, ...) do { } while (0)
-+static inline void debug_tracing_stop(void) { }
-+#endif
-+
-+
- extern void ftrace_dump(enum ftrace_dump_mode oops_dump_mode);
- #else
- static inline void tracing_start(void) { }
-diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-index abe5c583bd59..e07bca39dec9 100644
---- a/kernel/trace/Kconfig
-+++ b/kernel/trace/Kconfig
-@@ -974,6 +974,26 @@ config GCOV_PROFILE_FTRACE
- 	  Note that on a kernel compiled with this config, ftrace will
- 	  run significantly slower.
- 
-+config FTRACE_DEBUG_PRINT
-+	bool "Enable debug_trace_printk()"
-+	depends on TRACING
-+	help
-+	  This option enables the use of debug_trace_printk() instead of
-+	  using trace_printk(). The difference between the two is that
-+	  debug_trace_printk() traces are visible in the "debug" instance
-+	  found in:
-+
-+	  /sys/kernel/tracing/instances/debug
-+
-+	  This is useful when the trace printks should not interfere with
-+	  the normal top level tracing. It is also useful if the top level
-+	  tracing is very noisy and critical trace printks are dropped.
-+	  By using debug_trace_printk() the traces goes into as separate
-+	  ring buffer that will not be overridden by other trace events.
-+
-+	  If unsure say N (In fact, only say Y if you are debugging a
-+	                   kernel and require this)
-+
- config FTRACE_SELFTEST
- 	bool
- 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 64a4dde073ef..c21a93cf5fd8 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -490,6 +490,10 @@ static struct trace_array global_trace = {
- 	.trace_flags = TRACE_DEFAULT_FLAGS,
- };
- 
-+#ifdef CONFIG_FTRACE_DEBUG_PRINT
-+static struct trace_array *debug_trace;
-+#endif
-+
- LIST_HEAD(ftrace_trace_arrays);
- 
- int trace_array_get(struct trace_array *this_tr)
-@@ -10455,8 +10459,33 @@ void __init early_trace_init(void)
- 	tracer_alloc_buffers();
- 
- 	init_events();
-+
-+#ifdef CONFIG_FTRACE_DEBUG_PRINT
-+	debug_trace = trace_array_get_by_name("debug");
-+	if (WARN_ON(!debug_trace))
-+		return;
-+	trace_array_init_printk(debug_trace);
-+#endif
- }
- 
-+#ifdef CONFIG_FTRACE_DEBUG_PRINT
-+__printf(2, 0)
-+void do_debug_trace_printk(unsigned long ip, const char *fmt, ...)
-+{
-+	va_list ap;
-+
-+	va_start(ap, fmt);
-+	trace_array_vprintk(debug_trace, ip, fmt, ap);
-+	va_end(ap);
-+}
-+
-+void debug_tracing_stop(void)
-+{
-+	debug_trace_printk("Stopping debug tracing\n");
-+	tracing_stop_tr(debug_trace);
-+}
-+#endif
-+
- void __init trace_init(void)
- {
- 	trace_event_init();
--- 
-2.39.2
-
+>   
+>   &main_uart0 {
