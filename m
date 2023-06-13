@@ -2,98 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0C6372D8FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 07:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 294BA72D913
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 07:27:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239939AbjFMFK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 01:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34582 "EHLO
+        id S239749AbjFMF1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 01:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239747AbjFMFKY (ORCPT
+        with ESMTP id S239182AbjFMF1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 01:10:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14585138
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 22:10:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96CE56316F
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 05:10:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E4E5EC433A1;
-        Tue, 13 Jun 2023 05:10:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686633022;
-        bh=NHdCIb1zv2Arlk5ZHNC+WxvFRKd8YhAHkgky6zU714g=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=EYYc3q/wMH0BEElR4x/aWfNiKnE71+w4S+tZLwcSdvjo1qGvXoaD/aG88sVhkjMHi
-         n+gGLe9BWmjKmKaLk8YKHBwPoV9VOu96aLes+jNv6RM6W34JpNbR76odLODm8h5evn
-         pAV08PHhJh3Jy0hpQRPuObLNH1miq6RhccmMFeHF/vIX4ERUOLbZxfoGKjhcO8Pyak
-         rrkODPSW/ch6e+/A6GLRZ878944LH6FSSwHYPk/Qgwq9PwnMTOKeOXamk98pUJR9qs
-         F5SVa8qZBGLrguJ4ekYlKP1OHRuLNY0UrbmNKq5jUCkxmnMUg+KNNkmaxx8vIJjl/z
-         MVGsuoSADZW/g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C7DEFE21EC0;
-        Tue, 13 Jun 2023 05:10:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 13 Jun 2023 01:27:38 -0400
+X-Greylist: delayed 647 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 12 Jun 2023 22:27:21 PDT
+Received: from cwdelivery.e-purifier.com (cwdelivery.e-purifier.com [197.234.175.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A12E7C
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 22:27:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686633165; cv=none; d=telkomsa.net; s=key;
+ b=YyZEgvAMlfJHxW9U263de7/BMUIpzIeAal7jPVYp8vEJ41IZNVmZ9ygCcQks6/hobIfuJr5zfr00
+        H7Hh/Gq/GSaVEznbjfSZdjv1O++iGVQj9TUn0sy7DDmxYa7ZAE32l/gVAqGJPZ9V8myEyJjlLgwJ
+        rOiFO24YTsqQs6K2X1VZ0WMJzoZLElkngWjxzQR71TGhOtojL9hVUpSyG2GsrOtOJ7yEp8AR5GtH
+        LIpq/yYZLZqMcoytI6ecxbF+HPyIvG5qp+MDM9EB+uG2vLuKDvYIukpwGJDkrcnKOa35bvqC846q
+        rryQ0J5uCqoxbB25izIrU6LfE7YWsOa7PkVURQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; d=telkomsa.net; s=key; c=relaxed/relaxed;
+ h=dkim-signature:date:from:message-id:subject:mime-version:content-type;
+ bh=XMRDcl6SBlpeeBUBKadTZ3EVgsNsAkNlceydqCEYbK0=;
+ b=LdQ3fk5Qt4FS8YSZgw3zbpvzEdmNXGXjSheeXevkCiAqb5ecW28j1UXo7VW3ztRgfJCZ/g+g4XFz
+        PiOceqgfr4ZhpjPEvYT7sEtbZGJPy0eb2hikrEmOU+6e+4tOeG9JXnmSXMLcRDBQzkAltTkRnMI4
+        FwBV0a8ldn12G3fa/ovV6CZZhxroCsYTiAlXTMuPPZHlaFXESL1Lm7W0NuTE/F41q/IRNPdbH+yF
+        p35KnD9B+Hudw9PLDiBjo2BogXAMNCCVAVkoG+VdFd3Y7ykpIuMnns66Hw56LxBwvvLn/cyhmGT7
+        hzc/BOigqv1Bcl9mM4EMBczGuevU3ySbkx0org==
+ARC-Authentication-Results: i=1; cwdelivery.e-purifier.com;
+        spf=pass (e-purifier.com: domain of online2427826@telkomsa.net designates 105.224.1.22 as permitted sender) smtp.mailfrom=online2427826@telkomsa.net;
+Authentication-Results: cwdelivery.e-purifier.com;
+        spf=pass (e-purifier.com: domain of online2427826@telkomsa.net designates 105.224.1.22 as permitted sender) smtp.mailfrom=online2427826@telkomsa.net;
+X-Virus-Scanned: amavisd-new at zmmtaout4.telkomsa.net
+Date:   Tue, 13 Jun 2023 07:11:56 +0200 (SAST)
+From:   online2427826@telkomsa.net
+Message-ID: <290961390.8825635.1686633116553.JavaMail.zimbra@telkomsa.net>
+Subject: =?utf-8?B?57eK5oCl5oqV6LOH5pSv5o+0?=
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/6] splice,
- net: Some miscellaneous MSG_SPLICE_PAGES changes
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168663302181.19155.9169104916425356557.git-patchwork-notify@kernel.org>
-Date:   Tue, 13 Jun 2023 05:10:21 +0000
-References: <20230609100221.2620633-1-dhowells@redhat.com>
-In-Reply-To: <20230609100221.2620633-1-dhowells@redhat.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org, kuba@kernel.org, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com,
-        willemdebruijn.kernel@gmail.com, dsahern@kernel.org,
-        willy@infradead.org, axboe@kernel.dk, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+X-Originating-IP: [103.125.146.52]
+X-Mailer: Zimbra 8.8.15_GA_4545 (ZimbraWebClient - GC114 (Win)/8.8.15_GA_4545)
+Thread-Index: VSKssGyTOimAfyf9T3W4wiest6R15w==
+Thread-Topic: =?utf-8?B?57eK5oCl5oqV6LOH5pSv5o+0?=
+Content-Transfer-Encoding: quoted-printable
+X-FEAS-Client-IP: 105.224.1.22
+X-FE-Last-Public-Client-IP: 105.224.1.22
+X-FE-Policy-ID: 5:3:0:SYSTEM
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; d=telkomsa.net; s=key; c=relaxed/relaxed;
+ h=date:from:message-id:subject:mime-version:content-type;
+ bh=XMRDcl6SBlpeeBUBKadTZ3EVgsNsAkNlceydqCEYbK0=;
+ b=bsbtvVtESoCdAHq0GPCP3FwYGb/oU8M0xVGPeN3SGbwQcywKEg7qX4VkArAnCc7tQBLOzOhnR2LO
+        kv/5gBjjsxe4lJUmnDyop5A9GKjgDdZ+z1zqsS5NCopULORxsAjYuLtuKFp3tdTwnlgyV3embHq7
+        2ixWXCiNQtBOVQURT5Xoi7JCme6C1LBS4rAw5p9vY2k73HAE9BvJLLlYLZ9mAe2p14EBfOfqlw+0
+        GY0Shy1xPKrx+f63xfGt27wE2jX8ObhDVnztQ0UHlr6MyrvhUaSf6cfq0eYsUldjCTniwlTenSAe
+        CFuDKPsEMIvrKGdFn/HqTwLT667Y/jZsuig0/A==
+X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Fri,  9 Jun 2023 11:02:15 +0100 you wrote:
-> Now that the splice_to_socket() has been rewritten so that nothing now uses
-> the ->sendpage() file op[1], some further changes can be made, so here are
-> some miscellaneous changes that can now be done.
-> 
->  (1) Remove the ->sendpage() file op.
-> 
->  (2) Remove hash_sendpage*() from AF_ALG.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next,1/6] Remove file->f_op->sendpage
-    https://git.kernel.org/netdev/net-next/c/a3bbdc52c38f
-  - [net-next,2/6] algif: Remove hash_sendpage*()
-    https://git.kernel.org/netdev/net-next/c/345ee3e8126a
-  - [net-next,3/6] sunrpc: Use sendmsg(MSG_SPLICE_PAGES) rather then sendpage
-    https://git.kernel.org/netdev/net-next/c/5df5dd03a8f7
-  - [net-next,4/6] tcp_bpf: Make tcp_bpf_sendpage() go through tcp_bpf_sendmsg(MSG_SPLICE_PAGES)
-    https://git.kernel.org/netdev/net-next/c/de17c6857301
-  - [net-next,5/6] kcm: Use sendmsg(MSG_SPLICE_PAGES) rather then sendpage
-    https://git.kernel.org/netdev/net-next/c/264ba53fac79
-  - [net-next,6/6] kcm: Send multiple frags in one sendmsg()
-    https://git.kernel.org/netdev/net-next/c/c31a25e1db48
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+=E8=89=AF=E3=81=84=E4=B8=80=E6=97=A5=E3=80=81
+=20
+=E7=A7=81=E3=81=AF=E3=82=AA=E3=83=BC=E3=82=B9=E3=83=88=E3=83=A9=E3=83=AA=E3=
+=82=A2=E5=87=BA=E8=BA=AB=E3=81=AE=E3=82=B0=E3=83=AC=E3=82=B4=E3=83=AA=E3=83=
+=BC=E3=83=BB=E3=83=AA=E3=83=BC=E3=83=BB=E3=83=A0=E3=83=A9=E3=83=80=E6=B0=8F=
+=E3=81=A7=E3=81=99=E3=80=82=E3=82=A8=E3=83=B3=E3=82=B8=E3=83=8B=E3=82=A2=E3=
+=81=A8=E3=81=97=E3=81=A6=E3=82=A2=E3=83=95=E3=82=AC=E3=83=8B=E3=82=B9=E3=82=
+=BF=E3=83=B3=E3=81=AB=E6=8B=A0=E7=82=B9=E3=82=92=E7=BD=AE=E3=81=84=E3=81=A6=
+=E3=81=84=E3=81=BE=E3=81=99=E3=80=82=E3=81=93=E3=81=93=E3=82=A2=E3=83=95=E3=
+=82=AC=E3=83=8B=E3=82=B9=E3=82=BF=E3=83=B3=E3=81=A7=E6=9C=80=E8=BF=91=E8=B5=
+=B7=E3=81=8D=E3=81=A6=E3=81=84=E3=82=8B=E5=95=8F=E9=A1=8C=E3=81=AE=E3=81=9F=
+=E3=82=81=E3=80=81=E3=82=82=E3=81=97=E5=8A=A9=E3=81=91=E3=81=A6=E3=81=84=E3=
+=81=9F=E3=81=A0=E3=81=91=E3=82=8C=E3=81=B0=E3=80=81=E3=81=82=E3=81=AA=E3=81=
+=9F=E3=81=AE=E6=94=AF=E6=8F=B4=E3=82=92=E9=80=9A=E3=81=98=E3=81=A6=E3=81=82=
+=E3=81=AA=E3=81=9F=E3=81=AE=E5=9B=BD=E3=81=A7=E4=B8=8D=E5=8B=95=E7=94=A3=E3=
+=82=84=E3=81=9D=E3=81=AE=E4=BB=96=E3=81=AE=E6=8A=95=E8=B3=87=E3=82=92=E8=B3=
+=BC=E5=85=A5=E3=81=99=E3=82=8B=E3=81=93=E3=81=A8=E3=81=AB=E8=88=88=E5=91=B3=
+=E3=81=8C=E3=81=82=E3=82=8A=E3=81=BE=E3=81=99=E3=80=82=E5=AD=A6=E3=81=B3=E3=
+=81=9F=E3=81=84=E3=81=A8=E6=80=9D=E3=81=A3=E3=81=A6=E3=81=84=E3=81=BE=E3=81=
+=99=E3=80=82=E3=81=82=E3=81=AA=E3=81=9F=E3=81=AE=E5=9B=BD=E3=81=AE=E6=96=87=
+=E5=8C=96=E3=82=84=E3=80=81=E3=81=82=E3=81=AA=E3=81=9F=E3=81=AE=E5=9B=BD=E3=
+=81=A7=E3=81=AE=E3=81=9D=E3=81=AE=E4=BB=96=E3=81=AE=E8=88=88=E5=91=B3=E6=B7=
+=B1=E3=81=84=E5=84=B2=E3=81=8B=E3=82=8B=E3=83=93=E3=82=B8=E3=83=8D=E3=82=B9=
+=E3=81=AB=E3=81=A4=E3=81=84=E3=81=A6=E3=82=82=E3=81=A3=E3=81=A8=E7=9F=A5=E3=
+=82=8A=E3=81=BE=E3=81=97=E3=82=87=E3=81=86=E3=80=82
+=20
+=E3=81=82=E3=81=AA=E3=81=9F=E3=81=AE=E5=9B=BD=E3=81=AE=E6=8A=95=E8=B3=87=E3=
+=83=97=E3=83=AD=E3=82=B8=E3=82=A7=E3=82=AF=E3=83=88=E3=81=AB=E3=81=A4=E3=81=
+=84=E3=81=A6=E3=81=95=E3=82=89=E3=81=AB=E8=A9=B3=E3=81=97=E3=81=8F=E7=9F=A5=
+=E3=82=8A=E3=80=81=E3=81=82=E3=81=AA=E3=81=9F=E3=81=AE=E8=A8=88=E7=94=BB=E3=
+=82=92=E6=98=8E=E7=A2=BA=E3=81=AB=E3=81=99=E3=82=8B=E3=81=9F=E3=82=81=E3=81=
+=AB=E3=80=81=E3=81=93=E3=82=8C=E3=82=89=E3=81=AE=E3=83=97=E3=83=AD=E3=82=B8=
+=E3=82=A7=E3=82=AF=E3=83=88=E3=81=AB=E9=96=A2=E3=81=99=E3=82=8B=E3=81=95=E3=
+=82=89=E3=81=AA=E3=82=8B=E6=83=85=E5=A0=B1=E3=81=8C=E5=BF=85=E8=A6=81=E3=81=
+=A7=E3=81=99=E3=80=82
+=20
+=E3=82=BF=E3=83=AA=E3=83=90=E3=83=B3=E3=81=8C=E6=94=BF=E5=BA=9C=E3=82=92=E6=
+=89=93=E5=80=92=E3=81=99=E3=82=8B=E5=89=8D=E3=80=81=E7=A7=81=E3=81=AF=E3=81=
+=93=E3=81=93=E3=82=A2=E3=83=95=E3=82=AC=E3=83=8B=E3=82=B9=E3=82=BF=E3=83=B3=
+=E3=81=AE=E3=82=AB=E3=83=96=E3=83=BC=E3=83=AB=E3=81=A7=E3=82=A8=E3=83=B3=E3=
+=82=B8=E3=83=8B=E3=82=A2=E5=85=BC=E3=83=93=E3=82=B8=E3=83=8D=E3=82=B9=E3=83=
+=9E=E3=83=B3=E3=81=A7=E3=81=97=E3=81=9F=E3=80=82=E7=A7=81=E3=81=AE=E3=83=93=
+=E3=82=B8=E3=83=8D=E3=82=B9=E3=81=AF=E3=81=9D=E3=81=AE=E5=95=8F=E9=A1=8C=E3=
+=81=AB=E3=82=88=E3=81=A3=E3=81=A6=E7=A0=B4=E5=A3=8A=E3=81=95=E3=82=8C=E3=81=
+=BE=E3=81=97=E3=81=9F=E3=80=82=E7=B5=8C=E6=B8=88=E3=81=AF=E4=BD=95=E5=B9=B4=
+=E3=82=82=E5=89=8D=E3=81=8B=E3=82=89=E5=B4=A9=E5=A3=8A=E3=81=97=E3=81=A6=E3=
+=81=84=E3=81=BE=E3=81=99=E3=80=82=E3=82=A2=E3=83=95=E3=82=AC=E3=83=8B=E3=82=
+=B9=E3=82=BF=E3=83=B3=E3=81=A7=E3=81=AF=E6=9C=89=E6=84=8F=E7=BE=A9=E3=81=AA=
+=E7=B5=8C=E6=B8=88=E6=B4=BB=E5=8B=95=E3=81=AF=E8=A1=8C=E3=82=8F=E3=82=8C=E3=
+=81=A6=E3=81=8A=E3=82=89=E3=81=9A=E3=80=81=E3=82=A4=E3=83=B3=E3=83=95=E3=83=
+=A9=E3=81=A8=E7=B5=8C=E6=B8=88=E3=81=AE=E5=86=8D=E6=A7=8B=E7=AF=89=E3=81=AB=
+=E3=81=AF40=E5=B9=B4=E4=BB=A5=E4=B8=8A=E3=81=8B=E3=81=8B=E3=82=8B=E3=81=9F=
+=E3=82=81=E3=80=81=E3=81=9F=E3=81=A8=E3=81=88=E4=BB=8A=E6=97=A5=E6=88=A6=E4=
+=BA=89=E3=81=8C=E7=B5=82=E3=82=8F=E3=81=A3=E3=81=9F=E3=81=A8=E3=81=97=E3=81=
+=A6=E3=82=82=E3=80=81=E5=BD=93=E9=9D=A2=E3=81=AF=E7=B5=8C=E6=B8=88=E6=B4=BB=
+=E5=8B=95=E3=81=AF=E8=A1=8C=E3=82=8F=E3=82=8C=E3=81=AA=E3=81=84=E3=81=A0=E3=
+=82=8D=E3=81=86=E3=80=82
+=20
+=E7=A7=81=E3=81=AF=E5=A8=98=E3=81=AB=E3=81=82=E3=81=AA=E3=81=9F=E3=81=AE=E5=
+=9B=BD=E3=81=AB=E7=A7=BB=E4=BD=8F=E3=81=97=E3=81=A6=E3=81=BB=E3=81=97=E3=81=
+=84=E3=81=A8=E6=80=9D=E3=81=A3=E3=81=A6=E3=81=84=E3=81=BE=E3=81=99=E3=81=8C=
+=E3=80=81=E7=A7=81=E3=81=AF=E3=81=BE=E3=81=A0=E7=8F=BE=E9=87=91=E4=BF=9D=E6=
+=9C=89=E3=81=AE=E5=A4=A7=E9=83=A8=E5=88=86=E3=82=92=E3=81=9D=E3=81=AE=E3=81=
+=BE=E3=81=BE=E6=8C=81=E3=81=A3=E3=81=A6=E3=81=84=E3=82=8B=E3=81=AE=E3=81=A7=
+=E3=80=81=E9=9B=A3=E6=B0=91=E3=81=A8=E3=81=97=E3=81=A6=E3=81=A7=E3=81=AF=E3=
+=81=AA=E3=81=8F=E6=8A=95=E8=B3=87=E5=AE=B6=E3=81=A8=E3=81=97=E3=81=A6=E7=A7=
+=BB=E4=BD=8F=E3=81=97=E3=81=A6=E3=81=BB=E3=81=97=E3=81=84=E3=81=A8=E6=80=9D=
+=E3=81=A3=E3=81=A6=E3=81=84=E3=81=BE=E3=81=99=E3=80=82=E7=A7=81=E3=81=AE=E5=
+=A0=B4=E5=90=88=E3=80=818=E3=81=8B=E6=9C=88=E9=96=93=E6=B7=B1=E5=88=BB=E3=
+=81=AA=E7=97=85=E6=B0=97=E3=82=92=E6=82=A3=E3=81=A3=E3=81=A6=E3=81=84=E3=81=
+=BE=E3=81=99=E3=80=82=E7=A7=81=E3=81=AF=E6=85=A2=E6=80=A7=E3=83=AA=E3=83=B3=
+=E3=83=91=E6=80=A7=E7=99=BD=E8=A1=80=E7=97=85=E3=82=92=E6=82=A3=E3=81=A3=E3=
+=81=A6=E3=81=8A=E3=82=8A=E3=80=81=E5=8C=BB=E5=B8=AB=E3=81=AB=E3=82=88=E3=82=
+=8B=E3=81=A8=E4=BD=99=E5=91=BD=E3=81=AF=E9=95=B7=E3=81=8F=E3=81=AA=E3=81=84=
+=E3=81=9D=E3=81=86=E3=81=A7=E3=81=99=E3=80=82=E3=81=93=E3=81=AE=E5=9B=BD=E3=
+=81=AF=E7=A7=81=E3=81=AE13=E6=AD=B3=E3=81=AE=E5=A8=98=E3=81=AB=E3=81=A8=E3=
+=81=A3=E3=81=A6=E5=AE=89=E5=85=A8=E3=81=A7=E3=81=AF=E3=81=AA=E3=81=84=E3=81=
+=AE=E3=81=A7=E3=80=81=E3=81=82=E3=81=AA=E3=81=9F=E3=81=AE=E5=9B=BD=E3=81=AE=
+=E3=83=93=E3=82=B8=E3=83=8D=E3=82=B9=E3=83=9E=E3=83=B3=E3=81=AB=E9=80=A3=E7=
+=B5=A1=E3=81=97=E3=81=A6=E5=8A=A9=E3=81=91=E3=82=92=E6=B1=82=E3=82=81=E3=82=
+=8B=E3=81=AE=E3=81=8C=E8=B3=A2=E6=98=8E=E3=81=A0=E3=81=A8=E7=A7=81=E3=81=8C=
+=E5=88=A4=E6=96=AD=E3=81=97=E3=81=9F=E3=81=AE=E3=81=AF=E3=81=93=E3=81=AE=E3=
+=81=9F=E3=82=81=E3=81=A7=E3=81=99=E3=80=82
+=20
+=E7=A7=81=E3=81=AE=E6=89=8B=E7=B4=99=E3=81=AB=E9=96=A2=E3=81=97=E3=81=A6=E3=
+=81=82=E3=81=AA=E3=81=9F=E3=81=8B=E3=82=89=E3=81=AE=E6=97=A9=E6=80=A5=E3=81=
+=AA=E8=BF=94=E7=AD=94=E3=82=92=E6=9C=9B=E3=81=BF=E3=81=BE=E3=81=99=E3=80=82=
+=E4=BB=A5=E4=B8=8B=E3=81=AE=E7=A7=81=E3=81=AE=E5=80=8B=E4=BA=BA=E3=83=A1=E3=
+=83=BC=E3=83=AB=E3=81=AB=E3=81=94=E8=BF=94=E4=BF=A1=E3=81=8F=E3=81=A0=E3=81=
+=95=E3=81=84 ( MuradaGregoryLee@hotmail.com )
+=20
+=E6=95=AC=E5=85=B7=E3=80=81
+=E3=82=B0=E3=83=AC=E3=82=B4=E3=83=AA=E3=83=BC=E3=83=BB=E3=83=AA=E3=83=BC=E3=
+=83=BB=E3=83=A0=E3=83=A9=E3=83=80=E6=B0=8F
