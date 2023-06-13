@@ -2,135 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 845EC72EDE4
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 23:29:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 023C472EDE8
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 23:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240044AbjFMV3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 17:29:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36500 "EHLO
+        id S240109AbjFMVbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 17:31:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbjFMV32 (ORCPT
+        with ESMTP id S230220AbjFMVbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 17:29:28 -0400
-Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED57173C
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 14:29:27 -0700 (PDT)
-Received: by mail-oo1-xc2f.google.com with SMTP id 006d021491bc7-55b78f40301so24009eaf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 14:29:27 -0700 (PDT)
+        Tue, 13 Jun 2023 17:31:21 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E5319B6
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 14:31:19 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id e9e14a558f8ab-3409d944009so2795ab.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 14:31:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686691766; x=1689283766;
+        d=google.com; s=20221208; t=1686691879; x=1689283879;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=m5HE/be1fUs4mLPz2SaYKZccHzMwcgmBbh761wXiNnM=;
-        b=UvQvJ1HKFaAQUKjPmhDlN7jMvGSXBDIpN8pkmYF/Bwah+h8t3CYvGVpSGid2I0e1od
-         EVrSYsLxjZIKskXU0Vvt3brC/t3bA5LGP8JPpEtjL0RMSbnCD3G31q5hwxWjam+kQ7ex
-         xxV7ezNLLsVB0tD6+MpVreQkIk6yJG7zTek10=
+        bh=NHiplLldqs8StTkBOxaUBgWS+U0FnghVyW4LVhK4+ao=;
+        b=7ptynPiofmHtSihnemIuGl8iAKCp+wgVoYQFtx1Yrunyh2vmQYOeStZROmZs87tDnr
+         Vi3tyhr6o2XOc0t+o7fH40+p11eRX2z+rwrJHyUdbb8SS/FXjKg6c69b+WIYAbc7uKfh
+         OpIDKTfnou9fmKaQw0t1liTb59FQp3O95M6K6RA0VtJh/1ALmnP+fs+88ypG+lKHRgs3
+         3QbhzgaZbwZ+kVkNGT4Vowb2Qt1cXrU+rqtTxx7vUj6LY199B0qyLocRkyfIb4ygRbBK
+         h6oxSrrvN1VMCIzVG6bmuqgRUSSeB9n7/kAGAb1Z0sg4lTu4o1s2Sje4FQ+grWb5HYea
+         6rNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686691766; x=1689283766;
+        d=1e100.net; s=20221208; t=1686691879; x=1689283879;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=m5HE/be1fUs4mLPz2SaYKZccHzMwcgmBbh761wXiNnM=;
-        b=CKYoytoOA/L47+pBRv3Yv9CMyxbN2YOU8dP2jmbZdd+FRdfGUT8eZJ2PnFHnjzd3Yy
-         JD8zJsiFCow3EYfB1QEgUH02VnS1NK+L6dWO00WVP5Dk2Ct2JWN+AyKPt2aj55UBDbFn
-         5edDWGtdhlLwRmC3NLd6TQg/mkfHduT4uiSnJjhzXfRM3k23enVu36KCmcOsvx/PzAEe
-         nACYgEuRYcm/+iMVgW24c6VWgXVZZurhcZ+yixND6mZU/pqwtcz9xi7FTKVTzK1ERBxm
-         G9Cv2H29BQFrCRNYgG4kvNrG4OBPBD9aEcUbFNYIyMa28MOBEVRyElkW0Sbb4SnghLtc
-         pS7Q==
-X-Gm-Message-State: AC+VfDzGxE2ejnoQN9I3sj62cXghMPYwuOU96cHVSY9u6VI/ZUyD3Q4i
-        S14XMeAcxpGL4xbocpXzGs1Uw2VBAvsUd68I8cQPRw==
-X-Google-Smtp-Source: ACHHUZ7fbo8Kxz8Uov9OlVFEvorMOAwEZuA89XR8G2tpT+1NdcpRdHiv7waH1TAy4137LEZTgCftvDdUkcR4RpaqMKg=
-X-Received: by 2002:a4a:e9e2:0:b0:558:b424:8c31 with SMTP id
- w2-20020a4ae9e2000000b00558b4248c31mr8037821ooc.0.1686691766049; Tue, 13 Jun
- 2023 14:29:26 -0700 (PDT)
+        bh=NHiplLldqs8StTkBOxaUBgWS+U0FnghVyW4LVhK4+ao=;
+        b=FTodkLpZh5u7ZCxXGnWlo573BfMh1XW4FDDDmPFOOYDL9UJKdc4Hyn7BokO0/rQBDw
+         1y1Iob4bFTHka6DE4IV01C0j5lXaT90Enh+tBRF8ewKKxNWJI0NkKg9JU02Vl9v/Leap
+         aYuNGrWE69LddviYhmAdpcRDrvc405gWVMo2nTO89CVuIVWmqTs4lZ7HIrgytzUypBCz
+         3MEZZBjDxj1MEXnTDkeoKG0wSZNP8T6W1+69OIjMpYc8F5CUVAxbPtBlDpoxkvWhm4ku
+         mo8qCQpeXHHYgVZGpP/9Z3I2ixYCedzjIWm7UamzLPJEsQ2hxw6mjwHK/xDF1UP30B8x
+         Guww==
+X-Gm-Message-State: AC+VfDyxKxFBX6+FGgzoXreaPzBRFQYhZiAJSKPu51n+VMDrt+AY7DcV
+        sxhIchq0ORjwCbuBWxEc7o3RpAs01XYJ0w9jmJmj
+X-Google-Smtp-Source: ACHHUZ5RpILx8ZmepUai3ca1XkjF3I4umpSz9jXNbJu/gSbqft0PB9qE5MWFrwod/JZLIenVqb9SlJz3T7Xt1IRPusg=
+X-Received: by 2002:a05:6e02:1b06:b0:340:502b:1487 with SMTP id
+ i6-20020a056e021b0600b00340502b1487mr79874ilv.12.1686691878870; Tue, 13 Jun
+ 2023 14:31:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <CABi2SkWx_BnEHzGqqqbDMJi+vi-5a7XkQUCkyesN5PUtk23SgQ@mail.gmail.com>
- <CABi2SkXw6ZD-M1ZrcXNL7abtM=RzQXv716PPM_k=1Tay=5rUFA@mail.gmail.com> <ZIjOlU5EfVNt6NRU@x1n>
-In-Reply-To: <ZIjOlU5EfVNt6NRU@x1n>
-From:   Jeff Xu <jeffxu@chromium.org>
-Date:   Tue, 13 Jun 2023 14:29:14 -0700
-Message-ID: <CABi2SkXE4pUhHucZ_c-_4Ux-VcLKic0+HY_DN2wUEC6DGkDvQQ@mail.gmail.com>
-Subject: Re: inconsistence in mprotect_fixup mlock_fixup madvise_update_vma
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-mm@kvack.org, linux-hardening@vger.kernel.org,
-        Liam.Howlett@oracle.com, zhangpeng.00@bytedance.com,
-        akpm@linux-foundation.org, koct9i@gmail.com, david@redhat.com,
-        ak@linux.intel.com, hughd@google.com, emunson@akamai.com,
-        rppt@linux.ibm.com, aarcange@redhat.com,
-        linux-kernel@vger.kernel.org, Lorenzo Stoakes <lstoakes@gmail.com>
+References: <20230601055846.2349566-1-jstultz@google.com> <cbcbe3e3-e657-25f2-199d-ce78711545bd@arm.com>
+In-Reply-To: <cbcbe3e3-e657-25f2-199d-ce78711545bd@arm.com>
+From:   John Stultz <jstultz@google.com>
+Date:   Tue, 13 Jun 2023 14:31:05 -0700
+Message-ID: <CANDhNCrUd_eistcitQU4im1H=GZVNh09RLzJZLTQFAZFLbAbCw@mail.gmail.com>
+Subject: Re: [PATCH v4 00/13] Generalized Priority Inheritance via Proxy
+ Execution v3
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Joel Fernandes <joelaf@google.com>,
+        Qais Yousef <qyousef@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Zimuzo Ezeozue <zezeozue@google.com>,
+        Youssef Esmat <youssefesmat@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>, kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Peter,
-
-Thanks for responding.
-
-On Tue, Jun 13, 2023 at 1:16=E2=80=AFPM Peter Xu <peterx@redhat.com> wrote:
+On Tue, Jun 13, 2023 at 10:36=E2=80=AFAM Dietmar Eggemann
+<dietmar.eggemann@arm.com> wrote:
 >
-> Hi, Jeff,
->
-> On Tue, Jun 13, 2023 at 08:26:26AM -0700, Jeff Xu wrote:
-> > + more ppl to the list.
+> On 01/06/2023 07:58, John Stultz wrote:
+> > After having to catch up on other work after OSPM[1], I've finally
+> > gotten back to focusing on Proxy Execution and wanted to send out this
+> > next iteration of the patch series for review, testing, and feedback.
+> > (Many thanks to folks who provided feedback on the last revision!)
 > >
-> > On Mon, Jun 12, 2023 at 6:04=E2=80=AFPM Jeff Xu <jeffxu@chromium.org> w=
-rote:
-> > >
-> > > Hello,
-> > >
-> > > There seems to be inconsistency in different VMA fixup
-> > > implementations, for example:
-> > > mlock_fixup will skip VMA that is hugettlb, etc, but those checks do
-> > > not exist in mprotect_fixup and madvise_update_vma. Wouldn't this be =
-a
-> > > problem? the merge/split skipped by mlock_fixup, might get acted on i=
+> > As mentioned previously, this Proxy Execution series has a long history=
+:
+> > First described in a paper[2] by Watkins, Straub, Niehaus, then from
+> > patches from Peter Zijlstra, extended with lots of work by Juri Lelli,
+> > Valentin Schneider, and Connor O'Brien. (and thank you to Steven Rosted=
+t
+> > for providing additional details here!)
+> >
+> > So again, many thanks to those above, as all the credit for this series
+> > really is due to them - while the mistakes are likely mine.
+> >
+> > Overview:
+> > =E2=80=94----------
+> > Proxy Execution is a generalized form of priority inheritance. Classic
+> > priority inheritance works well for real-time tasks where there is a
+> > straight forward priority order to how things are run. But it breaks
+> > down when used between CFS or DEADLINE tasks, as there are lots
+> > of parameters involved outside of just the task=E2=80=99s nice value wh=
+en
+> > selecting the next task to run (via pick_next_task()).  So ideally we
+> > want to imbue the mutex holder with all the scheduler attributes of
+> > the blocked waiting task.
+> >
+> > Proxy Execution does this via a few changes:
+> > * Keeping tasks that are blocked on a mutex *on* the runqueue
+> > * Keeping additional tracking of which mutex a task is blocked on, and
+> >   which task holds a specific mutex.
+> > * Special handling for when we select a blocked task to run, so that we
+> >   instead run the mutex holder.
+> >
+> > The first of these is the most difficult to grasp (I do get the mental
+> > friction here: blocked tasks on the *run*queue sounds like nonsense!
+> > Personally I like to think of the runqueue in this model more like a
+> > =E2=80=9Ctask-selection queue=E2=80=9D).
+> >
+> > By leaving blocked tasks on the runqueue, we allow pick_next_task() to
+> > choose the task that should run next (even if it=E2=80=99s blocked wait=
+ing on a
+> > mutex). If we do select a blocked task, we look at the task=E2=80=99s b=
+locked_on
+> > mutex and from there look at the mutex=E2=80=99s owner task. And in the=
+ simple
+> > case, the task which owns the mutex is what we then choose to run,
+> > allowing it to release the mutex.
+> >
+> > This means that instead of just tracking =E2=80=9Ccurr=E2=80=9D, the sc=
+heduler needs to
+> > track both the scheduler context (what was picked and all the state use=
+d
+> > for scheduling decisions), and the execution context (what we=E2=80=99r=
+e
+> > running)
+> >
+> > In this way, the mutex owner is run =E2=80=9Con behalf=E2=80=9D of the =
+blocked task
+> > that was picked to run, essentially inheriting the scheduler context of
+> > the blocked task.
+> >
+> > As Connor outlined in a previous submission of this patch series,  this
+> > raises a number of complicated situations:  The mutex owner might itsel=
+f
+> > be blocked on another mutex, or it could be sleeping, running on a
+> > different CPU, in the process of migrating between CPUs, etc.
+> >
+> > But the functionality provided by Proxy Execution is useful, as in
+> > Android we have a number of cases where we are seeing priority inversio=
 n
-> > > the madvice/mprotect case.
-> > >
-> > > mlock_fixup currently check for
-> > > if (newflags =3D=3D oldflags || (oldflags & VM_SPECIAL) ||
-> > > is_vm_hugetlb_page(vma) || vma =3D=3D get_gate_vma(current->mm) ||
-> > > vma_is_dax(vma) || vma_is_secretmem(vma))
+> > (not unbounded, but longer than we=E2=80=99d like) between =E2=80=9Cfor=
+eground=E2=80=9D and
+> > =E2=80=9Cbackground=E2=80=9D SCHED_NORMAL applications, so having a gen=
+eralized solution
+> > would be very useful.
+> >
+> > New in v4:
+> > =E2=80=94------
+> > * Fixed deadlock that was caused by wait/wound mutexes having circular
+> >   blocked_on references by clearing the blocked_on pointer on the task
+> >   we are waking to wound/die.
 >
-> The special handling you mentioned in mlock_fixup mostly makes sense to m=
-e.
+> I always get this when running `insmod ./test-ww_mutex.ko` with default
+> SCHED_FEAT(TTWU_QUEUE, true) with this fix. Don't understand the issue
+> fully yet:
 >
-> E.g., I think we can just ignore mlock a hugetlb page if it won't be
-> swapped anyway.
+> qemu-system-x86_64 ... -smp cores=3D64 -enable-kvm ...
 >
-> Do you encounter any issue with above?
->
-> > > Should there be a common function to handle VMA merge/split ?
->
-> IMHO vma_merge() and split_vma() are the "common functions".  Copy Lorenz=
-o
-> as I think he has plan to look into the interface to make it even easier =
-to
-> use.
->
-The mprotect_fixup doesn't have the same check as mlock_fixup. When
-userspace calls mlock(), two VMAs might not merge or split because of
-vma_is_secretmem check, However, when user space calls mprotect() with
-the same address range, it will merge/split.  If mlock() is doing the
-right thing to merge/split the VMAs, then mprotect() is not ?
+> [   21.109134] Beginning ww mutex selftests
+> [   26.397545] ------------[ cut here ]------------
+> [   26.397951] WARNING: CPU: 41 PID: 0 at kernel/sched/core.c:4126 sched_=
+ttwu_pending+0xc5/0x120
 
-Also skipping merge of VMA might be OK, but skipping split doesn't,
-wouldn't that cause inconsistent between vma->vm_flags and what is
-provisioned in the page ?
+Thanks for testing it out and sharing this!
 
-Thanks
--Jeff Xu
+Yeah. I've seen this as well, and I suspect this is tied to the
+runqueue accounting issues that are causing the null sched entity
+issue I've been chasing.
 
+One issue seems to be the blocked_on manipulation done in the
+try_to_wakeup() path. For mutex blocked tasks, try_to_wakeup() needs
+to clear blocked_on so the task can actually run and try to acquire
+the mutex. This is why __mutex_lock_slowpath_common() sets blocked_on
+twice.  I'm seeing some trouble where try_to_wakeup() ends up
+migrating the still technically blocked task (as it's not yet acquired
+the mutex, just waking to try to take it) back to the p->wake_cpu -
+but the issue is that the task has not been deactivated from the
+current runqueue.
 
-> --
-> Peter Xu
->
+The "fix" for ww_mutex circular dependencies resolution in
+__ww_mutex_die() is similar, as it clears the blocked_on value and
+tries to wake the task, but then ttwu often migrates the task without
+deactivating it from the current rq.
+
+Unfortunately once the rq accounting is gone wrong, the failures seem
+multi-modal, so trying to get enough tracing logs in place to get your
+head around what's going wrong in one case is hard because run-to-run
+it will fail differently.
+
+In my current tree I've extended this so we have a separate
+task->blocked_on_waking flag, so we don't mess with the
+task->blocked_on state in ttwu & __wwmutex_die and can distinguish
+between waking a blocked task and waking an unblocked task.  However
+that in itself isn't working yet, so I'm currently deconstructing the
+patch series a bit to try to understand that logic better and if we
+can avoid special casing as much in the ttwu path (I'd like to be able
+to take mutex blocked tasks and also just drop them from the runqueue
+- as we do now - and have things work so we have fallback options if
+proxy() migrations are taking too long to resolve).
+
+thanks
+-john
