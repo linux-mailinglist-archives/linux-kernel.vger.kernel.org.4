@@ -2,342 +2,671 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3D572DD68
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 11:15:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C04E772DD6A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 11:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241831AbjFMJPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 05:15:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43234 "EHLO
+        id S241834AbjFMJPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 05:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240910AbjFMJPB (ORCPT
+        with ESMTP id S241841AbjFMJPk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 05:15:01 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2070.outbound.protection.outlook.com [40.107.8.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84EB18E;
-        Tue, 13 Jun 2023 02:14:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Onx+YviQZooKxNskRa/8F6u8XfYM3uyVIaIpUESn7+5nPdmZ3ZUGRcw7aHa/5stUo9TPvMkPr6lRjuvh8eG0R5U7rAMl84t0YTGlgEdp+VLFUCCKKK4zShSeTly57Upo+1jM/yRCOyssxNmBurSLQqhnG62KLVcRCJC8OflmyB+nUhIGA4kgLbnHrU/kWH4MfHA4qtiW07al5E+hlNqCnH3xpLEt2extrhlgd0TCVdRCpt0Iw/IsGKD+oOB8jtmAfAzcw5w8SSEz+6UsX8qwONhzgbbUbVXHne15BQETMnRmkHdkmoMjeS4QJylabQpdSKCHPKQt1M6WdndCtfxQow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AM2PtbcFDMDxN34Bj4aAyNZfiRnFXYbh5T8Wb4ig9ao=;
- b=J+yUQ+R6jko9yf3QXFqT0lXJPMU9ZJxX0z/fC7QT+gPlIUHK1UtmXao34QideQPOm/1yichAXzMUZ4xjXNAw3ufRIMVLVh4nUd3if85HBTWeqhWZPCkFklDUTliYpkRLIeC73wmOebmKPSvk5k3HlXl8SPDTw7XwpF3CWal9c5Fj+YIDW77SC7DlBgbZjYXeE+LsfMd7KQmx2t6wyv5YJirrxoVM9Hgjbzw7opKmaTn9eSsfEohawkSOrnFjPJPzMvxho5xUzsjDeo1zAyR1O9tkkTZ9xd1KGmfiNC14mL1E/g+fyjwfOc/Tu+9S92FJSm8XSiR64PIM97EoaonkKw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AM2PtbcFDMDxN34Bj4aAyNZfiRnFXYbh5T8Wb4ig9ao=;
- b=ITG3RDRUk+0hg1hHwWkZvo39E5WxT5cOEjVUucArIUctl9Bsdb1LvKWFBwxWva4DpHRV4bjsn0zB42XV42g0Bmro2AcC0TxkBDXOhGAWJjj4iAAQ+A0wBKlr0Argg38m5F8e8BkBJkvnX0VT38eZOzNCPKHvnaHahDFic50fspg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
- by PAWPR04MB10008.eurprd04.prod.outlook.com (2603:10a6:102:38b::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Tue, 13 Jun
- 2023 09:14:56 +0000
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::79f2:2888:dbd7:ad6f]) by AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::79f2:2888:dbd7:ad6f%7]) with mapi id 15.20.6455.039; Tue, 13 Jun 2023
- 09:14:56 +0000
-From:   Ming Qian <ming.qian@nxp.com>
-To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl
-Cc:     shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        xiahong.bao@nxp.com, eagle.zhou@nxp.com, tao.jiang_2@nxp.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] media: amphion: add helper function to get id name
-Date:   Tue, 13 Jun 2023 17:14:08 +0800
-Message-Id: <20230613091408.7676-1-ming.qian@nxp.com>
-X-Mailer: git-send-email 2.38.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2P153CA0007.APCP153.PROD.OUTLOOK.COM (2603:1096::17) To
- AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
+        Tue, 13 Jun 2023 05:15:40 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECC31A5
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 02:15:36 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3f98276f89cso146011cf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 02:15:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686647736; x=1689239736;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZQhxEt01WWC9jKURdXbeXoWofOugqPqfEcw3e/eZLi8=;
+        b=lwHtXgHnxujXHCk/i19J0JxWSS5HphPQ+FwgkqQy5n723YZ8ANv3OyJu4OI7vq47sI
+         Cpy8Ne9aOCsYvSqOOH4hMFhP1rcIujxp3V1iAOcGntZwaBkgCqJVWHzZ1tNwU9KGS4Hg
+         vvayrKHGLNwvvDzczps4NEGkL0DcdPti74fU3mFKbMm+u8Ej8ZVieNmeC3J7ubaImzNs
+         8DM17DZgHW7gK7/GXM9mSTj23j6yZosnBuWZRGHjpEDAS6bE/M6zV8lH4YVT6+YicYTd
+         mnXNuPdOheOaLzUwVBM5ykUEuK3Wn02iCNaB3CdQnd+BnJ3NRthNiVVbD3p7iHCxT07u
+         YMNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686647736; x=1689239736;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZQhxEt01WWC9jKURdXbeXoWofOugqPqfEcw3e/eZLi8=;
+        b=AUj8GiO2cNMwAx3G5EA77sskBy4vJIUUJIdSW0xjFs13HWObl7IcxdSmMjO3OhUS+G
+         KZEgvDRtIb5psGZM9O9qICoZBWP/besGERNvTrvBaNUgvU223kdqyiPTp/2WEYbvunPi
+         yqU7jrMdzKWRK0g8Wb+u1ViP9TC1/IsAorMjgFgzl4DN6+w6k39xg/li+HZZsz7IRlfp
+         K8B7X4KlNsjQ9Iq8FdDQiAvbzd651e52ViTXkjfrhg2OJxch50ISW0tHUYJ++E1m+1XS
+         jQoANbPAw5ygRW+O067Xgy2/i2sF8BsFybtHhsVbLKFr7C8WO5pxdhbDNEdHTz7AQOZk
+         TbRA==
+X-Gm-Message-State: AC+VfDzgsK5rdlxRn51oKM/b5sJClgNxUJr4PiFwEybT9sPCbLDQMjuS
+        L5pXY5HO3/bR9AA/qysRd6w6Wx8JlUootf5eMUzEcQ==
+X-Google-Smtp-Source: ACHHUZ7yueJ0OvZrVyfHFtA6puhJYQ84pbRBIvxFiyNMFtow7MEXaV3yqC8CVtph+aOVcs/0QlNkNTyBWP94i0z2FSM=
+X-Received: by 2002:ac8:7d4f:0:b0:3ef:343b:fe7e with SMTP id
+ h15-20020ac87d4f000000b003ef343bfe7emr92897qtb.2.1686647735616; Tue, 13 Jun
+ 2023 02:15:35 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM6PR04MB6341:EE_|PAWPR04MB10008:EE_
-X-MS-Office365-Filtering-Correlation-Id: c7da34e8-1c5d-46b3-3ed9-08db6beea7ce
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 305ax0MzF3+u1W4hnr0qAPrn57xueagvMOCaly3p6g6yj+ojYmjpYYVYtcDPXlU/Ty9DrH7skHSaHlnmVHtHfy8+Q28OeIImbiR4NZPl5KjA9+KmmfW62adO3Y5kAwcB91r8pkxS8LCTXWZpx5MtroO7ACY+/egc3Hq6ejq9/mYnU3w07GEgBIS+UO0jZfwhQkFZaqQA5sZmLX3ONuj13/ns/RVn/2LcGRvwGYV0M7+M9wIsHOqeifls55/x7Jaz+4yiYeknSBpDJW2qrSzkjp1WKLP68WJOfAe4aTaC61U6UqRwp8FZLITNUbHtDpOQJ2wMZocURZ8hH967GfV8qIzCth/lSgZWYALI37u9M4KoW71/2ukx3U17rilkvj9MseqAt3mexgHLkSaKHUXqxBQmjCDGB5teigOkRN51Z7asIyrizbAUBG+oR7OmV1YdCyx3Hi4qFXRl0IBpqL1PKPaBYDpPcqkXkQVccyWGocGekqQT09HdyrNvh21RlHffyRu03iFVyZv2b9YMsVoY0KDVSUG32clmNlCu1EWPMzQOH6yeJ0oteLkaBSXADS5hrr7c8tpz7sfxJ7ldOkrXuXMAlXIEKVuPgrWIr1kNEFiUECoCJc5SrU3AMfqgk3C1
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(39860400002)(346002)(136003)(396003)(451199021)(2616005)(83380400001)(38350700002)(36756003)(38100700002)(86362001)(478600001)(44832011)(4326008)(6666004)(6486002)(8936002)(8676002)(2906002)(5660300002)(7416002)(52116002)(66556008)(66476007)(66946007)(41300700001)(316002)(186003)(6512007)(6506007)(26005)(1076003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pMZeTyfFFYM1/2rujH0Wabf9UhNlC9y9Sfyg++i3KwkcnuhX7PHXIY+h0rEZ?=
- =?us-ascii?Q?T/DyOpDsI8GSQXJdvzjsgV75p4S4Odss1dIbWW7HSe2eshNiS1SoMIChse4p?=
- =?us-ascii?Q?1EkfntCnT1AS1YtimRdpHHvh1b29MSZ0L/1urixcVxAa5ZezPFqdRf9eRKZb?=
- =?us-ascii?Q?DXZie/zt/3pS6guZ39HOlMbMujdeSIRuXpMIzlWQWy5LvQVR0s74YTpYW/AB?=
- =?us-ascii?Q?6BwMqNJ9s64eeyzzeDi47rxj0RXlXg/hlR36PcOeKzK4Gu3bxfI8Up0WXxaU?=
- =?us-ascii?Q?oXrsWqZhAI020O2Jc+IOOhDUDKzx5K0JrnMqh+LkwU8jVMxNQfnth0Ruwz3Q?=
- =?us-ascii?Q?ciiufUAV+xIM5NwC2dZ0QBXR++WI/zH0oHJ74hRXGKbysEN6aXX8tib/FVIh?=
- =?us-ascii?Q?eBM/ClGTAXki4UHFBMyfmwdSn/A6jplxyNQObbOfVZcvOxnF9Vxh/kENXARh?=
- =?us-ascii?Q?G7zmIdlcCUBZQekTbDHf09KMDJhAC5iHa2U3OtbTP6vU08Q6j3EpisCOplPo?=
- =?us-ascii?Q?nbdo9c9Nt7shtc/s5q9vkEcmzIPy5EUz4tw97fkDnlKk/izgDqjXvpxVBkJ4?=
- =?us-ascii?Q?2Ki/qKi2PJ/EelJpzkpcq+k0/uCZJrcGmHb1u9XdgxExlt1v8ZPUFRcVF42d?=
- =?us-ascii?Q?ZXZa4ZiNFMCJJuks1Gp7GVi/flFI2OXZ6dH/xSP5d2Fag8qEugaw3BuphxK8?=
- =?us-ascii?Q?wMeeV06fAIF3HTfvUKyLbc/gBE1nmH2Jm/EqnH5OyYrzW+MzeD9rNUA7NxZL?=
- =?us-ascii?Q?Y1BsZX2m56bk4jc/xnWWmpqeMPbFm4ClYQjV2KQCV6oD9UMsE7OZrzLHNLcV?=
- =?us-ascii?Q?LRIFXZfRcCNEBnN+IlMYLAav975CNhs7SeO6MU7gMV0VpsMh7c43ewnGrKBc?=
- =?us-ascii?Q?74kKs0Bpv7OiiKmP6/RnHrQ4Fvu5EODFz9tlX/bCq1JZDKrCOtISHW88i3XF?=
- =?us-ascii?Q?xfhpgFMQCSe16w7f4I9L/64OuVs1SfztnB1jof3yhIN9LArs9xBfupUJWxLd?=
- =?us-ascii?Q?mQ3pYio3k/dmCL2eqKpxdgu3ga/fbS2CMt6Y/AcJ69JIDMkOe3BPLvUKf+4h?=
- =?us-ascii?Q?5Jl/AtoBoxGUP2tM7SaUmI1Bqj3S0giTDQNqfNMeCFrreWdzIAjKNJCic54Q?=
- =?us-ascii?Q?CWL2EBhz4O0tVjsZIzAKny/ZhJ3TaD3ppISoH84/HCz5c7e1aTku6bFSkK6y?=
- =?us-ascii?Q?M/ljspoW44NHHLvyEQhiFp3fhhGwz9Emh1rpeDAfkm4Y2vhA1Up1Z3KQzj51?=
- =?us-ascii?Q?dG1MZlmcCuquQz0J/CspxHMvg07v5c338yetj2nEpsbnbrHKL6xqqfTybyMT?=
- =?us-ascii?Q?lMgD/8MjZ10oz2R8GWLvL8W8sjYZE3aABiUNSgtPiwHAicLarYJhtQTOodfh?=
- =?us-ascii?Q?PM51uVrk7EZ6fw0qIz/PfSCFlui5zuP2LMRO1CtAApjMJajyEF4JLhZDI+PC?=
- =?us-ascii?Q?puvd1G5ZxoN23DsyZO4rRRkLVAJ0JrSPWVoSjrPanytbPef/RbwRoMqEL7yb?=
- =?us-ascii?Q?hxjKhSWdUgOqwQFxTN+Z2AIzCEPYLEfa+emOqSMt6wnzkkvn4Up2d31jWS2k?=
- =?us-ascii?Q?nSqOVUUxrICS0ClLrHmpmcn2/6//YF4HaPdGB8T4?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c7da34e8-1c5d-46b3-3ed9-08db6beea7ce
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2023 09:14:56.7377
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ITZhG/LBz9kTY/9bTr+VBz2cepdpLSOkOPrZYgW0BDKcE6EcL+NVC5yeLDq+mSx3xSFIOCxlqYn0v+8tibdqGg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR04MB10008
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230525180209.19497-1-james.morse@arm.com> <20230525180209.19497-25-james.morse@arm.com>
+In-Reply-To: <20230525180209.19497-25-james.morse@arm.com>
+From:   Peter Newman <peternewman@google.com>
+Date:   Tue, 13 Jun 2023 11:15:24 +0200
+Message-ID: <CALPaoCjxUMy_yW0+4MgssiisoDpeP8m62fP9nhTcse9nKiXM+A@mail.gmail.com>
+Subject: Re: [PATCH v4 24/24] x86/resctrl: Separate arch and fs resctrl locks
+To:     James Morse <james.morse@arm.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        carl@os.amperecomputing.com, lcherian@marvell.com,
+        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
+        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Xin Hao <xhao@linux.alibaba.com>, dfustini@baylibre.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-convert numbers into meaningful names,
-then it can improve the log readability
+Hi James,
 
-Fixes: 9f599f351e86 ("media: amphion: add vpu core driver")
-Signed-off-by: Ming Qian <ming.qian@nxp.com>
----
- drivers/media/platform/amphion/vdec.c        |  9 +--
- drivers/media/platform/amphion/vpu.h         |  3 +
- drivers/media/platform/amphion/vpu_cmds.c    | 11 ++--
- drivers/media/platform/amphion/vpu_dbg.c     |  6 +-
- drivers/media/platform/amphion/vpu_helpers.c | 61 ++++++++++++++++++++
- drivers/media/platform/amphion/vpu_msgs.c    |  2 +-
- 6 files changed, 79 insertions(+), 13 deletions(-)
+On Thu, May 25, 2023 at 8:03=E2=80=AFPM James Morse <james.morse@arm.com> w=
+rote:
+>
+> resctrl has one mutex that is taken by the architecture specific code,
+> and the filesystem parts. The two interact via cpuhp, where the
+> architecture code updates the domain list. Filesystem handlers that
+> walk the domains list should not run concurrently with the cpuhp
+> callback modifying the list.
+>
+> Exposing a lock from the filesystem code means the interface is not
+> cleanly defined, and creates the possibility of cross-architecture
+> lock ordering headaches. The interaction only exists so that certain
+> filesystem paths are serialised against cpu hotplug. The cpu hotplug
+> code already has a mechanism to do this using cpus_read_lock().
+>
+> MPAM's monitors have an overflow interrupt, so it needs to be possible
+> to walk the domains list in irq context. RCU is ideal for this,
+> but some paths need to be able to sleep to allocate memory.
 
-diff --git a/drivers/media/platform/amphion/vdec.c b/drivers/media/platform/amphion/vdec.c
-index 56c4deea4494..60f3a73c6a8a 100644
---- a/drivers/media/platform/amphion/vdec.c
-+++ b/drivers/media/platform/amphion/vdec.c
-@@ -299,7 +299,8 @@ static int vdec_update_state(struct vpu_inst *inst, enum vpu_codec_state state,
- 		vdec->state = VPU_CODEC_STATE_DYAMIC_RESOLUTION_CHANGE;
- 
- 	if (inst->state != pre_state)
--		vpu_trace(inst->dev, "[%d] %d -> %d\n", inst->id, pre_state, inst->state);
-+		vpu_trace(inst->dev, "[%d] %s -> %s\n", inst->id,
-+			  vpu_codec_state_name(pre_state), vpu_codec_state_name(inst->state));
- 
- 	if (inst->state == VPU_CODEC_STATE_DYAMIC_RESOLUTION_CHANGE)
- 		vdec_handle_resolution_change(inst);
-@@ -1037,8 +1038,8 @@ static int vdec_response_frame(struct vpu_inst *inst, struct vb2_v4l2_buffer *vb
- 		return -EINVAL;
- 	}
- 
--	dev_dbg(inst->dev, "[%d] state = %d, alloc fs %d, tag = 0x%x\n",
--		inst->id, inst->state, vbuf->vb2_buf.index, vdec->seq_tag);
-+	dev_dbg(inst->dev, "[%d] state = %s, alloc fs %d, tag = 0x%x\n",
-+		inst->id, vpu_codec_state_name(inst->state), vbuf->vb2_buf.index, vdec->seq_tag);
- 	vpu_buf = to_vpu_vb2_buffer(vbuf);
- 
- 	memset(&info, 0, sizeof(info));
-@@ -1400,7 +1401,7 @@ static void vdec_abort(struct vpu_inst *inst)
- 	struct vpu_rpc_buffer_desc desc;
- 	int ret;
- 
--	vpu_trace(inst->dev, "[%d] state = %d\n", inst->id, inst->state);
-+	vpu_trace(inst->dev, "[%d] state = %s\n", inst->id, vpu_codec_state_name(inst->state));
- 
- 	vdec->aborting = true;
- 	vpu_iface_add_scode(inst, SCODE_PADDING_ABORT);
-diff --git a/drivers/media/platform/amphion/vpu.h b/drivers/media/platform/amphion/vpu.h
-index 3bfe193722af..5a701f64289e 100644
---- a/drivers/media/platform/amphion/vpu.h
-+++ b/drivers/media/platform/amphion/vpu.h
-@@ -355,6 +355,9 @@ void vpu_inst_record_flow(struct vpu_inst *inst, u32 flow);
- int vpu_core_driver_init(void);
- void vpu_core_driver_exit(void);
- 
-+const char *vpu_id_name(u32 id);
-+const char *vpu_codec_state_name(enum vpu_codec_state state);
-+
- extern bool debug;
- #define vpu_trace(dev, fmt, arg...)					\
- 	do {								\
-diff --git a/drivers/media/platform/amphion/vpu_cmds.c b/drivers/media/platform/amphion/vpu_cmds.c
-index fa581ba6bab2..647d94554fb5 100644
---- a/drivers/media/platform/amphion/vpu_cmds.c
-+++ b/drivers/media/platform/amphion/vpu_cmds.c
-@@ -98,7 +98,7 @@ static struct vpu_cmd_t *vpu_alloc_cmd(struct vpu_inst *inst, u32 id, void *data
- 	cmd->id = id;
- 	ret = vpu_iface_pack_cmd(inst->core, cmd->pkt, inst->id, id, data);
- 	if (ret) {
--		dev_err(inst->dev, "iface pack cmd(%d) fail\n", id);
-+		dev_err(inst->dev, "iface pack cmd %s fail\n", vpu_id_name(id));
- 		vfree(cmd->pkt);
- 		vfree(cmd);
- 		return NULL;
-@@ -125,14 +125,14 @@ static int vpu_session_process_cmd(struct vpu_inst *inst, struct vpu_cmd_t *cmd)
- {
- 	int ret;
- 
--	dev_dbg(inst->dev, "[%d]send cmd(0x%x)\n", inst->id, cmd->id);
-+	dev_dbg(inst->dev, "[%d]send cmd %s\n", inst->id, vpu_id_name(cmd->id));
- 	vpu_iface_pre_send_cmd(inst);
- 	ret = vpu_cmd_send(inst->core, cmd->pkt);
- 	if (!ret) {
- 		vpu_iface_post_send_cmd(inst);
- 		vpu_inst_record_flow(inst, cmd->id);
- 	} else {
--		dev_err(inst->dev, "[%d] iface send cmd(0x%x) fail\n", inst->id, cmd->id);
-+		dev_err(inst->dev, "[%d] iface send cmd %s fail\n", inst->id, vpu_id_name(cmd->id));
- 	}
- 
- 	return ret;
-@@ -149,7 +149,8 @@ static void vpu_process_cmd_request(struct vpu_inst *inst)
- 	list_for_each_entry_safe(cmd, tmp, &inst->cmd_q, list) {
- 		list_del_init(&cmd->list);
- 		if (vpu_session_process_cmd(inst, cmd))
--			dev_err(inst->dev, "[%d] process cmd(%d) fail\n", inst->id, cmd->id);
-+			dev_err(inst->dev, "[%d] process cmd %s fail\n",
-+				inst->id, vpu_id_name(cmd->id));
- 		if (cmd->request) {
- 			inst->pending = (void *)cmd;
- 			break;
-@@ -339,7 +340,7 @@ static int vpu_session_send_cmd(struct vpu_inst *inst, u32 id, void *data)
- 
- exit:
- 	if (ret)
--		dev_err(inst->dev, "[%d] send cmd(0x%x) fail\n", inst->id, id);
-+		dev_err(inst->dev, "[%d] send cmd %s fail\n", inst->id, vpu_id_name(id));
- 
- 	return ret;
- }
-diff --git a/drivers/media/platform/amphion/vpu_dbg.c b/drivers/media/platform/amphion/vpu_dbg.c
-index 44b830ae01d8..adc523b95061 100644
---- a/drivers/media/platform/amphion/vpu_dbg.c
-+++ b/drivers/media/platform/amphion/vpu_dbg.c
-@@ -67,7 +67,7 @@ static int vpu_dbg_instance(struct seq_file *s, void *data)
- 	num = scnprintf(str, sizeof(str), "tgig = %d,pid = %d\n", inst->tgid, inst->pid);
- 	if (seq_write(s, str, num))
- 		return 0;
--	num = scnprintf(str, sizeof(str), "state = %d\n", inst->state);
-+	num = scnprintf(str, sizeof(str), "state = %s\n", vpu_codec_state_name(inst->state));
- 	if (seq_write(s, str, num))
- 		return 0;
- 	num = scnprintf(str, sizeof(str),
-@@ -188,9 +188,9 @@ static int vpu_dbg_instance(struct seq_file *s, void *data)
- 
- 		if (!inst->flows[idx])
- 			continue;
--		num = scnprintf(str, sizeof(str), "\t[%s]0x%x\n",
-+		num = scnprintf(str, sizeof(str), "\t[%s] %s\n",
- 				inst->flows[idx] >= VPU_MSG_ID_NOOP ? "M" : "C",
--				inst->flows[idx]);
-+				vpu_id_name(inst->flows[idx]));
- 		if (seq_write(s, str, num)) {
- 			mutex_unlock(&inst->core->cmd_lock);
- 			return 0;
-diff --git a/drivers/media/platform/amphion/vpu_helpers.c b/drivers/media/platform/amphion/vpu_helpers.c
-index 019c77e84514..af3b336e5dc3 100644
---- a/drivers/media/platform/amphion/vpu_helpers.c
-+++ b/drivers/media/platform/amphion/vpu_helpers.c
-@@ -11,6 +11,7 @@
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include "vpu.h"
-+#include "vpu_defs.h"
- #include "vpu_core.h"
- #include "vpu_rpc.h"
- #include "vpu_helpers.h"
-@@ -447,3 +448,63 @@ int vpu_find_src_by_dst(struct vpu_pair *pairs, u32 cnt, u32 dst)
- 
- 	return -EINVAL;
- }
-+
-+const char *vpu_id_name(u32 id)
-+{
-+	switch (id) {
-+	case VPU_CMD_ID_NOOP: return "noop";
-+	case VPU_CMD_ID_CONFIGURE_CODEC: return "configure codec";
-+	case VPU_CMD_ID_START: return "start";
-+	case VPU_CMD_ID_STOP: return "stop";
-+	case VPU_CMD_ID_ABORT: return "abort";
-+	case VPU_CMD_ID_RST_BUF: return "reset buf";
-+	case VPU_CMD_ID_SNAPSHOT: return "snapshot";
-+	case VPU_CMD_ID_FIRM_RESET: return "reset firmware";
-+	case VPU_CMD_ID_UPDATE_PARAMETER: return "update parameter";
-+	case VPU_CMD_ID_FRAME_ENCODE: return "encode frame";
-+	case VPU_CMD_ID_SKIP: return "skip";
-+	case VPU_CMD_ID_FS_ALLOC: return "alloc fb";
-+	case VPU_CMD_ID_FS_RELEASE: return "release fb";
-+	case VPU_CMD_ID_TIMESTAMP: return "timestamp";
-+	case VPU_CMD_ID_DEBUG: return "debug";
-+	case VPU_MSG_ID_RESET_DONE: return "reset done";
-+	case VPU_MSG_ID_START_DONE: return "start done";
-+	case VPU_MSG_ID_STOP_DONE: return "stop done";
-+	case VPU_MSG_ID_ABORT_DONE: return "abort done";
-+	case VPU_MSG_ID_BUF_RST: return "buf reset done";
-+	case VPU_MSG_ID_MEM_REQUEST: return "mem request";
-+	case VPU_MSG_ID_PARAM_UPD_DONE: return "param upd done";
-+	case VPU_MSG_ID_FRAME_INPUT_DONE: return "frame input done";
-+	case VPU_MSG_ID_ENC_DONE: return "encode done";
-+	case VPU_MSG_ID_DEC_DONE: return "frame display";
-+	case VPU_MSG_ID_FRAME_REQ: return "fb request";
-+	case VPU_MSG_ID_FRAME_RELEASE: return "fb release";
-+	case VPU_MSG_ID_SEQ_HDR_FOUND: return "seq hdr found";
-+	case VPU_MSG_ID_RES_CHANGE: return "resolution change";
-+	case VPU_MSG_ID_PIC_HDR_FOUND: return "pic hdr found";
-+	case VPU_MSG_ID_PIC_DECODED: return "picture decoded";
-+	case VPU_MSG_ID_PIC_EOS: return "eos";
-+	case VPU_MSG_ID_FIFO_LOW: return "fifo low";
-+	case VPU_MSG_ID_BS_ERROR: return "bs error";
-+	case VPU_MSG_ID_UNSUPPORTED: return "unsupported";
-+	case VPU_MSG_ID_FIRMWARE_XCPT: return "exception";
-+	case VPU_MSG_ID_PIC_SKIPPED: return "skipped";
-+	}
-+	return "<unknown>";
-+}
-+
-+const char *vpu_codec_state_name(enum vpu_codec_state state)
-+{
-+	switch (state) {
-+	case VPU_CODEC_STATE_DEINIT: return "initialization";
-+	case VPU_CODEC_STATE_CONFIGURED: return "configured";
-+	case VPU_CODEC_STATE_START: return "start";
-+	case VPU_CODEC_STATE_STARTED: return "started";
-+	case VPU_CODEC_STATE_ACTIVE: return "active";
-+	case VPU_CODEC_STATE_SEEK: return "seek";
-+	case VPU_CODEC_STATE_STOP: return "stop";
-+	case VPU_CODEC_STATE_DRAIN: return "drain";
-+	case VPU_CODEC_STATE_DYAMIC_RESOLUTION_CHANGE: return "resolution change";
-+	}
-+	return "<unknown>";
-+}
-diff --git a/drivers/media/platform/amphion/vpu_msgs.c b/drivers/media/platform/amphion/vpu_msgs.c
-index 92672a802b49..f9eb488d1b5e 100644
---- a/drivers/media/platform/amphion/vpu_msgs.c
-+++ b/drivers/media/platform/amphion/vpu_msgs.c
-@@ -210,7 +210,7 @@ static int vpu_session_handle_msg(struct vpu_inst *inst, struct vpu_rpc_event *m
- 		return -EINVAL;
- 
- 	msg_id = ret;
--	dev_dbg(inst->dev, "[%d] receive event(0x%x)\n", inst->id, msg_id);
-+	dev_dbg(inst->dev, "[%d] receive event(%s)\n", inst->id, vpu_id_name(msg_id));
- 
- 	for (i = 0; i < ARRAY_SIZE(handlers); i++) {
- 		if (handlers[i].id == msg_id) {
--- 
-2.38.1
+I noticed there's also a call to get_domain_from_cpu() in
+rdt_ctrl_update(), which is invoked by IPI when updating a schemata
+file, but at least it's a blocking IPI and the caller holds the
+rdtgroup_mutex, so the handler is serialized with CPU hotplug.
 
+Taking a step back, I'm concerned about the scalability of searching
+these linked-lists of domains in atomic contexts. We already have
+machines where the list is 32 entries deep in L3, and much larger in
+L2 CAT.
+
+Will the overflow interrupt target a CPU in the correct domain? The
+existing domain list search in rdt_ctrl_update() is for the current
+CPU's domain, so an alternative there would be to store each CPU's
+interrupt-relevant domain pointers in percpu data for quick lookup.
+
+Also, how quickly does the overflow condition need to be serviced? On
+Intel, overflow handling deadlines aren't even tight enough to warrant
+an interrupt handler.
+
+Thanks!
+-Peter
+
+
+
+
+
+>
+> Because resctrl_{on,off}line_cpu() take the rdtgroup_mutex as part
+> of a cpuhp callback, cpus_read_lock() must always be taken first.
+> rdtgroup_schemata_write() already does this.
+>
+> Most of the filesystem code's domain list walkers are currently
+> protected by the rdtgroup_mutex taken in rdtgroup_kn_lock_live().
+> The exceptions are rdt_bit_usage_show() and the mon_config helpers
+> which take the lock directly.
+>
+> Make the domain list protected by RCU. An architecture-specific
+> lock prevents concurrent writers. rdt_bit_usage_show() can
+> walk the domain list under rcu_read_lock(). The mon_config helpers
+> send multiple IPIs, take the cpus_read_lock() in these cases.
+>
+> The other filesystem list walkers need to be able to sleep.
+> Add cpus_read_lock() to rdtgroup_kn_lock_live() so that the
+> cpuhp callbacks can't be invoked when file system operations are
+> occurring.
+>
+> Add lockdep_assert_cpus_held() in the cases where the
+> rdtgroup_kn_lock_live() call isn't obvious.
+>
+> Resctrl's domain online/offline calls now need to take the
+> rdtgroup_mutex themselves.
+>
+> Tested-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
+> Signed-off-by: James Morse <james.morse@arm.com>
+> ---
+> Changes since v2:
+>  * Reworded a comment,
+>  * Added a lockdep assertion
+>  * Moved clear_closid_rmid() outside the locked region of cpu
+>    online/offline
+>
+> Changes since v3:
+>  * Added a header include
+> ---
+>  arch/x86/kernel/cpu/resctrl/core.c        | 38 +++++++++-----
+>  arch/x86/kernel/cpu/resctrl/ctrlmondata.c | 16 ++++--
+>  arch/x86/kernel/cpu/resctrl/monitor.c     |  4 ++
+>  arch/x86/kernel/cpu/resctrl/pseudo_lock.c |  3 ++
+>  arch/x86/kernel/cpu/resctrl/rdtgroup.c    | 63 ++++++++++++++++++++---
+>  include/linux/resctrl.h                   |  2 +-
+>  6 files changed, 100 insertions(+), 26 deletions(-)
+>
+> diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/res=
+ctrl/core.c
+> index edc0dd123317..f106c68a9be8 100644
+> --- a/arch/x86/kernel/cpu/resctrl/core.c
+> +++ b/arch/x86/kernel/cpu/resctrl/core.c
+> @@ -25,8 +25,15 @@
+>  #include <asm/resctrl.h>
+>  #include "internal.h"
+>
+> -/* Mutex to protect rdtgroup access. */
+> -DEFINE_MUTEX(rdtgroup_mutex);
+> +/*
+> + * rdt_domain structures are kfree()d when their last CPU goes offline,
+> + * and allocated when the first CPU in a new domain comes online.
+> + * The rdt_resource's domain list is updated when this happens. Readers =
+of
+> + * the domain list must either take cpus_read_lock(), or rely on an RCU
+> + * read-side critical section, to avoid observing concurrent modificatio=
+n.
+> + * All writers take this mutex:
+> + */
+> +static DEFINE_MUTEX(domain_list_lock);
+>
+>  /*
+>   * The cached resctrl_pqr_state is strictly per CPU and can never be
+> @@ -508,6 +515,8 @@ static void domain_add_cpu(int cpu, struct rdt_resour=
+ce *r)
+>         struct rdt_domain *d;
+>         int err;
+>
+> +       lockdep_assert_held(&domain_list_lock);
+> +
+>         d =3D rdt_find_domain(r, id, &add_pos);
+>         if (IS_ERR(d)) {
+>                 pr_warn("Couldn't find cache id for CPU %d\n", cpu);
+> @@ -541,11 +550,12 @@ static void domain_add_cpu(int cpu, struct rdt_reso=
+urce *r)
+>                 return;
+>         }
+>
+> -       list_add_tail(&d->list, add_pos);
+> +       list_add_tail_rcu(&d->list, add_pos);
+>
+>         err =3D resctrl_online_domain(r, d);
+>         if (err) {
+> -               list_del(&d->list);
+> +               list_del_rcu(&d->list);
+> +               synchronize_rcu();
+>                 domain_free(hw_dom);
+>         }
+>  }
+> @@ -556,6 +566,8 @@ static void domain_remove_cpu(int cpu, struct rdt_res=
+ource *r)
+>         struct rdt_hw_domain *hw_dom;
+>         struct rdt_domain *d;
+>
+> +       lockdep_assert_held(&domain_list_lock);
+> +
+>         d =3D rdt_find_domain(r, id, NULL);
+>         if (IS_ERR_OR_NULL(d)) {
+>                 pr_warn("Couldn't find cache id for CPU %d\n", cpu);
+> @@ -566,7 +578,8 @@ static void domain_remove_cpu(int cpu, struct rdt_res=
+ource *r)
+>         cpumask_clear_cpu(cpu, &d->cpu_mask);
+>         if (cpumask_empty(&d->cpu_mask)) {
+>                 resctrl_offline_domain(r, d);
+> -               list_del(&d->list);
+> +               list_del_rcu(&d->list);
+> +               synchronize_rcu();
+>
+>                 /*
+>                  * rdt_domain "d" is going to be freed below, so clear
+> @@ -594,30 +607,29 @@ static void clear_closid_rmid(int cpu)
+>  static int resctrl_arch_online_cpu(unsigned int cpu)
+>  {
+>         struct rdt_resource *r;
+> -       int ret;
+>
+> -       mutex_lock(&rdtgroup_mutex);
+> +       mutex_lock(&domain_list_lock);
+>         for_each_capable_rdt_resource(r)
+>                 domain_add_cpu(cpu, r);
+> +       mutex_unlock(&domain_list_lock);
+> +
+>         clear_closid_rmid(cpu);
+>
+> -       ret =3D resctrl_online_cpu(cpu);
+> -       mutex_unlock(&rdtgroup_mutex);
+> -
+> -       return ret;
+> +       return resctrl_online_cpu(cpu);
+>  }
+>
+>  static int resctrl_arch_offline_cpu(unsigned int cpu)
+>  {
+>         struct rdt_resource *r;
+>
+> -       mutex_lock(&rdtgroup_mutex);
+>         resctrl_offline_cpu(cpu);
+>
+> +       mutex_lock(&domain_list_lock);
+>         for_each_capable_rdt_resource(r)
+>                 domain_remove_cpu(cpu, r);
+> +       mutex_unlock(&domain_list_lock);
+> +
+>         clear_closid_rmid(cpu);
+> -       mutex_unlock(&rdtgroup_mutex);
+>
+>         return 0;
+>  }
+> diff --git a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c b/arch/x86/kernel/=
+cpu/resctrl/ctrlmondata.c
+> index 280d66fae21c..d8d7c127403b 100644
+> --- a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
+> +++ b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
+> @@ -209,6 +209,9 @@ static int parse_line(char *line, struct resctrl_sche=
+ma *s,
+>         struct rdt_domain *d;
+>         unsigned long dom_id;
+>
+> +       /* Walking r->domains, ensure it can't race with cpuhp */
+> +       lockdep_assert_cpus_held();
+> +
+>         if (rdtgrp->mode =3D=3D RDT_MODE_PSEUDO_LOCKSETUP &&
+>             (r->rid =3D=3D RDT_RESOURCE_MBA || r->rid =3D=3D RDT_RESOURCE=
+_SMBA)) {
+>                 rdt_last_cmd_puts("Cannot pseudo-lock MBA resource\n");
+> @@ -313,6 +316,9 @@ int resctrl_arch_update_domains(struct rdt_resource *=
+r, u32 closid)
+>         struct rdt_domain *d;
+>         u32 idx;
+>
+> +       /* Walking r->domains, ensure it can't race with cpuhp */
+> +       lockdep_assert_cpus_held();
+> +
+>         if (!zalloc_cpumask_var(&cpu_mask, GFP_KERNEL))
+>                 return -ENOMEM;
+>
+> @@ -378,11 +384,9 @@ ssize_t rdtgroup_schemata_write(struct kernfs_open_f=
+ile *of,
+>                 return -EINVAL;
+>         buf[nbytes - 1] =3D '\0';
+>
+> -       cpus_read_lock();
+>         rdtgrp =3D rdtgroup_kn_lock_live(of->kn);
+>         if (!rdtgrp) {
+>                 rdtgroup_kn_unlock(of->kn);
+> -               cpus_read_unlock();
+>                 return -ENOENT;
+>         }
+>         rdt_last_cmd_clear();
+> @@ -444,7 +448,6 @@ ssize_t rdtgroup_schemata_write(struct kernfs_open_fi=
+le *of,
+>  out:
+>         rdt_staged_configs_clear();
+>         rdtgroup_kn_unlock(of->kn);
+> -       cpus_read_unlock();
+>         return ret ?: nbytes;
+>  }
+>
+> @@ -464,6 +467,9 @@ static void show_doms(struct seq_file *s, struct resc=
+trl_schema *schema, int clo
+>         bool sep =3D false;
+>         u32 ctrl_val;
+>
+> +       /* Walking r->domains, ensure it can't race with cpuhp */
+> +       lockdep_assert_cpus_held();
+> +
+>         seq_printf(s, "%*s:", max_name_width, schema->name);
+>         list_for_each_entry(dom, &r->domains, list) {
+>                 if (sep)
+> @@ -534,8 +540,8 @@ void mon_event_read(struct rmid_read *rr, struct rdt_=
+resource *r,
+>  {
+>         int cpu;
+>
+> -       /* When picking a CPU from cpu_mask, ensure it can't race with cp=
+uhp */
+> -       lockdep_assert_held(&rdtgroup_mutex);
+> +       /* When picking a cpu from cpu_mask, ensure it can't race with cp=
+uhp */
+> +       lockdep_assert_cpus_held();
+>
+>         /*
+>          * setup the parameters to pass to mon_event_count() to read the =
+data.
+> diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/=
+resctrl/monitor.c
+> index ae02185f3354..41b4cd2c7d64 100644
+> --- a/arch/x86/kernel/cpu/resctrl/monitor.c
+> +++ b/arch/x86/kernel/cpu/resctrl/monitor.c
+> @@ -15,6 +15,7 @@
+>   * Software Developer Manual June 2016, volume 3, section 17.17.
+>   */
+>
+> +#include <linux/cpu.h>
+>  #include <linux/module.h>
+>  #include <linux/sizes.h>
+>  #include <linux/slab.h>
+> @@ -476,6 +477,9 @@ static void add_rmid_to_limbo(struct rmid_entry *entr=
+y)
+>
+>         lockdep_assert_held(&rdtgroup_mutex);
+>
+> +       /* Walking r->domains, ensure it can't race with cpuhp */
+> +       lockdep_assert_cpus_held();
+> +
+>         idx =3D resctrl_arch_rmid_idx_encode(entry->closid, entry->rmid);
+>
+>         entry->busy =3D 0;
+> diff --git a/arch/x86/kernel/cpu/resctrl/pseudo_lock.c b/arch/x86/kernel/=
+cpu/resctrl/pseudo_lock.c
+> index 460421051abf..fc3ed917d173 100644
+> --- a/arch/x86/kernel/cpu/resctrl/pseudo_lock.c
+> +++ b/arch/x86/kernel/cpu/resctrl/pseudo_lock.c
+> @@ -830,6 +830,9 @@ bool rdtgroup_pseudo_locked_in_hierarchy(struct rdt_d=
+omain *d)
+>         struct rdt_domain *d_i;
+>         bool ret =3D false;
+>
+> +       /* Walking r->domains, ensure it can't race with cpuhp */
+> +       lockdep_assert_cpus_held();
+> +
+>         if (!zalloc_cpumask_var(&cpu_with_psl, GFP_KERNEL))
+>                 return true;
+>
+> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu=
+/resctrl/rdtgroup.c
+> index 3a8e2c98b611..9002ac728001 100644
+> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> @@ -35,6 +35,10 @@
+>  DEFINE_STATIC_KEY_FALSE(rdt_enable_key);
+>  DEFINE_STATIC_KEY_FALSE(rdt_mon_enable_key);
+>  DEFINE_STATIC_KEY_FALSE(rdt_alloc_enable_key);
+> +
+> +/* Mutex to protect rdtgroup access. */
+> +DEFINE_MUTEX(rdtgroup_mutex);
+> +
+>  static struct kernfs_root *rdt_root;
+>  struct rdtgroup rdtgroup_default;
+>  LIST_HEAD(rdt_all_groups);
+> @@ -950,7 +954,8 @@ static int rdt_bit_usage_show(struct kernfs_open_file=
+ *of,
+>
+>         mutex_lock(&rdtgroup_mutex);
+>         hw_shareable =3D r->cache.shareable_bits;
+> -       list_for_each_entry(dom, &r->domains, list) {
+> +       rcu_read_lock();
+> +       list_for_each_entry_rcu(dom, &r->domains, list) {
+>                 if (sep)
+>                         seq_putc(seq, ';');
+>                 sw_shareable =3D 0;
+> @@ -1006,8 +1011,10 @@ static int rdt_bit_usage_show(struct kernfs_open_f=
+ile *of,
+>                 }
+>                 sep =3D true;
+>         }
+> +       rcu_read_unlock();
+>         seq_putc(seq, '\n');
+>         mutex_unlock(&rdtgroup_mutex);
+> +
+>         return 0;
+>  }
+>
+> @@ -1250,6 +1257,9 @@ static bool rdtgroup_mode_test_exclusive(struct rdt=
+group *rdtgrp)
+>         struct rdt_domain *d;
+>         u32 ctrl;
+>
+> +       /* Walking r->domains, ensure it can't race with cpuhp */
+> +       lockdep_assert_cpus_held();
+> +
+>         list_for_each_entry(s, &resctrl_schema_all, list) {
+>                 r =3D s->res;
+>                 if (r->rid =3D=3D RDT_RESOURCE_MBA || r->rid =3D=3D RDT_R=
+ESOURCE_SMBA)
+> @@ -1516,6 +1526,7 @@ static int mbm_config_show(struct seq_file *s, stru=
+ct rdt_resource *r, u32 evtid
+>         struct rdt_domain *dom;
+>         bool sep =3D false;
+>
+> +       cpus_read_lock();
+>         mutex_lock(&rdtgroup_mutex);
+>
+>         list_for_each_entry(dom, &r->domains, list) {
+> @@ -1532,6 +1543,7 @@ static int mbm_config_show(struct seq_file *s, stru=
+ct rdt_resource *r, u32 evtid
+>         seq_puts(s, "\n");
+>
+>         mutex_unlock(&rdtgroup_mutex);
+> +       cpus_read_unlock();
+>
+>         return 0;
+>  }
+> @@ -1623,6 +1635,9 @@ static int mon_config_write(struct rdt_resource *r,=
+ char *tok, u32 evtid)
+>         struct rdt_domain *d;
+>         int ret =3D 0;
+>
+> +       /* Walking r->domains, ensure it can't race with cpuhp */
+> +       lockdep_assert_cpus_held();
+> +
+>  next:
+>         if (!tok || tok[0] =3D=3D '\0')
+>                 return 0;
+> @@ -1664,6 +1679,7 @@ static ssize_t mbm_total_bytes_config_write(struct =
+kernfs_open_file *of,
+>         if (nbytes =3D=3D 0 || buf[nbytes - 1] !=3D '\n')
+>                 return -EINVAL;
+>
+> +       cpus_read_lock();
+>         mutex_lock(&rdtgroup_mutex);
+>
+>         rdt_last_cmd_clear();
+> @@ -1673,6 +1689,7 @@ static ssize_t mbm_total_bytes_config_write(struct =
+kernfs_open_file *of,
+>         ret =3D mon_config_write(r, buf, QOS_L3_MBM_TOTAL_EVENT_ID);
+>
+>         mutex_unlock(&rdtgroup_mutex);
+> +       cpus_read_unlock();
+>
+>         return ret ?: nbytes;
+>  }
+> @@ -1688,6 +1705,7 @@ static ssize_t mbm_local_bytes_config_write(struct =
+kernfs_open_file *of,
+>         if (nbytes =3D=3D 0 || buf[nbytes - 1] !=3D '\n')
+>                 return -EINVAL;
+>
+> +       cpus_read_lock();
+>         mutex_lock(&rdtgroup_mutex);
+>
+>         rdt_last_cmd_clear();
+> @@ -1697,6 +1715,7 @@ static ssize_t mbm_local_bytes_config_write(struct =
+kernfs_open_file *of,
+>         ret =3D mon_config_write(r, buf, QOS_L3_MBM_LOCAL_EVENT_ID);
+>
+>         mutex_unlock(&rdtgroup_mutex);
+> +       cpus_read_unlock();
+>
+>         return ret ?: nbytes;
+>  }
+> @@ -2149,6 +2168,9 @@ static int set_cache_qos_cfg(int level, bool enable=
+)
+>         struct rdt_domain *d;
+>         int cpu;
+>
+> +       /* Walking r->domains, ensure it can't race with cpuhp */
+> +       lockdep_assert_cpus_held();
+> +
+>         if (level =3D=3D RDT_RESOURCE_L3)
+>                 update =3D l3_qos_cfg_update;
+>         else if (level =3D=3D RDT_RESOURCE_L2)
+> @@ -2337,6 +2359,7 @@ struct rdtgroup *rdtgroup_kn_lock_live(struct kernf=
+s_node *kn)
+>         atomic_inc(&rdtgrp->waitcount);
+>         kernfs_break_active_protection(kn);
+>
+> +       cpus_read_lock();
+>         mutex_lock(&rdtgroup_mutex);
+>
+>         /* Was this group deleted while we waited? */
+> @@ -2354,6 +2377,7 @@ void rdtgroup_kn_unlock(struct kernfs_node *kn)
+>                 return;
+>
+>         mutex_unlock(&rdtgroup_mutex);
+> +       cpus_read_unlock();
+>
+>         if (atomic_dec_and_test(&rdtgrp->waitcount) &&
+>             (rdtgrp->flags & RDT_DELETED)) {
+> @@ -2651,6 +2675,9 @@ static int reset_all_ctrls(struct rdt_resource *r)
+>         struct rdt_domain *d;
+>         int i;
+>
+> +       /* Walking r->domains, ensure it can't race with cpuhp */
+> +       lockdep_assert_cpus_held();
+> +
+>         if (!zalloc_cpumask_var(&cpu_mask, GFP_KERNEL))
+>                 return -ENOMEM;
+>
+> @@ -2935,6 +2962,9 @@ static int mkdir_mondata_subdir_alldom(struct kernf=
+s_node *parent_kn,
+>         struct rdt_domain *dom;
+>         int ret;
+>
+> +       /* Walking r->domains, ensure it can't race with cpuhp */
+> +       lockdep_assert_cpus_held();
+> +
+>         list_for_each_entry(dom, &r->domains, list) {
+>                 ret =3D mkdir_mondata_subdir(parent_kn, dom, r, prgrp);
+>                 if (ret)
+> @@ -3625,7 +3655,8 @@ static void domain_destroy_mon_state(struct rdt_dom=
+ain *d)
+>         kfree(d->mbm_local);
+>  }
+>
+> -void resctrl_offline_domain(struct rdt_resource *r, struct rdt_domain *d=
+)
+> +static void _resctrl_offline_domain(struct rdt_resource *r,
+> +                                   struct rdt_domain *d)
+>  {
+>         lockdep_assert_held(&rdtgroup_mutex);
+>
+> @@ -3660,6 +3691,13 @@ void resctrl_offline_domain(struct rdt_resource *r=
+, struct rdt_domain *d)
+>         domain_destroy_mon_state(d);
+>  }
+>
+> +void resctrl_offline_domain(struct rdt_resource *r, struct rdt_domain *d=
+)
+> +{
+> +       mutex_lock(&rdtgroup_mutex);
+> +       _resctrl_offline_domain(r, d);
+> +       mutex_unlock(&rdtgroup_mutex);
+> +}
+> +
+>  static int domain_setup_mon_state(struct rdt_resource *r, struct rdt_dom=
+ain *d)
+>  {
+>         u32 idx_limit =3D resctrl_arch_system_num_rmid_idx();
+> @@ -3691,7 +3729,7 @@ static int domain_setup_mon_state(struct rdt_resour=
+ce *r, struct rdt_domain *d)
+>         return 0;
+>  }
+>
+> -int resctrl_online_domain(struct rdt_resource *r, struct rdt_domain *d)
+> +static int _resctrl_online_domain(struct rdt_resource *r, struct rdt_dom=
+ain *d)
+>  {
+>         int err;
+>
+> @@ -3727,12 +3765,23 @@ int resctrl_online_domain(struct rdt_resource *r,=
+ struct rdt_domain *d)
+>         return 0;
+>  }
+>
+> +int resctrl_online_domain(struct rdt_resource *r, struct rdt_domain *d)
+> +{
+> +       int err;
+> +
+> +       mutex_lock(&rdtgroup_mutex);
+> +       err =3D _resctrl_online_domain(r, d);
+> +       mutex_unlock(&rdtgroup_mutex);
+> +
+> +       return err;
+> +}
+> +
+>  int resctrl_online_cpu(unsigned int cpu)
+>  {
+> -       lockdep_assert_held(&rdtgroup_mutex);
+> -
+> +       mutex_lock(&rdtgroup_mutex);
+>         /* The cpu is set in default rdtgroup after online. */
+>         cpumask_set_cpu(cpu, &rdtgroup_default.cpu_mask);
+> +       mutex_unlock(&rdtgroup_mutex);
+>
+>         return 0;
+>  }
+> @@ -3753,8 +3802,7 @@ void resctrl_offline_cpu(unsigned int cpu)
+>         struct rdtgroup *rdtgrp;
+>         struct rdt_resource *l3 =3D &rdt_resources_all[RDT_RESOURCE_L3].r=
+_resctrl;
+>
+> -       lockdep_assert_held(&rdtgroup_mutex);
+> -
+> +       mutex_lock(&rdtgroup_mutex);
+>         list_for_each_entry(rdtgrp, &rdt_all_groups, rdtgroup_list) {
+>                 if (cpumask_test_and_clear_cpu(cpu, &rdtgrp->cpu_mask)) {
+>                         clear_childcpus(rdtgrp, cpu);
+> @@ -3774,6 +3822,7 @@ void resctrl_offline_cpu(unsigned int cpu)
+>                         cqm_setup_limbo_handler(d, 0, cpu);
+>                 }
+>         }
+> +       mutex_unlock(&rdtgroup_mutex);
+>  }
+>
+>  /*
+> diff --git a/include/linux/resctrl.h b/include/linux/resctrl.h
+> index c4be3453b3ff..fe94ef3369fa 100644
+> --- a/include/linux/resctrl.h
+> +++ b/include/linux/resctrl.h
+> @@ -159,7 +159,7 @@ struct resctrl_schema;
+>   * @cache_level:       Which cache level defines scope of this resource
+>   * @cache:             Cache allocation related data
+>   * @membw:             If the component has bandwidth controls, their pr=
+operties.
+> - * @domains:           All domains for this resource
+> + * @domains:           RCU list of all domains for this resource
+>   * @name:              Name to use in "schemata" file.
+>   * @data_width:                Character width of data when displaying
+>   * @default_ctrl:      Specifies default cache cbm or memory B/W percent=
+.
+> --
+> 2.39.2
+>
