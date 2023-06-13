@@ -2,77 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB7F72DE38
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 11:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1981B72DE42
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 11:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241567AbjFMJtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 05:49:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60414 "EHLO
+        id S239589AbjFMJu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 05:50:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241767AbjFMJsM (ORCPT
+        with ESMTP id S241606AbjFMJuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 05:48:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9901B1FF9;
-        Tue, 13 Jun 2023 02:47:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35CD062B60;
-        Tue, 13 Jun 2023 09:47:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FF32C433EF;
-        Tue, 13 Jun 2023 09:47:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686649646;
-        bh=3C/9k3Wp2q74e5Kj4lNKZVGCxlcGfqV9JqY5As7yd24=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=XHczFg4HXbJp609NdfE1ms1DT9DpefdHDAzhkAexPPtZMyJr+vkm1d7t/NFAnc8cU
-         6mwp8q9o4goDQf8DQgkcLS7iOlW1Xf8kzVvn+u1+du8pj06wCTpPk3EebXxwzA7WzS
-         JjKsTchxuutlmQjmke7oyJbK/d6odL1U+tcaZFCbEx0H65kPP6VQja3ORNVOmXWxt8
-         rkZCBfbuLI2L0ScSPv8K/RGqjwPsuznFwFq9dT+shvGlw9DHIdtAsmZPC+hmkEYFpi
-         3gXGgklHp27nGDW7ZKXADMfg8GbvLDSXV2/t/cL4cep1C8ving+gBfAIr8jBsYyOUB
-         4sQ2g330/QnHQ==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     baomingtong001@208suo.com
-Cc:     toke@toke.dk, linux-wireless@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ath: Remove unneeded variable
-References: <20230613093757.5380-1-luojianhong@cdjrlc.com>
-        <b41c50989125dec782e1fbd2793d0ecf@208suo.com>
-Date:   Tue, 13 Jun 2023 12:47:20 +0300
-In-Reply-To: <b41c50989125dec782e1fbd2793d0ecf@208suo.com> (baomingtong's
-        message of "Tue, 13 Jun 2023 17:43:53 +0800")
-Message-ID: <87352velsn.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Tue, 13 Jun 2023 05:50:11 -0400
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483472705
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 02:49:35 -0700 (PDT)
+Received: by mail-vs1-xe33.google.com with SMTP id ada2fe7eead31-43dc17feb22so315423137.3
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 02:49:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1686649774; x=1689241774;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lHShPJI1ND84wlAQIXTdkKHqiP9kaIQnFJziQlEFXAg=;
+        b=W6V4ONuGe+cz/0uk/uN5Iqq0aT/OfJ6B9RiOB0CdGwIzS6c6ziD2B5nKU9nEklZFod
+         3ilSqxRl3pklQ5KRqx0j4ktIUbx25z2edb6WY294QkZsXfM2J/X+wug1aSX0NprsmZ5Y
+         KCQEca4HhEkM6S9qJsUkogsPU+JJ4q8bRDoVZmhq4y8wvWneOf6rl2vcBOPIiVMxQqOL
+         XklEO9/DYK6kBfs66OJ3+roaXwfEfqZi0331CzihEAbErEx9cXxlXmeWQFmqZzs2fJid
+         EtvIZkBReT9vSeUMj828rvEBXQ4SzgEXomPbmotCE3YkNpAYtPIw/eY1iJhEJ+NPb4Cy
+         ek7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686649774; x=1689241774;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lHShPJI1ND84wlAQIXTdkKHqiP9kaIQnFJziQlEFXAg=;
+        b=Sb11rVqgU3qnOktHECGrX4V7m1KPAZ14SnwmRit/aXGQd+/NthJU0Pk08e63/WjpXG
+         M2Sum1AEFjVKR7d5qvZrmYM9k8xfogoakzOTjOO7qhXl9hp+WNE3/15nF6Pei+tvbqb+
+         UydO1l29EnfRy/HNdmFE1r9qfPYI24np29sSn8jjYfC3kJb8CYuP8tbdl3/xq+zb0Y9g
+         Q9AbdekOLyCMBJ4JXyb/YAoUtew7mfL6eVGGrTn2MGXhUj73JdRhiN2JDb7PkIIARift
+         QNnu7BPMeChA4gmy1jwhHheo3rq6ers7nrlaAa5azNwqYjFL47iBMEbPVFjvxNPn1TRT
+         HJSQ==
+X-Gm-Message-State: AC+VfDwYH8MaH3fEV4QOxOFJrH7bCzlufQkTRsRAb88Cog8KgQdyPx1Q
+        igaQtmSXN6lIeFIZFl+YHpEPqN5PinJ+pmrNmnARRQ==
+X-Google-Smtp-Source: ACHHUZ6d07s72MWiYVxCx5UTb5HEFEm5bhKysx4M+2vQ5aEkZntWDPGMGEALVUWuh8IGKijZ+Q5f8rP5+9BSaUl6N9s=
+X-Received: by 2002:a67:ff88:0:b0:439:3128:587d with SMTP id
+ v8-20020a67ff88000000b004393128587dmr5259878vsq.28.1686649774444; Tue, 13 Jun
+ 2023 02:49:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1686249772-26231-1-git-send-email-manikanta.guntupalli@amd.com>
+In-Reply-To: <1686249772-26231-1-git-send-email-manikanta.guntupalli@amd.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 13 Jun 2023 11:49:23 +0200
+Message-ID: <CAMRc=Mdv0+o6BLZS779yyvZayHy+8iTD7Oy71GR4mvPbn=_A-A@mail.gmail.com>
+Subject: Re: [PATCH V2] gpio: zynq: fix zynqmp_gpio not an immutable chip warning
+To:     Manikanta Guntupalli <manikanta.guntupalli@amd.com>
+Cc:     michal.simek@xilinx.com, michal.simek@amd.com, git@amd.com,
+        shubhrajyoti.datta@xilinx.com, srinivas.neeli@xilinx.com,
+        linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        srinivas.goud@amd.com, manion05gk@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-baomingtong001@208suo.com writes:
-
-> Fix the following coccicheck warning:
+On Thu, Jun 8, 2023 at 8:43=E2=80=AFPM Manikanta Guntupalli
+<manikanta.guntupalli@amd.com> wrote:
 >
-> drivers/net/wireless/ath/ath9k/gpio.c:501:5-8: Unneeded variable: "len".
+> Make the struct irq_chip const and flag it as IRQCHIP_IMMUTABLE,
+> call gpiochip_disable_irq() in the .irq_mask() callback and
+> gpiochip_enable_irq() in the .irq_unmask() callback to fix
+> "gpio gpiochip1: (zynqmp_gpio): not an immutable chip" warning.
 >
-> Signed-off-by: Mingtong Bao <baomingtong001@208suo.com>
+> Signed-off-by: Manikanta Guntupalli <manikanta.guntupalli@amd.com>
+> ---
 
-No HTML emails, our lists drop those automatically. Please use 'git
-send-email', more info in the wiki below.
+Applied, thanks!
 
-This is not the first time I'm commenting about this for a patch from
-208suo.com:
-
-https://lore.kernel.org/linux-wireless/87zg57fne1.fsf@kernel.org/
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Bart
