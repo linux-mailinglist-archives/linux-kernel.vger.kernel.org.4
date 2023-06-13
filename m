@@ -2,238 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FDC672E87F
+	by mail.lfdr.de (Postfix) with ESMTP id 557DE72E87E
 	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 18:27:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238560AbjFMQ0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 12:26:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53446 "EHLO
+        id S237056AbjFMQ1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 12:27:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231691AbjFMQ0b (ORCPT
+        with ESMTP id S231691AbjFMQ1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 12:26:31 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3849E4A;
-        Tue, 13 Jun 2023 09:26:29 -0700 (PDT)
-Received: from mercury (dyndsl-091-248-189-170.ewe-ip-backbone.de [91.248.189.170])
+        Tue, 13 Jun 2023 12:27:35 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AF19A1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 09:27:33 -0700 (PDT)
+Received: from mail-yb1-f200.google.com (mail-yb1-f200.google.com [209.85.219.200])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 90CD56606F02;
-        Tue, 13 Jun 2023 17:26:28 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686673588;
-        bh=PJNaA82l3h2YK+IyLkBxAuI/hFHUcU8f0OMwwfGkI6E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LdtJCgZb4TWILwc4v0I226TaYUr8ygIMXSFatfDGtMACWF81B7tlFHZONFxVQowJX
-         xIwsaqMdyPZ2QM4kga6bIHnx6AqWzOpljKQjpA0cB7Zn6kzM+gSuZFitmijD6Pym7g
-         U0rGhPJu5np+9IVVPGjpFrBy8aq2okjWy5/PI7xuaPRXivfFIwcWaRoUjMWErCKPHM
-         2gIzn/Jw5TrEyS0paXr5AzM226ddzd5l5xgcUUYl4JGuNVo5ppkvdxRrVQpKq/t7qz
-         K3H2ME6VY2KKkWXA8JB1KAQgk6TZwv4Jl+GrJnTXtBvJyHDb0OK5I/iAem/LZyyIES
-         cpICz54sf3Svg==
-Received: by mercury (Postfix, from userid 1000)
-        id 2F5FD1066FBA; Tue, 13 Jun 2023 18:26:26 +0200 (CEST)
-Date:   Tue, 13 Jun 2023 18:26:26 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Vincent Legoll <vincent.legoll@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 04/25] PM / devfreq: rockchip-dfi: Add SoC specific
- init function
-Message-ID: <20230613162626.s7ijyg7iu6jcrvbq@mercury.elektranox.org>
-References: <20230524083153.2046084-1-s.hauer@pengutronix.de>
- <20230524083153.2046084-5-s.hauer@pengutronix.de>
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id EA63C3F269
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 16:27:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1686673650;
+        bh=ValhE6UfwquXmpyVBBbxsSIHDSpMkwILF2ZvydAjNCo=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=Wkk5GUhRGcM0FYQ7NRW6JI7y0945sgQw853AzvXiNsSY/cZTzb5dmTi18IhU+0g/G
+         1as8PlYbCc16pIjrio+lyQfQ95KMZEoMMyjgGOBzBY9pGf5vnaV8rN6RhqG9dRRRRb
+         rTsjVc6aWuDHrSeoqrXKWAxL0PxIFpejO14CDWNdrvnkBKNrBWUvw2lX5rxgQ8k0zo
+         mzpVpuhNJ0xDcJ4pha4rQeml6JKNoni1kmivuhe8UqOlyS4l04TzQpSzYnFfvYDnKu
+         9LnG8k70QTbOe9XXzu0CtIONDt0KuXIEYqloCrnQosIj6myAke326xuqq3ev7dcx2U
+         Wz7nIuhwCcXeg==
+Received: by mail-yb1-f200.google.com with SMTP id 3f1490d57ef6-bd69ee0edacso294050276.3
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 09:27:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686673650; x=1689265650;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ValhE6UfwquXmpyVBBbxsSIHDSpMkwILF2ZvydAjNCo=;
+        b=T8ZlHGWaY/QEKEZxjBUDE8Lm1f1IRp6P0DlVxFjodAgKkHZlPji/yuEJaetaqZq5VS
+         KH3ln4j6QUmPFemogEe0DndyCYY0P6QJCtPnexxct3HkanUx18Caw7MTruioxFImqjhv
+         L/QLAnek6HArCS811laB+EwxBuDRY2YkC3pxj9sREJiHmImEMsrsV7l7ZBAPS+R7OIPg
+         g5a0sp+dzaOlJyx0aAGVEjk5kQaQDJcKjb+ea9NS81YGwQUZQpRuDGXv4SKlAxlUEp+4
+         A1fT9HvKDhHsyBMtFsZAm0VDtWNAqOStmbhhT04mtJnPFW0+ATJa1WLrgzZhIOVJ41m5
+         9lpQ==
+X-Gm-Message-State: AC+VfDyaXupgvq7PjiIVRoOVODbKlpVRIOid42eMIuTnCKCsVpdr9+fe
+        /D6fQ+Nw8Qj7Qb7eh8XIFPYGpqLpIFDyHE/kPdh4BcvZ0V4JU5iDIDeWazPXq0PAr+04ItzyEhi
+        JKgW3Nud/JKJJuVv+ZTawqqzcwdseZNkv3yJjhXNjuvovnC4KRAmjkheblg==
+X-Received: by 2002:a25:4605:0:b0:bc6:6083:8f42 with SMTP id t5-20020a254605000000b00bc660838f42mr1564366yba.21.1686673649892;
+        Tue, 13 Jun 2023 09:27:29 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5JlLRjmXwi2pYsePj7YxcsfdOk4CxL8axkWWI3zvYCCITZ+u0R3LM2ErXc9+TNwZ73jINAQkimPaDpZvWgJb8=
+X-Received: by 2002:a25:4605:0:b0:bc6:6083:8f42 with SMTP id
+ t5-20020a254605000000b00bc660838f42mr1564353yba.21.1686673649608; Tue, 13 Jun
+ 2023 09:27:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rx6ubjn2sztmbvp2"
-Content-Disposition: inline
-In-Reply-To: <20230524083153.2046084-5-s.hauer@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230608154256.562906-1-aleksandr.mikhalitsyn@canonical.com>
+ <f3864ed6-8c97-8a7a-f268-dab29eb2fb21@redhat.com> <CAEivzxcRsHveuW3nrPnSBK6_2-eT4XPvza3kN2oogvnbVXBKvQ@mail.gmail.com>
+ <20230609-alufolie-gezaubert-f18ef17cda12@brauner> <CAEivzxc_LW6mTKjk46WivrisnnmVQs0UnRrh6p0KxhqyXrErBQ@mail.gmail.com>
+ <ac1c6817-9838-fcf3-edc8-224ff85691e0@redhat.com> <CAJ4mKGby71qfb3gd696XH3AazeR0Qc_VGYupMznRH3Piky+VGA@mail.gmail.com>
+In-Reply-To: <CAJ4mKGby71qfb3gd696XH3AazeR0Qc_VGYupMznRH3Piky+VGA@mail.gmail.com>
+From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Date:   Tue, 13 Jun 2023 18:27:18 +0200
+Message-ID: <CAEivzxfdYagVp+nA1RXdtWa0XAM82TScLWSfYr6ZH5zAOGVcVQ@mail.gmail.com>
+Subject: Re: [PATCH v5 00/14] ceph: support idmapped mounts
+To:     Gregory Farnum <gfarnum@redhat.com>
+Cc:     Xiubo Li <xiubli@redhat.com>,
+        Christian Brauner <brauner@kernel.org>, stgraber@ubuntu.com,
+        linux-fsdevel@vger.kernel.org, Ilya Dryomov <idryomov@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 13, 2023 at 4:54=E2=80=AFPM Gregory Farnum <gfarnum@redhat.com>=
+ wrote:
+>
+> On Mon, Jun 12, 2023 at 6:43=E2=80=AFPM Xiubo Li <xiubli@redhat.com> wrot=
+e:
+> >
+> >
+> > On 6/9/23 18:12, Aleksandr Mikhalitsyn wrote:
+> > > On Fri, Jun 9, 2023 at 12:00=E2=80=AFPM Christian Brauner <brauner@ke=
+rnel.org> wrote:
+> > >> On Fri, Jun 09, 2023 at 10:59:19AM +0200, Aleksandr Mikhalitsyn wrot=
+e:
+> > >>> On Fri, Jun 9, 2023 at 3:57=E2=80=AFAM Xiubo Li <xiubli@redhat.com>=
+ wrote:
+> > >>>>
+> > >>>> On 6/8/23 23:42, Alexander Mikhalitsyn wrote:
+> > >>>>> Dear friends,
+> > >>>>>
+> > >>>>> This patchset was originally developed by Christian Brauner but I=
+'ll continue
+> > >>>>> to push it forward. Christian allowed me to do that :)
+> > >>>>>
+> > >>>>> This feature is already actively used/tested with LXD/LXC project=
+.
+> > >>>>>
+> > >>>>> Git tree (based on https://github.com/ceph/ceph-client.git master=
+):
+> > >>> Hi Xiubo!
+> > >>>
+> > >>>> Could you rebase these patches to 'testing' branch ?
+> > >>> Will do in -v6.
+> > >>>
+> > >>>> And you still have missed several places, for example the followin=
+g cases:
+> > >>>>
+> > >>>>
+> > >>>>      1    269  fs/ceph/addr.c <<ceph_netfs_issue_op_inline>>
+> > >>>>                req =3D ceph_mdsc_create_request(mdsc, CEPH_MDS_OP_=
+GETATTR,
+> > >>>> mode);
+> > >>> +
+> > >>>
+> > >>>>      2    389  fs/ceph/dir.c <<ceph_readdir>>
+> > >>>>                req =3D ceph_mdsc_create_request(mdsc, op, USE_AUTH=
+_MDS);
+> > >>> +
+> > >>>
+> > >>>>      3    789  fs/ceph/dir.c <<ceph_lookup>>
+> > >>>>                req =3D ceph_mdsc_create_request(mdsc, op, USE_ANY_=
+MDS);
+> > >>> We don't have an idmapping passed to lookup from the VFS layer. As =
+I
+> > >>> mentioned before, it's just impossible now.
+> > >> ->lookup() doesn't deal with idmappings and really can't otherwise y=
+ou
+> > >> risk ending up with inode aliasing which is really not something you
+> > >> want. IOW, you can't fill in inode->i_{g,u}id based on a mount's
+> > >> idmapping as inode->i_{g,u}id absolutely needs to be a filesystem wi=
+de
+> > >> value. So better not even risk exposing the idmapping in there at al=
+l.
+> > > Thanks for adding, Christian!
+> > >
+> > > I agree, every time when we use an idmapping we need to be careful wi=
+th
+> > > what we map. AFAIU, inode->i_{g,u}id should be based on the filesyste=
+m
+> > > idmapping (not mount),
+> > > but in this case, Xiubo want's current_fs{u,g}id to be mapped
+> > > according to an idmapping.
+> > > Anyway, it's impossible at now and IMHO, until we don't have any
+> > > practical use case where
+> > > UID/GID-based path restriction is used in combination with idmapped
+> > > mounts it's not worth to
+> > > make such big changes in the VFS layer.
+> > >
+> > > May be I'm not right, but it seems like UID/GID-based path restrictio=
+n
+> > > is not a widespread
+> > > feature and I can hardly imagine it to be used with the container
+> > > workloads (for instance),
+> > > because it will require to always keep in sync MDS permissions
+> > > configuration with the
+> > > possible UID/GID ranges on the client. It looks like a nightmare for =
+sysadmin.
+> > > It is useful when cephfs is used as an external storage on the host, =
+but if you
+> > > share cephfs with a few containers with different user namespaces idm=
+apping...
+> >
+> > Hmm, while this will break the MDS permission check in cephfs then in
+> > lookup case. If we really couldn't support it we should make it to
+> > escape the check anyway or some OPs may fail and won't work as expected=
+.
 
---rx6ubjn2sztmbvp2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Dear Gregory,
 
-Hi,
+Thanks for the fast reply!
 
-On Wed, May 24, 2023 at 10:31:32AM +0200, Sascha Hauer wrote:
-> Move the RK3399 specifics to a SoC specific init function to make
-> the way free for supporting other SoCs later.
->=20
-> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> ---
->=20
-> Notes:
->     Changes since v4:
->     - use of_device_get_match_data()
->     - use a callback rather than a struct type as driver data
->=20
->  drivers/devfreq/event/rockchip-dfi.c | 48 +++++++++++++++++++---------
->  1 file changed, 33 insertions(+), 15 deletions(-)
->=20
+>
+> I don't pretend to know the details of the VFS (or even our linux
+> client implementation), but I'm confused that this is apparently so
+> hard. It looks to me like we currently always fill in the "caller_uid"
+> with "from_kuid(&init_user_ns, req->r_cred->fsuid))". Is this actually
+> valid to begin with? If it is, why can't the uid mapping be applied on
+> that?
 
-Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Applying an idmapping is not hard, it's as simple as replacing
+from_kuid(&init_user_ns, req->r_cred->fsuid)
+to
+from_vfsuid(req->r_mnt_idmap, &init_user_ns, VFSUIDT_INIT(req->r_cred->fsui=
+d))
 
--- Sebastian
+but the problem is that we don't have req->r_mnt_idmap for all the requests=
+.
+For instance, we don't have idmap arguments (that come from the VFS
+layer) for ->lookup
+operation and many others. There are some reasons for that (Christian
+has covered some of them).
+So, it's not about my laziness to implement that. It's a real pain ;-)
 
-> diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event=
-/rockchip-dfi.c
-> index e19e5acaa362c..6b1ef29df7048 100644
-> --- a/drivers/devfreq/event/rockchip-dfi.c
-> +++ b/drivers/devfreq/event/rockchip-dfi.c
-> @@ -17,6 +17,7 @@
->  #include <linux/slab.h>
->  #include <linux/list.h>
->  #include <linux/of.h>
-> +#include <linux/of_device.h>
-> =20
->  #include <soc/rockchip/rk3399_grf.h>
-> =20
-> @@ -55,27 +56,21 @@ struct rockchip_dfi {
->  	void __iomem *regs;
->  	struct regmap *regmap_pmu;
->  	struct clk *clk;
-> +	u32 ddr_type;
->  };
-> =20
->  static void rockchip_dfi_start_hardware_counter(struct devfreq_event_dev=
- *edev)
->  {
->  	struct rockchip_dfi *dfi =3D devfreq_event_get_drvdata(edev);
->  	void __iomem *dfi_regs =3D dfi->regs;
-> -	u32 val;
-> -	u32 ddr_type;
-> -
-> -	/* get ddr type */
-> -	regmap_read(dfi->regmap_pmu, RK3399_PMUGRF_OS_REG2, &val);
-> -	ddr_type =3D (val >> RK3399_PMUGRF_DDRTYPE_SHIFT) &
-> -		    RK3399_PMUGRF_DDRTYPE_MASK;
-> =20
->  	/* clear DDRMON_CTRL setting */
->  	writel_relaxed(CLR_DDRMON_CTRL, dfi_regs + DDRMON_CTRL);
-> =20
->  	/* set ddr type to dfi */
-> -	if (ddr_type =3D=3D RK3399_PMUGRF_DDRTYPE_LPDDR3)
-> +	if (dfi->ddr_type =3D=3D RK3399_PMUGRF_DDRTYPE_LPDDR3)
->  		writel_relaxed(LPDDR3_EN, dfi_regs + DDRMON_CTRL);
-> -	else if (ddr_type =3D=3D RK3399_PMUGRF_DDRTYPE_LPDDR4)
-> +	else if (dfi->ddr_type =3D=3D RK3399_PMUGRF_DDRTYPE_LPDDR4)
->  		writel_relaxed(LPDDR4_EN, dfi_regs + DDRMON_CTRL);
-> =20
->  	/* enable count, use software mode */
-> @@ -167,8 +162,26 @@ static const struct devfreq_event_ops rockchip_dfi_o=
-ps =3D {
->  	.set_event =3D rockchip_dfi_set_event,
->  };
-> =20
-> +static int rk3399_dfi_init(struct rockchip_dfi *dfi)
-> +{
-> +	struct regmap *regmap_pmu =3D dfi->regmap_pmu;
-> +	u32 val;
-> +
-> +	dfi->clk =3D devm_clk_get(dfi->dev, "pclk_ddr_mon");
-> +	if (IS_ERR(dfi->clk))
-> +		return dev_err_probe(dfi->dev, PTR_ERR(dfi->clk),
-> +				     "Cannot get the clk pclk_ddr_mon\n");
-> +
-> +	/* get ddr type */
-> +	regmap_read(regmap_pmu, RK3399_PMUGRF_OS_REG2, &val);
-> +	dfi->ddr_type =3D (val >> RK3399_PMUGRF_DDRTYPE_SHIFT) &
-> +			RK3399_PMUGRF_DDRTYPE_MASK;
-> +
-> +	return 0;
-> +};
-> +
->  static const struct of_device_id rockchip_dfi_id_match[] =3D {
-> -	{ .compatible =3D "rockchip,rk3399-dfi" },
-> +	{ .compatible =3D "rockchip,rk3399-dfi", .data =3D rk3399_dfi_init },
->  	{ },
->  };
->  MODULE_DEVICE_TABLE(of, rockchip_dfi_id_match);
-> @@ -179,6 +192,12 @@ static int rockchip_dfi_probe(struct platform_device=
- *pdev)
->  	struct rockchip_dfi *dfi;
->  	struct devfreq_event_desc *desc;
->  	struct device_node *np =3D pdev->dev.of_node, *node;
-> +	int (*soc_init)(struct rockchip_dfi *dfi);
-> +	int ret;
-> +
-> +	soc_init =3D of_device_get_match_data(&pdev->dev);
-> +	if (!soc_init)
-> +		return -EINVAL;
-> =20
->  	dfi =3D devm_kzalloc(dev, sizeof(*dfi), GFP_KERNEL);
->  	if (!dfi)
-> @@ -188,11 +207,6 @@ static int rockchip_dfi_probe(struct platform_device=
- *pdev)
->  	if (IS_ERR(dfi->regs))
->  		return PTR_ERR(dfi->regs);
-> =20
-> -	dfi->clk =3D devm_clk_get(dev, "pclk_ddr_mon");
-> -	if (IS_ERR(dfi->clk))
-> -		return dev_err_probe(dev, PTR_ERR(dfi->clk),
-> -				     "Cannot get the clk pclk_ddr_mon\n");
-> -
->  	node =3D of_parse_phandle(np, "rockchip,pmu", 0);
->  	if (!node)
->  		return dev_err_probe(&pdev->dev, -ENODEV, "Can't find pmu_grf register=
-s\n");
-> @@ -209,6 +223,10 @@ static int rockchip_dfi_probe(struct platform_device=
- *pdev)
->  	desc->driver_data =3D dfi;
->  	desc->name =3D np->name;
-> =20
-> +	ret =3D soc_init(dfi);
-> +	if (ret)
-> +		return ret;
-> +
->  	dfi->edev =3D devm_devfreq_event_add_edev(&pdev->dev, desc);
->  	if (IS_ERR(dfi->edev)) {
->  		dev_err(&pdev->dev,
-> --=20
-> 2.39.2
->=20
+>
+> As both the client and the server share authority over the inode's
+> state (including things like mode bits and owners), and need to do
+> permission checking, being able to tell the server the relevant actor
+> is inherently necessary. We also let admins restrict keys to
+> particular UID/GID combinations as they wish, and it's not the most
+> popular feature but it does get deployed. I would really expect a user
+> of UID mapping to be one of the *most* likely to employ such a
+> facility...maybe not with containers, but certainly end-user homedirs
+> and shared spaces.
+>
+> Disabling the MDS auth checks is really not an option. I guess we
+> could require any user employing idmapping to not be uid-restricted,
+> and set the anonymous UID (does that work, Xiubo, or was it the broken
+> one? In which case we'd have to default to root?). But that seems a
+> bit janky to me.
 
---rx6ubjn2sztmbvp2
-Content-Type: application/pgp-signature; name="signature.asc"
+That's an interesting point about anonymous UID, but at the same time,
+We use these caller's fs UID/GID values as an owner's UID/GID for
+newly created inodes.
+It means that we can't use anonymous UID everywhere in this case
+otherwise all new files/directories
+will be owned by an anonymous user.
 
------BEGIN PGP SIGNATURE-----
+> -Greg
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSImLEACgkQ2O7X88g7
-+pqZDQ/+OZcf2EIUTPKqg4spvMldvlmYCa6HcWP2PYnPewWBlAOGuuKx0gsCfIRL
-BDskxrVjEgblfAU6TGbH9L/gtCK+Mo2YQcPIeGOANIupI/j4Lq510CTzxvtTRcV+
-QlxqCMqnynE3lR3RfDfxHT2u391X7axmzyLXGEhyHlWOQnMrNBM2hDt4v7/hP+Rf
-KAaj+c+OuZvucZsgbx2qL+1GldDtYI01LwWp1hpofgwt3s8K2LBumaJyu1HrkfFk
-C2XOrVFD+yHLl+iZaN0U/0+36Ncep1IdY0ytJI1USJO4CI3KzZ8q3d5Uz+vHvjV8
-T9S1onvR9iiFvSHxsEo82ABJ/hjXUnXH5Xy7xTEpUE92Xc+8otb3xJc+0kFKDF6E
-kgWwOuIL2xM1iItYZdMXtAS48a75DyM+2RpNuioyReDS2sNowbJK86WoLwucU3PM
-gp6v06jfPbq6PrHy/KVKdjb+sDkYggatA9XgNa3zkOYZ8+EC7fMdu1ZHcvKxnDYO
-N5ZoDbYtqISN6x3kGda/67ViEjh7l1qLMl0ujFq8tRA2EcY/IKvoc9dyko+N85ml
-rv5gVzJxKZbRvL4lBFzHrQkAbMru3BLk7WcuhDsPq/CoffTWddlhJiKVKsPpK+06
-uvsCvubIt/p5bfzTJklQm3oG02bfyH4UimNIwRaf59WWnDphEac=
-=jgR8
------END PGP SIGNATURE-----
+Kind regards,
+Alex
 
---rx6ubjn2sztmbvp2--
+>
+> > @Greg
+> >
+> > For the lookup requests the idmapping couldn't get the mapped UID/GID
+> > just like all the other requests, which is needed by the MDS permission
+> > check. Is that okay to make it disable the check for this case ? I am
+> > afraid this will break the MDS permssions logic.
+> >
+> > Any idea ?
+> >
+> > Thanks
+> >
+> > - Xiubo
+> >
+> >
+> > > Kind regards,
+> > > Alex
+> > >
+> >
+>
