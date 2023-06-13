@@ -2,120 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1628072E769
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61FA572E77C
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241236AbjFMPh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 11:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52760 "EHLO
+        id S242416AbjFMPiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 11:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240660AbjFMPhW (ORCPT
+        with ESMTP id S240183AbjFMPiA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 11:37:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07101FE2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 08:35:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686670555;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XrhOZVeec/db2uALYpez63xq92Ih/dtdSBOBzIwOjR8=;
-        b=YZc8wHfxBsbMEoOlNZS9ABgyiz8zrQvVHWMLCk4NgPL4AQTdIFyszOfYf4kYyPuMw1+uBQ
-        uW/57mw8CQNjJ7ozWaeP9s7l1aEg4VVNdMRvhGDtb+bBuEZSyKvKhvGD8EP42EQdwgD9XL
-        L0XZtB+HjqcYQeNffjUOSQ9zZMax/k8=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-1-OvGX4RoZN2GRsfFLQyVpDg-1; Tue, 13 Jun 2023 11:35:52 -0400
-X-MC-Unique: OvGX4RoZN2GRsfFLQyVpDg-1
-Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-514abe67064so5305290a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 08:35:46 -0700 (PDT)
+        Tue, 13 Jun 2023 11:38:00 -0400
+Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89FEA1FFD
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 08:37:38 -0700 (PDT)
+Received: by mail-il1-x143.google.com with SMTP id e9e14a558f8ab-33dae9244a1so25323205ab.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 08:37:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686670627; x=1689262627;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AKbFs/oSeKbO6WH3jSDXeZ5tC5Pa2Etv2JU7SHAB4fk=;
+        b=pur9sIjm9MnbkLWBP+xKRkhzhe1XrnfdhgP+bxJQvZ/g4e7gcCQqdZriUdAgT5lqww
+         QyRYjNI7kBMNdMPS4rhjDUL41HOjunNHgFmY2RcfhTyvjKolcngRkpX3OjmsFfdSNcUp
+         YMaCWGOn8Jmz2oUgaUgXCatrAl6tjR4e/C2dgrlU6n9HSal/FYmeys0A/zcCYGyuOxTm
+         uZ6qzgCCe+ftQzZfiSOs2Gi3wI2mZxXkpWfCi/D+e/XQKnaQv/SH1KIv7ESBMeGnAZAL
+         qEQorsnvu77SBDcnHteizxv7ngWtvdJODCfA+OtoW9HWNO8scZDhWwGv7WR2NJD/8qFf
+         1ewA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686670546; x=1689262546;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1686670627; x=1689262627;
+        h=to:subject:message-id:date:from:reply-to:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XrhOZVeec/db2uALYpez63xq92Ih/dtdSBOBzIwOjR8=;
-        b=JhxFTWC97rKgPauNc5tX+ak7oGIDFOW/ANLaKMSg5RNw6OVHQRZRqY/Fu/J1gcjjBi
-         F5RZT3PWY7Wf0VFq8ZusFWsLi5woQW9szzouhfoluGbckVPx0hUEXI0+H6rqlsMykAPL
-         FYSc2+/jaJMFY02yy4dhxRovDsBxkTVUFS3MdBhSCOeBo89hOYblGYZVY+oOd+59gcue
-         T7oVmgZfA3NxjyJpvAw2WffUbCCmvwCNZ6hsrdQtMHcIHRmiLt0ZKIbNBJoLuEKbR80m
-         gT5tThHgPviT4FdFqncTgXZ6Jl7ZKJJWB9gBMIB2oisarxRZ6OOS6fvEULGpBtvBPAdc
-         Z5yg==
-X-Gm-Message-State: AC+VfDyatVzaZaO7cfaoEmru98qAPrSUWAnf1s7O6b7YyAIk6rcRGyJO
-        0Zk686gIDQV7onev2/ltghLtjQ/ulifUCth+jjqjrLbjENR2kQA5RxH4j3UyZ7Yd9FeGNN132pJ
-        vOAen/egWdNpdLq/xIUi5qOEM
-X-Received: by 2002:aa7:d49a:0:b0:50b:fd52:2f4b with SMTP id b26-20020aa7d49a000000b0050bfd522f4bmr8767187edr.24.1686670546060;
-        Tue, 13 Jun 2023 08:35:46 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7BMFmVyFJ4lCGDdWS54ulpZZa9F099khds3bj+FjvKlYT50eyMdDe0p3lFuCQ0U4uRG/Fslw==
-X-Received: by 2002:aa7:d49a:0:b0:50b:fd52:2f4b with SMTP id b26-20020aa7d49a000000b0050bfd522f4bmr8767175edr.24.1686670545829;
-        Tue, 13 Jun 2023 08:35:45 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? ([2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id j25-20020aa7c0d9000000b005148f0e8568sm6626969edp.39.2023.06.13.08.35.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 08:35:45 -0700 (PDT)
-Message-ID: <5a6e0086-027b-cf6b-6c89-32aba244c1dd@redhat.com>
-Date:   Tue, 13 Jun 2023 17:35:42 +0200
+        bh=AKbFs/oSeKbO6WH3jSDXeZ5tC5Pa2Etv2JU7SHAB4fk=;
+        b=CXWxl/u4jDDlHqv8hWMSKWjd2UNxPakDneXal+dHRhPV2NnBgV1kGPIubB313EECgj
+         8FJ0n3rmycOrWQqLCScCCEafxOx4K6Mrspv3LWvwAwC4b1SMkh2mAFp7URaxtMmMpTbR
+         WaT7lpwZyVlniz2D/ZvqBi4X3eOjLUtc3377xhZBzRUhPR+neMcAwAaB8YrWkubhUHP0
+         +UqljB5RD9xFpP3bG7QVFaHlk5x6QN5xmYs7O4LHr7ZkZ/qexT39FROH0rAH4FQ+0My/
+         qjV0QwnmKsplpU6JK7EyBO+CwtlI5EAXiBQVbhLd/Dj4xWNsbIukn2porHuoyOUcj/Cf
+         wy/g==
+X-Gm-Message-State: AC+VfDxD6UzhPcoG1GqB9ExH4u0kguwk0TO4h0aSQ5r+UUQaDSJfya1l
+        zi53DmONg0j/vf63M+Gbs+yi6//n3JnjfbLsrQs=
+X-Google-Smtp-Source: ACHHUZ6S9KltKtE4oZoCl3owl2noBBj9wQATCC6pCpyJnIYfn/LhqEcvKzwSFifRBBCOilA+RHSZDHjlIs23KmiiX9Q=
+X-Received: by 2002:a05:6e02:1301:b0:331:85fa:74c5 with SMTP id
+ g1-20020a056e02130100b0033185fa74c5mr9834193ilr.1.1686670627267; Tue, 13 Jun
+ 2023 08:37:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2] platform/x86/dell/dell-rbtn: Fix resources leaking on
- error path
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Michal Wilczynski <michal.wilczynski@intel.com>
-Cc:     linux-acpi@vger.kernel.org, rafael@kernel.org,
-        ilpo.jarvinen@linux.intel.com, pali@kernel.org,
-        markgross@kernel.org, fengguang.wu@intel.com,
-        dvhart@linux.intel.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230613084310.2775896-1-michal.wilczynski@intel.com>
- <ZIiHaEn7nW7yAFK8@smile.fi.intel.com>
-Content-Language: en-US, nl
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <ZIiHaEn7nW7yAFK8@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:a05:6638:d55:b0:411:2930:9dda with HTTP; Tue, 13 Jun 2023
+ 08:37:07 -0700 (PDT)
+Reply-To: missantoniaayeleobi@gmail.com
+From:   Miss Antonia Ayele Obi <jameskondo32@gmail.com>
+Date:   Tue, 13 Jun 2023 08:37:07 -0700
+Message-ID: <CANkAqSuknEQG3gCmqVQK1bx-uJZU16Kd9e-rbd2D8P=Gcw2G0w@mail.gmail.com>
+Subject: URGENT
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,HK_RANDOM_REPLYTO,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:143 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4881]
+        *  1.0 HK_RANDOM_REPLYTO Reply-To username looks random
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [jameskondo32[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [jameskondo32[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+-- 
+Good day,
+How are you doing today, hope you are fine please i have something to
+tell you. If you don't mind.
 
-On 6/13/23 17:12, Andy Shevchenko wrote:
-> On Tue, Jun 13, 2023 at 11:43:10AM +0300, Michal Wilczynski wrote:
->> Currently rbtn_add() in case of failure is leaking resources. Fix this
->> by adding a proper rollback. Move devm_kzalloc() before rbtn_acquire(),
->> so it doesn't require rollback in case of failure. While at it, remove
->> unnecessary assignment of NULL to device->driver_data and unnecessary
->> whitespace, plus add a break for the default case in a switch.
-> 
->> Suggested-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> 
-> Isn't also suggested by Pali?
-> 
->> Fixes: 817a5cdb40c8 ("dell-rbtn: Dell Airplane Mode Switch driver")
->> Signed-off-by: Michal Wilczynski <michal.wilczynski@intel.com>
->> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->> Acked-by: Rafael J. Wysocki <rafael@kernel.org>
-> 
-> ...
-> 
-> Hans, can it (an additional tag) be folded into applied change?
+Am waiting for your response.
 
-Done and pushed to review-hans.
+Best regards.
 
-Regards,
-
-Hans
-
-
-
-
+Miss Antonia Ayele Obi
