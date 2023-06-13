@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3102172D672
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 02:33:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B1F72D675
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 02:34:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238500AbjFMAde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 20:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36554 "EHLO
+        id S238658AbjFMAeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 20:34:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjFMAdc (ORCPT
+        with ESMTP id S230445AbjFMAeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 20:33:32 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CEE135;
-        Mon, 12 Jun 2023 17:33:31 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id ca18e2360f4ac-77ae3db633cso244524539f.2;
-        Mon, 12 Jun 2023 17:33:31 -0700 (PDT)
+        Mon, 12 Jun 2023 20:34:08 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B1D13E;
+        Mon, 12 Jun 2023 17:34:07 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id ca18e2360f4ac-77b210292c5so32400339f.1;
+        Mon, 12 Jun 2023 17:34:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686616411; x=1689208411;
+        d=gmail.com; s=20221208; t=1686616447; x=1689208447;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=orvTaM05vfNG9foEK/hqh+cEN5/5QXQGjI4W0NarmSc=;
-        b=sVN/hHFn2mCnqJsDV1/wf/tvkHMku434xIkskNn8dQRPf3VpS1giJRuSSObFQKRF2O
-         aKDWo5ch1KU1X5vV/TyOBBLcP9hk/G93wzzs62//+uqGpF3xCc85dhxjZieUAQ0LWQ3D
-         jV+SxYtFY2bx5J+yROGHgJIJ/FeB6IQ25n3frvdYIBaYvVrutJXT940ZAWrdq4/pO5T+
-         alrIAI5BhJbLz9PRADEqjOYkIqpQZSF+kaE1YIb1ropgJw9zdCVEDn6x/mOgT/O5dyvc
-         bAJuOfuYpPNDvUyijxlKxxTDX1b45Tconltk8AG/FSdQnulMIXMB5OJh0Yd9pNaEVmk4
-         aX+Q==
+        bh=5ZyJW6d4bROLzUBlQENsOphZCVnHp3HjRNgKHqO3CTA=;
+        b=plyiZsTwLOCz5jJaWXoCQyBlO8UjThua51T0gwTk++Yy3YxMemPc9mBETyZL3KnoN5
+         ZtH7AYEQMHXhnxfxoAFdXlNGNfocRpOPZ0VJ7ksSDEJlfO/u1eAfNtgaT/woLXeXukf4
+         b1x541aR9H/w8R8wFxlWsscgmXNwYO/yo7+bxL1GnVla4Aw5HLLeYFZZBAwmTY3hqyR2
+         BZRf7PTHpa+Sc2uydd0YRAgsuTK9WX+GxPeS9gwP9jfpPKKPjJo58vFG1zWge6Yw6luX
+         sszMnumkqYDq7ED9Zhb0/RRVy4nXpBgKKDTPjjMgaoGQwebk4HHpuqLXC4J4EFJjNERA
+         IxGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686616411; x=1689208411;
+        d=1e100.net; s=20221208; t=1686616447; x=1689208447;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=orvTaM05vfNG9foEK/hqh+cEN5/5QXQGjI4W0NarmSc=;
-        b=JU60LHGeciNyfJZn+4rkdNKC19l4vlcD8m7YCzZpQBW17VsNlf20MV/KTo4MPbpxgA
-         OJAOKcrcVI3cuAQsWIp2hA9jyKRkWm5//LWMrujP1xx6HPf/eLXCwjrNwKLS+CxExukS
-         iHot+1+/hGKmqcpWNZ4HFioB88V4N11P/5d6lm92pAvusTeqN6KmT7K5ccC++5x9/ax2
-         2BG0CiDG4SCI0gVoeydGja3o/Ge0/ndNKs/vzlGmwRWTjfUBreYzptEqGkD+xXLnazSn
-         Bq+uSS3i4pnJV6GgrMWKqsO9PCrJ2ecw/Jw+oW/2EcLhdyHJug1uPq+aQ4aXidRq1Hwu
-         TMbg==
-X-Gm-Message-State: AC+VfDyqcXTOq3JJ+yseBmp+IItCy5M9ao6eVGca/OxDNglwBHYqYxjq
-        jfxnpA5SAnOgQVXE3Z4kB/w=
-X-Google-Smtp-Source: ACHHUZ5qJiyzIl6fNy5Eta9rZ0A75u23IN2Wh+JvlLGlqiBYaTyZWLejZ20IYu4ylFcuIDX5ED7ofQ==
-X-Received: by 2002:a5e:da0a:0:b0:775:8241:724a with SMTP id x10-20020a5eda0a000000b007758241724amr9316288ioj.16.1686616410765;
-        Mon, 12 Jun 2023 17:33:30 -0700 (PDT)
+        bh=5ZyJW6d4bROLzUBlQENsOphZCVnHp3HjRNgKHqO3CTA=;
+        b=U1ghphAO/KDjdWL9V/2r++ZzX0KuARUz6Y+9NvbdKUPUEmg6WjPtHS44Er6mnnlFAH
+         zcFzE2ARwq+EqCasIceWpV0cZygoHXvIHBJIbJcW/nFH6jgGrVNgj+Etv0U/DMbGHFRp
+         9RIa9ooC/hOjudHBZc9Q7HRuMiglmVUjni8fAVOM6JY7jEPEqH1lIDSaOFU+8iKJUHTL
+         S8rYZ5K9l8Ggsz/tsr3QHJknT8Jf8EDfOPi826aj+addOsJR+T9KBg31bhgGI407qIUL
+         SKdkVIUDO9ISBizXC0rieSxxaKBp+cN+70ajc7MpbQMGnAu5tQ+wLtx6CCQAHb2Le9yh
+         liMA==
+X-Gm-Message-State: AC+VfDzUMXJCmUAjVRCAL4Bbjj3jZ3cZhEMcCzZWf6L6AtWACYhGAwR0
+        XKD+on2RFF4AicW0vmm9YZw=
+X-Google-Smtp-Source: ACHHUZ5nWGpcSmeIrHIFjUJkjgZR4nOixtAXzLoekNMP0wOxE0qS/8tnIAMblPmXtXFL1R9IhTaEGA==
+X-Received: by 2002:a5e:c64d:0:b0:777:b464:6ff9 with SMTP id s13-20020a5ec64d000000b00777b4646ff9mr8858679ioo.21.1686616447193;
+        Mon, 12 Jun 2023 17:34:07 -0700 (PDT)
 Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
-        by smtp.gmail.com with ESMTPSA id g11-20020a02c54b000000b0041f4f8094ddsm3194983jaj.106.2023.06.12.17.33.30
+        by smtp.gmail.com with ESMTPSA id h14-20020a0566380f0e00b0041cea93e589sm3049909jas.152.2023.06.12.17.34.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 17:33:30 -0700 (PDT)
+        Mon, 12 Jun 2023 17:34:06 -0700 (PDT)
 From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-To:     Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Johannes Berg <johannes@sipsolutions.net>
 Cc:     linux-hardening@vger.kernel.org,
         Azeem Shaikh <azeemshaikh38@gmail.com>,
-        linux-wpan@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Subject: [PATCH] ieee802154: Replace strlcpy with strscpy
-Date:   Tue, 13 Jun 2023 00:33:25 +0000
-Message-ID: <20230613003326.3538391-1-azeemshaikh38@gmail.com>
+Subject: [PATCH] mac80211: Replace strlcpy with strscpy
+Date:   Tue, 13 Jun 2023 00:34:04 +0000
+Message-ID: <20230613003404.3538524-1-azeemshaikh38@gmail.com>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -83,44 +81,30 @@ overflows if a source string is not NUL-terminated [1].
 In an effort to remove strlcpy() completely [2], replace
 strlcpy() here with strscpy().
 
-Direct replacement is safe here since the return values
-from the helper macros are ignored by the callers.
+Direct replacement is safe here since LOCAL_ASSIGN is only used by
+TRACE macros and the return values are ignored.
 
 [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
 [2] https://github.com/KSPP/linux/issues/89
 
 Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
 ---
- net/ieee802154/trace.h |    2 +-
- net/mac802154/trace.h  |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ net/mac80211/trace.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/ieee802154/trace.h b/net/ieee802154/trace.h
-index e5d8439b9e45..c16db0b326fa 100644
---- a/net/ieee802154/trace.h
-+++ b/net/ieee802154/trace.h
-@@ -13,7 +13,7 @@
+diff --git a/net/mac80211/trace.h b/net/mac80211/trace.h
+index db0d0132c58c..c51c6e3feac9 100644
+--- a/net/mac80211/trace.h
++++ b/net/mac80211/trace.h
+@@ -17,7 +17,7 @@
  
  #define MAXNAME		32
- #define WPAN_PHY_ENTRY	__array(char, wpan_phy_name, MAXNAME)
--#define WPAN_PHY_ASSIGN	strlcpy(__entry->wpan_phy_name,	 \
-+#define WPAN_PHY_ASSIGN	strscpy(__entry->wpan_phy_name,	 \
- 				wpan_phy_name(wpan_phy), \
- 				MAXNAME)
- #define WPAN_PHY_PR_FMT	"%s"
-diff --git a/net/mac802154/trace.h b/net/mac802154/trace.h
-index 689396d6c76a..1574ecc48075 100644
---- a/net/mac802154/trace.h
-+++ b/net/mac802154/trace.h
-@@ -14,7 +14,7 @@
- 
- #define MAXNAME		32
- #define LOCAL_ENTRY	__array(char, wpan_phy_name, MAXNAME)
--#define LOCAL_ASSIGN	strlcpy(__entry->wpan_phy_name, \
-+#define LOCAL_ASSIGN	strscpy(__entry->wpan_phy_name, \
- 				wpan_phy_name(local->hw.phy), MAXNAME)
+ #define LOCAL_ENTRY	__array(char, wiphy_name, 32)
+-#define LOCAL_ASSIGN	strlcpy(__entry->wiphy_name, wiphy_name(local->hw.wiphy), MAXNAME)
++#define LOCAL_ASSIGN	strscpy(__entry->wiphy_name, wiphy_name(local->hw.wiphy), MAXNAME)
  #define LOCAL_PR_FMT	"%s"
- #define LOCAL_PR_ARG	__entry->wpan_phy_name
+ #define LOCAL_PR_ARG	__entry->wiphy_name
+ 
 -- 
 2.41.0.162.gfafddb0af9-goog
 
