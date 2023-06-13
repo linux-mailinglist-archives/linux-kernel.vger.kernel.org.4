@@ -2,66 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8725172DCD5
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:41:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 326CC72DCD3
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:41:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241735AbjFMIlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 04:41:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
+        id S241713AbjFMIk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 04:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241616AbjFMIkO (ORCPT
+        with ESMTP id S241851AbjFMIkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 04:40:14 -0400
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C671C0;
+        Tue, 13 Jun 2023 04:40:13 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 61C87A0;
         Tue, 13 Jun 2023 01:40:12 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0Vl1SShK_1686645608;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0Vl1SShK_1686645608)
-          by smtp.aliyun-inc.com;
-          Tue, 13 Jun 2023 16:40:09 +0800
-From:   Jingbo Xu <jefflexu@linux.alibaba.com>
-To:     axboe@kernel.dk, hch@lst.de, linux-block@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, tianjia.zhang@linux.alibaba.com,
-        xiang@kernel.org, casey@schaufler-ca.com
-Subject: [PATCH v3 0/2] block: fine-granular CAP_SYS_ADMIN for Persistent Reservation ioctl
-Date:   Tue, 13 Jun 2023 16:40:06 +0800
-Message-Id: <20230613084008.93795-1-jefflexu@linux.alibaba.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
+HMM_SOURCE_IP: 10.64.8.43:49218.162439971
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id 42FC2100236;
+        Tue, 13 Jun 2023 16:40:08 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-75648544bd-7vx9t with ESMTP id eeccf25fcf684add9e175087e8ee34ea for mripard@kernel.org;
+        Tue, 13 Jun 2023 16:40:11 CST
+X-Transaction-ID: eeccf25fcf684add9e175087e8ee34ea
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <555e160a-0c9d-9145-88f1-a0ecff62240a@189.cn>
+Date:   Tue, 13 Jun 2023 16:40:07 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v14 0/2] drm: add kms driver for loongson display
+ controller
+Content-Language: en-US
+To:     Maxime Ripard <mripard@kernel.org>,
+        Sui Jingfeng <suijingfeng@loongson.cn>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        loongson-kernel@lists.loongnix.cn
+References: <20230520105718.325819-1-15330273260@189.cn>
+ <d4e647d8-294c-abd7-40c6-37381796203d@loongson.cn>
+ <a23d6mgl4fbfa4ucgjvwgw7l3somxo4tkhit7ygy55fldlum56@vm3tyjdsx24l>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <a23d6mgl4fbfa4ucgjvwgw7l3somxo4tkhit7ygy55fldlum56@vm3tyjdsx24l>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-changes since v2:
-- patch 1: disallow reservations on partitions entirely and make it into
-  a separate patch (hch)
-- patch 2: rebase to hch's series of converting fmode_t to blk_mode_t
-  and execute permission check upon blk_mode_t (hch)
 
-changes since RFC:
-- only allow unprivileged reservations if the file descriptor is open
-  for write (Christoph Hellwig)
-- refuse the unprivileged reservations on partitions (Christoph Hellwig)
-  (maybe this checking shall also be done when CAP_SYS_ADMIN is set?)
+On 2023/6/13 16:30, Maxime Ripard wrote:
+> Hi,
+>
+> On Mon, Jun 12, 2023 at 10:58:54PM +0800, Sui Jingfeng wrote:
+>> Hi,
+>>
+>>
+>> Any ideas for this trivial DC driver? Sorry about my broken English.
+>>
+>> What to do next? Send a new version?
+> Thomas already told you to merge it in the previous version:
+> https://lore.kernel.org/dri-devel/7b77020f-d543-13bf-e178-bc416bcc728d@suse.de/
+>
+> So.. do that?
 
+OK, I also want to merge this.
 
-RFC: https://lore.kernel.org/all/20230609102122.118800-1-jefflexu@linux.alibaba.com/
-v2: https://lore.kernel.org/all/20230612074103.4866-1-jefflexu@linux.alibaba.com/
+If there are any other problems, We and other contributor will take the 
+responsibility to fixed it with a separate patch.
 
-Jingbo Xu (2):
-  block: disallow Persistent Reservation on partitions
-  block: fine-granular CAP_SYS_ADMIN for Persistent Reservation
+It this OK?
 
- block/ioctl.c | 47 +++++++++++++++++++++++++++++++----------------
- 1 file changed, 31 insertions(+), 16 deletions(-)
-
--- 
-2.19.1.6.gb485710b
-
+> Maxime
