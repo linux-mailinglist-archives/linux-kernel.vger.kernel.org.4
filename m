@@ -2,56 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A0972EF48
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 00:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C88172EF60
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 00:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240679AbjFMW15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 18:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60804 "EHLO
+        id S240918AbjFMW2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 18:28:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239117AbjFMW1d (ORCPT
+        with ESMTP id S236179AbjFMW1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 13 Jun 2023 18:27:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3C91BF9;
-        Tue, 13 Jun 2023 15:27:25 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7D21BFD;
+        Tue, 13 Jun 2023 15:27:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 362AB63B99;
-        Tue, 13 Jun 2023 22:27:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAD7AC433D9;
-        Tue, 13 Jun 2023 22:27:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F29061625;
+        Tue, 13 Jun 2023 22:27:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0DBEC433C8;
+        Tue, 13 Jun 2023 22:27:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686695243;
-        bh=gJnHt3ruuA96Eien6SKgyVtO8mxux+BgnWX9bkvxlQA=;
+        s=k20201202; t=1686695244;
+        bh=y9fKrFHaMRhep0/VFWaHJUxHH5jsTj0Etm8hQeq/a+E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=brWSduzuLXLvNOh9OllGhp7Trl6aeBo6Edif9pAm4KHYMBIAQT8d7dTjAECrS52nD
-         +yuWAiELXZJt0R5UBlgezaKqitFXyQw+G3MOY7f2Yvh6A2rzBJyGQ7nIIBIUhSQWUK
-         7okhRk5DOzz9fQkT+7qcbhNwUnzYdEnn7F5/EjePrHLNzdh8B6Y3uA8iMHAvWq+Xwl
-         92iiuOkcqyraqaz8A6IltTcK91MyP0qB2yhP/B376QV4b5Fs7mUoTkAOKEY5fW+wNh
-         jrtisr1a76YjLzBJ5nezcwO3h80YhRRG3t4JEyqSE46nS8yi5olMHjWPKsp6ciNpY8
-         acbbXXGCgclIw==
+        b=Ghagcwh2EhNqyVqS0dGDU61XJkaH+Xh+xSrn6E/pM7HmWXtMs1wGl+nWZZyjrx/L5
+         /V6t6xic26C6Zi2Q+3TeKUgvjzIzGKm+O6gw6ZHdnscHQ3uLE221fhVbxha/uhiRE0
+         6pfXozpKCo8lPMiSYqQ1VxEOLsBZJDZaZCDrxBkYcpIM8m9fiQ+qfwo/flUUw7NF54
+         RZVZ/v7CL74DQk/OFDu3LlPcOWp3gbS8AaO4UhNAt5hQS8YoeglT6ejs+molyzrALI
+         MagTdY2NaUreOAiUCkfNifz58bfOgvZkmdruIvHAUiZsrlGLK7a08O1Z+NNqMA7+56
+         bdWIQ2eWpLCSw==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+To:     agross@kernel.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Anusha Rao <quic_anusha@quicinc.com>,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        konrad.dybcio@linaro.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/4] arm64: qcom: sm8550: enable PMIC devices
-Date:   Tue, 13 Jun 2023 15:30:20 -0700
-Message-Id: <168669542893.1315701.13987460112749056512.b4-ty@kernel.org>
+Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_poovendh@quicinc.com,
+        quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com
+Subject: Re: [PATCH] arm64: dts: qcom: ipq9574: add few more reserved memory region
+Date:   Tue, 13 Jun 2023 15:30:21 -0700
+Message-Id: <168669542895.1315701.7702140907456519614.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230525-topic-sm8550-upstream-pm8550-lpg-dt-v4-0-a288f24af81b@linaro.org>
-References: <20230525-topic-sm8550-upstream-pm8550-lpg-dt-v4-0-a288f24af81b@linaro.org>
+In-Reply-To: <20230602084431.19134-1-quic_anusha@quicinc.com>
+References: <20230602084431.19134-1-quic_anusha@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,26 +62,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 12 Jun 2023 17:22:48 +0200, Neil Armstrong wrote:
-> This enables the following PMIC devices:
-> - PWM RGB LED
-> - RTC
-> - Volume and Power buttons
-> 
-> on the SM8550 boards.
+On Fri, 2 Jun 2023 14:14:31 +0530, Anusha Rao wrote:
+> In IPQ SoCs, bootloader will collect the system RAM contents upon crash
+> for post-morterm analysis. If we don't reserve the memory region used
+> by bootloader, obviously linux will consume it and upon next boot on
+> crash, bootloader will be loaded in the same region, which will lead to
+> loss of some data, sometimes we may miss out critical information.
+> So lets reserve the region used by the bootloader.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/4] arm64: dts: qcom: pm8550: add PWM controller
-      commit: 8889d13c2e758cff33fc85139c6d9288553e0e30
-[2/4] arm64: dts: qcom: sm8550-qrd: add notification RGB LED
-      commit: 3818165476d70b13cf3193e1b5e60b1af6689772
-[3/4] arm64: dts: qcom: pmk8550: always enable RTC PMIC device
-      commit: a791fc19965e52918bb70e2b764965083eaadbed
-[4/4] arm64: dts: qcom: sm8550-qrd: enable PMIC Volume and Power buttons
-      commit: bb47bfbd5aa89368c348d9828484f7201cef6cea
+[1/1] arm64: dts: qcom: ipq9574: add few more reserved memory region
+      commit: f684391e3d323bbdc832569dc685d1289c58d081
 
 Best regards,
 -- 
