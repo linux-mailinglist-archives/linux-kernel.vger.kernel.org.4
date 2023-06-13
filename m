@@ -2,145 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BEE172DA24
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 08:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7797172DA2B
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 08:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239360AbjFMGtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 02:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42854 "EHLO
+        id S239747AbjFMGu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 02:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234840AbjFMGtD (ORCPT
+        with ESMTP id S237542AbjFMGuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 02:49:03 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CDD10F7
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 23:49:00 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-51493ec65d8so9125937a12.2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 23:49:00 -0700 (PDT)
+        Tue, 13 Jun 2023 02:50:54 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E274C10D4
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 23:50:52 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-97458c97333so860888766b.2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 23:50:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686638939; x=1689230939;
+        d=linaro.org; s=google; t=1686639051; x=1689231051;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=JByW78XRxwt99QO8bpQ4dJ/f+SnJIwQTPeLVoUbaf6E=;
-        b=CUH5io/2NXK9bJPrQ4CKLbyiev/+CzqQvIpxpYkdcdhl8VKlJAtIAR3zbZeeDJhwUo
-         PmPCw4FMiDLSLeHE8jfh8vP0EJlCropcNp61+eZu8GixJ/X8b24NFSe0xwlge9s9ZmPV
-         iWDfhWMG+TROBBgM+luWc8nFxaUlrI4uhLqNL5pQ7LGr55lHcq2xrI0rLO/xCpqGEVDi
-         IQA4F+G5QfiB1peiDeR9gVwkO/ZhOsd24gsGjdHZdcOhBKmxXVgCK39J/kNwqcXHpcSY
-         g6pTwqiHmIi9nGLeNJniSOH2UiJ5QKC29S1YYNqGPQUNeZweulAQIazq6K1aNmMPXIIt
-         Qy/g==
+        bh=drhtA/AGAcvwMxZVFjQYAdmDG7ePEnCLOgbt0/oNOdY=;
+        b=TEBz+iZ2s8G54c8HHwJZkTgDJI3RZ7DozvdgUWvfhiUfwutxTKRQkZVedL1jpTAZfa
+         64EH2Nf8Vhk1Ym3/SD7HraDStIGt4V5gA5TkrUUm93LI0BAC6SnoTjOvJZMTynrqaJ9i
+         YMDJl45H1L1hsufbHT9H4Xl7f7yEhUu4cviByNBfIIOXIeCEJcfM9ATgrE2GEgKWdRrC
+         iN3VXWj+Lo4+ywfbsuPzWfRNMLrofczkxh+QLjEmdP2AeabuiH8oUjF4GXZNlHhN5cBI
+         nKFQeKjeWF9mhyholPm+CxYVhdPMi6VemXc/i3VuGaknkVq6uUqr6SCdt+hkHz4yL9VX
+         /pqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686638939; x=1689230939;
+        d=1e100.net; s=20221208; t=1686639051; x=1689231051;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JByW78XRxwt99QO8bpQ4dJ/f+SnJIwQTPeLVoUbaf6E=;
-        b=akPGg5P15F6IcugqPotavPde7RmeeBR6lcvHHVkO5kkYt9tnuGhtb1YaHmDvuM31wC
-         zNZOSaB3Rw5LqpVB9dQPOpuZ1jCyU0HkC0nVK/zpU63KxBf7Dl+a30zFqLWcB+GyIToD
-         9y7dU4HOYQi/ZJJhQYU5HkaIq+TWtTiaMXIQ1w5VdL/7CJJXP37QVcnUKFJlzhTDT6t0
-         GHb4NKha3ptBb5NkfPkNkXsXEdixi5nwsUGylRdrIejsq3QPwagdNfW43qsMFJjsnKJp
-         nZ0wPifJvoz0hy+uqamG8EIbBlP8iiea5C6tuOrXVkb9NjYGlf+53GTisftdiQqlYjKf
-         GWBQ==
-X-Gm-Message-State: AC+VfDwoWOzKpZJ5ktKyXLcmh+Np2FkWFaiMS8VwhSgf7y90K0xZouzf
-        0/uA7w3n05I6iMuj4r2AAAZaeg==
-X-Google-Smtp-Source: ACHHUZ5/M9JVbjysecegMnbOiZeUTZSN0jbLGBBwN5EOdmZ+O/uJf1KT064tupN6w0UPiJ5xdqKdyw==
-X-Received: by 2002:a17:906:dc90:b0:969:faf3:7dba with SMTP id cs16-20020a170906dc9000b00969faf37dbamr12740249ejc.52.1686638939343;
-        Mon, 12 Jun 2023 23:48:59 -0700 (PDT)
+        bh=drhtA/AGAcvwMxZVFjQYAdmDG7ePEnCLOgbt0/oNOdY=;
+        b=dU5Y0+QprXp1Xd+0npQ+wKUfR6NCiNJYlCMG1svDzOnlWGlUdyx5yoDAniiBR4X04D
+         Wf9gb3bwkqY/J0aCvPONqVbESs4V42ueU0/s3Lb2UHUlsyihHZytV/zLcE8QxmvDexbr
+         afgtGW6peuvl/yqJhi0OkSpfIY4+jdCcjHf6IEtdUYHVFU/tnnbhkYPK7ZTNODBl3ryx
+         21BwaLtMeLks87EIlfO1bdrsDT0NRsfpLLIAcrrzpk2OXST+9Rkyy1npzm5z0c+BaEkr
+         3cflw9M3TcEtubDdMLEs+k9G2YX/Qk95JIRVfTe/kYQhTHbovYnT5+DFZy3cfjzlKHXE
+         w2uQ==
+X-Gm-Message-State: AC+VfDx44IJswVbQa0/6atHzcpVcrUMFUiIfBtFMIQo4Kxd9kjwk4Ivq
+        vHeT0ajFXpwaY7nzY9KJ6uM91A==
+X-Google-Smtp-Source: ACHHUZ5lSqWMsB61h7O6+N3ZWQOmMk7RyGINbwtui6J6a/uSKzxVIYdHi35keMsaFrU1N49eWCtbyw==
+X-Received: by 2002:a17:907:7fab:b0:978:9380:bc0b with SMTP id qk43-20020a1709077fab00b009789380bc0bmr14104575ejc.75.1686639051382;
+        Mon, 12 Jun 2023 23:50:51 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id s15-20020a170906960f00b009783791b1a1sm6211872ejx.121.2023.06.12.23.48.57
+        by smtp.gmail.com with ESMTPSA id l14-20020a170906a40e00b0097382ed45cbsm6140775ejz.108.2023.06.12.23.50.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 23:48:58 -0700 (PDT)
-Message-ID: <5064f8aa-7aff-bf51-212c-e4d7e465b36a@linaro.org>
-Date:   Tue, 13 Jun 2023 08:48:57 +0200
+        Mon, 12 Jun 2023 23:50:51 -0700 (PDT)
+Message-ID: <b8a062a0-10e9-bf17-c109-f6986f9dd02c@linaro.org>
+Date:   Tue, 13 Jun 2023 08:50:49 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
 Subject: Re: [PATCH] dt-bindings: pinctrl: qcom,pmic-mpp: Fix schema for
  "qcom,paired"
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
+To:     Rob Herring <robh@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         Linus Walleij <linus.walleij@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20230418150606.1528107-1-robh@kernel.org>
- <9543f619-88fa-8e54-6e9a-4334750e51b4@linaro.org>
- <CAL_Jsq+ZVAZc1nYJVLPQt=KM1qOZrZCrRC4q_o8XQjDdo_NuKA@mail.gmail.com>
- <CAL_JsqJMpjW6a4Q6xUX6TEZ+vyLJJn5bDtwEdf_-E=BeA-Z_tA@mail.gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAL_JsqJMpjW6a4Q6xUX6TEZ+vyLJJn5bDtwEdf_-E=BeA-Z_tA@mail.gmail.com>
+In-Reply-To: <20230418150606.1528107-1-robh@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/06/2023 23:34, Rob Herring wrote:
-> On Fri, Apr 21, 2023 at 1:48 PM Rob Herring <robh@kernel.org> wrote:
->>
->> On Wed, Apr 19, 2023 at 2:56 PM Krzysztof Kozlowski
->> <krzysztof.kozlowski@linaro.org> wrote:
->>>
->>> On 18/04/2023 17:06, Rob Herring wrote:
->>>> The "qcom,paired" schema is all wrong. First, it's a list rather than an
->>>> object(dictionary). Second, it is missing a required type. The meta-schema
->>>> normally catches this, but schemas under "$defs" was not getting checked.
->>>> A fix for that is pending.
->>>>
->>>> Signed-off-by: Rob Herring <robh@kernel.org>
->>>> ---
->>>>  Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml | 5 +++--
->>>>  1 file changed, 3 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
->>>> index 9412b9362328..4c3e9ff82105 100644
->>>> --- a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
->>>> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml
->>>> @@ -144,8 +144,9 @@ $defs:
->>>>          enum: [0, 1, 2, 3, 4, 5, 6, 7]
->>>>
->>>>        qcom,paired:
->>>> -        - description:
->>>> -            Indicates that the pin should be operating in paired mode.
->>>> +        type: boolean
->>>> +        description:
->>>> +          Indicates that the pin should be operating in paired mode.
->>>
->>> Current Linux implementation uses it as a generic pinconf param
->>> pinconf_generic_params which is parsed by:
->>>
->>> pinconf_generic_parse_dt_config() -> parse_dt_cfg() ->
->>> of_property_read_u32()
->>>
->>>
->>> The pinctrl-spmi-mpp.c driver, using this schema, treat it as a bool,
->>> but I still wonder how the code will parse bool with
->>> of_property_read_u32(). Maybe it should be uint32 with value of 0 and 1?
->>
->> That should be an error because the length is too short so it should
->> go with some default from the code.
->>
->> Looks like there is no user, though no property could mean keep the
->> default/bootloader setting. Can you sort out which type is really
->> desired here and hopefully we can get rid of the other type. It's not
->> the first case of pinctrl properties with multiple types, but we don't
->> really need more.
+On 18/04/2023 17:06, Rob Herring wrote:
+> The "qcom,paired" schema is all wrong. First, it's a list rather than an
+> object(dictionary). Second, it is missing a required type. The meta-schema
+> normally catches this, but schemas under "$defs" was not getting checked.
+> A fix for that is pending.
 > 
-> Still an issue here. Please sort out what functionality QCom wants here.
-> 
-> dtschema (main br) will now throw a warning on it.
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
 
-I think we can go with your patch, after double checking my previous
-concerns are not relevant here - driver reads it as bool just like other
-bool properties.
+Linus,
+Could you take it for current fixes? The code was wrong and dtschema is
+warning now about this.
+
+Fixes: f9a06b810951 ("dt-bindings: pinctrl: qcom,pmic-mpp: Convert qcom
+pmic mpp bindings to YAML")
+
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
