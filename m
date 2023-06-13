@@ -2,76 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8010872DB83
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 09:50:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6797772DB86
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 09:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238220AbjFMHuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 03:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46516 "EHLO
+        id S234983AbjFMHvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 03:51:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240365AbjFMHuj (ORCPT
+        with ESMTP id S240365AbjFMHvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 03:50:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2556510E9;
-        Tue, 13 Jun 2023 00:50:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9324D61EF0;
-        Tue, 13 Jun 2023 07:50:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E75BC433D2;
-        Tue, 13 Jun 2023 07:50:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686642631;
-        bh=goV8gP/KHbMbiDcM/4DeoeQ71fS5d2keb4GB/l1HI1s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pjHMiqIgYrYF+L+Wjiij+dvaTaGD/brRW3tDy2aXuD04wH0r41aqKdSqN9sOvWh0x
-         xCel0co6I2RgxXNs6fdhwx5nIhmSUNB0GyCSE0HhYV6XJ6/wB0c1ff9QBlPhyR7hpv
-         jdIDB9/uE7u61z8T2RC3V6WuiqbKWjqnT8t7+CYg=
-Date:   Tue, 13 Jun 2023 09:50:28 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     torvalds@linux-foundation.org, keescook@chromium.org,
-        pbonzini@redhat.com, masahiroy@kernel.org, nathan@kernel.org,
-        ndesaulniers@google.com, nicolas@fjasle.eu,
-        catalin.marinas@arm.com, will@kernel.org, vkoul@kernel.org,
-        trix@redhat.com, ojeda@kernel.org, mingo@redhat.com,
-        longman@redhat.com, boqun.feng@gmail.com, dennis@kernel.org,
-        tj@kernel.org, cl@linux.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
-        42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
-        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
-        john.johansen@canonical.com, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
-        rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
-        tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
-        luc.vanoostenryck@gmail.com
-Subject: Re: [PATCH v3 46/57] perf: Simplify pmu_dev_alloc()
-Message-ID: <2023061333-imposing-shortly-6803@gregkh>
-References: <20230612090713.652690195@infradead.org>
- <20230612093540.850386350@infradead.org>
- <20230612094400.GG4253@hirez.programming.kicks-ass.net>
- <2023061226-grumpily-entire-f06a@gregkh>
- <20230612141322.GA83892@hirez.programming.kicks-ass.net>
- <2023061217-mutable-curry-c2ac@gregkh>
- <20230613073415.GP4253@hirez.programming.kicks-ass.net>
+        Tue, 13 Jun 2023 03:51:06 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1242510C6
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:51:05 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b1adf27823so62957141fa.2
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:51:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google; t=1686642663; x=1689234663;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lspr7HNHeaiV2qUAruENxLGYvC88tqFFiuL3gIqe8Ng=;
+        b=Bfcv+iym0jAhe6QyFmsR+93MybVzpMSVKmDEm8W2UVLvT6Inyo5pgZzRAJeHte+nxN
+         BJK4fExKC1I64Q4mGdw46jdbKaefgxZjaEhyPl+XmOvNr1W3ufD3pDmWVhJDcqBpM7V9
+         en1UM0NaP0oDUZu1vnk9SEvH1Qztxcbyb8Cgo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686642663; x=1689234663;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lspr7HNHeaiV2qUAruENxLGYvC88tqFFiuL3gIqe8Ng=;
+        b=K9Iff6FddAK6UDNxS0bKLlbf3VdcBk2KIOysV3sfVI1uxBHzS1016Ss4ngABj/9PbS
+         Mqv60fYVlxWy3Gs4jNfW/pvNS6kTKfTtLC4qLkAgFTuYEaw5g7qzNeBQSleMO+CtDbX0
+         MHfFkfOf4RpAtK/Fvnaitpa5wWtC52VBdGvJCKUP9s8M8fmU5Qy2YO6FavcUiSj0ei4s
+         PN4TZ4qXgZqfWE1CX7eNzzndMixGmsKLNNxLf62dJtSmxzN4yq1XKRpIcOaHg7KmhbeM
+         nL4oLwllwx7ZCxFv0uDZBeZPnSlw95FoWiStV6uydvMakLzbCtj6oF1qDY/Z4Jpxln0c
+         mwig==
+X-Gm-Message-State: AC+VfDwRGGbYhM8O6C1C5qcEXqWYi3plnwq9EUNdq0qHLG4/t94YJWYj
+        mZPngSHtXLRDIf7jFZBSSGalYQ==
+X-Google-Smtp-Source: ACHHUZ5NJdywuSGoAJEJ2wJgaZpkSFmc45vSo0/ophNi9f/UuDLXCQvRZe4z15pqwaznFKAZMCsw5g==
+X-Received: by 2002:a2e:9ad0:0:b0:2b2:1373:2377 with SMTP id p16-20020a2e9ad0000000b002b213732377mr3831735ljj.35.1686642663330;
+        Tue, 13 Jun 2023 00:51:03 -0700 (PDT)
+Received: from [172.16.11.116] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id w20-20020a2e3014000000b002b331e241edsm326177ljw.133.2023.06.13.00.51.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 00:51:02 -0700 (PDT)
+Message-ID: <919df40e-2f8a-1ad9-7c2e-9ba9fe1a481a@rasmusvillemoes.dk>
+Date:   Tue, 13 Jun 2023 09:51:01 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230613073415.GP4253@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 6/8] rtc: isl12022: trigger battery level detection during
+ probe
+Content-Language: en-US, da
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
+ <20230612113059.247275-7-linux@rasmusvillemoes.dk>
+ <665d9926-2e0f-4b16-1414-f6d8fc487124@rasmusvillemoes.dk>
+ <2023061214170504ac9f0b@mail.local>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <2023061214170504ac9f0b@mail.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,71 +80,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 09:34:15AM +0200, Peter Zijlstra wrote:
-> On Mon, Jun 12, 2023 at 05:44:59PM +0200, Greg KH wrote:
-> > To be fair the end-result of misc_init() is much nicer and cleaner and
-> > "obviously correct", which is good, even with the crazy proc file mess
-> > in it.  So I like the idea overall, need to figure out when to use
-> > DEFINE_CLASS() vs. DEFINE_FREE(), that isn't obvious to me.
+On 12/06/2023 16.17, Alexandre Belloni wrote:
+> On 12/06/2023 14:30:18+0200, Rasmus Villemoes wrote:
+
+>> So testing this a bit more thoroughly reveals that the LBAT85/LBAT75
+>> bits do not get updated immediately after the TSE bit is set; one needs
+>> to wait a little before the battery voltage detection is done and the SR
+>> bits updated. Unfortunately, the data sheet doesn't say anything about
+>> how long that might be or if there's some busy bit one could look at;
+>> all it says is actually exactly what I've done above:
+>>
+>>   The battery level monitor is not functional in battery backup
+>>   mode. In order to read the monitor bits after powering up VDD,
+>>   instigate a battery level measurement by setting the TSE bit to
+>>   "1" (BETA register), and then read the bits.
+>>
+>> IOW, please don't apply this patch until I figure out how to do this
+>> properly.
+>>
 > 
-> CLASS is meant for things that have an obvious contructor as well as a
-> destructor, that always go together. Like for example the lock things,
-> they always pair a lock and unlock. But also things like:
-> fdget()+fdput(), these can also always be paired, and if you want the
-> file to escape you simply take yet another reference to prevent the
-> fdput() from being the final.
+> The datasheet states 22ms for the temperature conversion so I would
+> expect it takes about that time.
 
-Ok, so then the class_destroy stuff down below here should be
-DEFINE_CLASS()?
+It's most likely much shorter than that - if I just busy-read SR until
+the LBAT bits are clear, that takes no more than 2ms, and the final read
+of SR still has the BUSY bit set, indicating a temp conversion being
+(still) in progress. But I'd prefer to have Renesas provide the proper
+value rather than using some seems-to-work-on-my-desk. But but, it's
+probably moot, see other reply.
 
-> > @@ -280,29 +268,24 @@ static char *misc_devnode(const struct device *dev, umode_t *mode)
-> >  	return NULL;
-> >  }
-> >  
-> > +DEFINE_FREE(class_destroy, struct class *, if (_T) class_destroy(_T));
-> 
-> Documentation for class_create() says it will return ERR_PTR(), so then
-> this should be something like:
-> 
-> DEFINE_FRERE(class_destroy, struct class *, if (!IS_ERR_OR_NULL(_T)) class_destroy(_T))
+Rasmus
 
-Nit, as class_destroy() handles this type of check within it, it can be
-even simpler:
-	DEFINE_FREE(class_destroy, struct class *, class_destroy(_T));
-or would that be:
-	DEFINE_CLASS(class_destroy, struct class *, class_destroy(_T));
-?
-
-> > +DEFINE_FREE(remove_proc, struct proc_dir_entry *, if (_T) remove_proc_entry("misc", NULL));
-> >  static int __init misc_init(void)
-> >  {
-> > +	struct proc_dir_entry *ret __free(remove_proc) = proc_create_seq("misc", 0, NULL, &misc_seq_ops);
-> > +	struct class *c __free(class_destroy) = class_create("misc");
-> >  
-> > +	if (IS_ERR(c))
-> > +		return PTR_ERR(c);
-> >  
-> >  	if (register_chrdev(MISC_MAJOR, "misc", &misc_fops))
-> > +		return -EIO;
-> >  
-> > +	c->devnode = misc_devnode;
-> > +
-> > +	misc_class = no_free_ptr(c);
-> > +	no_free_ptr(ret);
-> > +
-> > +	return 0;
-> >  }
-> 
-> And yes, this does look nicer.
-
-I have a ton of future patches coming that does a bunch of
-class_create/destroy changes that would be made a LOT simpler with this
-patchset, and I really don't want to have to hit the same codepaths
-twice if at all possible.
-
-So what's the odds this can be reasonable enough to get into 6.5-rc1 so
-we can rely on it there?
-
-thanks,
-
-greg k-h
