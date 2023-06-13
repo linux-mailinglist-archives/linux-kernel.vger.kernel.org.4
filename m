@@ -2,54 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C391B72EC9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B4E472ECA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240812AbjFMULr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 16:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54152 "EHLO
+        id S230461AbjFMUL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 16:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240180AbjFMULf (ORCPT
+        with ESMTP id S237433AbjFMULm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 16:11:35 -0400
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE701FC8;
-        Tue, 13 Jun 2023 13:11:13 -0700 (PDT)
-Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-777b0cae9ecso346530139f.2;
-        Tue, 13 Jun 2023 13:11:13 -0700 (PDT)
+        Tue, 13 Jun 2023 16:11:42 -0400
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 209A12100;
+        Tue, 13 Jun 2023 13:11:23 -0700 (PDT)
+Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-33dae9244a1so26220725ab.0;
+        Tue, 13 Jun 2023 13:11:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686687070; x=1689279070;
+        d=1e100.net; s=20221208; t=1686687082; x=1689279082;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1PBzPtKEJdG96O52dKqtaQoAEW6B/L+Tc6sjmbWnvF8=;
-        b=jKEFHQt8xPN8hl5VjO/RObGCdtWdY2ivuslNtc2NwelF4chJExsFdVhWs3Y1UPkyPr
-         b4Nz8YnUiejj41HehaAzQfRCzHtWYIEi9GM1dFko6omt75qf5bO8PESK+JnnxchgwBsk
-         rai+jMA8yHSEzwSt9oYxUsw+ESLJHRJ9r5x4ClXuCpW0XsDgXC8yqN+pJLHBY9Pr3eAG
-         TrqY7URHU0LEsZuid3IZK3HDIHCeGWZe/+ptZ4M8FvHzIVze5JwZdTtGIcP0d9RDcfaS
-         nJVG6sO+OHm2W/XLCSUuRev7bZW7jVryP5F762c4v6cGQthedOVO1Z1b1q9sHLemPBwP
-         IUQw==
-X-Gm-Message-State: AC+VfDwSE8J+JddilHP8eoWzgH6MZGyOr98EytO/X2jxloDyqTNJZJAN
-        uQ4oPYTNZzzpVstKpuZ3sg==
-X-Google-Smtp-Source: ACHHUZ7Cvzh17SUGOeQREJ30JIkfakOMM7si91l/XAhc3ugQT4AvpHnzINdbry515wsptIqSlOIfPg==
-X-Received: by 2002:a6b:7614:0:b0:774:7cdb:1fe4 with SMTP id g20-20020a6b7614000000b007747cdb1fe4mr12961010iom.13.1686687070300;
-        Tue, 13 Jun 2023 13:11:10 -0700 (PDT)
+        bh=zMVh+zJOgPqDKyoOp2YotBxKUzQ/IGweQ3mdvJwSkLQ=;
+        b=L/Qt022Yo34U4P5M0pPCBWC+a61eEm5ZaOoNYTCoLXEdZ8g1W9eZu6ph+ZoiuNz9QL
+         2imWY++VVjoSF5A3MvYucIwEKESiUoogNh/QgCjm1y6lQtvC8AOSgWkNptAseGPb5/z8
+         fFJmebflEuFc4QEsDBX1wtkjyxVcqwYJPvOXNvPH9m/8WYHmN6zNkziqh1Rti8zx4ubs
+         BRtjusVETYAzrreGyGjxKXR9+gmevCAoBvWzHPjGtzl7NJuzuSdVSfBjOibEExvkmwoO
+         pQZuhmIHBzCl8eEGZgDdf45A7CEPCrHmA0p+np6TlSgHg3cOR2U+8kN0LSp7iwfNSR5X
+         Yxow==
+X-Gm-Message-State: AC+VfDxArWjvl8+OfNGDZYa+tR1N4mowlxCrgD/fSqeIEUJzVSd+yJpp
+        ZE+SQsHtC6qBX8NTA80mKA==
+X-Google-Smtp-Source: ACHHUZ7trQEUyTsH2/4qCfXy9q8VWFel7Oj5LuNBTzxv4rqOJqvR46PwWVrn/5foWVVIHRbL3zU2DQ==
+X-Received: by 2002:a05:6e02:12e2:b0:334:fa57:e670 with SMTP id l2-20020a056e0212e200b00334fa57e670mr12729137iln.0.1686687082081;
+        Tue, 13 Jun 2023 13:11:22 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id a22-20020a056602209600b0076c7a2f0f41sm4093739ioa.46.2023.06.13.13.11.08
+        by smtp.gmail.com with ESMTPSA id v9-20020a92c809000000b00313ca4be5e1sm4102979iln.12.2023.06.13.13.11.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 13:11:09 -0700 (PDT)
-Received: (nullmailer pid 2824490 invoked by uid 1000);
-        Tue, 13 Jun 2023 20:11:08 -0000
+        Tue, 13 Jun 2023 13:11:21 -0700 (PDT)
+Received: (nullmailer pid 2824760 invoked by uid 1000);
+        Tue, 13 Jun 2023 20:11:19 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Peter Korsgaard <peter@korsgaard.com>,
-        Andrew Lunn <andrew@lunn.ch>,
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        Conor Dooley <conor+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: i2c: opencores: Add missing type for "regstep"
-Date:   Tue, 13 Jun 2023 14:11:04 -0600
-Message-Id: <20230613201105.2824399-1-robh@kernel.org>
+Subject: [PATCH] dt-bindings: display: Add missing property types
+Date:   Tue, 13 Jun 2023 14:11:14 -0600
+Message-Id: <20230613201114.2824626-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -64,25 +71,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"regstep" may be deprecated, but it still needs a type.
+A couple of display bridge properties are missing a type definition. Add
+the types to them.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/i2c/opencores,i2c-ocores.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ .../devicetree/bindings/display/bridge/analogix,dp.yaml          | 1 +
+ .../devicetree/bindings/display/bridge/nxp,tda998x.yaml          | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/i2c/opencores,i2c-ocores.yaml b/Documentation/devicetree/bindings/i2c/opencores,i2c-ocores.yaml
-index 85d9efb743ee..d9ef86729011 100644
---- a/Documentation/devicetree/bindings/i2c/opencores,i2c-ocores.yaml
-+++ b/Documentation/devicetree/bindings/i2c/opencores,i2c-ocores.yaml
-@@ -60,6 +60,7 @@ properties:
-     default: 0
+diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,dp.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,dp.yaml
+index c9b06885cc63..62f0521b0924 100644
+--- a/Documentation/devicetree/bindings/display/bridge/analogix,dp.yaml
++++ b/Documentation/devicetree/bindings/display/bridge/analogix,dp.yaml
+@@ -26,6 +26,7 @@ properties:
+     const: dp
  
-   regstep:
+   force-hpd:
++    type: boolean
+     description:
+       Indicate driver need force hpd when hpd detect failed, this
+       is used for some eDP screen which don not have a hpd signal.
+diff --git a/Documentation/devicetree/bindings/display/bridge/nxp,tda998x.yaml b/Documentation/devicetree/bindings/display/bridge/nxp,tda998x.yaml
+index c4bf54397473..21d995f29a1e 100644
+--- a/Documentation/devicetree/bindings/display/bridge/nxp,tda998x.yaml
++++ b/Documentation/devicetree/bindings/display/bridge/nxp,tda998x.yaml
+@@ -20,6 +20,7 @@ properties:
+     maxItems: 1
+ 
+   video-ports:
 +    $ref: /schemas/types.yaml#/definitions/uint32
-     description: |
-       deprecated, use reg-shift above
-     deprecated: true
+     default: 0x230145
+     maximum: 0xffffff
+     description:
 -- 
 2.39.2
 
