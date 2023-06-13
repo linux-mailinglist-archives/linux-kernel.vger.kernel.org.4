@@ -2,147 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 212C572ED44
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:45:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA84A72ED42
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:45:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234061AbjFMUpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 16:45:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47242 "EHLO
+        id S240051AbjFMUpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 16:45:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234166AbjFMUpC (ORCPT
+        with ESMTP id S240723AbjFMUox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 16:45:02 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7B9E59
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 13:45:00 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-514ad92d1e3so499a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 13:45:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686689099; x=1689281099;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w3I43KAuJAocXaniTcVrq9SXL9Lvm/1crVtr2GDT8u8=;
-        b=5Zm5sKRkHMVDZPW2Y1FNVHlOcAFdOb/jk3DvGjuiLGPssaDk+mymtYebDfdKQu0tkX
-         adUO3QTRnBddXET8vlONIyHU/MHqu+0/pRYg2sjjepoS9aOvmJiG9nt2iJnRU8u8frvG
-         CmDWTEpHuADJ6v39wAZvIgTNDyLw7VUYqpfOwtFnnnCZnBuxTUoMv2KmfdQdRVFOHAZm
-         ynorB8ZtdBPyca8D3c3g0O1x9IlUfar31fSFerUJ2kAhNNKMe/z2fQW8WIG/6tR8EyJH
-         VTMJqXMDMVAdiIlEIp8L0SGS9bq9pkPPNl92Mh71c3lz6DNxIhH6wLOLRe2f0EbC2rKn
-         0fBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686689099; x=1689281099;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w3I43KAuJAocXaniTcVrq9SXL9Lvm/1crVtr2GDT8u8=;
-        b=GuY7r+B6wgEBAc4dreLASksu+GFYdZoZt9mKHcw1ha+wTCMfZi96BFOt2ctOC1B3/6
-         kGBS4bwUnkiKDmfHaia77XW1FKmU9L7a7xz5MMVIshuUyg5ZbLAFaEWNIrdQmWb8wDcV
-         mIzXcQXyDEs9YvXCZO6V8jejBnKrBJ4WNp7Udcq6AFyughxzb88LZXltpG+c+WgRlCeu
-         xfHiRmiQecZb5OUPMNMPXPyTPzjAitulG+D7DQb2iZMJI/ERLkiJxsIuHkyD68b/MLBI
-         SBEhOU8fPZK+qQ0kfrovGi/IGoIvw6rGDVA70SSKy4/pxLS8L5CHeiKmpUdkJ8FBZGQs
-         OOAA==
-X-Gm-Message-State: AC+VfDz+ryacwEjucd3J35B4eo7ock6hzmeoNLOp6H97TyLa5FJDa4kG
-        d2KmN2ooDT1siQmcUGm9VxtTmhc13gUhpJSjxSzUbQ==
-X-Google-Smtp-Source: ACHHUZ58WJEANk7OZrTLn1q96CvAJiH4uGdd3nBCTWwrgtjjdrmlkWJXrFAweZHcEfVBn8g33KV6l4BEWsYWZoALSi0=
-X-Received: by 2002:a50:d0d1:0:b0:518:7076:74bc with SMTP id
- g17-20020a50d0d1000000b00518707674bcmr22868edf.1.1686689099093; Tue, 13 Jun
- 2023 13:44:59 -0700 (PDT)
+        Tue, 13 Jun 2023 16:44:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9B5E53;
+        Tue, 13 Jun 2023 13:44:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1374F617E3;
+        Tue, 13 Jun 2023 20:44:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64003C433C0;
+        Tue, 13 Jun 2023 20:44:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686689091;
+        bh=197GhMaGHAg2n1nbm70axBPdT5BZD1C6NILjDiLPZjI=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=U9x36Wd+JZDMSDouThk/NP+nQrM/qtILqn89gaQyKEuQ4epArY8F0zmiUQpOXW/rj
+         s2dCMJ0O9K4UyxqjImAK/N/9wTWPYU/FaweNxg+pYTaC8mHrrYm5EIPhx75n3z0iO2
+         IOBMCybzq99OtMPjVZE93No0zLhdNUYbMNnuYEKMMfCJlk0i+BSVzgiLoSoM+fvXl+
+         3E9ArlAa1zWnTa84kunzuaMR+L9+2rkoo6hOgzThbW7HOvbLh6lzDRAOy5jS1XF+ep
+         Zgg1L75/2Hy3Fn9ZD8t8ivwGz90WsyADUmLaxNWKHDvtR6ziefAZmCxzXrSRFjYipL
+         1K55p38MJiS4g==
+Message-ID: <d47d0ceb834ca56a4733e226e89a4f2b.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230610005149.1145665-1-rmoar@google.com> <20230610005149.1145665-6-rmoar@google.com>
- <CABVgOSkKYzynFcAdSKbdbVjL0bYnXtgM8XbkkRc2+9mef1wCzQ@mail.gmail.com>
-In-Reply-To: <CABVgOSkKYzynFcAdSKbdbVjL0bYnXtgM8XbkkRc2+9mef1wCzQ@mail.gmail.com>
-From:   Rae Moar <rmoar@google.com>
-Date:   Tue, 13 Jun 2023 16:44:48 -0400
-Message-ID: <CA+GJov5ug3DjXe4f0_G1emt7FPVZACqtyhoQtNmxZ81tLH_feA@mail.gmail.com>
-Subject: Re: [RFC v1 5/6] kunit: memcpy: Mark tests as slow using test attributes
-To:     David Gow <davidgow@google.com>
-Cc:     shuah@kernel.org, dlatypov@google.com, brendan.higgins@linux.dev,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        linux-hardening@vger.kernel.org, jstultz@google.com,
-        tglx@linutronix.de, sboyd@kernel.org
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <e8ee511863ce2aa9b09b7f0c4fa9b6919603c8f0.camel@maquefel.me>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me> <20230424123522.18302-13-nikita.shubin@maquefel.me> <d15b580f84ac89274cde3785168b0e26.sboyd@kernel.org> <e8ee511863ce2aa9b09b7f0c4fa9b6919603c8f0.camel@maquefel.me>
+Subject: Re: [PATCH 12/43] clk: ep93xx: add DT support for Cirrus EP93xx
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+To:     Nikita Shubin <nikita.shubin@maquefel.me>
+Date:   Tue, 13 Jun 2023 13:44:49 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 10, 2023 at 4:29=E2=80=AFAM David Gow <davidgow@google.com> wro=
-te:
->
-> On Sat, 10 Jun 2023 at 08:52, Rae Moar <rmoar@google.com> wrote:
-> >
-> > Mark slow memcpy KUnit tests using test attributes.
-> >
-> > Tests marked as slow are as follows: memcpy_large_test, memmove_test,
-> > memmove_large_test, and memmove_overlap_test.
-> >
-> > These tests were the slowest of the memcpy tests and relatively slower =
-to
-> > most other KUnit tests. Most of these tests are already skipped when
-> > CONFIG_MEMCPY_SLOW_KUNIT_TEST is not enabled.
->
-> I assume the plan will be to eventually remove the
-> CONFIG_MEMCPY_SLOW_KUNIT_TEST option and just rely on the "speed"
-> attribute to filter these out. That has the disadvantage that the
-> tests will still be built, but is probably the nicer long-term
-> solution.
->
-> I suppose we could remove it in this patch, too, but I suspect it
-> makes more sense to have a deprecation period to make sure the
-> attributes are working well. That being said, maybe add a note to the
-> CONFIG_MEMCPY_SLOW_KUNIT_TEST help text to advertise this?
->
+Quoting Nikita Shubin (2023-05-15 06:31:41)
+> Hello Stephen!
+>=20
+> Thank you for your review.
+>=20
+> Acknowledged all remarks, however, i didn't fully understood some of
+> the requirements:
 
-Yes that was the plan but I should definitely document that here and
-then I like the idea for adding the note with
-CONFIG_MEMCPY_SLOW_KUNIT_TEST.
+When the reply is taken out of context it is harder for me to recall
+what we're talking about.
 
-Thanks!
--Rae
+>=20
+> > And maybe this can be registered from wherever the regmap is created?
+>=20
+> Are you suggesting that all clock from init, i.e. "pll1", "pll2",
+> "hclk", "fclk", "pclk"
+>=20
+> Should be moved to=C2=A0SoC driver instead:
+>=20
+> https://lore.kernel.org/all/20230424123522.18302-3-nikita.shubin@maquefel=
+.me/
+>=20
+> ?
 
+Sure? That looks like a possibility.
 
->
-> >
-> > These tests can now be filtered on using the KUnit test attribute filte=
-ring
-> > feature. Example: --filter "speed>slow". This will run only the tests t=
-hat
-> > have speeds faster than slow. The slow attribute will also be outputted=
- in
-> > KTAP.
-> >
-> > Signed-off-by: Rae Moar <rmoar@google.com>
-> > ---
-> >  lib/memcpy_kunit.c | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/lib/memcpy_kunit.c b/lib/memcpy_kunit.c
-> > index 887926f04731..440aee705ccc 100644
-> > --- a/lib/memcpy_kunit.c
-> > +++ b/lib/memcpy_kunit.c
-> > @@ -551,10 +551,10 @@ static void strtomem_test(struct kunit *test)
-> >  static struct kunit_case memcpy_test_cases[] =3D {
-> >         KUNIT_CASE(memset_test),
-> >         KUNIT_CASE(memcpy_test),
-> > -       KUNIT_CASE(memcpy_large_test),
-> > -       KUNIT_CASE(memmove_test),
-> > -       KUNIT_CASE(memmove_large_test),
-> > -       KUNIT_CASE(memmove_overlap_test),
-> > +       KUNIT_CASE_SLOW(memcpy_large_test),
-> > +       KUNIT_CASE_SLOW(memmove_test),
-> > +       KUNIT_CASE_SLOW(memmove_large_test),
-> > +       KUNIT_CASE_SLOW(memmove_overlap_test),
-> >         KUNIT_CASE(strtomem_test),
-> >         {}
-> >  };
-> > --
-> > 2.41.0.162.gfafddb0af9-goog
-> >
+>=20
+> > Does some interrupt or timer driver use dma? Why are these registered
+> > early?
+>=20
+> ep93xx_dma uses subsys_initcall(ep93xx_dma_module_init)
+>=20
+> https://elixir.bootlin.com/linux/v6.3.2/source/drivers/dma/ep93xx_dma.c#L=
+1430
+>=20
+> I can move clk to using arch_initcall and move all stuff to probe, i
+> think...
+
+Sounds like the answer to my question is no. In which case moving to
+arch_initcall() or probe will work. Please try.
+
+>=20
+> > Why is this in arm/ directory? Isn't it a clock controller?
+>=20
+> ep93xx clocks, reboot, pinctrl use syscon regmap and some special
+> functions from SoC, i.e. "Syscon Software Lock Register" - so we are
+> able to write to some registers only after writing some magik value
+> there.
+>=20
+> So all above use regmap from SoC.
+
+There can be an API in a header located in include/soc/ that implements
+the magik value unlock sequence?
+
+>=20
+> Should make a separate clock controller like one i did for pinctrl ?
+> Then it should look like:
+>=20
+> syscon@80930000 {
+>   compatible =3D "cirrus,ep9301-syscon",
+>                "syscon", "simple-mfd";
+>   reg =3D <0x80930000 0x1000>;
+>   #reset-cells =3D <1>;
+>      =20
+>   clocks {
+>     xtali: oscillator {
+>       compatible =3D "fixed-clock";
+>       #clock-cells =3D <0>;
+>       clock-frequency =3D <14745600>;
+>     };
+>   };
+>      =20
+>   clock-controller {
+>     #clock-cells =3D <1>;
+>     compatible =3D "cirrus,ep9301-clk";
+>     clocks =3D <&xtali>;
+>   };
+> };
+>=20
+> Or even simply:
+>=20
+> clocks {
+>   xtali: oscillator {
+>     compatible =3D "fixed-clock";
+>     #clock-cells =3D <0>;
+>     clock-frequency =3D <14745600>;
+>   };
+> };
+>      =20
+> clock-controller {
+>   #clock-cells =3D <1>;
+>   compatible =3D "cirrus,ep9301-clk";
+>   clocks =3D <&xtali>;
+> };
+
+The DT binding shouldn't be making sub-nodes to match driver structure
+of the kernel. Instead, there should be a node for a register range that
+represents a device on the bus. That device may be multipurpose, in
+which case it can probe as a platform driver and that platform driver
+can create some number of auxiliary bus devices for the sub
+functionality of the device. We shouldn't be prescribing Linux software
+constructs onto the DT binding.
