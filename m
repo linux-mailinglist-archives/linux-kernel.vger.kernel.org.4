@@ -2,123 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9FD972D752
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 04:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C47872D754
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 04:20:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233844AbjFMCUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 22:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40276 "EHLO
+        id S239022AbjFMCUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 22:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238936AbjFMCUC (ORCPT
+        with ESMTP id S229809AbjFMCUM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 22:20:02 -0400
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2105172B;
-        Mon, 12 Jun 2023 19:19:58 -0700 (PDT)
-Received: by mail-oo1-xc2a.google.com with SMTP id 006d021491bc7-558b6cffe03so2944689eaf.3;
-        Mon, 12 Jun 2023 19:19:58 -0700 (PDT)
+        Mon, 12 Jun 2023 22:20:12 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B0C1730
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 19:20:09 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f63ea7bfb6so5692546e87.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 19:20:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686622798; x=1689214798;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7Rc8puRsMNB1FwhvbPkjunTvdFQSMdNIDd9z2KyEZcY=;
-        b=UkAIuPO4nfCvYOa1VJ1tK7XVbWnl1M1hYkZ6FaKYumVSAbsNQGAw4XzRXcAK2edeou
-         5IAoEdSkabS7OOhcu+8RuwI5UVBzOgyveX6ek7QdbyJZsitqtqYsLk+tEwXiqJsUWgkv
-         6hSJo/I0yJDTN+M0MxG7XUeZcP3sAE1RKNF6ZuWwz1P4YwLL2U7RFL8l+k144VshgBgo
-         FcW2rd0s8Z7nl9JaEXKEdxzZFIuS/oBoDcgyrncNUuepa3er1cqe1n4dofeCv3yOnCt1
-         emRx9Qzdm/IcLOyRKv0ufSW2wQgJJU3ZUtc3CLUMTSXFQlWTmic58/vDe3ycN0i8uYhO
-         NXDg==
+        d=chromium.org; s=google; t=1686622808; x=1689214808;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B1shOEn6nPaVCEbd4LM/XYWlmeirPeNDnDCpFLJAn8M=;
+        b=RAtFtf51gawv3C7hUz5ysqbwI7ecg+XXrOydFkRhKemur5yZN3RD5q9GAF5/Sljofw
+         17WN4Cj3ugfoMZJkMFYnB+Hk0AduWXEiNApie/YI1gmnWVvRbYLenB1FDQo0vpq/pz35
+         O+DasHqbUyrEBTgqNENAOrq2J3LT+GYiG3h00=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686622798; x=1689214798;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7Rc8puRsMNB1FwhvbPkjunTvdFQSMdNIDd9z2KyEZcY=;
-        b=N0wvTugjE9jkuabrEF6PSD04dKmqORaZrNqU3auoUXx8vvrDHCUOJhnLAHGO07WtHk
-         SBYYR/CtZ1hN4cyTban+tip/FRWBiHNorMosDeFpUH5Vuy3xTr+OuX/c7zi2KMSPy3Nw
-         SiXjn3sviDgOIozdWkh8+wNKalrtwtRHkV2qGaO8QDPcGLPpNG6JXlFB57ozF+cSaPH4
-         pwz44gbJkTStxkcSWQfoHwxFd32coh/7SL0LBWujYBFbnja5hik9+/nqjsUhWRd+QA/W
-         6ioMo89O3RDI1TN1WAuR89Wgo+DOGJtHfnqQRs90RMuIt/W3KduL+uLJUYShnrjB6Gzh
-         MKGA==
-X-Gm-Message-State: AC+VfDz8afXtFZCEi70Nc3uMGFbP64EZvqw8m95Q+5yTbe/BOZu4lxZU
-        W4aYNzrcKhdcm5UK900DY2COfwiYXXE=
-X-Google-Smtp-Source: ACHHUZ4NUAZrRFfEixwJIufjYq1nC+yN5/3MPpGckOQqgAHxA7p/K+Zp1j/d7YD4R3hfhoAUKcWi/w==
-X-Received: by 2002:a05:6358:cb1c:b0:129:c25e:1caf with SMTP id gr28-20020a056358cb1c00b00129c25e1cafmr4848634rwb.3.1686622797910;
-        Mon, 12 Jun 2023 19:19:57 -0700 (PDT)
-Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id 2-20020a630b02000000b0051b7d83ff22sm8127529pgl.80.2023.06.12.19.19.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 19:19:57 -0700 (PDT)
-Message-ID: <8b0376be-fbee-f4ad-c0d8-f12471fab7ae@gmail.com>
-Date:   Tue, 13 Jun 2023 10:19:52 +0800
+        d=1e100.net; s=20221208; t=1686622808; x=1689214808;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B1shOEn6nPaVCEbd4LM/XYWlmeirPeNDnDCpFLJAn8M=;
+        b=Ox3szqe7KNrJQXTqsQJ2SPowKVPoY33BZQW+R0GvQNZhjj5rY37HD6hlK6YzprR/af
+         3BnY6dioeZpT3qpOwQiChXEfE8vjPW8saVlr2LN2UQLJIFJPxySupON0CGcGk31m4aau
+         ARMGiN/F02shx0YmKQPtGZcf1p9Pphn2lmWVbqMEoNQTcUwGiYZoDkqQ3436lMRFyqoR
+         TSgOnreAMmfk5AINAv/18yCgXZR1HHHyJ8yGtqj76Qff7fP7a3sFz1ZcUYGsq2qlMJ6H
+         3kig9du5MosErLBtbf6+TPyBAJRhthQAvNymmLJxwCtIdE5t3jPaB/Vhz+mHjFDS8p9u
+         R86w==
+X-Gm-Message-State: AC+VfDwC4IHyKZ/5LWfi7ORACm7Jz+ii7bj5DCvbKtOX0Y5mEgF6KIk5
+        jqGznI0kh5bGYfBp0xqmLmSOOE6QO/Lnu2RwRJBT8g==
+X-Google-Smtp-Source: ACHHUZ5nU/RT+l0B8eGNQK7cVvbMPzWQeVYVWx36X8mWJm2OkkWZ8BTKX3tUWqYeB7PdXuhD39Z6AeV/fsdbkM+IuZ0=
+X-Received: by 2002:a2e:868b:0:b0:2b1:c783:b905 with SMTP id
+ l11-20020a2e868b000000b002b1c783b905mr3549460lji.15.1686622807918; Mon, 12
+ Jun 2023 19:20:07 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 12 Jun 2023 19:20:07 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v13 08/10] clk: nuvoton: Add clock driver for ma35d1 clock
- controller
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>, catalin.marinas@arm.com,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        mturquette@baylibre.com, p.zabel@pengutronix.de,
-        robh+dt@kernel.org, tmaimon77@gmail.com, will@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-serial@vger.kernel.org, arnd@arndb.de, soc@kernel.org,
-        schung@nuvoton.com, mjchen@nuvoton.com,
-        Jacky Huang <ychuang3@nuvoton.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20230605040749.67964-1-ychuang570808@gmail.com>
- <20230605040749.67964-9-ychuang570808@gmail.com>
- <bda5f640831a8080a83eca8c8e37c30d.sboyd@kernel.org>
- <233f4e83-e872-5499-2ca7-a1c277425fb0@gmail.com>
- <b4a20267862f6cd20d50016cb130ba95.sboyd@kernel.org>
-From:   Jacky Huang <ychuang570808@gmail.com>
-In-Reply-To: <b4a20267862f6cd20d50016cb130ba95.sboyd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230612165302.1.I24b838a5b4151fb32bccd6f36397998ea2df9fbb@changeid>
+References: <20230612165302.1.I24b838a5b4151fb32bccd6f36397998ea2df9fbb@changeid>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Mon, 12 Jun 2023 19:20:07 -0700
+Message-ID: <CAE-0n50E+ERC2tvTmb2_FMas8QETgdogm8A1d_bkmhhwafsn6w@mail.gmail.com>
+Subject: Re: [PATCH] drm/bridge: ti-sn65dsi86: Fix auxiliary bus lifetime
+To:     Douglas Anderson <dianders@chromium.org>,
+        dri-devel@lists.freedesktop.org
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Quoting Douglas Anderson (2023-06-12 16:53:03)
+> Memory for the "struct device" for any given device isn't supposed to
+> be released until the device's release() is called. This is important
+> because someone might be holding a kobject reference to the "struct
+> device" and might try to access one of its members even after any
+> other cleanup/uninitialization has happened.
+>
+> Code analysis of ti-sn65dsi86 shows that this isn't quite right. When
+> the code was written, it was believed that we could rely on the fact
+> that the child devices would all be freed before the parent devices
+> and thus we didn't need to worry about a release() function. While I
+> still believe that the parent's "struct device" is guaranteed to
+> outlive the child's "struct device" (because the child holds a kobject
+> reference to the parent), the parent's "devm" allocated memory is a
+> different story. That appears to be freed much earlier.
+>
+> Let's make this better for ti-sn65dsi86 by allocating each auxiliary
+> with kzalloc and then free that memory in the release().
+>
+> Fixes: bf73537f411b ("drm/bridge: ti-sn65dsi86: Break GPIO and MIPI-to-eDP bridge into sub-drivers")
+> Suggested-by: Stephen Boyd <swboyd@chromium.org>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
 
+Thanks!
 
-On 2023/6/13 上午 10:16, Stephen Boyd wrote:
-> Quoting Jacky Huang (2023-06-12 18:37:31)
->> On 2023/6/13 上午 09:02, Stephen Boyd wrote:
->>> Quoting Jacky Huang (2023-06-04 21:07:47)
->>>> diff --git a/drivers/clk/nuvoton/clk-ma35d1-divider.c b/drivers/clk/nuvoton/clk-ma35d1-divider.c
->>>> +                                           int num_pdata)
->>>> +{
->>>> +       return clk_hw_register_mux_parent_data(dev, name, pdata, num_pdata,
->>>> +                                              CLK_SET_RATE_NO_REPARENT, reg, shift,
->>>> +                                              width, 0, &ma35d1_lock);
->>>> +}
->>>> +
->>>> +static struct clk_hw *ma35d1_clk_mux(struct device *dev, const char *name,
->>>> +                                    void __iomem *reg, u8 shift, u8 width,
->>>> +                                    const char *const *parents, int num_parents)
->>> Please don't use string arrays for parent descriptions. Everything
->>> should use clk_parent_data or direct clk_hw pointers.
->> I will use clk_parent_data instead of strings.
->>
-> When you use clk_parent_data, just don't set anything for the "dummy"
-> clks besides a -1 .index to indicate there isn't a parent for that
-> entry.
+> diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+> index 597ceb7024e0..db1461cc3170 100644
+> --- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+> +++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+> @@ -464,27 +464,32 @@ static void ti_sn65dsi86_delete_aux(void *data)
+>         auxiliary_device_delete(data);
+>  }
+>
+> -/*
+> - * AUX bus docs say that a non-NULL release is mandatory, but it makes no
+> - * sense for the model used here where all of the aux devices are allocated
+> - * in the single shared structure. We'll use this noop as a workaround.
+> - */
+> -static void ti_sn65dsi86_noop(struct device *dev) {}
+> +static void ti_sn65dsi86_aux_device_release(struct device *dev)
+> +{
+> +       struct auxiliary_device *aux = container_of(dev, struct auxiliary_device, dev);
+> +
+> +       kfree(aux);
+> +}
+>
+>  static int ti_sn65dsi86_add_aux_device(struct ti_sn65dsi86 *pdata,
+> -                                      struct auxiliary_device *aux,
+> +                                      struct auxiliary_device **aux_out,
+>                                        const char *name)
+>  {
+>         struct device *dev = pdata->dev;
+> +       struct auxiliary_device *aux;
+>         int ret;
+>
+> +       aux = kzalloc(sizeof(*aux), GFP_KERNEL);
 
+Check for allocation failure?
 
-Okay, thank you for the reminder.
+> +
+>         aux->name = name;
+>         aux->dev.parent = dev;
+> -       aux->dev.release = ti_sn65dsi86_noop;
+> +       aux->dev.release = ti_sn65dsi86_aux_device_release;
+>         device_set_of_node_from_dev(&aux->dev, dev);
+>         ret = auxiliary_device_init(aux);
+> -       if (ret)
+> +       if (ret) {
+> +               kfree(aux);
+>                 return ret;
+> +       }
+>         ret = devm_add_action_or_reset(dev, ti_sn65dsi86_uninit_aux, aux);
+>         if (ret)
+>                 return ret;
+> @@ -494,6 +499,9 @@ static int ti_sn65dsi86_add_aux_device(struct ti_sn65dsi86 *pdata,
+>                 return ret;
+>         ret = devm_add_action_or_reset(dev, ti_sn65dsi86_delete_aux, aux);
+>
 
-Best Regards,
-Jacky Huang
+Nitpick: Stick this if line to the line above
 
-
-
-
+> +       if (!ret)
+> +               *aux_out = aux;
+> +
+>         return ret;
