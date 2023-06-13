@@ -2,58 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF84F72EC82
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB9672EC84
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239319AbjFMUKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 16:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53118 "EHLO
+        id S240328AbjFMUKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 16:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbjFMUJ7 (ORCPT
+        with ESMTP id S237764AbjFMUKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 16:09:59 -0400
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A3B1BE5;
-        Tue, 13 Jun 2023 13:09:56 -0700 (PDT)
-Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-77ac59135ebso213273939f.3;
-        Tue, 13 Jun 2023 13:09:56 -0700 (PDT)
+        Tue, 13 Jun 2023 16:10:07 -0400
+Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 742C41BDC;
+        Tue, 13 Jun 2023 13:10:06 -0700 (PDT)
+Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-33b1e83e204so26284505ab.1;
+        Tue, 13 Jun 2023 13:10:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686686996; x=1689278996;
+        d=1e100.net; s=20221208; t=1686687005; x=1689279005;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Gjpk6M00PyKdezSkYwKG0YakVAZSBP58+XeaS+tOstY=;
-        b=b1JV/lgdGp9ozFaZHd9pUNfKkq4IAYQHqy+FDJK2i059wE33dNG+b+GfjILuEaIMbl
-         svwsXyC79DH6148eslIQUfYnSR1WVdn8U9EEpnR3YyyaqCCCfJfh8bWhdsL56tL9zJbw
-         m/LN81O8RFp5DOCKjRPBJux8DwbF7Hh/r07OqX/0hEWwknDZqWXMKzD2hydvFWYPMYLe
-         c+PQhV4uz2RYrBB4G8WsFwgo4VFKUyOwLamJtWIjX56SaC5rnp4f2VSsnu23IJlLCl2Z
-         c47naN6dS2xX2Uha8rQUYXA2OJOR5ADTvL1UXILjSa142K5S3XQ83F4oS+HTq7JpA4T2
-         nbrA==
-X-Gm-Message-State: AC+VfDymi8p4255fuAOP3q8fYHbMwSUvZ7eF0WGUu1nynjcgNWSteaTV
-        EPoDjCL1jPUQvL1UP3v2wGSM+mhCCQ==
-X-Google-Smtp-Source: ACHHUZ7pD/oHFNZgCq+eRIVMNAKGU5vIehooTsAFl+mLTv6j93ybrKAnQLA3JXDCNHHCw1kjvMbRtg==
-X-Received: by 2002:a6b:4418:0:b0:76c:8877:861f with SMTP id r24-20020a6b4418000000b0076c8877861fmr9829960ioa.1.1686686996069;
-        Tue, 13 Jun 2023 13:09:56 -0700 (PDT)
+        bh=0SbnFlItAWad/ujWZeSpUG23g+KB9i3Y20nYCUuAL0w=;
+        b=YqgKvwoamk40ZaqyKU9vnUkABr3f6isvqE6OpQD4aIF/JcQpl4SFeJr9ypz58JDmpy
+         b7tQOPc4s8KbUQLRhpFYNBgqpceuvFiNLKS233n7DuZ6qjfEwcLoc1xhz9Z395NVo7z/
+         rhpIAcngnRsyvOWrVLBWqEzbF1T7XQlQMaEtVOWuclk8Rd4oBshE8hXCOFjnz5Ebmsi0
+         c/bDt5d9NInuFWEx9GNAZkuNWLZlVPa3MvcNd8RLeXFbpBlYztuFnqGwYc2KVlwoiz0B
+         wvZ8rcBki0BayYu6xikW46wfKs5IetZoDmzZrEALJ1gGR+nkGC96XNx/0dVzGgn3VXsG
+         cjxQ==
+X-Gm-Message-State: AC+VfDy8oIh3JlZksnrZQHLY9LcrTmWt2x0xAl5CLduVmEdQmt7RnYX9
+        hOY14oWOE5jXTfNjk261pw==
+X-Google-Smtp-Source: ACHHUZ7Kk3TGuBb9HcJOEiIT87QDlrASPfN1Hv6HgdKE+ubylXIM2EjkG75/5Al1Z1Rtd/T2ExTvzw==
+X-Received: by 2002:a92:c64b:0:b0:340:54f1:35dc with SMTP id 11-20020a92c64b000000b0034054f135dcmr3996014ill.18.1686687005685;
+        Tue, 13 Jun 2023 13:10:05 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id f5-20020a056638118500b0041eb1fb695csm3652269jas.105.2023.06.13.13.09.54
+        by smtp.gmail.com with ESMTPSA id e6-20020a92de46000000b0033bdfbbb5ebsm4032754ilr.42.2023.06.13.13.10.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 13:09:55 -0700 (PDT)
-Received: (nullmailer pid 2822666 invoked by uid 1000);
-        Tue, 13 Jun 2023 20:09:53 -0000
+        Tue, 13 Jun 2023 13:10:04 -0700 (PDT)
+Received: (nullmailer pid 2822918 invoked by uid 1000);
+        Tue, 13 Jun 2023 20:10:03 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Amitkumar Karwar <amitkumar.karwar@nxp.com>,
-        Neeraj Kale <neeraj.sanjaykale@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: net: bluetooth: nxp: Add missing type for "fw-init-baudrate"
-Date:   Tue, 13 Jun 2023 14:09:29 -0600
-Message-Id: <20230613200929.2822137-1-robh@kernel.org>
+        Conor Dooley <conor+dt@kernel.org>,
+        Brian Norris <briannorris@chromium.org>,
+        Lee Jones <lee@kernel.org>,
+        Alexandre Courbot <acourbot@nvidia.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH] regulator: dt-bindings: pwm-regulator: Add missing type for "pwm-dutycycle-unit"
+Date:   Tue, 13 Jun 2023 14:09:56 -0600
+Message-Id: <20230613200956.2822740-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -68,33 +66,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"fw-init-baudrate" is missing a type, add it. While we're here, define the
-default value with a schema rather than freeform text.
+"pwm-dutycycle-unit" is missing a type, add it.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- .../devicetree/bindings/net/bluetooth/nxp,88w8987-bt.yaml    | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/regulator/pwm-regulator.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/net/bluetooth/nxp,88w8987-bt.yaml b/Documentation/devicetree/bindings/net/bluetooth/nxp,88w8987-bt.yaml
-index 57e4c87cb00b..f01a3988538c 100644
---- a/Documentation/devicetree/bindings/net/bluetooth/nxp,88w8987-bt.yaml
-+++ b/Documentation/devicetree/bindings/net/bluetooth/nxp,88w8987-bt.yaml
-@@ -24,11 +24,12 @@ properties:
-       - nxp,88w8997-bt
- 
-   fw-init-baudrate:
+diff --git a/Documentation/devicetree/bindings/regulator/pwm-regulator.yaml b/Documentation/devicetree/bindings/regulator/pwm-regulator.yaml
+index 7e58471097f8..80ecf938b749 100644
+--- a/Documentation/devicetree/bindings/regulator/pwm-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/pwm-regulator.yaml
+@@ -64,6 +64,7 @@ properties:
+         defined, <100> is assumed, meaning that
+         pwm-dutycycle-range contains values expressed in
+         percent.
 +    $ref: /schemas/types.yaml#/definitions/uint32
-+    default: 115200
-     description:
-       Chip baudrate after FW is downloaded and initialized.
-       This property depends on the module vendor's
--      configuration. If this property is not specified,
--      115200 is set as default.
-+      configuration.
+     default: 100
  
- required:
-   - compatible
+   pwm-dutycycle-range:
 -- 
 2.39.2
 
