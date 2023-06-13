@@ -2,215 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37BD672F005
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 01:37:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7194172F00C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 01:39:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234813AbjFMXg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 19:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33094 "EHLO
+        id S229740AbjFMXjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 19:39:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231341AbjFMXg5 (ORCPT
+        with ESMTP id S231341AbjFMXjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 19:36:57 -0400
-Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8EB81727
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 16:36:55 -0700 (PDT)
-Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-76c6c1b16d2so771696339f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 16:36:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686699415; x=1689291415;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qpzsuVrNoglwA7vam832+fL4Or5CLbaAmcZOxQ4ezY8=;
-        b=YQO1aLC6LsMaANN1GgaS6aXh8JwvWRb4r0dRThaCCc+cQSXAmKe/XPIxCzHWOKf4Eg
-         YY6Zd/93JfGRHK57MwCGP6sqjBa26M9kCn7wxiRcfth0ve58JRjUbfEjA2dT2NzEAz34
-         wGW2btouD0s3y56jnCtGyMWd+biMBSWv3LFOjXi2sKU+FK4aQjrbr8tax1Dd04DMBYZw
-         /3aJ0r1cHL8BEa95uISRseUOIKb3c5qNMbZSv2glOW839LtpEawqRm44DxzmJrk+kWFf
-         j8odUcKmecOwA8PqjrUT05QOd73++WCkmEqKk0M+L8bsq5wzefxGMsJHZ7V7A29CWP9C
-         Eglg==
-X-Gm-Message-State: AC+VfDzIbjDnVZv489GDQP9oCd4ucXOkFK1ExNYfxUgt2/zWdUqPKdMg
-        EyjX7fd8pXHlF/dHWEZWIo+MBMQmM1n0J3Sg4piCFzvb36sp
-X-Google-Smtp-Source: ACHHUZ5p0PUhsHjUdEm3xNlS191eQu7h67/ihxJbBXYCXrNqfCjlaPNKoRP/Gd7tH/aX450c1u2zszknknxab5IJwvlQXkN8EAeW
+        Tue, 13 Jun 2023 19:39:13 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D371727;
+        Tue, 13 Jun 2023 16:39:11 -0700 (PDT)
+Received: from mercury (unknown [185.209.196.239])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 06CBD6606EF9;
+        Wed, 14 Jun 2023 00:39:10 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686699550;
+        bh=IKYgT2kpzwm26VrHhP6ovXhCybkwMBtlj3qr8WiFGbo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k6Z8PSNSJkj4IA9XxLF1dVbJynR/k5304D5jZaNwmxcG8cBsNDlRLm5oAoXzgyCf0
+         w8uALy6UV3NlqUnG/ED4DkXdl4mz/UtWSLi+Yyf4yjzScb9AqjZCP9U40+RPACuYTH
+         31kindpdAEOOJPydLidvKe+USIxnIHCAlv3xUkTBCtKbeYEsv0qNCUvyhuYHShlY9E
+         W9Vd9c+2Vkb9ey4GW/uDIevQYWvfJdOeZkK27kuaFmPaf5XOQk9Ji4E4LF0Th9guLe
+         rTCaOu5hA56IodBvpuVv40u7UzdnqbMAEG1eztn7LdGztaZj6C604dMa8YBKqSaTeY
+         VAk+KbbS+aZLg==
+Received: by mercury (Postfix, from userid 1000)
+        id 50F631060A57; Wed, 14 Jun 2023 01:39:07 +0200 (CEST)
+Date:   Wed, 14 Jun 2023 01:39:07 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Vincent Legoll <vincent.legoll@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v5 20/25] dt-bindings: devfreq: event: convert Rockchip
+ DFI binding to yaml
+Message-ID: <20230613233907.a5t4ckpmbqip7iue@mercury.elektranox.org>
+References: <20230524083153.2046084-1-s.hauer@pengutronix.de>
+ <20230524083153.2046084-21-s.hauer@pengutronix.de>
 MIME-Version: 1.0
-X-Received: by 2002:a02:228b:0:b0:41d:70ff:9254 with SMTP id
- o133-20020a02228b000000b0041d70ff9254mr6168071jao.3.1686699415331; Tue, 13
- Jun 2023 16:36:55 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 16:36:55 -0700
-In-Reply-To: <0000000000009612bc05fe07c73f@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007e6d7505fe0b4f4b@google.com>
-Subject: Re: [syzbot] [hams?] memory leak in nr_create (3)
-From:   syzbot <syzbot+d327a1f3b12e1e206c16@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux-hams@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, ralf@linux-mips.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="igsprmquqpwnps2m"
+Content-Disposition: inline
+In-Reply-To: <20230524083153.2046084-21-s.hauer@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
 
-HEAD commit:    fb054096aea0 Merge tag 'mm-hotfixes-stable-2023-06-12-12-2..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17042a9d280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=62c3855f0661c072
-dashboard link: https://syzkaller.appspot.com/bug?extid=d327a1f3b12e1e206c16
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=166d8d2d280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=102f213b280000
+--igsprmquqpwnps2m
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/193c8ae2af09/disk-fb054096.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/eaa8cc7d62e7/vmlinux-fb054096.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/4209ce6abb1d/bzImage-fb054096.xz
+Hi,
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d327a1f3b12e1e206c16@syzkaller.appspotmail.com
+On Wed, May 24, 2023 at 10:31:48AM +0200, Sascha Hauer wrote:
+> Convert the Rockchip DFI binding to yaml.
+>=20
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> ---
 
-BUG: memory leak
-unreferenced object 0xffff8881160a5800 (size 2048):
-  comm "syz-executor386", pid 5102, jiffies 4294948540 (age 23.020s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    06 00 07 40 00 00 00 00 00 00 00 00 00 00 00 00  ...@............
-  backtrace:
-    [<ffffffff8154621a>] __do_kmalloc_node mm/slab_common.c:965 [inline]
-    [<ffffffff8154621a>] __kmalloc+0x4a/0x120 mm/slab_common.c:979
-    [<ffffffff83dbed6d>] kmalloc include/linux/slab.h:563 [inline]
-    [<ffffffff83dbed6d>] sk_prot_alloc+0xcd/0x1b0 net/core/sock.c:2035
-    [<ffffffff83dc14e6>] sk_alloc+0x36/0x300 net/core/sock.c:2088
-    [<ffffffff843df034>] nr_create+0x84/0x1c0 net/netrom/af_netrom.c:438
-    [<ffffffff83db741e>] __sock_create+0x1de/0x300 net/socket.c:1547
-    [<ffffffff83dbaa32>] sock_create net/socket.c:1598 [inline]
-    [<ffffffff83dbaa32>] __sys_socket_create net/socket.c:1635 [inline]
-    [<ffffffff83dbaa32>] __sys_socket_create net/socket.c:1620 [inline]
-    [<ffffffff83dbaa32>] __sys_socket+0xa2/0x190 net/socket.c:1663
-    [<ffffffff83dbab3e>] __do_sys_socket net/socket.c:1676 [inline]
-    [<ffffffff83dbab3e>] __se_sys_socket net/socket.c:1674 [inline]
-    [<ffffffff83dbab3e>] __x64_sys_socket+0x1e/0x30 net/socket.c:1674
-    [<ffffffff84a17749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a17749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-write to /proc/sys/kernel/hung_task_check_interval_secs failed: No such file or directory
-write to /proc/sys/kernel/softlockup_all_cpu_backtrace failed: No such file or directory
-BUG: memory leak
-unreferenced object 0xffff8881115ddde0 (size 32):
-  comm "syz-executor386", pid 5003, jiffies 4294947794 (age 35.370s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff81545b34>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
-    [<ffffffff83de7abc>] kmalloc include/linux/slab.h:559 [inline]
-    [<ffffffff83de7abc>] kzalloc include/linux/slab.h:680 [inline]
-    [<ffffffff83de7abc>] net_alloc net/core/net_namespace.c:422 [inline]
-    [<ffffffff83de7abc>] copy_net_ns+0xdc/0x450 net/core/net_namespace.c:476
-    [<ffffffff812bf009>] create_new_namespaces+0x199/0x4f0 kernel/nsproxy.c:110
-    [<ffffffff812bf9bf>] unshare_nsproxy_namespaces+0x9f/0x120 kernel/nsproxy.c:228
-    [<ffffffff81279ae2>] ksys_unshare+0x302/0x600 kernel/fork.c:3441
-    [<ffffffff81279df6>] __do_sys_unshare kernel/fork.c:3512 [inline]
-    [<ffffffff81279df6>] __se_sys_unshare kernel/fork.c:3510 [inline]
-    [<ffffffff81279df6>] __x64_sys_unshare+0x16/0x20 kernel/fork.c:3510
-    [<ffffffff84a17749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a17749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+-- Sebastian
 
-BUG: memory leak
-unreferenced object 0xffff888109e8a600 (size 512):
-  comm "syz-executor386", pid 5003, jiffies 4294947794 (age 35.370s)
-  hex dump (first 32 bytes):
-    00 98 e8 09 81 88 ff ff 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 ea ff ff ff ff ff ff ff  ................
-  backtrace:
-    [<ffffffff8154621a>] __do_kmalloc_node mm/slab_common.c:965 [inline]
-    [<ffffffff8154621a>] __kmalloc+0x4a/0x120 mm/slab_common.c:979
-    [<ffffffff8176619f>] kmalloc include/linux/slab.h:563 [inline]
-    [<ffffffff8176619f>] kzalloc include/linux/slab.h:680 [inline]
-    [<ffffffff8176619f>] __register_sysctl_table+0x7f/0xac0 fs/proc/proc_sysctl.c:1376
-    [<ffffffff83f75c50>] netfilter_log_sysctl_init net/netfilter/nf_log.c:490 [inline]
-    [<ffffffff83f75c50>] nf_log_net_init+0xc0/0x1e0 net/netfilter/nf_log.c:539
-    [<ffffffff83de6184>] ops_init+0x54/0x1d0 net/core/net_namespace.c:136
-    [<ffffffff83de64d2>] setup_net+0x1d2/0x3f0 net/core/net_namespace.c:339
-    [<ffffffff83de7bed>] copy_net_ns+0x20d/0x450 net/core/net_namespace.c:491
-    [<ffffffff812bf009>] create_new_namespaces+0x199/0x4f0 kernel/nsproxy.c:110
-    [<ffffffff812bf9bf>] unshare_nsproxy_namespaces+0x9f/0x120 kernel/nsproxy.c:228
-    [<ffffffff81279ae2>] ksys_unshare+0x302/0x600 kernel/fork.c:3441
-    [<ffffffff81279df6>] __do_sys_unshare kernel/fork.c:3512 [inline]
-    [<ffffffff81279df6>] __se_sys_unshare kernel/fork.c:3510 [inline]
-    [<ffffffff81279df6>] __x64_sys_unshare+0x16/0x20 kernel/fork.c:3510
-    [<ffffffff84a17749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a17749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>=20
+> Notes:
+>     Changes since v4:
+>    =20
+>     - Revert to state of v3 (changes were lost in v4)
+>=20
+>  .../bindings/devfreq/event/rockchip,dfi.yaml  | 61 +++++++++++++++++++
+>  .../bindings/devfreq/event/rockchip-dfi.txt   | 18 ------
+>  .../rockchip,rk3399-dmc.yaml                  |  2 +-
+>  3 files changed, 62 insertions(+), 19 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/devfreq/event/rockc=
+hip,dfi.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/devfreq/event/rockc=
+hip-dfi.txt
+>=20
+> diff --git a/Documentation/devicetree/bindings/devfreq/event/rockchip,dfi=
+=2Eyaml b/Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
+> new file mode 100644
+> index 0000000000000..7a82f6ae0701e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
+> @@ -0,0 +1,61 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/devfreq/event/rockchip,dfi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Rockchip DFI
+> +
+> +maintainers:
+> +  - Sascha Hauer <s.hauer@pengutronix.de>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - rockchip,rk3399-dfi
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: pclk_ddr_mon
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  rockchip,pmu:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      Phandle to the syscon managing the "PMU general register files".
+> +
+> +required:
+> +  - compatible
+> +  - clocks
+> +  - clock-names
+> +  - interrupts
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/rk3308-cru.h>
+> +
+> +    bus {
+> +      #address-cells =3D <2>;
+> +      #size-cells =3D <2>;
+> +
+> +      dfi: dfi@ff630000 {
+> +        compatible =3D "rockchip,rk3399-dfi";
+> +        reg =3D <0x00 0xff630000 0x00 0x4000>;
+> +        interrupts =3D <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH 0>;
+> +        rockchip,pmu =3D <&pmugrf>;
+> +        clocks =3D <&cru PCLK_DDR_MON>;
+> +        clock-names =3D "pclk_ddr_mon";
+> +      };
+> +    };
+> diff --git a/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi=
+=2Etxt b/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
+> deleted file mode 100644
+> index 148191b0fc158..0000000000000
+> --- a/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
+> +++ /dev/null
+> @@ -1,18 +0,0 @@
+> -
+> -* Rockchip rk3399 DFI device
+> -
+> -Required properties:
+> -- compatible: Must be "rockchip,rk3399-dfi".
+> -- reg: physical base address of each DFI and length of memory mapped reg=
+ion
+> -- rockchip,pmu: phandle to the syscon managing the "pmu general register=
+ files"
+> -- clocks: phandles for clock specified in "clock-names" property
+> -- clock-names : the name of clock used by the DFI, must be "pclk_ddr_mon=
+";
+> -
+> -Example:
+> -	dfi: dfi@ff630000 {
+> -		compatible =3D "rockchip,rk3399-dfi";
+> -		reg =3D <0x00 0xff630000 0x00 0x4000>;
+> -		rockchip,pmu =3D <&pmugrf>;
+> -		clocks =3D <&cru PCLK_DDR_MON>;
+> -		clock-names =3D "pclk_ddr_mon";
+> -	};
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/rockchi=
+p,rk3399-dmc.yaml b/Documentation/devicetree/bindings/memory-controllers/ro=
+ckchip,rk3399-dmc.yaml
+> index fb4920397d08e..aba8649aaeb10 100644
+> --- a/Documentation/devicetree/bindings/memory-controllers/rockchip,rk339=
+9-dmc.yaml
+> +++ b/Documentation/devicetree/bindings/memory-controllers/rockchip,rk339=
+9-dmc.yaml
+> @@ -18,7 +18,7 @@ properties:
+>      $ref: /schemas/types.yaml#/definitions/phandle
+>      description:
+>        Node to get DDR loading. Refer to
+> -      Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt.
+> +      Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml.
+> =20
+>    clocks:
+>      maxItems: 1
+> --=20
+> 2.39.2
+>=20
 
-BUG: memory leak
-unreferenced object 0xffff88810e12b400 (size 256):
-  comm "syz-executor386", pid 5003, jiffies 4294947794 (age 35.370s)
-  hex dump (first 32 bytes):
-    78 b4 12 0e 81 88 ff ff 00 00 00 00 00 00 00 00  x...............
-    00 00 00 00 00 00 00 00 ea ff ff ff ff ff ff ff  ................
-  backtrace:
-    [<ffffffff8154621a>] __do_kmalloc_node mm/slab_common.c:965 [inline]
-    [<ffffffff8154621a>] __kmalloc+0x4a/0x120 mm/slab_common.c:979
-    [<ffffffff81766883>] kmalloc include/linux/slab.h:563 [inline]
-    [<ffffffff81766883>] kzalloc include/linux/slab.h:680 [inline]
-    [<ffffffff81766883>] new_dir fs/proc/proc_sysctl.c:970 [inline]
-    [<ffffffff81766883>] get_subdir fs/proc/proc_sysctl.c:1014 [inline]
-    [<ffffffff81766883>] sysctl_mkdir_p fs/proc/proc_sysctl.c:1307 [inline]
-    [<ffffffff81766883>] __register_sysctl_table+0x763/0xac0 fs/proc/proc_sysctl.c:1392
-    [<ffffffff83f75c50>] netfilter_log_sysctl_init net/netfilter/nf_log.c:490 [inline]
-    [<ffffffff83f75c50>] nf_log_net_init+0xc0/0x1e0 net/netfilter/nf_log.c:539
-    [<ffffffff83de6184>] ops_init+0x54/0x1d0 net/core/net_namespace.c:136
-    [<ffffffff83de64d2>] setup_net+0x1d2/0x3f0 net/core/net_namespace.c:339
-    [<ffffffff83de7bed>] copy_net_ns+0x20d/0x450 net/core/net_namespace.c:491
-    [<ffffffff812bf009>] create_new_namespaces+0x199/0x4f0 kernel/nsproxy.c:110
-    [<ffffffff812bf9bf>] unshare_nsproxy_namespaces+0x9f/0x120 kernel/nsproxy.c:228
-    [<ffffffff81279ae2>] ksys_unshare+0x302/0x600 kernel/fork.c:3441
-    [<ffffffff81279df6>] __do_sys_unshare kernel/fork.c:3512 [inline]
-    [<ffffffff81279df6>] __se_sys_unshare kernel/fork.c:3510 [inline]
-    [<ffffffff81279df6>] __x64_sys_unshare+0x16/0x20 kernel/fork.c:3510
-    [<ffffffff84a17749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a17749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+--igsprmquqpwnps2m
+Content-Type: application/pgp-signature; name="signature.asc"
 
-BUG: memory leak
-unreferenced object 0xffff88810b613180 (size 192):
-  comm "syz-executor386", pid 5003, jiffies 4294947794 (age 35.370s)
-  hex dump (first 32 bytes):
-    00 1a 62 0a 81 88 ff ff 00 00 00 00 00 00 00 00  ..b.............
-    00 00 00 00 00 00 00 00 ea ff ff ff ff ff ff ff  ................
-  backtrace:
-    [<ffffffff8154621a>] __do_kmalloc_node mm/slab_common.c:965 [inline]
-    [<ffffffff8154621a>] __kmalloc+0x4a/0x120 mm/slab_common.c:979
-    [<ffffffff8176619f>] kmalloc include/linux/slab.h:563 [inline]
-    [<ffffffff8176619f>] kzalloc include/linux/slab.h:680 [inline]
-    [<ffffffff8176619f>] __register_sysctl_table+0x7f/0xac0 fs/proc/proc_sysctl.c:1376
-    [<ffffffff83decbae>] sysctl_core_net_init+0x8e/0x130 net/core/sysctl_net_core.c:715
-    [<ffffffff83de6184>] ops_init+0x54/0x1d0 net/core/net_namespace.c:136
-    [<ffffffff83de64d2>] setup_net+0x1d2/0x3f0 net/core/net_namespace.c:339
-    [<ffffffff83de7bed>] copy_net_ns+0x20d/0x450 net/core/net_namespace.c:491
-    [<ffffffff812bf009>] create_new_namespaces+0x199/0x4f0 kernel/nsproxy.c:110
-    [<ffffffff812bf9bf>] unshare_nsproxy_namespaces+0x9f/0x120 kernel/nsproxy.c:228
-    [<ffffffff81279ae2>] ksys_unshare+0x302/0x600 kernel/fork.c:3441
-    [<ffffffff81279df6>] __do_sys_unshare kernel/fork.c:3512 [inline]
-    [<ffffffff81279df6>] __se_sys_unshare kernel/fork.c:3510 [inline]
-    [<ffffffff81279df6>] __x64_sys_unshare+0x16/0x20 kernel/fork.c:3510
-    [<ffffffff84a17749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a17749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSI/hQACgkQ2O7X88g7
++pruyw/+PclczDdjsGUjLjCBWzHU1CIdodfMwJfKjcmX+gJhGxbklOg+VyjnxF+R
+BBcnoYB6lmSEUIGQmEz9AJ/8dQoTB9mSENw8tKimVPLSdiRO/qdLxsspTZJ5OSQE
+fIn/+MoVkW6Xvv7a14oumTvrZGNjPhD/OQMRcMY5mfdLsIi0E9UMIob9ow8r6Qqj
+0M1YUBp9YenTWD8J/e5mOafaJ6E7EoDoEQSytRppQHiFN4E7EjNQr5hduOChlyoP
+BAIPj1jz2HhVUJdTwgdlxhOUmhjpKLewcFdZSB7hTjY5SrYhMEUlByRog3ILiSO8
+mNvPhN+VHnumvv+8KkSm2sgpZ7FvUjjxfRobydFoXWnlb5Z5GQtuJiz65bVzI57v
+vzf/QWAXQ9dey+Q2Q+FQh4nPAmovV3KQ07GUR4bfL3ofMsUJZaT+tpGbqvpRklTh
+unG/PDWK1WSPBLxN09V3+5aiXm12hHw0/JJIxZWPXL7CvwOuhKj8vO6mrXlabdy9
+H5H3jcPE8MCcN7c6ZhOV4H8Lbt1VwqhjBY16Z8etzIOMaq8uL2Cg9hbZTbFbL/Q8
+gnS+7wY+t1VYP9+1XWnoIverBeCd3Q/jixTGXs7bMZxwOXqWHHqgwsj00zWBU6ns
+yInon6jNb03nDPpygcL7EKVeTBmKyeFJKgL3CaoLCYF7LneOZqo=
+=k0al
+-----END PGP SIGNATURE-----
 
-
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+--igsprmquqpwnps2m--
