@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A81D72D873
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 06:22:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAC8F72D875
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 06:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239538AbjFMEWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 00:22:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45420 "EHLO
+        id S239567AbjFMEWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 00:22:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239335AbjFMEV6 (ORCPT
+        with ESMTP id S239374AbjFMEWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 00:21:58 -0400
+        Tue, 13 Jun 2023 00:22:10 -0400
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB28C10FE;
-        Mon, 12 Jun 2023 21:21:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B96171D;
+        Mon, 12 Jun 2023 21:21:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686630107; x=1718166107;
+  t=1686630109; x=1718166109;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=ci6rEw05hh+1ShG1mMr7Z5qVrukY7SAsqk+7oT7Fwys=;
-  b=AXE4E/C/FhFhBS8MBhZqnDWnzmDW9/197iXZc4yPGxUlt+Bvpk3DbLLN
-   CaApxDPwC9aArUDsI5IER2iZVcFeXnUwNNh4qHOAOx8F2EskuVaHTPeZX
-   lcTqDYsL2YEM8H0bhOYzO14/yykl+X3xKPFcFzZxkyiTD8VQrME/7bWhS
-   aK5BUge6GxoDK3Hb1jm0ZJxcES4emPsQkHVaFZWpWnsUieZpjzvrK0vnI
-   lEzUOK7EC4smoWAOnMotpQ884yeZjCnxumWLCmyt+gVIuHPGGFxvheV5D
-   6p553UIbaciMJu5FyVFMtDNAHwlwOcfUjI2wGp3fuw+IZY5UCJcuoAiFS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="358222131"
+  bh=/I49eIsDquR6DFYsO93kE0UH3pQmCgZ0Nh4gXSalcss=;
+  b=NjjKNrQXJsw2RrnH4XFLz/Y+huzpJBJMxesqJW03q34Gt4I0hc9fHz+3
+   s/e4ycpeOpeTHP0oMXmo2P1N7DAIL+ihNbegVQkMYYaHgx/e67TB+pJCz
+   lhoHmPtMd0vMBlQ3HZAKJgTo+vXAjxQO10he19oH1kds/bO+cVkovvyup
+   /b3uxnV84NRSMXQreySCkfAyJ3TE/Td/lJsIaeZPuWsU6zLBf3F6+JWt0
+   /KW9AyIsRNEW5IDOX7BmbvGc0+oMxq4WnolXaIf8nu8P5tbU69HKfK0JI
+   Ir6f65tYgEmBD++b5rRh7ckJJla53zMKePdDqvxIk9jEK0HTuOqT9ixH7
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="358222148"
 X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
-   d="scan'208";a="358222131"
+   d="scan'208";a="358222148"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 21:21:47 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 21:21:48 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="661854959"
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="661854962"
 X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
-   d="scan'208";a="661854959"
+   d="scan'208";a="661854962"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga003.jf.intel.com with ESMTP; 12 Jun 2023 21:21:45 -0700
+  by orsmga003.jf.intel.com with ESMTP; 12 Jun 2023 21:21:47 -0700
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 To:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
@@ -63,9 +63,9 @@ Cc:     Ricardo Neri <ricardo.neri@intel.com>,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
         "Tim C . Chen" <tim.c.chen@intel.com>,
         Zhao Liu <zhao1.liu@linux.intel.com>
-Subject: [PATCH v4 09/24] sched/fair: Use IPCC stats to break ties between fully_busy SMT groups
-Date:   Mon, 12 Jun 2023 21:24:07 -0700
-Message-Id: <20230613042422.5344-10-ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v4 10/24] sched/fair: Use IPCC scores to select a busiest runqueue
+Date:   Mon, 12 Jun 2023 21:24:08 -0700
+Message-Id: <20230613042422.5344-11-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230613042422.5344-1-ricardo.neri-calderon@linux.intel.com>
 References: <20230613042422.5344-1-ricardo.neri-calderon@linux.intel.com>
@@ -79,17 +79,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IPCC statistics are used during idle load balancing. After balancing one
-of the siblings of an SMT core becomes idle. The remaining busy siblings
-experience increased throughput. The IPCC statistics provide a measure of
-the increased throughput. Use them to select the busiest group between
-otherwise identical fully_busy scheduling groups. (The avg_load is not
-computed in this case and is zero for both groups).
+Use IPCC scores to break a tie between two runqueues with the same priority
+and number of running tasks: select the runqueue of which the task enqueued
+last would get a higher IPC boost when migrated to the destination CPU.
+(These tasks are migrated first during load balance.)
 
-IPCC scores are not needed to break ties with non-SMT fully_busy sched
-groups. SMT sched groups always need more help.
-
-Add a stub sched_asym_ipcc_prefer() to handle !CONFIG_IPC_CLASSES.
+For now, restrict the utilization of IPCC scores to scheduling domains
+marked with the SD_ASYM_PACKING flag.
 
 Cc: Ben Segall <bsegall@google.com>
 Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -112,59 +108,119 @@ Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
 Changes since v3:
- * None
+ * Do not compute the IPCC stats using the current tasks of runqueues.
+   Instead, use the tasks at the back of the queue. These are the tasks
+   that will be pulled first during load balance. (Vincent)
 
 Changes since v2:
- * Introduced this patch.
+ * Only use IPCC scores to break ties if the sched domain uses
+   asym_packing. (Ionela)
+ * Handle errors of arch_get_ipcc_score(). (Ionela)
 
 Changes since v1:
- * N/A
+ * Fixed a bug when selecting a busiest runqueue: when comparing two
+   runqueues with equal nr_running, we must compute the IPCC score delta
+   of both.
+ * Renamed local variables to improve the layout of the code block.
+   (PeterZ)
+ * Used the new interface names.
 ---
- kernel/sched/fair.c | 23 ++++++++++++++++++++---
- 1 file changed, 20 insertions(+), 3 deletions(-)
+ kernel/sched/fair.c | 61 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
 
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index fb3d793fe9ad..fcec791ede4f 100644
+index fcec791ede4f..da3e009eef42 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -9580,6 +9580,12 @@ static void update_sg_lb_stats_scores(struct sg_lb_stats *sgs,
- {
+@@ -9564,6 +9564,41 @@ static bool sched_asym_ipcc_pick(struct sched_group *a,
+ 	return sched_asym_ipcc_prefer(a_stats, b_stats);
  }
  
-+static bool sched_asym_ipcc_prefer(struct sg_lb_stats *a,
-+				   struct sg_lb_stats *b)
++/**
++ * ipcc_score_delta - Get the IPCC score delta wrt the load balance's dst_cpu
++ * @rq:		A runqueue
++ * @env:	Load balancing environment
++ *
++ * Returns: The IPCC score delta that the last task enqueued in @rq would get
++ * if placed in the destination CPU of @env. LONG_MIN to indicate that the
++ * delta should not be used.
++ */
++static long ipcc_score_delta(struct rq *rq, struct lb_env *env)
 +{
-+	return false;
++	unsigned long score_src, score_dst;
++	unsigned short ipcc;
++
++	if (!sched_ipcc_enabled())
++		return LONG_MIN;
++
++	/* Only asym_packing uses IPCC scores at the moment. */
++	if (!(env->sd->flags & SD_ASYM_PACKING))
++		return LONG_MIN;
++
++	if (rq_last_task_ipcc(env->dst_cpu, rq, &ipcc))
++		return LONG_MIN;
++
++	score_dst = arch_get_ipcc_score(ipcc, env->dst_cpu);
++	if (IS_ERR_VALUE(score_dst))
++		return LONG_MIN;
++
++	score_src = arch_get_ipcc_score(ipcc, cpu_of(rq));
++	if (IS_ERR_VALUE(score_src))
++		return LONG_MIN;
++
++	return score_dst - score_src;
 +}
 +
- static bool sched_asym_ipcc_pick(struct sched_group *a,
- 				 struct sched_group *b,
- 				 struct sg_lb_stats *a_stats,
-@@ -9861,10 +9867,21 @@ static bool update_sd_pick_busiest(struct lb_env *env,
- 		if (sgs->avg_load == busiest->avg_load) {
- 			/*
- 			 * SMT sched groups need more help than non-SMT groups.
--			 * If @sg happens to also be SMT, either choice is good.
- 			 */
--			if (sds->busiest->flags & SD_SHARE_CPUCAPACITY)
--				return false;
-+			if (sds->busiest->flags & SD_SHARE_CPUCAPACITY) {
-+				if (!(sg->flags & SD_SHARE_CPUCAPACITY))
-+					return false;
+ #else /* CONFIG_IPC_CLASSES */
+ static void update_sg_lb_ipcc_stats(int dst_cpu, struct sg_lb_stats *sgs,
+ 				    struct rq *rq)
+@@ -9594,6 +9629,11 @@ static bool sched_asym_ipcc_pick(struct sched_group *a,
+ 	return false;
+ }
+ 
++static long ipcc_score_delta(struct rq *rq, struct lb_env *env)
++{
++	return LONG_MIN;
++}
++
+ #endif /* CONFIG_IPC_CLASSES */
+ 
+ /**
+@@ -10769,6 +10809,7 @@ static struct rq *find_busiest_queue(struct lb_env *env,
+ {
+ 	struct rq *busiest = NULL, *rq;
+ 	unsigned long busiest_util = 0, busiest_load = 0, busiest_capacity = 1;
++	long busiest_ipcc_delta = LONG_MIN;
+ 	unsigned int busiest_nr = 0;
+ 	int i;
+ 
+@@ -10885,6 +10926,26 @@ static struct rq *find_busiest_queue(struct lb_env *env,
+ 			if (busiest_nr < nr_running) {
+ 				busiest_nr = nr_running;
+ 				busiest = rq;
 +
 +				/*
-+				 * Between two SMT groups, use IPCC scores to pick the
-+				 * one that would improve throughput the most (only
-+				 * asym_packing uses IPCC scores for now).
++				 * Remember the IPCC score of the busiest
++				 * runqueue. We may need it to break a tie with
++				 * other queues with equal nr_running.
 +				 */
-+				if (sched_ipcc_enabled() &&
-+				    env->sd->flags & SD_ASYM_PACKING &&
-+				    sched_asym_ipcc_prefer(busiest, sgs))
-+					return false;
-+			}
- 		}
++				busiest_ipcc_delta = ipcc_score_delta(busiest, env);
++			/*
++			 * For ties, select @rq if doing would give its last
++			 * queued task a bigger IPC boost when migrated to
++			 * dst_cpu.
++			 */
++			} else if (busiest_nr == nr_running) {
++				long delta = ipcc_score_delta(rq, env);
++
++				if (busiest_ipcc_delta < delta) {
++					busiest_ipcc_delta = delta;
++					busiest_nr = nr_running;
++					busiest = rq;
++				}
+ 			}
+ 			break;
  
- 		break;
 -- 
 2.25.1
 
