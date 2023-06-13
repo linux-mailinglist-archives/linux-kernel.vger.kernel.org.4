@@ -2,103 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55CE772E15F
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 13:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30F9572E167
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 13:24:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239883AbjFMLYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 07:24:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59702 "EHLO
+        id S242113AbjFMLYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 07:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239702AbjFMLXt (ORCPT
+        with ESMTP id S241693AbjFMLYO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 07:23:49 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793E01FC3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 04:23:26 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 9611F1FD8F;
-        Tue, 13 Jun 2023 11:22:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1686655362; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=sO60fsV+XdP0/uve4cp5yDDKZqVuceLf/J7QE90gvx4=;
-        b=ejablnhwvL4lTGlWKUz3ffv4cDRlSuI9FS31tOH+oWSfCENaycQFl4IN5rPjKR0KWtl2zf
-        Qikby3IYbqxRff4+pFPs+hSL0eLCPHC1E0sdMQXoQJ9Os38jX8xHJS4n8mzQ74A+J9Q2QN
-        sYQafm6AO/SkpgIm1drAKldyAmshZwk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1686655362;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=sO60fsV+XdP0/uve4cp5yDDKZqVuceLf/J7QE90gvx4=;
-        b=XjSaphVlBL6b0B4XsnfWafGKd/gGG/alhSDI7S2B9X0E+Jwai6Pwq7wfPwxH1/hBtxsgTG
-        HBZ9YplLhokcUeDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7109013483;
-        Tue, 13 Jun 2023 11:22:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Lb22GoJRiGS5EAAAMHmgww
-        (envelope-from <tiwai@suse.de>); Tue, 13 Jun 2023 11:22:42 +0000
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: [PATCH v2] regmap: regcache: Don't sync read-only registers
-Date:   Tue, 13 Jun 2023 13:22:40 +0200
-Message-Id: <20230613112240.3361-1-tiwai@suse.de>
-X-Mailer: git-send-email 2.35.3
+        Tue, 13 Jun 2023 07:24:14 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155AD1BE1;
+        Tue, 13 Jun 2023 04:23:56 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b3c0c476d1so20944665ad.1;
+        Tue, 13 Jun 2023 04:23:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686655431; x=1689247431;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=7Y7yi+Okgc5sTCMPfTkh6DdWUXsya0gJ+xteKBizfC8=;
+        b=VYJsYkRhmamDj0aNWQJOkE+7ttXipRe/tLvjw4RXVYlJrxUeo3Tix2IPWS/huLQCzm
+         G2O12J9IHZGKb06YSDZZX/Qg7iCKNo/mQ7jh93hlk9RHonsEvI08W6+kihAkVEeQL1j5
+         J67c+KII/42VyBcPj8WN7Htnuum9/ImWAmBrd5IWkX31RSC0TTyXK0CrLZTcta7JCO91
+         AMGDjHkX41C5SORTelhnqblJt2THuHdwLcSBeo5smjfjjTgtYT784wO6bJV2FAL5uq8Z
+         6OYs5ydA8eiDht8ia7y1h2DHlQn+8uX/0ITdFNx2lLK8Gq+b5k1u7AVGDtVumOx407tb
+         8woA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686655431; x=1689247431;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7Y7yi+Okgc5sTCMPfTkh6DdWUXsya0gJ+xteKBizfC8=;
+        b=l1LXXuxYEl7Zm9sCQI32HrJssbwlWK4KgF6ZpxTc3Ko3zfBv8J+S50lWeFO3/Ycloq
+         CHm3w02Otsoud7F4e5O4eREjhZ0eboDFqdO//RROpfYm4sQbL/PAJ+8xP/1L/ww1MGAd
+         dXQo0EMhRPLrT5B4oe1eb55IwkjcHkui9z9e0UuG58O4AKggzAXZf0zlkwpiqYxmrY4Y
+         k463x9JoHKwyHCRjNp2Y1WA7HO+NSMehEapC2lcY4zKXYzFKogXv0wvjRefgZqu0+l9N
+         9aQjB4S+mho1mY4bt22Kg6puVzaCWSHW8bIKulHamyO/ICCHizATYaU07VCvJt86Gg+e
+         RaRA==
+X-Gm-Message-State: AC+VfDxT5QVqewMbzGft2gy3A2Rb4PQV2sgIg9NpHxOQD/jQacAunfM2
+        vg/FwsBQni4DLimuCpRW1H4=
+X-Google-Smtp-Source: ACHHUZ5ZMtmfWu4aONz4T6VLColaAUqpKiQI9Drl624Ken5HRMAMAu3DDnkq0vW0Jy6kR2QfcsVLhw==
+X-Received: by 2002:a17:902:b10b:b0:1ae:35ba:8c8f with SMTP id q11-20020a170902b10b00b001ae35ba8c8fmr8408423plr.13.1686655430967;
+        Tue, 13 Jun 2023 04:23:50 -0700 (PDT)
+Received: from [192.168.0.103] ([103.124.138.155])
+        by smtp.gmail.com with ESMTPSA id a7-20020a170902ecc700b00198d7b52eefsm9946916plh.257.2023.06.13.04.23.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 04:23:50 -0700 (PDT)
+Message-ID: <cc577237-7814-0bea-a152-8acdea844088@gmail.com>
+Date:   Tue, 13 Jun 2023 18:23:30 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: Fwd: w_scan hangs on 6.3.7 and does not react on kill -9
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lukasz Kalamlacki <kalamlacki@gmail.com>,
+        Hyunwoo Kim <imv4bel@gmail.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Stefan Lippers-Hollmann <s.l-h@gmx.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>
+References: <67afa974-835a-77cc-d4bb-49cba0ff5bf5@gmail.com>
+Content-Language: en-US
+In-Reply-To: <67afa974-835a-77cc-d4bb-49cba0ff5bf5@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-regcache_maple_sync() tries to sync all cached values no matter
-whether it's writable or not.  OTOH, regache_sync_val() does care the
-wrtability and returns -EIO for a read-only register.  This results in
-an error message like:
-  snd_hda_codec_realtek hdaudioC0D0: Unable to sync register 0x2f0009. -5
-and the sync loop is aborted incompletely.
+On 6/12/23 20:52, Bagas Sanjaya wrote:
+> Hi,
+> 
+> I notice a regression report on Bugzilla [1]. Quoting from it:
+> 
+>> w_scan tool on kernel 6.3.7 hangs so badly that it cannot be killed by kill -9 
+>> I tried also w_scan_cpp 20230604 but it also fails I have 2040:8268 Hauppauge soloHD device as reported by lsusb. During reboot of the OS it prints a lot of kernel errors but it is after syslog is killed I guess and in syslog messages I do not see anything. On default Debian kernel 5.10.0-23 this problem does not exists.
+> 
+> 
+> See Bugzilla for the full thread and attached dmesg and kernel config.
+> 
+> Lukasz: On what hardware you have this regression? Also, it is really
+> helpful if you can perform bisection (as outlined
+> in Documentation/admin-guide/bug-bisect.html) to find the culprit,
+> when developers can't figure it out by inspecting the code alone.
+> Last but not least, please also try latest mainline (currently v6.4-rc6).
+> 
+> Anyway, I'm adding it to regzbot:
+> 
+> #regzbot introduced: v5.10..v6.3 https://bugzilla.kernel.org/show_bug.cgi?id=217540
+> #regzbot title: w_scan zombie (unkillable) on kernel v6.3
+> 
 
-This patch adds the writable register check to regcache_sync_val() for
-addressing the bug above.
+Another reporter on Bugzilla with similar regression as this one had
+bisected the culprit, so:
 
-Note that, although we may add the check in the caller side
-(regcache_maple_sync()), here we put in regcache_sync_val(), so that a
-similar case like this can be avoided in future.
+Hyunwoo Kim: It looks like this regression is caused by a backported
+commit of yours. Would you like to take a look on it?
 
-Fixes: f033c26de5a5 ("regmap: Add maple tree based register cache")
-Link: https://lore.kernel.org/r/877cs7g6f1.wl-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
----
- drivers/base/regmap/regcache.c | 3 +++
- 1 file changed, 3 insertions(+)
+#regzbot introduced: 8994830135b38b
 
-diff --git a/drivers/base/regmap/regcache.c b/drivers/base/regmap/regcache.c
-index 029564695dbb..97c681fcf9f6 100644
---- a/drivers/base/regmap/regcache.c
-+++ b/drivers/base/regmap/regcache.c
-@@ -284,6 +284,9 @@ static bool regcache_reg_needs_sync(struct regmap *map, unsigned int reg,
- {
- 	int ret;
- 
-+	if (!regmap_writeable(map, reg))
-+		return false;
-+
- 	/* If we don't know the chip just got reset, then sync everything. */
- 	if (!map->no_sync_defaults)
- 		return true;
+Thanks.
+
 -- 
-2.35.3
+An old man doll... just what I always wanted! - Clara
 
