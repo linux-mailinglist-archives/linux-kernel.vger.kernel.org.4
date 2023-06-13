@@ -2,58 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE2AC72EC99
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:11:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E7F272EC9B
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:11:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240799AbjFMUL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 16:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
+        id S229602AbjFMULl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 16:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbjFMULN (ORCPT
+        with ESMTP id S240347AbjFMULZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 16:11:13 -0400
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8EB1FC9;
-        Tue, 13 Jun 2023 13:10:49 -0700 (PDT)
-Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-77acb944bdfso346751339f.0;
-        Tue, 13 Jun 2023 13:10:49 -0700 (PDT)
+        Tue, 13 Jun 2023 16:11:25 -0400
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DE51FDB;
+        Tue, 13 Jun 2023 13:11:03 -0700 (PDT)
+Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-76c64da0e46so269386139f.0;
+        Tue, 13 Jun 2023 13:11:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686687049; x=1689279049;
+        d=1e100.net; s=20221208; t=1686687063; x=1689279063;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=m/0Ld9Rv7cpsr9VbIPD46nT8UE2Lan47fsXtsoJnXmY=;
-        b=HFiNiVpKKWUM/bWNozAIFsQaP9oFWg9u+0F3nAIXaswaMpe5ft+Ix+7D8xuJUy4s6C
-         BVnyZD6zkqZd2vMvGtpatHj8xwibXsAYQemhfql7Y+OZWjiQvDsjgkomoColl59xszag
-         +WkKT1OC4gjTCuknGz7l0OZW5RAgDEQ170RWuCfcW3BWhsxB21PGgjrtL1f25PgFm1/x
-         ByjCzU/VBk0hqv8grFC66gYG2MRIdbX36AOSrApkT2+cAwvbZloP0j7eXhoxkDcAgjay
-         6cYw+RwE5VHarK3BaoBp5DC3w+JhIQtO9GxO9D2LhHjPvo/ch3OKw0wQhnJuaV2xrUj5
-         XaUA==
-X-Gm-Message-State: AC+VfDyHzy76cfJKCOBhzMOanhT7b5zUr9UdmeTA+MxjD7xiGOkL2I4W
-        PgOE+RebMgFyc3CMJ+0a7g==
-X-Google-Smtp-Source: ACHHUZ5uW/zGOo0tQgIhPAfnV1Zc8GBjuvZGKJYam6fCcqz5xYi7Ghl5jBM6tpUZne+7Uvhv3mb8Fw==
-X-Received: by 2002:a5e:9509:0:b0:77a:1307:1e4e with SMTP id r9-20020a5e9509000000b0077a13071e4emr13227179ioj.18.1686687048997;
-        Tue, 13 Jun 2023 13:10:48 -0700 (PDT)
+        bh=mUj26fejO957l4yBbEEAi9JZZ08xfdS4qcBuiIeOXuw=;
+        b=AGf1ZL+JijBsIvE0/RjSZxaShk/vYU7cZbpVUEB87uBaSNetQ24V+KnPaPUqw9UizR
+         bLhWdITJ6Eoja6kPrWnPGTDJg0cz3pdr1n7ECDpYSFyHCvP7vdWdBmON1Y2Bo91sKVSc
+         kHsqp0C0LyYdjECrHvomOzcDw0BvlIQzKRTDXNVZoIH4r2BCVlmoWQ9Dmd5GbyygWA73
+         tSt8J94BCyYF54/GvIbptjwEp3hf61XhDt6JT0ZUNDDMiSitcdJGAN1aqWMP6EXZPYEf
+         tYk0Eq5fZtsXL/WYhvLnVynmpNz9ta16W5nhIP1NJ/IQu32yq3iaamOY5WwsDUeDszAv
+         pxTw==
+X-Gm-Message-State: AC+VfDwH400U3A+IEEEMl3yA4v0hId+2RT9tbT3UXUwDAUnrY3Lu60MA
+        I7D4J9Tx5qNcrsGq7ukPmA==
+X-Google-Smtp-Source: ACHHUZ7oOMR5aJtfWBZ1LlyuTCJpf3sWNQfrhOkUmJyXlASL8oj+Ddej7IKvS0CC5AIBvuDB5noIIQ==
+X-Received: by 2002:a6b:6d0b:0:b0:77a:d2d3:fbde with SMTP id a11-20020a6b6d0b000000b0077ad2d3fbdemr12166870iod.3.1686687062754;
+        Tue, 13 Jun 2023 13:11:02 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id w12-20020a02cf8c000000b0041653d00c1fsm3633263jar.72.2023.06.13.13.10.47
+        by smtp.gmail.com with ESMTPSA id v3-20020a5ec103000000b00763699c3d02sm4103356iol.0.2023.06.13.13.11.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 13:10:48 -0700 (PDT)
-Received: (nullmailer pid 2823983 invoked by uid 1000);
-        Tue, 13 Jun 2023 20:10:46 -0000
+        Tue, 13 Jun 2023 13:11:02 -0700 (PDT)
+Received: (nullmailer pid 2824314 invoked by uid 1000);
+        Tue, 13 Jun 2023 20:11:00 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+To:     Robin van der Gracht <robin@protonic.nl>,
+        Miguel Ojeda <ojeda@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chen Zhong <chen.zhong@mediatek.com>
-Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH] dt-bindings: input: mediatek,pmic-keys: Fix typo in "linux,keycodes" property name
-Date:   Tue, 13 Jun 2023 14:10:40 -0600
-Message-Id: <20230613201040.2823802-1-robh@kernel.org>
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: auxdisplay: holtek: Add missing type for "linux,no-autorepeat"
+Date:   Tue, 13 Jun 2023 14:10:49 -0600
+Message-Id: <20230613201049.2824028-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -68,27 +63,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"linux-keycodes" is the wrong property name and is unused. It should be
-"linux,keycodes" instead.
+"linux,no-autorepeat" is missing a type, add it.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/input/mediatek,pmic-keys.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/input/mediatek,pmic-keys.yaml b/Documentation/devicetree/bindings/input/mediatek,pmic-keys.yaml
-index 037c3ae9f1c3..e34c9e78d38d 100644
---- a/Documentation/devicetree/bindings/input/mediatek,pmic-keys.yaml
-+++ b/Documentation/devicetree/bindings/input/mediatek,pmic-keys.yaml
-@@ -55,7 +55,7 @@ patternProperties:
+diff --git a/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml b/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
+index 49304a1476ab..be95f6b97b41 100644
+--- a/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
++++ b/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
+@@ -40,6 +40,7 @@ properties:
+   linux,keymap: true
  
-       interrupt-names: true
+   linux,no-autorepeat:
++    type: boolean
+     description: Disable keyrepeat
  
--      linux-keycodes:
-+      linux,keycodes:
-         maxItems: 1
- 
-       wakeup-source: true
+   default-brightness-level:
 -- 
 2.39.2
 
