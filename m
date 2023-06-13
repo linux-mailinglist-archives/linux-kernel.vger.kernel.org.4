@@ -2,112 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 695C772E8CB
+	by mail.lfdr.de (Postfix) with ESMTP id B441B72E8CC
 	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 18:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234137AbjFMQrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 12:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
+        id S234334AbjFMQsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 12:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233441AbjFMQrq (ORCPT
+        with ESMTP id S233441AbjFMQsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 12:47:46 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C18219BC;
-        Tue, 13 Jun 2023 09:47:44 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1152)
-        id E94B720FE6E9; Tue, 13 Jun 2023 09:47:43 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E94B720FE6E9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1686674863;
-        bh=+iEeguyuJXlRkQExInBQoHnknosojavZvT0L/jXtsK8=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=nbWg7k0es9g6uyWIXPbwVTVmxCFAbr+YJ8FFRgAk2NWCqeZbo1IPKlsy5zotIOxrh
-         Nse1nuyT4dDPmP3OSYW2EwEiLLpNHjm2m/R0lsZwZmUJZz2KHbG5UhTFbu3RS2y8kJ
-         PUSZfnpB7ZXTdrArVD6nAf2ecJpOeCijnR3kb7DY=
-Received: from localhost (localhost [127.0.0.1])
-        by linux.microsoft.com (Postfix) with ESMTP id E6305307057C;
-        Tue, 13 Jun 2023 09:47:43 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 09:47:43 -0700 (PDT)
-From:   Shyam Saini <shyamsaini@linux.microsoft.com>
-To:     "Zhu, Bing" <bing.zhu@intel.com>
-cc:     "alex.bennee@linaro.org" <alex.bennee@linaro.org>,
-        "code@tyhicks.com" <code@tyhicks.com>,
-        "Matti.Moell@opensynergy.com" <Matti.Moell@opensynergy.com>,
-        "arnd@linaro.org" <arnd@linaro.org>,
-        "hmo@opensynergy.com" <hmo@opensynergy.com>,
-        "ilias.apalodimas@linaro.org" <ilias.apalodimas@linaro.org>,
-        "joakim.bech@linaro.org" <joakim.bech@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "maxim.uvarov@linaro.org" <maxim.uvarov@linaro.org>,
-        "ruchika.gupta@linaro.org" <ruchika.gupta@linaro.org>,
-        "Winkler, Tomas" <tomas.winkler@intel.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "Huang, Yang" <yang.huang@intel.com>,
-        "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
-        "jens.wiklander@linaro.org" <jens.wiklander@linaro.org>,
-        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>
-Subject: RE: [PATCH  v2 0/4] rpmb subsystem, uapi and virtio-rpmb driver
-In-Reply-To: <SN7PR11MB6850DA4A185E3429B62531CD84499@SN7PR11MB6850.namprd11.prod.outlook.com>
-Message-ID: <1ee57e46-6e86-eff0-ba9e-b7526fa865c0@linux.microsoft.com>
-References: <20220405093759.1126835-1-alex.bennee@linaro.org> <20230531191007.13460-1-shyamsaini@linux.microsoft.com> <SN7PR11MB6850DA4A185E3429B62531CD84499@SN7PR11MB6850.namprd11.prod.outlook.com>
+        Tue, 13 Jun 2023 12:48:03 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0B61BC6;
+        Tue, 13 Jun 2023 09:48:02 -0700 (PDT)
+Received: from mercury (dyndsl-091-248-189-170.ewe-ip-backbone.de [91.248.189.170])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CFE936601F5E;
+        Tue, 13 Jun 2023 17:48:00 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686674880;
+        bh=Vfsp4MJKJl01zeaV5MXk17AXCk6laqudfFFj8VAdsO8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=d1Qs0uVaLNFTMtpVuMgb/CEr4VcVnk3t29wGt20lOzzaVQec+ErQHN57Xnp9cxcJp
+         JyWjxzknDrkNXy/QOW3Oqq5p+/vHPZfZACch8PhNJ1500Ae38Ypy42N6L5gclJl2hO
+         iHwe3gSMy04IP59PV6D65gCVLO+RjhZuT0NnmobLEyUjqpTOorQ3AP2bJE/QEM1pAF
+         mmzSX8yZCCFmMnx29E/kM3WJ4mtM+6nQvgM7CXqiJ2kSN/Qmdb0iSZlfh4f5HNPcRw
+         otYXzMUjYXhXEr8u50NSjfYq6S+8EfThEcYhnBK8Gk1P9hA7RFIEBLOIsznYwmGkUa
+         iD74dFjRQFyqw==
+Received: by mercury (Postfix, from userid 1000)
+        id BFE1B1066FBA; Tue, 13 Jun 2023 18:47:58 +0200 (CEST)
+Date:   Tue, 13 Jun 2023 18:47:58 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Vincent Legoll <vincent.legoll@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v5 11/25] PM / devfreq: rockchip-dfi: Handle LPDDR2
+ correctly
+Message-ID: <20230613164758.qjjjtog5bjnhjry5@mercury.elektranox.org>
+References: <20230524083153.2046084-1-s.hauer@pengutronix.de>
+ <20230524083153.2046084-12-s.hauer@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4yktvbxgbrrvhkrz"
+Content-Disposition: inline
+In-Reply-To: <20230524083153.2046084-12-s.hauer@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bing,
 
-Other than PCRs we also want to store Non volatile ftpm data (NVData), 
-storing these in volatile DDR shared memory will be a spec violation.
+--4yktvbxgbrrvhkrz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best Regards,
-Shyam
+Hi,
 
-> As an alternative, Is it possible to change ftpm design not to depend on RPMB access at the earlier/boot stage? Because to my understanding, typically PCRs don't require persistent/NV storage (for example, before RPMB or tee-supplicant is ready, use TEE memory instead as temporary storage)
->
-> Bing
->
-> IPAS Security Brown Belt (https://www.credly.com/badges/69ea809f-3a96-4bc7-bb2f-442c1b17af26)
-> System Software Engineering
-> Software and Advanced Technology Group
-> Zizhu Science Park, Shanghai, China
->
-> -----Original Message-----
-> From: Shyam Saini <shyamsaini@linux.microsoft.com>
-> Sent: Thursday, June 1, 2023 3:10 AM
-> To: alex.bennee@linaro.org
-> Cc: code@tyhicks.com; Matti.Moell@opensynergy.com; arnd@linaro.org; Zhu, Bing <bing.zhu@intel.com>; hmo@opensynergy.com; ilias.apalodimas@linaro.org; joakim.bech@linaro.org; linux-kernel@vger.kernel.org; linux-mmc@vger.kernel.org; linux-scsi@vger.kernel.org; maxim.uvarov@linaro.org; ruchika.gupta@linaro.org; Winkler, Tomas <tomas.winkler@intel.com>; ulf.hansson@linaro.org; Huang, Yang <yang.huang@intel.com>; sumit.garg@linaro.org; jens.wiklander@linaro.org; op-tee@lists.trustedfirmware.org
-> Subject: [PATCH v2 0/4] rpmb subsystem, uapi and virtio-rpmb driver
->
-> Hi Alex,
->
-> [ Resending, Sorry for the noise ]
->
-> Are you still working on it or planning to resubmit it ?
->
-> [1] The current optee tee kernel driver implementation doesn't work when IMA is used with optee implemented ftpm.
->
-> The ftpm has dependency on tee-supplicant which comes once the user space is up and running and IMA attestation happens at boot time and it requires to extend ftpm PCRs.
->
-> But IMA can't use PCRs if ftpm use secure emmc RPMB partition. As optee can only access RPMB via tee-supplicant(user space). So, there should be a fast path to allow optee os to access the RPMB parititon without waiting for user-space tee supplicant.
->
-> To achieve this fast path linux optee driver and mmc driver needs some work and finally it will need RPMB driver which you posted.
->
-> Please let me know what's your plan on this.
->
-> [1] https://optee.readthedocs.io/en/latest/architecture/secure_storage.html
->
-> Best Regards,
-> Shyam
->
+On Wed, May 24, 2023 at 10:31:39AM +0200, Sascha Hauer wrote:
+> According to the downstream driver the DDRMON_CTRL_LPDDR23 bit must be
+> set for both LPDDR2 and LPDDR3. Add the missing LPDDR2 case and while
+> at it turn the if/else if/else into switch/case which makes it easier
+> to read.
+>=20
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> ---
+
+Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+
+-- Sebastian
+
+>  drivers/devfreq/event/rockchip-dfi.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event=
+/rockchip-dfi.c
+> index 261d112580c9e..16cd5365671f7 100644
+> --- a/drivers/devfreq/event/rockchip-dfi.c
+> +++ b/drivers/devfreq/event/rockchip-dfi.c
+> @@ -82,12 +82,19 @@ static void rockchip_dfi_start_hardware_counter(struc=
+t devfreq_event_dev *edev)
+>  		       DDRMON_CTRL_HARDWARE_EN), dfi_regs + DDRMON_CTRL);
+> =20
+>  	/* set ddr type to dfi */
+> -	if (dfi->ddr_type =3D=3D ROCKCHIP_DDRTYPE_LPDDR3)
+> +	switch (dfi->ddr_type) {
+> +	case ROCKCHIP_DDRTYPE_LPDDR2:
+> +	case ROCKCHIP_DDRTYPE_LPDDR3:
+>  		writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_LPDDR23, DDRMON_CTRL_DDR_TYPE=
+_MASK),
+>  			       dfi_regs + DDRMON_CTRL);
+> -	else if (dfi->ddr_type =3D=3D ROCKCHIP_DDRTYPE_LPDDR4)
+> +		break;
+> +	case ROCKCHIP_DDRTYPE_LPDDR4:
+>  		writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_LPDDR4, DDRMON_CTRL_DDR_TYPE_=
+MASK),
+>  			       dfi_regs + DDRMON_CTRL);
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> =20
+>  	/* enable count, use software mode */
+>  	writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_SOFTWARE_EN, DDRMON_CTRL_SOFTW=
+ARE_EN),
+> --=20
+> 2.39.2
+>=20
+
+--4yktvbxgbrrvhkrz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSInb4ACgkQ2O7X88g7
++prLsg/+OFMv+BneIBfQR6aVu6uaeszYHoFsIk7sydXblAcOfo7MGACwwpiW3Fig
+h8gftrpDOi6qfCjzOzhR0WkKacHVt5xrY3lpkC06i+0Ri81LXxXKpAYMx3G6XVQv
+W/0invqIS8Q6FbQi+a33Bdt1cCKQgcYSMFlQsSMnlYGiW6ixOlbsF2WtT7WjG7aC
+PhACLPESyedGRXSVsvy9z81kSmNOs2blGNpXnJhYn5kNHsymlZLcMR7OsWkmUC+0
+pHkYx/XrFSBPe5tT22YHoNeBIjxYA+GS7ZWmn+pgt1Sy/Zqd0w8L9hTTpuN1t4tu
+Syzy1Q8tUp9sFV1qqJwaA4zx0xQ6KJvGh1laebyBlW4Ej9igWklUGM5xlfMGNsaz
+1usQVasNBlC28y8x3rUZSFxFocnvCMU9Upg9+Xsx+jRq2PG5H2KJQuWpdndk5PIA
+GTeEvkdJ63XTSoL3UQ9nx5KkiEOMn4MWsTBORaNOLzcNAe3OD2VKeXmDqeL26qV4
+LgyB4txXEJG55VQXNVZ5SV0j8l2xS9M6LLq5G4DbV4bl0i0m2+RxSB9XouokM1G/
+W2zzn6VXu2Z/442GjoohwC8QA9pOug/ZB1BYd20S8h7TDrGZ3QkPzhjt/nHC1LAS
+h82umKSpYRHGLAfnboV4/Xk1KcMbn1sXX8uk+vjE7I/TuA+b5wc=
+=kmuy
+-----END PGP SIGNATURE-----
+
+--4yktvbxgbrrvhkrz--
