@@ -2,64 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23C4172E661
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 16:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9CF72E65D
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 16:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241179AbjFMO4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 10:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
+        id S242912AbjFMOzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 10:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242952AbjFMOyw (ORCPT
+        with ESMTP id S241028AbjFMOzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 10:54:52 -0400
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606BA1BD2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 07:54:47 -0700 (PDT)
-Received: by mail-ua1-x936.google.com with SMTP id a1e0cc1a2514c-78cc78d79deso394765241.2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 07:54:47 -0700 (PDT)
+        Tue, 13 Jun 2023 10:55:49 -0400
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC731734
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 07:55:47 -0700 (PDT)
+Received: by mail-vs1-xe2b.google.com with SMTP id ada2fe7eead31-43b4b5378ecso469321137.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 07:55:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1686668086; x=1689260086;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1686668147; x=1689260147;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ujKpeDBf4dlsgCHpOAeVReymujxCrTOGm/9TDlUS9o8=;
-        b=4yz4ATvwH1tPmaTnf4zVg+ULGJd7OA2GjN6pjySEKg2LlPnbuAfWLgzRLxbOxLDFsy
-         t0zLz28hhGrpKT37Q/V6KNpTPpQqASBYD4vInsJa9X8GxiT3/JUMEMR4k3bOBrdAUFYX
-         PrAEH9xCmS+Ce5Tv9DKOybyWqaRnFij6oAJ89DSXxg4aW09/5YSg20GJHHXtDN+tJp71
-         oHOoLcJWWBAPh4u6UdiJnnL/5SMGmpqYC1SLV+pCUwc38ODvvxRy29maEWOx4AtzK5jY
-         JtqFKbDrmDmGXWPAzdPaIIqxxmR1FxwJPLDMyeYp0D0/rnPQp7j2mGuEfM5fu06QyaXQ
-         /drg==
+        bh=eUjBNQR3ayKs+c7PtNJMktv7NPrLUhbz12wWwvQ4mnE=;
+        b=zBmRFI3G1eexEjmXLDT7CdfJ8PPO20byDmYp9SBqqUFGFdsVzlotKgIwWK5JEYLN5h
+         LTX71RchE7A6EJ0cDhvVRxamsPqv9+FPOEtzIpvtyJ1j9xFT2kRDnjOGUTpT2TeUFj9a
+         3q7Lno/PlspWCdt04VG0dCZnmg/6r2NFiojbkc/J4EWU2GGLLlk83kxUY2XwZPiD4rF0
+         WOofcJdfGjbXdiVuvgye14FzFK8qrsO5oirRN2rp9bs6DjaNXKHvGSZhQfCvJpd6xtrp
+         Tbp8UtblfHOK0Gby+lnmksuCRgotre8zfyt2lGSs4zbabXR81ZgSHoXFLKu/lPLJwqAF
+         whSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686668086; x=1689260086;
+        d=1e100.net; s=20221208; t=1686668147; x=1689260147;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ujKpeDBf4dlsgCHpOAeVReymujxCrTOGm/9TDlUS9o8=;
-        b=KkBebsBAxCEFzfggdemu4ZBpxZWjxPgXsI6cKLUpuwLVu6cG2IRPnBBOkyb7z9HjM3
-         jWE/rl4xYdMqy9PBEZokQovEn/vlf0aEPCWRB4FeT0sMu96pW6CnEGNQp8G4ro33Oy4T
-         3ko7OhAy3qEluGr3PjeBec3dcWW2h5IMU59gYRavzhHVziVS7asNSMkXTgV0Q1QEbslu
-         WjB2L4eQsh8xCHiNB6LXfPuHK4gg3+gOAK80d6Nrf2Lfyh/6B0ev2i9ZTelaP5ZxBl1P
-         s/OLw7XlAfo894HZD02GYOn1Y6B8bF4LTer6GUGM3gv5PZ0SyHviuElcL5tCPEezxSoT
-         jRxA==
-X-Gm-Message-State: AC+VfDzQTLIUFMQ6szL5LsEIyBO7M9jE1GSZtFMbCUh91WqQj6hTh9sG
-        0Z98sizQd2dOrIWYXrnzhYpr5ucvzCgz3mY2IPc5CQ==
-X-Google-Smtp-Source: ACHHUZ6F0BD0AfkU0XluXJjcMLWPntGpPl2nLiNPAiceu39hatrS3xE+Zp8rfKjyLrBOQhARtVcB0FhfuQlHNJxrDTA=
-X-Received: by 2002:a67:f9c7:0:b0:43d:cf39:456c with SMTP id
- c7-20020a67f9c7000000b0043dcf39456cmr4690712vsq.15.1686668086467; Tue, 13 Jun
- 2023 07:54:46 -0700 (PDT)
+        bh=eUjBNQR3ayKs+c7PtNJMktv7NPrLUhbz12wWwvQ4mnE=;
+        b=AiTZbSODgUpUnOJnpx8Vk9dltBajHbXpbOD+mPTlsJGzbhPq+FtIczGkc+m1Bp0KOn
+         rvdhqKpq4D3d3jPiQNph1vrHYnF0GHC3xQv9Fg29yoMtZ51UnEitEZCAveoYaVRppvG5
+         MkqTc4I+D04HvnAaPVSMU2BgbLDtzi6N4+RYzwYxwG5SI6+zqzy3pqGvhnpzEEHpuI73
+         Ba7lSpEc8eFhYTilcJP9DlTN4bqWE4F2zslF/tlbg2crZ452nMjrk9c99ho8bhmP/jY4
+         znw4I/NfM9SebiJJvfnZe2LiyZxfZC1xvWn6xPK6MpdSI6bC0n3zLNAkFZ+/eP94DPJQ
+         tCxg==
+X-Gm-Message-State: AC+VfDxerU1QM9e/AThNXBuUun9q2p9OASkNxyIcpolrF5gpiWGW+JYQ
+        euFltdxOjQ4Njm+bNCymoHyOwtlx5svC4uPHe1iYHw==
+X-Google-Smtp-Source: ACHHUZ6zGp2wWUBczZ3EZNkyAM/WjSHCJx+x6suhmZczY/H+a7+tSuxScOYQkbuwQxm7A/Mg2w5Oem1IJtilPRj83Mg=
+X-Received: by 2002:a05:6102:e4b:b0:43b:431d:8d51 with SMTP id
+ p11-20020a0561020e4b00b0043b431d8d51mr6882544vst.8.1686668146887; Tue, 13 Jun
+ 2023 07:55:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230607115508.2964574-1-l.goehrs@pengutronix.de> <20230607115508.2964574-3-l.goehrs@pengutronix.de>
-In-Reply-To: <20230607115508.2964574-3-l.goehrs@pengutronix.de>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+ <20230601054549.10843-15-nikita.shubin@maquefel.me> <cacd8ea8-f834-4983-20ff-a875fee8011a@linaro.org>
+ <CACRpkdZVhwsoHg3jOWuXtdL5kqbnbHjEYJOGsBCTcfLrVKbX3w@mail.gmail.com>
+In-Reply-To: <CACRpkdZVhwsoHg3jOWuXtdL5kqbnbHjEYJOGsBCTcfLrVKbX3w@mail.gmail.com>
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 13 Jun 2023 16:54:35 +0200
-Message-ID: <CAMRc=Me5VJ5xfNSW2hu2EYwV2wkHJpd+dvx-iGsR70Dso3EX5w@mail.gmail.com>
-Subject: Re: [PATCH v1 3/8] dt-bindings: gpio: pca9570: add gpio-line-names property
-To:     =?UTF-8?Q?Leonard_G=C3=B6hrs?= <l.goehrs@pengutronix.de>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Sungbo Eo <mans0n@gorani.run>, kernel@pengutronix.de,
+Date:   Tue, 13 Jun 2023 16:55:35 +0200
+Message-ID: <CAMRc=MfgBAnSwLTKuCZ9WgbX_oWoB2xLk=J86QCo9YkcfWaq_Q@mail.gmail.com>
+Subject: Re: [PATCH v1 33/43] dt-bindings: gpio: Add Cirrus EP93xx
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Nikita Shubin <nikita.shubin@maquefel.me>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-gpio@vger.kernel.org,
+        Michael Peters <mpeters@embeddedts.com>,
+        Kris Bahnsen <kris@embeddedts.com>, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
@@ -73,37 +78,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 7, 2023 at 1:57=E2=80=AFPM Leonard G=C3=B6hrs <l.goehrs@pengutr=
-onix.de> wrote:
+On Fri, Jun 2, 2023 at 9:41=E2=80=AFAM Linus Walleij <linus.walleij@linaro.=
+org> wrote:
 >
-> This patch allows giving each of the controller's pins a meaningful
-> name.
+> On Thu, Jun 1, 2023 at 10:20=E2=80=AFAM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
 >
-> Signed-off-by: Leonard G=C3=B6hrs <l.goehrs@pengutronix.de>
-> ---
->  Documentation/devicetree/bindings/gpio/gpio-pca9570.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
+> > > +title: EP93xx GPIO controller
+> > > +
+> > > +maintainers:
+> > > +  - Linus Walleij <linus.walleij@linaro.org>
+> > > +  - Bartosz Golaszewski <brgl@bgdev.pl>
+> >
+> > Did you choose correct maintainers? Bartosz, Linus, do you take care
+> > about EP93xx platform?
 >
-> diff --git a/Documentation/devicetree/bindings/gpio/gpio-pca9570.yaml b/D=
-ocumentation/devicetree/bindings/gpio/gpio-pca9570.yaml
-> index 5b0134304e51c..452f8972a9659 100644
-> --- a/Documentation/devicetree/bindings/gpio/gpio-pca9570.yaml
-> +++ b/Documentation/devicetree/bindings/gpio/gpio-pca9570.yaml
-> @@ -24,6 +24,10 @@ properties:
->    '#gpio-cells':
->      const: 2
->
-> +  gpio-line-names:
-> +    minItems: 4
-> +    maxItems: 8
-> +
->  required:
->    - compatible
->    - reg
-> --
-> 2.39.2
->
+> I'm fine with it (I have a platform).
 
-Applied, thanks!
+I don't but I'm actually not sure how DT bindings maintainership works
+- do GPIO bindings all fall under the GPIO jurisdiction automatically?
 
 Bart
