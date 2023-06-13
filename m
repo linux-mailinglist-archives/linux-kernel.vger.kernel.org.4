@@ -2,99 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B59372E262
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77A4A72E287
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:09:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242270AbjFMMAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 08:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50126 "EHLO
+        id S240461AbjFMMJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 08:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242269AbjFMMAR (ORCPT
+        with ESMTP id S234563AbjFMMJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 08:00:17 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7092124;
-        Tue, 13 Jun 2023 05:00:15 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QgRvG53PZz4f4684;
-        Tue, 13 Jun 2023 20:00:10 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgCXaK9KWohkdghwLg--.58089S3;
-        Tue, 13 Jun 2023 20:00:11 +0800 (CST)
-Subject: Re: [dm-devel] [PATCH -next v2 2/6] md: refactor action_store() for
- 'idle' and 'frozen'
-To:     Xiao Ni <xni@redhat.com>, Yu Kuai <yukuai1@huaweicloud.com>,
-        guoqing.jiang@linux.dev, agk@redhat.com, snitzer@kernel.org,
-        dm-devel@redhat.com, song@kernel.org
-Cc:     yi.zhang@huawei.com, yangerkun@huawei.com,
-        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230529132037.2124527-1-yukuai1@huaweicloud.com>
- <20230529132037.2124527-3-yukuai1@huaweicloud.com>
- <b780ccfd-66b1-fdd1-b33e-aa680fbd86f1@redhat.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <1aaf9150-bbd3-87a8-8d54-8b5d63ab5ed3@huaweicloud.com>
-Date:   Tue, 13 Jun 2023 20:00:10 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 13 Jun 2023 08:09:01 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7C2E55;
+        Tue, 13 Jun 2023 05:09:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686658140; x=1718194140;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=77JdOeqaLtpWVDtMAb1kf7q0hb1+drYDYzJGG71SUZM=;
+  b=KASaKrNXdILRf4TSg1/spcXSkOnEAATqkrQ8bjTlYb/VahwkJbuHRaG9
+   0caMP69SAC8OGnWi+1Vq4qrF3DLVS3S2/yODFpYsB4L0S/tdGtB6FiDYd
+   HUWECmjpdJvOHoFzGPit3y4/ue+DZyna9HrQLK2Vy0MfTzl4jJvE9hGGd
+   TDQNXY/gPy6UZpghXmvfBeg/cNceL88e7vLxqbsq0u/wkITSi8PVHF9iE
+   6J4NuZ/x4RObNBP0c43VlO1R2/DE4B7NrLmy+2TcqoQKjfRU2G5CqzEQm
+   FKH3pczcTHwV6L98Ext5PFFSj5zJpSFqBuZ5DgKoNGSiqecr3S6n+ATyG
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="424194077"
+X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
+   d="scan'208";a="424194077"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 05:08:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="885823097"
+X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
+   d="scan'208";a="885823097"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 05:08:39 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id 93DF111F76F;
+        Tue, 13 Jun 2023 15:00:34 +0300 (EEST)
+Date:   Tue, 13 Jun 2023 12:00:34 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Tommaso Merciai <tomm.merciai@gmail.com>,
+        jacopo.mondi@ideasonboard.com, martin.hecht@avnet.eu,
+        linuxfancy@googlegroups.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        Nicholas Roth <nicholas@rothemail.net>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH v2 2/2] media: i2c: Add support for alvium camera
+Message-ID: <ZIhaYk1v69Sp+Xqd@kekkonen.localdomain>
+References: <20230526173955.797226-1-tomm.merciai@gmail.com>
+ <20230526173955.797226-3-tomm.merciai@gmail.com>
+ <20230529074018.GD25984@pendragon.ideasonboard.com>
+ <ZHcd09f5wOKjQdHX@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+ <20230531113331.GC27043@pendragon.ideasonboard.com>
+ <ZHjPyxColttdARQm@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+ <20230602043126.GM22609@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-In-Reply-To: <b780ccfd-66b1-fdd1-b33e-aa680fbd86f1@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgCXaK9KWohkdghwLg--.58089S3
-X-Coremail-Antispam: 1UD129KBjvdXoWrtFykCF13Gry3WryfZry3XFb_yoW3Xwb_C3
-        yDKw15Wr18Aaya9r1qyw15Z347Krn0v34UGrZ5Zw45uw17WFs5Jrs8J3Z5Wr4UGFWqkr17
-        AFyYqa13Jr429jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb3xFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY
-        04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
-        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
-        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
-        AIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1l
-        IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
-        C2KfnxnUUI43ZEXa7VU1a9aPUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230602043126.GM22609@pendragon.ideasonboard.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Laurent, Tommaso,
 
-在 2023/06/13 16:02, Xiao Ni 写道:
+On Fri, Jun 02, 2023 at 07:31:26AM +0300, Laurent Pinchart wrote:
+> > > > > > diff --git a/drivers/media/i2c/alvium.c b/drivers/media/i2c/alvium.c
+> > > > > > new file mode 100644
+> > > > > > index 000000000000..e77fb6bda64b
+> > > > > > --- /dev/null
+> > > > > > +++ b/drivers/media/i2c/alvium.c
+> > > > > > @@ -0,0 +1,3547 @@
 > 
-> 在 2023/5/29 下午9:20, Yu Kuai 写道:
->> From: Yu Kuai <yukuai3@huawei.com>
->>
->> Prepare to handle 'idle' and 'frozen' differently to fix a deadlock, 
->> there
->> are no functional changes except that MD_RECOVERY_RUNNING is checked
->> again after 'reconfig_mutex' is held.
+> [snip]
 > 
+> > > > > > +static int alvium_probe(struct i2c_client *client)
+> > > > > > +{
+> > > > > > +	struct device *dev = &client->dev;
+> > > > > > +	struct v4l2_subdev *sd;
+> > > > > > +	struct alvium_dev *alvium;
+> > > > > > +	int ret;
+> > > > > > +
+> > > > > > +	alvium = devm_kzalloc(dev, sizeof(*alvium), GFP_KERNEL);
+> > > > > > +	if (!alvium)
+> > > > > > +		return -ENOMEM;
+> > > > > > +
+> > > > > > +	alvium->i2c_client = client;
+> > > > > > +	ret = alvium_get_dt_data(alvium);
+> > > > > > +	if (ret)
+> > > > > > +		return ret;
+> > > > > > +
+> > > > > > +	mutex_init(&alvium->lock);
+> > > > > > +
+> > > > > > +	sd = &alvium->sd;
+> > > > > > +
+> > > > > > +	/* init alvium sd */
+> > > > > > +	v4l2_i2c_subdev_init(sd, client, &alvium_subdev_ops);
+> > > > > > +
+> > > > > > +	sd->flags |= V4L2_SUBDEV_FL_HAS_EVENTS | V4L2_SUBDEV_FL_HAS_DEVNODE;
+> > > > > > +	alvium->pad.flags = MEDIA_PAD_FL_SOURCE;
+> > > > > > +	sd->entity.function = MEDIA_ENT_F_CAM_SENSOR;
+> > > > > > +	sd->entity.ops = &alvium_sd_media_ops;
+> > > > > > +
+> > > > > > +	ret = media_entity_pads_init(&sd->entity, 1, &alvium->pad);
+> > > > > > +	if (ret)
+> > > > > > +		return ret;
+> > > > > > +
+> > > > > > +	sd->dev = dev;
+> > > > > > +
+> > > > > > +	ret = alvium_power_on(alvium);
+> > > > > 
+> > > > > The driver should use runtime PM (with autosuspend), and power on/off in
+> > > > > the .s_stream() handler.
+> > > > 
+> > > > Can we delay the pm implementation as a future patchset?
+> > > > Alvium pm would be tricky (cause is the boot time of the camera)
+> > > > and if is possible I want work on pm later.
+> > > > Let me know. Thanks! :)
+> > > 
+> > > With autosuspend the camera can remain powered up between stream stop
+> > > and stream start, if they happen quickly enough. An autosuspend delay of
+> > > a few seconds is usually a good value. It should be fairly easy to
+> > > implement runtime PM support, you just need to
+> > > 
+> > > - Call alvium_power_on() from the runtime PM resume handler and
+> > >   alvium_power_off() from the runtime PM suspend handler.
+> > > 
+> > > - Call pm_runtime_resume_and_get() and stream on time, and
+> > >   pm_runtime_mark_last_busy() and pm_runtime_put_autosuspend() at stream
+> > >   stop time.
+> > > 
+> > > - Initialize runtime PM at probe time (and clean up at remove time).
+> > >   There's a bit of boilerplate code needed to get that right, but it's
+> > >   not difficult. You can copy it from the imx290 driver.
+> > 
+> > Back to you to clarify this point.
+> > 
+> > Plan as you suggest is handling pm of camera using external
+> > regulator. Problem is that the boot time of the camera is around 5s.
 > 
-> Can you explain more about why it needs to check MD_RECOVERY_RUNNING 
-> again here?
+> 5s ? Ouch !!
+> 
+> This has two consequences:
+> 
+> - Just probing the camera would take 5s, which is insanely long.
+> - There will be a 5s delay when starting video capture.
+> 
+> There's no 5s delay in the current code, so I assume things work fine
+> because the power regulator is always on, and turned on 5s or more
+> before the driver is loaded. That's pretty fragile.
+> 
+> That camera is clearly not a good fit for an embedded system that cares
+> about power consumption and performance, but we still have to support
+> it. The probe time issue isn't something we can fix, a 5s delay is
+> required.
+> 
+> The stream start issue can be alleviated by keeping the camera on, or
+> offering a way for userspace to turn it on ahead of stream start.
+> Runtime PM autosuspend will help with the former, and I would push the
+> autosuspend delay up as a result of the huge camera boot time. We don't
+> have a good solution of the latter at the moment, it used to be that
+> opening video nodes would power up the whole pipeline, but that has been
+> dropped some time ago in V4L2. Another API extension for this kind of
 
-As I explain in the following comment:
->> +    /*
->> +     * Check again in case MD_RECOVERY_RUNNING is cleared before lock is
->> +     * held.
->> +     */
->> +    if (!test_bit(MD_RECOVERY_RUNNING, &mddev->recovery)) {
->> +        mddev_unlock(mddev);
->> +        return;
->> +    }
+And that was never a good solution.
 
-Thanks,
-Kuai
+> use cases would be useful I think. Sakari, any opinion ?
 
+I'd approach this with autosuspend, but going forward we could research
+adding an API for V4L2 sub-devices to access PM QoS. This way the device
+could be powered down while the user would have a way to ensure resuming
+the device wouldn't take excessively long.
+
+-- 
+Kind regards,
+
+Sakari Ailus
