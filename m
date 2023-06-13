@@ -2,95 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C18072DDBD
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 11:34:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC96A72DD9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 11:27:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240546AbjFMJdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 05:33:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52544 "EHLO
+        id S237327AbjFMJ1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 05:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239532AbjFMJdo (ORCPT
+        with ESMTP id S235168AbjFMJ1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 05:33:44 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810FD18E;
-        Tue, 13 Jun 2023 02:33:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686648823; x=1718184823;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=s6xsUBvMQBvwXMxPKFv6VAm7oSub0u5Wh+bYY89/XOM=;
-  b=ilj4YJqbXjE1SW8c+YMvfye2v/IG6UOIJkyephe5uOXiQzGoQB0h4aTI
-   Fazfa7CvoVbJ/EMISG2LtP9fjELEF7HPDffHcMq+knb3MzInqUFVpZVGX
-   GIaNDByl8J0L3hxONpu0hUXs/ENQS4q4jYseOL5y5FTJBpV4ceUgmMEjR
-   l4QyExPnnllv8lJGqAOMBZDV044TMr9yy4tNTFD88uRsUOk+ToDnIFVj/
-   vak9O94haAuilPDVmf9kcXOCsy/EPJLfPYy4cdCly0x6IxxwjjuOLnaUk
-   JMpt4IX4+BiklNn2CaMqFUozz0MqiyljEqIPG4Yk9zUzMVhDbgC1yN5KH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="360762828"
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="scan'208";a="360762828"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 02:33:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="776739520"
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="scan'208";a="776739520"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 02:33:39 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id 9A44011F9D2;
-        Tue, 13 Jun 2023 12:26:32 +0300 (EEST)
-Date:   Tue, 13 Jun 2023 09:26:32 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Damien Le Moal <dlemoal@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Subject: Re: [PATCH v2 3/3] ata: ahci_platform: Make code agnostic to OF/ACPI
-Message-ID: <ZIg2SBegQW7d5QJf@kekkonen.localdomain>
-References: <20230609154900.43024-1-andriy.shevchenko@linux.intel.com>
- <20230609154900.43024-4-andriy.shevchenko@linux.intel.com>
- <ZIbRJGhikaYEkuay@kekkonen.localdomain>
- <ZIc3sQD7U2Ifrneh@smile.fi.intel.com>
+        Tue, 13 Jun 2023 05:27:01 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06059E71
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 02:27:00 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id e9e14a558f8ab-33aa60f4094so18546975ab.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 02:26:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1686648419; x=1689240419;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YYp2vyZT2cywAARdyCm9IEf7v0f+Ok+TOsPUs4YC8jM=;
+        b=EEtcbJv9u5SGZWq8XPeS6PBV8b2VOznN1VeU4Abenfytw5WBGxZ1dtkKpFPUylls7s
+         +uhbv5teINR0Ph763ti/q/iRZ1HDJWjzyDToH5uPxwY0UjUVyFBmJqCn0qyg7/muNBf+
+         T3LG9uNqMCiHOoHvWVoQld7zc0nC4hroZlWvs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686648419; x=1689240419;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YYp2vyZT2cywAARdyCm9IEf7v0f+Ok+TOsPUs4YC8jM=;
+        b=Nr1EHn8nAoSd4Myaf2HC8P22bWuxOrNmIxv6503cefFha6dHn6a+DP8TIo3Yycr9NU
+         HeavhdSKzBcvcpMHLbpUY1uNRZJFTcF+WEOXisLLwGTKNeh5UeC5CqugOqWAzGLypgIo
+         +lIPmGSkmlBOslu6EWBevbZHH/4BFC86at2m4OB5ehVWQmLpkiKsmjLPdwsa7GkjXNdz
+         XwQwe7Jj/7Cz/ki7xhr+e+zcU9/hezA0FyJuWqXssoCG6AgDAn3B2DX8XX0vJr8gkxFn
+         J1rx1r7H+F2cw2ev4BCYWgPrvxfmmUyW70NRpIPEHg+ze1S2tJ2O0dYt+oyef8ftbnkH
+         2oKA==
+X-Gm-Message-State: AC+VfDzD+CSCXI+daWVrwQRMsKgmLUvk/oo3AuBAOXuq7mQKkhT/olI1
+        xX/gWUGyiSSwtLgY9WPhhlAgUVnFeJkidq+aNHCTGQ==
+X-Google-Smtp-Source: ACHHUZ6CaCnnsXFqNf8wTBEDg+4Y0jfMbTs1+LQak0udGIxNEZCr7oVDxT5f5s5UH1Zyc2FqWOj8c7qZQ8wt2CoKgYw=
+X-Received: by 2002:a92:dc03:0:b0:340:7643:d5a7 with SMTP id
+ t3-20020a92dc03000000b003407643d5a7mr615743iln.4.1686648419396; Tue, 13 Jun
+ 2023 02:26:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZIc3sQD7U2Ifrneh@smile.fi.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230519001709.2563-1-tj@kernel.org> <ZIewlkGJJJUXPFL0@google.com>
+ <ZIfY5zhhHU9IgOqx@slm.duckdns.org>
+In-Reply-To: <ZIfY5zhhHU9IgOqx@slm.duckdns.org>
+From:   Pin-yen Lin <treapking@chromium.org>
+Date:   Tue, 13 Jun 2023 17:26:48 +0800
+Message-ID: <CAEXTbpconFReyAKxerNCQW5e51CMG=_RU9JHAquyEfSH1aqajA@mail.gmail.com>
+Subject: Re: [PATCHSET v1 wq/for-6.5] workqueue: Improve unbound workqueue
+ execution locality
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Brian Norris <briannorris@chromium.org>, jiangshanlai@gmail.com,
+        torvalds@linux-foundation.org, peterz@infradead.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        joshdon@google.com, brho@google.com, nhuck@google.com,
+        agk@redhat.com, snitzer@kernel.org, void@manifault.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 06:20:17PM +0300, Andy Shevchenko wrote:
-> On Mon, Jun 12, 2023 at 08:02:44AM +0000, Sakari Ailus wrote:
-> > On Fri, Jun 09, 2023 at 06:49:00PM +0300, Andy Shevchenko wrote:
-> > > With the help of a new device_is_compatible() make
-> > > the driver code agnostic to the OF/ACPI. This makes
-> > > it neater. As a side effect the header inclusions is
-> > > corrected (seems mod_devicetable.h was implicitly
-> > > included).
-> > 
-> > You're wrapping the lines well before 75. Why?
-> 
-> Didn't pay attention to that much. Is it a problem? Should I send a new
-> version because of that?
+Hi Tejun,
 
-I guess not. But it's a good practice to wrap at 75 instead.
+On Tue, Jun 13, 2023 at 10:48=E2=80=AFAM Tejun Heo <tj@kernel.org> wrote:
+>
+> Hello,
+>
+> On Mon, Jun 12, 2023 at 04:56:06PM -0700, Brian Norris wrote:
+> > Thanks for the CC; my colleague tried out your patches (ported to 5.15
+> > with some minor difficulty), and aside from some crashes (already noted
+> > by others, although we didn't pull the proposed v2 fixes), he didn't
+>
+> Yeah, there were a few subtle bugs that v2 fixes.
+>
+> > notice a significant change in performance on our particular test syste=
+m
+> > and WiFi-throughput workload. I don't think we expected a lot though,
+> > per the discussion at:
+> >
+> > https://lore.kernel.org/all/ZFvpJb9Dh0FCkLQA@google.com/
+>
+> That's disappointing. I was actually expecting that the default behavior
+> would restrain migrations across L3 boundaries strong enough to make a
+> meaningful difference. Can you enable WQ_SYSFS and test the following
+> configs?
+>
+>  1. affinity_scope =3D cache, affinity_strict =3D 1
+>
+>  2. affinity_scope =3D cpu, affinity_strict =3D 0
+>
+>  3. affinity_scope =3D cpu, affinity_strict =3D 1
 
--- 
-Sakari Ailus
+I pulled down v2 series and tried these settings on our 5.15 kernel.
+Unfortunately none of them showed significant improvement on the
+throughput. It's hard to tell which one is the best because of the
+noise, but the throughput is still all far from our 4.19 kernel or
+simply pinning everything to a single core.
+
+All the 4 settings (3 settings listed above plus the default) yields
+results between 90 to 120 Mbps, while pinning tasks to a single core
+consistently reaches >250 Mbps.
+>
+> #3 basically turns it into a percpu workqueue, so it should perform more =
+or
+> less the same as a percpu workqueue without affecting everyone else.
+>
+> Any chance you can post the toplogy details on the affected setup? How ar=
+e
+> the caches and cores laid out?
+
+The core layout is listed at [1], and I'm not familiar with its cache
+configuration either.
+
+[1]: https://lore.kernel.org/all/ZFvpJb9Dh0FCkLQA@google.com/
+
+Best regards,
+Pin-yen
+>
+> Thanks.
+>
+> --
+> tejun
