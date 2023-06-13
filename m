@@ -2,33 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DCBC72B5AB
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 05:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8ACB72EC19
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232804AbjFLDII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 23:08:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45554 "EHLO
+        id S230309AbjFMTlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 15:41:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232117AbjFLDIF (ORCPT
+        with ESMTP id S229481AbjFMTlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 23:08:05 -0400
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0683910D
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 20:08:03 -0700 (PDT)
-Received: from localhost.localdomain (unknown [219.141.250.2])
-        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 6F615602B440F;
-        Mon, 12 Jun 2023 11:08:01 +0800 (CST)
-X-MD-Sfrom: zeming@nfschina.com
-X-MD-SrcIP: 219.141.250.2
-From:   Li zeming <zeming@nfschina.com>
-To:     jstultz@google.com, tglx@linutronix.de, sboyd@kernel.org
-Cc:     linux-kernel@vger.kernel.org, Li zeming <zeming@nfschina.com>
-Subject: [PATCH] time: clocksource: remove unnecessary (void*) conversions
-Date:   Wed, 14 Jun 2023 03:39:19 +0800
-Message-Id: <20230613193919.3439-1-zeming@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_24_48,
-        RDNS_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Tue, 13 Jun 2023 15:41:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582E012A;
+        Tue, 13 Jun 2023 12:41:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E0BE8635CD;
+        Tue, 13 Jun 2023 19:41:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F0D5C433D9;
+        Tue, 13 Jun 2023 19:41:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686685306;
+        bh=G+owjEHHC7g39g4PWETjU0hB/g9AYANCMLxoyEgCrC0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XQgV+hhS+ECAleGYuB+CPLP0Ld5QU/bG4Psc4t5WopGZOaiJBSDvV8C9L5v23QgZz
+         4KpMLYzQQqV2anRTU6zZ8dKJc15z7BOm57JrrqfnoQjRm+9MXjxLIQ7EQM4BzWTbBl
+         3wTCD9MlL8l+daKEVE77kAlc7MXdlgC50WFJ+DzElyAtwyisqxZgMDNo/JBodCky/J
+         qAbJlJPgVaoJnWT8/eban44iPYdwc35rzJ6toZGG8CahuS0e5NK5DpPyOiv8jIufZH
+         6WfZWpf1/7je0ezmbPoD3gnBhLYHG47HJ9MSL0z9oT+pJiLcoPgnCHoiKHkrG0LK6p
+         WBcKBnBMrhECA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 2CD3E40692; Tue, 13 Jun 2023 16:41:43 -0300 (-03)
+Date:   Tue, 13 Jun 2023 16:41:43 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Rob Herring <robh@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] perf parse-events: Avoid string for PE_BP_COLON,
+ PE_BP_SLASH
+Message-ID: <ZIjGd79uWxgRF0og@kernel.org>
+References: <20230613182629.1500317-1-irogers@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230613182629.1500317-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -36,26 +66,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pointer variables of void * type do not require type cast.
+Em Tue, Jun 13, 2023 at 11:26:29AM -0700, Ian Rogers escreveu:
+> There's no need to read the string ':' or '/' for PE_BP_COLON or
+> PE_BP_SLASH and doing so causes parse-events.y to leak memory.
+> 
+> The original patch has a committer note about not using these tokens
+> presumably as yacc spotted they were a memory leak because no
+> %destructor could be run. Remove the unused token workaround as there
+> is now no value associated with these tokens.
 
-Signed-off-by: Li zeming <zeming@nfschina.com>
----
- kernel/time/clocksource.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+It looked like the compiler was the one warning (-Wother) about args not
+being used, didn't made it clear those were possible memory leaks :-\
 
-diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
-index 91836b727cef..82087cec5b07 100644
---- a/kernel/time/clocksource.c
-+++ b/kernel/time/clocksource.c
-@@ -327,7 +327,7 @@ static void clocksource_verify_choose_cpus(void)
+ util/parse-events.y:508.24-34: warning: unused value: $3 [-Wother]
+   508 | PE_PREFIX_MEM PE_VALUE PE_BP_SLASH PE_VALUE PE_BP_COLON PE_MODIFIER_BP opt_event_config
+
+Anyway, I'll apply and test your patch.
+
+- Arnaldo
  
- static void clocksource_verify_one_cpu(void *csin)
- {
--	struct clocksource *cs = (struct clocksource *)csin;
-+	struct clocksource *cs = csin;
- 
- 	csnow_mid = cs->read(cs);
- }
+> Fixes: f0617f526cb0 ("perf parse: Allow config terms with breakpoints")
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/util/parse-events.h | 4 ----
+>  tools/perf/util/parse-events.l | 4 ++--
+>  tools/perf/util/parse-events.y | 9 ---------
+>  3 files changed, 2 insertions(+), 15 deletions(-)
+> 
+> diff --git a/tools/perf/util/parse-events.h b/tools/perf/util/parse-events.h
+> index 5fdc1f33f57e..b0eb95f93e9c 100644
+> --- a/tools/perf/util/parse-events.h
+> +++ b/tools/perf/util/parse-events.h
+> @@ -228,10 +228,6 @@ void parse_events_error__handle(struct parse_events_error *err, int idx,
+>  void parse_events_error__print(struct parse_events_error *err,
+>  			       const char *event);
+>  
+> -static inline void parse_events_unused_value(const void *x __maybe_unused)
+> -{
+> -}
+> -
+>  #ifdef HAVE_LIBELF_SUPPORT
+>  /*
+>   * If the probe point starts with '%',
+> diff --git a/tools/perf/util/parse-events.l b/tools/perf/util/parse-events.l
+> index 7629af3d5c7c..99335ec586ae 100644
+> --- a/tools/perf/util/parse-events.l
+> +++ b/tools/perf/util/parse-events.l
+> @@ -315,13 +315,13 @@ r0x{num_raw_hex}	{ return str(yyscanner, PE_RAW); }
+>  	 * are the same, so trailing context can be used disambiguate the two
+>  	 * cases.
+>  	 */
+> -":"/{modifier_bp}	{ return str(yyscanner, PE_BP_COLON); }
+> +":"/{modifier_bp}	{ return PE_BP_COLON; }
+>  	/*
+>  	 * The slash before memory length can get mixed up with the slash before
+>  	 * config terms. Fortunately config terms do not start with a numeric
+>  	 * digit, so trailing context can be used disambiguate the two cases.
+>  	 */
+> -"/"/{digit}		{ return str(yyscanner, PE_BP_SLASH); }
+> +"/"/{digit}		{ return PE_BP_SLASH; }
+>  "/"/{non_digit}		{ BEGIN(config); return '/'; }
+>  {num_dec}		{ return value(yyscanner, 10); }
+>  {num_hex}		{ return value(yyscanner, 16); }
+> diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
+> index 0c3d086cc22a..9f28d4b5502f 100644
+> --- a/tools/perf/util/parse-events.y
+> +++ b/tools/perf/util/parse-events.y
+> @@ -80,8 +80,6 @@ static void free_list_evsel(struct list_head* list_evsel)
+>  %type <str> PE_LEGACY_CACHE
+>  %type <str> PE_MODIFIER_EVENT
+>  %type <str> PE_MODIFIER_BP
+> -%type <str> PE_BP_COLON
+> -%type <str> PE_BP_SLASH
+>  %type <str> PE_EVENT_NAME
+>  %type <str> PE_KERNEL_PMU_EVENT PE_PMU_EVENT_FAKE
+>  %type <str> PE_DRV_CFG_TERM
+> @@ -510,9 +508,6 @@ PE_PREFIX_MEM PE_VALUE PE_BP_SLASH PE_VALUE PE_BP_COLON PE_MODIFIER_BP opt_event
+>  	struct list_head *list;
+>  	int err;
+>  
+> -	parse_events_unused_value(&$3);
+> -	parse_events_unused_value(&$5);
+> -
+>  	list = alloc_list();
+>  	ABORT_ON(!list);
+>  	err = parse_events_add_breakpoint(_parse_state, list,
+> @@ -531,8 +526,6 @@ PE_PREFIX_MEM PE_VALUE PE_BP_SLASH PE_VALUE opt_event_config
+>  	struct list_head *list;
+>  	int err;
+>  
+> -	parse_events_unused_value(&$3);
+> -
+>  	list = alloc_list();
+>  	ABORT_ON(!list);
+>  	err = parse_events_add_breakpoint(_parse_state, list,
+> @@ -550,8 +543,6 @@ PE_PREFIX_MEM PE_VALUE PE_BP_COLON PE_MODIFIER_BP opt_event_config
+>  	struct list_head *list;
+>  	int err;
+>  
+> -	parse_events_unused_value(&$3);
+> -
+>  	list = alloc_list();
+>  	ABORT_ON(!list);
+>  	err = parse_events_add_breakpoint(_parse_state, list,
+> -- 
+> 2.41.0.162.gfafddb0af9-goog
+> 
+
 -- 
-2.18.2
 
+- Arnaldo
