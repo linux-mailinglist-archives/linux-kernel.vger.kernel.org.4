@@ -2,112 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC83072D8DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 06:57:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A95A172D8DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 06:58:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234475AbjFME5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 00:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59186 "EHLO
+        id S239713AbjFME6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 00:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232700AbjFME5P (ORCPT
+        with ESMTP id S232700AbjFME6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 00:57:15 -0400
-X-Greylist: delayed 521 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 12 Jun 2023 21:57:14 PDT
-Received: from striker.routify.me (striker.routify.me [IPv6:2602:fe90:604:1b::87c:418e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1544B8E
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 21:57:14 -0700 (PDT)
-Received: from glitch (unknown [IPv6:2602:24c:b8f:cd90::8eb3])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by striker.routify.me (Postfix) with ESMTPSA id B72ACE34;
-        Tue, 13 Jun 2023 04:48:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 striker.routify.me B72ACE34
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seangreenslade.com;
-        s=striker-outgoing; t=1686631707;
-        bh=3SWM9HpbvhY+6JXsgZEbqdJ7uzmLqwt9dCy2pAjIAms=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r9OFNliJWYsooYmf4esdOxSlSOzjzXXOFNdtBQRRqJXow8z+fd5nFSnzAtZaLG2f3
-         9Cgl0yfTaGG7xNxflDfil9S/SaoKw7b7/Fo1HewXr0qImxl7IqXB/1OHpxh39ml6Z6
-         eMg7swj9N5L67o5gIJS+O94x1U2oNyEZ3Wb9EiUE=
-Date:   Mon, 12 Jun 2023 21:48:30 -0700
-From:   Sean Greenslade <sean@seangreenslade.com>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     linux-ext4@vger.kernel.org, Ye Bin <yebin10@huawei.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>
-Subject: Re: RO mount of ext4 filesystem causes writes
-Message-ID: <ZIf1HpUjmQWu0xXo@glitch>
-References: <ZIauBR7YiV3rVAHL@glitch>
- <ZIa5P1HqE62rmzqu@debian.me>
+        Tue, 13 Jun 2023 00:58:36 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FAF48E
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 21:58:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686632314; x=1718168314;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=dKWqNItNhnl2qzeK3LTkxa2K/X8UQHIfaIfPLs0gLNM=;
+  b=CksqoXARYx89ZHaVMxCTy4a9DnG+zkdHmZHLuc5+Qk+Kf7Tph8UH61RW
+   qJCELSbF/FZUShmt7G/l96X+ufR+Zqrmy1Qayf9ls8meOvWuCWyveU+Qd
+   WPW2NHr3M0JtD1w4EF8S6f6Y1tbrx0yvymGTfQ4p+N3yNPKmCcjv3/U/S
+   2HNYqnPspWj0892Yc3mGLmLHWEKQC4yVJY9tlEWC/iZAZAXnf922nCJQy
+   atxJjNHouy128t/Na2qoBUHzJw9DiWOTbXrGqDWu6wpWph4kuD9ncnOaf
+   7DwixNZPVo/tGE5UrevCc9TJqBxhXpohXEleGaOUmNWBF1Ecasl1aBcGM
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="421819089"
+X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
+   d="scan'208";a="421819089"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 21:58:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="1041614066"
+X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
+   d="scan'208";a="1041614066"
+Received: from haoyao-desk.bj.intel.com ([10.238.232.41])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 21:58:31 -0700
+From:   Hao Yao <hao.yao@intel.com>
+To:     Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Hao Yao <hao.yao@intel.com>, Md Sadre Alam <mdalam@codeaurora.org>
+Subject: [PATCH v2] mtd: spi-nor: gigadevice: Add support for gd25lb256
+Date:   Tue, 13 Jun 2023 12:53:13 +0800
+Message-Id: <20230613045313.2690342-1-hao.yao@intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <1612869079-19593-1-git-send-email-mdalam@codeaurora.org>
+References: <1612869079-19593-1-git-send-email-mdalam@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <ZIa5P1HqE62rmzqu@debian.me>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 01:20:47PM +0700, Bagas Sanjaya wrote:
-> On Sun, Jun 11, 2023 at 10:32:53PM -0700, Sean Greenslade wrote:
-> > Hello, folks.
-> >=20
-> > I noticed a change in behavior of ext4 in recent kernels. I make use of
-> > several luks loopback images formatted as ext4 that I mount read-only
-> > most of the time. I use rsync to synchronize the backing images between
-> > machines. In the past, mouning the images as read-only would not touch
-> > the backing image contents at all, but recently this changed. Every
-> > mount, even ones that are RO from the start, will cause some small
-> > writes to the backing image and thus force rsync to scan the whole file.
-> >=20
-> > I confirmed that the issue is still present on v6.4.rc6, so I performed
-> > a bisect and landed on the following commit:
-> >=20
-> > > eee00237fa5ec8f704f7323b54e48cc34e2d9168 is the first bad commit
-> > > commit eee00237fa5ec8f704f7323b54e48cc34e2d9168
-> > > Author: Ye Bin <yebin10@huawei.com>
-> > > Date:   Tue Mar 7 14:17:02 2023 +0800
-> > >=20
-> > >     ext4: commit super block if fs record error when journal record w=
-ithout error
-> >=20
-> > That certainly looks like a likely cause of my issue, but I'm not
-> > familiar enough with the ext4 code to diagnose any further. Please let
-> > me know if you need any additional information, or if you would like me
-> > to test anything.
-> >=20
->=20
-> Can you show dmesg when regression happens?
->=20
-> Ye: It looks like this regression is caused by your commit. Would you like
-> to take a look on it?
->=20
-> Anyway, thanks for the bug report. I'm adding it to regzbot:
->=20
-> #regzbot ^introduced: eee00237fa5ec8
-> #regzbot title: commit super block writes even in read-only filesystems
+Signed-off-by: Md Sadre Alam <mdalam@codeaurora.org>
+Signed-off-by: Hao Yao <hao.yao@intel.com>
+---
+ drivers/mtd/spi-nor/gigadevice.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-I did a fresh boot on the 6.4 rc6 kernel and did an RO mount and
-unmount. Here's the full dmesg output from that:
-
-[   48.955896] loop0: detected capacity change from 0 to 4194304
-[   48.965526] Key type trusted registered
-[   48.973640] Key type encrypted registered
-[   49.032404] EXT4-fs (dm-0): mounted filesystem 4e824972-4523-407e-b0da-3=
-229a71b68d8 ro with ordered data mode. Quota mode: none.
-[   61.180755] EXT4-fs (dm-0): unmounting filesystem 4e824972-4523-407e-b0d=
-a-3229a71b68d8.
-[   61.236958] dm-0: detected capacity change from 4190208 to 0
-
-Thanks,
-
---Sean
+diff --git a/drivers/mtd/spi-nor/gigadevice.c b/drivers/mtd/spi-nor/gigadevice.c
+index d57ddaf1525b..d56c1876549f 100644
+--- a/drivers/mtd/spi-nor/gigadevice.c
++++ b/drivers/mtd/spi-nor/gigadevice.c
+@@ -62,6 +62,10 @@ static const struct flash_info gigadevice_nor_parts[] = {
+ 		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB)
+ 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
+ 			      SPI_NOR_QUAD_READ) },
++	{ "gd25lb256", INFO(0xc86719, 0, 64 * 1024, 512)
++		PARSE_SFDP
++		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB | SPI_NOR_TB_SR_BIT6)
++		FIXUP_FLAGS(SPI_NOR_4B_OPCODES) },
+ 	{ "gd25q256", INFO(0xc84019, 0, 64 * 1024, 512)
+ 		PARSE_SFDP
+ 		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB | SPI_NOR_TB_SR_BIT6)
+-- 
+2.34.1
 
