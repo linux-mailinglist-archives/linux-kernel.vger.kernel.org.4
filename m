@@ -2,102 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A39872DA7C
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 09:12:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4073272DA86
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 09:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235761AbjFMHL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 03:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54906 "EHLO
+        id S238563AbjFMHNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 03:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234981AbjFMHLy (ORCPT
+        with ESMTP id S234188AbjFMHND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 03:11:54 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C76B13A;
-        Tue, 13 Jun 2023 00:11:52 -0700 (PDT)
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35D6pXGf009742;
-        Tue, 13 Jun 2023 07:11:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : to : cc : references : from : subject : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=lHbvjzg+JN1rB6ifJXgO7XUOgQ4ftErpZSvR7J6UnnE=;
- b=osR+kD/VK0enAD8robL8nRNJDEWTG2Rp1a1h/OnSoeA37ApsVCXoA4Ear93/FU5W4sWE
- +Od8nCit8cMY0hj5uIDIFq9QMaHCwc6sHONT1S3kVsQElAZykDjpX01mVNwXE8zn6M+F
- f8P7gAX8QYIXCVU7F9OwZsPTV+/JdaeASSIZ9R951o7rwv7j0EQe0xXmedDDgcSs5rhf
- CPbEd0u1e16bbBXaDckRf19lANq0yXzYNj5G8XXm2gZyibmiajiBIqWs+bkFMtjxYRaJ
- +PTvwbee0ccdGyMW/i593mWIjrFV/hMPd0uCepwxp6oAGqyKRJzIlnMxaeetDUvmsGbD RA== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r6kjc8h6k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Jun 2023 07:11:41 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35D4tceY020338;
-        Tue, 13 Jun 2023 07:11:38 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3r4gt51yfm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Jun 2023 07:11:38 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35D7BXoO38863116
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Jun 2023 07:11:33 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 38FF620040;
-        Tue, 13 Jun 2023 07:11:33 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D0BA220043;
-        Tue, 13 Jun 2023 07:11:32 +0000 (GMT)
-Received: from [9.171.86.1] (unknown [9.171.86.1])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 13 Jun 2023 07:11:32 +0000 (GMT)
-Message-ID: <8701bac9-e604-40cc-74db-18b0ab1e7490@linux.ibm.com>
-Date:   Tue, 13 Jun 2023 09:11:32 +0200
+        Tue, 13 Jun 2023 03:13:03 -0400
+Received: from gproxy4-pub.mail.unifiedlayer.com (gproxy4-pub.mail.unifiedlayer.com [69.89.23.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E0BB8
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:13:02 -0700 (PDT)
+Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
+        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id 8BD5A10044F48
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 07:13:01 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id 8yD7qkDbQ9GaS8yD7qOabI; Tue, 13 Jun 2023 07:13:01 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=VfYygHl9 c=1 sm=1 tr=0 ts=648816fd
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=of4jigFt-DYA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:In-Reply-To:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ciM/8tmcOavJChPwmWHOgNt3frvNSsuFF1qYoKngwlY=; b=BXGa3DDGcAOYO6BAroV+qPdi9i
+        DgBU3YawWqMRxRy37eJ+IJdAZVANDgfDICz4ER/aXzlTefebCzG7qUU/iklpk5sebImy84yxMhSnW
+        Cqmq+1igmrsD9LbsMd6h2sxKpbUfRxB65EtUwdvaj5DflaQVOq6Sk+IutsxUJdbIZFkqz2apCeAoC
+        lWpCa31/yIzEWCAHFwxmx1KQML3TUpwQLs2RwvziuLfi5IWF1J/vo/xLP5hDeH0SCQ0/GtrHFTtv/
+        Nu9azfcr4ifSdVmWCxk7BS0+jSR10JhIuE1rpKFyJ9E8A5gxwOyQmbq+NO6X7KWBu9OuNtlSilgvV
+        s1usLkgw==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:43710 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1q8yD6-002dCj-A0;
+        Tue, 13 Jun 2023 01:13:00 -0600
+Subject: Re: [PATCH 6.3 000/160] 6.3.8-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230612101715.129581706@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+In-Reply-To: <20230612101715.129581706@linuxfoundation.org>
+Message-ID: <ec1ee634-b41f-0ded-b9e5-d34a25a1627f@w6rz.net>
+Date:   Tue, 13 Jun 2023 00:12:58 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.1
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230613092726.0383cb94@canb.auug.org.au>
-Content-Language: en-US
-From:   Janosch Frank <frankja@linux.ibm.com>
-Subject: Re: linux-next: bad rebase of the kvms390 tree
-In-Reply-To: <20230613092726.0383cb94@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 5k5a3KuRXkokiz0FQUvyg9Yymq4oO5Eo
-X-Proofpoint-GUID: 5k5a3KuRXkokiz0FQUvyg9Yymq4oO5Eo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-13_04,2023-06-12_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
- phishscore=0 spamscore=0 impostorscore=0 adultscore=0 suspectscore=0
- mlxscore=0 lowpriorityscore=0 malwarescore=0 priorityscore=1501
- mlxlogscore=986 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306130062
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1q8yD6-002dCj-A0
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:43710
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/13/23 01:27, Stephen Rothwell wrote:
-> Hi all,
-> 
-> The kvms390 tree has been rebased onto Linus' tree incorrectly - it
-> includes duplicates of 3 commits from Linus' tree.
-> 
-> Please fix this up.
-> 
+On 6/12/23 3:25 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.3.8 release.
+> There are 160 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 14 Jun 2023 10:16:41 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.8-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.3.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-@Claudio:
-Not sure how you managed to do that.
-Please have a look.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+
+Tested-by: Ron Economos <re@w6rz.net>
+
