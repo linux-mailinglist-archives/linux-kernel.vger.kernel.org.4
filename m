@@ -2,124 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB5672E8F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79FDA72E8F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234928AbjFMRBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 13:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39476 "EHLO
+        id S235106AbjFMRDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 13:03:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231348AbjFMRBk (ORCPT
+        with ESMTP id S234253AbjFMRDI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 13:01:40 -0400
-X-Greylist: delayed 165714 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 13 Jun 2023 10:01:37 PDT
-Received: from out203-205-251-59.mail.qq.com (out203-205-251-59.mail.qq.com [203.205.251.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2908C19B1;
-        Tue, 13 Jun 2023 10:01:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1686675689;
-        bh=WN3EO5L6L2LgUO17F1OB+6gZgNsH9LQG50fu8rjPAmw=;
-        h=From:To:Cc:Subject:Date;
-        b=RwlL8Hu6NjuOw1HA4xLw38JZdkmtp+YE8KyXfqlJ24Xz9GZaX7J+jXi9AufCW9JVy
-         urgOp+7SzZSKoYIsPG9uW8nO3MGmTVO5Ej7w3ah2xfjIIqwz6ZE8QGuEpEEQ2onbTA
-         RarFGWq1AUQ5sFLmL+huwBwjRAs+Ez+aUcRI8tHU=
-Received: from localhost.localdomain ([240e:331:cc9:d200:8f2b:c42a:801a:dea9])
-        by newxmesmtplogicsvrszc5-0.qq.com (NewEsmtp) with SMTP
-        id 598000A; Wed, 14 Jun 2023 01:01:25 +0800
-X-QQ-mid: xmsmtpt1686675685t1vd58xeh
-Message-ID: <tencent_05B9CFEFE6B9BC2A9B3A27886A122A7D9205@qq.com>
-X-QQ-XMAILINFO: MR/iVh5QLeieV1wQ4/ZgJkO9il4+0Zm6ZsbNCsziZg9eB7MUoKKULEsQBHpDd+
-         t+PKUP2D4a7XlPE5vo/BuMz1LQxsSEdRAnKmwxn76FeqfXg/lWGta9ZymMsPsECQt+djyLRpy5AV
-         cWt2U0xbrW/UiOX9/3Pj1xuYUs9gmfE6kPaiW3z1t1RbNY3SxpFhzflurJLW3zfZdymvU1FIEW5z
-         PPn3m5RO+UixWvqB209KEAZR84ExgtxkdhpRGLpd2pR1coLWA+dWoPEBHTSwMh/dqXvwBzjGR/Zt
-         gd5uL1k1o2ys/hV/A5tR4+Avrxzd/kbBsDwhJm1j6Wf5rty4M7HIEZpmAMvEDTQJuE2c7eeN9SZY
-         UL+SoWT/idY6KDhn3oQh7RI4eG+ytsCWft+hdDIiapt9jrPlVHnHoP18pPo2n/Ml4i1XjMJzg60Y
-         zxkibs/YEOJrfdrFbV2VcFSZJtK0/K4C3wAAlB0PAnhqXgWFHxntaZyelL3E2CBx5GluJMsj+NpS
-         jqIyAGyBmvVnA5yK+CAJdsaHNUb7HODfgQQxyW9i4/MRHI0HLCTKKjk+mKNLfdw9inlQASzs8keD
-         b+fDp33S8Yj/CCSpTS6/LswVC4C5TiWOJykxmfJuNgpX4EMNbGuIBDy5dKPWdpMq0HPktiHkB4Oy
-         oUN/4HCgnEEuGV2UmLCbLQVZsafmA4tN+CNGU2OIVvDHsavwYzFRPZrQN0PBZhsWv2xWBC/PS/O8
-         ppwjHnhikLs22lK4lFr+lHYp2xixe2U3fAXrpUscHipoUfq024+8wWXDe43J6WqBTUX2myt4A0a/
-         jB9mbKfELz9aMTvuL/4EyJCVf3jPuH0fMBWfT1YRYc+CM77vQ9QbTcD2Tuv4502ahClHMhZUb12+
-         YsEPLIwIMQoXtITOg7WJfUbuo7C0UJ2EKCLPVS+iWxE2M3Mh0VQcjG2TvEEtgLFGruIAiixVMrqJ
-         AAxJ0yOUnsRTW5DZUWUxVONBicIKo2sTvefZVelUgOeljF0t0dPotLO/HxcflcvWTidgb4nlO2Vc
-         4s0xPT1fq520hcCkGryrxnH0OTijAwstOgB4INIV/iOzwC6S9F
-X-QQ-XMAILREADINFO: MFSZYyQdPxvloIttF8cZzD8=
-From:   wenyang.linux@foxmail.com
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     Wen Yang <wenyang.linux@foxmail.com>,
-        Christoph Hellwig <hch@lst.de>, Dylan Yudaken <dylany@fb.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Eric Biggers <ebiggers@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] eventfd: show the EFD_SEMAPHORE flag in fdinfo
-Date:   Wed, 14 Jun 2023 01:01:22 +0800
-X-OQ-MSGID: <20230613170122.6867-1-wenyang.linux@foxmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+        Tue, 13 Jun 2023 13:03:08 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF16184
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 10:03:05 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-53feeb13975so2439203a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 10:03:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686675784; x=1689267784;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Zzy8aEVU/HLeeWa6iy7cIU9ak1rBIlaxwEZFOK1hwFc=;
+        b=XrwnSj2LJwucXHLm9g3iOWE0glW2c3TeIzsLg9jpyGqe7qqgdudGESJpTj1cQeK+4B
+         gIXU3CiNTMdFDIMqXRPf201Mz+kbhRJkyeEiEoRkwAuW+orAccDxs3P8R+Gm+HbdTPe1
+         7G1SPJvp0Dg0frm3TwaI9yo/yMqkC3ac/no0N3HN6t32hzT6NaH8UJmrnZd+8PyXeRQQ
+         9UFhwWBhPW3z+2dWxlJS4wBHxYcErN7zZQrsu2joz35o+eRBOzr2tu1vyYqcYzYGvL4l
+         WOANgWD44YaGNKOdPmpXFmlJUPipfICb6yVTLjs8G0G8lb+Mym+gRoU/WUBdbpyLDJlK
+         Ro1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686675784; x=1689267784;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Zzy8aEVU/HLeeWa6iy7cIU9ak1rBIlaxwEZFOK1hwFc=;
+        b=Ty/SoTNQnIqa65z3+SXx+BSyOA7HLPT+IfW3mhPPJTBDt4CaH6kerae8DqYgnXmsIB
+         DfV6tXFJF0WIRLWYkMNal+R2fMsQ9z8adUWApjMnmYKtxfIHsm1zZ3E2ftawt40WjYU7
+         eoyaT7SwDxtGyAaFjfQK1JUU4rwsNdA7EMBbpJUQyxKw40E1meQfnEqVFvt4CXatv8yi
+         WdGz3vxvkdnDaP/vQ95qOhnoRYxjuFcE+TZrINynfbj+jn/VHaXVa6sEmSfTJZlyjplA
+         4Va9YNcVy4TxBh0L2dn3Ys6hvim09bqbFDV9oZFCdjyl7eo+/DTF/t384iE9h0atUuWJ
+         Oz3g==
+X-Gm-Message-State: AC+VfDzFxzjU3BomvoB0X5uVSgrel8FfiGYF32M7w5KoiPCsGepVpHC5
+        dYn+rdXn83lcZASRIm7zFXvMn3ruA0U=
+X-Google-Smtp-Source: ACHHUZ7OT77gxrOyF+Q1xmdH9z9fBu36eeSiA+8HAHbpB71BSaS2ab6G6/cPyWQINuDnmCob5Lq9Et/lhIA=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a65:4088:0:b0:540:3370:217a with SMTP id
+ t8-20020a654088000000b005403370217amr1948711pgp.5.1686675784414; Tue, 13 Jun
+ 2023 10:03:04 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 10:03:02 -0700
+In-Reply-To: <20230612164727.3935657-1-carlos.bilbao@amd.com>
+Mime-Version: 1.0
+References: <20230612164727.3935657-1-carlos.bilbao@amd.com>
+Message-ID: <ZIihRqZljMaMRGcK@google.com>
+Subject: Re: [PATCH v2] docs: security: Confidential computing intro and
+ threat model for x86 virtualization
+From:   Sean Christopherson <seanjc@google.com>
+To:     Carlos Bilbao <carlos.bilbao@amd.com>
+Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ardb@kernel.org, kraxel@redhat.com,
+        dovmurik@linux.ibm.com, elena.reshetova@intel.com,
+        dave.hansen@linux.intel.com, Dhaval.Giani@amd.com,
+        michael.day@amd.com, pavankumar.paluri@amd.com,
+        David.Kaplan@amd.com, Reshma.Lal@amd.com, Jeremy.Powell@amd.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        alexander.shishkin@linux.intel.com, thomas.lendacky@amd.com,
+        tglx@linutronix.de, dgilbert@redhat.com,
+        gregkh@linuxfoundation.org, dinechin@redhat.com,
+        linux-coco@lists.linux.dev, berrange@redhat.com, mst@redhat.com,
+        tytso@mit.edu, jikos@kernel.org, joro@8bytes.org, leon@kernel.org,
+        richard.weinberger@gmail.com, lukas@wunner.de, jejb@linux.ibm.com,
+        cdupontd@redhat.com, jasowang@redhat.com, sameo@rivosinc.com,
+        bp@alien8.de, security@kernel.org,
+        Larry Dewey <larry.dewey@amd.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wen Yang <wenyang.linux@foxmail.com>
+On Mon, Jun 12, 2023, Carlos Bilbao wrote:
+> Kernel developers working on confidential computing for virtualized
+> environments in x86 operate under a set of assumptions regarding the Linu=
+x
 
-The EFD_SEMAPHORE flag should be displayed in fdinfo,
-as different value could affect the behavior of eventfd.
+No, "x86" isn't special, SNP and TDX and s390's UV are special.  pKVM is si=
+milar,
+but (a) it's not as paranoid as SNP and TDX, and (b) the known use case for=
+ pKVM
+on x86 is to harden usage of hardware devices, i.e. pKVM x86 "guests" likel=
+y don't
+have the same "untrusted virtual device" attack surfaces a SNP/TDX/UV guest=
+s.
 
-Suggested-by: Christian Brauner <brauner@kernel.org>
-Signed-off-by: Wen Yang <wenyang.linux@foxmail.com>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Dylan Yudaken <dylany@fb.com>
-Cc: David Woodhouse <dwmw@amazon.co.uk>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Eric Biggers <ebiggers@google.com>
-Cc: linux-fsdevel@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- fs/eventfd.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+> +Kernel developers working on confidential computing for virtualized
+> +environments in x86 operate under a set of assumptions regarding the Lin=
+ux
 
-diff --git a/fs/eventfd.c b/fs/eventfd.c
-index 6c06a527747f..8aa36cd37351 100644
---- a/fs/eventfd.c
-+++ b/fs/eventfd.c
-@@ -33,10 +33,10 @@ struct eventfd_ctx {
- 	/*
- 	 * Every time that a write(2) is performed on an eventfd, the
- 	 * value of the __u64 being written is added to "count" and a
--	 * wakeup is performed on "wqh". A read(2) will return the "count"
--	 * value to userspace, and will reset "count" to zero. The kernel
--	 * side eventfd_signal() also, adds to the "count" counter and
--	 * issue a wakeup.
-+	 * wakeup is performed on "wqh". If EFD_SEMAPHORE flag was not
-+	 * specified, a read(2) will return the "count" value to userspace,
-+	 * and will reset "count" to zero. The kernel side eventfd_signal()
-+	 * also, adds to the "count" counter and issue a wakeup.
- 	 */
- 	__u64 count;
- 	unsigned int flags;
-@@ -301,6 +301,8 @@ static void eventfd_show_fdinfo(struct seq_file *m, struct file *f)
- 		   (unsigned long long)ctx->count);
- 	spin_unlock_irq(&ctx->wqh.lock);
- 	seq_printf(m, "eventfd-id: %d\n", ctx->id);
-+	seq_printf(m, "eventfd-semaphore: %d\n",
-+		   !!(ctx->flags & EFD_SEMAPHORE));
- }
- #endif
- 
--- 
-2.25.1
+I don't think "virtualized environments" is the right description.  IMO, "c=
+loud
+computing environments" or maybe "off-premise environments" more accurately
+captures what you want to document, though the latter fails to imply the "v=
+irtual"
+aspect of things.
 
+> +The specific details of the CoCo security manager vastly diverge between
+> +technologies. For example, in some cases, it will be implemented in HW
+> +while in others it may be pure SW. In some cases, such as for the
+> +`Protected kernel-based virtual machine (pKVM) <https://github.com/intel=
+-staging/pKVM-IA>`,
+> +the CoCo security manager is a small, isolated and highly privileged
+> +(compared to the rest of SW running on the host) part of a traditional
+> +VMM.
+
+I say that "virtualized environments" isn't a good description because whil=
+e pKVM
+does utilize hardware virtualization, my understanding is that the primary =
+use
+cases for pKVM don't have the same threat model as SNP/TDX, e.g. IIUC many =
+(most?
+all?) pKVM guests don't require network access.
+
+> +Confidential Computing adds a new type of attacker to the above list: a
+
+This should be qualified as "CoCo for cloud", or whatever sublabel we land =
+on.
+
+> +potentially misbehaving host (which can also include some part of a
+> +traditional VMM or all of it), which is typically placed outside of the
+> +CoCo VM TCB due to its large SW attack surface. It is important to note
+> +that this doesn=E2=80=99t imply that the host or VMM are intentionally
+> +malicious, but that there exists a security value in having a small CoCo
+> +VM TCB. This new type of adversary may be viewed as a more powerful type
+> +of external attacker, as it resides locally on the same physical machine
+> +-in contrast to a remote network attacker- and has control over the gues=
+t
+> +kernel communication with most of the HW::
+
+IIUC, this last statement doesn't hold true for the pKVM on x86 use case, w=
+hich
+specifically aims to give a "guest" exclusive access to hardware resources.
+
+> +The **Linux kernel CoCo VM security objectives** can be summarized as fo=
+llows:
+> +
+> +1. Preserve the confidentiality and integrity of CoCo guest's private
+> +memory and registers.
+
+As I complained in v1, this doesn't hold true for all of x86.  My complaint=
+ goes
+away if the document is specific to the TDX/SNP/UV threat models, but descr=
+ibing
+the doc as "x86 specific" is misleading, as the threat model isn't x86 spec=
+ific,
+nor do all confidential compute technologies that run on x86 share these ob=
+jectives,
+e.g. vanilla SEV.
+
+> +well as CoCo technology specific hypercalls, if present. Additionally, t=
+he
+> +host in a CoCo system typically controls the process of creating a CoCo
+> +guest: it has a method to load into a guest the firmware and bootloader
+> +images, the kernel image together with the kernel command line. All of t=
+his
+> +data should also be considered untrusted until its integrity and
+> +authenticity is established via attestation.
+
+Attestation is SNP and TDX specific.  AIUI, none of SEV, SEV-ES, or pKVM (w=
+hich
+doesn't even really exist on x86 yet), have attestation of their own, e.g. =
+the
+proposed pKVM support would rely on Secure Boot of the original "full" host=
+ kernel.
+
+> +CONFIDENTIAL COMPUTING THREAT MODEL FOR X86 VIRTUALIZATION
+> +M:    Elena Reshetova <elena.reshetova@intel.com>
+> +M:    Carlos Bilbao <carlos.bilbao@amd.com>
+> +S:    Maintained
+> +F:    Documentation/security/x86-confidential-computing.rst
+
+Throwing "x86" on the name doesn't change my objections, this is still an S=
+NP/TDX
+specific doc pretending to be more generic then it actually is.  I don't un=
+derstand
+the resistance to picking a name that makes it abundantly clear the doc cov=
+ers a
+very specific niche of confidential computing.
