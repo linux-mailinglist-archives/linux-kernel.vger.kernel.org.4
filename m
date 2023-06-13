@@ -2,130 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9FF72ED27
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3097472ED2E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239835AbjFMUi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 16:38:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44242 "EHLO
+        id S240065AbjFMUjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 16:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239495AbjFMUi0 (ORCPT
+        with ESMTP id S233808AbjFMUjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 16:38:26 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6074D1BD3;
-        Tue, 13 Jun 2023 13:38:23 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 045EB5C01DD;
-        Tue, 13 Jun 2023 16:38:20 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Tue, 13 Jun 2023 16:38:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ryhl.io; h=cc:cc
-        :content-transfer-encoding:content-type:content-type:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1686688700; x=1686775100; bh=P33YgGs6OZIxngy95+ozg40+5//7kMaRyYq
-        7qJmuQ0Y=; b=V19y85sgevW88E/PFN9v/F1+YVpGMdvbUVD0n3A9QLbv/t4ggdx
-        fw7Ln3P72JE0ABvWtQuBS2R6YlQA4Eq70QIT5LqZmBuHpjby4OmeMhiCtkozpOEJ
-        isgjJY/lh34zvEpBV1Z4/CW5cp3EDYA/HZdxzXF9VYQA+wofHiRCgYgJQ54zvmwR
-        SeNkBNm/7ZR4/4B8UF5Ki8R3sDVwdd1mlvGhEb6LX8lChxzw0/Jh1DQxBLvGEZc/
-        CfBrVfJLlQLH91C76fal51snoPUVJNtanOKUhUKvLxe62hFgO+IkhW5m0AMNAVfD
-        LVjdljcDWfml2BKaRQI1/2luAPugXAb2trg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1686688700; x=1686775100; bh=P33YgGs6OZIxngy95+ozg40+5//7kMaRyYq
-        7qJmuQ0Y=; b=nHa/66Y+wkQDCh0Wtfo2//OBIhTgEOcWP/DmmAx7S4hQKyJoVdt
-        KCO/wG9lGDo7SkZ2TOSfeIgesthOvTogycHk+ZN1Hg2hWyparr8Rsmzj9ih+a9r0
-        FdkN3ZeFMaUcCgXjdJTGH6zZH7DdRQUdQ4qtTxSm/447fUQKPzvoLN/XqsSLL1YL
-        0WetCgimt5guRex/vPx+jQ9pV5aT9J243GAdUsHziUGrs5u1mvxx24kAt0ZuGPGI
-        2kW3mq4RBBP2mHw7D2LmaBZj6Nq8yrNFW3enGA3Z4ureMSrt6fVvgJiMb8+nyDPi
-        07h02Q9Sn1DY0vEvDxP8O96KJ5cLeKctTaQ==
-X-ME-Sender: <xms:u9OIZGKB-fNl5wKjbRxQ70Qqk4T0R4s1N7o78m_56qL-AaLh79cP5Q>
-    <xme:u9OIZOI-yJUuaF4lrSYivKEb2VLOeCQtS0AAqX3PHWFHMj2pWAplfxMg5iIrC-7eC
-    YylJd5BdelYuMwyTw>
-X-ME-Received: <xmr:u9OIZGsqepqJK1qiYkFpNK-NS2GSRgLFMmeofcMoxjY0gkU50MAmHsixY1KZQs3n1qudT5KRlIEknxxhzJhjXCS6pXNpERMvdoHkVQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedujedgudegkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomheptehl
-    ihgtvgcutfihhhhluceorghlihgtvgesrhihhhhlrdhioheqnecuggftrfgrthhtvghrnh
-    epheduuddvteekvdektdduledugfffhfdugeejgeeuvdevtdetveejheehiefffeegnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihgtvg
-    esrhihhhhlrdhioh
-X-ME-Proxy: <xmx:u9OIZLadp7E579akjkeELsSYg5A3wK2HJm-ycQSR4KdnTN1kjvuW2A>
-    <xmx:u9OIZNZuG7BOL2S-IodW0U_RiAwZQQhlfOFke_I1bs8bhFbUxi8KrQ>
-    <xmx:u9OIZHARceM2EZCJbJvekfCMg7RuKCIhe4a4msJBKkIFV2k5V4JniA>
-    <xmx:u9OIZKQ2pmnuAUjHwtrSiovuaDYCQ0Cg3Nx_dy-UBn7Gq3d6So6Y5g>
-Feedback-ID: i56684263:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 13 Jun 2023 16:38:14 -0400 (EDT)
-Message-ID: <d31dac7e-671a-1741-5f13-c61624bceac0@ryhl.io>
-Date:   Tue, 13 Jun 2023 22:38:12 +0200
+        Tue, 13 Jun 2023 16:39:10 -0400
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B56B8;
+        Tue, 13 Jun 2023 13:39:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686688747; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=a/JWKGm11zhcb5nFHenvxaldcANs6IvdoFtpe4pmKFyLYgGd0RYN+rgY+mzYdRyeg1
+    w7ZUez9tN9wsqA1ioQJnEqEXV/SCbuMMHzkUHf915Gu745Jf+AgBbXhGNhroz8P8gShV
+    f+uq//dZQWVrESKR7sWM9Q0jyNDv/a8xnXfTCw5ZtZFPueqZvGfYOfel816PAXWQU6xq
+    DK2T/WaPd02Soh40neY2eUyKsRshkEbtjOU6ymDEpvhsmsF52ZAXvEsrLZMNuymi0gDl
+    ouCj8wtndBgFqPJ1G9URE3RrZryXN7lNXJqLwrkf0iCq0LCBoj+2GbMTZZDiHShVj5Db
+    XBnw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686688747;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=hy7FRYIzYsOPwgbepFyiaiot8JFsm4Zkz9w3L4U2mzo=;
+    b=eMsGoBuCF8z9SlrJnJeWL3Itpb4yPHA2X9mlWHroytHEwKDdSrMY1t77ccVwFGfgdn
+    swIO/FdxghqHmkqWBbg3xvitzShy6SbZKfc7vXrodlEfygFSpYJjzvXpyO655OAGHIcL
+    jJwKC6OJD7JMNyiEMrHMZDDY6Yn/TQy3Hi+ZBU5ZMh89z7SbqDQDs+RTvEV/dhgnlyWy
+    /7IIfTBYVTfRFgmUrhE8gtiPhPXETiR03jhJn+BJ8kQAwfReGyCo7Ze4DOvzkZW4Ee+t
+    8m1D8DNNhEZPxnS29KPL6J/ewugAcYy8BRVWafPdZGJLp1uzJu9YlyewJ/hYHlroYjpd
+    qnDQ==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686688747;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=hy7FRYIzYsOPwgbepFyiaiot8JFsm4Zkz9w3L4U2mzo=;
+    b=Ap0/aJTUv/o31aFP5t8fPvUo8WKNAxhWIbGPXQa6mc1Ky+f31wzk56ng0QqHGBZACS
+    GNtGDykKRzhafmeuVK5x/43izrpkad1yGGtrFOyqLLCCFfCrqe4w73EJRR9Unc/+kB8/
+    VC8FfOYhsQmfHOqSeveKSoHSBDzRq/GQCR1R4HNq6/Bd6jho1Djt62RefPtnmpX70oeP
+    gQRK02ShWvFbUvpA6Fx4bSMJxeyJu0Z409XHrwGas9v3g5vV3YgiCVcd4dhGUBosBWuC
+    NSWwz2UDqBdG8naOerlSybLdI2PbUzOCbIeU10L76lArvM8nIGPZq+Bpy29CmphNvYs6
+    QJIA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686688747;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=hy7FRYIzYsOPwgbepFyiaiot8JFsm4Zkz9w3L4U2mzo=;
+    b=uhwja9ofWSp2loylTSe1vZmg1mQm+iK/RNjeqEBUCADp1B1JuNTjJmeFLrxuSQ7ZcR
+    CZGXww4Kv0GPZ3QKjHBQ==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4peA8Z3h"
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.5.3 DYNA|AUTH)
+    with ESMTPSA id Z82ec2z5DKd6a9o
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 13 Jun 2023 22:39:06 +0200 (CEST)
+Date:   Tue, 13 Jun 2023 22:39:05 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 17/22] interconnect: qcom: icc-rpm: Control bus rpmcc
+ from icc
+Message-ID: <ZIjT6U24iwkBkqHW@gerhold.net>
+References: <20230526-topic-smd_icc-v4-0-5ba82b6fbba2@linaro.org>
+ <20230526-topic-smd_icc-v4-17-5ba82b6fbba2@linaro.org>
+ <ZIjTPyOfuVM7S1O1@gerhold.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] rust: allocator: Prevents mis-aligned allocation
-Content-Language: en-US-large
-To:     Boqun Feng <boqun.feng@gmail.com>, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        Alice Ryhl <aliceryhl@google.com>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Fox Chen <foxhlchen@gmail.com>,
-        John Baublitz <john.m.baublitz@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andreas Hindborg <nmi@metaspace.dk>, stable@vger.kernel.org
-References: <20230613164258.3831917-1-boqun.feng@gmail.com>
-From:   Alice Ryhl <alice@ryhl.io>
-In-Reply-To: <20230613164258.3831917-1-boqun.feng@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZIjTPyOfuVM7S1O1@gerhold.net>
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/13/23 18:42, Boqun Feng wrote:
-> Currently the KernelAllocator simply passes the size of the type Layout
-> to krealloc(), and in theory the alignment requirement from the type
-> Layout may be larger than the guarantee provided by SLAB, which means
-> the allocated object is mis-aligned.
-> 
-> Fixes this by adjusting the allocation size to the nearest power of two,
-> which SLAB always guarantees a size-aligned allocation. And because Rust
-> guarantees that original size must be a multiple of alignment and the
-> alignment must be a power of two, then the alignment requirement is
-> satisfied.
-> 
-> Suggested-by: Vlastimil Babka <vbabka@suse.cz>
-> Co-developed-by: Andreas Hindborg (Samsung) <nmi@metaspace.dk>
-> Signed-off-by: Andreas Hindborg (Samsung) <nmi@metaspace.dk>
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> Cc: stable@vger.kernel.org # v6.1+
+On Tue, Jun 13, 2023 at 10:36:15PM +0200, Stephan Gerhold wrote:
+> Not even compile tested this time!
 
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+Would have probably been worth it, sigh:
+
+> 
+> 	/*
+> 	 * Downstream checks whether the requested rate is zero, but it makes little sense
+> 	 * to vote for a value that's below the lower threshold, so let's not do so.
+> 	 */
+> 	if (qp->keep_alive)
+> 		agg_clk_rate[QCOM_SMD_RPM_ACTIVE_STATE]
+> 			= max(ICC_BUS_CLK_MIN_RATE, agg_clk_rate[QCOM_SMD_RPM_ACTIVE_STATE]);
+> 
+> 	/* Some providers have a non-RPM-owned bus clock - convert kHz->Hz for the CCF */
+> 	if (qp->bus_clk) {
+> 		rate = max_t(u64, agg_clk_rate[QCOM_SMD_RPM_ACTIVE_STATE],
+> 			     agg_clk_rate[QCOM_SMD_RPM_SLEEP_STATE]);
+> 		/* ARM32 caps clk_set_rate arg to u32.. Nothing we can do about that! */
+> 		reate = min_t(u64, 1000ULL * rate, ULONG_MAX);
+> 		return clk_set_rate(qp->bus_clk, rate);
+> 	}
+> 
+> 	for (i = 0; i < QCOM_SMD_RPM_STATE_NUM; i++) {
+> 		/* RPM only accepts <=INT_MAX rates */
+> 		rate = min_t(u64, active_rate, INT_MAX);
+
+->		rate = min_t(u64, agg_clk_rate[i], INT_MAX);
+
+> 		if (rate == qp->bus_clk_rate[i])
+> 			continue;
+> 
+> 		ret = qcom_icc_rpm_set_bus_rate(qp->bus_clk_desc, rate, i);
+> 		if (ret)
+> 			return ret;
+> 
+> 		/* Cache the rate after we've successfully commited it to RPM */
+> 		qp->bus_clk_rate[i] = rate;
+> 	}
