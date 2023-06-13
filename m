@@ -2,71 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E1D72D900
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 07:14:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41FA172D904
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 07:20:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239859AbjFMFOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 01:14:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35986 "EHLO
+        id S239215AbjFMFT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 01:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232951AbjFMFOW (ORCPT
+        with ESMTP id S239952AbjFMFTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 01:14:22 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B5FE79
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 22:14:21 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35D4U4gx022408;
-        Tue, 13 Jun 2023 05:14:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=+xOblXP6Of44juClUSLRySEfxGA1qt8RGsv8h8ljKLE=;
- b=b8IY0KN8TyAS/wYGkwSqrzsJLg2cCQ4/sAgIoSDBMrA6zr7gMZXnSzaLjfhC8x4tbphU
- xpV/IBKmtNBXEFORaEoUGnDL5oEBSGke6Gy/uN6Dry3htdkoy5EC6uRAvDJ1rMGTjOvE
- +QXgVLdK+pJ6W3tE5iqgv2KsfcZMpoC7lkzQxRVWTJifWr7+aYX5VUfp59wO92xmIhPX
- nWCt+W2obr0GKUY28h0WnOVxG243BtcfkuxqzBYbOz7aYLxtXz9GEUlb8QtdNMlsMgEF
- yzohgnOMIeLXuA7cF0o9pw02GVmhKtWxNYZ0TGHluFpo1w0zgN3pf41bkExuzhmGVLzO Lg== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r69gx0s9y-1
+        Tue, 13 Jun 2023 01:19:47 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFC6E79
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 22:19:46 -0700 (PDT)
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35D4o1gq004570;
+        Tue, 13 Jun 2023 05:19:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=pp1; bh=MrYXrxW8j1E1qxfXdt+55Beucp1/X5+Ov6Rjpc40ssY=;
+ b=FyHIyvMfEpcp4X2tax318HlU3pMt56UAPwJYg+2w2rBjPFC8TbnDCS3MsIuq22gVT6af
+ hnbdlbiJ9nM3bkgeeF0XRJzJKvAjl8Wc4YdtKtzUx7AjQHh4A8UV3oSLFVGtZ2kr/5qq
+ O/AGvA8ET/5Rat+CDehU0X13Id40WVVx6UK7LBwORHwmjpm8U4lQqiWS3HSvash1eVNr
+ iwiknV5+gdhSTEUmlVyxRibS6hxLDwza7pWvAylPerGi+gGbeZq8fiowpNzBhqvFs4U0
+ zxx0GKEZbUMs3lCpKaomBQxNAPyPRri2wFLhHrXP8mUeIHw55Xng571HkdlCs011B9/E dw== 
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r6hs50mna-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Jun 2023 05:14:15 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35D5Dx3O021631
+        Tue, 13 Jun 2023 05:19:19 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35D4acjq009635;
+        Tue, 13 Jun 2023 05:19:17 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3r4gt51d94-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Jun 2023 05:13:59 GMT
-Received: from hu-charante-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 12 Jun 2023 22:13:56 -0700
-From:   Charan Teja Kalla <quic_charante@quicinc.com>
-To:     <akpm@linux-foundation.org>, <yury.norov@gmail.com>,
-        <mingo@kernel.org>, <mgorman@techsingularity.net>
-CC:     <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        "Charan Teja Kalla" <quic_charante@quicinc.com>
-Subject: [PATCH] mm: fix gfp-translate for changes in gfp.h
-Date:   Tue, 13 Jun 2023 10:43:37 +0530
-Message-ID: <1686633217-4397-1-git-send-email-quic_charante@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Tue, 13 Jun 2023 05:19:17 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35D5JE3Q36634884
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 13 Jun 2023 05:19:15 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E19E220043;
+        Tue, 13 Jun 2023 05:19:14 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BDC9220040;
+        Tue, 13 Jun 2023 05:19:14 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Tue, 13 Jun 2023 05:19:14 +0000 (GMT)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tracing: fix memcpy size when copying stack entries
+References: <20230612160748.4082850-1-svens@linux.ibm.com>
+        <20230612123407.5ebcabdf@gandalf.local.home>
+Date:   Tue, 13 Jun 2023 07:19:14 +0200
+In-Reply-To: <20230612123407.5ebcabdf@gandalf.local.home> (Steven Rostedt's
+        message of "Mon, 12 Jun 2023 12:34:07 -0400")
+Message-ID: <yt9dy1koey7h.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 2F8eCcU-5At9-eJbJYHjcr4ZTrk_hIyp
-X-Proofpoint-GUID: 2F8eCcU-5At9-eJbJYHjcr4ZTrk_hIyp
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: r7tD4j2k0QkKgtzbM8rXuPZmm5m4yj-8
+X-Proofpoint-ORIG-GUID: r7tD4j2k0QkKgtzbM8rXuPZmm5m4yj-8
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
  definitions=2023-06-13_02,2023-06-12_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 lowpriorityscore=0 clxscore=1011 mlxscore=0
- suspectscore=0 mlxlogscore=529 bulkscore=0 adultscore=0 phishscore=0
- spamscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306130046
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=860
+ priorityscore=1501 suspectscore=0 phishscore=0 mlxscore=0 spamscore=0
+ lowpriorityscore=0 clxscore=1015 adultscore=0 bulkscore=0 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306130044
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,52 +84,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The commit cb5a065b4ea9 ("headers/deps: mm: Split <linux/gfp_types.h>
-out of <linux/gfp.h>") made all the gfp flags that the gfp-translate
-script needed to move from gfp.h to gfp_types.h.  Made changes
-accordingly in the gfp-translate scipt.
+Steven Rostedt <rostedt@goodmis.org> writes:
 
-w/o this patch:
-$./scripts/gfp-translate 0xc2cc0
-Source: /local/mnt/workspace/linux_next/linux
-Parsing: 0xc2cc0
+> On Mon, 12 Jun 2023 18:07:48 +0200
+> Sven Schnelle <svens@linux.ibm.com> wrote:
+>
+>> Noticed the following warning during boot:
+>> 
+>> [    2.316341] Testing tracer wakeup:
+>> [    2.383512] ------------[ cut here ]------------
+>> [    2.383517] memcpy: detected field-spanning write (size 104) of single field "&entry->caller" at kernel/trace/trace.c:3167 (size 64)
+>> 
+>> The reason seems to be that the maximum number of entries is calculated
+>> from the size of the fstack->calls array which is 128. But later the same
+>> size is used to memcpy() the entries to entry->callers, which has only
+>> room for eight elements. Therefore use the minimum of both arrays as limit.
+>> 
+>> Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+>> ---
+>>  kernel/trace/trace.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>> 
+>> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+>> index 64a4dde073ef..988d664c13ec 100644
+>> --- a/kernel/trace/trace.c
+>> +++ b/kernel/trace/trace.c
+>> @@ -3146,7 +3146,7 @@ static void __ftrace_trace_stack(struct trace_buffer *buffer,
+>>  	barrier();
+>>  
+>>  	fstack = this_cpu_ptr(ftrace_stacks.stacks) + stackidx;
+>> -	size = ARRAY_SIZE(fstack->calls);
+>> +	size = min(ARRAY_SIZE(entry->caller), ARRAY_SIZE(fstack->calls));
+>
+> No, this is not how it works, and this breaks the stack tracing code.
+> [..]
+> The old way use to just record the 8 entries, but that was not very useful
+> in real world analysis. Your patch takes that away. Might as well just
+> record directly into the ring buffer again like it use to.
+>
+> Yes the above may be special, but your patch breaks it.
 
-with this patch:
-Source: /local/mnt/workspace/linux_next/linux
-Parsing: 0xc2cc0
- #define ___GFP_IO               0x40
- #define ___GFP_FS               0x80
- #define ___GFP_DIRECT_RECLAIM   0x400
- #define ___GFP_KSWAPD_RECLAIM   0x800
- #define ___GFP_NOWARN           0x2000
- #define ___GFP_COMP             0x40000
- #define ___GFP_NOMEMALLOC       0x80000
-
-Fixes: cb5a065b4ea9 ("headers/deps: mm: Split <linux/gfp_types.h> out of <linux/gfp.h>")
-Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
----
- scripts/gfp-translate | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/scripts/gfp-translate b/scripts/gfp-translate
-index b2ce416..6c9aed1 100755
---- a/scripts/gfp-translate
-+++ b/scripts/gfp-translate
-@@ -63,11 +63,11 @@ fi
- 
- # Extract GFP flags from the kernel source
- TMPFILE=`mktemp -t gfptranslate-XXXXXX` || exit 1
--grep -q ___GFP $SOURCE/include/linux/gfp.h
-+grep -q ___GFP $SOURCE/include/linux/gfp_types.h
- if [ $? -eq 0 ]; then
--	grep "^#define ___GFP" $SOURCE/include/linux/gfp.h | sed -e 's/u$//' | grep -v GFP_BITS > $TMPFILE
-+	grep "^#define ___GFP" $SOURCE/include/linux/gfp_types.h | sed -e 's/u$//' | grep -v GFP_BITS > $TMPFILE
- else
--	grep "^#define __GFP" $SOURCE/include/linux/gfp.h | sed -e 's/(__force gfp_t)//' | sed -e 's/u)/)/' | grep -v GFP_BITS | sed -e 's/)\//) \//' > $TMPFILE
-+	grep "^#define __GFP" $SOURCE/include/linux/gfp_types.h | sed -e 's/(__force gfp_t)//' | sed -e 's/u)/)/' | grep -v GFP_BITS | sed -e 's/)\//) \//' > $TMPFILE
- fi
- 
- # Parse the flags
--- 
-2.7.4
-
+Indeed, i'm feeling a bit stupid for sending that patch, should have
+used my brain during reading the source. Thanks for the explanation.
