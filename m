@@ -2,102 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88FDB72E797
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8443472E79A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:48:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242880AbjFMPrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 11:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
+        id S242951AbjFMPsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 11:48:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241126AbjFMPrQ (ORCPT
+        with ESMTP id S242899AbjFMPsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 11:47:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC404D1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 08:47:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 720EB633E4
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 15:47:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6758CC433F0;
-        Tue, 13 Jun 2023 15:47:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686671234;
-        bh=+ohipxYNxEPiJYNmfAXVMC4O4nJHcUHSzXecjYk9z08=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N0MWlEzcnvFqQ2Y0D4KCE5QjY++EVkiMDUn70n3KVM1O5JmPHBX1UL2Hhjn46vGVs
-         XLlJFlt04EGOOsT+q2xaMD4q6anHXuY08/24Uby+QDCcJTeVQfYT07nXy8MG4SHIAV
-         xSZVJFhP3vHZye2oyByGRcGEOsyz8J8gqAwgoZk9LZnYJnTWyKq8v9j5cpDcOJ9IeL
-         KR3oaxteprBmXf7+Xc1h5LejYCVTjnQfB+GpfD1nGb/laydu9pmUAQBlMvDtxhwmkc
-         99kZlqILbdbDrkMu11kqNBqtj5UskAAbExRGaKXtSmV069ao9rhP0zL5/rQ0R1xCNQ
-         2jT/e8+EGQj6Q==
-Date:   Tue, 13 Jun 2023 16:47:10 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Ricard Wanderlof <ricardw@axis.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Waqar Hameed <waqar.hameed@axis.com>, kernel@axis.com,
-        linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v2] regmap: Add debugfs file for forcing field writes
-Message-ID: <1c1f7fae-7eee-473a-b637-af021510d7d3@sirena.org.uk>
-References: <pnd1qifa7sj.fsf@axis.com>
- <2023061322-garter-linseed-6dfe@gregkh>
- <5b20509c-e4d5-21f8-fc20-4d02b9abd87d@axis.com>
+        Tue, 13 Jun 2023 11:48:22 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F2718E
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 08:48:21 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-33d0c740498so3748175ab.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 08:48:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1686671300; x=1689263300;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GSrctI8rg8I7twHK6Nil4YKzI1pYE/l9OdmquxynZq4=;
+        b=1IxMrX8EdCYYXT8z4R8g5xqadrCypUsYWgg41u3N/dlybwXZJu7zAUDrBeN4GL449o
+         +8RfTGMi6r5QikoO/a1XC8JEDxdc4ILd/eIp3FOAFEcyMBjAKLVIAkG6aaCp1B/0GAh5
+         h4DCxWuoSl72Xf9hJ3tYHUmZxuCN11luuhQkBuupPRWrUiybaDDE83+lfAmhfszwQVZC
+         tYqtRCdXcBg8+M/hPoMUyTQcoGw2bipRmg3f7WRV2QYo7ekDRaCHO+HWJdf5M1zAQKRy
+         wsaurWEurnvuCie8fqVMgUxsHgVftMVS9XSbnCorlXIG/gNuD/libC/nNCKEBg/dxtq/
+         JoKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686671300; x=1689263300;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GSrctI8rg8I7twHK6Nil4YKzI1pYE/l9OdmquxynZq4=;
+        b=VmURiGMp6HlcOZfKuub/x7X1h2ahqGnNZ6Mc2IrISbw8Hg4xuVMPuy+QMAFkwb4wUI
+         fx1f94MRHQmk6BhHqA/rIxy53EV8FeCLT1bESmPxsbPD0iWtN1K3bWouzP5QwQbykdKZ
+         cmyEHwThvkYCuQ/UZNU1xW5Txosu2qckheMGNtuf4i2DAS8Xv1734r4ZfUKPXniGmdK4
+         RsxSjwY8KcHRNHjOOMGCIXfyxNYFtyeVfDZmCWjgZHgRph4+fNakQYJv45G64x1o0P2D
+         kpZVcY3EB6RYvEYihAmDzFSzHDzxNPavE4c57q62oJopxdaUClDt7Fot2pZ0Vhy+9dWm
+         32ig==
+X-Gm-Message-State: AC+VfDyjFN4aCaUAHaL55bXHCfndq8WYwe6MSAQe2pyLN9ehYXXzuLs1
+        gAWtq8VMUWwkT3qNCpL+3JDNNw==
+X-Google-Smtp-Source: ACHHUZ5StGBwUyOjFSA4oiFTpuXR+sgEyx4jlxweuyIJg1gEkVnyybc/DjDXsTvbpm397ZVPBanKkQ==
+X-Received: by 2002:a05:6602:1789:b0:777:b456:abbe with SMTP id y9-20020a056602178900b00777b456abbemr7180557iox.0.1686671300719;
+        Tue, 13 Jun 2023 08:48:20 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id h24-20020a02cd38000000b004145ebbf193sm3468444jaq.51.2023.06.13.08.48.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 08:48:20 -0700 (PDT)
+Message-ID: <491da795-e9e0-1d84-558b-df09063228cb@kernel.dk>
+Date:   Tue, 13 Jun 2023 09:48:18 -0600
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5A4kAC+oX43H9Pox"
-Content-Disposition: inline
-In-Reply-To: <5b20509c-e4d5-21f8-fc20-4d02b9abd87d@axis.com>
-X-Cookie: Not a flying toy.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2] block: Fix dio_bio_alloc() to set BIO_PAGE_PINNED
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        kernel test robot <oliver.sang@intel.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-mm@kvack.org, oe-lkp@lists.linux.dev, lkp@intel.com,
+        linux-kernel@vger.kernel.org
+References: <545463.1686601473@warthog.procyon.org.uk>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <545463.1686601473@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/12/23 2:24 PM, David Howells wrote:
+>     
+> Fix dio_bio_alloc() to set BIO_PAGE_PINNED, not BIO_PAGE_REFFED, so that
+> the bio code unpins the pinned pages rather than putting a ref on them.
+> 
+> The issue was causing:
+> 
+>         WARNING: CPU: 6 PID: 2220 at mm/gup.c:76 try_get_folio
+> 
+> This can be caused by creating a file on a loopback UDF filesystem, opening
+> it O_DIRECT and making two writes to it from the same source buffer.
 
---5A4kAC+oX43H9Pox
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+What is this against?
 
-On Tue, Jun 13, 2023 at 05:15:10PM +0200, Ricard Wanderlof wrote:
+-- 
+Jens Axboe
 
-> I can understand that enabling a write-always behavior results in a=20
-> different behavior on the associated bus (e.g. I2C), but in the end it=20
-> shouldn't affect the functionality of the peripheral device any more than=
-=20
-> rearranging driver code to perform regmap writes in a different order,=20
-> which might also lead to fewer or more bus writes.
 
-> It seems I'm clearly in the wrong here, so there must be some scenario=20
-> I've missed. It just doesn't seem that dangerous; it's a debug=20
-> functionality after all.
-
-There are devices where the act of writing to a register can have side
-effects even if the values in the register are the same (for example
-triggering some kind of recalibration based on the "new" value).  It's
-rare, and it's probably more likely to be annoying or disruptive than
-actually dangerous, but it is something drivers might be relying on.
-
---5A4kAC+oX43H9Pox
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSIj30ACgkQJNaLcl1U
-h9DvFAf/cQwuvYnO7JDuL83AFlpdAHUglQLWdk4YV7wQuxjt+nnVZuKRDADuX2rL
-hNfdmO1mEwYBGon7bI8fY+omEisls736KXLAUs69DeEHz4tgO/zzMjYjLDsJmjev
-QkxFreFWcvRLHsCTGxE9zTAcDysxULFmqotS9WI5EPCVnuZoj6cKLfxi2UwmILWB
-QFxuKOttitcpWBz7HQhwzFCiMJFFsomtFvvK+QbmtAWEa6VIhUdDk0Jya5ilAfhk
-VD4EQFEhWIy4YVT4YdGju+F6botKpzpXATjfGRROaRNDCfBwnaw3Yz9k0jN8RJKx
-IPQ2jZii+OCd4Svwkl+vHapqsVc8qA==
-=3Q0/
------END PGP SIGNATURE-----
-
---5A4kAC+oX43H9Pox--
