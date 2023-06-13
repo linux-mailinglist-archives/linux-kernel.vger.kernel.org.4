@@ -2,111 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0367E72D8AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 06:35:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC7072D8B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 06:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239497AbjFMEf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 00:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
+        id S234254AbjFMEg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 00:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240004AbjFMEe4 (ORCPT
+        with ESMTP id S229445AbjFMEgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 00:34:56 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61791DB
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 21:34:34 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b3be39e666so15855955ad.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 21:34:34 -0700 (PDT)
+        Tue, 13 Jun 2023 00:36:15 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CEABDB;
+        Mon, 12 Jun 2023 21:36:14 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-54f75f85a17so1352929a12.0;
+        Mon, 12 Jun 2023 21:36:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686630874; x=1689222874;
-        h=content-transfer-encoding:cc:to:subject:from:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6qvka6//2uWaQtF0BTHBk1dA62rA7SJ2p/E0dmEtui4=;
-        b=CuWsTUsbABTc5hOd8bT0WOWUbcCum4neovT/JXQjY4izeTMp1mmGNN578JJAJuThqr
-         gRvb2OM+SGewUPIsHcvcHyOHCNektrCLkRET3vWkpg0bd8NXtKh13w4BxLSmgfgUs9m1
-         7G9mGWlRYhtjsDtUtlfj0UZ2lG5wjP93KbkjAw7lYrVpWBrOavnEyga+Lgq0EENLYnSw
-         fEs/WdQrKMjwFIbjfH+b/kEMABI9kn2nbB8FbktVszcOfXGUpu2dnKKvj/2jIxLHXt0v
-         4/vJPJuIn7BymrDeXyvHEhd1sms3E+hwlWxYt1M86zT6LocMVPvnMgHlhCLv2dW8DDP4
-         jQYQ==
+        d=gmail.com; s=20221208; t=1686630974; x=1689222974;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aLey+7BUO2+v17+Z/uap9UjvAbO893/3s+NdkwIj1tU=;
+        b=kQsV1t1Eyqm8Zm+jY6rt2A8U9bIjx/T8ySnLIOAoXPHj0ovnliDTWTwUPmKbIrPuTB
+         T5ugGZP7QLYdK6GaZuZX2TgmKUdTzZeShm5YtVVljKH/9bT8d7XAhrdmzZXDfxS7mcTG
+         zD/J6J6Cjkl95YcsQzOE7kfb2Uj6h6936q8MX36vFwcC8OqaI5P8GeOPv4C869Pa5hjq
+         Wn+xKnfOY476WxY3DL6Z6VzXEzjtRAwwMTORR4Xw83T7xIUGmgbYYRUPdFfrG7a3aQ2q
+         3204p+LOau0HOIFYxej+FjG9Ku3eG7pCSpZKOQPzjG5n8fWNT+sb+DNaXvvdXr1mwmcW
+         JoPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686630874; x=1689222874;
-        h=content-transfer-encoding:cc:to:subject:from:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=6qvka6//2uWaQtF0BTHBk1dA62rA7SJ2p/E0dmEtui4=;
-        b=OJS9rPUwTR1qmujfzedMpI93rYoA7oNEtuC6KYpinQFDIXh5bQrirbqmiYWDCd3vjn
-         dBf+Zl456+7t+4j1Mu4oNhwMrJwTGyhSLKwxhJ8Uktqf8+6TQJWt2041rN3Dfk71wYJC
-         6n/IYQ4c4Vxv++ocXFPeCbItlgA9dNgznKEV/wFI7orRu/ts6gjEXzIultwrTgQYV/hN
-         hb48cuwnr/xKoL/EYw96CWJWpc0LbUgBPqg2eMPqcf3YOCDnqFSHcPTUhzIw0xEyxLqg
-         hd6L54oc1m5ke5QaKH6WLMnlHyKzVr+AytPGRQVqRtY/1aQg2hHZjZCZfWzT8G/K7N/e
-         Cc2w==
-X-Gm-Message-State: AC+VfDw/+yTX6O467ZxqrfTtEsRQ4DBS36uwlkjBkKbbWyK6X+BUQtFZ
-        fTkXUd/wvd1eVseZfvwXzyk=
-X-Google-Smtp-Source: ACHHUZ6gZXx27tAfV3kMBiWPTFGugi2tredtGzduwgwFQ9144wq53mfjE7EBrnmgzWsxUghyAumcrA==
-X-Received: by 2002:a17:903:54:b0:1b2:421b:6f21 with SMTP id l20-20020a170903005400b001b2421b6f21mr7437782pla.9.1686630873753;
-        Mon, 12 Jun 2023 21:34:33 -0700 (PDT)
-Received: from [183.173.18.203] ([183.173.18.203])
-        by smtp.gmail.com with ESMTPSA id jf6-20020a170903268600b001b3d8ac1b5csm2205865plb.219.2023.06.12.21.34.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 21:34:32 -0700 (PDT)
-Message-ID: <0c336a41-54fb-2904-42e2-1d9ee3950b21@gmail.com>
-Date:   Tue, 13 Jun 2023 12:34:30 +0800
+        d=1e100.net; s=20221208; t=1686630974; x=1689222974;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aLey+7BUO2+v17+Z/uap9UjvAbO893/3s+NdkwIj1tU=;
+        b=Ui4PT+Eq2mss4gBbqKPMwWG/7sdYD86Ojz8+D/SZzcG8jvDOYQ3L+RSYiZY0Cjs9zz
+         VIwfmfvywsJvS11+6DEwJV3AIdP4kmSvgWr0ol18Lm1oE1sUlSMdi9pA9c/JICQShsTw
+         z2m+vBQuRavoMPjRMRgvcNmWID7NV3VkhbzjVFllyqtZG+buZCAfKNfuXIh5kmUPQ1eK
+         0+JAC7cGcBlwKisyatcQUfwUNBS4ZYhhobIyoqQsJMFmKqXB83uxYdZwDB4M/j2ZqE7M
+         18QhO5BOqGSYn7IOi9ikmGUJAjO4Rwmxw9QnNfMEr8nuEKGJU1W2tYQnIsKHca8eYlTY
+         TGMA==
+X-Gm-Message-State: AC+VfDzOJ1nUMGP2oVA921RwqNUavwdvrWRgIACI3qnelbOTlyGi5X0n
+        9RDQaaRnUBqjb4KNzl/5geQ=
+X-Google-Smtp-Source: ACHHUZ5VZF1FuJCXEL+pyvS4Q5nj8ZJtVqGazuh5rkdjbvs6yoecAkFV5ZP4hCbp+20SZ5nSsr261Q==
+X-Received: by 2002:a17:90a:9f82:b0:256:5637:2b30 with SMTP id o2-20020a17090a9f8200b0025656372b30mr9259319pjp.40.1686630973944;
+        Mon, 12 Jun 2023 21:36:13 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-27.three.co.id. [180.214.232.27])
+        by smtp.gmail.com with ESMTPSA id j13-20020a170902da8d00b001b06c106844sm9114212plx.151.2023.06.12.21.36.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 21:36:13 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 56B21106BB9; Tue, 13 Jun 2023 11:36:10 +0700 (WIB)
+Date:   Tue, 13 Jun 2023 11:36:09 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.3 000/160] 6.3.8-rc1 review
+Message-ID: <ZIfyOdBtdhCkwJmj@debian.me>
+References: <20230612101715.129581706@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-From:   Tuo Li <islituo@gmail.com>
-Subject: [BUG] ntfs: possible data races in ntfs_clear_extent_inode()
-To:     anton@tuxera.com, linkinjeon@kernel.org
-Cc:     linux-ntfs-dev@lists.sourceforge.net,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        baijiaju1990@outlook.com
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="9vZIuwzAQwncgYxj"
+Content-Disposition: inline
+In-Reply-To: <20230612101715.129581706@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-Our static analysis tool finds some possible data races in the NTFS file
-system in Linux 6.4.0-rc6.
+--9vZIuwzAQwncgYxj
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-In most calling contexts, the variable ni->ext.base_ntfs_ino is accessed
-with holding the lock ni->extent_lock. Here is an example:
+On Mon, Jun 12, 2023 at 12:25:32PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.3.8 release.
+> There are 160 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
 
-   ntfs_extent_mft_record_free() --> Line 2773 in fs/ntfs/mtf.c
-     mutex_lock(&ni->extent_lock); --> Line 2786 in fs/ntfs/mtf.c (Lock 
-ni->extent_lock)
-     base_ni = ni->ext.base_ntfs_ino; --> Line 2787 in fs/ntfs/mft.c 
-(Access ni->ext.base_ntfs_ino)
+Successfully compiled and installed bindeb-pkgs on my computer (Acer
+Aspire E15, Intel Core i3 Haswell). No noticeable regressions.
 
-However, in the following calling contexts:
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-   ntfs_evict_big_inode() --> Line 2247 in fs/ntfs/inode.c
-      ntfs_clear_extent_inode() --> Line 2274 in fs/ntfs/inode.c
-         if (!is_bad_inode(VFS_I(ni->ext.base_ntfs_ino))) --> Line 2224 
-in fs/ntfs/inode.c (Access ni->ext.base_ntfs_ino)
+--=20
+An old man doll... just what I always wanted! - Clara
 
-   ntfs_evict_big_inode() --> Line 2247 in fs/ntfs/inode.c
-     ni->ext.base_ntfs_ino = NULL; --> Line 2285 in fs/ntfs/inode.c 
-(Access ni->ext.base_ntfs_ino)
+--9vZIuwzAQwncgYxj
+Content-Type: application/pgp-signature; name="signature.asc"
 
-the variable ni->ext.base_ntfs_ino is accessed without holding the lock
-ni->extent_lock, and thus data races can occur.
+-----BEGIN PGP SIGNATURE-----
 
-I am not quite sure whether these possible data races are real and how 
-to fix them if they are real.
-Any feedback would be appreciated, thanks!
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZIfyMQAKCRD2uYlJVVFO
+o9WwAP0c5JBvbxPUwQCUVX9cQqQdmbolsg/yus7Lk1ukE1GBAgEA7Nml4743Hx0I
+fygwgvAS7T+MtZ/5VQ1Ce86Wvwx+FQ0=
+=iA8N
+-----END PGP SIGNATURE-----
 
-Reported-by: BassCheck <bass@buaa.edu.cn>
-
-Best wishes,
-Tuo Li
+--9vZIuwzAQwncgYxj--
