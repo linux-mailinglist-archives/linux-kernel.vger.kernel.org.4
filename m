@@ -2,62 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 532BB72E02C
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 12:55:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AB4072E030
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 12:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239890AbjFMKzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 06:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42880 "EHLO
+        id S239672AbjFMKzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 06:55:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239539AbjFMKzP (ORCPT
+        with ESMTP id S238726AbjFMKzb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 06:55:15 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEF61B8;
-        Tue, 13 Jun 2023 03:55:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686653714; x=1718189714;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vEktzoBpSkrn0wkyvocbOkW43+YZyv0TA5B13Xrvmd8=;
-  b=itOpNpWUXrEfWO1BgmdkTN32G1WQDsq/OSKMRuJdly4DPfBGo8R/qZHJ
-   IgFSwQEocnv5Dxa3Ijpl774UBgu1GCTfDU94uzMoKLljkme4VxXcfIPty
-   iE+r2KjYAL5GUpETJI8ehUUviaRc9qFrS3bppXmolgBOD8nLCQbEJYp6+
-   R41DU9/t9MXPG00Fwmsh0ahGSjqhntOUUTCH2KTWGDGJw4TEUMUY5GsJJ
-   /cV/X0UwFN+A4KMmZOPUhx7nTsDu1nsjikaVYuZ1kFnEQULw4dtfytkc4
-   S2EKcGNvnKQGl7hzEbWU9Amr92dXr8haJFHBZMhr3ar2a7xVgBMNGw8go
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="444670611"
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="scan'208";a="444670611"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 03:55:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="885806358"
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="scan'208";a="885806358"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 03:55:13 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id 1A8A711F9D2;
-        Tue, 13 Jun 2023 13:55:10 +0300 (EEST)
-Date:   Tue, 13 Jun 2023 10:55:10 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH] media: v4l2-core: Fix a potential resource leak in
- v4l2_fwnode_parse_link()
-Message-ID: <ZIhLDh567eWqY5vk@kekkonen.localdomain>
-References: <2ddd10ec9e009bbb85518355f1e09e1ecd349925.1685340968.git.christophe.jaillet@wanadoo.fr>
+        Tue, 13 Jun 2023 06:55:31 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C10E55;
+        Tue, 13 Jun 2023 03:55:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=GMlksJ5muipLr0Ufss/WSswgj2qownE6HhlJFXhcXlg=; b=a9KFFt6X10FXGv2kIkzGTnsIDj
+        S2hxVxvC8y8yY6vRCgKbQfTumoiC2Oi7IJwPadzTHPYYf03jUD8rOFcDArJSDmBaTe6ch7rcWPyXk
+        AsuHe3FVpF/zX4yh2hTjPst2Z10wtAhlIFHZXwxwG+eOnp7l7eF7LHqUA5i/bqDVB9ymIzf2gcUeI
+        kujQ8iw8VK2/CQuvfEZRuamzJFGghTqyOI/u4HLE/P+lv1uloNQuptF94XXv6GyVyvIm+QV/aBRZ/
+        LAViy+/LWhi/rAzC8CXHv7awdkWevYiOY17Nv7Zy4O020FOryv2Bfghhni3m1pZ8hc7XXPmwM2VfD
+        5Ece5izQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q91gJ-003oTx-3o; Tue, 13 Jun 2023 10:55:23 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AA072300322;
+        Tue, 13 Jun 2023 12:55:22 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8D05424556032; Tue, 13 Jun 2023 12:55:22 +0200 (CEST)
+Date:   Tue, 13 Jun 2023 12:55:22 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     torvalds@linux-foundation.org, keescook@chromium.org,
+        gregkh@linuxfoundation.org, pbonzini@redhat.com
+Cc:     masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+        nicolas@fjasle.eu, catalin.marinas@arm.com, will@kernel.org,
+        vkoul@kernel.org, trix@redhat.com, ojeda@kernel.org,
+        mingo@redhat.com, longman@redhat.com, boqun.feng@gmail.com,
+        dennis@kernel.org, tj@kernel.org, cl@linux.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
+        adrian.hunter@intel.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, paulmck@kernel.org,
+        frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
+        42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
+        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
+        john.johansen@canonical.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
+        rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
+        tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
+        luc.vanoostenryck@gmail.com
+Subject: Re: [PATCH v3 03/57] locking: Introduce __cleanup() based
+ infrastructure
+Message-ID: <20230613105522.GU4253@hirez.programming.kicks-ass.net>
+References: <20230612090713.652690195@infradead.org>
+ <20230612093537.614161713@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2ddd10ec9e009bbb85518355f1e09e1ecd349925.1685340968.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <20230612093537.614161713@infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,43 +83,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
+On Mon, Jun 12, 2023 at 11:07:16AM +0200, Peter Zijlstra wrote:
 
-On Mon, May 29, 2023 at 08:17:18AM +0200, Christophe JAILLET wrote:
-> 'fwnode is known to be NULL, at this point, so fwnode_handle_put() is a
-> no-op.
-> 
-> Release the reference taken from a previous fwnode_graph_get_port_parent()
-> call instead.
-> 
-> Fixes: ca50c197bd96 ("[media] v4l: fwnode: Support generic fwnode for parsing standardised properties")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> /!\  THIS PATCH IS SPECULATIVE  /!\
->          review with care
-> ---
->  drivers/media/v4l2-core/v4l2-fwnode.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
-> index 049c2f2001ea..b7dd467c53fd 100644
-> --- a/drivers/media/v4l2-core/v4l2-fwnode.c
-> +++ b/drivers/media/v4l2-core/v4l2-fwnode.c
-> @@ -571,7 +571,7 @@ int v4l2_fwnode_parse_link(struct fwnode_handle *fwnode,
->  
->  	fwnode = fwnode_graph_get_remote_endpoint(fwnode);
->  	if (!fwnode) {
-> -		fwnode_handle_put(fwnode);
-> +		fwnode_handle_put(link->local_node);
+> --- /dev/null
+> +++ b/include/linux/cleanup.h
+> @@ -0,0 +1,167 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef __LINUX_GUARDS_H
+> +#define __LINUX_GUARDS_H
+> +
+> +#include <linux/compiler.h>
+> +
+> +/*
+> + * DEFINE_FREE(name, type, free):
+> + *	simple helper macro that defines the required wrapper for a __free()
+> + *	based cleanup function. @free is an expression using '_T' to access
+> + *	the variable.
+> + *
+> + * __free(name):
+> + *	variable attribute to add a scoped based cleanup to the variable.
+> + *
 
-link->local_node also needs to be non-NULL for the successful case. The
-condition should take that into account. Could you send v2 with that?
+	no_free_ptr(var):
+	  like a non-atomic xchg(var, NULL), such that the cleanup
+	  function will be inhibited -- provided it sanely deals with a
+	  NULL value.
 
->  		return -ENOLINK;
->  	}
->  
+> + * return_ptr(p):
+> + *	returns p while inhibiting the __free().
+> + *
+> + * Ex.
+> + *
+> + * DEFINE_FREE(kfree, void *, if (_T) kfree(_T))
+> + *
+> + *	struct obj *p = kmalloc(...);
 
--- 
-Kind regards,
+That should obviously have been:
 
-Sakari Ailus
+	struct obj *p __free(kfree) = kmalloc(...);
+
+> + *	if (!p)
+> + *		return NULL;
+> + *
+> + *	if (!init_obj(p))
+> + *		return NULL;
+> + *
+> + *	return_ptr(p);
+> + */
+> +
+> +#define DEFINE_FREE(name, type, free) \
+> +	static inline void __free_##name(void *p) { type _T = *(type *)p; free; }
+> +
+> +#define __free(name)	__cleanup(__free_##name)
+> +
+> +#define no_free_ptr(p) \
+> +	({ __auto_type __ptr = (p); (p) = NULL; __ptr; })
+> +
+> +#define return_ptr(p)	return no_free_ptr(p)
