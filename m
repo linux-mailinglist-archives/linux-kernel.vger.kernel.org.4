@@ -2,73 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A91B72E34F
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:49:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B3EC72E352
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:49:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242349AbjFMMtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 08:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47712 "EHLO
+        id S242395AbjFMMth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 08:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235210AbjFMMtA (ORCPT
+        with ESMTP id S240019AbjFMMtf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 08:49:00 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7508DE4;
-        Tue, 13 Jun 2023 05:48:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686660539; x=1718196539;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4DIaRf5rR2wt24OZUbm+fHnDkQb9/kC9L8KgnQRTvrM=;
-  b=CAHyQW2SOPC5tbRuPxtFuURDFCtdYqkg9UawoA+DxB/UF5YofSOAWIVE
-   KlqhER3Dg9QZW8EV2JYEkzygo5Xqte+irRDBFlYQcuDARhIbTj+Wq/kS9
-   5L2va+vIWUD7nrrTeBB53TneqBEq16TL1QKnYS+gYBEH1V2T8iSe1O+Z0
-   0hMeYrqrJKDMWT90dZPg+SAw93JnJdiUjRhzqXz7DZrpMImw9lGoceaK4
-   yZUqJUT16YrtBkfCoPXOgeRCBAHtuVO8eRXhylxUQzpAqyBAy3Bc5iAXb
-   q2yd1C7tJNFZzbvlJZE6GyAmqBgOU4VOx5Jkh1AZBXhNVpUC4oBAy71Pl
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="358316913"
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="scan'208";a="358316913"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 05:48:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="714785617"
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="scan'208";a="714785617"
-Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 13 Jun 2023 05:48:56 -0700
-Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q93SB-0001M8-1M;
-        Tue, 13 Jun 2023 12:48:55 +0000
-Date:   Tue, 13 Jun 2023 20:48:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Frank Oltmanns <frank@oltmanns.dev>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, Frank Oltmanns <frank@oltmanns.dev>,
-        "A.s. Dong" <aisheng.dong@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: Re: [PATCH v2 2/2] clk: tests: Add tests for fractional divisor
- approximation
-Message-ID: <202306132038.nUB6hmCv-lkp@intel.com>
-References: <20230613083626.227476-3-frank@oltmanns.dev>
+        Tue, 13 Jun 2023 08:49:35 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BA4AD;
+        Tue, 13 Jun 2023 05:49:34 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f654d713c0so6274218e87.3;
+        Tue, 13 Jun 2023 05:49:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686660572; x=1689252572;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=gmQyg9/IsE7vybupq2HnNpp0eUH7WhJlrGp6WZrhAn4=;
+        b=RK0JGICH7XDUQYLyZTqr1U+i6igdBy59gSYCFMK1wi+qd+nTKwNZvY86ex3S+0N10P
+         cygR1SyPTXJ1wfpNFx+60Ct6eVQE22yZZMLAP9XYLK/GihboAn8+QAVvdfSIcFONV3HV
+         if3JDH5yhFkbu3Q0pgC45UnK5VZd6Y7e9DROAR2izbAmYjfxebmc/L9Xx+DydzzHrOG8
+         o219AN/c6bZMo2yjMTmBRlApJ7oh2VWaNzd3WCeUKMMqdEb2aiLce80RjjDqBa1Zvukb
+         /cQ7wLN6lPiZuEgbywGQs6LpVReNdKoAs2kKDW3MstiVcIchaPllmM9ceYSxJUX8gRrU
+         oFcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686660572; x=1689252572;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gmQyg9/IsE7vybupq2HnNpp0eUH7WhJlrGp6WZrhAn4=;
+        b=HTE1/I83LbhMJnm+apltKf+cbWc2pd0+NiB8Tck9UTioGKGAaGTiPg20/Pbig1Fpc8
+         w2eE5N0MLEwAhE2GJ4jWaDYe29qVOelQ5Nd6tPowgQ1BWOT8A8kzw9sg5rxR1m0j2JNb
+         xGGM4SYcwYq0UTWIVSuawj+PxDlJ+hADMWiMFXnY8i8uN40q7HhsUYW7pKSdWwZpIcrG
+         djQxF0JM/7j0KlYglpoFYgCRLSRICqxHH5wlJotiMicqjauUEj5Ca6+BP0rEP88r0zwq
+         Q9CNhq95Oea37JBGIMaCwJrC9wjziJ74yxw0kbn5Dw7SAo4u1U+3naD75uZux6vsutZh
+         OX1A==
+X-Gm-Message-State: AC+VfDwhCAZeqtdt2c32uldlkKc4Pfjm2bvzljv1j+2ydXHLZpYpS27I
+        HMuMHVhkvIxuNfR1Wi9CIOQ=
+X-Google-Smtp-Source: ACHHUZ6JVds8bYIfYxk9bO9+uKSvGoQYAWa94DZcakOPfDG9fl6KyQrXctBWLCC46hPWBEW2lXAk3g==
+X-Received: by 2002:a19:e30e:0:b0:4f0:1124:8b2a with SMTP id a14-20020a19e30e000000b004f011248b2amr5147703lfh.46.1686660572162;
+        Tue, 13 Jun 2023 05:49:32 -0700 (PDT)
+Received: from ?IPV6:2a0b:6204:4302:5f00:4dab:3483:4506:9a0e? ([2a0b:6204:4302:5f00:4dab:3483:4506:9a0e])
+        by smtp.gmail.com with ESMTPSA id c20-20020a197614000000b004f24bc0cbf9sm1754680lff.154.2023.06.13.05.49.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 05:49:31 -0700 (PDT)
+From:   "bibo, mao" <bibo.mao@gmail.com>
+X-Google-Original-From: "bibo, mao" <maobibo@loongson.cn>
+Message-ID: <cc73aaf7-85bf-2062-6d1b-f1cbb70242f8@loongson.cn>
+Date:   Tue, 13 Jun 2023 20:49:26 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230613083626.227476-3-frank@oltmanns.dev>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v13 03/30] LoongArch: KVM: Implement kvm hardware enable,
+ disable interface
+To:     Tianrui Zhao <zhaotianrui@loongson.cn>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Xi Ruoyao <xry111@xry111.site>, tangyouling@loongson.cn,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20230609090832.2131037-1-zhaotianrui@loongson.cn>
+ <20230609090832.2131037-4-zhaotianrui@loongson.cn>
+In-Reply-To: <20230609090832.2131037-4-zhaotianrui@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,43 +85,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Frank,
 
-kernel test robot noticed the following build errors:
 
-[auto build test ERROR on v6.4-rc6]
-[also build test ERROR on linus/master]
-[cannot apply to clk/clk-next next-20230613]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+在 2023/6/9 17:08, Tianrui Zhao 写道:
+> Implement kvm hardware enable, disable interface, setting
+> the guest config register to enable virtualization features
+> when called the interface.
+> 
+> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
+> ---
+>   arch/loongarch/kvm/main.c | 64 +++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 64 insertions(+)
+> 
+> diff --git a/arch/loongarch/kvm/main.c b/arch/loongarch/kvm/main.c
+> index f98c1619725f..5ebae1ea7565 100644
+> --- a/arch/loongarch/kvm/main.c
+> +++ b/arch/loongarch/kvm/main.c
+> @@ -195,6 +195,70 @@ static void _kvm_init_gcsr_flag(void)
+>   	set_gcsr_sw_flag(LOONGARCH_CSR_PERFCNTR3);
+>   }
+>   
+> +void kvm_init_vmcs(struct kvm *kvm)
+> +{
+> +	kvm->arch.vmcs = vmcs;
+> +}
+> +
+> +long kvm_arch_dev_ioctl(struct file *filp,
+> +			unsigned int ioctl, unsigned long arg)
+> +{
+> +	return -ENOIOCTLCMD;
+> +}
+> +
+> +#ifdef CONFIG_KVM_GENERIC_HARDWARE_ENABLING
+Can we remove macro CONFIG_KVM_GENERIC_HARDWARE_ENABLING here since it 
+is always enabled? The other looks good to me.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Frank-Oltmanns/clk-fractional-divider-Improve-approximation-when-zero-based/20230613-163903
-base:   v6.4-rc6
-patch link:    https://lore.kernel.org/r/20230613083626.227476-3-frank%40oltmanns.dev
-patch subject: [PATCH v2 2/2] clk: tests: Add tests for fractional divisor approximation
-config: csky-randconfig-r011-20230612 (https://download.01.org/0day-ci/archive/20230613/202306132038.nUB6hmCv-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git checkout v6.4-rc6
-        b4 shazam https://lore.kernel.org/r/20230613083626.227476-3-frank@oltmanns.dev
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=csky olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=csky SHELL=/bin/bash
+Reviewed-by: Bibo Mao <maobibo@loongson.cn>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306132038.nUB6hmCv-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "clk_fractional_divider_general_approximation" [drivers/clk/clk_test.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards
+Bibo, Mao
+> +int kvm_arch_hardware_enable(void)
+> +{
+> +	unsigned long env, gcfg = 0;
+> +
+> +	env = read_csr_gcfg();
+> +	/* First init gtlbc, gcfg, gstat, gintc. All guest use the same config */
+> +	clear_csr_gtlbc(CSR_GTLBC_USETGID | CSR_GTLBC_TOTI);
+> +	write_csr_gcfg(0);
+> +	write_csr_gstat(0);
+> +	write_csr_gintc(0);
+> +
+> +	/*
+> +	 * Enable virtualization features granting guest direct control of
+> +	 * certain features:
+> +	 * GCI=2:       Trap on init or unimplement cache instruction.
+> +	 * TORU=0:      Trap on Root Unimplement.
+> +	 * CACTRL=1:    Root control cache.
+> +	 * TOP=0:       Trap on Previlege.
+> +	 * TOE=0:       Trap on Exception.
+> +	 * TIT=0:       Trap on Timer.
+> +	 */
+> +	if (env & CSR_GCFG_GCIP_ALL)
+> +		gcfg |= CSR_GCFG_GCI_SECURE;
+> +	if (env & CSR_GCFG_MATC_ROOT)
+> +		gcfg |= CSR_GCFG_MATC_ROOT;
+> +
+> +	gcfg |= CSR_GCFG_TIT;
+> +	write_csr_gcfg(gcfg);
+> +
+> +	kvm_flush_tlb_all();
+> +
+> +	/* Enable using TGID  */
+> +	set_csr_gtlbc(CSR_GTLBC_USETGID);
+> +	kvm_debug("gtlbc:%llx gintc:%llx gstat:%llx gcfg:%llx",
+> +			read_csr_gtlbc(), read_csr_gintc(),
+> +			read_csr_gstat(), read_csr_gcfg());
+> +
+> +	return 0;
+> +}
+> +
+> +void kvm_arch_hardware_disable(void)
+> +{
+> +	clear_csr_gtlbc(CSR_GTLBC_USETGID | CSR_GTLBC_TOTI);
+> +	write_csr_gcfg(0);
+> +	write_csr_gstat(0);
+> +	write_csr_gintc(0);
+> +
+> +	/* Flush any remaining guest TLB entries */
+> +	kvm_flush_tlb_all();
+> +}
+> +#endif
+> +
+>   static int kvm_loongarch_env_init(void)
+>   {
+>   	struct kvm_context *context;
