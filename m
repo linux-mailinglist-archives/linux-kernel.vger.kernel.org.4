@@ -2,102 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DDE072EA74
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 20:04:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82AE372EA81
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 20:07:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239701AbjFMSD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 14:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47742 "EHLO
+        id S231153AbjFMSHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 14:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240119AbjFMSDU (ORCPT
+        with ESMTP id S230035AbjFMSHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 14:03:20 -0400
-Received: from smtp2.infineon.com (smtp2.infineon.com [IPv6:2a00:18f0:1e00:4::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3945810F7;
-        Tue, 13 Jun 2023 11:03:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1686679399; x=1718215399;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=6JLgbkkYt1U63xIpmUAgRDi0lykGOmT7an3pZEBkGhI=;
-  b=a4syogtyV87Ts+C5WVfVPecZkk6xHPOfdnNeFbm4IXkxR8M5TR00gvhy
-   FjWby6K6R5L0kiT++aQYVuvfu4IMlHG+qT7IkWq3a/GA1MCAvEzRRjge1
-   NzlWxwyoq5DL0/8uJEI1wGPMCWbpO5EUMTPF+CddEQU8uRHZPzs3+CZ8W
-   E=;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="41820531"
-X-IronPort-AV: E=Sophos;i="6.00,240,1681164000"; 
-   d="scan'208";a="41820531"
-Received: from unknown (HELO MUCSE805.infineon.com) ([172.23.29.31])
-  by smtp2.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 20:03:17 +0200
-Received: from KLUSE818.infineon.com (172.28.156.171) by MUCSE805.infineon.com
- (172.23.29.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 13 Jun
- 2023 20:03:17 +0200
-Received: from ISCNPC0VBFBX.infineon.com (10.161.6.196) by
- KLUSE818.infineon.com (172.28.156.171) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 13 Jun 2023 20:03:16 +0200
-From:   Alexander Steffen <Alexander.Steffen@infineon.com>
-To:     <jarkko@kernel.org>, <linux-integrity@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Alexander Steffen <Alexander.Steffen@infineon.com>
-Subject: [PATCH v3 4/4] tpm_tis: Resend command to recover from data transfer errors
-Date:   Tue, 13 Jun 2023 20:02:59 +0200
-Message-ID: <20230613180259.3525-5-Alexander.Steffen@infineon.com>
-X-Mailer: git-send-email 2.28.0.windows.1
-In-Reply-To: <20230613180259.3525-1-Alexander.Steffen@infineon.com>
-References: <20230613180259.3525-1-Alexander.Steffen@infineon.com>
+        Tue, 13 Jun 2023 14:07:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6B919A8;
+        Tue, 13 Jun 2023 11:07:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D2E5632AA;
+        Tue, 13 Jun 2023 18:07:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02F0DC433D9;
+        Tue, 13 Jun 2023 18:07:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686679641;
+        bh=sVA1SNUHZ25ExbWIX7Us9rw1rc9saLwiqn/s/BIC9r0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kokQUW6pmOVgkyFnx+zjqdNgvL/LY6vxCZ86eP8pKEvLfRxiwUJf48h0eNnaHNLeh
+         YsB4VQSZCxGecSjOwXJvjSbmkDg6Xgm+SJ7mKal0ci1Rb57gcChG3ec4nDgYOQHkI3
+         cUT+HDEf/pifAXg7XmGhmtcKYHHk0GEGSCFF8OY6OzWlDIAvVUIg09b/tudoJ/PQGO
+         7/U7jtp/KsjjtOkFV9HwuPyxb667Ay8/JVMXVh+poYRQSjnWp5C1hdmuAyf5Ee3P5g
+         e+Kmzu9VrjXLygeM7Jbq9ozalrIqO/oz8KoybmFuGXIQQBqundQ1lhlaQYueHBq12P
+         RTjAHVHIpuNlA==
+Date:   Tue, 13 Jun 2023 19:07:15 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     "Paller, Kim Seer" <KimSeer.Paller@analog.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        "Hennerich, Michael" <Michael.Hennerich@analog.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+Subject: Re: [PATCH v5 1/2] dt-bindings: iio: adc: add max14001
+Message-ID: <20230613-stratus-earthling-601ed4588cdf@spud>
+References: <20230613093346.60781-1-kimseer.paller@analog.com>
+ <168665154072.1311520.12958978545814613109.robh@kernel.org>
+ <8998c3d3f3ca4f44a5c99594dcb24cbe@analog.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.161.6.196]
-X-ClientProxiedBy: MUCSE821.infineon.com (172.23.29.47) To
- KLUSE818.infineon.com (172.28.156.171)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="aXppyU3Eb1ZEUk4b"
+Content-Disposition: inline
+In-Reply-To: <8998c3d3f3ca4f44a5c99594dcb24cbe@analog.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similar to the transmission of TPM responses, also the transmission of TPM
-commands may become corrupted. Instead of aborting when detecting such
-issues, try resending the command again.
 
-Signed-off-by: Alexander Steffen <Alexander.Steffen@infineon.com>
----
- drivers/char/tpm/tpm_tis_core.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+--aXppyU3Eb1ZEUk4b
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-index a6d1396413a7..7b13ad4bd6dd 100644
---- a/drivers/char/tpm/tpm_tis_core.c
-+++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -532,10 +532,17 @@ static int tpm_tis_send_main(struct tpm_chip *chip, const u8 *buf, size_t len)
- 	int rc;
- 	u32 ordinal;
- 	unsigned long dur;
-+	unsigned int try;
- 
--	rc = tpm_tis_send_data(chip, buf, len);
--	if (rc < 0)
--		return rc;
-+	for (try = 0; try < TPM_RETRY; try++) {
-+		rc = tpm_tis_send_data(chip, buf, len);
-+		if (rc >= 0)
-+			/* Data transfer done successfully */
-+			break;
-+		else if (rc != -EIO)
-+			/* Data transfer failed, not recoverable */
-+			return rc;
-+	}
- 
- 	/* go and do it */
- 	rc = tpm_tis_write8(priv, TPM_STS(priv->locality), TPM_STS_GO);
--- 
-2.25.1
+On Tue, Jun 13, 2023 at 02:07:39PM +0000, Paller, Kim Seer wrote:
+> > From: Rob Herring <robh@kernel.org>
+> > On Tue, 13 Jun 2023 17:33:45 +0800, Kim Seer Paller wrote:
 
+> > >  .../bindings/iio/adc/adi,max14001.yaml        | 54 +++++++++++++++++=
+++
+
+> >=20
+> > My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_chec=
+k'
+> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> >=20
+> > yamllint warnings/errors:
+> >=20
+> > dtschema/dtc warnings/errors:
+> > /builds/robherring/dt-review-
+> > ci/linux/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml:
+> > $defs:qcom-pmic-mpp-state:properties:qcom,paired: [{'description': 'Ind=
+icates
+> > that the pin should be operating in paired mode.'}] is not of type 'obj=
+ect',
+> > 'boolean'
+> > 	from schema $id:
+> > https://urldefense.com/v3/__http://devicetree.org/meta-
+> > schemas/core.yaml*__;Iw!!A3Ni8CS0y2Y!5MOlRhmYJLqPmhR7QmgutQNBKIuJ
+> > Tk_FlMbFGnFd4R9dVxnXWk8rY0woqzhv5YcF58DvBLTrc0FLIB-v$
+> >=20
+> > doc reference errors (make refcheckdocs):
+>=20
+> Could the doc reference error also be ignored? I cannot reproduce the sam=
+e error on my side.
+
+The whole report from the bot looks unrelated & ignorable.
+
+Cheers,
+Conor.
+
+--aXppyU3Eb1ZEUk4b
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIiwUwAKCRB4tDGHoIJi
+0hGWAQDBMUQf5fYToyyK2ziK3qKaIBdkfJFtEBFI7svpxbsacwD/QhE8RvgY8+RI
+qe0m5iczkEYJQWWYVqo2kyMiCw5qJgo=
+=ULmj
+-----END PGP SIGNATURE-----
+
+--aXppyU3Eb1ZEUk4b--
