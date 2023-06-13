@@ -2,134 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9AFF72DD0B
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41BFC72DD0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:52:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241795AbjFMIvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 04:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57816 "EHLO
+        id S241813AbjFMIv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 04:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241090AbjFMIve (ORCPT
+        with ESMTP id S241805AbjFMIvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 04:51:34 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB166CA;
-        Tue, 13 Jun 2023 01:51:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686646293; x=1718182293;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=f8fpX7WbHtQPgDSMHUPqyQBZ/trkXyouBY/M9suBHRw=;
-  b=EHLqwVGIoRISkzonk1xYeHlaaVRhuGv+vSZS4ZYke8V78rXQokJm1fi2
-   RJ/oonUeHLHq/FUxnxOqv6IOIBhYQT4su97Ogm54+RElwNIfIeI8IFlKR
-   q/h6zu4/4Iz6GIGB3CGu11a6uV1lfh2+uodTfRPfb0mOWPMsN3yISBugB
-   XSsXu/m1Rl+CaSN3vPOUf2FjE8NsTiZeDWzYLGhe0DOOHmCjU679MZ5FN
-   o0LoPZM/dfFKVAkigQoNaNQDV4ar/zxJvKjlgE8RsrkQgJFdxlX/jNXhG
-   R/EpbCzmjNv5RGvUSQ1nLfbJpMLnaJOzWwxOqG9Xp7Y6h4SqohmuLMpQD
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="386664949"
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="scan'208";a="386664949"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 01:51:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="824305098"
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="scan'208";a="824305098"
-Received: from inesxmail01.iind.intel.com ([10.223.154.20])
-  by fmsmga002.fm.intel.com with ESMTP; 13 Jun 2023 01:51:29 -0700
-Received: from inlubt0316.iind.intel.com (inlubt0316.iind.intel.com [10.191.20.213])
-        by inesxmail01.iind.intel.com (Postfix) with ESMTP id 731BD19746;
-        Tue, 13 Jun 2023 14:21:28 +0530 (IST)
-Received: by inlubt0316.iind.intel.com (Postfix, from userid 12101951)
-        id 70262104; Tue, 13 Jun 2023 14:21:28 +0530 (IST)
-From:   Raag Jadav <raag.jadav@intel.com>
-To:     linus.walleij@linaro.org, mika.westerberg@linux.intel.com,
-        andriy.shevchenko@linux.intel.com
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mallikarjunappa.sangannavar@intel.com, pandith.n@intel.com,
-        Raag Jadav <raag.jadav@intel.com>
-Subject: [PATCH v3 3/3] pinctrl: intel: simplify exit path of ->gpio_request_enable() hook
-Date:   Tue, 13 Jun 2023 14:20:54 +0530
-Message-Id: <20230613085054.10976-4-raag.jadav@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230613085054.10976-1-raag.jadav@intel.com>
-References: <20230613085054.10976-1-raag.jadav@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 13 Jun 2023 04:51:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6C1188;
+        Tue, 13 Jun 2023 01:51:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC05363305;
+        Tue, 13 Jun 2023 08:51:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9FCAC4339B;
+        Tue, 13 Jun 2023 08:51:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686646307;
+        bh=Fs2TQdypARqaeonb0tIJpF45H+5ETzPPP/OhXKzKJfg=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=Z1ugRPqQAgG7q4ip7dzx+ov4MrcxTdMzqcxqT48GRQbzkZeiwjw0PnWb547BsIhcv
+         qCbTw0jLpG9oYZV8VzjskmU0ri0ZyMV0K+IBsnYJT4PaZpLclPb8hkk0RE4YuEzCRa
+         niRBpSMapLcUCNEJ0M1uILKbwJJcPi/XXBDrbU6ay/AzQdcM3kWFaICDDB3qJzDRcl
+         H4wA1GaRFxblgqutYYUKy4f0zhpbjB/9d2vA0twLy3PzOKJOLBJSxh6wieWtAiE2DF
+         aU+7NC2+1Q248T8bDA9uNefaicnxqhbcIkO7sLvcNRIlycjOebK6VGsWj0YaXFvQ3r
+         1aNYb0ahMjEAw==
+Message-ID: <d9cd1ff3-b537-1481-9453-5b3683d30fed@kernel.org>
+Date:   Tue, 13 Jun 2023 10:51:39 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 7/7] ASoC: dt-bindings: mediatek,mt79xx-afe: add audio afe
+ document
+Content-Language: en-US
+To:     Maso Hunag <maso.huang@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Trevor Wu <trevor.wu@mediatek.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        Ren Zhijie <renzhijie2@huawei.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230612105250.15441-1-maso.huang@mediatek.com>
+ <20230612105250.15441-8-maso.huang@mediatek.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20230612105250.15441-8-maso.huang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simplify exit path of ->gpio_request_enable() hook and save a few bytes.
+On 12/06/2023 12:52, Maso Hunag wrote:
+> From: Maso Huang <maso.huang@mediatek.com>
+> 
+> Add mt79xx audio afe document.
 
-add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-36 (-36)
-Function                                     old     new   delta
-intel_gpio_request_enable                    186     150     -36
-Total: Before=10453, After=10417, chg -0.34%
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
 
-Signed-off-by: Raag Jadav <raag.jadav@intel.com>
----
- drivers/pinctrl/intel/pinctrl-intel.c | 20 +++++++++-----------
- 1 file changed, 9 insertions(+), 11 deletions(-)
+> 
+> Signed-off-by: Maso Huang <maso.huang@mediatek.com>
+> ---
+>  .../bindings/sound/mediatek,mt79xx-afe.yaml   | 102 ++++++++++++++++++
+>  1 file changed, 102 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/sound/mediatek,mt79xx-afe.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/sound/mediatek,mt79xx-afe.yaml b/Documentation/devicetree/bindings/sound/mediatek,mt79xx-afe.yaml
+> new file mode 100644
+> index 000000000000..11ef1cfdf49b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/sound/mediatek,mt79xx-afe.yaml
+> @@ -0,0 +1,102 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/sound/mediatek,mt79xx-afe.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek AFE PCM controller for MT79xx
 
-diff --git a/drivers/pinctrl/intel/pinctrl-intel.c b/drivers/pinctrl/intel/pinctrl-intel.c
-index 3f78066b1837..43e17bc177d0 100644
---- a/drivers/pinctrl/intel/pinctrl-intel.c
-+++ b/drivers/pinctrl/intel/pinctrl-intel.c
-@@ -485,20 +485,19 @@ static int intel_gpio_request_enable(struct pinctrl_dev *pctldev,
- 	struct intel_pinctrl *pctrl = pinctrl_dev_get_drvdata(pctldev);
- 	void __iomem *padcfg0;
- 	unsigned long flags;
-+	int ret = 0;
- 
- 	padcfg0 = intel_get_padcfg(pctrl, pin, PADCFG0);
- 
- 	raw_spin_lock_irqsave(&pctrl->lock, flags);
- 
- 	if (!intel_pad_owned_by_host(pctrl, pin)) {
--		raw_spin_unlock_irqrestore(&pctrl->lock, flags);
--		return -EBUSY;
-+		ret = -EBUSY;
-+		goto out_unlock;
- 	}
- 
--	if (!intel_pad_is_unlocked(pctrl, pin)) {
--		raw_spin_unlock_irqrestore(&pctrl->lock, flags);
--		return 0;
--	}
-+	if (!intel_pad_is_unlocked(pctrl, pin))
-+		goto out_unlock;
- 
- 	/*
- 	 * If pin is already configured in GPIO mode, we assume that
-@@ -506,16 +505,15 @@ static int intel_gpio_request_enable(struct pinctrl_dev *pctldev,
- 	 * potential glitches on the pin. Otherwise, for the pin in
- 	 * alternative mode, consumer has to supply respective flags.
- 	 */
--	if (intel_gpio_get_gpio_mode(padcfg0) == PADCFG0_PMODE_GPIO) {
--		raw_spin_unlock_irqrestore(&pctrl->lock, flags);
--		return 0;
--	}
-+	if (intel_gpio_get_gpio_mode(padcfg0) == PADCFG0_PMODE_GPIO)
-+		goto out_unlock;
- 
- 	intel_gpio_set_gpio_mode(padcfg0);
- 
-+out_unlock:
- 	raw_spin_unlock_irqrestore(&pctrl->lock, flags);
- 
--	return 0;
-+	return ret;
- }
- 
- static int intel_gpio_set_direction(struct pinctrl_dev *pctldev,
--- 
-2.17.1
+79XX sounds weird. Are you sure you are not using wildcards (which are
+not allowed)?
+
+> +
+> +maintainers:
+> +  - Maso Huang <maso.huang@mediatek.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - const: mediatek,mt79xx-afe
+> +      - items:
+> +          - enum:
+> +              - mediatek,mt7981-afe
+> +              - mediatek,mt7986-afe
+> +              - mediatek,mt7988-afe
+> +          - const: mediatek,mt79xx-afe
+
+I already saw AFE, why it cannot be part of existing bindings?
+
+This list is odd. 79xx, 7981? So it is wildcard?
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    minItems: 5
+> +    items:
+> +      - description: audio bus clock
+> +      - description: audio 26M clock
+> +      - description: audio intbus clock
+> +      - description: audio hopping clock
+> +      - description: audio pll clock
+> +      - description: mux for pcm_mck
+> +      - description: audio i2s/pcm mck
+> +
+> +  clock-names:
+> +    minItems: 5
+> +    items:
+> +      - const: aud_bus_ck
+> +      - const: aud_26m_ck
+> +      - const: aud_l_ck
+> +      - const: aud_aud_ck
+> +      - const: aud_eg2_ck
+> +      - const: aud_sel
+> +      - const: aud_i2s_m
+
+Why this is variable?
+
+> +
+> +  assigned-clocks:
+> +    minItems: 3
+> +    maxItems: 4
+
+Drop assigned-clocks
+
+> +
+> +  assigned-clock-parents:
+> +    minItems: 3
+> +    maxItems: 4
+
+Drop
+
+
+
+Best regards,
+Krzysztof
 
