@@ -2,177 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8ACB72EC19
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:42:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B51F72EC1E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230309AbjFMTlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 15:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41030 "EHLO
+        id S231417AbjFMTmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 15:42:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjFMTlt (ORCPT
+        with ESMTP id S231529AbjFMTm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 15:41:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582E012A;
-        Tue, 13 Jun 2023 12:41:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E0BE8635CD;
-        Tue, 13 Jun 2023 19:41:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F0D5C433D9;
-        Tue, 13 Jun 2023 19:41:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686685306;
-        bh=G+owjEHHC7g39g4PWETjU0hB/g9AYANCMLxoyEgCrC0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XQgV+hhS+ECAleGYuB+CPLP0Ld5QU/bG4Psc4t5WopGZOaiJBSDvV8C9L5v23QgZz
-         4KpMLYzQQqV2anRTU6zZ8dKJc15z7BOm57JrrqfnoQjRm+9MXjxLIQ7EQM4BzWTbBl
-         3wTCD9MlL8l+daKEVE77kAlc7MXdlgC50WFJ+DzElyAtwyisqxZgMDNo/JBodCky/J
-         qAbJlJPgVaoJnWT8/eban44iPYdwc35rzJ6toZGG8CahuS0e5NK5DpPyOiv8jIufZH
-         6WfZWpf1/7je0ezmbPoD3gnBhLYHG47HJ9MSL0z9oT+pJiLcoPgnCHoiKHkrG0LK6p
-         WBcKBnBMrhECA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 2CD3E40692; Tue, 13 Jun 2023 16:41:43 -0300 (-03)
-Date:   Tue, 13 Jun 2023 16:41:43 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Rob Herring <robh@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] perf parse-events: Avoid string for PE_BP_COLON,
- PE_BP_SLASH
-Message-ID: <ZIjGd79uWxgRF0og@kernel.org>
-References: <20230613182629.1500317-1-irogers@google.com>
+        Tue, 13 Jun 2023 15:42:28 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630CF1A5;
+        Tue, 13 Jun 2023 12:42:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686685346; x=1718221346;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Lz85jrU6iR9R6CqSIYyzCsTLAAEFjmrL/CeWk5ErFa4=;
+  b=iQQxk6I7l1FBUDdGXqtX1KiKIU1jxMaQ1vHC8W5tFi+LVCEIaUthKohU
+   /83XBqWEpZ+SRbSN70WmSRsQWtmCGAsQmfDA+aXzG2zTeat6yJOFvxmnI
+   il1hKjicb3A+h9jEq9Pie2DPoHrDbUxkLeyLNHiTC2/Wki8dCHvCqHqS/
+   hOTqiN7wecHdXXBn7QOKuxJS5YnVNsNLJ8/DjRl+fgsV0IAH8r7LR4rIO
+   MVs9AtBcnPBAN8vpZ0uKCfCvnAUB2R9kNjqT5EpjYqYD3joFA0A3IyH91
+   BFhSjz5G+EKgA2/9kX+bU5IqAwVvfaj2V8/3W1I44rOAxUPfmEq8NDjAg
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="355935118"
+X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
+   d="scan'208";a="355935118"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 12:42:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="856242508"
+X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
+   d="scan'208";a="856242508"
+Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 13 Jun 2023 12:42:19 -0700
+Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q99uE-0001ia-0x;
+        Tue, 13 Jun 2023 19:42:18 +0000
+Date:   Wed, 14 Jun 2023 03:41:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lorenz Bauer <lmb@isovalent.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Joe Stringer <joe@wand.net.nz>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        netdev@vger.kernel.org, Hemanth Malla <hemanthmalla@gmail.com>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Lorenz Bauer <lmb@isovalent.com>
+Subject: Re: [PATCH bpf-next v2 4/6] net: remove duplicate sk_lookup helpers
+Message-ID: <202306140351.Y1JjOIxo-lkp@intel.com>
+References: <20230613-so-reuseport-v2-4-b7c69a342613@isovalent.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230613182629.1500317-1-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230613-so-reuseport-v2-4-b7c69a342613@isovalent.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Jun 13, 2023 at 11:26:29AM -0700, Ian Rogers escreveu:
-> There's no need to read the string ':' or '/' for PE_BP_COLON or
-> PE_BP_SLASH and doing so causes parse-events.y to leak memory.
-> 
-> The original patch has a committer note about not using these tokens
-> presumably as yacc spotted they were a memory leak because no
-> %destructor could be run. Remove the unused token workaround as there
-> is now no value associated with these tokens.
+Hi Lorenz,
 
-It looked like the compiler was the one warning (-Wother) about args not
-being used, didn't made it clear those were possible memory leaks :-\
+kernel test robot noticed the following build errors:
 
- util/parse-events.y:508.24-34: warning: unused value: $3 [-Wother]
-   508 | PE_PREFIX_MEM PE_VALUE PE_BP_SLASH PE_VALUE PE_BP_COLON PE_MODIFIER_BP opt_event_config
+[auto build test ERROR on 25085b4e9251c77758964a8e8651338972353642]
 
-Anyway, I'll apply and test your patch.
+url:    https://github.com/intel-lab-lkp/linux/commits/Lorenz-Bauer/net-export-inet_lookup_reuseport-and-inet6_lookup_reuseport/20230613-181619
+base:   25085b4e9251c77758964a8e8651338972353642
+patch link:    https://lore.kernel.org/r/20230613-so-reuseport-v2-4-b7c69a342613%40isovalent.com
+patch subject: [PATCH bpf-next v2 4/6] net: remove duplicate sk_lookup helpers
+config: hexagon-randconfig-r041-20230612 (https://download.01.org/0day-ci/archive/20230614/202306140351.Y1JjOIxo-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git checkout 25085b4e9251c77758964a8e8651338972353642
+        b4 shazam https://lore.kernel.org/r/20230613-so-reuseport-v2-4-b7c69a342613@isovalent.com
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-- Arnaldo
- 
-> Fixes: f0617f526cb0 ("perf parse: Allow config terms with breakpoints")
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/util/parse-events.h | 4 ----
->  tools/perf/util/parse-events.l | 4 ++--
->  tools/perf/util/parse-events.y | 9 ---------
->  3 files changed, 2 insertions(+), 15 deletions(-)
-> 
-> diff --git a/tools/perf/util/parse-events.h b/tools/perf/util/parse-events.h
-> index 5fdc1f33f57e..b0eb95f93e9c 100644
-> --- a/tools/perf/util/parse-events.h
-> +++ b/tools/perf/util/parse-events.h
-> @@ -228,10 +228,6 @@ void parse_events_error__handle(struct parse_events_error *err, int idx,
->  void parse_events_error__print(struct parse_events_error *err,
->  			       const char *event);
->  
-> -static inline void parse_events_unused_value(const void *x __maybe_unused)
-> -{
-> -}
-> -
->  #ifdef HAVE_LIBELF_SUPPORT
->  /*
->   * If the probe point starts with '%',
-> diff --git a/tools/perf/util/parse-events.l b/tools/perf/util/parse-events.l
-> index 7629af3d5c7c..99335ec586ae 100644
-> --- a/tools/perf/util/parse-events.l
-> +++ b/tools/perf/util/parse-events.l
-> @@ -315,13 +315,13 @@ r0x{num_raw_hex}	{ return str(yyscanner, PE_RAW); }
->  	 * are the same, so trailing context can be used disambiguate the two
->  	 * cases.
->  	 */
-> -":"/{modifier_bp}	{ return str(yyscanner, PE_BP_COLON); }
-> +":"/{modifier_bp}	{ return PE_BP_COLON; }
->  	/*
->  	 * The slash before memory length can get mixed up with the slash before
->  	 * config terms. Fortunately config terms do not start with a numeric
->  	 * digit, so trailing context can be used disambiguate the two cases.
->  	 */
-> -"/"/{digit}		{ return str(yyscanner, PE_BP_SLASH); }
-> +"/"/{digit}		{ return PE_BP_SLASH; }
->  "/"/{non_digit}		{ BEGIN(config); return '/'; }
->  {num_dec}		{ return value(yyscanner, 10); }
->  {num_hex}		{ return value(yyscanner, 16); }
-> diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
-> index 0c3d086cc22a..9f28d4b5502f 100644
-> --- a/tools/perf/util/parse-events.y
-> +++ b/tools/perf/util/parse-events.y
-> @@ -80,8 +80,6 @@ static void free_list_evsel(struct list_head* list_evsel)
->  %type <str> PE_LEGACY_CACHE
->  %type <str> PE_MODIFIER_EVENT
->  %type <str> PE_MODIFIER_BP
-> -%type <str> PE_BP_COLON
-> -%type <str> PE_BP_SLASH
->  %type <str> PE_EVENT_NAME
->  %type <str> PE_KERNEL_PMU_EVENT PE_PMU_EVENT_FAKE
->  %type <str> PE_DRV_CFG_TERM
-> @@ -510,9 +508,6 @@ PE_PREFIX_MEM PE_VALUE PE_BP_SLASH PE_VALUE PE_BP_COLON PE_MODIFIER_BP opt_event
->  	struct list_head *list;
->  	int err;
->  
-> -	parse_events_unused_value(&$3);
-> -	parse_events_unused_value(&$5);
-> -
->  	list = alloc_list();
->  	ABORT_ON(!list);
->  	err = parse_events_add_breakpoint(_parse_state, list,
-> @@ -531,8 +526,6 @@ PE_PREFIX_MEM PE_VALUE PE_BP_SLASH PE_VALUE opt_event_config
->  	struct list_head *list;
->  	int err;
->  
-> -	parse_events_unused_value(&$3);
-> -
->  	list = alloc_list();
->  	ABORT_ON(!list);
->  	err = parse_events_add_breakpoint(_parse_state, list,
-> @@ -550,8 +543,6 @@ PE_PREFIX_MEM PE_VALUE PE_BP_COLON PE_MODIFIER_BP opt_event_config
->  	struct list_head *list;
->  	int err;
->  
-> -	parse_events_unused_value(&$3);
-> -
->  	list = alloc_list();
->  	ABORT_ON(!list);
->  	err = parse_events_add_breakpoint(_parse_state, list,
-> -- 
-> 2.41.0.162.gfafddb0af9-goog
-> 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306140351.Y1JjOIxo-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "inet6_lookup_run_sk_lookup" [net/ipv6/ipv6.ko] undefined!
 
 -- 
-
-- Arnaldo
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
