@@ -2,195 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDA2372E8BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 18:44:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4299F72E8C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 18:46:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233111AbjFMQo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 12:44:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60984 "EHLO
+        id S233188AbjFMQq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 12:46:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjFMQoz (ORCPT
+        with ESMTP id S229601AbjFMQq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 12:44:55 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461B89C;
-        Tue, 13 Jun 2023 09:44:51 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id af79cd13be357-75d536afa43so72727585a.1;
-        Tue, 13 Jun 2023 09:44:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686674690; x=1689266690;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:feedback-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=IdNyT3h/2Lj1GbQumw7eHKxO5LcFAdyfwGjCcOob+Zo=;
-        b=lTe2j27ro7nHxwhpMNVMaiaqsf4h8H9Q/qLOKjmvScJxCAHq1286pDm9kGwx1Wlvgn
-         xmyViIgptANeoO7AQV2B5sp4LEOOF4lfarWLeXHPIxInTmN+6ryQEUFD/6tu8M1orOxu
-         hZwdlAxBJpy7ljsHMKQIjzPhlgZ28MEq85t+VshZ4QjCeQtGHxzh5pMioiw0BU3UWGsD
-         OYRGhDbbwU7lVsc09Kc+Vg/PLTwpOMB89vA2wUOpyC78UJ5ZIiMLe3ylNprTuYNjLeWH
-         KWImR8JsSnnpr6bzg8QEmOXKdtsV6ua/C8h7fRVX8QtNUfmzk376Xr+D4TBpO3mhJJnZ
-         LRmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686674690; x=1689266690;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:feedback-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IdNyT3h/2Lj1GbQumw7eHKxO5LcFAdyfwGjCcOob+Zo=;
-        b=DzVod5mSYo/G8Tu3Tjx569EtHvq3GunqpM5fAgqGyVt+VbEwItYenQBJhxcjH1z57F
-         Hi9G2SMUm97jlM/dQbUtrTBWbgdejjkqXhfl0MclhLc8vxyBasiCFUoQ3dfGEyW2m4FK
-         14QDk/hU1Ae9/3NAcj8qpNO06dOpn4+tz0KS0vD5Zhnom4YXMyHLcvI8VoDmgQi9M238
-         6pH7i1C6+UvFgNzfuv12Yd5mwN+pGXU4Uimldn8uOHZC2fH2X+L1lNlFxyJvWpttmAve
-         lfooTa9JCkyUbIH44x/hrvtYqB3YRJxy7rVWl29wLmYEgbhP9ju9MCTjnebF5SEg0Wme
-         ohOA==
-X-Gm-Message-State: AC+VfDx99m84V/6xO1SLGMhk9TFExmcuG4bvRVjvmJCjW/hFuiiYCpiD
-        MkBQyQLaA4aYi1fbcPSR61c=
-X-Google-Smtp-Source: ACHHUZ4xnn+16fUiAKlxfeCVeOhanJqobW3OzNkpPJDwLznYPOp0hNxDwK7UD1IIJuplfx+fgqczwA==
-X-Received: by 2002:a37:511:0:b0:75e:b8ae:a4dd with SMTP id 17-20020a370511000000b0075eb8aea4ddmr14101150qkf.13.1686674690343;
-        Tue, 13 Jun 2023 09:44:50 -0700 (PDT)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id c16-20020a05620a135000b0075aff6f835bsm3746625qkl.19.2023.06.13.09.44.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 09:44:49 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 92A5D27C0054;
-        Tue, 13 Jun 2023 12:44:48 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Tue, 13 Jun 2023 12:44:48 -0400
-X-ME-Sender: <xms:_ZyIZCEMpKU3-0FQezo9hIr467C7165mPS6_leTnoG_hcXlBsQdw4A>
-    <xme:_ZyIZDXsIP48kLEAol0ApxB2Ct_MvTYpIUc-IwlXBzEIp5nxs25-ya-_ezy6xkB1s
-    XrMDpMwCJjNLAm63w>
-X-ME-Received: <xmr:_ZyIZMKIeHYCuwQFSbzwClCCq57qpEjQEnWPm28vakOP_Vyw-c4eDwzAlcM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedujedguddtudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeeuohhquhhn
-    ucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrth
-    htvghrnhepfeekieejhfevhfffgfeftdektdevueelgffgjeefhfduheeljeeiieekvdef
-    hfehnecuffhomhgrihhnpehruhhsthdqlhgrnhhgrdhorhhgnecuvehluhhsthgvrhfuih
-    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghu
-    thhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqh
-    hunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:_ZyIZMHy609JHLuw-CGaHlviIaJq9EF5Za9rmGWUXMhgmdiQMbWVMQ>
-    <xmx:_ZyIZIWGv2dL329uWW1nEu3yzcMIY7gSBZFr1cqWNfYEGSzNs25heA>
-    <xmx:_ZyIZPNg6hhPotxbNG4wHr1CSBeNcSROi_GLpyj-5ID9SlkgJfZ_Yw>
-    <xmx:AJ2IZC_t6OmZoq9xsmiOl8jjfC6rLsw97goNv-8JHfsiThOjA6soBA>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 13 Jun 2023 12:44:45 -0400 (EDT)
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        Alice Ryhl <aliceryhl@google.com>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Fox Chen <foxhlchen@gmail.com>,
-        John Baublitz <john.m.baublitz@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andreas Hindborg <nmi@metaspace.dk>, stable@vger.kernel.org
-Subject: [PATCH] rust: allocator: Prevents mis-aligned allocation
-Date:   Tue, 13 Jun 2023 09:42:58 -0700
-Message-Id: <20230613164258.3831917-1-boqun.feng@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Tue, 13 Jun 2023 12:46:26 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61FCC1989;
+        Tue, 13 Jun 2023 09:46:24 -0700 (PDT)
+Received: from mercury (dyndsl-091-248-189-170.ewe-ip-backbone.de [91.248.189.170])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 008AB6601F5E;
+        Tue, 13 Jun 2023 17:46:22 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686674783;
+        bh=GDJl3WvY/KbTnr+TYhBiW/UNNbZLG+jJxvkLPSAAcgY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=X7JCm+F2D+S/FPHx5ID05TKL19ZqQY3UmSvxiAtWOhhFj5eBvaE+sXIsowE0rwv8R
+         YCZ4xzn1XDPaaoBINbZ0r97IDYL8o3XKf/y2MDQgVlqT8Gw79i51CrBo0Deu/1oZGS
+         ybpiNMAwaGZe+qMAG4CrbI9BghuVB9/QCK6t1awEnkYTTMpeQQoENTK6tVjprVXlmO
+         3oKBg50q27qF6qJ+Vluz/c8AuqnwPhXyoGroFGDOVLUTIMppTeIjh5N74NsrqC4FST
+         8f4GylShKF8aY6Lx6KsvECCV/5Zi9eSqGw7SAREqlCJ7AnSacPX1uzNemNtP02UoeX
+         koohaLdx34FYA==
+Received: by mercury (Postfix, from userid 1000)
+        id 4D7521066FBA; Tue, 13 Jun 2023 18:46:20 +0200 (CEST)
+Date:   Tue, 13 Jun 2023 18:46:20 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Vincent Legoll <vincent.legoll@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 09/25] PM / devfreq: rockchip-dfi: Clean up DDR type
+ register defines
+Message-ID: <20230613164620.4ckr4kkedkwzup32@mercury.elektranox.org>
+References: <20230524083153.2046084-1-s.hauer@pengutronix.de>
+ <20230524083153.2046084-10-s.hauer@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="orfr6nckjzplc7bn"
+Content-Disposition: inline
+In-Reply-To: <20230524083153.2046084-10-s.hauer@pengutronix.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the KernelAllocator simply passes the size of the type Layout
-to krealloc(), and in theory the alignment requirement from the type
-Layout may be larger than the guarantee provided by SLAB, which means
-the allocated object is mis-aligned.
 
-Fixes this by adjusting the allocation size to the nearest power of two,
-which SLAB always guarantees a size-aligned allocation. And because Rust
-guarantees that original size must be a multiple of alignment and the
-alignment must be a power of two, then the alignment requirement is
-satisfied.
+--orfr6nckjzplc7bn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Suggested-by: Vlastimil Babka <vbabka@suse.cz>
-Co-developed-by: Andreas Hindborg (Samsung) <nmi@metaspace.dk>
-Signed-off-by: Andreas Hindborg (Samsung) <nmi@metaspace.dk>
-Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-Cc: stable@vger.kernel.org # v6.1+
----
-Some more explanation:
+Hi,
 
-* Layout is a data structure describing a particular memory layout,
-  conceptionally it has two fields: align and size.
+On Wed, May 24, 2023 at 10:31:37AM +0200, Sascha Hauer wrote:
+> Use the HIWORD_UPDATE() define known from other rockchip drivers to
+> make the defines look less odd to the readers who've seen other
+> rockchip drivers.
+>=20
+> The HIWORD registers have their functional bits in the lower 16 bits
+> whereas the upper 16 bits contain a mask. Only the functional bits that
+> have the corresponding mask bit set are modified during a write. Although
+> the register writes look different, the end result should be the same,
+> at least there's no functional change intended with this patch.
+>=20
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> ---
 
-  * align is guaranteed to be a power of two.
-  * size can be smaller than align (only when the Layout is created via
-    Layout::from_align_size())
-  * After pad_to_align(), the size is guaranteed to be a multiple of
-    align
+Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-For more information, please see: 
+-- Sebastian
 
-	https://doc.rust-lang.org/stable/std/alloc/struct.Layout.html
+>  drivers/devfreq/event/rockchip-dfi.c | 33 ++++++++++++++++++----------
+>  1 file changed, 21 insertions(+), 12 deletions(-)
+>=20
+> diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event=
+/rockchip-dfi.c
+> index 6bccb6fbcfc0c..6b3ef97b3be09 100644
+> --- a/drivers/devfreq/event/rockchip-dfi.c
+> +++ b/drivers/devfreq/event/rockchip-dfi.c
+> @@ -26,15 +26,19 @@
+> =20
+>  #define DMC_MAX_CHANNELS	2
+> =20
+> +#define HIWORD_UPDATE(val, mask)	((val) | (mask) << 16)
+> +
+>  /* DDRMON_CTRL */
+>  #define DDRMON_CTRL	0x04
+> -#define CLR_DDRMON_CTRL	(0x1f0000 << 0)
+> -#define LPDDR4_EN	(0x10001 << 4)
+> -#define HARDWARE_EN	(0x10001 << 3)
+> -#define LPDDR3_EN	(0x10001 << 2)
+> -#define SOFTWARE_EN	(0x10001 << 1)
+> -#define SOFTWARE_DIS	(0x10000 << 1)
+> -#define TIME_CNT_EN	(0x10001 << 0)
+> +#define DDRMON_CTRL_DDR4		BIT(5)
+> +#define DDRMON_CTRL_LPDDR4		BIT(4)
+> +#define DDRMON_CTRL_HARDWARE_EN		BIT(3)
+> +#define DDRMON_CTRL_LPDDR23		BIT(2)
+> +#define DDRMON_CTRL_SOFTWARE_EN		BIT(1)
+> +#define DDRMON_CTRL_TIMER_CNT_EN	BIT(0)
+> +#define DDRMON_CTRL_DDR_TYPE_MASK	(DDRMON_CTRL_DDR4 | \
+> +					 DDRMON_CTRL_LPDDR4 | \
+> +					 DDRMON_CTRL_LPDDR23)
+> =20
+>  #define DDRMON_CH0_COUNT_NUM		0x28
+>  #define DDRMON_CH0_DFI_ACCESS_NUM	0x2c
+> @@ -73,16 +77,20 @@ static void rockchip_dfi_start_hardware_counter(struc=
+t devfreq_event_dev *edev)
+>  	void __iomem *dfi_regs =3D dfi->regs;
+> =20
+>  	/* clear DDRMON_CTRL setting */
+> -	writel_relaxed(CLR_DDRMON_CTRL, dfi_regs + DDRMON_CTRL);
+> +	writel_relaxed(HIWORD_UPDATE(0, DDRMON_CTRL_TIMER_CNT_EN | DDRMON_CTRL_=
+SOFTWARE_EN |
+> +		       DDRMON_CTRL_HARDWARE_EN), dfi_regs + DDRMON_CTRL);
+> =20
+>  	/* set ddr type to dfi */
+>  	if (dfi->ddr_type =3D=3D ROCKCHIP_DDRTYPE_LPDDR3)
+> -		writel_relaxed(LPDDR3_EN, dfi_regs + DDRMON_CTRL);
+> +		writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_LPDDR23, DDRMON_CTRL_DDR_TYPE=
+_MASK),
+> +			       dfi_regs + DDRMON_CTRL);
+>  	else if (dfi->ddr_type =3D=3D ROCKCHIP_DDRTYPE_LPDDR4)
+> -		writel_relaxed(LPDDR4_EN, dfi_regs + DDRMON_CTRL);
+> +		writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_LPDDR4, DDRMON_CTRL_DDR_TYPE_=
+MASK),
+> +			       dfi_regs + DDRMON_CTRL);
+> =20
+>  	/* enable count, use software mode */
+> -	writel_relaxed(SOFTWARE_EN, dfi_regs + DDRMON_CTRL);
+> +	writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_SOFTWARE_EN, DDRMON_CTRL_SOFTW=
+ARE_EN),
+> +		       dfi_regs + DDRMON_CTRL);
+>  }
+> =20
+>  static void rockchip_dfi_stop_hardware_counter(struct devfreq_event_dev =
+*edev)
+> @@ -90,7 +98,8 @@ static void rockchip_dfi_stop_hardware_counter(struct d=
+evfreq_event_dev *edev)
+>  	struct rockchip_dfi *dfi =3D devfreq_event_get_drvdata(edev);
+>  	void __iomem *dfi_regs =3D dfi->regs;
+> =20
+> -	writel_relaxed(SOFTWARE_DIS, dfi_regs + DDRMON_CTRL);
+> +	writel_relaxed(HIWORD_UPDATE(0, DDRMON_CTRL_SOFTWARE_EN),
+> +		       dfi_regs + DDRMON_CTRL);
+>  }
+> =20
+>  static void rockchip_dfi_read_counters(struct devfreq_event_dev *edev, s=
+truct dmc_count *count)
+> --=20
+> 2.39.2
+>=20
 
- rust/bindings/bindings_helper.h |  1 +
- rust/kernel/allocator.rs        | 17 ++++++++++++++++-
- 2 files changed, 17 insertions(+), 1 deletion(-)
+--orfr6nckjzplc7bn
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
-index 3e601ce2548d..6619ce95dd37 100644
---- a/rust/bindings/bindings_helper.h
-+++ b/rust/bindings/bindings_helper.h
-@@ -15,3 +15,4 @@
- /* `bindgen` gets confused at certain things. */
- const gfp_t BINDINGS_GFP_KERNEL = GFP_KERNEL;
- const gfp_t BINDINGS___GFP_ZERO = __GFP_ZERO;
-+const size_t BINDINGS_ARCH_SLAB_MINALIGN = ARCH_SLAB_MINALIGN;
-diff --git a/rust/kernel/allocator.rs b/rust/kernel/allocator.rs
-index 397a3dd57a9b..66575cf87ce2 100644
---- a/rust/kernel/allocator.rs
-+++ b/rust/kernel/allocator.rs
-@@ -11,9 +11,24 @@
- 
- unsafe impl GlobalAlloc for KernelAllocator {
-     unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
-+        // Customized layouts from `Layout::from_size_align()` can have size < align, so pads first.
-+        let layout = layout.pad_to_align();
-+
-+        let mut size = layout.size();
-+
-+        if layout.align() > bindings::BINDINGS_ARCH_SLAB_MINALIGN {
-+            // The alignment requirement exceeds the slab guarantee, then tries to enlarges the size
-+            // to use the "power-of-two" size/alignment guarantee (see comments in kmalloc() for
-+            // more information).
-+            //
-+            // Note that `layout.size()` (after padding) is guaranteed to be muliples of
-+            // `layout.align()`, so `next_power_of_two` gives enough alignment guarantee.
-+            size = size.next_power_of_two();
-+        }
-+
-         // `krealloc()` is used instead of `kmalloc()` because the latter is
-         // an inline function and cannot be bound to as a result.
--        unsafe { bindings::krealloc(ptr::null(), layout.size(), bindings::GFP_KERNEL) as *mut u8 }
-+        unsafe { bindings::krealloc(ptr::null(), size, bindings::GFP_KERNEL) as *mut u8 }
-     }
- 
-     unsafe fn dealloc(&self, ptr: *mut u8, _layout: Layout) {
--- 
-2.39.2
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSInVsACgkQ2O7X88g7
++pripQ//XMW4zu69nZFG4mV3sjACP5kQia6Tr0QutsUveoANz/NWztN/pbXupClb
+Y/CgXQODHPSVLH7zzKdj1hVS7XmIvkLxsay8p8fHCp7g71egEpb/UDF0sA80ExML
+6AMiVGopNGpWGZWolqexnmxbMrHQXsyjgOAyTKwDYkkKBGsIgfkwKWCQiAu//2AL
+VDAAvQOOqkXrh3hq/6DZHNapEKS3qNPE/n5yebjE5+7qBuUFhxz0V4KrpNxP6GU+
+69BE6X9KIvK0Px2J88rk8mF+fDVIlm89M/SdvPUSW/omDOnXWfgWzr6DEo0PJ5uu
+mRY4QJkHBftHySqLen9MQgRntPMY+dtKjIjb35gaWOT0elhN8MInKNlbSO8ljxRM
+AFyP3P/Ue7IKAPt2sMQbMs1ePYLvuI9eSiYHHCLVcC3k6WRI4b/ucC2MxBCkAIPD
+3DBu2C67xGGP2INn0NgLNzXUcwePg5aZPFeTcGgY/sUUyau8qJROFR9Gs4cuNZ6F
+zbCy0QO+Lp46j1Ty3cQIZswcTbxUrNsmNS/Peit+hL2YgWE2qO2AfZwa+LuJ9Uww
+04WMCCTgwuBSp6tyzjUZAPvpNyPN2nYVS7tFiDBGJj4H88ptCzIfw+TZOeG4XMUS
+jZ888YFkyePKOISUOKuaAwc5N2GNkJU1kawDDJc2OtEjSauhXFA=
+=KoZi
+-----END PGP SIGNATURE-----
+
+--orfr6nckjzplc7bn--
