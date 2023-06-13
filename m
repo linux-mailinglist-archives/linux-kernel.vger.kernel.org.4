@@ -2,200 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6D2D72DA72
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 09:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D2F672DA79
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 09:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238727AbjFMHH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 03:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51578 "EHLO
+        id S234428AbjFMHKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 03:10:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234662AbjFMHHc (ORCPT
+        with ESMTP id S238008AbjFMHJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 03:07:32 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39E0268C
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:06:40 -0700 (PDT)
-X-UUID: d5e621de09b811eeb20a276fd37b9834-20230613
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=Jw95RLs2zM8ZEyb0S2VMu+ldUCbhVLAPdFCYSODB93Y=;
-        b=EYixz2Xhxg9ZcpnVhMsf7Llf2sSYSv6Hz78UooILk/l52FsUi1YjScEPaBCQecLsMNK/b/3CWj9LXBGRvAlzoLEvnVjT/f2PZ4AZUNxuAXH+N5T5/Zn1tHe0T+qrLUwmf8nqT/nh1d6grXSftVp+mA4jGGP29wazCoEcOP2GprI=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.26,REQID:b337d20f-bd15-418d-b1cd-79b9fe78728f,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:cb9a4e1,CLOUDID:f765733e-7aa7-41f3-a6bd-0433bee822f3,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: d5e621de09b811eeb20a276fd37b9834-20230613
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <jason-jh.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 342922520; Tue, 13 Jun 2023 15:06:36 +0800
-Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 13 Jun 2023 15:06:35 +0800
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (172.21.101.237)
- by mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Tue, 13 Jun 2023 15:06:35 +0800
+        Tue, 13 Jun 2023 03:09:07 -0400
+Received: from CO1PR02CU002.outbound.protection.outlook.com (mail-westus2azon11010005.outbound.protection.outlook.com [52.101.46.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F7E1FCF;
+        Tue, 13 Jun 2023 00:08:27 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mJjFWfgKtnmHMgIRW7DU078ZH5oRWvLIFT2G8+/wbxZ6mfhHW3vkdrEZjyf2DS3Df1t8C2AWSnZIKKNj4wobjHTaShrFK6Ln5BQS8/MRKGMRFRujdREHOHiqs/mc75nkK+bS4/na0ijxnui74rrW/mXVSiWPtXpwDtK0GHTBasLPZG3bCYhU8E/OAiIJDctR/KH6d/kTppFrpSyfzSgNPV1WbgRcAZqkjMqfVHx/dMcvQha7IDqU1WwHq3gCT0YsijDzUGhBlr5Bc70Na0DDxcqThcVbHszQm3CQtrJDZNwJRDMi2O43kM0PCbR3WeOixQgim7xWi9TpWnjoQCMKyQ==
+ b=T6geNLCCtpcOgToKe5FwvmoJz7Qyqr77qtOZZJcEN/Og7GktuSzpRQRoQiYK30ma5Bq3AVQOOac/e8EdEFQcC/a1ndUgSrG7gjrN9G73lAQCeFOu0LKkZ4u4MZg0U9KX1T4Q8XsPWlMLZzQCk5fmcsS/9NQd1zBEPJhAzDZkasGJKGSmIWpaueFJH/XiqTOwYbQdEDNz9A1au4guVtEZryCPGklnQUy/+6H/TthGlpVBxzW7LnfbpRk7aZlVui1/U6aJ0RD3U9xp/3V+BoyDmAbR7dAyM2ui+omZZGlyTLEwoo+4OnFjQfWXzvAAv35HcUERgwrMFyCNWBizBp8ugg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Jw95RLs2zM8ZEyb0S2VMu+ldUCbhVLAPdFCYSODB93Y=;
- b=PCAB/Y1Pj11ykkbUTBl0fYf5rS6fKNEs6h7868/zJRC58ie/y6wPhJuRco1EBkJUOvvhoVqDwgdM7TRCGH4fd2PPJv2IHXtSVV5yNfAFuHrMWKLqgXvYuMxr57kfKXhPM6ZxVd8LxbO7u4j7Gs6U70SzJcujNQ9WwIjhSoMXby90dTJX3zP2w6qtrWqeSrLtKmrOXQ7nf5IgsX58yROz6HL5l14EgS/gqYq1ppajGhumnMoMIKGbJ9mKR7nDPsv5M2WzopcyTnPrAlnviu5y2Cbjb6JtzhVD8QmHhwHZt+noH7xjK3wjPCTch5i3kxyQ3sf8mBv7mmZy52gacroN5Q==
+ bh=j2T46ayk/KmwMZw45gKkOA58dpE5dqcLAdSxSgf0hqo=;
+ b=Zd0g0pf0+wN1fUvshb3K8tUfAJ+R21rEB2F/t/BWmYS6zcbJqaOalgVeA+wZ9OIi3DbwERfAbRCseu+mnaLjEhildZDGLWEUuogbHm9+gZ/3TtMQTw363XspmRg0jw89n/9fOn9Jzjxjt7WX03d9AnqM+K5zuNLdd2mO6wva2SMkaELRjYeISF+jGGk4zQwBzDyhRN5UJJOwP93SCFhmcsOl9wHrup5x+bZLvQf2iibwUo2FPIYyvhUzsZeIrSQjvYoEJwk/6mVn22+pC6IysJ7L9rxKq6hdCZRlXEfBdlrOUDn7NM+B7Br6ZiYOOCz23tuAm5MglbR/eFRxiaILdA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
- dkim=pass header.d=mediatek.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
+ smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
+ dkim=pass header.d=vmware.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Jw95RLs2zM8ZEyb0S2VMu+ldUCbhVLAPdFCYSODB93Y=;
- b=Zk0U7Pd+RiaDwgGB0BdIF0YwBvdKGoiQcYdNI0ynMazgJ7mtzzJTKf8jdJmAZU2h7klL8wws8e/N0sWnQGCc+zWDVhnZwejAaSOGVR2Opze//vsGnda38D+7rikcrd6OeDLyan8VTOp0Wp+aD/9qdKXowuMElqHA3nU4yshNbqc=
-Received: from SEYPR03MB7682.apcprd03.prod.outlook.com (2603:1096:101:149::11)
- by TY0PR03MB6949.apcprd03.prod.outlook.com (2603:1096:400:277::11) with
+ bh=j2T46ayk/KmwMZw45gKkOA58dpE5dqcLAdSxSgf0hqo=;
+ b=UNMxzuqbl9rdZULq3YDRtMHETwfY2WEkidsTpmo0m+DZNrIh6PIQJA0fSmH80KRRkIyrbrMEPpgevL2v7DfddfLkTuXD0rKQzp9jBnKmFKNpx0ewGUjJ6Jhpo3kQmlRyx4yh/tbJhBs5C6rZCmz/4UeBxGUTiFowTyBHJ1ft0Io=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vmware.com;
+Received: from PH0PR05MB8703.namprd05.prod.outlook.com (2603:10b6:510:bd::5)
+ by SJ0PR05MB7643.namprd05.prod.outlook.com (2603:10b6:a03:2ab::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.44; Tue, 13 Jun
- 2023 07:06:32 +0000
-Received: from SEYPR03MB7682.apcprd03.prod.outlook.com
- ([fe80::8b05:4869:405a:924d]) by SEYPR03MB7682.apcprd03.prod.outlook.com
- ([fe80::8b05:4869:405a:924d%4]) with mapi id 15.20.6455.045; Tue, 13 Jun 2023
- 07:06:32 +0000
-From:   =?utf-8?B?SmFzb24tSkggTGluICjmnpfnnb/npaUp?= 
-        <Jason-JH.Lin@mediatek.com>
-To:     =?utf-8?B?Q0sgSHUgKOiDoeS/iuWFiSk=?= <ck.hu@mediatek.com>,
-        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        =?utf-8?B?U2luZ28gQ2hhbmcgKOW8teiIiOWciyk=?= 
-        <Singo.Chang@mediatek.com>,
-        =?utf-8?B?SmFzb24tY2ggQ2hlbiAo6Zmz5bu66LGqKQ==?= 
-        <Jason-ch.Chen@mediatek.com>,
-        =?utf-8?B?U2hhd24gU3VuZyAo5a6L5a2d6KyZKQ==?= 
-        <Shawn.Sung@mediatek.com>,
-        =?utf-8?B?TmFuY3kgTGluICjmnpfmrKPonqIp?= <Nancy.Lin@mediatek.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        =?utf-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
-        <Rex-BC.Chen@mediatek.com>
-Subject: Re: [PATCH 1/5] drm/mediatek: Remove freeing not dynamic allocated
- memory
-Thread-Topic: [PATCH 1/5] drm/mediatek: Remove freeing not dynamic allocated
- memory
-Thread-Index: AQHZaRzTAcuXVQUCF0umvPb9BnZJW6+HN3GAgAGBfoA=
-Date:   Tue, 13 Jun 2023 07:06:32 +0000
-Message-ID: <6c5fe5f4c6e82dec6613317933ce43ade11ff332.camel@mediatek.com>
-References: <20230407064657.12350-1-jason-jh.lin@mediatek.com>
-         <20230407064657.12350-2-jason-jh.lin@mediatek.com>
-         <2ff94f781b17c25229d547e763f74ef43aac35f6.camel@mediatek.com>
-In-Reply-To: <2ff94f781b17c25229d547e763f74ef43aac35f6.camel@mediatek.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mediatek.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SEYPR03MB7682:EE_|TY0PR03MB6949:EE_
-x-ms-office365-filtering-correlation-id: 463c4b34-7f5d-4c85-71b5-08db6bdcb7c3
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: pFYt6okh15uZYAep6kTyZhXb0Kwjn3HHeRnxQC1ud20rWAwHDlTP5B14kzBennAMhJsbaCdzly5NdrMludD/GTfXtkXOFZU2k5wKmCWSkh5KUPSwTeo24VtX5DoW//w1lh/ym2idrKkG7xDhBYAo9HoDGadYitivLc59/OX6fIIHC4J8ZducOh4W2b5N7BHqgoZRirwJm8xebEZGZpvpbbb22usP8/OK3nQGB2aBTIIqdWnW4EYPnqzhRlfRUZTVCirJEIiL3JtLfeP4eGY1/G1MGgM4k2S0qOlKReWoW1WEXABs/eNGtP7xEGvSI0FNivJ773jNj5iwluOLTjWf2cpEKaC67XIIkmat1fsQrP4DDotNqXIgKOfQWM09VSV5vEd1dHnZt320FQdxuMV73qGaXNFIDbJ7/i9GqB3XkYyH28N2BdZN4DLNoKN0zzul0G1qnh9N7Jg4LZaOH23cWUkVTEQUoHiaQq9WjNWzW2r6uTRZ2lgxCRTbA9geZm7kq5LEqo1pPlu5XIIIP1WhiD31jhO1mTe5+ft2QPAbKWjy0yhP3veOHs7/p4LCOF+OB/q+NiBKapkUcXn1Xtpud28nekpHNUHvVsd/9WuiV14=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEYPR03MB7682.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(396003)(376002)(346002)(366004)(451199021)(54906003)(66946007)(76116006)(4326008)(91956017)(66476007)(66446008)(64756008)(66556008)(36756003)(186003)(478600001)(110136005)(2616005)(2906002)(8676002)(316002)(41300700001)(107886003)(86362001)(6486002)(6506007)(38070700005)(71200400001)(122000001)(8936002)(5660300002)(83380400001)(26005)(85182001)(38100700002)(6512007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Rm5HTzJralR3VjcwQWVFaDBXR0xyQXVXUWZhQklnaWpZWUYwSkZ2TndJVlZN?=
- =?utf-8?B?dFoxV2cxU2tyOFJRSFNGVEhmK01TUWtVaUR2R3JMNmV5ajlScG9GQ1Nybloy?=
- =?utf-8?B?WHhLNEJVWDc1N2JWRHNHT3pMUFpQNVovOHJOWkFMVTFPR2hsNHhIOGswTnZl?=
- =?utf-8?B?NEJVNHB3ZzV2Uk1PWlRpVHJrM05xYUZnNUcvTm9ySEYzS0pLTCtWYTQ4ayt0?=
- =?utf-8?B?S2dOb0s0MW5WczFTaG13K0pucFhBUVJjalFiM1gvbVNEa2htN1dkM0hxQ21M?=
- =?utf-8?B?ZlpkUksvLzVOMmhUNVEwK3JNbmxUVi9ZQXhadjFPaDh2NTE1VjZrc2drU1g4?=
- =?utf-8?B?SG5YR2lUdUQyWlZIZHpEc2s0a1JHSmI2ZGlkVnpjWTJLbkJWZ25LVmZMUGdn?=
- =?utf-8?B?Wk1OWklkclkyNS9QdEZKeGpmQXk4WEwyRjZKQlRRb1FydVh3MDZXOWpMUDVk?=
- =?utf-8?B?K0Z0TXN1VW9PSDJqSVRXVWdRdE5INVdDTFNzZEpZQk9iZzdGYUpEVDlId0I1?=
- =?utf-8?B?NUVjYWR2NHliMXBwVmo3U1N3VHMyV2QrTkJvZ1A4TURydWhQQklLNk1XWEFF?=
- =?utf-8?B?WGRadmxGOUZJelFuUXBlTXBvRmxJc1hXdlNUREdoeFU0NzVWeDBvakxOM0V0?=
- =?utf-8?B?N1IrNEs0YkVOODBuUVVYbTJoRlpFMzZiNGNjSFdYaVg1YzhsTnBhRk13UFhY?=
- =?utf-8?B?ZXpFUElRSU1MbGp2eis1Tmo1YTNrTmV3ckgzUExQemp2dHhrVkJaanFrcVJY?=
- =?utf-8?B?TVdEcEpxYy9JOFRLSmFQU2hobytLRFAxOHNEU3MzdzBua0llOFhYVUh4Mm1p?=
- =?utf-8?B?TDdUSEJXTXU4a242dE9HZjY2blBtVG5RY3lnVnM2VkllOGJzSkZWYUtCVm81?=
- =?utf-8?B?Zjk4RTEwbEJQdHBoWnpEZmtncVhseFpRZm9PVE9xa1orb1FBMktNUkJ2Nk5s?=
- =?utf-8?B?d215WGY1QzEzUnM1TGkzODJ1dWZuVXpBWFdHY2tzVnR6NkxXZC95WGJoU0pV?=
- =?utf-8?B?MVRibVAzMHZNZUVQV2t4ZEIralUvS3ZsQ2pxNXdiRFh3Z2N3RFgzazM4TUo3?=
- =?utf-8?B?NmlEZUpneGV4R29qMTU2eUJDVDF6clpJTzZLTHlMYTROWElDL25OcnNkNGUx?=
- =?utf-8?B?czFFQWllMlRaNEV0Z2Z4RXRmV0hhUUUzZDYzbHpTeCtZMlVzM3ZyRDlva1lJ?=
- =?utf-8?B?a0YxRnkybUFLUWh2WVlnaUVWdFVjZmE5WTdhZklLSGlQY3pCVWtiWnBueTdB?=
- =?utf-8?B?aXJ2OUE3N1ppMWZ2cUkwdW13bktVRkR6SmlJUTdpMFdTME85SmczOE5kNWt4?=
- =?utf-8?B?SWRJMjJpQmsvOW9yU0krQkV4V3U2c3puQXEyN0FSNG5MUmhtbzlOTTFxY3B6?=
- =?utf-8?B?Mm1LTVJPVG5jdEpRd1NLazhjaWFaQlNjSm15ZWtRbEJ4MVg3ZStoM1l1MmVi?=
- =?utf-8?B?RUZqYVMxanU0MkdRSTh2M2hXK2d5cGFCLzJMVU1LZURMc3dmQlo1L1lIK0RF?=
- =?utf-8?B?Snp4U3ZBdmJnZGZSOUFKK3h5RmNtVUF6Z1NxZmZVL3djbkJJRWg4T3owTmF2?=
- =?utf-8?B?YUx1dzU4cjArQVRvaFFVTmtScUswd2xwR01DcjlUcEplelhsZzZNcVZFMjkr?=
- =?utf-8?B?WE4zK0tlNDU3RHowM1YybGUyNmFKcWtJZ1ZUZ3V1RDhVT1piVWd2WTdRbnJo?=
- =?utf-8?B?MWJDRVJHQ29vWUtCN0lWdjhvRDIrOGllcXpISTdlTFU5K0gyejNMWmRuVGhm?=
- =?utf-8?B?cCtBY2lZb2JiaGNwdVVEZFpXeTdrZllNZEpjTW9IKy80ZWdDRmkzNFVpSDg5?=
- =?utf-8?B?aXcvcWc4bUh0Q1NMUjQya1VtdC9Ia1BGOVRybDNTbXJYMStod3dDMWlWMFcw?=
- =?utf-8?B?OHc3UVVEV011aHBXZ3N3WnVzNEt1M2djQlRCdEFvOWIyYkJYWENSdVgySkh4?=
- =?utf-8?B?K01VNjZTZ2FGbVBvc1g4ekFqajNtRXdodlhOcjBtak9nTlpPeEJodWk3WFd4?=
- =?utf-8?B?eElmN0sxSXdsNDVka2Z0dEM2QjhuWEI5TnBxK1g4UllzcHl4cFo2dllIckRC?=
- =?utf-8?B?ZE5oazJMbmNUaUZvdjd5U0xJY1piOGc4VWhlSmJLTU5adnIraVlQamwrN2Q2?=
- =?utf-8?B?TTM5L0VmcFpBU0gvVXlFMkJkcHV1ZEhaZDV5cURvalVGVlpHUHpNLzMwSWpr?=
- =?utf-8?B?K2c9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D26148B6B347C344AF1F8A7A27E48D24@apcprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ 2023 07:08:21 +0000
+Received: from PH0PR05MB8703.namprd05.prod.outlook.com
+ ([fe80::4f1a:ecac:2dab:7044]) by PH0PR05MB8703.namprd05.prod.outlook.com
+ ([fe80::4f1a:ecac:2dab:7044%3]) with mapi id 15.20.6455.043; Tue, 13 Jun 2023
+ 07:08:21 +0000
+From:   Ajay Kaher <akaher@vmware.com>
+To:     oliver.sang@intel.com
+Cc:     akaher@vmware.com, amakhalov@vmware.com, chinglinyu@google.com,
+        er.ajay.kaher@gmail.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, lkp@intel.com,
+        mhiramat@kernel.org, namit@vmware.com, oe-lkp@lists.linux.dev,
+        rostedt@goodmis.org, shuah@kernel.org, srivatsa@csail.mit.edu,
+        tkundu@vmware.com, vsirnapalli@vmware.com
+Subject: Re: [PATCH v3 09/10] eventfs: moving tracing/events to eventfs
+Date:   Tue, 13 Jun 2023 12:36:44 +0530
+Message-Id: <1686640004-47546-1-git-send-email-akaher@vmware.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <202306102230.b5aa258d-oliver.sang@intel.com>
+References: <202306102230.b5aa258d-oliver.sang@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SJ0PR03CA0243.namprd03.prod.outlook.com
+ (2603:10b6:a03:3a0::8) To PH0PR05MB8703.namprd05.prod.outlook.com
+ (2603:10b6:510:bd::5)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR05MB8703:EE_|SJ0PR05MB7643:EE_
+X-MS-Office365-Filtering-Correlation-Id: b0cede16-9e55-47b3-b726-08db6bdcf8bd
+X-LD-Processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vcnX8vDcf8CukPVf78HNbwTy2gQqITU/MjU18S8Ddby1bp1h2VMSfDIYuKYkIu1AVGjnl6PUyz1kQHR5bqnnhGLrrcmDbvrV7kLW8+2729v7WqHJIWwCL5tj5B087Vlwr22vShv2PD0ozSqs8pMbYMGrzlDZIQ22MBIwJQV7VveMVHPCFhM/kislgAmVlV7d3hzS6qumlJ49dlhV0rczGujlUWSJbMiVqV6/+dQQ95aY5Nx060AqlBRfYy3YFEYSG+Nm9ztzjCHmqROi+lzm32Hy9eUerfeFa4YUi8oJVX4+9BEbPc0e6imhz0wjxnZcYTYUgwq1lEhPwxFoOtYY3n/TOXWYov1IWe+78eIRvCnT0+S27EKELbdyGF1qQisV+29BBZbinis0qJwi65LkSR0Ers1wA9iGPRQ47P2rOQWfGtgPacH359FsA74UyoC5qbCzWPkaxHPhFXP4aMDTMLJ7VbxhRiBboRf0R2htybK9Kn7LfbMus20eIuY4n0VEPkbU6a5KC711H39PYG06YCPKxdlBeCXlumv2wOvXvMeEjNDsPZSwjL9BtW/yqWQT6O1a00PppJGRdYKKVzXT3h8B86XjJthxAI6FcRg86L8O8OFwCxhunO9u/klQM/cxPjDT+DPZFqDggRQcPbap6bg91VEITOUfauDe2/Jao199G4nLHpMbkfCSQpVDwfudILS0RDx+mGviDmyaqHLG0A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR05MB8703.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(39860400002)(346002)(366004)(136003)(451199021)(5660300002)(52116002)(7416002)(8936002)(8676002)(2906002)(66556008)(66946007)(66476007)(6666004)(966005)(6486002)(4326008)(107886003)(26005)(6512007)(6506007)(186003)(316002)(41300700001)(6916009)(83380400001)(2616005)(478600001)(36756003)(38100700002)(86362001)(38350700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OGVqYnFMQUFXV241NWpqODQwaVFuRTVkNktRN3dLdEh3RmVOMURaRU1lREdP?=
+ =?utf-8?B?YmFYR1pPbXQ3U1grckMzelNrMGdtaDdsMGhBU3BBZmM5S3JzWlRIZDZibkJ5?=
+ =?utf-8?B?YUh0VnErejZoSUNYYTg4bVArWGg4QmlzT1hkZWttNy91bVJWUnhESjlhOXNH?=
+ =?utf-8?B?TUErbzc3YzJoUmV3NHkvdlJUclllcTJSUXZDVGE1c1JJd2lHczArekR2aDZR?=
+ =?utf-8?B?bFV6bkFndGZ1TEV6TVp2eU12WCtta3Y0WHFBcUlJWTZ0eWt1V0xVb0xpelBT?=
+ =?utf-8?B?UktVOElzcW1QR2dLYkZTWDBWeEl1SDRqcGEwYUhjL052OFhWMjlTbzRzbjRJ?=
+ =?utf-8?B?aHlONkExMHVhTHRPci9OMkQzZnh6TGUrdG9LYW5ma0U5RitwYitIWXAwTjEx?=
+ =?utf-8?B?NnczcjZUR0hQZFV4UnE0NjRGUEdEam00SS9NOUxab2xvK2UzQWVXZ3hxL0JZ?=
+ =?utf-8?B?Z3lLRXRGTWdueUpHN1FRcFpTdGRocUh3M0wwR3lxN1NLTWVWRW9nVHNSNDZT?=
+ =?utf-8?B?bHA2bm5NTG42a0wyd0p1ZWl5RHc5WU5VZ3UwWjdOUHJaQW1kUmNjK1E0MGR5?=
+ =?utf-8?B?MzhLSlhWa2ppZk15RHhrNnl6N3ZFQmFVd2Y3dUlFc0JsRkdCVFdScEpPRzgx?=
+ =?utf-8?B?MkFza1EzNE9lTXZIcnNGTVpzb1V3cUZaMzFyTGVwdlNtVXZnZzc5eDVHRTNi?=
+ =?utf-8?B?MjFsMHgzeXRpYVdodzVGWFNBYlFLZEJhclFxZS81TGJwZThKTzlxdE9NUUNo?=
+ =?utf-8?B?NzRoT1ArOHNXN2MyU1hQVnE1NTNXVGQzcTcrTEFOSjhyYWdNTnlRVmZsUVA4?=
+ =?utf-8?B?dVZIa1JaQVU4bzNTM2xDVW5jdWk5NVFQVUJ2bHNrZ29kQnRIdSs1QW9rbU1E?=
+ =?utf-8?B?cDVpQUplSUR1YXFJVDRVK2xEcVlsMEN6WXdENC9tL1YvV29QM3JVVnhyRnds?=
+ =?utf-8?B?TFB0SXByRVh1WUFHYnJZYzVOdlRzVWlTNlNUVWdZZXNkL05kQTh6QXRVZ0tx?=
+ =?utf-8?B?NW5JSzllNzdqN29Cbzd3Rkh5UFJtN0NLUTBmTHRvRHkxbDF5VGFZRis3anh5?=
+ =?utf-8?B?RHJockdabkFWUVF5aWZBcTFEUTFuamVwZVBpT3FvZW45eDlvQW0xMGY5T3JR?=
+ =?utf-8?B?RStVZ3JiV01DUm1TcDFHM0dPRHl4cDRHTkc3QW9Yby9qSFZnRVc2NHVLL3dw?=
+ =?utf-8?B?eGFaUjdLOVhid29GV3JjZ3B5bnkwK3VBOHhhYW01dUVjRFlmSnhyZEVVeE5M?=
+ =?utf-8?B?VDh6clhlS0NwU2VtZmFGN1VRdnJURlR6TFlaZGh2akt2YUQ4dnk1Q1JaM0pJ?=
+ =?utf-8?B?Y1BDTzZTTFB2VkowNDhLOEV2Szk4aHJaZU1jbUhEaDdDcU1BcGJla2srT1RL?=
+ =?utf-8?B?WXJqU2VxME5Wc1YwZHREOFgxR0NHcVRGNytHVFQzd1pxUlVyUGxSV3NIWDM5?=
+ =?utf-8?B?VldXSVcrSHppTFZkRHdCL0VaZFl1dUkycDJpbmxYalgxcHFOeDJJMUd4VlpB?=
+ =?utf-8?B?T1Z4S3pXWlhweFJJdWxKcFdPdHVYZ1k4RElGM3BjdXY5akZOdkdYSGFHMjVU?=
+ =?utf-8?B?elNZd2ZVWTVOYnlVbjZnak1pK09zS0dIT01IeU9BWDQ1MEgzS1NrWW5RZ01a?=
+ =?utf-8?B?bWt1VnNwVkVoRk84UXM5eFdHekFNbXNRQy94TXMvZG1yQ1dSMVB6VmpnWDls?=
+ =?utf-8?B?WXhhOGtsZlBIN3MvTXQrN1VUdlVVZXZMMjdnckZnMWlTM2ZuUWpRbDdxRjJV?=
+ =?utf-8?B?eEFlS1grN1k2LzB4Vno4Z1M5a3dheFdHMU5kWmVpK1lzbEtxS0ZicVFVTlJY?=
+ =?utf-8?B?ZURLZXJtSFlJcnFVdEIzbThVeEZ0eEVOaDY1VTJTaEl0NkRqMk9jQk5ObFI2?=
+ =?utf-8?B?dDk5bEFYaXRBcXord3ExZCtsT01BQlk4WDFsT3A1UlphMG5BSHJXTGpLR0xx?=
+ =?utf-8?B?SjRxQis2Ry9Kdjk3K20wRlhTZUpWS1dweFhVSjBvRk9aeE9YWUZXQjJId1Ez?=
+ =?utf-8?B?a2p1ckNBaXBSNGVudVlDZGZmSHdiUzZER3pkTU5VRUhJY3dleDFQTGdXSUxZ?=
+ =?utf-8?B?RFZNUzJiZUdWeWRKM2FVaTF1cmwzeU5SUjNjSFFXamI1TXNYQkZhSDhFemdT?=
+ =?utf-8?Q?EPrnklCem/vF2dZpryueOyIaO?=
+X-OriginatorOrg: vmware.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b0cede16-9e55-47b3-b726-08db6bdcf8bd
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR05MB8703.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SEYPR03MB7682.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 463c4b34-7f5d-4c85-71b5-08db6bdcb7c3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jun 2023 07:06:32.2899
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2023 07:08:21.4934
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: f4gIJpZi8ojWJRiRKm7oQIr9nzh51bUxe+kZgDqUbyZYJKxzR1wdKba3wc2poNDsQRVTEL3YfX6oesSW1+xV5DooTFfAaR8MrQG9DRKcxQ4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR03MB6949
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ra2bmaZe8nLQHbt8J+owOaU/jfd1BSXwXTUl0LiHKihHo68BYVnaHDjVLNTLXoWoQD/ZlO/YBGXnC7O3tj7kuA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR05MB7643
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgQ0ssDQoNClRoYW5rcyBmb3IgdGhlIHJldmlld3MuDQoNCk9uIE1vbiwgMjAyMy0wNi0xMiBh
-dCAwODowNiArMDAwMCwgQ0sgSHUgKOiDoeS/iuWFiSkgd3JvdGU6DQo+IEhpLCBKYXNvbjoNCj4g
-DQo+IE9uIEZyaSwgMjAyMy0wNC0wNyBhdCAxNDo0NiArMDgwMCwgSmFzb24tSkguTGluIHdyb3Rl
-Og0KPiA+IEZpeGluZyB0aGUgY292ZXJpdHkgaXNzdWUgb2Y6DQo+ID4gbXRrX2RybV9jbWRxX3Br
-dF9kZXN0cm95IGZyZWVzIGFkZHJlc3Mgb2YgbXRrX2NydGMtPmNtZHFfaGFuZGxlDQo+ID4gDQo+
-ID4gU28gcmVtb3ZlIHRoZSBmcmVlIGZ1bmN0aW9uLg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6
-IEphc29uLUpILkxpbiA8amFzb24tamgubGluQG1lZGlhdGVrLmNvbT4NCj4gPiBGaXhlczogNzYy
-NzEyMmZkMWMwICgiZHJtL21lZGlhdGVrOiBBZGQgY21kcV9oYW5kbGUgaW4gbXRrX2NydGMiKQ0K
-PiA+IC0tLQ0KPiA+ICBkcml2ZXJzL2dwdS9kcm0vbWVkaWF0ZWsvbXRrX2RybV9jcnRjLmMgfCAx
-IC0NCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDEgZGVsZXRpb24oLSkNCj4gPiANCj4gPiBkaWZmIC0t
-Z2l0IGEvZHJpdmVycy9ncHUvZHJtL21lZGlhdGVrL210a19kcm1fY3J0Yy5jDQo+ID4gYi9kcml2
-ZXJzL2dwdS9kcm0vbWVkaWF0ZWsvbXRrX2RybV9jcnRjLmMNCj4gPiBpbmRleCA0YmM0NWNkYmRk
-ZjEuLmM3YjAzZTU2NDA5NSAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vbWVkaWF0
-ZWsvbXRrX2RybV9jcnRjLmMNCj4gPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vbWVkaWF0ZWsvbXRr
-X2RybV9jcnRjLmMNCj4gPiBAQCAtMTQ4LDcgKzE0OCw2IEBAIHN0YXRpYyB2b2lkIG10a19kcm1f
-Y21kcV9wa3RfZGVzdHJveShzdHJ1Y3QNCj4gPiBjbWRxX3BrdCAqcGt0KQ0KPiA+ICAJZG1hX3Vu
-bWFwX3NpbmdsZShjbGllbnQtPmNoYW4tPm1ib3gtPmRldiwgcGt0LT5wYV9iYXNlLCBwa3QtDQo+
-ID4gPiBidWZfc2l6ZSwNCj4gPiANCj4gPiAgCQkJIERNQV9UT19ERVZJQ0UpOw0KPiA+ICAJa2Zy
-ZWUocGt0LT52YV9iYXNlKTsNCj4gPiAtCWtmcmVlKHBrdCk7DQo+IA0KPiANCj4gQWxzbyBmaXgg
-dGhlIHNhbWUgcHJvYmxlbSBpbiBtdGtfZHJtX2NtZHFfcGt0X2NyZWF0ZSgpLg0KPiANCj4gUmVn
-YXJkcywNCj4gQ0sNCg0KT0ssIEknbGwgYWxzbyBmaXggdGhlbS4gVGhhbmtzIGZvciB0aGUgcmVt
-aW5kZXIuDQoNClJlZ2FyZHMsDQpKYXNvbi1KSC5MaW4NCj4gDQo+ID4gIH0NCj4gPiAgI2VuZGlm
-DQo+ID4gIA0K
+> Hello,
+>
+> kernel test robot noticed "WARNING:possible_circular_locking_dependency_detected" on:
+>
+> commit: a3bb763435d444023d3bca5479da632c57724619 ("[PATCH v3 09/10] eventfs: moving tracing/events to eventfs")
+> url: https://github.com/intel-lab-lkp/linux/commits/Ajay-Kaher/tracing-Require-all-trace-events-to-have-a-TRACE_SYSTEM/20230601-230657
+> base: https://git.kernel.org/cgit/linux/kernel/git/shuah/linux-kselftest.git next
+> patch link: 1685610013-33478-10-git-send-email-akaher@vmware.com/">https://lore.kernel.org/all/1685610013-33478-10-git-send-email-akaher@vmware.com/
+> patch subject: [PATCH v3 09/10] eventfs: moving tracing/events to eventfs
+>
+> in testcase: kernel-selftests
+> version: kernel-selftests-x86_64-60acb023-1_20230329
+> with following parameters:
+>
+> group: ftrace
+>
+> test-description: The kernel contains a set of "self tests" under the tools/testing/selftests/ directory. These are intended to be small unit tests to exercise individual code paths in the kernel.
+> test-url: https://www.kernel.org/doc/Documentation/kselftest.txt
+>
+>
+> compiler: gcc-12
+> test machine: 36 threads 1 sockets Intel(R) Core(TM) i9-10980XE CPU @ 3.00GHz (Cascade Lake) with 32G memory
+>
+> (please refer to attached dmesg/kmsg for entire log/backtrace)
+>
+>
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <oliver.sang@intel.com>
+> | Closes: 202306102230.b5aa258d-oliver.sang@intel.com">https://lore.kernel.org/oe-lkp/202306102230.b5aa258d-oliver.sang@intel.com
+>
+>
+> kern  :warn  : [  173.884312] WARNING: possible circular locking dependency detected
+> kern  :warn  : [  173.884947] 6.4.0-rc1-00014-ga3bb763435d4 #1 Not tainted
+> kern  :warn  : [  173.885501] ------------------------------------------------------
+> kern  :warn  : [  173.886125] ftracetest/2186 is trying to acquire lock:
+> kern :warn : [  173.886665] ffff88810045d368 (&sb->s_type->i_mutex_key#5){++++}-{3:3}, at: dcache_dir_open_wrapper (fs/tracefs/event_inode.c:373)
+> kern  :warn  : [  173.887638]
+> but task is already holding lock:
+> kern :warn : [  173.888299] ffffffff84e6d640 (eventfs_rwsem/1){.+.+}-{3:3}, at: dcache_dir_open_wrapper (fs/tracefs/event_inode.c:364)
+> kern  :warn  : [  173.889183]
+> which lock already depends on the new lock.
+>
+> kern  :warn  : [  173.890101]
+> the existing dependency chain (in reverse order) is:
+> kern  :warn  : [  173.890898]
+> -> #1 (eventfs_rwsem/1){.+.+}-{3:3}:
+> kern :warn : [  173.891600] lock_acquire (kernel/locking/lockdep.c:467 kernel/locking/lockdep.c:5693 kernel/locking/lockdep.c:5656)
+> kern :warn : [  173.892066] down_read_nested (kernel/locking/rwsem.c:1263 kernel/locking/rwsem.c:1646)
+> kern :warn : [  173.892553] eventfs_root_lookup (fs/tracefs/event_inode.c:283)
+> kern :warn : [  173.893058] __lookup_slow (include/linux/dcache.h:359 include/linux/dcache.h:364 fs/namei.c:1691)
+> kern :warn : [  173.893529] walk_component (include/linux/fs.h:790 fs/namei.c:1708 fs/namei.c:1998)
+> kern :warn : [  173.894006] path_lookupat (fs/namei.c:2455 fs/namei.c:2479)
+> kern :warn : [  173.894476] filename_lookup (fs/namei.c:2508)
+> kern :warn : [  173.894974] vfs_statx (fs/stat.c:239)
+> kern :warn : [  173.895410] vfs_fstatat (fs/stat.c:277)
+> kern :warn : [  173.895851] __do_sys_newfstatat (fs/stat.c:447)
+> kern :warn : [  173.896350] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
+> kern :warn : [  173.896815] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120)
+> kern  :warn  : [  173.897392]
+> -> #0 (&sb->s_type->i_mutex_key#5){++++}-{3:3}:
+> kern :warn : [  173.898158] check_prev_add (kernel/locking/lockdep.c:3109)
+> kern :warn : [  173.898643] __lock_acquire (kernel/locking/lockdep.c:3228 kernel/locking/lockdep.c:3842 kernel/locking/lockdep.c:5074)
+> kern :warn : [  173.899133] lock_acquire (kernel/locking/lockdep.c:467 kernel/locking/lockdep.c:5693 kernel/locking/lockdep.c:5656)
+> kern :warn : [  173.899610] down_write (arch/x86/include/asm/preempt.h:80 kernel/locking/rwsem.c:1304 kernel/locking/rwsem.c:1315 kernel/locking/rwsem.c:1574)
+> kern :warn : [  173.900054] dcache_dir_open_wrapper (fs/tracefs/event_inode.c:373)
+> kern :warn : [  173.900603] do_dentry_open (fs/open.c:920)
+> kern :warn : [  173.901081] do_open (fs/namei.c:3636)
+> kern :warn : [  173.901508] path_openat (fs/namei.c:3792)
+> kern :warn : [  173.901963] do_filp_open (fs/namei.c:3818)
+> kern :warn : [  173.902425] do_sys_openat2 (fs/open.c:1356)
+> kern :warn : [  173.902902] __x64_sys_openat (fs/open.c:1383)
+> kern :warn : [  173.903408] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
+> kern :warn : [  173.903864] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120)
+> kern  :warn  : [  173.904451]
+> other info that might help us debug this:
+>
+> kern  :warn  : [  173.905372]  Possible unsafe locking scenario:
+>
+> kern  :warn  : [  173.906049]        CPU0                    CPU1
+> kern  :warn  : [  173.906538]        ----                    ----
+> kern  :warn  : [  173.907027]   rlock(eventfs_rwsem/1);
+> kern  :warn  : [  173.907464]                                lock(&sb->s_type->i_mutex_key#5);
+> kern  :warn  : [  173.908171]                                lock(eventfs_rwsem/1);
+> kern  :warn  : [  173.908800]   lock(&sb->s_type->i_mutex_key#5);
+> kern  :warn  : [  173.909291]
+> *** DEADLOCK ***
+
+Steve, this seems not to be a problem here as dcache_dir_open_wrapper()
+and eventfs_root_lookup() both lock eventfs_rwsem as read lock, however
+it’s known problem in Lockdep for rwlock:
+https://lpc.events/event/2/contributions/74/
+And available patchset on Lockdep not upstreamed:
+https://lore.kernel.org/all/20190829083132.22394-1-duyuyang@gmail.com/
+
+-Ajay
+
