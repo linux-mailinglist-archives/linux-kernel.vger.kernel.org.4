@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2892E72D87D
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 06:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F2472D87E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 06:23:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239548AbjFMEXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 00:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46148 "EHLO
+        id S239203AbjFMEXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 00:23:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237495AbjFMEWa (ORCPT
+        with ESMTP id S239335AbjFMEWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 00:22:30 -0400
+        Tue, 13 Jun 2023 00:22:41 -0400
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E794C19B4;
-        Mon, 12 Jun 2023 21:21:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9DB1734;
+        Mon, 12 Jun 2023 21:21:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686630112; x=1718166112;
+  t=1686630114; x=1718166114;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=sAQ1uZpZ/GyeSOWenRYpSLcOx4BePCSSLjrCLgIxfbo=;
-  b=M1+Q8CFCUKIxt2wmqtf/pdblWM21fJbRHXfb+95muJ4pZjnYvJk1ASr+
-   clq2H+58OTHabHu4MaFFlimWLxtHO1aOnnf4U/8IYtwx2OMq2m6AzfPgx
-   n9pxpjqCnpPhR3K/jgGSiaEHsXwFr0tXU2rgoPEKXpmAqePXIAWjqBIbr
-   ORSc7bnwJYb26Mf5su8wzeLbYVFYQD8GflqJ3v00U9zykIAHcChhfhGY4
-   XHKC7UMRmhFLEYnE2Wj8r7KL06XfCNcwQXlm5zBTwJFkL331NLXAOwnUt
-   Rn/ue3bRW7Xy5hP7o5NHEKrWvv06ecf3bNmqg4qb7CcT37r/6Id9DUnLj
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="358222183"
+  bh=Rg6bBLEQ3AC4QDzW6yr8kT0VDnQBk2LkMuNm2FBH7m4=;
+  b=KTPz9mb27IBpJnSggCKlaeBB0xZ5nQdVRqzBHO/LXGSgLzgvw5oY+20H
+   3i7YxXtGBSbGNrkgmUiwhWt7WS9J+yDThGMx5Kt2XFpvY+z19Lest6Y5i
+   2P1K81sF9W+WaNsEeCRRB+prch9ICqniNy4O8osHEITmrvdkDa45KfzBO
+   Ovw6JPKfw3BpMZS5pKO8lmTEr9YCevz9s7h18qRrItZzhOqDpcIvpFzzF
+   +dMrOYMxOhd1O1NwVOuIQI3VrXVgrQ31+L8UIK/8UBpSZYPxY9m1fGFxO
+   kCvmogFVXA9jHKVUdkNWTtUhTRq9aSJqk6E+mhTNW71+GrPiCMrQX9g4k
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="358222201"
 X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
-   d="scan'208";a="358222183"
+   d="scan'208";a="358222201"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 21:21:52 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 21:21:53 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="661854971"
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="661854974"
 X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
-   d="scan'208";a="661854971"
+   d="scan'208";a="661854974"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga003.jf.intel.com with ESMTP; 12 Jun 2023 21:21:50 -0700
+  by orsmga003.jf.intel.com with ESMTP; 12 Jun 2023 21:21:52 -0700
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 To:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
@@ -63,9 +63,9 @@ Cc:     Ricardo Neri <ricardo.neri@intel.com>,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
         "Tim C . Chen" <tim.c.chen@intel.com>,
         Zhao Liu <zhao1.liu@linux.intel.com>
-Subject: [PATCH v4 13/24] x86/sched: Update the IPC class of the current task
-Date:   Mon, 12 Jun 2023 21:24:11 -0700
-Message-Id: <20230613042422.5344-14-ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v4 14/24] thermal: intel: hfi: Store per-CPU IPCC scores
+Date:   Mon, 12 Jun 2023 21:24:12 -0700
+Message-Id: <20230613042422.5344-15-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230613042422.5344-1-ricardo.neri-calderon@linux.intel.com>
 References: <20230613042422.5344-1-ricardo.neri-calderon@linux.intel.com>
@@ -79,21 +79,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Intel Thread Director provides a classification value based on the type of
-instructions that CPU is currently executing. Use this classification to
-update the IPC class of the current task.
+The scheduler reads the IPCC scores when balancing load. These reads can
+occur frequently and originate from many CPUs. Hardware may also
+occasionally update the HFI table. Controlling access with locks would
+cause contention.
 
-The responsibility for configuring and enabling both the Hardware Feedback
-Interface and Intel Thread Director lies with the HFI driver, but it should
-not directly handle tasks.
+Cache the IPCC scores in separate per-CPU variables that the scheduler can
+use. Use a seqcount to synchronize memory accesses to these cached values.
+This eliminates the need for locks, as the sequence counter provides the
+memory ordering required to prevent the use of stale data.
 
-Update the HFI driver to read the register that provides the classification
-result. Implement the arch_update_ipcc() interface of the scheduler under
-arch/x86 code to update the IPC class of individual tasks.
+The HFI delayed workqueue guarantees that only one CPU writes the cached
+IPCC scores. The frequency of updates is low (every CONFIG_HZ jiffies or
+less), and the number of writes per update is in the order of tens. Writes
+should not starve reads.
 
-Task classification only makes sense when used along with the HFI driver.
-Make HFI driver select CONFIG_IPC_CLASSES. However, users may still select
-CONFIG_IPC_CLASSES. Add function stubs to prevent build errors.
+Only cache IPCC scores in this changeset. A subsequent changeset will
+use these scores.
 
 Cc: Ben Segall <bsegall@google.com>
 Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -113,192 +115,130 @@ Cc: Zhao Liu <zhao1.liu@linux.intel.com>
 Cc: x86@kernel.org
 Cc: linux-pm@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
+Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
 Changes since v3:
- * Relocated the implementation of arch_update_ipcc() from drivers/thermal
-   to arch/x86. (Rafael)
- * Moved the definition of MSR_IA32_HW_FEEDBACK_CHAR into this patch.
-   (Reported-by: kernel test robot <lkp@intel.com>)
- * Select CONFIG_IPC_CLASSES when CONFIG_INTEL_HFI_THERMAL is selected to
-   reduce the configuration burden of the user/administrator. (Srinivas)
+ * As Rafael requested, I reworked the memory ordering of the cached IPCC
+   scores. I selected a seqcount as is less expensive than a memory
+   barrier, which is not necessary anyways.
+ * Made alloc_hfi_ipcc_scores() return -ENOMEM on allocation failure.
+   (Rafael)
+ * Added a comment to describe hfi_ipcc_scores. (Rafael)
 
 Changes since v2:
- * Removed the implementation of arch_has_ipc_classes().
+ * Only create these per-CPU variables when Intel Thread Director is
+   supported.
 
 Changes since v1:
- * Adjusted the result the classification of Intel Thread Director to start
-   at class 1. Class 0 for the scheduler means that the task is
-   unclassified.
- * Redefined union hfi_thread_feedback_char_msr to ensure all
-   bit-fields are packed. (PeterZ)
- * Removed CONFIG_INTEL_THREAD_DIRECTOR. (PeterZ)
- * Shortened the names of the functions that implement IPC classes.
- * Removed argument smt_siblings_idle from intel_hfi_update_ipcc().
-   (PeterZ)
+ * Added this patch.
 ---
- arch/x86/include/asm/msr-index.h  |  1 +
- arch/x86/include/asm/topology.h   | 11 +++++++++
- arch/x86/kernel/Makefile          |  2 ++
- arch/x86/kernel/sched_ipcc.c      | 35 +++++++++++++++++++++++++++++
- drivers/thermal/intel/Kconfig     |  1 +
- drivers/thermal/intel/intel_hfi.c | 37 +++++++++++++++++++++++++++++++
- 6 files changed, 87 insertions(+)
- create mode 100644 arch/x86/kernel/sched_ipcc.c
+ drivers/thermal/intel/intel_hfi.c | 66 +++++++++++++++++++++++++++++++
+ 1 file changed, 66 insertions(+)
 
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index 3aedae61af4f..0bc4ed0ff787 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -1108,6 +1108,7 @@
- /* Hardware Feedback Interface */
- #define MSR_IA32_HW_FEEDBACK_PTR        0x17d0
- #define MSR_IA32_HW_FEEDBACK_CONFIG     0x17d1
-+#define MSR_IA32_HW_FEEDBACK_CHAR	0x17d2
- 
- /* x2APIC locked status */
- #define MSR_IA32_XAPIC_DISABLE_STATUS	0xBD
-diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
-index caf41c4869a0..7d2ed7f7bb8c 100644
---- a/arch/x86/include/asm/topology.h
-+++ b/arch/x86/include/asm/topology.h
-@@ -235,4 +235,15 @@ void init_freq_invariance_cppc(void);
- #define arch_init_invariance_cppc init_freq_invariance_cppc
- #endif
- 
-+#ifdef CONFIG_INTEL_HFI_THERMAL
-+int intel_hfi_read_classid(u8 *classid);
-+#else
-+static inline int intel_hfi_read_classid(u8 *classid) { return -ENODEV; }
-+#endif
-+
-+#ifdef CONFIG_IPC_CLASSES
-+void intel_update_ipcc(struct task_struct *curr);
-+#define arch_update_ipcc intel_update_ipcc
-+#endif
-+
- #endif /* _ASM_X86_TOPOLOGY_H */
-diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-index 4070a01c11b7..f9b9d213ddaa 100644
---- a/arch/x86/kernel/Makefile
-+++ b/arch/x86/kernel/Makefile
-@@ -145,6 +145,8 @@ obj-$(CONFIG_CFI_CLANG)			+= cfi.o
- 
- obj-$(CONFIG_CALL_THUNKS)		+= callthunks.o
- 
-+obj-$(CONFIG_IPC_CLASSES)		+= sched_ipcc.o
-+
- ###
- # 64 bit specific files
- ifeq ($(CONFIG_X86_64),y)
-diff --git a/arch/x86/kernel/sched_ipcc.c b/arch/x86/kernel/sched_ipcc.c
-new file mode 100644
-index 000000000000..685e7b3b5375
---- /dev/null
-+++ b/arch/x86/kernel/sched_ipcc.c
-@@ -0,0 +1,35 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Intel support for scheduler IPC classes
-+ *
-+ * Copyright (c) 2023, Intel Corporation.
-+ *
-+ * Author: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-+ *
-+ * On hybrid processors, the architecture differences between types of CPUs
-+ * lead to different number of retired instructions per cycle (IPC). IPCs may
-+ * differ further by classes of instructions.
-+ *
-+ * The scheduler assigns an IPC class to every task with arch_update_ipcc()
-+ * from data that hardware provides. Implement this interface for x86.
-+ *
-+ * See kernel/sched/sched.h for details.
-+ */
-+
-+#include <linux/sched.h>
-+
-+#include <asm/topology.h>
-+
-+void intel_update_ipcc(struct task_struct *curr)
-+{
-+	u8 hfi_class;
-+
-+	if (intel_hfi_read_classid(&hfi_class))
-+		return;
-+
-+	/*
-+	 * 0 is a valid classification for Intel Thread Director. A scheduler
-+	 * IPCC class of 0 means that the task is unclassified. Adjust.
-+	 */
-+	curr->ipcc = hfi_class + 1;
-+}
-diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
-index ecd7e07eece0..418db04dc876 100644
---- a/drivers/thermal/intel/Kconfig
-+++ b/drivers/thermal/intel/Kconfig
-@@ -109,6 +109,7 @@ config INTEL_HFI_THERMAL
- 	depends on CPU_SUP_INTEL
- 	depends on X86_THERMAL_VECTOR
- 	select THERMAL_NETLINK
-+	select IPC_CLASSES
- 	help
- 	  Select this option to enable the Hardware Feedback Interface. If
- 	  selected, hardware provides guidance to the operating system on
 diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-index b41547912fda..20ee4264dcd4 100644
+index 20ee4264dcd4..d822ed0bb5c1 100644
 --- a/drivers/thermal/intel/intel_hfi.c
 +++ b/drivers/thermal/intel/intel_hfi.c
-@@ -72,6 +72,15 @@ union cpuid6_edx {
- 	u32 full;
- };
- 
-+union hfi_thread_feedback_char_msr {
-+	struct {
-+		u64	classid : 8;
-+		u64	__reserved : 55;
-+		u64	valid : 1;
-+	} split;
-+	u64 full;
-+};
-+
- /**
-  * struct hfi_cpu_data - HFI capabilities per CPU
-  * @perf_cap:		Performance capability
-@@ -171,6 +180,34 @@ static struct workqueue_struct *hfi_updates_wq;
+@@ -29,9 +29,11 @@
+ #include <linux/kernel.h>
+ #include <linux/math.h>
+ #include <linux/mutex.h>
++#include <linux/percpu.h>
+ #include <linux/percpu-defs.h>
+ #include <linux/printk.h>
+ #include <linux/processor.h>
++#include <linux/seqlock.h>
+ #include <linux/slab.h>
+ #include <linux/spinlock.h>
+ #include <linux/string.h>
+@@ -180,6 +182,62 @@ static struct workqueue_struct *hfi_updates_wq;
  #define HFI_UPDATE_INTERVAL		HZ
  #define HFI_MAX_THERM_NOTIFY_COUNT	16
  
-+/**
-+ * intel_hfi_read_classid() - Read the currrent classid
-+ * @classid:	Variable to which the classid will be written.
-+ *
-+ * Read the classification that Intel Thread Director has produced when this
-+ * function is called. Thread classification must be enabled before calling
-+ * this function.
-+ *
-+ * Return: 0 if the produced classification is valid. Error otherwise.
-+ */
-+int intel_hfi_read_classid(u8 *classid)
++/* A cache of the HFI perf capabilities for lockless access. */
++static int __percpu *hfi_ipcc_scores;
++/* Sequence counter for hfi_ipcc_scores */
++static seqcount_t hfi_ipcc_seqcount = SEQCNT_ZERO(hfi_ipcc_seqcount);
++
++static int alloc_hfi_ipcc_scores(void)
 +{
-+	union hfi_thread_feedback_char_msr msr;
++	if (!cpu_feature_enabled(X86_FEATURE_ITD))
++		return 0;
 +
-+	/* We should not be here if ITD is not supported. */
-+	if (!cpu_feature_enabled(X86_FEATURE_ITD)) {
-+		pr_warn_once("task classification requested but not supported!");
-+		return -ENODEV;
-+	}
++	hfi_ipcc_scores = __alloc_percpu(sizeof(*hfi_ipcc_scores) *
++					 hfi_features.nr_classes,
++					 sizeof(*hfi_ipcc_scores));
 +
-+	rdmsrl(MSR_IA32_HW_FEEDBACK_CHAR, msr.full);
-+	if (!msr.split.valid)
-+		return -EINVAL;
-+
-+	*classid = msr.split.classid;
-+	return 0;
++	return hfi_ipcc_scores ? 0 : -ENOMEM;
 +}
 +
- static void get_hfi_caps(struct hfi_instance *hfi_instance,
- 			 struct thermal_genl_cpu_caps *cpu_caps)
- {
++static void set_hfi_ipcc_scores(struct hfi_instance *hfi_instance)
++{
++	int cpu;
++
++	if (!cpu_feature_enabled(X86_FEATURE_ITD))
++		return;
++
++	/*
++	 * Serialize with writes to the HFI table. It also protects the write
++	 * loop against seqcount readers running in interrupt context.
++	 */
++	raw_spin_lock_irq(&hfi_instance->table_lock);
++	/*
++	 * The seqcount implies store-release semantics to order stores with
++	 * lockless loads from the seqcount read side. It also implies a
++	 * compiler barrier.
++	 */
++	write_seqcount_begin(&hfi_ipcc_seqcount);
++	for_each_cpu(cpu, hfi_instance->cpus) {
++		int c, *scores;
++		s16 index;
++
++		index = per_cpu(hfi_cpu_info, cpu).index;
++		scores = per_cpu_ptr(hfi_ipcc_scores, cpu);
++
++		for (c = 0;  c < hfi_features.nr_classes; c++) {
++			struct hfi_cpu_data *caps;
++
++			caps = hfi_instance->data +
++			       index * hfi_features.cpu_stride +
++			       c * hfi_features.class_stride;
++			scores[c] = caps->perf_cap;
++		}
++	}
++
++	write_seqcount_end(&hfi_ipcc_seqcount);
++	raw_spin_unlock_irq(&hfi_instance->table_lock);
++}
++
+ /**
+  * intel_hfi_read_classid() - Read the currrent classid
+  * @classid:	Variable to which the classid will be written.
+@@ -275,6 +333,8 @@ static void update_capabilities(struct hfi_instance *hfi_instance)
+ 		thermal_genl_cpu_capability_event(cpu_count, &cpu_caps[i]);
+ 
+ 	kfree(cpu_caps);
++
++	set_hfi_ipcc_scores(hfi_instance);
+ out:
+ 	mutex_unlock(&hfi_instance_lock);
+ }
+@@ -618,8 +678,14 @@ void __init intel_hfi_init(void)
+ 	if (!hfi_updates_wq)
+ 		goto err_nomem;
+ 
++	if (alloc_hfi_ipcc_scores())
++		goto err_ipcc;
++
+ 	return;
+ 
++err_ipcc:
++	destroy_workqueue(hfi_updates_wq);
++
+ err_nomem:
+ 	for (j = 0; j < i; ++j) {
+ 		hfi_instance = &hfi_instances[j];
 -- 
 2.25.1
 
