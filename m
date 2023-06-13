@@ -2,238 +2,352 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 284B072DB0E
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 09:35:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5204672DB11
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 09:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239778AbjFMHfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 03:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36654 "EHLO
+        id S238840AbjFMHg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 03:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240611AbjFMHfB (ORCPT
+        with ESMTP id S238329AbjFMHgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 03:35:01 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2951EAA;
-        Tue, 13 Jun 2023 00:34:59 -0700 (PDT)
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35D5IVBp031989;
-        Tue, 13 Jun 2023 03:34:32 -0400
-Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2043.outbound.protection.outlook.com [104.47.57.43])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3r4k1683a6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Jun 2023 03:34:31 -0400
+        Tue, 13 Jun 2023 03:36:22 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2088.outbound.protection.outlook.com [40.107.8.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B304AA;
+        Tue, 13 Jun 2023 00:36:20 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KL8Sx9PDLKx+NZao+d0QkRqrnvQv+VL68jXd8no83UMDakst5pDhQM1zrNrz8jlLTyoWh/S+f9wX3XFmr+IOEyz6lz4uNYLWjycL/2rGS/ve7D70Y2rGz6UXDG6xUneb+smw7oZjJZvYu+58WIdMLrjOh8lb++OM8GnJpjNBmUyvDdnIdxrfe2kIJhsn9Y2DRZgXYyd7HzTUlL3SEQ0Pg0MTwWufVV8t9B5JlLftFUVF3SBQfIn6/yIpDH269Pc97bWXEib07azhchcboWMQKxm5IeCWRxNV6yNfKJ0TAw629qTTT3fzP8L8udTZRX5Zm8LDVvCBOa089rNiFqcKVQ==
+ b=fvFw4NasQS1XtvUi/KGDhSxqh4kPIYmOErGsWUOY5ZbMo0wqWbvaPmd86HhTVMQLHbHNEoxqTJWd2AAuSpC2B0QZXLikfHKpahSDt+EPXBeJdCnjy0gPXptcuIHaIhO9iGRHHKRJiXsLOPsTVQ3WMxb3kDdZpESp5KZW9u+k3ZdY9M+PtJ9hUFcnnRP3hpczd1QzYijr3hLhBnWeZOLRKM09KuvgJAfx28yj63xNjKTx8MMZAC+OYs6eP74XxkMRjPsY/lCWBBqLm9u0x71plvjmMzC98Zriwl0IdzGB3+Dl7SCTmtreH4TSyeDLXZHQszpBes8R96S+fB690BoX3g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=B6S7hTtvZCN+lO3VCkr69n2hS4kANM/+C2W6g7LjQv4=;
- b=Msv1gKH98NE2gMELz+hQygdAJDwLxTfY3dnfYON5MSyxDwyhohIEZkoAdIHDWvYXpUTNuWNlsOpxMfWH9n+wV0hWn/yV8TFixtQS8dCwvICYJa2Dp10OVMZ+Lok3m6n7ZOvKc3XrGFuyTU3zdfXT3Q+5AeJZWTxHm1vrfwMqcQkjBxJzvcPnlnvC0R9qzda1TJuc330oLprlEsTRS50PM3u3vmwcJoBxBNR0RBfjnYsHxu/EAJ/bdDbaTfMB9KZneEa6Cx2mvkwGs3MkONevJ2OUb0VKilhl3XUxJF3nXolCfdFxw7A94X3FJnKnh+arAs7MEJcsByEqQCaBu4DNqQ==
+ bh=XaG4GjPrV8roDzx+6ekz6hfNO29A/16JsdYquwdq7Xc=;
+ b=TEpan9xLaPjhmPMsn7UJmNkiecgry6BOPtf8Ox5APiWJiy1OUu8kywInh+jHdhwjEZPYa4cLnJ0EymKYaKrmLZ0bDXmN5GBo27aLuws0/l87eU2eqia9ZAKwVYqhMrzce9GAj9WBtzfXzPsglMxCZfDldaQOMjM875ga5iggjyE1rN311YzBk08SWToqm8WtF1BFj05VNi4HcS4L7Uq8c92dI+S2HgEL0Z67hBX4M5aVZFyZhN5Mvmai5UwEJw3lJabgvPRygk99avlsRZL0GamrawpGZsVc3cxR2heSGB5DR9lzbtDFoJVsWsSIrmWr2yiTLpylP8fo0xLODRpCHA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analog.com; dmarc=pass action=none header.from=analog.com;
- dkim=pass header.d=analog.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
+ smtp.mailfrom=wolfvision.net; dmarc=pass action=none
+ header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B6S7hTtvZCN+lO3VCkr69n2hS4kANM/+C2W6g7LjQv4=;
- b=zODPj+ibPOvIeRWhVHGz0zRTrU5eg9c+EW/2/f5YOf1lvOniMYXak2hPPrpD/cYvPOb0XwquEYLGI18GOkws0zRhkR9Qa0JiBdfok+YCg9A7jXesePK8wce8bfH8IrHluF1c9Pv9sDxw0wa3pQ65tdQf2L9PN2yok6GZa2xboYA=
-Received: from MN2PR03MB5168.namprd03.prod.outlook.com (2603:10b6:208:1ec::19)
- by DS7PR03MB5480.namprd03.prod.outlook.com (2603:10b6:5:2d1::21) with
+ bh=XaG4GjPrV8roDzx+6ekz6hfNO29A/16JsdYquwdq7Xc=;
+ b=KYQtzTnSsR7Q/TNbDRE7aAFW4Az/5TQz57DCtEBJefuF1rcsNFqO9SFFVaaFdND1GCt3qy4MkhlDb/qf0bNGOlLnS2LKS804tWjRd1puovvVhv8nfcUaTGzFKsYx7cAacDMV5xXvSzqdWClu73TsLE8lfkCJPEenI4+h89UNXaA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wolfvision.net;
+Received: from DU0PR08MB9155.eurprd08.prod.outlook.com (2603:10a6:10:416::5)
+ by GVXPR08MB7752.eurprd08.prod.outlook.com (2603:10a6:150:6::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Tue, 13 Jun
- 2023 07:34:29 +0000
-Received: from MN2PR03MB5168.namprd03.prod.outlook.com
- ([fe80::6ccf:ae70:970e:b3d1]) by MN2PR03MB5168.namprd03.prod.outlook.com
- ([fe80::6ccf:ae70:970e:b3d1%4]) with mapi id 15.20.6477.016; Tue, 13 Jun 2023
- 07:34:29 +0000
-From:   "Sahin, Okan" <Okan.Sahin@analog.com>
-To:     Mark Brown <broonie@kernel.org>, Lee Jones <lee@kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Marcus Folkesson <marcus.folkesson@gmail.com>,
-        "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Haibo Chen <haibo.chen@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
-Subject: RE: [PATCH v7 5/5] mfd: max77541: Add ADI MAX77541/MAX77540 PMIC
- Support
-Thread-Topic: [PATCH v7 5/5] mfd: max77541: Add ADI MAX77541/MAX77540 PMIC
- Support
-Thread-Index: AQHZbTAwI+aD1ACCtUO1/gFoBRLbUq80DQkAgABpiYCAAPfnAIAAYtuAgFLlgCA=
-Date:   Tue, 13 Jun 2023 07:34:28 +0000
-Message-ID: <MN2PR03MB516860989BD8ED6AC9A767FBE755A@MN2PR03MB5168.namprd03.prod.outlook.com>
-References: <20230412111256.40013-1-okan.sahin@analog.com>
- <20230412111256.40013-6-okan.sahin@analog.com>
- <20230420103438.GI9904@google.com>
- <09eb8e4c-3e73-41f0-bf42-8ddf3c4254ec@sirena.org.uk>
- <20230421073938.GO996918@google.com>
- <82612171-46d7-4d82-a8fc-c7d6a99d57e9@sirena.org.uk>
-In-Reply-To: <82612171-46d7-4d82-a8fc-c7d6a99d57e9@sirena.org.uk>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Tue, 13 Jun
+ 2023 07:36:15 +0000
+Received: from DU0PR08MB9155.eurprd08.prod.outlook.com
+ ([fe80::77dd:14e4:a772:d85f]) by DU0PR08MB9155.eurprd08.prod.outlook.com
+ ([fe80::77dd:14e4:a772:d85f%7]) with mapi id 15.20.6477.028; Tue, 13 Jun 2023
+ 07:36:14 +0000
+Message-ID: <0718981e-a433-0119-ba34-7e28ebbf4a2b@wolfvision.net>
+Date:   Tue, 13 Jun 2023 09:36:12 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH RFC v2 3/6] media: v4l2-ctrls: add lens group status
+ controls for zoom and focus
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: =?us-ascii?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcb2thbi5zYWhp?=
- =?us-ascii?Q?blxhcHBkYXRhXHJvYW1pbmdcMDlkODQ5YjYtMzJkMy00YTQwLTg1ZWUtNmI4?=
- =?us-ascii?Q?NGJhMjllMzViXG1zZ3NcbXNnLWI4N2U4ZjkxLTA5YmMtMTFlZS1iZWVkLTU4?=
- =?us-ascii?Q?NmMyNWQzYzNlNFxhbWUtdGVzdFxiODdlOGY5My0wOWJjLTExZWUtYmVlZC01?=
- =?us-ascii?Q?ODZjMjVkM2MzZTRib2R5LnR4dCIgc3o9IjU1OTgiIHQ9IjEzMzMxMTE1MjY1?=
- =?us-ascii?Q?OTMyOTc2NiIgaD0iak1NUU44NUo5K1RCbDVoOGJOQ3Bkb1g0SmgwPSIgaWQ9?=
- =?us-ascii?Q?IiIgYmw9IjAiIGJvPSIxIiBjaT0iY0FBQUFFUkhVMVJTUlVGTkNnVUFBRW9D?=
- =?us-ascii?Q?QUFEbWN0dDZ5WjNaQVRqNGYxQU52Nnc3T1BoL1VBMi9yRHNEQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUhBQUFBRGFBUUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUVBQVFBQkFBQUFSNmxUTEFBQUFBQUFBQUFBQUFBQUFKNEFBQUJoQUdR?=
- =?us-ascii?Q?QWFRQmZBSE1BWlFCakFIVUFjZ0JsQUY4QWNBQnlBRzhBYWdCbEFHTUFkQUJ6?=
- =?us-ascii?Q?QUY4QVpnQmhBR3dBY3dCbEFGOEFaZ0J2QUhNQWFRQjBBR2tBZGdCbEFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBRUFBQUFBQUFBQUFnQUFBQUFBbmdBQUFHRUFaQUJwQUY4QWN3QmxBR01B?=
- =?us-ascii?Q?ZFFCeUFHVUFYd0J3QUhJQWJ3QnFBR1VBWXdCMEFITUFYd0IwQUdrQVpRQnlB?=
- =?us-ascii?Q?REVBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQVFBQUFBQUFBQUFD?=
- =?us-ascii?Q?QUFBQUFBQ2VBQUFBWVFCa0FHa0FYd0J6QUdVQVl3QjFBSElBWlFCZkFIQUFj?=
- =?us-ascii?Q?Z0J2QUdvQVpRQmpBSFFBY3dCZkFIUUFhUUJsQUhJQU1nQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUJBQUFBQUFBQUFBSUFBQUFBQUE9PSIvPjwv?=
- =?us-ascii?Q?bWV0YT4=3D?=
-x-dg-rorf: true
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN2PR03MB5168:EE_|DS7PR03MB5480:EE_
-x-ms-office365-filtering-correlation-id: 3628e8c4-fcae-43b9-ca78-08db6be09ee5
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: jHQqJ6IcV4fC7qEu07xfw0NG1GVD7ncPXs+V6viKrNGfYQjLnRN/A/+QGiRYL0gbla6hbG+JMDpO2GeU8fbmfN7k2OkuXBtAG7+emjEF5XT0SBBm5rJBes1HDHblbH/kW8LKEovwDK/ipEmzc3ikly0g44segtfDCg3oEL39WQQghOHVp/kErJHIOC/D3HPONGjc2uzZWbNIz6PfrdkfUAJ4NTgQG7DYJkrz7RTXUAF09YKRvkhXUF023euYCmsYg4I6Bae8kTHngTm8onyAJoZuV7rmfrg+pK1ue6Mpkne5xdJRPpJzmhG9V7G+hQ0C28MvWqjqsXN1Xl5drL+9KTxw4hlEKLBQaGmMp0rVONtm+gN575i+xsPDaIudARrXTdhePsS2Uwo9LD7A/t5M7nxdxPMMZWOnFXvvJOZ9old2j1z0pKINYndDF6Wk+B3Lyomk1X8CiBcLgLAijxDBHqu/q9osPtVjjN55fZ0LhA0b5M39gxU/9h38cMo+2nbMBbjWF6mLJC7kYWs66TlWKHmcPWuGMks7iTUbJoY36bc+4NpRVbZhUrZ7Eu18pULc7fpfmFSyv2h088CTq2RTjzi5QigpO+9PVmMhCtkEmHPkmeKAQW1AdQpdU5eVLZWu
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR03MB5168.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(366004)(136003)(376002)(396003)(451199021)(83380400001)(86362001)(33656002)(55016003)(122000001)(38070700005)(38100700002)(478600001)(110136005)(54906003)(71200400001)(4326008)(7696005)(8936002)(8676002)(2906002)(5660300002)(52536014)(7416002)(64756008)(66946007)(66446008)(66476007)(66556008)(76116006)(41300700001)(316002)(186003)(66899021)(9686003)(26005)(6506007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?YGgdSSJPBij2MAKJbi0Un6E6Nk9pS9mUYsRAyeiBvvLMLxodDihTy6xsgenB?=
- =?us-ascii?Q?+2qNg+J5WZTVqPZLlnTvk0d62CiXOTUTW6iYVzd/yF7EMxIHdU30wJ51YKMi?=
- =?us-ascii?Q?UcxiIZrMXpkrmHX64+YfAXNI3crPOKfsvS/Xj7RTjif+QdabWhUMGUWGC0k9?=
- =?us-ascii?Q?1kZVWmks0oMPkivI68HZOV8m/OX9nyo+mFY8p5LXd27hMui/iu9ZGl77VpnN?=
- =?us-ascii?Q?mvbbfrPvIyVeHGLAa9AZ/FKv4qZ6ECG+PDxN4a3cFm8XjRYb6MQFkGEdg73m?=
- =?us-ascii?Q?NT0tg2UI2tplCcE5C5pe9TtY/8VE0P7Pk6SYO636xw/d9YFeMoE3X9OTG1z2?=
- =?us-ascii?Q?wgfYmV1GQ8/rgus5g64HAIskBIpRbFrvvVWhBsa+s/nA5SWGsZDZZreexQdD?=
- =?us-ascii?Q?mWuT4zYkGd+p8HpOiXZNPhZ02Vler6saqFW6FrhIcAyslv8q+dm0Bv9rhdOS?=
- =?us-ascii?Q?XMiiQwZoPJvI5f777GYgG6ix0RrOyt2oJ2ldPIg8XDperuGona9Cawu2xqEo?=
- =?us-ascii?Q?8hojK6OGwy4BDUbeJA/gv8LrBEzBN3A5Zm/i1aI7P1Lra6d+SE1UZT1Wzngi?=
- =?us-ascii?Q?WoB0pCc1r+Jq4GzOvpDbOwKKv2EejT1zUbdwveAXxlcxJieTBDZ9SlvxyV2K?=
- =?us-ascii?Q?QiycMQjW0awFKdyKIAC4RLUhOqkhUQTXuXpUM0PuMyGU54ZzMLk3SfgmHApo?=
- =?us-ascii?Q?vAUqKAGj9UIJ1L9xpayP0qhUyqJXD6kvpOQYyKzPuzLTbrVn7T/mH+W02woS?=
- =?us-ascii?Q?Z3OF1nYFw25R17fnSZ/J+4Pk2NhpynHlBuMmW7F9c009EKU55f+ru/Q3gQsE?=
- =?us-ascii?Q?GV3K1EK73nOc9lCP6KifWIBW6BCcEq5ZWijQYCMNZFQPyysaqYqdJSBie3WG?=
- =?us-ascii?Q?urrpTSgLM4G3ZTRJK4iBilSst8zs6Sd+L7lcrHud5RTAblO06U/mseUyJK0x?=
- =?us-ascii?Q?pkMAr8iCxp1ck3oSmNyiOSNHkYXX/uAqt+eGfZCbC3PvV5VhiN4hJfr/lqb+?=
- =?us-ascii?Q?x28Gm2fPHFBUxUhGbsx+3icwtxM71Yxqt62LNotc9nHLveCNRjir6FzS3dEL?=
- =?us-ascii?Q?NPckUzoHcgbstcI6ti2+df8oNlYJs1B0S0q8uwvZaLEhJdlFnnKAQPyfU+XG?=
- =?us-ascii?Q?pxcNRsqMlzh2Jr+onQ+Q2DHM38ORrTuiQ5mVpjY9R79gUuORjg6qDfVqCHaa?=
- =?us-ascii?Q?0+TOCl9B/yqhahhrWBRqIpqz0VBtFiPeSgK7yNRXwEFxuEqeG9SEy1zulmkF?=
- =?us-ascii?Q?CWL0AHmawtxD/ZRjUU9/+Vx4ttL7eA5adguuzDa92757pGb/gGc8OB+BKOzz?=
- =?us-ascii?Q?SjBJax4qqCzpYBSBh1VJ1x72CyXCHj5FXSP4coX8s/YM8MY2lSCD+WuZJdzj?=
- =?us-ascii?Q?F2deyrjkgM5mgfwE4H67IUzvYUktnsJS8qhFT6pNPksGQW2MzjV2A3f7+XEF?=
- =?us-ascii?Q?5bgfWZf+ob201UXCkQY9pbOOBKWRC9qIZdcvUhPstphJYIIowroQvU2LXuw6?=
- =?us-ascii?Q?fVFo6bfIpCDfOMY97rbwFKLeY8mkkb+mesY41mknHWLZFf5JQOHaY4mlb0FG?=
- =?us-ascii?Q?oebiBT/GMbJUo6FLe4yQfSResn/VQyqRLK8tak2F?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        libcamera-devel@lists.libcamera.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Matthias Fend <Matthias.Fend@wolfvision.net>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230406-feature-controls-lens-v2-0-faa8ad2bc404@wolfvision.net>
+ <20230406-feature-controls-lens-v2-3-faa8ad2bc404@wolfvision.net>
+ <20230607070345.GH14101@pendragon.ideasonboard.com>
+From:   Michael Riesch <michael.riesch@wolfvision.net>
+In-Reply-To: <20230607070345.GH14101@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: ZR2P278CA0010.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:50::14) To DU0PR08MB9155.eurprd08.prod.outlook.com
+ (2603:10a6:10:416::5)
 MIME-Version: 1.0
-X-OriginatorOrg: analog.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR08MB9155:EE_|GVXPR08MB7752:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5514908c-0cd2-4493-59bd-08db6be0dddf
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Ivnd0efCjNA1dt43zGRbwnG+ccN1S2KXtH9QfqnH0tXfevL3a9+J4lZB32xICkNw94SOUkpWDJ80FV62SwIT+InbBmSFI+gXpKYMrPKuAzUzXuT5Thl3WLOF3QUl1N66K9NHSBCnJGznaHcdkLujYXelvBgIHHkT4qiDjddMI2FClCsmjqO24p31NI5h5eYe1gDJavx1RFxfX43d65iHIfjDINpQYW8p8gPQIVm9Nfk2ZaWhQfgCvzub+1hL7GBOqg6T00tkkFvgUz8z+mksmMblEChRvyRTf1J3aHSDbUiXKHINIATfmzBYFbRLdAWv0RMItvS4eyXUGY9jDGkrSS0tgPpLndfqm5jYLGtpOlY17+TQYjl/FZ70vNbA8BMvwCcFUEoV/sa5+5dXTSbNOykT3EqcMP3G6pdnpIoGmCuc08XiOBVLATgG7UlRJZUFrckwhJcEuMaDr1iUY3kgvyDL6lUgEQU0b6yEh9blK9HK2sN0sMft7PQjGih8m1NoGBx4feprfI4hHwEKTNUTpJigD7naD089KKU1gsv5q3KosDQ3lawYKAN2JURZAckck+sa4cE7MFt7EjFnP5LSfCiIyC9ajnzOdEQ6KeIldrn8AwqVtkHYIJ9WRnR15zGnLFYBavLos0Y7MzjVdpG0Cw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9155.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(366004)(39850400004)(346002)(136003)(451199021)(5660300002)(8676002)(8936002)(2906002)(31686004)(66476007)(66946007)(66556008)(54906003)(44832011)(6486002)(4326008)(6506007)(6512007)(53546011)(6916009)(41300700001)(316002)(66899021)(186003)(478600001)(83380400001)(2616005)(86362001)(36756003)(31696002)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UWpwMUFQUXRHUU4yMDBGaEsxZXVtbGxwOVQyeHFWVmNPNzVMS1RTYmxsdDBQ?=
+ =?utf-8?B?SHU2UGxpSDlReHRDcVJ2Mjh3OERHRE9MYXB4VkZGYWJKMTNVWEZacWlYNnZw?=
+ =?utf-8?B?amdBaW9jcXpIZlM0QnpjT3hKdzdGZG1SWHUwdFI2Tlh0WGE0dk5iY1doNnhi?=
+ =?utf-8?B?OWsyQ3NWUEw5L3I2aDIwcWN3OXpVZHJKWFAvc1J5WHB3d0lpdno5ZXh3bjRh?=
+ =?utf-8?B?NExHZ3JlekRqcElzZEowOU5qTUFzTzRyNytyaytoaUJtYXFNVUdvb0VoS0g1?=
+ =?utf-8?B?UmlPYU1rYnZrTHhWZVhVakt3dnllZ1ZDRnlDTm03WS8wOWY3ais5cXhnYUU0?=
+ =?utf-8?B?MU50L2V1RndTamxDTGNaQjlFMW1UUkY2TDgrcEFKcUpnWWNBSlVnRTU3a1Vu?=
+ =?utf-8?B?VnNmOXNjTlZmUVN3WTU3MDlvYVkvRE1GT1dlcGg0SGF1RE12WitueTVNZS9X?=
+ =?utf-8?B?cklWcXkvelBxZ282YlB1NXZzRnl2MDltbk1NNEhadXpqa1pSNng1U3hGRnd6?=
+ =?utf-8?B?RExZZ3pEUE5yZC8yZ1JvdDlKWmpqTGE3VCtwRXhiRXZYQ2U5VDNDb3pHdDZo?=
+ =?utf-8?B?aGtJSER2cHhMRDM2ZTNKZmk3SEYxTGFwV2R6RTdMR1pCd1hlbnc2VDdmOTdZ?=
+ =?utf-8?B?bE1YN3VRTytNa1JtdklzOEVkdWI3QTlOUm9OeFlEY1FKWWJuNS9UN2d2R1Zn?=
+ =?utf-8?B?S1BST3NEQ2w2MUhsS0tHSkpERFlEZXBpK0RBbGp2WERmQ3NNeWdLU1VuYUQ4?=
+ =?utf-8?B?bnhIU2J5U1FFSDA0Z3BoREhMZ3M1Zk02QmZXL21XeFVkbWZQQzBOeUZhK05B?=
+ =?utf-8?B?a1BpQS9NTmsxZW8wTm9BeWlnSlRyZTRuME9hSkR6c0ZsSHVtOS80R1J1NVdK?=
+ =?utf-8?B?S2haekpsaGZQYU5EVS9JUDg4MWhWN1VxUlUxM3BrT2dPOVR4UjdEb3IzdzRU?=
+ =?utf-8?B?Qk9JRUh4RDZlcGV6UW0yeFdabTErcU84MzE3ZDdlUUpOMTlORWM3MnlBeHgz?=
+ =?utf-8?B?YjNibFlhNTNNOTZvSy9lVGFEQUREV2tDYkxJa0NLaVhXc0o0eXpoK0hSeXRk?=
+ =?utf-8?B?K1ZmbzZQRjM5SmlaYUJrYkpIT1VWWDBDUDMyZU9jTjNlNXVsMjg3YkNrWGhT?=
+ =?utf-8?B?UHYxRlJmeE54aDU4bXgwWWdUNFpMcWFsZkVsMmZPZHMrZ29uT1FTQitMVE5Q?=
+ =?utf-8?B?ZWc4RWVSeXZDYTFTTUFrSWoyRVhBQVBWTG4wQzR3YTI4V1RST3p5eC8vVmVO?=
+ =?utf-8?B?RzFMalVLY0g0OVNPcWJzR0xNU3pLN2V0K0NiMUhlU043RUF5eGxKeEduVkdt?=
+ =?utf-8?B?MU1rdnl2M0xzK0pscEk3QkprNGpodUcrRzhGWndtZndLWGJUZGZWLzJ3a0pI?=
+ =?utf-8?B?enpLTGI5UnBtNXV1YldEY0UzZC9pNFRWMHEzcDRKZVRsaUJsZ3RtTEhHQlRQ?=
+ =?utf-8?B?dGY1TlNUSVZCZzM2T3RxUzdSMGorbFV4b2JacXIwQTRYT1VYQ3A3RjNRbk5K?=
+ =?utf-8?B?WmdwM2JxeDJiQ1FyeVl2VjNSdTFiUlk2aFpWTlVlSjlVdEtIcldzUTE5UHk0?=
+ =?utf-8?B?azV4T24zclhlNzhSRWt5UHRCSFJXOUFoQXgzdmV4bExZWTkyVWVleHhmVUky?=
+ =?utf-8?B?MWN2NDh5NVZLZzY3bTZualdwb0VMQldHS0dXUW5ZV1VaSDEyUnRIdEZJMmND?=
+ =?utf-8?B?b1Z0MWlaSTQyOWRqemFOZ0dTTVpsZE9SUG5JNUV4NXE5aHRUcGxpQVNGdnhE?=
+ =?utf-8?B?YjRoZ0hmVmorZGJRWXgrbmtoNVoxeXRobFFTVVNOeElRaTdtK1hJZEQvcmZi?=
+ =?utf-8?B?K0tlNkNweTljc1ZiaG5CV3VzMFY1N04rcTdnTUtwSHdFeXFycHpqOWdIYnAv?=
+ =?utf-8?B?WGFXSk9HNkUvb0NqdHR1OFRVTFlDRjUyUWhDVzJXYll0aWZOMWc4TUhoSjdl?=
+ =?utf-8?B?ZFMvVmJmUW5LUkRZS0c0SklTZDRCY0RHR05kNy9GWjBDVlZST1pWSzJwOGc0?=
+ =?utf-8?B?b2N0bmFtdjBGcnRNMVlIbXR3TDQwVkdUaVRYTDZZbjNyVDQ4SHFiak5aRVRm?=
+ =?utf-8?B?dW9MbytoeDNvL0JCenJvS2lJRjh3d1l6MFJxWS9wdHVnRjZUN2hLaXFTd1hF?=
+ =?utf-8?B?ZXpwMmF2eGoyNkZVSG8rNEpZOHQ1ZG9saGhWVnorYWM5cHNzeHFHRG16Ui9D?=
+ =?utf-8?B?ekZXdnZhbGY3bS9Bdk9jbzNoMlI2MXdVSzFsUmV6czdCZGJua3UrMjhJZHo3?=
+ =?utf-8?Q?N4hFWykFtezUIJ7gJlpl7cEqdSwe/tJZzxkGRQ1mjY=3D?=
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5514908c-0cd2-4493-59bd-08db6be0dddf
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9155.eurprd08.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR03MB5168.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3628e8c4-fcae-43b9-ca78-08db6be09ee5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jun 2023 07:34:28.5459
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2023 07:36:14.3809
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pr8Re7MlluCpbEIeQ3lx04GbqtJcZHXjrzwVbZ9T+D02CU8u8rycswKRNfkXW34v9HTo5la0KD/CUgO5rkPn1w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR03MB5480
-X-Proofpoint-GUID: 7KeERJJqujbzwuj82IkWojqyHHXd6pUH
-X-Proofpoint-ORIG-GUID: 7KeERJJqujbzwuj82IkWojqyHHXd6pUH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-13_04,2023-06-12_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 phishscore=0 mlxlogscore=999 spamscore=0 mlxscore=0
- lowpriorityscore=0 impostorscore=0 bulkscore=0 clxscore=1011
- suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306130067
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Aw4EZLtQkXJwE17xDjqPDrhyaFCJ3tMd9NUVcP3jogSAf4OB8qRgVBU8ipYAqacFh1NEIfN2AXXtM5kJQWeO58/vN3m97/lUucpTnpQCCnA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR08MB7752
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->On Fri, Apr 21, 2023 at 08:39:38AM +0100, Lee Jones wrote:
->
->> I'll try anything once!
->
->> Fair warning, I think this is going to massively complicate things.
->
->> Either we're going to be left with a situation where child-driver
->> maintainers are scrabbling around looking for previous versions for the
->> MFD pull-request or contributors being forced to wait a full cycle for
->> their dependencies to arrive in the maintainer's base.
->
->If people are resending after the MFD has gone in they really ought to
->be including the pull request in the cover letter, with some combination
->of either referencing the mail or just saying "this depends on the
->signed tag at url+tag", the same way they would for any other dependency.
->
->I can't see how you applying stuff when you can slow things down TBH,
->the MFD bits will be applied faster and either people can pull in a
->shared tag or you can apply more commits on top of the existing core
->driver.
->
->> I'm not sure why simply providing your Ack when you're happy with the
->> driver and forgetting about the set until the pull-request arrives, like
->> we've been doing for nearly a decade now, isn't working for you anymore
->> but I'm mostly sure this method will be a regression.
->
->Like I said I've not been doing that, I've mostly been just applying the
->driver when it's ready.  This might not have been so visible to you
->since it means that the regulator driver doesn't appear in the series by
->the time the MFD settles down.  The whole "Acked-for-MFD" has always
->been a bit confusing TBH, it's not a normal ack ("go ahead and apply
->this, I'm fine with it") so it was never clear what the intention was.
->
->Before I started just applying the drivers there used to be constant
->problems with things like tags going missing (which some of the time is
->the submitter just not carrying them but can also be the result of some
->churn causing them to be deliberately dropped due to changes) or
->forgetting the series as you suggest and then not looking at some other
->very similarly named series that was also getting lots of versions after
->thinking it was one that had been reviewed already.  It was all very
->frustrating.  Not doing the tags until the dependencies have settled
->down means that if it's in my inbox it at least consistently needs some
->kind of attention and that the submitter didn't drop tags or anything so
->I know why there's no tag on it even though the version number is high,
->though it's not ideal either.
+Hi Laurent,
 
-Hi Mark and Lee,
+Thanks for the review. I'll address your comments in the next iteration,
+but please be aware that it may take some time due to other things
+needing my attention.
 
-Is there anything that I need to do for this patch set. I have received rev=
-iewed
-by tag for all of them so far.=20
+On 6/7/23 09:03, Laurent Pinchart wrote:
+> Hi Michael,
+> 
+> Thank you for the patch.
+> 
+> On Tue, Apr 25, 2023 at 11:45:13AM +0200, Michael Riesch wrote:
+>> Add the controls V4L2_CID_{FOCUS,ZOOM}_{CURRENT,STATUS} that report the
+>> current position and status, respectively, of the zoom lens group and
+>> the focus lens group.
+>>
+>> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
+>> ---
+>>  .../userspace-api/media/v4l/ext-ctrls-camera.rst   | 46 ++++++++++++++++++++++
+>>  drivers/media/v4l2-core/v4l2-ctrls-defs.c          | 10 +++++
+>>  include/uapi/linux/v4l2-controls.h                 |  9 +++++
+>>  3 files changed, 65 insertions(+)
+>>
+>> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
+>> index 42cf4c3cda0c..3ea4175f9619 100644
+>> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
+>> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
+>> @@ -150,6 +150,29 @@ enum v4l2_exposure_metering -
+>>      write-only control. It should be implemented only if the device cannot
+>>      handle absolute values.
+>>  
+>> +``V4L2_CID_FOCUS_CURRENT (integer)``
+>> +    The current position of the focal point. The unit is undefined. Larger
+>> +    values indicate that the focus is closer to the camera, smaller values
+>> +    indicate that the focus is closer to infinity. This is a read-only control.
+> 
+> I think you should also update the definition of the
+> V4L2_CID_FOCUS_ABSOLUTE control to indicate the reading the control back
+> will return the focus *target*, not the current focus position. This
+> control should also refer to V4L2_CID_FOCUS_ABSOLUTE.
+> 
+> I think we should also require the V4L2_CID_FOCUS_CURRENT and
+> V4L2_CID_FOCUS_ABSOLUTE controls to have the same unit.
+> 
+> Is this control expected to generate events, when the lens reaches its
+> target position, or during movement ?
 
-Regards,
-Okan Sahin
+Although I can't rule it out completely, it wouldn't expect that the
+current position of a lens triggers events. I would say that this is a
+continuous movement (well, in case of a stepper motor a quasi-continuous
+one), so when exactly should the controller generate in interrupt/event?
+
+I expect that the current position is polled instead, e.g., once per
+frame in the scope of an autofocus algorithm.
+
+When the lens reaches its target, an event could be generated, but this
+would be related to the _STATUS control below.
+
+> How should we deal with the drivers that implement
+> V4L2_CID_FOCUS_ABSOLUTE, do any of them implement reading
+> V4L2_CID_FOCUS_ABSOLUTE with the semantics of the V4L2_CID_FOCUS_CURRENT
+> control, instead of returning the focus target ?
+
+Not sure whether I understand your question correctly, but drivers that
+implement V4L2_CID_FOCUS_ABSOLUTE are mostly VCMs where I believe it is
+assumed that target always equals the current position due to their fast
+response.
+
+But then there is the UVC driver of course. Only had a quick look, but
+it seems to me that Focus (Absolute) does not support GET_CUR. I would
+guess that GET_CUR could return the current value in the sense of
+V4L2_CID_FOCUS_CURRENT.
+
+>> +
+>> +``V4L2_CID_FOCUS_STATUS (bitmask)``
+>> +    The status of the focus lens group. The possible flags are described in
+>> +    the table below. This is a read-only control.
+> 
+> Is this control expected to generate events ?
+
+Yes, one could think of events when the lens reached its target or a
+collision prevented exactly that.
+
+>> +
+>> +.. tabularcolumns:: |p{6.8cm}|p{10.7cm}|
+>> +
+>> +.. flat-table::
+>> +    :header-rows:  0
+>> +    :stub-columns: 0
+>> +
+>> +    * - ``V4L2_LENS_STATUS_IDLE``
+>> +      - Focus lens group is at rest.
+>> +    * - ``V4L2_LENS_STATUS_BUSY``
+>> +      - Focus lens group is moving.
+> 
+> V4L2_LENS_STATUS_MOVING would be a better name if it's defined as "is
+> moving".
+> 
+>> +    * - ``V4L2_LENS_STATUS_FAILED``
+>> +      - Focus lens group has failed to reach its target position. The driver
+> 
+> What are the expected reasons for this ?
+
+Variable focal length optics are complex beasts. It could happen, for
+instance, that the range of the focus lens depends on the position of
+the zoom lens(es). A smart controller could handle such situations
+properly and the failure will never occur, but there might be
+not-so-smart controllers as well.
+
+In our case the status of the individual lenses is very important for
+the initial calibration. Here, we need to be informed when a
+collision/failure happened. Once the calibration is complete, this
+should not occur anymore.
+
+Best regards,
+Michael
+
+>> +	will not transition from this state until another action is performed
+>> +	by an application.
+> 
+> You're talking about transitions here, I think you should document the
+> state machine for the other states too. I expect the control to
+> transition from IDLE to MOVING when the V4L2_CID_FOCUS_ABSOLUTE control
+> is set, and transition from MOVING to IDLE or FAILED at the end of the
+> motion. What happens if the user sets V4L2_CID_FOCUS_ABSOLUTE while the
+> status is MOVING also needs to be documented.
+> 
+> It sounds we need helper functions to implement this state machine and
+> generate events, leaving it to drivers would open the door to different
+> behaviours for different devices.
+> 
+> All these comments apply to zoom too.
+> 
+>>  
+>>  ``V4L2_CID_FOCUS_AUTO (boolean)``
+>>      Enables continuous automatic focus adjustments. The effect of manual
+>> @@ -241,6 +264,29 @@ enum v4l2_auto_focus_range -
+>>      movement. A negative value moves the zoom lens group towards the
+>>      wide-angle direction. The zoom speed unit is driver-specific.
+>>  
+>> +``V4L2_CID_ZOOM_CURRENT (integer)``
+>> +    The current objective lens focal length. The unit is undefined and
+>> +    its value should be a positive integer. This is a read-only control.
+>> +
+>> +``V4L2_CID_ZOOM_STATUS (bitmask)``
+>> +    The status of the zoom lens group. The possible flags are described in
+>> +    the table below. This is a read-only control.
+>> +
+>> +.. tabularcolumns:: |p{6.8cm}|p{10.7cm}|
+>> +
+>> +.. flat-table::
+>> +    :header-rows:  0
+>> +    :stub-columns: 0
+>> +
+>> +    * - ``V4L2_LENS_STATUS_IDLE``
+>> +      - Zoom lens group is at rest.
+>> +    * - ``V4L2_LENS_STATUS_BUSY``
+>> +      - Zoom lens group is moving.
+>> +    * - ``V4L2_LENS_STATUS_FAILED``
+>> +      - Zoom lens group has failed to reach its target position. The driver will
+>> +	not transition from this state until another action is performed by an
+>> +	application.
+>> +
+>>  ``V4L2_CID_IRIS_ABSOLUTE (integer)``
+>>      This control sets the camera's aperture to the specified value. The
+>>      unit is undefined. Larger values open the iris wider, smaller values
+>> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+>> index 564fedee2c88..794ef3ab0c02 100644
+>> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+>> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+>> @@ -1044,6 +1044,10 @@ const char *v4l2_ctrl_get_name(u32 id)
+>>  	case V4L2_CID_CAMERA_ORIENTATION:	return "Camera Orientation";
+>>  	case V4L2_CID_CAMERA_SENSOR_ROTATION:	return "Camera Sensor Rotation";
+>>  	case V4L2_CID_HDR_SENSOR_MODE:		return "HDR Sensor Mode";
+>> +	case V4L2_CID_FOCUS_CURRENT:		return "Focus, Current";
+>> +	case V4L2_CID_FOCUS_STATUS:		return "Focus, Status";
+>> +	case V4L2_CID_ZOOM_CURRENT:		return "Zoom, Current";
+>> +	case V4L2_CID_ZOOM_STATUS:		return "Zoom, Status";
+>>  
+>>  	/* FM Radio Modulator controls */
+>>  	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
+>> @@ -1593,6 +1597,12 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
+>>  		*flags |= V4L2_CTRL_FLAG_WRITE_ONLY |
+>>  			  V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
+>>  		break;
+>> +	case V4L2_CID_FOCUS_CURRENT:
+>> +	case V4L2_CID_FOCUS_STATUS:
+>> +	case V4L2_CID_ZOOM_CURRENT:
+>> +	case V4L2_CID_ZOOM_STATUS:
+>> +		*flags |= V4L2_CTRL_FLAG_READ_ONLY | V4L2_CTRL_FLAG_VOLATILE;
+>> +		break;
+>>  	case V4L2_CID_FLASH_STROBE_STATUS:
+>>  	case V4L2_CID_AUTO_FOCUS_STATUS:
+>>  	case V4L2_CID_FLASH_READY:
+>> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+>> index 5e80daa4ffe0..793ee8c65e87 100644
+>> --- a/include/uapi/linux/v4l2-controls.h
+>> +++ b/include/uapi/linux/v4l2-controls.h
+>> @@ -993,6 +993,15 @@ enum v4l2_auto_focus_range {
+>>  
+>>  #define V4L2_CID_HDR_SENSOR_MODE		(V4L2_CID_CAMERA_CLASS_BASE+36)
+>>  
+>> +#define V4L2_LENS_STATUS_IDLE			(0 << 0)
+>> +#define V4L2_LENS_STATUS_BUSY			(1 << 0)
+>> +#define V4L2_LENS_STATUS_FAILED			(1 << 2)
+>> +
+>> +#define V4L2_CID_FOCUS_CURRENT			(V4L2_CID_CAMERA_CLASS_BASE+37)
+>> +#define V4L2_CID_FOCUS_STATUS			(V4L2_CID_CAMERA_CLASS_BASE+38)
+>> +#define V4L2_CID_ZOOM_CURRENT			(V4L2_CID_CAMERA_CLASS_BASE+39)
+>> +#define V4L2_CID_ZOOM_STATUS			(V4L2_CID_CAMERA_CLASS_BASE+40)
+>> +
+>>  /* FM Modulator class control IDs */
+>>  
+>>  #define V4L2_CID_FM_TX_CLASS_BASE		(V4L2_CTRL_CLASS_FM_TX | 0x900)
+>>
+> 
