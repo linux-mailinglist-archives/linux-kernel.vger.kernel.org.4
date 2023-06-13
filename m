@@ -2,99 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 935A272EBB1
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A327772EBB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:13:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240588AbjFMTMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 15:12:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55426 "EHLO
+        id S233029AbjFMTNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 15:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233057AbjFMTMJ (ORCPT
+        with ESMTP id S231667AbjFMTNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 15:12:09 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A180292
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:12:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Content-Type:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-To:Resent-Cc:
-        Resent-Message-ID:In-Reply-To:References;
-        bh=SrpgzuH0KR9yBiTvlVofkEktvkwwH5sLm2fMqoWHD5Y=; t=1686683527; x=1687893127; 
-        b=L9yh2Ai3tnqdzXvMDzeif6BWzWw0fxn8jn0fd97zCgMCZLj8q5hBMga3E+kl5t9bnMxyuxCdwho
-        /g3wBQHDAGjGDN5NdUM3CG+UHjUc4v1FC3yLVVfi91l+wubBPw2/LUG4BzqKq3z+zN/NbvykH5+Fj
-        WCigeAizo+ILcGopGQy8rplvrobyS2r8JdWLE7Fk1LB9HdbqcKGbtQ6IdQYeKhT0rMEFucIZC3AnT
-        +9YklRYgMYBuxsMol0GRHDwUJPilBdASxxYCkFytG1VsZdJRyDNiWVjdyLUj2K4Myrnu90CYZPe3f
-        Q68ul3O+GTRNcWvn89iwVeccIXb/Y99gF5Lg==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1q99Qx-005B5P-30;
-        Tue, 13 Jun 2023 21:12:04 +0200
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jan Kiszka <jan.kiszka@siemens.com>,
-        Kieran Bingham <kbingham@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH] gdb: linux: make SB_* constants gdb-parsed
-Date:   Tue, 13 Jun 2023 21:11:59 +0200
-Message-Id: <20230613211159.b1faefb1a1bd.Ie873f66db5555c014c4afc15678e4fd5cfeca226@changeid>
-X-Mailer: git-send-email 2.40.1
+        Tue, 13 Jun 2023 15:13:04 -0400
+Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088721BDB
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:13:03 -0700 (PDT)
+Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-77ade29e1easo549436839f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:13:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686683582; x=1689275582;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eCNqdunKDuVY4aQw92zFkhhfWi7DLSQ56UGFt9Om+VA=;
+        b=CQzp97ndixqH5/t4+r8SaIVkaSFB/woxmdOnOkqO/olA4kpi33KukYHFJNKlM6CkSo
+         qeUa2WrGpYtIa7a6RjfBJyV8dvCpO5N9Ow1hnEHxB1rxHI596HE0IFgWm1eg0HePnm2T
+         0gOIJwSUzxD/pDaPcGUnBOs6u2bsMf9oyRfbqMdkJwhpf033coUnDAGFQhkWqt8EIzvh
+         7JrtYFPrbO2aB+xb5wA7EErETs0o4SDFDee1gVaLNI8dmwkjGXa3viO0lEMK/0dye+BK
+         jSZFa6IWoFcHAQBIAqpApdB+Y6nc2ipU1DGJk9Jxd7bVk25zN/FKcGygcZR+tBIEgWGP
+         s0sg==
+X-Gm-Message-State: AC+VfDxfqawSvdrhgVHOI49Q9UgYEgFVTpxn9GDKF1JcJEchoMjkMOyU
+        DX2KV1QMA+5jxn+mkegexw69MPI098dl+2rXWHV93qhX0y4f
+X-Google-Smtp-Source: ACHHUZ5Kc3S8nfvS+Ei/DvQAZwxWT0Y3C6QjfRbQBEmGZOPCQnb5kpwPL9uE2LywEbAopkf22ohUqmqTZQGnJ7YYt13vhhjzMf0r
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a6b:fd15:0:b0:777:afc6:8da0 with SMTP id
+ c21-20020a6bfd15000000b00777afc68da0mr5335883ioi.1.1686683582324; Tue, 13 Jun
+ 2023 12:13:02 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 12:13:02 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c5e79405fe079f9d@google.com>
+Subject: [syzbot] [reiserfs?] UBSAN: array-index-out-of-bounds in direntry_create_vi
+From:   syzbot <syzbot+e5bb9eb00a5a5ed2a9a2@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+Hello,
 
-These now contain "UL" suffixes due to the use of BIT(),
-so they need to be parsed by gdb since python doesn't
-understand that.
+syzbot found the following issue on:
 
-Also fix a comment typo while at it.
+HEAD commit:    1f6ce8392d6f Add linux-next specific files for 20230613
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=164a5a9b280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d103d5f9125e9fe9
+dashboard link: https://syzkaller.appspot.com/bug?extid=e5bb9eb00a5a5ed2a9a2
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-ticket=none
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Fixes: f15afbd34d8f ("fs: fix undefined behavior in bit shift for SB_NOUSER")
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/2d9bf45aeae9/disk-1f6ce839.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e0b03ef83e17/vmlinux-1f6ce839.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/b6c21a24174d/bzImage-1f6ce839.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e5bb9eb00a5a5ed2a9a2@syzkaller.appspotmail.com
+
+REISERFS (device loop2): checking transaction log (loop2)
+REISERFS (device loop2): Using r5 hash to sort names
+reiserfs: enabling write barrier flush mode
+REISERFS (device loop2): Created .reiserfs_priv - reserved for xattr storage.
+================================================================================
+UBSAN: array-index-out-of-bounds in fs/reiserfs/item_ops.c:485:21
+index 1 is out of range for type '__u16 [1]'
+CPU: 1 PID: 10154 Comm: syz-executor.2 Not tainted 6.4.0-rc6-next-20230613-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
+ ubsan_epilogue lib/ubsan.c:217 [inline]
+ __ubsan_handle_out_of_bounds+0xd5/0x140 lib/ubsan.c:348
+ direntry_create_vi+0x8db/0x9f0 fs/reiserfs/item_ops.c:485
+ create_virtual_node+0x748/0x1a70 fs/reiserfs/fix_node.c:115
+ ip_check_balance fs/reiserfs/fix_node.c:1412 [inline]
+ check_balance fs/reiserfs/fix_node.c:2083 [inline]
+ fix_nodes+0x42e9/0x8660 fs/reiserfs/fix_node.c:2635
+ reiserfs_paste_into_item+0x51a/0x8d0 fs/reiserfs/stree.c:2128
+ reiserfs_get_block+0x165c/0x4100 fs/reiserfs/inode.c:1069
+ __block_write_begin_int+0x3b1/0x14a0 fs/buffer.c:2128
+ reiserfs_write_begin+0x36e/0xa60 fs/reiserfs/inode.c:2773
+ generic_cont_expand_simple+0x117/0x1f0 fs/buffer.c:2488
+ reiserfs_setattr+0x395/0x1370 fs/reiserfs/inode.c:3304
+ notify_change+0xb2c/0x1180 fs/attr.c:483
+ do_truncate+0x143/0x200 fs/open.c:66
+ do_sys_ftruncate+0x549/0x780 fs/open.c:194
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fd1ea48c199
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fd1eb140168 EFLAGS: 00000246 ORIG_RAX: 000000000000004d
+RAX: ffffffffffffffda RBX: 00007fd1ea5abf80 RCX: 00007fd1ea48c199
+RDX: 0000000000000000 RSI: 0000000006000000 RDI: 0000000000000005
+RBP: 00007fd1ea4e7ca1 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffe9b988ecf R14: 00007fd1eb140300 R15: 0000000000022000
+ </TASK>
+================================================================================
+
+
 ---
- scripts/gdb/linux/constants.py.in | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/scripts/gdb/linux/constants.py.in b/scripts/gdb/linux/constants.py.in
-index 471300ba176c..646fffddd862 100644
---- a/scripts/gdb/linux/constants.py.in
-+++ b/scripts/gdb/linux/constants.py.in
-@@ -48,14 +48,14 @@ if IS_BUILTIN(CONFIG_COMMON_CLK):
-     LX_GDBPARSED(CLK_GET_RATE_NOCACHE)
- 
- /* linux/fs.h */
--LX_VALUE(SB_RDONLY)
--LX_VALUE(SB_SYNCHRONOUS)
--LX_VALUE(SB_MANDLOCK)
--LX_VALUE(SB_DIRSYNC)
--LX_VALUE(SB_NOATIME)
--LX_VALUE(SB_NODIRATIME)
-+LX_GDBPARSED(SB_RDONLY)
-+LX_GDBPARSED(SB_SYNCHRONOUS)
-+LX_GDBPARSED(SB_MANDLOCK)
-+LX_GDBPARSED(SB_DIRSYNC)
-+LX_GDBPARSED(SB_NOATIME)
-+LX_GDBPARSED(SB_NODIRATIME)
- 
--/* linux/htimer.h */
-+/* linux/hrtimer.h */
- LX_GDBPARSED(hrtimer_resolution)
- 
- /* linux/irq.h */
--- 
-2.40.1
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
