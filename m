@@ -2,75 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8443172DC83
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A2C72DC86
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:32:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241217AbjFMIbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 04:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42382 "EHLO
+        id S241237AbjFMIcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 04:32:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235270AbjFMIbl (ORCPT
+        with ESMTP id S241232AbjFMIcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 04:31:41 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F152BE5
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 01:31:14 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-652a6bf4e6aso4133342b3a.2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 01:31:14 -0700 (PDT)
+        Tue, 13 Jun 2023 04:32:03 -0400
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C59710FF
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 01:31:56 -0700 (PDT)
+Received: by mail-ua1-x92b.google.com with SMTP id a1e0cc1a2514c-78a03acc52aso296202241.3
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 01:31:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1686645074; x=1689237074;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1686645115; x=1689237115;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WBLsYYCRK+M7QM1fm/1EP1IdQg+rYVQrvl5Ag66IbpI=;
-        b=HPsDq4J5O/IKVFZpARKzG5/QUls0v9oZRVCTmifME+MK9AE55F2M7SB+GZNsB8rDHG
-         ocPaiGHqBjD5ae3JA2OMHTxbfy66P+eY7aXN6oxhGT3s2+cAG7fpv2EChzWowamVjGsO
-         QFYeEq9PXlJE6AuDyquEm6WHSs9bygWcxhT75Oiho9Wg4AJags64jfI+W7fPAOkvokO+
-         yzUzTQ4uKkiPz/6nYiqNVnvWYF/bX9kE3N4AhTRXgSI4//nc1hHOt9hBtWCAs/WC4mrD
-         EuH+eE17HN4KQl8h4bPNixBZYh8ePL0hfhG460SA8dMruNkY5jSRYXYiA+NuLHmml1gZ
-         QnrQ==
+        bh=M4iXIQmlE7K/ZL7WODqTijarurUNDUtMrl1zC33XtUM=;
+        b=W7tOwFeb7OKaxnCiWPufvGERu1UH+ZrF1DmyUa800pGdoqQl/VPPjOXX1qwejlfKor
+         YeLpeMhOhLpm+EJmFC7BGEmPAU7W/b9pY505g6yYrzSINKGosNEnDQbDVBSOk9kPP1U7
+         P/LJK0huLvgULwj46FxudgkbrwqoveABcSttSUwFagxY0ty7MGC07uI8BAC2MedDUUsZ
+         YhGqhz1NzVAb/vX/TYb76hWGX+5fu9GKM8InGQOrPLdA75AmJD5C2mAAvgmol1fZB2Df
+         jq9ihOt2MbZ8JbLyYTW6HDTxpN1xwsks98n2Z/8vJtnzNx1CXpmGhzqhHTTyTmbQ8z58
+         gxrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686645074; x=1689237074;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=WBLsYYCRK+M7QM1fm/1EP1IdQg+rYVQrvl5Ag66IbpI=;
-        b=Tw8mC9spxbLBmuqqu/+JWHdVzJRiM+0ZwPmYwSrSoFWGnh3d7laFhcSdx9N38WBRfq
-         ZfkJjS7TWIWK+IrUtRNpa8abmGM/0f5A7ufRl9JL4KiyYrcSBQ4pYV2PSUuGPfxkz8U+
-         5xYQVpkph2dJDMkEtpIZ5lAhQNS74dQxJ2Wo8lopTp3WI7FA01oJqXmDfV0cEqckKBc8
-         pJJbqwmlNmfQ64/TR+ULyw5EQE9AWdv7FL7SrvmYY/J2mRKy9Bf8S+ubGXuDhvrtXxNm
-         DwbEkf75X50xGK1NxxBpJ+2L8VTwDH31bBWQZ+3G0uDUpctbMyl/KdCW7CDOJ/1HVvbF
-         nQ1w==
-X-Gm-Message-State: AC+VfDxeHzth4KT0qvf3xcC8BOBv9Dnx1Feo3BXhK8ObThFMTw55i1dO
-        22w42jlFhmgbu/9H7xPdmT5Axw==
-X-Google-Smtp-Source: ACHHUZ7qf8zIFKTi1bB6s8QQYmm5o7Sw8fTDibk5ylPlVn27D5AdZxqRgTRX8cddfxUJbUm3+BFsCw==
-X-Received: by 2002:a17:902:e747:b0:1b3:ec39:f40d with SMTP id p7-20020a170902e74700b001b3ec39f40dmr732878plf.50.1686645074457;
-        Tue, 13 Jun 2023 01:31:14 -0700 (PDT)
-Received: from ?IPV6:fdbd:ff1:ce00:11b7:189f:bf83:942e:7892? ([240e:694:e21:b::2])
-        by smtp.gmail.com with ESMTPSA id c18-20020a170902b69200b001ae59169f05sm9643163pls.182.2023.06.13.01.31.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 01:31:13 -0700 (PDT)
-Message-ID: <c06dd33c-bc91-e0a9-096c-d135ce4fedcb@bytedance.com>
-Date:   Tue, 13 Jun 2023 16:31:05 +0800
+        d=1e100.net; s=20221208; t=1686645115; x=1689237115;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M4iXIQmlE7K/ZL7WODqTijarurUNDUtMrl1zC33XtUM=;
+        b=bYzFZjJa7ij4rTayE/8gXx9oOf4q61AzNiW6h5l7Cu9z81K0Kl+IOlMVMp754+PA23
+         yukpjVe3VXfdipP8aeqsWtJfMU7FroL0sHRpWGlOkLXq4eET/3eBZxyN1KnhCCWQ8xYy
+         k0gA5IiUu8LYHf/T6Q5H+5cQUVnVah8iWPJMx87Poo8Bpe85ursxuyQbNVirTOR3PzB8
+         LV5+/lPiDiaSxkjpmWy5hV1FeE+LSFpgF6dGxjcvXOQyR544YASOZkeLoicG+IQThtwY
+         6xwuNWv9SLc37siMt5Sjh+X0jjEL4pcN9R2CnfHC2kYUiDsya/mdk4LnE0ScjwPlla//
+         6ddg==
+X-Gm-Message-State: AC+VfDy7ltiPNOqfdVCgIcwJ65HfaIhBoxoXUPDrhEXR7Lweq66irsLi
+        hQ2bidLuJttPfRnoRqzd2mnce2D3O6hsg5DkzkEKbYyk38X1uXf1NgTwWQ==
+X-Google-Smtp-Source: ACHHUZ7dAttEj0WX3njveCX71aXDMkbQmyqjLTKbyt12iCSdXtC5npmRe3YLMafc5OUtcg/WusOl5Ln1bid0f4entac=
+X-Received: by 2002:a67:ff91:0:b0:43b:3ad8:6886 with SMTP id
+ v17-20020a67ff91000000b0043b3ad86886mr5060793vsq.16.1686645114885; Tue, 13
+ Jun 2023 01:31:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH v5 1/4] sched/core: Fixed missing rq clock update before
- calling set_rq_offline()
-To:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        mgorman@techsingularity.net
-Cc:     linux-kernel@vger.kernel.org
-References: <20230613082012.49615-1-jiahao.os@bytedance.com>
- <20230613082012.49615-2-jiahao.os@bytedance.com>
-From:   Hao Jia <jiahao.os@bytedance.com>
-In-Reply-To: <20230613082012.49615-2-jiahao.os@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230612101702.085813286@linuxfoundation.org>
+In-Reply-To: <20230612101702.085813286@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 13 Jun 2023 14:01:43 +0530
+Message-ID: <CA+G9fYuUF6pc44ETj7q7Mz5Lik93OqLkK_uzx1D_Yu2CGc_V2g@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/91] 5.15.117-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,127 +73,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 12 Jun 2023 at 16:05, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.117 release.
+> There are 91 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 14 Jun 2023 10:16:41 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.117-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
 
-On 2023/6/13 Hao Jia wrote:
-> This is triggered during cpu offline when CONFIG_CPU_FREQ is enabled
-> and cpufreq is set to powersave:
-> ------------[ cut here ]------------
-> rq->clock_update_flags < RQCF_ACT_SKIP
-> WARNING: CPU: 24 PID: 754 at kernel/sched/sched.h:1496
-> enqueue_top_rt_rq+0x139/0x160
-> Call Trace:
->   <TASK>
->   ? intel_pstate_update_util+0x3b0/0x3b0
->   rq_offline_rt+0x1b7/0x250
->   set_rq_offline.part.120+0x28/0x60
->   rq_attach_root+0xc4/0xd0
->   cpu_attach_domain+0x3dc/0x7f0
->   ? __schedule+0x65e/0x1310
->   partition_sched_domains_locked+0x2a5/0x3c0
->   rebuild_sched_domains_locked+0x477/0x830
->   ? percpu_rwsem_wait+0x140/0x140
->   rebuild_sched_domains+0x1b/0x30
->   cpuset_hotplug_workfn+0x2ca/0xc90
->   ? balance_push+0x56/0x120
->   ? _raw_spin_unlock+0x15/0x30
->   ? finish_task_switch+0x98/0x2f0
->   ? __switch_to+0x116/0x410
->   ? __schedule+0x65e/0x1310 ? internal_add_timer+0x42/0x60
->   ? _raw_spin_unlock_irqrestore+0x23/0x40
->   ? add_timer_on+0xd5/0x130
->   process_one_work+0x1bc/0x3d0
->   worker_thread+0x4c/0x380
->   ? preempt_count_add+0x56/0xa0
->   ? rescuer_thread+0x310/0x310
->   kthread+0xe6/0x110
->   ? kthread_complete_and_exit+0x20/0x20
->   ret_from_fork+0x1f/0x30
-> 
-> More detailed key function call graph:
-> rq_offline_rt()
->    __disable_runtime()
->      sched_rt_rq_enqueue()
->        enqueue_top_rt_rq()
->          cpufreq_update_util() <-- depends on CONFIG_CPU_FREQ
->            data->func(data, *rq_clock(rq)*, flags)
->              intel_pstate_update_util() <-- powersave policy callback function
-> 
-> Before calling rq_offline_rt() we need to update the rq clock to avoid
-> using the old rq clock, So we add update_rq_clock() to set_rq_offline()
-> to update rq clock. And we use rq_lock_irqsave()/rq_unlock_irqrestore()
-> to replace raw_spin_rq_lock_irqsave()/raw_spin_rq_unlock_irqrestore()
-> in rq_attach_root() to ensure that rq->clock_update_flags are cleared
-> before updating the rq clock.
-> 
-> Steps to reproduce:
-> 1. Enable CONFIG_SMP and CONFIG_CPU_FREQ when compiling the kernel
-> 2. echo 1 > /sys/kernel/debug/clear_warn_once
-> 3. cpupower -c all frequency-set -g powersave
-> 4. Run some rt tasks e.g. Create 5*n rt (100% running) tasks (on a
->     system with n CPUs)
-> 5. Offline cpu one by one until the warninng is triggered
-> 
-> Suggested-by: Ben Segall <bsegall@google.com>
-> Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Hi Vincent,
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-   Benjamin Segall suggested adding update_rq_clock() to set_rq_offline()
-instead of calling update_rq_clock() before set_rq_offline() runs.
-The code of patch1 has changed, so I removed your tag "Reviewed-by". 
-Please review again.
+## Build
+* kernel: 5.15.117-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.15.y
+* git commit: 09ab3478acfde2bfd20e35fa2f6d3db44662db69
+* git describe: v5.15.116-92-g09ab3478acfd
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.116-92-g09ab3478acfd
 
-Thanks,
-Hao
+## Test Regressions (compared to v5.15.116)
 
-> ---
->   kernel/sched/core.c     | 2 +-
->   kernel/sched/topology.c | 6 +++---
->   2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index a68d1276bab0..a8be5415daba 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -9548,6 +9548,7 @@ void set_rq_offline(struct rq *rq)
->   	if (rq->online) {
->   		const struct sched_class *class;
->   
-> +		update_rq_clock(rq);
->   		for_each_class(class) {
->   			if (class->rq_offline)
->   				class->rq_offline(rq);
-> @@ -9689,7 +9690,6 @@ int sched_cpu_deactivate(unsigned int cpu)
->   
->   	rq_lock_irqsave(rq, &rf);
->   	if (rq->rd) {
-> -		update_rq_clock(rq);
->   		BUG_ON(!cpumask_test_cpu(cpu, rq->rd->span));
->   		set_rq_offline(rq);
->   	}
-> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-> index 6682535e37c8..52976eadfee9 100644
-> --- a/kernel/sched/topology.c
-> +++ b/kernel/sched/topology.c
-> @@ -487,9 +487,9 @@ static void free_rootdomain(struct rcu_head *rcu)
->   void rq_attach_root(struct rq *rq, struct root_domain *rd)
->   {
->   	struct root_domain *old_rd = NULL;
-> -	unsigned long flags;
-> +	struct rq_flags rf;
->   
-> -	raw_spin_rq_lock_irqsave(rq, flags);
-> +	rq_lock_irqsave(rq, &rf);
->   
->   	if (rq->rd) {
->   		old_rd = rq->rd;
-> @@ -515,7 +515,7 @@ void rq_attach_root(struct rq *rq, struct root_domain *rd)
->   	if (cpumask_test_cpu(rq->cpu, cpu_active_mask))
->   		set_rq_online(rq);
->   
-> -	raw_spin_rq_unlock_irqrestore(rq, flags);
-> +	rq_unlock_irqrestore(rq, &rf);
->   
->   	if (old_rd)
->   		call_rcu(&old_rd->rcu, free_rootdomain);
+## Metric Regressions (compared to v5.15.116)
+
+## Test Fixes (compared to v5.15.116)
+
+## Metric Fixes (compared to v5.15.116)
+
+## Test result summary
+total: 131232, pass: 110630, fail: 3682, skip: 16729, xfail: 191
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 117 total, 116 passed, 1 failed
+* arm64: 45 total, 43 passed, 2 failed
+* i386: 35 total, 32 passed, 3 failed
+* mips: 27 total, 26 passed, 1 failed
+* parisc: 4 total, 4 passed, 0 failed
+* powerpc: 27 total, 26 passed, 1 failed
+* riscv: 11 total, 11 passed, 0 failed
+* s390: 12 total, 11 passed, 1 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 38 total, 36 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-exec
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-user_events
+* kselftest-vDSO
+* kselftest-watchdog
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
