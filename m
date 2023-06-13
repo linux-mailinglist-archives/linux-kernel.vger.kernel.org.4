@@ -2,93 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E44A072E346
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD78B72E349
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:46:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242080AbjFMMqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 08:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46320 "EHLO
+        id S242202AbjFMMqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 08:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236464AbjFMMqJ (ORCPT
+        with ESMTP id S242084AbjFMMqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 08:46:09 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A94DE7A
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 05:46:07 -0700 (PDT)
-Received: from loongson.cn (unknown [10.180.13.22])
-        by gateway (Coremail) with SMTP id _____8Bx7eoOZYhkB6UEAA--.9985S3;
-        Tue, 13 Jun 2023 20:46:06 +0800 (CST)
-Received: from [10.180.13.22] (unknown [10.180.13.22])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax6OQNZYhkhyoZAA--.6327S3;
-        Tue, 13 Jun 2023 20:46:05 +0800 (CST)
-Message-ID: <de2b71d8-9204-a8cc-2e82-9a9e2c04ee9e@loongson.cn>
-Date:   Tue, 13 Jun 2023 20:45:40 +0800
+        Tue, 13 Jun 2023 08:46:17 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6AAE7A
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 05:46:16 -0700 (PDT)
+Received: from mail-yb1-f200.google.com (mail-yb1-f200.google.com [209.85.219.200])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 38A4B3F273
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:46:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1686660375;
+        bh=DJyvntNK5zxh7HK+mp4W1WMoJPxy7nqBJlYeYzOf6Og=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=Pkja2DqtESh9d+TMgoRK0JBCtotZf60iugjn+jyYL33czHh1e9ZL3PMAJ12+ZZQMU
+         qdZ4oF4dZWZqL6P9kLkbI58b3n7nwxD/nMb/l2wiAADXJWL/3Et67HzgUUShywK/Ep
+         v0XTa51au8kIMjZUbcmC0CRA6WeP/rZJx4BEfHLunDwY/7I4pOizD3VxoqE2zyZgeA
+         Zi6W4+jvkk+Yg5i3d9QrTrfRr1meryfb5ZzEMTmE9HA2XQHZVmq6j4gwqgHgOIRQ4H
+         7FkLfml0YtzJ2t4YGGKBNkkT9KPDrUxKRXGn07HAlfFTk0ie8lGFYFyMETYdD0QF6i
+         awYY4VeZPuj3w==
+Received: by mail-yb1-f200.google.com with SMTP id 3f1490d57ef6-bc77a2d3841so3852860276.3
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 05:46:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686660374; x=1689252374;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DJyvntNK5zxh7HK+mp4W1WMoJPxy7nqBJlYeYzOf6Og=;
+        b=lW4GgVopr0hicLVYj5gUHXktFf+GDoVSA3yhWNko3S5ewW8UMYpLFKAR089a5NLWRt
+         pOgdPmBuNsNvby8sG2N5fgVNw/QbbBsc0nbMnvEbGTFCb93zpQ3d5gAUeTpHCZsGGTlZ
+         TDoYLATHNj3ZowFGuNbswGJx2XRk6OsP8kxMIt0du7dGvLX2VIZ/XDY8S9EksrqPjNia
+         p6hRYOtQGpcvt6A6rKyKCX3MNcjYlWvaxmRaWU81RESIpk1SZvb22SPG6ALDrvtEmdin
+         tl2rqISv7F/k1xmmXVmbs2fPPXhGfR/HultBYzj/imIji9JqQOsJNf9M1O2AwiUrns1w
+         OoWg==
+X-Gm-Message-State: AC+VfDxkvYI20CfSkg8mLybWn1wTy0XJNgV2xP8gUoc62KzAp7l+gVAW
+        NL5paZbH+nND4C8CtZz6QpVytlsIj3MJ0iPbrzRJVGKPmkbbMc/XgoP0mwvqqQ9WRIbi63HILjj
+        aEIcdU4blfCuhhAEUOmVEeFOCk3SVvIcc8iHWV7BjcBgyF8xiEuSSK3I7gA==
+X-Received: by 2002:a25:ba88:0:b0:ba8:3b3d:3dc0 with SMTP id s8-20020a25ba88000000b00ba83b3d3dc0mr1176567ybg.65.1686660374089;
+        Tue, 13 Jun 2023 05:46:14 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6ByVyQMc1FDiM+BMPWPp5Yh34Hpj01MWgfV11RE/419O9gOrGZrLRNRl5YaWKNn5smLlZPr5vjNJmpBm2O3JM=
+X-Received: by 2002:a25:ba88:0:b0:ba8:3b3d:3dc0 with SMTP id
+ s8-20020a25ba88000000b00ba83b3d3dc0mr1176550ybg.65.1686660373803; Tue, 13 Jun
+ 2023 05:46:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [ PATCH v2 0/3] Add Loongson I2S controller support
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     lgirdwood@gmail.com, krzysztof.kozlowski+dt@linaro.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn
-References: <20230612085048.3039471-1-mengyingkun@loongson.cn>
- <31bd1de1-feb7-4544-aca6-cfb983722057@sirena.org.uk>
-From:   Yingkun Meng <mengyingkun@loongson.cn>
-In-Reply-To: <31bd1de1-feb7-4544-aca6-cfb983722057@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8Ax6OQNZYhkhyoZAA--.6327S3
-X-CM-SenderInfo: 5phqw55lqjy33q6o00pqjv00gofq/1tbiAQABDGSIXIIAvwACsD
-X-Coremail-Antispam: 1Uk129KBj9xXoWrKF4rWw18ZFWxJr1UKF4rWFX_yoWfZFXE9r
-        ya9Fn5ZrykArykZ395trW5XF9I9a4jv34UK345tF1vqasYgryFgrWqkrZI9a4rGF4DK3Zx
-        Xr4DGr4jy347GosvyTuYvTs0mTUanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvT
-        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-        cSsGvfJTRUUUbqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-        vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6F4UJVW0owAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
-        Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_
-        WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrw
-        CYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48J
-        MxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI
-        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y
-        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-        W8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1l
-        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8_gA5UUUU
-        U==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230608154256.562906-1-aleksandr.mikhalitsyn@canonical.com>
+ <f3864ed6-8c97-8a7a-f268-dab29eb2fb21@redhat.com> <CAEivzxcRsHveuW3nrPnSBK6_2-eT4XPvza3kN2oogvnbVXBKvQ@mail.gmail.com>
+ <20230609-alufolie-gezaubert-f18ef17cda12@brauner> <CAEivzxc_LW6mTKjk46WivrisnnmVQs0UnRrh6p0KxhqyXrErBQ@mail.gmail.com>
+ <ac1c6817-9838-fcf3-edc8-224ff85691e0@redhat.com>
+In-Reply-To: <ac1c6817-9838-fcf3-edc8-224ff85691e0@redhat.com>
+From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Date:   Tue, 13 Jun 2023 14:46:02 +0200
+Message-ID: <CAEivzxeZ6fDgYMnjk21qXYz13tHqZa8rP-cZ2jdxkY0eX+dOjw@mail.gmail.com>
+Subject: Re: [PATCH v5 00/14] ceph: support idmapped mounts
+To:     Xiubo Li <xiubli@redhat.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Gregory Farnum <gfarnum@redhat.com>, stgraber@ubuntu.com,
+        linux-fsdevel@vger.kernel.org, Ilya Dryomov <idryomov@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 13, 2023 at 3:43=E2=80=AFAM Xiubo Li <xiubli@redhat.com> wrote:
+>
+>
+> On 6/9/23 18:12, Aleksandr Mikhalitsyn wrote:
+> > On Fri, Jun 9, 2023 at 12:00=E2=80=AFPM Christian Brauner <brauner@kern=
+el.org> wrote:
+> >> On Fri, Jun 09, 2023 at 10:59:19AM +0200, Aleksandr Mikhalitsyn wrote:
+> >>> On Fri, Jun 9, 2023 at 3:57=E2=80=AFAM Xiubo Li <xiubli@redhat.com> w=
+rote:
+> >>>>
+> >>>> On 6/8/23 23:42, Alexander Mikhalitsyn wrote:
+> >>>>> Dear friends,
+> >>>>>
+> >>>>> This patchset was originally developed by Christian Brauner but I'l=
+l continue
+> >>>>> to push it forward. Christian allowed me to do that :)
+> >>>>>
+> >>>>> This feature is already actively used/tested with LXD/LXC project.
+> >>>>>
+> >>>>> Git tree (based on https://github.com/ceph/ceph-client.git master):
+> >>> Hi Xiubo!
+> >>>
+> >>>> Could you rebase these patches to 'testing' branch ?
+> >>> Will do in -v6.
+> >>>
+> >>>> And you still have missed several places, for example the following =
+cases:
+> >>>>
+> >>>>
+> >>>>      1    269  fs/ceph/addr.c <<ceph_netfs_issue_op_inline>>
+> >>>>                req =3D ceph_mdsc_create_request(mdsc, CEPH_MDS_OP_GE=
+TATTR,
+> >>>> mode);
+> >>> +
+> >>>
+> >>>>      2    389  fs/ceph/dir.c <<ceph_readdir>>
+> >>>>                req =3D ceph_mdsc_create_request(mdsc, op, USE_AUTH_M=
+DS);
+> >>> +
+> >>>
+> >>>>      3    789  fs/ceph/dir.c <<ceph_lookup>>
+> >>>>                req =3D ceph_mdsc_create_request(mdsc, op, USE_ANY_MD=
+S);
+> >>> We don't have an idmapping passed to lookup from the VFS layer. As I
+> >>> mentioned before, it's just impossible now.
+> >> ->lookup() doesn't deal with idmappings and really can't otherwise you
+> >> risk ending up with inode aliasing which is really not something you
+> >> want. IOW, you can't fill in inode->i_{g,u}id based on a mount's
+> >> idmapping as inode->i_{g,u}id absolutely needs to be a filesystem wide
+> >> value. So better not even risk exposing the idmapping in there at all.
+> > Thanks for adding, Christian!
+> >
+> > I agree, every time when we use an idmapping we need to be careful with
+> > what we map. AFAIU, inode->i_{g,u}id should be based on the filesystem
+> > idmapping (not mount),
+> > but in this case, Xiubo want's current_fs{u,g}id to be mapped
+> > according to an idmapping.
+> > Anyway, it's impossible at now and IMHO, until we don't have any
+> > practical use case where
+> > UID/GID-based path restriction is used in combination with idmapped
+> > mounts it's not worth to
+> > make such big changes in the VFS layer.
+> >
+> > May be I'm not right, but it seems like UID/GID-based path restriction
+> > is not a widespread
+> > feature and I can hardly imagine it to be used with the container
+> > workloads (for instance),
+> > because it will require to always keep in sync MDS permissions
+> > configuration with the
+> > possible UID/GID ranges on the client. It looks like a nightmare for sy=
+sadmin.
+> > It is useful when cephfs is used as an external storage on the host, bu=
+t if you
+> > share cephfs with a few containers with different user namespaces idmap=
+ping...
+>
+> Hmm, while this will break the MDS permission check in cephfs then in
+> lookup case. If we really couldn't support it we should make it to
+> escape the check anyway or some OPs may fail and won't work as expected.
 
-On 2023/6/13 03:07, Mark Brown wrote:
-> On Mon, Jun 12, 2023 at 04:50:48PM +0800, YingKun Meng wrote:
->> Hi all,
->>
->> This patchset adds support for Loongson I2S controller, and
->> introduce a ASoC machine driver for loongson platform.
->>
->> The Loongson I2S controller is available on Loongson
->> 7a2000/2k2000 chips, works as a PCI device. It has two
->> private DMA controllers used to playback and capture.
->> Each DMA controller has one channel.
->>
->> The ASoC machine driver adds support for audio device which
->> using loongson I2S controller to tranfser the audio data.
->> The audio device uses "PRP0001" as its ACPI device ID, which
->> provides a means to use the existing DT-compatible device
->> identification in ACPI.
-> The code here all looks broadly good - I did have a few review comments
-> that I sent in reply to the individual patches but they're more
-> stylistic than anything too substantial.
+Hi Xiubo!
 
+Disabling UID/GID checks on the MDS side looks reasonable. IMHO the
+most important checks are:
+- open
+- mknod/mkdir/symlink/rename
+and for these checks we already have an idmapping.
 
-Thanks
+Also, I want to add that it's a little bit unusual when permission
+checks are done against the caller UID/GID.
+Usually, if we have opened a file descriptor and, for instance, passed
+this file descriptor through a unix socket then
+file descriptor holder will be able to use it in accordance with the
+flags (O_RDONLY, O_RDWR, ...).
+We also have ->f_cred on the struct file that contains credentials of
+the file opener and permission checks are usually done
+based on this. But in cephfs we are always using syscall caller's
+credentials. It makes cephfs file descriptor "not transferable"
+in terms of permission checks.
 
+Kind regards,
+Alex
+
+>
+> @Greg
+>
+> For the lookup requests the idmapping couldn't get the mapped UID/GID
+> just like all the other requests, which is needed by the MDS permission
+> check. Is that okay to make it disable the check for this case ? I am
+> afraid this will break the MDS permssions logic.
+>
+> Any idea ?
+>
+> Thanks
+>
+> - Xiubo
+>
+>
+> > Kind regards,
+> > Alex
+> >
+>
