@@ -2,82 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3047272E36E
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6A772E371
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240529AbjFMM4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 08:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51220 "EHLO
+        id S237959AbjFMM53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 08:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240639AbjFMM4j (ORCPT
+        with ESMTP id S235739AbjFMM50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 08:56:39 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D781734;
-        Tue, 13 Jun 2023 05:56:38 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f644dffd71so6796103e87.1;
-        Tue, 13 Jun 2023 05:56:38 -0700 (PDT)
+        Tue, 13 Jun 2023 08:57:26 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEA1184
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 05:57:25 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b33176880bso21869741fa.3
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 05:57:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686660996; x=1689252996;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=WICqJH+RY9rL2TO+4voHx0nD9gL2WvHqo9ICGl9Zhr8=;
-        b=prNplwdsTxvCbTHswX7EviFH0PzuEuI8aCS0FYz3Q8nBx+uf0jbyzCubpHiNpgI8YK
-         74LRt03Y1AZUmdFTCD3IIwvsxHtUIOscldibGwXtSiJSwSJqr0xCNe5vBQ9IYT/LHffQ
-         lgmtWbOlq9e/BUEYYRri9eBE2XtabjvFdr7E1Wuv0iS8l1RxwCUfCZupmvAS/Z9NG7kg
-         BuAucJ6xsNbK4u/jJ/y/F0r+BtIeYHYTBO/UIwBa3fkflPj1fVK3Ie5gyeIvDBezlPTa
-         qDg2geE3HSafLmzbr3FxpiJpWK70NVi/vcX9xw5XyO/AEgMrOGjt3qQFEGPdqMLoEyy9
-         S1Kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686660996; x=1689252996;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:x-gm-message-state
+        d=linaro.org; s=google; t=1686661044; x=1689253044;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=WICqJH+RY9rL2TO+4voHx0nD9gL2WvHqo9ICGl9Zhr8=;
-        b=ezu1EfNAfQ9PZ5Y6daFievPdEzrSGladU4dFZgXkRPAJhzLDu0MdRLruRwuHw3qR2P
-         DUjAFAMz9OGa2Cz6FIGIaAdn05vUFHyqc1iTQnEVMaoCr5POEP14JcNt9kbxMpVkFXc7
-         cUDJxpylB4mvuv1XhZmjpmMlUvZKCHzRIZkZnbEzTWT7IYlVOkpiM2nJ8+ZGVtCWC5+I
-         jxInQYf62H8iJkpeKKQUZfH0EtoLi2MZf8R/5NgSUYHHkLTF488qAuQefHRJQhqj8aDW
-         kTjFUj1UVO50W6RgzHXljpe+zElIarQDW555GpxGPZBOcCnmDvlOPaNoZkXDUDfy675E
-         /X6g==
-X-Gm-Message-State: AC+VfDyM8qyWY4DE5XC6WABbgm2dip6wfxjWGkekD4OqFmpTQF42ng9g
-        yo4M1npih0mhiHXAFwIv3NM=
-X-Google-Smtp-Source: ACHHUZ4eDjiZq+6LCo3PUb6iG1hsZFF9yaGP1ilxp8FzBDDkMmIdJLrioYFr0dES8PbQ+b99/PRoFg==
-X-Received: by 2002:ac2:46ec:0:b0:4f3:a820:dd98 with SMTP id q12-20020ac246ec000000b004f3a820dd98mr6097106lfo.7.1686660996264;
-        Tue, 13 Jun 2023 05:56:36 -0700 (PDT)
-Received: from ?IPV6:2a0b:6204:4302:5f00:4dab:3483:4506:9a0e? ([2a0b:6204:4302:5f00:4dab:3483:4506:9a0e])
-        by smtp.gmail.com with ESMTPSA id u1-20020ac248a1000000b004eaf41933a4sm1773998lfg.59.2023.06.13.05.56.33
+        bh=IOtugteg27Qs3cUmW6TBtan0ET5d8v3oiWN8auOS0yY=;
+        b=aZJuwwutzfHxC33CEHo2wEtpbF2txC+HbBJLBT25nW1rs2v1hT0QRFACk+m/4U2qW+
+         AeBQP42yJEO5xfi76O/M/QaeYWyJVNmPcpRhuLQhzYOxRwVZlTtRTdB4DlO0OSn+KQDx
+         Gbj6IbgjnUmkQkxQ3sJi4Un5sDNRf/yeIZAbhUoZ3ZVXWE0Nnb6PEddX1jFSso8/rOLP
+         N7qSsfNcX/vE3kRqgJ8nVRcHGNl4WKajBdJeGCsEjndSZLf8IPGl0KDMJa8e8HY0sZ3C
+         x+6ikrRaxQWVtjyBPCfQ9drexH/B93wuNrkMfJJtjF0qji2lm+zoM0l1S5jN2xuR5Z6N
+         aQNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686661044; x=1689253044;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IOtugteg27Qs3cUmW6TBtan0ET5d8v3oiWN8auOS0yY=;
+        b=KGoYqG3xykGOlkvI6cEWyouRSS3yChf/uTZNH8ISqO4zu1ORQa7P0d6JPM4jp1TQWr
+         nw4uTV7ROTbsIRgqA0W2fBIa4b0VU4QWIBtfocOLU4S4DCq+PrdQ4okAmz7zsPgVrhxQ
+         1+Vt0pLbm+vojJB4qf69C5cddO+dE6IrKQEDisnDmOmqDcNfRZzRxrGKLGMSxCUZ1F69
+         dnkg1DfG1ttJorStEGDUEinVKL/8qGfZFf5sQ/50Gm5tlZheNHsoAxWaCXeEDl7w19b/
+         KMbkRqtL1XHu0eu84ACthOIMjb8w9G0oSh/4rA4ivNmPWIVC63T37+CKpvCha2VQ91vQ
+         q3Uw==
+X-Gm-Message-State: AC+VfDyTXK9BM74nTwORA8qGeNuP/Pza9OWP0jX5QBKLidaOLx0Drau/
+        jY8pyE0xveuuwBfzJs/hC5YS4pyKixqwuC+RfPs=
+X-Google-Smtp-Source: ACHHUZ78PSyLNXs4FBh18uue1H920tw1Gp+R6J566Szf/z3zIrAvhmP+MKqDcDZt01XPxGXPjOilug==
+X-Received: by 2002:a2e:978f:0:b0:2b1:dbdf:4524 with SMTP id y15-20020a2e978f000000b002b1dbdf4524mr5563503lji.9.1686661043429;
+        Tue, 13 Jun 2023 05:57:23 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id s20-20020a2e2c14000000b002b1a8b926f3sm2137293ljs.3.2023.06.13.05.57.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 05:56:35 -0700 (PDT)
-From:   "bibo, mao" <bibo.mao@gmail.com>
-X-Google-Original-From: "bibo, mao" <maobibo@loongson.cn>
-Message-ID: <b55f4665-1e2b-30fe-fb29-ae8856227275@loongson.cn>
-Date:   Tue, 13 Jun 2023 20:56:32 +0800
+        Tue, 13 Jun 2023 05:57:22 -0700 (PDT)
+Message-ID: <a838693e-e441-2ea2-937a-5cad9a5cd512@linaro.org>
+Date:   Tue, 13 Jun 2023 15:57:22 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v13 08/30] LoongArch: KVM: Implement vcpu handle exit
- interface
-To:     Tianrui Zhao <zhaotianrui@loongson.cn>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Xi Ruoyao <xry111@xry111.site>, tangyouling@loongson.cn,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-References: <20230609090832.2131037-1-zhaotianrui@loongson.cn>
- <20230609090832.2131037-9-zhaotianrui@loongson.cn>
-In-Reply-To: <20230609090832.2131037-9-zhaotianrui@loongson.cn>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] soc: qcom: mdt_loader: Fix split image detection
+Content-Language: en-GB
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230612215804.1883458-1-quic_bjorande@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230612215804.1883458-1-quic_bjorande@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,73 +78,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Bibo Mao <maobibo@loongson.cn>
-
-Regards
-Bibo, Mao
-
-在 2023/6/9 17:08, Tianrui Zhao 写道:
-> Implement vcpu handle exit interface, getting the exit code by ESTAT
-> register and using kvm exception vector to handle it.
+On 13/06/2023 00:58, Bjorn Andersson wrote:
+> The enhanced detection introduced in commit '210d12c8197a ("soc: qcom:
+> mdt_loader: Enhance split binary detection")' requires that all segments
+> lies within the file on disk.
 > 
-> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
+> But the Qualcomm firmware files consistently has a BSS-like segment at
+> the end, with a p_offset aligned to the next 4k boundary. As the p_size
+> is 0 and there's nothing to load, the image is not padded to cover this
+> (empty) segment.
+> 
+> Ignore zero-sized segments when determining if the image is split, to
+> avoid this problem.
+> 
+> Fixes: 210d12c8197a ("soc: qcom: mdt_loader: Enhance split binary detection")
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Tested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org> # qrb5165-rb5
+
+W/o this patch loading mbn files is broken.
+
 > ---
->   arch/loongarch/kvm/vcpu.c | 45 +++++++++++++++++++++++++++++++++++++++
->   1 file changed, 45 insertions(+)
+>   drivers/soc/qcom/mdt_loader.c | 8 ++++++++
+>   1 file changed, 8 insertions(+)
 > 
-> diff --git a/arch/loongarch/kvm/vcpu.c b/arch/loongarch/kvm/vcpu.c
-> index eba5c07b8be3..a45e9d9efe5b 100644
-> --- a/arch/loongarch/kvm/vcpu.c
-> +++ b/arch/loongarch/kvm/vcpu.c
-> @@ -52,6 +52,51 @@ static void kvm_pre_enter_guest(struct kvm_vcpu *vcpu)
->   	vcpu->arch.aux_inuse &= ~KVM_LARCH_CSR;
->   }
+> diff --git a/drivers/soc/qcom/mdt_loader.c b/drivers/soc/qcom/mdt_loader.c
+> index 9418993a3a92..6f177e46fa0f 100644
+> --- a/drivers/soc/qcom/mdt_loader.c
+> +++ b/drivers/soc/qcom/mdt_loader.c
+> @@ -275,6 +275,14 @@ static bool qcom_mdt_bins_are_split(const struct firmware *fw, const char *fw_na
+>   	phdrs = (struct elf32_phdr *)(ehdr + 1);
 >   
-> +/*
-> + * Return 1 for resume guest and "<= 0" for resume host.
-> + */
-> +static int _kvm_handle_exit(struct kvm_run *run, struct kvm_vcpu *vcpu)
-> +{
-> +	unsigned long exst = vcpu->arch.host_estat;
-> +	u32 intr = exst & 0x1fff; /* ignore NMI */
-> +	u32 exccode = (exst & CSR_ESTAT_EXC) >> CSR_ESTAT_EXC_SHIFT;
-> +	int ret = RESUME_GUEST;
+>   	for (i = 0; i < ehdr->e_phnum; i++) {
+> +		/*
+> +		 * The size of the MDT file is not padded to include any
+> +		 * zero-sized segments at the end. Ignore these, as they should
+> +		 * not affect the decision about image being split or not.
+> +		 */
+> +		if (!phdrs[i].p_filesz)
+> +			continue;
 > +
-> +	vcpu->mode = OUTSIDE_GUEST_MODE;
-> +
-> +	/* Set a default exit reason */
-> +	run->exit_reason = KVM_EXIT_UNKNOWN;
-> +
-> +	local_irq_enable();
-> +	guest_state_exit_irqoff();
-> +
-> +	trace_kvm_exit(vcpu, exccode);
-> +	if (exccode) {
-> +		ret = _kvm_handle_fault(vcpu, exccode);
-> +	} else {
-> +		WARN(!intr, "vm exiting with suspicious irq\n");
-> +		++vcpu->stat.int_exits;
-> +	}
-> +
-> +	cond_resched();
-> +	local_irq_disable();
-> +
-> +	if (ret == RESUME_HOST)
-> +		return ret;
-> +
-> +	/* Only check for signals if not already exiting to userspace */
-> +	if (signal_pending(current)) {
-> +		vcpu->run->exit_reason = KVM_EXIT_INTR;
-> +		++vcpu->stat.signal_exits;
-> +		return -EINTR;
-> +	}
-> +
-> +	kvm_pre_enter_guest(vcpu);
-> +	trace_kvm_reenter(vcpu);
-> +	guest_state_enter_irqoff();
-> +	return RESUME_GUEST;
-> +}
-> +
->   int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
->   {
->   	unsigned long timer_hz;
+>   		seg_start = phdrs[i].p_offset;
+>   		seg_end = phdrs[i].p_offset + phdrs[i].p_filesz;
+>   		if (seg_start > fw->size || seg_end > fw->size)
+
+-- 
+With best wishes
+Dmitry
+
