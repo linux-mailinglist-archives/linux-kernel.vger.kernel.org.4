@@ -2,124 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ECB372E9A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:29:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FAC272E9E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231521AbjFMR0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 13:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50248 "EHLO
+        id S231297AbjFMRbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 13:31:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240237AbjFMR0U (ORCPT
+        with ESMTP id S231277AbjFMRbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 13:26:20 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B499E212F;
-        Tue, 13 Jun 2023 10:25:30 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f62cf9755eso7160450e87.1;
-        Tue, 13 Jun 2023 10:25:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686677046; x=1689269046;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ODAKB6kMlEX4PRQW3AKishpUPeUFtuBOriTsESRpwjE=;
-        b=pLcwynQ+oas3Kb8/0F2Hz+m1VyNqeFVV/YvMS3XyBpbDFLR9FXZUR6LeBm7+9BXefh
-         wLOkX1dHxIrIqJEOlqpZKVWZEhQ6AyDg+0q04bVX/KIt8AWuHx8OeocQHM8a9c/VE9X7
-         25cjyEZNsk5E5nqTacfHBbh9IzcKjq2g5ij39zdum0KJ80EO5bucu2dsGlb0DyTlvIWe
-         HUkun7St2gyaZEJw+AXCTo2MJx8inmwAcnyqVjvRowRrewcQ7Z+qJF1QEfRY3uxBFq9S
-         XwwapRDwqoqzVWG1L/7OIOb4cH3MIdS2twG/T+dfZ41jDSPJugwYd7t7hf9MKaRDQXLX
-         jIFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686677046; x=1689269046;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ODAKB6kMlEX4PRQW3AKishpUPeUFtuBOriTsESRpwjE=;
-        b=NtE05oPC8iABwHHEUlB9IMAVYpZMxtr8LHEQRBlrtrq33kke0vvJ6IlI0PS7rUl6Eg
-         w9b1o+d7gdfW290o2cdoVEWNo+rSn5dmmpG26IEb70JFPofB/OSDsDk8B7cYRh+Cp5Kr
-         EbIZRUI/50sK9Ny+PvafJRK0+az0eIV0squlhCFdJoiqFhy81/lDFHeqps06tfw7xQpA
-         bwTROj/fFHBMSM9v0xw0j/ov1Ug+8jCmXALmmUIA3kAXTkQRleTFCwGDFiRCNBbln2l/
-         e/gnKBYLPCi+t+wQdvUw0emsO7Du18M/3G+cvRsuYVPtMO8sYi89ieQ3A0yjC5TmB6H4
-         k03A==
-X-Gm-Message-State: AC+VfDwy/JzuwLDhoRob8utD1UY6UzKQQuScvLE5MblJaaPOTA2lJQOi
-        sJIqzvY8NGDH+zOq2nT4u5E=
-X-Google-Smtp-Source: ACHHUZ5FED+iaQ0AU4j8ePw/sCKudiJLTltePzDr7wRRsMmxp2Y8olQvUpTIE5i+5HP7X96hf1qLwg==
-X-Received: by 2002:a05:6512:3284:b0:4f3:b49b:e246 with SMTP id p4-20020a056512328400b004f3b49be246mr7076497lfe.5.1686677045828;
-        Tue, 13 Jun 2023 10:24:05 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id e3-20020a50fb83000000b0051879590e06sm982088edq.24.2023.06.13.10.24.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 10:24:05 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 20:24:02 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net v2 2/7] net: dsa: mt7530: fix trapping frames with
- multiple CPU ports on MT7530
-Message-ID: <20230613172402.grdpgago6in4jogq@skbuf>
-References: <20230611081547.26747-1-arinc.unal@arinc9.com>
- <20230611081547.26747-2-arinc.unal@arinc9.com>
- <20230613150815.67uoz3cvvwgmhdp2@skbuf>
- <a91e88a8-c528-0392-1237-fc8417931170@arinc9.com>
- <20230613171858.ybhtlwxqwp7gyrfs@skbuf>
+        Tue, 13 Jun 2023 13:31:34 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0050F1BF9;
+        Tue, 13 Jun 2023 10:31:08 -0700 (PDT)
+Received: from mercury (dyndsl-091-248-189-170.ewe-ip-backbone.de [91.248.189.170])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BFD6A6606EC6;
+        Tue, 13 Jun 2023 18:24:38 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686677078;
+        bh=4rasFY34I/XTUiOf9VJ79l/mxOmZFAZu43QjJc0pgJQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M1sykmhm4gIpYvUkVjvTX9a1XM2iB8Dm1WECS5cIyLzyd0qYVLBb7B+LwsjW44jb/
+         tPHb+WN3B2wpvpUTc4BhlYZI4XM/PLLsOMlTlH/euIbAvLOcmJ6x+/VVXVP+izcifH
+         1Ya9dZa7b4Jfz9woAVMqOh0kAHMnPR43cOQQEd9bAXBY2SQt5IWGWmCO7fEouM8Iox
+         p4zCtA9v13n4d6zhb+JMHprOOk+Jp3Y2qLr9OA94NvvI9p+xeQxF0tBHDsrkQbAyTJ
+         aZu/GExwl2vceio6G8BEShDyl4ReTUscNVTG/1t5GwD/mmziABdJEl6uy+Zuu9B0CA
+         0d1aOfxMbqIow==
+Received: by mercury (Postfix, from userid 1000)
+        id B0D0F1066FC6; Tue, 13 Jun 2023 19:24:36 +0200 (CEST)
+Date:   Tue, 13 Jun 2023 19:24:36 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Vincent Legoll <vincent.legoll@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v5 18/25] PM / devfreq: rockchip-dfi: account for
+ multiple DDRMON_CTRL registers
+Message-ID: <20230613172436.ah5oyhnt6sbxj5hf@mercury.elektranox.org>
+References: <20230524083153.2046084-1-s.hauer@pengutronix.de>
+ <20230524083153.2046084-19-s.hauer@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qcgjuyhdjwqhjjno"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230613171858.ybhtlwxqwp7gyrfs@skbuf>
+In-Reply-To: <20230524083153.2046084-19-s.hauer@pengutronix.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 08:18:58PM +0300, Vladimir Oltean wrote:
-> On Tue, Jun 13, 2023 at 08:14:35PM +0300, Arınç ÜNAL wrote:
-> > Actually, having only "net: dsa: introduce preferred_default_local_cpu_port
-> > and use on MT7530" backported is an enough solution for the current stable
-> > kernels.
-> > 
-> > When multiple CPU ports are defined on the devicetree, the CPU_PORT bits
-> > will be set to port 6. The active CPU port will also be port 6.
-> > 
-> > This would only become an issue with the changing the DSA conduit support.
-> > But that's never going to happen as this patch will always be on the kernels
-> > that support changing the DSA conduit.
-> 
-> Aha, ok. I thought that device trees with CPU port 5 exclusively defined
-> also exist in the wild. If not, and this patch fixes a theoretical only
-> issue, then it is net-next material.
 
-On second thought, compatibility with future device trees is the reason
-for this patch set, so that should equally be a reason for keeping this
-patch in a "net" series.
+--qcgjuyhdjwqhjjno
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-If I understand you correctly, port 5 should have worked since commit
-c8b8a3c601f2 ("net: dsa: mt7530: permit port 5 to work without port 6 on
-MT7621 SoC"), and it did, except for trapping, right?
+Hi,
 
-So how about settling on that as a more modest Fixes: tag, and
-explaining clearly in the commit message what's affected?
+On Wed, May 24, 2023 at 10:31:46AM +0200, Sascha Hauer wrote:
+> The currently supported RK3399 has a set of registers per channel, but
+> it has only a single DDRMON_CTRL register. With upcoming RK3588 this
+> will be different, the RK3588 has a DDRMON_CTRL register per channel.
+>=20
+> Instead of expecting a single DDRMON_CTRL register, loop over the
+> channels and write the channel specific DDRMON_CTRL register. Break
+> out early out of the loop when there is only a single DDRMON_CTRL
+> register like on the RK3399.
+>=20
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> ---
+
+Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+
+-- Sebastian
+
+>  drivers/devfreq/event/rockchip-dfi.c | 72 ++++++++++++++++++----------
+>  1 file changed, 48 insertions(+), 24 deletions(-)
+>=20
+> diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event=
+/rockchip-dfi.c
+> index a872550a7caf5..23d66fe737975 100644
+> --- a/drivers/devfreq/event/rockchip-dfi.c
+> +++ b/drivers/devfreq/event/rockchip-dfi.c
+> @@ -113,12 +113,13 @@ struct rockchip_dfi {
+>  	int burst_len;
+>  	int buswidth[DMC_MAX_CHANNELS];
+>  	int ddrmon_stride;
+> +	bool ddrmon_ctrl_single;
+>  };
+> =20
+>  static int rockchip_dfi_enable(struct rockchip_dfi *dfi)
+>  {
+>  	void __iomem *dfi_regs =3D dfi->regs;
+> -	int ret =3D 0;
+> +	int i, ret =3D 0;
+> =20
+>  	mutex_lock(&dfi->mutex);
+> =20
+> @@ -132,29 +133,41 @@ static int rockchip_dfi_enable(struct rockchip_dfi =
+*dfi)
+>  		goto out;
+>  	}
+> =20
+> -	/* clear DDRMON_CTRL setting */
+> -	writel_relaxed(HIWORD_UPDATE(0, DDRMON_CTRL_TIMER_CNT_EN | DDRMON_CTRL_=
+SOFTWARE_EN |
+> -		       DDRMON_CTRL_HARDWARE_EN), dfi_regs + DDRMON_CTRL);
+> +	for (i =3D 0; i < DMC_MAX_CHANNELS; i++) {
+> +		u32 ctrl =3D 0;
+> =20
+> -	/* set ddr type to dfi */
+> -	switch (dfi->ddr_type) {
+> -	case ROCKCHIP_DDRTYPE_LPDDR2:
+> -	case ROCKCHIP_DDRTYPE_LPDDR3:
+> -		writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_LPDDR23, DDRMON_CTRL_DDR_TYPE=
+_MASK),
+> -			       dfi_regs + DDRMON_CTRL);
+> -		break;
+> -	case ROCKCHIP_DDRTYPE_LPDDR4:
+> -	case ROCKCHIP_DDRTYPE_LPDDR4X:
+> -		writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_LPDDR4, DDRMON_CTRL_DDR_TYPE_=
+MASK),
+> -			       dfi_regs + DDRMON_CTRL);
+> -		break;
+> -	default:
+> -		break;
+> -	}
+> +		if (!(dfi->channel_mask & BIT(i)))
+> +			continue;
+> =20
+> -	/* enable count, use software mode */
+> -	writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_SOFTWARE_EN, DDRMON_CTRL_SOFTW=
+ARE_EN),
+> -		       dfi_regs + DDRMON_CTRL);
+> +		/* clear DDRMON_CTRL setting */
+> +		writel_relaxed(HIWORD_UPDATE(0, DDRMON_CTRL_TIMER_CNT_EN |
+> +			       DDRMON_CTRL_SOFTWARE_EN | DDRMON_CTRL_HARDWARE_EN),
+> +			       dfi_regs + i * dfi->ddrmon_stride + DDRMON_CTRL);
+> +
+> +		/* set ddr type to dfi */
+> +		switch (dfi->ddr_type) {
+> +		case ROCKCHIP_DDRTYPE_LPDDR2:
+> +		case ROCKCHIP_DDRTYPE_LPDDR3:
+> +			ctrl =3D DDRMON_CTRL_LPDDR23;
+> +			break;
+> +		case ROCKCHIP_DDRTYPE_LPDDR4:
+> +		case ROCKCHIP_DDRTYPE_LPDDR4X:
+> +			ctrl =3D DDRMON_CTRL_LPDDR4;
+> +			break;
+> +		default:
+> +			break;
+> +		}
+> +
+> +		writel_relaxed(HIWORD_UPDATE(ctrl, DDRMON_CTRL_DDR_TYPE_MASK),
+> +			       dfi_regs + i * dfi->ddrmon_stride + DDRMON_CTRL);
+> +
+> +		/* enable count, use software mode */
+> +		writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_SOFTWARE_EN, DDRMON_CTRL_SOFT=
+WARE_EN),
+> +			       dfi_regs + i * dfi->ddrmon_stride + DDRMON_CTRL);
+> +
+> +		if (dfi->ddrmon_ctrl_single)
+> +			break;
+> +	}
+>  out:
+>  	mutex_unlock(&dfi->mutex);
+> =20
+> @@ -164,6 +177,7 @@ static int rockchip_dfi_enable(struct rockchip_dfi *d=
+fi)
+>  static void rockchip_dfi_disable(struct rockchip_dfi *dfi)
+>  {
+>  	void __iomem *dfi_regs =3D dfi->regs;
+> +	int i;
+> =20
+>  	mutex_lock(&dfi->mutex);
+> =20
+> @@ -174,8 +188,17 @@ static void rockchip_dfi_disable(struct rockchip_dfi=
+ *dfi)
+>  	if (dfi->usecount > 0)
+>  		goto out;
+> =20
+> -	writel_relaxed(HIWORD_UPDATE(0, DDRMON_CTRL_SOFTWARE_EN),
+> -		       dfi_regs + DDRMON_CTRL);
+> +	for (i =3D 0; i < DMC_MAX_CHANNELS; i++) {
+> +		if (!(dfi->channel_mask & BIT(i)))
+> +			continue;
+> +
+> +		writel_relaxed(HIWORD_UPDATE(0, DDRMON_CTRL_SOFTWARE_EN),
+> +			      dfi_regs + i * dfi->ddrmon_stride + DDRMON_CTRL);
+> +
+> +		if (dfi->ddrmon_ctrl_single)
+> +			break;
+> +	}
+> +
+>  	clk_disable_unprepare(dfi->clk);
+>  out:
+>  	mutex_unlock(&dfi->mutex);
+> @@ -663,6 +686,7 @@ static int rk3399_dfi_init(struct rockchip_dfi *dfi)
+>  	dfi->buswidth[1] =3D FIELD_GET(RK3399_PMUGRF_OS_REG2_BW_CH1, val) =3D=
+=3D 0 ? 4 : 2;
+> =20
+>  	dfi->ddrmon_stride =3D 0x14;
+> +	dfi->ddrmon_ctrl_single =3D true;
+> =20
+>  	return 0;
+>  };
+> --=20
+> 2.39.2
+>=20
+
+--qcgjuyhdjwqhjjno
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSIplQACgkQ2O7X88g7
++poSVQ/8CdcfkOAIJEK9UNTf1vpgujtEuSeIYOsifZifSXVZO6S73Qkzec3iYFDw
+iI0H8DmfO3dOI/bj8viBWFSkHIK/zYe3LHgyEst9l7gbg0gxsClOuUIyhV7MoZpi
+/+o+GDHzbxO0murEnOpwGfJgyVoPODrTmN+2ZsHDZWRUK1hoeL3q4seJ+bNwmHOw
+RIoLx/fRkpQrI6+cjg0QalJyRavazv2niUBa0Too8ogPxPLo+e8yYVTQhvddER6k
+Jb+7LTnx6yUY1LQt0SgBTWrmHkS8b3wYG32fEbKsU/hYQguHQ+kD8rGFW0LaKBzQ
+y3yfqsXnQxAGcHdJtsg+vbxzdJ5JgvgdPEgKtJoWKT9i7veWf/5gt9enNU0bLL52
+qz2uuc7lZgJ4OzWakd2lcPYL6iN32NAs8a9hAF52cXtzRyqH3LgH1QXAXoiDUWvg
+Le/vlsw4mu6Ltz/AytwZNVUT3HPWVPuwRc9YuYGnTaP+NsOceqUVZn4dylmVDc7k
+uqPMnYakS26rkDrJVoeflgyjtj3ekXFZN9SjIhk5WpSJBKPHy4+h4Vf1Sr0nvlT/
+XHZ83IZ3WU9JEJvoXIj8wOHFm2WzCOiqz/3EhHrJbikAboE1nDQFXzIhXCORVWU7
+vssSowYyNQ5FIrFIAGSTlGrf8LlWrjwsb3R6VC2OeXN2Dg19+RE=
+=eEfi
+-----END PGP SIGNATURE-----
+
+--qcgjuyhdjwqhjjno--
