@@ -2,162 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D7DF72DB06
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 09:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C966872DAF6
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 09:32:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240585AbjFMHcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 03:32:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33726 "EHLO
+        id S239872AbjFMHcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 03:32:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240590AbjFMHc0 (ORCPT
+        with ESMTP id S233791AbjFMHbr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 03:32:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69FB91739
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:31:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686641465;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=a0vScxj5YMa+K+40jeVOVL1oOtwkyiQd/IWuuzvGGDI=;
-        b=NU7xXNM+Kh3r9AbfNCAavZZ1raVsIJXeygQOLI1Rv+faHS0DLwfpPTc5ky93yZ3l0y+hok
-        P7ThNoqOTZqLfMxKAFlvo7m1qphcps+1XGjADRJny2OgyqqDQYpNyY0HHKOkPSHWqU5x6M
-        YrHqN7Ekdj4kB+VKmSIlIypGOGfFiUY=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-399-EAnTQqLSOky49hFWv52aOQ-1; Tue, 13 Jun 2023 03:31:03 -0400
-X-MC-Unique: EAnTQqLSOky49hFWv52aOQ-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-30c5d31b567so1987636f8f.2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:31:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686641462; x=1689233462;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=a0vScxj5YMa+K+40jeVOVL1oOtwkyiQd/IWuuzvGGDI=;
-        b=heIAtocgxzbO0YrvV6hzz6fWKvlhXjUE3FiRs3rHLYPVl3uvzVJdnrZytUqw9CtTVa
-         B6qxQOKjO7DHkwNbQ0R0mrgm41NJMVps6kYoZvlNEkwLyvGvN906LSt84x02ZmILe6CH
-         WnJq4kXdo0tdwEGy//Byf3Yea4UW/lA4sVEU2Rr003xherxRXJTIEhm974kA/PRzTuru
-         SUvGzcnGI7GHDur9YMrjtQz+i0Awd5OblFsaTj9uMWuz6Lr/MwRoOubmT7mRjIFAqM67
-         gbVvOnXA4JI5m2RFXGz0zukFrKDtddqjmma/v7mHTMu4DNHhC6JlZxyik0OMsoNBNnkt
-         knUg==
-X-Gm-Message-State: AC+VfDyBo8icf0B/AUn2SY5eIkLMbbfwS6KKYI60JoWE2Bn7XXIKjVrp
-        4dGjsLafCfsjTUrBRyr6ZyjoKPB+j75MFTl2ZgkAfEF6+QcLs4NExYVOgJ3jAVGCDJmqktTQk5C
-        qnwr/UvWXLPmj1flNNOPZMLMD
-X-Received: by 2002:adf:f042:0:b0:30f:cf6b:4982 with SMTP id t2-20020adff042000000b0030fcf6b4982mr261185wro.62.1686641462575;
-        Tue, 13 Jun 2023 00:31:02 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5CTFZVdIdiMBJTa4yPNgw1OdLhPXmCNTDxDHv57xIkOk0hRvQBsdz1yvdn7YhXRQMeaWwtxg==
-X-Received: by 2002:adf:f042:0:b0:30f:cf6b:4982 with SMTP id t2-20020adff042000000b0030fcf6b4982mr261154wro.62.1686641462242;
-        Tue, 13 Jun 2023 00:31:02 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c710:ff00:1a06:80f:733a:e8c6? (p200300cbc710ff001a06080f733ae8c6.dip0.t-ipconnect.de. [2003:cb:c710:ff00:1a06:80f:733a:e8c6])
-        by smtp.gmail.com with ESMTPSA id b10-20020adfe30a000000b00300aee6c9cesm14561038wrj.20.2023.06.13.00.31.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 00:31:01 -0700 (PDT)
-Message-ID: <5aed54c8-45e3-e05e-ccfd-a177df41c4a9@redhat.com>
-Date:   Tue, 13 Jun 2023 09:31:00 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2] block: Fix dio_bio_alloc() to set BIO_PAGE_PINNED
-Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        kernel test robot <oliver.sang@intel.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-mm@kvack.org, oe-lkp@lists.linux.dev, lkp@intel.com,
+        Tue, 13 Jun 2023 03:31:47 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2139.outbound.protection.outlook.com [40.107.215.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53101995
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:31:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QftQhsn+26GX9msNi6uw8MoyHO0j2Y2ICALNoPdt7GY5scWuNTXL6x7m4dZo2YGy/svgYdJTIUddUp8kpt2QgILUoGijsTz+KnJZiTlqt0tSZwoIWOiwm5WL3wOp129mfGJ/It+VGDZV00LLRaAXBlc2emRhpPCTMPyQJr/LgelFpfvCxqLaw+yCCkg8ypKKJdIw0r9D+Ipoj8PNFS82HP3+SojQf0Zozr2gd9rA49jSgBGySIea3n2HCS8Tj0IupZSchrPpSRYRw/9Vg/W8sTfyQ1VggYyyI5mX3d5Yoa15nAzmgihc0sJ/S5vAujw4QJBTMFdyH+fwd6nAqWZOdQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WASiI+LGr+j54QgtHqz/Mb0c0vmWaC6GIOI+FQCQgEU=;
+ b=m3hnsapKVdW+XoaYMF/bNZySFGwjh1bPH9GqlzYJPZFkolmYL7YAgihCdzYlIHSTEPOrhFbGJsBOvFw7RKnaO97KJniCzOCJlFPdImVSzXMo9Ww5aqt+3YIYk5ZW25ap3T5aO7J9hWqc8Qr2tD3a6nr1ibO5/fOY1AESwAfJCyBgSC4PLtcfL8bQKjA0YWrL1Cp5mBMi5MQ9F8YYcxqu67eJYFJDyIk7mRVBHx8n/t7p2sgwffiistiP8a0iPbsefKM7yTZi9kXnjvfEVmTWq8vDDlE1wTjGj8tuivRdpDWeySR6jzWtw9OZpjdAYSWCNvNAEPJNS4J7aZLoYlWoVw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WASiI+LGr+j54QgtHqz/Mb0c0vmWaC6GIOI+FQCQgEU=;
+ b=GYiMmRiOBI8Hx8aBpysqBRNx0NKSYBA0U0DdtQPNsuJBk1mdlbEamikMs9iXLtsaC1d9boTWw6Wxv3zT3+7moq4bJS5xjdRtBnZk5ESGoU3RjsYr532R9aQwbMBs+8Kb+2qQv4f5fhszt1CJbPj0qD4Nd8JCLffuEDLE3t6uz9a7S+Z259je+9UGLJNZxjiFqBojKKfcw51igSRXaFNtHq6rIZs/FDk0BWo2+aGkHHO0G/1DbJt8EmEoUAkl8PiycSOxEsjDpIr9Y6VzQ1KAsngNMLfKpV8b3shz7GviN91Lp8eB8JlVX5XrDezh2Kasb6DzEZC3gds0X9s0roUjig==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by KL1PR0601MB3985.apcprd06.prod.outlook.com (2603:1096:820:27::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Tue, 13 Jun
+ 2023 07:31:16 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::76d6:4828:7e80:2965]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::76d6:4828:7e80:2965%3]) with mapi id 15.20.6455.039; Tue, 13 Jun 2023
+ 07:31:16 +0000
+Message-ID: <b1616a3d-c1a3-571a-3b54-4ca975b5d6cd@vivo.com>
+Date:   Tue, 13 Jun 2023 15:31:10 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v4] f2fs: refactor struct f2fs_attr macro
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
         linux-kernel@vger.kernel.org
-References: <545463.1686601473@warthog.procyon.org.uk>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <545463.1686601473@warthog.procyon.org.uk>
+References: <20230506151604.36890-1-frank.li@vivo.com>
+From:   Yangtao Li <frank.li@vivo.com>
+In-Reply-To: <20230506151604.36890-1-frank.li@vivo.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-ClientProxiedBy: SGXP274CA0003.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::15)
+ To SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|KL1PR0601MB3985:EE_
+X-MS-Office365-Filtering-Correlation-Id: d8b21817-1246-47f3-899f-08db6be02c0f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: f1AuOpRAZmj5TEwiqvof8ogoSyq8WnZL6bYrZ9r6KhTIV10HdqLUHlgmYfNbM3CjI90VcRVTYuwEwbSucPQscSbZXoy6W7VZ1CqV0n16qgOIP4nP8pzwgXcnpkKmdnuEIGmgCp42tISRZs3qiiJbjlNpq8XwWIVjAlfdmz3G2LS0Jw8jecwoJt1tK3HKCAaLjmQ90W6S1rQLIp4HOdYEfUP/DsvHr6A5chaFssml/V8CeudeTj/jKO8kRTkZCn4A4ccARXqFUNTZSwISxryoLTY/ofT/QxPUdzzp6Jv554ooJIg3rX/S8pzxP9iD1WbyY5zEl++QmqIIzgNu9opAfybdKnGoGbtfa5IJeYkvR9QLsc5Io0Zj6HhgBZPXwsc34iRxl9aMvm3ZmcGOfOh02+QZszAsSzWJq+h20Zjyo9s=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(136003)(376002)(39860400002)(366004)(451199021)(8936002)(8676002)(2906002)(4326008)(66556008)(66946007)(66476007)(52116002)(31686004)(110136005)(6666004)(6486002)(26005)(6512007)(6506007)(41300700001)(316002)(186003)(2616005)(478600001)(558084003)(38100700002)(36756003)(31696002)(86362001)(38350700002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NkxEOW5CTTJJWHN0MU96Rng5UTNJNjB4SVMxMkxNcDRKdUhKZ1JyNGV2RUhO?=
+ =?utf-8?B?T2tEMTRZY0NuUnJTT3h1dXNqOGJWRk1QS1c0NDZvM1JTSmg5bXNYUjRZVUFl?=
+ =?utf-8?B?dFRpYmdaWlpOTUphcWlwQldHOEFXNDUxcDdZK2JBWDVsKzZyMC9hTlQwWEJX?=
+ =?utf-8?B?YmhvTzdOdEdNd3RkQWs2WlVSWUtKVkVrZTRKT2hVNDVTT1RjVm1ScHBjUW1m?=
+ =?utf-8?B?YitJT0xJeXE0OTJBcTNWSDFjSEEzK3JjVVdUNEhSQlFTTjg5UWpjcjhKMm1h?=
+ =?utf-8?B?NThOQXlJODBySXRDSXB3U2lNTDJaMDBmRnNhWG0yVkp2N01Fa01TSmlzMkVQ?=
+ =?utf-8?B?eXlHUmRsWWU3NUhqSVIxNE1MS25uQ3pxRCtVbDZueURUaDZuSVBGM2dhZHdk?=
+ =?utf-8?B?RFQ4TFV4ZU0vbkR6Zkx5NnRiZ3EvWUxmU1lGUkdiQTNtN0Z5bWs5MDh6V1Z1?=
+ =?utf-8?B?RjRMOEZmZ2doZmlUWnYzcUVFS3JCSXA0YVVucUc0RjdIWjl5MjhhaHdIZU5S?=
+ =?utf-8?B?YlBpcWgxRU1UM1dvKzhlZklBUkhzUW9sT2F4M3Y3TmY4dko0YUh3QnlSRjl0?=
+ =?utf-8?B?elZDYnFHT1NNVUNTb0dBQ0dZOUpuT3dZaFkwRno3R1Mraml6RkphcU03VFNS?=
+ =?utf-8?B?cmxrZ3lNb3RKOEZQVGx0SVNsMldXUFFlNHNIK0xmVmpJdjNWejA3OUJZVUps?=
+ =?utf-8?B?Q0g4d1hCOXJ2UERhZDhsczVPVzNSWFNqSkt4b052cXZzVGtmVFJpS0NsbzNK?=
+ =?utf-8?B?U1ZQZGNpUEMzbS9kT2tRS0hMRThkaThVUFk2bmdwWTlNdlo4UW1oUlZ1V1lT?=
+ =?utf-8?B?MWEwU0FxZWY3cURYemkyNkNTRVllS2h5TGNXdlM3R1pVQVFHTG1NdlpRTXNO?=
+ =?utf-8?B?V200cDltMjlIVEVjdWk3eHdtTmRLRzc2QlVIQm1kOTRtVjlvb0RxVEMxZWxt?=
+ =?utf-8?B?ZlB4WFQ2ZDhVNFV0bFRzWVNxQUlTZko3UE1rdU9pc3YvenJMZnpHOCsrd082?=
+ =?utf-8?B?UjdsRTY3a3N0NVZIVyt0dU1ibndpZkVicmV1ZTFUa1pGWXZrWW9kVXMvWkZq?=
+ =?utf-8?B?YllnM1ovUCtnVE5FSFVKbC9LM2NNbWd0cVNIUzlXMUlMVXJYelRXeHQzZEYr?=
+ =?utf-8?B?dTl5QTViZVNhbXNXVk1ocWRIYVlFNmNERmZtY2VJdmRab0JERG95RUI2RVJs?=
+ =?utf-8?B?VFRXODBDQWlaUlRRTXRrUHdNc29YdUxDalpzbXc0dUYwUVZFcG1leW90S2ta?=
+ =?utf-8?B?ZWRGbFdhRXBoSTRwUnAwY0tGd2o0a1JuMklveDRFbjlFcDFQVG9YUTh5SXVJ?=
+ =?utf-8?B?ZHVzWSszMDBXd2o2ck5aVy9GckMyNkdZcHBVam8zbDdiY2RKYjVVdStKUmxt?=
+ =?utf-8?B?L2N2bS9aZURPeTF5YWRXb214d2pKczVKZWNMb2FyZFczc3lsbVJ0dTd5OTBw?=
+ =?utf-8?B?K2UzcVJab0lmK1hkYk5hTXQwNXJ4UEgvMzRwMXBzemtqODFFT1JTcGR3L1Ro?=
+ =?utf-8?B?N2p6OVRpekdHcjNkR2Q4WUlzS1YxN1Z1OFE2MjIxMWU2WmpTRWVMSVVkYU01?=
+ =?utf-8?B?MHBMUXhUamZuYVd3aERXS1JVZXZFSGNwQ0prWExiZCtTMjducnVZMk8wSERk?=
+ =?utf-8?B?RHY3UlNWWTVxQXBTdU9uVmFNbzJHTWRCbGp2ZUZQRWlYUElSeXVpRTUxenZ0?=
+ =?utf-8?B?TWRXdHFxV1JYUmVENzFzRW1CN1BtMTZLTHBWTTFoNm1yaERtQ0pybnRVMUdX?=
+ =?utf-8?B?TjBtenRoWGQvSWhjOVVQL1dTZDFoYlA4WHhSY2hQRDZDU1NmWEN3amJXY3Vh?=
+ =?utf-8?B?MVcxRkdnQ2g0V0lIejc3MEdKK3VVeGl5alNuSnRDbHZMOWVGNVhZRldTYlVO?=
+ =?utf-8?B?MW9vS250SjBMckh2eTRVQkpTZHg0RW1HRzlmVXE4YUdON2hEeUw4RUtkNU45?=
+ =?utf-8?B?NzZkeWI4OUh0ckIwb25tVmdZSXJrZENlczZSa1FtQjRzZkp4N01LVjFVeURy?=
+ =?utf-8?B?RVVEcjZ3c1NUQzBvdzNjN0ErdkxkNDAvbHFNU25vUWs0TUt2aXAvOEwreXVW?=
+ =?utf-8?B?djQzbS9ONHptVW9XWU5USDdwMk9YZGdVK0kwTUFvbTFCWVQ4SUthSU14aVd1?=
+ =?utf-8?Q?UH+35RP8LItYhNqpRzbtJCMH9?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d8b21817-1246-47f3-899f-08db6be02c0f
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2023 07:31:16.4008
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wv3UIJsiX/StYHZY+Hc5MPFFKSpqN9jQ68M4UG5SscdGl+HhayufVX0X2e/4dUbxosQkEsBjODiRYBDl2OzKYg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB3985
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,BODY_SINGLE_WORD,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SCC_BODY_SINGLE_WORD,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12.06.23 22:24, David Howells wrote:
->      
-> Fix dio_bio_alloc() to set BIO_PAGE_PINNED, not BIO_PAGE_REFFED, so that
-> the bio code unpins the pinned pages rather than putting a ref on them.
-> 
-> The issue was causing:
-> 
->          WARNING: CPU: 6 PID: 2220 at mm/gup.c:76 try_get_folio
-> 
-> This can be caused by creating a file on a loopback UDF filesystem, opening
-> it O_DIRECT and making two writes to it from the same source buffer.
-> 
-> Fixes: 1ccf164ec866 ("block: Use iov_iter_extract_pages() and page pinning in direct-io.c")
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> Closes: https://lore.kernel.org/oe-lkp/202306120931.a9606b88-oliver.sang@intel.com
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Christoph Hellwig <hch@infradead.org>
-> cc: David Hildenbrand <david@redhat.com>
-> cc: Andrew Morton <akpm@linux-foundation.org>
-> cc: Jens Axboe <axboe@kernel.dk>
-> cc: Al Viro <viro@zeniv.linux.org.uk>
-> cc: Matthew Wilcox <willy@infradead.org>
-> cc: Jan Kara <jack@suse.cz>
-> cc: Jeff Layton <jlayton@kernel.org>
-> cc: Jason Gunthorpe <jgg@nvidia.com>
-> cc: Logan Gunthorpe <logang@deltatee.com>
-> cc: Hillf Danton <hdanton@sina.com>
-> cc: Christian Brauner <brauner@kernel.org>
-> cc: Linus Torvalds <torvalds@linux-foundation.org>
-> cc: linux-fsdevel@vger.kernel.org
-> cc: linux-block@vger.kernel.org
-> cc: linux-kernel@vger.kernel.org
-> cc: linux-mm@kvack.org
-> ---
-> 
-> Notes:
->      ver #2)
->       - Remove comment on requiring references for all pages.
-> 
->   fs/direct-io.c |    4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/direct-io.c b/fs/direct-io.c
-> index 14049204cac8..5d4c5be0fb41 100644
-> --- a/fs/direct-io.c
-> +++ b/fs/direct-io.c
-> @@ -414,8 +414,8 @@ dio_bio_alloc(struct dio *dio, struct dio_submit *sdio,
->   		bio->bi_end_io = dio_bio_end_aio;
->   	else
->   		bio->bi_end_io = dio_bio_end_io;
-> -	/* for now require references for all pages */
-> -	bio_set_flag(bio, BIO_PAGE_REFFED);
-> +	if (dio->need_unpin)
-> +		bio_set_flag(bio, BIO_PAGE_PINNED);
->   	sdio->bio = bio;
->   	sdio->logical_offset_in_bio = sdio->cur_page_fs_offset;
->   }
-> 
-
-Reviewed-by: David Hildenbrand <david@redhat.com>
-
--- 
-Cheers,
-
-David / dhildenb
+ping......
 
