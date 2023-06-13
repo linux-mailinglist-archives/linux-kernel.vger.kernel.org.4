@@ -2,200 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1907872DE63
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 11:56:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D929572DE57
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 11:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241887AbjFMJ4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 05:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37642 "EHLO
+        id S240089AbjFMJzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 05:55:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241500AbjFMJ4f (ORCPT
+        with ESMTP id S241840AbjFMJzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 05:56:35 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2084.outbound.protection.outlook.com [40.107.220.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1133110F7;
-        Tue, 13 Jun 2023 02:56:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XXD1LhFDvO2Xf836UonY1A10c8ajIYg0ahcREs8CcqViY/HadbpwJdcNqJ6ouCk8uHyL1WT3ZMDM7fJjjxyM3rhSUMmNqI5BN7kyNvLHifYkHDEXNSG2GC/aNjT2FVkYAtydDuso6km2RBI6qihEUWvVYz+09vErIq1XxX3jDl87rpCsGU8AWdazZcwD4C6wP9jD5tQaLaPDLki6fW2rvBbd5CGG+kj2c9XVRac+Aqh0vIkvVIQlW4JAE1f1/bWIH3DioLdhMObruH2AcbHHK6UH2HNG7gVRgfnBoFYsdMlGPuUyhJ8b9nEEmzMEVzHQbjVNWD3YAKFVAWyL18WGyw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qjhtwrSqUQQPgUBWDsmm175+OpJdVZSK9WpkNag4JYE=;
- b=FCR1JYiSC4psgGx1+4H2I3WBDFRfWTyAmn7opESOHG5qEnfoeyS09Bu3O6ixFHHf9aqZE7jo01E2Qcd2KvoIGUOTV2b/pkT3YyStkVre+BK2+T/puJBM6hkjOXAdNO6OKWR92LzGQRZaYxbBecjaMZBC1meJfBbm84F8rcs/HkbGdkKOx1460vBT74/xJklS8kVDlJK1/lEQtOFR3ijkLl7XrwVhs6wdGHJ4wxVQgQmoHl6f3Je9T4dK7xISVniN0PZCJo40VO2yNy6JLmS6uiqWlcXK+XQ/2KFyvPjrfw1QC+ruLGI3IOAyqeaANGPC1sZSEfe5ovMW47I6cX5NOQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qjhtwrSqUQQPgUBWDsmm175+OpJdVZSK9WpkNag4JYE=;
- b=j0q75D+G3uZqzSlOoAyOjfTMpVhOkNRqvEtVZ+0tflgBXvKBWyWZ0HdS4g3FtaOmmM/nu536BdKCK5pmMcFOsaHYUGTts6UoJbdKzl+G9kMHWhRvcTBQNcNIFv3JpaJJqnT4kC1mylLj+AH5ZaH+rd+MygWS/yEGsdkuvh6x4hI=
-Received: from SN6PR04CA0081.namprd04.prod.outlook.com (2603:10b6:805:f2::22)
- by MW4PR12MB7430.namprd12.prod.outlook.com (2603:10b6:303:224::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.36; Tue, 13 Jun
- 2023 09:56:22 +0000
-Received: from SN1PEPF0002636A.namprd02.prod.outlook.com
- (2603:10b6:805:f2:cafe::6e) by SN6PR04CA0081.outlook.office365.com
- (2603:10b6:805:f2::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.35 via Frontend
- Transport; Tue, 13 Jun 2023 09:56:22 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SN1PEPF0002636A.mail.protection.outlook.com (10.167.241.135) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6500.23 via Frontend Transport; Tue, 13 Jun 2023 09:56:21 +0000
-Received: from BLR-5CG113396H.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 13 Jun
- 2023 04:56:15 -0500
-From:   Ravi Bangoria <ravi.bangoria@amd.com>
-To:     <acme@kernel.org>
-CC:     <ravi.bangoria@amd.com>, <irogers@google.com>, <jolsa@kernel.org>,
-        <namhyung@kernel.org>, <mark.rutland@arm.com>,
-        <peterz@infradead.org>, <adrian.hunter@intel.com>,
-        <kan.liang@linux.intel.com>, <james.clark@arm.com>,
-        <alisaidi@amazon.com>, <leo.yan@linaro.org>, <maddy@linux.ibm.com>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <sandipan.das@amd.com>, <ananth.narayan@amd.com>,
-        <santosh.shukla@amd.com>
-Subject: [PATCH 4/4] perf mem amd: Scan all PMUs instead of just core ones
-Date:   Tue, 13 Jun 2023 15:25:06 +0530
-Message-ID: <20230613095506.547-5-ravi.bangoria@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230613095506.547-1-ravi.bangoria@amd.com>
-References: <20230613095506.547-1-ravi.bangoria@amd.com>
+        Tue, 13 Jun 2023 05:55:17 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1733E3
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 02:55:15 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-307d20548adso3711131f8f.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 02:55:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1686650114; x=1689242114;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RqNvggRPyNB9Hehd7xfWxJNAOn1bnmQJXJE17DkVdBU=;
+        b=g/gQ2/z9jaLvDVlTUHmih1Mf6W7SQX7wJSQ+I8XBYvpmmlpFWCMKBmAtIqbdA9HJWB
+         iWJ8265l0uWUBs0Kg2xf88IK1ASsgY7HBMkicdvyoLSF2ZFw96kmx8hlZ4inRvc6mfw6
+         usW+eWfcjxc7P7c5wlWofL6a/6amUVvrMqWmVbcEPl/2nvlor4GEZMJYDGvrBQ2ES0Kz
+         MIm+Gt3o5Al8+xgJHIvN+k83T0tslOCriSPQAfvlsubkAEA+EPvZDMa6sTwznVHhsGT7
+         9tQ5f+N1kjiEiCDElzEW318WS8K22rXW/SvG9B0QnKg+Y4mmXmNqLX7TKuwjrx3J05kI
+         izbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686650114; x=1689242114;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RqNvggRPyNB9Hehd7xfWxJNAOn1bnmQJXJE17DkVdBU=;
+        b=Yr9pytCaS2fMvr+rqVLx2RIH5laLfB5ySvQUobjqSRtlPCOBznfgI9aiqfOYJ9OqmF
+         jH/p7jWCJi0VaBfRgVC0w1zLv8Gz5qysRdm2iqpAK9ngpAAzW0550yoznL8V43slOKgr
+         0Igl9sD4XVLYRSTb/E4KipjBEfW2tQcJvs5wk9Yi19pm+ZrsfX4RRXP46s0b3nT0xlTe
+         TCAiJfn1I3CNO1gXKodhVsVa534KSwi1Uwhj6UvCZl6ajORb3vFEObj7agxu9XuuhtMj
+         HZ0OtfVN990DPKvAbUXrkgUO6RkczIIjUOOd3QZ8iHpa0cT3gBea82s51bpTvaZcqIA7
+         +F9w==
+X-Gm-Message-State: AC+VfDxvL5q/jAWacOmVHeyjajmARYeCuq2xyHdveIWERZIbYu4qTiw7
+        8XXY2zrsyI2pPBZmk65HQPOsmw==
+X-Google-Smtp-Source: ACHHUZ5ZrdfyYh5y1tk49fFKsi3ApIfFMGD+jwFkSrpureaIeIWoGT4Ghm/fdObK/np4YyjXHk7Jyg==
+X-Received: by 2002:adf:e252:0:b0:307:7f38:37f with SMTP id bl18-20020adfe252000000b003077f38037fmr6934139wrb.66.1686650114217;
+        Tue, 13 Jun 2023 02:55:14 -0700 (PDT)
+Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
+        by smtp.gmail.com with ESMTPSA id e4-20020adfdbc4000000b0030ada01ca78sm14844845wrj.10.2023.06.13.02.55.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 02:55:13 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 11:55:11 +0200
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
+        vadfed@meta.com, jonathan.lemon@gmail.com, pabeni@redhat.com,
+        corbet@lwn.net, davem@davemloft.net, edumazet@google.com,
+        vadfed@fb.com, jesse.brandeburg@intel.com,
+        anthony.l.nguyen@intel.com, saeedm@nvidia.com, leon@kernel.org,
+        richardcochran@gmail.com, sj@kernel.org, javierm@redhat.com,
+        ricardo.canuelo@collabora.com, mst@redhat.com, tzimmermann@suse.de,
+        michal.michalik@intel.com, gregkh@linuxfoundation.org,
+        jacek.lawrynowicz@linux.intel.com, airlied@redhat.com,
+        ogabbay@kernel.org, arnd@arndb.de, nipun.gupta@amd.com,
+        axboe@kernel.dk, linux@zary.sk, masahiroy@kernel.org,
+        benjamin.tissoires@redhat.com, geert+renesas@glider.be,
+        milena.olech@intel.com, kuniyu@amazon.com, liuhangbin@gmail.com,
+        hkallweit1@gmail.com, andy.ren@getcruise.com, razor@blackwall.org,
+        idosch@nvidia.com, lucien.xin@gmail.com, nicolas.dichtel@6wind.com,
+        phil@nwl.cc, claudiajkang@gmail.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, linux-rdma@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, poros@redhat.com,
+        mschmidt@redhat.com, linux-clk@vger.kernel.org,
+        vadim.fedorenko@linux.dev
+Subject: Re: [RFC PATCH v8 01/10] dpll: documentation on DPLL subsystem
+ interface
+Message-ID: <ZIg8/0UJB9Lbyx2D@nanopsycho>
+References: <20230609121853.3607724-1-arkadiusz.kubalewski@intel.com>
+ <20230609121853.3607724-2-arkadiusz.kubalewski@intel.com>
+ <20230612154329.7bd2d52f@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF0002636A:EE_|MW4PR12MB7430:EE_
-X-MS-Office365-Filtering-Correlation-Id: a7438da6-be89-4e06-f3d0-08db6bf47134
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bZleVwqXVnSsWo6rzFmUcJN2CSX8FgigPzIGQijOrZo6ZfQPp2QdGNMX9WtlbkXzYsInxECoh51xX/YFly7Qt3vLnXd2GeUFiwtG7GbDnH6OGM3uSX6LliswM15X0pi2o18xKpcIM/utbJJuKiMH/9lE4qahOurWKEV51+El9WmxHB9nBw0gCiToy9lTzddso5ik30M9MF47y0iMbQz0p1Vf9KurAQuhQz4+QodbzruqeDvOOatid2Ilb57ik+ZZMszs0D3eED0D2tzG4yrFdmr9tXgyxUJ3uGR38bNGZKS35TmFtlOdhYakOfBcehsoYh8Xy8G9F4nQtPfs81D2/lqMH/Gn84+/+n1podPZ6u9Vw5OadXyymfwiljNgSylgSzBwzTo6lAeTjck3xvvDOOzE1iZXYJHfZYH5kP8suaModrhZkp4KJISbL+6b+ctQctOUwgSgSpWClCFsfL0/wB3FNg+0tyflMn3KCyZvLUc0zPBvT2Io0hjowKSJv98kaWGIPkc5V5fv6au47fIFp/yUI2dCKln+cZY2gHYSyFwgLXMTl5tLdw4tz38ExczAdtdB6jALpTn3FGfquYUr3YIzn/uqaTrpd3A7+OfyTsV5gk4j0QJfIOASp/cfaMqIrTZn9ETjJH0Q6WJkmqQBlnBMKq3RFuh9L9KxN/X0OsfRcOiiIO3UIrJM+bQFpHAw5I+WEiBriUEDDAFf59mBAzfqncaHh79ZdPrt9/i+knglnVwEQOlBFhI9tPj64/kNMszV+Sw/x0B2N3rlBt4ofg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(346002)(136003)(376002)(451199021)(40470700004)(46966006)(36840700001)(40460700003)(47076005)(83380400001)(36860700001)(7416002)(336012)(426003)(44832011)(36756003)(478600001)(8676002)(40480700001)(8936002)(70586007)(86362001)(316002)(41300700001)(82740400003)(356005)(81166007)(70206006)(5660300002)(4326008)(6916009)(7696005)(6666004)(2906002)(82310400005)(54906003)(186003)(1076003)(26005)(16526019)(2616005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2023 09:56:21.7920
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a7438da6-be89-4e06-f3d0-08db6bf47134
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1PEPF0002636A.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7430
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230612154329.7bd2d52f@kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Scanning only core PMUs is not sufficient on AMD since perf mem on
-AMD uses IBS OP PMU, which is independent of core PMU.
+Tue, Jun 13, 2023 at 12:43:29AM CEST, kuba@kernel.org wrote:
+>On Fri,  9 Jun 2023 14:18:44 +0200 Arkadiusz Kubalewski wrote:
+>> From: Vadim Fedorenko <vadim.fedorenko@linux.dev>
+>> 
+>> Add documentation explaining common netlink interface to configure DPLL
+>> devices and monitoring events. Common way to implement DPLL device in
+>> a driver is also covered.
+>
+>> +``'pin': [{
+>> + {'clock-id': 282574471561216,
+>> +  'module-name': 'ice',
+>> +  'pin-dpll-caps': 4,
+>> +  'pin-id': 13,
+>> +  'pin-parent': [{'pin-id': 2, 'pin-state': 'connected'},
+>> +                 {'pin-id': 3, 'pin-state': 'disconnected'},
+>> +                 {'id': 0, 'pin-direction': 'input'},
+>> +                 {'id': 1, 'pin-direction': 'input'}],
+>> +  'pin-type': 'synce-eth-port'}
+>> +}]``
+>
+>It seems like pin-parent is overloaded, can we split it into two
+>different nests?
 
-Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
----
- tools/perf/arch/x86/util/mem-events.c |  5 +++++
- tools/perf/util/mem-events.c          | 16 ++++++++++++----
- tools/perf/util/mem-events.h          |  1 +
- 3 files changed, 18 insertions(+), 4 deletions(-)
+Yeah, we had it as two and converged to this one. The thing is, the rest
+of the attrs are the same for both parent pin and parent device. I link
+it this way a bit better. No strong feeling.
 
-diff --git a/tools/perf/arch/x86/util/mem-events.c b/tools/perf/arch/x86/util/mem-events.c
-index a8a782bcb121..43af872e89a6 100644
---- a/tools/perf/arch/x86/util/mem-events.c
-+++ b/tools/perf/arch/x86/util/mem-events.c
-@@ -91,3 +91,8 @@ char *perf_mem_events__name(int i, char *pmu_name)
- 
- 	return (char *)e->name;
- }
-+
-+bool perf_mem_events__via_core_pmus(void)
-+{
-+	return !x86__is_amd_cpu();
-+}
-diff --git a/tools/perf/util/mem-events.c b/tools/perf/util/mem-events.c
-index be15aadb6b14..0c04f883d634 100644
---- a/tools/perf/util/mem-events.c
-+++ b/tools/perf/util/mem-events.c
-@@ -109,6 +109,14 @@ static bool perf_mem_event__supported(const char *mnt, char *sysfs_name)
- 	return !stat(path, &st);
- }
- 
-+bool __weak perf_mem_events__via_core_pmus(void)
-+{
-+	return true;
-+}
-+
-+#define perf_mem_scan_next_pmu(pmu) \
-+	(perf_mem_events__via_core_pmus() ? perf_pmus__scan_core(pmu) : perf_pmus__scan(pmu))
-+
- int perf_mem_events__init(void)
- {
- 	const char *mnt = sysfs__mount();
-@@ -130,7 +138,7 @@ int perf_mem_events__init(void)
- 		if (!e->tag)
- 			continue;
- 
--		while ((pmu = perf_pmus__scan_core(pmu)) != NULL) {
-+		while ((pmu = perf_mem_scan_next_pmu(pmu)) != NULL) {
- 			scnprintf(sysfs_name, sizeof(sysfs_name), e->sysfs_name, pmu->name);
- 			e->supported |= perf_mem_event__supported(mnt, sysfs_name);
- 		}
-@@ -165,7 +173,7 @@ static void perf_mem_events__print_unsupport_hybrid(struct perf_mem_event *e,
- 	char sysfs_name[100];
- 	struct perf_pmu *pmu = NULL;
- 
--	while ((pmu = perf_pmus__scan_core(pmu)) != NULL) {
-+	while ((pmu = perf_mem_scan_next_pmu(pmu)) != NULL) {
- 		scnprintf(sysfs_name, sizeof(sysfs_name), e->sysfs_name,
- 			  pmu->name);
- 		if (!perf_mem_event__supported(mnt, sysfs_name)) {
-@@ -188,7 +196,7 @@ int perf_mem_events__record_args(const char **rec_argv, int *argv_nr,
- 		if (!e->record)
- 			continue;
- 
--		if (perf_pmus__num_core_pmus() == 1) {
-+		if (perf_pmus__num_mem_pmus() == 1) {
- 			if (!e->supported) {
- 				pr_err("failed: event '%s' not supported\n",
- 				       perf_mem_events__name(j, NULL));
-@@ -203,7 +211,7 @@ int perf_mem_events__record_args(const char **rec_argv, int *argv_nr,
- 				return -1;
- 			}
- 
--			while ((pmu = perf_pmus__scan_core(pmu)) != NULL) {
-+			while ((pmu = perf_mem_scan_next_pmu(pmu)) != NULL) {
- 				rec_argv[i++] = "-e";
- 				s = perf_mem_events__name(j, pmu->name);
- 				if (s) {
-diff --git a/tools/perf/util/mem-events.h b/tools/perf/util/mem-events.h
-index 12372309d60e..d650eb311113 100644
---- a/tools/perf/util/mem-events.h
-+++ b/tools/perf/util/mem-events.h
-@@ -36,6 +36,7 @@ enum {
- extern unsigned int perf_mem_events__loads_ldlat;
- 
- int perf_mem_events__parse(const char *str);
-+bool perf_mem_events__via_core_pmus(void);
- int perf_mem_events__init(void);
- 
- char *perf_mem_events__name(int i, char *pmu_name);
--- 
-2.40.1
 
+>
+>> +SET commands format
+>> +===================
+>> +
+>> +``DPLL_CMD_DEVICE_SET`` - to target a dpll device, the user provides
+>> +``DPLL_A_ID``, which is unique identifier of dpll device in the system,
+>> +as well as parameter being configured (``DPLL_A_MODE``).
+>> +
+>> +``DPLL_CMD_PIN_SET`` - to target a pin user has to provide a
+>> +``DPLL_A_PIN_ID``, which is unique identifier of a pin in the system.
+>> +Also configured pin parameters must be added.
+>> +If ``DPLL_A_PIN_DIRECTION`` or ``DPLL_A_PIN_FREQUENCY`` are configured,
+>> +this affects all the dpll device they are connected, that is why those
+>> +attributes shall not be enclosed in ``DPLL_A_PIN_PARENT``.
+>> +Other attributes:
+>> +``DPLL_A_PIN_PRIO`` or ``DPLL_A_PIN_STATE`` must be enclosed in
+>> +``DPLL_A_PIN_PARENT`` as their configuration relates to only one
+>> +parent dpll or parent pin.
+>
+>Also sounds like setting pin attrs and pin-parent attrs should be
+>different commands.
+
+Could be, but what't the benefit? Also, you are not configuring
+pin-parent. You are configuring pin:pin-parent tuple. Basically the pin
+configuration as a child. So this is mainly config of the pin itsest
+Therefore does not really make sense to me to split to two comments.
