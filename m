@@ -2,193 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 153B272DA09
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 08:42:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 554C272DA0C
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 08:44:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235093AbjFMGmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 02:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39532 "EHLO
+        id S237288AbjFMGnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 02:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234850AbjFMGmZ (ORCPT
+        with ESMTP id S235053AbjFMGnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 02:42:25 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBAA10C2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 23:42:23 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686638541;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OrXtx3q+fEY1tPmCeQlf9j6nownlqedt7spCGcPEGYo=;
-        b=bbZgiNRa0Lfg7M4kZerXFAix5Uih85EN7RBfhf+hXRj/BAN+z58sdh83Fv5PQcnkTq/o1E
-        GSo44gGf3JnwrSZA4FJTdvsbaZjd1WV063cqzRNVcOf8w5bGSgViy7qW3pyL+4VWz4ZRMC
-        uXZbiQnA3Ojc9CKWV96LEtLHFgKEJbjFOTLTsH/jhugDeE2uZXQmIgmUzQfgFjnQIGDgcW
-        9cRv3yDI5omSbAGl8bLNafqcrUbQa3GZRcto2n03yKVFSf/5UDCDzNtbYalFXfg3kFIg/y
-        XOCCZ3L0mFWrJEKyqKPgf6sDROejqCJBRbmTT/cN9beF7BJCPvMenpmHvRMcmg==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C58B81C000E;
-        Tue, 13 Jun 2023 06:42:19 +0000 (UTC)
-Date:   Tue, 13 Jun 2023 08:42:18 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        Linux MTD List <linux-mtd@lists.infradead.org>,
-        f.fainelli@gmail.com, rafal@milecki.pl, kursad.oney@broadcom.com,
-        joel.peshkin@broadcom.com, computersforpeace@gmail.com,
-        anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
-        tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
-        linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 10/12] mtd: rawnand: brcmnand: Add BCMBCA read data bus
- interface
-Message-ID: <20230613084218.65a6da15@xps-13>
-In-Reply-To: <da4cb6a6-aa7d-3747-3f64-19b5582b15e8@broadcom.com>
-References: <20230606231252.94838-1-william.zhang@broadcom.com>
-        <20230606231252.94838-11-william.zhang@broadcom.com>
-        <20230607102232.17c4a27b@xps-13>
-        <7b393f47-4053-a8c7-f32e-3881d8130d80@broadcom.com>
-        <20230608081821.1de5a50b@xps-13>
-        <4ab08e3e-3be4-8b8b-6eb8-03a62337f46f@broadcom.com>
-        <20230609103544.0f00f799@xps-13>
-        <3d3b471b-c555-ee1c-96d6-c04d76979e76@broadcom.com>
-        <20230612194908.5465bc56@xps-13>
-        <20230612195305.4b097c46@xps-13>
-        <da4cb6a6-aa7d-3747-3f64-19b5582b15e8@broadcom.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 13 Jun 2023 02:43:42 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550FFE6B
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 23:43:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686638621; x=1718174621;
+  h=date:from:to:cc:subject:message-id;
+  bh=Ic3iWeQmivw86fUJmlScgYRneoFiBgPTcgGfUBc56Hk=;
+  b=aj9cSWcA+9pIxVpsxe3ZsginvXEkEVmvXy6ybtaobmbvPpcSpiiSFx3m
+   quUhWIAcZn8/0q3VQrGyI1YVJkpYn7sdw84zJDBXWsArw7YMdedXSIf2X
+   mYk8gxThNEt6jVrTwCILl+F5X15qP9ABddTZ4w2g26mWdDSJuPxb3nI9J
+   H9Ew2pI2OZiuQV1vRUxvEuNd7/Ravp7t1KcfUyNkqQc6w0Kj9sMltLjrF
+   ZUwl9bTGCY7WYNTQKMEsLoMn6qKscbE9PDzR6F6qD3HFtd9p1ERZA5C0D
+   9Ikes10xaTQOn746mQD7CIWDMdynEWviIiVSIrajXYcrib1I1zIkBgO5V
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="355743230"
+X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
+   d="scan'208";a="355743230"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 23:43:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="958288880"
+X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
+   d="scan'208";a="958288880"
+Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 12 Jun 2023 23:43:40 -0700
+Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q8xkh-00014e-22;
+        Tue, 13 Jun 2023 06:43:39 +0000
+Date:   Tue, 13 Jun 2023 14:42:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ 7728822622f78a493273454af746309f852c4c0e
+Message-ID: <202306131453.PRwEKpTR-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi William,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: 7728822622f78a493273454af746309f852c4c0e  Merge x86/microcode into tip/master
 
-william.zhang@broadcom.com wrote on Mon, 12 Jun 2023 12:18:58 -0700:
+elapsed time: 976m
 
-> On 06/12/2023 10:53 AM, Miquel Raynal wrote:
-> > Hello again,
-> >  =20
-> >>>>>>>> Perhaps we could have a single function that is statically assig=
-ned at
-> >>>>>>>> probe time instead of a first helper with two conditions which c=
-alls in
-> >>>>>>>> one case another hook... This can be simplified I guess. =20
-> >>>>>>>>      >> Well this will need to be done at the SoC specific imple=
-mentation level (bcm<xxx>_nand.c) and each SoC will need to have either gen=
-eral data bus read func with is_param option or data_bus_read_page, data_bu=
-s_read_param. =20
-> >>>>>>
-> >>>>>> You told me in case we would use exec_op we could avoid the param
-> >>>>>> cache. If that's true then the whole support can be simplified. =20
-> >>>>>>     >> Correct we may possibly unified the parameter data read but=
- exec_op is long shot and we are not fully ready for that yet. It also depe=
-nds on if the low level data register has endianess difference for the para=
-meter data between difference SoCs. =20
-> >>>>>
-> >>>>> So I would like to push the current implementation and we can explo=
-re the exec_op option late which will be a much big and complete different =
-implementation. =20
-> >>>>
-> >>>> I am sorry but this series is totally backwards, you're trying to gu=
-ess
-> >>>> what comes next with the 'is_param' thing, it's exactly what we are
-> >>>> fighting against since 2017. There are plenty of ->exec_op()
-> >>>> conversions out there, I don't believe this one will be harder. You
-> >>>> need to convert the driver to this new API and get rid of this whole
-> >>>> endianness non-sense to simplify a lot the driver. =20
-> >>>>    >>> I am not guessing anything but just factor out the existing c=
-ommon nand cache read logic into the single default function(or one for pag=
-e read and another for parameter read as I mentioned in another thread) and=
- allow SoC to overrides the implementation when needed. =20
-> >>
-> >> No, you are trying to guess what type of read the core is performing,
-> >> either a regular data page read or a parameter page read.
-> >> =20
-> >>> I agree ->exec_op can possibly get rid of the parameter page read fun=
-ction and is the way to go. But it won't help on the page read for endianes=
-s. =20
-> >>
-> >> You told me there is no endianess issue with the data pages, so why it
-> >> won't help on the page read?
-> >> =20
-> >>> It's not that I am against exec_op but I want to take one step a time
-> >>> and I'd like to get these fixes =20
-> >>
-> >> I don't see any fix here? Let me know if I am missing something but
-> >> right now I see a new version of the controller being supported with
-> >> its own constraints. If you are fixing existing code for already
-> >> supported platform, then make it clear and we can discuss this. But if
-> >> you just want to support the bcmbca flavor, then there is no risk
-> >> mitigation involved here, and a conversion is the right step :)
-> >> =20
-> >=20
-> > I forgot to mention: the exec_op conversion is almost ready, Boris
-> > worked on it but he lacked the hardware so maybe you'll just need to
-> > revive the few patches which target your platform and do a little bit of
-> > debugging?
-> >=20
-> > https://github.com/bbrezillon/linux/commits/nand/exec-op-conversion?aft=
-er=3D8a3cf6fd25d5e15c6667f9e95c1fc86e4cb735e6+34&branch=3Dnand%2Fexec-op-co=
-nversion&qualified_name=3Drefs%2Fheads%2Fnand%2Fexec-op-conversion
-> >  =20
-> Yes this is the patch what our exec_op work is based on. Thanks Boris! Th=
-e issue with patch is that performance is very slow for anything that rely =
-on nand_read_page_op as the patch implementing it using the low level cmd a=
-nd data register to transfer the data byte by byte.
+configs tested: 126
+configs skipped: 5
 
-You don't need to use exec_op for your read_page/write_page hooks,
-quite the opposite actually. exec_op is not meant for high throughput.
-exec_op is meant to be simple. You can have fast I/Os with a different
-mechanism in your read/write_page hooks.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
->  I actually sent out email regarding this to Boris and he cc'ed you in
->  sept last year. We have to use the nand parser to match the page read
->  from exec_op so we can actually match and use the brcmnand_page_read
->  fast path. But there are many situations that we need to match so the
->  project to migrate exce_op are still work in progress just on our
->  bcmbca chip as of now.  Just forward that email again to you and I
->  appreciate it if you have any inputs there. So IMHO it is just too
->  risky and too big of scope to have the exec_op added to this patch
->  series and definitively better to do it afterwards with a dedicated
->  patch.
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r005-20230612   gcc  
+alpha                randconfig-r024-20230612   gcc  
+arc                              allyesconfig   gcc  
+arc          buildonly-randconfig-r006-20230612   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r012-20230612   gcc  
+arc                  randconfig-r043-20230612   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r005-20230612   gcc  
+arm                  randconfig-r026-20230612   clang
+arm                  randconfig-r046-20230612   clang
+arm64                            allyesconfig   gcc  
+arm64        buildonly-randconfig-r001-20230612   clang
+arm64                               defconfig   gcc  
+arm64                randconfig-r002-20230612   clang
+arm64                randconfig-r011-20230612   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r003-20230612   gcc  
+csky                 randconfig-r015-20230612   gcc  
+csky                 randconfig-r034-20230612   gcc  
+csky                 randconfig-r036-20230612   gcc  
+hexagon              randconfig-r041-20230612   clang
+hexagon              randconfig-r045-20230612   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r006-20230612   clang
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230612   clang
+i386                 randconfig-i002-20230612   clang
+i386                 randconfig-i003-20230612   clang
+i386                 randconfig-i004-20230612   clang
+i386                 randconfig-i005-20230612   clang
+i386                 randconfig-i006-20230612   clang
+i386                 randconfig-i011-20230612   gcc  
+i386                 randconfig-i012-20230612   gcc  
+i386                 randconfig-i013-20230612   gcc  
+i386                 randconfig-i014-20230612   gcc  
+i386                 randconfig-i015-20230612   gcc  
+i386                 randconfig-i016-20230612   gcc  
+i386                 randconfig-r031-20230612   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r023-20230612   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k         buildonly-randconfig-r004-20230612   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r021-20230612   gcc  
+m68k                 randconfig-r032-20230612   gcc  
+m68k                 randconfig-r035-20230612   gcc  
+m68k                 randconfig-r036-20230612   gcc  
+microblaze   buildonly-randconfig-r002-20230612   gcc  
+microblaze           randconfig-r004-20230612   gcc  
+microblaze           randconfig-r022-20230612   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r003-20230612   gcc  
+mips                 randconfig-r031-20230612   gcc  
+nios2        buildonly-randconfig-r004-20230612   gcc  
+nios2                               defconfig   gcc  
+openrisc             randconfig-r001-20230612   gcc  
+openrisc             randconfig-r006-20230612   gcc  
+openrisc             randconfig-r014-20230612   gcc  
+parisc                           allyesconfig   gcc  
+parisc       buildonly-randconfig-r001-20230612   gcc  
+parisc       buildonly-randconfig-r003-20230612   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r033-20230612   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc      buildonly-randconfig-r002-20230612   gcc  
+powerpc              randconfig-r032-20230612   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv        buildonly-randconfig-r005-20230612   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r002-20230612   clang
+riscv                randconfig-r006-20230612   clang
+riscv                randconfig-r034-20230612   clang
+riscv                randconfig-r042-20230612   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230612   gcc  
+sh                               allmodconfig   gcc  
+sh                   randconfig-r001-20230612   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r025-20230612   gcc  
+sparc                randconfig-r033-20230612   gcc  
+sparc64              randconfig-r004-20230612   gcc  
+sparc64              randconfig-r035-20230612   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   clang
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230612   clang
+x86_64               randconfig-a001-20230613   gcc  
+x86_64               randconfig-a002-20230612   clang
+x86_64               randconfig-a002-20230613   gcc  
+x86_64               randconfig-a003-20230612   clang
+x86_64               randconfig-a003-20230613   gcc  
+x86_64               randconfig-a004-20230612   clang
+x86_64               randconfig-a004-20230613   gcc  
+x86_64               randconfig-a005-20230612   clang
+x86_64               randconfig-a005-20230613   gcc  
+x86_64               randconfig-a006-20230612   clang
+x86_64               randconfig-a006-20230613   gcc  
+x86_64               randconfig-a011-20230612   gcc  
+x86_64               randconfig-a012-20230612   gcc  
+x86_64               randconfig-a013-20230612   gcc  
+x86_64               randconfig-a014-20230612   gcc  
+x86_64               randconfig-a015-20230612   gcc  
+x86_64               randconfig-a016-20230612   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r013-20230612   gcc  
 
-As long as you add small and orthogonal changes to cmd_ctrl/cmd_func
-I don't mind, but what you want now is to force me to pull dirty
-changes "first", the type of change we are refusing since 2018, making
-me expect you'll perform the conversion after. It would have been
-terribly less dirty and you would have all your code already upstreamed
-if you had performed the exec_op conversion since September.
-
-Thanks,
-Miqu=C3=A8l
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
