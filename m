@@ -2,149 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A78D72E126
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 13:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8179A72E14F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 13:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237627AbjFMLUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 07:20:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55930 "EHLO
+        id S241841AbjFMLVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 07:21:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242433AbjFMLTu (ORCPT
+        with ESMTP id S240821AbjFMLVD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 07:19:50 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E4E1BD7
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 04:19:29 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-5183101690cso5572594a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 04:19:28 -0700 (PDT)
+        Tue, 13 Jun 2023 07:21:03 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A137098
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 04:21:01 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f642a24568so6584328e87.2
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 04:21:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686655167; x=1689247167;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=dtzyg81yCu4VXwW413lxgy6B2wG9SaGkM8lh+1KCu1g=;
-        b=LYbOWDJUSS7DIRw9J0C8Id2sSIgH9M1zm2KSPI7CbOTgx2VSIGhUWnN0rZbuVXiGc3
-         Rbxy7IGgE36jaklExufVW9DNVTJrSbUiNWgBeAZ/hmIhLrPCV1FbyNZo4BwdRlo73CL9
-         qPd+b4nA7Uqp4mNrk5ttZ9ZIy9VtvsKdcnpUrF8BrJ+ior9hzUADrMi/khEzwfNJgBBB
-         3J3aCRqAmCfHJEUQTgo35GLSrY2DAVgxAkIBeSLAyhb1JMDKYQtJkHNSTPnerU0/5Ut0
-         15Y3W9kYyyBmpkkigX9U2BqLDgVW7ZQtql+TjHZKmKVe5WZNSgoS6jFsrAavv1NznRie
-         Fb1A==
+        d=linaro.org; s=google; t=1686655260; x=1689247260;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QJexvCUYaVmjQj1NIVnYpyS9P6fcRoHfQo7408YP75I=;
+        b=cpBLc9LMzv8sqmwV7f8UA+wHe9C/gVsv+v5KCfGXCI2E9sbv+7QuBgOeYHzCEnXiVp
+         AMTcfBvxnUfnaGbVd+Ne8HppMXbmNl0vKQQtuZdw0E0Mm9SsgrAdix39usLPr2nW5mV4
+         WjwNvAPxCK68KQijNbR7uiMoFk5WEl5ZB+zdpxPrHCuRVfyApDz6XTpiYrZ32ZkJCY5d
+         fQI3NU6SGFQtZB5geNFrYmIVBc8g2joCOecrIpCULUSIblTacgeauiLjHctupdq7qSTP
+         mZJJqCDxJwjOvf9YCOIpdCvcRZe75NfqoA1wXVwoYQcP0utcmLIUuBWrp98krWbrN/jx
+         P2Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686655167; x=1689247167;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1686655260; x=1689247260;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dtzyg81yCu4VXwW413lxgy6B2wG9SaGkM8lh+1KCu1g=;
-        b=CBFYDKr+y7tjG92NIeWK/ua9XS7vIsy+kTntqLi6d+OFhWCGA5cIqzAlb9cE9Y8OPj
-         FILaFNU7VS/nhu5Hcv+4SO5EwgWm+QnbeUcUVbrMiwTegLxPBmyLlRJaEEDK8uNjVvuR
-         TIDzbA8QXQJ7Wp/qPJAdFyQ4/CWXq3GFh7S1mNTvwLC17REitaASMLOGq2Jq/I2MLtTE
-         RJ3Vn592MdEQrQ6/BgZsc2kxRqqqNO4HeHCDK/SYpYWMlEKSOIyvnjsypS+GwhAybMAS
-         +Hun76uOLEr2PgB01TDYKIb0Ohq77j3vbp+AjwP/44zIO4Al5cpzbEwAVel3oiMAyRIm
-         MD2w==
-X-Gm-Message-State: AC+VfDwXPZuk0RB5lWNUvfExSROmTrXq14BSVkimfFwUyP2VSQGUAfJB
-        TioCVjcyPlyVi/Iij1izYV30iw==
-X-Google-Smtp-Source: ACHHUZ7V9uuUJDuQkeE0U0VIpQbamKxyYvpkZgeq1/iDcr16b5+vIJ7b1fWzeTaXfAfKzGUoiNz/fw==
-X-Received: by 2002:a17:906:5d09:b0:978:af9d:c004 with SMTP id g9-20020a1709065d0900b00978af9dc004mr11055545ejt.4.1686655167482;
-        Tue, 13 Jun 2023 04:19:27 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id f13-20020a170906494d00b0097461fecc91sm6493922ejt.81.2023.06.13.04.19.26
+        bh=QJexvCUYaVmjQj1NIVnYpyS9P6fcRoHfQo7408YP75I=;
+        b=LVLuAvq8wPfpEJtPak2w4dukE8fLrvgla6T3A6HmsuVszIyB5WvWRDHIBsgggRKpu3
+         7Kt+fwUlDrh5FG5fG+vRm9XNw3EzKRRVotQzwTuwtMpumU+AVu8JVRUUzFw1xB9gFN1E
+         bxOAyjzDxCSX1cimz++0fugVHkEBvEeIBVmCpW7KAyDcg2y1wQt+FTeyNsrXyW5l50KN
+         iqBEl63hLvtUUPP5LNUPij8tlu/7H89hnEd77YOH+nFGg87jOkROtcClJVoPGMbV/pza
+         p4u0JSuUpSl9NrqROo2732trLkR0ehvQB6Ik1w8Hs093f20WBdv5PolzcfKPdim8XGTd
+         S0JA==
+X-Gm-Message-State: AC+VfDxD/uqAtU5WxURKBV2iiDUcrl7aQlsXGvYtGOdFIAa9I00EIl1D
+        lXWg/MIB6yWGDQHVmo1HGz7zM8jJg2btZyocO/Q=
+X-Google-Smtp-Source: ACHHUZ4Un3Kd8jYCXhk2BJfqRhFBDEwVeoA47+e7X2GVgEKjVn+3QHyO17A5QxxVIZ/nmWXXwWk6zw==
+X-Received: by 2002:a2e:890d:0:b0:2a8:b579:225b with SMTP id d13-20020a2e890d000000b002a8b579225bmr4029208lji.40.1686655259830;
+        Tue, 13 Jun 2023 04:20:59 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id y22-20020a2e3216000000b002a8e8c776e9sm2121628ljy.56.2023.06.13.04.20.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 04:19:27 -0700 (PDT)
-Message-ID: <7574a6fe-ddf1-1500-ba04-5a1df6845b6a@linaro.org>
-Date:   Tue, 13 Jun 2023 13:19:24 +0200
+        Tue, 13 Jun 2023 04:20:59 -0700 (PDT)
+Message-ID: <35c3fe5b-0c8f-4a2e-e3b3-f181edbdc956@linaro.org>
+Date:   Tue, 13 Jun 2023 13:20:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v4 12/12] dt-bindings: fsl-dma: fsl-edma: add edma3
- compatible string
-To:     Frank Li <Frank.Li@nxp.com>, vkoul@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        peng.fan@nxp.com, joy.zou@nxp.com, shenwei.wang@nxp.com,
-        imx@lists.linux.dev
-References: <20230612203418.2017769-1-Frank.Li@nxp.com>
- <20230612203418.2017769-13-Frank.Li@nxp.com>
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v3 01/23] dt-bindings: interconnect: Add Qcom RPM ICC
+ bindings
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230612203418.2017769-13-Frank.Li@nxp.com>
+To:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230526-topic-smd_icc-v3-0-5fb7d39b874f@linaro.org>
+ <20230526-topic-smd_icc-v3-1-5fb7d39b874f@linaro.org>
+ <ZIhO2Tgh5q4heBi6@kernkonzept.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <ZIhO2Tgh5q4heBi6@kernkonzept.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/06/2023 22:34, Frank Li wrote:
-> Extend Freescale eDMA driver bindings to support eDMA3 IP blocks in
-> i.MX8QM and i.MX8QXP SoCs. In i.MX93, both eDMA3 and eDMA4 are now.
+
+
+On 13.06.2023 13:11, Stephan Gerhold wrote:
+> On Mon, Jun 12, 2023 at 08:24:18PM +0200, Konrad Dybcio wrote:
+>> The SMD RPM interconnect driver requires different icc tags to the
+>> RPMh driver. Add bindings to reflect that.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>  include/dt-bindings/interconnect/qcom,rpm-icc.h | 13 +++++++++++++
+>>  1 file changed, 13 insertions(+)
+>>
+>> diff --git a/include/dt-bindings/interconnect/qcom,rpm-icc.h b/include/dt-bindings/interconnect/qcom,rpm-icc.h
+>> new file mode 100644
+>> index 000000000000..ef61006c9c58
+>> --- /dev/null
+>> +++ b/include/dt-bindings/interconnect/qcom,rpm-icc.h
+>> @@ -0,0 +1,13 @@
+>> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+>> +/*
+>> + * Copyright (c) 2023, Linaro Limited
+>> + */
+>> +
+>> +#ifndef __DT_BINDINGS_INTERCONNECT_QCOM_RPM_ICC_H
+>> +#define __DT_BINDINGS_INTERCONNECT_QCOM_RPM_ICC_H
+>> +
+>> +#define RPM_ACTIVE_TAG		BIT(0)
+>> +#define RPM_SLEEP_TAG		BIT(1)
 > 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
->  .../devicetree/bindings/dma/fsl,edma.yaml     | 24 +++++++++++++++++++
->  1 file changed, 24 insertions(+)
+> BIT(n) doesn't work in dt-bindings (syntax error), can you change this
+> to (1 << 0) / (1 << 1)?
+Just including the binding did not show it.. You're right..
+
+Konrad
 > 
-> diff --git a/Documentation/devicetree/bindings/dma/fsl,edma.yaml b/Documentation/devicetree/bindings/dma/fsl,edma.yaml
-> index 5fd8fc604261..14cea8a3f442 100644
-> --- a/Documentation/devicetree/bindings/dma/fsl,edma.yaml
-> +++ b/Documentation/devicetree/bindings/dma/fsl,edma.yaml
-> @@ -21,6 +21,10 @@ properties:
->        - enum:
->            - fsl,vf610-edma
->            - fsl,imx7ulp-edma
-> +          - fsl,imx8qm-edma
-> +          - fsl,imx8qm-adma
-> +          - fsl,imx93-edma3
-> +          - fsl,imx93-edma4
->        - items:
->            - const: fsl,ls1028a-edma
->            - const: fsl,vf610-edma
-> @@ -101,6 +105,26 @@ allOf:
->          reg:
->            maxItems: 2
->  
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            anyOf:
-
-This is just enum.
-
-> +              - const: fsl,imx8qm-edma
-> +              - const: fsl,imx8qm-adma
-
-Keep entries ordered alphabetically. In compatible list as well.
-
-> +              - const: fsl,imx93-edma3
-> +              - const: fsl,imx93-edma4
-> +    then:
-> +      properties:
-> +        reg:
-> +          maxItems: 1
-> +        interrupts:
-> +          minItems: 1
-> +          maxItems: 64
-> +        interrupt-names:
-> +          minItems: 1
-> +          maxItems: 64
-
-It does not look like you tested the bindings, at least after quick
-look. Please run `make dt_binding_check` (see
-Documentation/devicetree/bindings/writing-schema.rst for instructions).
-Maybe you need to update your dtschema and yamllint.
-
-interrupts can be max 17, so just test it and you will see errors.
-
-Why names are not listed? If you accept names like "candy" or
-"elephant", then why having the names in the first place?
-
-And what about clocks?
-
-Best regards,
-Krzysztof
-
+> Thanks!
+> 
