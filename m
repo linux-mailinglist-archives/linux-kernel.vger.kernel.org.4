@@ -2,59 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81F2872EB6A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:01:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8535F72EB74
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240378AbjFMTBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 15:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48518 "EHLO
+        id S240374AbjFMTCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 15:02:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231562AbjFMTBp (ORCPT
+        with ESMTP id S239762AbjFMTCI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 15:01:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8060BA7;
-        Tue, 13 Jun 2023 12:01:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 185346395C;
-        Tue, 13 Jun 2023 19:01:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D73EC433D9;
-        Tue, 13 Jun 2023 19:01:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686682902;
-        bh=/JuClQfiInF4E+biL4mmyBg4GdWaji39UK48z39WAK8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pkxj4anxa9SwIR1rVD3AliSkIE6TiUP+JPyhWPaTAMASCYImM6Cj69VqV/Mtcji38
-         PGGhjmgEOlhC598j3OTvAFk5BngXgPFozP4Q4rjUmM3OG+aIHzEvXXg8SimdzXAUQ5
-         2EcR1OLu9zIhtTwQPeKzlbcreooITMgSpR9vNE4TWLXXoR2Kzs8jL93mnkK+mWOUDi
-         4gHH94BmCUyqc83ZesZQPPROYwhrLM1wzbiz9gKngJGqnsSlCrAGZjsMGSoO7POMOK
-         7zMiVl0AM3IdDCm2wTfIHvHN9BGYuT1cD4elm9WPPCRXgB+FiOkefM+Q0iRZlrbo7A
-         3QHifX5W7No4g==
-Date:   Tue, 13 Jun 2023 12:01:40 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, herbert@gondor.apana.org.au,
-        davem@davemloft.net, conor.dooley@microchip.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, christoph.muellner@vrull.eu
-Subject: Re: [PATCH v5 4/4] RISC-V: crypto: add accelerated GCM GHASH
- implementation
-Message-ID: <20230613190140.GD1139@sol.localdomain>
-References: <20230612210442.1805962-1-heiko.stuebner@vrull.eu>
- <20230612210442.1805962-5-heiko.stuebner@vrull.eu>
- <20230613031006.GD883@sol.localdomain>
- <2236193.NgBsaNRSFp@diego>
+        Tue, 13 Jun 2023 15:02:08 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C3DE5;
+        Tue, 13 Jun 2023 12:02:05 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f62b552751so7318482e87.3;
+        Tue, 13 Jun 2023 12:02:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686682923; x=1689274923;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jk4xTe07/GeNMrAZFNQY+BzkTYH3If3cldLHtOxjDjg=;
+        b=hnBQKQlz7SSBYWxjCWexy5F+WSYk+2Tqo0P3qW0WiyBfFLsPhA7shj1ApaTEocai0/
+         phin901w7E53BQMDS9I3j4x87Ix2P25wPdwNYxcrdnT7AO606nYuTpFdiirpAgcSuCln
+         sa2RlU9qK4vCofv3vsHSR4CkZKA9PQhp8BVPRGLGH5eK5152LZNW3z3qmuYRfC2f4YU4
+         wAbSbqq31G9WE+pXZBZ2csmB8Ms1v4J0DIGUm1Esa+4AidpOpvM+ydMwOu+a1ntfs70d
+         +b08gtKZirLVVu8Gw8ne9gyp8u70q0VcNOzcMbCwFUIfTDbudreWyfKozRl20TPjab/I
+         /VNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686682923; x=1689274923;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Jk4xTe07/GeNMrAZFNQY+BzkTYH3If3cldLHtOxjDjg=;
+        b=UdkspsKAqsnMN0EmPulXVrF4hPN5ZIkt6yhUSELavkUQaMKQ/baBMU0YaQYtK54MSQ
+         hviBdMxMQX1MGE6sHU+gtXvI6IjInKRjpwCUIToI41M7sV+vtU9vf45x3jvJp3BLbDuU
+         OCdJfmPC4Ft+kzV8SxciE125gXXrAtDAxveNRlRmod/n0WlSSuBP6ZJrHREJhhXqD2x2
+         eUweWsCPLWamXWalsVkftGFrBVTbJ8Dv21bJgQ3AyTITUC8e7kaF7O1uPzjdA42XtnTj
+         vGGV8YD5GdWlaOBqWcpnpiki89Mj5rukeaGZcaEkh80pwhoM0AN4IVcZBcQESaV3E52S
+         X6wA==
+X-Gm-Message-State: AC+VfDyIe7lLkcn9neDag5oU77am+OWLoTlTQDe8mVETLDvXstIbnekK
+        rQV4RSwaIk2ES2GRxEfsGTo=
+X-Google-Smtp-Source: ACHHUZ454yzSsHJTRyUrKRIQsvsXLypKDPWH6elEZzFQjXx1TGgnzhqQCL5NmUlhY3sV9DBuS6yIJA==
+X-Received: by 2002:ac2:4982:0:b0:4f6:2e4f:19c6 with SMTP id f2-20020ac24982000000b004f62e4f19c6mr6339639lfl.53.1686682923262;
+        Tue, 13 Jun 2023 12:02:03 -0700 (PDT)
+Received: from mobilestation ([95.79.140.35])
+        by smtp.gmail.com with ESMTPSA id q4-20020ac24a64000000b004f2532cfbc1sm1870281lfp.81.2023.06.13.12.02.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 12:02:02 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 22:02:00 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Abe Kohandel <abe.kohandel@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH] spi: dw: Replace incorrect spi_get_chipselect with set
+Message-ID: <20230613190200.ifuwxstc77tbeopo@mobilestation>
+References: <20230613162103.569812-1-abe.kohandel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2236193.NgBsaNRSFp@diego>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+In-Reply-To: <20230613162103.569812-1-abe.kohandel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,70 +73,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 10:00:44AM +0200, Heiko Stübner wrote:
-> Am Dienstag, 13. Juni 2023, 05:10:06 CEST schrieb Eric Biggers:
-> > Hi Heiko,
-> > 
-> > On Mon, Jun 12, 2023 at 11:04:42PM +0200, Heiko Stuebner wrote:
-> > > diff --git a/arch/riscv/crypto/ghash-riscv64-zbc.pl b/arch/riscv/crypto/ghash-riscv64-zbc.pl
-> > > new file mode 100644
-> > > index 000000000000..677c438a44bf
-> > > --- /dev/null
-> > > +++ b/arch/riscv/crypto/ghash-riscv64-zbc.pl
-> > > @@ -0,0 +1,427 @@
-> > > +#! /usr/bin/env perl
-> > > +# Copyright 2022 The OpenSSL Project Authors. All Rights Reserved.
-> > > +#
-> > > +# Licensed under the Apache License 2.0 (the "License").  You may not use
-> > > +# this file except in compliance with the License.  You can obtain a copy
-> > > +# in the file LICENSE in the source distribution or at
-> > > +# https://www.openssl.org/source/license.html
-> > > +
-> > > +# This file is dual-licensed and is also available under the following
-> > > +# terms:
-> > > +#
-> > > +# Copyright (c) 2023, Christoph Müllner <christoph.muellner@vrull.eu>
-> > > +# All rights reserved.
-> > > +#
-> > > +# Redistribution and use in source and binary forms, with or without
-> > > +# modification, are permitted provided that the following conditions
-> > > +# are met:
-> > > +# 1. Redistributions of source code must retain the above copyright
-> > > +#    notice, this list of conditions and the following disclaimer.
-> > > +# 2. Redistributions in binary form must reproduce the above copyright
-> > > +#    notice, this list of conditions and the following disclaimer in the
-> > > +#    documentation and/or other materials provided with the distribution.
-> > 
-> > Is this worded properly for a dual license?  The paragraph about the Apache
-> > License makes it sound like the Apache License must always be complied with:
-> > "You may not use this file except in compliance with the License."
-> > 
-> > So I worry that this could be interpreted as:
-> > 
-> >     Apache-2.0 AND BSD-2-Clause
-> > 
-> > instead of
-> > 
-> >     Apache-2.0 OR BSD-2-Clause
-> > 
-> > It needs to be the latter.
-> > 
-> > So I think the file header needs to be clarified w.r.t. the dual license.
+On Tue, Jun 13, 2023 at 09:21:03AM -0700, Abe Kohandel wrote:
+> Commit 445164e8c136 ("spi: dw: Replace spi->chip_select references with
+> function calls") replaced direct access to spi.chip_select with
+> spi_*_chipselect calls but incorrectly replaced a set instance with a
+> get instance, replace the incorrect instance.
 > 
-> Hmm, I think the 
-> 	"This file is dual-licensed and is also available under the following terms"
-> should be pretty clear?
+> Fixes: 445164e8c136 ("spi: dw: Replace spi->chip_select references with function calls")
+> Signed-off-by: Abe Kohandel <abe.kohandel@intel.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-As I said, IMO the problem is that it contradicts the Apache license blurb just
-above it, specifically the part "You may not use this file except in compliance
-with the License".  So it's not clear what is meant.  That sentence does not
-appear in other common license blurbs; it seems to be unique to Apache's.
+Indeed! Thanks for fixing this.
+Acked-by: Serge Semin <fancer.lancer@gmail.com>
 
-I know that people often treat these blurbs as magic incantations, but I'm just
-looking at the plain English meaning here.
+-Serge(y)
 
-To fix this ambiguity I think either that sentence should be removed, or the
-intent to dual license should be clearly described in the *first paragraph*
-before listing the two licenses.  (Or do both of those.)
-
-- Eric
+> ---
+>  drivers/spi/spi-dw-mmio.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
+> index a699ce496cc5..a963bc96c223 100644
+> --- a/drivers/spi/spi-dw-mmio.c
+> +++ b/drivers/spi/spi-dw-mmio.c
+> @@ -292,7 +292,7 @@ static void dw_spi_elba_set_cs(struct spi_device *spi, bool enable)
+>  	 */
+>  	spi_set_chipselect(spi, 0, 0);
+>  	dw_spi_set_cs(spi, enable);
+> -	spi_get_chipselect(spi, cs);
+> +	spi_set_chipselect(spi, 0, cs);
+>  }
+>  
+>  static int dw_spi_elba_init(struct platform_device *pdev,
+> -- 
+> 2.40.1
+> 
