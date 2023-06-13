@@ -2,61 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D66472DB6D
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 09:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE5372DB71
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 09:47:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240685AbjFMHqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 03:46:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43948 "EHLO
+        id S235218AbjFMHrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 03:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240723AbjFMHqA (ORCPT
+        with ESMTP id S235159AbjFMHr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 03:46:00 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7804119AE
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:45:25 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Tue, 13 Jun 2023 03:47:27 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C0EE7A
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:47:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=C+P1RKdkxJ+NyfWaNFtM/NhTzPDkyJkUlTPOcCqnetc=; b=vqZVEL7b3WAZ1C9pwK1Gsw5Rh8
+        75LoXDLBnkPbS5OkNKmwV67emHoaUOSmQzrj/z33v+cpAGXQIXK7cSt24yekviJ5QkYsuXUJDCWsF
+        8dLVxxgwt/+MgRuJHnDhNQOYqO4NuZlO8behT2J9ZRwb5hLsF8HGyKvJJUVqMCzheaWaxLTfCtFX9
+        MpkQ2jYRmE3uosmz2M9bbKAXyG/ll7mI0x/0Wd2VR9eWFpB6i4WhedhnHFAn/1Yj/3YZ8HfF/5ihL
+        GNMOzN6UsZ2mlmkAmk3yYI6xol5NYd8nHlVCvPMGqOdjiB+x4uKgF5mIhi3ZZ3miL+M0jt4Job2vK
+        x8sHj9DA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q8ykO-003fbx-Ah; Tue, 13 Jun 2023 07:47:24 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0BC4A1FD76;
-        Tue, 13 Jun 2023 07:45:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1686642324; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=dJgC7IJsRwZThDR+MXRBPyItHeIWZPAve8xzVWCL4AA=;
-        b=nofkgr7WVYo44MkQhB5D/5stT35GW4ushSOXVFwIwRQcDHwKvjAOuUQeVnwN4aB7FNo8+n
-        zOn8MnM+pC6eMxX+nkc0xNi0t3jMwdfDOihU1P9QlzvPGy5IkfcziFXOJb5jTAyg6Kpp7u
-        EiuRwJQScu78OWYcvozCSSkg8+vkoqw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1686642324;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=dJgC7IJsRwZThDR+MXRBPyItHeIWZPAve8xzVWCL4AA=;
-        b=jQdDjp3X+OOoVnKP18S7Wq7otNDIDcV8t+BCIpB9v7+Y6rDausZKiY3Pw2z0q5wUi576Gk
-        pXKHhtoTm8imgxAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CC58C13345;
-        Tue, 13 Jun 2023 07:45:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id j2niMJMeiGTbHAAAMHmgww
-        (envelope-from <tiwai@suse.de>); Tue, 13 Jun 2023 07:45:23 +0000
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: [PATCH] regmap: maple: Don't sync read-only registers
-Date:   Tue, 13 Jun 2023 09:45:11 +0200
-Message-Id: <20230613074511.4476-1-tiwai@suse.de>
-X-Mailer: git-send-email 2.35.3
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id EA8F1300188;
+        Tue, 13 Jun 2023 09:47:23 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id CEEF3245C04DD; Tue, 13 Jun 2023 09:47:23 +0200 (CEST)
+Date:   Tue, 13 Jun 2023 09:47:23 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH] MAINTAINERS: Add CPU HOTPLUG entry
+Message-ID: <20230613074723.GH83892@hirez.programming.kicks-ass.net>
+References: <87o7ll6ogo.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87o7ll6ogo.ffs@tglx>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,36 +59,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-regcache_maple_sync() tries to sync all cached values no matter
-whether it's writable or not.  OTOH, regache_sync_val() does care the
-wrtability and returns -EIO for a read-only register.  This results in
-an error message like:
-  snd_hda_codec_realtek hdaudioC0D0: Unable to sync register 0x2f0009. -5
-and the sync loop is aborted incompletely.
+On Mon, Jun 12, 2023 at 11:04:39AM +0200, Thomas Gleixner wrote:
+> Document the status quo and add myself and Peter as CPU hotplug
+> maintainers.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 
-This patch adds the writable register check in the loop for addressing
-the bug.
+Heh, what's a few more emails.. ;-)
 
-Fixes: f033c26de5a5 ("regmap: Add maple tree based register cache")
-Link: https://lore.kernel.org/r/877cs7g6f1.wl-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
----
- drivers/base/regmap/regcache-maple.c | 2 ++
- 1 file changed, 2 insertions(+)
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-diff --git a/drivers/base/regmap/regcache-maple.c b/drivers/base/regmap/regcache-maple.c
-index c2e3a0f6c218..d2dad32dd399 100644
---- a/drivers/base/regmap/regcache-maple.c
-+++ b/drivers/base/regmap/regcache-maple.c
-@@ -203,6 +203,8 @@ static int regcache_maple_sync(struct regmap *map, unsigned int min,
- 
- 	mas_for_each(&mas, entry, max) {
- 		for (r = max(mas.index, lmin); r <= min(mas.last, lmax); r++) {
-+			if (!regmap_writeable(map, r))
-+				continue;
- 			mas_pause(&mas);
- 			rcu_read_unlock();
- 			ret = regcache_sync_val(map, r, entry[r - mas.index]);
--- 
-2.35.3
-
+> ---
+>  MAINTAINERS |   12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -5356,6 +5356,18 @@ F:	Documentation/driver-api/pm/cpuidle.r
+>  F:	drivers/cpuidle/
+>  F:	include/linux/cpuidle.h
+>  
+> +CPU HOTPLUG
+> +M:	Thomas Gleixner <tglx@linutronix.de>
+> +M:	Peter Zijlstra <peterz@infradead.org>
+> +L:	linux-kernel@vger.kernel.org
+> +S:	Maintained
+> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git smp/core
+> +F:	kernel/cpu.c
+> +F:	kernel/smpboot.*
+> +F:	include/linux/cpu.h
+> +F:	include/linux/cpuhotplug.h
+> +F:	include/linux/smpboot.h
+> +
+>  CPU POWER MONITORING SUBSYSTEM
+>  M:	Thomas Renninger <trenn@suse.com>
+>  M:	Shuah Khan <shuah@kernel.org>
