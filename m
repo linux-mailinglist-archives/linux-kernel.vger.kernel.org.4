@@ -2,78 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7F772EC54
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:53:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8340372EC5B
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:55:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238362AbjFMTxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 15:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47604 "EHLO
+        id S238933AbjFMTy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 15:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbjFMTxG (ORCPT
+        with ESMTP id S230229AbjFMTyZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 15:53:06 -0400
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C82CE3;
-        Tue, 13 Jun 2023 12:53:05 -0700 (PDT)
-Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-76c64da0e46so268687639f.0;
-        Tue, 13 Jun 2023 12:53:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686685984; x=1689277984;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Tue, 13 Jun 2023 15:54:25 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1108BE3
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:54:24 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-3f9b7de94e7so60011cf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:54:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686686063; x=1689278063;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OFF9yKVxZTmwGftTglpqWvlcX4ivJd8HOQxUjLCVDrc=;
-        b=HFMxzrVm/R3qb2OeKCcT2aSvYPXy87Fwf5SH2fr83FmEttbhXht4Gr6/lPacEPTsz0
-         O87IAuxYpGAgaFnjCMD6KAvj76aO/J13TUCJYM1NCatIXf+XVr7M3mr/ngpnZo1jzeKR
-         cCMjiAp1CAk1o2nILIZ0Ac0hLNWlP8mlvAHnQM6h3NF9c4G1kCBIEFJEusYCoy7zbitp
-         DOSjM7lBtf2P5vV/Ue8BMnVHMlG6pQHmm5wfhD7pma4PDNSSF9+b9wBXIRddJe+kGjZ6
-         maI+BAiIS2y/QYzyWyFvrQom1/ZD9B8rem1eeHvjqmwSPi9+Ml8BdWwrlH5i397qYgjo
-         2/0g==
-X-Gm-Message-State: AC+VfDyv0lwh5F7ioLTIH2t1hcLHYRjLNN6tWXrq/hXD/G8JXDXmLO66
-        eVRNiyBFUU0aVOOrG40ssw==
-X-Google-Smtp-Source: ACHHUZ6axH7naaPgnju5+V8UP64sAjOwVNHmfmcTyrY7IgbMSKMQ7+TbSESewQtMeKZHe9DNg8HL/Q==
-X-Received: by 2002:a5e:da0a:0:b0:776:f992:78cf with SMTP id x10-20020a5eda0a000000b00776f99278cfmr11622178ioj.12.1686685984430;
-        Tue, 13 Jun 2023 12:53:04 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id t13-20020a5edd0d000000b0076373f90e46sm4097306iop.33.2023.06.13.12.53.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 12:53:03 -0700 (PDT)
-Received: (nullmailer pid 2796278 invoked by uid 1000);
-        Tue, 13 Jun 2023 19:53:02 -0000
-Date:   Tue, 13 Jun 2023 13:53:02 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Tim Jiang <quic_tjiang@quicinc.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, quic_bgodavar@quicinc.com,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        quic_hemantg@quicinc.com
-Subject: Re: [PATCH v2] dt-bindings: net: Add QCA2066 Bluetooth
-Message-ID: <168668597983.2796176.858314477197972698.robh@kernel.org>
-References: <20230530082922.2208-1-quic_tjiang@quicinc.com>
+        bh=7kaFNmrqlXNHl6myJJQwEsOqHgyEX905kiiiOT//v0E=;
+        b=Qo/exQHT36cb+zXUyJ2uhsj50qlk6woHq8nmHeIhTvlhuqtByy5ah0TJKBKiPmMZw8
+         H2iwmNk5t5tm//j1J2U+E17Kr4Yio8o/y/N5sC/oMc4Q08pJJbfqKNiwLzYQImpTt51x
+         d1zaTvuJ3T8Et1qV8VtPe/FWyGMjwtuztRCOjAraJSmhM8+ljMKKqtpxSa7IeRl6q+lD
+         vGOVxeoh8FUxtegF+KqR2qQcJdt7HO3vBB12OZXjdI+uHj0qu9a3R6CrMeXESML6CKGN
+         uOcbHiLLcbb7ZU2T4XZ/3I9rSrt7XvCCjn8xgUHCC3+L4O4/mbvryDWU5rAypGD3P8TV
+         nZwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686686063; x=1689278063;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7kaFNmrqlXNHl6myJJQwEsOqHgyEX905kiiiOT//v0E=;
+        b=MJQYPH72IbGRbN/3cDcUd5XLnFFJBOVJr4pLhpx+4+UP8ttyyfLIgNn8f36o2/hXcj
+         Y0MTClNG8phxkLbcBk3/uDBeHJzsIatCl4hnIU+p2rK3CcX09+x6+VEE5+zUVVUt8aKy
+         e2ZojAVaiLmc2AZKUV836qW35puYyz2X9QqI0oOg0hb6xuWWGZYh88OwcK0ngdAORmWr
+         Bj5UKurlNfD+xSv9XEX6dnxYNxAMUJFVk5qkQUWEEwYej6hzOknPo+9Ukl3GyC/Ld1Fc
+         R9tUvvoFRx2PrSs/Vrb/XZNEEcGHD+tC3MNj2YZwSmpNGlZC1pSkm0muFEOzvDWiOJWq
+         qPiw==
+X-Gm-Message-State: AC+VfDyDxZl6Pq/+UF54LUFx/KFlOBrUA6QPl43kogk6ydee4qqYQUQ7
+        o6SuLQ+Z7sAxaaxvZhS5asYfh8ztO63IFg+pr8LXPg==
+X-Google-Smtp-Source: ACHHUZ4YzZm7OoifKmmJgSwGRdJRZJ56jjZluRQ/w5pW4YLVSsvKxL4+BJJ8N/hAR1JJWv7rUSdIr6Nw8YumyN+B67g=
+X-Received: by 2002:ac8:7d84:0:b0:3ef:343b:fe7e with SMTP id
+ c4-20020ac87d84000000b003ef343bfe7emr56480qtd.2.1686686063049; Tue, 13 Jun
+ 2023 12:54:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530082922.2208-1-quic_tjiang@quicinc.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230613191639.1547925-1-irogers@google.com> <ZIjIiPAfTwL/P1dt@kernel.org>
+In-Reply-To: <ZIjIiPAfTwL/P1dt@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 13 Jun 2023 12:54:11 -0700
+Message-ID: <CAP-5=fUQC2homPem0C4gsmiTMhwnNA0Jau8ehg=WG_oXRq0-8Q@mail.gmail.com>
+Subject: Re: [RFC PATCH] perf util: asprintf helper for leak sanitizer
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 13, 2023 at 12:50=E2=80=AFPM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Tue, Jun 13, 2023 at 12:16:38PM -0700, Ian Rogers escreveu:
+> > asprintf is a source of memory leaks but produces bad stack traces on
+> > my Debian linux. This patch adds a simple asprintf implementation to
+> > util.c that works around it.
+>
+> So is this something to report to the glibc maintainers or debian?
 
-On Tue, 30 May 2023 16:29:22 +0800, Tim Jiang wrote:
-> Add bindings for the QCA2066 chipset.
-> 
-> Signed-off-by: Tim Jiang <quic_tjiang@quicinc.com>
-> ---
->  .../devicetree/bindings/net/bluetooth/qualcomm-bluetooth.yaml   | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+*shrug* Folks appear to have been complaining about no option for
+nearly 10 years, motivated by profiling more than sanitizers. Perhaps
+I need to convince my employer to switch to Fedora.
 
-Applied, thanks!
+Thanks,
+Ian
 
+> - Arnaldo
+>
+> > Before output:
+> > ```
+> > =3D=3D1541752=3D=3DERROR: LeakSanitizer: detected memory leaks
+> >
+> > Direct leak of 10 byte(s) in 1 object(s) allocated from:
+> >     #0 0x7f90c76b89cf in __interceptor_malloc ../../../../src/libsaniti=
+zer/asan/asan_malloc_linux.cpp:69
+> >     #1 0x7f90c649d2c7 in __vasprintf_internal libio/vasprintf.c:71
+> >     #2 0x55ad9b79afbf  (/tmp/perf/perf+0x850fbf)
+> >
+> > SUMMARY: AddressSanitizer: 10 byte(s) leaked in 1 allocation(s).
+> > ```
+> >
+> > After output:
+> > ```
+> > =3D=3D1545918=3D=3DERROR: LeakSanitizer: detected memory leaks
+> >
+> > Direct leak of 10 byte(s) in 1 object(s) allocated from:
+> >     #0 0x7f2755a7077b in __interceptor_strdup ../../../../src/libsaniti=
+zer/asan/asan_interceptors.cpp:439
+> >     #1 0x564986a8df31 in asprintf util/util.c:566
+> >     #2 0x5649869b5901 in metricgroup__lookup_default_metricgroup util/m=
+etricgroup.c:1520
+> >     #3 0x5649869b5e57 in metricgroup__lookup_create util/metricgroup.c:=
+1579
+> >     #4 0x5649869b6ddc in parse_groups util/metricgroup.c:1698
+> >     #5 0x5649869b7714 in metricgroup__parse_groups util/metricgroup.c:1=
+771
+> >     #6 0x5649867da9d5 in add_default_attributes tools/perf/builtin-stat=
+.c:2164
+> >     #7 0x5649867ddbfb in cmd_stat tools/perf/builtin-stat.c:2707
+> >     #8 0x5649868fa5a2 in run_builtin tools/perf/perf.c:323
+> >     #9 0x5649868fab13 in handle_internal_command tools/perf/perf.c:377
+> >     #10 0x5649868faedb in run_argv tools/perf/perf.c:421
+> >     #11 0x5649868fb443 in main tools/perf/perf.c:537
+> >     #12 0x7f2754846189 in __libc_start_call_main ../sysdeps/nptl/libc_s=
+tart_call_main.h:58
+> >
+> > SUMMARY: AddressSanitizer: 10 byte(s) leaked in 1 allocation(s).
+> > ```
+> >
+> > RFC: is this useful for others? Should we have a build flag for it?
+> > ---
+> >  tools/perf/util/util.c | 19 +++++++++++++++++++
+> >  1 file changed, 19 insertions(+)
+> >
+> > diff --git a/tools/perf/util/util.c b/tools/perf/util/util.c
+> > index c1fd9ba6d697..57eb528c5fed 100644
+> > --- a/tools/perf/util/util.c
+> > +++ b/tools/perf/util/util.c
+> > @@ -552,3 +552,22 @@ int sched_getcpu(void)
+> >       return -1;
+> >  }
+> >  #endif
+> > +
+> > +int asprintf(char **restrict strp, const char *restrict fmt, ...)
+> > +{
+> > +     char buf[1024];
+> > +     va_list ap;
+> > +     int size;
+> > +     char *result;
+> > +
+> > +     va_start(ap, fmt);
+> > +     size =3D vsnprintf(buf, sizeof(buf), fmt, ap);
+> > +     if (size < (int)sizeof(buf))
+> > +             result =3D strdup(buf);
+> > +     else
+> > +             size =3D vasprintf(&result, fmt, ap);
+> > +
+> > +     *strp =3D result;
+> > +     va_end(ap);
+> > +     return size;
+> > +}
+> > --
+> > 2.41.0.162.gfafddb0af9-goog
+> >
+>
+> --
+>
+> - Arnaldo
