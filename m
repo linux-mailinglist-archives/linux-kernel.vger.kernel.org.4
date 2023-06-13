@@ -2,70 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20EDA72D8A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 06:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF7C72D8A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 06:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238882AbjFMEb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 00:31:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51164 "EHLO
+        id S239864AbjFMEcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 00:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239923AbjFMEbd (ORCPT
+        with ESMTP id S239839AbjFMEbt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 00:31:33 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E3E564ECA
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 21:28:23 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 58BD71FB;
-        Mon, 12 Jun 2023 21:28:48 -0700 (PDT)
-Received: from [10.162.42.9] (unknown [10.162.42.9])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 16A713F587;
-        Mon, 12 Jun 2023 21:27:59 -0700 (PDT)
-Message-ID: <34360cc9-b2ef-ec44-db93-b93b224fe1cb@arm.com>
-Date:   Tue, 13 Jun 2023 09:57:57 +0530
+        Tue, 13 Jun 2023 00:31:49 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD38B1FCF;
+        Mon, 12 Jun 2023 21:28:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=ryKq7bxbg4ef0qaI3pTxqxm2yR
+        wnJe8TefRz5dM8wTiP1PZa5jAfwkSHI+Kutb7CBC3tn8uDXxMbAPctSdwTwgb2TJ1gfO7SIL/USQb
+        sWS1V7HkEHNjrsK82hmPN3C/b86JPAEwpEGv9eiSp+HA/W+HsNWMBz6Hkng9Pcbg1fidb1Tlp+Cvn
+        rovj+9ljujRL+uZAWQCkZDGBKctdAyeaaT6A66Yv/NC58zmOOeMlAaO1fVYWZ3QUqjl0nkKXVJDFZ
+        pGIqFl8euIRh92xKG/vCFa3DhBPhfyB4yYQxjU7QV91W668MDAnPSXJNahsxVT7C8goRVhUtRa4+q
+        ZlQ+HqPA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q8vdf-006sZD-2p;
+        Tue, 13 Jun 2023 04:28:15 +0000
+Date:   Mon, 12 Jun 2023 21:28:15 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, David Hildenbrand <david@redhat.com>,
+        kernel test robot <oliver.sang@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-mm@kvack.org, oe-lkp@lists.linux.dev, lkp@intel.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] block: Fix dio_bio_alloc() to set BIO_PAGE_PINNED
+Message-ID: <ZIfwX7Fo+CWjbAYr@infradead.org>
+References: <545463.1686601473@warthog.procyon.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V2 00/14] arm64/sysreg: Convert TRBE registers to
- automatic generation
-Content-Language: en-US
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, broonie@kernel.org,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        James Morse <james.morse@arm.com>, kvmarm@lists.linux.dev,
-        coresight@lists.linaro.org, linux-kernel@vger.kernel.org
-References: <20230602062552.565992-1-anshuman.khandual@arm.com>
- <ZIISaXnrhDtauY2G@arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <ZIISaXnrhDtauY2G@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <545463.1686601473@warthog.procyon.org.uk>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Looks good:
 
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 
-On 6/8/23 23:09, Catalin Marinas wrote:
-> Hi Anshuman,
-> 
-> On Fri, Jun 02, 2023 at 11:55:38AM +0530, Anshuman Khandual wrote:
->> Changes in V2:
->>
->> - Renamed each individual TRBE register fields as per auto-gen tools
->> - Converted each individual TRBE registers as per auto-gen tools
->> - Added new register fields as per DDI0601 2023-03
-> 
-> Mark had some comments about using Enum for some bitfields. While not
-> essential, it would be nice to have those fixed. It's probably easier to
-> do an incremental patch fixing those, so please post one (or repost the
-> whole series, whatever is easier for you).
-
-Sure, will fold in those suggested changes and re-post the series soon.
