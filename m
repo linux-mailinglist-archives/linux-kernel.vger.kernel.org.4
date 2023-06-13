@@ -2,99 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A4D472EA98
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 20:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36DEB72EAE8
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 20:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232450AbjFMSMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 14:12:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52008 "EHLO
+        id S239711AbjFMSZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 14:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjFMSMW (ORCPT
+        with ESMTP id S239035AbjFMSZy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 14:12:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9CF1B2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 11:12:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 336A860F64
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 18:12:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A82C3C433D9;
-        Tue, 13 Jun 2023 18:12:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686679940;
-        bh=ki+xIq/Dtd9uylVNt8VBujumNOAojzQwiYYysPBIzcs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hBhEDrl4b8DDCLZU8lDdDOYrB0LSlfpGhPq1VZj+bHO12jCDh3U+pK/tzcaq1z8lV
-         JtCGVSdsyZDbMN4gHGtaow3ty0MNeGKIwp1KxZnb2XcDVs8mDxWSDW/ah48vkJOBzP
-         TCITMHrsqHCnZxeTdojdkzXP8siv3Bzcb8HWrUI59/C6xhTb3ghvXvOMyCuFWszrds
-         mb9yb2LtSZam88vyxKBwb+zYPpk6KMHWBFS5G4xcIbZvPqEOlBbUat0ePSe/uMdyJ8
-         cTqtnF0ag1mr9lVl+z2xwunbrQzwAyETLw5kqSrdtWDlBoGcVn32WaNZ/DoQG61KLp
-         ZcP74nuDe0zuA==
-Date:   Tue, 13 Jun 2023 11:12:18 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net v2 2/7] net: dsa: mt7530: fix trapping frames with
- multiple CPU ports on MT7530
-Message-ID: <20230613111218.0e1b3e9f@kernel.org>
-In-Reply-To: <edcbe326-c456-06ef-373b-313e780209de@arinc9.com>
-References: <20230611081547.26747-1-arinc.unal@arinc9.com>
-        <20230611081547.26747-2-arinc.unal@arinc9.com>
-        <20230613150815.67uoz3cvvwgmhdp2@skbuf>
-        <a91e88a8-c528-0392-1237-fc8417931170@arinc9.com>
-        <20230613171858.ybhtlwxqwp7gyrfs@skbuf>
-        <20230613172402.grdpgago6in4jogq@skbuf>
-        <ca78b2f9-bf98-af26-0267-60d2638f7f00@arinc9.com>
-        <20230613173908.iuofbuvkanwyr7as@skbuf>
-        <edcbe326-c456-06ef-373b-313e780209de@arinc9.com>
+        Tue, 13 Jun 2023 14:25:54 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0BCF19B5
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 11:25:52 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9745c5fed21so851754966b.3
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 11:25:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google; t=1686680751; x=1689272751;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ndSkO2qkti4L/SsRIO9nUQau8kKaAI3Sxaq+0HhunWc=;
+        b=ntRa6AW6ValrHAqkuzvskPZkjppT1UiqWn5XgLaJRL+M66yi9z5SuBsJJtsg8gSyVk
+         ZTIikpoielPrbB8yOOTgCPTe0h3G8snlfV3i1tciBEYR0ULVrQlaH6ZlloWRNz123Gp2
+         8aS+0U465JGkaRt7VZb5swDwBi6W5as5+c8JY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686680751; x=1689272751;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ndSkO2qkti4L/SsRIO9nUQau8kKaAI3Sxaq+0HhunWc=;
+        b=G95Vnk9mLKsEX2p6D7KGSkLOhKhsfDUaFb5AC6TjI+e59/uBYCD++g9WEZP0arpWXk
+         Ut+EDI6KEeQwzy+F6AWP2ocUDFpUynCp22aB5zkEYiaIEVe2neBqQ28vawGf7WyVHPKr
+         xoL1sZ7Jmdk3tu9qjvU2g7Cv7rvI5qYKj+auMFP5SRaQBlgYK2lWzmdvibG0HC2Xk7eQ
+         4EaOfHERp4rdmhj6/QGHj/sbWNglrmalzlI59coSyTwp7u6EnPyM+wWb025AzlyLBShx
+         WNuzsK7fSS5kSrRrIuYeg5AkZAaE+rEbUsBDW58Phvc5r0drg6k/WIZGY5UAVyO9rben
+         0tMw==
+X-Gm-Message-State: AC+VfDwhzuhDLEmQ4dTgRUoMDcQLNWKqVuetZbAmoDLlejgrFt1uAu/5
+        29HEbNpmC5k2N/qvo7PBpvQWDQ==
+X-Google-Smtp-Source: ACHHUZ6L7PTRLKSYbWQ/tjcT0d/XBC+vGVXO4zTlysaNeyin+mwYf/zWWNDpzlfMXEPA3fN2f50m6A==
+X-Received: by 2002:a17:906:da87:b0:974:1c91:a752 with SMTP id xh7-20020a170906da8700b009741c91a752mr12713028ejb.5.1686680751027;
+        Tue, 13 Jun 2023 11:25:51 -0700 (PDT)
+Received: from cloudflare.com (79.184.146.33.ipv4.supernova.orange.pl. [79.184.146.33])
+        by smtp.gmail.com with ESMTPSA id p20-20020a170906b21400b009767c4235absm6869904ejz.219.2023.06.13.11.25.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 11:25:50 -0700 (PDT)
+References: <20230613084315.62021-1-luojianhong@cdjrlc.com>
+ <6228af14241b831be4bae6ebcd63799e@208suo.com>
+ <53510828-ee5b-1d91-0f85-b79da4422741@meta.com>
+User-agent: mu4e 1.6.10; emacs 28.2
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     Yonghong Song <yhs@meta.com>
+Cc:     baomingtong001@208suo.com, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        mykolal@fb.com, shuah@kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/bpf: Remove unneeded variable "ret"
+Date:   Tue, 13 Jun 2023 20:13:00 +0200
+In-reply-to: <53510828-ee5b-1d91-0f85-b79da4422741@meta.com>
+Message-ID: <87pm5z9q36.fsf@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 13 Jun 2023 20:58:33 +0300 Ar=C4=B1n=C3=A7 =C3=9CNAL wrote:
-> > Ok. I see Russell has commented on v4, though I don't see that he parti=
-cularly
-> > pointed out that this fixes a problem which isn't yet a problem. I got =
-lost in
-> > all the versions. v2 and v3 are out of my inbox now :) =20
->=20
-> All good, I had to quickly roll v3 as v2 had wrong author information=20
-> and I couldn't risk getting v2 applied.
+On Tue, Jun 13, 2023 at 06:42 AM -07, Yonghong Song wrote:
+> On 6/13/23 1:50 AM, baomingtong001@208suo.com wrote:
+>> Fix the following coccicheck warning:
+>> tools/testing/selftests/bpf/progs/tailcall_bpf2bpf6.c:28:14-17: Unneeded
+>> variable: "ret".
+>> Return "1".
+>> Signed-off-by: Mingtong Bao <baomingtong001@208suo.com>
+>> ---
+>>  =C2=A0tools/testing/selftests/bpf/progs/tailcall_bpf2bpf6.c | 3 +--
+>>  =C2=A01 file changed, 1 insertion(+), 2 deletions(-)
+>> diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf6.c
+>> b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf6.c
+>> index 4a9f63bea66c..7f0146682577 100644
+>> --- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf6.c
+>> +++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf6.c
+>> @@ -25,10 +25,9 @@ static __noinline
+>>  =C2=A0int subprog_tail(struct __sk_buff *skb)
+>>  =C2=A0{
+>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Don't propagate the constant to the ca=
+ller */
+>> - =C2=A0=C2=A0=C2=A0volatile int ret =3D 1;
+>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bpf_tail_call_static(skb, &jmp_table, 0);
+>> - =C2=A0=C2=A0=C2=A0return ret;
+>> + =C2=A0=C2=A0=C2=A0return 1;
+>
+> Please pay attention to the comment:
+>    /* Don't propagate the constant to the caller */
+> which clearly says 'constant' is not preferred.
+>
+> The patch introduced this change is:
+>     5e0b0a4c52d30   selftests/bpf: Test tail call counting with bpf2bpf a=
+nd data
+>    on stack
+>
+> The test intentionally want to:
+>   'Specifically when the size      of data allocated on BPF stack is not a
+>  multiple on 8.'
+>
+> Note that with volatile and without volatile, the generated
+> code will be different and it will result in different
+> verification path.
+>
+> cc Jakub for further clarification.
 
-FWIW you can reply with pw-bot: changes-requested to your own patches
-and the bot should discard them from patchwork.
+Yonghong is right. We can't replace it like that.
 
-https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#updatin=
-g-patch-status
+Compiler is smart and pull up the constant into subprog_tail() caller.
 
-It's a new capability that nobody has used, yet, so YMMV :)
+And it doesn't have the slightest idea that bpf_tail_call_static() is
+actually tail call (destroy frame + jump) and control doesn't return to
+subprog_tail().
+
+(You can read more about BPF tail calls in [1] and [2] if they are not
+familiar.)
+
+IOW, we need an r0 store to happen after a call to BPF tail call helper
+(call 12) to remain in subprog_tail body for the regression test to
+work:
+
+$ llvm-objdump -d --no-show-raw-insn tailcall_bpf2bpf6.bpf.o
+
+tailcall_bpf2bpf6.bpf.o:        file format elf64-bpf
+
+Disassembly of section .text:
+
+0000000000000000 <subprog_tail>:
+       0:       r6 =3D r1
+       1:       w1 =3D 1
+       2:       *(u32 *)(r10 - 4) =3D r1
+       3:       r7 =3D 0 ll
+       5:       r1 =3D r6
+       6:       r2 =3D r7
+       7:       r3 =3D 0
+       8:       call 12
+       9:       r0 =3D *(u32 *)(r10 - 4) <-- this must stay
+      10:       exit
+
+You could take a shot at replacing it with inline asm, if you want.
+
+[1] https://docs.cilium.io/en/stable/bpf/architecture/#bpf-to-bpf-calls
+[2] https://blog.cloudflare.com/assembly-within-bpf-tail-calls-on-x86-and-a=
+rm/
