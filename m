@@ -2,91 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F54572E3B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:04:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7AD72E3B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242487AbjFMND7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 09:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57830 "EHLO
+        id S242591AbjFMNEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 09:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242614AbjFMNDp (ORCPT
+        with ESMTP id S242575AbjFMNDx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 09:03:45 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6B919B7;
-        Tue, 13 Jun 2023 06:03:41 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id 6a1803df08f44-62dea65edb2so5658746d6.0;
-        Tue, 13 Jun 2023 06:03:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686661420; x=1689253420;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ph8muSYdWfoSysNozHej0lspNPRmqVyqDCHut3XIIUY=;
-        b=ln4YUxRpK9f8I0HhdEpd3858fLpiCbXpocosM3zRqygyHl9hyBPjUxT+VR91cFlFvm
-         SrGpVOwRuy2qhZvkPlOGuQILYTukeFo9Bg3uC/QOod5fjB11XhE9Xk3T8NpJfEKtDTsI
-         8W9+g4X79V6llo/DMNJTA8V+NV8wYsoIpca8C5kqStEZXfEKurpdmcjz/ZRDzVDDtd1J
-         PgjHR54Hlnrb6NkJy48VfGywsN78zbALz9eiBOvMWf+TJUx91ipSjMGos8meeRi2U58C
-         iEavMOG6xrHPTZCUTGXyJojaR5nPjJ+sNOnTv/WsikKRVOprOtT9ZXgEA3X8OGfyWoWB
-         fJTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686661420; x=1689253420;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ph8muSYdWfoSysNozHej0lspNPRmqVyqDCHut3XIIUY=;
-        b=PkQWidmvtEJeqqE2sejzFq6t6dAtFB4hqpMxBr/iuRsL2hcts9dZ9VLesHaC2p9kkC
-         SN43wXqXUGAZfum79VfJoURSKvTDZ4aPP3zGjG1SjLWNPQYVpB+0ae+8dRM5Iq44IZI/
-         YjAFHOPIvQL/rXcRAgbmY7PLFLiIQusf5RRHhi7fFkSHdqUjip7qjcKEsYqF0gPIQzWb
-         YPqCKJqGPe3krrYzke7O7/QuXzXrwEoUOpcZswHnB0X9DEm4kmwvN35qDuyOo4VwezL3
-         9akcBVozYRa2w68vwLdnY6viDjn2TUfH4zPFYbw8PuE4Q1xBzTeW80dtY7GDf0RWNIjw
-         GFfw==
-X-Gm-Message-State: AC+VfDxZ/P1DqeaW8hzycwsJcKZ4nGupr52Rz735mYAGcttEhRy5bd62
-        +jhncQ/7AEI33M+2ONib5tyOBUSMTdptru6RDhI=
-X-Google-Smtp-Source: ACHHUZ5nOTLhze+E2wXOckkmMBUzoKHAynMMVWwnxk/gQWe9ti2e0UBDodLfEIjcbxBl0q5mNW1fPU58CsqjOiGw3xo=
-X-Received: by 2002:a05:6214:401c:b0:62d:e73b:c4ab with SMTP id
- kd28-20020a056214401c00b0062de73bc4abmr6160647qvb.1.1686661420050; Tue, 13
- Jun 2023 06:03:40 -0700 (PDT)
+        Tue, 13 Jun 2023 09:03:53 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 470A11BC3;
+        Tue, 13 Jun 2023 06:03:50 -0700 (PDT)
+Received: from loongson.cn (unknown [10.180.13.22])
+        by gateway (Coremail) with SMTP id _____8AxW+o1aYhkhaYEAA--.9900S3;
+        Tue, 13 Jun 2023 21:03:49 +0800 (CST)
+Received: from [10.180.13.22] (unknown [10.180.13.22])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axfco0aYhkZTEZAA--.63228S3;
+        Tue, 13 Jun 2023 21:03:48 +0800 (CST)
+Message-ID: <58b70e1b-d292-ec45-2309-e237a4a43d0d@loongson.cn>
+Date:   Tue, 13 Jun 2023 21:03:23 +0800
 MIME-Version: 1.0
-References: <20230613075834.5219-1-zhuyinbo@loongson.cn> <20230613075834.5219-3-zhuyinbo@loongson.cn>
-In-Reply-To: <20230613075834.5219-3-zhuyinbo@loongson.cn>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 13 Jun 2023 16:03:03 +0300
-Message-ID: <CAHp75VdtFjkyBF4K1+MOHAmp0S6RU5Cg3NYD8yGH+8FBBG0Zuw@mail.gmail.com>
-Subject: Re: [PATCH v13 2/2] spi: loongson: add bus driver for the loongson
- spi controller
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [ PATCH v2 3/3] ASoC: dt-bindings: Add support for Loongson audio
+ card
+Content-Language: en-US
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Conor Dooley <conor@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, conor+dt@kernel.org, broonie@kernel.org,
+        lgirdwood@gmail.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn
+References: <20230612085614.3039498-1-mengyingkun@loongson.cn>
+ <20230612-booted-french-186dd95e78a9@spud>
+ <bda7c25f-65cf-d45f-3ac0-f2471e3aacf8@loongson.cn>
+ <20230613-zoologist-panorama-a87858bba075@wendy>
+ <887f9cc4-6457-9d14-8aef-011ff4c9aeda@loongson.cn>
+ <20230613-depletion-garnet-ccc2009111c3@wendy>
+From:   Yingkun Meng <mengyingkun@loongson.cn>
+In-Reply-To: <20230613-depletion-garnet-ccc2009111c3@wendy>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Axfco0aYhkZTEZAA--.63228S3
+X-CM-SenderInfo: 5phqw55lqjy33q6o00pqjv00gofq/1tbiAQABDGSIXIIBbgABsQ
+X-Coremail-Antispam: 1Uk129KBj93XoW7tF1kWF1DKr4DAF47uFykZwc_yoW8uw1fpF
+        W8Ja47KFn5Kw15Cr9Yvw18Jr42vFWftFZxXr4DXr17G390gry3Gr13tF1Fk3srCr18X342
+        vFWFka47J3Z8JagCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUBFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVWxJr0_GcWln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
+        6r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
+        1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWU
+        JVW8JwCFI7km07C267AKxVW8ZVWrXwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+        vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IY
+        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
+        xKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAF
+        wI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jF4E_UUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 10:58=E2=80=AFAM Yinbo Zhu <zhuyinbo@loongson.cn> w=
-rote:
 
-...
+On 2023/6/13 20:46, Conor Dooley wrote:
+> On Tue, Jun 13, 2023 at 08:38:59PM +0800, Yingkun Meng wrote:
+>> On 2023/6/13 20:28, Conor Dooley wrote:
+>>> On Tue, Jun 13, 2023 at 08:23:58PM +0800, Yingkun Meng wrote:
+>>>> On 2023/6/13 01:24, Conor Dooley wrote:
+>>>>> On Mon, Jun 12, 2023 at 04:56:14PM +0800, YingKun Meng wrote:
+>>>>>> From: Yingkun Meng <mengyingkun@loongson.cn>
+>>>>>>
+>>>>>> The audio card uses loongson I2S controller present in
+>>>>>> 7axxx/2kxxx chips to transfer audio data.
+>>>>>>
+>>>>>> On loongson platform, the chip has only one I2S controller.
+>>>>>> +description:
+>>>>>> +  The binding describes the sound card present in loongson
+>>>>>> +  7axxx/2kxxx platform. The sound card is an ASoC component
+>>>>>> +  which uses Loongson I2S controller to transfer the audio data.
+>>>>>> +
+>>>>>> +properties:
+>>>>>> +  compatible:
+>>>>>> +    const: loongson,ls-audio-card
+>>>>> Reviewing sound stuff is beyond my pay grade, so forgive me if I am off
+>>>>> the rails here, but this (and the "x"s in the description) look a bit
+>>>>> odd. Recently, we've noticed quite a few loongson dt-bindings attempting
+>>>>> to use a single compatible for many different chips.
+>>>>> Usually you have individual compatibles for the various SoCs with this
+>>>>> core, which can fall back to a generic one, rather than just adding a
+>>>>> generic compatible for all devices.
+>>>>> As far as I know, there's several SoCs fitting 2kxxx, and the format
+>>>>> being used elsewhere is "loongson,ls2k1000" etc.
+>>>> Currently, Loongson has 2K0500/2K1000LA/2K1500/2K2000 chips.
+>>>>
+>>>> Here, its' possible to use a single compatible for different chips,
+>>>>
+>>>> as the audio device is a logical device, not dependent on chip model.
+>>> What, may I ask, is a "logical device"?
+>>
+>> I means it's not a physical one, like "platform bus".
+> So it is entirely a software construct? Why does it need a dt-binding
+> then? Your commit message says the controller is present on the device!
 
-> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+It's not. The audio device consists of an i2s controller and codec.
 
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+The dt-binding is for the audio device, not for i2s controller.
 
-Just a remark for the next contribution. When you have a tag, no need
-to have a Cc for the same person, Git tools automatically add all
-tagged people to the Cc list of email.
+> Confused,
+> Conor.
 
---=20
-With Best Regards,
-Andy Shevchenko
