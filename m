@@ -2,128 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76A6072DDA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 11:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7024672DDA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 11:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240482AbjFMJ2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 05:28:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49896 "EHLO
+        id S240803AbjFMJ2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 05:28:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239912AbjFMJ2Q (ORCPT
+        with ESMTP id S240944AbjFMJ2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 05:28:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0694A13E;
-        Tue, 13 Jun 2023 02:28:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 87C70632B0;
-        Tue, 13 Jun 2023 09:28:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70438C433D2;
-        Tue, 13 Jun 2023 09:28:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686648493;
-        bh=WrUaJlwPOdtH8Grtb3bcTqhOd6ZRH6ivcqiAJBGA61A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dtlBEDlInPiJlEo/p+6W2w8iVMXBB22HyclMjkfcITxusrVvmqDFUEuYUUZPxc1Vm
-         DTcPGiAyzmxCRrsp0VnF2bzZx7bUByoo90KmsgR0MkVDkuFefTzWtNIX4g7jTBWkR6
-         B4zk5+zqCTaex4SDzxWPGIb8g104LSPq59B/IExiBEERUpPUrX2c4TyBW5PlkMEQjl
-         dPo0z3nRcN7+5XcZutQiaHun1uwKML5YrvXObDjUPUTFdJ10Wumn5p7SVMsSoJih9G
-         BvDpTvoOe5D2JvLuWFPtka8Nagz1pzfa0SoKOgQ/8qB102ITVqPQvc0Yu4br3/0eIy
-         o91t+00olmZkg==
-Date:   Tue, 13 Jun 2023 11:28:10 +0200
-From:   Maxime Ripard <mripard@kernel.org>
-To:     Sui Jingfeng <suijingfeng@loongson.cn>
-Cc:     Sui Jingfeng <15330273260@189.cn>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH v14 0/2] drm: add kms driver for loongson display
- controller
-Message-ID: <7rbtdidyfpctz22pw2mnt2a6yp34hwp2bdp7usp52ft5mfrfud@nokbyxjip5by>
-References: <20230520105718.325819-1-15330273260@189.cn>
- <d4e647d8-294c-abd7-40c6-37381796203d@loongson.cn>
- <a23d6mgl4fbfa4ucgjvwgw7l3somxo4tkhit7ygy55fldlum56@vm3tyjdsx24l>
- <d2f744b6-e4c9-d1b5-d4ca-470b801c670d@189.cn>
- <hvfr6qkepf6l3ymqtp6vhlneeqihnli7g5v7nzd6rirwleffk6@4ernj6xng5rt>
- <42c54caf-0ab9-a075-b641-9e3e21b2a2f3@loongson.cn>
+        Tue, 13 Jun 2023 05:28:34 -0400
+Received: from mx6.didiglobal.com (mx6.didiglobal.com [111.202.70.123])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9FB90B7
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 02:28:30 -0700 (PDT)
+Received: from mail.didiglobal.com (unknown [10.79.65.12])
+        by mx6.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id ABFC81100E7802;
+        Tue, 13 Jun 2023 17:28:27 +0800 (CST)
+Received: from didi-ThinkCentre-M930t-N000 (10.79.64.101) by
+ ZJY02-ACTMBX-02.didichuxing.com (10.79.65.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 13 Jun 2023 17:28:27 +0800
+Date:   Tue, 13 Jun 2023 17:28:19 +0800
+X-MD-Sfrom: tiozhang@didiglobal.com
+X-MD-SrcIP: 10.79.65.12
+From:   tiozhang <tiozhang@didiglobal.com>
+To:     <mingo@redhat.com>, <peterz@infradead.org>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
+        <tj@kernel.org>
+CC:     <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
+        <vschneid@redhat.com>, <zyhtheonly@gmail.com>,
+        <tiozhang@didiglobal.com>, <zwp10758@gmail.com>,
+        <fuyuanli@didiglobal.com>, <zyhtheonly@yeah.net>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] sched/isolation: add a workqueue parameter to constrain
+ unbound CPUs
+Message-ID: <20230613092819.GA18487@didi-ThinkCentre-M930t-N000>
+Mail-Followup-To: mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org, tj@kernel.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        zyhtheonly@gmail.com, zwp10758@gmail.com, fuyuanli@didiglobal.com,
+        zyhtheonly@yeah.net, linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="efolnwkilneuxbv7"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <42c54caf-0ab9-a075-b641-9e3e21b2a2f3@loongson.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.79.64.101]
+X-ClientProxiedBy: ZJY01-PUBMBX-01.didichuxing.com (10.79.64.32) To
+ ZJY02-ACTMBX-02.didichuxing.com (10.79.65.12)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Motivation of doing this is to better improve boot times for devices when
+we want to prevent our workqueue works from running on some specific CPUs,
+i,e, some CPUs are busy with interrupts.
 
---efolnwkilneuxbv7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Suggested-by: Tejun Heo <tj@kernel.org>
+Signed-off-by: tiozhang <tiozhang@didiglobal.com>
+---
+ kernel/sched/isolation.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-On Tue, Jun 13, 2023 at 05:17:00PM +0800, Sui Jingfeng wrote:
->=20
-> On 2023/6/13 17:10, Maxime Ripard wrote:
-> > On Tue, Jun 13, 2023 at 04:35:44PM +0800, Sui Jingfeng wrote:
-> > > Hi,
-> > >=20
-> > > On 2023/6/13 16:30, Maxime Ripard wrote:
-> > > > Hi,
-> > > >=20
-> > > > On Mon, Jun 12, 2023 at 10:58:54PM +0800, Sui Jingfeng wrote:
-> > > > > Hi,
-> > > > >=20
-> > > > >=20
-> > > > > Any ideas for this trivial DC driver? Sorry about my broken Engli=
-sh.
-> > > > >=20
-> > > > > What to do next? Send a new version?
-> > > > Thomas already told you to merge it in the previous version:
-> > > > https://lore.kernel.org/dri-devel/7b77020f-d543-13bf-e178-bc416bcc7=
-28d@suse.de/
-> > > >=20
-> > > > So.. do that?
-> > > Yes, that sound fine.
-> > >=20
-> > > But I can't do it myself, would you like to help?
-> > Why can't you do it yourself?
->=20
-> I don't have a commit access to the drm-misc,
->=20
-> I think, I can get the commit access in a letter time when I good enough,
->=20
-> But get the code merged, just merge the latest version is OK.
+diff --git a/kernel/sched/isolation.c b/kernel/sched/isolation.c
+index 373d42c707bc..85e744c1349a 100644
+--- a/kernel/sched/isolation.c
++++ b/kernel/sched/isolation.c
+@@ -208,6 +208,12 @@ static int __init housekeeping_isolcpus_setup(char *str)
+ 			continue;
+ 		}
+ 
++		if (!strncmp(str, "workqueue,", 10)) {
++			str += 10;
++			flags |= HK_FLAG_WQ;
++			continue;
++		}
++
+ 		if (!strncmp(str, "managed_irq,", 12)) {
+ 			str += 12;
+ 			flags |= HK_FLAG_MANAGED_IRQ;
+-- 
+2.17.1
 
-Look at the link in Thomas mail, it's the documentation on how to get
-commit access.
-
-Maxime
-
---efolnwkilneuxbv7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZIg2qgAKCRDj7w1vZxhR
-xe2oAP4gD4M8YGkmV6iqul3AbWlc89QdI9EkMzUDaxAdh2wwhAD/RciCYKO5vjJ4
-wHadgVBEHDBjHiKxJ5t/84BRjU5WewY=
-=45xg
------END PGP SIGNATURE-----
-
---efolnwkilneuxbv7--
