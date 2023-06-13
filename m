@@ -2,178 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 617E172E56A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 16:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A63A272E56E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 16:16:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242734AbjFMOMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 10:12:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37564 "EHLO
+        id S242378AbjFMOOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 10:14:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242476AbjFMOMh (ORCPT
+        with ESMTP id S239278AbjFMOOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 10:12:37 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6171FC3;
-        Tue, 13 Jun 2023 07:12:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1686665539; x=1718201539;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hfxBhUgx7NXJ6JdXeA8drLUkBlBlA9y7CgQi6V3xvlI=;
-  b=EfEg4FtnU2mG8JkGKEDWTqrEJM0477zu4izGtRHurccl+bBA05ahCQLN
-   k/EF/6GiNV438uLZtTKiFuv2/ZH7LxLPxxpOIPTThcN52FBu0uOkEfqAl
-   v2RGiXoWak1sblb3kmWreTUQspSHpaBFonepm075DJLo2EvjfOWeMKq01
-   QF/4GGkRAlApWJP/Ia0z9OWhAk/6aqr5rYV4SbENQ6U0EI75cQvgboSoK
-   /mUusOnskX3j/GKWaDGuxigEh6+RVZOCb6xIEoyJlFwGhdR/h4nF0EPrN
-   vg0Ybic4hluEOGvQhs0DKAWZKPuxN/+gKQz5crXDD8ydIT2aJF9XVtlFL
-   g==;
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="asc'?scan'208";a="218264434"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Jun 2023 07:12:17 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 13 Jun 2023 07:12:16 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Tue, 13 Jun 2023 07:12:13 -0700
-Date:   Tue, 13 Jun 2023 15:11:47 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Conor Dooley <conor@kernel.org>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Anup Patel <anup@brainfault.org>,
-        Andrew Jones <ajones@ventanamicro.com>, <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alistair Francis <alistair.francis@wdc.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Jessica Clarke <jrtc27@jrtc27.com>,
-        Rick Chen <rick@andestech.com>, Leo <ycliang@andestech.com>,
-        <linux-riscv@lists.infradead.org>, <qemu-riscv@nongnu.org>,
-        <u-boot@lists.denx.de>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] dt-bindings: riscv: deprecate riscv,isa
-Message-ID: <20230613-outbound-exchange-cf48ad61d31c@wendy>
-References: <20230518-4050231ca8dbe93c08cf9c9a@orel>
- <CAAhSdy07Mg_JBF+4ucGFiWdBKh-Ass5G_aUWqBqTnDSFp7S=0A@mail.gmail.com>
- <20230518-hammock-doornail-478e8ea8e6a7@wendy>
- <f7c20090-220c-2805-86ba-b174a89f65b3@seco.com>
- <20230518-monkhood-dispersal-6749b1228b0d@spud>
- <20230530-duller-reset-a34ae111f207@wendy>
- <20230608191537.GA3233857-robh@kernel.org>
- <20230608-cobbler-giving-e0fac2185e11@spud>
- <20230612-relic-fetal-1beeae3455aa@spud>
- <CAL_Jsq+CJ-mEcEujd5Sk4SLvgTfUX1A7NRXYcMDqkoViDYxTXw@mail.gmail.com>
+        Tue, 13 Jun 2023 10:14:34 -0400
+Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6DC541BD3;
+        Tue, 13 Jun 2023 07:14:04 -0700 (PDT)
+Received: from [192.168.4.25] (unknown [62.77.71.229])
+        by mx.gpxsee.org (Postfix) with ESMTPSA id 8F0D6DC81;
+        Tue, 13 Jun 2023 16:13:51 +0200 (CEST)
+Message-ID: <219c6e63-f036-9491-9f4a-c11c824c0b5f@gpxsee.org>
+Date:   Tue, 13 Jun 2023 16:13:51 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="X3sgJjRgCn4CtUIw"
-Content-Disposition: inline
-In-Reply-To: <CAL_Jsq+CJ-mEcEujd5Sk4SLvgTfUX1A7NRXYcMDqkoViDYxTXw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [RESEND PATCH v6 1/1] Added Digiteq Automotive MGB4 driver
+Content-Language: en-US
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Martin_T=c5=afma?= <martin.tuma@digiteqautomotive.com>
+References: <20230524112126.2242-1-tumic@gpxsee.org>
+ <20230524112126.2242-2-tumic@gpxsee.org>
+ <3a7da3cd-8d03-a2c4-0534-a75565aefc13@xs4all.nl>
+ <c544814a-7d99-add9-0397-d56776f911dd@gpxsee.org>
+ <0cec2b34-01bb-ec0e-f215-9e6ed3f44e73@xs4all.nl>
+ <5021c762-3435-719b-18a3-def7888fb5f6@gpxsee.org>
+ <313827c0-3b7a-e70a-b281-cbb5f68e6fd2@xs4all.nl>
+From:   =?UTF-8?Q?Martin_T=c5=afma?= <tumic@gpxsee.org>
+In-Reply-To: <313827c0-3b7a-e70a-b281-cbb5f68e6fd2@xs4all.nl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---X3sgJjRgCn4CtUIw
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 13. 06. 23 14:26, Hans Verkuil wrote:
+> On 12/06/2023 16:36, Martin Tůma wrote:
+>> On 12. 06. 23 10:42, Hans Verkuil wrote:
+>>> On 08/06/2023 13:16, Martin Tůma wrote:
+>>>> Hi,
+>>>> This is the "technical" part of my response, comments bellow:
+>>>>
+>>>> On 07. 06. 23 10:41, Hans Verkuil wrote:
+>>>>> Hi Martin,
+>>>>>
+>>>>> Some comments below:
+>>>>>
+>>>>> On 24/05/2023 13:21, tumic@gpxsee.org wrote:
+>>>>>> From: Martin Tůma <martin.tuma@digiteqautomotive.com>
+>>>>
+>>>>>> diff --git a/Documentation/admin-guide/media/mgb4.rst b/Documentation/admin-guide/media/mgb4.rst
+>>>>>> new file mode 100644
+>>>>>> index 000000000000..77db2fa64ab4
+>>>>>> --- /dev/null
+>>>>>> +++ b/Documentation/admin-guide/media/mgb4.rst
+>>>>>> @@ -0,0 +1,352 @@
+>>>>>> +.. SPDX-License-Identifier: GPL-2.0
+>>>>>> +
+>>>>>
+>>>>> Perhaps it is a good idea to start with a high level overview of the
+>>>>> hardware blocks. That might help understand how the various parts are
+>>>>> connected.
+>>>>>
+>>>>
+>>>> This is the "admin-guide" documentation and I'm not sure if the admins (= the card users) are interested in some hardware blocks description. I can for sure ad some basic info like that the card (with
+>>>> the given module) has two inputs and two outputs, but if you hold the card in your hands while installing it into the PCIe slot you definitely notice that ;-)
+>>>
+>>> True, but I don't have that module :-).
+>>>
+>>> I assume the inputs (and also outputs) are mutually exclusive? I.e., only one at a time can be active?
+>>>
+>>> But it is also possible to switch between the inputs/outputs dynamically if you want?
+>>>
+>>> Right now it is hard coded through this property, but I assume there is a reason these
+>>> modules have two inputs and two outputs, so it is odd that it is not possible use
+>>> VIDIOC_S_INPUT/S_OUTPUT to toggle between them.
+>>>
+>>
+>> With the current modules, you can not even theoretically (after changing the FPGA bitstream) change the outputs to inputs or vice versa as the the serializers/deserializers are hardcoded on the modules.
+> 
+> I think you misunderstand me.
+> 
+> Let's keep it simple: a source is connected to input 0 and you capture from it with V4L2.
+> 
+> Can I dynamically switch to input 1 and capture from that? I.e., each input has a
+> different source connected to it, so userspace can select from which input to capture.
+> 
+> Right now it appears that V4L2 just advertises a single input. And the input_id
+> property is read-only. So that means that input 1 is effectively unusable with
+> the current driver, or am I missing something?
+> 
 
-On Tue, Jun 13, 2023 at 07:28:34AM -0600, Rob Herring wrote:
-> On Mon, Jun 12, 2023 at 3:23=E2=80=AFPM Conor Dooley <conor@kernel.org> w=
-rote:
-> > On Thu, Jun 08, 2023 at 08:30:28PM +0100, Conor Dooley wrote:
-> > > On Thu, Jun 08, 2023 at 01:15:37PM -0600, Rob Herring wrote:
-> > > > On Tue, May 30, 2023 at 03:12:12PM +0100, Conor Dooley wrote:
-> > > > > On Thu, May 18, 2023 at 10:42:34PM +0100, Conor Dooley wrote:
-> > > > > > On Thu, May 18, 2023 at 02:30:53PM -0400, Sean Anderson wrote:
-> > > > >
-> > > > > > >
-> > > > > > > Why not just have something like
-> > > > > > >
-> > > > > > > mycpu {
-> > > > > > >       ...
-> > > > > > >       riscv,isa {
-> > > > > > >               i;
-> > > > > > >               m;
-> > > > > > >               a;
-> > > > > > >               zicsr;
-> > > > > > >               ...
-> > > >
-> > > > I prefer property names be globally unique. The tools are geared to=
-wards
-> > > > that too. That's largely a symptom of having 0 type information in =
-the
-> > > > DT.
-> > > >
-> > > > For example if you had an extension called 'reg', it would be a pro=
-blem.
-> > >
-> > > Per the current ISA rules, that'd not be valid. But then again, I do
-> > > have trust issues & it's not like "reg" is the only property name in =
-DT
-> > > land.
-> >
-> > ...you say "prefer" here. Is that a NAK, or a "you keep the pieces"?
->=20
-> Don't do the above node.
+You can not mix the inputs. Input 0 is always wired to video0 (or 
+whatever the naming of the video devices may be) and input 1 to video1 
+- there are two v4l2 devices, for every HW input one. The input_id 
+property is just a "hint" which device corresponds to the given HW 
+input. For the GMSL module, the situation is a little bit more 
+complicated, as a single "wire" may contain multiple streams which are 
+extracted by the GMSL deserializer (see the "gmsl_stream_id" property) 
+so one "wire" may be the source of both video0 and video1, but the video 
+streams are different.
 
-Yeah, that's more helpful wording than "prefer" for sure!
+For the outputs, you can do more with the video_source property. You can 
+for example "duplicate" the input stream to both HW outputs in the 
+loopback mode or duplicate a v4l2 output stream to both HW outputs. In 
+both cases, the duplication happens inside the PCIe card.
 
-If that's a no-go & so are the booleans prefixed with "riscv,whatever-",
-since people have size concerns, I guess that leaves your string
-suggestion (there is a helper in Linux at least, haven't checked
-elsewhere yet).
+>>
+>> I can post here some photo of the card, if it is ok to send image attachement to the mailing list so you have some image of what we are talking about. Or I can even show you the card live when you are
+>> in Prague in few days.
+> 
+> Actually, I'd like that! We'll meet there anyway, so that's a good opportunity to
+> see the real deal :-)
+> 
 
-I guess that means something like:
+I have no problem with taking the PCIe card (and the modules) to the 
+conference, but I will definitely not bring the whole setup to see it 
+running there as all together (the PC, monitor, infotainment system, car 
+display and 12V power supply) it takes a whole desk at my office ;-)
+But if you would desperately like to see it "live", you can visit our 
+offices and see it there, if you like.
 
-  riscv,isa-extensions:
-    $ref: /schemas/types.yaml#/definitions/string-array
-    minItems: 1
-    description: Extensions supported by the hart.
-    items:
-      anyOf:
-        - const: i
-          description: foo
-        - const: m
-          description: foo
-        - const: a
-          description: foo
-        - const: f
-          description: foo
-        - const: d
-          description: foo
-        - const: c
-          description: foo
-        - const: zifencei
-          description: foo
-        - etc
+M.
 
-Obviously with "foo" replaced by the existing descriptions in this
-patch.
+> Regards,
+> 
+> 	Hans
 
-
---X3sgJjRgCn4CtUIw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIh5IwAKCRB4tDGHoIJi
-0qHeAP4vJ0QRi7YJAoUUY9FMywRtOb4MKioKJLodiR5tQ3sA3gEA/oOKmdPiwKIP
-32NtYdVYP78YjeI+omupwDOZZfgQEQw=
-=td6r
------END PGP SIGNATURE-----
-
---X3sgJjRgCn4CtUIw--
