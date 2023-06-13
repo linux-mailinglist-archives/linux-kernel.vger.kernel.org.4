@@ -2,65 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5FA872E91D
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:13:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F76572E929
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:17:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236927AbjFMRNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 13:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45390 "EHLO
+        id S237719AbjFMRPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 13:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237109AbjFMRNG (ORCPT
+        with ESMTP id S231454AbjFMRPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 13:13:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D9610FE;
-        Tue, 13 Jun 2023 10:13:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C893F638AF;
-        Tue, 13 Jun 2023 17:13:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAC41C433F0;
-        Tue, 13 Jun 2023 17:13:02 +0000 (UTC)
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     linux-kernel@vger.kernel.org, Baoquan He <bhe@redhat.com>
-Cc:     Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        corbet@lwn.net, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] arm64: add kdump.rst into index.rst
-Date:   Tue, 13 Jun 2023 18:13:00 +0100
-Message-Id: <168667637705.1243746.16301904509352996990.b4-ty@arm.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230611230358.13635-1-bhe@redhat.com>
-References: <20230611230358.13635-1-bhe@redhat.com>
+        Tue, 13 Jun 2023 13:15:34 -0400
+Received: from sender3-op-o18.zoho.com (sender3-op-o18.zoho.com [136.143.184.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD48B19B7;
+        Tue, 13 Jun 2023 10:15:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686676491; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=lz3sdfZjEVjsHOHX1i+1kne1PU5B10VTEJ44ohq/FmwWqdNKwhrNoLHDhK2b759ZrPb8QW+aOxebY9rvuEy9BoHRf5UpGzM3OOhCGbwpastP8gtNxAGk354KLiUpNrvUetaRV8ukyVo8hVZw+yy86/Bl/AvalnYDJc3UdQ8HVTQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1686676491; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=nEMtIqngoCAEAyT+fpf/LXjugwgNpXqZT2MooeG0VEk=; 
+        b=UCzvd6VAF+Y+FiklAgTUDa75yDjZBBA8aVVlr6qHHCd5l4TjL7Am1DMeHAaGKCjiPt8lzCoKr0BTpRsFaFG88oyFmaI1rzhBgeU/tIQoqgOcGCIhNcwM19CnhUGL3vWTsDBVyd7KSJVeMx6RoTeKEHW1r7ACx+XUxfPNpnegl4U=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1686676491;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=nEMtIqngoCAEAyT+fpf/LXjugwgNpXqZT2MooeG0VEk=;
+        b=AjM/jtql6fiVufSKKLUDB2frT5CoRHbXUAhS6wYCvEJ/OeIkFE9tAPWHv+b1r/0f
+        s62ZjndlrGNUMdHbnpy2k2X0cUMV4h7iIxxl6XkJC7fCzely07TlDuXhGDat4fiKbOz
+        IieXNrnAKjgBiEjKdb06JgsFBfgOK65omjiwfkKc=
+Received: from [192.168.1.248] (178-147-169-233.haap.dm.cosmote.net [178.147.169.233]) by mx.zohomail.com
+        with SMTPS id 1686676484920865.7792338096236; Tue, 13 Jun 2023 10:14:44 -0700 (PDT)
+Message-ID: <a91e88a8-c528-0392-1237-fc8417931170@arinc9.com>
+Date:   Tue, 13 Jun 2023 20:14:35 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net v2 2/7] net: dsa: mt7530: fix trapping frames with
+ multiple CPU ports on MT7530
+Content-Language: en-US
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230611081547.26747-1-arinc.unal@arinc9.com>
+ <20230611081547.26747-2-arinc.unal@arinc9.com>
+ <20230613150815.67uoz3cvvwgmhdp2@skbuf>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20230613150815.67uoz3cvvwgmhdp2@skbuf>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 12 Jun 2023 07:03:58 +0800, Baoquan He wrote:
-> Document kdump.rst was added into Documentation/arm64/, but not listed
-> in Documentation/arm64/index.rst. That triggers below warning when
-> executing "make htmldoc":
+On 13.06.2023 18:08, Vladimir Oltean wrote:
+> On Sun, Jun 11, 2023 at 11:15:42AM +0300, Arınç ÜNAL wrote:
+>> The CPU_PORT bits represent the CPU port to trap frames to for the MT7530
+>> switch. This switch traps frames to the CPU port set on the CPU_PORT bits,
+>> regardless of the affinity of the user port which the frames are received
+>> from.
+>>
+>> When multiple CPU ports are being used, the trapped frames won't be
+>> received when the DSA conduit interface, which the frames are supposed to
+>> be trapped to, is down because it's not affine to any user port. This
+>> requires the DSA conduit interface to be manually set up for the trapped
+>> frames to be received.
+>>
+>> To fix this, implement ds->ops->master_state_change() on this subdriver and
+>> set the CPU_PORT bits to the CPU port which the DSA conduit interface its
+>> affine to is up. Introduce the active_cpu_ports field to store the
+>> information of the active CPU ports. Correct the macros, CPU_PORT is bits 4
+>> through 6 of the register.
+>>
+>> Add comments to explain frame trapping for this switch.
+>>
+>> Fixes: b8f126a8d543 ("net-next: dsa: add dsa support for Mediatek MT7530 switch")
+>> Suggested-by: Vladimir Oltean <olteanv@gmail.com>
+>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>> ---
 > 
-> >> Documentation/arm64/kdump.rst: WARNING: document isn't included in any toctree
+> My only concern with this patch is that it depends upon functionality
+> that was introduced in kernel v5.18 - commit 295ab96f478d ("net: dsa:
+> provide switch operations for tracking the master state"). But otherwise
+> it is correct, does not require subsequent net-next rework, and
+> relatively clean, at least I think it's cleaner than checking which of
+> the multiple CPU ports is the active CPU port - the other will have no
+> user port dp->cpu_dp pointing to it. But strictly, the master_state_change()
+> logic is not needed when you can't change the CPU port assignment.
 > 
-> Fix it now.
+> It might also be that your patch "net: dsa: introduce
+> preferred_default_local_cpu_port and use on MT7530" gets backported
+> to stable kernels that this patch doesn't get backported to, and then,
+> we have a problem, because that will cause even more breakage.
 > 
-> [...]
+> I wonder if there's a way to specify a dependency from this to that
+> other patch, to ensure that at least that does not happen?
 
-Applied to arm64 (for-next/kdump), thanks!
+Actually, having only "net: dsa: introduce 
+preferred_default_local_cpu_port and use on MT7530" backported is an 
+enough solution for the current stable kernels.
 
-[1/1] arm64: add kdump.rst into index.rst
-      https://git.kernel.org/arm64/c/389ce21b622b
+When multiple CPU ports are defined on the devicetree, the CPU_PORT bits 
+will be set to port 6. The active CPU port will also be port 6.
 
--- 
-Catalin
+This would only become an issue with the changing the DSA conduit 
+support. But that's never going to happen as this patch will always be 
+on the kernels that support changing the DSA conduit.
 
+Arınç
