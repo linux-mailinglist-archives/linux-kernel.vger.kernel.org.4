@@ -2,57 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 353ED72F0BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 01:55:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA22072F0BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 01:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232079AbjFMXzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 19:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45824 "EHLO
+        id S233355AbjFMX6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 19:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241494AbjFMXy7 (ORCPT
+        with ESMTP id S232582AbjFMX6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 19:54:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1229A7;
-        Tue, 13 Jun 2023 16:54:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Tue, 13 Jun 2023 19:58:03 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BFCC12E;
+        Tue, 13 Jun 2023 16:58:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686700682; x=1718236682;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=h+6OfsSluCawClvrO2Il9k8paXcrOgv8viJ3PyYy2tg=;
+  b=COmtgGaSqL4UDH3mYN889Ol1D43AZnNxKxk9jcmRX0cMlmMIhJxIULVR
+   3lwAZMsjZHAJcjgM2LMoP6QMDUBbF/E8x/yVDMkh2Rbay1IYEcvakTxfa
+   0jcVaV6NuPfdBNUq570ATfvfrpAaqxppQahg/d0RXGjINjo3sHYQ2pxZZ
+   /w8R0NECvzXSEto8G6v4YBYRMID7JH8yFW74zuCFbgLlXeNstDEjLaHbe
+   q6GbaBsOKmTGP47fQkotozU5mpPXCFQJ9PpgSGUmGzs383GpzCu06stjR
+   cfZp/iagC0QdszjsJchPlolSmfNT/WQr2Qn7HuzitxNX4fHERwVUisul2
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="343171431"
+X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
+   d="scan'208";a="343171431"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 16:58:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="958597777"
+X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
+   d="scan'208";a="958597777"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga006.fm.intel.com with ESMTP; 13 Jun 2023 16:58:01 -0700
+Received: from [10.251.24.95] (kliang2-mobl1.ccr.corp.intel.com [10.251.24.95])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 65C0D63B11;
-        Tue, 13 Jun 2023 23:54:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96005C433C8;
-        Tue, 13 Jun 2023 23:54:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686700497;
-        bh=A2KnQtXsxVJpgrtKvXpTSH8wQ4W6n9q6OJkUWV7Pgdg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FGxRYHdNSZOL8/eFuftct2nIlt1h5MiG6mu/9geKiEAgROtVlyppg+WF2rKGjlfp6
-         4kJmR4FEE70TabwBFG2t8D39v5B1hRMlWb/MZsfBymjODHxvpZfEPwVDPZ0z7QTab8
-         Uew17FZbZt4UJsd0Oc4WmXsfGjoKidyMdvn4NUhaH9EZMqjqxbaTbtX5MiCQ0tPZJE
-         eluad5miyEMjSMEmW0s+s+aVKz1uxoeAkceQvlMmTuLymwHCAz/w3401jmCmyLKH0B
-         Ii6vVhThYNhP7Vi/GwgQdvwtV+jBNh+MYGpcVymIeRMXM4i5rdmuetQ7dYlxj/rk8s
-         tOx4j0jT4Q4Ew==
-Date:   Wed, 14 Jun 2023 01:54:53 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Wang Zhang <silver_code@hust.edu.cn>
-Cc:     Peter Korsgaard <peter@korsgaard.com>,
-        Andrew Lunn <andrew@lunn.ch>, Wolfram Sang <wsa@kernel.org>,
-        Andreas Larsson <andreas@gaisler.com>,
-        hust-os-kernel-patches@googlegroups.com,
-        Peter Korsgaard <jacmet@sunsite.dk>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] i2c: ocores: use devm_ managed clks
-Message-ID: <20230613235453.msezptxa5pwpizoi@intel.intel>
-References: <b5c00122-0fe0-4020-9036-e4cc37d1b51a@lunn.ch>
- <20230526070534.76112-1-silver_code@hust.edu.cn>
+        by linux.intel.com (Postfix) with ESMTPS id 92FA8580BEE;
+        Tue, 13 Jun 2023 16:57:59 -0700 (PDT)
+Message-ID: <1d5f51e0-d187-14af-a349-437407404e5f@linux.intel.com>
+Date:   Tue, 13 Jun 2023 19:57:58 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230526070534.76112-1-silver_code@hust.edu.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 2/8] perf evsel: Fix the annotation for hardware events on
+ hybrid
+Content-Language: en-US
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>, mingo@redhat.com,
+        peterz@infradead.org, namhyung@kernel.org, jolsa@kernel.org,
+        adrian.hunter@intel.com, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ak@linux.intel.com,
+        eranian@google.com, ahmad.yasin@intel.com
+References: <20230607162700.3234712-1-kan.liang@linux.intel.com>
+ <20230607162700.3234712-3-kan.liang@linux.intel.com>
+ <CAP-5=fVz1zgwdJVs1V7putUdp9wf-QKWH1Ky-heLoHWgnJu6dg@mail.gmail.com>
+ <7487eff9-5769-1701-ea1b-45dd5ab67c85@linux.intel.com>
+ <ZIjdDFJHYuK7rdmD@kernel.org>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <ZIjdDFJHYuK7rdmD@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,40 +77,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wang,
 
-> -	i2c->clk = devm_clk_get(&pdev->dev, NULL);
-> -
-> -	if (!IS_ERR(i2c->clk)) {
-> -		int ret = clk_prepare_enable(i2c->clk);
-> -
-> -		if (ret) {
-> -			dev_err(&pdev->dev,
-> -				"clk_prepare_enable failed: %d\n", ret);
-> -			return ret;
-> -		}
-> -		i2c->ip_clock_khz = clk_get_rate(i2c->clk) / 1000;
-> -		if (clock_frequency_present)
-> -			i2c->bus_clock_khz = clock_frequency / 1000;
-> -	}
-> -
-> +	i2c->clk = devm_clk_get_optional_enabled(&pdev->dev, NULL);
-> +	if (IS_ERR(i2c->clk))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(i2c->clk),
-> +				     "devm_clk_get_optional_enabled failed\n");
-> +
-> +	i2c->ip_clock_khz = clk_get_rate(i2c->clk) / 1000;
 
-if devm_clk_get_optional_enabled() returns NULL, clk_get_rate()
-returns '0' and op_clk_khz would be '0'...
+On 2023-06-13 5:18 p.m., Arnaldo Carvalho de Melo wrote:
+> Em Tue, Jun 13, 2023 at 04:06:59PM -0400, Liang, Kan escreveu:
+>>
+>>
+>> On 2023-06-13 3:35 p.m., Ian Rogers wrote:
+>>> On Wed, Jun 7, 2023 at 9:27 AM <kan.liang@linux.intel.com> wrote:
+>>>>
+>>>> From: Kan Liang <kan.liang@linux.intel.com>
+>>>>
+>>>> The annotation for hardware events is wrong on hybrid. For example,
+>>>>
+>>>>  # ./perf stat -a sleep 1
+>>>>
+>>>>  Performance counter stats for 'system wide':
+>>>>
+>>>>          32,148.85 msec cpu-clock                        #   32.000 CPUs utilized
+>>>>                374      context-switches                 #   11.633 /sec
+>>>>                 33      cpu-migrations                   #    1.026 /sec
+>>>>                295      page-faults                      #    9.176 /sec
+>>>>         18,979,960      cpu_core/cycles/                 #  590.378 K/sec
+>>>>        261,230,783      cpu_atom/cycles/                 #    8.126 M/sec                       (54.21%)
+>>>>         17,019,732      cpu_core/instructions/           #  529.404 K/sec
+>>>>         38,020,470      cpu_atom/instructions/           #    1.183 M/sec                       (63.36%)
+>>>>          3,296,743      cpu_core/branches/               #  102.546 K/sec
+>>>>          6,692,338      cpu_atom/branches/               #  208.167 K/sec                       (63.40%)
+>>>>             96,421      cpu_core/branch-misses/          #    2.999 K/sec
+>>>>          1,016,336      cpu_atom/branch-misses/          #   31.613 K/sec                       (63.38%)
+>>>>
+>>>> The hardware events have extended type on hybrid, but the evsel__match()
+>>>> doesn't take it into account.
+>>>>
+>>>> Add a mask to filter the extended type on hybrid when checking the config.
+>>>>
+>>>> With the patch,
+>>>>
+>>>>  # ./perf stat -a sleep 1
+>>>>
+>>>>  Performance counter stats for 'system wide':
+>>>>
+>>>>          32,139.90 msec cpu-clock                        #   32.003 CPUs utilized
+>>>>                343      context-switches                 #   10.672 /sec
+>>>>                 32      cpu-migrations                   #    0.996 /sec
+>>>>                 73      page-faults                      #    2.271 /sec
+>>>>         13,712,841      cpu_core/cycles/                 #    0.000 GHz
+>>>>        258,301,691      cpu_atom/cycles/                 #    0.008 GHz                         (54.20%)
+>>>>         12,428,163      cpu_core/instructions/           #    0.91  insn per cycle
+>>>>         37,786,557      cpu_atom/instructions/           #    2.76  insn per cycle              (63.35%)
+>>>>          2,418,826      cpu_core/branches/               #   75.259 K/sec
+>>>>          6,965,962      cpu_atom/branches/               #  216.739 K/sec                       (63.38%)
+>>>>             72,150      cpu_core/branch-misses/          #    2.98% of all branches
+>>>>          1,032,746      cpu_atom/branch-misses/          #   42.70% of all branches             (63.35%)
+>>>>
+>>>> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+>>>> ---
+>>>>  tools/perf/util/evsel.h       | 12 ++++++-----
+>>>>  tools/perf/util/stat-shadow.c | 39 +++++++++++++++++++----------------
+>>>>  2 files changed, 28 insertions(+), 23 deletions(-)
+>>>>
+>>>> diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
+>>>> index b365b449c6ea..36a32e4ca168 100644
+>>>> --- a/tools/perf/util/evsel.h
+>>>> +++ b/tools/perf/util/evsel.h
+>>>> @@ -350,9 +350,11 @@ u64 format_field__intval(struct tep_format_field *field, struct perf_sample *sam
+>>>>
+>>>>  struct tep_format_field *evsel__field(struct evsel *evsel, const char *name);
+>>>>
+>>>> -#define evsel__match(evsel, t, c)              \
+>>>> +#define EVSEL_EVENT_MASK                       (~0ULL)
+>>>> +
+>>>> +#define evsel__match(evsel, t, c, m)                   \
+>>>>         (evsel->core.attr.type == PERF_TYPE_##t &&      \
+>>>> -        evsel->core.attr.config == PERF_COUNT_##c)
+>>>> +        (evsel->core.attr.config & m) == PERF_COUNT_##c)
+>>>
+>>> The EVSEL_EVENT_MASK here isn't very intention revealing, perhaps we
+>>> can remove it and do something like:
+>>>
+>>> static inline bool __evsel__match(const struct evsel *evsel, u32 type,
+>>> u64 config)
+>>> {
+>>>   if ((type == PERF_TYPE_HARDWARE || type ==PERF_TYPE_HW_CACHE)  &&
+>>> perf_pmus__supports_extended_type())
+>>>      return (evsel->core.attr.config & PERF_HW_EVENT_MASK) == config;
+>>>
+>>>   return evsel->core.attr.config == config;
+>>> }
+>>> #define evsel__match(evsel, t, c) __evsel__match(evsel, PERF_TYPE_##t,
+>>> PERF_COUNT_##c)
+>>
+>> Yes, the above code looks better. I will apply it in V2.
+> 
+> Please base v2 on tmp.perf-tools-next, tests are running and that branch
+> will become perf-tools-next.
+> 
 
-> +	if (clock_frequency_present)
-> +		i2c->bus_clock_khz = clock_frequency / 1000;
->  	if (i2c->ip_clock_khz == 0) {
+Sure.
 
-... and we fall inside this 'if', as expected. Looks correct!
+> Some patches from your series were cherry-picked there.
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
+Thanks.
 
-Thanks,
-Andi
+Kan
