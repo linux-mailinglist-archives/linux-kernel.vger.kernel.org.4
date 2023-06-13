@@ -2,89 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4734F72EDBD
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 23:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC82D72EDC0
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 23:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236020AbjFMVPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 17:15:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
+        id S230471AbjFMVQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 17:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230471AbjFMVPf (ORCPT
+        with ESMTP id S235998AbjFMVQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 17:15:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5523C173C;
-        Tue, 13 Jun 2023 14:15:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38F67632AF;
-        Tue, 13 Jun 2023 21:15:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9AD2C433C8;
-        Tue, 13 Jun 2023 21:15:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686690932;
-        bh=3ccj01nPeLrzbHPbFudIi7YMYYr+8Kcyp8XJeZS7dMo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Fs1rcb5v3x4UGcv+5Ro0Hf50UaEkn/fi4Yb+Wqzo5q+hD5+F4By14+01cowoga7rp
-         IXhgrjfDsE1pxAqIzwinpNZW3c7vFNMtvOZQw+SZjVFYvww2fCS1l29QQtYOkKXp+K
-         uHNMWjDuYbKz88Z4Z3oNU2GVgnD3JLhZjsPe7U8eB5rnK3QU+4XLq0vSHR7nG9T5S5
-         06Aq7CLFarLhj5R2scjsfNCG8A3YOUXhx47gj4nOuoVEbEYo1SaygLx0zbgpi184xg
-         nYONQak7YNCLm/j8dMDHtc33kSQAhgc65CmuDETjIGtBjVlFguX628IAAewTRDiDij
-         3bHg1pJxsN0iQ==
-From:   Dinh Nguyen <dinguyen@kernel.org>
-To:     gregkh@linuxfoundation.org
-Cc:     dinguyen@kernel.org, linux-kernel@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        stable@vger.kernel.org
-Subject: [PATCH] firmware: stratix10-svc: Fix a potential resource leak in svc_create_memory_pool()
-Date:   Tue, 13 Jun 2023 16:15:21 -0500
-Message-Id: <20230613211521.16366-1-dinguyen@kernel.org>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 13 Jun 2023 17:16:20 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19171133
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 14:16:19 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-651ce788961so3506436b3a.2
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 14:16:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686690978; x=1689282978;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zoXsbeVfXLLEsjLQrLANrMHnuV7SIcBeWtBPaSlJE0U=;
+        b=zQ7R5o0craf7u+8BFUd0XqKzaiFd07QQ12Eidv2oX82/8xpvNaNd5d3F1TCTk6N0Hu
+         7fMAmHEwJDyPmDip2pmYEeWftlaTmP5dIu41ZGeOFz45S21m6tXwg30hbcF3thUzi676
+         vzpD724q+62Lf8U9Gs9MKk4E/8JtwMR99WvwZB1LR98kFvEt6ayHb9QgvMry583OCgJV
+         lblJoGrE/X04cAdDQliEfEc/u/0GX09ErJvgFy+LvpVV5l8d0IOk2DTITEBHELAeAkNh
+         50M+uJ4OhYkQVSE9h6BW4mKFbmJK1/oUtMREUc0flhuMb3gVbi/lwRS/0faB5gRn/RtF
+         ddZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686690978; x=1689282978;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zoXsbeVfXLLEsjLQrLANrMHnuV7SIcBeWtBPaSlJE0U=;
+        b=jGJ1S2jmGXcRX+e9+anUmhe//wRy5zqt2xjz3ND0qFU0U/9Gfo3f0KguSugQc9ZCWx
+         FZumvuuIgK6a7VlfF6shGIh6UwrxpifUCKrp8GIajGqgX9CmD+3lMklQJlzAkLxaDfP/
+         UkCsqFFt9/U9uwEKb4RBOgQ9iXALVMs/dogEk2cfQDdPaiSC1PuPyuyERmev3ADO66fv
+         VTl9aPRmlI1srnuu4kF9FFnS9YRbLx/hlG550dwMOpiF3er85+DWngyNXwyDmcun+XJ+
+         RhG2C5aP5wIwOZp02EJTFYQf/C9/J6aKCOeheXvF3o8UAh0J4TwYGv7oCDD+QKfpo0tq
+         UxxA==
+X-Gm-Message-State: AC+VfDwJSPVNzZ5zJEwekIZhh8W5cHW/1GWm5xJAEqW3TYpZwCFLOeyd
+        vkhvzkpXZHkzGmTsKgSaPcMNdMiLdK4=
+X-Google-Smtp-Source: ACHHUZ7p7HWyWa7uo6JIcTCl2qEWne7t8Z1pA5sTVB2E6o4i4fbc3cAgW8yVZwQOXwCLEQAIaBcF/pXVJrY=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:2d1d:b0:63a:ff2a:bf9f with SMTP id
+ fa29-20020a056a002d1d00b0063aff2abf9fmr9201pfb.2.1686690978636; Tue, 13 Jun
+ 2023 14:16:18 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 14:16:16 -0700
+In-Reply-To: <20230315101606.10636-1-wei.w.wang@intel.com>
+Mime-Version: 1.0
+References: <20230315101606.10636-1-wei.w.wang@intel.com>
+Message-ID: <ZIjcoOaexz5YAyWT@google.com>
+Subject: Re: [PATCH RESEND v2] KVM: move KVM_CAP_DEVICE_CTRL to the generic check
+From:   Sean Christopherson <seanjc@google.com>
+To:     Wei Wang <wei.w.wang@intel.com>
+Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
++<everyone else>
 
-svc_create_memory_pool() is only called from stratix10_svc_drv_probe().
-Most of resources in the probe are managed, but not this memremap() call.
+Please use scripts/get_maintainer.pl to generate the To/Cc lists.  This may be
+trivial, but it still needs eyeballs from the relevant maintainers.
 
-There is also no memunmap() call in the file.
-
-So switch to devm_memremap() to avoid a resource leak.
-
-Cc: stable@vger.kernel.org
-Fixes: 7ca5ce896524 ("firmware: add Intel Stratix10 service layer driver")
-Link: https://lore.kernel.org/all/783e9dfbba34e28505c9efa8bba41f97fd0fa1dc.1686109400.git.christophe.jaillet@wanadoo.fr/
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
----
- drivers/firmware/stratix10-svc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/firmware/stratix10-svc.c b/drivers/firmware/stratix10-svc.c
-index 80f4e2d14e04..2d674126160f 100644
---- a/drivers/firmware/stratix10-svc.c
-+++ b/drivers/firmware/stratix10-svc.c
-@@ -755,7 +755,7 @@ svc_create_memory_pool(struct platform_device *pdev,
- 	end = rounddown(sh_memory->addr + sh_memory->size, PAGE_SIZE);
- 	paddr = begin;
- 	size = end - begin;
--	va = memremap(paddr, size, MEMREMAP_WC);
-+	va = devm_memremap(dev, paddr, size, MEMREMAP_WC);
- 	if (!va) {
- 		dev_err(dev, "fail to remap shared memory\n");
- 		return ERR_PTR(-EINVAL);
--- 
-2.25.1
-
+On Wed, Mar 15, 2023, Wei Wang wrote:
+> KVM_CAP_DEVICE_CTRL allows userspace to check if the kvm_device
+> framework (e.g. KVM_CREATE_DEVICE) is supported by KVM. Move
+> KVM_CAP_DEVICE_CTRL to the generic check for the two reasons:
+> 1) it already supports arch agnostic usages (i.e. KVM_DEV_TYPE_VFIO).
+> For example, userspace VFIO implementation may needs to create
+> KVM_DEV_TYPE_VFIO on x86, riscv, or arm etc. It is simpler to have it
+> checked at the generic code than at each arch's code.
+> 2) KVM_CREATE_DEVICE has been added to the generic code.
+> 
+> Link: https://lore.kernel.org/all/20221215115207.14784-1-wei.w.wang@intel.com
+> Signed-off-by: Wei Wang <wei.w.wang@intel.com>
+> Reviewed-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/arm64/kvm/arm.c       | 1 -
+>  arch/powerpc/kvm/powerpc.c | 1 -
+>  arch/riscv/kvm/vm.c        | 1 -
+>  arch/s390/kvm/kvm-s390.c   | 1 -
+>  virt/kvm/kvm_main.c        | 1 +
+>  5 files changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index 3bd732eaf087..96329e675771 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -202,7 +202,6 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>  		r = vgic_present;
+>  		break;
+>  	case KVM_CAP_IOEVENTFD:
+> -	case KVM_CAP_DEVICE_CTRL:
+>  	case KVM_CAP_USER_MEMORY:
+>  	case KVM_CAP_SYNC_MMU:
+>  	case KVM_CAP_DESTROY_MEMORY_REGION_WORKS:
+> diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
+> index 4c5405fc5538..185efed23896 100644
+> --- a/arch/powerpc/kvm/powerpc.c
+> +++ b/arch/powerpc/kvm/powerpc.c
+> @@ -526,7 +526,6 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>  	case KVM_CAP_ENABLE_CAP:
+>  	case KVM_CAP_ONE_REG:
+>  	case KVM_CAP_IOEVENTFD:
+> -	case KVM_CAP_DEVICE_CTRL:
+>  	case KVM_CAP_IMMEDIATE_EXIT:
+>  	case KVM_CAP_SET_GUEST_DEBUG:
+>  		r = 1;
+> diff --git a/arch/riscv/kvm/vm.c b/arch/riscv/kvm/vm.c
+> index 65a964d7e70d..6efe93b282e1 100644
+> --- a/arch/riscv/kvm/vm.c
+> +++ b/arch/riscv/kvm/vm.c
+> @@ -57,7 +57,6 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>  
+>  	switch (ext) {
+>  	case KVM_CAP_IOEVENTFD:
+> -	case KVM_CAP_DEVICE_CTRL:
+>  	case KVM_CAP_USER_MEMORY:
+>  	case KVM_CAP_SYNC_MMU:
+>  	case KVM_CAP_DESTROY_MEMORY_REGION_WORKS:
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index 39b36562c043..7b097b5253ca 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -556,7 +556,6 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>  	case KVM_CAP_ENABLE_CAP:
+>  	case KVM_CAP_S390_CSS_SUPPORT:
+>  	case KVM_CAP_IOEVENTFD:
+> -	case KVM_CAP_DEVICE_CTRL:
+>  	case KVM_CAP_S390_IRQCHIP:
+>  	case KVM_CAP_VM_ATTRIBUTES:
+>  	case KVM_CAP_MP_STATE:
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index d255964ec331..71cc63640173 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -4523,6 +4523,7 @@ static long kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
+>  #endif
+>  	case KVM_CAP_BINARY_STATS_FD:
+>  	case KVM_CAP_SYSTEM_EVENT_DATA:
+> +	case KVM_CAP_DEVICE_CTRL:
+>  		return 1;
+>  	default:
+>  		break;
+> -- 
+> 2.27.0
+> 
