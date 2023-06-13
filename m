@@ -2,127 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5596D72EBA0
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5693B72EBAE
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:11:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239369AbjFMTKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 15:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54016 "EHLO
+        id S238728AbjFMTLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 15:11:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjFMTKS (ORCPT
+        with ESMTP id S233084AbjFMTLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 15:10:18 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B2F92;
-        Tue, 13 Jun 2023 12:10:17 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b1b8593263so73186721fa.2;
-        Tue, 13 Jun 2023 12:10:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686683416; x=1689275416;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ukmpjB2evvzV+K2dRegWsqshz7MHYI5yA57E91qt//0=;
-        b=nPHkhuVZ50BUfD5nmyyGwqL93NQQxldU7AZOOnAHMzhVjBYHfFHQJmWxSDp1pxKfQS
-         iylZlWVAsZoTs5+ETrcrSdgIWamclgcY6/cpimQIA3WDt2RhRV9DmEdo3cW2u/A/1kS9
-         9mqF6pAECK637jyxKuqN+0F/AQM/LBDSbtpOdELMA+CZCI4pLk8o3qpPKdqYQUyL4tPy
-         9BILBQ3s6mbHBxqk/GT6Sa5Kaw2bj9IFl1bVesPVcgu+8pDSKdcE/4x6Bb64CCUnr6Fj
-         HqS/aZSbPm8fp6WTRUqbX6MWo5+jdFl7B7MGRKZDAFMjuBrLzA1MNEudpxuYAVaBvdxh
-         5/LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686683416; x=1689275416;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ukmpjB2evvzV+K2dRegWsqshz7MHYI5yA57E91qt//0=;
-        b=QT85RbkrDqpw9Jll18et23ZENYWzzBdQ1LsmPgc4tmFe3ntGmPyeXBvESZAdO1OtwJ
-         +QmE4aqIWGCx6XllmKYl9waS0OkFzjgeTGSec989q4YQF/AYJruBawUDSBzCECU16Xe1
-         DYeIw+v9N064Ob6K6Xvv3Y+pr/neFFACxUwhSD7+rOIvQL980P3BMbQRFW8b6DNaiQHT
-         RZTiE1P9n0PfyAaznfZ7tbKnI3TOq/ttWu9ve1YXGotCXFak2BadNksEWSg/JGyEdgps
-         mn+9duRPJnxkLVb1jjot8zlmZJyYfXkh30Xui7WXOsoac3RExHBFLujPLq8jzTn5Dcig
-         0njg==
-X-Gm-Message-State: AC+VfDxxpynTzZuY8O9KQE7RYlXnBnftyqbvlyGe4F+zOQke9YKO0NOW
-        Ujw9AjNJw9e0bo0bgTp5NLo=
-X-Google-Smtp-Source: ACHHUZ6LhivEpT+kIkT56ptSismUuMBZk55INPEJh0MnrMG32kXvZiffmuLV0Sy1V22n/MLjQJkQoQ==
-X-Received: by 2002:a2e:9f4e:0:b0:2af:47b2:3f6c with SMTP id v14-20020a2e9f4e000000b002af47b23f6cmr5174305ljk.31.1686683415625;
-        Tue, 13 Jun 2023 12:10:15 -0700 (PDT)
-Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id k13-20020a2e920d000000b002adadef95c0sm2264765ljg.124.2023.06.13.12.10.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 12:10:15 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 22:10:13 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: Re: [PATCH v3 2/3] device property: Implement device_is_compatible()
-Message-ID: <20230613191013.gwkeco4abvcgxsvf@mobilestation>
-References: <20230612161011.86871-1-andriy.shevchenko@linux.intel.com>
- <20230612161011.86871-3-andriy.shevchenko@linux.intel.com>
+        Tue, 13 Jun 2023 15:11:22 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FFD92;
+        Tue, 13 Jun 2023 12:11:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686683481; x=1718219481;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=n85A7XX5nbTTFgI8vxPPQTfwXp2EqTftD8XoZuF/4ak=;
+  b=UHv3jnMAZTRx5zURAaQm8FAuh4+spUUE2TKLZfH2U+gh1qJ32JcVtvLt
+   D0RTvIp7AfzULrFq1S3f/+TKXwoeXskCoezGLm31dq5+fdEHnNDs8xTI6
+   nMPQwrnwp3Pf7uTCvMLboVTL6wwrAbAYITrL6c1fnfoFkz4pXA/7SykV+
+   Rw/1dYQ4o4yxW/0B9rC0R/QPxKZKTZTj9Zm29aT3v2h4UrRH1gbs2COls
+   DyGEwPAcFhhsO900vNG7tXX4gzHmCyR8FbL5GZB9E4m+dvpdU9xzejDXr
+   2DBvbjYpuukt05vp1CZkaqcI1tDVXRx1cmHexJ5HMkGcXOghzHz6Ia7rW
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="422027724"
+X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
+   d="scan'208";a="422027724"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 12:11:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="856232720"
+X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
+   d="scan'208";a="856232720"
+Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 13 Jun 2023 12:11:17 -0700
+Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q99QD-0001gs-0V;
+        Tue, 13 Jun 2023 19:11:17 +0000
+Date:   Wed, 14 Jun 2023 03:10:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 8/8] rtc: isl12022: implement support for the
+ #clock-cells DT property
+Message-ID: <202306140237.9IMWa7cz-lkp@intel.com>
+References: <20230613130011.305589-9-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230612161011.86871-3-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230613130011.305589-9-linux@rasmusvillemoes.dk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 07:10:10PM +0300, Andy Shevchenko wrote:
-> Some users want to use the struct device pointer to see if the
-> device is compatible in terms of Open Firmware specifications,
-> i.e. if it has a 'compatible' property and it matches to the
-> given value. Provide inline helper for the users.
-> 
-> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Hi Rasmus,
 
+kernel test robot noticed the following build errors:
 
-C/P v2: IMO much useful wrapper. Thanks for the patch.
-Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+[auto build test ERROR on abelloni/rtc-next]
+[also build test ERROR on robh/for-next linus/master v6.4-rc6 next-20230613]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
--Serge(y)
+url:    https://github.com/intel-lab-lkp/linux/commits/Rasmus-Villemoes/rtc-isl12022-remove-wrong-warning-for-low-battery-level/20230613-210308
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
+patch link:    https://lore.kernel.org/r/20230613130011.305589-9-linux%40rasmusvillemoes.dk
+patch subject: [PATCH v2 8/8] rtc: isl12022: implement support for the #clock-cells DT property
+config: hexagon-randconfig-r041-20230612 (https://download.01.org/0day-ci/archive/20230614/202306140237.9IMWa7cz-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add abelloni https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git
+        git fetch abelloni rtc-next
+        git checkout abelloni/rtc-next
+        b4 shazam https://lore.kernel.org/r/20230613130011.305589-9-linux@rasmusvillemoes.dk
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-> ---
->  include/linux/property.h | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/include/linux/property.h b/include/linux/property.h
-> index 3df7e10156d8..0251138c7c88 100644
-> --- a/include/linux/property.h
-> +++ b/include/linux/property.h
-> @@ -90,6 +90,18 @@ bool fwnode_device_is_compatible(const struct fwnode_handle *fwnode, const char
->  	return fwnode_property_match_string(fwnode, "compatible", compat) >= 0;
->  }
->  
-> +/**
-> + * device_is_compatible - match 'compatible' property of the device with a given string
-> + * @dev: Pointer to the struct device
-> + * @compat: The string to match 'compatible' property with
-> + *
-> + * Returns: true if matches, otherwise false.
-> + */
-> +static inline bool device_is_compatible(const struct device *dev, const char *compat)
-> +{
-> +	return fwnode_device_is_compatible(dev_fwnode(dev), compat);
-> +}
-> +
->  int fwnode_property_get_reference_args(const struct fwnode_handle *fwnode,
->  				       const char *prop, const char *nargs_prop,
->  				       unsigned int nargs, unsigned int index,
-> -- 
-> 2.40.0.1.gaa8946217a0b
-> 
-> 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306140237.9IMWa7cz-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: __clk_hw_register_fixed_rate
+   >>> referenced by rtc-isl12022.c:272 (drivers/rtc/rtc-isl12022.c:272)
+   >>>               drivers/rtc/rtc-isl12022.o:(isl12022_probe) in archive vmlinux.a
+   >>> referenced by rtc-isl12022.c:272 (drivers/rtc/rtc-isl12022.c:272)
+   >>>               drivers/rtc/rtc-isl12022.o:(isl12022_probe) in archive vmlinux.a
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
