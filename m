@@ -2,160 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36DEB72EAE8
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 20:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E700172EA9D
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 20:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239711AbjFMSZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 14:25:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59254 "EHLO
+        id S234402AbjFMSOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 14:14:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239035AbjFMSZy (ORCPT
+        with ESMTP id S232792AbjFMSOq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 14:25:54 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0BCF19B5
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 11:25:52 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9745c5fed21so851754966b.3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 11:25:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google; t=1686680751; x=1689272751;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ndSkO2qkti4L/SsRIO9nUQau8kKaAI3Sxaq+0HhunWc=;
-        b=ntRa6AW6ValrHAqkuzvskPZkjppT1UiqWn5XgLaJRL+M66yi9z5SuBsJJtsg8gSyVk
-         ZTIikpoielPrbB8yOOTgCPTe0h3G8snlfV3i1tciBEYR0ULVrQlaH6ZlloWRNz123Gp2
-         8aS+0U465JGkaRt7VZb5swDwBi6W5as5+c8JY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686680751; x=1689272751;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ndSkO2qkti4L/SsRIO9nUQau8kKaAI3Sxaq+0HhunWc=;
-        b=G95Vnk9mLKsEX2p6D7KGSkLOhKhsfDUaFb5AC6TjI+e59/uBYCD++g9WEZP0arpWXk
-         Ut+EDI6KEeQwzy+F6AWP2ocUDFpUynCp22aB5zkEYiaIEVe2neBqQ28vawGf7WyVHPKr
-         xoL1sZ7Jmdk3tu9qjvU2g7Cv7rvI5qYKj+auMFP5SRaQBlgYK2lWzmdvibG0HC2Xk7eQ
-         4EaOfHERp4rdmhj6/QGHj/sbWNglrmalzlI59coSyTwp7u6EnPyM+wWb025AzlyLBShx
-         WNuzsK7fSS5kSrRrIuYeg5AkZAaE+rEbUsBDW58Phvc5r0drg6k/WIZGY5UAVyO9rben
-         0tMw==
-X-Gm-Message-State: AC+VfDwhzuhDLEmQ4dTgRUoMDcQLNWKqVuetZbAmoDLlejgrFt1uAu/5
-        29HEbNpmC5k2N/qvo7PBpvQWDQ==
-X-Google-Smtp-Source: ACHHUZ6L7PTRLKSYbWQ/tjcT0d/XBC+vGVXO4zTlysaNeyin+mwYf/zWWNDpzlfMXEPA3fN2f50m6A==
-X-Received: by 2002:a17:906:da87:b0:974:1c91:a752 with SMTP id xh7-20020a170906da8700b009741c91a752mr12713028ejb.5.1686680751027;
-        Tue, 13 Jun 2023 11:25:51 -0700 (PDT)
-Received: from cloudflare.com (79.184.146.33.ipv4.supernova.orange.pl. [79.184.146.33])
-        by smtp.gmail.com with ESMTPSA id p20-20020a170906b21400b009767c4235absm6869904ejz.219.2023.06.13.11.25.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 11:25:50 -0700 (PDT)
-References: <20230613084315.62021-1-luojianhong@cdjrlc.com>
- <6228af14241b831be4bae6ebcd63799e@208suo.com>
- <53510828-ee5b-1d91-0f85-b79da4422741@meta.com>
-User-agent: mu4e 1.6.10; emacs 28.2
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     Yonghong Song <yhs@meta.com>
-Cc:     baomingtong001@208suo.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        mykolal@fb.com, shuah@kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/bpf: Remove unneeded variable "ret"
-Date:   Tue, 13 Jun 2023 20:13:00 +0200
-In-reply-to: <53510828-ee5b-1d91-0f85-b79da4422741@meta.com>
-Message-ID: <87pm5z9q36.fsf@cloudflare.com>
+        Tue, 13 Jun 2023 14:14:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF44419A7;
+        Tue, 13 Jun 2023 11:14:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 843DC6395A;
+        Tue, 13 Jun 2023 18:14:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC10CC433D9;
+        Tue, 13 Jun 2023 18:14:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686680083;
+        bh=fjT4gpdjI8bzfc0kSPvWLMcKfBFEaXgHEzlFBmmWqkQ=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=YPBwCeRUs39kxlaLzdOB3U/bmTyHUsAgwUCs8NioF14TZY5ElTAYwBY3aLoc8t+wS
+         e7bjbenC0hl1zrZBBwEJynjtkv3y8YHI3Y0EL41PdFbkLqqmFNzGbNGIRl/VZnFsYI
+         CEwTLDbyKWuoN9nk3I/ejgmZ+2WowJN20sz99hVWF4I8TU1yLWxTHyDtznWvx7r7qp
+         Vri8t/fEYXoWjE2p8JoArbh5O2YE0NPTL2eCwWxwE7P/vGrX8992LrfTUUX5KaU5v4
+         52tJPG2/TK+wz8hZw12VOptpVSyRZhteeSItM9u2L0OhNiloXN3I+k9XVhutsfKh78
+         0Uq9DJwQX5BaA==
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 64961BBEAD1; Tue, 13 Jun 2023 20:14:40 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>
+To:     Kalle Valo <kvalo@kernel.org>, linux-wireless@vger.kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        regressions@lists.linux.dev,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: Re: Closing down the wireless trees for a summer break?
+In-Reply-To: <87y1kncuh4.fsf@kernel.org>
+References: <87y1kncuh4.fsf@kernel.org>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Tue, 13 Jun 2023 20:14:40 +0200
+Message-ID: <871qifxm9b.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 06:42 AM -07, Yonghong Song wrote:
-> On 6/13/23 1:50 AM, baomingtong001@208suo.com wrote:
->> Fix the following coccicheck warning:
->> tools/testing/selftests/bpf/progs/tailcall_bpf2bpf6.c:28:14-17: Unneeded
->> variable: "ret".
->> Return "1".
->> Signed-off-by: Mingtong Bao <baomingtong001@208suo.com>
->> ---
->>  =C2=A0tools/testing/selftests/bpf/progs/tailcall_bpf2bpf6.c | 3 +--
->>  =C2=A01 file changed, 1 insertion(+), 2 deletions(-)
->> diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf6.c
->> b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf6.c
->> index 4a9f63bea66c..7f0146682577 100644
->> --- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf6.c
->> +++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf6.c
->> @@ -25,10 +25,9 @@ static __noinline
->>  =C2=A0int subprog_tail(struct __sk_buff *skb)
->>  =C2=A0{
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Don't propagate the constant to the ca=
-ller */
->> - =C2=A0=C2=A0=C2=A0volatile int ret =3D 1;
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bpf_tail_call_static(skb, &jmp_table, 0);
->> - =C2=A0=C2=A0=C2=A0return ret;
->> + =C2=A0=C2=A0=C2=A0return 1;
+Kalle Valo <kvalo@kernel.org> writes:
+
+> Me and Johannes are planning to take a longer break from upstream this
+> summer. To keep things simple my suggestion is that we would official
+> close wireless and wireless-next trees from June 23rd to August 14th
+> (approximately).
 >
-> Please pay attention to the comment:
->    /* Don't propagate the constant to the caller */
-> which clearly says 'constant' is not preferred.
+> During that time urgent fixes would need go directly to the net tree.
+> Patches can keep flowing to the wireless list but the the net
+> maintainers will follow the list and they'll just apply them to the
+> net tree directly.
 >
-> The patch introduced this change is:
->     5e0b0a4c52d30   selftests/bpf: Test tail call counting with bpf2bpf a=
-nd data
->    on stack
+> The plan here is that -next patches would have to wait for
+> wireless-next to open. Luckily the merge window for v6.6 most likely
+> opens beginning of September[1] so after our break we would have few
+> weeks to get -next patches ready for v6.6.
 >
-> The test intentionally want to:
->   'Specifically when the size      of data allocated on BPF stack is not a
->  multiple on 8.'
+> And the v6.5 -next patches should be ready by Monday June 19th so that we
+> have enough time to get them into the tree before we close the trees.
 >
-> Note that with volatile and without volatile, the generated
-> code will be different and it will result in different
-> verification path.
->
-> cc Jakub for further clarification.
+> What do people think, would this work? This is the first time we are
+> doing this so we would like to hear any comments about this, both
+> negative and positive. You can also reply to me and Johannes privately,
+> if that's easier.
 
-Yonghong is right. We can't replace it like that.
+I think this sounds reasonable, and I applaud the effort to take some
+time off during the summer :)
 
-Compiler is smart and pull up the constant into subprog_tail() caller.
+One question that comes to mind is how would this work for patchwork?
+Would we keep using the wireless patchwork instance for the patches
+going to -net in that period, or will there be some other process for
+this? I realise the setup we have for ath9k is a bit special in this
+regard with the ack-on-list+delegation, so I'm obviously mostly
+interested in what to do about that... :)
 
-And it doesn't have the slightest idea that bpf_tail_call_static() is
-actually tail call (destroy frame + jump) and control doesn't return to
-subprog_tail().
-
-(You can read more about BPF tail calls in [1] and [2] if they are not
-familiar.)
-
-IOW, we need an r0 store to happen after a call to BPF tail call helper
-(call 12) to remain in subprog_tail body for the regression test to
-work:
-
-$ llvm-objdump -d --no-show-raw-insn tailcall_bpf2bpf6.bpf.o
-
-tailcall_bpf2bpf6.bpf.o:        file format elf64-bpf
-
-Disassembly of section .text:
-
-0000000000000000 <subprog_tail>:
-       0:       r6 =3D r1
-       1:       w1 =3D 1
-       2:       *(u32 *)(r10 - 4) =3D r1
-       3:       r7 =3D 0 ll
-       5:       r1 =3D r6
-       6:       r2 =3D r7
-       7:       r3 =3D 0
-       8:       call 12
-       9:       r0 =3D *(u32 *)(r10 - 4) <-- this must stay
-      10:       exit
-
-You could take a shot at replacing it with inline asm, if you want.
-
-[1] https://docs.cilium.io/en/stable/bpf/architecture/#bpf-to-bpf-calls
-[2] https://blog.cloudflare.com/assembly-within-bpf-tail-calls-on-x86-and-a=
-rm/
+-Toke
