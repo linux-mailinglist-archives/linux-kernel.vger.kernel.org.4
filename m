@@ -2,94 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FC7472DBCB
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 09:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E27B872DBD4
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240658AbjFMH6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 03:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51632 "EHLO
+        id S240834AbjFMIAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 04:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240721AbjFMH56 (ORCPT
+        with ESMTP id S241101AbjFMH7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 03:57:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF0C1FC1;
-        Tue, 13 Jun 2023 00:57:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F74C62A2C;
-        Tue, 13 Jun 2023 07:57:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 410FFC433EF;
-        Tue, 13 Jun 2023 07:57:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686643028;
-        bh=XZcRKllUDNwn2KB+yvdCn+WcXnldLMqtBn28JoqAwAs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rVLOG4lJhh5nhCufoSbyVcE1QEDmhGeLg1W0JkZcRgXj1ET7Sg9f+xe2zE/Q197Y3
-         pJg0YJSvPPbAtn3qdfzqKSme8VbbTLoDV4NQKASwOWwN3eeLPOztUFwZQedHvBrXNt
-         2fFpF4Vqqn/rcBe0SNOrl9X+LuZBUDWMB49GFaP8=
-Date:   Tue, 13 Jun 2023 09:57:05 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dave Jiang <dave.jiang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-cxl@vger.kernel.org, Dan Williams <dan.j.williams@intel.com>,
-        rafael@kernel.org, jonathan.cameron@huawei.com
-Subject: Re: [PATCH v2] base/node / acpi: Change 'node_hmem_attrs' to
- 'access_coordinates'
-Message-ID: <2023061331-napkin-disburse-915d@gregkh>
-References: <168660916231.1965241.248859226126456131.stgit@djiang5-mobl3>
+        Tue, 13 Jun 2023 03:59:54 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A34C3C16
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:58:51 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b3d0b33dc2so11999465ad.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:58:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686643130; x=1689235130;
+        h=content-transfer-encoding:cc:to:subject:from:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8gFVICJk82rsLy6XURcItio5Wc3MLyUpCU3bKiLcn7E=;
+        b=Zu1eNmH59rjQOm+08m4N17C7EGxZr54zmOO94OfKblpkr1l7peVqWXSNqS+0/kS6gX
+         EapSF+QxF6DrIFV0TjB/67BzDJWIFcDgtaU/ji05c1C+S2c0li5WNJzs1zhq3oWZePi/
+         79tD5grYYPpJSQ8nJ0OjlVgeckvPmJuUqsskvJq8iWb0tKMjp7scryD6wiMJQt4cTjYE
+         oSBIajdSrEdw/p4rEGa1ntbbU7i+yBu7nBU+mXKzl8jn3CI5YTF+XvPARZTLAP3p0WyG
+         vadttwCxVI6wTO6MtUsNikCSAdXyyEF62rloPdjiXb9y3SC3T+SQlU3i+rDRrlIs6E3P
+         wTKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686643130; x=1689235130;
+        h=content-transfer-encoding:cc:to:subject:from:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=8gFVICJk82rsLy6XURcItio5Wc3MLyUpCU3bKiLcn7E=;
+        b=lagm5FIyouOHlKecevXKy+8GwmvGbCSC55dWuykEwZDVzPAtOOwfCLOKlbSHaLlcna
+         IrtGCs0Y2HYsPVdtWZEFifdDudepkHijUNAc8vRtuNazfObWS4lwMXt0mZot+cpB84KY
+         Z7zJUoLM/u1getlUqvtx7vw1ZV4LZbt+2eABmmVLzlFppKiOXbIUSwYiReDEbDB5btsf
+         T3FUK3m/GziJIMVBBx32dPWGL2T8K3HfGgd3JRfzneFRf8WU+NAkHzgjA05jLNKM4r0Q
+         cDk72Sccp1xgl3p5oDFdpg8B4LZD7PD6+FmIIUVST7eyUgUzw1buenQYJ5evWlEqHpeb
+         tzzA==
+X-Gm-Message-State: AC+VfDxWqDj2JBlSL95LcCRIe8TGRXGBCb8gJgIPJQbYsWU2nGVHHiok
+        F9KvItRoN+ie6nfoztZLX4lWUaG4zYyFxQ==
+X-Google-Smtp-Source: ACHHUZ4LF6u5/W4jCFiUuKAjF1AFewN+gLsPgJsbR4sHJpvM3DYDCzMRA98AOm63FAOSef1TdAzbog==
+X-Received: by 2002:a17:902:b489:b0:1b3:7de7:f83f with SMTP id y9-20020a170902b48900b001b37de7f83fmr8268095plr.26.1686643130358;
+        Tue, 13 Jun 2023 00:58:50 -0700 (PDT)
+Received: from [183.173.18.203] ([183.173.18.203])
+        by smtp.gmail.com with ESMTPSA id g18-20020a170902869200b001b01fc7337csm9515480plo.247.2023.06.13.00.58.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 00:58:49 -0700 (PDT)
+Message-ID: <32dc96d0-2d27-47e4-448a-a42e9ce352af@gmail.com>
+Date:   Tue, 13 Jun 2023 15:58:28 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <168660916231.1965241.248859226126456131.stgit@djiang5-mobl3>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US
+From:   Tuo Li <islituo@gmail.com>
+Subject: [BUG] ocfs2/dlm: possible data races in dlm_drop_lockres_ref_done()
+ and dlm_get_lock_resource()
+To:     mark@fasheh.com, jlbec@evilplan.org,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        akpm@linux-foundation.org
+Cc:     ocfs2-devel@oss.oracle.com,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        baijiaju1990@outlook.com
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 03:32:42PM -0700, Dave Jiang wrote:
-> Dan Williams suggested changing the struct 'node_hmem_attrs' to
-> 'access_coordinates' [1]. The struct is a container of r/w-latency and
-> r/w-bandwidth numbers. Moving forward, this container will also be used by
-> CXL to store the performance characteristics of each link hop in
-> the PCIE/CXL topology. So, where node_hmem_attrs is just the access
-> parameters of a memory-node, access_coordinates applies more broadly
-> to hardware topology characteristics. The observation is that seemed like
-> an excercise in having the application identify "where" it falls on a
-> spectrum of bandwidth and latency needs. For the tuple of read/write-latency
-> and read/write-bandwidth, "coordinates" is not a perfect fit. Sometimes it
-> is just conveying values in isolation and not a "location" relative to
-> other performance points, but in the end this data is used to identify the
-> performance operation point of a given memory-node. [2]
-> 
-> Link: http://lore.kernel.org/r/64471313421f7_1b66294d5@dwillia2-xfh.jf.intel.com.notmuch/
-> Link: https://lore.kernel.org/linux-cxl/645e6215ee0de_1e6f2945e@dwillia2-xfh.jf.intel.com.notmuch/
-> Suggested-by: Dan Williams <dan.j.williams@intel.com>
-> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-> Signed-off-by: Dave Jiang <dave.jiang@intel.com>
-> 
-> ---
-> 
-> Hi Greg and Rafael,
-> please consider ACK this patch and Dan can take it through the
-> CXL upstream tree. The remaining ACPI [1] and CXL [2] patches for enabling
-> CXL QoS class data have dependency on this patch. Thank you!
-> 
-> [1]: https://lore.kernel.org/linux-cxl/168333141100.2290593.16294670316057617744.stgit@djiang5-mobl3/T/#t
-> [2]: https://lore.kernel.org/linux-cxl/168451588868.3470703.3527256859632103687.stgit@djiang5-mobl3/T/#t
+Hello,
 
-Isn't this going to conflict with the version that I have in the
-driver-core-next tree as commit 7810f4dc8795 ("base/node: Use 'property'
-to identify an access parameter")?
+Our static analysis tool finds some possible data races in the OCFS2 file
+system in Linux 6.4.0-rc6.
 
-Or was that a different thing?
+In most calling contexts, the variables  such as res->lockname.name and
+res->owner are accessed with holding the lock res->spinlock. Here is an
+example:
 
-thanks,
+   lockres_seq_start() --> Line 539 in dlmdebug.c
+     spin_lock(&res->spinlock); --> Line 574 in dlmdebug.c (Lock 
+res->spinlock)
+     dump_lockres(res, ...); --> Line 575 in fs/ocfs2/dlm/dlmdebug.c
+       stringify_lockname(res->lockname.name, ...);  --> Line 493 in 
+dlmdebug.c (Access res->lockname.name)
+       scnprintf(..., res->owner, ...);  -->Line 498 in dlmdebug.c 
+(Access res->owner)
 
-greg k-h
+However, in the following calling contexts:
+
+   dlm_deref_lockres_worker() --> Line 2439 in dlmmaster.c
+     dlm_drop_lockres_ref_done() --> Line 2459 in dlmmaster.c
+       lockname = res->lockname.name; --> Line 2416 in dlmmaster.c 
+(Access res->lockname.name)
+
+   dlm_get_lock_resource() --> Line 701 in dlmmaster.c
+     if (res->owner != dlm->node_num) --> Line 1023 in dlmmaster.c 
+(Access res->owner)
+
+The variables res->lockname.name and res->owner are accessed respectively
+without holding the lock res->spinlock, and thus data races can occur.
+
+I am not quite sure whether these possible data races are real and how 
+to fix
+them if they are real.
+
+Any feedback would be appreciated, thanks!
+
+Reported-by: BassCheck <bass@buaa.edu.cn>
+
+Best wishes,
+Tuo Li
