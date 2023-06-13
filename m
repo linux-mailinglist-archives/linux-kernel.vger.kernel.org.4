@@ -2,85 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B595E72E6DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EC8072E6E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242464AbjFMPP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 11:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41368 "EHLO
+        id S240668AbjFMPSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 11:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240619AbjFMPPz (ORCPT
+        with ESMTP id S239617AbjFMPSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 11:15:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40BBD118;
-        Tue, 13 Jun 2023 08:15:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 44AF662EA4;
-        Tue, 13 Jun 2023 15:15:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDDEFC433F0;
-        Tue, 13 Jun 2023 15:15:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686669344;
-        bh=/rl23s8079daMc/L5xKX5HaxFBpVGzkrwZXcRhgrzUo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d3rTI8P1B/ZQkdGFSOLmBZfHDc0v1qUD5ReW/6vIFrV7gdzkt39bZ2f0RXKWqznCP
-         mak7dZUd/dZLoXk+ERH4/Z/OVpJCuCJ7PW860UL+CYqnIPUIQyoC7A3eHZs9TtLQr5
-         RAcdJKHXTcUwcaKJtteJrUAQtkyCrHBuDuh0abZfKzX5Kg9LVT8FJEMv7uVGPNXJR/
-         NjAx9gqLWqqJe5OVYmp9Z/fs5MfA6nBNw0SBJf4UIrswTkNexThtVewvq7yM5qWje8
-         AQzZV7HczX0LzsXj27rMLtOQ5REMxlatnITnkxaqLgbald+Ki8/N1aEqxZnChb+Bp7
-         fqdF79Ugiy5uQ==
-Date:   Tue, 13 Jun 2023 16:15:31 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com, szabolcs.nagy@arm.com,
-        torvalds@linux-foundation.org, Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>
-Subject: Re: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack
- description
-Message-ID: <1f04fa59-6ca9-4f18-b138-6c33e164b6c2@sirena.org.uk>
-References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
- <20230613001108.3040476-24-rick.p.edgecombe@intel.com>
- <0b7cae2a-ae5b-40d8-9ae7-10aea5a57fd6@sirena.org.uk>
- <87y1knh729.fsf@oldenburg.str.redhat.com>
+        Tue, 13 Jun 2023 11:18:18 -0400
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457A710DA;
+        Tue, 13 Jun 2023 08:18:17 -0700 (PDT)
+Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-77af8476cd4so138365439f.1;
+        Tue, 13 Jun 2023 08:18:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686669496; x=1689261496;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oWDvuSYvyO0yT5XAM5g7LXE8j9cOzjQQlkcaunrDQec=;
+        b=JcojDTMG4Hgl+0fqpSG+UbOG/igey+m74D4NiHBMKc4VtvxzfZbvVZjzkVbDLv/mbG
+         aLYQoZIJrBSAlPm+UMeGSH3oYmKgOk0HU1JiYWEOgo5jBU2DRbIIku00YhS8JL+CCwM9
+         rkVQUTFXb9pWEZVRYgozZaxaWseZ2KJ9/HNrRqs3/f12O4UlYVjYlLMLe6nrAWAkkOPY
+         osVFSNJmfy/1lMH2iMZcqftDlsCblz9UG+kfxvKs5NyOy+1LShmi7CaluqwVrUA5UOXd
+         fLdJfPCkbAbHr41jlBCFo6G4/uklWuMhMnvaWGdJAG98n31hx1e0Se0lHOxfM1Go2yT/
+         y7dg==
+X-Gm-Message-State: AC+VfDx6qjpkYFEDNsmmX0k0Wc1ddqMraXvKyxkE+UVL5sS9Mtq4+Ei/
+        gV6OfSe3yXZhgnUI/zpqLg==
+X-Google-Smtp-Source: ACHHUZ52Cxir7VJt6AIP+N64lio1+ph206iUWkcaMQgfylkK4ArSxPjxdBB+C1xvzowTLCXV4c/Wkg==
+X-Received: by 2002:a5e:db0d:0:b0:77a:d862:242f with SMTP id q13-20020a5edb0d000000b0077ad862242fmr10727914iop.21.1686669496452;
+        Tue, 13 Jun 2023 08:18:16 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id x12-20020a02970c000000b0041f5a0b7f9bsm3524235jai.108.2023.06.13.08.18.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 08:18:15 -0700 (PDT)
+Received: (nullmailer pid 2136982 invoked by uid 1000);
+        Tue, 13 Jun 2023 15:18:14 -0000
+Date:   Tue, 13 Jun 2023 09:18:14 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [GIT PULL] Devicetree fixes for v6.4, part 3
+Message-ID: <20230613151814.GA2133279-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="CHHivuSQNQZBIb3Y"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87y1knh729.fsf@oldenburg.str.redhat.com>
-X-Cookie: Not a flying toy.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,49 +62,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Linus,
 
---CHHivuSQNQZBIb3Y
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Please pull a few DT fixes for 6.4.
 
-On Tue, Jun 13, 2023 at 02:37:18PM +0200, Florian Weimer wrote:
+Rob
 
-> > I appreciate it's very late in the development of this series but given
-> > that there are very similar features on both arm64 and riscv would it
-> > make sense to make these just regular prctl()s, arch_prctl() isn't used
-> > on other architectures and it'd reduce the amount of arch specific work
-> > that userspace needs to do if the interface is shared.
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
-> Has the Arm feature been fully disclosed?
+  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
 
-Unfortunately no, it's not yet been folded into the ARM.  The system
-registers and instructions are in the latest XML releases but that's not
-the full story.
+are available in the Git repository at:
 
-> I would expect the integration with stack switching and unwinding
-> differs between architectures even if the core mechanism is similar.
-> It's probably tempting to handle shadow stack placement differently,
-> too.
+  git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git tags/devicetree-fixes-for-6.4-3
 
-Yeah, there's likely to be some differences (though given the amount of
-discussion on the x86 implementation I'm trying to follow the decisions
-there as much as reasonable on the basis that we should hopefully come
-to the same conclusions).  It seemed worth mentioning as a needless
-bump, OTOH I defninitely don't see it as critical.
+for you to fetch changes up to c7753ed71c160f75f92ff5679e9fc22526e56fc5:
 
---CHHivuSQNQZBIb3Y
-Content-Type: application/pgp-signature; name="signature.asc"
+  dt-bindings: pinctrl: qcom,pmic-mpp: Fix schema for "qcom,paired" (2023-06-13 07:58:47 -0600)
 
------BEGIN PGP SIGNATURE-----
+----------------------------------------------------------------
+Devicetree fixes for v6.4, part 3:
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSIiBMACgkQJNaLcl1U
-h9DYKAf/Vz3wx22uDdLyCBpiG7PQdfsvx6Gsa3OkqligILXiOR/RqMgrq58a10CL
-1Y83LNYyJWuUw541NRW64qugDHs9G2NwIpxrgeD3mBQibPyJoJyFsEOia0VFOvB/
-jEcMyC/PLUl6W0LBP7P/tyDcf6UyZY5mhI32w4k5JHImx4iNswSTcS5bEMrkbs/J
-wcEZi8RTKT6XeWHM1Y7Ky3oQax1I8b1G3pzGa6WK0c5fNstN0QRY6hpMFKknp1sR
-yygF1dgoS3kygw4ZeBsmpkmGJKETDGsCpqteh2JQ7XV2i2kEJe8IeOD/NAcPl43V
-Sovm7EiMjuwISm0hPggYtQ+vsFGHrg==
-=tl5C
------END PGP SIGNATURE-----
+- Fix missing of_node_put() in init_overlay_changeset()
 
---CHHivuSQNQZBIb3Y--
+- Fix schema for qcom,pmic-mpp "qcom,paired" property
+
+- Fix 'additionalProperties' in silvaco,i3c-master binding
+
+- usage-model.rst: Use documented "arm,primecell" compatible string
+
+- Update Damien Le Moal's email address
+
+- Fixes in Realtek Bluetooth binding
+
+----------------------------------------------------------------
+Baruch Siach (2):
+      docs: dt: fix documented Primecell compatible string
+      docs: zh_CN/devicetree: sync usage-model fix
+
+Chris Morgan (1):
+      dt-bindings: net: realtek-bluetooth: Fix RTL8821CS binding
+
+Damien Le Moal (1):
+      dt-bindings: Change Damien Le Moal's contact email
+
+Diederik de Haas (1):
+      dt-bindings: net: realtek-bluetooth: Fix double RTL8723CS in desc
+
+Krzysztof Kozlowski (1):
+      dt-bindings: i3c: silvaco,i3c-master: fix missing schema restriction
+
+Kunihiko Hayashi (1):
+      of: overlay: Fix missing of_node_put() in error case of init_overlay_changeset()
+
+Rob Herring (1):
+      dt-bindings: pinctrl: qcom,pmic-mpp: Fix schema for "qcom,paired"
+
+ Documentation/devicetree/bindings/ata/ahci-common.yaml           | 2 +-
+ Documentation/devicetree/bindings/clock/canaan,k210-clk.yaml     | 2 +-
+ Documentation/devicetree/bindings/i3c/silvaco,i3c-master.yaml    | 2 +-
+ Documentation/devicetree/bindings/mfd/canaan,k210-sysctl.yaml    | 2 +-
+ Documentation/devicetree/bindings/net/realtek-bluetooth.yaml     | 4 ++--
+ Documentation/devicetree/bindings/pinctrl/canaan,k210-fpioa.yaml | 2 +-
+ Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml     | 5 +++--
+ Documentation/devicetree/bindings/reset/canaan,k210-rst.yaml     | 2 +-
+ Documentation/devicetree/bindings/riscv/canaan.yaml              | 2 +-
+ Documentation/devicetree/usage-model.rst                         | 2 +-
+ Documentation/translations/zh_CN/devicetree/usage-model.rst      | 2 +-
+ drivers/of/overlay.c                                             | 1 +
+ 12 files changed, 15 insertions(+), 13 deletions(-)
