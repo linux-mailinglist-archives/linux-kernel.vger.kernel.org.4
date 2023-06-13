@@ -2,153 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB8572E2D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:25:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B116472E2DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242254AbjFMMZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 08:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34548 "EHLO
+        id S242425AbjFMM1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 08:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236188AbjFMMZp (ORCPT
+        with ESMTP id S236391AbjFMM1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 08:25:45 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD6010CE;
-        Tue, 13 Jun 2023 05:25:44 -0700 (PDT)
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35DCNfkV006121;
-        Tue, 13 Jun 2023 12:25:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : date : subject :
- mime-version : content-type : content-transfer-encoding : message-id : to
- : cc; s=pp1; bh=0QJ5OOSqOBhOpoGHM9mIKfqtD9U6FDSmgII1zFfBG7w=;
- b=STSeSzyvzvJkHYgGju6hWsQcfKBHjy6WBf47K+whSQUV+GYHorIEU91AR+m2gohqu+Am
- PN0a3aZttQlnreCeSxtwd3mT5A6PNY9Vh0P6w5G3ShdkvZsnqIgbPqFZofPukkwWxjx3
- BRVVBSMRdPH/xTQeHvnQOqnISkb4L33h+REHp81fqdtrY2eCW17o1zTjYWyZUhU+jAOm
- v4GB208KCoe2X9e3wEfAK3joq3OnGBGSUo8Yq/EyD6pyQtckFuOWFEanFiTFVwyuPAc5
- IJUTQp3DS+nrRDiJuPvQxVc/yzSyNnUa5IscMQvxvIzE1hux4XMTaJF2Ejs+s7npPiqv vw== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r6re2r1f3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Jun 2023 12:25:43 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35D4mTIc016530;
-        Tue, 13 Jun 2023 12:25:41 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3r4gee246e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Jun 2023 12:25:41 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35DCPcig42467876
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Jun 2023 12:25:38 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 19F1D20040;
-        Tue, 13 Jun 2023 12:25:38 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5ED9720043;
-        Tue, 13 Jun 2023 12:25:37 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 13 Jun 2023 12:25:37 +0000 (GMT)
-From:   Julian Ruess <julianr@linux.ibm.com>
-Date:   Tue, 13 Jun 2023 14:25:37 +0200
-Subject: [PATCH] s390/ism: Fix trying to free already-freed IRQ by repeated
- ism_dev_exit()
+        Tue, 13 Jun 2023 08:27:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DDD10CE
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 05:26:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686659174;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kdc7U94xkVs29WOVZE2o7NQmpfO54OWwBKACRIySOxQ=;
+        b=V63tEdjXP0ZdVG0+y48WCXYK/xdbMrZFAvPP2bPcjERQT4t6itZBf2LIzwjchP0pdsu8fW
+        g0BZuSAz8q+ZwCZnSptr5cZh7JML0i52239ywE0fMg0+F5+EJroxczYfYAvWrbJeLEH87V
+        2Hfii7MI84U7Zj1Gq/YEKl2qgLpw6yU=
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
+ [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-80-vgDbyjj7PpileyrjZhvWZg-1; Tue, 13 Jun 2023 08:26:11 -0400
+X-MC-Unique: vgDbyjj7PpileyrjZhvWZg-1
+Received: by mail-oo1-f70.google.com with SMTP id 006d021491bc7-558cbf62c87so3425250eaf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 05:26:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686659170; x=1689251170;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kdc7U94xkVs29WOVZE2o7NQmpfO54OWwBKACRIySOxQ=;
+        b=YxCPm4U1QUY7Xh/WudasRTcldX8Bo6edb+9Y7wByxfSh2tkzO9G03CP0usFRA5ZAUa
+         UOU2zeCBWs80stf5bq+SQ88s58PgnFkSHm0npcP1YNLk9T7P1OK1VA30CEchPzKxQXqj
+         3SKcckphlhSlDeWpcSHJvYPitwn2KGH6W3RFBxYoNE0cLtc5mvuhVh9MSWvFdGavx/RL
+         O0bp2MKi/J3rqUutYQ2zz1DPpAeGC6ZPYJlAdmiAEXDVfwY1FknjOHkUyvPW1I418wiL
+         gSTzhs9mAvzPWBcdxiKoAAF/lJuGt208/AVX51zt5YCq9goyoYotkZTpNyNEraWZd4mK
+         fJyA==
+X-Gm-Message-State: AC+VfDyiYcMnJnP7nbbaEB8qLa4urnN1U3j/ZUE9tN0N8ixxYp6h8QaW
+        lI+IeXMxG8S3FwEf/uF2/ILNVAtl7nguPAP0G1ZsikJF9f7aKr9CGwadClUD8Ax/SqRJAz25jE+
+        KoWoj/+54e9AxbSr61M1eDtg7cvq420bYx9Gdw3C6
+X-Received: by 2002:a05:6808:aa6:b0:39c:7a71:945 with SMTP id r6-20020a0568080aa600b0039c7a710945mr6665209oij.56.1686659170673;
+        Tue, 13 Jun 2023 05:26:10 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ78NH/EDUObpqeiuWTv/ei0rcNTq2G3JcAYYkdP6lUVZNrwES4dFqTfrj6xUXLkqd2QPOhn4hynFlH1BTjrtsI=
+X-Received: by 2002:a05:6808:aa6:b0:39c:7a71:945 with SMTP id
+ r6-20020a0568080aa600b0039c7a710945mr6665199oij.56.1686659170481; Tue, 13 Jun
+ 2023 05:26:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230613-ism-rmmod-crash-v1-1-359ac51e18c9@linux.ibm.com>
-X-B4-Tracking: v=1; b=H4sIAEBgiGQC/x2NQQqDQAxFryJZN6AzIqVXKUXiGDtZzChJkYJ49
- 6Yu3+c9/gHGKmzwaA5Q3sVkrQ7drYGUqb4ZZXaG0IbYDl1EsYJayjpjUrKMc7/EPoRIwz2CVxM
- Z46RUU/53ro+XPm708cmNTXmR7/X5fJ3nD9slGreDAAAA
-To:     Julian Ruess <julianr@linux.ibm.com>,
-        Alexandra Winter <wintera@linux.ibm.com>,
-        Wenjia Zhang <wenjia@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jan Karcher <jaka@linux.ibm.com>,
-        Stefan Raspl <raspl@linux.ibm.com>
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Niklas Schnelle <schnelle@linux.ibm.com>
-X-Mailer: b4 0.12.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 1aIL0rMSPM2ipBYuvnwOYpT3DYv2dmrH
-X-Proofpoint-ORIG-GUID: 1aIL0rMSPM2ipBYuvnwOYpT3DYv2dmrH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-13_04,2023-06-12_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=960 spamscore=0
- lowpriorityscore=0 priorityscore=1501 impostorscore=0 bulkscore=0
- mlxscore=0 adultscore=0 suspectscore=0 phishscore=0 malwarescore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306130107
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230529132037.2124527-1-yukuai1@huaweicloud.com>
+ <20230529132037.2124527-3-yukuai1@huaweicloud.com> <b780ccfd-66b1-fdd1-b33e-aa680fbd86f1@redhat.com>
+ <1aaf9150-bbd3-87a8-8d54-8b5d63ab5ed3@huaweicloud.com>
+In-Reply-To: <1aaf9150-bbd3-87a8-8d54-8b5d63ab5ed3@huaweicloud.com>
+From:   Xiao Ni <xni@redhat.com>
+Date:   Tue, 13 Jun 2023 20:25:59 +0800
+Message-ID: <CALTww2-ta1NUJxcT3Dq5KP7iunnVx24X7RKj1OKYTYwEPeDNrg@mail.gmail.com>
+Subject: Re: [dm-devel] [PATCH -next v2 2/6] md: refactor action_store() for
+ 'idle' and 'frozen'
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     guoqing.jiang@linux.dev, agk@redhat.com, snitzer@kernel.org,
+        dm-devel@redhat.com, song@kernel.org, yi.zhang@huawei.com,
+        yangerkun@huawei.com, linux-kernel@vger.kernel.org,
+        linux-raid@vger.kernel.org, "yukuai (C)" <yukuai3@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch prevents the system from crashing when unloading the ISM module.
+On Tue, Jun 13, 2023 at 8:00=E2=80=AFPM Yu Kuai <yukuai1@huaweicloud.com> w=
+rote:
+>
+> Hi,
+>
+> =E5=9C=A8 2023/06/13 16:02, Xiao Ni =E5=86=99=E9=81=93:
+> >
+> > =E5=9C=A8 2023/5/29 =E4=B8=8B=E5=8D=889:20, Yu Kuai =E5=86=99=E9=81=93:
+> >> From: Yu Kuai <yukuai3@huawei.com>
+> >>
+> >> Prepare to handle 'idle' and 'frozen' differently to fix a deadlock,
+> >> there
+> >> are no functional changes except that MD_RECOVERY_RUNNING is checked
+> >> again after 'reconfig_mutex' is held.
+> >
+> >
+> > Can you explain more about why it needs to check MD_RECOVERY_RUNNING
+> > again here?
+>
+> As I explain in the following comment:
 
-How to reproduce: Attach an ISM device and execute 'rmmod ism'.
+Hi
 
-Error-Log:
-- Trying to free already-free IRQ 0
-- WARNING: CPU: 1 PID: 966 at kernel/irq/manage.c:1890 free_irq+0x140/0x540
+Who can clear the flag before the lock is held?
 
-After calling ism_dev_exit() for each ISM device in the exit routine,
-pci_unregister_driver() will execute ism_remove() for each ISM device.
-Because ism_remove() also calls ism_dev_exit(),
-free_irq(pci_irq_vector(pdev, 0), ism) is called twice for each ISM
-device. This results in a crash with the error
-'Trying to free already-free IRQ'.
-
-In the exit routine, it is enough to call pci_unregister_driver()
-because it ensures that ism_dev_exit() is called once per
-ISM device.
-
-Cc: <stable@vger.kernel.org> # 6.3+
-Fixes: 89e7d2ba61b7 ("net/ism: Add new API for client registration")
-Reviewed-by: Niklas Schnelle <schnelle@linux.ibm.com>
-Signed-off-by: Julian Ruess <julianr@linux.ibm.com>
----
- drivers/s390/net/ism_drv.c | 8 --------
- 1 file changed, 8 deletions(-)
-
-diff --git a/drivers/s390/net/ism_drv.c b/drivers/s390/net/ism_drv.c
-index 8acb9eba691b..c2096e4bba31 100644
---- a/drivers/s390/net/ism_drv.c
-+++ b/drivers/s390/net/ism_drv.c
-@@ -771,14 +771,6 @@ static int __init ism_init(void)
- 
- static void __exit ism_exit(void)
- {
--	struct ism_dev *ism;
--
--	mutex_lock(&ism_dev_list.mutex);
--	list_for_each_entry(ism, &ism_dev_list.list, list) {
--		ism_dev_exit(ism);
--	}
--	mutex_unlock(&ism_dev_list.mutex);
--
- 	pci_unregister_driver(&ism_driver);
- 	debug_unregister(ism_debug_info);
- }
-
----
-base-commit: 858fd168a95c5b9669aac8db6c14a9aeab446375
-change-id: 20230613-ism-rmmod-crash-d4f34223a683
-
-Best regards,
--- 
-Julian Ruess <julianr@linux.ibm.com>
+Regards
+Xiao
+> >> +    /*
+> >> +     * Check again in case MD_RECOVERY_RUNNING is cleared before lock=
+ is
+> >> +     * held.
+> >> +     */
+> >> +    if (!test_bit(MD_RECOVERY_RUNNING, &mddev->recovery)) {
+> >> +        mddev_unlock(mddev);
+> >> +        return;
+> >> +    }
+>
+> Thanks,
+> Kuai
+>
 
