@@ -2,97 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1404E72E844
+	by mail.lfdr.de (Postfix) with ESMTP id 72DA972E845
 	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 18:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242920AbjFMQSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 12:18:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46972 "EHLO
+        id S243015AbjFMQT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 12:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235443AbjFMQSV (ORCPT
+        with ESMTP id S242846AbjFMQTS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 12:18:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C2492
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 09:18:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BAFA632F3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 16:18:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B790C43396;
-        Tue, 13 Jun 2023 16:18:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686673098;
-        bh=a2rrXOBNbdz17opc1wDnoKiPwzIuSO/Z+/wGkvgS9ow=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=LUsoAlHVxQ2GCRxBCt2oa1W95dB7y8rR+aRhGio0+7J4ReGojrYa4cDruqm1g4AVD
-         51fHNacVjUE42TmmEuui/YfOhEldEeL7V+7ILMrTclj+6AiaZnj0p/JtD8UgCVZDFa
-         TZ9etvq7eHs8BJ0tqgNmKqXG4KKhSbGI3XlRQTvB17W5rj7Z84eGYXJAIkWXZCH+79
-         /UXYmSpf4M3xT7HDVlutQy9lo/Shq/XQdOtY1ggADCMde1smZvSZumBDQzDEI4/ybd
-         6iB4LCtFDEHPhAoxTQgWncd9kHqyH/KMOPa7C4GXPCNqkJBhaLWUODAwTDmru0o3R0
-         gdkMuu1MMBSvw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Waqar Hameed <waqar.hameed@axis.com>
-Cc:     kernel@axis.com, linux-kernel@vger.kernel.org
-In-Reply-To: <pnd1qifa7sj.fsf@axis.com>
-References: <pnd1qifa7sj.fsf@axis.com>
-Subject: Re: [PATCH v2] regmap: Add debugfs file for forcing field writes
-Message-Id: <168667309723.106862.4715235200493830383.b4-ty@kernel.org>
-Date:   Tue, 13 Jun 2023 17:18:17 +0100
+        Tue, 13 Jun 2023 12:19:18 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6842E92;
+        Tue, 13 Jun 2023 09:19:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=kSo7oxYAqeqzQOt2hOKeJJzZZSXVTeK57hiOvOHIciQ=; b=axPXUCBs4qxP5Eq6uAZ6LSiMiv
+        ZM1H4K0fxuyqvb6mQmMwTYoYn2MC8ajhvI5l9CbSq2Us51zYo7BSziWZj0hZW66h5N/36k2/5z3Bt
+        RsNPNlSK4HFvXz/ICq3lXjelSCDOJmVT1nMQevaVL3GcgaoR5fYaYVyiQB+Sr8OQcVcU=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1q96jT-00Fk4W-0P; Tue, 13 Jun 2023 18:18:59 +0200
+Date:   Tue, 13 Jun 2023 18:18:58 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Jianhui Zhao <zhaojh329@gmail.com>
+Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2] net: phy: Add sysfs attribute for PHY c45 identifiers.
+Message-ID: <612d5964-6034-4188-8da5-53f3f38a25e4@lunn.ch>
+References: <20230613143025.111844-1-zhaojh329@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bfdf5
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230613143025.111844-1-zhaojh329@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 13 Jun 2023 13:42:27 +0200, Waqar Hameed wrote:
-> `_regmap_update_bits()` checks if the current register value differs
-> from the new value, and only writes to the register if they differ. When
-> testing hardware drivers, it might be desirable to always force a
-> register write, for example when writing to a `regmap_field`. This
-> enables and simplifies testing and verification of the hardware
-> interaction. For example, when using a hardware mock/simulation model,
-> one can then more easily verify that the driver makes the correct
-> expected register writes during certain events.
-> 
-> [...]
+> +#define DEVICE_ATTR_C45_ID(i) \
+> +static ssize_t \
+> +phy_c45_id##i##_show(struct device *dev, \
+> +	struct device_attribute *attr, char *buf) \
+> +{ \
+> +	struct phy_device *phydev = to_phy_device(dev); \
+> +\
+> +	if (!phydev->is_c45) \
+> +		return 0; \
+> +\
+> +	return sprintf(buf, "0x%.8lx\n", \
+> +		(unsigned long)phydev->c45_ids.device_ids[i]); \
+> +} \
 
-Applied to
+That is not the most efficient implementation.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
+You can have one generic
 
-Thanks!
+static ssize_t phy_c45_id_show(struct device *dev, char *buf, int i)
+{
+	struct phy_device *phydev = to_phy_device(dev);
 
-[1/1] regmap: Add debugfs file for forcing field writes
-      commit: b629c698eae745eb51b6d92395e2eee44bbf5f49
+	if (!phydev->is_c45)
+		return 0;
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+	return sprintf(buf, "0x%.8lx\n",
+		      (unsigned long)phydev->c45_ids.device_ids[i]);
+}
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+And then your macros becomes
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+#define DEVICE_ATTR_C45_ID(i)			  \
+static ssize_t					  \
+phy_c45_id##i##_show(struct device *dev,	  \
+	struct device_attribute *attr, char *buf) \
+{						  \
+	return phy_c45_id_show(dev, buf, i);	  \
+}
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+	Andrew
 
-Thanks,
-Mark
-
+---
+pw-bot: cr
