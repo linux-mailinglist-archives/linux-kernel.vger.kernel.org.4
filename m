@@ -2,109 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8535F72EB74
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D92A872EB72
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240374AbjFMTCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 15:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
+        id S240405AbjFMTCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 15:02:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239762AbjFMTCI (ORCPT
+        with ESMTP id S239762AbjFMTCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 15:02:08 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C3DE5;
-        Tue, 13 Jun 2023 12:02:05 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f62b552751so7318482e87.3;
-        Tue, 13 Jun 2023 12:02:05 -0700 (PDT)
+        Tue, 13 Jun 2023 15:02:31 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3061BF8
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:02:29 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b1a3fa2cd2so71716631fa.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:02:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686682923; x=1689274923;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jk4xTe07/GeNMrAZFNQY+BzkTYH3If3cldLHtOxjDjg=;
-        b=hnBQKQlz7SSBYWxjCWexy5F+WSYk+2Tqo0P3qW0WiyBfFLsPhA7shj1ApaTEocai0/
-         phin901w7E53BQMDS9I3j4x87Ix2P25wPdwNYxcrdnT7AO606nYuTpFdiirpAgcSuCln
-         sa2RlU9qK4vCofv3vsHSR4CkZKA9PQhp8BVPRGLGH5eK5152LZNW3z3qmuYRfC2f4YU4
-         wAbSbqq31G9WE+pXZBZ2csmB8Ms1v4J0DIGUm1Esa+4AidpOpvM+ydMwOu+a1ntfs70d
-         +b08gtKZirLVVu8Gw8ne9gyp8u70q0VcNOzcMbCwFUIfTDbudreWyfKozRl20TPjab/I
-         /VNw==
+        d=linaro.org; s=google; t=1686682947; x=1689274947;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2EVZcCPFB1GTJ+QWap3KhHJTy/gr52NKGXQAEAB4e6g=;
+        b=d1DaQKWjqf0ITS2F+w4PLAzozKd3B2kVEP+nM0xGjvFWXaDuKQZ5/EBkiiIvK/g5d3
+         nk37E0ZroYqpL3NOw6Jmo6h44Ub5TLb2ZtLRE5aBNmEF8tkGfpyYppmg7E/RbH1egjVM
+         RrRDPmZGgVucBOsBf3vDDqLEP9HfwjfY5nIyldccS02j3inZljQJzsS3LGP6CF/0K+4C
+         XYR6RxrUel3RHQ79ZDG4oa5w3twaAUZjKzjYngWvvIv3yRxhVQpGMpo99U1sQNKHcdQ6
+         F1j8bxAgKZXNk55/5sf5pnSVplpGCeBIaRlFhKN+m4y73YOPLFXxip8YhQWc7vLnfnyr
+         sppQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686682923; x=1689274923;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Jk4xTe07/GeNMrAZFNQY+BzkTYH3If3cldLHtOxjDjg=;
-        b=UdkspsKAqsnMN0EmPulXVrF4hPN5ZIkt6yhUSELavkUQaMKQ/baBMU0YaQYtK54MSQ
-         hviBdMxMQX1MGE6sHU+gtXvI6IjInKRjpwCUIToI41M7sV+vtU9vf45x3jvJp3BLbDuU
-         OCdJfmPC4Ft+kzV8SxciE125gXXrAtDAxveNRlRmod/n0WlSSuBP6ZJrHREJhhXqD2x2
-         eUweWsCPLWamXWalsVkftGFrBVTbJ8Dv21bJgQ3AyTITUC8e7kaF7O1uPzjdA42XtnTj
-         vGGV8YD5GdWlaOBqWcpnpiki89Mj5rukeaGZcaEkh80pwhoM0AN4IVcZBcQESaV3E52S
-         X6wA==
-X-Gm-Message-State: AC+VfDyIe7lLkcn9neDag5oU77am+OWLoTlTQDe8mVETLDvXstIbnekK
-        rQV4RSwaIk2ES2GRxEfsGTo=
-X-Google-Smtp-Source: ACHHUZ454yzSsHJTRyUrKRIQsvsXLypKDPWH6elEZzFQjXx1TGgnzhqQCL5NmUlhY3sV9DBuS6yIJA==
-X-Received: by 2002:ac2:4982:0:b0:4f6:2e4f:19c6 with SMTP id f2-20020ac24982000000b004f62e4f19c6mr6339639lfl.53.1686682923262;
-        Tue, 13 Jun 2023 12:02:03 -0700 (PDT)
-Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id q4-20020ac24a64000000b004f2532cfbc1sm1870281lfp.81.2023.06.13.12.02.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 12:02:02 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 22:02:00 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Abe Kohandel <abe.kohandel@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH] spi: dw: Replace incorrect spi_get_chipselect with set
-Message-ID: <20230613190200.ifuwxstc77tbeopo@mobilestation>
-References: <20230613162103.569812-1-abe.kohandel@intel.com>
+        d=1e100.net; s=20221208; t=1686682947; x=1689274947;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2EVZcCPFB1GTJ+QWap3KhHJTy/gr52NKGXQAEAB4e6g=;
+        b=F2O8xD9kk7DF7Gbdb+fLLmXGf3ayLBtqNR6Coyae7zFYaSodG3skaLVLGds/nfe7fa
+         bk9QWdaz2mpUpi4BtoikwypFvC3dzDJlCDnDXcubflb747x0rfF1jEBMPneEw/oeBVRd
+         M4DBbeQLXYlDKTwA8ZMcxsceT+D4vVvIE7LhyA9Sj7WlNIvCKhTM8dQeiTr0rsrEmlV+
+         F/IFUoamv9Ju3wUDAXBlGvrOve6hR4MrBIrs5OMqfMgbJYg1Befdqd8yydn0a8gj/kxi
+         fDZorkkEV/MHKc7eb7mJxD5dIDpFJ/KujR+qg+riXE+4CN4iLN9qhcsDrsbveughDtcb
+         TKeg==
+X-Gm-Message-State: AC+VfDz4R8CMbeWXRAHvxslPHkVQn3Ibc7FzZ6A/1Zy2CfKvycGl+99R
+        t33qzz6JgW5B9OnxW1QcXpjd4g==
+X-Google-Smtp-Source: ACHHUZ6DjJpRPOvESX58e85nO9sR6PlnFNzsWTps7zd03Gu0DU4gLGE7Uf0OlVChY2Jv6wdXtQcFjQ==
+X-Received: by 2002:a2e:9096:0:b0:2b2:16:45e3 with SMTP id l22-20020a2e9096000000b002b2001645e3mr5023381ljg.53.1686682947178;
+        Tue, 13 Jun 2023 12:02:27 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id d7-20020a2e96c7000000b002b1ad0e7357sm2258898ljj.51.2023.06.13.12.02.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 12:02:26 -0700 (PDT)
+Message-ID: <0a57a9ad-67ab-cf1a-9bb7-c645de833450@linaro.org>
+Date:   Tue, 13 Jun 2023 21:02:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230613162103.569812-1-abe.kohandel@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 24/26] arm64: dts: qcom: sa8775p-ride: enable the SerDes
+ PHY
+Content-Language: en-US
+To:     Bartosz Golaszewski <brgl@bgdev.pl>, Vinod Koul <vkoul@kernel.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>
+Cc:     netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230612092355.87937-1-brgl@bgdev.pl>
+ <20230612092355.87937-25-brgl@bgdev.pl>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230612092355.87937-25-brgl@bgdev.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 09:21:03AM -0700, Abe Kohandel wrote:
-> Commit 445164e8c136 ("spi: dw: Replace spi->chip_select references with
-> function calls") replaced direct access to spi.chip_select with
-> spi_*_chipselect calls but incorrectly replaced a set instance with a
-> get instance, replace the incorrect instance.
+
+
+On 12.06.2023 11:23, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
-> Fixes: 445164e8c136 ("spi: dw: Replace spi->chip_select references with function calls")
-> Signed-off-by: Abe Kohandel <abe.kohandel@intel.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-Indeed! Thanks for fixing this.
-Acked-by: Serge Semin <fancer.lancer@gmail.com>
-
--Serge(y)
-
+> Enable the internal PHY on sa8775p-ride.
+> 
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > ---
->  drivers/spi/spi-dw-mmio.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+---
+
+Bjorn, Krzysztof.. I was thinking whether we should even be disabling
+such hardware by default..
+
+Things that reside on the SoC and have no external dependencies could
+be left enabled:
+
+pros:
+- less fluff
+- we'd probably very quickly fix the missing PM calls
+- possibly less fw_devlink woes if we fail to get rid of references to
+  the disabled component?
+
+cons:
+- boot times
+- slightly more memory usage
+
+Konrad
+>  arch/arm64/boot/dts/qcom/sa8775p-ride.dts | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-> index a699ce496cc5..a963bc96c223 100644
-> --- a/drivers/spi/spi-dw-mmio.c
-> +++ b/drivers/spi/spi-dw-mmio.c
-> @@ -292,7 +292,7 @@ static void dw_spi_elba_set_cs(struct spi_device *spi, bool enable)
->  	 */
->  	spi_set_chipselect(spi, 0, 0);
->  	dw_spi_set_cs(spi, enable);
-> -	spi_get_chipselect(spi, cs);
-> +	spi_set_chipselect(spi, 0, cs);
->  }
+> diff --git a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
+> index ab767cfa51ff..7754788ea775 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
+> +++ b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
+> @@ -355,6 +355,10 @@ &qupv3_id_2 {
+>  	status = "okay";
+>  };
 >  
->  static int dw_spi_elba_init(struct platform_device *pdev,
-> -- 
-> 2.40.1
-> 
+> +&serdes_phy {
+> +	status = "okay";
+> +};
+> +
+>  &sleep_clk {
+>  	clock-frequency = <32764>;
+>  };
