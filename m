@@ -2,231 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A654E72DAEE
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 09:30:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A56E72DAEF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 09:30:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240200AbjFMHaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 03:30:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32900 "EHLO
+        id S239786AbjFMHau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 03:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233925AbjFMHa3 (ORCPT
+        with ESMTP id S239712AbjFMHae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 03:30:29 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778A8AA
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:30:24 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-30fceb009faso120182f8f.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:30:24 -0700 (PDT)
+        Tue, 13 Jun 2023 03:30:34 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A21AA;
+        Tue, 13 Jun 2023 00:30:33 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-653bed78635so3609088b3a.0;
+        Tue, 13 Jun 2023 00:30:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686641423; x=1689233423;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LWxp0A9f2AiWgsptaHzRYn+xtrjX1untDQt897ukbeo=;
-        b=f19c6qI3lfqYskS1oo0aUUXqQy5cJaJClkZqEF/XNQ7ScZmawpqjb0mOYqQjncm0zs
-         QdqJdT92wjt7ZtTTGS8D3RkQVfj/Passv9I+zeMuBF3T9Osb3GUoO9lElXkILQRQV68w
-         Rw0hGhEhSqdzgTW7yj52jFPgKEYTcWhL70VH1n6rRGm1rzbiEuIr0zyNXUjcswj25JBi
-         PPo6Z0FJrfrpL0g/Wvyav+KOpgbiuFxIfB6T84t8YaKlGO7eZyIQYqcr/m7m3znzpbrs
-         Y3mOBoFYuoEXBTFAvRDtHRlsBdCjDBCJKy0SAuu/u2lVevq7I5GpGTdnbF3cc97g134D
-         h/tA==
+        d=gmail.com; s=20221208; t=1686641433; x=1689233433;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=8COXtLnoxqKO/UVgznx3PizNzdhIHH08suKe+/FukvM=;
+        b=Phfgf+Kn6vOdmI0WQXgPL5TtrrjKKKA+V9Y32ZJ9j+4W2u8xGU/1JAq7TVxUGQily7
+         kMpJQM1oS/dC59GoXwQxci4r5V/7ksEF/ITO5uUKJDi99YjjGmIUvua0AYRDeik6P1JS
+         VahAR4+A2xU4eMWFLfAtW8SXCPWGwckY89dGjY2i4LI9FGz1MeEJm4xe8eG3T9OS2uOI
+         G5mLEZLQ/6RamJYenR+VYMJ3m/I0r3kF4TYRI9gMkx8mbKufgkMkkXaEqNUnKycwt4yb
+         Y+kuIDrNeqqdbqEHBBvbbJsMjHV7BCMb3qeoUhZ6FJQyCak6E9RUxly2yDdBdMvFGNNS
+         WrEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686641423; x=1689233423;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LWxp0A9f2AiWgsptaHzRYn+xtrjX1untDQt897ukbeo=;
-        b=HGIOki0Dg9JSADSX9L69dOINW8XEOu1VMZAfZyeAFOdpV8sx/1RPyXe+Bvhd4hcF3J
-         JtenR7xMD8/EM8VGTfK9NQqFAu1ffdFO24BOdNTuIk8rfitUzw1lWRxpWYyTFpYKYvG5
-         Fm0F+9fT0NzyhhND2Z7ZyWT6A/nIa2egwpMQJJEvZDdSbmVtJGAGHiV0P8Iabq6fUVlJ
-         BPtWoiPGr0S7nK8ykFUwpK7UliZT8cCRGM9U/+Ts4cLQu8donSDXlfjDfBdHBvp5JxY9
-         63jGnemzxmEH06XOGJ9wqS0Zboz8ijHDXSQjfhK3yVb+CZYTiuR/7u/TkxIPjBDA0G3o
-         a/Pw==
-X-Gm-Message-State: AC+VfDzn/vBCo3NRRWyqE3lU2MSjnxjLPo+wwVucud3mN6Y2S25wKxFS
-        JTSc2wolDnxHGa98c13Xt6spow==
-X-Google-Smtp-Source: ACHHUZ4sH2HytnNf1ZE8FXoYFFHV0OtkPgsKw1H/3G+aVs/hsTaHUgWLMR67qmKBu8muaPzlndiNMQ==
-X-Received: by 2002:a5d:594b:0:b0:30a:f60a:dc3c with SMTP id e11-20020a5d594b000000b0030af60adc3cmr6417764wri.24.1686641423039;
-        Tue, 13 Jun 2023 00:30:23 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id q25-20020a7bce99000000b003f17848673fsm13474453wmj.27.2023.06.13.00.30.21
+        d=1e100.net; s=20221208; t=1686641433; x=1689233433;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8COXtLnoxqKO/UVgznx3PizNzdhIHH08suKe+/FukvM=;
+        b=SXZGSx7FFJZnxwCfxoi0K1MsGCSgGEoF2TqjtoXYUOAabPCKtm65B3uZHbR10fkBC7
+         GriKsHaAHTgmQwgc2vehxtcyotPFIsGfrvWEFGxiQX/M9PajO7uGBYuc+g6YgJy2ZDW9
+         NBqOfbVR23ozWSY/D1zLUDspW2osqlt3CD7V2o5AKJi3QV/6xbYu9MlTZi5CD6G/sJDL
+         NJL5O1qHV1EQOKP0QsY/xi9dl0EZiFRU+nrkBtfYg/iJaFBP7GFIKR/FFQ7JCNTQBDkZ
+         pHI6KzDsBM8dqf6WmMI9kh2AeU4RlZFYXxXsvBeWK97pRfBOf5SMYCIh7ueSGwJULMRp
+         grgw==
+X-Gm-Message-State: AC+VfDyicTQ+WkhRXr+Vq+Zv5nymAxQeFnk8W1ANWbKVk8yKbpyyf44V
+        SrLJvuCxdg60oS3fiYC6JL8=
+X-Google-Smtp-Source: ACHHUZ6IxFfVA1hn0Evy8F7GvBORebD0/1ULQgfZ7QrbFoAX5Uw4TRrYnpbz0z50lk8Ns8W2kmE5Qw==
+X-Received: by 2002:a17:90a:9b89:b0:25c:186b:8f76 with SMTP id g9-20020a17090a9b8900b0025c186b8f76mr1284228pjp.4.1686641432702;
+        Tue, 13 Jun 2023 00:30:32 -0700 (PDT)
+Received: from sumitra.com ([117.199.173.64])
+        by smtp.gmail.com with ESMTPSA id be7-20020a170902aa0700b001b1920cffd5sm9407400plb.267.2023.06.13.00.30.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 00:30:22 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Tue, 13 Jun 2023 09:30:13 +0200
-Subject: [PATCH v4 2/2] arm64: dts: qcom: sm8550: add display port nodes
+        Tue, 13 Jun 2023 00:30:32 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 00:30:20 -0700
+From:   Sumitra Sharma <sumitraartsy@gmail.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ira Weiny <ira.weiny@intel.com>, Deepak R Varma <drv@mailo.com>
+Subject: Re: [PATCH] lib/test_bpf: Replace kmap() with kmap_local_page()
+Message-ID: <20230613073020.GA359792@sumitra.com>
+References: <20230612103341.GA354790@sumitra.com>
+ <3744835.kQq0lBPeGt@suse>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230601-topic-sm8550-upstream-dp-v4-2-ac2c6899d22c@linaro.org>
-References: <20230601-topic-sm8550-upstream-dp-v4-0-ac2c6899d22c@linaro.org>
-In-Reply-To: <20230601-topic-sm8550-upstream-dp-v4-0-ac2c6899d22c@linaro.org>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3472;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=OT9fRI9abb+RycwRAR3WBnAhUBfEPjR/71I2pAue+x4=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkiBsL2NWmkEWos0mQfZTxgT6q6aNllKnzeoj8boi9
- SHFErjWJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZIgbCwAKCRB33NvayMhJ0dplEA
- CWVNMiu82x/7M3/290CDaDUh+iBtv+SewsRaQ5glE9uJOWQVEWP/em7LbV1D6YViPalahrA6A+IDa9
- BG2I4YAmW2Cto+jDoWW4CEWbJ/j6oCmZ6TLRh3YdqO2bO9VgvhLYsrIYzBtwstCyJX+BYzi+M1iqAx
- oFmME85h1cncLT3ZQLUEwAgD9QJQCk9odLYFF2LsF09cV/4U+emfoz+3L5AzdjJKYCS/zYG7H6zaVv
- CntbtJeyDbV+/8eSqQbeaReV8/BX0rezkyS8d6lgRW1FLexfUIUEOy0+IFdv40XrF/i4D56DIxg8v5
- uSk1W3v4tzAFZZHMmE75KpfWTMPATWmYt5lEjBWbibrkMfsIYI3PWjoY/OYsy9jHetSCATVBsrh3dD
- 1417NLUBCzaEm3Mgsmh+Uyks85lOZYNxFICLA16hWwIvBut20x2MIfqOlmSgByaiFAgYdBGVkrl3Ji
- goNORVbwZK7gNJh0lWkdBMZLgl8v7oMflnPJ8y775JWjrPpZdPLmiHRfJNabZXxE2ReWCN+ZFO2cU/
- kfbo31+7Qn+wu94auszhCL1x7TXzbTtoyQy9JIoELLS6uoEd0Hh6Yrh7Ht1VWlpN28z5iBylHUVlIh
- OrFDj73B3rOZp4LqttOapadmO9bhQ1wXSjgDND79bctQia3h+4f4JN6iC6/Q==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3744835.kQq0lBPeGt@suse>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the Display Port controller subnode to the MDSS node.
+On Mon, Jun 12, 2023 at 01:49:56PM +0200, Fabio M. De Francesco wrote:
+> On lunedì 12 giugno 2023 12:33:41 CEST Sumitra Sharma wrote:
+> > kmap() has been deprecated in favor of the kmap_local_page()
+> > due to high cost, restricted mapping space, the overhead of
+> > a global lock for synchronization, and making the process
+> > sleep in the absence of free slots.
+> > 
+> > kmap_local_page() is faster than kmap() and offers thread-local
+> > and CPU-local mappings, take pagefaults in a local kmap region
+> > and preserves preemption by saving the mappings of outgoing
+> > tasks and restoring those of the incoming one during a context
+> > switch.
+> > 
+> > The mapping is kept thread local in the function
+> > “generate_test_data” in test_bpf.c
+> > 
+> > Therefore, replace kmap() with kmap_local_page() and use
+> > memcpy_to_page() to avoid open coding kmap_local_page()
+> > + memcpy() + kunmap_local().
+> > 
+> > Remove the unused variable “ptr”.
+> 
+> Sumitra,
+> 
+> Please Cc your mentors while in the internship.
+> It's not mandatory but it would expedite comments and reviews :-)
+> 
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8550.dtsi | 89 +++++++++++++++++++++++++++++++++++-
- 1 file changed, 87 insertions(+), 2 deletions(-)
+Hi Fabio,
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-index 972df1ef86ee..b41b3981b3ce 100644
---- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-@@ -2495,6 +2495,13 @@ dpu_intf2_out: endpoint {
- 							remote-endpoint = <&mdss_dsi1_in>;
- 						};
- 					};
-+
-+					port@2 {
-+						reg = <2>;
-+						dpu_intf0_out: endpoint {
-+							remote-endpoint = <&mdss_dp0_in>;
-+						};
-+					};
- 				};
- 
- 				mdp_opp_table: opp-table {
-@@ -2522,6 +2529,84 @@ opp-514000000 {
- 				};
- 			};
- 
-+			mdss_dp0: displayport-controller@ae90000 {
-+				compatible = "qcom,sm8550-dp", "qcom,sm8350-dp";
-+				reg = <0 0xae90000 0 0x200>,
-+				      <0 0xae90200 0 0x200>,
-+				      <0 0xae90400 0 0xc00>,
-+				      <0 0xae91000 0 0x400>,
-+				      <0 0xae91400 0 0x400>;
-+				interrupt-parent = <&mdss>;
-+				interrupts = <12>;
-+				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
-+					 <&dispcc DISP_CC_MDSS_DPTX0_AUX_CLK>,
-+					 <&dispcc DISP_CC_MDSS_DPTX0_LINK_CLK>,
-+					 <&dispcc DISP_CC_MDSS_DPTX0_LINK_INTF_CLK>,
-+					 <&dispcc DISP_CC_MDSS_DPTX0_PIXEL0_CLK>;
-+				clock-names = "core_iface",
-+					      "core_aux",
-+					      "ctrl_link",
-+					      "ctrl_link_iface",
-+					      "stream_pixel";
-+
-+				assigned-clocks = <&dispcc DISP_CC_MDSS_DPTX0_LINK_CLK_SRC>,
-+						  <&dispcc DISP_CC_MDSS_DPTX0_PIXEL0_CLK_SRC>;
-+				assigned-clock-parents = <&usb_dp_qmpphy QMP_USB43DP_DP_LINK_CLK>,
-+							 <&usb_dp_qmpphy QMP_USB43DP_DP_VCO_DIV_CLK>;
-+
-+				phys = <&usb_dp_qmpphy QMP_USB43DP_DP_PHY>;
-+				phy-names = "dp";
-+
-+				#sound-dai-cells = <0>;
-+
-+				operating-points-v2 = <&dp_opp_table>;
-+				power-domains = <&rpmhpd SM8550_MMCX>;
-+
-+				status = "disabled";
-+
-+				ports {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					port@0 {
-+						reg = <0>;
-+						mdss_dp0_in: endpoint {
-+							remote-endpoint = <&dpu_intf0_out>;
-+						};
-+					};
-+
-+					port@1 {
-+						reg = <1>;
-+						mdss_dp0_out: endpoint {
-+						};
-+					};
-+				};
-+
-+				dp_opp_table: opp-table {
-+					compatible = "operating-points-v2";
-+
-+					opp-162000000 {
-+						opp-hz = /bits/ 64 <162000000>;
-+						required-opps = <&rpmhpd_opp_low_svs_d1>;
-+					};
-+
-+					opp-270000000 {
-+						opp-hz = /bits/ 64 <270000000>;
-+						required-opps = <&rpmhpd_opp_low_svs>;
-+					};
-+
-+					opp-540000000 {
-+						opp-hz = /bits/ 64 <540000000>;
-+						required-opps = <&rpmhpd_opp_svs_l1>;
-+					};
-+
-+					opp-810000000 {
-+						opp-hz = /bits/ 64 <810000000>;
-+						required-opps = <&rpmhpd_opp_nom>;
-+					};
-+				};
-+			};
-+
- 			mdss_dsi0: dsi@ae94000 {
- 				compatible = "qcom,sm8550-dsi-ctrl", "qcom,mdss-dsi-ctrl";
- 				reg = <0 0x0ae94000 0 0x400>;
-@@ -2705,8 +2790,8 @@ dispcc: clock-controller@af00000 {
- 				 <&mdss_dsi0_phy 1>,
- 				 <&mdss_dsi1_phy 0>,
- 				 <&mdss_dsi1_phy 1>,
--				 <0>, /* dp0 */
--				 <0>,
-+				 <&usb_dp_qmpphy QMP_USB43DP_DP_LINK_CLK>,
-+				 <&usb_dp_qmpphy QMP_USB43DP_DP_VCO_DIV_CLK>,
- 				 <0>, /* dp1 */
- 				 <0>,
- 				 <0>, /* dp2 */
+I will take care of it.
 
--- 
-2.34.1
+> > 
+> > Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+> > ---
+> >  lib/test_bpf.c | 10 +---------
+> >  1 file changed, 1 insertion(+), 9 deletions(-)
+> > 
+> > diff --git a/lib/test_bpf.c b/lib/test_bpf.c
+> > index ade9ac672adb..3bb94727d83b 100644
+> > --- a/lib/test_bpf.c
+> > +++ b/lib/test_bpf.c
+> > @@ -14381,25 +14381,17 @@ static void *generate_test_data(struct bpf_test
+> > *test, int sub) * single fragment to the skb, filled with
+> >  		 * test->frag_data.
+> >  		 */
+> > -		void *ptr;
+> > -
+> >  		page = alloc_page(GFP_KERNEL);
+> > 
+> >  		if (!page)
+> >  			goto err_kfree_skb;
+> > 
+> > -		ptr = kmap(page);
+> > -		if (!ptr)
+> > -			goto err_free_page;
+> > -		memcpy(ptr, test->frag_data, MAX_DATA);
+> > -		kunmap(page);
+> > +		memcpy_to_page(page, 0, test->frag_data, MAX_DATA);
+> 
+> Why are you temporary mapping a page allocated with the GFP_KERNEL flag? 
+> It cannot come from ZONE_HIGHMEM. 
+>
 
+Fabio, I somewhere _wrongly_ read that "GFP_KERNEL may allocate pages from
+highmem". However, with further readings and checking the GFP_KERNEL
+definition in gfp_types.h
+
+#define GFP_KERNEL	(__GFP_RECLAIM | __GFP_IO | __GFP_FS)
+
+I have got that with the GFP_KERNEL flag, pages can never come 
+from ZONE_HIGHMEM.
+
+Apologise.
+
+Thanks & regards
+Sumitra
+
+> Fabio
+> 
+> >  		skb_add_rx_frag(skb, 0, page, 0, MAX_DATA, MAX_DATA);
+> >  	}
+> > 
+> >  	return skb;
+> > 
+> > -err_free_page:
+> > -	__free_page(page);
+> >  err_kfree_skb:
+> >  	kfree_skb(skb);
+> >  	return NULL;
+> > --
+> > 2.25.1
+> 
+> 
+> 
