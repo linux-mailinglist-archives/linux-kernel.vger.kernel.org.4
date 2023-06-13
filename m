@@ -2,203 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA29D72E2B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E504C72E2BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242384AbjFMMS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 08:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57156 "EHLO
+        id S240520AbjFMMSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 08:18:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242339AbjFMMSI (ORCPT
+        with ESMTP id S242362AbjFMMSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 08:18:08 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FB810DE
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 05:18:06 -0700 (PDT)
-Message-ID: <20230613121616.043917725@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686658684;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=+pGCv5A/cUsvuPq2YWIxIWEZjsKI3s/qdD/44v/vU8Q=;
-        b=C+IAa5VcWWtJUvW9fkPRzEnCIXIE1fuu4nI1g0LAWosPE3uELqrVZ+xrVZnmTgonotB3fW
-        fetUCFEyv1icg62OIzvSAb7R3MgeSRf67DHAkPfYJiZjy+9nebqynSXC0qGDcznlesvcaS
-        x4voMKMH4MrHymVDNW0gNqnfrzKqilMCFXo/ZPu4gbgOWD2zTbweT1ClIy6W2B5+j37nZj
-        0tGkiHSjE9n3t/T5AwnVH1QasayiLhe094Swjv3MvY4D5pxxAwpjPtkffWl4AV0+YSD0Sj
-        EFw/UdyS5tZBy3OvYRMsAn65lQHQS1Dw6Gb1oPRmQgX4KWooODZpXfODtVG8OQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686658684;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=+pGCv5A/cUsvuPq2YWIxIWEZjsKI3s/qdD/44v/vU8Q=;
-        b=SJ6Eu0mSyRlcNSUcInmuOlYzla2QknnMjcYSFX67vaztA2iwBWxdTukfv9zUoYD77RFx58
-        D95D+j/gvHapg5CA==
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, Mario Limonciello <mario.limonciello@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Tony Battersby <tonyb@cybernetics.com>,
-        Ashok Raj <ashok.raj@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Ashok Raj <ashok.raj@intel.com>
-Subject: [patch V2 8/8] x86/smp: Put CPUs into INIT on shutdown if possible
-References: <20230613115353.599087484@linutronix.de>
+        Tue, 13 Jun 2023 08:18:13 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F4310FA;
+        Tue, 13 Jun 2023 05:18:10 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f7368126a6so40406665e9.0;
+        Tue, 13 Jun 2023 05:18:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686658689; x=1689250689;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5lN7lpEDhUAFrWCql8GXgz0NB6FUC/uhCsLDpu9xEis=;
+        b=sGOaxWfnltQqyhvjw10PWp15U+snxILw/aOJVFnVmoroUvlASQNXSj4ltoGNcw3nHl
+         I79wSUahzanCYjybZkX9XYsl9zll4P0OF730gjq/1+7KNhDBRTWq5wKqyVRCP1CPuXeI
+         F4yBWe0K6c3FJiS/dsqmAREiURH4+T/v9xusNuj4LtdUP89PasuYfoFog6iINw06fGgW
+         prI30vAz2Cv0h0sc3WRZrv+7MQswjMVG/l7szoXxQna3C2x/FgXrDQTc+g+h0c62ljWl
+         QntSFHHG/UMZG6+xDySaDHE4fngbH7dKYmU51wZkXjxP2GfFscRHMTCtCSmtaFY1BL8z
+         PSPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686658689; x=1689250689;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5lN7lpEDhUAFrWCql8GXgz0NB6FUC/uhCsLDpu9xEis=;
+        b=dygstSDbmsgMyD7UB8IssbjjFZxLkRvqGoWl2aZbJasMql8Essn0B8/cLOrBFJc2Zw
+         yJHNKXwKGbSiQQ0zMGvN+UF8E5gHQB1Vs4q2sKW9H4VYtzsof7MgPpMZXSsDjoTs0Pjl
+         LtnxP/p/qUfZ56iYspmjwb1PeTWXiZQl4zDEWHp8Qqfr4llJZ0i18KDp0HeAAhEAdoRh
+         C6e6MH2zr0q49OjNLj3+WYVN0zEgL2gw53neQtvymH0vuToy9iputSd/YMzFrkWnUQmW
+         wWYUjDdNw1G+DDDmMIjurwe8MVQRqzNla4m4N5RD+pSntF1Fj6ntPFqXGRdrzvPjhwgm
+         kRsQ==
+X-Gm-Message-State: AC+VfDyCy1OMiDe7fNQ+fRWGO/qU7olS804C/P3Xz3kPLs0QgK2PZc9t
+        9H5PeZDVtCoxio0Z2aGlU3E=
+X-Google-Smtp-Source: ACHHUZ7tXyNzLeloSSFIoDzLEWtS2QbakYDXkwCEZCpaQlzqXFpbZ/CYc1OAP/xp1Wm0dJHPHwQGEw==
+X-Received: by 2002:a05:600c:2103:b0:3f0:b1c9:25d4 with SMTP id u3-20020a05600c210300b003f0b1c925d4mr7738419wml.21.1686658689044;
+        Tue, 13 Jun 2023 05:18:09 -0700 (PDT)
+Received: from debian ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id 11-20020a05600c228b00b003f7361ca753sm14217408wmf.24.2023.06.13.05.18.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 05:18:08 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 13:18:06 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Subject: Re: [PATCH 5.4 00/45] 5.4.247-rc1 review
+Message-ID: <ZIhefkuiBubOqSe6@debian>
+References: <20230612101654.644983109@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 13 Jun 2023 14:18:04 +0200 (CEST)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230612101654.644983109@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Parking CPUs in a HLT loop is not completely safe vs. kexec() as HLT can
-resume execution due to NMI, SMI and MCE, which has the same issue as the
-MWAIT loop.
+Hi Greg,
 
-Kicking the secondary CPUs into INIT makes this safe against NMI and SMI.
+On Mon, Jun 12, 2023 at 12:25:54PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.247 release.
+> There are 45 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-A broadcast MCE will take the machine down, but a broadcast MCE which makes
-HLT resume and execute overwritten text, pagetables or data will end up in
-a disaster too.
+Build test (gcc version 11.3.1 20230511):
+mips: 65 configs -> no failure
+arm: 106 configs -> no failure
+arm64: 2 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
-So chose the lesser of two evils and kick the secondary CPUs into INIT
-unless the system has installed special wakeup mechanisms which are not
-using INIT.
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Ashok Raj <ashok.raj@intel.com>
----
- arch/x86/include/asm/smp.h |    2 ++
- arch/x86/kernel/smp.c      |   38 +++++++++++++++++++++++++++++---------
- arch/x86/kernel/smpboot.c  |   19 +++++++++++++++++++
- 3 files changed, 50 insertions(+), 9 deletions(-)
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
 
---- a/arch/x86/include/asm/smp.h
-+++ b/arch/x86/include/asm/smp.h
-@@ -139,6 +139,8 @@ void native_send_call_func_ipi(const str
- void native_send_call_func_single_ipi(int cpu);
- void x86_idle_thread_init(unsigned int cpu, struct task_struct *idle);
- 
-+bool smp_park_nonboot_cpus_in_init(void);
-+
- void smp_store_boot_cpu_info(void);
- void smp_store_cpu_info(int id);
- 
---- a/arch/x86/kernel/smp.c
-+++ b/arch/x86/kernel/smp.c
-@@ -131,7 +131,7 @@ static int smp_stop_nmi_callback(unsigne
- }
- 
- /*
-- * this function calls the 'stop' function on all other CPUs in the system.
-+ * Disable virtualization, APIC etc. and park the CPU in a HLT loop
-  */
- DEFINE_IDTENTRY_SYSVEC(sysvec_reboot)
- {
-@@ -148,8 +148,7 @@ static int register_stop_handler(void)
- 
- static void native_stop_other_cpus(int wait)
- {
--	unsigned long flags;
--	unsigned long timeout;
-+	unsigned long flags, timeout;
- 
- 	if (reboot_force)
- 		return;
-@@ -167,10 +166,10 @@ static void native_stop_other_cpus(int w
- 	/*
- 	 * Start by using the REBOOT_VECTOR. That acts as a sync point to
- 	 * allow critical regions of code on other cpus to leave their
--	 * critical regions. Jumping straight to an NMI might accidentally
--	 * cause deadlocks with further shutdown code. This gives the CPUs
--	 * up to one second to finish their work before forcing them off
--	 * with the NMI.
-+	 * critical regions. Jumping straight to NMI or INIT might
-+	 * accidentally cause deadlocks with further shutdown code. This
-+	 * gives the CPUs up to one second to finish their work before
-+	 * forcing them off with the NMI or INIT.
- 	 */
- 	if (atomic_read(&stop_cpus_count) > 0) {
- 		apic_send_IPI_allbutself(REBOOT_VECTOR);
-@@ -178,7 +177,7 @@ static void native_stop_other_cpus(int w
- 		/*
- 		 * Don't wait longer than a second for IPI completion. The
- 		 * wait request is not checked here because that would
--		 * prevent an NMI shutdown attempt in case that not all
-+		 * prevent an NMI/INIT shutdown in case that not all
- 		 * CPUs reach shutdown state.
- 		 */
- 		timeout = USEC_PER_SEC;
-@@ -186,7 +185,27 @@ static void native_stop_other_cpus(int w
- 			udelay(1);
- 	}
- 
--	/* if the REBOOT_VECTOR didn't work, try with the NMI */
-+	/*
-+	 * Park all nonboot CPUs in INIT including offline CPUs, if
-+	 * possible. That's a safe place where they can't resume execution
-+	 * of HLT and then execute the HLT loop from overwritten text or
-+	 * page tables.
-+	 *
-+	 * The only downside is a broadcast MCE, but up to the point where
-+	 * the kexec() kernel brought all APs online again an MCE will just
-+	 * make HLT resume and handle the MCE. The machine crashs and burns
-+	 * due to overwritten text, page tables and data. So there is a
-+	 * choice between fire and frying pan. The result is pretty much
-+	 * the same. Chose frying pan until x86 provides a sane mechanism
-+	 * to park a CPU.
-+	 */
-+	if (smp_park_nonboot_cpus_in_init())
-+		goto done;
-+
-+	/*
-+	 * If park with INIT was not possible and the REBOOT_VECTOR didn't
-+	 * take all secondary CPUs offline, try with the NMI.
-+	 */
- 	if (atomic_read(&stop_cpus_count) > 0) {
- 		/*
- 		 * If NMI IPI is enabled, try to register the stop handler
-@@ -211,6 +230,7 @@ static void native_stop_other_cpus(int w
- 			udelay(1);
- 	}
- 
-+done:
- 	local_irq_save(flags);
- 	disable_local_APIC();
- 	mcheck_cpu_clear(this_cpu_ptr(&cpu_info));
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1465,6 +1465,25 @@ void arch_thaw_secondary_cpus_end(void)
- 	cache_aps_init();
- }
- 
-+bool smp_park_nonboot_cpus_in_init(void)
-+{
-+	unsigned int cpu, this_cpu = smp_processor_id();
-+	unsigned int apicid;
-+
-+	if (apic->wakeup_secondary_cpu_64 || apic->wakeup_secondary_cpu)
-+		return false;
-+
-+	for_each_present_cpu(cpu) {
-+		if (cpu == this_cpu)
-+			continue;
-+		apicid = apic->cpu_present_to_apicid(cpu);
-+		if (apicid == BAD_APICID)
-+			continue;
-+		send_init_sequence(apicid);
-+	}
-+	return true;
-+}
-+
- /*
-  * Early setup to make printk work.
-  */
+[1]. https://openqa.qa.codethink.co.uk/tests/3933
 
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip
