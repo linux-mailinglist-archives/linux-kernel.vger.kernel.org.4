@@ -2,415 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 562E972EE62
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 23:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6349872EE60
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 23:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240914AbjFMVzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 17:55:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46020 "EHLO
+        id S240569AbjFMVzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 17:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240613AbjFMVzP (ORCPT
+        with ESMTP id S240412AbjFMVzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 17:55:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC63A1BDC
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 14:54:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686693260;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/X3bGqn1q+zHUVNMkc4k9dYCbdcixuWgARgx8VaUnYY=;
-        b=DrjKZY1QVUNpXUpJtKdtOL0qFmlbABWMUw19bDqxY2o6kclWhKL9qB0Z/jjxlljYlS+5en
-        CuKG1XSruWkpb6BDA9LxKQ/fG4ELeruHNDeaKgBGal1OebTOhawKCsRY4mryiT1dqZUVpH
-        b8ePr3WE+AQCh1LVYZEtx4GO7RJYE64=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-609-Re07rdKCOm2k1DNzHMMkmQ-1; Tue, 13 Jun 2023 17:54:12 -0400
-X-MC-Unique: Re07rdKCOm2k1DNzHMMkmQ-1
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-3f9eb7d5202so4777581cf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 14:54:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686693248; x=1689285248;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/X3bGqn1q+zHUVNMkc4k9dYCbdcixuWgARgx8VaUnYY=;
-        b=AoG4240tIPryGS/LdRBWR8xQyCpgjnejGQUnPAPdbeN4hZ6kqZQTxJZ+aV6g/HICic
-         hS7x4F8i3phNpHJpehqFiawf9cAigQegz1gXVA7WD6z2w1Wra037M4/atXkd3tQ/4yYt
-         iUjN0EQAMtux7VEfW8CIouwK/5qdFk2vB+Zr1BsmGTlVasFpeumxVgSiqnpSHs9sRmVx
-         0/+cMmXIeaPSZ+GBPlr+BbD0uJ7GKWvDnySgqOq6kbPlmAKtUjtlTV3+0XUY0Z3u9YlY
-         YkLsuESMQjjkC52Q5yRRYHhQKUCoPImpdTnlk6PoiIz3INwLC0TGvWdCvaMIMnCDBI3w
-         bHrw==
-X-Gm-Message-State: AC+VfDxDVXEQ9rWrMRMaipLfD9DrgACEZYdXHvVslhiPfJK++0xgKuQF
-        21hpUICY886M+0HmWdY8sSfPIPToU3MW1cNzxhsL7073ScEVHcrKDs8oyOzK/AhnJT6K4I3htpx
-        ySXeiUaxVZ9cN6u8JgtSU8nubi3b4VL00DZo3GXGce9MlghQVUyxkcg4T4rjXHxALVmsqzVT10U
-        FQoGel1w==
-X-Received: by 2002:a05:622a:1a02:b0:3f6:ab9a:3d8e with SMTP id f2-20020a05622a1a0200b003f6ab9a3d8emr17758141qtb.4.1686693247628;
-        Tue, 13 Jun 2023 14:54:07 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5w87HGnELUi5EkIzhKvNW57lYdNaWbCEMcUpk8sbBZqYIrssusFuVowDO7JEjTYM2qoSnZFw==
-X-Received: by 2002:a05:622a:1a02:b0:3f6:ab9a:3d8e with SMTP id f2-20020a05622a1a0200b003f6ab9a3d8emr17758109qtb.4.1686693247132;
-        Tue, 13 Jun 2023 14:54:07 -0700 (PDT)
-Received: from x1n.redhat.com (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id fz24-20020a05622a5a9800b003f9bccc3182sm4522330qtb.32.2023.06.13.14.54.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 14:54:06 -0700 (PDT)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>, peterx@redhat.com,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        James Houghton <jthoughton@google.com>,
-        Hugh Dickins <hughd@google.com>
-Subject: [PATCH 7/7] mm/gup: Retire follow_hugetlb_page()
-Date:   Tue, 13 Jun 2023 17:53:46 -0400
-Message-Id: <20230613215346.1022773-8-peterx@redhat.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230613215346.1022773-1-peterx@redhat.com>
-References: <20230613215346.1022773-1-peterx@redhat.com>
-MIME-Version: 1.0
+        Tue, 13 Jun 2023 17:55:09 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2076.outbound.protection.outlook.com [40.107.22.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB131BF4;
+        Tue, 13 Jun 2023 14:55:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=E947hhT7t5i88vVy7F6nA7F5BRM/o2mXW4iFfEkmpzooxKoOXbkUwyq7cyPHgMgY4IG4c46nTmU6BrWZXQxbRVz2VDu8TxEIEzNPP+xfHtBwpHZFeidZL7s5/URMdzwDjN6kcMoDPEFXDVpmigc+QElJ1fpszonumsrlv7yyad35ocPYhElI69xpvs/iLtj6yDTDUidH8HHk+ijFIP4ei+YJrH8lTN4f/zFjNfArKAunGlEJwf9PX6L0fRvc8V+IklM9KnEGIuCwHmdojIjZLuuIdnUTPKcREPXfOfie38+1JQYdTu0SSLrjSYe4Ke2p/kEESQU8Tl5sKF8HtJuGPA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1s3X56HaGVXHVNIT5AVnfdlfDvymYHNfKJ3qdeDdAUc=;
+ b=l7MbfU8hqzyt8QAzynm62tQ1dF/UZkTHI5gbPfP3A0MQtq9WN4ndD5kUiLv85+kGV5UwFVE8+iL3kr1cIaJDtIAAtT3nqUcoCKiOFL7LPajlQU103xa+5TIZfaFX8a/wa7m/eIpmKcBTHSWDn3W72k2NBCRWnLMHLCQ7nqwkZVjcfqmutYTxA7d+DPTvmKSRwdsOMdDI6pjEF2/xy3V01DiS12Z9F9gHkdcSCVKQay9mQf1zkI132kpZci8PdfOPaGLhMgoNiH41CUl4h/COl9m/niWjIdEQxvaLwx4GBxU03iqfu5W9EKIJMtZrMXMjZI4btVWMgr19c5UEGa550w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1s3X56HaGVXHVNIT5AVnfdlfDvymYHNfKJ3qdeDdAUc=;
+ b=fePOgM2bIbQtiGIIF20DzBH8Rfm6ZbQ8GlZbJFA7wIZfkZOxsU8sUXCRwtk1Iql9YVMJ/16kQYalAuZNCd5UR+Y/xHidsgjibGdEbbZktb41D82ytdLnI+dnBmhkK6N9Eqg+K3e1B8qQmGCduuEvPxY7u60bzSx/SrPCdOd58aU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
+ by AM9PR04MB8081.eurprd04.prod.outlook.com (2603:10a6:20b:3e2::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Tue, 13 Jun
+ 2023 21:54:51 +0000
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::c40e:d76:fd88:f460]) by AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::c40e:d76:fd88:f460%4]) with mapi id 15.20.6455.045; Tue, 13 Jun 2023
+ 21:54:50 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     netdev@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
+        Peilin Ye <yepeilin.cs@gmail.com>,
+        Pedro Tammela <pctammela@mojatatu.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Zhengchao Shao <shaozhengchao@huawei.com>,
+        Maxim Georgiev <glipus@gmail.com>
+Subject: [PATCH v2 net-next 0/9] Improve the taprio qdisc's relationship with its children
+Date:   Wed, 14 Jun 2023 00:54:31 +0300
+Message-Id: <20230613215440.2465708-1-vladimir.oltean@nxp.com>
+X-Mailer: git-send-email 2.34.1
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: AM0PR04CA0044.eurprd04.prod.outlook.com
+ (2603:10a6:208:1::21) To AM0PR04MB6452.eurprd04.prod.outlook.com
+ (2603:10a6:208:16d::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|AM9PR04MB8081:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9755816b-6024-4c18-5063-08db6c58cfe8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5Nw9x2IDAosetVWkbgEFQ7eO3+uvLfBDWWFjs0RV7HGpSdgMvH69iypUwt/qSCjJ5xZ6IGrc7+Xc+2QT4cV8TrYG5fcmqz0h58MbDp/p3+ZQtSMxtYGyywHYsMKU6OlCz40p+tjGFUzlGL+wwiaLOcTLMok4R+8pGwB3UHnFqy6UfhQZ4IMWwv2eJxA7oHUa2969MeBbHPi86khRoMXt9fDL3wNPvrbt5VI0Czwao2ZLVr603/mfPvnOEjNeh+993ayoU4kLl2jVErdU5bdsntZUXUPzClybjJ4PHOtte8KFzuQ/UhaT5QtpZo9bxcbHMBCWNMxHmshDng1V//OAU2r17OXxmDDyYDjzqnEXFxhYQIl8KFYQhJPLNuxxpUC3eHCiJ51GGIXi0YK1D4OxFMixU2RDLrfZkuntCyJZoUYPQ6WLL8MoFAOMmLpUkLUpkYU3ktWACBTd5/bmo4P/9tXGftza4MYJjwkbdfzxNeaK6EL1IDKvwPw3CBcRWU3S7T1vvmruVCnI+YOIBCzsOBg9ZiDbr/0qkDLASCmKoB45IrRr07kyjsYdc9Qt/AqrBplDKIySRyOXSzGpJgaqEWih9/W+s9FwyOPn7MnvIfM8kOiUk4SjifGWd70PUlxyDYiIEiCLdWWpd+u/DYX3AQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(39860400002)(366004)(346002)(376002)(451199021)(6916009)(66946007)(4326008)(66556008)(36756003)(186003)(54906003)(478600001)(2616005)(2906002)(66476007)(8676002)(6666004)(316002)(966005)(41300700001)(86362001)(6486002)(7416002)(6506007)(1076003)(8936002)(44832011)(83380400001)(26005)(5660300002)(38100700002)(52116002)(38350700002)(6512007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dFCoxXf+Ma3E59fuYmYnk/mAdHtA25Tm5P+Kto1TiyEdPhkHcxoBlij3NeXH?=
+ =?us-ascii?Q?67yTzLoa7rV0cOEl7SZpv/mTnggAgRLsGNTRL6A7SfegLat9grk3CX2QaDXB?=
+ =?us-ascii?Q?X6ATGGsIWQ8nB5pdZE0hVPLJuHAJyXPHJiKYtDnnC7l93yn0/S52P5guIkX0?=
+ =?us-ascii?Q?4L9uQUYLh6KTJkBzS1D9NFfEeJpcwkePucaufxmlAt8SaT9p7WDCHo0UkKPB?=
+ =?us-ascii?Q?DsCdFW4TxhGHk+K+7A/8KmXwPJA2TbFbxSYhWE61r2UjDrK073JJX4XHF+Yi?=
+ =?us-ascii?Q?BWpENLvvwVIdXIkLaiBFzcERsW68Gn0QVYW7XOgcATSYiRhDWLRwGOT9dzuD?=
+ =?us-ascii?Q?6aAjRletUdX65jighmHU5+/xDMiOwPfuesYsfKzXLz2Jj/+zTn+F7VIYc5vO?=
+ =?us-ascii?Q?+yOIVjY81QNqIutexXlPmLiOfKwimwDgCMM+CCdLAzBJjWqVbYRKgDwjrDSq?=
+ =?us-ascii?Q?VIEqcXpUWVRSf2TDF9wjhokEaGO2uu3x7F4iWTecnnaZHoR9OJMQfWKK4Cej?=
+ =?us-ascii?Q?p0eqt52wTUBQ5QImlnbnLTgHKjTYRaBWX0JkVFGqhnKtgrzQ/68XrXNihTBL?=
+ =?us-ascii?Q?ThWmmIaH9f8Lfs6fIrVaYjisDvOXtJLPFHr6l1na8ISqnTtezC6WPDVvKeeF?=
+ =?us-ascii?Q?AQy8BA/EAq1mKYdw4A5ZcFQuLLcb3/g/KCifinTJoZqNGaArJN7/FfVOoj1C?=
+ =?us-ascii?Q?wZKiRixAeDbxVyU9UJ01mW7oOtHBOnC+p6dFiT3KowI7Y6z4jjdPpzsR3kbw?=
+ =?us-ascii?Q?VlY5XVJn1f3vo0QHQGHuRldlSRAg0tjXg4I9pIhSxJgJPjB9eQEzrCGG/U6t?=
+ =?us-ascii?Q?cF2kWqqgLj/edCacAx2vH5viFrsWzplYxKa+mqdf+vc+mPwtDdTgsdkrXSJ5?=
+ =?us-ascii?Q?ZtVv59VXXvYsqZQLX30HsILk15eToAH1PL8KdEHmkfR/f2Sfa5epRsqZtLqm?=
+ =?us-ascii?Q?JkojOjYlwShNhnTZ4aVZQBbeJP2XsvcfFuBcO2ZHVBzS/wsszrui0GEUeUet?=
+ =?us-ascii?Q?rn4LwwAF2LjgQG/V2G6M1lQUEPMIp/fP+wuR0xOYB6PG47LK2sgfj515Cgf0?=
+ =?us-ascii?Q?9hNRGDtmwBvkq/IFvmJ83TB1foEOvgduX8XqInfZFd9Yf6nhVetrtRaKWUNu?=
+ =?us-ascii?Q?xxOpAXQQ3/9JsXGewudFqn4+DJgg1Zu26/SRLs6gjdOMXWycDk9twmvJnnHw?=
+ =?us-ascii?Q?E/zkw2Sw25oyNzYGZnQM6Yrze/qLzpcbAgndzclE7J/10jgdJxTcTFNxHV/b?=
+ =?us-ascii?Q?icWC2rKgJsBARgulj48FTfXrkbqZqYDvgGmgc+pmSdJsQjEtoj4RcEpXJhzQ?=
+ =?us-ascii?Q?79AuRFaUW4MBUn/zg6AjQhkO8NlvZVOFEOIWdYGRw3N3PgczdtjjVgZJRM/Z?=
+ =?us-ascii?Q?taxVnQblP6VhoH1E3lgXef+JCSY4IwFI55pkxCqs6IYKSLMmur9iP3CUMpuj?=
+ =?us-ascii?Q?2DXeb+/vbClSN+WEaFDFv7TU0G9M+KBDKeYkp31cMTkgCanOMMg18kwXsE1y?=
+ =?us-ascii?Q?V82XK6bfUVkAPpXnHzU7I8MDzGEnbIqvZBcVSKaYIFBMnu7SpL1CeXimgI2I?=
+ =?us-ascii?Q?dLRyMfR/7aYFX/dQ0HI1THSsKMLteY0hznFbfSL6jEHwBtt0TRmQb7v+C7u0?=
+ =?us-ascii?Q?wQ=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9755816b-6024-4c18-5063-08db6c58cfe8
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2023 21:54:50.6709
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SjKWCsIo0WaTFD/ce5KUyiBacU90Pn4rjCZTL+GIbGf08CTak663UYZ3Ma/I7Txa+iX9MgVkrcsshGz/DHM5HQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8081
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now __get_user_pages() should be well prepared to handle thp completely,
-as long as hugetlb gup requests even without the hugetlb's special path.
+Changes in v2:
+It was requested to add test cases for the taprio software and offload modes.
+Those are patches 08 and 09.
 
-Time to retire follow_hugetlb_page().
+That implies adding taprio offload support to netdevsim, which is patch 07.
 
-Tweak the comments in follow_page_mask() to reflect reality, by dropping
-the "follow_page()" description.
+In turn, that implies adding a PHC driver for netdevsim, which is patch 06.
 
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- include/linux/hugetlb.h |  12 ---
- mm/gup.c                |  19 ----
- mm/hugetlb.c            | 223 ----------------------------------------
- 3 files changed, 254 deletions(-)
+v1 at:
+https://lore.kernel.org/lkml/20230531173928.1942027-1-vladimir.oltean@nxp.com/
 
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index 0d6f389d98de..44e5836eed15 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -133,9 +133,6 @@ int copy_hugetlb_page_range(struct mm_struct *, struct mm_struct *,
- struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
- 				      unsigned long address, unsigned int flags,
- 				      unsigned int *page_mask);
--long follow_hugetlb_page(struct mm_struct *, struct vm_area_struct *,
--			 struct page **, unsigned long *, unsigned long *,
--			 long, unsigned int, int *);
- void unmap_hugepage_range(struct vm_area_struct *,
- 			  unsigned long, unsigned long, struct page *,
- 			  zap_flags_t);
-@@ -305,15 +302,6 @@ static inline struct page *hugetlb_follow_page_mask(
- 	BUILD_BUG(); /* should never be compiled in if !CONFIG_HUGETLB_PAGE*/
- }
- 
--static inline long follow_hugetlb_page(struct mm_struct *mm,
--			struct vm_area_struct *vma, struct page **pages,
--			unsigned long *position, unsigned long *nr_pages,
--			long i, unsigned int flags, int *nonblocking)
--{
--	BUG();
--	return 0;
--}
--
- static inline int copy_hugetlb_page_range(struct mm_struct *dst,
- 					  struct mm_struct *src,
- 					  struct vm_area_struct *dst_vma,
-diff --git a/mm/gup.c b/mm/gup.c
-index cdabc8ea783b..a65b80953b7a 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -789,9 +789,6 @@ static struct page *follow_page_mask(struct vm_area_struct *vma,
- 	 * Call hugetlb_follow_page_mask for hugetlb vmas as it will use
- 	 * special hugetlb page table walking code.  This eliminates the
- 	 * need to check for hugetlb entries in the general walking code.
--	 *
--	 * hugetlb_follow_page_mask is only for follow_page() handling here.
--	 * Ordinary GUP uses follow_hugetlb_page for hugetlb processing.
- 	 */
- 	if (is_vm_hugetlb_page(vma))
- 		return hugetlb_follow_page_mask(vma, address, flags,
-@@ -1149,22 +1146,6 @@ static long __get_user_pages(struct mm_struct *mm,
- 			ret = check_vma_flags(vma, gup_flags);
- 			if (ret)
- 				goto out;
--
--			if (is_vm_hugetlb_page(vma)) {
--				i = follow_hugetlb_page(mm, vma, pages,
--							&start, &nr_pages, i,
--							gup_flags, locked);
--				if (!*locked) {
--					/*
--					 * We've got a VM_FAULT_RETRY
--					 * and we've lost mmap_lock.
--					 * We must stop here.
--					 */
--					BUG_ON(gup_flags & FOLL_NOWAIT);
--					goto out;
--				}
--				continue;
--			}
- 		}
- retry:
- 		/*
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 31d8f18bc2e4..b7ff413ff68b 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -6425,37 +6425,6 @@ int hugetlb_mfill_atomic_pte(pte_t *dst_pte,
- }
- #endif /* CONFIG_USERFAULTFD */
- 
--static void record_subpages(struct page *page, struct vm_area_struct *vma,
--			    int refs, struct page **pages)
--{
--	int nr;
--
--	for (nr = 0; nr < refs; nr++) {
--		if (likely(pages))
--			pages[nr] = nth_page(page, nr);
--	}
--}
--
--static inline bool __follow_hugetlb_must_fault(struct vm_area_struct *vma,
--					       unsigned int flags, pte_t *pte,
--					       bool *unshare)
--{
--	pte_t pteval = huge_ptep_get(pte);
--
--	*unshare = false;
--	if (is_swap_pte(pteval))
--		return true;
--	if (huge_pte_write(pteval))
--		return false;
--	if (flags & FOLL_WRITE)
--		return true;
--	if (gup_must_unshare(vma, flags, pte_page(pteval))) {
--		*unshare = true;
--		return true;
--	}
--	return false;
--}
--
- struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
- 				      unsigned long address, unsigned int flags,
- 				      unsigned int *page_mask)
-@@ -6518,198 +6487,6 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
- 	return page;
- }
- 
--long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
--			 struct page **pages, unsigned long *position,
--			 unsigned long *nr_pages, long i, unsigned int flags,
--			 int *locked)
--{
--	unsigned long pfn_offset;
--	unsigned long vaddr = *position;
--	unsigned long remainder = *nr_pages;
--	struct hstate *h = hstate_vma(vma);
--	int err = -EFAULT, refs;
--
--	while (vaddr < vma->vm_end && remainder) {
--		pte_t *pte;
--		spinlock_t *ptl = NULL;
--		bool unshare = false;
--		int absent;
--		struct page *page;
--
--		/*
--		 * If we have a pending SIGKILL, don't keep faulting pages and
--		 * potentially allocating memory.
--		 */
--		if (fatal_signal_pending(current)) {
--			remainder = 0;
--			break;
--		}
--
--		hugetlb_vma_lock_read(vma);
--		/*
--		 * Some archs (sparc64, sh*) have multiple pte_ts to
--		 * each hugepage.  We have to make sure we get the
--		 * first, for the page indexing below to work.
--		 *
--		 * Note that page table lock is not held when pte is null.
--		 */
--		pte = hugetlb_walk(vma, vaddr & huge_page_mask(h),
--				   huge_page_size(h));
--		if (pte)
--			ptl = huge_pte_lock(h, mm, pte);
--		absent = !pte || huge_pte_none(huge_ptep_get(pte));
--
--		/*
--		 * When coredumping, it suits get_dump_page if we just return
--		 * an error where there's an empty slot with no huge pagecache
--		 * to back it.  This way, we avoid allocating a hugepage, and
--		 * the sparse dumpfile avoids allocating disk blocks, but its
--		 * huge holes still show up with zeroes where they need to be.
--		 */
--		if (absent && (flags & FOLL_DUMP) &&
--		    !hugetlbfs_pagecache_present(h, vma, vaddr)) {
--			if (pte)
--				spin_unlock(ptl);
--			hugetlb_vma_unlock_read(vma);
--			remainder = 0;
--			break;
--		}
--
--		/*
--		 * We need call hugetlb_fault for both hugepages under migration
--		 * (in which case hugetlb_fault waits for the migration,) and
--		 * hwpoisoned hugepages (in which case we need to prevent the
--		 * caller from accessing to them.) In order to do this, we use
--		 * here is_swap_pte instead of is_hugetlb_entry_migration and
--		 * is_hugetlb_entry_hwpoisoned. This is because it simply covers
--		 * both cases, and because we can't follow correct pages
--		 * directly from any kind of swap entries.
--		 */
--		if (absent ||
--		    __follow_hugetlb_must_fault(vma, flags, pte, &unshare)) {
--			vm_fault_t ret;
--			unsigned int fault_flags = 0;
--
--			if (pte)
--				spin_unlock(ptl);
--			hugetlb_vma_unlock_read(vma);
--
--			if (flags & FOLL_WRITE)
--				fault_flags |= FAULT_FLAG_WRITE;
--			else if (unshare)
--				fault_flags |= FAULT_FLAG_UNSHARE;
--			if (locked) {
--				fault_flags |= FAULT_FLAG_ALLOW_RETRY |
--					FAULT_FLAG_KILLABLE;
--				if (flags & FOLL_INTERRUPTIBLE)
--					fault_flags |= FAULT_FLAG_INTERRUPTIBLE;
--			}
--			if (flags & FOLL_NOWAIT)
--				fault_flags |= FAULT_FLAG_ALLOW_RETRY |
--					FAULT_FLAG_RETRY_NOWAIT;
--			if (flags & FOLL_TRIED) {
--				/*
--				 * Note: FAULT_FLAG_ALLOW_RETRY and
--				 * FAULT_FLAG_TRIED can co-exist
--				 */
--				fault_flags |= FAULT_FLAG_TRIED;
--			}
--			ret = hugetlb_fault(mm, vma, vaddr, fault_flags);
--			if (ret & VM_FAULT_ERROR) {
--				err = vm_fault_to_errno(ret, flags);
--				remainder = 0;
--				break;
--			}
--			if (ret & VM_FAULT_RETRY) {
--				if (locked &&
--				    !(fault_flags & FAULT_FLAG_RETRY_NOWAIT))
--					*locked = 0;
--				*nr_pages = 0;
--				/*
--				 * VM_FAULT_RETRY must not return an
--				 * error, it will return zero
--				 * instead.
--				 *
--				 * No need to update "position" as the
--				 * caller will not check it after
--				 * *nr_pages is set to 0.
--				 */
--				return i;
--			}
--			continue;
--		}
--
--		pfn_offset = (vaddr & ~huge_page_mask(h)) >> PAGE_SHIFT;
--		page = pte_page(huge_ptep_get(pte));
--
--		VM_BUG_ON_PAGE((flags & FOLL_PIN) && PageAnon(page) &&
--			       !PageAnonExclusive(page), page);
--
--		/*
--		 * If subpage information not requested, update counters
--		 * and skip the same_page loop below.
--		 */
--		if (!pages && !pfn_offset &&
--		    (vaddr + huge_page_size(h) < vma->vm_end) &&
--		    (remainder >= pages_per_huge_page(h))) {
--			vaddr += huge_page_size(h);
--			remainder -= pages_per_huge_page(h);
--			i += pages_per_huge_page(h);
--			spin_unlock(ptl);
--			hugetlb_vma_unlock_read(vma);
--			continue;
--		}
--
--		/* vaddr may not be aligned to PAGE_SIZE */
--		refs = min3(pages_per_huge_page(h) - pfn_offset, remainder,
--		    (vma->vm_end - ALIGN_DOWN(vaddr, PAGE_SIZE)) >> PAGE_SHIFT);
--
--		if (pages)
--			record_subpages(nth_page(page, pfn_offset),
--					vma, refs,
--					likely(pages) ? pages + i : NULL);
--
--		if (pages) {
--			/*
--			 * try_grab_folio() should always succeed here,
--			 * because: a) we hold the ptl lock, and b) we've just
--			 * checked that the huge page is present in the page
--			 * tables. If the huge page is present, then the tail
--			 * pages must also be present. The ptl prevents the
--			 * head page and tail pages from being rearranged in
--			 * any way. As this is hugetlb, the pages will never
--			 * be p2pdma or not longterm pinable. So this page
--			 * must be available at this point, unless the page
--			 * refcount overflowed:
--			 */
--			if (WARN_ON_ONCE(!try_grab_folio(pages[i], refs,
--							 flags))) {
--				spin_unlock(ptl);
--				hugetlb_vma_unlock_read(vma);
--				remainder = 0;
--				err = -ENOMEM;
--				break;
--			}
--		}
--
--		vaddr += (refs << PAGE_SHIFT);
--		remainder -= refs;
--		i += refs;
--
--		spin_unlock(ptl);
--		hugetlb_vma_unlock_read(vma);
--	}
--	*nr_pages = remainder;
--	/*
--	 * setting position is actually required only if remainder is
--	 * not zero but it's faster not to add a "if (remainder)"
--	 * branch.
--	 */
--	*position = vaddr;
--
--	return i ? i : err;
--}
--
- long hugetlb_change_protection(struct vm_area_struct *vma,
- 		unsigned long address, unsigned long end,
- 		pgprot_t newprot, unsigned long cp_flags)
+Original message:
+
+Prompted by Vinicius' request to consolidate some child Qdisc
+dereferences in taprio:
+https://lore.kernel.org/netdev/87edmxv7x2.fsf@intel.com/
+
+I remembered that I had left some unfinished work in this Qdisc, namely
+commit af7b29b1deaa ("Revert "net/sched: taprio: make qdisc_leaf() see
+the per-netdev-queue pfifo child qdiscs"").
+
+This patch set represents another stab at, essentially, what's in the
+title. Not only does taprio not properly detect when it's grafted as a
+non-root qdisc, but it also returns incorrect per-class stats.
+Eventually, Vinicius' request is addressed too, although in a different
+form than the one he requested (which was purely cosmetic).
+
+Review from people more experienced with Qdiscs than me would be
+appreciated. I tried my best to explain what I consider to be problems.
+I am deliberately targeting net-next because the changes are too
+invasive for net - they were reverted from stable once already.
+
+Vladimir Oltean (9):
+  net/sched: taprio: don't access q->qdiscs[] in unoffloaded mode during
+    attach()
+  net/sched: taprio: keep child Qdisc refcount elevated at 2 in offload
+    mode
+  net/sched: taprio: try again to report q->qdiscs[] to qdisc_leaf()
+  net/sched: taprio: delete misleading comment about preallocating child
+    qdiscs
+  net/sched: taprio: dump class stats for the actual q->qdiscs[]
+  net: netdevsim: create a mock-up PTP Hardware Clock driver
+  net: netdevsim: mimic tc-taprio offload
+  selftests/tc-testing: test that taprio can only be attached as root
+  selftests/tc-testing: verify that a qdisc can be grafted onto a taprio
+    class
+
+ drivers/net/Kconfig                           |   1 +
+ drivers/net/netdevsim/ethtool.c               |  11 ++
+ drivers/net/netdevsim/netdev.c                |  38 +++-
+ drivers/net/netdevsim/netdevsim.h             |   2 +
+ drivers/ptp/Kconfig                           |  11 ++
+ drivers/ptp/Makefile                          |   1 +
+ drivers/ptp/ptp_mock.c                        | 175 ++++++++++++++++++
+ include/linux/ptp_mock.h                      |  38 ++++
+ net/sched/sch_taprio.c                        |  68 ++++---
+ .../tc-testing/tc-tests/qdiscs/taprio.json    |  98 ++++++++++
+ 10 files changed, 415 insertions(+), 28 deletions(-)
+ create mode 100644 drivers/ptp/ptp_mock.c
+ create mode 100644 include/linux/ptp_mock.h
+
 -- 
-2.40.1
+2.34.1
 
