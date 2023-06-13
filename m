@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4512572E531
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 16:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED4272E4DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 16:03:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242831AbjFMOES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 10:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57976 "EHLO
+        id S242642AbjFMODY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 10:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242670AbjFMODz (ORCPT
+        with ESMTP id S242605AbjFMODQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 10:03:55 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13F02105
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 07:03:34 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-51879487e18so956531a12.3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 07:03:34 -0700 (PDT)
+        Tue, 13 Jun 2023 10:03:16 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565D5EC
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 07:03:15 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f61735676fso6965957e87.2
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 07:03:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686665012; x=1689257012;
+        d=linaro.org; s=google; t=1686664993; x=1689256993;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Ak6pJEE70i86/FySUfYrSS2au3HzGmo13oLp85+Of0E=;
-        b=JWFrVCzyLFy6CqPFmqqcXfRWl/ZeOmY5cAPxItitCG2GSxUYodXCoIkvJp5mVCPmmu
-         SgjN48AopiP0g+o1PXNPG/iDxVgiFf0RY7H3UD/i79TL1cHXtabZwHznOuN699NmW4jP
-         ai3/SBOa2DRoF6COQXHCwYy5kQUVWV4LN6DZR0LmVxFwx9suEqRFy7WCBYzH5GAbekIV
-         ZClivZunzCVkjpPjJ6ipzbL29xa0Oyb0WkiSCAmv4LNOrn3gIGvJ1g6KHjsay6CdvJNj
-         9V5z3NPmHYGqm/ZL0bSIqyFb8S/x7PmIik8JfnpwLoVnf8EwvGonu4wgjed1lmYKedUj
-         APDg==
+        bh=SD+82Kp64qdWpl/p0nHwxIb/l/7wz0DuQnwuSSdR/H4=;
+        b=xj0xlSeCPhw5AxVZORqoblYLF2f8uDEmnpl5KdIW7yvz3l3wcasDuEnC4W1e63Tlyt
+         310F6tlPgqNLQ49PR8DgDkil1BjnqR/gBK3ghiV9KAWxME1vk352EWKGzGxGNKWOFoek
+         eFDIR5tbtt+tNRvEB0hQwa55nzfO+mkjob07pS46OpnWC1tk81qKYZWEcvnBuc/vCy9U
+         gIpanrcKM6Zwr4ew/lIQdSIZDjwkpOJq91SSU3wq3q1NpxM0+aFxN1btmUxE/wCNXW3p
+         GLE4UM5JiocXYnlDoxH26S1QhLJfWOub1IUgp1JylTkVwCrn+iGujvr40TwZBO+NuETz
+         Cfbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686665012; x=1689257012;
+        d=1e100.net; s=20221208; t=1686664993; x=1689256993;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ak6pJEE70i86/FySUfYrSS2au3HzGmo13oLp85+Of0E=;
-        b=EkNWaK+BInTUP27Bk137kaI0j6dlFoQrIl/u7Mc8Ti5cp5HcX5nomaydjoU34yEKBo
-         vVuNr5mpg+KQRonT4L/XRw1d3y8Yo0jk8H8GXvghQhE86N60H20duUiZNjROwh8p5Vdk
-         7+jDySBr5JIR5rRy2Xd+7HvBru543PHfwWhMSD+R57+HPpHs+S0BKLuo/yd92mGTQA01
-         cyXRGBYXPgLUaUFg5FaYEHNIAZcKMU4YaX+mynmGh+pmgMFVuM5+ZANsv8Rz6Bc2Ymw9
-         Vzp4nywjUSmnCcfYgsvY1s8N+i+20VlaKbPhYg/D/AbjOLHd7CpBb3+unwxVpi45dAgC
-         jeBQ==
-X-Gm-Message-State: AC+VfDx3k43xD0xNr3+IaQkgNk1Sos3jKN3hrdZ7mRZwewqKhPOKYqMK
-        sTodDMxza6PgHUrW0LuokIfbsbZRh8TgCCZhRHU=
-X-Google-Smtp-Source: ACHHUZ7aKpFKuiZWnq2Ux5sIXUigwaKgfMGsH6NF903Bat0KexP0k974tF3Z6crgiEpYTpBS5/Ei5w==
-X-Received: by 2002:a05:651c:117:b0:2b1:bd37:e7e1 with SMTP id a23-20020a05651c011700b002b1bd37e7e1mr4850383ljb.32.1686664991733;
-        Tue, 13 Jun 2023 07:03:11 -0700 (PDT)
+        bh=SD+82Kp64qdWpl/p0nHwxIb/l/7wz0DuQnwuSSdR/H4=;
+        b=CCWYcLVTl20yBzghUaPcnV20nQ5rAqcW6zXNZYodhj5AzuN8laLJeNYLab1dPjPE59
+         raks5bciZaT5Gf4MsuO3Oy/dME+WQBOXJ55taGsKgJqLZjMW7w/xkpsRaEQJ9N/UghGs
+         9hBYBBnmYZnBIHPMIpYLPg64jwkr6uaSFG+bCLzS+8oejS09hdizNdouDFFWFFP9tGMQ
+         BYu6Qt2wOivfX5+tpWFukgDIkpIidMfdcIEUvdoL2fJcDxtU83wGmO74kzaNS8XQe7EN
+         yQRlAZE++oUex0jTKHhR9z/VU+M6DsLxBtExOqcGYJpQtu7i1DSKWvr9YUa4I7DA/K8m
+         2V0A==
+X-Gm-Message-State: AC+VfDyC37pgf4avENokPtWLtlA/Pgx5a4OPM1+mM1UwRmG7TQRfdBya
+        Zpx0+6mInnUe5PKI4ti6gkI9ug==
+X-Google-Smtp-Source: ACHHUZ4jJ9jeHuvL/oUVggWU+lb/Tql+Z/RsGUdCZRwl7wGbtNPjiAYUWW6kFh7AprExSrksK+bzBQ==
+X-Received: by 2002:a2e:4949:0:b0:2b1:be22:4741 with SMTP id b9-20020a2e4949000000b002b1be224741mr4652288ljd.51.1686664993643;
+        Tue, 13 Jun 2023 07:03:13 -0700 (PDT)
 Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id a18-20020a05651c011200b002b32af2e9c6sm901490ljb.116.2023.06.13.07.03.10
+        by smtp.gmail.com with ESMTPSA id a18-20020a05651c011200b002b32af2e9c6sm901490ljb.116.2023.06.13.07.03.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 07:03:11 -0700 (PDT)
+        Tue, 13 Jun 2023 07:03:13 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 13 Jun 2023 16:03:02 +0200
-Subject: [PATCH v4 02/22] soc: qcom: smd-rpm: Add QCOM_SMD_RPM_STATE_NUM
+Date:   Tue, 13 Jun 2023 16:03:03 +0200
+Subject: [PATCH v4 03/22] soc: qcom: smd-rpm: Use tabs for defines
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230526-topic-smd_icc-v4-2-5ba82b6fbba2@linaro.org>
+Message-Id: <20230526-topic-smd_icc-v4-3-5ba82b6fbba2@linaro.org>
 References: <20230526-topic-smd_icc-v4-0-5ba82b6fbba2@linaro.org>
 In-Reply-To: <20230526-topic-smd_icc-v4-0-5ba82b6fbba2@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -75,11 +75,11 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         devicetree@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1686664985; l=664;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1686664985; l=691;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=XHE1WQYZzaLo+c3xD4ALM/GRb1VwY7GuxNqpdL0mBnk=;
- b=0hu2uLKM1PKnDIKpu/TRmCfDjaloa6VaYIarEIKVnJ6/AzAc22Wjp6IAZQP9iZX+VdG/ATjf4
- SW+4bjBHbRJCKeF4inUFUocAzhieblB734hHD8cQHgVjsJSJbqEF9e6
+ bh=7uAPa6YDjXHLJZjqpcpTS8PIWFtwDRP9qtCSKC7URyY=;
+ b=3QxTLVHO4Nr6bVB2frFdYaQedokBMp38qiprqfH/uJfbdIhUt5gKU6UxggRbV2D7R4kUa8Pkp
+ Bx/In/tt5kvBMujWMNlvZkL5UPROUqK5TZgTKvBRxbQetqOqRAhjTlH
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -92,25 +92,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a preprocessor define to indicate the number of RPM contexts/states.
+Use tabs for defines to make things spaced consistently.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- include/linux/soc/qcom/smd-rpm.h | 1 +
- 1 file changed, 1 insertion(+)
+ include/linux/soc/qcom/smd-rpm.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/include/linux/soc/qcom/smd-rpm.h b/include/linux/soc/qcom/smd-rpm.h
-index 2990f425fdef..e468f94fa323 100644
+index e468f94fa323..99499e4b080e 100644
 --- a/include/linux/soc/qcom/smd-rpm.h
 +++ b/include/linux/soc/qcom/smd-rpm.h
-@@ -6,6 +6,7 @@ struct qcom_smd_rpm;
+@@ -4,8 +4,8 @@
  
- #define QCOM_SMD_RPM_ACTIVE_STATE        0
- #define QCOM_SMD_RPM_SLEEP_STATE         1
-+#define QCOM_SMD_RPM_STATE_NUM		2
+ struct qcom_smd_rpm;
+ 
+-#define QCOM_SMD_RPM_ACTIVE_STATE        0
+-#define QCOM_SMD_RPM_SLEEP_STATE         1
++#define QCOM_SMD_RPM_ACTIVE_STATE	0
++#define QCOM_SMD_RPM_SLEEP_STATE	1
+ #define QCOM_SMD_RPM_STATE_NUM		2
  
  /*
-  * Constants used for addressing resources in the RPM.
 
 -- 
 2.41.0
