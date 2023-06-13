@@ -2,64 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55F0C72E7D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 18:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 625FE72E7DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 18:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240945AbjFMQGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 12:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39196 "EHLO
+        id S239339AbjFMQHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 12:07:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240034AbjFMQGa (ORCPT
+        with ESMTP id S235686AbjFMQHN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 12:06:30 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25D4171A
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 09:06:29 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-56cfcdc7421so42419677b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 09:06:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686672389; x=1689264389;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qSQDwhzYJY7tobD4czU+pyoTs1hJWVefOdasiCdvdec=;
-        b=7JZwNsEgQrxs9spaTdwXX2Di3yo5WPOgDQ55PEAhk/K3pspHhwT4fd+ubWREmWxa6c
-         JFuI+CGBrhKi5g0AM4cw0JOtjmpQjDDCxgajP//aA/FKIedVMGNUJEPfjOfaeqk/FAsw
-         f9GsrmYsDeV95H+jllKNDH1ovIVytMq36I1+BWMhQ5p4pGoK7s/Uld5Y/vM3TXkpR/Gn
-         eR4KhQCEA8bdGfV6xPPRzT9EV7UNtqvJw1PT8FBSGc+2/CEEdWpEK09IQWmWgIwEd0+9
-         VWg4vT4MBsiCegzGIwhjVJIwH5PeW5mRWf/ZowU767J5m4p08jehbcfVtueNmcTlioA6
-         61ZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686672389; x=1689264389;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qSQDwhzYJY7tobD4czU+pyoTs1hJWVefOdasiCdvdec=;
-        b=Gf2cAltm71f8vNiLttACmRMFHePB1EgFZGNsIVSsccrfn3m/a/kYEzXoSwBY9Fdum3
-         cENWSgMpjwR+pAOMwKHhn60hrGKdeTlJy5Ab91Jy7mAe9x610isDjceMfJPjcSIoSKm7
-         ZCDdjwhwLT28E2Lqx9u+9haDrVuaIN6equy456ed2U0GNS586yh5slssazvQoIi3ukYq
-         rgYRNaksw3mPvqWiThfzwWyS9sK30eoSScNb39zEUHW+s3nSGyM1Kvag0URWTvn61t4e
-         9M2oN1pD4IyeFR+xNKZ+e2yBRWdREfLb7dNhoEY30F9G+rAPFHWHAVNSBl/oubN+Ql/H
-         64+g==
-X-Gm-Message-State: AC+VfDzBcEyUyeFE9PihwQ5OyW3skCQEPdR8SBUdUHGm0Sle9xFMaP6U
-        IXceVIQhVUBexZ2gT+96Vydw2GHM8PQ=
-X-Google-Smtp-Source: ACHHUZ5t1fBiSR/tYb00iWy9UK0OHpyz0u1GPadvHcGNxc5YGmkhV9HnKH0b/w5BmC0fEJM2S3Us09Z6T0Q=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:1682:b0:bca:629b:6f33 with SMTP id
- bx2-20020a056902168200b00bca629b6f33mr1049253ybb.5.1686672389135; Tue, 13 Jun
- 2023 09:06:29 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 09:06:27 -0700
-In-Reply-To: <fd000efe-315f-a2c7-b42b-7ebbce922928@linux.intel.com>
-Mime-Version: 1.0
-References: <20230607004636.1421424-1-seanjc@google.com> <fd000efe-315f-a2c7-b42b-7ebbce922928@linux.intel.com>
-Message-ID: <ZIiUAz7VIBughj/J@google.com>
-Subject: Re: [PATCH] KVM: x86: Update comments about MSR lists exposed to userspace
-From:   Sean Christopherson <seanjc@google.com>
-To:     Binbin Wu <binbin.wu@linux.intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        Tue, 13 Jun 2023 12:07:13 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BDAA0;
+        Tue, 13 Jun 2023 09:07:10 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35DAkVw4004535;
+        Tue, 13 Jun 2023 16:07:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=rOkfD0VbuvCThFWC0VDMkt5Me6BqDMFsKBlBpWGcBE0=;
+ b=LMB/LvOBUlhHfn1VzUhUjPwJK5AGFIj9Yeasfy/xMfnzdihWWvdVxulgsRHqRIzxjLXl
+ D+qf7d7XhWLYNExo8BtGJ78CKWyBDZZLt/lvJ6ZUrxp1DDOxitvA2kLutDAG6YLFKCx4
+ jpJ7nIHIWf8NpCc0dobXcqbpc4/59rvQXhE6ISPkh+2O9IH3wQO7kzj8VpXarJr/h9ps
+ fb1+OhN6C8SoQOv/jbCS0MPkv74IY2Z1l4YlTayGCQTrTJdLb56iMgb7KUOfWFeMT4K3
+ 0hpx2qP2QyiPXno2yXKvH+Ahu8i3JyCgWbjkv1xwgAwvl3Mla0ySZccijHwXM2Y6h5iN zQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r68x9a7fw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Jun 2023 16:07:05 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35DG74A9002280
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Jun 2023 16:07:04 GMT
+Received: from [10.216.12.219] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 13 Jun
+ 2023 09:07:00 -0700
+Message-ID: <02dabcc8-2340-2188-f6a8-51513b147e7c@quicinc.com>
+Date:   Tue, 13 Jun 2023 21:36:41 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] soc: qcom: geni-se: Do not bother about enable/disable of
+ interrupts in secondary sequencer for non-uart modes
+Content-Language: en-CA
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+To:     Doug Anderson <dianders@chromium.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_msavaliy@quicinc.com>,
+        <mka@chromium.org>, <swboyd@chromium.org>,
+        <quic_vtanuku@quicinc.com>
+References: <1685729609-26871-1-git-send-email-quic_vnivarth@quicinc.com>
+ <CAD=FV=Uy=ELwg2jhtFSrpndw-GxUO=0NTKotNymi3sqwG=ggnQ@mail.gmail.com>
+ <af4c131a-b97d-a8e8-957d-77c31d3c816a@quicinc.com>
+In-Reply-To: <af4c131a-b97d-a8e8-957d-77c31d3c816a@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 5qZaDfeNdUiV3yIX0wyNFaWxOn7w0Dyf
+X-Proofpoint-ORIG-GUID: 5qZaDfeNdUiV3yIX0wyNFaWxOn7w0Dyf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-13_18,2023-06-12_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_spam policy=outbound score=95 phishscore=0 priorityscore=1501
+ lowpriorityscore=0 impostorscore=0 spamscore=95 suspectscore=0
+ mlxlogscore=-127 mlxscore=95 adultscore=0 malwarescore=0 clxscore=1015
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306130142
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,54 +85,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023, Binbin Wu wrote:
-> 
-> 
-> On 6/7/2023 8:46 AM, Sean Christopherson wrote:
-> > Refresh comments about msrs_to_save, emulated_msrs, and msr_based_features
-> > to remove stale references left behind by commit 2374b7310b66 (KVM:
-> > x86/pmu: Use separate array for defining "PMU MSRs to save"), and to
-> > better reflect the current reality, e.g. emulated_msrs is no longer just
-> > for MSRs that are "kvm-specific".
-> > 
-> > Reported-by: Binbin Wu <binbin.wu@linux.intel.com>
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> >   arch/x86/kvm/x86.c | 27 +++++++++++++--------------
-> >   1 file changed, 13 insertions(+), 14 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index 5ad55ef71433..c77f72cf6dc8 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -1427,15 +1427,14 @@ int kvm_emulate_rdpmc(struct kvm_vcpu *vcpu)
-> >   EXPORT_SYMBOL_GPL(kvm_emulate_rdpmc);
-> >   /*
-> > - * List of msr numbers which we expose to userspace through KVM_GET_MSRS
-> > - * and KVM_SET_MSRS, and KVM_GET_MSR_INDEX_LIST.
-> > - *
-> > - * The three MSR lists(msrs_to_save, emulated_msrs, msr_based_features)
-> > - * extract the supported MSRs from the related const lists.
-> > - * msrs_to_save is selected from the msrs_to_save_all to reflect the
-> > - * capabilities of the host cpu. This capabilities test skips MSRs that are
-> > - * kvm-specific. Those are put in emulated_msrs_all; filtering of emulated_msrs
-> > - * may depend on host virtualization features rather than host cpu features.
-> > + * The three MSR lists(msrs_to_save, emulated_msrs, msr_based_features) track
-> > + * the set of MSRs that KVM exposes to userspace through KVM_GET_MSRS,
-> > + * KVM_SET_MSRS, and KVM_GET_MSR_INDEX_LIST.  msrs_to_save holds MSRs that
-> > + * require host support, i.e. should be probed via RDMSR.  emulated_msrs holds
-> > + * MSRs that emulates without strictly requiring host support.
-> emulates -> emulate/emulated?
+Hi,
 
-Ah, no, that's supposed to be "that KVM emulates".  I'll fix that up when applying.
 
-> BTW, do you think is it better to use msrs_emulated instead of emulated_msrs
-> to align the naming style?
+On 6/12/2023 7:09 PM, Vijaya Krishna Nivarthi wrote:
+> Hi,
+>
+> Thank you very much for the review...
+>
+>
+> On 6/7/2023 9:41 PM, Doug Anderson wrote:
+>> Hi,
+>>
+>> On Fri, Jun 2, 2023 at 11:13 AM Vijaya Krishna Nivarthi
+>> <quic_vnivarth@quicinc.com> wrote:
+>>> The select_fifo/dma_mode() functions in geni driver enable/disable
+>>> interrupts (secondary included) conditionally for non-uart modes, while
+>>> uart is supposed to manage this internally.
+>>> However, only uart uses secondary IRQs while spi, i2c do not care about
+>>> these at all making their enablement (or disablement) totally 
+>>> unnecessary
+>>> for these protos.
+>>>
+>>> Drop enabling/disabling secondary IRQs for non-uart modes.
+>>> This doesn't solve any observed problem but only gets rid of code 
+>>> pieces
+>>> that are not required.
+>>>
+>>> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+>>> ---
+>>>   drivers/soc/qcom/qcom-geni-se.c | 24 ++++--------------------
+>>>   1 file changed, 4 insertions(+), 20 deletions(-)
+>> This seems like a nice cleanup to me. It's still odd that the general
+>> code has a special case for UART, but I guess the alternative is to
+>> duplicate the exact same logic for both the i2c and SPI drivers. I
+>> won't insist on that, though I wouldn't be opposed to it either.
+>>
+>> I guess one comment, though: should we also remove the code that
+>> messes with "SE_GENI_S_IRQ_EN" in geni_se_select_gpi_mode()?
+>
+>
+> Right now we have gpi-dma mode support for i2c and spi but not for uart.
+>
+> Even when gpi-dma support is added, uart driver's interrupt handler 
+> would not be invoked so I believe it would be safe to drop that code 
+> from geni_se_select_gpi_mode() too.
+>
+> I will post v2 dropping same after some more lookup.
 
-No, "emulated" is used as an adjective that describes each MSR, versus the "to save"
-part of msrs_to_save being a description of the list, not each MSR.
 
-If I were going to rename anything, it would be msr_based_features, because that
-reads as "MSR-based features", i.e. reads as "a list of features that are tied
-to MSRs", whereas the list actually tracks "feature-based MSRs", i.e. "a list of
-MSRs that track features".
+Looking at this once again, I am more inclined towards leaving alone 
+gpi_mode() for now.
+
+It probably needs cleanup but we want to take that up at a later time.
+
+Meanwhile its not causing much harm as we don't switch modes dynamically 
+for gpi case, so we are not losing much time there reading from and 
+writing to registers.
+
+Please let know your thoughts.
+
+Thank you,
+
+Vijay/
+
+
+>
+> -Vijay/
+>
+>
+>>
+>> -Doug
