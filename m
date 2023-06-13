@@ -2,157 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8067772EA5A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:58:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E851C72EA64
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239702AbjFMR5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 13:57:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
+        id S240003AbjFMR71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 13:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239374AbjFMR5r (ORCPT
+        with ESMTP id S240019AbjFMR7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 13:57:47 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2425A19A8
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 10:57:45 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f620583bc2so7236967e87.1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 10:57:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686679062; x=1689271062;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ucwpoQAK13prSY87pdp529JG6f/Yd6pwjydVL0f7ZAE=;
-        b=GqVMVo6Hp3TdQ/tAVhnguvaW4XPQ8Z6x0MBjZl0T1E+O0LfjSyFdhMC5JUTEXsfnLi
-         6nvtSlZWpNbTKLQlAk2EQVMqUlx3IBDIf6CDdg1JX3cXDZc6McL81zw8ZDPTo/8UySjw
-         6kkcsWmkElBmEofyxqawn17ksyrYU4ZHxp6WI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686679062; x=1689271062;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ucwpoQAK13prSY87pdp529JG6f/Yd6pwjydVL0f7ZAE=;
-        b=UYmbj8p2muSOdb96vpGwr5fzYefE/g7J6ydxmXDzgv71VPz7uR/I7e4ZrTJVqOFcKw
-         NHjJ4uG8z3nSRKrPcZyqyslFki6c7xk+lpZ16ymT3oR3iRbGLVlB6L7irkB3LEVVglzv
-         efKgDc9a2Um7Kr214vczpyjv4bFhhRLoPumM2aq+dmzAqAcZ3aS3um4aXseHZBDetgYy
-         vXMCYCKaWUG9QLkQ/XI3u3XJ20+/Fla9zaYtiBSyUVln9P2NiGFYh1Mx6hfCZFtZpowS
-         HoOjfypwSkDG9R4YaH+gdX+4fQw32OWBi8ePxdufT60JSERmpw4JvYBaap4892NuByTT
-         NfOw==
-X-Gm-Message-State: AC+VfDwxOdSa+Tc+Qpb9xBiXF0baViIew4nCEFzIT2qf8y55iJ2H7TND
-        ZHE8BTVH7tONS9D7XZtjuY8joExfd9EgPWvxHOdIIbOL
-X-Google-Smtp-Source: ACHHUZ4HxX0+IF2HqGBZ5H2xv8/fW5c/KiYXaZ60+U53Fm45AOGoGfB+s2tnDf9EGerQ23vj8We7qQ==
-X-Received: by 2002:a05:6512:46a:b0:4f3:a99f:1ea1 with SMTP id x10-20020a056512046a00b004f3a99f1ea1mr7612623lfd.45.1686679061967;
-        Tue, 13 Jun 2023 10:57:41 -0700 (PDT)
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
-        by smtp.gmail.com with ESMTPSA id m10-20020aa7c2ca000000b005184165f1fasm2712480edp.5.2023.06.13.10.57.39
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 10:57:40 -0700 (PDT)
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-514ad92d1e3so1228a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 10:57:39 -0700 (PDT)
-X-Received: by 2002:a50:ab0b:0:b0:514:95d4:c2bb with SMTP id
- s11-20020a50ab0b000000b0051495d4c2bbmr2429edc.2.1686679059461; Tue, 13 Jun
- 2023 10:57:39 -0700 (PDT)
+        Tue, 13 Jun 2023 13:59:24 -0400
+Received: from sender3-op-o18.zoho.com (sender3-op-o18.zoho.com [136.143.184.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0349919B6;
+        Tue, 13 Jun 2023 10:59:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686679125; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=E7lSMWkV7b5ODjNO7BK5WP5Ssg4jm20tHSnNq/e3F9lHXNxeIlmwoSoBR79du19K4HJBsz/NY7xLrBq4BY5Dv83G5zU/eXRcx/uWMTt0/w7o13+qeZNLlQz/0GWML34ZeLAXieAZH78br5N906djoyVXwz5Gc5/7zGDZw1XL4vE=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1686679125; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=WzrVqvh/dDTqDYcbmTwhWyO6VLQD1qgqToUYYDQ/RoE=; 
+        b=DtJuxPts/TzNr9xeoUahNfThapMuO2eo2mUqa5Nmvt/jUvnYSp9o7C/ZPCJDg9B9ObR3/u6M2/AxlI4Sn48NaezK8RQtC4iMd+tjQ5W/yXOEhOFvFXZBleRxIUK2layNPRZ67qMxGRz7awboUPUlhb6qoOK+zBf+/ZzswG2/Vkk=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1686679125;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=WzrVqvh/dDTqDYcbmTwhWyO6VLQD1qgqToUYYDQ/RoE=;
+        b=aE8QH8mAUu0WeIZHkrvypJMCH0MvzmPSDKBFMrxb7+q+Ug54uKZ6MC3vCEintK5O
+        7Bua4EQOsHjCxOFzPoFOxf7ie5q8e5a9Vf6/eYTijXyUjvdx7jM4SA26lo4unyN+iCs
+        cNQ5At/73sitHYeJmMULF4wy3WATlBZneo3L1IWM=
+Received: from [192.168.1.248] (178-147-169-233.haap.dm.cosmote.net [178.147.169.233]) by mx.zohomail.com
+        with SMTPS id 1686679123743537.1638599900879; Tue, 13 Jun 2023 10:58:43 -0700 (PDT)
+Message-ID: <edcbe326-c456-06ef-373b-313e780209de@arinc9.com>
+Date:   Tue, 13 Jun 2023 20:58:33 +0300
 MIME-Version: 1.0
-References: <1685729609-26871-1-git-send-email-quic_vnivarth@quicinc.com>
- <CAD=FV=Uy=ELwg2jhtFSrpndw-GxUO=0NTKotNymi3sqwG=ggnQ@mail.gmail.com>
- <af4c131a-b97d-a8e8-957d-77c31d3c816a@quicinc.com> <02dabcc8-2340-2188-f6a8-51513b147e7c@quicinc.com>
-In-Reply-To: <02dabcc8-2340-2188-f6a8-51513b147e7c@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 13 Jun 2023 10:57:24 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WwcpyvMem08rOXrBMUWW_7ADgfGZGEnEFDky+96pSdpQ@mail.gmail.com>
-Message-ID: <CAD=FV=WwcpyvMem08rOXrBMUWW_7ADgfGZGEnEFDky+96pSdpQ@mail.gmail.com>
-Subject: Re: [PATCH] soc: qcom: geni-se: Do not bother about enable/disable of
- interrupts in secondary sequencer for non-uart modes
-To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_msavaliy@quicinc.com, mka@chromium.org, swboyd@chromium.org,
-        quic_vtanuku@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net v2 2/7] net: dsa: mt7530: fix trapping frames with
+ multiple CPU ports on MT7530
+Content-Language: en-US
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230611081547.26747-1-arinc.unal@arinc9.com>
+ <20230611081547.26747-2-arinc.unal@arinc9.com>
+ <20230613150815.67uoz3cvvwgmhdp2@skbuf>
+ <a91e88a8-c528-0392-1237-fc8417931170@arinc9.com>
+ <20230613171858.ybhtlwxqwp7gyrfs@skbuf>
+ <20230613172402.grdpgago6in4jogq@skbuf>
+ <ca78b2f9-bf98-af26-0267-60d2638f7f00@arinc9.com>
+ <20230613173908.iuofbuvkanwyr7as@skbuf>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20230613173908.iuofbuvkanwyr7as@skbuf>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 13.06.2023 20:39, Vladimir Oltean wrote:
+> On Tue, Jun 13, 2023 at 08:30:28PM +0300, Arınç ÜNAL wrote:
+>> That fixes port 5 on certain variants of the MT7530 switch, as it was
+>> already working on the other variants, which, in conclusion, fixes port 5 on
+>> all MT7530 variants.
+> 
+> Ok. I didn't pay enough attention to the commit message.
+> 
+>> And no, trapping works. Having only CPU port 5 defined on the devicetree
+>> will cause the CPU_PORT bits to be set to port 5. There's only a problem
+>> when multiple CPU ports are defined.
+> 
+> Got it. Then this is really not a problem, and the commit message frames
+> it incorrectly.
 
-On Tue, Jun 13, 2023 at 9:07=E2=80=AFAM Vijaya Krishna Nivarthi
-<quic_vnivarth@quicinc.com> wrote:
->
-> Hi,
->
->
-> On 6/12/2023 7:09 PM, Vijaya Krishna Nivarthi wrote:
-> > Hi,
-> >
-> > Thank you very much for the review...
-> >
-> >
-> > On 6/7/2023 9:41 PM, Doug Anderson wrote:
-> >> Hi,
-> >>
-> >> On Fri, Jun 2, 2023 at 11:13=E2=80=AFAM Vijaya Krishna Nivarthi
-> >> <quic_vnivarth@quicinc.com> wrote:
-> >>> The select_fifo/dma_mode() functions in geni driver enable/disable
-> >>> interrupts (secondary included) conditionally for non-uart modes, whi=
-le
-> >>> uart is supposed to manage this internally.
-> >>> However, only uart uses secondary IRQs while spi, i2c do not care abo=
-ut
-> >>> these at all making their enablement (or disablement) totally
-> >>> unnecessary
-> >>> for these protos.
-> >>>
-> >>> Drop enabling/disabling secondary IRQs for non-uart modes.
-> >>> This doesn't solve any observed problem but only gets rid of code
-> >>> pieces
-> >>> that are not required.
-> >>>
-> >>> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-> >>> ---
-> >>>   drivers/soc/qcom/qcom-geni-se.c | 24 ++++--------------------
-> >>>   1 file changed, 4 insertions(+), 20 deletions(-)
-> >> This seems like a nice cleanup to me. It's still odd that the general
-> >> code has a special case for UART, but I guess the alternative is to
-> >> duplicate the exact same logic for both the i2c and SPI drivers. I
-> >> won't insist on that, though I wouldn't be opposed to it either.
-> >>
-> >> I guess one comment, though: should we also remove the code that
-> >> messes with "SE_GENI_S_IRQ_EN" in geni_se_select_gpi_mode()?
-> >
-> >
-> > Right now we have gpi-dma mode support for i2c and spi but not for uart=
-.
-> >
-> > Even when gpi-dma support is added, uart driver's interrupt handler
-> > would not be invoked so I believe it would be safe to drop that code
-> > from geni_se_select_gpi_mode() too.
-> >
-> > I will post v2 dropping same after some more lookup.
->
->
-> Looking at this once again, I am more inclined towards leaving alone
-> gpi_mode() for now.
->
-> It probably needs cleanup but we want to take that up at a later time.
->
-> Meanwhile its not causing much harm as we don't switch modes dynamically
-> for gpi case, so we are not losing much time there reading from and
-> writing to registers.
->
-> Please let know your thoughts.
+Actually this patch fixes the issue it describes. At the state of this 
+patch, when multiple CPU ports are defined, port 5 is the active CPU 
+port, CPU_PORT bits are set to port 6.
 
-It's not really about the time needed for the extra register writes,
-but just someone trying to understand the code who might be trying to
-figure out what bits are relevant. The bits related to the secondary
-sequencer's interrupts don't do anything useful when we're using the
-controller for i2c/spi, so why not delete them?
+Once "the patch that prefers port 6, I could easily find the exact name 
+but your mail snipping makes it hard" is applied, this issue becomes 
+redundant.
 
--Doug
+> 
+>>> So how about settling on that as a more modest Fixes: tag, and
+>>> explaining clearly in the commit message what's affected?
+>>
+>> I don't see anything to change in the patch log except addressing Russell's
+>> comments.
+> 
+> Ok. I see Russell has commented on v4, though I don't see that he particularly
+> pointed out that this fixes a problem which isn't yet a problem. I got lost in
+> all the versions. v2 and v3 are out of my inbox now :)
+
+All good, I had to quickly roll v3 as v2 had wrong author information 
+and I couldn't risk getting v2 applied.
+
+Arınç
