@@ -2,111 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD3172E71C
+	by mail.lfdr.de (Postfix) with ESMTP id C0CBE72E71E
 	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242837AbjFMPXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 11:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
+        id S240113AbjFMPYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 11:24:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240973AbjFMPXn (ORCPT
+        with ESMTP id S242789AbjFMPYO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 11:23:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020C019B7;
-        Tue, 13 Jun 2023 08:23:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 13 Jun 2023 11:24:14 -0400
+Received: from mx2.veeam.com (mx2.veeam.com [64.129.123.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F215E1BE7;
+        Tue, 13 Jun 2023 08:24:00 -0700 (PDT)
+Received: from mail.veeam.com (prgmbx01.amust.local [172.24.128.102])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 285EB637A0;
-        Tue, 13 Jun 2023 15:23:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED41EC433D9;
-        Tue, 13 Jun 2023 15:23:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686669813;
-        bh=Mi+mI7N46ZxzzZLb/TXUcDy1ynizAZzA47svx3Q14sY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=maobcKQoh6GI014NM4dpO69qO3Z32zkLGDzKUc3qUJlLtIi5jKuQUArg/20JvSxgi
-         OlBlaGd/IKH9xxJdWythhnPj7hSjP9a6xsUY8o+EytJbAqqlP+1nXMlAWLoV6ibIdA
-         nsIfpSJZvrrLQ3H/hJ2WBozgqZKS329hcqeaRPQrKTyEOZSt21I7X0Vgw51dKTy00w
-         mlLYbAX/gEzk6nWdRto5freDs7B+KHZgRwGloAh1f2yfOdMmiwfNyjc0aF51Wpir+l
-         seMNpfqifr6ept0O6vK4tWR4JZRnXFgPCxNPp/5kFvogGvHWErWJ7sz0wphWLyTRZ/
-         RkexTX+4bH1Iw==
-Date:   Tue, 13 Jun 2023 16:23:27 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Yingkun Meng <mengyingkun@loongson.cn>,
-        Conor Dooley <conor@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        conor+dt@kernel.org, lgirdwood@gmail.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org, loongarch@lists.linux.dev,
-        loongson-kernel@lists.loongnix.cn
-Subject: Re: [ PATCH v2 3/3] ASoC: dt-bindings: Add support for Loongson
- audio card
-Message-ID: <fb8ef8e7-15d2-4fc3-8d9b-4edf1b3bced1@sirena.org.uk>
-References: <20230612085614.3039498-1-mengyingkun@loongson.cn>
- <20230612-booted-french-186dd95e78a9@spud>
- <bda7c25f-65cf-d45f-3ac0-f2471e3aacf8@loongson.cn>
- <20230613-zoologist-panorama-a87858bba075@wendy>
- <887f9cc4-6457-9d14-8aef-011ff4c9aeda@loongson.cn>
- <20230613-depletion-garnet-ccc2009111c3@wendy>
- <449d07d9-5538-4f36-83a0-3a81a9ab9ea2@sirena.org.uk>
- <20230613-crewmate-levitate-597ab96ea2d7@wendy>
+        by mx2.veeam.com (Postfix) with ESMTPS id E534441C2D;
+        Tue, 13 Jun 2023 11:23:57 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com;
+        s=mx2-2022; t=1686669838;
+        bh=40s+nUN8R5Qgu61YlGIQxZXjwUmvIf+foe93wtMZLps=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To:From;
+        b=kccezytyhEARm4Ht3h3sAzJiwHnocoTeyPml2SRgvpncfqGgta7s3s+qEVqw1g4UZ
+         H+E5vne7MD40jhf568I1zCOrVj3KE000dpx1WRe20dqZYOBtW/ceykZWhQMov1QA1a
+         7EJJV1ADLISDrTHe5sAtfUbWQkkOfESPrqe015l5OT9cnijMYw30iK5A4XBnr5wwr+
+         n3/Mos+ot2gb7UdpKJ1OsdKKgB+Xp518iQf5mCZRCAqyqw89ff8AcQE07iXfoKYXZK
+         EYx0OiVCWPX9nWTWc2clW2OMa805j5lStTV3MurApz/NVCdV0DT3F/z7hfpFt9911v
+         F5GDfLPwSMEFA==
+Received: from [172.24.10.107] (172.24.10.107) by prgmbx01.amust.local
+ (172.24.128.102) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Tue, 13 Jun
+ 2023 17:23:56 +0200
+Message-ID: <5f6cdc55-ddbe-ab03-92bf-02ff0318985f@veeam.com>
+Date:   Tue, 13 Jun 2023 17:23:50 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="l11+GZHPld2NB1XO"
-Content-Disposition: inline
-In-Reply-To: <20230613-crewmate-levitate-597ab96ea2d7@wendy>
-X-Cookie: Not a flying toy.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v4 01/11] documentation: Block Device Filtering Mechanism
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, <axboe@kernel.dk>,
+        <hch@infradead.org>, <corbet@lwn.net>, <snitzer@kernel.org>
+CC:     <viro@zeniv.linux.org.uk>, <brauner@kernel.org>,
+        <willy@infradead.org>, <dlemoal@kernel.org>, <wsa@kernel.org>,
+        <heikki.krogerus@linux.intel.com>, <ming.lei@redhat.com>,
+        <gregkh@linuxfoundation.org>, <linux-block@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>,
+        "Bagas Sanjaya" <bagasdotme@gmail.com>
+References: <20230609115858.4737-1-sergei.shtepa@veeam.com>
+ <004cc6b2-1941-5aed-6e09-3bd01dfbf8e4@infradead.org>
+From:   Sergei Shtepa <sergei.shtepa@veeam.com>
+In-Reply-To: <004cc6b2-1941-5aed-6e09-3bd01dfbf8e4@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.24.10.107]
+X-ClientProxiedBy: prgmbx02.amust.local (172.24.128.103) To
+ prgmbx01.amust.local (172.24.128.102)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A29240315546D7161
+X-Veeam-MMEX: True
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Thank you very much, Randy, for the work you've done.
+Sometimes I want to compile the documentation into bytecode, fix the warnings
+and debug it in the debugger.
 
---l11+GZHPld2NB1XO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 6/13/23 03:52, Randy Dunlap wrote:
+> Subject:
+> Re: [PATCH v4 01/11] documentation: Block Device Filtering Mechanism
+> From:
+> Randy Dunlap <rdunlap@infradead.org>
+> Date:
+> 6/13/23, 03:52
+> 
+> To:
+> Sergei Shtepa <sergei.shtepa@veeam.com>, axboe@kernel.dk, hch@infradead.org, corbet@lwn.net, snitzer@kernel.org
+> CC:
+> viro@zeniv.linux.org.uk, brauner@kernel.org, willy@infradead.org, dlemoal@kernel.org, wsa@kernel.org, heikki.krogerus@linux.intel.com, ming.lei@redhat.com, gregkh@linuxfoundation.org, linux-block@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, Bagas Sanjaya <bagasdotme@gmail.com>
+> 
+> 
+> Hi--
+> 
+> On 6/9/23 04:58, Sergei Shtepa wrote:
+>> The document contains:
+>> * Describes the purpose of the mechanism
+>> * A little historical background on the capabilities of handling I/O
+>>   units of the Linux kernel
+>> * Brief description of the design
+>> * Reference to interface description
+>>
+>> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+>> Signed-off-by: Sergei Shtepa <sergei.shtepa@veeam.com>
+>> ---
+>>  Documentation/block/blkfilter.rst | 64 +++++++++++++++++++++++++++++++
+>>  Documentation/block/index.rst     |  1 +
+>>  MAINTAINERS                       |  6 +++
+>>  3 files changed, 71 insertions(+)
+>>  create mode 100644 Documentation/block/blkfilter.rst
+>>
+>> diff --git a/Documentation/block/blkfilter.rst b/Documentation/block/blkfilter.rst
+>> new file mode 100644
+>> index 000000000000..555625789244
+>> --- /dev/null
+>> +++ b/Documentation/block/blkfilter.rst
+>> @@ -0,0 +1,64 @@
+>> +.. SPDX-License-Identifier: GPL-2.0
+>> +
+>> +================================
+>> +Block Device Filtering Mechanism
+>> +================================
+>> +
+>> +The block device filtering mechanism is an API that allows to attach block
+>                                                   that allows {what or who} to attach
+> 
+> so who/what does the attach? Is it a driver or a user or admin or something else?
+> and attach them to what?
+> 
+>> +device filters. Block device filters allow perform additional processing
+>                                         allow performing ...
+> 
+>> +for I/O units.
+>> +
+>> +Introduction
+>> +============
+>> +
+>> +The idea of handling I/O units on block devices is not new. Back in the
+>> +2.6 kernel, there was an undocumented possibility of handling I/O units
+>> +by substituting the make_request_fn() function, which belonged to the
+>> +request_queue structure. But none of the in-tree kernel modules used this
+>> +feature, and it was eliminated in the 5.10 kernel.
+>> +
+>> +The block device filtering mechanism returns the ability to handle I/O units.
+>> +It is possible to safely attach filter to a block device "on the fly" without
+>                             attach a filter
+> or
+>                             attach filters
+> 
+>> +changing the structure of block devices stack.
+>                           of the block device's stack.
+> 
+>> +
+>> +It supports attaching one filter to one block device, because there is only
+>> +one filter implementation in the kernel yet.
+>> +See Documentation/block/blksnap.rst.
+>> +
+>> +Design
+>> +======
+>> +
+>> +The block device filtering mechanism provides registration and unregistration
+>> +for filter operations. The struct blkfilter_operations contains a pointer to
+>> +the callback functions for the filter. After registering the filter operations,
+>> +filter can be managed using block device ioctl BLKFILTER_ATTACH,
+>    a filter
+> or
+>    the filter                               ioctls
+> 
+>> +BLKFILTER_DETACH and BLKFILTER_CTL.
+>> +
+>> +When the filter is attached, the callback function is called for each I/O unit
+>> +for a block device, providing I/O unit filtering. Depending on the result of
+>> +filtering the I/O unit, it can either be passed for subsequent processing by
+>> +the block layer, or skipped.
+>> +
+>> +The filter can be implemented as a loadable module. In this case, the filter
+>> +module cannot be unloaded while the filter is attached to at least one of the
+>> +block devices.
+>> +
+>> +Interface description
+>> +=====================
+>> +
+>> +The ioctl BLKFILTER_ATTACH and BLKFILTER_DETACH use structure blkfilter_name.
+>        ioctls
+> 
+>> +It allows to attach a filter to a block device or detach it.
+>    It allows a driver to attach a filter ...
+> ?
+> 
+>> +
+>> +The ioctl BLKFILTER_CTL use structure blkfilter_ctl. It allows to send a
+>                                                         It allows a driver to send a
+> 
+>> +filter-specific command.
+>> +
+>> +.. kernel-doc:: include/uapi/linux/blk-filter.h
+>> +
+>> +To register in the system, the filter creates its own account, which contains
+>> +callback functions, unique filter name and module owner. This filter account is
+>> +used by the registration functions.
+> I'm having a problem with this "account" thingy. Can you explain more about it?
+> Is there an alternate word that might be used here?
+> 
+>> +
+>> +.. kernel-doc:: include/linux/blk-filter.h
+>> +
+>> +.. kernel-doc:: block/blk-filter.c
+>> +   :export:
+> Thanks.
+> -- ~Randy
+> 
 
-On Tue, Jun 13, 2023 at 03:29:33PM +0100, Conor Dooley wrote:
-> On Tue, Jun 13, 2023 at 02:54:36PM +0100, Mark Brown wrote:
+fix of the blkfilter.rst document and help in Kconfig for blksnap
 
-> > are also important to the audio configuration.  A card binding describes
-> > the interconections between the devices in the system and provides
-> > identification information for the audio subsystem.  This system level
-> > audio integration is a physical thing that can be pointed at that
-> > requires real software control.
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Sergei Shtepa <sergei.shtepa@veeam.com>
+---
+ Documentation/block/blkfilter.rst | 28 +++++++++++++++-------------
+ drivers/block/blksnap/Kconfig     |  2 +-
+ 2 files changed, 16 insertions(+), 14 deletions(-)
 
-> The bit you were responding to with that was a disingenuous question.
-> Probably not fair of me to ask one of a non-native speaker like that,
-> when all I wanted to know was whether it was appropriate not to add
-> a more specific compatible, or whether this was something invariant.
-
-I don't think that's particularly useful - you'd end up adding a
-compatible for every single board which we've got no real intention of
-adding except in the cases where we end up being able to merge a more
-specific machine driver into a generic one.  It'd be more likely to lead
-to bikeshedding than anything useful I think.
-
---l11+GZHPld2NB1XO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSIie4ACgkQJNaLcl1U
-h9AEeAgAhZ6Nnbye3sNtvMwQaRERwepufwIWsUfpfSJkhRHcfJsVgVpsigqOkqQm
-Ww5V12dg4E8ljvAjGNUDrwAJ98LcmRikl5uE6P06jl6ujwtdoUQ1M7WfAQW15+is
-NGYylD/mE4SSGcuvHhxpgKOOISsVvyu4LI1/6ZDZbMF33Uas9HRRixagjcVgJawG
-ySBXnlv/WS2GKJ06X0LhRAYGgDHXqsGoxu+cDw+RrTMd8pHoZElVNefvdNI62ZUy
-LHRMc2YaiyDxkvZVdrJ3jJhzUAPVcehEVCgCWmKeSN0ht55OmoBnNhKXUcWIv0Zd
-ZO23yw2R7z5P8Q7aEAJ208kmhU+4rg==
-=v32h
------END PGP SIGNATURE-----
-
---l11+GZHPld2NB1XO--
+diff --git a/Documentation/block/blkfilter.rst b/Documentation/block/blkfilter.rst
+index 555625789244..b5160d1008fd 100644
+--- a/Documentation/block/blkfilter.rst
++++ b/Documentation/block/blkfilter.rst
+@@ -4,8 +4,8 @@
+ Block Device Filtering Mechanism
+ ================================
+ 
+-The block device filtering mechanism is an API that allows to attach block
+-device filters. Block device filters allow perform additional processing
++The block device filtering mechanism provides the ability to attach block
++device filters. Block device filters allow performing additional processing
+ for I/O units.
+ 
+ Introduction
+@@ -18,8 +18,8 @@ request_queue structure. But none of the in-tree kernel modules used this
+ feature, and it was eliminated in the 5.10 kernel.
+ 
+ The block device filtering mechanism returns the ability to handle I/O units.
+-It is possible to safely attach filter to a block device "on the fly" without
+-changing the structure of block devices stack.
++It is possible to safely attach a filter to a block device "on the fly" without
++changing the structure of the block device's stack.
+ 
+ It supports attaching one filter to one block device, because there is only
+ one filter implementation in the kernel yet.
+@@ -31,7 +31,7 @@ Design
+ The block device filtering mechanism provides registration and unregistration
+ for filter operations. The struct blkfilter_operations contains a pointer to
+ the callback functions for the filter. After registering the filter operations,
+-filter can be managed using block device ioctl BLKFILTER_ATTACH,
++the filter can be managed using block device ioctls BLKFILTER_ATTACH,
+ BLKFILTER_DETACH and BLKFILTER_CTL.
+ 
+ When the filter is attached, the callback function is called for each I/O unit
+@@ -46,17 +46,19 @@ block devices.
+ Interface description
+ =====================
+ 
+-The ioctl BLKFILTER_ATTACH and BLKFILTER_DETACH use structure blkfilter_name.
+-It allows to attach a filter to a block device or detach it.
+-
+-The ioctl BLKFILTER_CTL use structure blkfilter_ctl. It allows to send a
+-filter-specific command.
++The ioctl BLKFILTER_ATTACH allows user-space programs to attach a block device
++filter to a block device. The ioctl BLKFILTER_DETACH allows user-space programs
++to detach it. Both ioctls use structure blkfilter_name. The ioctl BLKFILTER_CTL
++allows user-space programs to send a filter-specific command. It use structure
++blkfilter_ctl.
+ 
+ .. kernel-doc:: include/uapi/linux/blk-filter.h
+ 
+-To register in the system, the filter creates its own account, which contains
+-callback functions, unique filter name and module owner. This filter account is
+-used by the registration functions.
++To register in the system, the filter uses the blkfilter_operations structure,
++which contains callback functions, unique filter name and module owner. When
++attaching a filter to a block device, the filter creates a blkfilter structure.
++The pointer to the blkfilter structure allows the filter to determine for
++which block device the callback functions are being called.
+ 
+ .. kernel-doc:: include/linux/blk-filter.h
+ 
+diff --git a/drivers/block/blksnap/Kconfig b/drivers/block/blksnap/Kconfig
+index 14081359847b..11df0886489d 100644
+--- a/drivers/block/blksnap/Kconfig
++++ b/drivers/block/blksnap/Kconfig
+@@ -8,5 +8,5 @@ config BLKSNAP
+ 	help
+ 	  Allow to create snapshots and track block changes for block devices.
+ 	  Designed for creating backups for simple block devices. Snapshots are
+-	  temporary and are released then backup is completed. Change block
++	  temporary and are released when backup is completed. Change block
+ 	  tracking allows to create incremental or differential backups.
+-- 
+2.20.1
