@@ -2,100 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7E5872DCFA
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FC5272DCFC
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241667AbjFMIt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 04:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56268 "EHLO
+        id S241719AbjFMItb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 04:49:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241090AbjFMItY (ORCPT
+        with ESMTP id S241526AbjFMItY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 13 Jun 2023 04:49:24 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11DCC9;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38475C0;
         Tue, 13 Jun 2023 01:49:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1686646161; x=1718182161;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0+c48awLSI/0CX9e9GAjVHuwkZ1cRmuijLM7ZZzCtiA=;
-  b=tjt8p1VwHATIBSrBND5pMlokUEQgrA4QygsEf4AMRblU3/c319M9kgeY
-   PcvMRQQh57xWoWWtx6wtknoPlefNhFL0l931klafnZ+oYM204NAiudSjl
-   h/oRbA4QwJvmQRvn7G2B7pIA2Ga2Ei1HCBYD+2Xc4cAV7ozxRg9GG9a4Z
-   zDOnG3kxn1PxGRzzqBAtb9oKb/UZ641VZuzvDR8mhBD48rKTMgw/RSak7
-   qFk7/eKJdO/xKUUIEiHrIvuAFSyS06M0FKFwC4yE4f8L7hjB3BC3EehhP
-   cE8RoSVqVfjGToziDOTpLz54C1Jyz9Z6mAGHx1HEgFCTjzn/BR/KToN1s
-   g==;
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="asc'?scan'208";a="217571653"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Jun 2023 01:49:21 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 13 Jun 2023 01:49:20 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Tue, 13 Jun 2023 01:49:18 -0700
-Date:   Tue, 13 Jun 2023 09:48:53 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <stable@vger.kernel.org>, <patches@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>, <torvalds@linux-foundation.org>,
-        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
-        <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>
-Subject: Re: [PATCH 6.3 000/160] 6.3.8-rc1 review
-Message-ID: <20230613-guidance-coveted-a8e584cbe2b2@wendy>
-References: <20230612101715.129581706@linuxfoundation.org>
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C985B62B6F;
+        Tue, 13 Jun 2023 08:49:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1677C433D2;
+        Tue, 13 Jun 2023 08:49:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686646160;
+        bh=13QxIeZfhU5GLFvayprb0+agNd+CZDWoGxFWOWD3MhM=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=ZNOh2FB1/xMCR9XW9z3iU/U+scSh5i+/NQHd/VfoS2b4vP9bEuKOPbNpGjW3QE3UQ
+         QtOo67gei1ki9H6yJ94Z7MdlZ4pyOwSL/+xkAJ1VM2kQqmWIwP8HE3LBAglu9+a+3l
+         JE5+q5ZA7J/Yesfi1oBZCT/h9BlH/pwjSI9c42gtIDrbyxq/Sr36kkRqOT4e2lAanC
+         e5OtFco8ih63s64epRhj6/Cf57d2BvXQD4ELyJ+zn7PJpk0xf8PJ9Qkm/PvhtjBDYP
+         08X5c5thabZbROWDQATmBsCoCuU9Cyh+u7Wo7aUWVXVK+s2N1DVDTcRG2WkjtaWukF
+         vN7a5K7fw5hTQ==
+Message-ID: <7bf1395a-eba8-fe27-a359-9c50af7add2a@kernel.org>
+Date:   Tue, 13 Jun 2023 10:49:13 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="dDJ5gyBZh1IgAYsH"
-Content-Disposition: inline
-In-Reply-To: <20230612101715.129581706@linuxfoundation.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 6/7] ASoC: dt-bindings: mediatek,mt79xx-wm8960: add
+ mt79xx-wm8960 document
+Content-Language: en-US
+To:     Maso Hunag <maso.huang@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Trevor Wu <trevor.wu@mediatek.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        Ren Zhijie <renzhijie2@huawei.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230612105250.15441-1-maso.huang@mediatek.com>
+ <20230612105250.15441-7-maso.huang@mediatek.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20230612105250.15441-7-maso.huang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---dDJ5gyBZh1IgAYsH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 12/06/2023 12:52, Maso Hunag wrote:
+> From: Maso Huang <maso.huang@mediatek.com>
+> 
+> Add document for mt79xx board with wm8960.
 
-On Mon, Jun 12, 2023 at 12:25:32PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.3.8 release.
-> There are 160 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
 
-Tested-by: Conor Dooley <conor.dooley@microchip.com>
+> 
+> Signed-off-by: Maso Huang <maso.huang@mediatek.com>
+> ---
+>  .../sound/mediatek,mt79xx-wm8960.yaml         | 53 +++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/sound/mediatek,mt79xx-wm8960.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/sound/mediatek,mt79xx-wm8960.yaml b/Documentation/devicetree/bindings/sound/mediatek,mt79xx-wm8960.yaml
+> new file mode 100644
+> index 000000000000..26b38bb629da
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/sound/mediatek,mt79xx-wm8960.yaml
+> @@ -0,0 +1,53 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/sound/mediatek,mt79xx-wm8960.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek MT79xx ASOC sound card with WM8960 codec
 
-Thanks,
-Conor.
+What is a MT79xx ASOC? Is it some specific SoC name? What does "A"
+stands for in SoC? XX also looks odd, I thought Mediatek uses only numbers.
+
+> +
+> +maintainers:
+> +  - Maso Huang <maso.huang@mediatek.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: mediatek,mt79xx-wm8960-machine
+> +
+> +  mediatek,platform:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: The phandle of MT79xx ASoC platform.
+
+What is MT79xx ASoC platform?
 
 
---dDJ5gyBZh1IgAYsH
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+Best regards,
+Krzysztof
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIgtdQAKCRB4tDGHoIJi
-0ksMAP9tuDiBuXFuFp/74o3e8ST6oIaVrodvmXc3Xs8Z2b9SMwEA/aYNJ0bFUqKq
-Fk8AkuVKLgekY33M7RvgHJfLeP4E+ws=
-=qZZq
------END PGP SIGNATURE-----
-
---dDJ5gyBZh1IgAYsH--
