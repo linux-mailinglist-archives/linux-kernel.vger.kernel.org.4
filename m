@@ -2,104 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC0772EABD
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 20:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 806BF72EAC4
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 20:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237860AbjFMSUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 14:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55590 "EHLO
+        id S238304AbjFMSV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 14:21:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232303AbjFMSUO (ORCPT
+        with ESMTP id S232056AbjFMSVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 14:20:14 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4557F184
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 11:20:13 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-56ce6bbe274so42746137b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 11:20:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686680412; x=1689272412;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GzoITlkvXOOXaxcBX10vC+q2MwiSX7omqPKM4OYACbM=;
-        b=cDo4KYMSzW2JCfxx5H4X+/IYbdGF/FmH7l2YP8HfZhNYBBYG5MWtVg5dsfFzrxi2Rd
-         MUilPZrQoqP+YYWhRGAF0SJFxrh2k8D3JPakgTZ3IybW8PkIhJyUXeIcfJHdh1htlnVM
-         wZ0G4PYeSRkhtw+/tdPo1XxAg68gPOavBAh63KoOmySBJxpPUvxSwtl6nEWsMhnx43c5
-         U3h4ICQ62FMOb0zjPOquPhNftt8d7Yw4vw04ZclZehSrxSy5hz7Vs3G45r9tE6t9wetI
-         MplkXNr89ytfwMJTf2jUdTBd5LD0HhAioaAvly2ZRiFE252pcah1THDeJw4hnbZxcS4Y
-         c1Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686680412; x=1689272412;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GzoITlkvXOOXaxcBX10vC+q2MwiSX7omqPKM4OYACbM=;
-        b=FUcYKIDZ4hBbzLuteG/MKEpwraDm7RBHYkTK+cgbUzgHnhoeisAU79vUjm7rCarHEL
-         YNF6lwXFvzhH+HaffKXtsOaE9PXjOXHXF1E78CI5gfRu2nPBS2Hs+Al44BQQEz5i8+/p
-         vpHKDyXa9UfeX1wYsMtJeeIB8a7YdgJSq/XrT+TxdjGJzv6z4Fehg3y9bzHNq/jZ4pi/
-         JS7NLIRqXkdUnCZTd2xKCze7T2d7+veGRi8cp1Xq+WvD3SdC78Z2lJtOTuhqE46DY/wg
-         kWLTi1LAyqrVdidD5jUsNIVZmECoF+iryJ4kZJW8kJkxrmdo/hO76mFDbBlgwJ8uFEQA
-         WnTQ==
-X-Gm-Message-State: AC+VfDxnuMabwXk5wCGZ7EQvYOLy58uRtPknE/5knsCoGRxIWXy6Seny
-        0VCcGqMgErSh2dE0JJ9e1h8zZ3GzByOwns9p/KbJYA==
-X-Google-Smtp-Source: ACHHUZ6+/uZzKrxAXzrWwTNJxKf0up28eWIWrk4WjaTGzjye0Yy8SiYEYBQVD/Itn2xQ0uoLa1D3G8NFztcWJyya5kg=
-X-Received: by 2002:a25:2b88:0:b0:bca:efc4:2ccf with SMTP id
- r130-20020a252b88000000b00bcaefc42ccfmr1996804ybr.44.1686680412433; Tue, 13
- Jun 2023 11:20:12 -0700 (PDT)
+        Tue, 13 Jun 2023 14:21:22 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BEBA19A;
+        Tue, 13 Jun 2023 11:21:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=juq72744bbt+1tC+EywAD76Jb+ygPBpQeICaFLDnKjA=; b=fnu/ramaMmpZB3NQux+azFlCUV
+        7ga0av+e/3rtiILUmleFCt1GPwNUtWULBocPwYbvySIeeC5cuk8s3TrgtjdM3fpqhwGI35UE6T/lk
+        08Td2WsZB6+GtFnTWXetz3DRETQYP3CgXn8lrowJz45q5s4GdcKWotueTfEbNEkf9BkOvvWRbwWA6
+        +mUhv5eaC3H+yHXFrXU2wwFnQZwA/aR9DAJpfWGdJFCMwLWHjh74GB/DdBMeKEfPnNEtZSdUN3vjM
+        vDivOSHV4VgtUxs91Snk0T3LT91xWSf/CHh22iqxEJJHfLOW8VztLUoFRqGR7K2DI2DrlRnUBUN4p
+        UPcUkAlw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56914)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1q98da-0000YQ-LR; Tue, 13 Jun 2023 19:21:02 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1q98dU-0006Ff-6l; Tue, 13 Jun 2023 19:20:56 +0100
+Date:   Tue, 13 Jun 2023 19:20:56 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net v2 2/7] net: dsa: mt7530: fix trapping frames with
+ multiple CPU ports on MT7530
+Message-ID: <ZIiziJ6Os+QScfMj@shell.armlinux.org.uk>
+References: <20230611081547.26747-1-arinc.unal@arinc9.com>
+ <20230611081547.26747-2-arinc.unal@arinc9.com>
+ <20230613150815.67uoz3cvvwgmhdp2@skbuf>
+ <a91e88a8-c528-0392-1237-fc8417931170@arinc9.com>
+ <20230613171858.ybhtlwxqwp7gyrfs@skbuf>
+ <20230613172402.grdpgago6in4jogq@skbuf>
+ <ca78b2f9-bf98-af26-0267-60d2638f7f00@arinc9.com>
+ <20230613173908.iuofbuvkanwyr7as@skbuf>
 MIME-Version: 1.0
-References: <20230418150606.1528107-1-robh@kernel.org> <b8a062a0-10e9-bf17-c109-f6986f9dd02c@linaro.org>
- <CAL_JsqJvmN7824Q0vnWpnO3a_Fdo5Ybc2tcGnJZAfDLM=-1Apg@mail.gmail.com>
-In-Reply-To: <CAL_JsqJvmN7824Q0vnWpnO3a_Fdo5Ybc2tcGnJZAfDLM=-1Apg@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 13 Jun 2023 20:20:01 +0200
-Message-ID: <CACRpkdaUGpwok_s-4UWXWmZKK6=tbAQ6DWn9CBdSruTD97=qpA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: pinctrl: qcom,pmic-mpp: Fix schema for "qcom,paired"
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230613173908.iuofbuvkanwyr7as@skbuf>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 3:46=E2=80=AFPM Rob Herring <robh@kernel.org> wrote=
-:
-> On Tue, Jun 13, 2023 at 12:50=E2=80=AFAM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
-> >
-> > On 18/04/2023 17:06, Rob Herring wrote:
-> > > The "qcom,paired" schema is all wrong. First, it's a list rather than=
- an
-> > > object(dictionary). Second, it is missing a required type. The meta-s=
-chema
-> > > normally catches this, but schemas under "$defs" was not getting chec=
-ked.
-> > > A fix for that is pending.
-> > >
-> > > Signed-off-by: Rob Herring <robh@kernel.org>
-> > > ---
-> >
-> > Linus,
-> > Could you take it for current fixes? The code was wrong and dtschema is
-> > warning now about this.
->
-> I have other things ready for 6.4, so I'll add this one.
+On Tue, Jun 13, 2023 at 08:39:08PM +0300, Vladimir Oltean wrote:
+> Ok. I see Russell has commented on v4, though I don't see that he particularly
+> pointed out that this fixes a problem which isn't yet a problem. I got lost in
+> all the versions. v2 and v3 are out of my inbox now :)
 
-Thanks for picking this one Rob!
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+I didn't really get to that level of detail (which is why I haven't
+given any r-b's) - I was more focused on trying to understand what
+each commit was doing, and trying to get easier to parse commit
+messages.
 
-Yours,
-Linus Walleij
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
