@@ -2,109 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB8072DD84
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 11:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F094572DD86
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 11:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241924AbjFMJS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 05:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45290 "EHLO
+        id S241878AbjFMJTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 05:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241920AbjFMJSO (ORCPT
+        with ESMTP id S241860AbjFMJS5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 05:18:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD65AE73
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 02:18:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5205F62926
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 09:18:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61408C433D2;
-        Tue, 13 Jun 2023 09:18:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686647886;
-        bh=gp+4Z1m750oiZIRymOwmqEvUZvz41fNPY9krBfP1984=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GVGh3QOpVrxSHP9UZtItr+ntdS6qUPKsngq/pP32GnjqCUmJVvftIcD55a/PdaRWr
-         qrss9Pxw5CMb3Vh8yF09ougsSYqgBQOkc/4gRjjhVqhecQxMn2qHeGhmTEX4PSoGY/
-         qVGd70/5mhXvXVBRwld68AXTpT+ThEFuuPHz19z8=
-Date:   Tue, 13 Jun 2023 11:18:04 +0200
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     Wei-chin Tsai =?utf-8?B?KOiUoee2reaZiSk=?= 
-        <Wei-chin.Tsai@mediatek.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Mel Lee =?utf-8?B?KOadjuWlh+mMmik=?= <Mel.Lee@mediatek.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        wsd_upstream <wsd_upstream@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        Ivan Tseng =?utf-8?B?KOabvuW/l+i7kik=?= 
-        <ivan.tseng@mediatek.com>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH v1 1/1] process: export symbols for fork/exit tracing
- functions
-Message-ID: <2023061331-stipulate-crumpled-97cb@gregkh>
-References: <20230612151545.17810-1-Wei-chin.Tsai@mediatek.com>
- <2023061226-repugnant-upstate-a2b4@gregkh>
- <8fa623a77edd2d8b6ade77903d40b4c4c5992965.camel@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        Tue, 13 Jun 2023 05:18:57 -0400
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8980E7A;
+        Tue, 13 Jun 2023 02:18:52 -0700 (PDT)
+Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-34070ecad56so1286555ab.3;
+        Tue, 13 Jun 2023 02:18:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686647932; x=1689239932;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=3l7i3ti7Ci+JAIfrqJMPuqYwSi/QpzUEyhd2W9zcJMQ=;
+        b=JyWKeYjNesxCe+GqlqmLhu0yPTy/nVq0C/yWInnI6Jv5V47A4poldt/7JNaY1tVuSa
+         4U6ZzQLDtaDxfO6DcSeBraMHzlM12TFQiuAQFObpbZ8/GBu3IHbr6SkahsD+FPOeCqrh
+         iYChh8JY0MG1zTJTd8zoP+5e6kI1X/y6mvkaQx2Ppgu8IQ1ByTJHET3J10/fV0zZ0S9k
+         w2X6f2jsIY3uDt/WEOIvOxX7CRb6g7ckK9B0JISiAa6AWhw+3F0nXLiENxc++WRKCgGk
+         BnX4BxcnJTNeaqi0fP72odO/EkUOycR/3C/sDTGugstdmA/un+TxIKDCHs4h3SnSqvH9
+         dixQ==
+X-Gm-Message-State: AC+VfDw5FUVBsArkGKhZvSwfte77YRfIWiWgXv3YNbIbc21nVmr27RZU
+        EI2R006P+aaONzjvp+5M8w==
+X-Google-Smtp-Source: ACHHUZ4UEbo3jcsK6QJZwFJIadLOuNXhsYrmCm2eEJADv3BGbeK/HQpFbgZyJG8xnpy45roW1OQ7aQ==
+X-Received: by 2002:a92:cb42:0:b0:331:3b07:56e2 with SMTP id f2-20020a92cb42000000b003313b0756e2mr9377465ilq.31.1686647931922;
+        Tue, 13 Jun 2023 02:18:51 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id v5-20020a92d245000000b0032957b21c26sm3711047ilg.77.2023.06.13.02.18.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 02:18:51 -0700 (PDT)
+Received: (nullmailer pid 1147154 invoked by uid 1000);
+        Tue, 13 Jun 2023 09:18:49 -0000
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <8fa623a77edd2d8b6ade77903d40b4c4c5992965.camel@mediatek.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Okan Sahin <okan.sahin@analog.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230613080552.4492-2-okan.sahin@analog.com>
+References: <20230613080552.4492-1-okan.sahin@analog.com>
+ <20230613080552.4492-2-okan.sahin@analog.com>
+Message-Id: <168664792963.1147059.8156399408819922296.robh@kernel.org>
+Subject: Re: [PATCH v1 1/2] dt-bindings: regulator: max77857: Add ADI
+ MAX77831/MAX77831 Regulator
+Date:   Tue, 13 Jun 2023 03:18:49 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 09:12:38AM +0000, Wei-chin Tsai (蔡維晉) wrote:
-> On Mon, 2023-06-12 at 18:37 +0200, Greg Kroah-Hartman wrote:
-> >  	 
-> > External email : Please do not click links or open attachments until
-> > you have verified the sender or the content.
-> >  On Mon, Jun 12, 2023 at 11:15:41PM +0800, jim.tsai wrote:
-> > > +static void class_create_release(struct class *cls)
-> > > +{
-> > > +/*do nothing because the mbraink class is not from malloc*/
-> > > +}
-> > 
-> > Then the code is totally broken and wrong :(
-> > 
-> > Please just use the misc device api instead, it is much simpler and
-> > doesn't have these types of errors.
-> > 
-> > thanks,
-> > 
-> > greg k-h
+
+On Tue, 13 Jun 2023 11:05:49 +0300, Okan Sahin wrote:
+> Add ADI MAX77857 and MAX77831 Regulator device tree document.
 > 
+> Signed-off-by: Okan Sahin <okan.sahin@analog.com>
+> ---
+>  .../bindings/regulator/adi,max77857.yaml      | 83 +++++++++++++++++++
+>  1 file changed, 83 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/regulator/adi,max77857.yaml
 > 
-> Sorry, I did not really get the point from above comments because It
-> works well for me for the mbraink_main.c and no compiler errors or
-> runtime errors?
 
-Think about why the kernel is trying to check if you have a release
-function or not.  Would an "empty" function be the same thing?
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-That check was added to tell you that your design is wrong and needs to
-be fixed, do NOT just try to paper over warnings from the kernel as
-someone spent the time to try to be nice and tell you that the code is
-incorrect :)
+yamllint warnings/errors:
 
-Anyway, almost all of these (if not all), can just go away if you move
-to  use the miscdevice api instead.
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml: $defs:qcom-pmic-mpp-state:properties:qcom,paired: [{'description': 'Indicates that the pin should be operating in paired mode.'}] is not of type 'object', 'boolean'
+	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
 
-Also, please don't send HTML email, the mailing lists reject it :(
+doc reference errors (make refcheckdocs):
 
-thanks,
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230613080552.4492-2-okan.sahin@analog.com
 
-greg k-h
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
