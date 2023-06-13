@@ -2,204 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A8DA72E384
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A53CE72E475
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:45:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241352AbjFMM7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 08:59:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53348 "EHLO
+        id S242479AbjFMNoZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 13 Jun 2023 09:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242352AbjFMM7A (ORCPT
+        with ESMTP id S242575AbjFMNoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 08:59:00 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0D2199B;
-        Tue, 13 Jun 2023 05:58:55 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f62cf9755eso6664813e87.1;
-        Tue, 13 Jun 2023 05:58:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686661134; x=1689253134;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=uoHY7f5SpaZmehHO5pzD7w8BkW1cE5mh1OnwQ8erXk0=;
-        b=CUIbht58ZuwStSZVhwocni2OvSmzJRPWJ+NCYbrIO5E2jeIm8OWvSbKjWAUF4mF2C3
-         VNJAaxxGxyupYMYb9iV1NEfgp8kqe4WhM4RejVZMxfLBZ1tPxLQg6gCHzt+C84PYL+qd
-         Z0MG7yWOvTLmXe1bsPDNB3GdbpXk+HJPNtJzv+HWoPGlYmvkVOwpzNn9ocA7/3U59V/z
-         rYF9zV3NWPCVIypyfAPy4+bLcVLWCHewWcbL16xaHRxR97CNzvhoV3UhJaCXeWMFsxcJ
-         BFoS+SIEhH2xtYS/JiojnwG+A1u2+DDz5GKdR7hG1iBzr1Yveh8NbjGEbyeF2RbN3jxx
-         LJlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686661134; x=1689253134;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uoHY7f5SpaZmehHO5pzD7w8BkW1cE5mh1OnwQ8erXk0=;
-        b=kzlfMQCpRXGAmQ608Bvw/iYMWWkvS6b0BXQeIU7F4j4+ZKyfYJghv4WbWbIYvmeWR5
-         o5dLVUjqA/paMYHZkvSzk2AT6mXHPGU1v16/V4lKgF6H48fpYVUg027/CVMoOXL/zSi+
-         KQ3z1AC2r49ydGzaLiKeO2uny7Qbs70ZUY17RhFwVGc9ESdOlpRoOmAHfRx2OVp7M7Di
-         F58n4WBsvUDR5u0sLuXevl8dn2+8fZNVmhGXZkfZCp9HfWLpLZwaGLacXR1TJUOwdOiT
-         hqHgHUccTwR92kVK8hO4C5rRd+kP8rj21bUhlKUOhB4FyXYgYT+AkMKFYc50jyPFEYLX
-         wwCQ==
-X-Gm-Message-State: AC+VfDzu6iaEym/cTD3RvZkgEXScH8rN2NaqXJERTn54R3NoEDt//430
-        v9RZQRnmRCNVwRb53tPDxaI=
-X-Google-Smtp-Source: ACHHUZ5hpxIirshOoeLkuF5RellTk57gwjytTxxsOJZKHLvqweumaYxLmUUZFl2Bj2FETplTZqT4/g==
-X-Received: by 2002:a19:3807:0:b0:4ef:f11c:f5b0 with SMTP id f7-20020a193807000000b004eff11cf5b0mr5800493lfa.54.1686661133869;
-        Tue, 13 Jun 2023 05:58:53 -0700 (PDT)
-Received: from ?IPV6:2a0b:6204:4302:5f00:4dab:3483:4506:9a0e? ([2a0b:6204:4302:5f00:4dab:3483:4506:9a0e])
-        by smtp.gmail.com with ESMTPSA id a8-20020a19f808000000b004f14ecc03f1sm1769903lff.100.2023.06.13.05.58.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 05:58:53 -0700 (PDT)
-From:   "bibo, mao" <bibo.mao@gmail.com>
-X-Google-Original-From: "bibo, mao" <maobibo@loongson.cn>
-Message-ID: <e6508c4c-4987-37ed-9c4e-9189417e0f83@loongson.cn>
-Date:   Tue, 13 Jun 2023 20:58:49 +0800
+        Tue, 13 Jun 2023 09:44:17 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062611BC3;
+        Tue, 13 Jun 2023 06:44:04 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id EFE2824E225;
+        Tue, 13 Jun 2023 21:43:56 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 13 Jun
+ 2023 20:58:57 +0800
+Received: from localhost.localdomain (113.72.145.34) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 13 Jun
+ 2023 20:58:56 +0800
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        Xingyu Wu <xingyu.wu@starfivetech.com>,
+        "William Qiu" <william.qiu@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+Subject: [PATCH v5 5/7] clk: starfive: jh7110-sys: Add PLL clocks source from DTS
+Date:   Tue, 13 Jun 2023 20:58:50 +0800
+Message-ID: <20230613125852.211636-6-xingyu.wu@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230613125852.211636-1-xingyu.wu@starfivetech.com>
+References: <20230613125852.211636-1-xingyu.wu@starfivetech.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v13 20/30] LoongArch: KVM: Implement handle csr excption
-To:     Tianrui Zhao <zhaotianrui@loongson.cn>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Xi Ruoyao <xry111@xry111.site>, tangyouling@loongson.cn,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-References: <20230609090832.2131037-1-zhaotianrui@loongson.cn>
- <20230609090832.2131037-21-zhaotianrui@loongson.cn>
-In-Reply-To: <20230609090832.2131037-21-zhaotianrui@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [113.72.145.34]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Bibo Mao <maobibo@loongson.cn>
+Modify PLL clocks source to be got from DTS or
+the fixed factor clocks.
 
-Regards
-Bibo, Mao
+Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+---
+ drivers/clk/starfive/Kconfig                  |  1 +
+ .../clk/starfive/clk-starfive-jh7110-sys.c    | 45 +++++++++++--------
+ 2 files changed, 28 insertions(+), 18 deletions(-)
 
-在 2023/6/9 17:08, Tianrui Zhao 写道:
-> Implement kvm handle LoongArch vcpu exit caused by reading and
-> writing csr. Using csr structure to emulate the registers.
-> 
-> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
-> ---
->   arch/loongarch/kvm/exit.c | 98 +++++++++++++++++++++++++++++++++++++++
->   1 file changed, 98 insertions(+)
->   create mode 100644 arch/loongarch/kvm/exit.c
-> 
-> diff --git a/arch/loongarch/kvm/exit.c b/arch/loongarch/kvm/exit.c
-> new file mode 100644
-> index 000000000000..18635333fc9a
-> --- /dev/null
-> +++ b/arch/loongarch/kvm/exit.c
-> @@ -0,0 +1,98 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
-> + */
-> +
-> +#include <linux/errno.h>
-> +#include <linux/err.h>
-> +#include <linux/module.h>
-> +#include <linux/preempt.h>
-> +#include <linux/vmalloc.h>
-> +#include <asm/fpu.h>
-> +#include <asm/inst.h>
-> +#include <asm/time.h>
-> +#include <asm/tlb.h>
-> +#include <asm/loongarch.h>
-> +#include <asm/numa.h>
-> +#include <asm/kvm_vcpu.h>
-> +#include <asm/kvm_csr.h>
-> +#include <linux/kvm_host.h>
-> +#include <asm/mmzone.h>
-> +#include "trace.h"
-> +
-> +static unsigned long _kvm_emu_read_csr(struct kvm_vcpu *vcpu, int csrid)
-> +{
-> +	struct loongarch_csrs *csr = vcpu->arch.csr;
-> +	unsigned long val = 0;
-> +
-> +	if (get_gcsr_flag(csrid) & SW_GCSR)
-> +		val = kvm_read_sw_gcsr(csr, csrid);
-> +	else
-> +		pr_warn_once("Unsupport csrread 0x%x with pc %lx\n",
-> +			csrid, vcpu->arch.pc);
-> +	return val;
-> +}
-> +
-> +static void _kvm_emu_write_csr(struct kvm_vcpu *vcpu, int csrid,
-> +	unsigned long val)
-> +{
-> +	struct loongarch_csrs *csr = vcpu->arch.csr;
-> +
-> +	if (get_gcsr_flag(csrid) & SW_GCSR)
-> +		kvm_write_sw_gcsr(csr, csrid, val);
-> +	else
-> +		pr_warn_once("Unsupport csrwrite 0x%x with pc %lx\n",
-> +				csrid, vcpu->arch.pc);
-> +}
-> +
-> +static void _kvm_emu_xchg_csr(struct kvm_vcpu *vcpu, int csrid,
-> +	unsigned long csr_mask, unsigned long val)
-> +{
-> +	struct loongarch_csrs *csr = vcpu->arch.csr;
-> +
-> +	if (get_gcsr_flag(csrid) & SW_GCSR) {
-> +		unsigned long orig;
-> +
-> +		orig = kvm_read_sw_gcsr(csr, csrid);
-> +		orig &= ~csr_mask;
-> +		orig |= val & csr_mask;
-> +		kvm_write_sw_gcsr(csr, csrid, orig);
-> +	} else
-> +		pr_warn_once("Unsupport csrxchg 0x%x with pc %lx\n",
-> +				csrid, vcpu->arch.pc);
-> +}
-> +
-> +static int _kvm_handle_csr(struct kvm_vcpu *vcpu, larch_inst inst)
-> +{
-> +	unsigned int rd, rj, csrid;
-> +	unsigned long csr_mask;
-> +	unsigned long val = 0;
-> +
-> +	/*
-> +	 * CSR value mask imm
-> +	 * rj = 0 means csrrd
-> +	 * rj = 1 means csrwr
-> +	 * rj != 0,1 means csrxchg
-> +	 */
-> +	rd = inst.reg2csr_format.rd;
-> +	rj = inst.reg2csr_format.rj;
-> +	csrid = inst.reg2csr_format.csr;
-> +
-> +	/* Process CSR ops */
-> +	if (rj == 0) {
-> +		/* process csrrd */
-> +		val = _kvm_emu_read_csr(vcpu, csrid);
-> +		vcpu->arch.gprs[rd] = val;
-> +	} else if (rj == 1) {
-> +		/* process csrwr */
-> +		val = vcpu->arch.gprs[rd];
-> +		_kvm_emu_write_csr(vcpu, csrid, val);
-> +	} else {
-> +		/* process csrxchg */
-> +		val = vcpu->arch.gprs[rd];
-> +		csr_mask = vcpu->arch.gprs[rj];
-> +		_kvm_emu_xchg_csr(vcpu, csrid, csr_mask, val);
-> +	}
-> +
-> +	return EMULATE_DONE;
-> +}
+diff --git a/drivers/clk/starfive/Kconfig b/drivers/clk/starfive/Kconfig
+index 5195f7be5213..978b78ec08b1 100644
+--- a/drivers/clk/starfive/Kconfig
++++ b/drivers/clk/starfive/Kconfig
+@@ -35,6 +35,7 @@ config CLK_STARFIVE_JH7110_SYS
+ 	select AUXILIARY_BUS
+ 	select CLK_STARFIVE_JH71X0
+ 	select RESET_STARFIVE_JH7110 if RESET_CONTROLLER
++	select CLK_STARFIVE_JH7110_PLL
+ 	default ARCH_STARFIVE
+ 	help
+ 	  Say yes here to support the system clock controller on the
+diff --git a/drivers/clk/starfive/clk-starfive-jh7110-sys.c b/drivers/clk/starfive/clk-starfive-jh7110-sys.c
+index e6031345ef05..d56f48013388 100644
+--- a/drivers/clk/starfive/clk-starfive-jh7110-sys.c
++++ b/drivers/clk/starfive/clk-starfive-jh7110-sys.c
+@@ -7,6 +7,7 @@
+  */
+ 
+ #include <linux/auxiliary_bus.h>
++#include <linux/clk.h>
+ #include <linux/clk-provider.h>
+ #include <linux/init.h>
+ #include <linux/io.h>
+@@ -386,6 +387,7 @@ EXPORT_SYMBOL_GPL(jh7110_reset_controller_register);
+ 
+ static int __init jh7110_syscrg_probe(struct platform_device *pdev)
+ {
++	bool use_fixed_pll = true;	/* PLL clocks use fixed factor clocks or PLL driver */
+ 	struct jh71x0_clk_priv *priv;
+ 	unsigned int idx;
+ 	int ret;
+@@ -402,28 +404,29 @@ static int __init jh7110_syscrg_probe(struct platform_device *pdev)
+ 	if (IS_ERR(priv->base))
+ 		return PTR_ERR(priv->base);
+ 
+-	/*
+-	 * These PLL clocks are not actually fixed factor clocks and can be
+-	 * controlled by the syscon registers of JH7110. They will be dropped
+-	 * and registered in the PLL clock driver instead.
+-	 */
++	if (!IS_ERR(devm_clk_get(priv->dev, "pll0_out")))
++		use_fixed_pll = false;	/* can get pll clocks from PLL driver */
++
++	/* Use fixed factor clocks if can not get the PLL clocks from DTS */
++	if (use_fixed_pll) {
+ 	/* 24MHz -> 1000.0MHz */
+-	priv->pll[0] = devm_clk_hw_register_fixed_factor(priv->dev, "pll0_out",
+-							 "osc", 0, 125, 3);
+-	if (IS_ERR(priv->pll[0]))
+-		return PTR_ERR(priv->pll[0]);
++		priv->pll[0] = devm_clk_hw_register_fixed_factor(priv->dev, "pll0_out",
++								 "osc", 0, 125, 3);
++		if (IS_ERR(priv->pll[0]))
++			return PTR_ERR(priv->pll[0]);
+ 
+ 	/* 24MHz -> 1066.0MHz */
+-	priv->pll[1] = devm_clk_hw_register_fixed_factor(priv->dev, "pll1_out",
+-							 "osc", 0, 533, 12);
+-	if (IS_ERR(priv->pll[1]))
+-		return PTR_ERR(priv->pll[1]);
++		priv->pll[1] = devm_clk_hw_register_fixed_factor(priv->dev, "pll1_out",
++								 "osc", 0, 533, 12);
++		if (IS_ERR(priv->pll[1]))
++			return PTR_ERR(priv->pll[1]);
+ 
+ 	/* 24MHz -> 1188.0MHz */
+-	priv->pll[2] = devm_clk_hw_register_fixed_factor(priv->dev, "pll2_out",
+-							 "osc", 0, 99, 2);
+-	if (IS_ERR(priv->pll[2]))
+-		return PTR_ERR(priv->pll[2]);
++		priv->pll[2] = devm_clk_hw_register_fixed_factor(priv->dev, "pll2_out",
++								 "osc", 0, 99, 2);
++		if (IS_ERR(priv->pll[2]))
++			return PTR_ERR(priv->pll[2]);
++	}
+ 
+ 	for (idx = 0; idx < JH7110_SYSCLK_END; idx++) {
+ 		u32 max = jh7110_sysclk_data[idx].max;
+@@ -462,8 +465,14 @@ static int __init jh7110_syscrg_probe(struct platform_device *pdev)
+ 				parents[i].fw_name = "tdm_ext";
+ 			else if (pidx == JH7110_SYSCLK_MCLK_EXT)
+ 				parents[i].fw_name = "mclk_ext";
+-			else
++			else if (use_fixed_pll)
+ 				parents[i].hw = priv->pll[pidx - JH7110_SYSCLK_PLL0_OUT];
++			else if (pidx == JH7110_SYSCLK_PLL0_OUT)
++				parents[i].fw_name = "pll0_out";
++			else if (pidx == JH7110_SYSCLK_PLL1_OUT)
++				parents[i].fw_name = "pll1_out";
++			else if (pidx == JH7110_SYSCLK_PLL2_OUT)
++				parents[i].fw_name = "pll2_out";
+ 		}
+ 
+ 		clk->hw.init = &init;
+-- 
+2.25.1
+
