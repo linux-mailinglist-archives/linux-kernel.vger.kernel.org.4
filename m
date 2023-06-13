@@ -2,124 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F7A872ED72
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:58:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D77672ED74
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:59:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235049AbjFMU6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 16:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53490 "EHLO
+        id S235088AbjFMU7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 16:59:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjFMU6o (ORCPT
+        with ESMTP id S229447AbjFMU7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 16:58:44 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C790199C
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 13:58:43 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-51400fa347dso3830a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 13:58:43 -0700 (PDT)
+        Tue, 13 Jun 2023 16:59:21 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DCCC1713;
+        Tue, 13 Jun 2023 13:59:20 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-97881a996a0so2436166b.0;
+        Tue, 13 Jun 2023 13:59:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686689921; x=1689281921;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IAKJIDFpZuSxjbq11Sivsx7j8EhbMPSluCQPJIPFOeY=;
-        b=3wvY99jVUR4aRlrh2JJ3n4XR/82x8Kmm6awdM03ZnnU+AjfX8vl1vS9BU6SUoQOgWL
-         yKQCBUjxJf9WazFAHgYv7mpumPoB44lvFBO6dsdaC+eQAw6ciu8hD5HacFQ5P4OkRt1H
-         LZSb1MZD5UgpFuigznxpri1Q17ISsXb7ZJto36DI2PBRcHgk4y6fu6W3PKWvFPqK5WoZ
-         dtXqxEwL0K09H1j8crTja0ZJGkZTXFE/+QL5t4Ojh2wze1SDTwbkZn2rEUGBqVwT7z8Q
-         3YX0m4SZaALjPCmLp/hQvKb/7ohYWQj60SUKXEisBqd4oyHujuXiHDO4iz0dFsiiwPp2
-         9Xxw==
+        d=gmail.com; s=20221208; t=1686689959; x=1689281959;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=FnCC76S/R/td93VtAHcKLzfGTNnlN+6UbWPXpb6p1xM=;
+        b=egNnBfbVJb6ap+gKmUpxLnNKAP1aI4oSDbxk59NgNwt+BzliMV4/nSS/IpZq4LZo6M
+         TbNRtvO4m6XYRQMVbcRP76aBQy4/D3kjbnH7+mlPYzei94kdJ6KHIbMRv9SRP+w05yg0
+         nJVdAoqExTs6Q8xdmzcLXfLlpJOW1ti2CPfYWkqwnvvRpGoYv8bPFUecfNVS0NAqCr7X
+         ZOHLe7E5nTkTs8L9lpdFK7OwjrIZDsrlU6O1km3lJ3KTOfq0CYKLUShS5s7BOMoJOuQo
+         i+OtyUz7HpWzd3qIBOByE8Xl3tjS5wN4HzSJbNFDo78XW9DdP6+Uzv9v38fjY0kpJ/cA
+         kOQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686689921; x=1689281921;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IAKJIDFpZuSxjbq11Sivsx7j8EhbMPSluCQPJIPFOeY=;
-        b=dnqfOsHn/dEst8MjrWiyp5WsCGSYIHpLdiVFxt8UeneHLdyLbr/knIP6cKBydUVRqK
-         DKI/RBWxRbGR15HfSBxwZ0aleV4lIW0+8O4D3FjhQEasC7iDyRuHm7r/5ikhNCQPAlba
-         wd/e9256tvMkopTu61qSJXGrg+rhTxOL0dHJth1eW+3e1y3XaM5lTqVKdrl19uivrRVy
-         GndlCqHxtiwJ1oXqKd+cVfRS4yGOlixEYHr/p62GyRCl69H6WQGYsHniMkhClDeaRLBb
-         4KRharwjDYjF7BOapG9CJ7ZFLtWcxixeBSmRGZ/NcTuNAIbsBZs1HXCTHbGBjUL0Uvxm
-         /5Qw==
-X-Gm-Message-State: AC+VfDybRhhkb2T50wGhH8LovMwG3zrD5MonnFdKq0lltEkmY/CSrd6j
-        HZ5lm5XcV04HQl7ZpcI0egxI/n5OPuryCxZHGtJ2kw==
-X-Google-Smtp-Source: ACHHUZ4+Sx/OVELnVq7juOYWbkf7lKyjpQO6KHH4OztkJBMF/OX6VD0uZMZsQf3W8LLsd0ZxTGuxxVFlR4EQMy5V6SI=
-X-Received: by 2002:a50:baa9:0:b0:510:b2b7:8a78 with SMTP id
- x38-20020a50baa9000000b00510b2b78a78mr17708ede.5.1686689921506; Tue, 13 Jun
- 2023 13:58:41 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686689959; x=1689281959;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FnCC76S/R/td93VtAHcKLzfGTNnlN+6UbWPXpb6p1xM=;
+        b=iRqPRyHXfFlrm2hZcYVzDaaSP5elyvFFXyy+2DxCszH5Ypq9O8pXGLZjUIB3Qyu0FL
+         4UA+CRGmFSTjffTAVvodqPkWNCd17RHZjUt+f0m3ZnV5BpWjUauReAuo9EIDsSCmCKcQ
+         6fnWnCUVM2vOQn46pRwA4nHl3/55ANs41gvwDIPnxQjQ1va6PRK5Cbz6hVO2Il31c4db
+         BFq/ElM164IfxpuhJ+L7t0CP3Kltgiz4+MGUhOXRE5nf4Cy2F/XM5WdIyU+IDIlHtWVM
+         UyA85XhUhaMwSkoMl+Obt1Y0tT3ND7ZCPxX5OiwB3nPPhsFwJ4/SUujEJi0W1mOMIJge
+         y+hA==
+X-Gm-Message-State: AC+VfDy7FPJFZYgP4rRBzlbu891gkgxHQtv+RfwfRJPwYpSRI78sxSH9
+        GK3VcNobtL5STnCHw/SfmR4=
+X-Google-Smtp-Source: ACHHUZ6IiFahRQUP7LVJYSUAngqZVdb8DjBTGPrETG/oSI2Q6OrlBQiz8RoreTA2ZJ4shhrIV0ft6g==
+X-Received: by 2002:a17:907:1c26:b0:94a:8291:a1e3 with SMTP id nc38-20020a1709071c2600b0094a8291a1e3mr13103976ejc.74.1686689958752;
+        Tue, 13 Jun 2023 13:59:18 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id mh2-20020a170906eb8200b0097073f1ed84sm7142079ejb.4.2023.06.13.13.59.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 13:59:18 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 23:59:15 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net v2 2/7] net: dsa: mt7530: fix trapping frames with
+ multiple CPU ports on MT7530
+Message-ID: <20230613205915.rmpuqq7ahmd7taeq@skbuf>
+References: <20230611081547.26747-2-arinc.unal@arinc9.com>
+ <20230613150815.67uoz3cvvwgmhdp2@skbuf>
+ <a91e88a8-c528-0392-1237-fc8417931170@arinc9.com>
+ <20230613171858.ybhtlwxqwp7gyrfs@skbuf>
+ <20230613172402.grdpgago6in4jogq@skbuf>
+ <ca78b2f9-bf98-af26-0267-60d2638f7f00@arinc9.com>
+ <20230613173908.iuofbuvkanwyr7as@skbuf>
+ <edcbe326-c456-06ef-373b-313e780209de@arinc9.com>
+ <20230613201850.5g4u3wf2kllmlk27@skbuf>
+ <4a2fb3ac-ccad-f56e-4951-e5a5cb80dd1b@arinc9.com>
 MIME-Version: 1.0
-References: <20230610005149.1145665-1-rmoar@google.com> <20230610005149.1145665-4-rmoar@google.com>
- <202306131324.5B69ABC@keescook>
-In-Reply-To: <202306131324.5B69ABC@keescook>
-From:   Rae Moar <rmoar@google.com>
-Date:   Tue, 13 Jun 2023 16:58:30 -0400
-Message-ID: <CA+GJov6FjojVU6FhbkFfosGQveqFG2a2fuc4Pw83Cs7dbhuhDw@mail.gmail.com>
-Subject: Re: [RFC v1 3/6] kunit: Add ability to filter attributes
-To:     Kees Cook <keescook@chromium.org>
-Cc:     shuah@kernel.org, davidgow@google.com, dlatypov@google.com,
-        brendan.higgins@linux.dev, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org, jstultz@google.com,
-        tglx@linutronix.de, sboyd@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4a2fb3ac-ccad-f56e-4951-e5a5cb80dd1b@arinc9.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 4:26=E2=80=AFPM Kees Cook <keescook@chromium.org> w=
-rote:
->
-> On Sat, Jun 10, 2023 at 12:51:46AM +0000, Rae Moar wrote:
-> > Add filtering of test attributes. Users can filter tests using a
-> > module_param_array called "filter". This functionality will be added to
-> > kunit.py in the next patch.
-> >
-> > The filters will be imputed in the format:
-> > "<attribute_name><operation><attribute_value>"
-> >
-> > Example: "speed>slow"
-> >
-> > Operations include: >, <, >=3D, <=3D, !=3D, and =3D. These operations d=
-o not need
-> > to act the same for every attribute.
->
-> How is the "default" filter specified? Is explicitly unfiltered? (i.e.
-> "slow" stuff will run by default?) Or should there be a default filter
-> of "speed<slow" for the memcpy conversion?
->
-> But yes, I'm a fan of this whole series! I would much prefer this to
-> having one-off CONFIGs for slow tests. :)
->
+On Tue, Jun 13, 2023 at 11:35:08PM +0300, Arınç ÜNAL wrote:
+> On 13.06.2023 23:18, Vladimir Oltean wrote:
+> > On Tue, Jun 13, 2023 at 08:58:33PM +0300, Arınç ÜNAL wrote:
+> > > On 13.06.2023 20:39, Vladimir Oltean wrote:
+> > > > Got it. Then this is really not a problem, and the commit message frames
+> > > > it incorrectly.
+> > > 
+> > > Actually this patch fixes the issue it describes. At the state of this
+> > > patch, when multiple CPU ports are defined, port 5 is the active CPU port,
+> > > CPU_PORT bits are set to port 6.
+> > > 
+> > > Once "the patch that prefers port 6, I could easily find the exact name but
+> > > your mail snipping makes it hard" is applied, this issue becomes redundant.
+> > 
+> > Ok. Well, you don't get bonus points for fixing a problem in 2 different
+> > ways, once is enough :)
+> 
+> This is not the case here though.
+> 
+> This patch fixes an issue that can be stumbled upon in two ways. This is for
+> when multiple CPU ports are defined on the devicetree.
+> 
+> As I explained to Russell, the first is the CPU_PORT field not matching the
+> active CPU port.
+> 
+> The second is when port 5 becomes the only active CPU port. This can only
+> happen with the changing the DSA conduit support.
+> 
+> The "prefer port 6" patch only prevents the first way from happening. The
+> latter still can happen. But this feature doesn't exist yet. Hence why I
+> think we should apply this series as-is (after some patch log changes) and
+> backport it without this patch on kernels older than 5.18.
+> 
+> Arınç
 
-Hello!
-
-Great to hear that you are happy to see this series.
-
-Currently if no filter is specified, tests will run unfiltered (so the
-slow tests will run by default).
-
-But I think the idea of having a "default" filter is really
-interesting. I would definitely be open to adding a default filter
-that only runs tests with speeds faster than slow, which could then be
-overridden by any filter input.
-
-This also means there could be suite specific default filters but that
-may be a future implementation since we currently only have one
-attribute.
-
-Or alternatively we could have a file that includes a list of default
-filters that could then be inputted and altered based on suite.
-
-Thanks!
-Rae
-
-> --
-> Kees Cook
+I was following you until the last phrase. Why should we apply this series
+as-is [ to net.git ], if this patch fixes a problem (the *only* problem in
+lack of .port_change_master() support, aka for stable kernels) that is
+already masked by a different patch targeted to net.git?
