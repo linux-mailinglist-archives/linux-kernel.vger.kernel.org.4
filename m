@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CAD572D687
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 02:44:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0FDC72D68A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 02:44:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238698AbjFMAns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 20:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40356 "EHLO
+        id S238507AbjFMAoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 20:44:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238367AbjFMAnp (ORCPT
+        with ESMTP id S237991AbjFMAoN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 20:43:45 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48E1E7A;
-        Mon, 12 Jun 2023 17:43:44 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id ca18e2360f4ac-77acb944bdfso313120239f.0;
-        Mon, 12 Jun 2023 17:43:44 -0700 (PDT)
+        Mon, 12 Jun 2023 20:44:13 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9C9197;
+        Mon, 12 Jun 2023 17:44:06 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id ca18e2360f4ac-77a62a84855so204583539f.1;
+        Mon, 12 Jun 2023 17:44:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686617024; x=1689209024;
+        d=gmail.com; s=20221208; t=1686617045; x=1689209045;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SUjTXpZGWUl8aPCIqnXmDVJiFmEW7gMN7vp18gmwoYo=;
-        b=IXpe7Emrl6ko4LD7DQoZAwv8z0/KdLITExfmWAAXsA+D25C04eyN8asLgKPw0QqTfy
-         sbei46gpq/X8JWoloCKU7vFBGj5+IoPn9Rz3Z8R/0fdIHlSLqXNik/g+VPAmrEu+5AbB
-         6gJaFwKYe4TiOcbpftpt7Ypd9DtTxGTZAHDLEqUY7Mv67eCMoLIVBy9pjfWgifdggQgf
-         t/vUE67hyFRErw1hAc0o7OU3DPWaNlwfdvH3cy/m95/Po20ZkyrDTbJkcrbyA4KZjsQy
-         /M9vU9XR4ArJegue/6zVWkk7mdyKDsbCdlRbMzzEw67/PSfwCN43R09lMxj0LCIrbAF1
-         RD8A==
+        bh=EfdpRgK82uIcWY9DiF8XW3rM3gbbM8fuRAOQCRLpNoU=;
+        b=At4Y9fekSW8Lzq4Bl+jd33oBq3U9HO0KTPWDEr03dg4Y27nisUQ+upPdxCl7LSo8Ob
+         1Tfi4pKLmKVy1TyuzAFqDMFiMG5S6/nakUHt3IBU6TXT49LitBoLG4wJspnsDHjbw4tp
+         1XNYkchZ8s+m5VZLLpSGMl70BJrBWS7LIH49mA6XzcY9YFhPlQ2zS292TLVOlkDf4aWe
+         oLSVCnjurllZzQz3ErjurwELXZHv75oBrDrq1tJY8yVlg6dhw/hOb6Si3nwyDverNbMo
+         IpfQWSWow1ZL5cAxnvIurkOGDvYuln8MUyx6FqCW6tnVXf0S9sOWm5OmimPm/Nahrxx8
+         LUjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686617024; x=1689209024;
+        d=1e100.net; s=20221208; t=1686617045; x=1689209045;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SUjTXpZGWUl8aPCIqnXmDVJiFmEW7gMN7vp18gmwoYo=;
-        b=gs4TyjkBxVn6UJ68GkD9DzG61MlWHajcAcI4i41c0lz46q3ZiCh1UPwTTLx3fwiNiR
-         uA4NRmmWiaxTT0s7fo7ZLD0K9W2Og+ePl8f8Cukd2NE3yRiolBaxQWUNp8Dnhb6U0EjY
-         OD+OsWOtlJvzf62u2JfRrtpm2aKiBLgk6AjSt1LAuY6/eWTMHZmIrcqYx9PkxJzXlNmZ
-         0ghz6NQxjZ8UNrc60AauG0R0GVV0BVTU7VAGjDMcGfkGmBmvrHktZW/SkKxn7tw5pETN
-         92kys7sYsehCrCY7hJNNH8zEzTlZX2IBAL3szoDpPYYFdu/J3G97NDGjwOrWXPWm4lgj
-         9JCQ==
-X-Gm-Message-State: AC+VfDyQXW9TckVFeC7Cbs2c9AbQR0l6J/PgLvxyi8SIKL5gArLq6zU8
-        5cOfB2nLRD6LNef80XgmDDs=
-X-Google-Smtp-Source: ACHHUZ7i6GSt2jdKr3j5yG/4NXkXwOGZEJuQD6eDvRYDUL6sL1IEo1hSDkdoL5M6ydeOg6lrivBmyQ==
-X-Received: by 2002:a5e:c64d:0:b0:777:b464:6ff9 with SMTP id s13-20020a5ec64d000000b00777b4646ff9mr8880457ioo.21.1686617024076;
-        Mon, 12 Jun 2023 17:43:44 -0700 (PDT)
+        bh=EfdpRgK82uIcWY9DiF8XW3rM3gbbM8fuRAOQCRLpNoU=;
+        b=Ndea5XJYYoXj+UEipbPijTPsgnfHt2lH41f8N9LHsTAf5pTfuWMQxttGQOMpP+l1E0
+         V9Hk0lr2yCclorHW1OxAqXuTQpHK2KmB21hmUrlAeH5c69+hS1Lyb/HpEhaN9HYBooPN
+         2WjYS8WCB0Mzv4CrhGkJ5JajPTfTmgaqlf5m1GG6f5KIgqvk13y4QtIC/uuaOeXFZlOj
+         +SY4NMS8qCMYRDdrhDnomRKfYsgCreSOwtXp6uFGU4QuGdxLagnGhG4OVbiFkmLpHrq0
+         JL29JVQE9OrjU0XyJ2422SIxafe6AhKetqwuGqM5wg2jnPaMudBCm8w7yylc3uFaQ971
+         QERQ==
+X-Gm-Message-State: AC+VfDzwJjS4pw5QJxpWGsacBZ2Ztd/tam1On4S3fk2n6i3VMI+Fk8YO
+        vWteih4T/n2aAw5H3RoNx00=
+X-Google-Smtp-Source: ACHHUZ6w+Eq9N8dZexuZSv2xrTC5UmzN3S2cmTdQVxCP1TEaGj+JmzvZ55Yhdiy+y+a4XZVkItsGjg==
+X-Received: by 2002:a6b:f915:0:b0:776:fc02:184e with SMTP id j21-20020a6bf915000000b00776fc02184emr8602127iog.14.1686617045259;
+        Mon, 12 Jun 2023 17:44:05 -0700 (PDT)
 Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
-        by smtp.gmail.com with ESMTPSA id o11-20020a056638124b00b0041643b78cbesm3118861jas.120.2023.06.12.17.43.43
+        by smtp.gmail.com with ESMTPSA id cu13-20020a05663848cd00b0040bb600eb81sm3117118jab.149.2023.06.12.17.44.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 17:43:43 -0700 (PDT)
+        Mon, 12 Jun 2023 17:44:04 -0700 (PDT)
 From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
 Cc:     linux-hardening@vger.kernel.org,
         Azeem Shaikh <azeemshaikh38@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Albert Briscoe <albertsbriscoe@gmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Subject: [PATCH] usb: gadget: function: printer: Replace strlcpy with strscpy
-Date:   Tue, 13 Jun 2023 00:43:41 +0000
-Message-ID: <20230613004341.3540325-1-azeemshaikh38@gmail.com>
+        Hongren Zheng <i@zenithal.me>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usbip: usbip_host: Replace strlcpy with strscpy
+Date:   Tue, 13 Jun 2023 00:44:02 +0000
+Message-ID: <20230613004402.3540432-1-azeemshaikh38@gmail.com>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -88,24 +89,24 @@ is used to check for truncation instead of sizeof(dest).
 
 Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
 ---
- drivers/usb/gadget/function/f_printer.c |    4 ++--
+ drivers/usb/usbip/stub_main.c |    4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
-index 28db3e336e7d..10dc7c55c25f 100644
---- a/drivers/usb/gadget/function/f_printer.c
-+++ b/drivers/usb/gadget/function/f_printer.c
-@@ -1211,8 +1211,8 @@ static ssize_t f_printer_opts_pnp_string_show(struct config_item *item,
- 	if (!opts->pnp_string)
- 		goto unlock;
+diff --git a/drivers/usb/usbip/stub_main.c b/drivers/usb/usbip/stub_main.c
+index e8c3131a8543..a92a284f5abb 100644
+--- a/drivers/usb/usbip/stub_main.c
++++ b/drivers/usb/usbip/stub_main.c
+@@ -174,8 +174,8 @@ static ssize_t match_busid_store(struct device_driver *dev, const char *buf,
+ 		return -EINVAL;
  
--	result = strlcpy(page, opts->pnp_string, PAGE_SIZE);
--	if (result >= PAGE_SIZE) {
-+	result = strscpy(page, opts->pnp_string, PAGE_SIZE);
-+	if (result == -E2BIG) {
- 		result = PAGE_SIZE;
- 	} else if (page[result - 1] != '\n' && result + 1 < PAGE_SIZE) {
- 		page[result++] = '\n';
+ 	/* busid needs to include \0 termination */
+-	len = strlcpy(busid, buf + 4, BUSID_SIZE);
+-	if (sizeof(busid) <= len)
++	len = strscpy(busid, buf + 4, BUSID_SIZE);
++	if (len == -E2BIG)
+ 		return -EINVAL;
+ 
+ 	if (!strncmp(buf, "add ", 4)) {
 -- 
 2.41.0.162.gfafddb0af9-goog
 
