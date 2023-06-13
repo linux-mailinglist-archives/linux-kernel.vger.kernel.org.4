@@ -2,136 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12DEC72E374
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2FDE72E46F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:45:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241015AbjFMM5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 08:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52088 "EHLO
+        id S242631AbjFMNoa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 13 Jun 2023 09:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241003AbjFMM5k (ORCPT
+        with ESMTP id S242613AbjFMNoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 08:57:40 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8617A191;
-        Tue, 13 Jun 2023 05:57:37 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b203360d93so67438251fa.3;
-        Tue, 13 Jun 2023 05:57:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686661056; x=1689253056;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=XeFbrqjcv72tXKY+nTQZPqYsLbKLXvzDbqnXIJWbTaI=;
-        b=F8VnRb8baWHgKP7PGJySntfa4HuH266ABbFf9nId1exOyhM/HnnQ/GywEd0BxhfGHu
-         X+luqaQSHaFKkz1nXryWggrcRnyk+KUEytNhbL6ujbuN6Wi7hS+9PUmXykJz6BUUNSMc
-         9BAKSdiAzBDZVwqMvhzHJRovQ6NmXSRibBDtOnER+gnqh03i+9/ivgzNOWlvXlGhGpBG
-         POOMoB+I3FweB+xZvaCgAUWBaL76Z6t98IcdTiKOmvBtAVNxBi2xprk/qzjXw4anLsmO
-         Hd1h4rEz9BCi8Iqch0RFz8FQAnX6d46OFwT02Bwt50ZCv+YtKZDH8qrEpSRWEbxReAoa
-         INzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686661056; x=1689253056;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XeFbrqjcv72tXKY+nTQZPqYsLbKLXvzDbqnXIJWbTaI=;
-        b=fP04zqp1nudxwX8vsSNKGN/9vV0g8yzj6GKvuQlY5waJwf31c4LNqnApNqQg0StZPv
-         XjeSV9iCp25S+ZLuPW5jyssOLduBeSBrgP+q2glny4YyyZfOV7F/DvOxQuERNnYVhsiE
-         xThxBAB1qgovH3aIEDfMyy9eB6Ji+XuELBgW1Cwsgm7sdO2sV6l2GKGP0rzEvCw9yqZ/
-         dO26GJxwypERpXJjO33hYi3DyLfNGb7HpFHroB6RlxBmSJbjVfxT9qN8MZdjnvgVhraS
-         ejOjXCJJEtjowo9w6+JSMlWUx0+IDfoLjjPIDsRpiNBO5T5kTW+4jW5D1Cbn2O5wltDo
-         LHCA==
-X-Gm-Message-State: AC+VfDxAAcmFGPXVN7BqaLiUdHrRIiZGUVm/2rnJDtAwGgo8bMNGwHUY
-        aBZTcd9c+9J66mSJepA2giRSazAYNalFBs9KPQM=
-X-Google-Smtp-Source: ACHHUZ58fdvqqZGzZ2BJ69HvjsawvXZXVqX8mWvk/TZrT9Ybw87KzskU5alAos2BM+DSCl/BlFmKEw==
-X-Received: by 2002:a2e:241a:0:b0:2b1:e958:efa0 with SMTP id k26-20020a2e241a000000b002b1e958efa0mr3743952ljk.50.1686661055572;
-        Tue, 13 Jun 2023 05:57:35 -0700 (PDT)
-Received: from ?IPV6:2a0b:6204:4302:5f00:4dab:3483:4506:9a0e? ([2a0b:6204:4302:5f00:4dab:3483:4506:9a0e])
-        by smtp.gmail.com with ESMTPSA id r7-20020a2eb607000000b0029c96178425sm2165663ljn.19.2023.06.13.05.57.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 05:57:35 -0700 (PDT)
-From:   "bibo, mao" <bibo.mao@gmail.com>
-X-Google-Original-From: "bibo, mao" <maobibo@loongson.cn>
-Message-ID: <5442b28a-12d9-bacb-3983-ad4cc0c79689@loongson.cn>
-Date:   Tue, 13 Jun 2023 20:57:30 +0800
+        Tue, 13 Jun 2023 09:44:17 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFDAF1BC9;
+        Tue, 13 Jun 2023 06:44:05 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id E973824E1FE;
+        Tue, 13 Jun 2023 21:43:56 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 13 Jun
+ 2023 20:58:53 +0800
+Received: from localhost.localdomain (113.72.145.34) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 13 Jun
+ 2023 20:58:52 +0800
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        Xingyu Wu <xingyu.wu@starfivetech.com>,
+        "William Qiu" <william.qiu@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+Subject: [PATCH v5 0/7] Add PLL clocks driver and syscon for StarFive JH7110 SoC
+Date:   Tue, 13 Jun 2023 20:58:45 +0800
+Message-ID: <20230613125852.211636-1-xingyu.wu@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v13 10/30] LoongArch: KVM: Implement vcpu ENABLE_CAP ioctl
- interface
-To:     Tianrui Zhao <zhaotianrui@loongson.cn>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Xi Ruoyao <xry111@xry111.site>, tangyouling@loongson.cn,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-References: <20230609090832.2131037-1-zhaotianrui@loongson.cn>
- <20230609090832.2131037-11-zhaotianrui@loongson.cn>
-In-Reply-To: <20230609090832.2131037-11-zhaotianrui@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [113.72.145.34]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Bibo Mao <maobibo@loongson.cn>
+This patch serises are to add PLL clocks driver and providers by writing
+and reading syscon registers for the StarFive JH7110 RISC-V SoC. And add 
+documentation and nodes to describe StarFive System Controller(syscon)
+Registers. This patch serises are based on Linux 6.4-rc1.
 
-Regards
-Bibo, Mao
+PLL are high speed, low jitter frequency synthesizers in JH7110.
+Each PLL clocks work in integer mode or fraction mode by some dividers,
+and the dividers are set in several syscon registers.
+The formula for calculating frequency is: 
+Fvco = Fref * (NI + NF) / M / Q1
 
-在 2023/6/9 17:08, Tianrui Zhao 写道:
-> Implement LoongArch vcpu KVM_ENABLE_CAP ioctl interface.
-> 
-> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
-> ---
->   arch/loongarch/kvm/vcpu.c | 19 +++++++++++++++++++
->   1 file changed, 19 insertions(+)
-> 
-> diff --git a/arch/loongarch/kvm/vcpu.c b/arch/loongarch/kvm/vcpu.c
-> index b0cce413762d..da97b77da8eb 100644
-> --- a/arch/loongarch/kvm/vcpu.c
-> +++ b/arch/loongarch/kvm/vcpu.c
-> @@ -186,6 +186,16 @@ int kvm_arch_vcpu_ioctl_set_regs(struct kvm_vcpu *vcpu, struct kvm_regs *regs)
->   	return 0;
->   }
->   
-> +static int kvm_vcpu_ioctl_enable_cap(struct kvm_vcpu *vcpu,
-> +				     struct kvm_enable_cap *cap)
-> +{
-> +	/*
-> +	 * FPU is enable by default, do not support any other caps,
-> +	 * and later we will support such as LSX cap.
-> +	 */
-> +	return -EINVAL;
-> +}
-> +
->   long kvm_arch_vcpu_ioctl(struct file *filp,
->   			 unsigned int ioctl, unsigned long arg)
->   {
-> @@ -209,6 +219,15 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
->   			r = _kvm_get_reg(vcpu, &reg);
->   		break;
->   	}
-> +	case KVM_ENABLE_CAP: {
-> +		struct kvm_enable_cap cap;
-> +
-> +		r = -EFAULT;
-> +		if (copy_from_user(&cap, argp, sizeof(cap)))
-> +			break;
-> +		r = kvm_vcpu_ioctl_enable_cap(vcpu, &cap);
-> +		break;
-> +	}
->   	default:
->   		r = -ENOIOCTLCMD;
->   		break;
+The first patch adds docunmentation to describe PLL clock bindings,
+and the second patch adds documentation to decribe syscon registers.
+The patch 3 modifies the SYSCRG dibindings and adds PLL clock inputs.
+The patch 4 adds driver to support PLL clocks for JH7110.
+The patch 5 modifies the system clock driver and can select the PLL clock
+source from PLL clocks driver. And the patch 6 adds the 
+stg/sys/aon syscon nodes for JH7110 SoC. The last patch modifies the
+syscrg node in JH7110 dts file.
+
+Changes since v4:
+- Rebased on Linux 6.4-rc6.
+- Patch 2 dropped the example node about sys-syscon.
+- Patch 3 used PLL clocks as one of optional items in SYSCRG bindings.
+- Patch 4 used the patch instead about PLL clocks driver from Emil.
+- Patch 5 retained the fixed factor PLL clocks as the optional source
+  about PLL clocks in SYSCRG clock driver.
+- Patch 6 added the child node clock-controller as the complete
+  sys-syscon node and patch 7 dropped this part.
+
+v4: https://lore.kernel.org/all/20230512022036.97987-1-xingyu.wu@starfivetech.com/
+
+Changes since v3: 
+- Rebased on Linux 6.4-rc1.
+- Dropped the 'power-controller' property and used 'power-domain-cells'
+  instead in syscon binding.
+- Used the data by of_device_id to get the syscon registers'
+  configuration include offset, mask and shift.
+
+v3: https://lore.kernel.org/all/20230414024157.53203-1-xingyu.wu@starfivetech.com/
+
+Changes since v2: 
+- Rebased on latest JH7110 basic clock drivers.
+- Added the complete documentation to describe syscon register.
+- Added syscon node in JH7110 dts file.
+- Modified the clock rate selection to match the closest rate in
+  PLL driver when setting rate.
+
+v2: https://lore.kernel.org/all/20230316030514.137427-1-xingyu.wu@starfivetech.com/
+
+Changes since v1: 
+- Changed PLL clock node to be child of syscon node in dts.
+- Modifed the definitions and names of function in PLL clock driver.
+- Added commit to update syscon and syscrg dt-bindings.
+
+v1: https://lore.kernel.org/all/20230221141147.303642-1-xingyu.wu@starfivetech.com/
+
+William Qiu (2):
+  dt-bindings: soc: starfive: Add StarFive syscon module
+  riscv: dts: starfive: jh7110: Add syscon nodes
+
+Xingyu Wu (5):
+  dt-bindings: clock: Add StarFive JH7110 PLL clock generator
+  dt-bindings: clock: jh7110-syscrg: Add PLL clock inputs
+  clk: starfive: Add StarFive JH7110 PLL clock driver
+  clk: starfive: jh7110-sys: Add PLL clocks source from DTS
+  riscv: dts: starfive: jh7110: Add PLL clock source in SYSCRG node
+
+ .../bindings/clock/starfive,jh7110-pll.yaml   |  46 ++
+ .../clock/starfive,jh7110-syscrg.yaml         |  56 ++
+ .../soc/starfive/starfive,jh7110-syscon.yaml  |  62 +++
+ MAINTAINERS                                   |  13 +
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      |  30 +-
+ drivers/clk/starfive/Kconfig                  |   9 +
+ drivers/clk/starfive/Makefile                 |   1 +
+ .../clk/starfive/clk-starfive-jh7110-pll.c    | 507 ++++++++++++++++++
+ .../clk/starfive/clk-starfive-jh7110-sys.c    |  45 +-
+ .../dt-bindings/clock/starfive,jh7110-crg.h   |   6 +
+ 10 files changed, 755 insertions(+), 20 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-pll.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
+ create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-pll.c
+
+-- 
+2.25.1
+
