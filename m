@@ -2,275 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B61A572EBE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:26:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A3272EBF0
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232995AbjFMTZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 15:25:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60554 "EHLO
+        id S229492AbjFMTYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 15:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235007AbjFMTYt (ORCPT
+        with ESMTP id S235007AbjFMTYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 15:24:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D321FD7
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:24:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686684248;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=o0Xp4cZRzSm04wF//W6ULMDJ6pAy04YCwjnVzsE4FtU=;
-        b=jIaAFGq2T6KhI9sSvYc7KpmjoQqZQmUR3g8XHsgQfoIh/dGBdM9DbXCR52dDcrz7gNMmez
-        DtqYi2ZiKA5B4U5PwPrOjSnkDLmF+1m4qeZ9pJO8kNYMtE9ePg95TpCoaTgkYT8zQNGtaL
-        cmqK1QNTt5W0YJMzbw5ul53xn4IhuXY=
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
- [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-639-sgyjIzZsOgudZx2eM1Rv8Q-1; Tue, 13 Jun 2023 15:24:06 -0400
-X-MC-Unique: sgyjIzZsOgudZx2eM1Rv8Q-1
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-33bdb682a1fso52102795ab.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:24:05 -0700 (PDT)
+        Tue, 13 Jun 2023 15:24:15 -0400
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0FCE1FE4
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:24:10 -0700 (PDT)
+Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3406661e649so11537225ab.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:24:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686684244; x=1689276244;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=o0Xp4cZRzSm04wF//W6ULMDJ6pAy04YCwjnVzsE4FtU=;
-        b=ReEoxL5p0ovz/eFqQXmno+HXKyndyNE8nAQ4OVMw6rNbgmZvVikGnNsnYtuqdY4WAn
-         slcpDrlfvjE5Oja+5qmFT6aXMhwu/g1Ohb6Nu2un43Bbj1KuXpucwnuTOdJ9vM2zPdLY
-         gQFFyVl1D4nzZvRgU6eMJxGPPtao37rNB6PqLa300kUVJNRmoXB+Qj2MSBb3yseOk5DM
-         7pw4EuPjy7e/U4Kglm0PYZS/4svd0Dnv699TqcHOdKR2G2titUeKuWbCyboa40DFZjFp
-         F9dC2ci26rJ7ATZUUAVkh/BjuCkyfI1djKjxoDE8zfk3+dDQki9QBW2t7rVYoIF96VlE
-         S76g==
-X-Gm-Message-State: AC+VfDyyhlMIXZ7DdXfKPcQeYPalb752th2g86sC4AovYAOFi7KIq2Y3
-        vAqoa+VA582EcrMmjZZKyqn0/O0hTVQf8vLZw+T/9iFFY/zFJKWd5fGDz74AyWGg+ZNVdayAUL7
-        R5727XYPr12sl8ckE+tEyeEi+
-X-Received: by 2002:a05:6e02:544:b0:33b:f86:d2ac with SMTP id i4-20020a056e02054400b0033b0f86d2acmr11024595ils.1.1686684244554;
-        Tue, 13 Jun 2023 12:24:04 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6UjVusKH334SviJEX1YcZHvyy4usNg7QiXPX6t9JZvkQId9cz2LdV7NKff5YpRTYpUaSrDZQ==
-X-Received: by 2002:a05:6e02:544:b0:33b:f86:d2ac with SMTP id i4-20020a056e02054400b0033b0f86d2acmr11024581ils.1.1686684244203;
-        Tue, 13 Jun 2023 12:24:04 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id x24-20020a02ac98000000b00420c5d10c38sm3508457jan.74.2023.06.13.12.24.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 12:24:03 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 13:24:02 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     ankita@nvidia.com, aniketa@nvidia.com, cjia@nvidia.com,
-        kwankhede@nvidia.com, targupta@nvidia.com, vsethi@nvidia.com,
-        acurrid@nvidia.com, apopple@nvidia.com, jhubbard@nvidia.com,
-        danw@nvidia.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/1] vfio/nvgpu: Add vfio pci variant module for
- grace hopper
-Message-ID: <20230613132402.2765b6cb.alex.williamson@redhat.com>
-In-Reply-To: <ZIh+wXFrls7StWzc@nvidia.com>
-References: <20230606025320.22647-1-ankita@nvidia.com>
-        <20230606083238.48ea50e9.alex.williamson@redhat.com>
-        <ZH9RfXhbuED2IUgJ@nvidia.com>
-        <20230606110510.0f87952c.alex.williamson@redhat.com>
-        <ZH9p+giEs6bCYfw8@nvidia.com>
-        <20230606121348.670229ff.alex.williamson@redhat.com>
-        <ZH+DdVIyZ6hHCDaK@nvidia.com>
-        <20230606153057.4cbc36a0.alex.williamson@redhat.com>
-        <ZH/LzyF/uttviRnQ@nvidia.com>
-        <20230607122303.5d25c973.alex.williamson@redhat.com>
-        <ZIh+wXFrls7StWzc@nvidia.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+        d=1e100.net; s=20221208; t=1686684250; x=1689276250;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SgHMOF8OeFwcQdJEJjLCGMA6VWATpWbNVoe8L+fE+wo=;
+        b=Jj+KguvoFKxHC8+BwCSoz+hwa0mpYNau0fyjwu2Hf5h8jv0epBVsObGwSru4PSOF/M
+         hqEmGe5kdKx52ZUZHl12qGOhrhkDXjSLm2atmFp3+5a15bEZTmYvOIEWQXUnGfBs+Zni
+         rqQAWb6d+N0M/0mlp2/IOG0wndGEgDNGTzWMmo7uIyzeYkIobq9GBRHuEIsBdOBll1G4
+         6fQaUkCagsqYEp8AvyG3e4QNrx0A4qsWlPAL9FzUqD9Xt6b9oQk/IxLQYE4gznoF2+5o
+         Zg8w0aw7UKSvmTxP7j1l6Im7GZCRL+5i3MWdLpds8oEc3pqljREj11jppCumqAYHazz8
+         YW5Q==
+X-Gm-Message-State: AC+VfDzTyMP5TWiLAwo2qnAgZ1nGhK+76lJM21L34bpY4LjiKWG8tnES
+        ksdaJdLq5sFduTRNCT2xSARUSb1PGHCjUPeQSbXXHe3tHOXa
+X-Google-Smtp-Source: ACHHUZ47f/tkHD73IJ2U64Up5h0iDVztKjFpwg4JcF+ze0rI49jXUJvSqYEyO+DPQoKt/oH5Mwkq5wKSoJB1tYC5rhBjRahxTCZn
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:d3c2:0:b0:33e:6549:1fa3 with SMTP id
+ c2-20020a92d3c2000000b0033e65491fa3mr6170175ilh.0.1686684250278; Tue, 13 Jun
+ 2023 12:24:10 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 12:24:10 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009612bc05fe07c73f@google.com>
+Subject: [syzbot] [hams?] memory leak in nr_create (3)
+From:   syzbot <syzbot+d327a1f3b12e1e206c16@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-hams@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, ralf@linux-mips.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 13 Jun 2023 11:35:45 -0300
-Jason Gunthorpe <jgg@nvidia.com> wrote:
+Hello,
 
-> On Wed, Jun 07, 2023 at 12:23:03PM -0600, Alex Williamson wrote:
-> 
-> > > The fixing is generic, a generic function does not elevate to create a
-> > > vendor uAPI IMHO.  
-> > 
-> > Who else is trying to expose a non-power-of-2 region as a BAR right
-> > now?   
-> 
-> I see a few needs in other places internally that are not public yet,
-> especially in the SIOV world I alluded to below.
-> 
-> > We have neither a specification nor a complimentary implementation
-> > from which to derive generic support.    
-> 
-> "specification"? It is literally - the size of the bar is not a power
-> of two, so make the resulting hole when mapping that to a vPCI discard
-> writes and read 0s.
-> 
-> This isn't a PCI specification, it is a contract between the kernel
-> side and the VMM side within VFIO about how to handle VFIO devices
-> where the kernel driver wants to have a padding.
-> 
-> It makes sense that we shouldn't just do this blidly for the existing
-> indexes without some negotation, but that isn't a PCI "compliance"
-> problem, that is a incomplete VFIO uAPI design in this patch.
-> 
-> > GPUs seem to manage to have non-power-of-2 size VRAM while still
-> > providing BARs that are a power-of-2, ex. 6GB VRAM, 8GB BAR.    
-> 
-> Generally excess BAR is modeled in HW as discard writes return 0 (or
-> maybe return -1). HW can do this easially. SW is more tricky
-> 
-> > Why shouldn't the variant driver here extend the BAR region to a
-> > power-of-2 and then we can decide the error handling should accesses
-> > exceed the implemented range?  
-> 
-> This sounds doable, I don't know if Ankit had a problem with using the
-> sparse mmap feature to do this. We'd need to have the padding be
-> non-mmapable space and then the kernel driver would do the discard/0
-> with the read/write calls.
-> 
-> If this works out I'm happy enough if we go this way too. I suppose it
-> allows better compatibility with all the VMMs.
+syzbot found the following issue on:
 
-I'd even forgotten about the sparse mmap solution here, that's even
-better than trying to do something clever with the mmap.
+HEAD commit:    33f2b5785a2b Merge tag 'drm-fixes-2023-06-09' of git://ano..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=127f61b3280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ee975febba574924
+dashboard link: https://syzkaller.appspot.com/bug?extid=d327a1f3b12e1e206c16
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=110a6ef1280000
 
-Existing QEMU has an assert in pci_register_bar() that the size of the
-MemoryRegion must be a power of 2, therefore it is ABI that the a vfio
-PCI BAR region must be a power of 2.  It's not sufficient to change
-QEMU, an old QEMU running on a kernel with this device would assert.
-The BAR region must either be properly sized or we define a new region
-definition which requires new QEMU support to mimic a BAR, but I don't
-know why we wouldn't just use this sparse mmap trick.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/33eb581c818f/disk-33f2b578.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/0bcbec3a83cf/vmlinux-33f2b578.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/0e577c2e8783/bzImage-33f2b578.xz
 
-> > > I would say if the thing that is showing up on the VM side is not PCI
-> > > then maybe a vendor label might make sense.  
-> > 
-> > Well, how do you suppose a device with a non-power-of-2 BAR is PCI
-> > compliant?  You're asking the VMM to assume what the driver meant by
-> > providing that non-standard BAR, which sounds vendor specific to me.  
-> 
-> It shows up as a PCI compliant device in the VM, with a compliant
-> power of two size.
-> 
-> > Is your primary complaint here that you don't want
-> > that region to be labeled VFIO_PCI_NVGPU_BAR1?    
-> 
-> Yes. This modified VFIO uAPI contract is general enough it should not
-> be forced as unique to this device.
-> 
-> > We could certainly define VFIO_PCI_VENDOR_BAR0..5 where QEMU knows
-> > that it's supposed to relax expectations and mangle the region into
-> > a compliant BAR, but now you're adding complexity that may never be
-> > used elsewhere.  
-> 
-> I wouldn't use a _VENDOR_ name for this since it is generic.
-> 
-> I would suggest using a FEATURE:
-> 
-> /*
->  * When SET to 1 it indicates that the userspace understands non-power of two
->  * region sizes on VFIO_PCI_BARx_REGION_INDEX. If the kernel driver requests a
->  * non-power of two size then if userspace needs to round the size back up to a
->  * power of two, eg to create a vPCI device, it should return 0 for reads and
->  * discard writes for the padding that was added.
->  *
->  * If this flag is not set, and the VFIO driver cannot work without non-power of
->  * two BARs then mmap of those BAR indexes will fail. (FIXME: maybe
->  * this needs more thinking)
->  */
-> #define VFIO_DEVICE_FEATURE_PCI_PAD_BARS 10
-> 
-> As adding new index types for every new functionality will become
-> combinatoral, and adding discovery of which vPCI BAR index the new
-> indexes should map too is also complicated..
-> 
-> Though sparse mmap is probably better.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d327a1f3b12e1e206c16@syzkaller.appspotmail.com
 
-Yes.
+2023/06/09 19:03:53 executed programs: 18
+BUG: memory leak
+unreferenced object 0xffff888114e76800 (size 2048):
+  comm "syz-executor.3", pid 5156, jiffies 4294942146 (age 20.470s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    06 00 07 40 00 00 00 00 00 00 00 00 00 00 00 00  ...@............
+  backtrace:
+    [<ffffffff815461aa>] __do_kmalloc_node mm/slab_common.c:965 [inline]
+    [<ffffffff815461aa>] __kmalloc+0x4a/0x120 mm/slab_common.c:979
+    [<ffffffff83dbe78d>] kmalloc include/linux/slab.h:563 [inline]
+    [<ffffffff83dbe78d>] sk_prot_alloc+0xcd/0x1b0 net/core/sock.c:2035
+    [<ffffffff83dc0f06>] sk_alloc+0x36/0x300 net/core/sock.c:2088
+    [<ffffffff843dea54>] nr_create+0x84/0x1c0 net/netrom/af_netrom.c:438
+    [<ffffffff83db6e3e>] __sock_create+0x1de/0x300 net/socket.c:1547
+    [<ffffffff83dba452>] sock_create net/socket.c:1598 [inline]
+    [<ffffffff83dba452>] __sys_socket_create net/socket.c:1635 [inline]
+    [<ffffffff83dba452>] __sys_socket_create net/socket.c:1620 [inline]
+    [<ffffffff83dba452>] __sys_socket+0xa2/0x190 net/socket.c:1663
+    [<ffffffff83dba55e>] __do_sys_socket net/socket.c:1676 [inline]
+    [<ffffffff83dba55e>] __se_sys_socket net/socket.c:1674 [inline]
+    [<ffffffff83dba55e>] __x64_sys_socket+0x1e/0x30 net/socket.c:1674
+    [<ffffffff84a17749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff84a17749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-> > > It really has nothing to do with the regions, it is something that is
-> > > needed if this variant driver is being used at all. The vPCI device
-> > > will work without the ACPI, but the Linux drivers won't like it.  
-> > 
-> > OTOH if the ACPI work is based on device specific regions, the list of
-> > device IDs in QEMU goes away and support for a new device requires no
-> > VMM changes.  
-> 
-> Using the device ID seems like the better approach as we don't know
-> what future devices using this varient driver are going to need for
-> ACPI modeling.
-> 
-> It also seems I was too optimistic to think a simple variant driver ID
-> would be sufficient. IMHO you are closer below, it depends on what
-> bare metal FW qemu is trying to emulate, which I suppose is
-> technically a combination of the machine type and the installed vPCI
-> devices..
-> 
-> > > The ACPI is not related to the region. It is just creating many empty
-> > > NUMA nodes. They should have no CPUs and no memory. The patch is
-> > > trying to make the insertion of the ACPI automatic. Keying it off a
-> > > region is not right for the purpose.  
-> > 
-> > Why aren't the different NUMA nodes a machine type option?  If we start
-> > having each device mangle the machine in incompatible ways it seems
-> > like we're going to get conflicts not only with other devices, but also
-> > user specified NUMA configurations.  
-> 
-> You may be right, I think this patch is trying to make things
-> automatic for user, but a dedicated machine type might make more
-> sense.
+BUG: memory leak
+unreferenced object 0xffff8881185accc0 (size 32):
+  comm "syz-executor.3", pid 5156, jiffies 4294942146 (age 20.470s)
+  hex dump (first 32 bytes):
+    a8 d1 a3 00 81 88 ff ff 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff81545ac4>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
+    [<ffffffff823168c2>] kmalloc include/linux/slab.h:559 [inline]
+    [<ffffffff823168c2>] kzalloc include/linux/slab.h:680 [inline]
+    [<ffffffff823168c2>] apparmor_sk_alloc_security+0x52/0xd0 security/apparmor/lsm.c:828
+    [<ffffffff822dbe95>] security_sk_alloc+0x35/0x70 security/security.c:4372
+    [<ffffffff83dbe7be>] sk_prot_alloc+0xfe/0x1b0 net/core/sock.c:2038
+    [<ffffffff83dc0f06>] sk_alloc+0x36/0x300 net/core/sock.c:2088
+    [<ffffffff843dea54>] nr_create+0x84/0x1c0 net/netrom/af_netrom.c:438
+    [<ffffffff83db6e3e>] __sock_create+0x1de/0x300 net/socket.c:1547
+    [<ffffffff83dba452>] sock_create net/socket.c:1598 [inline]
+    [<ffffffff83dba452>] __sys_socket_create net/socket.c:1635 [inline]
+    [<ffffffff83dba452>] __sys_socket_create net/socket.c:1620 [inline]
+    [<ffffffff83dba452>] __sys_socket+0xa2/0x190 net/socket.c:1663
+    [<ffffffff83dba55e>] __do_sys_socket net/socket.c:1676 [inline]
+    [<ffffffff83dba55e>] __se_sys_socket net/socket.c:1674 [inline]
+    [<ffffffff83dba55e>] __x64_sys_socket+0x1e/0x30 net/socket.c:1674
+    [<ffffffff84a17749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff84a17749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-Juan and I discussed this with Ankit last week, there are a lot of down
-sides with another machine type, but the automatic manipulation of the
-machine is still problematic.  Another option we have is to use QEMU
-command line options for each feature.  For example we already support
-NUMA VM configurations and loading command line ACPI tables, hopefully
-also associating devices to nodes.  Do we end up with just a
-configuration spec for the VM to satisfy the in-guest drivers?
-Potentially guest driver requirements may changes over time, so a hard
-coded recipe built-in to QEMU might not be the best solution anyway.
+BUG: memory leak
+unreferenced object 0xffff888115867800 (size 2048):
+  comm "syz-executor.0", pid 5159, jiffies 4294942269 (age 19.240s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    06 00 07 40 00 00 00 00 00 00 00 00 00 00 00 00  ...@............
+  backtrace:
+    [<ffffffff815461aa>] __do_kmalloc_node mm/slab_common.c:965 [inline]
+    [<ffffffff815461aa>] __kmalloc+0x4a/0x120 mm/slab_common.c:979
+    [<ffffffff83dbe78d>] kmalloc include/linux/slab.h:563 [inline]
+    [<ffffffff83dbe78d>] sk_prot_alloc+0xcd/0x1b0 net/core/sock.c:2035
+    [<ffffffff83dc0f06>] sk_alloc+0x36/0x300 net/core/sock.c:2088
+    [<ffffffff843dea54>] nr_create+0x84/0x1c0 net/netrom/af_netrom.c:438
+    [<ffffffff83db6e3e>] __sock_create+0x1de/0x300 net/socket.c:1547
+    [<ffffffff83dba452>] sock_create net/socket.c:1598 [inline]
+    [<ffffffff83dba452>] __sys_socket_create net/socket.c:1635 [inline]
+    [<ffffffff83dba452>] __sys_socket_create net/socket.c:1620 [inline]
+    [<ffffffff83dba452>] __sys_socket+0xa2/0x190 net/socket.c:1663
+    [<ffffffff83dba55e>] __do_sys_socket net/socket.c:1676 [inline]
+    [<ffffffff83dba55e>] __se_sys_socket net/socket.c:1674 [inline]
+    [<ffffffff83dba55e>] __x64_sys_socket+0x1e/0x30 net/socket.c:1674
+    [<ffffffff84a17749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff84a17749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-> > I'm struggling with whether I can
-> > set some bits in the root port devcap2 register[1] based on device
-> > capabilities and here this is fundamentally manipulating the VM
-> > topology.
-> > 
-> > [1]https://lore.kernel.org/all/20230526231558.1660396-1-alex.williamson@redhat.com/  
-> 
-> That does seem a bit dicey - alot of this stuff, especially ACPI, is
-> reasonably assumed to be set at boot time by an OS. Changing it
-> dynamically becomes exciting..
+BUG: memory leak
+unreferenced object 0xffff88811896cae0 (size 32):
+  comm "syz-executor.0", pid 5159, jiffies 4294942269 (age 19.240s)
+  hex dump (first 32 bytes):
+    a8 d1 a3 00 81 88 ff ff 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff81545ac4>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
+    [<ffffffff823168c2>] kmalloc include/linux/slab.h:559 [inline]
+    [<ffffffff823168c2>] kzalloc include/linux/slab.h:680 [inline]
+    [<ffffffff823168c2>] apparmor_sk_alloc_security+0x52/0xd0 security/apparmor/lsm.c:828
+    [<ffffffff822dbe95>] security_sk_alloc+0x35/0x70 security/security.c:4372
+    [<ffffffff83dbe7be>] sk_prot_alloc+0xfe/0x1b0 net/core/sock.c:2038
+    [<ffffffff83dc0f06>] sk_alloc+0x36/0x300 net/core/sock.c:2088
+    [<ffffffff843dea54>] nr_create+0x84/0x1c0 net/netrom/af_netrom.c:438
+    [<ffffffff83db6e3e>] __sock_create+0x1de/0x300 net/socket.c:1547
+    [<ffffffff83dba452>] sock_create net/socket.c:1598 [inline]
+    [<ffffffff83dba452>] __sys_socket_create net/socket.c:1635 [inline]
+    [<ffffffff83dba452>] __sys_socket_create net/socket.c:1620 [inline]
+    [<ffffffff83dba452>] __sys_socket+0xa2/0x190 net/socket.c:1663
+    [<ffffffff83dba55e>] __do_sys_socket net/socket.c:1676 [inline]
+    [<ffffffff83dba55e>] __se_sys_socket net/socket.c:1674 [inline]
+    [<ffffffff83dba55e>] __x64_sys_socket+0x1e/0x30 net/socket.c:1674
+    [<ffffffff84a17749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff84a17749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-I think we need to be careful about how and where we apply it.  Yes,
-there could be a guest OS that caches the capabilities of the root
-ports and could have stale information at the time the driver probes
-Atomic Ops information.  But the spec doesn't prohibit RO defined bits
-from changing that I can find... and I can't come up with a better
-solution to support atomic ops.
 
-The alternative would again be device switches on the QEMU command
-line, which I think would have a dependency on disabling hotplug for
-the slot (pcie-root-port,hotplug=off) and also need to validate that
-all virtual downstream devices capable of those atomic ops have
-equivalent host support.  I couldn't find enough downsides to the risk
-that a guest booted with an Atomic Ops capable device that also caches
-the capabilities of the root port (Linux doesn't) might hot-unplug that
-device, hot-plug a new device w/o the same host support (ex. different
-slot or different host after a migration), and report the stale atomic
-ops support.
 
-I think NVIDIA might have an interest in enabling Atomic Ops support in
-VMs as well, so please comment in the series thread if there are
-concerns here or if anyone can definitively says that another guest OS
-we might care about does cache root port capability bits.  Thanks,
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Alex
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
