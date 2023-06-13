@@ -2,72 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 441B472F047
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 01:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FA5372F054
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 01:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241538AbjFMXlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 19:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34276 "EHLO
+        id S241886AbjFMXlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 19:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241534AbjFMXkE (ORCPT
+        with ESMTP id S241232AbjFMXkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 19:40:04 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9F51FFB;
-        Tue, 13 Jun 2023 16:39:41 -0700 (PDT)
-Message-ID: <20230613224545.612182854@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686699580;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=0VnFCDlFg0Z65xUPcTSUW8cd097ZM3tj8m6sSpK3s64=;
-        b=2vIwQPIUp/HJUmCG4BQezI45Q367xKHJYYqLK7G4wdrDSn+cOBFzLkdHYUwzUXc6gDifT9
-        rXY1lpsCnLehM7zAXb6roxx5XLRXYnCJR+grAmVc2dHif25zyPdBFAdRB8oZi5F8oDEYjX
-        LfRMBrXHCi+WgVWwvhW/rD4N9Ur83iWtMYD/8dwxcO3p39WY5cZNs0IUmsHtiYOfpH2mPn
-        zfJVRybOawF0SSzGOD7ZbR8K3/Wde2+WMR35K0mYj4U05gliICM7VVvC+XUr8nRG+osE42
-        Jt6Rw45sBhht2PYfVT0AcDzOMXI7pmmP+pQ2CC66euAz7R6Cd8BF8y04Prxn9g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686699580;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=0VnFCDlFg0Z65xUPcTSUW8cd097ZM3tj8m6sSpK3s64=;
-        b=Xu1aR4gK/TE/PO7y3dM5tqNyYP8UwrzsrU8JCSaOdKEVqSuAOvhIQ2kubFuP8M//eeln2X
-        Z4Xwxgc0BSAFJ1Bg==
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
-        Nikolay Borisov <nik.borisov@suse.com>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-sh@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org,
-        Richard Henderson <richard.henderson@linaro.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chris Zankel <chris@zankel.net>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Subject: [patch 12/17] init: Invoke arch_cpu_finalize_init() earlier
-References: <20230613223827.532680283@linutronix.de>
+        Tue, 13 Jun 2023 19:40:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B920F2118;
+        Tue, 13 Jun 2023 16:39:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 93CA263375;
+        Tue, 13 Jun 2023 23:39:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E07A1C433CB;
+        Tue, 13 Jun 2023 23:39:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686699582;
+        bh=GSISUAdKFLSbpxyTM08xZOsDpcq/incijyeO8wdFdzQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=n6BV8dpImJkWAKnYGbk6jQa8k3INA5QDed/haok34ODb+G9ceokA3wVB/ACdeA7BK
+         lbnSZFRd6Hb1QaHYi3hYDBlHeDIuHWDyWPdoUhFH7F1hptMmFCPrTszGeidgO8UsAb
+         yGY2bQCTIg2qZBby2Xxomtn0zuwoBvq6dfXrN/0ZIGavK/P1GNvD2/+FTDjG8mXg9R
+         0/LYLtrGztsagsUGzKUvsEaU1fYMVKsM+vLUxj8r05UwVt2TTdo/1//fYPVJiwkO9y
+         WjEvZ9NBsRoEs3S/u7W7oIkqcy+I/XdEzxg8eQfUGOisx6Nsq4pBw6rWb2y1YV4VfK
+         ePojbsP7tVeMQ==
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, stable@vger.kernel.org
+Subject: [PATCH] f2fs: remove i_xattr_sem to avoid deadlock and fix the original issue
+Date:   Tue, 13 Jun 2023 16:39:40 -0700
+Message-ID: <20230613233940.3643362-1-jaegeuk@kernel.org>
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 14 Jun 2023 01:39:39 +0200 (CEST)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,48 +53,190 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-X86 is reworking the boot process so that initializations which are not
-required during early boot can be moved into the late boot process and out
-of the fragile and restricted initial boot phase.
+This reverts commit 27161f13e3c3 "f2fs: avoid race in between read xattr & write xattr".
 
-arch_cpu_finalize_init() is the obvious place to do such initializations,
-but arch_cpu_finalize_init() is invoked too late in start_kernel() e.g. for
-initializing the FPU completely. fork_init() requires that the FPU is
-initialized as the size of task_struct on X86 depends on the size of the
-required FPU register buffer.
+That introduced a deadlock case:
 
-Fortunately none of the init calls between calibrate_delay() and
-arch_cpu_finalize_init() is relevant for the functionality of
-arch_cpu_finalize_init().
+Thread #1:
 
-Invoke it right after calibrate_delay() where everything which is relevant
-for arch_cpu_finalize_init() has been set up already.
+[122554.641906][   T92]  f2fs_getxattr+0xd4/0x5fc
+    -> waiting for f2fs_down_read(&F2FS_I(inode)->i_xattr_sem);
 
-No functional change intended.
+[122554.641927][   T92]  __f2fs_get_acl+0x50/0x284
+[122554.641948][   T92]  f2fs_init_acl+0x84/0x54c
+[122554.641969][   T92]  f2fs_init_inode_metadata+0x460/0x5f0
+[122554.641990][   T92]  f2fs_add_inline_entry+0x11c/0x350
+    -> Locked dir->inode_page by f2fs_get_node_page()
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+[122554.642009][   T92]  f2fs_do_add_link+0x100/0x1e4
+[122554.642025][   T92]  f2fs_create+0xf4/0x22c
+[122554.642047][   T92]  vfs_create+0x130/0x1f4
+
+Thread #2:
+
+[123996.386358][   T92]  __get_node_page+0x8c/0x504
+    -> waiting for dir->inode_page lock
+
+[123996.386383][   T92]  read_all_xattrs+0x11c/0x1f4
+[123996.386405][   T92]  __f2fs_setxattr+0xcc/0x528
+[123996.386424][   T92]  f2fs_setxattr+0x158/0x1f4
+    -> f2fs_down_write(&F2FS_I(inode)->i_xattr_sem);
+
+[123996.386443][   T92]  __f2fs_set_acl+0x328/0x430
+[123996.386618][   T92]  f2fs_set_acl+0x38/0x50
+[123996.386642][   T92]  posix_acl_chmod+0xc8/0x1c8
+[123996.386669][   T92]  f2fs_setattr+0x5e0/0x6bc
+[123996.386689][   T92]  notify_change+0x4d8/0x580
+[123996.386717][   T92]  chmod_common+0xd8/0x184
+[123996.386748][   T92]  do_fchmodat+0x60/0x124
+[123996.386766][   T92]  __arm64_sys_fchmodat+0x28/0x3c
+
+Let's take a look at the original issue back.
+
+Thread A:                                       Thread B:
+-f2fs_getxattr
+   -lookup_all_xattrs
+      -xnid = F2FS_I(inode)->i_xattr_nid;
+                                                -f2fs_setxattr
+                                                    -__f2fs_setxattr
+                                                        -write_all_xattrs
+                                                            -truncate_xattr_node
+                                                                  ...  ...
+                                                -write_checkpoint
+                                                                  ...  ...
+                                                -alloc_nid   <- nid reuse
+          -get_node_page
+              -f2fs_bug_on  <- nid != node_footer->nid
+
+I think we don't need to truncate xattr pages eagerly which introduces lots of
+data races without big benefits.
+
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 ---
- init/main.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/f2fs/f2fs.h  |  1 -
+ fs/f2fs/super.c |  1 -
+ fs/f2fs/xattr.c | 31 ++++++++-----------------------
+ 3 files changed, 8 insertions(+), 25 deletions(-)
 
---- a/init/main.c
-+++ b/init/main.c
-@@ -1041,6 +1041,8 @@ asmlinkage __visible void __init __no_sa
- 	sched_clock_init();
- 	calibrate_delay();
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 3f5b161dd743..7b9af2d51656 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -838,7 +838,6 @@ struct f2fs_inode_info {
  
-+	arch_cpu_finalize_init();
-+
- 	/*
- 	 * This needs to be called before any devices perform DMA
- 	 * operations that might use the SWIOTLB bounce buffers. It will
-@@ -1077,8 +1079,6 @@ asmlinkage __visible void __init __no_sa
- 	taskstats_init_early();
- 	delayacct_init();
+ 	/* avoid racing between foreground op and gc */
+ 	struct f2fs_rwsem i_gc_rwsem[2];
+-	struct f2fs_rwsem i_xattr_sem; /* avoid racing between reading and changing EAs */
  
--	arch_cpu_finalize_init();
--
- 	acpi_subsystem_init();
- 	arch_post_acpi_subsys_init();
- 	kcsan_init();
+ 	int i_extra_isize;		/* size of extra space located in i_addr */
+ 	kprojid_t i_projid;		/* id for project quota */
+diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+index 1b2c788ed80d..c917fa771f0e 100644
+--- a/fs/f2fs/super.c
++++ b/fs/f2fs/super.c
+@@ -1418,7 +1418,6 @@ static struct inode *f2fs_alloc_inode(struct super_block *sb)
+ 	INIT_LIST_HEAD(&fi->gdirty_list);
+ 	init_f2fs_rwsem(&fi->i_gc_rwsem[READ]);
+ 	init_f2fs_rwsem(&fi->i_gc_rwsem[WRITE]);
+-	init_f2fs_rwsem(&fi->i_xattr_sem);
+ 
+ 	/* Will be used by directory only */
+ 	fi->i_dir_level = F2FS_SB(sb)->dir_level;
+diff --git a/fs/f2fs/xattr.c b/fs/f2fs/xattr.c
+index 213805d3592c..bdc8a55085a2 100644
+--- a/fs/f2fs/xattr.c
++++ b/fs/f2fs/xattr.c
+@@ -433,7 +433,7 @@ static inline int write_all_xattrs(struct inode *inode, __u32 hsize,
+ {
+ 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+ 	size_t inline_size = inline_xattr_size(inode);
+-	struct page *in_page = NULL;
++	struct page *in_page = ipage;
+ 	void *xattr_addr;
+ 	void *inline_addr = NULL;
+ 	struct page *xpage;
+@@ -446,29 +446,19 @@ static inline int write_all_xattrs(struct inode *inode, __u32 hsize,
+ 
+ 	/* write to inline xattr */
+ 	if (inline_size) {
+-		if (ipage) {
+-			inline_addr = inline_xattr_addr(inode, ipage);
+-		} else {
++		if (!in_page) {
+ 			in_page = f2fs_get_node_page(sbi, inode->i_ino);
+ 			if (IS_ERR(in_page)) {
+ 				f2fs_alloc_nid_failed(sbi, new_nid);
+ 				return PTR_ERR(in_page);
+ 			}
+-			inline_addr = inline_xattr_addr(inode, in_page);
+ 		}
++		inline_addr = inline_xattr_addr(inode, in_page);
+ 
+-		f2fs_wait_on_page_writeback(ipage ? ipage : in_page,
+-							NODE, true, true);
+-		/* no need to use xattr node block */
++		f2fs_wait_on_page_writeback(in_page, NODE, true, true);
+ 		if (hsize <= inline_size) {
+-			err = f2fs_truncate_xattr_node(inode);
+-			f2fs_alloc_nid_failed(sbi, new_nid);
+-			if (err) {
+-				f2fs_put_page(in_page, 1);
+-				return err;
+-			}
+ 			memcpy(inline_addr, txattr_addr, inline_size);
+-			set_page_dirty(ipage ? ipage : in_page);
++			set_page_dirty(in_page);
+ 			goto in_page_out;
+ 		}
+ 	}
+@@ -502,12 +492,13 @@ static inline int write_all_xattrs(struct inode *inode, __u32 hsize,
+ 	memcpy(xattr_addr, txattr_addr + inline_size, VALID_XATTR_BLOCK_SIZE);
+ 
+ 	if (inline_size)
+-		set_page_dirty(ipage ? ipage : in_page);
++		set_page_dirty(in_page);
+ 	set_page_dirty(xpage);
+ 
+ 	f2fs_put_page(xpage, 1);
+ in_page_out:
+-	f2fs_put_page(in_page, 1);
++	if (in_page != ipage)
++		f2fs_put_page(in_page, 1);
+ 	return err;
+ }
+ 
+@@ -528,10 +519,8 @@ int f2fs_getxattr(struct inode *inode, int index, const char *name,
+ 	if (len > F2FS_NAME_LEN)
+ 		return -ERANGE;
+ 
+-	f2fs_down_read(&F2FS_I(inode)->i_xattr_sem);
+ 	error = lookup_all_xattrs(inode, ipage, index, len, name,
+ 				&entry, &base_addr, &base_size, &is_inline);
+-	f2fs_up_read(&F2FS_I(inode)->i_xattr_sem);
+ 	if (error)
+ 		return error;
+ 
+@@ -565,9 +554,7 @@ ssize_t f2fs_listxattr(struct dentry *dentry, char *buffer, size_t buffer_size)
+ 	int error;
+ 	size_t rest = buffer_size;
+ 
+-	f2fs_down_read(&F2FS_I(inode)->i_xattr_sem);
+ 	error = read_all_xattrs(inode, NULL, &base_addr);
+-	f2fs_up_read(&F2FS_I(inode)->i_xattr_sem);
+ 	if (error)
+ 		return error;
+ 
+@@ -794,9 +781,7 @@ int f2fs_setxattr(struct inode *inode, int index, const char *name,
+ 	f2fs_balance_fs(sbi, true);
+ 
+ 	f2fs_lock_op(sbi);
+-	f2fs_down_write(&F2FS_I(inode)->i_xattr_sem);
+ 	err = __f2fs_setxattr(inode, index, name, value, size, ipage, flags);
+-	f2fs_up_write(&F2FS_I(inode)->i_xattr_sem);
+ 	f2fs_unlock_op(sbi);
+ 
+ 	f2fs_update_time(sbi, REQ_TIME);
+-- 
+2.41.0.162.gfafddb0af9-goog
 
