@@ -2,208 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83AF872E55F
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 16:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BAA872E586
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 16:18:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241683AbjFMOPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 10:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40144 "EHLO
+        id S242554AbjFMOQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 10:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240380AbjFMOPF (ORCPT
+        with ESMTP id S240572AbjFMOQr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 10:15:05 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F86EC;
-        Tue, 13 Jun 2023 07:14:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=5dUDV/ulY1VwPUL5mH+Lz5QqPr6DjLH8cBAyedpbDYo=; b=iYD6PUgaB/68RBS8u9Ym/rotRl
-        FXw1OvFMWOiYd+gt0bp4wsTYby3J9Z85iZkj97SrcFBXrifSj1oiaAnZxTwfzEtELzMoetFthNaX8
-        ++pqz+HsX9OMSh6EAY7Q/mglNu3XoptYmD/63DJJunhrjHc9Br9OPsfspuSK+HPP5/2o=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1q94nG-00FjYJ-Fe; Tue, 13 Jun 2023 16:14:46 +0200
-Date:   Tue, 13 Jun 2023 16:14:46 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        SkyLake Huang <SkyLake.Huang@mediatek.com>,
-        Qingfang Deng <dqfext@gmail.com>
-Subject: Re: [PATCH net-next] net: phy: mediatek-ge-soc: initialize MT7988
- PHY LEDs default state
-Message-ID: <7fc15ef7-ab5d-4af7-8d9b-bf0928f476a0@lunn.ch>
-References: <ZIfT7UUzj74NyzL_@makrotopia.org>
- <922466fd-bb14-4b6e-ad40-55b4249c571f@lunn.ch>
- <ZIhreKECr8nsNgrh@makrotopia.org>
+        Tue, 13 Jun 2023 10:16:47 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733C194;
+        Tue, 13 Jun 2023 07:16:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=CbGcyfHi9QA1um+JXK92ovTuo4LzjCmAsPSThsU99qE=; b=YHP/QC3m5r8bf93VtZEyxh/INM
+        9SOJij2U2Pjj1WYK4iuiA5KnydctxBsfTeeOshHG6I5pU/VVHdwrIhivOjqLXT3nzcB1acCCbiql8
+        S2dITLjPcWpzWwA0o1jk3ep/cZh80zjDVXi36DD6YTUnyNSkggJpNz648uDI6nV4UJDjxPt0gaXgQ
+        KlMDjs/fCy5DGFXU3tp5QvcaznNwNLq4CDvuFyyxYHbeZ/n7YABL0evJaWOiVE26mwVdnjgCh81Dm
+        jEiv3jIzyvmTOQ/V6ntL6I59lSH1Qkl1aEHOGSBr+j/meYKNOgSM8/8LFgCJH8F9FmRj9A3byqfaF
+        06OCKDmw==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q94oy-008IDS-2l;
+        Tue, 13 Jun 2023 14:16:32 +0000
+Message-ID: <77171ea8-c8d9-5f8d-caf0-76bd5ca03f0c@infradead.org>
+Date:   Tue, 13 Jun 2023 07:16:31 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZIhreKECr8nsNgrh@makrotopia.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v4 02/11] block: Block Device Filtering Mechanism
+Content-Language: en-US
+To:     Sergei Shtepa <sergei.shtepa@veeam.com>, axboe@kernel.dk,
+        hch@infradead.org, corbet@lwn.net, snitzer@kernel.org
+Cc:     viro@zeniv.linux.org.uk, brauner@kernel.org, willy@infradead.org,
+        dlemoal@kernel.org, wsa@kernel.org,
+        heikki.krogerus@linux.intel.com, ming.lei@redhat.com,
+        gregkh@linuxfoundation.org, linux-block@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Donald Buczek <buczek@molgen.mpg.de>
+References: <20230609115858.4737-1-sergei.shtepa@veeam.com>
+ <20230609115858.4737-2-sergei.shtepa@veeam.com>
+ <e2f851d7-6b17-7a36-b5b3-2d60d450989d@infradead.org>
+ <f7b67068-62c4-0977-265a-37c84f553eab@veeam.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <f7b67068-62c4-0977-265a-37c84f553eab@veeam.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 02:13:28PM +0100, Daniel Golle wrote:
-> Hi Andrew,
+
+
+On 6/13/23 05:34, Sergei Shtepa wrote:
 > 
-> On Tue, Jun 13, 2023 at 05:23:25AM +0200, Andrew Lunn wrote:
-> > > +/* Registers on MDIO_MMD_VEND2 */
-> > > +#define MTK_PHY_LED0_ON_CTRL			0x24
-> > > +#define MTK_PHY_LED1_ON_CTRL			0x26
-> > > +#define   MTK_PHY_LED_ON_MASK			GENMASK(6, 0)
-> > > +#define   MTK_PHY_LED_ON_LINK1000		BIT(0)
-> > > +#define   MTK_PHY_LED_ON_LINK100		BIT(1)
-> > > +#define   MTK_PHY_LED_ON_LINK10			BIT(2)
-> > > +#define   MTK_PHY_LED_ON_LINKDOWN		BIT(3)
-> > > +#define   MTK_PHY_LED_ON_FDX			BIT(4) /* Full duplex */
-> > > +#define   MTK_PHY_LED_ON_HDX			BIT(5) /* Half duplex */
-> > > +#define   MTK_PHY_LED_FORCE_ON			BIT(6)
-> > > +#define   MTK_PHY_LED_POLARITY			BIT(14)
-> > > +#define   MTK_PHY_LED_ENABLE			BIT(15)
-
-> The PHY has two LED outputs, LED0 and LED1. Both have an ON_CTRL and
-> a BLINK_CTRL register each with identical layouts for LED0_ON_CTRL and
-> LED1_ON_CTRL as well as LED0_BLINK_CTRL as well as LED1_BLINK_CTRL.
- 
-O.K. So i think the naming could be better
-
-#define MTK_PHY_LED0_ON_CTRL			0x24
-#define MTK_PHY_LED1_ON_CTRL			0x26
-#define   MTK_PHY_LEDX_ON_CTRL_MASK		GENMASK(6, 0)
-#define   MTK_PHY_LEDX_ON_CTRL_LINK1000		BIT(0)
-#define   MTK_PHY_LEDX_ON_CTRL_LINK100		BIT(1)
-
-#define MTK_PHY_LED0_BLINK_CTRL			0x25
-#define MTK_PHY_LED1_BLINK_CTRL			0x27
-#define   MTK_PHY_LEDX_BLINK_CTRL_1000TX	BIT(0)
-#define   MTK_PHY_LEDX_BLINK_CTRL_1000RX	BIT(1)
-
-I've taken over code where i found a few examples of a register write
-which used the wrong macro for bits because there was no clear
-indication which register is belonged to.
-
-	   phy_write(phydev, MTK_PHY_LED1_ON_CTRL,
-	   	     MTK_PHY_LEDX_BLINK_CTRL_1000TX |
-	             MTK_PHY_LEDX_BLINK_CTRL_1000RX)
-
-is pretty obvious it is wrong.
-
-> The LED controller of both LEDs are identical. The SoC's pinmux assigns
-> LED0 as LED_A, LED_B, LED_C and LED_D respectively. And those pins are
-> used for bootstrapping board configuration bits, and that then implies
-> the polarity of the connected LED.
 > 
-> Ie.
-> -----------------------------+ SoC pin
-> --------------+-------+      |
->        port 0 = PHY 0 - LED0 - LED_A
->               +-------\ LED1 - JTAG_JTDI
->        port 1 = PHY 1 - LED0 - LED_B
-> MT7530        +-------\ LED1 - JTAG_JTDO
->        port 2 = PHY 2 - LED0 - LED_C
->               +-------\ LED1 - JTAG_JTMS
->        port 3 = PHY 3 - LED0 - LED_D
-> --------------+-------\ LED1 - JTAG_JTCLK
->        2P5G PHY       - LED0 - LED_E
-> ----------------------\ LED1 - JTAG_JTRST_N
-> --------------+--------------+
-
-So you can skip the JTAG interface and have two LEDs. This is purely
-down to pinmux settings. In fact, with careful design, it might be
-possible to have both LEDs and JTAG.
-
-> > >  #define MTK_PHY_RG_BG_RASEL			0x115
-> > >  #define   MTK_PHY_RG_BG_RASEL_MASK		GENMASK(2, 0)
-> > >  
-> > > +/* Register in boottrap syscon defining the initial state of the 4 PHY LEDs */
-> > 
-> > Should this be bootstrap? You had the same in the commit message.
-> > 
-> > Also, i'm confused. Here you say 4 PHY LEDs, yet
-> > 
-> > > +#define MTK_PHY_LED0_ON_CTRL			0x24
-> > > +#define MTK_PHY_LED1_ON_CTRL			0x26
-> > 
-> > suggests there are two LEDs?
+> On 6/13/23 03:51, Randy Dunlap wrote:
+>>
+>> On 6/9/23 04:58, Sergei Shtepa wrote:
+>>> diff --git a/include/uapi/linux/fs.h b/include/uapi/linux/fs.h
+>>> index b7b56871029c..7904f157b245 100644
+>>> --- a/include/uapi/linux/fs.h
+>>> +++ b/include/uapi/linux/fs.h
+>>> @@ -189,6 +189,9 @@ struct fsxattr {
+>>>   * A jump here: 130-136 are reserved for zoned block devices
+>>>   * (see uapi/linux/blkzoned.h)
+>>>   */
+>>> +#define BLKFILTER_ATTACH	_IOWR(0x12, 140, struct blkfilter_name)
+>>> +#define BLKFILTER_DETACH	_IOWR(0x12, 141, struct blkfilter_name)
+>>> +#define BLKFILTER_CTL		_IOWR(0x12, 142, struct blkfilter_ctl)
+>>
+>> Please update Documentation/userspace-api/ioctl/ioctl-number.rst
+>> with the blkfilter ioctl number usage.
 > 
-> There are 4 PHYs with two LEDs each. Only LED0 of each PHY is using
-> a pin which is used for bootstrapping, hence LED polarity is known
-> only for those, polarity of LED1 is unknown and always set the default
-> at this point.
-
-So hopefully you can see my sources of confusion and can add some
-comments to make this clearer.
-
-> > > +static int mt798x_phy_setup_led(struct phy_device *phydev, bool inverted)
-> > > +{
-> > > +	struct pinctrl *pinctrl;
-> > > +	const u16 led_on_ctrl_defaults = MTK_PHY_LED_ENABLE      |
-> > > +					 MTK_PHY_LED_ON_LINK1000 |
-> > > +					 MTK_PHY_LED_ON_LINK100  |
-> > > +					 MTK_PHY_LED_ON_LINK10;
-> > > +	const u16 led_blink_defaults = MTK_PHY_LED_1000TX |
-> > > +				       MTK_PHY_LED_1000RX |
-> > > +				       MTK_PHY_LED_100TX  |
-> > > +				       MTK_PHY_LED_100RX  |
-> > > +				       MTK_PHY_LED_10TX   |
-> > > +				       MTK_PHY_LED_10RX;
-> > > +
-> > > +	phy_write_mmd(phydev, MDIO_MMD_VEND2, MTK_PHY_LED0_ON_CTRL,
-> > > +		      led_on_ctrl_defaults ^
-> > > +		      (inverted ? MTK_PHY_LED_POLARITY : 0));
-> > > +
-> > > +	phy_write_mmd(phydev, MDIO_MMD_VEND2, MTK_PHY_LED1_ON_CTRL,
-> > > +		      led_on_ctrl_defaults);
-> > > +
-> > 
-> > Now i'm even more confused. Both have the same value, expect the
-> > polarity bit?
+> It seems to me that there is no need to change anything in the table of
+> numbers for 'blkfilter'. I think the existing record is enough:
 > 
-> Only LED0 polarity of each PHY is affected by the bootstrap pins
-> LED_A, LED_B, LED_C and LED_D of the SoC, see above.
-> Hence we need to XOR polarity only for LED0.
+> 0x10  20-2F  arch/s390/include/uapi/asm/hypfs.h
+> 0x12  all    linux/fs.h
+>              linux/blkpg.h
 
-However, if there are two LEDs, you are likely to want to configure
-them to show different things, not identical. You are setting the
-defaults here which all boards will get. So i would set LED1 to
-something different, something which makes sense when there are two
-LEDs.
+Yes, OK.
 
-> > > +	pinctrl = devm_pinctrl_get_select(&phydev->mdio.dev, "gbe-led");
-> > 
-> > This is also very unusual. At minimum, it needs a comment as to why it
-> > is needed. But more likely, because no other driver in driver/net does
-> > this, it makes me think it is wrong.
+> Maybe it would probably be correct to specify the file 'uapi/linux/fs.h'?
+> And maybe we need to specify the request numbers for blksnap?
+
+Yes.
+
+> add ioctls numbers for blksnap
 > 
-> The reason for not using the "default" pinctrl name is simply that then
-> the "default" state will already be requested by device model *before*
-> the LED registers are actually setup. This results in a short but unwanted
-> blink of the LEDs during setup.
-> Requesting the pinctrl state only once the setup is done allows avoiding
-> that, but of course this is of purely aesthetic nature.
+> Asked-by: Randy Dunlap <rdunlap@infradead.org>
 
-So i assume the pin can have other functions? Just for an example, say
-it can also be an I2C clock line, which might be connected to an
-SFP. The I2C node in DT will have a pinmux to configure the pin for
-I2C. What happens when the PHY driver loads and executes this?
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
-     Andrew
+Thanks.
+
+> Signed-off-by: Sergei Shtepa <sergei.shtepa@veeam.com>
+> ---
+>  Documentation/userspace-api/ioctl/ioctl-number.rst | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/userspace-api/ioctl/ioctl-number.rst b/Documentation/userspace-api/ioctl/ioctl-number.rst
+> index 176e8fc3f31b..96af64988251 100644
+> --- a/Documentation/userspace-api/ioctl/ioctl-number.rst
+> +++ b/Documentation/userspace-api/ioctl/ioctl-number.rst
+> @@ -202,6 +202,7 @@ Code  Seq#    Include File                                           Comments
+>  'V'   C0     linux/ivtvfb.h                                          conflict!
+>  'V'   C0     linux/ivtv.h                                            conflict!
+>  'V'   C0     media/si4713.h                                          conflict!
+> +'V'   00-1F  uapi/linux/blksnap.h                                    conflict!
+>  'W'   00-1F  linux/watchdog.h                                        conflict!
+>  'W'   00-1F  linux/wanrouter.h                                       conflict! (pre 3.9)
+>  'W'   00-3F  sound/asound.h                                          conflict!
+
+-- 
+~Randy
