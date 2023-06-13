@@ -2,66 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3DD772E77A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE19972E77D
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242434AbjFMPjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 11:39:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55656 "EHLO
+        id S241384AbjFMPk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 11:40:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241194AbjFMPjP (ORCPT
+        with ESMTP id S242675AbjFMPjz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 11:39:15 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFF0127;
-        Tue, 13 Jun 2023 08:38:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686670733; x=1718206733;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/xGp+iT5zbAfOiZZknUyObKuwpoHCKHzyzKxIRVycMY=;
-  b=jGZLbQclZ8mcfAS6MbEFpzULfghCxa1roIQGEa4Ct8s15WTBjuhlfRK6
-   2XnNa5HSMUqzYuwMiXpNaDTH8836a+f0HrkDdUk8DtMZGEWZICj9dZj+j
-   N6eIQiafSU79Uxsa5a07g6nm/gnRNAHxBKLE/LKAXJcn+ExguafsEPgW7
-   zHMUASG3Qit2Z4VhRa43Dw7/feaaOs8JMSx+jMSWpk2qYGz2wzF2U7oY3
-   GhvK7Q4UvPmonWabFBdaz6o92C86QX8gQFDPDmMmcqhKreqLnFoeaUjMW
-   ewcsRN+uG7i9v/PXwHtCDdYGKnwLjsNRVYSWdE6QK9zu+vc7vGCiP8Au7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="444741953"
-X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
-   d="scan'208";a="444741953"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 08:38:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="1041811992"
-X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
-   d="scan'208";a="1041811992"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP; 13 Jun 2023 08:38:15 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1q9661-003UMS-2p;
-        Tue, 13 Jun 2023 18:38:13 +0300
-Date:   Tue, 13 Jun 2023 18:38:13 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Raag Jadav <raag.jadav@intel.com>
-Cc:     linus.walleij@linaro.org, mika.westerberg@linux.intel.com,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mallikarjunappa.sangannavar@intel.com, pandith.n@intel.com
-Subject: Re: [PATCH v3 3/3] pinctrl: intel: simplify exit path of
- ->gpio_request_enable() hook
-Message-ID: <ZIiNZQj44d0u6g0z@smile.fi.intel.com>
-References: <20230613085054.10976-1-raag.jadav@intel.com>
- <20230613085054.10976-4-raag.jadav@intel.com>
+        Tue, 13 Jun 2023 11:39:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A36E1BD3
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 08:39:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E21962D2F
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 15:39:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19011C43392;
+        Tue, 13 Jun 2023 15:39:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686670750;
+        bh=bqhbfxfuVVbH/p+/UQRRfRNgV8oXiTFi0OTEAjc9R/I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=c/bw0zNfo6o1AHPdh4s1EYe30nvhRPcLooJ5+5dKlgi6UOF9qzBNL+/+iIiyuHmjL
+         3la+m4er+B9Xs73vcuhGYZaZyz/e0VC2YCJWlTGJ/Izn+iXPNckxydHeXxJJvYgPSC
+         CQMt5Ew4xMerOSeddTd0naww3NoJQu3lvTWb7E8u4xQ09w9xwtqsD0+7cG2Ki0Nwoc
+         3J5SDOi8XBzEs8yI1yD/CLtwNrUPGr1vPDbH1FNSjb828wkBdp16cja31kQihV6iaD
+         asrDmgi8VvPPVPTlfIU/D4QD+EStOqVcSkw2E3Cw44NC0aDkcwiRjMdN/54Qfb2GCD
+         unbtQOz9jFrmA==
+Date:   Tue, 13 Jun 2023 16:39:05 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Waqar Hameed <waqar.hameed@axis.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, kernel@axis.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] regmap: Add debugfs file for forcing field writes
+Message-ID: <8da4b552-740f-489f-a2ae-1a6e87c41463@sirena.org.uk>
+References: <pnd1qifa7sj.fsf@axis.com>
+ <2023061322-garter-linseed-6dfe@gregkh>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="0npxGfmuYZo3rjJ2"
 Content-Disposition: inline
-In-Reply-To: <20230613085054.10976-4-raag.jadav@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <2023061322-garter-linseed-6dfe@gregkh>
+X-Cookie: Not a flying toy.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,21 +58,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 02:20:54PM +0530, Raag Jadav wrote:
-> Simplify exit path of ->gpio_request_enable() hook and save a few bytes.
-> 
-> add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-36 (-36)
-> Function                                     old     new   delta
-> intel_gpio_request_enable                    186     150     -36
-> Total: Before=10453, After=10417, chg -0.34%
 
-I believe Mika's comment against patch 3 of v2 of this series applies here
-as well, meaning this patch won't be accepted.
+--0npxGfmuYZo3rjJ2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-But let Mika express himself.
+On Tue, Jun 13, 2023 at 05:02:27PM +0200, Greg Kroah-Hartman wrote:
+> On Tue, Jun 13, 2023 at 01:42:27PM +0200, Waqar Hameed wrote:
 
--- 
-With Best Regards,
-Andy Shevchenko
+> > +#undef REGMAP_ALLOW_FORCE_WRITE_FIELD_DEBUGFS
+> > +#ifdef REGMAP_ALLOW_FORCE_WRITE_FIELD_DEBUGFS
+> > +	debugfs_create_bool("force_write_field", 0600, map->debugfs,
+> > +			    &map->force_write_field);
+> > +#endif
 
+> Please no, that means this will never ever ever get used, and if it
+> happens to break the build or runtime, no one will ever notice it.
 
+> If you need this for your device/tree/distro, great, just keep it as an
+> out-of-tree patch with the huge header "NEVER ENABLE THIS IN A REAL
+> SYSTEM" or something like that.
+
+We have an existing setting that parallels this which enables writes via
+debugfs - there *is* demand for this sort of thing in development where
+this is a viable configuration mechanism, having something in tree in a
+way that requires an out of tree patch like you're suggesting to enable
+it documents why the feature isn't something you can enable without code
+changes whereas just not having anything means people send patches
+adding the feature.
+
+This one is very much safer than the general write thing, we probably
+*could* have a Kconfig option but changing the guarantees underneath
+drivers feels like it's going to explode if we just let it happen.
+
+--0npxGfmuYZo3rjJ2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSIjZgACgkQJNaLcl1U
+h9DVmQf8DHD4US+VwJB2+GIOnP9xJerSq1q68bKEagqHIyrFqegoJicQgpq3LZV+
+uW1DIiGptfDQ//XDqIWs8Bj66EnJsms1Cmh+aN5ZBx+mIxfJa2rijKWplv9w5ic7
+MjtnAZtiRdMqGXkar/E4ym2wFpHlqvBSygEZJdQhIbiflO3uFAK7iAxJJzcmoN+h
+lu9gE+WSnp2Fb6FOZBvOychVs4wP+68Lx/hhEHxKjwzhfgPXzqde1TkV65nfch72
+czAvYpj6ZLO400CZpMjyPCn6Mjs3qbJRH2WgE9KbW0lNe7v6wbq0TT8IaVdNBW4g
+uw0m6+BWS3NyVP8+8/GXCLgTBhtqzA==
+=FSRD
+-----END PGP SIGNATURE-----
+
+--0npxGfmuYZo3rjJ2--
