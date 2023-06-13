@@ -2,195 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99FA372E74F
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A464672E768
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242942AbjFMPfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 11:35:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51134 "EHLO
+        id S242971AbjFMPfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 11:35:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243000AbjFMPex (ORCPT
+        with ESMTP id S242945AbjFMPfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 11:34:53 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CF31BEE
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 08:34:48 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-3f9b7de94e7so288451cf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 08:34:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686670487; x=1689262487;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8dMYlj7iUQeJ0BKLhAjf7bhCdFYI7Iu2GyDUwmySGX8=;
-        b=EwaGiGbQZuTd76G9xqhhCWKOH/7AbaQrtP4AMsNOavUCFeAvUUf6YdG4pAsTAB0nv3
-         wwhKffPS5ALGgXrIbI2q+uwCr9s5ZMFyb4dH0zxNcxg7vvCrnxsxnuwO9KGWjy3PHKeR
-         nu2LJbFvqhciO2Vfwl2xHaAaH+z421pmBXay8Xbv845RZ26F03WSE/CyLl8T/V0R+vZF
-         Js7RkR1Ao1S8voU+QupyBnVUg2bRdslBXmTjmu9RTWPiKqpXiEgyfZPtUQfHTYaJcaS1
-         P11y/t6QB0hH0ZtIvcncK6bjzn7hvC/IuT2ivqDlejKecK1liz8u+1WF96FwL1qGiJti
-         lFbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686670487; x=1689262487;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8dMYlj7iUQeJ0BKLhAjf7bhCdFYI7Iu2GyDUwmySGX8=;
-        b=Z0i05uxZyOD1sg00wCGdhSMDBmqLHiR/UfcCvoFoK5Rqu1gn1ZZ64Y/bQjnldzokY9
-         eLQLEm/GOsjN6IcwXz/m2c6n99jh1EjOAaWe6oJPywsd0cv7Zt+Mge60VABA7mIVfx88
-         +Yleu6dzt30IogyXrPxP+GGh1HYS2V1hcw2ub1jNg14rBcWzWewN5EvcYxtEl7vVSGy0
-         B+0+fEvqHYZRtsI4Jeu/MXSli+1faOxIp/c4o2k1bEGTJCrVb8rdhMyndEpAWRsUk+am
-         WbE71gdJDoIrjmqL4uWeXGywwxFHeqpoAsor4BNE3Ys3vX+2NB1oiSP5bEM6LhSlVi96
-         HP9A==
-X-Gm-Message-State: AC+VfDwIGwjly1vqe7JPqZq/D7tOXy1i90pqpgZLwXXQcJ8DExavLssA
-        kTZQffGqnaM/543nVQUox1ifEEcMrpCcF+8e9wdeWw==
-X-Google-Smtp-Source: ACHHUZ6x242VmlboiolvbEgyois5rr0oH8Go03NqcPHpODBvNDFIB/csmaFDIMMDpHIlK6KOJKg1ubHmmTF2+3B5lbA=
-X-Received: by 2002:a05:622a:134b:b0:3f9:56c:1129 with SMTP id
- w11-20020a05622a134b00b003f9056c1129mr106783qtk.5.1686670487234; Tue, 13 Jun
- 2023 08:34:47 -0700 (PDT)
+        Tue, 13 Jun 2023 11:35:13 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60DA7127
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 08:35:12 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id CAF365C0143;
+        Tue, 13 Jun 2023 11:35:11 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Tue, 13 Jun 2023 11:35:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1686670511; x=1686756911; bh=arSfmSsp6qMAGSwGIzR20rLDf4VrfVXnKoh
+        BNMEZvus=; b=AV/GnTdCBzJnwntFBVhC5JKSzuoA+EVWhxbt6wYkN0YeL0VhKIS
+        vJZJqik3jvIzbPH6cFeCjyh/EzBCrFIGLMWAse9nsI3Z2pK2CuEB+qp/gX/je2yb
+        aug5+i8FS7RHaP9diJhkorAa5Vr0f4Jsdhc5IOcBpfBEYcjBjLXbQxldqDmSrKuO
+        O+bKep2ng30VHkGTtZZdvJBRRJ4oyPXLu7ANJOs9b+xMkxbB4vVHSU5hCj0uWXfs
+        fGlg5PnP3vA/qtMx7XPJ0Vw/OseWV5IVsjq4AfcK61GLnW/mF9lwbmEI0o2eTQfa
+        EKOfsXSafLbC+wSXCJHL8b9gPhXWf2q+liQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1686670511; x=1686756911; bh=arSfmSsp6qMAG
+        SwGIzR20rLDf4VrfVXnKohBNMEZvus=; b=cOiyTjTqzBhRBNqmf8S95wJRwaw62
+        UcW6WbcQKcIuMG7m9I6Db2uvrQmHRj4K0/5094hgjj6azM79iS2H8gj8eNAel55X
+        id64B9655GZkxA/AFA+KTH93FJea4HFJTFFVUAWe5at4W4dcaw9C/TtYBEgNm90K
+        sdKHRzmS2bSn34Cr2eifw1tADLhjuVVa82CC7AeAdkTBXQnAjAnaXF8VHg16sU/e
+        aBZRFz+9/WkEl6sKxUfUK545A0S08Fb0/LFHcwACIhoIGIoAGfTOwvg/rJ/YxE0b
+        pUQ+Gzo1SOfGeGbUOE37UU0lfY4zMA2JUbjowZTSfh69Ot0ETGlCRpJZw==
+X-ME-Sender: <xms:r4yIZHrTqZEB0sSjQ79_YUcgFpHtEi5vbzy0M7KiAE-TPNaosVccqA>
+    <xme:r4yIZBrDvKEhvKxVTxthMuYWFUORPOrUBSxMGLmyMkuxVH0_RH6KJLO1u-n7Ni_j1
+    Vo_ci-DmT8w0_Y>
+X-ME-Received: <xmr:r4yIZEPGANQuS3i-X8LkVWnSee-JOkKKVqCAFmZxAaAbBaYote7f_DAXHAo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedujedgkeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepffgvmhhi
+    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
+    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepvdejteegkefhteduhffgteffgeff
+    gfduvdfghfffieefieekkedtheegteehffelnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhs
+    lhgrsgdrtghomh
+X-ME-Proxy: <xmx:r4yIZK4IHBt8QT7Xy44-sxA0-qLaLvTeqm5-A1Sgm3YVAKJQctu3QA>
+    <xmx:r4yIZG7KZ9tinf0OBr4xw9OpoUQIhUlUuuC7l9nlaGKpYR-CZ9e0aA>
+    <xmx:r4yIZCihXi2fxyU0_z8KCbv7XzlrY-rTtKr8m2O1iT9rWBETDnUBrA>
+    <xmx:r4yIZCo2cRKNCK-eMLHJo4rTNfo8BvpbVzDDV-OpPyyoI9i7xmRhlg>
+Feedback-ID: iac594737:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 13 Jun 2023 11:35:10 -0400 (EDT)
+Date:   Tue, 13 Jun 2023 11:35:05 -0400
+From:   Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     David Laight <David.Laight@aculab.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Alexey Dobriyan <adobriyan@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Lee Jones <lee@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: [PATCH v3 0/4] Make sscanf() stricter
+Message-ID: <ZIiMrDxI5Ts0s8fK@itl-email>
+References: <6ab6adce-2318-4ae6-bde6-4317485639fd@p183>
+ <ZId/IA41c2sJyvE0@itl-email>
+ <ZIeHfBf3aB3vUgRM@smile.fi.intel.com>
+ <ZIeMyQXU49OcoxY2@itl-email>
+ <ec3d7ebe62654e949329785bb32c3822@AcuMS.aculab.com>
 MIME-Version: 1.0
-References: <20230613095506.547-1-ravi.bangoria@amd.com> <20230613095506.547-5-ravi.bangoria@amd.com>
-In-Reply-To: <20230613095506.547-5-ravi.bangoria@amd.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 13 Jun 2023 08:34:35 -0700
-Message-ID: <CAP-5=fVm4_BhZTx2OpR+FYo4GD3ZTFiiY1NR_4_XnDX6XHuhLQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] perf mem amd: Scan all PMUs instead of just core ones
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     acme@kernel.org, jolsa@kernel.org, namhyung@kernel.org,
-        mark.rutland@arm.com, peterz@infradead.org,
-        adrian.hunter@intel.com, kan.liang@linux.intel.com,
-        james.clark@arm.com, alisaidi@amazon.com, leo.yan@linaro.org,
-        maddy@linux.ibm.com, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sandipan.das@amd.com,
-        ananth.narayan@amd.com, santosh.shukla@amd.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fNICznYAU3QlUDGM"
+Content-Disposition: inline
+In-Reply-To: <ec3d7ebe62654e949329785bb32c3822@AcuMS.aculab.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 2:56=E2=80=AFAM Ravi Bangoria <ravi.bangoria@amd.co=
-m> wrote:
->
-> Scanning only core PMUs is not sufficient on AMD since perf mem on
-> AMD uses IBS OP PMU, which is independent of core PMU.
->
-> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
-> ---
->  tools/perf/arch/x86/util/mem-events.c |  5 +++++
->  tools/perf/util/mem-events.c          | 16 ++++++++++++----
->  tools/perf/util/mem-events.h          |  1 +
->  3 files changed, 18 insertions(+), 4 deletions(-)
->
-> diff --git a/tools/perf/arch/x86/util/mem-events.c b/tools/perf/arch/x86/=
-util/mem-events.c
-> index a8a782bcb121..43af872e89a6 100644
-> --- a/tools/perf/arch/x86/util/mem-events.c
-> +++ b/tools/perf/arch/x86/util/mem-events.c
-> @@ -91,3 +91,8 @@ char *perf_mem_events__name(int i, char *pmu_name)
->
->         return (char *)e->name;
->  }
-> +
-> +bool perf_mem_events__via_core_pmus(void)
-> +{
-> +       return !x86__is_amd_cpu();
-> +}
-> diff --git a/tools/perf/util/mem-events.c b/tools/perf/util/mem-events.c
-> index be15aadb6b14..0c04f883d634 100644
-> --- a/tools/perf/util/mem-events.c
-> +++ b/tools/perf/util/mem-events.c
-> @@ -109,6 +109,14 @@ static bool perf_mem_event__supported(const char *mn=
-t, char *sysfs_name)
->         return !stat(path, &st);
->  }
->
-> +bool __weak perf_mem_events__via_core_pmus(void)
-> +{
-> +       return true;
-> +}
-> +
-> +#define perf_mem_scan_next_pmu(pmu) \
-> +       (perf_mem_events__via_core_pmus() ? perf_pmus__scan_core(pmu) : p=
-erf_pmus__scan(pmu))
-> +
->  int perf_mem_events__init(void)
->  {
->         const char *mnt =3D sysfs__mount();
-> @@ -130,7 +138,7 @@ int perf_mem_events__init(void)
->                 if (!e->tag)
->                         continue;
->
-> -               while ((pmu =3D perf_pmus__scan_core(pmu)) !=3D NULL) {
-> +               while ((pmu =3D perf_mem_scan_next_pmu(pmu)) !=3D NULL) {
->                         scnprintf(sysfs_name, sizeof(sysfs_name), e->sysf=
-s_name, pmu->name);
->                         e->supported |=3D perf_mem_event__supported(mnt, =
-sysfs_name);
->                 }
-> @@ -165,7 +173,7 @@ static void perf_mem_events__print_unsupport_hybrid(s=
-truct perf_mem_event *e,
->         char sysfs_name[100];
->         struct perf_pmu *pmu =3D NULL;
->
-> -       while ((pmu =3D perf_pmus__scan_core(pmu)) !=3D NULL) {
-> +       while ((pmu =3D perf_mem_scan_next_pmu(pmu)) !=3D NULL) {
 
-It was my mistake to optimize this, I think we can just go back to:
-perf_pmus__scan(pmu)
-which would remove a lot of the weak/macros etc. here. We can have a
-comment as to why this is scan not scan_core, because of AMD. I plan
-to further improve overhead of PMUs so I'm not worried about losing
-the small performance win from this.
+--fNICznYAU3QlUDGM
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 13 Jun 2023 11:35:05 -0400
+From: Demi Marie Obenour <demi@invisiblethingslab.com>
+To: David Laight <David.Laight@aculab.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Alexey Dobriyan <adobriyan@gmail.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Juergen Gross <jgross@suse.com>,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+	Lee Jones <lee@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Petr Mladek <pmladek@suse.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: [PATCH v3 0/4] Make sscanf() stricter
 
-Thanks,
-Ian
+On Tue, Jun 13, 2023 at 01:02:59PM +0000, David Laight wrote:
+> From: Demi Marie Obenour
+> > Sent: 12 June 2023 22:23
+> ....
+> > sscanf(), except to the extent that -Werror=3Dformat can keep working.
+> > Userspace sscanf() is almost useless: it has undefined behavior on
+> > integer overflow and swallows spaces that should usually be rejected.
+>=20
+> scanf() is designed for parsing space separated data.
+> Eating spaces it part of its job description.
+>=20
+> 	David
 
->                 scnprintf(sysfs_name, sizeof(sysfs_name), e->sysfs_name,
->                           pmu->name);
->                 if (!perf_mem_event__supported(mnt, sysfs_name)) {
-> @@ -188,7 +196,7 @@ int perf_mem_events__record_args(const char **rec_arg=
-v, int *argv_nr,
->                 if (!e->record)
->                         continue;
->
-> -               if (perf_pmus__num_core_pmus() =3D=3D 1) {
-> +               if (perf_pmus__num_mem_pmus() =3D=3D 1) {
->                         if (!e->supported) {
->                                 pr_err("failed: event '%s' not supported\=
-n",
->                                        perf_mem_events__name(j, NULL));
-> @@ -203,7 +211,7 @@ int perf_mem_events__record_args(const char **rec_arg=
-v, int *argv_nr,
->                                 return -1;
->                         }
->
-> -                       while ((pmu =3D perf_pmus__scan_core(pmu)) !=3D N=
-ULL) {
-> +                       while ((pmu =3D perf_mem_scan_next_pmu(pmu)) !=3D=
- NULL) {
->                                 rec_argv[i++] =3D "-e";
->                                 s =3D perf_mem_events__name(j, pmu->name)=
-;
->                                 if (s) {
-> diff --git a/tools/perf/util/mem-events.h b/tools/perf/util/mem-events.h
-> index 12372309d60e..d650eb311113 100644
-> --- a/tools/perf/util/mem-events.h
-> +++ b/tools/perf/util/mem-events.h
-> @@ -36,6 +36,7 @@ enum {
->  extern unsigned int perf_mem_events__loads_ldlat;
->
->  int perf_mem_events__parse(const char *str);
-> +bool perf_mem_events__via_core_pmus(void);
->  int perf_mem_events__init(void);
->
->  char *perf_mem_events__name(int i, char *pmu_name);
-> --
-> 2.40.1
->
+In this case I would prefer to have two versions: one that eats spaces
+and one that does not.  For instance, I don=E2=80=99t think any user of
+xenbus_scanf() wants the space-swallowing behavior.  This can be worked
+around in xenbus_scanf(), of course, by having it reject strings with
+spaces (as determened by isspace()) before calling vsscanf().
+--=20
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+Invisible Things Lab
+
+--fNICznYAU3QlUDGM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmSIjKwACgkQsoi1X/+c
+IsH7BBAAvFNPcgApcQwpZ3D3vyZvEJ6//ENiuEPS3e9FzSqjwejzAuIzUMK15zNv
+mgfy2bVAeWvpxNgvYE6tuJ182pcZosJgxnzi5R2a5ft9eEs2OvNQgUskgxD+BT1C
+4sPw09VkTVrYQ+UO7wQ+fyM6LsLF+G3fukQP9wrejFETpS9Sk+4yonELFHlvN13K
+WJ7lU56W8QVnyd8nDyVo7v/MeXAPITGyFPAV7zN3uP9NsFJmAcR1QCP+6WubO5rm
+67VcxkLSvxh+ch8gttagXNGZTGLnjQaaDU3VygNCAEV+vOJe4SUcDSKC5VhKMoad
+Ew6Ki2fiA/zMk1jJvBCmN6JU+8JyVPU2t2ITccVS9VG/S2eTQrwTlHjba16IRTTV
+D9Ai5CdkI9aYJk482BlurVYjoYPQqFrpFDOw+nhxclhvdruxSmo3us1jwPyoLVJY
+iTbRoyLKV5NnOb+AkVtGN6XqgBklPCSZty8QWPts3tXvzt30miS+4tL8+vUH853s
+aXsQtFxmQ4iw3GdQyjyuY0DnKzTw3s7jKHnm6H4O5iokF8f2YfMNxAj5NfeginVo
+lrDgGhnbIOknNK6azyx0jGEmzWQUzqQLGHYn2GWCI8/90BACz6Cp6/beH6HF3VO6
+oC/WHx1YtttkGKO+R1yEp9lMKy/elfIYJGVBxHjoJoR0A5VPr8Y=
+=Uv3f
+-----END PGP SIGNATURE-----
+
+--fNICznYAU3QlUDGM--
