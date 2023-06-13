@@ -2,79 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E4F72ECF6
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:31:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA9BE72ECF7
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240008AbjFMUbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 16:31:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39594 "EHLO
+        id S240522AbjFMUbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 16:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231866AbjFMUay (ORCPT
+        with ESMTP id S239641AbjFMUaz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 16:30:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B591BE8;
+        Tue, 13 Jun 2023 16:30:55 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676011BF5
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 13:30:49 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-652d1d3e040so4563221b3a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 13:30:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1686688249; x=1689280249;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KYTi7R1na9a50Ov2kINcNl6p8dn3MSr2AXDHhuOecUI=;
+        b=A260gQeEMHclZVygyc4n4vupbAvrqkqlnSosMCjUQD0YbVX7Gy8i2OOdQuIox7hkhN
+         8T5kSuAv6qgx7XTcXaTrpa95anM+bQ837h4+gW0RnWvX+GJqL2T65ruQCIM0vWGze9nG
+         R/v1av+YEyGKHi6dl13wLfSn/8h1bGTtHfusw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686688249; x=1689280249;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KYTi7R1na9a50Ov2kINcNl6p8dn3MSr2AXDHhuOecUI=;
+        b=E8u1+1B2GEBc8vvDTSFDoVBKuLNkpWKivv+Y80YaGtt3IiEc7opbV3O0HLP/nt9M0W
+         dVrMbi31dI4qQ1XTcDLU7SYdwtS2TS784kczZOY89lWE585HtYwykZKVsbLdqLyZgFEn
+         ZHNFnZ3THbWwStzo/xb1paQ4zVh9RkjlCux3cTXO2LKzVvyGMESyKdpQsDCE0RVPus/L
+         VYMkfcgJ64RqTL91Eac65fcD07D0F7ifhyNSxUxvGbnq13YKtv3DI1nffUL7MiOmhIUY
+         0x28Qq6PmXO8WA/Z7WqH6Zl1FTPNG28EQGGWAJ48qeNw0E8e5boYs7O6Vhe/sV3E8X3Y
+         c0pg==
+X-Gm-Message-State: AC+VfDw76eQmDRvaMpHSnmO+koo5OCneW4Ty+bOo3zCjEe/h0VEsHX2c
+        dFt9KlzEwxI2j8f2LDDMvms0wA==
+X-Google-Smtp-Source: ACHHUZ4mHukYbIJE2e2Xi8DHSCtvzzOa3UY5WJSj7UbvOlwZVWsqOvneRIiveTjRTcbTxrWCozkwlw==
+X-Received: by 2002:a17:90a:f2c9:b0:25c:1397:3c0b with SMTP id gt9-20020a17090af2c900b0025c13973c0bmr2237895pjb.37.1686688248844;
         Tue, 13 Jun 2023 13:30:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE3866124B;
-        Tue, 13 Jun 2023 20:30:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AF1AC433B7;
-        Tue, 13 Jun 2023 20:30:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686688246;
-        bh=krtMn/ptOU5M7jSt0Q+VlGwLfY4X8qDf28PoRTLFcHc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=saW9/RLgVebsN6+Azefx/Be6dICpagsT9k2SRXenZaQQAWwXG+ubuBw8jNyYS9EBc
-         08/nVBFQUj8F9QxnAOsRaMKWPZ0JR28+Reyy58adVpn5KqPJTdWJU7u6FCpOmIJyIi
-         bdyaRgOUzwRDZRYHvnl7uoZg6qqi0gCQyixybf7wA35pS9Hu5vdialvevxPTYi2Opq
-         9kQ7Nl6YfnpJu0uio3k2zmU5ZTVZr2YiRi/LSFlkXNY5gW0M+rm5PCjDATU9RxezUS
-         xhPjgox1rn3Gcny91R8jP8CXA8ZdVKMZOpNiXxNgWY4hApafG3N3c+4LGs5zDkNVd/
-         PCiB/ZHDaIw1g==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 8620540692; Tue, 13 Jun 2023 17:30:43 -0300 (-03)
-Date:   Tue, 13 Jun 2023 17:30:43 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     kan.liang@linux.intel.com, mingo@redhat.com, peterz@infradead.org,
-        namhyung@kernel.org, jolsa@kernel.org, adrian.hunter@intel.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ak@linux.intel.com, eranian@google.com, ahmad.yasin@intel.com
-Subject: Re: [PATCH 7/8] pert tests: Support metricgroup perf stat JSON output
-Message-ID: <ZIjR87AnexiHvGNX@kernel.org>
-References: <20230607162700.3234712-1-kan.liang@linux.intel.com>
- <20230607162700.3234712-8-kan.liang@linux.intel.com>
- <CAP-5=fX9E0g28spjC2k_YUKz6Vm2AKe_1VLJoapStHY6juDX1A@mail.gmail.com>
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id 1-20020a17090a034100b0025bf9e02e1bsm3479153pjf.51.2023.06.13.13.30.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 13:30:48 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 13:30:47 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Tom Rix <trix@redhat.com>
+Cc:     mcgrof@kernel.org, yzaikin@google.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH] sysctl: set variable sysctl_mount_point
+ storage-class-specifier to static
+Message-ID: <202306131330.AAC4C43AC@keescook>
+References: <20230611120725.183182-1-trix@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fX9E0g28spjC2k_YUKz6Vm2AKe_1VLJoapStHY6juDX1A@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230611120725.183182-1-trix@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Jun 13, 2023 at 01:17:41PM -0700, Ian Rogers escreveu:
-> On Wed, Jun 7, 2023 at 9:27 AM <kan.liang@linux.intel.com> wrote:
-> >
-> > From: Kan Liang <kan.liang@linux.intel.com>
-> >
-> > A new field metricgroup has been added in the perf stat JSON output.
-> > Support it in the test case.
-> >
-> > Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+On Sun, Jun 11, 2023 at 08:07:25AM -0400, Tom Rix wrote:
+> smatch reports
+> fs/proc/proc_sysctl.c:32:18: warning: symbol
+>   'sysctl_mount_point' was not declared. Should it be static?
 > 
-> Acked-by: Ian Rogers <irogers@google.com>
+> This variable is only used in its defining file, so it should be static.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Thanks, applied.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-- Arnaldo
+-- 
+Kees Cook
