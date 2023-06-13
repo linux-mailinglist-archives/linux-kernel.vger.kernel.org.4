@@ -2,115 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A31672DC05
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F8D72DC09
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:07:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240458AbjFMIGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 04:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58358 "EHLO
+        id S240369AbjFMIHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 04:07:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240925AbjFMIGw (ORCPT
+        with ESMTP id S234993AbjFMIHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 04:06:52 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D333510E9
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 01:06:49 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-977e7d6945aso934302166b.2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 01:06:49 -0700 (PDT)
+        Tue, 13 Jun 2023 04:07:47 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C3910CE;
+        Tue, 13 Jun 2023 01:07:46 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-30aeee7c8a0so3834494f8f.1;
+        Tue, 13 Jun 2023 01:07:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686643608; x=1689235608;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oh9FMASx+40RIFRTYw/y+LLrrdSrxB/p4X2a4zp9Ws4=;
-        b=cqEKvVFfHDYoJgMarpDsGYd3s2g3FDEOBAy4sjzhpE26l/fw+vmu2nYWvxbMrLyulm
-         WwFPfPMLMH0hfqH433hC7mMq6rdmFDsgKt1VbEZ/DSVpBAeos7ZKHX/fThfCz3E8KUYp
-         +X3FoOqAlFf8bQ7SVPezV7PyjMi8tWcOD7d7OPLjCmNmpqgb1rXfixxydvKNzH/OAc2L
-         2a7SIAiKMaJJYNYHaQg7b/3LgvlwQMrhO4BvcFIcxYGiOjrtwRGDiQtL5byU8mMuZo1k
-         hDIgEczP5q7QDoAuAbOVv34PaIGmhBEsMtR9exkUus1zRfHW0UpTSXzECxTnhoR76HjW
-         0WFA==
+        d=gmail.com; s=20221208; t=1686643664; x=1689235664;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jVCvnuikxuMkayvXMhnhJV1W770twmco4K8oIyl6qVk=;
+        b=ITi8kRp3sMI/PkbbTaZ89AQ3XwCLefwMYZr709m/UEKHYyqhIRR+6qCSdbsfHwGZMA
+         4pafBFCU5yMtOKM+SlmLu0OASrI+VO/29p00PEh3eA3xGPdJ2M5vsR4wZbV18YnoEte9
+         z0+8G3cabGgg3W20nVXdEZn43CIiFXhTJ2OZ7j+proaC3CSudp8dSfA/0/PuNVss1LIr
+         jxY5cOA2qAAE2IXLf8MKRUt0/xZHhoyFXCcxCEj2ARrDQjQiM1T+4YB0gEmPmR+JjkgK
+         jx3Qu9AHcngfJ/sGQIPVd/dttyxyFZ+V/UKUZuoKAZrQzl0d/fjwX4uPvMvumljrGvD7
+         j5Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686643608; x=1689235608;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oh9FMASx+40RIFRTYw/y+LLrrdSrxB/p4X2a4zp9Ws4=;
-        b=cpmbq4EfGDPkbJwG38iNNXdj/bl5xrwvlJpIr8Dq34Jq2HgE7FmmaUtnCy4ZCgrqqU
-         gdTlizxsimStK8rte4rBiJP6WAXoDOK9x6Az7auNRoeWioIPNz0pr2tDfi+B/ksAJyae
-         a1qvZTN1k+7LaLyw7OaO4cbWaJV7Lv2AeI7zIWpO8s7eZ1KSeKro8CQaf71HjUCLaijK
-         3L2fM3HWLjlMOUQBjFXw4oqoyd3MlbWpuaVLZY4yNRfsu30wWeZ0wqeS+faTS3KPvo59
-         C4M2rJGSblRgYqkqRloe/ziUYGR3ZD2hVB4qJzRLjoOL2erjx+0RRekiziRi4iitywte
-         mwWA==
-X-Gm-Message-State: AC+VfDzjr+OXd04xuKudR54va3+hGFNYua47NlnsWQDZjE17ghsCShRo
-        l0MP2dUMN9onmJ0uOxRn868yjhnoQ4QTQIjLazI=
-X-Google-Smtp-Source: ACHHUZ7ZvoKbB/eR5zPGEdQjV/KEn2jaUSHVtC7Y8ed0326mNJhgj90KYBg6vspasSbY983Naq5Pyg==
-X-Received: by 2002:a17:907:36c3:b0:974:7713:293f with SMTP id bj3-20020a17090736c300b009747713293fmr13715718ejc.41.1686643608167;
-        Tue, 13 Jun 2023 01:06:48 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id i8-20020a170906a28800b009655eb8be26sm6300308ejz.73.2023.06.13.01.06.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 01:06:47 -0700 (PDT)
-Message-ID: <dcc99c16-3807-1f81-03b8-86095f08258e@linaro.org>
-Date:   Tue, 13 Jun 2023 10:06:46 +0200
+        d=1e100.net; s=20221208; t=1686643664; x=1689235664;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jVCvnuikxuMkayvXMhnhJV1W770twmco4K8oIyl6qVk=;
+        b=eYTkHYOI9bJaCvODOKA81oqJ9qYngrGDqZGxi/iAGE1bL4PdpCf64DGvK875Keqqv9
+         cdnSgL7lNlZJYz6lNV8TT5By/mtL6645+5Jy7PE9rypqFZN17EEk9/Og4cSu2oP3jYCb
+         qMi0SfQEBwaJDrrIjaXMAJtBkNASI1aN45PrcVy2vJYWbWHQ5JB1P838fxfbe8L3/uyt
+         hr2PumBAs2JFSr25dTV5tW7LMQV+VTZbPd2iHVbnr6cSr9jMGUUWgTnqaEt9W+iQK1bq
+         vVIFRnNJsaggg372xROc5KkLpgO254Ce8Gt35AwM/nBp0Pb5iUPMFjjhXt1L+QWSW9fc
+         e68w==
+X-Gm-Message-State: AC+VfDyweZezmPqRrRSLq3zyzcrFpvL3uqJfLrOaTXBpnQJGTxCDDqom
+        XLz+It259ozPeuMalLfpMZdyAuF1yRs=
+X-Google-Smtp-Source: ACHHUZ6K2SbKLlM0iN07nmJITtTy2TyPN4FsjiCyN58Ad66eU5l2fQtW0TJNIp0oPxJ6YuV5QBfCAQ==
+X-Received: by 2002:a5d:60c5:0:b0:307:7959:6461 with SMTP id x5-20020a5d60c5000000b0030779596461mr7170270wrt.31.1686643664224;
+        Tue, 13 Jun 2023 01:07:44 -0700 (PDT)
+Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation.. (mob-5-90-5-141.net.vodafone.it. [5.90.5.141])
+        by smtp.gmail.com with ESMTPSA id t18-20020adfeb92000000b003093a412310sm14559754wrn.92.2023.06.13.01.07.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 01:07:43 -0700 (PDT)
+From:   Tommaso Merciai <tomm.merciai@gmail.com>
+Cc:     linuxfancy@googlegroups.com,
+        Tommaso Merciai <tomm.merciai@gmail.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] media: i2c: imx290: drop format param from imx290_ctrl_update
+Date:   Tue, 13 Jun 2023 10:07:34 +0200
+Message-Id: <20230613080734.8151-1-tomm.merciai@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] w1: ds2482: Switch back to use struct i2c_driver's
- .probe()
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
-References: <20230612072807.839689-1-u.kleine-koenig@pengutronix.de>
- <6d76105f-daa1-1cd0-35b3-1727aa967bcc@linaro.org>
- <20230613070237.srqd3sy2c3lp7u5p@pengutronix.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230613070237.srqd3sy2c3lp7u5p@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/06/2023 09:02, Uwe Kleine-König wrote:
-> Hello Krzysztof,
-> 
-> On Mon, Jun 12, 2023 at 10:10:30PM +0200, Krzysztof Kozlowski wrote:
->> On 12/06/2023 09:28, Uwe Kleine-König wrote:
->>> After commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
->>> call-back type"), all drivers being converted to .probe_new() and then
->>> commit 03c835f498b5 ("i2c: Switch .probe() to not take an id parameter")
->>> convert back to (the new) .probe() to be able to eventually drop
->>> .probe_new() from struct i2c_driver.
->>>
->>> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
->>> ---
->>>  drivers/w1/masters/ds2482.c | 2 +-
->>
->> Thank you for the patch.
->> It is too late in the cycle for me to pick it up. I will take it after
->> the merge window.
-> 
-> This is one of only 19 patches that are still needed on top of what is
-> currently in next before I can drop .probe_new() which I intended to
-> tackle after the upcoming merge window. I expect that most of these 19
-> patches will still be picked up and go into v6.5-rc1.
-> 
-> Assuming there are only less than 10 patches remaining on top of
-> v6.5-rc1, I intend to create a pull request for Wolfram with the
-> remaining bits and a patch doing
+The format param actually is not used in imx290_ctrl_update
+function, let's drop this
 
-Sure, go ahead:
+Fixes: bc35f9a21a55 ("media: i2c: imx290: Fix the pixel rate at 148.5Mpix/s")
+Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
+Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+---
+Changes since v1:
+ - Collected tag from DStevenson
+ - Added Fixes as suggested by from DStevenson
 
+ drivers/media/i2c/imx290.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
+index 5ea25b7acc55..a84b581682a2 100644
+--- a/drivers/media/i2c/imx290.c
++++ b/drivers/media/i2c/imx290.c
+@@ -902,7 +902,6 @@ static const char * const imx290_test_pattern_menu[] = {
+ };
+ 
+ static void imx290_ctrl_update(struct imx290 *imx290,
+-			       const struct v4l2_mbus_framefmt *format,
+ 			       const struct imx290_mode *mode)
+ {
+ 	unsigned int hblank_min = mode->hmax_min - mode->width;
+@@ -1195,7 +1194,7 @@ static int imx290_set_fmt(struct v4l2_subdev *sd,
+ 	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
+ 		imx290->current_mode = mode;
+ 
+-		imx290_ctrl_update(imx290, &fmt->format, mode);
++		imx290_ctrl_update(imx290, mode);
+ 		imx290_exposure_update(imx290, mode);
+ 	}
+ 
+@@ -1300,7 +1299,6 @@ static const struct media_entity_operations imx290_subdev_entity_ops = {
+ static int imx290_subdev_init(struct imx290 *imx290)
+ {
+ 	struct i2c_client *client = to_i2c_client(imx290->dev);
+-	const struct v4l2_mbus_framefmt *format;
+ 	struct v4l2_subdev_state *state;
+ 	int ret;
+ 
+@@ -1335,8 +1333,7 @@ static int imx290_subdev_init(struct imx290 *imx290)
+ 	}
+ 
+ 	state = v4l2_subdev_lock_and_get_active_state(&imx290->sd);
+-	format = v4l2_subdev_get_pad_format(&imx290->sd, state, 0);
+-	imx290_ctrl_update(imx290, format, imx290->current_mode);
++	imx290_ctrl_update(imx290, imx290->current_mode);
+ 	v4l2_subdev_unlock_state(state);
+ 
+ 	return 0;
+-- 
+2.34.1
 
