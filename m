@@ -2,54 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AEFE72DE35
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 11:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A834572DE34
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 11:47:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240851AbjFMJro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 05:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60424 "EHLO
+        id S241968AbjFMJrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 05:47:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241594AbjFMJrD (ORCPT
+        with ESMTP id S241588AbjFMJrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 13 Jun 2023 05:47:03 -0400
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B62819A4;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FF310D9;
         Tue, 13 Jun 2023 02:46:48 -0700 (PDT)
-Received: from tp8.. (mdns.lwn.net [45.79.72.68])
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 3B1FA7DE;
-        Tue, 13 Jun 2023 09:46:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 3B1FA7DE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1686649600; bh=Ws0sgPK8ew7x5vxl+TuTJyXb8SBuL/KQ6lfSG/O9Xu8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rFS60iFolb45Rs8MlzAbX9/IuNIHcSz+Kh3iCrSfaqXJXiHRzsDJjwhJAGdCK2fp/
-         4tRCQQsJsJtnxTcol2K+zkySYho9KntiXdqkYfR2ZPVebcQTRVgCPP7MFKZN52p9cf
-         0V9j0i2vmxH4u1OXTtuVk7c4taBYVMw15HJQA6XKCuJdmFOYyuOF/IIypZV6c5iHwY
-         CofdjXO1zlP230wQ5GZyHzIpVxjd32GM0Z2FSsz9+ORhaG7EsQG2UtCS9nUlHs62u6
-         KQs18KP840i93BAh1rlsDQL+7TmC6X3irvglULosWSeq8IQL+jWx17ZI9nJhoGcUld
-         AJbXeYPk1aKpA==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     linux-doc@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: [PATCH 5/5] perf arm-spe: Fix a dangling Documentation/arm64 reference
-Date:   Tue, 13 Jun 2023 03:46:06 -0600
-Message-Id: <20230613094606.334687-6-corbet@lwn.net>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230613094606.334687-1-corbet@lwn.net>
-References: <20230613094606.334687-1-corbet@lwn.net>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B15FE633A9;
+        Tue, 13 Jun 2023 09:46:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A021DC433D2;
+        Tue, 13 Jun 2023 09:46:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686649607;
+        bh=8eG9BXn9SgJZO8Q9TEHnAKVexAZ+M+5pTf3R8w8Jqc4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S7JOsAKqj74Eryl5wpQA3K3CAScfgu0jgQ0mXN7RYcEViX5fckMQ88B2657QnsMFE
+         +WO98orfB3CZy4c2VaMDmTHaMU1S4wcjmM+3THw+QMpZnyJjuIn8NVc6shEww1loq/
+         Ev5UD4w4FlVxXDPRouOTf3rF6R40pY7lW+PQCGtc=
+Date:   Tue, 13 Jun 2023 11:46:44 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Daisy.Barrera@siriusxm.com, Cliff.Holden@siriusxm.com,
+        tony@atomide.com, jdelvare@suse.de, neal_liu@aspeedtech.com,
+        linus.walleij@linaro.org, egtvedt@samfundet.no,
+        biju.das.jz@bp.renesas.com, herve.codina@bootlin.com
+Subject: Re: [PATCH v4 4/4] MAINTAINERS: add Cadence USBHS driver entry
+Message-ID: <2023061350-calcium-follow-8649@gregkh>
+References: <20230602102644.77470-1-pawell@cadence.com>
+ <20230602102644.77470-5-pawell@cadence.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230602102644.77470-5-pawell@cadence.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,33 +55,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The arm64 documentation has moved under Documentation/arch/.  Fix up a
-dangling reference to match.
+On Fri, Jun 02, 2023 at 06:26:44AM -0400, Pawel Laszczak wrote:
+> Patch adds entry for USBHS (CDNS2) driver into MAINTARNERS file
+> 
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> ---
+>  MAINTAINERS | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index c269a15609e2..8b289d52d983 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4523,6 +4523,12 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb.git
+>  F:	drivers/usb/cdns3/
+>  X:	drivers/usb/cdns3/cdns3*
+>  
+> +CADENCE USBHS DRIVER
+> +M:	Pawel Laszczak <pawell@cadence.com>
+> +L:	linux-usb@vger.kernel.org
+> +S:	Maintained
 
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Signed-off-by: Jonathan Corbet <corbet@lwn.net>
----
- tools/perf/util/arm-spe-decoder/arm-spe-decoder.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This isn't part of your job description?  Why doesn't Cadence allow you
+to do that?  That's not good on a bunch of levels, have you seen the
+Documentation/process/contribution-maturity-model.rst file yet?
 
-diff --git a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c
-index f3918f290df5..ba807071d3c1 100644
---- a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c
-+++ b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c
-@@ -51,7 +51,7 @@ static u64 arm_spe_calc_ip(int index, u64 payload)
- 		 * (bits [63:56]) is assigned as top-byte tag; so we only can
- 		 * retrieve address value from bits [55:0].
- 		 *
--		 * According to Documentation/arm64/memory.rst, if detects the
-+		 * According to Documentation/arch/arm64/memory.rst, if detects the
- 		 * specific pattern in bits [55:52] of payload which falls in
- 		 * the kernel space, should fixup the top byte and this allows
- 		 * perf tool to parse DSO symbol for data address correctly.
--- 
-2.40.1
+thanks,
 
+greg k-h
