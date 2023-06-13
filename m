@@ -2,135 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1D0A72E92B
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8B972E92A
 	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:17:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238087AbjFMRP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 13:15:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46380 "EHLO
+        id S237862AbjFMRQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 13:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237764AbjFMRPz (ORCPT
+        with ESMTP id S232022AbjFMRQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 13:15:55 -0400
-Received: from smtp.smtpout.orange.fr (smtp-25.smtpout.orange.fr [80.12.242.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A86801BD3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 10:15:50 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id 97cKqpd5hx5Vb97cKqvfRE; Tue, 13 Jun 2023 19:15:42 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1686676542;
-        bh=nJwk0bnAQ0Xv6sG4ivedyKkZihPzSwcBd5Y0QPp0N8Q=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=MVyQ422go+DjjzMaDCYxv4dYV00tNMyAXp4VRoC/u+vRBDxhF+r1NEVXlvPeaj/G1
-         XPSj8iTmg8nxd5idXgfiqg6JZVHpk5RTaUP4LxVOK/IZwbhwMnQfAZS0jhdD4pWjC9
-         cVL/de62rrH4bsDt84FJLrm8k95o8VmS/v4Pyf5unBP2Gj00S1+n5TqYCCRKY95uNM
-         tWaQYID9AN+jWNhvsMRiPF2lb3RKXwTyFlDcXOPYgDmyoEVrFlieyzA+cBWyDHPGLK
-         vreUmFehIue4Nx7PF08o4Fk2E4nLcvvXSN+ZT6q+qjLsM1/KfHEtR3ib8LYjRPbOil
-         6q+UQea0BNfGA==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 13 Jun 2023 19:15:42 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <34b714b6-cb49-1a34-58f5-8b5ef0da2714@wanadoo.fr>
-Date:   Tue, 13 Jun 2023 19:15:40 +0200
+        Tue, 13 Jun 2023 13:16:34 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B0E19BF;
+        Tue, 13 Jun 2023 10:16:27 -0700 (PDT)
+Received: from mercury (dyndsl-091-248-189-170.ewe-ip-backbone.de [91.248.189.170])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AFF5666003AC;
+        Tue, 13 Jun 2023 18:16:26 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686676586;
+        bh=5AxaalXzVaJFUkSTDi3Tm4IeWzb4tfj/SGsHptGfdcw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mqW70nOZWRTeu1NehigYLVIKDoDs5kENOcbMF9f0Sk19xKMpYE5PB811THrIbcmB8
+         e05QQS1DlIr6lTdPQyaGrgazfR7h41QVcP8snBVb6Vu0lxK87Hf5BcbGemt30lVnUJ
+         Gt1Or5sLzy7uAwqh1lm+43r4BmEGAl7EWKTgJMRhw06PH8I5PCwCLVkOdUxv/rmJxB
+         yj0RPZ0IHiTNcsq7zi+y8SuAuQ176tnuyGe22m6xQvmaHEhbxDBqbRYFHushn9TUoK
+         Q5yOzOAtFp/b+zWRuwJBDc27aaUdW+VeJxcYDfiUvGVSrUl9BcsdL8183/3XCyW6dT
+         +VEoAMpdcJNDw==
+Received: by mercury (Postfix, from userid 1000)
+        id 1C1551066FC6; Tue, 13 Jun 2023 19:16:24 +0200 (CEST)
+Date:   Tue, 13 Jun 2023 19:16:24 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Vincent Legoll <vincent.legoll@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 15/25] PM / devfreq: rockchip-dfi: give variable a
+ better name
+Message-ID: <20230613171624.mrosctprljlz4g46@mercury.elektranox.org>
+References: <20230524083153.2046084-1-s.hauer@pengutronix.de>
+ <20230524083153.2046084-16-s.hauer@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] media: v4l2-core: Fix a potential resource leak in
- v4l2_fwnode_parse_link()
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-media@vger.kernel.org
-References: <2ddd10ec9e009bbb85518355f1e09e1ecd349925.1685340968.git.christophe.jaillet@wanadoo.fr>
- <ZIhLDh567eWqY5vk@kekkonen.localdomain>
-Content-Language: fr
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <ZIhLDh567eWqY5vk@kekkonen.localdomain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pfxobpnuncen6xuh"
+Content-Disposition: inline
+In-Reply-To: <20230524083153.2046084-16-s.hauer@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 13/06/2023 à 12:55, Sakari Ailus a écrit :
-> Hi Christophe,
-> 
-> On Mon, May 29, 2023 at 08:17:18AM +0200, Christophe JAILLET wrote:
->> 'fwnode is known to be NULL, at this point, so fwnode_handle_put() is a
->> no-op.
->>
->> Release the reference taken from a previous fwnode_graph_get_port_parent()
->> call instead.
->>
->> Fixes: ca50c197bd96 ("[media] v4l: fwnode: Support generic fwnode for parsing standardised properties")
->> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->> ---
->> /!\  THIS PATCH IS SPECULATIVE  /!\
->>           review with care
->> ---
->>   drivers/media/v4l2-core/v4l2-fwnode.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
->> index 049c2f2001ea..b7dd467c53fd 100644
->> --- a/drivers/media/v4l2-core/v4l2-fwnode.c
->> +++ b/drivers/media/v4l2-core/v4l2-fwnode.c
->> @@ -571,7 +571,7 @@ int v4l2_fwnode_parse_link(struct fwnode_handle *fwnode,
->>   
->>   	fwnode = fwnode_graph_get_remote_endpoint(fwnode);
->>   	if (!fwnode) {
->> -		fwnode_handle_put(fwnode);
->> +		fwnode_handle_put(link->local_node);
-> 
-> link->local_node also needs to be non-NULL for the successful case. The
-> condition should take that into account. Could you send v2 with that?
-> 
->>   		return -ENOLINK;
->>   	}
->>   
-> 
+
+--pfxobpnuncen6xuh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
 Hi,
-something like below?
 
-@@ -568,19 +568,25 @@ int v4l2_fwnode_parse_link(struct fwnode_handle 
-*fwnode,
-  	link->local_id = fwep.id;
-  	link->local_port = fwep.port;
-  	link->local_node = fwnode_graph_get_port_parent(fwnode);
-+	if (!link->local_node)
-+		return -ENOLINK;
+On Wed, May 24, 2023 at 10:31:43AM +0200, Sascha Hauer wrote:
+> struct dmc_count_channel::total counts the clock cycles of the DDR
+> controller. Rename it accordingly to give the reader a better idea
+> what this is about. While at it, at some documentation to struct
+> dmc_count_channel.
+>=20
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> ---
 
-  	fwnode = fwnode_graph_get_remote_endpoint(fwnode);
--	if (!fwnode) {
--		fwnode_handle_put(fwnode);
--		return -ENOLINK;
--	}
-+	if (!fwnode)
-+		goto err_put_local_node;
+Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-  	fwnode_graph_parse_endpoint(fwnode, &fwep);
-  	link->remote_id = fwep.id;
-  	link->remote_port = fwep.port;
-  	link->remote_node = fwnode_graph_get_port_parent(fwnode);
-+	if (!link->remote_node)
-+		goto err_put_local_node;
+-- Sebastian
 
-  	return 0;
-+
-+err_put_local_node:
-+	fwnode_handle_put(link->local_node);
-+	return -ENOLINK;
-  }
-  EXPORT_SYMBOL_GPL(v4l2_fwnode_parse_link);
+>  drivers/devfreq/event/rockchip-dfi.c | 19 ++++++++++++-------
+>  1 file changed, 12 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event=
+/rockchip-dfi.c
+> index 8a7af7c32ae0d..50e497455dc69 100644
+> --- a/drivers/devfreq/event/rockchip-dfi.c
+> +++ b/drivers/devfreq/event/rockchip-dfi.c
+> @@ -46,9 +46,14 @@
+>  #define DDRMON_CH1_COUNT_NUM		0x3c
+>  #define DDRMON_CH1_DFI_ACCESS_NUM	0x40
+> =20
+> +/**
+> + * struct dmc_count_channel - structure to hold counter values from the =
+DDR controller
+> + * @access:       Number of read and write accesses
+> + * @clock_cycles: DDR clock cycles
+> + */
+>  struct dmc_count_channel {
+>  	u32 access;
+> -	u32 total;
+> +	u32 clock_cycles;
+>  };
+> =20
+>  struct dmc_count {
+> @@ -150,7 +155,7 @@ static void rockchip_dfi_read_counters(struct rockchi=
+p_dfi *dfi, struct dmc_coun
+>  			continue;
+>  		count->c[i].access =3D readl_relaxed(dfi_regs +
+>  				DDRMON_CH0_DFI_ACCESS_NUM + i * 20);
+> -		count->c[i].total =3D readl_relaxed(dfi_regs +
+> +		count->c[i].clock_cycles =3D readl_relaxed(dfi_regs +
+>  				DDRMON_CH0_COUNT_NUM + i * 20);
+>  	}
+>  }
+> @@ -182,29 +187,29 @@ static int rockchip_dfi_get_event(struct devfreq_ev=
+ent_dev *edev,
+>  	struct rockchip_dfi *dfi =3D devfreq_event_get_drvdata(edev);
+>  	struct dmc_count count;
+>  	struct dmc_count *last =3D &dfi->last_event_count;
+> -	u32 access =3D 0, total =3D 0;
+> +	u32 access =3D 0, clock_cycles =3D 0;
+>  	int i;
+> =20
+>  	rockchip_dfi_read_counters(dfi, &count);
+> =20
+>  	/* We can only report one channel, so find the busiest one */
+>  	for (i =3D 0; i < DMC_MAX_CHANNELS; i++) {
+> -		u32 a, t;
+> +		u32 a, c;
+> =20
+>  		if (!(dfi->channel_mask & BIT(i)))
+>  			continue;
+> =20
+>  		a =3D count.c[i].access - last->c[i].access;
+> -		t =3D count.c[i].total - last->c[i].total;
+> +		c =3D count.c[i].clock_cycles - last->c[i].clock_cycles;
+> =20
+>  		if (a > access) {
+>  			access =3D a;
+> -			total =3D t;
+> +			clock_cycles =3D c;
+>  		}
+>  	}
+> =20
+>  	edata->load_count =3D access * 4;
+> -	edata->total_count =3D total;
+> +	edata->total_count =3D clock_cycles;
+> =20
+>  	dfi->last_event_count =3D count;
+> =20
+> --=20
+> 2.39.2
+>=20
 
+--pfxobpnuncen6xuh
+Content-Type: application/pgp-signature; name="signature.asc"
 
-CJ
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSIpGcACgkQ2O7X88g7
++pqCyA/+LtQycD7o9vOEa1QsxI1Jhpp/ODV1N1n7SFabrVZ5oq92CcyFBpHUhTIR
+taIWvyae1XLKz6HJNoEGzA6xQqEDdGqXLCrRmfbx59QaeJOfJGt0fcIQ4t0WbhvH
+Y4KcUebYaBZnVCzdzJFCbScrpcKfk4hcSgMFHy5KAHGTRF2USYhcUBgS3wO7r8Ph
+OSOnFDmx8/styjdpVQIVpWnTrM4Jx1zs79u2TP669ddq5Fsqd0mcifUUbcYwXXws
+ySQyTDC14N1TztxQzpe5g4/IVej6TnVXB+EKbPc/B+8ZFXc0qjUQaJJNsKx08HXM
+a39Ifgbbf7qvxxx3mzGqDP+bVtU7gmGIzGBiYbyjNP4tu7fgn9nunshEzGllKCr6
+BmdAp3HIe63572BKHiMlofA60WCiewzgZhGCLlMUCUsyChB96xBfR0Sc/YZ01CIx
+02iUBC3HlscYwdcXsREd2uW5No+zjSEdlgDP+o2ecArNxDV63fPo2e7pFQdBAjle
+Jl2xtYDMCTzdERc+woA7q8aMXupEwImo1stBVMtnMyU/SRa9peApx9/s43is7aas
+SB1GSQ2/hjrcAW9HTiqVhFVpVfu7poGhtVlKouk7C7o7uf82uAnZ8trILzHdgN27
+kR0rmWM+VUx8nIDLTP5RKO4VrAVhfWCLuKCYQd95a8PTPhwIdI4=
+=HV39
+-----END PGP SIGNATURE-----
+
+--pfxobpnuncen6xuh--
