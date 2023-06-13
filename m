@@ -2,133 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EAE572DCDD
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:41:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 098BE72DCDF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241607AbjFMIl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 04:41:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49638 "EHLO
+        id S241369AbjFMIln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 04:41:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241672AbjFMIkn (ORCPT
+        with ESMTP id S241695AbjFMIky (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 04:40:43 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BF119AE;
-        Tue, 13 Jun 2023 01:40:30 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b3d29cfb17so15852625ad.3;
-        Tue, 13 Jun 2023 01:40:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686645629; x=1689237629;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Uuddb9c9VUE9xG/wODQy6qGOGm/KkteE8GYq9MCwRAo=;
-        b=hHVs3qPi0Aq8cI3ZELcon2W8/5mlGpERDvjit7DNkZJGLihmbAwJbkACfzIIgkxIpc
-         j4vFdsP/WWW0wIJd/+64pTHuEO5ZVFDRuI3Ji6gM8fK45NJlH0e7e/arPF6r2r2akpsM
-         +P2AQH9buFVjbPQZ+tH8SrQvxbwlEmqMjiKsi3b2c61QcoDyZqrxyk3f27/fjkKTuQeH
-         oJykroMIDIs7GXAhup68spefTPKSnD3abb/0MnqQMjKiiJpTM6AyYrvCdFBlKCBeyInX
-         hAmGy+znv8erLXrRjh7AGDf7f3c0YH8bWp8o24v/AElZnau34Ib2Vq14+f23at78jucW
-         sshQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686645629; x=1689237629;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Uuddb9c9VUE9xG/wODQy6qGOGm/KkteE8GYq9MCwRAo=;
-        b=hNvSXvSjcfvqFGfnv+69AdyuoUzw1pouOFvZQmVYptdk6b2x4mAz3cu9nMuD73+xv3
-         E1E/TgCLK6/yasmvb7RrkzHLpiKbFJZObj+ceVp7b9M87UC+t36g/Ln1EFxxI8HSY9Sr
-         xmqosnV4w+DGNdu8JScWVMxXCZ53S+IRb02f8G10fUK17Nh2YMtHWGMI+OfIoA1A9rMf
-         trdOitz0FSyRngdP1aljTkSIfyPw6dRyWaeMPoGBeSLfpFF4jITiEABtr1cXy/gBB8F4
-         4fn39BJ4k1YWlp2Ht5LLB5HbH4zlCw3OF7Wt6xnEptR6oewhcxDziioLIb5zDZ8LVmmo
-         BbAw==
-X-Gm-Message-State: AC+VfDxby6lBz5hEV/PMz2eva4L60hiX4eiUwCZa4Xt24J2cLC1uMKNY
-        fh56xOz2qgcvaHmKkmba8hA=
-X-Google-Smtp-Source: ACHHUZ6QLjaq87VUQOeMerJ4xeq4L9fRl6+tzkvzr9yyN/61YJ9iz8+q0PqfsCt/f8g2UDEsLRUlOA==
-X-Received: by 2002:a17:903:1105:b0:1b3:f572:397f with SMTP id n5-20020a170903110500b001b3f572397fmr389922plh.34.1686645629045;
-        Tue, 13 Jun 2023 01:40:29 -0700 (PDT)
-Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
-        by smtp.gmail.com with ESMTPSA id n10-20020a170902e54a00b001b01448ba72sm9528439plf.215.2023.06.13.01.40.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 01:40:28 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 12 Jun 2023 22:40:32 -1000
-From:   "tj@kernel.org" <tj@kernel.org>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Yosry Ahmed <yosryahmed@google.com>,
-        =?utf-8?B?56iL5Z6y5rab?= Chengkaitao Cheng 
-        <chengkaitao@didiglobal.com>,
-        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
-        "shakeelb@google.com" <shakeelb@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "muchun.song@linux.dev" <muchun.song@linux.dev>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
-        "chengzhihao1@huawei.com" <chengzhihao1@huawei.com>,
-        "pilgrimtao@gmail.com" <pilgrimtao@gmail.com>,
-        "haolee.swjtu@gmail.com" <haolee.swjtu@gmail.com>,
-        "yuzhao@google.com" <yuzhao@google.com>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "vasily.averin@linux.dev" <vasily.averin@linux.dev>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "surenb@google.com" <surenb@google.com>,
-        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "sujiaxun@uniontech.com" <sujiaxun@uniontech.com>,
-        "feng.tang@intel.com" <feng.tang@intel.com>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Subject: Re: [PATCH v3 0/2] memcontrol: support cgroup level OOM protection
-Message-ID: <ZIgrgGQQ-tYEQJFr@slm.duckdns.org>
-References: <ZFd5bpfYc3nPEVie@dhcp22.suse.cz>
- <66F9BB37-3BE1-4B0F-8DE1-97085AF4BED2@didiglobal.com>
- <ZFkEqhAs7FELUO3a@dhcp22.suse.cz>
- <CAJD7tkaw_7vYACsyzAtY9L0ZVC0B=XJEWgG=Ad_dOtL_pBDDvQ@mail.gmail.com>
- <ZIgodGWoC/R07eak@dhcp22.suse.cz>
+        Tue, 13 Jun 2023 04:40:54 -0400
+X-Greylist: delayed 243 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 13 Jun 2023 01:40:45 PDT
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [IPv6:2001:67c:2050:0:465::102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8E7A0;
+        Tue, 13 Jun 2023 01:40:45 -0700 (PDT)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4QgMT62WB0z9smX;
+        Tue, 13 Jun 2023 10:40:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
+        s=MBO0001; t=1686645642;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=F4YR6IC11dblIqgF9IfE7gEo2pRgRczWDAIr1+EuyLQ=;
+        b=uHu3KnFjumsj3KVvsIxFa5qbz7R5TJoEBx6uzPIP9sPj+t/s4QhN2PBRzU9hQ3Z1ukHlk6
+        K5E3nwo9JPvEUni832RmtTxLZ4ajKne4JDpllxjTjtJtpa3/70x5VrUlzIAxCmRs0FITXB
+        IAQsd9Cydes9Jys/2+edOYNSq/kVAoMn5Rpe1XGI5TyYZdrT/YZuPSMFJOQhrkTaemDZFL
+        /6hF8VNRzVG0rBZEvJ+vZWyIpNeKyHJvp/Tg+fcjpz0ooTk3XLXtV/+1TirGKKDyU5qEAd
+        ZcWbBi7Fs+uVLpC6+hZ2gZCYP2BTX7d9483Apo2SgMjGX+H7Ii+cRDM3ZzKLfQ==
+References: <20230529133433.56215-1-frank@oltmanns.dev>
+ <69a0b07442116b52e359534d93433f55.sboyd@kernel.org>
+From:   Frank Oltmanns <frank@oltmanns.dev>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Anson Huang <Anson.Huang@nxp.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] clk: fractional-divider: Improve approximation when
+ zero based
+In-reply-to: <69a0b07442116b52e359534d93433f55.sboyd@kernel.org>
+Date:   Tue, 13 Jun 2023 10:40:33 +0200
+Message-ID: <875y7r21ry.fsf@oltmanns.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZIgodGWoC/R07eak@dhcp22.suse.cz>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Rspamd-Queue-Id: 4QgMT62WB0z9smX
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Stephen,
 
-On Tue, Jun 13, 2023 at 10:27:32AM +0200, Michal Hocko wrote:
-> On the other hand I can see a need to customizable OOM victim selection
-> functionality. We've been through that discussion on several other
-> occasions and the best thing we could come up with was to allow to plug
-> BPF into the victim selection process and allow to bypass the system
-> default method. No code has ever materialized from those discussions
-> though. Maybe this is the time to revive that idea again?
+On 2023-06-12 at 14:39:00 -0700, Stephen Boyd <sboyd@kernel.org> wrote:
+> Quoting Frank Oltmanns (2023-05-29 06:34:33)
+>> Consider the CLK_FRAC_DIVIDER_ZERO_BASED flag when finding the best
+>> approximation for m and n. By doing so, increase the range of valid
+>> values for the numerator and denominator by 1.
+>>
+>> Cc: A.s. Dong <aisheng.dong@nxp.com
+>> Signed-off-by: Frank Oltmanns <frank@oltmanns.dev>
+>> ---
+>> I stumpled upon this, when familiarizing myself with clk drivers. Unfortunately,
+>> I have no boards to test this patch. It seems the only user of this flag in
+>> mainline is drivers/clk/imx/clk-composite-7ulp.c, therefore I'm cc-ing
+>> get_maintainers.pl --git-blame -f drivers/clk/imx/clk-composite-7ulp.c
+>> in the hopes of a wider audience.
+>>
+>> Thank you for considering this contribution,
+>
+> Thanks for looking at this. Can you add a kunit test (or a suite of
+> tests) to confirm that this doesn't break existing functionality and
+> also improves a case that would have failed or been suboptimal before?
 
-Yeah, my 5 cent - trying to define a rigid interface for something complex
-and flexible is a fool's errand.
+Thank you for your feedback, I've submitted a V2 that contains the
+tests:
 
-Johannes knows a lot better than me but we (meta) are handling most OOMs
-with oomd which gives more than sufficient policy flexibility. That said,
-handling OOMs in userspace requires wholesale configuration changes (e.g.
-working IO isolation) and being able to steer kernel OOM kills can be useful
-for many folks. I haven't thought too much about it but the problem seems
-pretty well fit for offloading policy decisions to a BPF program.
+https://lore.kernel.org/lkml/20230613083626.227476-1-frank@oltmanns.dev/
 
-Thanks.
-
--- 
-tejun
+Thanks,
+  Frank
