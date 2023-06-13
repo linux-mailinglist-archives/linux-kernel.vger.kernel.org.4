@@ -2,94 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6607672E793
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88FDB72E797
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:48:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242638AbjFMPqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 11:46:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59546 "EHLO
+        id S242880AbjFMPrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 11:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234367AbjFMPqV (ORCPT
+        with ESMTP id S241126AbjFMPrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 11:46:21 -0400
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FDE418C
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 08:46:19 -0700 (PDT)
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1b3be6c0b4cso17312115ad.3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 08:46:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686671179; x=1689263179;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DycG4W9rFQOA5mqe7LcQiptnT0e+7vh1h/UF+fmSM40=;
-        b=JQKTaGzTIydGJ0kOanyBvSENtY2ieQk1DsYGafj6/MGszzMriE2v3AqbAhNjyQF9CR
-         Cae0HTS6JLKN48nkxf3PEdWivZ4vWc6OxqCjTIIl8PEYfL9hQFMXpeo+s3I5g8PEVLNr
-         OGxfIxj8Tw4WNwhKe1X2EsedvPsz0d4zGGFwjoD2NU6vVk1TjhPiVREpYiOsgVtAIpOW
-         Os31hABT4E0viFTlaPL76OHa8DJhPXeQLQQkxWEs3hSiKoEkd8wzp+N265640zl6u0wO
-         rd466RzICNzu8Grr4s8Ec2xBdL/BirxvyAI7PfksvtOu6yh55wKkop9fYcJIbmbdy0ux
-         O8Ig==
-X-Gm-Message-State: AC+VfDya01OotwkoDXV+F7MHJadK7Pptb3EvbvFONq4RjaR10oZS2aHa
-        Z4wrsNEyP3h8MkprQyexmss/DQ==
-X-Google-Smtp-Source: ACHHUZ57ihyk/UnWUTc8fZnPloB6lQh8V/nD/R7t1VZlIHIgcTPby2SjniCB4PIGKmfv8C5HcaZS3Q==
-X-Received: by 2002:a17:903:120c:b0:1ae:305f:e949 with SMTP id l12-20020a170903120c00b001ae305fe949mr9690010plh.6.1686671178914;
-        Tue, 13 Jun 2023 08:46:18 -0700 (PDT)
-Received: from localhost ([75.172.135.98])
-        by smtp.gmail.com with ESMTPSA id c2-20020a170902848200b001b3ab80381csm6439130plo.301.2023.06.13.08.46.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 08:46:18 -0700 (PDT)
-From:   Kevin Hilman <khilman@kernel.org>
-To:     Stephen Boyd <sboyd@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Alexandre Mergnat <amergnat@baylibre.com>
-Subject: Re: [PATCH] clk: mediatek: mt8365: Fix inverted topclk operations
-In-Reply-To: <ca6a5f0cd1f64368045df05ba048e31d.sboyd@kernel.org>
-References: <20230511133226.913600-1-msp@baylibre.com>
- <20230523114618.laajn2et5nbcxszv@blmsp> <7hsfbjxcqs.fsf@baylibre.com>
- <7ha5x8xzrp.fsf@baylibre.com>
- <ca6a5f0cd1f64368045df05ba048e31d.sboyd@kernel.org>
-Date:   Tue, 13 Jun 2023 08:46:17 -0700
-Message-ID: <7hv8frwek6.fsf@baylibre.com>
+        Tue, 13 Jun 2023 11:47:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC404D1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 08:47:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 720EB633E4
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 15:47:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6758CC433F0;
+        Tue, 13 Jun 2023 15:47:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686671234;
+        bh=+ohipxYNxEPiJYNmfAXVMC4O4nJHcUHSzXecjYk9z08=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N0MWlEzcnvFqQ2Y0D4KCE5QjY++EVkiMDUn70n3KVM1O5JmPHBX1UL2Hhjn46vGVs
+         XLlJFlt04EGOOsT+q2xaMD4q6anHXuY08/24Uby+QDCcJTeVQfYT07nXy8MG4SHIAV
+         xSZVJFhP3vHZye2oyByGRcGEOsyz8J8gqAwgoZk9LZnYJnTWyKq8v9j5cpDcOJ9IeL
+         KR3oaxteprBmXf7+Xc1h5LejYCVTjnQfB+GpfD1nGb/laydu9pmUAQBlMvDtxhwmkc
+         99kZlqILbdbDrkMu11kqNBqtj5UskAAbExRGaKXtSmV069ao9rhP0zL5/rQ0R1xCNQ
+         2jT/e8+EGQj6Q==
+Date:   Tue, 13 Jun 2023 16:47:10 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Ricard Wanderlof <ricardw@axis.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Waqar Hameed <waqar.hameed@axis.com>, kernel@axis.com,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v2] regmap: Add debugfs file for forcing field writes
+Message-ID: <1c1f7fae-7eee-473a-b637-af021510d7d3@sirena.org.uk>
+References: <pnd1qifa7sj.fsf@axis.com>
+ <2023061322-garter-linseed-6dfe@gregkh>
+ <5b20509c-e4d5-21f8-fc20-4d02b9abd87d@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5A4kAC+oX43H9Pox"
+Content-Disposition: inline
+In-Reply-To: <5b20509c-e4d5-21f8-fc20-4d02b9abd87d@axis.com>
+X-Cookie: Not a flying toy.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Stephen Boyd <sboyd@kernel.org> writes:
 
-> Quoting Kevin Hilman (2023-06-09 11:21:30)
->> Kevin Hilman <khilman@kernel.org> writes:
->> 
->> > Markus Schneider-Pargmann <msp@baylibre.com> writes:
->> >
->> >> just wanted to ask if I need to do something specific for it to go into
->> >> a rc? Sorry if I missed doing something for that, I haven't had to fix
->> >> something in an rc that often before.
->> >
->> > I think the  Fixes tag is enough to indicate that.
->> >
->> > Steven, is there still time for this fix be queued up for v6.4-rc?
->> 
->> Steven: gentle reminder ping.
->
-> Who's Steven :)
+--5A4kAC+oX43H9Pox
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Sorry, I confused you with Steven Spielberg.  I bet that happens to you
-a lot on the mailing list. ;)   (either that, or I can't spell.)
+On Tue, Jun 13, 2023 at 05:15:10PM +0200, Ricard Wanderlof wrote:
 
-Thanks for queuing this up Stephen. 
+> I can understand that enabling a write-always behavior results in a=20
+> different behavior on the associated bus (e.g. I2C), but in the end it=20
+> shouldn't affect the functionality of the peripheral device any more than=
+=20
+> rearranging driver code to perform regmap writes in a different order,=20
+> which might also lead to fewer or more bus writes.
 
-Kevin
+> It seems I'm clearly in the wrong here, so there must be some scenario=20
+> I've missed. It just doesn't seem that dangerous; it's a debug=20
+> functionality after all.
+
+There are devices where the act of writing to a register can have side
+effects even if the values in the register are the same (for example
+triggering some kind of recalibration based on the "new" value).  It's
+rare, and it's probably more likely to be annoying or disruptive than
+actually dangerous, but it is something drivers might be relying on.
+
+--5A4kAC+oX43H9Pox
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSIj30ACgkQJNaLcl1U
+h9DvFAf/cQwuvYnO7JDuL83AFlpdAHUglQLWdk4YV7wQuxjt+nnVZuKRDADuX2rL
+hNfdmO1mEwYBGon7bI8fY+omEisls736KXLAUs69DeEHz4tgO/zzMjYjLDsJmjev
+QkxFreFWcvRLHsCTGxE9zTAcDysxULFmqotS9WI5EPCVnuZoj6cKLfxi2UwmILWB
+QFxuKOttitcpWBz7HQhwzFCiMJFFsomtFvvK+QbmtAWEa6VIhUdDk0Jya5ilAfhk
+VD4EQFEhWIy4YVT4YdGju+F6botKpzpXATjfGRROaRNDCfBwnaw3Yz9k0jN8RJKx
+IPQ2jZii+OCd4Svwkl+vHapqsVc8qA==
+=3Q0/
+-----END PGP SIGNATURE-----
+
+--5A4kAC+oX43H9Pox--
