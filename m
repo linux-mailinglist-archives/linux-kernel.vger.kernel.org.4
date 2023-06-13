@@ -2,80 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0541972EBAA
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:11:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47BF772EBB0
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231954AbjFMTK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 15:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54544 "EHLO
+        id S239427AbjFMTLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 15:11:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232969AbjFMTK4 (ORCPT
+        with ESMTP id S233084AbjFMTLm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 15:10:56 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9048E199A
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:10:55 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f64fb05a8aso7421855e87.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:10:55 -0700 (PDT)
+        Tue, 13 Jun 2023 15:11:42 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32D21BD7;
+        Tue, 13 Jun 2023 12:11:40 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f6170b1486so7191464e87.0;
+        Tue, 13 Jun 2023 12:11:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686683454; x=1689275454;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0bsthYoTMoxKvhCTREZdV1Kid7Fcy+tC3T2OnmSeiNw=;
-        b=GD+dsWXhc4Jx4h5q1rLFVbaICNav2yheoYx+hViDBrl+DYy6sh22S+/NJAGlO862nj
-         ra1TFSwxC9DtpUR/p37d2Xr45DWefo+F5OlEq05Esb8K/f0K2uT00il8AC87oD4IfgEM
-         +mtCFS5e6/pM9m+nt7QSVyM9a5jTQKjtkeD5m38D5OLuefXBHwAxcnIrCI66C/Uyg4ii
-         K/Ql5mHMk9H2KQTmCpL4zLsaXkL1emJZfChO+GveeBYvH7Dvjzz1+3tknlbyWqB3PQIp
-         yjZCkBQoxYoA9q6L8Lf0RPuTWePxStd3mjVAlHSsqIhd3Pss00hiiNIx8A+AdzhMOJNY
-         gEpQ==
+        d=gmail.com; s=20221208; t=1686683499; x=1689275499;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fj+Ip2BCprc+rlLncGJe/EAXRZh5CYhi5myNlBBps7A=;
+        b=kcZQJpGCBI3FDyKJ4CI+DwMxrZlNPuhVMc9TmU9CHKEmXsRB2+os1Ol280Qb28bxhZ
+         3v0ZNAk2R4R/EpV/mGlJdTRw3m9B9Ln98TFwZb0p85QwItHDBrtAFAzd5T1Ld53pVW2R
+         H6v1FwWp7J32lPqHnOwGadhMVMGn4ELalJl5CIbdC+UgmypTKbwNHnpPZYq7U/7wly9F
+         OpaJqNodezo69yj1P2/kWW6fc0pehFhxwaPaZ3RRGifBsuMmZ1+AwOThyudSUge0LxH6
+         SXRhEYLrKu1Sdcs+tsTnxMi6ruYoUhi5PZMZtGB9FTq5rRQd2uTxA+Uqx9sBmIFpKVFs
+         YLcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686683454; x=1689275454;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0bsthYoTMoxKvhCTREZdV1Kid7Fcy+tC3T2OnmSeiNw=;
-        b=VMzOa6pnL6MGdqW2tuYjrYRnvrFLDe87F7+GQW6AQQtnVITGvyBNbEq4tORvRQD++H
-         eKiaTnkD/2qLbSTYgQJv1BblNugTQx5ZOtpUAO46JX5whvRIqsPWy4n7Das4rzSxDVlY
-         dgRw+PwPz5tFYebXqvfypeRLkx1GjT0C/fr2SivqFt+gELxgEXsd1Mm0di8jfQBFUSpU
-         D+qD7knZLesrLtHn01WGB/kigq7e/5MeqXsc5IsY6YJZRwLYHkHrkZoeK8+fwZ7Q1bPQ
-         l9Bhv5tTKAxMSTnrCYnyiopVX/BZoecEqE52/7V+cbeoF/cbhs8g1e3ppsBYLIf8STeD
-         zBCA==
-X-Gm-Message-State: AC+VfDw4wok2nHtcbCR2syI1/xBffX+lxpUfkSl7pCs/ern0gnAfXyza
-        JjkTgVYRhjfyVlXDLCHfcZeIPw==
-X-Google-Smtp-Source: ACHHUZ5OMU9IQGCMZ6AHR8ezt2PQkmNVD/i8Q4phlBfYM0zoCZUE85NqI4RSCWrszKbuQ+cbdZbc4A==
-X-Received: by 2002:ac2:5f87:0:b0:4f6:4d92:9ffb with SMTP id r7-20020ac25f87000000b004f64d929ffbmr6606096lfe.21.1686683453771;
-        Tue, 13 Jun 2023 12:10:53 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id b8-20020aa7cd08000000b005187af2dbe3sm588947edw.6.2023.06.13.12.10.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 12:10:53 -0700 (PDT)
-Message-ID: <208d06d1-58e3-748e-de28-075dc0cd28de@linaro.org>
-Date:   Tue, 13 Jun 2023 21:10:51 +0200
+        d=1e100.net; s=20221208; t=1686683499; x=1689275499;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fj+Ip2BCprc+rlLncGJe/EAXRZh5CYhi5myNlBBps7A=;
+        b=S/Nfjk18d4hmei9UcnmVB0dNVXFa49UnLgxpy5gv7hJQsiv5uQgF6bCPne4auUFvsI
+         OAwx2URYKFucA9D60uWDNKkYprNWnRifq7L2rA9Oa7wTm6Ys0qM8I9lMHvKN0vKmq+fl
+         nl7/updk86jCmvBGFJmWg01vZ2RiHmSm+8OmcVPGhmRJUmhus5cV3fK//iAxcynEwxg6
+         dJu55ogRi7NlRoDIaUyCiCOajioOMNBBubWhD8jsXxcekhLbtQtIeC+WHbB2eGvbz1nY
+         TKRlLJug4pA/CwaU2LcSDK6m5FPulPRMTp7CA2cDtBT+2Ajd+RR3t4WsiBxhb0nbSlSp
+         q/Pw==
+X-Gm-Message-State: AC+VfDyTS/33C6iY71yM/WcXd9v+HKphiwbe1ESsJ5PLNLKzlIlBw2ay
+        3uzNxo56+K5mP6ArZMj3wBG2CknDpocfQg==
+X-Google-Smtp-Source: ACHHUZ7QwMsaS+cIIe0SExSsgxCnjlmVpNKHyv+kwpgqfdJg4s7XE9gBU9tLEGf8iZAJ9zp4AT/15Q==
+X-Received: by 2002:a05:6512:329a:b0:4f3:89e6:23c0 with SMTP id p26-20020a056512329a00b004f389e623c0mr4270840lfe.31.1686683498639;
+        Tue, 13 Jun 2023 12:11:38 -0700 (PDT)
+Received: from mobilestation ([95.79.140.35])
+        by smtp.gmail.com with ESMTPSA id b17-20020a056512025100b004f763e3c0c6sm40283lfo.115.2023.06.13.12.11.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 12:11:38 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 22:11:36 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: Re: [PATCH v3 3/3] ata: ahci_platform: Make code agnostic to OF/ACPI
+Message-ID: <20230613191136.2yol2kwyqtge3o4u@mobilestation>
+References: <20230612161011.86871-1-andriy.shevchenko@linux.intel.com>
+ <20230612161011.86871-4-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 7/8] dt-bindings: rtc: isl12022: add #clock-cells
- property
-Content-Language: en-US
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
- <20230613130011.305589-1-linux@rasmusvillemoes.dk>
- <20230613130011.305589-8-linux@rasmusvillemoes.dk>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230613130011.305589-8-linux@rasmusvillemoes.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230612161011.86871-4-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,35 +80,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/06/2023 15:00, Rasmus Villemoes wrote:
-> The isl12022 has a dual-purpose irq/f_out pin, which can either be
-> used as an interrupt or clock output.
+On Mon, Jun 12, 2023 at 07:10:11PM +0300, Andy Shevchenko wrote:
+> With the help of a new device_is_compatible() make the driver code
+> agnostic to the OF/ACPI. This makes it neater. As a side effect
+> the header inclusions is corrected (seems mod_devicetable.h was
+> implicitly included).
 > 
-> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+C/P v2:
+I don't think the driver will get to be fully agnostic after this
+patch because for instance the ahci_platform_get_resources() method
+directly uses the OF-available functions, walks over the OF subnodes,
+touches the OF-properties, etc. So AFAICS in order to be fully OF/ACPI
+agnostic the entire libahci_platform.o driver needs to be converted
+too, but it's not trivial at all.
+
+Anyway as a start this patch looks good.
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+
+-Serge(y)
+
 > ---
->  .../devicetree/bindings/rtc/intersil,isl12022.yaml     | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+>  drivers/ata/ahci_platform.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml b/Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml
-> index d5d3a687a34d..a9ef68b5fdcd 100644
-> --- a/Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml
-> @@ -11,6 +11,13 @@ maintainers:
+> diff --git a/drivers/ata/ahci_platform.c b/drivers/ata/ahci_platform.c
+> index ab30c7138d73..81fc63f6b008 100644
+> --- a/drivers/ata/ahci_platform.c
+> +++ b/drivers/ata/ahci_platform.c
+> @@ -9,14 +9,14 @@
+>   */
 >  
->  allOf:
->    - $ref: rtc.yaml#
-> +  # If #clock-cells is present, interrupts must not be present
-> +  - if:
-> +      required:
-> +        - '#clock-cells'
-> +    then:
-> +      properties:
-> +        interrupts: false
-
-Entire allOf block should be like in example-schema, so before
-unevaluatedProperties. Please put it in correct place in your first
-patch so here it does not have to be moved.
-
-Best regards,
-Krzysztof
-
+>  #include <linux/kernel.h>
+> +#include <linux/mod_devicetable.h>
+>  #include <linux/module.h>
+>  #include <linux/pm.h>
+>  #include <linux/device.h>
+> -#include <linux/of_device.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/property.h>
+>  #include <linux/libata.h>
+>  #include <linux/ahci_platform.h>
+> -#include <linux/acpi.h>
+>  #include <linux/pci_ids.h>
+>  #include "ahci.h"
+>  
+> @@ -56,10 +56,10 @@ static int ahci_probe(struct platform_device *pdev)
+>  	if (rc)
+>  		return rc;
+>  
+> -	if (of_device_is_compatible(dev->of_node, "hisilicon,hisi-ahci"))
+> +	if (device_is_compatible(dev, "hisilicon,hisi-ahci"))
+>  		hpriv->flags |= AHCI_HFLAG_NO_FBS | AHCI_HFLAG_NO_NCQ;
+>  
+> -	port = acpi_device_get_match_data(dev);
+> +	port = device_get_match_data(dev);
+>  	if (!port)
+>  		port = &ahci_port_info;
+>  
+> -- 
+> 2.40.0.1.gaa8946217a0b
+> 
+> 
