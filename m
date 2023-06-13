@@ -2,146 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA69572E821
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 18:17:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE5872E82C
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 18:17:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243100AbjFMQQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 12:16:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
+        id S243121AbjFMQQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 12:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243099AbjFMQQb (ORCPT
+        with ESMTP id S243106AbjFMQQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 12:16:31 -0400
-Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9131BFC
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 09:16:10 -0700 (PDT)
-Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-77accdaa0e0so621658139f.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 09:16:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686672969; x=1689264969;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HjzB5ZogMCMAXiS6nJY/dEPDSCC8PcZdW4N8dElRAZk=;
-        b=EIPOaOv91QvP6GxZSCw42LDd70foHqOnhOm0oxR3duImW2JBATvN/MY1lPlMWlIbhd
-         Ux/bmuQ4QBF04FimH4FKdOvtzAUDQbqBGWIR6Z4gN8hXwCD5Ou9ulkUcK2Vd8p2CqOOi
-         0QUm+/H60HUTgGQQJDzQSrOSEXt+LAkR77UDOtfSCaIeSHSk++blVkJiwyBpeeRuRszo
-         O8gtRm2Q078/L1ayCsB+Qeg+L8VDVuJ9tFGBTTq4wBkUqXwHzICh6ngpxpHieyTJTdDw
-         MDrcHnphcZnIHo2lU+IvraJVxulKDRNm3O18lK+2V2idkflnk1GfHN0s0skJFtdGtnpl
-         TZiQ==
-X-Gm-Message-State: AC+VfDyD6R20PusyLHTO4FWj5t5hNf1Ne/bbDP4DzTfUYyM6L+6pQpWJ
-        iOVJmxKnWo0p1SaYva876QXevqVhqlgKn6qavOhEqmDAViJz
-X-Google-Smtp-Source: ACHHUZ5cbjV5+iu597wn2wOTTlbWmghFWU5S0DmcoQdpqOHMx9WLVcDC/74qPlWegpU0yNja/teZmrW117k58ehn1z7EZk2yaRyI
+        Tue, 13 Jun 2023 12:16:44 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B567E19B3;
+        Tue, 13 Jun 2023 09:16:39 -0700 (PDT)
+Received: from mercury (dyndsl-091-248-189-170.ewe-ip-backbone.de [91.248.189.170])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D32DA6606EF9;
+        Tue, 13 Jun 2023 17:16:37 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686672997;
+        bh=VE/+max2Mlkt3YpUqAw/JwuEfVkmt/4kiwUGsGiUfyM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=E+ob3Lptalee4kc7E9ETGu6hl+h1NwPpV5Ryh0bPjm3T54RNe/UKAExvDPeXAj5WG
+         kFv9UKt3t8oRaRJ7yA3xqHPFcRcF++JB9gNmfSKwz0583oppLSvVnHzNFLJZc9jZVn
+         goY9dHQxUkQoU4tNnAwhoiWn6kV7vAkrwSNH8uF8u8/7gZ9B5K5KroigQxwkshRcCy
+         C6gD/qSBtKhJnxXfiv7MY8/uKYLnLbNAV7fC4Hj9Z29zsallV4Cj3uWT77UcPqx7yq
+         eqmxdjeiHJp+vJ1+dB1IBIkDCdX3LoJl/nxi/oDZws2cXOoi0VN8qb1xKf5JalnpMz
+         CHIIn9IhrBuSQ==
+Received: by mercury (Postfix, from userid 1000)
+        id 2C4A91066FBA; Tue, 13 Jun 2023 18:16:35 +0200 (CEST)
+Date:   Tue, 13 Jun 2023 18:16:35 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Vincent Legoll <vincent.legoll@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v5 19/25] PM / devfreq: rockchip-dfi: add support for
+ RK3588
+Message-ID: <20230613161635.2rhx5eebhccg4niu@mercury.elektranox.org>
+References: <20230524083153.2046084-1-s.hauer@pengutronix.de>
+ <20230524083153.2046084-20-s.hauer@pengutronix.de>
 MIME-Version: 1.0
-X-Received: by 2002:a02:9487:0:b0:41d:76e2:9f17 with SMTP id
- x7-20020a029487000000b0041d76e29f17mr5495895jah.2.1686672969569; Tue, 13 Jun
- 2023 09:16:09 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 09:16:09 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000342a9105fe052726@google.com>
-Subject: [syzbot] [net?] WARNING in unreserve_psock
-From:   syzbot <syzbot+dd1339599f1840e4cc65@syzkaller.appspotmail.com>
-To:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pwxokmnhbdb7mc7y"
+Content-Disposition: inline
+In-Reply-To: <20230524083153.2046084-20-s.hauer@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
+--pwxokmnhbdb7mc7y
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-HEAD commit:    c29e012eae29 selftests: forwarding: Fix layer 2 miss test ..
-git tree:       net-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=14505343280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=526f919910d4a671
-dashboard link: https://syzkaller.appspot.com/bug?extid=dd1339599f1840e4cc65
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=170f2663280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12f1c5e7280000
+Hi,
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/12ab2dfeec70/disk-c29e012e.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/424354551939/vmlinux-c29e012e.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/40982e9df534/bzImage-c29e012e.xz
+On Wed, May 24, 2023 at 10:31:47AM +0200, Sascha Hauer wrote:
+> Add support for the RK3588 to the driver. The RK3588 has four DDR
+> channels with a register stride of 0x4000 between the channel
+> registers, also it has a DDRMON_CTRL register per channel.
+>=20
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> ---
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+dd1339599f1840e4cc65@syzkaller.appspotmail.com
+Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 5007 at net/kcm/kcmsock.c:533 unreserve_psock+0x2e1/0x6e0 net/kcm/kcmsock.c:533
-Modules linked in:
-CPU: 0 PID: 5007 Comm: syz-executor222 Not tainted 6.4.0-rc5-syzkaller-01194-gc29e012eae29 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-RIP: 0010:unreserve_psock+0x2e1/0x6e0 net/kcm/kcmsock.c:533
-Code: 3c f8 48 89 ef e8 df b1 ff ff 4c 89 f7 e8 e7 f5 cd 00 48 83 c4 08 5b 5d 41 5c 41 5d 41 5e 41 5f e9 c4 f2 3c f8 e8 bf f2 3c f8 <0f> 0b 4c 89 f7 e8 c5 f5 cd 00 eb dc e8 ae f2 3c f8 0f 0b e9 f0 fe
-RSP: 0018:ffffc90003a9f6a0 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff888077f60000 RCX: 0000000000000000
-RDX: ffff8880284d3b80 RSI: ffffffff89475391 RDI: ffffc90003a9f630
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000003
-R10: fffff52000753ec6 R11: 0000000000000005 R12: ffff88802cfd8000
-R13: ffff888077f60000 R14: ffff88802cfd81c0 R15: ffff888077f60598
-FS:  000055555562f300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000200006c8 CR3: 0000000025a48000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- kcm_write_msgs+0x571/0x14b0 net/kcm/kcmsock.c:699
- kcm_sendmsg+0x1fe1/0x2720 net/kcm/kcmsock.c:903
- sock_sendmsg_nosec net/socket.c:724 [inline]
- sock_sendmsg+0xde/0x190 net/socket.c:747
- ____sys_sendmsg+0x344/0x920 net/socket.c:2493
- ___sys_sendmsg+0x110/0x1b0 net/socket.c:2547
- __sys_sendmmsg+0x18f/0x460 net/socket.c:2633
- __do_sys_sendmmsg net/socket.c:2662 [inline]
- __se_sys_sendmmsg net/socket.c:2659 [inline]
- __x64_sys_sendmmsg+0x9d/0x100 net/socket.c:2659
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7efed1630b39
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff10fc2e08 EFLAGS: 00000246 ORIG_RAX: 0000000000000133
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007efed1630b39
-RDX: 0000000000000001 RSI: 00000000200006c0 RDI: 0000000000000003
-RBP: 00007efed15f4ce0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007efed15f4d70
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
+-- Sebastian
 
+>  drivers/devfreq/event/rockchip-dfi.c | 30 +++++++++++++++++++++++++++-
+>  include/soc/rockchip/rk3588_grf.h    | 18 +++++++++++++++++
+>  2 files changed, 47 insertions(+), 1 deletion(-)
+>  create mode 100644 include/soc/rockchip/rk3588_grf.h
+>=20
+> diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event=
+/rockchip-dfi.c
+> index 23d66fe737975..1410d20f3df80 100644
+> --- a/drivers/devfreq/event/rockchip-dfi.c
+> +++ b/drivers/devfreq/event/rockchip-dfi.c
+> @@ -26,8 +26,9 @@
+>  #include <soc/rockchip/rockchip_grf.h>
+>  #include <soc/rockchip/rk3399_grf.h>
+>  #include <soc/rockchip/rk3568_grf.h>
+> +#include <soc/rockchip/rk3588_grf.h>
+> =20
+> -#define DMC_MAX_CHANNELS	2
+> +#define DMC_MAX_CHANNELS	4
+> =20
+>  #define HIWORD_UPDATE(val, mask)	((val) | (mask) << 16)
+> =20
+> @@ -711,9 +712,36 @@ static int rk3568_dfi_init(struct rockchip_dfi *dfi)
+>  	return 0;
+>  };
+> =20
+> +static int rk3588_dfi_init(struct rockchip_dfi *dfi)
+> +{
+> +	struct regmap *regmap_pmu =3D dfi->regmap_pmu;
+> +	u32 reg2, reg3, reg4;
+> +
+> +	regmap_read(regmap_pmu, RK3588_PMUGRF_OS_REG2, &reg2);
+> +	regmap_read(regmap_pmu, RK3588_PMUGRF_OS_REG3, &reg3);
+> +	regmap_read(regmap_pmu, RK3588_PMUGRF_OS_REG4, &reg4);
+> +
+> +	dfi->ddr_type =3D FIELD_GET(RK3588_PMUGRF_OS_REG2_DRAMTYPE_INFO, reg2);
+> +
+> +	if (FIELD_GET(RK3588_PMUGRF_OS_REG3_SYSREG_VERSION, reg3) >=3D 0x3)
+> +		dfi->ddr_type |=3D FIELD_GET(RK3588_PMUGRF_OS_REG3_DRAMTYPE_INFO_V3, r=
+eg3) << 3;
+> +
+> +	dfi->buswidth[0] =3D FIELD_GET(RK3588_PMUGRF_OS_REG2_BW_CH0, reg2) =3D=
+=3D 0 ? 4 : 2;
+> +	dfi->buswidth[1] =3D FIELD_GET(RK3588_PMUGRF_OS_REG2_BW_CH1, reg2) =3D=
+=3D 0 ? 4 : 2;
+> +	dfi->buswidth[2] =3D FIELD_GET(RK3568_PMUGRF_OS_REG2_BW_CH0, reg4) =3D=
+=3D 0 ? 4 : 2;
+> +	dfi->buswidth[3] =3D FIELD_GET(RK3588_PMUGRF_OS_REG2_BW_CH1, reg4) =3D=
+=3D 0 ? 4 : 2;
+> +	dfi->channel_mask =3D FIELD_GET(RK3588_PMUGRF_OS_REG2_CH_INFO, reg2) |
+> +			    FIELD_GET(RK3588_PMUGRF_OS_REG2_CH_INFO, reg4) << 2;
+> +
+> +	dfi->ddrmon_stride =3D 0x4000;
+> +
+> +	return 0;
+> +};
+> +
+>  static const struct of_device_id rockchip_dfi_id_match[] =3D {
+>  	{ .compatible =3D "rockchip,rk3399-dfi", .data =3D rk3399_dfi_init },
+>  	{ .compatible =3D "rockchip,rk3568-dfi", .data =3D rk3568_dfi_init },
+> +	{ .compatible =3D "rockchip,rk3588-dfi", .data =3D rk3588_dfi_init },
+>  	{ },
+>  };
+> =20
+> diff --git a/include/soc/rockchip/rk3588_grf.h b/include/soc/rockchip/rk3=
+588_grf.h
+> new file mode 100644
+> index 0000000000000..630b35a550640
+> --- /dev/null
+> +++ b/include/soc/rockchip/rk3588_grf.h
+> @@ -0,0 +1,18 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */
+> +#ifndef __SOC_RK3588_GRF_H
+> +#define __SOC_RK3588_GRF_H
+> +
+> +#define RK3588_PMUGRF_OS_REG2		0x208
+> +#define RK3588_PMUGRF_OS_REG2_DRAMTYPE_INFO		GENMASK(15, 13)
+> +#define RK3588_PMUGRF_OS_REG2_BW_CH0			GENMASK(3, 2)
+> +#define RK3588_PMUGRF_OS_REG2_BW_CH1                    GENMASK(19, 18)
+> +#define RK3588_PMUGRF_OS_REG2_CH_INFO                   GENMASK(29, 28)
+> +
+> +#define RK3588_PMUGRF_OS_REG3		0x20c
+> +#define RK3588_PMUGRF_OS_REG3_DRAMTYPE_INFO_V3		GENMASK(13, 12)
+> +#define RK3588_PMUGRF_OS_REG3_SYSREG_VERSION		GENMASK(31, 28)
+> +
+> +#define RK3588_PMUGRF_OS_REG4           0x210
+> +#define RK3588_PMUGRF_OS_REG5           0x214
+> +
+> +#endif /* __SOC_RK3588_GRF_H */
+> --=20
+> 2.39.2
+>=20
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+--pwxokmnhbdb7mc7y
+Content-Type: application/pgp-signature; name="signature.asc"
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-----BEGIN PGP SIGNATURE-----
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSIllkACgkQ2O7X88g7
++pqqxg//Ru08eJtfd7WQl/Adyz6ldiB1m34JNsRpPS3WRnpZruiK8lAjavvXFrZf
+apqhFTb6MkQTDV88k63E/JxRoRZhmcj42i9UGPI+LVapbJ7P10vv1VDr2eWjLBZ8
+vnOqTPI1AXvAJUK9v6aDoozrdrZD9vdOcILMwo8oO249JIov3XXN/Vi70prL11SG
+4B0KCRm6JwgzXr1wYdCc6jpUu8g7K+WYgHHtpgc5h4vjQC3bQHidfJDp4RWQNB2p
+E6ig/NP0hoE8IYX+fWqRL+kSFb6u5wJn0ntNogUP+pb7SfzBIh5Gyy5YKz1dvKDp
+mx1s2IzGQNnvRS/bS3oQFzZAVcY6S3fNZp8QgZ9hqu6bG9n1cCRSaf2OzReQvelO
+zC00ReXgZTAeF/aWYBhp7GiaTOj8C3m5Mb7qGsKfZf2dSRNJPTbML5k4NmDKO/db
+w+Cqlgs0e01jl67CmvzM/DROC+Vig9RzTsylWAgJh7j5eaSFaxnqjJP1hynjeuzr
+hyX/f3VzkBwxNNJYo9kD8n9mhX2JL78Hu471bCmoxUVlb3tJEcw8HlzXcxnvvhtp
+PFQ0PDqHJ6EKKSEKu6rL1GbDMBy/W16qVgFPqK1LmqzBM9F5DqE1RNkc2hvko+eF
+kagas9l5UlztXdu6on+knrBsF5DCbrKxMpv98HdWS6Ow6Q5Jxx8=
+=qCmO
+-----END PGP SIGNATURE-----
 
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+--pwxokmnhbdb7mc7y--
