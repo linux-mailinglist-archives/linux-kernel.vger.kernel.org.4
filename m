@@ -2,163 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CA5472EDCA
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 23:18:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 419EA72EDCC
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 23:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231667AbjFMVSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 17:18:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33228 "EHLO
+        id S232290AbjFMVUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 17:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235998AbjFMVSJ (ORCPT
+        with ESMTP id S230411AbjFMVUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 17:18:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34A8131;
-        Tue, 13 Jun 2023 14:18:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B550632AF;
-        Tue, 13 Jun 2023 21:18:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FDABC433C8;
-        Tue, 13 Jun 2023 21:18:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686691087;
-        bh=SaIMM8OrJIOq7RBIH4G8hJ1Vzm0EeepKr004O6wkm5I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m+kbv0FrOgliTIq0ULeBR9/b6cyioXjaCteErIc8l8znMXVPiIIwK+d/vScRwA+RP
-         i233vbEhMz+3wKMhlzn5EL0TG/+/EU+5s3ln0Ze4knDO6h421knEqYgvOISnjGA1tj
-         ZKZWzg3eWtp42EeK9xqCOjMuarkjVrw9lkzAEzuVB3IwGL+ddmbRH1PwPKnz4fy/nS
-         kzwbfZ1xtjvHxvwNAkcYjp4aa1ei96l+ymXCkm1crYu0scc2DGlcqb6kKbcZpz3x4+
-         rqJtUMNIhX91hhQrGEp5bfXtRuaiA1o0680Vm/WpRRYHGi5pYUXnjZ6X86cVLcLlSs
-         gtM37tAgGJajw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 607BC40692; Tue, 13 Jun 2023 18:18:04 -0300 (-03)
-Date:   Tue, 13 Jun 2023 18:18:04 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     Ian Rogers <irogers@google.com>, mingo@redhat.com,
-        peterz@infradead.org, namhyung@kernel.org, jolsa@kernel.org,
-        adrian.hunter@intel.com, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ak@linux.intel.com,
-        eranian@google.com, ahmad.yasin@intel.com
-Subject: Re: [PATCH 2/8] perf evsel: Fix the annotation for hardware events
- on hybrid
-Message-ID: <ZIjdDFJHYuK7rdmD@kernel.org>
-References: <20230607162700.3234712-1-kan.liang@linux.intel.com>
- <20230607162700.3234712-3-kan.liang@linux.intel.com>
- <CAP-5=fVz1zgwdJVs1V7putUdp9wf-QKWH1Ky-heLoHWgnJu6dg@mail.gmail.com>
- <7487eff9-5769-1701-ea1b-45dd5ab67c85@linux.intel.com>
+        Tue, 13 Jun 2023 17:20:05 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DDB129
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 14:20:02 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-5187aa18410so1143243a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 14:20:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686691201; x=1689283201;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4jWvY4U8tYba+wNIbdqcQVeFZy9Nih1yvcvBjp24Mas=;
+        b=qRU/dUZpnh2AVwkbsKA44WLQyrmK9X/p/rf9IDKCQ7dB+mze0KgTsdLfaIX5G2wkNS
+         yiSAHuQ1Ge+PQVcRvhs9MbIryKEnqv9UkSRDAKl2VSOCdNncZbX1sd2EfqURYQi6VDfV
+         exuCx1pEhcm74sgwNmWlXfb2fkCl6L9jYeDLWCzlc1zR4J1MVvQrcNnuLQ8NjSqdnPS+
+         c4o/AzAvZ0WGsawlk2bSyJINvtuy4o2KjkMff5ia2un8U/ZoPwWH3cEjrPFbW0jGXL6o
+         0uax62fbwF84CRgCFWS5TdWKFckCZGQT3s+RQ/fzY4MGeXb+WPqGziPP4+e45OSg4SxI
+         Ul3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686691201; x=1689283201;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4jWvY4U8tYba+wNIbdqcQVeFZy9Nih1yvcvBjp24Mas=;
+        b=j5cE1J6/uNBbAHulEl+Oe0i725LXPDJ6/+MhwnRpR3QpsaP7EocelDsB/H2nFaY//0
+         2ISRBmR1+8z3+xUkB/iCrFZQwhyTwZEQwBMeO9Q2cwZVA23+rtG5ntHQWC/xRWTV84WU
+         yDKRQDXRMqcUqvLGp2BTkv/Yi868eMyHM0ZVfEgAfXAnjb+PE1LR2gMBYeQkRtJAZKZM
+         Fev645OMc05Qkev4zjVkRzMIHcvU1xwsy3reKItC+3wttv5R9GaCbUnVKK9bDcY9EV6v
+         tP+nYJS3siXYbDgBnir2qzl2QeoOI3POqM2lmVWnUMr9ivaIkzFUek6gcFRBHsG1z7Fi
+         4jkw==
+X-Gm-Message-State: AC+VfDx1m1Eg7TlhvMyyQi6k615LMCwAMDthgM4fPs2VOVibI45CraXV
+        kmGhQ8Zsha5gKI4URcsrDE4=
+X-Google-Smtp-Source: ACHHUZ7ttPM6Lmzp02stCVrPtQ12GVqkzGdupAadZLlbQZwynuS3qmelOCVeX/cFVP2wQFJlS/feKA==
+X-Received: by 2002:aa7:ccda:0:b0:518:7a40:b75e with SMTP id y26-20020aa7ccda000000b005187a40b75emr1817076edt.25.1686691200508;
+        Tue, 13 Jun 2023 14:20:00 -0700 (PDT)
+Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id u11-20020aa7d0cb000000b00514a97b6b80sm6922313edo.78.2023.06.13.14.19.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 14:20:00 -0700 (PDT)
+Message-ID: <aaf4580a-a368-8f70-c9c4-21b5ed4dd599@gmail.com>
+Date:   Tue, 13 Jun 2023 23:19:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7487eff9-5769-1701-ea1b-45dd5ab67c85@linux.intel.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+From:   Johan Jonker <jbx6244@gmail.com>
+Subject: [PATCH v3 1/2] mtd: rawnand: add basic sandisk manufacturer ops
+To:     miquel.raynal@bootlin.com
+Cc:     richard@nod.at, vigneshr@ti.com, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Jun 13, 2023 at 04:06:59PM -0400, Liang, Kan escreveu:
-> 
-> 
-> On 2023-06-13 3:35 p.m., Ian Rogers wrote:
-> > On Wed, Jun 7, 2023 at 9:27 AM <kan.liang@linux.intel.com> wrote:
-> >>
-> >> From: Kan Liang <kan.liang@linux.intel.com>
-> >>
-> >> The annotation for hardware events is wrong on hybrid. For example,
-> >>
-> >>  # ./perf stat -a sleep 1
-> >>
-> >>  Performance counter stats for 'system wide':
-> >>
-> >>          32,148.85 msec cpu-clock                        #   32.000 CPUs utilized
-> >>                374      context-switches                 #   11.633 /sec
-> >>                 33      cpu-migrations                   #    1.026 /sec
-> >>                295      page-faults                      #    9.176 /sec
-> >>         18,979,960      cpu_core/cycles/                 #  590.378 K/sec
-> >>        261,230,783      cpu_atom/cycles/                 #    8.126 M/sec                       (54.21%)
-> >>         17,019,732      cpu_core/instructions/           #  529.404 K/sec
-> >>         38,020,470      cpu_atom/instructions/           #    1.183 M/sec                       (63.36%)
-> >>          3,296,743      cpu_core/branches/               #  102.546 K/sec
-> >>          6,692,338      cpu_atom/branches/               #  208.167 K/sec                       (63.40%)
-> >>             96,421      cpu_core/branch-misses/          #    2.999 K/sec
-> >>          1,016,336      cpu_atom/branch-misses/          #   31.613 K/sec                       (63.38%)
-> >>
-> >> The hardware events have extended type on hybrid, but the evsel__match()
-> >> doesn't take it into account.
-> >>
-> >> Add a mask to filter the extended type on hybrid when checking the config.
-> >>
-> >> With the patch,
-> >>
-> >>  # ./perf stat -a sleep 1
-> >>
-> >>  Performance counter stats for 'system wide':
-> >>
-> >>          32,139.90 msec cpu-clock                        #   32.003 CPUs utilized
-> >>                343      context-switches                 #   10.672 /sec
-> >>                 32      cpu-migrations                   #    0.996 /sec
-> >>                 73      page-faults                      #    2.271 /sec
-> >>         13,712,841      cpu_core/cycles/                 #    0.000 GHz
-> >>        258,301,691      cpu_atom/cycles/                 #    0.008 GHz                         (54.20%)
-> >>         12,428,163      cpu_core/instructions/           #    0.91  insn per cycle
-> >>         37,786,557      cpu_atom/instructions/           #    2.76  insn per cycle              (63.35%)
-> >>          2,418,826      cpu_core/branches/               #   75.259 K/sec
-> >>          6,965,962      cpu_atom/branches/               #  216.739 K/sec                       (63.38%)
-> >>             72,150      cpu_core/branch-misses/          #    2.98% of all branches
-> >>          1,032,746      cpu_atom/branch-misses/          #   42.70% of all branches             (63.35%)
-> >>
-> >> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-> >> ---
-> >>  tools/perf/util/evsel.h       | 12 ++++++-----
-> >>  tools/perf/util/stat-shadow.c | 39 +++++++++++++++++++----------------
-> >>  2 files changed, 28 insertions(+), 23 deletions(-)
-> >>
-> >> diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
-> >> index b365b449c6ea..36a32e4ca168 100644
-> >> --- a/tools/perf/util/evsel.h
-> >> +++ b/tools/perf/util/evsel.h
-> >> @@ -350,9 +350,11 @@ u64 format_field__intval(struct tep_format_field *field, struct perf_sample *sam
-> >>
-> >>  struct tep_format_field *evsel__field(struct evsel *evsel, const char *name);
-> >>
-> >> -#define evsel__match(evsel, t, c)              \
-> >> +#define EVSEL_EVENT_MASK                       (~0ULL)
-> >> +
-> >> +#define evsel__match(evsel, t, c, m)                   \
-> >>         (evsel->core.attr.type == PERF_TYPE_##t &&      \
-> >> -        evsel->core.attr.config == PERF_COUNT_##c)
-> >> +        (evsel->core.attr.config & m) == PERF_COUNT_##c)
-> > 
-> > The EVSEL_EVENT_MASK here isn't very intention revealing, perhaps we
-> > can remove it and do something like:
-> > 
-> > static inline bool __evsel__match(const struct evsel *evsel, u32 type,
-> > u64 config)
-> > {
-> >   if ((type == PERF_TYPE_HARDWARE || type ==PERF_TYPE_HW_CACHE)  &&
-> > perf_pmus__supports_extended_type())
-> >      return (evsel->core.attr.config & PERF_HW_EVENT_MASK) == config;
-> > 
-> >   return evsel->core.attr.config == config;
-> > }
-> > #define evsel__match(evsel, t, c) __evsel__match(evsel, PERF_TYPE_##t,
-> > PERF_COUNT_##c)
-> 
-> Yes, the above code looks better. I will apply it in V2.
+Add basic Sandisk manufacturer ops support to get
+SDTNQGAMA timing data with the nand_get_sdr_timings()
+function.
 
-Please base v2 on tmp.perf-tools-next, tests are running and that branch
-will become perf-tools-next.
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+---
 
-Some patches from your series were cherry-picked there.
+Changed V3:
+  Separate serie
+  Change prefixes
 
-- Arnaldo
+Changed V2:
+  New patch
+
+---
+Limited to one chip model for now.
+In need for someone with better knowledge of the Sandisk product
+range to expand and improve. Documentation is rare to find.
+---
+ drivers/mtd/nand/raw/Makefile       |  1 +
+ drivers/mtd/nand/raw/internals.h    |  1 +
+ drivers/mtd/nand/raw/nand_ids.c     |  2 +-
+ drivers/mtd/nand/raw/nand_sandisk.c | 26 ++++++++++++++++++++++++++
+ 4 files changed, 29 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/mtd/nand/raw/nand_sandisk.c
+
+diff --git a/drivers/mtd/nand/raw/Makefile b/drivers/mtd/nand/raw/Makefile
+index 917cdfb81..d93e861d8 100644
+--- a/drivers/mtd/nand/raw/Makefile
++++ b/drivers/mtd/nand/raw/Makefile
+@@ -67,5 +67,6 @@ nand-objs += nand_esmt.o
+ nand-objs += nand_hynix.o
+ nand-objs += nand_macronix.o
+ nand-objs += nand_micron.o
++nand-objs += nand_sandisk.o
+ nand-objs += nand_samsung.o
+ nand-objs += nand_toshiba.o
+diff --git a/drivers/mtd/nand/raw/internals.h b/drivers/mtd/nand/raw/internals.h
+index 7016e0f38..e9932da18 100644
+--- a/drivers/mtd/nand/raw/internals.h
++++ b/drivers/mtd/nand/raw/internals.h
+@@ -73,6 +73,7 @@ extern const struct nand_manufacturer_ops hynix_nand_manuf_ops;
+ extern const struct nand_manufacturer_ops macronix_nand_manuf_ops;
+ extern const struct nand_manufacturer_ops micron_nand_manuf_ops;
+ extern const struct nand_manufacturer_ops samsung_nand_manuf_ops;
++extern const struct nand_manufacturer_ops sandisk_nand_manuf_ops;
+ extern const struct nand_manufacturer_ops toshiba_nand_manuf_ops;
+
+ /* MLC pairing schemes */
+diff --git a/drivers/mtd/nand/raw/nand_ids.c b/drivers/mtd/nand/raw/nand_ids.c
+index dacc5529b..1a89ed796 100644
+--- a/drivers/mtd/nand/raw/nand_ids.c
++++ b/drivers/mtd/nand/raw/nand_ids.c
+@@ -188,7 +188,7 @@ static const struct nand_manufacturer_desc nand_manufacturer_descs[] = {
+ 	{NAND_MFR_NATIONAL, "National"},
+ 	{NAND_MFR_RENESAS, "Renesas"},
+ 	{NAND_MFR_SAMSUNG, "Samsung", &samsung_nand_manuf_ops},
+-	{NAND_MFR_SANDISK, "SanDisk"},
++	{NAND_MFR_SANDISK, "SanDisk", &sandisk_nand_manuf_ops},
+ 	{NAND_MFR_STMICRO, "ST Micro"},
+ 	{NAND_MFR_TOSHIBA, "Toshiba", &toshiba_nand_manuf_ops},
+ 	{NAND_MFR_WINBOND, "Winbond"},
+diff --git a/drivers/mtd/nand/raw/nand_sandisk.c b/drivers/mtd/nand/raw/nand_sandisk.c
+new file mode 100644
+index 000000000..7c66e4187
+--- /dev/null
++++ b/drivers/mtd/nand/raw/nand_sandisk.c
+@@ -0,0 +1,26 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++
++#include "internals.h"
++
++static int
++sdtnqgama_choose_interface_config(struct nand_chip *chip,
++				  struct nand_interface_config *iface)
++{
++	onfi_fill_interface_config(chip, iface, NAND_SDR_IFACE, 0);
++
++	return nand_choose_best_sdr_timings(chip, iface, NULL);
++}
++
++static int sandisk_nand_init(struct nand_chip *chip)
++{
++	if (!strncmp("SDTNQGAMA", chip->parameters.model,
++		     sizeof("SDTNQGAMA") - 1))
++		chip->ops.choose_interface_config =
++			&sdtnqgama_choose_interface_config;
++
++	return 0;
++}
++
++const struct nand_manufacturer_ops sandisk_nand_manuf_ops = {
++	.init = sandisk_nand_init,
++};
+--
+2.30.2
+
