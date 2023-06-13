@@ -2,68 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C32A72E522
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 16:09:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E861672E548
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 16:10:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242876AbjFMOGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 10:06:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58368 "EHLO
+        id S242566AbjFMOJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 10:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242743AbjFMOFK (ORCPT
+        with ESMTP id S242676AbjFMOJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 10:05:10 -0400
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F4326AF;
-        Tue, 13 Jun 2023 07:04:37 -0700 (PDT)
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1b3dd3ca7adso13351645ad.3;
-        Tue, 13 Jun 2023 07:04:37 -0700 (PDT)
+        Tue, 13 Jun 2023 10:09:03 -0400
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694A61709;
+        Tue, 13 Jun 2023 07:08:37 -0700 (PDT)
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-25c119005bcso644424a91.0;
+        Tue, 13 Jun 2023 07:08:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686665033; x=1689257033;
+        d=1e100.net; s=20221208; t=1686665250; x=1689257250;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q/9A+Z+TgBVYDrCZ3bWX8OfhcX85V5t+oh8ZXWenYUo=;
-        b=BzKh0FjnEJTXb/bwkQl+2eDHw1mtrOfo6L9WvRpXa01jcyoxncTfdgz45Us6dNGpGY
-         NV6UyjAgmWJ9qSaOV8g93z+MTNaPBRw+S2fO4I4GnQoIagXxK1TM7tJTSqAFaLR0vCwa
-         ZW0w60yGNfvwM4yhk2PA2as9Uw3Nl++L8ipR1EIKpNsjVe18rN+5zCvXxqN+k9cThzWY
-         B/aeUWJ/+hsSdXMhae7momTg999dya5tOoudTizbSOpagsFNkPgXGEEBRfz3eoIy1r4Q
-         Vs5ruBrLKMzJwJq6e/OG+OZjVFYEVIlpG0jy2hbdKSRVt20edlgVjRIvpE3AqK1DT66V
-         mFRg==
-X-Gm-Message-State: AC+VfDzDf0j7bi5q7UHIhPkPjmfk1nI5ABrsgCbyftllrS+XiaicUNHq
-        LWOcLrzmI8ZBn6Xulbt6jko=
-X-Google-Smtp-Source: ACHHUZ4rfrN+RJYRgVtgWDG7pEqn3MZ/a3YF3vqreAxqV1jZNhQ+2PJ6IE1h+2ZcMlIuYY+zii+0PA==
-X-Received: by 2002:a17:902:f687:b0:1a6:6fe3:df8d with SMTP id l7-20020a170902f68700b001a66fe3df8dmr13407929plg.8.1686665032684;
-        Tue, 13 Jun 2023 07:03:52 -0700 (PDT)
+        bh=EvAFLkMD1GiJryurX3BgCgJEcKGxveNHWp6M99GnmxU=;
+        b=HPcNeMI8D6+8DvPkAgnsReTK9ZlMybgb3Ryl8FC66Ydwa+TnLy5+GAy8okT7hATKoW
+         AcHLYbVsXaaHPTBbTrFvyjblMlu1yMVAOl2nYy3mfjMtWM2xegXYsnkRPqybMHoozDQx
+         l6jz6w6lq5wlhWeqb+krOb8G8aOq122OFAkveDKEPZ8xnvVZZB6RyO+ceFcFYVtAuO9e
+         dnyjygZiAtiui+3ZHLCV0OOllh/e5ICerDY5W0ujKxcMNHthI6AG2jMJO278cgOvqW9o
+         5ZGjGZ7JBXqt8ZsVOJfK15XCv5Nwxmxz9lMKeYOgDCmhpd7vWBfLhka8W4PWmoIJP43W
+         Uglg==
+X-Gm-Message-State: AC+VfDx2tJdb45yknMr7a8YXpWntWvY2wOZ4Hed3XVa/4ccjgjQLucXw
+        rFTEyLuFZ5NWhdHpQ2f/8oE=
+X-Google-Smtp-Source: ACHHUZ46BDy0mDKcY0HLANL3dOq0tH4OBEkYAY5URE+QljLf4o5QTQFqfE4hLEQB26qVcW4lasD6VQ==
+X-Received: by 2002:a17:90a:5891:b0:253:340d:77d8 with SMTP id j17-20020a17090a589100b00253340d77d8mr10649596pji.33.1686665249640;
+        Tue, 13 Jun 2023 07:07:29 -0700 (PDT)
 Received: from [192.168.3.219] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id j13-20020a170902da8d00b001b06c106844sm10324024plx.151.2023.06.13.07.03.51
+        by smtp.gmail.com with ESMTPSA id l7-20020a17090a150700b0025621aa4c6bsm6051815pja.25.2023.06.13.07.07.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 07:03:52 -0700 (PDT)
-Message-ID: <488689a7-e68e-bd68-2cb2-f2f67baa176d@acm.org>
-Date:   Tue, 13 Jun 2023 07:03:51 -0700
+        Tue, 13 Jun 2023 07:07:28 -0700 (PDT)
+Message-ID: <04a4d0db-2f2d-e2fc-5458-4ddf852ffc8a@acm.org>
+Date:   Tue, 13 Jun 2023 07:07:27 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
-Subject: Re: [PATCH v5] scsi: ufs: wb: Add explicit flush_threshold sysfs
- attribute
+Subject: Re: [PATCH 2/2] ufs: don't use the fair tag sharings
 Content-Language: en-US
-To:     Lu Hongfei <luhongfei@vivo.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        Daniil Lunev <dlunev@chromium.org>,
-        Bean Huo <beanhuo@micron.com>,
-        Peter Wang <peter.wang@mediatek.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER" 
-        <linux-scsi@vger.kernel.org>
-Cc:     opensource.kernel@vivo.com
-References: <20230613022240.16595-1-luhongfei@vivo.com>
+To:     Yu Kuai <yukuai1@huaweicloud.com>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     Ed Tsai <ed.tsai@mediatek.com>, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
+        stanley.chu@mediatek.com, peter.wang@mediatek.com,
+        chun-hung.wu@mediatek.com, alice.chao@mediatek.com,
+        powen.kao@mediatek.com, naomi.chu@mediatek.com,
+        wsd_upstream@mediatek.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230509065230.32552-1-ed.tsai@mediatek.com>
+ <20230509065230.32552-3-ed.tsai@mediatek.com>
+ <ZF0K7A6G2cYBjSgn@infradead.org>
+ <aa9af9ae-62a4-6469-244c-b5d9106bb044@acm.org>
+ <ZF5G5ztMng8Xbd1W@infradead.org>
+ <2740ee82-e35f-1cbf-f5d0-373f94eb14a5@acm.org>
+ <de3f41a0-b13d-d4f6-765a-19b857bce53e@huaweicloud.com>
+ <86065501-ab2e-09b4-71cd-c0b18ede00ed@acm.org>
+ <a26e28a6-91e0-e803-749e-2ce957711c64@huaweicloud.com>
+ <097caed2-10b3-7cd1-7c06-90f983e5c720@acm.org>
+ <f9ccab59-91a1-69d5-6d20-2c6ea0e24b5a@huaweicloud.com>
+ <66906bd5-d73f-af96-bf38-c6aee576fa73@acm.org>
+ <bef8340e-f051-db63-5c2f-a2bc94c678ac@huaweicloud.com>
 From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230613022240.16595-1-luhongfei@vivo.com>
+In-Reply-To: <bef8340e-f051-db63-5c2f-a2bc94c678ac@huaweicloud.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
@@ -75,13 +82,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/12/23 19:22, Lu Hongfei wrote:
-> +	/* The range of values for wb_flush_threshold is (0,10] */
-> +	if (wb_flush_threshold > UFS_WB_BUF_REMAIN_PERCENT(100) ||
-> +		wb_flush_threshold == 0) {
+On 5/18/23 00:55, Yu Kuai wrote:
+> 在 2023/05/18 10:23, Bart Van Assche 写道:
+>> On 5/17/23 18:49, Yu Kuai wrote:
+>>> Currently, fair share from hctx_may_queue() requires two
+>>> atomic_read(active_queues and active_requests), I think this smoothing
+>>> method can be placed into get_tag fail path, for example, the more times
+>>> a disk failed to get tag in a period of time, the more tag this disk can
+>>> get, and all the information can be updated here(perhaps directly
+>>> record how many tags a disk can get, then hctx_may_queue() still only
+>>> require 2 atomic_read()).
+>>
+>> That sounds interesting to me. Do you perhaps plan to implement this 
+>> approach and to post it as a patch?
+> 
+> Of course, I'll try to send a RFC patch.
 
-For future patches, please align split lines as is done elsewhere in the 
-kernel. This means aligning "wb_flush_threshold == 0" with 
-"wb_flush_threshold > ...". Anyway:
+Hi Kuai,
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Has this RFC patch already been posted or did I perhaps miss it?
+
+Thanks,
+
+Bart.
+
