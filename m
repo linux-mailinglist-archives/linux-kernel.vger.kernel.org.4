@@ -2,127 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B145972E59E
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 16:23:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8715F72E59B
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 16:23:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242582AbjFMOWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 10:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44230 "EHLO
+        id S242678AbjFMOXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 10:23:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235921AbjFMOWm (ORCPT
+        with ESMTP id S242738AbjFMOW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 10:22:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06194EC;
-        Tue, 13 Jun 2023 07:22:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BFFA61846;
-        Tue, 13 Jun 2023 14:22:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4A36C433F0;
-        Tue, 13 Jun 2023 14:22:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686666160;
-        bh=HhYD3JuRz7if0a7jlwfSjRUiZkCdi6uHJj+m0ZT47eY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oYkGKbz3KDGxIF/jJ+H42/VW/4dh3/H1Pr7VP7xpcU/Op/lhjsE3P0FQaWooW9w4Y
-         iulaEOir/bzBNzwWsRIo4Z+e9qCdni7QS2JuVmKxPgRnQmooNJCmgTqNKTvlTxHRzG
-         qDvimneaSLuBcObl6xmle2Z1yz32Joy/v+GN6z4rBxKbwmW3Q9VlPO7tZ9/7Z7VYVc
-         j68hoGMLZ5gyF699eKVghzXc4BWeAGIJlpMgqaPDE98PL/tjltE2uKmclCD5FDT9Er
-         Rc3X297eSltupFIUVzVXeiRXkHQq/RvNz9Qz9JqnhJBD2x7Sj+SHuN1+m1H5ZAd/Vq
-         37qe9M6MUPVhQ==
-Date:   Tue, 13 Jun 2023 15:22:35 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Okan Sahin <okan.sahin@analog.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] regulator: max77857: Add ADI MAX77857/MAX77831
- Regulator Support
-Message-ID: <6e75f1b5-db99-43c8-aae9-132269b2eb89@sirena.org.uk>
-References: <20230613080552.4492-1-okan.sahin@analog.com>
- <20230613080552.4492-3-okan.sahin@analog.com>
+        Tue, 13 Jun 2023 10:22:57 -0400
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE7819A
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 07:22:55 -0700 (PDT)
+Received: by mail-ua1-x936.google.com with SMTP id a1e0cc1a2514c-783f17f0a00so435743241.2
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 07:22:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1686666173; x=1689258173;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1gWIF6WfXGGLV7wV95q+Bs7ONpfkMQ74yIFAAdWgckU=;
+        b=a/BBVjmaMQ4W6Uh57UzU2yX7l6o8M8VmaUrobFylrp2Lj1e8Zk4i1JsD2rhJGFOGj7
+         LxDaeAiMscWxru8mlDYV+lxikYRK9FwFcFn8f+TTir+jo+Qie32VNdKSUx8pDD+ZKUb8
+         dN9/VheT2T5upyliDSFeUcOABFpv242h0NutbQBIyyfuyYPSvqSpQgxvPcMU6lWLbkL9
+         gBJ9VH0NT1H8dBe5UP+rm7EakoA5vVCJ1Xf5GshvGP3rnuzEPcWtoKxMkwvpNOtmvYMR
+         oosmUI7srWEIx77rEfNqbHTwIl6ltzIjWmI1kK4Yj7PZAgT01zkcszpmUt76ZeuVqzr7
+         qY0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686666173; x=1689258173;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1gWIF6WfXGGLV7wV95q+Bs7ONpfkMQ74yIFAAdWgckU=;
+        b=P34lm4cPChgjbiiKzn4UW47GEdvCdk88PEAEKATIpfQgqIRd3Zh9G0yNaetdZ5WLlV
+         /0MHc6eT3tVjv2TjRRoUy9I3NOqhPYMvSRUwcwiBATQJcWNCV8gZ/noA0i+b4EcSfmHb
+         wfbWkfGpL1HXtksYWDXDyADvmi4xYxHXQ+Bsi0NCZMMUfBEJWsS1lbDxCt+PXMOje+x6
+         GdWL2UmsfcncJ4bw44ftJKWmI1bFV3YOmPpnghz67olnVPMVFHX5bWR8UCHxxd6ATtaM
+         O01/8tbsHeCYpc7kboBN8bRKrrYOW03pmchOl/gUXrEQeExKqiSdJhd/FcxndGdni5Jv
+         QlRQ==
+X-Gm-Message-State: AC+VfDy3kXllOvr0431lpy+Vqdrg9JQ81TbKkWAujeJ6y+1t3QvRXUvZ
+        Sw5H8jYvUP9jIdXhh8m78m3vgMbXNRdBoP1d4UMXJw==
+X-Google-Smtp-Source: ACHHUZ5vP+V+IYfx+6K3RQdpyB8TtZRAxKeKOoDh1dO34vqqR5jmKqETRZ2YfFdpKic4CFmIUYOgjxbDQldWhsZkLD8=
+X-Received: by 2002:a05:6102:408:b0:430:e0:ac2e with SMTP id
+ d8-20020a056102040800b0043000e0ac2emr5618052vsq.15.1686666172953; Tue, 13 Jun
+ 2023 07:22:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="O1QQbi+LWYO5tBXP"
-Content-Disposition: inline
-In-Reply-To: <20230613080552.4492-3-okan.sahin@analog.com>
-X-Cookie: Not a flying toy.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230606031159.38246-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <20230606031159.38246-1-jiasheng@iscas.ac.cn>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 13 Jun 2023 16:22:42 +0200
+Message-ID: <CAMRc=McoDu4jsy4pWnu=T1+q_FfnYa8bfqWb39ZZXM_YmaGpXw@mail.gmail.com>
+Subject: Re: [PATCH v3] gpio: sifive: Add missing check for platform_get_irq
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     andy.shevchenko@gmail.com, oe-kbuild-all@lists.linux.dev,
+        linus.walleij@linaro.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, linux-gpio@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 6, 2023 at 5:12=E2=80=AFAM Jiasheng Jiang <jiasheng@iscas.ac.cn=
+> wrote:
+>
+> Add the missing check for platform_get_irq() and return error code
+> if it fails.
+> The returned error code will be dealed with in
+> builtin_platform_driver(sifive_gpio_driver) and the driver will not
+> be registered.
+>
+> Fixes: f52d6d8b43e5 ("gpio: sifive: To get gpio irq offset from device tr=
+ee data")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+> Changelog:
+>
+> v2 -> v3:
+>
+> 1. Check before assigning values.
+>
+> v1 -> v2:
+>
+> 1. Return "girq->parents[0]" instead of "-ENODEV".
+> ---
+>  drivers/gpio/gpio-sifive.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpio/gpio-sifive.c b/drivers/gpio/gpio-sifive.c
+> index 98939cd4a71e..745e5f67254e 100644
+> --- a/drivers/gpio/gpio-sifive.c
+> +++ b/drivers/gpio/gpio-sifive.c
+> @@ -221,8 +221,12 @@ static int sifive_gpio_probe(struct platform_device =
+*pdev)
+>                 return -ENODEV;
+>         }
+>
+> -       for (i =3D 0; i < ngpio; i++)
+> -               chip->irq_number[i] =3D platform_get_irq(pdev, i);
+> +       for (i =3D 0; i < ngpio; i++) {
+> +               ret =3D platform_get_irq(pdev, i);
+> +               if (ret < 0)
+> +                       return ret;
+> +               chip->irq_number[i] =3D ret;
+> +       }
+>
+>         ret =3D bgpio_init(&chip->gc, dev, 4,
+>                          chip->base + SIFIVE_GPIO_INPUT_VAL,
+> --
+> 2.25.1
+>
 
---O1QQbi+LWYO5tBXP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied, thanks!
 
-On Tue, Jun 13, 2023 at 11:05:50AM +0300, Okan Sahin wrote:
-
-> +struct regmap_config max77857_regmap_config = {
-> +	.reg_bits = 8,
-> +	.val_bits = 8,
-> +	.cache_type = REGCACHE_RBTREE,
-
-Please use the more modern REGCACHE_MAPLE for new devices.
-
-> +static irqreturn_t max77857_irq_handler(int irq, void *data)
-> +{
-> +	struct regulator_dev *rdev = data;
-> +	enum max77857_id id = (enum max77857_id)rdev_get_drvdata(rdev);
-> +	struct device *dev = &rdev->dev;
-> +	unsigned long flags = 0;
-> +	unsigned int status;
-> +	int ret;
-> +
-> +	switch (id) {
-> +	case ID_MAX77831:
-> +	case ID_MAX77857:
-> +		ret = regmap_read(rdev->regmap, MAX77857_REG_INT_SRC, &status);
-> +		break;
-> +	default:
-> +		return IRQ_HANDLED;
-> +	}
-
-We just completely ignore the interrupt if it's not one of the supported
-devices, that seems wrong - it looks likee those devices don't have the
-support for interrupts at all and so should never get here?  If the
-interrupt does go off then this is likely to lead to problems.  I think
-it'd be better if the driver just didn't request the interrupt for
-devices that it doesn't support interrupts for, if there's no interrupt
-support in the hardware for those it could also complain if one is
-specified though that's optional.
-
-> +	if (ret) {
-> +		dev_err(dev, "cannot read status\n");
-> +		return IRQ_HANDLED;
-> +	}
-
-IRQ_NONE.
-
---O1QQbi+LWYO5tBXP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSIe6oACgkQJNaLcl1U
-h9CuNQf+KFgyY6janu6dhTtJn4QR9TZ65kzcshdAxrYQ37D1QUPNq8H2MUfnMoMW
-K19+vVoPm9DfKAFyasTEk4vhzSWqu+uWiIXwC1NWUq29JyPKq0NIzaxPIgLCgDi/
-ZDGBCwYg9yZE7Y3Gu6vQoo6Xn9u5mCYX4HWKcFNGFPHNuASC213kPMPeLx/S8UkS
-OjzW0s9LPYrm/Dq/ZGcL6lkNBixD0gqjarU2HsA14hqWhnIR9+NfbboScNRv1o2a
-6AHKQVY29PCJ2ndCPqWQeZBOCZXZatL46OlbhnrUER0aGtsw+oJzpI+jXBBIThZw
-XGzBa1k2sxE4zeEC7KA4qVNpnHKhcg==
-=OgFa
------END PGP SIGNATURE-----
-
---O1QQbi+LWYO5tBXP--
+Bart
