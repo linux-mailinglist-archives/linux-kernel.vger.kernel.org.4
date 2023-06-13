@@ -2,306 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 241D072D694
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 02:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 088DA72D696
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 02:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238978AbjFMApE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 20:45:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41562 "EHLO
+        id S238637AbjFMApd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 20:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236013AbjFMAo6 (ORCPT
+        with ESMTP id S238391AbjFMAp2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 20:44:58 -0400
-Received: from cheetah.elm.relay.mailchannels.net (cheetah.elm.relay.mailchannels.net [23.83.212.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B6B10CB
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 17:44:56 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 2B45E4C021B
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:44:56 +0000 (UTC)
-Received: from pdx1-sub0-mail-a313.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id B01344C005E
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:44:55 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1686617095; a=rsa-sha256;
-        cv=none;
-        b=B/yY37srSnfwCV5zMgXRdbcZ75MiXzL2568gMsWCqEsAtnn2Dswo0RE080dO4y6zc/Lpyu
-        hWCQKp39VFKDFT5A/UstrFMi00pMKJoXPyv4Sp7ZQPRNoM6Kryk8OaegVqea0MyzSraKce
-        ev+HC509uMCXEuvXjzmL/2kFyxJdy0Eyup8NOcp/VpZZzdb4AxJlJ0tozGeChnVFlHMi0e
-        bP9UKPtavmEy2JnjnbBb5u5b7I106+ZGzQbQpfZPpa27N9r7WZXZVEE5DygqGZDo+iH4b/
-        iyuWfAJYC9jH21UUAt2ncMxZR2iQoHRXX2qRhZoTmcUdONvpL8MRlL/tZKUxvQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1686617095;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=mfxFRa1MMmozhkb+u47FSIspVf5nNBhGEY+ele75JX8=;
-        b=0vU9DvxJI+LfGdoMa0ihTdB+E6caMHv07pxpC5cETUMHDs7VRkouqvOpXlNgVfPaZV5NGB
-        usCVmPsZAciVckgYv6EjCafgIqzHAQftw1ylGXqwGjpwwham5QJz15mXY0AoyQpUCwe26o
-        4jQ/45ZnvbkffHOOuHl9VviMNgQzhu5EQsCa/C+WRprZZsD9mB3nNeW7MilT27bfGaiRmW
-        lSh3GXCKTYzbzrTV6MhvKG7XqoXfxkrCgWVLzdBFc+aopTu6ZvyP0tsubkLaYxQz8MsU1g
-        K7qJqzmzQMeRvk3znB9Co+zyYRdIxJEhC+4tFpBfTRmpVKYuQf9qC+xLSxiPew==
-ARC-Authentication-Results: i=1;
-        rspamd-6c69b8658d-swvgs;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MC-Relay: Good
-X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MailChannels-Auth-Id: dreamhost
-X-Blushing-Shoe: 07a8693d27ab06c7_1686617095987_1275860827
-X-MC-Loop-Signature: 1686617095987:2193922317
-X-MC-Ingress-Time: 1686617095987
-Received: from pdx1-sub0-mail-a313.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.120.163.21 (trex/6.8.1);
-        Tue, 13 Jun 2023 00:44:55 +0000
-Received: from kmjvbox (c-73-93-64-36.hsd1.ca.comcast.net [73.93.64.36])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kjlx@templeofstupid.com)
-        by pdx1-sub0-mail-a313.dreamhost.com (Postfix) with ESMTPSA id 4Qg8w70NSKzmF
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 17:44:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
-        s=dreamhost; t=1686617095;
-        bh=mfxFRa1MMmozhkb+u47FSIspVf5nNBhGEY+ele75JX8=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=MNYIYmDH+Qlp5hpo9YZptT3I4i/1OtfbxO0xMwEE56X5y9EwvKVQ7+4t6FyrRHHHm
-         GHNVpY1gPAWO4zhHt1I4bBJioD/0hvpiri34aasS/goM+h/TlI1zHQsV0dG8c4yy/Y
-         HkfY3Sdt+uCJUASeQ7g+MG0LvUPMzshonGABvgFo=
-Received: from johansen (uid 1000)
-        (envelope-from kjlx@templeofstupid.com)
-        id e027c
-        by kmjvbox (DragonFly Mail Agent v0.12);
-        Mon, 12 Jun 2023 17:44:54 -0700
-Date:   Mon, 12 Jun 2023 17:44:54 -0700
-From:   Krister Johansen <kjlx@templeofstupid.com>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v5 2/2] selftests/bpf: add a test for subprogram extables
-Message-ID: <4ebf95ec857cd785b81db69f3e408c039ad8408b.1686616663.git.kjlx@templeofstupid.com>
-References: <cover.1686616663.git.kjlx@templeofstupid.com>
+        Mon, 12 Jun 2023 20:45:28 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AB510C2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 17:45:25 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f7359a3b78so39795e9.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 17:45:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686617124; x=1689209124;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rGVOka0XFxlXOCQKGD+4It0cmDTbvq3TfuKoJfEoe9I=;
+        b=zTRRzFdz1weZOI85jGqCi9IspeMLlf73fs2ZRuKnMjxsff0t/q1JbowHXaJ4FJlai/
+         laHfjKcwbIJ3Qss1M2JkT4vEyLSQca/6hIAiDrweBZR8yJs4NkFJJOzx+ztm7aPNnWgh
+         DhMwKLez/7yDTnIGeCKRfNzw1zBRc6AFBuFOrk6WBqZFimbeKRz9eCn998U9ONn1KGET
+         +HMywXTbb7N5Hw+7sDKJzTjGD88MT6ITRLPNpmonGTKYXVUjXaxrpG0hPG45XUrqPtof
+         thuKbVeZtNfcz9Qh/e8ub4Sin70SddbQQzyArMdemcTbIGQoK4zSWbG4votngyTb/JRA
+         IFow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686617124; x=1689209124;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rGVOka0XFxlXOCQKGD+4It0cmDTbvq3TfuKoJfEoe9I=;
+        b=Ei0s7O1Gv5zEMCNVtROIsmYTUOJEeuH0rPnN5XONuMtqXMqUMoTlGak1B6CekPn6cE
+         fUcCuokUXZjYgpANTJaSo/xKO/CA1BGtwt/7XzSUI5sqARv6lKJHqcM/5FcIoAOKHzR7
+         wE12st1NBNJTKu2OX08ZPbT9cG/yv/1IFb7bvcXp7kcu/zeFNFwfVUth9eRB5nG09fH1
+         rcN/y3Ifl8RqNaLneU+qJKkuqlmRmo1NeofvmedP8HBFxkypDzTjpUnVUhovVAe/lwfh
+         0v3GN4W1PcfDDMDhVELmmw1buGxQOEcrOAh0H42yyXWFTvMPqVzLpB+KThjziJOkLWQL
+         92Rw==
+X-Gm-Message-State: AC+VfDx+CEq2ps918UtCTAcneG2ZMj1XYqfkIOuReYtgXFRFyy47y7qk
+        WYL3Zg4KMsWGiN4e/iiNEyKqyDE2PXnWATklyirRCB8a7ZdjdVjGx1o=
+X-Google-Smtp-Source: ACHHUZ5WTyrKxziSHoWNuXKIdm51hYH6mMm4Obd5cB1SpLcdXb9/uE7Zx7lyq0jR2Hq7bKjB8sLuousPm56XJp+7hls=
+X-Received: by 2002:a05:600c:4f94:b0:3f7:e59f:2183 with SMTP id
+ n20-20020a05600c4f9400b003f7e59f2183mr7255wmq.5.1686617123959; Mon, 12 Jun
+ 2023 17:45:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1686616663.git.kjlx@templeofstupid.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+References: <CABVgOS=HpS9g+YwLth2xpY9i2u3DxLzbbPoqnJshhAhU2fB_pA@mail.gmail.com>
+ <20230613000130.85038-1-sj@kernel.org>
+In-Reply-To: <20230613000130.85038-1-sj@kernel.org>
+From:   David Gow <davidgow@google.com>
+Date:   Tue, 13 Jun 2023 08:45:11 +0800
+Message-ID: <CABVgOSkLDSneCiTqz7fD4sCJLJ_cnZkHUBSL2B67-HGc_Y6kmw@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: Add source tree entry for kunit
+To:     SeongJae Park <sj@kernel.org>
+Cc:     brendanhiggins@google.com, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000091b28805fdf82629"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In certain situations a program with subprograms may have a NULL
-extable entry.  This should not happen, and when it does, it turns a
-single trap into multiple.  Add a test case for further debugging and to
-prevent regressions.
+--00000000000091b28805fdf82629
+Content-Type: text/plain; charset="UTF-8"
 
-The test-case contains three essentially identical versions of the same
-test because just one program may not be sufficient to trigger the oops.
-This is due to the fact that the items are stored in a binary tree and
-have identical values so it's possible to sometimes find the ksym with
-the extable.  With 3 copies, this has been reliable on this author's
-test systems.
+On Tue, 13 Jun 2023 at 08:01, SeongJae Park <sj@kernel.org> wrote:
+>
+> On Tue, 13 Jun 2023 07:54:01 +0800 David Gow <davidgow@google.com> wrote:
+>
+> > [-- Attachment #1: Type: text/plain, Size: 1120 bytes --]
+> >
+> > On Sun, 11 Jun 2023 at 02:05, SeongJae Park <sj@kernel.org> wrote:
+> > >
+> > > Patches for kunit are managed in linux-kselftest tree before merged into
+> > > the mainline, but the MAINTAINERS section for kunit doesn't have the
+> > > entry for the tree.  Add it.
+> > >
+> > > Signed-off-by: SeongJae Park <sj@kernel.org>
+> > > ---
+> >
+> > Thanks very much.
+>
+> My pleasure! :)
+>
+> >
+> > Given KUnit work happens in the kunit and kunit-fixes branches here,
+> > should we note those as well?
+>
+> That makes sense, I will add those in the commit message with the next version
+> of this.
+>
+> >
+> > -- David
+> >
+> >
+> > >  MAINTAINERS | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > index ce5f343c1443..8a217438956b 100644
+> > > --- a/MAINTAINERS
+> > > +++ b/MAINTAINERS
+> > > @@ -11327,6 +11327,7 @@ L:      linux-kselftest@vger.kernel.org
+> > >  L:     kunit-dev@googlegroups.com
+> > >  S:     Maintained
+> > >  W:     https://google.github.io/kunit-docs/third_party/kernel/docs/
+> > > +T:     git git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git
+> >
+> > Should we also mention the branch here:
+> > git git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git
+> > kunit
+>
+> I think so.  Would you prefer having only one 'T' line with 'kunit' branch?
+> Or, both branches like below?  I have no strong opinion.
+>
+> T:     git git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git kunit
+> T:     git git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git kunit-fixes
+>
+>
 
-When triggered out of this test case, the oops looks like this:
+Let's go with both, assuming no-one else objects.
 
-   BUG: kernel NULL pointer dereference, address: 000000000000000c
-   #PF: supervisor read access in kernel mode
-   #PF: error_code(0x0000) - not-present page
-   PGD 0 P4D 0
-   Oops: 0000 [#1] PREEMPT SMP NOPTI
-   CPU: 0 PID: 1132 Comm: test_progs Tainted: G           OE      6.4.0-rc3+ #2
-   RIP: 0010:cmp_ex_search+0xb/0x30
-   Code: cc cc cc cc e8 36 cb 03 00 66 0f 1f 44 00 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 55 48 89 e5 48 8b 07 <48> 63 0e 48 01 f1 31 d2 48 39 c8 19 d2 48 39 c8 b8 01 00 00 00 0f
-   RSP: 0018:ffffb30c4291f998 EFLAGS: 00010006
-   RAX: ffffffffc00b49da RBX: 0000000000000002 RCX: 000000000000000c
-   RDX: 0000000000000002 RSI: 000000000000000c RDI: ffffb30c4291f9e8
-   RBP: ffffb30c4291f998 R08: ffffffffab1a42d0 R09: 0000000000000001
-   R10: 0000000000000000 R11: ffffffffab1a42d0 R12: ffffb30c4291f9e8
-   R13: 000000000000000c R14: 000000000000000c R15: 0000000000000000
-   FS:  00007fb5d9e044c0(0000) GS:ffff92e95ee00000(0000) knlGS:0000000000000000
-   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-   CR2: 000000000000000c CR3: 000000010c3a2005 CR4: 00000000007706f0
-   DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-   DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-   PKRU: 55555554
-   Call Trace:
-    <TASK>
-    bsearch+0x41/0x90
-    ? __pfx_cmp_ex_search+0x10/0x10
-    ? bpf_prog_45a7907e7114d0ff_handle_fexit_ret_subprogs3+0x2a/0x6c
-    search_extable+0x3b/0x60
-    ? bpf_prog_45a7907e7114d0ff_handle_fexit_ret_subprogs3+0x2a/0x6c
-    search_bpf_extables+0x10d/0x190
-    ? bpf_prog_45a7907e7114d0ff_handle_fexit_ret_subprogs3+0x2a/0x6c
-    search_exception_tables+0x5d/0x70
-    fixup_exception+0x3f/0x5b0
-    ? look_up_lock_class+0x61/0x110
-    ? __lock_acquire+0x6b8/0x3560
-    ? __lock_acquire+0x6b8/0x3560
-    ? __lock_acquire+0x6b8/0x3560
-    kernelmode_fixup_or_oops+0x46/0x110
-    __bad_area_nosemaphore+0x68/0x2b0
-    ? __lock_acquire+0x6b8/0x3560
-    bad_area_nosemaphore+0x16/0x20
-    do_kern_addr_fault+0x81/0xa0
-    exc_page_fault+0xd6/0x210
-    asm_exc_page_fault+0x2b/0x30
-   RIP: 0010:bpf_prog_45a7907e7114d0ff_handle_fexit_ret_subprogs3+0x2a/0x6c
-   Code: f3 0f 1e fa 0f 1f 44 00 00 66 90 55 48 89 e5 f3 0f 1e fa 48 8b 7f 08 49 bb 00 00 00 00 00 80 00 00 4c 39 df 73 04 31 f6 eb 04 <48> 8b 77 00 49 bb 00 00 00 00 00 80 00 00 48 81 c7 7c 00 00 00 4c
-   RSP: 0018:ffffb30c4291fcb8 EFLAGS: 00010282
-   RAX: 0000000000000001 RBX: 0000000000000001 RCX: 0000000000000000
-   RDX: 00000000cddf1af1 RSI: 000000005315a00d RDI: ffffffffffffffea
-   RBP: ffffb30c4291fcb8 R08: ffff92e644bf38a8 R09: 0000000000000000
-   R10: 0000000000000000 R11: 0000800000000000 R12: ffff92e663652690
-   R13: 00000000000001c8 R14: 00000000000001c8 R15: 0000000000000003
-    bpf_trampoline_251255721842_2+0x63/0x1000
-    bpf_testmod_return_ptr+0x9/0xb0 [bpf_testmod]
-    ? bpf_testmod_test_read+0x43/0x2d0 [bpf_testmod]
-    sysfs_kf_bin_read+0x60/0x90
-    kernfs_fop_read_iter+0x143/0x250
-    vfs_read+0x240/0x2a0
-    ksys_read+0x70/0xe0
-    __x64_sys_read+0x1f/0x30
-    do_syscall_64+0x68/0xa0
-    ? syscall_exit_to_user_mode+0x77/0x1f0
-    ? do_syscall_64+0x77/0xa0
-    ? irqentry_exit+0x35/0xa0
-    ? sysvec_apic_timer_interrupt+0x4d/0x90
-    entry_SYSCALL_64_after_hwframe+0x72/0xdc
-   RIP: 0033:0x7fb5da00a392
-   Code: ac 00 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb be 0f 1f 80 00 00 00 00 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 0f 05 <48> 3d 00 f0 ff ff 77 56 c3 0f 1f 44 00 00 48 83 ec 28 48 89 54 24
-   RSP: 002b:00007ffc5b3cab68 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-   RAX: ffffffffffffffda RBX: 000055bee7b8b100 RCX: 00007fb5da00a392
-   RDX: 00000000000001c8 RSI: 0000000000000000 RDI: 0000000000000009
-   RBP: 00007ffc5b3caba0 R08: 0000000000000000 R09: 0000000000000037
-   R10: 000055bee7b8c2a7 R11: 0000000000000246 R12: 000055bee78f1f60
-   R13: 00007ffc5b3cae90 R14: 0000000000000000 R15: 0000000000000000
-    </TASK>
-   Modules linked in: bpf_testmod(OE) nls_iso8859_1 dm_multipath scsi_dh_rdac scsi_dh_emc scsi_dh_alua intel_rapl_msr intel_rapl_common intel_uncore_frequency_common ppdev nfit crct10dif_pclmul crc32_pclmul psmouse ghash_clmulni_intel sha512_ssse3 aesni_intel parport_pc crypto_simd cryptd input_leds parport rapl ena i2c_piix4 mac_hid serio_raw ramoops reed_solomon pstore_blk drm pstore_zone efi_pstore autofs4 [last unloaded: bpf_testmod(OE)]
-   CR2: 000000000000000c
+Cheers,
+-- David
 
-Though there may be some variation, depending on which suprogram
-triggers the bug.
+--00000000000091b28805fdf82629
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
-Acked-by: Yonghong Song <yhs@fb.com>
----
- .../bpf/prog_tests/subprogs_extable.c         | 29 +++++++++++
- .../bpf/progs/test_subprogs_extable.c         | 51 +++++++++++++++++++
- 2 files changed, 80 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c b/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-new file mode 100644
-index 000000000000..3afd9f775f68
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-@@ -0,0 +1,29 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+#include "test_subprogs_extable.skel.h"
-+
-+void test_subprogs_extable(void)
-+{
-+	const int read_sz = 456;
-+	struct test_subprogs_extable *skel;
-+	int err;
-+
-+	skel = test_subprogs_extable__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
-+		return;
-+
-+	err = test_subprogs_extable__attach(skel);
-+	if (!ASSERT_OK(err, "skel_attach"))
-+		goto cleanup;
-+
-+	/* trigger tracepoint */
-+	ASSERT_OK(trigger_module_test_read(read_sz), "trigger_read");
-+
-+	ASSERT_NEQ(skel->bss->triggered, 0, "verify at least one program ran");
-+
-+	test_subprogs_extable__detach(skel);
-+
-+cleanup:
-+	test_subprogs_extable__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_subprogs_extable.c b/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-new file mode 100644
-index 000000000000..e2a21fbd4e44
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-@@ -0,0 +1,51 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 8);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} test_array SEC(".maps");
-+
-+unsigned int triggered;
-+
-+static __u64 test_cb(struct bpf_map *map, __u32 *key, __u64 *val, void *data)
-+{
-+	return 1;
-+}
-+
-+SEC("fexit/bpf_testmod_return_ptr")
-+int BPF_PROG(handle_fexit_ret_subprogs, int arg, struct file *ret)
-+{
-+	*(volatile long *)ret;
-+	*(volatile int *)&ret->f_mode;
-+	bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
-+	triggered++;
-+	return 0;
-+}
-+
-+SEC("fexit/bpf_testmod_return_ptr")
-+int BPF_PROG(handle_fexit_ret_subprogs2, int arg, struct file *ret)
-+{
-+	*(volatile long *)ret;
-+	*(volatile int *)&ret->f_mode;
-+	bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
-+	triggered++;
-+	return 0;
-+}
-+
-+SEC("fexit/bpf_testmod_return_ptr")
-+int BPF_PROG(handle_fexit_ret_subprogs3, int arg, struct file *ret)
-+{
-+	*(volatile long *)ret;
-+	*(volatile int *)&ret->f_mode;
-+	bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
-+	triggered++;
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.25.1
-
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+9IGQSBx2i4m+hGXJpET+MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQCRI3Z4cAidgFcv
+Usqdz765x6KMZSfg/WtFrYg8ewsP2NpCxVM2+EhPyyEQ0k0DhtzdtGoI/Ug+jdFDyCKB9P2+EPLh
+iMjMnFILp7Zs4r18ECHlvZuDZfH9m0BchXIxu5jLIuQyKUWrCRDZZEDNr510ZhhVfYSFPA8ms1nk
+jyzYFOHYQyv5IfML/3IBFKlON5OZa+V8EZYULYcNkp03DdWglafj7SXZ1/XgAbVYrC381UvrsYN8
+jndVvoa1GWwe+NVlIIK7Q3uAjV3qLEDQpaNPg1rr0oAn6YmvTccjVMqj2YNwN+RHhKNzgRGxY5ct
+FaN+8fXZhRhpv3bVbAWuPZXoMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCB+
+QFLI7KyZbcis48Ch0hKHaJKiCJzscsjZMMx0Ode+VzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA2MTMwMDQ1MjRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAc8JCxni/WQOKRy4BnsDb
+y9n/ww4EE30RwuO2kuEQmy9nenlcKBB2PtqJ/RLw9FYZEbPJ8W9PHzD5bvnPOlhEXG0IZmAuZWl9
+WNIavcNj+v8P17WVyarA5LkRWTGXZ8+vhHsi/4Ljzua4iDAKRaY1Ovb5EiIPbvwAeAYq3YR3JmfG
+FnJDm3OYLGmN3aDhMTpGd6noJSVU6RPww5YsBqd4w2K0e4PAxUzl2Tyn2QfHwWPFlqfEd+0u2BTX
+wk74npHf7aCWaMvLgnTRke8OYoTV6keq+IX5Fi7+QK1mAfh6dQaFzum1EqAZhKdu+Z+Ivorq2ZyP
+J3kbvhXKx/e8xnxQcw==
+--00000000000091b28805fdf82629--
