@@ -2,184 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B00C72E5E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 16:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C774A72E5F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 16:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242505AbjFMOhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 10:37:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51552 "EHLO
+        id S242601AbjFMOih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 10:38:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234939AbjFMOhA (ORCPT
+        with ESMTP id S234635AbjFMOif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 10:37:00 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52062189;
-        Tue, 13 Jun 2023 07:36:58 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-66577752f05so1858835b3a.0;
-        Tue, 13 Jun 2023 07:36:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686667017; x=1689259017;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PLlWFUrferj4g53iCG/BqiTgqM0UBmr45zNNhlToYsg=;
-        b=sHHJ811WGZ0/KTLmPkqZTw5cwc+f5LM8YHBQMbgtDmanyn/amD0IFUH92FzMNGAXkC
-         2XrjrXgN7rcDF05BXRObHVuCs8qiVLxe3Yh4t0nQlSibV3ZTN0FjAB3Sa7SEiJzKwiiR
-         Q1kWNxNO3SXOCZ3b6xG/EiiuBsaxbnQVs7P/q/Pgugxx2eTJ7Z/BCWVp8WABZ61VFPD6
-         QLT0amN7kPrcmyEZFDQcA0yULahj0reoNJQaXPvefaFDMBB5Wu4sNnnUIrDtoryyP3oK
-         fFWkqiYla1FhB0vWv4TO5b2QHEEQ7l4ZrujV+JZk8ms7AaRMFDJSIXOybVHJQOsNoG42
-         6yeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686667017; x=1689259017;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PLlWFUrferj4g53iCG/BqiTgqM0UBmr45zNNhlToYsg=;
-        b=OMBiafQ7vfsNgoCRMAcC756zrLltI6obkE86GH1H/sxri34a2aiQOrm8nU299c3ITu
-         Zxx1D0TTq3jjj7YF5N4KmwQU5il/9CPoFU8p/epD10znPgGM76nsruhSoPPlaeBerEvD
-         xziwmZk66Qi11a/IT29MSbDaWGBHynGz8yuGEcxBr6vQkV5Y4CFJWuCz7T7LncPo/ttg
-         3WQS5//QzPJ542NmGxwmW4WLH6g/X+8zRq4vp5wO2tCSy/xWrfLblnZ7Qnj4wAyYdRmE
-         8PRtdo8xkTH0ppARtWVxFatrWorWztVazux2K3wf3rGXJ0cqx/D8+CkpHfWqT4lVlvxS
-         WFJA==
-X-Gm-Message-State: AC+VfDwT52E4F2qChy2/NdsXa88CykNbz3LRA+ZF3FWvzUSwT3iAeUUE
-        0DkyHlMhP6t1RhdUdkkmVy+bmLmK4FTZ3TYwTfc=
-X-Google-Smtp-Source: ACHHUZ6u0QPb/MLm3qUBJ+eJ+cQrRYBHsqNihv7qkWgiSmZWQA2adGcVjOOkPMF4ZK5+TbCH0xRRJeOmsBiNRsCcpF4=
-X-Received: by 2002:a17:90b:3a86:b0:259:bdb:6956 with SMTP id
- om6-20020a17090b3a8600b002590bdb6956mr10601398pjb.7.1686667017272; Tue, 13
- Jun 2023 07:36:57 -0700 (PDT)
+        Tue, 13 Jun 2023 10:38:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7609EE54;
+        Tue, 13 Jun 2023 07:38:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 019F963718;
+        Tue, 13 Jun 2023 14:38:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 072C6C433D9;
+        Tue, 13 Jun 2023 14:38:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686667113;
+        bh=KyNKPb3XB1lGkvR0Y+s7paPHoIWzcsHiAkYyCRP4POc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GZp6ouHjBMHcFQ/LMNy1VAzOLNv7GuWM/n/zn2MfBSMbQufIrkgYzV0JzVJmgKxA3
+         KabgdW4vv/s0QCUxO+DpJI3LTf/2T6USfTStXVidQjd8aeb9/iem4zt1NCmoEsMSEQ
+         d9Z3OgoAGWuCWiqh27kXXDnWYnWI3NMBkY7NA8bczZbqV5ycxzQmj0sOBE6jvRhwa1
+         pAjVZ/3MPNVKLsjK1DZelEfUOWS2LvS39x6/kN9OCQH0gUu9YtQKu9Vl0jHuUjH6uJ
+         XWYYOQgGGFWjeCEX7H8Tq4im54NECV1WKdPhecpvzdeuW3/325M/rFIWwYY6hTHL4q
+         utyjJJes5ueNQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 7FCF540692; Tue, 13 Jun 2023 11:38:30 -0300 (-03)
+Date:   Tue, 13 Jun 2023 11:38:30 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andi Kleen <ak@linux.intel.com>
+Subject: Re: [PATCH v1 1/2] perf tests x86: Generate entire instruction
+ struct in C files
+Message-ID: <ZIh/ZliOmCx0RCSV@kernel.org>
+References: <20230531154333.364167-1-irogers@google.com>
+ <ZIdtO9xVsP6Ytb0q@kernel.org>
+ <683fea7c-f5e9-fa20-f96b-f6233ed5d2a7@intel.com>
 MIME-Version: 1.0
-References: <20230609131740.7496-1-linyunsheng@huawei.com> <20230609131740.7496-4-linyunsheng@huawei.com>
-In-Reply-To: <20230609131740.7496-4-linyunsheng@huawei.com>
-From:   Alexander Duyck <alexander.duyck@gmail.com>
-Date:   Tue, 13 Jun 2023 07:36:20 -0700
-Message-ID: <CAKgT0UfVwQ=ri7ZDNnsATH2RQpEz+zDBBb6YprvniMEWGdw+dQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 3/4] page_pool: introduce page_pool_alloc() API
-To:     Yunsheng Lin <linyunsheng@huawei.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Eric Dumazet <edumazet@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <683fea7c-f5e9-fa20-f96b-f6233ed5d2a7@intel.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 6:20=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei.com=
-> wrote:
->
-> Currently page pool supports the below use cases:
-> use case 1: allocate page without page splitting using
->             page_pool_alloc_pages() API if the driver knows
->             that the memory it need is always bigger than
->             half of the page allocated from page pool.
-> use case 2: allocate page frag with page splitting using
->             page_pool_alloc_frag() API if the driver knows
->             that the memory it need is always smaller than
->             or equal to the half of the page allocated from
->             page pool.
->
-> There is emerging use case [1] & [2] that is a mix of the
-> above two case: the driver doesn't know the size of memory it
-> need beforehand, so the driver may use something like below to
-> allocate memory with least memory utilization and performance
-> penalty:
->
-> if (size << 1 > max_size)
->         page =3D page_pool_alloc_pages();
-> else
->         page =3D page_pool_alloc_frag();
->
-> To avoid the driver doing something like above, add the
-> page_pool_alloc() API to support the above use case, and update
-> the true size of memory that is acctually allocated by updating
-> '*size' back to the driver in order to avoid the truesize
-> underestimate problem.
->
-> 1. https://lore.kernel.org/all/d3ae6bd3537fbce379382ac6a42f67e22f27ece2.1=
-683896626.git.lorenzo@kernel.org/
-> 2. https://lore.kernel.org/all/20230526054621.18371-3-liangchen.linux@gma=
-il.com/
->
-> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
-> CC: Lorenzo Bianconi <lorenzo@kernel.org>
-> CC: Alexander Duyck <alexander.duyck@gmail.com>
+Em Tue, Jun 13, 2023 at 04:22:26PM +0300, Adrian Hunter escreveu:
+> On 12/06/23 22:08, Arnaldo Carvalho de Melo wrote:
+> > Em Wed, May 31, 2023 at 08:43:32AM -0700, Ian Rogers escreveu:
+> >> Generate the entire struct in the C files. Later changes will break
+> >> apart the struct and so two phases of output are necessary, this isn't
+> >> possible if part of the struct is declared in insn-x86.c.
+> > 
+> > Adrian,
+> > 
+> > 	Could you please take a look at these two patches?
+> 
+> One of the considerations when adding the generated code
+> was that it wouldn't have to be changed because the instructions
+> do not change.
+> 
+> I would much prefer to move the test out of the default perf build.
+> 
+> Here is a patch to do that:
+
+Thanks, I thinkg this is perfectly fine and perhaps with some study we
+can classify some more tests as being useful for developers while others
+test things like integration with the running kernel and other moving
+parts that may make perf not work in production and thus perhaps perf
+test helping identify that situation could help.
+
+Ian, Ack?
+
+- Arnaldo
+ 
+> 
+> From: Adrian Hunter <adrian.hunter@intel.com>
+> Date: Tue, 13 Jun 2023 15:15:58 +0300
+> Subject: [PATCH] perf tests: Make x86 new instructions test optional at build
+>  time
+> 
+> The "x86 instruction decoder - new instructions" test takes up space but
+> is only really useful to developers. Make it optional at build time.
+> 
+> Add variable EXTRA_TESTS which must be defined in order to build perf
+> with the test.
+> 
+> Example:
+> 
+>   Before:
+> 
+>     $ make -C tools/perf clean >/dev/null
+>     $ make -C tools/perf >/dev/null
+>     Makefile.config:650: No libunwind found. Please install libunwind-dev[el] >= 1.1 and/or set LIBUNWIND_DIR
+>     Makefile.config:1149: libpfm4 not found, disables libpfm4 support. Please install libpfm4-dev
+>       PERF_VERSION = 6.4.rc3.gd15b8c76c964
+>     $ readelf -SW tools/perf/perf | grep '\.rela.dyn\|.rodata\|\.data.rel.ro'
+>       [10] .rela.dyn         RELA            000000000002fcb0 02fcb0 0748b0 18   A  6   0  8
+>       [18] .rodata           PROGBITS        00000000002eb000 2eb000 6bac00 00   A  0   0 32
+>       [25] .data.rel.ro      PROGBITS        00000000009ea180 9e9180 04b540 00  WA  0   0 32
+> 
+>   After:
+> 
+>     $ make -C tools/perf clean >/dev/null
+>     $ make -C tools/perf >/dev/null
+>     Makefile.config:650: No libunwind found. Please install libunwind-dev[el] >= 1.1 and/or set LIBUNWIND_DIR
+>     Makefile.config:1154: libpfm4 not found, disables libpfm4 support. Please install libpfm4-dev
+>       PERF_VERSION = 6.4.rc3.g4ea9c1569ea4
+>     $ readelf -SW tools/perf/perf | grep '\.rela.dyn\|.rodata\|\.data.rel.ro'
+>       [10] .rela.dyn         RELA            000000000002f3c8 02f3c8 036d68 18   A  6   0  8
+>       [18] .rodata           PROGBITS        00000000002ac000 2ac000 68da80 00   A  0   0 32
+>       [25] .data.rel.ro      PROGBITS        000000000097d440 97c440 022280 00  WA  0   0 32
+> 
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 > ---
->  include/net/page_pool.h | 43 +++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 43 insertions(+)
->
-> diff --git a/include/net/page_pool.h b/include/net/page_pool.h
-> index 0b8cd2acc1d7..c135cd157cea 100644
-> --- a/include/net/page_pool.h
-> +++ b/include/net/page_pool.h
-> @@ -260,6 +260,49 @@ static inline struct page *page_pool_dev_alloc_frag(=
-struct page_pool *pool,
->         return page_pool_alloc_frag(pool, offset, size, gfp);
->  }
->
-> +static inline struct page *page_pool_alloc(struct page_pool *pool,
-> +                                          unsigned int *offset,
-> +                                          unsigned int *size, gfp_t gfp)
-> +{
-> +       unsigned int max_size =3D PAGE_SIZE << pool->p.order;
-> +       struct page *page;
+>  tools/perf/Makefile.config               | 5 +++++
+>  tools/perf/Makefile.perf                 | 4 ++++
+>  tools/perf/arch/x86/include/arch-tests.h | 2 ++
+>  tools/perf/arch/x86/tests/Build          | 5 ++++-
+>  tools/perf/arch/x86/tests/arch-tests.c   | 4 ++++
+>  tools/perf/tests/make                    | 1 +
+>  6 files changed, 20 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+> index a794d9eca93d..9c5aa14a44cf 100644
+> --- a/tools/perf/Makefile.config
+> +++ b/tools/perf/Makefile.config
+> @@ -1075,6 +1075,11 @@ ifndef NO_AUXTRACE
+>    endif
+>  endif
+>  
+> +ifdef EXTRA_TESTS
+> +    $(call detected,CONFIG_EXTRA_TESTS)
+> +    CFLAGS += -DHAVE_EXTRA_TESTS
+> +endif
 > +
-> +       *size =3D ALIGN(*size, dma_get_cache_alignment());
-> +
-> +       if (WARN_ON(*size > max_size))
-> +               return NULL;
-> +
-> +       if ((*size << 1) > max_size || PAGE_POOL_DMA_USE_PP_FRAG_COUNT) {
-> +               *size =3D max_size;
-> +               *offset =3D 0;
-> +               return page_pool_alloc_pages(pool, gfp);
-> +       }
-> +
-> +       page =3D __page_pool_alloc_frag(pool, offset, *size, gfp);
-> +       if (unlikely(!page))
-> +               return NULL;
-> +
-> +       /* There is very likely not enough space for another frag, so app=
-end the
-> +        * remaining size to the current frag to avoid truesize underesti=
-mate
-> +        * problem.
-> +        */
-> +       if (pool->frag_offset + *size > max_size) {
-> +               *size =3D max_size - *offset;
-> +               pool->frag_offset =3D max_size;
-> +       }
-> +
+>  ifndef NO_JVMTI
+>    ifneq (,$(wildcard /usr/sbin/update-java-alternatives))
+>      JDIR=$(shell /usr/sbin/update-java-alternatives -l | head -1 | awk '{print $$3}')
+> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> index f48794816d82..b1e62a621f92 100644
+> --- a/tools/perf/Makefile.perf
+> +++ b/tools/perf/Makefile.perf
+> @@ -128,6 +128,10 @@ include ../scripts/utilities.mak
+>  #
+>  # Define BUILD_NONDISTRO to enable building an linking against libbfd and
+>  # libiberty distribution license incompatible libraries.
+> +#
+> +# Define EXTRA_TESTS to enable building extra tests useful mainly to perf
+> +# developers, such as:
+> +#	x86 instruction decoder - new instructions test
+>  
+>  # As per kernel Makefile, avoid funny character set dependencies
+>  unexport LC_ALL
+> diff --git a/tools/perf/arch/x86/include/arch-tests.h b/tools/perf/arch/x86/include/arch-tests.h
+> index 33d39c1d3e64..df133020d582 100644
+> --- a/tools/perf/arch/x86/include/arch-tests.h
+> +++ b/tools/perf/arch/x86/include/arch-tests.h
+> @@ -6,7 +6,9 @@ struct test_suite;
+>  
+>  /* Tests */
+>  int test__rdpmc(struct test_suite *test, int subtest);
+> +#ifdef HAVE_EXTRA_TESTS
+>  int test__insn_x86(struct test_suite *test, int subtest);
+> +#endif
+>  int test__intel_pt_pkt_decoder(struct test_suite *test, int subtest);
+>  int test__intel_pt_hybrid_compat(struct test_suite *test, int subtest);
+>  int test__bp_modify(struct test_suite *test, int subtest);
+> diff --git a/tools/perf/arch/x86/tests/Build b/tools/perf/arch/x86/tests/Build
+> index 08cc8b9c931e..394771c00dca 100644
+> --- a/tools/perf/arch/x86/tests/Build
+> +++ b/tools/perf/arch/x86/tests/Build
+> @@ -4,5 +4,8 @@ perf-$(CONFIG_DWARF_UNWIND) += dwarf-unwind.o
+>  perf-y += arch-tests.o
+>  perf-y += sample-parsing.o
+>  perf-y += hybrid.o
+> -perf-$(CONFIG_AUXTRACE) += insn-x86.o intel-pt-test.o
+> +perf-$(CONFIG_AUXTRACE) += intel-pt-test.o
+> +ifeq ($(CONFIG_EXTRA_TESTS),y)
+> +perf-$(CONFIG_AUXTRACE) += insn-x86.o
+> +endif
+>  perf-$(CONFIG_X86_64) += bp-modify.o
+> diff --git a/tools/perf/arch/x86/tests/arch-tests.c b/tools/perf/arch/x86/tests/arch-tests.c
+> index 147ad0638bbb..3f2b90c59f92 100644
+> --- a/tools/perf/arch/x86/tests/arch-tests.c
+> +++ b/tools/perf/arch/x86/tests/arch-tests.c
+> @@ -4,7 +4,9 @@
+>  #include "arch-tests.h"
+>  
+>  #ifdef HAVE_AUXTRACE_SUPPORT
+> +#ifdef HAVE_EXTRA_TESTS
+>  DEFINE_SUITE("x86 instruction decoder - new instructions", insn_x86);
+> +#endif
+>  
+>  static struct test_case intel_pt_tests[] = {
+>  	TEST_CASE("Intel PT packet decoder", intel_pt_pkt_decoder),
+> @@ -37,7 +39,9 @@ struct test_suite *arch_tests[] = {
+>  	&suite__dwarf_unwind,
+>  #endif
+>  #ifdef HAVE_AUXTRACE_SUPPORT
+> +#ifdef HAVE_EXTRA_TESTS
+>  	&suite__insn_x86,
+> +#endif
+>  	&suite__intel_pt,
+>  #endif
+>  #if defined(__x86_64__)
+> diff --git a/tools/perf/tests/make b/tools/perf/tests/make
+> index 8dd3f8090352..885cd321d67b 100644
+> --- a/tools/perf/tests/make
+> +++ b/tools/perf/tests/make
+> @@ -69,6 +69,7 @@ make_clean_all      := clean all
+>  make_python_perf_so := $(python_perf_so)
+>  make_debug          := DEBUG=1
+>  make_nondistro      := BUILD_NONDISTRO=1
+> +make_extra_tests    := EXTRA_TESTS=1
+>  make_no_libperl     := NO_LIBPERL=1
+>  make_no_libpython   := NO_LIBPYTHON=1
+>  make_no_scripts     := NO_LIBPYTHON=1 NO_LIBPERL=1
+> -- 
+> 2.34.1
+> 
+> 
 
-Rather than preventing a truesize underestimation this will cause one.
-You are adding memory to the size of the page reserved and not
-accounting for it anywhere as this isn't reported up to the network
-stack. I would suggest dropping this from your patch.
+-- 
 
-> +       return page;
-> +}
-> +
-> +static inline struct page *page_pool_dev_alloc(struct page_pool *pool,
-> +                                              unsigned int *offset,
-> +                                              unsigned int *size)
-> +{
-> +       gfp_t gfp =3D (GFP_ATOMIC | __GFP_NOWARN);
-> +
-> +       return page_pool_alloc(pool, offset, size, gfp);
-> +}
-> +
->  /* get the stored dma direction. A driver might decide to treat this loc=
-ally and
->   * avoid the extra cache line from page_pool to determine the direction
->   */
-> --
-> 2.33.0
->
+- Arnaldo
