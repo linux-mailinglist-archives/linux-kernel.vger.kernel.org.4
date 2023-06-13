@@ -2,192 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A14DB72DA57
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 09:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 722BC72DA58
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 09:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240307AbjFMHD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 03:03:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50180 "EHLO
+        id S239104AbjFMHEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 03:04:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240352AbjFMHDU (ORCPT
+        with ESMTP id S234905AbjFMHEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 03:03:20 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8211984;
-        Tue, 13 Jun 2023 00:03:12 -0700 (PDT)
-Received: from dggpemm500011.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QgKF13gR4zLqfB;
-        Tue, 13 Jun 2023 15:00:05 +0800 (CST)
-Received: from localhost.huawei.com (10.137.16.203) by
- dggpemm500011.china.huawei.com (7.185.36.110) with Microsoft SMTP Server
+        Tue, 13 Jun 2023 03:04:32 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164A410F7;
+        Tue, 13 Jun 2023 00:04:29 -0700 (PDT)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QgKCp6wPXzqTMw;
+        Tue, 13 Jun 2023 14:59:02 +0800 (CST)
+Received: from [10.67.111.205] (10.67.111.205) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 13 Jun 2023 15:03:08 +0800
-From:   renmingshuai <renmingshuai@huawei.com>
-To:     <vladbu@nvidia.com>
-CC:     <caowangbao@huawei.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <jhs@mojatatu.com>, <jiri@resnulli.us>,
-        <kuba@kernel.org>, <liaichun@huawei.com>,
-        <linux-kernel@vger.kernel.org>, <liubo335@huawei.com>,
-        <netdev@vger.kernel.org>, <pabeni@redhat.com>,
-        <renmingshuai@huawei.com>, <xiyou.wangcong@gmail.com>,
-        <yanan@huawei.com>
-Subject: Re: [PATCH v2] net/sched: Set the flushing flags to false to prevent an infinite loop and add one test to tdc
-Date:   Tue, 13 Jun 2023 15:02:40 +0800
-Message-ID: <20230613070240.2772355-1-renmingshuai@huawei.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <874jncwwkx.fsf@nvidia.com>
-References: <874jncwwkx.fsf@nvidia.com>
+ 15.1.2507.23; Tue, 13 Jun 2023 15:03:58 +0800
+Subject: Re: [RFC] Adding support for setting the affinity of the recording
+ process
+To:     Namhyung Kim <namhyung@kernel.org>
+CC:     James Clark <james.clark@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>
+References: <159de73b-fdd6-6df8-4f77-73c628fe641f@huawei.com>
+ <a24634f7-be80-6ca2-9df7-1624fe11c281@arm.com>
+ <c291692c-7db8-b4cc-e17a-422c75ad8daa@huawei.com>
+ <CAM9d7chqy-RztC943JOgRLcEHvKZN8rS542q3xxW63==KGY3CQ@mail.gmail.com>
+From:   Yang Jihong <yangjihong1@huawei.com>
+Message-ID: <c2f82ca1-8fda-bd0c-4162-3a9e5d867a75@huawei.com>
+Date:   Tue, 13 Jun 2023 15:03:58 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.137.16.203]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500011.china.huawei.com (7.185.36.110)
+In-Reply-To: <CAM9d7chqy-RztC943JOgRLcEHvKZN8rS542q3xxW63==KGY3CQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->On Mon 12 Jun 2023 at 22:29, renmingshuai <renmingshuai@huawei.com> wrote:
->>>On Fri 09 Jun 2023 at 17:46, renmingshuai <renmingshuai@huawei.com> wrote:
->>>> When a new chain is added by using tc, one soft lockup alarm will be
->>>>  generated after delete the prio 0 filter of the chain. To reproduce
->>>>  the problem, perform the following steps:
->>>> (1) tc qdisc add dev eth0 root handle 1: htb default 1
->>>> (2) tc chain add dev eth0
->>>> (3) tc filter del dev eth0 chain 0 parent 1: prio 0
->>>> (4) tc filter add dev eth0 chain 0 parent 1:
->>>>
->>>>
->>>> The refcnt of the chain added by step 2 is equal to 1. After step 3,
->>>>  the flushing flag of the chain is set to true in the tcf_chain_flush()
->>>>  called by tc_del_tfilter() because the prio is 0. In this case, if
->>>>  we add a new filter to this chain, it will never succeed and try again
->>>>  and again because the refresh flash is always true and refcnt is 1.
->>>>  A soft lock alarm is generated 20 seconds later.
->>>
->>>Hi Mingshuai,
->>>
->>>Thanks for investigating and reporting this!
->>>
->>>> The stack is show as below:
->>>>
->>>> Kernel panic - not syncing: softlockup: hung tasks
->>>> CPU: 2 PID: 3321861 Comm: tc Kdump: loaded Tainted: G
->>>> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
->>>> Call Trace:
->>>>  <IRQ>
->>>>  dump_stack+0x57/0x6e
->>>>  panic+0x196/0x3ec
->>>>  watchdog_timer_fn.cold+0x16/0x5c
->>>>  __run_hrtimer+0x5e/0x190
->>>>  __hrtimer_run_queues+0x8a/0xe0
->>>>  hrtimer_interrupt+0x110/0x2c0
->>>>  ? irqtime_account_irq+0x49/0xf0
->>>>  __sysvec_apic_timer_interrupt+0x5f/0xe0
->>>>  asm_call_irq_on_stack+0x12/0x20
->>>>  </IRQ>
->>>>  sysvec_apic_timer_interrupt+0x72/0x80
->>>>  asm_sysvec_apic_timer_interrupt+0x12/0x20
->>>> RIP: 0010:mutex_lock+0x24/0x70
->>>> RSP: 0018:ffffa836004ab9a8 EFLAGS: 00000246
->>>> RAX: 0000000000000000 RBX: ffff95bb02d76700 RCX: 0000000000000000
->>>> RDX: ffff95bb27462100 RSI: 0000000000000000 RDI: ffff95ba5b527000
->>>> RBP: ffff95ba5b527000 R08: 0000000000000001 R09: ffffa836004abbb8
->>>> R10: 000000000000000f R11: 0000000000000000 R12: 0000000000000000
->>>> R13: ffff95ba5b527000 R14: ffffa836004abbb8 R15: 0000000000000001
->>>>  __tcf_chain_put+0x27/0x200
->>>>  tc_new_tfilter+0x5e8/0x810
->>>>  ? tc_setup_cb_add+0x210/0x210
->>>>  rtnetlink_rcv_msg+0x2e3/0x380
->>>>  ? rtnl_calcit.isra.0+0x120/0x120
->>>>  netlink_rcv_skb+0x50/0x100
->>>>  netlink_unicast+0x12d/0x1d0
->>>>  netlink_sendmsg+0x286/0x490
->>>>  sock_sendmsg+0x62/0x70
->>>>  ____sys_sendmsg+0x24c/0x2c0
->>>>  ? import_iovec+0x17/0x20
->>>>  ? sendmsg_copy_msghdr+0x80/0xa0
->>>>  ___sys_sendmsg+0x75/0xc0
->>>>  ? do_fault_around+0x118/0x160
->>>>  ? do_read_fault+0x68/0xf0
->>>>  ? __handle_mm_fault+0x3f9/0x6f0
->>>>  __sys_sendmsg+0x59/0xa0
->>>>  do_syscall_64+0x33/0x40
->>>>  entry_SYSCALL_64_after_hwframe+0x61/0xc6
->>>> RIP: 0033:0x7f96705b8247
->>>> RSP: 002b:00007ffe552e9dc8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
->>>> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f96705b8247
->>>> RDX: 0000000000000000 RSI: 00007ffe552e9e40 RDI: 0000000000000003
->>>> RBP: 0000000000000001 R08: 0000000000000001 R09: 0000558113f678b0
->>>> R10: 00007f967069ab00 R11: 0000000000000246 R12: 00000000647ea089
->>>> R13: 00007ffe552e9f30 R14: 0000000000000001 R15: 0000558113175f00
->>>>
->>>> To avoid this case, set chain->flushing to be false if the chain->refcnt
->>>>  is 2 after flushing the chain when prio is 0. I also add one test to tdc.
->>>>
->>>> Fixes: 726d061286ce ("net: sched: prevent insertion of new classifiers during chain flush")
->>>> Signed-off-by: Mingshuai Ren <renmingshuai@huawei.com>
->>>> Reviewed-by: Aichun Li <Liaichun@huawei.com>
->>>> ---
->>>> V1 -> V2:
->>>>   * Correct the judgment on the value chain->refcnt and add one test to tdc
->>>> ---
->>>>  net/sched/cls_api.c                           |  7 ++++++
->>>>  .../tc-testing/tc-tests/infra/filter.json     | 25 +++++++++++++++++++
->>>>  2 files changed, 32 insertions(+)
->>>>  create mode 100644 tools/testing/selftests/tc-testing/tc-tests/infra/filter.json
->>>>
->>>> diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
->>>> index 2621550bfddc..3ea054e03fbf 100644
->>>> --- a/net/sched/cls_api.c
->>>> +++ b/net/sched/cls_api.c
->>>> @@ -2442,6 +2442,13 @@ static int tc_del_tfilter(struct sk_buff *skb, struct nlmsghdr *n,
->>>>  		tfilter_notify_chain(net, skb, block, q, parent, n,
->>>>  				     chain, RTM_DELTFILTER, extack);
->>>>  		tcf_chain_flush(chain, rtnl_held);
->>>> +		/* Set the flushing flags to false to prevent an infinite loop
->>>> +		 * when a new filter is added.
->>>> +		 */
->>>> +		mutex_lock(&chain->filter_chain_lock);
->>>> +		if (chain->refcnt == 2)
->>>> +			chain->flushing = false;
->>>> +		mutex_unlock(&chain->filter_chain_lock);
->>>
->>>I don't think this check is enough since there can be concurrent filter
->>>ops holding the reference to the chain. This just makes the issue harder
->>>to reproduce.
->>>
->>>I'll try to formulate a fix that takes any potential concurrent users
->>>into account and verify it with your test.
->>
->> Thanks for your reply.
->> I didn't find any concurrent scenarios that would "escape" this check.
->> That's my understanding.
->> During the flush operation, after filter_chain_lock is obtained, no new chain reference
->>  could be added. After unlock, chain->flushing is set to true. The chain->refcnt and
->>  chain->action_refcnt are always different. Therefore, chain->flushing will be never set to false.
->
->I agree with your analysis.
->
->>  Then there seems to be no concurrency problem until flushing is set to true.
->> would you mind tell me the concurrent scenario you're talking about?
->
->What if, for example, chain->refcnt==3 after flush because there is
->another task inserting filters to the same chain concurrently? In such
->case for chains explicitly created with chains API, chain->flushing flag
->will never be reset afterwards and user will get the same lockup when
->trying to install any following filters. Also, refcnt==2 only means that
->there is no concurrent users when flushing explicitly created chains
->(because chains API holds a "passive" reference to such chains). For
->regular chains implicitly created by filters API refcnt==2 here means
->that there are active concurrent users.
+Hello,
 
-Thanks, you are right.
-My previous insistence that the chain->refcnt would only be increased if the filter was successfully
- inserted into the chain was clearly wrong.
+On 2023/6/13 13:50, Namhyung Kim wrote:
+> Hello,
+> 
+> On Mon, Jun 12, 2023 at 7:28 PM Yang Jihong <yangjihong1@huawei.com> wrote:
+>>
+>> Hello,
+>>
+>> On 2023/6/12 23:27, James Clark wrote:
+>>>
+>>>
+>>> On 12/06/2023 11:26, Yang Jihong wrote:
+>>>> Hello everyone,
+>>>>
+>>>> Currently, perf-record supports profiling an existing process, thread,
+>>>> or a specified command.
+>>>>
+>>>> Sometimes we may need to set CPU affinity of the target process before
+>>>> recording:
+>>>>
+>>>>     # taskset -pc <cpus> <pid>
+>>>>     # perf record -p <pid> -- sleep 10
+>>>>
+>>>> or:
+>>>>
+>>>>     # perf record -- `taskset -c <cpus> COMMAND`
+>>>>
+>>>> I'm thinking about getting perf to support setting the affinity of the
+>>>> recording process, for example:
+>>>>
+>>>> 1. set the CPU affinity of the <pid1> process to <cpus1>, <pid2> process
+>>>> to <cpus2>,  and record:
+>>>>
+>>>>     # perf record -p <pid1>/<cpus1>:<pid2>/<cpus2> -- sleep 10
+>>>>
+>>>
+>>> I'm not sure if this is necessary. You can already do this with taskset
+>>> when you launch the processes or for existing ones.
+>>
+>> Yes, that's what we're doing now, and I'm thinking about whether perf
+>> can support this "taskset" feature.
+> 
+> I agree with James that it looks out of scope of perf tools.
+> You can always use `taskset` for external processes.
+> 
+OK, so let's not consider this scenario.
+>>
+>>>
+>>>> and
+>>>>
+>>>> 2. set CPU affinity of the COMMAND and record:
+>>>>
+>>>>     # perf record --taskset-command <cpus> COMMAND
+>>>>
+>>>> In doing so, perf, as an observer, actually changes some of the
+>>>> properties of the target process, which may be contrary to the purpose
+>>>> of perf tool.
+>>>>
+>>>>
+>>>> Will we consider accepting this approach?
+>>>>
+>>>
+>>> For #2 I do this sometimes, but I prefix the perf command with taskset
+>>> because otherwise there is a small time between when taskset does its
+>>> thing and launching the child process that it runs in the wrong place.
+>>>
+>>> Then one issue with the above method is that perf itself gets pinned to
+>>> those CPUs as well. I suppose that could influence your application but
+>>> I've never had an issue with it.
+>>>
+>>> If you really can't live with perf also being pinned to those CPUs I
+>>> would say it makes sense to add options for #2. Otherwise I would just
+>>> run everything under taskset and no changes are needed.
+>>
+>> If "perf" process and the target process are pinned to the same CPU,
+>> and the CPU usage of the target process is high, the perf data
+>> collection may be affected. Therefore, in this case, we may need to pin
+>> the target process and "perf" to different CPUs.
+>>
+>>>
+>>> I think you would still need to have perf itself pinned to the CPUs just
+>>> before it does the fork and exec, and then after that it can undo its
+>>> pinning. Otherwise you'd still get that small time running on the wrong
+>>> cores.
+>>>
+>>
+>> Thanks for your advice, or we can support setting different affinities
+>> for the "perf" process and the target process.
+> 
+> When it comes to controlling `perf`, you can use --threads=<spec>
+> option which supports fairly complex control for parallelism and
+> affinity.
+> 
+Yes, we can ues --threads=<spec>
+
+In addition to the above, or we can simply add a parameter to pin the 
+COMMAND to specific cpus.
+
+Thank you for your reply.
+
+Thanks,
+Yang.
