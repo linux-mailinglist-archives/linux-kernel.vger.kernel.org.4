@@ -2,96 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF46D72E33E
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5682772E341
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240061AbjFMMnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 08:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45076 "EHLO
+        id S241430AbjFMMod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 08:44:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233000AbjFMMnI (ORCPT
+        with ESMTP id S236464AbjFMMoa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 08:43:08 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64146AD
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 05:43:07 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-311-rnUksceOM2-gkIbIoMQNcA-1; Tue, 13 Jun 2023 13:43:04 +0100
-X-MC-Unique: rnUksceOM2-gkIbIoMQNcA-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 13 Jun
- 2023 13:42:59 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Tue, 13 Jun 2023 13:42:59 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Rasmus Villemoes' <linux@rasmusvillemoes.dk>,
-        Demi Marie Obenour <demi@invisiblethingslab.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Juergen Gross <jgross@suse.com>,
-        "Stefano Stabellini" <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Lee Jones <lee@kernel.org>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
-CC:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "Christoph Hellwig" <hch@lst.de>
-Subject: RE: [PATCH v3 3/4] vsscanf(): do not skip spaces
-Thread-Topic: [PATCH v3 3/4] vsscanf(): do not skip spaces
-Thread-Index: AQHZnR4ovdHGuD5F0k2o+1T0Ru69aa+Iri8A
-Date:   Tue, 13 Jun 2023 12:42:59 +0000
-Message-ID: <32e8b52d64b642608595142ab2952f16@AcuMS.aculab.com>
-References: <20230610204044.3653-1-demi@invisiblethingslab.com>
- <20230610204044.3653-4-demi@invisiblethingslab.com>
- <546e2ab5-f520-c85e-d6f4-ca7b02457d4c@rasmusvillemoes.dk>
-In-Reply-To: <546e2ab5-f520-c85e-d6f4-ca7b02457d4c@rasmusvillemoes.dk>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 13 Jun 2023 08:44:30 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC495AD;
+        Tue, 13 Jun 2023 05:44:29 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QgStK4XF5z4f3v55;
+        Tue, 13 Jun 2023 20:44:25 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgAHuKuoZIhkVmRyLg--.57499S3;
+        Tue, 13 Jun 2023 20:44:26 +0800 (CST)
+Subject: Re: [dm-devel] [PATCH -next v2 2/6] md: refactor action_store() for
+ 'idle' and 'frozen'
+To:     Xiao Ni <xni@redhat.com>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     guoqing.jiang@linux.dev, agk@redhat.com, snitzer@kernel.org,
+        dm-devel@redhat.com, song@kernel.org, yi.zhang@huawei.com,
+        yangerkun@huawei.com, linux-kernel@vger.kernel.org,
+        linux-raid@vger.kernel.org, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230529132037.2124527-1-yukuai1@huaweicloud.com>
+ <20230529132037.2124527-3-yukuai1@huaweicloud.com>
+ <b780ccfd-66b1-fdd1-b33e-aa680fbd86f1@redhat.com>
+ <1aaf9150-bbd3-87a8-8d54-8b5d63ab5ed3@huaweicloud.com>
+ <CALTww2-ta1NUJxcT3Dq5KP7iunnVx24X7RKj1OKYTYwEPeDNrg@mail.gmail.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <68b215a4-b4bb-7c94-6ad4-84ea859af742@huaweicloud.com>
+Date:   Tue, 13 Jun 2023 20:44:24 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CALTww2-ta1NUJxcT3Dq5KP7iunnVx24X7RKj1OKYTYwEPeDNrg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgAHuKuoZIhkVmRyLg--.57499S3
+X-Coremail-Antispam: 1UD129KBjvdXoWrZrW5Kw4DXry5ZF43uw43GFg_yoWkWFX_Cr
+        s2ywnrGr18ZFnIgwn0yr4rJ39rKFn5Wr47X3yUZF4Yvw18Xa4kJr4ktr18Ww45WayYyrnI
+        vFyq9ay7XrZ7ZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb3AFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY
+        04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
+        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
+        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
+        AIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyU
+        JwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogUmFzbXVzIFZpbGxlbW9lcw0KPiBTZW50OiAxMiBKdW5lIDIwMjMgMTI6MDgNCj4gDQo+
-IE9uIDEwLzA2LzIwMjMgMjIuNDAsIERlbWkgTWFyaWUgT2Jlbm91ciB3cm90ZToNCj4gPiBQYXNz
-aW5nIHNwYWNlcyBiZWZvcmUgZS5nLiBhbiBpbnRlZ2VyIGlzIHVzdWFsbHkNCj4gPiBub3QgaW50
-ZW5kZWQuDQo+IA0KPiBNYXliZSwgbWF5YmUgbm90LiBCdXQgaXQncyBtYW5kYXRlZCBieSBQT1NJ
-WC9DOTkuDQo+IA0KPiBBbmQgb2YgY291cnNlIHdlIGFyZSBmcmVlIHRvIGlnbm9yZSB0aGF0IGFu
-ZCBpbXBsZW1lbnQgb3VyIG93biBzZW1hbnRpY3MNCj4gKHRob3VnaCB3aXRoaW4gdGhlIGNvbnN0
-cmFpbnRzIHRoYXQgd2UgcmVhbGx5IHdhbnQgLVdmb3JtYXQgdG8gaGVscCB1cyksDQo+IGJ1dCB0
-aGVyZSBzZWVtcyB0byBiZSBleGlzdGluZyBjb2RlIGluLXRyZWUgdGhhdCByZWxpZXMgb24gdGhp
-cw0KPiBiZWhhdmlvci4gRm9yIGV4YW1wbGUgSSB0aGluayB0aGlzIHdpbGwgYnJlYWsNCj4gZnNs
-X3NhdGFfaW50cl9jb2FsZXNjaW5nX3N0b3JlKCkgd2hpY2ggdXNlcyBhIHNjYW5mIGZvcm1hdCBv
-ZiAiJXUldSIuDQo+IA0KPiBTdXJlLCB0aGF0IGNvdWxkIGp1c3Qgc2F5ICIldSAldSIgaW5zdGVh
-ZCwgYnV0IHRoZSBwb2ludCBpcyB0aGF0DQo+IGN1cnJlbnRseSBpdCBkb2Vzbid0LiBTbyB3aXRo
-b3V0IHNvbWUgcmVhc29uYWJseSB0aG9yb3VnaCBhbmFseXNpcw0KPiBhY3Jvc3MgdGhlIHRyZWUs
-IGFuZCB1cGRhdGVzIG9mIGFmZmVjdGVkIGNhbGxlcnMsIE5BSy4NCg0KSXQgd291bGQgYWxtb3N0
-IGNlcnRhaW5seSBuZWVkIHRvIGJlICIgJXUgJXUiIHRvIGFsbG93IGZvcg0KdXNlcnNwYWNlIGdl
-bmVyYXRpbmcgdGhlIGlucHV0IHdpdGggIiU2dSAlNnUiLA0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0
-ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBL
-ZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+Hi,
+
+在 2023/06/13 20:25, Xiao Ni 写道:
+> On Tue, Jun 13, 2023 at 8:00 PM Yu Kuai <yukuai1@huaweicloud.com> wrote:
+>>
+>> Hi,
+>>
+>> 在 2023/06/13 16:02, Xiao Ni 写道:
+>>>
+>>> 在 2023/5/29 下午9:20, Yu Kuai 写道:
+>>>> From: Yu Kuai <yukuai3@huawei.com>
+>>>>
+>>>> Prepare to handle 'idle' and 'frozen' differently to fix a deadlock,
+>>>> there
+>>>> are no functional changes except that MD_RECOVERY_RUNNING is checked
+>>>> again after 'reconfig_mutex' is held.
+>>>
+>>>
+>>> Can you explain more about why it needs to check MD_RECOVERY_RUNNING
+>>> again here?
+>>
+>> As I explain in the following comment:
+> 
+> Hi
+> 
+> Who can clear the flag before the lock is held?
+
+Basically every where that can clear the flag...
+
+// This context 	// Other context
+			mutex_lock
+			...
+test_bit -> pass
+			clear_bit
+			mutex_unlock
+mutex_lock
+test_bit -> check again
+
+Thanks,
+Kuai
+> 
+> Regards
+> Xiao
+>>>> +    /*
+>>>> +     * Check again in case MD_RECOVERY_RUNNING is cleared before lock is
+>>>> +     * held.
+>>>> +     */
+>>>> +    if (!test_bit(MD_RECOVERY_RUNNING, &mddev->recovery)) {
+>>>> +        mddev_unlock(mddev);
+>>>> +        return;
+>>>> +    }
+>>
+>> Thanks,
+>> Kuai
+>>
+> 
+> .
+> 
 
