@@ -2,176 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4141072E78B
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:44:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF82B72E78F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:45:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241454AbjFMPoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 11:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58604 "EHLO
+        id S242476AbjFMPpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 11:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239942AbjFMPoD (ORCPT
+        with ESMTP id S242956AbjFMPou (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 11:44:03 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9DAD1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 08:44:01 -0700 (PDT)
-Received: from ideasonboard.com (unknown [IPv6:2001:b07:5d2e:52c9:72c3:346:a663:c82d])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0F67AE4;
-        Tue, 13 Jun 2023 17:43:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1686671008;
-        bh=69Y8mbPkcrpHvAWJab0wmj4G9uavhZYYSLIf/HtXip4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=q9qJOZXuM0Md7IFQuErNgFFt28HvD+xzojk0IbacpF5xYQGEoHbpl316yTQ40J/z/
-         HpUskdMcYa/UJj6UD98ac03OnavF2UYQCjUCovoVjmThU3DUb3r6tGNCNGtaJM6a6h
-         KXuqUbIJhKMIuAmogfHIo2+tVUK0WRHyPRYEzMQg=
-Date:   Tue, 13 Jun 2023 17:43:55 +0200
-From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-To:     Melissa Wen <mwen@igalia.com>
-Cc:     airlied@gmail.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, daniel@ffwll.ch, harry.wentland@amd.com,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        Rodrigo.Siqueira@amd.com, sunpeng.li@amd.com, tzimmermann@suse.de,
-        Xinhui.Pan@amd.com, laurent.pinchart+renesas@ideasonboard.com,
-        Shashank Sharma <shashank.sharma@amd.com>, alex.hung@amd.com,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, seanpaul@chromium.org,
-        kernel-dev@igalia.com, bhawanpreet.lakha@amd.com,
-        nicholas.kazlauskas@amd.com, Joshua Ashton <joshua@froggi.es>,
-        sungjoon.kim@amd.com, ppaalanen@gmail.com
-Subject: Re: [RFC PATCH v2 00/18] Add DRM CRTC 3D LUT interface
-Message-ID: <yevhvooznvpqbuybp7tmbo6qgrbxzqrs4y2k4onrjnfbcz42et@hmiwqw74dhgc>
-References: <20230109143846.1966301-1-mwen@igalia.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230109143846.1966301-1-mwen@igalia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 13 Jun 2023 11:44:50 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF7E8127;
+        Tue, 13 Jun 2023 08:44:48 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id DC23D320095F;
+        Tue, 13 Jun 2023 11:44:44 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 13 Jun 2023 11:44:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1686671084; x=1686757484; bh=k3ek7V5og/jAxqAHyIbXVs/nCJAhWpzv8iS
+        ulQtMJ8I=; b=i25fvbZ43tfLcBg7k45NhbybIbPtwaulSRLXfJ66DaQlcXJSABL
+        r7eWKY6K7m3XIJQVWFNglIOCiR9bsRX9/GUBj+llF3lM4N56JijzFcD/7mtFcYxg
+        jAt+m4f2D+CqV0xv9u4LcPsKnNvhpd70vvUhTYrhhRIbiraMVxw3ukhuJi5PZkVE
+        Xjjb4yN+c85byOxnXUG5Q8Rqu8Iwy9b78K6Z89+wSUsCk0/rNIKw2r9rMHphg1r0
+        gmi7QX0lAUcdZQoXwReWV1+NvicsoCA3N06Aopffw60nVcoYMEOFX6UlweNfKjLA
+        zTl39n/blZJsjuVcTnAwuqrYbas4Y/7uA+g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1686671084; x=1686757484; bh=k3ek7V5og/jAxqAHyIbXVs/nCJAhWpzv8iS
+        ulQtMJ8I=; b=I418A2xfI25DMobOpjWKbzVLIpNs13e84N9THqgblB4uJe3UNPJ
+        ih+TfVqdy9Sa/0gyf8o2OXq0VNUWTVNeTuOchjzVlOzisJkG20nnAGnJppJImi57
+        sBxTAnFDc4MC9ajdW2o+gDKy4F9DxR/GN2BnXJGEwta1cKAXd/LTJzQMhJsmJDqK
+        Irk+LFRV9clRB+VuQsEL//zTaW+eFH/jYv3UEeXRDJxLbQmpQnZMx9RdIwkI9ahp
+        q8AiV1X1qBpYGuiD5XfkX7NSp5LqgQq22FNku+iXkxQyiA18pF3afy4HOlyOxq2z
+        wGSYHVweeJK3UMkv/jOnniMHGgvVDLDnEsQ==
+X-ME-Sender: <xms:646IZEQzojVj5xZjcSvl6kRZkc_i_T5KgclETuTg-EEPBeZl_cHTow>
+    <xme:646IZBwIxRJtRLn34PPoxxcKjrU6URojpDzo8zyFfG7ViBZjpKctAn9X_zLDnednf
+    __SVRxl913P2JQX9ks>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedujedgkeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:646IZB30Xby_fi7Q1Cyc62rhVyrzNKv3joyg5-E4yn_CXgD5twq9rw>
+    <xmx:646IZIBq8hLvqjiSIOzuW2K-nymv4Y2wjgB-rWKyns3AQPkjqyl5eA>
+    <xmx:646IZNgcKkc1a-FvHHfcIUjJ9Ku8idAh1sA7PODwY98JPj7j0a9gkQ>
+    <xmx:7I6IZGbFSWPsPn9v0o3AjgvqkUPiiqhmRBjUzzXViqSGxhzbhCc7xg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 7A948B60086; Tue, 13 Jun 2023 11:44:43 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-492-g08e3be04ba-fm-20230607.003-g08e3be04
+Mime-Version: 1.0
+Message-Id: <35e768ad-7f15-48a4-9c38-09570026cf71@app.fastmail.com>
+In-Reply-To: <2023061356-matchbook-footwear-d142@gregkh>
+References: <20230612025355.547871-1-ychuang570808@gmail.com>
+ <20230612025355.547871-2-ychuang570808@gmail.com>
+ <2023061338-lunchbox-snorkel-e6a9@gregkh>
+ <f8eb6114-8248-8886-b301-c2886e50e016@gmail.com>
+ <2023061356-matchbook-footwear-d142@gregkh>
+Date:   Tue, 13 Jun 2023 17:44:23 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Jacky Huang" <ychuang570808@gmail.com>
+Cc:     "Rob Herring" <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, "Lee Jones" <lee@kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        "Stephen Boyd" <sboyd@kernel.org>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        "Jiri Slaby" <jirislaby@kernel.org>,
+        "Tomer Maimon" <tmaimon77@gmail.com>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        soc@kernel.org, schung@nuvoton.com, mjchen@nuvoton.com,
+        "Jacky Huang" <ychuang3@nuvoton.com>
+Subject: Re: [PATCH v14 1/1] tty: serial: Add Nuvoton ma35d1 serial driver support
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello
+On Tue, Jun 13, 2023, at 16:49, Greg KH wrote:
+> On Tue, Jun 13, 2023 at 06:58:32PM +0800, Jacky Huang wrote:
+>>=20
+>> On 2023/6/13 =E4=B8=8B=E5=8D=88 06:28, Greg KH wrote:
+>> > On Mon, Jun 12, 2023 at 02:53:55AM +0000, Jacky Huang wrote:
+>> > > From: Jacky Huang <ychuang3@nuvoton.com>
+>> > >=20
+>> > > This adds UART and console driver for Nuvoton ma35d1 Soc.
+>> > > It supports full-duplex communication, FIFO control, and
+>> > > hardware flow control.
+>> > You get a full 72 columns for your changelog :)
+>> >=20
+>> > > --- a/include/uapi/linux/serial_core.h
+>> > > +++ b/include/uapi/linux/serial_core.h
+>> > > @@ -279,4 +279,7 @@
+>> > >   /* Sunplus UART */
+>> > >   #define PORT_SUNPLUS	123
+>> > > +/* Nuvoton MA35 SoC */
+>> > > +#define PORT_MA35	124
+>> > > +
+>> > Why is this change needed?  What userspace code is going to rely on=
+ it?
+>> >=20
+>> > thanks,
+>> >=20
+>> > greg k-h
+>>=20
+>> Because the serial driver requires a port->type, and almost all serial
+>> drivers defined their port type here. We follow the practice of most =
+serial
+>> drivers here.
+>> If we don't do it this way, we would have to directly assign a value =
+to
+>> port->type. However, such modifications were questioned in the past,
+>> which is why we changed it back to defining the port type in serial_c=
+ore.h.
+>
+> I really really want to get rid of this list, as it's a UAPI that no o=
+ne
+> uses.  So please don't use it, it doesn't help anything, and while the
+> serial driver might require it, it doesn't actually do anything with
+> that field, right?  So why don't we just set all of the values to the
+> same one?
 
-   I'm completing the support for 3D LUT on R-Car DU peripheral
-and I have used this series as a base.
+I don't see how Jacky can come up with a patch to do this correctly
+without more specific guidance to what exactly you are looking for,
+after the last 123 people that added support for a new port got
+that merged.
 
-I'm wondering, since quite some time has passed without any update if
-this series is still a thing and it makes any sense for me to try to
-bring it forward.
+I checked debian codesearch and found only three obscure packages that
+accidentally include this header instead of including linux/serial.h,
+a couple of lists of all kernel headers, and none that include it on
+purpose. I agree that this header should really not exist in uapi,
+but the question is what exactly to do about it.
 
-I'm asking as I've noticed:
-"[PATCH 00/36] drm/amd/display: add AMD driver-specific properties for color mgmt"
+Possible changes would be:
 
-which seems to supersede this proposal with driver-specific
-properties.
+- add a special value PORT_* constant other than PORT_UNKNOWN that
+  can be used by serial drivers instead of a unique value, and
+  ensure that the serial core can handle drivers using it.
 
-I asked Melissa privately but I wasn't able to get an hold of her, so
-if anyone has any clue feel free to reply :)
+- move all values used by the 8250 driver from serial_core.h
+  to serial.h, as this driver actually uses the constants.
 
-Thanks
-  j
+- Move the remaining contents of uapi/linux/serial.h into the=20
+  non-uapi version.
 
-On Mon, Jan 09, 2023 at 01:38:28PM -0100, Melissa Wen wrote:
-> Hi,
->
-> After collecting comments in different places, here is a second version
-> of the work on adding DRM CRTC 3D LUT support to the current DRM color
-> mgmt interface. In comparison to previous proposals [1][2][3], here we
-> add 3D LUT before gamma 1D LUT, but also a shaper 1D LUT before 3D LUT,
-> that means the following DRM CRTC color correction pipeline:
->
-> Blend -> Degamma 1D LUT -> CTM -> Shaper 1D LUT -> 3D LUT -> Gamma 1D LUT
->
-> and we also add a DRM CRTC LUT3D_MODE property, based on Alex Hung
-> proposal for pre-blending 3D LUT [4] (Thanks!), instead of just a
-> LUT3D_SIZE, that allows userspace to use different supported settings of
-> 3D LUT, fitting VA-API and new color API better. In this sense, I
-> adjusted the pre-blending proposal for post-blending usage.
->
-> Patches 1-6 targets the addition of shaper LUT and 3D LUT properties to
-> the current DRM CRTC color mgmt pipeline. Patch 6 can be considered an
-> extra/optional patch to define a default value for LUT3D_MODE, inspired
-> by what we do for the plane blend mode property (pre-multiplied).
->
-> Patches 7-18 targets AMD display code to enable shaper and 3D LUT usage
-> on DCN 301 (our HW case). Patches 7-9 performs code cleanups on current
-> AMD DM colors code, patch 10 updates AMD stream in case of user 3D LUT
-> changes, patch 11/12 rework AMD MPC 3D LUT resource handling by context
-> for DCN 301 (easily extendible to other DCN families). Finally, from
-> 13-18, we wire up SHAPER LUT, LUT3D and LUT3D MODE to AMD display
-> driver, exposing modes supported by HW and programming user shaper and
-> 3D LUT accordingly.
->
-> Our target userspace is Gamescope/SteamOS.
->
-> Basic IGT tests were based on [5][6] and are available here (in-progress):
-> https://gitlab.freedesktop.org/mwen/igt-gpu-tools/-/commits/crtc-lut3d-api
->
-> [1] https://lore.kernel.org/all/20201221015730.28333-1-laurent.pinchart+renesas@ideasonboard.com/
-> [2] https://github.com/vsyrjala/linux/commit/4d28e8ddf2a076f30f9e5bdc17cbb4656fe23e69
-> [3] https://lore.kernel.org/amd-gfx/20220619223104.667413-1-mwen@igalia.com/
-> [4] https://lore.kernel.org/dri-devel/20221004211451.1475215-1-alex.hung@amd.com/
-> [5] https://patchwork.freedesktop.org/series/90165/
-> [6] https://patchwork.freedesktop.org/series/109402/
-> [VA_API] http://intel.github.io/libva/structVAProcFilterParameterBuffer3DLUT.html
-> [KMS_pipe_API] https://gitlab.freedesktop.org/pq/color-and-hdr/-/issues/11
->
-> Let me know your thoughts.
->
-> Thanks,
->
-> Melissa
->
-> Alex Hung (2):
->   drm: Add 3D LUT mode and its attributes
->   drm/amd/display: Define 3D LUT struct for HDR planes
->
-> Melissa Wen (16):
->   drm/drm_color_mgmt: add shaper LUT to color mgmt properties
->   drm/drm_color_mgmt: add 3D LUT props to DRM color mgmt
->   drm/drm_color_mgmt: add function to create 3D LUT modes supported
->   drm/drm_color_mgmt: add function to attach 3D LUT props
->   drm/drm_color_mgmt: set first lut3d mode as default
->   drm/amd/display: remove unused regamma condition
->   drm/amd/display: add comments to describe DM crtc color mgmt behavior
->   drm/amd/display: encapsulate atomic regamma operation
->   drm/amd/display: update lut3d and shaper lut to stream
->   drm/amd/display: handle MPC 3D LUT resources for a given context
->   drm/amd/display: acquire/release 3D LUT resources for ctx on DCN301
->   drm/amd/display: expand array of supported 3D LUT modes
->   drm/amd/display: enable 3D-LUT DRM properties if supported
->   drm/amd/display: add user 3D LUT support to the amdgpu_dm color
->     pipeline
->   drm/amd/display: decouple steps to reuse in shaper LUT support
->   drm/amd/display: add user shaper LUT support to amdgpu_dm color
->     pipeline
->
->  .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |   6 +
->  .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h |   3 +
->  .../amd/display/amdgpu_dm/amdgpu_dm_color.c   | 370 ++++++++++++++++--
->  .../amd/display/amdgpu_dm/amdgpu_dm_crtc.c    |   2 +
->  drivers/gpu/drm/amd/display/dc/core/dc.c      |  49 ++-
->  drivers/gpu/drm/amd/display/dc/dc.h           |   8 +
->  .../amd/display/dc/dcn301/dcn301_resource.c   |  47 ++-
->  .../amd/display/modules/color/color_gamma.h   |  43 ++
->  drivers/gpu/drm/drm_atomic_state_helper.c     |   7 +
->  drivers/gpu/drm/drm_atomic_uapi.c             |  24 ++
->  drivers/gpu/drm/drm_color_mgmt.c              | 127 ++++++
->  drivers/gpu/drm/drm_fb_helper.c               |   5 +
->  drivers/gpu/drm/drm_mode_config.c             |  21 +
->  include/drm/drm_color_mgmt.h                  |   8 +
->  include/drm/drm_crtc.h                        |  32 +-
->  include/drm/drm_mode_config.h                 |  25 ++
->  include/drm/drm_mode_object.h                 |   2 +-
->  include/uapi/drm/drm_mode.h                   |  17 +
->  18 files changed, 757 insertions(+), 39 deletions(-)
->
-> --
-> 2.35.1
->
+- Change all drivers that only reference a single PORT_*
+  value to use the generic one.
+
+       Arnd
