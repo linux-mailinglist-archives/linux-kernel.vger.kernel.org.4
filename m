@@ -2,78 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4D9072DC88
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:32:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECCEF72DC89
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241269AbjFMIci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 04:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43230 "EHLO
+        id S241290AbjFMIcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 04:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241355AbjFMIcb (ORCPT
+        with ESMTP id S241262AbjFMIch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 04:32:31 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6AC199A
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 01:32:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ZLpF5uaE5vEXK70soXXBTsKAuRo8FWQfkbFKAKFSYT8=; b=bgk+OBXW7KObNsaL+te0/3zM6l
-        FeBmWiBjT5yIidb7PY2IJMoTVg/8HDi6igjPC5y7lEiHZlt8WIC8/lhGKKsM4aH8y13P82jUo+Lnb
-        rNTgukeW1c9qX8huTtw1LocfDYnjT9UDZVobYB8hAMaXUD6JybndnYltwlXi0GcLNrT8ZjHpo6SNP
-        O1k0GIFFjcJrdknPMzp61Z02SXReIQ5op7fMOt5D8AxihE2d5tUDmcd4KMyuzjKtAmwBXyETSZ4RK
-        1Np3DXbTKOhabpgbVJn85cvCkQLgzBdrXkCHUZawP6sThOizbopJemlQO0a180RZFPPML6rMyecbz
-        ySco/46A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q8zRd-003hZW-32; Tue, 13 Jun 2023 08:32:05 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Tue, 13 Jun 2023 04:32:37 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F9DD2
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 01:32:36 -0700 (PDT)
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EBA8C1EC0674;
+        Tue, 13 Jun 2023 10:32:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1686645155;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=6P7m16HjSLkfJscuTlcRNl0ZdJBTKG8OShHHGfYxK90=;
+        b=DBoTFWVhaW96moOzl2igDodpyJogFSy5jNNNF7S4POTUTGB1Lrm5j+D8I8+gc8tZvj3pdz
+        Q/O0mXW1oj1uYK98isab/w76DV0nJmwG8dhwvRSvZLPryggqagTMg5o5w/F3UaVbouFYqL
+        UOrxAtVytb9HdjiXGT/8VlG9owXNPgY=
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+        header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id W7JC76o8M21I; Tue, 13 Jun 2023 08:32:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+        t=1686645152; bh=6P7m16HjSLkfJscuTlcRNl0ZdJBTKG8OShHHGfYxK90=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T9QR03aGGVAbUFwAtxtE2hXFqG0W6CA5Du0QaagjdBMTrGuC9YZmF6sT7rRIH0c8a
+         fLcE12QBTD1fzvnIBITvvkuuzcR53ftf3tH5ldnmFS84bGlAKLZNu9mo/IlSlGs84s
+         j0Nkw/iap6PO0e1xh8sq8k2mUGwrJkLUHq7hz4SMWoR6+/LRfS5fAQCkuOrucB3RYz
+         BabzbJk1TLiWdgmXU1U5PUH327h1PGJlCAY0Rl1mLVZyednYZTJ0ujIWSP5QelIQ1z
+         wRCuJjLj6OBK1CkVTZNSplAiNUW+KcH30D6btZt2lLKsxz7RCmYsSM22y4hXrwil29
+         qirOLDNO0GsKadv1l2vYrNsSsHFKiwiQAyX/xThnJaJAGL8uULXDgmA5RVxLGeGmxm
+         uVryn90aHvUbiLx45Z2Hfh0s2JmTtSc79aBsA/iNVykoKi2h6zCpqGy99UiNGDo0KU
+         BkjhEvLBB39oo2lUAH8moeB7L0OxDV3dqpNVo8Leuawi8WkglLnmKUC/+R+e12nizO
+         rlUxVzRGMydkOSTOvAPOPaoW1eKM0MJimF2+hPdXN6UwH+ftD5ZwfH0y+sIaWlmzHQ
+         IMtB2YaZwl2qXWGoaHKkRbJC/TDaL/OHT2VX2wCMPsRbuf0CVAAuqlYvHAYhm65yiG
+         h2/hyB8/XpewyA8Vdy7tPZWo=
+Received: from zn.tnic (p200300eA971Dc5f0329c23FffEA6A903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c5f0:329c:23ff:fea6:a903])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B1D3C3002F0;
-        Tue, 13 Jun 2023 10:32:03 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8DBF6262C92A6; Tue, 13 Jun 2023 10:32:03 +0200 (CEST)
-Date:   Tue, 13 Jun 2023 10:32:03 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     David Vernet <void@manifault.com>
-Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        rostedt@goodmis.org, dietmar.eggemann@arm.com, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        joshdon@google.com, roman.gushchin@linux.dev, tj@kernel.org,
-        kernel-team@meta.com
-Subject: Re: [RFC PATCH 3/3] sched: Implement shared wakequeue in CFS
-Message-ID: <20230613083203.GR4253@hirez.programming.kicks-ass.net>
-References: <20230613052004.2836135-1-void@manifault.com>
- <20230613052004.2836135-4-void@manifault.com>
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+        (No client certificate requested)
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E928D40E01D0;
+        Tue, 13 Jun 2023 08:32:28 +0000 (UTC)
+Date:   Tue, 13 Jun 2023 10:32:24 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] x86/microcode: Add a "microcode=" command line option
+Message-ID: <20230613083224.GAZIgpmBjiuSZuYydZ@fat_crate.local>
+References: <20230605141332.25948-1-bp@alien8.de>
+ <20230605141332.25948-2-bp@alien8.de>
+ <87ilbs7lcr.ffs@tglx>
+ <20230612154246.GLZIc89v6Q2THgsY8N@fat_crate.local>
+ <87a5x47fy0.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230613052004.2836135-4-void@manifault.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <87a5x47fy0.ffs@tglx>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Just to sum up what we talked about on IRC:
 
-Still gotta read it properly, however:
+Early loading already does per-thread loading unconditionally and it
+doesn't have a chicken bit. I will do the chicken bit for both loading
+methods but keep it out-of-tree if it turns out we need it.
 
-On Tue, Jun 13, 2023 at 12:20:04AM -0500, David Vernet wrote:
-> Single-socket | 32-core | 2-CCX | AMD 7950X Zen4
-> Single-socket | 72-core | 6-CCX | AMD Milan Zen3
-> Single-socket | 176-core | 11-CCX | 2-CCX per CCD | AMD Bergamo Zen4c
+-- 
+Regards/Gruss,
+    Boris.
 
-Could you please also benchmark on something Intel that has these stupid
-large LLCs ?
-
-Because the last time I tried something like this, it came apart real
-quick. And AMD has these relatively small 8-core LLCs.
-
+https://people.kernel.org/tglx/notes-about-netiquette
