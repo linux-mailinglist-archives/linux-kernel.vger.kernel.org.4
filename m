@@ -2,269 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7161272D75E
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 04:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6D872D762
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 04:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238194AbjFMC25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 22:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43066 "EHLO
+        id S238935AbjFMCgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 22:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237472AbjFMC2z (ORCPT
+        with ESMTP id S232146AbjFMCg3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 22:28:55 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2041.outbound.protection.outlook.com [40.107.215.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2114110EC
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 19:28:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hBOItTmzJl1t2OtC9hWzm2MF/l9ngAaGr/0ZUHFYCsPGLfSPL2J4HLKiKWDENlSqoYLMNZAALmZcLvyXWOjCs/JeeY9qmDsL6W8kkP/eziW0TkjCm5J90jg1+39lvnQ8Nyt/vvMw7plGavDqKFpfEStN/vlC5zEFtgOM69XSLC63Ueilq/7ZEDF6SW0aYVfBRL75ep+kxVe0D/sRot6CugxEVTcnydEAujgazxyWtgmkdLNzBkx4biij5JYoHnWkX3UaaA3ywiA10gkkF4DxllZ9yVrQbCKMQOlpf/za523XZQ12ObNqvRtQfwrEIT4XyKxazQP/Lesl5w8tce5/ZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qTld24b0sm8PbxCjVjiYms5LKcrxg48u2KgHyqr5rsY=;
- b=M79oFWc36P9nlCx7Yvc6LImwMiYNPKGHNhvuCPAYRwAdaFjZB6pzyp18s9FnY2WWitS5Xb14MPibAg67N4ziaJBlIa/S3M1Kfgb31g755yibmbZ1OkkLmp4mVH978ejh0kiyiILiIQRxfEo9lYc4QpEcCZrejNR8XAdEmj/zR/tBFEFQsT8VjhG20TgXMcagjxrtAAA8KMm35BseS0KZw0d7a2TKBByvS3IBS40kIUVYh+cuRht3Py6n8VgKGxLQjfgesqOxDvY6+ZA3/96yrLZrBuR2D6I3lRReZ8w+5Tv2NiDT78XE5eo63LuFQVThs3w7VYNyyuFsk9QAy5KpVA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
- dkim=pass header.d=oppo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qTld24b0sm8PbxCjVjiYms5LKcrxg48u2KgHyqr5rsY=;
- b=RZ7+GmpF56eY9xUJgpIIpj1fCRTn1gIu6xoB3yu6g4tc9FpBSqYs6LKA7WMjCnVaCNVp8CPrapV5CAzUfbPvaRPCgmH0RndpwyJLUa8FvcUu/lj6sODG15dWNYmexinkU2bubaifRMCdB/PzZ9ZY6P2hj7Y4ubdBhUW86GDCT0c=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oppo.com;
-Received: from SI2PR02MB5148.apcprd02.prod.outlook.com (2603:1096:4:153::6) by
- SEYPR02MB5871.apcprd02.prod.outlook.com (2603:1096:101:8a::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6500.19; Tue, 13 Jun 2023 02:28:36 +0000
-Received: from SI2PR02MB5148.apcprd02.prod.outlook.com
- ([fe80::6297:13a6:41f1:e471]) by SI2PR02MB5148.apcprd02.prod.outlook.com
- ([fe80::6297:13a6:41f1:e471%6]) with mapi id 15.20.6500.020; Tue, 13 Jun 2023
- 02:28:35 +0000
-Message-ID: <44e2c24a-c94c-a991-d029-c0997a1db5d2@oppo.com>
-Date:   Tue, 13 Jun 2023 10:28:32 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v4 1/6] f2fs: add helper to check compression level
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     chao@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, ebiggers@kernel.org
-References: <20230612030121.2393541-1-shengyong@oppo.com>
- <20230612030121.2393541-2-shengyong@oppo.com> <ZIeY0qNjXgx419NZ@google.com>
-From:   Sheng Yong <shengyong@oppo.com>
-In-Reply-To: <ZIeY0qNjXgx419NZ@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR02CA0040.apcprd02.prod.outlook.com
- (2603:1096:4:196::6) To SI2PR02MB5148.apcprd02.prod.outlook.com
- (2603:1096:4:153::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SI2PR02MB5148:EE_|SEYPR02MB5871:EE_
-X-MS-Office365-Filtering-Correlation-Id: ff512804-b03a-45d6-30a4-08db6bb5e3d1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1ft8mqH6YIb3yYpbF0X8Kixgyb/Pufsp8OMgT9x+Lwhiy0cBBdmGufq6WI5XmbGtZ5/u4qYkEj/DSAtr/SOGTvDz+/wXsQB822bwoa0E279EaMqmcLtjBtGPPEdtrbb92pji/igt5rR6LiSLX9t648CuUbJ5Yvg2ymORwHObUfQAdo6HGYg1pm6ly56U6kVAxkFDY4glFbwmB0nHkNxZa2u4V+il0MTRUrmL53tBjOLXCb4144WzxSqHcotUNxuzs7E0PoAhvgjTHdyA1eJ6jTsGd5TUintGnGtySO/H9QYAu7hyTeO266ZG0Nz/kavsYXbHwKQk0DE1eSqrodLFxxXMLMRHkhrdHMOn5HyVFgaJxkbRy7cq03Ov02t79KOcgxax9naOD9oUL4YKBT7qs+5YWT43i7iDLtu76B/KaggjhTdZSY+BSLi4CNS0WvNVbcv9vtxb3RQ3XrnWhtUM+Il4OxEt3zR13vO1c+gPaR9y1RhGnzJkKHKp2z2UMCjmBo6TEChsx01FnZQsBolMvrL5aYJ5Wx4AO/9+HVEx6YIeP2rOHYyU0XR4wURsQkPQqFYUGp8Nl8XrSHf2jZPGw8Au+7hZckBesJQKcDTJLFNmsXiW60Ttllu64APqdjuxFnMKj7x/ptOm7KbXrJX0rw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR02MB5148.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(136003)(39860400002)(346002)(366004)(451199021)(966005)(6666004)(6486002)(478600001)(6512007)(6506007)(186003)(83380400001)(36756003)(86362001)(31696002)(38100700002)(26005)(53546011)(2616005)(4326008)(6916009)(66476007)(66556008)(66946007)(316002)(8936002)(8676002)(31686004)(5660300002)(2906002)(41300700001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VnVMNGl0Qzg1bXNQWGRzbkl1Z2dCZjhUYnBGb1JYZkwxRUpxWUFIZnR4UXZ3?=
- =?utf-8?B?eGZhMkxpV2FVbzRud3hCczNVdTBrWTFFSnZvOGF5V28yTGloaFIyTVFlUVVL?=
- =?utf-8?B?TEYzYWJ5TCt6Q0l2SmJnZWtBMUNpWmhDTDd1Y0JDUmpMd0tDOFdadHFFOWxx?=
- =?utf-8?B?UGZMeTl3NXRTVyszTE1FenZIS2JmM2daTkl0bzZyV2xWckwrSVdKdU54OHBw?=
- =?utf-8?B?RTd5dFRaM2locnNZWC9FVzMwVm85dlV4d3JMcExYU0hjeVlzS0FWcVFOaU16?=
- =?utf-8?B?Y1djWVRIS1hDWkNVYWNHL2VqUUF1YWIrTWRWT2ZwSEhYeXh6RlVrMXdzeEc5?=
- =?utf-8?B?cGQwaHRTWG90UGhIYWJYVTlkQTZiUS9HU0Q4YTYraURaZUZSUEF0RGtlbFEx?=
- =?utf-8?B?aVpXYk9UZnZQRjlqdEx6UmE2WGU5Zk53ZTNVc1Fsck9EczFkUElSblQvUDBX?=
- =?utf-8?B?YUkvMU5UOVFIeXZmUWJBSDFXVHVDNDF4MmZRSzNLNUhidHUwTXVRcTNDcXJw?=
- =?utf-8?B?NnlQditUQU0zV2J5SXBHM05CVVhMcTYyaDU0cWF2eHJyQjROZkszcWZOTEdz?=
- =?utf-8?B?VlYyZkxlNnU4aUl4TTcwZElzMHNCNUVpM3RMYkJZTlBELzUyOE9XdStpUzVY?=
- =?utf-8?B?dk1LeDhyM3cvQ0EzUnE3OXh0UDgrVm1Wam5pUVdSbnNrQWUxSXdpY2RBcURE?=
- =?utf-8?B?T1lJV213SUltR09mdHJNciswU0lnSnloSnZ5ckEwdnNjUkFQQWcrV1RyQlpI?=
- =?utf-8?B?VXQ3Zk5oMGdFSWJuam5EV3dhcm5taWtsd2krK1lSa2Nqbm5UWFU2NzR0OGY5?=
- =?utf-8?B?Q2pSNXFpTlNjSFZOTGxKL1RJUGE3VFhqT09wTmkzcUxiejhPT01zWUpmVGhr?=
- =?utf-8?B?NnluRElDWFMzdUNsSVNMMjJhSXErdUtGckhpVzZjbDZyZEJuRFNyNUlvd3Nt?=
- =?utf-8?B?enNNUEdwU2tSQWN0dDFoOHYrbXMwUEF1T09kMHlLbCtDOWxZVXBhUlpuVVpv?=
- =?utf-8?B?SW5oa1dVckJJVTkzM0RsV0hxeitoZzlvYTdLNnZsV2pQcFkxbDNEZ25TNmg2?=
- =?utf-8?B?OEJvellyenl5UDFCWVZud1c3QUNoZjN0WmxKODNwUE1RSy9peHg1ZzU0ZlJ1?=
- =?utf-8?B?VXJVZkdvTml0WTM3Ui9xUFRhWVF1SExXQ3pIemRHZ1RSSEpGWERNRGhxMWJk?=
- =?utf-8?B?VkpKM1p0dDBSN1lwWldWa1o2Nml4cFl1emJWWHh0ZEoxcEdFOStZRmVBeXdI?=
- =?utf-8?B?bXVnQVBnVXZ3WVlvU1ExUVg4M2dSQ2xFMWNMMEJhTm5TWDlpczN2OTNxcXhs?=
- =?utf-8?B?QlBWSTZrNWdkcFdPb1IyYzQwbE9hb0swakFkZ3FrRzRQWngyVHhsQXNtSmpH?=
- =?utf-8?B?dTArWmhmTnVzS0pueEM4STFTSTYrSUNPQURZNWxabStjY1RQajdhbS9UTThv?=
- =?utf-8?B?ZHBqek1mVkhSakkrU3gvQzRMUllVV2dIMHAwY2E5RWdwWDRzaW1VcWZQYjBq?=
- =?utf-8?B?eFUvcUNEMDRrNWF3ZnFOMGdESFl3VlBtVkdJbDJjOUlYdmxXL1JISVZaUHk5?=
- =?utf-8?B?VUtnVnB0QzYzNjdldjVVY3JvanArdEJiOU8xWURTZGhhcWs1bmF3SWRMcXlm?=
- =?utf-8?B?M01hdi9mU3A3bkp4QWJlZTdwL3FyV01RL0ZjK0IxOWZmc0V2eGVwM0g2K3hE?=
- =?utf-8?B?Z0hFaHFSa1FnQ2tnMURZRVhnckwxNHJLVFRXYm9YdnMwSnFhdEYwaWVwMVRu?=
- =?utf-8?B?VHpkRndHZGM5MWZEcTJXUVNqR1hPc0VXSDkwUmhGWVV0c1EvZWg5TUphZ1J5?=
- =?utf-8?B?K1Z0T1MrU3oxVFFKUCtWT3pZVndhZ1A5SXpKY1ZxSHFOMmNQMW1sZlVsVGRL?=
- =?utf-8?B?OXBPMnBydW45R1FnRm01N2FBSDdDUmhpVHRGcXBSWUhiMEIrYmxjejhzRjRs?=
- =?utf-8?B?UVlndFgwSVVGWFRldGVNaXJ5L0RKREJyNEx6K0N3WkRzK3FUT0g3clhkYzBq?=
- =?utf-8?B?eG5zMnBGVlJSZEtoZVhQQ25ZRmxJd2ZLSjduYndVV2VUNHRoT00rZnNOWDY2?=
- =?utf-8?B?YW5aZnN3Q3lkWlNZZVdLaGsxVVBLbUlvcDlWVVdieWlCRE9DRXJqOVJ5RzJl?=
- =?utf-8?Q?NFVzHVCgZuXsOTyCCeHICSfz6?=
-X-OriginatorOrg: oppo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ff512804-b03a-45d6-30a4-08db6bb5e3d1
-X-MS-Exchange-CrossTenant-AuthSource: SI2PR02MB5148.apcprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2023 02:28:35.9271
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jMEw63aTQIVhaUtcDoE9JVo3Xpp6DB1VtdXKVCAKWF49pSvUdjX3eGruo4+XK1XGsu1itFuCWOeM5q/BeYei4w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR02MB5871
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 12 Jun 2023 22:36:29 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57FF10FC
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 19:36:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686623788; x=1718159788;
+  h=date:from:to:cc:subject:message-id;
+  bh=HrNnpM/Jj9ct7HcwtfZLldqiHTU2etA4BWw7l88Rj48=;
+  b=b+GCRgE+GZq8mP8/J6Sme6c0HkmROHpzPnOu6KLXGRptHDcQdf5Ae9s2
+   CLyT+i1iY3LXnb1Wr2UUQ0pp9LiV0EdahwSXZ5uCwNiw0HA1B83+wJqM+
+   I4AKRWi++UNpBLlzv+MnkZFsymwaT0nSsBle07Kg/gaz4KDOtgoj/AoCL
+   LSzJg/qajDbzaSdsadbsFp7kTucPIsltWYvzYObSmbc+0E/JYhyQz1fH1
+   H1rj+GzBvNW8O8QY8fWSRu2xYFpAotBtgBlk9OK1MUKne6Ol7XilIuU0v
+   Yg+jQwrWe6hzOFFf9jtOreebHgE2GiwRY2VsMTNnGKnlxcBTmfzqb1Vxc
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="342901662"
+X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
+   d="scan'208";a="342901662"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 19:36:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="855914250"
+X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
+   d="scan'208";a="855914250"
+Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 12 Jun 2023 19:36:27 -0700
+Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q8ttS-0000wO-12;
+        Tue, 13 Jun 2023 02:36:26 +0000
+Date:   Tue, 13 Jun 2023 10:35:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/microcode] BUILD SUCCESS
+ 4a7349239418d78193e8d328f5eebd14a3f77bcd
+Message-ID: <202306131039.0oEns4O9-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/microcode
+branch HEAD: 4a7349239418d78193e8d328f5eebd14a3f77bcd  x86/microcode: Add a "microcode=" command line option
 
-On 2023/6/13 6:14, Jaegeuk Kim wrote:
-> Could you please check this version?
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git/commit/?h=dev-test&id=9c84aad379019a0d86655bb50bd7b4bc92683c4b
+elapsed time: 728m
 
-Hi, Jaegeuk,
+configs tested: 127
+configs skipped: 8
 
-Thanks for cleaning it up. This version looks good to me. I tested it
-with my testcases, and all are passed.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-thanks,
-shengyong
-> 
-> On 06/12, Sheng Yong wrote:
->> This patch adds a helper function to check if compression level is
->> valid.
->>
->> Signed-off-by: Sheng Yong <shengyong@oppo.com>
->> ---
->>   fs/f2fs/compress.c | 31 +++++++++++++++++++++++++++++++
->>   fs/f2fs/f2fs.h     |  2 ++
->>   fs/f2fs/super.c    |  4 ++--
->>   3 files changed, 35 insertions(+), 2 deletions(-)
->>
->> diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
->> index 1132d3cd8f337..63a496137ebe7 100644
->> --- a/fs/f2fs/compress.c
->> +++ b/fs/f2fs/compress.c
->> @@ -55,6 +55,7 @@ struct f2fs_compress_ops {
->>   	int (*init_decompress_ctx)(struct decompress_io_ctx *dic);
->>   	void (*destroy_decompress_ctx)(struct decompress_io_ctx *dic);
->>   	int (*decompress_pages)(struct decompress_io_ctx *dic);
->> +	bool (*is_level_valid)(int level);
->>   };
->>   
->>   static unsigned int offset_in_cluster(struct compress_ctx *cc, pgoff_t index)
->> @@ -308,11 +309,23 @@ static int lz4_decompress_pages(struct decompress_io_ctx *dic)
->>   	return 0;
->>   }
->>   
->> +static bool lz4_is_level_valid(int lvl)
->> +{
->> +	if (lvl == 0)
->> +		return true;
->> +#ifdef CONFIG_F2FS_FS_LZ4HC
->> +	if (lvl >= LZ4HC_MIN_CLEVEL && lvl <= LZ4HC_MAX_CLEVEL)
->> +		return true;
->> +#endif
->> +	return false;
->> +}
->> +
->>   static const struct f2fs_compress_ops f2fs_lz4_ops = {
->>   	.init_compress_ctx	= lz4_init_compress_ctx,
->>   	.destroy_compress_ctx	= lz4_destroy_compress_ctx,
->>   	.compress_pages		= lz4_compress_pages,
->>   	.decompress_pages	= lz4_decompress_pages,
->> +	.is_level_valid		= lz4_is_level_valid,
->>   };
->>   #endif
->>   
->> @@ -477,6 +490,13 @@ static int zstd_decompress_pages(struct decompress_io_ctx *dic)
->>   	return 0;
->>   }
->>   
->> +static bool zstd_is_level_valid(int lvl)
->> +{
->> +	if (lvl < zstd_min_clevel() || lvl > zstd_max_clevel())
->> +		return false;
->> +	return true;
->> +}
->> +
->>   static const struct f2fs_compress_ops f2fs_zstd_ops = {
->>   	.init_compress_ctx	= zstd_init_compress_ctx,
->>   	.destroy_compress_ctx	= zstd_destroy_compress_ctx,
->> @@ -484,6 +504,7 @@ static const struct f2fs_compress_ops f2fs_zstd_ops = {
->>   	.init_decompress_ctx	= zstd_init_decompress_ctx,
->>   	.destroy_decompress_ctx	= zstd_destroy_decompress_ctx,
->>   	.decompress_pages	= zstd_decompress_pages,
->> +	.is_level_valid		= zstd_is_level_valid,
->>   };
->>   #endif
->>   
->> @@ -542,6 +563,16 @@ bool f2fs_is_compress_backend_ready(struct inode *inode)
->>   	return f2fs_cops[F2FS_I(inode)->i_compress_algorithm];
->>   }
->>   
->> +bool f2fs_is_compress_level_valid(int alg, int lvl)
->> +{
->> +	const struct f2fs_compress_ops *cops = f2fs_cops[alg];
->> +
->> +	if (cops->is_level_valid)
->> +		return cops->is_level_valid(lvl);
->> +
->> +	return lvl == 0;
->> +}
->> +
->>   static mempool_t *compress_page_pool;
->>   static int num_compress_pages = 512;
->>   module_param(num_compress_pages, uint, 0444);
->> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
->> index 80c783215b5a3..1b17bbe7e8656 100644
->> --- a/fs/f2fs/f2fs.h
->> +++ b/fs/f2fs/f2fs.h
->> @@ -4236,6 +4236,7 @@ bool f2fs_compress_write_end(struct inode *inode, void *fsdata,
->>   int f2fs_truncate_partial_cluster(struct inode *inode, u64 from, bool lock);
->>   void f2fs_compress_write_end_io(struct bio *bio, struct page *page);
->>   bool f2fs_is_compress_backend_ready(struct inode *inode);
->> +bool f2fs_is_compress_level_valid(int alg, int lvl);
->>   int __init f2fs_init_compress_mempool(void);
->>   void f2fs_destroy_compress_mempool(void);
->>   void f2fs_decompress_cluster(struct decompress_io_ctx *dic, bool in_task);
->> @@ -4300,6 +4301,7 @@ static inline bool f2fs_is_compress_backend_ready(struct inode *inode)
->>   	/* not support compression */
->>   	return false;
->>   }
->> +static inline bool f2fs_is_compress_level_valid(int alg, int lvl) { return false; }
->>   static inline struct page *f2fs_compress_control_page(struct page *page)
->>   {
->>   	WARN_ON_ONCE(1);
->> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
->> index 8fd23caa1ed99..023981824d240 100644
->> --- a/fs/f2fs/super.c
->> +++ b/fs/f2fs/super.c
->> @@ -606,7 +606,7 @@ static int f2fs_set_lz4hc_level(struct f2fs_sb_info *sbi, const char *str)
->>   	if (kstrtouint(str + 1, 10, &level))
->>   		return -EINVAL;
->>   
->> -	if (level < LZ4HC_MIN_CLEVEL || level > LZ4HC_MAX_CLEVEL) {
->> +	if (!f2fs_is_compress_level_valid(COMPRESS_LZ4, level)) {
->>   		f2fs_info(sbi, "invalid lz4hc compress level: %d", level);
->>   		return -EINVAL;
->>   	}
->> @@ -640,7 +640,7 @@ static int f2fs_set_zstd_level(struct f2fs_sb_info *sbi, const char *str)
->>   	if (kstrtouint(str + 1, 10, &level))
->>   		return -EINVAL;
->>   
->> -	if (!level || level > zstd_max_clevel()) {
->> +	if (!f2fs_is_compress_level_valid(COMPRESS_ZSTD, level)) {
->>   		f2fs_info(sbi, "invalid zstd compress level: %d", level);
->>   		return -EINVAL;
->>   	}
->> -- 
->> 2.40.1
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha        buildonly-randconfig-r001-20230612   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r002-20230612   gcc  
+alpha                randconfig-r015-20230612   gcc  
+alpha                randconfig-r022-20230612   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r015-20230612   gcc  
+arc                  randconfig-r025-20230612   gcc  
+arc                  randconfig-r043-20230612   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                         axm55xx_defconfig   gcc  
+arm          buildonly-randconfig-r004-20230612   clang
+arm          buildonly-randconfig-r005-20230612   clang
+arm                     davinci_all_defconfig   clang
+arm                                 defconfig   gcc  
+arm                  randconfig-r003-20230612   gcc  
+arm                  randconfig-r046-20230612   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r004-20230612   clang
+csky                                defconfig   gcc  
+csky                 randconfig-r034-20230612   gcc  
+csky                 randconfig-r036-20230612   gcc  
+hexagon      buildonly-randconfig-r006-20230612   clang
+hexagon              randconfig-r041-20230612   clang
+hexagon              randconfig-r045-20230612   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230612   clang
+i386                 randconfig-i002-20230612   clang
+i386                 randconfig-i003-20230612   clang
+i386                 randconfig-i004-20230612   clang
+i386                 randconfig-i005-20230612   clang
+i386                 randconfig-i006-20230612   clang
+i386                 randconfig-i011-20230612   gcc  
+i386                 randconfig-i012-20230612   gcc  
+i386                 randconfig-i013-20230612   gcc  
+i386                 randconfig-i014-20230612   gcc  
+i386                 randconfig-i015-20230612   gcc  
+i386                 randconfig-i016-20230612   gcc  
+i386                 randconfig-r001-20230612   clang
+i386                 randconfig-r012-20230612   gcc  
+i386                 randconfig-r014-20230612   gcc  
+i386                 randconfig-r035-20230612   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r001-20230612   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r023-20230612   gcc  
+m68k                 randconfig-r032-20230612   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                        bcm47xx_defconfig   gcc  
+mips                        maltaup_defconfig   clang
+mips                 randconfig-r021-20230612   clang
+mips                           xway_defconfig   gcc  
+nios2        buildonly-randconfig-r003-20230612   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r022-20230612   gcc  
+nios2                randconfig-r032-20230612   gcc  
+openrisc     buildonly-randconfig-r004-20230612   gcc  
+openrisc             randconfig-r013-20230612   gcc  
+openrisc             randconfig-r024-20230612   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r033-20230612   gcc  
+parisc64                            defconfig   gcc  
+powerpc                     akebono_defconfig   clang
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                     rainier_defconfig   gcc  
+powerpc              randconfig-r003-20230612   clang
+riscv                            alldefconfig   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r011-20230612   gcc  
+riscv                randconfig-r042-20230612   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r004-20230612   clang
+s390                 randconfig-r016-20230612   gcc  
+s390                 randconfig-r025-20230612   gcc  
+s390                 randconfig-r026-20230612   gcc  
+s390                 randconfig-r033-20230612   clang
+s390                 randconfig-r044-20230612   gcc  
+sh                               allmodconfig   gcc  
+sh                   randconfig-r031-20230612   gcc  
+sh                   randconfig-r036-20230612   gcc  
+sh                          sdk7780_defconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64              randconfig-r006-20230612   gcc  
+sparc64              randconfig-r021-20230612   gcc  
+sparc64              randconfig-r035-20230612   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   clang
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r002-20230612   clang
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230612   clang
+x86_64               randconfig-a002-20230612   clang
+x86_64               randconfig-a003-20230612   clang
+x86_64               randconfig-a004-20230612   clang
+x86_64               randconfig-a005-20230612   clang
+x86_64               randconfig-a006-20230612   clang
+x86_64               randconfig-a011-20230612   gcc  
+x86_64               randconfig-a012-20230612   gcc  
+x86_64               randconfig-a013-20230612   gcc  
+x86_64               randconfig-a014-20230612   gcc  
+x86_64               randconfig-a015-20230612   gcc  
+x86_64               randconfig-a016-20230612   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r013-20230612   gcc  
+xtensa               randconfig-r014-20230612   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
