@@ -2,143 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 844FE72DDD6
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 11:36:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE8872DDE2
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 11:37:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234044AbjFMJgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 05:36:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53518 "EHLO
+        id S239208AbjFMJhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 05:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241979AbjFMJfT (ORCPT
+        with ESMTP id S239443AbjFMJhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 05:35:19 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F205E52;
-        Tue, 13 Jun 2023 02:35:18 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b227fdda27so44739101fa.1;
-        Tue, 13 Jun 2023 02:35:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686648917; x=1689240917;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2iWhindHOsxnpq1wX2NfZLQ2L8M7YYJer1+2D3NT1I0=;
-        b=qI24wwymKrn5XH2edmVN+C+LRRo6cF301xw6V0hkfV5BW5jNEY4eyT7+n9n5NRAsbC
-         zEFndS0eB7pwG90caXDiL8nCHmvHzcQf6Ww6d+/5zgP7PQZQij9f2OFUhCybqxTitoxk
-         PJTxMB0ri5uzzl550BFX/T4tEDaGNml4M2YW1WpWmRgKR/yPMWnssWqBAAZ5HypYfdI5
-         iRLvcbFLllQZSBKFzWxKrMlfNNSqFaSBQwpy9erh1Hy+2o0hZX0VHMjSuziIx/CqqC5X
-         rdVTmil2ZVkwesOM48ISk38orXz6Em8BDdOzJhVjviXvnMBDPkvAY4jwemahiFBnN/eW
-         gZmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686648917; x=1689240917;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2iWhindHOsxnpq1wX2NfZLQ2L8M7YYJer1+2D3NT1I0=;
-        b=gnjwBOcjJLXkJY7Ic9lirswI3MkMwgiTUqb6s/4lTkxKa3rDwh77mEz3zrGlgBevef
-         4uPL8b3GAjIVHFB/f9Wck07Fug6SM+VUrR0+I4HLvOhchGFI4xLOcfhGGYNJnQuQBY/J
-         eSbsc4RLcE42iWFZhkyVE0d5YjxCzGf1T51YJCB9jFenRQqeHrqsL+/085ELXeoTjv3v
-         dyakvHDVbpObpL6Ji7Q5TBPXsRu+qdmcHc+H/XINOD9CXHMz/KvU9H3lgwvKrsizgODl
-         E6D6DH3c7Z8XQOUaZKN2JPsCdjLXZSpnOrtTvCMhZoKUfodjI4BYVU5/0DQLR6B0eX9r
-         VEjw==
-X-Gm-Message-State: AC+VfDzNnsSiz5aiO4bOKPgTN1lFPOXD7zrrdj6BgP/g2KNUBy1hVdUX
-        Pw9Y3Bi5bd3zVIdKMlobWz4=
-X-Google-Smtp-Source: ACHHUZ5y84wlpKyjEID+HOXo8vs+sEKOLM5HA/5Eb2ufvQqxzT/ktpDk/GZyv6x+kpL1IrtE6zf8NA==
-X-Received: by 2002:a2e:2403:0:b0:2a7:7493:9966 with SMTP id k3-20020a2e2403000000b002a774939966mr2965359ljk.24.1686648916532;
-        Tue, 13 Jun 2023 02:35:16 -0700 (PDT)
-Received: from dc78bmyyyyyyyyyyyyyyt-3.rev.dnainternet.fi (dc78bmyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f8:1500::1])
-        by smtp.gmail.com with ESMTPSA id k15-20020a2e240f000000b002b1a872c826sm1837749ljk.61.2023.06.13.02.35.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 02:35:15 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 12:35:12 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] iio: light: bu27008: Fix intensity data type
-Message-ID: <240a7ca5fc1b76da20d81f930d00f31a54b1fdf8.1686648422.git.mazziesaccount@gmail.com>
-References: <cover.1686648422.git.mazziesaccount@gmail.com>
+        Tue, 13 Jun 2023 05:37:23 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0572C3;
+        Tue, 13 Jun 2023 02:37:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686649042; x=1718185042;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=sK4SMOaK62ydzdde+segKUntckMsJWrxYGQGbFSDWmo=;
+  b=LZabzckD+RYtDG+d15qftD3dl4KHnBZBBFiUJeUwqypEhebGScvCNR6T
+   zyGT80UM/MCGgVGJT6dqjx62Vh7hAiXQ51RQo+dtmBrM441AC6cTuUKee
+   yUeF371VTHFneThpvaJI2eSVq9VXjI0YRALe7lq03OaQ76znmXpI5wpob
+   BSBj94oeZ+T8QdQ7kSFV2YcRgbxYvZd0RN6k3Teuri0aAfzLqi7ajqsof
+   /C7SySGXqCAewagkaY/rZNsm3/q9wQYNYzzC0/PRq96AltH3Jw/iSYkyr
+   z2fbtQNGVXpginnN5laKSho4Zv90e6JJV/+SaCOu2xHOI6pr/Cotlzozz
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="337916456"
+X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
+   d="scan'208";a="337916456"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 02:36:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="824325090"
+X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
+   d="scan'208";a="824325090"
+Received: from abujor-mobl.ger.corp.intel.com ([10.249.44.113])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 02:36:50 -0700
+Date:   Tue, 13 Jun 2023 12:36:48 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Jacky Huang <ychuang570808@gmail.com>
+cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        p.zabel@pengutronix.de,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, tmaimon77@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-serial <linux-serial@vger.kernel.org>, arnd@arndb.de,
+        soc@kernel.org, schung@nuvoton.com, mjchen@nuvoton.com,
+        Jacky Huang <ychuang3@nuvoton.com>
+Subject: Re: [PATCH v14 1/1] tty: serial: Add Nuvoton ma35d1 serial driver
+ support
+In-Reply-To: <20230612025355.547871-2-ychuang570808@gmail.com>
+Message-ID: <6af0e528-096-391-43db-c07659e46e9@linux.intel.com>
+References: <20230612025355.547871-1-ychuang570808@gmail.com> <20230612025355.547871-2-ychuang570808@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="VHU0M3xPK1b1nyOO"
-Content-Disposition: inline
-In-Reply-To: <cover.1686648422.git.mazziesaccount@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; BOUNDARY="8323329-1313138601-1686648986=:2099"
+Content-ID: <205652a6-becb-10ae-b038-af463b408a16@linux.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
---VHU0M3xPK1b1nyOO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+--8323329-1313138601-1686648986=:2099
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+Content-ID: <006fe4-6e79-c630-fb6f-8b81dee31dff@linux.intel.com>
 
-The intensity data from bu27008 is unsigned. The type of the scan data
-was incorrectly marked as signed resulting large intensity values to be
-interpreted as negative ones.
+On Mon, 12 Jun 2023, Jacky Huang wrote:
 
-Fix the scan data type.
+> From: Jacky Huang <ychuang3@nuvoton.com>
+> 
+> This adds UART and console driver for Nuvoton ma35d1 Soc.
+> It supports full-duplex communication, FIFO control, and
+> hardware flow control.
+> 
+> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
----
-Fixes tag not added because AFACS the bu27008 is not yet in any releases.
----
- drivers/iio/light/rohm-bu27008.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/iio/light/rohm-bu27008.c b/drivers/iio/light/rohm-bu27=
-008.c
-index 80eb14ea8193..b50bf8973d9a 100644
---- a/drivers/iio/light/rohm-bu27008.c
-+++ b/drivers/iio/light/rohm-bu27008.c
-@@ -190,7 +190,7 @@ static const struct iio_itime_sel_mul bu27008_itimes[] =
-=3D {
- 	.address =3D BU27008_REG_##data##_LO,					\
- 	.scan_index =3D BU27008_##color,						\
- 	.scan_type =3D {								\
--		.sign =3D 's',							\
-+		.sign =3D 'u',							\
- 		.realbits =3D 16,							\
- 		.storagebits =3D 16,						\
- 		.endianness =3D IIO_LE,						\
---=20
-2.40.1
-
-
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---VHU0M3xPK1b1nyOO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmSIOFAACgkQeFA3/03a
-ocW2JAf/WHNOhKsmgJ7tYo98tiAwIYkU5Hd2wzWzUi8iGqowDg7fF7tJOgTFTx4K
-abHmA3hEMLpt6KR4kGOtDw2qS8z8QsclOx6vlft39MHgJGbWqFpMwB0USqhj4QD1
-r/Cm+uTfCUN0aO4aRpj+nvHLD7CFKtRG9G0PfpilhB8aqxhqb0h6OW5ifYidy82g
-JSsFy4q5knXtRahjQlNC1Rd00ciJSWUmSU+1dRcwa9bwIHFRWCFRB6eHd4LSddkY
-xytHJrEip3nx4wbhjHMB5lEv0kbd1CfyIBPg1JzZXXrxpYnfYdltPtNmsN45u6lx
-XnOWkKbNK0yoq0AlGMjC2R/a7SJzYg==
-=UxJ2
------END PGP SIGNATURE-----
-
---VHU0M3xPK1b1nyOO--
+-- 
+ i.
+--8323329-1313138601-1686648986=:2099--
