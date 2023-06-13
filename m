@@ -2,173 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC91872E7E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 18:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12D4072E7FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 18:13:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242935AbjFMQKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 12:10:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40910 "EHLO
+        id S241491AbjFMQMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 12:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243046AbjFMQKG (ORCPT
+        with ESMTP id S235917AbjFMQMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 12:10:06 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 797351989;
-        Tue, 13 Jun 2023 09:10:05 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2B482143D;
-        Tue, 13 Jun 2023 09:10:50 -0700 (PDT)
-Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E80413F5A1;
-        Tue, 13 Jun 2023 09:10:03 -0700 (PDT)
-From:   Ryan Roberts <ryan.roberts@arm.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Yu Zhao <yuzhao@google.com>
-Cc:     Ryan Roberts <ryan.roberts@arm.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v1 2/2] mm: /proc/pid/smaps: Report contpte mappings
-Date:   Tue, 13 Jun 2023 17:09:50 +0100
-Message-Id: <20230613160950.3554675-3-ryan.roberts@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230613160950.3554675-1-ryan.roberts@arm.com>
-References: <20230613160950.3554675-1-ryan.roberts@arm.com>
+        Tue, 13 Jun 2023 12:12:41 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DFB92;
+        Tue, 13 Jun 2023 09:12:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686672760; x=1718208760;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=WHV4FEfJfq9HVHNXBICHwzIvVJlAjf9wds6NoOlHzQE=;
+  b=TTvk/I+iVa1XyyjiI8kri7qizPs/Kj5SCg3J04k/65yhgEjCTWwFd7r2
+   0tpsHm9FMBf5oMeb8tDGidyqmTe9aF7B7LIvLPIUES/sK0GyabxsHuaTS
+   oq0fGReomNrEOH+pJMvPiT6sWklgWEwatG29PgrWc5aVt95dSk+ub2rtu
+   Dic7vVskpvSJINWanxkhctQ0JWZYtfTN5XqJkygaYIjcFA8CxVXvkarrT
+   qmWmkQvrNn7inv+NxHWkyahCvL9ECbrYpe22w5gqQMwJMmsqPaMc4Fyw0
+   caVj7Aa5V6xnocs5B1scj99PTJIHGr0570YPJCxi69Ps4CsZTgf3PMlrx
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="348038772"
+X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
+   d="scan'208";a="348038772"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 09:10:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="714863422"
+X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
+   d="scan'208";a="714863422"
+Received: from powerlab.fi.intel.com ([10.237.71.25])
+  by fmsmga007.fm.intel.com with ESMTP; 13 Jun 2023 09:10:48 -0700
+From:   Michal Wilczynski <michal.wilczynski@intel.com>
+To:     linux-acpi@vger.kernel.org
+Cc:     rafael@kernel.org, andriy.shevchenko@intel.com,
+        artem.bityutskiy@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, lenb@kernel.org,
+        jgross@suse.com, linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: [PATCH v3 0/5] Prefer using _OSC method over deprecated _PDC
+Date:   Tue, 13 Jun 2023 19:10:29 +0300
+Message-Id: <20230613161034.3496047-1-michal.wilczynski@intel.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-arm64 intends to start using its "contpte" bit in pgtables more
-frequently, and therefore it would be useful to know how well utilised
-it is in order to help diagnose and fix performance issues.
+ACPI 3.0 introduced a new Operating System Capabilities _OSC control
+method. This method is similar to _PDC, which was marked as deprecated
+in ACPI 3.0.
 
-Add "ContPTEMapped" field, which shows how much of the rss is mapped
-using contptes. For architectures that do not support contpte mappings
-(as determined by pte_cont() not being defined) the field will be
-suppressed.
+Prefer using _OSC method over deprecated _PDC in the acpi_bus_init(). In
+case of the failure of the _OSC, try using _PDC as a fallback.
 
-Rollup Example:
+Testing done:
+Tested on physical server with BIOS implementing _OSC methods. In this
+case acpi_processor_osc() was executed for each CPU core. acpi_run_osc()
+returned success indicating that _OSC method succeeded.
 
-aaaac5150000-ffffccf07000 ---p 00000000 00:00 0                 [rollup]
-Rss:               11504 kB
-...
-ContPTEMapped:      6848 kB
+Tested on qemu VM to check whether the code would work on a SeaBios (the
+default for qemu, doesn't support _OSC methods, or _PDC). This way I was
+able to see how code behaves in case BIOS doesn't implement _OSC. In
+that case the function
+acpi_run_osc() returned failure, which propagated all the way up to
+acpi_early_processor_osc(). The logic responsible for triggering _PDC
+execution was triggered correctly.
 
-Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
----
- Documentation/filesystems/proc.rst |  5 +++++
- fs/proc/task_mmu.c                 | 19 +++++++++++++++----
- 2 files changed, 20 insertions(+), 4 deletions(-)
+Tested this using debug messages with printk.
 
-diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-index 5fa3f638848d..726951374c57 100644
---- a/Documentation/filesystems/proc.rst
-+++ b/Documentation/filesystems/proc.rst
-@@ -491,6 +491,7 @@ Memory Area, or VMA) there is a series of lines such as the following::
-     FileCont512K:          0 kB
-     FileCont1M:            0 kB
-     FileCont2M:            0 kB
-+    ContPTEMapped:         0 kB
-     THPeligible:           0
-     VmFlags: rd ex mr mw me dw
- 
-@@ -550,6 +551,10 @@ pmd size. Therefore the exact set of keys will vary by platform. It only
- includes pte-mapped memory and reports on anonymous and file-backed memory
- separately.
- 
-+"ContPTEMapped" is only present for architectures that support indicating a set
-+of contiguously mapped ptes in their page tables. In this case, it indicates
-+how much of the memory is currently mapped using contpte mappings.
-+
- "THPeligible" indicates whether the mapping is eligible for allocating THP
- pages as well as the THP is PMD mappable or not - 1 if true, 0 otherwise.
- It just shows the current status.
-diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index 29fee5b7b00b..0ebd6eb7efd4 100644
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -465,6 +465,7 @@ struct mem_size_stats {
- 	unsigned long anon_cont[CONT_ORDER_MAX + 1];
- 	unsigned long file_cont[CONT_ORDER_MAX + 1];
- 	struct cont_accumulator cacc;
-+	unsigned long contpte_mapped;
- };
- 
- static void cacc_init(struct mem_size_stats *mss)
-@@ -548,7 +549,7 @@ static void smaps_page_accumulate(struct mem_size_stats *mss,
- 
- static void smaps_account(struct mem_size_stats *mss, struct page *page,
- 		bool compound, bool young, bool dirty, bool locked,
--		bool migration)
-+		bool migration, bool contpte)
- {
- 	int i, nr = compound ? compound_nr(page) : 1;
- 	unsigned long size = nr * PAGE_SIZE;
-@@ -572,6 +573,10 @@ static void smaps_account(struct mem_size_stats *mss, struct page *page,
- 	if (!compound)
- 		cacc_accumulate(mss, page);
- 
-+	/* Accumulate all the pages that are part of a contpte. */
-+	if (contpte)
-+		mss->contpte_mapped += size;
-+
- 	/*
- 	 * Then accumulate quantities that may depend on sharing, or that may
- 	 * differ page-by-page.
-@@ -636,13 +641,16 @@ static void smaps_pte_entry(pte_t *pte, unsigned long addr,
- 	struct vm_area_struct *vma = walk->vma;
- 	bool locked = !!(vma->vm_flags & VM_LOCKED);
- 	struct page *page = NULL;
--	bool migration = false, young = false, dirty = false;
-+	bool migration = false, young = false, dirty = false, cont = false;
- 	pte_t ptent = ptep_get(pte);
- 
- 	if (pte_present(ptent)) {
- 		page = vm_normal_page(vma, addr, ptent);
- 		young = pte_young(ptent);
- 		dirty = pte_dirty(ptent);
-+#ifdef pte_cont
-+		cont = pte_cont(ptent);
-+#endif
- 	} else if (is_swap_pte(ptent)) {
- 		swp_entry_t swpent = pte_to_swp_entry(ptent);
- 
-@@ -672,7 +680,7 @@ static void smaps_pte_entry(pte_t *pte, unsigned long addr,
- 	if (!page)
- 		return;
- 
--	smaps_account(mss, page, false, young, dirty, locked, migration);
-+	smaps_account(mss, page, false, young, dirty, locked, migration, cont);
- }
- 
- #ifdef CONFIG_TRANSPARENT_HUGEPAGE
-@@ -708,7 +716,7 @@ static void smaps_pmd_entry(pmd_t *pmd, unsigned long addr,
- 		mss->file_thp += HPAGE_PMD_SIZE;
- 
- 	smaps_account(mss, page, true, pmd_young(*pmd), pmd_dirty(*pmd),
--		      locked, migration);
-+		      locked, migration, false);
- }
- #else
- static void smaps_pmd_entry(pmd_t *pmd, unsigned long addr,
-@@ -964,6 +972,9 @@ static void __show_smap(struct seq_file *m, const struct mem_size_stats *mss,
- 					cont_label(i, label),
- 					mss->file_cont[i] >> 10);
- 	}
-+#ifdef pte_cont
-+	SEQ_PUT_DEC(" kB\nContPTEMapped:  ", mss->contpte_mapped);
-+#endif
- 	seq_puts(m, " kB\n");
- }
- 
+v3:
+ - split into more commits to make review easier
+ - changed "_UID" to METHOD_NAME_UID
+ - changed hard-coded constant to ACPI_PDC_COLLAB_PROC_PERF
+ - added Suggested-by tags
+ - fixed style issues
+ - fixed whitespaces
+ - refactored code
+v2:
+ - fixed compilation issues on ia64 and arm
+
+Michal Wilczynski (5):
+  acpi: Move logic responsible for conveying processor OSPM capabilities
+  acpi: Refactor arch_acpi_set_pdc_bits()
+  acpi: Introduce new function callback for _OSC
+  acpi: Use _OSC method to convey processor OSPM capabilities
+  acpi: Remove acpi_hwp_native_thermal_lvt_osc()
+
+ arch/ia64/include/asm/acpi.h  |   4 +-
+ arch/x86/include/asm/acpi.h   |  13 +--
+ drivers/acpi/acpi_processor.c | 151 +++++++++++++++++++++++++++-------
+ drivers/acpi/bus.c            |  13 ++-
+ drivers/acpi/internal.h       |  10 +--
+ drivers/acpi/processor_pdc.c  |  82 +-----------------
+ include/acpi/pdc_intel.h      |   1 +
+ include/acpi/processor.h      |   2 +-
+ 8 files changed, 148 insertions(+), 128 deletions(-)
+
 -- 
-2.25.1
+2.41.0
 
