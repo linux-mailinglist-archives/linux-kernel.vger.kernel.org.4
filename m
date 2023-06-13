@@ -2,108 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E504C72E2BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86E2A72E2BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240520AbjFMMSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 08:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
+        id S242396AbjFMMTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 08:19:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242362AbjFMMSN (ORCPT
+        with ESMTP id S241824AbjFMMTA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 08:18:13 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F4310FA;
-        Tue, 13 Jun 2023 05:18:10 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f7368126a6so40406665e9.0;
-        Tue, 13 Jun 2023 05:18:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686658689; x=1689250689;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5lN7lpEDhUAFrWCql8GXgz0NB6FUC/uhCsLDpu9xEis=;
-        b=sGOaxWfnltQqyhvjw10PWp15U+snxILw/aOJVFnVmoroUvlASQNXSj4ltoGNcw3nHl
-         I79wSUahzanCYjybZkX9XYsl9zll4P0OF730gjq/1+7KNhDBRTWq5wKqyVRCP1CPuXeI
-         F4yBWe0K6c3FJiS/dsqmAREiURH4+T/v9xusNuj4LtdUP89PasuYfoFog6iINw06fGgW
-         prI30vAz2Cv0h0sc3WRZrv+7MQswjMVG/l7szoXxQna3C2x/FgXrDQTc+g+h0c62ljWl
-         QntSFHHG/UMZG6+xDySaDHE4fngbH7dKYmU51wZkXjxP2GfFscRHMTCtCSmtaFY1BL8z
-         PSPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686658689; x=1689250689;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5lN7lpEDhUAFrWCql8GXgz0NB6FUC/uhCsLDpu9xEis=;
-        b=dygstSDbmsgMyD7UB8IssbjjFZxLkRvqGoWl2aZbJasMql8Essn0B8/cLOrBFJc2Zw
-         yJHNKXwKGbSiQQ0zMGvN+UF8E5gHQB1Vs4q2sKW9H4VYtzsof7MgPpMZXSsDjoTs0Pjl
-         LtnxP/p/qUfZ56iYspmjwb1PeTWXiZQl4zDEWHp8Qqfr4llJZ0i18KDp0HeAAhEAdoRh
-         C6e6MH2zr0q49OjNLj3+WYVN0zEgL2gw53neQtvymH0vuToy9iputSd/YMzFrkWnUQmW
-         wWYUjDdNw1G+DDDmMIjurwe8MVQRqzNla4m4N5RD+pSntF1Fj6ntPFqXGRdrzvPjhwgm
-         kRsQ==
-X-Gm-Message-State: AC+VfDyCy1OMiDe7fNQ+fRWGO/qU7olS804C/P3Xz3kPLs0QgK2PZc9t
-        9H5PeZDVtCoxio0Z2aGlU3E=
-X-Google-Smtp-Source: ACHHUZ7tXyNzLeloSSFIoDzLEWtS2QbakYDXkwCEZCpaQlzqXFpbZ/CYc1OAP/xp1Wm0dJHPHwQGEw==
-X-Received: by 2002:a05:600c:2103:b0:3f0:b1c9:25d4 with SMTP id u3-20020a05600c210300b003f0b1c925d4mr7738419wml.21.1686658689044;
-        Tue, 13 Jun 2023 05:18:09 -0700 (PDT)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id 11-20020a05600c228b00b003f7361ca753sm14217408wmf.24.2023.06.13.05.18.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 05:18:08 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 13:18:06 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Subject: Re: [PATCH 5.4 00/45] 5.4.247-rc1 review
-Message-ID: <ZIhefkuiBubOqSe6@debian>
-References: <20230612101654.644983109@linuxfoundation.org>
+        Tue, 13 Jun 2023 08:19:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DA6171C;
+        Tue, 13 Jun 2023 05:18:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D8886358F;
+        Tue, 13 Jun 2023 12:18:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0977C433D2;
+        Tue, 13 Jun 2023 12:18:34 +0000 (UTC)
+Message-ID: <72494a61-5be8-033b-5bcd-59699a226002@xs4all.nl>
+Date:   Tue, 13 Jun 2023 14:18:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612101654.644983109@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [RESEND PATCH v6 1/1] Added Digiteq Automotive MGB4 driver
+Content-Language: en-US
+To:     =?UTF-8?Q?Martin_T=c5=afma?= <tumic@gpxsee.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Martin_T=c5=afma?= <martin.tuma@digiteqautomotive.com>
+References: <20230524112126.2242-1-tumic@gpxsee.org>
+ <20230524112126.2242-2-tumic@gpxsee.org>
+ <3a7da3cd-8d03-a2c4-0534-a75565aefc13@xs4all.nl>
+ <7072a8f3-5c9e-1170-e480-6fb57b95110f@gpxsee.org>
+ <6b792de3-bb2c-d2b5-a652-eca6d20dad20@xs4all.nl>
+ <c34db414-159a-313f-90eb-2bfc0f4496fa@gpxsee.org>
+ <089e728b-0596-d3e3-39a1-651a3ac73e33@xs4all.nl>
+ <f72a7380-d8bc-24bf-630c-75f8ffd6abf3@gpxsee.org>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <f72a7380-d8bc-24bf-630c-75f8ffd6abf3@gpxsee.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Hi Martin,
 
-On Mon, Jun 12, 2023 at 12:25:54PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.247 release.
-> There are 45 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 12/06/2023 13:34, Martin Tůma wrote:
+> On 12. 06. 23 10:51, Hans Verkuil wrote:
+>> On 08/06/2023 17:30, Martin Tůma wrote:
+>>> On 08. 06. 23 12:23, Hans Verkuil wrote:
+>>>
+>>>> Can you make a list of which sysfs properties correspond to existing V4L2
+>>>> format or timing fields and which are 'new'?
+>>>>
+>>>
+>>> On the left all the current mgb4 sysfs properties (see the admin-guide doc from the patch for description), on the right v4l2 structures where they could be mapped (may not be true for all of them in
+>>> the patch, I will check it and update the code in v7)
+>>>
+>>>
+>>> --- PCIE CARD ---
+>>>
+>>> module_type        -
+>>> module_version        -
+>>> fw_type            -
+>>> fw_version        -
+>>> serial_number        -
+>>> temperature        hwmon
+>>>
+>>> --- INPUTS ---
+>>>
+>>> input_id        -
+>>> oldi_lane_width        -
+>>> color_mapping        -
+>>> link_status        v4l2_input.status (V4L2_IN_ST_NO_SYNC)
+>>> stream_status        v4l2_input.status (V4L2_IN_ST_NO_SIGNAL)
+>>> video_width        v4l2_bt_timings.width
+>>> video_height        v4l2_bt_timings.height
+>>> vsync_status        v4l2_bt_timings.polarities
+>>> hsync_status        v4l2_bt_timings.polarities
+>>> vsync_gap_length    -
+>>> hsync_gap_length    -
+>>> pclk_frequency        v4l2_bt_timings.pixelclock
+>>> hsync_width        v4l2_bt_timings.hsync
+>>> vsync_width        v4l2_bt_timings.vsync
+>>> hback_porch        v4l2_bt_timings.hbackporch
+>>> hfront_porch        v4l2_bt_timings.hfrontporch
+>>> vback_porch        v4l2_bt_timings.vbackporch
+>>> vfront_porch        v4l2_bt_timings.vfrontporch
+>>> frequency_range        -
+>>> alignment        v4l2_pix_format.bytesperline
+>>> fpdl3_input_width    -
+>>> gmsl_mode        -
+>>> gmsl_stream_id        -
+>>> gmsl_fec        -
+>>>
+>>> --- OUTPUTS ---
+>>>
+>>> output_id        -
+>>> video_source        -
+>>> display_width        v4l2_bt_timings.width
+>>> display_height        v4l2_bt_timings.height
+>>> frame_rate        v4l2_frmivalenum
+>>
+>> The frame rate is a property of the width/height+blanking and the
+>> pixel clock frequency. IMHO it does not make sense to have this as
+>> a writable property. Read-only is OK.
+>>
+>>> hsync_polarity        v4l2_bt_timings.polarities
+>>> vsync_polarity        v4l2_bt_timings.polarities
+>>> de_polarity        -
+>>> pclk_frequency        v4l2_bt_timings.pixelclock
+>>> hsync_width        v4l2_bt_timings.hsync
+>>> vsync_width        v4l2_bt_timings.vsync
+>>> vsync_width        v4l2_bt_timings.vsync
+>>> hback_porch        v4l2_bt_timings.hbackporch
+>>> hfront_porch        v4l2_bt_timings.hfrontporch
+>>> vback_porch        v4l2_bt_timings.vbackporch
+>>> vfront_porch        v4l2_bt_timings.vfrontporch
+>>> alignment        v4l2_pix_format.bytesperline
+>>> fpdl3_output_width    -
+>>>
+>>>
+>>> M.
+>>
+>> The property I am most concerned with is alignment (both for input and output).
+>> But it is not clear to me what the use-case is.
+>>
+> 
+> Hi,
+> The use-case is to provide the alignment required by some video processing chips. We have a product based on NVIDIA Jetson TX2 that uses the mgb4 cards and the HW video encoding needs a specific
+> alignment to work.
 
-Build test (gcc version 11.3.1 20230511):
-mips: 65 configs -> no failure
-arm: 106 configs -> no failure
-arm64: 2 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+OK. I would suggest that for this property it has a default value of 0 (i.e. a 1 byte alignment),
+and in that case VIDIOC_S_FMT allows userspace to set bytesperline to whatever they want. I.e.,
+this is the normal behavior for DMA engines that can deal with custom padding at the end of each
+line.
 
+If it is > 0, then bytesperline is fixed, based on this value.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
+That way both methods are supported fairly cleanly.
 
-[1]. https://openqa.qa.codethink.co.uk/tests/3933
+BTW, what is missing in the property documentation for writable properties is what the default
+value is. That must be documented as well.
 
+Regards,
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
+	Hans
