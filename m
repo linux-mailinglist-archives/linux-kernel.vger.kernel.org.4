@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43B5C72DAC0
+	by mail.lfdr.de (Postfix) with ESMTP id 8F1F772DAC1
 	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 09:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238821AbjFMH1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 03:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59044 "EHLO
+        id S239072AbjFMH1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 03:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238813AbjFMH0v (ORCPT
+        with ESMTP id S240476AbjFMH1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 03:26:51 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6F7EAA
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:26:50 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b3ce6607cbso16667165ad.2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:26:50 -0700 (PDT)
+        Tue, 13 Jun 2023 03:27:15 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1707790
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:27:13 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f619c2ba18so5941581e87.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:27:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1686641210; x=1689233210;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XCTKwSM7nGfTgkpcwxuzbHKvrUHLJBGdS4r/wN5pXSo=;
-        b=LiWdB17E+jMG963EaRHIWlzJpAIjHvEvA6bk4BXb1N4r3YKPeO+SP2mkQPkR4PCnaz
-         B6lk/eSWsSCcR7gIE0oL4Ngx0J5MrheuIJ1xyaQslocVd5ouF+kzNKZexYWLSd6q9J68
-         F5zIYtwYDGwrxB3ONyRFmJeIk7hWu3hzwrP3WffN7Dm4NOOeA3sNh9hjiGq2XOxmPFar
-         ox0DLtxWHQDYLJFpcwamhFWtbh5XvtJQw9eiLbNyCcnrWLcQ4czn/Igkn9AmyAdnGzrR
-         4zNKIN8CJi7WJykqGqKHN5z9UxsgzEboK4ErLZYhiQSQbYBrU7Gq53w84BCT0soat3tP
-         iYjA==
+        d=rasmusvillemoes.dk; s=google; t=1686641231; x=1689233231;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iCo9VX6y9eskW7XjUhZdDSOq/PCOqTXRwWrOd9wTu+s=;
+        b=XYA14pIhapBKivqyi3B9Ed9HUVcA0lKpuz2vxCxtj8/5rWSJ8C1VCgk+GIdV7X66xa
+         kN5ndtyrdGmXN6zQQXpNy5Sz0dP56rvMvPNv7UlWHQJniiWRuKfTmBkzYXyU27yf0GfD
+         RK9vUQyEbi6qr/C/0geRHm1FhKhtRUffLe/zQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686641210; x=1689233210;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XCTKwSM7nGfTgkpcwxuzbHKvrUHLJBGdS4r/wN5pXSo=;
-        b=KUsaZ/aqJ3pdPrQnAnGEEBqwhkF6BuK0Ca8zRKcVzGLjiEZ36zJret9ye9jk8Neax9
-         +oTPwVQHFbnmOm+UNhsdPcM5KYmq6VAmdos3/f/d+Zwi84MLTgTlq9JGMpPPHgaqnINd
-         sV0H+k7S/A3QsyrVnlXUjZBQrnY7p3T35AJXMu4kKGr8w2Zk0Eo/TkomP07VImwLZh0g
-         xswEFI6e6veKlHvi0htPGrMKxBd6OEwWR5H0m/Wks6NwxLhqSBaDcTIk4P4+giv9X3s+
-         +6Gq+ja/SmFcuLnVpKmdSIozfJC/9C6M2/DI7d5n6CnKPamaA+XM+woFV+XSYSte0iM3
-         pK5w==
-X-Gm-Message-State: AC+VfDz1KPErOQKlkie3009LdEROgTzsRw4GvEeFYq4ZOpvxqixPnGv1
-        IIfwm1hi+Lmvy7mHxcgT1j8N87zH3d4UFpbY8oEdjnoElF00O6T0XNLTbjwu9sCBZ+bZqdmDqE5
-        4MJ+4lg1sAY1WFh9EaaKrvn2anUZkGwlSmHXUXh+uuFgY4C9kZtWESdCzQ6oPWZdLABvIXtMMf6
-        Cu8v44PLNwhw==
-X-Google-Smtp-Source: ACHHUZ7/bXnQVjLPpiyc3uSEjDr+FSZ/NtFlYA34O9DkwBHezk4wWVKKyVZtaCb/wBtFIl1nnjSLDQ==
-X-Received: by 2002:a17:902:708a:b0:1b2:fa8:d9c9 with SMTP id z10-20020a170902708a00b001b20fa8d9c9mr8467088plk.49.1686641210024;
-        Tue, 13 Jun 2023 00:26:50 -0700 (PDT)
-Received: from hsinchu15.internal.sifive.com (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
-        by smtp.gmail.com with ESMTPSA id h4-20020a170902748400b001ab0d815dbbsm9446677pll.23.2023.06.13.00.26.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 00:26:49 -0700 (PDT)
-From:   Nylon Chen <nylon.chen@sifive.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-riscv@lists.infradead.org, jszhang@kernel.org,
-        conor.dooley@microchip.com, ajones@ventanamicro.com,
-        aou@eecs.berkeley.edu, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, greentime.hu@sifive.com,
-        zong.li@sifive.com, nylon7717@gmail.com,
-        Nylon Chen <nylon.chen@sifive.com>
-Subject: [PATCH] RISC-V: Support 32_PCREL relocation type in kernel module
-Date:   Tue, 13 Jun 2023 15:26:44 +0800
-Message-Id: <20230613072644.10487-1-nylon.chen@sifive.com>
-X-Mailer: git-send-email 2.40.1
+        d=1e100.net; s=20221208; t=1686641231; x=1689233231;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iCo9VX6y9eskW7XjUhZdDSOq/PCOqTXRwWrOd9wTu+s=;
+        b=b9IqKgp6lgJoASRSaABwX3nKNP2wNAqPbwjGOjmzy0J/gkwoYcl3f6m3L5gy8PvRZs
+         ajeKKuqe7uSrafgplA5n+Bc1ak013utLP7pm5c7MOclgR9t5PR3JsHiXsUnh7OLSf41E
+         S+xkNxhw4ncG6U/cErqN2Syz6Hih7tgWwr66ajYr6d+JjcpengdosyAcNu5AryJO0NZp
+         F9a/DXeAO/vnBBWCDbKcBbgJXhRaPR1mBLM9SEUns7x7+jqsAN+DWW7rW5Cd6CqKBESY
+         H4cPpoTUJ46A1nYrHVh2MRVQoSwo8FpuC1t3sVCaAPP6iYTtskPydRILXs3eUnEZ66Zt
+         EiCA==
+X-Gm-Message-State: AC+VfDxtsZFk/0gHK+2BssLHMnp/mycjnTCvcSPB+KBZQtQbLLT9CoIK
+        TzisRe8JrMblImwD/Ujv9CikEG5QgQnpI23HNi7/GA==
+X-Google-Smtp-Source: ACHHUZ7b79zF1t3JexEgFXaaW0BEgSSi2mVnZwe64OwRddvWIYqYcVYq/ieGRFeTDhaQJKFKuKaiSw==
+X-Received: by 2002:a19:4312:0:b0:4f4:b28f:6b9c with SMTP id q18-20020a194312000000b004f4b28f6b9cmr4619711lfa.29.1686641231173;
+        Tue, 13 Jun 2023 00:27:11 -0700 (PDT)
+Received: from [172.16.11.116] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id j7-20020ac24547000000b004f251cf3d31sm1678280lfm.153.2023.06.13.00.27.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 00:27:10 -0700 (PDT)
+Message-ID: <76f0f62d-e53f-8708-e8a8-f71777a95f21@rasmusvillemoes.dk>
+Date:   Tue, 13 Jun 2023 09:27:09 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 5/8] rtc: isl12022: implement RTC_VL_READ and RTC_VL_CLR
+ ioctls
+Content-Language: en-US, da
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
+ <20230612113059.247275-6-linux@rasmusvillemoes.dk>
+ <2023061214074623dcc0cf@mail.local>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <2023061214074623dcc0cf@mail.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,39 +79,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Nylon Chen <nylon.chen@sifive.com>
----
- arch/riscv/kernel/module.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+On 12/06/2023 16.07, Alexandre Belloni wrote:
+> On 12/06/2023 13:30:55+0200, Rasmus Villemoes wrote:
 
-diff --git a/arch/riscv/kernel/module.c b/arch/riscv/kernel/module.c
-index 7c651d55fcbd..f52d8e3d4b63 100644
---- a/arch/riscv/kernel/module.c
-+++ b/arch/riscv/kernel/module.c
-@@ -310,6 +310,15 @@ static int apply_r_riscv_sub64_rela(struct module *me, u32 *location,
- 	return 0;
- }
- 
-+static int apply_r_riscv_pcrel_32_rela(struct module *me, u32 *location,
-+				       Elf_Addr v)
-+{
-+	ptrdiff_t offset = (void *)v - (void *)location;
-+
-+	*location = (*location & 0xffff0000) | (offset & 0xffff);
-+	return 0;
-+}
-+
- static int (*reloc_handlers_rela[]) (struct module *me, u32 *location,
- 				Elf_Addr v) = {
- 	[R_RISCV_32]			= apply_r_riscv_32_rela,
-@@ -335,6 +344,7 @@ static int (*reloc_handlers_rela[]) (struct module *me, u32 *location,
- 	[R_RISCV_SUB16]			= apply_r_riscv_sub16_rela,
- 	[R_RISCV_SUB32]			= apply_r_riscv_sub32_rela,
- 	[R_RISCV_SUB64]			= apply_r_riscv_sub64_rela,
-+	[R_RISCV_32_PCREL]		= apply_r_riscv_pcrel_32_rela,
- };
- 
- int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
--- 
-2.40.1
+>> +static int isl12022_rtc_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
+>> +{
+>> +	struct regmap *regmap = dev_get_drvdata(dev);
+>> +	u32 user = 0;
+>> +	int ret;
+>> +
+>> +	switch (cmd) {
+>> +	case RTC_VL_READ:
+>> +		ret = isl12022_read_sr(regmap);
+>> +		if (ret < 0)
+>> +			return ret;
+>> +
+>> +		if (ret & ISL12022_SR_LBAT85)
+>> +			user |= RTC_VL_BACKUP_LOW;
+>> +
+>> +		if (ret & ISL12022_SR_LBAT75)
+>> +			user |= RTC_VL_BACKUP_EMPTY;
+>> +
+>> +		return put_user(user, (u32 __user *)arg);
+>> +
+>> +	case RTC_VL_CLR:
+>> +		return regmap_clear_bits(regmap, ISL12022_REG_SR,
+>> +					 ISL12022_SR_LBAT85 | ISL12022_SR_LBAT75);
+> 
+> I'm against using RTC_VL_CLR for this as it deletes important
+> information (i.e. the date is probably invalid). You should let the RTC
+> clear the bits once the battery has been changed:
+> 
+> "The LBAT75 bit is set when the
+> VBAT has dropped below the pre-selected trip level, and will self
+> clear when the VBAT is above the pre-selected trip level at the
+> next detection cycle either by manual or automatic trigger."
+
+Well, the same thing means that the bit would get set again within a
+minute after the RTC_VL_CLR, so the information isn't lost as such. I
+actually don't understand what RTC_VL_CLR would be for if not this
+(though, again, in this case at least it would only have a very
+short-lived effect), but I'm perfectly happy to just rip out the
+RTC_VL_CLR case.
+
+Rasmus
 
