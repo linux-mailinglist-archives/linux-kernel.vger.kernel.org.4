@@ -2,58 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD2BB72E7D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 18:05:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C025772E7E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 18:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242857AbjFMQEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 12:04:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37928 "EHLO
+        id S242624AbjFMQIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 12:08:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243010AbjFMQEB (ORCPT
+        with ESMTP id S240627AbjFMQIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 12:04:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0EF172A;
-        Tue, 13 Jun 2023 09:03:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE07B63805;
-        Tue, 13 Jun 2023 16:03:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6505EC4AF5C;
-        Tue, 13 Jun 2023 16:03:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686672237;
-        bh=hRs/09I3nVePGyq7+ZAJUlWdpGWIbMI1XEr6/Yow+u8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tVbpwH2fLHIWbej7jYshdnJlpjWYAHpIevTgNAUXsmMojFrbopyryR+rfDUL8xCv1
-         /X96DIpLwGVYwA9TQPDXiz5IWgsOEPpoHu9Qb7yYylwZyRSU2GXXbqK4P6BSZ4uwv1
-         qVGi9XqLxwx35wynCx2Qvsnm3jgctojsLBxG/O+7c8FnkGePCFlMH27pUGGAHjo9y9
-         zR+HJHoMVB1dd4NOoHwvZ5E0EAvHUR9Fwf76b/ER8ZhpuSz8miIPlaMasDVR5sTZPI
-         cWGnxa0BQnrC1BULZIN4vUjbBFGUN9oKFlTk6O0llidTzw5w5qgMWGpQuAAMI9UqxY
-         62P++rDdTFT+A==
-Date:   Tue, 13 Jun 2023 09:07:20 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/msm/dpu: Configure DP INTF/PHY selector
-Message-ID: <20230613160720.2a6ouut5qn3cewqd@ripper>
-References: <20230612221047.1886709-1-quic_bjorande@quicinc.com>
- <435dd068-fbf2-10cf-4f78-377e689abb2c@linaro.org>
+        Tue, 13 Jun 2023 12:08:06 -0400
+Received: from smtp-fw-52004.amazon.com (smtp-fw-52004.amazon.com [52.119.213.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8461981;
+        Tue, 13 Jun 2023 09:08:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1686672486; x=1718208486;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=UMXii+5rBuoMAs0WL8DNFNbC1KKA1KhEPyGQS0o9/ak=;
+  b=GNyjnvNEzdVq5wdedMC/ElxZC96HJIhVsVgxlJqwPL2cHdvRPpjs/oRf
+   5ewKxrtOb+xm+ADdyKMD0rbNWE7UDe77wWc33LKG7S+5Pe2xC+xJvEVqb
+   0xzz7e7J6gogpDZFChQ8NNVoLDGvFmT3iHLCGzXzgfTLA/m2xqzgxs64v
+   Q=;
+X-IronPort-AV: E=Sophos;i="6.00,240,1681171200"; 
+   d="scan'208";a="136747801"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-f323d91c.us-west-2.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-52004.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 16:08:03 +0000
+Received: from EX19MTAUWA002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2b-m6i4x-f323d91c.us-west-2.amazon.com (Postfix) with ESMTPS id A8F1A414A5;
+        Tue, 13 Jun 2023 16:08:01 +0000 (UTC)
+Received: from EX19MTAUWA001.ant.amazon.com (10.250.64.218) by
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Tue, 13 Jun 2023 16:07:53 +0000
+Received: from dev-dsk-mngyadam-1c-a2602c62.eu-west-1.amazon.com (10.15.1.225)
+ by mail-relay.amazon.com (10.250.64.204) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Tue, 13 Jun 2023 16:07:53 +0000
+Received: by dev-dsk-mngyadam-1c-a2602c62.eu-west-1.amazon.com (Postfix, from userid 23907357)
+        id F01C6960E; Tue, 13 Jun 2023 16:07:52 +0000 (UTC)
+From:   Mahmoud Adam <mngyadam@amazon.com>
+To:     <dhowells@redhat.com>
+CC:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <keyrings@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Mahmoud Adam <mngyadam@amazon.com>
+Subject: [PATCH] KEYS: use kfree_sensitive with key
+Date:   Tue, 13 Jun 2023 16:07:23 +0000
+Message-ID: <20230613160723.61729-1-mngyadam@amazon.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <435dd068-fbf2-10cf-4f78-377e689abb2c@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,195 +63,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 01:31:40AM +0300, Dmitry Baryshkov wrote:
-> On 13/06/2023 01:10, Bjorn Andersson wrote:
-> > From: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > 
-> > Some platforms provides a mechanism for configuring the mapping between
-> > (one or two) DisplayPort intfs and their PHYs.
-> > 
-> > In particular SC8180X provides this functionality, without a default
-> > configuration, resulting in no connection between its two external
-> > DisplayPort controllers and any PHYs.
-> > 
-> > The change implements the logic for optionally configuring which phy
-> > each of the intfs should be connected to, provides a new entry in the
-> > DPU catalog for specifying how many intfs to configure and marks the
-> > SC8180X DPU to program 2 entries.
-> > 
-> > For now the request is simply to program the mapping 1:1, any support
-> > for alternative mappings is left until the use case arrise.
-> > 
-> > Note that e.g. msm-4.14 unconditionally maps intf 0 to phy 0 on all
-> > rlatforms, so perhaps this is needed in order to get DisplayPort working
-> > on some other platforms as well.
-> > 
-> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> > ---
-> >   .../msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h   |  1 +
-> >   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    |  2 ++
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c    | 23 +++++++++++++++++++
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.h    |  8 +++++++
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h      |  1 +
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c       | 10 ++++++++
-> >   6 files changed, 45 insertions(+)
-> > 
-> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
-> > index 8ed2b263c5ea..9da952692a69 100644
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
-> > @@ -19,6 +19,7 @@ static const struct dpu_caps sc8180x_dpu_caps = {
-> >   	.pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
-> >   	.max_hdeci_exp = MAX_HORZ_DECIMATION,
-> >   	.max_vdeci_exp = MAX_VERT_DECIMATION,
-> > +	.num_dp_intf_sel = 2,
-> >   };
-> >   static const struct dpu_ubwc_cfg sc8180x_ubwc_cfg = {
-> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> > index ac4a9e73705c..4cb8d096d8ec 100644
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> > @@ -357,6 +357,7 @@ struct dpu_rotation_cfg {
-> >    * @pixel_ram_size     size of latency hiding and de-tiling buffer in bytes
-> >    * @max_hdeci_exp      max horizontal decimation supported (max is 2^value)
-> >    * @max_vdeci_exp      max vertical decimation supported (max is 2^value)
-> > + * @num_dp_intf_sel    number of DP intfs to configure PHY selection for
-> >    */
-> >   struct dpu_caps {
-> >   	u32 max_mixer_width;
-> > @@ -371,6 +372,7 @@ struct dpu_caps {
-> >   	u32 pixel_ram_size;
-> >   	u32 max_hdeci_exp;
-> >   	u32 max_vdeci_exp;
-> > +	u32 num_dp_intf_sel;
-> >   };
-> >   /**
-> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c
-> > index 963bdb5e0252..5afa99cb148c 100644
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c
-> > @@ -250,6 +250,27 @@ static void dpu_hw_intf_audio_select(struct dpu_hw_mdp *mdp)
-> >   	DPU_REG_WRITE(c, HDMI_DP_CORE_SELECT, 0x1);
-> >   }
-> > +static void dpu_hw_dp_phy_intf_sel(struct dpu_hw_mdp *mdp, unsigned int *phys,
-> > +				   unsigned int num_intfs)
-> > +{
-> > +	struct dpu_hw_blk_reg_map *c = &mdp->hw;
-> > +	unsigned int intf;
-> > +	u32 sel = 0;
-> > +
-> > +	if (!num_intfs)
-> > +		return;
-> > +
-> > +	for (intf = 0; intf < num_intfs; intf++) {
-> > +		/* Specify the PHY (1-indexed) for @intf */
-> > +		sel |= (phys[intf] + 1) << (intf * 3);
-> > +
-> > +		/* Specify the @intf (1-indexed) of targeted PHY */
-> > +		sel |= (intf + 1) << (6 + phys[intf] * 3);
-> 
-> From what I can see, phys[intf] is const. What about defining indexed masks
-> instead?
-> 
+key member might contain private part of the key, so better use
+kfree_sensitive to free it
 
-intf is the loop variable. What am I missing?
+Signed-off-by: Mahmoud Adam <mngyadam@amazon.com>
+---
+ crypto/asymmetric_keys/public_key.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-> > +	}
-> > +
-> > +	DPU_REG_WRITE(c, DP_PHY_INTF_SEL, sel);
-> > +}
-> > +
-> >   static void _setup_mdp_ops(struct dpu_hw_mdp_ops *ops,
-> >   		unsigned long cap)
-> >   {
-> > @@ -264,6 +285,8 @@ static void _setup_mdp_ops(struct dpu_hw_mdp_ops *ops,
-> >   	ops->get_safe_status = dpu_hw_get_safe_status;
-> > +	ops->dp_phy_intf_sel = dpu_hw_dp_phy_intf_sel;
-> 
-> Should this be gated for DPU < 4.0? Or 5.0?
-> 
-> > +
-> >   	if (cap & BIT(DPU_MDP_AUDIO_SELECT))
-> >   		ops->intf_audio_select = dpu_hw_intf_audio_select;
-> >   }
-> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.h
-> > index a1a9e44bed36..8446d74d59b0 100644
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.h
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.h
-> > @@ -125,6 +125,14 @@ struct dpu_hw_mdp_ops {
-> >   	void (*get_safe_status)(struct dpu_hw_mdp *mdp,
-> >   			struct dpu_danger_safe_status *status);
-> > +	/**
-> > +	 * dp_phy_intf_sel - configure intf to phy mapping
-> > +	 * @mdp: mdp top context driver
-> > +	 * @phys: list of phys the @num_intfs intfs should be connected to
-> > +	 * @num_intfs: number of intfs to configure
-> > +	 */
-> > +	void (*dp_phy_intf_sel)(struct dpu_hw_mdp *mdp, unsigned int *phys,
-> > +			        unsigned int num_intfs);
-> >   	/**
-> >   	 * intf_audio_select - select the external interface for audio
-> >   	 * @mdp: mdp top context driver
-> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h
-> > index 5acd5683d25a..6d31bdc7269c 100644
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h
-> > @@ -59,6 +59,7 @@
-> >   #define MDP_WD_TIMER_4_CTL2             0x444
-> >   #define MDP_WD_TIMER_4_LOAD_VALUE       0x448
-> >   #define DCE_SEL                         0x450
-> > +#define DP_PHY_INTF_SEL                 0x460
-> 
-> MDP_DP_PHY_INTF_SEL, if you don't mind.
-> 
+diff --git a/crypto/asymmetric_keys/public_key.c b/crypto/asymmetric_keys/public_key.c
+index eca5671ad3f2..006ae170a16f 100644
+--- a/crypto/asymmetric_keys/public_key.c
++++ b/crypto/asymmetric_keys/public_key.c
+@@ -43,7 +43,7 @@ static void public_key_describe(const struct key *asymmetric_key,
+ void public_key_free(struct public_key *key)
+ {
+ 	if (key) {
+-		kfree(key->key);
++		kfree_sensitive(key->key);
+ 		kfree(key->params);
+ 		kfree(key);
+ 	}
+@@ -218,7 +218,7 @@ static int software_key_query(const struct kernel_pkey_params *params,
+ 	ret = 0;
+ 
+ error_free_key:
+-	kfree(key);
++	kfree_sensitive(key);
+ error_free_tfm:
+ 	crypto_free_akcipher(tfm);
+ 	pr_devel("<==%s() = %d\n", __func__, ret);
+@@ -303,7 +303,7 @@ static int software_key_eds_op(struct kernel_pkey_params *params,
+ 		ret = req->dst_len;
+ 
+ error_free_key:
+-	kfree(key);
++	kfree_sensitive(key);
+ error_free_req:
+ 	akcipher_request_free(req);
+ error_free_tfm:
+@@ -456,7 +456,7 @@ int public_key_verify_signature(const struct public_key *pkey,
+ 	ret = crypto_wait_req(crypto_akcipher_verify(req), &cwait);
+ 
+ error_free_key:
+-	kfree(key);
++	kfree_sensitive(key);
+ error_free_req:
+ 	akcipher_request_free(req);
+ error_free_tfm:
+-- 
+2.40.1
 
-I don't mind.
-
-> >   #define MDP_PERIPH_TOP0			MDP_WD_TIMER_0_CTL
-> >   #define MDP_PERIPH_TOP0_END		CLK_CTRL3
-> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> > index aa8499de1b9f..5dbe5d164c01 100644
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> > @@ -1011,6 +1011,14 @@ unsigned long dpu_kms_get_clk_rate(struct dpu_kms *dpu_kms, char *clock_name)
-> >   	return clk_get_rate(clk);
-> >   }
-> > +static void dpu_kms_dp_phy_intf_sel(struct dpu_kms *dpu_kms)
-> > +{
-> > +	const unsigned int num_intfs = dpu_kms->catalog->caps->num_dp_intf_sel;
-> > +	static unsigned int phy_map[] = {0, 1, 2};
-> 
-> Please move this to dp_phy_intf_sel() and make it const.
-> 
-
-There's a possible use case for passing a phy_map of {0, 2} or {2, 1} on
-SC8180X. While this is left to someone in the future to have that use
-case, as split dp_phy_intf_sel() would handle such variations.
-
-That said, per the layout of the DP_PHY_INTF_SEL, num_intfs can not be
-more than 2, so this list shouldn't have 3 elements.
-
-Regards,
-Bjorn
-
-> > +
-> > +	dpu_kms->hw_mdp->ops.dp_phy_intf_sel(dpu_kms->hw_mdp, phy_map, num_intfs);
-> > +}
-> > +
-> >   static int dpu_kms_hw_init(struct msm_kms *kms)
-> >   {
-> >   	struct dpu_kms *dpu_kms;
-> > @@ -1122,6 +1130,8 @@ static int dpu_kms_hw_init(struct msm_kms *kms)
-> >   		goto perf_err;
-> >   	}
-> > +	dpu_kms_dp_phy_intf_sel(dpu_kms);
-> > +
-> >   	dpu_kms->hw_intr = dpu_hw_intr_init(dpu_kms->mmio, dpu_kms->catalog);
-> >   	if (IS_ERR_OR_NULL(dpu_kms->hw_intr)) {
-> >   		rc = PTR_ERR(dpu_kms->hw_intr);
-> 
-> -- 
-> With best wishes
-> Dmitry
-> 
