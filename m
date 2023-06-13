@@ -2,150 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1E9C72DCD2
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F9B872DCD7
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241669AbjFMIkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 04:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48280 "EHLO
+        id S241636AbjFMIlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 04:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241599AbjFMIjk (ORCPT
+        with ESMTP id S235640AbjFMIkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 04:39:40 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2077.outbound.protection.outlook.com [40.107.237.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6CE0E4;
+        Tue, 13 Jun 2023 04:40:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFC11998
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 01:39:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686645581;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vrGYNaIheG5cW9vw0WAFpAIgS9tsi2HOTi0exhZ2A/c=;
+        b=faI69AB7Z74YUFcNPuxJw61EISqqTpX+oVHbkWuoU0bLazWCBHDBt8WXyX7S2VTfrHcAbe
+        rNCP8HC0Lsmn6uiTyaZ6C4IOTSGgCTSlJwUVH1b4Ip4acO04OazW/XhqE+HwERnaDOIznE
+        7kMKTQ0q/lu9SQM7v3meiX75Lq/9GSk=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-615-YiZQAdfiO3quRZa3YQgfdA-1; Tue, 13 Jun 2023 04:39:39 -0400
+X-MC-Unique: YiZQAdfiO3quRZa3YQgfdA-1
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-62849c5e9f0so6816016d6.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 01:39:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686645579; x=1689237579;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vrGYNaIheG5cW9vw0WAFpAIgS9tsi2HOTi0exhZ2A/c=;
+        b=dQRsLu3ULXj+Yobd4RvhZ9BPoK8nybpkDo+nAhFRv88+5xyUfJQSwuxcTSsFMy+BD6
+         clSBeaJhT4a+tpjxq6jnAw9B0TW6wfU9q1jSypPCpUvDhMIT5JFHWClaSdrtzCpqdF9R
+         ZPazlbSjLjdNxkTipPFSvXGaZFhnoAet3Rrs5/BEcJ6/+8fbUrUa0aRnUHWurPNpIiRx
+         2VrjxvOPJnU5HQc7CENHR778j55B/linnZA775NXP1gUng2CgyQpp0lpxfn21nJc3MdK
+         gzSbeYzvCTuUnIvYL3dG2/1Tv/LSYmdynaXDr4lu1AOXJr8NpPJmkWit6cCXYGuN0WOz
+         wHbw==
+X-Gm-Message-State: AC+VfDzBO9qmpxiqS6LlaJUqhMlLuxwO1qLJjZOOULkxLlUiBPLf4AIU
+        6Izh3rV8C4jBT/9AxbrOfApzkM2SwCauxmHJjPlquR97FR8oeGBEv4aBUkBXLQSJ/pLD/OH37Sj
+        CtZlUW07Ju70Wsr5qFH3+XIl8
+X-Received: by 2002:a05:6214:763:b0:62d:eceb:f7ce with SMTP id f3-20020a056214076300b0062decebf7cemr5372272qvz.1.1686645578865;
         Tue, 13 Jun 2023 01:39:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XeKAKbdJEV+EoJ0Tqh2oXzLt4CbFw1B9lqa9eMxXdiSdVB1Ua2/hEvCKrWhyc4jGygWcWNERVVsFwQQ0jnRA1UeMwbQhBJ+QgLkS/6nYubeakdXvWVKTC0cQJoXR0Rqz4UjxCxeHEYv69X+cCzv3JOeVjTdt19VE/m059WpzsDhhEX6nkOHapXfJWTL7FM92eWn9radOO7R40DFFZwwRSARZNbuTEmyAsV9Xs8Tm1fbKADTtTpMFmG7KZjjqlCYB9J1P62wq1kY+kG8FwvFKW4APifp6ZRMds6IY9Va8qKuqiL7P40Ku7N7udNuJtKpcRdG29HgWj30+YCecEWw9hQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jn/0GiKxxHXbhT8hCybN2E6Cg/Xx5suuWi+0lQnVLFk=;
- b=XXj8diiteWWZ+zOJ/p4JDGn+rERUP3Du9SwR1MAt8thGL+YW8q8k5O+Y38l0B5EEMYeUqMbRCQYu8+pL6E21URHXn+VTspjVaRbkXEEuaBRXFzhCbkNNCC6ld9js6oKVOCz9bTMXZIv4ynIVxbsgIZhvfUyx2AHWE3fJF8zNJvzm9jWWTg6pB7MrGMB1Q3vuSGQH6VWf33entlcNOad3eIm2Yt82UD/2zooOphkOomkErgjm3Xmb3k2bRX5zbhvB0CjYEvMFQa2dOZpA/DYudiL+6FaPOZHK64rzC1goOGxrBhoV70KQDnFoCn8eRkvrXHe/R65by0YxjlIkbrBszg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jn/0GiKxxHXbhT8hCybN2E6Cg/Xx5suuWi+0lQnVLFk=;
- b=rbb3kKUsWISZd4Noj6O0vRMuoFdwYONwIdJW1UqjQj36KwextJq1bb71hlIC3QW9JWyNYpDEBGdIeb8PrkK1WORLlFHpinnW+EKEkmP4P/1sduwv6JYVvRDLRT0vzI47sgBXoiWXCo2kO89euP3+jOispUuh4Xm7j5e8OFeKYkDntyfruAyi+SU162kDfTH0fmNBSf9IUNFWUn50Pb9gBU1/26X0rI97xyBHlLk5WDXmdWetTS1IcPcNpeQKkK9XV196PthpUwhWfNg47iq++q/GEXefwxa71qfj694BEjflsYF3FY3e1+NYzNJS6RiAAA2CDZq9v7OfdK8BQlw/nA==
-Received: from CY5PR10CA0025.namprd10.prod.outlook.com (2603:10b6:930:1c::22)
- by MN0PR12MB6293.namprd12.prod.outlook.com (2603:10b6:208:3c2::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Tue, 13 Jun
- 2023 08:39:36 +0000
-Received: from CY4PEPF0000EE33.namprd05.prod.outlook.com
- (2603:10b6:930:1c:cafe::37) by CY5PR10CA0025.outlook.office365.com
- (2603:10b6:930:1c::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.35 via Frontend
- Transport; Tue, 13 Jun 2023 08:39:36 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CY4PEPF0000EE33.mail.protection.outlook.com (10.167.242.39) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6500.23 via Frontend Transport; Tue, 13 Jun 2023 08:39:35 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 13 Jun 2023
- 01:39:18 -0700
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Tue, 13 Jun
- 2023 01:39:18 -0700
-Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
- Transport; Tue, 13 Jun 2023 01:39:17 -0700
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
-        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>,
-        <stable@vger.kernel.org>
-Subject: Re: [PATCH 6.3 000/160] 6.3.8-rc1 review
-In-Reply-To: <20230612101715.129581706@linuxfoundation.org>
-References: <20230612101715.129581706@linuxfoundation.org>
-X-NVConfidentiality: public
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+X-Google-Smtp-Source: ACHHUZ6ArpYF88Ugrz7kYTH6At9wENyZlMxfLOFwsntoCoR4u161C9Q+M0HyVxOHw+cLbQW2p3OGig==
+X-Received: by 2002:a05:6214:763:b0:62d:eceb:f7ce with SMTP id f3-20020a056214076300b0062decebf7cemr5372260qvz.1.1686645578567;
+        Tue, 13 Jun 2023 01:39:38 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-245-147.dyn.eolo.it. [146.241.245.147])
+        by smtp.gmail.com with ESMTPSA id e21-20020a0caa55000000b00626330a39ecsm3835317qvb.9.2023.06.13.01.39.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 01:39:38 -0700 (PDT)
+Message-ID: <7f773c114001cbcd0c6ff21da9976eb0ba533421.camel@redhat.com>
+Subject: Re: [PATCH net 2/2] net/sched: qdisc_destroy() old ingress and
+ clsact Qdiscs before grafting
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Peilin Ye <yepeilin.cs@gmail.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Peilin Ye <peilin.ye@bytedance.com>,
+        Vlad Buslov <vladbu@mellanox.com>,
+        Pedro Tammela <pctammela@mojatatu.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hillf Danton <hdanton@sina.com>,
+        Zhengchao Shao <shaozhengchao@huawei.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Cong Wang <cong.wang@bytedance.com>
+Date:   Tue, 13 Jun 2023 10:39:33 +0200
+In-Reply-To: <c1f67078dc8a3fd7b3c8ed65896c726d1e9b261e.1686355297.git.peilin.ye@bytedance.com>
+References: <cover.1686355297.git.peilin.ye@bytedance.com>
+         <c1f67078dc8a3fd7b3c8ed65896c726d1e9b261e.1686355297.git.peilin.ye@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Message-ID: <f84b8683-445d-4c14-bd3d-1602a9f17b2e@rnnvmail202.nvidia.com>
-Date:   Tue, 13 Jun 2023 01:39:17 -0700
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE33:EE_|MN0PR12MB6293:EE_
-X-MS-Office365-Filtering-Correlation-Id: 131718e7-d590-4566-9ed8-08db6be9b7cd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cHXmxER7+d9F972xje7mrZIN97yCEUGu27oKrcYm2jLGxDUtm90SGBWR7xVSIHdVCuGdAr6KqWfJn3G+faHHsMrva+ki+1uGk885Oems1ex/8jAaeMCenuvoO2w2cSRbM7avBGGaKrYOIgUqPjSw1Qe3SvtS8QDIhCYLsJK38eg6VC0IyoCU/mUGNZrN0iMslc1MJytToRyod+V81evelz7dU7JZTyCdF0X5M/XNvvcUXR0dbWSX/lAL17qMKz1WfdG4b8aansgq8nH+PAnH8LIbbjdrzZ3+aknwYSPG+0Uod7pwRYGnl/xvjZFil+4yQ2iCTIjkPkVeVi5yXINe5CtrxoPQRAJwbRBBE31D4VnV8MbNgH2R3/ibDBylu4Fj+dwU90s/oNrUE3EDmmvWOcZ8mCJ6qc+K9SpgsfXjwXr2H6CAtAUvyWdkP8i57fRHJE3O+RGf+Z0QwiUOUeUSsIkcF5h0Ch19wxwdprnhCTr9kibG4eBE6UMKXYZKvppOxUF+Q/PgyVzhs2fh6k2g6Ni7vBPhzxhZX04nPNv0Go+Ub7ZG/rI/EevCx0VTrCiFy5Ws4pDMB9CYatF/Omv7Jnm33HHZR7D/MdpdDnG3rRyMT9DfpwswSl/iX5/RwxWHfwvt1hbut1GVt/BOf0SS3Sprg8LaNhdk+OrIfsQbroWh1StHoG8bqSR2uTgv0Bbf9f78mBc0BAFyOD77p5nWoX1W1sjJwoZKnfljrMmw+ly6Ay9ivYbs9xYddEyY/+i71HXWJAzvrGfWVeBsYbZQCIxEQQ8QK2bGqQGOxPTJOaM=
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(376002)(39860400002)(136003)(451199021)(40470700004)(36840700001)(46966006)(47076005)(41300700001)(26005)(31686004)(426003)(966005)(36860700001)(186003)(336012)(40480700001)(478600001)(6916009)(316002)(356005)(82310400005)(54906003)(70206006)(40460700003)(7636003)(4326008)(82740400003)(7416002)(8936002)(70586007)(5660300002)(2906002)(31696002)(86362001)(8676002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2023 08:39:35.6908
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 131718e7-d590-4566-9ed8-08db6be9b7cd
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000EE33.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6293
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 12 Jun 2023 12:25:32 +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.3.8 release.
-> There are 160 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 14 Jun 2023 10:16:41 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.8-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.3.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Hi,
 
-All tests passing for Tegra ...
+On Sat, 2023-06-10 at 20:30 -0700, Peilin Ye wrote:
+> From: Peilin Ye <peilin.ye@bytedance.com>
+>=20
+> mini_Qdisc_pair::p_miniq is a double pointer to mini_Qdisc, initialized
+> in ingress_init() to point to net_device::miniq_ingress.  ingress Qdiscs
+> access this per-net_device pointer in mini_qdisc_pair_swap().  Similar
+> for clsact Qdiscs and miniq_egress.
+>=20
+> Unfortunately, after introducing RTNL-unlocked RTM_{NEW,DEL,GET}TFILTER
+> requests (thanks Hillf Danton for the hint), when replacing ingress or
+> clsact Qdiscs, for example, the old Qdisc ("@old") could access the same
+> miniq_{in,e}gress pointer(s) concurrently with the new Qdisc ("@new"),
+> causing race conditions [1] including a use-after-free bug in
+> mini_qdisc_pair_swap() reported by syzbot:
+>=20
+>  BUG: KASAN: slab-use-after-free in mini_qdisc_pair_swap+0x1c2/0x1f0 net/=
+sched/sch_generic.c:1573
+>  Write of size 8 at addr ffff888045b31308 by task syz-executor690/14901
+> ...
+>  Call Trace:
+>   <TASK>
+>   __dump_stack lib/dump_stack.c:88 [inline]
+>   dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+>   print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:319
+>   print_report mm/kasan/report.c:430 [inline]
+>   kasan_report+0x11c/0x130 mm/kasan/report.c:536
+>   mini_qdisc_pair_swap+0x1c2/0x1f0 net/sched/sch_generic.c:1573
+>   tcf_chain_head_change_item net/sched/cls_api.c:495 [inline]
+>   tcf_chain0_head_change.isra.0+0xb9/0x120 net/sched/cls_api.c:509
+>   tcf_chain_tp_insert net/sched/cls_api.c:1826 [inline]
+>   tcf_chain_tp_insert_unique net/sched/cls_api.c:1875 [inline]
+>   tc_new_tfilter+0x1de6/0x2290 net/sched/cls_api.c:2266
+> ...
+>=20
+> @old and @new should not affect each other.  In other words, @old should
+> never modify miniq_{in,e}gress after @new, and @new should not update
+> @old's RCU state.
+>=20
+> Fixing without changing sch_api.c turned out to be difficult (please
+> refer to Closes: for discussions).  Instead, make sure @new's first call
+> always happen after @old's last call (in {ingress,clsact}_destroy()) has
+> finished:
+>=20
+> In qdisc_graft(), return -EBUSY if @old has any ongoing filter requests,
+> and call qdisc_destroy() for @old before grafting @new.
+>=20
+> Introduce qdisc_refcount_dec_if_one() as the counterpart of
+> qdisc_refcount_inc_nz() used for filter requests.  Introduce a
+> non-static version of qdisc_destroy() that does a TCQ_F_BUILTIN check,
+> just like qdisc_put() etc.
+>=20
+> Depends on patch "net/sched: Refactor qdisc_graft() for ingress and
+> clsact Qdiscs".
+>=20
+> [1] To illustrate, the syzkaller reproducer adds ingress Qdiscs under
+> TC_H_ROOT (no longer possible after commit c7cfbd115001 ("net/sched:
+> sch_ingress: Only create under TC_H_INGRESS")) on eth0 that has 8
+> transmission queues:
+>=20
+>   Thread 1 creates ingress Qdisc A (containing mini Qdisc a1 and a2),
+>   then adds a flower filter X to A.
+>=20
+>   Thread 2 creates another ingress Qdisc B (containing mini Qdisc b1 and
+>   b2) to replace A, then adds a flower filter Y to B.
+>=20
+>  Thread 1               A's refcnt   Thread 2
+>   RTM_NEWQDISC (A, RTNL-locked)
+>    qdisc_create(A)               1
+>    qdisc_graft(A)                9
+>=20
+>   RTM_NEWTFILTER (X, RTNL-unlocked)
+>    __tcf_qdisc_find(A)          10
+>    tcf_chain0_head_change(A)
+>    mini_qdisc_pair_swap(A) (1st)
+>             |
+>             |                         RTM_NEWQDISC (B, RTNL-locked)
+>          RCU sync                2     qdisc_graft(B)
+>             |                    1     notify_and_destroy(A)
+>             |
+>    tcf_block_release(A)          0    RTM_NEWTFILTER (Y, RTNL-unlocked)
+>    qdisc_destroy(A)                    tcf_chain0_head_change(B)
+>    tcf_chain0_head_change_cb_del(A)    mini_qdisc_pair_swap(B) (2nd)
+>    mini_qdisc_pair_swap(A) (3rd)                |
+>            ...                                 ...
+>=20
+> Here, B calls mini_qdisc_pair_swap(), pointing eth0->miniq_ingress to
+> its mini Qdisc, b1.  Then, A calls mini_qdisc_pair_swap() again during
+> ingress_destroy(), setting eth0->miniq_ingress to NULL, so ingress
+> packets on eth0 will not find filter Y in sch_handle_ingress().
+>=20
+> This is just one of the possible consequences of concurrently accessing
+> miniq_{in,e}gress pointers.
+>=20
+> Fixes: 7a096d579e8e ("net: sched: ingress: set 'unlocked' flag for Qdisc =
+ops")
+> Fixes: 87f373921c4e ("net: sched: ingress: set 'unlocked' flag for clsact=
+ Qdisc ops")
+> Reported-by: syzbot+b53a9c0d1ea4ad62da8b@syzkaller.appspotmail.com
+> Closes: https://lore.kernel.org/r/0000000000006cf87705f79acf1a@google.com=
+/
+> Cc: Hillf Danton <hdanton@sina.com>
+> Cc: Vlad Buslov <vladbu@mellanox.com>
+> Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
 
-Test results for stable-v6.3:
-    11 builds:	11 pass, 0 fail
-    28 boots:	28 pass, 0 fail
-    130 tests:	130 pass, 0 fail
+The fixes LGTM, but I guess this could deserve an explicit ack from
+Jakub, as he raised to point for the full retry implementation.
 
-Linux version:	6.3.8-rc1-g718be3905b8f
-Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
-                tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
-                tegra20-ventana, tegra210-p2371-2180,
-                tegra210-p3450-0000, tegra30-cardhu-a04
+Cheers,
 
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
+Paolo
 
-Jon
