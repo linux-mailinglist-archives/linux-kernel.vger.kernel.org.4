@@ -2,92 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C2472E2D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAB8572E2D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241745AbjFMMZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 08:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34430 "EHLO
+        id S242254AbjFMMZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 08:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242487AbjFMMZQ (ORCPT
+        with ESMTP id S236188AbjFMMZp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 08:25:16 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8D710CB
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 05:25:14 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-403-Ufe39FLKM9uv02YWJ1c2EA-1; Tue, 13 Jun 2023 13:25:11 +0100
-X-MC-Unique: Ufe39FLKM9uv02YWJ1c2EA-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 13 Jun
- 2023 13:25:03 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Tue, 13 Jun 2023 13:25:03 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     "'Kasireddy, Vivek'" <vivek.kasireddy@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "qemu-devel@nongnu.org" <qemu-devel@nongnu.org>,
-        Hugh Dickins <hughd@google.com>
-CC:     Gerd Hoffmann <kraxel@redhat.com>,
-        "Kim, Dongwon" <dongwon.kim@intel.com>,
-        "Chang, Junxiao" <junxiao.chang@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Hocko, Michal" <mhocko@suse.com>,
-        "jmarchan@redhat.com" <jmarchan@redhat.com>,
-        "muchun.song@linux.dev" <muchun.song@linux.dev>,
-        James Houghton <jthoughton@google.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH] udmabuf: revert 'Add support for mapping hugepages (v4)'
-Thread-Topic: [PATCH] udmabuf: revert 'Add support for mapping hugepages (v4)'
-Thread-Index: AQHZmkrTMFwnMH2R1EGnnRur83Hw9a+FyCfggAEHOQCAAT7FoIAAoNDA
-Date:   Tue, 13 Jun 2023 12:25:03 +0000
-Message-ID: <89652021ecea4aa2ada763c97deeb543@AcuMS.aculab.com>
-References: <20230608204927.88711-1-mike.kravetz@oracle.com>
- <IA0PR11MB71851B64A5E7062E3BDD8D2FF854A@IA0PR11MB7185.namprd11.prod.outlook.com>
- <281caf4f-25da-3a73-554b-4fb252963035@redhat.com>
- <IA0PR11MB71852D6B27C83658670CBFBDF855A@IA0PR11MB7185.namprd11.prod.outlook.com>
-In-Reply-To: <IA0PR11MB71852D6B27C83658670CBFBDF855A@IA0PR11MB7185.namprd11.prod.outlook.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 13 Jun 2023 08:25:45 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD6010CE;
+        Tue, 13 Jun 2023 05:25:44 -0700 (PDT)
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35DCNfkV006121;
+        Tue, 13 Jun 2023 12:25:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : date : subject :
+ mime-version : content-type : content-transfer-encoding : message-id : to
+ : cc; s=pp1; bh=0QJ5OOSqOBhOpoGHM9mIKfqtD9U6FDSmgII1zFfBG7w=;
+ b=STSeSzyvzvJkHYgGju6hWsQcfKBHjy6WBf47K+whSQUV+GYHorIEU91AR+m2gohqu+Am
+ PN0a3aZttQlnreCeSxtwd3mT5A6PNY9Vh0P6w5G3ShdkvZsnqIgbPqFZofPukkwWxjx3
+ BRVVBSMRdPH/xTQeHvnQOqnISkb4L33h+REHp81fqdtrY2eCW17o1zTjYWyZUhU+jAOm
+ v4GB208KCoe2X9e3wEfAK3joq3OnGBGSUo8Yq/EyD6pyQtckFuOWFEanFiTFVwyuPAc5
+ IJUTQp3DS+nrRDiJuPvQxVc/yzSyNnUa5IscMQvxvIzE1hux4XMTaJF2Ejs+s7npPiqv vw== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r6re2r1f3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Jun 2023 12:25:43 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35D4mTIc016530;
+        Tue, 13 Jun 2023 12:25:41 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3r4gee246e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Jun 2023 12:25:41 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35DCPcig42467876
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 13 Jun 2023 12:25:38 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 19F1D20040;
+        Tue, 13 Jun 2023 12:25:38 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5ED9720043;
+        Tue, 13 Jun 2023 12:25:37 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 13 Jun 2023 12:25:37 +0000 (GMT)
+From:   Julian Ruess <julianr@linux.ibm.com>
+Date:   Tue, 13 Jun 2023 14:25:37 +0200
+Subject: [PATCH] s390/ism: Fix trying to free already-freed IRQ by repeated
+ ism_dev_exit()
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230613-ism-rmmod-crash-v1-1-359ac51e18c9@linux.ibm.com>
+X-B4-Tracking: v=1; b=H4sIAEBgiGQC/x2NQQqDQAxFryJZN6AzIqVXKUXiGDtZzChJkYJ49
+ 6Yu3+c9/gHGKmzwaA5Q3sVkrQ7drYGUqb4ZZXaG0IbYDl1EsYJayjpjUrKMc7/EPoRIwz2CVxM
+ Z46RUU/53ro+XPm708cmNTXmR7/X5fJ3nD9slGreDAAAA
+To:     Julian Ruess <julianr@linux.ibm.com>,
+        Alexandra Winter <wintera@linux.ibm.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jan Karcher <jaka@linux.ibm.com>,
+        Stefan Raspl <raspl@linux.ibm.com>
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Niklas Schnelle <schnelle@linux.ibm.com>
+X-Mailer: b4 0.12.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 1aIL0rMSPM2ipBYuvnwOYpT3DYv2dmrH
+X-Proofpoint-ORIG-GUID: 1aIL0rMSPM2ipBYuvnwOYpT3DYv2dmrH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-13_04,2023-06-12_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=960 spamscore=0
+ lowpriorityscore=0 priorityscore=1501 impostorscore=0 bulkscore=0
+ mlxscore=0 adultscore=0 suspectscore=0 phishscore=0 malwarescore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306130107
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogS2FzaXJlZGR5LCBWaXZlayA8dml2ZWsua2FzaXJlZGR5QGludGVsLmNvbT4NCj4gU2Vu
-dDogMTMgSnVuZSAyMDIzIDA5OjI2DQouLi4NCj4gPiBJcyBteSB1bmRlcnN0YW5kaW5nIGNvcnJl
-Y3QsIHRoYXQgd2UgY2FuIGVmZmVjdGl2ZWx5IGxvbmctdGVybSBwaW4NCj4gPiAod29yc2UgdGhh
-biBtbG9jaykgNjQgTWlCIHBlciBVRE1BQlVGX0NSRUFURSwgYWxsb3dpbmcgZXZlbnR1YWxseSAh
-cm9vdA0KPiA+IHVzZXJzDQo+DQo+IFRoZSA2NCBNaUIgbGltaXQgaXMgdGhlIHRoZW9yZXRpY2Fs
-IHVwcGVyIGJvdW5kIHRoYXQgd2UgaGF2ZSBub3Qgc2VlbiBoaXQgaW4NCj4gcHJhY3RpY2UuIFR5
-cGljYWxseSwgZm9yIGEgMTkyMHgxMDgwIHJlc29sdXRpb24gKGNvbW1vbmx5IHVzZWQgaW4gR3Vl
-c3RzKSwNCj4gdGhlIHNpemUgb2YgdGhlIEZCIGlzIH44IE1CICgxOTIweDEwODB4NCkuIEFuZCwg
-bW9zdCBtb2Rlcm4gR3JhcGhpY3MNCj4gY29tcG9zaXRvcnMgZmxpcCBiZXR3ZWVuIHR3byBGQnMu
-DQoNCldoYXQgY29kZSBkb2VzIGFuZCB3aGF0IHBvdGVudGlhbGx5IG1hbGljaW91cyBjb2RlIG1p
-Z2h0IGRvDQphcmUgZW50aXJlbHkgZGlmZmVyZW50IHRoaW5ncy4NCg0KCURhdmlkDQoNCi0NClJl
-Z2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0
-b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykN
-Cg==
+This patch prevents the system from crashing when unloading the ISM module.
+
+How to reproduce: Attach an ISM device and execute 'rmmod ism'.
+
+Error-Log:
+- Trying to free already-free IRQ 0
+- WARNING: CPU: 1 PID: 966 at kernel/irq/manage.c:1890 free_irq+0x140/0x540
+
+After calling ism_dev_exit() for each ISM device in the exit routine,
+pci_unregister_driver() will execute ism_remove() for each ISM device.
+Because ism_remove() also calls ism_dev_exit(),
+free_irq(pci_irq_vector(pdev, 0), ism) is called twice for each ISM
+device. This results in a crash with the error
+'Trying to free already-free IRQ'.
+
+In the exit routine, it is enough to call pci_unregister_driver()
+because it ensures that ism_dev_exit() is called once per
+ISM device.
+
+Cc: <stable@vger.kernel.org> # 6.3+
+Fixes: 89e7d2ba61b7 ("net/ism: Add new API for client registration")
+Reviewed-by: Niklas Schnelle <schnelle@linux.ibm.com>
+Signed-off-by: Julian Ruess <julianr@linux.ibm.com>
+---
+ drivers/s390/net/ism_drv.c | 8 --------
+ 1 file changed, 8 deletions(-)
+
+diff --git a/drivers/s390/net/ism_drv.c b/drivers/s390/net/ism_drv.c
+index 8acb9eba691b..c2096e4bba31 100644
+--- a/drivers/s390/net/ism_drv.c
++++ b/drivers/s390/net/ism_drv.c
+@@ -771,14 +771,6 @@ static int __init ism_init(void)
+ 
+ static void __exit ism_exit(void)
+ {
+-	struct ism_dev *ism;
+-
+-	mutex_lock(&ism_dev_list.mutex);
+-	list_for_each_entry(ism, &ism_dev_list.list, list) {
+-		ism_dev_exit(ism);
+-	}
+-	mutex_unlock(&ism_dev_list.mutex);
+-
+ 	pci_unregister_driver(&ism_driver);
+ 	debug_unregister(ism_debug_info);
+ }
+
+---
+base-commit: 858fd168a95c5b9669aac8db6c14a9aeab446375
+change-id: 20230613-ism-rmmod-crash-d4f34223a683
+
+Best regards,
+-- 
+Julian Ruess <julianr@linux.ibm.com>
 
