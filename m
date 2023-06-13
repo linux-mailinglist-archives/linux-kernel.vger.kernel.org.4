@@ -2,77 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1D972DBA3
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 09:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3680B72DBB8
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 09:56:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238229AbjFMH4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 03:56:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49758 "EHLO
+        id S239103AbjFMH4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 03:56:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240274AbjFMHzy (ORCPT
+        with ESMTP id S239031AbjFMH4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 03:55:54 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF6810E3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:55:53 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-bcad7f7dabcso1530103276.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:55:53 -0700 (PDT)
+        Tue, 13 Jun 2023 03:56:10 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F12E7D
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:56:08 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f629ccb8ebso6274044e87.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:56:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1686642953; x=1689234953;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GqkMTpZSPTrtiBwrlg2HB9jORG0uNI2X+Q54yKxHyHA=;
-        b=X1lH0zTSm/2trYaS1XeQ55Q9hA/9/r0gKILDhIP3BM1V9j/9FcNnlTg8C6eqes6MhY
-         kEEujrjfs/bXMw2MXXaDIEhSffQ3ZxmyyehIWQMaGdQ83t9lijLU+cai3uaF5ZNQ3hJ1
-         U4h+mNKlmJ4enUA0b9qIy8BcA850nZF9q8DNphIsqHIDVsbimRdE1m2LdXqy6pRLVSor
-         CuNaeb3ZHWvaqWp2UlX8SxpNaeTb54BL1Y6A72HUI8F4MxEPteEgE7OxPWAGRl2KwREW
-         FSjlxEtmon50dMqJgkzch8RTCiRJz+wMgeMWSkqDFbH4doZHuoKH0L9GHXdRo8TV+x0S
-         4DDw==
+        d=linaro.org; s=google; t=1686642966; x=1689234966;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qt6DO4eTqgm1PKgstjuXoKWvYLzLs/3RIwW59uXSJfE=;
+        b=XAAAvbiX1KmTs/nZ4eapF5OhkbIGZBHGMn4WJpPangVsSU+eXKkd+sfCNhXXAgCJec
+         WAeFmGIDntrCMQry2+idiO2BkwKFIdW4x8AEO0ewV/aIqlEnVBbtggSMtR1sLK5DiU1n
+         0nCGtOu9f3/+Nh42TTsrantfCKyeQ9cgmUuMFWf9llvkTGk/2AD8YysiAXuUEfYsJKSV
+         /uxjWkVg4tCJVShhf/8lMCEcwLaDTdnbktkwHyCkQjwdPSfckW4+VIgIQKiTgB3dVV5C
+         S0PPA3T/IK8Qf6rT90HQpfgVwxBhwqaqmGrJ46dGUoSB12xjD+kH3G8Al/vbu7nQudNy
+         8Sog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686642953; x=1689234953;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GqkMTpZSPTrtiBwrlg2HB9jORG0uNI2X+Q54yKxHyHA=;
-        b=YYg/3o34xGy0N2foTsDR8jIFFY2PSLtBoBczXkWSpcysdGpMlnaeTMBtUX2g7vJW+X
-         Ng1URThGgSAi/XNQvQshiA3A4/IZ1zvbsrt+qjh3pM8y0VoMmb0DO5jzSgXvTs1CMj45
-         jbOMd/f8P/85l10U6UztzFh3aWbZphrC5psrZnRITCU/tG2C8ysX9bjQHee/gB3Uw6fF
-         HmBwicX01XI7t34Ncl3u3Vs2A7rXEBd4YZw9mlC93EwNTHxPQsXKuQ+gfeGgMVwqdVxL
-         B86JMjI0UuLH/s73dNHXu5JEBRqR/pv5SUsSqnoWZwPZFzJalfp/tqVJ8QIgI6TBW+TW
-         +Kmg==
-X-Gm-Message-State: AC+VfDx7m2cN8Q137TccS07owv506iPmeer/C/aj9b0V3Oq8VzcwgDvf
-        ndhBLdZaKSxF4f0qFs1aaMJAT1B48+2QcNkfXpEnrA==
-X-Google-Smtp-Source: ACHHUZ7O4IuL4c5Qy6TEcv499ftciQaYRXdKcvbuS5ivN5I0ThoFAm05aH64SAu17/J52IMOAeGVAiqoO7kjJSXAUJs=
-X-Received: by 2002:a0d:fd83:0:b0:56d:4014:dd20 with SMTP id
- n125-20020a0dfd83000000b0056d4014dd20mr982407ywf.30.1686642952928; Tue, 13
- Jun 2023 00:55:52 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686642966; x=1689234966;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Qt6DO4eTqgm1PKgstjuXoKWvYLzLs/3RIwW59uXSJfE=;
+        b=apXBnRR8+ATA9qevMHu5lKditIfBYxA07DkIoKpy8+VQbu9X2yVW61czqW6guyX8/a
+         1TVvTTTZdSejBR9mVcMHlysjRVDtAJBirOLGLl/EUusTQrrZFG2lDLnjAGXL2B6xFUHC
+         qFNIkzg0zsqOkIgL05elEB57wJ0joQ3+XBBzJ+axptqYGmvwvKI5XGboc9Qhj3re35Kq
+         t41Lktj7sEHKpXc8EUZzjp6loyVfnIDLQdFVXhB7i7ltDhlBj8Jzxvk62ib4bN4bVZpb
+         VRzbyg8Qy2WdBJUk+1lDl6XM+CsDb0rHZgTMXm0oKV9e2kyYvZjDBtqHg8uXPr/osOpj
+         IgWQ==
+X-Gm-Message-State: AC+VfDw9kTUSU+tpXGpvi50HglI7jZNlG1v/Uctlgxyb3j6Q9G7NH2uG
+        W4idKCQar0NJ9BDS+CR/xjunfA==
+X-Google-Smtp-Source: ACHHUZ5fW3ryKdvd83gwTbTkCIF0OxVrYv/7x/9Sz1zAv0fCZAcv6Fkgq85atuOhvfwTZUaZLcdY8g==
+X-Received: by 2002:a19:5e58:0:b0:4f4:d324:8b14 with SMTP id z24-20020a195e58000000b004f4d3248b14mr5035114lfi.14.1686642966390;
+        Tue, 13 Jun 2023 00:56:06 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id k20-20020a05600c0b5400b003f4266965fbsm13662316wmr.5.2023.06.13.00.56.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 00:56:05 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH v3 0/8] arm64: qcom: add Type-C Altmode support
+Date:   Tue, 13 Jun 2023 09:55:53 +0200
+Message-Id: <20230601-topic-sm8550-upstream-type-c-v3-0-22c9973012b6@linaro.org>
 MIME-Version: 1.0
-References: <20230508142842.854564-1-apatel@ventanamicro.com>
- <20230508142842.854564-8-apatel@ventanamicro.com> <ZGIrOKIT8uHcNqbQ@nvidia.com>
-In-Reply-To: <ZGIrOKIT8uHcNqbQ@nvidia.com>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Tue, 13 Jun 2023 13:25:41 +0530
-Message-ID: <CAK9=C2V9o4FsFXAfRHLGSuJaDubwM_HSL7keTYeWb_vFDNLd7g@mail.gmail.com>
-Subject: Re: [PATCH v3 07/11] irqchip/riscv-imsic: Improve IOMMU DMA support
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAkhiGQC/5WOvQ6CMBRGX8V09ppCqaCT72Ec+nOBJtA2LTQSw
+ rtb2Nx0PN9wzreSiMFgJPfTSgImE42zGdj5RFQvbIdgdGZS0pLRKy1gct4oiGPDOYXZxymgGGF
+ aPIICbLis9K0uKk5JVkgREWQQVvVZYudhyKMP2Jr30Xy+MvcmTi4sx4VU7OuPtVQABb33crSRQ
+ j4GY0VwFxc6sptT+Y+tzDYmpW5ZzWuu2Jdt27YPAPDoxywBAAA=
+To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, iommu@lists.linux.dev,
-        Vincent Chen <vincent.chen@sifive.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2787;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=BHAgQ+UG5MLHVgrLY9X0OW+HponTfcnibfbTbfKXYaA=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkiCEQVetVQxGQVm3pW63K5GgAgaxaLOJ7YEzbEf5B
+ N3P1GEmJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZIghEAAKCRB33NvayMhJ0cpIEA
+ CnECPB9irgAv5XQjvhHw9vJwqUoXarSQrXfjhw5aFN6kz8JINuGWFRzeU6XPoWh/QEZfEcnWiC9KPX
+ zDtZ1gdeLQFiK5vgBMVlTVDJ+9QvCPmRxs5lYa8Qrud6f9G+ggV8GfDHJT8oGO5HEWG194gyLlpl2C
+ GQnk3WiWkaGIY69Buxer6uW7Y82u4nJSqzoRaFSg4KWEnqvoud5o7rbJ04jWdhcnhi6LxINgEFgmwj
+ OG2yxBDpwYwjODnVf3HWI4O6IRggNIuUGyCCwzLEK0oL1273DiveTp+SH3qqJl18uChHCcVug6FkUX
+ 8uz81i2Rys/tRFGlKB9XBXiCfkRmaRiqJq07S2uQklV+seYdKQG5AkQHIsTU94gTJiAOMDYZ1wznem
+ GJ+PA65DvsqodMpNU0kWQ8x5JzVmAOJRGruR7mkvPL757qm/BWO74lQ6CVIj9yV73A/VYvjIKvDlQo
+ DXZGHwg+Q0kecXzu/uW8TmFsDCouIVkkhJo62bjyoCD+6XekjHdbAZbS3BMVWSduhh1WIkPlaYtxNl
+ tnXUppyM0oQBj0zh+NLZMwRjYWX+VD2Ig/R5cu+z8+R03pNncBu58mAtSupSPcniiE7H+55Bn0wm8Z
+ y+gZp+yo6xaGBgqlCrsJ8jTILvksYJmg/f/vwCs6xtEd0KQnxtV1FReW+mRQ==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -83,57 +100,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 6:23=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com> wr=
-ote:
->
-> On Mon, May 08, 2023 at 07:58:38PM +0530, Anup Patel wrote:
-> > We have a separate RISC-V IMSIC MSI address for each CPU so changing
-> > MSI (or IRQ) affinity results in re-programming of MSI address in
-> > the PCIe (or platform) device.
-> >
-> > Currently, the iommu_dma_prepare_msi() is called only once at the
-> > time of IRQ allocation so IOMMU DMA domain will only have mapping
-> > for one MSI page. This means iommu_dma_compose_msi_msg() called
-> > by imsic_irq_compose_msi_msg() will always use the same MSI page
-> > irrespective to target CPU MSI address. In other words, changing
-> > MSI (or IRQ) affinity for device using IOMMU DMA domain will not
-> > work.
-> >
-> > To address above issue, we do the following:
-> > 1) Map MSI pages for all CPUs in imsic_irq_domain_alloc()
-> >    using iommu_dma_prepare_msi().
-> > 2) Add a new iommu_dma_select_msi() API to select a specific
-> >    MSI page from a set of already mapped MSI pages.
-> > 3) Use iommu_dma_select_msi() to select a specific MSI page
-> >    before calling iommu_dma_compose_msi_msg() in
-> >    imsic_irq_compose_msi_msg().
->
-> Is there an iommu driver somewhere in all this? I don't obviously see
-> one?
+This adds the missing bits to support the USB-C Altmode
+support on SM8550.
 
-Sorry for the delayed response.
+These are the following changes since the previous SM8450 SoC:
+- No more GLINK altmode events for USB only changes, only DP
+- Type-C orientation is available on a PMIC signal connected
+  to a GPIO line
+- When altmode is disconnected, an 0xff mode event is sent.
 
-The RISC-V IOMMU specification is frozen and will be ratified/released
-anytime this month or next.
-https://github.com/riscv-non-isa/riscv-iommu/releases/download/v1.0-rc6/ris=
-cv-iommu.pdf
+In order to handle those changes, a new orientation-gpios property
+is added to the usb-c connector bindings.
+The 0xff altomode is translated as a SAFE type-c mux mode.
 
-The RISC-V IOMMU driver will be send-out on LKML pretty soon
-https://github.com/tjeznach/linux/tree/tjeznach/riscv-iommu
-which can be tested on QEMU
-https://github.com/tjeznach/qemu/tree/tjeznach/riscv-iommu
+And in order to handle such info, we tie this to the UCSI connector
+events to propagate the orientation to Type-C switches.
 
->
-> There should be no reason to use the dma-iommu.c stuff just to make
-> interrupts work, that is only necessary if there is an iommu, and the
-> platform architecture requires the iommu to have the MSI region
-> programmed into IOPTEs.
->
-> And I'd be much happier if we could clean this design up before risc-v
-> starts using it too :\
->
+Redriver driver & bindings dependency at [1].
 
-Sure, I will send-out v4 in the next few days.
+[1] https://lore.kernel.org/all/20230601-topic-sm8x50-upstream-redriver-v2-0-dda89b22b1c0@linaro.org/
 
-Regards,
-Anup
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Changes in v3:
+- Fix fsa node names in both QRD amd MTP nodes
+- Add missing orientation-gpios in MTP dt
+- Remove invalid svid property
+- Link to v2: https://lore.kernel.org/r/20230601-topic-sm8550-upstream-type-c-v2-0-3bbdf37575c3@linaro.org
+
+Changes in v2:
+- Updated redriver node to use retimer-switch on QRD
+- Fixed redriver data-lane according to v2 bindings
+- Added review/ack tags
+- Added new change to handle retimer-switch in pmic-glink altmode driver
+- Link to v1: https://lore.kernel.org/r/20230601-topic-sm8550-upstream-type-c-v1-0-d4d97b4d8bab@linaro.org
+
+---
+Neil Armstrong (8):
+      dt-bindings: connector: usb-connector: add a gpio used to determine the Type-C port plug orientation
+      soc: qcom: pmic_glink_altmode: handle safe mode when disconnect
+      usb: ucsi: glink: use the connector orientation GPIO to provide switch events
+      qcom: pmic_glink_altmode: add retimer-switch support
+      qcom: pmic_glink: enable altmode for SM8550
+      arm64: dts: qcom: sm8550: add ports subnodes in usb/dp qmpphy node
+      arm64: dts: qcom: sm8550-mtp: add pmic glink port/endpoints
+      arm64: dts: qcom: sm8550-qrd: add pmic glink port/endpoints
+
+ .../bindings/connector/usb-connector.yaml          |  5 ++
+ arch/arm64/boot/dts/qcom/sm8550-mtp.dts            | 67 ++++++++++++++-
+ arch/arm64/boot/dts/qcom/sm8550-qrd.dts            | 99 +++++++++++++++++++++-
+ arch/arm64/boot/dts/qcom/sm8550.dtsi               | 26 ++++++
+ drivers/soc/qcom/pmic_glink.c                      |  6 +-
+ drivers/soc/qcom/pmic_glink_altmode.c              | 61 ++++++++++++-
+ drivers/usb/typec/ucsi/ucsi_glink.c                | 52 +++++++++++-
+ 7 files changed, 305 insertions(+), 11 deletions(-)
+---
+base-commit: e8bab25f2afdf2f74359f6c743b21fafc9cdb03e
+change-id: 20230601-topic-sm8550-upstream-type-c-e85b4d971450
+
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
+
