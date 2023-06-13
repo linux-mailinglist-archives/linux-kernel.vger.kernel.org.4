@@ -2,112 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B519572ED91
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 23:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 565AA72ED96
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 23:05:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235588AbjFMVEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 17:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55570 "EHLO
+        id S232064AbjFMVFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 17:05:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232924AbjFMVEJ (ORCPT
+        with ESMTP id S236659AbjFMVFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 17:04:09 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E600C19A8
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 14:04:07 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-39a505b901dso3396269b6e.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 14:04:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686690247; x=1689282247;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BOx1Cb4CrkzgKdN2+7kWQPFrvO7Tgljw4Xt6t1AfgN4=;
-        b=Wrgk0HFKlb86zVDE/KpwIxBXfv2OLpAmFYzNC8qwKVw4dirnXILmb3uDaY5URVddY1
-         dlgkG9awQpBaW37Z/nuuojDOQo/OSOfOu6sBnDiOSpqkQf5m/vYJuHAoukeGYJmbsB5z
-         8GuqxaqUtUn1ZlO/diFZ2jx26EETlfzz2934o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686690247; x=1689282247;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BOx1Cb4CrkzgKdN2+7kWQPFrvO7Tgljw4Xt6t1AfgN4=;
-        b=g4wzxswrkxhEbY3h9NRc9qEtRiVaeH8UQYu/7BhNPc7sXnKijGKF32tWQuhLDEAsBe
-         AjU8EFQhvFIKGZaQpRhevasrNVU5a6oPK/6YdWIz92UniUlX4E5gQ2PFBZqZ2QGyyj7+
-         p+r8bLBTZEAI48sduAoOuVPsaNBkDPKS1KlshENgrg3c4olx7gcm3SaI1gucw4Wdzlue
-         QdoSTtvPLEx4JOeIjL2NIpChQJ5zWHwju4d+TtnKDtUzRiJzX6047w9SJSTvvEAQraqk
-         RK/70IfygZyHVC/SdCNhuuI72AE2BkXkXZK77Nee5fW3c4MFoo1hdWRxY3WRN5Qi+xls
-         X7kA==
-X-Gm-Message-State: AC+VfDySV51F7dOUWZoD8aUM8QWhIbkNQJJgjR8t2a0YzvWoOMWHQ/JB
-        6JSSLXoM4pijHpvCMpcABpjvNvVEQf6QvrmZlZI=
-X-Google-Smtp-Source: ACHHUZ4IAbWflqgt5qapX8OK1U5Kv3y8xxTFpTDoZKZ9c+9N5ZZhJ5eZl/IFs2wLxtx3aXss8NPufA==
-X-Received: by 2002:a05:6808:284:b0:397:f82f:90a4 with SMTP id z4-20020a056808028400b00397f82f90a4mr8059633oic.3.1686690246395;
-        Tue, 13 Jun 2023 14:04:06 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id 2-20020a630b02000000b0051b7d83ff22sm9713553pgl.80.2023.06.13.14.04.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 14:04:05 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        kernel test robot <oliver.sang@intel.com>,
-        kernel test robot <lkp@intel.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        =?UTF-8?q?J=C3=B3=20=C3=81gila=20Bitsch?= <jgilab@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] usb: ch9: Replace 1-element array with flexible array
-Date:   Tue, 13 Jun 2023 14:04:04 -0700
-Message-Id: <20230613210400.never.078-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 13 Jun 2023 17:05:13 -0400
+Received: from sender3-op-o19.zoho.com (sender3-op-o19.zoho.com [136.143.184.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A02219A7;
+        Tue, 13 Jun 2023 14:05:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686690262; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=h5XT1YKtblE2EbdkfNwDxnv6JsYamFwH2kFnrl/YUs5MFcMAOG3UfjSKcPSJsH4DFrpjFm/+qUTBYfXINdnvbK0ESC6JbhjNateuAUeAYzsmmxXypLV46d+oqWEl89Oo4kaDJiWwQIzKZshxuwfyRSEMSrouJodEvJSHVDp5a+A=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1686690262; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=mNrSoA9RNanVJ842F7+wKKUHtKKldQV+kaGjsFPdlIw=; 
+        b=ktzgPAYxOg3Yocw5UfX11w1BH/qcey9+pTuIdgQNvqMRQbtaxj0j/fgIJtn9lUtFWRIIkCNrSt07xTnsxE+ualoKOM5+VkxlRIy9HHCx7A8m14rcEaGm0Ra3p9GDU6SY3jcKe1nKPz7Ud8h4WYue8pYe6vJnCKxgGcKqSUB5JN0=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1686690262;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=mNrSoA9RNanVJ842F7+wKKUHtKKldQV+kaGjsFPdlIw=;
+        b=ANWo1ieZAPI87KHbnBruHf4fRzOgNTl0e9FL0mtBMttmA+JEZI/9nEah39HzcmfJ
+        9HF+LTHMZNM1hgcqOz/FzfHCYLHiZYifgZzRiO7hXmR8hDOgqVUa+GLYWUc7LA84w8a
+        oahMOKD2Mc92TbRWXwBgoCAsQkqik1dlXCqcGhBQ=
+Received: from [192.168.1.248] (178-147-169-233.haap.dm.cosmote.net [178.147.169.233]) by mx.zohomail.com
+        with SMTPS id 1686690259958616.2203158377357; Tue, 13 Jun 2023 14:04:19 -0700 (PDT)
+Message-ID: <dd0d716e-8fdc-b6dc-3870-e7e524e8bf49@arinc9.com>
+Date:   Wed, 14 Jun 2023 00:04:10 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1428; h=from:subject:message-id; bh=JnLkH4pmZPr+c0qLV33G9jBQkGYO6fWW64bmkRy4SIY=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBkiNnDHBwR1Ie8fRBd7eHhD8fIQtVxLvTp5alQtuBH DWwFQ8+JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZIjZwwAKCRCJcvTf3G3AJsFCD/ 4x1nXqX6El0WiD6bCA9teDACqjOpqTmk7gcwUI9PdJzVcHeJrbFFtmwxJ9gFMI26Ez67hVKTcXf1di tls62NokgUH9nDlkOUyA3GiEkC8ltgIwI0LHUxeY+Wd9rFiN/f2xceF1pQocUGQ8RdrllXpFObeXKO vq8LBMV6Vv8mnY1xjf/3uS+bNlmcb/TzoeaUGKuwUTJUryRwEnP+IhjjhiLoKq/xVLYinuUPnC3mZ0 VAekizBZYNPHWItfimEw5qQYAR+3GQU2yHhLgOCqXffbmYPIEsElbUK7zun6tPn5F/eMEbcqclBmnL uPSr7hHjqn47v/iuYyXW0XbuxyLrwmJ9BhB7rmfionI+Wo09ttk03hc7IQXzjcpR5frONcP/3DiGn0 G0syov5rKbYlVlxjgUpUZxzs4owZAWVHJdD4fz9ik+qsv6/87Rgos42x+sM+GP/tDIQNmvIxTOGtqb 2YYPNlIP97Y/9zZ9O7b+Z+H1MgJU566fTTcQS9Z2a8ucWzJcXGxnVURF3UlHs+6JP9AzQp3RBCGCpL DMMkA8C1LDWlWMuKfgiCvuBNkX03/Nz4pR7MhEZoWRdqwnOgZq9NOv3yFo4q5l1P4Z5HFlrPY6XPGJ CZxVwukYn6Hzl3Zhl0SrGCQ//moINSF/AnPh2j+2TSVHTIMnlwoLq8KD4B9w==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net v2 2/7] net: dsa: mt7530: fix trapping frames with
+ multiple CPU ports on MT7530
+Content-Language: en-US
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230611081547.26747-2-arinc.unal@arinc9.com>
+ <20230613150815.67uoz3cvvwgmhdp2@skbuf>
+ <a91e88a8-c528-0392-1237-fc8417931170@arinc9.com>
+ <20230613171858.ybhtlwxqwp7gyrfs@skbuf>
+ <20230613172402.grdpgago6in4jogq@skbuf>
+ <ca78b2f9-bf98-af26-0267-60d2638f7f00@arinc9.com>
+ <20230613173908.iuofbuvkanwyr7as@skbuf>
+ <edcbe326-c456-06ef-373b-313e780209de@arinc9.com>
+ <20230613201850.5g4u3wf2kllmlk27@skbuf>
+ <4a2fb3ac-ccad-f56e-4951-e5a5cb80dd1b@arinc9.com>
+ <20230613205915.rmpuqq7ahmd7taeq@skbuf>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20230613205915.rmpuqq7ahmd7taeq@skbuf>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With "-fstrict-flex-arrays=3" enabled, UBSAN_BOUNDS no longer pretends
-1-element arrays are unbounded. Walking wData will trigger a warning,
-so make it a proper flexible array. Add a union to keep the struct size
-identical for userspace in case anything was depending on the old size.
+On 13.06.2023 23:59, Vladimir Oltean wrote:
+> On Tue, Jun 13, 2023 at 11:35:08PM +0300, Arınç ÜNAL wrote:
+>> On 13.06.2023 23:18, Vladimir Oltean wrote:
+>>> On Tue, Jun 13, 2023 at 08:58:33PM +0300, Arınç ÜNAL wrote:
+>>>> On 13.06.2023 20:39, Vladimir Oltean wrote:
+>>>>> Got it. Then this is really not a problem, and the commit message frames
+>>>>> it incorrectly.
+>>>>
+>>>> Actually this patch fixes the issue it describes. At the state of this
+>>>> patch, when multiple CPU ports are defined, port 5 is the active CPU port,
+>>>> CPU_PORT bits are set to port 6.
+>>>>
+>>>> Once "the patch that prefers port 6, I could easily find the exact name but
+>>>> your mail snipping makes it hard" is applied, this issue becomes redundant.
+>>>
+>>> Ok. Well, you don't get bonus points for fixing a problem in 2 different
+>>> ways, once is enough :)
+>>
+>> This is not the case here though.
+>>
+>> This patch fixes an issue that can be stumbled upon in two ways. This is for
+>> when multiple CPU ports are defined on the devicetree.
+>>
+>> As I explained to Russell, the first is the CPU_PORT field not matching the
+>> active CPU port.
+>>
+>> The second is when port 5 becomes the only active CPU port. This can only
+>> happen with the changing the DSA conduit support.
+>>
+>> The "prefer port 6" patch only prevents the first way from happening. The
+>> latter still can happen. But this feature doesn't exist yet. Hence why I
+>> think we should apply this series as-is (after some patch log changes) and
+>> backport it without this patch on kernels older than 5.18.
+>>
+>> Arınç
+> 
+> I was following you until the last phrase. Why should we apply this series
+> as-is [ to net.git ], if this patch fixes a problem (the *only* problem in
+> lack of .port_change_master() support, aka for stable kernels) that is
+> already masked by a different patch targeted to net.git?
 
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Closes: https://lore.kernel.org/oe-lkp/202306102333.8f5a7443-oliver.sang@intel.com
-Fixes: df8fc4e934c1 ("kbuild: Enable -fstrict-flex-arrays=3")
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: kernel test robot <lkp@intel.com>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: "Jó Ágila Bitsch" <jgilab@gmail.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- include/uapi/linux/usb/ch9.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Because I don't see the latter patch as a fix. It treats the symptom, 
+not the cause.
 
-diff --git a/include/uapi/linux/usb/ch9.h b/include/uapi/linux/usb/ch9.h
-index b17e3a21b15f..82ec6af71a1d 100644
---- a/include/uapi/linux/usb/ch9.h
-+++ b/include/uapi/linux/usb/ch9.h
-@@ -376,7 +376,10 @@ struct usb_string_descriptor {
- 	__u8  bLength;
- 	__u8  bDescriptorType;
- 
--	__le16 wData[1];		/* UTF-16LE encoded */
-+	union {
-+		__le16 legacy_padding;
-+		__DECLARE_FLEX_ARRAY(__le16, wData);	/* UTF-16LE encoded */
-+	};
- } __attribute__ ((packed));
- 
- /* note that "string" zero is special, it holds language codes that
--- 
-2.34.1
+Anyway, I'm fine with taking this patch from this series and put it on 
+my series for net-next instead.
 
+Arınç
