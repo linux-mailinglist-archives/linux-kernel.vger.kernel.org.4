@@ -2,165 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF5072E43B
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:36:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD21C72E445
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240816AbjFMNft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 09:35:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42036 "EHLO
+        id S241597AbjFMNgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 09:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236188AbjFMNfq (ORCPT
+        with ESMTP id S241006AbjFMNgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 09:35:46 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1EEBE5;
-        Tue, 13 Jun 2023 06:35:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1686663344;
-  x=1718199344;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=9X1LVPKSkMPZErlcbEMfy+2TuN44oV6pjzZe524RYJ4=;
-  b=Hb2d3stU48lYY58hcgrsN0RCaNyCWJeDqMaqkm0K/x2+mEprMV7Vv0gG
-   c9bxmQMYTtEEtglqHWl+jxHtISSAAnIo5RdYyZ4NOEBLRFKgi+yLJmMC1
-   MKJZVkNkBEQz3mkqUnXaJnv3kQod4q/xSVlaTIWd8DRVCgHl0+fIZw67u
-   Xn3kMcNq1YDXUn5oLfW+MBE9ntk1rFPXSMlxwwO7QQ3TCpx8N5CB7nTNO
-   w4OXLWwGI+iP2q4IFgpe8XnPwkhYiifyXnPvVHmrtUoT+4E//JPM/lXmA
-   Y7WaB/H/NilNT/7v34YV/afqaegLzMOmq38auFIevMASt5qEXv/QX9wQp
-   w==;
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=buk7TJmMgFjVbKc5Dk02YWPhorP0hf9o0AtP3x8o9e3unENWwjAwji15iuHDR0f6thMW9wpqS7g1WbQUJ5OEctnkYLEQxV/7D5cSLEK7YlbnsB7Kkhw1lUawiGf5f6wvIg51mB3n0oQWOQqpTLkhqVxDKZ3nzGVCQUgWXtpdgzx4PXXrUYbnGn0me8576wgOpvXgeOA2ePDIj77apIpGLcpWp4DwJbtrVgUEhrDyw2M285MX/cOZp5U0Qqrvjm9rL+CxTSZ+RtzTeGZztKlKoo+H9UgLIA1jaUR5NuijKtvpkUYfeti+pC/PJzNhyT5kYtGJovyh05ENsF6OkoPmIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9X1LVPKSkMPZErlcbEMfy+2TuN44oV6pjzZe524RYJ4=;
- b=bxO2Fh2uT2ilWbKXWA4FW+Gh9VYnwbod0VZPu/HAMZC8UTmJIvjlehXAKGnKRo3lbogyjzWoBDdU3nHAj8rPfDheU7qCZWDFPGQQeECGvnyrVONUKRwgiDfRNc34hlrJAfDPQa+XFITb5bK3tHVSdBqUS+TYr9Fhbq+R8l99eFuRip5z53qLyqzOZiBiPh90NCmR+zuggalq52dkR2T2pA6vs4hdK65pCZQmbOMikgRS79uapf6IHwnl6UTZINHPQJkNh6iw/eLTqZf5cJ8ZpZGWUs01fLAwyDCp7tQNafu9+QMyKWeOYzrHlc3f0d7SWq9Iiv6JqEm8MM7DZeVZSg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=2n.com; dmarc=pass action=none header.from=axis.com; dkim=pass
- header.d=axis.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=axis365.onmicrosoft.com; s=selector2-axis365-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9X1LVPKSkMPZErlcbEMfy+2TuN44oV6pjzZe524RYJ4=;
- b=Rg2HxKDkTaphTAddP2d1EhYvWbAPOBQyIrbr/u40quUnAA11a3O6oYlKUEyajvW6JfAIQ7Wd60hMlIuoMZ8Z8AiZQQOtTvWs82jC9pY97wyEeEqx8B0Wmfbk7+D8QFErzDaGhCofjyZ/ujag+qifxwkc5qvu6ht7Tqnq71iyGyc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=axis.com;
-Message-ID: <99582640-7486-7771-9fd0-c417e283051e@axis.com>
-Date:   Tue, 13 Jun 2023 15:35:39 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/2] Input: cap11xx - add advanced sensitivity settings
-Content-Language: en-US
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-CC:     <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
-        <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <robh+dt@kernel.org>, <u.kleine-koenig@pengutronix.de>
-References: <20230414233815.4004526-1-jiriv@axis.com>
- <20230414233815.4004526-3-jiriv@axis.com> <ZF2A/STY66sqoOLX@google.com>
-From:   Jiri Valek - 2N <jiriv@axis.com>
-In-Reply-To: <ZF2A/STY66sqoOLX@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VI1P194CA0043.EURP194.PROD.OUTLOOK.COM
- (2603:10a6:803:3c::32) To PAXPR02MB7263.eurprd02.prod.outlook.com
- (2603:10a6:102:1c5::18)
+        Tue, 13 Jun 2023 09:36:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88AF1B2;
+        Tue, 13 Jun 2023 06:36:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D7D76233A;
+        Tue, 13 Jun 2023 13:36:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 276A3C433F0;
+        Tue, 13 Jun 2023 13:36:08 +0000 (UTC)
+Date:   Tue, 13 Jun 2023 09:36:06 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Yonghong Song <yhs@meta.com>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Jackie Liu <liu.yun@linux.dev>
+Subject: Re: [PATCHv2] ftrace: Show all functions with addresses in
+ available_filter_functions_addrs
+Message-ID: <20230613093606.069a70da@gandalf.local.home>
+In-Reply-To: <4c87727b-0b3f-ffc1-d55b-90e75dcae52b@meta.com>
+References: <20230611130029.1202298-1-jolsa@kernel.org>
+        <53a11f31-256d-e7bc-eca5-597571076dc5@meta.com>
+        <20230611225407.3e9b8ad2@gandalf.local.home>
+        <20230611225754.01350a50@gandalf.local.home>
+        <d5ffd64c-65b7-e28c-b8ee-0d2ff9dcd78b@meta.com>
+        <20230612110222.50c254f3@gandalf.local.home>
+        <ZId/UL/iujOdgel+@krava>
+        <4c87727b-0b3f-ffc1-d55b-90e75dcae52b@meta.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR02MB7263:EE_|AM7PR02MB6386:EE_
-X-MS-Office365-Filtering-Correlation-Id: daba78ea-c6c3-44a2-520b-08db6c13147e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ccLaw5PN9OsNgMfQQQamWyr7nS2+Tyl/eZJgmhNQBUmq82IhraQc6GtCAjPxeYrzlS1OPaLLBNoQmBo+xKslvlf4wOr3kB6bFbp2B8d2jtdLUdFkSouh5gr18ljc50PBFXHXyLGmLgkxZQhSg2doJ/89ra0uIZK4QaLk++E5jI5oeSdZQMnI9Qjc6JGoA9uoYBv4piw51BdGJGFOmQE4M84U9R3N8cEua/ltICVUE5EbNo6EicXNPSuHXLrUYEwWukxSD2JSWcn/U/UMrVtq5tjIs8fqI7MsmEoP8r41ZV+SJNBtEliPWrrKbN4GE1d5eF+f6XG6xuof5AbwuVif9w5qzYKOPGMEUu72HUZKGBSe7EILxDKdrcYCEYWHVImYUOAUKe/D0fodYRv56gVlsgyVy7LkaR9WLSu0m2bDhlcZmE8sKfTPcBzZM1u1L9ZTOfocv/FavLPNbgorMYxHcucu/i5siU4f3QKLtXqECrv/cJdZgXRl0seB4zvOOc3G0QyEBgVSBJEqikk8ZdiEy3VY+ybiE90L3CHEpgGOykP7FQUqawZ5mldf75LMEsLFaotrmHqE1NYKi58YBmEWpeerI5WEKhH9iEOpgGwazWDGuXfB9IV8ceJJP1e2K9O7xpJeNPRMlFrTuswS8Y4Zumsklj9qADK258GToUGQZtNs0m1yzMNW4JR1whYyipKpJHkHBtYemJf9cEYjUryXtw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR02MB7263.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(346002)(39850400004)(136003)(396003)(451199021)(66476007)(66556008)(2906002)(6916009)(38100700002)(36756003)(41300700001)(4326008)(66946007)(4744005)(5660300002)(31696002)(316002)(8676002)(8936002)(6486002)(83170400001)(26005)(6512007)(53546011)(6506007)(186003)(478600001)(83380400001)(2616005)(42882007)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZjVKdlBMT1d2d3UxYlhmKzBKemxxOWtBY0RUZFdwUlBMWkRUcStuM09Cekh3?=
- =?utf-8?B?cXpqVUhqalpkT0p0d0JtMTFNOTJQczJBc205d291VDJMZUNpVHhXdlk2bGZG?=
- =?utf-8?B?Ly9zNnRPRnlyQXhvSnloRG5zU0lzTytub0w1T2h5VVZ5dXZkVWVhUlZkSE4z?=
- =?utf-8?B?ZnR5ZjcxNytpNjIyem0wcHJxQTlYNUdMMDRxQlJ5SW1XNU1OQm5udG1uL0pQ?=
- =?utf-8?B?ZDE2QTVFU3BmbHdIZjNXK1dkT05UanhuSVRJU2dIUCttRGNoSGVVdUtycWhp?=
- =?utf-8?B?UkVPTUkvUGIwQi9oai8zbUhXSG5mT210bEJLdTJpb3hVV05MVVRVVEQ3V2Ju?=
- =?utf-8?B?a1ZWS1ZFTGQvS3doaWM1RTYyTjFJbXpGNVRsTlk5N2pxMUlhaTlLQUNWVVFW?=
- =?utf-8?B?REVMcnpTWFpMSG5jOHV3bG1ST1lZT3BmRnFiVW5yVjAwLy9VVWlXMnFFWVN6?=
- =?utf-8?B?VUV0WHhIbXpCU1V1ellIejdHYnhQWXdUdGdZb0xtd3hLc2tQRnZIcnhpUDln?=
- =?utf-8?B?ZnpITFJCVjlnY1FaRWYvaCs1WUt1Yk5WNnE1ZDUrejRhcmFvTU1GbkJpczJI?=
- =?utf-8?B?MUk0U2Y4Q1dORndzNkx4ZkdDU3h6QmQxWTd0UUpoMHdwYkRNRGhUWFRNWHQ5?=
- =?utf-8?B?YTFOcStWaW9xMm9VUDhlNVV4bXRNcFpBcmFIamJMYVhhVHBIVEZGenF4YVdw?=
- =?utf-8?B?Vzd2bktzanhibyt3WTBHVXJhOGwrSndYSmVKQVdCbzlQNWI2UUY4UG9JbTVF?=
- =?utf-8?B?ZkM5c0JKNnRYaExiazN2MDRYc0g2WlpWaEtKZlVEdXVjSVJ3Yy9Sa1FxV0tV?=
- =?utf-8?B?d000MEl4cW8wTytLc2JlOGNFSEM2NFJUYkhxSUx4TkYzbUUvRFJMd0pXQlNJ?=
- =?utf-8?B?bmVlV3JEbm4raWU4bjBhUVhkS1Bxa2h6UmFlTGlCckhwaWIvOTFEZW5mY0Mx?=
- =?utf-8?B?OEJ5bFE1bU5IZkdTVU0rK1RuYTVNbEtTSXg4SmczcXFmMzlIZzUwMG9Ccngv?=
- =?utf-8?B?c1d0S1QzeFNPUkM2eHhiT3ZCNzMxUENWdVRxWUJIaXp5djdxbjJBc3VHOUJu?=
- =?utf-8?B?WEJ6Rk9qeUxlWTNiSnhGdUlnOWlrY2RRdTN5M21Pc2pVNUFJTEFWc0JmNW9C?=
- =?utf-8?B?MTdCVjRkZk9OZS9pMVB3ZzdDSU9QS0RkaHFNM2JmMXJLbjZHN2FZaHRWY0t1?=
- =?utf-8?B?djVlUkpBYk9OV09odFZTQWNpQlFubkRVQ0RXTjBFOHpPZUlJU2hxN0dGRnI4?=
- =?utf-8?B?VEIzekpWdHpLV00rOTVkZnhiSFg4T295UDZqSVdLaW11UmF1V2pTVnI1MFRh?=
- =?utf-8?B?L04xbFVPK0JtRkFWajNuYVczT2ErbENneFJLZFhKdmsyQ1BhZmZNVlYrYnJV?=
- =?utf-8?B?dDdyWnFxUExqWVZaSjlmUy9nSE1ERzF0VEJOTURNQWt1OWpOT0h0RHpKS2Vm?=
- =?utf-8?B?ZTJoaGltMDgzMkwrU0xGcnI5bERDbVVjRzB1eUVTN2lBcXBtK3VSbE9BdVF1?=
- =?utf-8?B?akQ3T1dJY2ZFcllJMlJNdnovNjZlL3pxcmhrMXNJL0JqS1lPd1dLR0c3ZVRr?=
- =?utf-8?B?THIxVnRpanR3MTdtM0xmUktOWDJsMGFCcHJJMm9XVjB5V3lGZ0VtWmtSQ0Vo?=
- =?utf-8?B?NHUwZU1uZDk5L1VDZTYvcGExSDlMNWdnNlZtVVRFQ0pBYjFXRDBwZUcrcWVS?=
- =?utf-8?B?cisrdStsOW1JbUVhSWMvcWQ4bU45b2k3eUFJaWFhb0hhUVRQeldteDMvSitR?=
- =?utf-8?B?YnNUdGxqZTNCSllqazZndEttRS9lcHl6cjNTdm1CTTJ6RER0em10UXNlNFpq?=
- =?utf-8?B?c0dkd1RNLzcrQ3JSSTJjR0dkM2NrSFBWOXdSM2xQSUtDY2puUllwOVJja1di?=
- =?utf-8?B?WDRCZGhiRjkwQXVpMlh3N1g1ZWFBTkxEazZONDRkVEtBNjJ3UXo1VzVFVmty?=
- =?utf-8?B?ZXZMd1hBV3l4OUZlSUNQeGlkeUVVWkZER3YyMXBiZGJOU2tLcjYvdlVpdkZF?=
- =?utf-8?B?NW0wTzdWSDFNTG9VaWpRZE1Hd0NOTVQ5QTFteWFjK0lpQ1FXTDZOZGlCeWt0?=
- =?utf-8?B?cDFaL2cyWEllazJWY3hGVGh6WU1sWDJvTmZOaFlZRnQ1OXEzbEdxZW50NWpa?=
- =?utf-8?Q?JuFEg/SOfhCgkF3QKUjmfUoXv?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: daba78ea-c6c3-44a2-520b-08db6c13147e
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR02MB7263.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2023 13:35:40.8519
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dx3e/x10F20HEziKjdfB+q21VsXXp3UdNIojv5gTdvnuc9m1rV116lNcxj7AgDZi
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR02MB6386
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
+On Mon, 12 Jun 2023 22:04:28 -0700
+Yonghong Song <yhs@meta.com> wrote:
 
-On 5/12/23 01:57, Dmitry Torokhov wrote:
-> Hi Jiri,
-> 
-> On Sat, Apr 15, 2023 at 01:38:15AM +0200, Jiri Valek - 2N wrote:
->> @@ -474,7 +645,7 @@ static int cap11xx_i2c_probe(struct i2c_client *i2c_client)
->>  	if (error)
->>  		return error;
->>  
->> -	irq = irq_of_parse_and_map(node, 0);
->> +	irq = irq_of_parse_and_map(dev->of_node, 0);
-> 
-> Do you know if this is actually needed or we can rely on I2C core to
-> figure out the interrupt for us?
+> Thanks for explanation! It would be great if we can put more details in
+> this email into the commit message!
 
-Agree and verified that's really not needed. I2C core do the job.
-I will remove it.
+I agree.
 
-> 
-> Also, could I ask you to move the driver from of_property_*() to
-> device_property_*() API?
+This is the patch I just pulled into my queue:
 
-And yes. I can move it to device_property API.
+From: Jiri Olsa <jolsa@kernel.org>
+Date: Sun, 11 Jun 2023 15:00:29 +0200
+Subject: [PATCH] ftrace: Show all functions with addresses in
+ available_filter_functions_addrs
 
-I prepare the changes as separate commits after I solve issues
-with my "add advanced sensitivity settings" patch.
+Adding new available_filter_functions_addrs file that shows all available
+functions (same as available_filter_functions) together with addresses,
+like:
 
-> 
-> Thanks.
-> 
+  # cat available_filter_functions_addrs | head
+  ffffffff81000770 __traceiter_initcall_level
+  ffffffff810007c0 __traceiter_initcall_start
+  ffffffff81000810 __traceiter_initcall_finish
+  ffffffff81000860 trace_initcall_finish_cb
+  ...
 
-BR,
-Jiri Valek
+Note displayed address is the patch-site address and can differ from
+/proc/kallsyms address.
+
+It's useful to have address avilable for traceable symbols, so we don't
+need to allways cross check kallsyms with available_filter_functions
+(or the other way around) and have all the data in single file.
+
+For backwards compatibility reasons we can't change the existing
+available_filter_functions file output, but we need to add new file.
+
+The problem is that we need to do 2 passes:
+
+ - through available_filter_functions and find out if the function is traceable
+ - through /proc/kallsyms to get the address for traceable function
+
+Having available_filter_functions symbols together with addresses allow
+us to skip the kallsyms step and we are ok with the address in
+available_filter_functions_addr not being the function entry, because
+kprobe_multi uses fprobe and that handles both entry and patch-site
+address properly.
+
+We have 2 interfaces how to create kprobe_multi link:
+
+  a) passing symbols to kernel
+
+     1) user gathers symbols and need to ensure that they are
+        trace-able -> pass through available_filter_functions file
+
+     2) kernel takes those symbols and translates them to addresses
+        through kallsyms api
+
+     3) addresses are passed to fprobe/ftrace through:
+
+         register_fprobe_ips
+         -> ftrace_set_filter_ips
+
+  b) passing addresses to kernel
+
+     1) user gathers symbols and needs to ensure that they are
+        trace-able -> pass through available_filter_functions file
+
+     2) user takes those symbols and translates them to addresses
+       through /proc/kallsyms
+
+     3) addresses are passed to the kernel and kernel calls:
+
+         register_fprobe_ips
+         -> ftrace_set_filter_ips
+
+The new available_filter_functions_addrs file helps us with option b),
+because we can make 'b 1' and 'b 2' in one step - while filtering traceable
+functions, we get the address directly.
+
+Link: https://lore.kernel.org/linux-trace-kernel/20230611130029.1202298-1-jolsa@kernel.org
+
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Jackie Liu <liu.yun@linux.dev>
+Suggested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ Documentation/trace/ftrace.rst |  6 ++++++
+ include/linux/ftrace.h         |  1 +
+ kernel/trace/ftrace.c          | 37 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 44 insertions(+)
+
+diff --git a/Documentation/trace/ftrace.rst b/Documentation/trace/ftrace.rst
+index df2d3e57a83f..b7308ab10c0e 100644
+--- a/Documentation/trace/ftrace.rst
++++ b/Documentation/trace/ftrace.rst
+@@ -324,6 +324,12 @@ of ftrace. Here is a list of some of the key files:
+ 	"set_graph_function", or "set_graph_notrace".
+ 	(See the section "dynamic ftrace" below for more details.)
+ 
++  available_filter_functions_addrs:
++
++	Similar to available_filter_functions, but with address displayed
++	for each function. The displayed address is the patch-site address
++	and can differ from /proc/kallsyms address.
++
+   dyn_ftrace_total_info:
+ 
+ 	This file is for debugging purposes. The number of functions that
+diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+index 49f279f4c3a1..8e59bd954153 100644
+--- a/include/linux/ftrace.h
++++ b/include/linux/ftrace.h
+@@ -633,6 +633,7 @@ enum {
+ 	FTRACE_ITER_MOD		= (1 << 5),
+ 	FTRACE_ITER_ENABLED	= (1 << 6),
+ 	FTRACE_ITER_TOUCHED	= (1 << 7),
++	FTRACE_ITER_ADDRS	= (1 << 8),
+ };
+ 
+ void arch_ftrace_update_code(int command);
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index 764668467155..b24c573934af 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -3861,6 +3861,9 @@ static int t_show(struct seq_file *m, void *v)
+ 	if (!rec)
+ 		return 0;
+ 
++	if (iter->flags & FTRACE_ITER_ADDRS)
++		seq_printf(m, "%lx ", rec->ip);
++
+ 	if (print_rec(m, rec->ip)) {
+ 		/* This should only happen when a rec is disabled */
+ 		WARN_ON_ONCE(!(rec->flags & FTRACE_FL_DISABLED));
+@@ -3996,6 +3999,30 @@ ftrace_touched_open(struct inode *inode, struct file *file)
+ 	return 0;
+ }
+ 
++static int
++ftrace_avail_addrs_open(struct inode *inode, struct file *file)
++{
++	struct ftrace_iterator *iter;
++	int ret;
++
++	ret = security_locked_down(LOCKDOWN_TRACEFS);
++	if (ret)
++		return ret;
++
++	if (unlikely(ftrace_disabled))
++		return -ENODEV;
++
++	iter = __seq_open_private(file, &show_ftrace_seq_ops, sizeof(*iter));
++	if (!iter)
++		return -ENOMEM;
++
++	iter->pg = ftrace_pages_start;
++	iter->flags = FTRACE_ITER_ADDRS;
++	iter->ops = &global_ops;
++
++	return 0;
++}
++
+ /**
+  * ftrace_regex_open - initialize function tracer filter files
+  * @ops: The ftrace_ops that hold the hash filters
+@@ -5916,6 +5943,13 @@ static const struct file_operations ftrace_touched_fops = {
+ 	.release = seq_release_private,
+ };
+ 
++static const struct file_operations ftrace_avail_addrs_fops = {
++	.open = ftrace_avail_addrs_open,
++	.read = seq_read,
++	.llseek = seq_lseek,
++	.release = seq_release_private,
++};
++
+ static const struct file_operations ftrace_filter_fops = {
+ 	.open = ftrace_filter_open,
+ 	.read = seq_read,
+@@ -6377,6 +6411,9 @@ static __init int ftrace_init_dyn_tracefs(struct dentry *d_tracer)
+ 	trace_create_file("available_filter_functions", TRACE_MODE_READ,
+ 			d_tracer, NULL, &ftrace_avail_fops);
+ 
++	trace_create_file("available_filter_functions_addrs", TRACE_MODE_READ,
++			d_tracer, NULL, &ftrace_avail_addrs_fops);
++
+ 	trace_create_file("enabled_functions", TRACE_MODE_READ,
+ 			d_tracer, NULL, &ftrace_enabled_fops);
+ 
+-- 
+2.39.2
+
