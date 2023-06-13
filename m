@@ -2,234 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89C3272E3D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C2372E3D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:15:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239522AbjFMNLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 09:11:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60516 "EHLO
+        id S240384AbjFMNN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 09:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233941AbjFMNLg (ORCPT
+        with ESMTP id S239766AbjFMNNz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 09:11:36 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A501AA;
-        Tue, 13 Jun 2023 06:11:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686661895; x=1718197895;
-  h=message-id:date:subject:from:to:cc:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=OhWGaOwEK3EKrBBQn/uHRL2CZm6PeHPDS9a98qpvCbg=;
-  b=LvBT+NOLDpJ+NIgWMVLlZTfraNAKg4PXFsIbhEf3nCMpx0J43m+X6U9R
-   4pMcYaa+g0l80WAXxecm5P8sx3IAWvITDJDAzuhfNLM4/TXe5Pjd3gIxw
-   aWNZAb5hrKNtIwkkT3hbswAZENKSXVtXJ9VabWJ/ExDxwKPY/bw14azLO
-   m3atssBMYSy/wM+XG9qAaif3kvAZddTIQH3Kj/wDCqtu628dsPl2D20c/
-   snQxMXMADt86WVWwI1VfqupLMCiDEColNQDW0pwfS5y/2mRk3kONBkn9h
-   9LcXDpLRQem3KgV8FQKctxoJsn8RcyoJCyP8zF0owubbJ3uRDjwEm9QrD
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="347978003"
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="scan'208";a="347978003"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 06:11:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="801476567"
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="scan'208";a="801476567"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by FMSMGA003.fm.intel.com with ESMTP; 13 Jun 2023 06:11:34 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 13 Jun 2023 06:11:33 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Tue, 13 Jun 2023 06:11:33 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.101)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Tue, 13 Jun 2023 06:11:24 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OsCHyHfjJAptNMyR2gmklSCmQugZFLKUWoGVAU7LLkKrV9sXlmnTcW9wgFPr8vHLe1d7GgbPEv9do/sHM2eLM69jQoOejIvs/p0HB4FBQGxQFETrvfddRH9rFPx8efGaSAeDpAKtz9HSue1Y1UdZynSerHB+wy5zmO1Vfqj7PxGsxD4yBPkwodXOF4he/98Rg15xqfiS1Q6mhR+umF33/lvUf1FvTSBBPY8RSyT6GGU3jxhEW20SNOiF/hcCS9OSnbX42+1aVQQyktnm+TH7jgUjm5Lc+Yzb96l82XA8iQesHUwBA04xjPiA64N5qqBkSJ8tvHAzZGcViaJt8meVWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qsVXsPK5Ljfef47EhaYtAC/rDgcvfRAwMuuBZ6NWRsw=;
- b=EhBe2y6826p8DWX61dQXAcmeha+jeXnA/8/lEYtpgbRfcF0Iz65bdTEUKtEzq3hhkg0M+8kwZiFvP6Fkn3puynwsh4LtInj9mnkFEGI25V7zXQpdSkfa+QAEF89U9vE0PHpZSFdy8awtr4DvHc+VJ/EwwYxvdRI44p268YejMGmgYWrEnoB9tDefSGEoiSnE4Gd5l/xCEXg/um4zqHFEN23o0ZMaHJ494OrlH8yRFi8pyyAkZVEY+O8EXzffosnLYhCU86g+NycUSULPRJywn7Kj1J6j7Aff2CV137bRZbR1R/YiG7jj/+bHh/5TNBD9yz0/eGtpxj9iTAlpfPx9xQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
- by BN9PR11MB5515.namprd11.prod.outlook.com (2603:10b6:408:104::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Tue, 13 Jun
- 2023 13:11:22 +0000
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::82b6:7b9d:96ce:9325]) by DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::82b6:7b9d:96ce:9325%6]) with mapi id 15.20.6455.030; Tue, 13 Jun 2023
- 13:11:22 +0000
-Message-ID: <9f861b07-78e4-c18c-d1a5-d61f3cf42e3f@intel.com>
-Date:   Tue, 13 Jun 2023 15:11:16 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.1
-Subject: Re: [PATCH net-next v4 3/5] page_pool: introduce page_pool_alloc()
- API
-Content-Language: en-US
-From:   Alexander Lobakin <aleksander.lobakin@intel.com>
-To:     Yunsheng Lin <linyunsheng@huawei.com>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        "Jesper Dangaard Brouer" <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Eric Dumazet <edumazet@google.com>
-References: <20230612130256.4572-1-linyunsheng@huawei.com>
- <20230612130256.4572-4-linyunsheng@huawei.com>
- <d4424b60-9a9c-a741-86e3-e712960cdf44@intel.com>
-In-Reply-To: <d4424b60-9a9c-a741-86e3-e712960cdf44@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0053.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:93::6) To DM6PR11MB3625.namprd11.prod.outlook.com
- (2603:10b6:5:13a::21)
+        Tue, 13 Jun 2023 09:13:55 -0400
+Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C11D1AA;
+        Tue, 13 Jun 2023 06:13:52 -0700 (PDT)
+Received: from local
+        by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1q93qE-0000O9-06;
+        Tue, 13 Jun 2023 13:13:46 +0000
+Date:   Tue, 13 Jun 2023 14:13:28 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        SkyLake Huang <SkyLake.Huang@mediatek.com>,
+        Qingfang Deng <dqfext@gmail.com>
+Subject: Re: [PATCH net-next] net: phy: mediatek-ge-soc: initialize MT7988
+ PHY LEDs default state
+Message-ID: <ZIhreKECr8nsNgrh@makrotopia.org>
+References: <ZIfT7UUzj74NyzL_@makrotopia.org>
+ <922466fd-bb14-4b6e-ad40-55b4249c571f@lunn.ch>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|BN9PR11MB5515:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5bf69dc7-3bf3-41ff-324e-08db6c0faf0b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: o72SYFQMwdAEsNDC9vaDlQik47y6BtzA0xv3OwoTSy9OU2SE9je7d0QVG1KwW8ESc4m5am6Srfo+4VmboPC2z+cbjgJyS1VsvEyLgBQAnn1Zi2KNEJYJLYk46dyHRB8uubpGIr7OmYJO1+LuBuO173liEsg2ksAdMfTmoDfBXsqtUeT3fgr3+QIzuQhQHtd9B2srzCQYnNystU29eSd0rPmzOlc7MGqVujFZ/lvkFjGlYJ3DbWsypBIYCA1QlNDdeb//dihJHM1NVsO4ePwDRnYaReVLeaqYl81BO8Zqb9lXUBjAjNkzr+kx/FWUns9FgQR74djCfKpZK7UGuDDa635Q/pB8jXJbt6MtrhpS1byXwrk5DRZgcXt9paoy7nZqnGyEqWgiPbp9YkToZF+4dUiVe/+/l1SXMIfkxpi+7b7XVVGGjFSQHuxW++t+1ev46j7psOg1RmvibEF1i2r/4NmxmTnOtRIkFfhrafZ/oTgWrABf8ExJ27tPS9/O4w5dZ2RT18VV0vRSt0IMhfxA/DnHrNIbaRWdbww8wUuzRXJWA/TFpS909kV7x2XMudCPvtvqmkz0lUsvUUPe32vMg19S0wP+WHZSLTiYPKynkro95qkGnmjicU4l7Nd93nEEKqObNNAnZDQVsXXK7qRB1F36JFUSwPpUtCZHqY9mZrWbyP/OoHndYb9UwRzrCtZu
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(366004)(346002)(136003)(376002)(396003)(451199021)(66946007)(66476007)(66556008)(478600001)(54906003)(5660300002)(8676002)(8936002)(36756003)(6916009)(6666004)(31686004)(4326008)(316002)(41300700001)(966005)(6486002)(38100700002)(82960400001)(83380400001)(186003)(6506007)(7416002)(86362001)(2906002)(26005)(2616005)(31696002)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VjV3a09MRFIzVmJ1NmdCeTUwM2ZUWC81bkFWdi90QzN0Z2prQWxsR1lrSXE0?=
- =?utf-8?B?NGRaQVNQaG93Njlma3NmSnM3bmpjS3g2djJBSnlRd1BvQzJxVE8xaEQ2OEti?=
- =?utf-8?B?K0duK05FdzFMWXh1RGdmMW9Qb3pmZWUvZWx2UzhnalNsRlJOdWR5TklqZUFF?=
- =?utf-8?B?TWhBbSt0bklLaVYrbDcrcUd2YVVqcjRaamc5MTRXaDF3cThQSGh6bDBERTRW?=
- =?utf-8?B?bGxDcEg1SVZGZG9ReWprR09kMmZqbkluK0VuQVhaZEsrZ2luNVNLc0dXblZh?=
- =?utf-8?B?bDB2bENuWFBkMFJqR2dtTlBHSFphcERnZzFLeFZZRVVvcGdCNnFkb0xSakJt?=
- =?utf-8?B?MlZCaGVZdnJuY0hWRFNnYUxwWDA4ZTJXSDYxcUhjRWY3RUdQMDBRMFp3RjE2?=
- =?utf-8?B?V2YxZmtWcmxjZzM3dGZkTkxCUUxYU1duUWUxdzRNYmVJTjZmVDVSTE03MjhV?=
- =?utf-8?B?YVZJUGpobEhDeWVyc1liY1Z2WU9tcHFjR0hkMWhZd2QrVGF4QjlXaW8xTTVL?=
- =?utf-8?B?YlNFb0pBYmZDVE83SUZRb0Z0c2dXMDIwNjBzQ2FGTy8zM3lSTW5aVmZBYnFF?=
- =?utf-8?B?dG9US2Z2VjhHZ3VzM3FLQmFMOXVSTzhoUVljR29tNURSc3FlbHBPVENrMnpY?=
- =?utf-8?B?MngyWG13SEZvQU1ZaTVWQUFjQzg4dDNyYldKWkdHNExjOFVHNTNadDZOZ1l4?=
- =?utf-8?B?UitMMUtOTTFhS1oxNnZkbXFKQStUcnozWU1nRUNCVElHT3Y2dkxMdjZoQk04?=
- =?utf-8?B?eC9tSUpMK28waSs2ODdqRUgwK0VoUnAzazdaOG45YlM3cHpjMk1UTGZXZk1X?=
- =?utf-8?B?K0JHQWNKYkpFQnMrYkRoRS9DNCt1bHFpdDRSU05PbDFnL0xkRE9DSmZmVHhi?=
- =?utf-8?B?Vis2UHZjajRvR0ZiZ1VadjQrTUE5ZVFwcWQxekV6Z05YSng0VUxXZXVpNlQ3?=
- =?utf-8?B?dWR4UlFSdDM1M2Z2WGgvT2ttOTUycURXcGFoMjlNcHYrbWVBNFpJOUVBQXBH?=
- =?utf-8?B?KzZ4aEsxUWNMR2UzSW9LaUorRlk3TnBPbDRqclZFaEJOT1V4UnZoTTJuNmd6?=
- =?utf-8?B?ekVQQkdQNVB3UEtPYitmS2owWmNrZzV1ZEZzZFJhSjdJZm0rVk1SMmZXQ0gz?=
- =?utf-8?B?dUdxN25MZm9WVHdpa3hmVStjeUhyeUNzQ2lxbEdvWnFzeWs4WkxGOGJVM2Fj?=
- =?utf-8?B?ZmpRRFZCVFB0NzhZd2ZIUzZpa2lRZi9aNDc4QkZtR3hoT216YUIrMU1WbnFv?=
- =?utf-8?B?enAvSUJnTFZzaXVBRFRVeVdmcS9aT3J2MFF6TVdLMms4THB1RksycGdJWFA4?=
- =?utf-8?B?NENiM1U2aHpna2ZVV0thYXlCWWJBZUdsS1BOaXBlczdGNC95dnY3MnQ5WnNr?=
- =?utf-8?B?WVByL01laXZOZzBhQWZLWlNweTdyRVJsdVIzVHE1ME5McU1lWVhsUk55OTlV?=
- =?utf-8?B?bERaTUUzenBvRXJ5dW1UVU1uMmxLZVJmS0lDUEpwZ013UmhGaGJkUUY0aFlL?=
- =?utf-8?B?eldoRXJxVnZ1ZEVVN3M4SzNUeDcwZ1N1emNIS3d6eGxLQ1huWEZLZDRrMGp4?=
- =?utf-8?B?TW5NeHpSWWUvQkI5LzRFeE9TaUZiMU1reUxsSmNBWmVyc0hCbFBzTlEyeXJy?=
- =?utf-8?B?bjk5ZXgvNzkwd2JXTGNwL2plZDhpWTF4OXJqV05vcXdzTkdCZi9RL29xbXF5?=
- =?utf-8?B?TmtuQlRBK3J1ckh5UG1OaWd6d0srMm9tNTF6Zk1XNDBkaGxCWUtxS2tYZGpN?=
- =?utf-8?B?bjNvQjhqbGJ2ME1zRzVoTm15Y0lqZnZhbzZBV2tQWElNTnlzbkZiN0dUaEtR?=
- =?utf-8?B?NVMvOWJJUkxXWGlTN3FlSXhPRU5xbURIWmFMNzN6Q3FReXVyMG9mTWNUTmRv?=
- =?utf-8?B?SmtuazE4aHlENjRYcm13ckdWdlc2ckZIMVlFZTdaNktxVStKVnh0RWprTlVq?=
- =?utf-8?B?Vk9XWVRKQW5ETjNBa1ZTeHpxTEtOVlBCS2JtaFNJenptMWpTUWxaY25BMk8r?=
- =?utf-8?B?S2xvcU9zclNITlo0V3ZTeWNmWVhIQ0N4Y1J1MXZVeGt2czRST2Fyek9NVmZj?=
- =?utf-8?B?b0xDd2VKVFVJcThiOUNYUnVFbjk0VS9Bck5rZDlmTGplVDN2NTI5ZmpZVENR?=
- =?utf-8?B?dnh4N1RkTmEvalRzQU1XUFA3MVhzUjZxTWEwNU40Y3JpanVleTFrZVpHUkxV?=
- =?utf-8?B?MlE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5bf69dc7-3bf3-41ff-324e-08db6c0faf0b
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2023 13:11:22.2286
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uq6sgLGuDVgtYfC7HZhfAra/Iwyk30LlAj0gnaOZunbqqAHcqZsaY+aSqBquXyXesI3WmwLWvdfdmg2fJi9D3g4qjDsYyzt6/9YQAjkJ6vA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5515
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <922466fd-bb14-4b6e-ad40-55b4249c571f@lunn.ch>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Lobakin <aleksander.lobakin@intel.com>
-Date: Tue, 13 Jun 2023 15:08:41 +0200
+Hi Andrew,
 
-> From: Yunsheng Lin <linyunsheng@huawei.com>
-> Date: Mon, 12 Jun 2023 21:02:54 +0800
+On Tue, Jun 13, 2023 at 05:23:25AM +0200, Andrew Lunn wrote:
+> > +/* Registers on MDIO_MMD_VEND2 */
+> > +#define MTK_PHY_LED0_ON_CTRL			0x24
+> > +#define MTK_PHY_LED1_ON_CTRL			0x26
+> > +#define   MTK_PHY_LED_ON_MASK			GENMASK(6, 0)
+> > +#define   MTK_PHY_LED_ON_LINK1000		BIT(0)
+> > +#define   MTK_PHY_LED_ON_LINK100		BIT(1)
+> > +#define   MTK_PHY_LED_ON_LINK10			BIT(2)
+> > +#define   MTK_PHY_LED_ON_LINKDOWN		BIT(3)
+> > +#define   MTK_PHY_LED_ON_FDX			BIT(4) /* Full duplex */
+> > +#define   MTK_PHY_LED_ON_HDX			BIT(5) /* Half duplex */
+> > +#define   MTK_PHY_LED_FORCE_ON			BIT(6)
+> > +#define   MTK_PHY_LED_POLARITY			BIT(14)
+> > +#define   MTK_PHY_LED_ENABLE			BIT(15)
 > 
->> Currently page pool supports the below use cases:
->> use case 1: allocate page without page splitting using
->>             page_pool_alloc_pages() API if the driver knows
->>             that the memory it need is always bigger than
->>             half of the page allocated from page pool.
->> use case 2: allocate page frag with page splitting using
->>             page_pool_alloc_frag() API if the driver knows
->>             that the memory it need is always smaller than
->>             or equal to the half of the page allocated from
->>             page pool.
->>
->> There is emerging use case [1] & [2] that is a mix of the
->> above two case: the driver doesn't know the size of memory it
->> need beforehand, so the driver may use something like below to
->> allocate memory with least memory utilization and performance
->> penalty:
->>
->> if (size << 1 > max_size)
->> 	page = page_pool_alloc_pages();
->> else
->> 	page = page_pool_alloc_frag();
->>
->> To avoid the driver doing something like above, add the
->> page_pool_alloc() API to support the above use case, and update
->> the true size of memory that is acctually allocated by updating
->> '*size' back to the driver in order to avoid the truesize
->> underestimate problem.
->>
->> 1. https://lore.kernel.org/all/d3ae6bd3537fbce379382ac6a42f67e22f27ece2.1683896626.git.lorenzo@kernel.org/
->> 2. https://lore.kernel.org/all/20230526054621.18371-3-liangchen.linux@gmail.com/
->>
->> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
->> CC: Lorenzo Bianconi <lorenzo@kernel.org>
->> CC: Alexander Duyck <alexander.duyck@gmail.com>
->> ---
->>  include/net/page_pool.h | 43 +++++++++++++++++++++++++++++++++++++++++
->>  1 file changed, 43 insertions(+)
->>
->> diff --git a/include/net/page_pool.h b/include/net/page_pool.h
->> index 0b8cd2acc1d7..c135cd157cea 100644
->> --- a/include/net/page_pool.h
->> +++ b/include/net/page_pool.h
->> @@ -260,6 +260,49 @@ static inline struct page *page_pool_dev_alloc_frag(struct page_pool *pool,
->>  	return page_pool_alloc_frag(pool, offset, size, gfp);
->>  }
->>  
->> +static inline struct page *page_pool_alloc(struct page_pool *pool,
->> +					   unsigned int *offset,
->> +					   unsigned int *size, gfp_t gfp)
-> 
-> Oh, really nice. Wouldn't you mind if I base my series on top of this? :)
-> 
-> Also, with %PAGE_SIZE of 32k+ and default MTU, there is truesize
-> underestimation. I haven't looked at the latest conversations as I had a
-> small vacation, sowwy :s What's the current opinion on this?
+> Would enable being clear result in the LED being off? You can force it
+> on with MTK_PHY_LED_FORCE_ON | MTK_PHY_LED_ENABLE? That gives you
+> enough to allow software control of the LED. You can then implement
+> the led_brightness_set() op, if you want.
 
-Please ignore this, seems like I didn't manage to read 2 lines below,
-you explicitly mention in the comment that you already handle this >_<
+Yes, and that would be the next thing I was planning to work on.
 
-Thanks,
-Olek
+> 
+> I assume the above are specific to LED0? It would be good to include
+> the 0 in the name, to make that clear.
+
+The PHY has two LED outputs, LED0 and LED1. Both have an ON_CTRL and
+a BLINK_CTRL register each with identical layouts for LED0_ON_CTRL and
+LED1_ON_CTRL as well as LED0_BLINK_CTRL as well as LED1_BLINK_CTRL.
+
+> 
+> > +
+> > +#define MTK_PHY_LED0_BLINK_CTRL			0x25
+> > +#define MTK_PHY_LED1_BLINK_CTRL			0x27
+> > +#define   MTK_PHY_LED_1000TX			BIT(0)
+> 
+> So do this mean LINK1000 + blink on TX ?
+
+Exactly.
+
+> 
+> > +#define   MTK_PHY_LED_1000RX			BIT(1)
+> 
+> So do this mean LINK1000 + blink on RX ?
+> 
+
+Yep.
+
+> It would be good to add a comment, because at some point it is likely
+> somebody will want to offload the ledtrig-netdev and will need to
+> understand what these really do.
+> 
+> > +#define   MTK_PHY_LED_100TX			BIT(2)
+> > +#define   MTK_PHY_LED_100RX			BIT(3)
+> > +#define   MTK_PHY_LED_10TX			BIT(4)
+> > +#define   MTK_PHY_LED_10RX			BIT(5)
+> > +#define   MTK_PHY_LED_COLLISION			BIT(6)
+> > +#define   MTK_PHY_LED_RX_CRC_ERR		BIT(7)
+> > +#define   MTK_PHY_LED_RX_IDLE_ERR		BIT(8)
+> > +#define   MTK_PHY_LED_FORCE_BLINK		BIT(9)
+> 
+> Is there a way to force the LED1 off/on?  I guess not setting any of
+> these bits will force it off.
+
+Both LED0 and LED1 of each PHY can be forced on by writing
+MTK_PHY_LED_FORCE_ON | MTK_PHY_LED_ENABLE to MTK_PHY_LEDx_ON_CTRL.
+They can be forced off by clearing MTK_PHY_LED_ENABLE in
+MTK_PHY_LEDx_ON_CTRL.
+
+Similarly, blinking can be forced by setting MTK_PHY_LED_FORCE_BLINK
+in the MTK_PHY_LEDx_BLINK_CTRL register.
+
+> 
+> So the polarity and enable bits apply to LED1? 
+
+The LED controller of both LEDs are identical. The SoC's pinmux assigns
+LED0 as LED_A, LED_B, LED_C and LED_D respectively. And those pins are
+used for bootstrapping board configuration bits, and that then implies
+the polarity of the connected LED.
+
+Ie.
+-----------------------------+ SoC pin
+--------------+-------+      |
+       port 0 = PHY 0 - LED0 - LED_A
+              +-------\ LED1 - JTAG_JTDI
+       port 1 = PHY 1 - LED0 - LED_B
+MT7530        +-------\ LED1 - JTAG_JTDO
+       port 2 = PHY 2 - LED0 - LED_C
+              +-------\ LED1 - JTAG_JTMS
+       port 3 = PHY 3 - LED0 - LED_D
+--------------+-------\ LED1 - JTAG_JTCLK
+       2P5G PHY       - LED0 - LED_E
+----------------------\ LED1 - JTAG_JTRST_N
+--------------+--------------+
+
+> 
+> > +
+> >  #define MTK_PHY_RG_BG_RASEL			0x115
+> >  #define   MTK_PHY_RG_BG_RASEL_MASK		GENMASK(2, 0)
+> >  
+> > +/* Register in boottrap syscon defining the initial state of the 4 PHY LEDs */
+> 
+> Should this be bootstrap? You had the same in the commit message.
+> 
+> Also, i'm confused. Here you say 4 PHY LEDs, yet
+> 
+> > +#define MTK_PHY_LED0_ON_CTRL			0x24
+> > +#define MTK_PHY_LED1_ON_CTRL			0x26
+> 
+> suggests there are two LEDs?
+
+There are 4 PHYs with two LEDs each. Only LED0 of each PHY is using
+a pin which is used for bootstrapping, hence LED polarity is known
+only for those, polarity of LED1 is unknown and always set the default
+at this point.
+
+> 
+> Should these actually be :
+> 
+> > +#define MTK_PHY_LED_ON_CTRL1			0x24
+> > +#define MTK_PHY_LED_ON_CTRL2			0x26
+> 
+> meaning each LED has two control registers?
+
+No, each LED has one control register and each PHY has two LEDs, and
+there are four PHYs total in the package.
+
+> 
+> MTK_PHY_LED_ON_LINK1000 should actually be MTK_PHY_LED_ON_CTRL1_LINK1000 ?
+
+Maybe MTK_PHY_LED_ON_CTRL_LINK1000 would be more appropriate.
+
+> MTK_PHY_LED_100TX should be MTK_PHY_LED_CTRL2_100TX ?
+
+Maybe better MTK_PHY_LED_BLINK_100TX.
+
+> 
+> I find it good practice to ensure a bit value #define includes enough
+> information in its name to clear indicate what register it applies to.
+
+I agree and will make the names more clear, always using the
+MTK_PHY_LED_ON_CTRL_ prefix for bits in the MTK_PHY_LEDx_ON_CTRL
+register and MTK_PHY_LED_BLINK_CTRL_ prefix for all registers in
+MTK_PHY_LEDx_BLINK_CTRL.
+
+> 
+> > +static int mt798x_phy_setup_led(struct phy_device *phydev, bool inverted)
+> > +{
+> > +	struct pinctrl *pinctrl;
+> > +	const u16 led_on_ctrl_defaults = MTK_PHY_LED_ENABLE      |
+> > +					 MTK_PHY_LED_ON_LINK1000 |
+> > +					 MTK_PHY_LED_ON_LINK100  |
+> > +					 MTK_PHY_LED_ON_LINK10;
+> > +	const u16 led_blink_defaults = MTK_PHY_LED_1000TX |
+> > +				       MTK_PHY_LED_1000RX |
+> > +				       MTK_PHY_LED_100TX  |
+> > +				       MTK_PHY_LED_100RX  |
+> > +				       MTK_PHY_LED_10TX   |
+> > +				       MTK_PHY_LED_10RX;
+> > +
+> > +	phy_write_mmd(phydev, MDIO_MMD_VEND2, MTK_PHY_LED0_ON_CTRL,
+> > +		      led_on_ctrl_defaults ^
+> > +		      (inverted ? MTK_PHY_LED_POLARITY : 0));
+> > +
+> > +	phy_write_mmd(phydev, MDIO_MMD_VEND2, MTK_PHY_LED1_ON_CTRL,
+> > +		      led_on_ctrl_defaults);
+> > +
+> 
+> Now i'm even more confused. Both have the same value, expect the
+> polarity bit?
+
+Only LED0 polarity of each PHY is affected by the bootstrap pins
+LED_A, LED_B, LED_C and LED_D of the SoC, see above.
+Hence we need to XOR polarity only for LED0.
+
+> 
+> Please add a lot of comments about how this hardware actually works!
+> 
+> > +	phy_write_mmd(phydev, MDIO_MMD_VEND2, MTK_PHY_LED0_BLINK_CTRL,
+> > +		      led_blink_defaults);
+> > +
+> > +	phy_write_mmd(phydev, MDIO_MMD_VEND2, MTK_PHY_LED1_BLINK_CTRL,
+> > +		      led_blink_defaults);
+> > +
+> > +	pinctrl = devm_pinctrl_get_select(&phydev->mdio.dev, "gbe-led");
+> 
+> This is also very unusual. At minimum, it needs a comment as to why it
+> is needed. But more likely, because no other driver in driver/net does
+> this, it makes me think it is wrong.
+
+The reason for not using the "default" pinctrl name is simply that then
+the "default" state will already be requested by device model *before*
+the LED registers are actually setup. This results in a short but unwanted
+blink of the LEDs during setup.
+Requesting the pinctrl state only once the setup is done allows avoiding
+that, but of course this is of purely aesthetic nature.
+
+> 
+> > +static bool mt7988_phy_get_boottrap_polarity(struct phy_device *phydev)
+> > +{
+> > +	struct mtk_socphy_shared *priv = phydev->shared->priv;
+> > +
+> > +	if (priv->boottrap & BIT(phydev->mdio.addr))
+> > +		return false;
+> 
+> This can be simplified to
+> 
+> 	return !priv->boottrap & BIT(phydev->mdio.addr);
+
+Ack.
+
+
+> 
+> 	Andrew
