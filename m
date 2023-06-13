@@ -2,53 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C4CF72D546
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 01:59:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF9572D54B
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 02:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233097AbjFLX7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 19:59:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
+        id S234490AbjFMAA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 20:00:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232056AbjFLX7A (ORCPT
+        with ESMTP id S232056AbjFMAA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 19:59:00 -0400
-Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598A31713
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 16:58:58 -0700 (PDT)
-Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-77ad94642d4so624780739f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 16:58:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686614337; x=1689206337;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=I60cThygFBEQa4s2JlbXnAAnVmBToxnr0RN30Ke0zVQ=;
-        b=Cnii6hnc3XEtKfGIZuxoVE8x57YOfaRFJUCBqAbWPZ9U7p0544v+2EqlWRAT/GO49o
-         ozg+UPyd2kaskWw9aik/5jBnBLrrPy9cOM6TsHsRJodmXQYJc8O9x/95loROf4a+hFVT
-         H/z8zvROvndCewpPeTK9VOuzUoWKsPHv4ReVSLKYJbXxxlqes8JzIO75AiJ2j0THUh2N
-         yVQZaGvZuKMuwmwPSHF0PLHdb1i7e3MUHBgYFylIVBqA3sltJUcPsdhdd4LAz7g0dp1r
-         xKHV8o3fscx704jdQ0bMuRYyfiE60HOjqOon2CpKsEb5BqeeotKifcS0bL25ZiZyd61q
-         WlSA==
-X-Gm-Message-State: AC+VfDwqqBLAWHEpjsD5NYpKX+FxlzNGmvUmduTBJhX2KWzj/zZsgA6D
-        nCY3Btznn99YCSdPXweReBgJGhmiyLg0H9Z5MReMFV55pOd4
-X-Google-Smtp-Source: ACHHUZ55nByCQPnYhdB5pelTum4aoB271NyGVXkbd+02MVKqPl6kKOb6Qyck86RgkYKlcyQyrKcBRql2C2vDgw1c8shsLlJ000FZ
+        Mon, 12 Jun 2023 20:00:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD8A12A;
+        Mon, 12 Jun 2023 17:00:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9BF561FCF;
+        Tue, 13 Jun 2023 00:00:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 163F1C4339B;
+        Tue, 13 Jun 2023 00:00:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686614424;
+        bh=ejP2zOU7tKEEXBd532d7YQRPeaxHw7CzRYHpB1izQJ4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=nmcYwxruMeSny0UTLfqbrvXR+UhnWDhCeoaMMy0oOt29NVueMD6CWC+vYalTwiYlf
+         LvdGmAheoyR4fzkjl7lsSgvT57EN2XG5gGZ+qw1oQzHU9D0CIWfMY3j/uSYNLPjI5L
+         QTEezCsSe8byoPifLF6vxtfoXcgf0EMU3NLaLQWHePyF2N/kXMGSdsthUIsFqyvlSY
+         QDwpT9AvzpkabnESYSfURroMw4v0Capv6JCxOQ2/tAAGU/818TDExsK+pSPxphpZb3
+         2V4h4v21U6qk5nRC4YxU20JmsTglh+8+4lpuGD8MSNZFoPeKoUNr4bqHkFRT3dwJee
+         ZjSwtq/6w+RaA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E30E0E1CF31;
+        Tue, 13 Jun 2023 00:00:23 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-Received: by 2002:a02:a1c8:0:b0:41d:86fc:4b43 with SMTP id
- o8-20020a02a1c8000000b0041d86fc4b43mr4688613jah.4.1686614337718; Mon, 12 Jun
- 2023 16:58:57 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 16:58:57 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000079134b05fdf78048@google.com>
-Subject: [syzbot] [ext4?] UBSAN: shift-out-of-bounds in ext2_fill_super (2)
-From:   syzbot <syzbot+af5e10f73dbff48f70af@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, jack@suse.com,
-        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 01/17] selftests: mptcp: lib: skip if not below kernel
+ version
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168661442392.10094.4616497599019441750.git-patchwork-notify@kernel.org>
+Date:   Tue, 13 Jun 2023 00:00:23 +0000
+References: <20230609-upstream-net-20230610-mptcp-selftests-support-old-kernels-part-3-v1-1-2896fe2ee8a3@tessares.net>
+In-Reply-To: <20230609-upstream-net-20230610-mptcp-selftests-support-old-kernels-part-3-v1-1-2896fe2ee8a3@tessares.net>
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>
+Cc:     mptcp@lists.linux.dev, martineau@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        shuah@kernel.org, fw@strlen.de, dcaratti@redhat.com,
+        cpaasch@apple.com, geliangtang@gmail.com, geliang.tang@suse.com,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        stable@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,88 +63,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hello:
 
-syzbot found the following issue on:
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-HEAD commit:    908f31f2a05b Merge branch 'for-next/core', remote-tracking..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=124e9053280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c1058fe68f4b7b2c
-dashboard link: https://syzkaller.appspot.com/bug?extid=af5e10f73dbff48f70af
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10f66595280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14abde43280000
+On Sat, 10 Jun 2023 18:11:36 +0200 you wrote:
+> Selftests are supposed to run on any kernels, including the old ones not
+> supporting all MPTCP features.
+> 
+> A new function is now available to easily detect if a feature is
+> missing by looking at the kernel version. That's clearly not ideal and
+> this kind of check should be avoided as soon as possible. But sometimes,
+> there are no external sign that a "feature" is available or not:
+> internal behaviours can change without modifying the uAPI and these
+> selftests are verifying the internal behaviours. Sometimes, the only
+> (easy) way to verify if the feature is present is to run the test but
+> then the validation cannot determine if there is a failure with the
+> feature or if the feature is missing. Then it looks better to check the
+> kernel version instead of having tests that can never fail. In any case,
+> we need a solution not to have a whole selftest being marked as failed
+> just because one sub-test has failed.
+> 
+> [...]
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/87d095820229/disk-908f31f2.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/a1bf67af9675/vmlinux-908f31f2.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/7784a88b37e8/Image-908f31f2.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/2816e591e0fa/mount_0.gz
+Here is the summary with links:
+  - [net,01/17] selftests: mptcp: lib: skip if not below kernel version
+    https://git.kernel.org/netdev/net/c/b1a6a38ab8a6
+  - [net,02/17] selftests: mptcp: join: use 'iptables-legacy' if available
+    https://git.kernel.org/netdev/net/c/0c4cd3f86a40
+  - [net,03/17] selftests: mptcp: join: helpers to skip tests
+    https://git.kernel.org/netdev/net/c/cdb50525345c
+  - [net,04/17] selftests: mptcp: join: skip check if MIB counter not supported
+    (no matching commit)
+  - [net,05/17] selftests: mptcp: join: skip test if iptables/tc cmds fail
+    https://git.kernel.org/netdev/net/c/4a0b866a3f7d
+  - [net,06/17] selftests: mptcp: join: support local endpoint being tracked or not
+    https://git.kernel.org/netdev/net/c/d4c81bbb8600
+  - [net,07/17] selftests: mptcp: join: skip Fastclose tests if not supported
+    https://git.kernel.org/netdev/net/c/ae947bb2c253
+  - [net,08/17] selftests: mptcp: join: support RM_ADDR for used endpoints or not
+    https://git.kernel.org/netdev/net/c/425ba803124b
+  - [net,09/17] selftests: mptcp: join: skip implicit tests if not supported
+    https://git.kernel.org/netdev/net/c/36c4127ae8dd
+  - [net,10/17] selftests: mptcp: join: skip backup if set flag on ID not supported
+    https://git.kernel.org/netdev/net/c/07216a3c5d92
+  - [net,11/17] selftests: mptcp: join: skip fullmesh flag tests if not supported
+    https://git.kernel.org/netdev/net/c/9db34c4294af
+  - [net,12/17] selftests: mptcp: join: skip userspace PM tests if not supported
+    https://git.kernel.org/netdev/net/c/f2b492b04a16
+  - [net,13/17] selftests: mptcp: join: skip fail tests if not supported
+    https://git.kernel.org/netdev/net/c/ff8897b51894
+  - [net,14/17] selftests: mptcp: join: skip MPC backups tests if not supported
+    https://git.kernel.org/netdev/net/c/632978f0a961
+  - [net,15/17] selftests: mptcp: join: skip PM listener tests if not supported
+    https://git.kernel.org/netdev/net/c/0471bb479af0
+  - [net,16/17] selftests: mptcp: join: uniform listener tests
+    https://git.kernel.org/netdev/net/c/96b84195df61
+  - [net,17/17] selftests: mptcp: join: skip mixed tests if not supported
+    https://git.kernel.org/netdev/net/c/6673851be0fc
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+af5e10f73dbff48f70af@syzkaller.appspotmail.com
-
-memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=5969 'syz-executor354'
-loop0: detected capacity change from 0 to 512
-EXT2-fs (loop0): (no)user_xattr optionsnot supported
-================================================================================
-UBSAN: shift-out-of-bounds in fs/ext2/super.c:1015:40
-shift exponent 63 is too large for 32-bit type 'int'
-CPU: 0 PID: 5969 Comm: syz-executor354 Not tainted 6.4.0-rc4-syzkaller-g908f31f2a05b #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-Call trace:
- dump_backtrace+0x1b8/0x1e4 arch/arm64/kernel/stacktrace.c:233
- show_stack+0x2c/0x44 arch/arm64/kernel/stacktrace.c:240
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
- dump_stack+0x1c/0x28 lib/dump_stack.c:113
- ubsan_epilogue lib/ubsan.c:217 [inline]
- __ubsan_handle_shift_out_of_bounds+0x2f4/0x36c lib/ubsan.c:387
- ext2_fill_super+0x2270/0x2450 fs/ext2/super.c:1015
- mount_bdev+0x274/0x370 fs/super.c:1380
- ext2_mount+0x44/0x58 fs/ext2/super.c:1491
- legacy_get_tree+0xd4/0x16c fs/fs_context.c:610
- vfs_get_tree+0x90/0x274 fs/super.c:1510
- do_new_mount+0x25c/0x8c4 fs/namespace.c:3039
- path_mount+0x590/0xe04 fs/namespace.c:3369
- do_mount fs/namespace.c:3382 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __arm64_sys_mount+0x45c/0x594 fs/namespace.c:3568
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
- el0_svc_common+0x138/0x244 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:191
- el0_svc+0x4c/0x160 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-================================================================================
-EXT2-fs (loop0): error: can't find an ext2 filesystem on dev loop0.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
