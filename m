@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D5DD72F0A7
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 01:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97B1772F099
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 01:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233025AbjFMXrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 19:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
+        id S240879AbjFMXry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 19:47:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240820AbjFMXrW (ORCPT
+        with ESMTP id S241427AbjFMXrW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 13 Jun 2023 19:47:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27CDD2D45;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC902D4B;
         Tue, 13 Jun 2023 16:46:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C3836353D;
-        Tue, 13 Jun 2023 23:45:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0AB9C433CC;
-        Tue, 13 Jun 2023 23:45:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 81E9E63C7C;
+        Tue, 13 Jun 2023 23:45:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A45BC433D9;
+        Tue, 13 Jun 2023 23:45:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686699938;
-        bh=qesurF4toa3MGEAJJCumXKvdmGx/hbsiVL5/FEtac7Q=;
+        s=k20201202; t=1686699942;
+        bh=Y4bU11qYX6QwxEel9Q85VI1TlVfqbOIFBsPHmGRKibM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CgnBTgOnvG+2gOjPC2oBWX+HjSinI+03orQ5/AifJjsgRC37AvN+dFn4Z56a3xftm
-         I+7yo5rHk6EHZaNagEDXuvrQ0ljCFAFS49o6OIRPMrWxe7X2Q+JthuXOIWgzK92HT0
-         n4CDzckTlJJdCX8NqcnDBIOvMtuaBqYBOAw8W7oqJZUrFEMJme4gbzVx5e+3+ZbMXt
-         Bp7UNGt7frhTWKUKLkcE2j5FtFfos9NunJupr7O16nbX7KWjr+ay7u9N2u6UbMIebS
-         ENFoVf5nSRcjQr5yYN8VzrR4Z6SPYDiWW9EGcz0w509rhW85cCb1uBrQuEGJSPx4dy
-         zqei5LH+Z/5CA==
+        b=bbi+ot9ETFGJtwG3gFKhVpSacBVHU71oQEqGN6H2wRSmgOtQYQASuOPSq9lSDM7fY
+         BIHJ8K8xP84aHEnPwTkymkNeQ8H5zmzH2BcB4qEFDwDwoA6f0gQXyF/Bn3NlrGkOJ8
+         bd25MWCj2hpC1Mpx/Py9E8uVC1GxETjBFOyPYUdoE2T0onG7XHTOci900OT/dYzpH4
+         5IFLUd+pn3CVbqofKf7dHqKp5YHy3JAhsgXnUPfeCwAQ1QrltDbhyf8rPMntIHdH4H
+         e5is7Gp9Pm+BY6CZ4cw9WU/V+A+z7Tu5lCr6z0cvpQu14a2XvD1PhjdMKpoVaVFqpy
+         3k9Xq2ZHdO0Ww==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>,
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Andy Gross <agross@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Robert Marko <robimarko@gmail.com>
-Cc:     Mantas Pucka <mantas@8devices.com>, Arnd Bergmann <arnd@arndb.de>,
-        linux-kernel@vger.kernel.org,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH] clk: qcom: gcc-ipq6018: remove duplicate initializers
-Date:   Tue, 13 Jun 2023 16:48:42 -0700
-Message-Id: <168670013502.1400697.3131204181371880058.b4-ty@kernel.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>
+Subject: Re: [PATCH 0/2] Add VDD_GX to SM6375 GPUCC
+Date:   Tue, 13 Jun 2023 16:48:46 -0700
+Message-Id: <168670013503.1400697.7477513214624813621.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230601213416.3373599-1-arnd@kernel.org>
-References: <20230601213416.3373599-1-arnd@kernel.org>
+In-Reply-To: <20230529-topic-sm6375gpuccpd-v1-0-8d57c41a6066@linaro.org>
+References: <20230529-topic-sm6375gpuccpd-v1-0-8d57c41a6066@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,25 +63,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Jun 2023 23:34:12 +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Mon, 29 May 2023 15:14:22 +0200, Konrad Dybcio wrote:
+> The GPUCC block on SM6375 is powered by VDD_CX and VDD_GX. If the latter
+> rail is not online, GX_GDSC will never turn on. Take care of this.
 > 
-> A recent change added new initializers for .config_ctl_val and
-> .config_ctl_hi_val but left the old values in place:
 > 
-> drivers/clk/qcom/gcc-ipq6018.c:4155:27: error: initialized field overwritten [-Werror=override-init]
->  4155 |         .config_ctl_val = 0x240d4828,
->       |                           ^~~~~~~~~~
-> drivers/clk/qcom/gcc-ipq6018.c:4156:30: error: initialized field overwritten [-Werror=override-init]
->  4156 |         .config_ctl_hi_val = 0x6,
->       |                              ^~~
-> 
-> [...]
 
 Applied, thanks!
 
-[1/1] clk: qcom: gcc-ipq6018: remove duplicate initializers
-      commit: 5ae7899765607e97e5eb34486336898c8d9ec654
+[1/2] dt-bindings: clock: sm6375-gpucc: Add VDD_GX
+      commit: 2f138c667cb94a3a150d3341ca5ebf62480b501f
+[2/2] clk: qcom: gpucc-sm6375: Enable runtime pm
+      commit: 097d359c8ca892b63e9d91bdfaf6c45d07c943c7
 
 Best regards,
 -- 
