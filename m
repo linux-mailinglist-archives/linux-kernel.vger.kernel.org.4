@@ -2,52 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C279372F09A
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 01:49:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AA8572F0B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 01:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231987AbjFMXsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 19:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
+        id S240145AbjFMXsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 19:48:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232646AbjFMXrZ (ORCPT
+        with ESMTP id S232550AbjFMXrZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 13 Jun 2023 19:47:25 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFA72D54;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C551FCF;
         Tue, 13 Jun 2023 16:46:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03C0562EF7;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F41DC63C81;
         Tue, 13 Jun 2023 23:45:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 514A5C433D9;
-        Tue, 13 Jun 2023 23:45:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C226C433CB;
+        Tue, 13 Jun 2023 23:45:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686699955;
-        bh=o4AIqGTNBOdVmrdJEKcPDcLQEjkhm6E0B/4K9xnHkXs=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=eosRzgDdP+haRL72z9fUoaHVfLIx1OH1dJk8pCA0eP+OBH/rP17wWMgfCDk3nkAUw
-         M8rFIC0cjhQ0xecllgjAXq7LdU4hQ/G1rkuyYDTXEcXsshVAgr+vStSx0UfqF+9WrY
-         lvLRi/aqEBscRrkX3+o01/EPW0XyI/Mo1wn5nMcYmPAXMaT0z4iWKCvfbxYGWXbI07
-         fiATR/EriokFHQPZXaNQI2SLWbzUe/lueyOYIfetHlKYTwbIoKlnHADc/8+80w4hN1
-         dZcdfOyrq6JLL2rBBT1a6tirR+3B0eN8K3T81erFT7csNeblYWo0gZ75RgtCCArDKs
-         mBuB/jrQ0GaBQ==
+        s=k20201202; t=1686699956;
+        bh=RPO1qjIIqnUDwMgPufqXgv3QAhqpUBEUclU6+rE87J0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=b5xoaKpp6JbkzsOHClhbb+MLnBILE2h06oOiEl7XV1Ushhh1ZXDKzgsx/FFeZSPhz
+         1iHKcAp/UhNHa61wm95VYtbSI6Vb+E7jYwQOjMTf9Qze4PBqmfTwQgKVXcitoMpJeo
+         +g0z/0b1oJSrpI7DNxA/L70GkVWv3aeKWmUTz+m4dHItSmiLwrG1GFe7t2qHVKGgOu
+         Nt5LOyH/q/Hxy1lLPKyykmRVltrlprDvMPvdKZOjZ3FjmgYdFRMFltrn5tVCBo6WuP
+         cShFvUTk7U+Sd6HALg7PA7Xrcc/oj3fA9cEAgDpjcGdCdXPEOpJF1Phv6Q6fUEh9as
+         9HjRQTMWxd2vQ==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     devicetree@vger.kernel.org, rafael@kernel.org,
-        konrad.dybcio@linaro.org, linux-kernel@vger.kernel.org,
-        Varadarajan Narayanan <quic_varada@quicinc.com>,
-        thara.gopinath@gmail.com, linux-arm-msm@vger.kernel.org,
-        conor+dt@kernel.org, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, robh+dt@kernel.org, rui.zhang@intel.com,
-        amitk@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        agross@kernel.org
-Subject: Re: (subset) [PATCH v6 0/3] Enable IPQ9574 TSENS support
-Date:   Tue, 13 Jun 2023 16:48:57 -0700
-Message-Id: <168670013501.1400697.3289506817774430976.b4-ty@kernel.org>
+To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, conor+dt@kernel.org,
+        agross@kernel.org, robh+dt@kernel.org,
+        Robert Marko <robimarko@gmail.com>,
+        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@linaro.org
+Cc:     ansuelsmth@gmail.com
+Subject: Re: [PATCH] arm64: dts: qcom: ipq8074: add critical thermal trips
+Date:   Tue, 13 Jun 2023 16:48:58 -0700
+Message-Id: <168670013501.1400697.17683754939462878932.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <cover.1686125196.git.quic_varada@quicinc.com>
-References: <cover.1686125196.git.quic_varada@quicinc.com>
+In-Reply-To: <20230607184448.2512179-1-robimarko@gmail.com>
+References: <20230607184448.2512179-1-robimarko@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -61,24 +59,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Jun 2023 14:23:07 +0530, Varadarajan Narayanan wrote:
-> This patch set enables tsens in IPQ9574
+On Wed, 7 Jun 2023 20:44:48 +0200, Robert Marko wrote:
+> According to bindings, thermal zones must have associated trips as well.
+> Since we currently dont have CPUFreq support and thus no passive cooling
+> lets start by defining critical trips to protect the devices against
+> severe overheating.
 > 
-> Depends on
-> 	https://lore.kernel.org/linux-arm-msm/20230406061314.10916-1-quic_devipriy@quicinc.com/
-> [v6]:
-> 	Remove comments from tsens node in dtsi
-> [v5]:
-> 	Fix make DT_CHECKER_FLAGS=-m dt_binding_check and make dtbs_check errors without removing existing entries
 > 
-> [...]
 
 Applied, thanks!
 
-[2/3] arm64: dts: qcom: ipq9574: add tsens node
-      commit: 2e0580e10e919b544d7be1b2b8fc48fc7dff1322
-[3/3] arm64: dts: qcom: ipq9574: add thermal zone nodes
-      commit: 581dcbe60b6390c633f318a29db41d1df642e6d8
+[1/1] arm64: dts: qcom: ipq8074: add critical thermal trips
+      commit: 56d3067cb694ba60d654e7f5ef231b6fabc4697f
 
 Best regards,
 -- 
