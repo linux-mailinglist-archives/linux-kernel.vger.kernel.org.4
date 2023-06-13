@@ -2,131 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF5972E908
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C294D72E90B
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:09:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235720AbjFMRIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 13:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43090 "EHLO
+        id S236175AbjFMRIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 13:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235279AbjFMRIq (ORCPT
+        with ESMTP id S235279AbjFMRIu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 13:08:46 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE7D187;
-        Tue, 13 Jun 2023 10:08:45 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id 6a1803df08f44-62de508705dso9507116d6.1;
-        Tue, 13 Jun 2023 10:08:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686676124; x=1689268124;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IEOxPjyq7cbAhN04VkJQjCBC+cXkSTNShgxgFc1N+zA=;
-        b=A7iJAOhzjDARsMdLXql0k2OXLHNTpaLZtqbaTeS51zwUgfBoKoHEAdgUwftZtXPkrr
-         yoch6gF7JjAlWDOjG9dCbPyLz8wl0KVf9c+xRea0NqOAttdciVtvu9j6oDNptpSoLsj9
-         Zy2SsuRT8B3s9C49maijvvGSEb+p2wwuiM3MOY4xvubIKWPb7NMQiueXnt/hLkbjK0Qb
-         3LtbtFYpKySGZMPmCO9Y9boRNazVRe3Uc/G0fFHOUGSADUajXULr45dvsJlbVNfhFBg9
-         p8NL/UmHMg3bEGWslK4cFSxYbVrEFwIk7cpDgWfblmckcgIaWKaQUoTTNxaMLSZLEVhL
-         2Abw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686676124; x=1689268124;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IEOxPjyq7cbAhN04VkJQjCBC+cXkSTNShgxgFc1N+zA=;
-        b=lyqlni2rvUohdkJB9n4KzzyagmodFprDp1YSRawrsyYfbllXLDfwKpqG6N5itiN0oq
-         2B92kMLfzahdIHkygFE5jAjdp/klqOXES00/6sYDHHZ+BSvyPXfWMXcLjvTUZue6ZEOc
-         CndOoFdgu02lbd93G75USlPwS665ZNPR8QU8mHN8ZUQ8RTwQHJj0IBSZdGyagkqnmUqr
-         y3ZD7EMQm3wPmGJdCQB4RnEhYa0Hcf3rfy1pCY84dC+l9qT9UdSiDYXJMyJRCeUt7DGr
-         A8tmCPEr+01vZkc1bjbfN65nzvcLmuDvRWvadhfe3RuNrmZNZnsTwsjfbuuMQTixZ9v5
-         f4Hg==
-X-Gm-Message-State: AC+VfDy9+CibQtYeLv1QfTKKHe7qiPL20pXyPIeHMLdYQUfX3NDDwVzK
-        iOLkGaww3Wd+MpWAfMpvMYARvQeyy1QGV9aCwZA=
-X-Google-Smtp-Source: ACHHUZ6IVHYtr6EhQ8zxzJ7cZgPX29yPpTxMs+tJlNote6SRNod+g3s8Q+j1rgTEV1/Gp9V+uz2mkZmDpuA7/u9qgnM=
-X-Received: by 2002:a05:6214:2468:b0:626:1e6b:4785 with SMTP id
- im8-20020a056214246800b006261e6b4785mr15074240qvb.6.1686676124471; Tue, 13
- Jun 2023 10:08:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230612122926.107333-1-herve.codina@bootlin.com>
- <20230612122926.107333-7-herve.codina@bootlin.com> <CAHp75Vf2dmAS9VD-pgyZwVopVCFy8yFjhPWEj8sym=pfE7uxSA@mail.gmail.com>
- <20230613100000.6bd9e690@bootlin.com>
-In-Reply-To: <20230613100000.6bd9e690@bootlin.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 13 Jun 2023 20:08:08 +0300
-Message-ID: <CAHp75Vcr5Owjn0HK-+D0mpPJAkAxG7F8bEO=sqvhT8w=_xnF7w@mail.gmail.com>
-Subject: Re: [PATCH v3 06/12] minmax: Introduce {min,max}_array()
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        Tue, 13 Jun 2023 13:08:50 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F39F187;
+        Tue, 13 Jun 2023 10:08:49 -0700 (PDT)
+Received: from mercury (dyndsl-091-248-189-170.ewe-ip-backbone.de [91.248.189.170])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DA62F6602121;
+        Tue, 13 Jun 2023 18:08:47 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686676128;
+        bh=iQ4ftuaDBWznEH5kDX5P/Q5kN2Byy7CoqD5P8dbx2Fo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SMSzrc9xFt40RcZnTRnRdu5SpYhhgLOXDegVKwBQhYZVVwzU94lSbbkDIFRoLF5fR
+         N2bKCjUUwKuOb09ysuRw3IqWyQZVjyuJlSh6YvPT20jn94HrqRvNNJBhS1NCbbb8BC
+         OzcaWz/YP/QcSsYlKe3cZ9WVv8e7hjMTiR8xUZd0sFdKSj9PdH2DIWxWDxGxbv9NW4
+         K8V1pI0eWvzABG6Z59Chs04UOPga8mcn/kAxSkM9MO/CmHSWxa722i32rn8rhFkiyt
+         emmCZGyVMJWLwlNsgByytgQhV33ez/ZEVnm7XiNwp/eWINFvjRvlilNx7Tr7hHdax3
+         04faZNC2KZmhg==
+Received: by mercury (Postfix, from userid 1000)
+        id 8AC541066FC6; Tue, 13 Jun 2023 19:08:45 +0200 (CEST)
+Date:   Tue, 13 Jun 2023 19:08:45 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Vincent Legoll <vincent.legoll@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v5 13/25] PM / devfreq: rockchip-dfi: Pass private data
+ struct to internal functions
+Message-ID: <20230613170845.j5fcj746u6n6tmsq@mercury.elektranox.org>
+References: <20230524083153.2046084-1-s.hauer@pengutronix.de>
+ <20230524083153.2046084-14-s.hauer@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fprcqslfdwew5bja"
+Content-Disposition: inline
+In-Reply-To: <20230524083153.2046084-14-s.hauer@pengutronix.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 11:00=E2=80=AFAM Herve Codina <herve.codina@bootlin=
-.com> wrote:
-> On Mon, 12 Jun 2023 17:10:40 +0300
-> Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> > On Mon, Jun 12, 2023 at 3:30=E2=80=AFPM Herve Codina <herve.codina@boot=
-lin.com> wrote:
-> > >
-> > > Introduce min_array() (resp max_array()) in order to get the
-> > > minimal (resp maximum) of values present in an array.
-> >
-> > Some comments below, after addressing them,
-> > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-...
+--fprcqslfdwew5bja
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > > +       typeof(array) __array =3D (array);                        \
-> >
-> > We have __must_be_array()
->
-> Using __must_be_array() will lead to some failure.
-> Indeed, we can have:
->   --- 8< ---
->   int *buff
->   ...
->   min =3D min_array(buff, nb_item);
->   --- 8< ---
->
-> In this case, __must_be_array() will report that buff is not an array.
+Hi,
 
-Oh, I missed that.
+On Wed, May 24, 2023 at 10:31:41AM +0200, Sascha Hauer wrote:
+> The internal functions do not need the struct devfreq_event_dev *,
+> so pass them the struct rockchip_dfi *. This is a preparation for
+> adding perf support later which doesn't have a struct devfreq_event_dev *.
+>=20
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> ---
 
-> To avoid any confusion, what do you think if I renamed {min,max}_array()
-> to {min,max}_buffer() and replace __array by __buff and use *(__buff + xx=
-x)
-> instead of array[xxx] in the macro.
+Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-But functionally it's still against an array.
+-- Sebastian
 
-I would stick with "array" in the name, but add a comment why
-__must_be_array() is not used. If we need a stricter variant, we may
-add a new wrapper with that check. That said, I think we can use
-__array[0] and similar indexed accesses.
+>  drivers/devfreq/event/rockchip-dfi.c | 15 ++++++---------
+>  1 file changed, 6 insertions(+), 9 deletions(-)
+>=20
+> diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event=
+/rockchip-dfi.c
+> index 0a568c5551699..d39db5de7f19c 100644
+> --- a/drivers/devfreq/event/rockchip-dfi.c
+> +++ b/drivers/devfreq/event/rockchip-dfi.c
+> @@ -72,9 +72,8 @@ struct rockchip_dfi {
+>  	unsigned int channel_mask;
+>  };
+> =20
+> -static void rockchip_dfi_start_hardware_counter(struct devfreq_event_dev=
+ *edev)
+> +static void rockchip_dfi_start_hardware_counter(struct rockchip_dfi *dfi)
+>  {
+> -	struct rockchip_dfi *dfi =3D devfreq_event_get_drvdata(edev);
+>  	void __iomem *dfi_regs =3D dfi->regs;
+> =20
+>  	/* clear DDRMON_CTRL setting */
+> @@ -102,18 +101,16 @@ static void rockchip_dfi_start_hardware_counter(str=
+uct devfreq_event_dev *edev)
+>  		       dfi_regs + DDRMON_CTRL);
+>  }
+> =20
+> -static void rockchip_dfi_stop_hardware_counter(struct devfreq_event_dev =
+*edev)
+> +static void rockchip_dfi_stop_hardware_counter(struct rockchip_dfi *dfi)
+>  {
+> -	struct rockchip_dfi *dfi =3D devfreq_event_get_drvdata(edev);
+>  	void __iomem *dfi_regs =3D dfi->regs;
+> =20
+>  	writel_relaxed(HIWORD_UPDATE(0, DDRMON_CTRL_SOFTWARE_EN),
+>  		       dfi_regs + DDRMON_CTRL);
+>  }
+> =20
+> -static void rockchip_dfi_read_counters(struct devfreq_event_dev *edev, s=
+truct dmc_count *count)
+> +static void rockchip_dfi_read_counters(struct rockchip_dfi *dfi, struct =
+dmc_count *count)
+>  {
+> -	struct rockchip_dfi *dfi =3D devfreq_event_get_drvdata(edev);
+>  	u32 i;
+>  	void __iomem *dfi_regs =3D dfi->regs;
+> =20
+> @@ -131,7 +128,7 @@ static int rockchip_dfi_disable(struct devfreq_event_=
+dev *edev)
+>  {
+>  	struct rockchip_dfi *dfi =3D devfreq_event_get_drvdata(edev);
+> =20
+> -	rockchip_dfi_stop_hardware_counter(edev);
+> +	rockchip_dfi_stop_hardware_counter(dfi);
+>  	clk_disable_unprepare(dfi->clk);
+> =20
+>  	return 0;
+> @@ -148,7 +145,7 @@ static int rockchip_dfi_enable(struct devfreq_event_d=
+ev *edev)
+>  		return ret;
+>  	}
+> =20
+> -	rockchip_dfi_start_hardware_counter(edev);
+> +	rockchip_dfi_start_hardware_counter(dfi);
+>  	return 0;
+>  }
+> =20
+> @@ -166,7 +163,7 @@ static int rockchip_dfi_get_event(struct devfreq_even=
+t_dev *edev,
+>  	u32 access =3D 0, total =3D 0;
+>  	int i;
+> =20
+> -	rockchip_dfi_read_counters(edev, &count);
+> +	rockchip_dfi_read_counters(dfi, &count);
+> =20
+>  	/* We can only report one channel, so find the busiest one */
+>  	for (i =3D 0; i < DMC_MAX_CHANNELS; i++) {
+> --=20
+> 2.39.2
+>=20
 
+--fprcqslfdwew5bja
+Content-Type: application/pgp-signature; name="signature.asc"
 
---
-With Best Regards,
-Andy Shevchenko
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSIopgACgkQ2O7X88g7
++prsew/+LN7A+w+Fxan4kvHnEiZpj4xZA3Avqs/Lsz2Rem4DqsupltVNzgsPMwlH
+8TJksf8RvETr2hPUT/2R/VgGApIR+QygSUj8Y/s/sPj0ngXuk/nrMvniByPEqN+g
+V1yNWPMNOYGpZX9SCvpAA1Nwlvsvg9oHRHI553vxF7F5JDine/YYhqjqATdJf7Bl
+WPo7YtJ+kCmjPuk+GK3Foll/+WJo8Sa1GJUNqw9ovdqtThn7lVvwuSqYGUCoVoii
+hkht0bKwaDuLDdwHVzvsZC81eeoLefsvAty+HDDveLZ1bgq6xdmdbKnAjOW9tbgg
+vrDV6qWDlsFdhemvfHPMAWsTLAz+azDDQAFJBU7PE9y8h0MVd/3nbRh42qgT1Yaf
+bnEShymXUwvk31rrrlJmZ0MPI9lLtZ/Zrs+UzhalDzDKiqWAFHnTqUIa2PxCpGkU
+TgbhRxy3zIefePLjkZeEwSMaCXmrRGCHaijM3DmVB1OvGGmYpr+2ydeEw5CT99Je
+sB9RcK1n/ROKIJG+jPVEt68SWuqDSC5uWRDrks9RYb97vVYTdtBLM2nqAkl0bXJJ
+GH9L5qjwWyJG4SQFQ1H+/87Zo/VrzHFaDY8jmf2iLEoH8zGd0GAG1PUp3TsFjbKS
+Cm+ng9GjXUu2/T9yTL5Q+G+YI5jghuX4R/i8Oi6wdOgsANTyz4A=
+=Lfwq
+-----END PGP SIGNATURE-----
+
+--fprcqslfdwew5bja--
