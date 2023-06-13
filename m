@@ -2,123 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B116472E2DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B628372E2DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242425AbjFMM1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 08:27:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34814 "EHLO
+        id S242276AbjFMM0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 08:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236391AbjFMM1C (ORCPT
+        with ESMTP id S240072AbjFMM0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 08:27:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DDD10CE
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 05:26:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686659174;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kdc7U94xkVs29WOVZE2o7NQmpfO54OWwBKACRIySOxQ=;
-        b=V63tEdjXP0ZdVG0+y48WCXYK/xdbMrZFAvPP2bPcjERQT4t6itZBf2LIzwjchP0pdsu8fW
-        g0BZuSAz8q+ZwCZnSptr5cZh7JML0i52239ywE0fMg0+F5+EJroxczYfYAvWrbJeLEH87V
-        2Hfii7MI84U7Zj1Gq/YEKl2qgLpw6yU=
-Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
- [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-80-vgDbyjj7PpileyrjZhvWZg-1; Tue, 13 Jun 2023 08:26:11 -0400
-X-MC-Unique: vgDbyjj7PpileyrjZhvWZg-1
-Received: by mail-oo1-f70.google.com with SMTP id 006d021491bc7-558cbf62c87so3425250eaf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 05:26:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686659170; x=1689251170;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kdc7U94xkVs29WOVZE2o7NQmpfO54OWwBKACRIySOxQ=;
-        b=YxCPm4U1QUY7Xh/WudasRTcldX8Bo6edb+9Y7wByxfSh2tkzO9G03CP0usFRA5ZAUa
-         UOU2zeCBWs80stf5bq+SQ88s58PgnFkSHm0npcP1YNLk9T7P1OK1VA30CEchPzKxQXqj
-         3SKcckphlhSlDeWpcSHJvYPitwn2KGH6W3RFBxYoNE0cLtc5mvuhVh9MSWvFdGavx/RL
-         O0bp2MKi/J3rqUutYQ2zz1DPpAeGC6ZPYJlAdmiAEXDVfwY1FknjOHkUyvPW1I418wiL
-         gSTzhs9mAvzPWBcdxiKoAAF/lJuGt208/AVX51zt5YCq9goyoYotkZTpNyNEraWZd4mK
-         fJyA==
-X-Gm-Message-State: AC+VfDyiYcMnJnP7nbbaEB8qLa4urnN1U3j/ZUE9tN0N8ixxYp6h8QaW
-        lI+IeXMxG8S3FwEf/uF2/ILNVAtl7nguPAP0G1ZsikJF9f7aKr9CGwadClUD8Ax/SqRJAz25jE+
-        KoWoj/+54e9AxbSr61M1eDtg7cvq420bYx9Gdw3C6
-X-Received: by 2002:a05:6808:aa6:b0:39c:7a71:945 with SMTP id r6-20020a0568080aa600b0039c7a710945mr6665209oij.56.1686659170673;
-        Tue, 13 Jun 2023 05:26:10 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ78NH/EDUObpqeiuWTv/ei0rcNTq2G3JcAYYkdP6lUVZNrwES4dFqTfrj6xUXLkqd2QPOhn4hynFlH1BTjrtsI=
-X-Received: by 2002:a05:6808:aa6:b0:39c:7a71:945 with SMTP id
- r6-20020a0568080aa600b0039c7a710945mr6665199oij.56.1686659170481; Tue, 13 Jun
- 2023 05:26:10 -0700 (PDT)
+        Tue, 13 Jun 2023 08:26:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62D610CB;
+        Tue, 13 Jun 2023 05:26:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B0406359E;
+        Tue, 13 Jun 2023 12:26:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E20DDC433EF;
+        Tue, 13 Jun 2023 12:26:35 +0000 (UTC)
+Message-ID: <313827c0-3b7a-e70a-b281-cbb5f68e6fd2@xs4all.nl>
+Date:   Tue, 13 Jun 2023 14:26:34 +0200
 MIME-Version: 1.0
-References: <20230529132037.2124527-1-yukuai1@huaweicloud.com>
- <20230529132037.2124527-3-yukuai1@huaweicloud.com> <b780ccfd-66b1-fdd1-b33e-aa680fbd86f1@redhat.com>
- <1aaf9150-bbd3-87a8-8d54-8b5d63ab5ed3@huaweicloud.com>
-In-Reply-To: <1aaf9150-bbd3-87a8-8d54-8b5d63ab5ed3@huaweicloud.com>
-From:   Xiao Ni <xni@redhat.com>
-Date:   Tue, 13 Jun 2023 20:25:59 +0800
-Message-ID: <CALTww2-ta1NUJxcT3Dq5KP7iunnVx24X7RKj1OKYTYwEPeDNrg@mail.gmail.com>
-Subject: Re: [dm-devel] [PATCH -next v2 2/6] md: refactor action_store() for
- 'idle' and 'frozen'
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     guoqing.jiang@linux.dev, agk@redhat.com, snitzer@kernel.org,
-        dm-devel@redhat.com, song@kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, linux-kernel@vger.kernel.org,
-        linux-raid@vger.kernel.org, "yukuai (C)" <yukuai3@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [RESEND PATCH v6 1/1] Added Digiteq Automotive MGB4 driver
+Content-Language: en-US
+To:     =?UTF-8?Q?Martin_T=c5=afma?= <tumic@gpxsee.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Martin_T=c5=afma?= <martin.tuma@digiteqautomotive.com>
+References: <20230524112126.2242-1-tumic@gpxsee.org>
+ <20230524112126.2242-2-tumic@gpxsee.org>
+ <3a7da3cd-8d03-a2c4-0534-a75565aefc13@xs4all.nl>
+ <c544814a-7d99-add9-0397-d56776f911dd@gpxsee.org>
+ <0cec2b34-01bb-ec0e-f215-9e6ed3f44e73@xs4all.nl>
+ <5021c762-3435-719b-18a3-def7888fb5f6@gpxsee.org>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <5021c762-3435-719b-18a3-def7888fb5f6@gpxsee.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 8:00=E2=80=AFPM Yu Kuai <yukuai1@huaweicloud.com> w=
-rote:
->
-> Hi,
->
-> =E5=9C=A8 2023/06/13 16:02, Xiao Ni =E5=86=99=E9=81=93:
-> >
-> > =E5=9C=A8 2023/5/29 =E4=B8=8B=E5=8D=889:20, Yu Kuai =E5=86=99=E9=81=93:
-> >> From: Yu Kuai <yukuai3@huawei.com>
-> >>
-> >> Prepare to handle 'idle' and 'frozen' differently to fix a deadlock,
-> >> there
-> >> are no functional changes except that MD_RECOVERY_RUNNING is checked
-> >> again after 'reconfig_mutex' is held.
-> >
-> >
-> > Can you explain more about why it needs to check MD_RECOVERY_RUNNING
-> > again here?
->
-> As I explain in the following comment:
+On 12/06/2023 16:36, Martin Tůma wrote:
+> On 12. 06. 23 10:42, Hans Verkuil wrote:
+>> On 08/06/2023 13:16, Martin Tůma wrote:
+>>> Hi,
+>>> This is the "technical" part of my response, comments bellow:
+>>>
+>>> On 07. 06. 23 10:41, Hans Verkuil wrote:
+>>>> Hi Martin,
+>>>>
+>>>> Some comments below:
+>>>>
+>>>> On 24/05/2023 13:21, tumic@gpxsee.org wrote:
+>>>>> From: Martin Tůma <martin.tuma@digiteqautomotive.com>
+>>>
+>>>>> diff --git a/Documentation/admin-guide/media/mgb4.rst b/Documentation/admin-guide/media/mgb4.rst
+>>>>> new file mode 100644
+>>>>> index 000000000000..77db2fa64ab4
+>>>>> --- /dev/null
+>>>>> +++ b/Documentation/admin-guide/media/mgb4.rst
+>>>>> @@ -0,0 +1,352 @@
+>>>>> +.. SPDX-License-Identifier: GPL-2.0
+>>>>> +
+>>>>
+>>>> Perhaps it is a good idea to start with a high level overview of the
+>>>> hardware blocks. That might help understand how the various parts are
+>>>> connected.
+>>>>
+>>>
+>>> This is the "admin-guide" documentation and I'm not sure if the admins (= the card users) are interested in some hardware blocks description. I can for sure ad some basic info like that the card (with
+>>> the given module) has two inputs and two outputs, but if you hold the card in your hands while installing it into the PCIe slot you definitely notice that ;-)
+>>
+>> True, but I don't have that module :-).
+>>
+>> I assume the inputs (and also outputs) are mutually exclusive? I.e., only one at a time can be active?
+>>
+>> But it is also possible to switch between the inputs/outputs dynamically if you want?
+>>
+>> Right now it is hard coded through this property, but I assume there is a reason these
+>> modules have two inputs and two outputs, so it is odd that it is not possible use
+>> VIDIOC_S_INPUT/S_OUTPUT to toggle between them.
+>>
+> 
+> With the current modules, you can not even theoretically (after changing the FPGA bitstream) change the outputs to inputs or vice versa as the the serializers/deserializers are hardcoded on the modules.
 
-Hi
+I think you misunderstand me.
 
-Who can clear the flag before the lock is held?
+Let's keep it simple: a source is connected to input 0 and you capture from it with V4L2.
 
-Regards
-Xiao
-> >> +    /*
-> >> +     * Check again in case MD_RECOVERY_RUNNING is cleared before lock=
- is
-> >> +     * held.
-> >> +     */
-> >> +    if (!test_bit(MD_RECOVERY_RUNNING, &mddev->recovery)) {
-> >> +        mddev_unlock(mddev);
-> >> +        return;
-> >> +    }
->
-> Thanks,
-> Kuai
->
+Can I dynamically switch to input 1 and capture from that? I.e., each input has a
+different source connected to it, so userspace can select from which input to capture.
 
+Right now it appears that V4L2 just advertises a single input. And the input_id
+property is read-only. So that means that input 1 is effectively unusable with
+the current driver, or am I missing something?
+
+> 
+> I can post here some photo of the card, if it is ok to send image attachement to the mailing list so you have some image of what we are talking about. Or I can even show you the card live when you are
+> in Prague in few days.
+
+Actually, I'd like that! We'll meet there anyway, so that's a good opportunity to
+see the real deal :-)
+
+Regards,
+
+	Hans
