@@ -2,118 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF8A72EA17
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7448C72EA3E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235640AbjFMRml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 13:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38140 "EHLO
+        id S234284AbjFMRwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 13:52:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236376AbjFMRmZ (ORCPT
+        with ESMTP id S230073AbjFMRwO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 13:42:25 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BECA6;
-        Tue, 13 Jun 2023 10:42:24 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35DHfu9W084100;
-        Tue, 13 Jun 2023 12:41:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1686678116;
-        bh=igyZvlOfVcSf4nGPg6BKktZlYY6keooO5jqV4M4Sjf8=;
-        h=Date:Subject:From:To:CC:References:In-Reply-To;
-        b=GxpXVusBEQWpKJk8EBWTP2BMfzh9WPp8AV+k33AdMWxN4P+v8hMs6zUxuJDgxnwbH
-         0Q+oKfWMpNgZBmev9FwdcO+h35SbYXjFwi/be+J+7xOCvrnwn3msEPUShT7FPrvgAm
-         oYLb8mIxa09TV4psU4JfK4DwyfphqOMFfSi4fG+o=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35DHfuOi122876
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 13 Jun 2023 12:41:56 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 13
- Jun 2023 12:41:55 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 13 Jun 2023 12:41:55 -0500
-Received: from [128.247.81.105] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35DHftFR010861;
-        Tue, 13 Jun 2023 12:41:55 -0500
-Message-ID: <9905aefb-0d27-a4d6-b72d-5b852dc04465@ti.com>
-Date:   Tue, 13 Jun 2023 12:41:55 -0500
+        Tue, 13 Jun 2023 13:52:14 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE97AA
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 10:52:13 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-977d6aa3758so1027778966b.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 10:52:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1686678731; x=1689270731;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kcOW2YayMm3xjw1cJ1qlGpr/UGWPmxOrQJ2QJLZKMzE=;
+        b=dP5DXlDYSrraxxFtQyF+hVZ1fmEi81oJkvt7PhTgPnLwMsbYHfwMgend+XfBg4MKfU
+         zN56wIuL6cCPFmEYsc1fjn73I/lAva+dOIIiZHwNT8hAm2gqdLSnQ1eF+UJIIc7do710
+         MhpjqQcMzLhl1Sp+ii1rFRNgLQ8f7kUsOBV6k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686678731; x=1689270731;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kcOW2YayMm3xjw1cJ1qlGpr/UGWPmxOrQJ2QJLZKMzE=;
+        b=BgTCPbT9JSdYWGBjYDcAVy0f2jYzWWLp9M+gtc01axbFbmwMwMQc9RmcahoX3tImQR
+         tHADWMZ9u8vdtXabaE3yzCopcwJjEbrJI7mLln+qpSD+9Lj0pb4b+1JE3RgzP/PHWubq
+         XSWIScZiea0UVvfMixd14+zBKmdb2S3YVlF/eLR15HVl3IPw98DP4GQxZ0u9rFvr2yCx
+         C5+KBQ6TzWIiUwlG1LccTorf8y48VcxQ1yi1MwZ3udFn9wFQT45he/Z7+l/15rtyqqp0
+         ++edKdHkRe2xIbXgXYS9TD8LnB010mjNcFPi2zDtPikZcSxOQ6spEdUPhJGGtCQ4Msb3
+         199w==
+X-Gm-Message-State: AC+VfDzDncwgxaW+6Gp0ircR1NtZW235y1+8mH5Pl2ZZEzGSfTORr9Ts
+        VNanugfKfTKxT35sMum4Ta2wYUT9KO03FcBEifzz2Zxt
+X-Google-Smtp-Source: ACHHUZ60yxv1uB88Y8zLPAPNp0Hrpm0XkWvvLp9ovYowII9aB2b14+xyTIlB4QwhKI3lbAeQzSVqkQ==
+X-Received: by 2002:a17:906:d54b:b0:978:94b1:25ac with SMTP id cr11-20020a170906d54b00b0097894b125acmr16344366ejc.40.1686678731358;
+        Tue, 13 Jun 2023 10:52:11 -0700 (PDT)
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com. [209.85.218.47])
+        by smtp.gmail.com with ESMTPSA id q13-20020a1709064c8d00b0095fbb1b72c2sm6989087eju.63.2023.06.13.10.52.10
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 10:52:11 -0700 (PDT)
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-970028cfb6cso1027337366b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 10:52:10 -0700 (PDT)
+X-Received: by 2002:a05:6512:548:b0:4ef:ec6a:198c with SMTP id
+ h8-20020a056512054800b004efec6a198cmr6103911lfl.26.1686678301549; Tue, 13 Jun
+ 2023 10:45:01 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v8 0/2] Enable multiple MCAN on AM62x
-Content-Language: en-US
-From:   Judith Mendez <jm@ti.com>
-To:     <linux-can@vger.kernel.org>, Marc Kleine-Budde <mkl@pengutronix.de>
-CC:     Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Schuyler Patton <spatton@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <devicetree@vger.kernel.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Simon Horman <simon.horman@corigine.com>,
-        Conor Dooley <conor+dt@linaro.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>
-References: <20230530224820.303619-1-jm@ti.com>
-In-Reply-To: <20230530224820.303619-1-jm@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
+ <CAHk-=wh0UNRn96k3XLh2AYOo0iz1k_Qk-rQXv8kYjXkKBzUMWA@mail.gmail.com> <c239d2c4f7e369690866db455813cac359731e1d.camel@intel.com>
+In-Reply-To: <c239d2c4f7e369690866db455813cac359731e1d.camel@intel.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 13 Jun 2023 10:44:44 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjSWhVV+qr_tV0xg8c0WRn_H9wtFZkUVCpv-VzsddAS-Q@mail.gmail.com>
+Message-ID: <CAHk-=wjSWhVV+qr_tV0xg8c0WRn_H9wtFZkUVCpv-VzsddAS-Q@mail.gmail.com>
+Subject: Re: [PATCH v9 00/42] Shadow stacks for userspace
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "bp@alien8.de" <bp@alien8.de>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Mon, Jun 12, 2023 at 8:12=E2=80=AFPM Edgecombe, Rick P
+<rick.p.edgecombe@intel.com> wrote:
+>
+> Sure. I probably should have included that upfront. Here is a github
+> repo:
+> https://github.com/rpedgeco/linux/tree/user_shstk_v9
+>
+> I went ahead and included the tags[0] from last time in case that's
+> useful, but unfortunately the github web interface is not very
+> conducive to viewing the tag-based segmentation of the series. If
+> having it in a korg repo would be useful, please let me know.
 
-On 5/30/23 5:48 PM, Judith Mendez wrote:
-> On AM62x there are two MCANs in MCU domain. The MCANs in MCU domain
-> were not enabled since there is no hardware interrupt routed to A53
-> GIC interrupt controller. Therefore A53 Linux cannot be interrupted
-> by MCU MCANs.
-> 
-> This solution instantiates a hrtimer with 1 ms polling interval
-> for MCAN device when there is no hardware interrupt property in
-> DTB MCAN node. The hrtimer generates a recurring software interrupt
-> which allows to call the isr. The isr will check if there is pending
-> transaction by reading a register and proceed normally if there is.
-> MCANs with hardware interrupt routed to A53 Linux will continue to
-> use the hardware interrupt as expected.
-> 
-> Timer polling method was tested on both classic CAN and CAN-FD
-> at 125 KBPS, 250 KBPS, 1 MBPS and 2.5 MBPS with 4 MBPS bitrate
-> switching.
-> 
-> Letency and CPU load benchmarks were tested on 3x MCAN on AM62x.
-> 1 MBPS timer polling interval is the better timer polling interval
-> since it has comparable latency to hardware interrupt with the worse
-> case being 1ms + CAN frame propagation time and CPU load is not
-> substantial. Latency can be improved further with less than 1 ms
-> polling intervals, howerver it is at the cost of CPU usage since CPU
-> load increases at 0.5 ms.
-> 
-> Note that in terms of power, enabling MCU MCANs with timer-polling
-> implementation might have negative impact since we will have to wake
-> up every 1 ms whether there are CAN packets pending in the RX FIFO or
-> not. This might prevent the CPU from entering into deeper idle states
-> for extended periods of time.
+Oh, kernel.org vs github doesn't matter. I'm not actually merging this
+yet, I'm just doing a fetch to then easily be able to look at it
+locally in different formats.
 
-Was wondering if I am still pending some updates for this patch series? 
-Or if any other issues please let me know. (: Thanks all
+I tend to like seeing small things in my MUA just because then I don't
+switch back-and-forth between reading email and some gitk workflow,
+and it is easy to just scan through the series and reply all inthe
+MUA.
 
-~ Judith
+But when it's some bigger piece, just doing a "git fetch" and then
+being able to dissect it locally is really convenient.
+
+Having worked with patches for three decades, I can read diffs in my
+sleep - but it's still quite useful to say "give me the patches just
+for *this* file" to just see how some specific area changed without
+having to look at the other parts.
+
+Or for example, that whole pte_mkwrite -> pte_mkwrite_novma patch is
+much denser and more legible with color-coding and the --word-diff.
+
+Anyway, I'm scanning through it right now. No comments yet, I only
+just got started.
+
+              Linus
