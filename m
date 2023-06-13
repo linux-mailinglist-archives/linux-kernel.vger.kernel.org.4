@@ -2,197 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D86F772E8EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:00:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C14F272E8ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231691AbjFMRAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 13:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38730 "EHLO
+        id S234738AbjFMRBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 13:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231297AbjFMRAi (ORCPT
+        with ESMTP id S234632AbjFMRBJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 13:00:38 -0400
+        Tue, 13 Jun 2023 13:01:09 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C8B19BC
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 09:59:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643B6183
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 10:00:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686675589;
+        s=mimecast20190719; t=1686675624;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=j04GnjVnV6VhU15tbBAUt5ncRnXCPvNX2dvFYsA/gBk=;
-        b=XSbZAdkwyM+AlyeJLB2ZpNP7umc1NTwCjHptKoRT8birC5ym/7gclnWisrJFFy8I9fRDSI
-        LQWrcGoxpg+7pjubqOYRTORJOF08LxhC0tgpL1spcaVOF6t6L3tdTbXRK6Z3nIuSPkN5Xi
-        IiSEnmYkn9aO/Io2w9sjSu4XDcmAxSA=
-Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com
- [209.85.128.200]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=N+LdwBzt0uYokh007O/q+HMXZaTU5MnHMEEMsHFG/3Y=;
+        b=b5QXc1UDtXhLUrUBT8VP+aRWSn1WZxFm8SinST+aDCPbgy4goOCMSUKrUmj2ayxYc2mHy8
+        +tU7+MY0tq9QL6bVA0IhfA1GZvbkzKmJs7eQ0a6dRYmGbgNbbFKZ+wNri2PUsbdY+rAeSO
+        gs1DA+H3Gg5UFGbHLSq+WUA03T9ut+M=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-81-Qe8n5V4wP0qBYqojDmMuhg-1; Tue, 13 Jun 2023 12:59:47 -0400
-X-MC-Unique: Qe8n5V4wP0qBYqojDmMuhg-1
-Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-561ceb5b584so93717027b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 09:59:47 -0700 (PDT)
+ us-mta-53-W9y_eTInNnqTC2gw5hNvsw-1; Tue, 13 Jun 2023 13:00:23 -0400
+X-MC-Unique: W9y_eTInNnqTC2gw5hNvsw-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f7e4dc0fe5so37055695e9.3
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 10:00:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686675587; x=1689267587;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j04GnjVnV6VhU15tbBAUt5ncRnXCPvNX2dvFYsA/gBk=;
-        b=AwmKXDCRiTr6kEr1od4PWVT+O6phKoryMslsSb1fIKW1Sg48Rb+mW7kQ4R3gTnDGXh
-         VkFnGzMyR13vAHjaKxvaMSo8/9PibOtwuTJ7dvOkvTK8RXFinjctYnBLmzauevBf94za
-         tUXBNvsnjmoc8lvkayVDAoKDQrqudtnJNGFQX/SkC6HbL/l5MT37BIf3WEvTuQDrhDge
-         I+oxKOLsGWo9ZrUNP4VUu40YjyCh5HY5hczB8eyY/nZEUpBBbgKM37vrZFVcKckC9uUY
-         orwdpeJKw1gRv3C6RThp0p3L9aCnM+4CpiY6ypGpktZc8SXkBR2yXfEyfvD8hRkwYY5g
-         MCYw==
-X-Gm-Message-State: AC+VfDxse2ZfOD96IFRoWeOq+PzSSaEQ7tf2TFWYmr6bfpStcmSsTtyA
-        E6kFrgMyfkVWdqYVM7eOfHfXYWJUsriKIULtfJeAr2YG1nriuJg+202eDAxazO+mMMqmaiW3vMc
-        FOlvPUKQ40xyPg2eTfuVvlJK5
-X-Received: by 2002:a81:738b:0:b0:565:e48d:32cf with SMTP id o133-20020a81738b000000b00565e48d32cfmr2533639ywc.7.1686675587353;
-        Tue, 13 Jun 2023 09:59:47 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7O9u46bkmq9uCzDtwjiCxY77/JvONfFU/2txtnkFyT64oc8V6fa+eQ8cwyObh374VppqoV4w==
-X-Received: by 2002:a81:738b:0:b0:565:e48d:32cf with SMTP id o133-20020a81738b000000b00565e48d32cfmr2533610ywc.7.1686675587072;
-        Tue, 13 Jun 2023 09:59:47 -0700 (PDT)
-Received: from halaney-x13s ([2600:1700:1ff0:d0e0::45])
-        by smtp.gmail.com with ESMTPSA id s7-20020a0de907000000b005688f7596ccsm1699074ywe.78.2023.06.13.09.59.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 09:59:46 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 11:59:43 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH 16/26] net: stmmac: dwmac-qcom-ethqos: prepare the driver
- for more PHY modes
-Message-ID: <20230613165943.zjr4b4p44jhl2dtx@halaney-x13s>
-References: <20230612092355.87937-1-brgl@bgdev.pl>
- <20230612092355.87937-17-brgl@bgdev.pl>
+        d=1e100.net; s=20221208; t=1686675621; x=1689267621;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N+LdwBzt0uYokh007O/q+HMXZaTU5MnHMEEMsHFG/3Y=;
+        b=ijd2354PKGH0/LLFDv3FRFTJEPgj/kPs+vK7pZVXMrtrg43U1XK404AWZXaVW5bAPT
+         vUQeA/Nu8X8D1J5yozO4d87TEByaS1L9gPciJpRQ19k7Qv5mYxVkrXrZNuVyWDHMPxgS
+         7lJT37D1h4JwEIlgb5ZhlBDYPhXJ/Kl+k6tzNPlR0Wa4+DqtEN99d/AIDZYazIAMU79b
+         SEJg10aChXNrJC2DTqqdwkNX+H+VgwMzh2cJi2LDdMHv5d4qglkZ4IzU9q6vkR52jD8I
+         o5/YCL1RJLZ0Lt8s363GngJRELZQtXAdtThGBvs3mrYUG3n9RDHGES4PA1n8i5iWW++U
+         fRIQ==
+X-Gm-Message-State: AC+VfDwmZnDt4IiZDWDZ9lk9o5JfbUkYidCm1Zvcf8ECWuYNl2kgnIYX
+        gBfTUbF6y28LRuOKy+jVxt2BIF6bPeTAWEO/xAMi5I/pbjDMFJOTbGVDYPHrwDtol89owgwLdKf
+        YEXm4sfwQyMOrcifWRbrHd1JM
+X-Received: by 2002:a05:600c:2041:b0:3f8:d0e7:daed with SMTP id p1-20020a05600c204100b003f8d0e7daedmr1651724wmg.19.1686675620855;
+        Tue, 13 Jun 2023 10:00:20 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5DqYDEwXY1aS+T8oevGZM1GGzvu3C6CrpD97OsPgkk4IOclN0QORetIFLX25l+OyKcdC2cGA==
+X-Received: by 2002:a05:600c:2041:b0:3f8:d0e7:daed with SMTP id p1-20020a05600c204100b003f8d0e7daedmr1651659wmg.19.1686675620442;
+        Tue, 13 Jun 2023 10:00:20 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c710:ff00:1a06:80f:733a:e8c6? (p200300cbc710ff001a06080f733ae8c6.dip0.t-ipconnect.de. [2003:cb:c710:ff00:1a06:80f:733a:e8c6])
+        by smtp.gmail.com with ESMTPSA id d17-20020adffbd1000000b0030fb4b55c13sm9792662wrs.96.2023.06.13.10.00.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 10:00:19 -0700 (PDT)
+Message-ID: <8a053da2-0f26-82ca-f437-9b9de11d4584@redhat.com>
+Date:   Tue, 13 Jun 2023 19:00:17 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612092355.87937-17-brgl@bgdev.pl>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v9 02/42] mm: Move pte/pmd_mkwrite() callers with no VMA
+ to _novma()
+Content-Language: en-US
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "rppt@kernel.org" <rppt@kernel.org>
+Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "bp@alien8.de" <bp@alien8.de>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>
+References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
+ <20230613001108.3040476-3-rick.p.edgecombe@intel.com>
+ <20230613074428.GS52412@kernel.org>
+ <21b0342854b067c241206f422bc5b3254b43c7f5.camel@intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <21b0342854b067c241206f422bc5b3254b43c7f5.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 11:23:45AM +0200, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On 13.06.23 18:19, Edgecombe, Rick P wrote:
+> On Tue, 2023-06-13 at 10:44 +0300, Mike Rapoport wrote:
+>>> Previous patches have done the first step, so next move the callers
+>>> that
+>>> don't have a VMA to pte_mkwrite_novma(). Also do the same for
+>>
+>> I hear x86 maintainers asking to drop "previous patches" ;-)
+>>
+>> Maybe
+>> This is the second step of the conversion that moves the callers ...
 > 
-> In preparation for supporting SGMII, let's make the code a bit more
-> generic. Add a new callback for MAC configuration so that we can assign
-> a different variant of it in the future.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> Really? I've not heard that. Just a strong aversion to "this patch".
+> I've got feedback to say "previous patches" and not "the last patch" so
+> it doesn't get stale. I guess it could be "previous changes".
 
-Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
+Talking about patches make sense when discussing literal patches sent to 
+the mailing list. In the git log, it's commit, and "future commits" or 
+"follow-up work".
 
-> ---
->  .../stmicro/stmmac/dwmac-qcom-ethqos.c        | 31 ++++++++++++++++---
->  1 file changed, 26 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-> index 21f329d2f7eb..2f96f2c11278 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-> @@ -92,12 +92,14 @@ struct ethqos_emac_driver_data {
->  struct qcom_ethqos {
->  	struct platform_device *pdev;
->  	void __iomem *rgmii_base;
-> +	int (*configure_func)(struct qcom_ethqos *ethqos);
->  
->  	unsigned int rgmii_clk_rate;
->  	struct clk *rgmii_clk;
->  	struct clk *phyaux_clk;
->  	struct phy *serdes_phy;
->  	unsigned int speed;
-> +	int phy_mode;
->  
->  	const struct ethqos_emac_por *por;
->  	unsigned int num_por;
-> @@ -332,13 +334,11 @@ static int ethqos_rgmii_macro_init(struct qcom_ethqos *ethqos)
->  {
->  	struct device *dev = &ethqos->pdev->dev;
->  	int phase_shift;
-> -	int phy_mode;
->  	int loopback;
->  
->  	/* Determine if the PHY adds a 2 ns TX delay or the MAC handles it */
-> -	phy_mode = device_get_phy_mode(dev);
-> -	if (phy_mode == PHY_INTERFACE_MODE_RGMII_ID ||
-> -	    phy_mode == PHY_INTERFACE_MODE_RGMII_TXID)
-> +	if (ethqos->phy_mode == PHY_INTERFACE_MODE_RGMII_ID ||
-> +	    ethqos->phy_mode == PHY_INTERFACE_MODE_RGMII_TXID)
->  		phase_shift = 0;
->  	else
->  		phase_shift = RGMII_CONFIG2_TX_CLK_PHASE_SHIFT_EN;
-> @@ -485,7 +485,7 @@ static int ethqos_rgmii_macro_init(struct qcom_ethqos *ethqos)
->  	return 0;
->  }
->  
-> -static int ethqos_configure(struct qcom_ethqos *ethqos)
-> +static int ethqos_configure_rgmii(struct qcom_ethqos *ethqos)
->  {
->  	struct device *dev = &ethqos->pdev->dev;
->  	volatile unsigned int dll_lock;
-> @@ -561,6 +561,11 @@ static int ethqos_configure(struct qcom_ethqos *ethqos)
->  	return 0;
->  }
->  
-> +static int ethqos_configure(struct qcom_ethqos *ethqos)
-> +{
-> +	return ethqos->configure_func(ethqos);
-> +}
-> +
->  static void ethqos_fix_mac_speed(void *priv, unsigned int speed)
->  {
->  	struct qcom_ethqos *ethqos = priv;
-> @@ -660,6 +665,22 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
->  		goto out_config_dt;
->  	}
->  
-> +	ethqos->phy_mode = device_get_phy_mode(dev);
-> +	switch (ethqos->phy_mode) {
-> +	case PHY_INTERFACE_MODE_RGMII:
-> +	case PHY_INTERFACE_MODE_RGMII_ID:
-> +	case PHY_INTERFACE_MODE_RGMII_RXID:
-> +	case PHY_INTERFACE_MODE_RGMII_TXID:
-> +		ethqos->configure_func = ethqos_configure_rgmii;
-> +		break;
-> +	case -ENODEV:
-> +		ret = -ENODEV;
-> +		goto out_config_dt;
-> +	default:
-> +		ret = -EINVAL;
-> +		goto out_config_dt;
-> +	}
-> +
->  	ethqos->pdev = pdev;
->  	ethqos->rgmii_base = devm_platform_ioremap_resource_byname(pdev, "rgmii");
->  	if (IS_ERR(ethqos->rgmii_base)) {
-> -- 
-> 2.39.2
-> 
+Yes, we use "patches" all of the time in commit logs, especially when we 
+  include the cover letter in the commit message (as done frequently in 
+the -mm tree).
+
+-- 
+Cheers,
+
+David / dhildenb
 
