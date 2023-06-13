@@ -2,72 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFAB872F06B
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 01:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB0572F04C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 01:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241936AbjFMXl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 19:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34132 "EHLO
+        id S241703AbjFMXlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 19:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241616AbjFMXkI (ORCPT
+        with ESMTP id S241427AbjFMXkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 19:40:08 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051311985;
-        Tue, 13 Jun 2023 16:39:46 -0700 (PDT)
-Message-ID: <20230613224545.783704297@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686699584;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=Gb5sLOwcDGGXCtx9H68t6SKa9rJuuFgNMIgGpRA1Cww=;
-        b=OnpchWKJJhpq6ONVVpZ9c6pjV8+YWD6D9ACsa/8z515oMg42/3uYESxEQtaaT0ZhA+Bg4D
-        buKV/TS+gn3oROep32cD9pSlOuxkNN9gN1FI793/jM6gaP61aGgNBMspBhF24cVrqNkwmP
-        6ZpLhrFqrdHTnl2F9db2HisP72PB5PFG31yDOZj7xCPFtzA0i/wVmqWvn4/B7KPU4C+g+A
-        Hb0tBXmvL2dCVGkZKLYp8zxv+/uly8bkLAHYCsjdnPbgTYze9gOUtyNazJsma861n1vfxT
-        FzX8CKJnzmPKSylUT3jSpbeQwCYY0b1DBlyPWRtKlKctXCqDI1gfU4iKjo3u0Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686699584;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=Gb5sLOwcDGGXCtx9H68t6SKa9rJuuFgNMIgGpRA1Cww=;
-        b=KeoNcLCZt1pscWtsZI+qPvC+QWWzBTddeaCrGnRrGuOteDQ3sqa2Z5VDUdEJeOoM1IwMZE
-        +u5kYsrLmjkwanCA==
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
-        Nikolay Borisov <nik.borisov@suse.com>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-sh@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org,
-        Richard Henderson <richard.henderson@linaro.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chris Zankel <chris@zankel.net>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Subject: [patch 15/17] x86/fpu: Remove cpuinfo argument from init functions
-References: <20230613223827.532680283@linutronix.de>
+        Tue, 13 Jun 2023 19:40:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2372E2130;
+        Tue, 13 Jun 2023 16:39:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EEECA6316C;
+        Tue, 13 Jun 2023 23:39:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1F48C433CC;
+        Tue, 13 Jun 2023 23:39:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686699587;
+        bh=AMr6Ad/aGcpnOx8XIK3BvlyamRbYLVRlaFZmuhNVlOQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jSY5N7QnRY8jLkiXn0fbSTrPHy1hrDFr+1hV4CVVXidkrnRCSEojOgQDZiXKByVbZ
+         ic3biLuwlRxbgA6WZbauFvyeVPv9ZmVdZjz+kl5ENAEUWuTpav+yEnemnqc4mn/8/2
+         9v9UaAKyT4I4oyTFquwz6hVWm5KI/aEe74olRUPSB4Q+aDr/x1p84xqtQQ3mdPKjHW
+         WEDGXOI7uQ62ybGXKn/AerQF5+MA1iuH4O+bWnd3ftgKgoO+2ksOiz4RYNQUGS6Duy
+         dkjz73t7ANX8ez6pykjTGgxKhFmWV5USRJzFkvcq/e+m+FPfl7Jh6gY9EyJw1sovYm
+         afhKtlhbo9yWA==
+Date:   Wed, 14 Jun 2023 01:39:44 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     carlos.song@nxp.com
+Cc:     aisheng.dong@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, xiaoning.wang@nxp.com,
+        haibo.chen@nxp.com, linux-imx@nxp.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: imx-lpi2c: add debug message when i2c peripheral
+ clk doesn't work
+Message-ID: <20230613233944.673syh3cjykvygfl@intel.intel>
+References: <20230529072316.3605989-1-carlos.song@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 14 Jun 2023 01:39:43 +0200 (CEST)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230529072316.3605989-1-carlos.song@nxp.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,59 +58,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nothing in the call chain requires it
+Hi,
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
----
- arch/x86/include/asm/fpu/api.h |    2 +-
- arch/x86/kernel/cpu/common.c   |    2 +-
- arch/x86/kernel/fpu/init.c     |    6 +++---
- 3 files changed, 5 insertions(+), 5 deletions(-)
+On Mon, May 29, 2023 at 03:23:16PM +0800, carlos.song@nxp.com wrote:
+> From: Gao Pan <pandy.gao@nxp.com>
+> 
+> Add debug message when i2c peripheral clk rate is 0, then
+> directly return -EINVAL.
+> 
+> Fixes: a55fa9d0e42e ("i2c: imx-lpi2c: add low power i2c bus driver")
+> Signed-off-by: Gao Pan <pandy.gao@nxp.com>
+> Signed-off-by: Carlos Song <carlos.song@nxp.com>
+> ---
+>  drivers/i2c/busses/i2c-imx-lpi2c.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
+> index 11240bf8e8e2..62111fe9f207 100644
+> --- a/drivers/i2c/busses/i2c-imx-lpi2c.c
+> +++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
+> @@ -209,6 +209,11 @@ static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
+>  	lpi2c_imx_set_mode(lpi2c_imx);
+>  
+>  	clk_rate = clk_get_rate(lpi2c_imx->clks[0].clk);
+> +	if (!clk_rate) {
+> +		dev_dbg(&lpi2c_imx->adapter.dev, "clk_per rate is 0\n");
+> +		return -EINVAL;
+> +	}
 
---- a/arch/x86/include/asm/fpu/api.h
-+++ b/arch/x86/include/asm/fpu/api.h
-@@ -109,7 +109,7 @@ extern void fpu_reset_from_exception_fix
- 
- /* Boot, hotplug and resume */
- extern void fpu__init_cpu(void);
--extern void fpu__init_system(struct cpuinfo_x86 *c);
-+extern void fpu__init_system(void);
- extern void fpu__init_check_bugs(void);
- extern void fpu__resume_cpu(void);
- 
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -1604,7 +1604,7 @@ static void __init early_identify_cpu(st
- 
- 	sld_setup(c);
- 
--	fpu__init_system(c);
-+	fpu__init_system();
- 
- #ifdef CONFIG_X86_32
- 	/*
---- a/arch/x86/kernel/fpu/init.c
-+++ b/arch/x86/kernel/fpu/init.c
-@@ -71,7 +71,7 @@ static bool fpu__probe_without_cpuid(voi
- 	return fsw == 0 && (fcw & 0x103f) == 0x003f;
- }
- 
--static void fpu__init_system_early_generic(struct cpuinfo_x86 *c)
-+static void fpu__init_system_early_generic(void)
- {
- 	if (!boot_cpu_has(X86_FEATURE_CPUID) &&
- 	    !test_bit(X86_FEATURE_FPU, (unsigned long *)cpu_caps_cleared)) {
-@@ -211,10 +211,10 @@ static void __init fpu__init_system_xsta
-  * Called on the boot CPU once per system bootup, to set up the initial
-  * FPU state that is later cloned into all processes:
-  */
--void __init fpu__init_system(struct cpuinfo_x86 *c)
-+void __init fpu__init_system(void)
- {
- 	fpstate_reset(&current->thread.fpu);
--	fpu__init_system_early_generic(c);
-+	fpu__init_system_early_generic();
- 
- 	/*
- 	 * The FPU has to be operational for some of the
+should this rather be a dev_err?
 
+And, BTW, did you actually hit this?
+
+Andi
+
+> +
+>  	if (lpi2c_imx->mode == HS || lpi2c_imx->mode == ULTRA_FAST)
+>  		filt = 0;
+>  	else
+> -- 
+> 2.34.1
+> 
