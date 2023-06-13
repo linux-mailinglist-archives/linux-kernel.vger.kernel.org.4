@@ -2,164 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D83B272D76B
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 04:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E83F672D76D
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 04:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233329AbjFMCjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 22:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
+        id S237472AbjFMCsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 22:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237967AbjFMCjY (ORCPT
+        with ESMTP id S233144AbjFMCsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 22:39:24 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88A210FF;
-        Mon, 12 Jun 2023 19:39:22 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QgCLT2vpDz18M4r;
-        Tue, 13 Jun 2023 10:34:25 +0800 (CST)
-Received: from M910t (10.110.54.157) by kwepemi500013.china.huawei.com
- (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 13 Jun
- 2023 10:39:19 +0800
-Date:   Tue, 13 Jun 2023 10:39:04 +0800
-From:   Changbin Du <changbin.du@huawei.com>
-To:     Ian Rogers <irogers@google.com>
-CC:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
-        Changbin Du <changbin.du@huawei.com>
-Subject: Re: [PATCH v1 1/2] perf srcline: Make addr2line configuration
- failure more verbose
-Message-ID: <20230613023904.xlnfgzedfz4epjz3@M910t>
-References: <20230609235419.204624-1-irogers@google.com>
+        Mon, 12 Jun 2023 22:48:06 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F091720
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 19:48:05 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-1a5229df1f2so3221850fac.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 19:48:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686624484; x=1689216484;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KAqkcjT6LIQQdFeaFHSjrw8XkbwpmOnSGyOspM01Gew=;
+        b=cun9njffuoamEe1XUOhorGMsTm4Qnlmyz2PArP+hsesHWx0DMxCkJKB4bfjtggF8Ax
+         YW0WQpAHOk6DWsefa4dWoDonxjOkaInHuYyUGipvDIctkJpuchP/HG7D2Jt2sw9U7pcQ
+         +0eCvwHXUc0WtW6w8Qn6gdqVHrNelu23sA2bhVlGQpYD/b8yQb9Q4Pv+0xVZEfBzQMEf
+         d5+iQGeucsnB7SDy1yENfgf4uPjpEfIjMTJ6pPZ6Gx9EtIURIBs2SwLu7oNLfj81bNnD
+         RZmczY1w0q/9hqEbcaS1WLwDVFtAMkXn2aDjVote9vabTAaH1LzCD+gLDsII/Tv9q4vr
+         QlYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686624484; x=1689216484;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KAqkcjT6LIQQdFeaFHSjrw8XkbwpmOnSGyOspM01Gew=;
+        b=eqqGeMTkvtKh9uibFdFA7x9ScuiFuIWyBbvBgHHacXVtnbYIkErNqlebgqLhXjJqRA
+         RKBwg1Dhd1CDylV7KpLbsjmWte8nuWo+jwDExOY0kNEGVxNwOaCXQwSJIs45P5HI4mCP
+         ciQk19k4dOqLyOF0cT5bEKPz/IWaZva3pyA0Htxs2oc04lneLmcQ6sfuTsCouxSkNa0H
+         UktTlhuUVoznPLDtpk39PZJcPKkC4DiVVG9NJPTsNzIuZACPqj7zhZ5Eu9gD+E5XSiLo
+         eAX2JxaoR7RPdU4byDr1UAaGw/cwrVF9uCBRiMo79tVfGPLpTaD1SozZLZ4qcSLbOgI7
+         o7UA==
+X-Gm-Message-State: AC+VfDwR+ECGxPGPZEC85XDHPqFrKHfedWlqXc72ARmaTs2oiX5eeBvO
+        ZGa8IFPaCGczFmmz2dw1WS0=
+X-Google-Smtp-Source: ACHHUZ7X+vrRc18BVSk9Dn9FnHqL/RQSWNvlmr91M3GQ0DvWn8TfyWol48lSBmCp8opleMSWv9nIAA==
+X-Received: by 2002:a05:6358:515a:b0:12b:e2d8:d80f with SMTP id 26-20020a056358515a00b0012be2d8d80fmr2218994rwj.5.1686624484006;
+        Mon, 12 Jun 2023 19:48:04 -0700 (PDT)
+Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
+        by smtp.gmail.com with ESMTPSA id 13-20020aa7924d000000b0064d74808738sm7485165pfp.214.2023.06.12.19.48.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 19:48:03 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 12 Jun 2023 16:48:07 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     jiangshanlai@gmail.com, torvalds@linux-foundation.org,
+        peterz@infradead.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, joshdon@google.com, brho@google.com,
+        nhuck@google.com, agk@redhat.com, snitzer@kernel.org,
+        void@manifault.com, treapking@chromium.org
+Subject: Re: [PATCHSET v1 wq/for-6.5] workqueue: Improve unbound workqueue
+ execution locality
+Message-ID: <ZIfY5zhhHU9IgOqx@slm.duckdns.org>
+References: <20230519001709.2563-1-tj@kernel.org>
+ <ZIewlkGJJJUXPFL0@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230609235419.204624-1-irogers@google.com>
-X-Originating-IP: [10.110.54.157]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZIewlkGJJJUXPFL0@google.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 04:54:18PM -0700, Ian Rogers wrote:
-> To aid debugging why it fails. Also, combine the loops for reading a
-> line for the llvm/binutils cases.
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/util/srcline.c | 34 +++++++++++++++++++++-------------
->  1 file changed, 21 insertions(+), 13 deletions(-)
-> 
-> diff --git a/tools/perf/util/srcline.c b/tools/perf/util/srcline.c
-> index b8e596528d7e..fc85cdd6c8f9 100644
-> --- a/tools/perf/util/srcline.c
-> +++ b/tools/perf/util/srcline.c
-> @@ -441,7 +441,7 @@ enum a2l_style {
->  	LLVM,
->  };
->  
-> -static enum a2l_style addr2line_configure(struct child_process *a2l)
-> +static enum a2l_style addr2line_configure(struct child_process *a2l, const char *dso_name)
->  {
->  	static bool cached;
->  	static enum a2l_style style;
-> @@ -450,6 +450,7 @@ static enum a2l_style addr2line_configure(struct child_process *a2l)
->  		char buf[128];
->  		struct io io;
->  		int ch;
-> +		int lines;
->  
->  		if (write(a2l->in, ",\n", 2) != 2)
->  			return BROKEN;
-> @@ -459,19 +460,29 @@ static enum a2l_style addr2line_configure(struct child_process *a2l)
->  		if (ch == ',') {
->  			style = LLVM;
->  			cached = true;
-> +			lines = 1;
->  		} else if (ch == '?') {
->  			style = GNU_BINUTILS;
->  			cached = true;
-> +			lines = 2;
->  		} else {
-> -			style = BROKEN;
-> +			if (!symbol_conf.disable_add2line_warn) {
-> +				char *output;
-This 'output' should be initialized to NULL.
+Hello,
 
-In file included from util/srcline.c:13:
-util/srcline.c: In function ‘addr2line’:
-/work/linux/tools/perf/libapi/include/api/io.h:130:2: error: ‘output’ may be used uninitialized in this function [-Werror=maybe-uninitialized]
-  130 |  free(*line_out);
-      |  ^~~~~~~~~~~~~~~
-util/srcline.c:472:11: note: ‘output’ was declared here
-  472 |     char *output;
-      |           ^~~~~~
-cc1: all warnings being treated as errors
-make[4]: *** [/work/linux/tools/build/Makefile.build:97: util/srcline.o] Error 1
+On Mon, Jun 12, 2023 at 04:56:06PM -0700, Brian Norris wrote:
+> Thanks for the CC; my colleague tried out your patches (ported to 5.15
+> with some minor difficulty), and aside from some crashes (already noted
+> by others, although we didn't pull the proposed v2 fixes), he didn't
 
+Yeah, there were a few subtle bugs that v2 fixes.
 
-> +				size_t output_len;
-> +
-> +				io__getline(&io, &output, &output_len);
-> +				pr_warning("%s %s: addr2line configuration failed\n",
-> +					   __func__, dso_name);
-> +				pr_warning("\t%c%s\n", ch, output);
-> +			}
-> +			return BROKEN;
->  		}
-> -		do {
-> +		while (lines) {
->  			ch = io__get_char(&io);
-> -		} while (ch > 0 && ch != '\n');
-> -		if (style == GNU_BINUTILS) {
-> -			do {
-> -				ch = io__get_char(&io);
-> -			} while (ch > 0 && ch != '\n');
-> +			if (ch <= 0)
-> +				break;
-> +			if (ch == '\n')
-> +				lines--;
->  		}
->  		/* Ignore SIGPIPE in the event addr2line exits. */
->  		signal(SIGPIPE, SIG_IGN);
-> @@ -591,12 +602,9 @@ static int addr2line(const char *dso_name, u64 addr,
->  			pr_warning("%s %s: addr2line_subprocess_init failed\n", __func__, dso_name);
->  		goto out;
->  	}
-> -	a2l_style = addr2line_configure(a2l);
-> -	if (a2l_style == BROKEN) {
-> -		if (!symbol_conf.disable_add2line_warn)
-> -			pr_warning("%s: addr2line configuration failed\n", __func__);
-> +	a2l_style = addr2line_configure(a2l, dso_name);
-> +	if (a2l_style == BROKEN)
->  		goto out;
-> -	}
->  
->  	/*
->  	 * Send our request and then *deliberately* send something that can't be interpreted as
-> -- 
-> 2.41.0.162.gfafddb0af9-goog
+> notice a significant change in performance on our particular test system
+> and WiFi-throughput workload. I don't think we expected a lot though,
+> per the discussion at:
 > 
+> https://lore.kernel.org/all/ZFvpJb9Dh0FCkLQA@google.com/
+
+That's disappointing. I was actually expecting that the default behavior
+would restrain migrations across L3 boundaries strong enough to make a
+meaningful difference. Can you enable WQ_SYSFS and test the following
+configs?
+
+ 1. affinity_scope = cache, affinity_strict = 1
+
+ 2. affinity_scope = cpu, affinity_strict = 0
+
+ 3. affinity_scope = cpu, affinity_strict = 1
+
+#3 basically turns it into a percpu workqueue, so it should perform more or
+less the same as a percpu workqueue without affecting everyone else.
+
+Any chance you can post the toplogy details on the affected setup? How are
+the caches and cores laid out?
+
+Thanks.
 
 -- 
-Cheers,
-Changbin Du
+tejun
