@@ -2,238 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0F4A72E3FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86CD572E409
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242341AbjFMNYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 09:24:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37412 "EHLO
+        id S240454AbjFMN0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 09:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238753AbjFMNYl (ORCPT
+        with ESMTP id S242442AbjFMN0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 09:24:41 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000C31AA;
-        Tue, 13 Jun 2023 06:24:39 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f8d2bfec3bso4409405e9.2;
-        Tue, 13 Jun 2023 06:24:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686662678; x=1689254678;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7XW9rh4jUldX1UD/nk0BgegxHJcL2wRG/tuF1MFv9Nc=;
-        b=qmt3yPAItBp5Leswgr+iV8olSEMC29DPV49p+1DpTPn4HI+QdqTomAGa7LTX97VRfD
-         U79hAQNmJAQipoFY3i2ZNhAk9J1LyPNcDlV1Q4rvzFMFrYIUy/p3W7OImFrgKE1FKS3b
-         lQFbZwYxlRGSytAewkTIMHYqV5aIx7tJyXyI+uuXgI0d+zP36/yI+luh4bSu0bnnRSBE
-         c4J6Kd3aBrRs4/wsuRkvnpDBwUIprjS7wAn3NrflPgyIAWWXw0lEbbg5v+ilL28P2Com
-         jFzzy/thS7b0qfsn6NqnmIWjltvuecvfCowa8Ul6AC1kDTKG+6Beg9mgST0HjHYMiDTJ
-         1VVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686662678; x=1689254678;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7XW9rh4jUldX1UD/nk0BgegxHJcL2wRG/tuF1MFv9Nc=;
-        b=QQ20F7zMakV3/FUch9BYqIRaZu+dYWleEvTKv7o1EGaKJl8wBvyYFUn4vmWOQrH1Sz
-         iTyGuv8acZSjdcuvdqXVgIPnUYJuqFhNSBetn3XVrCB7dRKoussYd5XETxgjDUhxZw62
-         lp8448+xfvlNMCB3Y2MsQgYM6yANY0mgZbXR/0JD0pYzmHi+kjGtwcbPoB839hozOznS
-         7No60pvqrseqMjWgpEiYlWTzZ0rQFjhoR9P01iu2TDKkuF7rw20kIY3gs3DgTkLYB0Zx
-         T2vevGk/L84kwOfR/3tt20Nt6V7IQ3/TmGfXFNKiHG9I2Rit04ZacTCWeh1XfFjxsp1M
-         eIOw==
-X-Gm-Message-State: AC+VfDw9PN78H9NWWTweBC4aRJE77WmeXweMbXoN+89xCb1dGRAD1biq
-        iH/aJk4TB9zsfe+fYdMLZAQ=
-X-Google-Smtp-Source: ACHHUZ4ZArX1XRPgz5kr7OpNljmKS21m1ctlMDTCGRb52v2HpifiBaaxnMNFu9qpPCrRm7/KNUx/4A==
-X-Received: by 2002:a1c:7906:0:b0:3f7:f2d0:b904 with SMTP id l6-20020a1c7906000000b003f7f2d0b904mr10595351wme.8.1686662678012;
-        Tue, 13 Jun 2023 06:24:38 -0700 (PDT)
-Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation (mob-5-90-65-61.net.vodafone.it. [5.90.65.61])
-        by smtp.gmail.com with ESMTPSA id t11-20020a7bc3cb000000b003f60eb72cf5sm14542378wmj.2.2023.06.13.06.24.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 06:24:37 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 15:24:33 +0200
-From:   Tommaso Merciai <tomm.merciai@gmail.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        jacopo.mondi@ideasonboard.com, martin.hecht@avnet.eu,
-        linuxfancy@googlegroups.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Gerald Loacker <gerald.loacker@wolfvision.net>,
-        Nicholas Roth <nicholas@rothemail.net>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH v2 2/2] media: i2c: Add support for alvium camera
-Message-ID: <ZIhuEcUGdK4spvoy@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
-References: <20230526173955.797226-1-tomm.merciai@gmail.com>
- <20230526173955.797226-3-tomm.merciai@gmail.com>
- <20230529074018.GD25984@pendragon.ideasonboard.com>
- <ZHcd09f5wOKjQdHX@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
- <20230531113331.GC27043@pendragon.ideasonboard.com>
- <ZHjPyxColttdARQm@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
- <20230602043126.GM22609@pendragon.ideasonboard.com>
- <ZIhaYk1v69Sp+Xqd@kekkonen.localdomain>
+        Tue, 13 Jun 2023 09:26:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3DC1AA
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 06:25:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686662723;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JboUraAKvypGcrddtsolOxusyUZhs5znGcYYiSkF8MQ=;
+        b=ijzYY7B/gZ1cOgTI6GvboHunvUvOW8Nl/rwedMGlyBmE0JJ4gdy2nqpCxzMrVH7vJO28fQ
+        Rs5UC6gX04H7A18j3lawVsfm59wGSF/aD8U5crtuiAwsORQfDfs7seAYyVTf10ycB1tats
+        ulJJEHacGyFdF+NgQFKCatXinAql0JU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-193-Md6wsI11P-OcTj7s-6zvRA-1; Tue, 13 Jun 2023 09:25:16 -0400
+X-MC-Unique: Md6wsI11P-OcTj7s-6zvRA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E14C61022F09;
+        Tue, 13 Jun 2023 13:25:03 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.39.193.76])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D233B2166B26;
+        Tue, 13 Jun 2023 13:24:57 +0000 (UTC)
+Date:   Tue, 13 Jun 2023 09:24:54 -0400
+From:   Phil Auld <pauld@redhat.com>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Luca Abeni <luca.abeni@santannapisa.it>,
+        Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Vineeth Pillai <vineeth@bitbyteword.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [RFC PATCH V3 1/6] sched: Unify runtime accounting across classes
+Message-ID: <20230613132454.GC536267@lorien.usersys.redhat.com>
+References: <cover.1686239016.git.bristot@kernel.org>
+ <51ad657375206dac0f2609224babafa1c1486d4b.1686239016.git.bristot@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZIhaYk1v69Sp+Xqd@kekkonen.localdomain>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <51ad657375206dac0f2609224babafa1c1486d4b.1686239016.git.bristot@kernel.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sakari, Laurent,
-
-
-On Tue, Jun 13, 2023 at 12:00:34PM +0000, Sakari Ailus wrote:
-> Hi Laurent, Tommaso,
+On Thu, Jun 08, 2023 at 05:58:13PM +0200 Daniel Bristot de Oliveira wrote:
+> From: Peter Zijlstra <peterz@infradead.org>
 > 
-> On Fri, Jun 02, 2023 at 07:31:26AM +0300, Laurent Pinchart wrote:
-> > > > > > > diff --git a/drivers/media/i2c/alvium.c b/drivers/media/i2c/alvium.c
-> > > > > > > new file mode 100644
-> > > > > > > index 000000000000..e77fb6bda64b
-> > > > > > > --- /dev/null
-> > > > > > > +++ b/drivers/media/i2c/alvium.c
-> > > > > > > @@ -0,0 +1,3547 @@
-> > 
-> > [snip]
-> > 
-> > > > > > > +static int alvium_probe(struct i2c_client *client)
-> > > > > > > +{
-> > > > > > > +	struct device *dev = &client->dev;
-> > > > > > > +	struct v4l2_subdev *sd;
-> > > > > > > +	struct alvium_dev *alvium;
-> > > > > > > +	int ret;
-> > > > > > > +
-> > > > > > > +	alvium = devm_kzalloc(dev, sizeof(*alvium), GFP_KERNEL);
-> > > > > > > +	if (!alvium)
-> > > > > > > +		return -ENOMEM;
-> > > > > > > +
-> > > > > > > +	alvium->i2c_client = client;
-> > > > > > > +	ret = alvium_get_dt_data(alvium);
-> > > > > > > +	if (ret)
-> > > > > > > +		return ret;
-> > > > > > > +
-> > > > > > > +	mutex_init(&alvium->lock);
-> > > > > > > +
-> > > > > > > +	sd = &alvium->sd;
-> > > > > > > +
-> > > > > > > +	/* init alvium sd */
-> > > > > > > +	v4l2_i2c_subdev_init(sd, client, &alvium_subdev_ops);
-> > > > > > > +
-> > > > > > > +	sd->flags |= V4L2_SUBDEV_FL_HAS_EVENTS | V4L2_SUBDEV_FL_HAS_DEVNODE;
-> > > > > > > +	alvium->pad.flags = MEDIA_PAD_FL_SOURCE;
-> > > > > > > +	sd->entity.function = MEDIA_ENT_F_CAM_SENSOR;
-> > > > > > > +	sd->entity.ops = &alvium_sd_media_ops;
-> > > > > > > +
-> > > > > > > +	ret = media_entity_pads_init(&sd->entity, 1, &alvium->pad);
-> > > > > > > +	if (ret)
-> > > > > > > +		return ret;
-> > > > > > > +
-> > > > > > > +	sd->dev = dev;
-> > > > > > > +
-> > > > > > > +	ret = alvium_power_on(alvium);
-> > > > > > 
-> > > > > > The driver should use runtime PM (with autosuspend), and power on/off in
-> > > > > > the .s_stream() handler.
-> > > > > 
-> > > > > Can we delay the pm implementation as a future patchset?
-> > > > > Alvium pm would be tricky (cause is the boot time of the camera)
-> > > > > and if is possible I want work on pm later.
-> > > > > Let me know. Thanks! :)
-> > > > 
-> > > > With autosuspend the camera can remain powered up between stream stop
-> > > > and stream start, if they happen quickly enough. An autosuspend delay of
-> > > > a few seconds is usually a good value. It should be fairly easy to
-> > > > implement runtime PM support, you just need to
-> > > > 
-> > > > - Call alvium_power_on() from the runtime PM resume handler and
-> > > >   alvium_power_off() from the runtime PM suspend handler.
-> > > > 
-> > > > - Call pm_runtime_resume_and_get() and stream on time, and
-> > > >   pm_runtime_mark_last_busy() and pm_runtime_put_autosuspend() at stream
-> > > >   stop time.
-> > > > 
-> > > > - Initialize runtime PM at probe time (and clean up at remove time).
-> > > >   There's a bit of boilerplate code needed to get that right, but it's
-> > > >   not difficult. You can copy it from the imx290 driver.
-> > > 
-> > > Back to you to clarify this point.
-> > > 
-> > > Plan as you suggest is handling pm of camera using external
-> > > regulator. Problem is that the boot time of the camera is around 5s.
-> > 
-> > 5s ? Ouch !!
-> > 
-> > This has two consequences:
-> > 
-> > - Just probing the camera would take 5s, which is insanely long.
-> > - There will be a 5s delay when starting video capture.
-> > 
-> > There's no 5s delay in the current code, so I assume things work fine
-> > because the power regulator is always on, and turned on 5s or more
-> > before the driver is loaded. That's pretty fragile.
-> > 
-> > That camera is clearly not a good fit for an embedded system that cares
-> > about power consumption and performance, but we still have to support
-> > it. The probe time issue isn't something we can fix, a 5s delay is
-> > required.
-> > 
-> > The stream start issue can be alleviated by keeping the camera on, or
-> > offering a way for userspace to turn it on ahead of stream start.
-> > Runtime PM autosuspend will help with the former, and I would push the
-> > autosuspend delay up as a result of the huge camera boot time. We don't
-> > have a good solution of the latter at the moment, it used to be that
-> > opening video nodes would power up the whole pipeline, but that has been
-> > dropped some time ago in V4L2. Another API extension for this kind of
+> All classes use sched_entity::exec_start to track runtime and have
+> copies of the exact same code around to compute runtime.
 > 
-> And that was never a good solution.
+> Collapse all that.
 > 
-> > use cases would be useful I think. Sakari, any opinion ?
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 
-:'(
+Reviewed-by: Phil Auld <pauld@redhat.com>
 
+> ---
+>  include/linux/sched.h    |  2 +-
+>  kernel/sched/deadline.c  | 15 +++--------
+>  kernel/sched/fair.c      | 57 ++++++++++++++++++++++++++++++----------
+>  kernel/sched/rt.c        | 15 +++--------
+>  kernel/sched/sched.h     | 12 ++-------
+>  kernel/sched/stop_task.c | 13 +--------
+>  6 files changed, 53 insertions(+), 61 deletions(-)
 > 
-> I'd approach this with autosuspend, but going forward we could research
-> adding an API for V4L2 sub-devices to access PM QoS. This way the device
-> could be powered down while the user would have a way to ensure resuming
-> the device wouldn't take excessively long.
-
-What's the plan? :)
-
-I test regulator/pm implementation in v5
-Take your time to check that.
-
-(I'm waiting for your feedback on some questions on
-first review of v5) :)
-
-If you have better ideas to handle this
-very long boot time please don't esitate to share
-with me. I can test on my side.
-
-In my opinion using regulator and skipping power up
-if regulator is already enabled as suggested by Laurent,
-is not a so bad idea :)
-
-Tests on the real hw are giving good results.
-
-Let me know. Many thanks!
-
-Regards,
-Tommaso
-
-> 
+> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> index 1292d38d66cc..26b1925a702a 100644
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -521,7 +521,7 @@ struct sched_statistics {
+>  	u64				block_max;
+>  	s64				sum_block_runtime;
+>  
+> -	u64				exec_max;
+> +	s64				exec_max;
+>  	u64				slice_max;
+>  
+>  	u64				nr_migrations_cold;
+> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+> index f827067ad03b..030e7c11607f 100644
+> --- a/kernel/sched/deadline.c
+> +++ b/kernel/sched/deadline.c
+> @@ -1301,9 +1301,8 @@ static void update_curr_dl(struct rq *rq)
+>  {
+>  	struct task_struct *curr = rq->curr;
+>  	struct sched_dl_entity *dl_se = &curr->dl;
+> -	u64 delta_exec, scaled_delta_exec;
+> +	s64 delta_exec, scaled_delta_exec;
+>  	int cpu = cpu_of(rq);
+> -	u64 now;
+>  
+>  	if (!dl_task(curr) || !on_dl_rq(dl_se))
+>  		return;
+> @@ -1316,21 +1315,13 @@ static void update_curr_dl(struct rq *rq)
+>  	 * natural solution, but the full ramifications of this
+>  	 * approach need further study.
+>  	 */
+> -	now = rq_clock_task(rq);
+> -	delta_exec = now - curr->se.exec_start;
+> -	if (unlikely((s64)delta_exec <= 0)) {
+> +	delta_exec = update_curr_common(rq);
+> +	if (unlikely(delta_exec <= 0)) {
+>  		if (unlikely(dl_se->dl_yielded))
+>  			goto throttle;
+>  		return;
+>  	}
+>  
+> -	schedstat_set(curr->stats.exec_max,
+> -		      max(curr->stats.exec_max, delta_exec));
+> -
+> -	trace_sched_stat_runtime(curr, delta_exec, 0);
+> -
+> -	update_current_exec_runtime(curr, now, delta_exec);
+> -
+>  	if (dl_entity_is_special(dl_se))
+>  		return;
+>  
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 6189d1a45635..fda67f05190d 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -891,23 +891,17 @@ static void update_tg_load_avg(struct cfs_rq *cfs_rq)
+>  }
+>  #endif /* CONFIG_SMP */
+>  
+> -/*
+> - * Update the current task's runtime statistics.
+> - */
+> -static void update_curr(struct cfs_rq *cfs_rq)
+> +static s64 update_curr_se(struct rq *rq, struct sched_entity *curr)
+>  {
+> -	struct sched_entity *curr = cfs_rq->curr;
+> -	u64 now = rq_clock_task(rq_of(cfs_rq));
+> -	u64 delta_exec;
+> -
+> -	if (unlikely(!curr))
+> -		return;
+> +	u64 now = rq_clock_task(rq);
+> +	s64 delta_exec;
+>  
+>  	delta_exec = now - curr->exec_start;
+> -	if (unlikely((s64)delta_exec <= 0))
+> -		return;
+> +	if (unlikely(delta_exec <= 0))
+> +		return delta_exec;
+>  
+>  	curr->exec_start = now;
+> +	curr->sum_exec_runtime += delta_exec;
+>  
+>  	if (schedstat_enabled()) {
+>  		struct sched_statistics *stats;
+> @@ -917,8 +911,43 @@ static void update_curr(struct cfs_rq *cfs_rq)
+>  				max(delta_exec, stats->exec_max));
+>  	}
+>  
+> -	curr->sum_exec_runtime += delta_exec;
+> -	schedstat_add(cfs_rq->exec_clock, delta_exec);
+> +	return delta_exec;
+> +}
+> +
+> +/*
+> + * Used by other classes to account runtime.
+> + */
+> +s64 update_curr_common(struct rq *rq)
+> +{
+> +	struct task_struct *curr = rq->curr;
+> +	s64 delta_exec;
+> +
+> +	delta_exec = update_curr_se(rq, &curr->se);
+> +	if (unlikely(delta_exec <= 0))
+> +		return delta_exec;
+> +
+> +	trace_sched_stat_runtime(curr, delta_exec, 0);
+> +
+> +	account_group_exec_runtime(curr, delta_exec);
+> +	cgroup_account_cputime(curr, delta_exec);
+> +
+> +	return delta_exec;
+> +}
+> +
+> +/*
+> + * Update the current task's runtime statistics.
+> + */
+> +static void update_curr(struct cfs_rq *cfs_rq)
+> +{
+> +	struct sched_entity *curr = cfs_rq->curr;
+> +	s64 delta_exec;
+> +
+> +	if (unlikely(!curr))
+> +		return;
+> +
+> +	delta_exec = update_curr_se(rq_of(cfs_rq), curr);
+> +	if (unlikely(delta_exec <= 0))
+> +		return;
+>  
+>  	curr->vruntime += calc_delta_fair(delta_exec, curr);
+>  	update_min_vruntime(cfs_rq);
+> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+> index 00e0e5074115..efec4f3fef83 100644
+> --- a/kernel/sched/rt.c
+> +++ b/kernel/sched/rt.c
+> @@ -1046,24 +1046,15 @@ static void update_curr_rt(struct rq *rq)
+>  {
+>  	struct task_struct *curr = rq->curr;
+>  	struct sched_rt_entity *rt_se = &curr->rt;
+> -	u64 delta_exec;
+> -	u64 now;
+> +	s64 delta_exec;
+>  
+>  	if (curr->sched_class != &rt_sched_class)
+>  		return;
+>  
+> -	now = rq_clock_task(rq);
+> -	delta_exec = now - curr->se.exec_start;
+> -	if (unlikely((s64)delta_exec <= 0))
+> +	delta_exec = update_curr_common(rq);
+> +	if (unlikely(delta_exec <= 0))
+>  		return;
+>  
+> -	schedstat_set(curr->stats.exec_max,
+> -		      max(curr->stats.exec_max, delta_exec));
+> -
+> -	trace_sched_stat_runtime(curr, delta_exec, 0);
+> -
+> -	update_current_exec_runtime(curr, now, delta_exec);
+> -
+>  	if (!rt_bandwidth_enabled())
+>  		return;
+>  
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index 556496c77dc2..da0cec2fc63a 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -2176,6 +2176,8 @@ struct affinity_context {
+>  	unsigned int flags;
+>  };
+>  
+> +extern s64 update_curr_common(struct rq *rq);
+> +
+>  struct sched_class {
+>  
+>  #ifdef CONFIG_UCLAMP_TASK
+> @@ -3207,16 +3209,6 @@ extern int sched_dynamic_mode(const char *str);
+>  extern void sched_dynamic_update(int mode);
+>  #endif
+>  
+> -static inline void update_current_exec_runtime(struct task_struct *curr,
+> -						u64 now, u64 delta_exec)
+> -{
+> -	curr->se.sum_exec_runtime += delta_exec;
+> -	account_group_exec_runtime(curr, delta_exec);
+> -
+> -	curr->se.exec_start = now;
+> -	cgroup_account_cputime(curr, delta_exec);
+> -}
+> -
+>  #ifdef CONFIG_SCHED_MM_CID
+>  
+>  #define SCHED_MM_CID_PERIOD_NS	(100ULL * 1000000)	/* 100ms */
+> diff --git a/kernel/sched/stop_task.c b/kernel/sched/stop_task.c
+> index 85590599b4d6..7595494ceb6d 100644
+> --- a/kernel/sched/stop_task.c
+> +++ b/kernel/sched/stop_task.c
+> @@ -70,18 +70,7 @@ static void yield_task_stop(struct rq *rq)
+>  
+>  static void put_prev_task_stop(struct rq *rq, struct task_struct *prev)
+>  {
+> -	struct task_struct *curr = rq->curr;
+> -	u64 now, delta_exec;
+> -
+> -	now = rq_clock_task(rq);
+> -	delta_exec = now - curr->se.exec_start;
+> -	if (unlikely((s64)delta_exec < 0))
+> -		delta_exec = 0;
+> -
+> -	schedstat_set(curr->stats.exec_max,
+> -		      max(curr->stats.exec_max, delta_exec));
+> -
+> -	update_current_exec_runtime(curr, now, delta_exec);
+> +	update_curr_common(rq);
+>  }
+>  
+>  /*
 > -- 
-> Kind regards,
+> 2.40.1
 > 
-> Sakari Ailus
+
+-- 
+
