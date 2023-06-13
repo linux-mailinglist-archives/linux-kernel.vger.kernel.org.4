@@ -2,42 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC7B72E117
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 13:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 660D472E11F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 13:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242234AbjFMLQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 07:16:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49746 "EHLO
+        id S239434AbjFMLSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 07:18:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242320AbjFMLPr (ORCPT
+        with ESMTP id S239986AbjFMLR5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 07:15:47 -0400
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BBD26A3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 04:13:38 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R481e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0Vl21u6Q_1686654766;
-Received: from 30.97.48.46(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Vl21u6Q_1686654766)
-          by smtp.aliyun-inc.com;
-          Tue, 13 Jun 2023 19:12:47 +0800
-Message-ID: <838c3066-43e9-2035-cf69-4957481cddda@linux.alibaba.com>
-Date:   Tue, 13 Jun 2023 19:13:06 +0800
+        Tue, 13 Jun 2023 07:17:57 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38792118;
+        Tue, 13 Jun 2023 04:16:04 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-30af159b433so5149913f8f.3;
+        Tue, 13 Jun 2023 04:16:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686654908; x=1689246908;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=R4kd+y1uwKfRP7e93ZE/WKZWkAA+D5Ut1RT3+7c7Onw=;
+        b=sef3YbXzr7MvxGXHaRQdMd+IM+wAPQBtg+CKkvRPn7PmFW+E/bx0clC72RYYbWcdMt
+         y171cIXU4EfkHrqXVqOMxVz8CRv6k5d06AngpR01J8izEa8Yf4+d0mBOYGuotmzUuBbP
+         XCv9X9gDUDRq2KI8NBVmd5W4C6B1pjq5GINjOmX3egn/E+7GMbpZNW4M2SD3QSMPNiu2
+         aR2vN95sLlugbPZg+V34pB5muiMCNpt1X/6696C22rnQ1myg8ZcnG5U7idVZqZxpLdrf
+         D7fWbcb8H/uchGj9tghtN7wwYYR+kc9ejChx7SZHNrc5BWc2y3Y0A+sBriVp+LlArHGX
+         tSiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686654908; x=1689246908;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=R4kd+y1uwKfRP7e93ZE/WKZWkAA+D5Ut1RT3+7c7Onw=;
+        b=XS1KJFE+MB7cmeJO1QEA//EsGoDAbLLAW2OGPvb97hLCzgErzK90UGVIEyLQrstKqL
+         VKzzGxTIAF2ptKJ9Rz6bqLRO2lxkr11w53Lza47ziNOfDpwT+3/dW0//uwDJf9kyt7as
+         rDm2dxeG7P3QIxN5Bc1YjAaOQDBP3CmEembr2SLxHM1sizJOGKPCcLfROToMOs1WeAjX
+         ipXjYuUBVjulTyfNHrYwH3G6r1wKNpKxBzzN6cH9HDX/Ze/u2Q5uJb+fBLPv94kgGfvB
+         jxt5QRuV9PZWYbdFlpFTFfqTF1W7n1DipQFMzdYlcHnuH8b8pHewv1bCDIJ8JLVqLhLW
+         WGNA==
+X-Gm-Message-State: AC+VfDzaQUwmqFkU6jz/N8O8X8ZLGm4izTqXQOys3M+hSqcFYOYZ+7fL
+        l6Cx6iis+o/40c/rRZ3o7ok=
+X-Google-Smtp-Source: ACHHUZ6ZNvQZlX7H3HzuRZ0k2J5gJdr2u9+UMZo3nIqlVJaBUQmWwBFxq9Dje1Cdfb+3MmMX8iF4IA==
+X-Received: by 2002:adf:e544:0:b0:30f:bcfd:c690 with SMTP id z4-20020adfe544000000b0030fbcfdc690mr5868435wrm.38.1686654907663;
+        Tue, 13 Jun 2023 04:15:07 -0700 (PDT)
+Received: from [192.168.0.107] ([77.126.161.239])
+        by smtp.gmail.com with ESMTPSA id m12-20020a7bca4c000000b003f4290720d0sm14009675wml.47.2023.06.13.04.15.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 04:15:07 -0700 (PDT)
+Message-ID: <5a9d4ffb-a569-3f60-6ac8-070ab5e5f5ad@gmail.com>
+Date:   Tue, 13 Jun 2023 14:15:03 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2] mm: compaction: skip memory hole rapidly when
- isolating migratable pages
-To:     David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org
-Cc:     mgorman@techsingularity.net, vbabka@suse.cz, ying.huang@intel.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <770f9f61472b24b6bc89adbd71a77d9cf62bb54f.1686646361.git.baolin.wang@linux.alibaba.com>
- <c9384e52-3f3b-cb1b-a607-955cd7066422@redhat.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <c9384e52-3f3b-cb1b-a607-955cd7066422@redhat.com>
+ Thunderbird/102.12.0
+Subject: Re: [PATCH net-next v10 08/16] tls: Inline do_tcp_sendpages()
+To:     David Howells <dhowells@redhat.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Boris Pismenny <borisp@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Gal Pressman <gal@nvidia.com>, ranro@nvidia.com,
+        samiram@nvidia.com, drort@nvidia.com,
+        Tariq Toukan <tariqt@nvidia.com>
+References: <4c49176f-147a-4283-f1b1-32aac7b4b996@gmail.com>
+ <20230522121125.2595254-1-dhowells@redhat.com>
+ <20230522121125.2595254-9-dhowells@redhat.com>
+ <2267272.1686150217@warthog.procyon.org.uk>
+Content-Language: en-US
+From:   Tariq Toukan <ttoukan.linux@gmail.com>
+In-Reply-To: <2267272.1686150217@warthog.procyon.org.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,120 +97,41 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 6/13/2023 5:56 PM, David Hildenbrand wrote:
-> On 13.06.23 10:55, Baolin Wang wrote:
->> On some machines, the normal zone can have a large memory hole like
->> below memory layout, and we can see the range from 0x100000000 to
->> 0x1800000000 is a hole. So when isolating some migratable pages, the
->> scanner can meet the hole and it will take more time to skip the large
->> hole. From my measurement, I can see the isolation scanner will take
->> 80us ~ 100us to skip the large hole [0x100000000 - 0x1800000000].
->>
->> So adding a new helper to fast search next online memory section
->> to skip the large hole can help to find next suitable pageblock
->> efficiently. With this patch, I can see the large hole scanning only
->> takes < 1us.
->>
->> [    0.000000] Zone ranges:
->> [    0.000000]   DMA      [mem 0x0000000040000000-0x00000000ffffffff]
->> [    0.000000]   DMA32    empty
->> [    0.000000]   Normal   [mem 0x0000000100000000-0x0000001fa7ffffff]
->> [    0.000000] Movable zone start for each node
->> [    0.000000] Early memory node ranges
->> [    0.000000]   node   0: [mem 0x0000000040000000-0x0000000fffffffff]
->> [    0.000000]   node   0: [mem 0x0000001800000000-0x0000001fa3c7ffff]
->> [    0.000000]   node   0: [mem 0x0000001fa3c80000-0x0000001fa3ffffff]
->> [    0.000000]   node   0: [mem 0x0000001fa4000000-0x0000001fa402ffff]
->> [    0.000000]   node   0: [mem 0x0000001fa4030000-0x0000001fa40effff]
->> [    0.000000]   node   0: [mem 0x0000001fa40f0000-0x0000001fa73cffff]
->> [    0.000000]   node   0: [mem 0x0000001fa73d0000-0x0000001fa745ffff]
->> [    0.000000]   node   0: [mem 0x0000001fa7460000-0x0000001fa746ffff]
->> [    0.000000]   node   0: [mem 0x0000001fa7470000-0x0000001fa758ffff]
->> [    0.000000]   node   0: [mem 0x0000001fa7590000-0x0000001fa7ffffff]
->>
->> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->> ---
->> Changes from v1:
->>   - Fix building errors if CONFIG_SPARSEMEM is not selected.
->>   - Use NR_MEM_SECTIONS instead of '-1' per Huang Ying.
->> ---
->>   include/linux/mmzone.h | 10 ++++++++++
->>   mm/compaction.c        | 30 +++++++++++++++++++++++++++++-
->>   2 files changed, 39 insertions(+), 1 deletion(-)
->>
->> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
->> index 5a7ada0413da..5ff1fa2efe28 100644
->> --- a/include/linux/mmzone.h
->> +++ b/include/linux/mmzone.h
->> @@ -2000,6 +2000,16 @@ static inline unsigned long 
->> next_present_section_nr(unsigned long section_nr)
->>       return -1;
->>   }
->> +static inline unsigned long next_online_section_nr(unsigned long 
->> section_nr)
->> +{
->> +    while (++section_nr <= __highest_present_section_nr) {
->> +        if (online_section_nr(section_nr))
->> +            return section_nr;
->> +    }
->> +
->> +    return NR_MEM_SECTIONS;
->> +}
->> +
->>   /*
->>    * These are _only_ used during initialisation, therefore they
->>    * can use __initdata ...  They could have names to indicate
->> diff --git a/mm/compaction.c b/mm/compaction.c
->> index 3398ef3a55fe..c31ff6123891 100644
->> --- a/mm/compaction.c
->> +++ b/mm/compaction.c
->> @@ -229,6 +229,28 @@ static void reset_cached_positions(struct zone 
->> *zone)
->>                   pageblock_start_pfn(zone_end_pfn(zone) - 1);
->>   }
->> +#ifdef CONFIG_SPARSEMEM
->> +static unsigned long skip_hole_pageblock(unsigned long start_pfn)
->> +{
->> +    unsigned long next_online_nr;
->> +    unsigned long start_nr = pfn_to_section_nr(start_pfn);
->> +
->> +    if (online_section_nr(start_nr))
->> +        return 0;
->> +
->> +    next_online_nr = next_online_section_nr(start_nr);
->> +    if (next_online_nr < NR_MEM_SECTIONS)
->> +        return section_nr_to_pfn(next_online_nr);
->> +
+On 07/06/2023 18:03, David Howells wrote:
+> Tariq Toukan <ttoukan.linux@gmail.com> wrote:
 > 
-> I would simply inline next_online_section_nr and simplify (and add a 
-> comment):
+>> My team spotted a new degradation in TLS TX device offload, bisected to this
+>> patch.
 > 
-> /*
->   * If the PFN falls into an offline section, return the start PFN of the
->   * next online section. If the PFN falls into an online section or if
->   * there is no next online section, return 0.
->   */
-> static unsigned long skip_hole_pageblock(unsigned long start_pfn)
-> {
->      unsigned long nr = pfn_to_section_nr(start_pfn);
+> I presume you're using some hardware (I'm guessing Mellanox?) that can
+> actually do TLS offload?  Unfortunately, I don't have any hardware that can do
+> this, so I can't test the tls_device stuff.
 > 
->      if (online_section_nr(nr))
->          return 0;
+>>  From a quick look at the patch, it's not clear to me what's going wrong.
+>> Please let us know of any helpful information that we can provide to help in
+>> the debug.
 > 
->      while (++nr <= __highest_present_section_nr) {
->          if (online_section_nr(nr))
->              return section_nr_to_pfn(nr);
->      }
->      return 0
-> }
+> Can you find out what source line this corresponds to?
 > 
-> Easier, no?
+> 	RIP: 0010:skb_splice_from_iter+0x102/0x300
+> 
+> Assuming you're building your own kernel, something like the following might
+> do the trick:
+> 
+> 	echo "RIP: 0010:skb_splice_from_iter+0x102/0x300" |
+> 	./scripts/decode_stacktrace.sh /my/built/vmlinux /my/build/tree
+> 
 
-Originally I want to add a common helper like next_present_section_nr(), 
-which can be used by other users. But yes, your suggestion is easier, 
-and I am fine with that.
+Hi,
 
-> And maybe just call that function "skip_offline_sections()" then? 
-> Because we're not operating on pageblocks.
+It's:
+RIP: 0010:skb_splice_from_iter (/usr/linux/net/core/skbuff.c:6957)
 
-OK. Thanks.
+which coresponds to this line:
+                         if (WARN_ON_ONCE(!sendpage_ok(page)))
+
+> if you run it in the kernel source tree you're using and substitute the
+> paths to vmlinux and the build tree for modules.
+> 
+> David
+> 
