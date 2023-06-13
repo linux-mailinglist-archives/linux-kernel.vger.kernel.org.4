@@ -2,261 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 142A072E30A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF7AE72E30D
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239336AbjFMMbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 08:31:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38622 "EHLO
+        id S240351AbjFMMca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 08:32:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237979AbjFMMbV (ORCPT
+        with ESMTP id S239539AbjFMMc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 08:31:21 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2044.outbound.protection.outlook.com [40.107.223.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A06F10EC;
-        Tue, 13 Jun 2023 05:31:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Xv+oQ0tT8oETNjrf86dEBbcKhKLIEDhUznZLgLYaIrMfDC2pW7BOXsiSb9wdFkAzodpocSVAxCp4IXTg3SGex3BCnogNQMO+K0zNvi6hGywvCEZXqmYt1xLibgk4vBmhezNxqCg9kKd0SAdwXvfazJR69hzB6PZyV1WKbY9YxS8qDb8FhA0QSJYSm6J5mw/ytxAVBn7HJcE0PXrsk7FsQlLqwQTB2vZrU3GowYyaW/KAvKlY3+LiJ3HKLrQX0VcnZFW/Fa2g0kh7IjXaxPrsLvU2FZQagbvb+COwU1CioHj5pVg9uNRn07hZZOOf5eAsp0jhcFFVoO7lrsnflFu0Kw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=m6+FEnYT9R3Kd3dIQY4VkZ4ax/9Y87C0gNCnVdq1mqI=;
- b=MDXv3ueN8tboIJqN4KtNxzaO4/AHL1NhC/kiTfQ3Dlv9eysxf0M0yp1b4r3woB9y3GidJjY5Bhw/+ve52SNDpj/b9APRD5qE9w3DlUtwk4C6dIcQItvDrguy8EJzhG2vnujGD+ltHTMHFfRrQ5hQ33LnJIOoHymNYUEOg7tBsvQVvJwn8Ww94Y2eLjOIQNooPabKbID4NOesHk1ZxrTH2TLvvN/i1zITCJryq8TqyBdn51QNnNbs3w+hETtQq8gtRfR+fjlvla9YBI1MF1H+rJLrq8BoX+bKHd8OiwHYRAkwxQljTc4W5zfHjoO7kmbGIcRRvNkFawrIr6hmK7VWEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=pengutronix.de smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=m6+FEnYT9R3Kd3dIQY4VkZ4ax/9Y87C0gNCnVdq1mqI=;
- b=asohAJ8KYpmOcNpYqSlJBkOi6pt4GCrF6qNLa0oXpYDrmh4p0vK4pWcEMWE/mTTlTqD3pa+ensDkGsw6eyzKJK2m45fafb1/hfcg/oJIPVGY8LqJrxxh227ALQgDpmdHUnQLZXrcvpkUADW9Hl29zNk22ZKKmdPQwCtCELiIaqY=
-Received: from MW4PR04CA0164.namprd04.prod.outlook.com (2603:10b6:303:85::19)
- by DS0PR12MB6629.namprd12.prod.outlook.com (2603:10b6:8:d3::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.39; Tue, 13 Jun
- 2023 12:31:13 +0000
-Received: from CO1NAM11FT041.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:85:cafe::ce) by MW4PR04CA0164.outlook.office365.com
- (2603:10b6:303:85::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.34 via Frontend
- Transport; Tue, 13 Jun 2023 12:31:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CO1NAM11FT041.mail.protection.outlook.com (10.13.174.217) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6500.23 via Frontend Transport; Tue, 13 Jun 2023 12:31:11 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 13 Jun
- 2023 07:31:08 -0500
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 13 Jun
- 2023 07:31:07 -0500
-Received: from xhdnavam40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.23 via Frontend
- Transport; Tue, 13 Jun 2023 07:31:04 -0500
-From:   Piyush Mehta <piyush.mehta@amd.com>
-To:     <p.zabel@pengutronix.de>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <michal.simek@amd.com>, <michal.simek@xilinx.com>,
-        <nava.manne@xilinx.com>
-CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <siva.durga.prasad.paladugu@amd.com>, <git@amd.com>,
-        Piyush Mehta <piyush.mehta@amd.com>
-Subject: [PATCH V3] dt-bindings: reset: convert the xlnx,zynqmp-reset.txt to yaml
-Date:   Tue, 13 Jun 2023 18:00:48 +0530
-Message-ID: <20230613123048.2935502-1-piyush.mehta@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 13 Jun 2023 08:32:28 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE0410F9;
+        Tue, 13 Jun 2023 05:32:24 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0Vl2I24-_1686659534;
+Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0Vl2I24-_1686659534)
+          by smtp.aliyun-inc.com;
+          Tue, 13 Jun 2023 20:32:18 +0800
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+To:     alexander.shishkin@linux.intel.com, peterz@infradead.org,
+        james.clark@arm.com, leo.yan@linaro.org
+Cc:     mingo@redhat.com, baolin.wang@linux.alibaba.com, acme@kernel.org,
+        mark.rutland@arm.com, jolsa@kernel.org, namhyung@kernel.org,
+        irogers@google.com, adrian.hunter@intel.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [Patch v2] perf/core: Bail out early if the request AUX area is out of bound
+Date:   Tue, 13 Jun 2023 20:32:11 +0800
+Message-Id: <20230613123211.58393-1-xueshuai@linux.alibaba.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT041:EE_|DS0PR12MB6629:EE_
-X-MS-Office365-Filtering-Correlation-Id: 00d07c36-a6ee-4267-8dc5-08db6c0a1295
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Jj2TOEiPiDz+YbdXKZPm7+/mhXKXciaegtrHSyg0L15fGr0DXpfTWrKSEh90NYdRDsldMN1gZ7goyu7KOBnrfFA309HJgk9WFaDY2koqt9Mh1HHZsIQskSgBi2Pin2e85KQdytH69H/wvDt+5adYAvaWSgoSj9751kTY48P1M/cC9P0GEvH/3+koAl1WgBsaTt8ibVrxPVrJaP5w5PWh49Kw0AOMRld5D1SC3US1AD3cHIbAFeJLJFAfqAYVCIfiCwsYcKGCuJoRd+kGL8BFwBqVUfIbHIgX/60uD1pLRTHdQeXi1iuZBM3K2Mm+l2fb7myQeCBjsQSWNsM/NbsDFtFZTHyVugZ1r/V21hs6n5jnx+A8X9Knl/13Axpd2qj4MppQDwTw+JBfyFPJwulfPOkyb1NgshTGbhlD6wPDfHQ7mWmCOYsnxwAJN5vr4ll4sj5pIMtpyF5xJ6JLgVIaFaKxcEwi6lFFk6hZK1eoQBWrxaZ3NJuETy9taw3bxlu7RmgS8ZomLlsyouQr8Dd0krJplY5Ny+NyJXblfPpUDylZeyPAm7Xzi6rawpcQxvLL/cxSkTeAoLYY9zzUB/2mIJwZ27qo9csNvf60Kpps5ebDmu7/3Fcws7vV5Nn5zy7VRC3LrBkMkew4wPQC+fqDQwhl3R1P1uDzKc1mGh51xGgRoCrcC4LkRZ+Om2jKdw9/1c1bScVlLMIgs9O8bkD7AuzdDBtVqAn2RVpck3KnqxkZ8Z9uap20ny1hEdyTt7lGGPRQoNdMm2HOO7FZV/WsSu39uXaf2lUbQle2Sc4XFoheQTWfsfVoZTO0mt0YKCkd
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(346002)(39860400002)(396003)(451199021)(36840700001)(46966006)(40470700004)(70206006)(70586007)(478600001)(54906003)(110136005)(8676002)(8936002)(36756003)(5660300002)(4326008)(6666004)(41300700001)(316002)(40460700003)(966005)(81166007)(356005)(82740400003)(426003)(336012)(47076005)(36860700001)(44832011)(86362001)(40480700001)(2616005)(82310400005)(186003)(26005)(1076003)(2906002)(83380400001)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2023 12:31:11.8758
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 00d07c36-a6ee-4267-8dc5-08db6c0a1295
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT041.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6629
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the binding to DT schema format. It also updates the
-reset-controller description.
+When perf-record with a large AUX area, e.g 4GB, it fails with:
 
-Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+    #perf record -C 0 -m ,4G -e arm_spe_0// -- sleep 1
+    failed to mmap with 12 (Cannot allocate memory)
+
+and it reveals a WARNING with __alloc_pages():
+
+[   66.595604] ------------[ cut here ]------------
+[   66.600206] WARNING: CPU: 44 PID: 17573 at mm/page_alloc.c:5568 __alloc_pages+0x1ec/0x248
+[   66.608375] Modules linked in: ip6table_filter(E) ip6_tables(E) iptable_filter(E) ebtable_nat(E) ebtables(E) aes_ce_blk(E) vfat(E) fat(E) aes_ce_cipher(E) crct10dif_ce(E) ghash_ce(E) sm4_ce_cipher(E) sm4(E) sha2_ce(E) sha256_arm64(E) sha1_ce(E) acpi_ipmi(E) sbsa_gwdt(E) sg(E) ipmi_si(E) ipmi_devintf(E) ipmi_msghandler(E) ip_tables(E) sd_mod(E) ast(E) drm_kms_helper(E) syscopyarea(E) sysfillrect(E) nvme(E) sysimgblt(E) i2c_algo_bit(E) nvme_core(E) drm_shmem_helper(E) ahci(E) t10_pi(E) libahci(E) drm(E) crc64_rocksoft(E) i40e(E) crc64(E) libata(E) i2c_core(E)
+[   66.657719] CPU: 44 PID: 17573 Comm: perf Kdump: loaded Tainted: G            E      6.3.0-rc4+ #58
+[   66.666749] Hardware name: Default Default/Default, BIOS 1.2.M1.AL.P.139.00 03/22/2023
+[   66.674650] pstate: 23400009 (nzCv daif +PAN -UAO +TCO +DIT -SSBS BTYPE=--)
+[   66.681597] pc : __alloc_pages+0x1ec/0x248
+[   66.685680] lr : __kmalloc_large_node+0xc0/0x1f8
+[   66.690285] sp : ffff800020523980
+[   66.693585] pmr_save: 000000e0
+[   66.696624] x29: ffff800020523980 x28: ffff000832975800 x27: 0000000000000000
+[   66.703746] x26: 0000000000100000 x25: 0000000000100000 x24: ffff8000083615d0
+[   66.710866] x23: 0000000000040dc0 x22: ffff000823d6d140 x21: 000000000000000b
+[   66.717987] x20: 000000000000000b x19: 0000000000000000 x18: 0000000000000030
+[   66.725108] x17: 0000000000000000 x16: ffff800008f05be8 x15: ffff000823d6d6d0
+[   66.732229] x14: 0000000000000000 x13: 343373656761705f x12: 726e202c30206574
+[   66.739350] x11: 00000000ffff7fff x10: 00000000ffff7fff x9 : ffff8000083af570
+[   66.746471] x8 : 00000000000bffe8 x7 : c0000000ffff7fff x6 : 000000000005fff4
+[   66.753592] x5 : 0000000000000000 x4 : ffff000823d6d8d8 x3 : 0000000000000000
+[   66.760713] x2 : 0000000000000000 x1 : 0000000000000001 x0 : 0000000000040dc0
+[   66.767834] Call trace:
+[   66.770267]  __alloc_pages+0x1ec/0x248
+[   66.774003]  __kmalloc_large_node+0xc0/0x1f8
+[   66.778259]  __kmalloc_node+0x134/0x1e8
+[   66.782081]  rb_alloc_aux+0xe0/0x298
+[   66.785643]  perf_mmap+0x440/0x660
+[   66.789031]  mmap_region+0x308/0x8a8
+[   66.792593]  do_mmap+0x3c0/0x528
+[   66.795807]  vm_mmap_pgoff+0xf4/0x1b8
+[   66.799456]  ksys_mmap_pgoff+0x18c/0x218
+[   66.803365]  __arm64_sys_mmap+0x38/0x58
+[   66.807187]  invoke_syscall+0x50/0x128
+[   66.810922]  el0_svc_common.constprop.0+0x58/0x188
+[   66.815698]  do_el0_svc+0x34/0x50
+[   66.818999]  el0_svc+0x34/0x108
+[   66.822127]  el0t_64_sync_handler+0xb8/0xc0
+[   66.826296]  el0t_64_sync+0x1a4/0x1a8
+[   66.829946] ---[ end trace 0000000000000000 ]---
+
+'rb->aux_pages' allocated by kcalloc() is a pointer array which is used to
+maintains AUX trace pages. The allocated page for this array is physically
+contiguous (and virtually contiguous) with an order of 0..MAX_ORDER. If the
+size of pointer array crosses the limitation set by MAX_ORDER, it reveals a
+WARNING.
+
+So bail out early with -EINVAL if the request AUX area is out of bound,
+e.g.:
+
+    #perf record -C 0 -m ,4G -e arm_spe_0// -- sleep 1
+    failed to mmap with 22 (Invalid argument)
+
+Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
 ---
-Changes in V2:
-- Addressed the Krzysztof review comment:
- - Update DT binding to fix the dt_binding_check warning.
- - Removed 2/2 - xlnx,zynqmp-firmware.yaml binding patch: Will send after
-   xlnx,zynqmp-reset.yaml binding merge.
-
-Link: https://lore.kernel.org/lkml/168612336438.2153757.6000360498539992409.robh@kernel.org/T/#m4abfe6287177d5fd09f781d298dd19d56aae5e27
-
-Changes in V3:
-- Addressed the Krzysztof review comment:
- - Removed 2/2 - xlnx,zynqmp-firmware.yaml binding patch: Will send after
-   xlnx,zynqmp-reset.yaml binding merge.
- - Update title: Removed "binding".
- - Update Example:
-  - Removed header file.
-  - Dropped three levels of indentations: firmware and zynqmp_firmware.
-  - Removed the sata example.
-
-Link: https://lore.kernel.org/all/22e3c25e-487b-c02f-46f3-6d2ab2be8813@linaro.org/
+changes since v1:
+- drop out patch2 because it has been fixed on upstream (Thanks James for reminding)
+- move sanity check into rb_alloc_aux (per Leo)
+- add overflow check (per James)
 ---
- .../bindings/reset/xlnx,zynqmp-reset.txt      | 55 -------------------
- .../bindings/reset/xlnx,zynqmp-reset.yaml     | 52 ++++++++++++++++++
- 2 files changed, 52 insertions(+), 55 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.txt
- create mode 100644 Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml
+ kernel/events/ring_buffer.c              | 13 +++++++++++++
+ tools/perf/Documentation/perf-record.txt |  3 ++-
+ 2 files changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.txt b/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.txt
-deleted file mode 100644
-index ed836868dbf1..000000000000
---- a/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.txt
-+++ /dev/null
-@@ -1,55 +0,0 @@
----------------------------------------------------------------------------
-- =  Zynq UltraScale+ MPSoC and Versal reset driver binding =
----------------------------------------------------------------------------
--The Zynq UltraScale+ MPSoC and Versal has several different resets.
--
--See Chapter 36 of the Zynq UltraScale+ MPSoC TRM (UG) for more information
--about zynqmp resets.
--
--Please also refer to reset.txt in this directory for common reset
--controller binding usage.
--
--Required Properties:
--- compatible:	"xlnx,zynqmp-reset" for Zynq UltraScale+ MPSoC platform
--		"xlnx,versal-reset" for Versal platform
--- #reset-cells:	Specifies the number of cells needed to encode reset
--		line, should be 1
--
---------
--Example
---------
--
--firmware {
--	zynqmp_firmware: zynqmp-firmware {
--		compatible = "xlnx,zynqmp-firmware";
--		method = "smc";
--
--		zynqmp_reset: reset-controller {
--			compatible = "xlnx,zynqmp-reset";
--			#reset-cells = <1>;
--		};
--	};
--};
--
--Specifying reset lines connected to IP modules
--==============================================
--
--Device nodes that need access to reset lines should
--specify them as a reset phandle in their corresponding node as
--specified in reset.txt.
--
--For list of all valid reset indices for Zynq UltraScale+ MPSoC see
--<dt-bindings/reset/xlnx-zynqmp-resets.h>
--For list of all valid reset indices for Versal see
--<dt-bindings/reset/xlnx-versal-resets.h>
--
--Example:
--
--serdes: zynqmp_phy@fd400000 {
--	...
--
--	resets = <&zynqmp_reset ZYNQMP_RESET_SATA>;
--	reset-names = "sata_rst";
--
--	...
--};
-diff --git a/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml b/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml
-new file mode 100644
-index 000000000000..0d50f6a54af3
---- /dev/null
-+++ b/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml
-@@ -0,0 +1,52 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/reset/xlnx,zynqmp-reset.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Zynq UltraScale+ MPSoC and Versal reset
-+
-+maintainers:
-+  - Piyush Mehta <piyush.mehta@amd.com>
-+
-+description: |
-+  The Zynq UltraScale+ MPSoC and Versal has several different resets.
-+
-+  The PS reset subsystem is responsible for handling the external reset
-+  input to the device and that all internal reset requirements are met
-+  for the system (as a whole) and for the functional units.
-+
-+  Please also refer to reset.txt in this directory for common reset
-+  controller binding usage. Device nodes that need access to reset
-+  lines should specify them as a reset phandle in their corresponding
-+  node as specified in reset.txt.
-+
-+  For list of all valid reset indices for Zynq UltraScale+ MPSoC
-+  <dt-bindings/reset/xlnx-zynqmp-resets.h>
-+
-+  For list of all valid reset indices for Versal
-+  <dt-bindings/reset/xlnx-versal-resets.h>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - xlnx,zynqmp-reset
-+      - xlnx,versal-reset
-+
-+  "#reset-cells":
-+    const: 1
-+
-+required:
-+  - compatible
-+  - "#reset-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    zynqmp_reset: reset-controller {
-+        compatible = "xlnx,zynqmp-reset";
-+        #reset-cells = <1>;
-+    };
-+
-+...
+diff --git a/kernel/events/ring_buffer.c b/kernel/events/ring_buffer.c
+index a0433f37b024..e514aaba9d42 100644
+--- a/kernel/events/ring_buffer.c
++++ b/kernel/events/ring_buffer.c
+@@ -673,6 +673,7 @@ int rb_alloc_aux(struct perf_buffer *rb, struct perf_event *event,
+ 	bool overwrite = !(flags & RING_BUFFER_WRITABLE);
+ 	int node = (event->cpu == -1) ? -1 : cpu_to_node(event->cpu);
+ 	int ret = -ENOMEM, max_order;
++	size_t bytes;
+ 
+ 	if (!has_aux(event))
+ 		return -EOPNOTSUPP;
+@@ -699,6 +700,18 @@ int rb_alloc_aux(struct perf_buffer *rb, struct perf_event *event,
+ 		watermark = 0;
+ 	}
+ 
++	/*
++	 * 'rb->aux_pages' allocated by kcalloc() is a pointer array which is
++	 * used to maintains AUX trace pages. The allocated page for this array
++	 * is physically contiguous (and virtually contiguous) with an order of
++	 * 0..MAX_ORDER. If the size of pointer array crosses the limitation set
++	 * by MAX_ORDER, it reveals a WARNING.
++	 *
++	 * So bail out early if the request AUX area is out of bound.
++	 */
++	if (check_mul_overflow(nr_pages, sizeof(void *), &bytes) ||
++	    get_order(bytes) > MAX_ORDER)
++		return -EINVAL;
+ 	rb->aux_pages = kcalloc_node(nr_pages, sizeof(void *), GFP_KERNEL,
+ 				     node);
+ 	if (!rb->aux_pages)
+diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
+index 680396c56bd1..5d8d3ad084ed 100644
+--- a/tools/perf/Documentation/perf-record.txt
++++ b/tools/perf/Documentation/perf-record.txt
+@@ -290,7 +290,8 @@ OPTIONS
+ 	specification with appended unit character - B/K/M/G. The
+ 	size is rounded up to have nearest pages power of two value.
+ 	Also, by adding a comma, the number of mmap pages for AUX
+-	area tracing can be specified.
++	area tracing can be specified. With MAX_ORDER set as 10 on
++	arm64 platform , the maximum AUX area is limited to 2GiB.
+ 
+ -g::
+ 	Enables call-graph (stack chain/backtrace) recording for both
 -- 
-2.25.1
+2.20.1.12.g72788fdb
 
