@@ -2,405 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA9D572EB32
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 20:45:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E79C372EB38
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 20:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237109AbjFMSpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 14:45:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
+        id S231455AbjFMSpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 14:45:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235186AbjFMSpB (ORCPT
+        with ESMTP id S235186AbjFMSpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 14:45:01 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED62A1BDA
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 11:44:58 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id e9e14a558f8ab-33fa4707d03so20665ab.1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 11:44:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686681898; x=1689273898;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GkCb0yFxfR4opINNJsGvfT//mpUEjiOj45xzWBFj8VM=;
-        b=Zby6oNorVmRoqwVF6+hjAJrFiNISC3tvVqx5OLJFMY3po6VG1xGebxomdPBOCbJ0gS
-         c+2j61h66X4fgfZqNNEb3v+l0wdeW2fIH8XTKl5mCJrAXFGNC7L+Ziq0ousiTRgEDQYI
-         nf53wPeH+XYEoE4YcnQ4s3rnhJHf+xMQBWSPDrMWFJwgUqYQmw8lHP8e2JoRp41b0qba
-         wTgcgznq6Skj4GVzJxC2OdvIeSpCL6mJJ67xB8EASSbKJt5hNhoziN/loKMDFcUjoko4
-         leuQjxmdQlXZsE8WF5DWFJEjWsYK00un35D6tLc34dgV1ogxS+SJF8PqM9d3nqMe/hHT
-         EhnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686681898; x=1689273898;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GkCb0yFxfR4opINNJsGvfT//mpUEjiOj45xzWBFj8VM=;
-        b=Vjb6H9ipO3EcvqnGidI5tplTqN/mZVA76F0i1sSrnUx4lXa42digh7Ed5kuwnBam+b
-         QHKbthi3t9qv/0ejVk8o1hqjls2AzTinhfjELBCzfnASFnHjY+6T+KCihIYZcrAIOXCX
-         btPSdM+Zlv/0Asi9X04jOtWHXIwXoQqcIur3g6zQrlJfWOJobAG8UXWiUWfiIkG8kGfJ
-         5rBDtyxeq13cJtjIUwMfcDGD5YFRKKnY3b7kMAxKbDumI8pfsN3CIJ9LTV67S9J0Tjnt
-         cZkKdJd7OYuIp33jmfvf8UK7be4cxKq7VM1vfDkgZcfVtAKiLS3ct1/4eX7iRdaQw6VJ
-         Kx3w==
-X-Gm-Message-State: AC+VfDzOi9WNMvhohz06LxphveFEtRLy1nD1sHwDKtIpGdWp150kM9eA
-        IXTG/sQt5VJbUfNI8zyAdjxDvA==
-X-Google-Smtp-Source: ACHHUZ4JbDitzJjJ2Lghi72Mu72vEuviVacnx0bwQzYEBNyM6dNJ+ETPjetmQMYyiVyhpZB/h0gF3w==
-X-Received: by 2002:a05:6e02:194c:b0:337:c28c:3d0f with SMTP id x12-20020a056e02194c00b00337c28c3d0fmr29219ilu.6.1686681898060;
-        Tue, 13 Jun 2023 11:44:58 -0700 (PDT)
-Received: from google.com ([2620:15c:183:200:cb62:3c3c:921b:d84])
-        by smtp.gmail.com with ESMTPSA id k11-20020a02cccb000000b004065707eb2bsm3610615jaq.42.2023.06.13.11.44.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 11:44:57 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 12:44:54 -0600
-From:   Yu Zhao <yuzhao@google.com>
-To:     Ryan Roberts <ryan.roberts@arm.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1 0/2] Report on physically contiguous memory in smaps
-Message-ID: <ZIi5JnOOffcsoVL0@google.com>
-References: <20230613160950.3554675-1-ryan.roberts@arm.com>
+        Tue, 13 Jun 2023 14:45:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8773C106;
+        Tue, 13 Jun 2023 11:45:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CEFE6399A;
+        Tue, 13 Jun 2023 18:45:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40008C433D9;
+        Tue, 13 Jun 2023 18:45:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686681903;
+        bh=quDK8Gy8ZIEfbXIMZtbRCTRyQ5wKmjUdjbmpX3LlFbY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vw8qnk7QFSrbWqOde5TQi30Kl7u6Q7E+9nxitIY8pSoGJXV237pSpUmTkva+Jpn83
+         ak1TvyWwIF9lKS73/VxS/2JoBNd4CV59YkjJhULr51vDUd+xU+qE9Z3eLYp+Kyv/1i
+         DS+6eZ9DbEj4KXshOoFkVTwV46Iv6lSLRo7YX8Fj8hEcB9mBE5rmDNx0Rc9L+eRYJH
+         pYAp7wKPdJQKcC2j5zxpTXtUOhjOq//P/VCX930H0OTnKgnO+MDQ0w/yIShqn2h2tZ
+         SiT41vQhT2yIF3z9OPRBfQDUQmAggLcfipQeRYIw5I2c4ZP9bNRyGfQOUtIBmfscBj
+         JtuO5OeHwsdZw==
+Date:   Tue, 13 Jun 2023 19:44:58 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        alexandre.belloni@bootlin.com, sre@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 3/4] dt-bindings: power: reset: atmel,sama5d2-shdwc:
+ convert to yaml
+Message-ID: <20230613-library-enigmatic-267396f84d78@spud>
+References: <20230524123528.439082-1-claudiu.beznea@microchip.com>
+ <20230524123528.439082-4-claudiu.beznea@microchip.com>
+ <20230524-blizzard-hunting-4da815e634e2@spud>
+ <20230607204351.GA3984668-robh@kernel.org>
+ <20230607-refute-acrobat-3b3f645da71b@spud>
+ <CAL_JsqLyLs3Vfsd8LRd5_dUbzjE9LgMNnWa+8uP88Ab+E1oLfw@mail.gmail.com>
+ <20230608-tiptop-unfold-66c4b8f4e620@spud>
+ <82f1d66a-b8cf-69bd-4783-e2c867c11828@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="V+uDGWC8cxX7bfEn"
 Content-Disposition: inline
-In-Reply-To: <20230613160950.3554675-1-ryan.roberts@arm.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <82f1d66a-b8cf-69bd-4783-e2c867c11828@microchip.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 05:09:48PM +0100, Ryan Roberts wrote:
-> Hi All,
-> 
-> I thought I would try my luck with this pair of patches...
 
-Ack on the idea.
+--V+uDGWC8cxX7bfEn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Actually I have a script to do just this, but it's based on pagemap (attaching the script at the end).
+On Fri, Jun 09, 2023 at 12:09:24PM +0200, Nicolas Ferre wrote:
+> On 08/06/2023 at 18:49, Conor Dooley wrote:
+> >=20
+> > On Thu, Jun 08, 2023 at 08:38:10AM -0600, Rob Herring wrote:
+> >=20
+> > > For reference, anything done by Arm, Linaro or NVIDIA employees is
+> > > okay to relicense to dual license.
+> > Ah cool, that's good to know, thanks.
+> > Perhaps I should try to get a similar edict issued for Microchip ones.
+> > @Nicolas, does that sound reasonable?
+>=20
+> Well, we can work it out internally, indeed. But is there a public statem=
+ent
+> about this somewhere?
 
-> This series adds new entries to /proc/pid/smaps[_rollup] to report on physically
-> contiguous runs of memory. The first patch reports on the sizes of the runs by
-> binning into power-of-2 blocks and reporting how much memory is in which bin.
-> The second patch reports on how much of the memory is contpte-mapped in the page
-> table (this is a hint that arm64 supports to tell the HW that a range of ptes
-> map physically contiguous memory).
-> 
-> With filesystems now supporting large folios in the page cache, this provides a
-> useful way to see what sizes are actually getting mapped. And with the prospect
-> of large folios for anonymous memory and contpte mapping for conformant large
-> folios on the horizon, this reporting will become useful to aid application
-> performance optimization.
-> 
-> Perhaps I should really be submitting these patches as part of my large anon
-> folios and contpte sets (which I plan to post soon), but given this touches
-> the user ABI, I thought it was sensible to post it early and separately to get
-> feedback.
-> 
-> It would specifically be good to get feedback on:
-> 
->   - The exact set of new fields depend on the system that its being run on. Does
->     this cause problem for compat? (specifically the bins are determined based
->     on PAGE_SIZE and PMD_SIZE).
->   - The ContPTEMapped field is effectively arm64-specific. What is the preferred
->     way to handle arch-specific values if not here?
-
-No strong opinions here.
-
-===
-
-$ cat memory-histogram/mem_hist.py
-"""Script that scans VMAs, outputting histograms regarding memory allocations.
-
-Example usage:
-  python3 mem_hist.py --omit-file-backed --omit-unfaulted-vmas
-
-For every process on the system, this script scans each VMA, counting the number
-of order n allocations for 0 <= n <= MAX_ORDER. An order n allocation is a
-region of memory aligned to a PAGESIZE * (2 ^ n) sized region consisting of 2 ^
-n pages in which every page is present (according to the data in
-/proc/<pid>/pagemap).  VMA information as in /proc/<pid>/maps is output for all
-scanned VMAs along with a histogram of allocation orders. For example, this
-histogram states that there are 12 order 0 allocations, 4 order 1 allocations, 5
-order 2 allocations, and so on:
-
-  [12, 4, 5, 9, 5, 10, 6, 2, 2, 4, 3, 4]
-
-In addition to per-VMA histograms, per-process histograms are printed.
-Per-process histograms are the sum of the histograms of all VMAs contained
-within it, allowing for an overview of the memory allocations patterns of the
-process as a whole.
-
-Processes, and VMAs under each process are printed sorted in reverse-lexographic
-order of historgrams. That is, VMAs containing more high order allocations will
-be printed after ones containing more low order allocations. The output can thus
-be easily visually scanned to find VMAs in which hugepage use shows the most
-potential benefit.
-
-To reduce output clutter, the options --omit-file-backed exists to omit VMAs
-that are file backed (which, outside of tmpfs, don't support transparent
-hugepages on Linux). Additionally, the option --omit-unfaulted-vmas exists to
-omit VMAs containing zero resident pages.
-"""
-import argparse
-import functools
-import re
-import struct
-import subprocess
-import sys
-
-ALL_PIDS_CMD = "ps --no-headers -e | awk '{ print $1 }'"
-
-# Maximum order the script creates histograms up to. This is by default 9
-# since the usual hugepage size on x86 is 2MB which is 2**9 4KB pages
-MAX_ORDER = 9
-
-PAGE_SIZE = 2**12
-BLANK_HIST = [0] * (MAX_ORDER + 1)
-
-class Vma:
-  """Represents a virtual memory area.
-
-  Attributes:
-    proc: Process object in which this VMA is contained
-    start_vaddr: Start virtual address of VMA
-    end_vaddr: End virtual address of VMA
-    perms: Permission string of VMA as in /proc/<pid>/maps (eg. rw-p)
-    mapped_file: Path to file backing this VMA from /proc/<pid>/maps, empty
-      string if not file backed. Note there are some cases in Linux where this
-      may be nonempty and the VMA not file backed (eg. memfds)
-    hist: This VMA's histogram as a list of integers
-  """
-
-  def __init__(self, proc, start_vaddr, end_vaddr, perms, mapped_file):
-    self.proc = proc
-    self.start_vaddr = start_vaddr
-    self.end_vaddr = end_vaddr
-    self.perms = perms
-    self.mapped_file = mapped_file
-
-  def is_file_backed(self):
-    """Returns true if this VMA is file backed, false otherwise."""
-    # The output printed for memfds (eg. /memfd:crosvm) also happens to be a
-    # valid file path on *nix, so special case them
-    return (bool(re.match("(?:/[^/]+)+", self.mapped_file)) and
-            not bool(re.match("^/memfd:", self.mapped_file)))
-
-  @staticmethod
-  def bitmask(hi, lo):
-    """Returns a bitmask with the bits from index hi to low+1 set."""
-    return ((1 << (hi - lo)) - 1) << lo
-
-  @property
-  @functools.lru_cache(maxsize=50000)
-  def hist(self):
-    """Returns this VMA's histogram as a list."""
-    hist = BLANK_HIST[:]
-
-    pagemap_file = safe_open_procfile(self.proc.pid, "pagemap", "rb")
-    if not pagemap_file:
-      err_print(
-          "Cannot open /proc/{0}/pagemap, not generating histogram".format(
-              self.proc.pid))
-      return hist
-
-    # Page index of start/end VMA virtual addresses
-    vma_start_page_i = self.start_vaddr // PAGE_SIZE
-    vma_end_page_i = self.end_vaddr // PAGE_SIZE
-
-    for order in range(0, MAX_ORDER + 1):
-      # If there are less than two previous order pages, there can be no more
-      # pages of a higher order so just break out to save time
-      if order > 0 and hist[order - 1] < 2:
-        break
-
-      # First and last pages aligned to 2**order bytes in this VMA
-      first_aligned_page = (vma_start_page_i
-                            & self.bitmask(64, order)) + 2**order
-      last_aligned_page = vma_end_page_i & self.bitmask(64, order)
-
-      # Iterate over all order-sized and order-aligned chunks in this VMA
-      for start_page_i in range(first_aligned_page, last_aligned_page,
-                                2**order):
-        if self._is_region_present(pagemap_file, start_page_i,
-                                   start_page_i + 2**order):
-          hist[order] += 1
-
-          # Subtract two lower order VMAs so that we don't double-count
-          # order n VMAs as two order n-1 VMAs as well
-          if order > 0:
-            hist[order - 1] -= 2
-
-    pagemap_file.close()
-    return hist
-
-  def _is_region_present(self, pagemap_file, start_page_i, end_page_i):
-    """Returns True if all pages in the given range are resident.
-
-    Args:
-      pagemap_file: Opened /proc/<pid>/pagemap file for this process
-      start_page_i: Start page index for range
-      end_page_i: End page index for range
-
-    Returns:
-      True if all pages from page index start_page_i to end_page_i are present
-      according to the pagemap file, False otherwise.
-    """
-    pagemap_file.seek(start_page_i * 8)
-    for _ in range(start_page_i, end_page_i):
-      # /proc/<pid>/pagemaps contains an 8 byte value for every page
-      page_info, = struct.unpack("Q", pagemap_file.read(8))
-      # Bit 63 is set if the page is present
-      if not page_info & (1 << 63):
-        return False
-    return True
-
-  def __str__(self):
-    return ("{start:016x}-{end:016x} {size:<8} {perms:<4} {hist:<50} "
-            "{mapped_file:<40}").format(
-                start=self.start_vaddr,
-                end=self.end_vaddr,
-                size="%dk" % ((self.end_vaddr - self.start_vaddr) // 1024),
-                perms=self.perms,
-                hist=str(self.hist),
-                mapped_file=str(self.mapped_file))
+You mean, is there a public statement about Arm/Linaro/Nvidia being okay
+with relicensing bindings as dual license?
 
 
-class Process:
-  """Represents a running process.
+--V+uDGWC8cxX7bfEn
+Content-Type: application/pgp-signature; name="signature.asc"
 
-  Attributes:
-    vmas: List of VMA objects representing this processes's VMAs
-    pid: Process PID
-    name: Name of process (read from /proc/<pid>/status
-  """
-  _MAPS_LINE_REGEX = ("([0-9a-f]+)-([0-9a-f]+) ([r-][w-][x-][ps-]) "
-                      "[0-9a-f]+ [0-9a-f]+:[0-9a-f]+ [0-9]+[ ]*(.*)")
+-----BEGIN PGP SIGNATURE-----
 
-  def __init__(self, pid):
-    self.vmas = []
-    self.pid = pid
-    self.name = None
-    self._read_name()
-    self._read_vma_info()
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIi5KgAKCRB4tDGHoIJi
+0sSEAP0Xu0Wae82AKpJQOqCyRJPQzoqqDRSY/SYQOjb+oj9ArAD+IUwPSdfjYl54
+Fy5wytGN094nNRWdBOP4khrNxvoW0wU=
+=9ZuW
+-----END PGP SIGNATURE-----
 
-  def _read_name(self):
-    """Reads this Process's name from /proc/<pid>/status."""
-    get_name_sp = subprocess.Popen(
-        "grep Name: /proc/%d/status | awk '{ print $2 }'" % self.pid,
-        shell=True,
-        stdout=subprocess.PIPE)
-    self.name = get_name_sp.communicate()[0].decode("ascii").strip()
-
-  def _read_vma_info(self):
-    """Populates this Process's VMA list."""
-    f = safe_open_procfile(self.pid, "maps", "r")
-    if not f:
-      err_print("Could not read maps for process {0}".format(self.pid))
-      return
-
-    for line in f:
-      match = re.match(Process._MAPS_LINE_REGEX, line)
-      start_vaddr = int(match.group(1), 16)
-      end_vaddr = int(match.group(2), 16)
-      perms = match.group(3)
-      mapped_file = match.group(4) if match.lastindex == 4 else None
-      self.vmas.append(Vma(self, start_vaddr, end_vaddr, perms, mapped_file))
-    f.close()
-
-  @property
-  @functools.lru_cache(maxsize=50000)
-  def hist(self):
-    """The process-level memory allocation histogram.
-
-    This is the sum of all VMA histograms for every VMA in this process.
-    For example, if a process had two VMAs with the following histograms:
-
-      [1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0]
-      [0, 1, 2, 3, 0, 0, 0, 0, 0, 0, 0]
-
-    This would return:
-      [1, 3, 5, 3, 0, 0, 0, 0, 0, 0, 0]
-    """
-    return [sum(x) for x in zip(*[vma.hist for vma in self.vmas])]
-
-  def __str__(self):
-    return "process {pid:<18} {name:<25} {hist:<50}".format(
-        pid=self.pid, name=str(self.name), hist=str(self.hist))
-
-
-def safe_open_procfile(pid, file_name, mode):
-  """Safely open the given file under /proc/<pid>.
-
-  This catches a variety of common errors bound to happen when using this
-  script (eg. permission denied, process already exited).
-
-  Args:
-    pid: Pid of process (used to construct /proc/<pid>/)
-    file_name: File directly under /proc/<pid>/ to open
-    mode: Mode to pass to open (eg. "w", "r")
-
-  Returns:
-    File object corresponding to file requested or None if there was an error
-  """
-  full_path = "/proc/{0}/{1}".format(pid, file_name)
-  try:
-    return open(full_path, mode)
-  except PermissionError:
-    err_print("Not accessing {0} (permission denied)".format(full_path))
-  except FileNotFoundError:
-    err_print(
-        "Not opening {0} (does not exist, process {1} likely exited)".format(
-            full_path, pid))
-
-
-def err_print(*args, **kwargs):
-  print(*args, file=sys.stderr, **kwargs)
-
-
-def print_hists(args):
-  """Prints all process and VMA histograms as/per module documentation."""
-  pid_list_sp = subprocess.Popen(
-      ALL_PIDS_CMD, shell=True, stdout=subprocess.PIPE)
-  pid_list = map(int, pid_list_sp.communicate()[0].splitlines())
-  procs = []
-
-  for pid in pid_list:
-    procs.append(Process(pid))
-
-  for proc in sorted(procs, key=lambda p: p.hist[::-1]):
-    # Don't print info on kernel threads or processes we couldn't collect info
-    # on due to insufficent permissions
-    if not proc.vmas:
-      continue
-    print(proc)
-    for vma in sorted(proc.vmas, key=lambda v: v.hist[::-1]):
-      if args.no_unfaulted_vmas and vma.hist == BLANK_HIST:
-        continue
-      elif args.omit_file_backed and vma.is_file_backed():
-        continue
-      print("    ", vma)
-
-
-if __name__ == "__main__":
-  parser = argparse.ArgumentParser(
-      description=("Create per-process and per-VMA "
-                   "histograms of contigous virtual "
-                   "memory allocations"))
-  parser.add_argument(
-      "--omit-unfaulted-vmas",
-      dest="no_unfaulted_vmas",
-      action="store_true",
-      help="Omit VMAs containing 0 present pages from output")
-  parser.add_argument(
-      "--omit-file-backed",
-      dest="omit_file_backed",
-      action="store_true",
-      help="Omit VMAs corresponding to mmaped files")
-  print_hists(parser.parse_args())
+--V+uDGWC8cxX7bfEn--
