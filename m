@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 767FF72EC95
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2AC72EC99
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240618AbjFMULS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 16:11:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53732 "EHLO
+        id S240799AbjFMUL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 16:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237764AbjFMULH (ORCPT
+        with ESMTP id S230035AbjFMULN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 16:11:07 -0400
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752B32128;
-        Tue, 13 Jun 2023 13:10:39 -0700 (PDT)
-Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-34096e3799bso531655ab.2;
-        Tue, 13 Jun 2023 13:10:39 -0700 (PDT)
+        Tue, 13 Jun 2023 16:11:13 -0400
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8EB1FC9;
+        Tue, 13 Jun 2023 13:10:49 -0700 (PDT)
+Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-77acb944bdfso346751339f.0;
+        Tue, 13 Jun 2023 13:10:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686687038; x=1689279038;
+        d=1e100.net; s=20221208; t=1686687049; x=1689279049;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=OrFKDv64C3D/mFI/tKzX33+FI46+VP2OrxXGEXnBBaY=;
-        b=WlOsIWXWUOIF14glcjb/a3qdWofPlx9FHjkbwKjujMOqCWmgMAUPxXY0Kk52eOpUE6
-         jUwgipykkAAq8Ve1sSh0zJLrQAcCfHATnzFXJe4y26vf8uIgCvqE0dThpkIgjsXh6Os6
-         mw6AvjwePbYu8X6fADL56EZKnjLJ/jR4IQ0Ldi1qQt41kFje9D9M2trQCyiTImUBUhK4
-         TPQFMN4qykpymMxjUr9aPxypF//a/EZ07ib5O1QnYBwsFq5E5itQ8IeZHauqzY+Xc5ba
-         8a8Q+n3SsePcAxGF2Y+DCOZEmGguucQA2A+sgNAcf3DHSJOgS7lQSL9sEQO8xx40y7CN
-         Tyjw==
-X-Gm-Message-State: AC+VfDxPwuTOIyusnej6STal2rduhcf+MOCPJCbDQm9htwkbtjjEd+7P
-        XThsPtUmTRUF3In7D67cH+PB+EExTA==
-X-Google-Smtp-Source: ACHHUZ4p4QXVC7+UoDw8SyyPdFsQCfC744w0znfg77T5EBiSJu0WhmplR1C5kCPCXOPO4NIaOWK7yQ==
-X-Received: by 2002:a6b:e614:0:b0:777:b364:bab9 with SMTP id g20-20020a6be614000000b00777b364bab9mr12043059ioh.6.1686687038727;
-        Tue, 13 Jun 2023 13:10:38 -0700 (PDT)
+        bh=m/0Ld9Rv7cpsr9VbIPD46nT8UE2Lan47fsXtsoJnXmY=;
+        b=HFiNiVpKKWUM/bWNozAIFsQaP9oFWg9u+0F3nAIXaswaMpe5ft+Ix+7D8xuJUy4s6C
+         BVnyZD6zkqZd2vMvGtpatHj8xwibXsAYQemhfql7Y+OZWjiQvDsjgkomoColl59xszag
+         +WkKT1OC4gjTCuknGz7l0OZW5RAgDEQ170RWuCfcW3BWhsxB21PGgjrtL1f25PgFm1/x
+         ByjCzU/VBk0hqv8grFC66gYG2MRIdbX36AOSrApkT2+cAwvbZloP0j7eXhoxkDcAgjay
+         6cYw+RwE5VHarK3BaoBp5DC3w+JhIQtO9GxO9D2LhHjPvo/ch3OKw0wQhnJuaV2xrUj5
+         XaUA==
+X-Gm-Message-State: AC+VfDyHzy76cfJKCOBhzMOanhT7b5zUr9UdmeTA+MxjD7xiGOkL2I4W
+        PgOE+RebMgFyc3CMJ+0a7g==
+X-Google-Smtp-Source: ACHHUZ5uW/zGOo0tQgIhPAfnV1Zc8GBjuvZGKJYam6fCcqz5xYi7Ghl5jBM6tpUZne+7Uvhv3mb8Fw==
+X-Received: by 2002:a5e:9509:0:b0:77a:1307:1e4e with SMTP id r9-20020a5e9509000000b0077a13071e4emr13227179ioj.18.1686687048997;
+        Tue, 13 Jun 2023 13:10:48 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id g1-20020a056638060100b0040b671bcf15sm3516700jar.30.2023.06.13.13.10.37
+        by smtp.gmail.com with ESMTPSA id w12-20020a02cf8c000000b0041653d00c1fsm3633263jar.72.2023.06.13.13.10.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 13:10:37 -0700 (PDT)
-Received: (nullmailer pid 2823717 invoked by uid 1000);
-        Tue, 13 Jun 2023 20:10:36 -0000
+        Tue, 13 Jun 2023 13:10:48 -0700 (PDT)
+Received: (nullmailer pid 2823983 invoked by uid 1000);
+        Tue, 13 Jun 2023 20:10:46 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Jianhua Lu <lujianhua000@gmail.com>, Lee Jones <lee@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: backlight: kinetic,ktz8866: Add missing type for "current-num-sinks"
-Date:   Tue, 13 Jun 2023 14:10:22 -0600
-Message-Id: <20230613201022.2823392-1-robh@kernel.org>
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chen Zhong <chen.zhong@mediatek.com>
+Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH] dt-bindings: input: mediatek,pmic-keys: Fix typo in "linux,keycodes" property name
+Date:   Tue, 13 Jun 2023 14:10:40 -0600
+Message-Id: <20230613201040.2823802-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -65,25 +68,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"current-num-sinks" is missing a type, add it.
+"linux-keycodes" is the wrong property name and is unused. It should be
+"linux,keycodes" instead.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- .../devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml      | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/devicetree/bindings/input/mediatek,pmic-keys.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml b/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
-index e1191453c2f0..11b6fc36183d 100644
---- a/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
-+++ b/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
-@@ -33,6 +33,7 @@ properties:
+diff --git a/Documentation/devicetree/bindings/input/mediatek,pmic-keys.yaml b/Documentation/devicetree/bindings/input/mediatek,pmic-keys.yaml
+index 037c3ae9f1c3..e34c9e78d38d 100644
+--- a/Documentation/devicetree/bindings/input/mediatek,pmic-keys.yaml
++++ b/Documentation/devicetree/bindings/input/mediatek,pmic-keys.yaml
+@@ -55,7 +55,7 @@ patternProperties:
  
-   current-num-sinks:
-     description: number of the LED current sinks' channels.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-     enum: [1, 2, 3, 4, 5, 6]
+       interrupt-names: true
  
-   kinetic,current-ramp-delay-ms:
+-      linux-keycodes:
++      linux,keycodes:
+         maxItems: 1
+ 
+       wakeup-source: true
 -- 
 2.39.2
 
