@@ -2,127 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 719EF72EAFD
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7CF72EAFC
 	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 20:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232690AbjFMS3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 14:29:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34382 "EHLO
+        id S239450AbjFMSaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 14:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbjFMS3k (ORCPT
+        with ESMTP id S233062AbjFMSaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 14:29:40 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C2710CC;
-        Tue, 13 Jun 2023 11:29:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=DXfkpTd4BgNrWMUgFq3EjpQXH5nUJQkyJKKnkCOa5Zk=; b=O19PVe2L/0aXNxgPLyhPb8w6Sp
-        nKuVjsn1qMFhWQsMddhnsavhxJox9cdxWE13H2FW74HQKEn+TFPm1hi2CPvQHIEw9uOsJrzyu5Y5k
-        ONqAWhYz/mbbqXtDYrWrivVe3x/1BZAERDePJZ9ZLyTAsVybcj0vb+4H3ZAL2iMHPaP085RNGaJBy
-        +OMPtcJKrZpMULnW1vHejvvo9/kRP3j0Ui2daorSwKMLccOabS9tbFd9DH8ARZCacQUVeYK8zvmZN
-        zi1DSc0tcof9oVe2GuBWu4SZtL35rRYwXyxYKKWz7ucdpdWxW7XR1Qiz2a0qj7kRRH+oA3QQuEN5r
-        SqhNpZGw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:43678)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q98lf-0000Z9-GS; Tue, 13 Jun 2023 19:29:23 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q98la-0006Fs-DQ; Tue, 13 Jun 2023 19:29:18 +0100
-Date:   Tue, 13 Jun 2023 19:29:18 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net v2 2/7] net: dsa: mt7530: fix trapping frames with
- multiple CPU ports on MT7530
-Message-ID: <ZIi1fixnNqj9Gfcg@shell.armlinux.org.uk>
-References: <20230611081547.26747-1-arinc.unal@arinc9.com>
- <20230611081547.26747-2-arinc.unal@arinc9.com>
- <20230613150815.67uoz3cvvwgmhdp2@skbuf>
- <a91e88a8-c528-0392-1237-fc8417931170@arinc9.com>
- <20230613171858.ybhtlwxqwp7gyrfs@skbuf>
- <20230613172402.grdpgago6in4jogq@skbuf>
- <ca78b2f9-bf98-af26-0267-60d2638f7f00@arinc9.com>
- <20230613173908.iuofbuvkanwyr7as@skbuf>
- <edcbe326-c456-06ef-373b-313e780209de@arinc9.com>
+        Tue, 13 Jun 2023 14:30:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF771709;
+        Tue, 13 Jun 2023 11:30:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C894163417;
+        Tue, 13 Jun 2023 18:30:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB035C433D9;
+        Tue, 13 Jun 2023 18:30:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686681018;
+        bh=9UpH02lnYMFhWYUhwvlChbIYfVJtuVYhldKfs9WH2JY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DC+laHQB4xKjdZpP6Vn7Ee0G2PYgW0Rs45JrTvXg4uR7KFNOjMaqmVVXh4QqlWm9o
+         zsGmqrvwyj7C9KfSidMr2Y/EYtL4wxXrmmxzv8rs5qq4UxHpJVc1yQIAW3ZCrnoa8J
+         hhLmLqF2NPfjUP2A7hW+UhbplStdkNCYFxTqvhaUXUFuBYz3x2UfeqpmjCCPDE8H5V
+         sgeknqlVX08oo4A1S/MyEzB+3DUxATkhlU4vKGrC0w+mRt+z85kPGFvCid7n/7pd/8
+         afEqjKccE5oBvB0Yv0ZS2/61w34LfI+idaZZCdywyVtM3vv6y/kv0yYqTfIMmQGkc0
+         X+5cbKTbGQjbA==
+From:   SeongJae Park <sj@kernel.org>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     SeongJae Park <sj@kernel.org>, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] MAINTAINERS: Add source tree entry for kunit
+Date:   Tue, 13 Jun 2023 18:30:15 +0000
+Message-Id: <20230613183015.88392-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <edcbe326-c456-06ef-373b-313e780209de@arinc9.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 08:58:33PM +0300, Arınç ÜNAL wrote:
-> On 13.06.2023 20:39, Vladimir Oltean wrote:
-> > On Tue, Jun 13, 2023 at 08:30:28PM +0300, Arınç ÜNAL wrote:
-> > > That fixes port 5 on certain variants of the MT7530 switch, as it was
-> > > already working on the other variants, which, in conclusion, fixes port 5 on
-> > > all MT7530 variants.
-> > 
-> > Ok. I didn't pay enough attention to the commit message.
-> > 
-> > > And no, trapping works. Having only CPU port 5 defined on the devicetree
-> > > will cause the CPU_PORT bits to be set to port 5. There's only a problem
-> > > when multiple CPU ports are defined.
-> > 
-> > Got it. Then this is really not a problem, and the commit message frames
-> > it incorrectly.
-> 
-> Actually this patch fixes the issue it describes. At the state of this
-> patch, when multiple CPU ports are defined, port 5 is the active CPU port,
-> CPU_PORT bits are set to port 6.
+Patches for kunit are managed in kunit and kunit-fixes branches of
+linux-kselftest tree before merged into the mainline.  However, the
+MAINTAINERS section for kunit is not having the entries for the
+branches.  Add the entries.
 
-Maybe it's just me being dumb, but I keep finding things difficult to
-understand, such as the above paragraph.
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
+Changes from v1
+(https://lore.kernel.org/all/20230610180549.82560-1-sj@kernel.org/)
+- Mention branches (David Gow)
 
-It sounds like you're saying that _before_ this patch, port 5 is the
-active CPU port, but the CPU_PORT *FIELD* NOT BITS are set such that
-port 6 is the active CPU port. Therefore, things are broken, and this
-patch fixes it.
+ MAINTAINERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Or are you saying that after this patch is applied, port 5 is the
-active CPU port, but the CPU_PORT *FIELD* is set to port 6. If that's
-true, then I've no idea what the hell is going on here because it
-seems to be senseless.
-
-I think at this point I just give up trying to understand what the
-hell these patches are trying to do - in my opinion, the commit
-messages are worded attrociously and incomprehensively.
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ce5f343c1443..eda8b6b464c6 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11327,6 +11327,8 @@ L:	linux-kselftest@vger.kernel.org
+ L:	kunit-dev@googlegroups.com
+ S:	Maintained
+ W:	https://google.github.io/kunit-docs/third_party/kernel/docs/
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git kunit
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git kunit-fixes
+ F:	Documentation/dev-tools/kunit/
+ F:	include/kunit/
+ F:	lib/kunit/
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+2.25.1
+
