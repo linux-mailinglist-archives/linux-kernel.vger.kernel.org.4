@@ -2,69 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E494F72E2F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD1F72E301
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:29:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240653AbjFMM25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 08:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36104 "EHLO
+        id S242482AbjFMM3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 08:29:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242438AbjFMM2m (ORCPT
+        with ESMTP id S242474AbjFMM3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 08:28:42 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E39B1BDB;
-        Tue, 13 Jun 2023 05:28:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1686659321; x=1718195321;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=M+YsxAsrMOdQXi3EjTzJQEXiDd2GLlwy4TAIkoE71E8=;
-  b=sIXKRKxS4RucNF1ZzaKlD+m8Nqc/G80K+rfIS2Jvqu+n8ZS7101RkS0X
-   D/bh93q99QYNQwtoSBOSnNc4hBF7aP55lay1GBXOne7kHH4b0Bsgn0/0x
-   ISiavBLjHlQfp/PstOcQyHfR0tanI5KwYz4HWGaqqv1EvqtU3NKxr9Dg6
-   UzZsA+k1Vz7LECBsSLsz+ud4JvaXSA4vBtaCiVxrSJs2z96hriMhQlZrH
-   +njJbViWmlcZOePPuRsGWo4iPrVC4NvY1lTVacrazbX1TGH8piSWOMq9w
-   pCJMX20jrnCgAhhRVJjoel1NL1vcOcl8RoVw+4MwauFXCWu5ny4aWUbBI
-   g==;
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="asc'?scan'208";a="156745543"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Jun 2023 05:28:40 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 13 Jun 2023 05:28:38 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Tue, 13 Jun 2023 05:28:36 -0700
-Date:   Tue, 13 Jun 2023 13:28:11 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Yingkun Meng <mengyingkun@loongson.cn>
-CC:     Conor Dooley <conor@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
-        <conor+dt@kernel.org>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <loongarch@lists.linux.dev>,
-        <loongson-kernel@lists.loongnix.cn>
-Subject: Re: [ PATCH v2 3/3] ASoC: dt-bindings: Add support for Loongson
- audio card
-Message-ID: <20230613-zoologist-panorama-a87858bba075@wendy>
-References: <20230612085614.3039498-1-mengyingkun@loongson.cn>
- <20230612-booted-french-186dd95e78a9@spud>
- <bda7c25f-65cf-d45f-3ac0-f2471e3aacf8@loongson.cn>
+        Tue, 13 Jun 2023 08:29:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291D7173E
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 05:28:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686659298;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5APAgmZrGjFJ9+U0RvJUaGvdr2gWc6sxi+r6310cnNs=;
+        b=NpemX1ocFWDM1Jmyz+nrK9ZpYU08wE6iscEdj7w6KetAsPrCRPOR33uj2YzQ+NGDI9xFxG
+        ofMbFgb7TFJdjLQXR1lYykQMCz2ht40lWsGpbzukhJ1tg5tLu5Plik83oCOioTshUpSdnP
+        ahg0K99Jrlx1aaB+llVMNNOx/TmtlU0=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-515-O614FytmNMmlZX5Pk76c_w-1; Tue, 13 Jun 2023 08:28:17 -0400
+X-MC-Unique: O614FytmNMmlZX5Pk76c_w-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-30fc9cfe82eso580173f8f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 05:28:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686659296; x=1689251296;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5APAgmZrGjFJ9+U0RvJUaGvdr2gWc6sxi+r6310cnNs=;
+        b=dEJ9s+qVflN8YRcZ8kjGvnVRahA01NK/l67pjK2PId8aUM/gyE0nmiN2z+z4MohVtG
+         Uqm+TbI55aH9w5GxBApdRE1qZEe/1SXDC1Jkf5bQsxRIN71tghC74KLmP3G2x2HBcSvw
+         QB9y3Z1jncnQtodl6U9JCJ2ygxZXJCePLIFsxruxkOtWI7iwi5UfX28vrxZ0PVdweHzj
+         gqFM0gNz4LRlCdkR8jCjwNgTCYmbn/6MCChygXpUpp3m++FKsOzgbUKSL70nU3hPk2xA
+         cF54SxcJwrZ47uEU203hvBA5XzRp7WMW6YnG1yAxFm69BBil3OmP6OMU36bUtnJBFqpG
+         8gpg==
+X-Gm-Message-State: AC+VfDwUeLXbspLoGlTZbxiNdKJUth0qzrp05G1zOyQ2Dm9Zkve4bmRo
+        Rr4uo+vLL/LqqWUkazI2ZUWO7i0mB1Rd4tzlfh/lF5IWIcNDtT/yy+r4e3+BkZgpRHNuT8GEhuK
+        /F7pJ6q3+RJX/r5wXyAywrUi1
+X-Received: by 2002:a05:6000:10c7:b0:30a:eae0:106c with SMTP id b7-20020a05600010c700b0030aeae0106cmr7102033wrx.10.1686659296206;
+        Tue, 13 Jun 2023 05:28:16 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ61EMABfB7hkEtd8rE3feiAmwo8GaJnsqM5qFYcE5rkOiMq3BqizYRb/VE1CFB4BKMLKA5RWQ==
+X-Received: by 2002:a05:6000:10c7:b0:30a:eae0:106c with SMTP id b7-20020a05600010c700b0030aeae0106cmr7101998wrx.10.1686659295754;
+        Tue, 13 Jun 2023 05:28:15 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c710:ff00:1a06:80f:733a:e8c6? (p200300cbc710ff001a06080f733ae8c6.dip0.t-ipconnect.de. [2003:cb:c710:ff00:1a06:80f:733a:e8c6])
+        by smtp.gmail.com with ESMTPSA id u2-20020a5d4342000000b0030e5c8d55f2sm15258101wrr.6.2023.06.13.05.28.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 05:28:15 -0700 (PDT)
+Message-ID: <65805965-c6a2-ce0c-fb11-5277e5976120@redhat.com>
+Date:   Tue, 13 Jun 2023 14:28:13 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="b/Hqn05Zp1cdyDvp"
-Content-Disposition: inline
-In-Reply-To: <bda7c25f-65cf-d45f-3ac0-f2471e3aacf8@loongson.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v9 03/42] mm: Make pte_mkwrite() take a VMA
+Content-Language: en-US
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        debug@rivosinc.com, szabolcs.nagy@arm.com,
+        torvalds@linux-foundation.org, broonie@kernel.org
+References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
+ <20230613001108.3040476-4-rick.p.edgecombe@intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230613001108.3040476-4-rick.p.edgecombe@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,90 +110,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---b/Hqn05Zp1cdyDvp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 13.06.23 02:10, Rick Edgecombe wrote:
+> The x86 Shadow stack feature includes a new type of memory called shadow
+> stack. This shadow stack memory has some unusual properties, which requires
+> some core mm changes to function properly.
+> 
+> One of these unusual properties is that shadow stack memory is writable,
+> but only in limited ways. These limits are applied via a specific PTE
+> bit combination. Nevertheless, the memory is writable, and core mm code
+> will need to apply the writable permissions in the typical paths that
+> call pte_mkwrite(). Future patches will make pte_mkwrite() take a VMA, so
+> that the x86 implementation of it can know whether to create regular
+> writable memory or shadow stack memory.
+> 
+> But there are a couple of challenges to this. Modifying the signatures of
+> each arch pte_mkwrite() implementation would be error prone because some
+> are generated with macros and would need to be re-implemented. Also, some
+> pte_mkwrite() callers operate on kernel memory without a VMA.
+> 
+> So this can be done in a three step process. First pte_mkwrite() can be
+> renamed to pte_mkwrite_novma() in each arch, with a generic pte_mkwrite()
+> added that just calls pte_mkwrite_novma(). Next callers without a VMA can
+> be moved to pte_mkwrite_novma(). And lastly, pte_mkwrite() and all callers
+> can be changed to take/pass a VMA.
+> 
+> In a previous patches, pte_mkwrite() was renamed pte_mkwrite_novma() and
+> callers that don't have a VMA were changed to use pte_mkwrite_novma(). So
+> now change pte_mkwrite() to take a VMA and change the remaining callers to
+> pass a VMA. Apply the same changes for pmd_mkwrite().
+> 
+> No functional change.
+> 
+> Suggested-by: David Hildenbrand <david@redhat.com>
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> ---
 
-On Tue, Jun 13, 2023 at 08:23:58PM +0800, Yingkun Meng wrote:
->=20
-> On 2023/6/13 01:24, Conor Dooley wrote:
-> > Hey!
-> >=20
-> > On Mon, Jun 12, 2023 at 04:56:14PM +0800, YingKun Meng wrote:
-> > > From: Yingkun Meng <mengyingkun@loongson.cn>
-> > >=20
-> > > The audio card uses loongson I2S controller present in
-> > > 7axxx/2kxxx chips to transfer audio data.
-> > >=20
-> > > On loongson platform, the chip has only one I2S controller.
-> > >=20
-> > > Signed-off-by: Yingkun Meng <mengyingkun@loongson.cn>
-> > I got 2 copies of this patch, but none of the rest of the series appears
-> > to be threaded with it.
-> >=20
-> > >   .../sound/loongson,ls-audio-card.yaml         | 70 ++++++++++++++++=
-+++
-> > >   1 file changed, 70 insertions(+)
-> > >   create mode 100644 Documentation/devicetree/bindings/sound/loongson=
-,ls-audio-card.yaml
-> > >=20
-> > > diff --git a/Documentation/devicetree/bindings/sound/loongson,ls-audi=
-o-card.yaml b/Documentation/devicetree/bindings/sound/loongson,ls-audio-car=
-d.yaml
-> > > new file mode 100644
-> > > index 000000000000..61e8babed402
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/sound/loongson,ls-audio-card.=
-yaml
-> > > @@ -0,0 +1,70 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/sound/loongson,ls-audio-card.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Loongson 7axxx/2kxxx ASoC audio sound card driver
-> > > +
-> > > +maintainers:
-> > > +  - Yingkun Meng <mengyingkun@loongson.cn>
-> > > +
-> > > +description:
-> > > +  The binding describes the sound card present in loongson
-> > > +  7axxx/2kxxx platform. The sound card is an ASoC component
-> > > +  which uses Loongson I2S controller to transfer the audio data.
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    const: loongson,ls-audio-card
-> > Reviewing sound stuff is beyond my pay grade, so forgive me if I am off
-> > the rails here, but this (and the "x"s in the description) look a bit
-> > odd. Recently, we've noticed quite a few loongson dt-bindings attempting
-> > to use a single compatible for many different chips.
-> > Usually you have individual compatibles for the various SoCs with this
-> > core, which can fall back to a generic one, rather than just adding a
-> > generic compatible for all devices.
-> > As far as I know, there's several SoCs fitting 2kxxx, and the format
-> > being used elsewhere is "loongson,ls2k1000" etc.
->=20
->=20
-> Currently, Loongson has 2K0500/2K1000LA/2K1500/2K2000 chips.
->=20
-> Here, its' possible to use a single compatible for different chips,
->=20
-> as the audio device is a logical device, not dependent on chip model.
+Acked-by: David Hildenbrand <david@redhat.com>
 
-What, may I ask, is a "logical device"?
+Hopefully we'll get this landed soon :)
 
---b/Hqn05Zp1cdyDvp
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+Cheers,
 
------BEGIN PGP SIGNATURE-----
+David / dhildenb
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIhg2wAKCRB4tDGHoIJi
-0u4VAQCigbmTSbs6qKpLCthlel+v9B2o217oImTKlmwzgWRYqQEArSFE2JivD5nX
-5x8XGvhmbqoQ+5dKs74EhWk1XyGz6Qs=
-=K/HX
------END PGP SIGNATURE-----
-
---b/Hqn05Zp1cdyDvp--
