@@ -2,63 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3E3E72ECD5
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3660772ECDC
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240825AbjFMUVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 16:21:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34682 "EHLO
+        id S240370AbjFMUZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 16:25:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbjFMUVn (ORCPT
+        with ESMTP id S240844AbjFMUZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 16:21:43 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604E298
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 13:21:42 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id d75a77b69052e-3f9a81da5d7so70171cf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 13:21:42 -0700 (PDT)
+        Tue, 13 Jun 2023 16:25:04 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA3B1996
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 13:25:03 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-977cc662f62so862575066b.3
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 13:25:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686687701; x=1689279701;
+        d=google.com; s=20221208; t=1686687901; x=1689279901;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+0Cy2vujaFKSDY95ZmH0ol5S2C2EMV/ACOqku8ieMcw=;
-        b=aqmVAmW/QwJ8tG2J7VEOnkJGL6QuO0tHCpFh6i20oWXnOI5bwChepbEsI4gaRivsoi
-         gKqzR1YJbo482DP0Aif9O7IJAAkuQup5tVzZaqxyNy3qljk66VIVcVKh4+ovANZkeyBe
-         dXoO2aivMvIqDg18wFe3gEdhVXTIDlt2iwbhyCNTlA1nWg7xw5MgD3fTZVbp6tTBq6bJ
-         pA1nEjShefn1Gk30S80p3YfEZEvTYe3fAWMvXqN8j9BP+9wDCOKiBfKZhfbThTeZvJQk
-         7thv67SFLWjA99JfjBMJUp2lRnDQRzXbH6I4RvXmbeAgi+Kl7VsDnTSu0DxpFvngOvF+
-         wrog==
+        bh=Tu74121bGTOyi/gScvgyRcJ4UHCFo8s9EjAjR7M4bno=;
+        b=ulZ0jrJSHTa44Qg7LztFaCU5OztMo1pzVdcwaQdm3K0MJ+V8u2aBjSkTyr9cquXrQA
+         GHi/c9unlglS2gH6aSu87kJPrEnsYJkUqT7K98t95dvhTb2hl8FnJlyKH59hFs/QomsE
+         B0IG2WTvaJQe+TMeAvtQzzZCYw9ZbLHP7XM+ayfnU//j7Plf0t2fyDdDz/YHSjg1fE1y
+         vfJ7xZTNRGH04qcTdDaxtvDjnf7xuB9RSqUHby5veNVYLqpQ7nGJy4ytb5MQtdmPP4O8
+         yNPNCgR/Ew0tge3k25Z+klUrBuGsQ4LGa/QDhPzFgee+jNvpGtHmhB70UEtFK1O60XHE
+         s3iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686687701; x=1689279701;
+        d=1e100.net; s=20221208; t=1686687901; x=1689279901;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+0Cy2vujaFKSDY95ZmH0ol5S2C2EMV/ACOqku8ieMcw=;
-        b=TOOqMM3Nvo/VXOHjjyDv4JK4qr9WYsAtmK229ufNOO9TwA9RXYIUJpscWkVCuc4Xo2
-         BZGGb0mbAnf17VGfRXW3K1N2/7alvgylXhb0T9mqPgea/DV1FEMIKo+LHHY9FsH5WAks
-         nGrOWnLxz/JbTG3E8U4ADCyN10XXceTEaH0azrvxdB+OkOXSEkVQhDhioBXjS0nWfx0u
-         R89yuDrhxEaPZz+jGkmq+KVnUR+QIWXMeNXB75Jymg4gzK4sHXRN45z8SQnogmVU2nLL
-         gghFi/VEYB63cReh2JT0pLk28HaQowddqodVDJBKH/FNHhsfWhT+epigybpnAw0VVJ3N
-         5ZVw==
-X-Gm-Message-State: AC+VfDwbjdjR6VasEIkB1i6knHldALFfabvDuQpUzQffLiacrkoqGz/D
-        /qC1wXgPuCt8z1tAINqiMnPCQXBJpoJcge1OUfTWPw==
-X-Google-Smtp-Source: ACHHUZ7FtTKF6BY6NqpaeF6aacL/pSEK+AEn81qDhoywfyv4zpPxc6f1V4uGmmUVIHopR5Cu7OTqKjfNRO7oiq2mvqw=
-X-Received: by 2002:a05:622a:11d1:b0:3e0:c2dd:fd29 with SMTP id
- n17-20020a05622a11d100b003e0c2ddfd29mr51724qtk.4.1686687701335; Tue, 13 Jun
- 2023 13:21:41 -0700 (PDT)
+        bh=Tu74121bGTOyi/gScvgyRcJ4UHCFo8s9EjAjR7M4bno=;
+        b=N4ArOwFwZoh1qYRYQIUfOTdh/QpA4qiXFAYdBxOdTWwclsSCUaid1GUMcHtqDvzRbm
+         fo5GRBKxNsrblmiS8ILeKb1y5h/L9iRG3vWBX2tspqKWgv1k+nz6QuT2da409r26EH6+
+         xx2gfZi3iAjkd/WGWcEhxK0SczLz6OCl2a+E60u1thH8HrITambh5q3v2nG1gc7Og1Sb
+         YFxAoPd4bpTfMNXa1cBHXbcDcjJqE7gglZUu3tOwmSOeagccrOlM6SY2etiX+vPF3jjn
+         QUGSLSBGiK3jDfYOESyXtrZoEGNQ3Mn0R94ikxwZOAVquhSJvbd+qTC8qZKBPpdP5A80
+         /XWg==
+X-Gm-Message-State: AC+VfDxGGNbiaY9n6bKC309+sOP9wyBt3k2x+3SSIREhf7gqtJhVfAGs
+        8XF4AFqL9ILEgl+WKn4MLLJhBBxEkmZLZAl54mFcrQ==
+X-Google-Smtp-Source: ACHHUZ4UQLCRFW8Ae1CeHiyl3YXv4gfhRdDudewN0V5us8ifj90n5vl30hC8MeMLRwFSyiBhziB9drX0AujNZLFOpc0=
+X-Received: by 2002:a17:907:2d8f:b0:959:5407:3e65 with SMTP id
+ gt15-20020a1709072d8f00b0095954073e65mr16064057ejc.55.1686687901264; Tue, 13
+ Jun 2023 13:25:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230607162700.3234712-1-kan.liang@linux.intel.com> <20230607162700.3234712-9-kan.liang@linux.intel.com>
-In-Reply-To: <20230607162700.3234712-9-kan.liang@linux.intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 13 Jun 2023 13:21:30 -0700
-Message-ID: <CAP-5=fV7b=xGuSED88mNJ1k86mTt3YH185+PsedqWPYg4EL0zQ@mail.gmail.com>
-Subject: Re: [PATCH 8/8] perf test: Add test case for the standard perf stat output
-To:     kan.liang@linux.intel.com
-Cc:     acme@kernel.org, mingo@redhat.com, peterz@infradead.org,
-        namhyung@kernel.org, jolsa@kernel.org, adrian.hunter@intel.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ak@linux.intel.com, eranian@google.com, ahmad.yasin@intel.com
+References: <ZFd5bpfYc3nPEVie@dhcp22.suse.cz> <66F9BB37-3BE1-4B0F-8DE1-97085AF4BED2@didiglobal.com>
+ <ZFkEqhAs7FELUO3a@dhcp22.suse.cz> <CAJD7tkaw_7vYACsyzAtY9L0ZVC0B=XJEWgG=Ad_dOtL_pBDDvQ@mail.gmail.com>
+ <ZIgodGWoC/R07eak@dhcp22.suse.cz> <CAJD7tkawYZAWKYgttgtPjscnZTARj+QaGZLGiMiSadwC3oCELQ@mail.gmail.com>
+ <ZIhb1EwvrdKXpEMb@dhcp22.suse.cz>
+In-Reply-To: <ZIhb1EwvrdKXpEMb@dhcp22.suse.cz>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Tue, 13 Jun 2023 13:24:24 -0700
+Message-ID: <CAJD7tka-w8-0G5hjr8MRAue0wct0UPh4-BrPEGkOa1eUycz5mQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] memcontrol: support cgroup level OOM protection
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     =?UTF-8?B?56iL5Z6y5rabIENoZW5na2FpdGFvIENoZW5n?= 
+        <chengkaitao@didiglobal.com>, "tj@kernel.org" <tj@kernel.org>,
+        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
+        "shakeelb@google.com" <shakeelb@google.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "muchun.song@linux.dev" <muchun.song@linux.dev>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
+        "chengzhihao1@huawei.com" <chengzhihao1@huawei.com>,
+        "pilgrimtao@gmail.com" <pilgrimtao@gmail.com>,
+        "haolee.swjtu@gmail.com" <haolee.swjtu@gmail.com>,
+        "yuzhao@google.com" <yuzhao@google.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "vasily.averin@linux.dev" <vasily.averin@linux.dev>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "surenb@google.com" <surenb@google.com>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "sujiaxun@uniontech.com" <sujiaxun@uniontech.com>,
+        "feng.tang@intel.com" <feng.tang@intel.com>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        David Rientjes <rientjes@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
@@ -72,302 +103,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 7, 2023 at 9:27=E2=80=AFAM <kan.liang@linux.intel.com> wrote:
+On Tue, Jun 13, 2023 at 5:06=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrot=
+e:
 >
-> From: Kan Liang <kan.liang@linux.intel.com>
+> On Tue 13-06-23 01:36:51, Yosry Ahmed wrote:
+> > +David Rientjes
+> >
+> > On Tue, Jun 13, 2023 at 1:27=E2=80=AFAM Michal Hocko <mhocko@suse.com> =
+wrote:
+> > >
+> > > On Sun 04-06-23 01:25:42, Yosry Ahmed wrote:
+> > > [...]
+> > > > There has been a parallel discussion in the cover letter thread of =
+v4
+> > > > [1]. To summarize, at Google, we have been using OOM scores to
+> > > > describe different job priorities in a more explicit way -- regardl=
+ess
+> > > > of memory usage. It is strictly priority-based OOM killing. Ties ar=
+e
+> > > > broken based on memory usage.
+> > > >
+> > > > We understand that something like memory.oom.protect has an advanta=
+ge
+> > > > in the sense that you can skip killing a process if you know that i=
+t
+> > > > won't free enough memory anyway, but for an environment where multi=
+ple
+> > > > jobs of different priorities are running, we find it crucial to be
+> > > > able to define strict ordering. Some jobs are simply more important
+> > > > than others, regardless of their memory usage.
+> > >
+> > > I do remember that discussion. I am not a great fan of simple priorit=
+y
+> > > based interfaces TBH. It sounds as an easy interface but it hits
+> > > complications as soon as you try to define a proper/sensible
+> > > hierarchical semantic. I can see how they might work on leaf memcgs w=
+ith
+> > > statically assigned priorities but that sounds like a very narrow
+> > > usecase IMHO.
+> >
+> > Do you mind elaborating the problem with the hierarchical semantics?
 >
-> Add a new test case to verify the standard perf stat output with
-> different options.
+> Well, let me be more specific. If you have a simple hierarchical numeric
+> enforcement (assume higher priority more likely to be chosen and the
+> effective priority to be max(self, max(parents)) then the semantic
+> itslef is straightforward.
 >
-> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-> ---
->  tools/perf/tests/shell/stat+std_output.sh | 259 ++++++++++++++++++++++
->  1 file changed, 259 insertions(+)
->  create mode 100755 tools/perf/tests/shell/stat+std_output.sh
+> I am not really sure about the practical manageability though. I have
+> hard time to imagine priority assignment on something like a shared
+> workload with a more complex hierarchy. For example:
+>             root
+>         /    |    \
+> cont_A    cont_B  cont_C
 >
-> diff --git a/tools/perf/tests/shell/stat+std_output.sh b/tools/perf/tests=
-/shell/stat+std_output.sh
-> new file mode 100755
-> index 000000000000..b9db0f245450
-> --- /dev/null
-> +++ b/tools/perf/tests/shell/stat+std_output.sh
-> @@ -0,0 +1,259 @@
-> +#!/bin/bash
-> +# perf stat STD output linter
-> +# SPDX-License-Identifier: GPL-2.0
-> +# Tests various perf stat STD output commands for
-> +# default event and metricgroup
-> +
-> +set -e
-> +
-> +skip_test=3D0
-> +
-> +stat_output=3D$(mktemp /tmp/__perf_test.stat_output.std.XXXXX)
-> +
-> +event_name=3D(cpu-clock task-clock context-switches cpu-migrations page-=
-faults cycles instructions branches branch-misses stalled-cycles-frontend s=
-talled-cycles-backend)
-> +event_metric=3D("CPUs utilized" "CPUs utilized" "/sec" "/sec" "/sec" "GH=
-z" "insn per cycle" "/sec" "of all branches" "frontend cycles idle" "backen=
-d cycles idle")
-> +
-> +metricgroup_name=3D(TopdownL1 TopdownL2)
-> +
-> +cleanup() {
-> +  rm -f "${stat_output}"
-> +
-> +  trap - EXIT TERM INT
-> +}
-> +
-> +trap_cleanup() {
-> +  cleanup
-> +  exit 1
-> +}
-> +trap trap_cleanup EXIT TERM INT
-> +
-> +function commachecker()
-> +{
-> +       local -i cnt=3D0
-> +       local prefix=3D1
-> +
-> +       case "$1"
-> +       in "--interval")        prefix=3D2
-> +       ;; "--per-thread")      prefix=3D2
-> +       ;; "--system-wide-no-aggr")     prefix=3D2
-> +       ;; "--per-core")        prefix=3D3
-> +       ;; "--per-socket")      prefix=3D3
-> +       ;; "--per-node")        prefix=3D3
-> +       ;; "--per-die")         prefix=3D3
-> +       ;; "--per-cache")       prefix=3D3
-> +       esac
-> +
-> +       while read line
-> +       do
-> +               # Ignore initial "started on" comment.
-> +               x=3D${line:0:1}
-> +               [ "$x" =3D "#" ] && continue
-> +               # Ignore initial blank line.
-> +               [ "$line" =3D "" ] && continue
-> +               # Ignore "Performance counter stats"
-> +               x=3D${line:0:25}
-> +               [ "$x" =3D "Performance counter stats" ] && continue
-> +               # Ignore "seconds time elapsed" and break
-> +               [[ "$line" =3D=3D *"time elapsed"* ]] && break
-> +
-> +               main_body=3D$(echo $line | cut -d' ' -f$prefix-)
-> +               x=3D${main_body%#*}
-> +               # Check default metricgroup
-> +               y=3D$(echo $x | tr -d ' ')
-> +               [ "$y" =3D "" ] && continue
-> +               for i in "${!metricgroup_name[@]}"; do
-> +                       [[ "$y" =3D=3D *"${metricgroup_name[$i]}"* ]] && =
-break
-> +               done
-> +               [[ "$y" =3D=3D *"${metricgroup_name[$i]}"* ]] && continue
-> +
-> +               # Check default event
-> +               for i in "${!event_name[@]}"; do
-> +                       [[ "$x" =3D=3D *"${event_name[$i]}"* ]] && break
-> +               done
-> +
-> +               [[ ! "$x" =3D=3D *"${event_name[$i]}"* ]] && {
-> +                       echo "Unknown event name in $line" 1>&2
-> +                       exit 1;
-> +               }
-> +
-> +               # Check event metric if it exists
-> +               [[ ! "$main_body" =3D=3D *"#"* ]] && continue
-> +               [[ ! "$main_body" =3D=3D *"${event_metric[$i]}"* ]] && {
-> +                       echo "wrong event metric. expected ${event_metric=
-[$i]} in $line" 1>&2
-> +                       exit 1;
-> +               }
-> +       done < "${stat_output}"
-> +       return 0
-> +}
-> +
-> +# Return true if perf_event_paranoid is > $1 and not running as root.
-> +function ParanoidAndNotRoot()
-> +{
-> +        [ $(id -u) !=3D 0 ] && [ $(cat /proc/sys/kernel/perf_event_paran=
-oid) -gt $1 ]
-> +}
-> +
-> +check_no_args()
-> +{
-> +       echo -n "Checking STD output: no args "
-> +       perf stat -o "${stat_output}" true
-> +        commachecker --no-args
-> +       echo "[Success]"
-> +}
-> +
-> +check_system_wide()
-> +{
-> +       echo -n "Checking STD output: system wide "
-> +       if ParanoidAndNotRoot 0
-> +       then
-> +               echo "[Skip] paranoid and not root"
-> +               return
-> +       fi
-> +       perf stat -a -o "${stat_output}" true
-> +        commachecker --system-wide
-> +       echo "[Success]"
-> +}
-> +
-> +check_system_wide_no_aggr()
-> +{
-> +       echo -n "Checking STD output: system wide no aggregation "
-> +       if ParanoidAndNotRoot 0
-> +       then
-> +               echo "[Skip] paranoid and not root"
-> +               return
-> +       fi
-> +       perf stat -A -a --no-merge -o "${stat_output}" true
-> +        commachecker --system-wide-no-aggr
-> +       echo "[Success]"
-> +}
-> +
-> +check_interval()
-> +{
-> +       echo -n "Checking STD output: interval "
-> +       perf stat -I 1000 -o "${stat_output}" true
-> +        commachecker --interval
-> +       echo "[Success]"
-> +}
-> +
-> +
-> +check_per_core()
-> +{
-> +       echo -n "Checking STD output: per core "
-> +       if ParanoidAndNotRoot 0
-> +       then
-> +               echo "[Skip] paranoid and not root"
-> +               return
-> +       fi
-> +       perf stat --per-core -a -o "${stat_output}" true
-> +        commachecker --per-core
-> +       echo "[Success]"
-> +}
-> +
-> +check_per_thread()
-> +{
-> +       echo -n "Checking STD output: per thread "
-> +       if ParanoidAndNotRoot 0
-> +       then
-> +               echo "[Skip] paranoid and not root"
-> +               return
-> +       fi
-> +       perf stat --per-thread -a -o "${stat_output}" true
-> +        commachecker --per-thread
-> +       echo "[Success]"
-> +}
-> +
-> +check_per_cache_instance()
-> +{
-> +       echo -n "Checking STD output: per cache instance "
-> +       if ParanoidAndNotRoot 0
-> +       then
-> +               echo "[Skip] paranoid and not root"
-> +               return
-> +       fi
-> +       perf stat  --per-cache -a true 2>&1 | commachecker --per-cache
-> +       echo "[Success]"
-> +}
-> +
-> +check_per_die()
-> +{
-> +       echo -n "Checking STD output: per die "
-> +       if ParanoidAndNotRoot 0
-> +       then
-> +               echo "[Skip] paranoid and not root"
-> +               return
-> +       fi
-> +       perf stat --per-die -a -o "${stat_output}" true
-> +        commachecker --per-die
-> +       echo "[Success]"
-> +}
-> +
-> +check_per_node()
-> +{
-> +       echo -n "Checking STD output: per node "
-> +       if ParanoidAndNotRoot 0
-> +       then
-> +               echo "[Skip] paranoid and not root"
-> +               return
-> +       fi
-> +       perf stat --per-node -a -o "${stat_output}" true
-> +        commachecker --per-node
-> +       echo "[Success]"
-> +}
-> +
-> +check_per_socket()
-> +{
-> +       echo -n "Checking STD output: per socket "
-> +       if ParanoidAndNotRoot 0
-> +       then
-> +               echo "[Skip] paranoid and not root"
-> +               return
-> +       fi
-> +       perf stat --per-socket -a -o "${stat_output}" true
-> +        commachecker --per-socket
-> +       echo "[Success]"
-> +}
-> +
-> +# The perf stat options for per-socket, per-core, per-die
-> +# and -A ( no_aggr mode ) uses the info fetched from this
-> +# directory: "/sys/devices/system/cpu/cpu*/topology". For
-> +# example, socket value is fetched from "physical_package_id"
-> +# file in topology directory.
-> +# Reference: cpu__get_topology_int in util/cpumap.c
-> +# If the platform doesn't expose topology information, values
-> +# will be set to -1. For example, incase of pSeries platform
-> +# of powerpc, value for  "physical_package_id" is restricted
-> +# and set to -1. Check here validates the socket-id read from
-> +# topology file before proceeding further
-> +
-> +FILE_LOC=3D"/sys/devices/system/cpu/cpu*/topology/"
-> +FILE_NAME=3D"physical_package_id"
-> +
-> +check_for_topology()
-> +{
-> +       if ! ParanoidAndNotRoot 0
-> +       then
-> +               socket_file=3D`ls $FILE_LOC/$FILE_NAME | head -n 1`
-> +               [ -z $socket_file ] && return 0
-> +               socket_id=3D`cat $socket_file`
-> +               [ $socket_id =3D=3D -1 ] && skip_test=3D1
-> +               return 0
-> +       fi
-> +}
+> each container running its workload with own hierarchy structures that
+> might be rather dynamic during the lifetime. In order to have a
+> predictable OOM behavior you need to watch and reassign priorities all
+> the time, no?
 
-Tests, great! This logic is taken from
-tools/perf/tests/shell/stat+csv_output.sh, could we share the
-implementation between that and here by moving the code into something
-in the lib directory?
+In our case we don't really manage the entire hierarchy in a
+centralized fashion. Each container gets a score based on their
+relative priority, and each container is free to set scores within its
+subcontainers if needed. Isn't this what the hierarchy is all about?
+Each parent only cares about its direct children. On the system level,
+we care about the priority ordering of containers. Ordering within
+containers can be deferred to containers.
 
-Thanks,
-Ian
+>
+> > The way it works with our internal implementation is (imo) sensible
+> > and straightforward from a hierarchy POV. Starting at the OOM memcg
+> > (which can be root), we recursively compare the OOM scores of the
+> > children memcgs and pick the one with the lowest score, until we
+> > arrive at a leaf memcg.
+>
+> This approach has a strong requirement on the memcg hierarchy
+> organization. Siblings have to be directly comparable because you cut
+> off many potential sub-trees this way (e.g. is it easy to tell
+> whether you want to rule out all system or user slices?).
+>
+> I can imagine usecases where this could work reasonably well e.g. a set
+> of workers of a different priority all of them running under a shared
+> memcg parent. But more more involved hierarchies seem more complex
+> because you always keep in mind how the hierarchy is organize to get to
+> your desired victim.
 
-> +
-> +check_for_topology
-> +check_no_args
-> +check_system_wide
-> +check_interval
-> +check_per_thread
-> +check_per_node
-> +if [ $skip_test -ne 1 ]
-> +then
-> +       check_system_wide_no_aggr
-> +       check_per_core
-> +       check_per_cache_instance
-> +       check_per_die
-> +       check_per_socket
-> +else
-> +       echo "[Skip] Skipping tests for system_wide_no_aggr, per_core, pe=
-r_die and per_socket since socket id exposed via topology is invalid"
-> +fi
-> +cleanup
-> +exit 0
+I guess the main point is what I mentioned above, you don't need to
+manage the entire tree, containers can manage their subtrees. The most
+important thing is to provide the kernel with priority ordering among
+containers, and optionally priority ordering within a container
+(disregarding other containers).
+
+>
 > --
-> 2.35.1
->
+> Michal Hocko
+> SUSE Labs
