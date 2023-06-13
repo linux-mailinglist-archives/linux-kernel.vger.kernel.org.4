@@ -2,70 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1788972EAF8
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 20:28:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 781DE72EAEF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 20:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231610AbjFMS1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 14:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
+        id S231680AbjFMS2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 14:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjFMS1l (ORCPT
+        with ESMTP id S230253AbjFMS2H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 14:27:41 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12051BC5
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 11:27:24 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-1a6a2cb4659so1262535fac.1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 11:27:24 -0700 (PDT)
+        Tue, 13 Jun 2023 14:28:07 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932B319BC
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 11:28:06 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b1b06af50eso73666171fa.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 11:28:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google; t=1686680844; x=1689272844;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OD/sBnMhOS+76TBbX745v9EyDJOqWBR1zdKjyXB6hEo=;
-        b=TNvKEBQDz0UXjGY82Rdzzk7mJQiwrkyJVwvuxu8n8m0Pi2aswclN30CIh/rhXgR9EL
-         GcUphBoC3mHb5JyYtboioVzFLX76O5uxbzvCqp58ta7SwnjUsDKVDt9AWw9Y9o3re5Ow
-         1Btu5L4SF8IUndx5WaD12X8bmEvsxLbVgaYM0=
+        d=linux-foundation.org; s=google; t=1686680885; x=1689272885;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c13OqGThZo2X78u4bO5FLqEGNspfbVSXUjccgWtSHTY=;
+        b=RVvNfGvzt0DYgLXTRiA0G20yg8E5kMPkOEOA91DG6XO1VyQhXDm1tx5k24cikw27o4
+         pFVfCDktyV/fJw77oIZY5fXb6C6hA1cADQVs/+aJh+Ufj2V3YcJ7V0/bzyDve1GG1gjS
+         EHPRD5S+JqfBPj+qQ6Z3589ZrYMXqWpz4TMqc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686680844; x=1689272844;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1686680885; x=1689272885;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OD/sBnMhOS+76TBbX745v9EyDJOqWBR1zdKjyXB6hEo=;
-        b=BXy0b5n0ATOf/eMV7A5dC9DZwwOTjsbuTYpJIsXB7YGTkOeisQpG2qS7lxWNW7XbL6
-         BMbbQzznhn6CkC9of25RgDydNH4ZNeIrkzzrk0hjNtdIMwN0ryOxEU1O1VAvGu7qs1Y1
-         nuPneaNmbCW175LvhEZSx4xogEu8CLieITvCVcgGpMakb+wIwhzAq814Tfgsmej+lwRX
-         nz65VS0VcjJWi92qjinvkPI9ChMCjbarsv6ANU91uqk071/R0rirqB/NxslF5imv18tJ
-         gjfduLrcZKX8wQxbdfjREQMW3CP9sx2AFkSeh0ttM6E6XPWloUAckvkd2ejCKEA17Emb
-         Akrg==
-X-Gm-Message-State: AC+VfDzUVkEf+sO33rsZqQftOHy61jALzquzMyn98Sp0zs4I/O4jhMRe
-        3mXEqLmj2puvd2lZXkAY5dIvzA==
-X-Google-Smtp-Source: ACHHUZ7ahhE3kP1FUW/F7G37fNcHq4Fz7WbfGH3XVBVth497lPJQKvXVRBAUtifGjYjKR0kmMJqoLg==
-X-Received: by 2002:a05:6871:69f:b0:1a6:b5e5:29c6 with SMTP id l31-20020a056871069f00b001a6b5e529c6mr1822097oao.2.1686680843802;
-        Tue, 13 Jun 2023 11:27:23 -0700 (PDT)
-Received: from fedora64.linuxtx.org ([99.47.93.78])
-        by smtp.gmail.com with ESMTPSA id k19-20020a05687015d300b001a66a48a68asm4236294oad.57.2023.06.13.11.27.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 11:27:23 -0700 (PDT)
-Sender: Justin Forbes <jmforbes@linuxtx.org>
-Date:   Tue, 13 Jun 2023 13:27:20 -0500
-From:   Justin Forbes <jforbes@fedoraproject.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.3 000/160] 6.3.8-rc1 review
-Message-ID: <ZIi1CKTsIJo+wLaE@fedora64.linuxtx.org>
-References: <20230612101715.129581706@linuxfoundation.org>
+        bh=c13OqGThZo2X78u4bO5FLqEGNspfbVSXUjccgWtSHTY=;
+        b=h+wd8D3xep466RCZmxZBV2mLAdrZWzhOfgbuQ2sFTaT+QukOQz88wITseInc26jYP0
+         8kcJPW+CMyuajU1GeugQ5jN4SvF6mcziewPgMbsAvXBVfv5DsOouY0aXo/9UrgGjy88Q
+         eD6iUO9CUeeWbuhEBsJ1MumVIL8QVvAy00iehVuuuskhT4y43IdvMkGUa0Ubx9LXvsXw
+         yA/J+X2Kk0fneaTcqKeQpFEv5rIeN+Ee8L8PtAad4y2gF0KpWfzRLqJPE+l7xP7K6GQl
+         ACpmsfomKf8TfNPz/cBQ2EMXvYiC5Gf/L/nX9SDv5GFSb0GrOU93pZiOksuKHAxZhtck
+         i7yQ==
+X-Gm-Message-State: AC+VfDyWqMSsRLjC22/u/QkTBBMexro+MKPO3APaibwbjfkIg3h3sfn6
+        Y9uje1fvkPT+CXfDgLwC5QYKO6lRwNjHYrtXjmYu5Z/l
+X-Google-Smtp-Source: ACHHUZ4If1OjmA34pME87CihVe89X0/Ke4D3WcZY3Pf4i4KlRrhrohcashH3UeDbdk5tfw/BauI7iA==
+X-Received: by 2002:a2e:a171:0:b0:2b2:90e:165f with SMTP id u17-20020a2ea171000000b002b2090e165fmr5107030ljl.17.1686680884754;
+        Tue, 13 Jun 2023 11:28:04 -0700 (PDT)
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
+        by smtp.gmail.com with ESMTPSA id f26-20020a2e9e9a000000b002adb0164258sm2249779ljk.112.2023.06.13.11.28.03
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 11:28:04 -0700 (PDT)
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-4f6454a21a9so7337311e87.3
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 11:28:03 -0700 (PDT)
+X-Received: by 2002:a19:3819:0:b0:4f7:457e:a457 with SMTP id
+ f25-20020a193819000000b004f7457ea457mr3476722lfa.53.1686680882933; Tue, 13
+ Jun 2023 11:28:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612101715.129581706@linuxfoundation.org>
+References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
+ <CAHk-=wh0UNRn96k3XLh2AYOo0iz1k_Qk-rQXv8kYjXkKBzUMWA@mail.gmail.com>
+ <c239d2c4f7e369690866db455813cac359731e1d.camel@intel.com> <CAHk-=wjSWhVV+qr_tV0xg8c0WRn_H9wtFZkUVCpv-VzsddAS-Q@mail.gmail.com>
+In-Reply-To: <CAHk-=wjSWhVV+qr_tV0xg8c0WRn_H9wtFZkUVCpv-VzsddAS-Q@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 13 Jun 2023 11:27:45 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whY0ggV9P+3Ch1LcqefnS3=O7FmWkOPoiABD7QJGtwSHg@mail.gmail.com>
+Message-ID: <CAHk-=whY0ggV9P+3Ch1LcqefnS3=O7FmWkOPoiABD7QJGtwSHg@mail.gmail.com>
+Subject: Re: [PATCH v9 00/42] Shadow stacks for userspace
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "bp@alien8.de" <bp@alien8.de>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,26 +117,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 12:25:32PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.3.8 release.
-> There are 160 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 14 Jun 2023 10:16:41 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.8-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.3.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Tue, Jun 13, 2023 at 10:44=E2=80=AFAM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> Anyway, I'm scanning through it right now. No comments yet, I only
+> just got started.
 
-Tested rc1 against the Fedora build system (aarch64, ppc64le, s390x,
-x86_64), and boot tested x86_64. No regressions noted.
+Well, it all looked fine from a quick scan. One small comment, and
+even that was just a minor stylistic nit.
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+I didn't actually look through the x86 state infrastructure side -
+I'll just trust that is fine, and it doesn't interact with anything
+else, so I don't really worry about it. I mainly care about the VM
+side not causing problems, and the changes on that side all looked
+fine.
+
+             Linus
