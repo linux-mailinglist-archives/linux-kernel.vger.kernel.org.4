@@ -2,93 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C927072EE1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 23:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF82B72EE1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 23:37:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbjFMVht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 17:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41472 "EHLO
+        id S231670AbjFMVh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 17:37:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbjFMVhj (ORCPT
+        with ESMTP id S229947AbjFMVhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 17:37:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A652102
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 14:36:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686692180;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ds/y7lH76obKk3se56kRnUXeuApDjVV7xaTlhnaSY1k=;
-        b=b4olZ5khCAoYI7d3CmYbLcpP2WsXu4TidVpvHYr5Ne5R6hhntSdShb+3scbRV7l+/QKPDw
-        4bmbZ8SWlRNuDzpFgqzASMUovdlkFHZpzA3Xriy9tZ3mfX0TEUU2S6ToVFc/KCjNm7qCFk
-        sLzki9WKL9WH0tJ0Vx5xStghjpjGt6g=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-637-eu5Jh_yLPdaKczsKDCMpHA-1; Tue, 13 Jun 2023 17:36:15 -0400
-X-MC-Unique: eu5Jh_yLPdaKczsKDCMpHA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C4F90811E8D;
-        Tue, 13 Jun 2023 21:36:14 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3D5D140C6F5D;
-        Tue, 13 Jun 2023 21:36:12 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <1156283.1686692027@warthog.procyon.org.uk>
-References: <1156283.1686692027@warthog.procyon.org.uk> <f50b438f-90bc-36b1-c943-18d7a4b3f441@redhat.com> <431929.1686588681@warthog.procyon.org.uk>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     dhowells@redhat.com, Jens Axboe <axboe@kernel.dk>,
-        kernel test robot <oliver.sang@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-mm@kvack.org, oe-lkp@lists.linux.dev, lkp@intel.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] block: Fix dio_bio_alloc() to set BIO_PAGE_PINNED
+        Tue, 13 Jun 2023 17:37:24 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E401BF5
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 14:37:19 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-977c89c47bdso4261866b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 14:37:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686692238; x=1689284238;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oip7SqC/cNKZpwuyshsaw2zREje6DYUcsApGrxnqSjc=;
+        b=i1xbrWeSBBDDeChk2v1jFQ8oNrFfLHyhMK5pCcLQkja3OqbHo2bJ/wFHW7uutFX9XZ
+         i6B51pldX5oeo7lYYaDlHiTKsm3/u5OCvL6YNOnA4lmfBx8a7VyTS7N9SzxKcGs57wnC
+         8mxdIiwnNcJ2FlyXtMEyA/0/wBdPgaVhyqfO45QxRPAoBTT+nQbHDzy9uF69dhqIcI2W
+         YetKdFtdwJTU5y2CCz1KyLhQgYgzrxUF9Vky5XdyrtXP992Uz8lCG4PAr11dJpPmNO6b
+         Re0941tRW3KeLKZgV89XErY04JlNHWHSMzNtAWQ7qXUP/V8UU59V4mLSIl8GHpkHDOxN
+         yVuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686692238; x=1689284238;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oip7SqC/cNKZpwuyshsaw2zREje6DYUcsApGrxnqSjc=;
+        b=deK0oNnLqCp48ddfW5CBef6tzTnFr5Db3mk7LJGPF5yHn08n7Wrq6m81T0ve44eZ4O
+         wFHzsPWH7c5qaNfUechyGiX6OdwXjwsRZevbUNEEf3z36wAUrXUBR4mDMUaeiqZ6smhz
+         5j/u4RBArlglJB5Rc/232uEByUQZGqx0Ynl+LcG/vmEsHoU3lc2XFT/lg+9mWEb1uxV9
+         0pV4OHM6ixPxdWpxrJKmqDH76U00EXqMmQ3MNfbVHPrqAYd41JuwwKZbQA16pHdouW/N
+         bZvlJ+UKIQy33LeKhdhS4QiUMDyOHNoYpKDLY/D8A7+KaU3ga2OzVa//xUl3DC0GfeSk
+         fbwA==
+X-Gm-Message-State: AC+VfDz1O1zi2uExNsBQVkJHiIwpv+EJG5MFsvBxFgZGokj99pcMbIaI
+        M8652bRidYLdj63tFEENZlqz7A==
+X-Google-Smtp-Source: ACHHUZ6a2hnnxxgRqbHde0/z6M1zAJKLjWqTWlBx8ZNIxyQ4NWlh0GA2OLSUJCuN3o03XaigIgk1JA==
+X-Received: by 2002:a17:906:ef03:b0:977:d676:d3ca with SMTP id f3-20020a170906ef0300b00977d676d3camr16308640ejs.33.1686692237898;
+        Tue, 13 Jun 2023 14:37:17 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id gu4-20020a170906f28400b0096fbc516a93sm7107806ejb.211.2023.06.13.14.37.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 14:37:17 -0700 (PDT)
+Message-ID: <605616cd-d0f9-a430-7cf2-b2f36d07ffe3@linaro.org>
+Date:   Tue, 13 Jun 2023 23:37:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1157973.1686692171.1@warthog.procyon.org.uk>
-Date:   Tue, 13 Jun 2023 22:36:11 +0100
-Message-ID: <1157974.1686692171@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 3/8] dt-bindings: rtc: isl12022: add bindings for
+ battery alarm trip levels
+Content-Language: en-US
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
+ <20230613130011.305589-1-linux@rasmusvillemoes.dk>
+ <20230613130011.305589-4-linux@rasmusvillemoes.dk>
+ <0600a505-d1bf-f4be-57ef-51d34c77501e@linaro.org>
+ <dd15aaeb-04ff-126b-b524-44e30c60426b@rasmusvillemoes.dk>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <dd15aaeb-04ff-126b-b524-44e30c60426b@rasmusvillemoes.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- static inline void dio_cleanup(struct dio *dio, struct dio_submit *sdio)
- {
--       while (sdio->head < sdio->tail)
--               put_page(dio->pages[sdio->head++]);
-+       if (dio->is_pinned)
-+               unpin_user_pages(dio->pages + sdio->head,
-+                                sdio->tail - sdio->head);
- }
- 
- /*
+On 13/06/2023 21:51, Rasmus Villemoes wrote:
+>>> diff --git a/Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml b/Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml
+>>> index 7c1e638d657a..d5d3a687a34d 100644
+>>> --- a/Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml
+>>> +++ b/Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml
+>>> @@ -22,6 +22,18 @@ properties:
+>>>    interrupts:
+>>>      maxItems: 1
+>>>  
+>>> +  isil,trip-level85-microvolt:
+>>
+>> Why encoding level85 in the property name? Your commit msg (datasheet)
+>> suggests this is quite flexible, so why it cannot be just list of two
+>> trip levels - for first and second interrupt?
+> 
+> Yeah, so I did consider just making it a two-element array
+> isil,trip-levels-microvolt. But then I didn't know how to express the
+> enum constraint, i.e. that the first must be one of the 2125000, ...,
+> 4675000 values and the second one of the 1875000, ..., 4125000 ones. Is
+> that possible, without providing a list of 49 possible pairs? Or is it
+> sufficient to just write this out in prose?
 
-Meh.  It's obvious.  Need to advance head.
+items:
+  - enum: [ a, b, c ]
+  - enum: [ f, d, e ]
 
-David
+
+Best regards,
+Krzysztof
 
