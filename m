@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D902272E0E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 13:11:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D258772E0FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 13:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242214AbjFMLK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 07:10:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49146 "EHLO
+        id S242041AbjFMLLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 07:11:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242104AbjFMLKD (ORCPT
+        with ESMTP id S242105AbjFMLKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 07:10:03 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870AB10DA;
+        Tue, 13 Jun 2023 07:10:04 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBC410DE;
         Tue, 13 Jun 2023 04:10:02 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3B5C01FD9B;
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8137A2240D;
         Tue, 13 Jun 2023 11:10:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1686654601; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZgRWkj4ohO0KZCbdDBuPVV97H141ZbSM13kcN600c2k=;
-        b=zbJ6q17gN8z70oqaqKqYOGRakhvg0MbJtIIg+o+DeiVqehX4j9aCFpHcRwxRU7Z7rTKQ5t
-        f2HvzzQ9ZUU7AlYT3riteoeQJIFhBNK0hiqqcaAKRYURq+VplkkzBMg+g1sCN1U6pkFzi3
-        R00/iqjza3qieg7tUoKlcDTqAiYBjMk=
+        bh=SP5XPQ+B+tBgODPORD3Z9zsr7bRrI+Ip0rV0x56IK2w=;
+        b=pTSICEX1c8Qsm19zd8eQCOJmYryvMjO4aaOSHlOwtXah5fzubr34ywOkPBk4udx7Cd8n99
+        Qogm1Tg5gQANMUt14YBudjAK4+V0BX1XBy+bxA2fQQDpo10af0cqtvdgcZbgBS0ghOnZiJ
+        JCTCiP5206NMjTAyMPMCilRo+t0oVgU=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1686654601;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZgRWkj4ohO0KZCbdDBuPVV97H141ZbSM13kcN600c2k=;
-        b=pIjnNyxvGQUaS/zeU12bEmPVy9t4gCOAOw0wkygp3pDUeluFfLgW/eBwzhfSOeCSyTtNPF
-        rxGmQ9YXgFdbbCCg==
+        bh=SP5XPQ+B+tBgODPORD3Z9zsr7bRrI+Ip0rV0x56IK2w=;
+        b=9Ocgsrqyr17hP8X9xHsC/t7ebR3q+Nbnf3ogJQ3SjTVVLWEjLKHtw3tY3i4JoL3nQy+/SE
+        YEXpcN8c7ALLfPCQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E667E13A47;
-        Tue, 13 Jun 2023 11:10:00 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3CF8A13483;
+        Tue, 13 Jun 2023 11:10:01 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id UNF+N4hOiGR8CQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Tue, 13 Jun 2023 11:10:00 +0000
+        id mAscDolOiGR8CQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 13 Jun 2023 11:10:01 +0000
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     daniel@ffwll.ch, javierm@redhat.com, sam@ravnborg.org,
         deller@gmx.de, geert+renesas@glider.be, lee@kernel.org,
@@ -57,11 +57,10 @@ To:     daniel@ffwll.ch, javierm@redhat.com, sam@ravnborg.org,
 Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-sh@vger.kernel.org, linux-omap@vger.kernel.org,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Timur Tabi <timur@kernel.org>
-Subject: [PATCH v3 15/38] fbdev/fsl-diu-fb: Output messages with fb_*() helpers
-Date:   Tue, 13 Jun 2023 13:06:50 +0200
-Message-ID: <20230613110953.24176-16-tzimmermann@suse.de>
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH v3 16/38] fbdev/mb862xxfb: Output messages with fb_dbg()
+Date:   Tue, 13 Jun 2023 13:06:51 +0200
+Message-ID: <20230613110953.24176-17-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230613110953.24176-1-tzimmermann@suse.de>
 References: <20230613110953.24176-1-tzimmermann@suse.de>
@@ -78,106 +77,61 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Fix cases were output helpers are called with struct fb_info.dev.
-Use fb_*() helpers instead. Prepares fbdev for making struct
-fb_info.dev optional.
+Use fb_dbg() instead. Prepares fbdev for making struct fb_info.dev
+optional.
+
+v2:
+	* fix another reference to struct fb_info.dev (kernel test reobot)
+	* remove fb_err() from commit message
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: Timur Tabi <timur@kernel.org>
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
 ---
- drivers/video/fbdev/fsl-diu-fb.c | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+ drivers/video/fbdev/mb862xx/mb862xxfbdrv.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/video/fbdev/fsl-diu-fb.c b/drivers/video/fbdev/fsl-diu-fb.c
-index 730a07d23fa92..785eb8a06943f 100644
---- a/drivers/video/fbdev/fsl-diu-fb.c
-+++ b/drivers/video/fbdev/fsl-diu-fb.c
-@@ -872,7 +872,7 @@ static int map_video_memory(struct fb_info *info)
+diff --git a/drivers/video/fbdev/mb862xx/mb862xxfbdrv.c b/drivers/video/fbdev/mb862xx/mb862xxfbdrv.c
+index b5c8fcab9940d..119c2a582ecbd 100644
+--- a/drivers/video/fbdev/mb862xx/mb862xxfbdrv.c
++++ b/drivers/video/fbdev/mb862xx/mb862xxfbdrv.c
+@@ -112,8 +112,7 @@ static int mb862xxfb_check_var(struct fb_var_screeninfo *var,
+ {
+ 	unsigned long tmp;
  
- 	p = alloc_pages_exact(smem_len, GFP_DMA | __GFP_ZERO);
- 	if (!p) {
--		dev_err(info->dev, "unable to allocate fb memory\n");
-+		fb_err(info, "unable to allocate fb memory\n");
- 		return -ENOMEM;
- 	}
- 	mutex_lock(&info->mm_lock);
-@@ -1145,7 +1145,7 @@ static int fsl_diu_set_par(struct fb_info *info)
+-	if (fbi->dev)
+-		dev_dbg(fbi->dev, "%s\n", __func__);
++	fb_dbg(fbi, "%s\n", __func__);
  
- 		/* Memory allocation for framebuffer */
- 		if (map_video_memory(info)) {
--			dev_err(info->dev, "unable to allocate fb memory 1\n");
-+			fb_err(info, "unable to allocate fb memory 1\n");
- 			return -ENOMEM;
- 		}
- 	}
-@@ -1277,16 +1277,16 @@ static int fsl_diu_ioctl(struct fb_info *info, unsigned int cmd,
- 	if (!arg)
- 		return -EINVAL;
+ 	/* check if these values fit into the registers */
+ 	if (var->hsync_len > 255 || var->vsync_len > 255)
+@@ -290,7 +289,7 @@ static int mb862xxfb_blank(int mode, struct fb_info *fbi)
+ 	struct mb862xxfb_par  *par = fbi->par;
+ 	unsigned long reg;
  
--	dev_dbg(info->dev, "ioctl %08x (dir=%s%s type=%u nr=%u size=%u)\n", cmd,
-+	fb_dbg(info, "ioctl %08x (dir=%s%s type=%u nr=%u size=%u)\n", cmd,
- 		_IOC_DIR(cmd) & _IOC_READ ? "R" : "",
- 		_IOC_DIR(cmd) & _IOC_WRITE ? "W" : "",
- 		_IOC_TYPE(cmd), _IOC_NR(cmd), _IOC_SIZE(cmd));
+-	dev_dbg(fbi->dev, "blank mode=%d\n", mode);
++	fb_dbg(fbi, "blank mode=%d\n", mode);
  
- 	switch (cmd) {
- 	case MFB_SET_PIXFMT_OLD:
--		dev_warn(info->dev,
--			 "MFB_SET_PIXFMT value of 0x%08x is deprecated.\n",
--			 MFB_SET_PIXFMT_OLD);
-+		fb_warn(info,
-+			"MFB_SET_PIXFMT value of 0x%08x is deprecated.\n",
-+			MFB_SET_PIXFMT_OLD);
- 		fallthrough;
- 	case MFB_SET_PIXFMT:
- 		if (copy_from_user(&pix_fmt, buf, sizeof(pix_fmt)))
-@@ -1294,9 +1294,9 @@ static int fsl_diu_ioctl(struct fb_info *info, unsigned int cmd,
- 		ad->pix_fmt = pix_fmt;
- 		break;
- 	case MFB_GET_PIXFMT_OLD:
--		dev_warn(info->dev,
--			 "MFB_GET_PIXFMT value of 0x%08x is deprecated.\n",
--			 MFB_GET_PIXFMT_OLD);
-+		fb_warn(info,
-+			"MFB_GET_PIXFMT value of 0x%08x is deprecated.\n",
-+			MFB_GET_PIXFMT_OLD);
- 		fallthrough;
- 	case MFB_GET_PIXFMT:
- 		pix_fmt = ad->pix_fmt;
-@@ -1375,7 +1375,7 @@ static int fsl_diu_ioctl(struct fb_info *info, unsigned int cmd,
- 	}
- #endif
- 	default:
--		dev_err(info->dev, "unknown ioctl command (0x%08X)\n", cmd);
-+		fb_err(info, "unknown ioctl command (0x%08X)\n", cmd);
- 		return -ENOIOCTLCMD;
- 	}
+ 	switch (mode) {
+ 	case FB_BLANK_POWERDOWN:
+@@ -791,7 +790,7 @@ static void of_platform_mb862xx_remove(struct platform_device *ofdev)
+ 	resource_size_t res_size = resource_size(par->res);
+ 	unsigned long reg;
  
-@@ -1543,21 +1543,21 @@ static int install_fb(struct fb_info *info)
- 	}
+-	dev_dbg(fbi->dev, "%s release\n", fbi->fix.id);
++	fb_dbg(fbi, "%s release\n", fbi->fix.id);
  
- 	if (fsl_diu_check_var(&info->var, info)) {
--		dev_err(info->dev, "fsl_diu_check_var failed\n");
-+		fb_err(info, "fsl_diu_check_var failed\n");
- 		unmap_video_memory(info);
- 		fb_dealloc_cmap(&info->cmap);
- 		return -EINVAL;
- 	}
+ 	/* display off */
+ 	reg = inreg(disp, GC_DCM1);
+@@ -1138,7 +1137,7 @@ static void mb862xx_pci_remove(struct pci_dev *pdev)
+ 	struct mb862xxfb_par *par = fbi->par;
+ 	unsigned long reg;
  
- 	if (register_framebuffer(info) < 0) {
--		dev_err(info->dev, "register_framebuffer failed\n");
-+		fb_err(info, "register_framebuffer failed\n");
- 		unmap_video_memory(info);
- 		fb_dealloc_cmap(&info->cmap);
- 		return -EINVAL;
- 	}
+-	dev_dbg(fbi->dev, "%s release\n", fbi->fix.id);
++	fb_dbg(fbi, "%s release\n", fbi->fix.id);
  
- 	mfbi->registered = 1;
--	dev_info(info->dev, "%s registered successfully\n", mfbi->id);
-+	fb_info(info, "%s registered successfully\n", mfbi->id);
- 
- 	return 0;
- }
+ 	/* display off */
+ 	reg = inreg(disp, GC_DCM1);
 -- 
 2.41.0
 
