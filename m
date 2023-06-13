@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B7072ECB0
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A98C72ECB2
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240623AbjFMUN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 16:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54592 "EHLO
+        id S240694AbjFMUN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 16:13:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231129AbjFMUM5 (ORCPT
+        with ESMTP id S239036AbjFMUM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 16:12:57 -0400
+        Tue, 13 Jun 2023 16:12:58 -0400
 Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B98A61BFD;
-        Tue, 13 Jun 2023 13:12:38 -0700 (PDT)
-Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-33d269dd56bso24792935ab.1;
-        Tue, 13 Jun 2023 13:12:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFE41FC9;
+        Tue, 13 Jun 2023 13:12:41 -0700 (PDT)
+Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-3408334f13bso2682305ab.3;
+        Tue, 13 Jun 2023 13:12:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686687158; x=1689279158;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KOZIQBDKy2phoYWlHea2hom6JZXMO/IHjZv2PzErzXs=;
-        b=GyGf1dxDnZk0TcdSmIPkgD6lybFBS70ptDVsO7MxKMG6TYOe0VQEUMbnJRnMfHKoZk
-         C0TTzsNlSABc9DdD6Rv62qSowElEneQdQC5+BQsktP41wyPYtYgjaD9FE2sVsFvOsVsa
-         GSE+t/R+Tawls5KUVeMBPXrZDAL98t1fsc+Ar2G7xzWaajj4j4n4+0WxHi4goQfcBgOt
-         qMpy/ApZFCF8VXXu2CUp2J4LSgLJf7grfg7baKuPYGn2vZuZRHhH8QOilFMDiM+IbskB
-         R1G/ZTiJP5HX+0+fN/ZPzi2zJKpr7gHiHQm+XEr8r+01nObV/wktdVjG0tgVzVEQF3hO
-         mHCQ==
-X-Gm-Message-State: AC+VfDwmoAgct8kPpGMpBn2mVWfYeWqSmA7MrFmhge0assm6K+oszxl4
-        vLj2GWE0LEcy0V8SCY/flw==
-X-Google-Smtp-Source: ACHHUZ6t5H6H+OiQsJB+7wKd39zkkt23zsP4+mprng2W1w1AX/1fk0KlPe6jzlgXwI5G282HoUsx7w==
-X-Received: by 2002:a92:7302:0:b0:33d:3b69:2d28 with SMTP id o2-20020a927302000000b0033d3b692d28mr10183276ilc.29.1686687157940;
-        Tue, 13 Jun 2023 13:12:37 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686687160; x=1689279160;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oddYJI1Au0Bn0ZcRmQ0kDRSxDhbPMqnSUlKHFev/jqs=;
+        b=J1DhJortaFpgNWtZdvjLDY8qwculWGy8KriBhCkX3CAjLgc9NdFl1A31tJ57vUgSpX
+         mITPh34O7747QQy2pZO5Oa6Pm7eTdBn/rRpKF/j4jssoUY+SkQ6zUpj/IPcRVnwbCAWp
+         7s9fNQ2Cc1roE7RhfZqCZ5M4WL+s39F9Duq6ObTsFx8zSTOy2hUzE3fXM7bKobv3zl7O
+         zkgEt51LAHcM6mDOnhKHD7mcuKQsN5mrjo7om5AwrKSJq/x7qGVy1sXGsR7BIszq0P2+
+         0x/qdfKe12NiAbijzFWsL9/brgVb1VAy/8+Sn3Rpo++vfO5/EB7JlufAEBvLsTtx2LDQ
+         Xazg==
+X-Gm-Message-State: AC+VfDyCb8ela5eye5oSlMmurim2KW39PidCI6ClaTF0Su8eeVHsW61I
+        LV2mqGnbdYSWg8pmrAvLMQ==
+X-Google-Smtp-Source: ACHHUZ4ZjlbQhnvd4WwCh+2VWWgPQoAi0uSYLDOAA6PeQNVESD2t3GfM/OUN1AVNWSmf6dqcFZZQVA==
+X-Received: by 2002:a92:ddcf:0:b0:328:52d1:6415 with SMTP id d15-20020a92ddcf000000b0032852d16415mr11477350ilr.15.1686687160314;
+        Tue, 13 Jun 2023 13:12:40 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id p13-20020a92da4d000000b0033549a5fb36sm4100057ilq.27.2023.06.13.13.12.36
+        by smtp.gmail.com with ESMTPSA id y10-20020a92d80a000000b0033e23a5c730sm4021994ilm.88.2023.06.13.13.12.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 13:12:37 -0700 (PDT)
-Received: (nullmailer pid 2826488 invoked by uid 1000);
-        Tue, 13 Jun 2023 20:12:35 -0000
+        Tue, 13 Jun 2023 13:12:39 -0700 (PDT)
+Received: (nullmailer pid 2826527 invoked by uid 1000);
+        Tue, 13 Jun 2023 20:12:36 -0000
 From:   Rob Herring <robh@kernel.org>
 To:     =?UTF-8?q?Horia=20Geant=C4=83?= <horia.geanta@nxp.com>,
         Pankaj Gupta <pankaj.gupta@nxp.com>,
@@ -50,10 +50,12 @@ To:     =?UTF-8?q?Horia=20Geant=C4=83?= <horia.geanta@nxp.com>,
         Conor Dooley <conor+dt@kernel.org>
 Cc:     linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] dt-bindings: crypto: fsl,sec-v4.0-mon: Add missing type for "linux,keycode"
-Date:   Tue, 13 Jun 2023 14:12:29 -0600
-Message-Id: <20230613201231.2826352-1-robh@kernel.org>
+Subject: [PATCH 2/2] dt-bindings: crypto: fsl,sec-v4.0-mon: Add "linux,keycodes" and deprecate "linux,keycode"
+Date:   Tue, 13 Jun 2023 14:12:30 -0600
+Message-Id: <20230613201231.2826352-2-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230613201231.2826352-1-robh@kernel.org>
+References: <20230613201231.2826352-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
@@ -67,26 +69,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "linux,keycode" property is missing a type probably because it was
-confused with the common property "linux,keycodes".
+The "linux,keycode" property is non-standard. Add the common property
+"linux,keycodes" and mark "linux,keycode" deprecated so that the mistake
+is not propagated.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/crypto/fsl,sec-v4.0-mon.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ .../devicetree/bindings/crypto/fsl,sec-v4.0-mon.yaml         | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/crypto/fsl,sec-v4.0-mon.yaml b/Documentation/devicetree/bindings/crypto/fsl,sec-v4.0-mon.yaml
-index 286dffa0671b..6052129bf852 100644
+index 6052129bf852..e879bc0be8e2 100644
 --- a/Documentation/devicetree/bindings/crypto/fsl,sec-v4.0-mon.yaml
 +++ b/Documentation/devicetree/bindings/crypto/fsl,sec-v4.0-mon.yaml
-@@ -103,6 +103,7 @@ properties:
-       wakeup-source: true
- 
+@@ -105,6 +105,11 @@ properties:
        linux,keycode:
-+        $ref: /schemas/types.yaml#/definitions/uint32
+         $ref: /schemas/types.yaml#/definitions/uint32
          default: 116
++        deprecated: true
++
++      linux,keycodes:
++        maxItems: 1
++        default: 116
  
      required:
+       - compatible
 -- 
 2.39.2
 
