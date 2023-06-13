@@ -2,150 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83AE472EEFE
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 00:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88E6172EF12
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 00:19:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231915AbjFMWQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 18:16:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57364 "EHLO
+        id S234166AbjFMWTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 18:19:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjFMWQ1 (ORCPT
+        with ESMTP id S229947AbjFMWTg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 18:16:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC66B10CC;
-        Tue, 13 Jun 2023 15:16:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E87960A5A;
-        Tue, 13 Jun 2023 22:16:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E27C1C433C0;
-        Tue, 13 Jun 2023 22:16:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686694582;
-        bh=+WIGytSpx4hFIJZtH+suKZCZHkq5JBHItki5+7BFPsc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=KvuDR5kbBMLh2VXVzw7NO5wtSshJHEiPMI72MOW96V4/U71ZPwOvtZcgx4igXxMM9
-         em+vyycTpMJAdlxzRDVkQnWhkW0lpSv1w5OfUlveeKzndjtlhfIAlz6KkyJhYm9vAL
-         YeOSX6iUcPzAZQxfDfXnUCMYGVKsXS4ueWqr5sAFUnmWDNkxen775E7afX9ThgAUDG
-         /zY+Rb3OkZn0TBkz1JEvYtOijN22lxlf2MhOYND5RFEYMsncR0Ru0UtWG3QgShOTYr
-         rTOglNLVYb9iCLUk1lIGArlo4nilYPoAaYiuRtfBAW2VjixrTzTJsPA6zdb5t+Q6uZ
-         QAuDp1N4POaTw==
-Message-ID: <032f8239-bb82-e20e-e42b-e7a54754298b@kernel.org>
-Date:   Tue, 13 Jun 2023 17:16:18 -0500
+        Tue, 13 Jun 2023 18:19:36 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB4919A;
+        Tue, 13 Jun 2023 15:19:33 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35DJoLxE017479;
+        Tue, 13 Jun 2023 22:19:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=K0qNhIIXKK45Ts/N5IbalZI9W7UKiRSCw61qaqks+Nk=;
+ b=UpV4xpdowtGziZTyYi13w6OVRxVKR7wl02OP0S1Ud6qdnDs2e2yKzk6Oce4vTtvhABq5
+ K9piJOEpwUikhrkrTNQxGqcVCGjGoNlOfbNE9pGHMLU/OWzkxkYRfhOREVW4LqHBGnt3
+ noHLc4ybyZ94F9D2PjGt5DN6DotvHJyA7+s237RREXh3eB0Z1r0uadardSKr+RZ2asEH
+ aJc7xAQJ5I9bxOPawdRCSqwEJPBihXKHNzke2OjkJ76Op8QP8cep0fzGA2Fw0xSo4XFU
+ 08Um54pFQlvmIgyN7ikP4KoAUea3R3XP5AVWbh2jvsoxEzkhFYkHWVy70hvS7ZdYxGxD Mg== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r6q4r1fgk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Jun 2023 22:19:23 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35DMJBaW010330
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Jun 2023 22:19:11 GMT
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 13 Jun 2023 15:19:10 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <andersson@kernel.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <quic_jesszhan@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 0/2] retrieve DSI DSC through priv-dsi[0]
+Date:   Tue, 13 Jun 2023 15:19:00 -0700
+Message-ID: <1686694742-20862-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 01/13] nios2: define virtual address space for modules
-Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Song Liu <song@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-References: <20230601101257.530867-1-rppt@kernel.org>
- <20230601101257.530867-2-rppt@kernel.org>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <20230601101257.530867-2-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: C5bLhjiTzgaxPOO9kVp_kXOBYMopu24a
+X-Proofpoint-ORIG-GUID: C5bLhjiTzgaxPOO9kVp_kXOBYMopu24a
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-13_22,2023-06-12_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ spamscore=0 mlxscore=0 mlxlogscore=925 clxscore=1015 priorityscore=1501
+ adultscore=0 bulkscore=0 suspectscore=0 impostorscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306130196
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+moving retrieving struct drm_dsc_cofnig from setup_display to
+atomic_enable() and delete struct drm_dsc_config from
+struct msm_display_info.
 
+Kuogee Hsieh (2):
+  drm/msm/dpu: retrieve DSI DSC struct through priv->dsi[0]
+  drm/msm/dpu: remove struct drm_dsc_config from struct msm_display_info
 
-On 6/1/23 05:12, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> 
-> nios2 uses kmalloc() to implement module_alloc() because CALL26/PCREL26
-> cannot reach all of vmalloc address space.
-> 
-> Define module space as 32MiB below the kernel base and switch nios2 to
-> use vmalloc for module allocations.
-> 
-> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> ---
->   arch/nios2/include/asm/pgtable.h |  5 ++++-
->   arch/nios2/kernel/module.c       | 19 ++++---------------
->   2 files changed, 8 insertions(+), 16 deletions(-)
-> 
-> diff --git a/arch/nios2/include/asm/pgtable.h b/arch/nios2/include/asm/pgtable.h
-> index 0f5c2564e9f5..0073b289c6a4 100644
-> --- a/arch/nios2/include/asm/pgtable.h
-> +++ b/arch/nios2/include/asm/pgtable.h
-> @@ -25,7 +25,10 @@
->   #include <asm-generic/pgtable-nopmd.h>
->   
->   #define VMALLOC_START		CONFIG_NIOS2_KERNEL_MMU_REGION_BASE
-> -#define VMALLOC_END		(CONFIG_NIOS2_KERNEL_REGION_BASE - 1)
-> +#define VMALLOC_END		(CONFIG_NIOS2_KERNEL_REGION_BASE - SZ_32M - 1)
-> +
-> +#define MODULES_VADDR		(CONFIG_NIOS2_KERNEL_REGION_BASE - SZ_32M)
-> +#define MODULES_END		(CONFIG_NIOS2_KERNEL_REGION_BASE - 1)
->   
->   struct mm_struct;
->   
-> diff --git a/arch/nios2/kernel/module.c b/arch/nios2/kernel/module.c
-> index 76e0a42d6e36..9c97b7513853 100644
-> --- a/arch/nios2/kernel/module.c
-> +++ b/arch/nios2/kernel/module.c
-> @@ -21,23 +21,12 @@
->   
->   #include <asm/cacheflush.h>
->   
-> -/*
-> - * Modules should NOT be allocated with kmalloc for (obvious) reasons.
-> - * But we do it for now to avoid relocation issues. CALL26/PCREL26 cannot reach
-> - * from 0x80000000 (vmalloc area) to 0xc00000000 (kernel) (kmalloc returns
-> - * addresses in 0xc0000000)
-> - */
->   void *module_alloc(unsigned long size)
->   {
-> -	if (size == 0)
-> -		return NULL;
-> -	return kmalloc(size, GFP_KERNEL);
-> -}
-> -
-> -/* Free memory returned from module_alloc */
-> -void module_memfree(void *module_region)
-> -{
-> -	kfree(module_region);
-> +	return __vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END,
-> +				    GFP_KERNEL, PAGE_KERNEL_EXEC,
-> +				    VM_FLUSH_RESET_PERMS, NUMA_NO_NODE,
-> +				    __builtin_return_address(0));
->   }
->   
->   int apply_relocate_add(Elf32_Shdr *sechdrs, const char *strtab,
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 44 ++++++++++++++++++++---------
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h |  2 --
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     |  2 --
+ 3 files changed, 30 insertions(+), 18 deletions(-)
 
-Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+-- 
+2.7.4
+
