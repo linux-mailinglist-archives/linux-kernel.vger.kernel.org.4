@@ -2,104 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2A8E72DCDC
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:41:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EAE572DCDD
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241522AbjFMIlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 04:41:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49626 "EHLO
+        id S241607AbjFMIl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 04:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241667AbjFMIkm (ORCPT
+        with ESMTP id S241672AbjFMIkn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 04:40:42 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773E1199E
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 01:40:29 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f8c74af64fso4090245e9.1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 01:40:29 -0700 (PDT)
+        Tue, 13 Jun 2023 04:40:43 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BF119AE;
+        Tue, 13 Jun 2023 01:40:30 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b3d29cfb17so15852625ad.3;
+        Tue, 13 Jun 2023 01:40:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686645627; x=1689237627;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RNiICPsLQLIgFEOjAZE7SmBkD5zH7qfRQmETS3TMEtA=;
-        b=eSmsgf9fjF/TSYZCNneFweS+x2xAzcFBp/E4Jnq6I/bXUrC9r6x5pGyx52+kM+M27g
-         3IlTpZ2S88CCKS9NXoJmUH7z8mPhMblDrbIBizobA6VG5nJW2R1S05WjFPGMKp7aOkYM
-         HvItcOnShrcUlL+CBtHP7ZRG3VFbPAxAk+hOieQ00z6r5DuGgQorZCng74pv/+NZu+c9
-         P/iPmA1pGpxVwYLku/outN50DM/tIXsBV1t04fBDb0bSxI3PXtE0P6mRHqKztE5ahE4p
-         5shdVpQ0Q3i2yX90M4Eh8aI2UFXNaH/dETqzEuTm8uonqviul+XQi6lAAL+X8frfdojX
-         w/eQ==
+        d=gmail.com; s=20221208; t=1686645629; x=1689237629;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Uuddb9c9VUE9xG/wODQy6qGOGm/KkteE8GYq9MCwRAo=;
+        b=hHVs3qPi0Aq8cI3ZELcon2W8/5mlGpERDvjit7DNkZJGLihmbAwJbkACfzIIgkxIpc
+         j4vFdsP/WWW0wIJd/+64pTHuEO5ZVFDRuI3Ji6gM8fK45NJlH0e7e/arPF6r2r2akpsM
+         +P2AQH9buFVjbPQZ+tH8SrQvxbwlEmqMjiKsi3b2c61QcoDyZqrxyk3f27/fjkKTuQeH
+         oJykroMIDIs7GXAhup68spefTPKSnD3abb/0MnqQMjKiiJpTM6AyYrvCdFBlKCBeyInX
+         hAmGy+znv8erLXrRjh7AGDf7f3c0YH8bWp8o24v/AElZnau34Ib2Vq14+f23at78jucW
+         sshQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686645627; x=1689237627;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RNiICPsLQLIgFEOjAZE7SmBkD5zH7qfRQmETS3TMEtA=;
-        b=ZuVnQqevnJzt++JjPYCL+YWdt2gszpcbwLkzNFhnesc1Wc+VuZ3KPAddVjIr5MHliQ
-         jB+CkMb2MaX5I4/iQQ0U8HxSFjxwog9qyT/3mGSrt8XE1dEoVCh0HSECjNps/MjxMRvM
-         MD8TxbkLT5AqvdM1F2CDpvKNbH8D87VeUoIFaAT7tiXeXGnBGWXRMJVZr9TnpM0w9leg
-         RutXtYf1VloHg1yCW/heWyg4ZK7JOyCBtj/kKBwfHWQkMl2QCqSY8pDvIkWfPsMQURiw
-         DkwXywu7G0jLksoC+DPQvAyD0Cn1oO7pW36fqy/wMwShH+qLrcNh0Zro5LkhvhiGnTa9
-         MbqQ==
-X-Gm-Message-State: AC+VfDzQGc8J+JYXWv0qq1amPL4/4Jppv3vEPjV7VXmHKwQsEVU+I+KC
-        ll7Eepl/FiCbNE+m6Vh/rtvDnQ==
-X-Google-Smtp-Source: ACHHUZ4NEZA3RKdwcGEdV6TgpfyHraQdHx4D2B3hpjdE/u7c9ynnZ19MNLHZ8/g+4k1ruSevyU5iBA==
-X-Received: by 2002:a7b:cb90:0:b0:3f5:878:c0c2 with SMTP id m16-20020a7bcb90000000b003f50878c0c2mr8143809wmi.3.1686645627468;
-        Tue, 13 Jun 2023 01:40:27 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:b5a8:28ff:af00:a97f? ([2a05:6e02:1041:c10:b5a8:28ff:af00:a97f])
-        by smtp.googlemail.com with ESMTPSA id o6-20020a05600c378600b003f42d8dd7d1sm13809957wmr.7.2023.06.13.01.40.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 01:40:26 -0700 (PDT)
-Message-ID: <2b73ec3e-43e6-4fd0-034c-7541b6f53443@linaro.org>
-Date:   Tue, 13 Jun 2023 10:40:26 +0200
+        d=1e100.net; s=20221208; t=1686645629; x=1689237629;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Uuddb9c9VUE9xG/wODQy6qGOGm/KkteE8GYq9MCwRAo=;
+        b=hNvSXvSjcfvqFGfnv+69AdyuoUzw1pouOFvZQmVYptdk6b2x4mAz3cu9nMuD73+xv3
+         E1E/TgCLK6/yasmvb7RrkzHLpiKbFJZObj+ceVp7b9M87UC+t36g/Ln1EFxxI8HSY9Sr
+         xmqosnV4w+DGNdu8JScWVMxXCZ53S+IRb02f8G10fUK17Nh2YMtHWGMI+OfIoA1A9rMf
+         trdOitz0FSyRngdP1aljTkSIfyPw6dRyWaeMPoGBeSLfpFF4jITiEABtr1cXy/gBB8F4
+         4fn39BJ4k1YWlp2Ht5LLB5HbH4zlCw3OF7Wt6xnEptR6oewhcxDziioLIb5zDZ8LVmmo
+         BbAw==
+X-Gm-Message-State: AC+VfDxby6lBz5hEV/PMz2eva4L60hiX4eiUwCZa4Xt24J2cLC1uMKNY
+        fh56xOz2qgcvaHmKkmba8hA=
+X-Google-Smtp-Source: ACHHUZ6QLjaq87VUQOeMerJ4xeq4L9fRl6+tzkvzr9yyN/61YJ9iz8+q0PqfsCt/f8g2UDEsLRUlOA==
+X-Received: by 2002:a17:903:1105:b0:1b3:f572:397f with SMTP id n5-20020a170903110500b001b3f572397fmr389922plh.34.1686645629045;
+        Tue, 13 Jun 2023 01:40:29 -0700 (PDT)
+Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
+        by smtp.gmail.com with ESMTPSA id n10-20020a170902e54a00b001b01448ba72sm9528439plf.215.2023.06.13.01.40.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 01:40:28 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 12 Jun 2023 22:40:32 -1000
+From:   "tj@kernel.org" <tj@kernel.org>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        =?utf-8?B?56iL5Z6y5rab?= Chengkaitao Cheng 
+        <chengkaitao@didiglobal.com>,
+        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
+        "shakeelb@google.com" <shakeelb@google.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "muchun.song@linux.dev" <muchun.song@linux.dev>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
+        "chengzhihao1@huawei.com" <chengzhihao1@huawei.com>,
+        "pilgrimtao@gmail.com" <pilgrimtao@gmail.com>,
+        "haolee.swjtu@gmail.com" <haolee.swjtu@gmail.com>,
+        "yuzhao@google.com" <yuzhao@google.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "vasily.averin@linux.dev" <vasily.averin@linux.dev>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "surenb@google.com" <surenb@google.com>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "sujiaxun@uniontech.com" <sujiaxun@uniontech.com>,
+        "feng.tang@intel.com" <feng.tang@intel.com>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Subject: Re: [PATCH v3 0/2] memcontrol: support cgroup level OOM protection
+Message-ID: <ZIgrgGQQ-tYEQJFr@slm.duckdns.org>
+References: <ZFd5bpfYc3nPEVie@dhcp22.suse.cz>
+ <66F9BB37-3BE1-4B0F-8DE1-97085AF4BED2@didiglobal.com>
+ <ZFkEqhAs7FELUO3a@dhcp22.suse.cz>
+ <CAJD7tkaw_7vYACsyzAtY9L0ZVC0B=XJEWgG=Ad_dOtL_pBDDvQ@mail.gmail.com>
+ <ZIgodGWoC/R07eak@dhcp22.suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] lvts_thermal.c: Drop error checking for
- debugfs_create_dir
-Content-Language: en-US
-To:     Osama Muhammad <osmtendev@gmail.com>, rafael@kernel.org,
-        rui.zhang@intel.com, angelogioacchino.delregno@collabora.com,
-        DLG-Adam.Ward.opensource@dm.renesas.com, amitk@kernel.org,
-        wenst@chromium.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230530172439.13683-1-osmtendev@gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230530172439.13683-1-osmtendev@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZIgodGWoC/R07eak@dhcp22.suse.cz>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/05/2023 19:24, Osama Muhammad wrote:
-> This patch removes the error checking for debugfs_create_dir
-> in lvts_thermal.c. This is because the debugfs_create_dir()
-> does not return NULL but an ERR_PTR after an error.
-> The DebugFS kernel API is developed in a way that the
-> caller can safely ignore the errors that occur during
-> the creation of DebugFS nodes.The debugfs Api handles
-> it gracefully. The check is unnecessary.
-> 
-> Link to the comment above debugfs_create_dir:
-> https://elixir.bootlin.com/linux/latest/source/fs/debugfs/inode.c#L451
-> 
-> Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+Hello,
 
-Is this patch tested ?
+On Tue, Jun 13, 2023 at 10:27:32AM +0200, Michal Hocko wrote:
+> On the other hand I can see a need to customizable OOM victim selection
+> functionality. We've been through that discussion on several other
+> occasions and the best thing we could come up with was to allow to plug
+> BPF into the victim selection process and allow to bypass the system
+> default method. No code has ever materialized from those discussions
+> though. Maybe this is the time to revive that idea again?
 
+Yeah, my 5 cent - trying to define a rigid interface for something complex
+and flexible is a fool's errand.
 
+Johannes knows a lot better than me but we (meta) are handling most OOMs
+with oomd which gives more than sufficient policy flexibility. That said,
+handling OOMs in userspace requires wholesale configuration changes (e.g.
+working IO isolation) and being able to steer kernel OOM kills can be useful
+for many folks. I haven't thought too much about it but the problem seems
+pretty well fit for offloading policy decisions to a BPF program.
+
+Thanks.
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+tejun
