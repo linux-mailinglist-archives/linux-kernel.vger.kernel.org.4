@@ -2,265 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4A2E72D75C
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 04:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1643B72D75D
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 04:28:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233475AbjFMC2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 22:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42462 "EHLO
+        id S237650AbjFMC2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 22:28:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjFMC2E (ORCPT
+        with ESMTP id S239035AbjFMC20 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 22:28:04 -0400
-Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230B010EC;
-        Mon, 12 Jun 2023 19:28:02 -0700 (PDT)
-Received: from local
-        by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1q8tlF-0006QG-1C;
-        Tue, 13 Jun 2023 02:27:57 +0000
-Date:   Tue, 13 Jun 2023 03:27:14 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        SkyLake Huang <SkyLake.Huang@mediatek.com>,
-        Qingfang Deng <dqfext@gmail.com>
-Subject: [PATCH net-next] net: phy: mediatek-ge-soc: initialize MT7988 PHY
- LEDs default state
-Message-ID: <ZIfT7UUzj74NyzL_@makrotopia.org>
+        Mon, 12 Jun 2023 22:28:26 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C55199E;
+        Mon, 12 Jun 2023 19:28:17 -0700 (PDT)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QgC7p48VDzLq8m;
+        Tue, 13 Jun 2023 10:25:10 +0800 (CST)
+Received: from [10.67.111.205] (10.67.111.205) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 13 Jun 2023 10:28:14 +0800
+Subject: Re: [RFC] Adding support for setting the affinity of the recording
+ process
+To:     James Clark <james.clark@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+CC:     Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>
+References: <159de73b-fdd6-6df8-4f77-73c628fe641f@huawei.com>
+ <a24634f7-be80-6ca2-9df7-1624fe11c281@arm.com>
+From:   Yang Jihong <yangjihong1@huawei.com>
+Message-ID: <c291692c-7db8-b4cc-e17a-422c75ad8daa@huawei.com>
+Date:   Tue, 13 Jun 2023 10:28:14 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <a24634f7-be80-6ca2-9df7-1624fe11c281@arm.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Initialize LEDs and set sane default values.
-Read boottrap register and apply LED polarities accordingly to get
-uniform behavior from all LEDs on MT7988.
-Requires syscon phandle 'mediatek,pio' present in parenting MDIO bus
-which should point to the syscon holding the boottrap register.
+Hello,
 
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- drivers/net/phy/mediatek-ge-soc.c | 144 ++++++++++++++++++++++++++++--
- 1 file changed, 136 insertions(+), 8 deletions(-)
+On 2023/6/12 23:27, James Clark wrote:
+> 
+> 
+> On 12/06/2023 11:26, Yang Jihong wrote:
+>> Hello everyone,
+>>
+>> Currently, perf-record supports profiling an existing process, thread,
+>> or a specified command.
+>>
+>> Sometimes we may need to set CPU affinity of the target process before
+>> recording:
+>>
+>>    # taskset -pc <cpus> <pid>
+>>    # perf record -p <pid> -- sleep 10
+>>
+>> or:
+>>
+>>    # perf record -- `taskset -c <cpus> COMMAND`
+>>
+>> I'm thinking about getting perf to support setting the affinity of the
+>> recording process, for example:
+>>
+>> 1. set the CPU affinity of the <pid1> process to <cpus1>, <pid2> process
+>> to <cpus2>,  and record:
+>>
+>>    # perf record -p <pid1>/<cpus1>:<pid2>/<cpus2> -- sleep 10
+>>
+> 
+> I'm not sure if this is necessary. You can already do this with taskset
+> when you launch the processes or for existing ones.
 
-diff --git a/drivers/net/phy/mediatek-ge-soc.c b/drivers/net/phy/mediatek-ge-soc.c
-index 95369171a7ba6..7bdcb4415509f 100644
---- a/drivers/net/phy/mediatek-ge-soc.c
-+++ b/drivers/net/phy/mediatek-ge-soc.c
-@@ -1,11 +1,13 @@
- // SPDX-License-Identifier: GPL-2.0+
- #include <linux/bitfield.h>
-+#include <linux/mfd/syscon.h>
- #include <linux/module.h>
- #include <linux/nvmem-consumer.h>
- #include <linux/of_address.h>
- #include <linux/of_platform.h>
- #include <linux/pinctrl/consumer.h>
- #include <linux/phy.h>
-+#include <linux/regmap.h>
- 
- #define MTK_GPHY_ID_MT7981			0x03a29461
- #define MTK_GPHY_ID_MT7988			0x03a29481
-@@ -208,9 +210,40 @@
- #define MTK_PHY_DA_TX_R50_PAIR_C		0x53f
- #define MTK_PHY_DA_TX_R50_PAIR_D		0x540
- 
-+/* Registers on MDIO_MMD_VEND2 */
-+#define MTK_PHY_LED0_ON_CTRL			0x24
-+#define MTK_PHY_LED1_ON_CTRL			0x26
-+#define   MTK_PHY_LED_ON_MASK			GENMASK(6, 0)
-+#define   MTK_PHY_LED_ON_LINK1000		BIT(0)
-+#define   MTK_PHY_LED_ON_LINK100		BIT(1)
-+#define   MTK_PHY_LED_ON_LINK10			BIT(2)
-+#define   MTK_PHY_LED_ON_LINKDOWN		BIT(3)
-+#define   MTK_PHY_LED_ON_FDX			BIT(4) /* Full duplex */
-+#define   MTK_PHY_LED_ON_HDX			BIT(5) /* Half duplex */
-+#define   MTK_PHY_LED_FORCE_ON			BIT(6)
-+#define   MTK_PHY_LED_POLARITY			BIT(14)
-+#define   MTK_PHY_LED_ENABLE			BIT(15)
-+
-+#define MTK_PHY_LED0_BLINK_CTRL			0x25
-+#define MTK_PHY_LED1_BLINK_CTRL			0x27
-+#define   MTK_PHY_LED_1000TX			BIT(0)
-+#define   MTK_PHY_LED_1000RX			BIT(1)
-+#define   MTK_PHY_LED_100TX			BIT(2)
-+#define   MTK_PHY_LED_100RX			BIT(3)
-+#define   MTK_PHY_LED_10TX			BIT(4)
-+#define   MTK_PHY_LED_10RX			BIT(5)
-+#define   MTK_PHY_LED_COLLISION			BIT(6)
-+#define   MTK_PHY_LED_RX_CRC_ERR		BIT(7)
-+#define   MTK_PHY_LED_RX_IDLE_ERR		BIT(8)
-+#define   MTK_PHY_LED_FORCE_BLINK		BIT(9)
-+
- #define MTK_PHY_RG_BG_RASEL			0x115
- #define   MTK_PHY_RG_BG_RASEL_MASK		GENMASK(2, 0)
- 
-+/* Register in boottrap syscon defining the initial state of the 4 PHY LEDs */
-+#define RG_GPIO_MISC_TPBANK0			0x6f0
-+#define   RG_GPIO_MISC_TPBANK0_BOOTMODE		GENMASK(11, 8)
-+
- /* These macro privides efuse parsing for internal phy. */
- #define EFS_DA_TX_I2MPB_A(x)			(((x) >> 0) & GENMASK(5, 0))
- #define EFS_DA_TX_I2MPB_B(x)			(((x) >> 6) & GENMASK(5, 0))
-@@ -238,13 +271,6 @@ enum {
- 	PAIR_D,
- };
- 
--enum {
--	GPHY_PORT0,
--	GPHY_PORT1,
--	GPHY_PORT2,
--	GPHY_PORT3,
--};
--
- enum calibration_mode {
- 	EFUSE_K,
- 	SW_K
-@@ -263,6 +289,10 @@ enum CAL_MODE {
- 	SW_M
- };
- 
-+struct mtk_socphy_shared {
-+	u32			boottrap;
-+};
-+
- static int mtk_socphy_read_page(struct phy_device *phydev)
- {
- 	return __phy_read(phydev, MTK_EXT_PAGE_ACCESS);
-@@ -1073,6 +1103,104 @@ static int mt798x_phy_config_init(struct phy_device *phydev)
- 	return mt798x_phy_calibration(phydev);
- }
- 
-+static int mt798x_phy_setup_led(struct phy_device *phydev, bool inverted)
-+{
-+	struct pinctrl *pinctrl;
-+	const u16 led_on_ctrl_defaults = MTK_PHY_LED_ENABLE      |
-+					 MTK_PHY_LED_ON_LINK1000 |
-+					 MTK_PHY_LED_ON_LINK100  |
-+					 MTK_PHY_LED_ON_LINK10;
-+	const u16 led_blink_defaults = MTK_PHY_LED_1000TX |
-+				       MTK_PHY_LED_1000RX |
-+				       MTK_PHY_LED_100TX  |
-+				       MTK_PHY_LED_100RX  |
-+				       MTK_PHY_LED_10TX   |
-+				       MTK_PHY_LED_10RX;
-+
-+	phy_write_mmd(phydev, MDIO_MMD_VEND2, MTK_PHY_LED0_ON_CTRL,
-+		      led_on_ctrl_defaults ^
-+		      (inverted ? MTK_PHY_LED_POLARITY : 0));
-+
-+	phy_write_mmd(phydev, MDIO_MMD_VEND2, MTK_PHY_LED1_ON_CTRL,
-+		      led_on_ctrl_defaults);
-+
-+	phy_write_mmd(phydev, MDIO_MMD_VEND2, MTK_PHY_LED0_BLINK_CTRL,
-+		      led_blink_defaults);
-+
-+	phy_write_mmd(phydev, MDIO_MMD_VEND2, MTK_PHY_LED1_BLINK_CTRL,
-+		      led_blink_defaults);
-+
-+	pinctrl = devm_pinctrl_get_select(&phydev->mdio.dev, "gbe-led");
-+	if (IS_ERR(pinctrl))
-+		dev_err(&phydev->mdio.bus->dev, "Failed to setup PHY LED\n");
-+
-+	return 0;
-+}
-+
-+static int mt7988_phy_probe_shared(struct phy_device *phydev)
-+{
-+	struct device_node *np = dev_of_node(&phydev->mdio.bus->dev);
-+	struct mtk_socphy_shared *priv = phydev->shared->priv;
-+	struct regmap *regmap;
-+	u32 reg;
-+	int ret;
-+
-+	/* The LED0 of the 4 PHYs in MT7988 are wired to SoC pins LED_A, LED_B,
-+	 * LED_C and LED_D respectively. At the same time those pins are used to
-+	 * bootstrap configuration of the reference clock source (LED_A),
-+	 * DRAM DDRx16b x2/x1 (LED_B) and boot device (LED_C, LED_D).
-+	 * In practise this is done using a LED and a resistor pulling the pin
-+	 * either to GND or to VIO.
-+	 * The detected value at boot time is accessible at run-time using the
-+	 * TPBANK0 register located in the gpio base of the pinctrl, in order
-+	 * to read it here it needs to be referenced by a phandle called
-+	 * 'mediatek,pio' in the MDIO bus hosting the PHY.
-+	 * The 4 bits in TPBANK0 are kept as package shared data and are used to
-+	 * set LED polarity for each of the LED0.
-+	 */
-+	regmap = syscon_regmap_lookup_by_phandle(np, "mediatek,pio");
-+	if (IS_ERR(regmap))
-+		return PTR_ERR(regmap);
-+
-+	ret = regmap_read(regmap, RG_GPIO_MISC_TPBANK0, &reg);
-+	if (ret)
-+		return ret;
-+
-+	priv->boottrap = FIELD_GET(RG_GPIO_MISC_TPBANK0_BOOTMODE, reg);
-+
-+	return 0;
-+}
-+
-+static bool mt7988_phy_get_boottrap_polarity(struct phy_device *phydev)
-+{
-+	struct mtk_socphy_shared *priv = phydev->shared->priv;
-+
-+	if (priv->boottrap & BIT(phydev->mdio.addr))
-+		return false;
-+
-+	return true;
-+}
-+
-+static int mt7988_phy_probe(struct phy_device *phydev)
-+{
-+	int err;
-+
-+	err = devm_phy_package_join(&phydev->mdio.dev, phydev, 0,
-+				    sizeof(struct mtk_socphy_shared));
-+	if (err)
-+		return err;
-+
-+	if (phy_package_probe_once(phydev)) {
-+		err = mt7988_phy_probe_shared(phydev);
-+		if (err)
-+			return err;
-+	}
-+
-+	mt798x_phy_setup_led(phydev, mt7988_phy_get_boottrap_polarity(phydev));
-+
-+	return mt798x_phy_calibration(phydev);
-+}
-+
- static struct phy_driver mtk_socphy_driver[] = {
- 	{
- 		PHY_ID_MATCH_EXACT(MTK_GPHY_ID_MT7981),
-@@ -1092,7 +1220,7 @@ static struct phy_driver mtk_socphy_driver[] = {
- 		.config_init	= mt798x_phy_config_init,
- 		.config_intr	= genphy_no_config_intr,
- 		.handle_interrupt = genphy_handle_interrupt_no_ack,
--		.probe		= mt798x_phy_calibration,
-+		.probe		= mt7988_phy_probe,
- 		.suspend	= genphy_suspend,
- 		.resume		= genphy_resume,
- 		.read_page	= mtk_socphy_read_page,
--- 
-2.41.0
+Yes, that's what we're doing now, and I'm thinking about whether perf 
+can support this "taskset" feature.
 
+> 
+>> and
+>>
+>> 2. set CPU affinity of the COMMAND and record:
+>>
+>>    # perf record --taskset-command <cpus> COMMAND
+>>
+>> In doing so, perf, as an observer, actually changes some of the
+>> properties of the target process, which may be contrary to the purpose
+>> of perf tool.
+>>
+>>
+>> Will we consider accepting this approach?
+>>
+> 
+> For #2 I do this sometimes, but I prefix the perf command with taskset
+> because otherwise there is a small time between when taskset does its
+> thing and launching the child process that it runs in the wrong place.
+> 
+> Then one issue with the above method is that perf itself gets pinned to
+> those CPUs as well. I suppose that could influence your application but
+> I've never had an issue with it.
+> 
+> If you really can't live with perf also being pinned to those CPUs I
+> would say it makes sense to add options for #2. Otherwise I would just
+> run everything under taskset and no changes are needed.
+
+If "perf" process and the target process are pinned to the same CPU, 
+and the CPU usage of the target process is high, the perf data 
+collection may be affected. Therefore, in this case, we may need to pin 
+the target process and "perf" to different CPUs.
+
+> 
+> I think you would still need to have perf itself pinned to the CPUs just
+> before it does the fork and exec, and then after that it can undo its
+> pinning. Otherwise you'd still get that small time running on the wrong
+> cores.
+>
+
+Thanks for your advice, or we can support setting different affinities 
+for the "perf" process and the target process.
+
+
+Thanks,
+Yang.
