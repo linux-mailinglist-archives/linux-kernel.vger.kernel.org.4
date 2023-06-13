@@ -2,116 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E1D872E3E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 354E372E3F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:20:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233000AbjFMNTS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 13 Jun 2023 09:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35038 "EHLO
+        id S242481AbjFMNTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 09:19:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238917AbjFMNTP (ORCPT
+        with ESMTP id S240826AbjFMNTj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 09:19:15 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C509FE6
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 06:19:14 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-228-rngPUjIbMZOIePNVh0MRxQ-1; Tue, 13 Jun 2023 14:19:11 +0100
-X-MC-Unique: rngPUjIbMZOIePNVh0MRxQ-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 13 Jun
- 2023 14:19:07 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Tue, 13 Jun 2023 14:19:07 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Dave Hansen <dave.hansen@linux.intel.com>
-Subject: RE: [PATCH v1 1/1] signal: Use %*ph for printing hexdump of a small
- buffer
-Thread-Topic: [PATCH v1 1/1] signal: Use %*ph for printing hexdump of a small
- buffer
-Thread-Index: AQHZnXm9T9wPdtRS4UqlStR1qGjeqK+It5Rg
-Date:   Tue, 13 Jun 2023 13:19:07 +0000
-Message-ID: <d2772156abdb4b2388d9b6f701c81adc@AcuMS.aculab.com>
-References: <20230612220334.44177-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230612220334.44177-1-andriy.shevchenko@linux.intel.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 13 Jun 2023 09:19:39 -0400
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD691AC;
+        Tue, 13 Jun 2023 06:19:38 -0700 (PDT)
+Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-34070ecad56so2025885ab.3;
+        Tue, 13 Jun 2023 06:19:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686662377; x=1689254377;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=dT8m3Cu24ixjgaGAl25zXjiqNcC5dV8yRe8XpfUJ2IQ=;
+        b=bowsdthfXE0WYxgg66Q1+sD6nSSLevN48cqBBMWe9Ip2AAbNmH0vrbhRT8OwgiPzNR
+         ZjuUUATSaRW0Nlm6UPJz00+BYX/q+b00jq/BbsZ1wQZKbxi5dEHSf2WLbYZhFagA94lm
+         p7NIKocSKYMdrwhxqEwtN/vJCHdYfiuN5bRdorFEA7pt9Vv6mSiG07NCuEGzn2fxxwPS
+         Ajq7if8aHa11aLvKCWA9dwCDGDC/Cafy7G30KOG4pPqzPNvyoq/gG8sn5wFRDbO6Hkve
+         z45mDFSRud4N/KlBvDaNhMftIrV2zchuofn7GSXEwp9MssxB3NpKaPr21AKfYruaMx/z
+         seNw==
+X-Gm-Message-State: AC+VfDyvuoI5Roy0+eSwJOSvak3qqrJhnVRoGCrgrNZXy32F52Dw3bvg
+        KQ3KbTi9diPCy99oUtUxgmoQGhAQIg==
+X-Google-Smtp-Source: ACHHUZ6LVxhdrfDigUUxZyyKOzUm0MeS+qqoJHzIRx8RuSnPu1sAgcWkvmpQVZ2+A3XSjEIAaFXQZw==
+X-Received: by 2002:a92:d6c2:0:b0:340:8959:1268 with SMTP id z2-20020a92d6c2000000b0034089591268mr270515ilp.21.1686662377402;
+        Tue, 13 Jun 2023 06:19:37 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id v5-20020a92cd45000000b0032f240a0802sm500815ilq.48.2023.06.13.06.19.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 06:19:36 -0700 (PDT)
+Received: (nullmailer pid 1671700 invoked by uid 1000);
+        Tue, 13 Jun 2023 13:19:34 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Piyush Mehta <piyush.mehta@amd.com>
+Cc:     michal.simek@xilinx.com, robh+dt@kernel.org, git@amd.com,
+        nava.manne@xilinx.com, linux-kernel@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-usb@vger.kernel.org,
+        michal.simek@amd.com, conor+dt@kernel.org, p.zabel@pengutronix.de,
+        devicetree@vger.kernel.org, siva.durga.prasad.paladugu@amd.com
+In-Reply-To: <20230613123048.2935502-1-piyush.mehta@amd.com>
+References: <20230613123048.2935502-1-piyush.mehta@amd.com>
+Message-Id: <168666237486.1671584.5832429615873674500.robh@kernel.org>
+Subject: Re: [PATCH V3] dt-bindings: reset: convert the
+ xlnx,zynqmp-reset.txt to yaml
+Date:   Tue, 13 Jun 2023 07:19:34 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Shevchenko
-> Sent: 12 June 2023 23:04
+
+On Tue, 13 Jun 2023 18:00:48 +0530, Piyush Mehta wrote:
+> Convert the binding to DT schema format. It also updates the
+> reset-controller description.
 > 
-> The kernel already has a helper to print a hexdump of a small
-> buffer via pointer extension. Use that instead of open coded
-> variant.
-> 
-> In long term it helps to kill pr_cont() or at least narrow down
-> its use.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
 > ---
->  kernel/signal.c | 11 +++++------
->  1 file changed, 5 insertions(+), 6 deletions(-)
+> Changes in V2:
+> - Addressed the Krzysztof review comment:
+>  - Update DT binding to fix the dt_binding_check warning.
+>  - Removed 2/2 - xlnx,zynqmp-firmware.yaml binding patch: Will send after
+>    xlnx,zynqmp-reset.yaml binding merge.
 > 
-> diff --git a/kernel/signal.c b/kernel/signal.c
-> index b5370fe5c198..6be2df76f0b4 100644
-> --- a/kernel/signal.c
-> +++ b/kernel/signal.c
-> @@ -1259,18 +1259,17 @@ static void print_fatal_signal(int signr)
->  	pr_info("potentially unexpected fatal signal %d.\n", signr);
+> Link: https://lore.kernel.org/lkml/168612336438.2153757.6000360498539992409.robh@kernel.org/T/#m4abfe6287177d5fd09f781d298dd19d56aae5e27
 > 
->  #if defined(__i386__) && !defined(__arch_um__)
-> -	pr_info("code at %08lx: ", regs->ip);
->  	{
-> +		unsigned char insn[16];
->  		int i;
-> +
->  		for (i = 0; i < 16; i++) {
-> -			unsigned char insn;
-> -
-> -			if (get_user(insn, (unsigned char *)(regs->ip + i)))
-> +			if (get_user(insn[i], (unsigned char __user *)(regs->ip + i)))
->  				break;
-> -			pr_cont("%02x ", insn);
->  		}
+> Changes in V3:
+> - Addressed the Krzysztof review comment:
+>  - Removed 2/2 - xlnx,zynqmp-firmware.yaml binding patch: Will send after
+>    xlnx,zynqmp-reset.yaml binding merge.
+>  - Update title: Removed "binding".
+>  - Update Example:
+>   - Removed header file.
+>   - Dropped three levels of indentations: firmware and zynqmp_firmware.
+>   - Removed the sata example.
+> 
+> Link: https://lore.kernel.org/all/22e3c25e-487b-c02f-46f3-6d2ab2be8813@linaro.org/
+> ---
+>  .../bindings/reset/xlnx,zynqmp-reset.txt      | 55 -------------------
+>  .../bindings/reset/xlnx,zynqmp-reset.yaml     | 52 ++++++++++++++++++
+>  2 files changed, 52 insertions(+), 55 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.txt
+>  create mode 100644 Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml
+> 
 
-Isn't that just:
-		i = 16 - copy_from_user(insn, (unsigned char __user *)regs->ip, 16);
-(the 16 should be sizeof (insn))
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-	David
+yamllint warnings/errors:
 
-> +
-> +		pr_info("code at %08lx: %*ph\n", regs->ip, i, insn);
->  	}
-> -	pr_cont("\n");
->  #endif
->  	preempt_disable();
->  	show_regs(regs);
-> --
-> 2.40.0.1.gaa8946217a0b
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml: $defs:qcom-pmic-mpp-state:properties:qcom,paired: [{'description': 'Indicates that the pin should be operating in paired mode.'}] is not of type 'object', 'boolean'
+	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230613123048.2935502-1-piyush.mehta@amd.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
