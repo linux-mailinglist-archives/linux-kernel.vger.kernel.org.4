@@ -2,90 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2F872DC71
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:27:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 262AA72DC7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241207AbjFMI1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 04:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41032 "EHLO
+        id S241140AbjFMIaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 04:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234722AbjFMI1f (ORCPT
+        with ESMTP id S241293AbjFMIaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 04:27:35 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC09BC9;
-        Tue, 13 Jun 2023 01:27:33 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 13 Jun 2023 04:30:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E282C9;
+        Tue, 13 Jun 2023 01:30:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 923F31FD80;
-        Tue, 13 Jun 2023 08:27:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1686644852; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6nUGC14+7CBrEZi0pZlxIb9RwE6G35ofltIgPALxQpU=;
-        b=AvTOTVSVYVd8ee7Kx3UT6ua7VKmK3BO63CfBLXP9P/NNd2GCnkFP7DCouBzWUgF+Re9T5D
-        L9ERmrpkcMrCveWeQFYtfZyWwGKRIjc/oS2aEt3SIBgfA2D/M/FXI8OD41n4eZXivEZ0R4
-        VwVmBbZupyQ5A0phG1gvCTbkXDbPVkE=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 80C5E13483;
-        Tue, 13 Jun 2023 08:27:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id PuVeH3QoiGRqMwAAMHmgww
-        (envelope-from <mhocko@suse.com>); Tue, 13 Jun 2023 08:27:32 +0000
-Date:   Tue, 13 Jun 2023 10:27:32 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     =?utf-8?B?56iL5Z6y5rab?= Chengkaitao Cheng 
-        <chengkaitao@didiglobal.com>, "tj@kernel.org" <tj@kernel.org>,
-        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
-        "shakeelb@google.com" <shakeelb@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "muchun.song@linux.dev" <muchun.song@linux.dev>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
-        "chengzhihao1@huawei.com" <chengzhihao1@huawei.com>,
-        "pilgrimtao@gmail.com" <pilgrimtao@gmail.com>,
-        "haolee.swjtu@gmail.com" <haolee.swjtu@gmail.com>,
-        "yuzhao@google.com" <yuzhao@google.com>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "vasily.averin@linux.dev" <vasily.averin@linux.dev>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "surenb@google.com" <surenb@google.com>,
-        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "sujiaxun@uniontech.com" <sujiaxun@uniontech.com>,
-        "feng.tang@intel.com" <feng.tang@intel.com>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Subject: Re: [PATCH v3 0/2] memcontrol: support cgroup level OOM protection
-Message-ID: <ZIgodGWoC/R07eak@dhcp22.suse.cz>
-References: <ZFd5bpfYc3nPEVie@dhcp22.suse.cz>
- <66F9BB37-3BE1-4B0F-8DE1-97085AF4BED2@didiglobal.com>
- <ZFkEqhAs7FELUO3a@dhcp22.suse.cz>
- <CAJD7tkaw_7vYACsyzAtY9L0ZVC0B=XJEWgG=Ad_dOtL_pBDDvQ@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9772D620EA;
+        Tue, 13 Jun 2023 08:30:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81900C433D2;
+        Tue, 13 Jun 2023 08:30:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686645004;
+        bh=6d42DbKgu8Ei2jLZ7JrS4wpOmLl2weh1xU1RAzLXuv0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U7nb8VHi1M/V+P+7RhyqjKOtaDVctjbsdOhMSOSeZdtpmUzwbZW43X1xR/GFCmu9D
+         Pb9Y/x+vCtAK8U7dGFQPF9Y7qfMJwP/nvxojlCUh1AOGKywoxSlil/bK8jSpuCeRVr
+         77xOHM9NSqVxSSxU1R2Rwu1eUDlCfD6icKD4mM26GSezBtoJ2/ZgCUCgpnpnEiXIcz
+         1412f1T/WfxFCq3J1fcM0kqYpzfpZ10ycBhQSuKDs9oRvJxRZjpgbdKVuoL6lHQMp/
+         fcxq1alrDVAJj1RpDQWpoWJPbrjcZLU+FKoEn+2fu2cynGpCjD2SV9P5DlpZdVX/AY
+         T8mGvcH1F/ZEw==
+Date:   Tue, 13 Jun 2023 10:30:01 +0200
+From:   Maxime Ripard <mripard@kernel.org>
+To:     Sui Jingfeng <suijingfeng@loongson.cn>
+Cc:     Sui Jingfeng <15330273260@189.cn>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH v14 0/2] drm: add kms driver for loongson display
+ controller
+Message-ID: <a23d6mgl4fbfa4ucgjvwgw7l3somxo4tkhit7ygy55fldlum56@vm3tyjdsx24l>
+References: <20230520105718.325819-1-15330273260@189.cn>
+ <d4e647d8-294c-abd7-40c6-37381796203d@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6kkkzeylcfa5wg45"
 Content-Disposition: inline
-In-Reply-To: <CAJD7tkaw_7vYACsyzAtY9L0ZVC0B=XJEWgG=Ad_dOtL_pBDDvQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <d4e647d8-294c-abd7-40c6-37381796203d@loongson.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,49 +67,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun 04-06-23 01:25:42, Yosry Ahmed wrote:
-[...]
-> There has been a parallel discussion in the cover letter thread of v4
-> [1]. To summarize, at Google, we have been using OOM scores to
-> describe different job priorities in a more explicit way -- regardless
-> of memory usage. It is strictly priority-based OOM killing. Ties are
-> broken based on memory usage.
-> 
-> We understand that something like memory.oom.protect has an advantage
-> in the sense that you can skip killing a process if you know that it
-> won't free enough memory anyway, but for an environment where multiple
-> jobs of different priorities are running, we find it crucial to be
-> able to define strict ordering. Some jobs are simply more important
-> than others, regardless of their memory usage.
 
-I do remember that discussion. I am not a great fan of simple priority
-based interfaces TBH. It sounds as an easy interface but it hits
-complications as soon as you try to define a proper/sensible
-hierarchical semantic. I can see how they might work on leaf memcgs with
-statically assigned priorities but that sounds like a very narrow
-usecase IMHO.
+--6kkkzeylcfa5wg45
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I do not think we can effort a plethora of different OOM selection
-algorithms implemented in the kernel. Therefore we should really
-consider a control interface to be as much extensible and in line
-with the existing interfaces as much as possible. That is why I am
-really open to the oom protection concept which fits reasonably well
-to the reclaim protection scheme. After all oom killer is just a very
-aggressive method of the memory reclaim.
+Hi,
 
-On the other hand I can see a need to customizable OOM victim selection
-functionality. We've been through that discussion on several other
-occasions and the best thing we could come up with was to allow to plug
-BPF into the victim selection process and allow to bypass the system
-default method. No code has ever materialized from those discussions
-though. Maybe this is the time to revive that idea again?
- 
-> It would be great if we can arrive at an interface that serves this
-> use case as well.
-> 
-> Thanks!
-> 
-> [1]https://lore.kernel.org/linux-mm/CAJD7tkaQdSTDX0Q7zvvYrA3Y4TcvLdWKnN3yc8VpfWRpUjcYBw@mail.gmail.com/
--- 
-Michal Hocko
-SUSE Labs
+On Mon, Jun 12, 2023 at 10:58:54PM +0800, Sui Jingfeng wrote:
+> Hi,
+>=20
+>=20
+> Any ideas for this trivial DC driver? Sorry about my broken English.
+>=20
+> What to do next? Send a new version?
+
+Thomas already told you to merge it in the previous version:
+https://lore.kernel.org/dri-devel/7b77020f-d543-13bf-e178-bc416bcc728d@suse=
+=2Ede/
+
+So.. do that?
+
+Maxime
+
+--6kkkzeylcfa5wg45
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZIgpCQAKCRDj7w1vZxhR
+xaX9AP98NAUeUldG+9TkOuUCTTK2w4Lhn+TkARbi5tstE7HcyAEAyXSOV9A0A5k7
+xuUxndGdKHR5Al+XvMPG/pYoL0jt9w0=
+=kRkF
+-----END PGP SIGNATURE-----
+
+--6kkkzeylcfa5wg45--
