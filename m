@@ -2,82 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9179B72E70F
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:23:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD3172E71C
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240261AbjFMPXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 11:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44182 "EHLO
+        id S242837AbjFMPXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 11:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240973AbjFMPXi (ORCPT
+        with ESMTP id S240973AbjFMPXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 11:23:38 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA721FD2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 08:23:14 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f642a24555so7110251e87.3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 08:23:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686669792; x=1689261792;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZObq3QdQreREeU4NfsEue/+eYyb1HX3Nq35VP0wnSHk=;
-        b=O5I1KTQM9ahis2CVWCWapMP4B1w+V782LooA28aPXu+f8RIsABsAEG6HoMaXraby7g
-         HdDN1qziUtNinucVrcJwTyTcagUZEjEtlexo+8OnfziVbDulrBUnbj57VWTQ4d+L5ock
-         oQWQTGvpQ45Mo6I0heqUBJee7CgGQKuWJcd21ToX04OGSr3pIsy5fFoJsrGIL4GlVH6B
-         jDKNaixXYaNX/BSg+6fNh0NUDzkhC5NRZ7mbGe+fZxJPb5JkvWT/wArUzro3LFWPjgeu
-         RRUrLjCF6+45XGPMzKXCQ0Who0jYHmOH0H5ZC6BRaoe0ZG4Spgrr53phfK1cSjPWEzAQ
-         JhIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686669792; x=1689261792;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZObq3QdQreREeU4NfsEue/+eYyb1HX3Nq35VP0wnSHk=;
-        b=Z4vl2MSzc5paPOtHiEuEWjRhTLsBluTz6+Xc1tOqplgOC00uSMv+B3W6bV4pcDQT/R
-         nnQLkY8EHEc4ds4e6hyUpFdE4s5+gvqkUmKX+alYlIeBhNfvk9FPhQPymPBDFZLLtzCO
-         xD/RVHZWpg4Expbv1ZtyDctoGpIp4WOgp5ZzAfMwpsi1QnQEfipjxDbOBt7/+cGTFHBe
-         Cf+9tdF797+qjJgp7rxcTaTw46aIg+9/xdUMuleCVw9M1SBYj10+oRyvs2d85KbrLiUh
-         MKP3LsPzpGOTH6td07e9T4ca+hloIvlcIsGyTO8UkKR+9x+cFsg+fHLcwccH1pmVecCZ
-         eV9Q==
-X-Gm-Message-State: AC+VfDzp6i960IHqP7z1ZJ/C1tdw1tfblAv2lRUF3XTc/UaqeYtv/66z
-        tFk8f/U/8BiKFePsmZJSf+BmKA==
-X-Google-Smtp-Source: ACHHUZ5MGoSPdfOcevVLsn6Xp9mNELJ81EH8SncxQ2LkVo3Gx9bg3gEgGWSOLoOA3+r4muPayrH13w==
-X-Received: by 2002:a19:6601:0:b0:4f6:5bf2:63bc with SMTP id a1-20020a196601000000b004f65bf263bcmr5593106lfc.3.1686669792155;
-        Tue, 13 Jun 2023 08:23:12 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id 7-20020ac24847000000b004f60be0c685sm1809673lfy.123.2023.06.13.08.23.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 08:23:11 -0700 (PDT)
-Message-ID: <1631b3cd-dc24-0024-5291-fa9bdacc82bc@linaro.org>
-Date:   Tue, 13 Jun 2023 17:23:06 +0200
+        Tue, 13 Jun 2023 11:23:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020C019B7;
+        Tue, 13 Jun 2023 08:23:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 285EB637A0;
+        Tue, 13 Jun 2023 15:23:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED41EC433D9;
+        Tue, 13 Jun 2023 15:23:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686669813;
+        bh=Mi+mI7N46ZxzzZLb/TXUcDy1ynizAZzA47svx3Q14sY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=maobcKQoh6GI014NM4dpO69qO3Z32zkLGDzKUc3qUJlLtIi5jKuQUArg/20JvSxgi
+         OlBlaGd/IKH9xxJdWythhnPj7hSjP9a6xsUY8o+EytJbAqqlP+1nXMlAWLoV6ibIdA
+         nsIfpSJZvrrLQ3H/hJ2WBozgqZKS329hcqeaRPQrKTyEOZSt21I7X0Vgw51dKTy00w
+         mlLYbAX/gEzk6nWdRto5freDs7B+KHZgRwGloAh1f2yfOdMmiwfNyjc0aF51Wpir+l
+         seMNpfqifr6ept0O6vK4tWR4JZRnXFgPCxNPp/5kFvogGvHWErWJ7sz0wphWLyTRZ/
+         RkexTX+4bH1Iw==
+Date:   Tue, 13 Jun 2023 16:23:27 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Yingkun Meng <mengyingkun@loongson.cn>,
+        Conor Dooley <conor@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        conor+dt@kernel.org, lgirdwood@gmail.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, loongarch@lists.linux.dev,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [ PATCH v2 3/3] ASoC: dt-bindings: Add support for Loongson
+ audio card
+Message-ID: <fb8ef8e7-15d2-4fc3-8d9b-4edf1b3bced1@sirena.org.uk>
+References: <20230612085614.3039498-1-mengyingkun@loongson.cn>
+ <20230612-booted-french-186dd95e78a9@spud>
+ <bda7c25f-65cf-d45f-3ac0-f2471e3aacf8@loongson.cn>
+ <20230613-zoologist-panorama-a87858bba075@wendy>
+ <887f9cc4-6457-9d14-8aef-011ff4c9aeda@loongson.cn>
+ <20230613-depletion-garnet-ccc2009111c3@wendy>
+ <449d07d9-5538-4f36-83a0-3a81a9ab9ea2@sirena.org.uk>
+ <20230613-crewmate-levitate-597ab96ea2d7@wendy>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v4 2/8] clk: qcom: Add Global Clock controller (GCC)
- driver for IPQ5018
-Content-Language: en-US
-To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, ulf.hansson@linaro.org, linus.walleij@linaro.org,
-        catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20230510134121.1232286-1-quic_srichara@quicinc.com>
- <20230510134121.1232286-3-quic_srichara@quicinc.com>
- <21a5642c-e6e5-9323-7db1-383a18616ac0@linaro.org>
- <410b0991-30b6-c87d-9b25-5f51f6c08671@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <410b0991-30b6-c87d-9b25-5f51f6c08671@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="l11+GZHPld2NB1XO"
+Content-Disposition: inline
+In-Reply-To: <20230613-crewmate-levitate-597ab96ea2d7@wendy>
+X-Cookie: Not a flying toy.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,52 +70,43 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--l11+GZHPld2NB1XO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 13.06.2023 15:16, Sricharan Ramabadhran wrote:
-> Hi Konrad,
-> 
-> On 5/27/2023 12:47 AM, Konrad Dybcio wrote:
->>
->>
->> On 10.05.2023 15:41, Sricharan Ramabadhran wrote:
->>> Add support for the global clock controller found on IPQ5018
->>> based devices.
->>>
->>> Co-developed-by: Varadarajan Narayanan <quic_varada@quicinc.com>
->>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
->>> Co-developed-by: Gokul Sriram Palanisamy <quic_gokulsri@quicinc.com>
->>> Signed-off-by: Gokul Sriram Palanisamy <quic_gokulsri@quicinc.com>
->>> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
->>> ---
->>>   [v4] Fixed to use ARRAY_SIZE() wherever parent_data was used
->>>        Changed GPL v2 to GPL as per comments
->>>
->>>   drivers/clk/qcom/Kconfig       |   10 +-
->>>   drivers/clk/qcom/Makefile      |    1 +
->>>   drivers/clk/qcom/gcc-ipq5018.c | 3731 ++++++++++++++++++++++++++++++++
->>>   3 files changed, 3740 insertions(+), 2 deletions(-)
->>>   create mode 100644 drivers/clk/qcom/gcc-ipq5018.c
->>>
->> [...]
->>
->>> +struct clk_rcg2 lpass_axim_clk_src = {
->>> +    .cmd_rcgr = 0x2E028,
->> Please use lowercase hex for non-macro-defines, all throughout the file.
->>
-> 
->  ok. Will fix this in V10.
-> 
->> [...]
->>
->>> +static struct clk_rcg2 system_noc_bfdcd_clk_src = {
->> Drop clocks that are managed in RPM, they will conflict.
->>
-> 
->   IPQ5018 does not have RPM.
-Oh that's new. I suppose you'll be interested in clk-interconnect for
-voting on bus resources then.
+On Tue, Jun 13, 2023 at 03:29:33PM +0100, Conor Dooley wrote:
+> On Tue, Jun 13, 2023 at 02:54:36PM +0100, Mark Brown wrote:
 
-Konrad
-> 
-> Regards,
->  Sricharan
+> > are also important to the audio configuration.  A card binding describes
+> > the interconections between the devices in the system and provides
+> > identification information for the audio subsystem.  This system level
+> > audio integration is a physical thing that can be pointed at that
+> > requires real software control.
+
+> The bit you were responding to with that was a disingenuous question.
+> Probably not fair of me to ask one of a non-native speaker like that,
+> when all I wanted to know was whether it was appropriate not to add
+> a more specific compatible, or whether this was something invariant.
+
+I don't think that's particularly useful - you'd end up adding a
+compatible for every single board which we've got no real intention of
+adding except in the cases where we end up being able to merge a more
+specific machine driver into a generic one.  It'd be more likely to lead
+to bikeshedding than anything useful I think.
+
+--l11+GZHPld2NB1XO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSIie4ACgkQJNaLcl1U
+h9AEeAgAhZ6Nnbye3sNtvMwQaRERwepufwIWsUfpfSJkhRHcfJsVgVpsigqOkqQm
+Ww5V12dg4E8ljvAjGNUDrwAJ98LcmRikl5uE6P06jl6ujwtdoUQ1M7WfAQW15+is
+NGYylD/mE4SSGcuvHhxpgKOOISsVvyu4LI1/6ZDZbMF33Uas9HRRixagjcVgJawG
+ySBXnlv/WS2GKJ06X0LhRAYGgDHXqsGoxu+cDw+RrTMd8pHoZElVNefvdNI62ZUy
+LHRMc2YaiyDxkvZVdrJ3jJhzUAPVcehEVCgCWmKeSN0ht55OmoBnNhKXUcWIv0Zd
+ZO23yw2R7z5P8Q7aEAJ208kmhU+4rg==
+=v32h
+-----END PGP SIGNATURE-----
+
+--l11+GZHPld2NB1XO--
