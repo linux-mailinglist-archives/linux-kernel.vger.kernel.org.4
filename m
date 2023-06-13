@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C9F72D805
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 05:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CCE072D806
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 05:12:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239651AbjFMDMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 23:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56294 "EHLO
+        id S238724AbjFMDMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 23:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239175AbjFMDLO (ORCPT
+        with ESMTP id S239327AbjFMDLQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 23:11:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC661730;
-        Mon, 12 Jun 2023 20:10:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A0E6D61D5A;
-        Tue, 13 Jun 2023 03:10:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FAEFC433D2;
-        Tue, 13 Jun 2023 03:10:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686625809;
-        bh=hzoTsWIe+W0MkQt7OpjaB2OEQVikCx9KmTVgfu6i3Wo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pnafMXnHRAo1NxIlBZFL9ihkEP1KfM1H8Yp3cuF+8urOjaDUVOt9wwl4/Ks0gz36Z
-         dag2AQTYEAJxdFoQ0N2XI3voddu79ZtYbl/y3iQZbWmz2evoACnJL5o2gvewFbylRi
-         LadR44/l78Z3hSZGpyaywKyt0gqT/+rSPpODXFQgJv5N1Gvfj5jcsEkGaDQFSNfhg0
-         3IcFHaIlKte10s/oLbmQnBKPl91rPEFt/O9TzoFKJgLp6JheYL1C66ufWbtDL+A6nB
-         inGBOis0buSEcDFI91tYICDjnIfQs1M7U8gqQS2oueT2kP3ODVVn9bypunTffGNnTy
-         cWUd0azpxZSbQ==
-Date:   Mon, 12 Jun 2023 20:10:06 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, herbert@gondor.apana.org.au,
-        davem@davemloft.net, conor.dooley@microchip.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, christoph.muellner@vrull.eu,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>
-Subject: Re: [PATCH v5 4/4] RISC-V: crypto: add accelerated GCM GHASH
- implementation
-Message-ID: <20230613031006.GD883@sol.localdomain>
-References: <20230612210442.1805962-1-heiko.stuebner@vrull.eu>
- <20230612210442.1805962-5-heiko.stuebner@vrull.eu>
+        Mon, 12 Jun 2023 23:11:16 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3881E1BFD
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 20:10:23 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id 98e67ed59e1d1-25bf606fcbfso311174a91.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 20:10:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686625822; x=1689217822;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=H7TfWuJuxniQYZUFW9bvII5Vr1rgNmizaa/XrNQwKLo=;
+        b=o21hhPFI2C7x8MmkIJp324pzCYdODeDUSOjY5lJVwPn2X8uLrQWtOC391q9yKiO6Bw
+         dSXq6WwaR2tXABOcmtQ+RYDX6FhFgDCYMQaB1SnIq+PLQu2zy7uesNZU/Map8z1e4+J3
+         mNk+a5QNNGOrAlK4ur4hTJDRgO6Me2WL/TeHc2zYeW4ehOPw3FiQ197TH2/TOusmjJ1K
+         Kwr1D5rJAPt2JndlGxhQDnJ+VdDUX4WTjPHV81u8UHhH4UBn/UO8eDw1FcwtxizfJw6I
+         U0hs/ztuqe1oSPZGNen/sEef976p7BqFujRqEWjWGO78JXABb4Scsgr0sg1CrZ3zQB8X
+         n1zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686625822; x=1689217822;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=H7TfWuJuxniQYZUFW9bvII5Vr1rgNmizaa/XrNQwKLo=;
+        b=ToOHEx6iIWktGq1eQiCBIygl0lW4lxG2e8i0+80j8Xi3BlXYd5aA1LKzJubTfPMIGV
+         WKaPQ4JbljfgFz10PAtbhHaVEBxv2mMPYx2/sGh4PYIh9F4sKC6HxAGG5go/t7jEKFTQ
+         0A+Gc9y67kb74HbYyDnApsczxFSHdGFiVBG+KuROoilXVxHpxG/HYaKJLhiget8mFWRk
+         jDC3EZ3+Zz/ZDGoOrgoB5MHDL0FOZkBPDwlEBBIE0WaYEhjncO9Ofkf+OmZl8g1TzRCg
+         lXI/xlGIGLQypRdoyoq5kJhCrvIanaWvWsPkn7+iUYXkl1n/LZAeMz3xwd7MWYRjneq0
+         kcNA==
+X-Gm-Message-State: AC+VfDybYILaA5hTDJNyj+A3qeHR6sVaqQfM4tkMFPucc2jKBvicDySy
+        bINvlYyWx6MqlotMO1VH0C2hfC2sO677WGeb9HKR0x79opx31YFN6LkzyCtm
+X-Google-Smtp-Source: ACHHUZ5qgzPFLld4kQf0WeILf90CRF6XTkOBEbWB0G2OZPT9Xo7z8EtFAzC6TeraF5iElKcqA0t/TSuqhWdJLejzWbs=
+X-Received: by 2002:a17:90b:1a88:b0:25c:1ad3:a4a1 with SMTP id
+ ng8-20020a17090b1a8800b0025c1ad3a4a1mr342839pjb.1.1686625822346; Mon, 12 Jun
+ 2023 20:10:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230612210442.1805962-5-heiko.stuebner@vrull.eu>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+From:   "R.F. Burns" <burnsrf@gmail.com>
+Date:   Mon, 12 Jun 2023 23:10:11 -0400
+Message-ID: <CABG1boMoG2vM0pFWCnjP3GBrxQcwNiBBzxR=O2++WWDH_bJDcw@mail.gmail.com>
+Subject: PC speaker
+To:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,54 +62,5 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Heiko,
-
-On Mon, Jun 12, 2023 at 11:04:42PM +0200, Heiko Stuebner wrote:
-> diff --git a/arch/riscv/crypto/ghash-riscv64-zbc.pl b/arch/riscv/crypto/ghash-riscv64-zbc.pl
-> new file mode 100644
-> index 000000000000..677c438a44bf
-> --- /dev/null
-> +++ b/arch/riscv/crypto/ghash-riscv64-zbc.pl
-> @@ -0,0 +1,427 @@
-> +#! /usr/bin/env perl
-> +# Copyright 2022 The OpenSSL Project Authors. All Rights Reserved.
-> +#
-> +# Licensed under the Apache License 2.0 (the "License").  You may not use
-> +# this file except in compliance with the License.  You can obtain a copy
-> +# in the file LICENSE in the source distribution or at
-> +# https://www.openssl.org/source/license.html
-> +
-> +# This file is dual-licensed and is also available under the following
-> +# terms:
-> +#
-> +# Copyright (c) 2023, Christoph Müllner <christoph.muellner@vrull.eu>
-> +# All rights reserved.
-> +#
-> +# Redistribution and use in source and binary forms, with or without
-> +# modification, are permitted provided that the following conditions
-> +# are met:
-> +# 1. Redistributions of source code must retain the above copyright
-> +#    notice, this list of conditions and the following disclaimer.
-> +# 2. Redistributions in binary form must reproduce the above copyright
-> +#    notice, this list of conditions and the following disclaimer in the
-> +#    documentation and/or other materials provided with the distribution.
-
-Is this worded properly for a dual license?  The paragraph about the Apache
-License makes it sound like the Apache License must always be complied with:
-"You may not use this file except in compliance with the License."
-
-So I worry that this could be interpreted as:
-
-    Apache-2.0 AND BSD-2-Clause
-
-instead of
-
-    Apache-2.0 OR BSD-2-Clause
-
-It needs to be the latter.
-
-So I think the file header needs to be clarified w.r.t. the dual license.
-
-Side note: can you please also include a SPDX-License-Identifier?
-
-- Eric
+Is it possible to write a kernel module which, when loaded, will blow
+the PC speaker?
