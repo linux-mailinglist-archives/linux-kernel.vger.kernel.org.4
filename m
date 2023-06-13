@@ -2,56 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E22A972F09F
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 01:49:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03CEF72F0B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 01:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240983AbjFMXr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 19:47:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38250 "EHLO
+        id S242072AbjFMXtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 19:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240116AbjFMXrW (ORCPT
+        with ESMTP id S241444AbjFMXrX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 19:47:22 -0400
+        Tue, 13 Jun 2023 19:47:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22682D4C;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D8E11BFD;
         Tue, 13 Jun 2023 16:46:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BCA3C63C85;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BFD763C79;
+        Tue, 13 Jun 2023 23:45:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B892C433C0;
         Tue, 13 Jun 2023 23:45:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23650C433C9;
-        Tue, 13 Jun 2023 23:45:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686699944;
-        bh=B4SCq0iczA9nvDpM+xGfWptMw9Oi7D28BNYtK11OW0g=;
+        s=k20201202; t=1686699945;
+        bh=ZseuDVtPZx7qTmwgoEv1ylF+KAXwdDILoO8Fkiiir48=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p2g4ddkHfQmMSHrhzk3565U5nnjXV5BZktWsZIZywd3oaOAgpm7OA2tkJ3Iqy0OmG
-         VLCrK2KIUIlM4hbUVPDMM2EOuJRE1U7fRMfKXG+cZbxGU+hAzX5r6OsIpQIAPNBCc0
-         QbZLgoyiLbzfzWScDy9jaNYKKjxg2LxMzcQj9fnmw5xKX1dzzHGl/ws7kwYs/7Lb/k
-         CnFSE5s1iL8cAjfsthEB/kZOBPRBB03llteMpSFmAhJbJBayW3auAlLm8aD0wGdLyh
-         x3XOWqW5FNjmXZAC2aDNbVjO+lNWlu8SXq4rsZF72lBKA90DkRS7jABzvXXxzAi73p
-         wwKiJpbfu18QA==
+        b=hMtMwLBKBd8hCMUxocPlj5dpt08WaA2jkrwhxAr0tT410C2+vhlxgsdsFx/Ypp4RS
+         oKahyaRjKwvvNKRDOGd1ztaH1hXImOuIqbrwzV4xhqqEiPdV8Nn2dWYO/ZKzl1/Nn/
+         TjbFUPi/pDHBG9WpmmXfClJ2NQu9T8lbfz0KrOWIal8qUsnP0YjI+VO3gaZvXRXIhA
+         bdUSCAnAkC2OEAQs/dqduFYV1iyleImjON2cge1KJozjwwhnPAPeta8LrgO58vLJVh
+         KSx3ki1jlY9htvGzTH1Xn1KLoLatb6KV67q9oRC2xKQJaIt7n8NMsxa/vAg+h/Idh/
+         vdet5kNOszh+w==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Will Deacon <will@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
+To:     Michael Turquette <mturquette@baylibre.com>,
         Andy Gross <agross@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
+        Iskren Chernev <me@iskren.info>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org,
         Marijn Suijten <marijn.suijten@somainline.org>,
-        iommu@lists.linux.dev
-Subject: Re: (subset) [PATCH 0/2] SM6375 GPU SMMU
-Date:   Tue, 13 Jun 2023 16:48:47 -0700
-Message-Id: <168670013502.1400697.11946020572385370506.b4-ty@kernel.org>
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] Update parts of PLL_TEST_CTL(_U) if required
+Date:   Tue, 13 Jun 2023 16:48:48 -0700
+Message-Id: <168670013502.1400697.6968638068672657163.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230531-topic-sm6375_gpusmmu-v1-0-860943894c71@linaro.org>
-References: <20230531-topic-sm6375_gpusmmu-v1-0-860943894c71@linaro.org>
+In-Reply-To: <20230601-topic-alpha_ctl-v1-0-b6a932dfcf68@linaro.org>
+References: <20230601-topic-alpha_ctl-v1-0-b6a932dfcf68@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -65,21 +61,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 31 May 2023 17:04:22 +0200, Konrad Dybcio wrote:
-> This series hooks up the GPU SMMU, as well as GPUCC as its direct
-> dependency.
+On Thu, 01 Jun 2023 11:39:06 +0200, Konrad Dybcio wrote:
+> Some recent-ish clock drivers touching on the "standard" Alpha PLLs
+> have been specifying the values that should be written into the CTL
+> registers as mask-value combos, but that wasn't always reflected
+> properly (or at all). This series tries to fix that without affecitng
+> the drivers that actually provide the full register values.
 > 
-> The thing sadly can't seem to be able to do PPPT, not even on downstream..
-> 
-> Depends on (bindings and functionality-wise):
-> https://lore.kernel.org/linux-arm-msm/20230529-topic-sm6375gpuccpd-v1-0-8d57c41a6066@linaro.org/
 > 
 > [...]
 
 Applied, thanks!
 
-[2/2] arm64: dts: qcom: sm6375: Add GPUCC and Adreno SMMU
-      commit: 852865530a21d139196106543cdf3e76c389659b
+[1/2] clk: qcom: clk-alpha-pll: Add a way to update some bits of test_ctl(_hi)
+      commit: 501624339466a7896bb8a1f048cf8dcfd54b174e
+[2/2] clk: qcom: gcc-sm6115: Add missing PLL config properties
+      commit: e88c533d8a2a0fe84bb54cff1569bd079ad3512c
 
 Best regards,
 -- 
