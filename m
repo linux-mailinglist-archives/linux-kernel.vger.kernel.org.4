@@ -2,113 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1342C72DF10
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 12:19:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17DD172DF1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 12:19:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238464AbjFMKTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 06:19:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50756 "EHLO
+        id S239488AbjFMKT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 06:19:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233000AbjFMKTH (ORCPT
+        with ESMTP id S240022AbjFMKTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 06:19:07 -0400
-Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750ED13A;
-        Tue, 13 Jun 2023 03:19:06 -0700 (PDT)
-Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-33e4e59da95so31928845ab.2;
-        Tue, 13 Jun 2023 03:19:06 -0700 (PDT)
+        Tue, 13 Jun 2023 06:19:17 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE9C19D
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 03:19:15 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f6255ad8aeso6571628e87.2
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 03:19:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686651554; x=1689243554;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gdr35NVvZt5grZEtwTcOPCBT+aQqpwrBlFz/EyaAZAY=;
+        b=MT0jfmQ3GaGeOaRdULj4v+tzEv/qyqc7kkboNHxFk95UTYxahYr1Wu/ReM1jUPq7Y7
+         5PnBXZMc96XvR2x5cF5Mo4g9VQzuxuve1smXA/x1s28HNaT0qoVmHkCdJF7zlce98Yah
+         Vaz6sEnoempjBHWeWrMDdGTGYwd16RzI8vGSIoX30PXPM8N1PCsjDICvwfsV33xxQ+bM
+         3PnDWmo4w56mPiOZQCh1PHZLXr662z+H0LyPnJ7YST9C+8Z8gHzx5BPW6C5bxnqP8edq
+         V+sYD+GUUs+oixU+TF6PE9SL7pob/GuO+3XieGjKuBrvD4M3luTpfPbY6LVciutjW5jy
+         DfQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686651545; x=1689243545;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=UbG9U/FLtRULHFXZAPeAJM9N/HEaNECQdhVlO5M7IT8=;
-        b=KmCUHt4lbpGGDKuGdCuZL8mhVaTz0GnTRTxJ06BZ737i8uScRBoZ9Ufd9KuohbM/7s
-         4rtm2Fm/mNNkkbKrj+HSpGIY+aRUNfNfybhDHYR5kCA23Qnsoskf5SbtAoL2bM0QPMPc
-         MLD4A0erIhxelZI5Z9V7jtbYpX+Gfiiro/mlWpz8Pa1xoK+VM8GaPSiF+atxtV1QXkqC
-         fjz8HM81Tjuj1iuy1EAg3PWY6PcRALGG+IW6E5Fiud6SI8q5sss0uIKrkgNV9UYNYe6K
-         uasBVUfUGQ6VOSHu2FO3jMQPEx8jPVntnJJgpAJO8XuNDcvI9Nl+udgb3VwYRZtn5VkC
-         pzHA==
-X-Gm-Message-State: AC+VfDwIE8MrtRnk+ch//FPF84ICu+Qw9G4ThGsUxkMImZrU0PJzbshY
-        RAucux/wZBJ8h9nTfLKL+w==
-X-Google-Smtp-Source: ACHHUZ6b+3w2KTmQoleqNjbplF5QhcDGa+dzx6zlJ5JOkxzzvHjcoJsdGnoBowc14g3Y7OvjyRYLrA==
-X-Received: by 2002:a92:d084:0:b0:340:7986:93b7 with SMTP id h4-20020a92d084000000b00340798693b7mr811372ilh.26.1686651545573;
-        Tue, 13 Jun 2023 03:19:05 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id h14-20020a0566380f0e00b0041cea93e589sm3298899jas.152.2023.06.13.03.19.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 03:19:04 -0700 (PDT)
-Received: (nullmailer pid 1311612 invoked by uid 1000);
-        Tue, 13 Jun 2023 10:19:01 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20221208; t=1686651554; x=1689243554;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gdr35NVvZt5grZEtwTcOPCBT+aQqpwrBlFz/EyaAZAY=;
+        b=NjUAcvP0OwCaxWbKJ+giSM9ycDG9DjaprNVOzc6gXTxTFvLvqJ+tu1CdXX52E7OMLG
+         cihFiWm4WS3of5SEXweRWDoTaufSdABFz/CIfY0Wq4xGQpdqfRQVPOYCY3EEPNc8zX1l
+         rO+0k6/owptxZY6JggPi1F/Pf76C3z3JdkY+zrEB6Dql6ZycPXDgOVaTaq3VeyftbPjq
+         97Wme1jpIr2TaGmMD4hlWZlJZ5VUTFL6C5tvtZ9RrdKPvoKTcG145sY+BDCpXqLh+PeQ
+         B/ZRISQGKh3fgDlK5D/4284UcSJuZ8IWcB/L4h4Q+WSI/6ZhnLa71345w9AfWmfAC+B9
+         dB+w==
+X-Gm-Message-State: AC+VfDynYxXDJcQuxxUpngI1jZvN9kTuTyfBBqscvtGlPREzMMIg8rco
+        Uj34PKky1Ezm4B0kJioIoEURIw==
+X-Google-Smtp-Source: ACHHUZ6PKN8jwmaGHls2F2gl2akc40go/8ljLq7Qwlu5jF0CTKmMviLXMRWLeIbs9+JRw390KY37Rg==
+X-Received: by 2002:ac2:5b9a:0:b0:4f3:9136:9cd0 with SMTP id o26-20020ac25b9a000000b004f391369cd0mr5734769lfn.44.1686651553968;
+        Tue, 13 Jun 2023 03:19:13 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:d6bf:b78b:2fff:653a? ([2a05:6e02:1041:c10:d6bf:b78b:2fff:653a])
+        by smtp.googlemail.com with ESMTPSA id n6-20020a7bcbc6000000b003f6f6a6e769sm13838413wmi.17.2023.06.13.03.19.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 03:19:13 -0700 (PDT)
+Message-ID: <16e72927-b3b0-7191-e05c-74acb5a77859@linaro.org>
+Date:   Tue, 13 Jun 2023 12:19:12 +0200
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Kim Seer Paller <kimseer.paller@analog.com>
-Cc:     devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        lgirdwood@gmail.com, broonie@kernel.org, andy.shevchenko@gmail.com,
-        linux-kernel@vger.kernel.org, conor+dt@kernel.org,
-        Michael.Hennerich@analog.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lars@metafoo.de,
-        jic23@kernel.org, linux-iio@vger.kernel.org
-In-Reply-To: <20230613093346.60781-1-kimseer.paller@analog.com>
-References: <20230613093346.60781-1-kimseer.paller@analog.com>
-Message-Id: <168665154072.1311520.12958978545814613109.robh@kernel.org>
-Subject: Re: [PATCH v5 1/2] dt-bindings: iio: adc: add max14001
-Date:   Tue, 13 Jun 2023 04:19:01 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [RESEND 1/9] thermal/hwmon: Add error information printing for
+ devm_thermal_add_hwmon_sysfs()
+Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>, glaroque@baylibre.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, thara.gopinath@gmail.com,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        anarsoul@gmail.com, tiny.windzz@gmail.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        edubezval@gmail.com, j-keerthy@ti.com, f.fainelli@gmail.com
+Cc:     linux-pm@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        linux-tegra@vger.kernel.org, linux-omap@vger.kernel.org
+References: <20230613095624.78789-1-frank.li@vivo.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230613095624.78789-1-frank.li@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Tue, 13 Jun 2023 17:33:45 +0800, Kim Seer Paller wrote:
-> The MAX14001 is a configurable, isolated 10-bit ADC for multi-range
-> binary inputs.
+On 13/06/2023 11:56, Yangtao Li wrote:
+> Ensure that all error handling branches print error information. In this
+> way, when this function fails, the upper-layer functions can directly
+> return an error code without missing debugging information. Otherwise,
+> the error message will be printed redundantly or missing.
 > 
-> Signed-off-by: Kim Seer Paller <kimseer.paller@analog.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reported-by: Rob Herring <robh@kernel.org>
-> Closes: https://lore.kernel.org/all/168663709022.652608.11756645774505315189.robh@kernel.org/
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 > ---
-> V3 -> V5: Added spaces between prefixes in subject. Fixed MAINTAINERS reference.
+> Resend patchset so that the changes to thermal/hwmon.c are copied to everyone.
+>   drivers/thermal/thermal_hwmon.c | 5 ++++-
+>   1 file changed, 4 insertions(+), 1 deletion(-)
 > 
->  .../bindings/iio/adc/adi,max14001.yaml        | 54 +++++++++++++++++++
->  MAINTAINERS                                   |  7 +++
->  2 files changed, 61 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/adc/adi,max14001.yaml
-> 
+> diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
+> index fbe55509e307..a580add5a2f6 100644
+> --- a/drivers/thermal/thermal_hwmon.c
+> +++ b/drivers/thermal/thermal_hwmon.c
+> @@ -271,11 +271,14 @@ int devm_thermal_add_hwmon_sysfs(struct device *dev, struct thermal_zone_device
+>   
+>   	ptr = devres_alloc(devm_thermal_hwmon_release, sizeof(*ptr),
+>   			   GFP_KERNEL);
+> -	if (!ptr)
+> +	if (!ptr) {
+> +		dev_err(dev, "Failed to allocate device resource data\n");
+>   		return -ENOMEM;
+> +	}
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+When an allocation fails, there is a callstack showed. It is not 
+necessary to print an error in this case.
 
-yamllint warnings/errors:
+>   
+>   	ret = thermal_add_hwmon_sysfs(tz);
+>   	if (ret) {
+> +		dev_err(dev, "Failed to add hwmon sysfs attributes\n");
+>   		devres_free(ptr);
+>   		return ret;
+>   	}
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml: $defs:qcom-pmic-mpp-state:properties:qcom,paired: [{'description': 'Indicates that the pin should be operating in paired mode.'}] is not of type 'object', 'boolean'
-	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+That should not display an error. The call site will take care of that.
 
-doc reference errors (make refcheckdocs):
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230613093346.60781-1-kimseer.paller@analog.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
