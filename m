@@ -2,83 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA3E872EBB9
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F64472EBBB
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238497AbjFMTOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 15:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56356 "EHLO
+        id S240565AbjFMTOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 15:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235258AbjFMTOG (ORCPT
+        with ESMTP id S240056AbjFMTOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 15:14:06 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2601122
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:14:03 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f6195d2b3fso7498063e87.1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:14:03 -0700 (PDT)
+        Tue, 13 Jun 2023 15:14:34 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E818AC6
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:14:32 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9745baf7c13so855924266b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:14:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686683642; x=1689275642;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=635jy0e2lhv+fSXWusJ9DIeLST1wGeeAsUy28K1WJGY=;
-        b=wKr5ulDRcUGas1ZQElff+75ttyWitE9A2pG6uIyMcsh9rbZNbpQQPGy0e3xduAGF76
-         Dg8nnEIJGJAUnmqy9boYhZZXK5gqC4C1mgb1HAgvcZtiPrVXIURc0dBwOQOEWNyyroXq
-         OXx22UUciThFQdfHJwzcuRPOPwhNQcFuSrHEUQNR1XFFrF56vz9qhdLJxj1oi+ztIiGY
-         SH3cUlbqNGlWOdtchsZfmfGSe+DeykDru7LMjTqS7Uv7JUaMOaJXqtrs3xZ2PLs6DLNf
-         NNr4X1ynAyzN9nkcEqe/OGt10fyC717jFt1AP/tNZPolq5hOgKFcJdPIj1OmWu569VHv
-         jVAg==
+        d=chromium.org; s=google; t=1686683669; x=1689275669;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p7S1/D27u6WKdj6tifOuv3Tm0xI7mxTXpBSlAiR/eCY=;
+        b=jBVtqBPzhxozZ13UmrIUh04tkfIDeSfvsfa6z/1VnPetlv7w7+WsBT69fngsy3NA2c
+         updCmsHI9XgXt1U/66HB5goYeKrHdG21MfiQzoCubosXSNcLe1Q1OgZXfHds9NwWwf/h
+         21DX7l8R91PrgemKo5B2WfBaUJGfQCnS9KMV0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686683642; x=1689275642;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=635jy0e2lhv+fSXWusJ9DIeLST1wGeeAsUy28K1WJGY=;
-        b=UdwYWpaeBswV9dqGXXmI0YMb4cm9YKVVrMClbnMeZu+KYuXjNmbGuRuvYqFM/2DC06
-         0rgSbeLRGotz5d9Jm7Fw426NFhUvvDP4cn/ObN0UKPAUBmhsKclptPeM9kqi8qq7D6DO
-         ELG2EKiKw9/PpWA1GjFngoSfmHGrtWltAGQCIt5KuxJ53d5YoD+PtR5IWbnuYbOjhR/X
-         eEVX6eUF4eroVVLh4m3PnfpA5ASRi+uDD+MpmYkSkHkTETNKaqesoiIp6hsGCPu/mnor
-         Gc6flbouXVleExT4O63flKl/4tz+kB/RiRfUmRzadEc4il/ebmgc9Y5s+Oma5bIOwPbL
-         vrxw==
-X-Gm-Message-State: AC+VfDwaZZgDS6oUi57rtsIXY09qzuboZzGE5ZJVu/QbV5ISE1q42roY
-        qCA5CwEnec8CWNbxlB5TDU9rPw==
-X-Google-Smtp-Source: ACHHUZ55beN8wEnTRnmUwg8tqV6a5fXlfZlqoktgNmZpS1/giMsp6FpkoM6QbtOQkicojGYauLAjyw==
-X-Received: by 2002:a19:655d:0:b0:4f3:5038:5857 with SMTP id c29-20020a19655d000000b004f350385857mr6843243lfj.55.1686683642073;
-        Tue, 13 Jun 2023 12:14:02 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id r10-20020a19ac4a000000b004f01ae1e63esm1848443lfc.272.2023.06.13.12.14.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 12:14:01 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 13 Jun 2023 21:13:47 +0200
-Subject: [PATCH] arm64: dts: qcom: sm6115: Fix up cluster idle states
+        d=1e100.net; s=20221208; t=1686683669; x=1689275669;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p7S1/D27u6WKdj6tifOuv3Tm0xI7mxTXpBSlAiR/eCY=;
+        b=fDUwbxws5pdV5+Z+0mS/1FIMq09hGKz9vY2GbJnhjZt3v5KsmNErUmLFC1vh7SnrKO
+         3RSrDZrD9YAdm+TLzWS/124TGLI7CUCk3s9aEaAHvLBK46XNhlQP6xvC7BRdA9vOarcp
+         CLl2Ho2g9MYzhgqNjE1qPJzjB795UbUWCSLohF+FqZOGe93QLEwT5DTehyQ6GPZAV6A6
+         eeSnIrAcSGAIYYX7doYst9chKXHi6ude2Kyn5lUTR574MTE1tIhf6jeTA10m0yGMUDhR
+         lw6J8EdHrVSSQL+zBPaLOR0gARykdF8fHa+YaZt307+gGXRJOUWmUbtn7pgYi378X6Va
+         3RZg==
+X-Gm-Message-State: AC+VfDyypVKFcA++2Vv5w/WJV/x4hr3nDqx5HHPbuqur28RDZYC6IeT3
+        uCTdgRdg3WxH4Dz9MM/iMMcxZKGW8DYFMkg5NZ783HN4
+X-Google-Smtp-Source: ACHHUZ6Nto9HMhBaVveaiJ0fvgOD3MexjgYbmvGIJNO5/85aJ40+e89qHvrIy+zhJqUaDxR9f5+IPg==
+X-Received: by 2002:a17:907:2d0f:b0:965:6075:d0e1 with SMTP id gs15-20020a1709072d0f00b009656075d0e1mr14211245ejc.72.1686683669527;
+        Tue, 13 Jun 2023 12:14:29 -0700 (PDT)
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
+        by smtp.gmail.com with ESMTPSA id g19-20020a170906395300b00977cd6d2127sm6958844eje.6.2023.06.13.12.14.28
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 12:14:28 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-514ad92d1e3so2596a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:14:28 -0700 (PDT)
+X-Received: by 2002:a50:bac8:0:b0:507:6632:bbbf with SMTP id
+ x66-20020a50bac8000000b005076632bbbfmr8870ede.6.1686683667750; Tue, 13 Jun
+ 2023 12:14:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230613-topic-6115idlestates-v1-1-fa017052319d@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAOq/iGQC/x2N0QrCMAwAf2Xk2cDSzon+ivjQdtEFSjeaToSxf
- zfs8Q6O20G5Cis8uh0qf0VlKQZ06SDNoXwYZTIG1zvfj+SxLaskHImuMmXWFhorxuAHut0dx+j
- A0hiUMdZQ0mxx2XI2uVZ+y+98PV/H8QfLQ2YCewAAAA==
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1686683640; l=2325;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=ufJhln1rknyOKoYvw+gm0MwBsfp76sKNCVfI2Po21t8=;
- b=27kXMW5EZ44Lbx87/FcPywSyvc5LxOtI9IAN063mDoObOoPsmxZiyav4YbG0+wtrGPnaX9WAT
- FliyoOQjYNcBgSpap2gGyIce5BCP9qzaFLDO8QAkVk0NwYjsL6jpXBW
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <1685729609-26871-1-git-send-email-quic_vnivarth@quicinc.com>
+ <CAD=FV=Uy=ELwg2jhtFSrpndw-GxUO=0NTKotNymi3sqwG=ggnQ@mail.gmail.com>
+ <af4c131a-b97d-a8e8-957d-77c31d3c816a@quicinc.com> <02dabcc8-2340-2188-f6a8-51513b147e7c@quicinc.com>
+ <CAD=FV=WwcpyvMem08rOXrBMUWW_7ADgfGZGEnEFDky+96pSdpQ@mail.gmail.com> <39b5a025-d678-57d4-9e97-432ee1763186@quicinc.com>
+In-Reply-To: <39b5a025-d678-57d4-9e97-432ee1763186@quicinc.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 13 Jun 2023 12:14:14 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Wwj=1Pt9vaWTABi2GDXS4qGV-5RvSbZuGJdgWXRh_OyA@mail.gmail.com>
+Message-ID: <CAD=FV=Wwj=1Pt9vaWTABi2GDXS4qGV-5RvSbZuGJdgWXRh_OyA@mail.gmail.com>
+Subject: Re: [PATCH] soc: qcom: geni-se: Do not bother about enable/disable of
+ interrupts in secondary sequencer for non-uart modes
+To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_msavaliy@quicinc.com, mka@chromium.org, swboyd@chromium.org,
+        quic_vtanuku@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,65 +82,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The lowest nibble of the PSCI suspend param denotes the CPU state.
-It was mistakenly set to mimic the cluster state, resulting in poking
-PSCI with undocumented 0x2 and 0x4 states (both of which seem to be
-implemented and undocumented). Also, GDHS cluster param was wrong for C1.
+Hi,
 
-Fix that.
+On Tue, Jun 13, 2023 at 11:24=E2=80=AFAM Vijaya Krishna Nivarthi
+<quic_vnivarth@quicinc.com> wrote:
+>
+> Hi,
+>
+>
+> On 6/13/2023 11:27 PM, Doug Anderson wrote:
+> > Hi,
+> >
+> > On Tue, Jun 13, 2023 at 9:07=E2=80=AFAM Vijaya Krishna Nivarthi
+> > <quic_vnivarth@quicinc.com> wrote:
+> >> Hi,
+> >>
+> >>
+> >> On 6/12/2023 7:09 PM, Vijaya Krishna Nivarthi wrote:
+> >>> Hi,
+> >>>
+> >>> Thank you very much for the review...
+> >>>
+> >>>
+> >>> On 6/7/2023 9:41 PM, Doug Anderson wrote:
+> >>>> Hi,
+> >>>>
+> >>>> On Fri, Jun 2, 2023 at 11:13=E2=80=AFAM Vijaya Krishna Nivarthi
+> >>>> <quic_vnivarth@quicinc.com> wrote:
+> >>>>> The select_fifo/dma_mode() functions in geni driver enable/disable
+> >>>>> interrupts (secondary included) conditionally for non-uart modes, w=
+hile
+> >>>>> uart is supposed to manage this internally.
+> >>>>> However, only uart uses secondary IRQs while spi, i2c do not care a=
+bout
+> >>>>> these at all making their enablement (or disablement) totally
+> >>>>> unnecessary
+> >>>>> for these protos.
+> >>>>>
+> >>>>> Drop enabling/disabling secondary IRQs for non-uart modes.
+> >>>>> This doesn't solve any observed problem but only gets rid of code
+> >>>>> pieces
+> >>>>> that are not required.
+> >>>>>
+> >>>>> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+> >>>>> ---
+> >>>>>    drivers/soc/qcom/qcom-geni-se.c | 24 ++++--------------------
+> >>>>>    1 file changed, 4 insertions(+), 20 deletions(-)
+> >>>> This seems like a nice cleanup to me. It's still odd that the genera=
+l
+> >>>> code has a special case for UART, but I guess the alternative is to
+> >>>> duplicate the exact same logic for both the i2c and SPI drivers. I
+> >>>> won't insist on that, though I wouldn't be opposed to it either.
+> >>>>
+> >>>> I guess one comment, though: should we also remove the code that
+> >>>> messes with "SE_GENI_S_IRQ_EN" in geni_se_select_gpi_mode()?
+> >>>
+> >>> Right now we have gpi-dma mode support for i2c and spi but not for ua=
+rt.
+> >>>
+> >>> Even when gpi-dma support is added, uart driver's interrupt handler
+> >>> would not be invoked so I believe it would be safe to drop that code
+> >>> from geni_se_select_gpi_mode() too.
+> >>>
+> >>> I will post v2 dropping same after some more lookup.
+> >>
+> >> Looking at this once again, I am more inclined towards leaving alone
+> >> gpi_mode() for now.
+> >>
+> >> It probably needs cleanup but we want to take that up at a later time.
+> >>
+> >> Meanwhile its not causing much harm as we don't switch modes dynamical=
+ly
+> >> for gpi case, so we are not losing much time there reading from and
+> >> writing to registers.
+> >>
+> >> Please let know your thoughts.
+> > It's not really about the time needed for the extra register writes,
+> > but just someone trying to understand the code who might be trying to
+> > figure out what bits are relevant. The bits related to the secondary
+> > sequencer's interrupts don't do anything useful when we're using the
+> > controller for i2c/spi, so why not delete them?
+>
+>
+> Agreed the s_irqs are not useful for spi/i2c but Right now I am not
+> really sure how uart + gsi mode is going to look like.
+>
+> So how about we move the part that messes with s_irq in gpi_mode() into
+> a *if(proto =3D=3D GENI_SE_UART)* conditional?
+>
+> Understand we are adding to weirdness but Would that be ok for now?
 
-Fixes: b5de1a9ff1f2 ("arm64: dts: qcom: sm6115: Add CPU idle-states")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm6115.dtsi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+For the non-GPI DMA path and for the PIO path we don't touch the
+"S_IRQ" for UART either (we don't touch any IRQs for the UART). ...so
+it doesn't seem right to be tweaking with the S_IRQ for UART. I would
+say delete it and if/when the UART needs GPI mode then we can figure
+out what to do.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-index 55118577bf92..07d8b842d7be 100644
---- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-@@ -225,7 +225,7 @@ domain-idle-states {
- 			CLUSTER_0_SLEEP_0: cluster-sleep-0-0 {
- 				/* GDHS */
- 				compatible = "domain-idle-state";
--				arm,psci-suspend-param = <0x40000022>;
-+				arm,psci-suspend-param = <0x40000023>;
- 				entry-latency-us = <360>;
- 				exit-latency-us = <421>;
- 				min-residency-us = <782>;
-@@ -234,7 +234,7 @@ CLUSTER_0_SLEEP_0: cluster-sleep-0-0 {
- 			CLUSTER_0_SLEEP_1: cluster-sleep-0-1 {
- 				/* Power Collapse */
- 				compatible = "domain-idle-state";
--				arm,psci-suspend-param = <0x41000044>;
-+				arm,psci-suspend-param = <0x41000043>;
- 				entry-latency-us = <800>;
- 				exit-latency-us = <2118>;
- 				min-residency-us = <7376>;
-@@ -243,7 +243,7 @@ CLUSTER_0_SLEEP_1: cluster-sleep-0-1 {
- 			CLUSTER_1_SLEEP_0: cluster-sleep-1-0 {
- 				/* GDHS */
- 				compatible = "domain-idle-state";
--				arm,psci-suspend-param = <0x40000042>;
-+				arm,psci-suspend-param = <0x40000023>;
- 				entry-latency-us = <314>;
- 				exit-latency-us = <345>;
- 				min-residency-us = <660>;
-@@ -252,7 +252,7 @@ CLUSTER_1_SLEEP_0: cluster-sleep-1-0 {
- 			CLUSTER_1_SLEEP_1: cluster-sleep-1-1 {
- 				/* Power Collapse */
- 				compatible = "domain-idle-state";
--				arm,psci-suspend-param = <0x41000044>;
-+				arm,psci-suspend-param = <0x41000043>;
- 				entry-latency-us = <640>;
- 				exit-latency-us = <1654>;
- 				min-residency-us = <8094>;
+I'd actually wonder if GPI will ever be implemented for UART anyway.
+The whole idea of GPI is to allow sharing a port between more than one
+user. Each user could submit a "transaction" and they'd get the port
+for the duration of that transaction. After the transaction was done
+then another user would be able to grab the port. Typically UART isn't
+used like this. I'm not saying that it couldn't be done, but just
+saying that it would be a pretty non-standard way of using a UART...
 
----
-base-commit: 1f6ce8392d6ff486af5ca96df9ded5882c4b6977
-change-id: 20230613-topic-6115idlestates-ba341792ebb2
-
-Best regards,
--- 
-Konrad Dybcio <konrad.dybcio@linaro.org>
-
+-Doug
