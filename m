@@ -2,139 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A105E72D682
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 02:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D55E072D686
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 02:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237761AbjFMAl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 20:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39702 "EHLO
+        id S238200AbjFMAnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 20:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237433AbjFMAly (ORCPT
+        with ESMTP id S232529AbjFMAnj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 20:41:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE8A18C;
-        Mon, 12 Jun 2023 17:41:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 12 Jun 2023 20:43:39 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7E9E7A;
+        Mon, 12 Jun 2023 17:43:37 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3164763040;
-        Tue, 13 Jun 2023 00:41:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81F3DC433EF;
-        Tue, 13 Jun 2023 00:41:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686616912;
-        bh=IGOhvvrK7l3Oz69XA9xF5ZiPQc6f/G4f6BMPJ4mch2s=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=GJudkHabtLu6OFRUL5JzRLU5TWjoivWYWB8ECu77Ar9yWUhnEw2ye1EoNkFVEeicO
-         ecQa7AFs9l/mvV5w8VtQ2RsXmZbbYKyfRgxHxdnISHlWv/AyM+jPrDurIUkAyDbOEy
-         Ltijmd/mpNwWktEjJaYBgQlmc2CXytH0JLhD/ft5m3ggMOUQw3rx1rfa+79KWvzEUi
-         LRwQ6DHdD7/ox6UX4wCR6nYbAEABvoMMoAT1lbFbB5UpWaYdTgtDbI0Sfr/EWgFosZ
-         TPyeOohOtAGFaoVGBtlkdeo45b/jQms2SPVpWKurIOSRtL051kegjtTiGE/jCGdGNz
-         2tiXloXcKZ2aA==
-Message-ID: <5e9e776db6628d02d7081292b81ab102.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qg8tV5vR9z4x4G;
+        Tue, 13 Jun 2023 10:43:30 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1686617011;
+        bh=Z3d8HXepKDGROKZfan+P+T9+z/WIb+eklER97vDRfNo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=grJEPFT7Ekeodj0a46M6+YbYEB40Yg1oMzxfJ0og8tGO7CUlXdJVPoz67ODN2L9z7
+         h2DBQD2qvJhR5VJC4gqm3/HTp5apjlBd0c9OYNjTBbx9U9Y/VkW4rMC4HIG0hJdbWz
+         g+GAen3I5FNGJ3mtr3aw0ZqjcIuE9ovilGb6GfWDRaEy7jjd+N3vV9h/2ZIzXUloFR
+         IfsrQ0nXO1YJUhjkRDAJLUCdKS9pH7gQVhFQ70z/aHRSkJo6r4E+/uy3v3uioaL2qE
+         k2Q7zt99iPLC2BzaUvVVTH0sP+E8SEkwHYdeCUvxo599YMJeHiFA81/wmaEoApnPc9
+         NYIVqSFZBM/UA==
+Date:   Tue, 13 Jun 2023 10:43:29 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the arm-soc tree
+Message-ID: <20230613104329.025f9e4b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230526171057.66876-3-sebastian.reichel@collabora.com>
-References: <20230526171057.66876-1-sebastian.reichel@collabora.com> <20230526171057.66876-3-sebastian.reichel@collabora.com>
-Subject: Re: [PATCH v2 2/2] clk: divider: Fix divisions
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Christopher Obbard <chris.obbard@collabora.com>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        kernel@collabora.com
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 12 Jun 2023 17:41:50 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/EBie48=d3B/bm7Or3j6Uisp";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Sebastian Reichel (2023-05-26 10:10:57)
-> The clock framework handles clock rates as "unsigned long", so u32 on
-> 32-bit architectures and u64 on 64-bit architectures.
->=20
-> The current code pointlessly casts the dividend to u64 on 32-bit
-> architectures and thus pointlessly reducing the performance.
+--Sig_/EBie48=d3B/bm7Or3j6Uisp
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-It looks like that was done to make the DIV_ROUND_UP() macro not
-overflow the dividend on 32-bit machines (from 9556f9dad8f5):
+Hi all,
 
-  DIV_ROUND_UP(3000000000, 1500000000) =3D (3.0G + 1.5G - 1) / 1.5G
-                                       =3D OVERFLOW / 1.5G
+After merging the arm-soc tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-but I agree, the u64 cast is not necessary if DIV_ROUND_UP_ULL() is
-used as that macro casts the dividend to unsigned long long anyway.
+drivers/input/touchscreen/ads7846.c: In function 'ads7846_get_props':
+drivers/input/touchscreen/ads7846.c:1126:24: error: cast from pointer to in=
+teger of different size [-Werror=3Dpointer-to-int-cast]
+ 1126 |         pdata->model =3D (u32)device_get_match_data(dev);
+      |                        ^
+cc1: all warnings being treated as errors
 
->=20
-> On the other hand on 64-bit architectures the divisor is masked and only
-> the lower 32-bit are used. Thus requesting a frequency >=3D 4.3GHz results
-> in incorrect values. For example requesting 4300000000 (4.3 GHz) will
-> effectively request ca. 5 MHz.
+Caused by commit
 
-Nice catch. But I'm concerned that the case above is broken by changing
-to DIV_ROUND_UP(). As this code is generic, I fear we'll have to change
-this code that divides rates to use DIV64_U64_ROUND_UP() because we
-don't know how large the rate is (i.e. it could be larger than 32-bits
-on a 64-bit machine).
+  8f7913c04f6a ("Input: ads7846 - Fix usage of match data")
 
-> Requesting clk_round_rate(clk, ULONG_MAX)
-> is a bit of a special case, since that still returns correct values as
-> long as the parent clock is below 8.5 GHz.
->=20
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
->  drivers/clk/clk-divider.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/clk/clk-divider.c b/drivers/clk/clk-divider.c
-> index a2c2b5203b0a..c38e8aa60e54 100644
-> --- a/drivers/clk/clk-divider.c
-> +++ b/drivers/clk/clk-divider.c
-> @@ -220,7 +220,7 @@ static int _div_round_up(const struct clk_div_table *=
-table,
->                          unsigned long parent_rate, unsigned long rate,
->                          unsigned long flags)
->  {
-> -       int div =3D DIV_ROUND_UP_ULL((u64)parent_rate, rate);
-> +       int div =3D DIV_ROUND_UP(parent_rate, rate);
-> =20
->         if (flags & CLK_DIVIDER_POWER_OF_TWO)
->                 div =3D __roundup_pow_of_two(div);
-> @@ -237,7 +237,7 @@ static int _div_round_closest(const struct clk_div_ta=
-ble *table,
->         int up, down;
->         unsigned long up_rate, down_rate;
-> =20
-> -       up =3D DIV_ROUND_UP_ULL((u64)parent_rate, rate);
-> +       up =3D DIV_ROUND_UP(parent_rate, rate);
->         down =3D parent_rate / rate;
-> =20
->         if (flags & CLK_DIVIDER_POWER_OF_TWO) {
-> @@ -473,7 +473,7 @@ int divider_get_val(unsigned long rate, unsigned long=
- parent_rate,
->  {
->         unsigned int div, value;
-> =20
-> -       div =3D DIV_ROUND_UP_ULL((u64)parent_rate, rate);
-> +       div =3D DIV_ROUND_UP(parent_rate, rate);
-> =20
->         if (!_is_valid_div(table, div, flags))
->                 return -EINVAL;
+I have used the arm-soc tree from next-20230609 for today.
 
-This is undoing parts of commit 9556f9dad8f5 ("clk: divider: handle
-integer overflow when dividing large clock rates"). Please pair this
-patch with extensive kunit tests in a new test suite clk-divider_test.c
-file. I don't know if UML supports changing sizeof(long), but that would
-be a cool feature to tease out these sorts of issues. I suppose we'll
-just have to run the kunit tests on various architectures to cover the
-possibilities.
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/EBie48=d3B/bm7Or3j6Uisp
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSHu7EACgkQAVBC80lX
+0GyaJgf+Ntj2hV9I7pQ3RUWf4lYdTLx5TCid2x87GIuxB4Oc3gkXTdlPWQi2Ts5u
++SZKCzm2VXyuCV56k3/CG8XAh+vV6f8CjCgrvcK5PlMZc/U9fdAmZw3tim2GdPFS
+QJMKsD+h3fY96BhX0LRjT4Z2ZOdhL5OP9FnO49Y8YnVHBEMKZ9fkYZO3zk+svRrn
+/rZ0UlrpEmGX5yibmeNON6L13z1kkL97h/Qi5hI9WItxXYPf/7gqn+H5KLkVc34t
+W0x+1tcX0DdupTel8XFUBSXC+to8i/dd9pDcr26pgHjELaa4VgweLZg34c62TTSk
+UPogjhnjwCP4N9N0yrlTvULQEmFLjw==
+=Yqbj
+-----END PGP SIGNATURE-----
+
+--Sig_/EBie48=d3B/bm7Or3j6Uisp--
