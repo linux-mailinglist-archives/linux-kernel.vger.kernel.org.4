@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DDA572EE53
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 23:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AA0372EE74
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 23:56:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236612AbjFMVym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 17:54:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
+        id S231624AbjFMV4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 17:56:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbjFMVyh (ORCPT
+        with ESMTP id S238340AbjFMVyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 17:54:37 -0400
+        Tue, 13 Jun 2023 17:54:45 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D6631BCD
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 14:53:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8651BC7
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 14:53:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1686693238;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=RMeXibFgr6WGH9TADmv6GKzvddxtLLfsVSaxyvBxKHs=;
-        b=PARZNzKLdWiCszzTYXIw3Ca3t1mpR+kTz9+VafnEKoYOjj8VHujKQgkLkguCayCeo/XmIq
-        cUW1giZO106cu4CU5OUBXZmwPOCAnKVGrcpn6NGDFsYyEIYMdgliE2wTMJO41Hw5Ui4Nq5
-        NQX5WpUp4kV69dmmhceRA1PI78RnDTM=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=J0Si/SHg9D7WH2a+07u6wT7XlhbAs86SLIvfSHyM0qs=;
+        b=Q+yqSOV/aOY7Sh0HTAof0g4Dq66dDfhZ2HEBLLoxBL37r3htqeL1BsxK5jCEIPGI22IRm6
+        Kkwa0UjbOVwfYra6oAvx2ZNkb+4T5ajn29pitmBhr1fBQhOVVrmWYsprv/55gMca3nR/UT
+        xmzZ3AEZThijUO8Id74qRYTlJikR02o=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-371-R6PFmtyvP62yj4Agsx3PVw-1; Tue, 13 Jun 2023 17:53:57 -0400
-X-MC-Unique: R6PFmtyvP62yj4Agsx3PVw-1
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-3f871a1e3f9so8070031cf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 14:53:53 -0700 (PDT)
+ us-mta-597-IykalVUaMxOB3S1dbCrppA-1; Tue, 13 Jun 2023 17:53:56 -0400
+X-MC-Unique: IykalVUaMxOB3S1dbCrppA-1
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-3f86a3ce946so13356701cf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 14:53:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686693232; x=1689285232;
+        d=1e100.net; s=20221208; t=1686693234; x=1689285234;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RMeXibFgr6WGH9TADmv6GKzvddxtLLfsVSaxyvBxKHs=;
-        b=kfUo6tZ0VEfUFxaMyYXyqlWtTI0LPup5j6JAtCqN3kwHoDXl77JLxD1K7V3Ae6fNOT
-         KIOaYJNiq5eK1DujZ6A7Kzyykma8rH2GorHIiFEBDVnLX3PvATJ9wB0VC4rIT0Y7SHCH
-         wJ205OvH8k2GuzhLppnczhUdSsFr0RBiKXsmQ+jn70Hh8GwvYJJgDOrlWI0RO3l8tCiU
-         peh2pKuCLZumNARaZVDlC4ARyBdZCeyUWAYiQXQyd5cuhM/x9kfgXnf4R08L+SbuDfvQ
-         4U4c0sm9X1+A7T6RRJmtSrI5TiHo31EuONJHCIeslFhQ2yLsMAcG2aPBgh/cXmS8BYhh
-         pAcQ==
-X-Gm-Message-State: AC+VfDxyK7cfLU3+5j4b7UMAK8FGouZryLwR16z6+W8W1UpfNHwK/08T
-        pzhulGNiN5d96GP0QAHWbE8j/nTUfXvcX+dqszq0n4jQoYGotrbFTivNTJL2YUP0htriCo86bin
-        fzJmfACxlbUx7d2e1Y8jftAnHTF3Sc0BAR4YtJ78SKCzWOTXH+oUhvoEC3xHoQ7aR8nRoV4CwY2
-        1xkUbYmA==
-X-Received: by 2002:a05:622a:1887:b0:3f9:ab2c:8895 with SMTP id v7-20020a05622a188700b003f9ab2c8895mr18016485qtc.3.1686693232286;
-        Tue, 13 Jun 2023 14:53:52 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ72MmVJ/KYdtXeaLxllJ/hfKOlDEtGiOvMuFZzCmuKll0yFpjBUzckwXKh9hVVGptkRtecEgQ==
-X-Received: by 2002:a05:622a:1887:b0:3f9:ab2c:8895 with SMTP id v7-20020a05622a188700b003f9ab2c8895mr18016457qtc.3.1686693231907;
-        Tue, 13 Jun 2023 14:53:51 -0700 (PDT)
+        bh=J0Si/SHg9D7WH2a+07u6wT7XlhbAs86SLIvfSHyM0qs=;
+        b=FgriEwdbUn4IhSel/Uo2tynK9r7/EHvkCyk8DnX/M/638+guuuOQFlycGiMESIR5e/
+         WNFcucWcvabdUSXLeKjYNnKas/24XpmOHKqQDRUxZHxCyrqUXQzEZymJFpQeABIIZ9Z3
+         Lm64oAuyScP7p53mPyLzM7yCY2Z93BmqxgLtODTa0DyHkLs/svzu6KVXwijr5izBx5hk
+         hGYhOLyfwO5Uw2CWwTyAdvRQFXN+oamjsar+OACWiNC7Sr4rJ1z9fePDLmGgfc0FU9pl
+         ZradThL1PpXbm3FBqMcDVKTo/46vlYb2S8IZLJokBCNkOvdFl1VadUHjAi6AgFCVWYN4
+         R26w==
+X-Gm-Message-State: AC+VfDzVfdbFq58DPGSzODxdv1Mh1vy5hyDTFrtME6SDn9KMKn25wLhJ
+        ZdU5dKaireBKyz85Xn0wJvXzP3kDdfEBB2YjMEY/QIoybGMLx9dxXIyzZ/65bRNCxXgeO4tPoCu
+        ZpENv2Xy19AZuCr3Sd4+6J/+Qv39KiUi8BZmp/Pynv9tOdH12ambh5VZmr2BSdf90w2ufGz7etP
+        k/AoV2cQ==
+X-Received: by 2002:a05:622a:1981:b0:3f5:315f:5c1d with SMTP id u1-20020a05622a198100b003f5315f5c1dmr16598129qtc.4.1686693234514;
+        Tue, 13 Jun 2023 14:53:54 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4tfbjVj7iW6/DtRd/s2e+Ti93d6WI6EV2BJqT02+lq+41oEnqcND6tzmbEH3x8gd+k6nduCQ==
+X-Received: by 2002:a05:622a:1981:b0:3f5:315f:5c1d with SMTP id u1-20020a05622a198100b003f5315f5c1dmr16598098qtc.4.1686693234224;
+        Tue, 13 Jun 2023 14:53:54 -0700 (PDT)
 Received: from x1n.redhat.com (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id fz24-20020a05622a5a9800b003f9bccc3182sm4522330qtb.32.2023.06.13.14.53.49
+        by smtp.gmail.com with ESMTPSA id fz24-20020a05622a5a9800b003f9bccc3182sm4522330qtb.32.2023.06.13.14.53.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 14:53:50 -0700 (PDT)
+        Tue, 13 Jun 2023 14:53:53 -0700 (PDT)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Cc:     Matthew Wilcox <willy@infradead.org>,
@@ -70,9 +70,9 @@ Cc:     Matthew Wilcox <willy@infradead.org>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         James Houghton <jthoughton@google.com>,
         Hugh Dickins <hughd@google.com>
-Subject: [PATCH 1/7] mm/hugetlb: Handle FOLL_DUMP well in follow_page_mask()
-Date:   Tue, 13 Jun 2023 17:53:40 -0400
-Message-Id: <20230613215346.1022773-2-peterx@redhat.com>
+Subject: [PATCH 2/7] mm/hugetlb: Fix hugetlb_follow_page_mask() on permission checks
+Date:   Tue, 13 Jun 2023 17:53:41 -0400
+Message-Id: <20230613215346.1022773-3-peterx@redhat.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230613215346.1022773-1-peterx@redhat.com>
 References: <20230613215346.1022773-1-peterx@redhat.com>
@@ -88,77 +88,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Firstly, the no_page_table() is meaningless for hugetlb which is a no-op
-there, because a hugetlb page always satisfies:
+It seems hugetlb_follow_page_mask() was missing permission checks.  For
+example, one follow_page() can get the hugetlb page with FOLL_WRITE even if
+the page is read-only.
 
-  - vma_is_anonymous() == false
-  - vma->vm_ops->fault != NULL
+And it wasn't there even in the old follow_page_mask(), where we can
+reference from before commit 57a196a58421 ("hugetlb: simplify hugetlb
+handling in follow_page_mask").
 
-So we can already safely remove it in hugetlb_follow_page_mask(), alongside
-with the page* variable.
+Let's add them, namely, either the need to CoW due to missing write bit, or
+proper CoR on !AnonExclusive pages over R/O pins to reject the follow page.
+That brings this function closer to follow_hugetlb_page().
 
-Meanwhile, what we do in follow_hugetlb_page() actually makes sense for a
-dump: we try to fault in the page only if the page cache is already
-allocated.  Let's do the same here for follow_page_mask() on hugetlb.
+I just doubt how many of us care for that, for FOLL_PIN follow_page doesn't
+really happen at all.  But we'll care, and care more if we switch over
+slow-gup to use hugetlb_follow_page_mask().  We'll also care when to return
+-EMLINK then, as that's the gup internal api to mean "we should do CoR".
 
-It should so far has zero effect on real dumps, because that still goes
-into follow_hugetlb_page().  But this may start to influence a bit on
-follow_page() users who mimics a "dump page" scenario, but hopefully in a
-good way.  This also paves way for unifying the hugetlb gup-slow.
+When at it, switching the try_grab_page() to use WARN_ON_ONCE(), to be
+clear that it just should never fail.
 
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- mm/gup.c     | 9 ++-------
- mm/hugetlb.c | 9 +++++++++
- 2 files changed, 11 insertions(+), 7 deletions(-)
+ mm/hugetlb.c | 22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
 
-diff --git a/mm/gup.c b/mm/gup.c
-index dbe96d266670..aa0668505d61 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -781,7 +781,6 @@ static struct page *follow_page_mask(struct vm_area_struct *vma,
- 			      struct follow_page_context *ctx)
- {
- 	pgd_t *pgd;
--	struct page *page;
- 	struct mm_struct *mm = vma->vm_mm;
- 
- 	ctx->page_mask = 0;
-@@ -794,12 +793,8 @@ static struct page *follow_page_mask(struct vm_area_struct *vma,
- 	 * hugetlb_follow_page_mask is only for follow_page() handling here.
- 	 * Ordinary GUP uses follow_hugetlb_page for hugetlb processing.
- 	 */
--	if (is_vm_hugetlb_page(vma)) {
--		page = hugetlb_follow_page_mask(vma, address, flags);
--		if (!page)
--			page = no_page_table(vma, flags);
--		return page;
--	}
-+	if (is_vm_hugetlb_page(vma))
-+		return hugetlb_follow_page_mask(vma, address, flags);
- 
- 	pgd = pgd_offset(mm, address);
- 
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 270ec0ecd5a1..82dfdd96db4c 100644
+index 82dfdd96db4c..9c261921b2cf 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -6501,6 +6501,15 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
+@@ -6481,8 +6481,21 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
+ 	ptl = huge_pte_lock(h, mm, pte);
+ 	entry = huge_ptep_get(pte);
+ 	if (pte_present(entry)) {
+-		page = pte_page(entry) +
+-				((address & ~huge_page_mask(h)) >> PAGE_SHIFT);
++		page = pte_page(entry);
++
++		if (gup_must_unshare(vma, flags, page)) {
++			/* Tell the caller to do Copy-On-Read */
++			page = ERR_PTR(-EMLINK);
++			goto out;
++		}
++
++		if ((flags & FOLL_WRITE) && !pte_write(entry)) {
++			page = NULL;
++			goto out;
++		}
++
++		page += ((address & ~huge_page_mask(h)) >> PAGE_SHIFT);
++
+ 		/*
+ 		 * Note that page may be a sub-page, and with vmemmap
+ 		 * optimizations the page struct may be read only.
+@@ -6492,10 +6505,7 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
+ 		 * try_grab_page() should always be able to get the page here,
+ 		 * because we hold the ptl lock and have verified pte_present().
+ 		 */
+-		if (try_grab_page(page, flags)) {
+-			page = NULL;
+-			goto out;
+-		}
++		WARN_ON_ONCE(try_grab_page(page, flags));
+ 	}
+ out:
  	spin_unlock(ptl);
- out_unlock:
- 	hugetlb_vma_unlock_read(vma);
-+
-+	/*
-+	 * Fixup retval for dump requests: if pagecache doesn't exist,
-+	 * don't try to allocate a new page but just skip it.
-+	 */
-+	if (!page && (flags & FOLL_DUMP) &&
-+	    !hugetlbfs_pagecache_present(h, vma, address))
-+		page = ERR_PTR(-EFAULT);
-+
- 	return page;
- }
- 
 -- 
 2.40.1
 
