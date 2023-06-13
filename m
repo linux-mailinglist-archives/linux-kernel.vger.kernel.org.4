@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90EC472E62A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 16:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3523472EFA3
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 00:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242379AbjFMOtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 10:49:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57908 "EHLO
+        id S235258AbjFMWvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 18:51:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242625AbjFMOtM (ORCPT
+        with ESMTP id S231745AbjFMWvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 10:49:12 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45C41981;
-        Tue, 13 Jun 2023 07:49:11 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QgWfD0cZlz4f3pr8;
-        Tue, 13 Jun 2023 22:49:08 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP2 (Coremail) with SMTP id Syh0CgDHu+njgYhkYjUjLg--.22967S2;
-        Tue, 13 Jun 2023 22:49:08 +0800 (CST)
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca
-Cc:     s.l-h@gmx.de, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, shikemeng@huaweicloud.com
-Subject: [PATCH] Revert "ext4: remove unnecessary check in ext4_bg_num_gdb_nometa"
-Date:   Wed, 14 Jun 2023 06:50:25 +0800
-Message-Id: <20230613225025.3859522-1-shikemeng@huaweicloud.com>
-X-Mailer: git-send-email 2.30.0
+        Tue, 13 Jun 2023 18:51:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37217EC;
+        Tue, 13 Jun 2023 15:51:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0DC363611;
+        Tue, 13 Jun 2023 22:51:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B613C433C8;
+        Tue, 13 Jun 2023 22:51:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686696671;
+        bh=zVWmLSa3tOz3dzkcme4HlB9HKtQ3K2iGtgg1kJGmiRI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ePMi2Q+CTmtpgJVaIzPrukxiTC3TxB3QFM0s88Sryp7g8J8pap0u8KRphDdUOa+Hc
+         3n+gjevd+rbchrqK4t2C1AGaXtIUWAfKwlbnR4LjJwWOf42AsMGc5MSAt4EcLvTsGo
+         RbyH9qwiqhUtcOHEDRlk0jRnI3n7YzvISckIc/nbWNKwchWGJt0cP+YWJGPUJ5hlsF
+         8HkgyK7aNwncdd/FWqY0Wu4FUsKEFKLyix7my73Xm5JYXhDZeZRuPQGPQwxeYUhzf1
+         7WsV7bPegyYRBugI8AdTh7llIeRbqerMKLniBHW5Cyp8KQe95Rg8dlg5pZF1neqnNG
+         O/GAuthnXjn9A==
+Date:   Tue, 13 Jun 2023 16:52:08 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel test robot <oliver.sang@intel.com>,
+        kernel test robot <lkp@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        =?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] usb: ch9: Replace 1-element array with flexible array
+Message-ID: <ZIjzGCMWrar3kf1L@work>
+References: <20230613210400.never.078-kees@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgDHu+njgYhkYjUjLg--.22967S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7XFWxWw4DKrW3Ww1rZr1rXrb_yoWkKFcEka
-        y7KF1rX3yaqr1Syry2grsYgr1akFW0yr98XFnxGFyfua4xtF4rC3WDXr95ZrZrWay7Z3s5
-        ZryxXa4xJa1xtjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbxxFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M28lY4IEw2IIxx
-        k0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK
-        6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7
-        xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
-        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
-        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8v
-        x2IErcIFxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
-        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1l
-        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
-        AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWU
-        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjTRCA
-        pnUUUUU
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230613210400.never.078-kees@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,37 +60,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit ad3f09be6cfe332be8ff46c78e6ec0f8839107aa.
+On Tue, Jun 13, 2023 at 02:04:04PM -0700, Kees Cook wrote:
+> With "-fstrict-flex-arrays=3" enabled, UBSAN_BOUNDS no longer pretends
+> 1-element arrays are unbounded. Walking wData will trigger a warning,
+> so make it a proper flexible array. Add a union to keep the struct size
+> identical for userspace in case anything was depending on the old size.
+> 
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> Closes: https://lore.kernel.org/oe-lkp/202306102333.8f5a7443-oliver.sang@intel.com
+> Fixes: df8fc4e934c1 ("kbuild: Enable -fstrict-flex-arrays=3")
 
-The reverted commit was intended to simpfy the code to get group
-descriptor block number in non-meta block group by assuming
-s_gdb_count is block number used for all non-meta block group descriptors.
-However s_gdb_count is block number used for all meta *and* non-meta
-group descriptors. So s_gdb_group will be > actual group descriptor block
-number used for all non-meta block group which should be "total non-meta
-block group" / "group descriptors per block", e.g. s_first_meta_bg.
+I always have mixed feelings about a 'Fixes' tag applied to a commit
+like this (one that enables a compiler option that avoids the introduction
+of buggy code), when we are addressing the potentially buggy code that
+the option is inteded to prevent. (thinkingface)
 
-Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
----
- fs/ext4/balloc.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: kernel test robot <lkp@intel.com>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: "Jó Ágila Bitsch" <jgilab@gmail.com>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-diff --git a/fs/ext4/balloc.c b/fs/ext4/balloc.c
-index c1edde817be8..09c75a3127c7 100644
---- a/fs/ext4/balloc.c
-+++ b/fs/ext4/balloc.c
-@@ -886,7 +886,10 @@ static unsigned long ext4_bg_num_gdb_nometa(struct super_block *sb,
- 	if (!ext4_bg_has_super(sb, group))
- 		return 0;
- 
--	return EXT4_SB(sb)->s_gdb_count;
-+	if (ext4_has_feature_meta_bg(sb))
-+		return le32_to_cpu(EXT4_SB(sb)->s_es->s_first_meta_bg);
-+	else
-+		return EXT4_SB(sb)->s_gdb_count;
- }
- 
- /**
--- 
-2.30.0
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
+Thanks!
+--
+Gustavo
+
+> ---
+>  include/uapi/linux/usb/ch9.h | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/uapi/linux/usb/ch9.h b/include/uapi/linux/usb/ch9.h
+> index b17e3a21b15f..82ec6af71a1d 100644
+> --- a/include/uapi/linux/usb/ch9.h
+> +++ b/include/uapi/linux/usb/ch9.h
+> @@ -376,7 +376,10 @@ struct usb_string_descriptor {
+>  	__u8  bLength;
+>  	__u8  bDescriptorType;
+>  
+> -	__le16 wData[1];		/* UTF-16LE encoded */
+> +	union {
+> +		__le16 legacy_padding;
+> +		__DECLARE_FLEX_ARRAY(__le16, wData);	/* UTF-16LE encoded */
+> +	};
+>  } __attribute__ ((packed));
+>  
+>  /* note that "string" zero is special, it holds language codes that
+> -- 
+> 2.34.1
+> 
