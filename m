@@ -2,192 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF73172E4A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2879F72E4AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:55:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236500AbjFMNwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 09:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52558 "EHLO
+        id S237934AbjFMNzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 09:55:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239880AbjFMNw2 (ORCPT
+        with ESMTP id S235739AbjFMNyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 09:52:28 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916231FEF
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 06:52:00 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f7378a75c0so42245165e9.3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 06:52:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1686664317; x=1689256317;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=WaeJYs/uG6fynkKfa9zh2deKdFZIe8/Di6A1zgej6LU=;
-        b=Q1TcKKMKKnZe7DzIPaTDFI6gquigAuW8XeW4+klDezAjpwuO6fGCnJ1f7r/u6KZ0ER
-         O9dM1DXba6jhcO9WyqBBbXkOHVH51o+LTctGbKiFGcSH95isneJQPVjB5zHyiodmtN3Q
-         iiKAFQe47MdbZTDN7b34IMWXoX3zXEDuCXxkBRbmTYHrBDa3wPpgoRjui2Igf2KIbXxJ
-         LQWjxywaHFKOJAd0qWNhlGfaGxanYdhKtQUL87ogp+qDZ0PVjsxPh/zmXDXpLVRlr1QP
-         CsMUeQ2Eo5dTH5eOxqCdjEV+d9P6uNSTayFwtj3BByZuvQAvlobd7CngPX5JuQ9zHbHY
-         fMiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686664317; x=1689256317;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WaeJYs/uG6fynkKfa9zh2deKdFZIe8/Di6A1zgej6LU=;
-        b=kyhWBmaDWZ1OksnG3zLE0h386AZoL+a69bObWbwl9v3V7+cjtOwltCLSlVwisCV9GJ
-         8FvUVBSBov7LjAbr+mAsGFl9hL8K3veJeo0wAiaPTlcN5BWvZNR8worL79gK2iGTACZd
-         VGQpENzyY2c7PtVZ0v0ZJ57LAD/Qc81Uj/aS9wK9NYs6xYTd6F+3Z8TNtFdL0ph2AsqP
-         RENi3vuc4DKeOVc2yKCPcCtqykTwxhMdVpdFn20on1cxgU9ONaTfmzijqjgTE834s9j0
-         B6eC04HwpgRCIiVbHuXZGiPt0wI8mDx1PjQJU/RWIIJYAgNZ56K9Km/tdi8JXO5BzU4M
-         bnjg==
-X-Gm-Message-State: AC+VfDzpnMPyMswiHp2G38DR0lYZ3gp/Xo+uY5pad9TXfqovY5+TT2vn
-        NfP8VMZI+U5KnN3LNMfSaMEYdQ==
-X-Google-Smtp-Source: ACHHUZ6tbmwrKTMNvbpuPLgT+1R9lK2K8a7nds1UQDOt+PvY6ORk2+AOkeh44wiUBJm89/taQrjyYQ==
-X-Received: by 2002:adf:f548:0:b0:30e:1103:2e39 with SMTP id j8-20020adff548000000b0030e11032e39mr6622276wrp.58.1686664317375;
-        Tue, 13 Jun 2023 06:51:57 -0700 (PDT)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id n16-20020adfe350000000b0030e5b1fffc3sm15502558wrj.9.2023.06.13.06.51.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 06:51:56 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 15:51:55 +0200
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Petr Oros <poros@redhat.com>
-Cc:     Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
-        kuba@kernel.org, vadfed@meta.com, jonathan.lemon@gmail.com,
-        pabeni@redhat.com, corbet@lwn.net, davem@davemloft.net,
-        edumazet@google.com, vadfed@fb.com, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, saeedm@nvidia.com, leon@kernel.org,
-        richardcochran@gmail.com, sj@kernel.org, javierm@redhat.com,
-        ricardo.canuelo@collabora.com, mst@redhat.com, tzimmermann@suse.de,
-        michal.michalik@intel.com, gregkh@linuxfoundation.org,
-        jacek.lawrynowicz@linux.intel.com, airlied@redhat.com,
-        ogabbay@kernel.org, arnd@arndb.de, nipun.gupta@amd.com,
-        axboe@kernel.dk, linux@zary.sk, masahiroy@kernel.org,
-        benjamin.tissoires@redhat.com, geert+renesas@glider.be,
-        milena.olech@intel.com, kuniyu@amazon.com, liuhangbin@gmail.com,
-        hkallweit1@gmail.com, andy.ren@getcruise.com, razor@blackwall.org,
-        idosch@nvidia.com, lucien.xin@gmail.com, nicolas.dichtel@6wind.com,
-        phil@nwl.cc, claudiajkang@gmail.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-rdma@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, mschmidt@redhat.com,
-        linux-clk@vger.kernel.org, vadim.fedorenko@linux.dev,
-        Jiri Pirko <jiri@nvidia.com>
-Subject: Re: [RFC PATCH v8 06/10] netdev: expose DPLL pin handle for netdevice
-Message-ID: <ZIh0e5b/xp6H85pN@nanopsycho>
-References: <20230609121853.3607724-1-arkadiusz.kubalewski@intel.com>
- <20230609121853.3607724-7-arkadiusz.kubalewski@intel.com>
- <343e2638d2e9b3d13216235f85c2d1dae2634881.camel@redhat.com>
+        Tue, 13 Jun 2023 09:54:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C80AA6;
+        Tue, 13 Jun 2023 06:54:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 955266366E;
+        Tue, 13 Jun 2023 13:54:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71160C433D9;
+        Tue, 13 Jun 2023 13:54:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686664483;
+        bh=iSmSOi8YU02GjFRauD4K5+rplja7hUixCkETFWDQmlQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XJ5yJAExaLmvMqk4coILGi79B+899BpXgOZNH4uuP/eQuKwpaNkARmEFmkVgn7biz
+         EEk2e+3JekdMhMo0W7NRgYdtxxHKZ+2ekT+UnnDi7deCGPYnxY/WR/BnOeOTufBdXt
+         2CO2oDQnuIytFqJHXpZLWgWY2sVqHohlXOxyNOQLT/iDxGK5j29fqVnVKlwduZ5cjF
+         8S8JY68gz0Yn9r1clxM30GVBZT+z4k55qSAGM24UixT+z9/+OROWkalpCMi7/olPR+
+         Xoi0srk5u0usumLttenNwwwFYQwj4iXHoENmAPci1Y0sBd6eXoJJZqKdrlqxTtC7cH
+         X1AQRtNmIl8mw==
+Date:   Tue, 13 Jun 2023 14:54:36 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Yingkun Meng <mengyingkun@loongson.cn>,
+        Conor Dooley <conor@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        conor+dt@kernel.org, lgirdwood@gmail.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, loongarch@lists.linux.dev,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [ PATCH v2 3/3] ASoC: dt-bindings: Add support for Loongson
+ audio card
+Message-ID: <449d07d9-5538-4f36-83a0-3a81a9ab9ea2@sirena.org.uk>
+References: <20230612085614.3039498-1-mengyingkun@loongson.cn>
+ <20230612-booted-french-186dd95e78a9@spud>
+ <bda7c25f-65cf-d45f-3ac0-f2471e3aacf8@loongson.cn>
+ <20230613-zoologist-panorama-a87858bba075@wendy>
+ <887f9cc4-6457-9d14-8aef-011ff4c9aeda@loongson.cn>
+ <20230613-depletion-garnet-ccc2009111c3@wendy>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bcFqVBu2j9qZWhmQ"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <343e2638d2e9b3d13216235f85c2d1dae2634881.camel@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230613-depletion-garnet-ccc2009111c3@wendy>
+X-Cookie: Not a flying toy.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mon, Jun 12, 2023 at 11:17:23AM CEST, poros@redhat.com wrote:
->Arkadiusz Kubalewski píše v Pá 09. 06. 2023 v 14:18 +0200:
->> From: Jiri Pirko <jiri@nvidia.com>
 
-[...]
+--bcFqVBu2j9qZWhmQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+On Tue, Jun 13, 2023 at 01:46:41PM +0100, Conor Dooley wrote:
 
->> +static size_t rtnl_dpll_pin_size(const struct net_device *dev)
->> +{
->> +       size_t size = nla_total_size(0); /* nest IFLA_DPLL_PIN */
->> +
->> +       if (dev->dpll_pin)
->> +               size += dpll_msg_pin_handle_size(dev->dpll_pin);
->
->Hi Arkadiusz,
->
->net_device->dpll_pin is only valid if IS_ENABLED(CONFIG_DPLL)
->But the code in net/core/rtnetlink.c doesn't respect that.
->If CONFIG_DPLL is not set, net/core/rtnetlink.c cannot be compiled.
->
->Regards,
->Petr 
+> So it is entirely a software construct? Why does it need a dt-binding
+> then? Your commit message says the controller is present on the device!
 
-You are correct. Here's the squash-patch to fix this. Arkadiusz, could
-you please make the squash? Thanks!
+A typical embedded (or power efficient laptop) audio design will consist
+of multiple devices connected together (frequently via non-control
+buses) together with system level passive components and plastics which
+are also important to the audio configuration.  A card binding describes
+the interconections between the devices in the system and provides
+identification information for the audio subsystem.  This system level
+audio integration is a physical thing that can be pointed at that
+requires real software control.
 
-diff --git a/drivers/dpll/dpll_netlink.c b/drivers/dpll/dpll_netlink.c
-index e6efc17aaf26..00dc96c3ade4 100644
---- a/drivers/dpll/dpll_netlink.c
-+++ b/drivers/dpll/dpll_netlink.c
-@@ -303,12 +303,14 @@ dpll_cmd_pin_fill_details(struct sk_buff *msg, struct dpll_pin *pin,
- 
- size_t dpll_msg_pin_handle_size(struct dpll_pin *pin)
- {
--	return nla_total_size(4); /* DPLL_A_PIN_ID */
-+	return pin ? nla_total_size(4) : 0; /* DPLL_A_PIN_ID */
- }
- EXPORT_SYMBOL_GPL(dpll_msg_pin_handle_size);
- 
- int dpll_msg_add_pin_handle(struct sk_buff *msg, struct dpll_pin *pin)
- {
-+	if (!pin)
-+		return 0;
- 	if (nla_put_u32(msg, DPLL_A_PIN_ID, pin->id))
- 		return -EMSGSIZE;
- 	return 0;
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index b002e3cc9943..82ad12fd4266 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -3967,6 +3967,16 @@ int dev_get_port_parent_id(struct net_device *dev,
- bool netdev_port_same_parent_id(struct net_device *a, struct net_device *b);
- void netdev_dpll_pin_set(struct net_device *dev, struct dpll_pin *dpll_pin);
- void netdev_dpll_pin_clear(struct net_device *dev);
-+
-+static inline struct dpll_pin *netdev_dpll_pin(const struct net_device *dev)
-+{
-+#if IS_ENABLED(CONFIG_DPLL)
-+	return dev->dpll_pin;
-+#else
-+	return NULL;
-+#endif
-+}
-+
- struct sk_buff *validate_xmit_skb_list(struct sk_buff *skb, struct net_device *dev, bool *again);
- struct sk_buff *dev_hard_start_xmit(struct sk_buff *skb, struct net_device *dev,
- 				    struct netdev_queue *txq, int *ret);
-diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
-index ebe9ae8608fc..67dd455e15c7 100644
---- a/net/core/rtnetlink.c
-+++ b/net/core/rtnetlink.c
-@@ -1056,8 +1056,7 @@ static size_t rtnl_dpll_pin_size(const struct net_device *dev)
- {
- 	size_t size = nla_total_size(0); /* nest IFLA_DPLL_PIN */
- 
--	if (dev->dpll_pin)
--		size += dpll_msg_pin_handle_size(dev->dpll_pin);
-+	size += dpll_msg_pin_handle_size(netdev_dpll_pin(dev));
- 
- 	return size;
- }
-@@ -1790,11 +1789,9 @@ static int rtnl_fill_dpll_pin(struct sk_buff *skb,
- 	if (!dpll_pin_nest)
- 		return -EMSGSIZE;
- 
--	if (dev->dpll_pin) {
--		ret = dpll_msg_add_pin_handle(skb, dev->dpll_pin);
--		if (ret < 0)
--			goto nest_cancel;
--	}
-+	ret = dpll_msg_add_pin_handle(skb, netdev_dpll_pin(dev));
-+	if (ret < 0)
-+		goto nest_cancel;
- 
- 	nla_nest_end(skb, dpll_pin_nest);
- 	return 0;
+Like I said before please look at the existing audio card bindings.
 
+--bcFqVBu2j9qZWhmQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSIdRwACgkQJNaLcl1U
+h9AOEAf/djOuF0KqRDXHKbgIdlBrak/uDTEiHEoqXTlaTW9hPHgCP27FoU5F15vG
+/mS+Obydc9IWyOl0uscQPGFP9nLoayDYduM5nEIlAJiBH0rvBjqZ6UVnAofy1Ec7
+9ebQPTGDGmWs8iwKgfQjZmw7UJI2J4QQ5pFjZjNTkgmMb9Pu8ixylIbjiXyeiEZH
+8Ad65tmEvYRhcGdTFZZ/88Drx+ne7TczcBg4wwcFN0V51NWhXr2XwaEaGKfKTizA
+Vx3gq40qxkwzZQPp5UcSL/O7FqhwFh3zHwzduDMVv80tsDbHnD64xRQpZNWELycv
+lO4MOL8CZc5th3RnMJat7bXSNHcKuQ==
+=JHLU
+-----END PGP SIGNATURE-----
+
+--bcFqVBu2j9qZWhmQ--
