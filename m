@@ -2,66 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17ABE72E33B
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF46D72E33E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240935AbjFMMlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 08:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
+        id S240061AbjFMMnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 08:43:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233000AbjFMMlP (ORCPT
+        with ESMTP id S233000AbjFMMnI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 08:41:15 -0400
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9B312A
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 05:41:14 -0700 (PDT)
-Received: by mail-ua1-x931.google.com with SMTP id a1e0cc1a2514c-76d846a4b85so385658241.1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 05:41:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1686660073; x=1689252073;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xWJOTGLymbDQlUSAs58B7ENxx1uRHhF/it2ySbN2jk0=;
-        b=3LIY4mjmBQVmCsYj6CY7ZRKYKXF+viQMoTBUIpDoWuAAvszPCM8R+cKm2aTetU9HZB
-         dyFvoz1VJXHREzdOGYYZ8sExVEtQg7RN1oxTrXci03Zp4jEDPL+aI2wmW3rFK8hm+1/4
-         TfA5RMh2PumKn2Uz4NWUSfjaZbxGpI8qI6OGjSJHr74bcU6k1jG7yZv+Zfe8n4b+2q55
-         +X3w+7nEOIVG9DlirCZCRJYGeMz1gZZ7tLkzYSr7WcGzkM3C0oco+NG3epxXTHMk2J0P
-         lgB1cNw0WXzwzbUIYtdE5mU9CqbDZi3Wg3cg2XOz6HGFRCSczUc/EXH9hqS44wqE5VAX
-         p0vA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686660073; x=1689252073;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xWJOTGLymbDQlUSAs58B7ENxx1uRHhF/it2ySbN2jk0=;
-        b=VooF/9FJFSIGmgZXFbZkc/lIvkAGAGD/Jy+3d2EnNIFlxpteR/XYvqhyJQOcCZwLhc
-         hqVT5vwQySQpwJ5XnOiIDip37/3hamNoQdGOUmhbWVximYKsu4BpicN6NUWSawUNd19h
-         3Yl2gcOieGhZio4mRctAM9ZfeNzDKD538g60IKQ8R3kUs16yhd3c4pME//MTq8WexOdx
-         tzEh/ZVYcQGLRhrmZtPckyhEo2x8P/rgXH9d/E1MohqRTDcKDrH2oNEgiqUk2MB6vjeo
-         4CgzW24/NOAv+AMDh86d+hCjdS2ZunSfqScSwgTKJMGtwHylR2NKHZo8vq/rJK2W9ZJR
-         8amA==
-X-Gm-Message-State: AC+VfDyOdi1WeTnounoQyMMYgVvGYZJxPQbbghJtPCJcFtmkyZPWOvNj
-        DyCZNkJOA9Dn0aj0n6VZzD8bNbWIXrsypwEX4nCHGA==
-X-Google-Smtp-Source: ACHHUZ5q5N2uMo9uVe4NxB4a8cePYTi0SR1YsIgL+uUBG+s/kuNE16NepfqwinchlLZ5ThFRdfg+OSTLUAQQ4WtTe5k=
-X-Received: by 2002:a05:6102:1359:b0:439:3c15:da5b with SMTP id
- j25-20020a056102135900b004393c15da5bmr4763983vsl.17.1686660073315; Tue, 13
- Jun 2023 05:41:13 -0700 (PDT)
+        Tue, 13 Jun 2023 08:43:08 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64146AD
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 05:43:07 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-311-rnUksceOM2-gkIbIoMQNcA-1; Tue, 13 Jun 2023 13:43:04 +0100
+X-MC-Unique: rnUksceOM2-gkIbIoMQNcA-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 13 Jun
+ 2023 13:42:59 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Tue, 13 Jun 2023 13:42:59 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Rasmus Villemoes' <linux@rasmusvillemoes.dk>,
+        Demi Marie Obenour <demi@invisiblethingslab.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Juergen Gross <jgross@suse.com>,
+        "Stefano Stabellini" <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Lee Jones <lee@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
+CC:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "Christoph Hellwig" <hch@lst.de>
+Subject: RE: [PATCH v3 3/4] vsscanf(): do not skip spaces
+Thread-Topic: [PATCH v3 3/4] vsscanf(): do not skip spaces
+Thread-Index: AQHZnR4ovdHGuD5F0k2o+1T0Ru69aa+Iri8A
+Date:   Tue, 13 Jun 2023 12:42:59 +0000
+Message-ID: <32e8b52d64b642608595142ab2952f16@AcuMS.aculab.com>
+References: <20230610204044.3653-1-demi@invisiblethingslab.com>
+ <20230610204044.3653-4-demi@invisiblethingslab.com>
+ <546e2ab5-f520-c85e-d6f4-ca7b02457d4c@rasmusvillemoes.dk>
+In-Reply-To: <546e2ab5-f520-c85e-d6f4-ca7b02457d4c@rasmusvillemoes.dk>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20230607081803.778223-1-jiawenwu@trustnetic.com>
-In-Reply-To: <20230607081803.778223-1-jiawenwu@trustnetic.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 13 Jun 2023 14:41:02 +0200
-Message-ID: <CAMRc=Me8x9ytsg6RRrC93oh+q3Qqn4N92gjvQM=ARGO2=f-pgg@mail.gmail.com>
-Subject: Re: [PATCH v2] gpiolib: Fix GPIO chip IRQ initialization restriction
-To:     Jiawen Wu <jiawenwu@trustnetic.com>
-Cc:     linus.walleij@linaro.org, shreeya.patel@collabora.com,
-        andy.shevchenko@gmail.com, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,51 +76,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 7, 2023 at 10:20=E2=80=AFAM Jiawen Wu <jiawenwu@trustnetic.com>=
- wrote:
->
-> In case of gpio-regmap, IRQ chip is added by regmap-irq and associated wi=
-th
-> GPIO chip by gpiochip_irqchip_add_domain(). The initialization flag was n=
-ot
-> added in gpiochip_irqchip_add_domain(), causing gpiochip_to_irq() to retu=
-rn
-> -EPROBE_DEFER.
->
-> Fixes: 5467801f1fcb ("gpio: Restrict usage of GPIO chip irq members befor=
-e initialization")
-> Signed-off-by: Jiawen Wu <jiawenwu@trustnetic.com>
-> ---
-> v1 -> v2:
-> - add compiler barrier
-> ---
->  drivers/gpio/gpiolib.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-> index a7220e04a93e..9ecf93cbd801 100644
-> --- a/drivers/gpio/gpiolib.c
-> +++ b/drivers/gpio/gpiolib.c
-> @@ -1792,6 +1792,14 @@ int gpiochip_irqchip_add_domain(struct gpio_chip *=
-gc,
->         gc->to_irq =3D gpiochip_to_irq;
->         gc->irq.domain =3D domain;
->
-> +       /*
-> +        * Using barrier() here to prevent compiler from reordering
-> +        * gc->irq.initialized before adding irqdomain.
-> +        */
-> +       barrier();
-> +
-> +       gc->irq.initialized =3D true;
-> +
->         return 0;
->  }
->  EXPORT_SYMBOL_GPL(gpiochip_irqchip_add_domain);
-> --
-> 2.27.0
->
+RnJvbTogUmFzbXVzIFZpbGxlbW9lcw0KPiBTZW50OiAxMiBKdW5lIDIwMjMgMTI6MDgNCj4gDQo+
+IE9uIDEwLzA2LzIwMjMgMjIuNDAsIERlbWkgTWFyaWUgT2Jlbm91ciB3cm90ZToNCj4gPiBQYXNz
+aW5nIHNwYWNlcyBiZWZvcmUgZS5nLiBhbiBpbnRlZ2VyIGlzIHVzdWFsbHkNCj4gPiBub3QgaW50
+ZW5kZWQuDQo+IA0KPiBNYXliZSwgbWF5YmUgbm90LiBCdXQgaXQncyBtYW5kYXRlZCBieSBQT1NJ
+WC9DOTkuDQo+IA0KPiBBbmQgb2YgY291cnNlIHdlIGFyZSBmcmVlIHRvIGlnbm9yZSB0aGF0IGFu
+ZCBpbXBsZW1lbnQgb3VyIG93biBzZW1hbnRpY3MNCj4gKHRob3VnaCB3aXRoaW4gdGhlIGNvbnN0
+cmFpbnRzIHRoYXQgd2UgcmVhbGx5IHdhbnQgLVdmb3JtYXQgdG8gaGVscCB1cyksDQo+IGJ1dCB0
+aGVyZSBzZWVtcyB0byBiZSBleGlzdGluZyBjb2RlIGluLXRyZWUgdGhhdCByZWxpZXMgb24gdGhp
+cw0KPiBiZWhhdmlvci4gRm9yIGV4YW1wbGUgSSB0aGluayB0aGlzIHdpbGwgYnJlYWsNCj4gZnNs
+X3NhdGFfaW50cl9jb2FsZXNjaW5nX3N0b3JlKCkgd2hpY2ggdXNlcyBhIHNjYW5mIGZvcm1hdCBv
+ZiAiJXUldSIuDQo+IA0KPiBTdXJlLCB0aGF0IGNvdWxkIGp1c3Qgc2F5ICIldSAldSIgaW5zdGVh
+ZCwgYnV0IHRoZSBwb2ludCBpcyB0aGF0DQo+IGN1cnJlbnRseSBpdCBkb2Vzbid0LiBTbyB3aXRo
+b3V0IHNvbWUgcmVhc29uYWJseSB0aG9yb3VnaCBhbmFseXNpcw0KPiBhY3Jvc3MgdGhlIHRyZWUs
+IGFuZCB1cGRhdGVzIG9mIGFmZmVjdGVkIGNhbGxlcnMsIE5BSy4NCg0KSXQgd291bGQgYWxtb3N0
+IGNlcnRhaW5seSBuZWVkIHRvIGJlICIgJXUgJXUiIHRvIGFsbG93IGZvcg0KdXNlcnNwYWNlIGdl
+bmVyYXRpbmcgdGhlIGlucHV0IHdpdGggIiU2dSAlNnUiLA0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0
+ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBL
+ZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
-Applied, thanks!
-
-Bart
