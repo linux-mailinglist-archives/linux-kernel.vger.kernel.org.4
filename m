@@ -2,150 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0798472F077
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 01:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B70E72F080
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 01:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233331AbjFMXrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 19:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38426 "EHLO
+        id S238613AbjFMXrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 19:47:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjFMXqp (ORCPT
+        with ESMTP id S240275AbjFMXrU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 19:46:45 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7482705;
-        Tue, 13 Jun 2023 16:45:38 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35DNihwc013704;
-        Tue, 13 Jun 2023 23:44:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=D0L/w17UiNDeMoS9mBrUSRd8Ma3C3z8eh195zIKBeDA=;
- b=cuaopSmVAra4+pgpV51M95yoAYqt0AD2kyCNDSDtZc98udscZ7Tq42Jt3MoEsVQkN/l0
- WwEzL/p52sbtKDUjB0c/eKM+TwBbbGaa+6Z8fSV9by0MHi+lJ2pRjhiMJnrkH6BfD4lN
- kkOTdXdFqzavU1j6evIAyhD3VPPtF5dlNQpMNrJ8wcL4yYaYpVFsSrA0CeR0h6cHjnd4
- gkoixhJcLwgkjH0dyx//Jm1+iNb+eIJeBPncO0E5y9fOX6/24uVTx7MGb9Sb7nC/7o3s
- YpsoWLDqaysSwJhAeOSqz60j0ofB+ZUSzdhHc/peITTW/gr3l1hYicjyKu4UVCHLHqWC Lg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r6q4r1kn5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Jun 2023 23:44:43 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35DNigli030416
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Jun 2023 23:44:42 GMT
-Received: from [10.134.70.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 13 Jun
- 2023 16:44:40 -0700
-Message-ID: <c3cf57b5-15fb-4612-eb3b-52abd07ede8f@quicinc.com>
-Date:   Tue, 13 Jun 2023 16:44:40 -0700
+        Tue, 13 Jun 2023 19:47:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FC0296B;
+        Tue, 13 Jun 2023 16:46:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5EAE163C7B;
+        Tue, 13 Jun 2023 23:45:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 073E0C433C8;
+        Tue, 13 Jun 2023 23:45:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686699936;
+        bh=AMsd3sxADqpJqD+mB8eeW0S3cwb3hDi/Y81Gt8oCQVQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=LEBNMkY4MFiHfRwdaH0CIEVLuyHoWZU/F6mI/YsWNtktWHu+U1APZEvo5D0kCm8uD
+         pBv+W7ipUjXbPB1baW6s3IXhFpM9jDks5bCItq28KV0H5Uh79Dq9Ky1zjGG1FVINne
+         d6D/IB3D8dfzKhcfYEjC/3SUzxUW7WGXsyER1kN4U90PLYEZ/FiH8vm2kfARoxrpv4
+         jS5QV4TVY6w/OngD5aKcCezE59mvAhDGJiOH14WN5MsnBC8GLNCU/fyE+3l12IEHBY
+         20kD7ur+N7PVH6hSTEfmm0MGjtk473SdPscazyJd7Ug97H7jDVtunNTZ3MoZWdw2vH
+         5iT38VQqK3LVQ==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] arm64: dts: qcom: sm8550: Add missing interconnect path to USB HC
+Date:   Tue, 13 Jun 2023 16:48:40 -0700
+Message-Id: <168670013502.1400697.13657615350747337280.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230601103817.4066446-1-abel.vesa@linaro.org>
+References: <20230601103817.4066446-1-abel.vesa@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 2/2] drm/msm/dpu: remove struct drm_dsc_config from
- struct msm_display_info
-Content-Language: en-US
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <andersson@kernel.org>
-CC:     <quic_sbillaka@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <marijn.suijten@somainline.org>, <quic_jesszhan@quicinc.com>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <1686694742-20862-1-git-send-email-quic_khsieh@quicinc.com>
- <1686694742-20862-3-git-send-email-quic_khsieh@quicinc.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <1686694742-20862-3-git-send-email-quic_khsieh@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: YHcSrIps_c3FifMfKpoS8E51uKHrXmYF
-X-Proofpoint-ORIG-GUID: YHcSrIps_c3FifMfKpoS8E51uKHrXmYF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-13_23,2023-06-12_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- spamscore=0 mlxscore=0 mlxlogscore=999 clxscore=1015 priorityscore=1501
- adultscore=0 bulkscore=0 suspectscore=0 impostorscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306130209
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/13/2023 3:19 PM, Kuogee Hsieh wrote:
-> ince struct drm_dsc_config is stored at atomic_enable() instead
-S got cut off in since
-> of display setup time during boot up, saving struct drm_dsc_config
-> at struct msm_display_info is not necessary. Lets drop the dsc member
-> from struct msm_display_info.
+On Thu, 1 Jun 2023 13:38:17 +0300, Abel Vesa wrote:
+> The USB HC node is missing the interconnect paths, so add them.
 > 
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 2 --
->   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h | 2 --
->   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     | 2 --
->   3 files changed, 6 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> index e00cd39..50ce2ef 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> @@ -2309,8 +2309,6 @@ static int dpu_encoder_setup_display(struct dpu_encoder_virt *dpu_enc,
->   		dpu_enc->idle_pc_supported =
->   				dpu_kms->catalog->caps->has_idle_pc;
->   
-> -	dpu_enc->dsc = disp_info->dsc;
-> -
->   	mutex_lock(&dpu_enc->enc_lock);
->   	for (i = 0; i < disp_info->num_of_h_tiles && !ret; i++) {
->   		/*
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
-> index 90e1925..4c05fd5 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
-> @@ -28,7 +28,6 @@
->    * @is_cmd_mode		Boolean to indicate if the CMD mode is requested
->    * @is_te_using_watchdog_timer:  Boolean to indicate watchdog TE is
->    *				 used instead of panel TE in cmd mode panels
-> - * @dsc:		DSC configuration data for DSC-enabled displays
->    */
->   struct msm_display_info {
->   	enum dpu_intf_type intf_type;
-> @@ -36,7 +35,6 @@ struct msm_display_info {
->   	uint32_t h_tile_instance[MAX_H_TILES_PER_DISPLAY];
->   	bool is_cmd_mode;
->   	bool is_te_using_watchdog_timer;
-> -	struct drm_dsc_config *dsc;
->   };
->   
->   /**
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> index 613384b..5e77e09 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> @@ -544,8 +544,6 @@ static int _dpu_kms_initialize_dsi(struct drm_device *dev,
->   
->   		info.is_cmd_mode = msm_dsi_is_cmd_mode(priv->dsi[i]);
->   
-> -		info.dsc = msm_dsi_get_dsc_config(priv->dsi[i]);
-> -
->   		encoder = dpu_encoder_init(dev, DRM_MODE_ENCODER_DSI, &info);
->   		if (IS_ERR(encoder)) {
->   			DPU_ERROR("encoder init failed for dsi display\n");
+
+Applied, thanks!
+
+[1/1] arm64: dts: qcom: sm8550: Add missing interconnect path to USB HC
+      commit: 11a1397bbf69e408223bb691858a0fcd295a8f76
+
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
