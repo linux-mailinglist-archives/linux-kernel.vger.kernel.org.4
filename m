@@ -2,117 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB4372D80E
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 05:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C313E72D813
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 05:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232529AbjFMDPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 23:15:38 -0400
+        id S239674AbjFMDRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 23:17:22 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239708AbjFMDOz (ORCPT
+        with ESMTP id S239475AbjFMDQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 23:14:55 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C4AE7D
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 20:13:25 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35D2okBE026900;
-        Tue, 13 Jun 2023 03:13:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=C6/yV/Vq3nHnej1jBfjeowe/1deuVDw+kvoXqNqcZgs=;
- b=kLBmKwzS9n7fmKVsXHH08/m1suVWw1HqWp9Ac4kQQdhCYpf8Bq0vnBiEjmTjYlkzsHHw
- LSpbBUm/3uZXvPtIFNFqfJqhPIL6ifftRT/lD2DXUG+hcnZXKXWYuDlulVDnVNfNHI8Z
- lK9M167Pvv7pTvUP6gfyFdpxS7SU/npR35n3wnVCBOVHI9qYDDWgkyqv28k7neIvglSZ
- LuMhGze7iIQ0jwkcSJNg+Qy5T5Q2FmNvHI6Bspu3y/j6EYkJQDl1qxSRRLerBwha3l81
- PpRfyUEin9A1LDpzr/Ja0x9Cxhx/zBK5kynGApSArWGHKpG/QChwVCwDrAe9y/t0ZCw0 tA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r61q21q78-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Jun 2023 03:13:14 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35D3DD4Y030721
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Jun 2023 03:13:13 GMT
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 12 Jun 2023 20:13:10 -0700
-Date:   Tue, 13 Jun 2023 08:43:06 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Charan Teja Kalla <quic_charante@quicinc.com>
-CC:     Suren Baghdasaryan <surenb@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        <akpm@linux-foundation.org>, <minchan@kernel.org>,
-        <quic_pkondeti@quicinc.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mm: madvise: fix uneven accounting of psi
-Message-ID: <20230613031306.GB1860372@hu-pkondeti-hyd.qualcomm.com>
-References: <1685531374-6091-1-git-send-email-quic_charante@quicinc.com>
- <20230531221955.GD102494@cmpxchg.org>
- <230e45e8-8cd8-3668-bbfa-a95212b4cb99@quicinc.com>
- <20230605180013.GD221380@cmpxchg.org>
- <f3f15b6a-8618-f755-f21c-4193c502e65c@quicinc.com>
- <CAJuCfpFB33GLbwvYspg966b6AGMopS3ca68hjL94kgpM7et7CQ@mail.gmail.com>
- <4543c4e5-43f1-bae2-245e-951437e4bd07@quicinc.com>
+        Mon, 12 Jun 2023 23:16:42 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92FB9172A;
+        Mon, 12 Jun 2023 20:15:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686626141; x=1718162141;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2YVq3aZ9XIb0zceB5aVAvaOJdnAo1cIPmdg8DLRTCLU=;
+  b=RECczq4ijrgMofYOofaSxkbbGi1L/Gc5kiYude2MfV0lyYtfrAFHVX0c
+   24Z4jiYqqFw37aiQFmpcE7dngbDyGQxtXH5MjFBkBfeJIL0UMD6q5Uw5C
+   xrIbNE8CA5utjCecQng8niIvl9sbUTMENXMINv8Qwea4LBKKGjoZV42K+
+   kTWG/riL92A1+W43bCuw0mb14XJNUVn+PHAndhGwPs7Mrqwj5SDFMeMO7
+   L65nmDH7QgpJvAvS/9Ct2fsmsb9VbVYaV+DnAPBb2SgKWv+S5EkW4nX8W
+   xMm/tVnGz0g3PgJaa72wj0iydlSr4N8KX72GjCRWa400ugt4V6R7pilLU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="421807839"
+X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
+   d="scan'208";a="421807839"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 20:15:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="958242936"
+X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
+   d="scan'208";a="958242936"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
+  by fmsmga006.fm.intel.com with ESMTP; 12 Jun 2023 20:15:37 -0700
+Message-ID: <69f50ced-e806-717a-0c74-a4cfa58600fa@linux.intel.com>
+Date:   Tue, 13 Jun 2023 11:14:30 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <4543c4e5-43f1-bae2-245e-951437e4bd07@quicinc.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ojl4r2Mo_Ojhmq4J9Ynkclsv9-AISmlw
-X-Proofpoint-ORIG-GUID: ojl4r2Mo_Ojhmq4J9Ynkclsv9-AISmlw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-12_18,2023-06-12_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- clxscore=1011 suspectscore=0 adultscore=0 bulkscore=0 mlxlogscore=956
- malwarescore=0 impostorscore=0 priorityscore=1501 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306130026
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Cc:     baolu.lu@linux.intel.com, iommu@lists.linux.dev,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: Re: [PATCH 1/2] iommu: Prevent RESV_DIRECT devices from blocking
+ domains
+Content-Language: en-US
+To:     "Liu, Jingqi" <jingqi.liu@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Nicolin Chen <nicolinc@nvidia.com>
+References: <20230607035145.343698-1-baolu.lu@linux.intel.com>
+ <20230607035145.343698-2-baolu.lu@linux.intel.com>
+ <8cc1d69e-f86d-fd04-7737-914d967dc0f5@intel.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <8cc1d69e-f86d-fd04-7737-914d967dc0f5@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 06:12:28PM +0530, Charan Teja Kalla wrote:
-> Thanks Suren & Johannes,
+On 6/12/23 4:28 PM, Liu, Jingqi wrote:
+> On 6/7/2023 11:51 AM, Lu Baolu wrote:
+>> The IOMMU_RESV_DIRECT flag indicates that a memory region must be mapped
+>> 1:1 at all times. This means that the region must always be accessible to
+>> the device, even if the device is attached to a blocking domain. This is
+>> equal to saying that IOMMU_RESV_DIRECT flag prevents devices from being
+>> attached to blocking domains.
+>>
+>> This also implies that devices that implement RESV_DIRECT regions will be
+>> prevented from being assigned to user space since taking the DMA 
+>> ownership
+>> immediately switches to a blocking domain.
+>>
+>> The rule of preventing devices with the IOMMU_RESV_DIRECT regions from
+>> being assigned to user space has existed in the Intel IOMMU driver for
+>> a long time. Now, this rule is being lifted up to a general core rule,
+>> as other architectures like AMD and ARM also have RMRR-like reserved
+>> regions. This has been discussed in the community mailing list and refer
+>> to below link for more details.
+>>
+>> Other places using unmanaged domains for kernel DMA must follow the
+>> iommu_get_resv_regions() and setup IOMMU_RESV_DIRECT - we do not restrict
+>> them in the core code.
+>>
+>> Cc: Robin Murphy <robin.murphy@arm.com>
+>> Cc: Alex Williamson <alex.williamson@redhat.com>
+>> Cc: Kevin Tian <kevin.tian@intel.com>
+>> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+>> Link: 
+>> https://lore.kernel.org/linux-iommu/BN9PR11MB5276E84229B5BD952D78E9598C639@BN9PR11MB5276.namprd11.prod.outlook.com
+>> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+>> ---
+>>   include/linux/iommu.h |  2 ++
+>>   drivers/iommu/iommu.c | 39 +++++++++++++++++++++++++++++----------
+>>   2 files changed, 31 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+>> index d31642596675..fd18019ac951 100644
+>> --- a/include/linux/iommu.h
+>> +++ b/include/linux/iommu.h
+>> @@ -409,6 +409,7 @@ struct iommu_fault_param {
+>>    * @priv:     IOMMU Driver private data
+>>    * @max_pasids:  number of PASIDs this device can consume
+>>    * @attach_deferred: the dma domain attachment is deferred
+>> + * @requires_direct: The driver requested IOMMU_RESV_DIRECT
+>>    *
+>>    * TODO: migrate other per device data pointers under 
+>> iommu_dev_data, e.g.
+>>    *    struct iommu_group    *iommu_group;
+>> @@ -422,6 +423,7 @@ struct dev_iommu {
+>>       void                *priv;
+>>       u32                max_pasids;
+>>       u32                attach_deferred:1;
+>> +    u32                requires_direct:1;
+>>   };
+>>   int iommu_device_register(struct iommu_device *iommu,
+>> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+>> index 9e0228ef612b..e59de7852067 100644
+>> --- a/drivers/iommu/iommu.c
+>> +++ b/drivers/iommu/iommu.c
+>> @@ -959,12 +959,7 @@ static int 
+>> iommu_create_device_direct_mappings(struct iommu_domain *domain,
+>>       unsigned long pg_size;
+>>       int ret = 0;
+>> -    if (!iommu_is_dma_domain(domain))
+>> -        return 0;
+>> -
+>> -    BUG_ON(!domain->pgsize_bitmap);
+>> -
+>> -    pg_size = 1UL << __ffs(domain->pgsize_bitmap);
+>> +    pg_size = domain->pgsize_bitmap ? 1UL << 
+>> __ffs(domain->pgsize_bitmap) : 0;
+> Would it be better to add the following check here?
+>      if (WARN_ON(!pg_size))
+>              return -EINVAL;
 > 
-> On 6/7/2023 1:18 AM, Suren Baghdasaryan wrote:
-> > Hi Folks. Sorry for being late to the party.
-> > Yeah, userspace does not have a crystal ball to predict future user
-> > behavior, so there will always be pathological cases when usual
-> > assumptions and resulting madvise() would make things worse.
-> > 
-> > I think this discussion can be split into several questions/issues:
-> > 1. Inconsistency in how madvise(MADV_PAGEOUT) would affect PSI
-> > calculation when the page is refaulted, based on the path it took
-> > before being evicted by madvise(). In your initial description case
-> > (a) is inconsistent with (b) and (c) and it's probably worth fixing.
-> > IMHO (a) should be made consistent with others, not the other way
-> > around. My reasoning is that page was expelled from the active list,
-> > so it was part of the active workingset.
-> > 
-> That means we should be setting Workingset on the page while it is on
-> the active list and when it is being pageout through madvising. Right? I
-> see, this makes it consistent.
-> 
-> On the same note, discussing with Suren offline, Should the refaulted
-> madvise pages start always at the inactive list? If they are really
-> active, they get promoted anyway..
-> 
-Can you elaborate on the rationale why refaulted madvise pages needs to
-be on inactive list? If it had not been paged out via madvise, it would
-have been activated no?
+> Instead of checking latter in the loop as follows.
+>      if (WARN_ON_ONCE(!pg_size)) {
+>              ret = -EINVAL;
+>              goto out;
+>      }
 
-Thanks,
-Pavan
+I am afraid no. Only the paging domains need a valid pg_size. That's the
+reason why I put it after the iommu_is_dma_domain() check. The previous
+code has the same behavior too.
+
+Best regards,
+baolu
