@@ -2,80 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD78B72E349
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:46:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E686872E34C
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242202AbjFMMqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 08:46:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
+        id S242084AbjFMMrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 08:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242084AbjFMMqR (ORCPT
+        with ESMTP id S238753AbjFMMrL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 08:46:17 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6AAE7A
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 05:46:16 -0700 (PDT)
-Received: from mail-yb1-f200.google.com (mail-yb1-f200.google.com [209.85.219.200])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 38A4B3F273
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:46:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1686660375;
-        bh=DJyvntNK5zxh7HK+mp4W1WMoJPxy7nqBJlYeYzOf6Og=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=Pkja2DqtESh9d+TMgoRK0JBCtotZf60iugjn+jyYL33czHh1e9ZL3PMAJ12+ZZQMU
-         qdZ4oF4dZWZqL6P9kLkbI58b3n7nwxD/nMb/l2wiAADXJWL/3Et67HzgUUShywK/Ep
-         v0XTa51au8kIMjZUbcmC0CRA6WeP/rZJx4BEfHLunDwY/7I4pOizD3VxoqE2zyZgeA
-         Zi6W4+jvkk+Yg5i3d9QrTrfRr1meryfb5ZzEMTmE9HA2XQHZVmq6j4gwqgHgOIRQ4H
-         7FkLfml0YtzJ2t4YGGKBNkkT9KPDrUxKRXGn07HAlfFTk0ie8lGFYFyMETYdD0QF6i
-         awYY4VeZPuj3w==
-Received: by mail-yb1-f200.google.com with SMTP id 3f1490d57ef6-bc77a2d3841so3852860276.3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 05:46:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686660374; x=1689252374;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DJyvntNK5zxh7HK+mp4W1WMoJPxy7nqBJlYeYzOf6Og=;
-        b=lW4GgVopr0hicLVYj5gUHXktFf+GDoVSA3yhWNko3S5ewW8UMYpLFKAR089a5NLWRt
-         pOgdPmBuNsNvby8sG2N5fgVNw/QbbBsc0nbMnvEbGTFCb93zpQ3d5gAUeTpHCZsGGTlZ
-         TDoYLATHNj3ZowFGuNbswGJx2XRk6OsP8kxMIt0du7dGvLX2VIZ/XDY8S9EksrqPjNia
-         p6hRYOtQGpcvt6A6rKyKCX3MNcjYlWvaxmRaWU81RESIpk1SZvb22SPG6ALDrvtEmdin
-         tl2rqISv7F/k1xmmXVmbs2fPPXhGfR/HultBYzj/imIji9JqQOsJNf9M1O2AwiUrns1w
-         OoWg==
-X-Gm-Message-State: AC+VfDxkvYI20CfSkg8mLybWn1wTy0XJNgV2xP8gUoc62KzAp7l+gVAW
-        NL5paZbH+nND4C8CtZz6QpVytlsIj3MJ0iPbrzRJVGKPmkbbMc/XgoP0mwvqqQ9WRIbi63HILjj
-        aEIcdU4blfCuhhAEUOmVEeFOCk3SVvIcc8iHWV7BjcBgyF8xiEuSSK3I7gA==
-X-Received: by 2002:a25:ba88:0:b0:ba8:3b3d:3dc0 with SMTP id s8-20020a25ba88000000b00ba83b3d3dc0mr1176567ybg.65.1686660374089;
-        Tue, 13 Jun 2023 05:46:14 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6ByVyQMc1FDiM+BMPWPp5Yh34Hpj01MWgfV11RE/419O9gOrGZrLRNRl5YaWKNn5smLlZPr5vjNJmpBm2O3JM=
-X-Received: by 2002:a25:ba88:0:b0:ba8:3b3d:3dc0 with SMTP id
- s8-20020a25ba88000000b00ba83b3d3dc0mr1176550ybg.65.1686660373803; Tue, 13 Jun
- 2023 05:46:13 -0700 (PDT)
+        Tue, 13 Jun 2023 08:47:11 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02938E4;
+        Tue, 13 Jun 2023 05:47:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1686660429; x=1718196429;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9KV3amG53H3ns2W2UWEPrWJRjgAoTih55p2OZIWk4nM=;
+  b=IYnhILDagPWgl5o0h9SR3hVu8dhzZviVmHZT7qtjROYenV4COsMd1PYQ
+   BHBjLBl8q28TBispGWmitvFT6JTdU4lnmKNiLKTMOi3ZntIW9VsiJfveW
+   3l3swOZ5fyirqLMh76GqevN9bMjBkzpP6dMg4VgATEmKpuMq+Z63Jhykm
+   3/xfdPN2tXBRAg+eOjVgTbERRzOzfG5yKZ0utGEOaM1D5mwDn6IEM/+F7
+   e4x6rCu2WUOV1d5cwae80YiPs3FUhrgrky5oLh3PC0tZgeHG+vbfzcnnv
+   oIeIRzjCQY5mdLy59alMZOOxh6LgAWU1sgqadFsTN4eFKRQn37kc0c2BF
+   w==;
+X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
+   d="asc'?scan'208";a="229858885"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Jun 2023 05:47:08 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 13 Jun 2023 05:47:08 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Tue, 13 Jun 2023 05:47:06 -0700
+Date:   Tue, 13 Jun 2023 13:46:41 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Yingkun Meng <mengyingkun@loongson.cn>
+CC:     Conor Dooley <conor@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
+        <conor+dt@kernel.org>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <loongarch@lists.linux.dev>,
+        <loongson-kernel@lists.loongnix.cn>
+Subject: Re: [ PATCH v2 3/3] ASoC: dt-bindings: Add support for Loongson
+ audio card
+Message-ID: <20230613-depletion-garnet-ccc2009111c3@wendy>
+References: <20230612085614.3039498-1-mengyingkun@loongson.cn>
+ <20230612-booted-french-186dd95e78a9@spud>
+ <bda7c25f-65cf-d45f-3ac0-f2471e3aacf8@loongson.cn>
+ <20230613-zoologist-panorama-a87858bba075@wendy>
+ <887f9cc4-6457-9d14-8aef-011ff4c9aeda@loongson.cn>
 MIME-Version: 1.0
-References: <20230608154256.562906-1-aleksandr.mikhalitsyn@canonical.com>
- <f3864ed6-8c97-8a7a-f268-dab29eb2fb21@redhat.com> <CAEivzxcRsHveuW3nrPnSBK6_2-eT4XPvza3kN2oogvnbVXBKvQ@mail.gmail.com>
- <20230609-alufolie-gezaubert-f18ef17cda12@brauner> <CAEivzxc_LW6mTKjk46WivrisnnmVQs0UnRrh6p0KxhqyXrErBQ@mail.gmail.com>
- <ac1c6817-9838-fcf3-edc8-224ff85691e0@redhat.com>
-In-Reply-To: <ac1c6817-9838-fcf3-edc8-224ff85691e0@redhat.com>
-From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Date:   Tue, 13 Jun 2023 14:46:02 +0200
-Message-ID: <CAEivzxeZ6fDgYMnjk21qXYz13tHqZa8rP-cZ2jdxkY0eX+dOjw@mail.gmail.com>
-Subject: Re: [PATCH v5 00/14] ceph: support idmapped mounts
-To:     Xiubo Li <xiubli@redhat.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Gregory Farnum <gfarnum@redhat.com>, stgraber@ubuntu.com,
-        linux-fsdevel@vger.kernel.org, Ilya Dryomov <idryomov@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="aKk1AB1djxJIjJ7/"
+Content-Disposition: inline
+In-Reply-To: <887f9cc4-6457-9d14-8aef-011ff4c9aeda@loongson.cn>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,125 +74,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 3:43=E2=80=AFAM Xiubo Li <xiubli@redhat.com> wrote:
->
->
-> On 6/9/23 18:12, Aleksandr Mikhalitsyn wrote:
-> > On Fri, Jun 9, 2023 at 12:00=E2=80=AFPM Christian Brauner <brauner@kern=
-el.org> wrote:
-> >> On Fri, Jun 09, 2023 at 10:59:19AM +0200, Aleksandr Mikhalitsyn wrote:
-> >>> On Fri, Jun 9, 2023 at 3:57=E2=80=AFAM Xiubo Li <xiubli@redhat.com> w=
-rote:
-> >>>>
-> >>>> On 6/8/23 23:42, Alexander Mikhalitsyn wrote:
-> >>>>> Dear friends,
-> >>>>>
-> >>>>> This patchset was originally developed by Christian Brauner but I'l=
-l continue
-> >>>>> to push it forward. Christian allowed me to do that :)
-> >>>>>
-> >>>>> This feature is already actively used/tested with LXD/LXC project.
-> >>>>>
-> >>>>> Git tree (based on https://github.com/ceph/ceph-client.git master):
-> >>> Hi Xiubo!
-> >>>
-> >>>> Could you rebase these patches to 'testing' branch ?
-> >>> Will do in -v6.
-> >>>
-> >>>> And you still have missed several places, for example the following =
-cases:
-> >>>>
-> >>>>
-> >>>>      1    269  fs/ceph/addr.c <<ceph_netfs_issue_op_inline>>
-> >>>>                req =3D ceph_mdsc_create_request(mdsc, CEPH_MDS_OP_GE=
-TATTR,
-> >>>> mode);
-> >>> +
-> >>>
-> >>>>      2    389  fs/ceph/dir.c <<ceph_readdir>>
-> >>>>                req =3D ceph_mdsc_create_request(mdsc, op, USE_AUTH_M=
-DS);
-> >>> +
-> >>>
-> >>>>      3    789  fs/ceph/dir.c <<ceph_lookup>>
-> >>>>                req =3D ceph_mdsc_create_request(mdsc, op, USE_ANY_MD=
-S);
-> >>> We don't have an idmapping passed to lookup from the VFS layer. As I
-> >>> mentioned before, it's just impossible now.
-> >> ->lookup() doesn't deal with idmappings and really can't otherwise you
-> >> risk ending up with inode aliasing which is really not something you
-> >> want. IOW, you can't fill in inode->i_{g,u}id based on a mount's
-> >> idmapping as inode->i_{g,u}id absolutely needs to be a filesystem wide
-> >> value. So better not even risk exposing the idmapping in there at all.
-> > Thanks for adding, Christian!
-> >
-> > I agree, every time when we use an idmapping we need to be careful with
-> > what we map. AFAIU, inode->i_{g,u}id should be based on the filesystem
-> > idmapping (not mount),
-> > but in this case, Xiubo want's current_fs{u,g}id to be mapped
-> > according to an idmapping.
-> > Anyway, it's impossible at now and IMHO, until we don't have any
-> > practical use case where
-> > UID/GID-based path restriction is used in combination with idmapped
-> > mounts it's not worth to
-> > make such big changes in the VFS layer.
-> >
-> > May be I'm not right, but it seems like UID/GID-based path restriction
-> > is not a widespread
-> > feature and I can hardly imagine it to be used with the container
-> > workloads (for instance),
-> > because it will require to always keep in sync MDS permissions
-> > configuration with the
-> > possible UID/GID ranges on the client. It looks like a nightmare for sy=
-sadmin.
-> > It is useful when cephfs is used as an external storage on the host, bu=
-t if you
-> > share cephfs with a few containers with different user namespaces idmap=
-ping...
->
-> Hmm, while this will break the MDS permission check in cephfs then in
-> lookup case. If we really couldn't support it we should make it to
-> escape the check anyway or some OPs may fail and won't work as expected.
+--aKk1AB1djxJIjJ7/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Hi Xiubo!
+On Tue, Jun 13, 2023 at 08:38:59PM +0800, Yingkun Meng wrote:
+> On 2023/6/13 20:28, Conor Dooley wrote:
+> > On Tue, Jun 13, 2023 at 08:23:58PM +0800, Yingkun Meng wrote:
+> > > On 2023/6/13 01:24, Conor Dooley wrote:
+> > > > On Mon, Jun 12, 2023 at 04:56:14PM +0800, YingKun Meng wrote:
+> > > > > From: Yingkun Meng <mengyingkun@loongson.cn>
+> > > > >=20
+> > > > > The audio card uses loongson I2S controller present in
+> > > > > 7axxx/2kxxx chips to transfer audio data.
+> > > > >=20
+> > > > > On loongson platform, the chip has only one I2S controller.
 
-Disabling UID/GID checks on the MDS side looks reasonable. IMHO the
-most important checks are:
-- open
-- mknod/mkdir/symlink/rename
-and for these checks we already have an idmapping.
+> > > > > +description:
+> > > > > +  The binding describes the sound card present in loongson
+> > > > > +  7axxx/2kxxx platform. The sound card is an ASoC component
+> > > > > +  which uses Loongson I2S controller to transfer the audio data.
+> > > > > +
+> > > > > +properties:
+> > > > > +  compatible:
+> > > > > +    const: loongson,ls-audio-card
 
-Also, I want to add that it's a little bit unusual when permission
-checks are done against the caller UID/GID.
-Usually, if we have opened a file descriptor and, for instance, passed
-this file descriptor through a unix socket then
-file descriptor holder will be able to use it in accordance with the
-flags (O_RDONLY, O_RDWR, ...).
-We also have ->f_cred on the struct file that contains credentials of
-the file opener and permission checks are usually done
-based on this. But in cephfs we are always using syscall caller's
-credentials. It makes cephfs file descriptor "not transferable"
-in terms of permission checks.
+> > > > Reviewing sound stuff is beyond my pay grade, so forgive me if I am=
+ off
+> > > > the rails here, but this (and the "x"s in the description) look a b=
+it
+> > > > odd. Recently, we've noticed quite a few loongson dt-bindings attem=
+pting
+> > > > to use a single compatible for many different chips.
+> > > > Usually you have individual compatibles for the various SoCs with t=
+his
+> > > > core, which can fall back to a generic one, rather than just adding=
+ a
+> > > > generic compatible for all devices.
+> > > > As far as I know, there's several SoCs fitting 2kxxx, and the format
+> > > > being used elsewhere is "loongson,ls2k1000" etc.
+> > >=20
+> > > Currently, Loongson has 2K0500/2K1000LA/2K1500/2K2000 chips.
+> > >=20
+> > > Here, its' possible to use a single compatible for different chips,
+> > >=20
+> > > as the audio device is a logical device, not dependent on chip model.
+> > What, may I ask, is a "logical device"?
+>=20
+>=20
+> I means it's not a physical one, like "platform bus".
 
-Kind regards,
-Alex
+So it is entirely a software construct? Why does it need a dt-binding
+then? Your commit message says the controller is present on the device!
 
->
-> @Greg
->
-> For the lookup requests the idmapping couldn't get the mapped UID/GID
-> just like all the other requests, which is needed by the MDS permission
-> check. Is that okay to make it disable the check for this case ? I am
-> afraid this will break the MDS permssions logic.
->
-> Any idea ?
->
-> Thanks
->
-> - Xiubo
->
->
-> > Kind regards,
-> > Alex
-> >
->
+Confused,
+Conor.
+
+--aKk1AB1djxJIjJ7/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIhlMQAKCRB4tDGHoIJi
+0k/DAQCasCv+M+mHIyy3THECy16Hhwe7ITu/f3lb4MVy64A/CwD7BlnAWtgAfv7H
+IktHIHxxC6ITwBVp8qA9b1IE2/XejAA=
+=INbA
+-----END PGP SIGNATURE-----
+
+--aKk1AB1djxJIjJ7/--
