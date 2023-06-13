@@ -2,153 +2,331 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E8A72E1A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 13:28:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6803A72E1AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 13:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242242AbjFML15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 07:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34646 "EHLO
+        id S237163AbjFMLa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 07:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232194AbjFML1h (ORCPT
+        with ESMTP id S232194AbjFMLay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 07:27:37 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2104.outbound.protection.outlook.com [40.107.215.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E511BE1;
-        Tue, 13 Jun 2023 04:27:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YLgjO+VTBrN0W2AXumIqd084+n8vD3VrjMOXbhEZBra8yRBsqB0iER+OErr7e3Vac+TjxpGQv2lqcJ7ik7A43S0beBn5294dLJV7MbfXvyNeSbVR/gtB7wyrOkl3hSZdz1GX4jDG5Et8PrtGejbI3JfK9IzJuiW2DN0EqNYgpzcRd+GKrRpeH4cuiIFRQDc+1w4bkEfZ/z1PvHH9goY7Ltr3zHeY0Xp0Ufyk/1TUCvLGnMUh/sjePHuB8po3nuyr5ewUaRfQSfaCQJnTAAVQi0T5E0MCyseP4y7RxCirpPJHc1P1mGItGKWS7C5AskCqUxSwxVAv7Sz9a4fA4TPpdA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NUmClZP5e1qqbGNqHSfIQl660rJG41dR34DXna4zcMg=;
- b=ACNbmZjAaqNQscnVo9gm03VJn1EObM2+7VVd0T1fcw7Xchq8EeUjaARHZ/m3Dz2oUvTEhdcqIqEooCgPGiajC4C5zX5LCgYDf7hghklC1/MVG66A5GDYcE2+Et4hWKmW6Z/AacMWiRK8kQ9akXEPpZ8rLnXOn7vLswJsepEimZH0jwdZFsiFY4PR/I9JqWFRgrN+04w4RWuNQEXw2nfemg8QkfUzWWqWLOn5DKiA5AJSIR6seD1ceUa8Nf7jztr5YZE4leIIE2pOBESYhhFneTQzvdpjaZlVaYC+mKcuYnxnoXLDed7fo/lH2XvOX/G3dV4jCQodtqj/1kXy1MmHQA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NUmClZP5e1qqbGNqHSfIQl660rJG41dR34DXna4zcMg=;
- b=Z4kHZIHxSD/D6ywks9/+VY7SQEMgRgwG9bl/qSqcNlj3U5pkvX78+eYrNEWWSV4u2yDM13p1Gu7H4vCcozTT8rumaWStX26BznyChl+b18DB4aZqAMFzBMViqzVj1d9bzHL+Cmz0w7l4Z29TELFYLgEUetoR6nKgsmTp5yFNN1aVn97mTlhQB10svrGJNW51RTtbFl2bnPlTpGc6kVEZM442BY7G2/xZvXpsVC+WPTJMDXLoMEvWEkzWaYMHpK2AYdRkwlhTQ291+AKGBnlRnKbPThHT7YpTbUU4srmNpHzRg3wanXDsTh/MD1d2oFMjsWbecLtOz20NWf+xAQFCqw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by TYSPR06MB6793.apcprd06.prod.outlook.com (2603:1096:400:473::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.44; Tue, 13 Jun
- 2023 11:26:30 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::76d6:4828:7e80:2965]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::76d6:4828:7e80:2965%3]) with mapi id 15.20.6455.039; Tue, 13 Jun 2023
- 11:26:30 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     glaroque@baylibre.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        thara.gopinath@gmail.com, anarsoul@gmail.com,
-        tiny.windzz@gmail.com, wens@csie.org, jernej.skrabec@gmail.com,
-        samuel@sholland.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, edubezval@gmail.com, j-keerthy@ti.com,
-        f.fainelli@gmail.com
-Cc:     linux-pm@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        linux-tegra@vger.kernel.org, linux-omap@vger.kernel.org,
-        Yangtao Li <frank.li@vivo.com>
-Subject: [PATCH v2 11/11] thermal/drivers/generic-adc: remove redundant msg in gadc_thermal_probe()
-Date:   Tue, 13 Jun 2023 19:24:44 +0800
-Message-Id: <20230613112444.48042-11-frank.li@vivo.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230613112444.48042-1-frank.li@vivo.com>
-References: <20230613112444.48042-1-frank.li@vivo.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR04CA0159.apcprd04.prod.outlook.com (2603:1096:4::21)
- To SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+        Tue, 13 Jun 2023 07:30:54 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C1C98
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 04:30:49 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1q92EK-0005Df-2i; Tue, 13 Jun 2023 13:30:32 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 0B1161D8969;
+        Tue, 13 Jun 2023 11:30:30 +0000 (UTC)
+Date:   Tue, 13 Jun 2023 13:30:29 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Srinivas Goud <srinivas.goud@amd.com>
+Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, gcnu.goud@gmail.com,
+        git@amd.com, michal.simek@xilinx.com, linux-can@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] can: xilinx_can: Add ECC support
+Message-ID: <20230613-sprinkler-pasta-08ae2bd72ac8-mkl@pengutronix.de>
+References: <1686570177-2836108-1-git-send-email-srinivas.goud@amd.com>
+ <1686570177-2836108-3-git-send-email-srinivas.goud@amd.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|TYSPR06MB6793:EE_
-X-MS-Office365-Filtering-Correlation-Id: ea49e068-fe0a-4201-08b9-08db6c0108f9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PfJSAC54UV8bTb/93PivJhvhN59B4gkda+yayisgyaL09zp58ArQkNyoNWwhl6LtKN4OxLkdcshooAMDZh7SJ+0M6xEpXbfIeW5GKa0UgT6wnYt0bNJ9bBd8A4pyGmoOjrpJlFf6iHm0Jo25kEioN+WhJ93KtFv8h8DeX3IdJXFJZvOoWRFuchb2vYW0vIcwVMjxmBZIRjMU6LuleVvZxYhV9FeAboUJAmQSn0wPLbGTxrivUJrLJ/4DN9j9DMaVBH/TYMBm40FRR28KI3WRcz2UaAacX93Rzz7X9GqoJKTl5Fnu3kV4uYdx2kC9Jy6zcWZDmHvRoOkubfWBAt0mIKqiySFaiJoVQADI9sNtfc6jdw6SPsz+Sk8qJmg9hj8A0d6XDxUkGQArd+isOYZURcRrjK9jqqnZnLvd1VcQ207iCX4N/qeLCqTDqvNMEKY95AT59e/lfWaVrOCAIn5TEHriifhjHMuL1NTHHGFqzBh7vX9vJS8mpD8m8f3RxhXcG2f1XfCa2DqAMU++OcPcVjNiJXKL9reWBHjKJaIR+Cx26MbYZ908jJlT2v2vUQ/qCus7ajWKLtD9dlNFR+f/p25+sFMb2VWegLzixeS2aEZqqU1H4qce0+ww4Sag+N1JtNCW2paVu6N/edW7yK+HE9sfDdcOAqoex+YaPwzmVMg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(396003)(346002)(136003)(39860400002)(451199021)(921005)(6666004)(6486002)(38350700002)(38100700002)(52116002)(107886003)(83380400001)(2616005)(6506007)(26005)(186003)(6512007)(1076003)(36756003)(478600001)(316002)(41300700001)(66556008)(66946007)(66476007)(4326008)(7406005)(7416002)(86362001)(4744005)(2906002)(8676002)(5660300002)(8936002)(41533002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rsxLRMVb0PJrLn1pGI7uS4iNvUhyFGiEL8YeoRQ9Ed9EddRTHGHTJFK4z5RS?=
- =?us-ascii?Q?hseD0LXSrEbUCMNv+MSKetIUTPzaCZXf9Mp45bmURpWS72aeKX7VTTIq0VBb?=
- =?us-ascii?Q?jQySc/zuC0fPndw38JNb2RHKzOSZy4hhfoJfXQmEOADEfFTGmHddnjZckmnQ?=
- =?us-ascii?Q?hQeSXkyUSMkxz3D4EjpWaRKfD5pOMB+DQ70IxDq7zNyj64js3h8XwQRiBjoG?=
- =?us-ascii?Q?ZrVXtSwGRFgoxqxcQa55LBpkdGIeWZIyl3sP40b9L93oYccVcY44YEUjO7aX?=
- =?us-ascii?Q?3EHDhHAFaFdQxKvYA0KroPoF7Wln3FYune0CPfvOLeACj1mtXt2VCdL9IYsp?=
- =?us-ascii?Q?9m3kURGrHbhCbuTIWodoOhAPFVVU6SODVh2XDh2neSRSY/i1tKqKE+O7JdDc?=
- =?us-ascii?Q?m8s0BiivyTn3TtruooQpJ4Dc18IhCuSPTAIaRvoG6YSZ7jLQHJjW5KEYD+Yu?=
- =?us-ascii?Q?Fe2KMt6EZ5X7B3UCFGehvlc+JtWklTitxECnv8oezR66aEe7sjZQKryqNFEv?=
- =?us-ascii?Q?0pVpcUTOq84OMlwT6Jdn1wrmgC2GQf3CQyUi19WIuBICdMPxvigQRVUOYqYP?=
- =?us-ascii?Q?1oJwFpP+bNctS1BAVSJ7N09WiqchqA8/DfDEjGn54IwbKmQv0AB6CSa8nwA9?=
- =?us-ascii?Q?3A+BWz1lHrZI72vpNrYSpKOZbhyf3Cxvwd+lkVdtQ45o3jlXi8TRwG+fCyCS?=
- =?us-ascii?Q?S1Wcu/bbZEZBnTGhMVtCSgjg3PtzJEJxUM9xqkU8aSJUEgkU2abfxOTSSbmo?=
- =?us-ascii?Q?4enMzMkf6ITQBOkzfHy3WOKm+VhEYxwOrcWhOQlfCpoC8PafuMX2YJY6dkvR?=
- =?us-ascii?Q?z7meMLkyB+yao9cLngHusf3I/8f+SNMtD80bhS7sou5k3zhKFgx6hUPzh6Hq?=
- =?us-ascii?Q?caZqXnG4qLGs0Gt4mKIDbKICBTgUrxxb0o3XTdab/AZHM7wpdUKXLd85krRY?=
- =?us-ascii?Q?Gwf/+F4MMDdkJjjWBoG+HxYpLAeGOGASdwNdyTDOfMoqw7jc9raJwzYNbb3Q?=
- =?us-ascii?Q?LJwW97Jg1YGP4ITF3L12+8RuEiA1JR+HGonhTLS5yG8tRwPr+qmpc1i6JAEZ?=
- =?us-ascii?Q?0TqSkSygNZqlcjJZXOg2d6Yapvn8gni/DMa61M9P98pUk7c/WgPMSxT0Uvdp?=
- =?us-ascii?Q?5qpCIOy+ukbHQxaDU6XT0sbEZ4WnuKKq+B6AV91ut7MVrjl2rVzZxuvvxEIi?=
- =?us-ascii?Q?0wB2BcCAVxXokOX28z+ZtLHB4krb6X3WRC4lgBQVbQmyvgHaI+qGfxCB9d/2?=
- =?us-ascii?Q?L/y61ixF/g7PBzCHIZzLix3ly9El5HyiE/4hV1C2b+mdmGBI8mIbZ26YltxO?=
- =?us-ascii?Q?mqBGoKRkbCT89Z+XZGaDxfUvY60PdLlujCIyQWuVaNo4zZd+2PywrALAT5FX?=
- =?us-ascii?Q?7qwUtViLIlgJFZTvZp539HH8EiUhAcmh6wf60/rOgnKCDNdYKlwP4VRkJZuS?=
- =?us-ascii?Q?TJ6+wQiqC5swbrT1r22M1H+tj4wqUpBwAoUrXyQqNaJELVhx4mLZRQ6piGce?=
- =?us-ascii?Q?JYeGTealkKXEy2N3O0TYRJt1D/b/IW2NdHnyOD2nD6WVSl3BJeAvtCL6y3zl?=
- =?us-ascii?Q?r2Ga6kgHZwyqZV0fxRJ1qrDU/RDdp0yz39zIZKbD?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ea49e068-fe0a-4201-08b9-08db6c0108f9
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2023 11:26:30.6626
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WOZ3O1N2+KJa9nWZmCe6JjWKu+HERMHQsvB1M62jRoyR2sDb1yNpSWXUqTqxIwMCz9GLYpr79xJrHId7FALXSg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYSPR06MB6793
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="x5xvyuil73mjsnjs"
+Content-Disposition: inline
+In-Reply-To: <1686570177-2836108-3-git-send-email-srinivas.goud@amd.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The upper-layer devm_thermal_add_hwmon_sysfs() function can directly
-print error information.
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- drivers/thermal/thermal-generic-adc.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+--x5xvyuil73mjsnjs
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/thermal/thermal-generic-adc.c b/drivers/thermal/thermal-generic-adc.c
-index e7a82d5cabdb..f4f1a04f8c0f 100644
---- a/drivers/thermal/thermal-generic-adc.c
-+++ b/drivers/thermal/thermal-generic-adc.c
-@@ -155,11 +155,7 @@ static int gadc_thermal_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	ret = devm_thermal_add_hwmon_sysfs(&pdev->dev, gti->tz_dev);
--	if (ret) {
--		dev_warn(&pdev->dev, "Failed to add hwmon sysfs attributes\n");
--		return ret;
--	}
-+	devm_thermal_add_hwmon_sysfs(&pdev->dev, gti->tz_dev);
- 
- 	return 0;
- }
--- 
-2.39.0
+On 12.06.2023 17:12:56, Srinivas Goud wrote:
+> Add ECC support for Xilinx CAN Controller, so this driver reports
+> 1bit/2bit ECC errors for FIFO's based on ECC error interrupt.
+> ECC feature for Xilinx CAN Controller selected through
+> 'xlnx,has-ecc' DT property
+>=20
+> Signed-off-by: Srinivas Goud <srinivas.goud@amd.com>
+> ---
+>  drivers/net/can/xilinx_can.c | 109 +++++++++++++++++++++++++++++++++++++=
+++++--
+>  1 file changed, 104 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
+> index 43c812e..311e435 100644
+> --- a/drivers/net/can/xilinx_can.c
+> +++ b/drivers/net/can/xilinx_can.c
+> @@ -63,6 +63,12 @@ enum xcan_reg {
+>  	XCAN_RXMSG_2_BASE_OFFSET	=3D 0x2100, /* RX Message Space */
+>  	XCAN_AFR_2_MASK_OFFSET	=3D 0x0A00, /* Acceptance Filter MASK */
+>  	XCAN_AFR_2_ID_OFFSET	=3D 0x0A04, /* Acceptance Filter ID */
+> +
+> +	/* only on AXI CAN cores */
+> +	XCAN_ECC_CFG_OFFSET	=3D 0xC8,	/* ECC Configuration */
+> +	XCAN_TXTLFIFO_ECC_OFFSET	=3D 0xCC, /* TXTL FIFO ECC error counter */
+> +	XCAN_TXOLFIFO_ECC_OFFSET	=3D 0xD0, /* TXOL FIFO ECC error counter */
+> +	XCAN_RXFIFO_ECC_OFFSET		=3D 0xD4, /* RX FIFO ECC error counter */
+>  };
+> =20
+>  #define XCAN_FRAME_ID_OFFSET(frame_base)	((frame_base) + 0x00)
+> @@ -135,6 +141,17 @@ enum xcan_reg {
+>  #define XCAN_2_FSR_RI_MASK		0x0000003F /* RX Read Index */
+>  #define XCAN_DLCR_EDL_MASK		0x08000000 /* EDL Mask in DLC */
+>  #define XCAN_DLCR_BRS_MASK		0x04000000 /* BRS Mask in DLC */
+> +#define XCAN_IXR_E2BERX_MASK		BIT(23) /* RX FIFO two bit ECC error */
+> +#define XCAN_IXR_E1BERX_MASK		BIT(22) /* RX FIFO one bit ECC error */
+> +#define XCAN_IXR_E2BETXOL_MASK		BIT(21) /* TXOL FIFO two bit ECC error */
+> +#define XCAN_IXR_E1BETXOL_MASK		BIT(20) /* TXOL FIFO One bit ECC error */
+> +#define XCAN_IXR_E2BETXTL_MASK		BIT(19) /* TXTL FIFO Two bit ECC error */
+> +#define XCAN_IXR_E1BETXTL_MASK		BIT(18) /* TXTL FIFO One bit ECC error */
+> +#define XCAN_ECC_CFG_REECRX_MASK	BIT(2) /* Reset RX FIFO ECC error count=
+ers */
+> +#define XCAN_ECC_CFG_REECTXOL_MASK	BIT(1) /* Reset TXOL FIFO ECC error c=
+ounters */
+> +#define XCAN_ECC_CFG_REECTXTL_MASK	BIT(0) /* Reset TXTL FIFO ECC error c=
+ounters */
+> +#define XCAN_ECC_1BIT_CNT_MASK		GENMASK(15, 0) /* FIFO ECC 1bit count ma=
+sk */
+> +#define XCAN_ECC_2BIT_CNT_MASK		GENMASK(31, 16) /* FIFO ECC 2bit count m=
+ask */
+> =20
+>  /* CAN register bit shift - XCAN_<REG>_<BIT>_SHIFT */
+>  #define XCAN_BRPR_TDC_ENABLE		BIT(16) /* Transmitter Delay Compensation =
+(TDC) Enable */
+> @@ -198,6 +215,13 @@ struct xcan_devtype_data {
+>   * @bus_clk:			Pointer to struct clk
+>   * @can_clk:			Pointer to struct clk
+>   * @devtype:			Device type specific constants
+> + * @ecc_enable:			ECC enable flag
+> + * @ecc_2bit_rxfifo_cnt:	RXFIFO 2bit ECC count
+> + * @ecc_1bit_rxfifo_cnt:	RXFIFO 1bit ECC count
+> + * @ecc_2bit_txolfifo_cnt:	TXOLFIFO 2bit ECC count
+> + * @ecc_1bit_txolfifo_cnt:	TXOLFIFO 1bit ECC count
+> + * @ecc_2bit_txtlfifo_cnt:	TXTLFIFO 2bit ECC count
+> + * @ecc_1bit_txtlfifo_cnt:	TXTLFIFO 1bit ECC count
+>   */
+>  struct xcan_priv {
+>  	struct can_priv can;
+> @@ -215,6 +239,13 @@ struct xcan_priv {
+>  	struct clk *bus_clk;
+>  	struct clk *can_clk;
+>  	struct xcan_devtype_data devtype;
+> +	bool ecc_enable;
+> +	u32 ecc_2bit_rxfifo_cnt;
+> +	u32 ecc_1bit_rxfifo_cnt;
+> +	u32 ecc_2bit_txolfifo_cnt;
+> +	u32 ecc_1bit_txolfifo_cnt;
+> +	u32 ecc_2bit_txtlfifo_cnt;
+> +	u32 ecc_1bit_txtlfifo_cnt;
+>  };
+> =20
+>  /* CAN Bittiming constants as per Xilinx CAN specs */
+> @@ -517,6 +548,11 @@ static int xcan_chip_start(struct net_device *ndev)
+>  		XCAN_IXR_ERROR_MASK | XCAN_IXR_RXOFLW_MASK |
+>  		XCAN_IXR_ARBLST_MASK | xcan_rx_int_mask(priv);
+> =20
+> +	if (priv->ecc_enable)
+> +		ier |=3D XCAN_IXR_E2BERX_MASK | XCAN_IXR_E1BERX_MASK |
+> +			XCAN_IXR_E2BETXOL_MASK | XCAN_IXR_E1BETXOL_MASK |
+> +			XCAN_IXR_E2BETXTL_MASK | XCAN_IXR_E1BETXTL_MASK;
+> +
+>  	if (priv->devtype.flags & XCAN_FLAG_RXMNF)
+>  		ier |=3D XCAN_IXR_RXMNF_MASK;
+> =20
+> @@ -1121,6 +1157,56 @@ static void xcan_err_interrupt(struct net_device *=
+ndev, u32 isr)
+>  		priv->can.can_stats.bus_error++;
+>  	}
+> =20
+> +	if (priv->ecc_enable) {
+> +		u32 reg_ecc;
+> +
+> +		reg_ecc =3D priv->read_reg(priv, XCAN_RXFIFO_ECC_OFFSET);
+> +		if (isr & XCAN_IXR_E2BERX_MASK) {
+> +			priv->ecc_2bit_rxfifo_cnt +=3D
+> +				FIELD_GET(XCAN_ECC_2BIT_CNT_MASK, reg_ecc);
+> +			netdev_dbg(ndev, "%s: RX FIFO 2bit ECC error count %d\n",
+> +				   __func__, priv->ecc_2bit_rxfifo_cnt);
+> +		}
+> +		if (isr & XCAN_IXR_E1BERX_MASK) {
+> +			priv->ecc_1bit_rxfifo_cnt +=3D reg_ecc &
+> +				XCAN_ECC_1BIT_CNT_MASK;
 
+Please use FIELD_GET here, too.
+
+> +			netdev_dbg(ndev, "%s: RX FIFO 1bit ECC error count %d\n",
+> +				   __func__, priv->ecc_1bit_rxfifo_cnt);
+> +		}
+> +
+> +		reg_ecc =3D priv->read_reg(priv, XCAN_TXOLFIFO_ECC_OFFSET);
+> +		if (isr & XCAN_IXR_E2BETXOL_MASK) {
+> +			priv->ecc_2bit_txolfifo_cnt +=3D
+> +				FIELD_GET(XCAN_ECC_2BIT_CNT_MASK, reg_ecc);
+> +			netdev_dbg(ndev, "%s: TXOL FIFO 2bit ECC error count %d\n",
+> +				   __func__, priv->ecc_2bit_txolfifo_cnt);
+> +		}
+> +		if (isr & XCAN_IXR_E1BETXOL_MASK) {
+> +			priv->ecc_1bit_txolfifo_cnt +=3D reg_ecc &
+> +				XCAN_ECC_1BIT_CNT_MASK;
+
+same here
+
+> +			netdev_dbg(ndev, "%s: TXOL FIFO 1bit ECC error count %d\n",
+> +				   __func__, priv->ecc_1bit_txolfifo_cnt);
+> +		}
+> +
+> +		reg_ecc =3D priv->read_reg(priv, XCAN_TXTLFIFO_ECC_OFFSET);
+> +		if (isr & XCAN_IXR_E2BETXTL_MASK) {
+> +			priv->ecc_2bit_txtlfifo_cnt +=3D
+> +				FIELD_GET(XCAN_ECC_2BIT_CNT_MASK, reg_ecc);
+> +			netdev_dbg(ndev, "%s: TXTL FIFO 2bit ECC error count %d\n",
+> +				   __func__, priv->ecc_2bit_txtlfifo_cnt);
+> +		}
+> +		if (isr & XCAN_IXR_E1BETXTL_MASK) {
+> +			priv->ecc_1bit_txtlfifo_cnt +=3D reg_ecc &
+> +				XCAN_ECC_1BIT_CNT_MASK;
+
+same here
+
+> +			netdev_dbg(ndev, "%s: TXTL FIFO 1bit ECC error count %d\n",
+> +				   __func__, priv->ecc_1bit_txtlfifo_cnt);
+> +		}
+> +
+> +		/* Reset FIFO ECC counters */
+> +		priv->write_reg(priv, XCAN_ECC_CFG_OFFSET, XCAN_ECC_CFG_REECRX_MASK |
+> +				XCAN_ECC_CFG_REECTXOL_MASK | XCAN_ECC_CFG_REECTXTL_MASK);
+
+This is racy - you will lose events that occur between reading the
+register value and clearing the register. You can save the old value and
+add the difference between the new and the old value to the total
+counter. What happens when the counter overflows? The following
+pseudocode should handle the u16 counter rolling over to 0:
+
+    u16 old, new;
+    s16 inc;
+    u64 total;
+
+    ...
+
+    inc =3D (s16)(new - old);
+    if (inc < 0)
+        /* error handling */
+    total +=3D inc;
+
+BTW: When converting to ethtool statistics, a lock is required to keep
+the u64 values correct on 32-bit systems and the individual statistics
+consistent.
+
+> +	}
+> +
+>  	if (cf.can_id) {
+>  		struct can_frame *skb_cf;
+>  		struct sk_buff *skb =3D alloc_can_err_skb(ndev, &skb_cf);
+> @@ -1348,9 +1434,8 @@ static irqreturn_t xcan_interrupt(int irq, void *de=
+v_id)
+>  {
+>  	struct net_device *ndev =3D (struct net_device *)dev_id;
+>  	struct xcan_priv *priv =3D netdev_priv(ndev);
+> -	u32 isr, ier;
+> -	u32 isr_errors;
+>  	u32 rx_int_mask =3D xcan_rx_int_mask(priv);
+> +	u32 isr, ier, isr_errors, mask;
+> =20
+>  	/* Get the interrupt status from Xilinx CAN */
+>  	isr =3D priv->read_reg(priv, XCAN_ISR_OFFSET);
+> @@ -1368,10 +1453,18 @@ static irqreturn_t xcan_interrupt(int irq, void *=
+dev_id)
+>  	if (isr & XCAN_IXR_TXOK_MASK)
+>  		xcan_tx_interrupt(ndev, isr);
+> =20
+> +	mask =3D XCAN_IXR_ERROR_MASK | XCAN_IXR_RXOFLW_MASK |
+> +		XCAN_IXR_BSOFF_MASK | XCAN_IXR_ARBLST_MASK |
+> +		XCAN_IXR_RXMNF_MASK;
+> +
+> +	if (priv->ecc_enable)
+> +		mask |=3D XCAN_IXR_E2BERX_MASK | XCAN_IXR_E1BERX_MASK |
+> +			XCAN_IXR_E2BETXOL_MASK | XCAN_IXR_E1BETXOL_MASK |
+> +			XCAN_IXR_E2BETXTL_MASK | XCAN_IXR_E1BETXTL_MASK;
+> +
+>  	/* Check for the type of error interrupt and Processing it */
+> -	isr_errors =3D isr & (XCAN_IXR_ERROR_MASK | XCAN_IXR_RXOFLW_MASK |
+> -			    XCAN_IXR_BSOFF_MASK | XCAN_IXR_ARBLST_MASK |
+> -			    XCAN_IXR_RXMNF_MASK);
+> +	isr_errors =3D isr & mask;
+> +
+
+nitpick: don't add this extra newline
+
+>  	if (isr_errors) {
+>  		priv->write_reg(priv, XCAN_ICR_OFFSET, isr_errors);
+>  		xcan_err_interrupt(ndev, isr);
+> @@ -1783,6 +1876,7 @@ static int xcan_probe(struct platform_device *pdev)
+>  		return -ENOMEM;
+> =20
+>  	priv =3D netdev_priv(ndev);
+> +	priv->ecc_enable =3D of_property_read_bool(pdev->dev.of_node, "xlnx,has=
+-ecc");
+>  	priv->dev =3D &pdev->dev;
+>  	priv->can.bittiming_const =3D devtype->bittiming_const;
+>  	priv->can.do_set_mode =3D xcan_do_set_mode;
+> @@ -1880,6 +1974,11 @@ static int xcan_probe(struct platform_device *pdev)
+>  		   priv->reg_base, ndev->irq, priv->can.clock.freq,
+>  		   hw_tx_max, priv->tx_max);
+> =20
+> +	if (priv->ecc_enable)
+> +		/* Reset FIFO ECC counters */
+> +		priv->write_reg(priv, XCAN_ECC_CFG_OFFSET, XCAN_ECC_CFG_REECRX_MASK |
+> +			XCAN_ECC_CFG_REECTXOL_MASK | XCAN_ECC_CFG_REECTXTL_MASK);
+> +
+>  	return 0;
+> =20
+>  err_disableclks:
+> --=20
+> 2.1.1
+>=20
+>=20
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--x5xvyuil73mjsnjs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmSIU1IACgkQvlAcSiqK
+BOg4UAf+Nzsctgt3tbAv+7DLje/Eme8+r5w7djNvakpPYt6XSENx1HCHemOw2pe6
+i1DhC6kCixnk21dhCUYH4Mf2gzwyk7ZVPAAdtspE7wvLabdby/7En4nRTuDMAm+t
+fZ2706Sa2mLNLlEjCGHm1W8bVeUw1Q+jnrEif14suFvPZBXTO6xrM88607C2L4dX
+1wpszAMqCGbbTFy1wpfSDhQ0bgenyl9OkHRYiqJ0S1XRNdYrVEEZ8ENcQs/Nlfmu
+wdB7UBtbGLzEzTEehZREeI/yqmGxp+M1SPntgSlNBzceOfCWPSz1OKMaEabVv7GV
+Uu6+PhY42MT3XYyyq8Es+4cmk4Qodw==
+=1wZV
+-----END PGP SIGNATURE-----
+
+--x5xvyuil73mjsnjs--
