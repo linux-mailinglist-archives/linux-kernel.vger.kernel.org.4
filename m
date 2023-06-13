@@ -2,136 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2F1C72E6B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 087FE72E6B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236619AbjFMPI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 11:08:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37862 "EHLO
+        id S241222AbjFMPKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 11:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240423AbjFMPIW (ORCPT
+        with ESMTP id S242918AbjFMPKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 11:08:22 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9820173C;
-        Tue, 13 Jun 2023 08:08:20 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-977d7bdde43so1150717766b.0;
-        Tue, 13 Jun 2023 08:08:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686668899; x=1689260899;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=E4q8adGwxP9RYL6Vu3j2Y5B/9TiS66xoysba9qM6aQE=;
-        b=hcSwsE9PzOYN9O5abXdqmabZ58t+8RxBrj8ppWrnu8gAZAYHkwSe408mCYnJg+vkZC
-         xdwGLzzyHRtT5OdYDGLGHQWWMP7AmhHd1lhhwK/wqklZbYGtf6MREWj1bnVzRP/CoVai
-         ZOF17lGRw7baUP0UpNFK7ym2XGGQwVcqRhuZlYCi3xUSNNyuV9FWvbMEzRgYam8wpKOs
-         K/Xr4YwUb3FCv5WQvjdheckRnIpQYb1hfJA3naknTArhzNmhu1Vd7UqCtGFwxq1M6HSR
-         yv0scS1291VRLS8sQWHq+88sx1XO5/9UV2bx747a98ErN2A76J+VgHYsOmzqkAB3AaK9
-         u4hA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686668899; x=1689260899;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E4q8adGwxP9RYL6Vu3j2Y5B/9TiS66xoysba9qM6aQE=;
-        b=Cu6tPX4oQjDh+8u9NXu7o72ioR5SgKrjXGUiD+6jJiGzf/kFwwwPZpY5QdgqjmDYBv
-         GDEtn30qFV58laKjfUD3QXH6GViSULwfO56YZiQ4jIKTrOFi7RmjFI6Od8U/0UDtW97/
-         RBjVMwImNwtx6/0P8AXa2k9H+g+tKaxukS7GrDp6jyUz+NNcbI2K7QRksdiVZs5mca3X
-         pDwvU7hMFZRFotygWGai9Q3bIaM7jUVl7wiSWsN/M6xJoTuK5Re3og8fVyqwOxsvb+/R
-         xDpA4mitjKAYJM1sTOU0pXXczMzFasnJXGV/rVrzcR/7X332gKMKsldLIdl63UOWC90G
-         9tbw==
-X-Gm-Message-State: AC+VfDx+7ErQiqVCFLeHx4EuCDKhD1IHvMIJI/wKZCuPzeUHLtQb0kMG
-        70cChMvYodCXU1Pb4t75FNXHaKdOCcyVYA==
-X-Google-Smtp-Source: ACHHUZ7BRSngSE3pUQl7PfAVn9vk1KT0aL5TEihMP8aZralFWsbXNqoJNu+UOZk1g1MQH+CqxCy1xw==
-X-Received: by 2002:a17:907:7d92:b0:969:9c0c:4c97 with SMTP id oz18-20020a1709077d9200b009699c0c4c97mr13123946ejc.1.1686668899039;
-        Tue, 13 Jun 2023 08:08:19 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id z10-20020aa7c64a000000b00514bcbfd9e0sm6585832edr.46.2023.06.13.08.08.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 08:08:18 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 18:08:15 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc9.unal@gmail.com>
-Cc:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net v2 2/7] net: dsa: mt7530: fix trapping frames with
- multiple CPU ports on MT7530
-Message-ID: <20230613150815.67uoz3cvvwgmhdp2@skbuf>
-References: <20230611081547.26747-1-arinc.unal@arinc9.com>
- <20230611081547.26747-2-arinc.unal@arinc9.com>
+        Tue, 13 Jun 2023 11:10:06 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F84CA
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 08:10:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686669003; x=1718205003;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VNtTvHok2wk8XMsvlb+ByHj2zD+MybIHambRtUs2s/I=;
+  b=cKhstitUPQsYOX2fL+P/jyKagp7OJV80zLWlZKLwXNRs2HhST9acSUp+
+   lzPodZIABYSjnM8Wuy7nw9xq9gJ1/BTsS1mYGlAGlPgng544WwoF/Pd7k
+   S2lkSakMd8CZDMJ0egQba5wgtEi5vWxYzm+fXSM9IWFuaUI1Y5MBu5vsK
+   U8jELdx+maR+gBRxfTaQ5/OHi/ls1WuN3thoFi7HkFzYSYrla4LF4k3Nq
+   R3apmsgO5wdE5DWJIGrc9WUpJu8pB2r/qmunm5lVHDQtQFFAmxIkF3Dwy
+   Ix5MD7jQZXyMh74kP83lxxwRobz6mqZCxYU67dNqSx+pXzg9se1jETJv4
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="386761708"
+X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
+   d="scan'208";a="386761708"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 08:10:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="801524332"
+X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
+   d="scan'208";a="801524332"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP; 13 Jun 2023 08:10:01 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1q95ei-003U22-1A;
+        Tue, 13 Jun 2023 18:10:00 +0300
+Date:   Tue, 13 Jun 2023 18:10:00 +0300
+From:   'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Mike Snitzer <snitzer@kernel.org>,
+        Heinz Mauelshagen <heinzm@redhat.com>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Alasdair Kergon <agk@redhat.com>
+Subject: Re: [PATCH v1 1/1] dm integrity: Use %*ph for printing hexdump of a
+ small buffer
+Message-ID: <ZIiGyPMMcIxZHH9u@smile.fi.intel.com>
+References: <20230612214751.9662-1-andriy.shevchenko@linux.intel.com>
+ <516b13b634374885891ac1e808d37ce3@AcuMS.aculab.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230611081547.26747-2-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <516b13b634374885891ac1e808d37ce3@AcuMS.aculab.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 11, 2023 at 11:15:42AM +0300, Arınç ÜNAL wrote:
-> The CPU_PORT bits represent the CPU port to trap frames to for the MT7530
-> switch. This switch traps frames to the CPU port set on the CPU_PORT bits,
-> regardless of the affinity of the user port which the frames are received
-> from.
+On Tue, Jun 13, 2023 at 01:13:54PM +0000, David Laight wrote:
+> From: Andy Shevchenko
+> > Sent: 12 June 2023 22:48
+> > 
+> > The kernel already has a helper to print a hexdump of a small
+> > buffer via pointer extension. Use that instead of open coded
+> > variant.
+> > 
+> > In long term it helps to kill pr_cont() or at least narrow down
+> > its use.
+> > 
+> > Note, the format is slightly changed, i.e. the colon is not printed
+> > before the buffer dump and the trailing space is always printed.
+> > These are not a problem since it's a debug message. Also the IV dump
+> > is limited by 64 bytes which seems fine.
+> ...
+> > +#define DEBUG_bytes(bytes, len, msg, ...)	printk(KERN_DEBUG msg " %*ph\n", ##__VA_ARGS__, len,
+> > bytes)
 > 
-> When multiple CPU ports are being used, the trapped frames won't be
-> received when the DSA conduit interface, which the frames are supposed to
-> be trapped to, is down because it's not affine to any user port. This
-> requires the DSA conduit interface to be manually set up for the trapped
-> frames to be received.
-> 
-> To fix this, implement ds->ops->master_state_change() on this subdriver and
-> set the CPU_PORT bits to the CPU port which the DSA conduit interface its
-> affine to is up. Introduce the active_cpu_ports field to store the
-> information of the active CPU ports. Correct the macros, CPU_PORT is bits 4
-> through 6 of the register.
-> 
-> Add comments to explain frame trapping for this switch.
-> 
-> Fixes: b8f126a8d543 ("net-next: dsa: add dsa support for Mediatek MT7530 switch")
-> Suggested-by: Vladimir Oltean <olteanv@gmail.com>
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
+> Using:
+> 	printf(KERN_DEBUG msg "%s%*ph\n", ##__VA_ARGS__, len ? ": " : "", len, bytes)
+> would add back the optional ':'.
 
-My only concern with this patch is that it depends upon functionality
-that was introduced in kernel v5.18 - commit 295ab96f478d ("net: dsa:
-provide switch operations for tracking the master state"). But otherwise
-it is correct, does not require subsequent net-next rework, and
-relatively clean, at least I think it's cleaner than checking which of
-the multiple CPU ports is the active CPU port - the other will have no
-user port dp->cpu_dp pointing to it. But strictly, the master_state_change()
-logic is not needed when you can't change the CPU port assignment.
+Yes, I considered that and decided to avoid. This is debug and hence the format
+may vary anyway. That said, up to maintainers.
 
-It might also be that your patch "net: dsa: introduce
-preferred_default_local_cpu_port and use on MT7530" gets backported
-to stable kernels that this patch doesn't get backported to, and then,
-we have a problem, because that will cause even more breakage.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-I wonder if there's a way to specify a dependency from this to that
-other patch, to ensure that at least that does not happen?
+
