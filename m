@@ -2,86 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD08472E56B
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 16:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83AF872E55F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 16:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240399AbjFMOPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 10:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40072 "EHLO
+        id S241683AbjFMOPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 10:15:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240019AbjFMOPb (ORCPT
+        with ESMTP id S240380AbjFMOPF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 10:15:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD05122
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 07:14:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686665690;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DpkNnyJl/r+l38jd7G4jK6EOYDsTz3j87kgRPwWTAIk=;
-        b=UEf2412qnQxslGydMVsXHlAGJheQD7H3W1ba4V4jw8AFiat/XGsKgW6+kwkmoc9C0sVUjj
-        7O+KCAWM7CauJ5VD2/ekPbjroieWhekQv3uCuYtsVIvbDEec4WYe/gna9a/0dGu8rdW+/E
-        ZrcOVsJ5wBhGoXDm/Fj8HQ4qaPEYq8A=
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
- [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-562-DmXNZWxKPO2uFRts67c1Og-1; Tue, 13 Jun 2023 10:14:43 -0400
-X-MC-Unique: DmXNZWxKPO2uFRts67c1Og-1
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-1b3c8e41075so13425715ad.2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 07:14:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686665674; x=1689257674;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=DpkNnyJl/r+l38jd7G4jK6EOYDsTz3j87kgRPwWTAIk=;
-        b=T9ZgrLF/i2/O8mytiaYdAHEEsdNEeF9b3P7aN4vW6rRbkJC4fUuUMpU7HeA+pCR6Nv
-         RrpOEoFy/Z+NAGqfZwmv68uBq2K+YkoyyuiEa+QnoITdfjHDdzzxYci0wDywee1A9S6Q
-         6HEK4kzMtuVFmIbIPHL8Rwm9XLoukm2FE4p0zeCG8CZPy+N9R0ck+kG+r6CJBJIXqs4y
-         YEGxtyAjZ7V/tt32YRKOu/ZAnfVmgvr/VP0DbCG39abqxRwKhVrDhZvzjNPfMG8jPc29
-         rRZjENbWuGO4u5Z5xa6q3MU4NJthC7ZnkUzdvwKRLTYIPKkNY6MM3lYwn9rYEcnWHZ46
-         slVg==
-X-Gm-Message-State: AC+VfDxZc+3yx9geouUD5p3Nou7SQeOtWWRul7993yfRcXYcldWlq280
-        R/YoKSmJC+hif3OgRZyjdBRhhQXjW/GL6prR68H98/isaqvM79cYXieP/SJoD5TPXDzpt4y7vnl
-        +BVk/vD9Bru6KSyZupUKO/ZWb
-X-Received: by 2002:a17:902:db05:b0:1ac:750e:33ef with SMTP id m5-20020a170902db0500b001ac750e33efmr10683892plx.3.1686665673982;
-        Tue, 13 Jun 2023 07:14:33 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7hphU5oNXY+vLyEtzb2/VXAwyFdv/W1ERGfScbT2ryMWNZzP9j95BDoUSr4GRG7HdpNpBDJA==
-X-Received: by 2002:a17:902:db05:b0:1ac:750e:33ef with SMTP id m5-20020a170902db0500b001ac750e33efmr10683869plx.3.1686665673684;
-        Tue, 13 Jun 2023 07:14:33 -0700 (PDT)
-Received: from [10.72.13.126] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id q23-20020a170902b11700b001b008b3dee2sm4805118plr.287.2023.06.13.07.14.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 07:14:33 -0700 (PDT)
-Message-ID: <3917c8cf-dff7-e922-1d64-7ca1d7f03030@redhat.com>
-Date:   Tue, 13 Jun 2023 22:14:24 +0800
+        Tue, 13 Jun 2023 10:15:05 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F86EC;
+        Tue, 13 Jun 2023 07:14:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=5dUDV/ulY1VwPUL5mH+Lz5QqPr6DjLH8cBAyedpbDYo=; b=iYD6PUgaB/68RBS8u9Ym/rotRl
+        FXw1OvFMWOiYd+gt0bp4wsTYby3J9Z85iZkj97SrcFBXrifSj1oiaAnZxTwfzEtELzMoetFthNaX8
+        ++pqz+HsX9OMSh6EAY7Q/mglNu3XoptYmD/63DJJunhrjHc9Br9OPsfspuSK+HPP5/2o=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1q94nG-00FjYJ-Fe; Tue, 13 Jun 2023 16:14:46 +0200
+Date:   Tue, 13 Jun 2023 16:14:46 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        SkyLake Huang <SkyLake.Huang@mediatek.com>,
+        Qingfang Deng <dqfext@gmail.com>
+Subject: Re: [PATCH net-next] net: phy: mediatek-ge-soc: initialize MT7988
+ PHY LEDs default state
+Message-ID: <7fc15ef7-ab5d-4af7-8d9b-bf0928f476a0@lunn.ch>
+References: <ZIfT7UUzj74NyzL_@makrotopia.org>
+ <922466fd-bb14-4b6e-ad40-55b4249c571f@lunn.ch>
+ <ZIhreKECr8nsNgrh@makrotopia.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: [dm-devel] [PATCH -next v2 2/6] md: refactor action_store() for
- 'idle' and 'frozen'
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     guoqing.jiang@linux.dev, agk@redhat.com, snitzer@kernel.org,
-        dm-devel@redhat.com, song@kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, linux-kernel@vger.kernel.org,
-        linux-raid@vger.kernel.org, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230529132037.2124527-1-yukuai1@huaweicloud.com>
- <20230529132037.2124527-3-yukuai1@huaweicloud.com>
- <b780ccfd-66b1-fdd1-b33e-aa680fbd86f1@redhat.com>
- <1aaf9150-bbd3-87a8-8d54-8b5d63ab5ed3@huaweicloud.com>
- <CALTww2-ta1NUJxcT3Dq5KP7iunnVx24X7RKj1OKYTYwEPeDNrg@mail.gmail.com>
- <68b215a4-b4bb-7c94-6ad4-84ea859af742@huaweicloud.com>
-From:   Xiao Ni <xni@redhat.com>
-In-Reply-To: <68b215a4-b4bb-7c94-6ad4-84ea859af742@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZIhreKECr8nsNgrh@makrotopia.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,77 +62,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 13, 2023 at 02:13:28PM +0100, Daniel Golle wrote:
+> Hi Andrew,
+> 
+> On Tue, Jun 13, 2023 at 05:23:25AM +0200, Andrew Lunn wrote:
+> > > +/* Registers on MDIO_MMD_VEND2 */
+> > > +#define MTK_PHY_LED0_ON_CTRL			0x24
+> > > +#define MTK_PHY_LED1_ON_CTRL			0x26
+> > > +#define   MTK_PHY_LED_ON_MASK			GENMASK(6, 0)
+> > > +#define   MTK_PHY_LED_ON_LINK1000		BIT(0)
+> > > +#define   MTK_PHY_LED_ON_LINK100		BIT(1)
+> > > +#define   MTK_PHY_LED_ON_LINK10			BIT(2)
+> > > +#define   MTK_PHY_LED_ON_LINKDOWN		BIT(3)
+> > > +#define   MTK_PHY_LED_ON_FDX			BIT(4) /* Full duplex */
+> > > +#define   MTK_PHY_LED_ON_HDX			BIT(5) /* Half duplex */
+> > > +#define   MTK_PHY_LED_FORCE_ON			BIT(6)
+> > > +#define   MTK_PHY_LED_POLARITY			BIT(14)
+> > > +#define   MTK_PHY_LED_ENABLE			BIT(15)
 
-在 2023/6/13 下午8:44, Yu Kuai 写道:
-> Hi,
->
-> 在 2023/06/13 20:25, Xiao Ni 写道:
->> On Tue, Jun 13, 2023 at 8:00 PM Yu Kuai <yukuai1@huaweicloud.com> wrote:
->>>
->>> Hi,
->>>
->>> 在 2023/06/13 16:02, Xiao Ni 写道:
->>>>
->>>> 在 2023/5/29 下午9:20, Yu Kuai 写道:
->>>>> From: Yu Kuai <yukuai3@huawei.com>
->>>>>
->>>>> Prepare to handle 'idle' and 'frozen' differently to fix a deadlock,
->>>>> there
->>>>> are no functional changes except that MD_RECOVERY_RUNNING is checked
->>>>> again after 'reconfig_mutex' is held.
->>>>
->>>>
->>>> Can you explain more about why it needs to check MD_RECOVERY_RUNNING
->>>> again here?
->>>
->>> As I explain in the following comment:
->>
->> Hi
->>
->> Who can clear the flag before the lock is held?
->
-> Basically every where that can clear the flag...
->
-> // This context     // Other context
->             mutex_lock
->             ...
-> test_bit -> pass
->             clear_bit
->             mutex_unlock
-> mutex_lock
-> test_bit -> check again
->
-> Thanks,
-> Kuai
+> The PHY has two LED outputs, LED0 and LED1. Both have an ON_CTRL and
+> a BLINK_CTRL register each with identical layouts for LED0_ON_CTRL and
+> LED1_ON_CTRL as well as LED0_BLINK_CTRL as well as LED1_BLINK_CTRL.
+ 
+O.K. So i think the naming could be better
 
-At first, I wanted to figure out a specific case. Now I have the answer. 
-Maybe there are two people that want to stop
+#define MTK_PHY_LED0_ON_CTRL			0x24
+#define MTK_PHY_LED1_ON_CTRL			0x26
+#define   MTK_PHY_LEDX_ON_CTRL_MASK		GENMASK(6, 0)
+#define   MTK_PHY_LEDX_ON_CTRL_LINK1000		BIT(0)
+#define   MTK_PHY_LEDX_ON_CTRL_LINK100		BIT(1)
 
-the sync action at the same time. So this is the case that can be 
-checked by the codes.
+#define MTK_PHY_LED0_BLINK_CTRL			0x25
+#define MTK_PHY_LED1_BLINK_CTRL			0x27
+#define   MTK_PHY_LEDX_BLINK_CTRL_1000TX	BIT(0)
+#define   MTK_PHY_LEDX_BLINK_CTRL_1000RX	BIT(1)
 
-Regards
+I've taken over code where i found a few examples of a register write
+which used the wrong macro for bits because there was no clear
+indication which register is belonged to.
 
-Xiao
+	   phy_write(phydev, MTK_PHY_LED1_ON_CTRL,
+	   	     MTK_PHY_LEDX_BLINK_CTRL_1000TX |
+	             MTK_PHY_LEDX_BLINK_CTRL_1000RX)
 
->>
->> Regards
->> Xiao
->>>>> +    /*
->>>>> +     * Check again in case MD_RECOVERY_RUNNING is cleared before 
->>>>> lock is
->>>>> +     * held.
->>>>> +     */
->>>>> +    if (!test_bit(MD_RECOVERY_RUNNING, &mddev->recovery)) {
->>>>> +        mddev_unlock(mddev);
->>>>> +        return;
->>>>> +    }
->>>
->>> Thanks,
->>> Kuai
->>>
->>
->> .
->>
->
+is pretty obvious it is wrong.
 
+> The LED controller of both LEDs are identical. The SoC's pinmux assigns
+> LED0 as LED_A, LED_B, LED_C and LED_D respectively. And those pins are
+> used for bootstrapping board configuration bits, and that then implies
+> the polarity of the connected LED.
+> 
+> Ie.
+> -----------------------------+ SoC pin
+> --------------+-------+      |
+>        port 0 = PHY 0 - LED0 - LED_A
+>               +-------\ LED1 - JTAG_JTDI
+>        port 1 = PHY 1 - LED0 - LED_B
+> MT7530        +-------\ LED1 - JTAG_JTDO
+>        port 2 = PHY 2 - LED0 - LED_C
+>               +-------\ LED1 - JTAG_JTMS
+>        port 3 = PHY 3 - LED0 - LED_D
+> --------------+-------\ LED1 - JTAG_JTCLK
+>        2P5G PHY       - LED0 - LED_E
+> ----------------------\ LED1 - JTAG_JTRST_N
+> --------------+--------------+
+
+So you can skip the JTAG interface and have two LEDs. This is purely
+down to pinmux settings. In fact, with careful design, it might be
+possible to have both LEDs and JTAG.
+
+> > >  #define MTK_PHY_RG_BG_RASEL			0x115
+> > >  #define   MTK_PHY_RG_BG_RASEL_MASK		GENMASK(2, 0)
+> > >  
+> > > +/* Register in boottrap syscon defining the initial state of the 4 PHY LEDs */
+> > 
+> > Should this be bootstrap? You had the same in the commit message.
+> > 
+> > Also, i'm confused. Here you say 4 PHY LEDs, yet
+> > 
+> > > +#define MTK_PHY_LED0_ON_CTRL			0x24
+> > > +#define MTK_PHY_LED1_ON_CTRL			0x26
+> > 
+> > suggests there are two LEDs?
+> 
+> There are 4 PHYs with two LEDs each. Only LED0 of each PHY is using
+> a pin which is used for bootstrapping, hence LED polarity is known
+> only for those, polarity of LED1 is unknown and always set the default
+> at this point.
+
+So hopefully you can see my sources of confusion and can add some
+comments to make this clearer.
+
+> > > +static int mt798x_phy_setup_led(struct phy_device *phydev, bool inverted)
+> > > +{
+> > > +	struct pinctrl *pinctrl;
+> > > +	const u16 led_on_ctrl_defaults = MTK_PHY_LED_ENABLE      |
+> > > +					 MTK_PHY_LED_ON_LINK1000 |
+> > > +					 MTK_PHY_LED_ON_LINK100  |
+> > > +					 MTK_PHY_LED_ON_LINK10;
+> > > +	const u16 led_blink_defaults = MTK_PHY_LED_1000TX |
+> > > +				       MTK_PHY_LED_1000RX |
+> > > +				       MTK_PHY_LED_100TX  |
+> > > +				       MTK_PHY_LED_100RX  |
+> > > +				       MTK_PHY_LED_10TX   |
+> > > +				       MTK_PHY_LED_10RX;
+> > > +
+> > > +	phy_write_mmd(phydev, MDIO_MMD_VEND2, MTK_PHY_LED0_ON_CTRL,
+> > > +		      led_on_ctrl_defaults ^
+> > > +		      (inverted ? MTK_PHY_LED_POLARITY : 0));
+> > > +
+> > > +	phy_write_mmd(phydev, MDIO_MMD_VEND2, MTK_PHY_LED1_ON_CTRL,
+> > > +		      led_on_ctrl_defaults);
+> > > +
+> > 
+> > Now i'm even more confused. Both have the same value, expect the
+> > polarity bit?
+> 
+> Only LED0 polarity of each PHY is affected by the bootstrap pins
+> LED_A, LED_B, LED_C and LED_D of the SoC, see above.
+> Hence we need to XOR polarity only for LED0.
+
+However, if there are two LEDs, you are likely to want to configure
+them to show different things, not identical. You are setting the
+defaults here which all boards will get. So i would set LED1 to
+something different, something which makes sense when there are two
+LEDs.
+
+> > > +	pinctrl = devm_pinctrl_get_select(&phydev->mdio.dev, "gbe-led");
+> > 
+> > This is also very unusual. At minimum, it needs a comment as to why it
+> > is needed. But more likely, because no other driver in driver/net does
+> > this, it makes me think it is wrong.
+> 
+> The reason for not using the "default" pinctrl name is simply that then
+> the "default" state will already be requested by device model *before*
+> the LED registers are actually setup. This results in a short but unwanted
+> blink of the LEDs during setup.
+> Requesting the pinctrl state only once the setup is done allows avoiding
+> that, but of course this is of purely aesthetic nature.
+
+So i assume the pin can have other functions? Just for an example, say
+it can also be an I2C clock line, which might be connected to an
+SFP. The I2C node in DT will have a pinmux to configure the pin for
+I2C. What happens when the PHY driver loads and executes this?
+
+     Andrew
