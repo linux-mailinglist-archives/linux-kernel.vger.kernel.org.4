@@ -2,197 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C7D72D655
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 02:23:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FCB372D607
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 02:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239177AbjFMAUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 20:20:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
+        id S238769AbjFMAPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 20:15:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239447AbjFMASa (ORCPT
+        with ESMTP id S239092AbjFMAOH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 20:18:30 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC003C1B;
-        Mon, 12 Jun 2023 17:14:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686615273; x=1718151273;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=MIQ1pWvE/RoBE8pKawMdEBQM6Q57ao+KDpsn7QGopL8=;
-  b=QQ9X1yvEzmGzuyIHxFih972HlZMFv/ydI62a38WGtKVXsRctmlFgC+kM
-   x3p9Z6E/pTCwhwVTuvamy4j4G5YxtLsz00mec9bkGVisvezERjAE41ny4
-   LnBYVirsMrB0DN3IDKRm22i45rN9qc/Y2JUBNq/5hNTr6sNIeHfk9tykd
-   Keztd6faDV/GqJ9qKUFLDM1Mw/KdMEmTpX+m6yqxoYYq8r6jceUZSSkzN
-   Ym0hnGOxRLue5gmD9IRkNGRu6SecQmNMWoc70nxt8a748hJK03HgC4Elz
-   kjamzrkpqYdlaas38sZCXKCHBKh1A7IJh7U3cIQXp/cvip05wXKS5fGPE
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="361557660"
-X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
-   d="scan'208";a="361557660"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 17:12:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="835671189"
-X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
-   d="scan'208";a="835671189"
-Received: from almeisch-mobl1.amr.corp.intel.com (HELO rpedgeco-desk4.amr.corp.intel.com) ([10.209.42.242])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 17:12:43 -0700
-From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
-To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com, szabolcs.nagy@arm.com,
-        torvalds@linux-foundation.org, broonie@kernel.org
-Cc:     rick.p.edgecombe@intel.com, Pengfei Xu <pengfei.xu@intel.com>
-Subject: [PATCH v9 42/42] x86/shstk: Add ARCH_SHSTK_STATUS
-Date:   Mon, 12 Jun 2023 17:11:08 -0700
-Message-Id: <20230613001108.3040476-43-rick.p.edgecombe@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
-References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
+        Mon, 12 Jun 2023 20:14:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85FDC1FC4;
+        Mon, 12 Jun 2023 17:12:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 092356305B;
+        Tue, 13 Jun 2023 00:12:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68A60C433AC;
+        Tue, 13 Jun 2023 00:12:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686615156;
+        bh=fgQezU9Uhtd/cvT8fMXHuHFSkNX/SBX6F17ynk+Li7c=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qpA4jI42/zyo7xTLzS4PdiFvs6Shs4bsvDP7FZ95DpUGkl5Mjs6Z7Qg28S75n5pS6
+         RR6Me5RUfUoCZTeWuhzve2bSQiYsVRHO35Oim0DLaEalBT9u71eJ+fPNkYqcn4uBeM
+         SE/Y+sgyd/s3KddBGvibVr9EPqrMspPYGWom/RzVYoQEauETXMjb6JWUu2rFVwdpg4
+         XjssPWBFj+pFXbXSB11GOincfTGTzmma7Rb5hnii5wg0JtTyHZBdrGY+wZRiGpSchj
+         FHTYgcWt7T0DGpx+svuZ+z9y1s+A8cef1LzLrzyC3cC4CMvW+RYRVep3SScEUodCym
+         48ZVwvYB5SHWA==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-4f611ac39c5so6132978e87.2;
+        Mon, 12 Jun 2023 17:12:36 -0700 (PDT)
+X-Gm-Message-State: AC+VfDw1Z5vunOMqExez1R/6rXbsJpRKVZsScB0TFLmEGFAcsnaZze5n
+        slO4uHNrQayDY4B3M8AT34VNDeOlnhnslRZTjw==
+X-Google-Smtp-Source: ACHHUZ5DoNUKSvAIXqJyVR/dJqHjMXAJmhqi/nRReR8o6lChwcUCm3nF+VoA8dUPGUnBoXAPQ8cGXyQokNL17p9GqwE=
+X-Received: by 2002:a2e:9012:0:b0:2af:30d8:527f with SMTP id
+ h18-20020a2e9012000000b002af30d8527fmr3553372ljg.19.1686615154438; Mon, 12
+ Jun 2023 17:12:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230412112739.160376-1-angelogioacchino.delregno@collabora.com>
+ <20230412112739.160376-4-angelogioacchino.delregno@collabora.com> <02a588ca-680f-ab45-1005-768d5b5db252@gmail.com>
+In-Reply-To: <02a588ca-680f-ab45-1005-768d5b5db252@gmail.com>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Tue, 13 Jun 2023 08:12:22 +0800
+X-Gmail-Original-Message-ID: <CAAOTY_9Heu3yzwbJgEpOwqabwpyTXMByFgcpoBojaM7MaRTUnQ@mail.gmail.com>
+Message-ID: <CAAOTY_9Heu3yzwbJgEpOwqabwpyTXMByFgcpoBojaM7MaRTUnQ@mail.gmail.com>
+Subject: Re: [PATCH 03/27] dt-bindings: display: mediatek: dpi: Add compatible
+ for MediaTek MT6795
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        jassisinghbrar@gmail.com, chunfeng.yun@mediatek.com,
+        vkoul@kernel.org, kishon@kernel.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, ck.hu@mediatek.com,
+        jitao.shi@mediatek.com, xinlei.lee@mediatek.com,
+        houlong.wei@mediatek.com, dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-pwm@vger.kernel.org,
+        kernel@collabora.com, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CRIU and GDB need to get the current shadow stack and WRSS enablement
-status. This information is already available via /proc/pid/status, but
-this is inconvenient for CRIU because it involves parsing the text output
-in an area of the code where this is difficult. Provide a status
-arch_prctl(), ARCH_SHSTK_STATUS for retrieving the status. Have arg2 be a
-userspace address, and make the new arch_prctl simply copy the features
-out to userspace.
+Hi, Matthias:
 
-Suggested-by: Mike Rapoport <rppt@kernel.org>
-Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-Tested-by: John Allen <john.allen@amd.com>
-Tested-by: Kees Cook <keescook@chromium.org>
----
- Documentation/arch/x86/shstk.rst  | 6 ++++++
- arch/x86/include/asm/shstk.h      | 2 +-
- arch/x86/include/uapi/asm/prctl.h | 1 +
- arch/x86/kernel/process_64.c      | 1 +
- arch/x86/kernel/shstk.c           | 8 +++++++-
- 5 files changed, 16 insertions(+), 2 deletions(-)
+Matthias Brugger <matthias.bgg@gmail.com> =E6=96=BC 2023=E5=B9=B45=E6=9C=88=
+29=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=8810:07=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+>
+> Hi Chun-Kuang Hu,
+>
+> Can you help to merge the missing DT-binding patches in this series?
 
-diff --git a/Documentation/arch/x86/shstk.rst b/Documentation/arch/x86/shstk.rst
-index f3553cc8c758..60260e809baf 100644
---- a/Documentation/arch/x86/shstk.rst
-+++ b/Documentation/arch/x86/shstk.rst
-@@ -79,6 +79,11 @@ arch_prctl(ARCH_SHSTK_UNLOCK, unsigned long features)
-     Unlock features. 'features' is a mask of all features to unlock. All
-     bits set are processed, unset bits are ignored. Only works via ptrace.
- 
-+arch_prctl(ARCH_SHSTK_STATUS, unsigned long addr)
-+    Copy the currently enabled features to the address passed in addr. The
-+    features are described using the bits passed into the others in
-+    'features'.
-+
- The return values are as follows. On success, return 0. On error, errno can
- be::
- 
-@@ -86,6 +91,7 @@ be::
-         -ENOTSUPP if the feature is not supported by the hardware or
-          kernel.
-         -EINVAL arguments (non existing feature, etc)
-+        -EFAULT if could not copy information back to userspace
- 
- The feature's bits supported are::
- 
-diff --git a/arch/x86/include/asm/shstk.h b/arch/x86/include/asm/shstk.h
-index ecb23a8ca47d..42fee8959df7 100644
---- a/arch/x86/include/asm/shstk.h
-+++ b/arch/x86/include/asm/shstk.h
-@@ -14,7 +14,7 @@ struct thread_shstk {
- 	u64	size;
- };
- 
--long shstk_prctl(struct task_struct *task, int option, unsigned long features);
-+long shstk_prctl(struct task_struct *task, int option, unsigned long arg2);
- void reset_thread_features(void);
- unsigned long shstk_alloc_thread_stack(struct task_struct *p, unsigned long clone_flags,
- 				       unsigned long stack_size);
-diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
-index 3189c4a96468..384e2cc6ac19 100644
---- a/arch/x86/include/uapi/asm/prctl.h
-+++ b/arch/x86/include/uapi/asm/prctl.h
-@@ -34,6 +34,7 @@
- #define ARCH_SHSTK_DISABLE		0x5002
- #define ARCH_SHSTK_LOCK			0x5003
- #define ARCH_SHSTK_UNLOCK		0x5004
-+#define ARCH_SHSTK_STATUS		0x5005
- 
- /* ARCH_SHSTK_ features bits */
- #define ARCH_SHSTK_SHSTK		(1ULL <<  0)
-diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index e6db21c470aa..33b268747bb7 100644
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -900,6 +900,7 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
- 	case ARCH_SHSTK_DISABLE:
- 	case ARCH_SHSTK_LOCK:
- 	case ARCH_SHSTK_UNLOCK:
-+	case ARCH_SHSTK_STATUS:
- 		return shstk_prctl(task, option, arg2);
- 	default:
- 		ret = -EINVAL;
-diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
-index d43b7a9c57ce..b26810c7cd1c 100644
---- a/arch/x86/kernel/shstk.c
-+++ b/arch/x86/kernel/shstk.c
-@@ -482,8 +482,14 @@ SYSCALL_DEFINE3(map_shadow_stack, unsigned long, addr, unsigned long, size, unsi
- 	return alloc_shstk(addr, aligned_size, size, set_tok);
- }
- 
--long shstk_prctl(struct task_struct *task, int option, unsigned long features)
-+long shstk_prctl(struct task_struct *task, int option, unsigned long arg2)
- {
-+	unsigned long features = arg2;
-+
-+	if (option == ARCH_SHSTK_STATUS) {
-+		return put_user(task->thread.features, (unsigned long __user *)arg2);
-+	}
-+
- 	if (option == ARCH_SHSTK_LOCK) {
- 		task->thread.features_locked |= features;
- 		return 0;
--- 
-2.34.1
+Apply display binding of this series to  mediatek-drm-next [1].
 
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/=
+log/?h=3Dmediatek-drm-next
+
+Regards,
+Chun-Kuang.
+
+>
+> Thanks a lot,
+> Matthias
+>
+> On 12/04/2023 13:27, AngeloGioacchino Del Regno wrote:
+> > Add a compatible string for the MediaTek Helio X10 MT6795 SoC, using
+> > the same parameters as MT8183.
+> >
+> > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@co=
+llabora.com>
+> > ---
+> >   .../display/mediatek/mediatek,dpi.yaml        | 23 +++++++++++-------=
+-
+> >   1 file changed, 14 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/display/mediatek/mediate=
+k,dpi.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,dp=
+i.yaml
+> > index d976380801e3..803c00f26206 100644
+> > --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.y=
+aml
+> > +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.y=
+aml
+> > @@ -17,15 +17,20 @@ description: |
+> >
+> >   properties:
+> >     compatible:
+> > -    enum:
+> > -      - mediatek,mt2701-dpi
+> > -      - mediatek,mt7623-dpi
+> > -      - mediatek,mt8173-dpi
+> > -      - mediatek,mt8183-dpi
+> > -      - mediatek,mt8186-dpi
+> > -      - mediatek,mt8188-dp-intf
+> > -      - mediatek,mt8192-dpi
+> > -      - mediatek,mt8195-dp-intf
+> > +    oneOf:
+> > +      - enum:
+> > +          - mediatek,mt2701-dpi
+> > +          - mediatek,mt7623-dpi
+> > +          - mediatek,mt8173-dpi
+> > +          - mediatek,mt8183-dpi
+> > +          - mediatek,mt8186-dpi
+> > +          - mediatek,mt8188-dp-intf
+> > +          - mediatek,mt8192-dpi
+> > +          - mediatek,mt8195-dp-intf
+> > +      - items:
+> > +          - enum:
+> > +              - mediatek,mt6795-dpi
+> > +          - const: mediatek,mt8183-dpi
+> >
+> >     reg:
+> >       maxItems: 1
