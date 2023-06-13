@@ -2,328 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A0E72ED21
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B595972ED22
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238675AbjFMUiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 16:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44134 "EHLO
+        id S239265AbjFMUiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 16:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233540AbjFMUiD (ORCPT
+        with ESMTP id S234648AbjFMUiG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 16:38:03 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC39B8
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 13:38:02 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-513ea2990b8so3769a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 13:38:01 -0700 (PDT)
+        Tue, 13 Jun 2023 16:38:06 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692B2E0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 13:38:05 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-3f9b7de94e7so71621cf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 13:38:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686688680; x=1689280680;
+        d=google.com; s=20221208; t=1686688684; x=1689280684;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VM0dD9HmZngFj+rHh9bzUnCqU30kIvbLIPJ4xkHbBX0=;
-        b=gYEHffXt979nseqDhIp7OaRs37j7pHA/CAoeFu9/1JCgt/Gs/MEaYovjF7TsjryPz4
-         xHQB9D6AhxD+qEyq2/58CjNEtV2bC1+HReT451YXnNUqDdi6519i/nS+GmI0n6aXKrLv
-         az8KvDZEEmu1PlNjfLDTyaVSo7orbgFxj0dtvZ1bpePbcRxfOZiarRrb59GuuMysoui8
-         UFvluFNExhtWY5gRw4+2U++bAobzCRoYaYNz49IKIECdMvzk+Uzv3xD9W5hLIpd/O9Kh
-         xnbrfUTe7fBps8fn58d9e7Gk5q+UbXSkl46CUTbgAuYYBKyeg/BFRI476Vkzmn/YD9/S
-         8rWA==
+        bh=3BrUCOEPHj+KJSOSvkwPnQDjHbdcqCfclmuB+OEMU6A=;
+        b=tPbftEADHtzbL8pHewCZOaadBMt3EtqzufnPUKQ7cMVEQQgSLLp5yUS3pvMu2rmGpA
+         Mi6fRUFFM0sIsZZE+gc7cL3VI6StwhQMfFITA7mUiEkBo+bXJXvbBtWOSrL3kJjhNf/H
+         enEoXUlzxh5buT4VOJqYmMTIryQmZiC02aywygPEGL6PM26oqZJvJ6OGkNZTFMkG7SoJ
+         A44bQnZB8YwlTvqAqBQyYSR630yBz3Kwrxrcx7X+I4rkk6TAIu14Cfny6sBjWa2zj4S4
+         yzeEGH16bqGbezWDBK7tmU2LmtzR7jDiNLvmiA+nEsfgIsnQSMecLLh9qDnPhb/K4vKC
+         Kabw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686688680; x=1689280680;
+        d=1e100.net; s=20221208; t=1686688684; x=1689280684;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VM0dD9HmZngFj+rHh9bzUnCqU30kIvbLIPJ4xkHbBX0=;
-        b=EtyKlra2X1y+7aGumoJ3g5yJfaJkv36IutD6afGvunCukDJ4wyJvbOBcpCmdhJuazf
-         yc6ZBAi/WaqDLvq9hbG4nYP74/j02mMOyfKvI8yJ26XY8zFhRe/sdKm7peS4A29Hoz4b
-         oIpcmgTAk6I6U0y+7Cnw9SBL9Y7fhPyIzMJZqU5s7i4xCvFHm9+ezQDFyOW96qvhDWG3
-         cI+fDwKNeYUxgko7n6SKPhp0+lBeMx7sl0INd2XbgDCZpOfu/oYeNLAEowtDQov18wfl
-         lUieUyPRa4iFvq0yLu4/Mdmll0rLiklm2keiF5+bVEePK/LrV9ZtKPo2OWhLocPAXtya
-         BVPQ==
-X-Gm-Message-State: AC+VfDxC2JHXdSLvpZte26u4dL/y8UlsgdMmWSK/ZGwowCrHlhU30B3n
-        56+QnRHRxgQ/R2FRgbJvLFY1VStUCmQ9t+bATqC9iQ==
-X-Google-Smtp-Source: ACHHUZ6Xp0QI5ZsiN4lliLv43uJ3wzAKKeZKRkYZpOB+L5Ls0016S4i3atSIvznsQLPdX28k7BkC1SJrJoWrfYsezFk=
-X-Received: by 2002:a50:9ee3:0:b0:502:2af:7b1d with SMTP id
- a90-20020a509ee3000000b0050202af7b1dmr15359edf.3.1686688680354; Tue, 13 Jun
- 2023 13:38:00 -0700 (PDT)
+        bh=3BrUCOEPHj+KJSOSvkwPnQDjHbdcqCfclmuB+OEMU6A=;
+        b=ZRfQTDW5VGlq0pCN/X3cqZE6Iv4QocLmmJQMi8AGo8rv+D0mQlGqEiyOMIcRInECZm
+         L2BeUqp8ZeZM+39mGAL9ZtkPULyMgo98wzxxqmEtD7wZ5m4hbNsEjJlwmqAoT1U0fohS
+         3kPhRu9Q5oh05pi605xfWrxyeVzyKnFGx0jVXQcQLpV51QPe7Q5Hd2MbU5ydmAm9Rv63
+         CiQ2zrXFeQoKxnA8J7/4YLA74PrDRMrh8GOlC+VYBkBFpioJR90uWw2yJtDEyaeE9zJp
+         N7t1rjYNzqIF/y5SJwXi48RtKJRG3sUX01wgCJqnbHWeQjJcsNtVzZncJ2p4nEfhkK1B
+         XxVg==
+X-Gm-Message-State: AC+VfDy5/JyZte3y2H32NhNir+5MoLaa9a7NZLDMbE9JqUv9zuR1O88T
+        3/UhQPtUNYWo0msltZ16jBpXLvGrv26OoD+4r3Lx
+X-Google-Smtp-Source: ACHHUZ6qvY4tuCzekFd0O+W34XKwmvzz+wTzx+mbpy8z5FP1aIdkN0T2w3UueyN4sbFs7OOJ6Q/Y5fX2C52jCUrz0/A=
+X-Received: by 2002:a05:622a:54b:b0:3fd:aaef:3807 with SMTP id
+ m11-20020a05622a054b00b003fdaaef3807mr54313qtx.16.1686688684337; Tue, 13 Jun
+ 2023 13:38:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230610005149.1145665-1-rmoar@google.com> <20230610005149.1145665-3-rmoar@google.com>
- <CABVgOS=4ioKpNOh-hPGEv70LSVwFh2SC0BL_dK1pWZR3pLwrtQ@mail.gmail.com>
-In-Reply-To: <CABVgOS=4ioKpNOh-hPGEv70LSVwFh2SC0BL_dK1pWZR3pLwrtQ@mail.gmail.com>
-From:   Rae Moar <rmoar@google.com>
-Date:   Tue, 13 Jun 2023 16:37:49 -0400
-Message-ID: <CA+GJov5Uhxh8r=suXXjeGD7eHsnzo_Fu8+_w2UJRkw=jVYbnBA@mail.gmail.com>
-Subject: Re: [RFC v1 2/6] kunit: Add speed attribute
-To:     David Gow <davidgow@google.com>
-Cc:     shuah@kernel.org, dlatypov@google.com, brendan.higgins@linux.dev,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        linux-hardening@vger.kernel.org, jstultz@google.com,
-        tglx@linutronix.de, sboyd@kernel.org
+References: <20230601055846.2349566-1-jstultz@google.com> <20230601055846.2349566-8-jstultz@google.com>
+ <fd5d06cd-bda5-0e3e-5f90-d3c5464bfcad@arm.com>
+In-Reply-To: <fd5d06cd-bda5-0e3e-5f90-d3c5464bfcad@arm.com>
+From:   John Stultz <jstultz@google.com>
+Date:   Tue, 13 Jun 2023 13:37:50 -0700
+Message-ID: <CANDhNCpfnQKwaQ5Be+CfBzd4GqBp0A1uKjPQaDbNm=k+Y4BprQ@mail.gmail.com>
+Subject: Re: [PATCH v4 07/13] sched: Split scheduler execution context
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Joel Fernandes <joelaf@google.com>,
+        Qais Yousef <qyousef@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Zimuzo Ezeozue <zezeozue@google.com>,
+        Youssef Esmat <youssefesmat@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>, kernel-team@android.com,
+        "Connor O'Brien" <connoro@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 10, 2023 at 4:29=E2=80=AFAM David Gow <davidgow@google.com> wro=
-te:
->
-> On Sat, 10 Jun 2023 at 08:52, Rae Moar <rmoar@google.com> wrote:
+On Tue, Jun 13, 2023 at 10:12=E2=80=AFAM Dietmar Eggemann
+<dietmar.eggemann@arm.com> wrote:
+> On 01/06/2023 07:58, John Stultz wrote:
+> > NOTE: Peter previously mentioned he didn't like the name
+> > "rq_selected()", but I've not come up with a better alternative.
+> > I'm very open to other name proposals.
 > >
-> > Add speed attribute to the test attribute API. This attribute will allo=
-w
-> > users to mark tests with a category of speed.
-> >
-> > Currently the categories of speed proposed are: fast, normal, slow, and
-> > very_slow. These are outlined in the enum kunit_speed. Note the speed
-> > attribute can also be left as unset and then, will act as the default w=
-hich
-> > is "normal", during filtering.
+> > Question for Peter: Dietmar suggested you'd prefer I drop the
+> > conditionalization of the scheduler context pointer on the rq
+> > (so rq_selected() would be open coded as rq->curr_sched or
+> > whatever we agree on for a name), but I'd think in the
+> > !CONFIG_PROXY_EXEC case we'd want to avoid the wasted pointer
+> > and its use (since it curr_sched would always be =3D=3D curr)?
+> > If I'm wrong I'm fine switching this, but would appreciate
+> > clarification.
 >
-> Do we need both "fast" and "normal". KUnit tests are normally very
-> fast: I'm not sure there's a way to make them faster enough to make a
-> separate category here useful.
+> IMHO, keeping both, rq->curr and rq->proxy (latter for rq->curr_sched)
+> would make it easier to navigate through the different versions of this
+> patch-set while reviewing.
 >
+> I do understand that you have issues with the function name proxy() not
+> returning the proxy (task blocked on a mutex) but the mutex owner instead=
+.
+>
+> The header of v3 'sched: Add proxy execution'
+> https://lkml.kernel.org/r/20230411042511.1606592-12-jstultz@google.com
+> mentions:
+>
+> " ... Potential proxies (i.e., tasks blocked on a mutex) are not
+>   dequeued, so, if one of them is actually selected by schedule() as the
+>   next task to be put to run on a CPU, proxy() is used to walk the
+>   blocked_on relation and find which task (mutex owner) might be able to
+>   use the proxy's scheduling context. ..."
+>
+> But as I can see now, you changed this patch header in v4 to explain the
+> PE model slightly differently.
 
-This is a really interesting discussion. I see your point here. I will
-remove the "fast" category unless there are any objections.
+Yeah. (As you know from offline discussions :) I do feel a bit
+strongly that using the term proxy for the scheduler context is
+unnecessarily confusing and requires some mental contortions to try to
+make it fit the metaphor being used.
 
-> >
-> > Note speed is intended to be marked based on relative speeds rather tha=
-n
-> > quantitative speeds of KUnit tests. This is because tests may run on
-> > various architectures at different speeds.
->
-> My rule of thumb here is that a test is slow if it takes more than a
-> "trivial" amount of time (<1s), regardless of the machine it's running
-> on.
->
-> While the actual speed taken varies a lot (the time_test_cases take ~3
-> seconds on most fast, modern machines, even under something like qemu,
-> but ~15 minutes on an old 486), it's the idea that a test is doing
-> some significant amount of work (loops over many thousands or millions
-> of entries, etc) that pretty comfortably divides these into "normal"
-> and "slow".
->
-> Most tests run very, very quickly on even very slow systems, as all
-> they're doing is checking the result of one or two trivial
-> calculations or functions.
+In my mind, the task chosen by pick_next_task() is what we want to
+run, but if it is blocked on a mutex, we let the mutex owner run on
+its behalf, with the "authority" (ie: scheduling context) of the
+originally chosen task.
 
-This seems like a great rule of thumb to add to the documentation.
+This is a direct parallel to proxy voting where a person who needs to
+vote cannot attend, so someone else is sent to vote on their behalf,
+and does so with the authority of the person who cannot attend.
 
->
-> > Add the macro KUNIT_CASE_SLOW to set a test as slow, as this is likely =
-a
-> > common use of the attributes API.
->
-> I'd ask if we need a KUNIT_CASE_VERY_SLOW() as well, but let's leave
-> that until we have something which uses it.
->
+So, much like the person who votes on behalf of another is the proxy,
+with proxy-execution it makes most sense that the task that runs on
+the selected task's behalf is the proxy.
 
-I would be happy to add this once something uses the "very_slow" attribute.
+Calling the selected scheduler context the proxy makes it very
+difficult to use the metaphor to help in understanding what is being
+done. I'll grant you can try to twist it around and view it so that
+the blocked tasks are sort of proxy-voters left on the runqueue and
+sent to the pick_next_task() function to vote on behalf of a mutex
+owner, but that would be more like "proxy-scheduling". And it breaks
+down further as the blocked tasks actually don't know who they are
+voting for until after they are selected and we run proxy() to walk
+the blocked_on chain.  It just doesn't fit the metaphor very well
+(maybe "puppet candidates " would be better in this model?) and I
+think it only adds confusion.
 
->
-> > Add an example of marking a slow test to kunit-example-test.c.
-> >
-> > Signed-off-by: Rae Moar <rmoar@google.com>
-> > ---
-> >  include/kunit/test.h           | 31 ++++++++++++++++++++++-
-> >  lib/kunit/attributes.c         | 45 +++++++++++++++++++++++++++++++++-
-> >  lib/kunit/kunit-example-test.c |  9 +++++++
-> >  3 files changed, 83 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/include/kunit/test.h b/include/kunit/test.h
-> > index 1fc9155988e9..3d684723ae57 100644
-> > --- a/include/kunit/test.h
-> > +++ b/include/kunit/test.h
-> > @@ -63,8 +63,26 @@ enum kunit_status {
-> >         KUNIT_SKIPPED,
-> >  };
-> >
-> > +/* Attribute struct/enum definitions */
-> > +
-> > +/*
-> > + * Speed Attribute is stored as an enum and separated into categories =
-of
-> > + * speed: very_slowm, slow, normal, and fast. These speeds are relativ=
-e
-> > + * to other KUnit tests.
-> > + */
-> > +enum kunit_speed {
-> > +       KUNIT_SPEED_UNSET,
-> > +       KUNIT_SPEED_VERY_SLOW,
-> > +       KUNIT_SPEED_SLOW,
-> > +       KUNIT_SPEED_NORMAL,
-> > +       KUNIT_SPEED_FAST,
-> > +       KUNIT_SPEED_MAX =3D KUNIT_SPEED_FAST,
-> > +};
->
-> Question: Does it make sense to have these in this order: slow ->
-> fast? I think it does ("speed>slow" seems more correct than
-> "speed<slow"), but it'd be the other way round if we wanted to call
-> this, e.g., size instead of speed.
->
-> That being said, if it went the other way, we could rely on the fact
-> that the default is fast, and not need a separate "unset" default...
->
+This logic is already subtle and complex enough - we don't need to add
+stroop effects[1] to keep it interesting. :)
 
-Oh interesting. I hadn't considered changing the order. To me
-"speed>slow" seems a bit more intuitive but I can see how "speed<slow"
-would also make sense.  Hmm this is an interesting idea. Let me know
-if anyone has an opinion here else I will most likely keep it this
-order.
+But I agree the historic usage of the term proxy in the patch series
+makes it hard to simply switch it around, which is why I tried instead
+to reduce the use of the term proxy where it didn't seem appropriate,
+replacing it with "selected" or "donor".
 
-> > +
-> >  /* Holds attributes for each test case and suite */
-> > -struct kunit_attributes {};
-> > +struct kunit_attributes {
-> > +       enum kunit_speed speed;
-> > +};
-> >
-> >  /**
-> >   * struct kunit_case - represents an individual test case.
-> > @@ -150,6 +168,17 @@ static inline char *kunit_status_to_ok_not_ok(enum=
- kunit_status status)
-> >                 { .run_case =3D test_name, .name =3D #test_name,    \
-> >                   .attr =3D attributes }
-> >
-> > +/**
-> > + * KUNIT_CASE_SLOW - A helper for creating a &struct kunit_case
-> > + * with the slow attribute
-> > + *
-> > + * @test_name: a reference to a test case function.
-> > + */
-> > +
-> > +#define KUNIT_CASE_SLOW(test_name)                     \
-> > +               { .run_case =3D test_name, .name =3D #test_name,    \
-> > +                 .attr.speed =3D KUNIT_SPEED_SLOW }
-> > +
-> >  /**
-> >   * KUNIT_CASE_PARAM - A helper for creation a parameterized &struct ku=
-nit_case
-> >   *
-> > diff --git a/lib/kunit/attributes.c b/lib/kunit/attributes.c
-> > index 0ea641be795f..e17889f94693 100644
-> > --- a/lib/kunit/attributes.c
-> > +++ b/lib/kunit/attributes.c
-> > @@ -28,9 +28,52 @@ struct kunit_attr {
-> >         void *attr_default;
-> >  };
-> >
-> > +/* String Lists for enum Attributes */
-> > +
-> > +static const char * const speed_str_list[] =3D {"unset", "very_slow", =
-"slow", "normal", "fast"};
-> > +
-> > +/* To String Methods */
-> > +
-> > +static const char *attr_enum_to_string(void *attr, const char * const =
-str_list[], bool *to_free)
-> > +{
-> > +       long val =3D (long)attr;
-> > +
-> > +       *to_free =3D false;
-> > +       if (!val)
-> > +               return NULL;
-> > +       return str_list[val];
-> > +}
-> > +
-> > +static const char *attr_speed_to_string(void *attr, bool *to_free)
-> > +{
-> > +       return attr_enum_to_string(attr, speed_str_list, to_free);
-> > +}
-> > +
-> > +/* Get Attribute Methods */
-> > +
-> > +static void *attr_speed_get(void *test_or_suite, bool is_test)
-> > +{
-> > +       struct kunit_suite *suite =3D is_test ? NULL : test_or_suite;
-> > +       struct kunit_case *test =3D is_test ? test_or_suite : NULL;
-> > +
-> > +       if (test)
-> > +               return ((void *) test->attr.speed);
-> > +       else
-> > +               return ((void *) suite->attr.speed);
-> > +}
-> > +
-> > +/* Attribute Struct Definitions */
-> > +
-> > +static const struct kunit_attr speed_attr =3D {
-> > +       .name =3D "speed",
-> > +       .get_attr =3D attr_speed_get,
-> > +       .to_string =3D attr_speed_to_string,
-> > +       .attr_default =3D (void *)KUNIT_SPEED_NORMAL,
-> > +};
-> > +
-> >  /* List of all Test Attributes */
-> >
-> > -static struct kunit_attr kunit_attr_list[1] =3D {};
-> > +static struct kunit_attr kunit_attr_list[1] =3D {speed_attr};
->
-> Nit: Can we remove the hardcoded [1] here, and let the compiler do this f=
-or us?
+Again, I'm happy to switch to other terms that make sense.
 
-Yes, I will change this out.
+thanks
+-john
 
->
-> >
-> >  /* Helper Functions to Access Attributes */
-> >
-> > diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-t=
-est.c
-> > index b69b689ea850..01a769f35e1d 100644
-> > --- a/lib/kunit/kunit-example-test.c
-> > +++ b/lib/kunit/kunit-example-test.c
-> > @@ -220,6 +220,14 @@ static void example_params_test(struct kunit *test=
-)
-> >         KUNIT_EXPECT_EQ(test, param->value % param->value, 0);
-> >  }
-> >
-> > +/*
-> > + * This test should always pass. Can be used to practice filtering att=
-ributes.
-> > + */
-> > +static void example_slow_test(struct kunit *test)
-> > +{
-> > +       KUNIT_EXPECT_EQ(test, 1 + 1, 2);
-> > +}
->
-> Would we want to actually make this test slow? e.g. introduce a delay
-> or a big loop or something.
-> Probably not (I think it'd be more irritating than illuminating), but
-> maybe worth thinking of.
->
-
-I'm thinking not but it would make the concept clearer. I would
-definitely change this if it is wanted.
-
-Thanks!
--Rae
-
-
->
-> > +
-> >  /*
-> >   * Here we make a list of all the test cases we want to add to the tes=
-t suite
-> >   * below.
-> > @@ -237,6 +245,7 @@ static struct kunit_case example_test_cases[] =3D {
-> >         KUNIT_CASE(example_all_expect_macros_test),
-> >         KUNIT_CASE(example_static_stub_test),
-> >         KUNIT_CASE_PARAM(example_params_test, example_gen_params),
-> > +       KUNIT_CASE_SLOW(example_slow_test),
-> >         {}
-> >  };
-> >
-> > --
-> > 2.41.0.162.gfafddb0af9-goog
-> >
+[1] https://en.wikipedia.org/wiki/Stroop_effect
