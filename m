@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3EE272DC3B
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A33E772DC39
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239048AbjFMIVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 04:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36726 "EHLO
+        id S238597AbjFMIUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 04:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240763AbjFMIVK (ORCPT
+        with ESMTP id S237327AbjFMIUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 04:21:10 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E85410D4
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 01:20:44 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b038064d97so30272125ad.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 01:20:44 -0700 (PDT)
+        Tue, 13 Jun 2023 04:20:51 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB6210CE
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 01:20:50 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-54fb1bbc3f2so634763a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 01:20:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1686644443; x=1689236443;
+        d=bytedance.com; s=google; t=1686644450; x=1689236450;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NdXaw5dg9b8aDwiY+1vzb/StC7BleYDvDIrkoD6JVyU=;
-        b=MwkwZQfZhXuFpRyxfGK+yeua8xcpXoyMLDreZ9ju9u4T4rKv9hAAAGJ9CM0/uozmT9
-         hejd5YQc39tI88ViqQaOMkmyQZh2trhkk6+sB35OQrVp8AmBNpUKzusQV/LEidc4diNv
-         tIhW57975r3oigYlMcK2P6ANTbyTzQxkyg8yvE2HsPTp9aR9qpdcZunuA+NMW6VQLFFj
-         DFSD6jbfdzNWQGJ+zZzq0M6oaXsGepHQ9KQcy5/s/QYo/+OsCPvPN1MAobKgtMcM6/3C
-         TnglD35JjWL1zoJQWEAZuRZhLQ1XSrV13q6qBtICqUjHOfXioIFDMUaq4k/P5KefQd/B
-         6+zA==
+        bh=YmxLgmswZPkTWLyb16LsS4t5xijTdvKxqhRrgOY0CXw=;
+        b=UNWb0MvVXp+6wHq3c8yC/rxzKPoWksmJfE/2gZyZScKPsCcbWFuOIYiNxPrpc237vj
+         L91FaUJT+HKcOGSS7C7JDWn4sabCDVIiWMR73d/27lQYgpqlNjQ5pzuVt54HJ3jp6GdK
+         EEIDhXQ1BVz7iz05mg1JNRknESZ5h8t6NjOKafgFM6ugYiIr+vG8cVpcf5SOdvBlVjDr
+         cUlBRw1XS16C9c/QnZKc/QR0M7Epw6bfhGhUfzvFpmJItrOPzzo2JR0LXQohHbJNLbu/
+         lKFfdMOKJucRp4X6muZjN9ZLwkeLY4VcoQsx8/msfkAJ2TgvKv0ssImyX41ndplne0sq
+         F2mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686644443; x=1689236443;
+        d=1e100.net; s=20221208; t=1686644450; x=1689236450;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NdXaw5dg9b8aDwiY+1vzb/StC7BleYDvDIrkoD6JVyU=;
-        b=LwFa6NI7XbGh3wddC6UUHKsNZnwkaUOtSxhNuFN17QJhAdbGkTE5ynBDa0S8jrNnkJ
-         VtPnrhZvKKk2ro53sIh2VFB76Eo8T7qo2RulcYhdSdVYJ3o9Jch9rFGlqXu5ITgHh7G+
-         aW3XWEC6JODaWnSehI8Enh91rOMN26Xc/h/YsMpsMn96OHvU0Al12aC8LPF0ZM4JgIvu
-         YN3MI7eIT5W4+PvDx4f85narNclI7suVq4OPf3C4VnKviTh48LQLMehVzELr4OCkwKm+
-         BMT5w6KwyrCU5Ie6cl6rI38oXbBc6cCOWObpAPw54jS61RxfjeN0T9y46TcYZYwVcuaj
-         cc9A==
-X-Gm-Message-State: AC+VfDw1ifdbvqhmxANJ3AtD/EkjC4KcRxopMJrUY0r3/wMWG+mfOaCL
-        YF7+OQA33lJLhKzbNvjE0Vq9Rw==
-X-Google-Smtp-Source: ACHHUZ6jh1nPw6RXaAJQ5CYCdoB/yebKE51Je9nfgqU4wp2Nsj4Qfe6zgARXc/p8RBgiSsYrI2o7OA==
-X-Received: by 2002:a17:902:c205:b0:1b0:ec0:7cff with SMTP id 5-20020a170902c20500b001b00ec07cffmr8660630pll.10.1686644443668;
-        Tue, 13 Jun 2023 01:20:43 -0700 (PDT)
+        bh=YmxLgmswZPkTWLyb16LsS4t5xijTdvKxqhRrgOY0CXw=;
+        b=cQkW3qcl3iRBTNUJm6JVu36F339Qi9NdyGNOY2sriQxx3034p8QfZ2jl/0mVAlJLPb
+         RMU25V1m0I8FfmfzRFdvr5iyG9HLYwI1GcydW/dX+TiLxSOJ7HCIULoB29xmG7eEsLvJ
+         3xCx3qcSgUqhr8xyhWZKxVb0YPpKapO8AoghPIQUO/zz/Mxtt5jOC2a5zM883lMKWQsR
+         ZvgC+5DeZOdQ0o7Ewmqgk8MmGphXGgcDJ8Cun3CDT74uCI2htXMcwDMvSBW4RMbxDFuY
+         PaKvabO6HSFAadj1Hg98ZmwAg351VOZGSkmSa91/qQs9tkRduy0D1gJ8mhSY0MZ7JjEf
+         P74A==
+X-Gm-Message-State: AC+VfDxjYmLk5fgZbVcnO4RPiUKzM8TGveG9sWTqjFsh1+yUcuyW+mmQ
+        vJL6AmEVW2bAcWTU1wO2b6uAng==
+X-Google-Smtp-Source: ACHHUZ6zzvRFRlr7kFUtBVDYHMAhCMzRJGbw6mkElpdClO69BfNKDFeWo6C0gRiUTWH26XPLrpTH8Q==
+X-Received: by 2002:a17:90a:2905:b0:25b:f66c:35a9 with SMTP id g5-20020a17090a290500b0025bf66c35a9mr2893802pjd.48.1686644449830;
+        Tue, 13 Jun 2023 01:20:49 -0700 (PDT)
 Received: from C02G87K0MD6R.bytedance.net ([139.177.225.234])
-        by smtp.gmail.com with ESMTPSA id c5-20020a170902c1c500b001b027221393sm9567834plc.43.2023.06.13.01.20.38
+        by smtp.gmail.com with ESMTPSA id c5-20020a170902c1c500b001b027221393sm9567834plc.43.2023.06.13.01.20.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 01:20:43 -0700 (PDT)
+        Tue, 13 Jun 2023 01:20:49 -0700 (PDT)
 From:   Hao Jia <jiahao.os@bytedance.com>
 To:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
         juri.lelli@redhat.com, vincent.guittot@linaro.org,
@@ -57,9 +57,9 @@ To:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
         mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
         mgorman@techsingularity.net
 Cc:     linux-kernel@vger.kernel.org, Hao Jia <jiahao.os@bytedance.com>
-Subject: [PATCH v5 3/4] sched/core: Avoid multiple calling update_rq_clock() in __cfsb_csd_unthrottle()
-Date:   Tue, 13 Jun 2023 16:20:11 +0800
-Message-Id: <20230613082012.49615-4-jiahao.os@bytedance.com>
+Subject: [PATCH v5 4/4] sched/core: Avoid multiple calling update_rq_clock() in unthrottle_offline_cfs_rqs()
+Date:   Tue, 13 Jun 2023 16:20:12 +0800
+Message-Id: <20230613082012.49615-5-jiahao.os@bytedance.com>
 X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 In-Reply-To: <20230613082012.49615-1-jiahao.os@bytedance.com>
 References: <20230613082012.49615-1-jiahao.os@bytedance.com>
@@ -75,99 +75,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit 8ad075c2eb1f ("sched: Async unthrottling for cfs
-bandwidth"), we may update the rq clock multiple times in the loop of
-__cfsb_csd_unthrottle(). At that time the following warning will be
-triggered.
+This WARN_DOUBLE_CLOCK warning is triggered during cpu offline.
 ------------[ cut here ]------------
 rq->clock_update_flags & RQCF_UPDATED
-WARNING: CPU: 54 PID: 0 at kernel/sched/core.c:741
+WARNING: CPU: 0 PID: 3323 at kernel/sched/core.c:741
 update_rq_clock+0xaf/0x180
 Call Trace:
  <TASK>
  unthrottle_cfs_rq+0x4b/0x300
- __cfsb_csd_unthrottle+0xe0/0x100
- __flush_smp_call_function_queue+0xaf/0x1d0
- flush_smp_call_function_queue+0x49/0x90
- do_idle+0x17c/0x270
- cpu_startup_entry+0x19/0x20
- start_secondary+0xfa/0x120
- secondary_startup_64_no_verify+0xce/0xdb
+ rq_offline_fair+0x89/0x90
+ set_rq_offline.part.118+0x28/0x60
+ rq_attach_root+0xc4/0xd0
+ cpu_attach_domain+0x3dc/0x7f0
+ partition_sched_domains_locked+0x2a5/0x3c0
+ rebuild_sched_domains_locked+0x477/0x830
+ rebuild_sched_domains+0x1b/0x30
+ cpuset_hotplug_workfn+0x2ca/0xc90
+ ? balance_push+0x56/0xf0
+ ? _raw_spin_unlock+0x15/0x30
+ ? finish_task_switch+0x98/0x2f0
+ ? __switch_to+0x291/0x410
+ ? __schedule+0x65e/0x1310
+ process_one_work+0x1bc/0x3d0
+ worker_thread+0x4c/0x380
+ ? preempt_count_add+0x92/0xa0
+ ? rescuer_thread+0x310/0x310
+ kthread+0xe6/0x110
+ ? kthread_complete_and_exit+0x20/0x20
+ ret_from_fork+0x1f/0x30
 
-Before the loop starts, we update the rq clock once and call
-rq_clock_start_loop_update() to prevent updating the rq clock
-multiple times. And call rq_clock_stop_loop_update() After
-the loop to clear rq->clock_update_flags.
-
-Fixes: 8ad075c2eb1f ("sched: Async unthrottling for cfs bandwidth")
+The rq clock has been updated in the set_rq_offline(),
+so we don't need to call update_rq_clock() in
+unthrottle_offline_cfs_rqs().
+We only need to call rq_clock_start_loop_update() before the
+loop starts and rq_clock_stop_loop_update() after the loop
+to avoid this warning.
 
 Suggested-by: Vincent Guittot <vincent.guittot@linaro.org>
 Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
 Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
 ---
- kernel/sched/fair.c  |  9 +++++++++
- kernel/sched/sched.h | 21 +++++++++++++++++++++
- 2 files changed, 30 insertions(+)
+ kernel/sched/fair.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 373ff5f55884..af9604f4b135 100644
+index af9604f4b135..4da5f3541762 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -5576,6 +5576,14 @@ static void __cfsb_csd_unthrottle(void *arg)
+@@ -6124,6 +6124,13 @@ static void __maybe_unused unthrottle_offline_cfs_rqs(struct rq *rq)
  
- 	rq_lock(rq, &rf);
+ 	lockdep_assert_rq_held(rq);
  
 +	/*
-+	 * Iterating over the list can trigger several call to
-+	 * update_rq_clock() in unthrottle_cfs_rq().
-+	 * Do it once and skip the potential next ones.
++	 * The rq clock has already been updated in the
++	 * set_rq_offline(), so we should skip updating
++	 * the rq clock again in unthrottle_cfs_rq().
 +	 */
-+	update_rq_clock(rq);
 +	rq_clock_start_loop_update(rq);
 +
- 	/*
- 	 * Since we hold rq lock we're safe from concurrent manipulation of
- 	 * the CSD list. However, this RCU critical section annotates the
-@@ -5595,6 +5603,7 @@ static void __cfsb_csd_unthrottle(void *arg)
- 
+ 	rcu_read_lock();
+ 	list_for_each_entry_rcu(tg, &task_groups, list) {
+ 		struct cfs_rq *cfs_rq = tg->cfs_rq[cpu_of(rq)];
+@@ -6146,6 +6153,8 @@ static void __maybe_unused unthrottle_offline_cfs_rqs(struct rq *rq)
+ 			unthrottle_cfs_rq(cfs_rq);
+ 	}
  	rcu_read_unlock();
- 
++
 +	rq_clock_stop_loop_update(rq);
- 	rq_unlock(rq, &rf);
  }
  
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index ec7b3e0a2b20..50446e401b9f 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -1546,6 +1546,27 @@ static inline void rq_clock_cancel_skipupdate(struct rq *rq)
- 	rq->clock_update_flags &= ~RQCF_REQ_SKIP;
- }
- 
-+/*
-+ * During cpu offlining and rq wide unthrottling, we can trigger
-+ * an update_rq_clock() for several cfs and rt runqueues (Typically
-+ * when using list_for_each_entry_*)
-+ * rq_clock_start_loop_update() can be called after updating the clock
-+ * once and before iterating over the list to prevent multiple update.
-+ * After the iterative traversal, we need to call rq_clock_stop_loop_update()
-+ * to clear RQCF_ACT_SKIP of rq->clock_update_flags.
-+ */
-+static inline void rq_clock_start_loop_update(struct rq *rq)
-+{
-+	lockdep_assert_rq_held(rq);
-+	rq->clock_update_flags |= RQCF_ACT_SKIP;
-+}
-+
-+static inline void rq_clock_stop_loop_update(struct rq *rq)
-+{
-+	lockdep_assert_rq_held(rq);
-+	rq->clock_update_flags &= ~RQCF_ACT_SKIP;
-+}
-+
- struct rq_flags {
- 	unsigned long flags;
- 	struct pin_cookie cookie;
+ #else /* CONFIG_CFS_BANDWIDTH */
 -- 
 2.20.1
 
