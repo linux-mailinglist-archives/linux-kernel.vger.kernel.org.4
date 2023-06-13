@@ -2,140 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C86C72E723
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:25:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0574A72E725
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241223AbjFMPZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 11:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45328 "EHLO
+        id S241357AbjFMP0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 11:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243089AbjFMPZL (ORCPT
+        with ESMTP id S242900AbjFMP0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 11:25:11 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1177419B9;
-        Tue, 13 Jun 2023 08:25:09 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id d693ed22b0d7d60d; Tue, 13 Jun 2023 17:25:07 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 609006E2F7A;
-        Tue, 13 Jun 2023 17:25:07 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Saket Dumbre <saket.dumbre@intel.com>,
-        Xiaoming Ni <nixiaoming@huawei.com>
-Subject: [PATCH v1] ACPI: sleep: Avoid breaking S3 wakeup due to might_sleep()
-Date:   Tue, 13 Jun 2023 17:25:07 +0200
-Message-ID: <12237421.O9o76ZdvQC@kreacher>
+        Tue, 13 Jun 2023 11:26:13 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801661BEB
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 08:26:10 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3f9a81da5d7so293221cf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 08:26:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686669969; x=1689261969;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SGcsTjigiwsVCHhce7TrLNCGSp3EdOdru0xINbTB9k4=;
+        b=f5TKtpmTN9wf7BKxj6Uajjmt5oxcxBG4/knBASSpMcFt//NbRtP/z1Lg+NYOoRocKf
+         uHoZuwJzvPZqeEoniwzYWx1FE99oJEfR37uviUCbs3cSDRqmOnSfoqNmP/gRHEFvJZiu
+         VthOAu6laAUoPz4in9VIBxUyi5ggwP8wnRejBGedJ1KLMSuUsnGeE3uUgJC1S89sQdfW
+         1w71MQMQBV9gHBBb5Vb311u9PzsGhvwjetweYlHGizEhUT41p5qVxFBreUPATE5/0Rmr
+         g5xii4u641utrKTeirKfaGrAst4laGTACW2E8Hv98dRSPvUKMiHoi6Hs1wyo/88npeNL
+         rvBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686669969; x=1689261969;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SGcsTjigiwsVCHhce7TrLNCGSp3EdOdru0xINbTB9k4=;
+        b=U4chEsZ4xuhYcoOxz3fJt2Ex4Ll50eb2j5RSkBEnlvBNIN2khw69bZLfebaM6V8R6w
+         0+b43Hd+QtCna6QVdk+9RKXyELTXq+crtT/iTLhiIO3Tv95y685qCPHC/U7LxQz3CZlC
+         HWk+A8uhF0vM023zN+Mw5ZHitioex44oPyonRwtun5X1bOTZyqmGsoMebmFfeTRx1c7/
+         3yYu9xUW4wxlWSByRqruUYKUxdliWSMy4DB8qQhpLUjlinUN5Ax5c9O7PvR7m/LwEWV2
+         ZhcN/bEL7KIGAC1hGZzdHZ+Xlh+jJNzXEav2RHboBIPJQZXF+o1QvtfW98Rb8hu4XIje
+         3GIg==
+X-Gm-Message-State: AC+VfDwsIAUARVEu5UgpAXSSVmb1NJQQ4HOd3ojc+c3ItopTAEVCp1Qj
+        rOqRB7Z2eqyurIpxK+tH4xT1JSyczEzg4vY97HKpZg==
+X-Google-Smtp-Source: ACHHUZ5Z4kvR+02A8wyJ6TdV6v5xPpAhjbhwmXGnjDl3xuFuioDV2sog3K1wSVuWftI69WmSKIKd4r0sXNJt6SjvyXs=
+X-Received: by 2002:a05:622a:46:b0:3f9:b8c2:f2d3 with SMTP id
+ y6-20020a05622a004600b003f9b8c2f2d3mr96993qtw.19.1686669969458; Tue, 13 Jun
+ 2023 08:26:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <20230613095506.547-1-ravi.bangoria@amd.com> <20230613095506.547-4-ravi.bangoria@amd.com>
+In-Reply-To: <20230613095506.547-4-ravi.bangoria@amd.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 13 Jun 2023 08:25:58 -0700
+Message-ID: <CAP-5=fW0R2Dkwvw0twdzL5GrLy6jy0CXmFHYCsZtC8UQnZ4mVQ@mail.gmail.com>
+Subject: Re: [PATCH 3/4] perf mem amd: Fix perf_pmus__num_mem_pmus()
+To:     Ravi Bangoria <ravi.bangoria@amd.com>
+Cc:     acme@kernel.org, jolsa@kernel.org, namhyung@kernel.org,
+        mark.rutland@arm.com, peterz@infradead.org,
+        adrian.hunter@intel.com, kan.liang@linux.intel.com,
+        james.clark@arm.com, alisaidi@amazon.com, leo.yan@linaro.org,
+        maddy@linux.ibm.com, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sandipan.das@amd.com,
+        ananth.narayan@amd.com, santosh.shukla@amd.com
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrgedujedgkeegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepkedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghl
- rdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepfihilhhlsehkvghrnhgvlhdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=8 Fuz1=8 Fuz2=8
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Tue, Jun 13, 2023 at 2:56=E2=80=AFAM Ravi Bangoria <ravi.bangoria@amd.co=
+m> wrote:
+>
+> AMD cpus does not contain hybrid cores. Also, perf mem/c2c on AMD
+> internally uses IBS OP PMU, not the core PMU.
+>
+> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
+> ---
+>  tools/perf/arch/x86/util/pmu.c | 15 +++++++++++++++
+>  tools/perf/util/pmus.c         |  2 +-
+>  2 files changed, 16 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/perf/arch/x86/util/pmu.c b/tools/perf/arch/x86/util/pm=
+u.c
+> index 3c0de3370d7e..8a20d28d9927 100644
+> --- a/tools/perf/arch/x86/util/pmu.c
+> +++ b/tools/perf/arch/x86/util/pmu.c
+> @@ -14,6 +14,8 @@
+>  #include "../../../util/intel-bts.h"
+>  #include "../../../util/pmu.h"
+>  #include "../../../util/fncache.h"
+> +#include "../../../util/pmus.h"
+> +#include "env.h"
+>
+>  struct pmu_alias {
+>         char *name;
+> @@ -168,3 +170,16 @@ char *pmu_find_alias_name(const char *name)
+>
+>         return __pmu_find_alias_name(name);
+>  }
+> +
+> +int perf_pmus__num_mem_pmus(void)
+> +{
+> +       /*
+> +        * AMD does not have hybrid cores and also uses IBS OP
+> +        * pmu for perf mem/c2c.
+> +        */
+> +       if (x86__is_amd_cpu())
+> +               return 1;
 
-The addition of might_sleep() to down_timeout() caused the latter to
-enable interrupts unconditionally in some cases, which in turn broke
-the ACPI S3 wakeup path in acpi_suspend_enter(), where down_timeout()
-is called by acpi_disable_all_gpes() via acpi_ut_acquire_mutex().
+The code and comment seem out of sync here. For the hybrid part
+perf_pmus__num_core_pmus() will yield 1 if there is no hybrid, so we
+can just use perf_pmus__num_core_pmus(). For the IBS OP part, does
+that mean that AMD should have 2 mem pmus? Or is IBS OP a core PMU?
+Can we add this as an example in the core/other documentation in patch
+1, as you've done for ARM, for clarity.
 
-Namely, if CONFIG_DEBUG_ATOMIC_SLEEP is set, might_sleep() causes
-might_resched() to be used and if CONFIG_PREEMPT_VOLUNTARY is set,
-this triggers __cond_resched() which may call preempt_schedule_common(),
-so __schedule() gets invoked and it ends up with enabled interrupts (in
-the prev == next case).
+Thanks,
+Ian
 
-Now, enabling interrupts early in the S3 wakeup path causes the kernel
-to crash.
-
-Address this by modifying acpi_suspend_enter() to disable GPEs without
-attempting to acquire the sleeping lock which is not needed in that code
-path anyway.
-
-Fixes: 99409b935c9a locking/semaphore: Add might_sleep() to down_*() family
-Reported-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/acpica/achware.h |    2 --
- drivers/acpi/sleep.c          |   16 ++++++++++++----
- include/acpi/acpixf.h         |    1 +
- 3 files changed, 13 insertions(+), 6 deletions(-)
-
-Index: linux-pm/drivers/acpi/acpica/achware.h
-===================================================================
---- linux-pm.orig/drivers/acpi/acpica/achware.h
-+++ linux-pm/drivers/acpi/acpica/achware.h
-@@ -101,8 +101,6 @@ acpi_status
- acpi_hw_get_gpe_status(struct acpi_gpe_event_info *gpe_event_info,
- 		       acpi_event_status *event_status);
- 
--acpi_status acpi_hw_disable_all_gpes(void);
--
- acpi_status acpi_hw_enable_all_runtime_gpes(void);
- 
- acpi_status acpi_hw_enable_all_wakeup_gpes(void);
-Index: linux-pm/include/acpi/acpixf.h
-===================================================================
---- linux-pm.orig/include/acpi/acpixf.h
-+++ linux-pm/include/acpi/acpixf.h
-@@ -761,6 +761,7 @@ ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_sta
- 						     acpi_event_status
- 						     *event_status))
- ACPI_HW_DEPENDENT_RETURN_UINT32(u32 acpi_dispatch_gpe(acpi_handle gpe_device, u32 gpe_number))
-+ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status acpi_hw_disable_all_gpes(void))
- ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status acpi_disable_all_gpes(void))
- ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status acpi_enable_all_runtime_gpes(void))
- ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status acpi_enable_all_wakeup_gpes(void))
-Index: linux-pm/drivers/acpi/sleep.c
-===================================================================
---- linux-pm.orig/drivers/acpi/sleep.c
-+++ linux-pm/drivers/acpi/sleep.c
-@@ -636,11 +636,19 @@ static int acpi_suspend_enter(suspend_st
- 	}
- 
- 	/*
--	 * Disable and clear GPE status before interrupt is enabled. Some GPEs
--	 * (like wakeup GPE) haven't handler, this can avoid such GPE misfire.
--	 * acpi_leave_sleep_state will reenable specific GPEs later
-+	 * Disable all GPE and clear their status bits before interrupts are
-+	 * enabled. Some GPEs (like wakeup GPEs) have no handlers and this can
-+	 * prevent them from producing spurious interrups.
-+	 *
-+	 * acpi_leave_sleep_state() will reenable specific GPEs later.
-+	 *
-+	 * Because this code runs on one CPU with disabled interrupts (all of
-+	 * the other CPUs are offline at that time), it need not acquire any
-+	 * sleeping locks which maybe harmful due to instrumentation even if
-+	 * those locks are not contended, so avoid doing that by using a low-
-+	 * level library routine here.
- 	 */
--	acpi_disable_all_gpes();
-+	acpi_hw_disable_all_gpes();
- 	/* Allow EC transactions to happen. */
- 	acpi_ec_unblock_transactions();
- 
-
-
-
+> +
+> +       /* Intel uses core pmus for perf mem/c2c */
+> +       return perf_pmus__num_core_pmus();
+> +}
+> diff --git a/tools/perf/util/pmus.c b/tools/perf/util/pmus.c
+> index e505d2fef828..0ed943932945 100644
+> --- a/tools/perf/util/pmus.c
+> +++ b/tools/perf/util/pmus.c
+> @@ -240,7 +240,7 @@ const struct perf_pmu *perf_pmus__pmu_for_pmu_filter(=
+const char *str)
+>         return NULL;
+>  }
+>
+> -int perf_pmus__num_mem_pmus(void)
+> +int __weak perf_pmus__num_mem_pmus(void)
+>  {
+>         /* All core PMUs are for mem events. */
+>         return perf_pmus__num_core_pmus();
+> --
+> 2.40.1
+>
