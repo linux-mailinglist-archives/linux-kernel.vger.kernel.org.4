@@ -2,188 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B8B972E92A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:17:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6C872E931
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:17:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237862AbjFMRQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 13:16:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
+        id S238096AbjFMRRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 13:17:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232022AbjFMRQe (ORCPT
+        with ESMTP id S238498AbjFMRQv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 13:16:34 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B0E19BF;
-        Tue, 13 Jun 2023 10:16:27 -0700 (PDT)
-Received: from mercury (dyndsl-091-248-189-170.ewe-ip-backbone.de [91.248.189.170])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id AFF5666003AC;
-        Tue, 13 Jun 2023 18:16:26 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686676586;
-        bh=5AxaalXzVaJFUkSTDi3Tm4IeWzb4tfj/SGsHptGfdcw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mqW70nOZWRTeu1NehigYLVIKDoDs5kENOcbMF9f0Sk19xKMpYE5PB811THrIbcmB8
-         e05QQS1DlIr6lTdPQyaGrgazfR7h41QVcP8snBVb6Vu0lxK87Hf5BcbGemt30lVnUJ
-         Gt1Or5sLzy7uAwqh1lm+43r4BmEGAl7EWKTgJMRhw06PH8I5PCwCLVkOdUxv/rmJxB
-         yj0RPZ0IHiTNcsq7zi+y8SuAuQ176tnuyGe22m6xQvmaHEhbxDBqbRYFHushn9TUoK
-         Q5yOzOAtFp/b+zWRuwJBDc27aaUdW+VeJxcYDfiUvGVSrUl9BcsdL8183/3XCyW6dT
-         +VEoAMpdcJNDw==
-Received: by mercury (Postfix, from userid 1000)
-        id 1C1551066FC6; Tue, 13 Jun 2023 19:16:24 +0200 (CEST)
-Date:   Tue, 13 Jun 2023 19:16:24 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Vincent Legoll <vincent.legoll@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 15/25] PM / devfreq: rockchip-dfi: give variable a
- better name
-Message-ID: <20230613171624.mrosctprljlz4g46@mercury.elektranox.org>
-References: <20230524083153.2046084-1-s.hauer@pengutronix.de>
- <20230524083153.2046084-16-s.hauer@pengutronix.de>
+        Tue, 13 Jun 2023 13:16:51 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D8819B9;
+        Tue, 13 Jun 2023 10:16:48 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-bc4ed01b5d4so2658243276.1;
+        Tue, 13 Jun 2023 10:16:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686676608; x=1689268608;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GjLD3Z65AFUlnzGeDipyFAWU3jGU3OlZnyaKrjFl94c=;
+        b=NJTC1I0w/bhJorLtWaQfWlvAtWyxNzM902NoozV2bocuew6IVQusNLYYsR92cHHh34
+         unbOiMyrOlD3s/F94VX5GDu2SQjvEyrkkCVvXZv0vCl4WevU6AQ6ZIdMUFLUnckMLnKh
+         1ggPVAdvsGV89dZLvZbdqcXLIhViqBG+eUvpfVmtpd9FUKi9KXDDsKu/A6ecBlK9bfFY
+         U+GH0IuIyae8Z6r5rUNf6HTxjNB2s069SP7thqFKZP/qBRTz2uFWG6P8hHn/f7Y3ASQv
+         h2+ET2Kjlc0MKvm5SWLSQbwT3w/z/0VybpT8padCUx9s5AgwciSPlOi/v4GahA52YR5P
+         jKtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686676608; x=1689268608;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GjLD3Z65AFUlnzGeDipyFAWU3jGU3OlZnyaKrjFl94c=;
+        b=OOPnGeAGuQO83JzkBIkaJVhXvgdr4B5xPEmqxjqtk2u+JIO57cjDHq/1pEpxOo+G9r
+         G4TT43m2QfT+XFZHAX/rfL11UXiJh5ONYefjkj7eS+uHu/gIz34GZh7p4MJHEnymKX4x
+         UDNJwaNgSsRj7a8iSBcxGplTo0u7OxL/UpKPzAJJsk4Cz4Mef0ZU+OwpmF9l43Zd7gQh
+         MyScbodXKxTtuDyGpzwtkiXbQRjWX9gjnP49E6QrLYpMMC+r4Hf12OfSpxqQMmAaOf6c
+         0eDZBa7FDCx3gGmEyv+7JDpXsabdGrKoZ52g3r/p4hlwx/HfauNRYBdXY+VR4x2sUVXL
+         8K4w==
+X-Gm-Message-State: AC+VfDx5Yyf1I5hqE5xKvjO7CCdjiYk1aUnLTWdpuMbcPG4atvnJpV7n
+        P3R7yPIRgzmYBsTk9PnyAWf0RUAqnqwtXAi+HxI=
+X-Google-Smtp-Source: ACHHUZ51FK9fEEG9Y7UGxjZoDZTvO/ng3orwCtq1nFE6ZDFpN49YC8tIKpnu/txR4noRhPPPOhU9rPNQ8Cv9H8lanlM=
+X-Received: by 2002:a25:8ca:0:b0:bc8:c035:cf4 with SMTP id 193-20020a2508ca000000b00bc8c0350cf4mr1912446ybi.17.1686676607731;
+ Tue, 13 Jun 2023 10:16:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pfxobpnuncen6xuh"
-Content-Disposition: inline
-In-Reply-To: <20230524083153.2046084-16-s.hauer@pengutronix.de>
+References: <20230612090713.652690195@infradead.org> <20230612093537.614161713@infradead.org>
+In-Reply-To: <20230612093537.614161713@infradead.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 13 Jun 2023 19:16:36 +0200
+Message-ID: <CANiq72mTjNzLhfhax761CPDUHj=zC6qa6i3hobMWYaCvmgBAJQ@mail.gmail.com>
+Subject: Re: [PATCH v3 03/57] locking: Introduce __cleanup() based infrastructure
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     torvalds@linux-foundation.org, keescook@chromium.org,
+        gregkh@linuxfoundation.org, pbonzini@redhat.com,
+        masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+        nicolas@fjasle.eu, catalin.marinas@arm.com, will@kernel.org,
+        vkoul@kernel.org, trix@redhat.com, ojeda@kernel.org,
+        mingo@redhat.com, longman@redhat.com, boqun.feng@gmail.com,
+        dennis@kernel.org, tj@kernel.org, cl@linux.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
+        adrian.hunter@intel.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, paulmck@kernel.org,
+        frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
+        42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
+        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
+        john.johansen@canonical.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
+        rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
+        tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
+        luc.vanoostenryck@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---pfxobpnuncen6xuh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Wed, May 24, 2023 at 10:31:43AM +0200, Sascha Hauer wrote:
-> struct dmc_count_channel::total counts the clock cycles of the DDR
-> controller. Rename it accordingly to give the reader a better idea
-> what this is about. While at it, at some documentation to struct
-> dmc_count_channel.
->=20
-> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> ---
-
-Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-
--- Sebastian
-
->  drivers/devfreq/event/rockchip-dfi.c | 19 ++++++++++++-------
->  1 file changed, 12 insertions(+), 7 deletions(-)
->=20
-> diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event=
-/rockchip-dfi.c
-> index 8a7af7c32ae0d..50e497455dc69 100644
-> --- a/drivers/devfreq/event/rockchip-dfi.c
-> +++ b/drivers/devfreq/event/rockchip-dfi.c
-> @@ -46,9 +46,14 @@
->  #define DDRMON_CH1_COUNT_NUM		0x3c
->  #define DDRMON_CH1_DFI_ACCESS_NUM	0x40
-> =20
-> +/**
-> + * struct dmc_count_channel - structure to hold counter values from the =
-DDR controller
-> + * @access:       Number of read and write accesses
-> + * @clock_cycles: DDR clock cycles
+On Mon, Jun 12, 2023 at 11:39=E2=80=AFAM Peter Zijlstra <peterz@infradead.o=
+rg> wrote:
+>
+> --- a/include/linux/compiler_attributes.h
+> +++ b/include/linux/compiler_attributes.h
+> @@ -77,6 +77,12 @@
+>  #define __attribute_const__             __attribute__((__const__))
+>
+>  /*
+> + *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.=
+html#index-cleanup-variable-attribute
+> + * clang: https://clang.llvm.org/docs/AttributeReference.html#cleanup
 > + */
->  struct dmc_count_channel {
->  	u32 access;
-> -	u32 total;
-> +	u32 clock_cycles;
->  };
-> =20
->  struct dmc_count {
-> @@ -150,7 +155,7 @@ static void rockchip_dfi_read_counters(struct rockchi=
-p_dfi *dfi, struct dmc_coun
->  			continue;
->  		count->c[i].access =3D readl_relaxed(dfi_regs +
->  				DDRMON_CH0_DFI_ACCESS_NUM + i * 20);
-> -		count->c[i].total =3D readl_relaxed(dfi_regs +
-> +		count->c[i].clock_cycles =3D readl_relaxed(dfi_regs +
->  				DDRMON_CH0_COUNT_NUM + i * 20);
->  	}
->  }
-> @@ -182,29 +187,29 @@ static int rockchip_dfi_get_event(struct devfreq_ev=
-ent_dev *edev,
->  	struct rockchip_dfi *dfi =3D devfreq_event_get_drvdata(edev);
->  	struct dmc_count count;
->  	struct dmc_count *last =3D &dfi->last_event_count;
-> -	u32 access =3D 0, total =3D 0;
-> +	u32 access =3D 0, clock_cycles =3D 0;
->  	int i;
-> =20
->  	rockchip_dfi_read_counters(dfi, &count);
-> =20
->  	/* We can only report one channel, so find the busiest one */
->  	for (i =3D 0; i < DMC_MAX_CHANNELS; i++) {
-> -		u32 a, t;
-> +		u32 a, c;
-> =20
->  		if (!(dfi->channel_mask & BIT(i)))
->  			continue;
-> =20
->  		a =3D count.c[i].access - last->c[i].access;
-> -		t =3D count.c[i].total - last->c[i].total;
-> +		c =3D count.c[i].clock_cycles - last->c[i].clock_cycles;
-> =20
->  		if (a > access) {
->  			access =3D a;
-> -			total =3D t;
-> +			clock_cycles =3D c;
->  		}
->  	}
-> =20
->  	edata->load_count =3D access * 4;
-> -	edata->total_count =3D total;
-> +	edata->total_count =3D clock_cycles;
-> =20
->  	dfi->last_event_count =3D count;
-> =20
-> --=20
-> 2.39.2
->=20
+> +#define __cleanup(func)                        __attribute__((__cleanup_=
+_(func)))
+> +
+> +/*
+>   * Optional: only supported since gcc >=3D 9
+>   * Optional: not supported by clang
+>   *
 
---pfxobpnuncen6xuh
-Content-Type: application/pgp-signature; name="signature.asc"
+`cleanup` goes before `const`, but apart from that, for compiler attributes=
+:
 
------BEGIN PGP SIGNATURE-----
+    Acked-by: Miguel Ojeda <ojeda@kernel.org>
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSIpGcACgkQ2O7X88g7
-+pqCyA/+LtQycD7o9vOEa1QsxI1Jhpp/ODV1N1n7SFabrVZ5oq92CcyFBpHUhTIR
-taIWvyae1XLKz6HJNoEGzA6xQqEDdGqXLCrRmfbx59QaeJOfJGt0fcIQ4t0WbhvH
-Y4KcUebYaBZnVCzdzJFCbScrpcKfk4hcSgMFHy5KAHGTRF2USYhcUBgS3wO7r8Ph
-OSOnFDmx8/styjdpVQIVpWnTrM4Jx1zs79u2TP669ddq5Fsqd0mcifUUbcYwXXws
-ySQyTDC14N1TztxQzpe5g4/IVej6TnVXB+EKbPc/B+8ZFXc0qjUQaJJNsKx08HXM
-a39Ifgbbf7qvxxx3mzGqDP+bVtU7gmGIzGBiYbyjNP4tu7fgn9nunshEzGllKCr6
-BmdAp3HIe63572BKHiMlofA60WCiewzgZhGCLlMUCUsyChB96xBfR0Sc/YZ01CIx
-02iUBC3HlscYwdcXsREd2uW5No+zjSEdlgDP+o2ecArNxDV63fPo2e7pFQdBAjle
-Jl2xtYDMCTzdERc+woA7q8aMXupEwImo1stBVMtnMyU/SRa9peApx9/s43is7aas
-SB1GSQ2/hjrcAW9HTiqVhFVpVfu7poGhtVlKouk7C7o7uf82uAnZ8trILzHdgN27
-kR0rmWM+VUx8nIDLTP5RKO4VrAVhfWCLuKCYQd95a8PTPhwIdI4=
-=HV39
------END PGP SIGNATURE-----
+Thanks for bringing RAII/SBRM to the kernel!
 
---pfxobpnuncen6xuh--
+Rust also behaves like the `__cleanup__` attribute, e.g. iterating on
+a loop destroys and constructs the variables defined inside the loop.
+Also breaking to an outer label/scope.
+
+By the way, maybe some of the macros in `cleanup.h` read a bit better
+applying `clang-format` to it.
+
+Cheers,
+Miguel
