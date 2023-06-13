@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F2472D678
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 02:34:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5798172D67A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 02:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238781AbjFMAet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 20:34:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37336 "EHLO
+        id S239025AbjFMAfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 20:35:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbjFMAel (ORCPT
+        with ESMTP id S230445AbjFMAfF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 20:34:41 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACDE188;
-        Mon, 12 Jun 2023 17:34:40 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id ca18e2360f4ac-77ad3bba2a9so305273939f.1;
-        Mon, 12 Jun 2023 17:34:40 -0700 (PDT)
+        Mon, 12 Jun 2023 20:35:05 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16181B0;
+        Mon, 12 Jun 2023 17:35:01 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id e9e14a558f8ab-33d269dd56bso21250705ab.1;
+        Mon, 12 Jun 2023 17:35:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686616480; x=1689208480;
+        d=gmail.com; s=20221208; t=1686616501; x=1689208501;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wvMdVrWmm1KsKBFUWEX6pgpKCo/fWwZOLXy0dcLNEyU=;
-        b=mCW+LG6bMXAYtLCunsvonmLxyBwyUFcx5jUrWNVjeHc7toh2Dq4/vOar2JNiboPLme
-         YcOH0Fu+C6tihvwzzV4+yjl3a4IPYxr19Og3DsyjYJg0mChL7A8gjWUvRQjPjr4213w4
-         Jfc35+Oj6B6tYLRkMf082yIDz6YpUeGnlo4OjrUHXMCekHvCreSqrC3KmpGGs5Wnf0cI
-         IjB79ujFXXWDosvZfxjNzM/FPiUsCwj5V+SvNyaGdDZCyaw+ztAt5x5HR6YKSn8SjqnC
-         v0Y+YLVRqSn5BO4mRLTRTc825WBm4b6PzRUqx/M8hNBp+O3e8rJC+HOZp6L8dSVPXWmP
-         R0iw==
+        bh=Lcj3LTdqBYzQ+8iEp4pTaRpOWyZfI2CMA9mZFfHhQ/Y=;
+        b=gjlqGloDt9uucOR7CHB7v7jp61ky4iS1uK8CdFNENeoC51SqSVyw1zhMnULxYU2103
+         y7UuD/U/0KztPu2m7BEkfmDPIIcu75ZjmI/axFDhZs65MKe6QFJPBLKZhBQxcEYVGX1d
+         Qf0WXvjJUwgPXBKufjXk5TnBPQ7MvHOcv4m9SR+Dsy65HRJcxf7xhMwn39XgNblDyZJD
+         irK3qTDg7bLw7S12yY/mkeujlaHyuShkW9BSKqFfXXTPsKFbR9knzEjXksPlrmviQZjw
+         TIAWiHMQnxxB5VXKTIl1OLlWyppDjrEMmrW2mFiCw3TpcUccZmVAZX54pH0hVG0lpV08
+         3sfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686616480; x=1689208480;
+        d=1e100.net; s=20221208; t=1686616501; x=1689208501;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wvMdVrWmm1KsKBFUWEX6pgpKCo/fWwZOLXy0dcLNEyU=;
-        b=LbwvehTKKdfwjPVj8sI+Z3dSKvjq/rxsQ6Uydz3GY5NHfBa1q6dgw2axtMroJAqOjQ
-         n81o63lkYe2+EOiRscqaFThRGyQw2ayT8s/X5WPfcfxMKRYAtLNd7FdZ0bp86pQnXueh
-         LorgTrlllmxXt87EE6lIqPTayvu9lz+S5Zr90wRzEMYrWAbcwJ73e+Yid7mtWq39IwXV
-         FogEMl5YWiZSBNU7pGLyx9jwLBSSt2legyaagucsb47TcJm72+BhIKU2ijYU7lP4SZLJ
-         VghEzfjbP6G87VWEBZChTA8qV74qShu7Pn7oli+FlG69rgcKl3Xb/YoyMIvBcThIXJ+l
-         9+dA==
-X-Gm-Message-State: AC+VfDy2f7Kkwe1EbboPb4LBwbPeWoLhn0JL9Fb4HG55MRSp58Zff6sW
-        ZOjhRBsmT4F335ecVBJ5Cp0=
-X-Google-Smtp-Source: ACHHUZ4feAvrqg921toBhoDlWAO1vwl0K8oIcaaXToOdRvE3/z0T+XUpqJRbfQv4M6eTOEyMgG9Sdg==
-X-Received: by 2002:a05:6602:1851:b0:77a:c00c:1166 with SMTP id d17-20020a056602185100b0077ac00c1166mr9660252ioi.15.1686616480236;
-        Mon, 12 Jun 2023 17:34:40 -0700 (PDT)
+        bh=Lcj3LTdqBYzQ+8iEp4pTaRpOWyZfI2CMA9mZFfHhQ/Y=;
+        b=cv73012xlkkK/Kna2Om9e4hH1T9+t7+rqdB3zVU5iwt8czA4bZyV7LkT1rjmhl4v8T
+         BQyg/55EJlsaV9KgXa1FzigNTD9fOpiXwXuKQcjm15q12PHbFRQTuyhbOmbVY/SNgEOv
+         138++SoJqhehKxSnZq9S7l5C4BbXqgmFVZ8zbezmAcmpbG0+3QePeYtx6QeRjilXh5DA
+         i6bFr8eQ+pe7Q4sgyh97HJqrF/f1V2Y0bl26LZpvxyeAU13od+Qpgqxfo8MM8K98s+Cc
+         +oSlOVio1WH58rifjC4qh8weGBG5YtiSPCC0PYTc4gMFnYcv9Hk+rcdUqHF95bbOF922
+         m5wQ==
+X-Gm-Message-State: AC+VfDxaEzpX6nRyXqy2t7FxSSle4ejVvnhp0IwdrL1/SjwG7Z3J0waR
+        QOTN2y0OWeRIkJhhOpr6fxk=
+X-Google-Smtp-Source: ACHHUZ5S0otA0gTmI5YQ9DrVHUh/f+5EYzrFFFgKbXTybv3eHjkkz52csVS8lxXgMUkXm52+uJ3m/Q==
+X-Received: by 2002:a92:d94c:0:b0:338:af0b:f2bd with SMTP id l12-20020a92d94c000000b00338af0bf2bdmr8813893ilq.5.1686616500842;
+        Mon, 12 Jun 2023 17:35:00 -0700 (PDT)
 Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
-        by smtp.gmail.com with ESMTPSA id f5-20020a056638118500b0041eb1fb695csm3115812jas.105.2023.06.12.17.34.39
+        by smtp.gmail.com with ESMTPSA id t7-20020a92c907000000b0032ab5a86443sm3475382ilp.74.2023.06.12.17.35.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 17:34:39 -0700 (PDT)
+        Mon, 12 Jun 2023 17:35:00 -0700 (PDT)
 From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-To:     Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>
+To:     Jakub Kicinski <kuba@kernel.org>
 Cc:     linux-hardening@vger.kernel.org,
         Azeem Shaikh <azeemshaikh38@gmail.com>,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Subject: [PATCH] netfilter: ipset: Replace strlcpy with strscpy
-Date:   Tue, 13 Jun 2023 00:34:37 +0000
-Message-ID: <20230613003437.3538694-1-azeemshaikh38@gmail.com>
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kalle Valo <kvalo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH] net/mediatek: strlcpy withreturn
+Date:   Tue, 13 Jun 2023 00:34:57 +0000
+Message-ID: <20230613003458.3538812-1-azeemshaikh38@gmail.com>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -84,58 +83,30 @@ overflows if a source string is not NUL-terminated [1].
 In an effort to remove strlcpy() completely [2], replace
 strlcpy() here with strscpy().
 
-Direct replacement is safe here since return value from all
-callers of STRLCPY macro were ignored.
+Direct replacement is safe here since DEV_ASSIGN is only used by
+TRACE macros and the return values are ignored.
 
 [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
 [2] https://github.com/KSPP/linux/issues/89
 
 Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
 ---
- net/netfilter/ipset/ip_set_hash_netiface.c |   10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/net/wireless/mediatek/mt7601u/trace.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/netfilter/ipset/ip_set_hash_netiface.c b/net/netfilter/ipset/ip_set_hash_netiface.c
-index 031073286236..95aeb31c60e0 100644
---- a/net/netfilter/ipset/ip_set_hash_netiface.c
-+++ b/net/netfilter/ipset/ip_set_hash_netiface.c
-@@ -40,7 +40,7 @@ MODULE_ALIAS("ip_set_hash:net,iface");
- #define IP_SET_HASH_WITH_MULTI
- #define IP_SET_HASH_WITH_NET0
+diff --git a/drivers/net/wireless/mediatek/mt7601u/trace.h b/drivers/net/wireless/mediatek/mt7601u/trace.h
+index 5a6ba015085f..07696b672161 100644
+--- a/drivers/net/wireless/mediatek/mt7601u/trace.h
++++ b/drivers/net/wireless/mediatek/mt7601u/trace.h
+@@ -16,7 +16,7 @@
  
--#define STRLCPY(a, b)	strlcpy(a, b, IFNAMSIZ)
-+#define STRSCPY(a, b)	strscpy(a, b, IFNAMSIZ)
- 
- /* IPv4 variant */
- 
-@@ -182,11 +182,11 @@ hash_netiface4_kadt(struct ip_set *set, const struct sk_buff *skb,
- 
- 		if (!eiface)
- 			return -EINVAL;
--		STRLCPY(e.iface, eiface);
-+		STRSCPY(e.iface, eiface);
- 		e.physdev = 1;
- #endif
- 	} else {
--		STRLCPY(e.iface, SRCDIR ? IFACE(in) : IFACE(out));
-+		STRSCPY(e.iface, SRCDIR ? IFACE(in) : IFACE(out));
- 	}
- 
- 	if (strlen(e.iface) == 0)
-@@ -400,11 +400,11 @@ hash_netiface6_kadt(struct ip_set *set, const struct sk_buff *skb,
- 
- 		if (!eiface)
- 			return -EINVAL;
--		STRLCPY(e.iface, eiface);
-+		STRSCPY(e.iface, eiface);
- 		e.physdev = 1;
- #endif
- 	} else {
--		STRLCPY(e.iface, SRCDIR ? IFACE(in) : IFACE(out));
-+		STRSCPY(e.iface, SRCDIR ? IFACE(in) : IFACE(out));
- 	}
- 
- 	if (strlen(e.iface) == 0)
+ #define MAXNAME		32
+ #define DEV_ENTRY	__array(char, wiphy_name, 32)
+-#define DEV_ASSIGN	strlcpy(__entry->wiphy_name,			\
++#define DEV_ASSIGN	strscpy(__entry->wiphy_name,			\
+ 				wiphy_name(dev->hw->wiphy), MAXNAME)
+ #define DEV_PR_FMT	"%s "
+ #define DEV_PR_ARG	__entry->wiphy_name
 -- 
 2.41.0.162.gfafddb0af9-goog
 
