@@ -2,86 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65FD972E59D
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 16:23:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6B772E5A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 16:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242775AbjFMOW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 10:22:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44420 "EHLO
+        id S242730AbjFMOYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 10:24:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242670AbjFMOWz (ORCPT
+        with ESMTP id S240128AbjFMOYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 10:22:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C2B187;
-        Tue, 13 Jun 2023 07:22:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 13 Jun 2023 10:24:31 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C5DBA
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 07:24:30 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F0E361846;
-        Tue, 13 Jun 2023 14:22:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66085C433F0;
-        Tue, 13 Jun 2023 14:22:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686666172;
-        bh=uaFeJzmCxlczQeNB4wjNR1p0Vrwz4zgph2jIve82GkA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ZuISURTvbhSW/SoXlALwokHgjZzX5GB4acwTW7pOvOm1WaVJ/yM9OPv3mQ1wQn1z7
-         OGMI/SlP7+KxqnTJUzRHls3cnE0tKBjg57xnBXrTWTR2uuhy8K+/y6xTmxWs2LITc9
-         +EzI1xlyUA4Zc5z3L3kU9LyU6r6EBk+iu1mjDa4o+kxiTL6/DgLS4PWjYzTfBbcmTn
-         V1k30kU/KwJ8ZOeP6V5+tMiJmJ75luLSSMBrxr+oaCE4Mx0TJWfweH0RcfDZvjMDVE
-         9Pm+KV5djfrgBR5SYq3ya90zL5dG93tkzvOExr0cVX+qbH2EkE6wJ6dK0G3LCNRg7L
-         7h7sz1ezBqNUQ==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     linux-wireless@vger.kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        regressions@lists.linux.dev,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Closing down the wireless trees for a summer break?
-Date:   Tue, 13 Jun 2023 17:22:47 +0300
-Message-ID: <87y1kncuh4.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 71E631FDBB;
+        Tue, 13 Jun 2023 14:24:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1686666269; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9RQl95P12+POXLnCCgfU/OKJ6ihJlPynRRID4GB5eus=;
+        b=Gg4sD3qdSQQt5eMvPIb5pTedPLaB3WF8xPmWOV8f5s9LjKQzjca3nlVNcew2ZjJ/CnO/3W
+        wo1W6iTLvFydLZz04gz147pNya+gUiXvwfBKxom1gkF9ymZg68ZHZ9rjBXJ1BwrHsQxGIK
+        MSKX7AoF002sBkhBXUF/YQ1aF651Bzs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1686666269;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9RQl95P12+POXLnCCgfU/OKJ6ihJlPynRRID4GB5eus=;
+        b=8qssJCDxeIhFf88O9y/2OhTPBis/R67nadGbPcGRzCzoeTnMvsa1lcO+HNjh3SmYafiBUl
+        DWxX+X5GzfALQ4Bg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 520F213345;
+        Tue, 13 Jun 2023 14:24:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id znrdEh18iGQMewAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 13 Jun 2023 14:24:29 +0000
+Date:   Tue, 13 Jun 2023 16:24:28 +0200
+Message-ID: <87v8frcueb.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: hda: Use maple tree register cache
+In-Reply-To: <e48bbd3b-544d-43d5-82a1-8fbbcb8cd1a4@sirena.org.uk>
+References: <20230609-alsa-hda-maple-v1-1-a2b725c8b8f5@kernel.org>
+        <87v8fua1qm.wl-tiwai@suse.de>
+        <877cs7g6f1.wl-tiwai@suse.de>
+        <e48bbd3b-544d-43d5-82a1-8fbbcb8cd1a4@sirena.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Me and Johannes are planning to take a longer break from upstream this
-summer. To keep things simple my suggestion is that we would official
-close wireless and wireless-next trees from June 23rd to August 14th
-(approximately).
+On Tue, 13 Jun 2023 15:59:14 +0200,
+Mark Brown wrote:
+> 
+> On Tue, Jun 13, 2023 at 09:36:34AM +0200, Takashi Iwai wrote:
+> 
+> > This is an error from regache_sync_val(), and it indicates that the
+> > synced register is write-only; regcache_maple_sync() tries to sync all
+> > cached values no matter whether it's writable or not, then hitting
+> > this.
+> 
+> BTW I was just looking at reg_raw_update_once() and I can't figure out
+> why it's trying to do what it's doing - it does a read to check if it's
+> seen the register before and then does an _update_bits() if the register
+> hasn't been cached yet, apparently trying suppress duplicate writes but
+> possibly deliberately discarding changes to multiple bitfields in the
+> same register.  That's not what the non-regmap path does, it'll only
+> discard noop changes to the same bitfield.
 
-During that time urgent fixes would need go directly to the net tree.
-Patches can keep flowing to the wireless list but the the net
-maintainers will follow the list and they'll just apply them to the
-net tree directly.
+Yes, it's a quite hackish way of optimization of the initialization.
 
-The plan here is that -next patches would have to wait for
-wireless-next to open. Luckily the merge window for v6.6 most likely
-opens beginning of September[1] so after our break we would have few
-weeks to get -next patches ready for v6.6.
+Since HD-audio codec has no known default values unlike normal codecs,
+it needs to initialize itself only at the first access, and this
+helper does it.
 
-And the v6.5 -next patches should be ready by Monday June 19th so that we
-have enough time to get them into the tree before we close the trees.
 
-What do people think, would this work? This is the first time we are
-doing this so we would like to hear any comments about this, both
-negative and positive. You can also reply to me and Johannes privately,
-if that's easier.
-
-Kalle
-
-[1] https://phb-crystal-ball.sipsolutions.net/
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Takashi
