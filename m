@@ -2,120 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E27B872DBD4
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:00:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9A7272DBDC
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:00:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240834AbjFMIAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 04:00:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50204 "EHLO
+        id S240708AbjFMIAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 04:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241101AbjFMH7y (ORCPT
+        with ESMTP id S241290AbjFMIAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 03:59:54 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A34C3C16
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:58:51 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b3d0b33dc2so11999465ad.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:58:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686643130; x=1689235130;
-        h=content-transfer-encoding:cc:to:subject:from:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8gFVICJk82rsLy6XURcItio5Wc3MLyUpCU3bKiLcn7E=;
-        b=Zu1eNmH59rjQOm+08m4N17C7EGxZr54zmOO94OfKblpkr1l7peVqWXSNqS+0/kS6gX
-         EapSF+QxF6DrIFV0TjB/67BzDJWIFcDgtaU/ji05c1C+S2c0li5WNJzs1zhq3oWZePi/
-         79tD5grYYPpJSQ8nJ0OjlVgeckvPmJuUqsskvJq8iWb0tKMjp7scryD6wiMJQt4cTjYE
-         oSBIajdSrEdw/p4rEGa1ntbbU7i+yBu7nBU+mXKzl8jn3CI5YTF+XvPARZTLAP3p0WyG
-         vadttwCxVI6wTO6MtUsNikCSAdXyyEF62rloPdjiXb9y3SC3T+SQlU3i+rDRrlIs6E3P
-         wTKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686643130; x=1689235130;
-        h=content-transfer-encoding:cc:to:subject:from:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=8gFVICJk82rsLy6XURcItio5Wc3MLyUpCU3bKiLcn7E=;
-        b=lagm5FIyouOHlKecevXKy+8GwmvGbCSC55dWuykEwZDVzPAtOOwfCLOKlbSHaLlcna
-         IrtGCs0Y2HYsPVdtWZEFifdDudepkHijUNAc8vRtuNazfObWS4lwMXt0mZot+cpB84KY
-         Z7zJUoLM/u1getlUqvtx7vw1ZV4LZbt+2eABmmVLzlFppKiOXbIUSwYiReDEbDB5btsf
-         T3FUK3m/GziJIMVBBx32dPWGL2T8K3HfGgd3JRfzneFRf8WU+NAkHzgjA05jLNKM4r0Q
-         cDk72Sccp1xgl3p5oDFdpg8B4LZD7PD6+FmIIUVST7eyUgUzw1buenQYJ5evWlEqHpeb
-         tzzA==
-X-Gm-Message-State: AC+VfDxWqDj2JBlSL95LcCRIe8TGRXGBCb8gJgIPJQbYsWU2nGVHHiok
-        F9KvItRoN+ie6nfoztZLX4lWUaG4zYyFxQ==
-X-Google-Smtp-Source: ACHHUZ4LF6u5/W4jCFiUuKAjF1AFewN+gLsPgJsbR4sHJpvM3DYDCzMRA98AOm63FAOSef1TdAzbog==
-X-Received: by 2002:a17:902:b489:b0:1b3:7de7:f83f with SMTP id y9-20020a170902b48900b001b37de7f83fmr8268095plr.26.1686643130358;
-        Tue, 13 Jun 2023 00:58:50 -0700 (PDT)
-Received: from [183.173.18.203] ([183.173.18.203])
-        by smtp.gmail.com with ESMTPSA id g18-20020a170902869200b001b01fc7337csm9515480plo.247.2023.06.13.00.58.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 00:58:49 -0700 (PDT)
-Message-ID: <32dc96d0-2d27-47e4-448a-a42e9ce352af@gmail.com>
-Date:   Tue, 13 Jun 2023 15:58:28 +0800
+        Tue, 13 Jun 2023 04:00:07 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 630BA2112;
+        Tue, 13 Jun 2023 00:59:03 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8Dxi+qyIYhkXIMEAA--.9419S3;
+        Tue, 13 Jun 2023 15:58:42 +0800 (CST)
+Received: from user-pc.202.106.0.20 (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxluSsIYhkdKsYAA--.5184S2;
+        Tue, 13 Jun 2023 15:58:41 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v13 0/2] spi: loongson: add bus driver for the loongson spi
+Date:   Tue, 13 Jun 2023 15:58:32 +0800
+Message-Id: <20230613075834.5219-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-From:   Tuo Li <islituo@gmail.com>
-Subject: [BUG] ocfs2/dlm: possible data races in dlm_drop_lockres_ref_done()
- and dlm_get_lock_resource()
-To:     mark@fasheh.com, jlbec@evilplan.org,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        akpm@linux-foundation.org
-Cc:     ocfs2-devel@oss.oracle.com,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        baijiaju1990@outlook.com
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8DxluSsIYhkdKsYAA--.5184S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+        nUUI43ZEXa7xR_UUUUUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Loongson platform support spi hardware controller and this series patch
+was to add spi driver and binding support.
 
-Our static analysis tool finds some possible data races in the OCFS2 file
-system in Linux 6.4.0-rc6.
+Change in v2:
+		1. This [PATCH v2 1/2] dt-bindings patch need depend on clk patch:
+	 	   https://
+		   lore.kernel.org/all/20230307115022.12846-1-zhuyinbo@loongson.cn/
+		2. Remove the clock-names in spi yaml file.
+		3. Add "loongson,ls7a-spi" compatible in spi yaml file.
+		4. Add an || COMPILE_TEST and drop && PCI then add some CONFIG_PCI
+		   macro to limit some pci code.
+		5. Make the spi driver top code comment block that use C++ style.
+		6. Drop spi->max_speed_hz.
+		7. Add a spin_lock for loongson_spi_setup.
+		8. Add a timeout and cpu_relax() in loongson_spi_write_read_8bit.
+		9. Add spi_transfer_one and drop transfer and rework entire spi
+		   driver that include some necessary changes.
+		10. Use module_init replace subsys_initcall.
+		11. About PM interface that I don't find any issue so I don't add
+		    any changes.
+Change in v3:
+		1. This [PATCH v3 1/2] dt-bindings patch need depend on clk patch:
+		   https://
+		   lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
+		2. Drop the unused blank line in loongson,ls-spi.yaml file.
+		3. Replace clock minItems with clock maxItems in yaml file.
+		4. Separate spi driver into platform module, pci module and core
+		   module.
+		5. Replace DIV_ROUND_UP with DIV_ROUND_UP_ULL to fix compile error
+		   "undefined reference to `__aeabi_uldivmod'" and  "__udivdi3 undefined"
+		   that reported by test robot.
+		6. Remove the spin lock.
+		7. Clear the loongson_spi->hz and loongson_spi->mode in setup to fixup
+		   the issue that multiple spi device transfer that maybe cause spi was
+		   be misconfigured.
+Change in v4:
+		1. This [PATCH v4 1/2] dt-bindings patch need depend on clk patch:
+		   https://
+		   lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
+		2. Add "#include <linux/io.h>" in spi-loongson-core.c for fix the compile
+		   issue which devm_ioremap no declaration.
+		3. Add "EXPORT_SYMBOL_GPL(loongson_spi_dev_pm_ops)" in
+		   spi-loongson-core.c for fix the compile issue which
+		   loongson_spi_dev_pm_ops undefined.
+Change in v5:
+		1. Get rid of the clock patch's dependency and open-code the clock IDs.
+		2. Fixup checkpatch issue that by installed ply and gitpython package
+		   locally, but this series of patch's code doesn't have any change.
+Change in v6:
+		1. Remove the "#include <dt-bindings/clock/loongson,ls2k-clk.h>" in
+		   yaml file.
+Change in v7:
+		1. Remove the "loongson,ls7a-spi" and change yaml file name as
+		   "loongson,ls2k-spi.yaml".
+		2. Use module_pci_driver and module_platform_driver to replace
+		   module_init and module_exit.
+		3. Drop ".owner	= THIS_MODULE" in spi platform driver.
+		4. Add devm_spi_alloc_master devm_spi_register_master to simplify code.
+		5. Add pci_disable_device() in loongson_spi_pci_unregister.
+Change in v8:
+		1. Add reviewed-by information for spi bindings patch.
+		2. Fixup the uncorrect spi yaml file path in MAINTAINERS file.
+		3. Add spi_master_suspend and spi_master_resume in spi pm function.
+Change in v9:
+		1. Make spi_master_suspend go first in pm suspend.
+Change in v10:
+		1. Fix the compile issue about of_node_get and of_get_property no
+		   declaration.
+		2. set config SPI_LOONGSON_CORE invisible.
+		3. Captial "spi" in commit log and Kconfig file.
+		4. Write header files in alphabetical order.
+		5. Use clamp_val, GENMASK() and BIT() in spi clock setting.
+		6. Optimize clock and mode setting code.
+		7. Use readb_poll_timeout in loongson_spi_write_read_8bit.
+		8. Remove some useless dmesg print.
+		9. Use device_set_node replace of_node_get.
+		10. Use dev_err_probe in code.
+		11. Use devm_clk_get_optional replace devm_clk_get.
+		12. Remove SPI_NO_CS for drop 2k500 non common type spi.
+		13. Use pcim_enable_device() and pcim_iomap_regions() in spi pci
+		    driver.
+		14. Passing the remapped address in loongson_spi_init_master.
+		15. Remove the useless goto flag "err_out".
+		16. Use pci vendor id in pci_ids.h.
+		17. Use devm_platform_ioremap_resource in spi platform driver.
+		18. Remove the useless item in pci_device_id.
+		19. Remove the inned comma in of_device_id.
+		20. Add some headfile in spi_loongson.h.
+		21. Remove the useless extern for loongson_spi_init_master in
+		    spi_loongson.h.
+Change in v11:
+		1. Use spi_get_chipselect() to replace all spi->chip_select in
+		   spi driver
+Change in v12:
+		1. Reword the dt-bindings patch title.
+		2. Use a specific spi compatible in dt-bindings and spi driver.
+		3. Add Cc list for the reviewers of the previous version.
+		4. Add a static for rdiv[12] array in loongson_spi_set_clk.
+		5. Fixup the compile warning for spi HZ that reported by robot.
+		6. Use "#define LOONGSON_... BIT(0)" in readb_poll_timeout.
+		7. Add a error code return that when write spi failed.
+		8. Use spi_controller* instead of spi_master* in all cases.
+		9. Check for the error first which for clock gain.
+		10. Drop the ->remove() in spi pci driver.
+		11. Drop the comma for the terminator entry in pci_device_id.
+		12. Adjust the head file in spi driver.
+		13. Use forward declarations for device and spi_controller.
+Change in v13:
+		1. Reword the dt-bindings patch title.
+		2. Add the items for compatible with 2k500 in dts-bindings.
+		3. Add a bit changes in commit log.
+		4. Add a Reviewed-by for spi driver patch.
+		5. Rework the function loongson_spi_set_cs.
+		6. Use GENMASK() to replace some constant in function
+		   loongson_spi_set_clk.
+		7. Add or remove some blank lines.
+		8. Use LOONGSON_SPI_PARA_MEM_EN replace a constant in
+		   loongson_spi_prepare_message.
+		9. Use SPI_MODE_X_MASK to replace "SPI_CPOL | SPI_CPHA".
+		10. Use USEC_PER_MSEC to replace MSEC_PER_SEC.
 
-In most calling contexts, the variables  such as res->lockname.name and
-res->owner are accessed with holding the lock res->spinlock. Here is an
-example:
+Yinbo Zhu (2):
+  spi: dt-bindings: add loongson spi
+  spi: loongson: add bus driver for the loongson spi controller
 
-   lockres_seq_start() --> Line 539 in dlmdebug.c
-     spin_lock(&res->spinlock); --> Line 574 in dlmdebug.c (Lock 
-res->spinlock)
-     dump_lockres(res, ...); --> Line 575 in fs/ocfs2/dlm/dlmdebug.c
-       stringify_lockname(res->lockname.name, ...);  --> Line 493 in 
-dlmdebug.c (Access res->lockname.name)
-       scnprintf(..., res->owner, ...);  -->Line 498 in dlmdebug.c 
-(Access res->owner)
+ .../bindings/spi/loongson,ls2k-spi.yaml       |  46 +++
+ MAINTAINERS                                   |  10 +
+ drivers/spi/Kconfig                           |  26 ++
+ drivers/spi/Makefile                          |   3 +
+ drivers/spi/spi-loongson-core.c               | 279 ++++++++++++++++++
+ drivers/spi/spi-loongson-pci.c                |  55 ++++
+ drivers/spi/spi-loongson-plat.c               |  47 +++
+ drivers/spi/spi-loongson.h                    |  49 +++
+ 8 files changed, 515 insertions(+)
 
-However, in the following calling contexts:
+-- 
+2.20.1
 
-   dlm_deref_lockres_worker() --> Line 2439 in dlmmaster.c
-     dlm_drop_lockres_ref_done() --> Line 2459 in dlmmaster.c
-       lockname = res->lockname.name; --> Line 2416 in dlmmaster.c 
-(Access res->lockname.name)
-
-   dlm_get_lock_resource() --> Line 701 in dlmmaster.c
-     if (res->owner != dlm->node_num) --> Line 1023 in dlmmaster.c 
-(Access res->owner)
-
-The variables res->lockname.name and res->owner are accessed respectively
-without holding the lock res->spinlock, and thus data races can occur.
-
-I am not quite sure whether these possible data races are real and how 
-to fix
-them if they are real.
-
-Any feedback would be appreciated, thanks!
-
-Reported-by: BassCheck <bass@buaa.edu.cn>
-
-Best wishes,
-Tuo Li
