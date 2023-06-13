@@ -2,86 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBFEE72DF59
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 12:25:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F185672DFDD
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 12:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241852AbjFMKZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 06:25:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54114 "EHLO
+        id S241903AbjFMKl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 06:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242189AbjFMKZU (ORCPT
+        with ESMTP id S242029AbjFMKlV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 06:25:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2801984;
-        Tue, 13 Jun 2023 03:24:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17B1560CA5;
-        Tue, 13 Jun 2023 10:24:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31AB3C433D2;
-        Tue, 13 Jun 2023 10:24:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686651856;
-        bh=kmBMMIwD/yv1wQlDFbuD7w3rwb8n0X0M2t781svCHZw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eKJchQZffSxtukjB8t6lkEW9i+DIy54ptlyPirr2IakXGGwhXltdxh9eVr5UPHmV0
-         jHaxTOKMLsLffeh+r97kMT3MzZcfKX8dLjz+L2EYoZVOTKtvmz0gC5rWrUR9DkZGq0
-         GUUmGngWcdw7fLS2O9jGUJudTaL0p4hwuGtKHTuE=
-Date:   Tue, 13 Jun 2023 12:24:14 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Michal Sekletar <msekleta@redhat.com>
-Cc:     jirislaby@kernel.org, arozansk@redhat.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-Subject: Re: [PATCH v2 1/2] tty: tty_io: update timestamps on all device nodes
-Message-ID: <2023061359-document-armband-d67d@gregkh>
-References: <c91c458e-58d0-f13a-9adb-a48a19f82107@kernel.org>
- <20230608101616.44152-1-msekleta@redhat.com>
- <2023060816-quicken-around-d619@gregkh>
- <CALVzVJas7g8PrTavpQ01J4vpKtqNP7fYznMMXYEM4K5XbbXRhg@mail.gmail.com>
- <2023061325-alibi-grappling-c764@gregkh>
+        Tue, 13 Jun 2023 06:41:21 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E481734
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 03:41:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1686652874;
+  x=1718188874;
+  h=references:from:to:cc:subject:date:in-reply-to:
+   message-id:mime-version;
+  bh=asTNTnYftoZffO81bVBJAcD6pQPBR+6pQ0HzKkJz57k=;
+  b=Sq18T5z9Qrt89q/CHBCtLXbd58Hoj1dllBuVLdJjUXIEtgq0M9MIqXFC
+   ja6P2aihX6FTyIKST9e2GlJglsMCROR6RQDGOdP4Wj/kTLlJhqB5nqq3G
+   smKCbswF6imNqpA/kjRW+TT36PSYJVUy0KZE7ghXLIZeDNXGSSalisLgP
+   SZS6RN+CacmBlVzifHNPMWdp5VDUvzINCL+F3u3ItylGxsLVsN0tlXlSH
+   jT6AD6qqbYyAbSCI2rXDNjkErOIWj+cY9AOG1x6PSSPB4/Nwvhhnot8SY
+   REA4EUgvs4QiXo2J3NDx+K6y5ORK3SWFBQcxTWjPt20Evgsko8eR0AkeH
+   w==;
+References: <pndttvcu3ut.fsf@axis.com>
+ <443d4c43-080e-48b2-80ee-13e2df10c6eb@sirena.org.uk>
+User-agent: a.out
+From:   Waqar Hameed <waqar.hameed@axis.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@axis.com>
+Subject: Re: [PATCH] regmap: Add debugfs file for forcing field writes
+Date:   Tue, 13 Jun 2023 12:24:28 +0200
+In-Reply-To: <443d4c43-080e-48b2-80ee-13e2df10c6eb@sirena.org.uk>
+Message-ID: <pnd5y7rabll.fsf@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2023061325-alibi-grappling-c764@gregkh>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.0.5.60]
+X-ClientProxiedBy: se-mail02w.axis.com (10.20.40.8) To se-mail01w.axis.com
+ (10.20.40.7)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 12:23:41PM +0200, Greg KH wrote:
-> On Thu, Jun 08, 2023 at 07:52:54PM +0200, Michal Sekletar wrote:
-> > On Thu, Jun 8, 2023 at 1:51 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > 
-> > > So how are you protecting this from being an information leak like we
-> > > have had in the past where you could monitor how many characters were
-> > > being sent to the tty through a proc file?  Seems like now you can just
-> > > monitor any tty node in the system and get the same information, while
-> > > today you can only do it for the tty devices you have permissions for,
-> > > right?
-> > 
-> > Hi Greg,
-> > 
-> > I am not protecting against it in any way, but proposed changes are only
-> > about timestamp updates which still happen in at least 8 seconds intervals
-> > so exact timing of read/writes to tty can't be inferred. Frankly, I may
-> > have misunderstood something. It would be great if you could mention a bit
-> > more details about CVE you had in mind.
-> 
-> Ah, I missed that this is in 8 second increments, nevermind then!
-> 
+On Mon, Jun 12, 2023 at 16:00 +0100 Mark Brown <broonie@kernel.org> wrote:
 
-Note, I still can't take this series for the obvious reason in patch
-2/2.  Please fix.
+> If we're going to do something like this which could interfere with
+> driver operation then it should be guarded like the write support is so
+> that people using it have to modify the kernel to get the feature, or at
+> the very least taint the kernel.  This is less invasive but still might
+> cause issues if someone is relying on read/modify/write behaviour.
 
-thanks,
-
-greg k-h
+I understand your point. Should we introduce a new macro like
+`REGMAP_ALLOW_WRITE_DEBUGFS` (which requires direct code modification to
+enable it) to guard this or introduce a new kernel configuration?
