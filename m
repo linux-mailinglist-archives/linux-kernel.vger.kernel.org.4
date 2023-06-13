@@ -2,133 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84BD472EBA3
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:10:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FDC672EBA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:10:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240935AbjFMTKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 15:10:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53716 "EHLO
+        id S238845AbjFMTJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 15:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233134AbjFMTJz (ORCPT
+        with ESMTP id S229806AbjFMTJI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 15:09:55 -0400
-Received: from sender3-op-o19.zoho.com (sender3-op-o19.zoho.com [136.143.184.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831DD1BDB;
-        Tue, 13 Jun 2023 12:09:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1686683352; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=fczvPABsqPIZJ8HY09WErdfKxqbgdOof+2Opi0LZ9bhERQkbYlGvu+C0rWXf5iFcV2QDTQOAR71KBBzE5VjCfEOM6Rlc6P2grgG+pfHFYnuBMgZtBHbPFSTPE9HHdv1q3o6uojQb7Y2mzWc8dYCoNaEBiksAZlEjVEQhl/bKcs4=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1686683352; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=o2bkbcTw1AK1FNhICdg3zQep63Yz4043IOyF512q/uM=; 
-        b=HBaZYa41EeildaX69CSQ3HApYild2HHjFOggEDoA/+ckwHW0hmpDLGEOVkavIGifDAtyf9fPEjTnqVN29GBVat95V3peOwmow2CI2tYTRe2Du5C3fAFAW9CHOcthFV8etyNfh49AnrzolC3yCaGZj4kVFHvg/mM3pKJcxW62jrY=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1686683352;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:From:From:To:To:Cc:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=o2bkbcTw1AK1FNhICdg3zQep63Yz4043IOyF512q/uM=;
-        b=jLWAEz/uctSJKIZDQ7WGIg5SdHJgC6b1ztR55gcp6oReswlwQRnNIcadslA02rPY
-        /wtrPKktDhqwCAHCEppaVqfKJRsHIiWy2zMaCP5fWNbI6o22UE5WiwoUM3NcqpuAOVE
-        j+pP/G5nz6GEjinyhpQvPNf7nZPOtxzsdcSRqeQY=
-Received: from [192.168.1.248] (178-147-169-233.haap.dm.cosmote.net [178.147.169.233]) by mx.zohomail.com
-        with SMTPS id 168668335117378.79740996884823; Tue, 13 Jun 2023 12:09:11 -0700 (PDT)
-Message-ID: <1761c20e-5f94-cb21-6170-0c39520062d6@arinc9.com>
-Date:   Tue, 13 Jun 2023 22:09:02 +0300
+        Tue, 13 Jun 2023 15:09:08 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4580B19A5
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:09:06 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-514ab6cb529so13895246a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:09:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686683345; x=1689275345;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MKlCZA3/0PkDlUywQkb1PhLDuUB0+9ELHymR4eA15rU=;
+        b=lZ1wJxBDp4pcSXNcp8cWxLTeTK+HfrIKZf+m6Da9S4dJxZnFROIxyPWK29t5lg1uIz
+         f1vRtdGpZwRVf763rgTVMVwR52eCt803s6ILFw2sgIwPUWkL73MljIkpr4sheWylcuRy
+         IdJCUShTOt/IM3ybMAIoedKwvM1U2UAUzAByDo40cgdBapXMYB33FM8PLgrfRI7mCy3G
+         i1kcpoccvYIFngDig6XYaxjmxrD3eM2eiDq0BOxzXbr3Q7AGJ/44syvx/knQZz6NUWv5
+         Ru5Sc4OsHz5xRVMvUd9RxoIXp+VA99Mg8ZtC+zGhpZ10wgU6JWA4QDHTWWzWtgq2dNae
+         r2Dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686683345; x=1689275345;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MKlCZA3/0PkDlUywQkb1PhLDuUB0+9ELHymR4eA15rU=;
+        b=hDIE/7Xz30Tf20Y5gj3qmxSj1mAEkm3wO4Niu3y7hzXVOiqdD2r7cNWbD4SqR/i/qB
+         GGwbxFtsvJovOa2qKD6gH8xut4AxXdCSA+7PsI3PijByMqDBqc98Exh4fMI3rkz5D+V6
+         E037j7wwRMj+ay+3O/QOYM6sVXJUdGItis1ruDyIxrHWBnlAvXRPZVL0fV9Fnc5o81Yy
+         GEz3xh+0e4mKjLPZesLlq4/cn9QkL/fGeVDlU0MYBIJ2oSEaDsNFQKgeVDi8EoZOTyaT
+         53+E35n8SdrwLrPBThx5P0oqfI0E/h7yL/01w5lkHXGq5y3HXSwFR9CXQZTZmqjzILcW
+         dtZQ==
+X-Gm-Message-State: AC+VfDzyookQdele9BO3ljceoZexzYrqI5so/SjWInK9CujNLYgwJrBp
+        ltBenjzTVDuFanlrPha/guYzsg==
+X-Google-Smtp-Source: ACHHUZ4yc/iBIzssqHOIK2gvJxevALXcV3FSbVA9Not+FCwtqKOBEB2uVioxt8Oj1PA/XRY9ZE8rTg==
+X-Received: by 2002:a05:6402:2691:b0:514:9e81:6185 with SMTP id w17-20020a056402269100b005149e816185mr9449038edd.16.1686683344773;
+        Tue, 13 Jun 2023 12:09:04 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id j25-20020aa7c0d9000000b005148f0e8568sm6820301edp.39.2023.06.13.12.09.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 12:09:04 -0700 (PDT)
+Message-ID: <0600a505-d1bf-f4be-57ef-51d34c77501e@linaro.org>
+Date:   Tue, 13 Jun 2023 21:09:02 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH net v2 2/7] net: dsa: mt7530: fix trapping frames with
- multiple CPU ports on MT7530
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230611081547.26747-1-arinc.unal@arinc9.com>
- <20230611081547.26747-2-arinc.unal@arinc9.com>
- <20230613150815.67uoz3cvvwgmhdp2@skbuf>
- <a91e88a8-c528-0392-1237-fc8417931170@arinc9.com>
- <20230613171858.ybhtlwxqwp7gyrfs@skbuf>
- <20230613172402.grdpgago6in4jogq@skbuf>
- <ca78b2f9-bf98-af26-0267-60d2638f7f00@arinc9.com>
- <20230613173908.iuofbuvkanwyr7as@skbuf>
- <edcbe326-c456-06ef-373b-313e780209de@arinc9.com>
- <20230613111218.0e1b3e9f@kernel.org>
- <359d0825-e39a-8a12-ebbf-b8d7e941d1ef@arinc9.com>
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 3/8] dt-bindings: rtc: isl12022: add bindings for
+ battery alarm trip levels
 Content-Language: en-US
-In-Reply-To: <359d0825-e39a-8a12-ebbf-b8d7e941d1ef@arinc9.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
+ <20230613130011.305589-1-linux@rasmusvillemoes.dk>
+ <20230613130011.305589-4-linux@rasmusvillemoes.dk>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230613130011.305589-4-linux@rasmusvillemoes.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13.06.2023 22:03, Arınç ÜNAL wrote:
-> On 13.06.2023 21:12, Jakub Kicinski wrote:
->> On Tue, 13 Jun 2023 20:58:33 +0300 Arınç ÜNAL wrote:
->>>> Ok. I see Russell has commented on v4, though I don't see that he 
->>>> particularly
->>>> pointed out that this fixes a problem which isn't yet a problem. I 
->>>> got lost in
->>>> all the versions. v2 and v3 are out of my inbox now :)
->>>
->>> All good, I had to quickly roll v3 as v2 had wrong author information
->>> and I couldn't risk getting v2 applied.
->>
->> FWIW you can reply with pw-bot: changes-requested to your own patches
->> and the bot should discard them from patchwork.
->>
->> https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#updating-patch-status
->>
->> It's a new capability that nobody has used, yet, so YMMV :)
+On 13/06/2023 15:00, Rasmus Villemoes wrote:
+> The isl12022 has a built-in support for monitoring the voltage of the
+> backup battery, and setting bits in the status register when that
+> voltage drops below two predetermined levels (usually 85% and 75% of
+> the nominal voltage). However, since it can operate at wide range of
+> battery voltages (2.5V - 5.5V), one must configure those trip levels
+> according to which battery is used on a given board.
 > 
-> Interesting, I've got some questions regarding this.
+> Add bindings for defining these two trip levels. While the register
+> and bit names suggest that they should correspond to 85% and 75% of
+> the nominal battery voltage, the data sheet also says
 > 
->> For example to mark a series as Changes Requested one needs to send 
->> the following line anywhere in the email thread:
->>
->> pw-bot: changes-requested
+>   There are total of 7 levels that could be selected for the first
+>   alarm. Any of the of levels could be selected as the first alarm
+>   with no reference as to nominal Battery voltage level.
 > 
-> I suppose a reply to the cover letter or under the cover letter thread 
-> applies?
+> Hence this provides the hardware designer the ability to choose values
+> based on the discharge characteristics of the battery chosen for the
+> given product, rather than just having one battery-microvolt property
+> and having the driver choose levels close to 0.85/0.75 times that.
 > 
->> The use of the bot is restricted to authors of the patches (the From: 
->> header on patch submission and command must match!)
+> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> ---
+>  .../devicetree/bindings/rtc/intersil,isl12022.yaml | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
 > 
-> So, for example, if this patch series was new, Vladimir would reply to 
-> the patch they're the author of with 'pw-bot: changes-requested', and 
-> the patchworks would mark the whole patch series as changes requested?
+> diff --git a/Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml b/Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml
+> index 7c1e638d657a..d5d3a687a34d 100644
+> --- a/Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml
+> @@ -22,6 +22,18 @@ properties:
+>    interrupts:
+>      maxItems: 1
+>  
+> +  isil,trip-level85-microvolt:
 
-Also, replying with 'pw-bot: changes-requested' on an already accepted 
-patch series as the author won't change the state from accepted to 
-changes requested, correct?
+Why encoding level85 in the property name? Your commit msg (datasheet)
+suggests this is quite flexible, so why it cannot be just list of two
+trip levels - for first and second interrupt?
 
-Arınç
+> +    description: |
+
+Do not need '|' unless you need to preserve formatting.
+
+Best regards,
+Krzysztof
+
