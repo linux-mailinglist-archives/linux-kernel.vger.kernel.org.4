@@ -2,137 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 141F672E9C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB84272E9DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231544AbjFMR30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 13:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56024 "EHLO
+        id S235179AbjFMRaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 13:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbjFMR3X (ORCPT
+        with ESMTP id S240364AbjFMRaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 13:29:23 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C34173C;
-        Tue, 13 Jun 2023 10:28:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686677334; x=1718213334;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SlHj7S5jOOv05K4dEGQA+cB2WN4KQBOtvdjDfWv8PXg=;
-  b=Smfb44NorWLELeCCs+PbsDBnJtYiS4HZssecQw8CamAXLcBsJ6y9HNow
-   niBz/3dmTAgr4E08cbTZ+EvoWthc/EpNPGRUUtuI/Z6YHDycYoAieTrJM
-   Gi1b4ncZ0/IVYL6TUCxnOXtrGAZmg4H6BpwM5yUuiJzLKe5Lco4r2BxAz
-   yHL3AvWSTAaMMQYEr1Ef//BGCJQqA4dSBrhfICNpw2v6HXP8HyjZR/m5M
-   nOedioBMaUz8iXbmFCCVFye+x2HaQYFLbahIPr/hWLjWfk67YIMZjSnAF
-   SKP+9NdJkV8DzMHUbk8i/KxIzuCJRcZQ3uoL5MoFx9nmwpf3PT394sudJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="361774277"
-X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
-   d="scan'208";a="361774277"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 10:27:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="885923880"
-X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
-   d="scan'208";a="885923880"
-Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 13 Jun 2023 10:27:12 -0700
-Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q97nT-0001bK-2i;
-        Tue, 13 Jun 2023 17:27:11 +0000
-Date:   Wed, 14 Jun 2023 01:26:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lorenz Bauer <lmb@isovalent.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Ahern <dsahern@kernel.org>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Joe Stringer <joe@wand.net.nz>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        netdev@vger.kernel.org, Hemanth Malla <hemanthmalla@gmail.com>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Lorenz Bauer <lmb@isovalent.com>
-Subject: Re: [PATCH bpf-next v2 5/6] bpf, net: Support SO_REUSEPORT sockets
- with bpf_sk_assign
-Message-ID: <202306140012.hLncDFR5-lkp@intel.com>
-References: <20230613-so-reuseport-v2-5-b7c69a342613@isovalent.com>
+        Tue, 13 Jun 2023 13:30:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4701BDC
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 10:29:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1509463334
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 17:29:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 398A9C433D9;
+        Tue, 13 Jun 2023 17:29:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686677364;
+        bh=iUzj7k10YTg83S+wBJGVDKpPVzNghGpvuz+AjNuWW7Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hlfE+8v8EkiRGkP+igy4lwShxYw3Vp0o5/DRLgkuVIiZMRvAZuUfsqg2yY5hr5P25
+         j02w3EU/54Kv7ndjtLg8NTG+m1c/ZDQojifnhyZj1v2/r+MOeoHOBUqmBl43b7kOLF
+         QuajYiRpgF64HW48cVIgNGOFOc/fGH3ZFy0ZibXDscPKUkRxtEHnptPZgPTmwNAlR2
+         AS6C8pOItxNBf0G47WsO/8H27ill+Bge5YVi1qJu0avbrWuZSu5tUk9qqEzAhe58/D
+         eCyXzhmZdTslsl8jxiTZ5IOgAiBI0fhMOotVDeG+S1Zlpz00fhDpFupsNWVI5NEG4m
+         F2xWrotYhMSyA==
+Date:   Tue, 13 Jun 2023 18:29:19 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: hda: Use maple tree register cache
+Message-ID: <34b7d114-af69-459e-8a22-2a93a1e43e94@sirena.org.uk>
+References: <20230609-alsa-hda-maple-v1-1-a2b725c8b8f5@kernel.org>
+ <87v8fua1qm.wl-tiwai@suse.de>
+ <877cs7g6f1.wl-tiwai@suse.de>
+ <e48bbd3b-544d-43d5-82a1-8fbbcb8cd1a4@sirena.org.uk>
+ <87v8frcueb.wl-tiwai@suse.de>
+ <60f70667-16b0-4071-aa0f-a83e43bbf2a0@sirena.org.uk>
+ <87a5x3cp9r.wl-tiwai@suse.de>
+ <18bcfcba-a6ce-4595-bd2b-4d4ba761fd58@sirena.org.uk>
+ <874jnbcmy6.wl-tiwai@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="U5ZQrDXad9z9/cVp"
 Content-Disposition: inline
-In-Reply-To: <20230613-so-reuseport-v2-5-b7c69a342613@isovalent.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <874jnbcmy6.wl-tiwai@suse.de>
+X-Cookie: Not a flying toy.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lorenz,
 
-kernel test robot noticed the following build errors:
+--U5ZQrDXad9z9/cVp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-[auto build test ERROR on 25085b4e9251c77758964a8e8651338972353642]
+On Tue, Jun 13, 2023 at 07:05:21PM +0200, Takashi Iwai wrote:
+> Mark Brown wrote:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lorenz-Bauer/net-export-inet_lookup_reuseport-and-inet6_lookup_reuseport/20230613-181619
-base:   25085b4e9251c77758964a8e8651338972353642
-patch link:    https://lore.kernel.org/r/20230613-so-reuseport-v2-5-b7c69a342613%40isovalent.com
-patch subject: [PATCH bpf-next v2 5/6] bpf, net: Support SO_REUSEPORT sockets with bpf_sk_assign
-config: arm-randconfig-r016-20230612 (https://download.01.org/0day-ci/archive/20230614/202306140012.hLncDFR5-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        git checkout 25085b4e9251c77758964a8e8651338972353642
-        b4 shazam https://lore.kernel.org/r/20230613-so-reuseport-v2-5-b7c69a342613@isovalent.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+> > > Oh, I'm afraid that we're seeing different things.  The code there is
+> > > rather to *set* some initial value for each amp register (but only
+> > > once), and it's not about optimization for writing a same value
+> > > again.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306140012.hLncDFR5-lkp@intel.com/
+> > > That is, the function helps to set an initial (mute) value on each amp
+> > > when the driver parses the topology and finds an amp.  But if the
+> > > driver already has parsed this amp beforehand by other paths, it skips
+> > > the initialization, as the other path may have already unmuted the
+> > > amp.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+> > So it is possible that we might set two distinct values during setup
+> > then and we're doing this intentionally?  It's not obvious that this
+> > might happen.  A comment wouldn't hurt, and a big part of this is
+> > confusing is that in the non-regmap case all we're doing is suppressing
+> > duplicate writes, in that path it's just checking for changes in the
+> > register value.
 
-WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp1 (section: .init.text)
-WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp4 (section: .init.text)
-WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp7 (section: .init.text)
-WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp10 (section: .init.text)
-WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp13 (section: .init.text)
-WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp16 (section: .init.text)
-WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp19 (section: .init.text)
-WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp22 (section: .init.text)
-WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp25 (section: .init.text)
-WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp28 (section: .init.text)
-WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp31 (section: .init.text)
-WARNING: modpost: lib/test_user_copy.o: section mismatch in reference: (unknown) (section: .text.fixup) -> .Ltmp34 (section: .init.text)
->> ERROR: modpost: "inet_ehashfn" [net/dccp/dccp_ipv4.ko] undefined!
+> > None of this is what the non-regmap path does, it just suppresses noop
+> > writes to the hardware.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> Actually, many of HD-audio codec driver code heavily relies on the
+> regmap, more or less mandatory.  The snd_hda_codec_amp_init() is one
+> of such.  You may write a codec driver without the regmap, but some
+> helpers won't work as expected.
+
+Sounds like it might be so thinly used it's becoming mandatory to have a
+regmap in order to avoid gotchas like there might be with things getting
+muted?
+
+--U5ZQrDXad9z9/cVp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSIp28ACgkQJNaLcl1U
+h9D6iAf/YuE/ekMh7Ju3OxD7fiNwknQJlxztDugOKoOOz6W1IKuXHZQ6VmfOKEvv
+QY/hF7MXheC9rR3Ao2lkidhuDGxEBGWw8jizSEjg9OdMI3ciXJiRtH80XVVDnbGr
+r1TPDuleLgg8GcmVPoJfmZlOqdAuHxKxFXXIwaInYqWiaegh1k+4NG+R9AdqvjtD
+QE8LWM3ybcftlP8KN00cjVhE5JznwCeNmNkljRta+eU4BaV1NxhnbnH+Tox0Amss
+jPEmR5iimfW5AyagShLSzvEYxEnFVcxZxTz+s9d9T8z10CbuhOKsXAiz0WGQpAc+
+w6gga3FMjiQWOoiJN9r8laLc8yusjA==
+=1mK9
+-----END PGP SIGNATURE-----
+
+--U5ZQrDXad9z9/cVp--
