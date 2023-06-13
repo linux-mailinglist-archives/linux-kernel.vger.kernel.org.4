@@ -2,75 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E81572DFDA
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 12:40:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 064E872DFE3
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 12:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241894AbjFMKkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 06:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37148 "EHLO
+        id S241950AbjFMKlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 06:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241868AbjFMKkb (ORCPT
+        with ESMTP id S241954AbjFMKlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 06:40:31 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70ED910F2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 03:40:22 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f6283d0d84so6522051e87.1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 03:40:22 -0700 (PDT)
+        Tue, 13 Jun 2023 06:41:44 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849F8129
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 03:41:42 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-b9a6eec8611so9263196276.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 03:41:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686652820; x=1689244820;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RdczPZ7i6NweZc4Vs1GEhNBw4P6SDuu4rOPlRce3Cp8=;
-        b=AUbPJ07Z1odDHtCnZ823RkphdvcZ3F/p41LyifJZBZRycWLx87uEthbAheLUd9d4fw
-         QvGkzgij5648YDEodj6ptRqC3+VUPZMSTPRxfifNBvFk5k/G8mO9kSrJUgsPUDjdDQf2
-         kTU3N5IYasoX9y19jal1hK3/EAY3Gdp4ouqToLfnrCAWts9kY7jbGAedRlMQMqFpKqCy
-         eb1lJENWNoO1+j3VwToC/V/8Akbn4QHdPdYSHoF7cFV/ajJMbhAiqrkPreFsPsLO2TV4
-         MDumvPKSRlKZUoPI2Otf7G3PXB8R+eOO8N757C70cMrALim/UT87sS73D5gj3sewQNnL
-         sDyg==
+        d=linaro.org; s=google; t=1686652901; x=1689244901;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qo000+tMfEFV9hbsc5XmyKHzqMjtEWqkHh6QiK4Kq7s=;
+        b=qMUmc60ww/4ajFHunUj0BtpTP4X/HfcNS3MKa4p2WgG2GkirJ5wh6AVhkXSgMZN22z
+         Tg+cUHVX38Krjy9r4TeuuGEiMhAQMFwvuEb/rFTmPb5YkHJksF1qkUfriT0Dobk/idEl
+         wc2TkevY8VmKoolqfq0bQMGg2nt2igg2mPb6rQQ2S6A8w6ZIVK400+ylusIvzoqeyOMN
+         2zdFbL1mSc5HYsluM4+o0IqHq6GyJY1FB/FJ9BAttq+pxouPyZ0r1cq06YOMXYbaUzW2
+         eCV3XdPDUpjnhod6HsdQssXqwRPe7SAXr8liMzszzJJIuk0pB7NRiOUZWv1Wqeyg6SL+
+         7sEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686652820; x=1689244820;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RdczPZ7i6NweZc4Vs1GEhNBw4P6SDuu4rOPlRce3Cp8=;
-        b=C4I61MiS0eAbu8uJNE6MG+oyMyl4Pozd48kVYeuitWv/t8OAL3RP72oVYm2WrbMrKH
-         bU3wBOkUN+7mKyPtYXxFZAfllX6A37y+1C3hrEMa76eSp25YuPIwf6ystNr9bJ28XgUu
-         yh4/kzxAtjDndPavT5UyZSsf0RWi95HzRMmI8TAhYwG7exCux4mwDwzeFaQMI6KvFOyi
-         XS3L2kj75b7ZJv7EPJRjj4T9nl0TRAi3f1HTSfffDXUI/KM6l5jwSh5UR/zsxyC9kLke
-         nnI313OL3OQWILmnlSdu/2TV8rKAbWuUWorqutMQXOFGivunr9cZFR3rS4nhcJOchpfc
-         R5/w==
-X-Gm-Message-State: AC+VfDzmhAM58bj2oULzreNulLzGqt8pR5IJ13laafQP6OPgsCBL+Daj
-        TTQCNwEbGdUQKNujRGRPicVvQg==
-X-Google-Smtp-Source: ACHHUZ4WVznCWcsmGLMHRuA7VS6Lfj4mur40fa3EhFHuVyQQIFEL0bzMUHobk+R5es5R/aHSdgmKUw==
-X-Received: by 2002:a19:6402:0:b0:4f6:2cd8:5ff4 with SMTP id y2-20020a196402000000b004f62cd85ff4mr5562119lfb.2.1686652820609;
-        Tue, 13 Jun 2023 03:40:20 -0700 (PDT)
-Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
-        by smtp.gmail.com with ESMTPSA id m7-20020a056000008700b0030fa166d8a1sm12458137wrx.34.2023.06.13.03.40.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 03:40:20 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 11:40:18 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     daniel@ffwll.ch, javierm@redhat.com, sam@ravnborg.org,
-        deller@gmx.de, geert+renesas@glider.be, lee@kernel.org,
-        jingoohan1@gmail.com, dan.carpenter@linaro.org,
-        michael.j.ruhl@intel.com, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-sh@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Subject: Re: [PATCH v2 06/38] backlight/lv5207lp: Rename struct
- lv5207lp_platform_data.fbdev to 'dev'
-Message-ID: <20230613104018.GF169438@aspen.lan>
-References: <20230612141352.29939-1-tzimmermann@suse.de>
- <20230612141352.29939-7-tzimmermann@suse.de>
+        d=1e100.net; s=20221208; t=1686652901; x=1689244901;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qo000+tMfEFV9hbsc5XmyKHzqMjtEWqkHh6QiK4Kq7s=;
+        b=gHDx5SrwGF2yNvxFBvMP/n25msQbLxc2zbzPoWRId5/THqQTj+5FIGNsgedOjf4MRa
+         mDOFZEzTc1gzx7y7z7HZGoLRpmDT3uSA7RJxeWg7sSm9F/Hhr+2HPZuNoTkRljClkIve
+         SK2mx5nEa09ZGeekrIp2IjQucYoyK/rvdVE++bi89F+DWgIk0A4RZzQLNpyTKhbfM9Op
+         xmzC8RR9h86jBWkO+yrauSIiwasbEQ+UvPtXP51PG1rxisuB4WLJwxbOiXNtyUkLytHB
+         O7NQXXua0V3ysr800M8APAruh1INFhcqy1P+DFIsClvHM5PC95OKk6NOspSn4Vv3c2W6
+         wLEw==
+X-Gm-Message-State: AC+VfDw1cXaZFm9EVBs/dLnVGIQEu6xYtEBfZ+zPwhPCT15hWtCHa+8j
+        Vrcvv1eahU+4I5+Viw4rEOx1qfttxvBqBgoMH7tQ4A==
+X-Google-Smtp-Source: ACHHUZ7wXx9rL56M5TKSV8kIC35q0vxCnpiKFzxTQQHuOUbix+dPl8Nt63ZFe8Rva1rLJeB/BK0wLo7CntP9BKwy9aY=
+X-Received: by 2002:a25:8d85:0:b0:bac:ada7:140e with SMTP id
+ o5-20020a258d85000000b00bacada7140emr1130861ybl.9.1686652901179; Tue, 13 Jun
+ 2023 03:41:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612141352.29939-7-tzimmermann@suse.de>
+References: <20230613095624.78789-1-frank.li@vivo.com> <20230613095624.78789-9-frank.li@vivo.com>
+In-Reply-To: <20230613095624.78789-9-frank.li@vivo.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 13 Jun 2023 13:41:29 +0300
+Message-ID: <CAA8EJppgSg8TJOABkrNzBRYnyu33XuJF4DYmp2d++Pifx0Hpqw@mail.gmail.com>
+Subject: Re: [RESEND 9/9] thermal/drivers/qcom: remove redundant msg
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     glaroque@baylibre.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, thara.gopinath@gmail.com,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        anarsoul@gmail.com, tiny.windzz@gmail.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        edubezval@gmail.com, j-keerthy@ti.com, f.fainelli@gmail.com,
+        linux-pm@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        linux-tegra@vger.kernel.org, linux-omap@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -81,22 +78,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 04:07:44PM +0200, Thomas Zimmermann wrote:
-> Rename struct lv5207lp_platform_data.fbdev to 'dev', as it stores a
-> pointer to the Linux platform device; not the fbdev device. Makes
-> the code easier to understand.
+On Tue, 13 Jun 2023 at 12:59, Yangtao Li <frank.li@vivo.com> wrote:
 >
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> Cc: Lee Jones <lee@kernel.org>
-> Cc: Daniel Thompson <daniel.thompson@linaro.org>
-> Cc: Jingoo Han <jingoohan1@gmail.com>
-> Cc: linux-sh@vger.kernel.org
-> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+> The upper-layer devm_thermal_add_hwmon_sysfs() function can directly
+> print error information.
+>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+>  drivers/thermal/qcom/qcom-spmi-adc-tm5.c    | 4 +---
+>  drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 4 +---
+>  drivers/thermal/qcom/tsens.c                | 4 +---
+>  3 files changed, 3 insertions(+), 9 deletions(-)
 
-Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-
-Daniel.
+-- 
+With best wishes
+Dmitry
