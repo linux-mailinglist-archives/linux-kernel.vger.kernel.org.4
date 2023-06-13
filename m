@@ -2,156 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A4472EC1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:42:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 188C872EC28
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:44:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbjFMTmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 15:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41350 "EHLO
+        id S231529AbjFMTnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 15:43:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231529AbjFMTmV (ORCPT
+        with ESMTP id S239430AbjFMTmz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 15:42:21 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 536581720
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:42:15 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1b3c4c1fbd7so18659555ad.2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:42:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686685335; x=1689277335;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZxEcj49+vGwYkRgl1icr+yGC9c7gL0eXEsyVyEAa72I=;
-        b=QDF6XybuuSbESC6lsMPSOgkZPqsKAZRVX6eAzuQeJFFgsCxewr0dbZQsAQcrNv/Jt/
-         cUwNgWA3FaBmym/Q0URJfdCq/RYEH3el9I+AIsJg4wNI/j3dqAL883+nv6ycCEqwu8Is
-         szTUB9KYgk+4+OrfO9cFjQmr2dHKH1dCCXOEo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686685335; x=1689277335;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZxEcj49+vGwYkRgl1icr+yGC9c7gL0eXEsyVyEAa72I=;
-        b=QW5shh3YGp0s5D+Ri8eOxd4wVuMK2gv09xQkhX6iL8Z1XfUZZtudRii/EZlKaI61Fv
-         BJgEjgvgUgajAFqp0mKSd8NRCBcEUTRTMhuBugL24z4xJk7WLG/DI3Am9zZtIHCoBvqr
-         3SkW4/3jftqai03eBHqHM/57e7ffy/D9RlCoL+1dMyiBs44RlQ/MXwSue2UgoOz/pA39
-         R8VD/bxFTtTC3DwwC74m4T6Dqb4g7BtTv08fHkPIIryy2VrgR9xe69B5Vmbb7eAUd/qm
-         FV0GoXahQXhHl1QDfU/+fLTBeChpDRVt50qdX0cRuVBRHLBvqhVTbmP1qQg0M0e8OyOZ
-         If6w==
-X-Gm-Message-State: AC+VfDwk090+wmu8lChv9E4Slpj+JuNG1reFErL1eYmrgkkKr5Sak9bb
-        AgWHDu6+WkTnFJnx9C8D6p0g7A==
-X-Google-Smtp-Source: ACHHUZ4ASqDKrvZKerhnxXxdgCYThmTm+1P/kHDzqnN8JNmhcPCltk7Mdv4E+dofJzdv0DLD1v2ZjQ==
-X-Received: by 2002:a17:902:e88f:b0:1b3:ebda:6563 with SMTP id w15-20020a170902e88f00b001b3ebda6563mr2783752plg.53.1686685334830;
-        Tue, 13 Jun 2023 12:42:14 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id t10-20020a170902bc4a00b001b3c48d01d0sm3902plz.65.2023.06.13.12.42.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 12:42:14 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 12:42:13 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Chuck Lever III <chuck.lever@oracle.com>
-Cc:     Azeem Shaikh <azeemshaikh38@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        Neil Brown <neilb@suse.de>,
-        Olga Kornievskaia <kolga@netapp.com>,
-        Dai Ngo <dai.ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [PATCH] SUNRPC: Replace strlcpy with strscpy
-Message-ID: <202306131238.92CBED5@keescook>
-References: <20230613004054.3539554-1-azeemshaikh38@gmail.com>
- <01E2FCED-7EB6-4D06-8BB0-FB0D141B546E@oracle.com>
+        Tue, 13 Jun 2023 15:42:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C8F1BC3;
+        Tue, 13 Jun 2023 12:42:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 568C9635DC;
+        Tue, 13 Jun 2023 19:42:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85A7AC433F0;
+        Tue, 13 Jun 2023 19:42:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686685372;
+        bh=c6ZzikBxtlmLZ/0hwSSKRejwnFaHjBC1cBfQC+bGTAo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UdWdIZQ4bJ4A2YGAFBv2Wd3RGgeQhYPOV2r7AIRCo0aCH8aSM8A7J/5ojsBB6PzNn
+         2mwAI5UT38Aq/Mn4Tym0NzSOxetG19LbSHH/Z4HK1Irn+XvDJL3u4oeEMmeWn7lD45
+         ahCsLFdzuHoZ3/AeYGyPowkMyNPfBj6x8H3lQjyxd/KkHDAzEJYYzNJkXOLEHvtTlG
+         Xc17OFDbaM3ncJp5iXtdhUyduzrT09oyctZ3wX9NEIicN9mwxucNzw0qSi2FhnqD7Y
+         2C/IRt99JQh9xCzpeB58V6Qa9PYBwtxAcx+qVWvzRkgUILbEMy4eZCGeZw/U0N2e3d
+         TWWu7+WB0SGXw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id EBCE140692; Tue, 13 Jun 2023 16:42:49 -0300 (-03)
+Date:   Tue, 13 Jun 2023 16:42:49 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     coresight@lists.linaro.org,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/5] perf cs-etm: Track exception level
+Message-ID: <ZIjGubrXqQ8IIqDm@kernel.org>
+References: <20230612111403.100613-1-james.clark@arm.com>
+ <ZIdk1ArKuXLpKZT7@kernel.org>
+ <94e91db2-182e-836f-2edc-f804c4bb7290@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <01E2FCED-7EB6-4D06-8BB0-FB0D141B546E@oracle.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <94e91db2-182e-836f-2edc-f804c4bb7290@arm.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 02:18:06PM +0000, Chuck Lever III wrote:
+Em Tue, Jun 13, 2023 at 09:56:29AM +0100, James Clark escreveu:
 > 
 > 
-> > On Jun 12, 2023, at 8:40 PM, Azeem Shaikh <azeemshaikh38@gmail.com> wrote:
+> On 12/06/2023 19:32, Arnaldo Carvalho de Melo wrote:
+> > Em Mon, Jun 12, 2023 at 12:13:57PM +0100, James Clark escreveu:
+> >> Changes since v2:
+> >>
+> >>   * Rename prev_thread -> prev_packet_thread and prev_el ->
+> >>     prev_packet_el
+> >>   * Add a comment about tracking the previous packet's thread
+> >>
+> >> Changes since v1:
+> >>
+> >>   * Always assume host kernel when the trace was captured at EL1 (nVHE)
+> >>   * Fix EL validation to work with ETMv3
+> >>   * Add a commit to make PID format accessible from struct
+> >>     cs_etm_auxtrace
 > > 
-> > strlcpy() reads the entire source buffer first.
-> > This read may exceed the destination size limit.
-> > This is both inefficient and can lead to linear read
-> > overflows if a source string is not NUL-terminated [1].
-> > In an effort to remove strlcpy() completely [2], replace
-> > strlcpy() here with strscpy().
-> 
-> Using sprintf() seems cleaner to me: it would get rid of
-> the undocumented naked integer. Would that work for you?
-
-This is changing the "get" routine for reporting module parameters out
-of /sys. I think the right choice here is sysfs_emit(), as it performs
-the size tracking correctly. (Even the "default" sprintf() call should
-be replaced too, IMO.)
-
-> 
-> 
-> > Direct replacement is safe here since the getter in kernel_params_ops
-> > handles -errorno return [3].
-> 
-> s/errorno/errno/
-> 
-> 
-> > [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-> > [2] https://github.com/KSPP/linux/issues/89
-> > [3] https://elixir.bootlin.com/linux/v6.4-rc6/source/include/linux/moduleparam.h#L52
+> > Please take a look in my tmp.perf-tools-next branch, there were some
+> > conflicts I had to fix as those files were touched by refactorings for
+> > addr_location and thread reference counting.
 > > 
-> > Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
-> > ---
-> > net/sunrpc/svc.c |    8 ++++----
-> > 1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> Yeah I got the same result and the tests are still passing. Thanks for
+> fixing those.
+
+Thanks for double checking that!
+
+- Arnaldo
+ 
+> > ⬢[acme@toolbox perf-tools-next]$ git log --oneline -10
+> > aa53fb2c482e70c2 (HEAD -> perf-tools-next) perf cs-etm: Add exception level consistency check
+> > 2918e9895224541f perf cs-etm: Track exception level
+> > f492a33909829a75 perf cs-etm: Make PID format accessible from struct cs_etm_auxtrace
+> > e29ec19b0751c6b2 perf cs-etm: Use previous thread for branch sample source IP
+> > e9e03e9c3ca7088c perf cs-etm: Only track threads instead of PID and TIDs
+> > 6fd34445b8c94aa7 perf map: Fix double 'struct map' reference free found with -DREFCNT_CHECKING=1
+> > e9c0a7f63e45e76f perf srcline: Optimize comparision against SRCLINE_UNKNOWN
+> > fd87a79c7ed62804 perf hist: Fix srcline memory leak
+> > 933f9651d47cdda2 perf srcline: Change free_srcline to zfree_srcline
+> > d22cfb063bcc674e perf callchain: Use pthread keys for tls callchain_cursor
+> > ⬢[acme@toolbox perf-tools-next]$
 > > 
-> > diff --git a/net/sunrpc/svc.c b/net/sunrpc/svc.c
-> > index e6d4cec61e47..e5f379c4fdb3 100644
-> > --- a/net/sunrpc/svc.c
-> > +++ b/net/sunrpc/svc.c
-> > @@ -109,13 +109,13 @@ param_get_pool_mode(char *buf, const struct kernel_param *kp)
-> > switch (*ip)
-> > {
-> > case SVC_POOL_AUTO:
-> > - return strlcpy(buf, "auto\n", 20);
-> > + return strscpy(buf, "auto\n", 20);
-
-e.g.
-	return sysfs_emit(buf, "auto\n");
-...
-
-> > case SVC_POOL_GLOBAL:
-> > - return strlcpy(buf, "global\n", 20);
-> > + return strscpy(buf, "global\n", 20);
-> > case SVC_POOL_PERCPU:
-> > - return strlcpy(buf, "percpu\n", 20);
-> > + return strscpy(buf, "percpu\n", 20);
-> > case SVC_POOL_PERNODE:
-> > - return strlcpy(buf, "pernode\n", 20);
-> > + return strscpy(buf, "pernode\n", 20);
-> > default:
-> > return sprintf(buf, "%d\n", *ip);
-
-and:
-
-	return sysfs_emit(buf, "%d\n", *ip);
-
-
--Kees
+> > 
+> > - Arnaldo
+> >  
+> >> ======
+> >>
+> >> Some fixes to support an issue reported by Denis Nikitin where decoding
+> >> trace that contains different EL1 and EL2 kernels can crash or go into
+> >> an infinite loop because the wrong kernel maps are used for the decode.
+> >>
+> >> This still doesn't support distinguishing guest and host userspace,
+> >> we'd still have to fix the timestamps and do a bit more work to
+> >> correlate that. And I've removed PERF_RECORD_MISC_HYPERVISOR as a
+> >> possible outcome of cs_etm__cpu_mode(). As far as I know this could
+> >> never have been returned anyway because machine__is_host(machine) was
+> >> always true due to session.machines.host being hard coded. And I'm not
+> >> sure of the relevance of the difference between PERF_RECORD_MISC_KERNEL
+> >> and PERF_RECORD_MISC_HYPERVISOR in this scenario.
+> >>
+> >> The first commit is a tidy up, second fixes a bug that I found when
+> >> comparing the exception level and thread of branch records, the third
+> >> is the main fix, and the last commit is some extra error checking. 
+> >>
+> >> Applies to acme/perf-tools-next (42713dafc)
+> >>
+> >> James Clark (5):
+> >>   perf cs-etm: Only track threads instead of PID and TIDs
+> >>   perf cs-etm: Use previous thread for branch sample source IP
+> >>   perf cs-etm: Make PID format accessible from struct cs_etm_auxtrace
+> >>   perf cs-etm: Track exception level
+> >>   perf cs-etm: Add exception level consistency check
+> >>
+> >>  .../perf/util/cs-etm-decoder/cs-etm-decoder.c |  33 +-
+> >>  .../perf/util/cs-etm-decoder/cs-etm-decoder.h |   4 +-
+> >>  tools/perf/util/cs-etm.c                      | 282 ++++++++++--------
+> >>  tools/perf/util/cs-etm.h                      |  13 +-
+> >>  4 files changed, 184 insertions(+), 148 deletions(-)
+> >>
+> >> -- 
+> >> 2.34.1
+> >>
+> > 
 
 -- 
-Kees Cook
+
+- Arnaldo
