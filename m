@@ -2,182 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA22072F0BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 01:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C946872F0C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 02:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233355AbjFMX6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 19:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46638 "EHLO
+        id S235428AbjFNAAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 20:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232582AbjFMX6D (ORCPT
+        with ESMTP id S231799AbjFNAAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 19:58:03 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BFCC12E;
-        Tue, 13 Jun 2023 16:58:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686700682; x=1718236682;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=h+6OfsSluCawClvrO2Il9k8paXcrOgv8viJ3PyYy2tg=;
-  b=COmtgGaSqL4UDH3mYN889Ol1D43AZnNxKxk9jcmRX0cMlmMIhJxIULVR
-   3lwAZMsjZHAJcjgM2LMoP6QMDUBbF/E8x/yVDMkh2Rbay1IYEcvakTxfa
-   0jcVaV6NuPfdBNUq570ATfvfrpAaqxppQahg/d0RXGjINjo3sHYQ2pxZZ
-   /w8R0NECvzXSEto8G6v4YBYRMID7JH8yFW74zuCFbgLlXeNstDEjLaHbe
-   q6GbaBsOKmTGP47fQkotozU5mpPXCFQJ9PpgSGUmGzs383GpzCu06stjR
-   cfZp/iagC0QdszjsJchPlolSmfNT/WQr2Qn7HuzitxNX4fHERwVUisul2
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="343171431"
-X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
-   d="scan'208";a="343171431"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 16:58:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="958597777"
-X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
-   d="scan'208";a="958597777"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga006.fm.intel.com with ESMTP; 13 Jun 2023 16:58:01 -0700
-Received: from [10.251.24.95] (kliang2-mobl1.ccr.corp.intel.com [10.251.24.95])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Tue, 13 Jun 2023 20:00:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DA5E5
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 16:59:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686700796;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Gn8GRtspoLrOWgDx0Lu+JWveuP9Whv2Jn+BImtNwvwA=;
+        b=baFayY/9d4HFjv7XU6WKOnHqWqumkeSkzG29h7k8HrzJ/iKMnFD5w0qAeDmqbf0B6dhtQX
+        KqT9uQewoBYQkIdJjA3X0A3pokXJJdmz98MU1PlwzCZHiboZLgCpA8/ebh1ZpjGbp0zHEL
+        IYUTTaOCWcj8/EK7kMRnEgvF66AcQ+A=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-90-bjQJCsS8Pl6JbBA_CUV8tQ-1; Tue, 13 Jun 2023 19:59:51 -0400
+X-MC-Unique: bjQJCsS8Pl6JbBA_CUV8tQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 92FA8580BEE;
-        Tue, 13 Jun 2023 16:57:59 -0700 (PDT)
-Message-ID: <1d5f51e0-d187-14af-a349-437407404e5f@linux.intel.com>
-Date:   Tue, 13 Jun 2023 19:57:58 -0400
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C471F80231B;
+        Tue, 13 Jun 2023 23:59:50 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6A6B510BDF;
+        Tue, 13 Jun 2023 23:59:49 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <000000000000ae4cbf05fdeb8349@google.com>
+References: <000000000000ae4cbf05fdeb8349@google.com>
+To:     syzbot <syzbot+d8486855ef44506fd675@syzkaller.appspotmail.com>
+Cc:     dhowells@redhat.com, bpf@vger.kernel.org, davem@davemloft.net,
+        dsahern@kernel.org, edumazet@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [net?] KASAN: stack-out-of-bounds Read in skb_splice_from_iter
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 2/8] perf evsel: Fix the annotation for hardware events on
- hybrid
-Content-Language: en-US
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>, mingo@redhat.com,
-        peterz@infradead.org, namhyung@kernel.org, jolsa@kernel.org,
-        adrian.hunter@intel.com, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ak@linux.intel.com,
-        eranian@google.com, ahmad.yasin@intel.com
-References: <20230607162700.3234712-1-kan.liang@linux.intel.com>
- <20230607162700.3234712-3-kan.liang@linux.intel.com>
- <CAP-5=fVz1zgwdJVs1V7putUdp9wf-QKWH1Ky-heLoHWgnJu6dg@mail.gmail.com>
- <7487eff9-5769-1701-ea1b-45dd5ab67c85@linux.intel.com>
- <ZIjdDFJHYuK7rdmD@kernel.org>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <ZIjdDFJHYuK7rdmD@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1394610.1686700788.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 14 Jun 2023 00:59:48 +0100
+Message-ID: <1394611.1686700788@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.g=
+it main
 
+commit b49195695a78f1fb56ecbfd3c3fd14dbe6844088
+Author: David Howells <dhowells@redhat.com>
+Date:   Wed Jun 14 00:14:32 2023 +0100
 
-On 2023-06-13 5:18 p.m., Arnaldo Carvalho de Melo wrote:
-> Em Tue, Jun 13, 2023 at 04:06:59PM -0400, Liang, Kan escreveu:
->>
->>
->> On 2023-06-13 3:35 p.m., Ian Rogers wrote:
->>> On Wed, Jun 7, 2023 at 9:27 AM <kan.liang@linux.intel.com> wrote:
->>>>
->>>> From: Kan Liang <kan.liang@linux.intel.com>
->>>>
->>>> The annotation for hardware events is wrong on hybrid. For example,
->>>>
->>>>  # ./perf stat -a sleep 1
->>>>
->>>>  Performance counter stats for 'system wide':
->>>>
->>>>          32,148.85 msec cpu-clock                        #   32.000 CPUs utilized
->>>>                374      context-switches                 #   11.633 /sec
->>>>                 33      cpu-migrations                   #    1.026 /sec
->>>>                295      page-faults                      #    9.176 /sec
->>>>         18,979,960      cpu_core/cycles/                 #  590.378 K/sec
->>>>        261,230,783      cpu_atom/cycles/                 #    8.126 M/sec                       (54.21%)
->>>>         17,019,732      cpu_core/instructions/           #  529.404 K/sec
->>>>         38,020,470      cpu_atom/instructions/           #    1.183 M/sec                       (63.36%)
->>>>          3,296,743      cpu_core/branches/               #  102.546 K/sec
->>>>          6,692,338      cpu_atom/branches/               #  208.167 K/sec                       (63.40%)
->>>>             96,421      cpu_core/branch-misses/          #    2.999 K/sec
->>>>          1,016,336      cpu_atom/branch-misses/          #   31.613 K/sec                       (63.38%)
->>>>
->>>> The hardware events have extended type on hybrid, but the evsel__match()
->>>> doesn't take it into account.
->>>>
->>>> Add a mask to filter the extended type on hybrid when checking the config.
->>>>
->>>> With the patch,
->>>>
->>>>  # ./perf stat -a sleep 1
->>>>
->>>>  Performance counter stats for 'system wide':
->>>>
->>>>          32,139.90 msec cpu-clock                        #   32.003 CPUs utilized
->>>>                343      context-switches                 #   10.672 /sec
->>>>                 32      cpu-migrations                   #    0.996 /sec
->>>>                 73      page-faults                      #    2.271 /sec
->>>>         13,712,841      cpu_core/cycles/                 #    0.000 GHz
->>>>        258,301,691      cpu_atom/cycles/                 #    0.008 GHz                         (54.20%)
->>>>         12,428,163      cpu_core/instructions/           #    0.91  insn per cycle
->>>>         37,786,557      cpu_atom/instructions/           #    2.76  insn per cycle              (63.35%)
->>>>          2,418,826      cpu_core/branches/               #   75.259 K/sec
->>>>          6,965,962      cpu_atom/branches/               #  216.739 K/sec                       (63.38%)
->>>>             72,150      cpu_core/branch-misses/          #    2.98% of all branches
->>>>          1,032,746      cpu_atom/branch-misses/          #   42.70% of all branches             (63.35%)
->>>>
->>>> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
->>>> ---
->>>>  tools/perf/util/evsel.h       | 12 ++++++-----
->>>>  tools/perf/util/stat-shadow.c | 39 +++++++++++++++++++----------------
->>>>  2 files changed, 28 insertions(+), 23 deletions(-)
->>>>
->>>> diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
->>>> index b365b449c6ea..36a32e4ca168 100644
->>>> --- a/tools/perf/util/evsel.h
->>>> +++ b/tools/perf/util/evsel.h
->>>> @@ -350,9 +350,11 @@ u64 format_field__intval(struct tep_format_field *field, struct perf_sample *sam
->>>>
->>>>  struct tep_format_field *evsel__field(struct evsel *evsel, const char *name);
->>>>
->>>> -#define evsel__match(evsel, t, c)              \
->>>> +#define EVSEL_EVENT_MASK                       (~0ULL)
->>>> +
->>>> +#define evsel__match(evsel, t, c, m)                   \
->>>>         (evsel->core.attr.type == PERF_TYPE_##t &&      \
->>>> -        evsel->core.attr.config == PERF_COUNT_##c)
->>>> +        (evsel->core.attr.config & m) == PERF_COUNT_##c)
->>>
->>> The EVSEL_EVENT_MASK here isn't very intention revealing, perhaps we
->>> can remove it and do something like:
->>>
->>> static inline bool __evsel__match(const struct evsel *evsel, u32 type,
->>> u64 config)
->>> {
->>>   if ((type == PERF_TYPE_HARDWARE || type ==PERF_TYPE_HW_CACHE)  &&
->>> perf_pmus__supports_extended_type())
->>>      return (evsel->core.attr.config & PERF_HW_EVENT_MASK) == config;
->>>
->>>   return evsel->core.attr.config == config;
->>> }
->>> #define evsel__match(evsel, t, c) __evsel__match(evsel, PERF_TYPE_##t,
->>> PERF_COUNT_##c)
->>
->> Yes, the above code looks better. I will apply it in V2.
-> 
-> Please base v2 on tmp.perf-tools-next, tests are running and that branch
-> will become perf-tools-next.
-> 
+    ip, ip6: Handle splice to raw and ping sockets
+    =
 
-Sure.
+    Splicing to SOCK_RAW sockets may set MSG_SPLICE_PAGES, but in such a c=
+ase,
+    __ip_append_data() will call skb_splice_from_iter() to access the 'fro=
+m'
+    data, assuming it to point to a msghdr struct with an iter, instead of
+    using the provided getfrag function to access it.
+    =
 
-> Some patches from your series were cherry-picked there.
+    In the case of raw_sendmsg(), however, this is not the case and 'from'=
+ will
+    point to a raw_frag_vec struct and raw_getfrag() will be the frag-gett=
+ing
+    function.  A similar issue may occur with rawv6_sendmsg().
+    =
 
-Thanks.
+    Fix this by ignoring MSG_SPLICE_PAGES if getfrag !=3D ip_generic_getfr=
+ag as
+    ip_generic_getfrag() expects "from" to be a msghdr*, but the other get=
+frags
+    don't.  Note that this will prevent MSG_SPLICE_PAGES from being effect=
+ive
+    for udplite.
+    =
 
-Kan
+    This likely affects ping sockets too.  udplite looks like it should be=
+ okay
+    as it expects "from" to be a msghdr.
+    =
+
+    Signed-off-by: David Howells <dhowells@redhat.com>
+    Reported-by: syzbot+d8486855ef44506fd675@syzkaller.appspotmail.com
+    Link: https://lore.kernel.org/r/000000000000ae4cbf05fdeb8349@google.co=
+m/
+    Fixes: 2dc334f1a63a ("splice, net: Use sendmsg(MSG_SPLICE_PAGES) rathe=
+r than ->sendpage()")
+    cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+    cc: David Ahern <dsahern@kernel.org>
+    cc: "David S. Miller" <davem@davemloft.net>
+    cc: Eric Dumazet <edumazet@google.com>
+    cc: Jakub Kicinski <kuba@kernel.org>
+    cc: Paolo Abeni <pabeni@redhat.com>
+    cc: Jens Axboe <axboe@kernel.dk>
+    cc: Matthew Wilcox <willy@infradead.org>
+    cc: netdev@vger.kernel.org
+
+diff --git a/net/ipv4/ip_output.c b/net/ipv4/ip_output.c
+index 244fb9365d87..4b39ea99f00b 100644
+--- a/net/ipv4/ip_output.c
++++ b/net/ipv4/ip_output.c
+@@ -1040,7 +1040,8 @@ static int __ip_append_data(struct sock *sk,
+ 	} else if ((flags & MSG_SPLICE_PAGES) && length) {
+ 		if (inet->hdrincl)
+ 			return -EPERM;
+-		if (rt->dst.dev->features & NETIF_F_SG)
++		if (rt->dst.dev->features & NETIF_F_SG &&
++		    getfrag =3D=3D ip_generic_getfrag)
+ 			/* We need an empty buffer to attach stuff to */
+ 			paged =3D true;
+ 		else
+diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
+index c722cb881b2d..dd845139882c 100644
+--- a/net/ipv6/ip6_output.c
++++ b/net/ipv6/ip6_output.c
+@@ -1592,7 +1592,8 @@ static int __ip6_append_data(struct sock *sk,
+ 	} else if ((flags & MSG_SPLICE_PAGES) && length) {
+ 		if (inet_sk(sk)->hdrincl)
+ 			return -EPERM;
+-		if (rt->dst.dev->features & NETIF_F_SG)
++		if (rt->dst.dev->features & NETIF_F_SG &&
++		    getfrag =3D=3D ip_generic_getfrag)
+ 			/* We need an empty buffer to attach stuff to */
+ 			paged =3D true;
+ 		else
+
