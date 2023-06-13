@@ -2,135 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8989672E9AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:29:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19F8C72E965
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:22:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240108AbjFMRYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 13:24:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50498 "EHLO
+        id S234939AbjFMRVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 13:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239136AbjFMRYE (ORCPT
+        with ESMTP id S229878AbjFMRVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 13:24:04 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F105D2717;
-        Tue, 13 Jun 2023 10:22:41 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35DFfOJ1025233;
-        Tue, 13 Jun 2023 17:21:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=tREdu/Nnl8Ne/RNsSa0WRhFpAKhpL0Eq+1KJo/+tcbM=;
- b=IY3Vx5O6Kw3p5xgdtvMRvUUqDXqhE6xTl9OZgBvNt02qEHAfwv1HWq2QSl90EdmNWhY4
- WaciuD9kSBklcDS715rsyqTk2JlKRqQcmBcOVSngYAUqdvAQB+AZXreM6OjHMKKP91gO
- 4baqkjwxlPuw5SmUKRETYBgUf3/FrFiWvxwOW0qUuKwdGy+Rn/RKtla1NmFbivQTlmnk
- +2RSaDAgJg2V2jpnhwr3pcifP3tCeaq6Spxwp3LDwGxKwhHDZklTqy1SHHjR3aah3T10
- ys9uAGO5ATukt+X/tct5H8tR0v5eD71McVugdQWcVUOAmtIvx2vA1exXo88cO0n0iI0t GQ== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r68x9ae1q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Jun 2023 17:21:59 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35DHLwDP006410
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Jun 2023 17:21:58 GMT
-Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 13 Jun 2023 10:21:57 -0700
-From:   Elliot Berman <quic_eberman@quicinc.com>
-To:     Alex Elder <elder@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-CC:     Elliot Berman <quic_eberman@quicinc.com>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        "Srivatsa Vaddagiri" <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Will Deacon <will@kernel.org>, Andy Gross <agross@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH v14 25/25] MAINTAINERS: Add Gunyah hypervisor drivers section
-Date:   Tue, 13 Jun 2023 10:20:53 -0700
-Message-ID: <20230613172054.3959700-26-quic_eberman@quicinc.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230613172054.3959700-1-quic_eberman@quicinc.com>
-References: <20230613172054.3959700-1-quic_eberman@quicinc.com>
+        Tue, 13 Jun 2023 13:21:45 -0400
+Received: from sender3-op-o17.zoho.com (sender3-op-o17.zoho.com [136.143.184.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C871721;
+        Tue, 13 Jun 2023 10:21:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686676865; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=mUSutJ4v91LRQhTNQ2N8KPrx9BmEGGldCXHyxcahlDwzevtw6fzxQyyXONweq3353zkauZtua3D0shybbjVenQ+zGBYqmQh7Ozl1dfglcbDKPsE9fs+NjLcInOtj4Ycdd3wPRnhflgyh5JJlpkH0jHhdIO5t0ak3CFoxVhRLJKA=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1686676865; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=YmlHAc0oA+Gd6qbZ+MYa616u3dHbORdC6jb4K9GdGwM=; 
+        b=CReqfNMQLpGsTEVB1q1q79cdA9+cVV1GtaEamLL5Xhs+CSf9G3S9dvcwqILzNyOnMK3DEfDNsSqjArw6TCpG9MxqJ5quhpwT3TO/igw7JT446pjnE2n+oNIhhFicU0qpxiS0IkjwLKzjnW1qehvnecHY4WLVPy6Xh7vd7sDaWIA=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1686676865;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=YmlHAc0oA+Gd6qbZ+MYa616u3dHbORdC6jb4K9GdGwM=;
+        b=baQLGno+CdvN4L7LkqY2lVK2b44oEj3+1/mN6K58irFUL3QE8vuoWAzKzQovWgCp
+        I5t4K5Col/eHZNweivrGwIwgxb9SDwGrEf5u8XA15xwkTx7IxW8/dlY7EAgB4Ig5bIx
+        FxeWXPDVig8UcpyRxmuM5KNH7AtU4/HJIogv5uM4=
+Received: from [192.168.1.248] (178-147-169-233.haap.dm.cosmote.net [178.147.169.233]) by mx.zohomail.com
+        with SMTPS id 1686676863664276.1065429103859; Tue, 13 Jun 2023 10:21:03 -0700 (PDT)
+Message-ID: <826d89f5-1451-218c-a100-0913c98b931b@arinc9.com>
+Date:   Tue, 13 Jun 2023 20:20:54 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net v4 3/7] net: dsa: mt7530: fix trapping frames on
+ non-MT7621 SoC MT7530 switch
+Content-Language: en-US
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230612075945.16330-1-arinc.unal@arinc9.com>
+ <20230612075945.16330-4-arinc.unal@arinc9.com>
+ <ZIeKoVklLus8uzDp@shell.armlinux.org.uk>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <ZIeKoVklLus8uzDp@shell.armlinux.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: d1Sy9XHzR0tV1J4EomRdBrjJXZzfdXiw
-X-Proofpoint-ORIG-GUID: d1Sy9XHzR0tV1J4EomRdBrjJXZzfdXiw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-13_19,2023-06-12_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 lowpriorityscore=0 impostorscore=0 spamscore=0
- suspectscore=0 mlxlogscore=907 mlxscore=0 adultscore=0 malwarescore=0
- clxscore=1015 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306130153
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add myself and Prakruthi as maintainers of Gunyah hypervisor drivers.
+On 13.06.2023 00:14, Russell King (Oracle) wrote:
+> On Mon, Jun 12, 2023 at 10:59:41AM +0300, arinc9.unal@gmail.com wrote:
+>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>
+>> The check for setting the CPU_PORT bits must include the non-MT7621 SoC
+>> MT7530 switch variants to trap frames. Expand the check to include them.
+> 
+> ... and now you add support for this to the MT7530, which is what
+> alerted me to what seems to be a mistake in the previous patch.
+> 
+> "The setup of CPU_PORT() needs to be done for the MT7530 switch variants
+> as well as the MT7621."
 
-Reviewed-by: Alex Elder <elder@linaro.org>
-Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
----
- MAINTAINERS | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+No. ID_MT7621 represents the multi-chip module MT7530 switch in certain 
+MT7621 SoCs. So saying "the MT7530 switch variants" already covers the 
+switch on the MT7621 SoCs.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f794002a192e2..b25e20c871827 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8973,6 +8973,19 @@ L:	linux-efi@vger.kernel.org
- S:	Maintained
- F:	block/partitions/efi.*
- 
-+GUNYAH HYPERVISOR DRIVER
-+M:	Elliot Berman <quic_eberman@quicinc.com>
-+M:	Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-+L:	linux-arm-msm@vger.kernel.org
-+S:	Supported
-+F:	Documentation/devicetree/bindings/firmware/gunyah-hypervisor.yaml
-+F:	Documentation/virt/gunyah/
-+F:	arch/arm64/gunyah/
-+F:	drivers/mailbox/gunyah-msgq.c
-+F:	drivers/virt/gunyah/
-+F:	include/linux/gunyah*.h
-+F:	samples/gunyah/
-+
- HABANALABS PCI DRIVER
- M:	Oded Gabbay <ogabbay@kernel.org>
- L:	dri-devel@lists.freedesktop.org
--- 
-2.40.0
-
+Arınç
