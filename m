@@ -2,121 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3DA972EAB5
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 20:19:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B508872EAB9
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 20:20:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236749AbjFMSSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 14:18:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54786 "EHLO
+        id S237818AbjFMSTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 14:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231285AbjFMSSe (ORCPT
+        with ESMTP id S238368AbjFMSTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 14:18:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34700184;
-        Tue, 13 Jun 2023 11:18:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E90060BEE;
-        Tue, 13 Jun 2023 18:18:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E74BC433D9;
-        Tue, 13 Jun 2023 18:18:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686680312;
-        bh=lN/ZqEmXoki934P40qYc//rkr2yO0dmQOJ7AK2ooq30=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Jgy4stFumTxUdZD3TISLjanSJ3rLeuCRdBjXcIzFmcMJ1vLDfpUmiVEpGuOdsAyPy
-         cDGDV5HIown4NpxhUHUFErIA4N5Hc0wnb3w4Gh4IxHemp1dlja9ll4WGS+6zfSfyQH
-         51Lm7f2heGaKgcFTJfsbUgMguKDgsrZQTBBSRyI9h731UTVJJdl9pyiWqMrvlZCcLU
-         3xNDJxFDwpBY00edPwX4mmFJJ80kMHL/IThrWA/j/mvXdAyJv/2twyxHFI5X72Fbth
-         WCIJ+mYScLjgBbcoX5tvdWSmjD8FX/by3gOjMvaGPRUXz+PE1kQoBrqAqLVCSJbzNh
-         OM40TivsF7kuw==
-Date:   Tue, 13 Jun 2023 19:18:25 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Manikandan Muralidharan <manikandan.m@microchip.com>
-Cc:     lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com, sam@ravnborg.org,
-        bbrezillon@kernel.org, airlied@gmail.com, daniel@ffwll.ch,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Hari.PrasathGE@microchip.com,
-        Balamanikandan.Gunasundar@microchip.com,
-        Durai.ManickamKR@microchip.com, Nayabbasha.Sayed@microchip.com,
-        Dharma.B@microchip.com, Varshini.Rajendran@microchip.com,
-        Balakrishnan.S@microchip.com
-Subject: Re: [PATCH 1/9] dt-bindings: mfd: Add bindings for SAM9X7 LCD
- controller
-Message-ID: <20230613-scouting-barricade-56cadb14657c@spud>
-References: <20230613070426.467389-1-manikandan.m@microchip.com>
- <20230613070426.467389-2-manikandan.m@microchip.com>
+        Tue, 13 Jun 2023 14:19:13 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9BA1FC6
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 11:19:05 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-977d55ac17bso1029823666b.3
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 11:19:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686680344; x=1689272344;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Si+/shvcqkKwITehsz3jlcMUh+hjsQ3DO0PDy+Kywt8=;
+        b=EersYtXU6f0gNYm8ge0XLuS++K+5LXpzYjQ8c1p/Am+DEGDIfsoGeXhM+HnG7Z+Q1a
+         OLGkaRUuReTRokMWoSfQTm0+cuDbM0jK2wy58LvfMXf6415/CDVrc0FxHnjpL3VUJ9CJ
+         pmo8L0AjhzACJ9aUKZSTX4nH9eZIPaDk07niXhg+879+9DglHPcibGAQCfIKiPJ+VLj7
+         pQ7rHDdvG+a2/+YEVU8vIKnsj14Q+w3TcVs3MqWQsKtYoL4YeOCGRseAWTyRci658bsr
+         1i2k0TzfB49uZ+PYQ3ITrfC3AEMFaPJ8fSh7Zd685KrIwPTTCmi5yC5PMk/JVb9mbQzJ
+         X+lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686680344; x=1689272344;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Si+/shvcqkKwITehsz3jlcMUh+hjsQ3DO0PDy+Kywt8=;
+        b=Tp6CVbzqGyPjAYRn4jmhbtiPUZgqomtuKvIl9ZaxpMBr3snYNWWHgL2C+9FTXKFEZP
+         LlFT5US9TuHrprIpg5kaiWet0JQJYuG3xAKCf9BPXsJXOHzRilQ+mAY/xsyNVKXiNtc/
+         +5WPgf6ekw2p3IcrU5tPL7ahN31Wf8zakylAOMTPYaXcI+MDypyG0vSxzYn0wLR8fDqS
+         yBRgQwiQhOITwQ6LoAn4C0kUZ8nf2bvjHckZxZdJSj37ksL0kcidhlBg5enbrHuHb1Ig
+         U3OydI4Krwx3OBtjSl37chgShc1wOz/FqC/gKDiTmwGz2l+q3vosOooNL6ufXULSAg0g
+         qZ0g==
+X-Gm-Message-State: AC+VfDxAT7GHT8QLirEX1DC+d8BLWGUQnndyaxcI/A7P8cJ0JMIC5Mlo
+        gvqZSzbOiDA/f21//4dVx+wdyuHXNk0ODhY13vY=
+X-Google-Smtp-Source: ACHHUZ4kVz0Z2WClJ/sNF3p1W8w4qbF9ieyg0usT2Tb34YdPcuyYzGAMkhmYVkR6qKHAKM2296Y8vA==
+X-Received: by 2002:a17:907:9449:b0:97d:ee82:920a with SMTP id dl9-20020a170907944900b0097dee82920amr10869194ejc.74.1686680343677;
+        Tue, 13 Jun 2023 11:19:03 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id jt5-20020a170906dfc500b0097462d8dc04sm6993158ejc.100.2023.06.13.11.19.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 11:19:03 -0700 (PDT)
+Message-ID: <44b6cbbf-1fbf-cf2c-a035-5a7c6dd504de@linaro.org>
+Date:   Tue, 13 Jun 2023 20:19:01 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="QP2yCaGkKPXhdEsL"
-Content-Disposition: inline
-In-Reply-To: <20230613070426.467389-2-manikandan.m@microchip.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v8 1/2] dt-bindings: display: ti,am65x-dss: Add am625 dss
+ compatible
+Content-Language: en-US
+To:     Aradhya Bhatia <a-bhatia1@ti.com>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     DRI Development List <dri-devel@lists.freedesktop.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Jayesh Choudhary <j-choudhary@ti.com>
+References: <20230608163734.2578-1-a-bhatia1@ti.com>
+ <20230608163734.2578-2-a-bhatia1@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230608163734.2578-2-a-bhatia1@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 08/06/2023 18:37, Aradhya Bhatia wrote:
+> The DSS controller on TI's AM625 SoC is an update from that on TI's
+> AM65X SoC. The former has an additional OLDI TX on its first video port
+> that helps output cloned video or WUXGA (1920x1200@60fps) resolution
+> video output over a dual-link mode to reduce the required OLDI clock
+> output.
+> 
+> The second video port is same from AM65x DSS and it outputs DPI video
+> data. It can support 2K resolutions @ 60fps, independently.
+> 
 
---QP2yCaGkKPXhdEsL
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 13, 2023 at 12:34:18PM +0530, Manikandan Muralidharan wrote:
-> Add new compatible string for the XLCD controller on SAM9X7 SoC.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-You should probably indicate here why this is not compatible with the
-existing SoCs that are supported. To hazard a guess, it is the HLCDC IP
-(I forget the exact letters!)?
-If so,
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Best regards,
+Krzysztof
 
-Cheers,
-Conor.
-
->=20
-> Signed-off-by: Manikandan Muralidharan <manikandan.m@microchip.com>
-> ---
->  Documentation/devicetree/bindings/mfd/atmel-hlcdc.txt | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/mfd/atmel-hlcdc.txt b/Docu=
-mentation/devicetree/bindings/mfd/atmel-hlcdc.txt
-> index 5f8880cc757e..7c77b6bf4adb 100644
-> --- a/Documentation/devicetree/bindings/mfd/atmel-hlcdc.txt
-> +++ b/Documentation/devicetree/bindings/mfd/atmel-hlcdc.txt
-> @@ -8,6 +8,7 @@ Required properties:
->     "atmel,sama5d3-hlcdc"
->     "atmel,sama5d4-hlcdc"
->     "microchip,sam9x60-hlcdc"
-> +   "microchip,sam9x7-xlcdc"
->   - reg: base address and size of the HLCDC device registers.
->   - clock-names: the name of the 3 clocks requested by the HLCDC device.
->     Should contain "periph_clk", "sys_clk" and "slow_clk".
-> --=20
-> 2.25.1
->=20
-
---QP2yCaGkKPXhdEsL
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIiy8QAKCRB4tDGHoIJi
-0hGuAP94zGUWctEgLEspsssm28IRoOSAft6tLnIjHxmCnaTNsgEAgdQpLSpwU9NG
-J6BI+l1yq7iXhBSLceaDwg6K2mtCUgE=
-=0h02
------END PGP SIGNATURE-----
-
---QP2yCaGkKPXhdEsL--
