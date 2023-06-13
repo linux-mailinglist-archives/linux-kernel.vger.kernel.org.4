@@ -2,149 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F4D72D9C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 08:22:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9657B72D9D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 08:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239968AbjFMGVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 02:21:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33528 "EHLO
+        id S239990AbjFMGYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 02:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240278AbjFMGVY (ORCPT
+        with ESMTP id S239483AbjFMGYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 02:21:24 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985D3E47;
-        Mon, 12 Jun 2023 23:21:22 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QgJNJ3Ywbz4x3y;
-        Tue, 13 Jun 2023 16:21:20 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1686637281;
-        bh=09oLrHGEmpgpyTpLPSc4jHEwyd/VNs8IHZbmFF1qxD0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=p257LeXXti8Ytj43puEZXiR0jOqqbg0HzOPzCYhgkkV3Umbssxt9OYv6TIyHfy8sP
-         rlbDjbti7oFaeDP7lv5IZugyvCsDKiwrYRo6CWzoFiM/cJkmyfhUL0efoXJHC53Q+5
-         WtRuofXTdsvB/FRX8aWjwmKEUx8empsTq6wNg7DoQJ2iqeMoI2vcdiUS5gvDGJnxM7
-         DdKqGhm//56jaI/4d++oZ0aHn8qJAgO0YWF7IAyM4Ff835NO2FxseN6yiE7Vp5p0HZ
-         AhobZSuNsaYkLYCcPG9cqWFtmzTe658dKg9ncvgD992nkIkg16w2V5BF49DXsqkLGv
-         FyE6vTLL9DLxA==
-Date:   Tue, 13 Jun 2023 16:21:19 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-Subject: linux-next: build failure after merge of the mm tree
-Message-ID: <20230613162119.4a7a7d3c@canb.auug.org.au>
+        Tue, 13 Jun 2023 02:24:33 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392F6E6B;
+        Mon, 12 Jun 2023 23:24:29 -0700 (PDT)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QgJPn4N0ZzLmpq;
+        Tue, 13 Jun 2023 14:22:37 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.174.175) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 13 Jun 2023 14:24:26 +0800
+From:   Lu Jialin <lujialin4@huawei.com>
+To:     Lu Jialin <lujialin4@huawei.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
+Subject: [PATCH] sched/psi: Fix use-after-free in poll_freewait()
+Date:   Tue, 13 Jun 2023 14:23:06 +0800
+Message-ID: <20230613062306.101831-1-lujialin4@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/IxEZ4RJthVOEGv9b4i2lpKw";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.175]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/IxEZ4RJthVOEGv9b4i2lpKw
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+We found a UAF bug in remove_wait_queue as follows:
 
-Hi all,
+==================================================================
+BUG: KASAN: use-after-free in _raw_spin_lock_irqsave+0x71/0xe0
+Write of size 4 at addr ffff8881150d7b28 by task psi_trigger/15306
+Call Trace:
+ dump_stack+0x9c/0xd3
+ print_address_description.constprop.0+0x19/0x170
+ __kasan_report.cold+0x6c/0x84
+ kasan_report+0x3a/0x50
+ check_memory_region+0xfd/0x1f0
+ _raw_spin_lock_irqsave+0x71/0xe0
+ remove_wait_queue+0x26/0xc0
+ poll_freewait+0x6b/0x120
+ do_sys_poll+0x305/0x400
+ do_syscall_64+0x33/0x40
+ entry_SYSCALL_64_after_hwframe+0x61/0xc6
 
-After merging the mm tree, today's linux-next build (powerpc
-ppc44x_defconfig) failed like this:
+Allocated by task 15306:
+ kasan_save_stack+0x1b/0x40
+ __kasan_kmalloc.constprop.0+0xb5/0xe0
+ psi_trigger_create.part.0+0xfc/0x450
+ cgroup_pressure_write+0xfc/0x3b0
+ cgroup_file_write+0x1b3/0x390
+ kernfs_fop_write_iter+0x224/0x2e0
+ new_sync_write+0x2ac/0x3a0
+ vfs_write+0x365/0x430
+ ksys_write+0xd5/0x1b0
+ do_syscall_64+0x33/0x40
+ entry_SYSCALL_64_after_hwframe+0x61/0xc6
 
-In file included from arch/powerpc/include/asm/page.h:247,
-                 from arch/powerpc/include/asm/thread_info.h:13,
-                 from include/linux/thread_info.h:60,
-                 from include/asm-generic/preempt.h:5,
-                 from ./arch/powerpc/include/generated/asm/preempt.h:1,
-                 from include/linux/preempt.h:78,
-                 from include/linux/spinlock.h:56,
-                 from include/linux/ipc.h:5,
-                 from include/uapi/linux/sem.h:5,
-                 from include/linux/sem.h:5,
-                 from include/linux/compat.h:14,
-                 from arch/powerpc/kernel/asm-offsets.c:12:
-arch/powerpc/include/asm/page_32.h:16: warning: "ARCH_DMA_MINALIGN" redefin=
-ed
-   16 | #define ARCH_DMA_MINALIGN       L1_CACHE_BYTES
-      |=20
-In file included from include/linux/time.h:5,
-                 from include/linux/compat.h:10:
-include/linux/cache.h:104: note: this is the location of the previous defin=
-ition
-  104 | #define ARCH_DMA_MINALIGN __alignof__(unsigned long long)
-      |=20
+Freed by task 15850:
+ kasan_save_stack+0x1b/0x40
+ kasan_set_track+0x1c/0x30
+ kasan_set_free_info+0x20/0x40
+ __kasan_slab_free+0x151/0x180
+ kfree+0xba/0x680
+ cgroup_file_release+0x5c/0xe0
+ kernfs_drain_open_files+0x122/0x1e0
+ kernfs_drain+0xff/0x1e0
+ __kernfs_remove.part.0+0x1d1/0x3b0
+ kernfs_remove_by_name_ns+0x89/0xf0
+ cgroup_addrm_files+0x393/0x3d0
+ css_clear_dir+0x8f/0x120
+ kill_css+0x41/0xd0
+ cgroup_destroy_locked+0x166/0x300
+ cgroup_rmdir+0x37/0x140
+ kernfs_iop_rmdir+0xbb/0xf0
+ vfs_rmdir.part.0+0xa5/0x230
+ do_rmdir+0x2e0/0x320
+ __x64_sys_unlinkat+0x99/0xc0
+ do_syscall_64+0x33/0x40
+ entry_SYSCALL_64_after_hwframe+0x61/0xc6
+==================================================================
 
-(lots of theses)
+If using epoll(), wake_up_pollfree will empty waitqueue and set
+wait_queue_head is NULL before free waitqueue of psi trigger. But is
+doesn't work when using poll(), which will lead a UAF problem in
+poll_freewait coms as following:
 
-Caused by commit
+(cgroup_rmdir)                      |
+psi_trigger_destroy                 |
+  wake_up_pollfree(&t->event_wait)  |
+    kfree(t)                        |
+				    |	(poll_freewait)
+				    |     free_poll_entry(pwq->inline_entries + i)
+				    |	    remove_wait_queue(entry->wait_address)
+				    |	      spin_lock_irqsave(&wq_head->lock)
 
-  cc7335787e73 ("mm/slab: decouple ARCH_KMALLOC_MINALIGN from ARCH_DMA_MINA=
-LIGN")
+entry->wait_address in poll_freewait() is t->event_wait in cgroup_rmdir().
+t->event_wait is free in psi_trigger_destroy before call poll_freewait(),
+therefore wq_head in poll_freewait() has been already freed, which would
+lead to a UAF.
 
-I have applied the following hack for today - we need something better.
+similar problem for epoll() has been fixed commit c2dbe32d5db5
+("sched/psi: Fix use-after-free in ep_remove_wait_queue()").
+epoll wakeup function ep_poll_callback() will empty waitqueue and set
+wait_queue_head is NULL when pollflags is POLLFREE and judge pwq->whead
+is NULL or not before remove_wait_queue in ep_remove_wait_queue(),
+which will fix the UAF bug in ep_remove_wait_queue.
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 13 Jun 2023 16:07:16 +1000
-Subject: [PATCH] fix up for "mm/slab: decouple ARCH_KMALLOC_MINALIGN from A=
-RCH_DMA_MINALIGN"
+But poll wakeup function pollwake() doesn't do that. To fix the
+problem, we empty waitqueue and set wait_address is NULL in pollwake() when
+key is POLLFREE. otherwise in remove_wait_queue, which is similar to
+epoll().
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Fixes: 0e94682b73bf ("psi: introduce psi monitor")
+Signed-off-by: Lu Jialin <lujialin4@huawei.com>
 ---
- arch/powerpc/include/asm/cache.h | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ fs/select.c | 20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/include/asm/cache.h b/arch/powerpc/include/asm/ca=
-che.h
-index ae0a68a838e8..e9be1396dfd1 100644
---- a/arch/powerpc/include/asm/cache.h
-+++ b/arch/powerpc/include/asm/cache.h
-@@ -142,5 +142,14 @@ static inline void iccci(void *addr)
+diff --git a/fs/select.c b/fs/select.c
+index 0ee55af1a55c..e64c7b4e9959 100644
+--- a/fs/select.c
++++ b/fs/select.c
+@@ -132,7 +132,17 @@ EXPORT_SYMBOL(poll_initwait);
+ 
+ static void free_poll_entry(struct poll_table_entry *entry)
+ {
+-	remove_wait_queue(entry->wait_address, &entry->wait);
++	wait_queue_head_t *whead;
++
++	rcu_read_lock();
++	/* If it is cleared by POLLFREE, it should be rcu-safe.
++	 * If we read NULL we need a barrier paired with smp_store_release()
++	 * in pollwake().
++	 */
++	whead = smp_load_acquire(&entry->wait_address);
++	if (whead)
++		remove_wait_queue(whead, &entry->wait);
++	rcu_read_unlock();
+ 	fput(entry->filp);
  }
-=20
- #endif /* !__ASSEMBLY__ */
-+
-+#ifndef __powerpc64__
-+#ifdef CONFIG_NOT_COHERENT_CACHE
-+#ifndef ARCH_DMA_MINALIGN
-+#define ARCH_DMA_MINALIGN	L1_CACHE_BYTES
-+#endif
-+#endif
-+#endif
-+
- #endif /* __KERNEL__ */
- #endif /* _ASM_POWERPC_CACHE_H */
---=20
-2.39.2
+ 
+@@ -215,6 +225,14 @@ static int pollwake(wait_queue_entry_t *wait, unsigned mode, int sync, void *key
+ 	entry = container_of(wait, struct poll_table_entry, wait);
+ 	if (key && !(key_to_poll(key) & entry->key))
+ 		return 0;
++	if (key_to_poll(key) & POLLFREE) {
++		list_del_init(&wait->entry);
++		/* wait_address !=NULL protects us from the race with
++		 * poll_freewait().
++		 */
++		smp_store_release(&entry->wait_address, NULL);
++		return 0;
++	}
+ 	return __pollwake(wait, mode, sync, key);
+ }
+ 
+-- 
+2.17.1
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/IxEZ4RJthVOEGv9b4i2lpKw
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSICt8ACgkQAVBC80lX
-0Gyh2gf/VSu16R9zpGg+AreGcHAXLfhTsn75srJGOYEEWqZPPHTW9DZUzOz1IavK
-bf4fb8hYVMrLMHrDMJyLENSBxgTdflaDLrifPRkZymuWhkIwRChFPz7na1i8LY93
-xo1yrKyYQqH1OEz5lJ3Kd3aXqIRH5dnnpT7Y1LxpmSPVPE+rQvg7PStaokJhgpeX
-o6Lv3dnNFwCPtse2bB1EugDaZL+tm9Jj7c8srAT/qtJHjtT6U9NvOnAhWDdB9S+B
-Xn7SxZBTA2W0ehVqHFdQtYiXoQONYiG8ILx3MIvGzwKN1YoO2XgsmC70uuVCUzUO
-s6MVpN2Bz305ZseGeBP1mzdz2YPl6w==
-=p8mM
------END PGP SIGNATURE-----
-
---Sig_/IxEZ4RJthVOEGv9b4i2lpKw--
