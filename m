@@ -2,145 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A25E972D58A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 02:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 064C972D5C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 02:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238450AbjFMAKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 20:10:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51186 "EHLO
+        id S238638AbjFMAMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 20:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237887AbjFMAKj (ORCPT
+        with ESMTP id S238592AbjFMAMX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 20:10:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A592D171D;
-        Mon, 12 Jun 2023 17:10:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B4B662E7C;
-        Tue, 13 Jun 2023 00:10:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E8D3C4339C;
-        Tue, 13 Jun 2023 00:10:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686615037;
-        bh=RkC7m+ef9MDtn7UWLvgRnRzmN0nJLRntkzJFcqy2vXw=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=FHxvRGIAxDoNvq/SN8C376t3jj5M5YeyBEnSBQEIePf8IYJ5O3iPXFYKxeH3zr9uc
-         vTvrrwDc0P5Jpc+b4Xv4zRkSpfTlrT+fbRC3LRXKDJzxsS1YENK+dX5daB77WpijZG
-         FriHbVFFPh2O1BFpdttS4cZaz+rsWidUolh1MUDZs9E9nhZo0EqzeetlNjKFiU7doB
-         giVt0aYz3nY/pMQDBoxDlE6VjeykIwC26tsmtls+VY83CfjXl2YF+lf1z6vJfea96t
-         l4/IAGDiGi1PPK1KMKROVYpk2Ss3p1x72lqDwT6iGL/JlrKRz99ZG4KudliXDOmNJZ
-         WdTQNIRPk+4sg==
-Message-ID: <2f3328c4be9db6feef2cc662ede70f92.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230526171057.66876-2-sebastian.reichel@collabora.com>
-References: <20230526171057.66876-1-sebastian.reichel@collabora.com> <20230526171057.66876-2-sebastian.reichel@collabora.com>
-Subject: Re: [PATCH v2 1/2] clk: composite: Fix handling of high clock rates
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Christopher Obbard <chris.obbard@collabora.com>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        kernel@collabora.com, stable@vger.kernel.org,
-        Maxime Ripard <maxime@cerno.tech>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+        Mon, 12 Jun 2023 20:12:23 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8371173F;
+        Mon, 12 Jun 2023 17:12:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686615138; x=1718151138;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=YP96Yn7FdNN68fPWKmeUZZw0SU1yEnE0kYU9/y2Lvpc=;
+  b=QefwEUnAhkJ5xF6fSIomS1+EFsRVdKxpgTDF6YIqTUjTxp1QLWoEDZgU
+   Ut4C46TN409YUgx2wYW23j+eUexqKg+lgZzfvmE1z5fR36mxceMNqFHHq
+   a2IPzXlEkksvNKvkuKDC69SHpzFYFoubFjXwZ8oFHQ6hxiR+Eto7Vlws5
+   cyhcqXPmQa+ztulNzwkrRbGsymXV79MYeiJ67J1jNEe0DyXMyOM14UddW
+   2NzNIrPVGdzrsC+Uaed8ONPncvdhQMqVyByAWkI041ZXXYVwxDBbVq20V
+   7JMZsORUM1yMQGT07MmegA2/NprzxMZBvlwfKQrtsPbdEjWycVyJPuelV
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="361556844"
+X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
+   d="scan'208";a="361556844"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 17:12:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="835671000"
+X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
+   d="scan'208";a="835671000"
+Received: from almeisch-mobl1.amr.corp.intel.com (HELO rpedgeco-desk4.amr.corp.intel.com) ([10.209.42.242])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 17:12:14 -0700
+From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
+To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        david@redhat.com, debug@rivosinc.com, szabolcs.nagy@arm.com,
+        torvalds@linux-foundation.org, broonie@kernel.org
+Cc:     rick.p.edgecombe@intel.com, Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>
+Subject: [PATCH v9 09/42] x86/mm: Move pmd_write(), pud_write() up in the file
 Date:   Mon, 12 Jun 2023 17:10:35 -0700
-User-Agent: alot/0.10
+Message-Id: <20230613001108.3040476-10-rick.p.edgecombe@intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
+References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Sebastian Reichel (2023-05-26 10:10:56)
-> ULONG_MAX is used by a few drivers to figure out the highest available
-> clock rate via clk_round_rate(clk, ULONG_MAX). Since abs() takes a
-> signed value as input, the current logic effectively calculates with
-> ULONG_MAX =3D -1, which results in the worst parent clock being chosen
-> instead of the best one.
->=20
-> For example on Rockchip RK3588 the eMMC driver tries to figure out
-> the highest available clock rate. There are three parent clocks
-> available resulting in the following rate diffs with the existing
-> logic:
->=20
-> GPLL:   abs(18446744073709551615 - 1188000000) =3D 1188000001
-> CPLL:   abs(18446744073709551615 - 1500000000) =3D 1500000001
-> XIN24M: abs(18446744073709551615 -   24000000) =3D   24000001
+To prepare the introduction of _PAGE_SAVED_DIRTY, move pmd_write() and
+pud_write() up in the file, so that they can be used by other
+helpers below.  No functional changes.
 
-I had to read the abs() macro to understand this and also look at the
-types for 'req->rate' and 'tmp_req.rate' (both are unsigned long) to
-understand what's going on. I'm not sure I'd say that abs() takes the
-input as a signed value. Instead, it converts the input to a signed type
-to figure out if it should negate the value or not. The problem is the
-subtraction result is larger than can fit in a signed long long on a
-64-bit machine, so we can't use the macro at all if the type is unsigned
-long and the sign bit is set.
+Co-developed-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+Tested-by: Pengfei Xu <pengfei.xu@intel.com>
+Tested-by: John Allen <john.allen@amd.com>
+Tested-by: Kees Cook <keescook@chromium.org>
+---
+ arch/x86/include/asm/pgtable.h | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
->=20
-> As a result the clock framework will promote a maximum supported
-> clock rate of 24 MHz, even though 1.5GHz are possible. With the
-> updated logic any casting between signed and unsigned is avoided
-> and the numbers look like this instead:
->=20
-> GPLL:   18446744073709551615 - 1188000000 =3D 18446744072521551615
-> CPLL:   18446744073709551615 - 1500000000 =3D 18446744072209551615
-> XIN24M: 18446744073709551615 -   24000000 =3D 18446744073685551615
->=20
-> As a result the parent with the highest acceptable rate is chosen
-> instead of the parent clock with the lowest one.
->=20
-> Cc: stable@vger.kernel.org
-> Fixes: 49502408007b ("mmc: sdhci-of-dwcmshc: properly determine max clock=
- on Rockchip")
-> Tested-by: Christopher Obbard <chris.obbard@collabora.com>
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
->  drivers/clk/clk-composite.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/clk/clk-composite.c b/drivers/clk/clk-composite.c
-> index edfa94641bbf..66759fe28fad 100644
-> --- a/drivers/clk/clk-composite.c
-> +++ b/drivers/clk/clk-composite.c
-> @@ -119,7 +119,10 @@ static int clk_composite_determine_rate(struct clk_h=
-w *hw,
->                         if (ret)
->                                 continue;
-> =20
-> -                       rate_diff =3D abs(req->rate - tmp_req.rate);
-> +                       if (req->rate >=3D tmp_req.rate)
-> +                               rate_diff =3D req->rate - tmp_req.rate;
-> +                       else
-> +                               rate_diff =3D tmp_req.rate - req->rate;
+diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+index 112e6060eafa..768ee46782c9 100644
+--- a/arch/x86/include/asm/pgtable.h
++++ b/arch/x86/include/asm/pgtable.h
+@@ -160,6 +160,18 @@ static inline int pte_write(pte_t pte)
+ 	return pte_flags(pte) & _PAGE_RW;
+ }
+ 
++#define pmd_write pmd_write
++static inline int pmd_write(pmd_t pmd)
++{
++	return pmd_flags(pmd) & _PAGE_RW;
++}
++
++#define pud_write pud_write
++static inline int pud_write(pud_t pud)
++{
++	return pud_flags(pud) & _PAGE_RW;
++}
++
+ static inline int pte_huge(pte_t pte)
+ {
+ 	return pte_flags(pte) & _PAGE_PSE;
+@@ -1120,12 +1132,6 @@ extern int pmdp_clear_flush_young(struct vm_area_struct *vma,
+ 				  unsigned long address, pmd_t *pmdp);
+ 
+ 
+-#define pmd_write pmd_write
+-static inline int pmd_write(pmd_t pmd)
+-{
+-	return pmd_flags(pmd) & _PAGE_RW;
+-}
+-
+ #define __HAVE_ARCH_PMDP_HUGE_GET_AND_CLEAR
+ static inline pmd_t pmdp_huge_get_and_clear(struct mm_struct *mm, unsigned long addr,
+ 				       pmd_t *pmdp)
+@@ -1155,12 +1161,6 @@ static inline void pmdp_set_wrprotect(struct mm_struct *mm,
+ 	clear_bit(_PAGE_BIT_RW, (unsigned long *)pmdp);
+ }
+ 
+-#define pud_write pud_write
+-static inline int pud_write(pud_t pud)
+-{
+-	return pud_flags(pud) & _PAGE_RW;
+-}
+-
+ #ifndef pmdp_establish
+ #define pmdp_establish pmdp_establish
+ static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
+-- 
+2.34.1
 
-This problem is widespread
-
- $ git grep abs\(.*- -- drivers/clk/ | wc -l
- 52
-
-so we may have a bigger problem here. Maybe some sort of coccinelle
-script or smatch checker can be written to look for abs() usage with an
-unsigned long type or a subtraction expression. This may also be worse
-after converting drivers to clk_hw_forward_rate_request() and
-clk_hw_init_rate_request() because those set the rate to ULONG_MAX.
-+Maxime for that as an FYI.
-
-Maybe we need an abs_diff() macro instead, that checks the type and on
-CONFIG_64BIT uses a conditional like above, but if it is a smaller type
-then it just uses abs() on the expression because it knows the
-difference will fit in the signed type conversion. I see that such a
-macro exists in some drm driver, so maybe it can be promoted to
-linux/math.h and then every grep hit above can use this macro instead.
-Care to take that on?
-
-Either way, I've applied this to clk-fixes as it is a regression. I'm
-just worried that this problem is more extensive.
