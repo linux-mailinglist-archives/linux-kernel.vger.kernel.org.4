@@ -2,163 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6AA172E6FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9179B72E70F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:23:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242616AbjFMPWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 11:22:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43074 "EHLO
+        id S240261AbjFMPXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 11:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234367AbjFMPWN (ORCPT
+        with ESMTP id S240973AbjFMPXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 11:22:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC490171F;
-        Tue, 13 Jun 2023 08:22:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C353F63781;
-        Tue, 13 Jun 2023 15:22:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33181C433F2;
-        Tue, 13 Jun 2023 15:22:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686669731;
-        bh=A//ADTpJNEvj5sg5K/oNCTDrlTuwFx3q2DsloGFiOhY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=JhbB4c1XT5azVk1QDRETMtpcAshUJGmCBa0jLgc29MOBWoZSdAe6g/KwPt9MAeZl2
-         x2tXkatNcYYbkN8oGbfXCLejrQIR6un1w/r7YtbFTKhDiJubIL/+MMUZo+S4GkGUVB
-         dNgZLoM8cyA/ACEbVfENqpElTZ2V8kZBZyXUwlsfaQlGcCGvxQMojxOqwJGhK5cTlE
-         2sfqBtsQJ4oQDW2V6plElkq0mj2tO0QhqcxbLBqAT6tMQ7+M738X4T+2h+hcgHM7X8
-         EGWMp3nSjflU8bwiVrB7EXo1OXiFM5ewysMB2lhx7KsPbuD47R4t6NLFjJ1GThBhRL
-         73egeATN3Z5jQ==
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5149c51fd5bso9487978a12.0;
-        Tue, 13 Jun 2023 08:22:11 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzhYylAGmDE9PyUnr/cxRQMWcXYbjwNB/rQYIlgipv7B5CtQOM0
-        5550LOsTkfbse0ZvlndQKZbartu0r6EKyv+eEdA=
-X-Google-Smtp-Source: ACHHUZ6pWZ9l8QvxWkq83acuLujK7zG98RAohbsGYZcecDJOhHoddCHqgHxiXOUIlVkssS/hyomFuVwNQC+uKY09KBI=
-X-Received: by 2002:aa7:c50e:0:b0:516:7f02:92c0 with SMTP id
- o14-20020aa7c50e000000b005167f0292c0mr8125021edq.39.1686669729363; Tue, 13
- Jun 2023 08:22:09 -0700 (PDT)
+        Tue, 13 Jun 2023 11:23:38 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA721FD2
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 08:23:14 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f642a24555so7110251e87.3
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 08:23:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686669792; x=1689261792;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZObq3QdQreREeU4NfsEue/+eYyb1HX3Nq35VP0wnSHk=;
+        b=O5I1KTQM9ahis2CVWCWapMP4B1w+V782LooA28aPXu+f8RIsABsAEG6HoMaXraby7g
+         HdDN1qziUtNinucVrcJwTyTcagUZEjEtlexo+8OnfziVbDulrBUnbj57VWTQ4d+L5ock
+         oQWQTGvpQ45Mo6I0heqUBJee7CgGQKuWJcd21ToX04OGSr3pIsy5fFoJsrGIL4GlVH6B
+         jDKNaixXYaNX/BSg+6fNh0NUDzkhC5NRZ7mbGe+fZxJPb5JkvWT/wArUzro3LFWPjgeu
+         RRUrLjCF6+45XGPMzKXCQ0Who0jYHmOH0H5ZC6BRaoe0ZG4Spgrr53phfK1cSjPWEzAQ
+         JhIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686669792; x=1689261792;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZObq3QdQreREeU4NfsEue/+eYyb1HX3Nq35VP0wnSHk=;
+        b=Z4vl2MSzc5paPOtHiEuEWjRhTLsBluTz6+Xc1tOqplgOC00uSMv+B3W6bV4pcDQT/R
+         nnQLkY8EHEc4ds4e6hyUpFdE4s5+gvqkUmKX+alYlIeBhNfvk9FPhQPymPBDFZLLtzCO
+         xD/RVHZWpg4Expbv1ZtyDctoGpIp4WOgp5ZzAfMwpsi1QnQEfipjxDbOBt7/+cGTFHBe
+         Cf+9tdF797+qjJgp7rxcTaTw46aIg+9/xdUMuleCVw9M1SBYj10+oRyvs2d85KbrLiUh
+         MKP3LsPzpGOTH6td07e9T4ca+hloIvlcIsGyTO8UkKR+9x+cFsg+fHLcwccH1pmVecCZ
+         eV9Q==
+X-Gm-Message-State: AC+VfDzp6i960IHqP7z1ZJ/C1tdw1tfblAv2lRUF3XTc/UaqeYtv/66z
+        tFk8f/U/8BiKFePsmZJSf+BmKA==
+X-Google-Smtp-Source: ACHHUZ5MGoSPdfOcevVLsn6Xp9mNELJ81EH8SncxQ2LkVo3Gx9bg3gEgGWSOLoOA3+r4muPayrH13w==
+X-Received: by 2002:a19:6601:0:b0:4f6:5bf2:63bc with SMTP id a1-20020a196601000000b004f65bf263bcmr5593106lfc.3.1686669792155;
+        Tue, 13 Jun 2023 08:23:12 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id 7-20020ac24847000000b004f60be0c685sm1809673lfy.123.2023.06.13.08.23.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 08:23:11 -0700 (PDT)
+Message-ID: <1631b3cd-dc24-0024-5291-fa9bdacc82bc@linaro.org>
+Date:   Tue, 13 Jun 2023 17:23:06 +0200
 MIME-Version: 1.0
-References: <20230529084600.2878130-1-guoren@kernel.org> <20230529084600.2878130-2-guoren@kernel.org>
- <f686f36b-4c09-5099-3ba4-90f87f914654@rivosinc.com>
-In-Reply-To: <f686f36b-4c09-5099-3ba4-90f87f914654@rivosinc.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 13 Jun 2023 23:21:57 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQmLvCFhFL6eaNMcz__7Rv4TBBuoDQs288RycFvjMJrjQ@mail.gmail.com>
-Message-ID: <CAJF2gTQmLvCFhFL6eaNMcz__7Rv4TBBuoDQs288RycFvjMJrjQ@mail.gmail.com>
-Subject: Re: [PATCH -next V12 1/3] riscv: stack: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
-To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, conor.dooley@microchip.com,
-        heiko@sntech.de, jszhang@kernel.org, bjorn@kernel.org,
-        greentime.hu@sifive.com, vincent.chen@sifive.com,
-        andy.chiu@sifive.com, paul.walmsley@sifive.com,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v4 2/8] clk: qcom: Add Global Clock controller (GCC)
+ driver for IPQ5018
+Content-Language: en-US
+To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, ulf.hansson@linaro.org, linus.walleij@linaro.org,
+        catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230510134121.1232286-1-quic_srichara@quicinc.com>
+ <20230510134121.1232286-3-quic_srichara@quicinc.com>
+ <21a5642c-e6e5-9323-7db1-383a18616ac0@linaro.org>
+ <410b0991-30b6-c87d-9b25-5f51f6c08671@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <410b0991-30b6-c87d-9b25-5f51f6c08671@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 9:01=E2=80=AFPM Cl=C3=A9ment L=C3=A9ger <cleger@riv=
-osinc.com> wrote:
->
->
->
-> On 29/05/2023 10:45, guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > Add independent irq stacks for percpu to prevent kernel stack overflows=
-.
-> > It is also compatible with VMAP_STACK by arch_alloc_vmap_stack.
-> >
-> > Tested-by: Jisheng Zhang <jszhang@kernel.org>
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Cc: Conor Dooley <conor.dooley@microchip.com>
-> > ---
-> >   arch/riscv/Kconfig                   |  7 ++++++
-> >   arch/riscv/include/asm/irq_stack.h   | 32 +++++++++++++++++++++++++
-> >   arch/riscv/include/asm/thread_info.h |  2 ++
-> >   arch/riscv/kernel/irq.c              | 33 ++++++++++++++++++++++++++
-> >   arch/riscv/kernel/traps.c            | 35 ++++++++++++++++++++++++++-=
--
-> >   5 files changed, 107 insertions(+), 2 deletions(-)
-> >   create mode 100644 arch/riscv/include/asm/irq_stack.h
-> >
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index fa256f2e23c1..44b4c9690f94 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -588,6 +588,13 @@ config FPU
-> >
-> >         If you don't know what to do here, say Y.
-> >
-> > +config IRQ_STACKS
-> > +     bool "Independent irq stacks" if EXPERT
-> > +     default y
-> > +     select HAVE_IRQ_EXIT_ON_IRQ_STACK
-> > +     help
-> > +       Add independent irq stacks for percpu to prevent kernel stack o=
-verflows.
-> > +
-> >   endmenu # "Platform type"
-> >
-> >   menu "Kernel features"
-> > diff --git a/arch/riscv/include/asm/irq_stack.h b/arch/riscv/include/as=
-m/irq_stack.h
-> > new file mode 100644
-> > index 000000000000..b0dcee9a3fa2
-> > --- /dev/null
-> > +++ b/arch/riscv/include/asm/irq_stack.h
-> > @@ -0,0 +1,32 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +
-> > +#ifndef _ASM_RISCV_IRQ_STACK_H
-> > +#define _ASM_RISCV_IRQ_STACK_H
-> > +
-> > +#include <linux/bug.h>
-> > +#include <linux/gfp.h>
-> > +#include <linux/kconfig.h>
-> > +#include <linux/vmalloc.h>
-> > +#include <linux/pgtable.h>
-> > +#include <asm/thread_info.h>
-> > +
-> > +DECLARE_PER_CPU(ulong *, irq_stack_ptr);
-> > +
-> > +#ifdef CONFIG_VMAP_STACK
-> > +/*
-> > + * To ensure that VMAP'd stack overflow detection works correctly, all=
- VMAP'd
-> > + * stacks need to have the same alignment.
-> > + */
-> > +static inline unsigned long *arch_alloc_vmap_stack(size_t stack_size, =
-int node)
-> > +{
-> > +     void *p;
-> > +
-> > +     BUILD_BUG_ON(!IS_ENABLED(CONFIG_VMAP_STACK));
->
-> Hi Guo,
->
-> Since this function is already guarded with #ifdef CONFIG_VMAP_STACK, I
-> guess this BUILD_BUG_ON() is unnecessary).
-Yes, my carelessness. I would remove it in the next version.
-
->
-> Cl=C3=A9ment
 
 
+On 13.06.2023 15:16, Sricharan Ramabadhran wrote:
+> Hi Konrad,
+> 
+> On 5/27/2023 12:47 AM, Konrad Dybcio wrote:
+>>
+>>
+>> On 10.05.2023 15:41, Sricharan Ramabadhran wrote:
+>>> Add support for the global clock controller found on IPQ5018
+>>> based devices.
+>>>
+>>> Co-developed-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+>>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+>>> Co-developed-by: Gokul Sriram Palanisamy <quic_gokulsri@quicinc.com>
+>>> Signed-off-by: Gokul Sriram Palanisamy <quic_gokulsri@quicinc.com>
+>>> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+>>> ---
+>>>   [v4] Fixed to use ARRAY_SIZE() wherever parent_data was used
+>>>        Changed GPL v2 to GPL as per comments
+>>>
+>>>   drivers/clk/qcom/Kconfig       |   10 +-
+>>>   drivers/clk/qcom/Makefile      |    1 +
+>>>   drivers/clk/qcom/gcc-ipq5018.c | 3731 ++++++++++++++++++++++++++++++++
+>>>   3 files changed, 3740 insertions(+), 2 deletions(-)
+>>>   create mode 100644 drivers/clk/qcom/gcc-ipq5018.c
+>>>
+>> [...]
+>>
+>>> +struct clk_rcg2 lpass_axim_clk_src = {
+>>> +    .cmd_rcgr = 0x2E028,
+>> Please use lowercase hex for non-macro-defines, all throughout the file.
+>>
+> 
+>  ok. Will fix this in V10.
+> 
+>> [...]
+>>
+>>> +static struct clk_rcg2 system_noc_bfdcd_clk_src = {
+>> Drop clocks that are managed in RPM, they will conflict.
+>>
+> 
+>   IPQ5018 does not have RPM.
+Oh that's new. I suppose you'll be interested in clk-interconnect for
+voting on bus resources then.
 
-
---
-Best Regards
- Guo Ren
+Konrad
+> 
+> Regards,
+>  Sricharan
