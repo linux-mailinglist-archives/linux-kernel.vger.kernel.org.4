@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A12A72DFC4
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 12:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FD5572DFCB
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 12:39:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241560AbjFMKiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 06:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35772 "EHLO
+        id S239323AbjFMKjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 06:39:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232194AbjFMKiu (ORCPT
+        with ESMTP id S240712AbjFMKj3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 06:38:50 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759A8129
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 03:38:49 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-30fa23e106bso2764315f8f.3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 03:38:49 -0700 (PDT)
+        Tue, 13 Jun 2023 06:39:29 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E90E55
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 03:39:19 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f8d2bfed53so2268535e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 03:39:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686652728; x=1689244728;
+        d=linaro.org; s=google; t=1686652757; x=1689244757;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6d+VLj6m3MAAbwrIUd63IBRinbYN+a8k/C8reDLCUoA=;
-        b=hgjHCdmVZj17ygZWDKclgn2+Ytse1qSnmaG4LRvuBitz3LJyh5HgOVAUSo0/r7wbdt
-         fdSIKGBQtVODe5/DiwzNAY75tQn14eC3cn9Q2yhq2toPlE76Oa5oFJdV9l1XnL0YG0RH
-         fxvfeGPQ4hK4wvvH1FIqK7kR5+J3EkpRC2wIwVTAmEGdctNMUqczSpR/pqHqlcdrvXNx
-         w+5FbTeVgBNFZVVGyto35QUzWBVlGziPVY46F9DgTYoTMe+PwdW3jVov2buriiM7Vv2s
-         PvmiMKy9I+IiUkPF6osBSwKSkROBznVLomANfzqMBfERLZUvUZy0htIwFzMk6D4nAIGS
-         /3Pw==
+        bh=xaDlJQeO3hH2pBiVZb8UiGCEOJUjl7lCHpBv/xucTak=;
+        b=cpvNcFVPA6aGsusVPFb6hFFXQz+6VU2R47CMwhknwlsvy7rIY6Rk+tMn02L9wADk4J
+         dtcDrAclhTphN3RmE89KGiy/Z0axMKS5LBRKNXku1MLQ6GEU9yGjd+kU+if4mdozIid7
+         52AGaYdCsHmOUPFAhE1ldVMtIhfVu3VgCnQO0zPgDEVuiNZam0DkOX5JJILPJdtaOQQd
+         j6O33lazYUT02LUBC2KJRy1LUMNEol9eEIRGr2MH6aIBMLahrL3J0XAhnLlEajROAVRs
+         VB2tNLcH6Wm68U77Q1nN6s95j5W4YLQKkXWY0s1kDZ4kiRiqlMbOhAFVrzm/9SIUz7l3
+         JZUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686652728; x=1689244728;
+        d=1e100.net; s=20221208; t=1686652757; x=1689244757;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6d+VLj6m3MAAbwrIUd63IBRinbYN+a8k/C8reDLCUoA=;
-        b=gnQRtT3/jum6FLjiWcBTff9Iu48HKVvADwEAyeS5HbPR56LMzS+YqFVHPlbr3Mkw/l
-         6wDAVwjd8optuSFf59sDVfva5spJ/P0Al8bwWczNVCMuN9S/HKcgS2ItF49uUA4hlbVF
-         MyBP6mB3+AoRvh7S6glEd8MgzwvJdde0zimiRdvR9PDOdUVHiZSlC2AAMWg6ouEfU8Ro
-         E5kSj+9b+l3OKD0hkRT2Mct0TwrEx/NeKNP6/XByUiGJpMvLNBRN3z4K0budT85rGdBK
-         BiXBKqhc1v6DOSASqjhlibqQT+14nRNdL+FtviMirNMiJZB4gCU7Yw8tw48HjNjpAcFe
-         ADCg==
-X-Gm-Message-State: AC+VfDzdG5v9i8lJQl8UfLXZplBqom3/06H1bRssQKcEG66FjDcCTIZR
-        IRay3QMWcSvSfTsHKlxSGe6sMaz05Ucj69gzRg7q8A==
-X-Google-Smtp-Source: ACHHUZ5HGIJRgD5nl4Qh50NEPcobvGP0CTVSW1VYZZsJoGlj0SicoFaUzO4TaUafxBw4qtclMnMW2w==
-X-Received: by 2002:a5d:6a0b:0:b0:309:46a4:6378 with SMTP id m11-20020a5d6a0b000000b0030946a46378mr5778964wru.12.1686652727984;
-        Tue, 13 Jun 2023 03:38:47 -0700 (PDT)
+        bh=xaDlJQeO3hH2pBiVZb8UiGCEOJUjl7lCHpBv/xucTak=;
+        b=X9w3AJg5+41Rv7/slnlQ/JGadEysK9p3ZcfL9Kc7js6yzH/7zpEbck/bII9coFpXC2
+         sYDSHfrGKMWKuwXkwLM3piUiGqJemcG78XlHsKn9rcZVSvq4vjfZoy0ZjgvnTV/jPyJM
+         tI9d+rarJruBu+xU8puYzz0o6ZvQj1kE2KLzjnNXqLFWJcQhEpdOiEDYEhOYVZWm34m/
+         O5RSJ+2DdSSb4Ix59Kob0Cx1W1B20y1piDfDiidm3Hqx80Q6R/3ogdrjibQmMUg+nNwT
+         5F0e5l0bFB2Du4YmaLFDy5Vm37guuwiZfWmckSSrSWUqBXZ7Oh2WbV6hAtbEzywoAwLV
+         XrwQ==
+X-Gm-Message-State: AC+VfDzpp2MPoG1/1A4T1dMtC/KwY940tCq0um83LTdJaeXM7kJ6q2ae
+        KoiiYtTmTAAT5gXdP5DsqHVKzQ==
+X-Google-Smtp-Source: ACHHUZ5HyOHzcbog/cShZpBLWaDR0+w362TXtcaS+8aBiQA9iPPqkCG+m8GPuzzU6GS2TikA9g34VA==
+X-Received: by 2002:a05:600c:518d:b0:3f8:643:182d with SMTP id fa13-20020a05600c518d00b003f80643182dmr9843519wmb.16.1686652757444;
+        Tue, 13 Jun 2023 03:39:17 -0700 (PDT)
 Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
-        by smtp.gmail.com with ESMTPSA id f9-20020a5d6649000000b0030f9dc63ff1sm13001387wrw.88.2023.06.13.03.38.47
+        by smtp.gmail.com with ESMTPSA id c17-20020adffb51000000b00307bc4e39e5sm14976537wrs.117.2023.06.13.03.39.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 03:38:47 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 11:38:45 +0100
+        Tue, 13 Jun 2023 03:39:17 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 11:39:15 +0100
 From:   Daniel Thompson <daniel.thompson@linaro.org>
 To:     Thomas Zimmermann <tzimmermann@suse.de>
 Cc:     daniel@ffwll.ch, javierm@redhat.com, sam@ravnborg.org,
@@ -58,53 +58,40 @@ Cc:     daniel@ffwll.ch, javierm@redhat.com, sam@ravnborg.org,
         michael.j.ruhl@intel.com, linux-fbdev@vger.kernel.org,
         dri-devel@lists.freedesktop.org, linux-sh@vger.kernel.org,
         linux-omap@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2 03/38] backlight/gpio_backlight: Compare against
- struct fb_info.device
-Message-ID: <20230613103845.GC169438@aspen.lan>
+        linux-kernel@vger.kernel.org, Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Subject: Re: [PATCH v2 04/38] backlight/gpio_backlight: Rename field 'fbdev'
+ to 'dev'
+Message-ID: <20230613103915.GD169438@aspen.lan>
 References: <20230612141352.29939-1-tzimmermann@suse.de>
- <20230612141352.29939-4-tzimmermann@suse.de>
+ <20230612141352.29939-5-tzimmermann@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230612141352.29939-4-tzimmermann@suse.de>
+In-Reply-To: <20230612141352.29939-5-tzimmermann@suse.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 04:07:41PM +0200, Thomas Zimmermann wrote:
-> Struct gpio_backlight_platform_data refers to a platform device within
-> the Linux device hierarchy. The test in gpio_backlight_check_fb()
-> compares it against the fbdev device in struct fb_info.dev, which
-> is different. Fix the test by comparing to struct fb_info.device.
->
-> Fixes a bug in the backlight driver and prepares fbdev for making
-> struct fb_info.dev optional.
->
-> v2:
-> 	* move renames into separate patch (Javier, Sam, Michael)
+On Mon, Jun 12, 2023 at 04:07:42PM +0200, Thomas Zimmermann wrote:
+> Rename the field 'fbdev' in struct gpio_backlight_platform_data and
+> struct gpio_backlight to 'dev', as they store pointers to the Linux
+> platform device; not the fbdev device. Makes the code easier to
+> understand.
 >
 > Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-> Fixes: 8b770e3c9824 ("backlight: Add GPIO-based backlight driver")
-> Cc: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 > Cc: Rich Felker <dalias@libc.org>
 > Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 > Cc: Lee Jones <lee@kernel.org>
 > Cc: Daniel Thompson <daniel.thompson@linaro.org>
 > Cc: Jingoo Han <jingoohan1@gmail.com>
 > Cc: linux-sh@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: <stable@vger.kernel.org> # v3.12+
 
 Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
 
