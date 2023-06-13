@@ -2,111 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2659072E2C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FDFC72E2C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:24:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242386AbjFMMUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 08:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58412 "EHLO
+        id S240177AbjFMMYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 08:24:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242465AbjFMMT7 (ORCPT
+        with ESMTP id S233000AbjFMMY3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 08:19:59 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A4A1738;
-        Tue, 13 Jun 2023 05:19:38 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f122ff663eso6604443e87.2;
-        Tue, 13 Jun 2023 05:19:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686658777; x=1689250777;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mzJgGG/CDYOhD2YNQTv2CpS/TSd4Qcu56zqodO6IyB4=;
-        b=Qbe/SL0po5bwWWWFREV7MhlgjuwUoGjUD82KbJ/MQ2qc0C8XQmnPG3w2pzBDWaBxjq
-         pHbZWbhF0e9FOhM1kxt3TbkRYjMuGDGI7W2r0DPVbQxlZgu+EgBeKAr/FARcUpP+88ds
-         uS3SMi98EB6c502dbpLPxEkzoFpKcsxGPDkhXY3xCcvXZxCC+RJH7l3zfMmTUD/G7rbI
-         NSz3t9a7S6sE6U0tHECE02oadhCvLOxmR5J+jF/ZLEMj+WczhTB6Jin8yS46gIvx2Q/D
-         2sYvlkQd2kYY2lvTMLf6cXTS0xuS9fnWaWKZoVFwDQiSglQ2pgErQ9jZqmEvXtrno1OC
-         dNxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686658777; x=1689250777;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mzJgGG/CDYOhD2YNQTv2CpS/TSd4Qcu56zqodO6IyB4=;
-        b=VjcHUBmsLtF8bdJLWlcTvJqEMhNPUpG6JcgvNamVUOtHSpeUoIhU/DJ6HzQABaqB96
-         QmI8EdqHzhim5vN/LuG9nK7BtWQsTCHjxc97qt4J1wsAoes4ZcVQ7ZEHqbfMWu6bZH2c
-         5/yb9Yo5QvE9sMSSu4zCSAUxwKHoRof9JJWV5dN0AsRRz3HlIh+nDMB5Xiri7W8U/GAG
-         HQRCGR4CIfnbHJu46yRZkWn6YJpFixidyxXJ7mD8fqmbwQ7ERhtWI7qERuGisLHzCOqE
-         SJcj9npRHSoHZMxYW4y3Yn1hxd7NzDihr0f6OBsKlGkMVp63MIMWjYXWjlG4AEK9FbbC
-         OydA==
-X-Gm-Message-State: AC+VfDwP/HPOTo3eojSqcLVkDz5hN1Gie/WYkiI8w/n7dGeDOtG7qiGC
-        fVTg5ox3XbTcnQuYmH1FOQU=
-X-Google-Smtp-Source: ACHHUZ73NS69UjggKVhkFEj2G1DBNP2JULH1k7n4O+6a0aEVHacXcSMiSNDEOlOremukbrwfskSwHw==
-X-Received: by 2002:a19:5f0d:0:b0:4f6:26de:502e with SMTP id t13-20020a195f0d000000b004f626de502emr5281226lfb.43.1686658777047;
-        Tue, 13 Jun 2023 05:19:37 -0700 (PDT)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id x19-20020a1c7c13000000b003f7aad8c160sm14252269wmc.11.2023.06.13.05.19.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 05:19:36 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 13:19:34 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Subject: Re: [PATCH 5.15 00/91] 5.15.117-rc1 review
-Message-ID: <ZIhe1sDoz1bNjjcS@debian>
-References: <20230612101702.085813286@linuxfoundation.org>
+        Tue, 13 Jun 2023 08:24:29 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E93B5CE;
+        Tue, 13 Jun 2023 05:24:25 -0700 (PDT)
+Received: from loongson.cn (unknown [10.180.13.22])
+        by gateway (Coremail) with SMTP id _____8Cx8Oj4X4hkYKMEAA--.8005S3;
+        Tue, 13 Jun 2023 20:24:24 +0800 (CST)
+Received: from [10.180.13.22] (unknown [10.180.13.22])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax6OT3X4hknyMZAA--.6254S3;
+        Tue, 13 Jun 2023 20:24:23 +0800 (CST)
+Message-ID: <bda7c25f-65cf-d45f-3ac0-f2471e3aacf8@loongson.cn>
+Date:   Tue, 13 Jun 2023 20:23:58 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612101702.085813286@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [ PATCH v2 3/3] ASoC: dt-bindings: Add support for Loongson audio
+ card
+To:     Conor Dooley <conor@kernel.org>
+Cc:     krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        conor+dt@kernel.org, broonie@kernel.org, lgirdwood@gmail.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, loongarch@lists.linux.dev,
+        loongson-kernel@lists.loongnix.cn
+References: <20230612085614.3039498-1-mengyingkun@loongson.cn>
+ <20230612-booted-french-186dd95e78a9@spud>
+Content-Language: en-US
+From:   Yingkun Meng <mengyingkun@loongson.cn>
+In-Reply-To: <20230612-booted-french-186dd95e78a9@spud>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8Ax6OT3X4hknyMZAA--.6254S3
+X-CM-SenderInfo: 5phqw55lqjy33q6o00pqjv00gofq/1tbiAQABDGSIXIIAKwABsU
+X-Coremail-Antispam: 1Uk129KBj93XoWxGF4DKrW3ZF13AFWkuw43XFc_yoW5Gr47pF
+        WrCasrKF4xt3W7C3savFyrJr4fZFZayanxJr42qw1UC3s8Ka4rWw42kF1rZay2yrn5GrW2
+        vFyF9w48G3Z0yagCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVWxJr0_GcWln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
+        6r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
+        1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxG
+        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4U
+        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8HKZJUUUU
+        U==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
 
-On Mon, Jun 12, 2023 at 12:25:49PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.117 release.
-> There are 91 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 2023/6/13 01:24, Conor Dooley wrote:
+> Hey!
+>
+> On Mon, Jun 12, 2023 at 04:56:14PM +0800, YingKun Meng wrote:
+>> From: Yingkun Meng <mengyingkun@loongson.cn>
+>>
+>> The audio card uses loongson I2S controller present in
+>> 7axxx/2kxxx chips to transfer audio data.
+>>
+>> On loongson platform, the chip has only one I2S controller.
+>>
+>> Signed-off-by: Yingkun Meng <mengyingkun@loongson.cn>
+> I got 2 copies of this patch, but none of the rest of the series appears
+> to be threaded with it.
+>
+>>   .../sound/loongson,ls-audio-card.yaml         | 70 +++++++++++++++++++
+>>   1 file changed, 70 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/sound/loongson,ls-audio-card.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/sound/loongson,ls-audio-card.yaml b/Documentation/devicetree/bindings/sound/loongson,ls-audio-card.yaml
+>> new file mode 100644
+>> index 000000000000..61e8babed402
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/sound/loongson,ls-audio-card.yaml
+>> @@ -0,0 +1,70 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/sound/loongson,ls-audio-card.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Loongson 7axxx/2kxxx ASoC audio sound card driver
+>> +
+>> +maintainers:
+>> +  - Yingkun Meng <mengyingkun@loongson.cn>
+>> +
+>> +description:
+>> +  The binding describes the sound card present in loongson
+>> +  7axxx/2kxxx platform. The sound card is an ASoC component
+>> +  which uses Loongson I2S controller to transfer the audio data.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: loongson,ls-audio-card
+> Reviewing sound stuff is beyond my pay grade, so forgive me if I am off
+> the rails here, but this (and the "x"s in the description) look a bit
+> odd. Recently, we've noticed quite a few loongson dt-bindings attempting
+> to use a single compatible for many different chips.
+> Usually you have individual compatibles for the various SoCs with this
+> core, which can fall back to a generic one, rather than just adding a
+> generic compatible for all devices.
+> As far as I know, there's several SoCs fitting 2kxxx, and the format
+> being used elsewhere is "loongson,ls2k1000" etc.
 
-Build test (gcc version 12.2.1 20230511):
-mips: 62 configs -> no failure
-arm: 99 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
+Currently, Loongson has 2K0500/2K1000LA/2K1500/2K2000 chips.
 
-[1]. https://openqa.qa.codethink.co.uk/tests/3932
-[2]. https://openqa.qa.codethink.co.uk/tests/3919
-[3]. https://openqa.qa.codethink.co.uk/tests/3918
+Here, its' possible to use a single compatible for different chips,
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+as the audio device is a logical device, not dependent on chip model.
 
--- 
-Regards
-Sudip
+
+> Cheers,
+> Conor.
+>
+
