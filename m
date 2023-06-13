@@ -2,202 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 330A272E86D
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 18:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FDC672E87F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 18:27:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232428AbjFMQZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 12:25:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52958 "EHLO
+        id S238560AbjFMQ0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 12:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbjFMQZm (ORCPT
+        with ESMTP id S231691AbjFMQ0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 12:25:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DBDB5;
-        Tue, 13 Jun 2023 09:25:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 13 Jun 2023 12:26:31 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3849E4A;
+        Tue, 13 Jun 2023 09:26:29 -0700 (PDT)
+Received: from mercury (dyndsl-091-248-189-170.ewe-ip-backbone.de [91.248.189.170])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E075F618B9;
-        Tue, 13 Jun 2023 16:25:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E4D4C433F0;
-        Tue, 13 Jun 2023 16:25:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686673539;
-        bh=f4lAwk+LRCT6e2zfzrPLg93CA6TlPHVpgA6J1/rlXls=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=tNRT6G4bGetZeO47IbtMeQC2vx0hh96m8zSEn7Erm8bRRKpf1uwMSsHMYLc5ZRr8D
-         zhkyJ00NzcccAFaXrGGNdC6ACFIR5gH45OBdkGrrGkqJqEArIBH4EEiQOVRCvWzrTq
-         Sl+M99EL2C4rQm1fTO+i/qg9I800NY/TRUJZt04YcrSxbDdFL33sddmC6kjw4tlCcY
-         eBae53jwPJ4doKNvkr8OMv8GcNWeHSlMzjRQSLUCyemF5cS2JnXX5lR0XtBlWza9/I
-         iqDhO1ijhds83s2YxTS//WYnveOyEYZkDRqIMRvVxUOLh3xvjRHMjxg6WKRRpuIUAY
-         +CypN/TFVgueg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id D2103CE3A33; Tue, 13 Jun 2023 09:25:38 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 09:25:38 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Zqiang <qiang.zhang1211@gmail.com>,
-        Mukesh Ojha <quic_mojha@quicinc.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rcuscale: fix building with RCU_TINY
-Message-ID: <e2a4332b-fcc3-4eb3-846e-302e056821c6@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230609120522.3921015-1-arnd@kernel.org>
- <9fd81723-4ba2-4a0b-a7da-f9fb121021de@paulmck-laptop>
- <a3952f99-7ae9-8f8f-d87a-713690cbe1fb@infradead.org>
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 90CD56606F02;
+        Tue, 13 Jun 2023 17:26:28 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686673588;
+        bh=PJNaA82l3h2YK+IyLkBxAuI/hFHUcU8f0OMwwfGkI6E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LdtJCgZb4TWILwc4v0I226TaYUr8ygIMXSFatfDGtMACWF81B7tlFHZONFxVQowJX
+         xIwsaqMdyPZ2QM4kga6bIHnx6AqWzOpljKQjpA0cB7Zn6kzM+gSuZFitmijD6Pym7g
+         U0rGhPJu5np+9IVVPGjpFrBy8aq2okjWy5/PI7xuaPRXivfFIwcWaRoUjMWErCKPHM
+         2gIzn/Jw5TrEyS0paXr5AzM226ddzd5l5xgcUUYl4JGuNVo5ppkvdxRrVQpKq/t7qz
+         K3H2ME6VY2KKkWXA8JB1KAQgk6TZwv4Jl+GrJnTXtBvJyHDb0OK5I/iAem/LZyyIES
+         cpICz54sf3Svg==
+Received: by mercury (Postfix, from userid 1000)
+        id 2F5FD1066FBA; Tue, 13 Jun 2023 18:26:26 +0200 (CEST)
+Date:   Tue, 13 Jun 2023 18:26:26 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Vincent Legoll <vincent.legoll@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 04/25] PM / devfreq: rockchip-dfi: Add SoC specific
+ init function
+Message-ID: <20230613162626.s7ijyg7iu6jcrvbq@mercury.elektranox.org>
+References: <20230524083153.2046084-1-s.hauer@pengutronix.de>
+ <20230524083153.2046084-5-s.hauer@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rx6ubjn2sztmbvp2"
 Content-Disposition: inline
-In-Reply-To: <a3952f99-7ae9-8f8f-d87a-713690cbe1fb@infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230524083153.2046084-5-s.hauer@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 07:42:17AM -0700, Randy Dunlap wrote:
-> Paul-
-> 
-> On 6/9/23 15:51, Paul E. McKenney wrote:
-> > On Fri, Jun 09, 2023 at 02:05:14PM +0200, Arnd Bergmann wrote:
-> >> From: Arnd Bergmann <arnd@arndb.de>
-> >>
-> >> Both the CONFIG_TASKS_RCU and CONFIG_TASKS_RUDE_RCU options
-> >> are broken when RCU_TINY is enabled as well, as some functions
-> >> are missing a declaration.
-> >>
-> >> In file included from kernel/rcu/update.c:649:
-> >> kernel/rcu/tasks.h:1271:21: error: no previous prototype for 'get_rcu_tasks_rude_gp_kthread' [-Werror=missing-prototypes]
-> >>  1271 | struct task_struct *get_rcu_tasks_rude_gp_kthread(void)
-> >>       |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >> kernel/rcu/rcuscale.c:330:27: error: 'get_rcu_tasks_rude_gp_kthread' undeclared here (not in a function); did you mean 'get_rcu_tasks_trace_gp_kthread'?
-> >>   330 |         .rso_gp_kthread = get_rcu_tasks_rude_gp_kthread,
-> >>       |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >>       |                           get_rcu_tasks_trace_gp_kthread
-> >>
-> >> In file included from /home/arnd/arm-soc/kernel/rcu/update.c:649:
-> >> kernel/rcu/tasks.h:1113:21: error: no previous prototype for 'get_rcu_tasks_gp_kthread' [-Werror=missing-prototypes]
-> >>  1113 | struct task_struct *get_rcu_tasks_gp_kthread(void)
-> >>       |                     ^~~~~~~~~~~~~~~~~~~~~~~~
-> >>
-> >> Also, building with CONFIG_TASKS_RUDE_RCU but not CONFIG_TASKS_RCU is
-> >> broken because of some missing stub functions:
-> >>
-> >> kernel/rcu/rcuscale.c:322:27: error: 'tasks_scale_read_lock' undeclared here (not in a function); did you mean 'srcu_scale_read_lock'?
-> >>   322 |         .readlock       = tasks_scale_read_lock,
-> >>       |                           ^~~~~~~~~~~~~~~~~~~~~
-> >>       |                           srcu_scale_read_lock
-> >> kernel/rcu/rcuscale.c:323:27: error: 'tasks_scale_read_unlock' undeclared here (not in a function); did you mean 'srcu_scale_read_unlock'?
-> >>   323 |         .readunlock     = tasks_scale_read_unlock,
-> >>       |                           ^~~~~~~~~~~~~~~~~~~~~~~
-> >>       |                           srcu_scale_read_unlock
-> >>
-> >> Move the declarations outside of the RCU_TINY #ifdef and duplicate the
-> >> shared stub functions to address all of the above.
-> >>
-> >> Fixes: 88d7ff818f0ce ("rcuscale: Add RCU Tasks Rude testing")
-> >> Fixes: 755f1c5eb416b ("rcuscale: Measure RCU Tasks Trace grace-period kthread CPU time")
-> >> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > Queued and pushed, thank you!
-> > 
-> > I clearly need to improve my Kconfig coverage here...
-> 
-> Pushed where. I'm still seeing this build error in linux-next 20230613.
 
-To rcu/dev.  There have been some testing bottlenecks, but it should
-reach rcu/next soon.
+--rx6ubjn2sztmbvp2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-							Thanx, Paul
+Hi,
 
-> Thanks.
-> 
-> > 
-> >> ---
-> >>  kernel/rcu/rcu.h      | 14 ++++++++------
-> >>  kernel/rcu/rcuscale.c | 13 +++++++++++--
-> >>  2 files changed, 19 insertions(+), 8 deletions(-)
-> >>
-> >> diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
-> >> index 9829d8161b213..5befd8780dcd3 100644
-> >> --- a/kernel/rcu/rcu.h
-> >> +++ b/kernel/rcu/rcu.h
-> >> @@ -505,18 +505,20 @@ void rcu_async_relax(void);
-> >>  void rcupdate_announce_bootup_oddness(void);
-> >>  #ifdef CONFIG_TASKS_RCU_GENERIC
-> >>  void show_rcu_tasks_gp_kthreads(void);
-> >> -# ifdef CONFIG_TASKS_RCU
-> >> -struct task_struct *get_rcu_tasks_gp_kthread(void);
-> >> -# endif // # ifdef CONFIG_TASKS_RCU
-> >> -# ifdef CONFIG_TASKS_RUDE_RCU
-> >> -struct task_struct *get_rcu_tasks_rude_gp_kthread(void);
-> >> -# endif // # ifdef CONFIG_TASKS_RUDE_RCU
-> >>  #else /* #ifdef CONFIG_TASKS_RCU_GENERIC */
-> >>  static inline void show_rcu_tasks_gp_kthreads(void) {}
-> >>  #endif /* #else #ifdef CONFIG_TASKS_RCU_GENERIC */
-> >>  void rcu_request_urgent_qs_task(struct task_struct *t);
-> >>  #endif /* #else #ifdef CONFIG_TINY_RCU */
-> >>  
-> >> +#ifdef CONFIG_TASKS_RCU
-> >> +struct task_struct *get_rcu_tasks_gp_kthread(void);
-> >> +#endif // # ifdef CONFIG_TASKS_RCU
-> >> +
-> >> +#ifdef CONFIG_TASKS_RUDE_RCU
-> >> +struct task_struct *get_rcu_tasks_rude_gp_kthread(void);
-> >> +#endif // # ifdef CONFIG_TASKS_RUDE_RCU
-> >> +
-> >>  #define RCU_SCHEDULER_INACTIVE	0
-> >>  #define RCU_SCHEDULER_INIT	1
-> >>  #define RCU_SCHEDULER_RUNNING	2
-> >> diff --git a/kernel/rcu/rcuscale.c b/kernel/rcu/rcuscale.c
-> >> index 5ce3b4e7ce711..a0eae19007088 100644
-> >> --- a/kernel/rcu/rcuscale.c
-> >> +++ b/kernel/rcu/rcuscale.c
-> >> @@ -316,11 +316,20 @@ static struct rcu_scale_ops tasks_ops = {
-> >>   * Definitions for RCU-tasks-rude scalability testing.
-> >>   */
-> >>  
-> >> +static int tasks_rude_scale_read_lock(void)
-> >> +{
-> >> +	return 0;
-> >> +}
-> >> +
-> >> +static void tasks_rude_scale_read_unlock(int idx)
-> >> +{
-> >> +}
-> >> +
-> >>  static struct rcu_scale_ops tasks_rude_ops = {
-> >>  	.ptype		= RCU_TASKS_RUDE_FLAVOR,
-> >>  	.init		= rcu_sync_scale_init,
-> >> -	.readlock	= tasks_scale_read_lock,
-> >> -	.readunlock	= tasks_scale_read_unlock,
-> >> +	.readlock	= tasks_rude_scale_read_lock,
-> >> +	.readunlock	= tasks_rude_scale_read_unlock,
-> >>  	.get_gp_seq	= rcu_no_completed,
-> >>  	.gp_diff	= rcu_seq_diff,
-> >>  	.async		= call_rcu_tasks_rude,
-> >> -- 
-> >> 2.39.2
-> >>
-> 
-> -- 
-> ~Randy
+On Wed, May 24, 2023 at 10:31:32AM +0200, Sascha Hauer wrote:
+> Move the RK3399 specifics to a SoC specific init function to make
+> the way free for supporting other SoCs later.
+>=20
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> ---
+>=20
+> Notes:
+>     Changes since v4:
+>     - use of_device_get_match_data()
+>     - use a callback rather than a struct type as driver data
+>=20
+>  drivers/devfreq/event/rockchip-dfi.c | 48 +++++++++++++++++++---------
+>  1 file changed, 33 insertions(+), 15 deletions(-)
+>=20
+
+Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+
+-- Sebastian
+
+> diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event=
+/rockchip-dfi.c
+> index e19e5acaa362c..6b1ef29df7048 100644
+> --- a/drivers/devfreq/event/rockchip-dfi.c
+> +++ b/drivers/devfreq/event/rockchip-dfi.c
+> @@ -17,6 +17,7 @@
+>  #include <linux/slab.h>
+>  #include <linux/list.h>
+>  #include <linux/of.h>
+> +#include <linux/of_device.h>
+> =20
+>  #include <soc/rockchip/rk3399_grf.h>
+> =20
+> @@ -55,27 +56,21 @@ struct rockchip_dfi {
+>  	void __iomem *regs;
+>  	struct regmap *regmap_pmu;
+>  	struct clk *clk;
+> +	u32 ddr_type;
+>  };
+> =20
+>  static void rockchip_dfi_start_hardware_counter(struct devfreq_event_dev=
+ *edev)
+>  {
+>  	struct rockchip_dfi *dfi =3D devfreq_event_get_drvdata(edev);
+>  	void __iomem *dfi_regs =3D dfi->regs;
+> -	u32 val;
+> -	u32 ddr_type;
+> -
+> -	/* get ddr type */
+> -	regmap_read(dfi->regmap_pmu, RK3399_PMUGRF_OS_REG2, &val);
+> -	ddr_type =3D (val >> RK3399_PMUGRF_DDRTYPE_SHIFT) &
+> -		    RK3399_PMUGRF_DDRTYPE_MASK;
+> =20
+>  	/* clear DDRMON_CTRL setting */
+>  	writel_relaxed(CLR_DDRMON_CTRL, dfi_regs + DDRMON_CTRL);
+> =20
+>  	/* set ddr type to dfi */
+> -	if (ddr_type =3D=3D RK3399_PMUGRF_DDRTYPE_LPDDR3)
+> +	if (dfi->ddr_type =3D=3D RK3399_PMUGRF_DDRTYPE_LPDDR3)
+>  		writel_relaxed(LPDDR3_EN, dfi_regs + DDRMON_CTRL);
+> -	else if (ddr_type =3D=3D RK3399_PMUGRF_DDRTYPE_LPDDR4)
+> +	else if (dfi->ddr_type =3D=3D RK3399_PMUGRF_DDRTYPE_LPDDR4)
+>  		writel_relaxed(LPDDR4_EN, dfi_regs + DDRMON_CTRL);
+> =20
+>  	/* enable count, use software mode */
+> @@ -167,8 +162,26 @@ static const struct devfreq_event_ops rockchip_dfi_o=
+ps =3D {
+>  	.set_event =3D rockchip_dfi_set_event,
+>  };
+> =20
+> +static int rk3399_dfi_init(struct rockchip_dfi *dfi)
+> +{
+> +	struct regmap *regmap_pmu =3D dfi->regmap_pmu;
+> +	u32 val;
+> +
+> +	dfi->clk =3D devm_clk_get(dfi->dev, "pclk_ddr_mon");
+> +	if (IS_ERR(dfi->clk))
+> +		return dev_err_probe(dfi->dev, PTR_ERR(dfi->clk),
+> +				     "Cannot get the clk pclk_ddr_mon\n");
+> +
+> +	/* get ddr type */
+> +	regmap_read(regmap_pmu, RK3399_PMUGRF_OS_REG2, &val);
+> +	dfi->ddr_type =3D (val >> RK3399_PMUGRF_DDRTYPE_SHIFT) &
+> +			RK3399_PMUGRF_DDRTYPE_MASK;
+> +
+> +	return 0;
+> +};
+> +
+>  static const struct of_device_id rockchip_dfi_id_match[] =3D {
+> -	{ .compatible =3D "rockchip,rk3399-dfi" },
+> +	{ .compatible =3D "rockchip,rk3399-dfi", .data =3D rk3399_dfi_init },
+>  	{ },
+>  };
+>  MODULE_DEVICE_TABLE(of, rockchip_dfi_id_match);
+> @@ -179,6 +192,12 @@ static int rockchip_dfi_probe(struct platform_device=
+ *pdev)
+>  	struct rockchip_dfi *dfi;
+>  	struct devfreq_event_desc *desc;
+>  	struct device_node *np =3D pdev->dev.of_node, *node;
+> +	int (*soc_init)(struct rockchip_dfi *dfi);
+> +	int ret;
+> +
+> +	soc_init =3D of_device_get_match_data(&pdev->dev);
+> +	if (!soc_init)
+> +		return -EINVAL;
+> =20
+>  	dfi =3D devm_kzalloc(dev, sizeof(*dfi), GFP_KERNEL);
+>  	if (!dfi)
+> @@ -188,11 +207,6 @@ static int rockchip_dfi_probe(struct platform_device=
+ *pdev)
+>  	if (IS_ERR(dfi->regs))
+>  		return PTR_ERR(dfi->regs);
+> =20
+> -	dfi->clk =3D devm_clk_get(dev, "pclk_ddr_mon");
+> -	if (IS_ERR(dfi->clk))
+> -		return dev_err_probe(dev, PTR_ERR(dfi->clk),
+> -				     "Cannot get the clk pclk_ddr_mon\n");
+> -
+>  	node =3D of_parse_phandle(np, "rockchip,pmu", 0);
+>  	if (!node)
+>  		return dev_err_probe(&pdev->dev, -ENODEV, "Can't find pmu_grf register=
+s\n");
+> @@ -209,6 +223,10 @@ static int rockchip_dfi_probe(struct platform_device=
+ *pdev)
+>  	desc->driver_data =3D dfi;
+>  	desc->name =3D np->name;
+> =20
+> +	ret =3D soc_init(dfi);
+> +	if (ret)
+> +		return ret;
+> +
+>  	dfi->edev =3D devm_devfreq_event_add_edev(&pdev->dev, desc);
+>  	if (IS_ERR(dfi->edev)) {
+>  		dev_err(&pdev->dev,
+> --=20
+> 2.39.2
+>=20
+
+--rx6ubjn2sztmbvp2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSImLEACgkQ2O7X88g7
++pqZDQ/+OZcf2EIUTPKqg4spvMldvlmYCa6HcWP2PYnPewWBlAOGuuKx0gsCfIRL
+BDskxrVjEgblfAU6TGbH9L/gtCK+Mo2YQcPIeGOANIupI/j4Lq510CTzxvtTRcV+
+QlxqCMqnynE3lR3RfDfxHT2u391X7axmzyLXGEhyHlWOQnMrNBM2hDt4v7/hP+Rf
+KAaj+c+OuZvucZsgbx2qL+1GldDtYI01LwWp1hpofgwt3s8K2LBumaJyu1HrkfFk
+C2XOrVFD+yHLl+iZaN0U/0+36Ncep1IdY0ytJI1USJO4CI3KzZ8q3d5Uz+vHvjV8
+T9S1onvR9iiFvSHxsEo82ABJ/hjXUnXH5Xy7xTEpUE92Xc+8otb3xJc+0kFKDF6E
+kgWwOuIL2xM1iItYZdMXtAS48a75DyM+2RpNuioyReDS2sNowbJK86WoLwucU3PM
+gp6v06jfPbq6PrHy/KVKdjb+sDkYggatA9XgNa3zkOYZ8+EC7fMdu1ZHcvKxnDYO
+N5ZoDbYtqISN6x3kGda/67ViEjh7l1qLMl0ujFq8tRA2EcY/IKvoc9dyko+N85ml
+rv5gVzJxKZbRvL4lBFzHrQkAbMru3BLk7WcuhDsPq/CoffTWddlhJiKVKsPpK+06
+uvsCvubIt/p5bfzTJklQm3oG02bfyH4UimNIwRaf59WWnDphEac=
+=jgR8
+-----END PGP SIGNATURE-----
+
+--rx6ubjn2sztmbvp2--
