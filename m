@@ -2,100 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A7D72E260
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B59372E262
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242247AbjFMMAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 08:00:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49990 "EHLO
+        id S242270AbjFMMAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 08:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233858AbjFMMAH (ORCPT
+        with ESMTP id S242269AbjFMMAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 08:00:07 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C202AC5;
-        Tue, 13 Jun 2023 05:00:02 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1q92gl-0002a9-Fj; Tue, 13 Jun 2023 13:59:55 +0200
-Message-ID: <98909a2f-cb55-b732-409c-ad14c802bf13@leemhuis.info>
-Date:   Tue, 13 Jun 2023 13:59:54 +0200
+        Tue, 13 Jun 2023 08:00:17 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7092124;
+        Tue, 13 Jun 2023 05:00:15 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QgRvG53PZz4f4684;
+        Tue, 13 Jun 2023 20:00:10 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgCXaK9KWohkdghwLg--.58089S3;
+        Tue, 13 Jun 2023 20:00:11 +0800 (CST)
+Subject: Re: [dm-devel] [PATCH -next v2 2/6] md: refactor action_store() for
+ 'idle' and 'frozen'
+To:     Xiao Ni <xni@redhat.com>, Yu Kuai <yukuai1@huaweicloud.com>,
+        guoqing.jiang@linux.dev, agk@redhat.com, snitzer@kernel.org,
+        dm-devel@redhat.com, song@kernel.org
+Cc:     yi.zhang@huawei.com, yangerkun@huawei.com,
+        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20230529132037.2124527-1-yukuai1@huaweicloud.com>
+ <20230529132037.2124527-3-yukuai1@huaweicloud.com>
+ <b780ccfd-66b1-fdd1-b33e-aa680fbd86f1@redhat.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <1aaf9150-bbd3-87a8-8d54-8b5d63ab5ed3@huaweicloud.com>
+Date:   Tue, 13 Jun 2023 20:00:10 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: Fwd: w_scan hangs on 6.3.7 and does not react on kill -9
-Content-Language: en-US, de-DE
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lukasz Kalamlacki <kalamlacki@gmail.com>,
-        Hyunwoo Kim <imv4bel@gmail.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Stefan Lippers-Hollmann <s.l-h@gmx.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-References: <67afa974-835a-77cc-d4bb-49cba0ff5bf5@gmail.com>
- <cc577237-7814-0bea-a152-8acdea844088@gmail.com>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <cc577237-7814-0bea-a152-8acdea844088@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1686657602;40cc4f1c;
-X-HE-SMSGID: 1q92gl-0002a9-Fj
+In-Reply-To: <b780ccfd-66b1-fdd1-b33e-aa680fbd86f1@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgCXaK9KWohkdghwLg--.58089S3
+X-Coremail-Antispam: 1UD129KBjvdXoWrtFykCF13Gry3WryfZry3XFb_yoW3Xwb_C3
+        yDKw15Wr18Aaya9r1qyw15Z347Krn0v34UGrZ5Zw45uw17WFs5Jrs8J3Z5Wr4UGFWqkr17
+        AFyYqa13Jr429jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb3xFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY
+        04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
+        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
+        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
+        AIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1l
+        IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
+        C2KfnxnUUI43ZEXa7VU1a9aPUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-
-On 13.06.23 13:23, Bagas Sanjaya wrote:
-> On 6/12/23 20:52, Bagas Sanjaya wrote:
->> Hi,
->>
->> I notice a regression report on Bugzilla [1]. Quoting from it:
->>
->>> w_scan tool on kernel 6.3.7 hangs so badly that it cannot be killed by kill -9 
->>> I tried also w_scan_cpp 20230604 but it also fails I have 2040:8268 Hauppauge soloHD device as reported by lsusb. During reboot of the OS it prints a lot of kernel errors but it is after syslog is killed I guess and in syslog messages I do not see anything. On default Debian kernel 5.10.0-23 this problem does not exists.
->>
->>
->> See Bugzilla for the full thread and attached dmesg and kernel config.
->>
->> Lukasz: On what hardware you have this regression? Also, it is really
->> helpful if you can perform bisection (as outlined
->> in Documentation/admin-guide/bug-bisect.html) to find the culprit,
->> when developers can't figure it out by inspecting the code alone.
->> Last but not least, please also try latest mainline (currently v6.4-rc6).
->>
->> Anyway, I'm adding it to regzbot:
->>
->> #regzbot introduced: v5.10..v6.3 https://bugzilla.kernel.org/show_bug.cgi?id=217540
->> #regzbot title: w_scan zombie (unkillable) on kernel v6.3
+在 2023/06/13 16:02, Xiao Ni 写道:
 > 
-> Another reporter on Bugzilla with similar regression as this one had
-> bisected the culprit, so:
+> 在 2023/5/29 下午9:20, Yu Kuai 写道:
+>> From: Yu Kuai <yukuai3@huawei.com>
+>>
+>> Prepare to handle 'idle' and 'frozen' differently to fix a deadlock, 
+>> there
+>> are no functional changes except that MD_RECOVERY_RUNNING is checked
+>> again after 'reconfig_mutex' is held.
 > 
-> Hyunwoo Kim: It looks like this regression is caused by a backported
-> commit of yours. Would you like to take a look on it?
 > 
-> #regzbot introduced: 8994830135b38b
+> Can you explain more about why it needs to check MD_RECOVERY_RUNNING 
+> again here?
 
-TWIMC, revert for mainline already in preparation, for details see:
+As I explain in the following comment:
+>> +    /*
+>> +     * Check again in case MD_RECOVERY_RUNNING is cleared before lock is
+>> +     * held.
+>> +     */
+>> +    if (!test_bit(MD_RECOVERY_RUNNING, &mddev->recovery)) {
+>> +        mddev_unlock(mddev);
+>> +        return;
+>> +    }
 
-https://lore.kernel.org/all/23d5f9d6-f0db-a9af-1291-e9d6ac3cd126@leemhuis.info/
+Thanks,
+Kuai
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
-
-#regzbot monitor: https://lore.kernel.org/all/20230613053314.70839926@mir/
-#regzbot monitor:
-https://lore.kernel.org/all/20230609082238.3671398-1-mchehab@kernel.org/
