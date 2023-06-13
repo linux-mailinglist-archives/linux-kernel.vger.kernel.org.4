@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34AC172E0A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 13:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9587372E081
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 13:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242155AbjFMLKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 07:10:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49122 "EHLO
+        id S242102AbjFMLKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 07:10:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240041AbjFMLKB (ORCPT
+        with ESMTP id S240108AbjFMLKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 13 Jun 2023 07:10:01 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F020BE52;
-        Tue, 13 Jun 2023 04:09:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489D510D8;
+        Tue, 13 Jun 2023 04:10:00 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7D761223F0;
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D3254223F6;
         Tue, 13 Jun 2023 11:09:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1686654598; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KrLiCPptg/CrbEdxRS4nqESWN3R2XNbgt49nlTQ1rAI=;
-        b=GtWgQUMQuvT+GLA4Ey8TUV9PghMgSXEALHmo+M9zbwr6GBu1++03z+rM64A/shZi/+JihM
-        Xnywz1JlcqPCkRo9doybsThJJT7EygFDMMoFpnvyzyOkmVNxOKFEP5Kj4MGYs34yDB8Wjy
-        TxB0r5mw4ZHQfBDOJcjbvRK103MGQJo=
+        bh=3Hne6zfetbnsseXQc/de0eJDmmigZxWOHUk4CZKAIDY=;
+        b=KL3N5e5ivtUmwkAJemE63I+AtdC5MiHTK4dzeTOEeAKJfbjDZggCYd1n1knqsnsUGAOndJ
+        A/7c86AcjfM3MVygCAn07cFPtEXjTfN+E6CjKMg6zXPLATQ4pyKPA0FX5ggtvfFIbobYxn
+        G6Dp5t9Shvz7Asuokh1ps4REO/36AMY=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1686654598;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KrLiCPptg/CrbEdxRS4nqESWN3R2XNbgt49nlTQ1rAI=;
-        b=/e17zNgNljXV6lJyXfhxYAJ8MTLoKAhFe0DGCBW/4/6g1JDQxmYWiZiSELNEU+NXV1GUeE
-        AWZPROuIZvkaprBw==
+        bh=3Hne6zfetbnsseXQc/de0eJDmmigZxWOHUk4CZKAIDY=;
+        b=APplPEVT6MZ9PeXzJ8dv98VwUZ2pPhx1D0WWnZxRl+iwXoGHgfISZUbi9PsTM1tC17vGlu
+        4n+4eow1R5DAzyCA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2079813483;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8174E13A47;
         Tue, 13 Jun 2023 11:09:58 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6GAFB4ZOiGR8CQAAMHmgww
+        id YD+hHoZOiGR8CQAAMHmgww
         (envelope-from <tzimmermann@suse.de>); Tue, 13 Jun 2023 11:09:58 +0000
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     daniel@ffwll.ch, javierm@redhat.com, sam@ravnborg.org,
@@ -57,13 +57,10 @@ To:     daniel@ffwll.ch, javierm@redhat.com, sam@ravnborg.org,
 Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-sh@vger.kernel.org, linux-omap@vger.kernel.org,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Subject: [PATCH v3 06/38] backlight/lv5207lp: Rename struct lv5207lp_platform_data.fbdev to 'dev'
-Date:   Tue, 13 Jun 2023 13:06:41 +0200
-Message-ID: <20230613110953.24176-7-tzimmermann@suse.de>
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH v3 07/38] fbdev/atyfb: Reorder backlight and framebuffer init/cleanup
+Date:   Tue, 13 Jun 2023 13:06:42 +0200
+Message-ID: <20230613110953.24176-8-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230613110953.24176-1-tzimmermann@suse.de>
 References: <20230613110953.24176-1-tzimmermann@suse.de>
@@ -79,66 +76,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename struct lv5207lp_platform_data.fbdev to 'dev', as it stores a
-pointer to the Linux platform device; not the fbdev device. Makes
-the code easier to understand.
+The driver's backlight code requires the framebuffer to be
+registered. Therefore reorder the init and cleanup calls for
+both data structures.
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-Cc: Rich Felker <dalias@libc.org>
-Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc: Lee Jones <lee@kernel.org>
-Cc: Daniel Thompson <daniel.thompson@linaro.org>
-Cc: Jingoo Han <jingoohan1@gmail.com>
-Cc: linux-sh@vger.kernel.org
 Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
-Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
 ---
- arch/sh/boards/mach-kfr2r09/setup.c    | 2 +-
- drivers/video/backlight/lv5207lp.c     | 2 +-
- include/linux/platform_data/lv5207lp.h | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/video/fbdev/aty/atyfb_base.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/arch/sh/boards/mach-kfr2r09/setup.c b/arch/sh/boards/mach-kfr2r09/setup.c
-index 20f4db778ed6a..a18e80394aedc 100644
---- a/arch/sh/boards/mach-kfr2r09/setup.c
-+++ b/arch/sh/boards/mach-kfr2r09/setup.c
-@@ -202,7 +202,7 @@ static struct platform_device kfr2r09_sh_lcdc_device = {
- };
+diff --git a/drivers/video/fbdev/aty/atyfb_base.c b/drivers/video/fbdev/aty/atyfb_base.c
+index cba2b113b28b0..51504fe39054c 100644
+--- a/drivers/video/fbdev/aty/atyfb_base.c
++++ b/drivers/video/fbdev/aty/atyfb_base.c
+@@ -2654,11 +2654,6 @@ static int aty_init(struct fb_info *info)
+ 			   USE_F32KHZ | TRISTATE_MEM_EN, par);
+ 	} else
+ #endif
+-	if (M64_HAS(MOBIL_BUS) && backlight) {
+-#ifdef CONFIG_FB_ATY_BACKLIGHT
+-		aty_bl_init(par);
+-#endif
+-	}
  
- static struct lv5207lp_platform_data kfr2r09_backlight_data = {
--	.fbdev = &kfr2r09_sh_lcdc_device.dev,
-+	.dev = &kfr2r09_sh_lcdc_device.dev,
- 	.def_value = 13,
- 	.max_value = 13,
- };
-diff --git a/drivers/video/backlight/lv5207lp.c b/drivers/video/backlight/lv5207lp.c
-index 99ba4bc0a500d..739f45cd2d381 100644
---- a/drivers/video/backlight/lv5207lp.c
-+++ b/drivers/video/backlight/lv5207lp.c
-@@ -67,7 +67,7 @@ static int lv5207lp_backlight_check_fb(struct backlight_device *backlight,
- {
- 	struct lv5207lp *lv = bl_get_data(backlight);
+ 	memset(&var, 0, sizeof(var));
+ #ifdef CONFIG_PPC
+@@ -2751,6 +2746,12 @@ static int aty_init(struct fb_info *info)
+ 		goto aty_init_exit;
+ 	}
  
--	return lv->pdata->fbdev == NULL || lv->pdata->fbdev == info->device;
-+	return !lv->pdata->dev || lv->pdata->dev == info->device;
- }
++	if (M64_HAS(MOBIL_BUS) && backlight) {
++#ifdef CONFIG_FB_ATY_BACKLIGHT
++		aty_bl_init(par);
++#endif
++	}
++
+ 	fb_list = info;
  
- static const struct backlight_ops lv5207lp_backlight_ops = {
-diff --git a/include/linux/platform_data/lv5207lp.h b/include/linux/platform_data/lv5207lp.h
-index c9da8d4027504..95d85c1394bca 100644
---- a/include/linux/platform_data/lv5207lp.h
-+++ b/include/linux/platform_data/lv5207lp.h
-@@ -8,7 +8,7 @@
- struct device;
+ 	PRINTKI("fb%d: %s frame buffer device on %s\n",
+@@ -3716,12 +3717,13 @@ static void atyfb_remove(struct fb_info *info)
+ 	aty_set_crtc(par, &par->saved_crtc);
+ 	par->pll_ops->set_pll(info, &par->saved_pll);
  
- struct lv5207lp_platform_data {
--	struct device *fbdev;
-+	struct device *dev;
- 	unsigned int max_value;
- 	unsigned int def_value;
- };
+-	unregister_framebuffer(info);
+-
+ #ifdef CONFIG_FB_ATY_BACKLIGHT
+ 	if (M64_HAS(MOBIL_BUS))
+ 		aty_bl_exit(info->bl_dev);
+ #endif
++
++	unregister_framebuffer(info);
++
+ 	arch_phys_wc_del(par->wc_cookie);
+ 
+ #ifndef __sparc__
 -- 
 2.41.0
 
