@@ -2,173 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8199B72EA56
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8067772EA5A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:58:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbjFMR5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 13:57:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45088 "EHLO
+        id S239702AbjFMR5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 13:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjFMR5V (ORCPT
+        with ESMTP id S239374AbjFMR5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 13:57:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E6919A8;
-        Tue, 13 Jun 2023 10:57:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C83960F9E;
-        Tue, 13 Jun 2023 17:57:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9901FC433F2;
-        Tue, 13 Jun 2023 17:57:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686679039;
-        bh=IqkXJldW0A8Y3vMcqq5u/QYVg8dqjY4RiGJcpPC+dDM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tXNaOwvwJobwrSfQe3xFszHWpyiN680KdOA21GqS7X2QKkM4lO3Ya5uu/CVey7AYQ
-         6B0SdqkaM82XRdl3/S/adJtfmiMsGODaMhh7ViBWfe0bx6/gp2uv+ZiOWf0IKUS7Q4
-         /fUcMef7XXkwU+hbd0Nn801CVkLL5iqlL3NZdOB1dJ53duw0F+I8u/IvER2mgMrGpr
-         8JYWyHb3aB0nG6LbiG8JhLATWfFPRRyp4gM1KsSfHBg7cQ0yIt8TELy9vX7795LTIS
-         GONT6vW9Orcmg0TeSaj/vqBca40GctyDGjeFFrmaAja5mE7CYoKQV+CMJTpPgvHEte
-         YLpTuDs9MvDVw==
-Date:   Tue, 13 Jun 2023 18:57:05 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "fweimer@redhat.com" <fweimer@redhat.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "Xu, Pengfei" <pengfei.xu@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "Torvalds, Linus" <torvalds@linux-foundation.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "bp@alien8.de" <bp@alien8.de>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>
-Subject: Re: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack
- description
-Message-ID: <fc2ebfcf-8d91-4f07-a119-2aaec3aa099f@sirena.org.uk>
-References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
- <20230613001108.3040476-24-rick.p.edgecombe@intel.com>
- <0b7cae2a-ae5b-40d8-9ae7-10aea5a57fd6@sirena.org.uk>
- <87y1knh729.fsf@oldenburg.str.redhat.com>
- <1f04fa59-6ca9-4f18-b138-6c33e164b6c2@sirena.org.uk>
- <49eabafa97032dec8ace7361bccae72c6ecf3860.camel@intel.com>
+        Tue, 13 Jun 2023 13:57:47 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2425A19A8
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 10:57:45 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f620583bc2so7236967e87.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 10:57:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1686679062; x=1689271062;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ucwpoQAK13prSY87pdp529JG6f/Yd6pwjydVL0f7ZAE=;
+        b=GqVMVo6Hp3TdQ/tAVhnguvaW4XPQ8Z6x0MBjZl0T1E+O0LfjSyFdhMC5JUTEXsfnLi
+         6nvtSlZWpNbTKLQlAk2EQVMqUlx3IBDIf6CDdg1JX3cXDZc6McL81zw8ZDPTo/8UySjw
+         6kkcsWmkElBmEofyxqawn17ksyrYU4ZHxp6WI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686679062; x=1689271062;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ucwpoQAK13prSY87pdp529JG6f/Yd6pwjydVL0f7ZAE=;
+        b=UYmbj8p2muSOdb96vpGwr5fzYefE/g7J6ydxmXDzgv71VPz7uR/I7e4ZrTJVqOFcKw
+         NHjJ4uG8z3nSRKrPcZyqyslFki6c7xk+lpZ16ymT3oR3iRbGLVlB6L7irkB3LEVVglzv
+         efKgDc9a2Um7Kr214vczpyjv4bFhhRLoPumM2aq+dmzAqAcZ3aS3um4aXseHZBDetgYy
+         vXMCYCKaWUG9QLkQ/XI3u3XJ20+/Fla9zaYtiBSyUVln9P2NiGFYh1Mx6hfCZFtZpowS
+         HoOjfypwSkDG9R4YaH+gdX+4fQw32OWBi8ePxdufT60JSERmpw4JvYBaap4892NuByTT
+         NfOw==
+X-Gm-Message-State: AC+VfDwxOdSa+Tc+Qpb9xBiXF0baViIew4nCEFzIT2qf8y55iJ2H7TND
+        ZHE8BTVH7tONS9D7XZtjuY8joExfd9EgPWvxHOdIIbOL
+X-Google-Smtp-Source: ACHHUZ4HxX0+IF2HqGBZ5H2xv8/fW5c/KiYXaZ60+U53Fm45AOGoGfB+s2tnDf9EGerQ23vj8We7qQ==
+X-Received: by 2002:a05:6512:46a:b0:4f3:a99f:1ea1 with SMTP id x10-20020a056512046a00b004f3a99f1ea1mr7612623lfd.45.1686679061967;
+        Tue, 13 Jun 2023 10:57:41 -0700 (PDT)
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
+        by smtp.gmail.com with ESMTPSA id m10-20020aa7c2ca000000b005184165f1fasm2712480edp.5.2023.06.13.10.57.39
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 10:57:40 -0700 (PDT)
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-514ad92d1e3so1228a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 10:57:39 -0700 (PDT)
+X-Received: by 2002:a50:ab0b:0:b0:514:95d4:c2bb with SMTP id
+ s11-20020a50ab0b000000b0051495d4c2bbmr2429edc.2.1686679059461; Tue, 13 Jun
+ 2023 10:57:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ltcThYaE8QK6dqDg"
-Content-Disposition: inline
-In-Reply-To: <49eabafa97032dec8ace7361bccae72c6ecf3860.camel@intel.com>
-X-Cookie: Not a flying toy.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1685729609-26871-1-git-send-email-quic_vnivarth@quicinc.com>
+ <CAD=FV=Uy=ELwg2jhtFSrpndw-GxUO=0NTKotNymi3sqwG=ggnQ@mail.gmail.com>
+ <af4c131a-b97d-a8e8-957d-77c31d3c816a@quicinc.com> <02dabcc8-2340-2188-f6a8-51513b147e7c@quicinc.com>
+In-Reply-To: <02dabcc8-2340-2188-f6a8-51513b147e7c@quicinc.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 13 Jun 2023 10:57:24 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WwcpyvMem08rOXrBMUWW_7ADgfGZGEnEFDky+96pSdpQ@mail.gmail.com>
+Message-ID: <CAD=FV=WwcpyvMem08rOXrBMUWW_7ADgfGZGEnEFDky+96pSdpQ@mail.gmail.com>
+Subject: Re: [PATCH] soc: qcom: geni-se: Do not bother about enable/disable of
+ interrupts in secondary sequencer for non-uart modes
+To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_msavaliy@quicinc.com, mka@chromium.org, swboyd@chromium.org,
+        quic_vtanuku@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---ltcThYaE8QK6dqDg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Tue, Jun 13, 2023 at 9:07=E2=80=AFAM Vijaya Krishna Nivarthi
+<quic_vnivarth@quicinc.com> wrote:
+>
+> Hi,
+>
+>
+> On 6/12/2023 7:09 PM, Vijaya Krishna Nivarthi wrote:
+> > Hi,
+> >
+> > Thank you very much for the review...
+> >
+> >
+> > On 6/7/2023 9:41 PM, Doug Anderson wrote:
+> >> Hi,
+> >>
+> >> On Fri, Jun 2, 2023 at 11:13=E2=80=AFAM Vijaya Krishna Nivarthi
+> >> <quic_vnivarth@quicinc.com> wrote:
+> >>> The select_fifo/dma_mode() functions in geni driver enable/disable
+> >>> interrupts (secondary included) conditionally for non-uart modes, whi=
+le
+> >>> uart is supposed to manage this internally.
+> >>> However, only uart uses secondary IRQs while spi, i2c do not care abo=
+ut
+> >>> these at all making their enablement (or disablement) totally
+> >>> unnecessary
+> >>> for these protos.
+> >>>
+> >>> Drop enabling/disabling secondary IRQs for non-uart modes.
+> >>> This doesn't solve any observed problem but only gets rid of code
+> >>> pieces
+> >>> that are not required.
+> >>>
+> >>> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+> >>> ---
+> >>>   drivers/soc/qcom/qcom-geni-se.c | 24 ++++--------------------
+> >>>   1 file changed, 4 insertions(+), 20 deletions(-)
+> >> This seems like a nice cleanup to me. It's still odd that the general
+> >> code has a special case for UART, but I guess the alternative is to
+> >> duplicate the exact same logic for both the i2c and SPI drivers. I
+> >> won't insist on that, though I wouldn't be opposed to it either.
+> >>
+> >> I guess one comment, though: should we also remove the code that
+> >> messes with "SE_GENI_S_IRQ_EN" in geni_se_select_gpi_mode()?
+> >
+> >
+> > Right now we have gpi-dma mode support for i2c and spi but not for uart=
+.
+> >
+> > Even when gpi-dma support is added, uart driver's interrupt handler
+> > would not be invoked so I believe it would be safe to drop that code
+> > from geni_se_select_gpi_mode() too.
+> >
+> > I will post v2 dropping same after some more lookup.
+>
+>
+> Looking at this once again, I am more inclined towards leaving alone
+> gpi_mode() for now.
+>
+> It probably needs cleanup but we want to take that up at a later time.
+>
+> Meanwhile its not causing much harm as we don't switch modes dynamically
+> for gpi case, so we are not losing much time there reading from and
+> writing to registers.
+>
+> Please let know your thoughts.
 
-On Tue, Jun 13, 2023 at 05:11:35PM +0000, Edgecombe, Rick P wrote:
+It's not really about the time needed for the extra register writes,
+but just someone trying to understand the code who might be trying to
+figure out what bits are relevant. The bits related to the secondary
+sequencer's interrupts don't do anything useful when we're using the
+controller for i2c/spi, so why not delete them?
 
-> Two things that came up as far as unifying the interface were:
-> 1. The map_shadow_stack syscall
-> x86 shadow stack does some optional pre-populating of the shadow stack
-> memory. And in additional not all types of memory are supported
-> (private anonymous only). This is partly to strengthen the security
-> (which might be a cross-arch thing) and also partly due to x86's
-> Write=0,Dirty=1 PTE bit combination. So a new syscall fit better. Some
-> core-mm folks were not super keen on overloading mmap() to start doing
-> things like writing to the memory being mapped, as well.
-
-Right, the strengthening security bits made this one look cross arch -
-that one wasn't worrying me.
-
-> 2. The arch_prctl() interface
-> While enable and disable might be shared, there are some arch-specific
-> stuff for x86 like enabling the WRSS instruction.
-
-> For x86 all of the exercising of the kernel interface was in arch
-> specific code, so unifying the kernel interface didn't save much on the
-> user side. If there turns out to be some unification opportunities when
-> everything is explored and decided on, we could have the option of
-> tying x86's feature into it later.
-
-> I think the map_shadow_stack syscall had the most debate. But the
-> arch_prctl() was mostly agreed on IIRC. The debate was mostly with
-> glibc folks and the riscv shadow stack developer.
-
-For arm64 we have an equivalentish thing to WRSS which lets us control
-if userspace can explicitly push or pop values onto the shadow stack
-(GCS for us) so it all maps on well - before I noticed that it was
-arch_prctl() I was looking at it and thinking it worked for us.  At the
-minute I've taken the prctl() patch from the riscv series and added in a
-flag for writability since we just don't have an arch_prctl(), this
-isn't a huge deal but it just seemed like needless effort to wonder why
-it's different.
-
-> For my part, the thing I would really like to see unified as much as
-> possible is at the app developer's interface (glibc/gcc). The idea
-> would be to make it easy for app developers to know if their app
-> supports shadow stack. There will probably be some differences, but it
-> would be great if there was mostly the same behavior and a small list
-> of differences. I'm thinking about the behavior of longjmp(),
-> swapcontext(), etc.
-
-Yes, very much so.  sigaltcontext() too.
-
---ltcThYaE8QK6dqDg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSIrfAACgkQJNaLcl1U
-h9BVLAf+KkmhHb5ViBKmTT5RX0bhxDT5K+kyBt9O8VX7Yf4WGGM3Fewbz4iSD/Nx
-mLQ5cFFNZzLIAq+sPgH07Fua09/YuFeHw+3wluPhl/gR6ntKdzsnyO/D5i0XJ2Xb
-uwvQDzsmyjv59ztCH47aBTjpXlpS3uCkUnbQ+7uyO8B340Azh1IVSH65RN54Y7Yx
-BsjSEIauQFDGbvHfMg8K6a4WDFBjBRhng6/c3izXh4zfMKlj7FS9LNdpUIAPDrrV
-PbbFBlx/9ZA9bh5bCQezEGey0B9n7mrkmSTdym1yTz4dvuTqRdzsb2Lz8I/tZaXg
-Gd9+l3Zwvvuq1ZkIboLiiS0t6FnepQ==
-=xrY1
------END PGP SIGNATURE-----
-
---ltcThYaE8QK6dqDg--
+-Doug
