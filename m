@@ -2,55 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA84A72ED42
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:45:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D68472ED48
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:47:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240051AbjFMUpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 16:45:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47192 "EHLO
+        id S232679AbjFMUrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 16:47:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240723AbjFMUox (ORCPT
+        with ESMTP id S231363AbjFMUrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 16:44:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9B5E53;
-        Tue, 13 Jun 2023 13:44:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1374F617E3;
-        Tue, 13 Jun 2023 20:44:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64003C433C0;
-        Tue, 13 Jun 2023 20:44:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686689091;
-        bh=197GhMaGHAg2n1nbm70axBPdT5BZD1C6NILjDiLPZjI=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=U9x36Wd+JZDMSDouThk/NP+nQrM/qtILqn89gaQyKEuQ4epArY8F0zmiUQpOXW/rj
-         s2dCMJ0O9K4UyxqjImAK/N/9wTWPYU/FaweNxg+pYTaC8mHrrYm5EIPhx75n3z0iO2
-         IOBMCybzq99OtMPjVZE93No0zLhdNUYbMNnuYEKMMfCJlk0i+BSVzgiLoSoM+fvXl+
-         3E9ArlAa1zWnTa84kunzuaMR+L9+2rkoo6hOgzThbW7HOvbLh6lzDRAOy5jS1XF+ep
-         Zgg1L75/2Hy3Fn9ZD8t8ivwGz90WsyADUmLaxNWKHDvtR6ziefAZmCxzXrSRFjYipL
-         1K55p38MJiS4g==
-Message-ID: <d47d0ceb834ca56a4733e226e89a4f2b.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        Tue, 13 Jun 2023 16:47:02 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E968810E6;
+        Tue, 13 Jun 2023 13:47:00 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-5187ae34127so998816a12.2;
+        Tue, 13 Jun 2023 13:47:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686689219; x=1689281219;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fSNOwltAQrxAVV68XPYGPjq5L/bIYHyNYEji3sovMB8=;
+        b=Ls9NCRlivmPC49auVyJHDRF+h04dMXwMGmh110SKXer2GYxSqLJ9P1EGp0FjvkdV5Y
+         ZT59hga7BfF3nhKADgA++VIjISbHOXjbarrE22ZfAE111jgQ3jK7jtShuQEjePBTdLis
+         yciak/fmFmqGLf0kPVtaE83SgyEUNf4EYJ8t+BcD70N9SeDplDhhnv21ndbgohUjIo3Q
+         qoIFrDRIjD3zlcF+yzNquVLT03HQips/sNO/bgOKLbcYVEkAQUc21wT7i4P3CHKfFH3E
+         JBqhJVUG2DsUf/DTTO0WW993S6gOxx5pmwiBMHSV5JbAOZ/Gt2Ydgt6O9rNJJ0aBuvZC
+         X8tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686689219; x=1689281219;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fSNOwltAQrxAVV68XPYGPjq5L/bIYHyNYEji3sovMB8=;
+        b=MffYQCu4czD09SAUosdYpiNxpsxYXR3J+9M9YE6C1B+ksGn5tQMyzruG1aML0Zzc/j
+         4hdEEl4KNXHfASprcRdrLE8I4CQ+bLsQvp87NHBzIaIrVEnY8FCmuG3dumGw1WuW4NMt
+         hUKgXpjT1OuUiWNi7S3GfaoED3pwtTHvZIRKmGqKRXX8GEQcSJNPNeTJGxP3rvu2TAKm
+         qfJaksbdK0NnAsuwdmvsLdVzmemsnh4YGZJUJP2CWoFbE7O5h3ivrT9FUFp0Sz466oGg
+         iCZNYufsgegeT+EIcG9M+ukxpjLFfKdk8ClX+0nhg0JYQXLGwK+jLoeCjCv/yfMh5dqB
+         JHww==
+X-Gm-Message-State: AC+VfDxdrQxW9NsNUrc2+cR9g++J54Epp/yzfBjqvGnBbiAaCYIqrG0D
+        KyOIlAeXNW3L2/dphYRF6f4=
+X-Google-Smtp-Source: ACHHUZ5x08A9ldgu+vaqcgdfWvL3xxuzZM1dqATv5NQNkKaCgRk/Z49H2tvIClpjTgNoxcUIajTGMw==
+X-Received: by 2002:a05:6402:2055:b0:514:9df0:e3f3 with SMTP id bc21-20020a056402205500b005149df0e3f3mr9203260edb.0.1686689219118;
+        Tue, 13 Jun 2023 13:46:59 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id b14-20020aa7c6ce000000b00506987c5c71sm6802283eds.70.2023.06.13.13.46.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 13:46:58 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 23:46:55 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net v2 2/7] net: dsa: mt7530: fix trapping frames with
+ multiple CPU ports on MT7530
+Message-ID: <20230613204655.7dk5f5pbcyrquva5@skbuf>
+References: <20230611081547.26747-1-arinc.unal@arinc9.com>
+ <20230611081547.26747-2-arinc.unal@arinc9.com>
+ <20230613150815.67uoz3cvvwgmhdp2@skbuf>
+ <a91e88a8-c528-0392-1237-fc8417931170@arinc9.com>
+ <20230613171858.ybhtlwxqwp7gyrfs@skbuf>
+ <20230613172402.grdpgago6in4jogq@skbuf>
+ <ca78b2f9-bf98-af26-0267-60d2638f7f00@arinc9.com>
+ <20230613173908.iuofbuvkanwyr7as@skbuf>
+ <edcbe326-c456-06ef-373b-313e780209de@arinc9.com>
+ <ZIi1fixnNqj9Gfcg@shell.armlinux.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <e8ee511863ce2aa9b09b7f0c4fa9b6919603c8f0.camel@maquefel.me>
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me> <20230424123522.18302-13-nikita.shubin@maquefel.me> <d15b580f84ac89274cde3785168b0e26.sboyd@kernel.org> <e8ee511863ce2aa9b09b7f0c4fa9b6919603c8f0.camel@maquefel.me>
-Subject: Re: [PATCH 12/43] clk: ep93xx: add DT support for Cirrus EP93xx
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Date:   Tue, 13 Jun 2023 13:44:49 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZIi1fixnNqj9Gfcg@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,105 +99,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Nikita Shubin (2023-05-15 06:31:41)
-> Hello Stephen!
->=20
-> Thank you for your review.
->=20
-> Acknowledged all remarks, however, i didn't fully understood some of
-> the requirements:
+On Tue, Jun 13, 2023 at 07:29:18PM +0100, Russell King (Oracle) wrote:
+> Maybe it's just me being dumb, but I keep finding things difficult to
+> understand, such as the above paragraph.
+> 
+> It sounds like you're saying that _before_ this patch, port 5 is the
+> active CPU port, but the CPU_PORT *FIELD* NOT BITS are set such that
+> port 6 is the active CPU port. Therefore, things are broken, and this
+> patch fixes it.
+> 
+> Or are you saying that after this patch is applied, port 5 is the
+> active CPU port, but the CPU_PORT *FIELD* is set to port 6. If that's
+> true, then I've no idea what the hell is going on here because it
+> seems to be senseless.
 
-When the reply is taken out of context it is harder for me to recall
-what we're talking about.
+There are 2 distinct patches at play. I'll be showing some tables below.
+Their legend is that patch (1) affects only the second column and patch
+(2) affects only the third column.
 
->=20
-> > And maybe this can be registered from wherever the regmap is created?
->=20
-> Are you suggesting that all clock from init, i.e. "pll1", "pll2",
-> "hclk", "fclk", "pclk"
->=20
-> Should be moved to=C2=A0SoC driver instead:
->=20
-> https://lore.kernel.org/all/20230424123522.18302-3-nikita.shubin@maquefel=
-.me/
->=20
-> ?
+Patch (1): net: dsa: mt7530: fix trapping frames with multiple CPU ports on MT7530
+----------------------------------------------------------------------------------
 
-Sure? That looks like a possibility.
+What you need to know looking at the current code in net-next is that
+mt753x_cpu_port_enable() always overwrites the CPU_MASK field of MT7530_MFC,
+because that contains a single port. So when operating on a device tree
+with multiple CPU ports defined, only the last CPU port will be recorded
+in that register, and this will affect the destination port for
+trapped-to-CPU frames.
 
->=20
-> > Does some interrupt or timer driver use dma? Why are these registered
-> > early?
->=20
-> ep93xx_dma uses subsys_initcall(ep93xx_dma_module_init)
->=20
-> https://elixir.bootlin.com/linux/v6.3.2/source/drivers/dma/ep93xx_dma.c#L=
-1430
->=20
-> I can move clk to using arch_initcall and move all stuff to probe, i
-> think...
+However, DSA, when operating on a DT with multiple CPU ports, makes the
+dp->cpu_dp pointer of all user ports equal to the first CPU port. That
+affects which DSA master is automatically brought up when user ports are
+brought up. Minor issue, TBH, because it is sufficient for the user to
+manually bring up the DSA master corresponding to the second CPU port,
+and then trapped frames would be processed just fine. Prior to ~2021/v5.12,
+that facility wasn't even a thing - the user always had to bring that
+interface up manually.
 
-Sounds like the answer to my question is no. In which case moving to
-arch_initcall() or probe will work. Please try.
+That means that without patch (1) we have:
 
->=20
-> > Why is this in arm/ directory? Isn't it a clock controller?
->=20
-> ep93xx clocks, reboot, pinctrl use syscon regmap and some special
-> functions from SoC, i.e. "Syscon Software Lock Register" - so we are
-> able to write to some registers only after writing some magik value
-> there.
->=20
-> So all above use regmap from SoC.
+CPU ports in the    Trapping CPU port        Default CPU port
+device tree         (MT7530_MFC:CPU_MASK)    (all dp->cpu_dp point to it)
+-------------------------------------------------------------------------
+5                   5                        5
+6                   6                        6
+5 and 6             6                        5
 
-There can be an API in a header located in include/soc/ that implements
-the magik value unlock sequence?
+The semi-problem is that the DSA master of the trapping port (6) is not
+automatically brought up by the dsa_slave_open() logic, because no slave
+has port 6 (the trapping port) as a master.
 
->=20
-> Should make a separate clock controller like one i did for pinctrl ?
-> Then it should look like:
->=20
-> syscon@80930000 {
->   compatible =3D "cirrus,ep9301-syscon",
->                "syscon", "simple-mfd";
->   reg =3D <0x80930000 0x1000>;
->   #reset-cells =3D <1>;
->      =20
->   clocks {
->     xtali: oscillator {
->       compatible =3D "fixed-clock";
->       #clock-cells =3D <0>;
->       clock-frequency =3D <14745600>;
->     };
->   };
->      =20
->   clock-controller {
->     #clock-cells =3D <1>;
->     compatible =3D "cirrus,ep9301-clk";
->     clocks =3D <&xtali>;
->   };
-> };
->=20
-> Or even simply:
->=20
-> clocks {
->   xtali: oscillator {
->     compatible =3D "fixed-clock";
->     #clock-cells =3D <0>;
->     clock-frequency =3D <14745600>;
->   };
-> };
->      =20
-> clock-controller {
->   #clock-cells =3D <1>;
->   compatible =3D "cirrus,ep9301-clk";
->   clocks =3D <&xtali>;
-> };
+All that this patch is doing is that it moves around the trapping CPU
+port towards one of the DSA masters that is up, so that the user doesn't
+really need to care. The table becomes:
 
-The DT binding shouldn't be making sub-nodes to match driver structure
-of the kernel. Instead, there should be a node for a register range that
-represents a device on the bus. That device may be multipurpose, in
-which case it can probe as a platform driver and that platform driver
-can create some number of auxiliary bus devices for the sub
-functionality of the device. We shouldn't be prescribing Linux software
-constructs onto the DT binding.
+CPU ports in the    Trapping CPU port        Default CPU port
+device tree         (MT7530_MFC:CPU_MASK)    (all dp->cpu_dp point to it)
+--------------------------------------------------------------------------
+5                   5                        5
+6                   6                        6
+5 and 6             5                        5
+
+
+Patch (2) net: dsa: introduce preferred_default_local_cpu_port and use on MT7530
+--------------------------------------------------------------------------------
+
+This patch influences the choice that DSA makes when it comes to the
+dp->cpu_dp assignments of user ports, when fed a device tree with
+multiple CPU ports.
+
+The preference of the mt7530 driver is: if port 6 is defined in the DT
+as a CPU port, choose that. Otherwise don't care (which implicitly means:
+let DSA pick the first CPU port that is defined there, be it 5 or 6).
+
+The effect of this patch taken in isolation is (showing only "after",
+because "before" is the same as the "before" of patch 1):
+
+CPU ports in the    Trapping CPU port        Default CPU port
+device tree         (MT7530_MFC:CPU_MASK)    (all dp->cpu_dp point to it)
+-------------------------------------------------------------------------
+5                   5                        5
+6                   6                        6
+5 and 6             6                        6
+
+As you can see, patch (2) resolves the same semi-problem even in
+isolation because it makes the trapping port coincide with the default
+CPU port in a different way.
+
+> 
+> I think at this point I just give up trying to understand what the
+> hell these patches are trying to do - in my opinion, the commit
+> messages are worded attrociously and incomprehensively.
+
++1, could have been better..
