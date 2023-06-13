@@ -2,173 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD7272D9FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 08:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8053172D9FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 08:38:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239810AbjFMGhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 02:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38224 "EHLO
+        id S239927AbjFMGi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 02:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232063AbjFMGhE (ORCPT
+        with ESMTP id S239851AbjFMGiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 02:37:04 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D3AE54
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 23:37:03 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 52BFF32006F5;
-        Tue, 13 Jun 2023 02:36:59 -0400 (EDT)
-Received: from imap50 ([10.202.2.100])
-  by compute1.internal (MEProxy); Tue, 13 Jun 2023 02:37:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
-        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1686638218; x=1686724618; bh=3F
-        ZTRxLrHXD3Xm5q4Gr9FJo1SoQ3BCmMhPOkll2o7pw=; b=Z1Q5htHfdGX5fBNvv4
-        sveyeHD0Hwx1nBULbzz4lGXbxo6P7l2zrE+3IC/veQLUUTsJr3DQ5ye55vgawVPP
-        Z/A9EwVoOhUtkzh0nrSpiCgwiAI4KPgn+HrZ6/1ovOBiRNfS9yIBDT7tEAkCOqDh
-        73cJBUPLzTlHAtdD4bnatgr4GrBRHjhWzjVl8X7NkDwNQwVXqlnyQoW+DLliTZXx
-        15aeBFU1kourbUW6Sp2z9VBoAfaFf+mUF3NTIcUpokvSdxjcY0Gw1+vG2pOzbNjb
-        ITkDQUyHjR6/ilt2Dwnfs+tfdK5vWMEuqeivWEvvlgPaAJD6Wf9djZ2qY55HjpMe
-        Pbew==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1686638218; x=1686724618; bh=3FZTRxLrHXD3X
-        m5q4Gr9FJo1SoQ3BCmMhPOkll2o7pw=; b=m6iNhMZ+Zn4Krpl3SHtx2X8RAz0ff
-        e8TSRlW5bTRnzraYYJeOrLdy2jjL6hTbApLUD4zwOVbyIlvA++UsJ2aPTBrCK3D6
-        9Pu2PP+rzdcQcMvXsxVoW87Hp0Iu6aOx2NN/EWM6EL8ZwmQIT6Mrql5tkWP3LrlV
-        s45Pc1HFG98isBVyGRrSfnTuFICuEj0k5nf8CwCu1H/wfyBJF0K5WZEEIQ/B+Cq7
-        wJuJOi/NeomHEEgS9tVwP1xmSZRZH43RPFqgiotmbnyGvRQCaOzZfF4Nw1RlHyZw
-        TWu3wgPqjty+TezvnauB47Nbp4RfdGuEqVQq/sa0C5xjqxHxU35t3b2uA==
-X-ME-Sender: <xms:ig6IZHjxvmCEGYiVMNt3t-f8TivcklBZWqM6qye8_JlDamPbaHXKFQ>
-    <xme:ig6IZEC81LBtFICISnpaqFE0kc4VE1Ztf6AedC1zCRAKuGXsPqL6o-RRqNgCal4Wf
-    JsRyaf2FpWzUKdceQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeduiedguddufecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfu
-    thgvfhgrnhcuqfdktfgvrghrfdcuoehsohhrvggrrhesfhgrshhtmhgrihhlrdgtohhmqe
-    enucggtffrrghtthgvrhhnpeefudejvdejuddvjeejudekgfeikeevveevleeitddvtedu
-    jeegjeejgfeugfeiudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehsohhrvggrrhesfhgrshhtmhgrihhlrdgtohhm
-X-ME-Proxy: <xmx:ig6IZHH_FW5IDhG5XbukEga-97ECL21KVm2yXWtd35blv9dDqHuCCA>
-    <xmx:ig6IZES17GFt_TuoSBGbUAAALgR5_Vf7Bd8Jl9P9ij_7KiVDE_PmGw>
-    <xmx:ig6IZEwKmKtr5TpsPALaV1g-MsiZQDtI3a77vzmaSbw9rU1OTe0IhA>
-    <xmx:ig6IZLmkKySqM5X0srh4F9E50VuyRVe70Aog6zksBgAsK_2mXGLrtA>
-Feedback-ID: i84414492:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 6F0A91700093; Tue, 13 Jun 2023 02:36:58 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-492-g08e3be04ba-fm-20230607.003-g08e3be04
-Mime-Version: 1.0
-Message-Id: <75071be8-272d-45e7-989f-5d717f313fe2@app.fastmail.com>
-In-Reply-To: <20230228215435.3366914-3-heiko@sntech.de>
-References: <20230228215435.3366914-1-heiko@sntech.de>
- <20230228215435.3366914-3-heiko@sntech.de>
-Date:   Tue, 13 Jun 2023 02:35:53 -0400
-From:   "Stefan O'Rear" <sorear@fastmail.com>
-To:     "Heiko Stuebner" <heiko@sntech.de>, palmer@dabbelt.com
-Cc:     linux-riscv@lists.infradead.org, samuel@sholland.org,
-        guoren@kernel.org, christoph.muellner@vrull.eu,
-        conor.dooley@microchip.com, linux-kernel@vger.kernel.org,
-        "Heiko Stuebner" <heiko.stuebner@vrull.eu>
-Subject: Re: [PATCH RFC 2/2] RISC-V: add T-Head vector errata handling
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 13 Jun 2023 02:38:25 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5200E69
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 23:38:24 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-bb167972cffso5628565276.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 23:38:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686638304; x=1689230304;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ExFAj+YgJRdRcaCWeS0swTQHLCbPFVpzMAWP4t/hdrY=;
+        b=XD9BVgoHBc61quB8SKkRdCfvYhK8MJcPLnNCWAYsPU5WIzK2/2TTwZyP9udjVpgYA/
+         FsBDlIdaKIGc9oEnIq09TT8rnC6bpo5pqJs+ZSiMUirX6nFtj6YNKbwaUwSllrxtZToR
+         E7ket0iUDu6T5Dh2dp6hIRY7ouWrv7yWe1HnwsgoFZbhSX+nCKzj94TDPSOPuW32iLSC
+         QISB2MjGvLPxMZdIHPVXmqJ8Pz2tEnpD/KwNvtBCS1DjsyZbgufM5m6ORyzzVhtc/Ext
+         LZ0xxaGcDpXGLzTuzdt3+AljxbgH2C8W9HBiNzDdcGrvHyUp5I7yGkDHSMEIZ047ciPH
+         +LjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686638304; x=1689230304;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ExFAj+YgJRdRcaCWeS0swTQHLCbPFVpzMAWP4t/hdrY=;
+        b=fC8Kmuikpj3qdVS4ZA2iCdlSsVGxCzqRcp5YvgnZgmfJ2GVXmuiUbie0GnCHj9eKPk
+         6nDlLHOqo7b7M6OMPjCd/xIbWwcYA7SffNJJipG/SMw/XM56z3+5UfAUI757yyGVPerM
+         J89w0MU4PEOaDShHUER1l+BEs5d34ea/vUtnAZjOfBI+gzQ3X98UpZgk+/IryWCHPzLV
+         +PtMLzUKUiwtmzJR7qvO9/cMyTi5jF0GZyQw1rd0bNyfw2rPRlLbCxRZmweZ5V02ENfO
+         e8IfU80ppaaReKnKwdROw6yG6/JCSXoYwKRJZlLmaAuZvayv4w5qM53hFMBMOX/N7yc1
+         4P+g==
+X-Gm-Message-State: AC+VfDzPEMGBGPPmStv6Ri16wrBdDeXIerdcn+HRO3+uDSqTzKpvF/5r
+        q2wVUlT5WWAYMJ0S54hNduhA9n/MijOP+kq0nuJ4XQ==
+X-Google-Smtp-Source: ACHHUZ4QzMJOoKPnaIGmwIbagx01FpWCVjHkLLUN+4G5m0jH7BZUYj/pTq7XAyCGG7FQm15egVvbVCTXizmRW8ney74=
+X-Received: by 2002:a25:26c8:0:b0:bd0:78cd:99dc with SMTP id
+ m191-20020a2526c8000000b00bd078cd99dcmr846694ybm.37.1686638303955; Mon, 12
+ Jun 2023 23:38:23 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230613104329.025f9e4b@canb.auug.org.au>
+In-Reply-To: <20230613104329.025f9e4b@canb.auug.org.au>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 13 Jun 2023 08:38:13 +0200
+Message-ID: <CACRpkdZZX_iiN-XTG1ORqr2mpiOsJvLTOr3Lxertq9jgb=H03w@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the arm-soc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023, at 4:54 PM, Heiko Stuebner wrote:
-> @@ -29,6 +78,7 @@ static __always_inline bool has_vector(void)
->  static inline void __vstate_clean(struct pt_regs *regs)
->  {
->  	regs->status = (regs->status & ~(SR_VS)) | SR_VS_CLEAN;
-> +
->  }
-> 
->  static inline void vstate_off(struct pt_regs *regs)
-> @@ -58,30 +108,75 @@ static __always_inline void rvv_disable(void)
-> 
->  static __always_inline void __vstate_csr_save(struct __riscv_v_state *dest)
->  {
-> -	asm volatile (
-> +	register u32 t1 asm("t1") = (SR_FS);
-> +
-> +	/*
-> +	 * CSR_VCSR is defined as
-> +	 * [2:1] - vxrm[1:0]
-> +	 * [0] - vxsat
-> +	 * The earlier vector spec implemented by T-Head uses separate
-> +	 * registers for the same bit-elements, so just combine those
-> +	 * into the existing output field.
-> +	 *
-> +	 * Additionally T-Head cores need FS to be enabled when accessing
-> +	 * the VXRM and VXSAT CSRs, otherwise ending in illegal instructions.
-> +	 */
-> +	asm volatile (ALTERNATIVE(
->  		"csrr	%0, " CSR_STR(CSR_VSTART) "\n\t"
->  		"csrr	%1, " CSR_STR(CSR_VTYPE) "\n\t"
->  		"csrr	%2, " CSR_STR(CSR_VL) "\n\t"
->  		"csrr	%3, " CSR_STR(CSR_VCSR) "\n\t"
-> +		__nops(5),
-> +		"csrs	sstatus, t1\n\t"
-> +		"csrr	%0, " CSR_STR(CSR_VSTART) "\n\t"
-> +		"csrr	%1, " CSR_STR(CSR_VTYPE) "\n\t"
-> +		"csrr	%2, " CSR_STR(CSR_VL) "\n\t"
-> +		"csrr	%3, " CSR_STR(THEAD_C9XX_CSR_VXRM) "\n\t"
-> +		"slliw	%3, %3, " CSR_STR(VCSR_VXRM_SHIFT) "\n\t"
-> +		"csrr	t4, " CSR_STR(THEAD_C9XX_CSR_VXSAT) "\n\t"
-> +		"or	%3, %3, t4\n\t"
-> +		"csrc	sstatus, t1\n\t",
-> +		THEAD_VENDOR_ID,
-> +		ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)
->  		: "=r" (dest->vstart), "=r" (dest->vtype), "=r" (dest->vl),
-> -		  "=r" (dest->vcsr) : :);
-> +		  "=r" (dest->vcsr) : "r"(t1) : "t4");
->  }
-> 
->  static __always_inline void __vstate_csr_restore(struct __riscv_v_state *src)
->  {
-> -	asm volatile (
-> +	register u32 t1 asm("t1") = (SR_FS);
-> +
-> +	/*
-> +	 * Similar to __vstate_csr_save above, restore values for the
-> +	 * separate VXRM and VXSAT CSRs from the vcsr variable.
-> +	 */
-> +	asm volatile (ALTERNATIVE(
->  		"vsetvl	 x0, %2, %1\n\t"
->  		"csrw	" CSR_STR(CSR_VSTART) ", %0\n\t"
->  		"csrw	" CSR_STR(CSR_VCSR) ", %3\n\t"
-> +		__nops(6),
-> +		"csrs	sstatus, t1\n\t"
-> +		"vsetvl	 x0, %2, %1\n\t"
-> +		"csrw	" CSR_STR(CSR_VSTART) ", %0\n\t"
-> +		"srliw	t4, %3, " CSR_STR(VCSR_VXRM_SHIFT) "\n\t"
-> +		"andi	t4, t4, " CSR_STR(VCSR_VXRM_MASK) "\n\t"
-> +		"csrw	" CSR_STR(THEAD_C9XX_CSR_VXRM) ", t4\n\t"
-> +		"andi	%3, %3, " CSR_STR(VCSR_VXSAT_MASK) "\n\t"
-> +		"csrw	" CSR_STR(THEAD_C9XX_CSR_VXSAT) ", %3\n\t"
-> +		"csrc	sstatus, t1\n\t",
-> +		THEAD_VENDOR_ID,
-> +		ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)
->  		: : "r" (src->vstart), "r" (src->vtype), "r" (src->vl),
-> -		    "r" (src->vcsr) :);
-> +		    "r" (src->vcsr), "r"(t1): "t4");
->  }
+On Tue, Jun 13, 2023 at 2:43=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
 
-vxrm and vxsat are part of fcsr in 0.7.1, so they should already have been
-handled by __fstate_save and __fstate_restore, and this code is likely to
-misbehave (saving the new process's vxrm/vxsat in the old process's save area
-because float state is swapped before vector state in __switch_to).
+> After merging the arm-soc tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>
+> drivers/input/touchscreen/ads7846.c: In function 'ads7846_get_props':
+> drivers/input/touchscreen/ads7846.c:1126:24: error: cast from pointer to =
+integer of different size [-Werror=3Dpointer-to-int-cast]
+>  1126 |         pdata->model =3D (u32)device_get_match_data(dev);
+>       |                        ^
+> cc1: all warnings being treated as errors
 
--s
+There is already a patch, I'm sure it's on its way in:
+https://lore.kernel.org/linux-input/20230609202722.3634721-1-arnd@kernel.or=
+g/
+
+Arnd can you apply this patch to the SoC tree where the cause
+(by me) is? It's on top of the OMAP GPIO cleanups.
+
+Yours,
+Linus Walleij
