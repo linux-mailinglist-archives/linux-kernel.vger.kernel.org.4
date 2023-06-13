@@ -2,152 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 754AD72E871
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 18:26:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 530BC72E854
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 18:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243165AbjFMQWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 12:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50818 "EHLO
+        id S242655AbjFMQXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 12:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243075AbjFMQWs (ORCPT
+        with ESMTP id S240767AbjFMQXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 12:22:48 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE761BEC;
-        Tue, 13 Jun 2023 09:22:20 -0700 (PDT)
-Received: from mercury (dyndsl-091-248-189-170.ewe-ip-backbone.de [91.248.189.170])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1FC0E6606EF9;
-        Tue, 13 Jun 2023 17:22:19 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686673339;
-        bh=MADM0OvComNnVgRiTtbdHEXJKTfQ5wtfSsTHqpNZ7+Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cG7lOXdeYoK/EWOb0ByXUM8o7LL/QXTRtRP9r7fzeNr2SsPnglx5QGOR2u3xtyLzq
-         +/9z8neWmJLvxJn9IbHrX6FoDT2HVS9fLS+DYBK/KgGJrs4hc/rNKAe3Gia6PUH1PF
-         DuiU3FnEmYEo3ffkyXG98y8h6UvIHVgChwrKPAMKTNe0gDZmRds060hnSmKWWYJUNx
-         aVaoB2GlaSx6iiBc9rEBLQsTlfOOWSGE6pPsq4XEpO9Ez6sS2sYagf445F0h6fQN9E
-         V/qB43D5b4bdatSJIlqKzPheZeKdgmCBy3WKCGpoVhYRUFS9t5CsyBZADZeBV6Rl6+
-         chCQ8hfE8NNlQ==
-Received: by mercury (Postfix, from userid 1000)
-        id 3BC991066FBA; Tue, 13 Jun 2023 18:22:17 +0200 (CEST)
-Date:   Tue, 13 Jun 2023 18:22:17 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Vincent Legoll <vincent.legoll@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v5 02/25] PM / devfreq: rockchip-dfi: Embed desc into
- private data struct
-Message-ID: <20230613162217.auqdeogoxs35fuqe@mercury.elektranox.org>
-References: <20230524083153.2046084-1-s.hauer@pengutronix.de>
- <20230524083153.2046084-3-s.hauer@pengutronix.de>
+        Tue, 13 Jun 2023 12:23:34 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E164E1;
+        Tue, 13 Jun 2023 09:23:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686673414; x=1718209414;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=NDcHGxw1CNdPlvSvShic0BGGrA96azAguka/zb9SDF4=;
+  b=lO3mjMMSc0RU31bGqePYKhYT+yGXGdYFs8Vcw4Pbx/PxQlqf3D4gpBJR
+   NaNkozS50Tvd6xb2HwRdtyuwQYVcofBg9IpZgjacD0e0LdM1LRy0WYZJb
+   /8kVmmIsdemBJbVUB39vg99G4bMKYDJ2LDyIBYMW1ZUg1BnxNQBYrGee1
+   9375fBhVMAcvBaOp0gMTW4kE+dN0DSvbCxoEzJKieQR3eouZSWhjnllpV
+   rk5bn8wKvEMdqMlkTVsP2LMvn97+y1beeofTWKy4PiWfIjtP04IzTSaLK
+   swdde9IE5R/xEk+3/XkTfSfjTnph2DOOWPYZ6GQ/9P131zvQGRKfna0VY
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="444757199"
+X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
+   d="scan'208";a="444757199"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 09:23:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="824470475"
+X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
+   d="scan'208";a="824470475"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga002.fm.intel.com with ESMTP; 13 Jun 2023 09:23:32 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 13 Jun 2023 09:23:31 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Tue, 13 Jun 2023 09:23:31 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.173)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Tue, 13 Jun 2023 09:23:30 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=i3AnE1SzozW/OM2KqBlRo44DWnrpNi++ZAW32ipTWR7EKql6G3YDkIFPDmMPvtmvQatcXRnR4lCc7fyeYA3fpXdEz5v7YMdme26gg7MDf8ncTh6viYHc1gv8ShgpeDMCcTraEVmd1jjCxcp5733a/+TMeAF6ybakH52ZWVVwfZ5hJzSMMSLxWDNGY4JWNX3vGibrO5YBh0cVmKpTV3jj0dvNrzKgqgmp6JuKiKk8j4uRzMnYc+iRMCi1lPhbTmWbWnA3tsoOd26pD/5HD74i0x6avNWwS0YF9q9od8Lsd8iY1MLsLoVjDEWIdFmBpoFpHKgtKRqy9U+7pq+/+lIN8A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uMmOEG3MOE2kbgZ08lzt2E/D4WX2FDxHNJkBl3Eccj8=;
+ b=n0MjOFWrsgefDXYmYNzjPbVJzhCuR8X1kwSJJJ5Lt00s2ucDwvUmt+2fP6ueZRGgwqTuuYkQzb3yBfIsgqOF/fDwWlEsFhwblFgEd91EEH8DCX0YWhBqVa/mZk3vvBSQvr/CvaYkZvp09SL8ghgMLMSIRWjVr7k1L/rKqnmBEzPzXffd9BiUvJFUWGmqcRWDvPP6VRlxJAwrB5bm3iPB8RTQYRqj0VHNbEoLEZeLa2ASDvsmI+x8IMqqGs8KHf5hsaYHG5diPTKBqdQUZDAvcASSZkAjBGVhAscRySOud/2ao/c5szxciAuz4gFaafQnlVc1In0bGk4SQOuvHPCZJQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SN6PR11MB3229.namprd11.prod.outlook.com (2603:10b6:805:ba::28)
+ by MW3PR11MB4698.namprd11.prod.outlook.com (2603:10b6:303:5a::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Tue, 13 Jun
+ 2023 16:23:23 +0000
+Received: from SN6PR11MB3229.namprd11.prod.outlook.com
+ ([fe80::bdec:3ca4:b5e1:2b84]) by SN6PR11MB3229.namprd11.prod.outlook.com
+ ([fe80::bdec:3ca4:b5e1:2b84%7]) with mapi id 15.20.6455.039; Tue, 13 Jun 2023
+ 16:23:22 +0000
+Message-ID: <d9fd12f1-a858-c67e-b17f-2299bba9b17c@intel.com>
+Date:   Tue, 13 Jun 2023 09:23:19 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [Intel-wired-lan] [PATCH iwl-next v7 00/15] Introduce Intel IDPF
+ driver
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Pavan Kumar Linga <pavan.kumar.linga@intel.com>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        <intel-wired-lan@lists.osuosl.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>
+References: <20230612231021.39409-1-pavan.kumar.linga@intel.com>
+ <293a81d3-f0b4-904c-a5f9-64ce091f1ecd@intel.com>
+Content-Language: en-US
+From:   Tony Nguyen <anthony.l.nguyen@intel.com>
+In-Reply-To: <293a81d3-f0b4-904c-a5f9-64ce091f1ecd@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR13CA0214.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c1::9) To SN6PR11MB3229.namprd11.prod.outlook.com
+ (2603:10b6:805:ba::28)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jfxv54ui2trftfa7"
-Content-Disposition: inline
-In-Reply-To: <20230524083153.2046084-3-s.hauer@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR11MB3229:EE_|MW3PR11MB4698:EE_
+X-MS-Office365-Filtering-Correlation-Id: 185e6bb7-7948-4f9b-7ec5-08db6c2a81ca
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sddvEdM6z21t86laNUeEZcx12AxEHgr05HiMQDoskrB1v4zykcKgmgs8CW+wmwm+JDuNF61QdPfDOpQE/Sgcn1FLU6Wna4TW7E5gClp/SRQDvoknnHybQgayQuL0JuWluDBVqrssrv/9nWnaTuzUS2l8m5YaadEPPOXNOmEwTMZOzYWTKcb9XTYroDDwfF3YYRJqUh08DjpvkWhktyOo73BajGGEqO8LHrQfNxtc/p1giUr5o9kvGMNyPXU8JJXUzUDBtB08Rd8ZdZcJMinsagzd1gXYZ8TokJCVSSIljAdlI+3iQYQeDG6nWdON6RxpYB1iJPsIDvkIXo6/NBG5DO1Et+i2T1dRdM8+rlMrp7D4LqUn0CMKCBlLMDjRSByIZeLFo4sH2MZSEPTPZx+H1SHeOBpv6dnhf8kiP1H6qSGPR/sF/85U1lOPDFiP7YKVpx5zj5mle1hH6eUhZJLLGqphAJ+dlb4J4uM/UBWJ/PZxChj2x22XZUqt1HLtXhRhg8AOvZiR6I/BO+KnrszEtzZFUexjF7HCWIZlJxJk/b2j+Hn3ez/qJZjz6a/LGETrUoapuAi+djepYW5BM7UMaZs+OTVNIXuRN/BiaV79ffpqXT2dwAxWAkJxXz6pUpphtYdz7L6tj7c6FjdzgxFIMA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR11MB3229.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(366004)(396003)(136003)(346002)(376002)(451199021)(31686004)(66946007)(4326008)(66556008)(36756003)(186003)(54906003)(6636002)(478600001)(110136005)(2616005)(2906002)(4744005)(66476007)(8676002)(316002)(41300700001)(31696002)(86362001)(6486002)(6666004)(6506007)(53546011)(8936002)(82960400001)(26005)(5660300002)(38100700002)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dlY4b0ozSkoyUlMwSWxrTzNnWWRoQmxJdlZBcEgvU2pCWGp5d3dvT0svSW0x?=
+ =?utf-8?B?R1NHaWFPMnE0cWkvalpleGtrVjJOdFpQaExuMnZLWHIzaGdYZUxIZDNPTFhK?=
+ =?utf-8?B?eVd4RW11UUtQdWdvc2FUTXB4QzYxQWhWYWRyN0pGYWQvejFZYlFZRGYzMVg4?=
+ =?utf-8?B?ZkxyNFVOUHNuVGlrT2FPbnl0YlFGQnM1ODJUNGxNRlI5QUZOUFViRUVORjBl?=
+ =?utf-8?B?M2ZuSzBPUldabC8ydUdFNTMwUDlkeWdxQ3lNalpVeHRlWklvOFRkWDhDcnlS?=
+ =?utf-8?B?L2hJdy9yUEk5eE5Nakkvb0hISnk3UzQ0dkhnWitQdGh4NFExRjQzTFQvZ0dG?=
+ =?utf-8?B?TWtXcUZ5ZmR6cEx5NERaaS94Z1h0ejVRZWlJaUVnL3JvTGhkYzVKUzJmeWNI?=
+ =?utf-8?B?Q0pSbjdYZG92MlBxVzd6akdnREl1SzZqU0lJNW4xS3psem9rSjB2VXBiV0xL?=
+ =?utf-8?B?aXZLaGRJWExuZVNpRWRIY0VRMFJ1b0hQNW5kb0N6bUVSVWo5YWlVMGVmeTVB?=
+ =?utf-8?B?Z0VKS1FWZStDTUR5cFhGSndXdmVwcTlBaEpnaVVuMGVLNGNvQUpsLzVOTXJx?=
+ =?utf-8?B?MTNVblU0U0t1Z1RjTkxtZkhyWjk3d1A2TjJydzZHUmtnQWFRaGZaWlh2ankw?=
+ =?utf-8?B?ajBFcnZ2ZUx3SndmeDFnWnNoRitldFFKbjBqb2dLc0RPMmVQTm40YVBaanV5?=
+ =?utf-8?B?UEdrRlFSeUYzTlVFMUxUNHo3RWpFZHIrbWEvSFFLZlhpdHl3V01xZjdxM3Bo?=
+ =?utf-8?B?MURNZm5qVEtvUmpIY3oxTGU5VzVuQ1FnZjZGUzc0dEdwRy8xWWZLYkt1Wk9S?=
+ =?utf-8?B?ZnV3TGZqZURQelZsd3hmeVVwMG1ReTN6MHRTeTNrQlA4UkZTKzJ1QlhwUmxw?=
+ =?utf-8?B?TXYyVEZpSmFsMTRwOW5RdVpiY0poOXI5eWs1Tk1KM2Z2bm94YjcwZnZRRWlC?=
+ =?utf-8?B?NUZEUVprdlk2VVozcWUwaVZoQy92NDNTMXJobTR3Y2lEbGxPbkVaQ1N3TGRz?=
+ =?utf-8?B?eHpvOGxUUXd1Z3ZoU0ZmL1Vjb0U1R2JlRThpYTc4bEhGRm9RQVZQNnhva3FF?=
+ =?utf-8?B?UUdoRzhzWkl0OXRERG1oSGRMOEcxNXluYmtSMjhmUnFBTG10OHJ3VllienZy?=
+ =?utf-8?B?cHRoTDE4eUFkdVBYVnBNZVYyK3ZoVHlBdWg2SENxanJXaTlFc0h1NWVFbWVU?=
+ =?utf-8?B?OW1jV1ZoU21USUN4dGpUeFJGN1dlTXZqOUd5bjZrazFBMnRwRGNwUXo3OHZW?=
+ =?utf-8?B?TlIrUjlGZXVGVFdmL2l1cDZyaHNTNkVrQ2dSTEN1OVFKTW5MZ3p2YjcyVEpr?=
+ =?utf-8?B?MWcyeEs2M1Y2Wmk4UmE4UHplYWt5djFZNVdlN1dLb3VqY2xrV2hDdUJKVi9U?=
+ =?utf-8?B?Skd5S1JNTFp3Z2F6a1crb1pvUEZ3VU9HejBkYmJmaDVZYWYzMnNGK2Z6SkJY?=
+ =?utf-8?B?R0dPVkhNblhtVEU2emxuU2x4TWdZSW1LbDBSdXFSVk1ManAwM1pHMnFDY0xu?=
+ =?utf-8?B?QWlUckxsb1YzVCt1UytwZ0tTSGF5YXJyNlBwbldRdTh5c0NXVUFwa0JFays1?=
+ =?utf-8?B?ei8vejQ3Y1VNSnBqVDAydXlmb2gxcThKNHhhYnhyWUw3NzRhOHZhdmFjck1a?=
+ =?utf-8?B?aTBmb2dkVkVGMjIyOUFrWHBSUlFZYlorQXNZa3NTMWk1ZTNmeW9PMDlCNFRp?=
+ =?utf-8?B?VzgrZGFNYm9oV0NFSUhOZVVLNGRjMzA1bHJVVktoTUxMeENQaE5sR2k0VkM1?=
+ =?utf-8?B?VE96by9QdlN2WEVrOXlsOEwxQnRLMGplcVpHbllKbm5YSUdyVGtJMFBMaml1?=
+ =?utf-8?B?b0h4NEdCazBPY1pVN3VGbURtNTJjWXRxK2hYUmF6MzgvR0lvVEhmYzRDZG5p?=
+ =?utf-8?B?S1VhVkJQVUZveXRxRk1yRDR4Q3pTRCtLUi9mQkMxNnp3Ym44a0QvK3dKdTJU?=
+ =?utf-8?B?bTZ6T3FvUmEyTTVSeFd1Ym0xa1ljMFFIRG5WZ1Q1bjkvZk9iRFh3WmR5UVEy?=
+ =?utf-8?B?VmVZUkVLS1VSeUViNk9CdHBNY2FzZ0VKTjc4c3FLT3JYcnpNMEdDN3VxSDNw?=
+ =?utf-8?B?R0ZLQkpVcFdQOUxMNzhlS1p1OGFpT1pjT3RPM05LMGQ5WEJudlhhQjhCSFBO?=
+ =?utf-8?B?anEyQ01TZ3FLbklhaHpvZ2pxYjNpUDZjZm5Xdi9uMktHaHR2bUhha2NLS1or?=
+ =?utf-8?B?Qnc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 185e6bb7-7948-4f9b-7ec5-08db6c2a81ca
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR11MB3229.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2023 16:23:22.7147
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: iRNqnPCu2gfurViuQOxaRqOvtHCE76dOTxl5TDnmg66aNyCgttDIM9GJGHSv9kdmzM6DI4Yg60h7qzjkzB2ey4aBgxARsmGRXmOS9tTLh8E=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR11MB4698
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/13/2023 4:47 AM, Alexander Lobakin wrote:
+> From: Pavan Kumar Linga <pavan.kumar.linga@intel.com>
+> Date: Mon, 12 Jun 2023 16:10:06 -0700
+> 
+>> This patch series introduces the Intel(R) Infrastructure Data Path Function
+>> (IDPF) driver. It is used for both physical and virtual functions. Except
+> 
+> No netdev maintainers and generic MLs, not speaking that the previous
+> versions already were there? What?
 
---jfxv54ui2trftfa7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This was something I told Pavan he could do as this likely will be 
+turned around as the v2 PR. I was trying to save some extra thrash of, 
+nearly identical, iwl-next v7 and net-next v2 being sent in a short 
+timespan.
 
-Hi,
-
-On Wed, May 24, 2023 at 10:31:30AM +0200, Sascha Hauer wrote:
-> No need for an extra allocation, just embed the struct
-> devfreq_event_desc into the private data struct.
->=20
-> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> ---
-
-Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-
--- Sebastian
-
->  drivers/devfreq/event/rockchip-dfi.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event=
-/rockchip-dfi.c
-> index 74893c06aa087..467f9f42d38f7 100644
-> --- a/drivers/devfreq/event/rockchip-dfi.c
-> +++ b/drivers/devfreq/event/rockchip-dfi.c
-> @@ -49,7 +49,7 @@ struct dmc_usage {
->   */
->  struct rockchip_dfi {
->  	struct devfreq_event_dev *edev;
-> -	struct devfreq_event_desc *desc;
-> +	struct devfreq_event_desc desc;
->  	struct dmc_usage ch_usage[RK3399_DMC_NUM_CH];
->  	struct device *dev;
->  	void __iomem *regs;
-> @@ -204,14 +204,10 @@ static int rockchip_dfi_probe(struct platform_devic=
-e *pdev)
-> =20
->  	data->dev =3D dev;
-> =20
-> -	desc =3D devm_kzalloc(dev, sizeof(*desc), GFP_KERNEL);
-> -	if (!desc)
-> -		return -ENOMEM;
-> -
-> +	desc =3D &data->desc;
->  	desc->ops =3D &rockchip_dfi_ops;
->  	desc->driver_data =3D data;
->  	desc->name =3D np->name;
-> -	data->desc =3D desc;
-> =20
->  	data->edev =3D devm_devfreq_event_add_edev(&pdev->dev, desc);
->  	if (IS_ERR(data->edev)) {
-> --=20
-> 2.39.2
->=20
-
---jfxv54ui2trftfa7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSIl7gACgkQ2O7X88g7
-+pqavg//eGagVO58ELSDQgmcdseNzq5Z+G6qMNxVtz7FQsw+l/RWj2SPWK2u4g/a
-sQ2WAQyE2/f/VIt3kp0evIvau8xhc77d84NCfuNOYHeWKsmnH81opNj5n5PiGAzK
-iNwCRyecDGgOvar0ZqK+4RWS/+h0K//WH/dq85ssVMkkFye8GMTlYszbDWka5p98
-BGQNHW7EuT8qCsni4haqU0CfW9/P0fSMPBjjygittVYlXu1Om2VCTBZpeB9uF6iQ
-4hMJx9ih76+K4kQBMvxArKQOkZYBGYIUfjY97lH/YKZvrGf88Hm5RV2HiWzhN9v2
-GUmxqlq/A2pyPBhlbRhZZNf/0At99qGKIUwyffLW5+6YLFgAtAysRleRmd2BpkXn
-WrVsggohh0L0oaW4RWKeyT6/ZtcJ5qD9e1vari6JF0S+5+W+1CHtvEY+yQa3kekD
-WVuc1HtRNeqkqjgiO9I051BOepkIrb6RTGJPi6Rsotz5QIQatW7GzhwUhhT0cDUs
-f3ZcRjTvABqOfEVq4Y+ybEpcrhmlUW4hUPJjNsztf86D4mwAtUaRebpFof8NkJVn
-9g3322XfKBBxRfMlnwYVeT7oNuMurn7YuyUvfydFSNyuxXYUdQEDj+Y2UQ2luBi8
-IVunO3oplN9wAXOJHhYUsS//sGUeDNhcD7YwzSdxVnOs4ow2DVg=
-=XyGu
------END PGP SIGNATURE-----
-
---jfxv54ui2trftfa7--
+Thanks,
+Tony
