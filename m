@@ -2,116 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0686372E476
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5191072E489
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242602AbjFMNoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 09:44:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47444 "EHLO
+        id S242661AbjFMNpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 09:45:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242557AbjFMNn5 (ORCPT
+        with ESMTP id S242629AbjFMNpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 09:43:57 -0400
-Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF84E6;
-        Tue, 13 Jun 2023 06:43:39 -0700 (PDT)
-Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-33e75ca0a8bso24590845ab.0;
-        Tue, 13 Jun 2023 06:43:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686663819; x=1689255819;
+        Tue, 13 Jun 2023 09:45:08 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3166510DA;
+        Tue, 13 Jun 2023 06:44:53 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-98220bb31c6so320206666b.3;
+        Tue, 13 Jun 2023 06:44:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686663891; x=1689255891;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qIPTkEm+x3SAmqMtuyLsXbQowkmoWE26dGFQXuJ4pnc=;
+        b=ruD/BSoCNOUlocmTtUMmfF4n/YygzrQiQTT0qyLgY6CT5h5XRwufrZFJsXuOxxQMCq
+         oEM/ML+s3MWQGkN8E3kx3+YABngBd6Ud0WtTLs4nw/YdC8p/Xd+v6tfoxWdYKD1kxsgB
+         dKl7JpPkI+Xs8JwmBrhezlJ5qCdHfdwZs1af8xLexH592botbnfFrqhj3YL0FB6yKu2E
+         +kHnUm3+eSkvoEsQEwgnFFUi1JpI0mfOm5SaRlCV/UCCwnKWNpMNZPc8hRIep9UJxTi4
+         7zjAf6Lujf44MQAZ3frovCQ598gHa5KyKRcTZ3Sbh6GWi/NHG/m90UO+Xih2ALqRsXoz
+         ofwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686663891; x=1689255891;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Nmua7iGyrNHd+POWyUwRwRVOKzPbU1axH5KsFnA/6xU=;
-        b=hitn1Jb3ubnKZgMDIzLdQzZe+2gfnfnJ7Qf5+7KmnOiw/vYodxeyHUmBrbTTKit/z9
-         O2kN8YXi4l7FRgyJVovPE3g8Ge7Tup2A/IjpY+c8qrMT1km+iEgKkUki33x7yD7UEjtV
-         eaH1Ppq7yZfwZXvgcQioDzJbT9MHRqQeemxjd6+fBl/ZbTEWW2aIdpAmfFRnigBUrT/e
-         TKfJ7XU/NLAgc2pxvIlvWmpzf/sOGshqLcYVIYiT3NaMDaolhbUeck0Ix+CNIMlhgTbw
-         /GUNtFlfX44i8fAahEuABxL4QIaXsYoI7xJHeqBIF0W7s92Gk8Sf7wdax10/2/BxSjGB
-         cwbg==
-X-Gm-Message-State: AC+VfDw5dzTfmSQZ/yiZzkGbmatN0P3uDJCuViL62Ggqoa8o0srW1Xrs
-        qBIik2hMAQw9wGqWLQif3w==
-X-Google-Smtp-Source: ACHHUZ4N5LxEwQghbyZ0mVuAkfOFHBheqmu8DGwgun+YnzbyznQW+Hrq6vho8Zw5x6oO0ynuI43ghA==
-X-Received: by 2002:a92:d692:0:b0:33b:16e9:bba5 with SMTP id p18-20020a92d692000000b0033b16e9bba5mr10434067iln.28.1686663818733;
-        Tue, 13 Jun 2023 06:43:38 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id j18-20020a926e12000000b00326bd11f5d1sm2190658ilc.11.2023.06.13.06.43.37
+        bh=qIPTkEm+x3SAmqMtuyLsXbQowkmoWE26dGFQXuJ4pnc=;
+        b=IZ/mrq/Pdt/G6ErBGYu+usI/h9AlbFDc890QbGspE/NlrNIb72yWRJ1XKzEWiFSh7X
+         U9sB4N6uC4nNktVUxpMMkDuE1FFlKt7XlBN5jr6Q5P/Z3jeE2v5jF4+VNLJUVMMPAgoR
+         7ZAep145HJF1y9LeiTL+g0IkUmiwqtlXbFXh4APO/BQAWe8eOttV3ofwzIn2OTV3Eiwm
+         j5tZ9YPCeSi91TaQSbWODj6rPsrut2T8d9QhY3QshtaubfmyHwgJcziLII0KXRuwWsAy
+         /DXjQkwkQ1b6z4Eq9wzpjWEqtHyV06LlXProLLJE45+GZw+BI9I3EdQ75xkYD42/AkMK
+         JxXg==
+X-Gm-Message-State: AC+VfDyl21tGEeSQPnEBKBVlUEPWGoJqdctglM/ww4rbSHyAnypHcZRa
+        uQpJNWgoQVkxC3HPW9pq7aI=
+X-Google-Smtp-Source: ACHHUZ7d5iDJs1skj28GuyTneKjdn63hb1OG2DPCbvt7f9LzvHwU1I0m7wnmnKRBCCI98JY30fLANQ==
+X-Received: by 2002:a17:907:3e9f:b0:971:2ead:e161 with SMTP id hs31-20020a1709073e9f00b009712eade161mr16992395ejc.6.1686663891308;
+        Tue, 13 Jun 2023 06:44:51 -0700 (PDT)
+Received: from krava ([83.240.63.222])
+        by smtp.gmail.com with ESMTPSA id r26-20020a1709067fda00b0096a1ba4e0d1sm6697546ejs.32.2023.06.13.06.44.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 06:43:38 -0700 (PDT)
-Received: (nullmailer pid 1780603 invoked by uid 1000);
-        Tue, 13 Jun 2023 13:43:36 -0000
-Date:   Tue, 13 Jun 2023 07:43:36 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Piyush Mehta <piyush.mehta@amd.com>
-Cc:     michal.simek@xilinx.com, git@amd.com, nava.manne@xilinx.com,
-        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-usb@vger.kernel.org, michal.simek@amd.com,
-        conor+dt@kernel.org, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, siva.durga.prasad.paladugu@amd.com
-Subject: Re: [PATCH V3] dt-bindings: reset: convert the xlnx,zynqmp-reset.txt
- to yaml
-Message-ID: <20230613134336.GA1780229-robh@kernel.org>
-References: <20230613123048.2935502-1-piyush.mehta@amd.com>
- <168666237486.1671584.5832429615873674500.robh@kernel.org>
+        Tue, 13 Jun 2023 06:44:50 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Tue, 13 Jun 2023 15:44:48 +0200
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Yonghong Song <yhs@meta.com>, Jiri Olsa <olsajiri@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Jackie Liu <liu.yun@linux.dev>
+Subject: Re: [PATCHv2] ftrace: Show all functions with addresses in
+ available_filter_functions_addrs
+Message-ID: <ZIhy0BXEW65TV8sS@krava>
+References: <20230611130029.1202298-1-jolsa@kernel.org>
+ <53a11f31-256d-e7bc-eca5-597571076dc5@meta.com>
+ <20230611225407.3e9b8ad2@gandalf.local.home>
+ <20230611225754.01350a50@gandalf.local.home>
+ <d5ffd64c-65b7-e28c-b8ee-0d2ff9dcd78b@meta.com>
+ <20230612110222.50c254f3@gandalf.local.home>
+ <ZId/UL/iujOdgel+@krava>
+ <4c87727b-0b3f-ffc1-d55b-90e75dcae52b@meta.com>
+ <20230613093606.069a70da@gandalf.local.home>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <168666237486.1671584.5832429615873674500.robh@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230613093606.069a70da@gandalf.local.home>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 07:19:34AM -0600, Rob Herring wrote:
+On Tue, Jun 13, 2023 at 09:36:06AM -0400, Steven Rostedt wrote:
+> On Mon, 12 Jun 2023 22:04:28 -0700
+> Yonghong Song <yhs@meta.com> wrote:
 > 
-> On Tue, 13 Jun 2023 18:00:48 +0530, Piyush Mehta wrote:
-> > Convert the binding to DT schema format. It also updates the
-> > reset-controller description.
-> > 
-> > Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
-> > ---
-> > Changes in V2:
-> > - Addressed the Krzysztof review comment:
-> >  - Update DT binding to fix the dt_binding_check warning.
-> >  - Removed 2/2 - xlnx,zynqmp-firmware.yaml binding patch: Will send after
-> >    xlnx,zynqmp-reset.yaml binding merge.
-> > 
-> > Link: https://lore.kernel.org/lkml/168612336438.2153757.6000360498539992409.robh@kernel.org/T/#m4abfe6287177d5fd09f781d298dd19d56aae5e27
-> > 
-> > Changes in V3:
-> > - Addressed the Krzysztof review comment:
-> >  - Removed 2/2 - xlnx,zynqmp-firmware.yaml binding patch: Will send after
-> >    xlnx,zynqmp-reset.yaml binding merge.
-> >  - Update title: Removed "binding".
-> >  - Update Example:
-> >   - Removed header file.
-> >   - Dropped three levels of indentations: firmware and zynqmp_firmware.
-> >   - Removed the sata example.
-> > 
-> > Link: https://lore.kernel.org/all/22e3c25e-487b-c02f-46f3-6d2ab2be8813@linaro.org/
-> > ---
-> >  .../bindings/reset/xlnx,zynqmp-reset.txt      | 55 -------------------
-> >  .../bindings/reset/xlnx,zynqmp-reset.yaml     | 52 ++++++++++++++++++
-> >  2 files changed, 52 insertions(+), 55 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.txt
-> >  create mode 100644 Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml
-> > 
+> > Thanks for explanation! It would be great if we can put more details in
+> > this email into the commit message!
 > 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> I agree.
 > 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml: $defs:qcom-pmic-mpp-state:properties:qcom,paired: [{'description': 'Indicates that the pin should be operating in paired mode.'}] is not of type 'object', 'boolean'
-> 	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+> This is the patch I just pulled into my queue:
 
-Unrelated. This can be ignored.
+great, thanks
 
-Rob
+jirka
+
+> 
+> From: Jiri Olsa <jolsa@kernel.org>
+> Date: Sun, 11 Jun 2023 15:00:29 +0200
+> Subject: [PATCH] ftrace: Show all functions with addresses in
+>  available_filter_functions_addrs
+> 
+> Adding new available_filter_functions_addrs file that shows all available
+> functions (same as available_filter_functions) together with addresses,
+> like:
+> 
+>   # cat available_filter_functions_addrs | head
+>   ffffffff81000770 __traceiter_initcall_level
+>   ffffffff810007c0 __traceiter_initcall_start
+>   ffffffff81000810 __traceiter_initcall_finish
+>   ffffffff81000860 trace_initcall_finish_cb
+>   ...
+> 
+> Note displayed address is the patch-site address and can differ from
+> /proc/kallsyms address.
+> 
+> It's useful to have address avilable for traceable symbols, so we don't
+> need to allways cross check kallsyms with available_filter_functions
+> (or the other way around) and have all the data in single file.
+> 
+> For backwards compatibility reasons we can't change the existing
+> available_filter_functions file output, but we need to add new file.
+> 
+> The problem is that we need to do 2 passes:
+> 
+>  - through available_filter_functions and find out if the function is traceable
+>  - through /proc/kallsyms to get the address for traceable function
+> 
+> Having available_filter_functions symbols together with addresses allow
+> us to skip the kallsyms step and we are ok with the address in
+> available_filter_functions_addr not being the function entry, because
+> kprobe_multi uses fprobe and that handles both entry and patch-site
+> address properly.
+> 
+> We have 2 interfaces how to create kprobe_multi link:
+> 
+>   a) passing symbols to kernel
+> 
+>      1) user gathers symbols and need to ensure that they are
+>         trace-able -> pass through available_filter_functions file
+> 
+>      2) kernel takes those symbols and translates them to addresses
+>         through kallsyms api
+> 
+>      3) addresses are passed to fprobe/ftrace through:
+> 
+>          register_fprobe_ips
+>          -> ftrace_set_filter_ips
+> 
+>   b) passing addresses to kernel
+> 
+>      1) user gathers symbols and needs to ensure that they are
+>         trace-able -> pass through available_filter_functions file
+> 
+>      2) user takes those symbols and translates them to addresses
+>        through /proc/kallsyms
+> 
+>      3) addresses are passed to the kernel and kernel calls:
+> 
+>          register_fprobe_ips
+>          -> ftrace_set_filter_ips
+> 
+> The new available_filter_functions_addrs file helps us with option b),
+> because we can make 'b 1' and 'b 2' in one step - while filtering traceable
+> functions, we get the address directly.
+> 
+> Link: https://lore.kernel.org/linux-trace-kernel/20230611130029.1202298-1-jolsa@kernel.org
+> 
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+> Cc: Jackie Liu <liu.yun@linux.dev>
+> Suggested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> ---
+>  Documentation/trace/ftrace.rst |  6 ++++++
+>  include/linux/ftrace.h         |  1 +
+>  kernel/trace/ftrace.c          | 37 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 44 insertions(+)
+> 
+> diff --git a/Documentation/trace/ftrace.rst b/Documentation/trace/ftrace.rst
+> index df2d3e57a83f..b7308ab10c0e 100644
+> --- a/Documentation/trace/ftrace.rst
+> +++ b/Documentation/trace/ftrace.rst
+> @@ -324,6 +324,12 @@ of ftrace. Here is a list of some of the key files:
+>  	"set_graph_function", or "set_graph_notrace".
+>  	(See the section "dynamic ftrace" below for more details.)
+>  
+> +  available_filter_functions_addrs:
+> +
+> +	Similar to available_filter_functions, but with address displayed
+> +	for each function. The displayed address is the patch-site address
+> +	and can differ from /proc/kallsyms address.
+> +
+>    dyn_ftrace_total_info:
+>  
+>  	This file is for debugging purposes. The number of functions that
+> diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+> index 49f279f4c3a1..8e59bd954153 100644
+> --- a/include/linux/ftrace.h
+> +++ b/include/linux/ftrace.h
+> @@ -633,6 +633,7 @@ enum {
+>  	FTRACE_ITER_MOD		= (1 << 5),
+>  	FTRACE_ITER_ENABLED	= (1 << 6),
+>  	FTRACE_ITER_TOUCHED	= (1 << 7),
+> +	FTRACE_ITER_ADDRS	= (1 << 8),
+>  };
+>  
+>  void arch_ftrace_update_code(int command);
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index 764668467155..b24c573934af 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -3861,6 +3861,9 @@ static int t_show(struct seq_file *m, void *v)
+>  	if (!rec)
+>  		return 0;
+>  
+> +	if (iter->flags & FTRACE_ITER_ADDRS)
+> +		seq_printf(m, "%lx ", rec->ip);
+> +
+>  	if (print_rec(m, rec->ip)) {
+>  		/* This should only happen when a rec is disabled */
+>  		WARN_ON_ONCE(!(rec->flags & FTRACE_FL_DISABLED));
+> @@ -3996,6 +3999,30 @@ ftrace_touched_open(struct inode *inode, struct file *file)
+>  	return 0;
+>  }
+>  
+> +static int
+> +ftrace_avail_addrs_open(struct inode *inode, struct file *file)
+> +{
+> +	struct ftrace_iterator *iter;
+> +	int ret;
+> +
+> +	ret = security_locked_down(LOCKDOWN_TRACEFS);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (unlikely(ftrace_disabled))
+> +		return -ENODEV;
+> +
+> +	iter = __seq_open_private(file, &show_ftrace_seq_ops, sizeof(*iter));
+> +	if (!iter)
+> +		return -ENOMEM;
+> +
+> +	iter->pg = ftrace_pages_start;
+> +	iter->flags = FTRACE_ITER_ADDRS;
+> +	iter->ops = &global_ops;
+> +
+> +	return 0;
+> +}
+> +
+>  /**
+>   * ftrace_regex_open - initialize function tracer filter files
+>   * @ops: The ftrace_ops that hold the hash filters
+> @@ -5916,6 +5943,13 @@ static const struct file_operations ftrace_touched_fops = {
+>  	.release = seq_release_private,
+>  };
+>  
+> +static const struct file_operations ftrace_avail_addrs_fops = {
+> +	.open = ftrace_avail_addrs_open,
+> +	.read = seq_read,
+> +	.llseek = seq_lseek,
+> +	.release = seq_release_private,
+> +};
+> +
+>  static const struct file_operations ftrace_filter_fops = {
+>  	.open = ftrace_filter_open,
+>  	.read = seq_read,
+> @@ -6377,6 +6411,9 @@ static __init int ftrace_init_dyn_tracefs(struct dentry *d_tracer)
+>  	trace_create_file("available_filter_functions", TRACE_MODE_READ,
+>  			d_tracer, NULL, &ftrace_avail_fops);
+>  
+> +	trace_create_file("available_filter_functions_addrs", TRACE_MODE_READ,
+> +			d_tracer, NULL, &ftrace_avail_addrs_fops);
+> +
+>  	trace_create_file("enabled_functions", TRACE_MODE_READ,
+>  			d_tracer, NULL, &ftrace_enabled_fops);
+>  
+> -- 
+> 2.39.2
+> 
