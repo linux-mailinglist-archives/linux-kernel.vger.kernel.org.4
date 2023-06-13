@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3334872F02C
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 01:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D1E72F037
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 01:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241432AbjFMXkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 19:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33668 "EHLO
+        id S232596AbjFMXkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 19:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240329AbjFMXj3 (ORCPT
+        with ESMTP id S240572AbjFMXja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 19:39:29 -0400
+        Tue, 13 Jun 2023 19:39:30 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0544D1985;
-        Tue, 13 Jun 2023 16:39:28 -0700 (PDT)
-Message-ID: <20230613224545.078124882@linutronix.de>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535F91996;
+        Tue, 13 Jun 2023 16:39:29 -0700 (PDT)
+Message-ID: <20230613224545.137045745@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686699566;
+        s=2020; t=1686699567;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=dVFthLCRReoMWN5sC8FHYm0TEZ3L3fBC7evr6n0+Mk4=;
-        b=TpU4F3Cm21DA+wjsqv0/P+lCFo9Kph9tSJszuyDewJQpAkHNucWI6VQGH2ovheCCeLSwPM
-        8L0zJwOQu4OwERTYKoBKWk8lYaWsIeNJKgE/BZ+3odqC4pib9gmV3UiyFV64EYaagE2pPe
-        Exd1bgLoh+RHn42egy6GkWFY/dWoZ6kiRe8LYhwBFTmq/5hx2Xeu6+ayFJlro4BKpaVqTF
-        hoqWbHNhlfn0CKlpuwRtoRE/a9lZ6ft1xMPStZm61XNHf4WWtkCgcdqEVZdekO3JFHK0bm
-        4FNS7A0stNubNTTdH46Z7QDtve7F2+5WqKGyGo7lcEMug4LbJl6Tow46fGqshQ==
+         references:references; bh=DDD4mAWSMPbjAODBEDFm/GZSLXiwbvYxlB2kHZQV314=;
+        b=wVvSy71gluUCZPIXgEtKPo8BBg7ieMdvjy41cFsDvAMwvS7sWiK2ivysp2uh7x/mxyaE2v
+        lRpXB1T+7Rb6IhJgtH5Gh08EjeY+LV6qZp8KxcG+Mhf6mq4TcOLzZ/urF31L2Jq6vP8rGD
+        O3sKohDckVTh89UONt6PufDlgq59mtO9ozxMIcgcJeJuYnkf5IiWhWBIszpLhkgYnocc/h
+        xrbrRFzNmT23GfQzPff5kIDwltofebDY8pYCgfGaONVaucUAY1o15zJaZaeGbebvk8LdrS
+        hHhnyxcZsRDg7D6qogYEDL7tYICUsTP9fXm2+DUkN6m2IpENljiliuemCZcuKg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686699566;
+        s=2020e; t=1686699567;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=dVFthLCRReoMWN5sC8FHYm0TEZ3L3fBC7evr6n0+Mk4=;
-        b=n9/kemZ7bnQmtNpLkJz9kR9cP/+4kE35m9KdxwLlgsl/n5lmdDRb0Z74LTL1qsMW2Ghy/D
-        ZsktOSy4OXsR84Bg==
+         references:references; bh=DDD4mAWSMPbjAODBEDFm/GZSLXiwbvYxlB2kHZQV314=;
+        b=xCdom/FmXQFqzqnDxobvpXnmHuFNJaBHO2lxQlF4vIc3u28hxBBnrlvC4Zi9IVE9w6CRK5
+        Ws8bEUww9+yjUQBg==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
         Nikolay Borisov <nik.borisov@suse.com>,
         "Ahmed S. Darwish" <darwi@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>,
+        Arnd Bergmann <arnd@arndb.de>, linux-ia64@vger.kernel.org,
         Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
         Huacai Chen <chenhuacai@kernel.org>,
         WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
         Geert Uytterhoeven <geert@linux-m68k.org>,
@@ -60,11 +60,11 @@ Cc:     x86@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Chris Zankel <chris@zankel.net>,
         Tom Lendacky <thomas.lendacky@amd.com>
-Subject: [patch 03/17] ARM: cpu: Switch to arch_cpu_finalize_init()
+Subject: [patch 04/17] ia64/cpu: Switch to arch_cpu_finalize_init()
 References: <20230613223827.532680283@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 14 Jun 2023 01:39:25 +0200 (CEST)
+Date:   Wed, 14 Jun 2023 01:39:27 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
@@ -81,62 +81,56 @@ arch_cpu_finalize_init() implementation.
 No functional change.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-ia64@vger.kernel.org
 ---
- arch/arm/Kconfig            |    1 +
- arch/arm/include/asm/bugs.h |    4 ----
- arch/arm/kernel/bugs.c      |    3 ++-
- 3 files changed, 3 insertions(+), 5 deletions(-)
+ arch/ia64/Kconfig            |    1 +
+ arch/ia64/include/asm/bugs.h |   20 --------------------
+ arch/ia64/kernel/setup.c     |    3 +--
+ 3 files changed, 2 insertions(+), 22 deletions(-)
 
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -5,6 +5,7 @@ config ARM
- 	select ARCH_32BIT_OFF_T
- 	select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE if HAVE_KRETPROBES && FRAME_POINTER && !ARM_UNWIND
- 	select ARCH_HAS_BINFMT_FLAT
-+	select ARCH_HAS_CPU_FINALIZE_INIT if MMU
- 	select ARCH_HAS_CURRENT_STACK_POINTER
- 	select ARCH_HAS_DEBUG_VIRTUAL if MMU
- 	select ARCH_HAS_DMA_WRITE_COMBINE if !ARM_DMA_MEM_BUFFERABLE
---- a/arch/arm/include/asm/bugs.h
-+++ b/arch/arm/include/asm/bugs.h
-@@ -1,7 +1,5 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
- /*
-- *  arch/arm/include/asm/bugs.h
+--- a/arch/ia64/Kconfig
++++ b/arch/ia64/Kconfig
+@@ -9,6 +9,7 @@ menu "Processor type and features"
+ config IA64
+ 	bool
+ 	select ARCH_BINFMT_ELF_EXTRA_PHDRS
++	select ARCH_HAS_CPU_FINALIZE_INIT
+ 	select ARCH_HAS_DMA_MARK_CLEAN
+ 	select ARCH_HAS_STRNCPY_FROM_USER
+ 	select ARCH_HAS_STRNLEN_USER
+--- a/arch/ia64/include/asm/bugs.h
++++ /dev/null
+@@ -1,20 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/*
+- * This is included by init/main.c to check for architecture-dependent bugs.
 - *
-  *  Copyright (C) 1995-2003 Russell King
-  */
- #ifndef __ASM_BUGS_H
-@@ -10,10 +8,8 @@
- extern void check_writebuffer_bugs(void);
- 
- #ifdef CONFIG_MMU
--extern void check_bugs(void);
- extern void check_other_bugs(void);
- #else
--#define check_bugs() do { } while (0)
- #define check_other_bugs() do { } while (0)
- #endif
- 
---- a/arch/arm/kernel/bugs.c
-+++ b/arch/arm/kernel/bugs.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <linux/init.h>
-+#include <linux/cpu.h>
- #include <asm/bugs.h>
- #include <asm/proc-fns.h>
- 
-@@ -11,7 +12,7 @@ void check_other_bugs(void)
- #endif
+- * Needs:
+- *	void check_bugs(void);
+- *
+- * Based on <asm-alpha/bugs.h>.
+- *
+- * Modified 1998, 1999, 2003
+- *	David Mosberger-Tang <davidm@hpl.hp.com>,  Hewlett-Packard Co.
+- */
+-#ifndef _ASM_IA64_BUGS_H
+-#define _ASM_IA64_BUGS_H
+-
+-#include <asm/processor.h>
+-
+-extern void check_bugs (void);
+-
+-#endif /* _ASM_IA64_BUGS_H */
+--- a/arch/ia64/kernel/setup.c
++++ b/arch/ia64/kernel/setup.c
+@@ -1067,8 +1067,7 @@ cpu_init (void)
+ 	}
  }
  
--void __init check_bugs(void)
+-void __init
+-check_bugs (void)
 +void __init arch_cpu_finalize_init(void)
  {
- 	check_writebuffer_bugs();
- 	check_other_bugs();
+ 	ia64_patch_mckinley_e9((unsigned long) __start___mckinley_e9_bundles,
+ 			       (unsigned long) __end___mckinley_e9_bundles);
 
