@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8616472E40C
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F8F172E408
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240667AbjFMNZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 09:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37744 "EHLO
+        id S242604AbjFMNZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 09:25:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242639AbjFMNZL (ORCPT
+        with ESMTP id S242198AbjFMNZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 09:25:11 -0400
+        Tue, 13 Jun 2023 09:25:35 -0400
 Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B301B0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 06:25:08 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0Vl2cNV1_1686662703;
-Received: from 30.221.134.22(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0Vl2cNV1_1686662703)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D98AE6
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 06:25:34 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0Vl2dtTf_1686662730;
+Received: from 30.221.134.22(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0Vl2dtTf_1686662730)
           by smtp.aliyun-inc.com;
-          Tue, 13 Jun 2023 21:25:04 +0800
-Message-ID: <25a8daec-e1c4-2164-c210-4ee6b9924c99@linux.alibaba.com>
-Date:   Tue, 13 Jun 2023 21:25:02 +0800
+          Tue, 13 Jun 2023 21:25:31 +0800
+Message-ID: <b33fbbdf-42b2-b260-39a6-77f6356851f8@linux.alibaba.com>
+Date:   Tue, 13 Jun 2023 21:25:30 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH v8 4/5] erofs: unify inline/shared xattr iterators for
+Subject: Re: [PATCH v8 5/5] erofs: use separate xattr parsers for
  listxattr/getxattr
 To:     Jingbo Xu <jefflexu@linux.alibaba.com>, xiang@kernel.org,
         chao@kernel.org, huyue2@coolpad.com, linux-erofs@lists.ozlabs.org
 Cc:     linux-kernel@vger.kernel.org
 References: <20230613074114.120115-1-jefflexu@linux.alibaba.com>
- <20230613074114.120115-5-jefflexu@linux.alibaba.com>
+ <20230613074114.120115-6-jefflexu@linux.alibaba.com>
 From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <20230613074114.120115-5-jefflexu@linux.alibaba.com>
+In-Reply-To: <20230613074114.120115-6-jefflexu@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
@@ -48,33 +48,14 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 2023/6/13 15:41, Jingbo Xu wrote:
+> There's a callback styled xattr parser, i.e. xattr_foreach(), which is
+> shared among listxattr and getxattr.
+> 
+> Convert it to two separate xattr parsers to serve listxattr and getxattr
+> for better readability.
+> 
+> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
 
-...
-
-> +
-> +int erofs_getxattr(struct inode *inode, int index,
-> +		   const char *name,
-> +		   void *buffer, size_t buffer_size)
-
-I changed these line above into:
-
-int erofs_getxattr(struct inode *inode, int index, const char *name,
-		   void *buffer, size_t buffer_size)
-
-> +{
-> +	int ret;
-
-
-...
-
->   ssize_t erofs_listxattr(struct dentry *dentry,
-> @@ -568,8 +523,9 @@ ssize_t erofs_listxattr(struct dentry *dentry,
-
-I also move erofs_listxattr definition into a line (since it's just
-80 chars).
-
-
-Otherwise it looks good to me,
 Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 
 Thanks,
