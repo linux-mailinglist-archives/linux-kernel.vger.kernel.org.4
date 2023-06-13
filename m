@@ -2,642 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D15B672E448
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 15:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A8DA72E384
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242603AbjFMNgh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 13 Jun 2023 09:36:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42426 "EHLO
+        id S241352AbjFMM7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 08:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242583AbjFMNgX (ORCPT
+        with ESMTP id S242352AbjFMM7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 09:36:23 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C58E5;
-        Tue, 13 Jun 2023 06:36:19 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id E30977F8E;
-        Tue, 13 Jun 2023 21:36:11 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 13 Jun
- 2023 20:58:56 +0800
-Received: from localhost.localdomain (113.72.145.34) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 13 Jun
- 2023 20:58:55 +0800
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        Xingyu Wu <xingyu.wu@starfivetech.com>,
-        "William Qiu" <william.qiu@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-Subject: [PATCH v5 4/7] clk: starfive: Add StarFive JH7110 PLL clock driver
+        Tue, 13 Jun 2023 08:59:00 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0D2199B;
+        Tue, 13 Jun 2023 05:58:55 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f62cf9755eso6664813e87.1;
+        Tue, 13 Jun 2023 05:58:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686661134; x=1689253134;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=uoHY7f5SpaZmehHO5pzD7w8BkW1cE5mh1OnwQ8erXk0=;
+        b=CUIbht58ZuwStSZVhwocni2OvSmzJRPWJ+NCYbrIO5E2jeIm8OWvSbKjWAUF4mF2C3
+         VNJAaxxGxyupYMYb9iV1NEfgp8kqe4WhM4RejVZMxfLBZ1tPxLQg6gCHzt+C84PYL+qd
+         Z0MG7yWOvTLmXe1bsPDNB3GdbpXk+HJPNtJzv+HWoPGlYmvkVOwpzNn9ocA7/3U59V/z
+         rYF9zV3NWPCVIypyfAPy4+bLcVLWCHewWcbL16xaHRxR97CNzvhoV3UhJaCXeWMFsxcJ
+         BFoS+SIEhH2xtYS/JiojnwG+A1u2+DDz5GKdR7hG1iBzr1Yveh8NbjGEbyeF2RbN3jxx
+         LJlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686661134; x=1689253134;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uoHY7f5SpaZmehHO5pzD7w8BkW1cE5mh1OnwQ8erXk0=;
+        b=kzlfMQCpRXGAmQ608Bvw/iYMWWkvS6b0BXQeIU7F4j4+ZKyfYJghv4WbWbIYvmeWR5
+         o5dLVUjqA/paMYHZkvSzk2AT6mXHPGU1v16/V4lKgF6H48fpYVUg027/CVMoOXL/zSi+
+         KQ3z1AC2r49ydGzaLiKeO2uny7Qbs70ZUY17RhFwVGc9ESdOlpRoOmAHfRx2OVp7M7Di
+         F58n4WBsvUDR5u0sLuXevl8dn2+8fZNVmhGXZkfZCp9HfWLpLZwaGLacXR1TJUOwdOiT
+         hqHgHUccTwR92kVK8hO4C5rRd+kP8rj21bUhlKUOhB4FyXYgYT+AkMKFYc50jyPFEYLX
+         wwCQ==
+X-Gm-Message-State: AC+VfDzu6iaEym/cTD3RvZkgEXScH8rN2NaqXJERTn54R3NoEDt//430
+        v9RZQRnmRCNVwRb53tPDxaI=
+X-Google-Smtp-Source: ACHHUZ5hpxIirshOoeLkuF5RellTk57gwjytTxxsOJZKHLvqweumaYxLmUUZFl2Bj2FETplTZqT4/g==
+X-Received: by 2002:a19:3807:0:b0:4ef:f11c:f5b0 with SMTP id f7-20020a193807000000b004eff11cf5b0mr5800493lfa.54.1686661133869;
+        Tue, 13 Jun 2023 05:58:53 -0700 (PDT)
+Received: from ?IPV6:2a0b:6204:4302:5f00:4dab:3483:4506:9a0e? ([2a0b:6204:4302:5f00:4dab:3483:4506:9a0e])
+        by smtp.gmail.com with ESMTPSA id a8-20020a19f808000000b004f14ecc03f1sm1769903lff.100.2023.06.13.05.58.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 05:58:53 -0700 (PDT)
+From:   "bibo, mao" <bibo.mao@gmail.com>
+X-Google-Original-From: "bibo, mao" <maobibo@loongson.cn>
+Message-ID: <e6508c4c-4987-37ed-9c4e-9189417e0f83@loongson.cn>
 Date:   Tue, 13 Jun 2023 20:58:49 +0800
-Message-ID: <20230613125852.211636-5-xingyu.wu@starfivetech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230613125852.211636-1-xingyu.wu@starfivetech.com>
-References: <20230613125852.211636-1-xingyu.wu@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [113.72.145.34]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v13 20/30] LoongArch: KVM: Implement handle csr excption
+To:     Tianrui Zhao <zhaotianrui@loongson.cn>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Xi Ruoyao <xry111@xry111.site>, tangyouling@loongson.cn,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20230609090832.2131037-1-zhaotianrui@loongson.cn>
+ <20230609090832.2131037-21-zhaotianrui@loongson.cn>
+In-Reply-To: <20230609090832.2131037-21-zhaotianrui@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add driver for the StarFive JH7110 PLL clock controller
-and they work by reading and setting syscon registers.
+Reviewed-by: Bibo Mao <maobibo@loongson.cn>
 
-Co-developed-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Signed-off-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
----
- MAINTAINERS                                   |   6 +
- drivers/clk/starfive/Kconfig                  |   8 +
- drivers/clk/starfive/Makefile                 |   1 +
- .../clk/starfive/clk-starfive-jh7110-pll.c    | 507 ++++++++++++++++++
- 4 files changed, 522 insertions(+)
- create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-pll.c
+Regards
+Bibo, Mao
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ae037ba7fc47..e2ef606f5315 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20122,6 +20122,12 @@ S:	Supported
- F:	Documentation/devicetree/bindings/mmc/starfive*
- F:	drivers/mmc/host/dw_mmc-starfive.c
- 
-+STARFIVE JH7110 PLL CLOCK DRIVER
-+M:	Xingyu Wu <xingyu.wu@starfivetech.com>
-+S:	Supported
-+F:	Documentation/devicetree/bindings/clock/starfive,jh7110-pll.yaml
-+F:	drivers/clk/starfive/clk-starfive-jh7110-pll.*
-+
- STARFIVE JH7110 SYSCON
- M:	William Qiu <william.qiu@starfivetech.com>
- M:	Xingyu Wu <xingyu.wu@starfivetech.com>
-diff --git a/drivers/clk/starfive/Kconfig b/drivers/clk/starfive/Kconfig
-index 5d2333106f13..5195f7be5213 100644
---- a/drivers/clk/starfive/Kconfig
-+++ b/drivers/clk/starfive/Kconfig
-@@ -21,6 +21,14 @@ config CLK_STARFIVE_JH7100_AUDIO
- 	  Say Y or M here to support the audio clocks on the StarFive JH7100
- 	  SoC.
- 
-+config CLK_STARFIVE_JH7110_PLL
-+	bool "StarFive JH7110 PLL clock support"
-+	depends on ARCH_STARFIVE || COMPILE_TEST
-+	default ARCH_STARFIVE
-+	help
-+	  Say yes here to support the PLL clock controller on the
-+	  StarFive JH7110 SoC.
-+
- config CLK_STARFIVE_JH7110_SYS
- 	bool "StarFive JH7110 system clock support"
- 	depends on ARCH_STARFIVE || COMPILE_TEST
-diff --git a/drivers/clk/starfive/Makefile b/drivers/clk/starfive/Makefile
-index f3df7d957b1e..b48e539e52b0 100644
---- a/drivers/clk/starfive/Makefile
-+++ b/drivers/clk/starfive/Makefile
-@@ -4,5 +4,6 @@ obj-$(CONFIG_CLK_STARFIVE_JH71X0)	+= clk-starfive-jh71x0.o
- obj-$(CONFIG_CLK_STARFIVE_JH7100)	+= clk-starfive-jh7100.o
- obj-$(CONFIG_CLK_STARFIVE_JH7100_AUDIO)	+= clk-starfive-jh7100-audio.o
- 
-+obj-$(CONFIG_CLK_STARFIVE_JH7110_PLL)	+= clk-starfive-jh7110-pll.o
- obj-$(CONFIG_CLK_STARFIVE_JH7110_SYS)	+= clk-starfive-jh7110-sys.o
- obj-$(CONFIG_CLK_STARFIVE_JH7110_AON)	+= clk-starfive-jh7110-aon.o
-diff --git a/drivers/clk/starfive/clk-starfive-jh7110-pll.c b/drivers/clk/starfive/clk-starfive-jh7110-pll.c
-new file mode 100644
-index 000000000000..b10c142d456d
---- /dev/null
-+++ b/drivers/clk/starfive/clk-starfive-jh7110-pll.c
-@@ -0,0 +1,507 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * StarFive JH7110 PLL Clock Generator Driver
-+ *
-+ * Copyright (C) 2023 StarFive Technology Co., Ltd.
-+ * Copyright (C) 2023 Emil Renner Berthing <emil.renner.berthing@canonical.com>
-+ *
-+ * This driver is about to register JH7110 PLL clock generator and support ops.
-+ * The JH7110 have three PLL clock, PLL0, PLL1 and PLL2.
-+ * Each PLL clocks work in integer mode or fraction mode by some dividers,
-+ * and the configuration registers and dividers are set in several syscon registers.
-+ * The formula for calculating frequency is:
-+ * Fvco = Fref * (NI + NF) / M / Q1
-+ * Fref: OSC source clock rate
-+ * NI: integer frequency dividing ratio of feedback divider, set by fbdiv[11:0].
-+ * NF: fractional frequency dividing ratio, set by frac[23:0]. NF = frac[23:0] / 2^24 = 0 ~ 0.999.
-+ * M: frequency dividing ratio of pre-divider, set by prediv[5:0].
-+ * Q1: frequency dividing ratio of post divider, set by 2^postdiv1[1:0], eg. 1, 2, 4 or 8.
-+ */
-+
-+#include <linux/bits.h>
-+#include <linux/clk-provider.h>
-+#include <linux/debugfs.h>
-+#include <linux/device.h>
-+#include <linux/kernel.h>
-+#include <linux/mfd/syscon.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+
-+#include <dt-bindings/clock/starfive,jh7110-crg.h>
-+
-+/* this driver expects a 24MHz input frequency from the oscillator */
-+#define JH7110_PLL_OSC_RATE		24000000UL
-+
-+#define JH7110_PLL0_PD_OFFSET		0x18
-+#define JH7110_PLL0_DACPD_SHIFT		24
-+#define JH7110_PLL0_DACPD_MASK		BIT(24)
-+#define JH7110_PLL0_DSMPD_SHIFT		25
-+#define JH7110_PLL0_DSMPD_MASK		BIT(25)
-+#define JH7110_PLL0_FBDIV_OFFSET	0x1c
-+#define JH7110_PLL0_FBDIV_SHIFT		0
-+#define JH7110_PLL0_FBDIV_MASK		GENMASK(11, 0)
-+#define JH7110_PLL0_FRAC_OFFSET		0x20
-+#define JH7110_PLL0_PREDIV_OFFSET	0x24
-+
-+#define JH7110_PLL1_PD_OFFSET		0x24
-+#define JH7110_PLL1_DACPD_SHIFT		15
-+#define JH7110_PLL1_DACPD_MASK		BIT(15)
-+#define JH7110_PLL1_DSMPD_SHIFT		16
-+#define JH7110_PLL1_DSMPD_MASK		BIT(16)
-+#define JH7110_PLL1_FBDIV_OFFSET	0x24
-+#define JH7110_PLL1_FBDIV_SHIFT		17
-+#define JH7110_PLL1_FBDIV_MASK		GENMASK(28, 17)
-+#define JH7110_PLL1_FRAC_OFFSET		0x28
-+#define JH7110_PLL1_PREDIV_OFFSET	0x2c
-+
-+#define JH7110_PLL2_PD_OFFSET		0x2c
-+#define JH7110_PLL2_DACPD_SHIFT		15
-+#define JH7110_PLL2_DACPD_MASK		BIT(15)
-+#define JH7110_PLL2_DSMPD_SHIFT		16
-+#define JH7110_PLL2_DSMPD_MASK		BIT(16)
-+#define JH7110_PLL2_FBDIV_OFFSET	0x2c
-+#define JH7110_PLL2_FBDIV_SHIFT		17
-+#define JH7110_PLL2_FBDIV_MASK		GENMASK(28, 17)
-+#define JH7110_PLL2_FRAC_OFFSET		0x30
-+#define JH7110_PLL2_PREDIV_OFFSET	0x34
-+
-+#define JH7110_PLL_FRAC_SHIFT		0
-+#define JH7110_PLL_FRAC_MASK		GENMASK(23, 0)
-+#define JH7110_PLL_POSTDIV1_SHIFT	28
-+#define JH7110_PLL_POSTDIV1_MASK	GENMASK(29, 28)
-+#define JH7110_PLL_PREDIV_SHIFT		0
-+#define JH7110_PLL_PREDIV_MASK		GENMASK(5, 0)
-+
-+enum jh7110_pll_mode {
-+	JH7110_PLL_MODE_FRACTION,
-+	JH7110_PLL_MODE_INTEGER,
-+};
-+
-+struct jh7110_pll_preset {
-+	unsigned long freq;
-+	u32 frac;		/* frac value should be decimals multiplied by 2^24 */
-+	unsigned fbdiv    : 12;	/* fbdiv value should be 8 to 4095 */
-+	unsigned prediv   :  6;
-+	unsigned postdiv1 :  2;
-+	unsigned mode     :  1;
-+};
-+
-+struct jh7110_pll_info {
-+	char *name;
-+	const struct jh7110_pll_preset *presets;
-+	unsigned int npresets;
-+	struct {
-+		unsigned int pd;
-+		unsigned int fbdiv;
-+		unsigned int frac;
-+		unsigned int prediv;
-+	} offsets;
-+	struct {
-+		u32 dacpd;
-+		u32 dsmpd;
-+		u32 fbdiv;
-+	} masks;
-+	struct {
-+		char dacpd;
-+		char dsmpd;
-+		char fbdiv;
-+	} shifts;
-+};
-+
-+#define _JH7110_PLL(_idx, _name, _presets)				\
-+	[_idx] = {							\
-+		.name = _name,						\
-+		.presets = _presets,					\
-+		.npresets = ARRAY_SIZE(_presets),			\
-+		.offsets = {						\
-+			.pd = JH7110_PLL##_idx##_PD_OFFSET,		\
-+			.fbdiv = JH7110_PLL##_idx##_FBDIV_OFFSET,	\
-+			.frac = JH7110_PLL##_idx##_FRAC_OFFSET,		\
-+			.prediv = JH7110_PLL##_idx##_PREDIV_OFFSET,	\
-+		},							\
-+		.masks = {						\
-+			.dacpd = JH7110_PLL##_idx##_DACPD_MASK,		\
-+			.dsmpd = JH7110_PLL##_idx##_DSMPD_MASK,		\
-+			.fbdiv = JH7110_PLL##_idx##_FBDIV_MASK,		\
-+		},							\
-+		.shifts = {						\
-+			.dacpd = JH7110_PLL##_idx##_DACPD_SHIFT,	\
-+			.dsmpd = JH7110_PLL##_idx##_DSMPD_SHIFT,	\
-+			.fbdiv = JH7110_PLL##_idx##_FBDIV_SHIFT,	\
-+		},							\
-+	}
-+#define JH7110_PLL(idx, name, presets) _JH7110_PLL(idx, name, presets)
-+
-+struct jh7110_pll_data {
-+	struct clk_hw hw;
-+	unsigned int idx;
-+};
-+
-+struct jh7110_pll_priv {
-+	struct device *dev;
-+	struct regmap *regmap;
-+	struct jh7110_pll_data pll[JH7110_PLLCLK_END];
-+};
-+
-+struct jh7110_pll_regvals {
-+	u32 dacpd;
-+	u32 dsmpd;
-+	u32 fbdiv;
-+	u32 frac;
-+	u32 postdiv1;
-+	u32 prediv;
-+};
-+
-+/*
-+ * Because the pll frequency is relatively fixed,
-+ * it cannot be set arbitrarily, so it needs a specific configuration.
-+ * PLL0 frequency should be multiple of 125MHz (USB frequency).
-+ */
-+static const struct jh7110_pll_preset jh7110_pll0_presets[] = {
-+	{
-+		.freq = 375000000,
-+		.fbdiv = 125,
-+		.prediv = 8,
-+		.postdiv1 = 0,
-+		.mode = JH7110_PLL_MODE_INTEGER,
-+	}, {
-+		.freq = 500000000,
-+		.fbdiv = 125,
-+		.prediv = 6,
-+		.postdiv1 = 0,
-+		.mode = JH7110_PLL_MODE_INTEGER,
-+	}, {
-+		.freq = 625000000,
-+		.fbdiv = 625,
-+		.prediv = 24,
-+		.postdiv1 = 0,
-+		.mode = JH7110_PLL_MODE_INTEGER,
-+	}, {
-+		.freq = 750000000,
-+		.fbdiv = 125,
-+		.prediv = 4,
-+		.postdiv1 = 0,
-+		.mode = JH7110_PLL_MODE_INTEGER,
-+	}, {
-+		.freq = 875000000,
-+		.fbdiv = 875,
-+		.prediv = 24,
-+		.postdiv1 = 0,
-+		.mode = JH7110_PLL_MODE_INTEGER,
-+	}, {
-+		.freq = 1000000000,
-+		.fbdiv = 125,
-+		.prediv = 3,
-+		.postdiv1 = 0,
-+		.mode = JH7110_PLL_MODE_INTEGER,
-+	}, {
-+		.freq = 1250000000,
-+		.fbdiv = 625,
-+		.prediv = 12,
-+		.postdiv1 = 0,
-+		.mode = JH7110_PLL_MODE_INTEGER,
-+	}, {
-+		.freq = 1375000000,
-+		.fbdiv = 1375,
-+		.prediv = 24,
-+		.postdiv1 = 0,
-+		.mode = JH7110_PLL_MODE_INTEGER,
-+	}, {
-+		.freq = 1500000000,
-+		.fbdiv = 125,
-+		.prediv = 2,
-+		.postdiv1 = 0,
-+		.mode = JH7110_PLL_MODE_INTEGER,
-+	},
-+};
-+
-+static const struct jh7110_pll_preset jh7110_pll1_presets[] = {
-+	{
-+		.freq = 1066000000,
-+		.fbdiv = 533,
-+		.prediv = 12,
-+		.postdiv1 = 0,
-+		.mode = JH7110_PLL_MODE_INTEGER,
-+	}, {
-+		.freq = 1200000000,
-+		.fbdiv = 50,
-+		.prediv = 1,
-+		.postdiv1 = 0,
-+		.mode = JH7110_PLL_MODE_INTEGER,
-+	}, {
-+		.freq = 1400000000,
-+		.fbdiv = 350,
-+		.prediv = 6,
-+		.postdiv1 = 0,
-+		.mode = JH7110_PLL_MODE_INTEGER,
-+	}, {
-+		.freq = 1600000000,
-+		.fbdiv = 200,
-+		.prediv = 3,
-+		.postdiv1 = 0,
-+		.mode = JH7110_PLL_MODE_INTEGER,
-+	},
-+};
-+
-+static const struct jh7110_pll_preset jh7110_pll2_presets[] = {
-+	{
-+		.freq = 1188000000,
-+		.fbdiv = 99,
-+		.prediv = 2,
-+		.postdiv1 = 0,
-+		.mode = JH7110_PLL_MODE_INTEGER,
-+	}, {
-+		.freq = 1228800000,
-+		.fbdiv = 256,
-+		.prediv = 5,
-+		.postdiv1 = 0,
-+		.mode = JH7110_PLL_MODE_INTEGER,
-+	},
-+};
-+
-+static const struct jh7110_pll_info jh7110_plls[JH7110_PLLCLK_END] = {
-+	JH7110_PLL(JH7110_CLK_PLL0_OUT, "pll0_out", jh7110_pll0_presets),
-+	JH7110_PLL(JH7110_CLK_PLL1_OUT, "pll1_out", jh7110_pll1_presets),
-+	JH7110_PLL(JH7110_CLK_PLL2_OUT, "pll2_out", jh7110_pll2_presets),
-+};
-+
-+static struct jh7110_pll_data *jh7110_pll_data_from(struct clk_hw *hw)
-+{
-+	return container_of(hw, struct jh7110_pll_data, hw);
-+}
-+
-+static struct jh7110_pll_priv *jh7110_pll_priv_from(struct jh7110_pll_data *pll)
-+{
-+	return container_of(pll, struct jh7110_pll_priv, pll[pll->idx]);
-+}
-+
-+static void jh7110_pll_regvals_get(struct regmap *regmap,
-+				   const struct jh7110_pll_info *info,
-+				   struct jh7110_pll_regvals *ret)
-+{
-+	u32 val;
-+
-+	regmap_read(regmap, info->offsets.pd, &val);
-+	ret->dacpd = (val & info->masks.dacpd) >> info->shifts.dacpd;
-+	ret->dsmpd = (val & info->masks.dsmpd) >> info->shifts.dsmpd;
-+
-+	regmap_read(regmap, info->offsets.fbdiv, &val);
-+	ret->fbdiv = (val & info->masks.fbdiv) >> info->shifts.fbdiv;
-+
-+	regmap_read(regmap, info->offsets.frac, &val);
-+	ret->frac = (val & JH7110_PLL_FRAC_MASK) >> JH7110_PLL_FRAC_SHIFT;
-+	ret->postdiv1 = (val & JH7110_PLL_POSTDIV1_MASK) >> JH7110_PLL_POSTDIV1_SHIFT;
-+
-+	regmap_read(regmap, info->offsets.prediv, &val);
-+	ret->prediv = (val & JH7110_PLL_PREDIV_MASK) >> JH7110_PLL_PREDIV_SHIFT;
-+}
-+
-+static unsigned long jh7110_pll_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
-+{
-+	struct jh7110_pll_data *pll = jh7110_pll_data_from(hw);
-+	struct jh7110_pll_priv *priv = jh7110_pll_priv_from(pll);
-+	struct jh7110_pll_regvals val;
-+	unsigned long rate;
-+
-+	jh7110_pll_regvals_get(priv->regmap, &jh7110_plls[pll->idx], &val);
-+
-+	/*
-+	 * dacpd = dsmpd = 0: fraction mode
-+	 * dacpd = dsmpd = 1: integer mode, frac value ignored
-+	 *
-+	 * rate = parent * (fbdiv + frac/2^24) / prediv / 2^postdiv1
-+	 *      = (parent * fbdiv + parent * frac / 2^24) / (prediv * 2^postdiv1)
-+	 */
-+	if (val.dacpd == 0 && val.dsmpd == 0)
-+		rate = parent_rate * val.frac / (1UL << 24);
-+	else if (val.dacpd == 1 && val.dsmpd == 1)
-+		rate = 0;
-+	else
-+		return 0;
-+
-+	rate += parent_rate * val.fbdiv;
-+	rate /= val.prediv << val.postdiv1;
-+
-+	return rate;
-+}
-+
-+static int jh7110_pll_determine_rate(struct clk_hw *hw, struct clk_rate_request *req)
-+{
-+	struct jh7110_pll_data *pll = jh7110_pll_data_from(hw);
-+	const struct jh7110_pll_info *info = &jh7110_plls[pll->idx];
-+	const struct jh7110_pll_preset *selected = &info->presets[0];
-+	unsigned int idx;
-+
-+	/* if the parent rate doesn't match our expectations the presets won't work */
-+	if (req->best_parent_rate != JH7110_PLL_OSC_RATE) {
-+		req->rate = jh7110_pll_recalc_rate(hw, req->best_parent_rate);
-+		return 0;
-+	}
-+
-+	/* find highest rate lower or equal to the requested rate */
-+	for (idx = 1; idx < info->npresets; idx++) {
-+		const struct jh7110_pll_preset *val = &info->presets[idx];
-+
-+		if (req->rate < val->freq)
-+			break;
-+
-+		selected = val;
-+	}
-+
-+	req->rate = selected->freq;
-+	return 0;
-+}
-+
-+static int jh7110_pll_set_rate(struct clk_hw *hw, unsigned long rate,
-+			       unsigned long parent_rate)
-+{
-+	struct jh7110_pll_data *pll = jh7110_pll_data_from(hw);
-+	struct jh7110_pll_priv *priv = jh7110_pll_priv_from(pll);
-+	const struct jh7110_pll_info *info = &jh7110_plls[pll->idx];
-+	const struct jh7110_pll_preset *val;
-+	unsigned int idx;
-+
-+	/* if the parent rate doesn't match our expectations the presets won't work */
-+	if (parent_rate != JH7110_PLL_OSC_RATE)
-+		return -EINVAL;
-+
-+	for (idx = 0, val = &info->presets[0]; idx < info->npresets; idx++, val++) {
-+		if (val->freq == rate)
-+			goto found;
-+	}
-+	return -EINVAL;
-+
-+found:
-+	if (val->mode == JH7110_PLL_MODE_FRACTION)
-+		regmap_update_bits(priv->regmap, info->offsets.frac, JH7110_PLL_FRAC_MASK,
-+				   val->frac << JH7110_PLL_FRAC_SHIFT);
-+
-+	regmap_update_bits(priv->regmap, info->offsets.pd, info->masks.dacpd,
-+			   (u32)val->mode << info->shifts.dacpd);
-+	regmap_update_bits(priv->regmap, info->offsets.pd, info->masks.dsmpd,
-+			   (u32)val->mode << info->shifts.dsmpd);
-+	regmap_update_bits(priv->regmap, info->offsets.prediv, JH7110_PLL_PREDIV_MASK,
-+			   (u32)val->prediv << JH7110_PLL_PREDIV_SHIFT);
-+	regmap_update_bits(priv->regmap, info->offsets.fbdiv, info->masks.fbdiv,
-+			   val->fbdiv << info->shifts.fbdiv);
-+	regmap_update_bits(priv->regmap, info->offsets.frac, JH7110_PLL_POSTDIV1_MASK,
-+			   (u32)val->postdiv1 << JH7110_PLL_POSTDIV1_SHIFT);
-+
-+	return 0;
-+}
-+
-+#ifdef CONFIG_DEBUG_FS
-+static int jh7110_pll_registers_read(struct seq_file *s, void *unused)
-+{
-+	struct jh7110_pll_data *pll = s->private;
-+	struct jh7110_pll_priv *priv = jh7110_pll_priv_from(pll);
-+	struct jh7110_pll_regvals val;
-+
-+	jh7110_pll_regvals_get(priv->regmap, &jh7110_plls[pll->idx], &val);
-+
-+	seq_printf(s, "fbdiv=%u\n"
-+		      "frac=%u\n"
-+		      "prediv=%u\n"
-+		      "postdiv1=%u\n"
-+		      "dacpd=%u\n"
-+		      "dsmpd=%u\n",
-+		      val.fbdiv, val.frac, val.prediv, val.postdiv1,
-+		      val.dacpd, val.dsmpd);
-+
-+	return 0;
-+}
-+
-+static int jh7110_pll_registers_open(struct inode *inode, struct file *f)
-+{
-+	return single_open(f, jh7110_pll_registers_read, inode->i_private);
-+}
-+
-+static const struct file_operations jh7110_pll_registers_ops = {
-+	.owner = THIS_MODULE,
-+	.open = jh7110_pll_registers_open,
-+	.release = single_release,
-+	.read = seq_read,
-+	.llseek = seq_lseek
-+};
-+
-+static void jh7110_pll_debug_init(struct clk_hw *hw, struct dentry *dentry)
-+{
-+	struct jh7110_pll_data *pll = jh7110_pll_data_from(hw);
-+
-+	debugfs_create_file("registers", 0400, dentry, pll,
-+			    &jh7110_pll_registers_ops);
-+}
-+#else
-+#define jh7110_pll_debug_init NULL
-+#endif
-+
-+static const struct clk_ops jh7110_pll_ops = {
-+	.recalc_rate = jh7110_pll_recalc_rate,
-+	.determine_rate = jh7110_pll_determine_rate,
-+	.set_rate = jh7110_pll_set_rate,
-+	.debug_init = jh7110_pll_debug_init,
-+};
-+
-+static struct clk_hw *jh7110_pll_get(struct of_phandle_args *clkspec, void *data)
-+{
-+	struct jh7110_pll_priv *priv = data;
-+	unsigned int idx = clkspec->args[0];
-+
-+	if (idx < JH7110_PLLCLK_END)
-+		return &priv->pll[idx].hw;
-+
-+	return ERR_PTR(-EINVAL);
-+}
-+
-+static int jh7110_pll_probe(struct platform_device *pdev)
-+{
-+	struct jh7110_pll_priv *priv;
-+	unsigned int idx;
-+	int ret;
-+
-+	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->dev = &pdev->dev;
-+	priv->regmap = syscon_node_to_regmap(priv->dev->of_node->parent);
-+	if (IS_ERR(priv->regmap))
-+		return PTR_ERR(priv->regmap);
-+
-+	for (idx = 0; idx < JH7110_PLLCLK_END; idx++) {
-+		struct clk_parent_data parents = {
-+			.index = 0,
-+		};
-+		struct clk_init_data init = {
-+			.name = jh7110_plls[idx].name,
-+			.ops = &jh7110_pll_ops,
-+			.parent_data = &parents,
-+			.num_parents = 1,
-+			.flags = 0,
-+		};
-+		struct jh7110_pll_data *pll = &priv->pll[idx];
-+
-+		pll->hw.init = &init;
-+		pll->idx = idx;
-+
-+		ret = devm_clk_hw_register(&pdev->dev, &pll->hw);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return devm_of_clk_add_hw_provider(&pdev->dev, jh7110_pll_get, priv);
-+}
-+
-+static const struct of_device_id jh7110_pll_match[] = {
-+	{ .compatible = "starfive,jh7110-pll" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, jh7110_pll_match);
-+
-+static struct platform_driver jh7110_pll_driver = {
-+	.driver = {
-+		.name = "clk-starfive-jh7110-pll",
-+		.of_match_table = jh7110_pll_match,
-+	},
-+};
-+builtin_platform_driver_probe(jh7110_pll_driver, jh7110_pll_probe);
--- 
-2.25.1
-
+在 2023/6/9 17:08, Tianrui Zhao 写道:
+> Implement kvm handle LoongArch vcpu exit caused by reading and
+> writing csr. Using csr structure to emulate the registers.
+> 
+> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
+> ---
+>   arch/loongarch/kvm/exit.c | 98 +++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 98 insertions(+)
+>   create mode 100644 arch/loongarch/kvm/exit.c
+> 
+> diff --git a/arch/loongarch/kvm/exit.c b/arch/loongarch/kvm/exit.c
+> new file mode 100644
+> index 000000000000..18635333fc9a
+> --- /dev/null
+> +++ b/arch/loongarch/kvm/exit.c
+> @@ -0,0 +1,98 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
+> + */
+> +
+> +#include <linux/errno.h>
+> +#include <linux/err.h>
+> +#include <linux/module.h>
+> +#include <linux/preempt.h>
+> +#include <linux/vmalloc.h>
+> +#include <asm/fpu.h>
+> +#include <asm/inst.h>
+> +#include <asm/time.h>
+> +#include <asm/tlb.h>
+> +#include <asm/loongarch.h>
+> +#include <asm/numa.h>
+> +#include <asm/kvm_vcpu.h>
+> +#include <asm/kvm_csr.h>
+> +#include <linux/kvm_host.h>
+> +#include <asm/mmzone.h>
+> +#include "trace.h"
+> +
+> +static unsigned long _kvm_emu_read_csr(struct kvm_vcpu *vcpu, int csrid)
+> +{
+> +	struct loongarch_csrs *csr = vcpu->arch.csr;
+> +	unsigned long val = 0;
+> +
+> +	if (get_gcsr_flag(csrid) & SW_GCSR)
+> +		val = kvm_read_sw_gcsr(csr, csrid);
+> +	else
+> +		pr_warn_once("Unsupport csrread 0x%x with pc %lx\n",
+> +			csrid, vcpu->arch.pc);
+> +	return val;
+> +}
+> +
+> +static void _kvm_emu_write_csr(struct kvm_vcpu *vcpu, int csrid,
+> +	unsigned long val)
+> +{
+> +	struct loongarch_csrs *csr = vcpu->arch.csr;
+> +
+> +	if (get_gcsr_flag(csrid) & SW_GCSR)
+> +		kvm_write_sw_gcsr(csr, csrid, val);
+> +	else
+> +		pr_warn_once("Unsupport csrwrite 0x%x with pc %lx\n",
+> +				csrid, vcpu->arch.pc);
+> +}
+> +
+> +static void _kvm_emu_xchg_csr(struct kvm_vcpu *vcpu, int csrid,
+> +	unsigned long csr_mask, unsigned long val)
+> +{
+> +	struct loongarch_csrs *csr = vcpu->arch.csr;
+> +
+> +	if (get_gcsr_flag(csrid) & SW_GCSR) {
+> +		unsigned long orig;
+> +
+> +		orig = kvm_read_sw_gcsr(csr, csrid);
+> +		orig &= ~csr_mask;
+> +		orig |= val & csr_mask;
+> +		kvm_write_sw_gcsr(csr, csrid, orig);
+> +	} else
+> +		pr_warn_once("Unsupport csrxchg 0x%x with pc %lx\n",
+> +				csrid, vcpu->arch.pc);
+> +}
+> +
+> +static int _kvm_handle_csr(struct kvm_vcpu *vcpu, larch_inst inst)
+> +{
+> +	unsigned int rd, rj, csrid;
+> +	unsigned long csr_mask;
+> +	unsigned long val = 0;
+> +
+> +	/*
+> +	 * CSR value mask imm
+> +	 * rj = 0 means csrrd
+> +	 * rj = 1 means csrwr
+> +	 * rj != 0,1 means csrxchg
+> +	 */
+> +	rd = inst.reg2csr_format.rd;
+> +	rj = inst.reg2csr_format.rj;
+> +	csrid = inst.reg2csr_format.csr;
+> +
+> +	/* Process CSR ops */
+> +	if (rj == 0) {
+> +		/* process csrrd */
+> +		val = _kvm_emu_read_csr(vcpu, csrid);
+> +		vcpu->arch.gprs[rd] = val;
+> +	} else if (rj == 1) {
+> +		/* process csrwr */
+> +		val = vcpu->arch.gprs[rd];
+> +		_kvm_emu_write_csr(vcpu, csrid, val);
+> +	} else {
+> +		/* process csrxchg */
+> +		val = vcpu->arch.gprs[rd];
+> +		csr_mask = vcpu->arch.gprs[rj];
+> +		_kvm_emu_xchg_csr(vcpu, csrid, csr_mask, val);
+> +	}
+> +
+> +	return EMULATE_DONE;
+> +}
