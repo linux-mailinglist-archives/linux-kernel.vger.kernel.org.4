@@ -2,134 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 495CD72D680
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 02:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A105E72D682
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 02:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236437AbjFMAlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 20:41:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39360 "EHLO
+        id S237761AbjFMAl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 20:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233694AbjFMAl3 (ORCPT
+        with ESMTP id S237433AbjFMAly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 20:41:29 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5F7192;
-        Mon, 12 Jun 2023 17:41:29 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id e9e14a558f8ab-34070ecad56so139915ab.3;
-        Mon, 12 Jun 2023 17:41:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686616888; x=1689208888;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5rTOQWFVA6khqHtVp7GD0MN95ozRngFd7SU7JpSTOX8=;
-        b=HrrgygdGd34c3hZG9Ko9EXMPUVsYt81zKlXAISkhIkWi4VGAIIeUB8yV4tMn6EH5Ft
-         +TbZAoQg0H0yz2aG4uOjIOx9fmzXD/nfPETyD8Ircp6qYdBOtOxWCzwH6rQR0rHov4SZ
-         1tl9uHdNkhC9HMvwDreHqjE+VjO/HFT6SoHrVHnqxQmqy0qdZWEcEFOaWo3gsckMZZd6
-         Xmta/E1NggY5feulbzO82qkYgZvQ7FJJQ6Zi/ZESTfDHapp08v8sJvd5ue31SHClqXA6
-         uMm9qy0zYxvgph/jQvXdKYcR2xNTWWWJhf9z99/JQ3pIB7JfUQ110GXyjT02KBZLFchX
-         2iyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686616888; x=1689208888;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5rTOQWFVA6khqHtVp7GD0MN95ozRngFd7SU7JpSTOX8=;
-        b=Z0F32AuQ/6M/ISeNfOhNnYFIYneCmGBbw4rSNNq8WkVPvPd/zYEXmnFcSvYOhMu35N
-         MClxvY7MYSqyX+kUVESJyqJyXQG3zEPrBDqPTSUlnKIrpgq6veMU3qWRJu9zDyM2yb7z
-         H1jJB0kNNBd+wos2oufDo8X17ladGfLwMdyPCGKAvspFfAguAOrZ3H82Ma3YhNX1FWAT
-         O5Yy2dIVWZMRvbWG654bh9UplsMfwp15cSO2YtzeNvPoP5TqXJ+S0TnKWnUdlhRsTNZa
-         hOTEZCbImVHZU8QVw4MDH2FqKgxXUl3mPUl20pfEBxe0Ba+56N/Y0Mwal9cF9gTQooCC
-         pfyg==
-X-Gm-Message-State: AC+VfDx9mh+23bZL1rHQPBYKZX4rzhTpEWKqEIe+WhQkrG8U8FZ97s/f
-        KYEdFC7eivD+Z7K+wtMLWFE=
-X-Google-Smtp-Source: ACHHUZ5+aBw/9fdFocQCVdMI2dhsI0WYOI12EJh5UbhGeU2wuKe9u6YaezCaTrv9JoLIcSljChYktg==
-X-Received: by 2002:a92:d8c9:0:b0:334:f662:6406 with SMTP id l9-20020a92d8c9000000b00334f6626406mr8041778ilo.25.1686616888245;
-        Mon, 12 Jun 2023 17:41:28 -0700 (PDT)
-Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
-        by smtp.gmail.com with ESMTPSA id l5-20020a92d8c5000000b00338a1272ce1sm3510408ilo.52.2023.06.12.17.41.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 17:41:27 -0700 (PDT)
-From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     linux-hardening@vger.kernel.org,
-        Azeem Shaikh <azeemshaikh38@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: [PATCH] tracing/boot: Replace strlcpy with strscpy
-Date:   Tue, 13 Jun 2023 00:41:25 +0000
-Message-ID: <20230613004125.3539934-1-azeemshaikh38@gmail.com>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+        Mon, 12 Jun 2023 20:41:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE8A18C;
+        Mon, 12 Jun 2023 17:41:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3164763040;
+        Tue, 13 Jun 2023 00:41:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81F3DC433EF;
+        Tue, 13 Jun 2023 00:41:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686616912;
+        bh=IGOhvvrK7l3Oz69XA9xF5ZiPQc6f/G4f6BMPJ4mch2s=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=GJudkHabtLu6OFRUL5JzRLU5TWjoivWYWB8ECu77Ar9yWUhnEw2ye1EoNkFVEeicO
+         ecQa7AFs9l/mvV5w8VtQ2RsXmZbbYKyfRgxHxdnISHlWv/AyM+jPrDurIUkAyDbOEy
+         Ltijmd/mpNwWktEjJaYBgQlmc2CXytH0JLhD/ft5m3ggMOUQw3rx1rfa+79KWvzEUi
+         LRwQ6DHdD7/ox6UX4wCR6nYbAEABvoMMoAT1lbFbB5UpWaYdTgtDbI0Sfr/EWgFosZ
+         TPyeOohOtAGFaoVGBtlkdeo45b/jQms2SPVpWKurIOSRtL051kegjtTiGE/jCGdGNz
+         2tiXloXcKZ2aA==
+Message-ID: <5e9e776db6628d02d7081292b81ab102.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230526171057.66876-3-sebastian.reichel@collabora.com>
+References: <20230526171057.66876-1-sebastian.reichel@collabora.com> <20230526171057.66876-3-sebastian.reichel@collabora.com>
+Subject: Re: [PATCH v2 2/2] clk: divider: Fix divisions
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Christopher Obbard <chris.obbard@collabora.com>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        kernel@collabora.com
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 12 Jun 2023 17:41:50 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-strlcpy() reads the entire source buffer first.
-This read may exceed the destination size limit.
-This is both inefficient and can lead to linear read
-overflows if a source string is not NUL-terminated [1].
-In an effort to remove strlcpy() completely [2], replace
-strlcpy() here with strscpy().
+Quoting Sebastian Reichel (2023-05-26 10:10:57)
+> The clock framework handles clock rates as "unsigned long", so u32 on
+> 32-bit architectures and u64 on 64-bit architectures.
+>=20
+> The current code pointlessly casts the dividend to u64 on 32-bit
+> architectures and thus pointlessly reducing the performance.
 
-Direct replacement is safe here since return value of -E2BIG
-is used to check for truncation instead of sizeof(dest).
+It looks like that was done to make the DIV_ROUND_UP() macro not
+overflow the dividend on 32-bit machines (from 9556f9dad8f5):
 
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-[2] https://github.com/KSPP/linux/issues/89
+  DIV_ROUND_UP(3000000000, 1500000000) =3D (3.0G + 1.5G - 1) / 1.5G
+                                       =3D OVERFLOW / 1.5G
 
-Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
----
- kernel/trace/trace_boot.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+but I agree, the u64 cast is not necessary if DIV_ROUND_UP_ULL() is
+used as that macro casts the dividend to unsigned long long anyway.
 
-diff --git a/kernel/trace/trace_boot.c b/kernel/trace/trace_boot.c
-index 778200dd8ede..5fe525f1b8cc 100644
---- a/kernel/trace/trace_boot.c
-+++ b/kernel/trace/trace_boot.c
-@@ -31,7 +31,7 @@ trace_boot_set_instance_options(struct trace_array *tr, struct xbc_node *node)
- 
- 	/* Common ftrace options */
- 	xbc_node_for_each_array_value(node, "options", anode, p) {
--		if (strlcpy(buf, p, ARRAY_SIZE(buf)) >= ARRAY_SIZE(buf)) {
-+		if (strscpy(buf, p, ARRAY_SIZE(buf)) == -E2BIG) {
- 			pr_err("String is too long: %s\n", p);
- 			continue;
- 		}
-@@ -87,7 +87,7 @@ trace_boot_enable_events(struct trace_array *tr, struct xbc_node *node)
- 	const char *p;
- 
- 	xbc_node_for_each_array_value(node, "events", anode, p) {
--		if (strlcpy(buf, p, ARRAY_SIZE(buf)) >= ARRAY_SIZE(buf)) {
-+		if (strscpy(buf, p, ARRAY_SIZE(buf)) == -E2BIG) {
- 			pr_err("String is too long: %s\n", p);
- 			continue;
- 		}
-@@ -486,7 +486,7 @@ trace_boot_init_one_event(struct trace_array *tr, struct xbc_node *gnode,
- 
- 	p = xbc_node_find_value(enode, "filter", NULL);
- 	if (p && *p != '\0') {
--		if (strlcpy(buf, p, ARRAY_SIZE(buf)) >= ARRAY_SIZE(buf))
-+		if (strscpy(buf, p, ARRAY_SIZE(buf)) == -E2BIG)
- 			pr_err("filter string is too long: %s\n", p);
- 		else if (apply_event_filter(file, buf) < 0)
- 			pr_err("Failed to apply filter: %s\n", buf);
-@@ -494,7 +494,7 @@ trace_boot_init_one_event(struct trace_array *tr, struct xbc_node *gnode,
- 
- 	if (IS_ENABLED(CONFIG_HIST_TRIGGERS)) {
- 		xbc_node_for_each_array_value(enode, "actions", anode, p) {
--			if (strlcpy(buf, p, ARRAY_SIZE(buf)) >= ARRAY_SIZE(buf))
-+			if (strscpy(buf, p, ARRAY_SIZE(buf)) == -E2BIG)
- 				pr_err("action string is too long: %s\n", p);
- 			else if (trigger_process_regex(file, buf) < 0)
- 				pr_err("Failed to apply an action: %s\n", p);
--- 
-2.41.0.162.gfafddb0af9-goog
+>=20
+> On the other hand on 64-bit architectures the divisor is masked and only
+> the lower 32-bit are used. Thus requesting a frequency >=3D 4.3GHz results
+> in incorrect values. For example requesting 4300000000 (4.3 GHz) will
+> effectively request ca. 5 MHz.
 
+Nice catch. But I'm concerned that the case above is broken by changing
+to DIV_ROUND_UP(). As this code is generic, I fear we'll have to change
+this code that divides rates to use DIV64_U64_ROUND_UP() because we
+don't know how large the rate is (i.e. it could be larger than 32-bits
+on a 64-bit machine).
 
+> Requesting clk_round_rate(clk, ULONG_MAX)
+> is a bit of a special case, since that still returns correct values as
+> long as the parent clock is below 8.5 GHz.
+>=20
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  drivers/clk/clk-divider.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/clk/clk-divider.c b/drivers/clk/clk-divider.c
+> index a2c2b5203b0a..c38e8aa60e54 100644
+> --- a/drivers/clk/clk-divider.c
+> +++ b/drivers/clk/clk-divider.c
+> @@ -220,7 +220,7 @@ static int _div_round_up(const struct clk_div_table *=
+table,
+>                          unsigned long parent_rate, unsigned long rate,
+>                          unsigned long flags)
+>  {
+> -       int div =3D DIV_ROUND_UP_ULL((u64)parent_rate, rate);
+> +       int div =3D DIV_ROUND_UP(parent_rate, rate);
+> =20
+>         if (flags & CLK_DIVIDER_POWER_OF_TWO)
+>                 div =3D __roundup_pow_of_two(div);
+> @@ -237,7 +237,7 @@ static int _div_round_closest(const struct clk_div_ta=
+ble *table,
+>         int up, down;
+>         unsigned long up_rate, down_rate;
+> =20
+> -       up =3D DIV_ROUND_UP_ULL((u64)parent_rate, rate);
+> +       up =3D DIV_ROUND_UP(parent_rate, rate);
+>         down =3D parent_rate / rate;
+> =20
+>         if (flags & CLK_DIVIDER_POWER_OF_TWO) {
+> @@ -473,7 +473,7 @@ int divider_get_val(unsigned long rate, unsigned long=
+ parent_rate,
+>  {
+>         unsigned int div, value;
+> =20
+> -       div =3D DIV_ROUND_UP_ULL((u64)parent_rate, rate);
+> +       div =3D DIV_ROUND_UP(parent_rate, rate);
+> =20
+>         if (!_is_valid_div(table, div, flags))
+>                 return -EINVAL;
+
+This is undoing parts of commit 9556f9dad8f5 ("clk: divider: handle
+integer overflow when dividing large clock rates"). Please pair this
+patch with extensive kunit tests in a new test suite clk-divider_test.c
+file. I don't know if UML supports changing sizeof(long), but that would
+be a cool feature to tease out these sorts of issues. I suppose we'll
+just have to run the kunit tests on various architectures to cover the
+possibilities.
