@@ -2,169 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D92472DFAC
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 12:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56DD672DFB2
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 12:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239974AbjFMKga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 06:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59898 "EHLO
+        id S229926AbjFMKhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 06:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239026AbjFMKgE (ORCPT
+        with ESMTP id S240655AbjFMKhZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 06:36:04 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB51E55;
-        Tue, 13 Jun 2023 03:35:57 -0700 (PDT)
-Received: from [192.168.10.54] (unknown [119.155.33.163])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1F391660000E;
-        Tue, 13 Jun 2023 11:35:47 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686652555;
-        bh=HbdSMphLp1/aGNarPBMTAmoMfCdZYDwXjyzqGZPOGtA=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=eCbyTU2BUbopMEp0/l014XJDWH7zLmxfwh6N+IuQqSPT8pAD5HNik18UCjw7Dsc7G
-         /vqmj4fttKTO0BVCwJiqnn48/01nNX5aJ0czU9q13HY6d5YgAECt/27yeFOtmBpd5+
-         1cpwi9XnJK3ImYUXPXD7oHwevazumaZiK+213l1QbvXH3obGgIQcOM8NZ+b6+7nVDX
-         nRzqIZebJjG/SqbTFdtsx9sGMAlu6nQlFv73gbfOQKnr0k8dXPJ3QIrX4IWQdOrzEQ
-         /Y962W7NI2pvyTejjNeSukWiaANvS0kljQtCv2nU/ewwoBDQK0Q3Wtevvf6mii2biX
-         uqIW8Jt3z6Rcg==
-Message-ID: <0e6b318a-bbf8-3701-00af-1802c6347897@collabora.com>
-Date:   Tue, 13 Jun 2023 15:35:44 +0500
+        Tue, 13 Jun 2023 06:37:25 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F92119F
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 03:37:23 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-bc40d4145feso3491665276.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 03:37:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1686652642; x=1689244642;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u6v7bAOnlXSpxwVByNrc2wz3YyV0QI4pSQ1WAf4/fwQ=;
+        b=XYe7DUHMvGV7y2bk4ogTIjbkVzcgzUmWBbBgPF1keLUauqwTFso2aU41gu9FLKluKu
+         E6nipZ8KQrqhbgbP6eMpWe5q3qri0rXk+bWJv7HFMOae77UL2k7/845wYD8x9kH+wNhx
+         2ayxk0svBQENhTEER+t6TCNp+pXvad9K+spGe2yTQkmbk6i65MNaoFDRMaipn2r+vOs7
+         x4QiwKtfa8Nq7oCB+Ww4EJZ1Q/O9awqHQe7KlpLCHo2YOarsxYOHwh6vY05YXxDT0Bvl
+         72eaNF/Qm9LlPOuKgjVC0dQCkvOx2bLPW2eUO86Uha9sWk6PcHEICRBnAqRlVbMJr8TW
+         bUpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686652642; x=1689244642;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=u6v7bAOnlXSpxwVByNrc2wz3YyV0QI4pSQ1WAf4/fwQ=;
+        b=E0iKeI4sYRTh/Vh/yxbSBMkOMW4mUHzSLuxVSFIp/f/iVeN/1m2wMCIohn8ULM+oDS
+         hj/B84s8Lnt44MPmhUOO72Kgw27sAiU9k8Hwyr76ENF4n691SPxaUj2bYamBOUG8YDy+
+         sVBQtrj804PccmLVfS3QoHRfmJwlNNbqzfCehQ9sFwNHn6guJr9JNkZPSyhcTpbpeTnq
+         oR9Wcm6/u/fvNZIYhLFPpBNe2Lg5GxAsAU6URe+QmDF9tngmcHRULjLBt19atbBLX2qr
+         M+wxt85d2ygQJje6xW3qicxO6DLW2Qmefx+HzujFftjyn2bxlwHin2i9NOylp7Tcc0uh
+         U6KQ==
+X-Gm-Message-State: AC+VfDwiHSrRWsagXnCg7JM/8FHlfgqvBr7sxl0ANmoe37SZCVH3DRAz
+        oFpTDQ0hnjzjnqgyL96mtjLIPROpbsbN2n/laPZFVQ==
+X-Google-Smtp-Source: ACHHUZ5/Qvp7DqZ5pP3PN3ixTFHH2JNuoNmRb0aB0KXX5cNFjw0dq25o+ZtOjcjIGQZHYqGbkftMsLProALMoOCNzLk=
+X-Received: by 2002:a25:b901:0:b0:bc6:9e29:f2c2 with SMTP id
+ x1-20020a25b901000000b00bc69e29f2c2mr1018625ybj.44.1686652642636; Tue, 13 Jun
+ 2023 03:37:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Greg KH <greg@kroah.com>,
-        kernel test robot <lkp@intel.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
-Subject: Re: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-Content-Language: en-US
-To:     Vineet Gupta <vgupta@kernel.org>,
-        linux-snps-arc@lists.infradead.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>
-References: <20230406074005.1784728-3-usama.anjum@collabora.com>
- <202304061914.N1Hmx12N-lkp@intel.com>
- <e3c82373-256a-6297-bcb4-5e1179a2cbe2@collabora.com>
- <9d8b5b8e-47c9-16dd-050a-45d917d73c07@collabora.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <9d8b5b8e-47c9-16dd-050a-45d917d73c07@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SORBS_WEB,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230508142842.854564-1-apatel@ventanamicro.com>
+ <20230508142842.854564-9-apatel@ventanamicro.com> <20230510-retry-paced-644f5a95ba3f@spud>
+In-Reply-To: <20230510-retry-paced-644f5a95ba3f@spud>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Tue, 13 Jun 2023 16:07:11 +0530
+Message-ID: <CAK9=C2W1=DAME7uYKu82qcpfn=V5N=4tZ4NTa2EygR+HDQCsmQ@mail.gmail.com>
+Subject: Re: [PATCH v3 08/11] dt-bindings: interrupt-controller: Add RISC-V
+ advanced PLIC
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, iommu@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vineet,
+On Wed, May 10, 2023 at 9:11=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
+te:
+>
+> Hey Anup,
+>
+> On Mon, May 08, 2023 at 07:58:39PM +0530, Anup Patel wrote:
+> > +  interrupts-extended:
+> > +    minItems: 1
+> > +    maxItems: 16384
+> > +    description:
+> > +      Given APLIC domain directly injects external interrupts to a set=
+ of
+> > +      RISC-V HARTS (or CPUs). Each node pointed to should be a riscv,c=
+pu-intc
+> > +      node, which has a riscv node (i.e. RISC-V HART) as parent.
+>
+> Same nit here, s/riscv node/cpu node/?
 
-It seems arc architecture supports CONFIG_TRANSPARENT_HUGEPAGE, but it
-doesn't define HPAGE_SIZE. It only defines PAGE_SIZE in
-include/uapi/asm/page.h? AFAIK HPAGE_SIZE must be defined when
-CONFIG_TRANSPARENT_HUGEPAGE is enabled. What can be the solution here for arc?
+Okay, I will update.
 
-Should I just compile out this code for arc architecture specifically?
+>
+> > +
+> > +  msi-parent:
+> > +    description:
+> > +      Given APLIC domain forwards wired interrupts as MSIs to a AIA in=
+coming
+> > +      message signaled interrupt controller (IMSIC). If both "msi-pare=
+nt" and
+> > +      "interrupts-extended" properties are present then it means the A=
+PLIC
+> > +      domain supports both MSI mode and Direct mode in HW. In this cas=
+e, the
+> > +      APLIC driver has to choose between MSI mode or Direct mode.
+> > +
+> > +  riscv,num-sources:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    minimum: 1
+> > +    maximum: 1023
+> > +    description:
+> > +      Specifies the number of wired interrupt sources supported by thi=
+s
+> > +      APLIC domain.
+>
+> Rob asked:
+> | We don't normally need to how many interrupts, why here?
+>
+> But I do not see an answer to that on lore.
 
-Thanks,
-Usama
+The APLIC spec defines maximum interrupt sources to be 1023.
 
+>
+> > +
+> > +  riscv,children:
+> > +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> > +    minItems: 1
+> > +    maxItems: 1024
+> > +    items:
+> > +      maxItems: 1
+> > +    description:
+> > +      A list of child APLIC domains for the given APLIC domain. Each c=
+hild
+> > +      APLIC domain is assigned a child index in increasing order, with=
+ the
+> > +      first child APLIC domain assigned child index 0. The APLIC domai=
+n child
+> > +      index is used by firmware to delegate interrupts from the given =
+APLIC
+> > +      domain to a particular child APLIC domain.
+> > +
+> > +  riscv,delegate:
+> > +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> > +    minItems: 1
+> > +    maxItems: 1024
+> > +    items:
+> > +      items:
+> > +        - description: child APLIC domain phandle
+> > +        - description: first interrupt number of this APLIC domain (in=
+clusive)
+> > +        - description: last interrupt number of this APLIC domain (inc=
+lusive)
+> > +    description:
+> > +      A interrupt delegation list where each entry is a triple consist=
+ing of
+> > +      child APLIC domain phandle, first interrupt number of this APLIC=
+ domain,
+> > +      and last interrupt number of this APLIC domain. Firmware must co=
+nfigure
+> > +      interrupt delegation registers based on interrupt delegation lis=
+t.
+>
+> I read back Rob's comments on this from last time. He said:
+> | The node's domain it delegating its interrupts to the child domain or
+> | the other way around? The interrupt numbers here are this domain's or
+> | the child's?
 
-On 6/7/23 10:45 AM, Muhammad Usama Anjum wrote:
-> On 4/6/23 5:56 PM, Muhammad Usama Anjum wrote:
->> On 4/6/23 4:40 PM, kernel test robot wrote:
->>> Hi Muhammad,
->>>
->>> kernel test robot noticed the following build errors:
->>>
->>> [auto build test ERROR on akpm-mm/mm-everything]
->>> [also build test ERROR on next-20230406]
->>> [cannot apply to linus/master v6.3-rc5]
->>> [If your patch is applied to the wrong git tree, kindly drop us a note.
->>> And when submitting patch, we suggest to use '--base' as documented in
->>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->>>
->>> url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230406-154314
->>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
->>> patch link:    https://lore.kernel.org/r/20230406074005.1784728-3-usama.anjum%40collabora.com
->>> patch subject: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and optionally clear info about PTEs
->>> config: arc-randconfig-r023-20230405 (https://download.01.org/0day-ci/archive/20230406/202304061914.N1Hmx12N-lkp@intel.com/config)
->>> compiler: arceb-elf-gcc (GCC) 12.1.0
->>> reproduce (this is a W=1 build):
->>>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>>         chmod +x ~/bin/make.cross
->>>         # https://github.com/intel-lab-lkp/linux/commit/f13abb36f64c77913509da8ca157512d2fb9f031
->>>         git remote add linux-review https://github.com/intel-lab-lkp/linux
->>>         git fetch --no-tags linux-review Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230406-154314
->>>         git checkout f13abb36f64c77913509da8ca157512d2fb9f031
->>>         # save the config file
->>>         mkdir build_dir && cp config build_dir/.config
->>>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
->>>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash fs/proc/
->>>
->>> If you fix the issue, kindly add following tag where applicable
->>> | Reported-by: kernel test robot <lkp@intel.com>
->>> | Link: https://lore.kernel.org/oe-kbuild-all/202304061914.N1Hmx12N-lkp@intel.com/
->>>
->>> All error/warnings (new ones prefixed by >>):
->>>
->>>    fs/proc/task_mmu.c: In function 'pagemap_scan_pmd_entry':
->>>>> fs/proc/task_mmu.c:1921:37: error: 'HPAGE_SIZE' undeclared (first use in this function); did you mean 'PAGE_SIZE'?
->>>     1921 |                     ((end - start < HPAGE_SIZE) ||
->>>          |                                     ^~~~~~~~~~
->>>          |                                     PAGE_SIZE
->> It seems arc architecture supports CONFIG_TRANSPARENT_HUGEPAGE, but it
->> doesn't define HPAGE_SIZE. It only defines PAGE_SIZE in
->> include/uapi/asm/page.h? AFAIK HPAGE_SIZE must be defined when
->> CONFIG_TRANSPARENT_HUGEPAGE is enabled. What can be the solution here for arc?
-> I'm still looking for solution. Vineet do you have some thoughts?
-> 
->>
->> The remaining build failures are because the wrong tree. I base my patches
->> on latest next, while the bot has based patches on mm-everything. I guess
->> today's next would have latest mm stuff, a rebase would make things correct
->> or I'll shift to mm-everything.
->>
->>
-> 
+The node's domain is delegating its interrupts to the child domain.
 
--- 
-BR,
-Muhammad Usama Anjum
+>
+> IMO it's ambiguous from the binding description whether the numbers
+> refer to the "first interrupt in the parent domain that is delegated
+> to the child" or to numbering of the interrupts within the child domain.
+> "This" can be quite an ambiguous word, and it's not totally obvious
+> whether the "this" refers to the "child domain" earlier in the sentence.
+>
+> I also do not not think you have answered his question about the
+> directionality of the delegation either (it should just be a copy-paste
+> from riscv,children, no?).
+
+For APLIC, the interrupt delegation is always from parent domain
+to the child domain.
+
+I will add a statement about this in the description.
+
+>
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupt-controller
+> > +  - "#interrupt-cells"
+> > +  - riscv,num-sources
+>
+> btw, do we need something like:
+>
+> anyOf:
+>   - required:
+>       - interrupts-extended
+>   - required:
+>       - msi-parent
+
+Okay, I will update.
+
+>
+> & hopefully I didn't previously ask this one:
+> dependencies:
+>   riscv,delegate: [ riscv,children ]
+>
+> As an aside, I still think "riscv,delegate" looks strange here alongside
+> "riscv,children" since "delegate" is singular and "children" is plural.
+> The plural would be "delegates", but "delegation" would also fit better
+> than "delegate".
+
+Okay, I will rename it to "riscv,delegation".
+
+>
+> Cheers,
+> Conor.
+
+Regards,
+Anup
