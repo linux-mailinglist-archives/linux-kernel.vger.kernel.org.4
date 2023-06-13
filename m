@@ -2,134 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 781DE72EAEF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 20:28:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3F572EAFA
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 20:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231680AbjFMS2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 14:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33160 "EHLO
+        id S232882AbjFMS2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 14:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230253AbjFMS2H (ORCPT
+        with ESMTP id S231873AbjFMS2i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 14:28:07 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932B319BC
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 11:28:06 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b1b06af50eso73666171fa.1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 11:28:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1686680885; x=1689272885;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c13OqGThZo2X78u4bO5FLqEGNspfbVSXUjccgWtSHTY=;
-        b=RVvNfGvzt0DYgLXTRiA0G20yg8E5kMPkOEOA91DG6XO1VyQhXDm1tx5k24cikw27o4
-         pFVfCDktyV/fJw77oIZY5fXb6C6hA1cADQVs/+aJh+Ufj2V3YcJ7V0/bzyDve1GG1gjS
-         EHPRD5S+JqfBPj+qQ6Z3589ZrYMXqWpz4TMqc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686680885; x=1689272885;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=c13OqGThZo2X78u4bO5FLqEGNspfbVSXUjccgWtSHTY=;
-        b=h+wd8D3xep466RCZmxZBV2mLAdrZWzhOfgbuQ2sFTaT+QukOQz88wITseInc26jYP0
-         8kcJPW+CMyuajU1GeugQ5jN4SvF6mcziewPgMbsAvXBVfv5DsOouY0aXo/9UrgGjy88Q
-         eD6iUO9CUeeWbuhEBsJ1MumVIL8QVvAy00iehVuuuskhT4y43IdvMkGUa0Ubx9LXvsXw
-         yA/J+X2Kk0fneaTcqKeQpFEv5rIeN+Ee8L8PtAad4y2gF0KpWfzRLqJPE+l7xP7K6GQl
-         ACpmsfomKf8TfNPz/cBQ2EMXvYiC5Gf/L/nX9SDv5GFSb0GrOU93pZiOksuKHAxZhtck
-         i7yQ==
-X-Gm-Message-State: AC+VfDyWqMSsRLjC22/u/QkTBBMexro+MKPO3APaibwbjfkIg3h3sfn6
-        Y9uje1fvkPT+CXfDgLwC5QYKO6lRwNjHYrtXjmYu5Z/l
-X-Google-Smtp-Source: ACHHUZ4If1OjmA34pME87CihVe89X0/Ke4D3WcZY3Pf4i4KlRrhrohcashH3UeDbdk5tfw/BauI7iA==
-X-Received: by 2002:a2e:a171:0:b0:2b2:90e:165f with SMTP id u17-20020a2ea171000000b002b2090e165fmr5107030ljl.17.1686680884754;
-        Tue, 13 Jun 2023 11:28:04 -0700 (PDT)
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
-        by smtp.gmail.com with ESMTPSA id f26-20020a2e9e9a000000b002adb0164258sm2249779ljk.112.2023.06.13.11.28.03
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 11:28:04 -0700 (PDT)
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-4f6454a21a9so7337311e87.3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 11:28:03 -0700 (PDT)
-X-Received: by 2002:a19:3819:0:b0:4f7:457e:a457 with SMTP id
- f25-20020a193819000000b004f7457ea457mr3476722lfa.53.1686680882933; Tue, 13
- Jun 2023 11:28:02 -0700 (PDT)
+        Tue, 13 Jun 2023 14:28:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4790C1701;
+        Tue, 13 Jun 2023 11:28:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 41FAE633F3;
+        Tue, 13 Jun 2023 18:28:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 638C9C433D9;
+        Tue, 13 Jun 2023 18:28:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686680915;
+        bh=/D3YYRMFOxqtGYTim6YsH/QIEOLyRikQxfcIqm7Q9CE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LMOpkFDyGl8VngQ9e6e5EXkezJaA/iY/p72Nv7SmYBStPo/y2m9FJ1gMHUTaDViQS
+         WjoddG2ndc2qFJbIOIKCh0cbKv2Mst+g1lPqrx84hTmoqN1zppG3Qa6KkAA0uumk5a
+         Roj5fHWZq49Vx+VWVKz3hxGYyHzrerjh4GbYnbjDk89FWJtGa5oGfKkgXrjAXSqa6t
+         TGFZGkz7RLoTAh3GtqjX8MwZ+A73/lUw7niu4aXAEQJbhV9r4tSdqHwd/ml+L+pCor
+         tEcAPKSEi4ZYqiyX0r1+oKYBzPL1kIfLZcDjeuYHjTO8heHwjzhDZpYB3aLKxDnuaL
+         jQwPMNRe5bv5w==
+Date:   Tue, 13 Jun 2023 11:28:34 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@kernel.org>
+Cc:     Kalle Valo <kvalo@kernel.org>, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        regressions@lists.linux.dev,
+        Johannes Berg <johannes@sipsolutions.net>
+Subject: Re: Closing down the wireless trees for a summer break?
+Message-ID: <20230613112834.7df36e95@kernel.org>
+In-Reply-To: <871qifxm9b.fsf@toke.dk>
+References: <87y1kncuh4.fsf@kernel.org>
+        <871qifxm9b.fsf@toke.dk>
 MIME-Version: 1.0
-References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
- <CAHk-=wh0UNRn96k3XLh2AYOo0iz1k_Qk-rQXv8kYjXkKBzUMWA@mail.gmail.com>
- <c239d2c4f7e369690866db455813cac359731e1d.camel@intel.com> <CAHk-=wjSWhVV+qr_tV0xg8c0WRn_H9wtFZkUVCpv-VzsddAS-Q@mail.gmail.com>
-In-Reply-To: <CAHk-=wjSWhVV+qr_tV0xg8c0WRn_H9wtFZkUVCpv-VzsddAS-Q@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 13 Jun 2023 11:27:45 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whY0ggV9P+3Ch1LcqefnS3=O7FmWkOPoiABD7QJGtwSHg@mail.gmail.com>
-Message-ID: <CAHk-=whY0ggV9P+3Ch1LcqefnS3=O7FmWkOPoiABD7QJGtwSHg@mail.gmail.com>
-Subject: Re: [PATCH v9 00/42] Shadow stacks for userspace
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "bp@alien8.de" <bp@alien8.de>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 10:44=E2=80=AFAM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> Anyway, I'm scanning through it right now. No comments yet, I only
-> just got started.
+On Tue, 13 Jun 2023 20:14:40 +0200 Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+> I think this sounds reasonable, and I applaud the effort to take some
+> time off during the summer :)
+>=20
+> One question that comes to mind is how would this work for patchwork?
+> Would we keep using the wireless patchwork instance for the patches
+> going to -net in that period, or will there be some other process for
+> this? I realise the setup we have for ath9k is a bit special in this
+> regard with the ack-on-list+delegation, so I'm obviously mostly
+> interested in what to do about that... :)
 
-Well, it all looked fine from a quick scan. One small comment, and
-even that was just a minor stylistic nit.
-
-I didn't actually look through the x86 state infrastructure side -
-I'll just trust that is fine, and it doesn't interact with anything
-else, so I don't really worry about it. I mainly care about the VM
-side not causing problems, and the changes on that side all looked
-fine.
-
-             Linus
+Whatever's easiest :) It's probably a good idea for Kalle to write
+down all the local rules and customs and share those with us.
