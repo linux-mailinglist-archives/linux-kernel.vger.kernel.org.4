@@ -2,215 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5784E72DB07
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 09:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAB2C72DB0B
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 09:34:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234221AbjFMHeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 03:34:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
+        id S238893AbjFMHe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 03:34:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234043AbjFMHds (ORCPT
+        with ESMTP id S234043AbjFMHeY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 03:33:48 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41A31730
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:33:46 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-5149e65c244so7235724a12.3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 00:33:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686641625; x=1689233625;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qOj+b+v3wCNe+kI49zepTRDruNHDk16kXJ4DGLQYzEg=;
-        b=WuiZs2vsum/c+L7UptQ1ey6c3dDEd2i3Gn4IctiNR25SQOFM+f8b9PTdXqyA8gWF5Q
-         isR4NN+ux119Av7a552xhPBpzcRie2/XRAOXwZ3bGRcsAPFZAKugn34qSyeybNRIhIW/
-         QiXxHl7MTcuogVI60o8WfVrLu5zv9pcnwSO9j0h1Rr0AKUZmo63pP/QOMDVwguqi/roH
-         wG9eSSLEGWgo4JUnIPPeCamDGqKkAjF3iKhDbLJpqCYKUieWbvcJIvuee2yNHAfLx+H2
-         LZ1j6yE8V2ZmdcZp8zLIm143v9SBA+kHg7oKSBLxmlb+KRdemwnODe0zB2wuIRlLKOvS
-         qCIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686641625; x=1689233625;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qOj+b+v3wCNe+kI49zepTRDruNHDk16kXJ4DGLQYzEg=;
-        b=k1sHsmqPQJSrZS9P1BHlUYYR3e0OjZ1dUzvaEoPpuZWNFxRRkBKGS9fsdTGExheZs9
-         qnoXPJHcU2iNYaRt1CeztUNeE0pCbrKs5AEgyQtaWYXY4Ppp3FdC+2VVOIqzTFs5hdjT
-         xFdQsGCm1B6b4i/iCN234/Uw+2fLYky55OKEKKgQcVkK9dmTz+rAYX30tn2rskPto+pW
-         jqHI/lFKNJxjBIWg3JwnYJ3SkLsyJOU90j24+MpJPWQiMXsMU4LkTANkmTudQpODuBur
-         h2C5yFNCceB0SnXtIgpuLTO/+g+zRmwCfcln2aeYfMvc9Sd6bTqWAHiVUelFLkM5i29T
-         SI0Q==
-X-Gm-Message-State: AC+VfDxI+wM8vdTyS+phYgXnhuO9TeMMvpH9f8Khjh8NF7Z9KFrfB0PX
-        /o3CupCMdR2yK7i8UN2e0CM=
-X-Google-Smtp-Source: ACHHUZ5EwL5fueJ7a/Dj6vRcMs3w65CMYX4EbEvr2KBLD5NAzwVM2Rkk2Za89E07G7MzSE73tQU2UQ==
-X-Received: by 2002:a50:ed05:0:b0:518:73bb:b64f with SMTP id j5-20020a50ed05000000b0051873bbb64fmr874699eds.28.1686641624634;
-        Tue, 13 Jun 2023 00:33:44 -0700 (PDT)
-Received: from PCBABN.skidata.net ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id u13-20020a50eacd000000b005149b6ec1bdsm5991683edp.29.2023.06.13.00.33.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 00:33:44 -0700 (PDT)
-From:   Benjamin Bara <bbara93@gmail.com>
-To:     mazziesaccount@gmail.com
-Cc:     DLG-Adam.Ward.opensource@dm.renesas.com, bbara93@gmail.com,
-        benjamin.bara@skidata.com, broonie@kernel.org, lgirdwood@gmail.com,
-        linux-kernel@vger.kernel.org, support.opensource@diasemi.com
-Subject: Re: [PATCH RFC v3 1/5] regulator: move monitor handling into own function
-Date:   Tue, 13 Jun 2023 09:33:16 +0200
-Message-Id: <20230613073316.1984750-1-bbara93@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <5584a484-df7f-b927-9701-33dcea6230d0@gmail.com>
-References: <5584a484-df7f-b927-9701-33dcea6230d0@gmail.com>
+        Tue, 13 Jun 2023 03:34:24 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB8D10F7;
+        Tue, 13 Jun 2023 00:34:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=tAKolwLuXUR1D5yD/hL0f+kZnHou+PxeYU9aqGSZlgk=; b=PJ7DjtI5p9Scuhe88BpMQDomP0
+        MKCJntJTn1U+Rd2ZhV3FQnt6v8jDArMbzoUNSNBw22KQvf4WZts+aU5TsuEO6LVgTBI9Lt5J5/tRM
+        J8ziNRHbscTBejaoYpXuU/l3qPuKSjn5T8wVUN8+JYdj713tuMnbHx+7gbgAdsmA8wZ38wg4ht6m7
+        i0+jX0ZKdElRGA4MizB5sMdH1s4BRkSbqJI4EUQFv5UwmALAHg55ZjQOv7/wSBKbBTi1uFQEMjskS
+        A/QCcZxrSOjGP5FrTd8O11G3S61ZxvJCh2x57TVAqR8kGkTdhlP7MuYlgXagHdz4r3FYQqRS+YNsG
+        xU47uqLA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q8yXh-003ev7-B0; Tue, 13 Jun 2023 07:34:17 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0C1E9300322;
+        Tue, 13 Jun 2023 09:34:16 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id DB9FC262C92A1; Tue, 13 Jun 2023 09:34:15 +0200 (CEST)
+Date:   Tue, 13 Jun 2023 09:34:15 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     torvalds@linux-foundation.org, keescook@chromium.org,
+        pbonzini@redhat.com, masahiroy@kernel.org, nathan@kernel.org,
+        ndesaulniers@google.com, nicolas@fjasle.eu,
+        catalin.marinas@arm.com, will@kernel.org, vkoul@kernel.org,
+        trix@redhat.com, ojeda@kernel.org, mingo@redhat.com,
+        longman@redhat.com, boqun.feng@gmail.com, dennis@kernel.org,
+        tj@kernel.org, cl@linux.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
+        42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
+        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
+        john.johansen@canonical.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
+        rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
+        tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
+        luc.vanoostenryck@gmail.com
+Subject: Re: [PATCH v3 46/57] perf: Simplify pmu_dev_alloc()
+Message-ID: <20230613073415.GP4253@hirez.programming.kicks-ass.net>
+References: <20230612090713.652690195@infradead.org>
+ <20230612093540.850386350@infradead.org>
+ <20230612094400.GG4253@hirez.programming.kicks-ass.net>
+ <2023061226-grumpily-entire-f06a@gregkh>
+ <20230612141322.GA83892@hirez.programming.kicks-ass.net>
+ <2023061217-mutable-curry-c2ac@gregkh>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2023061217-mutable-curry-c2ac@gregkh>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matti!
+On Mon, Jun 12, 2023 at 05:44:59PM +0200, Greg KH wrote:
 
-On Wed, 24 May 2023 at 09:28, Matti Vaittinen <mazziesaccount@gmail.com> wrote:
-> I am thinking that maybe the default should still be to not touch the
-> monitoring unless explicitly requested.
+> Then in the last part of the file, I abuse the DEFINE_FREE() to handle a
+> special case of removing a proc file if things go bad (and add a
+> DEFINE_FREE() for class_destroy(), which should go into
+> include/device/class.h.
+> 
+> I've only test-built it, but is this the proper use of DEFINE_FREE()?
+> There wasn't much documentation :)
 
-Got it - I will bring back the "mon_disable_reg_disabled" property. With
-this property, the current behaviour will be in-place.
+Yes, this looks right.
 
-> My thinking is that the hardware should by default be able to handle
-> the voltage change / enable / disable etc while monitoring is enabled.
-> Hardware which requires explicit monitoring disabling sounds (to me)
-> like a 'design problem' and disabling the monitoring sounds (to me)
-> like a workaround. I wouldn't make this workaround default.
-> Furthermore, monitoring is a safety feature, and as such core should
-> not autonomously disable it (unless such behaviour is requested).
+> To be fair the end-result of misc_init() is much nicer and cleaner and
+> "obviously correct", which is good, even with the crazy proc file mess
+> in it.  So I like the idea overall, need to figure out when to use
+> DEFINE_CLASS() vs. DEFINE_FREE(), that isn't obvious to me.
 
-I totally agree with you here. However, there are regulators that
-require such workarounds (e.g. bd718x7 and da9063) and that's the reason
-for this series.
+CLASS is meant for things that have an obvious contructor as well as a
+destructor, that always go together. Like for example the lock things,
+they always pair a lock and unlock. But also things like:
+fdget()+fdput(), these can also always be paired, and if you want the
+file to escape you simply take yet another reference to prevent the
+fdput() from being the final.
 
-> I was thinking of a case where regulator state is not readable - I'm
-> not 100% sure how core thinks of their state.
+> Also, you can't put a DEFINE_FREE() within a function declaration, which
+> I guess makes sense, but the build warning is very odd when you attempt
+> it, mentioning an "invalid storage class".  Is that supposed to be able
+> to work?
 
-AFAIK, they would be considered as always on. But as Mark said, we could
-add this as a requirement for having protection.
+No, DEFINE_FREE() and DEFINE_CLASS() end up defining a bunch of inline
+functions, which can't be done inside another function.
 
-> Another case could be a regulator which is not registered to the core
-> but shares monitoring with some other regulator. 
+If only C would have lambda functions ... alas.
 
-I think this case should be handled by the driver anyways. Activating a
-shared protection on one regulator, without activating it on the other
-regulator should be considered as an error in my opinion.
+> @@ -280,29 +268,24 @@ static char *misc_devnode(const struct device *dev, umode_t *mode)
+>  	return NULL;
+>  }
+>  
+> +DEFINE_FREE(class_destroy, struct class *, if (_T) class_destroy(_T));
 
-> If I didn't misread the code, the differences here are that existing
-> "ideology" is to a) only touch the monitoring (enable/disable) when
-> explicitly requested for a given level and b) knowing that all
-> monitors that are requested to be enabled are enabled at the end of
-> the probe.
->
-> In my eyes change a) is problematic. For example, if a board using
-> BD9576 wants to have protection disabled via device-tree (let's assume
-> there is a board where we know that some disturbance to voltages will
-> occur under specific conditions) - it is very valid to complain
-> disabling protection is not supported. 
+Documentation for class_create() says it will return ERR_PTR(), so then
+this should be something like:
 
-Yes, I think so too. I would not give the BD9576 any new "workaround
-property", which would lead to the behaviour which is currently
-implemented, meaning the monitoring is not touched after initialization.
+DEFINE_FRERE(class_destroy, struct class *, if (!IS_ERR_OR_NULL(_T)) class_destroy(_T))
 
-> Go fix your board design message needs to be given because protection
-> can't be disabled. This is very different from case where we just try
-> disabling monitoring because regulator is turned off. In latter case
-> with BD9576 the failure to disable protection should just be silently
-> ignored. When we use same callbacks for both the initial configuration
-> and the runtime enable/disable/voltage-change handling the driver has
-> no way knowing if this is an error or not.
+> +DEFINE_FREE(remove_proc, struct proc_dir_entry *, if (_T) remove_proc_entry("misc", NULL));
+>  static int __init misc_init(void)
+>  {
+> +	struct proc_dir_entry *ret __free(remove_proc) = proc_create_seq("misc", 0, NULL, &misc_seq_ops);
+> +	struct class *c __free(class_destroy) = class_create("misc");
+>  
+> +	if (IS_ERR(c))
+> +		return PTR_ERR(c);
+>  
+>  	if (register_chrdev(MISC_MAJOR, "misc", &misc_fops))
+> +		return -EIO;
+>  
+> +	c->devnode = misc_devnode;
+> +
+> +	misc_class = no_free_ptr(c);
+> +	no_free_ptr(ret);
+> +
+> +	return 0;
+>  }
 
-Got it. I am aware now that there are PMICs which do not allow to turn
-off the monitor, therefore the default behaviour will be the same as
-now. For now, only the da9063 (invalid state when monitoring a disabled
-monitor) and the bd718x7 (invalid state when monitoring an enabled
-regulator that switches to a higher voltage) are affected by the new
-properties. The others which currently have {O,U}VP (max597x, bd9576)
-should stay the same as now.
-
-> Therefore, I will switch back to only do it when the monitor
-> configuration for enable/disable/voltage-change should be done via
-> separate driver callback - that would allow driver to separate these
-> use-cases. If this was change I wrote, I might try creating separate
-> driver callbacks for
-> enable/disable/voltage_change_start/voltage_change_done which get the
-> initial monitor configuration (as was read from device-tree) as an
-> argument. Do you think that could give the flexibility to handle all
-> different hardware quirks?
-
-I think it would, yes. But I also think that it will lead to a lot of
-duplicate code. However, instead of a simple "enable/disable" property,
-we could reuse the "type of protection" too, to create some kind of
-matrix. Example: Instead of setting mon_disable_reg_set_higher to 1 for
-the bd718x7, we could set it to REGULATOR_MONITOR_OVER_VOLTAGE, meaning
-just this protection should be disabled while switching to the higher
-voltage. What do you think about that?
-
-> The change b) does also have consequences. Some PMICs like the BD9576
-> do use same IRQ for indicating either ERROR or WARNING level problem.
-> Whether to use WARNING or ERROR is selected at star-up when the
-> device-tree flags are read. Eg, the .set_<XXX>_protection callbacks
-> store the severity information (WARNING or ERROR) and complain if both
-> are tried to be used. With the current approach we know the validity
-> of this configuration is checked right when regulator is registered,
-> not later at runtime when regulator is enabled.
-
-Not sure about that, but I think it would fail to register the
-regulator? In this case, later it would not be able to enable it because
-it is not registered, right?
-
-> Another example regarding design that uses the knowledge that all
-> requested monitors are enabled when regulator is registered is BD96801
-> - which is not upstream (although I've had patches in my outbox for an
-> year already waiting for permission from the HQ to actually send
-> them... Don't ask...). This PMIC can configure fatality of the fault
-> monitoring. This driver checks that all regulators did agree on
-> whether to use PROTECTION or ERROR/WARNING level monitoring at the end
-> of the probe - and toggles the IRQ fatality accordingly. I truly
-> believe that out-of-tree drivers must not mandate upstream design -
-> but I equally believe that we may see similar HW designs in upstream
-> and considering this now makes sense :) Yes, in order to paper over b)
-> a driver can for sure go and parse all the monitoring properties from
-> device-tree itself and decide things based on that - but it might be
-> quite a lot of duplicated code.
-
-From my point of view, the behaviour will stay exactly the same! If they
-don't agree on the same level, the probe should actually fail and the
-regulators should not be registered. 
-
-> To sum up my view - I do definitely like the idea that core supports
-> toggling the monitors for duration of enable/disable/voltage-change as
-> this is needed by some real world ICs.
->
-> I, however, think drivers should be able to separate the "set the
-> default monitoring config" request from the "change config to
-> something we use for duration of this operation" - because the best
-> monitoring config that is required for an operation may not be a
-> "disable all". Hence, we should leave it for the driver to decide what
-> config to set for the duration of an
-> enable/disable/voltage_set-operation.
->
-> Furthermore, I believe the default should be "don't touch the
-> monitoring" and not to try disable/enable it w/o explicit request.
-
-Yes, I will definitely keep that in mind and implement it like that in
-the next version.
-
-> Again, thank you for working on this and including me in the
-> discussion :)
-
-Thanks for your valuable feedback!
-
-Best regards,
-Benjamin
+And yes, this does look nicer.
