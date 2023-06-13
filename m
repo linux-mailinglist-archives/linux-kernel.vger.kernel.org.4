@@ -2,113 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D78CE72D859
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 06:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7219372D861
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 06:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233356AbjFMEPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 00:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44198 "EHLO
+        id S239063AbjFMEVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 00:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239086AbjFMEOv (ORCPT
+        with ESMTP id S229602AbjFMEVh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 00:14:51 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2058910DF;
-        Mon, 12 Jun 2023 21:14:46 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-65314ee05c6so4128790b3a.1;
-        Mon, 12 Jun 2023 21:14:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686629685; x=1689221685;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=q68FLd8Lf8c88U2yU1AjX1ynx75CBETxpHufNs3LkRk=;
-        b=C+DDSC4oivLipSV1OSoBz/cmklXs+3ZmdvqSXolMhlXiYAszxWutgU1874ONcQRwSu
-         ESP32Hg7dqm1vjH3sj89j606bAyYguVProcvT4M5h8xFLqghJKElHNL7kIZeqDPBsgp0
-         vGYl/oQqRL5yzMdJcQjw59k8HeRcAVp5rwWWa91muPXWN3GZwp71p22H4TBvmuX9HQP8
-         /R/j3Hp8GcEofeU55m7lwTofmkS/RHKZpvzZEJGIH1+7ttBHidXT/gED2GevHjl7Wjrj
-         VRWW2EFmu1LlIAtkiKThGaTjw8ODqs55d3etG0N5EeRY0p57cdiLtE4azM/7eIDdnuOK
-         f+hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686629685; x=1689221685;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q68FLd8Lf8c88U2yU1AjX1ynx75CBETxpHufNs3LkRk=;
-        b=J52zUV7mbi6anAemhzyNDjNIAyg7158mz6TKQfOqL6wZvNiQrwfucKDMLbEkVt8tqY
-         b2LC1WL2qt0f/qB+uhU71L4+MudoNOzOFGpwgUKH2HU5WaDbVDa91dprmJTeU0DXB368
-         MohCMPe7kAclZ6fXf1ZrYSyYuv401NK34GFVeS3j3sIqd/SwbG03x7JvEP2lyy3xyN3C
-         jcHWc9FpIoINOMo5RU0h/FZTF1/UoQlADDNOXAdhYBwFVe7CGmPo+Ac2j399tMijg/mW
-         tvJ14BqSW6118AqEn3W7eOOvvYJ5oTZftcOCSD2j63LZK/x5/1cLCc9t7x5MBLZ5mLF6
-         z9VA==
-X-Gm-Message-State: AC+VfDwXY/+USLLZ3HB7iZ9Lo0iCqlIPi7AEH+Ot7d7gDIF76uyHjv4j
-        HYEfLwr/SXtVOvDJply+Xv636D3Z86o=
-X-Google-Smtp-Source: ACHHUZ6gpgq7SxCh3va4CCldJkvqQEi2+kAUOUf9vIlHlTK48C/xvFhyFU6zwXsDOS0NbbuSzelG0w==
-X-Received: by 2002:a05:6a20:9384:b0:e9:5b0a:deff with SMTP id x4-20020a056a20938400b000e95b0adeffmr13167699pzh.22.1686629685444;
-        Mon, 12 Jun 2023 21:14:45 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-27.three.co.id. [180.214.232.27])
-        by smtp.gmail.com with ESMTPSA id u14-20020a170902a60e00b001b05e96d859sm9005098plq.135.2023.06.12.21.14.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 21:14:44 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 9429B106994; Tue, 13 Jun 2023 11:14:41 +0700 (WIB)
-Date:   Tue, 13 Jun 2023 11:14:41 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.15 00/91] 5.15.117-rc1 review
-Message-ID: <ZIftMfwrT4dLp3_L@debian.me>
-References: <20230612101702.085813286@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="PjzAGnKqwk+LHmb1"
-Content-Disposition: inline
-In-Reply-To: <20230612101702.085813286@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Tue, 13 Jun 2023 00:21:37 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E2010DA;
+        Mon, 12 Jun 2023 21:21:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686630095; x=1718166095;
+  h=from:to:cc:subject:date:message-id;
+  bh=njgdb0ONdSGtfhuhBYq+P+GvUryOJP3BffdwQYUOC4M=;
+  b=ZoKib7oUwnSnBOdpRJuRSdTwYu19GH+DtmIrnzCDlBApwMRzrk3nT5eg
+   8DYVkg2APmiV+ntl9qPnhW+ft27FSwMVgz5254u78dQHUUf8LdbsriQpq
+   7SX564FYQ3pnG3ZMXIWvyvSgKxbD/+D0kJeLxUjtDdV4HJw5f7ucnQDD3
+   tnx7TIit9YgjmZ78il9q2a1CC4Ol6aCOJixf9SRijtg1GCdvZ/L1xgVa9
+   9nuJ6y5yEZOD89JkQscV7Be+ApwDmsmAbUcqX39WJ8OWlD1bDEyoCBmNO
+   TkWz6jJqW21H5b9ZMoGGR6ZSkQMZA7+FFmhuDSw72aibmnx+SGORvZUYL
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="358222018"
+X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
+   d="scan'208";a="358222018"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 21:21:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="661854919"
+X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
+   d="scan'208";a="661854919"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orsmga003.jf.intel.com with ESMTP; 12 Jun 2023 21:21:33 -0700
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Zhao Liu <zhao1.liu@intel.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>, x86@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v4 00/24] sched: Introduce classes of tasks for load balance
+Date:   Mon, 12 Jun 2023 21:23:58 -0700
+Message-Id: <20230613042422.5344-1-ricardo.neri-calderon@linux.intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---PjzAGnKqwk+LHmb1
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is the fourth version of this patchset. Previous versions can be found
+here [1], here [2], and here[3]. For brevity, I did not include the cover
+letter from the original posting. You can read it here [1].
 
-On Mon, Jun 12, 2023 at 12:25:49PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.117 release.
-> There are 91 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+This patchset depends on a separate patchset to handle better asym_packing
+between SMT cores [4]. This patchset was recently merged into the tip tree.
 
-Successfully compiled and installed bindeb-pkgs on my computer (Acer
-Aspire E15, Intel Core i3 Haswell). No noticeable regressions.
+For your convenience, you can retrieve this patchset from [5], and is based
+on the master branch of the tip tree as on 12th June 2023.
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Changes since v3:
 
---=20
-An old man doll... just what I always wanted! - Clara
+Vincent highlighted the issue of using the current tasks of runqueues to
+collect IPCC statistics. Since these are the last tasks to be pulled during
+load balance, the proposed tie breakers would have little effect. Instead,
+I have reworked the collection of IPCC statistics to look at the back of
+the runqueues. This makes the IPCC scores more useful, as these are the
+first tasks to be pulled during load balance.
 
---PjzAGnKqwk+LHmb1
-Content-Type: application/pgp-signature; name="signature.asc"
+Rafael argued that the HFI driver should not handle tasks directly. I have
+reworked the code to let the HFI driver read the classification result.
+A new sched_ipcc.c file under arch/x86 is in charge or handling tasks and
+postprocess classification.
 
------BEGIN PGP SIGNATURE-----
+Rafael also raised concerns about the need for a memory barrier to order
+reads and writes of the cached IPCC scores that the scheduler can access
+without holding the HFI lock. I decided to use a seqcount. The seqcount
+provides store-release and load-acquire semantics, ensuring proper
+ordering of reads and writes of the cached IPCC scores. It also provides a
+compiler barrier. A CPU memory barrier is not needed.
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZIftKwAKCRD2uYlJVVFO
-o1N8AQDCFAbWcn+AHT2ebgUOuWoz0U3nhB4+mh8GczcCJGSBZQD9HfQXOGMEF4nW
-baoUGb0Ekt3T56dp2gzvoVGSY3tv8QI=
-=U6VQ
------END PGP SIGNATURE-----
+Zhao noticed that there is a new CPUID_7_1_EAX leaf and using cpuid_bits[]
+in scattered.c is not needed. I fixed it.
 
---PjzAGnKqwk+LHmb1--
+lkp@intel.com found a build break due to a misplaced definition of
+MSR_IA32_HW_FEEDBACK_CHAR. I moved the definition to patch 13.
+
+Updated patches: 6, 10, 13, 14, 15, 17, 21, 22
+New patches: none
+Unchanged patches: 1, 2, 3, 4, 5, 7, 8, 9, 11, 12, 16, 18, 19, 20, 23, 24
+
+Thanks in advance for your kind feedback!
+BR,
+Ricardo
+
+[1]. https://lore.kernel.org/lkml/20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com/
+[2]. https://lore.kernel.org/lkml/20221128132100.30253-1-ricardo.neri-calderon@linux.intel.com/
+[3]. https://lore.kernel.org/all/20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com/
+[4]. https://lore.kernel.org/all/20230406203148.19182-1-ricardo.neri-calderon@linux.intel.com/
+[5]. https://github.com/ricardon/tip/tree/rneri/ipc_classes_v4
+
+Ricardo Neri (24):
+  sched/task_struct: Introduce IPC classes of tasks
+  sched: Add interfaces for IPC classes
+  sched/core: Initialize the IPC class of a new task
+  sched/core: Add user_tick as argument to scheduler_tick()
+  sched/core: Update the IPC class of the current task
+  sched/fair: Collect load-balancing stats for IPC classes
+  sched/fair: Compute IPC class scores for load balancing
+  sched/fair: Use IPCC stats to break ties between asym_packing sched
+    groups
+  sched/fair: Use IPCC stats to break ties between fully_busy SMT groups
+  sched/fair: Use IPCC scores to select a busiest runqueue
+  thermal: intel: hfi: Introduce Intel Thread Director classes
+  x86/cpufeatures: Add the Intel Thread Director feature definitions
+  x86/sched: Update the IPC class of the current task
+  thermal: intel: hfi: Store per-CPU IPCC scores
+  thermal: intel: hfi: Report the IPC class score of a CPU
+  thermal: intel: hfi: Define a default class for unclassified tasks
+  thermal: intel: hfi: Enable the Intel Thread Director
+  sched/task_struct: Add helpers for IPC classification
+  sched/core: Initialize helpers of task classification
+  sched/fair: Introduce sched_smt_siblings_idle()
+  x86/sched/ipcc: Implement model-specific checks for task
+    classification
+  x86/cpufeatures: Add feature bit for HRESET
+  x86/hreset: Configure history reset
+  x86/process: Reset hardware history in context switch
+
+ arch/x86/include/asm/cpufeatures.h       |   2 +
+ arch/x86/include/asm/disabled-features.h |   8 +-
+ arch/x86/include/asm/hreset.h            |  30 +++
+ arch/x86/include/asm/msr-index.h         |   5 +
+ arch/x86/include/asm/topology.h          |  15 ++
+ arch/x86/kernel/Makefile                 |   2 +
+ arch/x86/kernel/cpu/common.c             |  30 ++-
+ arch/x86/kernel/cpu/cpuid-deps.c         |   1 +
+ arch/x86/kernel/process_32.c             |   3 +
+ arch/x86/kernel/process_64.c             |   3 +
+ arch/x86/kernel/sched_ipcc.c             |  93 +++++++
+ drivers/thermal/intel/Kconfig            |   1 +
+ drivers/thermal/intel/intel_hfi.c        | 219 +++++++++++++++-
+ include/linux/sched.h                    |  24 +-
+ include/linux/sched/topology.h           |   6 +
+ init/Kconfig                             |  12 +
+ kernel/sched/core.c                      |  10 +-
+ kernel/sched/fair.c                      | 316 ++++++++++++++++++++++-
+ kernel/sched/sched.h                     |  66 +++++
+ kernel/sched/topology.c                  |   9 +
+ kernel/time/timer.c                      |   2 +-
+ 21 files changed, 840 insertions(+), 17 deletions(-)
+ create mode 100644 arch/x86/include/asm/hreset.h
+ create mode 100644 arch/x86/kernel/sched_ipcc.c
+
+-- 
+2.25.1
+
