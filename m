@@ -2,233 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CE5472DDF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 11:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7271C72DDFA
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 11:41:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237456AbjFMJkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 05:40:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56828 "EHLO
+        id S239508AbjFMJlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 05:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241422AbjFMJka (ORCPT
+        with ESMTP id S239797AbjFMJld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 05:40:30 -0400
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959CBDF
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 02:40:26 -0700 (PDT)
-Received: by mail-ua1-x935.google.com with SMTP id a1e0cc1a2514c-78a1e095508so289714241.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 02:40:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686649225; x=1689241225;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fWL+8F4wX9QAkgda6QyJxqZXMC6jN1JJ2qnzQJBp1LA=;
-        b=FWNDnQrHaBxGSTCFKvGpSOnoHQIMoP+4atd30vuD3aEc3PZwxblz4336lsE9Oah2Jn
-         Kl6KLUMpSxcu05FzHx3wQESkClCZxlQ4rF225tHHAB5XZz5BHl7X+MvmgA6W9VYo5xPN
-         QTyh6tX3zGg6Hr1gQ1thoElaL47qUkO4ZO3BJ4Kv1ZLU9o5chPmwrSEYKCTWQFKlVCpQ
-         024ASjyR8PeKOaNHGNOPnI61D/R+fxjjsHp1H5JG0N6uNAddKTuDroG9Z/6B6IeFgN+F
-         VIUCZLOObbQDGA8WBnsIwicoA34oOeW7+MfaKn6eUsjTrEw6MDrZoq8Dp6HO4S1uYaR4
-         5q3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686649225; x=1689241225;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fWL+8F4wX9QAkgda6QyJxqZXMC6jN1JJ2qnzQJBp1LA=;
-        b=jrCathFzqwkElVK5bv9ZSgTetu5tf1Mb0O6xy2zrCiQli3lhUZyHSqrBtxQpBu/7+1
-         nBUiqB/XIrmHPPIkLiQ+wX3voS+eqliAUM1ZKtvwXTMU3aRajcLrcowU/LKXcLC9vFrW
-         kH3yoN1sZE1AU76uY1oYujVMUQvy2gVqu0LwUkjSfqwAqi6swXBL3QT5LFxT/dyOunt5
-         OwfCGllBmxVKYcy9V6B1ajNDjhKDzpi192/OQ1YS95ZsQwO4BDa4eys+EH8SSR5hHXRh
-         I1/hNJHlPdr7JXWxLntMhnEac4ZY8KhalMpUkvScAE6upaHGTrYZ2mynBTUtrtr0MS48
-         S8wA==
-X-Gm-Message-State: AC+VfDytil+LgrDG3AabEsGJt4dZAiDAQALlBz3Mgdqj42/qubE8eXOV
-        DE+tLVm8hp9BJnLZsA9omwYcjR1w55YP4+qamAMmdA==
-X-Google-Smtp-Source: ACHHUZ4EWfyHA5rw2XRBroD1azAfrmIXM3Fz6jopLa5yjoIdXhSqZPmSLZjjsADXUBn9iJmU85TtEMrvKH806787l5c=
-X-Received: by 2002:a1f:6051:0:b0:464:c5aa:3338 with SMTP id
- u78-20020a1f6051000000b00464c5aa3338mr4506802vkb.15.1686649225448; Tue, 13
- Jun 2023 02:40:25 -0700 (PDT)
+        Tue, 13 Jun 2023 05:41:33 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B11510D8;
+        Tue, 13 Jun 2023 02:41:30 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8AxGurJOYhkGJMEAA--.9851S3;
+        Tue, 13 Jun 2023 17:41:29 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxXMrIOYhkptkYAA--.62503S3;
+        Tue, 13 Jun 2023 17:41:28 +0800 (CST)
+Message-ID: <5050ec45-b82a-d815-659e-a408e692aea4@loongson.cn>
+Date:   Tue, 13 Jun 2023 17:41:28 +0800
 MIME-Version: 1.0
-References: <20230612101651.048240731@linuxfoundation.org>
-In-Reply-To: <20230612101651.048240731@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 13 Jun 2023 15:10:14 +0530
-Message-ID: <CA+G9fYvOtkh4H2CLn=ogogxz3S6TYcbS_YMGHpgaoeP6XQHeAw@mail.gmail.com>
-Subject: Re: [PATCH 4.14 00/21] 4.14.318-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v14 0/2] drm: add kms driver for loongson display
+ controller
+Content-Language: en-US
+To:     Maxime Ripard <mripard@kernel.org>
+Cc:     Sui Jingfeng <15330273260@189.cn>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        loongson-kernel@lists.loongnix.cn
+References: <20230520105718.325819-1-15330273260@189.cn>
+ <d4e647d8-294c-abd7-40c6-37381796203d@loongson.cn>
+ <a23d6mgl4fbfa4ucgjvwgw7l3somxo4tkhit7ygy55fldlum56@vm3tyjdsx24l>
+ <d2f744b6-e4c9-d1b5-d4ca-470b801c670d@189.cn>
+ <hvfr6qkepf6l3ymqtp6vhlneeqihnli7g5v7nzd6rirwleffk6@4ernj6xng5rt>
+ <42c54caf-0ab9-a075-b641-9e3e21b2a2f3@loongson.cn>
+ <7rbtdidyfpctz22pw2mnt2a6yp34hwp2bdp7usp52ft5mfrfud@nokbyxjip5by>
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+Organization: Loongson
+In-Reply-To: <7rbtdidyfpctz22pw2mnt2a6yp34hwp2bdp7usp52ft5mfrfud@nokbyxjip5by>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8CxXMrIOYhkptkYAA--.62503S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoW7Gr4fZrWkZr13CFWkGFWUWrX_yoW8JF13pr
+        WUtF10kF4kGr1rJrZYvw18tFnYvwn8tr1Uuw1qqr17urWqvr13GF42kr4YkF9xXr97Ca17
+        tF4UXa43tw4jkagCm3ZEXasCq-sJn29KB7ZKAUJUUUUP529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUPqb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVWxJr0_GcWln4kS14v26r1q6r43M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q
+        6rW5McIj6I8E87Iv67AKxVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vI
+        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Wrv_ZF1lx2IqxVAqx4xG67
+        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIY
+        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14
+        v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWxJVW8
+        Jr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07j7PE
+        -UUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 12 Jun 2023 at 15:59, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.14.318 release.
-> There are 21 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 14 Jun 2023 10:16:41 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.14.318-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.14.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+On 2023/6/13 17:28, Maxime Ripard wrote:
+> On Tue, Jun 13, 2023 at 05:17:00PM +0800, Sui Jingfeng wrote:
+>> On 2023/6/13 17:10, Maxime Ripard wrote:
+>>> On Tue, Jun 13, 2023 at 04:35:44PM +0800, Sui Jingfeng wrote:
+>>>> Hi,
+>>>>
+>>>> On 2023/6/13 16:30, Maxime Ripard wrote:
+>>>>> Hi,
+>>>>>
+>>>>> On Mon, Jun 12, 2023 at 10:58:54PM +0800, Sui Jingfeng wrote:
+>>>>>> Hi,
+>>>>>>
+>>>>>>
+>>>>>> Any ideas for this trivial DC driver? Sorry about my broken English.
+>>>>>>
+>>>>>> What to do next? Send a new version?
+>>>>> Thomas already told you to merge it in the previous version:
+>>>>> https://lore.kernel.org/dri-devel/7b77020f-d543-13bf-e178-bc416bcc728d@suse.de/
+>>>>>
+>>>>> So.. do that?
+>>>> Yes, that sound fine.
+>>>>
+>>>> But I can't do it myself, would you like to help?
+>>> Why can't you do it yourself?
+>> I don't have a commit access to the drm-misc,
+>>
+>> I think, I can get the commit access in a letter time when I good enough,
+>>
+>> But get the code merged, just merge the latest version is OK.
+> Look at the link in Thomas mail, it's the documentation on how to get
+> commit access.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Can I get the commit access at a latter time?
 
-## Build
-* kernel: 4.14.318-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-4.14.y
-* git commit: 6958cbc0ef5cb58a12f24faede15c46ea71a1975
-* git describe: v4.14.317-22-g6958cbc0ef5c
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
-.317-22-g6958cbc0ef5c
+I do not need the commit access currently.
 
-## Test Regressions (compared to v4.14.316)
+As long as somebody can help to merge this driver is OK.
 
-## Metric Regressions (compared to v4.14.316)
+> Maxime
 
-## Test Fixes (compared to v4.14.316)
+-- 
+Jingfeng
 
-## Metric Fixes (compared to v4.14.316)
-
-## Test result summary
-total: 66388, pass: 56634, fail: 3131, skip: 6520, xfail: 103
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 108 total, 104 passed, 4 failed
-* arm64: 35 total, 31 passed, 4 failed
-* i386: 21 total, 18 passed, 3 failed
-* mips: 21 total, 21 passed, 0 failed
-* parisc: 3 total, 3 passed, 0 failed
-* powerpc: 8 total, 7 passed, 1 failed
-* s390: 6 total, 5 passed, 1 failed
-* sh: 12 total, 12 passed, 0 failed
-* sparc: 6 total, 6 passed, 0 failed
-* x86_64: 27 total, 23 passed, 4 failed
-
-## Test suites summary
-* boot
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
