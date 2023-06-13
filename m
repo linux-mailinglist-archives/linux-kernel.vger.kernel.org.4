@@ -2,127 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9011A72EBFF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:31:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F2572EC02
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:32:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232196AbjFMTbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 15:31:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37250 "EHLO
+        id S232554AbjFMTcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 15:32:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbjFMTbk (ORCPT
+        with ESMTP id S233147AbjFMTb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 15:31:40 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CB519F;
-        Tue, 13 Jun 2023 12:31:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1686684696; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=i9NAex8IvHcO+Eks0UF5tXhjlxeGE8bPgyUjgiHvQBQ6UJGJxB1VU826az3nw2xCFx
-    A2Ywk+ImPvGJNOD7qp8SWVR4iGUzpXXgefSmJumCzPpz3hCsb4kFhv2SKzAdP+MHNskm
-    lG+LWN13eA2A8qWjklGCgN4QckGPVQqdli8i2OQRXRAXjhldFkhylkTwuB8R4b6msSKD
-    YmOv1xSaXb3J2Sker8bgQVb4QsiTWxDcCAfbOBd4ZLYng8YLApc3AZ+k11/zsKo01XFH
-    aocIK+ZSmAgMC4pIFQRgMBR8SzYD84S4Kt+3bxfaDSn9GT3AN0GBNOvNxNkiTIWIECGl
-    642w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686684696;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=TIYmApHrHDmwJcN1MBgG4zROT88X79OMyiaDJD5wJqU=;
-    b=PM71sj5oymrBrxiCzkEiRjQ6rF0QNhN0Cn9odJ409rQbU3+aTpOZMTDUMljL2XyIU0
-    yYjfbWZyHfLkhJrTqsG8D/+AZyPwdZrWtKOmbPQx6QvMe0MZlWTFUbODIFhAbCtwb9Qd
-    TDR1vwPOjrNw9C8jK29INzhMAIlBqR2GkneONSQpBAp61XUtm7Zvm9e3hkChLG5qlqZ4
-    M2cnWPLmgKozp3NG0kTNO0KV7O+mJCbWGfJozh42Y3i7I03Y+Sp5l1njK8VA4yDFTTMv
-    UoSNTgvjqAtd1QKwWtmJsMgTUff3pEOx0pWg/G2WTKjYyACCZVYbEpKoZREFny6KDJKf
-    jVPg==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686684696;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=TIYmApHrHDmwJcN1MBgG4zROT88X79OMyiaDJD5wJqU=;
-    b=c7apPiucD4QhROFfl3ZDexA6Jitw5diOPnCsAJc+04+LDnCMFhnt9okpm5Qh3Pvhxg
-    Y1hQLS13pFxxa0pukBpeV2KaHZtja1AO2kQ4e8hvYvb7qPlWzPI99uQLZppsidU9p8YD
-    uTmIyiyhVpvCR37ohzJ9qA4/tNMaId6vg6de8f5dfeNiroQUEm4PD4UWVg66RzkTgmEU
-    amOZSzNbzVX1qYtnbQUlJrIwg9ljG9bxBf959AKACJywvxdqNRFP3RlmqjSdYCsKa2o2
-    A28oUAG/aMpiHzmHMoZitQsYz3OEiQpA7nQWueDJwLcy6yIoHgBNVkH9iL5vb181i8kz
-    ca4g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686684696;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=TIYmApHrHDmwJcN1MBgG4zROT88X79OMyiaDJD5wJqU=;
-    b=Sk2D34KD1mkzYoLdFku+AsWhCGedIcYmUcSz/MUglekMldKe3sHaKUTPvKabkJt2ZI
-    pzr/gLM0mrQ0k9nkBBCw==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4peA8Z3h"
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.5.3 DYNA|AUTH)
-    with ESMTPSA id Z82ec2z5DJVaa4J
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Tue, 13 Jun 2023 21:31:36 +0200 (CEST)
-Date:   Tue, 13 Jun 2023 21:31:29 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: qcom: sm6115: Fix up cluster idle states
-Message-ID: <ZIjEEarBM93g8beB@gerhold.net>
-References: <20230613-topic-6115idlestates-v1-1-fa017052319d@linaro.org>
+        Tue, 13 Jun 2023 15:31:58 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2E8E59
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:31:57 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b4f95833c7so509995ad.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:31:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1686684717; x=1689276717;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=f5euzgeiZ5qWr3Kx1p765UIGm0BpE7qlZD/8jcIprGc=;
+        b=g4Xdj6IL66L7V4ix9KjnbpfTLfianXbn3R6cC3gdbzRXuEzA4dU+l9DbgpeacZXjBO
+         J1mDR4cFc/g8fb58ztIUGKiiLuED3wp9ics2T9egKaEnSCTM4JqXSnaor+C2Xa5a/Tg/
+         zBlKNm484JI940uwwzy5upXCEjwV/lfZ97ufE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686684717; x=1689276717;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=f5euzgeiZ5qWr3Kx1p765UIGm0BpE7qlZD/8jcIprGc=;
+        b=CZXcB1+mx+oIZkjLvsYP11xUScx652aEmQnVFpeWZ1NuE3YhQRb8yFk/HTKA9Wcb8J
+         rNov1Nm+az4u+rAu90g5wgSIuBAFk4TcVsKL3bjMHWF6WkS1XqWjL+zdTxEznOd1u3jZ
+         2p/JvRmFmgl4eCHJp2mNm8G0WiHEicE/Cx+laaeK0l8RtU5AjOuVHnaL9lzvQRW2UstH
+         q6kksFNRbrcJRqebwBRyg+k87w4tdbcwe81tKsycLMRaEK8xwcREXzuRqLwTh0ukikAB
+         50FgGVqJ7JQDwasx43HYiJnD38z1z35yHYCTjJPXOllR9YfWWCuZIOkFoooBpPOiZAN2
+         1aUw==
+X-Gm-Message-State: AC+VfDzlNeXz7T3WRXvzd6v/W6TUO1JEBv1mxJ80/xrQHXsHNwZ/2AXO
+        uocjVrKOf+NVI8KCw1qW3rat/pJvw/b3tj5X2bY=
+X-Google-Smtp-Source: ACHHUZ48VUIKnVIubqBg9OkadgWv/RDkrdFOjNUm/zcfs1CQ34NnLMg6nLwOgDF8RhZ91vxZlxsydw==
+X-Received: by 2002:a17:902:d887:b0:1b0:6541:91c2 with SMTP id b7-20020a170902d88700b001b0654191c2mr9679573plz.63.1686684717178;
+        Tue, 13 Jun 2023 12:31:57 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id p7-20020a1709026b8700b001b04b1fae4dsm239374plk.35.2023.06.13.12.31.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 12:31:56 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 12:31:56 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Azeem Shaikh <azeemshaikh38@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-hardening@vger.kernel.org, Hongren Zheng <i@zenithal.me>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usbip: usbip_host: Replace strlcpy with strscpy
+Message-ID: <202306131231.88243CB@keescook>
+References: <20230613004402.3540432-1-azeemshaikh38@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230613-topic-6115idlestates-v1-1-fa017052319d@linaro.org>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230613004402.3540432-1-azeemshaikh38@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 09:13:47PM +0200, Konrad Dybcio wrote:
-> The lowest nibble of the PSCI suspend param denotes the CPU state.
-> It was mistakenly set to mimic the cluster state, resulting in poking
-> PSCI with undocumented 0x2 and 0x4 states (both of which seem to be
-> implemented and undocumented). Also, GDHS cluster param was wrong for C1.
+On Tue, Jun 13, 2023 at 12:44:02AM +0000, Azeem Shaikh wrote:
+> strlcpy() reads the entire source buffer first.
+> This read may exceed the destination size limit.
+> This is both inefficient and can lead to linear read
+> overflows if a source string is not NUL-terminated [1].
+> In an effort to remove strlcpy() completely [2], replace
+> strlcpy() here with strscpy().
 > 
-> Fix that.
+> Direct replacement is safe here since return value of -E2BIG
+> is used to check for truncation instead of sizeof(dest).
 > 
-> Fixes: b5de1a9ff1f2 ("arm64: dts: qcom: sm6115: Add CPU idle-states")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+> [2] https://github.com/KSPP/linux/issues/89
+> 
+> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
 > ---
->  arch/arm64/boot/dts/qcom/sm6115.dtsi | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  drivers/usb/usbip/stub_main.c |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> index 55118577bf92..07d8b842d7be 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> @@ -225,7 +225,7 @@ domain-idle-states {
->  			CLUSTER_0_SLEEP_0: cluster-sleep-0-0 {
->  				/* GDHS */
->  				compatible = "domain-idle-state";
-> -				arm,psci-suspend-param = <0x40000022>;
-> +				arm,psci-suspend-param = <0x40000023>;
+> diff --git a/drivers/usb/usbip/stub_main.c b/drivers/usb/usbip/stub_main.c
+> index e8c3131a8543..a92a284f5abb 100644
+> --- a/drivers/usb/usbip/stub_main.c
+> +++ b/drivers/usb/usbip/stub_main.c
+> @@ -174,8 +174,8 @@ static ssize_t match_busid_store(struct device_driver *dev, const char *buf,
+>  		return -EINVAL;
+>  
+>  	/* busid needs to include \0 termination */
+> -	len = strlcpy(busid, buf + 4, BUSID_SIZE);
+> -	if (sizeof(busid) <= len)
+> +	len = strscpy(busid, buf + 4, BUSID_SIZE);
+> +	if (len == -E2BIG)
+>  		return -EINVAL;
 
-I think entering GDHS is also "Core is last in power level" "1=Cluster"
-so (1 << 24) should be set here as well (i.e. 0x41...).
+"len" is never used again, so maybe:
 
-Otherwise the fixes look good, thanks for taking a look!
+	if (strscpy(...) < 0)
+		return -EINVAL;
 
-Thanks,
-Stephan
+-Kees
+
+>  
+>  	if (!strncmp(buf, "add ", 4)) {
+> -- 
+> 2.41.0.162.gfafddb0af9-goog
+> 
+> 
+
+-- 
+Kees Cook
