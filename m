@@ -2,121 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E99B572EE47
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 23:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72EF072EE51
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 23:54:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231866AbjFMVwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 17:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45552 "EHLO
+        id S232508AbjFMVyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 17:54:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbjFMVwe (ORCPT
+        with ESMTP id S230516AbjFMVyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 17:52:34 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D0161BCD
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 14:52:32 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1b4fe2139a8so7305ad.1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 14:52:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686693151; x=1689285151;
-        h=mime-version:user-agent:message-id:in-reply-to:date:references
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=owxsvARooF1JqiUzQa0XlavPkJWvuoPCrCJNEJeKH7A=;
-        b=7Jt/0cS/OlG9EwR1ok+8kcFfNu/QXf81oVdNiJeOVa6yKczspQ5cw74P/ZgG003fpX
-         Q5VpUG2clUTrd+fq3QAzo/sPONTAmZa9Q6CZqeGvcnkED2zpB51L32bhdZYpcYo3MDAb
-         52xLJw8NNmaphcwB2c7rpzP8VivKsx2ybtvDLuiuZSb/FU3Bf+al4427vwJXG26vxie8
-         wCIC5s/1vxIuhK3HzNvm22SKbhk3ArKX88tZIwtAm3VM677uIrc1QCaatS7LpkJ9kuLq
-         t7tdM8nTo62BcSvIkhuWlbN4vWi2ZKRp6e3gHXtP2niCoZ1HJuqWfRNuqdEiZoF7BRN4
-         /rqQ==
+        Tue, 13 Jun 2023 17:54:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2175F1BC9
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 14:53:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686693232;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=HWwG9L2Hn01HieDsdKTsM+fW6Heseo+AVtJqKk3pma0=;
+        b=AuW7i9/FKvjK0+Q6MdN+b1hmBVq5m9/4ONGwmdpZv/iMuep8qL88HI8Q9xO0kSbPM03hZ9
+        s8G1X/Q/PjsyGnYtp6nO8quE/OUNoJcYLKhW1JGKxXWecRhoBZ77QtDdCg7Tu5R4zoiGZq
+        5rHV3d15V6Jo2AZ6LGQFQX9onXAYw8U=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-654-R-4W7kD9MOKGYfpONxlBMQ-1; Tue, 13 Jun 2023 17:53:51 -0400
+X-MC-Unique: R-4W7kD9MOKGYfpONxlBMQ-1
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-3f8283a3a7aso13777141cf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 14:53:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686693151; x=1689285151;
-        h=mime-version:user-agent:message-id:in-reply-to:date:references
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=owxsvARooF1JqiUzQa0XlavPkJWvuoPCrCJNEJeKH7A=;
-        b=W2mOxsNA+KRkLlzedS1ihf1NSSOXa7yR2VwrRgMqlL7BxSnaqw3d/6T6+jogC7PWUy
-         fV4NdSt/f6NY3UingsBJppzjHUJuvNnwfjTXG4kJIAaXV9mqTlT4mJGE3nl8zHu+6PTp
-         5gi+R/tDadw8fRcOvLA/L8q3j+hnO6eSzXBoojNmaB9/P72tWoVQ7eYhe1dA/ArxWi6i
-         iwKZchRvHXlh31PYEpLDd2CsZV65CuwaKHA4ARJUNXr6GzDK75DZP1zMxd+dWHFB4H1Y
-         cfXOoxX2PQ9RStstcMNJXQNy3X0c8KN70OujP0h39YpvvDnhYe2Fy6RaZTR3kPVQbaN9
-         YzIA==
-X-Gm-Message-State: AC+VfDytycVYnMJazOUBO5H1zDPnUyo/kCCuIBp1dXmd/WZxHyJI8Sj8
-        QtnXogza+FXbmlhhwoHuGU5R+L6Xg8qL+RmtclT7rKKT/Ps=
-X-Google-Smtp-Source: ACHHUZ7gEkJcXVOFGylA8S8/qzQFhnt1SJjpJ8j6LNrIe278qor7Oz1gRXP4N+quspgfmp+OeH5XAw==
-X-Received: by 2002:a17:903:280f:b0:1b0:4687:ba19 with SMTP id kp15-20020a170903280f00b001b04687ba19mr24421plb.10.1686693150637;
-        Tue, 13 Jun 2023 14:52:30 -0700 (PDT)
-Received: from bsegall-glaptop.localhost (c-73-158-249-138.hsd1.ca.comcast.net. [73.158.249.138])
-        by smtp.gmail.com with ESMTPSA id 26-20020aa7911a000000b0065440a07294sm9314800pfh.95.2023.06.13.14.52.28
+        d=1e100.net; s=20221208; t=1686693230; x=1689285230;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HWwG9L2Hn01HieDsdKTsM+fW6Heseo+AVtJqKk3pma0=;
+        b=cYb2RZa8qNbw3p6gJW8tX0qCo0oBp/Dx/V3f/9CHUK67xIJtTiWwqoz3eIPv48YmJd
+         CGtQP4d6ZAYIx+R6Ogus+sucfm+Bp2yG4LT+kEMpgbz9Ey3Lp5Tkvtb8CFxQ3oDSP2R3
+         fYb6HVFzZN/U/a2lUYSMlrTthskkMTbODsBbTt3bn8bw5trTrLOtN/vB1lRw88+v0pwW
+         oQvkwxEoenpneNd7yZ7z2TV0LqsYhswQGSpvOBdTDf7katLrKX7n6/lakPBLcm+a/a2X
+         xhZFu8NzDXSN0tGxynUkw5hH4iXJrO3eDIhRRph8rX/fbH86s8PPgiq9CdPjtY9PrhOb
+         OJJg==
+X-Gm-Message-State: AC+VfDy1nG6KRvA0pldY+kcTSkqRVnlsT6KycJ1FKFFIRkicjj0wp4+h
+        c3rUIwPMGHaKnWAMquUxRVgZcL/+Fb4WR8+qGHHSHecpHO6CVv2jWlmykOr7B+j2TAGjnNG+azS
+        1YlJQ8VNFwClmJZGjOiA1sG2QojP6hSmZZxDSydmq2nYaKltAebGeQ3d6tWbBojnrF2rLKyYuOp
+        +s0aFSEw==
+X-Received: by 2002:a05:622a:19a3:b0:3f9:cb97:f15a with SMTP id u35-20020a05622a19a300b003f9cb97f15amr17412711qtc.0.1686693229761;
+        Tue, 13 Jun 2023 14:53:49 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4LpuZZ8y6o+05nkbQUABsrbOlbnN9Rz4uLpZW4sN1JV6I6TVEVvx/zi1pYcdjTFS2ruush5A==
+X-Received: by 2002:a05:622a:19a3:b0:3f9:cb97:f15a with SMTP id u35-20020a05622a19a300b003f9cb97f15amr17412692qtc.0.1686693229394;
+        Tue, 13 Jun 2023 14:53:49 -0700 (PDT)
+Received: from x1n.redhat.com (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id fz24-20020a05622a5a9800b003f9bccc3182sm4522330qtb.32.2023.06.13.14.53.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 14:52:29 -0700 (PDT)
-From:   Benjamin Segall <bsegall@google.com>
-To:     Hao Jia <jiahao.os@bytedance.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        mgorman@techsingularity.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 4/4] sched/core: Avoid multiple calling
- update_rq_clock() in unthrottle_offline_cfs_rqs()
-References: <20230613082012.49615-1-jiahao.os@bytedance.com>
-        <20230613082012.49615-5-jiahao.os@bytedance.com>
-Date:   Tue, 13 Jun 2023 14:52:27 -0700
-In-Reply-To: <20230613082012.49615-5-jiahao.os@bytedance.com> (Hao Jia's
-        message of "Tue, 13 Jun 2023 16:20:12 +0800")
-Message-ID: <xm268rcn9gis.fsf@google.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        Tue, 13 Jun 2023 14:53:48 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>, peterx@redhat.com,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        James Houghton <jthoughton@google.com>,
+        Hugh Dickins <hughd@google.com>
+Subject: [PATCH 0/7] mm/gup: Unify hugetlb, speed up thp
+Date:   Tue, 13 Jun 2023 17:53:39 -0400
+Message-Id: <20230613215346.1022773-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.40.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hao Jia <jiahao.os@bytedance.com> writes:
+Hugetlb has a special path for slow gup that follow_page_mask() is actually
+skipped completely along with faultin_page().  It's not only confusing, but
+also duplicating a lot of logics that generic gup already has, making
+hugetlb slightly special.
 
-> This WARN_DOUBLE_CLOCK warning is triggered during cpu offline.
-> ------------[ cut here ]------------
-> rq->clock_update_flags & RQCF_UPDATED
-> WARNING: CPU: 0 PID: 3323 at kernel/sched/core.c:741
-> update_rq_clock+0xaf/0x180
-> Call Trace:
->  <TASK>
->  unthrottle_cfs_rq+0x4b/0x300
->  rq_offline_fair+0x89/0x90
->  set_rq_offline.part.118+0x28/0x60
->  rq_attach_root+0xc4/0xd0
->  cpu_attach_domain+0x3dc/0x7f0
->  partition_sched_domains_locked+0x2a5/0x3c0
->  rebuild_sched_domains_locked+0x477/0x830
->  rebuild_sched_domains+0x1b/0x30
->  cpuset_hotplug_workfn+0x2ca/0xc90
->  ? balance_push+0x56/0xf0
->  ? _raw_spin_unlock+0x15/0x30
->  ? finish_task_switch+0x98/0x2f0
->  ? __switch_to+0x291/0x410
->  ? __schedule+0x65e/0x1310
->  process_one_work+0x1bc/0x3d0
->  worker_thread+0x4c/0x380
->  ? preempt_count_add+0x92/0xa0
->  ? rescuer_thread+0x310/0x310
->  kthread+0xe6/0x110
->  ? kthread_complete_and_exit+0x20/0x20
->  ret_from_fork+0x1f/0x30
->
-> The rq clock has been updated in the set_rq_offline(),
-> so we don't need to call update_rq_clock() in
-> unthrottle_offline_cfs_rqs().
-> We only need to call rq_clock_start_loop_update() before the
-> loop starts and rq_clock_stop_loop_update() after the loop
-> to avoid this warning.
->
+This patchset tries to dedup the logic, by first touching up the slow gup
+code to be able to handle hugetlb pages correctly with the current follow
+page and faultin routines (where we're mostly there.. due to 10 years ago
+we did try to optimize thp, but half way done; more below), then at the
+last patch drop the special path, then the hugetlb gup will always go the
+generic routine too via faultin_page().
 
-Both of these cfsb patches look sensible to me.
+Note that hugetlb is still special for gup, mostly due to the pgtable
+walking (hugetlb_walk()) that we rely on which is currently per-arch.  But
+this is still one small step forward, and the diffstat might be a proof
+too that this might be worthwhile.
 
-Reviewed-By: Ben Segall <bsegall@google.com>
+Then for the "speed up thp" side: as a side effect, when I'm looking at the
+chunk of code, I found that thp support is actually partially done.  It
+doesn't mean that thp won't work for gup, but as long as **pages pointer
+passed over, the optimization will be skipped too.  Patch 6 should address
+that, so for thp we now get full speed gup.
+
+For a quick number, "chrt -f 1 ./gup_test -m 512 -t -L -n 1024 -r 10" gives
+me 13992.50us -> 378.50us.  Gup_test is an extreme case, but just to show
+how it affects thp gups.
+
+James: I hope this won't affect too much of your HGM series as this might
+conflict with yours.  Logically it should even make your series smaller,
+since you can drop the patch to support HGM for follow_hugetlb_page() now
+after this one, but you only need to worry that if this one is proven
+useful and merged first.
+
+Patch 1-6 prepares for the switch, while patch 7 does the switch over.
+
+I hope I didn't miss anything, and will be very happy to know.  Please have
+a look, thanks.
+
+Peter Xu (7):
+  mm/hugetlb: Handle FOLL_DUMP well in follow_page_mask()
+  mm/hugetlb: Fix hugetlb_follow_page_mask() on permission checks
+  mm/hugetlb: Add page_mask for hugetlb_follow_page_mask()
+  mm/hugetlb: Prepare hugetlb_follow_page_mask() for FOLL_PIN
+  mm/gup: Cleanup next_page handling
+  mm/gup: Accelerate thp gup even for "pages != NULL"
+  mm/gup: Retire follow_hugetlb_page()
+
+ include/linux/hugetlb.h |  20 +---
+ mm/gup.c                |  68 +++++------
+ mm/hugetlb.c            | 259 ++++------------------------------------
+ 3 files changed, 63 insertions(+), 284 deletions(-)
+
+-- 
+2.40.1
+
