@@ -2,58 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73FE772E8C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 18:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 695C772E8CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 18:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234188AbjFMQr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 12:47:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34024 "EHLO
+        id S234137AbjFMQrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 12:47:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233441AbjFMQru (ORCPT
+        with ESMTP id S233441AbjFMQrq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 12:47:50 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDCF5EC;
-        Tue, 13 Jun 2023 09:47:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=MPlFvYbPj0zRiedZYtDVq48XcSin/HHiLDsLfTxEPjs=; b=bzyyuuO1wXO4P6JhJ8fvVxGi0C
-        E73zFPqLI9Qy4PwXztTntyzzFk59hF8bYeUqsagBIbnYTWUXVlCTObrBG+7zXTF/3CU+0EfdlalRp
-        RDsX5suYs027TjZG0LqE5/eV/UiV8/YCd6CNp7jQN8pSeFU+pIw66VeLTZb9dcoY17EBi1atvad0o
-        SkEFlW3OSxiL7H3+n2JRPhm+IXwzjcXaSuo7hMMobf1WwH4ckm+sgIoEeSsge2bGFDJovhPcX1CmN
-        QGZblBFVaqmzJ/aF+UlWIrqAUlZ50b2w75iBgUySnv3ZCsx3d0c0P2TnaP9B+Jrs1T1j4yu/HKicU
-        oGWkF/dQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35810)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q97BI-0000O8-51; Tue, 13 Jun 2023 17:47:44 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q97BG-0006Bw-3D; Tue, 13 Jun 2023 17:47:42 +0100
-Date:   Tue, 13 Jun 2023 17:47:42 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Jianhui Zhao <zhaojh329@gmail.com>, hkallweit1@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2] net: phy: Add sysfs attribute for PHY c45 identifiers.
-Message-ID: <ZIidrqudxBaOva90@shell.armlinux.org.uk>
-References: <20230613143025.111844-1-zhaojh329@gmail.com>
- <612d5964-6034-4188-8da5-53f3f38a25e4@lunn.ch>
+        Tue, 13 Jun 2023 12:47:46 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C18219BC;
+        Tue, 13 Jun 2023 09:47:44 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1152)
+        id E94B720FE6E9; Tue, 13 Jun 2023 09:47:43 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E94B720FE6E9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1686674863;
+        bh=+iEeguyuJXlRkQExInBQoHnknosojavZvT0L/jXtsK8=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=nbWg7k0es9g6uyWIXPbwVTVmxCFAbr+YJ8FFRgAk2NWCqeZbo1IPKlsy5zotIOxrh
+         Nse1nuyT4dDPmP3OSYW2EwEiLLpNHjm2m/R0lsZwZmUJZz2KHbG5UhTFbu3RS2y8kJ
+         PUSZfnpB7ZXTdrArVD6nAf2ecJpOeCijnR3kb7DY=
+Received: from localhost (localhost [127.0.0.1])
+        by linux.microsoft.com (Postfix) with ESMTP id E6305307057C;
+        Tue, 13 Jun 2023 09:47:43 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 09:47:43 -0700 (PDT)
+From:   Shyam Saini <shyamsaini@linux.microsoft.com>
+To:     "Zhu, Bing" <bing.zhu@intel.com>
+cc:     "alex.bennee@linaro.org" <alex.bennee@linaro.org>,
+        "code@tyhicks.com" <code@tyhicks.com>,
+        "Matti.Moell@opensynergy.com" <Matti.Moell@opensynergy.com>,
+        "arnd@linaro.org" <arnd@linaro.org>,
+        "hmo@opensynergy.com" <hmo@opensynergy.com>,
+        "ilias.apalodimas@linaro.org" <ilias.apalodimas@linaro.org>,
+        "joakim.bech@linaro.org" <joakim.bech@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "maxim.uvarov@linaro.org" <maxim.uvarov@linaro.org>,
+        "ruchika.gupta@linaro.org" <ruchika.gupta@linaro.org>,
+        "Winkler, Tomas" <tomas.winkler@intel.com>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "Huang, Yang" <yang.huang@intel.com>,
+        "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
+        "jens.wiklander@linaro.org" <jens.wiklander@linaro.org>,
+        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>
+Subject: RE: [PATCH  v2 0/4] rpmb subsystem, uapi and virtio-rpmb driver
+In-Reply-To: <SN7PR11MB6850DA4A185E3429B62531CD84499@SN7PR11MB6850.namprd11.prod.outlook.com>
+Message-ID: <1ee57e46-6e86-eff0-ba9e-b7526fa865c0@linux.microsoft.com>
+References: <20220405093759.1126835-1-alex.bennee@linaro.org> <20230531191007.13460-1-shyamsaini@linux.microsoft.com> <SN7PR11MB6850DA4A185E3429B62531CD84499@SN7PR11MB6850.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <612d5964-6034-4188-8da5-53f3f38a25e4@lunn.ch>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,89 +66,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 06:18:58PM +0200, Andrew Lunn wrote:
-> > +#define DEVICE_ATTR_C45_ID(i) \
-> > +static ssize_t \
-> > +phy_c45_id##i##_show(struct device *dev, \
-> > +	struct device_attribute *attr, char *buf) \
-> > +{ \
-> > +	struct phy_device *phydev = to_phy_device(dev); \
-> > +\
-> > +	if (!phydev->is_c45) \
-> > +		return 0; \
-> > +\
-> > +	return sprintf(buf, "0x%.8lx\n", \
-> > +		(unsigned long)phydev->c45_ids.device_ids[i]); \
-> > +} \
-> 
-> That is not the most efficient implementation.
-> 
-> You can have one generic
-> 
-> static ssize_t phy_c45_id_show(struct device *dev, char *buf, int i)
-> {
-> 	struct phy_device *phydev = to_phy_device(dev);
-> 
-> 	if (!phydev->is_c45)
-> 		return 0;
-> 
-> 	return sprintf(buf, "0x%.8lx\n",
-> 		      (unsigned long)phydev->c45_ids.device_ids[i]);
-> }
-> 
-> And then your macros becomes
-> 
-> #define DEVICE_ATTR_C45_ID(i)			  \
-> static ssize_t					  \
-> phy_c45_id##i##_show(struct device *dev,	  \
-> 	struct device_attribute *attr, char *buf) \
-> {						  \
-> 	return phy_c45_id_show(dev, buf, i);	  \
-> }
-> 
+Hi Bing,
 
-I have a further suggestion, which I think will result in yet more
-efficiencies:
+Other than PCRs we also want to store Non volatile ftpm data (NVData), 
+storing these in volatile DDR shared memory will be a spec violation.
 
-struct phy_c45_devid_attribute {
-	struct device_attribute attr;
-	int index;
-};
+Best Regards,
+Shyam
 
-#define to_phy_c45_devid_attr(attr) \
-	container_of(attr, struct phy_c45_devid_attribute, attr)
-
-static ssize_t phy_c45_id_show(struct device *dev,
-			       struct device_attribute *attr, char *buf)
-{
-	struct phy_c45_devid_attribute *devattr = to_phy_c45_devid_attr(attr);
-	struct phy_device *phydev = to_phy_device(dev);
-	unsigned long id;
-
-	if (!phydev->is_c45)
-		return 0;
-
-	id = phydev->c45_ids.device_ids[devattr->index];
-
-	return sprintf(buf, "0x%.8lx\n", id);
-}
-
-#define DEVICE_ATTR_C45_ID(i) \
-static struct phy_c45_devid_attribute dev_attr_phy_c45_id##i = { \
-	.attr = { \
-		.attr   = { .name = __stringify(mmd##i), .mode = 0444 }, \
-		.show   = phy_c45_id_show \
-	}, \
-	.index = i, \
-}
-
-which will probably result in less code size for a little larger data
-size. Note that the references to this would need to be:
-
-	&dev_attr_phy_c45_id1.attr.attr
-
-in the array (adding an extra .attr).
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+> As an alternative, Is it possible to change ftpm design not to depend on RPMB access at the earlier/boot stage? Because to my understanding, typically PCRs don't require persistent/NV storage (for example, before RPMB or tee-supplicant is ready, use TEE memory instead as temporary storage)
+>
+> Bing
+>
+> IPAS Security Brown Belt (https://www.credly.com/badges/69ea809f-3a96-4bc7-bb2f-442c1b17af26)
+> System Software Engineering
+> Software and Advanced Technology Group
+> Zizhu Science Park, Shanghai, China
+>
+> -----Original Message-----
+> From: Shyam Saini <shyamsaini@linux.microsoft.com>
+> Sent: Thursday, June 1, 2023 3:10 AM
+> To: alex.bennee@linaro.org
+> Cc: code@tyhicks.com; Matti.Moell@opensynergy.com; arnd@linaro.org; Zhu, Bing <bing.zhu@intel.com>; hmo@opensynergy.com; ilias.apalodimas@linaro.org; joakim.bech@linaro.org; linux-kernel@vger.kernel.org; linux-mmc@vger.kernel.org; linux-scsi@vger.kernel.org; maxim.uvarov@linaro.org; ruchika.gupta@linaro.org; Winkler, Tomas <tomas.winkler@intel.com>; ulf.hansson@linaro.org; Huang, Yang <yang.huang@intel.com>; sumit.garg@linaro.org; jens.wiklander@linaro.org; op-tee@lists.trustedfirmware.org
+> Subject: [PATCH v2 0/4] rpmb subsystem, uapi and virtio-rpmb driver
+>
+> Hi Alex,
+>
+> [ Resending, Sorry for the noise ]
+>
+> Are you still working on it or planning to resubmit it ?
+>
+> [1] The current optee tee kernel driver implementation doesn't work when IMA is used with optee implemented ftpm.
+>
+> The ftpm has dependency on tee-supplicant which comes once the user space is up and running and IMA attestation happens at boot time and it requires to extend ftpm PCRs.
+>
+> But IMA can't use PCRs if ftpm use secure emmc RPMB partition. As optee can only access RPMB via tee-supplicant(user space). So, there should be a fast path to allow optee os to access the RPMB parititon without waiting for user-space tee supplicant.
+>
+> To achieve this fast path linux optee driver and mmc driver needs some work and finally it will need RPMB driver which you posted.
+>
+> Please let me know what's your plan on this.
+>
+> [1] https://optee.readthedocs.io/en/latest/architecture/secure_storage.html
+>
+> Best Regards,
+> Shyam
+>
