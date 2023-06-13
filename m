@@ -2,73 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A348D72C6CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:01:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACB4272D81D
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 05:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236794AbjFLOBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 10:01:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
+        id S238132AbjFMDXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 23:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236177AbjFLOA5 (ORCPT
+        with ESMTP id S230039AbjFMDXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 10:00:57 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B603310E6
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 07:00:54 -0700 (PDT)
-Received: from kwepemm600012.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QftcS0cSHzTl2s;
-        Mon, 12 Jun 2023 22:00:24 +0800 (CST)
-Received: from build.huawei.com (10.175.101.6) by
- kwepemm600012.china.huawei.com (7.193.23.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 12 Jun 2023 22:00:51 +0800
-From:   Wenchao Hao <haowenchao2@huawei.com>
-To:     Jan Kara <jack@suse.com>, <linux-kernel@vger.kernel.org>
-CC:     <linfeilong@huawei.com>, Wenchao Hao <haowenchao2@huawei.com>
-Subject: [PATCH 2/2] udf:check if buffer head's data when getting lvidiu
-Date:   Tue, 13 Jun 2023 11:22:54 +0800
-Message-ID: <20230613032254.1235752-3-haowenchao2@huawei.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20230613032254.1235752-1-haowenchao2@huawei.com>
-References: <20230613032254.1235752-1-haowenchao2@huawei.com>
+        Mon, 12 Jun 2023 23:23:38 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5001E124;
+        Mon, 12 Jun 2023 20:23:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=ls/2w+Jbt2FMuacLpY+NEyKD+0PIo2mAMCryynvWMs4=; b=OBarqweErD8npb6BhQRa/2350C
+        KyvzVG56P+TAu5O87pWw7Zyivbc8vIaRzirQ1vh461PsFFwJgqeB8LPFJisO7s3GWarZVacvqo5rK
+        40c+ypye9+lUkZMuSTQ/tCAbHt2Lnp2LRxMSD1aZgiwJ4js9dVmNT1teX4yQSRGLgJJw=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1q8ucv-00FfB4-8o; Tue, 13 Jun 2023 05:23:25 +0200
+Date:   Tue, 13 Jun 2023 05:23:25 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        SkyLake Huang <SkyLake.Huang@mediatek.com>,
+        Qingfang Deng <dqfext@gmail.com>
+Subject: Re: [PATCH net-next] net: phy: mediatek-ge-soc: initialize MT7988
+ PHY LEDs default state
+Message-ID: <922466fd-bb14-4b6e-ad40-55b4249c571f@lunn.ch>
+References: <ZIfT7UUzj74NyzL_@makrotopia.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600012.china.huawei.com (7.193.23.74)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZIfT7UUzj74NyzL_@makrotopia.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We can not always assume udf_sb_info->s_lvid_bh's data is valid. If the
-data is corrupted, we would get an incorrect offset and cause the
-following code access an illegal address.
+> +/* Registers on MDIO_MMD_VEND2 */
+> +#define MTK_PHY_LED0_ON_CTRL			0x24
+> +#define MTK_PHY_LED1_ON_CTRL			0x26
+> +#define   MTK_PHY_LED_ON_MASK			GENMASK(6, 0)
+> +#define   MTK_PHY_LED_ON_LINK1000		BIT(0)
+> +#define   MTK_PHY_LED_ON_LINK100		BIT(1)
+> +#define   MTK_PHY_LED_ON_LINK10			BIT(2)
+> +#define   MTK_PHY_LED_ON_LINKDOWN		BIT(3)
+> +#define   MTK_PHY_LED_ON_FDX			BIT(4) /* Full duplex */
+> +#define   MTK_PHY_LED_ON_HDX			BIT(5) /* Half duplex */
+> +#define   MTK_PHY_LED_FORCE_ON			BIT(6)
+> +#define   MTK_PHY_LED_POLARITY			BIT(14)
+> +#define   MTK_PHY_LED_ENABLE			BIT(15)
 
-Signed-off-by: Wenchao Hao <haowenchao2@huawei.com>
----
- fs/udf/super.c | 2 ++
- 1 file changed, 2 insertions(+)
+Would enable being clear result in the LED being off? You can force it
+on with MTK_PHY_LED_FORCE_ON | MTK_PHY_LED_ENABLE? That gives you
+enough to allow software control of the LED. You can then implement
+the led_brightness_set() op, if you want.
 
-diff --git a/fs/udf/super.c b/fs/udf/super.c
-index 6304e3c5c3d9..71481b60c871 100644
---- a/fs/udf/super.c
-+++ b/fs/udf/super.c
-@@ -114,6 +114,8 @@ struct logicalVolIntegrityDescImpUse *udf_sb_lvidiu(struct super_block *sb)
- 
- 	if (!UDF_SB(sb)->s_lvid_bh)
- 		return NULL;
-+	if (!udf_check_tagged_bh(sb, UDF_SB(sb)->s_lvid_bh))
-+		return NULL;
- 	lvid = (struct logicalVolIntegrityDesc *)UDF_SB(sb)->s_lvid_bh->b_data;
- 	partnum = le32_to_cpu(lvid->numOfPartitions);
- 	/* The offset is to skip freeSpaceTable and sizeTable arrays */
--- 
-2.35.3
+I assume the above are specific to LED0? It would be good to include
+the 0 in the name, to make that clear.
 
+> +
+> +#define MTK_PHY_LED0_BLINK_CTRL			0x25
+> +#define MTK_PHY_LED1_BLINK_CTRL			0x27
+> +#define   MTK_PHY_LED_1000TX			BIT(0)
+
+So do this mean LINK1000 + blink on TX ?
+
+> +#define   MTK_PHY_LED_1000RX			BIT(1)
+
+So do this mean LINK1000 + blink on RX ?
+
+It would be good to add a comment, because at some point it is likely
+somebody will want to offload the ledtrig-netdev and will need to
+understand what these really do.
+
+> +#define   MTK_PHY_LED_100TX			BIT(2)
+> +#define   MTK_PHY_LED_100RX			BIT(3)
+> +#define   MTK_PHY_LED_10TX			BIT(4)
+> +#define   MTK_PHY_LED_10RX			BIT(5)
+> +#define   MTK_PHY_LED_COLLISION			BIT(6)
+> +#define   MTK_PHY_LED_RX_CRC_ERR		BIT(7)
+> +#define   MTK_PHY_LED_RX_IDLE_ERR		BIT(8)
+> +#define   MTK_PHY_LED_FORCE_BLINK		BIT(9)
+
+Is there a way to force the LED1 off/on?  I guess not setting any of
+these bits will force it off.
+
+So the polarity and enable bits apply to LED1? 
+
+> +
+>  #define MTK_PHY_RG_BG_RASEL			0x115
+>  #define   MTK_PHY_RG_BG_RASEL_MASK		GENMASK(2, 0)
+>  
+> +/* Register in boottrap syscon defining the initial state of the 4 PHY LEDs */
+
+Should this be bootstrap? You had the same in the commit message.
+
+Also, i'm confused. Here you say 4 PHY LEDs, yet
+
+> +#define MTK_PHY_LED0_ON_CTRL			0x24
+> +#define MTK_PHY_LED1_ON_CTRL			0x26
+
+suggests there are two LEDs?
+
+Should these actually be :
+
+> +#define MTK_PHY_LED_ON_CTRL1			0x24
+> +#define MTK_PHY_LED_ON_CTRL2			0x26
+
+meaning each LED has two control registers?
+
+MTK_PHY_LED_ON_LINK1000 should actually be MTK_PHY_LED_ON_CTRL1_LINK1000 ?
+MTK_PHY_LED_100TX should be MTK_PHY_LED_CTRL2_100TX ?
+
+I find it good practice to ensure a bit value #define includes enough
+information in its name to clear indicate what register it applies to.
+
+> +static int mt798x_phy_setup_led(struct phy_device *phydev, bool inverted)
+> +{
+> +	struct pinctrl *pinctrl;
+> +	const u16 led_on_ctrl_defaults = MTK_PHY_LED_ENABLE      |
+> +					 MTK_PHY_LED_ON_LINK1000 |
+> +					 MTK_PHY_LED_ON_LINK100  |
+> +					 MTK_PHY_LED_ON_LINK10;
+> +	const u16 led_blink_defaults = MTK_PHY_LED_1000TX |
+> +				       MTK_PHY_LED_1000RX |
+> +				       MTK_PHY_LED_100TX  |
+> +				       MTK_PHY_LED_100RX  |
+> +				       MTK_PHY_LED_10TX   |
+> +				       MTK_PHY_LED_10RX;
+> +
+> +	phy_write_mmd(phydev, MDIO_MMD_VEND2, MTK_PHY_LED0_ON_CTRL,
+> +		      led_on_ctrl_defaults ^
+> +		      (inverted ? MTK_PHY_LED_POLARITY : 0));
+> +
+> +	phy_write_mmd(phydev, MDIO_MMD_VEND2, MTK_PHY_LED1_ON_CTRL,
+> +		      led_on_ctrl_defaults);
+> +
+
+Now i'm even more confused. Both have the same value, expect the
+polarity bit?
+
+Please add a lot of comments about how this hardware actually works!
+
+> +	phy_write_mmd(phydev, MDIO_MMD_VEND2, MTK_PHY_LED0_BLINK_CTRL,
+> +		      led_blink_defaults);
+> +
+> +	phy_write_mmd(phydev, MDIO_MMD_VEND2, MTK_PHY_LED1_BLINK_CTRL,
+> +		      led_blink_defaults);
+> +
+> +	pinctrl = devm_pinctrl_get_select(&phydev->mdio.dev, "gbe-led");
+
+This is also very unusual. At minimum, it needs a comment as to why it
+is needed. But more likely, because no other driver in driver/net does
+this, it makes me think it is wrong.
+
+> +static bool mt7988_phy_get_boottrap_polarity(struct phy_device *phydev)
+> +{
+> +	struct mtk_socphy_shared *priv = phydev->shared->priv;
+> +
+> +	if (priv->boottrap & BIT(phydev->mdio.addr))
+> +		return false;
+
+This can be simplified to
+
+	return !priv->boottrap & BIT(phydev->mdio.addr);
+
+	Andrew
