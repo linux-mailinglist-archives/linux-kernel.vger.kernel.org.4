@@ -2,70 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5AC472EB99
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:08:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0037772EBA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:10:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232278AbjFMTIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 15:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52756 "EHLO
+        id S234961AbjFMTI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 15:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232764AbjFMTID (ORCPT
+        with ESMTP id S232679AbjFMTIW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 15:08:03 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007191BEA
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:07:59 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id 98e67ed59e1d1-25dbcf8ad37so59537a91.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:07:59 -0700 (PDT)
+        Tue, 13 Jun 2023 15:08:22 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF4E199C
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:08:19 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f6454a21a9so7396769e87.3
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:08:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686683279; x=1689275279;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ct/zCCuATaNWjKBHPNvd1UYStLS589z7ctJXd+vLMd0=;
-        b=LIZ+nGa1lsYeKo+vmN3HOVpp7WlP7vCX1VRj5ai1od0ZGNsZHTg3CwKFvY+vj9eMPI
-         OE5bAkwBXgHAteYRd2QcUSeU7gP21lkHp2dKYCabOO8dY/4GDyhkDNSvQNwni9ycxVqB
-         AUfZ5AiAGrKcUlCVIYad/m3fNHkCJ2V/AaI3wquli7yIbTT1/TzzAWXncmZHmcVYozWW
-         A63B2Ih8NWk/owpcQnNKX9ZLocgZmR2KnaxvYcibnhfSuNk51jEny5EzD0zSyniayGEK
-         Lxcj9GfeQygM26nJILvkJTqOS2CxSQU8Pffa6hkASsUZ6HCYKGK0Vt37yfYhBXP5V10C
-         tz9Q==
+        d=linaro.org; s=google; t=1686683298; x=1689275298;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=F+tm3+Pdm0PaXfiZEzyRYLx0bL/2PcssnIDcJqEcG00=;
+        b=pXvtSrfvSZFtqXr7gBQNbwO93crNLRG5kDvQKUb9i07WRGV8cuKSZdeN2AHPfkSYEV
+         s9Kj4TDyZ6xACpGIQJynV4qJHfQP8x2u9sRicGgoFESj5RceIKeBfElicevTTgiNi7RL
+         9QVYc+lVnCKM1rsbq+3A8n10G22u07GDwcLiscU3lmCZ6y7WPLfCyTgRAVZA4pyyw5Yn
+         JKU8Q+vKxm0IHBX04DCwxktI6OGATGIu3ihwztTO+oNXjo8vTM8yorfcSd8ysJEEaPSj
+         +opeKcUuZUOr+FiHdS+JpkxNfEiaACOn71VVmdwpa4d0A54Sj9plaNCeEqJ1uAKxPOTX
+         1XpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686683279; x=1689275279;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ct/zCCuATaNWjKBHPNvd1UYStLS589z7ctJXd+vLMd0=;
-        b=cH3ufooMlOdR44l3lJFTdwJmGhooc2orDeEMGxy1oIK5yDgYiUt5b4ydA1YaRJ4xtS
-         VPr97kUTc/LWuwKn0svwgdJhN27b5Ly/F0mdHkWRh+8TANknntNsROytCWNDTjg0wRzJ
-         GVnL6M0RheLICqRoDFTo+QbTaT/YqH+h1GSmNW+nkDBG1Cwc42nmjCNwjawLbA0kwuLg
-         9FLklhr+lWzMYrXZJAAs2B+/IKdmKbzuyJrjR6R5Oug5wob4lvemOVevoXmfL4yqUUDd
-         H7TNJEX5lZmO+Ctsj2fFe7jIiAKN8RaO8MxbcsgjALPNFZYKiYf3VKTD/MU+2p0if1TG
-         b27Q==
-X-Gm-Message-State: AC+VfDxeoECPNeUWlGsHbQyll3HnNe8aHyvHJgnnfgROPbKMsrZZ02uy
-        YcrGf5P3u2wrERUK2abth3NztBfPdKk=
-X-Google-Smtp-Source: ACHHUZ6d1BOYCoi6GCk7T5M7Q6vTFZUS5zB71Lz2smCCIMdH+Mas5IRfBTx9AjJBjbb5YRQpkgbhrC2TMTA=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:c297:b0:25b:cb86:b13e with SMTP id
- f23-20020a17090ac29700b0025bcb86b13emr1434508pjt.2.1686683279301; Tue, 13 Jun
- 2023 12:07:59 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 12:07:57 -0700
-In-Reply-To: <20230608070016.f3dz6dhvdkxsomdb@linux.intel.com>
-Mime-Version: 1.0
-References: <20230602011518.787006-1-seanjc@google.com> <20230602011518.787006-2-seanjc@google.com>
- <20230607073728.vggwcoylibj3cp6s@linux.intel.com> <ZICUbIF2+Cvbb9GM@google.com>
- <20230607172243.c2bkw43hcet4sfnb@linux.intel.com> <ZIDENf2vzwUjzcl2@google.com>
- <20230608070016.f3dz6dhvdkxsomdb@linux.intel.com>
-Message-ID: <ZIi+jWxYg/UhKpr1@google.com>
-Subject: Re: [PATCH 1/3] KVM: VMX: Retry APIC-access page reload if
- invalidation is in-progress
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yu Zhang <yu.c.zhang@linux.intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Robin Murphy <robin.murphy@arm.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        d=1e100.net; s=20221208; t=1686683298; x=1689275298;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=F+tm3+Pdm0PaXfiZEzyRYLx0bL/2PcssnIDcJqEcG00=;
+        b=Sxr10UMCObqSQ5kj0segzIoRBqs2+Xdh8TesZaqD8g86QVkvmMtQ0KM5T1xbek3kqV
+         1CEyP+moQj8udo1PQTcYgjxQ9GphRizDpCqckHP1J5IqWScDOVkLbHSNlTfyOPhj8fIn
+         /+49QlsjSsxbP0daNPKhuRQISAedvSOHlEDVFLMGQzxPq0gjJ5ALOqF4GXjxdAvrQZIa
+         laBP26556O5kIP6FslDEkYaJ7/AbM04Rqwxj2GMjpquVBvEQMCu3nNyA6whoyH5IdvQ3
+         xjhheQ5nlmfnWlSuGRts/9LVmLOay+VxUQOjbvMt1mZgjGfLHPmL4fEzG3liYpZxIqxl
+         zLQg==
+X-Gm-Message-State: AC+VfDxC1zNuBH01PfkWO7LSFp3lpccTMahoS5pq7cN59lnDJjJsW1fR
+        9qsLqpRGVOJ1qXkkrphAZeXLjw==
+X-Google-Smtp-Source: ACHHUZ5hlHejaHU5jlNuZeMW5cevHnRvyHVwiIHOuhObHOVK4r0Ifh+Y4UFnRCtLYlUAMdVar7JMhg==
+X-Received: by 2002:a19:e059:0:b0:4d5:8306:4e9a with SMTP id g25-20020a19e059000000b004d583064e9amr6458878lfj.46.1686683298079;
+        Tue, 13 Jun 2023 12:08:18 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id m5-20020a056512014500b004f73eac0308sm1148576lfo.183.2023.06.13.12.08.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 12:08:17 -0700 (PDT)
+Message-ID: <cf515539-9a60-c3ae-18af-463651651a27@linaro.org>
+Date:   Tue, 13 Jun 2023 21:08:14 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 26/26] arm64: dts: qcom: sa8775p-ride: enable ethernet0
+Content-Language: en-US
+To:     Bartosz Golaszewski <brgl@bgdev.pl>, Vinod Koul <vkoul@kernel.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>
+Cc:     netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230612092355.87937-1-brgl@bgdev.pl>
+ <20230612092355.87937-27-brgl@bgdev.pl>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230612092355.87937-27-brgl@bgdev.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,52 +94,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023, Yu Zhang wrote:
-> > 
-> > Flushing when KVM zaps SPTEs is definitely necessary.  But the flush in
-> > vmx_set_apic_access_page_addr() *should* be redundant.
-> > 
-> > > Could we try to return false in kvm_unmap_gfn_range() to indicate no more
-> > > flush is needed, if the range to be unmapped falls within guest APIC base,
-> > > and leaving the TLB invalidation work to vmx_set_apic_access_page_addr()?
-> > 
-> > No, because vmx_flush_tlb_current(), a.k.a. KVM_REQ_TLB_FLUSH_CURRENT, flushes
-> > only the current root, i.e. on the current EP4TA.  kvm_unmap_gfn_range() isn't
-> > tied to a single vCPU and so needs to flush all roots.  We could in theory more
-> > precisely track which roots needs to be flushed, but in practice it's highly
-> > unlikely to matter as there is typically only one "main" root when TDP (EPT) is
-> > in use.  In other words, KVM could avoid unnecessarily flushing entries for other
-> > roots, but it would incur non-trivial complexity, and the probability of the
-> > precise flushing having a measurable impact on guest performance is quite low, at
-> > least outside of nested scenarios.
+
+
+On 12.06.2023 11:23, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
-> Well, I can understand the invalidation shall be performed for both current EP4TA,
-> and the nested EP4TA(EPT02) when host retries to reclaim a normal page, because L1
-> may assign this page to L2. But for APIC base address, will L1 map this address to
-> L2?
+> Enable the first 1Gb ethernet port on sa8775p-ride development board.
+> 
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
+I don't know a whole lot about this, but it passes bindings checks
+and looks good overall, so:
 
-L1 can do whatever it wants.  E.g. L1 could passthrough its APIC to L2, in which
-case, yes, L1 will map its APIC base into L2.  KVM (as L0) however doesn't support
-mapping the APIC-access page into L2.  KVM *could* support utilizing APICv to
-accelerate L2 when L1 has done a full APIC passthrough, but AFAIK no one has
-requested such support.  Functionally, an APIC passthrough setup for L1=>L2 will
-work, but KVM will trap and emulate APIC accesses from L2 instead of utilizing
-hardware acceleration.
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-More commonly, L1 will use APICv for L2 and thus have an APIC-access page for L2,
-and KVM will map _that_ page into L2.
-
-> Also, what if the virtualize APIC access is to be supported in L2,
-
-As above, KVM never maps the APIC-access page that KVM (as L0) manages into L2.
-
-> and the backing page is being reclaimed in L0? I saw
-> nested_get_vmcs12_pages() will check vmcs12 and set the APIC access address
-> in VMCS02, but not sure if this routine will be triggered by the mmu
-> notifier...
-
-Pages from vmcs12 that are referenced by physical address in the VMCS are pinned
-(where "pinned" means KVM holds a reference to the page) by kvm_vcpu_map().  I.e.
-the page will not be migrated, and if userspace unmaps the page, userspace might
-break its VM, but that's true for any guest memory that userspace unexpectedly
-unmaps, and there won't be any no use-after-free issues.
+Konrad
+>  arch/arm64/boot/dts/qcom/sa8775p-ride.dts | 89 +++++++++++++++++++++++
+>  1 file changed, 89 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
+> index dbd9553aa5c7..13508271bca8 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
+> +++ b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
+> @@ -261,6 +261,95 @@ vreg_l8e: ldo8 {
+>  	};
+>  };
+>  
+> +&ethernet0 {
+> +	phy-mode = "sgmii";
+> +	phy-handle = <&sgmii_phy>;
+> +	phy-supply = <&vreg_l5a>;
+> +
+> +	pinctrl-0 = <&ethernet0_default>;
+> +	pinctrl-names = "default";
+> +
+> +	snps,mtl-rx-config = <&mtl_rx_setup>;
+> +	snps,mtl-tx-config = <&mtl_tx_setup>;
+> +	snps,ps-speed = <1000>;
+> +
+> +	status = "okay";
+> +
+> +	mdio {
+> +		compatible = "snps,dwmac-mdio";
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		reset-gpios = <&pmm8654au_2_gpios 8 GPIO_ACTIVE_LOW>;
+> +		reset-delay-us = <11000>;
+> +		reset-post-delay-us = <70000>;
+> +
+> +		sgmii_phy: phy@8 {
+> +			reg = <0x8>;
+> +			device_type = "ethernet-phy";
+> +		};
+> +	};
+> +
+> +	mtl_rx_setup: rx-queues-config {
+> +		snps,rx-queues-to-use = <4>;
+> +		snps,rx-sched-sp;
+> +
+> +		queue0 {
+> +			snps,dcb-algorithm;
+> +			snps,map-to-dma-channel = <0x0>;
+> +			snps,route-up;
+> +			snps,priority = <0x1>;
+> +		};
+> +
+> +		queue1 {
+> +			snps,dcb-algorithm;
+> +			snps,map-to-dma-channel = <0x1>;
+> +			snps,route-ptp;
+> +		};
+> +
+> +		queue2 {
+> +			snps,avb-algorithm;
+> +			snps,map-to-dma-channel = <0x2>;
+> +			snps,route-avcp;
+> +		};
+> +
+> +		queue3 {
+> +			snps,avb-algorithm;
+> +			snps,map-to-dma-channel = <0x3>;
+> +			snps,priority = <0xc>;
+> +		};
+> +	};
+> +
+> +	mtl_tx_setup: tx-queues-config {
+> +		snps,tx-queues-to-use = <4>;
+> +		snps,tx-sched-sp;
+> +
+> +		queue0 {
+> +			snps,dcb-algorithm;
+> +		};
+> +
+> +		queue1 {
+> +			snps,dcb-algorithm;
+> +		};
+> +
+> +		queue2 {
+> +			snps,avb-algorithm;
+> +			snps,send_slope = <0x1000>;
+> +			snps,idle_slope = <0x1000>;
+> +			snps,high_credit = <0x3e800>;
+> +			snps,low_credit = <0xffc18000>;
+> +		};
+> +
+> +		queue3 {
+> +			snps,avb-algorithm;
+> +			snps,send_slope = <0x1000>;
+> +			snps,idle_slope = <0x1000>;
+> +			snps,high_credit = <0x3e800>;
+> +			snps,low_credit = <0xffc18000>;
+> +		};
+> +	};
+> +};
+> +
+>  &i2c11 {
+>  	clock-frequency = <400000>;
+>  	pinctrl-0 = <&qup_i2c11_default>;
