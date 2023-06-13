@@ -2,168 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE04772E010
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 12:47:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8547672E01A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 12:50:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242046AbjFMKrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 06:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
+        id S240111AbjFMKu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 06:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242030AbjFMKrw (ORCPT
+        with ESMTP id S234870AbjFMKuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 06:47:52 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE53F1AD;
-        Tue, 13 Jun 2023 03:47:50 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Tue, 13 Jun 2023 06:50:24 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675F2E53;
+        Tue, 13 Jun 2023 03:50:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=t+702YjolGkCyiHa0l6OM91j5GcnA1zXDcpSBa22PVM=; b=cq3oZ+2UUoBW6Ayud8FUtqQcgF
+        8Vk9zP7UFBdd1d5LBwQwn2AkLSvaMfko2yWiv9XTV3anXy7DAOSeZQkgyVfeGKfahXGD+fkz+Tt9x
+        z2YrKk3GWFF7yvNhzjfGwd7uC2o/8XbL6zOGRyRohwqKELaQOpfHoEiGSrSNfQnPksAkvlXI+zUf2
+        dj9Sqph+JWkhUnsUxpvfxI6kDqHqJh5mnoP7BZzMEauf4WABiQTm/JqQV+CwrLy2ZqsJStDi7WZKS
+        ntMaSJ9nXSXZMcN0Xi0oz9dUtpl8UdLwensB313mHVTtQ2munRbB6PSLvGJ7IFwV5LUI3Ef3epYcJ
+        AVXfP0Aw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q91bK-009L0E-1d;
+        Tue, 13 Jun 2023 10:50:14 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 48AA72213E;
-        Tue, 13 Jun 2023 10:47:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1686653269; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=c3fhYdVUr0tRLaaukczpen+StPe7TUnaAnjtsiCIZ2s=;
-        b=tdqBaQl0pM7QXRNqnNkkV7fRdFCZ3I4rbdThW7TEZZdnmPFQb1oVlDr7EHK3gWtsdfD4e2
-        MtKY75Qm/uLPgIZOgYTkJ2OlaQKhj4BNTdGA2Knvvgd72iKiazhq/IF1jKwgyk8PIRb7OB
-        /3jSZLCvym/lzkd/r32KuLer7mbzDds=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1686653269;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=c3fhYdVUr0tRLaaukczpen+StPe7TUnaAnjtsiCIZ2s=;
-        b=yyjG8vmaT01YVpsvIlIprlvIsyvd8WnCZbFEY0qVJByyZzlM558Aj+/peI35jk6oYhyrgf
-        s4FlWVWmtCGS1kDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F0CE313483;
-        Tue, 13 Jun 2023 10:47:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 7M8HOlRJiGTGfAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Tue, 13 Jun 2023 10:47:48 +0000
-Message-ID: <9a390f13-4ad3-cddc-64f7-8a1737965242@suse.de>
-Date:   Tue, 13 Jun 2023 12:47:48 +0200
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 73AFC300322;
+        Tue, 13 Jun 2023 12:50:13 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 49B8524556031; Tue, 13 Jun 2023 12:50:13 +0200 (CEST)
+Date:   Tue, 13 Jun 2023 12:50:13 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     torvalds@linux-foundation.org, keescook@chromium.org,
+        pbonzini@redhat.com, masahiroy@kernel.org, nathan@kernel.org,
+        ndesaulniers@google.com, nicolas@fjasle.eu,
+        catalin.marinas@arm.com, will@kernel.org, vkoul@kernel.org,
+        trix@redhat.com, ojeda@kernel.org, mingo@redhat.com,
+        longman@redhat.com, boqun.feng@gmail.com, dennis@kernel.org,
+        tj@kernel.org, cl@linux.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
+        42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
+        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
+        john.johansen@canonical.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
+        rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
+        tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
+        luc.vanoostenryck@gmail.com
+Subject: Re: [PATCH v3 46/57] perf: Simplify pmu_dev_alloc()
+Message-ID: <20230613105013.GT4253@hirez.programming.kicks-ass.net>
+References: <20230612090713.652690195@infradead.org>
+ <20230612093540.850386350@infradead.org>
+ <20230612094400.GG4253@hirez.programming.kicks-ass.net>
+ <2023061226-grumpily-entire-f06a@gregkh>
+ <20230612141322.GA83892@hirez.programming.kicks-ass.net>
+ <2023061217-mutable-curry-c2ac@gregkh>
+ <20230613073415.GP4253@hirez.programming.kicks-ass.net>
+ <2023061333-imposing-shortly-6803@gregkh>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 01/38] backlight/bd6107: Compare against struct
- fb_info.device
-Content-Language: en-US
-To:     Daniel Thompson <daniel.thompson@linaro.org>
-Cc:     daniel@ffwll.ch, javierm@redhat.com, sam@ravnborg.org,
-        deller@gmx.de, geert+renesas@glider.be, lee@kernel.org,
-        jingoohan1@gmail.com, dan.carpenter@linaro.org,
-        michael.j.ruhl@intel.com, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-sh@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        stable@vger.kernel.org
-References: <20230612141352.29939-1-tzimmermann@suse.de>
- <20230612141352.29939-2-tzimmermann@suse.de>
- <20230613103730.GA169438@aspen.lan>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230613103730.GA169438@aspen.lan>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------Bih0PagUpBHQXHTR42b2H5ZP"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2023061333-imposing-shortly-6803@gregkh>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------Bih0PagUpBHQXHTR42b2H5ZP
-Content-Type: multipart/mixed; boundary="------------kN8YWHBXTOAX040efj8X6bTV";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Daniel Thompson <daniel.thompson@linaro.org>
-Cc: daniel@ffwll.ch, javierm@redhat.com, sam@ravnborg.org, deller@gmx.de,
- geert+renesas@glider.be, lee@kernel.org, jingoohan1@gmail.com,
- dan.carpenter@linaro.org, michael.j.ruhl@intel.com,
- linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-sh@vger.kernel.org, linux-omap@vger.kernel.org,
- linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
- Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
- stable@vger.kernel.org
-Message-ID: <9a390f13-4ad3-cddc-64f7-8a1737965242@suse.de>
-Subject: Re: [PATCH v2 01/38] backlight/bd6107: Compare against struct
- fb_info.device
-References: <20230612141352.29939-1-tzimmermann@suse.de>
- <20230612141352.29939-2-tzimmermann@suse.de>
- <20230613103730.GA169438@aspen.lan>
-In-Reply-To: <20230613103730.GA169438@aspen.lan>
+On Tue, Jun 13, 2023 at 09:50:28AM +0200, Greg KH wrote:
 
---------------kN8YWHBXTOAX040efj8X6bTV
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+> > DEFINE_FRERE(class_destroy, struct class *, if (!IS_ERR_OR_NULL(_T)) class_destroy(_T))
+> 
+> Nit, as class_destroy() handles this type of check within it, it can be
+> even simpler:
+> 	DEFINE_FREE(class_destroy, struct class *, class_destroy(_T));
 
-SGkNCg0KQW0gMTMuMDYuMjMgdW0gMTI6Mzcgc2NocmllYiBEYW5pZWwgVGhvbXBzb246DQo+
-IE9uIE1vbiwgSnVuIDEyLCAyMDIzIGF0IDA0OjA3OjM5UE0gKzAyMDAsIFRob21hcyBaaW1t
-ZXJtYW5uIHdyb3RlOg0KPj4gU3RydWN0IGJkNjEwN19wbGF0Zm9ybV9kYXRhIHJlZmVycyB0
-byBhIHBsYXRmb3JtIGRldmljZSB3aXRoaW4NCj4+IHRoZSBMaW51eCBkZXZpY2UgaGllcmFy
-Y2h5LiBUaGUgdGVzdCBpbiBiZDYxMDdfYmFja2xpZ2h0X2NoZWNrX2ZiKCkNCj4+IGNvbXBh
-cmVzIGl0IGFnYWluc3QgdGhlIGZiZGV2IGRldmljZSBpbiBzdHJ1Y3QgZmJfaW5mby5kZXYs
-IHdoaWNoDQo+PiBpcyBkaWZmZXJlbnQuIEZpeCB0aGUgdGVzdCBieSBjb21wYXJpbmcgdG8g
-c3RydWN0IGZiX2luZm8uZGV2aWNlLg0KPj4NCj4+IEZpeGVzIGEgYnVnIGluIHRoZSBiYWNr
-bGlnaHQgZHJpdmVyIGFuZCBwcmVwYXJlcyBmYmRldiBmb3IgbWFraW5nDQo+PiBzdHJ1Y3Qg
-ZmJfaW5mby5kZXYgb3B0aW9uYWwuDQo+Pg0KPj4gdjI6DQo+PiAJKiBtb3ZlIHJlbmFtZXMg
-aW50byBzZXBhcmF0ZSBwYXRjaCAoSmF2aWVyLCBTYW0sIE1pY2hhZWwpDQo+Pg0KPj4gRml4
-ZXM6IDY3YjQzZTU5MDQxNSAoImJhY2tsaWdodDogQWRkIFJPSE0gQkQ2MTA3IGJhY2tsaWdo
-dCBkcml2ZXIiKQ0KPj4gU2lnbmVkLW9mZi1ieTogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1t
-ZXJtYW5uQHN1c2UuZGU+DQo+PiBDYzogTGF1cmVudCBQaW5jaGFydCA8bGF1cmVudC5waW5j
-aGFydCtyZW5lc2FzQGlkZWFzb25ib2FyZC5jb20+DQo+PiBDYzogTGVlIEpvbmVzIDxsZWVA
-a2VybmVsLm9yZz4NCj4+IENjOiBEYW5pZWwgVGhvbXBzb24gPGRhbmllbC50aG9tcHNvbkBs
-aW5hcm8ub3JnPg0KPj4gQ2M6IEppbmdvbyBIYW4gPGppbmdvb2hhbjFAZ21haWwuY29tPg0K
-Pj4gQ2M6IGRyaS1kZXZlbEBsaXN0cy5mcmVlZGVza3RvcC5vcmcNCj4+IENjOiA8c3RhYmxl
-QHZnZXIua2VybmVsLm9yZz4gIyB2My4xMisNCj4+IFJldmlld2VkLWJ5OiBKYXZpZXIgTWFy
-dGluZXogQ2FuaWxsYXMgPGphdmllcm1AcmVkaGF0LmNvbT4NCj4gDQo+IFJldmlld2VkLWJ5
-OiBEYW5pZWwgVGhvbXBzb24gPGRhbmllbC50aG9tcHNvbkBsaW5hcm8ub3JnPg0KDQpUaGFu
-a3MgZm9yIGdvaW5nIHRocm91Z2ggdGhlIGJhY2tsaWdodCBwYXRjaGVzLg0KDQo+IA0KPiAN
-Cj4gRGFuaWVsLg0KPiANCj4gUFMgUGxlYXNlIGRvbid0IHRyZWF0IHRoaXMgYXMgYW4gQWNr
-ZWQtYnksIGlmIHlvdSB3YW50IHRvIGxhbmQgdGhpcw0KPiAgICAgcGF0Y2hzZXQgdmlhIGEg
-c2luZ2xlIHRyZWUgcGxlYXNlIGNvb3JkaW5hdGUgd2l0aCBMZWUgSm9uZXMhDQoNCkknZCBs
-aWtlIHRvIG1lcmdlIHRoZW0gdmlhIGRybS1taXNjLW5leHQgdG9nZXRoZXIgd2l0aCB0aGUg
-cmVzdCBvZiB0aGUgDQpwYXRjaHNldC4gSXQncyBub3QgRFJNLCBidXQgZmJkZXYgcGF0Y2hl
-cyBvZnRlbiBnbyB0aHJvdWdoIHRoYXQgdHJlZSANCnF1aXRlIG9mdGVuLg0KDQpCZXN0IHJl
-Z2FyZHMNClRob21hcw0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2
-ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCkZy
-YW5rZW5zdHJhc3NlIDE0NiwgOTA0NjEgTnVlcm5iZXJnLCBHZXJtYW55DQpHRjogSXZvIFRv
-dGV2LCBBbmRyZXcgTXllcnMsIEFuZHJldyBNY0RvbmFsZCwgQm91ZGllbiBNb2VybWFuDQpI
-UkIgMzY4MDkgKEFHIE51ZXJuYmVyZykNCg==
+Note that that means there will be an unconditional call to
+class_destroy() in the success path. As long as that is never a hot-path
+this should be fine I suppose, but it is something Linus pointed out
+earlier.
 
---------------kN8YWHBXTOAX040efj8X6bTV--
+> or would that be:
+> 	DEFINE_CLASS(class_destroy, struct class *, class_destroy(_T));
 
---------------Bih0PagUpBHQXHTR42b2H5ZP
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Has a slightly different syntax per the comment I did do write :-)
 
------BEGIN PGP SIGNATURE-----
+DEFINE_CLASS(class, struct class *,
+	     if (!IS_ERR_OR_NULL(_T)) class_destroy(_T),
+	     class_create(cname), const char *name)
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmSISVQFAwAAAAAACgkQlh/E3EQov+DI
-iQ/7BKHWYUoMmnyorQ8yHtBI1XVxUNzbBJ0OGTBT4b82riNpqOq9KfyBGnmOJcEey66W74EmBU5V
-L4vlnw9VTD4BVQsw/iwIArnUrpazJ+GmYABhFM6I3BR8ZUwY61HH8PX8NeMje/nG4Md9n7ugOyzt
-mQerA5bh9exoD7hytk3CuDeEwpVfk+AvMOovuUwuUsKXOcK+s6oQiRfGSd4q+DrKQbD04JGy1IBf
-3ZR9s0dSIuBzZFwhqr+fUcAuuhZSxq6Fpd5okO6mhDlX+G6eeKuFaeL4hg51TJQe2wPokqZjatnG
-8qG9wA5+0uBdaDW620DSVpyUdAZZAKs5DLmKsM80SyBseZSXddy7Zo3958kbbl7pfcP3j3hlJiUI
-fMXMUY6y9syT/DVUXRVjiYb5qX7tO4W+gi8gBSNkdC99c4JwvhWFiobs4Lru0iM4ePC3LNCnt7Ma
-QZ9jbQlvu16Ke+9EIoA0bIxL0181S+19JHBftQzBAgbmXnB7pGZa9UIng8t0tGaLXMClLxmXC+lD
-+ryZgyLhc76mKMxQWy2CbJyM6Aynyq0U0P5DLsMkOBGDmqpLg5nQw6VC0INkEKnzIBq0cRTFEwry
-UwPWiBj1XzooWK/LiDPxdXqHFeibjHLzSCyxrdASPCFlhiw1A7SZWwYwsaP8+pS3KeM80gZPBcKq
-cwE=
-=cAD4
------END PGP SIGNATURE-----
+static int __init misc_init(void)
+{
+	struct proc_dir_entry *ret __free(remove_proc) =
+		proc_create_seq("misc", 0, NULL, &misc_seq_ops);
 
---------------Bih0PagUpBHQXHTR42b2H5ZP--
+	CLASS(class, c)("misc");
+	if (IS_ERR(c))
+		return PTR_ERR(c);
+
+	if (register_chrdev(MISC_MAJOR, "misc", &misc_fops))
+		return -EIO;
+
+	c->devnode = misc_devnode;
+
+	misc_class = no_free_ptr(c);
+	no_free_ptr(ret);
+
+	return 0;
+}
+
+The no_free_ptr() should work with CLASS(), but I'm not sure that's
+recommended, lots of un-explored terretory here :-)
+
+Similarly I suppose you could do something like:
+
+DEFINE_CLASS(proc_dir, struct proc_dir_entry *,
+	     proc_remove(_T), proc_create(pname, mode, parent, proc_ops),
+	     const char *pname, umode_t mode, struct proc_dir_entry *parent,
+	     const struct proc_ops *proc_ops)
+
+EXTEND_CLASS(proc_dir, _seq, proc_create_seq(pname, mode, parent, ops, state_size, data),
+	     const char *pname, umode_t mode, struct proc_dir_entry *parent,
+	     const struct seq_operations *ops, unsigned int state_size, void *data)
+
+EXTEND_CLASS(proc_dir, _seq_private, .....)
+
+(urgh, C really needs better forwarding support)
+
+Then you could write it something like:
+
+static int __init misc_init(void)
+{
+	CLASS(proc_dir_seq, ret)("misc", 0, NULL, &misc_seq_ops);
+
+	CLASS(class, c)("misc");
+	if (IS_ERR(c))
+		return PTR_ERR(c);
+
+	if (register_chrdev(MISC_MAJOR, "misc", &misc_fops))
+		return -EIO;
+
+	c->devnode = misc_devnode;
+
+	misc_class = no_free_ptr(c);
+	no_free_ptr(ret);
+
+	return 0;
+}
+
+Is what what we want?
+
+(also, perhaps I should prefix the macro arguments with an '_', as is
+you can't use 'name' as a constructor argument because the thing would
+expand weird)
+
+> I have a ton of future patches coming that does a bunch of
+> class_create/destroy changes that would be made a LOT simpler with this
+> patchset, and I really don't want to have to hit the same codepaths
+> twice if at all possible.
+> 
+> So what's the odds this can be reasonable enough to get into 6.5-rc1 so
+> we can rely on it there?
+
+That's one for Linus I suppose.. the only remaining issue I still have
+is the no_free_*() naming. One suggestion that made sense had it called
+take_*().
+
+All we really need are the first 4 patches to land; thereafter we can
+gradually start converting things.
