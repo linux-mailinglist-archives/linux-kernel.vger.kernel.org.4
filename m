@@ -2,296 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9655572EF8C
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 00:36:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D17372EF90
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 00:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240421AbjFMWgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 18:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
+        id S232792AbjFMWjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 18:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231284AbjFMWgk (ORCPT
+        with ESMTP id S229580AbjFMWjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 18:36:40 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E3910CC
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 15:36:37 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-514ad92d1e3so1362a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 15:36:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686695796; x=1689287796;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PvWX2bD0pqjf2LH9LS1XjF7500hItj0+6/IMn+0hUyQ=;
-        b=3Glh+mv9w/hlsr3HtW9bHUVgiWBnoxfzOAwjquvJ1AtpWmAxPHzA/8KB9rQGLI6bPW
-         f7qGlGThGtdA47ymx+HgiBOoyHoX8jWor32TAvaO+WmUaWX3Xn1BpcQf2f1XZitWH15J
-         MDv06bVTji5Ik3ErHeafLVYLUfoKp++ieuFYgvwKgCKflAvoHh5Ewq6xg9zaJ+jxAdsg
-         lyTmXYkYfQvktXvGcfRQcvhxjg6Ujut2b0YJFUIhzfQVJ5PzkiNsrvcO0ZYmSN5sFFLX
-         0WJW3uVykV1WNvlLlgmXEDrdroLofKmh8799uzbRJ6beNn6YsvBet8ulVt1JaK5KjEaQ
-         NW8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686695796; x=1689287796;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PvWX2bD0pqjf2LH9LS1XjF7500hItj0+6/IMn+0hUyQ=;
-        b=gBfBKvThARIuW1hWQ/E+QfRxm+dV2Np04DJPD8pL27lctLIaaHp/VJC5G+JEQCu6gi
-         yxU5p97tT08OreiiS77n3X96mBEjfA3JlwcQzjfEtKrHlC6rJb+L/30jMG4nQLJnYgBq
-         pwGMvKb1F1KZyitObpjwonFq2LIJgDlDdv8B8Wdo4d1/zDS58J0lubnFiHdGamApNf2s
-         Y43YwQTfnrchEj5toGjqZVwbMYlW742xnyJKJy7tk8X3PvkmdpWySzu9LCwlvETpBaMG
-         BtfDAWkP8xlx6V9SlKjiAoSLMBhUo13YgrT4kiQRcXFgaYaZ6LC6lMYnYxACbPzF67s1
-         wFMQ==
-X-Gm-Message-State: AC+VfDzOKBgo+R2VYsZm4faFu3Gt/ROaLdeJ/Q5301ccFKXTSg+BKCFC
-        e7Q8PJNTmMPGwz6I2IF49spkHngBXD2ukRhH4SLO4w==
-X-Google-Smtp-Source: ACHHUZ4b9ZmvHIHuVqiKCGkay8zIJtZ17R+nhtVYSufNYgAsmJA4+02HPCuDfftyIn3PNzWLVqxf8ToCsmK0FXHe7fI=
-X-Received: by 2002:a50:cc9a:0:b0:506:90c4:b63b with SMTP id
- q26-20020a50cc9a000000b0050690c4b63bmr36356edi.4.1686695795711; Tue, 13 Jun
- 2023 15:36:35 -0700 (PDT)
+        Tue, 13 Jun 2023 18:39:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379EF129;
+        Tue, 13 Jun 2023 15:39:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 753BB619E3;
+        Tue, 13 Jun 2023 22:39:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57074C433C0;
+        Tue, 13 Jun 2023 22:39:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686695950;
+        bh=NlxvWeh/iI/fmUa5V59cQyuKBcW8FcsJJPOT32TM0xM=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=AG9o1FVak06Frs3imw4TZ+ctWP3IXbtyxSJvvijaE9TOVKfTe/zO5VcC1BpdYInIK
+         whO+Yw/dkbnFJqfto4qkaW53dmc88a+CN+yTf+XixqvxxdBCLEWFay8OGy5rkzSkkc
+         DBEBmu327BO1RFwsk58uEObOAlYT/rxdv4s+HhNxbD5XVvVBD1BnI/xfg5GuTJsuFv
+         Xv0AJ+6FmKMFZbBIVQzPD4KCL/nwYDL8aHzq2s7YtYDL0sJT9xsXsMVVOvwJpmUhmm
+         ZeLWMNk1wzi2Gjq/ujV8tyLYcapL/frvulIjGKoI9YU8AJxgie/l1/2AvXvD5YAjT5
+         TOqZwTYZ1gSzQ==
+Message-ID: <d5bd569d-b20e-f9c7-d839-93011dde380b@kernel.org>
+Date:   Tue, 13 Jun 2023 17:39:09 -0500
 MIME-Version: 1.0
-References: <20230613102905.2808371-1-usama.anjum@collabora.com> <20230613102905.2808371-3-usama.anjum@collabora.com>
-In-Reply-To: <20230613102905.2808371-3-usama.anjum@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Wed, 14 Jun 2023 00:36:24 +0200
-Message-ID: <CABb0KFHWnbrf2ythvO0OKsd1ZS9b4D9BNzwBCbn6g9OX4n6ZOg@mail.gmail.com>
-Subject: Re: [PATCH v18 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 2/3] nios2: Fix flush_dcache_page() for usage from irq
+ context
+Content-Language: en-US
+To:     Helge Deller <deller@gmx.de>, linux@armlinux.org.uk,
+        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org
+References: <20230524152633.203927-1-deller@gmx.de>
+ <20230524152633.203927-3-deller@gmx.de>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+In-Reply-To: <20230524152633.203927-3-deller@gmx.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 13 Jun 2023 at 12:29, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
->
-> This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
-> the info about page table entries. The following operations are supported
-> in this ioctl:
-> - Get the information if the pages have been written-to (PAGE_IS_WRITTEN)=
-,
->   file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT) or swapped
->   (PAGE_IS_SWAPPED).
-> - Find pages which have been written-to and/or write protect the pages
->   (atomic PM_SCAN_OP_GET + PM_SCAN_OP_WP)
->
-> This IOCTL can be extended to get information about more PTE bits.
-[...]
-> --- a/fs/proc/task_mmu.c
-> +++ b/fs/proc/task_mmu.c
-[...]
-> +static int pagemap_scan_output(bool wt, bool file, bool pres, bool swap,
-> +                              struct pagemap_scan_private *p,
-> +                              unsigned long addr, unsigned int n_pages)
-> +{
-> +       unsigned long bitmap =3D PM_SCAN_BITMAP(wt, file, pres, swap);
-> +       struct page_region *cur_buf =3D &p->cur_buf;
+Hi Helge,
 
-Maybe we can go a step further and say here `cur_buf =3D
-&p->vec_buf[p->vec_buf_index];` and remove `p->cur_buf` entirely?
+Thanks for the patch. Does it need a Fixes tag?
 
-> +
-> +       if (!n_pages)
-> +               return -EINVAL;
-> +
-> +       if ((p->required_mask & bitmap) !=3D p->required_mask)
-> +               return 0;
-> +       if (p->anyof_mask && !(p->anyof_mask & bitmap))
-> +               return 0;
-> +       if (p->excluded_mask & bitmap)
-> +               return 0;
-> +
-> +       bitmap &=3D p->return_mask;
-> +       if (!bitmap)
-> +               return 0;
-> +
-> +       if (cur_buf->bitmap =3D=3D bitmap &&
-> +           cur_buf->start + cur_buf->len * PAGE_SIZE =3D=3D addr) {
-> +               cur_buf->len +=3D n_pages;
-> +               p->found_pages +=3D n_pages;
-> +       } else {
-> +               if (cur_buf->len && p->vec_buf_index >=3D p->vec_buf_len)
-> +                       return -ENOMEM;
+Dinh
 
-Shouldn't this be -ENOSPC? -ENOMEM usually signifies that the kernel
-ran out of memory when allocating, not that there is no space in a
-user-provided buffer.
-
-BTW, the check could be inside the if() below for easier reading and
-less redundancy.
-
-> +               if (cur_buf->len) {
-> +                       memcpy(&p->vec_buf[p->vec_buf_index], cur_buf,
-> +                              sizeof(*p->vec_buf));
-> +                       p->vec_buf_index++;
-> +               }
-> +
-> +               cur_buf->start =3D addr;
-> +               cur_buf->len =3D n_pages;
-> +               cur_buf->bitmap =3D bitmap;
-> +               p->found_pages +=3D n_pages;
-> +       }
-> +
-> +       if (p->max_pages && (p->found_pages =3D=3D p->max_pages))
-
-Since `p->found_pages > 0` holds here, the first check is redundant.
-Nit: the parentheses around =3D=3D are not needed.
-
-> +               return PM_SCAN_FOUND_MAX_PAGES;
-> +
-> +       return 0;
-> +}
-[...]
-> +static inline unsigned long pagemap_scan_check_page_written(struct pagem=
-ap_scan_private *p)
-> +{
-> +       return ((p->required_mask | p->anyof_mask | p->excluded_mask) &
-> +               PAGE_IS_WRITTEN) ? PM_SCAN_OP_WRITE : 0;
-> +}
-
-Please inline at the single callsite.
-
-For flags name: PM_REQUIRE_WRITE_ACCESS?
-Or Is it intended to be checked only if doing WP (as the current name
-suggests) and so it would be redundant as WP currently requires
-`p->required_mask =3D PAGE_IS_WRITTEN`?
-
-> +static int pagemap_scan_args_valid(struct pm_scan_arg *arg, unsigned lon=
-g start,
-> +                                  struct page_region __user *vec)
-> +{
-> +       /* Detect illegal size, flags, len and masks */
-> +       if (arg->size !=3D sizeof(struct pm_scan_arg))
-> +               return -EINVAL;
-> +       if (arg->flags & ~PM_SCAN_OPS)
-> +               return -EINVAL;
-> +       if (!arg->len)
-> +               return -EINVAL;
-> +       if ((arg->required_mask | arg->anyof_mask | arg->excluded_mask |
-> +            arg->return_mask) & ~PM_SCAN_BITS_ALL)
-> +               return -EINVAL;
-> +       if (!arg->required_mask && !arg->anyof_mask &&
-> +           !arg->excluded_mask)
-> +               return -EINVAL;
-> +       if (!arg->return_mask)
-> +               return -EINVAL;
-
-I just noticed that `!arg->return_mask =3D=3D !IS_PM_SCAN_GET()`. So the
-OP_GET is redundant and can be removed from the `flags` if checking
-`return_mask` instead. That way there won't be a "flags-encoded ops"
-thing as it would be a 'scan' with optional 'write-protect'.
-
-> +
-> +       /* Validate memory range */
-> +       if (!IS_ALIGNED(start, PAGE_SIZE))
-> +               return -EINVAL;
-> +       if (!access_ok((void __user *)start, arg->len))
-> +               return -EFAULT;
-> +
-> +       if (IS_PM_SCAN_GET(arg->flags)) {
-> +               if (!arg->vec)
-> +                       return -EINVAL;
-
-access_ok() -> -EFAULT (an early fail-check) (the vec_len should be
-checked first then, failing with -EINVAL if 0)
-
-> +               if (arg->vec_len =3D=3D 0)
-> +                       return -EINVAL;
-> +       }
-> +
-> +       if (IS_PM_SCAN_WP(arg->flags)) {
-> +               if (!IS_PM_SCAN_GET(arg->flags) && arg->max_pages)
-> +                       return -EINVAL;
-> +
-> +               if ((arg->required_mask | arg->anyof_mask | arg->excluded=
-_mask) &
-> +                   ~PAGE_IS_WRITTEN)
-
-Is `excluded_mask =3D PAGE_IS_WRITTEN` intended to be allowed? It would
-make WP do nothing, unless the required/anyof/excluded masks are not
-supposed to limit WP?
-
-
-> +                       return -EINVAL;
-> +       }
-
-If `flags =3D=3D 0` (and `return_mask =3D=3D 0` in case my earlier comment =
-is
-applied) it should fail with -EINVAL.
-
-[...]
-> --- a/include/uapi/linux/fs.h
-> +++ b/include/uapi/linux/fs.h
-> +/*
-> + * struct page_region - Page region with bitmap flags
-> + * @start:     Start of the region
-> + * @len:       Length of the region in pages
-> + * bitmap:     Bits sets for the region
-
-'@' is missing for the third field. BTW, maybe we can call it
-something like `flags` or `category` (something that hints at the
-meaning of the value instead of its data representation).
-
-> +/*
-> + * struct pm_scan_arg - Pagemap ioctl argument
-> + * @size:              Size of the structure
-> + * @flags:             Flags for the IOCTL
-> + * @start:             Starting address of the region
-> + * @len:               Length of the region (All the pages in this lengt=
-h are included)
-
-Maybe `scan_start`, `scan_len` - so that there is a better distinction
-from the structure's `size` field?
-
-> + * @vec:               Address of page_region struct array for output
-> + * @vec_len:           Length of the page_region struct array
-> + * @max_pages:         Optional max return pages
-> + * @required_mask:     Required mask - All of these bits have to be set =
-in the PTE
-> + * @anyof_mask:                Any mask - Any of these bits are set in t=
-he PTE
-> + * @excluded_mask:     Exclude mask - None of these bits are set in the =
-PTE
-> + * @return_mask:       Bits that are to be reported in page_region
-> + */
-
-I skipped most of the page walk implementation as maybe the comments
-above could make it simpler. Reading this patch and the documentation
-I still feel confused about how the filtering/limiting parameters
-should affect GET, WP and WP+GET. Should they limit the pages walked
-(and WP-ed)? Or only the GET's output? How about GET+WP case?
-
-Best Regards
-
-Micha=C5=82 Miros=C5=82aw
+On 5/24/23 10:26, Helge Deller wrote:
+> Since at least kernel 6.1, flush_dcache_page() is called with IRQs
+> disabled, e.g. from aio_complete().
+> 
+> But the current implementation for flush_dcache_page() on NIOS2
+> unintentionally re-enables IRQs, which may lead to deadlocks.
+> 
+> Fix it by using xa_lock_irqsave() and xa_unlock_irqrestore()
+> for the flush_dcache_mmap_*lock() macros instead.
+> 
+> Cc: Dinh Nguyen <dinguyen@kernel.org>
+> Signed-off-by: Helge Deller <deller@gmx.de>
+> ---
+>   arch/nios2/include/asm/cacheflush.h | 4 ++++
+>   arch/nios2/mm/cacheflush.c          | 5 +++--
+>   2 files changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/nios2/include/asm/cacheflush.h b/arch/nios2/include/asm/cacheflush.h
+> index d0b71dd71287..a37242662809 100644
+> --- a/arch/nios2/include/asm/cacheflush.h
+> +++ b/arch/nios2/include/asm/cacheflush.h
+> @@ -48,5 +48,9 @@ extern void invalidate_dcache_range(unsigned long start, unsigned long end);
+> 
+>   #define flush_dcache_mmap_lock(mapping)		xa_lock_irq(&mapping->i_pages)
+>   #define flush_dcache_mmap_unlock(mapping)	xa_unlock_irq(&mapping->i_pages)
+> +#define flush_dcache_mmap_lock_irqsave(mapping, flags)		\
+> +		xa_lock_irqsave(&mapping->i_pages, flags)
+> +#define flush_dcache_mmap_unlock_irqrestore(mapping, flags)	\
+> +		xa_unlock_irqrestore(&mapping->i_pages, flags)
+> 
+>   #endif /* _ASM_NIOS2_CACHEFLUSH_H */
+> diff --git a/arch/nios2/mm/cacheflush.c b/arch/nios2/mm/cacheflush.c
+> index 6aa9257c3ede..35f3b599187f 100644
+> --- a/arch/nios2/mm/cacheflush.c
+> +++ b/arch/nios2/mm/cacheflush.c
+> @@ -75,11 +75,12 @@ static void flush_aliases(struct address_space *mapping, struct page *page)
+>   {
+>   	struct mm_struct *mm = current->active_mm;
+>   	struct vm_area_struct *mpnt;
+> +	unsigned long flags;
+>   	pgoff_t pgoff;
+> 
+>   	pgoff = page->index;
+> 
+> -	flush_dcache_mmap_lock(mapping);
+> +	flush_dcache_mmap_lock_irqsave(mapping, flags);
+>   	vma_interval_tree_foreach(mpnt, &mapping->i_mmap, pgoff, pgoff) {
+>   		unsigned long offset;
+> 
+> @@ -92,7 +93,7 @@ static void flush_aliases(struct address_space *mapping, struct page *page)
+>   		flush_cache_page(mpnt, mpnt->vm_start + offset,
+>   			page_to_pfn(page));
+>   	}
+> -	flush_dcache_mmap_unlock(mapping);
+> +	flush_dcache_mmap_unlock_irqrestore(mapping, flags);
+>   }
+> 
+>   void flush_cache_all(void)
+> --
+> 2.38.1
+> 
