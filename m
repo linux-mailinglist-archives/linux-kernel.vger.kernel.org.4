@@ -2,70 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EA8272ECA4
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1F272ECA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 22:13:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240661AbjFMUMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 16:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55592 "EHLO
+        id S240476AbjFMUM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 16:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240845AbjFMUMU (ORCPT
+        with ESMTP id S240330AbjFMUMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 16:12:20 -0400
+        Tue, 13 Jun 2023 16:12:43 -0400
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485B82107;
-        Tue, 13 Jun 2023 13:11:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5D01FDB;
+        Tue, 13 Jun 2023 13:12:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686687116; x=1718223116;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=7j6b1PUNYhA/Tb+R1b5gtDigUxvfmNbGsC9sTp/9R1E=;
-  b=JEN1l5AbESJCvKbHRA3Bg3MSKCpXdj2oiIHSJ35QjyGqfjPBEe8N0eMi
-   hrFOwZswfCrekurgvI38YvJaL0tK/rW6SRtgIbGY2VCdgJOXuFwPqJYid
-   8HXEKvh8WqqEVyPO0cmPwcVpD0enn7gUmLS6rM83pNbBqB34uZA/pac9w
-   L3FgIBG4xW37TFOxRY+DJdW5X1TpaoPGcf9sZLZJxNBDfUvuGQU3G5QLe
-   Q9x/G/uS6ZmZkIUJ2FphzqLwp1ItA/HJT/ZQ/iCgtBaXn5tMAuwOTlXrr
-   5M6rDpHTXAHKvIyNdJFH31PBzKLBFd1tM2kZtFPiG7xvTakyC6cNyiKsu
+  t=1686687138; x=1718223138;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=sveSEHLy/iewONSb1ZTRM/SLciV+z4wONMUw9zPu5QQ=;
+  b=ljxX5x8koTqamY6c1VI34HGgRvFI/vMhlzImzxeJsW/qkObB9QtHocpu
+   GGrrnJs1bXftje6wkBQOOkbVANKdLQ7j3GbQeBAxSDVXcg3urTqOGMhL8
+   f9NfYj+sY+1e4K5S5CQmWfWs4bCpyb463W1xqejQB3RAJsfzyO40b6I9q
+   PWXOA6oaGtnYEChg5Qb2h1YjMK1YO2ADIIKZoEN9MxD54TuXbkKZCd6JP
+   W6XqyY8JXpYX2baHs74F1WXmqzplxIpe4Pj1LEoHzViIsZDIOTuXU0KwW
+   j11KccFnQTpzryULt7eI3Ccb7LUwWNRxEYamirmesOGBxenE479FUn0z7
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="444813672"
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="444813783"
 X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
-   d="scan'208";a="444813672"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 13:11:41 -0700
+   d="scan'208";a="444813783"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 13:12:09 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="836020940"
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="711780429"
 X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
-   d="scan'208";a="836020940"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga004.jf.intel.com with ESMTP; 13 Jun 2023 13:11:40 -0700
-Received: from [10.251.24.95] (kliang2-mobl1.ccr.corp.intel.com [10.251.24.95])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 6957F580BF8;
-        Tue, 13 Jun 2023 13:11:36 -0700 (PDT)
-Message-ID: <cd8009fe-9049-2c29-d5d9-1205ce98cb47@linux.intel.com>
-Date:   Tue, 13 Jun 2023 16:11:27 -0400
+   d="scan'208";a="711780429"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga002.jf.intel.com with ESMTP; 13 Jun 2023 13:12:09 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 13 Jun 2023 13:12:08 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Tue, 13 Jun 2023 13:12:08 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.170)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Tue, 13 Jun 2023 13:12:08 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XyF+8qm1rvky2L4IWLn6qQx9KOpKyjab/Uk34EOny2LCmbyMz7V99Yq1Vuut9u2uYPgFfouGo/xN/Z/s5OTlOsGoFuPt0gTX18CDxL+vpjHAEHoKhaUxQHJRWwvc03yV0zRuiai3OYo5+huu4+lk96SFOejgSIfSxI182FU8npXz5TlZSVwRBGkOfb/qsR2nibkAUeZpy4gQ6fz+S1IKzrIY/w2kvM5WMGPHsF+V2NQIwPj/p4jm7ozOJCw3os9RQN0dmICvTWdMDHbONy7JqxX3oL1kD4/p7FGUIAbT9ycKwa1TgUOLTgFNJXSeDxKOy+HGQgLwEaIMxuoUHbJnZA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9mdBmAu04T3XzBwfI9QatE5lQybJ2Rj9+MyHa2K4rSk=;
+ b=UA7mVybW5kHsJnE9SK3XKQ8RgsoRSHdzNE+yJQFgDsmiWwTSXUv5br3AakjulyFZDu1YhMH11z2abb2h/fQ+33lvrsyx93Ul8VtvwBKFygyNqqYAO4+dVVCBv5V8VZeeNjCOWHmO/oYk8IlWAxiAp4MJNfxFiKwQ4RBqj7EKCWhdKoaS9r5FL6kiMJNAGN2YPGM9c8RT8HIJOA9MulwlJV4ULVGL69ssYrZdTHEz31LjwVS7L20oKJbFAqJHsrzs4VszvobtT8HmnAh3VxwLdRXgng3zgzqrggor1D9eJ9xsgffnkJCGcOyMFJuoTzE9KBn9q8SV0HoiRrfLrLWx+Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
+ by BL1PR11MB5527.namprd11.prod.outlook.com (2603:10b6:208:317::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.44; Tue, 13 Jun
+ 2023 20:12:06 +0000
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::7237:cab8:f7f:52a5]) by SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::7237:cab8:f7f:52a5%6]) with mapi id 15.20.6455.037; Tue, 13 Jun 2023
+ 20:12:06 +0000
+Date:   Tue, 13 Jun 2023 13:12:00 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Benjamin LaHaise <bcrl@kvack.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>, <linux-aio@kvack.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [PATCH] fs/aio: Stop allocating aio rings from HIGHMEM
+Message-ID: <6488cd9030687_1ad89929456@iweiny-mobl.notmuch>
+References: <20230609145937.17610-1-fmdefrancesco@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230609145937.17610-1-fmdefrancesco@gmail.com>
+X-ClientProxiedBy: BYAPR02CA0008.namprd02.prod.outlook.com
+ (2603:10b6:a02:ee::21) To SA1PR11MB6733.namprd11.prod.outlook.com
+ (2603:10b6:806:25c::17)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 5/8] perf stat,jevents: Introduce Default tags for the
- default mode
-Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>
-Cc:     acme@kernel.org, mingo@redhat.com, peterz@infradead.org,
-        namhyung@kernel.org, jolsa@kernel.org, adrian.hunter@intel.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ak@linux.intel.com, eranian@google.com, ahmad.yasin@intel.com
-References: <20230607162700.3234712-1-kan.liang@linux.intel.com>
- <20230607162700.3234712-6-kan.liang@linux.intel.com>
- <CAP-5=fU_5fkJZ49B2yxkS4usuKw9fXZ=o-oJo3n5-j5YTAWNvA@mail.gmail.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <CAP-5=fU_5fkJZ49B2yxkS4usuKw9fXZ=o-oJo3n5-j5YTAWNvA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|BL1PR11MB5527:EE_
+X-MS-Office365-Filtering-Correlation-Id: 62e54d54-86e3-4af9-20b0-08db6c4a75d5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: U/b0QDj3MeMx3JoQ/+y4vTNbNvFCDzgvmbtSoazVPuToWfBHVwzrLY2aqyIdf2jGPoF5RpCPyfa0HmbjwvsvAc+y6Jtuxvh3x4C6JyQwAh3wEIVQHgTohoxU1bt5FiVQoFDEQgWBLNwvBK0ZJbkARCXNfbVI3AINx9SRae7gaKeZwWOhjl8kABcBHEq6zlWQaJqO2XHqNPtvtl4NAsp7mhHod2noYdYNoxy9kxSWb2KpRmLsBLN3jXOKNyLyxlRjfAewf5H3RZKGE7ktbF4l33LvgjQUv9uJjebddBtJluqbc0GHjNtDscLgflPeR+u3z67cN1w0NQtARN9DxJEgtRiVMzyoCvjsPYoFnR53LImGsFbnAMA5BJhe1oOX4Xw46wHd5N7CPw37wzMjm34tpObBpLCJP5ziZgK+QQgtnytzaj8c7GV+I5oXBEDWR1PstfCeKqtPEabHbnhfMWmlZpV4Av5enE0p7CD6YcQPPcYmmix7p0J8eKd7qmbtH3J9HbsmT30dFAfb2RIipJqnhf27jEa1WwDc6hjJ1Ywgu2n1W6Ey+27G/C6zMprdz2Bs
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(39860400002)(396003)(366004)(376002)(346002)(451199021)(110136005)(86362001)(54906003)(83380400001)(26005)(6512007)(9686003)(6506007)(478600001)(186003)(38100700002)(82960400001)(6666004)(6486002)(2906002)(316002)(44832011)(41300700001)(8676002)(66476007)(4326008)(5660300002)(66946007)(66556008)(8936002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4quljjVk8PFKyav9+gYG/RBSCL5vxNuukapMjju9neDORG/fWzLKTwtCDTj+?=
+ =?us-ascii?Q?3Gu7/EokpxzUKU8osnPbsSk5prt7Wnh+dVHuqTmEurfha80tKh71C+nqJLVr?=
+ =?us-ascii?Q?zxklhjB4kAnBRgYe6Zg1KZDbb4dfItwyqvNXIgLJki8eOiPL0PHCiqlJch4w?=
+ =?us-ascii?Q?rd3VshB0rtBD65Gv4eIhieUJelb0KvBGPCPJQt7Pwct1O0gyoT7Kk+cshxZd?=
+ =?us-ascii?Q?rgUdB3FYZ7cZ+Sfhz78DCqNL3vMIX/iqdumYV6lizWyl6BKNoz0gbn5FIxqY?=
+ =?us-ascii?Q?Ls3/+noX/GB2Xiaotw/XGOB2Y28/pPZbbsWfsNiRYHXQYIgOu7oZ0oONwuK9?=
+ =?us-ascii?Q?F9IeGoxqmpMbvTmQrKbivZJWXyYCWbJhNKr9xbT0IGQyMOHCc/6CLckHriTo?=
+ =?us-ascii?Q?8M66QSdbHk7/T5ZNn4JPI8djJsC5IbRfkjO6fAZUMbwM+OTHFKoJgKiim3pN?=
+ =?us-ascii?Q?8RelSBBZWSHkUR4k++RC3ga1aIdVGfgmESll5EINbXPrtzfpyG3RjuTTYXVl?=
+ =?us-ascii?Q?JltwiJpL69xzysyLmdc2+2g2lA47elry6SJgeg4bsF2gZOx0wbZm6L1kcG+R?=
+ =?us-ascii?Q?KiBUy+4TibYPCLbJDtnMcQhz9oB3PaenQX0qKgUXnefdd00nZYVcYZKSHncW?=
+ =?us-ascii?Q?K0IPiAGoBjDZWHKdFVRu0/Pr2FYdI2ODX6rGIG/wcYNGD9/IxizVaEUAU8fk?=
+ =?us-ascii?Q?y3TwruRACGWgJA5WLeoqgjcgYb8V9Fsf8lrrngCQXxTquNI3ltoRiEdTBwNt?=
+ =?us-ascii?Q?2hcZaczvOMvJM32kvlRpkBOn/XJo7QwjLekaCf6bxbO+v867UfnKatxqJWXW?=
+ =?us-ascii?Q?X/IGKZ7l+kdsrDXqadu9baQcLHiWPAkzU4CPPNm00BGsZZG0wwUQP9w8Ug+E?=
+ =?us-ascii?Q?ewbUDzhV+/2e7wYvXW9lijG5uYZqhh7Z/kdfY7ezbOmRjvXaQ+8vFDqLlDBr?=
+ =?us-ascii?Q?VmR877Pu732Smn2t1WKaHwz7x1AmgS+hq+E71hp309/L7U/cpMm0FV1DzpDe?=
+ =?us-ascii?Q?spjVRVX3qbYgAxMRZBAqRcU48PtTtOt4mdrv0UfdsnFq5zd/AI/G+3kF1ANp?=
+ =?us-ascii?Q?8FK97w9MWkFQ9Eyyo1D+0cW+DcjdtyxSXia7kkflZUIJQopfqSA3wv795Q/X?=
+ =?us-ascii?Q?8RDUGQ+kpusPzdPoZtB/8ElZXHs7s/VEo8ntxGr2d8XkRf2WCrqu0pPjubua?=
+ =?us-ascii?Q?HyJH6V/stwkRNmvCAfO8w6MITsiwVxNAJE65VTX004xieCnUqGqa3Fi1ZTIM?=
+ =?us-ascii?Q?65KB5x5PPSANyJLVUeV+aaUnIG0VP1zXn8OXEi01DFqt/iqm21r2wJOHX2bv?=
+ =?us-ascii?Q?INyddVEX7W0dt+p3phlmT0zg+bZGzHgodv5mfHOqIPvzLT3YwGODEoT7AMbF?=
+ =?us-ascii?Q?h4uOQ1WwI3ZgTR+9q2E2jlHxmn0bkeR8wcrULQ8uVdeJP+53A/hHY2lIRdPY?=
+ =?us-ascii?Q?STOpG2BONXpuAA8Q1fnPf0POPfWu/6lWmtMAscPoauZ4A3kOvDI9e5UhaZTt?=
+ =?us-ascii?Q?VK4jLbBEZLimCOybdtbesLJBGz/bxrolAxz6g6QuuDZDwNjXQ4CNG5YO+ha8?=
+ =?us-ascii?Q?BE3velaYlpAWCyylxfpzdWVd66ll4lpIfuomV6CN?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 62e54d54-86e3-4af9-20b0-08db6c4a75d5
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2023 20:12:06.7508
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nHrkUMWhWYmHXgMnVL39pATr+X1piyuWK/hKkEVgdXbxQQZKOaYAAHTZW3oARnnCJd1Ccx07j2F8FWV0nF6Q0g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5527
+X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,125 +149,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023-06-13 3:59 p.m., Ian Rogers wrote:
-> On Wed, Jun 7, 2023 at 9:27 AM <kan.liang@linux.intel.com> wrote:
->>
->> From: Kan Liang <kan.liang@linux.intel.com>
->>
->> Introduce a new metricgroup, Default, to tag all the metric groups which
->> will be collected in the default mode.
->>
->> Add a new field, DefaultMetricgroupName, in the JSON file to indicate
->> the real metric group name. It will be printed in the default output
->> to replace the event names.
->>
->> There is nothing changed for the output format.
->>
->> On SPR, both TopdownL1 and TopdownL2 are displayed in the default
->> output.
->>
->> On ARM, Intel ICL and later platforms (before SPR), only TopdownL1 is
->> displayed in the default output.
->>
->> Suggested-by: Stephane Eranian <eranian@google.com>
->> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
->> ---
->>  tools/perf/builtin-stat.c          | 4 ++--
->>  tools/perf/pmu-events/jevents.py   | 5 +++--
->>  tools/perf/pmu-events/pmu-events.h | 1 +
->>  tools/perf/util/metricgroup.c      | 3 +++
->>  4 files changed, 9 insertions(+), 4 deletions(-)
->>
->> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
->> index c87c6897edc9..2269b3e90e9b 100644
->> --- a/tools/perf/builtin-stat.c
->> +++ b/tools/perf/builtin-stat.c
->> @@ -2154,14 +2154,14 @@ static int add_default_attributes(void)
->>                  * Add TopdownL1 metrics if they exist. To minimize
->>                  * multiplexing, don't request threshold computation.
->>                  */
->> -               if (metricgroup__has_metric(pmu, "TopdownL1")) {
->> +               if (metricgroup__has_metric(pmu, "Default")) {
->>                         struct evlist *metric_evlist = evlist__new();
->>                         struct evsel *metric_evsel;
->>
->>                         if (!metric_evlist)
->>                                 return -1;
->>
->> -                       if (metricgroup__parse_groups(metric_evlist, pmu, "TopdownL1",
->> +                       if (metricgroup__parse_groups(metric_evlist, pmu, "Default",
->>                                                         /*metric_no_group=*/false,
->>                                                         /*metric_no_merge=*/false,
->>                                                         /*metric_no_threshold=*/true,
->> diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
->> index 7ed258be1829..12e80bb7939b 100755
->> --- a/tools/perf/pmu-events/jevents.py
->> +++ b/tools/perf/pmu-events/jevents.py
->> @@ -54,8 +54,8 @@ _json_event_attributes = [
->>  # Attributes that are in pmu_metric rather than pmu_event.
->>  _json_metric_attributes = [
->>      'pmu', 'metric_name', 'metric_group', 'metric_expr', 'metric_threshold',
->> -    'desc', 'long_desc', 'unit', 'compat', 'metricgroup_no_group', 'aggr_mode',
->> -    'event_grouping'
->> +    'desc', 'long_desc', 'unit', 'compat', 'metricgroup_no_group',
->> +    'default_metricgroup_name', 'aggr_mode', 'event_grouping'
->>  ]
->>  # Attributes that are bools or enum int values, encoded as '0', '1',...
->>  _json_enum_attributes = ['aggr_mode', 'deprecated', 'event_grouping', 'perpkg']
->> @@ -307,6 +307,7 @@ class JsonEvent:
->>      self.metric_name = jd.get('MetricName')
->>      self.metric_group = jd.get('MetricGroup')
->>      self.metricgroup_no_group = jd.get('MetricgroupNoGroup')
->> +    self.default_metricgroup_name = jd.get('DefaultMetricgroupName')
->>      self.event_grouping = convert_metric_constraint(jd.get('MetricConstraint'))
->>      self.metric_expr = None
->>      if 'MetricExpr' in jd:
->> diff --git a/tools/perf/pmu-events/pmu-events.h b/tools/perf/pmu-events/pmu-events.h
->> index 8cd23d656a5d..caf59f23cd64 100644
->> --- a/tools/perf/pmu-events/pmu-events.h
->> +++ b/tools/perf/pmu-events/pmu-events.h
->> @@ -61,6 +61,7 @@ struct pmu_metric {
->>         const char *desc;
->>         const char *long_desc;
->>         const char *metricgroup_no_group;
->> +       const char *default_metricgroup_name;
->>         enum aggr_mode_class aggr_mode;
->>         enum metric_event_groups event_grouping;
->>  };
->> diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
->> index 74f2d8efc02d..efafa02db5e5 100644
->> --- a/tools/perf/util/metricgroup.c
->> +++ b/tools/perf/util/metricgroup.c
->> @@ -137,6 +137,8 @@ struct metric {
->>          * output.
->>          */
->>         const char *metric_unit;
->> +       /** Optional default metric group name */
->> +       const char *default_metricgroup_name;
+Fabio M. De Francesco wrote:
+> There is no need to allocate aio rings from HIGHMEM because of very
+> little memory needed here.
 > 
-> Adding a bit more to the comment would be useful, like:
+> Therefore, use GFP_USER flag in find_or_create_page() and get rid of
+> kmap*() mappings.
 > 
-> Optional name of the metric group reported if the Default metric group
-> is being processed.
-
-Sure.
-
-Thanks,
-Kan
+> Cc: Al Viro <viro@zeniv.linux.org.uk>
+> Cc: Ira Weiny <ira.weiny@intel.com>
+> Suggested-by: Matthew Wilcox <willy@infradead.org>
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> ---
+>  fs/aio.c | 26 +++++++++-----------------
+>  1 file changed, 9 insertions(+), 17 deletions(-)
 > 
->>         /** Optional null terminated array of referenced metrics. */
->>         struct metric_ref *metric_refs;
->>         /**
->> @@ -219,6 +221,7 @@ static struct metric *metric__new(const struct pmu_metric *pm,
->>
->>         m->pmu = pm->pmu ?: "cpu";
->>         m->metric_name = pm->metric_name;
->> +       m->default_metricgroup_name = pm->default_metricgroup_name;
->>         m->modifier = NULL;
->>         if (modifier) {
->>                 m->modifier = strdup(modifier);
->> --
->> 2.35.1
->>
+> diff --git a/fs/aio.c b/fs/aio.c
+> index b0b17bd098bb..77e33619de40 100644
+> --- a/fs/aio.c
+> +++ b/fs/aio.c
+
+[snip]
+
+> @@ -1250,10 +1244,9 @@ static long aio_read_events_ring(struct kioctx *ctx,
+>  		avail = min(avail, nr - ret);
+>  		avail = min_t(long, avail, AIO_EVENTS_PER_PAGE - pos);
+>  
+> -		ev = kmap(page);
+> +		ev = page_address(page);
+
+NIT: This might be cleaner to remove the temp variable;
+
+		ev = page_address(ctx->ring_pages[pos / AIO_EVENTS_PER_PAGE];
+
+But generally LGTM.
+
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
