@@ -2,245 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2F3972E273
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C3872E278
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:06:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235532AbjFMMG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 08:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52024 "EHLO
+        id S242060AbjFMMGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 08:06:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234648AbjFMMGZ (ORCPT
+        with ESMTP id S240461AbjFMMGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 08:06:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75888C5;
-        Tue, 13 Jun 2023 05:06:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 13 Jun 2023 08:06:47 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E665AE57;
+        Tue, 13 Jun 2023 05:06:45 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 037276200B;
-        Tue, 13 Jun 2023 12:06:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5685C433EF;
-        Tue, 13 Jun 2023 12:06:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686657983;
-        bh=BIozQFeKN2aJ2jZ8p8QET0oaMrJoGdkmGxw7siSplFg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OkR4DKQ0GbOQL2zHAL3MwYkCx8Z06jPZxzdYzUjNUfgLdd8hdRv3F2M0ytfUApHAE
-         isEoOaYSdyvNDdEf8lvBBirbqd7P7N6drBz6wAB/xuXD/Mcb5JFutURj8ZLagV9wYi
-         k1f983F/a4l32CQzltJbP9wyAxhUpSkEZXlED73KePN7e1xNwTBpjtSA2O312iDzb1
-         7hoNLZYBbNaNmdCLFEA+9mPbHz0vQCrpNQgoXvZRgD8YROuDpaxhh40KLNA0pNKPCE
-         KQDe3cxh0+li6i7tTY9CR/xZZ59de+lv7wXvTcfFT+8CDa/w5X4NDszYWZGH7526sg
-         foa38RB5gH6GQ==
-Date:   Tue, 13 Jun 2023 14:06:20 +0200
-From:   Maxime Ripard <mripard@kernel.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        linux-kernel@vger.kernel.org, hsinyi@google.com,
-        cros-qcom-dts-watchers@chromium.org, devicetree@vger.kernel.org,
-        yangcong5@huaqin.corp-partner.google.com,
-        linux-arm-msm@vger.kernel.org,
-        Chris Morgan <macroalpha82@gmail.com>
-Subject: Re: [PATCH v2 00/10] drm/panel and i2c-hid: Allow panels and
- touchscreens to power sequence together
-Message-ID: <boqzlmbrp5rvepmckkqht4h5auspjlbt5leam4xivy7a4bqxnj@iuxxhooxcphk>
-References: <20230607215224.2067679-1-dianders@chromium.org>
- <jehxiy3z4aieop5qgzmlon4u76n7gvt3kc6knxhb5yqkiz3rsp@mx27m75sx43r>
- <CAD=FV=Wr7Xatw1LsofiZ5Xx7WBvAuMMdq4D5Po1yJUC1VdtZdg@mail.gmail.com>
- <z7wi4z4lxpkhvooqhihlkpubyvueb37gvrpmwk6v7xwj2lm6jn@b7rwyr5ic5x5>
- <CAD=FV=XnANRM=+2D9+DzcXx9Gw6iKKQsgkAiq8=izNEN-91f_Q@mail.gmail.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8A1D2224C5;
+        Tue, 13 Jun 2023 12:06:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1686658004; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HYVUFO1wPWNonY/X8OsDNVi5gRCOnIF00hLJCgVVXL8=;
+        b=E2hmup+R2QkYLjr7YF45V8o6ojzs8mRStZDGZ4gtvemfRUU6ZMdUti8UWYB14K4N087zID
+        PCmHqx+U0pWm1b+NAhJZWgxdcsmQ+DfDoUQ1SrXhDczXVUyCIOGHqIdZ4Mqv9LGNpjulD7
+        sr0aoAT7cMde28oU3y65lkUec6malk0=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7511513345;
+        Tue, 13 Jun 2023 12:06:44 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ab+LHNRbiGSNKAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Tue, 13 Jun 2023 12:06:44 +0000
+Date:   Tue, 13 Jun 2023 14:06:44 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     =?utf-8?B?56iL5Z6y5rab?= Chengkaitao Cheng 
+        <chengkaitao@didiglobal.com>, "tj@kernel.org" <tj@kernel.org>,
+        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
+        "shakeelb@google.com" <shakeelb@google.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "muchun.song@linux.dev" <muchun.song@linux.dev>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
+        "chengzhihao1@huawei.com" <chengzhihao1@huawei.com>,
+        "pilgrimtao@gmail.com" <pilgrimtao@gmail.com>,
+        "haolee.swjtu@gmail.com" <haolee.swjtu@gmail.com>,
+        "yuzhao@google.com" <yuzhao@google.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "vasily.averin@linux.dev" <vasily.averin@linux.dev>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "surenb@google.com" <surenb@google.com>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "sujiaxun@uniontech.com" <sujiaxun@uniontech.com>,
+        "feng.tang@intel.com" <feng.tang@intel.com>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        David Rientjes <rientjes@google.com>
+Subject: Re: [PATCH v3 0/2] memcontrol: support cgroup level OOM protection
+Message-ID: <ZIhb1EwvrdKXpEMb@dhcp22.suse.cz>
+References: <ZFd5bpfYc3nPEVie@dhcp22.suse.cz>
+ <66F9BB37-3BE1-4B0F-8DE1-97085AF4BED2@didiglobal.com>
+ <ZFkEqhAs7FELUO3a@dhcp22.suse.cz>
+ <CAJD7tkaw_7vYACsyzAtY9L0ZVC0B=XJEWgG=Ad_dOtL_pBDDvQ@mail.gmail.com>
+ <ZIgodGWoC/R07eak@dhcp22.suse.cz>
+ <CAJD7tkawYZAWKYgttgtPjscnZTARj+QaGZLGiMiSadwC3oCELQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yl5nvno6lnks7ke3"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAD=FV=XnANRM=+2D9+DzcXx9Gw6iKKQsgkAiq8=izNEN-91f_Q@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJD7tkawYZAWKYgttgtPjscnZTARj+QaGZLGiMiSadwC3oCELQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---yl5nvno6lnks7ke3
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Jun 12, 2023 at 02:13:46PM -0700, Doug Anderson wrote:
-> Hi,
->=20
-> On Mon, Jun 12, 2023 at 9:03=E2=80=AFAM Maxime Ripard <mripard@kernel.org=
-> wrote:
+On Tue 13-06-23 01:36:51, Yosry Ahmed wrote:
+> +David Rientjes
+> 
+> On Tue, Jun 13, 2023 at 1:27 AM Michal Hocko <mhocko@suse.com> wrote:
 > >
-> > > > I guess we can have
-> > > > something much simpler with a bunch of helpers that would register a
-> > > > i2c-hid device and would be called by the panel driver itself.
-> > > >
-> > > > And then, since everything is self-contained managing the power sta=
-te
-> > > > becomes easier as well.
+> > On Sun 04-06-23 01:25:42, Yosry Ahmed wrote:
+> > [...]
+> > > There has been a parallel discussion in the cover letter thread of v4
+> > > [1]. To summarize, at Google, we have been using OOM scores to
+> > > describe different job priorities in a more explicit way -- regardless
+> > > of memory usage. It is strictly priority-based OOM killing. Ties are
+> > > broken based on memory usage.
 > > >
-> > > Can you give me more details about how you think this would work?
-> > >
-> > > When you say that the panel would register an i2c-hid device itself,
-> > > do you mean that we'd do something like give a phandle to the i2c bus
-> > > to the panel and then the panel would manually instantiate the i2c-hid
-> > > device on it? ...and I guess it would need to be a "subclass" of
-> > > i2c-hid that knew about the connection to the panel code? This
-> > > subclass and the panel code would communicate with each other about
-> > > power sequencing needs through some private API (like MFD devices
-> > > usually do?). Assuming I'm understanding correctly, I think that could
-> > > work.
+> > > We understand that something like memory.oom.protect has an advantage
+> > > in the sense that you can skip killing a process if you know that it
+> > > won't free enough memory anyway, but for an environment where multiple
+> > > jobs of different priorities are running, we find it crucial to be
+> > > able to define strict ordering. Some jobs are simply more important
+> > > than others, regardless of their memory usage.
 > >
-> > I guess what I had in mind is to do something similar to what we're
-> > doing with hdmi-codec already for example.
->=20
-> By this you mean "rockchip,hdmi-codec" and "mediatek,hdmi-codec", right?
+> > I do remember that discussion. I am not a great fan of simple priority
+> > based interfaces TBH. It sounds as an easy interface but it hits
+> > complications as soon as you try to define a proper/sensible
+> > hierarchical semantic. I can see how they might work on leaf memcgs with
+> > statically assigned priorities but that sounds like a very narrow
+> > usecase IMHO.
+> 
+> Do you mind elaborating the problem with the hierarchical semantics?
 
-No, sorry it was a bit ambiguous. I meant how we instantiate the
-hdmi-codec driver here for example:
+Well, let me be more specific. If you have a simple hierarchical numeric
+enforcement (assume higher priority more likely to be chosen and the
+effective priority to be max(self, max(parents)) then the semantic
+itslef is straightforward.
 
-https://elixir.bootlin.com/linux/v6.3.7/source/drivers/gpu/drm/exynos/exyno=
-s_hdmi.c#L1665
-https://elixir.bootlin.com/linux/v6.3.7/source/drivers/gpu/drm/vc4/vc4_hdmi=
-=2Ec#L2539
-https://elixir.bootlin.com/linux/v6.3.7/source/drivers/gpu/drm/tegra/hdmi.c=
-#L1525
+I am not really sure about the practical manageability though. I have
+hard time to imagine priority assignment on something like a shared
+workload with a more complex hierarchy. For example:
+	    root
+	/    |    \
+cont_A    cont_B  cont_C
 
-> > We have several logical components already, in separate drivers, that
-> > still need some cooperation.
-> >
-> > If the panel and touchscreen are on the same i2c bus, I think we could
-> > even just get a reference to the panel i2c adapter, get a reference, and
-> > pass that to i2c-hid (with a nice layer of helpers).
->=20
-> Just for reference: the panel and touchscreen aren't on the same i2c
-> bus. In the cases that I've looked at the panel is either controlled
-> entirely by eDP or MIPI signals and isn't on any i2c bus at all. The
-> touchscreen is on the i2c bus in the cases I've looked at, though I
-> suppose I could imagine one that used a different bus.
+each container running its workload with own hierarchy structures that
+might be rather dynamic during the lifetime. In order to have a
+predictable OOM behavior you need to watch and reassign priorities all
+the time, no?
 
-Ok, so we would indeed need a phandle to the i2c controller
+> The way it works with our internal implementation is (imo) sensible
+> and straightforward from a hierarchy POV. Starting at the OOM memcg
+> (which can be root), we recursively compare the OOM scores of the
+> children memcgs and pick the one with the lowest score, until we
+> arrive at a leaf memcg.
 
-> > What I'm trying to say is: could we just make it work by passing a bunch
-> > of platform_data, 2-3 callbacks and a device registration from the panel
-> > driver directly?
->=20
-> I think I'm still confused about what you're proposing. Sorry! :( Let
-> me try rephrasing why I'm confused and perhaps we can get on the same
-> page. :-)
->=20
-> First, I guess I'm confused about how you have one of these devices
-> "register" the other device.
->=20
-> I can understand how one device might "register" its sub-devices in
-> the MFD case. To make it concrete, we can look at a PMIC like
-> max77686.c. The parent MFD device gets probed and then it's in charge
-> of creating all of its sub-devices. These sub-devices are intimately
-> tied to one another. They have shared data structures and can
-> coordinate power sequencing and whatnot. All good.
+This approach has a strong requirement on the memcg hierarchy
+organization. Siblings have to be directly comparable because you cut
+off many potential sub-trees this way (e.g. is it easy to tell
+whether you want to rule out all system or user slices?).
 
-We don't necessarily need to use MFD, but yeah, we could just register a
-device for the i2c-hid driver to probe from (using
-i2c_new_client_device?)
+I can imagine usecases where this could work reasonably well e.g. a set
+of workers of a different priority all of them running under a shared
+memcg parent. But more more involved hierarchies seem more complex
+because you always keep in mind how the hierarchy is organize to get to
+your desired victim.
 
-> ...but here, we really have something different in two fundamental ways:
->=20
-> a) In this case, the two components (panel and touchscreen) both use
-> separate primary communication methods. In DT the primary
-> communication method determines where the device is described in the
-> hierarchy. For eDP, this means that the DT node for the panel should
-> be under the eDP controller. For an i2c touchscreen, this means that
-> the DT node for the touchscreen should be under the i2c controller.
-> Describing things like this causes the eDP controller to "register"
-> the panel and the i2c controller to "register" the touchscreen. If we
-> wanted the panel driver to "register" the touchscreen then it would
-> get really awkward. Do we leave the touchscreen DT node under the i2c
-> controller but somehow tell the i2c subsytem not to register it? Do we
-> try to dynamically construct the touchscreen i2c node? Do we make a
-> fake i2c controller under our panel DT node and somehow tell the i2c
-> core to look at it?
-
-I would expect not to have any DT node for the touchscreen, but we would
-register a new i2c device on the bus that it's connected to.
-
-In essence, it's also fairly similar to what we're doing with
-i2c_new_ancillary_device() on some bridges. Except the primary device
-isn't necessarily controlled through the I2C bus (but could be, I'm
-pretty sure we have that situation for RGB or LVDS panels too).
-
-The plus side would also be that we don't really need a DT to make it
-work either. We just need the panel driver to probe somehow and a
-pointer to the i2c_adapter.
-
-> b) Things are different because the two devices here are not nearly as
-> intimately tied to one another. At least in the case of "homestar",
-> the only reason that the devices were tied to one another was because
-> the board designers chose to share power rails, but otherwise the
-> drivers were both generic.
-
-Yeah, and that's fine I guess?
-
-> In any case, is there any chance that we're in violent agreement
-
-Is it even violent? Sorry if it came across that way, it's really isn't
-on my end.
-
-> and that if you dig into my design more you might like it? Other than
-> the fact that the panel doesn't "register" the touchscreen device, it
-> kinda sounds as if what my patches are already doing is roughly what
-> you're describing. The touchscreen and panel driver are really just
-> coordinating with each other through a shared data structure (struct
-> drm_panel_follower) that has a few callback functions. Just like with
-> "hdmi-codec", the devices probe separately but find each other through
-> a phandle. The coordination between the two happens through a few
-> simple helper functions.
-
-I guess we very much agree on the end-goal, and I'd really like to get
-this addressed somehow. There's a couple of things I'm not really
-sold on with your proposal though:
-
- - It creates a ad-hoc KMS API for some problem that looks fairly
-   generic. It's also redundant with the notifier mechanism without
-   using it (probably for the best though).
-
- - MIPI-DSI panel probe sequence is already fairly complex and fragile
-   (See https://www.kernel.org/doc/html/latest/gpu/drm-kms-helpers.html#spe=
-cial-care-with-mipi-dsi-bridges).
-   I'd rather avoid creating a new dependency in that graph.
-
- - And yeah, to some extent it's inconsistent with how we dealt with
-   secondary devices in KMS so far.
-
-Maxime
-
---yl5nvno6lnks7ke3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZIhbvAAKCRDj7w1vZxhR
-xXIAAQCiA6UpybaCLDHQkulMGBLH5FKxWq5xq17fc71pttcy+AEA8RVO666uTh5l
-w20OfxJELeyiCmUVWLP2lpv8iqIY9Q4=
-=cOpc
------END PGP SIGNATURE-----
-
---yl5nvno6lnks7ke3--
+-- 
+Michal Hocko
+SUSE Labs
