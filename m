@@ -2,73 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B42D72E339
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:41:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17ABE72E33B
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 14:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240886AbjFMMlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 08:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43966 "EHLO
+        id S240935AbjFMMlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 08:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235429AbjFMMlL (ORCPT
+        with ESMTP id S233000AbjFMMlP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 08:41:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25B910E9
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 05:40:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686660025;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QHc7vP5zkhrUmujQoTt/giRPp5gmSgomrWcTeulO5hY=;
-        b=A59kENLO/RTqarF1OmD4BDoQHX+rNpW90bCDtaB35C6i0iOIC5wSc9qAj7CA7aoouTKBfg
-        vK6Ze0wmWPdmi92NIyTJ/Y5mpDETlElesdAMIPkrPdiBhbK67c5lJrC9cBcqdYYUx4F9fQ
-        p8D/4kEmDoamcy10QF9F/uYDydPTUxo=
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
- [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-360-99RU4DhDOAGqHwPxLXJ64g-1; Tue, 13 Jun 2023 08:40:22 -0400
-X-MC-Unique: 99RU4DhDOAGqHwPxLXJ64g-1
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-1b3b39e1468so15740515ad.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 05:40:22 -0700 (PDT)
+        Tue, 13 Jun 2023 08:41:15 -0400
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9B312A
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 05:41:14 -0700 (PDT)
+Received: by mail-ua1-x931.google.com with SMTP id a1e0cc1a2514c-76d846a4b85so385658241.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 05:41:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1686660073; x=1689252073;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xWJOTGLymbDQlUSAs58B7ENxx1uRHhF/it2ySbN2jk0=;
+        b=3LIY4mjmBQVmCsYj6CY7ZRKYKXF+viQMoTBUIpDoWuAAvszPCM8R+cKm2aTetU9HZB
+         dyFvoz1VJXHREzdOGYYZ8sExVEtQg7RN1oxTrXci03Zp4jEDPL+aI2wmW3rFK8hm+1/4
+         TfA5RMh2PumKn2Uz4NWUSfjaZbxGpI8qI6OGjSJHr74bcU6k1jG7yZv+Zfe8n4b+2q55
+         +X3w+7nEOIVG9DlirCZCRJYGeMz1gZZ7tLkzYSr7WcGzkM3C0oco+NG3epxXTHMk2J0P
+         lgB1cNw0WXzwzbUIYtdE5mU9CqbDZi3Wg3cg2XOz6HGFRCSczUc/EXH9hqS44wqE5VAX
+         p0vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686660022; x=1689252022;
+        d=1e100.net; s=20221208; t=1686660073; x=1689252073;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QHc7vP5zkhrUmujQoTt/giRPp5gmSgomrWcTeulO5hY=;
-        b=Fau3Ve7N3yILdI6vKVcUfuXVhcVQw8iU38227mdu9leEwQ0ZkDtCmjZs+0QjcYoN21
-         1qBI1KeHvccHLJUuE/OCJa4ZKdV1W2daLd1iMk6h5zkonRy5UQh8C3nALr4ZJ6sCriYG
-         LEvGMly0PV2D5E3lfGS0kwCOqf/3G5AWNWRRqopKEq6G5j6tYqY2YDpEuVOSntAsfJyd
-         dSoKuNzcNcorNAYE2f9KrpFOBpCGF7SvcmLFZ+YiMcwPV7iWoGz26fI6Za6oeeK9A+PI
-         jl3/nT0v2l6f1mLiGSnZMdKfbK7TgMjhtrG4hFm4wR4hnrLuqm5u0AylLXflBu/mAYka
-         5g/A==
-X-Gm-Message-State: AC+VfDx46vFQ9uSgixMpEcaM8pF80sckYCGLwBMwvNhzKxRITb4oS48w
-        KBV3/YZIt9jyc+futtDGaHwpGb+3CAxaUSkR+6Qq0SQ4rR9qKZAtnRNivgp/2XeW1KKglKlaecg
-        jE4D5QPbQ+iheULiDFM2Flx+xW8iBWHwb6bBY5ugu
-X-Received: by 2002:a17:902:f691:b0:1b1:93f9:4305 with SMTP id l17-20020a170902f69100b001b193f94305mr10848630plg.60.1686660021770;
-        Tue, 13 Jun 2023 05:40:21 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4Hp1AV+so40D6vobjase0i58jonjTTpJ10KQsC/eF3MECIIlrw38vj43vTRuKgo54y4DUsr0dFY21F9FS4bcQ=
-X-Received: by 2002:a17:902:f691:b0:1b1:93f9:4305 with SMTP id
- l17-20020a170902f69100b001b193f94305mr10848604plg.60.1686660021441; Tue, 13
- Jun 2023 05:40:21 -0700 (PDT)
+        bh=xWJOTGLymbDQlUSAs58B7ENxx1uRHhF/it2ySbN2jk0=;
+        b=VooF/9FJFSIGmgZXFbZkc/lIvkAGAGD/Jy+3d2EnNIFlxpteR/XYvqhyJQOcCZwLhc
+         hqVT5vwQySQpwJ5XnOiIDip37/3hamNoQdGOUmhbWVximYKsu4BpicN6NUWSawUNd19h
+         3Yl2gcOieGhZio4mRctAM9ZfeNzDKD538g60IKQ8R3kUs16yhd3c4pME//MTq8WexOdx
+         tzEh/ZVYcQGLRhrmZtPckyhEo2x8P/rgXH9d/E1MohqRTDcKDrH2oNEgiqUk2MB6vjeo
+         4CgzW24/NOAv+AMDh86d+hCjdS2ZunSfqScSwgTKJMGtwHylR2NKHZo8vq/rJK2W9ZJR
+         8amA==
+X-Gm-Message-State: AC+VfDyOdi1WeTnounoQyMMYgVvGYZJxPQbbghJtPCJcFtmkyZPWOvNj
+        DyCZNkJOA9Dn0aj0n6VZzD8bNbWIXrsypwEX4nCHGA==
+X-Google-Smtp-Source: ACHHUZ5q5N2uMo9uVe4NxB4a8cePYTi0SR1YsIgL+uUBG+s/kuNE16NepfqwinchlLZ5ThFRdfg+OSTLUAQQ4WtTe5k=
+X-Received: by 2002:a05:6102:1359:b0:439:3c15:da5b with SMTP id
+ j25-20020a056102135900b004393c15da5bmr4763983vsl.17.1686660073315; Tue, 13
+ Jun 2023 05:41:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230613030637.2934730-1-islituo@gmail.com>
-In-Reply-To: <20230613030637.2934730-1-islituo@gmail.com>
-From:   Andreas Gruenbacher <agruenba@redhat.com>
-Date:   Tue, 13 Jun 2023 14:40:08 +0200
-Message-ID: <CAHc6FU5NdUpYRhu7NR=LDLtX6CKbXvtaM6MJbkaHAZb0Y5Eh2Q@mail.gmail.com>
-Subject: Re: [PATCH] gfs2: Fix possible data races in gfs2_show_options()
-To:     Tuo Li <islituo@gmail.com>
-Cc:     rpeterso@redhat.com, cluster-devel@redhat.com,
-        linux-kernel@vger.kernel.org, baijiaju1990@outlook.com,
-        BassCheck <bass@buaa.edu.cn>
+References: <20230607081803.778223-1-jiawenwu@trustnetic.com>
+In-Reply-To: <20230607081803.778223-1-jiawenwu@trustnetic.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 13 Jun 2023 14:41:02 +0200
+Message-ID: <CAMRc=Me8x9ytsg6RRrC93oh+q3Qqn4N92gjvQM=ARGO2=f-pgg@mail.gmail.com>
+Subject: Re: [PATCH v2] gpiolib: Fix GPIO chip IRQ initialization restriction
+To:     Jiawen Wu <jiawenwu@trustnetic.com>
+Cc:     linus.walleij@linaro.org, shreeya.patel@collabora.com,
+        andy.shevchenko@gmail.com, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,61 +69,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 5:07=E2=80=AFAM Tuo Li <islituo@gmail.com> wrote:
-> Some fields such as gt_logd_secs of the struct gfs2_tune are accessed
-> without holding the lock gt_spin in gfs2_show_options():
+On Wed, Jun 7, 2023 at 10:20=E2=80=AFAM Jiawen Wu <jiawenwu@trustnetic.com>=
+ wrote:
 >
->   val =3D sdp->sd_tune.gt_logd_secs;
->   if (val !=3D 30)
->     seq_printf(s, ",commit=3D%d", val);
+> In case of gpio-regmap, IRQ chip is added by regmap-irq and associated wi=
+th
+> GPIO chip by gpiochip_irqchip_add_domain(). The initialization flag was n=
+ot
+> added in gpiochip_irqchip_add_domain(), causing gpiochip_to_irq() to retu=
+rn
+> -EPROBE_DEFER.
 >
-> And thus can cause data races when gfs2_show_options() and other function=
-s
-> such as gfs2_reconfigure() are concurrently executed:
->
->   spin_lock(&gt->gt_spin);
->   gt->gt_logd_secs =3D newargs->ar_commit;
->
-> To fix these possible data races, the lock sdp->sd_tune.gt_spin is
-> acquired before accessing the fields of gfs2_tune and released after thes=
-e
-> accesses.
->
-> Reported-by: BassCheck <bass@buaa.edu.cn>
-> Signed-off-by: Tuo Li <islituo@gmail.com>
+> Fixes: 5467801f1fcb ("gpio: Restrict usage of GPIO chip irq members befor=
+e initialization")
+> Signed-off-by: Jiawen Wu <jiawenwu@trustnetic.com>
 > ---
->  fs/gfs2/super.c | 2 ++
->  1 file changed, 2 insertions(+)
+> v1 -> v2:
+> - add compiler barrier
+> ---
+>  drivers/gpio/gpiolib.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 >
-> diff --git a/fs/gfs2/super.c b/fs/gfs2/super.c
-> index a84bf6444bba..671adf38fe03 100644
-> --- a/fs/gfs2/super.c
-> +++ b/fs/gfs2/super.c
-> @@ -1059,6 +1059,7 @@ static int gfs2_show_options(struct seq_file *s, st=
-ruct dentry *root)
->         }
->         if (args->ar_discard)
->                 seq_puts(s, ",discard");
-> +       spin_lock(&sdp->sd_tune.gt_spin);
->         val =3D sdp->sd_tune.gt_logd_secs;
->         if (val !=3D 30)
->                 seq_printf(s, ",commit=3D%d", val);
-> @@ -1070,6 +1071,7 @@ static int gfs2_show_options(struct seq_file *s, st=
-ruct dentry *root)
->         val =3D sdp->sd_tune.gt_quota_quantum;
->         if (val !=3D 60)
->                 seq_printf(s, ",quota_quantum=3D%d", val);
-> +       spin_unlock(&sdp->sd_tune.gt_spin);
->         if (args->ar_statfs_percent)
->                 seq_printf(s, ",statfs_percent=3D%d", args->ar_statfs_per=
-cent);
->         if (args->ar_errors !=3D GFS2_ERRORS_DEFAULT) {
+> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+> index a7220e04a93e..9ecf93cbd801 100644
+> --- a/drivers/gpio/gpiolib.c
+> +++ b/drivers/gpio/gpiolib.c
+> @@ -1792,6 +1792,14 @@ int gpiochip_irqchip_add_domain(struct gpio_chip *=
+gc,
+>         gc->to_irq =3D gpiochip_to_irq;
+>         gc->irq.domain =3D domain;
+>
+> +       /*
+> +        * Using barrier() here to prevent compiler from reordering
+> +        * gc->irq.initialized before adding irqdomain.
+> +        */
+> +       barrier();
+> +
+> +       gc->irq.initialized =3D true;
+> +
+>         return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(gpiochip_irqchip_add_domain);
 > --
-> 2.34.1
+> 2.27.0
 >
 
-Added to for-next (with minor adjustments).
+Applied, thanks!
 
-Thanks,
-Andreas
-
+Bart
