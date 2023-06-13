@@ -2,84 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F04B72EBDD
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4BAF72EBEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:26:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240738AbjFMTXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 15:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60450 "EHLO
+        id S232146AbjFMTYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 15:24:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240610AbjFMTXm (ORCPT
+        with ESMTP id S230035AbjFMTYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 15:23:42 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97661BEE
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:23:34 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-33b88241696so64956745ab.1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:23:34 -0700 (PDT)
+        Tue, 13 Jun 2023 15:24:05 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5922D1BFD
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:24:02 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b3afd2f9bdso21893805ad.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:24:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1686684241; x=1689276241;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JTjIPDpkQa3VuoP57lMJ7BntaNSVpd5s/6n5Z5BophI=;
+        b=BFk+KLo8AyFTwl75dvJrkMUiU5O0zBWVIuH3k1X/cMgHY+owCkN+GbwZQm98xJlt6d
+         Eg6pHt468GyNfzv2T3adVh2PhUhofAjkRdB2N2I1Nz2lYJwZtNtROyN6Whx4xrMUTxaE
+         bnPQigDrbnYNXENBT6muXhyfb6bwSDjoEZGWg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686684214; x=1689276214;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EWR0nHL39obXZ4tJlQ5WVdz7nMKP7k+coo8SdN3K02E=;
-        b=kB9IQFG82MpXjPDLPpGQfo2aQJpwPfUEnPxz2woE1vYwkjfprw0IhND1xoeK35ipOu
-         Arbuq/ZZ0zpb7qdbna0z6jREEe4OYYE8rSjCGIOinrufn1c3yNJ22b3WvFOmDi61gGZX
-         cMyEiLDQYmJVK2qk37sNvgd+XzYbVdr3B6tcnQ4Y7zSrC+PZi//nXMud7n6gZWq0PKWJ
-         i5pgdfa3ToejvZXZ3EvcW2BSDNeD4xXrdCu041Ny/Pg5ZXYmkLiCdSwAySPsC6eXB1p3
-         g8OHFA8fGEcMMQ+8oluylx9wDdEmBq+cCMznQS0sHTG3Qr0BqCT7PRtVyISTZuKyJdvk
-         wnJA==
-X-Gm-Message-State: AC+VfDzXrL2RhrEQNMI20TNOQzBsEKf0mo8Z13q5a810rPjzJV0Ygp1+
-        pYVnCQMeF/n+SxyErHpiDfOULx9PHrrO8/5QVMTRNg1eKlRK
-X-Google-Smtp-Source: ACHHUZ5mm+7XBQyFXmAboSSa7oz3FdFPxuwVp/0Ka1gF66Q3bahA2vN1w+3xFfJxjFNUEWcjVOreDOitShpXj9ttEQQ5k5mP9vg1
+        d=1e100.net; s=20221208; t=1686684241; x=1689276241;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JTjIPDpkQa3VuoP57lMJ7BntaNSVpd5s/6n5Z5BophI=;
+        b=F8rN3pe4tcW/m2FhjJAobwSXT724/gJPy8PhU0xPh7slFIU3ZVyiUq1OPA0f0+tq/r
+         asRpObGXpQ/LyRq9G2tr6eSREsP6kl0B7clzwKM+AtGaeszqapPfXaiHRv0r5wi/4RhL
+         m9LUXk5PbrMlNLNiO69pHtfsaaup7tSMnwgfA3CwenKdm5LD8EZ3geifIQ/wSqk4pmb4
+         4rRM3qXbR/hsBQiz3+E/BvJpI8XvVzq459BfWy0536wEcKY6R9/yY3CMoXfSxq2W+e6p
+         w7cx4ltIhsMxSQXxjCWSfKYL3NnT9Bo/CHwIVeXP4j+D8iYQPGMa0rBPmmN1UVFISEEE
+         3P2Q==
+X-Gm-Message-State: AC+VfDzNbU7kHMJ7Ze6afMksQytERY5Ke+RAlntfSdwXHG0d8pXv9VBI
+        uiywVjHBofrKUMeWiTnXoQP4Bw==
+X-Google-Smtp-Source: ACHHUZ5Xio21b+oMrhdUH1aEbO1e1KiOm+5dj7FNMCh/97l936Jqv0lrNd7Ra4B1IM3emNt/o72jiw==
+X-Received: by 2002:a17:902:e74c:b0:1b0:e0a:b7ab with SMTP id p12-20020a170902e74c00b001b00e0ab7abmr9998246plf.31.1686684241406;
+        Tue, 13 Jun 2023 12:24:01 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id d15-20020a170902cecf00b001ab09f5ca61sm10631831plg.55.2023.06.13.12.24.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 12:24:00 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 12:23:59 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Azeem Shaikh <azeemshaikh38@gmail.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, linux-hardening@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kalle Valo <kvalo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] net/mediatek: strlcpy withreturn
+Message-ID: <202306131223.F8F403D386@keescook>
+References: <20230613003458.3538812-1-azeemshaikh38@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:c948:0:b0:33e:7b40:18bd with SMTP id
- i8-20020a92c948000000b0033e7b4018bdmr5844858ilq.5.1686684214063; Tue, 13 Jun
- 2023 12:23:34 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 12:23:34 -0700
-In-Reply-To: <000000000000fe7dd005cc2d77c0@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006d819905fe07c52f@google.com>
-Subject: Re: [syzbot] kernel BUG in vmf_insert_pfn_prot
-From:   syzbot <syzbot+2d4f8693f438d2bd4bdb@syzkaller.appspotmail.com>
-To:     airlied@gmail.com, airlied@linux.ie, christian.koenig@amd.com,
-        daniel.vetter@ffwll.ch, daniel.vetter@intel.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, javierm@redhat.com,
-        linaro-mm-sig-owner@lists.linaro.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, maarten.lankhorst@linux.intel.com,
-        mripard@kernel.org, suijingfeng@loongson.cn,
-        sumit.semwal@linaro.org, syzkaller-bugs@googlegroups.com,
-        tzimmermann@suse.de, zackr@vmware.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230613003458.3538812-1-azeemshaikh38@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+On Tue, Jun 13, 2023 at 12:34:57AM +0000, Azeem Shaikh wrote:
+> strlcpy() reads the entire source buffer first.
+> This read may exceed the destination size limit.
+> This is both inefficient and can lead to linear read
+> overflows if a source string is not NUL-terminated [1].
+> In an effort to remove strlcpy() completely [2], replace
+> strlcpy() here with strscpy().
+> 
+> Direct replacement is safe here since DEV_ASSIGN is only used by
+> TRACE macros and the return values are ignored.
+> 
+> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+> [2] https://github.com/KSPP/linux/issues/89
+> 
+> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
 
-commit a5b44c4adb1699661d22e5152fb26885f30a2e4c
-Author: Thomas Zimmermann <tzimmermann@suse.de>
-Date:   Mon Mar 20 15:07:44 2023 +0000
+Yup double-checked the users of the macros. Looks good to me.
 
-    drm/fbdev-generic: Always use shadow buffering
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1025ee07280000
-start commit:   0326074ff465 Merge tag 'net-next-6.1' of git://git.kernel...
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d323d85b1f8a4ed7
-dashboard link: https://syzkaller.appspot.com/bug?extid=2d4f8693f438d2bd4bdb
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14fd1182880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17567514880000
-
-If the result looks correct, please mark the issue as fixed by replying with:
-
-#syz fix: drm/fbdev-generic: Always use shadow buffering
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+-- 
+Kees Cook
