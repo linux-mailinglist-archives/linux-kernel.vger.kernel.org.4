@@ -2,178 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2331772D8B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 06:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC83072D8DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 06:57:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239328AbjFMEnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 00:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56372 "EHLO
+        id S234475AbjFME5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 00:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233856AbjFMEnB (ORCPT
+        with ESMTP id S232700AbjFME5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 00:43:01 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98DD3131
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 21:42:53 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-51480d3e161so7532827a12.3
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 21:42:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20221208.gappssmtp.com; s=20221208; t=1686631372; x=1689223372;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CzwXO5LLinsbc81q9m0mJrThXDrRsGSZgZKBrqcWDhU=;
-        b=Re/JoZDdl7WWFhPNRzXIFIPRLlnyd5pZGoZse5aP6tFTQ1ruH4SblQBU/qotEyJ8+O
-         iMqIDMjO/+jluK8C/6EtzKspe3cTT3unitXHicVeJQf2SUUyk0agBJRXEkoityiA8USl
-         v82m85Hryu0TtYHH2IvWElQGzoJEg1Hu9nIdWCU1jFX2Bahe/MV3MRRvw/Ijm+3gPMB5
-         oTjOChfwoW7JOm9AYO1Uq0jt6SzTUsTP/bekTVKCXC9wOrzlXcAHZw8HEfWsXmQurh+D
-         6NBihHB3EucGRXJ+Rsd7kWSihtlrYwnUX7Kmnsaw2UqKgcpvTyaaNakSa1BFWTDPXa4R
-         HabA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686631372; x=1689223372;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CzwXO5LLinsbc81q9m0mJrThXDrRsGSZgZKBrqcWDhU=;
-        b=N14p8EBXi1wLIxwSL4W7zdqX2nm4upjKUUGwFUvoFrTb6j6QjRhoFa0voGKNqjJQls
-         nxtAcDtNfuDgjFfz5ItJ4pp99IQiCdMEeFawyKAk9u+Wwg4FNbGnOefNxaffOzOrRCWh
-         Kk0heFoKEW5RtdkL/Up+40OR/3Keua4Jb23P7IUJ62fAbyfWFZwrfE0OszpwEDGWsxth
-         wJPHehgQ7blMlN8HQhLzX3kQYt2RE1L15UUlZavJIzOcr5esutiwRDkxv7G2x1tx3EP3
-         WlHN/Aud1Y/7+n9c7+sBdA9v6aFa4YisgsGmq6vw1AhMFZsABXJQ3LvuQhp0g/Cy7YaW
-         TbCA==
-X-Gm-Message-State: AC+VfDwqb+N1GHMdlY46+GR3WId1dKEQigJT0IQud/lrTLPF5tTNj7D1
-        Is4Wo4zKXMO9npXAVi76TrjT/W8xD4EJkHUMhKtv4w==
-X-Google-Smtp-Source: ACHHUZ4ETr5UZ3VbtqL8LS3ZVa0OXp7qvMh694ytmLxSCEv5jRu14utuMLjd7mOBnSDm2aadOjxLwJ3P3GoNW1vtYdA=
-X-Received: by 2002:aa7:c553:0:b0:508:3b1f:e6b5 with SMTP id
- s19-20020aa7c553000000b005083b1fe6b5mr5571374edr.15.1686631371900; Mon, 12
- Jun 2023 21:42:51 -0700 (PDT)
+        Tue, 13 Jun 2023 00:57:15 -0400
+X-Greylist: delayed 521 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 12 Jun 2023 21:57:14 PDT
+Received: from striker.routify.me (striker.routify.me [IPv6:2602:fe90:604:1b::87c:418e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1544B8E
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 21:57:14 -0700 (PDT)
+Received: from glitch (unknown [IPv6:2602:24c:b8f:cd90::8eb3])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by striker.routify.me (Postfix) with ESMTPSA id B72ACE34;
+        Tue, 13 Jun 2023 04:48:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 striker.routify.me B72ACE34
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seangreenslade.com;
+        s=striker-outgoing; t=1686631707;
+        bh=3SWM9HpbvhY+6JXsgZEbqdJ7uzmLqwt9dCy2pAjIAms=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r9OFNliJWYsooYmf4esdOxSlSOzjzXXOFNdtBQRRqJXow8z+fd5nFSnzAtZaLG2f3
+         9Cgl0yfTaGG7xNxflDfil9S/SaoKw7b7/Fo1HewXr0qImxl7IqXB/1OHpxh39ml6Z6
+         eMg7swj9N5L67o5gIJS+O94x1U2oNyEZ3Wb9EiUE=
+Date:   Mon, 12 Jun 2023 21:48:30 -0700
+From:   Sean Greenslade <sean@seangreenslade.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     linux-ext4@vger.kernel.org, Ye Bin <yebin10@huawei.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>
+Subject: Re: RO mount of ext4 filesystem causes writes
+Message-ID: <ZIf1HpUjmQWu0xXo@glitch>
+References: <ZIauBR7YiV3rVAHL@glitch>
+ <ZIa5P1HqE62rmzqu@debian.me>
 MIME-Version: 1.0
-References: <20230508142842.854564-1-apatel@ventanamicro.com>
- <20230508142842.854564-3-apatel@ventanamicro.com> <20230608182828.GA3183987-robh@kernel.org>
- <CAGETcx_4OH=EmSUL2-rwKa=1uoOj+AH_xn4PoPsc0kt_aU0WOg@mail.gmail.com>
- <CAK9=C2V1LH0739Nq5Ji7gGbgbyFtNAtBYR43fU7vr9omD5tKSA@mail.gmail.com> <CAGETcx--aEEB6ag1qGcEeygPyZM9Q-T1NOY+wK911LGJGisN8Q@mail.gmail.com>
-In-Reply-To: <CAGETcx--aEEB6ag1qGcEeygPyZM9Q-T1NOY+wK911LGJGisN8Q@mail.gmail.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Tue, 13 Jun 2023 10:12:40 +0530
-Message-ID: <CAAhSdy2p6K70fc2yZLPdVGqEq61Y8F7WVT2J8st5mQrzBi4WHg@mail.gmail.com>
-Subject: Re: [PATCH v3 02/11] of/irq: Set FWNODE_FLAG_BEST_EFFORT for the
- interrupt controller DT nodes
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Anup Patel <apatel@ventanamicro.com>,
-        Rob Herring <robh@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, iommu@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZIa5P1HqE62rmzqu@debian.me>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 10, 2023 at 2:47=E2=80=AFAM Saravana Kannan <saravanak@google.c=
-om> wrote:
->
-> On Fri, Jun 9, 2023 at 4:40=E2=80=AFAM Anup Patel <apatel@ventanamicro.co=
-m> wrote:
-> >
-> > On Fri, Jun 9, 2023 at 1:35=E2=80=AFAM Saravana Kannan <saravanak@googl=
-e.com> wrote:
-> > >
-> > > On Thu, Jun 8, 2023 at 11:28=E2=80=AFAM Rob Herring <robh@kernel.org>=
- wrote:
-> > > >
-> > > > +Saravana
-> > > >
-> > > > On Mon, May 08, 2023 at 07:58:33PM +0530, Anup Patel wrote:
-> > > > > The RISC-V APLIC interrupt controller driver is a regular platfor=
-m
-> > > > > driver so we need to ensure that it is probed as soon as possible=
-.
-> > > > > To achieve this, we mark the interrupt controller device nodes wi=
-th
-> > > > > FWNODE_FLAG_BEST_EFFORT (just like console DT node).
-> > > > >
-> > > > > Fixes: 8f486cab263c ("driver core: fw_devlink: Allow firmware to =
-mark devices as best effort")
-> > > >
-> > > > It is good practice to Cc the commit author of what you are fixing.
-> > > >
-> > > > > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > > > > ---
-> > > > >  drivers/of/irq.c | 10 ++++++++++
-> > > > >  1 file changed, 10 insertions(+)
-> > > > >
-> > > > > diff --git a/drivers/of/irq.c b/drivers/of/irq.c
-> > > > > index 174900072c18..94e1d9245cff 100644
-> > > > > --- a/drivers/of/irq.c
-> > > > > +++ b/drivers/of/irq.c
-> > > > > @@ -535,6 +535,16 @@ void __init of_irq_init(const struct of_devi=
-ce_id *matches)
-> > > > >       INIT_LIST_HEAD(&intc_desc_list);
-> > > > >       INIT_LIST_HEAD(&intc_parent_list);
-> > > > >
-> > > > > +     /*
-> > > > > +      * We need interrupt controller platform drivers to work as=
- soon
-> > > >
-> > > > If it's platform drivers/devices you care about, then perhaps this
-> > > > should be done when platform devices are created.
-> > > >
-> > > > > +      * as possible so mark the interrupt controller device node=
-s with
-> > > > > +      * FWNODE_FLAG_BEST_EFFORT so that fw_delink knows not to d=
-elay
-> > > > > +      * the probe of the interrupt controller device for supplie=
-rs
-> > > > > +      * without drivers.
-> > > > > +      */
-> > > > > +     for_each_node_with_property(np, "interrupt-controller")
-> > > >
-> > > > This function only operates on nodes matching 'matches', but this
-> > > > operates on everything.
-> > > >
-> > > > It does make sense that if we init an interrupt controller here, th=
-en we
-> > > > will surely want to probe its driver later on. So maybe just move
-> > > > setting FWNODE_FLAG_BEST_EFFORT within
-> > > > for_each_matching_node_and_match() below.
-> > > >
-> > > > > +             np->fwnode.flags |=3D FWNODE_FLAG_BEST_EFFORT;
-> > > > > +
-> > >
-> > > Definite Nack. You are pretty much disabling fw_devlink for all
-> > > interrupt controllers. There are plenty of examples of the IRQ driver=
-s
-> > > being needed very early on and still probing properly without the nee=
-d
-> > > for this flag. Please fix your driver/DT.
-> >
-> > Okay, I will try to set FWNODE_FLAG_BEST_EFFORT only for
-> > APLIC device_node via IRQCHIP_DECLARE().
->
-> No, my point is that you very likely don't need to use that flag.
->
-> What exactly is the problem you are facing? Point to an example RISC-V
-> dts (not dtsi) in upstream and give specifics please.
+On Mon, Jun 12, 2023 at 01:20:47PM +0700, Bagas Sanjaya wrote:
+> On Sun, Jun 11, 2023 at 10:32:53PM -0700, Sean Greenslade wrote:
+> > Hello, folks.
+> >=20
+> > I noticed a change in behavior of ext4 in recent kernels. I make use of
+> > several luks loopback images formatted as ext4 that I mount read-only
+> > most of the time. I use rsync to synchronize the backing images between
+> > machines. In the past, mouning the images as read-only would not touch
+> > the backing image contents at all, but recently this changed. Every
+> > mount, even ones that are RO from the start, will cause some small
+> > writes to the backing image and thus force rsync to scan the whole file.
+> >=20
+> > I confirmed that the issue is still present on v6.4.rc6, so I performed
+> > a bisect and landed on the following commit:
+> >=20
+> > > eee00237fa5ec8f704f7323b54e48cc34e2d9168 is the first bad commit
+> > > commit eee00237fa5ec8f704f7323b54e48cc34e2d9168
+> > > Author: Ye Bin <yebin10@huawei.com>
+> > > Date:   Tue Mar 7 14:17:02 2023 +0800
+> > >=20
+> > >     ext4: commit super block if fs record error when journal record w=
+ithout error
+> >=20
+> > That certainly looks like a likely cause of my issue, but I'm not
+> > familiar enough with the ext4 code to diagnose any further. Please let
+> > me know if you need any additional information, or if you would like me
+> > to test anything.
+> >=20
+>=20
+> Can you show dmesg when regression happens?
+>=20
+> Ye: It looks like this regression is caused by your commit. Would you like
+> to take a look on it?
+>=20
+> Anyway, thanks for the bug report. I'm adding it to regzbot:
+>=20
+> #regzbot ^introduced: eee00237fa5ec8
+> #regzbot title: commit super block writes even in read-only filesystems
 
-The APLIC irqchip driver added by this series is a platform driver. It
-used to work fine without setting FWNODE_FLAG_BEST_EFFORT
-flag in fwnode but after commit 8f486cab263c the APLIC irqchip
-driver did not probe hence this fix.
+I did a fresh boot on the 6.4 rc6 kernel and did an RO mount and
+unmount. Here's the full dmesg output from that:
 
-Regards,
-Anup
+[   48.955896] loop0: detected capacity change from 0 to 4194304
+[   48.965526] Key type trusted registered
+[   48.973640] Key type encrypted registered
+[   49.032404] EXT4-fs (dm-0): mounted filesystem 4e824972-4523-407e-b0da-3=
+229a71b68d8 ro with ordered data mode. Quota mode: none.
+[   61.180755] EXT4-fs (dm-0): unmounting filesystem 4e824972-4523-407e-b0d=
+a-3229a71b68d8.
+[   61.236958] dm-0: detected capacity change from 4190208 to 0
+
+Thanks,
+
+--Sean
+
