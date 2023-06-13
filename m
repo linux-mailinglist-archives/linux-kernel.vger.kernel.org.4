@@ -2,208 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F9B872DCD7
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:41:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8725172DCD5
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:41:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241636AbjFMIlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 04:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48712 "EHLO
+        id S241735AbjFMIlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 04:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235640AbjFMIkb (ORCPT
+        with ESMTP id S241616AbjFMIkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 04:40:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFC11998
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 01:39:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686645581;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vrGYNaIheG5cW9vw0WAFpAIgS9tsi2HOTi0exhZ2A/c=;
-        b=faI69AB7Z74YUFcNPuxJw61EISqqTpX+oVHbkWuoU0bLazWCBHDBt8WXyX7S2VTfrHcAbe
-        rNCP8HC0Lsmn6uiTyaZ6C4IOTSGgCTSlJwUVH1b4Ip4acO04OazW/XhqE+HwERnaDOIznE
-        7kMKTQ0q/lu9SQM7v3meiX75Lq/9GSk=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-615-YiZQAdfiO3quRZa3YQgfdA-1; Tue, 13 Jun 2023 04:39:39 -0400
-X-MC-Unique: YiZQAdfiO3quRZa3YQgfdA-1
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-62849c5e9f0so6816016d6.1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 01:39:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686645579; x=1689237579;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vrGYNaIheG5cW9vw0WAFpAIgS9tsi2HOTi0exhZ2A/c=;
-        b=dQRsLu3ULXj+Yobd4RvhZ9BPoK8nybpkDo+nAhFRv88+5xyUfJQSwuxcTSsFMy+BD6
-         clSBeaJhT4a+tpjxq6jnAw9B0TW6wfU9q1jSypPCpUvDhMIT5JFHWClaSdrtzCpqdF9R
-         ZPazlbSjLjdNxkTipPFSvXGaZFhnoAet3Rrs5/BEcJ6/+8fbUrUa0aRnUHWurPNpIiRx
-         2VrjxvOPJnU5HQc7CENHR778j55B/linnZA775NXP1gUng2CgyQpp0lpxfn21nJc3MdK
-         gzSbeYzvCTuUnIvYL3dG2/1Tv/LSYmdynaXDr4lu1AOXJr8NpPJmkWit6cCXYGuN0WOz
-         wHbw==
-X-Gm-Message-State: AC+VfDzBO9qmpxiqS6LlaJUqhMlLuxwO1qLJjZOOULkxLlUiBPLf4AIU
-        6Izh3rV8C4jBT/9AxbrOfApzkM2SwCauxmHJjPlquR97FR8oeGBEv4aBUkBXLQSJ/pLD/OH37Sj
-        CtZlUW07Ju70Wsr5qFH3+XIl8
-X-Received: by 2002:a05:6214:763:b0:62d:eceb:f7ce with SMTP id f3-20020a056214076300b0062decebf7cemr5372272qvz.1.1686645578865;
-        Tue, 13 Jun 2023 01:39:38 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6ArpYF88Ugrz7kYTH6At9wENyZlMxfLOFwsntoCoR4u161C9Q+M0HyVxOHw+cLbQW2p3OGig==
-X-Received: by 2002:a05:6214:763:b0:62d:eceb:f7ce with SMTP id f3-20020a056214076300b0062decebf7cemr5372260qvz.1.1686645578567;
-        Tue, 13 Jun 2023 01:39:38 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-245-147.dyn.eolo.it. [146.241.245.147])
-        by smtp.gmail.com with ESMTPSA id e21-20020a0caa55000000b00626330a39ecsm3835317qvb.9.2023.06.13.01.39.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 01:39:38 -0700 (PDT)
-Message-ID: <7f773c114001cbcd0c6ff21da9976eb0ba533421.camel@redhat.com>
-Subject: Re: [PATCH net 2/2] net/sched: qdisc_destroy() old ingress and
- clsact Qdiscs before grafting
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Peilin Ye <yepeilin.cs@gmail.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Peilin Ye <peilin.ye@bytedance.com>,
-        Vlad Buslov <vladbu@mellanox.com>,
-        Pedro Tammela <pctammela@mojatatu.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Hillf Danton <hdanton@sina.com>,
-        Zhengchao Shao <shaozhengchao@huawei.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Cong Wang <cong.wang@bytedance.com>
-Date:   Tue, 13 Jun 2023 10:39:33 +0200
-In-Reply-To: <c1f67078dc8a3fd7b3c8ed65896c726d1e9b261e.1686355297.git.peilin.ye@bytedance.com>
-References: <cover.1686355297.git.peilin.ye@bytedance.com>
-         <c1f67078dc8a3fd7b3c8ed65896c726d1e9b261e.1686355297.git.peilin.ye@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Tue, 13 Jun 2023 04:40:14 -0400
+Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C671C0;
+        Tue, 13 Jun 2023 01:40:12 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0Vl1SShK_1686645608;
+Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0Vl1SShK_1686645608)
+          by smtp.aliyun-inc.com;
+          Tue, 13 Jun 2023 16:40:09 +0800
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+To:     axboe@kernel.dk, hch@lst.de, linux-block@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, tianjia.zhang@linux.alibaba.com,
+        xiang@kernel.org, casey@schaufler-ca.com
+Subject: [PATCH v3 0/2] block: fine-granular CAP_SYS_ADMIN for Persistent Reservation ioctl
+Date:   Tue, 13 Jun 2023 16:40:06 +0800
+Message-Id: <20230613084008.93795-1-jefflexu@linux.alibaba.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+changes since v2:
+- patch 1: disallow reservations on partitions entirely and make it into
+  a separate patch (hch)
+- patch 2: rebase to hch's series of converting fmode_t to blk_mode_t
+  and execute permission check upon blk_mode_t (hch)
 
-On Sat, 2023-06-10 at 20:30 -0700, Peilin Ye wrote:
-> From: Peilin Ye <peilin.ye@bytedance.com>
->=20
-> mini_Qdisc_pair::p_miniq is a double pointer to mini_Qdisc, initialized
-> in ingress_init() to point to net_device::miniq_ingress.  ingress Qdiscs
-> access this per-net_device pointer in mini_qdisc_pair_swap().  Similar
-> for clsact Qdiscs and miniq_egress.
->=20
-> Unfortunately, after introducing RTNL-unlocked RTM_{NEW,DEL,GET}TFILTER
-> requests (thanks Hillf Danton for the hint), when replacing ingress or
-> clsact Qdiscs, for example, the old Qdisc ("@old") could access the same
-> miniq_{in,e}gress pointer(s) concurrently with the new Qdisc ("@new"),
-> causing race conditions [1] including a use-after-free bug in
-> mini_qdisc_pair_swap() reported by syzbot:
->=20
->  BUG: KASAN: slab-use-after-free in mini_qdisc_pair_swap+0x1c2/0x1f0 net/=
-sched/sch_generic.c:1573
->  Write of size 8 at addr ffff888045b31308 by task syz-executor690/14901
-> ...
->  Call Trace:
->   <TASK>
->   __dump_stack lib/dump_stack.c:88 [inline]
->   dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
->   print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:319
->   print_report mm/kasan/report.c:430 [inline]
->   kasan_report+0x11c/0x130 mm/kasan/report.c:536
->   mini_qdisc_pair_swap+0x1c2/0x1f0 net/sched/sch_generic.c:1573
->   tcf_chain_head_change_item net/sched/cls_api.c:495 [inline]
->   tcf_chain0_head_change.isra.0+0xb9/0x120 net/sched/cls_api.c:509
->   tcf_chain_tp_insert net/sched/cls_api.c:1826 [inline]
->   tcf_chain_tp_insert_unique net/sched/cls_api.c:1875 [inline]
->   tc_new_tfilter+0x1de6/0x2290 net/sched/cls_api.c:2266
-> ...
->=20
-> @old and @new should not affect each other.  In other words, @old should
-> never modify miniq_{in,e}gress after @new, and @new should not update
-> @old's RCU state.
->=20
-> Fixing without changing sch_api.c turned out to be difficult (please
-> refer to Closes: for discussions).  Instead, make sure @new's first call
-> always happen after @old's last call (in {ingress,clsact}_destroy()) has
-> finished:
->=20
-> In qdisc_graft(), return -EBUSY if @old has any ongoing filter requests,
-> and call qdisc_destroy() for @old before grafting @new.
->=20
-> Introduce qdisc_refcount_dec_if_one() as the counterpart of
-> qdisc_refcount_inc_nz() used for filter requests.  Introduce a
-> non-static version of qdisc_destroy() that does a TCQ_F_BUILTIN check,
-> just like qdisc_put() etc.
->=20
-> Depends on patch "net/sched: Refactor qdisc_graft() for ingress and
-> clsact Qdiscs".
->=20
-> [1] To illustrate, the syzkaller reproducer adds ingress Qdiscs under
-> TC_H_ROOT (no longer possible after commit c7cfbd115001 ("net/sched:
-> sch_ingress: Only create under TC_H_INGRESS")) on eth0 that has 8
-> transmission queues:
->=20
->   Thread 1 creates ingress Qdisc A (containing mini Qdisc a1 and a2),
->   then adds a flower filter X to A.
->=20
->   Thread 2 creates another ingress Qdisc B (containing mini Qdisc b1 and
->   b2) to replace A, then adds a flower filter Y to B.
->=20
->  Thread 1               A's refcnt   Thread 2
->   RTM_NEWQDISC (A, RTNL-locked)
->    qdisc_create(A)               1
->    qdisc_graft(A)                9
->=20
->   RTM_NEWTFILTER (X, RTNL-unlocked)
->    __tcf_qdisc_find(A)          10
->    tcf_chain0_head_change(A)
->    mini_qdisc_pair_swap(A) (1st)
->             |
->             |                         RTM_NEWQDISC (B, RTNL-locked)
->          RCU sync                2     qdisc_graft(B)
->             |                    1     notify_and_destroy(A)
->             |
->    tcf_block_release(A)          0    RTM_NEWTFILTER (Y, RTNL-unlocked)
->    qdisc_destroy(A)                    tcf_chain0_head_change(B)
->    tcf_chain0_head_change_cb_del(A)    mini_qdisc_pair_swap(B) (2nd)
->    mini_qdisc_pair_swap(A) (3rd)                |
->            ...                                 ...
->=20
-> Here, B calls mini_qdisc_pair_swap(), pointing eth0->miniq_ingress to
-> its mini Qdisc, b1.  Then, A calls mini_qdisc_pair_swap() again during
-> ingress_destroy(), setting eth0->miniq_ingress to NULL, so ingress
-> packets on eth0 will not find filter Y in sch_handle_ingress().
->=20
-> This is just one of the possible consequences of concurrently accessing
-> miniq_{in,e}gress pointers.
->=20
-> Fixes: 7a096d579e8e ("net: sched: ingress: set 'unlocked' flag for Qdisc =
-ops")
-> Fixes: 87f373921c4e ("net: sched: ingress: set 'unlocked' flag for clsact=
- Qdisc ops")
-> Reported-by: syzbot+b53a9c0d1ea4ad62da8b@syzkaller.appspotmail.com
-> Closes: https://lore.kernel.org/r/0000000000006cf87705f79acf1a@google.com=
-/
-> Cc: Hillf Danton <hdanton@sina.com>
-> Cc: Vlad Buslov <vladbu@mellanox.com>
-> Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+changes since RFC:
+- only allow unprivileged reservations if the file descriptor is open
+  for write (Christoph Hellwig)
+- refuse the unprivileged reservations on partitions (Christoph Hellwig)
+  (maybe this checking shall also be done when CAP_SYS_ADMIN is set?)
 
-The fixes LGTM, but I guess this could deserve an explicit ack from
-Jakub, as he raised to point for the full retry implementation.
 
-Cheers,
+RFC: https://lore.kernel.org/all/20230609102122.118800-1-jefflexu@linux.alibaba.com/
+v2: https://lore.kernel.org/all/20230612074103.4866-1-jefflexu@linux.alibaba.com/
 
-Paolo
+Jingbo Xu (2):
+  block: disallow Persistent Reservation on partitions
+  block: fine-granular CAP_SYS_ADMIN for Persistent Reservation
+
+ block/ioctl.c | 47 +++++++++++++++++++++++++++++++----------------
+ 1 file changed, 31 insertions(+), 16 deletions(-)
+
+-- 
+2.19.1.6.gb485710b
 
