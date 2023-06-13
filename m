@@ -2,121 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A5572E5BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 16:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A8372E5C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 16:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242921AbjFMOaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 10:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48232 "EHLO
+        id S242769AbjFMOao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 10:30:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239831AbjFMOaH (ORCPT
+        with ESMTP id S240894AbjFMOak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 10:30:07 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2C2E54;
-        Tue, 13 Jun 2023 07:30:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1686666606; x=1718202606;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uE8h88szvoGxwdIx+6c5cOD/htbOXhAFq/tdRywRONE=;
-  b=Olr+8lkQUIJ9uUZPFEoZknMt2l6GidZ6ovf0c2q2EEHo5/WDx5FXI8if
-   dfGqeQ0HFijr5qSkdNXuZ2aj8xWJUGklZ36TH6xH3Wm9CAQGMzWsEMwAb
-   p+AMsdGGMx701vctiRHYl78kRpthKustp7kDfP9iOFYZ6oePOUt+6tZ8a
-   7MEDKFUZbXZ7dOF+twr/hACsSg/Chmc2UfcxrKtc7wpvnHrVcf1EKwd4u
-   nrrpc4xWm+2ex57GUaRfWMsXYx9Zkv7AXgqyxugM30OztwUdZTh3lzPi4
-   HMoW9B/7412DELJaspqVDUHsUMhpcIdPqLHtDMaLREQTVZqU6Iuwh8TvD
-   A==;
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="asc'?scan'208";a="215841586"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Jun 2023 07:30:05 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 13 Jun 2023 07:30:01 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Tue, 13 Jun 2023 07:29:59 -0700
-Date:   Tue, 13 Jun 2023 15:29:33 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Yingkun Meng <mengyingkun@loongson.cn>,
-        Conor Dooley <conor@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
-        <conor+dt@kernel.org>, <lgirdwood@gmail.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <loongarch@lists.linux.dev>,
-        <loongson-kernel@lists.loongnix.cn>
-Subject: Re: [ PATCH v2 3/3] ASoC: dt-bindings: Add support for Loongson
- audio card
-Message-ID: <20230613-crewmate-levitate-597ab96ea2d7@wendy>
-References: <20230612085614.3039498-1-mengyingkun@loongson.cn>
- <20230612-booted-french-186dd95e78a9@spud>
- <bda7c25f-65cf-d45f-3ac0-f2471e3aacf8@loongson.cn>
- <20230613-zoologist-panorama-a87858bba075@wendy>
- <887f9cc4-6457-9d14-8aef-011ff4c9aeda@loongson.cn>
- <20230613-depletion-garnet-ccc2009111c3@wendy>
- <449d07d9-5538-4f36-83a0-3a81a9ab9ea2@sirena.org.uk>
+        Tue, 13 Jun 2023 10:30:40 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7863F199;
+        Tue, 13 Jun 2023 07:30:39 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1b01d3bb571so30618285ad.2;
+        Tue, 13 Jun 2023 07:30:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686666639; x=1689258639;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=x06uIS9mUjSbGg95vCJuM5yUdjryjDtAV88RHciY3lM=;
+        b=KHeSGBuGpQwF1yUpFT4Kjc2BT8mU+sS2Jwmyi01cccNH1ojQck8rxQILpVxLP5VPw3
+         icIA1/bBhK0buIBoa3ZXM4LA9JZ27SRwKF1QJy7wPsa82ALBiZZpH/SryVymS6zQOBsB
+         m2ErL1V4bu0PK8AipFXeVblxIZB7abJJsFt94IEDsNeSfWhUF0i5xFGhq6SYj+jHDLwe
+         akgRgFzbRv7On2c5TUOvNzeV1vOKwHfVSPGy+i1eKJjdkoj5qtTd1Tw/GrD8R+1CtxEY
+         3aUXENPZIAvDrPFWhKEagd3Cl5IBtHuBv35CRHDojxxR0ZasISWSAel1M0+n6Ee8SleD
+         J4Kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686666639; x=1689258639;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x06uIS9mUjSbGg95vCJuM5yUdjryjDtAV88RHciY3lM=;
+        b=Xhr9xuJ3nco+SWur/U+yeTISTVBpmthK95i70/V3tUUL7kjY4581PrU4V2T6QUnZof
+         ULVq+ZsNh2CNKuAtO+DcEojJRiD4yInJkokzCtagu3v+7XNxbV2DCUIQSB6JvkmFPe1t
+         SaL2RqFn4+LnHuoTn5SGvX2d9DPIduXMb+Q5fyK1APIOKJ6TjTYQU4A/iDHbi11MDTdf
+         2V01Pk520EtGwYJwZuhf3n3eAlyz7bJtowzxSwimVffLvsjL9o8zzWmidCrqqqDBw74Q
+         ygwgMFOUXOz5hsTfnG53MudmbP8bNRNMQujAhcjSU5YT1aLTdAkrgufxwEYFEiSqsJKz
+         Phfg==
+X-Gm-Message-State: AC+VfDw9K4FmByJJwjT2Es259Zj6YKzelqbfcyKfgwmuzLG7k0k4WHI9
+        WZ81fSL+YH5Z75LNuytHOp4=
+X-Google-Smtp-Source: ACHHUZ7R38/EA7491ewajF4B4CQzzPDW0mbr9LBfvQCCyUMoVWy5XTFKId4vj2EN/Q0WhirKC+MoPA==
+X-Received: by 2002:a17:903:32c2:b0:1b0:28a7:16d1 with SMTP id i2-20020a17090332c200b001b028a716d1mr10317436plr.10.1686666638722;
+        Tue, 13 Jun 2023 07:30:38 -0700 (PDT)
+Received: from localhost.localdomain ([103.116.245.58])
+        by smtp.gmail.com with ESMTPSA id o4-20020a170902bcc400b001ac897026cesm10324376pls.102.2023.06.13.07.30.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 07:30:38 -0700 (PDT)
+From:   Jianhui Zhao <zhaojh329@gmail.com>
+To:     andrew@lunn.ch
+Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jianhui Zhao <zhaojh329@gmail.com>
+Subject: [PATCH V2] net: phy: Add sysfs attribute for PHY c45 identifiers.
+Date:   Tue, 13 Jun 2023 22:30:25 +0800
+Message-Id: <20230613143025.111844-1-zhaojh329@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="F73UMBvZBx0/ykU7"
-Content-Disposition: inline
-In-Reply-To: <449d07d9-5538-4f36-83a0-3a81a9ab9ea2@sirena.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---F73UMBvZBx0/ykU7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If a phydevice use c45, its phy_id property is always 0, so
+this adds a c45_ids sysfs attribute group contains from mmd0
+to mmd31 to MDIO devices.
+This attribute group can be useful when debugging problems
+related to phy drivers.
 
-On Tue, Jun 13, 2023 at 02:54:36PM +0100, Mark Brown wrote:
-> On Tue, Jun 13, 2023 at 01:46:41PM +0100, Conor Dooley wrote:
->=20
-> > So it is entirely a software construct? Why does it need a dt-binding
-> > then? Your commit message says the controller is present on the device!
->=20
-> A typical embedded (or power efficient laptop) audio design will consist
-> of multiple devices connected together (frequently via non-control
-> buses) together with system level passive components and plastics which
-> are also important to the audio configuration.  A card binding describes
-> the interconections between the devices in the system and provides
-> identification information for the audio subsystem.  This system level
-> audio integration is a physical thing that can be pointed at that
-> requires real software control.
+Likes this:
+/sys/bus/mdio_bus/devices/mdio-bus:05/c45_ids/mmd0
+/sys/bus/mdio_bus/devices/mdio-bus:05/c45_ids/mmd1
+...
+/sys/bus/mdio_bus/devices/mdio-bus:05/c45_ids/mmd31
 
-The bit you were responding to with that was a disingenuous question.
-Probably not fair of me to ask one of a non-native speaker like that,
-when all I wanted to know was whether it was appropriate not to add
-a more specific compatible, or whether this was something invariant.
+Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+---
+V1 -> V2: putting all 32 values in a subdirectory, one file per MMD
 
-> Like I said before please look at the existing audio card bindings.
+ .../ABI/testing/sysfs-class-net-phydev        |  10 ++
+ drivers/net/phy/phy_device.c                  | 103 +++++++++++++++++-
+ 2 files changed, 112 insertions(+), 1 deletion(-)
 
-Yah, ofc I did that to see if there were other similar bindings that
-used specific compatibles...
+diff --git a/Documentation/ABI/testing/sysfs-class-net-phydev b/Documentation/ABI/testing/sysfs-class-net-phydev
+index ac722dd5e694..aefddd911b04 100644
+--- a/Documentation/ABI/testing/sysfs-class-net-phydev
++++ b/Documentation/ABI/testing/sysfs-class-net-phydev
+@@ -63,3 +63,13 @@ Description:
+ 		only used internally by the kernel and their placement are
+ 		not meant to be stable across kernel versions. This is intended
+ 		for facilitating the debugging of PHY drivers.
++
++What:		/sys/class/mdio_bus/<bus>/<device>/c45_ids/mmd<n>
++Date:		November 2023
++KernelVersion:	6.4
++Contact:	netdev@vger.kernel.org
++Description:
++		This attribute group c45_ids contains 32 mmd id attribute from mmd0 to mmd31
++		as reported by the device during bus enumeration, encoded in hexadecimal.
++		This ID is used to match the device with the appropriate
++		driver.
+diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
+index 17d0d0555a79..c09282818d45 100644
+--- a/drivers/net/phy/phy_device.c
++++ b/drivers/net/phy/phy_device.c
+@@ -602,7 +602,108 @@ static struct attribute *phy_dev_attrs[] = {
+ 	&dev_attr_phy_dev_flags.attr,
+ 	NULL,
+ };
+-ATTRIBUTE_GROUPS(phy_dev);
++
++static const struct attribute_group phy_dev_group = {
++	.attrs = phy_dev_attrs
++};
++
++#define DEVICE_ATTR_C45_ID(i) \
++static ssize_t \
++phy_c45_id##i##_show(struct device *dev, \
++	struct device_attribute *attr, char *buf) \
++{ \
++	struct phy_device *phydev = to_phy_device(dev); \
++\
++	if (!phydev->is_c45) \
++		return 0; \
++\
++	return sprintf(buf, "0x%.8lx\n", \
++		(unsigned long)phydev->c45_ids.device_ids[i]); \
++} \
++static struct device_attribute dev_attr_phy_c45_id##i = { \
++	.attr	= { .name = __stringify(mmd##i), .mode = 0444 }, \
++	.show	= phy_c45_id##i##_show \
++}
++
++DEVICE_ATTR_C45_ID(0);
++DEVICE_ATTR_C45_ID(1);
++DEVICE_ATTR_C45_ID(2);
++DEVICE_ATTR_C45_ID(3);
++DEVICE_ATTR_C45_ID(4);
++DEVICE_ATTR_C45_ID(5);
++DEVICE_ATTR_C45_ID(6);
++DEVICE_ATTR_C45_ID(7);
++DEVICE_ATTR_C45_ID(8);
++DEVICE_ATTR_C45_ID(9);
++DEVICE_ATTR_C45_ID(10);
++DEVICE_ATTR_C45_ID(11);
++DEVICE_ATTR_C45_ID(12);
++DEVICE_ATTR_C45_ID(13);
++DEVICE_ATTR_C45_ID(14);
++DEVICE_ATTR_C45_ID(15);
++DEVICE_ATTR_C45_ID(16);
++DEVICE_ATTR_C45_ID(17);
++DEVICE_ATTR_C45_ID(18);
++DEVICE_ATTR_C45_ID(19);
++DEVICE_ATTR_C45_ID(20);
++DEVICE_ATTR_C45_ID(21);
++DEVICE_ATTR_C45_ID(22);
++DEVICE_ATTR_C45_ID(23);
++DEVICE_ATTR_C45_ID(24);
++DEVICE_ATTR_C45_ID(25);
++DEVICE_ATTR_C45_ID(26);
++DEVICE_ATTR_C45_ID(27);
++DEVICE_ATTR_C45_ID(28);
++DEVICE_ATTR_C45_ID(29);
++DEVICE_ATTR_C45_ID(30);
++DEVICE_ATTR_C45_ID(31);
++
++static struct attribute *phy_c45_id_attrs[] = {
++	&dev_attr_phy_c45_id0.attr,
++	&dev_attr_phy_c45_id1.attr,
++	&dev_attr_phy_c45_id2.attr,
++	&dev_attr_phy_c45_id3.attr,
++	&dev_attr_phy_c45_id4.attr,
++	&dev_attr_phy_c45_id5.attr,
++	&dev_attr_phy_c45_id6.attr,
++	&dev_attr_phy_c45_id7.attr,
++	&dev_attr_phy_c45_id8.attr,
++	&dev_attr_phy_c45_id9.attr,
++	&dev_attr_phy_c45_id10.attr,
++	&dev_attr_phy_c45_id11.attr,
++	&dev_attr_phy_c45_id12.attr,
++	&dev_attr_phy_c45_id13.attr,
++	&dev_attr_phy_c45_id14.attr,
++	&dev_attr_phy_c45_id15.attr,
++	&dev_attr_phy_c45_id16.attr,
++	&dev_attr_phy_c45_id17.attr,
++	&dev_attr_phy_c45_id18.attr,
++	&dev_attr_phy_c45_id19.attr,
++	&dev_attr_phy_c45_id20.attr,
++	&dev_attr_phy_c45_id21.attr,
++	&dev_attr_phy_c45_id22.attr,
++	&dev_attr_phy_c45_id23.attr,
++	&dev_attr_phy_c45_id24.attr,
++	&dev_attr_phy_c45_id25.attr,
++	&dev_attr_phy_c45_id26.attr,
++	&dev_attr_phy_c45_id27.attr,
++	&dev_attr_phy_c45_id28.attr,
++	&dev_attr_phy_c45_id29.attr,
++	&dev_attr_phy_c45_id30.attr,
++	&dev_attr_phy_c45_id31.attr,
++	NULL,
++};
++
++static const struct attribute_group phy_dev_c45_ids_group = {
++	.name = "c45_ids",
++	.attrs = phy_c45_id_attrs
++};
++
++static const struct attribute_group *phy_dev_groups[] = {
++	&phy_dev_group,
++	&phy_dev_c45_ids_group,
++	NULL,
++};
+ 
+ static const struct device_type mdio_bus_phy_type = {
+ 	.name = "PHY",
+-- 
+2.34.1
 
-
---F73UMBvZBx0/ykU7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIh9TQAKCRB4tDGHoIJi
-0im6AQCKC+utNKucFVTzatpu/JT9toHFnwcH/P19lIwDWM2GMwD+LgeihZ5UpRNH
-1O78Io5ySAoSy/xH4fujDTp98LU1SQI=
-=AuWz
------END PGP SIGNATURE-----
-
---F73UMBvZBx0/ykU7--
