@@ -2,98 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D4A72E9EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:35:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD3572E9F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 19:35:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239724AbjFMRdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 13:33:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59926 "EHLO
+        id S231862AbjFMRdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 13:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235168AbjFMRdQ (ORCPT
+        with ESMTP id S239515AbjFMRdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 13:33:16 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a02:c205:3004:2154::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F8419BC;
-        Tue, 13 Jun 2023 10:33:11 -0700 (PDT)
-Received: from p5dc58481.dip0.t-ipconnect.de ([93.197.132.129] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <andreas@kemnade.info>)
-        id 1q97t5-0000T3-Nz; Tue, 13 Jun 2023 19:32:59 +0200
-Date:   Tue, 13 Jun 2023 19:32:57 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, tony@atomide.com, afd@ti.com,
-        andreas@kemnade.info, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org
-Subject: Re: [PATCH v7 0/2] dt-bindings: omap: Convert omap.txt to yaml
-Message-ID: <20230613193257.267ad763@aktux>
-In-Reply-To: <20230515074512.66226-1-andreas@kemnade.info>
-References: <20230515074512.66226-1-andreas@kemnade.info>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.24; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 13 Jun 2023 13:33:15 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5955B1FC3
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 10:33:11 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1b3daa7ad62so12118315ad.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 10:33:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686677591; x=1689269591;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VH3BFFQPXMCmHgq4sTEkJiB5nlc/oTUMOeHBDQraoRg=;
+        b=4GIIZmokLWx0sKcscVZ/WqRILAZmvgM67vXFEKRHBzyu5m0n9vru+WeePzg6h1VSfW
+         NeNKYuIYEbM3Ooi8rYAYUgjOxEIK3oC35W0k9WKGXNk7U0Q6/QYqwRf6cnWcxPH2dmG7
+         Ywhi/pUEMeyoJCwjNDLyAqAcK2Fu6QcGIpHL0EsPLAwr5u72PfE359HmDZAQie/fEqXR
+         FSe272BX1Uep7Qo83vQHXfSfcm9mhe/B3JN/Kwkmo4R05pPLfREFUYqWzX9N2i5zGUP2
+         1528wtFuWIT6J4pIYi4TDePJ9+PBNysMe9/R24DITpnKj9Z/ydxW8OnS2yimzFjdzzxh
+         m+DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686677591; x=1689269591;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VH3BFFQPXMCmHgq4sTEkJiB5nlc/oTUMOeHBDQraoRg=;
+        b=ddAecwl049pAqIbFgTrBkAfyxNsy7Gk9Ps24VrcrXB4hjZhsuMbLabsV3j/7jiGgWi
+         SOBzNhmY/2aAh7LTRwDjuAytcrkuxtcS6LYQ7Slyrm0WsogKV1FnS0bMInZlFxXZZ+Xf
+         5dF8FWui0+wdqaG/bmH2t+e0g+1GzvSccc1pRvmjH/tCxgZkApSsUnDUZKvGlcpDlhbu
+         ev1aO4ENnE/dHVHE/Vk1wpdyWmISFs/boSykdTuq/gjwMylI/WYelSNt6VFMOWiAEBf8
+         f0hFM0WLQ2HZZRB02K0pc47tgdFTmNbFbB/aI4daQNOQfTplykCwjqbslb6mqCPnOhJq
+         vt/w==
+X-Gm-Message-State: AC+VfDzKxYVhOmzT05YAseAzT1wp8kYxsKqdHYAaG07bfDqcS7dMutPa
+        JGydD5ZFQ3Eex2Vv9pSKgQaoeEfM2Gw=
+X-Google-Smtp-Source: ACHHUZ40LZhuQyxtqTrzU0E5CVOKoCrXel1ms4oJrdweGCGHs4yjvb5eL9IveRDb17zbaD5p5K1fURK3kTk=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:8a90:b0:1ae:4d1c:1282 with SMTP id
+ p16-20020a1709028a9000b001ae4d1c1282mr1741443plo.7.1686677590757; Tue, 13 Jun
+ 2023 10:33:10 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Tue, 13 Jun 2023 10:33:05 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230613173305.1935490-1-seanjc@google.com>
+Subject: [ANNOUNCE] PUCK Notes - 2023.06.07 - pKVM on x86
+From:   Sean Christopherson <seanjc@google.com>
+To:     kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Apologies for the slow update, I was waiting for the recording to become
+available and was OOO Th/F last week.
 
-any action still expected from my side?
-people gave R-bys...
-So looks like it is ready for the dt-folks to pick it up.
+Key Takeaways:
+ - Primary use case is to secure workloads that process/handle sensitive
+   biometric data (e.g. fingerprints, face authentication).
+ - SEAM is a poor fit as it doesn't provide mechanisms to restrict access to
+   non-DRAM "memory", e.g. access to the hardware devices that provide biometric
+   data.  And there's no line of sight to an AMD equivalent.
+ - pKVM support requires few changes outside of KVM (though the changes to KVM
+   are extensive).
 
-Regards,
-Andreas
+Next Steps:
+ - Re-assess in 3-4 weeks after people have had a chance to read through and
+   review the RFC patches.
 
-On Mon, 15 May 2023 09:45:10 +0200
-Andreas Kemnade <andreas@kemnade.info> wrote:
-
-> Convert board compatibles to yaml and add the new yaml file to
-> MAINTAINERS so that emails are properly distributed
-> 
-> Changes in V7:
->  - checked for lost compatibles
->  - remove conversions with pattern matches probably allowing
->    too much
-> 
-> Changes in V6:
->  - reflect the rename also in the file header
-> 
-> Changes in V5:
->  - renamed the new file to ti/omap.yaml
-> 
-> Changes in V4:
->  - fix order 
->  - re-add dra7 to .txt to have it sorted out later
-> 
-> Changes in V3:
->  - update MAINTAINERS
->  - remove converted stuff from .txt
-> 
-> Changes in V2:
-> - renamed file
-> - fixed gta04
-> - added Openpandora, Epson Moverio BT-200
-> - drop example
-> - remove descriptions if just reformatting the name
-> 
-> Andreas Kemnade (1):
->   MAINTAINERS: add board bindings list to OMAP2+ files
-> 
-> Andrew Davis (1):
->   dt-bindings: omap: Partially convert omap.txt to yaml
-> 
->  .../devicetree/bindings/arm/omap/omap.txt     |  99 ----------
->  .../devicetree/bindings/arm/ti/omap.yaml      | 176 ++++++++++++++++++
->  MAINTAINERS                                   |   1 +
->  3 files changed, 177 insertions(+), 99 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/arm/ti/omap.yaml
-> 
-
+Recording:
+https://drive.google.com/file/d/1JZ6e8ZgR2gUfB4uBYxsJUxp1KVL5YEA_/view?usp=drive_link&resourcekey=0-MGjMLec-8JEIFC3-vmZeLg
