@@ -2,186 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 718F072DD00
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:49:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5599772DCFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 10:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240268AbjFMItg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 04:49:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56406 "EHLO
+        id S241526AbjFMItd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 04:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241090AbjFMIta (ORCPT
+        with ESMTP id S238800AbjFMIt3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 04:49:30 -0400
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BBA9F1;
-        Tue, 13 Jun 2023 01:49:27 -0700 (PDT)
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4QgMg82g5cz9sdK;
-        Tue, 13 Jun 2023 10:49:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
-        s=MBO0001; t=1686646164;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dKOsikHuaIxLmnX7LMFU7lxyfkWIITufUYLJEhwma08=;
-        b=Tg0prYrFLmm3TK1RL2DIhXYXPzA4ERHcq6g/Qv2oJ9RXJ2jCrCHxQ6/l+Qj+AybFvdKTfj
-        g1ku6Q9T4pExxcTpo/xUnNyjeNsxMfadlxigEiqdgLLUIK2d7FVDXqW2HhclLuGZzzTtmg
-        /j/CCKMlE+T+Gk3oPa1Vn/yEqSotGkeI7CTog/PPYrhMaerAEyZnSdWzwpFgTHTZEKLQ9J
-        FEzNuAgRcsBddjDAKxnec9F2Pd1mKGLU86CFysrlVrTe9kChjXMKk0dcQ+j6kfQmRuq10e
-        ve+utR9jq6Oz6orV3YSMI+nhRSoWlX4kxqp8qcc84KxdyXpIamPbal1vD7ElDQ==
-References: <20230613083626.227476-1-frank@oltmanns.dev>
- <20230613083626.227476-3-frank@oltmanns.dev>
-From:   Frank Oltmanns <frank@oltmanns.dev>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        "A.s. Dong" <aisheng.dong@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: Re: [PATCH v2 2/2] clk: tests: Add tests for fractional divisor
- approximation
-In-reply-to: <20230613083626.227476-3-frank@oltmanns.dev>
-Date:   Tue, 13 Jun 2023 10:49:20 +0200
-Message-ID: <871qif21db.fsf@oltmanns.dev>
+        Tue, 13 Jun 2023 04:49:29 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16BBE4
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 01:49:27 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f8cc04c2adso3631305e9.3
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 01:49:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686646166; x=1689238166;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=a0I2pNeOiPYcUgKjv6OV6+sPS7erJxX4fRSV8gqz1fw=;
+        b=JVPJNR2G9K5SB+ZbY//2raud+kEc/EIAVOrsIkSCHCmc2c4Oc6QBLqmbAJj6j3hweh
+         dXw485acl4adLieocy3FOyHxXRAgmSs7fYxE/6DLnxURl8KbWfJgNdJokpDwb9gmRuxE
+         8vi0l5DYkgzMbZHMjWiPGqZIJmixY2tpz+wUZMgxmoVIYjGHIIHg9N2A/8pft+GbW14+
+         tD3UKjvjxMKY11ZJl1oYQqi7rrIoQvusSCgRULOOcpSZjoFmQoP3c7ZshW17QdSs9XKA
+         gJTHWOERR1npxo0rAFS+CBJ5UZbvkh0Ami8TVlfy6pYx70reg/k1ctOhT9JFkPDRYK5R
+         TSHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686646166; x=1689238166;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a0I2pNeOiPYcUgKjv6OV6+sPS7erJxX4fRSV8gqz1fw=;
+        b=jRruX1C8kkKIeU/Mqg5CKXNviomIOZ1zmQ2Mwy4e5q4DZGIMMhc+QYa5GB+UOsu63u
+         Tc6IBfqByLBJmFR0fM5NbXOO3Fki0B40olcnMTleeH5oPNLLWA9mtwWuLPDNjpBru9qj
+         rX7pQ7d6ic2NH/71+GNJ8LMSkKOapAEN0Qr58QZFyGlsUk/4qrdrnjSaA2H4E5fuKAWW
+         uRXCj3hnKVWB0pevSS92rUWA9QrrNVo7hbQQJN/cPo+tyPMSGS8uDXG760sx3TU7dHJa
+         9Stt6SoiqCngf/wp6+VgaMDhDU6UpdJSOzzUhfzkw/8Og7d6wiCG6gRxaAn9wH6aWL8+
+         YdLA==
+X-Gm-Message-State: AC+VfDzuhzOR2TXjqp3H+I6KdT7N2sCmVGReBXRZUnOEVUHbF//Njeyk
+        tKPaF7aH/zzJI0XxL8LbjWNSCw==
+X-Google-Smtp-Source: ACHHUZ42xf9bgppziC+evXWZEQ23sTzyp1CSrHHwD55tNkhkvnVJMtZkpVFyXvbIV1n6bLMqRSDXhg==
+X-Received: by 2002:a7b:c7d8:0:b0:3f6:1474:905 with SMTP id z24-20020a7bc7d8000000b003f614740905mr9375762wmk.29.1686646165959;
+        Tue, 13 Jun 2023 01:49:25 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:b5a8:28ff:af00:a97f? ([2a05:6e02:1041:c10:b5a8:28ff:af00:a97f])
+        by smtp.googlemail.com with ESMTPSA id z15-20020a7bc7cf000000b003f6129d2e30sm13796467wmk.1.2023.06.13.01.49.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 01:49:25 -0700 (PDT)
+Message-ID: <ad78c18e-13dd-fca3-1aff-5b8e68a91c90@linaro.org>
+Date:   Tue, 13 Jun 2023 10:49:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Rspamd-Queue-Id: 4QgMg82g5cz9sdK
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2] thermal/drivers/sun8i: Fix some error handling paths
+ in sun8i_ths_probe()
+Content-Language: en-US
+To:     =?UTF-8?Q?Ond=c5=99ej_Jirman?= <megi@xff.cz>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev
+References: <a8ae84bd2dc4b55fe428f8e20f31438bf8bb6762.1684089931.git.christophe.jaillet@wanadoo.fr>
+ <ucnnixemxbpkjlbyenboydicslozt5jpyjjfbd4gjk4oye52et@fgyd3zqdqsh2>
+ <u7mmywm63bm5q4zlsbnooeplscn4rrd3qnslkfq2xnquxgnkkd@n3tsnrutmfjp>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <u7mmywm63bm5q4zlsbnooeplscn4rrd3qnslkfq2xnquxgnkkd@n3tsnrutmfjp>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+On 15/05/2023 14:33, Ondřej Jirman wrote:
+> Hi Maxime,
+> 
+> On Mon, May 15, 2023 at 01:54:41PM +0200, Maxime Ripard wrote:
+>> Hi,
+>>
+>> On Sun, May 14, 2023 at 08:46:05PM +0200, Christophe JAILLET wrote:
+>>> Should an error occur after calling sun8i_ths_resource_init() in the probe
+>>> function, some resources need to be released, as already done in the
+>>> .remove() function.
+>>>
+>>> Switch to the devm_clk_get_enabled() helper and add a new devm_action to
+>>> turn sun8i_ths_resource_init() into a fully managed function.
+>>>
+>>> Move the place where reset_control_deassert() is called so that the
+>>> recommended order of reset release/clock enable steps is kept.
+>>> A64 manual states that:
+>>>
+>>> 	3.3.6.4. Gating and reset
+>>>
+>>> 	Make sure that the reset signal has been released before the release of
+>>> 	module clock gating;
+>>>
+>>> This fixes the issue and removes some LoC at the same time.
+>>
+>> It should really be three different patches:
+>>   - One to fix the resource release, that can be backported to stable
+>>     releases
+>>   - One to switch to devm_clk_get_enabled
+>>   - and one to change the order of clock enable vs reset deassertion
+> 
+> The order was correct before this patch. I don't think an incorrect order
+> should be intorduced, even if temporarily between two patches.
 
-On 2023-06-13 at 10:36:26 +0200, Frank Oltmanns <frank@oltmanns.dev> wrote:
-> In light of the recent discovery that the fractional divisor
-> approximation does not utilize the full available range for clocks that
-> are flagged CLK_FRAC_DIVIDER_ZERO_BASED, implement tests for the edge
-> cases of this clock type.
->
-> Signed-off-by: Frank Oltmanns <frank@oltmanns.dev>
-> Link: https://lore.kernel.org/lkml/20230529133433.56215-1-frank@oltmanns.dev
-> ---
->  drivers/clk/clk_test.c | 69 +++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 68 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/clk/clk_test.c b/drivers/clk/clk_test.c
-> index f9a5c2964c65..b247ba841cbd 100644
-> --- a/drivers/clk/clk_test.c
-> +++ b/drivers/clk/clk_test.c
-> @@ -8,6 +8,9 @@
->  /* Needed for clk_hw_get_clk() */
->  #include "clk.h"
->
-> +/* Needed for clk_fractional_divider_general_approximation */
-> +#include "clk-fractional-divider.h"
-> +
->  #include <kunit/test.h>
->
->  #define DUMMY_CLOCK_INIT_RATE	(42 * 1000 * 1000)
-> @@ -2394,6 +2397,69 @@ static struct kunit_suite clk_mux_notifier_test_suite = {
->  	.test_cases = clk_mux_notifier_test_cases,
->  };
->
-> +
-> +/*
-> + * Test that clk_fractional_divider_general_approximation will work with the
-> + * highest available numerator and denominator.
-> + */
-> +static void clk_fd_test_round_rate_max_mn(struct kunit *test)
-> +{
-> +	struct clk_fractional_divider *fd;
-> +	struct clk_hw *hw;
-> +	unsigned long rate, parent_rate, m, n;
-> +
-> +	fd = kunit_kzalloc(test, sizeof(*fd), GFP_KERNEL);
-> +	KUNIT_ASSERT_NOT_NULL(test, fd);
-> +
-> +	fd->mwidth = 3;
-> +	fd->nwidth = 3;
-> +
-> +	hw = &fd->hw;
-> +
-> +	rate = DUMMY_CLOCK_RATE_1;
-> +
-> +	// Highest denominator, no flags
-> +	parent_rate = 10 * DUMMY_CLOCK_RATE_1;
-> +	clk_fractional_divider_general_approximation(hw, rate, &parent_rate, &m, &n);
-> +	KUNIT_EXPECT_EQ(test, m, 1);
-> +	KUNIT_EXPECT_EQ(test, n, 7);
-> +
-> +	// Highest numerator, no flags
-> +	parent_rate = DUMMY_CLOCK_RATE_1 / 10;
-> +	clk_fractional_divider_general_approximation(hw, rate, &parent_rate, &m, &n);
-> +	KUNIT_EXPECT_EQ(test, m, 7);
-> +	KUNIT_EXPECT_EQ(test, n, 1);
+Maxime ?
 
-The two calls above aim at proving that the change does not break
-existing functionality.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-> +
-> +	// Highest denominator, zero based
-> +	parent_rate = 10 * DUMMY_CLOCK_RATE_1;
-> +	fd->flags = CLK_FRAC_DIVIDER_ZERO_BASED;
-> +	clk_fractional_divider_general_approximation(hw, rate, &parent_rate, &m, &n);
-> +	KUNIT_EXPECT_EQ(test, m, 1);
-> +	KUNIT_EXPECT_EQ(test, n, 8);
-> +
-> +	// Highest numerator, zero based
-> +	parent_rate = DUMMY_CLOCK_RATE_1 / 10;
-> +	clk_fractional_divider_general_approximation(hw, rate, &parent_rate, &m, &n);
-> +	KUNIT_EXPECT_EQ(test, m, 8);
-> +	KUNIT_EXPECT_EQ(test, n, 1);
-> +}
-> +
-> +static struct kunit_case clk_fd_test_cases[] = {
-> +	KUNIT_CASE(clk_fd_test_round_rate_max_mn),
-> +	{}
-> +};
-> +
-> +/*
-> + * Test suite for a fractional divider clock.
-> + *
-> + * These tests exercise the fractional divider API: clk_recalc_rate,
-> + * clk_set_rate(), clk_round_rate().
-> + */
-> +static struct kunit_suite clk_fd_test_suite = {
-> +	.name = "clk-fd-test",
-> +	.test_cases = clk_fd_test_cases,
-> +};
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
-Unfortunately, the style of the tests does not really match with the
-style of the existing tests, because those where all aimed at the
-framework itself and not at specific functions.
-
-Please let me know, if you require any changes.
-
-Thanks,
-  Frank
-
-> +
->  kunit_test_suites(
->  	&clk_leaf_mux_set_rate_parent_test_suite,
->  	&clk_test_suite,
-> @@ -2406,6 +2472,7 @@ kunit_test_suites(
->  	&clk_range_maximize_test_suite,
->  	&clk_range_minimize_test_suite,
->  	&clk_single_parent_mux_test_suite,
-> -	&clk_uncached_test_suite
-> +	&clk_uncached_test_suite,
-> +	&clk_fd_test_suite
->  );
->  MODULE_LICENSE("GPL v2");
