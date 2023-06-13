@@ -2,62 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E64F972DDA3
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 11:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A6072DDA6
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 11:28:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239440AbjFMJ2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 05:28:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49820 "EHLO
+        id S240482AbjFMJ2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 05:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233062AbjFMJ2I (ORCPT
+        with ESMTP id S239912AbjFMJ2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 05:28:08 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD2CE52;
-        Tue, 13 Jun 2023 02:28:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686648487; x=1718184487;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=+94BmlOXXK9BhgybLoQlXD+SsDGq3jQslMKS/rV+7YI=;
-  b=j8vOGpsuuH5cNj5ryiTBbaavIVd3RgLgPGbu2veeIROEg5ObgtXfAxwI
-   AW+x+9zvEJRRIB5Qob6FXyUUzmwTDTOS6wPCQT+Z/4r+846KGawl8KSSS
-   wAtb1qWXQjZDVrECrwP9/6ypA4tvkBaFXF4cHJ5dIFXiugGs3b6LvUBYG
-   0LTpfd7FuJGYcjvZeAXRx5Hnegiskf6sdYz/P2ZaJJ4t1ME49DVwSWQwG
-   XmwBwd6AM51FlhLjKd9MMhkv4/V3LKu7b3RiZLnS5ssKcY6wFNTzIEuxR
-   6dkAeChLhPemDAEUVPbbab5shLCHiOvQw+pPR4VRn8AUcJmh6FqYpTIlp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="444654230"
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="scan'208";a="444654230"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 02:28:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="856017131"
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="scan'208";a="856017131"
-Received: from abujor-mobl.ger.corp.intel.com ([10.249.44.113])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 02:28:03 -0700
-Date:   Tue, 13 Jun 2023 12:28:01 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Michal Wilczynski <michal.wilczynski@intel.com>
-cc:     linux-acpi@vger.kernel.org, rafael@kernel.org,
-        andriy.shevchenko@intel.com, pali@kernel.org, hdegoede@redhat.com,
-        markgross@kernel.org, fengguang.wu@intel.com,
-        dvhart@linux.intel.com, platform-driver-x86@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] platform/x86/dell/dell-rbtn: Fix resources leaking
- on error path
-In-Reply-To: <20230612090250.1417940-1-michal.wilczynski@intel.com>
-Message-ID: <27dfd35-1d9d-b52f-ee7-1a5b9b25794@linux.intel.com>
-References: <20230612090250.1417940-1-michal.wilczynski@intel.com>
+        Tue, 13 Jun 2023 05:28:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0694A13E;
+        Tue, 13 Jun 2023 02:28:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 87C70632B0;
+        Tue, 13 Jun 2023 09:28:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70438C433D2;
+        Tue, 13 Jun 2023 09:28:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686648493;
+        bh=WrUaJlwPOdtH8Grtb3bcTqhOd6ZRH6ivcqiAJBGA61A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dtlBEDlInPiJlEo/p+6W2w8iVMXBB22HyclMjkfcITxusrVvmqDFUEuYUUZPxc1Vm
+         DTcPGiAyzmxCRrsp0VnF2bzZx7bUByoo90KmsgR0MkVDkuFefTzWtNIX4g7jTBWkR6
+         B4zk5+zqCTaex4SDzxWPGIb8g104LSPq59B/IExiBEERUpPUrX2c4TyBW5PlkMEQjl
+         dPo0z3nRcN7+5XcZutQiaHun1uwKML5YrvXObDjUPUTFdJ10Wumn5p7SVMsSoJih9G
+         BvDpTvoOe5D2JvLuWFPtka8Nagz1pzfa0SoKOgQ/8qB102ITVqPQvc0Yu4br3/0eIy
+         o91t+00olmZkg==
+Date:   Tue, 13 Jun 2023 11:28:10 +0200
+From:   Maxime Ripard <mripard@kernel.org>
+To:     Sui Jingfeng <suijingfeng@loongson.cn>
+Cc:     Sui Jingfeng <15330273260@189.cn>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH v14 0/2] drm: add kms driver for loongson display
+ controller
+Message-ID: <7rbtdidyfpctz22pw2mnt2a6yp34hwp2bdp7usp52ft5mfrfud@nokbyxjip5by>
+References: <20230520105718.325819-1-15330273260@189.cn>
+ <d4e647d8-294c-abd7-40c6-37381796203d@loongson.cn>
+ <a23d6mgl4fbfa4ucgjvwgw7l3somxo4tkhit7ygy55fldlum56@vm3tyjdsx24l>
+ <d2f744b6-e4c9-d1b5-d4ca-470b801c670d@189.cn>
+ <hvfr6qkepf6l3ymqtp6vhlneeqihnli7g5v7nzd6rirwleffk6@4ernj6xng5rt>
+ <42c54caf-0ab9-a075-b641-9e3e21b2a2f3@loongson.cn>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-1811702421-1686643242=:2099"
-Content-ID: <902feaef-9eb8-167d-8b1b-9a28d1c936b8@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="efolnwkilneuxbv7"
+Content-Disposition: inline
+In-Reply-To: <42c54caf-0ab9-a075-b641-9e3e21b2a2f3@loongson.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,60 +71,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323329-1811702421-1686643242=:2099
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <e391539-a58-2e42-2fc3-bb836f9ca96@linux.intel.com>
+--efolnwkilneuxbv7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 12 Jun 2023, Michal Wilczynski wrote:
+On Tue, Jun 13, 2023 at 05:17:00PM +0800, Sui Jingfeng wrote:
+>=20
+> On 2023/6/13 17:10, Maxime Ripard wrote:
+> > On Tue, Jun 13, 2023 at 04:35:44PM +0800, Sui Jingfeng wrote:
+> > > Hi,
+> > >=20
+> > > On 2023/6/13 16:30, Maxime Ripard wrote:
+> > > > Hi,
+> > > >=20
+> > > > On Mon, Jun 12, 2023 at 10:58:54PM +0800, Sui Jingfeng wrote:
+> > > > > Hi,
+> > > > >=20
+> > > > >=20
+> > > > > Any ideas for this trivial DC driver? Sorry about my broken Engli=
+sh.
+> > > > >=20
+> > > > > What to do next? Send a new version?
+> > > > Thomas already told you to merge it in the previous version:
+> > > > https://lore.kernel.org/dri-devel/7b77020f-d543-13bf-e178-bc416bcc7=
+28d@suse.de/
+> > > >=20
+> > > > So.. do that?
+> > > Yes, that sound fine.
+> > >=20
+> > > But I can't do it myself, would you like to help?
+> > Why can't you do it yourself?
+>=20
+> I don't have a commit access to the drm-misc,
+>=20
+> I think, I can get the commit access in a letter time when I good enough,
+>=20
+> But get the code merged, just merge the latest version is OK.
 
-> Currently rbtn_add() in case of failure is leaking resources. Fix this
-> by adding a proper rollback. While at it, remove unnecessary assignment
-> of NULL to device->driver_data and unnecessary whitespace, plus add a
-> break for the default case in a switch.
-> 
-> Suggested-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> Fixes: 817a5cdb40c8 ("dell-rbtn: Dell Airplane Mode Switch driver")
-> Signed-off-by: Michal Wilczynski <michal.wilczynski@intel.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/platform/x86/dell/dell-rbtn.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/dell/dell-rbtn.c b/drivers/platform/x86/dell/dell-rbtn.c
-> index aa0e6c907494..e9b3f9c3ab7d 100644
-> --- a/drivers/platform/x86/dell/dell-rbtn.c
-> +++ b/drivers/platform/x86/dell/dell-rbtn.c
-> @@ -420,10 +420,12 @@ static int rbtn_add(struct acpi_device *device)
->  		break;
->  	default:
->  		ret = -EINVAL;
-> +		break;
->  	}
-> +	if (ret)
-> +		rbtn_acquire(device, false);
->  
->  	return ret;
-> -
->  }
->  
->  static void rbtn_remove(struct acpi_device *device)
-> @@ -442,7 +444,6 @@ static void rbtn_remove(struct acpi_device *device)
->  	}
->  
->  	rbtn_acquire(device, false);
-> -	device->driver_data = NULL;
->  }
->  
->  static void rbtn_notify(struct acpi_device *device, u32 event)
+Look at the link in Thomas mail, it's the documentation on how to get
+commit access.
 
-I'm a bit worried the stable people might not like "these while at it 
-parts". Those changes too are all good but unrelated to the actual fix so 
-they should appear in their own patches.
+Maxime
 
--- 
- i.
---8323329-1811702421-1686643242=:2099--
+--efolnwkilneuxbv7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZIg2qgAKCRDj7w1vZxhR
+xe2oAP4gD4M8YGkmV6iqul3AbWlc89QdI9EkMzUDaxAdh2wwhAD/RciCYKO5vjJ4
+wHadgVBEHDBjHiKxJ5t/84BRjU5WewY=
+=45xg
+-----END PGP SIGNATURE-----
+
+--efolnwkilneuxbv7--
