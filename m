@@ -2,97 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A83A72EFD6
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 01:11:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 669BF72EFD7
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 01:15:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241203AbjFMXLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 19:11:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53056 "EHLO
+        id S232958AbjFMXPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 19:15:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233131AbjFMXK7 (ORCPT
+        with ESMTP id S230017AbjFMXPa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 19:10:59 -0400
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC4510C2;
-        Tue, 13 Jun 2023 16:10:58 -0700 (PDT)
-Received: by mail-oo1-xc32.google.com with SMTP id 006d021491bc7-55b8f1c930eso92714eaf.3;
-        Tue, 13 Jun 2023 16:10:58 -0700 (PDT)
+        Tue, 13 Jun 2023 19:15:30 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD1F199A
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 16:15:29 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b1b51ec3e9so72685ad.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 16:15:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686697858; x=1689289858;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CGbbjXN/crvc59oMheelamvmeF6LUTy2pn88QOiGH8w=;
-        b=LcT9ZFoqQsWDsjMQq00tcthHC3hGHT15aJmiOvTQfd81qF7dR2S9G+roEvMpyVASPc
-         35ZlYyUbzSbT4Vw3P9Z3Mc7WJGzPRQtz1WZWOvoxm2ymAx6I8bN18K4hY//JcSsNFW5Z
-         U2XWcBmbe6PmgV0+3w/EKla62syx84BC/vS4b+LrcmZ0JYwQZ7muRrVhHtcdtw8YlmRB
-         Yz/mfyYP+XRFUO5scJOI5q+C2WbGdQQtDbVmQXzV9T4B0HHa6AsmwmQigPgRMwRwLAhx
-         SxvrPToMda2TIqRbT5GOO+bw+/GXdGcTYoNZn/TEyj5gOLCZleUegfuAHFvn+8OouB0R
-         ltiQ==
+        d=google.com; s=20221208; t=1686698129; x=1689290129;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8uyQg9FJf1ujfXr9f268eDNpOT0Va/5nApJsu9c/ceI=;
+        b=ZU1TKS+Chn34vLFJwibDHRoEMvmMiSzpf0ZDVkri5ROYoqs8V2zaY2gNqlFnh3FM9W
+         DAfgIDaZfN+2aLQtYCYtmoYPiN7JOh7oTfXWyO/zsl4jhbkkwuJgb7gGO9atdO9mcjGz
+         xeycv9Kjlo2A2wW73U+OW03nshU6dNBbPmU1NS9CvyIgiPMHPEkbB3U9BtZlVx5oqvMj
+         6fLUMYeML4SdpsgO8ChyciHmoZnlyyxqL8fsGl8FExrKWpb+z83m0JOw3AxJdvkM//Yd
+         UgEAXqhcEFtsBq5fHl5j1MGD/WK2Vg/xSiB3L6ZdStIV9vrh9oia48S+bPbcnTMZg0cp
+         LA9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686697858; x=1689289858;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CGbbjXN/crvc59oMheelamvmeF6LUTy2pn88QOiGH8w=;
-        b=D/q7N0iitNDHn8c2kZdvT+L8nqzEqw7HY0bxtS+SSEL7voDCT5CntGFKeRGwuMNUCc
-         eluU8uEoN3Bqtzo4yCqqWhNKud7TeamlWzTNEs45H0rkaTAy3fdnZryV3RWliLf5+MJ+
-         3ZBhEoJykk861BbedLwifGW4CL59a1+/tFUS+Mc+rrLdUPRu8bswn+2PmLNa47jZcS6X
-         QV6CECw9FlMbhNWtUrI/W9SdgjauLzI3aVf4h28GU5UFrMhZTmb0MC6UHLtfeUdvkNMs
-         AkR/btyAoWJ1dAhtHEJdvzmuVLFEaXzSVDPAs9luFKQ/xO4Ak2Z9SH8g8FvwZejfIYAX
-         /KbQ==
-X-Gm-Message-State: AC+VfDzPTWjiDFz/UOj26Bmck4fDtL8cPL8z/0nwDmFNi0CVFyvBxYRm
-        4H22SgYB4G1eGDHBbZRQeLs=
-X-Google-Smtp-Source: ACHHUZ6vmk5nAB5OTM4ohimtJnmJRT52OmC+SYe2CrEewD9jQnkbUwfqb8D1bb9uWZaW579bD7IiWg==
-X-Received: by 2002:a05:6359:29a:b0:129:c3a3:5efd with SMTP id ek26-20020a056359029a00b00129c3a35efdmr6807107rwb.24.1686697857811;
-        Tue, 13 Jun 2023 16:10:57 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y9-20020a655a09000000b005287a0560c9sm9089916pgs.1.2023.06.13.16.10.57
+        d=1e100.net; s=20221208; t=1686698129; x=1689290129;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8uyQg9FJf1ujfXr9f268eDNpOT0Va/5nApJsu9c/ceI=;
+        b=DrJ7J13vbst/Sv1ImcavJwHfKsLGi/3HS23arD1lEFY6hoGK5eZA7Vt7/YndCv6T6U
+         ecXuOtbHwog14l7v5pN4JQp0qpUjk2Jvvadxj6l8U+w/6muAM4V6AnFc6mif4KdHfF3y
+         p51praN8psEdI422iuPfyLN9kCezC9B4+I5km/MPxJdKHWIu7gxgKEUar+xywh6maawE
+         hUkBg+d02/q6D0dd0ZELw9NlHV2JD+59VaTP3dZBD4dlrQAmzsvkzpKwNohg/6xCW8fd
+         b/K9416AaJkKBOQqkpP78Vqu2/Qfp0GCiGVgXWoNWMA2cBSMHWiX1hsKSiMDZRWCj+aQ
+         UmHA==
+X-Gm-Message-State: AC+VfDz4tp9u6QyHtWHwCIAkJCdkPuaF3wofjzCQNsV0sshfgyfhcY1t
+        bExLfqibYqh1IqakdBaEzBco7w==
+X-Google-Smtp-Source: ACHHUZ48GxbxKpQWOMS+G+8jVGNcR3YlGU7DNqyZtqK/fyTpBYFnk38p2ckYqoGkswYn/FM3bj+NDA==
+X-Received: by 2002:a17:902:cf0b:b0:1b3:c97a:1e90 with SMTP id i11-20020a170902cf0b00b001b3c97a1e90mr98471plg.4.1686698129085;
+        Tue, 13 Jun 2023 16:15:29 -0700 (PDT)
+Received: from [2620:0:1008:15:18be:6c84:11a2:b54] ([2620:0:1008:15:18be:6c84:11a2:b54])
+        by smtp.gmail.com with ESMTPSA id rj6-20020a17090b3e8600b002599ef80ab9sm11613374pjb.3.2023.06.13.16.15.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 16:10:57 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 13 Jun 2023 16:10:56 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.3 000/160] 6.3.8-rc1 review
-Message-ID: <51551bd1-425a-45be-b3f1-76cd96761910@roeck-us.net>
-References: <20230612101715.129581706@linuxfoundation.org>
+        Tue, 13 Jun 2023 16:15:28 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 16:15:27 -0700 (PDT)
+From:   David Rientjes <rientjes@google.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+cc:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/slab_common: use SLAB_NO_MERGE instead of negative
+ refcount
+In-Reply-To: <20230613102820.19153-2-vbabka@suse.cz>
+Message-ID: <11b6e080-8820-87bb-2686-1c78debad4c5@google.com>
+References: <20230613102820.19153-2-vbabka@suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612101715.129581706@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 12:25:32PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.3.8 release.
-> There are 160 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue, 13 Jun 2023, Vlastimil Babka wrote:
+
+> When CONFIG_MEMCG_KMEM is enabled, we disable cache merging for
+> KMALLOC_NORMAL so they don't end up merged with a cache that uses ad-hoc
+> __GFP_ACCOUNT. This was implemented by setting refcount to -1, but now
+> we have a proper SLAB_NO_MERGE flag, so use that instead.
 > 
-> Responses should be made by Wed, 14 Jun 2023 10:16:41 +0000.
-> Anything received after that time might be too late.
-> 
+> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 
-Build results:
-	total: 153 pass: 153 fail: 0
-Qemu test results:
-	total: 520 pass: 520 fail: 0
-
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
+Acked-by: David Rientjes <rientjes@google.com>
