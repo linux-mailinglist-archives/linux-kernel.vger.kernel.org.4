@@ -2,83 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21E2872E763
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99FA372E74F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 17:37:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240612AbjFMPg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 11:36:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52866 "EHLO
+        id S242942AbjFMPfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 11:35:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242338AbjFMPgl (ORCPT
+        with ESMTP id S243000AbjFMPex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 11:36:41 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286AE2101
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 08:36:09 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id 5614622812f47-39ce64700cbso1364658b6e.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 08:36:09 -0700 (PDT)
+        Tue, 13 Jun 2023 11:34:53 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CF31BEE
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 08:34:48 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-3f9b7de94e7so288451cf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 08:34:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1686670550; x=1689262550;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1686670487; x=1689262487;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YjPmtbt5dpp3nV1ppkSLOwXIjTqZCsmy4toORZe/818=;
-        b=Swu4hszULQzPuPzBt7iqf7LrNn3pbjBkMCsVSv0eHYkgdWXz+ssLl7XTId4Nr5rzC+
-         8a3/nOLQ58HBh1itV5d3Zm1Q5o/F/sG56/XMn/lM7XnGldDZFhvJaLBGVX3ct4r9PaUq
-         5xO2UMfIQ8LB3/+IweLxBeFM5jNSHy8V6LJ2QcsPHefylqBWPP/Fg76wn8cuwCSZoYE0
-         Hn3w6RKopilic4uboB8qNvybBC/uHDgpVqXXH5WZGqI4sWPZATWZqmo2PQA7vdOSKVnH
-         ZyKKq+H3CDcbycD+IazyO/GnO4bAGuQlmH8rMA4VeTT5U46wMBVBwupa7M1pKv9PNj6p
-         5Abg==
+        bh=8dMYlj7iUQeJ0BKLhAjf7bhCdFYI7Iu2GyDUwmySGX8=;
+        b=EwaGiGbQZuTd76G9xqhhCWKOH/7AbaQrtP4AMsNOavUCFeAvUUf6YdG4pAsTAB0nv3
+         wwhKffPS5ALGgXrIbI2q+uwCr9s5ZMFyb4dH0zxNcxg7vvCrnxsxnuwO9KGWjy3PHKeR
+         nu2LJbFvqhciO2Vfwl2xHaAaH+z421pmBXay8Xbv845RZ26F03WSE/CyLl8T/V0R+vZF
+         Js7RkR1Ao1S8voU+QupyBnVUg2bRdslBXmTjmu9RTWPiKqpXiEgyfZPtUQfHTYaJcaS1
+         P11y/t6QB0hH0ZtIvcncK6bjzn7hvC/IuT2ivqDlejKecK1liz8u+1WF96FwL1qGiJti
+         lFbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686670550; x=1689262550;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1686670487; x=1689262487;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YjPmtbt5dpp3nV1ppkSLOwXIjTqZCsmy4toORZe/818=;
-        b=hy3WqoMutvTVqyThZffL7z8Kai+aCSKBhiwghx1U+a8RnZW9rp4LbpiuWXt0pS526d
-         9dBXuoz5rOPBhd3IYb+89XxWLREKdiQ5akadlrFvWq4LPsTao3lekiTE3Or81IhZ4jN6
-         br6G6cxbWIesLWQByNi3289HowkjgoK0c4TGeESbY8v5R2bvb520Jw1A2GS3WW8fSovc
-         Vvkq71nWuQrGG1/bg3/Zd6fDrbboVOgpt1cPoBmBkn8RoHMymRe3DG2vTZpDCaUJ9ZUa
-         QbDzEhS1tPz7yOMOAc2GiLbgeKyvFuqaalazadVCVPyfu83G4ZBDwz9k5GC591faboc5
-         4EOA==
-X-Gm-Message-State: AC+VfDzTmd5cnv8hHUJvv1jjZifQfqYTGvlTSLBFuW2hyj0QI0mVarLN
-        5zQdStQghFRO7NYXzqYxYiTWRw==
-X-Google-Smtp-Source: ACHHUZ7Tg1xp84o5UNsIGFouFyCklTip/xPfGoAYw3cqzXxDnJEowsGdk1gdK+IhU0wBCwPu3ab6ww==
-X-Received: by 2002:a54:408e:0:b0:38e:d739:6f3f with SMTP id i14-20020a54408e000000b0038ed7396f3fmr6723088oii.56.1686670549823;
-        Tue, 13 Jun 2023 08:35:49 -0700 (PDT)
-Received: from anup-ubuntu-vm.localdomain ([103.97.165.210])
-        by smtp.gmail.com with ESMTPSA id n2-20020acabd02000000b0039ce305ea4fsm1630807oif.14.2023.06.13.08.35.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 08:35:49 -0700 (PDT)
-From:   Anup Patel <apatel@ventanamicro.com>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     Atish Patra <atishp@atishpatra.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Conor Dooley <conor@kernel.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, iommu@lists.linux.dev,
-        Anup Patel <apatel@ventanamicro.com>
-Subject: [PATCH v4 10/10] MAINTAINERS: Add entry for RISC-V AIA drivers
-Date:   Tue, 13 Jun 2023 21:04:15 +0530
-Message-Id: <20230613153415.350528-11-apatel@ventanamicro.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230613153415.350528-1-apatel@ventanamicro.com>
-References: <20230613153415.350528-1-apatel@ventanamicro.com>
+        bh=8dMYlj7iUQeJ0BKLhAjf7bhCdFYI7Iu2GyDUwmySGX8=;
+        b=Z0i05uxZyOD1sg00wCGdhSMDBmqLHiR/UfcCvoFoK5Rqu1gn1ZZ64Y/bQjnldzokY9
+         eLQLEm/GOsjN6IcwXz/m2c6n99jh1EjOAaWe6oJPywsd0cv7Zt+Mge60VABA7mIVfx88
+         +Yleu6dzt30IogyXrPxP+GGh1HYS2V1hcw2ub1jNg14rBcWzWewN5EvcYxtEl7vVSGy0
+         B+0+fEvqHYZRtsI4Jeu/MXSli+1faOxIp/c4o2k1bEGTJCrVb8rdhMyndEpAWRsUk+am
+         WbE71gdJDoIrjmqL4uWeXGywwxFHeqpoAsor4BNE3Ys3vX+2NB1oiSP5bEM6LhSlVi96
+         HP9A==
+X-Gm-Message-State: AC+VfDwIGwjly1vqe7JPqZq/D7tOXy1i90pqpgZLwXXQcJ8DExavLssA
+        kTZQffGqnaM/543nVQUox1ifEEcMrpCcF+8e9wdeWw==
+X-Google-Smtp-Source: ACHHUZ6x242VmlboiolvbEgyois5rr0oH8Go03NqcPHpODBvNDFIB/csmaFDIMMDpHIlK6KOJKg1ubHmmTF2+3B5lbA=
+X-Received: by 2002:a05:622a:134b:b0:3f9:56c:1129 with SMTP id
+ w11-20020a05622a134b00b003f9056c1129mr106783qtk.5.1686670487234; Tue, 13 Jun
+ 2023 08:34:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230613095506.547-1-ravi.bangoria@amd.com> <20230613095506.547-5-ravi.bangoria@amd.com>
+In-Reply-To: <20230613095506.547-5-ravi.bangoria@amd.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 13 Jun 2023 08:34:35 -0700
+Message-ID: <CAP-5=fVm4_BhZTx2OpR+FYo4GD3ZTFiiY1NR_4_XnDX6XHuhLQ@mail.gmail.com>
+Subject: Re: [PATCH 4/4] perf mem amd: Scan all PMUs instead of just core ones
+To:     Ravi Bangoria <ravi.bangoria@amd.com>
+Cc:     acme@kernel.org, jolsa@kernel.org, namhyung@kernel.org,
+        mark.rutland@arm.com, peterz@infradead.org,
+        adrian.hunter@intel.com, kan.liang@linux.intel.com,
+        james.clark@arm.com, alisaidi@amazon.com, leo.yan@linaro.org,
+        maddy@linux.ibm.com, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sandipan.das@amd.com,
+        ananth.narayan@amd.com, santosh.shukla@amd.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,37 +75,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add myself as maintainer for RISC-V AIA drivers including the
-RISC-V INTC driver which supports both AIA and non-AIA platforms.
+On Tue, Jun 13, 2023 at 2:56=E2=80=AFAM Ravi Bangoria <ravi.bangoria@amd.co=
+m> wrote:
+>
+> Scanning only core PMUs is not sufficient on AMD since perf mem on
+> AMD uses IBS OP PMU, which is independent of core PMU.
+>
+> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
+> ---
+>  tools/perf/arch/x86/util/mem-events.c |  5 +++++
+>  tools/perf/util/mem-events.c          | 16 ++++++++++++----
+>  tools/perf/util/mem-events.h          |  1 +
+>  3 files changed, 18 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/perf/arch/x86/util/mem-events.c b/tools/perf/arch/x86/=
+util/mem-events.c
+> index a8a782bcb121..43af872e89a6 100644
+> --- a/tools/perf/arch/x86/util/mem-events.c
+> +++ b/tools/perf/arch/x86/util/mem-events.c
+> @@ -91,3 +91,8 @@ char *perf_mem_events__name(int i, char *pmu_name)
+>
+>         return (char *)e->name;
+>  }
+> +
+> +bool perf_mem_events__via_core_pmus(void)
+> +{
+> +       return !x86__is_amd_cpu();
+> +}
+> diff --git a/tools/perf/util/mem-events.c b/tools/perf/util/mem-events.c
+> index be15aadb6b14..0c04f883d634 100644
+> --- a/tools/perf/util/mem-events.c
+> +++ b/tools/perf/util/mem-events.c
+> @@ -109,6 +109,14 @@ static bool perf_mem_event__supported(const char *mn=
+t, char *sysfs_name)
+>         return !stat(path, &st);
+>  }
+>
+> +bool __weak perf_mem_events__via_core_pmus(void)
+> +{
+> +       return true;
+> +}
+> +
+> +#define perf_mem_scan_next_pmu(pmu) \
+> +       (perf_mem_events__via_core_pmus() ? perf_pmus__scan_core(pmu) : p=
+erf_pmus__scan(pmu))
+> +
+>  int perf_mem_events__init(void)
+>  {
+>         const char *mnt =3D sysfs__mount();
+> @@ -130,7 +138,7 @@ int perf_mem_events__init(void)
+>                 if (!e->tag)
+>                         continue;
+>
+> -               while ((pmu =3D perf_pmus__scan_core(pmu)) !=3D NULL) {
+> +               while ((pmu =3D perf_mem_scan_next_pmu(pmu)) !=3D NULL) {
+>                         scnprintf(sysfs_name, sizeof(sysfs_name), e->sysf=
+s_name, pmu->name);
+>                         e->supported |=3D perf_mem_event__supported(mnt, =
+sysfs_name);
+>                 }
+> @@ -165,7 +173,7 @@ static void perf_mem_events__print_unsupport_hybrid(s=
+truct perf_mem_event *e,
+>         char sysfs_name[100];
+>         struct perf_pmu *pmu =3D NULL;
+>
+> -       while ((pmu =3D perf_pmus__scan_core(pmu)) !=3D NULL) {
+> +       while ((pmu =3D perf_mem_scan_next_pmu(pmu)) !=3D NULL) {
 
-Signed-off-by: Anup Patel <apatel@ventanamicro.com>
----
- MAINTAINERS | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+It was my mistake to optimize this, I think we can just go back to:
+perf_pmus__scan(pmu)
+which would remove a lot of the weak/macros etc. here. We can have a
+comment as to why this is scan not scan_core, because of AMD. I plan
+to further improve overhead of PMUs so I'm not worried about losing
+the small performance win from this.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 51da90e60004..2d474eb902fa 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18136,6 +18136,18 @@ S:	Maintained
- F:	drivers/mtd/nand/raw/r852.c
- F:	drivers/mtd/nand/raw/r852.h
- 
-+RISC-V AIA DRIVERS
-+M:	Anup Patel <anup@brainfault.org>
-+L:	linux-riscv@lists.infradead.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml
-+F:	Documentation/devicetree/bindings/interrupt-controller/riscv,imsics.yaml
-+F:	drivers/irqchip/irq-riscv-aplic.c
-+F:	drivers/irqchip/irq-riscv-imsic.c
-+F:	drivers/irqchip/irq-riscv-intc.c
-+F:	include/linux/irqchip/riscv-aplic.h
-+F:	include/linux/irqchip/riscv-imsic.h
-+
- RISC-V ARCHITECTURE
- M:	Paul Walmsley <paul.walmsley@sifive.com>
- M:	Palmer Dabbelt <palmer@dabbelt.com>
--- 
-2.34.1
+Thanks,
+Ian
 
+>                 scnprintf(sysfs_name, sizeof(sysfs_name), e->sysfs_name,
+>                           pmu->name);
+>                 if (!perf_mem_event__supported(mnt, sysfs_name)) {
+> @@ -188,7 +196,7 @@ int perf_mem_events__record_args(const char **rec_arg=
+v, int *argv_nr,
+>                 if (!e->record)
+>                         continue;
+>
+> -               if (perf_pmus__num_core_pmus() =3D=3D 1) {
+> +               if (perf_pmus__num_mem_pmus() =3D=3D 1) {
+>                         if (!e->supported) {
+>                                 pr_err("failed: event '%s' not supported\=
+n",
+>                                        perf_mem_events__name(j, NULL));
+> @@ -203,7 +211,7 @@ int perf_mem_events__record_args(const char **rec_arg=
+v, int *argv_nr,
+>                                 return -1;
+>                         }
+>
+> -                       while ((pmu =3D perf_pmus__scan_core(pmu)) !=3D N=
+ULL) {
+> +                       while ((pmu =3D perf_mem_scan_next_pmu(pmu)) !=3D=
+ NULL) {
+>                                 rec_argv[i++] =3D "-e";
+>                                 s =3D perf_mem_events__name(j, pmu->name)=
+;
+>                                 if (s) {
+> diff --git a/tools/perf/util/mem-events.h b/tools/perf/util/mem-events.h
+> index 12372309d60e..d650eb311113 100644
+> --- a/tools/perf/util/mem-events.h
+> +++ b/tools/perf/util/mem-events.h
+> @@ -36,6 +36,7 @@ enum {
+>  extern unsigned int perf_mem_events__loads_ldlat;
+>
+>  int perf_mem_events__parse(const char *str);
+> +bool perf_mem_events__via_core_pmus(void);
+>  int perf_mem_events__init(void);
+>
+>  char *perf_mem_events__name(int i, char *pmu_name);
+> --
+> 2.40.1
+>
