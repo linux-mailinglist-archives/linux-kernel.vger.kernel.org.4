@@ -2,212 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF37C72D9AF
+	by mail.lfdr.de (Postfix) with ESMTP id 641FE72D9AE
 	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 08:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240238AbjFMGKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 02:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58894 "EHLO
+        id S239689AbjFMGKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 02:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240270AbjFMGJx (ORCPT
+        with ESMTP id S240320AbjFMGJ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 02:09:53 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67640173F;
-        Mon, 12 Jun 2023 23:09:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686636576; x=1718172576;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5nLm4qe8kPcKMUnAEPMOaMOOzsBImUOGoaEZFvK0/jw=;
-  b=mKYFwDXE24KKHAqpfBn87X1miBnbliXMMAaZ9+adtad37mNetlo2lHPP
-   FNFekHFT4BVrByQrV+nKqYIlJ0RgPMKW6WUvFJamaOkm5Auv0matAk1Ng
-   trJR2yO9lGta6PtVx8HMQ5oogJxm+uDbhZhhj85KOvR0O7ESPWlBYqT81
-   NGamsVj3zmQZUcAroWZ/jxqrEHj4/l/a7wgLctdFH6O+Gg8DeLalNZ37m
-   fzmKP0UFE1NoXisloqmDz4dDQBxRiutv2yH5dS3Z5AoabNIlkFON2AMtf
-   gaVzTKXNvTpfKUbLBtCB+HuRpbgh4+Ap9E7ujLN7QBxq+zegB0uBytvmK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="342929507"
-X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
-   d="scan'208";a="342929507"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 23:09:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="776683422"
-X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
-   d="scan'208";a="776683422"
-Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 12 Jun 2023 23:09:31 -0700
-Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q8xDf-00013D-0k;
-        Tue, 13 Jun 2023 06:09:31 +0000
-Date:   Tue, 13 Jun 2023 14:08:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-kernel@vger.kernel.org, Trilok Soni <quic_tsoni@quicinc.com>,
-        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Guru Das Srinagesh <quic_gurus@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
-Subject: Re: [PATCH v5 2/2] remoteproc: qcom: Add remoteproc tracing
-Message-ID: <202306131305.GXI4gstL-lkp@intel.com>
-References: <12b533c73b8c6b039e90f20afef1c8dcd30b80de.1686606835.git.quic_gokukris@quicinc.com>
+        Tue, 13 Jun 2023 02:09:56 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7570A0;
+        Mon, 12 Jun 2023 23:09:54 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id 46e09a7af769-6b29b9f5a94so3241566a34.2;
+        Mon, 12 Jun 2023 23:09:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686636594; x=1689228594;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qfxDffF4oNGyONCr8odOKoLiVtDni1HDTuQoeb5CKkQ=;
+        b=nE3DWJTG1S8ILTVBQZA4FulsRGkRjuh11xmjDFgLfoeU3GEweKE/gkze/JXQEVpk9I
+         XcJLGi0RGkGvFAR2WaXVg8qDHD+UHbHIvIzOIqCK80liNco8SkmDXcOLlrS7FE7lLMJf
+         lwEYjWiM9Am0rWckiGV75z6OnQutWKUNiXPim9WUEUNhxIJLsT4XPUvTiGzP3+eWTL/+
+         gV2Pg5AKhejEwCr8dTNoM6eS7m2rFFv6/JUs8MzrLcoFsaAF8eiombyxAkg/I99g/lx1
+         K8wtgE6Sx8MBnUGiH0CVWJeN8CTOylpLQxA9GnqF1f0DC3zg/bgamlXCi7CIvvJec1f/
+         RuRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686636594; x=1689228594;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qfxDffF4oNGyONCr8odOKoLiVtDni1HDTuQoeb5CKkQ=;
+        b=M//nvPTTQT+qRHytQDJU4NWPTZZ4KwWr/YUfHqEGjxY9VnH5pWAggI1H+U11IQAEdY
+         QqY24ee9KvdAkoLMZ1muAruyQrnFX280Seuu2C5jUvDA932XuKRtVZHEek6YrzUf+Z0O
+         cJYcqJ8gdH8QeiN0wcsGtpcvUtm3aspThgv7WRgzUWwxu0Q37HUys+CiOCignGYlpXnu
+         4BKm+BH3Mj06d2aGTRF1LCJ3uKQHroYIcGhaVUWTS8GkRyrfK9kanexRdbOrHhedJKAN
+         zV/EYVRULwOCZIxLDUJDuOiOjubsJwUt1whDf7t+5d4NNXpc/oVj3FndWVPCrAzMsdki
+         mDlw==
+X-Gm-Message-State: AC+VfDyaeToypLiFokqFlykBca0x34ExvodF/pSLq2vDM6iKpysDlWZA
+        j+2TtLpVopZ60jdfl51Wbzg=
+X-Google-Smtp-Source: ACHHUZ6YSgQn2bvL4KlRa71K1UtlgfkoGdUXnp2n8S1QyTy7AbJT22tja7f24hm3x7iAgfzub3tbOw==
+X-Received: by 2002:a05:6830:1d6d:b0:6b3:477c:c725 with SMTP id l13-20020a0568301d6d00b006b3477cc725mr1662298oti.12.1686636594085;
+        Mon, 12 Jun 2023 23:09:54 -0700 (PDT)
+Received: from ryan-ThinkPad-T470.. (c-24-6-63-212.hsd1.ca.comcast.net. [24.6.63.212])
+        by smtp.gmail.com with ESMTPSA id z17-20020a631911000000b00548fb73874asm7009529pgl.37.2023.06.12.23.09.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 23:09:53 -0700 (PDT)
+From:   =?UTF-8?q?=E2=80=9CRyan?= <ryan.lee.analog@gmail.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        perex@perex.cz, tiwai@suse.com, rf@opensource.cirrus.com,
+        shumingf@realtek.com, povik+lin@cutebit.org,
+        herve.codina@bootlin.com, ryans.lee@analog.com,
+        wangweidong.a@awinic.com, ckeepax@opensource.cirrus.com,
+        ajye_huang@compal.corp-partner.google.com,
+        sebastian.reichel@collabora.com, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     venkataprasad.potturu@amd.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH V3 1/2] ASoC: dt-bindings: max98388: add amplifier driver
+Date:   Mon, 12 Jun 2023 23:09:44 -0700
+Message-Id: <20230613060945.183128-1-ryan.lee.analog@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <12b533c73b8c6b039e90f20afef1c8dcd30b80de.1686606835.git.quic_gokukris@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gokul,
+From: Ryan Lee <ryans.lee@analog.com>
 
-kernel test robot noticed the following build errors:
+Add dt-bindings information for Analog Devices MAX98388 I2S Amplifier
 
-[auto build test ERROR on 1ca04f21b204e99dd704146231adfb79ea2fb366]
+Signed-off-by: Ryan Lee <ryans.lee@analog.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+Changes from v1:
+  Removed unnecessary blank line and description. Modified quotes.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Gokul-krishna-Krishnakumar/remoteproc-Introduce-traces-for-remoteproc-events/20230613-060527
-base:   1ca04f21b204e99dd704146231adfb79ea2fb366
-patch link:    https://lore.kernel.org/r/12b533c73b8c6b039e90f20afef1c8dcd30b80de.1686606835.git.quic_gokukris%40quicinc.com
-patch subject: [PATCH v5 2/2] remoteproc: qcom: Add remoteproc tracing
-config: i386-randconfig-r025-20230612 (https://download.01.org/0day-ci/archive/20230613/202306131305.GXI4gstL-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build):
-        git checkout 1ca04f21b204e99dd704146231adfb79ea2fb366
-        b4 shazam https://lore.kernel.org/r/12b533c73b8c6b039e90f20afef1c8dcd30b80de.1686606835.git.quic_gokukris@quicinc.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Changes from v2:
+  No change.  
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306131305.GXI4gstL-lkp@intel.com/
+ .../bindings/sound/adi,max98388.yaml          | 79 +++++++++++++++++++
+ 1 file changed, 79 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/adi,max98388.yaml
 
-All errors (new ones prefixed by >>):
+diff --git a/Documentation/devicetree/bindings/sound/adi,max98388.yaml b/Documentation/devicetree/bindings/sound/adi,max98388.yaml
+new file mode 100644
+index 000000000000..93ccd5905736
+--- /dev/null
++++ b/Documentation/devicetree/bindings/sound/adi,max98388.yaml
+@@ -0,0 +1,79 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/sound/adi,max98388.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Analog Devices MAX98388 Speaker Amplifier
++
++maintainers:
++  - Ryan Lee <ryans.lee@analog.com>
++
++description:
++  The MAX98388 is a mono Class-D speaker amplifier with I/V feedback.
++  The device provides a PCM interface for audio data and a standard
++  I2C interface for control data communication.
++
++allOf:
++  - $ref: dai-common.yaml#
++
++properties:
++  compatible:
++    enum:
++      - adi,max98388
++
++  reg:
++    maxItems: 1
++
++  '#sound-dai-cells':
++    const: 0
++
++  adi,vmon-slot-no:
++    description: slot number of the voltage feedback monitor
++    $ref: /schemas/types.yaml#/definitions/uint32
++    minimum: 0
++    maximum: 15
++    default: 0
++
++  adi,imon-slot-no:
++    description: slot number of the current feedback monitor
++    $ref: /schemas/types.yaml#/definitions/uint32
++    minimum: 0
++    maximum: 15
++    default: 1
++
++  adi,interleave-mode:
++    description:
++      For cases where a single combined channel for the I/V feedback data
++      is not sufficient, the device can also be configured to share
++      a single data output channel on alternating frames.
++      In this configuration, the current and voltage data will be frame
++      interleaved on a single output channel.
++    type: boolean
++
++  reset-gpios:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - '#sound-dai-cells'
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        max98388: amplifier@39 {
++            compatible = "adi,max98388";
++            reg = <0x39>;
++            #sound-dai-cells = <0>;
++            adi,vmon-slot-no = <0>;
++            adi,imon-slot-no = <1>;
++            adi,interleave-mode;
++            reset-gpios = <&gpio 4 GPIO_ACTIVE_LOW>;
++        };
++    };
 
-   ld: drivers/remoteproc/remoteproc_core.o: in function `trace_rproc_stop_event':
->> include/trace/events/remoteproc_tracepoints.h:82: undefined reference to `__tracepoint_rproc_stop_event'
->> ld: include/trace/events/remoteproc_tracepoints.h:82: undefined reference to `__SCT__tp_func_rproc_stop_event'
-   ld: drivers/remoteproc/remoteproc_core.o: in function `trace_rproc_load_segment_event':
->> include/trace/events/remoteproc_tracepoints.h:17: undefined reference to `__tracepoint_rproc_load_segment_event'
->> ld: include/trace/events/remoteproc_tracepoints.h:17: undefined reference to `__SCT__tp_func_rproc_load_segment_event'
-   ld: drivers/remoteproc/remoteproc_core.o: in function `trace_rproc_start_event':
->> include/trace/events/remoteproc_tracepoints.h:63: undefined reference to `__tracepoint_rproc_start_event'
->> ld: include/trace/events/remoteproc_tracepoints.h:63: undefined reference to `__SCT__tp_func_rproc_start_event'
-   ld: drivers/remoteproc/remoteproc_core.o:(__jump_table+0x8): undefined reference to `__tracepoint_rproc_stop_event'
->> ld: drivers/remoteproc/remoteproc_core.o:(__jump_table+0x14): undefined reference to `__tracepoint_rproc_load_segment_event'
-   ld: drivers/remoteproc/remoteproc_core.o:(__jump_table+0x20): undefined reference to `__tracepoint_rproc_start_event'
-
-
-vim +82 include/trace/events/remoteproc_tracepoints.h
-
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   13  
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   14  /*
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   15   * Tracepoints for remoteproc and subdevice events
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   16   */
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12  @17  TRACE_EVENT(rproc_load_segment_event,
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   18  
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   19  	TP_PROTO(struct rproc *rproc, int ret),
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   20  
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   21  	TP_ARGS(rproc, ret),
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   22  
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   23  	TP_STRUCT__entry(
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   24  		__string(name, rproc->name)
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   25  		__string(firmware, rproc->firmware)
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   26  		__field(int, ret)
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   27  	),
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   28  
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   29  	TP_fast_assign(
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   30  		__assign_str(name, rproc->name);
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   31  		__assign_str(firmware, rproc->firmware);
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   32  		__entry->ret = ret;
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   33  	),
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   34  
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   35  	TP_printk("%s loading firmware %s returned %d",
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   36  			__get_str(name), __get_str(firmware),
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   37  			__entry->ret)
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   38  );
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   39  
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   40  TRACE_EVENT(rproc_attach_event,
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   41  
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   42  	TP_PROTO(struct rproc *rproc, int ret),
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   43  
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   44  	TP_ARGS(rproc, ret),
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   45  
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   46  	TP_STRUCT__entry(
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   47  		__string(name, rproc->name)
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   48  		__string(firmware, rproc->firmware)
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   49  		__field(int, ret)
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   50  	),
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   51  
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   52  	TP_fast_assign(
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   53  		__assign_str(name, rproc->name);
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   54  		__assign_str(firmware, rproc->firmware);
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   55  		__entry->ret = ret;
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   56  	),
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   57  
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   58  	TP_printk("%s attaching returned %d",
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   59  			__get_str(name),
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   60  			__entry->ret)
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   61  );
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   62  
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12  @63  TRACE_EVENT(rproc_start_event,
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   64  
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   65  	TP_PROTO(struct rproc *rproc, int ret),
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   66  
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   67  	TP_ARGS(rproc, ret),
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   68  
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   69  	TP_STRUCT__entry(
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   70  		__string(name, rproc->name)
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   71  		__field(int, ret)
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   72  	),
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   73  
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   74  	TP_fast_assign(
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   75  		__assign_str(name, rproc->name);
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   76  		__entry->ret = ret;
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   77  	),
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   78  
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   79  	TP_printk("%s %d", __get_str(name), __entry->ret)
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   80  );
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   81  
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12  @82  TRACE_EVENT(rproc_stop_event,
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   83  
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   84  	TP_PROTO(struct rproc *rproc, const char *crash_msg),
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   85  
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   86  	TP_ARGS(rproc, crash_msg),
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   87  
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   88  	TP_STRUCT__entry(
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   89  		__string(name, rproc->name)
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   90  		__string(crash_msg, crash_msg)
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   91  	),
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   92  
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   93  	TP_fast_assign(
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   94  		__assign_str(name, rproc->name);
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   95  		__assign_str(crash_msg, crash_msg)
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   96  	),
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   97  
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   98  	TP_printk("%s %s", __get_str(name), __get_str(crash_msg))
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12   99  );
-f73173f7e78a04 Gokul krishna Krishnakumar 2023-06-12  100  
-
+base-commit: 53ab6975c12d1ad86c599a8927e8c698b144d669
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
