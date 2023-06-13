@@ -2,101 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA4C72EB97
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:07:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5AC472EB99
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 21:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238424AbjFMTGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 15:06:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51702 "EHLO
+        id S232278AbjFMTIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 15:08:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbjFMTGs (ORCPT
+        with ESMTP id S232764AbjFMTID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 15:06:48 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37337199B
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:06:47 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9823de726c3so167673166b.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:06:47 -0700 (PDT)
+        Tue, 13 Jun 2023 15:08:03 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007191BEA
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:07:59 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id 98e67ed59e1d1-25dbcf8ad37so59537a91.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 12:07:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686683205; x=1689275205;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SSQ2Ofm/5XwGv6mSESlDU0Nj2cG4DNgNPbhJQeoIQpY=;
-        b=QSiA3oWxQopV30s9esmyHII8qfyptsy4AJ77FmiljXjuMB+0bljKoCZOckLJ5XFNq5
-         2H8GC2BdnKMUUU6vddQuN5mLZnpgeDwQ7vDBRu2hEEwvmTwFVL3qHucJ2YRJ7BI/qXku
-         A9t/uMT8TPCRFrnGAUqA1a94Nxz9hwBspi3yqDAUAb9TBk0m6D/gyKGN7hJcld8gVqkR
-         /E1dAJGQAGczRh7++GsflHxD6eHgZNnVmywiBKaqV22yAMD7Twy13+JdUTzyeMOBS0WN
-         HbOu4DgKNf4oA2YaCcmJvX5FWYt6HTrswBfo8/ykrCK533CHFxjBP1lT83O5HjamNoFJ
-         qvBA==
+        d=google.com; s=20221208; t=1686683279; x=1689275279;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ct/zCCuATaNWjKBHPNvd1UYStLS589z7ctJXd+vLMd0=;
+        b=LIZ+nGa1lsYeKo+vmN3HOVpp7WlP7vCX1VRj5ai1od0ZGNsZHTg3CwKFvY+vj9eMPI
+         OE5bAkwBXgHAteYRd2QcUSeU7gP21lkHp2dKYCabOO8dY/4GDyhkDNSvQNwni9ycxVqB
+         AUfZ5AiAGrKcUlCVIYad/m3fNHkCJ2V/AaI3wquli7yIbTT1/TzzAWXncmZHmcVYozWW
+         A63B2Ih8NWk/owpcQnNKX9ZLocgZmR2KnaxvYcibnhfSuNk51jEny5EzD0zSyniayGEK
+         Lxcj9GfeQygM26nJILvkJTqOS2CxSQU8Pffa6hkASsUZ6HCYKGK0Vt37yfYhBXP5V10C
+         tz9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686683205; x=1689275205;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SSQ2Ofm/5XwGv6mSESlDU0Nj2cG4DNgNPbhJQeoIQpY=;
-        b=bVh31peFo5CRQA/rSsBtDr4/rryx6PDfdSdXd9icb1/PMlzJFGvzsurmJ7Olfp86xk
-         oUQfbqRNlGzqwC+yvcImzMXSbcRb4EjiuXThJIzd7KRG6wJk4jgX7yBYKUpvdmKIL1zs
-         OG5JcTNavN/iwNwdcrx7apvXLWgwYKLfbRLLRP1iUrnstmNs+V4rQw+PXplct6hgj2Ul
-         xtpr7NwgWZm3ev91e+LKS9xCaeNqtO6ZYIWQ/0eMs9a58u+NKOf/2Q+L0fF3BvNDCKRa
-         bTp8SdBLedkRTH1O8CuzI/xKr/sYCJwOixEUY/GtQOOjSPIpy1NjI5uHV2WoYEmJ2NDz
-         QU7Q==
-X-Gm-Message-State: AC+VfDzifQJ4NevtjXUCqW4k/ty2nUNluZ6W26JR4q4ONXsIXvZstuAu
-        gDlzWhx4btBdrSfxyFLQJiSxUA==
-X-Google-Smtp-Source: ACHHUZ4cw2V0nsGESs9QYxJaXsXNVZS7vmLLuxbygQj5JAHQqeGBOQrgl1IoPhdeGZBViBjevxGozQ==
-X-Received: by 2002:a17:907:86a4:b0:970:1a68:bacc with SMTP id qa36-20020a17090786a400b009701a68baccmr15992858ejc.67.1686683205725;
-        Tue, 13 Jun 2023 12:06:45 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id rs15-20020a170907036f00b009823e62ca91sm1130002ejb.189.2023.06.13.12.06.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 12:06:45 -0700 (PDT)
-Message-ID: <89fb41d1-9cf8-cdab-e4ae-d5eef480242e@linaro.org>
-Date:   Tue, 13 Jun 2023 21:06:43 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 2/8] dt-bindings: rtc: Move isil,isl12022 from
- trivial-rtc.yaml into own schema file
-Content-Language: en-US
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
- <20230613130011.305589-1-linux@rasmusvillemoes.dk>
- <20230613130011.305589-3-linux@rasmusvillemoes.dk>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230613130011.305589-3-linux@rasmusvillemoes.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1686683279; x=1689275279;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ct/zCCuATaNWjKBHPNvd1UYStLS589z7ctJXd+vLMd0=;
+        b=cH3ufooMlOdR44l3lJFTdwJmGhooc2orDeEMGxy1oIK5yDgYiUt5b4ydA1YaRJ4xtS
+         VPr97kUTc/LWuwKn0svwgdJhN27b5Ly/F0mdHkWRh+8TANknntNsROytCWNDTjg0wRzJ
+         GVnL6M0RheLICqRoDFTo+QbTaT/YqH+h1GSmNW+nkDBG1Cwc42nmjCNwjawLbA0kwuLg
+         9FLklhr+lWzMYrXZJAAs2B+/IKdmKbzuyJrjR6R5Oug5wob4lvemOVevoXmfL4yqUUDd
+         H7TNJEX5lZmO+Ctsj2fFe7jIiAKN8RaO8MxbcsgjALPNFZYKiYf3VKTD/MU+2p0if1TG
+         b27Q==
+X-Gm-Message-State: AC+VfDxeoECPNeUWlGsHbQyll3HnNe8aHyvHJgnnfgROPbKMsrZZ02uy
+        YcrGf5P3u2wrERUK2abth3NztBfPdKk=
+X-Google-Smtp-Source: ACHHUZ6d1BOYCoi6GCk7T5M7Q6vTFZUS5zB71Lz2smCCIMdH+Mas5IRfBTx9AjJBjbb5YRQpkgbhrC2TMTA=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90a:c297:b0:25b:cb86:b13e with SMTP id
+ f23-20020a17090ac29700b0025bcb86b13emr1434508pjt.2.1686683279301; Tue, 13 Jun
+ 2023 12:07:59 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 12:07:57 -0700
+In-Reply-To: <20230608070016.f3dz6dhvdkxsomdb@linux.intel.com>
+Mime-Version: 1.0
+References: <20230602011518.787006-1-seanjc@google.com> <20230602011518.787006-2-seanjc@google.com>
+ <20230607073728.vggwcoylibj3cp6s@linux.intel.com> <ZICUbIF2+Cvbb9GM@google.com>
+ <20230607172243.c2bkw43hcet4sfnb@linux.intel.com> <ZIDENf2vzwUjzcl2@google.com>
+ <20230608070016.f3dz6dhvdkxsomdb@linux.intel.com>
+Message-ID: <ZIi+jWxYg/UhKpr1@google.com>
+Subject: Re: [PATCH 1/3] KVM: VMX: Retry APIC-access page reload if
+ invalidation is in-progress
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yu Zhang <yu.c.zhang@linux.intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Robin Murphy <robin.murphy@arm.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/06/2023 15:00, Rasmus Villemoes wrote:
-> Move the isil,isl12022 RTC bindings from trivial-rtc.yaml into its own
-> intersil,isl12022.yaml file, in preparation for adding more bindings.
+On Thu, Jun 08, 2023, Yu Zhang wrote:
+> > 
+> > Flushing when KVM zaps SPTEs is definitely necessary.  But the flush in
+> > vmx_set_apic_access_page_addr() *should* be redundant.
+> > 
+> > > Could we try to return false in kvm_unmap_gfn_range() to indicate no more
+> > > flush is needed, if the range to be unmapped falls within guest APIC base,
+> > > and leaving the TLB invalidation work to vmx_set_apic_access_page_addr()?
+> > 
+> > No, because vmx_flush_tlb_current(), a.k.a. KVM_REQ_TLB_FLUSH_CURRENT, flushes
+> > only the current root, i.e. on the current EP4TA.  kvm_unmap_gfn_range() isn't
+> > tied to a single vCPU and so needs to flush all roots.  We could in theory more
+> > precisely track which roots needs to be flushed, but in practice it's highly
+> > unlikely to matter as there is typically only one "main" root when TDP (EPT) is
+> > in use.  In other words, KVM could avoid unnecessarily flushing entries for other
+> > roots, but it would incur non-trivial complexity, and the probability of the
+> > precise flushing having a measurable impact on guest performance is quite low, at
+> > least outside of nested scenarios.
 > 
-> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> ---
->  .../bindings/rtc/intersil,isl12022.yaml       | 45 +++++++++++++++++++
->  .../devicetree/bindings/rtc/trivial-rtc.yaml  |  2 -
->  2 files changed, 45 insertions(+), 2 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml
-> 
+> Well, I can understand the invalidation shall be performed for both current EP4TA,
+> and the nested EP4TA(EPT02) when host retries to reclaim a normal page, because L1
+> may assign this page to L2. But for APIC base address, will L1 map this address to
+> L2?
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+L1 can do whatever it wants.  E.g. L1 could passthrough its APIC to L2, in which
+case, yes, L1 will map its APIC base into L2.  KVM (as L0) however doesn't support
+mapping the APIC-access page into L2.  KVM *could* support utilizing APICv to
+accelerate L2 when L1 has done a full APIC passthrough, but AFAIK no one has
+requested such support.  Functionally, an APIC passthrough setup for L1=>L2 will
+work, but KVM will trap and emulate APIC accesses from L2 instead of utilizing
+hardware acceleration.
 
-Best regards,
-Krzysztof
+More commonly, L1 will use APICv for L2 and thus have an APIC-access page for L2,
+and KVM will map _that_ page into L2.
 
+> Also, what if the virtualize APIC access is to be supported in L2,
+
+As above, KVM never maps the APIC-access page that KVM (as L0) manages into L2.
+
+> and the backing page is being reclaimed in L0? I saw
+> nested_get_vmcs12_pages() will check vmcs12 and set the APIC access address
+> in VMCS02, but not sure if this routine will be triggered by the mmu
+> notifier...
+
+Pages from vmcs12 that are referenced by physical address in the VMCS are pinned
+(where "pinned" means KVM holds a reference to the page) by kvm_vcpu_map().  I.e.
+the page will not be migrated, and if userspace unmaps the page, userspace might
+break its VM, but that's true for any guest memory that userspace unexpectedly
+unmaps, and there won't be any no use-after-free issues.
