@@ -2,100 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBF35730639
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 19:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0224573063C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 19:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236846AbjFNRnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 13:43:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56240 "EHLO
+        id S233934AbjFNRpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 13:45:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237525AbjFNRm6 (ORCPT
+        with ESMTP id S232934AbjFNRpP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 13:42:58 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22CE1BF0;
-        Wed, 14 Jun 2023 10:42:57 -0700 (PDT)
-Date:   Wed, 14 Jun 2023 17:42:54 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686764575;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=hfkqaiey4eDp8QZH5LR5I91Mf3eI8gRoHf9KYFgCwTM=;
-        b=p2UvlN3pOnWAt8bO2PQHu4MCkuWYzG5/L5PsA+XTlrWVmWPUVkBpSZCFmpR8T2fXJ6dY4q
-        pKXfrCpi8OH1vN3f/nrnITSFkVp3GmxhlBOJv6ujXvd7wNbv0YrqCRMt9rYwJKazC6cVnk
-        5jqjGQmn9B/I6xP5apC+s4VbRrEUj/qKq45sbykrdGtbTJ2xrJimtwnnkzr42QVID0qN1t
-        SF9PPO5OBFahSE3TBUsPGn2YwPvYTMkgnvCks1knmgpafsE4tnw+Bzcm4hq+E4aYcyp/So
-        opJRfamE6fjMvYFaZgCgvywCOhLjrLfaovG3fkoZ0impVL204cPqLfWSeLyumQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686764575;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=hfkqaiey4eDp8QZH5LR5I91Mf3eI8gRoHf9KYFgCwTM=;
-        b=VUIyuFVu+aw2Zf5NuWRLRt/gHhj3bmuCIqL7B0aDU1QbOPmy4f/wk3Z5SkI/eAmf0beF8k
-        5E2t5j6i4jzWKEDA==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/alternatives] x86/alternative: PAUSE is not a NOP
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
+        Wed, 14 Jun 2023 13:45:15 -0400
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24B21BF0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 10:45:13 -0700 (PDT)
+Received: by mail-vs1-xe2c.google.com with SMTP id ada2fe7eead31-43f55b63ebfso213714137.2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 10:45:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1686764713; x=1689356713;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rlCqyg/Yc+HEJru3BcMV2FLXrQMFTyeLgIEwLJkjWNQ=;
+        b=Ozqa/7gOuJsY9IASinCGkUWD/RvzMZZH+rjRKiN1bKGcQKulIzLJdHR3tF1/crO/1w
+         ABhrDG/rnmqa6FeHAWg3w0+LKRimq34d+fx9Y8YKraZWXsAYp+824/1FL6SoUkvj7h4P
+         QVzjv7b1G1R7MebLEMDcKJAEDo5ha5Jirz3yQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686764713; x=1689356713;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rlCqyg/Yc+HEJru3BcMV2FLXrQMFTyeLgIEwLJkjWNQ=;
+        b=H95BWEOK5ukq6ADmG/4hllPKrn+88yDURaJPPvZ28kULPPS1g1rS1H+F1Cy/oyB0t4
+         l1+t/8l+ft3cjZPhM7bh6+Ypm+t+13HJlfKoPHBk2M03VbvP+sZs2UryNZoFUYxidJN4
+         WRKj8NgqztGNoH+nUhV+EvpCDYBikPkCtj39ItdNtyRRG3I1PwEitMJKcokuElNRVPGR
+         w9qRkWE0neGGOp7LN91hn+lhNDv+5D77lQChysuvhALXr0CGa1Lqo9hm8B8KQ9hUkfMP
+         NLQiuee4jidP1lYapugHiWz6Izv2xiigvW3hyIiLJHGfCssc1H87L0MSD15RV6/5HNSc
+         qFfQ==
+X-Gm-Message-State: AC+VfDwyYV2EPCi7u2iD++tXfZGwiMJ+T8nwKUcjtdnSIbL4NAk3eZOx
+        6QDI9hq3tw0UFw8dE0rIop+d/RLqwOLtau3Rtz7IokOy
+X-Google-Smtp-Source: ACHHUZ63MkGnbaabwSnMZKkBkP6rmRvxNHmmBcF4b2AvZPMpU2xjUrJzH1qeRF/wcuxLv4EKy/zQPw==
+X-Received: by 2002:a67:b34d:0:b0:43b:3fcd:6923 with SMTP id b13-20020a67b34d000000b0043b3fcd6923mr6979412vsm.7.1686764712819;
+        Wed, 14 Jun 2023 10:45:12 -0700 (PDT)
+Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
+        by smtp.gmail.com with ESMTPSA id n8-20020ab05408000000b0077d41de19e3sm2519270uaa.34.2023.06.14.10.45.12
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 10:45:12 -0700 (PDT)
+Received: by mail-ua1-f53.google.com with SMTP id a1e0cc1a2514c-78f208ebf29so292360241.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 10:45:12 -0700 (PDT)
+X-Received: by 2002:a67:e913:0:b0:43b:4a1e:b15b with SMTP id
+ c19-20020a67e913000000b0043b4a1eb15bmr6906150vso.2.1686764712050; Wed, 14 Jun
+ 2023 10:45:12 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <168676457432.404.2368644491901077612.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <2392dcb4-71f4-1109-614b-4e2083c0941e@kernel.dk>
+ <20230614005449.awc2ncxl5lb2eg6m@zlang-mailbox> <5d5ccbb1-784c-52b3-3748-2cf7b5cf01ef@kernel.dk>
+In-Reply-To: <5d5ccbb1-784c-52b3-3748-2cf7b5cf01ef@kernel.dk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 14 Jun 2023 10:44:53 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiotpcKvBWGneGjNA4eOGUsY+KTMCVsMxsGhXGCg=n=bA@mail.gmail.com>
+Message-ID: <CAHk-=wiotpcKvBWGneGjNA4eOGUsY+KTMCVsMxsGhXGCg=n=bA@mail.gmail.com>
+Subject: Re: [PATCH] io_uring/io-wq: don't clear PF_IO_WORKER on exit
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Zorro Lang <zlang@redhat.com>, io-uring <io-uring@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Dave Chinner <david@fromorbit.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/alternatives branch of tip:
+On Tue, 13 Jun 2023 at 18:14, Jens Axboe <axboe@kernel.dk> wrote:
+>
+> +       preempt_disable();
+> +       current->worker_private = NULL;
+> +       preempt_enable();
 
-Commit-ID:     2bd4aa9325821551648cf9738d6aa3a49317d7e5
-Gitweb:        https://git.kernel.org/tip/2bd4aa9325821551648cf9738d6aa3a49317d7e5
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Wed, 14 Jun 2023 16:35:50 +02:00
-Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Wed, 14 Jun 2023 19:02:54 +02:00
+Yeah, that preempt_disable/enable cannot possibly make a difference in
+any sane situation.
 
-x86/alternative: PAUSE is not a NOP
+If you want to make clear that it should be one single write, do it
+with WRITE_ONCE().
 
-While chasing ghosts, I did notice that optimize_nops() was replacing
-'REP NOP' aka 'PAUSE' with NOP2. This is clearly not right.
+But realistically, that won't matter either. There's just no way a
+sane compiler can make it do anything else, and just the plain
 
-Fixes: 6c480f222128 ("x86/alternative: Rewrite optimize_nops() some")
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/linux-next/20230524130104.GR83892@hirez.programming.kicks-ass.net/
----
- arch/x86/kernel/alternative.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+        current->worker_private = NULL;
 
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index bbfbf7a..a7e1ec5 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -169,9 +169,12 @@ void text_poke_early(void *addr, const void *opcode, size_t len);
-  */
- static bool insn_is_nop(struct insn *insn)
- {
--	if (insn->opcode.bytes[0] == 0x90)
-+	/* Anything NOP, but no REP NOP */
-+	if (insn->opcode.bytes[0] == 0x90 &&
-+	    (!insn->prefixes.nbytes || insn->prefixes.bytes[0] != 0xF3))
- 		return true;
- 
-+	/* NOPL */
- 	if (insn->opcode.bytes[0] == 0x0F && insn->opcode.bytes[1] == 0x1F)
- 		return true;
- 
+will be equivalent.
+
+If there are ordering concerns, then neither preemption nor
+WRITE_ONCE() matter, but "smp_store_release()" would.
+
+But then any readers should use "smp_load_acquire()" too.
+
+However, in this case, I don't think any of that matters.
+
+The actual backing store is free'd with kfree_rcu(), so any ordering
+would be against the RCU grace period anyway. So the only ordering
+that matters is, I think, that you set it to NULL *before* that
+kfree_rcu() call, so that we know that "if somebody has seen a
+non-NULL worker_private, then you still have a full RCU grace period
+until it is gone".
+
+Of course, that all still assumes that any read of worker_private
+(from outside of 'current') is inside an RCU read-locked region. Which
+isn't actually obviously true.
+
+But at least for the case of io_wq_worker_running() and
+io_wq_worker_sleeping, the call is always just for the current task.
+So there are no ordering constraints at all. Not for preemption, not
+for SMP, not for RCU. It's all entirely thread-local.
+
+(That may not be obvious in the source code, since
+io_wq_worker_sleeping/running gets a 'tsk' argument, but in the
+context of the scheduler, 'tsk' is always just a cached copy of
+'current').
+
+End result: just do it as a plain store.  And I don't understand why
+the free'ing of that data structure is RCU-delayed at all. There does
+not seem to be any non-synchronous users of the worker_private pointer
+at all. So I *think* that
+
+        kfree_rcu(worker, rcu);
+
+should just be
+
+        kfree(worker);
+
+and I wonder if that rcu-freeing was there to try to hide the bug.
+
+But maybe I'm missing something.
+
+            Linus
