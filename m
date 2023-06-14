@@ -2,105 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D52B472F308
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 05:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6C6072F32D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 05:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242381AbjFNDYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 23:24:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49450 "EHLO
+        id S233749AbjFNDmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 23:42:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233985AbjFNDYJ (ORCPT
+        with ESMTP id S233310AbjFNDmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 23:24:09 -0400
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB404198;
-        Tue, 13 Jun 2023 20:24:06 -0700 (PDT)
-Received: from ed3e173716be.home.arpa (unknown [124.16.138.125])
-        by APP-03 (Coremail) with SMTP id rQCowADX3SHEMolkIQROAg--.40109S2;
-        Wed, 14 Jun 2023 11:23:48 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     vburru@marvell.com, aayarekar@marvell.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        sburla@marvell.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] octeon_ep: Add missing check for ioremap
-Date:   Wed, 14 Jun 2023 11:23:47 +0800
-Message-Id: <20230614032347.32940-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 13 Jun 2023 23:42:44 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3663F1B2
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 20:42:42 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4QgrXT1J7TzBL4jS
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:30:17 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1686713417; x=1689305418; bh=z5hs7QQbBqwpD+KWPgppc054WtM
+        v2RQuhhpTxrICano=; b=dED6LWw05tOhaz9hDYFLzSGCGSi9t3mVI+5Jpr/2P6E
+        kO2BjomTQ/dT2A/QWvyLnKPa7M5M1qdKpjyoJTKG9B5VcE1V5TRvuKlOmVbEilqM
+        z1sSXVywgqJ9Ut0YWnsKn/ezSUKiitsnxyHb8APKfTbOSarz/xMecfsoD0Pkn6jV
+        BNNi6a2NE8uBplE2h7J6nJTQRVAu8bPLbvHKdFRtqo2Jb/sFgEf2eSG+/vMWe0MC
+        KoyeAh2mJEyOepkGNw3Vm0pqJbzr89yLI0k8UrbdQGiY6T2gATmcPrrl5fQgQpIL
+        q7fYqk5WLOoi38in+jQZazntWV+shnBN0bmXGpb1Uow==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id kfyzxSgUNCnm for <linux-kernel@vger.kernel.org>;
+        Wed, 14 Jun 2023 11:30:17 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4QgrXS4fWGzBJLB4;
+        Wed, 14 Jun 2023 11:30:16 +0800 (CST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowADX3SHEMolkIQROAg--.40109S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZFy3KFW7uF4Dur4fJFy3XFb_yoW8Xw4Upr
-        yUWayDX34rtr43W3ZrXw1UJFn09a1Yy3s5Kr97Aanag3s3tFn8Aa48AF40v3yUKFZ5uF13
-        tF1jy3Z3AFn7AaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1lc2xSY4AK67AK6r48MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
-        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
-        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
-        vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
-        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
-        nxnUUI43ZEXa7VUjQBMtUUUUU==
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Date:   Wed, 14 Jun 2023 11:30:16 +0800
+From:   baomingtong001@208suo.com
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        ave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Fwd: [PATCH] KVM: x86: remove unneeded variable
+In-Reply-To: <20230614032736.13264-1-luojianhong@cdjrlc.com>
+References: <20230614032736.13264-1-luojianhong@cdjrlc.com>
+User-Agent: Roundcube Webmail
+Message-ID: <a2510fb15553a294236646321cf1b3a4@208suo.com>
+X-Sender: baomingtong001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add check for ioremap() and return the error if it fails in order to
-guarantee the success of ioremap().
+fix the following coccicheck warning:
 
-Fixes: 862cd659a6fb ("octeon_ep: Add driver framework and device initialization")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+arch/x86/kvm/emulate.c:1315:5-7: Unneeded variable: "rc".Return 
+"X86EMUL_CONTINUE".
+arch/x86/kvm/emulate.c:4559:5-7: Unneeded variable: "rc".Return 
+"X86EMUL_CONTINUE".
+arch/x86/kvm/emulate.c:1180:5-7: Unneeded variable: "rc".Return 
+"X86EMUL_CONTINUE".
+
+Signed-off-by: Mingtong Bao <baomingtong001@208suo.com>
 ---
- drivers/net/ethernet/marvell/octeon_ep/octep_main.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+  arch/x86/kvm/emulate.c | 15 ++++++---------
+  1 file changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-index e1853da280f9..06816d2baef8 100644
---- a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-+++ b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-@@ -969,7 +969,7 @@ static const char *octep_devid_to_str(struct octep_device *oct)
- int octep_device_setup(struct octep_device *oct)
- {
- 	struct pci_dev *pdev = oct->pdev;
--	int i, ret;
-+	int i, j, ret;
- 
- 	/* allocate memory for oct->conf */
- 	oct->conf = kzalloc(sizeof(*oct->conf), GFP_KERNEL);
-@@ -981,6 +981,9 @@ int octep_device_setup(struct octep_device *oct)
- 		oct->mmio[i].hw_addr =
- 			ioremap(pci_resource_start(oct->pdev, i * 2),
- 				pci_resource_len(oct->pdev, i * 2));
-+		if (!oct->mmio[i].hw_addr)
-+			goto unsupported_dev;
-+
- 		oct->mmio[i].mapped = 1;
- 	}
- 
-@@ -1015,8 +1018,8 @@ int octep_device_setup(struct octep_device *oct)
- 	return 0;
- 
- unsupported_dev:
--	for (i = 0; i < OCTEP_MMIO_REGIONS; i++)
--		iounmap(oct->mmio[i].hw_addr);
-+	for (j = 0; j < i; j++)
-+		iounmap(oct->mmio[j].hw_addr);
- 
- 	kfree(oct->conf);
- 	return -1;
--- 
-2.25.1
+diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+index 936a397a08cd..7a7e29e4e203 100644
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -1177,7 +1177,6 @@ static int decode_modrm(struct x86_emulate_ctxt 
+*ctxt,
+  {
+      u8 sib;
+      int index_reg, base_reg, scale;
+-    int rc = X86EMUL_CONTINUE;
+      ulong modrm_ea = 0;
 
+      ctxt->modrm_reg = ((ctxt->rex_prefix << 1) & 8); /* REX.R */
+@@ -1199,16 +1198,16 @@ static int decode_modrm(struct x86_emulate_ctxt 
+*ctxt,
+              op->bytes = 16;
+              op->addr.xmm = ctxt->modrm_rm;
+              kvm_read_sse_reg(ctxt->modrm_rm, &op->vec_val);
+-            return rc;
++            return X86EMUL_CONTINUE;
+          }
+          if (ctxt->d & Mmx) {
+              op->type = OP_MM;
+              op->bytes = 8;
+              op->addr.mm = ctxt->modrm_rm & 7;
+-            return rc;
++            return X86EMUL_CONTINUE;
+          }
+          fetch_register_operand(op);
+-        return rc;
++        return X86EMUL_CONTINUE;
+      }
+
+      op->type = OP_MEM;
+@@ -1306,13 +1305,12 @@ static int decode_modrm(struct x86_emulate_ctxt 
+*ctxt,
+          ctxt->memop.addr.mem.ea = (u32)ctxt->memop.addr.mem.ea;
+
+  done:
+-    return rc;
++    return X86EMUL_CONTINUE;
+  }
+
+  static int decode_abs(struct x86_emulate_ctxt *ctxt,
+                struct operand *op)
+  {
+-    int rc = X86EMUL_CONTINUE;
+
+      op->type = OP_MEM;
+      switch (ctxt->ad_bytes) {
+@@ -1327,7 +1325,7 @@ static int decode_abs(struct x86_emulate_ctxt 
+*ctxt,
+          break;
+      }
+  done:
+-    return rc;
++    return X86EMUL_CONTINUE;
+  }
+
+  static void fetch_bit_operand(struct x86_emulate_ctxt *ctxt)
+@@ -4556,7 +4554,6 @@ static unsigned imm_size(struct x86_emulate_ctxt 
+*ctxt)
+  static int decode_imm(struct x86_emulate_ctxt *ctxt, struct operand 
+*op,
+                unsigned size, bool sign_extension)
+  {
+-    int rc = X86EMUL_CONTINUE;
+
+      op->type = OP_IMM;
+      op->bytes = size;
+@@ -4590,7 +4587,7 @@ static int decode_imm(struct x86_emulate_ctxt 
+*ctxt, struct operand *op,
+          }
+      }
+  done:
+-    return rc;
++    return X86EMUL_CONTINUE;
+  }
+
+  static int decode_operand(struct x86_emulate_ctxt *ctxt, struct operand 
+*op,
