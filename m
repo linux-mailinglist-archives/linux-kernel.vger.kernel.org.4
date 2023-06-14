@@ -2,125 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E2647309D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 23:28:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA46C7309D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 23:31:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235693AbjFNV17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 17:27:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44696 "EHLO
+        id S232174AbjFNVbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 17:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjFNV15 (ORCPT
+        with ESMTP id S229453AbjFNVbd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 17:27:57 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F012101
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 14:27:52 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1b3ac2e4555so27373125ad.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 14:27:52 -0700 (PDT)
+        Wed, 14 Jun 2023 17:31:33 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7536C1FFA
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 14:31:31 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id 4fb4d7f45d1cf-5193c97ecbbso1328729a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 14:31:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686778071; x=1689370071;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vi/7hmjTrTZ9KkULGSIwFNzyIkPs6ZSrGwYo1vsf4LY=;
-        b=TOv1Wi0OzaxGH6kqqwft5pXdVjMAM/MiDgT/EMigAP6UWlnGu7xMRdzjFEeJmPqlWL
-         RTMguNIvf07SQMEHLrmAq4s538RBa8g1hlLJBVpqAYDMU7MXO/cI0vJfKZcRp7+Lt3PP
-         rBCkWOYHX/q3klthqhVRiMb2noZUa6qOCtAC86kXBsVW/1JVqW2M55oQy089ISYIUowd
-         /0HnJnD9FuOU8/oC54Cf7PVSQQmfS1FsVszS9TBP9uGWz7cNYoT1Wjm5N9i2YrbzBWGB
-         wl3xERsZlBeaYSbULQx5juqMja79hOySYoERJKr6GgCd3cvL84OlDeYeUVp9stiYEMlN
-         Wrwg==
+        d=chromium.org; s=google; t=1686778290; x=1689370290;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oh5nWE0pGFkoodtEGgImAH9t2K0gwbTAJWDqrg/URHU=;
+        b=oe5fklyGZLgQ6D0RFP6eEND/P7lS17P9niXlv2SXjRSeAq0nNPRJOsJKm9ky5lB+4h
+         dqN8oELynrplFPva4JtuIUIC8+l2or4QtrKbv1QeNgsxje2kWaHlyiP4n7e2mT39W+Kv
+         JwZ0CVVaOgHg4ciW1x+Bw9v2mv4SlRlXuENBU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686778071; x=1689370071;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vi/7hmjTrTZ9KkULGSIwFNzyIkPs6ZSrGwYo1vsf4LY=;
-        b=ALPYIJhBq4QilUu0lhr3WQTnUwOVENCfECc7BFj+LgqHHTSC4LNvsvYCJApGbl+Jwp
-         fIwZ3FM6dWdKUS87/g/aaHazU0v+VUvTjIK3BDtyMiaWwDU7W7DcHIm1/yY/YJ7qbw/m
-         9gMdhpoTqv3s6dgRlncrcfIs/J7OdSweDOAQC04u6Us44rH82EFXfGZgslzfZS1awxtL
-         WSZvee+Znc0b9OGEF3d2hTYOZO6Vq56v/iHiTVb0W3uc/kqhvg3o+wavQBMtRWWBu0pr
-         2yGO8RO+G/sbNSLiW0pEPzD/9sYajHWhKiCHjz3BqR3G2oXrrBnhaRbBIxHiVUuGVWK3
-         XcDg==
-X-Gm-Message-State: AC+VfDwLFBjDd1sOok3z3qTSkwB9HdD7Wj+sWxD7Np/IaCYuPcQmVPN6
-        0Xmj/9Z9XAbAQJ8HTFyZr5m3y05A0+c=
-X-Google-Smtp-Source: ACHHUZ5UF2epLMEIrkVLE9C35fy0CnP3TmO7JnKYJ6T3BpN/XCXz9TqLP32SSuRUgyULc0pTuDBD4I0wRGo=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:f807:b0:1b5:bd8:5aaa with SMTP id
- ix7-20020a170902f80700b001b50bd85aaamr277193plb.1.1686778071544; Wed, 14 Jun
- 2023 14:27:51 -0700 (PDT)
-Date:   Wed, 14 Jun 2023 14:27:49 -0700
-In-Reply-To: <9ccc37a9-4f0b-f662-4d1a-467d18bbe48e@amd.com>
-Mime-Version: 1.0
-References: <20230411125718.2297768-6-aik@amd.com> <ZGv9Td4p1vtXC0Hy@google.com>
- <719a6b42-fd91-8eb4-f773-9ed98d2fdb07@amd.com> <ZGzfWQub4FQOrEtw@google.com>
- <fc82a8a7-af38-5037-1862-ba2315c4e5af@amd.com> <ZHDEkuaVjs/0kM6t@google.com>
- <64336829-60c5-afe1-81ad-91b4f354aef3@amd.com> <5e7c6b3d-2c69-59ca-1b9f-2459430e2643@amd.com>
- <ZIj5ms+DohcLyXHE@google.com> <9ccc37a9-4f0b-f662-4d1a-467d18bbe48e@amd.com>
-Message-ID: <ZIow1a0rVQ1FC4sH@google.com>
-Subject: Re: [PATCH kernel v5 5/6] KVM: SEV: Enable data breakpoints in SEV-ES
-From:   Sean Christopherson <seanjc@google.com>
-To:     Alexey Kardashevskiy <aik@amd.com>
-Cc:     kvm@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Pankaj Gupta <pankaj.gupta@amd.com>,
-        Nikunj A Dadhania <nikunj@amd.com>,
-        Santosh Shukla <santosh.shukla@amd.com>,
-        Carlos Bilbao <carlos.bilbao@amd.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        d=1e100.net; s=20221208; t=1686778290; x=1689370290;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oh5nWE0pGFkoodtEGgImAH9t2K0gwbTAJWDqrg/URHU=;
+        b=KbgpYsXjjyKVr/G8q2/cVm6YUdux8feePYt+1RP0o+IhxN5vmPYuNoNmVUlV/P9qj0
+         WpUyCFSoSYBIsM8yGKcy2uazsfGNOXuE2Q/9orZ96wMr2gmUToGAeb1mYDYF9+RnGakx
+         8tqMALjzjK8Jk7OZ+9lxnPcOIn2I71th5cWHeDHGZVMPMrBfCsWqjSBDYKyOUUcWja1/
+         QapE9ahnbXs4n9Tha7NECpQOXAwvaJK+r/rqRgPqsMLHe9Z/kRjykZq53/8WQTRNicUB
+         vOheFeWanl0A7Q/bupoqOWqtD8xI2tu1UFOVKOZIyG6fpqf7Y0nae3Qsi+Gz2x7AK6+S
+         rYdA==
+X-Gm-Message-State: AC+VfDyUyvLC4Wpah7o5WSytby+08mXym0E0Oy0BKHOMnuLIrXsy7jqJ
+        AKN0DotjNTJMVKyW3668VH5bQn+vPo2m+NWKuYHbS0TUgHA=
+X-Google-Smtp-Source: ACHHUZ5GnExWTuP3w6MTRj3vlYQRoisn1E2oDOzKu4d/pz/4XpI1X6DCrIkKrlUOdatuAb00Erf0kw==
+X-Received: by 2002:a17:906:9b85:b0:96f:dd14:f749 with SMTP id dd5-20020a1709069b8500b0096fdd14f749mr13939870ejc.23.1686778289917;
+        Wed, 14 Jun 2023 14:31:29 -0700 (PDT)
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
+        by smtp.gmail.com with ESMTPSA id d18-20020a170906371200b0098282bb8effsm888822ejc.196.2023.06.14.14.31.29
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 14:31:29 -0700 (PDT)
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-516500163b2so959a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 14:31:29 -0700 (PDT)
+X-Received: by 2002:a50:9e65:0:b0:51a:2012:5b34 with SMTP id
+ z92-20020a509e65000000b0051a20125b34mr1137ede.4.1686778289380; Wed, 14 Jun
+ 2023 14:31:29 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230612163256.1.I7b8f60b3fbfda068f9bf452d584dc934494bfbfa@changeid>
+ <86ad3ffb-fbe2-9bed-751d-684994b71e9d@collabora.com>
+In-Reply-To: <86ad3ffb-fbe2-9bed-751d-684994b71e9d@collabora.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 14 Jun 2023 14:31:17 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XGN7NEFjtAAr+y_Vfth0MKL875B1+mqzmy3yAfteNxuQ@mail.gmail.com>
+Message-ID: <CAD=FV=XGN7NEFjtAAr+y_Vfth0MKL875B1+mqzmy3yAfteNxuQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/bridge: ps8640: Drop the ability of ps8640 to fetch
+ the EDID
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        Maxime Ripard <mripard@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Pin-yen Lin <treapking@chromium.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Icenowy Zheng <uwu@icenowy.me>,
+        linux-mediatek@lists.infradead.org,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        David Airlie <airlied@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023, Alexey Kardashevskiy wrote:
-> On 14/6/23 09:19, Sean Christopherson wrote:
-> > On Fri, Jun 02, 2023, Alexey Kardashevskiy wrote:
-> > > > > Side topic, isn't there an existing bug regarding SEV-ES NMI windows?
-> > > > > KVM can't actually single-step an SEV-ES guest, but tries to set
-> > > > > RFLAGS.TF anyways.
-> > > > =20
-> > > > Why is it a "bug" and what does the patch fix? Sound to me as it is
-> > > > pointless and the guest won't do single stepping and instead will run
-> > > > till it exits somehow, what do I miss?
-> > 
-> > The bug is benign in the end, but it's still a bug.  I'm not worried about =
-> 
-> 
-> (unrelated) Your response's encoding broke somehow and I wonder if this is
-> something I did or you did. Lore got it too:
-> 
-> https://lore.kernel.org/all/ZIj5ms+DohcLyXHE@google.com/
+Hi,
 
-Huh.  Guessing something I did, but I've no idea what caused it.
+On Wed, Jun 14, 2023 at 1:22=E2=80=AFAM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Il 13/06/23 01:32, Douglas Anderson ha scritto:
+> > In order to read the EDID from an eDP panel, you not only need to
+> > power on the bridge chip itself but also the panel. In the ps8640
+> > driver, this was made to work by having the bridge chip manually power
+> > the panel on by calling pre_enable() on everything connectorward on
+> > the bridge chain. This worked OK, but...
+> >
+> > ...when trying to do the same thing on ti-sn65dsi86, feedback was that
+> > this wasn't a great idea. As a result, we designed the "DP AUX"
+> > bus. With the design we ended up with the panel driver itself was in
+> > charge of reading the EDID. The panel driver could power itself on and
+> > the bridge chip was able to power itself on because it implemented the
+> > DP AUX bus.
+> >
+> > Despite the fact that we came up with a new scheme, implemented in on
+> > ti-sn65dsi86, and even implemented it on parade-ps8640, we still kept
+> > the old code around. This was because the new scheme required a DT
+> > change. Previously the panel was a simple "platform_device" and in DT
+> > at the top level. With the new design the panel needs to be listed in
+> > DT under the DP controller node. The old code allowed us to properly
+> > fetch EDIDs with ps8640 with the old DTs.
+> >
+> > Unfortunately, the old code stopped working as of commit 102e80d1fa2c
+> > ("drm/bridge: ps8640: Use atomic variants of drm_bridge_funcs"). There
+> > are cases at bootup where connector->state->state is NULL and the
+> > kernel crashed at:
+> > * drm_atomic_bridge_chain_pre_enable
+> > * drm_atomic_get_old_bridge_state
+> > * drm_atomic_get_old_private_obj_state
+> >
+> > A bit of digging was done to see if there was an easy fix but there
+> > was nothing obvious. Instead, the only device using ps8640 the "old"
+> > way had its DT updated so that the panel was no longer a simple
+> > "platform_deice". See commit c2d94f72140a ("arm64: dts: mediatek:
+> > mt8173-elm: Move display to ps8640 auxiliary bus") and commit
+> > 113b5cc06f44 ("arm64: dts: mediatek: mt8173-elm: remove panel model
+> > number in DT").
+> >
+> > Let's delete the old, crashing code so nobody gets tempted to copy it
+> > or figure out how it works (since it doesn't).
+> >
+> > NOTE: from a device tree "purist" point of view, we're supposed to
+> > keep old device trees working and this patch is technically "against
+> > policy". Reasons I'm still proposing it anyway:
+> > 1. Officially, old mt8173-elm device trees worked via the "little
+> >     white lie" approach. The DT would list an arbitrary/representative
+> >     panel that would be used for power sequencing. The mode information
+> >     in the panel driver would then be ignored / overridden by the EDID
+> >     reading code in ps8640. I don't feel too terrible breaking DTs that
+> >     contained the wrong "compatible" string to begin with. NOTE that
+> >     any old device trees that _didn't_ lie about their compatible will
+> >     still work because the mode information will come from the
+> >     hardcoded panels in panel-edp.
+> > 2. The only users of the old code were Chromebooks and Chromebooks
+> >     don't bake their DTs into the BIOS (they are bundled with the
+> >     kernel). Thus we don't need to worry about breaking someone using
+> >     an old DT with a new kernel.
+> > 3. The old code was crashing anyway. If someone wants to fix the old
+> >     code instead of deleting it then they have my blessing, but without
+> >     a proper fix the old code isn't useful.
+> >
+> > I'll list this as "Fixing" the code that made the old code start
+> > failing. There's not lots of reason to bring this back any further
+> > than that.
+>
+> Hoping to see removal of non-aux EDID reading code from all drivers that =
+can
+> support aux-bus is exactly why I moved Elm to the proper... aux-bus.. so.=
+..
+>
+> Yes! Let's go!
+>
+> >
+> > Fixes: 102e80d1fa2c ("drm/bridge: ps8640: Use atomic variants of drm_br=
+idge_funcs")
+>
+> ...but this Fixes tag will cause this commit to be backported to kernel v=
+ersions
+> before my commit moving Elm to aux-bus, and break display on those.
+>
+> I would suggest to either find a different Fixes tag, or don't add any, s=
+ince
+> technically this is a deprecation commit. We could imply that the old tec=
+hnique
+> is deprecated since kernel version X.Y and get away with it.
+>
+> Otherwise, if you want it backported *anyway*, the safest way would be to=
+ Cc it
+> to stable and explicitly say which versions should it be backported to.
 
-> > fixing
-> > any behavior, but I dislike having dead, misleading code, especially for so=
-> > mething
-> > like this where both NMI virtualization and SEV-ES are already crazy comple=
-> > x and
-> > subtle.  I think it's safe to say that I've spent more time digging through=
-> >   SEV-ES
-> > and NMI virtualization than most KVM developers, and as evidenced by the nu=
-> > mber of
-> > things I got wrong below, I'm still struggling to keep track of the bigger =
-> > picture.
-> > Developers that are new to all of this need as much help as they can get.
-> > 
-> > > > > Blech, and suppressing EFER.SVME in efer_trap() is a bit gross,
-> > > > =20
-> > > > Why suppressed? svm_set_efer() sets it eventually anyway.
-> > 
-> > svm_set_efer() sets SVME in hardware, but KVM's view of the guest's value t=
-> > hat's
-> > stored in vcpu->arch.efer doesn't have SVME set.  E.g. from the guest's per=
-> > spective,
-> > EFER.SVME will have "Reserved Read As Zero" semantics.
-> 
-> It is not zero, why? From inside the guest, rdmsrl(MSR_EFER, efer) reads
-> 0x1d01 from that msr where 0x1000==(1<<_EFER_SVME),  _EFER_SVME==12.
+The problem is that, as I understand it, as of commit 102e80d1fa2c
+("drm/bridge: ps8640: Use atomic variants of drm_bridge_funcs"),
+things are broken anyway and you'll get a crash at bootup. However, if
+you start at that commit and apply ${SUBJECT} patch, things actually
+end up being less broken. It won't crash anymore and on any boards
+that actually have the display that's specified in the DT compatible
+the screen should actually work. Thus even without your patch to move
+things over to the aux-bus it's still an improvement to take
+${SUBJECT} patch on any kernels that have that commit.
 
-Oh, lame.  So the guest gets to see the raw value in the VMSA.  So it really comes
-down to the GHCB not providing support for STGI/CLGI.
+I don't have an 'elm' device easily accessible, but I can figure out
+how to get one if needed to confirm that's true. However, maybe it's
+easy for you or Pin-Yen to confirm.
+
+If my understanding is incorrect, I have no objection to removing the
+Fixes tag. I'd probably have to update the commit message a bunch too
+because that was part of my justification for landing the patch in the
+first place.
