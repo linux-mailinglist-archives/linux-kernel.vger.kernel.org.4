@@ -2,208 +2,321 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D08CD72FEEF
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34D3C72FEF1
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:44:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244691AbjFNMoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 08:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46230 "EHLO
+        id S236149AbjFNMof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 08:44:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244680AbjFNMoN (ORCPT
+        with ESMTP id S244696AbjFNMob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 08:44:13 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2079.outbound.protection.outlook.com [40.107.92.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD6910EC;
-        Wed, 14 Jun 2023 05:44:12 -0700 (PDT)
+        Wed, 14 Jun 2023 08:44:31 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC67AE79;
+        Wed, 14 Jun 2023 05:44:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686746666; x=1718282666;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=frFu13+tnOBPXhIXd+Jm98anQQ/LZ3FhxOdDmHlpvu4=;
+  b=gTC3jzhfUcYqmkFRLGZjLo9zs65p1SfMpM7pREzQOiTkmsJ6W4J8VUQM
+   NItrC7oYpDTlolH3RDrQLuQNaUeOjPY7AQO1n+MtfyIvsluvfHpqOf44d
+   gA86x9sp54g3N/aUdFFDgsVY9rChCarr6SM3MEFW+xXKByLrK4uTJrHlh
+   rbLRJejizdcCcjmQAno1Mm3EIcTEfV96b//gcGArib/vjUDCoOdMxvRqB
+   LOuWGvHjpMhW+HqFcQgF+4MMApjQZo3uzd10KXz0ShrKsH9vtZoOvnGtQ
+   EX9m371wvF1xvoN0CCQZQZU1pHix6fsP96ieUflEBbIQuZZT+fBZl/Lfo
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="338950742"
+X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
+   d="scan'208";a="338950742"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 05:44:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="824803077"
+X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
+   d="scan'208";a="824803077"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga002.fm.intel.com with ESMTP; 14 Jun 2023 05:44:26 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 14 Jun 2023 05:44:25 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Wed, 14 Jun 2023 05:44:25 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.48) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Wed, 14 Jun 2023 05:44:25 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BhyojVhUARUa/goviwgizzWrE/pgLO44w0IhMnigi2UHDY7oHJssxjnVHM19owJ7Ig4u3bV2AeTyG+TkQvd9iX4Tiaw+7E+HewflBowcxaqquWnBBHI3yd6Kl+KpUAVeQ4MKUq7yN/96axrsq8JJkF7a5yfw8WmXkNL2tdNDV8vWDXnuVOGte7B3PGTljEdBR7LnYF/AsFBFnDLmZ6SrpOz8aU2FEP1LGPdOc7Nger19e08L1PjKVYk7OzZnos0scJKUXZu539c5+4iKkl4yzXRmfjF2T9ob9GP9QVZJDbF2qcj4lta2d+488Ni/YNf6Rbgw4xNsOeX6i5KF40wUZw==
+ b=jykGasiYrQgUuKYW/TuJtAJxrpXKeWywc7VQb50CQv0Q/aU4nzzNy9zenlsQUh/sMzy/MxpYYlb8GC1RmJDA+Gws3EkxpZ5P4eLXroj/UWRZcbbALWlhApxxJzkcQd+ujZCjYMPKrDGijlcUOvNa4EFZYCWPFwuTMX7NstvFbDqiSlDEThjqYguMYNDJrqoXnifbfTwcA1zakIeN5sxCwzWO6A04KGJa7G6VvazJuNEWIK3dVIl6OZFfivyd6640jDRN5+e1sZGI+7vmGdNi7FfWHtjoB8L4acSTZMEaCkKSmoeUG+VI4TyAl5SfM7H/6Di0zjfZGJk8QnJNgqZKxQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=e3PnbknJtw/ndRg7kLj1sMU6x5ZPDjHdexpFwdcwl2Q=;
- b=DgSD07iNBHbCe89z05HjZ9+6eC1L56u8CqtCFYJeYUFEPsQRysIEwULEMi7LhA7nXQn7poaBN6LHo+k4epqe3NA+/23dfEqvqlFqpbwuLrAF/wjh61roIZXcNI16ElLd5r5Z0JTo+bi2d/dqDTF6qCnwYvqtN4CiSK3Qi8IYvUIltbUGbXKIpClvioi6Q2apWfaVbww7IzKkkwJIEI3de1Yu4R6CLDL7YFpNyEsdO7YAq+Fsg7P6w3bmX78M+nmCKy1zGuhDSEye2uqcYnbYBOLxipMEdTNr9dSFBcT9HCJhOOGuC2nXjTcKWR9RS4UY1He4PMz0Bp5S6hVhdnsALw==
+ bh=nVwaQzubPL7gKD2ioPHqeneIrGyKu2Gt//nZUbiX7eg=;
+ b=oVti+GrOKuWiDgFf01quAiv6CW8J/G67gxJoevx6MqVTkuKAvKljsxK704BpkgRjDTpxuCIjQd1deP7zZHHG+iGiJ3tK/t2MryX0LnFqnEII+BuZm07+mOieVaMNuCSlMHCWwmnu2SNayCaUFPdDqtB3HAIQE5nJicoI34tr7vO+daYSaHPPL/a1Gf493B5haO/r0OhgsozmJoi8S1aZ0OToKGlbNE2D/s7AKLtfHqFdEYTxUX/OgueHpHozEAUAkyNjJ/hsKwXHVaEg0Y6gQL+oJaNlL6ziAJTgUXaN6q2UQ6MHZ5ooc/PnMoT6k9ErjcpmCsXc9hb7x58sTJU2MA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=e3PnbknJtw/ndRg7kLj1sMU6x5ZPDjHdexpFwdcwl2Q=;
- b=PWFw/ZtFNtUOeb85ggHvJRIHEpCqV76HCs0yMlNCGWiAKzWKip7F9yWlIolMgckrwfd3wxGMy/o0+qQKiVnx/04huY47VBQjTfFnZfBv91w2U9MYaGktz0UkzLdmtxWKL6RqrTz4J1RzK/5s6KZZFD4qNKivTqAwcd8G6K7Pw+Hx6SxuxIV9EKx5AKntijhHmohPx0wQzrrOg7CDZgL4Se3lT8GiyQcLJOgjEKP8mvINgbKiwRrpjeImDuLPM0GdHW104zMG1kBjteXRz20ZOh1AxUijA+x35PLPEWyt9cPKucY56yiXdpvXpINgIW9GplEHtNUusvn14wTLHw81XA==
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by BY5PR12MB4084.namprd12.prod.outlook.com (2603:10b6:a03:205::14) with
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by PH0PR11MB7711.namprd11.prod.outlook.com (2603:10b6:510:291::6) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37; Wed, 14 Jun
- 2023 12:44:09 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab%7]) with mapi id 15.20.6477.037; Wed, 14 Jun 2023
- 12:44:09 +0000
-Date:   Wed, 14 Jun 2023 09:44:06 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Marc Zyngier <maz@kernel.org>, ankita@nvidia.com,
-        alex.williamson@redhat.com, naoya.horiguchi@nec.com,
-        oliver.upton@linux.dev, aniketa@nvidia.com, cjia@nvidia.com,
-        kwankhede@nvidia.com, targupta@nvidia.com, vsethi@nvidia.com,
-        acurrid@nvidia.com, apopple@nvidia.com, jhubbard@nvidia.com,
-        danw@nvidia.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>
-Subject: Re: [PATCH v3 1/6] kvm: determine memory type from VMA
-Message-ID: <ZIm2FnH6EQfA4Qr+@nvidia.com>
-References: <20230405180134.16932-1-ankita@nvidia.com>
- <20230405180134.16932-2-ankita@nvidia.com>
- <86r0spl18x.wl-maz@kernel.org>
- <ZDarrZmLWlA+BHQG@nvidia.com>
- <ZHcxHbCb439I1Uk2@arm.com>
-Content-Type: text/plain; charset=us-ascii
+ 2023 12:44:22 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::95c6:c77e:733b:eee5]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::95c6:c77e:733b:eee5%5]) with mapi id 15.20.6455.030; Wed, 14 Jun 2023
+ 12:44:22 +0000
+Date:   Wed, 14 Jun 2023 05:44:19 -0700
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     <alison.schofield@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Len Brown" <lenb@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Borislav Petkov" <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Jonathan Cameron" <Jonathan.Cameron@huawei.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Mike Rapoport <rppt@kernel.org>
+CC:     Alison Schofield <alison.schofield@intel.com>, <x86@kernel.org>,
+        <linux-cxl@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Derick Marks <derick.w.marks@intel.com>
+Subject: RE: [PATCH v2 1/2] x86/numa: Introduce numa_fill_memblks()
+Message-ID: <6489b6234a03e_142af829454@dwillia2-xfh.jf.intel.com.notmuch>
+References: <cover.1686712819.git.alison.schofield@intel.com>
+ <9fcc548a6b4727cb2538e5227d7bad2e94e6adaf.1686712819.git.alison.schofield@intel.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <ZHcxHbCb439I1Uk2@arm.com>
-X-ClientProxiedBy: BY5PR20CA0001.namprd20.prod.outlook.com
- (2603:10b6:a03:1f4::14) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+In-Reply-To: <9fcc548a6b4727cb2538e5227d7bad2e94e6adaf.1686712819.git.alison.schofield@intel.com>
+X-ClientProxiedBy: BYAPR01CA0034.prod.exchangelabs.com (2603:10b6:a02:80::47)
+ To PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BY5PR12MB4084:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8c98d499-43ab-4fa6-c0f5-08db6cd50c0e
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|PH0PR11MB7711:EE_
+X-MS-Office365-Filtering-Correlation-Id: 70388179-afa4-415a-e8eb-08db6cd513da
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fCD9l5UzjhzaiR8UB1RL+pWUPTfTVgo52FhxrN5suHXs9X6E+HpcqLUgw03TdgOWLhmuGTkSpWNQ26rG2RZwVKl5ltg+99gaGvmnD7oa44kB/SFMJ4YIELcNLxBqDnam2C1vjHwP4nZ9Ad60egxu/1iYkxbZJVl7N4BxVf01jNrFOWnYrGbRFkOi7v/n0/wPRwYFTMMkiwLavjkgM0/jHSrITFXOl7gUXfMJJZJvIvsaRMiB08hX1s1Jid9l13+fGvb4WKXW32j8MAbp8Fcp6W2xleHik78TR2UWbLDsNIKZBZWfXJUpQV0Ad4WCLwCMxar/lkyYER0aPHkqGVd7uAd97zmZW/b40TyUbPTAdl7QnTsG6+obfkc6S5e8V+OVgkENNJrR5jTnjRmbZtBEm0FLiZsR9QhVTw2sDqbW1STTYbk51Sxuk7cgN8fl1ZQbP2kY3eD2VanxbSnVrnRPoQOjanS/YdVawkYxa8lUNcR9c2oPF/PWTz5a6vIziwyO/VjP3Rj3/Q9TDr3vGcjstPTTX9eSGdt3uaqHJwIrhYaEEmj4vrIRmr0VKypAiyts
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(346002)(396003)(136003)(376002)(451199021)(83380400001)(5660300002)(186003)(6506007)(66899021)(2906002)(2616005)(7416002)(41300700001)(6512007)(8936002)(26005)(8676002)(6486002)(316002)(54906003)(6666004)(36756003)(478600001)(38100700002)(86362001)(4326008)(66476007)(66556008)(66946007)(6916009);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: re9EgBc6MlIDmkKm9JGB9T5+lL3yE+nDDVoVdpw3e0FcFGxBQhFWEoSV+FBVmmwMVre7retxbBmziikzu231KasFmp/+S9UKRkzGk+OjpvMwvgDMkId21fOe+WGbnw7FrVVSbrCmHu4ef7lvvCZseIesCgXb+QLKkywaKWMk71AUKnJCi1Hf37UYNn0J0sAKQJV7HIhUutU+U/Z0pjLWOn7fhyoBqboGeNt5Issq3c4ruWQ+BAtHGTHFfPhBFIuP45bd8s0nLGNkZIH7UvVl/gnl8H0JANdZNo7EEBsVqdQVRaM3tv1pe96PDobnNuyMyMvEVoQIMG5wQ4CJ2brgO9LDZsXrlg8mQOM2HPHKZDojO9LPMZ61pTiGpzT8U7DfpAv5A4PgYI0NYlVdutiJuChVgUuUb3eZTUk7D+N38EOb61P1M9hSFPcjbcWdrKmcqaO/lEVP0OpBaufxHufWe233d7sYBdd/JXuGtOdfcJ1iBlgEi/jmt78Twy3ujcA0sFMTBH0/v1lvgB+PttJQg1Mu2g+VR1QW+7e2rLE1M1XJMIM43et31gTUi9L0RL+UO6hNZyHNZ3fUUhhXXRnv5ZLEkMBHXECL2duH9Y0M4Gk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(39860400002)(366004)(396003)(346002)(136003)(451199021)(82960400001)(921005)(38100700002)(478600001)(6666004)(110136005)(54906003)(6486002)(7416002)(316002)(41300700001)(5660300002)(8676002)(8936002)(66556008)(66476007)(66946007)(4326008)(2906002)(83380400001)(66899021)(6512007)(26005)(9686003)(186003)(6506007)(86362001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?oSG78m/2I4FifF/h40HJudqCWjPHuo3efpMzvwhIjPPlwmwKpMVW5Vukho4w?=
- =?us-ascii?Q?27Wi14ktRLGn19IHQAPvdyLCoytVfj5O0h7/X8hKv51HaXLhOHv9IaOG7WDY?=
- =?us-ascii?Q?et+pQMH7XXTyyxfRcPhY3e2RNtG8KgeeOb9QcHIO61nUYfVp8k6GoTOELC9s?=
- =?us-ascii?Q?75srfgLd857qT5oaQcCV5N20TyTigH/UM4FiD2WK8SVdy6/TrDMM7PlQtB/j?=
- =?us-ascii?Q?SXbAP86/SzgWozVNdJaN1oNoR2eenDol/PoofdLKwyzj6gvu0dMz8E+Ems65?=
- =?us-ascii?Q?lXhK5sPTUJ+O4gJb4ApKN+Tw+Lkt9q4E4DPOkGqAuwGJQnbcPxeLjY2BJFm+?=
- =?us-ascii?Q?dy3Yi++nl1GDcYby1l6jrUQmempRTXb0buyow+rNNKKhvXPeuTDCcqSAYx0q?=
- =?us-ascii?Q?57xEQ+l68FbgV5DWQD8eqm5SK/PfAKVFn2YBrnSFQ+ygu24ej1etpiusOX9k?=
- =?us-ascii?Q?K5erPddilsmGt0WbjHl8vaEwOnYPAuetwliEtBAu2B7S97ncHOKfTGQUdb0G?=
- =?us-ascii?Q?u9o+SajID99T2leDarqldD6SZs9YwRbsXxYiWDICEPW/jYjdlKlvZl3o6LWz?=
- =?us-ascii?Q?6zsftL5iiBquhs8S8EKxp/MmJx8vc/Eps1YIHnUW1DN/Vox9H8jG1uqScXlv?=
- =?us-ascii?Q?Wm5tYsVukpmlo+ix67CGBlVbxRGU/EItDPK8gCgW8k4a9b+auC6L0eKZ9ser?=
- =?us-ascii?Q?iIC1OiIpm5ILC6j7KLi6VXstrTzeNmDeuPL0gjwOnq+6m4MlxCarE1RbWV6h?=
- =?us-ascii?Q?xlPxBsrcJYdIb0CU1Wo3fjSuBIBEt4VSEvfdvCAYb1AATXXZB17uPAyfImAk?=
- =?us-ascii?Q?aUkB/WKoL3OkjhKF5U6jYEwYCBpfo9tllZWO/8M28laocaxYj80aKQ4th9Ot?=
- =?us-ascii?Q?J183RWS8OdMN2Zwv2zFhEXnNMYFKFT/v4jCKszgtqYRfGKrqfMogjreqdz/t?=
- =?us-ascii?Q?r7J+XrgZaZnb/oJl3GjtL6V6mK0dHm3EWInZYKbhQ5Blzj9NCfo8Ut7X4Wl2?=
- =?us-ascii?Q?M16mAdAnuARGuI2LjsXv+olSypwpRmiJZRqqje7x20E+jgH4JwuMC3R32upl?=
- =?us-ascii?Q?+n+01i81FbE9Pw7VEw/UsjBZoydYpFNM/nEBmT9Ap8NRtbutds4QSjqeSdi4?=
- =?us-ascii?Q?lRY77vkUt5ft2zZQUK7jj98gRkqe4XFB87MjdHZaFROkk/Wl1lfoW5SU0GiY?=
- =?us-ascii?Q?VdqeIbMbuu2blwvthWha4o+atvqKT3sVTd1C2072nnkX7rX1K69jLcDk9Dlb?=
- =?us-ascii?Q?94TxPCcQ/Vs/WahKC1zz3Zv5w7iLFjCCtfx7QilWOqTXBq+GxC37qeQTzFvP?=
- =?us-ascii?Q?+8Nf5wWW8iVkdT3ftBgfekOLqvmRErnSjKNzxH7S0yibXLRZhV/4Avajrs66?=
- =?us-ascii?Q?TedJn4ergoe4yu8AVlJo/yRzc0g3BnqS/pNevJi2rH/ac/l9yHpgipBGU5cP?=
- =?us-ascii?Q?x9tjKAfTq7gscZW4vyQVZN6WmwoU5B8i0jocbQqDXhn8oR3gircJELif8CGU?=
- =?us-ascii?Q?Gbp4l8iOGbxM/8Zl4lgXtm4p3ieLzaT5GveGf1OC8eGCvmJMHgZaG7kg07NQ?=
- =?us-ascii?Q?zD3cQbJOPKSa9IegALhKQqIYCsAmc/SkClrxP7oH?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8c98d499-43ab-4fa6-c0f5-08db6cd50c0e
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?E9ab+npXfOlkkpmdbnQ/51CiVSKW1BSIcG658jr+PvUtgura9vURLgRFQgZ/?=
+ =?us-ascii?Q?pdGA9Mobkr89OVr9cfmqxb95w5m5X7ZD1e6cbm2n5S8ZDvk6ZSRV7lk0Loxq?=
+ =?us-ascii?Q?HtyM4AzfjKjowFXVddyvocXHpr6oVXsPQ9uzgNi2D7s0wq+B/kW+FWRmKe0E?=
+ =?us-ascii?Q?AZKppiCudqPfopEoa8UjhEC0FN49wSUPCedTMrkQYnK+pnc1la4yNt5gamYD?=
+ =?us-ascii?Q?JSdw1qJJygbp1e4Qvqaj8YQEa2oYx41Gwyn1pGmnH+jEnERFzSTJ8Pfagy6N?=
+ =?us-ascii?Q?E15QYCBpxIUAGwASg/+L9CIJVBo1XZs21wa6+H+fVmwJ6Me59jg2aOqIW4nv?=
+ =?us-ascii?Q?bbDZ/3lvqwlvQveNJiNdCtW2cFWr5X53MR6J+RFwEKmbIKG6HAWZlBAeDLis?=
+ =?us-ascii?Q?ib5gifpoTJSwN0Wv98tjqhSSJImSh9VGjayddgX27bRdWoKwgSctlxcOnRnR?=
+ =?us-ascii?Q?LqGkNMvXqhZkAsKo/mPfFg1Sc3U7LlI30hWA3rr2sZha/+6rKJbx0PYIdeDh?=
+ =?us-ascii?Q?WaVP/6/i2P9G368gRYZBCNc7CXwWflbRVyg09C8tO2zpvBSJopbjMDc1WDjR?=
+ =?us-ascii?Q?1liVJGQDTRwg7CKChHiwv1i5W6AF2af/ea3rosmDvPN5U3G3AcTorxIIS0bk?=
+ =?us-ascii?Q?4YPLijVFXDMEAl0ai9LSdT7/2Pyq5xlt+yHxll2AYXu872ICXsVYUL3zMUPX?=
+ =?us-ascii?Q?/Zfkmd7S2bfX70B84TCoJ3AkHDGwpCtzMb4VwguyM8S+L+mRRoTf/uMhsjVb?=
+ =?us-ascii?Q?Gh5x/gtIAU2ndj6VTV1rmpectDbbbA4VnQhDwvrJ4s0FDWLZDOzo296Lu2fC?=
+ =?us-ascii?Q?TJsfmw87GOqf05Z40izsjDsYNT55bWgcUOteVtJ50wdHRFahyHQ6yuHWJ3M3?=
+ =?us-ascii?Q?vJ+cdY6t64NkiNjFK7EcYaGoniAMi7o2euiT1dH1fKSW6KvKHNUISU1/fE0I?=
+ =?us-ascii?Q?llRBcePdYma45SnjuwsJwpAz5jtuHp18Q1hT1mJHBJNtRFzZn+Gp3wRuWyDt?=
+ =?us-ascii?Q?s0JPnRvIxp3RaBk38cy6WUKlsoA1zhFvVVVSPxnypu4qButh6VF3AOXMEOnQ?=
+ =?us-ascii?Q?lH4/grYxF+iJroBXGdEEsyP6qTTUCcL+b7opbHkYaxVOaPLVgM+3vhS7xYwP?=
+ =?us-ascii?Q?VvxFE21GV3DbyuVp0qtpwHRkVS5yrtPNd5IzKPi7c6QyBxwqEpIV6CIXAquv?=
+ =?us-ascii?Q?CpJExASSGSMxEmhmVL4TKbq+2rUssxCVZ2O5JDcUt3ZHA29C+V9KOnC93WSt?=
+ =?us-ascii?Q?iT+04glKQ7+gi6JBsXuvgxs3kb8plV8ao/EJygim5oeAKPu8xohOyUQETOYU?=
+ =?us-ascii?Q?iY3SBh/NbFSHtlH9/2Y1TtWDIPxTLDlJOnAtoQAOBwoRLMF/j3KM9+AkS4OA?=
+ =?us-ascii?Q?jtrqeoiIAlR3DnYiqisjoYpkmn69tCVVW3CjCssLIarYDTAnNMq881POjCkP?=
+ =?us-ascii?Q?gZlypI2tiklbRs12chxlYfSuIpwx2UJQ9UKSobBa8JUWWP6jZEKngnH5ELA1?=
+ =?us-ascii?Q?v1R+E4uGew2X7bZUm+hhRKPM9/d8qRAfA3/MgmpDeMS9oIjSo4/xl3WckNLN?=
+ =?us-ascii?Q?Ma2nt9+tWK8uekLFc5gVm0DfQ4KkDaj1/SjXkJx2q5K2EXZWTbohMJZoBd7Q?=
+ =?us-ascii?Q?fg=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 70388179-afa4-415a-e8eb-08db6cd513da
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 12:44:09.0957
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 12:44:22.1551
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IXwbYxFO6Kcnyu5iT6bAicERBBjGQ3D+gh5eJ9l+dpqEk/NIs6Zzxrj/viq1ckoT
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4084
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: O9yGhtiKxKRSv6u2pTmOmfe9SLp06g64C7Yp3IOEJ81X3LOQSKAOMmpNeRWg0ZF8nqnCKD48ofth3J9hRu6ru+2RjL27LzViO8H+xmyG+s4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB7711
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 12:35:57PM +0100, Catalin Marinas wrote:
+alison.schofield@ wrote:
+> From: Alison Schofield <alison.schofield@intel.com>
+> 
+> numa_fill_memblks() fills in the gaps in numa_meminfo memblks
+> over an HPA address range.
+> 
+> The ACPI driver will use numa_fill_memblks() to implement a new Linux
+> policy that prescribes extending proximity domains in a portion of a
+> CFMWS window to the entire window.
+> 
+> Dan Williams offered this explanation of the policy:
+> A CFWMS is an ACPI data structure that indicates *potential* locations
+> where CXL memory can be placed. It is the playground where the CXL
+> driver has free reign to establish regions. That space can be populated
+> by BIOS created regions, or driver created regions, after hotplug or
+> other reconfiguration.
+> 
+> When BIOS creates a region in a CXL Window it additionally describes
+> that subset of the Window range in the other typical ACPI tables SRAT,
+> SLIT, and HMAT. The rationale for BIOS not pre-describing the entire
+> CXL Window in SRAT, SLIT, and HMAT is that it can not predict the
+> future. I.e. there is nothing stopping higher or lower performance
+> devices being placed in the same Window. Compare that to ACPI memory
+> hotplug that just onlines additional capacity in the proximity domain
+> with little freedom for dynamic performance differentiation.
+> 
+> That leaves the OS with a choice, should unpopulated window capacity
+> match the proximity domain of an existing region, or should it allocate
+> a new one? This patch takes the simple position of minimizing proximity
+> domain proliferation by reusing any proximity domain intersection for
+> the entire Window. If the Window has no intersections then allocate a
+> new proximity domain. Note that SRAT, SLIT and HMAT information can be
+> enumerated dynamically in a standard way from device provided data.
+> Think of CXL as the end of ACPI needing to describe memory attributes,
+> CXL offers a standard discovery model for performance attributes, but
+> Linux still needs to interoperate with the old regime.
+> 
+> Reported-by: Derick Marks <derick.w.marks@intel.com>
+> Suggested-by: Dan Williams <dan.j.williams@intel.com>
+> Signed-off-by: Alison Schofield <alison.schofield@intel.com>
+> Tested-by: Derick Marks <derick.w.marks@intel.com>
+[..]
+> diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
+> index 2aadb2019b4f..fa82141d1a04 100644
+> --- a/arch/x86/mm/numa.c
+> +++ b/arch/x86/mm/numa.c
+[..]
+> @@ -961,4 +962,90 @@ int memory_add_physaddr_to_nid(u64 start)
+>  	return nid;
+>  }
+>  EXPORT_SYMBOL_GPL(memory_add_physaddr_to_nid);
+> +
+> +static int __init cmp_memblk(const void *a, const void *b)
+> +{
+> +	const struct numa_memblk *ma = *(const struct numa_memblk **)a;
+> +	const struct numa_memblk *mb = *(const struct numa_memblk **)b;
+> +
+> +	if (ma->start != mb->start)
+> +		return (ma->start < mb->start) ? -1 : 1;
+> +
+> +	/* Caller handles duplicate start addresses */
+> +	return 0;
 
-> Current status on arm64: vfio-pci user mapping (Qemu) of PCIe BARs is
-> Device_nGnRnE. KVM also maps it at Stage 2 with the same attributes. The
-> user mapping is fine since the VMM may not have detailed knowledge about
-> how to safely map the BAR. KVM doesn't have such detailed knowledge
-> either in the device pass-through case but for safety reasons it follows
-> the same attributes as the user mapping.
+This can be simplified to:
 
-To put a fine point on this - it means the KVM VM does not emulate the
-same behaviors as a bare metal ARM system and this results in
-significant performance degradation (loss of WC) or malfunction (loss
-of cachable) when working with some VFIO device scenarios.
+static int __init cmp_memblk(const void *a, const void *b)
+{
+	const struct numa_memblk *ma = *(const struct numa_memblk **)a;
+	const struct numa_memblk *mb = *(const struct numa_memblk **)b;
 
-> architecture). Presumably cloud vendors allowing device pass-through
-> already know their system well enough, no need for further policing in
-> KVM (which it can't do properly anyway).
+	return ma->start - mb->start;
+}
 
-This also matches x86 pretty well. There is alot of platform and BIOS
-magic at work to make sure that VFIO is safe in general. As this is
-not discoverable by the OS we have no choice in the kernel but to
-assume the operator knows what they are doing.
+> +}
+> +
+> +static struct numa_memblk *numa_memblk_list[NR_NODE_MEMBLKS] __initdata;
+> +
+> +/**
+> + * numa_fill_memblks - Fill gaps in numa_meminfo memblks
+> + * @start: address to begin fill
+> + * @end: address to end fill
+> + *
+> + * Find and extend numa_meminfo memblks to cover the @start-@end
+> + * HPA address range, such that the first memblk includes @start,
+> + * the last memblk includes @end, and any gaps in between are
+> + * filled.
+> + *
+> + * RETURNS:
+> + * 0		  : Success
+> + * NUMA_NO_MEMBLK : No memblk exists in @start-@end range
+> + */
+> +
+> +int __init numa_fill_memblks(u64 start, u64 end)
+> +{
+> +	struct numa_memblk **blk = &numa_memblk_list[0];
+> +	struct numa_meminfo *mi = &numa_meminfo;
+> +	int count = 0;
+> +	u64 prev_end;
+> +
+> +	/*
+> +	 * Create a list of pointers to numa_meminfo memblks that
+> +	 * overlap start, end. Exclude (start == bi->end) since
+> +	 * end addresses in both a CFMWS range and a memblk range
+> +	 * are exclusive.
+> +	 *
+> +	 * This list of pointers is used to make in-place changes
+> +	 * that fill out the numa_meminfo memblks.
+> +	 */
 
-> While I think it's less likely for the VMM to access the same BAR that
-> was mapped into the guest, if we want to be on the safe side from an ABI
-> perspective (the returned mmap() now has different memory guarantees),
-> we could make this an opt-in. That's pretty much the VMM stating that it
-> is ok with losing some of the Device guarantees for the vfio-pci
-> mapping. 
+Thanks for this comment, looks good.
 
-I don't know of any use case where this matters. The VMM is already
-basically not allowed to touch the MMIO spaces for security
-reasons. The only reason it is mmap'd into the VMM at all is because
-this is the only way to get it into KVM.
+> +	for (int i = 0; i < mi->nr_blks; i++) {
+> +		struct numa_memblk *bi = &mi->blk[i];
+> +
+> +		if (start < bi->end && end >= bi->start) {
+> +			blk[count] = &mi->blk[i];
+> +			count++;
+> +		}
+> +	}
+> +	if (!count)
+> +		return NUMA_NO_MEMBLK;
+> +
+> +	/* Sort the list of pointers in memblk->start order */
+> +	sort(&blk[0], count, sizeof(blk[0]), cmp_memblk, NULL);
+> +
+> +	/* Make sure the first/last memblks include start/end */
+> +	blk[0]->start = min(blk[0]->start, start);
+> +	blk[count - 1]->end = max(blk[count - 1]->end, end);
+> +
+> +	/*
+> +	 * Fill any gaps by tracking the previous memblks end address,
+> +	 * prev_end, and backfilling to it if needed. Avoid filling
+> +	 * overlapping memblks by making prev_end monotonically non-
+> +	 * decreasing.
 
-So an opt-in seems like overkill to me.
+I am not immediately understanding the use of the term monotonically
+non-decreasing here? I think the first sentence of this comment is
+enough, or am I missing a nuance?
 
-> Going back to this series, allowing Cacheable mapping in KVM has similar
-> implications as above. (2) and (3) would be assumed safe by the platform
-> vendors. Regarding (1), to avoid confusion, I would only allow it if FWB
-> (force write-back) is present so that KVM can enforce a cacheable
-> mapping at Stage 2 if the vfio variant driver also maps it as cacheable
-> in user space.
+> +	 */
+> +	prev_end = blk[0]->end;
+> +	for (int i = 1; i < count; i++) {
+> +		struct numa_memblk *curr = blk[i];
+> +
+> +		if (prev_end >= curr->start) {
+> +			if (prev_end < curr->end)
+> +				prev_end = curr->end;
+> +		} else {
+> +			curr->start = prev_end;
+> +			prev_end = curr->end;
+> +		}
+> +	}
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(numa_fill_memblks);
 
-Yes, currently if FWB is not available this patch makes KVM crash :\
-FWB needs to be enforced as well in this patch.
-
-> There were some other thoughts on only allowing different attributes in
-> KVM if the user counterpart does not have any mapping (e.g. fd-based
-> KVM memory slots). However, this won't work well with CXL-attached
-> memory for example where the VMM may want access to it (e.g. virtio). So
-> I wouldn't spend more thoughts on this.
-
-CXL is a different beast - struct page backed CXL memory should be
-force-cachable everywhere just like normal system memory (it is normal
-system memory). This is the kind of memory that might be mixed with
-virtio.
-
-However, some future CXL VFIO device memory should ideally allow the
-VM full flexibility to use cachable or not to properly emulate
-bare-metal. This approach where we pre-select some of the CXL memory
-as cachable is kind of a half job..
-
-I think providing a way for KVM to take in a FD instead of a VMA for
-mapping memory could be interesting in general. We waste a fair amount
-of PTEs creating a 40GB linear map in the CPU just for KVM. Avoiding
-the alias mapping is a nice side effect.
-
-We'd have to do something else for the SIGBUS stuff though..
-
-> a) Relax the KVM Stage 2 mapping for vfio-pci to Normal NC
->    (pgprot_writecombine). TBD whether we need a VMM opt-in is at the
-
-We are working on a tested patch for this, it isn't working yet for
-some reason, still debugging.
-
-> b) Map the KVM stage 2 mapping as cacheable+FWB iff the VMM has a
->    corresponding cacheable mapping.
-
-That is this patch, with some improvements to check FWB/etc.
-
-Thanks,
-Jason
+This export is not needed. The only caller of this is
+drivers/acpi/numa/srat.c which is only ever built-in, not a module.
