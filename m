@@ -2,91 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9698E72F631
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 09:24:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A15472F642
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 09:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243463AbjFNHYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 03:24:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
+        id S235246AbjFNH0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 03:26:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243202AbjFNHYJ (ORCPT
+        with ESMTP id S243389AbjFNHYY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 03:24:09 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869A426A0;
-        Wed, 14 Jun 2023 00:22:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=oa4DOgSZwpr5FlHNC7X1lgn1eoGAQfcjs1SrNJbVpTg=; b=hHT9ZAx1PTiGPKAhnhqP1Wfk0i
-        gl/+ELIbVzYi5aXI1kQPrGZT96YPRBF6A6Q7Js1mZev89Tt+WQpCZIcUJDbkCkNKYX/ty67ZCP5/P
-        xoJqBWhbwkQav79q7n1SdUb6wTcMTdmC9e+2NSFUl99xYNPRAsRaQAGirQTj9uQY3mOibluV2sY1L
-        AIlwwJo/zRDSagW0sI9yDcUMOwZBIJ5Y2aOBzK7ZTio+Klw1348reyBx3oaf2Bw1gr8gOVe9sTVbe
-        byFTWDgVz7bOlLr3OX/XR+jBRRciFXAxJf2eEzKxWJCHrWF6gj4LWBgLTh4iMAQc416FZGai/enI5
-        xyH6aaMg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q9Kpy-00AeEL-0l;
-        Wed, 14 Jun 2023 07:22:38 +0000
-Date:   Wed, 14 Jun 2023 00:22:38 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Ayush Jain <ayush.jain3@amd.com>
-Cc:     sfr@canb.auug.org.au,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Wyes Karny <wyes.karny@amd.com>, hch@infradead.org,
-        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org
-Subject: Re: Kernel null pointer dereference on stopping raid device
-Message-ID: <ZIlqvsZ6nMv2OT2u@infradead.org>
-References: <e78344ad-8d57-91d8-0bfb-724c740c7c72@amd.com>
- <3c4911c4-d3d7-a93e-5f14-e97384ae4f21@amd.com>
+        Wed, 14 Jun 2023 03:24:24 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1048A1FD4
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 00:23:48 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4Qgxjr623rzBQJYc
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 15:23:44 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1686727424; x=1689319425; bh=YX2AQ8xFNrWpKSzaCk01/HXly/M
+        edBgyuGyHyDou450=; b=KhB2SohTmoiZFSWlWV5PLEe8UxZWYq/ibM2LOv8UYaC
+        KmoZIwWYppI4jvvWy2s6YtEyX34P+y/aVqhq9nTMu5Q+CMex8u8P8CQfR0zHooYN
+        8N1aQl8jZ9x1baPQKDcw+v4OhnZS2/QZeJaTsXeQ9epT8ev2qgoIB3TiOwAr6hYl
+        2lWgkaYGrrmjnpeRQ1eUgHap5p/qIpJRUioJgXRAU09MLW2EKj7/mf39CcuMZS+m
+        Nw5C8OqoYYb8LV3b9O5NB424ACKjZYE4MpUMXhGbseTK8o/c9quQ597jHMPU1zNU
+        /S0Myfv/3ah8UH6+xuylE548jUKOi8NVaFIVoRXjz5g==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id LbV7SwVSJnAg for <linux-kernel@vger.kernel.org>;
+        Wed, 14 Jun 2023 15:23:44 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4Qgxjr3pK5zBJLB3;
+        Wed, 14 Jun 2023 15:23:44 +0800 (CST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3c4911c4-d3d7-a93e-5f14-e97384ae4f21@amd.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Wed, 14 Jun 2023 15:23:44 +0800
+From:   hexingwei001@208suo.com
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mm: page_io: Prefer 'unsigned int' to bare use of 'unsigned'
+In-Reply-To: <20230614071804.13110-1-panzhiai@cdjrlc.com>
+References: <20230614071804.13110-1-panzhiai@cdjrlc.com>
+User-Agent: Roundcube Webmail
+Message-ID: <1e132a6416d673e285af610ff185fa5f@208suo.com>
+X-Sender: hexingwei001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ayush,
+Fix the following checkpatch warning:
 
-can you try this patch?
+mm/page_io.c:87: WARNING: Prefer 'unsigned int' to bare use of 
+'unsigned'.
+mm/page_io.c:89: WARNING: Prefer 'unsigned int' to bare use of 
+'unsigned'.
+mm/page_io.c:109: WARNING: Prefer 'unsigned int' to bare use of 
+'unsigned'.
 
-diff --git a/drivers/md/md.c b/drivers/md/md.c
-index ca0de7ddd9434d..828c4e6b9c5013 100644
---- a/drivers/md/md.c
-+++ b/drivers/md/md.c
-@@ -2460,7 +2460,7 @@ static void export_rdev(struct md_rdev *rdev, struct mddev *mddev)
- 	if (test_bit(AutoDetected, &rdev->flags))
- 		md_autodetect_dev(rdev->bdev->bd_dev);
- #endif
--	blkdev_put(rdev->bdev, mddev->major_version == -2 ? &claim_rdev : rdev);
-+	blkdev_put(rdev->bdev, &claim_rdev);
- 	rdev->bdev = NULL;
- 	kobject_put(&rdev->kobj);
- }
-@@ -3644,7 +3644,7 @@ static struct md_rdev *md_import_device(dev_t newdev, int super_format, int supe
- 		goto out_clear_rdev;
- 
- 	rdev->bdev = blkdev_get_by_dev(newdev, BLK_OPEN_READ | BLK_OPEN_WRITE,
--			super_format == -2 ? &claim_rdev : rdev, NULL);
-+			&claim_rdev, NULL);
- 	if (IS_ERR(rdev->bdev)) {
- 		pr_warn("md: could not open device unknown-block(%u,%u).\n",
- 			MAJOR(newdev), MINOR(newdev));
-@@ -3681,7 +3681,7 @@ static struct md_rdev *md_import_device(dev_t newdev, int super_format, int supe
- 	return rdev;
- 
- out_blkdev_put:
--	blkdev_put(rdev->bdev, super_format == -2 ? &claim_rdev : rdev);
-+	blkdev_put(rdev->bdev, &claim_rdev);
- out_clear_rdev:
- 	md_rdev_clear(rdev);
- out_free_rdev:
+Signed-off-by: Xingwei He <hexingwei001@208suo.com>
+---
+  mm/page_io.c | 6 +++---
+  1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/mm/page_io.c b/mm/page_io.c
+index 684cd3c7b59b..138f73386612 100644
+--- a/mm/page_io.c
++++ b/mm/page_io.c
+@@ -84,9 +84,9 @@ int generic_swapfile_activate(struct swap_info_struct 
+*sis,
+  {
+      struct address_space *mapping = swap_file->f_mapping;
+      struct inode *inode = mapping->host;
+-    unsigned blocks_per_page;
++    unsigned int blocks_per_page;
+      unsigned long page_no;
+-    unsigned blkbits;
++    unsigned int blkbits;
+      sector_t probe_block;
+      sector_t last_block;
+      sector_t lowest_block = -1;
+@@ -106,7 +106,7 @@ int generic_swapfile_activate(struct 
+swap_info_struct *sis,
+      last_block = i_size_read(inode) >> blkbits;
+      while ((probe_block + blocks_per_page) <= last_block &&
+              page_no < sis->max) {
+-        unsigned block_in_page;
++        unsigned int block_in_page;
+          sector_t first_block;
+
+          cond_resched();
