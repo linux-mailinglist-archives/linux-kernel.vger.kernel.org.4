@@ -2,75 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AEC272FD8F
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A723272FD99
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:56:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235834AbjFNLz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 07:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36288 "EHLO
+        id S235836AbjFNL4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 07:56:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244355AbjFNLzp (ORCPT
+        with ESMTP id S235787AbjFNL4o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 07:55:45 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03331BFA
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 04:55:36 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f62b552751so8412077e87.3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 04:55:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686743735; x=1689335735;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ykv/GwV2w/s1XOWDjj7UvX/0sKbvp29mJL9R2dK69wc=;
-        b=IOwIuW/a1zAfPZaRWrd646FOcfeyRubilQTZrt+HFVhmIYBiDZ4AV1pos3rO2n3or+
-         Ls88VyeCX2rUUHKLZDeBMpv4117TCTdvjlA90Kjtp4XC2+gLpkcBIRqMtD8dfPkXI0iw
-         AEbh07I264SrfU/dVYkN6nN1liKLNvYBi8acMrRosd4Ekj0yaodPJIVvlGoupeoccd/L
-         qTbs/reSnSG5eZP7qT6BwCKoxsJjupzk7eMIjxWd09D9Crfl6D9fwhnDT6EumsLwVcYV
-         WPhXagWGygY6SeMPtjxg/MdNwflXiF6dbJaV8RJe8aO3Hw901Dnz9b7YINVdLHFWDC5L
-         QbKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686743735; x=1689335735;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ykv/GwV2w/s1XOWDjj7UvX/0sKbvp29mJL9R2dK69wc=;
-        b=Tvs/8s5y6Gml+VFyydORHBZL6Zdncgq4+GOND+8C3teRAlAuJXp3C6boWTMpmaQqyZ
-         fOo4sp+UUOZ7Q0WrIiHEydouuyXI6vvcR4tgwQIeHkSzQpdFzTT9IT/2x1VQFgfwnoQN
-         wcDxZRrdf2qEutGglIf+bcT/UqCBlLRwrGkvGXx2pv5qlQGfKglB+A8w1qE1StiCrdf6
-         ENPLvs4M9LhDq2qDFGnOtQDtqO5GSi+/wDqDl71IZqHpUME4WYkv41oKbOFSaid2ntbB
-         5EnJhEhWTCcBwiCL0Sq+baGTfyc1kQHcAPUzeXgSG0le0EcllfUjYGt7x1acyPeoqoG0
-         mu9w==
-X-Gm-Message-State: AC+VfDyhPntUQ+zUt1la47JxMKek2GVBHpKV5nOhQ58wIxR1RGiqd3Qo
-        ZgfuXzv1FG5FnCAC1GPu7VsFBA==
-X-Google-Smtp-Source: ACHHUZ7UIgwPnNgtVg8gTMmxTLbVJ6LtLPWnod6cj64WHWT1Ri75+jSp2Zz2YTYWMn4FC16sclFpjw==
-X-Received: by 2002:a05:6512:2f5:b0:4f6:7e3:ac87 with SMTP id m21-20020a05651202f500b004f607e3ac87mr9216669lfq.14.1686743734996;
-        Wed, 14 Jun 2023 04:55:34 -0700 (PDT)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id ja15-20020a05600c556f00b003f61177faffsm6547045wmb.0.2023.06.14.04.55.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 04:55:34 -0700 (PDT)
-Message-ID: <5e9e525a-690d-38ce-d80f-da433d4062fd@linaro.org>
-Date:   Wed, 14 Jun 2023 12:55:33 +0100
+        Wed, 14 Jun 2023 07:56:44 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F452122;
+        Wed, 14 Jun 2023 04:56:24 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35EAkA8c001433;
+        Wed, 14 Jun 2023 11:56:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=lGvKgI0vmHHE67M00EyD0hJsM7VocyVHE9KVPqBmkP8=;
+ b=bpdTxDbjpev2zRy+rhxfe/HqffHqGTEiv9zJM8bHw4xanZ0ovBVHnszFHpafD9bEAErL
+ WxY2HVWLhFaRow0vTNMrDdfSS9tfJPJdg+61DCRhFeHi/qgU0iVJfQXxhK9qUSTvV/F3
+ 5CSjM32tTK75Gk5F0tihJDZloNXIM3lOJo+Xm2oAB5Xl2aAEQrjYevhwuWgci/73o4QJ
+ t6ZAV3jULvHcCWZewuYcDKMqcgCFQIATt1wdb6VnQDzAJmtS0U69uSbDmAxDDx9YUWB4
+ +OqD4rgxKAXze4yBLdTiwot/HswwpO7Rv1cJ6rmsVB43IXaTzukmmS96BR6Wmb1u3rcq uQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r6s3wtpqk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Jun 2023 11:56:20 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35EBuIL6013343
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Jun 2023 11:56:18 GMT
+Received: from [10.218.5.19] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 14 Jun
+ 2023 04:56:13 -0700
+Message-ID: <a3652f67-3e48-db33-1dd2-c17abdbdae41@quicinc.com>
+Date:   Wed, 14 Jun 2023 17:26:09 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2] ALSA: compress: allow setting codec params after next
- track
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH V4 4/4] arm64: dts: qcom: sm8550: Add camera clock
+ controller
 Content-Language: en-US
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     vkoul@kernel.org, broonie@kernel.org, tiwai@suse.com,
-        corbet@lwn.net, alsa-devel@alsa-project.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_plai@quicinc.com, quic_mohs@quicinc.com
-References: <20230609150416.24525-1-srinivas.kandagatla@linaro.org>
- <87edmebk2w.wl-tiwai@suse.de>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <87edmebk2w.wl-tiwai@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC:     Bjorn Andersson <andersson@kernel.org>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        "Satya Priya Kakitapalli" <quic_skakitap@quicinc.com>,
+        Imran Shaik <quic_imrashai@quicinc.com>,
+        Ajit Pandey <quic_ajipan@quicinc.com>
+References: <20230609115058.9059-1-quic_jkona@quicinc.com>
+ <20230609115058.9059-5-quic_jkona@quicinc.com>
+ <8d1ead23-8361-7943-baba-baf20d16cbe5@linaro.org>
+From:   Jagadeesh Kona <quic_jkona@quicinc.com>
+In-Reply-To: <8d1ead23-8361-7943-baba-baf20d16cbe5@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: wfffZtK1VCpBnwTJuIfFBGtlvMEmyrk3
+X-Proofpoint-GUID: wfffZtK1VCpBnwTJuIfFBGtlvMEmyrk3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-14_08,2023-06-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
+ adultscore=0 mlxscore=0 mlxlogscore=999 clxscore=1015 impostorscore=0
+ lowpriorityscore=0 suspectscore=0 priorityscore=1501 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306140102
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,180 +94,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Takashi for review,
 
-On 14/06/2023 08:04, Takashi Iwai wrote:
-> On Fri, 09 Jun 2023 17:04:16 +0200,
-> Srinivas Kandagatla wrote:
+
+On 6/9/2023 6:22 PM, Konrad Dybcio wrote:
+> 
+> 
+> On 9.06.2023 13:50, Jagadeesh Kona wrote:
+>> Add device node for camera clock controller on Qualcomm
+>> SM8550 platform.
 >>
->> For gapless playback it is possible that each track can have different
->> codec profile with same decoder, for example we have WMA album,
->> we may have different tracks as WMA v9, WMA v10 and so on
->>
->> Or if DSP's like QDSP have abililty to switch decoders on single stream
->> for each track, then this call could be used to set new codec parameters.
->>
->> Existing code does not allow to change this profile while doing gapless
->> playback.
->>
->> Reuse existing SNDRV_COMPRESS_SET_PARAMS to set this new track params along
->> some additional checks to enforce proper state machine.
->>
->> With this new changes now the user can call SNDRV_COMPRESS_SET_PARAMS
->> anytime after setting next track and additional check in write should
->> also ensure that params are set before writing new data.
->>
->> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+>> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+>> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
 >> ---
->> Changes since v1/RFC:
->> 	- removed introduction of new IOCTL, as suggested.
->> 	- update the state-machine doc.
+>> Changes since V3:
+>>   - No changes
+>> Changes since V2:
+>>   - No changes
+>> Changes since V1:
+>>   - Padded non-zero address part to 8 hex digits
 >>
->>   .../sound/designs/compress-offload.rst        | 52 +++++++++----------
->>   sound/core/compress_offload.c                 | 10 ++--
->>   2 files changed, 33 insertions(+), 29 deletions(-)
+>>   arch/arm64/boot/dts/qcom/sm8550.dtsi | 15 +++++++++++++++
+>>   1 file changed, 15 insertions(+)
 >>
->> diff --git a/Documentation/sound/designs/compress-offload.rst b/Documentation/sound/designs/compress-offload.rst
->> index 935f325dbc77..205cadcabe70 100644
->> --- a/Documentation/sound/designs/compress-offload.rst
->> +++ b/Documentation/sound/designs/compress-offload.rst
->> @@ -256,32 +256,32 @@ Gapless Playback SM
->>   For Gapless, we move from running state to partial drain and back, along
->>   with setting of meta_data and signalling for next track ::
+>> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+>> index 75cd374943eb..4d2d610fc66a 100644
+>> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+>> @@ -5,6 +5,7 @@
 >>   
->> -
->> -                                        +----------+
->> -                compr_drain_notify()    |          |
->> -              +------------------------>|  RUNNING |
->> -              |                         |          |
->> -              |                         +----------+
->> -              |                              |
->> -              |                              |
->> -              |                              | compr_next_track()
->> -              |                              |
->> -              |                              V
->> -              |                         +----------+
->> -              |                         |          |
->> -              |                         |NEXT_TRACK|
->> -              |                         |          |
->> -              |                         +----------+
->> -              |                              |
->> -              |                              |
->> -              |                              | compr_partial_drain()
->> -              |                              |
->> -              |                              V
->> -              |                         +----------+
->> -              |                         |          |
->> -              +------------------------ | PARTIAL_ |
->> -                                        |  DRAIN   |
->> -                                        +----------+
->> +                            +----------+
->> +     compr_drain_notify()   |          | compr_set_params() iff next-track set.
->> +  +------------------------>|  RUNNING |----------------------+
->> +  |                         |          |                      |
->> +  |                         +----------+                      |
->> +  |                              |                            |
->> +  |                              |                            |
->> +  |                              | compr_next_track()         |
->> +  |                              |                            V
->> +  |                              V                            |
->> +  |                         +----------+                      |
->> +  |                         |          |                      |
->> +  |                         |NEXT_TRACK|                      |
->> +  |                         |          |                      |
->> +  |                         +----------+                      |
->> +  |                              |                            |
->> +  |                              +----------------------------+
->> +  |                              |
->> +  |                              | compr_partial_drain()
->> +  |                              |
->> +  |                              V
->> +  |                         +----------+
->> +  |                         |          |
->> +  +------------------------ | PARTIAL_ |
->> +                            |  DRAIN   |
->> +                            +----------+
+>>   #include <dt-bindings/clock/qcom,rpmh.h>
+>>   #include <dt-bindings/clock/qcom,sm8450-videocc.h>
+>> +#include <dt-bindings/clock/qcom,sm8550-camcc.h>
+>>   #include <dt-bindings/clock/qcom,sm8550-gcc.h>
+>>   #include <dt-bindings/clock/qcom,sm8550-gpucc.h>
+>>   #include <dt-bindings/clock/qcom,sm8550-tcsr.h>
+>> @@ -2419,6 +2420,20 @@ videocc: clock-controller@aaf0000 {
+>>   			#power-domain-cells = <1>;
+>>   		};
 >>   
->>   Not supported
->>   =============
->> diff --git a/sound/core/compress_offload.c b/sound/core/compress_offload.c
->> index 243acad89fd3..fe67228e74b3 100644
->> --- a/sound/core/compress_offload.c
->> +++ b/sound/core/compress_offload.c
->> @@ -294,6 +294,9 @@ static ssize_t snd_compr_write(struct file *f, const char __user *buf,
->>   	case SNDRV_PCM_STATE_SETUP:
->>   	case SNDRV_PCM_STATE_PREPARED:
->>   	case SNDRV_PCM_STATE_RUNNING:
->> +		/* Make sure next track params are set before writing new data */
->> +		if (stream->next_track)
->> +			return -EPERM;
+>> +		camcc: clock-controller@ade0000 {
+>> +			compatible = "qcom,sm8550-camcc";
+>> +			reg = <0 0x0ade0000 0 0x20000>;
+>> +			clocks = <&gcc GCC_CAMERA_AHB_CLK>,
+>> +				 <&bi_tcxo_div2>,
+>> +				 <&bi_tcxo_ao_div2>,
+>> +				 <&sleep_clk>;
+>> +			power-domains = <&rpmhpd SM8550_MMCX>;
+> I see that both MMCX ("mmcx.lvl") and MXC ("mxc.lvl") (and MX, FWIW)
+> are consumed on msm-5.15, with the latter one powering camcc PLLs..
 > 
-> Hm, does this logic correctly match with the comment above?
-Yes I agree, it bit confusing and also going to break the partial drain 
-path.
-> Also, this misses the mutex unlock.
-
-Thinking about this again, Its not required have this check here to 
-start with.
-
-Something like below works, I can send this as v3, if this looks fine.
-
-------------------------->cut<----------------------------------
-
-diff --git a/Documentation/sound/designs/compress-offload.rst 
-b/Documentation/sound/designs/compress-offload.rst
-index 935f325dbc77..655624f77092 100644
---- a/Documentation/sound/designs/compress-offload.rst
-+++ b/Documentation/sound/designs/compress-offload.rst
-@@ -268,11 +268,12 @@ with setting of meta_data and signalling for next 
-track ::
-                |                              |
-                |                              V
-                |                         +----------+
--              |                         |          |
--              |                         |NEXT_TRACK|
--              |                         |          |
--              |                         +----------+
--              |                              |
-+              |    compr_set_params()   |          |
-+              |             +-----------|NEXT_TRACK|
-+              |             |           |          |
-+              |             |           +--+-------+
-+              |             |              | |
-+              |             +--------------+ |
-                |                              |
-                |                              | compr_partial_drain()
-                |                              |
-diff --git a/sound/core/compress_offload.c b/sound/core/compress_offload.c
-index 243acad89fd3..30f73097447b 100644
---- a/sound/core/compress_offload.c
-+++ b/sound/core/compress_offload.c
-@@ -589,7 +589,7 @@ snd_compr_set_params(struct snd_compr_stream 
-*stream, unsigned long arg)
-         struct snd_compr_params *params;
-         int retval;
-
--       if (stream->runtime->state == SNDRV_PCM_STATE_OPEN) {
-+       if (stream->runtime->state == SNDRV_PCM_STATE_OPEN || 
-stream->next_track) {
-                 /*
-                  * we should allow parameter change only when stream 
-has been
-                  * opened not in other cases
-@@ -612,6 +612,9 @@ snd_compr_set_params(struct snd_compr_stream 
-*stream, unsigned long arg)
-                 if (retval)
-                         goto out;
-
-+               if (stream->next_track)
-+                       goto out;
-+
-                 stream->metadata_set = false;
-                 stream->next_track = false;
-------------------------->cut<----------------------------------
-
+> How are they related? Is that resolved internally or does it need
+> manual intervention?
 > 
-> 
-> thanks,
-> 
-> Takashi
+> Konrad
+
+These are just different voltage rails, camcc clocks are powered by MMCX 
+rail and camcc pll's are powered by MXC rail. Consumer drivers need to 
+take care of voting on these rails properly based on the frequency of 
+clocks requested.
+
+Thanks,
+Jagadeesh
+
+>> +			required-opps = <&rpmhpd_opp_low_svs>;
+>> +			#clock-cells = <1>;
+>> +			#reset-cells = <1>;
+>> +			#power-domain-cells = <1>;
+>> +		};
+>> +
+>>   		mdss: display-subsystem@ae00000 {
+>>   			compatible = "qcom,sm8550-mdss";
+>>   			reg = <0 0x0ae00000 0 0x1000>;
