@@ -2,173 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC79F73079C
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 20:50:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 567727307A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 20:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233310AbjFNSuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 14:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34444 "EHLO
+        id S235231AbjFNSwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 14:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236797AbjFNSuH (ORCPT
+        with ESMTP id S235335AbjFNSvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 14:50:07 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8425C1BDB
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:50:06 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-310b631c644so1263395f8f.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:50:06 -0700 (PDT)
+        Wed, 14 Jun 2023 14:51:51 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6161BFD
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:51:49 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id 6a1803df08f44-62fe6580f17so6385946d6.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:51:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686768605; x=1689360605;
+        d=google.com; s=20221208; t=1686768708; x=1689360708;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=27Ibbm+oRpNn4LqE//rGeaeQep+ElKzgKjwbwf1dYTI=;
-        b=rlPvuEl/jJaiH0rCfqkOGxtRGN0uAw9VtA/vPTQ1mPTbRiF10BXc2h6HoiAr7+1c5D
-         P+bQaqLycMc7aHNQDDnsY+sPC3EqTu2OP57pUnuOo54gx0Ekj04NiU6Psyh6Mlml27GJ
-         u1NuoeypugKiOx4oyOgpe2iFK/vaCl12aNFSsy/7qswrxRzpy5qvxy+H03d9XIOcagsB
-         9iP02FxwMx57BZiSbCfcEY1k2Lwbr+3bmlwUkJ38Vf3oS1Zt7nMVeOUIQA1RJdwFcDyo
-         u1ndUOcBhF+pcou5sRvQHbZ19EgKHHc2CMGCj3XfBtjzMg9Vq7cgVyhW9OqI5R6jziSg
-         C0TA==
+        bh=gMedmrS/p/Qxyg4JgB/GvkpfboCL/ncS9ZcNdcAtbBw=;
+        b=UG4Ark6caifqCaop3OHayxIjvEQgvufpDyjCM5L8BzrCuHdw77DcbxB1Imy4IC8a6j
+         qvmAc0+3PaU06ELv685Mw+4bpeFCSRW4PK0s3SwzOLqsQIqSTsTQDCDK55ajqHSTwWyI
+         sC1grb6BoLFLS9oBhZjp7CwWT1Qj/GTT8FSkUDr1tpPWQ3jJGvoabANwtbxO28cdXcWN
+         q5pi37Hc0VstR2/usj/5HwMeK/470ocHhii58WQZ94lV5Efc2lLbP3RlR0G0BH9Lj5F7
+         0GZpUwwCktMWI22h/AtlmWfX/W74AcOIAfLEb3gulcqM0Mj+/DkKbCGs4YII5Svee66w
+         mSdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686768605; x=1689360605;
+        d=1e100.net; s=20221208; t=1686768708; x=1689360708;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=27Ibbm+oRpNn4LqE//rGeaeQep+ElKzgKjwbwf1dYTI=;
-        b=fcrkbF3a8Mh+C380AX7uQ/gSD6h5LK22OuT8AhICC59DADOeTsKxBxWyTstICc0Eeh
-         3z08IgwsIzAmpZq9VPwVIZ2HxnS31mo5evYH6hOz7/suFNCUB6odF7k+3plQC9IexlzV
-         R0ErJlAtxcdkvlltzQ3jr4ULktS2u5uVix9nw81EOePU+UF2sZ68min3ZHgDyxo2uXyU
-         514j+0H/sdhgmv+77YFqYyOrlTkH/Ivb0Zz/6e6tTsuxByewhELCzaJVlYJFN9jVdrNJ
-         KnRu+jQTwgy117NGREiZAZo+2KsxreBaQIitVj6PdXPnoAq2PM0x+CCN5T623Z2VVbk0
-         7a2g==
-X-Gm-Message-State: AC+VfDzUxzBszjMvnnRi7Pcmy9YOLmYOW6wB5ZDCoiqgQoLd8u5+4oPF
-        tNwQ4d2F/Wlsi2kEfdnVbq2YvDS3Ci3UJvBjmu4MUg==
-X-Google-Smtp-Source: ACHHUZ5rRWjGS8F+bSWT3HzGPZ4svnNt6B+OuJOD/+yunpJ8h6gygiQKlFbhDRCVM253Y59IjXAjbSrnej0eqNsh3AM=
-X-Received: by 2002:adf:dd41:0:b0:30f:c4e2:fc57 with SMTP id
- u1-20020adfdd41000000b0030fc4e2fc57mr8656969wrm.31.1686768604863; Wed, 14 Jun
- 2023 11:50:04 -0700 (PDT)
+        bh=gMedmrS/p/Qxyg4JgB/GvkpfboCL/ncS9ZcNdcAtbBw=;
+        b=OYf+NG5N2k3eAaVw7ourPETFWWMALxSV+olm33aYpwm91pHZGwhwVacdD6DI1rJKR0
+         ebGezGYJq/VkRVQ8wKxCo3UCUmkMRIMH6wbAQPOJL3RNm5fGvDkbxEUtDlY2FRb1REDB
+         2UdeRAU+qjmWz8bnAe0oxi+/5CsOplTVJRignN3LUwJ/KYmE/DPQqXA2y6+p8wVFwAsM
+         FHWW8t2uzAEIYEpJDM/izcFZ/x4kC0RIRWhMLIYXINdwRayDN+7pp4Ql5wTkV+gwh+J7
+         3Cr+Tnc2sGmjFX7ZgEJQgwdfidPN46iefnZ9BTnHy/J1+KKKnf5RFnyOMhsr4ejexpMM
+         zcJg==
+X-Gm-Message-State: AC+VfDzvBq1QQXhMKplzm2uZabZh8sJHPF3irA4O9Sv+qmF+q/XLdtyi
+        /hJ2391zDBn8MJeqs0xalXdrT0Gm2qJ9j00p+hswPeTPlHZm8AM3BuhaqA==
+X-Google-Smtp-Source: ACHHUZ7Wkp+teTCfoC7m4bCxnObJ2J7WNCIxCxch4HFFrKMCzde4tlGFIeZg71wvQEahtaEBZ2MTaSm/h278vtrJV8I=
+X-Received: by 2002:a05:6214:224a:b0:61b:75e0:6a19 with SMTP id
+ c10-20020a056214224a00b0061b75e06a19mr18911317qvc.14.1686768708272; Wed, 14
+ Jun 2023 11:51:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230519001709.2563-1-tj@kernel.org> <20230519001709.2563-15-tj@kernel.org>
- <CAB=BE-S=cxewXu7nqJY1DC5w9Bapar_C0cTjpZOQ-Qd5GGwYyw@mail.gmail.com>
- <c307ba94-0d8c-3cbf-19da-44ee31751428@amd.com> <ZIEBB-A1arYKSK2P@slm.duckdns.org>
- <fb3461cd-3fc2-189a-a86b-c638816a2440@amd.com> <ZIJbMQOu_k07jkFf@slm.duckdns.org>
- <fd5a27de-c8a9-892c-f413-66ea41221fdd@amd.com>
-In-Reply-To: <fd5a27de-c8a9-892c-f413-66ea41221fdd@amd.com>
-From:   Sandeep Dhavale <dhavale@google.com>
-Date:   Wed, 14 Jun 2023 11:49:53 -0700
-Message-ID: <CAB=BE-QaNBn1cVK6c7LM2cLpH_Ck_9SYw-YDYEnNrtwfoyu81Q@mail.gmail.com>
-Subject: Re: [PATCH 14/24] workqueue: Generalize unbound CPU pods
-To:     Tejun Heo <tj@kernel.org>
-Cc:     jiangshanlai@gmail.com, torvalds@linux-foundation.org,
-        peterz@infradead.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, joshdon@google.com, brho@google.com,
-        briannorris@chromium.org, nhuck@google.com, agk@redhat.com,
-        snitzer@kernel.org, void@manifault.com, kernel-team@android.com,
-        Swapnil Sapkal <swapnil.sapkal@amd.com>, kprateek.nayak@amd.com
+References: <202305230231.3Wb7Q68G-lkp@intel.com> <edf2ec88-3586-bbb1-fbf1-9451393c12ec@csgroup.eu>
+ <CAKwvOdm3vNxp9GZrxs6s4h73pHgHD=sJjaPziGzxcr+K7iGd-g@mail.gmail.com> <5fd58e1e-9e5f-4bd7-2153-aa0055a3f6c5@csgroup.eu>
+In-Reply-To: <5fd58e1e-9e5f-4bd7-2153-aa0055a3f6c5@csgroup.eu>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 14 Jun 2023 14:51:36 -0400
+Message-ID: <CAKwvOdmrQKx=gTbcRuSRGBjd2q8Zf5YvpOuzoVJg4ovL96w4yg@mail.gmail.com>
+Subject: Re: arch/powerpc/math-emu/fcmpu.c:13:2: warning: variable 'A_c' set
+ but not used
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     kernel test robot <lkp@intel.com>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nathan Chancellor <nathan@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tejun,
-Thank you for your patches! I tested the affinity-scopes-v2 with app launch
-benchmarks. The numbers below are total scheduling latency for erofs kworke=
-rs
-and last column is with percpu highpri kthreads that is
-CONFIG_EROFS_FS_PCPU_KTHREAD=3Dy
-CONFIG_EROFS_FS_PCPU_KTHREAD_HIPRI=3Dy
+On Wed, Jun 14, 2023 at 2:26=E2=80=AFPM Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
+>
+>
+>
+> Le 14/06/2023 =C3=A0 18:04, Nick Desaulniers a =C3=A9crit :
+> > On Wed, Jun 14, 2023 at 10:11=E2=80=AFAM Christophe Leroy
+> > <christophe.leroy@csgroup.eu> wrote:
+> >>
+> >> Hi,
+> >>
+> >> Le 22/05/2023 =C3=A0 21:00, kernel test robot a =C3=A9crit :
+> >>> Hi Christophe,
+> >>>
+> >>> FYI, the error/warning still remains.
+> >>>
+> >>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linu=
+x.git master
+> >>> head:   44c026a73be8038f03dbdeef028b642880cf1511
+> >>> commit: 7245fc5bb7a966852d5bd7779d1f5855530b461a powerpc/math-emu: Re=
+move -w build flag and fix warnings
+> >>> date:   9 months ago
+> >>> config: powerpc-randconfig-r022-20230522 (https://download.01.org/0da=
+y-ci/archive/20230523/202305230231.3Wb7Q68G-lkp@intel.com/config)
+> >>> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project =
+b0fb98227c90adf2536c9ad644a74d5e92961111)
+> >>> reproduce (this is a W=3D1 build):
+> >>>           wget https://raw.githubusercontent.com/intel/lkp-tests/mast=
+er/sbin/make.cross -O ~/bin/make.cross
+> >>>           chmod +x ~/bin/make.cross
+> >>>           # install powerpc cross compiling tool for clang build
+> >>>           # apt-get install binutils-powerpc-linux-gnu
+> >>>           # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/=
+linux.git/commit/?id=3D7245fc5bb7a966852d5bd7779d1f5855530b461a
+> >>>           git remote add linus https://git.kernel.org/pub/scm/linux/k=
+ernel/git/torvalds/linux.git
+> >>>           git fetch --no-tags linus master
+> >>>           git checkout 7245fc5bb7a966852d5bd7779d1f5855530b461a
+> >>>           # save the config file
+> >>>           mkdir build_dir && cp config build_dir/.config
+> >>>           COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cr=
+oss W=3D1 O=3Dbuild_dir ARCH=3Dpowerpc olddefconfig
+> >>>           COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cr=
+oss W=3D1 O=3Dbuild_dir ARCH=3Dpowerpc SHELL=3D/bin/bash arch/powerpc/math-=
+emu/
+> >>>
+> >>> If you fix the issue, kindly add following tag where applicable
+> >>> | Reported-by: kernel test robot <lkp@intel.com>
+> >>> | Closes: https://lore.kernel.org/oe-kbuild-all/202305230231.3Wb7Q68G=
+-lkp@intel.com/
+> >>>
+> >>> All warnings (new ones prefixed by >>):
+> >>>
+> >>>>> arch/powerpc/math-emu/fcmpu.c:13:2: warning: variable 'A_c' set but=
+ not used [-Wunused-but-set-variable]
+> >>
+> >> This code is imported, and there is no plan to make any change to it.
+> >> Can you desactivate that warning ?
+> >
+> > If the code is imported, and we don't plan to push fixes upstream,
+> > does it make sense to just set -Wno-unusued-but-set-variable in
+> > arch/powerpc/math-emu/Makefile?
+>
+> Yes, that's done already but clang ignores it apparently.
+>
+> >
+> > Wait, what?!
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/arch/powerpc/math-emu/Makefile#n20
+> > arch/powerpc/math-emu/Makefile already has -Wunused-but-set-variable
+> > in ccflags-remove-y. But if KBUILD_EXTRA_WARN is set for W=3D1 builds,
+> > -Wunused-but-set-variable is added back, but only for math.o and
+> > math_efp.o.  The warning above comes from building fcmpu.o.  So how
+> > did  -Wunused-but-set-variable get set in the first place?
+>
+> Indeed.
+>
+> I looked once more and found out that:
+>
+>    clang -Wp,-MMD,arch/powerpc/math-emu/.fcmpu.o.d -nostdinc
+> -I./arch/powerpc/include -I./arch/powerpc/include/generated  -I./include
+> -I./arch/powerpc/include/uapi -I./arch/powerpc/include/generated/uapi
+> -I./include/uapi -I./include/generated/uapi -include
+> ./include/linux/compiler-version.h -include ./include/linux/kconfig.h
+> -include ./include/linux/compiler_types.h -D__KERNEL__ -I ./arch/powerpc
+> -DHAVE_AS_ATHIGH=3D1 -fmacro-prefix-map=3D./=3D -Wundef -DKBUILD_EXTRA_WA=
+RN1
+> -Wall -Wundef -Werror=3Dstrict-prototypes -Wno-trigraphs
+> -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE
+> -Werror=3Dimplicit-function-declaration -Werror=3Dimplicit-int
+> -Werror=3Dreturn-type -Wno-format-security -funsigned-char -std=3Dgnu11
+> --target=3Dpowerpc64le-linux-gnu -fintegrated-as
+> -Werror=3Dunknown-warning-option -Werror=3Dignored-optimization-argument
+> -Werror=3Doption-ignored -Werror=3Dunused-command-line-argument -mbig-end=
+ian
+> -m32 -msoft-float -pipe -mcpu=3Dpowerpc -mno-prefixed -mno-pcrel
+> -mno-altivec -mno-vsx -mno-mma -mno-spe -fno-asynchronous-unwind-tables
+> -mbig-endian -fno-delete-null-pointer-checks -Wno-frame-address
+> -Wno-address-of-packed-member -O2 -Wframe-larger-than=3D1024
+> -fno-stack-protector -Wno-gnu -Wno-unused-but-set-variable
+> -Wno-unused-const-variable -ftrivial-auto-var-init=3Dzero
+> -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
+> -pg -Wdeclaration-after-statement -Wvla -Wno-pointer-sign
+> -Wcast-function-type -Wimplicit-fallthrough -fno-strict-overflow
+> -fno-stack-check -Werror=3Ddate-time -Werror=3Dincompatible-pointer-types
+> -Wextra -Wunused -Wno-unused-parameter -Wmissing-format-attribute
+> -Wold-style-definition -Wmissing-include-dirs -Wunused-const-variable
+> -Wno-missing-field-initializers -Wno-sign-compare -Wno-type-limits
+> -Wno-shift-negative-value -g -Werror
+> -DKBUILD_MODFILE=3D'"arch/powerpc/math-emu/fcmpu"'
+> -DKBUILD_BASENAME=3D'"fcmpu"' -DKBUILD_MODNAME=3D'"fcmpu"'
+> -D__KBUILD_MODNAME=3Dkmod_fcmpu -c -o arch/powerpc/math-emu/fcmpu.o
+> arch/powerpc/math-emu/fcmpu.c   ; ./tools/objtool/objtool --mcount
+> --uaccess --sec-address   arch/powerpc/math-emu/fcmpu.o
+>
+>
+> If you move -Wunused before -Wno-unused-but-set-variable, then you don't
+> have the warning/error anymore. So what ? What the hell is clang
+> behaving that way ?
 
-Scheduling latency is the latency between when the task became eligible to =
-run
-to when it actually started running. The test does 50 cold app launches for=
- each
-and aggregates the numbers.
+It's re-enabling ALL of the members of the -Wunused group without
+having checked to see if any more specific members were already
+disabled.
 
-| Table        | Upstream | Cache nostrict | CPU nostrict | PCPU hpri |
-|--------------+----------+----------------+--------------+-----------|
-| Average (us) | 12286    | 7440           | 4435         | 2717      |
-| Median (us)  | 12528    | 3901           | 3258         | 2476      |
-| Minimum (us) | 287      | 555            | 638          | 357       |
-| Maximum (us) | 35600    | 35911          | 13364        | 6874      |
-| Stdev (us)   | 7918     | 7503           | 3323         | 1918      |
-|--------------+----------+----------------+--------------+-----------|
+>
+> GCC documentation is explicit, see
+> https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html :
+>
+>    The combined effect of positive and negative forms is that more
+> specific options have priority over less specific ones, independently of
+> their position in the command-line.
 
-We see here that with affinity-scopes-v2 (which defaults to cache nostrict)=
-,
-there is a good improvement when compared to the current codebase.
-Affinity scope "CPU nostrict" for erofs workqueue has even better numbers
-for my test launches and it resembles logically to percpu highpri kthreads
-approach. Percpu highpri kthreads has the lowest latency and variation,
-probably down to running at higher priority as those threads are set to
-sched_set_fifo_low().
+Ah, nice citation. I did not know that was the expected behavior of
+this group diagnostics.  Indeed, there's a behavior difference here.
+https://godbolt.org/z/13MxqrjcW
 
-At high level, the app launch numbers itself improved with your series as
-entire workqueue subsystem improved across the board.
+>
+> Can clang be fixed ?
 
+Filed:
+https://github.com/llvm/llvm-project/issues/63315
+
+>
+> Christophe
+
+
+
+--=20
 Thanks,
-Sandeep.
-
-On Thu, Jun 8, 2023 at 8:43=E2=80=AFPM 'K Prateek Nayak' via kernel-team
-<kernel-team@android.com> wrote:
->
-> Hello Tejun,
->
-> On 6/9/2023 4:20 AM, Tejun Heo wrote:
-> > Hello,
-> >
-> > On Thu, Jun 08, 2023 at 08:31:34AM +0530, K Prateek Nayak wrote:
-> >> [..snip..]
-> >> o I consistently see a WARN_ON_ONCE() in kick_pool() being hit when I
-> >>   run "sudo ./stress-ng --iomix 96 --timeout 1m". I've seen few
-> >>   different stack traces so far. Including all below just in case:
-> > ...
-> >> This is the same WARN_ON_ONCE() you had added in the HEAD commit:
-> >>
-> >>     $ scripts/faddr2line vmlinux kick_pool+0xdb
-> >>     kick_pool+0xdb/0xe0:
-> >>     kick_pool at kernel/workqueue.c:1130 (discriminator 1)
-> >>
-> >>     $ sed -n 1130,1132p kernel/workqueue.c
-> >>     if (!WARN_ON_ONCE(wake_cpu >=3D nr_cpu_ids))
-> >>         p->wake_cpu =3D wake_cpu;
-> >>     get_work_pwq(work)->stats[PWQ_STAT_REPATRIATED]++;
-> >>
-> >> Let me know if you need any more data from my test setup.
-> >> P.S. The kernel is still up and running (~30min) despite hitting this
-> >> WARN_ON_ONCE() in my case :)
-> >
-> > Okay, that was me being stupid and not initializing the new fields for
-> > per-cpu workqueues. Can you please test the following branch? It should=
- have
-> > both bugs fixed properly.
-> >
-> >  git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git affinity-scope=
-s-v2
->
-> I've not run into any panics or warnings with this one. Kernel has been
-> stable for ~30min while running stress-ng iomix. We'll resume the testing
-> with v2 :)
->
-> >
-> > If that doesn't crash, I'd love to hear how it affects the perf regress=
-ions
-> > reported over that past few months.>
-> > Thanks.
-> >
->
-> --
-> Thanks and Regards,
-> Prateek
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kernel-team+unsubscribe@android.com.
->
+~Nick Desaulniers
