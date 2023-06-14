@@ -2,61 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F3272FA16
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 12:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18BC072FA18
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 12:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235762AbjFNKHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 06:07:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57994 "EHLO
+        id S234409AbjFNKHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 06:07:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243620AbjFNKGa (ORCPT
+        with ESMTP id S243814AbjFNKGa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 14 Jun 2023 06:06:30 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450E6E53;
-        Wed, 14 Jun 2023 03:06:24 -0700 (PDT)
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230F5E52;
+        Wed, 14 Jun 2023 03:06:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686737184; x=1718273184;
+  t=1686737185; x=1718273185;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=jWzfPbhC79qqaHTqzQY7E8PHAXtRi83kN66lly81vR4=;
-  b=eXK7NMJDkytpVIDIHorf/r1W44Fy/007vZo+4MWhpoLJk0YiEnLSIhI8
-   C9/FbQ2/5W0fvfasnaozzdoM0PGHxy/QgQwNiNpPoh3QqSxfVYJkhZDS2
-   5ocu4pj+GRDGfPvWxDFuHfHmdirc9il/TVOxUbWP5Xjy2+H1PJAPGSLNS
-   b0NVDFl6RXujwGPfl0ixVH1TAwtz1CUh+wUkd91O9n3Fq7JjvDW+dQE6L
-   xRhiL5pGbOvd6ystQyFAv6qiR1Rn8S/9ESdTlNhPAnfwIF4tQzK2iQQRU
-   HxvTqzt7z652aoNnun5DveJyN/XOfqXf9us9rhwqMwDe5Vliq1zUWE2Dy
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="361945621"
+  bh=g2QfR8bmYgD+CN0RFxMr1eU3YYzbjEOX8nWdKHOLO6M=;
+  b=MFmHPI3ixsBtdNO2NJtXr6XaCBM68f6KDYOrwDZcpUYt7n2rKUgeS1x8
+   ri/iK+WiLcYgDekhyh5pBuVCImSrm0qN7Wq3PjdAkCX9EbihWSlttcrmY
+   7n642PFY9eN8r/NWbVVFP1wMUSj7fQaJWeDFEdwBzKEV4KNlmY4NF8/Al
+   K56PO/CgYHJBo5vJGA8Kx9AenIC/5+aPDr1GHstZFMXMCT6nreHfH63V+
+   2kNj6qt+Yp32/rIFYaPVoC+tcSlvq28Y7dLngmKlOR4zw7lWVtK5ZIbw5
+   xnbmSByl0tubEXQo72TDGL6PZzovxxgISpW1XTYv12tG7lsRHDDdifG7M
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="444943713"
 X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="361945621"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 03:06:23 -0700
+   d="scan'208";a="444943713"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 03:06:24 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="745021639"
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="824753394"
 X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="745021639"
+   d="scan'208";a="824753394"
 Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 14 Jun 2023 03:06:21 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 14 Jun 2023 03:06:21 -0700
 Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1q9NOO-0000Vl-39;
-        Wed, 14 Jun 2023 10:06:20 +0000
-Date:   Wed, 14 Jun 2023 18:05:43 +0800
+        id 1q9NOP-0000Vn-06;
+        Wed, 14 Jun 2023 10:06:21 +0000
+Date:   Wed, 14 Jun 2023 18:05:44 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     JuenKit Yip <JuenKit_Yip@hotmail.com>, linux@roeck-us.net,
-        jdelvare@suse.com
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        JuenKit Yip <JuenKit_Yip@hotmail.com>
-Subject: Re: [PATCH 1/3] hwmon: (sht3x)remove sht3x_platform_data
-Message-ID: <202306141736.b9bPRO0Z-lkp@intel.com>
-References: <DB4PR10MB6261D79FE16EC2BBD5316B91925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+To:     Wei Chin Tsai <Wei-chin.Tsai@mediatek.com>,
+        linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     oe-kbuild-all@lists.linux.dev, wsd_upstream@mediatek.com,
+        wei-chin.tsai@mediatek.com, mel.lee@mediatek.com,
+        ivan.tseng@mediatek.com, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2 2/3] memory: export symbols for memory related
+ functions
+Message-ID: <202306141627.fYoZPKxi-lkp@intel.com>
+References: <20230614032038.11699-3-Wei-chin.Tsai@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DB4PR10MB6261D79FE16EC2BBD5316B91925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+In-Reply-To: <20230614032038.11699-3-Wei-chin.Tsai@mediatek.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -67,131 +72,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi JuenKit,
+Hi Wei,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.4-rc6 next-20230614]
+[auto build test WARNING on char-misc/char-misc-testing]
+[also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.4-rc6 next-20230614]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/JuenKit-Yip/hwmon-sht3x-add-medium-repeatability-support/20230614-143100
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/DB4PR10MB6261D79FE16EC2BBD5316B91925AA%40DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
-patch subject: [PATCH 1/3] hwmon: (sht3x)remove sht3x_platform_data
-config: hexagon-randconfig-r045-20230612 (https://download.01.org/0day-ci/archive/20230614/202306141736.b9bPRO0Z-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+url:    https://github.com/intel-lab-lkp/linux/commits/Wei-Chin-Tsai/kernel-process-fork-exit-export-symbol-for-fork-exit-tracing-functions/20230614-112218
+base:   char-misc/char-misc-testing
+patch link:    https://lore.kernel.org/r/20230614032038.11699-3-Wei-chin.Tsai%40mediatek.com
+patch subject: [PATCH v2 2/3] memory: export symbols for memory related functions
+config: csky-randconfig-r011-20230612 (https://download.01.org/0day-ci/archive/20230614/202306141627.fYoZPKxi-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 12.3.0
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
-        git fetch groeck-staging hwmon-next
-        git checkout groeck-staging/hwmon-next
-        b4 shazam https://lore.kernel.org/r/DB4PR10MB6261D79FE16EC2BBD5316B91925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
+        git remote add char-misc https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git
+        git fetch char-misc char-misc-testing
+        git checkout char-misc/char-misc-testing
+        b4 shazam https://lore.kernel.org/r/20230614032038.11699-3-Wei-chin.Tsai@mediatek.com
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/hwmon/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=csky olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=csky SHELL=/bin/bash fs/proc/
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306141736.b9bPRO0Z-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306141627.fYoZPKxi-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/hwmon/sht3x.c:17:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/hwmon/sht3x.c:17:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/hwmon/sht3x.c:17:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/hwmon/sht3x.c:25:28: warning: unused variable 'sht3x_cmd_measure_blocking_hpm' [-Wunused-const-variable]
-      25 | static const unsigned char sht3x_cmd_measure_blocking_hpm[]    = { 0x2c, 0x06 };
-         |                            ^
->> drivers/hwmon/sht3x.c:29:28: warning: unused variable 'sht3x_cmd_measure_blocking_lpm' [-Wunused-const-variable]
-      29 | static const unsigned char sht3x_cmd_measure_blocking_lpm[]    = { 0x2c, 0x10 };
-         |                            ^
-   8 warnings generated.
+>> fs/proc/task_mmu.c:776:6: warning: no previous prototype for 'smap_gather_stats' [-Wmissing-prototypes]
+     776 | void smap_gather_stats(struct vm_area_struct *vma,
+         |      ^~~~~~~~~~~~~~~~~
 
 
-vim +/sht3x_cmd_measure_blocking_hpm +25 drivers/hwmon/sht3x.c
+vim +/smap_gather_stats +776 fs/proc/task_mmu.c
 
-7c84f7f80d6fcea David Frey  2016-06-02  23  
-cecbab8bdd40311 JuenKit Yip 2023-06-14  24  /* commands (high repeatability mode) */
-7c84f7f80d6fcea David Frey  2016-06-02 @25  static const unsigned char sht3x_cmd_measure_blocking_hpm[]    = { 0x2c, 0x06 };
-7c84f7f80d6fcea David Frey  2016-06-02  26  static const unsigned char sht3x_cmd_measure_nonblocking_hpm[] = { 0x24, 0x00 };
-7c84f7f80d6fcea David Frey  2016-06-02  27  
-cecbab8bdd40311 JuenKit Yip 2023-06-14  28  /* commands (low repeatability mode) */
-7c84f7f80d6fcea David Frey  2016-06-02 @29  static const unsigned char sht3x_cmd_measure_blocking_lpm[]    = { 0x2c, 0x10 };
-7c84f7f80d6fcea David Frey  2016-06-02  30  static const unsigned char sht3x_cmd_measure_nonblocking_lpm[] = { 0x24, 0x16 };
-7c84f7f80d6fcea David Frey  2016-06-02  31  
+   769	
+   770	/*
+   771	 * Gather mem stats from @vma with the indicated beginning
+   772	 * address @start, and keep them in @mss.
+   773	 *
+   774	 * Use vm_start of @vma as the beginning address if @start is 0.
+   775	 */
+ > 776	void smap_gather_stats(struct vm_area_struct *vma,
+   777			       struct mem_size_stats *mss, unsigned long start)
+   778	{
+   779		const struct mm_walk_ops *ops = &smaps_walk_ops;
+   780	
+   781		/* Invalid start */
+   782		if (start >= vma->vm_end)
+   783			return;
+   784	
+   785		if (vma->vm_file && shmem_mapping(vma->vm_file->f_mapping)) {
+   786			/*
+   787			 * For shared or readonly shmem mappings we know that all
+   788			 * swapped out pages belong to the shmem object, and we can
+   789			 * obtain the swap value much more efficiently. For private
+   790			 * writable mappings, we might have COW pages that are
+   791			 * not affected by the parent swapped out pages of the shmem
+   792			 * object, so we have to distinguish them during the page walk.
+   793			 * Unless we know that the shmem object (or the part mapped by
+   794			 * our VMA) has no swapped out pages at all.
+   795			 */
+   796			unsigned long shmem_swapped = shmem_swap_usage(vma);
+   797	
+   798			if (!start && (!shmem_swapped || (vma->vm_flags & VM_SHARED) ||
+   799						!(vma->vm_flags & VM_WRITE))) {
+   800				mss->swap += shmem_swapped;
+   801			} else {
+   802				ops = &smaps_shmem_walk_ops;
+   803			}
+   804		}
+   805	
+   806		/* mmap_lock is held in m_start */
+   807		if (!start)
+   808			walk_page_vma(vma, ops, mss);
+   809		else
+   810			walk_page_range(vma->vm_mm, start, vma->vm_end, ops, mss);
+   811	}
+   812	EXPORT_SYMBOL_GPL(smap_gather_stats);
+   813	
 
 -- 
 0-DAY CI Kernel Test Service
