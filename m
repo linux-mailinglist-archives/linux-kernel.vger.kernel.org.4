@@ -2,218 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C4F730946
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 22:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EACDC730938
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 22:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235333AbjFNUkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 16:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
+        id S236729AbjFNUee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 16:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240582AbjFNUkB (ORCPT
+        with ESMTP id S236739AbjFNUe3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 16:40:01 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9612526A4;
-        Wed, 14 Jun 2023 13:39:43 -0700 (PDT)
-Received: from leknes.fjasle.eu ([46.142.98.236]) by mrelayeu.kundenserver.de
- (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MQvH5-1qWRWY21MF-00O06b; Wed, 14 Jun 2023 22:34:01 +0200
-Received: from localhost.fjasle.eu (kirkenes.fjasle.eu [10.10.0.5])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by leknes.fjasle.eu (Postfix) with ESMTPS id DECFF3E88F;
-        Wed, 14 Jun 2023 22:33:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
-        t=1686774840; bh=VxDwY6UWytIkBRLR4VrFcNCi9qR5AyTX2EDVL76J0I0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1PGXUvTUZ8aUAf9Q4bHeyTGqTgDEH9PXGMCmy+egXOGjlqvH+uMbHbAOXpT1tpU9r
-         hq4u4cV6kig6O3Tx9Ke5yloFxQv5HquySbMZMKQyZRq9MoZrMle2n/2FsRHEA2rG+E
-         OGAIdwUJRpN4P2UAofjDDnNUFLJYQejN+XFKoK9Y=
-Received: by localhost.fjasle.eu (Postfix, from userid 1000)
-        id 396601F2; Wed, 14 Jun 2023 22:33:59 +0200 (CEST)
-Date:   Wed, 14 Jun 2023 22:33:59 +0200
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH] kbuild: revive "Entering directory" for Make >= 4.4.1
-Message-ID: <ZIokN9rbm8+Xo0jU@bergen.fjasle.eu>
-References: <20230610161711.1094231-1-masahiroy@kernel.org>
+        Wed, 14 Jun 2023 16:34:29 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724C02684;
+        Wed, 14 Jun 2023 13:34:23 -0700 (PDT)
+X-GND-Sasl: herve.codina@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686774861;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yZm6YcC6DcFVvhOCrWE7tXXzeBzGgryfSQmR/S4llfA=;
+        b=nQ7IcnTL8O0E6kwDyNu6kT3yKmiODt5kIbcs4yQzM21QJqc0CQKBJIc3UrH/URxks21i4Q
+        9JDF6iwAmNyudNKKRcD0kHBCsZ3QewttgXr+j9xOz+MIl9aAXdhVsdLtpuij47spr3wHhP
+        oiFNRk5+jJKlfQrXTBEqUn2ZGP6BHOFo5zPXwmIznrIvw5LV4kJRgivyTBcLIKcP2G1I4C
+        g6EaUm43GYdJ7VH+I5IkZJw/S6qTZq51RC8aJ0SDC8Iwzr16gbEqI2w17H8ooobPKogxQ8
+        eXkxHWcDGFL7R9vQx9kUmhtAykgtUQX3buafDqQ0A5OKsiSwUBLg0djxY9Hn3g==
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9A02040005;
+        Wed, 14 Jun 2023 20:34:19 +0000 (UTC)
+Date:   Wed, 14 Jun 2023 22:34:18 +0200
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v4 07/13] minmax: Introduce {min,max}_array()
+Message-ID: <20230614223418.0d7e355d@bootlin.com>
+In-Reply-To: <CAHp75VcmW2StPqb_LtKFyNyJ2+jz3c19zNRDiSuGs06Bseq04w@mail.gmail.com>
+References: <20230614074904.29085-1-herve.codina@bootlin.com>
+        <20230614074904.29085-8-herve.codina@bootlin.com>
+        <CAHp75Vcur=H_2mBm5Ztuvd7Jnvmr6+tvCbEkFtmaVLsEjXr8NQ@mail.gmail.com>
+        <20230614114214.1371485e@bootlin.com>
+        <CAHp75VcmW2StPqb_LtKFyNyJ2+jz3c19zNRDiSuGs06Bseq04w@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="5+g3rxuO7DqIExaj"
-Content-Disposition: inline
-In-Reply-To: <20230610161711.1094231-1-masahiroy@kernel.org>
-X-Operating-System: Debian GNU/Linux 12.0
-Jabber-ID: nicolas@jabber.no
-X-Provags-ID: V03:K1:eI99D0swjbJCNfA6dfu2+LLaPmdE9spl9TDyMGGi8tE2NyH4gDH
- RAjIUs4bn2aKHKZMqPR3/b9GGnOT3tC/i/nLzAMp3UvLwTpj6pFCBJeBuz1K/vRojMQAnDs
- 3oAG9hK1fa2ADe3tuay3apq4xB4Imlr9EGDmMYaV26aOEx2OLyCu+UDQBeM3DceemLfqSj+
- MfBScqWRty5YORpsGZW9Q==
-UI-OutboundReport: notjunk:1;M01:P0:Osxz3cFq8b4=;RZmQ5HGl/gjXWXeDEknm5mYfsd7
- jzlCjT+5Rz2V4T3oqNgDb2hS4fil+RsPO3nneWJECloDuWC1mmChrjiuoSnIBVvki7encRXTx
- GjzPJ/jGVHLFLUF3zRheFpESZT8pZE0DKupiMSRu0y4ooVU++4S49TM63LP6ujvhq/kxFqPc2
- bldnit8dOQUuRYn4w1bcjMwTd3oXhuSsN1tasibB0nlNbQui5OrP24WdTr3QSjcKYm9iKCb0s
- D3DU0P+IthcK77xCRBpMj+vJ2ED2+o6KX0jRBPMejVIv9R2CbvJicXK3itqMf0T21/7cvoNie
- dZphdubg9JIA1EG2UmPUZxQeO2LqOncbrf6qsAfBmmiOE9OyKaCC/oadINSZhp0gMLWePvRuI
- sGk+9oaTUTdyk4LUX7XPZ8kDpVtsy72HyM9km9WPQhRLE7nEhKgWWjjlJ7/fUIJRSFW0F6CZX
- z4v526Rklpt7E2SjkJW99e6Ni8PPEz7BgrXK2164TBwCZI9AVxauiy2yF+jV9tpVgRGewGB7U
- nKyPnD4sVcT33x3MylHNlo/S8yTf/gYYbCx5jWPXupfmC38gdaOcos5B5zwxJHpyoBIm7zu0j
- GhLyL5RWmr716Y8nts3tAx5DLghpu3wClixAhnAnPjen7uwEOwT0Cr1QBMPgz10d8yuow7L2Y
- uFCTSoMqrhI6/w2EcZmSYxN1reMTq3jrFXvWGnEQsA==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Andy,
 
---5+g3rxuO7DqIExaj
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, 14 Jun 2023 14:51:43 +0300
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 
-On Sun 11 Jun 2023 01:17:11 +0900, Masahiro Yamada wrote:
-> With commit 9da0763bdd82 ("kbuild: Use relative path when building in
-> a subdir of the source tree"), compiler messages in out-of-tree builds
-> include relative paths, which are relative to the build directory, not
-> the directory where make was started.
->=20
-> To help IDEs/editors find the source files, Kbuild lets GNU Make print
-> "Entering directory ..." when it changes the working directory. It has
-> been working fine for a long time, but David reported it is broken with
-> GNU Make 4.4.1.
->=20
-> The behavior was changed by GNU Make commit 8f9e7722ff0f ("[SV 63537]
-> Fix setting -w in makefiles"). Previously, setting --no-print-directory
-> to MAKEFLAGS only affected child makes, but it is now interpreted in
-> the current make as soon as it is set.
->=20
-> [test code]
->=20
->   $ cat /tmp/Makefile
->   MAKEFLAGS +=3D --no-print-directory
->   all: ; :
->=20
-> [before 8f9e7722ff0f]
->=20
->   $ make -C /tmp
->   make: Entering directory '/tmp'
->   :
->   make: Leaving directory '/tmp'
->=20
-> [after 8f9e7722ff0f]
->=20
->   $ make -C /tmp
->   :
->=20
-> This commit restores the previous behavior for GNU Make >=3D 4.4.1.
->=20
-> Reported-by: David Howells <dhowells@redhat.com>
-> Closes: https://lore.kernel.org/all/2427604.1686237298@warthog.procyon.or=
-g.uk/
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->=20
->  Makefile | 16 ++++++++++++++--
->  1 file changed, 14 insertions(+), 2 deletions(-)
->=20
-> diff --git a/Makefile b/Makefile
-> index cc3fe09c4dec..9868186deb66 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -191,7 +191,7 @@ endif # ifneq ($(KBUILD_OUTPUT),)
-> =20
->  ifeq ($(abs_objtree),$(CURDIR))
->  # Suppress "Entering directory ..." unless we are changing the work dire=
-ctory.
-> -MAKEFLAGS +=3D --no-print-directory
-> +no-print-directory :=3D --no-print-directory
->  else
->  need-sub-make :=3D 1
->  endif
-> @@ -203,6 +203,15 @@ ifneq ($(words $(subst :, ,$(abs_srctree))), 1)
->  $(error source directory cannot contain spaces or colons)
->  endif
-> =20
-> +ifneq ($(filter jobserver-fifo,$(.FEATURES)),) # test $(MAKE_VERSION) >=
-=3D 4.4
+> On Wed, Jun 14, 2023 at 12:42 PM Herve Codina <herve.codina@bootlin.com> wrote:
+> > On Wed, 14 Jun 2023 12:02:57 +0300
+> > Andy Shevchenko <andy.shevchenko@gmail.com> wrote:  
+> > > On Wed, Jun 14, 2023 at 10:49 AM Herve Codina <herve.codina@bootlin.com> wrote:  
+> 
+> ...
+> 
+> > > > +       typeof(__array[0] + 0) __element = __array[--__len];    \  
+> > >
+> > > Do we need the ' + 0' part?  
+> >
+> > Yes.
+> >
+> > __array can be an array of const items and it is legitimate to get the
+> > minimum value from const items.
+> >
+> > typeof(__array[0]) keeps the const qualifier but we need to assign __element
+> > in the loop.
+> > One way to drop the const qualifier is to get the type from a rvalue computed
+> > from __array[0]. This rvalue has to have the exact same type with only the const
+> > dropped.
+> > '__array[0] + 0' was a perfect canditate.  
+> 
+> Seems like this also deserves a comment. But if the series is accepted
+> as is, it may be done as a follow up.
+> 
 
-In scripts/Kbuild.include, we use $(intcmp) to check against Make=20
-version >=3D 4.4, cp. commit fccb3d3eda8d ("kbuild: add=20
-test-{ge,gt,le,lt} macros", 2022-12-11).  Might it make sense to use=20
-the same test here too?
+Finally not so simple ...
+I did some deeper tests and the macros need to be fixed.
 
-> +ifeq ($(filter 4.4,$(MAKE_VERSION)),)
-> +# With GNU Make >=3D 4.4.1, a change in MAKEFLAGS takes effect as soon a=
-s it is
-> +# set. Run __sub-make all the time so that we can pass --no-print-direct=
-ory
-> +# via the command line.
-> +need-sub-make :=3D 1
-> +endif
-> +endif
-> +
->  ifneq ($(filter 3.%,$(MAKE_VERSION)),)
->  # 'MAKEFLAGS +=3D -rR' does not immediately become effective for GNU Mak=
-e 3.x
->  # We need to invoke sub-make to avoid implicit rules in the top Makefile.
-> @@ -223,7 +232,8 @@ $(filter-out $(this-makefile), $(MAKECMDGOALS)) __all=
-: __sub-make
-> =20
->  # Invoke a second make in the output directory, passing relevant variabl=
-es
->  __sub-make:
-> -	$(Q)$(MAKE) -C $(abs_objtree) -f $(abs_srctree)/Makefile $(MAKECMDGOALS)
-> +	$(Q)$(MAKE) $(no-print-directory) -C $(abs_objtree) \
-> +	-f $(abs_srctree)/Makefile $(MAKECMDGOALS)
+I hope this one (with comments added) is correct:
+--- 8 ---
+/*
+ * Do not check the array parameter using __must_be_array().
+ * In the following legit use-case where the "array" passed is a simple pointer,
+ * __must_be_array() will return a failure.
+ * --- 8< ---
+ * int *buff
+ * ...
+ * min = min_array(buff, nb_items);
+ * --- 8< ---
+ *
+ * The first typeof(&(array)[0]) is needed in order to support arrays of both
+ * 'int *buff' and 'int buf[N]' types.
+ *
+ * typeof(__array[0] + 0) used for __element is needed as the array can be an
+ * array of const items.
+ * In order to discard the const qualifier use an arithmetic operation (rvalue).
+ * This arithmetic operation discard the const but also can lead to an integer
+ * promotion. For instance, a const s8 __array[0] lead to an int __element due
+ * to the promotion.
+ * In this case, simple min() or max() operation fails (type mismatch).
+ * Use min_t() or max_t() (op_t parameter) enforcing the type in order to avoid
+ * the min() or max() failure.
+ */
+#define __minmax_array(op_t, array, len) ({			\
+	typeof(&(array)[0]) __array = (array);			\
+	typeof(len) __len = (len);				\
+	typeof(__array[0] + 0) __element = __array[--__len];	\
+	while (__len--)						\
+		__element = op_t(typeof(__array[0]), __element, __array[__len]); \
+	__element; })
 
-I like that solution, thanks!
+/**
+ * min_array - return minimum of values present in an array
+ * @array: array
+ * @len: array length
+ *
+ * Note that @len must not be zero (empty array).
+ */
+#define min_array(array, len) __minmax_array(min_t, array, len)
 
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+/**
+ * max_array - return maximum of values present in an array
+ * @array: array
+ * @len: array length
+ *
+ * Note that @len must not be zero (empty array).
+ */
+#define max_array(array, len) __minmax_array(max_t, array, len)
 
-> =20
->  endif # need-sub-make
->  endif # sub_make_done
-> @@ -234,6 +244,8 @@ ifeq ($(need-sub-make),)
->  # Do not print "Entering directory ...",
->  # but we want to display it when entering to the output directory
->  # so that IDEs/editors are able to understand relative filenames.
-> +# This line is needed to allow Make < 4.4.1 to skip __sub-make.
-> +# The newer Make versions runs __sub-make before seeing this line.
->  MAKEFLAGS +=3D --no-print-directory
-> =20
->  ifeq ($(abs_srctree),$(abs_objtree))
-> --=20
-> 2.39.2
+--- 8< ---
 
--- Nicolas Schier
+Tested ok from user-space on my x86_64 using the following types for *buff
+and buff[N]:
+- signed/unsigned char
+- signed/unsigned short
+- signed/unsigned int
+- signed/unsigned long
+- signed/unsigned long long
+- float, double, long double (even if not used in the kernel)
 
---5+g3rxuO7DqIExaj
-Content-Type: application/pgp-signature; name="signature.asc"
+Can you give me your feedback on this last version ?
 
------BEGIN PGP SIGNATURE-----
+If you are ok, it will be present in the next iteration of the series.
+Otherwise, as a last ressort, I will drop the {min,max}_array() and switch
+back to the specific min/max computation in IIO inkern.c
 
-iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmSKJDAACgkQB1IKcBYm
-Emn2SBAAtW7WFkg7YqlFFNSqlTmSJGpzyyu2JRnBcEUASs5OkQILLyZI/8OYUGOE
-pFvwNi1mP1XJNu8rcTBsj4ZD2khd8K9FVASvr9dDRnsFzFsed6IIzdX9/ADOUOLA
-fSss7SvkJ8EnPX8v5oQ8VZwaNApfLk6zXGM/hl9oEokHbQTCJ3ePXY9k47C4NvvN
-KOFmQ5Y7BsUFo/7KqYPbM/pus2hQ4zep6TMMpmp0Qt/KGZS6SnOrySZu8fdCtwvb
-INaSpHkWLGXGtrLUkRqh/isP8zqbXamNSJHsxaGx6DI8AyB3z1NMaKso7l3GKHZs
-rOrvEYhxo8uCtvh5rI9wUUf2LJQ0a83ZUBazvCcUg+EQnUkN8Dbf7RW53rFeJTQ2
-Ial/WKNzhtBYuwJBWfX71hmiw7bU+PjonwjN3dXzAdiyttAB3/y5wQmCBex7H+Fz
-/fw0R4xXjEVVKiVq+UQuDOvBQ6e02ZThSHLAobEetbad8l/rBhZGLk+Iqrc6phWI
-ejEkvuBvGutEIKR8cBKhjXHZL2DYJJXczrJ5x+63yMxQAoiREZHHS3PgeGYxK9OX
-A6dqfSwRt2RUeBX2mtjbBO8w94Cv1387rX2j1olQAkBL4MBlpgWcbjgsD3Wuf/d6
-OG7aIrLfe1umeZy8NqEA+DzX57qMBa9eSkrC2mWo60kQOddk+Pg=
-=4k6M
------END PGP SIGNATURE-----
+Sorry for this back and forth and this last minute detected bug.
 
---5+g3rxuO7DqIExaj--
+Best regards,
+Hervé
+
+-- 
+Hervé Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
