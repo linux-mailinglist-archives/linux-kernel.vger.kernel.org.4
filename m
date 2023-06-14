@@ -2,172 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39DB372F891
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 11:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E4272F88E
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 11:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243881AbjFNJBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 05:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48442 "EHLO
+        id S243838AbjFNJBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 05:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243841AbjFNJBl (ORCPT
+        with ESMTP id S235002AbjFNJBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 05:01:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A41B1BDA
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 02:00:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686733254;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=l4sh/emgrXW2GPutta+QOSkzrAD5eaw/WkmUJz4ERH8=;
-        b=AKdf28dKIp7AvWoSC1XyjmVmFwM77PkfLkkzXx5m4Vtl25/dHLzIoHr5BGn9UyOgeVURyD
-        pIA4BdlmpwR1rGc6Ys0TH8tPBa6g0OWeeLmM/Cg4XQVKSYPzQgIgBA8JyWUW/fQJlcC1pC
-        lmbmGt6f+V4cCvfLYk79k7eF7A1B74k=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-206-lxvdGTXmNbK4vkz0lZm75w-1; Wed, 14 Jun 2023 05:00:49 -0400
-X-MC-Unique: lxvdGTXmNbK4vkz0lZm75w-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 455F2101A531;
-        Wed, 14 Jun 2023 09:00:48 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 26114C1603B;
-        Wed, 14 Jun 2023 09:00:39 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <0000000000000900e905fdeb8e39@google.com>
-References: <0000000000000900e905fdeb8e39@google.com>
-To:     syzbot <syzbot+f9e28a23426ac3b24f20@syzkaller.appspotmail.com>
-Cc:     dhowells@redhat.com, brauner@kernel.org, kuba@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        viro@zeniv.linux.org.uk
-Subject: Re: [syzbot] [fs?] general protection fault in splice_to_socket
+        Wed, 14 Jun 2023 05:01:35 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128CF10E9
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 02:01:35 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q9MNe-0001bM-Cx; Wed, 14 Jun 2023 11:01:30 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q9MNc-007JWQ-Bi; Wed, 14 Jun 2023 11:01:28 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q9MNb-00E9dX-Jd; Wed, 14 Jun 2023 11:01:27 +0200
+Date:   Wed, 14 Jun 2023 11:01:27 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Shuijing Li <shuijing.li@mediatek.com>
+Cc:     thierry.reding@gmail.com, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com,
+        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        jitao.shi@mediatek.com
+Subject: Re: [PATCH v2] pwm: mtk_disp: Fix the disable flow of disp_pwm
+Message-ID: <20230614090127.6xynz6ti6cqptyy5@pengutronix.de>
+References: <20230518115258.14320-1-shuijing.li@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1423847.1686733230.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 14 Jun 2023 10:00:30 +0100
-Message-ID: <1423848.1686733230@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="g65y4tisr66ns5qu"
+Content-Disposition: inline
+In-Reply-To: <20230518115258.14320-1-shuijing.li@mediatek.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.g=
-it main
 
-commit d302bc9baf84c549891bedee57ee917d9e0485d7
-Author: David Howells <dhowells@redhat.com>
-Date:   Wed Jun 14 09:14:50 2023 +0100
+--g65y4tisr66ns5qu
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-    splice: Fix splice_to_socket() to handle pipe bufs larger than a page
-    =
+On Thu, May 18, 2023 at 07:52:58PM +0800, Shuijing Li wrote:
+> There is a flow error in the original mtk_disp_pwm_apply() function.
+> If this function is called when the clock is disabled, there will be a
+> chance to operate the disp_pwm register, resulting in disp_pwm exception.
+> Fix this accordingly.
+>=20
+> Signed-off-by: Shuijing Li <shuijing.li@mediatek.com>
 
-    splice_to_socket() assumes that a pipe_buffer won't hold more than a s=
-ingle
-    page of data - but it seems that this assumption can be violated when
-    splicing from a socket into a pipe.
-    =
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-kleine@pengutronix.de>
 
-    The problem is that splice_to_socket() doesn't advance the pipe_buffer
-    length and offset when transcribing from the pipe buf into a bio_vec, =
-so if
-    the buf is >PAGE_SIZE, it keeps repeating the same initial chunk and
-    doesn't advance the tail index.  It then subtracts this from "remain" =
-and
-    overcounts the amount of data to be sent.
-    =
+Best regards
+Uwe
 
-    The cleanup phase then tries to overclean the pipe, hits an unused pip=
-e buf
-    and a NULL-pointer dereference occurs.
-    =
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-    Fix this by not restricting the bio_vec size to PAGE_SIZE and instead
-    transcribing the entirety of each pipe_buffer into a single bio_vec an=
-d
-    advancing the tail index if remain hasn't hit zero yet.
-    =
+--g65y4tisr66ns5qu
+Content-Type: application/pgp-signature; name="signature.asc"
 
-    Large bio_vecs will then be split up iterator functions such as
-    iov_iter_extract_pages().
-    =
+-----BEGIN PGP SIGNATURE-----
 
-    This resulted in a KASAN report looking like:
-    =
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSJgeYACgkQj4D7WH0S
+/k4CfQf/dTzLQ5c2z/jSsZTIMPhUgJHtpEI+aFepaoUfNA4IRC+IrFVStQ8V/RJU
+6dAFA3nAUYFHuzZpQLTcaENDfr6MabMfSAR4yXhOaPcslme9pIpTuRnUZIIO0qvR
+42/AQxjcFCioGJAY0ARo4QLeKECZiK0U/ggPi3KRlqtd+XN78/q1Gc6483+0Eu4U
+F9ggDwUAft504AudLQq1CcKqUI4r2DkzpgKxzdTTOGcUFGCdwdhfjE0AooUN2wOp
+Fex3oZYrqkcw2WmUZydpEdSQ294jgNOBMG760VKK0mOrJDppOsPPRQN0jbK8J2i+
+4fiBt05cMgr2YeSBI1T7Fxh4dU5SPw==
+=mYin
+-----END PGP SIGNATURE-----
 
-    general protection fault, probably for non-canonical address 0xdffffc0=
-000000001: 0000 [#1] PREEMPT SMP KASAN
-    KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
-    ...
-    RIP: 0010:pipe_buf_release include/linux/pipe_fs_i.h:203 [inline]
-    RIP: 0010:splice_to_socket+0xa91/0xe30 fs/splice.c:933
-    =
-
-    Reported-by: syzbot+f9e28a23426ac3b24f20@syzkaller.appspotmail.com
-    Fixes: 2dc334f1a63a ("splice, net: Use sendmsg(MSG_SPLICE_PAGES) rathe=
-r than ->sendpage()")
-    =
-
-    Signed-off-by: David Howells <dhowells@redhat.com>
-    cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-    cc: David Ahern <dsahern@kernel.org>
-    cc: "David S. Miller" <davem@davemloft.net>
-    cc: Eric Dumazet <edumazet@google.com>
-    cc: Jakub Kicinski <kuba@kernel.org>
-    cc: Paolo Abeni <pabeni@redhat.com>
-    cc: Jens Axboe <axboe@kernel.dk>
-    cc: Matthew Wilcox <willy@infradead.org>
-    cc: Christian Brauner <brauner@kernel.org>
-    cc: Alexander Viro <viro@zeniv.linux.org.uk>
-    cc: netdev@vger.kernel.org
-    cc: linux-fsdevel@vger.kernel.org
-
-diff --git a/fs/splice.c b/fs/splice.c
-index e337630aed64..567a1f03ea1e 100644
---- a/fs/splice.c
-+++ b/fs/splice.c
-@@ -886,7 +886,6 @@ ssize_t splice_to_socket(struct pipe_inode_info *pipe,=
- struct file *out,
- 			}
- =
-
- 			seg =3D min_t(size_t, remain, buf->len);
--			seg =3D min_t(size_t, seg, PAGE_SIZE);
- =
-
- 			ret =3D pipe_buf_confirm(pipe, buf);
- 			if (unlikely(ret)) {
-@@ -897,10 +896,9 @@ ssize_t splice_to_socket(struct pipe_inode_info *pipe=
-, struct file *out,
- =
-
- 			bvec_set_page(&bvec[bc++], buf->page, seg, buf->offset);
- 			remain -=3D seg;
--			if (seg >=3D buf->len)
--				tail++;
--			if (bc >=3D ARRAY_SIZE(bvec))
-+			if (remain =3D=3D 0 || bc >=3D ARRAY_SIZE(bvec))
- 				break;
-+			tail++;
- 		}
- =
-
- 		if (!bc)
-
+--g65y4tisr66ns5qu--
