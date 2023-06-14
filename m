@@ -2,125 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D1DF72FA07
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 12:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9915D72FA02
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 12:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235090AbjFNKFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 06:05:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57026 "EHLO
+        id S233905AbjFNKDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 06:03:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243604AbjFNKEx (ORCPT
+        with ESMTP id S231875AbjFNKDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 06:04:53 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B6B195;
-        Wed, 14 Jun 2023 03:04:52 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f7ff69824dso3330455e9.1;
-        Wed, 14 Jun 2023 03:04:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686737091; x=1689329091;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=CJwr6Y2umkSKUEqhWH9SvLNqVUvRLzxqfJAUFOKrvpU=;
-        b=YdnjUdn8XRrLX9Gte6D/c18JhkyLdnvJNnkeJ5RW6fLHTg3J3lJ6sZK1QrI9iIubxY
-         gG0WcqYjP1yb/aPYV5td6KD8qnUTor7LPvtrGNelMl5uX/WlXjkbNddKQD74bSeM7l5x
-         EENwEbO1aIr92Og1+L0VyHc9qozi0XA1ZqteHyuJIczLGqFBKmgUOxq76oE9+FhOrOcC
-         RczP880i3XPQYzgti3VhFDvZy/C/Oj9HMUYqOJFQZWYx3IzYlvyxLQ1TEY1xDx1DFO+O
-         oUleUj7OUcDAkAiFWoQjKdPO9MJr9CIgIviZEQOEo4z/5AARj5mYL694nEhHDoO/x/n9
-         oGVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686737091; x=1689329091;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CJwr6Y2umkSKUEqhWH9SvLNqVUvRLzxqfJAUFOKrvpU=;
-        b=f5FYvfzxyCeHqYH0lT0+MWovD/C8PJ3OZBaEVAdVjhpQh68jLnAf5Qne3od79+djrw
-         CTi6t5CAu78Nzcf+JJ6N2+kls8drV4f0J6SmFDq3+q35HlfDKz7Bc2NXi9ghJS3KRQzY
-         pMABjGuzJ/PLLUhJbyu8x7Kro1nF4+ifS5bV5s1o+848C2Ppn/c3TvrO92K1V06thbqv
-         LfOwWVLEgc6Vi+4QGX23n05wveHHb9Vr1p0T+tGEp4IrR0tvGVHBs9b1245XxHlI+A3F
-         kGxCR8TuH6zkaBTY436PViBsQvK61Pf1l3lAirwvsOKAotMpEU81aWdWQ+9v4F4ogNB+
-         3Enw==
-X-Gm-Message-State: AC+VfDwJmNGA+pzY9PgdX3f6n6uQWOTx5ficBJMlM366YjSHXAje1dMY
-        NTDiq5PHQS1l1CoHriPXDItsTizCgSA=
-X-Google-Smtp-Source: ACHHUZ7NnadrCr99c3BsF7uxz0uSZ0Xsaquj+r/MPcopBB5hGiDYUm8XgILbFGUpVTXyfm7ULZI9tg==
-X-Received: by 2002:a05:600c:21cf:b0:3f8:6934:9775 with SMTP id x15-20020a05600c21cf00b003f869349775mr1005877wmj.7.1686737090538;
-        Wed, 14 Jun 2023 03:04:50 -0700 (PDT)
-Received: from localhost.localdomain (host-95-252-166-216.retail.telecomitalia.it. [95.252.166.216])
-        by smtp.gmail.com with ESMTPSA id n26-20020a1c721a000000b003f78fd2cf5esm16949354wmc.40.2023.06.14.03.04.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 03:04:50 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     "Theodore Ts'o" <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        syzbot+4acc7d910e617b360859@syzkaller.appspotmail.com
-Subject: [PATCH] ext4: Drop the call to ext4_error() from ext4_get_group_info()
-Date:   Wed, 14 Jun 2023 12:02:55 +0200
-Message-ID: <20230614100446.14337-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.41.0
+        Wed, 14 Jun 2023 06:03:43 -0400
+Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [5.144.164.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55951186;
+        Wed, 14 Jun 2023 03:03:42 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 1F08B3F806;
+        Wed, 14 Jun 2023 12:03:40 +0200 (CEST)
+Date:   Wed, 14 Jun 2023 12:03:39 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, quic_abhinavk@quicinc.com,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] drm/msm/dsi: Enable DATABUS_WIDEN for DSI command
+ mode
+Message-ID: <mfzmioovf54lcuiuzvk4fuz26elag6iw3ohbdhgym7k3qzirhx@dd7vu7ms6azz>
+References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
+ <20230525-add-widebus-support-v1-3-c7069f2efca1@quicinc.com>
+ <3a6cc492-6b54-2c70-402e-995c0b003c01@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3a6cc492-6b54-2c70-402e-995c0b003c01@linaro.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A recent patch added a call to ext4_error() which is problematic since
-some callers of the ext4_get_group_info() function may be holding a
-spinlock, whereas ext4_error() must never be called in atomic context.
+On 2023-06-14 10:49:31, Dmitry Baryshkov wrote:
+> On 14/06/2023 04:57, Jessica Zhang wrote:
+> > DSI 6G v2.5.x+ supports a data-bus widen mode that allows DSI to send
+> > 48 bits of compressed data per pclk instead of 24.
+> > 
+> > For all chipsets that support this mode, enable it whenever DSC is
+> > enabled as recommend by the hardware programming guide.
+> > 
+> > Only enable this for command mode as we are currently unable to validate
+> > it for video mode.
+> > 
+> > Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+> > ---
+> > 
+> > Note: The dsi.xml.h changes were generated using the headergen2 script in
+> > envytools [1], but the changes to the copyright and rules-ng-ng source file
+> > paths were dropped.
+> > 
+> > [1] https://github.com/freedreno/envytools/
+> > 
+> >   drivers/gpu/drm/msm/dsi/dsi.xml.h  |  1 +
+> >   drivers/gpu/drm/msm/dsi/dsi_host.c | 19 ++++++++++++++++++-
+> >   2 files changed, 19 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/gpu/drm/msm/dsi/dsi.xml.h b/drivers/gpu/drm/msm/dsi/dsi.xml.h
+> > index a4a154601114..2a7d980e12c3 100644
+> > --- a/drivers/gpu/drm/msm/dsi/dsi.xml.h
+> > +++ b/drivers/gpu/drm/msm/dsi/dsi.xml.h
+> > @@ -664,6 +664,7 @@ static inline uint32_t DSI_CMD_MODE_MDP_CTRL2_INPUT_RGB_SWAP(enum dsi_rgb_swap v
+> >   	return ((val) << DSI_CMD_MODE_MDP_CTRL2_INPUT_RGB_SWAP__SHIFT) & DSI_CMD_MODE_MDP_CTRL2_INPUT_RGB_SWAP__MASK;
+> >   }
+> >   #define DSI_CMD_MODE_MDP_CTRL2_BURST_MODE			0x00010000
+> > +#define DSI_CMD_MODE_MDP_CTRL2_DATABUS_WIDEN			0x00100000
+> > 
+> >   #define REG_DSI_CMD_MODE_MDP_STREAM2_CTRL			0x000001b8
+> >   #define DSI_CMD_MODE_MDP_STREAM2_CTRL_DATA_TYPE__MASK		0x0000003f
+> > diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> > index 5d7b4409e4e9..1da5238e7105 100644
+> > --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+> > +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> > @@ -927,6 +927,9 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+> >   	u32 hdisplay = mode->hdisplay;
+> >   	u32 wc;
+> >   	int ret;
+> > +	bool widebus_supported = msm_host->cfg_hnd->major == MSM_DSI_VER_MAJOR_6G &&
+> > +			msm_host->cfg_hnd->minor >= MSM_DSI_6G_VER_MINOR_V2_5_0;
+> > +
+> > 
+> >   	DBG("");
+> > 
+> > @@ -973,8 +976,15 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+> >   		 *
+> >   		 * hdisplay will be divided by 3 here to account for the fact
+> >   		 * that DPU sends 3 bytes per pclk cycle to DSI.
+> > +		 *
+> > +		 * If widebus is supported, set DATABUS_WIDEN register and divide hdisplay by 6
+> > +		 * instead of 3
+> 
+> This is useless, it is already obvious from the code below. Instead 
+> there should be something like "wide bus extends that to 6 bytes per 
+> pclk cycle"
 
-This triggered a report from Syzbot: "BUG: sleeping function called from
-invalid context in ext4_update_super" (see the link below).
+Yes please.  In general, don't paraphrase the code, but explain _why_ it
+is doing what it does.  Saying that the widebus feature doubles the
+bandwidth per pclk tick is much more clear than "divide by 6 instead of
+3" - we can read that from the code.
 
-Therefore, drop the call to ext4_error() from ext4_get_group_info(). In
-the meantime use eight characters tabs instead of nine characters ones.
+Overall comments have been very good so far (such as the original "to
+account for the fact that DPU sends 3 bytes per pclk cycle"), though!
 
-Reported-by: syzbot+4acc7d910e617b360859@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/all/00000000000070575805fdc6cdb2@google.com/
-Fixes: 5354b2af3406 ("ext4: allow ext4_get_group_info() to fail")
-Suggested-by: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
- fs/ext4/balloc.c | 20 +++++++++-----------
- 1 file changed, 9 insertions(+), 11 deletions(-)
+> >   		 */
+> > -		hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 3);
+> > +		if (!(msm_host->mode_flags & MIPI_DSI_MODE_VIDEO) && widebus_supported)
+> > +			hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 6);
+> > +		else
+> > +			hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 3);
+> > +
+> >   		h_total += hdisplay;
+> >   		ha_end = ha_start + hdisplay;
+> >   	}
+> > @@ -1027,6 +1037,13 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+> >   		dsi_write(msm_host, REG_DSI_CMD_MDP_STREAM0_TOTAL,
+> >   			DSI_CMD_MDP_STREAM0_TOTAL_H_TOTAL(hdisplay) |
+> >   			DSI_CMD_MDP_STREAM0_TOTAL_V_TOTAL(mode->vdisplay));
+> > +
+> > +		if (msm_host->dsc && widebus_supported) {
+> > +			u32 mdp_ctrl2 = dsi_read(msm_host, REG_DSI_CMD_MODE_MDP_CTRL2);
+> > +
+> > +			mdp_ctrl2 |= DSI_CMD_MODE_MDP_CTRL2_DATABUS_WIDEN;
+> > +			dsi_write(msm_host, REG_DSI_CMD_MODE_MDP_CTRL2, mdp_ctrl2);
+> 
+> Is widebus applicable only to the CMD mode, or video mode can employ it too?
 
-diff --git a/fs/ext4/balloc.c b/fs/ext4/balloc.c
-index c1edde817be8..e8da678a0103 100644
---- a/fs/ext4/balloc.c
-+++ b/fs/ext4/balloc.c
-@@ -324,17 +324,15 @@ static ext4_fsblk_t ext4_valid_block_bitmap_padding(struct super_block *sb,
- struct ext4_group_info *ext4_get_group_info(struct super_block *sb,
- 					    ext4_group_t group)
- {
--	 struct ext4_group_info **grp_info;
--	 long indexv, indexh;
--
--	 if (unlikely(group >= EXT4_SB(sb)->s_groups_count)) {
--		 ext4_error(sb, "invalid group %u", group);
--		 return NULL;
--	 }
--	 indexv = group >> (EXT4_DESC_PER_BLOCK_BITS(sb));
--	 indexh = group & ((EXT4_DESC_PER_BLOCK(sb)) - 1);
--	 grp_info = sbi_array_rcu_deref(EXT4_SB(sb), s_group_info, indexv);
--	 return grp_info[indexh];
-+	struct ext4_group_info **grp_info;
-+	long indexv, indexh;
-+
-+	if (unlikely(group >= EXT4_SB(sb)->s_groups_count))
-+		return NULL;
-+	indexv = group >> (EXT4_DESC_PER_BLOCK_BITS(sb));
-+	indexh = group & ((EXT4_DESC_PER_BLOCK(sb)) - 1);
-+	grp_info = sbi_array_rcu_deref(EXT4_SB(sb), s_group_info, indexv);
-+	return grp_info[indexh];
- }
- 
- /*
--- 
-2.41.0
+The patch description states that it was not tested on video-mode yet,
+so I assume it will.  But this should also be highlighted with a comment
+(e.g. /* XXX: Allow for video-mode once tested/fixed */), _especially_
+on the check for MIPI_DSI_MODE_VIDEO above.
 
+If I understand this correctly DSC is not working for video mode at all
+on these setups, right?  Or no-one was able to test it?  I'm inclined to
+request dropping these artifical guards to have as little friction as
+possible when someone starts enabling and testing this - and less
+patches removing artificial bounds in the future.
+
+- Marijn
