@@ -2,94 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 648E2730A69
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 00:09:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31ABD730A6D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 00:10:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236480AbjFNWJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 18:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54364 "EHLO
+        id S236515AbjFNWKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 18:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjFNWJo (ORCPT
+        with ESMTP id S229567AbjFNWKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 18:09:44 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FEB1A1;
-        Wed, 14 Jun 2023 15:09:42 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-bc492cb6475so1132416276.2;
-        Wed, 14 Jun 2023 15:09:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686780582; x=1689372582;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uxCYYqgD5haUCkeC5DXhN+uLq5/abXQjgXDwO+5hkwc=;
-        b=dT92Uk2SGyIBASdn2lfY84qqz+cSYS7DEvwolim1KJ8NqEiRlMaf1uBLM07S7UDzZ9
-         uk6HN3gXsTCujof6V+SQ1/Bl9SqtIB9ZpOiLjEGQSDaKbgB61qVRT2dwKZ9oXuiSWSjg
-         6xMvZNJuUxLs1vEaz33tbMB3hxiBKlS4jJ2jCVfSm8Jcj2+T++v1CSo6VtmQSo2y+yfu
-         lXnrSLtbB0dCwiw2twlcqaOJywLugz/d62mngkgHiJGB4WNogu5g8ZFV1e3D01bxUxrB
-         lGvak+5Ctw+fJY7TSslNIB20RU3R40WYKl4YxNjs+vwTheNvj8jmcMWPmMumtRbIFSO/
-         AnNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686780582; x=1689372582;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uxCYYqgD5haUCkeC5DXhN+uLq5/abXQjgXDwO+5hkwc=;
-        b=NFKO28xKfbl3Uf+P4LoE0BhQ6WgkvRx2N3B+6pP1Tio9TFe7CSpNNspCPuf51Vu8Kt
-         Um/MgXEifOJxLf0mNDBuNNY5119Fa3CHy+yqsWOPq7XqSmsY2ffWmMN8hKFC9A4VR+GY
-         HKNkv8zoz0ekNytN9A9rz6a6NE4SfMwmnq6Bz4zlyMl8SVvdD4k1OpyHOHR7qYnHaIEh
-         ZTnmUtggKc5qCSbSK8M8tir2z43mKbWOG/KUjI0Xxxw4CzBXkx8QFlwV9g9tctxjQVz7
-         TybPYrOI4Ugxw57Qqbp6WCBsBTEjfLtJ3TIzQ8FkX4khFYwXEZLgIOykXbmYM2B/1Buq
-         Ov8g==
-X-Gm-Message-State: AC+VfDy3GrEA9qF2Wo58T1hFDJiv+30hREp0oikE5ImNHdES4AJnl9jb
-        F6EYigZi4+WCfhHSW++AG2BEBvtAwccww5lADwc=
-X-Google-Smtp-Source: ACHHUZ5Ki7h45tEWuN2EE3YC5f6+IiHoRICcZpFhSuZgR2mQeCO1yeN+ZS7sLNMFWqW3qJyi2KZE+OGtbEesC1AoGK0=
-X-Received: by 2002:a25:9343:0:b0:bca:bc83:d315 with SMTP id
- g3-20020a259343000000b00bcabc83d315mr2765786ybo.48.1686780581786; Wed, 14 Jun
- 2023 15:09:41 -0700 (PDT)
+        Wed, 14 Jun 2023 18:10:17 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3058C1A1;
+        Wed, 14 Jun 2023 15:10:16 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35ELoFid020851;
+        Wed, 14 Jun 2023 22:10:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=nnWLQwiZkQ8s5CJTvwAtHE6CaPCsbe4R6Q/zstn1Luc=;
+ b=DZz5I+9VuXJWd7k/TkEHCTpNnPL4Wypx4h/Xq2vqIBngIrpz4gY96hFKFupz7Va4krlg
+ 2QPJBHhJnQXtDwUK7ZDZ1wtzq9D8Ry+R0llYF+0uSsPLNdoN99qwfBMv5p8CYjLj/3p9
+ /V+dtoWoIJ36492O9Rf8uM/QSKEwezvHFcbdoyYq/R35nO1dOUpYeoFpDPbIlUCuMIm4
+ 8Z/bKKADuD0f5SuVGc569xMX9mljdVu+QyxWpS8Cs/NdJUPQky0N6sACjddRnmehTOOO
+ YQfmXlSQbGXJp1ga/DjvuNYChq48aBZgYwfRFUPwYsnx1ppoaPveg0RwnMZuNDr10IGB TA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r7auy1p69-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Jun 2023 22:10:09 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35EM9iW3028192
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Jun 2023 22:09:45 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Wed, 14 Jun 2023 15:09:44 -0700
+Date:   Wed, 14 Jun 2023 15:09:43 -0700
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Bjorn Andersson <andersson@kernel.org>
+CC:     <freedreno@lists.freedesktop.org>, Rob Clark <robdclark@gmail.com>,
+        <johan@kernel.org>, Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        <devicetree@vger.kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        <linux-kernel@vger.kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <mani@kernel.org>, Sean Paul <sean@poorly.run>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH v2 0/3] drm/msm/adreno: GPU support on SC8280XP
+Message-ID: <20230614220943.GA2941091@hu-bjorande-lv.qualcomm.com>
+References: <20230523011522.65351-1-quic_bjorande@quicinc.com>
+ <168675861182.1453524.13825528487008901071.b4-ty@kernel.org>
 MIME-Version: 1.0
-References: <20230614180837.630180-1-ojeda@kernel.org> <20230614180837.630180-6-ojeda@kernel.org>
-In-Reply-To: <20230614180837.630180-6-ojeda@kernel.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Thu, 15 Jun 2023 00:09:30 +0200
-Message-ID: <CANiq72mM+=XBWXBqrgkBcSwR2GtC=PX5WwTB8+-Tm0wVOMtgPg@mail.gmail.com>
-Subject: Re: [PATCH 5/6] rust: support running Rust documentation tests as
- KUnit ones
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Alice Ryhl <aliceryhl@google.com>,
-        Andreas Hindborg <nmi@metaspace.dk>,
-        Philip Li <philip.li@intel.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <168675861182.1453524.13825528487008901071.b4-ty@kernel.org>
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: H2uwT20jcJRpnISyN6zyDC_T5LdqIC3a
+X-Proofpoint-GUID: H2uwT20jcJRpnISyN6zyDC_T5LdqIC3a
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-14_14,2023-06-14_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 spamscore=0 impostorscore=0 mlxlogscore=999
+ adultscore=0 phishscore=0 suspectscore=0 bulkscore=0 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306140194
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 8:09=E2=80=AFPM Miguel Ojeda <ojeda@kernel.org> wro=
-te:
->
-> +/// Prints a KUnit error.
+On Wed, Jun 14, 2023 at 09:03:34AM -0700, Bjorn Andersson wrote:
+> On Mon, 22 May 2023 18:15:19 -0700, Bjorn Andersson wrote:
+> > This series introduces support for A690 in the DRM/MSM driver and
+> > enables it for the two SC8280XP laptops.
+> > 
+> > Bjorn Andersson (3):
+> >   drm/msm/adreno: Add Adreno A690 support
+> >   arm64: dts: qcom: sc8280xp: Add GPU related nodes
+> >   arm64: dts: qcom: sc8280xp: Enable GPU related nodes
+> > 
+> > [...]
+> 
+> Applied, thanks!
+> 
+> [1/3] drm/msm/adreno: Add Adreno A690 support
+>       (no commit info)
+> [2/3] arm64: dts: qcom: sc8280xp: Add GPU related nodes
+>       commit: eec51ab2fd6f447a993c502364704d0cb5bc8cae
+> [3/3] arm64: dts: qcom: sc8280xp: Enable GPU related nodes
+>       commit: 598a06afca5a2ab4850ce9ff8146ec728cca570c
+> 
 
-Nit: this should be "info" instead.
+Seems like I managed to confuse b4, only v4 of the DTS patches were
+merged, while Rob merged the driver change.
 
-By the way, we may want to have "raw" `pr_*!` macros without the
-module prefix for cases like this in the future, in `print.rs`. But,
-for the moment, I added these two ad-hoc ones here.
-
-Cheers,
-Miguel
+Regards,
+Bjorn
