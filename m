@@ -2,109 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A7F730433
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:52:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4653D730435
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:52:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244754AbjFNPwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 11:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
+        id S244825AbjFNPwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 11:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235239AbjFNPwQ (ORCPT
+        with ESMTP id S235239AbjFNPwo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 11:52:16 -0400
+        Wed, 14 Jun 2023 11:52:44 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89F8A1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:51:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 419BBE57
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:51:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686757892;
+        s=mimecast20190719; t=1686757910;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gx5mIGJbC2RshKNPwZeqJT3qT5qrlHQNaZU0SSca/wY=;
-        b=PDppFL9x0lA7sSA0kDBgZxRCBtzvcM7Za9gAR/SOg4oozOtno6oJST+F1JTX1y75ZSGx01
-        /rnKYVzdA1mexonF1CpG/3KYy3Z1/WcDpLG4JHBG/kdsygznfCChYuVChOvM2PTRKs6ni7
-        ZwysWeIAXYtr/m/607zqztcJ+yKgMA8=
-Received: from mail-ua1-f70.google.com (mail-ua1-f70.google.com
- [209.85.222.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-150-IzGFfriXN-evX8R48sYipw-1; Wed, 14 Jun 2023 11:51:30 -0400
-X-MC-Unique: IzGFfriXN-evX8R48sYipw-1
-Received: by mail-ua1-f70.google.com with SMTP id a1e0cc1a2514c-78f229d2217so33977241.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:51:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686757890; x=1689349890;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gx5mIGJbC2RshKNPwZeqJT3qT5qrlHQNaZU0SSca/wY=;
-        b=MArWT3McY3K1yDYyqjLMtDpQQ3qITbQnf3F4an2UHXETkt1yz3t47TwKnAr5o7Y0lU
-         NTKBQzMuDuia2vSgBJJg/NgI3r2r2444F0/525kF+TEzp8dpdSbmGVcGvCyuF4k8i0nQ
-         aFg0jpPaN2zmILH2eUYFavkM1TRsil0JOQ0nt4T4aH/LFU0/5TfV0pTTL6/CvJSnL2aE
-         tyAJcVC+HvaEZnP0HNKorpwudfTjlRYEitHC0xss7humopAKCc9m5l9eAUttpUInypaY
-         4mX2LMaFw21ojEs6pYbf7BsmlTpdJw912kB+py6T8ZDse+vvdLqUdU0RoVvbsYzU5bFA
-         WYLA==
-X-Gm-Message-State: AC+VfDyMAYZUzm6LsLrE1db7JM7Iw2e+KXRJ/bRx8acxJkQAL7Ee/4Cn
-        M6iKbfvNcrBZESmAR6XbxVpe791oxFfRvwkaYxOSsPxioBvEU8hIqEjHCRwc7vq5c1Biljxnmd1
-        xZbasods4vwPg0q4TSVMyJ9KU
-X-Received: by 2002:a05:6102:390e:b0:43d:ecba:57d3 with SMTP id e14-20020a056102390e00b0043decba57d3mr5809633vsu.3.1686757890158;
-        Wed, 14 Jun 2023 08:51:30 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6YWRXgNTEb2Dq8Ia2QatMeTechjbZLoRWlFtVHbRiS/UMriwUxzHyaITTrU68b4zQk7vMUXA==
-X-Received: by 2002:a05:6102:390e:b0:43d:ecba:57d3 with SMTP id e14-20020a056102390e00b0043decba57d3mr5809614vsu.3.1686757889866;
-        Wed, 14 Jun 2023 08:51:29 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id n9-20020a0ce489000000b006260c683bf2sm1493153qvl.53.2023.06.14.08.51.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 08:51:29 -0700 (PDT)
-Date:   Wed, 14 Jun 2023 11:51:27 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        James Houghton <jthoughton@google.com>,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH 4/7] mm/hugetlb: Prepare hugetlb_follow_page_mask() for
- FOLL_PIN
-Message-ID: <ZInh//34yuKNuuX8@x1n>
-References: <20230613215346.1022773-1-peterx@redhat.com>
- <20230613215346.1022773-5-peterx@redhat.com>
- <533c32cf-9a18-1590-4d29-f076d6bd58c1@redhat.com>
- <ZInYh3cVUil9R/cf@x1n>
- <ef0f8e0e-cbce-7c7b-1b0e-c9d52ede7e0e@redhat.com>
- <ZIndN9isc4pTp2zK@x1n>
- <38574ed3-ea96-a72e-00dd-4e6204413a86@redhat.com>
+        bh=VKzVYTJU+Kltp7JOyEJXeiIKJE1OQId0BQJZ+m/qLVY=;
+        b=AxpJavDuf+z9lLRIY+aA4yA/wcyLaZvlXZ+BTp1suaWWHNjAHlfeQM/Waq8ciPxI6DnkJZ
+        8snxld2FN6W/Ub0lTNI0Qwc0THxNUcSA+jY36L2tJqFZCNE9piaKj75EOqeKL8u9PofLyq
+        6IImDd5m+pIC0A/+JPlCJo8r6JE0MfI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-570-zSJIIBXQMm21haaGJSnpZA-1; Wed, 14 Jun 2023 11:51:48 -0400
+X-MC-Unique: zSJIIBXQMm21haaGJSnpZA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8D07D3806738;
+        Wed, 14 Jun 2023 15:51:45 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 02D01492CA6;
+        Wed, 14 Jun 2023 15:51:43 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <000000000000b2585a05fdeb8379@google.com>
+References: <000000000000b2585a05fdeb8379@google.com>
+To:     syzbot <syzbot+6efc50cc1f8d718d6cb7@syzkaller.appspotmail.com>
+Cc:     dhowells@redhat.com, davem@davemloft.net,
+        herbert@gondor.apana.org.au, kuba@kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [crypto?] KASAN: slab-out-of-bounds Read in extract_iter_to_sg
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <38574ed3-ea96-a72e-00dd-4e6204413a86@redhat.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1657852.1686757902.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 14 Jun 2023 16:51:42 +0100
+Message-ID: <1657853.1686757902@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 05:47:31PM +0200, David Hildenbrand wrote:
-> Right. Then just call patch #2 "Add missing write-permission check" and this
-> patch "Support FOLL_PIN in hugetlb_follow_page_mask()" or sth. like that.
-> 
-> Regarding the backport, I really wonder if patch #2 is required at all,
-> because I didn't sport any applicable FOLL_WRITE users. Maybe there were
-> some? Hm. If it's not applicable, a single "Support FOLL_PIN in
-> hugetlb_follow_page_mask()" patch might be cleanest.
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.g=
+it main
 
-Yeah, I agree.  The code is definitely needed, not the split of patches if
-no need for a backport.  Let me merge then.
+    crypto: af_alg/hash: Fix recvmsg() after sendmsg(MSG_MORE)
+    =
 
--- 
-Peter Xu
+    If an AF_ALG socket bound to a hashing algorithm is sent a zero-length
+    message with MSG_MORE set and then recvmsg() is called without first
+    sending another message without MSG_MORE set to end the operation, an =
+oops
+    will occur because the crypto context and result doesn't now get set u=
+p in
+    advance because hash_sendmsg() now defers that as long as possible in =
+the
+    hope that it can use crypto_ahash_digest() - and then because the mess=
+age
+    is zero-length, it the data wrangling loop is skipped.
+    =
+
+    Fix this by always making a pass of the loop, even in the case that no=
+ data
+    is provided to the sendmsg().
+    =
+
+    Fix also extract_iter_to_sg() to handle a zero-length iterator by retu=
+rning
+    0 immediately.
+    =
+
+    Whilst we're at it, remove the code to create a kvmalloc'd scatterlist=
+ if
+    we get more than ALG_MAX_PAGES - this shouldn't happen.
+    =
+
+    Fixes: c662b043cdca ("crypto: af_alg/hash: Support MSG_SPLICE_PAGES")
+    Reported-by: syzbot+13a08c0bf4d212766c3c@syzkaller.appspotmail.com
+    Link: https://lore.kernel.org/r/000000000000b928f705fdeb873a@google.co=
+m/
+    Signed-off-by: David Howells <dhowells@redhat.com>
+    cc: Herbert Xu <herbert@gondor.apana.org.au>
+    cc: "David S. Miller" <davem@davemloft.net>
+    cc: Eric Dumazet <edumazet@google.com>
+    cc: Jakub Kicinski <kuba@kernel.org>
+    cc: Paolo Abeni <pabeni@redhat.com>
+    cc: Jens Axboe <axboe@kernel.dk>
+    cc: Matthew Wilcox <willy@infradead.org>
+    cc: linux-crypto@vger.kernel.org
+    cc: netdev@vger.kernel.org
+
+diff --git a/crypto/algif_hash.c b/crypto/algif_hash.c
+index dfb048cefb60..1176533a55c9 100644
+--- a/crypto/algif_hash.c
++++ b/crypto/algif_hash.c
+@@ -83,26 +83,14 @@ static int hash_sendmsg(struct socket *sock, struct ms=
+ghdr *msg,
+ =
+
+ 	ctx->more =3D false;
+ =
+
+-	while (msg_data_left(msg)) {
++	do {
+ 		ctx->sgl.sgt.sgl =3D ctx->sgl.sgl;
+ 		ctx->sgl.sgt.nents =3D 0;
+ 		ctx->sgl.sgt.orig_nents =3D 0;
+ =
+
+ 		err =3D -EIO;
+ 		npages =3D iov_iter_npages(&msg->msg_iter, max_pages);
+-		if (npages =3D=3D 0)
+-			goto unlock_free;
+-
+-		if (npages > ARRAY_SIZE(ctx->sgl.sgl)) {
+-			err =3D -ENOMEM;
+-			ctx->sgl.sgt.sgl =3D
+-				kvmalloc(array_size(npages,
+-						    sizeof(*ctx->sgl.sgt.sgl)),
+-					 GFP_KERNEL);
+-			if (!ctx->sgl.sgt.sgl)
+-				goto unlock_free;
+-		}
+-		sg_init_table(ctx->sgl.sgl, npages);
++		sg_init_table(ctx->sgl.sgl, max_t(size_t, npages, 1));
+ =
+
+ 		ctx->sgl.need_unpin =3D iov_iter_extract_will_pin(&msg->msg_iter);
+ =
+
+@@ -111,7 +99,8 @@ static int hash_sendmsg(struct socket *sock, struct msg=
+hdr *msg,
+ 		if (err < 0)
+ 			goto unlock_free;
+ 		len =3D err;
+-		sg_mark_end(ctx->sgl.sgt.sgl + ctx->sgl.sgt.nents - 1);
++		if (len > 0)
++			sg_mark_end(ctx->sgl.sgt.sgl + ctx->sgl.sgt.nents - 1);
+ =
+
+ 		if (!msg_data_left(msg)) {
+ 			err =3D hash_alloc_result(sk, ctx);
+@@ -148,7 +137,7 @@ static int hash_sendmsg(struct socket *sock, struct ms=
+ghdr *msg,
+ =
+
+ 		copied +=3D len;
+ 		af_alg_free_sg(&ctx->sgl);
+-	}
++	} while (msg_data_left(msg));
+ =
+
+ 	ctx->more =3D msg->msg_flags & MSG_MORE;
+ 	err =3D 0;
+diff --git a/lib/scatterlist.c b/lib/scatterlist.c
+index e97d7060329e..77a7b18ee751 100644
+--- a/lib/scatterlist.c
++++ b/lib/scatterlist.c
+@@ -1340,7 +1340,7 @@ ssize_t extract_iter_to_sg(struct iov_iter *iter, si=
+ze_t maxsize,
+ 			   struct sg_table *sgtable, unsigned int sg_max,
+ 			   iov_iter_extraction_t extraction_flags)
+ {
+-	if (maxsize =3D=3D 0)
++	if (!maxsize || !iter->count)
+ 		return 0;
+ =
+
+ 	switch (iov_iter_type(iter)) {
 
