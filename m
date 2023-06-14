@@ -2,112 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D51A72FE78
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6522C72FE81
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244558AbjFNMXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 08:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
+        id S243459AbjFNMZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 08:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244559AbjFNMXZ (ORCPT
+        with ESMTP id S244275AbjFNMY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 08:23:25 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048181FD5
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:23:21 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-307d20548adso4774247f8f.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:23:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686745399; x=1689337399;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=f9oDPuE6X9bPnN1e0nqNdnPmYq9OB1FqNsoaKy+XGXc=;
-        b=Gv0WbtgPmUm4pg2adHOLFwmHIaPmtsehPuX+4o4pEcdzuzQ82LxmbxzBuogD9bDPW7
-         vOdxQUZM9LGgmBAPqvbygvsBk07w4lEl3S7MoIGVyFcuB/AcNztG/I8aidqcdB13X3bv
-         7V12kqk0tor8nVpfM624cm/ZwfyC/tfoMIB8NQLPbxOR7p/LIdZ0njICyVahwktuW55J
-         6OXNe4g/X4M1QXzS7kpL+4RPMKIQqELKmQM9ZelmgbcieJ/m4lmDnksT9Rm+HWi23wXX
-         b+ltkypWFo90RtEP+6v2c31jYgI0EsZzfWQRbnNtbLpwlXkBLVucI/ljIzb9XWgwVUqI
-         AUfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686745399; x=1689337399;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f9oDPuE6X9bPnN1e0nqNdnPmYq9OB1FqNsoaKy+XGXc=;
-        b=E6jfTGqcLwbAT/drXe4yn3Kc11ynr+Mnv5O89/5qp0F034g3zw92CkgQzBKfNxHQqS
-         MQ25xoG/iTWhyEByyImxp7D6S1dsv7stHaNH0/wPIvWBQM4XIK1Nu1l7/qsRITP0s7O3
-         tjEcpzO3c7Ss8Ldd60fKN/PSQsdNrpIrwh0h3nYamwILa+yz1QIyxHPadwN/YiJwzODS
-         ffGEhzRn8m0p6gXdN5CCiguBPqkpCMueU5T/iiu1qtd3xj0oZtFU1ytWYTUS24DKPPFp
-         IPfrp5ssyqo7IsNVkNKRL/JdOoEgxi1DRpvExJ94m24oYTjYyi6D/tx9JG7fqX39V7Mv
-         FVmw==
-X-Gm-Message-State: AC+VfDzRC2IFVOZ7fuo9TCAaBoaj+Nj62sODREhBvyzINWeOhzTwoRyA
-        cj6EVPri46R/VpcFa8YzMN3K0w==
-X-Google-Smtp-Source: ACHHUZ55QXptvhOkcLACCLddQxPeYa4V0RaI78djcZf54s/WGu+g8iZBG3/s1BYA1nbve5tFROs9/Q==
-X-Received: by 2002:a5d:62ca:0:b0:30f:c009:cfa1 with SMTP id o10-20020a5d62ca000000b0030fc009cfa1mr6055137wrv.8.1686745399335;
-        Wed, 14 Jun 2023 05:23:19 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id p10-20020a5d48ca000000b0030e56a9ff25sm18065891wrs.31.2023.06.14.05.23.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 05:23:18 -0700 (PDT)
-Message-ID: <b6a1e11a-dac2-e7eb-8419-abe123b04e8a@linaro.org>
-Date:   Wed, 14 Jun 2023 13:23:17 +0100
+        Wed, 14 Jun 2023 08:24:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200DA109
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:23:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686745420;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=jFRmKE1gKyWwlU8dIHCT74Dsw8jBXXe3UgEOZvAo7zE=;
+        b=O7lU3DQ9yjdW4CgonJ0628Y/7ywtF5+ixhxq7aiywk9ViaAecjXTLsTXQCnwaRAICiNz+0
+        NSiXlulCVS/qFkb0RiHpLPa8VHG4CeLIwPl2s82Mbk49UPld5HG5P2XuCQXT3DwoVBXiGq
+        PA5flDfW1HPKasbvNX2GqUonGD/G80M=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-30-loLNedIZPRWdGegD93GlIw-1; Wed, 14 Jun 2023 08:23:34 -0400
+X-MC-Unique: loLNedIZPRWdGegD93GlIw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4EC0B3C1C4C9;
+        Wed, 14 Jun 2023 12:23:33 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.22.33.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4693240B4CD8;
+        Wed, 14 Jun 2023 12:23:28 +0000 (UTC)
+From:   Wander Lairson Costa <wander@redhat.com>
+To:     "Christian Brauner (Microsoft)" <brauner@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        linux-kernel@vger.kernel.org (open list)
+Cc:     Hu Chunyu <chuhu@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Paul McKenney <paulmck@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Luis Goncalves <lgoncalv@redhat.com>
+Subject: [PATCH v10 0/2] kernel/fork: beware of __put_task_struct calling context
+Date:   Wed, 14 Jun 2023 09:23:20 -0300
+Message-Id: <20230614122323.37957-1-wander@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/8] arm64: dts: qcom: msm8939-pm8916: Add missing
- pm8916_codec supplies
-Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230530-msm8939-regulators-v1-0-a3c3ac833567@gerhold.net>
- <20230530-msm8939-regulators-v1-1-a3c3ac833567@gerhold.net>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230530-msm8939-regulators-v1-1-a3c3ac833567@gerhold.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/06/2023 08:15, Stephan Gerhold wrote:
-> Update for recent changes to pm8916.dtsi in commit 38218822a72f
-> ("arm64: dts: qcom: pm8916: Move default regulator "-supply"s")
-> and add the now missing pm8916_codec supplies to msm8939-pm8916.dtsi
-> as well.
-> 
-> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
-> ---
->   arch/arm64/boot/dts/qcom/msm8939-pm8916.dtsi | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/msm8939-pm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8939-pm8916.dtsi
-> index 33e02f42f5e4..503c2dd5fe47 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8939-pm8916.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8939-pm8916.dtsi
-> @@ -25,6 +25,12 @@ &mpss {
->   	pll-supply = <&pm8916_l7>;
->   };
->   
-> +&pm8916_codec {
-> +	vdd-cdc-io-supply = <&pm8916_l5>;
-> +	vdd-cdc-tx-rx-cx-supply = <&pm8916_l5>;
-> +	vdd-micbias-supply = <&pm8916_l13>;
-> +};
-> +
->   &rpm_requests {
->   	smd_rpm_regulators: regulators {
->   		compatible = "qcom,rpm-pm8916-regulators";
-> 
+Under PREEMPT_RT, __put_task_struct() indirectly acquires sleeping
+locks. Therefore, it can't be called from an non-preemptible context.
 
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Instead of calling __put_task_struct() directly, we defer it using
+call_rcu(). A more natural approach would use a workqueue, but since
+in PREEMPT_RT, we can't allocate dynamic memory from atomic context,
+the code would become more complex because we would need to put the
+work_struct instance in the task_struct and initialize it when we
+allocate a new task_struct.
+
+Changelog
+=========
+
+v1:
+* Initial implementation fixing the splat.
+
+v2:
+* Isolate the logic in its own function.
+* Fix two more cases caught in review.
+
+v3:
+* Change __put_task_struct() to handle the issue internally.
+
+v4:
+* Explain why call_rcu() is safe to call from interrupt context.
+
+v5:
+* Explain why __put_task_struct() doesn't conflict with
+  put_task_sruct_rcu_user.
+
+v6:
+* As per Sebastian's review, revert back the implementation of v2
+  with a distinct function.
+* Add a check in put_task_struct() to warning when called from a
+  non-sleepable context.
+* Address more call sites.
+
+v7:
+* Fix typos.
+* Add an explanation why the new function doesn't conflict with
+  delayed_free_task().
+
+v8:
+* Bring back v5.
+* Fix coding style.
+
+v9:
+* Reorganize to not need ___put_task_struct() by Oleg's suggestion.
+
+v10:
+* Add a patch preventing a splat when compile with
+CONFIG_PROVE_RAW_LOCK_NESTING.
+
+Reported-by: Hu Chunyu <chuhu@redhat.com>
+Suggested-by: Oleg Nesterov <oleg@redhat.com>
+Suggested-by: Valentin Schneider <vschneid@redhat.com>
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Paul McKenney <paulmck@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Luis Goncalves <lgoncalv@redhat.com>
+
+Wander Lairson Costa (2):
+  kernel/fork: beware of __put_task_struct calling context
+  sched: avoid false lockdep splat in put_task_struct()
+
+ include/linux/sched/task.h | 38 +++++++++++++++++++++++++++++++++++++-
+ kernel/fork.c              |  8 ++++++++
+ 2 files changed, 45 insertions(+), 1 deletion(-)
+
+-- 
+2.40.1
+
