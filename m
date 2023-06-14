@@ -2,114 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC7472F360
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 06:09:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA94F72F363
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 06:10:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242134AbjFNEJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 00:09:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59200 "EHLO
+        id S242392AbjFNEKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 00:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232425AbjFNEJL (ORCPT
+        with ESMTP id S242423AbjFNEJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 00:09:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4E411C;
-        Tue, 13 Jun 2023 21:09:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 951066148B;
-        Wed, 14 Jun 2023 04:09:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5949EC433C0;
-        Wed, 14 Jun 2023 04:09:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686715748;
-        bh=yG/U6Ks90Qon8HXe90awol5NmPipuQ3/JKA84Zfu4H0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=JLbww1UgJFhNhtyf61pVhxIVSrQeRbUIf9/7kpp52qvXgx32Pdt6fIw+r50fQaBpk
-         qKct6FT70tTLinUmhBUHHrBZ3oGdGwTH6ogG3GdOfLgIJTH6VLgNgMaWxtWNsaTAU+
-         RSItd1IHG+1vZnfzyw5qhFZ0/CbRgI8Ilkg9etJK6uhnaEImSsiA/v9JD7WqC8gIGB
-         uZ71u5AnOIVBVrKCIO4rQjIMF2qyNULT6THlLLrwfLURMwQjKWKI4IhVBoOZM/EgzE
-         oCa7EsW2oVk9cYHIEKLItONBFMu2fO6Q5u+tHQ1D/IYDAM0lGLgMA5NoznP3tNVYQQ
-         ZyKNUE64NIp9Q==
-Date:   Tue, 13 Jun 2023 21:09:06 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Yunsheng Lin <linyunsheng@huawei.com>
-Cc:     <davem@davemloft.net>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        <linux-rdma@vger.kernel.org>
-Subject: Re: [PATCH net-next v4 1/5] page_pool: frag API support for 32-bit
- arch with 64-bit DMA
-Message-ID: <20230613210906.42ea393e@kernel.org>
-In-Reply-To: <20230612130256.4572-2-linyunsheng@huawei.com>
-References: <20230612130256.4572-1-linyunsheng@huawei.com>
-        <20230612130256.4572-2-linyunsheng@huawei.com>
+        Wed, 14 Jun 2023 00:09:46 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECBD51989;
+        Tue, 13 Jun 2023 21:09:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=KDMD/K5V222tTU27qxn19y0A6GVvL5QoX6is6LqN0fE=; b=45aGLkI4kRodLhj0fUaQatQYZM
+        iXLWGkFwyCAcjzR+9r1Mtl8Ycf7fZmtnUQGxafpkulq9qkPYM87imZBPG0JGCZWN8a8pU8zV7A+5x
+        TW5JxS6qYXKzR+RLbIP+7rVRPFvMfxiZRuSHVcV5sR4x3qEDlcGq21qqoI//2Ad9zbHloZdswkjwi
+        JUmEJE+LV+yjYh7/4ZWjqU/xNhiiqIDRkSQUN+Z9WG+4e0d/oTRVFDeSDJe52wQKUtpeU1mdXR3v9
+        HLRkJCOcP4sdqHux+A1gUaqzYCGK8XshHE617DnY7YwvAUS7TT7G2M7R/DrORjdlxASiFvJh+iEd2
+        tEmk5TGw==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q9Hos-009vRc-2D;
+        Wed, 14 Jun 2023 04:09:18 +0000
+Message-ID: <dacfde0b-bc72-dae7-e823-7905f27ff296@infradead.org>
+Date:   Tue, 13 Jun 2023 21:09:17 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v18 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Content-Language: en-US
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
+        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+References: <20230613102905.2808371-1-usama.anjum@collabora.com>
+ <20230613102905.2808371-3-usama.anjum@collabora.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230613102905.2808371-3-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 12 Jun 2023 21:02:52 +0800 Yunsheng Lin wrote:
-> Currently page_pool_alloc_frag() is not supported in 32-bit
-> arch with 64-bit DMA, which seems to be quite common, see
-> [1], which means driver may need to handle it when using
-> page_pool_alloc_frag() API.
-> 
-> In order to simplify the driver's work for supporting page
-> frag, this patch allows page_pool_alloc_frag() to call
-> page_pool_alloc_pages() to return a big page frag without
 
-it returns an entire (potentially compound) page, not a frag.
-AFAICT
 
-> page splitting because of overlap issue between pp_frag_count
-> and dma_addr_upper in 'struct page' for those arches.
+On 6/13/23 03:29, Muhammad Usama Anjum wrote:
+> diff --git a/include/uapi/linux/fs.h b/include/uapi/linux/fs.h
+> index b7b56871029c..47879c38ce2f 100644
+> --- a/include/uapi/linux/fs.h
+> +++ b/include/uapi/linux/fs.h
+> @@ -305,4 +305,57 @@ typedef int __bitwise __kernel_rwf_t;
+>  #define RWF_SUPPORTED	(RWF_HIPRI | RWF_DSYNC | RWF_SYNC | RWF_NOWAIT |\
+>  			 RWF_APPEND)
+>  
+> +/* Pagemap ioctl */
+> +#define PAGEMAP_SCAN	_IOWR('f', 16, struct pm_scan_arg)
 
-These two lines seem to belong in the first paragraph,
+Please update Documentation/userspace-api/ioctl/ioctl-number.rst also.
 
-> As page_pool_create() with PP_FLAG_PAGE_FRAG is supported in
-
-"is" -> "will now be"
-
-> 32-bit arch with 64-bit DMA now, mlx5 calls page_pool_create()
-> with PP_FLAG_PAGE_FRAG and manipulate the page->pp_frag_count
-> directly using the page_pool_defrag_page(), so add a checking
-> for it to aoivd writing to page->pp_frag_count that may not
-> exist in some arch.
-
-This paragraph needs some proof reading :(
-
-> Note that it may aggravate truesize underestimate problem for
-> skb as there is no page splitting for those pages, if driver
-> need a accuate truesize, it may calculate that according to
-
-accurate
-
-> frag size, page order and PAGE_POOL_DMA_USE_PP_FRAG_COUNT
-> being true or not. And we may provide a helper for that if it
-> turns out to be helpful.
-> 
-> 1. https://lore.kernel.org/all/20211117075652.58299-1-linyunsheng@huawei.com/
-
-> +		/* Return error here to avoid writing to page->pp_frag_count in
-> +		 * mlx5e_page_release_fragmented() for page->pp_frag_count is
-
-I don't see any direct access to pp_frag_count anywhere outside of
-page_pool.h in net-next. PAGE_POOL_DMA_USE_PP_FRAG_COUNT sounds like 
-an internal flag, drivers shouldn't be looking at it, IMO.
+thanks.
+-- 
+~Randy
