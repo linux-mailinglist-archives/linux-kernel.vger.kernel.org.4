@@ -2,162 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52F2D72FF98
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 15:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61EB172FF9B
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 15:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244876AbjFNNLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 09:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60700 "EHLO
+        id S244896AbjFNNLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 09:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244825AbjFNNLO (ORCPT
+        with ESMTP id S244878AbjFNNL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 09:11:14 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF00268F
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 06:10:47 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f8ca80e889so5860545e9.3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 06:10:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686748246; x=1689340246;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dRzG+HV9GN4lfJMfWqgxlfRDbNNuf4h9SVoZ/Ln+yfM=;
-        b=Abt84zPG1mZC7LoNsgyS/gG+GrkwXO5EYd4Oyn762VvhrHxIk7SUotb1Ogslm71/I0
-         ATLqAshTF7CDjww/zykZLRHWnCj5rVshi7dDPRp92TZaM2Qyo2G7LNyl1p4v8IEHyiX2
-         4hBA/wC9ZdQMuN3UwYfRU6lia70FeBwcj2aYgPZFeAg0hzZKDsn/v6obhqLNPHbS0U2G
-         WxH0CSDpjPE/pkJtBxJngH8RqGQn8GBq6Sg5uXbDShG/HU/mPaL6ORWMAzK3BvOyNtGM
-         hnm43phqzmWoRJbDZA40KxAx0N0kFXSOk+QGK8QwlJeNLyKLvufe3lgs5TB+HRHv6fOM
-         me5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686748246; x=1689340246;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dRzG+HV9GN4lfJMfWqgxlfRDbNNuf4h9SVoZ/Ln+yfM=;
-        b=fDvfdx0ZSrH0mPDvRiugqHI2563E8sqOKR3r0oc9/Q2WGsbsos7hQO9MKuOS6l5Bnv
-         GRx7bzQNTkhpCaPweASWcI0UIVgVZ3NVW9GU1MmOAqR3vmEafTPBMvFB9oFYg8XgwIoT
-         KStdUo7QVjNyYEHrbryYCxorEe859M4jOmuTZgPQArV2fZkviVADMuD5Mht5oWGnQ/E0
-         Z/mlIlU3GqkqNg/OKiAU5ZJjqKjcq7RZ/QMWk1S4MQ+2Lcpm4ZuqMHIrIm4P4TCsJXRf
-         o1Yqk/lTjBlQhxAuLXyQINOWNNTDAwcKslOlxiL3PFzWz/JArlDEHJWyWetmD9stLwW6
-         qr/g==
-X-Gm-Message-State: AC+VfDzAv7W/ryvBPxvFpa3yuLgcLD/2tPAV3Ny546ZT6sM7oM1p80kQ
-        BX30FNnpxwv573a1vV6zyuAauQ==
-X-Google-Smtp-Source: ACHHUZ7j42D1SG7rrT1Cld1gmzJEwnGxajVFXglzCpGYyHpVVCce1ptErw8HFvkeJ3zahOIhanxkOQ==
-X-Received: by 2002:a7b:ce88:0:b0:3f7:34dc:ed0d with SMTP id q8-20020a7bce88000000b003f734dced0dmr11048944wmj.25.1686748246152;
-        Wed, 14 Jun 2023 06:10:46 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id a7-20020a05600c224700b003f60a9ccd34sm17548661wmm.37.2023.06.14.06.10.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 06:10:45 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Wed, 14 Jun 2023 15:10:41 +0200
-Subject: [PATCH 3/3] usb: typec: fsa4480: add support for Audio Accessory
- Mode
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230614-topic-sm8550-upstream-type-c-audio-v1-3-15a92565146b@linaro.org>
-References: <20230614-topic-sm8550-upstream-type-c-audio-v1-0-15a92565146b@linaro.org>
-In-Reply-To: <20230614-topic-sm8550-upstream-type-c-audio-v1-0-15a92565146b@linaro.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2308;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=AmK9tGuhBzHU6OgDlD+wPAdxUZOMyPGmnDLrHwn/j/c=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkibxSO3IckWWolI0nLUXzFCyCRUwuqC71q47oYIZ3
- SH4yGcyJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZIm8UgAKCRB33NvayMhJ0fUBD/
- 4+WAQp8FuGaqCALfEFyB70ECb1yhUyo7bs4XJUARqa3sklwtH4oeb2nhWCJvcQKHKX510tvXmGMfmn
- ZNVpF7o9zHgYbSu9ICVa7CiROfCeNzYZ0BJR4dk1Lp9ua307BnoB57leUyaCR/QhacygzrGsJBoK2y
- 4sWwdIXHXSVF1SXFFel2eHWuFuOCPBlx2g+nsF9iW/Jvwe4FNsoJLLMfq37u/j4BkkG91aDJ/L724x
- NMNJLZYuGhrtVWi1TW0qy2PTdgp3t1GLGdTlTPZEWqaB8ifSla4zbHALA/t7WyvXa2cs+4S6VO60nB
- cVCtBUxRdYaczIE4E4XMH60AXVanHmqk2leErKRG6UO4zYhFjKgaCrMIlJXTPuF7gi92ZEE/t9FeZT
- 6OqrFwf/fxCcM5U5cZgyjTsYY0e7hbcGcT7Lkj+8XKGX9lyTNBLOnxOxzlGZB2wmri08aM2CjlOQvl
- TcpgOsruioWe++bQIhSwv0x28FDyMtsbTUr/OmwRx9uzCaHbVhLMY6pen4sSpaWnWaPDUFkznkAVWo
- ZNczyznmecSJdCkR2x5g54u2z5Avlhp1u0nf8XyXyZf4fOr3zkGL7QQhY32mZQ64dmxGE4/2FeANT9
- 0g2KeO/o8bPb61OlVA70idWgqBCFcDqfU56csnUWRMvgBjIJjE8WBftgUNtA==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 14 Jun 2023 09:11:29 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA8D184;
+        Wed, 14 Jun 2023 06:11:14 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id D41F33200924;
+        Wed, 14 Jun 2023 09:11:09 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 14 Jun 2023 09:11:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1686748269; x=1686834669; bh=yg
+        aeAW7Oiem/w6eWfgDKB5f6lRa+uXyAf0nyR9QWZ04=; b=fxTAGXXFTXOufJo2TO
+        mE3XjaK1s19oZ0tNxGzsTfITsX4CXJyrAw0qV8fLGW5GksN0o9ugYnAx6scimgo5
+        /tAVKpb5aIIT6wyviErJoUSHyE2cfBBTBZsRxOuqeYoriDz4pgvbitHhXlo64eei
+        RXF2CJH1Dzg3+KfdM2huW/YTr/xmGTaC6Ugq7/f1l/OBlrsayQ1TnFimBSml7tNF
+        gGevmmLslKHcCTIwwtLHYr3b0a7wBlRHxwIO8TZkoxIW/unPKf/q1Qnzt2u6EaOX
+        eSCVp/ueh6ZHZim2mp/cNidLMC/G79CSoFWI53aGOFevm+iX9R516RH6uqQkEX+d
+        xcXQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1686748269; x=1686834669; bh=ygaeAW7Oiem/w
+        6eWfgDKB5f6lRa+uXyAf0nyR9QWZ04=; b=clDQpDo3J4gwj9SNXUHNzGAT9LZOM
+        gm+ziObp9W8LHKg5Dq4xU/FkaMAX3PXBRohpj5J+7ppYpSNd5+maeh1ZsQkSsEUJ
+        puYaqexWDRZ6CkpxvMo4TSHcVu5QvtTwzhWqRBWRLhuvjN7YoX0hwx/TLfhzzY3e
+        Db6p83Pr4C/ZsyzJ3RtMdke4cnH99R07rYrHTvGYbaMhcozjytbmdkBtS9BsjNIT
+        FflKq7PHUyTu5ZESkPfBJJ5+M7+9cYnB94kLIBO7uEeDpoPQHiRSyQUjj+wto7DD
+        Kq5kc8mrdy7u09Cc2nv+vEISQ9m0INS6sRmJP3LdvRponMW6ckHopyNHw==
+X-ME-Sender: <xms:bLyJZPBEpxpI4Cm1kbP0rmAF7tPClIlganIEAFTLdUGm3AWeHQt68A>
+    <xme:bLyJZFgWXpbxPv-rc6C63v84kqGtq1m6b-nsHo22pJihrffAa4NT3-ygePUa2md0G
+    K5phChlWvIvr8hRpjo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedvtddgiedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:bLyJZKnrom6owFsuwpteY-ZLc6utfQfZPXkDJdkyH_NGvE8Xf32UdQ>
+    <xmx:bLyJZByZx406ihiY66AaiPuFvehLkP7wZ0hJEyZ2FazX4Jju8EcgbA>
+    <xmx:bLyJZEQdn1vYs5DpkodxIVd8IJealUtsKGwx0Vp5HV1KwVbbkRk2Xg>
+    <xmx:bbyJZBixDqVYetegvOr2f9iCRFLAiv0js0Ip7UoEqQxIV6AOLgaBZw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 58595B60086; Wed, 14 Jun 2023 09:11:08 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-492-g08e3be04ba-fm-20230607.003-g08e3be04
+Mime-Version: 1.0
+Message-Id: <20d4d296-14d7-467d-826c-b5c9cdf4599a@app.fastmail.com>
+In-Reply-To: <20230614104759.228372-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20230614104759.228372-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20230614104759.228372-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Date:   Wed, 14 Jun 2023 15:10:45 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     Prabhakar <prabhakar.csengg@gmail.com>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        guoren <guoren@kernel.org>,
+        "Andrew Jones" <ajones@ventanamicro.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Albert Ou" <aou@eecs.berkeley.edu>,
+        "Samuel Holland" <samuel@sholland.org>,
+        linux-riscv@lists.infradead.org,
+        "Christoph Hellwig" <hch@infradead.org>
+Cc:     "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "Biju Das" <biju.das.jz@bp.renesas.com>,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v9 5/6] cache: Add L2 cache management for Andes AX45MP RISC-V core
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The FSA4480 Type-C switch supports switching the Audio R/L,
-AGND and MIC signals to the USB-C DP/DM and SBU1/2 to support
-the Audio Accessory Mode.
+On Wed, Jun 14, 2023, at 12:47, Prabhakar wrote:
 
-The FSA4480 has an integrated Audio jack detection mechanism
-to automatically mux the AGND, MIX and Sense to the correct
-SBU lines to support 3 pole and both 4 pole TRRS pinouts.
+> +static void ax45mp_dma_cache_inv(phys_addr_t paddr, unsigned long size)
+> +{
+> +	unsigned long start = (unsigned long)phys_to_virt(paddr);
+> +	char cache_buf[2][AX45MP_CACHE_LINE_SIZE];
+> +	unsigned long end = start + size;
+> +	unsigned long old_start = start;
+> +	unsigned long old_end = end;
+> +	unsigned long line_size;
+> +	unsigned long flags;
+> +
+> +	if (unlikely(start == end))
+> +		return;
+> +
+> +	line_size = ax45mp_priv.ax45mp_cache_line_size;
+> +
+> +	memset(&cache_buf, 0x0, sizeof(cache_buf));
+> +	start = start & (~(line_size - 1));
+> +	end = ((end + line_size - 1) & (~(line_size - 1)));
+> +
+> +	local_irq_save(flags);
+> +	if (unlikely(start != old_start))
+> +		memcpy(&cache_buf[0][0], (void *)start, line_size);
+> +
+> +	if (unlikely(end != old_end))
+> +		memcpy(&cache_buf[1][0], (void *)(old_end & (~(line_size - 1))), 
+> line_size);
+> +
+> +	ax45mp_cpu_dcache_inval_range(start, end, line_size);
+> +
+> +	if (unlikely(start != old_start))
+> +		memcpy((void *)start, &cache_buf[0][0], (old_start & (line_size - 
+> 1)));
+> +
+> +	local_irq_restore(flags);
+> +}
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- drivers/usb/typec/mux/fsa4480.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+I'm not quite sure what this does, maybe some comments would help.
 
-diff --git a/drivers/usb/typec/mux/fsa4480.c b/drivers/usb/typec/mux/fsa4480.c
-index b2913594a58f..45f5683b7d81 100644
---- a/drivers/usb/typec/mux/fsa4480.c
-+++ b/drivers/usb/typec/mux/fsa4480.c
-@@ -25,15 +25,24 @@
- #define FSA4480_DELAY_L_MIC	0x0e
- #define FSA4480_DELAY_L_SENSE	0x0f
- #define FSA4480_DELAY_L_AGND	0x10
-+#define FSA4480_FUNCTION_ENABLE	0x12
- #define FSA4480_RESET		0x1e
- #define FSA4480_MAX_REGISTER	0x1f
- 
- #define FSA4480_ENABLE_DEVICE	BIT(7)
- #define FSA4480_ENABLE_SBU	GENMASK(6, 5)
- #define FSA4480_ENABLE_USB	GENMASK(4, 3)
-+#define FSA4480_ENABLE_SENSE	BIT(2)
-+#define FSA4480_ENABLE_MIC	BIT(1)
-+#define FSA4480_ENABLE_AGND	BIT(0)
- 
- #define FSA4480_SEL_SBU_REVERSE	GENMASK(6, 5)
- #define FSA4480_SEL_USB		GENMASK(4, 3)
-+#define FSA4480_SEL_SENSE	BIT(2)
-+#define FSA4480_SEL_MIC		BIT(1)
-+#define FSA4480_SEL_AGND	BIT(0)
-+
-+#define FSA4480_ENABLE_AUTO_JACK_DETECT	BIT(0)
- 
- struct fsa4480 {
- 	struct i2c_client *client;
-@@ -95,6 +104,9 @@ static int fsa4480_set(struct fsa4480 *fsa)
- 		default:
- 			return -EOPNOTSUPP;
- 		}
-+	} else if (fsa->mode == TYPEC_MODE_AUDIO) {
-+		/* Audio Accessory Mode, setup to auto Jack Detection */
-+		enable |= FSA4480_ENABLE_USB | FSA4480_ENABLE_AGND;
- 	} else
- 		return -EOPNOTSUPP;
- 
-@@ -110,6 +122,11 @@ static int fsa4480_set(struct fsa4480 *fsa)
- 	regmap_write(fsa->regmap, FSA4480_SWITCH_SELECT, sel);
- 	regmap_write(fsa->regmap, FSA4480_SWITCH_ENABLE, enable);
- 
-+	/* Start AUDIO JACK DETECTION to setup MIC, AGND & Sense muxes */
-+	if (enable & FSA4480_ENABLE_AGND)
-+		regmap_write(fsa->regmap, FSA4480_FUNCTION_ENABLE,
-+			     FSA4480_ENABLE_AUTO_JACK_DETECT);
-+
- 	if (enable & FSA4480_ENABLE_SBU) {
- 		/* 15us to allow the SBU switch to turn on again */
- 		usleep_range(15, 1000);
+This looks like a novel method of preserving partial cache lines
+at the beginning (but not the end?) of an unaligned area.
 
--- 
-2.34.1
+As far as I can tell, most dma_mapping implementations don't
+even try to do that at all, but the ones that do take a different
+approach by calling _wback_inv() on partial cache lines instead
+of calling _inv().
 
+I'd say this does not belong into the low-level operations
+here, especially since the ZICBOM variant doesn't do this either.
+
+      Arnd
