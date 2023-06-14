@@ -2,113 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EAF572F655
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 09:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B237C72F65F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 09:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243229AbjFNH3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 03:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47270 "EHLO
+        id S243202AbjFNHcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 03:32:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235079AbjFNH3f (ORCPT
+        with ESMTP id S243437AbjFNH3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 03:29:35 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424B11BC9
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 00:29:33 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4QgxrV6ZJKzBQJYm
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 15:29:30 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1686727770; x=1689319771; bh=v5CWFfBcMe/rqPjkRkZsB9WF6E9
-        Nw+B3pSIn9Cr5M2c=; b=lRXg8NkscEoky/TQTG3kX/EBZZA5TLk5XvrKlZuOCto
-        YM9icH23ivN7c6VYRs3jdhAIHCPKNOOxi9VqRnfGmfmYlh87ouXupPm0QYjSc8e/
-        uQxhQP1fLdesevpAJZd7oCLcT+rj8fPh+UMfAojE4riv5kooGk0RtAYprhDKAXMS
-        bgxgWsicNZPMjbo5zumIkCCuuNNzZwXDtL0IjqOZID3e74r4tNnylHSohn+XgkoU
-        iGKHCggjqeaqnu3k5hiYCCtshZF/5kRrTdhqWz2wLJfe9MqChK8+D7SRIJbELKLe
-        9fn+idByhlt14H51E43m6bukBQCggEqB4LbbQmLqoZA==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id cr3cbnmlAx2Z for <linux-kernel@vger.kernel.org>;
-        Wed, 14 Jun 2023 15:29:30 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4QgxrV3yzVzBJLB3;
-        Wed, 14 Jun 2023 15:29:30 +0800 (CST)
+        Wed, 14 Jun 2023 03:29:49 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19A910C6;
+        Wed, 14 Jun 2023 00:29:45 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f8d176396bso3045705e9.2;
+        Wed, 14 Jun 2023 00:29:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686727784; x=1689319784;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=kQh+i2qewEJ5nIFSelYX9sKtVjFZOZ+RgXX/lYenfFQ=;
+        b=S/YQ+11NAf7qreGezjRV9yfsyV7pNUapi0EPE8PP9I0aFcB/TsqJj+a/HenDT2bn1z
+         k7STkqr7yezK+s6GS1AoYcemFC1JVnkn+HCN9StZ5lc/hx253Yss7oazMT9uAXSeH+nb
+         YraIAtMvnGRb1LMlOTKyZ2h4kmu+ntNJ3YtiEBcMQAxZYoekucbmTwOmbi7Vvyrnggjr
+         9hStTPvaQRzEpEMgTvaQv9yH6Q4/DzZZycIE08YF7Dt9NfqVSQFpSjPlbRJNjzNz6Leb
+         PdZ1Yp495cJgBw/YWigzd+H6zRVDRpQuj6a9f+0b1cnbYD5+sAuweGGqduyIJ/vc25us
+         X/5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686727784; x=1689319784;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kQh+i2qewEJ5nIFSelYX9sKtVjFZOZ+RgXX/lYenfFQ=;
+        b=lez/lNluZ6f4Q82VHGut7LOFWVYYq8SNem7CuVIvym7LFrw2scgbHbMCfdkel2vHhZ
+         6nh0r79kxNJ/mmhhli+WZgXz43XDAzw0wVIuap8EGESwolvBRjh8YR7cMka4nmvmArRk
+         zYtNRBqxaSag7o9c07NRQSHqnZjeSxcmxQNxBkbHl3qqO4aGD55aQDV3ZK+1QPBq3G/m
+         wRoOIfQA9ms19PlrSaWe1ErTAOyPd0MLVooYU5KDEaadWYqgy/wxNg4A1ha/+cw8AKyD
+         OMZ6Zm0FNV+LcOYJPPJav3mIk88Omgn8LCLbVOLoap3KOlDNuLVyi/FheCLT/edb1R2T
+         Nlkw==
+X-Gm-Message-State: AC+VfDwNYF4vw3w9D65Lx2GGXyC5emWZXcMafvhuGeLO0k+bpszjoYAW
+        2EwJtYm2UKDkJ5z6Fzfy02s=
+X-Google-Smtp-Source: ACHHUZ61Q0pJnWxc3jjFrsz88PyYYxqooZdRMqUg+sTdEFjrw0hzq2gAWTF6R2U4AfzsQGJgMtcvtQ==
+X-Received: by 2002:a05:6000:88:b0:30a:bdfd:5c3c with SMTP id m8-20020a056000008800b0030abdfd5c3cmr8491423wrx.17.1686727784095;
+        Wed, 14 Jun 2023 00:29:44 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id 4-20020a05600c024400b003f60101074dsm16502798wmj.33.2023.06.14.00.29.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 00:29:43 -0700 (PDT)
+Date:   Wed, 14 Jun 2023 10:29:40 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net v2 2/7] net: dsa: mt7530: fix trapping frames with
+ multiple CPU ports on MT7530
+Message-ID: <20230614072940.zd7kxu22u4snuf3n@skbuf>
+References: <20230613172402.grdpgago6in4jogq@skbuf>
+ <ca78b2f9-bf98-af26-0267-60d2638f7f00@arinc9.com>
+ <20230613173908.iuofbuvkanwyr7as@skbuf>
+ <edcbe326-c456-06ef-373b-313e780209de@arinc9.com>
+ <20230613201850.5g4u3wf2kllmlk27@skbuf>
+ <4a2fb3ac-ccad-f56e-4951-e5a5cb80dd1b@arinc9.com>
+ <20230613205915.rmpuqq7ahmd7taeq@skbuf>
+ <dd0d716e-8fdc-b6dc-3870-e7e524e8bf49@arinc9.com>
+ <20230613211432.dc66py7nh34ehiv4@skbuf>
+ <ba072bab-a6af-b6bf-e3c2-de07b1003d41@arinc9.com>
 MIME-Version: 1.0
-Date:   Wed, 14 Jun 2023 15:29:30 +0800
-From:   baomingtong001@208suo.com
-To:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com
-Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] btrfs: make unpin_extent_cache return void
-In-Reply-To: <20230614072710.34392-1-luojianhong@cdjrlc.com>
-References: <20230614072710.34392-1-luojianhong@cdjrlc.com>
-User-Agent: Roundcube Webmail
-Message-ID: <a478eebcb05b6eebc6bab8996641c2ed@208suo.com>
-X-Sender: baomingtong001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ba072bab-a6af-b6bf-e3c2-de07b1003d41@arinc9.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of unpin_extent_cache is always 0,
-and its caller does not check its return value.
+On Wed, Jun 14, 2023 at 10:03:04AM +0300, Arınç ÜNAL wrote:
+> Makes sense. I have prepared v5 that addresses everything so far, should I
+> send it today now that Russell has reviewed v4?
+> 
+> Arınç
 
-Signed-off-by: Mingtong Bao <baomingtong001@208suo.com>
----
-  fs/btrfs/extent_map.c | 3 +--
-  fs/btrfs/extent_map.h | 2 +-
-  2 files changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/fs/btrfs/extent_map.c b/fs/btrfs/extent_map.c
-index f3e9aaeb9956..845994b47998 100644
---- a/fs/btrfs/extent_map.c
-+++ b/fs/btrfs/extent_map.c
-@@ -292,7 +292,7 @@ static void try_merge_map(struct extent_map_tree 
-*tree, struct extent_map *em)
-   * to the generation that actually added the file item to the inode so 
-we know
-   * we need to sync this extent when we call fsync().
-   */
--int unpin_extent_cache(struct extent_map_tree *tree, u64 start, u64 
-len,
-+void unpin_extent_cache(struct extent_map_tree *tree, u64 start, u64 
-len,
-                 u64 gen)
-  {
-      struct extent_map *em;
-@@ -326,7 +326,6 @@ int unpin_extent_cache(struct extent_map_tree *tree, 
-u64 start, u64 len,
-      free_extent_map(em);
-  out:
-      write_unlock(&tree->lock);
--    return 0;
-
-  }
-
-diff --git a/fs/btrfs/extent_map.h b/fs/btrfs/extent_map.h
-index 35d27c756e08..486a8ea798c7 100644
---- a/fs/btrfs/extent_map.h
-+++ b/fs/btrfs/extent_map.h
-@@ -97,7 +97,7 @@ struct extent_map *alloc_extent_map(void);
-  void free_extent_map(struct extent_map *em);
-  int __init extent_map_init(void);
-  void __cold extent_map_exit(void);
--int unpin_extent_cache(struct extent_map_tree *tree, u64 start, u64 
-len, u64 gen);
-+void unpin_extent_cache(struct extent_map_tree *tree, u64 start, u64 
-len, u64 gen);
-  void clear_em_logging(struct extent_map_tree *tree, struct extent_map 
-*em);
-  struct extent_map *search_extent_mapping(struct extent_map_tree *tree,
-                       u64 start, u64 len);
+Let's wait for Russell to ack that all discussions on v2-v4 are closed
+and that there aren't any follow-up questions there.
