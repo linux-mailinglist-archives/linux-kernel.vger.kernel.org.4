@@ -2,119 +2,347 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E6372FE63
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:23:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B55772FE69
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:23:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244317AbjFNMWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 08:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56746 "EHLO
+        id S244518AbjFNMXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 08:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244541AbjFNMWd (ORCPT
+        with ESMTP id S244541AbjFNMWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 08:22:33 -0400
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E791BFB
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:22:24 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R431e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0Vl6WXZT_1686745339;
-Received: from 30.13.128.154(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Vl6WXZT_1686745339)
-          by smtp.aliyun-inc.com;
-          Wed, 14 Jun 2023 20:22:20 +0800
-Message-ID: <4945e569-fb9c-3cb5-0c2f-da503632819d@linux.alibaba.com>
-Date:   Wed, 14 Jun 2023 20:22:38 +0800
+        Wed, 14 Jun 2023 08:22:51 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 191601FDE
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:22:44 -0700 (PDT)
+Received: from loongson.cn (unknown [10.180.13.124])
+        by gateway (Coremail) with SMTP id _____8CxtOgTsYlksSAFAA--.506S3;
+        Wed, 14 Jun 2023 20:22:43 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.180.13.124])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxXMoSsYlkWZkaAA--.1762S4;
+        Wed, 14 Jun 2023 20:22:42 +0800 (CST)
+From:   YingKun Meng <mengyingkun@loongson.cn>
+To:     broonie@kernel.org, lgirdwood@gmail.com
+Cc:     krzysztof.kozlowski@linaro.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, loongarch@lists.linux.dev,
+        loongson-kernel@lists.loongnix.cn, mengyingkun@loongson.cn
+Subject: [PATCH v3 2/3] ASoC: loongson: Add Loongson ASoC Sound Card Support
+Date:   Wed, 14 Jun 2023 20:22:40 +0800
+Message-Id: <20230614122240.3402762-1-mengyingkun@loongson.cn>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2] mm: compaction: skip memory hole rapidly when
- isolating migratable pages
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     akpm@linux-foundation.org, vbabka@suse.cz, david@redhat.com,
-        ying.huang@intel.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <770f9f61472b24b6bc89adbd71a77d9cf62bb54f.1686646361.git.baolin.wang@linux.alibaba.com>
- <20230614095501.m4porztaibchrgwx@techsingularity.net>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20230614095501.m4porztaibchrgwx@techsingularity.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxXMoSsYlkWZkaAA--.1762S4
+X-CM-SenderInfo: 5phqw55lqjy33q6o00pqjv00gofq/1tbiAQACDGSIXIIYSwANsj
+X-Coremail-Antispam: 1Uk129KBj93XoW3Ww1DCr4DJw47Zw4fXryfXwc_yoWfAr4xpa
+        nxZay5KrWrJr4fCr1FqrWrAF1ak34xuFnrXay7Gw1xKr9rA3s5WwnrGF1UZF4fAr98KayU
+        XFW8GFW8KFyDGacCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUU9jb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+        GcCE3s1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2
+        x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5
+        McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr4
+        1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_
+        JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17
+        CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0
+        I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I
+        8E87Iv67AKxVWxJVW8Jr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kfnx
+        nUUI43ZEXa7IU8EeHDUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Yingkun Meng <mengyingkun@loongson.cn>
 
+The Loongson ASoC Sound Card is a general ASoC DAI Link driver that
+can be used for Loongson CPU DAI drivers and external CODECs.
 
-On 6/14/2023 5:55 PM, Mel Gorman wrote:
-> On Tue, Jun 13, 2023 at 04:55:04PM +0800, Baolin Wang wrote:
->> On some machines, the normal zone can have a large memory hole like
->> below memory layout, and we can see the range from 0x100000000 to
->> 0x1800000000 is a hole. So when isolating some migratable pages, the
->> scanner can meet the hole and it will take more time to skip the large
->> hole. From my measurement, I can see the isolation scanner will take
->> 80us ~ 100us to skip the large hole [0x100000000 - 0x1800000000].
->>
->> So adding a new helper to fast search next online memory section
->> to skip the large hole can help to find next suitable pageblock
->> efficiently. With this patch, I can see the large hole scanning only
->> takes < 1us.
->>
->> [    0.000000] Zone ranges:
->> [    0.000000]   DMA      [mem 0x0000000040000000-0x00000000ffffffff]
->> [    0.000000]   DMA32    empty
->> [    0.000000]   Normal   [mem 0x0000000100000000-0x0000001fa7ffffff]
->> [    0.000000] Movable zone start for each node
->> [    0.000000] Early memory node ranges
->> [    0.000000]   node   0: [mem 0x0000000040000000-0x0000000fffffffff]
->> [    0.000000]   node   0: [mem 0x0000001800000000-0x0000001fa3c7ffff]
->> [    0.000000]   node   0: [mem 0x0000001fa3c80000-0x0000001fa3ffffff]
->> [    0.000000]   node   0: [mem 0x0000001fa4000000-0x0000001fa402ffff]
->> [    0.000000]   node   0: [mem 0x0000001fa4030000-0x0000001fa40effff]
->> [    0.000000]   node   0: [mem 0x0000001fa40f0000-0x0000001fa73cffff]
->> [    0.000000]   node   0: [mem 0x0000001fa73d0000-0x0000001fa745ffff]
->> [    0.000000]   node   0: [mem 0x0000001fa7460000-0x0000001fa746ffff]
->> [    0.000000]   node   0: [mem 0x0000001fa7470000-0x0000001fa758ffff]
->> [    0.000000]   node   0: [mem 0x0000001fa7590000-0x0000001fa7ffffff]
->>
->> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> 
-> This may only be necessary for non-contiguous zones so a check for
-> zone_contiguous could be made but I suspect the saving, if any, would be
-> marginal.
+The driver supports the use of ACPI table to describe device resources.
+On loongson 7axxx platforms, the audio device is an ACPI device.
 
-Right. But the pageblock_pfn_to_page() have considered the contiguous 
-case, and will not return NULL page for a contiguous zone.
+Signed-off-by: Yingkun Meng <mengyingkun@loongson.cn>
+---
+ sound/soc/loongson/Kconfig         |  10 ++
+ sound/soc/loongson/Makefile        |   4 +
+ sound/soc/loongson/loongson_card.c | 230 +++++++++++++++++++++++++++++
+ 3 files changed, 244 insertions(+)
+ create mode 100644 sound/soc/loongson/loongson_card.c
 
-> However, it's subtle that block_end_pfn can end up in an arbirary location
-> past the end of the zone or past cc->free_pfn. As the "continue" will update
-> cc->migrate_pfn, that might lead to errors in the future. It would be a
+diff --git a/sound/soc/loongson/Kconfig b/sound/soc/loongson/Kconfig
+index 4478ac91e402..c175f9de19a8 100644
+--- a/sound/soc/loongson/Kconfig
++++ b/sound/soc/loongson/Kconfig
+@@ -13,4 +13,14 @@ config SND_SOC_LOONGSON_I2S_PCI
+ 	  The controller is found in loongson bridge chips or SoCs,
+ 	  and work as a PCI device.
+ 
++config SND_SOC_LOONGSON_CARD
++	tristate "Loongson Sound Card Driver"
++	select SND_SOC_LOONGSON_I2S_PCI
++	help
++	  Say Y or M if you want to add support for SoC audio using
++	  loongson I2S controller.
++
++	  The driver add support for ALSA SoC Audio support using
++	  loongson I2S controller.
++
+ endmenu
+diff --git a/sound/soc/loongson/Makefile b/sound/soc/loongson/Makefile
+index 099af7989103..601a905a4860 100644
+--- a/sound/soc/loongson/Makefile
++++ b/sound/soc/loongson/Makefile
+@@ -2,3 +2,7 @@
+ #Platform Support
+ snd-soc-loongson-i2s-pci-objs := loongson_i2s_pci.o loongson_i2s.o loongson_dma.o
+ obj-$(CONFIG_SND_SOC_LOONGSON_I2S_PCI) += snd-soc-loongson-i2s-pci.o
++
++#Machine Support
++snd-soc-loongson-card-objs := loongson_card.o
++obj-$(CONFIG_SND_SOC_LOONGSON_CARD) += snd-soc-loongson-card.o
+diff --git a/sound/soc/loongson/loongson_card.c b/sound/soc/loongson/loongson_card.c
+new file mode 100644
+index 000000000000..965eaf4e9109
+--- /dev/null
++++ b/sound/soc/loongson/loongson_card.c
+@@ -0,0 +1,230 @@
++// SPDX-License-Identifier: GPL-2.0
++//
++// Loongson ASoC Audio Machine driver
++//
++// Copyright (C) 2023 Loongson Technology Corporation Limited
++// Author: Yingkun Meng <mengyingkun@loongson.cn>
++//
++
++#include <linux/module.h>
++#include <sound/soc.h>
++#include <sound/soc-acpi.h>
++#include <linux/acpi.h>
++#include <linux/pci.h>
++#include <sound/pcm_params.h>
++
++static char codec_name[SND_ACPI_I2C_ID_LEN];
++
++struct loongson_card_data {
++	struct snd_soc_card snd_card;
++	unsigned int mclk_fs;
++};
++
++static int loongson_card_hw_params(struct snd_pcm_substream *substream,
++				   struct snd_pcm_hw_params *params)
++{
++	struct snd_soc_pcm_runtime *rtd = substream->private_data;
++	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(rtd, 0);
++	struct snd_soc_dai *codec_dai = asoc_rtd_to_codec(rtd, 0);
++	struct loongson_card_data *ls_card = snd_soc_card_get_drvdata(rtd->card);
++	int ret, mclk;
++
++	if (ls_card->mclk_fs) {
++		mclk = ls_card->mclk_fs * params_rate(params);
++		ret = snd_soc_dai_set_sysclk(cpu_dai, 0, mclk,
++					     SND_SOC_CLOCK_OUT);
++		if (ret < 0) {
++			dev_err(codec_dai->dev, "cpu_dai clock not set\n");
++			return ret;
++		}
++
++		ret = snd_soc_dai_set_sysclk(codec_dai, 0, mclk,
++					     SND_SOC_CLOCK_IN);
++		if (ret < 0) {
++			dev_err(codec_dai->dev, "codec_dai clock not set\n");
++			return ret;
++		}
++	}
++	return 0;
++}
++
++static const struct snd_soc_ops loongson_ops = {
++	.hw_params = loongson_card_hw_params,
++};
++
++SND_SOC_DAILINK_DEFS(analog,
++	DAILINK_COMP_ARRAY(COMP_CPU("loongson-i2s")),
++	DAILINK_COMP_ARRAY(COMP_EMPTY()),
++	DAILINK_COMP_ARRAY(COMP_EMPTY()));
++
++static struct snd_soc_dai_link loongson_dai_links[] = {
++	{
++		.name = "Loongson Audio Port",
++		.stream_name = "Loongson Audio",
++		.dai_fmt = SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_IB_NF
++			| SND_SOC_DAIFMT_CBC_CFC,
++		SND_SOC_DAILINK_REG(analog),
++		.ops = &loongson_ops,
++	},
++};
++
++static int loongson_card_parse_acpi(struct loongson_card_data *data)
++{
++	struct snd_soc_card *card = &data->snd_card;
++	struct fwnode_handle *fwnode = card->dev->fwnode;
++	struct fwnode_reference_args args;
++	const char *codec_dai_name;
++	struct acpi_device *adev;
++	struct device *phy_dev;
++	int ret, i;
++
++	/* fixup platform name based on reference node */
++	memset(&args, 0, sizeof(args));
++	ret = acpi_node_get_property_reference(fwnode, "cpu", 0, &args);
++	if (ACPI_FAILURE(ret) || !is_acpi_device_node(args.fwnode)) {
++		dev_err(card->dev, "No matching phy in ACPI table\n");
++		return ret;
++	}
++	adev = to_acpi_device_node(args.fwnode);
++	phy_dev = acpi_get_first_physical_node(adev);
++	if (!phy_dev)
++		return -EPROBE_DEFER;
++	for (i = 0; i < card->num_links; i++)
++		loongson_dai_links[i].platforms->name = dev_name(phy_dev);
++
++	/* fixup codec name based on reference node */
++	memset(&args, 0, sizeof(args));
++	ret = acpi_node_get_property_reference(fwnode, "codec", 0, &args);
++	if (ACPI_FAILURE(ret) || !is_acpi_device_node(args.fwnode)) {
++		dev_err(card->dev, "No matching phy in ACPI table\n");
++		return ret;
++	}
++	adev = to_acpi_device_node(args.fwnode);
++	snprintf(codec_name, sizeof(codec_name), "i2c-%s", acpi_dev_name(adev));
++	for (i = 0; i < card->num_links; i++)
++		loongson_dai_links[i].codecs->name = codec_name;
++
++	device_property_read_string(card->dev, "codec-dai-name",
++				    &codec_dai_name);
++	for (i = 0; i < card->num_links; i++)
++		loongson_dai_links[i].codecs->dai_name = codec_dai_name;
++
++	return 0;
++}
++
++static int loongson_card_parse_of(struct loongson_card_data *data)
++{
++	const char *cpu_dai_name, *codec_dai_name;
++	struct device_node *cpu, *codec;
++	struct snd_soc_card *card = &data->snd_card;
++	struct device *dev = card->dev;
++	struct of_phandle_args args;
++	int ret, i;
++
++	cpu = of_get_child_by_name(dev->of_node, "cpu");
++	if (!cpu) {
++		dev_err(dev, "platform property missing or invalid\n");
++		return -EINVAL;
++	}
++	codec = of_get_child_by_name(dev->of_node, "codec");
++	if (!codec) {
++		dev_err(dev, "audio-codec property missing or invalid\n");
++		ret = -EINVAL;
++		goto err;
++	}
++
++	ret = of_parse_phandle_with_args(cpu, "sound-dai",
++					 "#sound-dai-cells", 0, &args);
++	if (ret) {
++		dev_err(dev, "codec node missing #sound-dai-cells\n");
++		goto err;
++	}
++	for (i = 0; i < card->num_links; i++)
++		loongson_dai_links[i].cpus->of_node = args.np;
++
++	ret = of_parse_phandle_with_args(codec, "sound-dai",
++					 "#sound-dai-cells", 0, &args);
++	if (ret) {
++		dev_err(dev, "codec node missing #sound-dai-cells\n");
++		goto err;
++	}
++	for (i = 0; i < card->num_links; i++)
++		loongson_dai_links[i].codecs->of_node = args.np;
++
++	snd_soc_of_get_dai_name(cpu, &cpu_dai_name);
++	snd_soc_of_get_dai_name(codec, &codec_dai_name);
++	for (i = 0; i < card->num_links; i++) {
++		loongson_dai_links[i].cpus->dai_name = cpu_dai_name;
++		loongson_dai_links[i].codecs->dai_name = codec_dai_name;
++	}
++	of_node_put(cpu);
++	of_node_put(codec);
++
++	return 0;
++
++err:
++	of_node_put(cpu);
++	of_node_put(codec);
++	return ret;
++}
++
++static int loongson_asoc_card_probe(struct platform_device *pdev)
++{
++	struct loongson_card_data *ls_priv;
++	struct snd_soc_card *card;
++	int ret;
++
++	ls_priv = devm_kzalloc(&pdev->dev, sizeof(*ls_priv), GFP_KERNEL);
++	if (!ls_priv)
++		return -ENOMEM;
++
++	card = &ls_priv->snd_card;
++
++	card->dev = &pdev->dev;
++	card->owner = THIS_MODULE;
++	card->dai_link = loongson_dai_links;
++	card->num_links = ARRAY_SIZE(loongson_dai_links);
++	snd_soc_card_set_drvdata(card, ls_priv);
++
++	ret = device_property_read_string(&pdev->dev, "model", &card->name);
++	if (ret) {
++		dev_err(&pdev->dev, "Error parsing card name: %d\n", ret);
++		return ret;
++	}
++	ret = device_property_read_u32(&pdev->dev, "mclk-fs", &ls_priv->mclk_fs);
++	if (ret) {
++		dev_err(&pdev->dev, "Error parsing mclk-fs: %d\n", ret);
++		return ret;
++	}
++
++	if (has_acpi_companion(&pdev->dev))
++		ret = loongson_card_parse_acpi(ls_priv);
++	else
++		ret = loongson_card_parse_of(ls_priv);
++	if (ret < 0)
++		return ret;
++
++	ret = devm_snd_soc_register_card(&pdev->dev, card);
++
++	return ret;
++}
++
++static const struct of_device_id loongson_asoc_dt_ids[] = {
++	{ .compatible = "loongson,ls-audio-card" },
++	{ /* sentinel */ },
++};
++MODULE_DEVICE_TABLE(of, loongson_asoc_dt_ids);
++
++static struct platform_driver loongson_audio_driver = {
++	.probe = loongson_asoc_card_probe,
++	.driver = {
++		.name = "loongson-asoc-card",
++		.pm = &snd_soc_pm_ops,
++		.of_match_table = of_match_ptr(loongson_asoc_dt_ids),
++	},
++};
++module_platform_driver(loongson_audio_driver);
++
++MODULE_DESCRIPTION("Loongson ASoc Sound Card driver");
++MODULE_AUTHOR("Loongson Technology Corporation Limited");
++MODULE_LICENSE("GPL");
+-- 
+2.33.0
 
-Ah, yes, thanks for pointing this out that I missed before.
-
-> lot safer to pass in cc->free_pfn and do two things with the value. First,
-> there is no point scanning for a valid online section past cc->free_pfn so
-> terminating after cc->free_pfn may save some cycles. Second, cc->migrate_pfn
-
-The skipping function introduced in this patch will only scan the first 
-online section, so it can not terminate the scanning early by comparing 
-if it is greater than cc->free_pfn. It can only compare the first online 
-section with cc->free_pfn.
-
-> does not end up with an arbitrary value which is a more defensive approach
-> to any future programming errors.
-
-Right. So I think I should make sure the cc->migrate_pfn is not larger 
-than cc->free_pfn with below change:
-
-@@ -1965,7 +1965,7 @@ static isolate_migrate_t 
-isolate_migratepages(struct compact_control *cc)
-
-                         next_pfn = skip_offline_sections(block_start_pfn);
-                         if (next_pfn)
--                               block_end_pfn = next_pfn;
-+                               block_end_pfn = min(next_pfn, cc->free_pfn);
-                         continue;
-                 }
