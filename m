@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2DDE7303EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91AB77303E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244809AbjFNPcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 11:32:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37530 "EHLO
+        id S236947AbjFNPaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 11:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245118AbjFNPcm (ORCPT
+        with ESMTP id S231331AbjFNPaQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 11:32:42 -0400
-Received: from zg8tndyumtaxlji0oc4xnzya.icoremail.net (zg8tndyumtaxlji0oc4xnzya.icoremail.net [46.101.248.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EE1AD2125;
-        Wed, 14 Jun 2023 08:32:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fudan.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id; bh=s6WgjVWLfkpxN651qFEtAa7EbFB9eDZZ7A04NJW3HN8=; b=Q
-        DUODjVOcTIOAcKh7GrLfPj8D93IroXBQ23ZFlVTQEl6iRMh0Cogb8m+8kLbWVsEc
-        XSc1M/p0XwjiHwuxUND+VkbddnctkXDuY7gbXwJjkQtbf5tRkbSdU7nv/j2Tfqmy
-        4Kfbxvmw6ibnqfEE+HUtJU/EiJL6XXAWdwKWM2Hl7U=
-Received: from ubuntu.localdomain (unknown [10.230.35.76])
-        by app1 (Coremail) with SMTP id XAUFCgB35T2L3Ylkkl_sAA--.37414S2;
-        Wed, 14 Jun 2023 23:32:28 +0800 (CST)
-From:   Chenyuan Mi <cymi20@fudan.edu.cn>
-To:     ilpo.jarvinen@linux.intel.com
-Cc:     andriy.shevchenko@linux.intel.com, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Chenyuan Mi <cymi20@fudan.edu.cn>
-Subject: [PATCH] serial: 8250_lpss: Fix missing check for return value of pci_get_slot()
-Date:   Wed, 14 Jun 2023 08:32:26 -0700
-Message-Id: <20230614153226.117768-1-cymi20@fudan.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: XAUFCgB35T2L3Ylkkl_sAA--.37414S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7XF47uFWrJF4DGrWUCr1rZwb_yoWfArgEka
-        4kAwnxZwnI9F1qkrn3Grn8ArWSk3WjvF1xX3Z2vr98JryDArWUZrWjqa9rXr9rWwsxJF95
-        Awn7Kr1Sqr1DZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbskFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IE
-        rcIFxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
-        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
-        6r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2
-        IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E
-        87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
-        IFyTuYvjfUOlksUUUUU
-X-CM-SenderInfo: isqsiiisuqikmt6i3vldqovvfxof0/
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        Wed, 14 Jun 2023 11:30:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39641FDD;
+        Wed, 14 Jun 2023 08:30:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48D3460C5B;
+        Wed, 14 Jun 2023 15:30:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBEEDC433C0;
+        Wed, 14 Jun 2023 15:30:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686756613;
+        bh=v+krQLSQvy0RGcZLcqbIXiObIFKECGV3dMiU83A9I2g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r9g20ssYNKtaULjYRXWMOoLGNr8ZM6tbNo/yhpgRFFeAH8p6PmFDtGHKTP8c91vrL
+         upcsrYypir8z5EQPzaglE8dDndY5hBBuZmcnwr8xvBl1m9uaaDXKTNDv9H056Ysw7I
+         cimA9WSSdat3kpguG6RPXyi3h9+TwpPZLXbnNsGXj6bkmBj/LIli+fO0o7WbYl956E
+         Q8pJxcHqV1BHcfOmwOL9czQ7uHZpPxMrL7ZKcGECxVdlLRiKlcf5mXG3KVe+NB236q
+         g1sVSCewkPMAs1kcBDAKubnRctG5W3UhZ27ea+rO9Vm5Rl7F78rj05uVV4mKF2S7JC
+         1M++kyryhcP3g==
+Date:   Wed, 14 Jun 2023 08:33:35 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Sarannya S <quic_sarannya@quicinc.com>
+Cc:     quic_bjorande@quicinc.com, arnaud.pouliquen@foss.st.com,
+        swboyd@chromium.org, quic_clew@quicinc.com,
+        mathieu.poirier@linaro.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        Deepak Kumar Singh <quic_deesin@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: Re: [PATCH V7 2/3] rpmsg: glink: Add support to handle signals
+ command
+Message-ID: <20230614153335.w7mej6mate5tki5w@ripper>
+References: <1682160127-18103-1-git-send-email-quic_sarannya@quicinc.com>
+ <1682160127-18103-3-git-send-email-quic_sarannya@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1682160127-18103-3-git-send-email-quic_sarannya@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,31 +62,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pci_get_slot() function may return NULL, which may
-cause null pointer deference, and most other callsites of
-pci_get_slot() do Null check. Add Null check for return
-value of pci_get_slot().
+On Sat, Apr 22, 2023 at 04:12:06PM +0530, Sarannya S wrote:
+> From: Chris Lew <quic_clew@quicinc.com>
+> 
+> Remote peripherals send signal notifications over glink with commandID 15.
+> 
+> Add support to send and receive the signal command and based signals
+> enable or disable flow control with remote host.
+> 
+> Signed-off-by: Chris Lew <quic_clew@quicinc.com>
+> Signed-off-by: Deepak Kumar Singh <quic_deesin@quicinc.com>
+> Signed-off-by: Sarannya S <quic_sarannya@quicinc.com>
+> ---
+>  drivers/rpmsg/qcom_glink_native.c | 64 +++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 64 insertions(+)
+> 
+> diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
+> index 01d2805..ff5e926 100644
+> --- a/drivers/rpmsg/qcom_glink_native.c
+> +++ b/drivers/rpmsg/qcom_glink_native.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/rpmsg.h>
+>  #include <linux/sizes.h>
+>  #include <linux/slab.h>
+> +#include <linux/termios.h>
+>  #include <linux/workqueue.h>
+>  #include <linux/mailbox_client.h>
+>  
+> @@ -197,9 +198,15 @@ static const struct rpmsg_endpoint_ops glink_endpoint_ops;
+>  #define GLINK_CMD_TX_DATA_CONT		12
+>  #define GLINK_CMD_READ_NOTIF		13
+>  #define GLINK_CMD_RX_DONE_W_REUSE	14
+> +#define GLINK_CMD_SIGNALS		15
+>  
+>  #define GLINK_FEATURE_INTENTLESS	BIT(1)
+>  
+> +#define NATIVE_DTR_SIG			NATIVE_DSR_SIG
+> +#define NATIVE_DSR_SIG			BIT(31)
+> +#define NATIVE_RTS_SIG			NATIVE_CTS_SIG
+> +#define NATIVE_CTS_SIG			BIT(30)
+> +
+>  static void qcom_glink_rx_done_work(struct work_struct *work);
+>  
+>  static struct glink_channel *qcom_glink_alloc_channel(struct qcom_glink *glink,
+> @@ -1014,6 +1021,58 @@ static int qcom_glink_rx_open_ack(struct qcom_glink *glink, unsigned int lcid)
+>  	return 0;
+>  }
+>  
+> +/**
+> + * qcom_glink_set_flow_control() - convert a signal cmd to wire format and
+> + * 				   transmit
+> + * @ept:	Rpmsg endpoint for channel.
+> + * @enable:	True/False - enable or disable flow control
+> + * @dst:	destination address of the endpoint
+> + *
+> + * Return: 0 on success or standard Linux error code.
+> + */
+> +static int qcom_glink_set_flow_control(struct rpmsg_endpoint *ept, bool enable, u32 dst)
+> +{
+> +	struct glink_channel *channel = to_glink_channel(ept);
+> +	struct qcom_glink *glink = channel->glink;
+> +	struct glink_msg msg;
+> +	u32 sigs = 0;
+> +
+> +	if (enable)
+> +		sigs |= NATIVE_DTR_SIG | NATIVE_RTS_SIG;
+> +
+> +	msg.cmd = cpu_to_le16(GLINK_CMD_SIGNALS);
+> +	msg.param1 = cpu_to_le16(channel->lcid);
+> +	msg.param2 = cpu_to_le32(sigs);
+> +
+> +	return qcom_glink_tx(glink, &msg, sizeof(msg), NULL, 0, true);
+> +}
+> +
+> +static int qcom_glink_handle_signals(struct qcom_glink *glink,
+> +				     unsigned int rcid, unsigned int sigs)
+> +{
+> +	struct glink_channel *channel;
+> +	unsigned long flags;
+> +	bool enable = false;
+> +
+> +	spin_lock_irqsave(&glink->idr_lock, flags);
+> +	channel = idr_find(&glink->rcids, rcid);
+> +	spin_unlock_irqrestore(&glink->idr_lock, flags);
+> +	if (!channel) {
+> +		dev_err(glink->dev, "signal for non-existing channel\n");
+> +		return -EINVAL;
 
-Found by our static analysis tool.
+You don't handle this return value, so this works fine. But the other
+cases of returning an error to qcom_glink_native_rx() indicates that no
+further messages should be processed (e.g. because there's no sufficient
+data in the FIFO).
 
-Signed-off-by: Chenyuan Mi <cymi20@fudan.edu.cn>
----
- drivers/tty/serial/8250/8250_lpss.c | 2 ++
- 1 file changed, 2 insertions(+)
+But getting a signal on a non-existing channel is not something that's
+going to be resolved until we get the next interrupt, so I think you
+shouldn't propagate this error.
 
-diff --git a/drivers/tty/serial/8250/8250_lpss.c b/drivers/tty/serial/8250/8250_lpss.c
-index 0e43bdfb7459..05af5865ee1b 100644
---- a/drivers/tty/serial/8250/8250_lpss.c
-+++ b/drivers/tty/serial/8250/8250_lpss.c
-@@ -137,6 +137,8 @@ static int byt_serial_setup(struct lpss8250 *lpss, struct uart_port *port)
- 	}
- 
- 	dma_dev = pci_get_slot(pdev->bus, PCI_DEVFN(PCI_SLOT(pdev->devfn), 0));
-+	if (!dma_dev)
-+		return -ENODEV;
- 
- 	param->dma_dev = &dma_dev->dev;
- 	param->m_master = 0;
--- 
-2.17.1
+Which means that it would be better to make the return type void of this
+function.
 
+> +	}
+> +
+> +	if (!channel->ept.flow_cb)
+> +		return 0;
+> +
+> +	if (sigs & (NATIVE_DSR_SIG | NATIVE_CTS_SIG))
+> +		enable = true;
+
+I'd find it cleaner to skip the early initialization and have a single
+point of assignment of enable, like:
+
+	enable = sigs & NATIVE_DSR_SIG || sigs & NATIVE_CTS_SIG;
+
+
+And consolidate the flow_cb query/invocation to one place:
+	if (channel->eptf.flow_cb)
+		channel->ept.flow_cb(, enable);
+
+Regards,
+Bjorn
+
+> +
+> +	channel->ept.flow_cb(channel->ept.rpdev, channel->ept.priv, enable);
+> +
+> +	return 0;
+> +}
+> +
+>  void qcom_glink_native_rx(struct qcom_glink *glink)
+>  {
+>  	struct glink_msg msg;
+> @@ -1075,6 +1134,10 @@ void qcom_glink_native_rx(struct qcom_glink *glink)
+>  			qcom_glink_handle_intent_req_ack(glink, param1, param2);
+>  			qcom_glink_rx_advance(glink, ALIGN(sizeof(msg), 8));
+>  			break;
+> +		case GLINK_CMD_SIGNALS:
+> +			qcom_glink_handle_signals(glink, param1, param2);
+> +			qcom_glink_rx_advance(glink, ALIGN(sizeof(msg), 8));
+> +			break;
+>  		default:
+>  			dev_err(glink->dev, "unhandled rx cmd: %d\n", cmd);
+>  			ret = -EINVAL;
+> @@ -1449,6 +1512,7 @@ static const struct rpmsg_endpoint_ops glink_endpoint_ops = {
+>  	.sendto = qcom_glink_sendto,
+>  	.trysend = qcom_glink_trysend,
+>  	.trysendto = qcom_glink_trysendto,
+> +	.set_flow_control = qcom_glink_set_flow_control,
+>  };
+>  
+>  static void qcom_glink_rpdev_release(struct device *dev)
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+> 
