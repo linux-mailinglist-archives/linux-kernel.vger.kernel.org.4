@@ -2,115 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A60730BA0
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 01:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED0E730BB2
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 01:42:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbjFNXfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 19:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33994 "EHLO
+        id S237023AbjFNXmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 19:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237103AbjFNXfP (ORCPT
+        with ESMTP id S233762AbjFNXl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 19:35:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C5F1BD4;
-        Wed, 14 Jun 2023 16:35:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 841FF61274;
-        Wed, 14 Jun 2023 23:35:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8900AC433C8;
-        Wed, 14 Jun 2023 23:35:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686785712;
-        bh=vacjCPiU5N8qvuuprIt6J0bOdVwOCc4CraBBI0wBsjA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eCc3lU9QvRreg8CWsym97621Y1HdoB5z0BuzFeiN07u9LL/m9q37r2V5D4RRnOW84
-         wjDU5qd+v0wR6BUZOEJO1LP6ZB3iJ2PGQTUCUrDtEUCo4kplur+s+ce1ytQwa0CYL0
-         3PsoGx+B4VeF2QCFMI33lfUN48CkkNS8MssSv/CGaV2YmN22V3495CK5i0X0cGe4jD
-         OOAlXyMYeRPIWk6DwaTGG5NXmUPGRljP+ep0lFLLVAe6utCSVBno0fer/rzrxtPP5w
-         4PsPrpZNYwrAXe1AgFqm2GKUVkAmpWSY4VeYue4CyAkSRdtT5vZx77zeg9rvfEOBqf
-         505cofmZyOrhg==
-Date:   Thu, 15 Jun 2023 00:35:01 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com, szabolcs.nagy@arm.com,
-        torvalds@linux-foundation.org, Pengfei Xu <pengfei.xu@intel.com>
-Subject: Re: [PATCH v9 17/42] mm: Warn on shadow stack memory in wrong vma
-Message-ID: <9583dff0-08aa-40e2-943f-f046f0402058@sirena.org.uk>
-References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
- <20230613001108.3040476-18-rick.p.edgecombe@intel.com>
+        Wed, 14 Jun 2023 19:41:59 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75AA2689;
+        Wed, 14 Jun 2023 16:41:54 -0700 (PDT)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35EK0AYt018100;
+        Wed, 14 Jun 2023 23:41:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2023-03-30; bh=rJIwuhlVKiVwRAd5mNg+jNoayRcALobuDnLNvDmjo0c=;
+ b=c7sJ6g/CuWikvG4EqfizvLQwgWNJLcLdh4P1DtostxObPC0LyNh0BBuijOBu+7efgNIT
+ YUBaMWCLmxaTKl0vOTFpt47U3GQGj9LRwENM6opHeCniYjHS4Z0yBO/NPupOjBZvq5Sk
+ +4UvOJErIliUpTmvYmY7hJsiyQHL0m4zSRtNDx+vykNONky9beGOW5DZpzZPyOhAxv3+
+ yLpDbDGdd4DzH3mPOIdsu1JvxSqoRpkmHPsOpXqv2o5dNwoaOgTovUWc1aQ7aPZpambB
+ Spl+el4HTlGNhV9a2xzN05nkFJVkIoJH7wJSAs4pkbfUC98CDgPRFL3VGMI2uaoVE2R4 Xw== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r4h7d8sg5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 14 Jun 2023 23:41:32 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35ENNR7a017765;
+        Wed, 14 Jun 2023 23:41:31 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3r4fm5y0a4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 14 Jun 2023 23:41:30 +0000
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35ENfUeN023835;
+        Wed, 14 Jun 2023 23:41:30 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3r4fm5y09x-1;
+        Wed, 14 Jun 2023 23:41:30 +0000
+From:   Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
+To:     davem@davemloft.net
+Cc:     david@fries.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, zbr@ioremap.net, brauner@kernel.org,
+        johannes@sipsolutions.net, ecree.xilinx@gmail.com, leon@kernel.org,
+        keescook@chromium.org, socketcan@hartkopp.net, petrm@nvidia.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Liam.Howlett@Oracle.com, akpm@linux-foundation.org,
+        anjali.k.kulkarni@oracle.com
+Subject: [PATCH v6 0/6] Process connector bug fixes & enhancements
+Date:   Wed, 14 Jun 2023 16:41:22 -0700
+Message-ID: <20230614234129.3264175-1-anjali.k.kulkarni@oracle.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BSjLtFoBpX+dhkhM"
-Content-Disposition: inline
-In-Reply-To: <20230613001108.3040476-18-rick.p.edgecombe@intel.com>
-X-Cookie: You are false data.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-14_14,2023-06-14_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0
+ suspectscore=0 mlxlogscore=999 mlxscore=0 phishscore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306140207
+X-Proofpoint-ORIG-GUID: 9i76TRak3lLbVL9XF4ErFAxWn3DTzz1B
+X-Proofpoint-GUID: 9i76TRak3lLbVL9XF4ErFAxWn3DTzz1B
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Oracle DB is trying to solve a performance overhead problem it has been
+facing for the past 10 years and using this patch series, we can fix this
+issue.
 
---BSjLtFoBpX+dhkhM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Oracle DB runs on a large scale with 100000s of short lived processes,
+starting up and exiting quickly. A process monitoring DB daemon which
+tracks and cleans up after processes that have died without a proper exit
+needs notifications only when a process died with a non-zero exit code
+(which should be rare).
 
-On Mon, Jun 12, 2023 at 05:10:43PM -0700, Rick Edgecombe wrote:
-> The x86 Control-flow Enforcement Technology (CET) feature includes a new
-> type of memory called shadow stack. This shadow stack memory has some
-> unusual properties, which requires some core mm changes to function
-> properly.
+Due to the pmon architecture, which is distributed, each process is
+independent and has minimal interaction with pmon. Hence fd based
+solutions to track a process's spawning and exit cannot be used. Pmon
+needs to detect the abnormal death of a process so it can cleanup after.
+Currently it resorts to checking /proc every few seconds. Other methods
+we tried like using system call to reduce the above overhead were not
+accepted upstream.
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
+With this change, we add event based filtering to proc connector module
+so that DB can only listen to the events it is interested in. A new
+event type PROC_EVENT_NONZERO_EXIT is added, which is only sent by kernel
+to a listening application when any process exiting has a non-zero exit
+status.
 
---BSjLtFoBpX+dhkhM
-Content-Type: application/pgp-signature; name="signature.asc"
+This change will give Oracle DB substantial performance savings - it takes
+50ms to scan about 8K PIDs in /proc, about 500ms for 100K PIDs. DB does
+this check every 3 secs, so over an hour we save 10secs for 100K PIDs.
 
------BEGIN PGP SIGNATURE-----
+With this, a client can register to listen for only exit or fork or a mix or
+all of the events. This greatly enhances performance - currently, we
+need to listen to all events, and there are 9 different types of events.
+For eg. handling 3 types of events - 8K-forks + 8K-exits + 8K-execs takes
+200ms, whereas handling 2 types - 8K-forks + 8K-exits takes about 150ms,
+and handling just one type - 8K exits takes about 70ms.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSKTqQACgkQJNaLcl1U
-h9DuIwf/UNc+nTY+UZmszCtFLLJzZY0v0k0woxLukAJtCYOMzWbzgUU3HMn/am0V
-y6ZoQODYns2OC5PQ1aHhORTs/srWbZDqABYUr4+Rg4tNPosfLoidutRExFLGvd1P
-tUU2Gkp+mCwzUbJN5KyUU0J1LSxWHzoJAqgomJGzhc2vSVtoF+KS2X9R5UdnfIE9
-T8DSw5VeYuzKGVPMQVzRs4cVNIuj5/94wEEyGHXEO/dOos8ECuoPkzkfLmDTtb50
-dylLaW7InFIA/HIXTPE1JwkFSomJePTZSlmngmAA91Andk6pvQ1PkKQayGqbqyXW
-kXqXqHJKtZE5tF1vFNHCKQJMNHQl6A==
-=Zsa+
------END PGP SIGNATURE-----
+Measuring the time using pidfds for monitoring 8K process exits took 4
+times longer - 200ms, as compared to 70ms using only exit notifications
+of proc connector. Hence, we cannot use pidfd for our use case.
 
---BSjLtFoBpX+dhkhM--
+This kind of a new event could also be useful to other applications like
+Google's lmkd daemon, which needs a killed process's exit notification.
+
+This patch series is organized as follows -
+
+Patch 1 : Needed for patch 3 to work.
+Patch 2 : Needed for patch 3 to work.
+Patch 3 : Fixes some bugs in proc connector, details in the patch.
+Patch 4 : Adds event based filtering for performance enhancements.
+Patch 5 : Allow non-root users access to proc connector events.
+Patch 6 : Selftest code for proc connector.
+
+v5->v6 changes:
+- Incorporated Liam Howlett's comments
+- Removed FILTER define from proc_filter.c and added a "-f" run-time
+  option to run new filter code.
+- Made proc_filter.c a selftest in tools/testing/selftests/connector
+
+v4->v5 changes:
+- Change the cover letter
+- Fix a small issue in proc_filter.c
+
+v3->v4 changes:
+- Fix comments by Jakub Kicinski to incorporate root access changes
+  within bind call of connector
+
+v2->v3 changes:
+- Fix comments by Jakub Kicinski to separate netlink (patch 2) (after
+  layering) from connector fixes (patch 3).
+- Minor fixes suggested by Jakub.
+- Add new multicast group level permissions check at netlink layer.
+  Split this into netlink & connector layers (patches 6 & 7)
+
+v1->v2 changes:
+- Fix comments by Jakub Kicinski to keep layering within netlink and
+  update kdocs.
+- Move non-root users access patch last in series so remaining patches
+  can go in first.
+
+v->v1 changes:
+- Changed commit log in patch 4 as suggested by Christian Brauner
+- Changed patch 4 to make more fine grained access to non-root users
+- Fixed warning in cn_proc.c,
+  Reported-by: kernel test robot <lkp@intel.com>
+- Fixed some existing warnings in cn_proc.c
+
+Anjali Kulkarni (6):
+  netlink: Reverse the patch which removed filtering
+  netlink: Add new netlink_release function
+  connector/cn_proc: Add filtering to fix some bugs
+  connector/cn_proc: Performance improvements
+  connector/cn_proc: Allow non-root users access
+  connector/cn_proc: Selftest for proc connector
+
+ drivers/connector/cn_proc.c                   | 110 ++++++-
+ drivers/connector/connector.c                 |  40 ++-
+ drivers/w1/w1_netlink.c                       |   6 +-
+ include/linux/connector.h                     |   8 +-
+ include/linux/netlink.h                       |   6 +
+ include/uapi/linux/cn_proc.h                  |  62 +++-
+ net/netlink/af_netlink.c                      |  33 +-
+ net/netlink/af_netlink.h                      |   4 +
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/connector/Makefile    |   6 +
+ .../testing/selftests/connector/proc_filter.c | 308 ++++++++++++++++++
+ 11 files changed, 541 insertions(+), 43 deletions(-)
+ create mode 100644 tools/testing/selftests/connector/Makefile
+ create mode 100644 tools/testing/selftests/connector/proc_filter.c
+
+-- 
+2.41.0
+
