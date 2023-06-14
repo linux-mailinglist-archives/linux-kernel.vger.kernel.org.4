@@ -2,143 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACB4B72F161
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 03:11:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3DA372F16F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 03:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241754AbjFNBLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 21:11:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
+        id S232854AbjFNBOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 21:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbjFNBLK (ORCPT
+        with ESMTP id S230189AbjFNBO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 21:11:10 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E341FCC;
-        Tue, 13 Jun 2023 18:11:06 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-977e7d6945aso30980166b.2;
-        Tue, 13 Jun 2023 18:11:06 -0700 (PDT)
+        Tue, 13 Jun 2023 21:14:29 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286481BE5
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 18:14:28 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-6584553892cso1454020b3a.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 18:14:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686705064; x=1689297064;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rNmNSkN2nUQ4erTOiloLjh5uXFX2hxtEy1bY/ri8psM=;
-        b=Ka2QXTHKDoV+pK9fLz5xT8OSiplGvUI3Pt3Bb/WMmgdeRDBIBytac4qKyJz0O2NOGv
-         GBRpLhNe7DjZKOcNMli+QTwsGONRrIZit1w2vR26tTUPAMEyHp6IDnOmphA93WIBeCZH
-         /8DfvGKImpAspDNCzLgkp8l603AulsqZWe9AogaBQiIe68zlcHvgutamQ/rIh/eoFJ/h
-         Q9V5MpZB/fYizz7BPPvQJZHhcY6KzOEQHce1/1mf22OUdxGUl/HOzgzutc65edFFvFL+
-         5WJLvHqyQtOlmQCoiDWhcMx9bHMn6LWNbP8ICuT6fzX60CbRa0aOGaCaUJDbk+HRd7Yt
-         PrYA==
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1686705267; x=1689297267;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UqfH+/eIFFxiGH9Q57a91INWozGJNqdtq4CLXi5rBYs=;
+        b=25R1wwfmrgHRk3Hm7uD0PIUbulPBr2SK0tTI11IrctVv2S4+syeujEArMbRSEJhYGV
+         sQ5n/xOR7Q0r6EC+O/OmJ+4ywmeynD4syxg9vroOuGQbrs9UBeNMSm7Pi0IADj5PJF/a
+         QIBQjqcNjRk23FYK4FuqEChglEblY2oriKNxfYTawnXOH5AvKfTRhbMhBPJopEbr+gX1
+         0cxEyK/pnxAuLoKZ4EOQ3z2ZrXe8Zh3spPuq+ABjuXfYe6vFk5Tdl+9sCbCYvsJxQsfM
+         +iWS1wXpM9AD3qRIlu4GzQltQTLkU4yZOt2cewc7+hAVlhBILqnjGyocX4VgstLmRSGw
+         5EsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686705064; x=1689297064;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rNmNSkN2nUQ4erTOiloLjh5uXFX2hxtEy1bY/ri8psM=;
-        b=Y79v/QgHS/GBcdnV7skZHnG7pVcjNucAICx8aZSyDmvXTSIwL7UwI9kMp10sDAGZU/
-         X+x5KSFnT/jLT0NoAB+Im5WfFoMPViBNBktySaX5DI5NCTiJoGyjO2F7CLhYTNF0ujmq
-         v2U13af4dJT48+3VIbyZxnuIe4VNzsB8ysfrVRn1MxA7KHLKYsuGPuPoeAxZUJhdM+Zv
-         0tiNZZdsvhx9gTieUh4VSxT8j98hJuu53XbuGKPnY7IhPfdNs3pDDjngSU4rXMYIRMtM
-         YQ+o3pDdSvrN6usYnjF4x/hYdGFBqyK8kxAk4kc+m8VNN5dKYyw1bxm2892j3lNERsdw
-         dTLg==
-X-Gm-Message-State: AC+VfDxYy/9Grk6m9pytVM+FJFwVAy4zwIbP0VMvHAb03xyvnn0l4R5T
-        cLM1aE4Ph99kvJQamUYZVyT5Kg1c+NM7o9S4t7Y=
-X-Google-Smtp-Source: ACHHUZ5vEIaVspP9yIdBExWOWFrWANCD0y4fe2QC7FKs0sez8qAvO9bcu1JPK+o+PhaSS8CnVw5Cu4Xrsl2onDQaCWQ=
-X-Received: by 2002:a17:907:707:b0:96a:b12d:2fdf with SMTP id
- xb7-20020a170907070700b0096ab12d2fdfmr13995224ejb.12.1686705064320; Tue, 13
- Jun 2023 18:11:04 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686705267; x=1689297267;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UqfH+/eIFFxiGH9Q57a91INWozGJNqdtq4CLXi5rBYs=;
+        b=efUkly1UsInLqkvsr46HNDLo5/3gp6UhlwWtZpFgxST+it0QCu4ddkw8OEd5iQAJ8R
+         1LxMJkhujcrFCb6123P7co3IxA00D1n/chNGjxfgh1BSenAy05PKvYh2HYbyxJE0ps94
+         zPxeIawlAM2Iw2IgBV1zdIxE8XpE3A8BdjYo0G91wxgnIUOTbNNP6YkCf2Eq5nbD+kuT
+         9G7N2t9HDZmgbJVzjjKN1O6FvQAQtUucaV0pibefxf/xzFIa+wYIeRHzKBsdsB/ZS6Kq
+         nf1QePT+g5rlsArpzhkBde5B2ZiLZOGIYqTPvYu2ITh4OgX+H5GZmZU+St6SgA2o3W1u
+         LaJQ==
+X-Gm-Message-State: AC+VfDyhk6XUcmVFbPciMwvO65CPhnyQKtYE5tBz4OB+XxViCgAsKIZh
+        ZYq3N8xhkiBmIUXiUB3DbLPSTQ==
+X-Google-Smtp-Source: ACHHUZ5ipPjXRyGe4Azn8FcTcmhqjLFIO4jYUU+DAGVkRUqI70p7S91QOBrSr3PiiQXD9B5s1qADdw==
+X-Received: by 2002:a05:6a20:42a5:b0:116:696f:1dd1 with SMTP id o37-20020a056a2042a500b00116696f1dd1mr17644666pzj.4.1686705267493;
+        Tue, 13 Jun 2023 18:14:27 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id q24-20020a62e118000000b0063b85893633sm9142471pfh.197.2023.06.13.18.14.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 18:14:26 -0700 (PDT)
+Message-ID: <5d5ccbb1-784c-52b3-3748-2cf7b5cf01ef@kernel.dk>
+Date:   Tue, 13 Jun 2023 19:14:25 -0600
 MIME-Version: 1.0
-References: <20230614001246.538643-1-azeemshaikh38@gmail.com> <7E4A66A6-0B58-43AF-B9E0-62087F2EA11C@kernel.org>
-In-Reply-To: <7E4A66A6-0B58-43AF-B9E0-62087F2EA11C@kernel.org>
-From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-Date:   Tue, 13 Jun 2023 21:10:53 -0400
-Message-ID: <CADmuW3VcK4zH0oOi8JxsdNvVwfxz+hf-aabLtf4xOJuYtM+jzA@mail.gmail.com>
-Subject: Re: [PATCH v2] SUNRPC: Remove strlcpy
-To:     Kees Cook <kees@kernel.org>
-Cc:     Chuck Lever <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-hardening@vger.kernel.org, Neil Brown <neilb@suse.de>,
-        Olga Kornievskaia <kolga@netapp.com>,
-        Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] io_uring/io-wq: don't clear PF_IO_WORKER on exit
+Content-Language: en-US
+To:     Zorro Lang <zlang@redhat.com>
+Cc:     io-uring <io-uring@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Dave Chinner <david@fromorbit.com>
+References: <2392dcb4-71f4-1109-614b-4e2083c0941e@kernel.dk>
+ <20230614005449.awc2ncxl5lb2eg6m@zlang-mailbox>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230614005449.awc2ncxl5lb2eg6m@zlang-mailbox>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 9:04=E2=80=AFPM Kees Cook <kees@kernel.org> wrote:
->
-> On June 13, 2023 5:12:46 PM PDT, Azeem Shaikh <azeemshaikh38@gmail.com> w=
-rote:
-> >strlcpy() reads the entire source buffer first.
-> >This read may exceed the destination size limit.
-> >This is both inefficient and can lead to linear read
-> >overflows if a source string is not NUL-terminated [1].
-> >In an effort to remove strlcpy() completely [2], replace
-> >strlcpy() here with sysfs_emit().
-> >
-> >Direct replacement is safe here since the getter in kernel_params_ops
-> >handles -errno return [3].
-> >
-> >[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlc=
-py
-> >[2] https://github.com/KSPP/linux/issues/89
-> >[3] https://elixir.bootlin.com/linux/v6.4-rc6/source/include/linux/modul=
-eparam.h#L52
-> >
-> >Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
-> >---
-> > net/sunrpc/svc.c |    8 ++++----
-> > 1 file changed, 4 insertions(+), 4 deletions(-)
-> >
-> >diff --git a/net/sunrpc/svc.c b/net/sunrpc/svc.c
-> >index e6d4cec61e47..77326f163801 100644
-> >--- a/net/sunrpc/svc.c
-> >+++ b/net/sunrpc/svc.c
-> >@@ -109,13 +109,13 @@ param_get_pool_mode(char *buf, const struct kernel=
-_param *kp)
-> >       switch (*ip)
-> >       {
-> >       case SVC_POOL_AUTO:
-> >-              return strlcpy(buf, "auto\n", 20);
-> >+              return sysfs_emit(buf, "auto\n");
-> >       case SVC_POOL_GLOBAL:
-> >-              return strlcpy(buf, "global\n", 20);
-> >+              return sysfs_emit(buf, "global\n");
-> >       case SVC_POOL_PERCPU:
-> >-              return strlcpy(buf, "percpu\n", 20);
-> >+              return sysfs_emit(buf, "percpu\n");
-> >       case SVC_POOL_PERNODE:
-> >-              return strlcpy(buf, "pernode\n", 20);
-> >+              return sysfs_emit(buf, "pernode\n");
-> >       default:
-> >               return sprintf(buf, "%d\n", *ip);
->
-> Please replace the sprintf too (and then the Subject could be "use sysfs_=
-emit" or so).
+On 6/13/23 6:54?PM, Zorro Lang wrote:
+> On Mon, Jun 12, 2023 at 12:11:57PM -0600, Jens Axboe wrote:
+>> A recent commit gated the core dumping task exit logic on current->flags
+>> remaining consistent in terms of PF_{IO,USER}_WORKER at task exit time.
+>> This exposed a problem with the io-wq handling of that, which explicitly
+>> clears PF_IO_WORKER before calling do_exit().
+>>
+>> The reasons for this manual clear of PF_IO_WORKER is historical, where
+>> io-wq used to potentially trigger a sleep on exit. As the io-wq thread
+>> is exiting, it should not participate any further accounting. But these
+>> days we don't need to rely on current->flags anymore, so we can safely
+>> remove the PF_IO_WORKER clearing.
+>>
+>> Reported-by: Zorro Lang <zlang@redhat.com>
+>> Reported-by: Dave Chinner <david@fromorbit.com>
+>> Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+>> Link: https://lore.kernel.org/all/ZIZSPyzReZkGBEFy@dread.disaster.area/
+>> Fixes: f9010dbdce91 ("fork, vhost: Use CLONE_THREAD to fix freezer/ps regression")
+>> Signed-off-by: Jens Axboe <axboe@kernel.dk>
+>>
+>> ---
+> 
+> Hi,
+> 
+> This patch fix the issue I reported. The bug can be reproduced on v6.4-rc6,
+> then test passed on v6.4-rc6 with this patch.
+> 
+> But I found another KASAN bug [1] on aarch64 machine, by running generic/388.
+> I hit that 3 times. And hit a panic [2] (once after that kasan bug) on a x86_64
+> with pmem device (mount with dax=never), by running geneirc/388 too.
 
-Ah sorry, I missed the "replace default sprintf too" part in the
-previous thread. Resending.
+Can you try with this? I suspect the preempt dance isn't really
+necessary, but I can't quite convince myself that it isn't. In any case,
+I think this should fix it and this was exactly what I was worried about
+but apparently not able to easily trigger or prove...
 
->
-> -Kees
->
->
->
-> --
-> Kees Cook
+
+diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
+index fe38eb0cbc82..878ec3feeba9 100644
+--- a/io_uring/io-wq.c
++++ b/io_uring/io-wq.c
+@@ -220,7 +220,9 @@ static void io_worker_exit(struct io_worker *worker)
+ 	list_del_rcu(&worker->all_list);
+ 	raw_spin_unlock(&wq->lock);
+ 	io_wq_dec_running(worker);
+-	worker->flags = 0;
++	preempt_disable();
++	current->worker_private = NULL;
++	preempt_enable();
+ 
+ 	kfree_rcu(worker, rcu);
+ 	io_worker_ref_put(wq);
+
+-- 
+Jens Axboe
+
