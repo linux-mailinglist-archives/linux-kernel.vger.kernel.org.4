@@ -2,80 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 128FF730968
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 22:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BBC273096C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 22:50:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236262AbjFNUra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 16:47:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
+        id S235984AbjFNUtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 16:49:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233546AbjFNUr2 (ORCPT
+        with ESMTP id S229576AbjFNUtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 16:47:28 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E871D2689
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 13:47:26 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-33fd4eed094so39235605ab.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 13:47:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686775646; x=1689367646;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XmYyn6KjnwCcEInr35KmY2CR5pAuogsMVf8CnIOKBGw=;
-        b=fS905DF67lRfdGoqak4+MBsvML0BPQkE8YsVNCEwdcfIuVUWo91cx6DI0uP1BAAMAc
-         Ce0EUHo5fB5/r4i18YoE1EXSDF0zcdCiG6RZcdZMLV8hKJImJM+VAZdr9rvCeMA4SsVl
-         EWe21g0FX/R2Rx4XkCjdcJdWAqaWD4kQ3TLLA0oMZOLTkT1dcMsViJfxlJtKyBZ5kGYe
-         /IT8Jmf3loqTs15ALdRK9E/yNKkOoNyrKKjEueph4FW1WkwTKJiqm/78qe5ozVbw/d6T
-         1ecaDL7xRrncZj5mu5jZurKTEn76r9Mcb+cAB2rUciG1pfRoZB+vZPPItlMUKKgQLy1Z
-         J8wQ==
-X-Gm-Message-State: AC+VfDxs7byXs9fY0q+7TXoKqdQzQ1iOkcgo60iAMmTvVZMyoIRpK7hA
-        3te1cKXISYhVQW739c5PaGq/g+pDBnquJOMQSwB1RoNs7bk4
-X-Google-Smtp-Source: ACHHUZ5ToLA16XDVvAhNW/25+v4XSEYndMm5DT0kaatIkxpwnMZIf/zfE0p7x9xA3A0Lw+CqVJxIM7cy7H1J0ip7ZWuN4posFSI+
+        Wed, 14 Jun 2023 16:49:45 -0400
+Received: from sender3-op-o19.zoho.com (sender3-op-o19.zoho.com [136.143.184.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789EA2128;
+        Wed, 14 Jun 2023 13:49:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686775730; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=kE1/7F46IfoXlMqgIsO/Z+JN+JGKtwmqFJux1FEPvbaOfIy0pQJ5OJ3eZqZgHS2I9DbhngLSckNeBYJeFJlPmTbwO/iWCX7srNA+c0i2d33TSATwgGZyPpg1ZqgVK5/ge3Cqa1i7VRFQU89D2TT72lwMv/GbGhl364kMQNRY2ic=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1686775730; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=41A9vyE5LhQe+wPF1+Q5kPhov+yOmbsk22ksW42fW7g=; 
+        b=gtIlfLbW1gB9FYo5JLIxipuGNmOYhMPavFLBsJpf8LL00agnGwkAoMoatMK1/x1w4JVd0l3XQSvXU3aFN8qVYFZVRJFW3KXVRz76HxP0H7/zW9wxDWoDQVh0aFO5AkIg2NDmX5JGt7OyWCug7KSq7gEF+JMK9Rdf6V3XWP2IHFg=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1686775730;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=41A9vyE5LhQe+wPF1+Q5kPhov+yOmbsk22ksW42fW7g=;
+        b=WBPRZeJ6ZNjdlcjcGpMfJxTH7vJpapJTdMeDZ/FIOuQQuVaS5XIamAwm5U+X5pUk
+        DgCJ2gg7Ru6xCOjrUFyb2hbJbLfM0aY5AAQUTOARz2g1jVBUdS3NntQjRCH6KiEWp/8
+        5UL2oXYLZ1coCbEWc8yC3bpu/EU5dQxN3W3AWAyI=
+Received: from [192.168.99.141] (178-147-169-233.haap.dm.cosmote.net [178.147.169.233]) by mx.zohomail.com
+        with SMTPS id 1686775729538978.2563745005754; Wed, 14 Jun 2023 13:48:49 -0700 (PDT)
+Message-ID: <d90f1658-d07e-5e0d-d8f3-24f9fcb1ef64@arinc9.com>
+Date:   Wed, 14 Jun 2023 23:48:42 +0300
 MIME-Version: 1.0
-X-Received: by 2002:a92:d24c:0:b0:341:3354:7688 with SMTP id
- v12-20020a92d24c000000b0034133547688mr218650ilg.6.1686775646277; Wed, 14 Jun
- 2023 13:47:26 -0700 (PDT)
-Date:   Wed, 14 Jun 2023 13:47:26 -0700
-In-Reply-To: <0000000000004f067905ea8ab9b2@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003656ed05fe1d0fa5@google.com>
-Subject: Re: [syzbot] [ext4?] possible deadlock in dquot_commit (2)
-From:   syzbot <syzbot+70ff52e51b7e7714db8a@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, boqun.feng@gmail.com, jack@suse.com,
-        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, paulmck@kernel.org,
-        peterz@infradead.org, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net v4 5/7] net: dsa: mt7530: fix handling of LLDP frames
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230612075945.16330-1-arinc.unal@arinc9.com>
+ <20230612075945.16330-6-arinc.unal@arinc9.com>
+ <ZInsUm5M47p4ReF3@shell.armlinux.org.uk>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <ZInsUm5M47p4ReF3@shell.armlinux.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+On 14.06.2023 19:35, Russell King (Oracle) wrote:
+> On Mon, Jun 12, 2023 at 10:59:43AM +0300, arinc9.unal@gmail.com wrote:
+>> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+>> index e4c169843f2e..8388b058fbe4 100644
+>> --- a/drivers/net/dsa/mt7530.c
+>> +++ b/drivers/net/dsa/mt7530.c
+>> @@ -2261,7 +2261,11 @@ mt7530_setup(struct dsa_switch *ds)
+>>   
+>>   	/* Trap BPDUs to the CPU port */
+>>   	mt7530_rmw(priv, MT753X_BPC, MT753X_BPDU_PORT_FW_MASK,
+>> -		   MT753X_BPDU_CPU_ONLY);
+>> +		   MT753X_PORT_FW_CPU_ONLY);
+>> +
+>> +	/* Trap LLDP frames with :0E MAC DA to the CPU port */
+>> +	mt7530_rmw(priv, MT753X_RGAC2, MT753X_R0E_PORT_FW_MASK,
+>> +		   MT753X_R0E_PORT_FW(MT753X_PORT_FW_CPU_ONLY));
+>>   
+>>   	/* Enable and reset MIB counters */
+>>   	mt7530_mib_reset(ds);
+>> @@ -2364,7 +2368,11 @@ mt7531_setup_common(struct dsa_switch *ds)
+>>   
+>>   	/* Trap BPDUs to the CPU port(s) */
+>>   	mt7530_rmw(priv, MT753X_BPC, MT753X_BPDU_PORT_FW_MASK,
+>> -		   MT753X_BPDU_CPU_ONLY);
+>> +		   MT753X_PORT_FW_CPU_ONLY);
+>> +
+>> +	/* Trap LLDP frames with :0E MAC DA to the CPU port(s) */
+>> +	mt7530_rmw(priv, MT753X_RGAC2, MT753X_R0E_PORT_FW_MASK,
+>> +		   MT753X_R0E_PORT_FW(MT753X_PORT_FW_CPU_ONLY));
+> 
+> Looking at the above two hunks, they look 100% identical. Given that
+> they are both setting up trapping to the CPU port, maybe they should
+> be moved into their own common function called from both setup()
+> functions?
 
-commit f0f44752f5f61ee4e3bd88ae033fdb888320aafe
-Author: Boqun Feng <boqun.feng@gmail.com>
-Date:   Fri Jan 13 06:59:54 2023 +0000
+Good idea, I shall make a function called something like 
+mt753x_trap_frames() on my net-next series. For this series which is for 
+net, I'd like my patches to fix the issue with as less structural 
+changes as possible.
 
-    rcu: Annotate SRCU's update-side lockdep dependencies
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1355576f280000
-start commit:   ab072681eabe Merge tag 'irq_urgent_for_v6.2_rc6' of git://..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c8d5c2ee6c2bd4b8
-dashboard link: https://syzkaller.appspot.com/bug?extid=70ff52e51b7e7714db8a
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11436221480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15133749480000
-
-If the result looks correct, please mark the issue as fixed by replying with:
-
-#syz fix: rcu: Annotate SRCU's update-side lockdep dependencies
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Arınç
