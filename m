@@ -2,93 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E83D7304A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC18730497
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232258AbjFNQNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 12:13:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33752 "EHLO
+        id S230507AbjFNQJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 12:09:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232050AbjFNQNx (ORCPT
+        with ESMTP id S230273AbjFNQJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 12:13:53 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E5A1FE2;
-        Wed, 14 Jun 2023 09:13:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686759232; x=1718295232;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=o5uQWnqbwzaqb8LixYVI9Hou4OwCL2loJHaPencrplE=;
-  b=fngjgK4Vop4JInyKacVRtrHgFifJbBM565hlxZzIHAw/fqMm4s3qOARw
-   tJp8TBtMdu2PvmlHMQWkU6yaqClGFQGWuD9uX7CZvILeH4Pubmlu6OaMM
-   cU0Wr9YN2kjRrVZQaWczSK3R3Uy9oie6gQ/r3otKNFYOwgK5C+Gihm2/e
-   UvbfHuzUvKrk9dj7x4JechCKkh1J/ce2q0tARK5Pkji6PJ2+QS8PFfv13
-   fUTTbqDEzlAhT+F3ArQ9vPJefG1aC7KE/kteBmXPLi/M2MUKt3t8/ys1X
-   nite7Kp50nflWwjus9oL5PwjjZSa9VpVQLgJkJhcyfuWq/h6vDLQObSze
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="358658082"
-X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="358658082"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 09:08:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="662449589"
-X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="662449589"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP; 14 Jun 2023 09:08:50 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1q9T3A-003jgN-1P;
-        Wed, 14 Jun 2023 19:08:48 +0300
-Date:   Wed, 14 Jun 2023 19:08:48 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Chenyuan Mi <cymi20@fudan.edu.cn>
-Cc:     ilpo.jarvinen@linux.intel.com, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] serial: 8250_lpss: Fix missing check for return value of
- pci_get_slot()
-Message-ID: <ZInmEJJjLEwCiOBU@smile.fi.intel.com>
-References: <20230614153226.117768-1-cymi20@fudan.edu.cn>
+        Wed, 14 Jun 2023 12:09:17 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A708A1FC8
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:09:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=qsRJI92Cr6ygcvJHeEVi6gQ8y10LaqKJ15yNeqo7lMM=; b=fC6KX1MRplony2LsSW3jdBN5oE
+        D4sBdMsn5Xc7dT2/apIFSYZkr+E2FQp0ehaez9qKFmYzTk16k5PgFQsFIQ/tPuVH0Tpov844N+lk1
+        s7EozNtmoBnh3gTBo13M0uyMCGpExZEKI3dLUdwgn+5o2pi0NNKazpFTGCu4ho+I4gNXyVw6XxkWo
+        M8WrAHn6gIW6S2dThq6h1Zp75TE7YRGYwzdPEY/cx2E1j3M5I3L7vQwJaV99tmf1gCPlDX8QUORPh
+        ynLew6NT6UimsxTrOd8HNrxHBbiv7R9v/RVqGPfmM2HYoCQBAVNLuDMS1WL8fXdZKukLQpQBRvki0
+        M2XWvvog==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q9T3X-00CA7n-0c;
+        Wed, 14 Jun 2023 16:09:11 +0000
+Message-ID: <5ea2d183-d042-d62e-918a-ab0199331d89@infradead.org>
+Date:   Wed, 14 Jun 2023 09:09:10 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230614153226.117768-1-cymi20@fudan.edu.cn>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] sysctl: fix unused proc_cap_handler() function warning
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        linux-kernel@vger.kernel.org
+References: <20230607120857.3621364-1-arnd@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230607120857.3621364-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 08:32:26AM -0700, Chenyuan Mi wrote:
-> The pci_get_slot() function may return NULL, which may
-> cause null pointer deference, and most other callsites of
-> pci_get_slot() do Null check. Add Null check for return
-> value of pci_get_slot().
+
+
+On 6/7/23 05:08, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Found by our static analysis tool.
+> Since usermodehelper_table() is marked static now, we get a
+> warning about it being unused when SYSCTL is disabled:
+> 
+> kernel/umh.c:497:12: error: 'proc_cap_handler' defined but not used [-Werror=unused-function]
+> 
+> Just move it inside of the same #ifdef.
+> 
+> Fixes: e6944e3b75df7 ("sysctl: move umh sysctl registration to its own file")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-...
 
->  	dma_dev = pci_get_slot(pdev->bus, PCI_DEVFN(PCI_SLOT(pdev->devfn), 0));
-> +	if (!dma_dev)
-> +		return -ENODEV;
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
 
-This adds (almost) a dead code. The function 0 must be present in accordance
-with the PCI specification (even earliest version of it state that).
-If pci_get_slot() returns a NULL, in this case it means that something, much
-bigger issue, happens and this check won't help us to do anything anyway.
+Thanks.
+
+> ---
+>  kernel/umh.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/umh.c b/kernel/umh.c
+> index d5dc3cc92d5c6..2f9249c2bf6ce 100644
+> --- a/kernel/umh.c
+> +++ b/kernel/umh.c
+> @@ -494,6 +494,7 @@ int call_usermodehelper(const char *path, char **argv, char **envp, int wait)
+>  }
+>  EXPORT_SYMBOL(call_usermodehelper);
+>  
+> +#if defined(CONFIG_SYSCTL)
+>  static int proc_cap_handler(struct ctl_table *table, int write,
+>  			 void *buffer, size_t *lenp, loff_t *ppos)
+>  {
+> @@ -544,7 +545,6 @@ static int proc_cap_handler(struct ctl_table *table, int write,
+>  	return 0;
+>  }
+>  
+> -#if defined(CONFIG_SYSCTL)
+>  static struct ctl_table usermodehelper_table[] = {
+>  	{
+>  		.procname	= "bset",
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+~Randy
