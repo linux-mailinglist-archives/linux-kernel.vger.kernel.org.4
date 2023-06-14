@@ -2,83 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D93E72F9EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 12:00:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5C1872F9FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 12:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240375AbjFNKAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 06:00:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55914 "EHLO
+        id S243399AbjFNKD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 06:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231875AbjFNKA3 (ORCPT
+        with ESMTP id S231875AbjFNKD0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 06:00:29 -0400
-Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206C1AC;
-        Wed, 14 Jun 2023 03:00:27 -0700 (PDT)
-Received: from ed3e173716be.home.arpa (unknown [124.16.138.125])
-        by APP-05 (Coremail) with SMTP id zQCowAAnLj61j4lkcbtFAg--.10545S2;
-        Wed, 14 Jun 2023 18:00:21 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com
-Cc:     linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] pstore/platform: Add check for kstrdup
-Date:   Wed, 14 Jun 2023 18:00:20 +0800
-Message-Id: <20230614100020.39020-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 14 Jun 2023 06:03:26 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827C5186;
+        Wed, 14 Jun 2023 03:03:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686737005; x=1718273005;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=dN70DPRIIm8Vru/aWZ0BgD3rW447BgWLjBzsIad6I7E=;
+  b=eKxIEltac2TLWFFXydULkGPTT2mbcu6CGBFLG5H7kK079Z8asCcuXFNZ
+   jBj4H1lC1rsO8I3Zb/WryxBZvxPLQdKGrTkgyqPu7GCsTTaHXn6GclBro
+   SKq1JT/DQdOvyKIs4qlB5O/SXYwQjUaFehibmW4PW/kXJVaWtcVL8Uhyl
+   Aek5wSw8LHVyiFnqR88WntQYLg7wROimXzg4VdUYav714RnnCcoyJiZwV
+   IV8LHVYa1O/kPtSkj8Dp8EfTTmu10Gmqz6gLCs7sJz15AEOAyqZejQKV3
+   6L8tkyMFpFUeJGm+ZcsWmaiHD892CYHSnJ/AkEtSvwH5SJxDS+1SIpWpQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="422174745"
+X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
+   d="scan'208";a="422174745"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 03:03:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="662346663"
+X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
+   d="scan'208";a="662346663"
+Received: from wlwpo-8.amr.corp.intel.com (HELO box.shutemov.name) ([10.251.211.89])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 03:03:06 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id A3D2710A069; Wed, 14 Jun 2023 13:02:45 +0300 (+03)
+Date:   Wed, 14 Jun 2023 13:02:45 +0300
+From:   "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+Subject: Re: [PATCH v11 18/20] x86: Handle TDX erratum to reset TDX private
+ memory during kexec() and reboot
+Message-ID: <20230614100245.3vehux365zou3ze6@box>
+References: <cover.1685887183.git.kai.huang@intel.com>
+ <5aa7506d4fedbf625e3fe8ceeb88af3be1ce97ea.1685887183.git.kai.huang@intel.com>
+ <d3df3a9fa3075066558dd3bc84ef76ab3747185b.camel@intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowAAnLj61j4lkcbtFAg--.10545S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrur45XrW5tF1Duw1UJFWDJwb_yoW3trg_G3
-        s7Ga4UWrW8trnYyr1qyr13C3s3A395GrW2qr4qkFs0y3yrG3W3Xryqvr93urWUXFyjyF1D
-        u397Kry3Z343GjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbc8FF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Gw1l
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
-        6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU0NtxUUUUU
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <d3df3a9fa3075066558dd3bc84ef76ab3747185b.camel@intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add check for the return value of kstrdup() and return the error
-if it fails in order to avoid NULL pointer dereference.
+On Wed, Jun 14, 2023 at 09:33:45AM +0000, Huang, Kai wrote:
+> On Mon, 2023-06-05 at 02:27 +1200, Kai Huang wrote:
+> > --- a/arch/x86/kernel/reboot.c
+> > +++ b/arch/x86/kernel/reboot.c
+> > @@ -720,6 +720,7 @@ void native_machine_shutdown(void)
+> >  
+> >  #ifdef CONFIG_X86_64
+> >  	x86_platform.iommu_shutdown();
+> > +	x86_platform.memory_shutdown();
+> >  #endif
+> >  }
+> 
+> Hi Kirill/Dave,
+> 
+> I missed that this solution doesn't reset TDX private for emergency restart or
+> when reboot_force is set, because machine_shutdown() isn't called for them.
+> 
+> Is it acceptable?  Or should we handle them too?
 
-Fixes: 563ca40ddf40 ("pstore/platform: Switch pstore_info::name to const")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- fs/pstore/platform.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Force reboot is not used in kexec path, right? And the platform has to
+handle erratum in BIOS to reset memory status on reboot anyway.
 
-diff --git a/fs/pstore/platform.c b/fs/pstore/platform.c
-index cbc0b468c1ab..afe07f0d1216 100644
---- a/fs/pstore/platform.c
-+++ b/fs/pstore/platform.c
-@@ -631,6 +631,10 @@ int pstore_register(struct pstore_info *psi)
- 	 * through /sys/module/pstore/parameters/backend
- 	 */
- 	backend = kstrdup(psi->name, GFP_KERNEL);
-+	if (!backend) {
-+		mutex_unlock(&psinfo_lock);
-+		return -ENOMEM;
-+	}
- 
- 	pr_info("Registered %s as persistent store backend\n", psi->name);
- 
+I think we should be fine. But it worth mentioning it in the commit
+message.
+
 -- 
-2.25.1
-
+  Kiryl Shutsemau / Kirill A. Shutemov
