@@ -2,152 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9746A72FDDA
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F80272FDE4
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244387AbjFNMF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 08:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43608 "EHLO
+        id S244444AbjFNMHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 08:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244279AbjFNMF1 (ORCPT
+        with ESMTP id S244382AbjFNMHS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 08:05:27 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2127.outbound.protection.outlook.com [40.107.243.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346BB19A7;
-        Wed, 14 Jun 2023 05:05:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bP91zbEfEVU6ExxHs4HFPFAQv5jErNfB4oFHZu1AhienoTcNukuE7Kbh9UsrH2Buf97wWvxWkYHFAGPYXHN/tzWUsE391R8IBSlPwFeohLaFlbqkcueLb9itixmkQ95h0IGVzqgWer3w8+U585hJvqAttzp91Zw/IK/t+Fe/PYW7XYbFK1GSm1cgqBDG3+cg0WbPqE+PvhC/mk1f7h7TAoYJr0g/F4BZIVDhxCwC3vtjmp+TvkoYSZhClikKN36HiZ2AC/hhgQRUrYnWO0q1o/loq+NMbqK17BG2j/H0q8WoJI3ceJswZORYIvnYMpmHLnedA1Wowjsx+4UYL4YdRg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nvCd7EA2J+5UnWdxM+dfYavJ1XqdnpKONVHMuz/62tE=;
- b=fTKKG3veLwr0kWjj1Jj2gPUFK1fJar00Y0agMvbCTgluXL8QnoberpqZ4KeApLJgvHvyYHQmDQhgAf/hQ+mpHxjZtwrSBVlKGpj+faQ2njyh2HG0Tx8ws6UTM9UU3b7GuixwbVSrVYUAyQIpXlRGqNSstJU0cGHcNIfjhyOPhkOstTdT3N0JOvJiO/ZCfG0XAwqsL/zmmpwlNXAxj20wGBsVw8mj+H++8lWqqItRlx1S6fUQT1FWssu8rtQRloAhpmY1OB5mkyvO1Zm/YlnsgK5TVn3+nFA+L6VQc4Ur8GoDmaWGDFqnDgL+hhRPE4bVqDsLTNsHYO4KOBHhsVImUw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Wed, 14 Jun 2023 08:07:18 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE301FDE;
+        Wed, 14 Jun 2023 05:07:15 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id af79cd13be357-75d54faa03eso199302185a.1;
+        Wed, 14 Jun 2023 05:07:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nvCd7EA2J+5UnWdxM+dfYavJ1XqdnpKONVHMuz/62tE=;
- b=lWMSEF5K83wvsCsiCaqW2iPZYM0dygn9zbLgnMaqy6I4WICllUUbTlkIi0jjGWvT1H0pwIJeid4w0/+UGyl2DsU5AVTHqiZ42OMiCe2AzfC+n88TG3RyPEaRh2HOwOtaiRFfiClqFpWpurhhaSaEKKo6UQQUQsqabHEp2mOpNnA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by BL3PR13MB5164.namprd13.prod.outlook.com (2603:10b6:208:33b::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37; Wed, 14 Jun
- 2023 12:05:22 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e%4]) with mapi id 15.20.6477.028; Wed, 14 Jun 2023
- 12:05:22 +0000
-Date:   Wed, 14 Jun 2023 14:05:15 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] net: dsa: felix: fix taprio guard band overflow at
- 10Mbps with jumbo frames
-Message-ID: <ZIms+0/KDpU9dd3y@corigine.com>
-References: <20230613170907.2413559-1-vladimir.oltean@nxp.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230613170907.2413559-1-vladimir.oltean@nxp.com>
-X-ClientProxiedBy: AS4PR10CA0002.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:20b:5dc::19) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=gmail.com; s=20221208; t=1686744434; x=1689336434;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CpftmWhYrmfspx1PS5npjXbFOLkpVAXBf5OKu43lD1E=;
+        b=bR28+jkpH/xw/0kRoHyU4zg/AEMWX2zI44haQToRNTK69f5CZszjfRVGN8dR1u/lLb
+         v1Lu/5ntmIwgghOoezal+KFjGw2xUuHzfXJnG7+MH0EC1P1TesKemBTEsa2vyrhoiBeq
+         lvOV1PNQwJRqpwM7V4QvE1vsBwmoqmC5H70IjQHLZ8Px7Gm24nkc/NjGZhkobrRuNy6D
+         S8f9y9F7CgXobxHcyG4p9w/gcWev78R26WNINyzpQsCchKhxzBTfJLeZYMizAalrGUdh
+         KfLiJJkh1IK06PYUPeqVTiDym3+a2FToQcbU9hVSUh5Ml+pSIlmc1bsx09QTWFnX43Hv
+         ZWoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686744434; x=1689336434;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CpftmWhYrmfspx1PS5npjXbFOLkpVAXBf5OKu43lD1E=;
+        b=Q2KVC6mwRXjpHppXZL/t0DA0QgycEINIMeL9AQlvzPGbtSNzJLOvHJwFJY/ngdG5xU
+         Mxi526ZJ0eAIqE3K17mJOofm5SqniGmxy5a+7Y+btieQIk8J5QkyUYUy15pVI6HYOQT4
+         5n4NWa4X+vWuibCgvPttAM3mu30eejjbgWoC67YZz7g+mMqLe+s0El5hbOURq1+ekwss
+         DB0RP5T5uW3HKev6ZhMUYrnXB2dr7rHylLmpqh9GCud+YaefQRVct7EiHdmaoZ2RhTXj
+         iSsjuhErepj68UYZMpILiZSWy9FS/+0BEEpEjH6/OhPccgvpftKrSGz9KyAqJXlExdTk
+         HG2w==
+X-Gm-Message-State: AC+VfDxN714y3eXkZ8cChSm/r538wiMV9lW9s9uLkZO9glGIfvCxfmCJ
+        4WgfOgfovTZhIC2e82HvCFZoOksCBdS3PsrJTL/S6xRX7Qw=
+X-Google-Smtp-Source: ACHHUZ7/W/9uNSg0CWK/HEL9y/EqE5WCuy6F2k0Khf2kA2H31yhioTeJhgiaMLUql+1WGbP3bGYaYbVAxy+ARAVTA+k=
+X-Received: by 2002:a05:6214:e83:b0:62d:fc19:b1c3 with SMTP id
+ hf3-20020a0562140e8300b0062dfc19b1c3mr4592459qvb.50.1686744434203; Wed, 14
+ Jun 2023 05:07:14 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BL3PR13MB5164:EE_
-X-MS-Office365-Filtering-Correlation-Id: edfcd88f-a503-43ad-01c0-08db6ccfa154
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IYOYco1gjzZDywIVUE75SMVm8FiPz7X7u5O/r5g1t1829/Qq+nOHc/uJy4rUkBIJp2lnjdr6ycjoVkN3MN1Hgo5H64lukQX6/OSgpCREjC7AZ9YXCMbNStNBisrP+jCzt6JA0CgPG1yoYDOwSLtZ9r5T/154I3OQ2OwMzxAQCz5OpGyQMWCvMc6Kub4QuuABqJs9R4p7aoJ4INLjq0g3VocvOUuSHZ53i+rOD8mXycIuwv/YyQnuvWmHd0w1bvrRgV9BuRSoD3Nu5eamgW4Qw6A3KKSdDbwqYEz+zWdeKTCbYn8fdqpnSCObXHIfdBWayXU9/zWaNYh4LWwk9a+UQ57iQjQK8cgCAjOiNpIYdbGCt5EdzjPS4UNFx0DycKvN9BdVsSuICQ0NbgCZHJ0ydXbHE8x9vBpw+GwLYyLNJeKMn+NUjb9kcfDiNzfNhBsMsEitN9s5a2tqZqOEmr7IsUUU3XwdwvlS2ebItaH6mMKvEqax7orHU/96OQ/sDPgxF6Cub8ZFipVAsNxWnZn4Cb6TGErAeJ+Gpmt67kREKTsG6j84yNvi2avtM2B/yD+HVRIU6/pyPeilbLafic9kEnVP1/MWnTQ0iRlDfbIEoNY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(396003)(136003)(376002)(39840400004)(451199021)(83380400001)(5660300002)(186003)(6506007)(44832011)(2906002)(2616005)(7416002)(41300700001)(6512007)(8936002)(8676002)(6486002)(316002)(54906003)(6666004)(36756003)(478600001)(38100700002)(86362001)(4326008)(66476007)(66556008)(66946007)(6916009);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?K46lUTkJCKmx1g1UmB2YoLISIEWJjl4vgPVXyLpWil4HY0WIPijy72iHH7Ox?=
- =?us-ascii?Q?RS+dpYh3AM/PpkIw728ou3LURsndLFJTHCeTUqxgSxR8FoqN7DdIxcc+T8Jz?=
- =?us-ascii?Q?irPxvjNYvp+Ql0az1M7OXlENW1V3uLWferGd1G7Zu8nnA9NwLPcDlmI5P1Oh?=
- =?us-ascii?Q?QjvdgRQI/Q+sUbFK8XVjOvwflUnduyklyiyL1NgU/M5s4iUxB16XAkH9OBBS?=
- =?us-ascii?Q?bj2ivLYJJiIGyziHln8RRW3dccY+B4WDwTL1D9kUjnn47EIqFr6EPpsjVFKy?=
- =?us-ascii?Q?HvKql9fMdaAdepWXzY/SQ+Cc/cD6eYvGeiq5wRrlII638TskmVONnQCGXGd6?=
- =?us-ascii?Q?o03ZN0gvBzNEfqvfe3pVB3l/1qU5ZWoMA3H/R/+xkTh3ilIIxQNC/mlqNl+Y?=
- =?us-ascii?Q?sDH+4qwGWcpa8DJChb13vshk1bvl6aCLm0eJUkJ14ei0mEfHtuoG+7zmMaWq?=
- =?us-ascii?Q?GMtkUzSBvyQ+lsnbGMGR5OGXFReJ9PMMUxA+sA5Hq8XWFq6qvVQzKpScYXnI?=
- =?us-ascii?Q?M21mdm+rl6SBzdFiN9AvF/OayS3W7v6wHX+cbyuS9LxJm/zJwzQ7LQdTKU8m?=
- =?us-ascii?Q?bNixdiunvcTnxk9/D5JOiMYVsz5RNOhxuAThv+GLwBxaO+LeKEBDQvzrf8Ke?=
- =?us-ascii?Q?cO9rE6LlSh/Ft4KzplhOCLTv4R3eq5d+iHnWGrOmREXr8F8bx6f46GNWUPKY?=
- =?us-ascii?Q?Uf+32T3Aj5gnH3YnNcf9RcyRYnsc0zxHv46MfGdcEdnpU0QTOJUuhbETeGK3?=
- =?us-ascii?Q?h3asK4V4q+D+iLIkacxBekHeZHt6MP+dqnLQxDNEzgzqeNrwlxZfM+f8bd/f?=
- =?us-ascii?Q?odKFUgP871AADFCNDkU/zQ8G1X+o8kO6EMaxtkAfwHUjK+0KWVEXFrJ2cFXh?=
- =?us-ascii?Q?tAFGb+oie0f7iv4zVuk9vjR1y/qJyrE84uPnGR3Bypxe+c9ljAMGUxhAYkZ6?=
- =?us-ascii?Q?SgbwfRyAk3BMd1w9nCOsGtIeMYBFzcvt4rxIv6NZ63Pj00/953bhyBusUfvO?=
- =?us-ascii?Q?7qNv6y9TPt73GzL6QLrjH0yq1bWaYwgyUihUD7+jbsUuAQfDxtyKUNyOmGfP?=
- =?us-ascii?Q?cKAZu85Bw7JC2OaWmtJHNiOSbSdBoMz+1EfkEbBUdp8TRXmeBapfk5WOgvHv?=
- =?us-ascii?Q?U5SNZjy/4Ncwy1X9MmFYtmRnqLXqmI4P0v4FbprTzJhqO9FcxuJBpIcAaoZP?=
- =?us-ascii?Q?VA28I2kLT4zUGOmwYKvP7jGW70LKS9SZ8e0BMW19YRRADdM2MaXVBEtkCdHb?=
- =?us-ascii?Q?x9ugxMD4hrEfUHOPe5pEv5nVcGRD0vaXtCDTPmEhT3B4lIbV8fU/tXzTwiXI?=
- =?us-ascii?Q?BpHMURWria/P2o3/yEJAGY80MyjQFNN0ZcITHfbs+fYT5gyLBxCVpYtQGqFt?=
- =?us-ascii?Q?IgLJar2aykvlD6CYle8oVAH/L8dxdVpNMIDw27QZCXng3J+ZchgAAAVceYOV?=
- =?us-ascii?Q?VWDODmcTT8TgtCRZ0OOqRGOoZidfHDfGjU+vEnezO438QL0wA91wdt0dXc0o?=
- =?us-ascii?Q?ag5UlV4EQ9m137dZcQHhu7Qo7Wo5/vKaS1Sm2n7D5Fp6CO1kjjdIQACDCXVj?=
- =?us-ascii?Q?JihEzgGioYy7GYW3Mf1FusCg5cBi3j4zATYh8inCpM6XcGpUD6VRa1tUEest?=
- =?us-ascii?Q?5cHIPPNm0z80CG5UAaZA50sD/Bauv9V+PglP7o/4JQX/AYgD2OTk/1isWY8D?=
- =?us-ascii?Q?pyj0Bw=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: edfcd88f-a503-43ad-01c0-08db6ccfa154
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 12:05:22.5309
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: htt/KK9gpD0cbfKD9XdNiXFStPlz4ir2Lbl8hywciyb/CERjqkmArWL5oRMv2WFKNQloeuhqQZIiiEXI7gL70TNThUc6FHCN/jZ9EqS1eD8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR13MB5164
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230613093757.5380-1-luojianhong@cdjrlc.com> <b41c50989125dec782e1fbd2793d0ecf@208suo.com>
+ <209fbe59213d89c3e7e3a5fe6030e19e@208suo.com>
+In-Reply-To: <209fbe59213d89c3e7e3a5fe6030e19e@208suo.com>
+From:   Julian Calaby <julian.calaby@gmail.com>
+Date:   Wed, 14 Jun 2023 22:07:02 +1000
+Message-ID: <CAGRGNgVULqZzu2_bqBSSdnjSj=EuO3-0BS3TBMk=RHL8O32NmQ@mail.gmail.com>
+Subject: Re: [PATCH] ath: Remove unneeded variable
+To:     baomingtong001@208suo.com
+Cc:     toke@toke.dk, kvalo@kernel.org, linux-wireless@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 08:09:07PM +0300, Vladimir Oltean wrote:
-> The DEV_MAC_MAXLEN_CFG register contains a 16-bit value - up to 65535.
-> Plus 2 * VLAN_HLEN (4), that is up to 65543.
-> 
-> The picos_per_byte variable is the largest when "speed" is lowest -
-> SPEED_10 = 10. In that case it is (1000000L * 8) / 10 = 800000.
-> 
-> Their product - 52434400000 - exceeds 32 bits, which is a problem,
-> because apparently, a multiplication between two 32-bit factors is
-> evaluated as 32-bit before being assigned to a 64-bit variable.
-> In fact it's a problem for any MTU value larger than 5368.
-> 
-> Cast one of the factors of the multiplication to u64 to force the
-> multiplication to take place on 64 bits.
-> 
-> Issue found by Coverity.
-> 
-> Fixes: 55a515b1f5a9 ("net: dsa: felix: drop oversized frames with tc-taprio instead of hanging the port")
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Hi Mingtong,
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+On Wed, Jun 14, 2023 at 1:23=E2=80=AFPM <baomingtong001@208suo.com> wrote:
+>
+> Fix the following coccicheck warning:
+>
+> drivers/net/wireless/ath/ath9k/gpio.c:501:5-8: Unneeded variable: "len".
 
-In a similar vein, you may want to consider the following suggestion from
-Coccinelle.
+Coccinelle / Coccicheck is unable to accurately detect unused
+variables as it can only analyse the code as it is written and
+doesn't, for example, expand macros. This produces false positives
+like the one you're trying to fix in this patch.
 
-  .../felix_vsc9959.c:1382:2-8: WARNING: do_div() does a 64-by-32 division, please consider using div64_u64 instead.
+> Signed-off-by: Mingtong Bao <baomingtong001@208suo.com>
+> ---
+>   drivers/net/wireless/ath/ath9k/gpio.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/drivers/net/wireless/ath/ath9k/gpio.c
+> b/drivers/net/wireless/ath/ath9k/gpio.c
+> index b457e52dd365..f3d1bc02e633 100644
+> --- a/drivers/net/wireless/ath/ath9k/gpio.c
+> +++ b/drivers/net/wireless/ath/ath9k/gpio.c
+> @@ -498,14 +498,13 @@ static int ath9k_dump_legacy_btcoex(struct
+> ath_softc *sc, u8 *buf, u32 size)
+>   {
+>
+>       struct ath_btcoex *btcoex =3D &sc->btcoex;
+> -    u32 len =3D 0;
+>
+>       ATH_DUMP_BTCOEX("Stomp Type", btcoex->bt_stomp_type);
 
+ATH_DUMP_BTCOEX() is a macro that relies on a bunch of local variables
+being defined, one of which is "len". If you'd compiled this code, you
+would have spotted this problem immediately.
+
+A "correct" solution to the "problem" here might be to add the local
+variables to the macro parameters or move the definition of the macro
+closer to where it's used so it's more obvious that some "magic" is
+going on here.
+
+As others have said, you need to fully understand what code is doing
+before producing these sorts of cleanups, otherwise you'll produce
+incorrect patches like this one.
+
+Thanks,
+
+--=20
+Julian Calaby
+
+Email: julian.calaby@gmail.com
+Profile: http://www.google.com/profiles/julian.calaby/
