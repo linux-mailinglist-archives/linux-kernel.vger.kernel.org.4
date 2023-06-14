@@ -2,156 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4804E730849
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:32:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4244730851
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236550AbjFNTcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 15:32:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55242 "EHLO
+        id S235841AbjFNTfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 15:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236006AbjFNTct (ORCPT
+        with ESMTP id S231438AbjFNTf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 15:32:49 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2043.outbound.protection.outlook.com [40.107.93.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D102D2;
-        Wed, 14 Jun 2023 12:32:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EqdQty2uGf2j+kWk7fP2D3YpDfcbgg878UeHQ5uSbyAqhTnXYhh4bNA+cqf7zPYIMZEBJdyxZYc225oIgrjrRRM2rWPmePYJogvpGBlTTlthz93ZrLZt5BQigUloe8vW/7tXIDKk0tHEZHwSDitWi6XwwvbMrMBZn8cKd//sq+FrG7g/fIxs5UOWySUnTiBqWGpd4ya3PXGguMr+VrTpEz5xj0xKb0BqNJbmflFem5jY0qtTA8rPxTN3rpTML++wXoPHvZpsdB8pbKGxuxvqr5cTYNHQEBSKRjJSSK7yrbLkKfmNnAjOUmQ3hZJNNxvo8g7bwco5CVnadJMqNtuAIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rvrZD/ZBlQxeLymw3iiLAhLKBKOrJw8bnW0s0Mw+4bA=;
- b=O/hx/Fjv5GliJ0/hIXdcaSIhqiiYNNkBzZWyAbi1eJKJ4DpD15+875CT+ObtF5da5SPdLm0sGakNrhTslHRdHmCu7cWbV1jAKRJhqM8alzoKYSPq9sVsOVzq4KdMi9IVPd5Fh9pP5spFPd29c3ZvcDUuGmqftA0reyNXM8ruCu43URAi46fqDQwPJG3Z+ywI995oWkwSZ67IcMfoJUKRB4uKa4dVsxSEnBlya56C03OUDCJRGXlzK7HJ2Rj4JOAWfEALvcLzhcT4idegL4z+FZpKt4VbbGwXHIQ7CAuaBVhM26ujIUzoI7ja+fCvciGoc1zoql3iK5tFmesfDJgs5w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rvrZD/ZBlQxeLymw3iiLAhLKBKOrJw8bnW0s0Mw+4bA=;
- b=l7OOKyFXpEXzj4cb2VDlQXLEaD64O3FJij0UvaaAe4RwLiCnANcRVPaFZyBaKe6+tNyyThJemHYkTSpKy16dSdFphT2jI/YqWHA9tdDc4nG3NEz+gwarSKCqR0khu+N0/9Tlz9jpDqlIB2yc8rNLgRgm+w5Ppx0FJ4jjtvRZOH9HxTvKSEosYCFUH12D7gDSQzOeuKOfQNa4lrNTPFxcVCCFBw/u4AdAz/ogNP6czXHWrVtnzz7Tm5gQA/C6BVtZRfRYsRNeaWuJQSnfKDpVZkFzo9gnGoEVI8JtyWnLX7dJaA22UsKEngSCv07KJOv472rhqBMsoMc+67NcdVl2dQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by IA0PR12MB8352.namprd12.prod.outlook.com (2603:10b6:208:3dd::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37; Wed, 14 Jun
- 2023 19:32:44 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab%7]) with mapi id 15.20.6477.037; Wed, 14 Jun 2023
- 19:32:44 +0000
-Date:   Wed, 14 Jun 2023 16:32:41 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     ankita@nvidia.com, aniketa@nvidia.com, cjia@nvidia.com,
-        kwankhede@nvidia.com, targupta@nvidia.com, vsethi@nvidia.com,
-        acurrid@nvidia.com, apopple@nvidia.com, jhubbard@nvidia.com,
-        danw@nvidia.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/1] vfio/nvgpu: Add vfio pci variant module for grace
- hopper
-Message-ID: <ZIoV2UyZ71cwXroD@nvidia.com>
-References: <ZH9p+giEs6bCYfw8@nvidia.com>
- <20230606121348.670229ff.alex.williamson@redhat.com>
- <ZH+DdVIyZ6hHCDaK@nvidia.com>
- <20230606153057.4cbc36a0.alex.williamson@redhat.com>
- <ZH/LzyF/uttviRnQ@nvidia.com>
- <20230607122303.5d25c973.alex.williamson@redhat.com>
- <ZIh+wXFrls7StWzc@nvidia.com>
- <20230613132402.2765b6cb.alex.williamson@redhat.com>
- <ZIn/EHnCg444LJ3i@nvidia.com>
- <20230614132047.519abe95.alex.williamson@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230614132047.519abe95.alex.williamson@redhat.com>
-X-ClientProxiedBy: SJ0PR03CA0292.namprd03.prod.outlook.com
- (2603:10b6:a03:39e::27) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Wed, 14 Jun 2023 15:35:28 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2647BD2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 12:35:27 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-51898b0c1a1so1407094a12.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 12:35:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1686771325; x=1689363325;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WU76vYQFaTOTVIoQqi0w79DumHDt6GCwn4u2KfUXZyQ=;
+        b=T56qH18gNskhdK9yvmXZXFOr6RC3nIJm8TzWcd8EGJTQH3VXHA2i4a7qfvGXvC8Rh5
+         c+GCKWtbRNW6S09q0quwgQppiX3U6ZR7aHp63uzZQa6yi5qtN6gj6RShQ/OV8aM4kOgr
+         WK28j8vcysacwwi4D+dHODRkUFe11CCoa454A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686771325; x=1689363325;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WU76vYQFaTOTVIoQqi0w79DumHDt6GCwn4u2KfUXZyQ=;
+        b=DhONdHQWoh81qOXPXfkVpF3nA7v/iGRyWJnW3CdwhZ5eUisRccLTIxhqFxB62F0IMX
+         Q1uhFQ4TnsmzqwHb2fiUqYht4LUgZWY/laz9qipS88XdAps/W01NxgMShPIQx0sWJjsl
+         5B+uj/BVeF92qwdmx3PMWW9+tu4Y142fOPKdXmCYDEp8M9mhL7nLulzmhEX8nkw21GxQ
+         UnTW7qqqhnVJD7XQXAgFWiGyKWSnee3g5EFoZlwMMgZIcI683w0zcAhCuFDOurqe98e1
+         yDVTEwxRSJIMT4kWJbCzKfnNIUs0OZTPDWlG8IB6guqmj+ySjDVXN8NzIkwR3Zh2GNY7
+         kSTg==
+X-Gm-Message-State: AC+VfDyn+Z+rhqRuk6TB5fkoTntGy5Bn5eFkSsF/nZpHxYDTRv3HLREI
+        hyNja5V7aADC4UYGdcFqxj6ai3Zf0XO6ns4EaFnl6Mjv
+X-Google-Smtp-Source: ACHHUZ5nmaRsonL2E2fffXmAg7YGeWMmUSo9xOKcOMJSMBgo3lQyDqjvdt4st8a2C+KOtqFCe0DrXA==
+X-Received: by 2002:a50:ef13:0:b0:514:80b9:793b with SMTP id m19-20020a50ef13000000b0051480b9793bmr10990200eds.19.1686771324973;
+        Wed, 14 Jun 2023 12:35:24 -0700 (PDT)
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com. [209.85.208.46])
+        by smtp.gmail.com with ESMTPSA id d13-20020aa7d5cd000000b00510d110db58sm8003390eds.80.2023.06.14.12.35.21
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 12:35:22 -0700 (PDT)
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-514ad92d1e3so1856a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 12:35:21 -0700 (PDT)
+X-Received: by 2002:a50:9b57:0:b0:506:90c4:b63b with SMTP id
+ a23-20020a509b57000000b0050690c4b63bmr15000edj.4.1686771321408; Wed, 14 Jun
+ 2023 12:35:21 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|IA0PR12MB8352:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4c266937-0433-45f7-9c24-08db6d0e200e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /k6U+R7+eKo4QUf2hfEgaacGVfSmpOyS8vBIHlsPRVG0dIDfdQfeH/SCOrz3u2hblx+5DHqUweKC6A2W5EmngRPOWzGRAWNR7Gd9E/GiMMfKSxLHyagCcNC3hLY//eRpjYzR17thBL7qtr0l/FjQpOoiHpVfRXSlLRKtGl52PUK1p4X+b8cFI2lv533r26IN84QYYQDaQkXpGEY4umx8rgzWso+0Nb2etWluYaY6OrlLSRBFWACxeG1xni5REN8busSgTaLbxcjt+hARlTpBlipk/F5LvWBR60lvIxjnhWK5jsfOpy7fXzeGaZKozPMzBgJQKTCcbapVYNsKILMOODjuM2oDyk8tqCHFWLcb8Q9M1kd6FUHE4ceUv2bO7/Ev3zJQuFtn+Uz5ypFD+fcLJxiQc5fT7dfICFgiEkU3oHZAMdXodzXg/i/q/QuzaM/OpJfQ89OQWNWXxLVtu0uMcfoo1RrYJ9K9GYsxIB4ZwlWTMMe1ex9PRAQZSLRLqc9SOUOuAzJCv765eZO5mdtlkoWaz85UzKbGFOxTY6ZwF310pijc727Ye2uZpAE0S3qI
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(396003)(346002)(366004)(136003)(451199021)(8936002)(6486002)(26005)(8676002)(6512007)(41300700001)(38100700002)(478600001)(36756003)(66946007)(6916009)(4326008)(66556008)(66476007)(86362001)(316002)(6666004)(6506007)(5660300002)(83380400001)(186003)(2616005)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?osDUHYhHmMidBrYAOGJ1BemfBE1HFRQNFVFpr/cQWuWHKeGj00pM80NaVcRR?=
- =?us-ascii?Q?jQJGV1rwiTtHWODf6ZH6aCTqVReMiTrmTvUBodcGh8UoFpYdm19glz7yJthn?=
- =?us-ascii?Q?dCTg0PcCQDJVo+P5EhBYeTbk8YdY0t+661k4Jn6/SKVMGof5yYIywuIce2Ww?=
- =?us-ascii?Q?wLPg5tJc1aFcaU11BE8FUIMPoXz6KUBlt4ZrpNVj5fkr+Kxtk11nn1IaRrAw?=
- =?us-ascii?Q?MMgt9kAbqJIJp71PvHdcqhgJyhFUdX4fpUgcm0P0tQdJV3usE6K0aUCXo6vS?=
- =?us-ascii?Q?spHXJ/N9yri8IiwsuHv0dgEWgJMe7d5Nuocn5H1WJuO5zvkcAjbniyyxJAld?=
- =?us-ascii?Q?Zq2T3gc6spEV3SDtpUgd5O/Frd9+EL1t1GvPf6I2Wlh+FFgFqXAvnVS20o5J?=
- =?us-ascii?Q?fde2fm8o6CuTwTKbBcNyQI1z7bXin1KN5Viu56CiOahhXzTAFBrDbk4/KxBE?=
- =?us-ascii?Q?r8zz73F61n0S9vPKsbDjDpgbVaZXQ5NuCJ2YHH1h+cK0hMdIYcnz9VxCYB4S?=
- =?us-ascii?Q?8JiT4v55X1HKXIqi4pKkWqjFNEbJDr6ASQhDsUqs4DXeU6wwEFDcSlKezBaw?=
- =?us-ascii?Q?/rh2kG3gKg3CwHY3G9Qkea6hlcxqiMxkmT98618tZHendGkW0oIqKTIHERyg?=
- =?us-ascii?Q?W4ZdiQ+cuKwTVWI8Ok28X55zxT4aFRm5ujYVxBeMIM+QPIVp72j5f71YMuFQ?=
- =?us-ascii?Q?/NEiHmL4aMzdutaajp8pBvNdQkCZ+dq5Cu6Mxqla3P3MBSi0V/TdlNeMrygi?=
- =?us-ascii?Q?IbvN9JAH6QyczK/cDCFy6C4fWDc3tJWhbtV+63OmRFyjI1c0I45Sa+HDDySJ?=
- =?us-ascii?Q?D+QDphVnXV4jC5dCQOfha3ZO+bw5ODNltK0wcD8iYvo/CbwaeT+Fn909wR5b?=
- =?us-ascii?Q?dgS/o41oUht5VjLYdT2uH1GDE4peWjDvvgiOP1BxdpDFM6MVcYrBOo/iGQd5?=
- =?us-ascii?Q?SB9sxkMCNHuutXYGkZad+g5L+VselLhzGE1LmAokBR0PQZLUdMnOgx0X9R/B?=
- =?us-ascii?Q?Dr+VppmV4lu+3eiHypBX6BLjb1oAGVzwmVbimN5BmEdznJ2DcYaiogJtbOlR?=
- =?us-ascii?Q?qyH6Dps2xNcqVltTYx8ZFztjEHLBIN+brxbQwJ54YQXA07wwhtCmWl+qKmDy?=
- =?us-ascii?Q?CI2DIXWUtQh0AzDYjJAs1M1AYXjVSWhC+SAp6dEpIYg1cKdUgzWn68MtaTmf?=
- =?us-ascii?Q?dk8DimRJbQHQffR17MbRFkghPbiESfISkC0xd/Yh24LnUYj2tv9uBr6NYtQY?=
- =?us-ascii?Q?rdW8rkBd2TG5xmBM5/voE8XgZMOTKJkgk9l59gqU342Qnng8e+MwfdyP/Cfi?=
- =?us-ascii?Q?vPtLgrPhfvJlUQNd9TbDQpjNweV1+h9d+dDdzs8ENoGVAv6dYZmjYet+nZzQ?=
- =?us-ascii?Q?iizKeYSjEJyYGFuR4Vd0l4RL1UbDIzj80Rwwv0VznpdZGTTpCMzYJ+JT0kCt?=
- =?us-ascii?Q?0mE1lyyPKjO99uvZ3RIOyHEinssc/HHAOxK8SPbCHqcm+KPCOeFKDvqYblPP?=
- =?us-ascii?Q?rgzmGrjTCqECyQX/quwO35jZoVuZQlc6cOLsWIrkN1bFEO+7vWfzBjJC+/dL?=
- =?us-ascii?Q?uxcj4XdhwymmPdgwqkFyrzXjpHoJNf6nVjzONKOu?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4c266937-0433-45f7-9c24-08db6d0e200e
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 19:32:43.9189
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iHM+cq6RHop75EcqQHjV1TMh7sJwJymWxZKJJtSgkvasntNgyjvC7yqpZoxA4pl2
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8352
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230324063357.1.Ifdf3625a3c5c9467bd87bfcdf726c884ad220a35@changeid>
+ <CAMi1Hd1avQDcDQf137m2auz2znov4XL8YGrLZsw5edb-NtRJRw@mail.gmail.com>
+ <552345c5-b1e9-41f6-f275-b6eeeb51df25@linaro.org> <CAMi1Hd05z8uBotO4vs7Ropmt7W2gSA__tTu_=X1t0mze7bXrhg@mail.gmail.com>
+ <CAD=FV=VSFDe445WEVTHXxU1WS_HGUV5jR5E8_Vgd4eyhn3rHyA@mail.gmail.com>
+ <CAMi1Hd28FJUjB8A-9YF7xpKOzSyNWXX3qung4aDjpLBhOvw_eA@mail.gmail.com>
+ <CAD=FV=W13L0H88G1gt8qRnXfpV-_7E9QfHufN_a23_B1bb=aww@mail.gmail.com>
+ <CAMi1Hd1WCtNvNaY_kVMx5F8T0nMVHvsjk9LsSETCMWWQyaq_Vw@mail.gmail.com>
+ <CAD=FV=W5Y_SHp0y2MEs8d1k255bm_PXdRYEmYei+g79pjnzYuA@mail.gmail.com>
+ <CAMi1Hd2OeL940r7jq0=Z_oxE8MYVioy0YnJXQC_5e0vJONd2sQ@mail.gmail.com>
+ <1bc79c48-7cba-476d-9a7e-5754a88fcdae@sirena.org.uk> <CAMi1Hd2BLB6H3QRLB5svRTkGoXaUeEsakNsmfCOjbDBcCEeqkA@mail.gmail.com>
+ <CAD=FV=UKyjRNZG-ED2meUAR9aXdco+AbUTHiKixTzjCkaJbjTg@mail.gmail.com> <CAMi1Hd12S+bKyp=CHwoioYoojtFzaA1tey19BqAFi+4DeJR__w@mail.gmail.com>
+In-Reply-To: <CAMi1Hd12S+bKyp=CHwoioYoojtFzaA1tey19BqAFi+4DeJR__w@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 14 Jun 2023 12:35:08 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XxWWxWB2zZwUdnRQkiiMbuC=Bx=ibRWG92nFzbXgHWHw@mail.gmail.com>
+Message-ID: <CAD=FV=XxWWxWB2zZwUdnRQkiiMbuC=Bx=ibRWG92nFzbXgHWHw@mail.gmail.com>
+Subject: Re: [PATCH] regulator: qcom-rpmh: Revert "regulator: qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS"
+To:     Amit Pundir <amit.pundir@linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 01:20:47PM -0600, Alex Williamson wrote:
+Hi,
 
-> Regarding relaxed ordering, are we talking about the 'No RO-enabled
-> PR-PR Passing' bit in the devcap2 register?  
+On Wed, Jun 14, 2023 at 12:03=E2=80=AFPM Amit Pundir <amit.pundir@linaro.or=
+g> wrote:
+>
+> On Wed, 7 Jun 2023 at 04:59, Doug Anderson <dianders@chromium.org> wrote:
+> >
+> > From a black box perspective, I guess the things I could think of
+> > would be to keep poking around with things that you control. Best
+> > ideas I have:
+> >
+> > 1. Use "bisect" style techniques to figure out how much you really
+> > need to move the "lvs" regulators. Try moving it halfway up the list.
+> > If that works, move it closer to the bottom. If that doesn't work,
+> > move it closer to the top. Eventually you'd find out which regulator
+> > it's important to be before.
+>
+> Hi, I tried this bisect style technique to move lvs regulators up in
+> the list gradually and I found that they need to be enabled atleast
+> before ldo12 and the ldo regulators which follow the ldo12 in the
+> list.
 
-I don't think so.. The RO problem is that the RO bit in the config
-space is only defined for a SRIOV PF not a SRIOV VF. The VF wires 0 to
-that config space.
+Super weird. I was hoping that something would jump out, but nothing
+does. :( I don't understand how lvs1 / lvs2 could have any impact on
+ldo12. :(
 
-So if you stick a VF into a VM as a vPCI then it appears to have a 0
-RO bit in the config space. A VM driver that relies on it will think
-it is not enabled.
 
-I suppose atomic will have the same issue?
+> > 2. Try adding some delays to some of the regulators with
+> > "regulator-enable-ramp-delay" and/or "regulator-settling-time-us".
+> > Without a scope, it'll be tricky to figure out exactly which
+> > regulators might need delays, but you could at least confirm if the
+> > "overkill" approach of having all the regulators have some delay
+> > helps... I guess you could also try putting a big delay for "ldo26".
+> > If that works, you could try moving it up (again using a bisect style
+> > approach) to see where the delay matters?
+>
+> I tried this approach as well earlier today but I don't know how big
+> "the big" delay can be. The device fails to boot if I add a settling
+> time of as much as 2sec per each ldo and lvs regulator too. I didn't
+> try increasing the delay further.
 
-> In general, I think we put driver writers in an awkward place if they
-> start trying things that are clearly not supported as reported by
-> hardware capability bits.  
+Yeah, 2 seconds is plenty big. If that doesn't fix it then it's not a
+timing issue.
 
-If you start down this path then IMHO it all has to work the same for
-a VF and the VF has to inherent any relevant PF capability bits. This
-also means the vPCI emulated bits don't actually work correctly which
-is a different mess..
+I guess with the above results, I'm still super confused about why the
+async probe has any impact at all on this. It sounds like the
+_ordering_ of the rpmh-regulators init matters but not the timing, and
+I'd expect the ordering to be the same between normal probe and async
+probe. Specifically, I think:
 
-This is why the answer of "don't trust the config space" is appealing
-for driver writers because the VMMs are not able to emulate bare metal
-very well in these details.
+a) There is exactly one rpmh-regulator driver instance in your system, righ=
+t?
 
-Jason
+b) Regulator initialization happens in rpmh_regulator_probe().
+
+c) The rpmh_regulator_probe() function is itself synchronous. That is,
+it sets up one regulator at a time and, I believe, nothing about the
+behavior of rpmh_regulator_probe() changes for async vs. sync probe.
+
+...so I'm left baffled...
