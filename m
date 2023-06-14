@@ -2,174 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF13172F990
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 11:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87AB872F9A9
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 11:45:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244148AbjFNJoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 05:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45364 "EHLO
+        id S233089AbjFNJpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 05:45:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235980AbjFNJoQ (ORCPT
+        with ESMTP id S244428AbjFNJpS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 05:44:16 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11E349C8;
-        Wed, 14 Jun 2023 02:42:19 -0700 (PDT)
-X-GND-Sasl: herve.codina@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686735738;
+        Wed, 14 Jun 2023 05:45:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157DBDC
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 02:43:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686735767;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+REmpcLHUL4BTOxA1dlLHsmBL+e+FBYJaTaqB02G6NY=;
-        b=d+AXI1g8Y06cHn5FQ9HHfYpUkbPNIKBON81J0yuXI5c9++a6TK2xsCzbdQ8XJXKjFG0Ks2
-        IlS6uGDcORffGChF4976ahuklePO8PU76h62Q9MZtlVuydhY/lUSXXJIrMvanEK0VvcCIS
-        K7bdwjIGwjy/ZcYCKTMQSyJLmycpDiEgwWvrzcoPoEtqVH0QyxVrTlSD0rpZ2JL8KtuiqD
-        wqEZQiJlji6q9zYJBnNnorhUyaGiJcnkwZA375KbgVR26OSg2D0hrHNBQUHCzhd55ZePmM
-        OTYg0eqK2ss1oCOt/DkCC2gsZZALpLj+rNIViYo2eFFQrNDSZtshDR9MMEM/EA==
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6813C60004;
-        Wed, 14 Jun 2023 09:42:15 +0000 (UTC)
-Date:   Wed, 14 Jun 2023 11:42:14 +0200
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 07/13] minmax: Introduce {min,max}_array()
-Message-ID: <20230614114214.1371485e@bootlin.com>
-In-Reply-To: <CAHp75Vcur=H_2mBm5Ztuvd7Jnvmr6+tvCbEkFtmaVLsEjXr8NQ@mail.gmail.com>
-References: <20230614074904.29085-1-herve.codina@bootlin.com>
-        <20230614074904.29085-8-herve.codina@bootlin.com>
-        <CAHp75Vcur=H_2mBm5Ztuvd7Jnvmr6+tvCbEkFtmaVLsEjXr8NQ@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+        bh=qN+1diYhERNkjXIoa2/XDpR5RGrQlC1FGasx3olZwEM=;
+        b=fLTw2CqrB+N3/Yw49xqedBg57oi1XNEjsdrDK15DEtPzIDy621qGALsJQrwGsn+9Al86Lp
+        lp1zJ4J5ImdVh6EAIAEMz9cIuRV/B5EhIWqzmbpYygFMy6vXeQ1AoxXGJcWOmvviJ688Hm
+        YU8JPlDu4t/bs3Gpuwedxy4FDgX6XiI=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-382-jLugubb-OKiIry1m0NAKaA-1; Wed, 14 Jun 2023 05:42:46 -0400
+X-MC-Unique: jLugubb-OKiIry1m0NAKaA-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f7ecda6eefso13929195e9.1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 02:42:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686735765; x=1689327765;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qN+1diYhERNkjXIoa2/XDpR5RGrQlC1FGasx3olZwEM=;
+        b=BetouMsdi43xMOG+gDL1SZL+zDUz8AMynd9Y3taS0BugMIK2AcWwpOPm1lkDPhUQDh
+         rPoJtCTDt3Di60Wsnsycf1WcnoLdL3HQDAFjomNVoHUkwLJb2QFtj5o+VZF1vAthXcH6
+         GnSHUtFCwFUPXsDg7+X6P+jZdjeUVybIadNHz5PvsV0X3ZNolEe0M6OdMEK14VdTZg5t
+         R8qtRJ6MFIL7c+Huam4hRlGPmeWOu2UVIHU+giSJbaPl/rDnqaYAVG+MvDBrNDMmo6fO
+         CY20TmGtUlmxW6wnmcAKVXNX9a63oRsSe6B+qV5d+kiykvDy261FKuB0wTQSG66WosR+
+         LnQA==
+X-Gm-Message-State: AC+VfDzn26RQJVWX/cqr+nbR37nRzWstVEzun4QDjImmOOYy6IHeWrm8
+        ffsli8w97qeR0dhNX1ITTvc8IDzHd/Km3MkvBJcLb61l+9noCGUk/zY0etaeGvA8Kzm+m0mUlHr
+        SSevMYaBWFOQV1s94HeNlk2wT
+X-Received: by 2002:adf:f642:0:b0:30c:4191:b247 with SMTP id x2-20020adff642000000b0030c4191b247mr10353545wrp.5.1686735765421;
+        Wed, 14 Jun 2023 02:42:45 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ66KndozB3mH6VvltJu6YxrA+IR8sESkB/CE2sAaPLInx38QXIMj0yTlAeCaYNi/KUJG6h8UQ==
+X-Received: by 2002:adf:f642:0:b0:30c:4191:b247 with SMTP id x2-20020adff642000000b0030c4191b247mr10353530wrp.5.1686735765049;
+        Wed, 14 Jun 2023 02:42:45 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-244-67.dyn.eolo.it. [146.241.244.67])
+        by smtp.gmail.com with ESMTPSA id i1-20020adfefc1000000b0030647449730sm17895849wrp.74.2023.06.14.02.42.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 02:42:44 -0700 (PDT)
+Message-ID: <dffbf0474b1352f1eac63125a973c8f8cd7b3e8d.camel@redhat.com>
+Subject: Re: [PATCH] net: hsr: Disable promiscuous mode in offload mode
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Ravi Gunasekaran <r-gunasekaran@ti.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, bigeasy@linutronix.de
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rogerq@kernel.org
+Date:   Wed, 14 Jun 2023 11:42:43 +0200
+In-Reply-To: <20230612093933.13267-1-r-gunasekaran@ti.com>
+References: <20230612093933.13267-1-r-gunasekaran@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On Mon, 2023-06-12 at 15:09 +0530, Ravi Gunasekaran wrote:
+> When port-to-port forwarding for interfaces in HSR node is enabled,
+> disable promiscuous mode since L2 frame forward happens at the
+> offloaded hardware.
+>=20
+> Signed-off-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
+> ---
+>  net/hsr/hsr_device.c |  5 +++++
+>  net/hsr/hsr_main.h   |  1 +
+>  net/hsr/hsr_slave.c  | 15 +++++++++++----
+>  3 files changed, 17 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/net/hsr/hsr_device.c b/net/hsr/hsr_device.c
+> index 5a236aae2366..306f942c3b28 100644
+> --- a/net/hsr/hsr_device.c
+> +++ b/net/hsr/hsr_device.c
+> @@ -531,6 +531,11 @@ int hsr_dev_finalize(struct net_device *hsr_dev, str=
+uct net_device *slave[2],
+>  	if (res)
+>  		goto err_add_master;
+> =20
+> +	/* HSR forwarding offload supported in lower device? */
+> +	if ((slave[0]->features & NETIF_F_HW_HSR_FWD) &&
+> +	    (slave[1]->features & NETIF_F_HW_HSR_FWD))
+> +		hsr->fwd_offloaded =3D true;
+> +
+>  	res =3D register_netdevice(hsr_dev);
+>  	if (res)
+>  		goto err_unregister;
+> diff --git a/net/hsr/hsr_main.h b/net/hsr/hsr_main.h
+> index 5584c80a5c79..0225fabbe6d1 100644
+> --- a/net/hsr/hsr_main.h
+> +++ b/net/hsr/hsr_main.h
+> @@ -195,6 +195,7 @@ struct hsr_priv {
+>  	struct hsr_self_node	__rcu *self_node;	/* MACs of slaves */
+>  	struct timer_list	announce_timer;	/* Supervision frame dispatch */
+>  	struct timer_list	prune_timer;
+> +	unsigned int            fwd_offloaded : 1; /* Forwarding offloaded to H=
+W */
 
-On Wed, 14 Jun 2023 12:02:57 +0300
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+Please use plain 'bool' instead.
 
-> On Wed, Jun 14, 2023 at 10:49 AM Herve Codina <herve.codina@bootlin.com> wrote:
-> >
-> > Introduce min_array() (resp max_array()) in order to get the
-> > minimal (resp maximum) of values present in an array.  
-> 
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> See a remark below.
-> 
-> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> > ---
-> >  include/linux/minmax.h | 36 ++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 36 insertions(+)
-> >
-> > diff --git a/include/linux/minmax.h b/include/linux/minmax.h
-> > index 396df1121bff..2cd0d34ce921 100644
-> > --- a/include/linux/minmax.h
-> > +++ b/include/linux/minmax.h
-> > @@ -133,6 +133,42 @@
-> >   */
-> >  #define max_t(type, x, y)      __careful_cmp((type)(x), (type)(y), >)
-> >
-> > +/*
-> > + * Do not check the array parameter using __must_be_array().
-> > + * In the following legit use-case where the "array" passed is a simple pointer,
-> > + * __must_be_array() will return a failure.
-> > + * --- 8< ---
-> > + * int *buff
-> > + * ...
-> > + * min = min_array(buff, nb_items);
-> > + * --- 8< ---
-> > + */
-> > +#define __minmax_array(op, array, len) ({                      \
-> > +       typeof(array) __array = (array);                        \
-> > +       typeof(len) __len = (len);                              \
-> > +       typeof(__array[0] + 0) __element = __array[--__len];    \  
-> 
-> Do we need the ' + 0' part?
+Also there is an hole in 'struct hsr_priv' just after 'net_id', you
+could consider moving this new field there.
 
-Yes.
 
-__array can be an array of const items and it is legitimate to get the
-minimum value from const items.
+Thanks!
 
-typeof(__array[0]) keeps the const qualifier but we need to assign __element
-in the loop.
-One way to drop the const qualifier is to get the type from a rvalue computed
-from __array[0]. This rvalue has to have the exact same type with only the const
-dropped.
-'__array[0] + 0' was a perfect canditate.
+Paolo
 
-Regards,
-Hervé
-
-> 
-> > +       while (__len--)                                         \
-> > +               __element = op(__element, __array[__len]);      \
-> > +       __element; })
-> > +
-> > +/**
-> > + * min_array - return minimum of values present in an array
-> > + * @array: array
-> > + * @len: array length
-> > + *
-> > + * Note that @len must not be zero (empty array).
-> > + */
-> > +#define min_array(array, len) __minmax_array(min, array, len)
-> > +
-> > +/**
-> > + * max_array - return maximum of values present in an array
-> > + * @array: array
-> > + * @len: array length
-> > + *
-> > + * Note that @len must not be zero (empty array).
-> > + */
-> > +#define max_array(array, len) __minmax_array(max, array, len)
-> > +
-> >  /**
-> >   * clamp_t - return a value clamped to a given range using a given type
-> >   * @type: the type of variable to use
-> > --
-> > 2.40.1
-> >  
-> 
-> 
