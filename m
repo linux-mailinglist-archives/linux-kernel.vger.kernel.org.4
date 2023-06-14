@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2ACB72F4D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 08:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E220772F4D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 08:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243221AbjFNGbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 02:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44028 "EHLO
+        id S243222AbjFNGbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 02:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243216AbjFNGan (ORCPT
+        with ESMTP id S243168AbjFNGap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 02:30:43 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440CC213F
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 23:30:22 -0700 (PDT)
+        Wed, 14 Jun 2023 02:30:45 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C562688
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 23:30:23 -0700 (PDT)
 X-GND-Sasl: miquel.raynal@bootlin.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686724221;
+        t=1686724222;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zxDjpsQsnHKyp+46A4IVR8UbFfLpDgOYCYup7v5oaqk=;
-        b=W3Gfs6pVbddjBLmdgT5NvK6nsbXjzsjABQxhtvuX0NESqymciSDiL3+HcVhAaWEIaQh04w
-        SlZXRj9DYw45Ek4PTgZWMb6HPM2nnZ7F0gVaqkinmaYULieA+doinqMaMfefDqZ9qv5vtj
-        1u6UeZ8aUF2cdCUtcizm5aJEkKQwhimJy3VgSjv5bZ2MSLkZWubUg+TN6QOlFTtIoWd1gg
-        xWIMO6VeHqJhaXHwUJfGjRfczemlTfq64ixgAU4Q+Y/8goyaztUjtxz+YpxBY6gNgewhCg
-        everkFlE9xeAQvFBsoOXHE2GIrO/MkeZx8NUv6HUT23wWV+SizyPTZ60IB0ZVw==
+        bh=QUIYbUJt+Cl/OQINsVO/8Ug45EH5iacT/hNl2EpfQ/k=;
+        b=mfakaeBitl8sXX9VzebECkRFdSsiGf2T8dggJsBcOT6ZnOkapFalhekJ1ozj3EJWsO1Z9o
+        5IxHEtOe3Mup/bKnMqr6BwGxTvllPwvOHQKl5VuXs+dopoYVA+Pb0kK4VB8bteOUEP4cGT
+        ljDrRyjZogg3pH5BB9sVkwwXbQdafyo3aQeOUyAcIDjFDZSBlKdJ383DGLkh4ADBz4XHNh
+        X1l79aSfjmQboxhyLYeALg894WeFSp+mMqX+QMMwb3UHbOUFtPLKXiNwAvENoLpmxRwMAN
+        +ZqLYLrsWf2JhYvTryKMEUFWM6ocy4Jr+pg5RKEzhGLgWDoL54jfAfTblaW3pA==
 X-GND-Sasl: miquel.raynal@bootlin.com
 X-GND-Sasl: miquel.raynal@bootlin.com
 X-GND-Sasl: miquel.raynal@bootlin.com
@@ -35,8 +35,8 @@ X-GND-Sasl: miquel.raynal@bootlin.com
 X-GND-Sasl: miquel.raynal@bootlin.com
 X-GND-Sasl: miquel.raynal@bootlin.com
 X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D5174FF80B;
-        Wed, 14 Jun 2023 06:30:20 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 95518FF812;
+        Wed, 14 Jun 2023 06:30:21 +0000 (UTC)
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -46,9 +46,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Luka Perkov <luka.perkov@sartura.hr>,
         Robert Marko <robert.marko@sartura.hr>,
         Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH v4 2/4] sysfs: Skip empty folders creation
-Date:   Wed, 14 Jun 2023 08:30:16 +0200
-Message-Id: <20230614063018.2419043-3-miquel.raynal@bootlin.com>
+Subject: [PATCH v4 3/4] ABI: sysfs-nvmem-cells: Expose cells through sysfs
+Date:   Wed, 14 Jun 2023 08:30:17 +0200
+Message-Id: <20230614063018.2419043-4-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230614063018.2419043-1-miquel.raynal@bootlin.com>
 References: <20230614063018.2419043-1-miquel.raynal@bootlin.com>
@@ -64,65 +64,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Most sysfs attributes are statically defined, the goal with this design
-being to be able to move all the filesystem description into read-only
-memory. Anyway, it may be relevant in some cases to populate attributes
-at run time. This leads to situation where an attribute may or may not be
-present depending on conditions which are not known at compile
-time, up to the point where no attribute at all gets added in a folder
-which then becomes "sometimes" empty. Problem is, providing an attribute
-group with a name and without .[bin_]attrs members will be loudly
-refused by the core, leading in most cases to a device registration
-failure.
+The binary content of nvmem devices is available to the user so in the
+easiest cases, finding the content of a cell is rather easy as it is
+just a matter of looking at a known and fixed offset. However, nvmem
+layouts have been recently introduced to cope with more advanced
+situations, where the offset and size of the cells is not known in
+advance or is dynamic. When using layouts, more advanced parsers are
+used by the kernel in order to give direct access to the content of each
+cell regardless of their position/size in the underlying device, but
+these information were not accessible to the user.
 
-The simple way to support such situation right now is to dynamically
-allocate an empty attribute array, which is:
-* a (small) waste of space
-* a waste of time
-* disturbing, to say the least, as an empty sysfs folder will be created
-  anyway.
-
-Another (even worse) possibility would be to dynamically overwrite a
-member of the attribute_group list, hopefully the last, which is also
-supposed to remain in the read-only section.
-
-In order to avoid these hackish situations, while still giving a little
-bit of flexibility, we might just check the validity of the .[bin_]attrs
-list and, if empty, just skip the attribute group creation instead of
-failing. This way, developers will not be tempted to workaround the
-core with useless allocations or strange writes on supposedly read-only
-structures.
-
-The content of the WARN() message is kept but turned into a debug
-message in order to help developers understanding why their sysfs
-folders might now silently fail to be created.
+By exposing the nvmem cells to the user through a dedicated cell/ folder
+containing one file per cell, we provide a straightforward access to
+useful user information without the need for re-writing a userland
+parser. Content of nvmem cells is usually: product names, manufacturing
+date, MAC addresses, etc,
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- fs/sysfs/group.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ Documentation/ABI/testing/sysfs-nvmem-cells | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-nvmem-cells
 
-diff --git a/fs/sysfs/group.c b/fs/sysfs/group.c
-index 990309132c93..138676463336 100644
---- a/fs/sysfs/group.c
-+++ b/fs/sysfs/group.c
-@@ -118,11 +118,13 @@ static int internal_create_group(struct kobject *kobj, int update,
- 	/* Updates may happen before the object has been instantiated */
- 	if (unlikely(update && !kobj->sd))
- 		return -EINVAL;
+diff --git a/Documentation/ABI/testing/sysfs-nvmem-cells b/Documentation/ABI/testing/sysfs-nvmem-cells
+new file mode 100644
+index 000000000000..641a7d7dad76
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-nvmem-cells
+@@ -0,0 +1,19 @@
++What:		/sys/bus/nvmem/devices/.../cells/<cell-name>
++Date:		May 2023
++KernelVersion:	6.5
++Contact:	Miquel Raynal <miquel.raynal@bootlin.com>
++Description:
++		The cells/ folder contains one file per cell exposed by
++		the nvmem device. The name of the file is the cell name.
++		The length of the file is the size of the cell (when
++		known). The content of the file is the binary content of
++		the cell (may sometimes be ASCII, likely without
++		trailing character).
++		Note: This file is only present if CONFIG_NVMEM_SYSFS
++		is enabled
 +
- 	if (!grp->attrs && !grp->bin_attrs) {
--		WARN(1, "sysfs: (bin_)attrs not set by subsystem for group: %s/%s\n",
--			kobj->name, grp->name ?: "");
--		return -EINVAL;
-+		pr_debug("sysfs: (bin_)attrs not set by subsystem for group: %s/%s, skipping\n",
-+			 kobj->name, grp->name ?: "");
-+		return 0;
- 	}
++		ex::
 +
- 	kobject_get_ownership(kobj, &uid, &gid);
- 	if (grp->name) {
- 		if (update) {
++		  hexdump -C /sys/bus/nvmem/devices/1-00563/cells/product-name
++		  00000000  54 4e 34 38 4d 2d 50 2d  44 4e         |TN48M-P-DN|
++		  0000000a
 -- 
 2.34.1
 
