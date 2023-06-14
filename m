@@ -2,56 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECA4F73078C
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 20:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3272A73078D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 20:44:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233325AbjFNSoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 14:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59034 "EHLO
+        id S231246AbjFNSoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 14:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231225AbjFNSnw (ORCPT
+        with ESMTP id S235335AbjFNSoY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 14:43:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B88F7212C
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:43:48 -0700 (PDT)
+        Wed, 14 Jun 2023 14:44:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E8B2688;
+        Wed, 14 Jun 2023 11:44:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4829063FA9
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 18:43:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14270C433C8;
-        Wed, 14 Jun 2023 18:43:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A685645BC;
+        Wed, 14 Jun 2023 18:44:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59415C433C0;
+        Wed, 14 Jun 2023 18:44:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686768227;
-        bh=NIXlB9+2WkBQ/E/Qxn+H6VTpQkwCpTesI9A9vvN9CeE=;
+        s=k20201202; t=1686768259;
+        bh=u121J8cwfQKQR6Kp3TJgvgH0HaZU1kI3wvydqEX92H4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZiRPIZzEq2FBbYrmRtsGLLdeSFFu9b8Q2J8fTocoPtIuJCnofrg1Bec5Yp2PbYOVp
-         l/NO9PSsw60vOuWoKwlOJB4/NPA4/O9PYBMZXskmIOZ/65qF80usL6zzYvox32T6tF
-         +v0gTMY9g9PgFXipLQ8f8Zo4l8B6QAkmclqRu3PMwMQG8rHyuZDvJ6w+gsToVoDMK7
-         AW9naZnVLIKx5dXQ28ot6P3H5Q+Q1/H0pKlQ9KWr5nH7adquqZ54HGh+0NXrKfs5U3
-         OdvGZfwKz6jDYoV4MOFpRXv63LJs/Rp5zjJ40kIBSb6v/f016GGtDZG/N5SZ3ymDQU
-         c6z9G9ehSeqWA==
-Date:   Wed, 14 Jun 2023 19:43:41 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-        hpa@zytor.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] x86/mm/KASLR: Store pud_page_tramp into entry
- rather than page
-Message-ID: <20230614184341.GC3635807@google.com>
-References: <20230614163859.924309-1-lee@kernel.org>
- <20230614163859.924309-2-lee@kernel.org>
- <ZIn9YCcETx+Hlf6Z@google.com>
+        b=V5rBRWTrCkoJ+qTPwmGrkxzlmvUd0ZgYh2JcOrsPRzcABCjXXDlwxvB2ASEj2o1kF
+         xZvg7Xa2zElP4A1rFkO0k9DhHCQKyZUbd4eLD8FEts1vQR6QpkmkxSycoTaW3/yBv/
+         YmVkS40+HQc/+74Naz0P5MGPkYR1bGXEK0k6yS3Kf05qRihps+wvRQaXlx/Bxx/Xdj
+         jyCVWVHQqVh9R0zfI8iZZPwEzNpcUW2ofpXcqMRsr4dbnP+V3oEba+GPz+hyr200HG
+         eZsMO99GJKq7SLamPw2PwupDvtJknFL45CzR8AODF+qoN/i/fskoxGts9O0KAXD2+4
+         y+oLiMEcn9U6Q==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 0BC1340692; Wed, 14 Jun 2023 15:44:16 -0300 (-03)
+Date:   Wed, 14 Jun 2023 15:44:16 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] tools api: Add simple timeout to io read
+Message-ID: <ZIoKgEO+pz3cDgEH@kernel.org>
+References: <20230608061812.3715566-1-irogers@google.com>
+ <CAP-5=fX1X=A7gkExsV917EntTdfgytNA8LBvHwTCsXfq1zHixw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZIn9YCcETx+Hlf6Z@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <CAP-5=fX1X=A7gkExsV917EntTdfgytNA8LBvHwTCsXfq1zHixw@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,58 +67,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Jun 2023, Nick Desaulniers wrote:
-
-> On Wed, Jun 14, 2023 at 05:38:54PM +0100, Lee Jones wrote:
-> > set_pgd() expects to be passed whole pages to operate on, whereas
-> > trampoline_pgd_entry is, as the name suggests, an entry.  The
-> > ramifications for using set_pgd() here are that the following thread of
-> > execution will not only place the suggested value into the
-> > trampoline_pgd_entry (8-Byte globally stored [.bss]) variable, PTI will
-> > also attempt to replicate that value into the non-existent neighboring
-> > user page (located +4k away), leading to the corruption of other global
-> > [.bss] stored variables.
-> > 
-> > Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
-> > Signed-off-by: Lee Jones <lee@kernel.org>
+Em Wed, Jun 14, 2023 at 10:36:47AM -0700, Ian Rogers escreveu:
+> On Wed, Jun 7, 2023 at 11:20 PM Ian Rogers <irogers@google.com> wrote:
+> >
+> > In situations like reading from a pipe it can be useful to have a
+> > timeout so that the caller doesn't block indefinitely. Implement a
+> > simple one based on poll.
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
 > 
-> Nice work tracking this one down!
+> There is overlap in what these patches aim to fix with the 2 submitted
+> patches making addr2line more robust:
+> https://lore.kernel.org/all/20230613034817.1356114-2-irogers@google.com/
 > 
-> Fixes: 0925dda5962e ("x86/mm/KASLR: Use only one PUD entry for real mode trampoline")
-> Cc: <stable@vger.kernel.org>
+> I think it could be pragmatic to take both of them. Be robust but
+> timeout if addr2line doesn't respond for 1s. What do you think?
 
-I was planning on backporting this myself once it hits Mainline.
+Agreed, fixed up a minor conflict and applied.
 
-Happy to submit a RESEND with those pieces added if required though.
-
-Or perhaps someone would be kind enough to add them on merge?
-
+- Arnaldo
+ 
+> Thanks,
+> Ian
+> 
 > > ---
-> >  arch/x86/mm/kaslr.c | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/arch/x86/mm/kaslr.c b/arch/x86/mm/kaslr.c
-> > index 557f0fe25dff4..37db264866b64 100644
-> > --- a/arch/x86/mm/kaslr.c
-> > +++ b/arch/x86/mm/kaslr.c
-> > @@ -172,10 +172,10 @@ void __meminit init_trampoline_kaslr(void)
-> >  		set_p4d(p4d_tramp,
-> >  			__p4d(_KERNPG_TABLE | __pa(pud_page_tramp)));
-> >  
-> > -		set_pgd(&trampoline_pgd_entry,
-> > -			__pgd(_KERNPG_TABLE | __pa(p4d_page_tramp)));
-> > +		trampoline_pgd_entry =
-> > +			__pgd(_KERNPG_TABLE | __pa(p4d_page_tramp));
-> >  	} else {
-> > -		set_pgd(&trampoline_pgd_entry,
-> > -			__pgd(_KERNPG_TABLE | __pa(pud_page_tramp)));
-> > +		trampoline_pgd_entry =
-> > +			__pgd(_KERNPG_TABLE | __pa(pud_page_tramp));
-> >  	}
+> >  tools/lib/api/io.h | 28 +++++++++++++++++++++++++++-
+> >  1 file changed, 27 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/tools/lib/api/io.h b/tools/lib/api/io.h
+> > index d5e8cf0dada0..9fc429d2852d 100644
+> > --- a/tools/lib/api/io.h
+> > +++ b/tools/lib/api/io.h
+> > @@ -8,6 +8,7 @@
+> >  #define __API_IO__
+> >
+> >  #include <errno.h>
+> > +#include <poll.h>
+> >  #include <stdlib.h>
+> >  #include <string.h>
+> >  #include <unistd.h>
+> > @@ -23,6 +24,8 @@ struct io {
+> >         char *end;
+> >         /* Currently accessed data pointer. */
+> >         char *data;
+> > +       /* Read timeout, 0 implies no timeout. */
+> > +       int timeout_ms;
+> >         /* Set true on when the end of file on read error. */
+> >         bool eof;
+> >  };
+> > @@ -35,6 +38,7 @@ static inline void io__init(struct io *io, int fd,
+> >         io->buf = buf;
+> >         io->end = buf;
+> >         io->data = buf;
+> > +       io->timeout_ms = 0;
+> >         io->eof = false;
 > >  }
-> > -- 
-> > 2.41.0.162.gfafddb0af9-goog
-> > 
+> >
+> > @@ -47,7 +51,29 @@ static inline int io__get_char(struct io *io)
+> >                 return -1;
+> >
+> >         if (ptr == io->end) {
+> > -               ssize_t n = read(io->fd, io->buf, io->buf_len);
+> > +               ssize_t n;
+> > +
+> > +               if (io->timeout_ms != 0) {
+> > +                       struct pollfd pfds[] = {
+> > +                               {
+> > +                                       .fd = io->fd,
+> > +                                       .events = POLLIN,
+> > +                               },
+> > +                       };
+> > +
+> > +                       n = poll(pfds, 1, io->timeout_ms);
+> > +                       if (n == 0)
+> > +                               errno = ETIMEDOUT;
+> > +                       if (n > 0 && !(pfds[0].revents & POLLIN)) {
+> > +                               errno = EIO;
+> > +                               n = -1;
+> > +                       }
+> > +                       if (n <= 0) {
+> > +                               io->eof = true;
+> > +                               return -1;
+> > +                       }
+> > +               }
+> > +               n = read(io->fd, io->buf, io->buf_len);
+> >
+> >                 if (n <= 0) {
+> >                         io->eof = true;
+> > --
+> > 2.41.0.rc0.172.g3f132b7071-goog
+> >
 
 -- 
-Lee Jones [李琼斯]
+
+- Arnaldo
