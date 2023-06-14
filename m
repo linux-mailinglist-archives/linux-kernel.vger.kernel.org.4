@@ -2,84 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48795730933
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 22:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D0DF730935
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 22:34:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236835AbjFNUdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 16:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52726 "EHLO
+        id S236918AbjFNUdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 16:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233936AbjFNUca (ORCPT
+        with ESMTP id S236396AbjFNUdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 16:32:30 -0400
-Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E747D2135
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 13:32:28 -0700 (PDT)
-Received: by mail-ej1-x64a.google.com with SMTP id a640c23a62f3a-977e50b0120so104133766b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 13:32:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686774747; x=1689366747;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=czEjt+NjAyuH0cAt6yqFee89woVRFsyvQrYC+0eGV9Y=;
-        b=xTtVN4Z1Q88g5rTsccodRHtuT93zYjcUCBrJT95LZIYNDADStxnQxZyTD2EJ2BW+EQ
-         gG9WCiqzycuFhB6BgXwWMlIppjT0CNI8UMkUsdxitpwlvLRaBXOIX+CaKxN3iL8IawY+
-         4esEjsAM7hRAtYvRzMgVmR9vSolLSnj+kPwM1wlEcomxT4tuscwRvYZ30cqXIjRZ7AFw
-         wpfkcDaqNEGH5bwnGlHbj6F5zl51FHU2M19UQIGZSAKRHHsbwNEwK/7ilANmFsnAOzJU
-         vDutlW9DFkMHsGVZF254iPq8SURQag7SygVMF8UeUTIN8cRHVAUiAvVUpGHKMl83Fcch
-         heGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686774747; x=1689366747;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=czEjt+NjAyuH0cAt6yqFee89woVRFsyvQrYC+0eGV9Y=;
-        b=anV+nmmKz1Owv72zVLMpPhtih9rg/HBSFe2e0RIARBWSztVJAERh3vO1KxDc+4aQDj
-         /GFq1/c00Td/YqgmBP36RVdpzS01094vF4Huv7DvEVHKDNKpvY00wwqnKD6O+r4NlyoQ
-         XQH8CuFJ4Z/eqm8w0eMHvZx8YpwpsP3cqkRCxNygZcoF8u1Tz6lP/+n6JDzWsTJJZ1de
-         VtWXkxBtvNuJl4hxhbAU82YhJk9VCLZK/EQUkDLkH2QB/QAijgcW+s/jlCRb1Kz059u3
-         BSrWynHJ7HWW8uzGjJEPCG4FEB+MERkD8uAf+U285BzuAL181mZJSM/jUa7bTTZZ3+fR
-         39Ug==
-X-Gm-Message-State: AC+VfDwpobK53KAUX85MSYFEWavv0ofm3PfXp3Ofh0AUBnnOqqM5eiMX
-        GZYIfI1QaeV+oCMi316YivbIe9WR21nfQ0g=
-X-Google-Smtp-Source: ACHHUZ6QRTP5WMGlZF6ouKyzQXFEVXAvPfgRaI2C78nvnu3bQtIOBOvXIr1gBV+MPRyzc5u+ThXTy0T5ROzw65g=
-X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
- (user=aliceryhl job=sendgmr) by 2002:a17:907:2bf0:b0:982:9e1c:ddc5 with SMTP
- id gv48-20020a1709072bf000b009829e1cddc5mr8045ejc.0.1686774747408; Wed, 14
- Jun 2023 13:32:27 -0700 (PDT)
-Date:   Wed, 14 Jun 2023 20:32:25 +0000
-In-Reply-To: <20230614180837.630180-5-ojeda@kernel.org>
+        Wed, 14 Jun 2023 16:33:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1386226BA
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 13:33:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FA906184D
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 20:33:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C85DBC433C0;
+        Wed, 14 Jun 2023 20:33:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1686774819;
+        bh=Iu93SuweVrRX7FVAD9kDUf9pdECryvqWZ90NRtl/CPM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pSwEuI0aIqzS/2+x/BhbgWOiPFgdB3tHAXo9/s4EEeQpUBC6DL34uboA1uV9fel//
+         tmwtpHlh9olp17mtfnOvFdKh/SZJsYxpZEZJJ7bTf8mz1FSNkjAHrQm0Y16fIoU0dv
+         KR9VvyNtVnVajWAOyJ6WJ+MtyO71bVnyYORfmY/U=
+Date:   Wed, 14 Jun 2023 13:33:37 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] mmzone: Introduce folio_migratetype()
+Message-Id: <20230614133337.f5eb6ef530d7d6cb1edbcf0d@linux-foundation.org>
+In-Reply-To: <ZIogXmFNr3MnBtjX@casper.infradead.org>
+References: <20230614021312.34085-1-vishal.moola@gmail.com>
+        <20230614021312.34085-3-vishal.moola@gmail.com>
+        <20230614131305.2939f29e4372c94a8c6a56a8@linux-foundation.org>
+        <ZIogXmFNr3MnBtjX@casper.infradead.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
-References: <20230614180837.630180-5-ojeda@kernel.org>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Message-ID: <20230614203225.2909756-1-aliceryhl@google.com>
-Subject: Re: [PATCH 4/6] rust: types: make doctests compilable/testable
-From:   Alice Ryhl <aliceryhl@google.com>
-To:     ojeda@kernel.org
-Cc:     alex.gaynor@gmail.com, aliceryhl@google.com,
-        benno.lossin@proton.me, bjorn3_gh@protonmail.com,
-        boqun.feng@gmail.com, brendan.higgins@linux.dev,
-        davidgow@google.com, gary@garyguo.net, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        nmi@metaspace.dk, patches@lists.linux.dev, philip.li@intel.com,
-        rust-for-linux@vger.kernel.org, wedsonaf@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Miguel Ojeda <ojeda@kernel.org> writes:
-> Rust documentation tests are going to be build/run-tested
-> with the KUnit integration added in a future patch, thus
-> update them to make them compilable/testable so that we
-> may start enforcing it.
+On Wed, 14 Jun 2023 21:17:34 +0100 Matthew Wilcox <willy@infradead.org> wrote:
+
+> On Wed, Jun 14, 2023 at 01:13:05PM -0700, Andrew Morton wrote:
+> > On Tue, 13 Jun 2023 19:13:09 -0700 "Vishal Moola (Oracle)" <vishal.moola@gmail.com> wrote:
+> > 
+> > > Introduce folio_migratetype() as a folio equivalent for
+> > > get_pageblock_migratetype(). This function intends to return the
+> > > migratetype the folio is located in, hence the name choice.
+> > > 
+> > > ...
+> > >
+> > > --- a/include/linux/mmzone.h
+> > > +++ b/include/linux/mmzone.h
+> > > @@ -105,6 +105,9 @@ extern int page_group_by_mobility_disabled;
+> > >  #define get_pageblock_migratetype(page)					\
+> > >  	get_pfnblock_flags_mask(page, page_to_pfn(page), MIGRATETYPE_MASK)
+> > >  
+> > > +#define folio_migratetype(folio)				\
+> > > +	get_pfnblock_flags_mask(&folio->page, folio_pfn(folio),		\
+> > > +			MIGRATETYPE_MASK)
+> > 
+> > Theoretically this is risky because it evaluates its argument more than
+> > once.  Although folio_migratetype(folio++) seems an unlikely thing to do.
 > 
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> folio++ is always an unsafe thing to do.  folios are not consecutive
+> in memory (unless we know they're order-0).
 
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+OK, folio_migratetype(expensive_function_which_returns_a_folio()) or
+folio_migratetype(function_with_side_effects_which_returns_a_folio()). 
+There are many failure modes.
 
+> > An inlined C function is always preferable.  My quick attempt at that
+> > reveals that the header files are All Messed Up As Usual.
+> 
+> The page-equivalent of this also evaluates its arguments more than once,
+> so it doesn't see too risky for now?
+
+We got lucky.   It's just bad practice.
