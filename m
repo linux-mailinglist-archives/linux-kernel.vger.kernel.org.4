@@ -2,75 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD5FD72F0CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 02:11:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7132672F0D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 02:13:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240280AbjFNALD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 20:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50294 "EHLO
+        id S240917AbjFNAMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 20:12:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbjFNALC (ORCPT
+        with ESMTP id S240872AbjFNAMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 20:11:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FAB21B8
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 17:11:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8223263410
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 00:10:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E562DC433C0;
-        Wed, 14 Jun 2023 00:10:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686701457;
-        bh=UremVR9Yk/i0U8+JW2S1pgvTtrYk8jILrPMGvbdUavg=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=croYMOsuotJDB1/0WtCWhzR2ANsPdDG8dZ6JuDYe5zKfWxf0So9qcYdXSyC5FKn6Q
-         vHhnPTXv/MBf8BupvK8AimFZHVvRuySqRkno4KP57l/gYSsFMaGC/FJajq7a8+RmUs
-         MqKTfAC6WEX3hWT/P24NB0UklwUh9ax2F66CG9kofMl1VrxpqSl+ynbuH6BtiQrQEg
-         xBEHCplA5cwgIJQKXYOm3JhZyMRfcnJK337rSG++HJvd43D5X878d/Ntz+qT4VWscq
-         UR9QIne/jPIkCnCOK2GahEC/t0pKJ5RKxzk4TNKlVCES7fe/AMu85EK9hDX1PUg/FV
-         Sx4z5nO+RZeXA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CCBC2C00446;
-        Wed, 14 Jun 2023 00:10:57 +0000 (UTC)
-Subject: Re: [GIT PULL] nios2: fix for v6.4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230613223510.20803-1-dinguyen@kernel.org>
-References: <20230613223510.20803-1-dinguyen@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230613223510.20803-1-dinguyen@kernel.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/nios2_fix_v6.4
-X-PR-Tracked-Commit-Id: 85041e12418fd0c08ff972b7729f7971afb361f8
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: b6dad5178ceaf23f369c3711062ce1f2afc33644
-Message-Id: <168670145782.22043.2882211666155977402.pr-tracker-bot@kernel.org>
-Date:   Wed, 14 Jun 2023 00:10:57 +0000
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     torvalds@linux-foundation.org, dinguyen@kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 13 Jun 2023 20:12:53 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FBA10EC;
+        Tue, 13 Jun 2023 17:12:50 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-3408334f13bso3357965ab.3;
+        Tue, 13 Jun 2023 17:12:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686701570; x=1689293570;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fH6FmxGt/Oa/LI1in+ZqKzhAOMdBsI3JiFQigCkDIqc=;
+        b=pYt2RDhwc1sIPeNdgwx+UjMvY5EHQ25+1nToJd1CC7SPfwXpYYeDp7rXg6Qpu5ZqG4
+         x1VA9PKkrTPoobu997BcRhjMOBdrXNMzJgca8ddmkVD5Y9H0ZDfoAkPkibPK1PhRCXCs
+         ZgjYPKMWVlZgfucyDBSJUkCB13636HGvCMOK1mTSx0AvP4FBZlyIsJTmBCerfVgbmjEf
+         RsvbdmNrMPuO75dzAnEC4TuYCo/9rzLWc3IfQrs97y7QhREzNfrEHpa+yGlGC3hHgjh5
+         MNtGnuTU/Kt7wh5C/A5uOXWEUr8+A0AUWrGszSehAiyn4v5dJoVEB6/itmey48XFGx/1
+         KxUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686701570; x=1689293570;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fH6FmxGt/Oa/LI1in+ZqKzhAOMdBsI3JiFQigCkDIqc=;
+        b=RI1XqNA5F3YQpy7jBVfM2HQktmJAYSAf+2GfEOCK66HyzMvRL8YdidvuOwswp2UhMY
+         HFNYrIBaeO7cTVWZ1knO87nQTf+Mb44vHoOjDu/XYA19fW1Je2s32/fDIwcBw2t6BVv8
+         oMb4y8t6aL0MIv9Fcmp3EvbnFkrbN6gACr6c7E68ZO/mO2sCiib8+OLRC4fTGAgFHQYZ
+         XutxOG5apOmSJoAPMH5ljIH6MX1uJFnVG/jEU6uj9P+gbjW6hFAd+Q8+Aegjr8enjznc
+         Jn/tGaqQysgcOqZwlXhZHOIZeLgD4DxVOOdore9vDgRZN1HO80D4/NwZtd9ZrGZ2jw5b
+         NzLw==
+X-Gm-Message-State: AC+VfDxkro6ljxnBIlGoLXoZ7KKCR7qyJHVzsM9rUnu7QHWrpHvu4aTh
+        rFCWQfMwvyGaX7zlh2BCMxk=
+X-Google-Smtp-Source: ACHHUZ7sy2N8NvzKYSG+QFV1WfIDNfXpxQy1JxKKM+nnIWZkV1mmK/3kZmx5oP6YJJh9DhyzOuU9yQ==
+X-Received: by 2002:a92:d450:0:b0:33e:6378:d917 with SMTP id r16-20020a92d450000000b0033e6378d917mr10816259ilm.9.1686701569555;
+        Tue, 13 Jun 2023 17:12:49 -0700 (PDT)
+Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
+        by smtp.gmail.com with ESMTPSA id p10-20020a92c10a000000b0033b27117120sm4090039ile.13.2023.06.13.17.12.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 17:12:48 -0700 (PDT)
+From:   Azeem Shaikh <azeemshaikh38@gmail.com>
+To:     Chuck Lever <chuck.lever@oracle.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Cc:     linux-hardening@vger.kernel.org,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        Neil Brown <neilb@suse.de>,
+        Olga Kornievskaia <kolga@netapp.com>,
+        Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Subject: [PATCH v2] SUNRPC: Remove strlcpy
+Date:   Wed, 14 Jun 2023 00:12:46 +0000
+Message-ID: <20230614001246.538643-1-azeemshaikh38@gmail.com>
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 13 Jun 2023 17:35:09 -0500:
+strlcpy() reads the entire source buffer first.
+This read may exceed the destination size limit.
+This is both inefficient and can lead to linear read
+overflows if a source string is not NUL-terminated [1].
+In an effort to remove strlcpy() completely [2], replace
+strlcpy() here with sysfs_emit().
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/nios2_fix_v6.4
+Direct replacement is safe here since the getter in kernel_params_ops
+handles -errno return [3].
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/b6dad5178ceaf23f369c3711062ce1f2afc33644
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+[2] https://github.com/KSPP/linux/issues/89
+[3] https://elixir.bootlin.com/linux/v6.4-rc6/source/include/linux/moduleparam.h#L52
 
-Thank you!
+Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+---
+ net/sunrpc/svc.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/net/sunrpc/svc.c b/net/sunrpc/svc.c
+index e6d4cec61e47..77326f163801 100644
+--- a/net/sunrpc/svc.c
++++ b/net/sunrpc/svc.c
+@@ -109,13 +109,13 @@ param_get_pool_mode(char *buf, const struct kernel_param *kp)
+ 	switch (*ip)
+ 	{
+ 	case SVC_POOL_AUTO:
+-		return strlcpy(buf, "auto\n", 20);
++		return sysfs_emit(buf, "auto\n");
+ 	case SVC_POOL_GLOBAL:
+-		return strlcpy(buf, "global\n", 20);
++		return sysfs_emit(buf, "global\n");
+ 	case SVC_POOL_PERCPU:
+-		return strlcpy(buf, "percpu\n", 20);
++		return sysfs_emit(buf, "percpu\n");
+ 	case SVC_POOL_PERNODE:
+-		return strlcpy(buf, "pernode\n", 20);
++		return sysfs_emit(buf, "pernode\n");
+ 	default:
+ 		return sprintf(buf, "%d\n", *ip);
+ 	}
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.41.0.162.gfafddb0af9-goog
+
+
