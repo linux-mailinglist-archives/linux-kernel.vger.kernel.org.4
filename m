@@ -2,216 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BA9F72FBCA
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 12:59:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2A4572FBCB
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 12:59:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235913AbjFNK7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 06:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59276 "EHLO
+        id S243367AbjFNK7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 06:59:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234209AbjFNK7M (ORCPT
+        with ESMTP id S235923AbjFNK7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 06:59:12 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92FA19BC
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 03:59:10 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-30c4c1fd511so6129610f8f.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 03:59:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686740349; x=1689332349;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=X76GkVQmm233Ef9CD45/5gbsHuJzJYm1L85f82G9R4o=;
-        b=YC6D/9YorHI2DGemUAj/35LGIrIk1d7W7kFw5L0NFtynGJLSkwhdHBHTSkjoAWF6Hw
-         pId1fTQQnxrw3IOIqwOPq4EYitLlCm4eclIXFwsCwdUT42yWTcdUPCNPSqVSLogvk1iU
-         xduZ2AUrOfBKMsWgPwR20HTGWegtCwfw5LRXu0ASMVU6Gl/0ltjm7D9BezzW72ukdkUj
-         vMiMK+9R2Qry+vuJ+0zUaYnKowG7HXx3jvRvpsXxISRg5C6jmrZ+zK0qBpdjVpM33kY0
-         fqFpfi058mntucNZ7KuAVG+aRmJWOKJxK2XdB2gecXB08r68rF+/Y/Rfxr6iVsBI6grQ
-         zhXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686740349; x=1689332349;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X76GkVQmm233Ef9CD45/5gbsHuJzJYm1L85f82G9R4o=;
-        b=PKHQuznzW29NEpWiBuIRhXbESLymAEM3i74+R2jy67FS4tNm9M+RYFk4zcerYt+Q2Z
-         YcevIyNaNFQ0iW1KjI6sL9Po2AM+aEzazzZrdHf7ES/ROPX/pduiCY1v0Pov4XACsR0C
-         yrxgBlksqAmgtzJ8iqoei3S0cwe/5m3VYmaN11BEqb2bcRDt24zTPB5nnvbu3Y61lks/
-         GW98qUb54C0FYY93nHZVtupiaDIAhEtnOXlB7050T4J1eilRtw87jSoPbnpaY7w+6Tzx
-         TR5etmc2ocdYg/l7jEdXyCEXpXud3leeMt9i4p0egZlULpAdBoLKLxXmuJKDFqi0gmrZ
-         5j5A==
-X-Gm-Message-State: AC+VfDw1Y77XQ06ULnDvvLVE7/AIZD+sqG1EhRB0FQRN/SqgY3LFmFt7
-        NOsZ6+WVH4J0GiJV3BMZKoOMSA==
-X-Google-Smtp-Source: ACHHUZ4osks2idP8nFHnF77UpFY2nhvaTzkrwZUVtXTupb7ex/nT+3I5JfmY4knyoi0MhzfpCxOZhg==
-X-Received: by 2002:adf:e4c8:0:b0:30f:c9bf:de69 with SMTP id v8-20020adfe4c8000000b0030fc9bfde69mr4851063wrm.46.1686740349081;
-        Wed, 14 Jun 2023 03:59:09 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:d8c4:17ec:c49d:215e? ([2a05:6e02:1041:c10:d8c4:17ec:c49d:215e])
-        by smtp.googlemail.com with ESMTPSA id n7-20020adff087000000b0030ae5a0516csm17816540wro.17.2023.06.14.03.59.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 03:59:08 -0700 (PDT)
-Message-ID: <d652acef-ab25-7d5e-6af0-584dacfbbd8d@linaro.org>
-Date:   Wed, 14 Jun 2023 12:59:07 +0200
+        Wed, 14 Jun 2023 06:59:41 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 650F91BEF;
+        Wed, 14 Jun 2023 03:59:37 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E46941FB;
+        Wed, 14 Jun 2023 04:00:20 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.24.16])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 60BB43F71E;
+        Wed, 14 Jun 2023 03:59:34 -0700 (PDT)
+Date:   Wed, 14 Jun 2023 11:59:28 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, catalin.marinas@arm.com,
+        Mark Brown <broonie@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH V11 08/10] arm64/perf: Add struct brbe_regset helper
+ functions
+Message-ID: <ZImdkHxE6kX+dT5e@FVFF77S0Q05N>
+References: <20230531040428.501523-1-anshuman.khandual@arm.com>
+ <20230531040428.501523-9-anshuman.khandual@arm.com>
+ <ZIikv0bW1xGeLf6B@FVFF77S0Q05N.cambridge.arm.com>
+ <2e91f218-e740-5b7d-fa8d-8fc43a6502a2@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v14 1/2] thermal: loongson-2: add thermal management
- support
-Content-Language: en-US
-To:     zhuyinbo <zhuyinbo@loongson.cn>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn,
-        zhanghongchen <zhanghongchen@loongson.cn>
-References: <20230426062018.19755-1-zhuyinbo@loongson.cn>
- <af4d1e00-76d6-b71a-2ed1-562e6405306b@linaro.org>
- <ac5b3982-a658-e05b-1b5c-3aeeda1585ed@loongson.cn>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <ac5b3982-a658-e05b-1b5c-3aeeda1585ed@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2e91f218-e740-5b7d-fa8d-8fc43a6502a2@arm.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Hi Yinbo,
-
-
-On 14/06/2023 10:03, zhuyinbo wrote:
+On Wed, Jun 14, 2023 at 10:44:38AM +0530, Anshuman Khandual wrote:
+> On 6/13/23 22:47, Mark Rutland wrote:
+> >> +/*
+> >> + * This scans over BRBE register banks and captures individual branch reocrds
+> >> + * [BRBSRC, BRBTGT, BRBINF] into a pre-allocated 'struct brbe_regset' buffer,
+> >> + * until an invalid one gets encountered. The caller for this function needs
+> >> + * to ensure BRBE is an appropriate state before the records can be captured.
+> >> + */
+> >> +static int capture_brbe_regset(struct brbe_hw_attr *brbe_attr, struct brbe_regset *buf)
+> >> +{
+> >> +	int loop1_idx1, loop1_idx2, loop2_idx1, loop2_idx2;
+> >> +	int idx, count;
+> >> +
+> >> +	loop1_idx1 = BRBE_BANK0_IDX_MIN;
+> >> +	if (brbe_attr->brbe_nr <= BRBE_BANK_MAX_ENTRIES) {
+> >> +		loop1_idx2 = brbe_attr->brbe_nr - 1;
+> >> +		loop2_idx1 = BRBE_BANK1_IDX_MIN;
+> >> +		loop2_idx2 = BRBE_BANK0_IDX_MAX;
+> >> +	} else {
+> >> +		loop1_idx2 = BRBE_BANK0_IDX_MAX;
+> >> +		loop2_idx1 = BRBE_BANK1_IDX_MIN;
+> >> +		loop2_idx2 = brbe_attr->brbe_nr - 1;
+> >> +	}
+> >> +
+> >> +	select_brbe_bank(BRBE_BANK_IDX_0);
+> >> +	for (idx = 0, count = loop1_idx1; count <= loop1_idx2; idx++, count++) {
+> >> +		buf[idx].brbinf = get_brbinf_reg(idx);
+> >> +		/*
+> >> +		 * There are no valid entries anymore on the buffer.
+> >> +		 * Abort the branch record processing to save some
+> >> +		 * cycles and also reduce the capture/process load
+> >> +		 * for the user space as well.
+> >> +		 */
+> >> +		if (brbe_invalid(buf[idx].brbinf))
+> >> +			return idx;
+> >> +
+> >> +		buf[idx].brbsrc = get_brbsrc_reg(idx);
+> >> +		buf[idx].brbtgt = get_brbtgt_reg(idx);
+> >> +	}
+> >> +
+> >> +	select_brbe_bank(BRBE_BANK_IDX_1);
+> >> +	for (count = loop2_idx1; count <= loop2_idx2; idx++, count++) {
+> >> +		buf[idx].brbinf = get_brbinf_reg(idx);
+> >> +		/*
+> >> +		 * There are no valid entries anymore on the buffer.
+> >> +		 * Abort the branch record processing to save some
+> >> +		 * cycles and also reduce the capture/process load
+> >> +		 * for the user space as well.
+> >> +		 */
+> >> +		if (brbe_invalid(buf[idx].brbinf))
+> >> +			return idx;
+> >> +
+> >> +		buf[idx].brbsrc = get_brbsrc_reg(idx);
+> >> +		buf[idx].brbtgt = get_brbtgt_reg(idx);
+> >> +	}
+> >> +	return idx;
+> >> +}
+> > 
+> > As with __armv8pmu_branch_read(), the loop conditions are a bit hard to follow,
+> > and I believe that can be rewritten along the lines of the suggestion there.
 > 
-> Hi Daniel,
+> I have changed both the places (in separate patches) with suggested loop structure.
 > 
-> Thank you very much for your feedback and suggestions. Below, I have
-> some comments, please review.
-
-[ ... ]
-
->>> +
->>> +    low += 100;
->>> +    high += 100;
-
-Literals -> macros
-
->>> +    reg_ctrl = low;
->>> +    reg_ctrl |= enable ? 0x100 : 0;
->>> +    writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
->>> +
->>> +    reg_ctrl = high;
->>> +    reg_ctrl |= enable ? 0x100 : 0;
->>> +    writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
->>
->> Is the 'enable' boolean really useful?
+> > 
+> > Looking at this, we now have a couple of places that will try to read the
+> > registers for an individual record, so it probably makes sense to facotr that
+> > into a helper, e.g.
 > 
+> There are indeed two places inside capture_brbe_regset() - one for each bank.
 > 
-> Yes, this 'enable' was to enable thermal irq.
+> > 
+> > | static bool __read_brbe_regset(struct brbe_regset *entry, int idx)
+> > | {
+> > | 	u64 brbinf = get_brbinf_reg(idx);
+> > | 
+> > | 	if (brbe_invalid(brbinf))
+> > | 		return false;
+> > | 	
+> > | 	entry->brbinf = brbinf;
+> > | 	entry->brbsrc = get_brbsrc_reg(idx);
+> > | 	entry->brbtgt = get_brbtgt_reg(idx);
+> > | 
+> > | 	return true;
+> > | }
+> > 
+> > ... which can be used here, e.g.
+> > 
+> > | /*
+> > |  * Capture all records before the first invalid record, and return the number
+> > |  * of records captured.
+> > |  */
+> > | static int capture_brbe_regset(struct brbe_hw_attr *brbe_attr, struct brbe_regset *buf)
+> > | {
+> > | 
+> > | 	int nr_entries = brbe_attr->brbe_nr;
+> > | 	int idx = 0;
+> > | 	
+> > | 	select_brbe_bank(BRBE_BANK_IDX_0);
+> > | 	while (idx < nr_entries && IDX < BRBE_BANK0_IDX_MAX) {
+> > | 		if (__read_brbe_regset(&buf[idx], idx))
 > 
->>
->> Wouldn't be the sensor trip points disabled by default at reset time?
->>
+> It should test !_read_brbe_regset(&buf[idx], idx)) instead as the error
+> case returns false.
+
+Yes, my bad.
+
+> >> +static int stitch_stored_live_entries(struct brbe_regset *stored,
+> >> +				      struct brbe_regset *live,
+> >> +				      int nr_stored, int nr_live,
+> >> +				      int nr_max)
+> >> +{
+> >> +	int nr_total, nr_excess, nr_last, i;
+> >> +
+> >> +	nr_total = nr_stored + nr_live;
+> >> +	nr_excess = nr_total - nr_max;
+> >> +
+> >> +	/* Stored branch records in stitched buffer */
+> >> +	if (nr_live == nr_max)
+> >> +		nr_stored = 0;
+> >> +	else if (nr_excess > 0)
+> >> +		nr_stored -= nr_excess;
+> >> +
+> >> +	/* Stitched buffer branch records length */
+> >> +	if (nr_total > nr_max)
+> >> +		nr_last = nr_max;
+> >> +	else
+> >> +		nr_last = nr_total;
+> >> +
+> >> +	/* Move stored branch records */
+> >> +	for (i = 0; i < nr_stored; i++)
+> >> +		copy_brbe_regset(stored, i, stored, nr_last - nr_stored - 1 + i);
+> >> +
+> >> +	/* Copy live branch records */
+> >> +	for (i = 0; i < nr_live; i++)
+> >> +		copy_brbe_regset(live, i, stored, i);
+> >> +
+> >> +	return nr_last;
+> >> +}
+> > 
+> > I think this can be written more simply as something like:
+> > 
+> > static int stitch_stored_live_entries(struct brbe_regset *stored,
+> > 				      struct brbe_regset *live,
+> > 				      int nr_stored, int nr_live,
+> > 				      int nr_max)
+> > {	
+> > 	int nr_move = max(nr_stored, nr_max - nr_live);
 > 
+> Should this compare be min() instead ?
+
+Yup, my bad again. That should be min().
+
+> > 	/* Move the tail of the buffer to make room for the new entries */
+> > 	memmove(&stored[nr_live], &stored[0], nr_move * sizeof(*stored));
+> > 
+> > 	/* Copy the new entries into the head of the buffer */
+> > 	memcpy(stored[0], &live[0], nr_live * sizeof(*stored));
+> > 
+> > 	/* Return the number of entries in the stitched buffer */
+> > 	return min(nr_live + nr_stored, nr_max);
+> > }
 > 
-> Only here will thermal irq be enabled throughout the entire driver, and
-> actual testing has shown that interrupts are valid, so this is
-> meaningful.
+> Otherwise this makes sense and simpler, will rework.
 
-Ok.
+Great!
 
->> If it is the case then we can get ride of this variable and make the 
->> routine simpler
->>
->>> +    return 0;
->>> +}
->>> +
->>> +static int loongson2_thermal_get_temp(struct thermal_zone_device 
->>> *tz, int *temp)
->>> +{
->>> +    u32 reg_val;
->>> +    struct loongson2_thermal_data *data = tz->devdata;
->>> +
->>> +    reg_val = readl(data->regs + LOONGSON2_TSENSOR_OUT);
->>
->> Seems like there is no offset for the sensor id here ?
-> 
-> 
-> There is no need for a sensor ID here.
-> 
-> There are some things that I didn't describe clearly, which made you
-> misunderstand. Actually, the temperature sensor of 2K1000 is like this:
-> 
-> There are 4 sets of temperature interrupt controllers, only one set of
-> temperature sampling registers. a sets of temperature interrupt
-> controllers was considered a sensor, which sensor include 3 register as
-> follows, where "SEL" represents which sensor is referenced, In 2k1000
-> datasheet, which "SEL" must be 0.
-
-I'm not sure to understand. Let me rephrase it and know what is wrong.
-
-1. The thermal controller has 4 sensors. The interrupt can be set for 
-these 4 sensors.
-
-2. When reading a temperature, we have to select the sensor via the 
-'SEL' register.
-
-3. The 2k1000 has one sensor with an id = 0.
-
-4. In the future, more Loongson platform can be submitted with more than 
-one sensor
-
-If this is correct, then my comments are about the inconsistency of the 
-proposed changes. Guessing in the future Loongson board there will be 
-more than one sensor, the existing code mixes support for one and 
-multiple sensors as well as assuming id is 0.
-
-So if you add in the of_loongson2_thermal_match table a new platform 
-with several sensors, the current code will be broken because:
-
-  - the initialization loop does exit when the first thermal zone 
-registration succeed
-
-  - the interrupt handler does not figure out which sensor crossed the 
-low/high limit
-
-  - the get_temp is not selecting the right sensor
-
-
-That is my point:
-
-  - write the code to support one sensor with id=0 only
-
-    *or*
-
-  - write the code to support multiple sensors
-
-If I'm not wrong the code is closer to support multiple sensors ;)
-
-Let me know if these deductions are correct
-
-   -- Daniel
-
-ps : is there an English translation for the 2k1000 datasheet ?
-
-
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Thanks,
+Mark.
