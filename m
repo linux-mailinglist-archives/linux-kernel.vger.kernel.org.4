@@ -2,118 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E9B72FDDD
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2211E72FDBA
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244406AbjFNMFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 08:05:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43710 "EHLO
+        id S243581AbjFNMAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 08:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244409AbjFNMFd (ORCPT
+        with ESMTP id S244378AbjFNL7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 08:05:33 -0400
-X-Greylist: delayed 181 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 14 Jun 2023 05:05:32 PDT
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.220])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460801BFA
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:05:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1686743964; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=HkDbnRCmoXRWNIKLy1ufRJJHJ8S8GbSncnuei3xZ5vg9XOnDYJLevzzXaPvZvClNk/
-    +CeJfyay1LPc78vCc7yvGwKnIZ+mcMTLwiVaiDKPoKZVD0udhaaf1q4H8RzgUeLEEOwk
-    AS/upRFkKFSr/55+tY0YTHPCvgHmEP3vNoTAQBFz63xCHdYFB41JVcKx5AZJqagbAd7F
-    JCGW/ocgyOu3X9K4v1SaW6kGmRn/RMUlXdgdjWWDg21yalsqKYzAIZ8StGncZLV+6tU2
-    8xvmYO/DtTyh/pgcFA3ZyzVrYxgRTEwCMqV5EzkcDgFecRB5wX3qJHEuqgNP8tvMLxNd
-    zQ/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686743964;
-    s=strato-dkim-0002; d=strato.com;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=vMoc5VyH6n3kW4KHnsgIvyCuToj2ccHvrt1ZTeOdzfY=;
-    b=KL94Es3IlnwhXkEbHGWsdDldB+UzENsYx3vZlZKJwdCTkHY86u/8u8Dp8JCzSKr8Go
-    UWCZokMZWhRfRRFu4IPdcsGTDcPgkETvUbNzm9BKdfZqmvs2VFIuEfeO1XMGypGgFXAe
-    SBW9oMne8QP0KyniV+3GA5Tx70FUq74drMyTGQMKK1l/PGuZUPPrSjW7egV/xXL/a7OL
-    8FZZmscKmEW27457FD0jXeTgXyONZPotDWYqi2dk94UcNemFrroFXiSpd7WwNeS5uY+Z
-    m9nVz/DLyrSW8cDGpiF+wLNw83WYsc8IgKlqowVjHb3aAXzWGPcERSBZfwO3t/RVzFXo
-    5ZIQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686743964;
-    s=strato-dkim-0002; d=chronox.de;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=vMoc5VyH6n3kW4KHnsgIvyCuToj2ccHvrt1ZTeOdzfY=;
-    b=RKMZO3FaYpNAQ6A8OqoTKstrmE5MsvwauNT3avcPv1CsJS3jb8iaTrnznpDISj0R/P
-    5nSaiHkUy5TiMmnsckF9RAtYFkcN0CxvXqabinJj9W7zbtmYXMmdOcexERGyokWt09E7
-    MkcAv+cUcUGKzAO06q7k1yl4zslVIYNi2Q+vVy1ulEQFM4TcPyTLPOqG5mV+J5Q4kOpo
-    2kXFNb84Dyye0KAEtgqe1d1AJIFn4ll0IWjEwcHtPkTAyFHk4UDjiHCqGb+OXHDCY1lu
-    6O5/TeWuprTK2dazytJz2t0FI5SfsclGrE1e5/y0QkBVp6OcaxW9t15SaNAS6tbX6lMA
-    oIGg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686743964;
-    s=strato-dkim-0003; d=chronox.de;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=vMoc5VyH6n3kW4KHnsgIvyCuToj2ccHvrt1ZTeOdzfY=;
-    b=yPJPMBEmSSaPLxIkjJNDt5qzpzC3ic8YZ4opGjYYUjlpxJwFg1PVfYv7A24JTpY6pW
-    vLalZ2mckqYGmKikLiCA==
-X-RZG-AUTH: ":P2ERcEykfu11Y98lp/T7+hdri+uKZK8TKWEqNyiHySGSa9k9y2gdNk2TvDz0d0iwLwE="
-Received: from tauon.chronox.de
-    by smtp.strato.de (RZmta 49.5.3 AUTH)
-    with ESMTPSA id qe6984z5EBxN6WH
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 14 Jun 2023 13:59:23 +0200 (CEST)
-From:   Stephan Mueller <smueller@chronox.de>
-To:     Mahmoud Adam <mngyadam@amazon.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     davem@davemloft.net, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] crypto: rsa - allow only odd e and restrict value in FIPS mode
-Date:   Wed, 14 Jun 2023 13:59:23 +0200
-Message-ID: <4502349.tsrQG4AIub@tauon.chronox.de>
-In-Reply-To: <ZImNfECCS+22oF/D@gondor.apana.org.au>
-References: <20230613161731.74081-1-mngyadam@amazon.com>
- <ZImNfECCS+22oF/D@gondor.apana.org.au>
+        Wed, 14 Jun 2023 07:59:44 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DF1A51FDC
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 04:59:38 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.116])
+        by gateway (Coremail) with SMTP id _____8Ax3eqpq4lkpx0FAA--.10865S3;
+        Wed, 14 Jun 2023 19:59:37 +0800 (CST)
+Received: from loongson-pc.loongson.cn (unknown [10.20.42.116])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxNeSoq4lkzJMaAA--.10424S2;
+        Wed, 14 Jun 2023 19:59:36 +0800 (CST)
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>,
+        loongson-kernel@lists.loongnix.cn
+Subject: [PATCH V3 0/5] irqchip/loongson: Fix some loongson irqchip drivers
+Date:   Wed, 14 Jun 2023 19:59:31 +0800
+Message-Id: <20230614115936.5950-1-lvjianmin@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxNeSoq4lkzJMaAA--.10424S2
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBj9xXoWrZF13JFWDXFyDJF1kZF17CFX_yoWfZFb_uF
+        WI93yDCrn2gF1xXay2yr40vF9I9FWUW3Wq9FyjqF1rX3yqv3W3Cr47CwnxG3Z7JF48tFn8
+        Xrs5GryfCryIyosvyTuYvTs0mTUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvT
+        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+        cSsGvfJTRUUUb38YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+        vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+        GcCE3s1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2
+        x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1D
+        McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr4
+        1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_
+        JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17
+        CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0
+        I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I
+        8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73
+        UjIFyTuYvjxU4xR6UUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, 14. Juni 2023, 11:50:52 CEST schrieb Herbert Xu:
+The patch series provide some fixes for loongson-liointc and loongson-pch-pic driver.
 
-Hi Herbert,
+V1->V2:
+1. Adjust commit log for all patchs
+2. Add some explanation for Loongson-3's polarity register
 
-> On Tue, Jun 13, 2023 at 04:17:31PM +0000, Mahmoud Adam wrote:
-> > check if rsa public exponent is odd and check its value is between
-> > 2^16 < e < 2^256.
-> > 
-> > FIPS 186-5 DSS (page 35)[1] specify that:
-> > 
-> > 1. The public exponent e shall be selected with the following constraints:
-> >   (a) The public verification exponent e shall be selected prior to
-> >   generating the primes, p and q, and the private signature exponent
-> >   d.
-> >   
-> >   (b) The exponent e shall be an odd positive integer such that:
-> >    2^16 < e < 2^256.
-> > 
-> > [1] https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-5.pdf
-> > 
-> > Signed-off-by: Mahmoud Adam <mngyadam@amazon.com>
+V2->V3:
+1. Add a new patch[5] to fix irq affinity setting during resume for loongson-eiointc
 
-Reviewed-by: Stephan Mueller <smueller@chronox.de>
+Jianmin Lv (3):
+  irqchip/loongson-pch-pic: Fix initialization of HT vector register
+  irqchip/loongson-liointc: Fix IRQ trigger polarity
+  irqchip/loongson-eiointc: Fix irq affinity setting during resume
 
-Ciao
-Stephan
+Liu Peibao (1):
+  irqchip/loongson-pch-pic: Fix potential incorrect hwirq assignment
 
+Yinbo Zhu (1):
+  irqchip/loongson-liointc: Add IRQCHIP_SKIP_SET_WAKE flag
+
+ drivers/irqchip/irq-loongson-eiointc.c |  2 +-
+ drivers/irqchip/irq-loongson-liointc.c | 13 +++++++++----
+ drivers/irqchip/irq-loongson-pch-pic.c | 10 ++++------
+ 3 files changed, 14 insertions(+), 11 deletions(-)
+
+-- 
+2.31.1
 
