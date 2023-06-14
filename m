@@ -2,123 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23FC472FE8B
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9133C72FE8D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:26:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244508AbjFNMZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 08:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59448 "EHLO
+        id S244400AbjFNM00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 08:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244578AbjFNMZa (ORCPT
+        with ESMTP id S244597AbjFNM0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 08:25:30 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3848A1FD6
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:25:28 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f8d61cb36cso6512085e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:25:28 -0700 (PDT)
+        Wed, 14 Jun 2023 08:26:12 -0400
+Received: from mail-lj1-x249.google.com (mail-lj1-x249.google.com [IPv6:2a00:1450:4864:20::249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C8F1FCC
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:26:10 -0700 (PDT)
+Received: by mail-lj1-x249.google.com with SMTP id 38308e7fff4ca-2b168e97cdfso5428541fa.2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:26:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686745526; x=1689337526;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6iG5vTOdWzF2uLO8FkovF7ShHOsamQjYeEGdvdvyCPc=;
-        b=D5VWS3vk0HgW8LDAcGE7BQZKTJtIFTU2fyJhZFJzB2fyCfLBt1e7mvFizFfdPvkjuA
-         sYkB86TEHdehY5mu38+NmNxcWnjtEHUU3bA5VB1sVl8iiAV3ETpl4mk1kOrLq1yrBKW/
-         QQYqOfV7ULhEGyk90oNvgan6ePjNzLPa+gax189cAGgjHe6LAky2ajemkNFgaZXJemd7
-         1O3HlJ0fTzXGMdrJjxGVqN+vb/V3ZHrauj3SDBmFi9IU4e5fvI6YhoVc4rBajLFl8QdN
-         G0OOu1SYxNkAnsGgBTEuXVfKmZnBvt9VDkpFapWcHn8UZOxuUQS5MVefYywfxOpxtEhm
-         RJbw==
+        d=google.com; s=20221208; t=1686745569; x=1689337569;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=yCzCiWoRELswxyKR3MRcDLOgrFXaFbCkfTHkOK7uwD0=;
+        b=gllsBxNq6gokE1zbrq87NmmsaIIb3mTAtMg7dO3GDuDj14v7zFtVy4Lcq4BZLStnZh
+         hoP5wHluCVhHdkY/oo+tU6vjDyKxLcLLjj9jNXCDdXeq9/ISRg5MBtFyVdjjnNkdUPzL
+         oCCHGVo1oanf2kaO2CroU/lWg9/MIshWsJTbsrw82EgF12g+6vvkCqfMAl5CqkIVlUIK
+         VjL4P+LgD8QRi5l3dqlQFdTq0IK+pCCvORdRHncrJ4ssTn+VqLNrmRC5Cy0q/iZ3cgTv
+         rrkAOGHzScUdeeZxDhGcxERAPcY4ZVU7KOQKXCUOo3roAVnOPGDn1Sjf7Z9mAM7FkOu4
+         qgeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686745526; x=1689337526;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6iG5vTOdWzF2uLO8FkovF7ShHOsamQjYeEGdvdvyCPc=;
-        b=O9+MvX+klOHTbljI1/uThr6lAY62JOB798zEc1bwLCYG0t41sNiELngWmricjFVqVB
-         6+RlrSXWUm4hF0pEVf3VlauW78UJ56VPdAqu92DRZr1Bh1wA2gouJwaHdUWN9OkEZoXs
-         aNFR5ceSL0s8DTeCPfbzs3/4WZXWlIndhRaXrIj9wx6Mz/YpqiXt5QI+Tq1NTvRaW/U9
-         XvnsScV6HThTkMs8Ly0OEV9Ord2k2gqmm/dV1T465Pq2N2Y01KrH3FEMi4UP7ELzSs+c
-         +3l1cbcCuw//Sj5SlBTZIYgdRZ2j5XvqNOTWfsaTONkI82OYw8ldkClAlNWx0nTF+3rP
-         IDfw==
-X-Gm-Message-State: AC+VfDzRwSPXTssdlM9aO71G80pEQR8E9mWpnvUmkwx6tkkZK3AO3FrG
-        Vf8CtFlOwSYafa9q6sspFiHiyg==
-X-Google-Smtp-Source: ACHHUZ4b1hlq4+ngmHH2dYvVKpDzL+96FL9kDu7anUXdRx9Z9DD4wc+TS6V9DMBamdmIZyFXLQWJlw==
-X-Received: by 2002:adf:e406:0:b0:307:9702:dfc8 with SMTP id g6-20020adfe406000000b003079702dfc8mr8934737wrm.48.1686745526648;
-        Wed, 14 Jun 2023 05:25:26 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id i4-20020a5d5584000000b0030fc576633dsm7421237wrv.16.2023.06.14.05.25.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 05:25:26 -0700 (PDT)
-Message-ID: <ce4a3201-3d42-b6fe-9e1a-63ea74588531@linaro.org>
-Date:   Wed, 14 Jun 2023 13:25:25 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 2/8] arm64: dts: qcom: msm8939: Disable lpass_codec by
- default
-Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        d=1e100.net; s=20221208; t=1686745569; x=1689337569;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yCzCiWoRELswxyKR3MRcDLOgrFXaFbCkfTHkOK7uwD0=;
+        b=b0nejK49ZlL3A8nDcCsj6VQD9Vs4D1dArl4mo/6oz+S1TbYc//l9ynAdVsSRaSYc1J
+         Aq7mL7mp/3e7Z4DuTRA5A6zNJRNc683uN7YlYQGVfx/DNcjXT5fyJQkR4cNUhwFTG7g9
+         ADBTXUgFEqEE7H43FEmcX28gkHDnaGm0+OcCwQkfDnD1URnNsWHZiR+ehX7HNG61sTWL
+         2/yQsKJ9qqixUzgp5KV9id1Tb4mQwc2kA/H8aLb+dIHQK/NNTgOFbCcuPs/DHmnRlm9f
+         fS5ERKx2dtj9PaC2JsmScTcd8DVqBXf40Gj/5ClYMGmI9bIRcF7xXhkqKZ8a27Js7soQ
+         73Aw==
+X-Gm-Message-State: AC+VfDwsMcFA6kR+KvOMfTfyQVCrkV/DNpl+i5BiJEgcqWOARnb2Z/K7
+        SXxtARhMjZBFsB23uxG3qvvAZPWqszWOIg==
+X-Google-Smtp-Source: ACHHUZ4uuMjHNfCmftPMbMtzKVaT5lwd5w6tsM1f8YtmMu9PT5/eEj8tScBG8lmCSia5m2Ir13MR585drZdnKw==
+X-Received: from mostafa.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:333c])
+ (user=smostafa job=sendgmr) by 2002:a2e:7310:0:b0:2ad:7f86:44e2 with SMTP id
+ o16-20020a2e7310000000b002ad7f8644e2mr3059289ljc.9.1686745568914; Wed, 14 Jun
+ 2023 05:26:08 -0700 (PDT)
+Date:   Wed, 14 Jun 2023 12:25:59 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230614122600.2098901-1-smostafa@google.com>
+Subject: [PATCH v2] KVM: arm64: Use different pointer authentication keys for pKVM
+From:   Mostafa Saleh <smostafa@google.com>
+To:     maz@kernel.org, oliver.upton@linux.dev,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
         linux-kernel@vger.kernel.org
-References: <20230530-msm8939-regulators-v1-0-a3c3ac833567@gerhold.net>
- <20230530-msm8939-regulators-v1-2-a3c3ac833567@gerhold.net>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230530-msm8939-regulators-v1-2-a3c3ac833567@gerhold.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Cc:     tabba@google.com, kaleshsingh@google.com, will@kernel.org,
+        catalin.marinas@arm.com, yuzenghui@huawei.com,
+        suzuki.poulose@arm.com, james.morse@arm.com,
+        Mostafa Saleh <smostafa@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/06/2023 08:16, Stephan Gerhold wrote:
-> Update for recent changes to msm8916.dtsi in commit a5cf21b14666
-> ("arm64: dts: qcom: msm8916: Disable audio codecs by default") and
-> make lpass_codec disabled by default for devices that are not using
-> the audio codec functionality inside MSM8939.
-> 
-> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
-> ---
->   arch/arm64/boot/dts/qcom/apq8039-t2.dts | 4 ++++
->   arch/arm64/boot/dts/qcom/msm8939.dtsi   | 1 +
->   2 files changed, 5 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/apq8039-t2.dts b/arch/arm64/boot/dts/qcom/apq8039-t2.dts
-> index 2a39216ceef5..c8442242137a 100644
-> --- a/arch/arm64/boot/dts/qcom/apq8039-t2.dts
-> +++ b/arch/arm64/boot/dts/qcom/apq8039-t2.dts
-> @@ -135,6 +135,10 @@ &lpass {
->   	status = "okay";
->   };
->   
-> +&lpass_codec {
-> +	status = "okay";
-> +};
-> +
->   &mdss {
->   	status = "okay";
->   };
-> diff --git a/arch/arm64/boot/dts/qcom/msm8939.dtsi b/arch/arm64/boot/dts/qcom/msm8939.dtsi
-> index 3c1505b69a6b..895cafc11480 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8939.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8939.dtsi
-> @@ -1608,6 +1608,7 @@ lpass_codec: audio-codec@771c000 {
->   				 <&gcc GCC_CODEC_DIGCODEC_CLK>;
->   			clock-names = "ahbix-clk", "mclk";
->   			#sound-dai-cells = <1>;
-> +			status = "disabled";
->   		};
->   
->   		sdhc_1: mmc@7824900 {
-> 
+When the use of pointer authentication is enabled in the kernel it
+applies to both the kernel itself as well as KVM's nVHE hypervisor. The
+same keys are used for both the kernel and the nVHE hypervisor, which is
+less than desirable for pKVM as the host is not trusted at runtime.
 
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Naturally, the fix is to use a different set of keys for the hypervisor
+when running in protected mode. Have the host generate a new set of keys
+for the hypervisor before deprivileging the kernel. While there might be
+other sources of random directly available at EL2, this keeps the
+implementation simple, and the host is trusted anyways until it is
+deprivileged.
+
+Since the host and hypervisor no longer share a set of pointer
+authentication keys, start context switching them on the host entry/exit
+path exactly as we do for guest entry/exit. There is no need to handle
+CPU migration as the nVHE code is not migratable in the first place.
+
+Signed-off-by: Mostafa Saleh <smostafa@google.com>
+
+---
+v2:
+- Add missing isb after updating hyp keys.
+- Reword commit message from Oliver.
+---
+ arch/arm64/kvm/arm.c           | 26 ++++++++++++++++++++++++
+ arch/arm64/kvm/hyp/nvhe/host.S | 36 +++++++++++++++++++++++++++++++++-
+ 2 files changed, 61 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+index 14391826241c..dd03b52f035d 100644
+--- a/arch/arm64/kvm/arm.c
++++ b/arch/arm64/kvm/arm.c
+@@ -51,6 +51,8 @@ DECLARE_KVM_HYP_PER_CPU(unsigned long, kvm_hyp_vector);
+ DEFINE_PER_CPU(unsigned long, kvm_arm_hyp_stack_page);
+ DECLARE_KVM_NVHE_PER_CPU(struct kvm_nvhe_init_params, kvm_init_params);
+ 
++DECLARE_KVM_NVHE_PER_CPU(struct kvm_cpu_context, kvm_hyp_ctxt);
++
+ static bool vgic_present;
+ 
+ static DEFINE_PER_CPU(unsigned char, kvm_arm_hardware_enabled);
+@@ -2067,6 +2069,26 @@ static int __init kvm_hyp_init_protection(u32 hyp_va_bits)
+ 	return 0;
+ }
+ 
++static void pkvm_hyp_init_ptrauth(void)
++{
++	struct kvm_cpu_context *hyp_ctxt;
++	int cpu;
++
++	for_each_possible_cpu(cpu) {
++		hyp_ctxt = per_cpu_ptr_nvhe_sym(kvm_hyp_ctxt, cpu);
++		hyp_ctxt->sys_regs[APIAKEYLO_EL1] = get_random_long();
++		hyp_ctxt->sys_regs[APIAKEYHI_EL1] = get_random_long();
++		hyp_ctxt->sys_regs[APIBKEYLO_EL1] = get_random_long();
++		hyp_ctxt->sys_regs[APIBKEYHI_EL1] = get_random_long();
++		hyp_ctxt->sys_regs[APDAKEYLO_EL1] = get_random_long();
++		hyp_ctxt->sys_regs[APDAKEYHI_EL1] = get_random_long();
++		hyp_ctxt->sys_regs[APDBKEYLO_EL1] = get_random_long();
++		hyp_ctxt->sys_regs[APDBKEYHI_EL1] = get_random_long();
++		hyp_ctxt->sys_regs[APGAKEYLO_EL1] = get_random_long();
++		hyp_ctxt->sys_regs[APGAKEYHI_EL1] = get_random_long();
++	}
++}
++
+ /* Inits Hyp-mode on all online CPUs */
+ static int __init init_hyp_mode(void)
+ {
+@@ -2228,6 +2250,10 @@ static int __init init_hyp_mode(void)
+ 	kvm_hyp_init_symbols();
+ 
+ 	if (is_protected_kvm_enabled()) {
++		if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL) &&
++		    cpus_have_const_cap(ARM64_HAS_ADDRESS_AUTH))
++			pkvm_hyp_init_ptrauth();
++
+ 		init_cpu_logical_map();
+ 
+ 		if (!init_psci_relay()) {
+diff --git a/arch/arm64/kvm/hyp/nvhe/host.S b/arch/arm64/kvm/hyp/nvhe/host.S
+index b6c0188c4b35..c87c63133e10 100644
+--- a/arch/arm64/kvm/hyp/nvhe/host.S
++++ b/arch/arm64/kvm/hyp/nvhe/host.S
+@@ -10,6 +10,7 @@
+ #include <asm/kvm_arm.h>
+ #include <asm/kvm_asm.h>
+ #include <asm/kvm_mmu.h>
++#include <asm/kvm_ptrauth.h>
+ 
+ 	.text
+ 
+@@ -37,10 +38,43 @@ SYM_FUNC_START(__host_exit)
+ 
+ 	/* Save the host context pointer in x29 across the function call */
+ 	mov	x29, x0
++
++#ifdef CONFIG_ARM64_PTR_AUTH_KERNEL
++alternative_if_not ARM64_HAS_ADDRESS_AUTH
++b __skip_pauth_save
++alternative_else_nop_endif
++
++alternative_if ARM64_KVM_PROTECTED_MODE
++	/* Save kernel ptrauth keys. */
++	add x18, x29, #CPU_APIAKEYLO_EL1
++	ptrauth_save_state x18, x19, x20
++
++	/* Use hyp keys. */
++	adr_this_cpu x18, kvm_hyp_ctxt, x19
++	add x18, x18, #CPU_APIAKEYLO_EL1
++	ptrauth_restore_state x18, x19, x20
++	isb
++alternative_else_nop_endif
++__skip_pauth_save:
++#endif /* CONFIG_ARM64_PTR_AUTH_KERNEL */
++
+ 	bl	handle_trap
+ 
+-	/* Restore host regs x0-x17 */
+ __host_enter_restore_full:
++	/* Restore kernel keys. */
++#ifdef CONFIG_ARM64_PTR_AUTH_KERNEL
++alternative_if_not ARM64_HAS_ADDRESS_AUTH
++b __skip_pauth_restore
++alternative_else_nop_endif
++
++alternative_if ARM64_KVM_PROTECTED_MODE
++	add x18, x29, #CPU_APIAKEYLO_EL1
++	ptrauth_restore_state x18, x19, x20
++alternative_else_nop_endif
++__skip_pauth_restore:
++#endif /* CONFIG_ARM64_PTR_AUTH_KERNEL */
++
++	/* Restore host regs x0-x17 */
+ 	ldp	x0, x1,   [x29, #CPU_XREG_OFFSET(0)]
+ 	ldp	x2, x3,   [x29, #CPU_XREG_OFFSET(2)]
+ 	ldp	x4, x5,   [x29, #CPU_XREG_OFFSET(4)]
+-- 
+2.41.0.162.gfafddb0af9-goog
+
