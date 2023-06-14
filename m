@@ -2,61 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 851AD72FD20
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:41:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E36172FD1F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235967AbjFNLlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 07:41:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50084 "EHLO
+        id S234968AbjFNLk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 07:40:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244320AbjFNLkB (ORCPT
+        with ESMTP id S244329AbjFNLkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 07:40:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F115294C
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 04:39:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 14 Jun 2023 07:40:02 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 313A319B5
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 04:39:27 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C6D664115
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:39:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6115BC433C8;
-        Wed, 14 Jun 2023 11:39:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686742757;
-        bh=LlWh19f3RlQqn8kuFR1+oUZNvEUJmzlu21blsqywozA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DgG26Rw3HLR7AZxK+QEqzeFtCmZne7K6DoJdgHHEp29eGDcJq2mOmQWQFUwauwbgr
-         pzwv4NMbHAtkVg1PTuAjVewVVvNgzwjZfq2re4mmiHROFwwU5oIN6mTycajoVNRTIc
-         tydtjY9+wYhqQptrvd+JyDsu3xbi00uOje+EqKwwwzQMnIcV6sM3U0lyQZE6j6pBx6
-         uBhFmvcVN7D4uqZQ4IRAMOulfrlHnfuXrczigJ+xoP7VeMAVeWB8TWT04cGBOAsDpP
-         NKX51f/gu9zehUc4FfwxzYdlpo4Lf1Yd1GlqM0ZzNixfz4t7KYiAWSaetJOKFKirVO
-         7d1gyAK+XRcGQ==
-Date:   Wed, 14 Jun 2023 12:39:12 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        James Morse <james.morse@arm.com>, kvmarm@lists.linux.dev,
-        coresight@lists.linaro.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V3 08/14] arm64/sysreg: Convert TRBLIMITR_EL1 register to
- automatic generation
-Message-ID: <58471fc8-9b45-4d6b-90a2-02fed759b33b@sirena.org.uk>
-References: <20230614065949.146187-1-anshuman.khandual@arm.com>
- <20230614065949.146187-9-anshuman.khandual@arm.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="J0Tx8fSl0ebs3TtD"
-Content-Disposition: inline
-In-Reply-To: <20230614065949.146187-9-anshuman.khandual@arm.com>
-X-Cookie: At participating locations only.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D2975223B2;
+        Wed, 14 Jun 2023 11:39:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1686742765; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=D8T3hvxpKhTd+SYmVBu2dSFpvNLIFBT4l+91bELI0KI=;
+        b=07UdI+UrMXyfyZR0G8X4mpXQR3Cc8m41bhHlpSMEBpg5E1F9/8rzLNDuEC+mycP8XdpdQJ
+        xmHd3dfNJJ782xIQE1KzMc9yU5EQtqSQiWT3WOnWGoQzSMq4yiLfZYWwlcXh15+2XYn0L+
+        f7onX3kfTsf9FhhNtmFC1mgEuq37AWA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1686742765;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=D8T3hvxpKhTd+SYmVBu2dSFpvNLIFBT4l+91bELI0KI=;
+        b=3oXH39uRzpcrVMfxBbTBEbHK864JeOgzRPrg9EUEsW4ko9c2YV04NT67dUCtASBP7FQZ/R
+        9hGN6FZcp3DsCrCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 479DD1357F;
+        Wed, 14 Jun 2023 11:39:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id GaL9D+2miWSYIAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 14 Jun 2023 11:39:25 +0000
+Date:   Wed, 14 Jun 2023 13:39:24 +0200
+Message-ID: <87jzw69ssz.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Lukasz Tyl <ltyl@hem-e.com>
+Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, pgorgon@hem-e.com
+Subject: Re: [PATCH] sound: usb: quirks: add flag for HEM devices to enable native DSD playback
+In-Reply-To: <20230614113350.25607-1-ltyl@hem-e.com>
+References: <20230614113350.25607-1-ltyl@hem-e.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,32 +69,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 14 Jun 2023 13:33:50 +0200,
+Lukasz Tyl wrote:
+> 
+> This commit adds new DEVICE_FLG with QUIRK_FLAG_DSD_RAW and Vendor Id for
+> HEM devices which supports native DSD. Prior to this change Linux kernel
+> was not enabling native DSD playback for HEM devices, and as a result,
+> DSD audio was being converted to PCM "on the fly". HEM devices,
+> when connected to the system, would only play audio in PCM format,
+> even if the source material was in DSD format. With the addition of new
+> VENDOR_FLG in the quircks.c file, the devices are now correctly
+> recognized, and raw DSD data is transmitted to the device,
+> allowing for native DSD playback.
+> 
+> Signed-off-by: Lukasz Tyl <ltyl@hem-e.com>
+> ---
+>  sound/usb/quirks.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/sound/usb/quirks.c b/sound/usb/quirks.c
+> index 3ecd1ba7fd4b..1414bf15ac21 100644
+> --- a/sound/usb/quirks.c
+> +++ b/sound/usb/quirks.c
+> @@ -2197,6 +2197,8 @@ static const struct usb_audio_quirk_flags_table quirk_flags_table[] = {
+>  		   QUIRK_FLAG_DSD_RAW),
+>  	VENDOR_FLG(0xc502, /* HiBy devices */
+>  		   QUIRK_FLAG_DSD_RAW),
+> +	VENDOR_FLG(0x3336, /* HEM devices */
+> +		   QUIRK_FLAG_DSD_RAW),
 
---J0Tx8fSl0ebs3TtD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The entry is sorted in vendor id number.  Could you try to put at the
+right position?
 
-On Wed, Jun 14, 2023 at 12:29:43PM +0530, Anshuman Khandual wrote:
-> This converts TRBLIMITR_EL1 register to automatic generation without
-> causing any functional change.
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
+thanks,
 
-vs DDI0601 2023-03
-
---J0Tx8fSl0ebs3TtD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSJpt8ACgkQJNaLcl1U
-h9CIJQf+Nt54C+QjxoV8wGNnAHT5W1Fz+L93k8Plp4tL7p6BFbpf1JYiYXZWRV+9
-XyS/WsLgBMzoU3I5QKdcE17HQmeWi287tbMPWG2wqMS6Ho/KmioXWK4yoFqTQbwp
-+FFSVMTz6QO0m/r0+RnIsgaEZALNRLsx3ZT+hK7AAQThtxQqJd5iVETGkVwJqOop
-EDksRtQ6O35Onl73laZehRCgz8aP5b3w0jbva9JO12qWPE6O/+cZ54Xta8NaSQeu
-JPf4BkBy3ULjZrbiinwtjOWj9FlPvQ4ralXhA0uvU8cn4SBp6O8y5dGtW40oVa7x
-HAtM37Lsd0DBI3B9wRNMjBpS9wYQaQ==
-=KN/O
------END PGP SIGNATURE-----
-
---J0Tx8fSl0ebs3TtD--
+Takashi
