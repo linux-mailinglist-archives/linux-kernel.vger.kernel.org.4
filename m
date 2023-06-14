@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C53C87305E2
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 19:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 932287305E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 19:18:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232568AbjFNRS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 13:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44346 "EHLO
+        id S237176AbjFNRSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 13:18:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236740AbjFNRSP (ORCPT
+        with ESMTP id S236756AbjFNRSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 14 Jun 2023 13:18:15 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22A61270F;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EF42711;
         Wed, 14 Jun 2023 10:18:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1686763092; x=1718299092;
   h=from:date:subject:mime-version:content-transfer-encoding:
    message-id:references:in-reply-to:to:cc;
-  bh=/AmoSSmYynJbMOebYCDV5FrFBblS9nyHhJ1GF9w1uYM=;
-  b=cXnYKcD8tG00/f8BTPqoVaIcXTqWpRis8U/e3b8Af8GgrjBQwsFv7Dot
-   zFVQN5BTnlYgO5SPDoIvIV4rqsmo+5xwQ4NM/2k6rF4HNMgjstjHut04i
-   qmYPIeocNjT1TXAHt99YVEdbNH1otVZ8hqDcl3Z1CtKt24iiS5aUrt/sf
-   L9jJWLSLCTPZAIl/l5Kk4ry/iufqitz1nrCVWIYoQZS0lEE0nSuX3/f+6
-   /yob5jHt9qH7SP+FSKbUeA7Do96JxxRSoXsKEsZn8KAW24BbvfnbtTc09
-   OvSdMWKrQ4LHCGoIr5XFPW+Ttof1cePTKB+1H4lt9JC6T9WXRbtczeZgW
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="362054371"
+  bh=KXze/yHtvX8i/7X5EL5m/NQ2O8y/9NNPJ8Ex4fgi0dY=;
+  b=SYjXOEJZ3mNtMYrfxdgKdD47dZU9oTTd57WxTsL6c38W3vmEtzsxzLcW
+   zpsWbMhWBnVZaGfOmo91g/xNhi6bBMZKFP0isVQ/XqKvtY2VpY1QYNGtA
+   ku64g3KczwW3sY+hHnLpJz9wTHV2wxENclm+kXepdmXAvZvFHnXbOpbu9
+   JsGVu/aWqR4CpEOq3+j8qjFAxo0AvPdfpmap/zINn5eKRUfcv/Ga2ZoC1
+   3xUNC64+Dedf9B9g/6vw48HC5crXDr/OOMLWput2tr6egs3ezblrzKEXZ
+   ChYi9J8BZ3Yt9rSF+AZkUJjbuR7LggVhWGSIWIYE+d7BilEGL8N3OFlcD
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="362054380"
 X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="362054371"
+   d="scan'208";a="362054380"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 10:18:09 -0700
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 10:18:10 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="662470736"
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="662470742"
 X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="662470736"
+   d="scan'208";a="662470742"
 Received: from mahbubu1-mobl.amr.corp.intel.com (HELO [192.168.1.200]) ([10.209.44.245])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 10:18:08 -0700
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 10:18:09 -0700
 From:   Vishal Verma <vishal.l.verma@intel.com>
-Date:   Wed, 14 Jun 2023 11:17:41 -0600
-Subject: [PATCH v4 2/4] tools/testing/cxl: Fix command effects for
- inject/clear poison
+Date:   Wed, 14 Jun 2023 11:17:42 -0600
+Subject: [PATCH v4 3/4] tools/testing/cxl: Use named effects for the
+ Command Effect Log
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230602-vv-fw_update-v4-2-c6265bd7343b@intel.com>
+Message-Id: <20230602-vv-fw_update-v4-3-c6265bd7343b@intel.com>
 References: <20230602-vv-fw_update-v4-0-c6265bd7343b@intel.com>
 In-Reply-To: <20230602-vv-fw_update-v4-0-c6265bd7343b@intel.com>
 To:     Alison Schofield <alison.schofield@intel.com>,
@@ -61,13 +61,13 @@ Cc:     linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
         Vishal Verma <vishal.l.verma@intel.com>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
 X-Mailer: b4 0.13-dev-02a79
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1259;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2945;
  i=vishal.l.verma@intel.com; h=from:subject:message-id;
- bh=/AmoSSmYynJbMOebYCDV5FrFBblS9nyHhJ1GF9w1uYM=;
- b=owGbwMvMwCXGf25diOft7jLG02pJDCmd3/xZfsQkvj39/KBnxglTMZ13OnU1V1uLz5mwuW7Z+
- 1yz7YF7RykLgxgXg6yYIsvfPR8Zj8ltz+cJTHCEmcPKBDKEgYtTACZyMZWRYY5dkvK1hMQnu8S0
- 6zwnn2t/dfvTVt7bRldsCnSNTxstZGJk2L9x36/uNTfW7f4iuvUpD/PTf7e+tG4wv/nh7qPoVXx
- /OjkB
+ bh=KXze/yHtvX8i/7X5EL5m/NQ2O8y/9NNPJ8Ex4fgi0dY=;
+ b=owGbwMvMwCXGf25diOft7jLG02pJDCmd3/xb9q61P2gwZ0l10aL+g9tfz7v0qP78WkaZv2vkn
+ s0Ib3b70VHKwiDGxSArpsjyd89HxmNy2/N5AhMcYeawMoEMYeDiFICJLJFn+Cu0/U2G9P5PrXI+
+ jTFKa8R9N3qanVyb8LRmf9DnSXpaqyIY/pek6em/v3unTuWQ1QWD8iVTzvGv3SkeNVHywh7fcwk
+ 9/bwA
 X-Developer-Key: i=vishal.l.verma@intel.com; a=openpgp;
  fpr=F8682BE134C67A12332A2ED07AFA61BEA3B84DFF
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -80,36 +80,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The CXL spec (3.0, section 8.2.9.8.4) Lists Inject Poison and Clear
-Poison as having the effects of "Immediate Data Change". Fix this in the
-mock driver so that the command effect log is populated correctly.
+As more emulated mailbox commands are added to cxl_test, it is a pain
+point to look up command effect numbers for each effect. Replace the
+bare numbers in the mock driver with an enum that lists all possible
+effects.
 
-Fixes: 371c16101ee8 ("tools/testing/cxl: Mock the Inject Poison mailbox command")
+Cc: Davidlohr Bueso <dave@stgolabs.net>
+Cc: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc: Russ Weight <russell.h.weight@intel.com>
 Cc: Alison Schofield <alison.schofield@intel.com>
+Cc: Ira Weiny <ira.weiny@intel.com>
+Cc: Dave Jiang <dave.jiang@intel.com>
+Cc: Ben Widawsky <bwidawsk@kernel.org>
 Cc: Dan Williams <dan.j.williams@intel.com>
+Suggested-by: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
 Reviewed-by: Alison Schofield <alison.schofield@intel.com>
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Reviewed-by: Dave Jiang <dave.jiang@intel.com>
 Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
 ---
- tools/testing/cxl/test/mem.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/cxl/test/mem.c | 32 +++++++++++++++++++++++---------
+ 1 file changed, 23 insertions(+), 9 deletions(-)
 
 diff --git a/tools/testing/cxl/test/mem.c b/tools/testing/cxl/test/mem.c
-index 34b48027b3de..403cd3608772 100644
+index 403cd3608772..68668d8df1cd 100644
 --- a/tools/testing/cxl/test/mem.c
 +++ b/tools/testing/cxl/test/mem.c
-@@ -52,11 +52,11 @@ static struct cxl_cel_entry mock_cel[] = {
+@@ -21,42 +21,56 @@
+ 
+ static unsigned int poison_inject_dev_max = MOCK_INJECT_DEV_MAX;
+ 
++enum cxl_command_effects {
++	CONF_CHANGE_COLD_RESET = 0,
++	CONF_CHANGE_IMMEDIATE,
++	DATA_CHANGE_IMMEDIATE,
++	POLICY_CHANGE_IMMEDIATE,
++	LOG_CHANGE_IMMEDIATE,
++	SECURITY_CHANGE_IMMEDIATE,
++	BACKGROUND_OP,
++	SECONDARY_MBOX_SUPPORTED,
++};
++
++#define CXL_CMD_EFFECT_NONE cpu_to_le16(0)
++
+ static struct cxl_cel_entry mock_cel[] = {
+ 	{
+ 		.opcode = cpu_to_le16(CXL_MBOX_OP_GET_SUPPORTED_LOGS),
+-		.effect = cpu_to_le16(0),
++		.effect = CXL_CMD_EFFECT_NONE,
+ 	},
+ 	{
+ 		.opcode = cpu_to_le16(CXL_MBOX_OP_IDENTIFY),
+-		.effect = cpu_to_le16(0),
++		.effect = CXL_CMD_EFFECT_NONE,
+ 	},
+ 	{
+ 		.opcode = cpu_to_le16(CXL_MBOX_OP_GET_LSA),
+-		.effect = cpu_to_le16(0),
++		.effect = CXL_CMD_EFFECT_NONE,
+ 	},
+ 	{
+ 		.opcode = cpu_to_le16(CXL_MBOX_OP_GET_PARTITION_INFO),
+-		.effect = cpu_to_le16(0),
++		.effect = CXL_CMD_EFFECT_NONE,
+ 	},
+ 	{
+ 		.opcode = cpu_to_le16(CXL_MBOX_OP_SET_LSA),
+-		.effect = cpu_to_le16(EFFECT(1) | EFFECT(2)),
++		.effect = cpu_to_le16(EFFECT(CONF_CHANGE_IMMEDIATE) |
++				      EFFECT(DATA_CHANGE_IMMEDIATE)),
+ 	},
+ 	{
+ 		.opcode = cpu_to_le16(CXL_MBOX_OP_GET_HEALTH_INFO),
+-		.effect = cpu_to_le16(0),
++		.effect = CXL_CMD_EFFECT_NONE,
+ 	},
+ 	{
+ 		.opcode = cpu_to_le16(CXL_MBOX_OP_GET_POISON),
+-		.effect = cpu_to_le16(0),
++		.effect = CXL_CMD_EFFECT_NONE,
  	},
  	{
  		.opcode = cpu_to_le16(CXL_MBOX_OP_INJECT_POISON),
--		.effect = cpu_to_le16(0),
-+		.effect = cpu_to_le16(EFFECT(2)),
+-		.effect = cpu_to_le16(EFFECT(2)),
++		.effect = cpu_to_le16(EFFECT(DATA_CHANGE_IMMEDIATE)),
  	},
  	{
  		.opcode = cpu_to_le16(CXL_MBOX_OP_CLEAR_POISON),
--		.effect = cpu_to_le16(0),
-+		.effect = cpu_to_le16(EFFECT(2)),
+-		.effect = cpu_to_le16(EFFECT(2)),
++		.effect = cpu_to_le16(EFFECT(DATA_CHANGE_IMMEDIATE)),
  	},
  };
  
