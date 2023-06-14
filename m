@@ -2,127 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C21D4730456
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:58:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED72B730451
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237162AbjFNP6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 11:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51756 "EHLO
+        id S245434AbjFNPza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 11:55:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234375AbjFNP6d (ORCPT
+        with ESMTP id S245202AbjFNPzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 11:58:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9411721
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:57:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686758266;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VBEkKn5fELdXle4Y33cuC2dwRJcYuUrgCYNnAHpQ2ZE=;
-        b=XPY5paQ2q8RltU1/4zZzWoImwjKXBt3avg50FVXy+hqZWx8O7ovgoaYx85q7WzkOqDk8UO
-        W2uYkkzGq/brzcBkN6Oqma9glm+3NQvVs90bgSaAi4YRN75EplJW9ZHc0ELOjsLL1Q60or
-        6+0UIyCD3dYDxz8hm/EPZizELZ43B+s=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-550-DIzVLYT1Ok2cSjtIHRGVdg-1; Wed, 14 Jun 2023 11:57:44 -0400
-X-MC-Unique: DIzVLYT1Ok2cSjtIHRGVdg-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f81bdf4716so4103145e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:57:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686758263; x=1689350263;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VBEkKn5fELdXle4Y33cuC2dwRJcYuUrgCYNnAHpQ2ZE=;
-        b=DWTli3whBscxPB3fyMl+D4PXBP7VcAF8mVjBC0TvTgBScZ6649YQHEbiZ/TaklrQvr
-         Qh4tKT4sZyV+dHdLy01ctYlTG6Un+giujBKwfKvagPiTTNlR7zXr7WGoXOZYvnLfHx0f
-         PxsLTzR6ZwMSApZp3dWb6CJyTNHIvsSpvj5GgT4kTmdD/EVXRYcPB0kUQcpnCB4j+/k4
-         9RwzpngBXDSd7A/XSq+SPtU+j2+xv0rY0Jw6W0AF7m+GN8sMH9/xZnLxhaApkxUZilgI
-         SK8FydWMxZfc8ID6dIUWDlg7DHKkKIGYCQsnelc4Wrb2UxAgPDUENKm+2m3eMGOtVmoe
-         EP+A==
-X-Gm-Message-State: AC+VfDxlnjcNc+7yvmON+JHJ8J8FoH9BQ2jxoP0xKXXd+rMDeLk1jdnM
-        VmHVs7QVAXJF0uRSa85NQotkh2tv3ANBPZ1pyZrYvT92VSjbES93u6Aczw+JcFuxTW+2++nJ5w+
-        u0q9aHIeD3rOuyH57/OGJZEPU
-X-Received: by 2002:a05:600c:4f96:b0:3f7:f302:161 with SMTP id n22-20020a05600c4f9600b003f7f3020161mr1999673wmq.8.1686758263554;
-        Wed, 14 Jun 2023 08:57:43 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ53Um/PvnitZJvGvInqSSXPNb7PBP0CKxlPpICpz1jpz3DwV4ttJBoSmVIIf0i8BB9A0MPD2Q==
-X-Received: by 2002:a05:600c:4f96:b0:3f7:f302:161 with SMTP id n22-20020a05600c4f9600b003f7f3020161mr1999658wmq.8.1686758263212;
-        Wed, 14 Jun 2023 08:57:43 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:b200:7d03:23db:ad5:2d21? (p200300cbc704b2007d0323db0ad52d21.dip0.t-ipconnect.de. [2003:cb:c704:b200:7d03:23db:ad5:2d21])
-        by smtp.gmail.com with ESMTPSA id y10-20020a1c4b0a000000b003f5ffba9ae1sm17926102wma.24.2023.06.14.08.57.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 08:57:42 -0700 (PDT)
-Message-ID: <ec8d0f27-a3e8-3b93-6703-9935e009ceb2@redhat.com>
-Date:   Wed, 14 Jun 2023 17:57:41 +0200
+        Wed, 14 Jun 2023 11:55:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F0B193;
+        Wed, 14 Jun 2023 08:55:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EBD9615D1;
+        Wed, 14 Jun 2023 15:55:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76027C433C0;
+        Wed, 14 Jun 2023 15:55:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686758101;
+        bh=iI6igqMT60w7P/l0QhFqDEyNg7+YVbD5N8OO3TanF+w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e48oeFwLHdIUlSFKmZpuhvaZIc6XX120LrcMPSpyEqB7BWuDFDEx67h7VG5wuG+/V
+         MZ55YvNovcv/mJkjYdv4qw/Fg9V8aUml9KglqAzDpQnFQJj6WBmgLjZINSWGrPOFKW
+         A4UJyJrm6EZnGRqzlethKgCNm6OmbCct4vFCZC3ztZhnngSbp8pzXo4cyHdNGZkwXz
+         gmGqY4U4493FBCFLe1W+p6/yZ9AorFfR4Az6A8Ax6LKC06sOmpk/gWKymf+QLeQbmI
+         v+58d1tk96zhctkcv00QPrklqa/1YQT9XY3e8vW+P2TBoD2h3BSqXYCgybGS7H+ljv
+         vnyDkW6WNMmCA==
+Date:   Wed, 14 Jun 2023 08:58:23 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, freedreno@lists.freedesktop.org,
+        johan@kernel.org, mani@kernel.org,
+        Steev Klimaszewski <steev@kali.org>,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: Re: [PATCH v4 2/2] arm64: dts: qcom: sc8280xp: Enable GPU related
+ nodes
+Message-ID: <20230614155823.g7xfgxff3eopukwh@ripper>
+References: <20230614142204.2675653-1-quic_bjorande@quicinc.com>
+ <20230614142204.2675653-3-quic_bjorande@quicinc.com>
+ <8f8d5e09-50a6-a83f-d4bb-3d7bc8c07162@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 2/7] mm/hugetlb: Fix hugetlb_follow_page_mask() on
- permission checks
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        James Houghton <jthoughton@google.com>,
-        Hugh Dickins <hughd@google.com>
-References: <20230613215346.1022773-1-peterx@redhat.com>
- <20230613215346.1022773-3-peterx@redhat.com>
- <24bc512a-b5c2-b7ea-fa83-5752cec7455b@redhat.com> <ZIng1SQ0xZ+eBua8@x1n>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <ZIng1SQ0xZ+eBua8@x1n>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8f8d5e09-50a6-a83f-d4bb-3d7bc8c07162@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.06.23 17:46, Peter Xu wrote:
-> On Wed, Jun 14, 2023 at 05:31:36PM +0200, David Hildenbrand wrote:
->> On 13.06.23 23:53, Peter Xu wrote:
->>> It seems hugetlb_follow_page_mask() was missing permission checks.  For
->>> example, one follow_page() can get the hugetlb page with FOLL_WRITE even if
->>> the page is read-only.
->>
->> I'm curious if there even is a follow_page() user that operates on hugetlb
->> ...
->>
->> s390x secure storage does not apply to hugetlb IIRC.
+On Wed, Jun 14, 2023 at 05:27:24PM +0200, Konrad Dybcio wrote:
+> On 14.06.2023 16:22, Bjorn Andersson wrote:
+> > From: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > 
+> > Add memory reservation for the zap-shader and enable the Adreno SMMU,
+> > GPU clock controller, GMU and the GPU nodes for the SC8280XP CRD and the
+> > Lenovo ThinkPad X13s.
+> > 
+> > Tested-by: Steev Klimaszewski <steev@kali.org>
+> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > Tested-by: Johan Hovold <johan+linaro@kernel.org>
+> > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> > ---
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > 
-> You're the expert, so I'll rely on you. :)
+
+Thanks.
+
+> one question below
+> >  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts          | 14 ++++++++++++++
+> >  .../dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts     | 14 ++++++++++++++
+> >  2 files changed, 28 insertions(+)
+> > 
+> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> > index cd7e0097d8bc..b566e403d1db 100644
+> > --- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> > +++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> > @@ -210,6 +210,11 @@ vreg_wwan: regulator-wwan {
+> >  	};
+> >  
+> >  	reserved-memory {
+> > +		gpu_mem: gpu-mem@8bf00000 {
+> Is it ever going to differ on other platforms, including the automotive ones?
 > 
 
-Hehe, there is a comment in gmap_destroy_page(), above one of the 
-follow_page() users:
+The memory maps for the two live different lives.
 
-	/*
-	 * Huge pages should not be able to become secure
-	 */
-	if (is_vm_hugetlb_page(vma))
-		goto out;
+Regards,
+Bjorn
 
-
--- 
-Cheers,
-
-David / dhildenb
-
+> Konrad
+> > +			reg = <0 0x8bf00000 0 0x2000>;
+> > +			no-map;
+> > +		};
+> > +
+> >  		linux,cma {
+> >  			compatible = "shared-dma-pool";
+> >  			size = <0x0 0x8000000>;
+> > @@ -390,6 +395,15 @@ &dispcc0 {
+> >  	status = "okay";
+> >  };
+> >  
+> > +&gpu {
+> > +	status = "okay";
+> > +
+> > +	zap-shader {
+> > +		memory-region = <&gpu_mem>;
+> > +		firmware-name = "qcom/sc8280xp/qcdxkmsuc8280.mbn";
+> > +	};
+> > +};
+> > +
+> >  &mdss0 {
+> >  	status = "okay";
+> >  };
+> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> > index 5ae057ad6438..7cc3028440b6 100644
+> > --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> > +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> > @@ -264,6 +264,11 @@ vreg_wwan: regulator-wwan {
+> >  	};
+> >  
+> >  	reserved-memory {
+> > +		gpu_mem: gpu-mem@8bf00000 {
+> > +			reg = <0 0x8bf00000 0 0x2000>;
+> > +			no-map;
+> > +		};
+> > +
+> >  		linux,cma {
+> >  			compatible = "shared-dma-pool";
+> >  			size = <0x0 0x8000000>;
+> > @@ -518,6 +523,15 @@ &dispcc0 {
+> >  	status = "okay";
+> >  };
+> >  
+> > +&gpu {
+> > +	status = "okay";
+> > +
+> > +	zap-shader {
+> > +		memory-region = <&gpu_mem>;
+> > +		firmware-name = "qcom/sc8280xp/LENOVO/21BX/qcdxkmsuc8280.mbn";
+> > +	};
+> > +};
+> > +
+> >  &mdss0 {
+> >  	status = "okay";
+> >  };
