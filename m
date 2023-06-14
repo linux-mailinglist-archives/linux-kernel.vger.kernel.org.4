@@ -2,111 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C378472F7E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E807C72F7E2
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243600AbjFNIak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 04:30:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56218 "EHLO
+        id S243610AbjFNIbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 04:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235121AbjFNIai (ORCPT
+        with ESMTP id S235148AbjFNIbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 04:30:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E1811F;
-        Wed, 14 Jun 2023 01:30:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 489D163EEB;
-        Wed, 14 Jun 2023 08:30:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C3A5C433C8;
-        Wed, 14 Jun 2023 08:30:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686731436;
-        bh=5sOkTNkkHBdbRw2JX2dJi2tKIH7ENjxXYhVFqEgiEpg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IRZqPUqU0BwUN9jHEoglWuy0xEgoYyag/Ebn+rb0Vkv1pU4YIEbzbp79ipCyUrtxh
-         uu5SSmyKUoI1KIaFNYpCGmYHIXb2asmRHSE1NzBkLRpCt3Lk6SOguRjQnw2e7R7/RE
-         3jA20kzbdthCOfDkyHAr2RIu4FsSLyLI6XH8DA2HcU29jUMoC2mD9jrm9rg2mkUfCC
-         fiHIUATN1wcmkhYcliwSeMfAeYVI8hK2mr8m3NIMM3pMKtWaDqvzxe5VRX3IwZIRDp
-         k6p3K+ytT5NuIM6/QXPL9ncD1YxYtMcfr5ZIYEUleDDbnRtoLwM75vc9NwENqU3Y1d
-         e+ig0BIIgMwMg==
-From:   Christian Brauner <brauner@kernel.org>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Brad Warrum <bwarrum@linux.ibm.com>,
-        Ritu Agarwal <rituagar@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ian Kent <raven@themaw.net>,
-        "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
-        Jeremy Kerr <jk@ozlabs.org>, Ard Biesheuvel <ardb@kernel.org>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        Steve French <sfrench@samba.org>,
-        Paulo Alcantara <pc@manguebit.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Ruihan Li <lrh2000@pku.edu.cn>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        autofs@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, apparmor@lists.ubuntu.com,
-        linux-security-module@vger.kernel.org
-Subject: Re: (subset) [PATCH v2 3/8] autofs: set ctime as well when mtime changes on a dir
-Date:   Wed, 14 Jun 2023 10:30:13 +0200
-Message-Id: <20230614-marmeladen-blechnapf-873c26e176cb@brauner>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230612104524.17058-4-jlayton@kernel.org>
-References: <20230612104524.17058-1-jlayton@kernel.org> <20230612104524.17058-4-jlayton@kernel.org>
+        Wed, 14 Jun 2023 04:31:12 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD5F1FCC
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 01:30:59 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4QgzCP3mRzzBQJYn
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 16:30:57 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1686731455; x=1689323456; bh=BeMI+RRIGeECSvPNxvrh+SCG+fs
+        Zlrc8ALkYqEnCFpE=; b=X2do0Y8SUbG7v4j5bPuDuutaiQKM1SqfruSGUeRZfoi
+        F80d1GM4I5zpMaurOPOvkTaI8hyozYfhTDSgwMBGLmuQrJxXSNG32YGUZ/qH6Kw3
+        ue/nrCiMxF7j/GGzzCwDsTYSGrh7ul6kVOVd5XnP8nhUMe/lgw17386QVuh+lpNE
+        oWFrgo2pdGedfaHM1beMQP0rp6nXVlAR0jNwundAyLEzJ0mXkYSys63fECvsWDaP
+        vs5y34WbsdIx9qeS1vl4J48ZL3Ko/iJU6ahRmeoOlVZzS/bvA4xd6C0AOiK6gXIH
+        e3RwAKu9nzA2GVy6UMab/4BQYhkwtC3LN0i+bia3dUg==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id UomKeUm5mDiS for <linux-kernel@vger.kernel.org>;
+        Wed, 14 Jun 2023 16:30:55 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4QgzCM120QzBJJCt;
+        Wed, 14 Jun 2023 16:30:55 +0800 (CST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=890; i=brauner@kernel.org; h=from:subject:message-id; bh=5sOkTNkkHBdbRw2JX2dJi2tKIH7ENjxXYhVFqEgiEpg=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaR0VvWrXuWb1qASt//kd4FHqU18By+ppS/RFud89ejpqjjT Z+/1O0pZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACby5Bgjw7qZ1+/qxD5ZFinJah7vuf 6TQM5RjfV3nHf+b3iWcMttHxfDb9bHk9/X5L+18DmgM//eoU3cO9eIMDluPBbqbjtNMHa/Fg8A
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Wed, 14 Jun 2023 16:30:55 +0800
+From:   hexingwei001@208suo.com
+To:     pmladek@suse.com, rostedt@goodmis.org, senozhatsky@chromium.org
+Cc:     linux-kernel@vger.kernel.org, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk
+Subject: [PATCH] lib/test_printf.c: space required after that ','
+In-Reply-To: <20230614082523.63191-1-panzhiai@cdjrlc.com>
+References: <20230614082523.63191-1-panzhiai@cdjrlc.com>
+User-Agent: Roundcube Webmail
+Message-ID: <f2d8eb955890bc1db1b307db713d4a4a@208suo.com>
+X-Sender: hexingwei001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 12 Jun 2023 06:45:19 -0400, Jeff Layton wrote:
-> When adding entries to a directory, POSIX generally requires that the
-> ctime also be updated alongside the mtime.
-> 
-> 
+Add missing spaces to clear checkpatch errors:
 
-Can't find a tree for this patch, so picking this patch up unless told otherwise.
+lib/test_printf.c:562: ERROR: space required after that ',' (ctx:VxV).
+lib/test_printf.c:562: ERROR: space required after that ',' (ctx:VxV).
+lib/test_printf.c:562: ERROR: space required after that ',' (ctx:VxV).
+lib/test_printf.c:562: ERROR: space required after that ',' (ctx:VxV).
+lib/test_printf.c:562: ERROR: space required after that ',' (ctx:VxV).
+lib/test_printf.c:562: ERROR: space required after that ',' (ctx:VxV).
 
+Signed-off-by: Xingwei He <hexingwei001@208suo.com>
 ---
+  lib/test_printf.c | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to the vfs.misc branch of the vfs/vfs.git tree.
-Patches in the vfs.misc branch should appear in linux-next soon.
+diff --git a/lib/test_printf.c b/lib/test_printf.c
+index 7677ebccf3c3..9d17c564fdf6 100644
+--- a/lib/test_printf.c
++++ b/lib/test_printf.c
+@@ -559,7 +559,7 @@ static void __init
+  bitmap(void)
+  {
+      DECLARE_BITMAP(bits, 20);
+-    const int primes[] = {2,3,5,7,11,13,17,19};
++    const int primes[] = {2, 3, 5, 7, 11, 13, 17, 19};
+      int i;
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
-
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs.misc
-
-[3/8] autofs: set ctime as well when mtime changes on a dir
-      https://git.kernel.org/vfs/vfs/c/9b37b3342a98
+      bitmap_zero(bits, 20);
