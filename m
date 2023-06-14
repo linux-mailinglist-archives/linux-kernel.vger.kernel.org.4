@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 226AA72F3C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 06:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 862C472F3C9
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 06:52:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242594AbjFNEwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 00:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40638 "EHLO
+        id S242432AbjFNEwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 00:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233244AbjFNEwY (ORCPT
+        with ESMTP id S231720AbjFNEw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 00:52:24 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF21C184
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 21:52:23 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b3c0c47675so28067395ad.1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 21:52:23 -0700 (PDT)
+        Wed, 14 Jun 2023 00:52:26 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A3E183
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 21:52:25 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b3d8aa2c17so15801295ad.3
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 21:52:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686718343; x=1689310343;
+        d=gmail.com; s=20221208; t=1686718344; x=1689310344;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wqw+pfXvRxFyKtNsvJYgxpMTw9Cw0YTqu9wRT0MEL7w=;
-        b=OimPmjXCG8okhtcLCLa7VYDFJqQQBCmFVW5QxbTi/cal0RAl1RvumolnmY/ZWjUCoV
-         oAMg/p+5sJnSfGLa1Xgim8Gjoj6vSVlhLWg6RI+cpiA//YXzuXnOnMsIoCQmW9CiYUFp
-         f9G02GCCyRDuSQ3CiBOUAfoeGzBbmOsTYD4KmHXoOej4GW5tb3SbIBXbqncciwlS2+lz
-         q6ej+NWHVzvPRmC6PhlhVWpjst8vogmOy6yvHFUh6xELCDDufLxDg1YLhsYI6YQ+xCnx
-         pFuK5gzixEZjso6CajRcYB+wVKQUCqd8aA3ecRaRhDJ4Huuklx9j7Bv1V/tmNfrDHg8o
-         B7OQ==
+        bh=FulhVEhNpgfCsNB5OSDOju9ICmBQY+Gxi28mpx6VJCw=;
+        b=OOuNLK6YyThTUcwakap3WAuddmLrp02i1QJxCPts/TtJZm+X6kxsHz2AfPBhSuCPwy
+         vd+G35pGrtwiFx1eBmfziFzW+UsVhi3pX8JeDHjfX0S7jX/WGcUcxKtKgzOCohWw0bOj
+         xq70p5LPAknA2/z/ia8VQ+d+3DyShd/6PgxRZIV2scoQk8zmdD2wRHhHUqzmtYM4i97Q
+         MHTLTczfFsD0SwsxxSnXDQFtKYagpW0hK0gsrWlc8ZYsqa/l5Z+AmWUdaaih64ytmodV
+         Vq+WCuROxSClr5AcnrRVOlxVh4SOQ+OF3Um7z7SzPmVEwG5rme/REUNbvJ30AvPKbaFQ
+         bonA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686718343; x=1689310343;
+        d=1e100.net; s=20221208; t=1686718344; x=1689310344;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wqw+pfXvRxFyKtNsvJYgxpMTw9Cw0YTqu9wRT0MEL7w=;
-        b=GZdUsxgXwBpnYT8zKdC81WTNcAPV/XirzjdS4TK9UYDI/va4OsLGSQ/zsdDpG+TfTJ
-         znkjJ5i4v2U5aOAq1YIS43be4qZbKyjhlrb8/57AKBPSfwqkqXMwb0NGn2zN9PXcg9IQ
-         Xq9NgVUfc6L399Y6cXkobOMGhYMfijDW81mLVkLry/wT/LZEwPV5k0ZtcCpAvYdIq3C7
-         Bd7c8A830uRCGzOnKKwzBTKxhT/tXRLCxJgAZrPSIdN/3u4Sf1aRvOCQDTNVG7QHXc1A
-         ZBeOLXW53ISob8/YdFf7ZYYZRKuodehLlZJpX8K7usQO/bdk/HGsrlGJlmirToCwsFH3
-         9JgQ==
-X-Gm-Message-State: AC+VfDx9T7UFFJICE3RvNZLi3KKqoDpU5WGzYexTSll7lEiauekZUQRG
-        sypD3x46SA7J4QtesU4oPT2dGqjl/EQ=
-X-Google-Smtp-Source: ACHHUZ6jDPY4+lPmASsyp2oI0qbUIfUOl/fAixH4E6uT3eg+XAoCsTBbNSW8NksgakF8dI74faRqvw==
-X-Received: by 2002:a17:902:e842:b0:1b2:4fea:c62 with SMTP id t2-20020a170902e84200b001b24fea0c62mr12789996plg.30.1686718342949;
-        Tue, 13 Jun 2023 21:52:22 -0700 (PDT)
+        bh=FulhVEhNpgfCsNB5OSDOju9ICmBQY+Gxi28mpx6VJCw=;
+        b=EOWY/GyDX4RP6QQi7Mgk7t/M/4l+NlfUY86lB9WZtx+tq0H2ggccOKmO0IKtCfO4rt
+         e71LNBaI1UTQqwUbq4yG1829Di7MSHOQcRiNEDXUOkmFPUH9ky5WBGT26/QpFU01i7Yw
+         LGHxT5jw2sSp9pSd2FHPg5qRMfDeavnytyAm8nalw9eNSzVb+drLpyaKbLWSalg7p/3t
+         8keeZrkLELlQAIuu+8yCmokIgkrVNFDVy4UNkssaERGOtjnVnKneGG9nRFT/x5/7ApXB
+         EDSZaTMQvX4t7v+sKh/wzW166RKeQS/yHeVp+zBVRVFAb0c0dScT6bG83XgEVLjx8qxl
+         /0hw==
+X-Gm-Message-State: AC+VfDxVIMTOQdwxMho/r0cMKGO0mZGwooTXzqyXWFmcIN5e8Fzc3+B2
+        /MmYkVXaTLuVYAbL/6kigSTdtbwtaAM=
+X-Google-Smtp-Source: ACHHUZ4eGndc+7QdI9mskaHBuTlC2cF2BI7Zf5TnziUkyKw+U7yNdG/ZaF4y2VrXs8Vh5aZHLLRslw==
+X-Received: by 2002:a17:903:187:b0:1b3:f8db:6f0e with SMTP id z7-20020a170903018700b001b3f8db6f0emr2192157plg.43.1686718343714;
+        Tue, 13 Jun 2023 21:52:23 -0700 (PDT)
 Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:bf5f:2e99:78f2:6007])
-        by smtp.gmail.com with ESMTPSA id z18-20020a170903019200b001acad86ebc5sm11089790plg.33.2023.06.13.21.52.22
+        by smtp.gmail.com with ESMTPSA id z18-20020a170903019200b001acad86ebc5sm11089790plg.33.2023.06.13.21.52.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 21:52:22 -0700 (PDT)
+        Tue, 13 Jun 2023 21:52:23 -0700 (PDT)
 From:   Max Filippov <jcmvbkbc@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH 1/4] xtensa: move early_trap_init from kasan_early_init to init_arch
-Date:   Tue, 13 Jun 2023 21:52:09 -0700
-Message-Id: <20230614045212.2534746-2-jcmvbkbc@gmail.com>
+Subject: [PATCH 2/4] xtensa: always install slow handler for unaligned access exception
+Date:   Tue, 13 Jun 2023 21:52:10 -0700
+Message-Id: <20230614045212.2534746-3-jcmvbkbc@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230614045212.2534746-1-jcmvbkbc@gmail.com>
 References: <20230614045212.2534746-1-jcmvbkbc@gmail.com>
@@ -72,76 +72,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There may be other users for the early traps besides KASAN. Move call to
-the early_trap_init from kasan_early_init. Protect init_exc_table
-initializer with ifdef to make sure it builds on noMMU configurations.
+Currently slow handler for unaligned access exception is not installed
+when CPU has hardware support for unaligned access. However some opcodes
+(e.g. l32ai, s32ri, s32c1i) would still raise unaligned access exception
+even on such CPUs. In that case instead of SIGBUS and a diagnostic entry
+in the kernel log the faulting process would receive SIGILL.
+Always install slow handler for unaligned access exception to fix that.
 
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
- arch/xtensa/include/asm/traps.h | 2 ++
- arch/xtensa/kernel/setup.c      | 6 ++++++
- arch/xtensa/mm/kasan_init.c     | 2 --
- 3 files changed, 8 insertions(+), 2 deletions(-)
+ arch/xtensa/kernel/traps.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/arch/xtensa/include/asm/traps.h b/arch/xtensa/include/asm/traps.h
-index 6f74ccc0c7ea..acffb02f8760 100644
---- a/arch/xtensa/include/asm/traps.h
-+++ b/arch/xtensa/include/asm/traps.h
-@@ -64,8 +64,10 @@ void do_unhandled(struct pt_regs *regs);
- static inline void __init early_trap_init(void)
+diff --git a/arch/xtensa/kernel/traps.c b/arch/xtensa/kernel/traps.c
+index a92c8593d4f1..f447262468c5 100644
+--- a/arch/xtensa/kernel/traps.c
++++ b/arch/xtensa/kernel/traps.c
+@@ -54,9 +54,7 @@ static void do_interrupt(struct pt_regs *regs);
+ #if XTENSA_FAKE_NMI
+ static void do_nmi(struct pt_regs *regs);
+ #endif
+-#if XCHAL_UNALIGNED_LOAD_EXCEPTION || XCHAL_UNALIGNED_STORE_EXCEPTION
+ static void do_unaligned_user(struct pt_regs *regs);
+-#endif
+ static void do_multihit(struct pt_regs *regs);
+ #if XTENSA_HAVE_COPROCESSORS
+ static void do_coprocessor(struct pt_regs *regs);
+@@ -102,9 +100,9 @@ static dispatch_init_table_t __initdata dispatch_init_table[] = {
+ #ifdef CONFIG_XTENSA_UNALIGNED_USER
+ { EXCCAUSE_UNALIGNED,		USER,	   fast_unaligned },
+ #endif
+-{ EXCCAUSE_UNALIGNED,		0,	   do_unaligned_user },
+ { EXCCAUSE_UNALIGNED,		KRNL,	   fast_unaligned },
+ #endif
++{ EXCCAUSE_UNALIGNED,		0,	   do_unaligned_user },
+ #ifdef CONFIG_MMU
+ { EXCCAUSE_ITLB_MISS,			0,	   do_page_fault },
+ { EXCCAUSE_ITLB_MISS,			USER|KRNL, fast_second_level_miss},
+@@ -363,7 +361,6 @@ static void do_div0(struct pt_regs *regs)
+  * accesses causes from user space.
+  */
+ 
+-#if XCHAL_UNALIGNED_LOAD_EXCEPTION || XCHAL_UNALIGNED_STORE_EXCEPTION
+ static void do_unaligned_user(struct pt_regs *regs)
  {
- 	static struct exc_table init_exc_table __initdata = {
-+#ifdef CONFIG_MMU
- 		.fast_kernel_handler[EXCCAUSE_DTLB_MISS] =
- 			fast_second_level_miss,
-+#endif
- 	};
- 	xtensa_set_sr(&init_exc_table, excsave1);
+ 	__die_if_kernel("Unhandled unaligned exception in kernel",
+@@ -375,7 +372,6 @@ static void do_unaligned_user(struct pt_regs *regs)
+ 			    task_pid_nr(current), regs->pc);
+ 	force_sig_fault(SIGBUS, BUS_ADRALN, (void *) regs->excvaddr);
  }
-diff --git a/arch/xtensa/kernel/setup.c b/arch/xtensa/kernel/setup.c
-index 94aafa19771b..5c0c0fcac144 100644
---- a/arch/xtensa/kernel/setup.c
-+++ b/arch/xtensa/kernel/setup.c
-@@ -47,6 +47,7 @@
- #include <asm/smp.h>
- #include <asm/sysmem.h>
- #include <asm/timex.h>
-+#include <asm/traps.h>
+-#endif
  
- #if defined(CONFIG_VGA_CONSOLE) || defined(CONFIG_DUMMY_CONSOLE)
- struct screen_info screen_info = {
-@@ -242,6 +243,11 @@ void __init early_init_devtree(void *params)
- 
- void __init init_arch(bp_tag_t *bp_start)
- {
-+	/* Initialize basic exception handling if configuration may need it */
-+
-+	if (IS_ENABLED(CONFIG_KASAN))
-+		early_trap_init();
-+
- 	/* Initialize MMU. */
- 
- 	init_mmu();
-diff --git a/arch/xtensa/mm/kasan_init.c b/arch/xtensa/mm/kasan_init.c
-index 1fef24db2ff6..f00d122aa806 100644
---- a/arch/xtensa/mm/kasan_init.c
-+++ b/arch/xtensa/mm/kasan_init.c
-@@ -14,7 +14,6 @@
- #include <linux/kernel.h>
- #include <asm/initialize_mmu.h>
- #include <asm/tlbflush.h>
--#include <asm/traps.h>
- 
- void __init kasan_early_init(void)
- {
-@@ -31,7 +30,6 @@ void __init kasan_early_init(void)
- 		BUG_ON(!pmd_none(*pmd));
- 		set_pmd(pmd, __pmd((unsigned long)kasan_early_shadow_pte));
- 	}
--	early_trap_init();
- }
- 
- static void __init populate(void *start, void *end)
+ #if XTENSA_HAVE_COPROCESSORS
+ static void do_coprocessor(struct pt_regs *regs)
 -- 
 2.30.2
 
