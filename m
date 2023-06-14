@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B71A172F2CD
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 04:49:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1841B72F2CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 04:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242471AbjFNCtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 22:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37344 "EHLO
+        id S242478AbjFNCtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 22:49:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242356AbjFNCst (ORCPT
+        with ESMTP id S242372AbjFNCsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 22:48:49 -0400
+        Tue, 13 Jun 2023 22:48:50 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA1B2112
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 19:48:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D77D2128
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 19:48:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686710900; x=1718246900;
+  t=1686710902; x=1718246902;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=WrDuSdB9iYumVVBXtypeizwCzmEr0vrCm5Dy+N+kwxM=;
-  b=lgqSQ/Nq5pVoN7RZymWTRPB3e6GlTrC65cBoX81IJlXvgQbYKxSS1+Sn
-   7BCapw+C+o0ICOsvSJnN7MKRU/GtmvzMvA3vKCjEeUgaeyrHzuZ+8jHIN
-   M8/xMgwy2BOfKQPDfUNjHQruTbLfY9H7cOblWrDvirDWdK6TZXekw3M22
-   N3k/jHpvEpZ7N3tbrzYkTkHFTDZ1Rw2vqFxlp/y7Io9jrRjE4FoH3fgU9
-   KdSho4jdRciYB33hx4EGLp3fb0GeA9spqa0EKrZ1UIzfSY+LgFc0ez9AC
-   VugGJcNmnTuUPMn4s/1AolL3m7FkHHnhWmQCGOMGY+2w/5qexVx0X4Xed
+  bh=UGWXKlFwoha8aQZA4PcpDVrWAANHfSgY3CsRnwLIe6c=;
+  b=a0+U6IQ5EdhQP35L6gr0wvawf4BRZU/vGOm0zeTiZNIUK6WYApbJhCev
+   R0FDHPlJZIn1jwBbx2UwPwpSmGV5IEP+szU/CotZ44VSW3mlq6NCVANOG
+   PmQ+7q3SCTNCH7JK6/PsMTdqil1Bj4Y4ZIpKF4cJbLn6nPNdwTkWHnV3q
+   5QnmQLGDHiSqB0TOzIvsbxSE8zuWNECeVu1hMsahLfBWCFCnQR3J1/5xd
+   jbaZXLi0HOnC8KZ8JFl956SNaYA2Kt2pClFzxk6HNm69EnHkopv2dDJ42
+   eStzxda+Xg2HUnB6Aft/s47DIe6OeQDrtoqWO1BCSgUGTa46FgmE8EydL
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="348164462"
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="348164469"
 X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
-   d="scan'208";a="348164462"
+   d="scan'208";a="348164469"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 19:48:20 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 19:48:21 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="711884211"
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="711884219"
 X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
-   d="scan'208";a="711884211"
+   d="scan'208";a="711884219"
 Received: from allen-box.sh.intel.com ([10.239.159.127])
-  by orsmga002.jf.intel.com with ESMTP; 13 Jun 2023 19:48:18 -0700
+  by orsmga002.jf.intel.com with ESMTP; 13 Jun 2023 19:48:20 -0700
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     Joerg Roedel <joro@8bytes.org>
 Cc:     Yanfei Xu <yanfei.xu@intel.com>, Suhui <suhui@nfschina.com>,
         iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] iommu/vt-d: Remove two WARN_ON in domain_context_mapping_one()
-Date:   Wed, 14 Jun 2023 10:47:04 +0800
-Message-Id: <20230614024705.88878-4-baolu.lu@linux.intel.com>
+Subject: [PATCH 4/4] iommu/vt-d: Remove commented-out code
+Date:   Wed, 14 Jun 2023 10:47:05 +0800
+Message-Id: <20230614024705.88878-5-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230614024705.88878-1-baolu.lu@linux.intel.com>
 References: <20230614024705.88878-1-baolu.lu@linux.intel.com>
@@ -62,45 +62,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yanfei Xu <yanfei.xu@intel.com>
+These lines of code were commented out when they were first added in commit
+ba39592764ed ("Intel IOMMU: Intel IOMMU driver"). We do not want to restore
+them because the VT-d spec has deprecated the read/write draining hit.
 
-Remove the WARN_ON(did == 0) as the domain id 0 is reserved and
-set once the domain_ids is allocated. So iommu_init_domains will
-never return 0.
+VT-d spec (section 11.4.2):
+"
+ Hardware implementation with Major Version 2 or higher (VER_REG), always
+ performs required drain without software explicitly requesting a drain in
+ IOTLB invalidation. This field is deprecated and hardware  will always
+ report it as 1 to maintain backward compatibility with software.
+"
 
-Remove the WARN_ON(!table) as this pointer will be accessed in
-the following code, if empty "table" really happens, the kernel
-will report a NULL pointer reference warning at the first place.
+Remove the code to make the code cleaner.
 
-Signed-off-by: Yanfei Xu <yanfei.xu@intel.com>
-Link: https://lore.kernel.org/r/20230605112659.308981-3-yanfei.xu@intel.com
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+Link: https://lore.kernel.org/r/20230609060514.15154-1-baolu.lu@linux.intel.com
 ---
- drivers/iommu/intel/iommu.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/iommu/intel/iommu.c | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
 diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index e83fe243680b..4c0b7424c45e 100644
+index 4c0b7424c45e..e5c111ff4dd9 100644
 --- a/drivers/iommu/intel/iommu.c
 +++ b/drivers/iommu/intel/iommu.c
-@@ -1897,8 +1897,6 @@ static int domain_context_mapping_one(struct dmar_domain *domain,
- 	struct context_entry *context;
- 	int ret;
+@@ -1312,15 +1312,7 @@ static void __iommu_flush_iotlb(struct intel_iommu *iommu, u16 did,
+ 			iommu->name, type);
+ 		return;
+ 	}
+-	/* Note: set drain read/write */
+-#if 0
+-	/*
+-	 * This is probably to be super secure.. Looks like we can
+-	 * ignore it without any impact.
+-	 */
+-	if (cap_read_drain(iommu->cap))
+-		val |= DMA_TLB_READ_DRAIN;
+-#endif
++
+ 	if (cap_write_drain(iommu->cap))
+ 		val |= DMA_TLB_WRITE_DRAIN;
  
--	WARN_ON(did == 0);
--
- 	if (hw_pass_through && domain_type_is_si(domain))
- 		translation = CONTEXT_TT_PASS_THROUGH;
- 
-@@ -1944,8 +1942,6 @@ static int domain_context_mapping_one(struct dmar_domain *domain,
- 	if (sm_supported(iommu)) {
- 		unsigned long pds;
- 
--		WARN_ON(!table);
--
- 		/* Setup the PASID DIR pointer: */
- 		pds = context_get_sm_pds(table);
- 		context->lo = (u64)virt_to_phys(table->table) |
 -- 
 2.34.1
 
