@@ -2,102 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B0472F2D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 04:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 442DA72F2D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 04:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242245AbjFNCwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 22:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41068 "EHLO
+        id S242277AbjFNCwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 22:52:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242198AbjFNCwL (ORCPT
+        with ESMTP id S242165AbjFNCv6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 22:52:11 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2CCA1FFC
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 19:51:53 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4Qgqgq3cgTzBJL9q
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 10:51:35 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1686711095; x=1689303096; bh=CCN25bbIwKKA08BngAtwGiU6p+B
-        /XQqOhcZ2yRbFbnE=; b=PXy+aBSnLznMym4e+raVReiyDr2JJVJiTArdY6oM3Bu
-        7PpcOxZghE43gEUCD48EZLpBYpbLTRflqBgZl3ic+eQIzQ1z7dZwT2W/x2It79zL
-        q4Lf1rRm187JMiTysaqCyA/7rwHxQQhe82Ovw9w62NJq5LjTaQ4PzMOWNxgSR/jQ
-        c/DuaPN/OmnsqjPQSEoz79HMTStQ4cOLGCgjRrc4vlTTqVhDP6Nrh66otnEkzoDL
-        PhqeupLwCs3ZtHt9t+CKFspkqpcd+rtJo2agUNgEEp6XDuWVfW7cW3WBk8dcEGgp
-        bx1148OfMG7kQXU73bcBUxrLFM9xha84I86GJV835Sg==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id K_Lo57TK0DLS for <linux-kernel@vger.kernel.org>;
-        Wed, 14 Jun 2023 10:51:35 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4Qgqgq1zgQzBJ9pH;
-        Wed, 14 Jun 2023 10:51:35 +0800 (CST)
+        Tue, 13 Jun 2023 22:51:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958D92690;
+        Tue, 13 Jun 2023 19:51:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 099A962F37;
+        Wed, 14 Jun 2023 02:51:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0878AC433C0;
+        Wed, 14 Jun 2023 02:51:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686711097;
+        bh=N3q6ixAinHSWilzVMCv++DW3xSimSHnyP2PRlOaULYE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aHS8GGlVpVMza8fUd10dHWgjcsEcnhYF6mtda1PEif73/gG8DJjgjRD496BZG2+IQ
+         yZb0yLikA3pccFbH6043Pq5QZcqOroZdRH/n0aPMe6tt6rd6svMoQlkxrdOQGMmm5p
+         gPTCRZNFuEphlrZWYkI0t495rTPGdcZJ6IzKlD2J5Zsf62F+leEV0MUgVETVEw0vup
+         sMwdFgG4EQYtmZ9JqLK5OUrSJZXnIspVyWrfW0tKAsYBWwuyMLC6UVSY84A9XKx8KM
+         hmEOCqZIbZ55Y5QXW5euBztlUDZTHbx6k9Q1KnD2gow6ubRUlJEXvAxIGp7m80p1TK
+         vqIb4LmfdSHew==
+Date:   Tue, 13 Jun 2023 19:51:36 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@kernel.org>,
+        Kalle Valo <kvalo@kernel.org>, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        regressions@lists.linux.dev
+Subject: Re: Closing down the wireless trees for a summer break?
+Message-ID: <20230613195136.6815df9b@kernel.org>
+In-Reply-To: <ba933d6e3d360298e400196371e37735aef3b1eb.camel@sipsolutions.net>
+References: <87y1kncuh4.fsf@kernel.org>
+        <871qifxm9b.fsf@toke.dk>
+        <20230613112834.7df36e95@kernel.org>
+        <ba933d6e3d360298e400196371e37735aef3b1eb.camel@sipsolutions.net>
 MIME-Version: 1.0
-Date:   Wed, 14 Jun 2023 10:51:35 +0800
-From:   baomingtong001@208suo.com
-To:     tsbogend@alpha.franken.de
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: Octeon: remove unneeded variable
-In-Reply-To: <20230614024408.46240-1-luojianhong@cdjrlc.com>
-References: <20230614024408.46240-1-luojianhong@cdjrlc.com>
-User-Agent: Roundcube Webmail
-Message-ID: <998d4901de43fa640b3c383bfb6c923b@208suo.com>
-X-Sender: baomingtong001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fix the following coccicheck warning:
+On Tue, 13 Jun 2023 22:00:35 +0200 Johannes Berg wrote:
+> On Tue, 2023-06-13 at 11:28 -0700, Jakub Kicinski wrote:
+> > On Tue, 13 Jun 2023 20:14:40 +0200 Toke H=C3=B8iland-J=C3=B8rgensen wro=
+te: =20
+> > > I think this sounds reasonable, and I applaud the effort to take some
+> > > time off during the summer :)
+> > >=20
+> > > One question that comes to mind is how would this work for patchwork?
+> > > Would we keep using the wireless patchwork instance for the patches
+> > > going to -net in that period, or will there be some other process for
+> > > this? I realise the setup we have for ath9k is a bit special in this
+> > > regard with the ack-on-list+delegation, so I'm obviously mostly
+> > > interested in what to do about that... :) =20
+> >=20
+> > Whatever's easiest :) It's probably a good idea for Kalle to write
+> > down all the local rules and customs and share those with us.
+>=20
+> While that's probably a good idea regardless, I'd think that patchwork
+> doesn't really matter that much - we'll have some catching up to do
+> anyway after the vacations, so looking through patchwork etc. would be
+> perfectly acceptable. Worst case we'd notice when a patch doesn't apply,
+> right? :)
 
-arch/mips/cavium-octeon/executive/cvmx-spi.c:108:5-8: Unneeded variable: 
-"res".
+Right, I meant it more in terms of patch flow. Is looking at which
+drivers have a tree specified in MAINTAINERS enough to know what
+should be applied directly?
 
-Signed-off-by: Mingtong Bao <baomingtong001@208suo.com>
----
-  arch/mips/cavium-octeon/executive/cvmx-spi.c | 5 ++---
-  1 file changed, 2 insertions(+), 3 deletions(-)
+> Wrt. ath9k patches I guess "delegate in patchwork" won't work anymore,
+> but "resend to netdev" or something perhaps?
 
-diff --git a/arch/mips/cavium-octeon/executive/cvmx-spi.c 
-b/arch/mips/cavium-octeon/executive/cvmx-spi.c
-index 1f8b85473677..5906cc551f75 100644
---- a/arch/mips/cavium-octeon/executive/cvmx-spi.c
-+++ b/arch/mips/cavium-octeon/executive/cvmx-spi.c
-@@ -105,10 +105,9 @@ void cvmx_spi_set_callbacks(cvmx_spi_callbacks_t 
-*new_callbacks)
-  int cvmx_spi_start_interface(int interface, cvmx_spi_mode_t mode, int 
-timeout,
-                   int num_ports)
-  {
--    int res = -1;
-
-      if (!(OCTEON_IS_MODEL(OCTEON_CN38XX) || 
-OCTEON_IS_MODEL(OCTEON_CN58XX)))
--        return res;
-+        return -1;
-
-      /* Callback to perform SPI4 reset */
-      INVOKE_CB(cvmx_spi_callbacks.reset_cb, interface, mode);
-@@ -130,7 +129,7 @@ int cvmx_spi_start_interface(int interface, 
-cvmx_spi_mode_t mode, int timeout,
-      /* Callback to handle interface coming up */
-      INVOKE_CB(cvmx_spi_callbacks.interface_up_cb, interface, mode);
-
--    return res;
-+    return -1;
-  }
-
-  /*
+We can watch PW state and apply from linux-wireless, I reckon.
+That said I don't know how you use delegation :)
