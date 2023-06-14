@@ -2,208 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA46C7309D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 23:31:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DE0C7309E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 23:41:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232174AbjFNVbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 17:31:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
+        id S234083AbjFNVlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 17:41:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjFNVbd (ORCPT
+        with ESMTP id S230186AbjFNVli (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 17:31:33 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7536C1FFA
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 14:31:31 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id 4fb4d7f45d1cf-5193c97ecbbso1328729a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 14:31:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686778290; x=1689370290;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oh5nWE0pGFkoodtEGgImAH9t2K0gwbTAJWDqrg/URHU=;
-        b=oe5fklyGZLgQ6D0RFP6eEND/P7lS17P9niXlv2SXjRSeAq0nNPRJOsJKm9ky5lB+4h
-         dqN8oELynrplFPva4JtuIUIC8+l2or4QtrKbv1QeNgsxje2kWaHlyiP4n7e2mT39W+Kv
-         JwZ0CVVaOgHg4ciW1x+Bw9v2mv4SlRlXuENBU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686778290; x=1689370290;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oh5nWE0pGFkoodtEGgImAH9t2K0gwbTAJWDqrg/URHU=;
-        b=KbgpYsXjjyKVr/G8q2/cVm6YUdux8feePYt+1RP0o+IhxN5vmPYuNoNmVUlV/P9qj0
-         WpUyCFSoSYBIsM8yGKcy2uazsfGNOXuE2Q/9orZ96wMr2gmUToGAeb1mYDYF9+RnGakx
-         8tqMALjzjK8Jk7OZ+9lxnPcOIn2I71th5cWHeDHGZVMPMrBfCsWqjSBDYKyOUUcWja1/
-         QapE9ahnbXs4n9Tha7NECpQOXAwvaJK+r/rqRgPqsMLHe9Z/kRjykZq53/8WQTRNicUB
-         vOheFeWanl0A7Q/bupoqOWqtD8xI2tu1UFOVKOZIyG6fpqf7Y0nae3Qsi+Gz2x7AK6+S
-         rYdA==
-X-Gm-Message-State: AC+VfDyUyvLC4Wpah7o5WSytby+08mXym0E0Oy0BKHOMnuLIrXsy7jqJ
-        AKN0DotjNTJMVKyW3668VH5bQn+vPo2m+NWKuYHbS0TUgHA=
-X-Google-Smtp-Source: ACHHUZ5GnExWTuP3w6MTRj3vlYQRoisn1E2oDOzKu4d/pz/4XpI1X6DCrIkKrlUOdatuAb00Erf0kw==
-X-Received: by 2002:a17:906:9b85:b0:96f:dd14:f749 with SMTP id dd5-20020a1709069b8500b0096fdd14f749mr13939870ejc.23.1686778289917;
-        Wed, 14 Jun 2023 14:31:29 -0700 (PDT)
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
-        by smtp.gmail.com with ESMTPSA id d18-20020a170906371200b0098282bb8effsm888822ejc.196.2023.06.14.14.31.29
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 14:31:29 -0700 (PDT)
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-516500163b2so959a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 14:31:29 -0700 (PDT)
-X-Received: by 2002:a50:9e65:0:b0:51a:2012:5b34 with SMTP id
- z92-20020a509e65000000b0051a20125b34mr1137ede.4.1686778289380; Wed, 14 Jun
- 2023 14:31:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230612163256.1.I7b8f60b3fbfda068f9bf452d584dc934494bfbfa@changeid>
- <86ad3ffb-fbe2-9bed-751d-684994b71e9d@collabora.com>
-In-Reply-To: <86ad3ffb-fbe2-9bed-751d-684994b71e9d@collabora.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 14 Jun 2023 14:31:17 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XGN7NEFjtAAr+y_Vfth0MKL875B1+mqzmy3yAfteNxuQ@mail.gmail.com>
-Message-ID: <CAD=FV=XGN7NEFjtAAr+y_Vfth0MKL875B1+mqzmy3yAfteNxuQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: ps8640: Drop the ability of ps8640 to fetch
- the EDID
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     dri-devel@lists.freedesktop.org,
-        Maxime Ripard <mripard@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Pin-yen Lin <treapking@chromium.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Icenowy Zheng <uwu@icenowy.me>,
-        linux-mediatek@lists.infradead.org,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        David Airlie <airlied@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
+        Wed, 14 Jun 2023 17:41:38 -0400
+Received: from sender3-op-o19.zoho.com (sender3-op-o19.zoho.com [136.143.184.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB03268C;
+        Wed, 14 Jun 2023 14:41:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686778856; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=Ul326G5zKHXONSFUS+UiamL2zNH0B5M+pCy2WNtDK0n5ysXLsGDDxcwi4wumb1/C2FX9y9DF0bJvqi8ezEhLEtknk1k1anFgqTMMCuuyPQpEzyDVm7/A+9cFpqIvEgm0XGQMNhfdDPG3VotkeACpSIZmsV06elkrBl7xdHzx3tc=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1686778856; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=qJJkUdB/0J8dtVErmzAQ2BEHrFf9wberlx5qBQL3ZnI=; 
+        b=WX0wi7xs/gkMuSYS46FuB4fhbMw3DOMzoyTGn6y/g9RX4gGcpvGbdQYD0yfYbwoC2e2sJTVVTV0Fro/a6oWsyl7z3X1ogFl2N4csugN+Ti+3SI2J9fKWnkJETsrQExi8EIR/E3EHsbE+P68YHUySOYhk2cZ6XDMDBWr8m2UHB74=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1686778856;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Date:Date:From:From:To:To:CC:Subject:Subject:In-Reply-To:References:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To:Cc;
+        bh=qJJkUdB/0J8dtVErmzAQ2BEHrFf9wberlx5qBQL3ZnI=;
+        b=MNQUj18m8K8Tj5BGICpC2tlZDVDm7bjh2FIYrwsyDBd4Ze6UqjtcrsWCFabFD/uI
+        wU5vvU/S4b/KjnYmUQMSVzCZUOZL1/Lboqxm4pSxKfdhmoAaCy5bcYSpF2ghvYsdff+
+        cPLeFH+60vqgl8kTqbnaZMKNlELb/6JrFfP0FywY=
+Received: from [127.0.0.1] (62.74.57.178 [62.74.57.178]) by mx.zohomail.com
+        with SMTPS id 1686778855456977.8281613933586; Wed, 14 Jun 2023 14:40:55 -0700 (PDT)
+Date:   Thu, 15 Jun 2023 00:40:47 +0300
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+CC:     Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_net_v4_1/7=5D_net=3A_dsa=3A_mt7530=3A_fix_tr?= =?US-ASCII?Q?apping_frames_with_multiple_CPU_ports_on_MT7531?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20230614211352.sls7ao5swiqjgtjz@skbuf>
+References: <20230612075945.16330-1-arinc.unal@arinc9.com> <20230612075945.16330-1-arinc.unal@arinc9.com> <20230612075945.16330-2-arinc.unal@arinc9.com> <20230612075945.16330-2-arinc.unal@arinc9.com> <20230614194330.qhhoxai7namrgczq@skbuf> <1e737fe9-6a2e-225b-9c0f-9a069e8fd4bc@arinc9.com> <20230614211352.sls7ao5swiqjgtjz@skbuf>
+Message-ID: <F03D45C7-04E9-4534-AC28-2C6F76EAF3F4@arinc9.com>
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 15 June 2023 00:13:52 EEST, Vladimir Oltean <olteanv@gmail=2Ecom> wrote:
+>On Wed, Jun 14, 2023 at 11:56:44PM +0300, Ar=C4=B1n=C3=A7 =C3=9CNAL wrote=
+:
+>> On 14=2E06=2E2023 22:43, Vladimir Oltean wrote:
+>> > On Mon, Jun 12, 2023 at 10:59:39AM +0300, arinc9=2Eunal@gmail=2Ecom w=
+rote:
+>> > > From: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc=2Eunal@arinc9=2Ecom>
+>> > >=20
+>> > > Every bit of the CPU port bitmap for MT7531 and the switch on the M=
+T7988
+>> > > SoC represents a CPU port to trap frames to=2E These switches trap =
+frames
+>> > > received from a user port to the CPU port that is affine to the use=
+r port
+>> > > from which the frames are received=2E
+>> > >=20
+>> > > Currently, only the bit that corresponds to the first found CPU por=
+t is set
+>> > > on the bitmap=2E When multiple CPU ports are being used, the trappe=
+d frames
+>> > > from the user ports not affine to the first CPU port will be droppe=
+d as the
+>> > > other CPU port is not set on the bitmap=2E The switch on the MT7988=
+ SoC is
+>> > > not affected as there's only one port to be used as a CPU port=2E
+>> > >=20
+>> > > To fix this, introduce the MT7531_CPU_PMAP macro to individually se=
+t the
+>> > > bits of the CPU port bitmap=2E Set the CPU port bitmap for MT7531 a=
+nd the
+>> > > switch on the MT7988 SoC on mt753x_cpu_port_enable() which runs on =
+a loop
+>> > > for each CPU port=2E
+>> > >=20
+>> > > Add a comment to explain frame trapping for these switches=2E
+>> > >=20
+>> > > According to the document MT7531 Reference Manual for Development B=
+oard
+>> > > v1=2E0, the MT7531_CPU_PMAP bits are unset after reset so no need t=
+o clear it
+>> > > beforehand=2E Since there's currently no public document for the sw=
+itch on
+>> > > the MT7988 SoC, I assume this is also the case for this switch=2E
+>> > >=20
+>> > > Fixes: c288575f7810 ("net: dsa: mt7530: Add the support of MT7531 s=
+witch")
+>> > > Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc=2Eunal@arinc9=2Ecom=
+>
+>> > > ---
+>> >=20
+>> > Would you agree that this is just preparatory work for change "net: d=
+sa:
+>> > introduce preferred_default_local_cpu_port and use on MT7530" and not=
+ a
+>> > fix to an existing problem in the code base?
+>>=20
+>> Makes sense=2E Pre-preferred_default_local_cpu_port patch, there isn't =
+a case
+>> where there's a user port affine to a CPU port that is not enabled on t=
+he
+>> CPU port bitmap=2E So yeah, this is just preparatory work for "net: dsa=
+:
+>> introduce preferred_default_local_cpu_port and use on MT7530"=2E
+>>=20
+>> So how do I change the patch to reflect this?
+>>=20
+>> Ar=C4=B1n=C3=A7
+>
+>net: dsa: mt7530: set all CPU ports in MT7531_CPU_PMAP
+>
+>MT7531_CPU_PMAP represents the destination port mask for trapped-to-CPU
+>frames (further restricted by PCR_MATRIX)=2E
+>
+>Currently the driver sets the first CPU port as the single port in this
+>bit mask, which works fine regardless of whether the device tree defines
+>port 5, 6 or 5+6 as CPU ports=2E This is because the logic coincides with
+>DSA's logic of picking the first CPU port as the CPU port that all user
+>ports are affine to, by default=2E
+>
+>An upcoming change would like to influence DSA's selection of the
+>default CPU port to no longer be the first one, and in that case, this
+>logic needs adaptation=2E
+>
+>Since there is no observed leakage or duplication of frames if all CPU
+>ports are defined in this bit mask, simply include them all=2E
+>
+>Note that there is no Fixes tag
 
-On Wed, Jun 14, 2023 at 1:22=E2=80=AFAM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Il 13/06/23 01:32, Douglas Anderson ha scritto:
-> > In order to read the EDID from an eDP panel, you not only need to
-> > power on the bridge chip itself but also the panel. In the ps8640
-> > driver, this was made to work by having the bridge chip manually power
-> > the panel on by calling pre_enable() on everything connectorward on
-> > the bridge chain. This worked OK, but...
-> >
-> > ...when trying to do the same thing on ti-sn65dsi86, feedback was that
-> > this wasn't a great idea. As a result, we designed the "DP AUX"
-> > bus. With the design we ended up with the panel driver itself was in
-> > charge of reading the EDID. The panel driver could power itself on and
-> > the bridge chip was able to power itself on because it implemented the
-> > DP AUX bus.
-> >
-> > Despite the fact that we came up with a new scheme, implemented in on
-> > ti-sn65dsi86, and even implemented it on parade-ps8640, we still kept
-> > the old code around. This was because the new scheme required a DT
-> > change. Previously the panel was a simple "platform_device" and in DT
-> > at the top level. With the new design the panel needs to be listed in
-> > DT under the DP controller node. The old code allowed us to properly
-> > fetch EDIDs with ps8640 with the old DTs.
-> >
-> > Unfortunately, the old code stopped working as of commit 102e80d1fa2c
-> > ("drm/bridge: ps8640: Use atomic variants of drm_bridge_funcs"). There
-> > are cases at bootup where connector->state->state is NULL and the
-> > kernel crashed at:
-> > * drm_atomic_bridge_chain_pre_enable
-> > * drm_atomic_get_old_bridge_state
-> > * drm_atomic_get_old_private_obj_state
-> >
-> > A bit of digging was done to see if there was an easy fix but there
-> > was nothing obvious. Instead, the only device using ps8640 the "old"
-> > way had its DT updated so that the panel was no longer a simple
-> > "platform_deice". See commit c2d94f72140a ("arm64: dts: mediatek:
-> > mt8173-elm: Move display to ps8640 auxiliary bus") and commit
-> > 113b5cc06f44 ("arm64: dts: mediatek: mt8173-elm: remove panel model
-> > number in DT").
-> >
-> > Let's delete the old, crashing code so nobody gets tempted to copy it
-> > or figure out how it works (since it doesn't).
-> >
-> > NOTE: from a device tree "purist" point of view, we're supposed to
-> > keep old device trees working and this patch is technically "against
-> > policy". Reasons I'm still proposing it anyway:
-> > 1. Officially, old mt8173-elm device trees worked via the "little
-> >     white lie" approach. The DT would list an arbitrary/representative
-> >     panel that would be used for power sequencing. The mode information
-> >     in the panel driver would then be ignored / overridden by the EDID
-> >     reading code in ps8640. I don't feel too terrible breaking DTs that
-> >     contained the wrong "compatible" string to begin with. NOTE that
-> >     any old device trees that _didn't_ lie about their compatible will
-> >     still work because the mode information will come from the
-> >     hardcoded panels in panel-edp.
-> > 2. The only users of the old code were Chromebooks and Chromebooks
-> >     don't bake their DTs into the BIOS (they are bundled with the
-> >     kernel). Thus we don't need to worry about breaking someone using
-> >     an old DT with a new kernel.
-> > 3. The old code was crashing anyway. If someone wants to fix the old
-> >     code instead of deleting it then they have my blessing, but without
-> >     a proper fix the old code isn't useful.
-> >
-> > I'll list this as "Fixing" the code that made the old code start
-> > failing. There's not lots of reason to bring this back any further
-> > than that.
->
-> Hoping to see removal of non-aux EDID reading code from all drivers that =
-can
-> support aux-bus is exactly why I moved Elm to the proper... aux-bus.. so.=
-..
->
-> Yes! Let's go!
->
-> >
-> > Fixes: 102e80d1fa2c ("drm/bridge: ps8640: Use atomic variants of drm_br=
-idge_funcs")
->
-> ...but this Fixes tag will cause this commit to be backported to kernel v=
-ersions
-> before my commit moving Elm to aux-bus, and break display on those.
->
-> I would suggest to either find a different Fixes tag, or don't add any, s=
-ince
-> technically this is a deprecation commit. We could imply that the old tec=
-hnique
-> is deprecated since kernel version X.Y and get away with it.
->
-> Otherwise, if you want it backported *anyway*, the safest way would be to=
- Cc it
-> to stable and explicitly say which versions should it be backported to.
+Thanks a lot for making it easier for me=2E
 
-The problem is that, as I understand it, as of commit 102e80d1fa2c
-("drm/bridge: ps8640: Use atomic variants of drm_bridge_funcs"),
-things are broken anyway and you'll get a crash at bootup. However, if
-you start at that commit and apply ${SUBJECT} patch, things actually
-end up being less broken. It won't crash anymore and on any boards
-that actually have the display that's specified in the DT compatible
-the screen should actually work. Thus even without your patch to move
-things over to the aux-bus it's still an improvement to take
-${SUBJECT} patch on any kernels that have that commit.
-
-I don't have an 'elm' device easily accessible, but I can figure out
-how to get one if needed to confirm that's true. However, maybe it's
-easy for you or Pin-Yen to confirm.
-
-If my understanding is incorrect, I have no objection to removing the
-Fixes tag. I'd probably have to update the commit message a bunch too
-because that was part of my justification for landing the patch in the
-first place.
+Ar=C4=B1n=C3=A7
