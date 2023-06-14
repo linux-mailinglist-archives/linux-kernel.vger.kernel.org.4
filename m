@@ -2,106 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA276730B87
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 01:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 110B6730B8A
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 01:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232672AbjFNX1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 19:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59590 "EHLO
+        id S235600AbjFNX2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 19:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjFNX1l (ORCPT
+        with ESMTP id S229516AbjFNX2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 19:27:41 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2052.outbound.protection.outlook.com [40.107.243.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061831BC3;
-        Wed, 14 Jun 2023 16:27:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JZN9+NDHXrzulzUsBjxSBISyzTDfr/hxqeScKw4jYUp6FirHFcjqjoGhfKfuYA1JR/uFf/EZ4fMGMKtoO/0ukvirM+go4lReZLCqmBvAtwRAxoqQsWoI6UnJ1NRe1G5CCUrnlvJQ3L1dGGwcJxYhCrqp5Dfs5JSdj6XNdyv/bFqL7QB/kT8zN0fDDjEeDI6i2gmXmMAb2ydQbFsqng5JGPx08zPGcpOd+Q+7JHU6S1pYm/1miG069iV6PDUvy1oh6VyB2+/1v78TmTNvA8AuHyVrTf3aJsr+JC7FgnZUbSj/xRwX4+p69uPjdCKQt782w7bHNW+syiDaWwF2GAqGoQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ewHgJGAmrqv1FJpXzuYR3L4m1RtF+CDAJjcddpSYiNU=;
- b=CXb609GGCcEZwQ6nHk4J2M+ZeXcw+VIz385EnbB0lWPTXIt1jZP0yNvy1R0KbkCM35IEnVO6rHB7vcxidpkLEZPo8/jX4G0qw6Ae49/9hJCoX0jbTSg5vQ/OqQNOlj79QGdTDQyDua6aGnvosdskGW/BioAAb7pNnXEHBVnoYF8qoUQXLficruzS+otKqVOWO6FtFvYygQlhb6BLOwXeR3EDBW+eecE0/qplxtvPsO4i+Q8tQURoY3ChE8ObJ9QoMPhJPWyz405BLY4NNbcCZSke/eeP+P69StOZPy9cwW1+vfsZP44BbPI5ZxVsya65ckNR+8cBJGMs4mGDRln9Mg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linaro.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ewHgJGAmrqv1FJpXzuYR3L4m1RtF+CDAJjcddpSYiNU=;
- b=TqETr2ch2QqFcKRRUpkkaoFQbDtHrlP7enUGaBVNjr7nCjv1agBfEQ4EG/LhxCHd8VmGICqlqaHCP13CGxxgS6pTPP804pvApTrisqL6U7dYp0EI+1lhlDZUNQ3Zf2n6FIyOhcEcoBfmRXTtBfYOYBWEiv+smhT0WpMrIW0GdqPl3kXvZgt9lA0KllYevKv+X8tejKaeJ9m+USk5fqgHUsXQEGDvy9Xqo1nfSJhcCSKTuNHmShhDZUhKHy9GxyI0A9CZ5bDKw5zjOiMSGTmiuZMhlMsqTFPehL7P49h7I96r7reEM3Vi/bRLAY68Ual6mU7ibK5qiqpxJqz0njOr/Q==
-Received: from DM6PR02CA0061.namprd02.prod.outlook.com (2603:10b6:5:177::38)
- by SA1PR12MB7176.namprd12.prod.outlook.com (2603:10b6:806:2bd::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Wed, 14 Jun
- 2023 23:27:36 +0000
-Received: from CY4PEPF0000E9D5.namprd05.prod.outlook.com
- (2603:10b6:5:177:cafe::f8) by DM6PR02CA0061.outlook.office365.com
- (2603:10b6:5:177::38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37 via Frontend
- Transport; Wed, 14 Jun 2023 23:27:36 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CY4PEPF0000E9D5.mail.protection.outlook.com (10.167.241.76) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6500.25 via Frontend Transport; Wed, 14 Jun 2023 23:27:34 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Wed, 14 Jun 2023
- 16:27:19 -0700
-Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Wed, 14 Jun
- 2023 16:27:19 -0700
-Message-ID: <8f3bb4a8-80cd-547e-df65-2d17827362f0@nvidia.com>
-Date:   Wed, 14 Jun 2023 16:27:18 -0700
+        Wed, 14 Jun 2023 19:28:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB1571FD7
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 16:28:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686785280;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=aH8zwLa8Ht2nXaE8fo3wqv7zLHm1tw4+70R/cDKjh3s=;
+        b=Pib7553m97gLDb/s0E3V+7jCoW58jZS1t2ygyRC3W7QMAac1p0Sq5dX/2Dl2zYWSUouRHl
+        y6nssujR7lIzBoi4HSx69+yp+7uUIAEugKCZzc1pZlqRo0ix07AtEinXcrul7CHlH7RP4N
+        LsA5s3QmdWxiYniv6S3TZ9b4qMWeA1s=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-85-n6p0z6GaO3ei54QFL73rZQ-1; Wed, 14 Jun 2023 19:27:56 -0400
+X-MC-Unique: n6p0z6GaO3ei54QFL73rZQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1504A296A603;
+        Wed, 14 Jun 2023 23:27:56 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 559E240C6F5E;
+        Wed, 14 Jun 2023 23:27:54 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+To:     netdev@vger.kernel.org
+cc:     dhowells@redhat.com,
+        syzbot+13a08c0bf4d212766c3c@syzkaller.appspotmail.com,
+        syzbot+14234ccf6d0ef629ec1a@syzkaller.appspotmail.com,
+        syzbot+4e2e47f32607d0f72d43@syzkaller.appspotmail.com,
+        syzbot+472626bb5e7c59fb768f@syzkaller.appspotmail.com,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next] crypto: af_alg/hash: Fix recvmsg() after sendmsg(MSG_MORE)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] selftests: lib.mk: fix out-of-tree builds
-Content-Language: en-US
-To:     Anders Roxell <anders.roxell@linaro.org>
-CC:     <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <usama.anjum@collabora.com>
-References: <20230613074931.666966-1-anders.roxell@linaro.org>
- <928ad485-2dc2-2e02-98a2-fa203441f463@nvidia.com>
- <CADYN=9KtYe6jo+MDm+3NVwfNFzsOgoRRKxu_hSJeEPMuLRGgeg@mail.gmail.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <CADYN=9KtYe6jo+MDm+3NVwfNFzsOgoRRKxu_hSJeEPMuLRGgeg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.231.35]
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D5:EE_|SA1PR12MB7176:EE_
-X-MS-Office365-Filtering-Correlation-Id: c22d91b0-fa10-4599-3627-08db6d2eeec3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1xUWJu3ZgD3ycBShRn1s6ie7fl7uemKfXD5ZEhxm7I87bs41Yy3s/QRuI9+1ZqJ52c6JDjGzn8WtRJT34KuNUef5yMb2BESbfcNYZUNVDevkxgFYFFMJN9+zEg//4Bb5FWqa67zS6oXNtZJUAxKrZ7t5FsTCR3A9faVR2feWbio+gyTWrJjl1NZkrElVm6paO9Agh57Oh4RUkwtbJtWP9AJ3H6GGOK9OkYOfK0/PaUUyQTwnllwRYV+K+foTanuY0x86+0VqGG366vUEe7O0IH6bMfyg27lBOGTFo83sI3ms6+hOB18Uqu8cQcIZv6t+A4ZyjhxBm8oBSvqrK2jvkWt9yCcMi4CR2HQAhEbXT2Z1Zcjbj1bo6FQYC15bjFTEwYdHjudfbMiJj3PV2iBQyMo8PFJLMJxS1v62A6W/EuJOFEvfkII57xwPRtUrD/Wx0jvUqp7PGDBPDUKbTGyOspHxTBrFurLG/Jh43YBkC8rqNleor4QVQRUkHBUItXIemEWUnmyu4UAgp1WoweS5GZ47sKP3FPP4J9JT0BIbdYOtJrCVWX0N2mDfEXCruP9geRzpfGBzSmXubUZRYviX4EFVTxONOUBzisYhHotGaWkTIdeyKBt92nV6oq667WbEmPw3H0zahPpyO+arfAolH6V9MRJMe+rfl+ZYT9xhjWvoR+SiSQX4ehsNbsFubva9KFBErzkNAg8T82VGK9Cik9EaE1RD6ZcTjA4+HoJSxUy7lIaJQslS8uTnWvgjwQfUtexO54nGS1ju19EdARxLab7F9MITb5jT2eKs42FVNeQ=
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(136003)(396003)(376002)(451199021)(36840700001)(46966006)(40470700004)(86362001)(31696002)(40460700003)(36860700001)(8676002)(82310400005)(41300700001)(316002)(83380400001)(26005)(82740400003)(5660300002)(40480700001)(356005)(53546011)(7636003)(8936002)(36756003)(70586007)(336012)(54906003)(70206006)(4326008)(47076005)(478600001)(6916009)(16526019)(186003)(31686004)(426003)(2906002)(2616005)(16576012)(21314003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 23:27:34.3657
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c22d91b0-fa10-4599-3627-08db6d2eeec3
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000E9D5.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7176
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1679811.1686785244.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+From:   David Howells <dhowells@redhat.com>
+Date:   Thu, 15 Jun 2023 00:27:53 +0100
+Message-ID: <1679829.1686785273@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,90 +73,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/14/23 14:16, Anders Roxell wrote:
->> (It's too bad that we have all this duplication between the Makefile
->> and lib.mk.)
-> 
-> I agree, also the duplication of get_sys_includes in bpf, hid and net Makefile's
-> Do you have any idea how we can remove the duplication?
-> 
+    =
 
-Well, since you asked... :)
+If an AF_ALG socket bound to a hashing algorithm is sent a zero-length
+message with MSG_MORE set and then recvmsg() is called without first
+sending another message without MSG_MORE set to end the operation, an oops
+will occur because the crypto context and result doesn't now get set up in
+advance because hash_sendmsg() now defers that as long as possible in the
+hope that it can use crypto_ahash_digest() - and then because the message
+is zero-length, it the data wrangling loop is skipped.
 
-Yes. Given that the goal is to support two similar, related activities:
-	a) make -C tools/testing/selftests
-	b) make -C tools/testing/selftests/<subtest>
+Fix this by always making a pass of the loop, even in the case that no dat=
+a
+is provided to the sendmsg().
 
-, we could move common functionality into common_vars.mk and
-common_targets.mk, and include those from both the top level
-tools/testing/selftests/Makefile, and the subtest Makefiles.
+Fix also extract_iter_to_sg() to handle a zero-length iterator by returnin=
+g
+0 immediately.
 
-This allows deduplication in a fairly safe sort of way, because it also
-simultaneously moves everything to a non-recursive Make design. That's
-especially nice, because then dependencies work reliably, and you also
-don't have to worry about propagating Make variables (via Make's export
-directive).
+Whilst we're at it, remove the code to create a kvmalloc'd scatterlist if
+we get more than ALG_MAX_PAGES - this shouldn't happen.
 
-I haven't done this, because a few years ago I somehow got the vague
-impression that it would not be well-received. But maybe that's
-pessimistic and/or obsolete--times change, after all!
+Fixes: c662b043cdca ("crypto: af_alg/hash: Support MSG_SPLICE_PAGES")
+Reported-by: syzbot+13a08c0bf4d212766c3c@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/r/000000000000b928f705fdeb873a@google.com/
+Reported-by: syzbot+14234ccf6d0ef629ec1a@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/r/000000000000c047db05fdeb8790@google.com/
+Reported-by: syzbot+4e2e47f32607d0f72d43@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/r/000000000000bcca3205fdeb87fb@google.com/
+Reported-by: syzbot+472626bb5e7c59fb768f@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/r/000000000000b55d8805fdeb8385@google.com/
+Signed-off-by: David Howells <dhowells@redhat.com>
+Tested-by: syzbot+13a08c0bf4d212766c3c@syzkaller.appspotmail.com
+Tested-by: syzbot+14234ccf6d0ef629ec1a@syzkaller.appspotmail.com
+Tested-by: syzbot+4e2e47f32607d0f72d43@syzkaller.appspotmail.com
+Tested-by: syzbot+472626bb5e7c59fb768f@syzkaller.appspotmail.com
+cc: Herbert Xu <herbert@gondor.apana.org.au>
+cc: "David S. Miller" <davem@davemloft.net>
+cc: Eric Dumazet <edumazet@google.com>
+cc: Jakub Kicinski <kuba@kernel.org>
+cc: Paolo Abeni <pabeni@redhat.com>
+cc: Jens Axboe <axboe@kernel.dk>
+cc: Matthew Wilcox <willy@infradead.org>
+cc: linux-crypto@vger.kernel.org
+cc: netdev@vger.kernel.org
+---
+ crypto/algif_hash.c |   21 +++++----------------
+ lib/scatterlist.c   |    2 +-
+ 2 files changed, 6 insertions(+), 17 deletions(-)
 
-***************************************************************
-Contents of tools/testing/selftests/Makefile:
+diff --git a/crypto/algif_hash.c b/crypto/algif_hash.c
+index dfb048cefb60..1176533a55c9 100644
+--- a/crypto/algif_hash.c
++++ b/crypto/algif_hash.c
+@@ -83,26 +83,14 @@ static int hash_sendmsg(struct socket *sock, struct ms=
+ghdr *msg,
+ =
 
-include common_vars.mk
+ 	ctx->more =3D false;
+ =
 
-include alsa/alsa.mk
-include amd-pstate/amd-pstate.mk
-include arm64/arm64.mk
-...etc, there are 100+ subdirs
+-	while (msg_data_left(msg)) {
++	do {
+ 		ctx->sgl.sgt.sgl =3D ctx->sgl.sgl;
+ 		ctx->sgl.sgt.nents =3D 0;
+ 		ctx->sgl.sgt.orig_nents =3D 0;
+ =
 
-include common_targets.mk
+ 		err =3D -EIO;
+ 		npages =3D iov_iter_npages(&msg->msg_iter, max_pages);
+-		if (npages =3D=3D 0)
+-			goto unlock_free;
+-
+-		if (npages > ARRAY_SIZE(ctx->sgl.sgl)) {
+-			err =3D -ENOMEM;
+-			ctx->sgl.sgt.sgl =3D
+-				kvmalloc(array_size(npages,
+-						    sizeof(*ctx->sgl.sgt.sgl)),
+-					 GFP_KERNEL);
+-			if (!ctx->sgl.sgt.sgl)
+-				goto unlock_free;
+-		}
+-		sg_init_table(ctx->sgl.sgl, npages);
++		sg_init_table(ctx->sgl.sgl, max_t(size_t, npages, 1));
+ =
 
-(This is instead of doing "TARGETS += xxx" in the Makefile. Including
-the subtest *.mk fragments allows each subtest to add features and
-quirks as necessary, while also enabling full dependency checking via a
-true non-recursive Make.)
+ 		ctx->sgl.need_unpin =3D iov_iter_extract_will_pin(&msg->msg_iter);
+ =
 
-***************************************************************
-Contents of tools/testing/selftests/common_targets.mk:
+@@ -111,7 +99,8 @@ static int hash_sendmsg(struct socket *sock, struct msg=
+hdr *msg,
+ 		if (err < 0)
+ 			goto unlock_free;
+ 		len =3D err;
+-		sg_mark_end(ctx->sgl.sgt.sgl + ctx->sgl.sgt.nents - 1);
++		if (len > 0)
++			sg_mark_end(ctx->sgl.sgt.sgl + ctx->sgl.sgt.nents - 1);
+ =
 
-all: kernel_headers
-     ...
+ 		if (!msg_data_left(msg)) {
+ 			err =3D hash_alloc_result(sk, ctx);
+@@ -148,7 +137,7 @@ static int hash_sendmsg(struct socket *sock, struct ms=
+ghdr *msg,
+ =
 
-Other rules/targets here.
+ 		copied +=3D len;
+ 		af_alg_free_sg(&ctx->sgl);
+-	}
++	} while (msg_data_left(msg));
+ =
 
-***************************************************************
-Contents of tools/testing/selftests/common_vars.mk:
+ 	ctx->more =3D msg->msg_flags & MSG_MORE;
+ 	err =3D 0;
+diff --git a/lib/scatterlist.c b/lib/scatterlist.c
+index e97d7060329e..77a7b18ee751 100644
+--- a/lib/scatterlist.c
++++ b/lib/scatterlist.c
+@@ -1340,7 +1340,7 @@ ssize_t extract_iter_to_sg(struct iov_iter *iter, si=
+ze_t maxsize,
+ 			   struct sg_table *sgtable, unsigned int sg_max,
+ 			   iov_iter_extraction_t extraction_flags)
+ {
+-	if (maxsize =3D=3D 0)
++	if (!maxsize || !iter->count)
+ 		return 0;
+ =
 
-Common variables, some of which may be overridden by a Makefile.
-
-***************************************************************
-
-Using alsa as an example of a subtest:
-
-***************************************************************
-Contents of tools/testing/selftests/alsa/alsa.mk:
-TARGETS += alsa
-
-TEST* items
-
-Plus: alsa-specific items, such as:
-CFLAGS += $(shell pkg-config --cflags alsa)
-
-***************************************************************
-Contents of tools/testing/selftests/alsa/Makefile:
-
-include ../common_vars.mk
-include alsa.mk
-
-...maybe very little else needs to go here.
-
-include ../common_targets.mk
-
-
-thanks,
--- 
-John Hubbard
-NVIDIA
+ 	switch (iov_iter_type(iter)) {
 
