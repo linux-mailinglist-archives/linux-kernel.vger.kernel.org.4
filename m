@@ -2,124 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34F0272F7C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D70172F7C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:26:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243530AbjFNIZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 04:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54314 "EHLO
+        id S243572AbjFNI0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 04:26:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243433AbjFNIZw (ORCPT
+        with ESMTP id S243558AbjFNI0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 04:25:52 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92951A1;
-        Wed, 14 Jun 2023 01:25:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=xz5/VyeWvrJxvz7Vj1Bej8cUKvcRWi1AM/YLcdj+D/Y=; b=BRDdoKzwDzkGKB+A7e3ag/q8ah
-        OuIxesfxVQag4DfRTqhUekNoppHbkzvJkwCCICkhEf8dky95UyM5bzWwWxiNms2GIKgSietdNCacr
-        HKrpLs/0yU3FtQlwoH2plJxAxqyXuzokNnbLBzeUE9RSI7aVLHoO8WAyzDiPUNVNg7d4jKQdfqnkK
-        9h4Yy3POzOVCIIQ6n1ZFg5fvmffQFY8z1DLGdH80TK1X/ioX1bFq0p3iImYmiPCTfOGxyHwcnHVIe
-        dc1+v/iDoOcVsxc8xJStSr7UlxJxe/mokgVK6nXWCJOg+fkstoS29jdcRppL3KDo7lAMYq+k7jWOq
-        4GBG8M1g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q9Loz-00Abb2-0b;
-        Wed, 14 Jun 2023 08:25:41 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C65B930031B;
-        Wed, 14 Jun 2023 10:25:39 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 975E227F86A4E; Wed, 14 Jun 2023 10:25:39 +0200 (CEST)
-Date:   Wed, 14 Jun 2023 10:25:39 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     torvalds@linux-foundation.org, keescook@chromium.org,
-        gregkh@linuxfoundation.org, pbonzini@redhat.com, nathan@kernel.org,
-        ndesaulniers@google.com, nicolas@fjasle.eu,
-        catalin.marinas@arm.com, will@kernel.org, vkoul@kernel.org,
-        trix@redhat.com, ojeda@kernel.org, mingo@redhat.com,
-        longman@redhat.com, boqun.feng@gmail.com, dennis@kernel.org,
-        tj@kernel.org, cl@linux.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
-        42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
-        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
-        john.johansen@canonical.com, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
-        rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
-        tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
-        luc.vanoostenryck@gmail.com
-Subject: Re: [PATCH v3 04/57] kbuild: Drop -Wdeclaration-after-statement
-Message-ID: <20230614082539.GB1639749@hirez.programming.kicks-ass.net>
-References: <20230612090713.652690195@infradead.org>
- <20230612093537.693926033@infradead.org>
- <CAK7LNARwAaw_22AjsheMtNwpVgF7FtKxh08mkg3cP=bY2016hw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Wed, 14 Jun 2023 04:26:17 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2104.outbound.protection.outlook.com [40.107.223.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60161CA;
+        Wed, 14 Jun 2023 01:26:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XaEyTblWoACzU1BRs4nhiVY/G7LFWbnyQqAcDsG9s1uagYvdM6gXEeypvr8BU9Hc0QQHRFGYIYMn/rxuFhfAvm02LA7tU7Iz70Ma55S/gvJkue5xoZUEmRDVkhmE3qXRulFXn/W18UxQtsyjjd9I3U4pTpodRjmxYHztxoU05c/0Hgc+KAxzF83n3Kc7q5Rry2WRcXPTwwFBf3IFe+FZ6vnxE6n+/u80jAgFbf0rwuJOdj3W8QX80orGy/CrMhwEDIM3OQw1VF8uNsI2ttPoe3i018YUT5q4HD9s9hhyjpc+3cBQYc9S4EIGCO8GrwLfKKTL+Fl4KIk4QeZiqSmZYw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=C3dHXr/LjfI+mpPMG+bFbxDo7mFAc0MjKzAVyIqvcZs=;
+ b=Y7WVPnDA/w3mBHmggnRSVIQ6DCfBrKtrKRyrUF2m4hP8C3qCCJ5w4rJTrst1e9IYtAc4Rf6pKe/wsi8zyI5rcoph9IQm7mUn2DmERmps4vkrNHI9CX3fDYyFBKNhKSjzfqDud5EwoSK+iGmC1k69qNF4pyW52Ilq5elLfQH9v4he4UTIukm1dxBdNHCdzvXN6aXD6y3My44TfyZRm2lzFRBej1FZsGCj7hXKHgecQte9V8w6E0LLcpsMG1eN4BA1YSjy3sV+3VmR1e3bEtvsCSvx6YLYQEciaWizKwSTQmi/T2AhNlqmKoGLzKoK2Rp4d6aPXq5iodL1mhZkgq5okA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=C3dHXr/LjfI+mpPMG+bFbxDo7mFAc0MjKzAVyIqvcZs=;
+ b=MBwn1ulAZ/cdflF9QqGtdFKI83iCA29tMHxaqJ+DwzVJAt4N5sHXNV+lvrvNNcBmmY5Wl7ZM6csn3hGyTcRgyeYg3SHB6QXC4y0Px40GePFvZHfKFudDcL0nNUPIY4p86sNmIY4wtePzQWXRwwH4wzbnHEyVM/GqhTNozwEOf4I=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by LV8PR13MB6350.namprd13.prod.outlook.com (2603:10b6:408:188::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.25; Wed, 14 Jun
+ 2023 08:26:12 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e%4]) with mapi id 15.20.6477.028; Wed, 14 Jun 2023
+ 08:26:12 +0000
+Date:   Wed, 14 Jun 2023 10:26:04 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Ivan Vecera <ivecera@redhat.com>
+Cc:     netdev@vger.kernel.org, Ma Yuying <yuma@redhat.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "moderated list:INTEL ETHERNET DRIVERS" 
+        <intel-wired-lan@lists.osuosl.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next 1/2] i40e: Add helper for VF inited state check
+ with timeout
+Message-ID: <ZIl5nM7sl1lJn0F5@corigine.com>
+References: <20230613121610.137654-1-ivecera@redhat.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK7LNARwAaw_22AjsheMtNwpVgF7FtKxh08mkg3cP=bY2016hw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230613121610.137654-1-ivecera@redhat.com>
+X-ClientProxiedBy: AM0PR02CA0178.eurprd02.prod.outlook.com
+ (2603:10a6:20b:28e::15) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|LV8PR13MB6350:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9ad038ca-94db-4e3a-8f15-08db6cb10313
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DspFS65rBV7ZCAvCT5pK7qgswVBXXkB7WRI44MtPrhpgsEwjRB6Sb/wraSpNHmZobXA93anbRQ9AycZvo/r08xRyl0vKOqsxgaogI3qX1ZXLG6MPgWaHTID18efF0L0D0w3svW4gMt29/xyoACriZk2nJaow2iCvJpwAaJYw0nh9/YRP+lMzsIkz8/S+knsqUAKRVNndHonJSWI5zl0dyGRMIhgQZog4paJZx3uA9i3D+laPVsyPnTaovK0E5hTu6tBT3PAEKYVfx4G9bc76YQlHlN7MISXVejEk8jbNELZowo3e3hyYb7gisHkLUInwbH/HhEz1r9UjTJzxZbDwB6Ph5aDG5ZrDgSQtSRF9jZ0j3SxGW4sY7pD09ynQOFtSCVwYOndBBwUmyNtZj1LHLXWbMr/M5ukEe+wRgPn6EPl4UKb92gEA3JU1s7vZyqvt43FlW7iedMIcxXzZozQ+j46aQHpYduX/wTpua/XFWWlY+FS1VFW5wO6KRYRAnNm+r2AIdrv39fHqUzr0jjFPCpHwmcbRotuiMHwAa/sL4Icemy+H43fH6+7DkhA11cSgaz5kbyC6vrvf5aAhz1D+LYrl/JI5aaf3l9eP9V/T0A8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(39840400004)(366004)(346002)(136003)(451199021)(36756003)(4744005)(2906002)(86362001)(44832011)(7416002)(6666004)(6486002)(186003)(6512007)(6506007)(5660300002)(478600001)(54906003)(66946007)(6916009)(66556008)(66476007)(4326008)(2616005)(316002)(38100700002)(8936002)(8676002)(41300700001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/06SDTXfYzlggYahXwYb+tX1/rBO0cn9uWCbEaUUqeGtwiXoWeRgVIJCkas7?=
+ =?us-ascii?Q?Zc624Jh8uU8XJjSjO1q8+8JH6/AsNF0LOOc9/vQhiM3X3VkTrcWWcgYY0OEJ?=
+ =?us-ascii?Q?TEFE6F/S6dTcPumMHMol8w4KDdEk3mFKliz70YBShArZZu9CnXSIi0lynq7D?=
+ =?us-ascii?Q?ljnsqm7LP0VdYXwW3XyzwFYAqDVNk735wj1zFGEcxcR3QC6QK2gB6K6RHHXZ?=
+ =?us-ascii?Q?6R5vYdiAQ8b6f7Zhmpq+FJ8txAcgf1lNyNJ7DeHtTea9f3/vjUTqkefU43kY?=
+ =?us-ascii?Q?fBYPWX4NotahL72Tdp/oKV313xUgk5qg4tsMLgYTEZd9G1hRae0mGKKM89i8?=
+ =?us-ascii?Q?QMyzjvUghCeTB5YMK6x1PrH1V8MOTh4gc1JQLv++ZFGiuDQPqYd6U0IXgCjf?=
+ =?us-ascii?Q?Jvcsk0PJO9hM+wSOZGjiJOlKMFKTcV0aioxEjqAbYVaH7VdK6rgUrxLqHGe2?=
+ =?us-ascii?Q?fnjObccMEWWRCzI3Ey2YsmGkyZRhAtKvZSKGLxfFzfybsoG5xAb/nVoPyVmV?=
+ =?us-ascii?Q?CQrgkvSQ5arsusSvUWmXbGmEvY4aWocQBciOuLtjFT1KgUegzbcqNXHJBQnO?=
+ =?us-ascii?Q?O4VfoD4bE8pvSw0qhWlO/Krse37H63p3s6TEplBtihNF80+ARJIB8k5O1TGs?=
+ =?us-ascii?Q?T+wZRle1kXE12VMm6CL6J6lxRtRhcDIePnL1PkCYWOO+vAUuDmra3L63MO8B?=
+ =?us-ascii?Q?08DDlYdOSS9A5Xx+2Ypf+46ReOjSc6pqwekQRXKR+WAV1dWZk22aHcp19Geu?=
+ =?us-ascii?Q?uX25oYoMVO0jmY//tz+29mFTha3rimrw4URXUPj8cfZ7qtMhwHk9RFrWUlIM?=
+ =?us-ascii?Q?IRj391ZvRU5GjWsqmOcZvpzmczHpUsXfbpOc1hTuxBwQIqwiVAyijBuy+dah?=
+ =?us-ascii?Q?MfamJpIGb407RfjCeZd/WSMPvzmjSB9ntFnc0hMC/v+j9seNyICrqbZ8/rw2?=
+ =?us-ascii?Q?9hjZIsmzApSzIBL/t4WjZ4sd3w39Zu4GUNU4widxWNDq7hxlMvpBh0GOMWsQ?=
+ =?us-ascii?Q?YaguAD2x3h9rE59j0gCIuL5jhrbd5aZLb/qf5cDoZUt9XGC4GEDM6Gwk/uJw?=
+ =?us-ascii?Q?gCLgvrcA9XRK3Zt1uIdCU1d3uwL+aef//si3rnFWfTS5uhiMMOsnEoo98Fh2?=
+ =?us-ascii?Q?kyVIhbuKm7HL53FzzVfDvgJ5Lv451NOx3419oLfW7Hmj6V6YPTV30WxJ1F7X?=
+ =?us-ascii?Q?lGaDWExq38EIxF2++R5jSGs32wuDeAlQAXBn5tOrrK5i+YoOAYJJ8N6hYZQR?=
+ =?us-ascii?Q?ncmBOUOjAP0YF+FslpEWkWZtWEQtnCIR0YQdVgsdVRf5APWdt2yjY1164fCg?=
+ =?us-ascii?Q?gFfJr2jpJddu/EuORbQj8/W9oi279Tyj0S2F0KH2p/tmMtPsHLQD1oPqijRT?=
+ =?us-ascii?Q?FtAafIszlJDCE6I2OgsaF6RtS/1me1ouIJjZrFkFW9Hzg+wglkZYcNfnrFqL?=
+ =?us-ascii?Q?0O8jCv/fgC7gK+VqqGBjjMHD5yQJu82SwXxP9INxQvuwBLrUz4osGeXor8Ec?=
+ =?us-ascii?Q?GgRDyNkbemwwn38VkUfr5fPvbu9918RofHBfrJrDt2ANLJ8hTLdmh+TK3/mm?=
+ =?us-ascii?Q?JGiuh7ath6KQ3Ev0Bd4/E8hoqYn4x2ce0Fp5AyPwLWBDjOuvk2DlgY20rr9j?=
+ =?us-ascii?Q?LsYbcFYAYpJ7u6u3H8Gy4Zog9w4o6tdHYRT6Ra8t2/wkVrGBeQa0We/5skBe?=
+ =?us-ascii?Q?B1ttSA=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9ad038ca-94db-4e3a-8f15-08db6cb10313
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 08:26:12.5131
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: i2Q/uNj7jYvfFg4RSuIoOC4i8pqtTWBXcvYbvB1pc7Ba0chcMBufYrFrGejjq3sV9e70nxRqGdjYHycQLnZjo+FZ4uJV7hJIrfgOV6U5b9s=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR13MB6350
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 03:13:03PM +0900, Masahiro Yamada wrote:
-> On Mon, Jun 12, 2023 at 6:39 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > With the advent on scope-based resource management it comes really
-> > tedious to abide by the contraints of -Wdeclaration-after-statement.
+On Tue, Jun 13, 2023 at 02:16:09PM +0200, Ivan Vecera wrote:
+> Move the check for VF inited state (with optional up-to 300ms
+> timeout to separate helper i40e_check_vf_init_timeout() that
+> will be used in the following commit.
 > 
-> Where is the context of Linus' suggested-by?
-> 
-> I do not know where this came from.
-> I suddenly got a huge v3 in my mailbox.
-> 
-> 
-> I see an equivalent patch submitted last year:
-> https://lore.kernel.org/lkml/Y1w031iI6Ld29IVT@p183/
-> 
-> Linus rejected it. Did he change his mind?
+> Tested-by: Ma Yuying <yuma@redhat.com>
+> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
 
-https://lkml.kernel.org/r/CAHk-%3Dwi-RyoUhbChiVaJZoZXheAwnJ7OO%3DGxe85BkPAd93TwDA%40mail.gmail.com
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-I'll add it as a Link tag to the Changelog.
-
-> 
-> > It will still be recommeneded to place declarations at the start of a
-> > scope where possible, but it will no longer be enforced.
-> 
-> If you remove the warning, we will not be able to
-> detect code that opts out the recommendation
-> for no good reason.
-
-Yeah, so per that thread linked above I tried to play clever games with
-_Pragma() to get around this, but GCC hates on it (works fine with Clang
-though).
-
-Linus said to just give up and scrap the whole
--Wdeclaration-after-statement thing.
-
-I suppose it'll be up to reviewers and perhaps checkpatch like things to
-'enforce' the rules.
