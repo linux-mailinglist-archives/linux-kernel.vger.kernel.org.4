@@ -2,52 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A64972F752
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB4472F767
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:07:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243260AbjFNIFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 04:05:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40468 "EHLO
+        id S243423AbjFNIHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 04:07:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243113AbjFNIFl (ORCPT
+        with ESMTP id S243245AbjFNIHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 04:05:41 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC67B13E;
-        Wed, 14 Jun 2023 01:05:35 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 29C6C8027;
-        Wed, 14 Jun 2023 08:05:35 +0000 (UTC)
-Date:   Wed, 14 Jun 2023 11:05:33 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        Paul Walmsley <paul@pwsan.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: omap2: Use of_range_to_resource() for "ranges"
- parsing
-Message-ID: <20230614080533.GG14287@atomide.com>
-References: <20230609183252.1767487-1-robh@kernel.org>
+        Wed, 14 Jun 2023 04:07:47 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5E326A8
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 01:07:08 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4Qgygs5dfMzBQgnm
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 16:07:05 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1686730025; x=1689322026; bh=zhK88B2whr8OskPG/+tMULNkTtK
+        T+KMo00QbU4r8aaE=; b=uHtoAGNzyQ9dJgPRLXp0slTNil7WpUbes6Cl3MZxYur
+        dT6GdPx3WeZFLRNoDE1YSGrfbPPzhOOaFhmKUUKdVGw7jsCNGJSmEn5AkEb7rTKS
+        O2FUBq3Lwmfvqi7fhK7AcKk6cQgu5Y+IvNig70l3VE1LCKqQBs0ait1nFDF4JZ1J
+        7Wkk4q3GEakDcZZR+EwgmfQIzeTRtFYTIrwMFaa276Yp/upIvD54io94WaO4+zoz
+        RxHPIII1mcJJCZLjMbhAF3Sfv0vJEvl7RE3GLVhLyo172FzfA69r+DEpzoK6IHGq
+        aZp927LuSzpDnRO3/sIPuQ/7B/yNojz5/dBxoIPJD+w==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id k3FHURk-Z8Rt for <linux-kernel@vger.kernel.org>;
+        Wed, 14 Jun 2023 16:07:05 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4Qgygs24nzzBQJYp;
+        Wed, 14 Jun 2023 16:07:05 +0800 (CST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230609183252.1767487-1-robh@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Date:   Wed, 14 Jun 2023 16:07:05 +0800
+From:   baomingtong001@208suo.com
+To:     jesper.nilsson@axis.com, lars.persson@axis.com,
+        linux@armlinux.org.uk
+Cc:     linux-arm-kernel@axis.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] arm: Remove unneeded semicolon
+In-Reply-To: <20230614080509.5947-1-luojianhong@cdjrlc.com>
+References: <20230614080509.5947-1-luojianhong@cdjrlc.com>
+User-Agent: Roundcube Webmail
+Message-ID: <9fa20192233fad1306a0eacce1aaf6aa@208suo.com>
+X-Sender: baomingtong001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Rob Herring <robh@kernel.org> [230609 21:33]:
-> "ranges" is a standard property with common parsing functions. Users
-> shouldn't be implementing their own parsing of it. Use the recently
-> added of_range_to_resource() function instead for OMAP hwmod.
+./arch/arm/mach-artpec/board-artpec6.c:42:2-3: Unneeded semicolon
 
-Thanks applying into omap-for-v6.5/cleanup.
+Signed-off-by: Mingtong Bao <baomingtong001@208suo.com>
+---
+  arch/arm/mach-artpec/board-artpec6.c | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Tony
+diff --git a/arch/arm/mach-artpec/board-artpec6.c 
+b/arch/arm/mach-artpec/board-artpec6.c
+index d3cf3e8603e8..c27e7bbcd7bc 100644
+--- a/arch/arm/mach-artpec/board-artpec6.c
++++ b/arch/arm/mach-artpec/board-artpec6.c
+@@ -39,7 +39,7 @@ static void __init artpec6_init_machine(void)
+           */
+          regmap_write(regmap, ARTPEC6_DMACFG_REGNUM,
+                   ARTPEC6_DMACFG_UARTS_BURST);
+-    };
++    }
+  }
+
+  static void artpec6_l2c310_write_sec(unsigned long val, unsigned reg)
