@@ -2,232 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D01F730172
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:15:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDED0730171
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:15:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245483AbjFNOPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 10:15:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42428 "EHLO
+        id S245477AbjFNOPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 10:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245489AbjFNOOZ (ORCPT
+        with ESMTP id S245490AbjFNOOZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 14 Jun 2023 10:14:25 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0339D10D8;
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88F2CD;
+        Wed, 14 Jun 2023 07:14:23 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-9745d99cfccso125687566b.1;
+        Wed, 14 Jun 2023 07:14:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686752062; x=1689344062;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bZcc1N+pfWDP9EyHMZ8HVe/V78CMvOZrkT7dGeTorW0=;
+        b=lRelaGos+jd5arMyCLOFQs5LM5DoQgXvA6qkSU8/8bb5j7QTCdDcjrFAzA5+09H8va
+         Vj7IxMejFnY3Wonw15taxTIZ7FhIbq4g6J/kbiKvHzZg/x4JC/Ca0ksRK9RD8k80HCFg
+         Q5CMj8tvbCuzJSrpYk+jMRlsEWw4++lg+xaXbXjG+1nEEkPAeWX3W3sWRGeKkF3q1V+S
+         FB8z7px0eY6vTAlJp8z+C5ebYA13En7kfjZ2v+lq9laZCZciEHy2MzTCdaFp4MrLMPNb
+         5pQLSkpVcFQLpacWxrwndWmA78B/d9LGuYXRtiVKpOJnapEu1A3ca41O2vDQGhbwsDgq
+         cnuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686752062; x=1689344062;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bZcc1N+pfWDP9EyHMZ8HVe/V78CMvOZrkT7dGeTorW0=;
+        b=goazEibIucGrvD4g52KKI/TyYL7nzrfCDo5CSjQoha75dPj5D4UUAbydLXs/YyvCrO
+         7NAL8bgw7ynwahAZWGo3KdJEXVJRl6h0/CzlCXuzGatrfeYC6VoZR6/xM41LUQ9Lu8w2
+         opEv94c/I9dHmNJAQxYoyvDF1YrNiuHU3kFpSwpCwpMdSm+KpfRACMI9DCvDOyDDcrL7
+         E+s0EpvYB0Nz39QjJr4zP2gLex3lAX/i2CylyuWd9uRQfTMFUs/QThs16fx7OOfxIwl+
+         J1SDjeK67SHvM8UrG6FagUnBScCQ0fTS1YoEDot7IPjeMAeCh1/h4qirvSe5x/MT7uk0
+         IVog==
+X-Gm-Message-State: AC+VfDyYlTFshOGXV9tmynu/oMYF3X7y1o5IA146JS+j+o5ji94KpibJ
+        uZALsxsUJjcSd+8OxpumHhE=
+X-Google-Smtp-Source: ACHHUZ5AOEghS7r/YuBm8qLG9tdWa5T4rDdMOPaDHJ4gyt0FnJMgDbUWn7gXD2yBpY+ahQw+UsIwkw==
+X-Received: by 2002:a17:907:7f93:b0:974:218d:c048 with SMTP id qk19-20020a1709077f9300b00974218dc048mr19264188ejc.26.1686752061928;
         Wed, 14 Jun 2023 07:14:21 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Qh6ml0TPXz6J7Z5;
-        Wed, 14 Jun 2023 22:11:51 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 14 Jun
- 2023 15:14:18 +0100
-Date:   Wed, 14 Jun 2023 15:14:17 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Vishal Verma <vishal.l.verma@intel.com>
-CC:     Alison Schofield <alison.schofield@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Russ Weight <russell.h.weight@intel.com>
-Subject: Re: [PATCH v3 1/4] cxl: add a firmware update mechanism using the
- sysfs firmware loader
-Message-ID: <20230614151417.00002f46@Huawei.com>
-In-Reply-To: <20230602-vv-fw_update-v3-1-869f82069c95@intel.com>
-References: <20230602-vv-fw_update-v3-0-869f82069c95@intel.com>
-        <20230602-vv-fw_update-v3-1-869f82069c95@intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id e26-20020a1709062c1a00b00974556e50a6sm8103322ejh.114.2023.06.14.07.14.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 07:14:21 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Wed, 14 Jun 2023 16:14:19 +0200
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Yonghong Song <yhs@meta.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Jackie Liu <liu.yun@linux.dev>
+Subject: Re: [PATCHv2] ftrace: Show all functions with addresses in
+ available_filter_functions_addrs
+Message-ID: <ZInLO4/xly/f+Zk3@krava>
+References: <20230611130029.1202298-1-jolsa@kernel.org>
+ <53a11f31-256d-e7bc-eca5-597571076dc5@meta.com>
+ <20230611225407.3e9b8ad2@gandalf.local.home>
+ <20230611225754.01350a50@gandalf.local.home>
+ <d5ffd64c-65b7-e28c-b8ee-0d2ff9dcd78b@meta.com>
+ <20230612110222.50c254f3@gandalf.local.home>
+ <ZId/UL/iujOdgel+@krava>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZId/UL/iujOdgel+@krava>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 12 Jun 2023 00:55:56 -0600
-Vishal Verma <vishal.l.verma@intel.com> wrote:
-
-> The sysfs based firmware loader mechanism was created to easily allow
-> userspace to upload firmware images to FPGA cards. This also happens to
-> be pretty suitable to create a user-initiated but kernel-controlled
-> firmware update mechanism for CXL devices, using the CXL specified
-> mailbox commands.
+On Mon, Jun 12, 2023 at 10:25:55PM +0200, Jiri Olsa wrote:
+> On Mon, Jun 12, 2023 at 11:02:22AM -0400, Steven Rostedt wrote:
+> > On Mon, 12 Jun 2023 07:49:53 -0700
+> > Yonghong Song <yhs@meta.com> wrote:
+> > 
+> > > I am actually interested in how available_filter_functions_addrs
+> > > will be used. For example, bpf_program__attach_kprobe_multi_opts()
+> > > can already take addresses from kallsyms. How to use
+> > > available_filter_functions_addrs to facilitate kprobe_multi?
 > 
-> Since firmware update commands can be long-running, and can be processed
-> in the background by the endpoint device, it is desirable to have the
-> ability to chunk the firmware transfer down to smaller pieces, so that
-> one operation does not monopolize the mailbox, locking out any other
-> long running background commands entirely - e.g. security commands like
-> 'sanitize' or poison scanning operations.
+> the problem is that we need to do 2 passes:
 > 
-> The firmware loader mechanism allows a natural way to perform this
-> chunking, as after each mailbox command, that is restricted to the
-> maximum mailbox payload size, the cxl memdev driver relinquishes control
-> back to the fw_loader system and awaits the next chunk of data to
-> transfer. This opens opportunities for other background commands to
-> access the mailbox and send their own slices of background commands.
+>  - through available_filter_functions and find out if the function is traceable
+>  - through /proc/kallsyms to get the address for traceable function
 > 
-> Add the necessary helpers and state tracking to be able to perform the
-> 'Get FW Info', 'Transfer FW', and 'Activate FW' mailbox commands as
-> described in the CXL spec. Wire these up to the firmware loader
-> callbacks, and register with that system to create the memX/firmware/
-> sysfs ABI.
+> having available_filter_functions symbols together with addresses allow
+> us to skip the kallsyms step
 > 
-> Cc: Davidlohr Bueso <dave@stgolabs.net>
-> Cc: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-> Cc: Russ Weight <russell.h.weight@intel.com>
-> Cc: Alison Schofield <alison.schofield@intel.com>
-> Cc: Ira Weiny <ira.weiny@intel.com>
-> Cc: Dave Jiang <dave.jiang@intel.com>
-> Cc: Ben Widawsky <bwidawsk@kernel.org>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
+> and we are ok with the address in available_filter_functions_addr not being the
+> function entry, because kprobe_multi uses fprobe and that handles both entry and
+> patch-site address properly
+> 
+> > > Do we need to change kernel APIs? It would be great at least we
+> > > got a RFC patch to answer these questions.
+> > 
+> > I agree, having that information would also be useful to me.
+> > 
+> > Jiri? Andrii?
+> 
+> so we have 2 interfaces how to create kprobe_multi link:
+> 
+>   a) passing symbols to kernel
+> 
+>      1) user gathers symbols and need to ensure that they are
+>         trace-able -> pass through available_filter_functions file
+> 
+>      2) kernel takes those symbols and translates them to addresses
+>         through kallsyms api
+> 
+>      3) addresses are passed to fprobe/ftrace through:
+> 
+>          register_fprobe_ips
+>          -> ftrace_set_filter_ips
+> 
+>   b) passing addresses to kernel
+> 
+>      1) user gathers symbols and needs to ensure that they are
+>         trace-able -> pass through available_filter_functions file
+> 
+>      2) user takes those symbols and translates them to addresses
+>        through /proc/kallsyms
+> 
+>      3) addresses are passed to the kernel and kernel calls:
+> 
+>          register_fprobe_ips
+>          -> ftrace_set_filter_ips
+> 
+> 
+> The new available_filter_functions_addrs file helps us with option b),
+> because we can make 'b 1' and 'b 2' in one step - while filtering traceable
+> functions, we get the address directly.
+> 
+> I tested the new available_filter_functions_addrs changes with some hacked
+> selftest changes, you can check it in here [1].
+> 
+> I assume Jackie Liu will send new version of her patchset [2] based on this
+> new available_filter_functions_addrs file.
+> 
+> I think we should have these changes coming together and add some perf
+> measurements from before and after to make the benefit apparent.
 
-One issue and one trivial comment inline.
-With those fixed up and subject to the fact I haven't looked at the firmware
-class before...
+FYI I did some perf meassurements and the speedup is not substantial :-\
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+looks like the symbols resolving to addresses we do in kernel for kprobe_multi
+link is more faster/cheaper than I thought 
 
-> diff --git a/drivers/cxl/core/memdev.c b/drivers/cxl/core/memdev.c
-> index 057a43267290..3234885ad804 100644
-> --- a/drivers/cxl/core/memdev.c
-> +++ b/drivers/cxl/core/memdev.c
-> @@ -1,6 +1,7 @@
-
-
-> +
-> +static enum fw_upload_err cxl_fw_write(struct fw_upload *fwl, const u8 *data,
-> +				       u32 offset, u32 size, u32 *written)
-> +{
-> +	struct cxl_dev_state *cxlds = fwl->dd_handle;
-> +	struct cxl_memdev *cxlmd = cxlds->cxlmd;
-> +	struct cxl_mbox_transfer_fw *transfer;
-> +	struct cxl_mbox_cmd mbox_cmd;
-> +	u32 cur_size, remaining;
-> +	size_t size_in;
-> +	int rc;
-> +
-> +	*written = 0;
-> +
-> +	/* Offset has to be aligned to 128B (CXL-3.0 8.2.9.3.2 Table 8-57) */
-> +	if (!IS_ALIGNED(offset, CXL_FW_TRANSFER_ALIGNMENT)) {
-> +		dev_err(&cxlmd->dev,
-> +			"misaligned offset for FW transfer slice (%u)\n",
-> +			offset);
-> +		return FW_UPLOAD_ERR_RW_ERROR;
-> +	}
-> +
-> +	/*
-> +	 * Pick transfer size based on cxlds->payload_size
-> +	 * @size must bw 128-byte aligned, ->payload_size is a power of 2
-> +	 * starting at 256 bytes, and sizeof(*transfer) is 128.
-> +	 * These constraints imply that @cur_size will always be 128b aligned.
-> +	 */
-> +	cur_size = min_t(size_t, size, cxlds->payload_size - sizeof(*transfer));
-> +
-> +	remaining = size - cur_size;
-> +	size_in = struct_size(transfer, data, cur_size);
-> +
-> +	if (test_and_clear_bit(CXL_FW_CANCEL, cxlds->fw.state))
-> +		return cxl_fw_do_cancel(fwl);
-> +
-> +	/*
-> +	 * Slot numbers are 1-indexed
-> +	 * cur_slot is the 0-indexed next_slot (i.e. 'cur_slot - 1 + 1')
-> +	 * Check for rollover using modulo, and 1-index it by adding 1
-> +	 */
-> +	cxlds->fw.next_slot = (cxlds->fw.cur_slot % cxlds->fw.num_slots) + 1;
-> +
-> +	/* Do the transfer via mailbox cmd */
-> +	transfer = kzalloc(size_in, GFP_KERNEL);
-> +	if (!transfer)
-> +		return FW_UPLOAD_ERR_RW_ERROR;
-> +
-> +	transfer->offset = cpu_to_le32(offset / CXL_FW_TRANSFER_ALIGNMENT);
-> +	memcpy(transfer->data, data + offset, cur_size);
-> +	if (cxlds->fw.oneshot) {
-> +		transfer->action = CXL_FW_TRANSFER_ACTION_FULL;
-> +		transfer->slot = cxlds->fw.next_slot;
-> +	} else {
-> +		if (offset == 0) {
-> +			transfer->action = CXL_FW_TRANSFER_ACTION_INITIATE;
-> +		} else if (remaining == 0) {
-> +			transfer->action = CXL_FW_TRANSFER_ACTION_END;
-> +			transfer->slot = cxlds->fw.next_slot;
-> +		} else {
-> +			transfer->action = CXL_FW_TRANSFER_ACTION_CONTINUE;
-> +		}
-> +	}
-> +
-> +	mbox_cmd = (struct cxl_mbox_cmd) {
-> +		.opcode = CXL_MBOX_OP_TRANSFER_FW,
-> +		.size_in = size_in,
-> +		.payload_in = transfer,
-> +		.poll_interval_ms = 1000,
-> +		.poll_count = 30,
-> +	};
-> +
-> +	rc = cxl_internal_send_cmd(cxlds, &mbox_cmd);
-> +	if (rc < 0) {
-> +		kfree(transfer);
-
-Double free.  Drop this one.
-
-> +		rc = FW_UPLOAD_ERR_RW_ERROR;
-> +		goto out_free;
-> +	}
-> +
-> +	*written = cur_size;
-> +
-> +	/* Activate FW if oneshot or if the last slice was written */
-> +	if (cxlds->fw.oneshot || remaining == 0) {
-> +		dev_dbg(&cxlmd->dev, "Activating firmware slot: %d\n",
-> +			cxlds->fw.next_slot);
-> +		rc = cxl_mem_activate_fw(cxlds, cxlds->fw.next_slot);
-> +		if (rc < 0) {
-> +			dev_err(&cxlmd->dev, "Error activating firmware: %d\n",
-> +				rc);
-> +			rc = FW_UPLOAD_ERR_HW_ERROR;
-> +			goto out_free;
-> +		}
-> +	}
-> +
-> +	rc = FW_UPLOAD_ERR_NONE;
-> +
-> +out_free:
-> +	kfree(transfer);
-> +	return rc;
-> +}
+but still there is 'some' speedup and we will get rid of the extra
+/proc/kallsyms parsing, so I think it's still worth it to have the
+new file
 
 
+base:
 
->  static const struct file_operations cxl_memdev_fops = {
->  	.owner = THIS_MODULE,
->  	.unlocked_ioctl = cxl_memdev_ioctl,
-> @@ -582,6 +891,7 @@ struct cxl_memdev *devm_cxl_add_memdev(struct cxl_dev_state *cxlds)
->  	rc = devm_add_action_or_reset(cxlds->dev, cxl_memdev_unregister, cxlmd);
->  	if (rc)
->  		return ERR_PTR(rc);
-> +
+ Performance counter stats for './test_progs -n 103/1':
 
-What is this stray white space change I see before me? :)
+       103,423,103      cycles:u
+    79,279,231,029      cycles:k
+    79,382,694,663      cycles
+
+      18.627593589 seconds time elapsed
+
+       0.025999000 seconds user
+      18.323855000 seconds sys
 
 
->  	return cxlmd;
->  
->  err:
+with fix:
 
+ Performance counter stats for './test_progs -n 103/1':
+
+       126,659,572      cycles:u
+    77,951,768,179      cycles:k
+    78,078,467,451      cycles
+
+      18.651464273 seconds time elapsed
+
+       0.025001000 seconds user
+      18.243828000 seconds sys
+
+
+jirka
