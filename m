@@ -2,116 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D275730094
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 15:50:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 667F3730099
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 15:51:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245157AbjFNNuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 09:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54502 "EHLO
+        id S245196AbjFNNvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 09:51:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245203AbjFNNuL (ORCPT
+        with ESMTP id S245189AbjFNNvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 09:50:11 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E691FF7;
-        Wed, 14 Jun 2023 06:50:00 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id e9e14a558f8ab-340a05c22deso2187135ab.1;
-        Wed, 14 Jun 2023 06:50:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686750599; x=1689342599;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZEPuphakaNp1fYcyZ4pObojDdVaUBwTgM8okY278g5E=;
-        b=ipsgnUCS9NMIbr5fKQnk6kUv67E3x/wY8Rq+aGR0dr6qp/ctIpczO2KxLo1i9Cez3l
-         y8qlys4Sx5KpiBn9Nnjg44K0M0X/fQ3mvM5r9ErMiOAADRI5WwBa5rpflBHNJ87ta5qN
-         Vj33y4B2iKVL/rP7Wi/cm2uV+G8nxboYFqLXVv1CuqLQ/MJq23RcFH3XD7OUkDBvQJCc
-         Wt/8MaUcl1t5faWXnbe3x198W8AabOJRZ0a+UaFI+MjqVfGYlZceaEqLt/FpCCw0q+co
-         /m0OOa1RD0pmujC8dngUrmQcYCRaL/5JGUqS9jRI14oY9K361mymCboKbWJACZHWfH02
-         cXWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686750599; x=1689342599;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZEPuphakaNp1fYcyZ4pObojDdVaUBwTgM8okY278g5E=;
-        b=foYcaPNq4OHEIJ7vwPJaMP7oIgoOOR2VBZiw8NERWdIhAK476WqfF6CUXexdpjjBIJ
-         B/mMs+6y2Tf96NCzZnuEfxLDNnvo2wM6jSexljXxNg0sxy3rkK6wtEi0nHtl6xx5C0e5
-         0MJegbbFAxxGYbbeRlRWDrsiZAltPs2pkaQzXbTgZ9kWe2pA+kWsEmyIMmKSwNAsxG8a
-         Hm2nr7DMzFCmGt0qJbwUNfoQtiNQdHRawxLcJUrY4eDAdeqNx1/WnGGymswGQJgXNMFE
-         mPhbv+Aj5cRdV8xf7JDBvYlC3yfIiDjdUGg/Xl0ux/uWju0MCoD6Vx4YziH+/Qaqky0L
-         h3Ng==
-X-Gm-Message-State: AC+VfDwud9kqottb5ItIQTftJp0p7DEsGXnq2+jY1ECHIP0R6kawTJL4
-        gL1QnPi1q23lyMIxy0mhcf0=
-X-Google-Smtp-Source: ACHHUZ4Q+vvd86epl/4PhLMQWi6vLCuv0c4ale/GTY/nnvGPX8Z/2yHYNXQj/hF9L+IuVhfQH7e0pg==
-X-Received: by 2002:a92:cacd:0:b0:33a:5bb5:f8f6 with SMTP id m13-20020a92cacd000000b0033a5bb5f8f6mr11581580ilq.18.1686750599414;
-        Wed, 14 Jun 2023 06:49:59 -0700 (PDT)
-Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
-        by smtp.gmail.com with ESMTPSA id a26-20020a056638019a00b004182f88c368sm5072190jaq.67.2023.06.14.06.49.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 06:49:59 -0700 (PDT)
-From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     linux-hardening@vger.kernel.org,
-        Azeem Shaikh <azeemshaikh38@gmail.com>,
-        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Johannes Berg <johannes@sipsolutions.net>
-Subject: [PATCH v3] wifi: cfg80211: replace strlcpy() with strscpy()
-Date:   Wed, 14 Jun 2023 13:49:56 +0000
-Message-ID: <20230614134956.2109252-1-azeemshaikh38@gmail.com>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+        Wed, 14 Jun 2023 09:51:10 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904B82109;
+        Wed, 14 Jun 2023 06:50:39 -0700 (PDT)
+X-GND-Sasl: alexandre.belloni@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686750638;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uH0PecxGM0xXTyJcDX7gP5FtdzAMT+wQnkEYwRRyRJg=;
+        b=M5iMP4w9VsHNG/YdS8Tn2Sf4mbhF3tDXAFpknzwjGIB1MAQ+1h4fuiQJdFD01L+GDqQ7lk
+        ysVo74591ywkghh3HGcmWq6dHk0Lrw1YdFLfWnANkK9jb+tlWLhovXI1ogfgfq/mZYE6p2
+        m75jmn4MYMJYUNzXUcX/9GUQ+xjw69voZ58UaOyeCfIn/l9kJ7eL5YtYj+v6Q6weNXSlqf
+        MQoLNifIyDezs4gT4Vf4cj7Yq9r217bFr3X+o27Vj9fk11aSOdTjhHO0uBwnqG6cOkUHDt
+        y+PWywwNpTgul2FnSgCSISeILzOaL3pEocK14qDFWhmP8smqx35XDxFRSsxccA==
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 582D8E0006;
+        Wed, 14 Jun 2023 13:50:37 +0000 (UTC)
+Date:   Wed, 14 Jun 2023 15:50:36 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 5/8] rtc: isl12022: implement RTC_VL_READ ioctl
+Message-ID: <20230614135036a3e049c4@mail.local>
+References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
+ <20230613130011.305589-1-linux@rasmusvillemoes.dk>
+ <20230613130011.305589-6-linux@rasmusvillemoes.dk>
+ <ZIiJWKBFojAcNCkA@smile.fi.intel.com>
+ <20230613212651c8770218@mail.local>
+ <ZImvjj34YILrNJU5@smile.fi.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZImvjj34YILrNJU5@smile.fi.intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-strlcpy() reads the entire source buffer first.
-This read may exceed the destination size limit.
-This is both inefficient and can lead to linear read
-overflows if a source string is not NUL-terminated [1].
-In an effort to remove strlcpy() completely [2], replace
-strlcpy() here with strscpy().
+On 14/06/2023 15:16:14+0300, Andy Shevchenko wrote:
+> On Tue, Jun 13, 2023 at 11:26:51PM +0200, Alexandre Belloni wrote:
+> > On 13/06/2023 18:20:56+0300, Andy Shevchenko wrote:
+> > > On Tue, Jun 13, 2023 at 03:00:07PM +0200, Rasmus Villemoes wrote:
+> 
+> ...
+> 
+> > > > +		ret = regmap_read(regmap, ISL12022_REG_SR, &val);
+> > > > +		if (ret < 0)
+> > > 
+> > > I always feel uneasy with ' < 0' — Does positive error makes sense?
+> > > Is it even possible? OTOH if the entire driver uses this idiom...
+> > > oh well, let's make it consistent.
+> > 
+> > /**
+> >  * regmap_read() - Read a value from a single register
+> >  *
+> >  * @map: Register map to read from
+> >  * @reg: Register to be read from
+> >  * @val: Pointer to store read value
+> >  *
+> >  * A value of zero will be returned on success, a negative errno will
+> >  * be returned in error cases.
+> >  */
+> 
+> I'm not sure what you meant by this. Yes, I know that there is no
+> possibility that regmap API returns positive value. Do you mean that
+> regmap API documentation is unclear?
 
-Direct replacement is safe here since WIPHY_ASSIGN is only used by
-TRACE macros and the return values are ignored.
+No, I mean that you'd have to be clearer as to why you are uneasy with a
+test for a negative value when the function returns 0 for success and a
+negative value for an error. Else, this is pure bullying.
 
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-[2] https://github.com/KSPP/linux/issues/89
+> 
+> > > > +			return ret;
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
 
-Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
----
-v1: https://lore.kernel.org/all/20230612232301.2572316-1-azeemshaikh38@gmail.com/
-v2: https://lore.kernel.org/all/20230614134552.2108471-1-azeemshaikh38@gmail.com/
-
-Changes from v1 and v2 - updated patch title.
-
- net/wireless/trace.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/wireless/trace.h b/net/wireless/trace.h
-index 716a1fa70069..a00da3ebfed5 100644
---- a/net/wireless/trace.h
-+++ b/net/wireless/trace.h
-@@ -22,7 +22,7 @@
- 
- #define MAXNAME		32
- #define WIPHY_ENTRY	__array(char, wiphy_name, 32)
--#define WIPHY_ASSIGN	strlcpy(__entry->wiphy_name, wiphy_name(wiphy), MAXNAME)
-+#define WIPHY_ASSIGN	strscpy(__entry->wiphy_name, wiphy_name(wiphy), MAXNAME)
- #define WIPHY_PR_FMT	"%s"
- #define WIPHY_PR_ARG	__entry->wiphy_name
- 
 -- 
-2.41.0.162.gfafddb0af9-goog
-
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
