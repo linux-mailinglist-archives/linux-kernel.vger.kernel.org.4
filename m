@@ -2,75 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06DCD730806
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE6B9730805
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236018AbjFNTU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 15:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47190 "EHLO
+        id S235256AbjFNTVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 15:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233446AbjFNTUz (ORCPT
+        with ESMTP id S235377AbjFNTU4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 15:20:55 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A6B213B;
+        Wed, 14 Jun 2023 15:20:56 -0400
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B3B213F;
         Wed, 14 Jun 2023 12:20:53 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; t=1686770450; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=EFbXxSUGekfWR6MwUXGRZhWs4rlgAgD8D5gszALsI6y00wMZCgsTV0Dz7GSQ+1WShE
-    40YOQ7Jg6JWrraKBICxQWLtVUU3K0rvhQg1w7qdh6oj5YPxuDZyJQ2U4tptHkqzqsSXN
-    jX1Rq2qHJj6UxlFJLHN2gDAKJLmNHuiZr1DeSK366R7fUfxdXTOrNWO9b4N9sEMBhgC4
-    zXFOa7bFM/eF5GLOjRttKzMPL7eCFgZUHDoiRsd86u5UvYgJDJuZ1r0ljIq5p2D5Mh+o
-    ri7Q4KgJgfj+2mlv/0MCg6ayvRIPzINnKbtqhwqEROcKyZxm3BY6uk5AiNlEfuVhBuOj
-    C63g==
+    b=e+FzeiGmNyPUcMNfIoFrMokIUBpwxFNnsbXhzQtr7tU7CfBtBDWs/shxjnNi5sAB4G
+    j3Xzr0NNGiR86ueeKzgw8jd2mqUpS+vZsUNMqb243whVTYm9QLfULVw7eyDsSHM5QWly
+    OlO3kCLWxONMcbgWpU0jp1ILS/x/46Kcdwzn0nL+LZzX1JvU9fHEbYhcFAOEOAQ4nfUB
+    UBh0kFjYVv2+rp4sF9JFzjNp1iCd+73blPG1bOZXTFPWGGxl3bJvyqW1R41n5F0AncIt
+    okmKsl1B8gUSXZII4bY4P/BfyE4tzpMQCNwV5SYEMfV0kHF1LZQgX95ZPs8xlno2/FWT
+    PR1g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686770450;
     s=strato-dkim-0002; d=strato.com;
-    h=Cc:To:Message-Id:Date:Subject:From:Cc:Date:From:Subject:Sender;
-    bh=neT+DUbNGXFd7YKRPRpjpjhGQIXjCgnsy9pZLG/vLm4=;
-    b=pu8vsnwXkTh2BO6lEqh3oG6pTN3QG1Euntxh9R0Rr3fUELZutOVRKq6Y292xrjZS6w
-    CGU2J8HpJ5M+Wq0sesI3MakJCr6tg6hNGFVIRBBsSKoUgc326CdF9VoOlkOG0UxvBmql
-    W6+2ds5VNwcmqoU34euNgpCgZMIC3cfpjIKMWllYAhleeP1g+L2LsZrXlw3/VXTGCgKj
-    pivjceAdoqODpj1h/W28lbWaOfztW5xM3O/sQZJup5LPCDFMyY0JOC6MP49KufIMS5ya
-    EGxRWy8ekVqbA1moSJfit0lUr8xsXbKukdXpkyjMgOCfZ7e4Za/L3prkV4gHrJmcIkZG
-    YKSQ==
+    h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
+    From:Subject:Sender;
+    bh=LdeZ5ShzM18y4oy4q0pM7ga3Ybusf7cQdOu55GJ4/fM=;
+    b=tMgPvQdPiE4sjQrE43YGJcftGU4EGRFN9SuxfDpGmEkoFTTFoxHsSWPuEnAxwEaHDt
+    b3euHjIaN+AW9XbBAAicwEthYqj9CXgZupocZOFWLvN0XG2rUsi278mvvXJKWBmZM/ZO
+    X0DLCDTWLTZcWvSViK7vpY/wdTNN0z0xJh5gNuauJjW+6EG4Kf/e2p/vmEkhzzCXJWc3
+    NLuo4yJPnG1z2qz6heLk8oMR+JFcuZaD/mmhy2+iWPKtHxb5wTxI4mVfWJOKpfkZHiZF
+    n3hbAP/QvErdveLHp3DADDGnaHCMyEtVIy0wfCivMrafXdW9PupSDjzFRsCuU/Xt4xwe
+    lV+w==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
-X-RZG-CLASS-ID: mo01
+X-RZG-CLASS-ID: mo02
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686770450;
     s=strato-dkim-0002; d=gerhold.net;
-    h=Cc:To:Message-Id:Date:Subject:From:Cc:Date:From:Subject:Sender;
-    bh=neT+DUbNGXFd7YKRPRpjpjhGQIXjCgnsy9pZLG/vLm4=;
-    b=X7KvdbOmhGO+0OOTZWBq8HzMelMX9FHmfXUKM6CfQ3t5F/J/VndmrOSTAGVYMgIqe6
-    xUO4SrOnM9Ky1QpPmhosywor8AgUWa0F0H/aCkB8CVzyk0o9uf2Csp7KsGcWB3RZAFIH
-    fX3PbDJRotywZpqrlvFJMUmqJLVuu3C/y6OHQKl5TLC3IN7HW67uhQQIjF9fEDmubRyS
-    DOLUY4U+Hh79fkxCF4eRsW0miUOC6aAOO2ms6vrvWXGmSDMhiL2gHrKBMO+Xexl8CRYW
-    81pfuxYTX/ycWKW15I6Nb2rWeZj0UR/0jvGAAYTUfA6FE4nXvgraH9fG9S4oZMi33jJf
-    r05w==
+    h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
+    From:Subject:Sender;
+    bh=LdeZ5ShzM18y4oy4q0pM7ga3Ybusf7cQdOu55GJ4/fM=;
+    b=RDIc6K+fuXpn+9U5xbQluGWN1tgqNZJYFYq4GDD0iS3/xDUUFGzInbbvzPajYjB73X
+    l2DFMTkStTsx+PL8CM6AtcKiaxcWDRBYfp8JuHyxoS3b8qAyI3FU7xF20N3LgN+g0fHD
+    3QjAkWZo0Osgpw8PVDsXPd/bTu1yCT7TGBIUzdTdwDPDmXD40tOKyxS1aggktUombb8v
+    64uOcLHy/PeP4J01/bPiumT0NACjWecbgBMoT+kow05FaR51v0jJY10Aq8W1H572TWi+
+    nF1pe6nC75hQkW7GgsKvGdsvEK1j3/49DTvE/Tww1abEjKyDXKhxSFJkdJJoWbUD9kC9
+    nqpQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686770450;
     s=strato-dkim-0003; d=gerhold.net;
-    h=Cc:To:Message-Id:Date:Subject:From:Cc:Date:From:Subject:Sender;
-    bh=neT+DUbNGXFd7YKRPRpjpjhGQIXjCgnsy9pZLG/vLm4=;
-    b=EXiQ/bZ71kQlrQ1nP9Wlb1U+xaTpZLk10kg7vn6/CPmKDd7sflwoq70S0zKMiYgwg1
-    rzIfypzsPp7K0ZYIYHAA==
+    h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
+    From:Subject:Sender;
+    bh=LdeZ5ShzM18y4oy4q0pM7ga3Ybusf7cQdOu55GJ4/fM=;
+    b=59cCZ4+6c3YKIGO5o78XtZ1x4mwKdt3EUHOR88YMGTRprtTBgUWfX3GIK4tenqjbTP
+    aa/Rbkx//GSW5G0FNSAA==
 X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQjVd4CteZ/7jYgS+mLFY+H0JAn8u4xxmw=="
 Received: from [192.168.244.3]
     by smtp.strato.de (RZmta 49.6.0 DYNA|AUTH)
-    with ESMTPSA id D0d0a8z5EJKn0hr
+    with ESMTPSA id D0d0a8z5EJKo0hs
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Wed, 14 Jun 2023 21:20:49 +0200 (CEST)
+    Wed, 14 Jun 2023 21:20:50 +0200 (CEST)
 From:   Stephan Gerhold <stephan@gerhold.net>
-Subject: [PATCH v2 0/2] of: reserved_mem: Improve range allocations
-Date:   Wed, 14 Jun 2023 21:20:41 +0200
-Message-Id: <20230510-dt-resv-bottom-up-v2-0-aeb2afc8ac25@gerhold.net>
+Date:   Wed, 14 Jun 2023 21:20:42 +0200
+Subject: [PATCH v2 1/2] of: reserved_mem: Try to keep range allocations
+ contiguous
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAkTimQC/32NQQrDIBQFrxJc9xc11EhXvUfJQuM3Co0GtdISc
- veaHKDLeY9hNpIxeczk3m0kYfXZx9CAXzoyORVmBG8aE055T2+MgimQMFfQsZS4wHsFIc3ArBW
- CS0uap1VG0EmFyR3monLBdBxrQus/Z+w5NnY+l5i+Z7uyY/2XqQwo9NoKKYfeaDSPGZOLL3MNW
- Mi47/sP/7X0dM0AAAA=
+Message-Id: <20230510-dt-resv-bottom-up-v2-1-aeb2afc8ac25@gerhold.net>
+References: <20230510-dt-resv-bottom-up-v2-0-aeb2afc8ac25@gerhold.net>
+In-Reply-To: <20230510-dt-resv-bottom-up-v2-0-aeb2afc8ac25@gerhold.net>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
@@ -92,37 +94,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Try to allocate dynamic reserved memory regions with "alloc-ranges" 
-close to other static regions by choosing between allocating them 
-bottom-up or top-down. This keeps the reserved memory regions closer 
-together rather than potentially having them spread all over the RAM.
+Right now dynamic reserved memory regions are allocated either
+bottom-up or top-down, depending on the memblock setting of the
+architecture. This is fine when the address is arbitrary. However,
+when using "alloc-ranges" the regions are often placed somewhere
+in the middle of (free) RAM, even if the range starts or ends next
+to another (static) reservation.
 
-Also make the allocation order of dynamic reserved memory regions 
-deterministic so it doesn't change randomly when adding unrelated 
-reserved memory regions.
+Try to detect this situation, and choose explicitly between bottom-up
+or top-down to allocate the memory close to the other reservations:
+
+  1. If the "alloc-range" starts at the end or inside an existing
+     reservation, use bottom-up.
+  2. If the "alloc-range" ends at the start or inside an existing
+     reservation, use top-down.
+  3. If both or none is the case, keep the current
+     (architecture-specific) behavior.
+
+There are plenty of edge cases where only a more complex algorithm
+would help, but even this simple approach helps in many cases to keep
+the reserved memory (and therefore also the free memory) contiguous.
 
 Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
 ---
-Changes in v2:
-- Drop explicit "allocate-bottom-up"/"allocate-top-down" properties
-  Instead, try to guess in the implementation based on the already 
-  available information in the DT. (Rob)
-- Drop examples that were just included to show the motivation.
-  They are still available on v1 if needed.
-- Link to v1: https://lore.kernel.org/r/20230510-dt-resv-bottom-up-v1-0-3bf68873dbed@gerhold.net
+ drivers/of/of_reserved_mem.c | 55 ++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 53 insertions(+), 2 deletions(-)
 
----
-Stephan Gerhold (2):
-      of: reserved_mem: Try to keep range allocations contiguous
-      of: reserved_mem: Use stable allocation order
+diff --git a/drivers/of/of_reserved_mem.c b/drivers/of/of_reserved_mem.c
+index 948efa9f99e3..7f892c3dcc63 100644
+--- a/drivers/of/of_reserved_mem.c
++++ b/drivers/of/of_reserved_mem.c
+@@ -77,6 +77,57 @@ void __init fdt_reserved_mem_save_node(unsigned long node, const char *uname,
+ 	return;
+ }
+ 
++/*
++ * __reserved_mem_alloc_in_range() - allocate reserved memory described with
++ *	'alloc-ranges'. Choose bottom-up/top-down depending on nearby existing
++ *	reserved regions to keep the reserved memory contiguous if possible.
++ */
++static int __init __reserved_mem_alloc_in_range(phys_addr_t size,
++	phys_addr_t align, phys_addr_t start, phys_addr_t end, bool nomap,
++	phys_addr_t *res_base)
++{
++	bool prev_bottom_up = memblock_bottom_up();
++	bool bottom_up = false, top_down = false;
++	int ret, i;
++
++	for (i = 0; i < reserved_mem_count; i++) {
++		struct reserved_mem *rmem = &reserved_mem[i];
++
++		/* Skip regions that were not reserved yet */
++		if (rmem->size == 0)
++			continue;
++
++		/*
++		 * If range starts next to an existing reservation, use bottom-up:
++		 *	|....RRRR................RRRRRRRR..............|
++		 *	       --RRRR------
++		 */
++		if (start >= rmem->base && start <= (rmem->base + rmem->size))
++			bottom_up = true;
++
++		/*
++		 * If range ends next to an existing reservation, use top-down:
++		 *	|....RRRR................RRRRRRRR..............|
++		 *	              -------RRRR-----
++		 */
++		if (end >= rmem->base && end <= (rmem->base + rmem->size))
++			top_down = true;
++	}
++
++	/* Change setting only if either bottom-up or top-down was selected */
++	if (bottom_up != top_down)
++		memblock_set_bottom_up(bottom_up);
++
++	ret = early_init_dt_alloc_reserved_memory_arch(size, align,
++			start, end, nomap, res_base);
++
++	/* Restore old setting if needed */
++	if (bottom_up != top_down)
++		memblock_set_bottom_up(prev_bottom_up);
++
++	return ret;
++}
++
+ /*
+  * __reserved_mem_alloc_size() - allocate reserved memory described by
+  *	'size', 'alignment'  and 'alloc-ranges' properties.
+@@ -137,8 +188,8 @@ static int __init __reserved_mem_alloc_size(unsigned long node,
+ 			end = start + dt_mem_next_cell(dt_root_size_cells,
+ 						       &prop);
+ 
+-			ret = early_init_dt_alloc_reserved_memory_arch(size,
+-					align, start, end, nomap, &base);
++			ret = __reserved_mem_alloc_in_range(size, align,
++					start, end, nomap, &base);
+ 			if (ret == 0) {
+ 				pr_debug("allocated memory for '%s' node: base %pa, size %lu MiB\n",
+ 					uname, &base,
 
- drivers/of/of_reserved_mem.c | 60 ++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 58 insertions(+), 2 deletions(-)
----
-base-commit: b16049b21162bb649cdd8519642a35972b7910fe
-change-id: 20230510-dt-resv-bottom-up-68d71ff6628f
-
-Best regards,
 -- 
-Stephan Gerhold <stephan@gerhold.net>
+2.40.1
 
