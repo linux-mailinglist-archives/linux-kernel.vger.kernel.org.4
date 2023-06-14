@@ -2,197 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E0A73022A
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1BE8730226
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:45:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231812AbjFNOqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 10:46:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33640 "EHLO
+        id S236528AbjFNOp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 10:45:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236851AbjFNOqF (ORCPT
+        with ESMTP id S235889AbjFNOp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 10:46:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 188791BE5
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 07:45:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686753918;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VKzVYTJU+Kltp7JOyEJXeiIKJE1OQId0BQJZ+m/qLVY=;
-        b=ik6dJmN9HG+bWwzs7fpLh5OFGm07H1ed89erpbzrtIBQchF/eNXPqFwH41e+AQOiK4ooWu
-        JjWPYJOtWvn82qqz4Dsk5bIIVFgy3c3G9XoGoroWLLVq4C6Mdm54uPZDQotmGfmBuNkYTr
-        6ZYnxWUUcVGdzk/InZ3zhTjWSWrIZX4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-377-Bu1HHQf7POCSH_AjXKqpQw-1; Wed, 14 Jun 2023 10:45:15 -0400
-X-MC-Unique: Bu1HHQf7POCSH_AjXKqpQw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 84BC980879D;
-        Wed, 14 Jun 2023 14:45:14 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 258409E9C;
-        Wed, 14 Jun 2023 14:45:13 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <000000000000b928f705fdeb873a@google.com>
-References: <000000000000b928f705fdeb873a@google.com>
-To:     syzbot <syzbot+13a08c0bf4d212766c3c@syzkaller.appspotmail.com>
-Cc:     dhowells@redhat.com, davem@davemloft.net,
-        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [crypto?] general protection fault in shash_async_final
+        Wed, 14 Jun 2023 10:45:27 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF951BE8
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 07:45:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686753926; x=1718289926;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=6v6TbjeMW8U/IbxBNH5DXiK4YQ9SM1BrYJGznxX5fKw=;
+  b=BiZlGtQ1EVqEb+3BOg/cyg5WN9Zg+XxJBSxrmpvLJiVi55HySylQZ0go
+   ObYGjX9tA95MTO7FG1wPF+9bJga+LK+GsTVmOQ19FOfFhCyjzAM4muRi5
+   kwwfHusm0LWkvGCxy997WONk5ewZ463rZHq9qOzWqU0Q+oSubFpgTNJYi
+   wfVKJFmAaWIDZF/Af9TTztS0PsEtEWxY5c/qL7AJDYS/6N5UrTTsQ2y+X
+   tK3U08JkElhAwYsviJOSuhWm4Tmz1QbCPRbExHxLTnXJOnagD2iCnLHf7
+   Y74knSMGz9We3ycU/szCOb43E/VXfB54vYsoPuF/NqxE/oYRWs4j2vNQd
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="362002433"
+X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
+   d="scan'208";a="362002433"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 07:45:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="662420636"
+X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
+   d="scan'208";a="662420636"
+Received: from ngarg3-mobl3.amr.corp.intel.com (HELO [10.212.191.43]) ([10.212.191.43])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 07:45:24 -0700
+Message-ID: <0cefb67a-6fae-daa2-c871-ae35b96aac08@intel.com>
+Date:   Wed, 14 Jun 2023 07:45:24 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1602672.1686753912.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 14 Jun 2023 15:45:12 +0100
-Message-ID: <1602673.1686753912@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: x86: pgtable / kaslr initialisation (OOB) help
+Content-Language: en-US
+To:     Lee Jones <lee@kernel.org>, Peter Zijlstra <peterz@infradead.org>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <20230614132339.GS3635807@google.com>
+ <20230614141654.GA1640123@hirez.programming.kicks-ass.net>
+ <20230614143732.GW3635807@google.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230614143732.GW3635807@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.g=
-it main
+On 6/14/23 07:37, Lee Jones wrote:
+> Still unsure how we (the kernel) can/should write to an area of memory
+> that does not belong to it.  Should we allocate enough memory
+> (2*PAGE_SIZE? rather than 8-Bytes) for trampoline_pgd_entry to consume
+> in a more sane way?
 
-    crypto: af_alg/hash: Fix recvmsg() after sendmsg(MSG_MORE)
-    =
+No.
 
-    If an AF_ALG socket bound to a hashing algorithm is sent a zero-length
-    message with MSG_MORE set and then recvmsg() is called without first
-    sending another message without MSG_MORE set to end the operation, an =
-oops
-    will occur because the crypto context and result doesn't now get set u=
-p in
-    advance because hash_sendmsg() now defers that as long as possible in =
-the
-    hope that it can use crypto_ahash_digest() - and then because the mess=
-age
-    is zero-length, it the data wrangling loop is skipped.
-    =
+I think this:
 
-    Fix this by always making a pass of the loop, even in the case that no=
- data
-    is provided to the sendmsg().
-    =
+                set_pgd(&trampoline_pgd_entry,
+                        __pgd(_KERNPG_TABLE | __pa(p4d_page_tramp)));
 
-    Fix also extract_iter_to_sg() to handle a zero-length iterator by retu=
-rning
-    0 immediately.
-    =
+is bogus-ish.  set_pgd() wants to operate on a pgd_t inside a pgd
+*PAGE*.  But it's just being pointed at a single  _entry_.  The address
+of 'trampoline_pgd_entry' in your case  also just (unfortunately)
+happens to pass the:
 
-    Whilst we're at it, remove the code to create a kvmalloc'd scatterlist=
- if
-    we get more than ALG_MAX_PAGES - this shouldn't happen.
-    =
+	__pti_set_user_pgtbl -> pgdp_maps_userspace()
 
-    Fixes: c662b043cdca ("crypto: af_alg/hash: Support MSG_SPLICE_PAGES")
-    Reported-by: syzbot+13a08c0bf4d212766c3c@syzkaller.appspotmail.com
-    Link: https://lore.kernel.org/r/000000000000b928f705fdeb873a@google.co=
-m/
-    Signed-off-by: David Howells <dhowells@redhat.com>
-    cc: Herbert Xu <herbert@gondor.apana.org.au>
-    cc: "David S. Miller" <davem@davemloft.net>
-    cc: Eric Dumazet <edumazet@google.com>
-    cc: Jakub Kicinski <kuba@kernel.org>
-    cc: Paolo Abeni <pabeni@redhat.com>
-    cc: Jens Axboe <axboe@kernel.dk>
-    cc: Matthew Wilcox <willy@infradead.org>
-    cc: linux-crypto@vger.kernel.org
-    cc: netdev@vger.kernel.org
+test.  I _think_ we want these to just be something like:
 
-diff --git a/crypto/algif_hash.c b/crypto/algif_hash.c
-index dfb048cefb60..1176533a55c9 100644
---- a/crypto/algif_hash.c
-+++ b/crypto/algif_hash.c
-@@ -83,26 +83,14 @@ static int hash_sendmsg(struct socket *sock, struct ms=
-ghdr *msg,
- =
+	trampoline_pgd_entry = __pgd(_KERNPG_TABLE |
+				     __pa(p4d_page_tramp);
 
- 	ctx->more =3D false;
- =
-
--	while (msg_data_left(msg)) {
-+	do {
- 		ctx->sgl.sgt.sgl =3D ctx->sgl.sgl;
- 		ctx->sgl.sgt.nents =3D 0;
- 		ctx->sgl.sgt.orig_nents =3D 0;
- =
-
- 		err =3D -EIO;
- 		npages =3D iov_iter_npages(&msg->msg_iter, max_pages);
--		if (npages =3D=3D 0)
--			goto unlock_free;
--
--		if (npages > ARRAY_SIZE(ctx->sgl.sgl)) {
--			err =3D -ENOMEM;
--			ctx->sgl.sgt.sgl =3D
--				kvmalloc(array_size(npages,
--						    sizeof(*ctx->sgl.sgt.sgl)),
--					 GFP_KERNEL);
--			if (!ctx->sgl.sgt.sgl)
--				goto unlock_free;
--		}
--		sg_init_table(ctx->sgl.sgl, npages);
-+		sg_init_table(ctx->sgl.sgl, max_t(size_t, npages, 1));
- =
-
- 		ctx->sgl.need_unpin =3D iov_iter_extract_will_pin(&msg->msg_iter);
- =
-
-@@ -111,7 +99,8 @@ static int hash_sendmsg(struct socket *sock, struct msg=
-hdr *msg,
- 		if (err < 0)
- 			goto unlock_free;
- 		len =3D err;
--		sg_mark_end(ctx->sgl.sgt.sgl + ctx->sgl.sgt.nents - 1);
-+		if (len > 0)
-+			sg_mark_end(ctx->sgl.sgt.sgl + ctx->sgl.sgt.nents - 1);
- =
-
- 		if (!msg_data_left(msg)) {
- 			err =3D hash_alloc_result(sk, ctx);
-@@ -148,7 +137,7 @@ static int hash_sendmsg(struct socket *sock, struct ms=
-ghdr *msg,
- =
-
- 		copied +=3D len;
- 		af_alg_free_sg(&ctx->sgl);
--	}
-+	} while (msg_data_left(msg));
- =
-
- 	ctx->more =3D msg->msg_flags & MSG_MORE;
- 	err =3D 0;
-diff --git a/lib/scatterlist.c b/lib/scatterlist.c
-index e97d7060329e..77a7b18ee751 100644
---- a/lib/scatterlist.c
-+++ b/lib/scatterlist.c
-@@ -1340,7 +1340,7 @@ ssize_t extract_iter_to_sg(struct iov_iter *iter, si=
-ze_t maxsize,
- 			   struct sg_table *sgtable, unsigned int sg_max,
- 			   iov_iter_extraction_t extraction_flags)
- {
--	if (maxsize =3D=3D 0)
-+	if (!maxsize || !iter->count)
- 		return 0;
- =
-
- 	switch (iov_iter_type(iter)) {
-
+That'll keep us away from all of the set_pgd()-induced nastiness.
