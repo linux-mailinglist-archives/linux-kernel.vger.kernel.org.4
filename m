@@ -2,95 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCF8673031A
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:13:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 267D473031D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:13:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245752AbjFNPNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 11:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
+        id S1343590AbjFNPNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 11:13:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343588AbjFNPNA (ORCPT
+        with ESMTP id S1343594AbjFNPNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 11:13:00 -0400
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9438A1FE3;
-        Wed, 14 Jun 2023 08:12:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fudan.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id; bh=OHZn+k1AM9F1aty+YrtKkF7m95JGwUE4afqcP7fAHA8=; b=g
-        /bdE4cvMeMBSwBXoKSoOD/yOK0BzlaCrH3txPZJWrVNFWOFP8PPg80N/WWz11+4v
-        303mRIpCcqMNu271IJJ3XyMqaqPjVbnAoeth/M9NCQrzUuxKYbLbdzdjVKNAJSEC
-        f21xUq/rKrXod/hpwToNlVgtae2YZj4VBce0Z/SP7g=
-Received: from ubuntu.localdomain (unknown [10.230.35.76])
-        by app1 (Coremail) with SMTP id XAUFCgC3v__v2IlkbinsAA--.37499S2;
-        Wed, 14 Jun 2023 23:12:48 +0800 (CST)
-From:   Chenyuan Mi <cymi20@fudan.edu.cn>
-To:     axboe@kernel.dk
-Cc:     asml.silence@gmail.com, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Chenyuan Mi <cymi20@fudan.edu.cn>
-Subject: [PATCH] io_uring/kbuf: fix missing check for return value of io_buffer_get_list()
-Date:   Wed, 14 Jun 2023 08:12:46 -0700
-Message-Id: <20230614151246.116391-1-cymi20@fudan.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: XAUFCgC3v__v2IlkbinsAA--.37499S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Gr4fur4UZr48Xry5Zw17GFg_yoWDAFc_G3
-        ykZr18u343GFsYkr1UCryrArWUCF43Zr4xWFyIyas3GF1YkF4rAFZ5ZFZ7Wr1xGa13W3yj
-        yF4qgw1agr1IgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbskFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IE
-        rcIFxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
-        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
-        6r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2
-        IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E
-        87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
-        IFyTuYvjfUOXo2UUUUU
-X-CM-SenderInfo: isqsiiisuqikmt6i3vldqovvfxof0/
+        Wed, 14 Jun 2023 11:13:17 -0400
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4CF2101;
+        Wed, 14 Jun 2023 08:13:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686755592; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=IBLrXQumV9gvhZ5cuFdLlDATix6u1lpargigSDFWF0idUbwaf4tmwa0U+/caZ1uVGp
+    oWV84Sq1SsqsFnAy++6RuZPpC8hh1PJ5uwPHLmHKLdQPsLxmvq6ZsTRqolhPK6ZwZjBy
+    NC/JI1srL/1TmLHNakTYEB8StMQ1yREvLji8vF7hDhagfVXfm5aw5io9jchM/78t5muG
+    kJ7awRbPixNzXfdyNjqJVTOCZqlMhv+Bg5zpLI0xW3SRQ/F+OesFS6Kl9lo+Utr5XkOj
+    qbUuBzeZIsJ6CHDBE4Hq8OQUqLjrjSp/SyhYR0GA6BMFIxOurQqm4MKn7I0LLkQYeQio
+    dxZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686755592;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=6vWmnjq8PtOemDu4fY8kEJsPcuBxy1e+Pqtj3pY7T9k=;
+    b=Si4pICgNty0wr0B1iS//6ReDIJjHqhpfclr3Q0zTR9JTach9ceGMKAGl6SZPs9E05P
+    6eCM+WsN9PBjm9qnKw+k8Hm9Twt2VVaRAlviQc+m5FYsIKk5l2ipjmz2x70GVeJaeceF
+    RuTtMGqhHK8qK0kS/X1Usham7WZFGjidlMsr7sOxard1KbF/WON7u38yE1YIa9uFtmO2
+    7GNQIhrQRwJ29geAa7UI+x7kKbOe+W+8hVF/Hka1NJ0s6pXpeJzcbivSM1Gy+L8yqCFt
+    b9VEsbdEsjP3m1CeTqGWN227xkvodGeVII5cE0q5oVP+KeTg9t4kZgE708aAv5iD7tJB
+    ir4w==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686755592;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=6vWmnjq8PtOemDu4fY8kEJsPcuBxy1e+Pqtj3pY7T9k=;
+    b=Mgg741W2+VYSXlbkmVk/GzFkQcxC2/kFof6xc8CuKtdI1kLDM11ACcYWDjVRgUekku
+    R8Te2sN3QYE6AKAA1Sv5cyJO0Kn1QFMQ7u0HuTv/5pLd8IExgcOKyymvxdslBhKfhCsJ
+    wu7s7K2kMX/SOUuz+tRZQpP1dLZW+YHGnBahgXgQ7BLMzxcidHVTTPG8hA+Sgc5ZD5eO
+    E1eUqnQvAGnwK/7h3kdJUsZWtNJ01xcvhLrvZ0SboilzzMSQ0DN7XnudqMfCC2RUMTib
+    VdO7siKabiq3p/bdXbe//4m0y/rUY8wb31zb0RP25h7wXYlLDfB4fvpCut84D/S6ZAp5
+    YfOQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686755592;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=6vWmnjq8PtOemDu4fY8kEJsPcuBxy1e+Pqtj3pY7T9k=;
+    b=vGqj8TXpZQtPvTEGotwrpykui0AN9b3DBr7ThBGtrsD+gJzUvZHRlwljiyVky8LJ6R
+    7kc3AdYP4uLnTFUVkXDA==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4peA95nh"
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.6.0 DYNA|AUTH)
+    with ESMTPSA id D0d0a8z5EFDC0Kr
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 14 Jun 2023 17:13:12 +0200 (CEST)
+Date:   Wed, 14 Jun 2023 17:13:03 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] remoteproc: qcom: Use of_reserved_mem_lookup()
+Message-ID: <ZInY_9QjJXIo7Bn8@gerhold.net>
+References: <20230529-rproc-of-rmem-v1-1-5b1e38880aba@gerhold.net>
+ <20230614151213.qiimwth3fkic5vct@ripper>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230614151213.qiimwth3fkic5vct@ripper>
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The io_buffer_get_list() function may return NULL, which may
-cause null pointer deference, and other callsites of
-io_buffer_get_list() all do Null check. Add Null check for
-return value of io_buffer_get_list().
+On Wed, Jun 14, 2023 at 08:12:13AM -0700, Bjorn Andersson wrote:
+> On Wed, May 31, 2023 at 11:34:54AM +0200, Stephan Gerhold wrote:
+> > Reserved memory can be either looked up using the generic function
+> > of_address_to_resource() or using the special of_reserved_mem_lookup().
+> > The latter has the advantage that it ensures that the referenced memory
+> > region was really reserved and is not e.g. status = "disabled".
+> > 
+> > of_reserved_mem also supports allocating reserved memory dynamically at
+> > boot time. This works only when using of_reserved_mem_lookup() since
+> > there won't be a fixed address in the device tree.
+> > 
+> > Switch the code to use of_reserved_mem_lookup(), similar to
+> > qcom_q6v5_wcss.c which is using it already. There is no functional
+> > difference for static reserved memory allocations.
+> > 
+> > While at it this also adds two missing of_node_put() calls in
+> > qcom_q6v5_pas.c.
+> > 
+> > Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+> > ---
+> > See e.g. [1] for an example of dynamically allocated reserved memory.
+> > (This patch does *not* depend on [1] and is useful without as well...)
+> > 
+> > NOTE: Changes in qcom_q6v5_adsp.c and qcom_q6v5_pas.c are untested,
+> > I only checked qcom_q6v5_mss.c and qcom_wcnss.c on MSM8916/DB410c.
+> > The code changes are pretty similar for all of those though.
+> > 
+> > [1]: https://lore.kernel.org/linux-arm-msm/20230510-dt-resv-bottom-up-v1-5-3bf68873dbed@gerhold.net/
+> > ---
+> >  drivers/remoteproc/qcom_q6v5_adsp.c | 22 ++++++++--------
+> >  drivers/remoteproc/qcom_q6v5_mss.c  | 35 +++++++++++++++----------
+> >  drivers/remoteproc/qcom_q6v5_pas.c  | 51 ++++++++++++++++++++-----------------
+> >  drivers/remoteproc/qcom_wcnss.c     | 24 ++++++++---------
+> >  4 files changed, 69 insertions(+), 63 deletions(-)
+> > 
+> > diff --git a/drivers/remoteproc/qcom_q6v5_adsp.c b/drivers/remoteproc/qcom_q6v5_adsp.c
+> > index 6777a3bd6226..948b3d00a564 100644
+> > --- a/drivers/remoteproc/qcom_q6v5_adsp.c
+> > +++ b/drivers/remoteproc/qcom_q6v5_adsp.c
+> > @@ -14,8 +14,8 @@
+> >  #include <linux/kernel.h>
+> >  #include <linux/mfd/syscon.h>
+> >  #include <linux/module.h>
+> > -#include <linux/of_address.h>
+> >  #include <linux/of_device.h>
+> > +#include <linux/of_reserved_mem.h>
+> >  #include <linux/platform_device.h>
+> >  #include <linux/pm_domain.h>
+> >  #include <linux/pm_runtime.h>
+> > @@ -637,28 +637,26 @@ static int adsp_init_mmio(struct qcom_adsp *adsp,
+> >  
+> >  static int adsp_alloc_memory_region(struct qcom_adsp *adsp)
+> >  {
+> > +	struct reserved_mem *rmem = NULL;
+> >  	struct device_node *node;
+> > -	struct resource r;
+> > -	int ret;
+> >  
+> >  	node = of_parse_phandle(adsp->dev->of_node, "memory-region", 0);
+> > +	if (node)
+> > +		rmem = of_reserved_mem_lookup(node);
+> > +	of_node_put(node);
+> > +
+> >  	if (!node) {
+> > -		dev_err(adsp->dev, "no memory-region specified\n");
+> > +		dev_err(adsp->dev, "unable to resolve memory-region\n");
+> >  		return -EINVAL;
+> >  	}
+> >  
+> > -	ret = of_address_to_resource(node, 0, &r);
+> > -	of_node_put(node);
+> > -	if (ret)
+> > -		return ret;
+> > -
+> > -	adsp->mem_phys = adsp->mem_reloc = r.start;
+> > -	adsp->mem_size = resource_size(&r);
+> 
+> Aren't you missing a check for !rmem here? (The others has it)
+> 
 
-Found by our static analysis tool.
+Indeed, thanks for spotting this! Will send a v2.
 
-Signed-off-by: Chenyuan Mi <cymi20@fudan.edu.cn>
----
- io_uring/kbuf.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
-index 2f0181521c98..d209a0a9e337 100644
---- a/io_uring/kbuf.c
-+++ b/io_uring/kbuf.c
-@@ -66,9 +66,11 @@ void io_kbuf_recycle_legacy(struct io_kiocb *req, unsigned issue_flags)
- 
- 	buf = req->kbuf;
- 	bl = io_buffer_get_list(ctx, buf->bgid);
--	list_add(&buf->list, &bl->buf_list);
--	req->flags &= ~REQ_F_BUFFER_SELECTED;
--	req->buf_index = buf->bgid;
-+	if (likely(bl)) {
-+		list_add(&buf->list, &bl->buf_list);
-+		req->flags &= ~REQ_F_BUFFER_SELECTED;
-+		req->buf_index = buf->bgid;
-+	}
- 
- 	io_ring_submit_unlock(ctx, issue_flags);
- 	return;
--- 
-2.17.1
-
+Stephan
