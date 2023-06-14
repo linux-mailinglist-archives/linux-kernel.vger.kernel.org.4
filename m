@@ -2,223 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 230E47303FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:38:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6FBF73040D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244314AbjFNPiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 11:38:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40728 "EHLO
+        id S244082AbjFNPnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 11:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235947AbjFNPiT (ORCPT
+        with ESMTP id S235283AbjFNPn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 11:38:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F123A123;
-        Wed, 14 Jun 2023 08:38:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85D9B643DA;
-        Wed, 14 Jun 2023 15:38:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FD32C433C8;
-        Wed, 14 Jun 2023 15:38:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686757097;
-        bh=xPsZfZMXejY7kb0kn7Ws5xGYfQGwc+dwRrlGM9Khnfc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YccOMKqouS1zlk/hKjfl6CkEmKWbWGOTqiEYcijXCM5QzpGjxk971Lrv47HQnUXQ8
-         4fQtS3iJ/gL9acmbIDF/LWD1ebHDF/Sr7zDXkcIWtkh4tIUrZFbI2XWgJdQrbHtsHY
-         huN/R4w6XQmiN+pzmSEI4TVMyuVCXnwZQcvBM1HEW7xisH8ewgZ4VvaLTMGYr1RuLF
-         NmfG7mmyLcoZX5zeubDq2/MMUq61u3JXbXaW7J2b65dnAUJCGuuvWArfVSgxyxzkP0
-         oJ7buPnAn1vyO0/8Ikmcw2of2RcfAlYVGTeS9Qv6RqEMcH+m/wmgzHrro4pTQYmZX1
-         c8SNQX4GlupSA==
-Date:   Wed, 14 Jun 2023 08:41:40 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Sarannya S <quic_sarannya@quicinc.com>
-Cc:     quic_bjorande@quicinc.com, arnaud.pouliquen@foss.st.com,
-        swboyd@chromium.org, quic_clew@quicinc.com,
-        mathieu.poirier@linaro.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        Deepak Kumar Singh <quic_deesin@quicinc.com>
-Subject: Re: [PATCH V7 3/3] rpmsg: char: Add RPMSG GET/SET FLOWCONTROL IOCTL
- support
-Message-ID: <20230614154140.4ebqtkaccha2rmqp@ripper>
-References: <1682160127-18103-1-git-send-email-quic_sarannya@quicinc.com>
- <1682160127-18103-4-git-send-email-quic_sarannya@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1682160127-18103-4-git-send-email-quic_sarannya@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 14 Jun 2023 11:43:28 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6D71FF9
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:43:27 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-565d1b86a64so11159257b3.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:43:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686757407; x=1689349407;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=mAfUZAOawoyT8CZyBzszrXXIQaEA3XJLD6s2UAVMv7M=;
+        b=klcb7noUuAhdnyf4XlxZkBVy6m4Tak9FnBDCYLv6vayg10s9lLLt3qPnVLxLMx4V/h
+         pzPnayfvfuzQEUOB5XX/2G4ghnontqIKTbMe/zek+dZYqjblajQdwzG5A5/4xyYyQv0d
+         uNT6JXsDQ4tSPqvuddMCl0Qt2DTW0J2AIZ9hpB9C/p7k2dqijFS2u2wBiti+po7ZBLXc
+         EUD2/i+KUUbqSkgvN3ngtvMFkwb8ug7x3Ak6EEbKeN8Lm1RGfOZajT7aoy+JasZ6nVLM
+         be92jLBxtpRiPyw9LnERbrec0UvRLfJPdL+sInjK5bYmS+0vcPh/N9mBFQSxzlY0jGVK
+         J6jA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686757407; x=1689349407;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mAfUZAOawoyT8CZyBzszrXXIQaEA3XJLD6s2UAVMv7M=;
+        b=kzKGSKLRA1eUx6WZ8aj0xLOCayPXGEbLYcyNqMDkLjLvBpsdaqdogbZgko0FuQDNUz
+         WBdG2C2xvYBaUIAiEhsy5XeuMZyza3QTb3W017mDENd4FB5Pmx2nYL/qtk3HchbJp4mh
+         FRaYEOzkmXSvGwC1dM6HoDKJ2gOE+to6Ti8zRmE6Fmd5D/5RQrpVeJ06twOWEsN4Wn9J
+         w2FdXDHiaqqmbDwLYL9vNLGXTckQNgGUuhkAiV2Vp+TbC8JcVDdeEEbiL53weFc975Vo
+         sccwpTZjZgC03Q1Js23GNk9UH9wReOAjvBQIIlIlpFNrLgyN9PDrUClQFehoLmawKQCD
+         na8A==
+X-Gm-Message-State: AC+VfDwtGJMFyc+XaCEY7Fjpg93Ln+G7ZeZXjf6w6GXgoO0hd1SwpH3l
+        htJ92/DCUtjYF5Rgeyf7PjdbLxMB2kaX
+X-Google-Smtp-Source: ACHHUZ7xIpowVbdQXt1AFVkmjdLe/ViKNLhbx2+GqU5cx7xGsa3h+wqyu0XBexhlSmG0mpwgu06VfPb3ROLc
+X-Received: from mshavit.ntc.corp.google.com ([2401:fa00:95:20c:c6e6:49bf:5c44:5965])
+ (user=mshavit job=sendgmr) by 2002:a81:b64a:0:b0:56c:fffd:49db with SMTP id
+ h10-20020a81b64a000000b0056cfffd49dbmr1019861ywk.7.1686757406946; Wed, 14 Jun
+ 2023 08:43:26 -0700 (PDT)
+Date:   Wed, 14 Jun 2023 23:41:52 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230614154304.2860121-1-mshavit@google.com>
+Subject: [PATCH v3 00/13] Add PASID support to SMMUv3 unmanaged domains
+From:   Michael Shavit <mshavit@google.com>
+To:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>
+Cc:     Michael Shavit <mshavit@google.com>, jean-philippe@linaro.org,
+        nicolinc@nvidia.com, jgg@nvidia.com, baolu.lu@linux.intel.com,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 22, 2023 at 04:12:07PM +0530, Sarannya S wrote:
-> From: Chris Lew <quic_clew@quicinc.com>
-> 
-> Add RPMSG_GET_OUTGOING_FLOWCONTROL and RPMSG_SET_INCOMING_FLOWCONTROL
-> IOCTL support for rpmsg char device nodes to get/set the low level
-> transport signals.
-> 
-> Signed-off-by: Chris Lew <quic_clew@quicinc.com>
-> Signed-off-by: Deepak Kumar Singh <quic_deesin@quicinc.com>
-> Signed-off-by: Sarannya S <quic_sarannya@quicinc.com>
-> ---
->  drivers/rpmsg/rpmsg_char.c | 49 ++++++++++++++++++++++++++++++++++++++++------
->  include/uapi/linux/rpmsg.h | 11 ++++++++++-
->  2 files changed, 53 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
-> index a271fce..d50908f 100644
-> --- a/drivers/rpmsg/rpmsg_char.c
-> +++ b/drivers/rpmsg/rpmsg_char.c
-> @@ -23,6 +23,7 @@
->  #include <linux/rpmsg.h>
->  #include <linux/skbuff.h>
->  #include <linux/slab.h>
-> +#include <linux/termios.h>
->  #include <linux/uaccess.h>
->  #include <uapi/linux/rpmsg.h>
->  
-> @@ -68,6 +69,8 @@ struct rpmsg_eptdev {
->  	struct sk_buff_head queue;
->  	wait_queue_head_t readq;
->  
-> +	bool remote_flow;
+Hi all,
 
-I was about to agree with Arnaud, that this needs to be defaulted to
-true. But the flag means "has the remote asked for flow to be limited".
+This patch series implements the set_dev_pasid operation for DMA
+and UNMANAGED iommu domains.
 
-As such, the name of this variable is misleading. Please rename it
-"remote_flow_restricted" or something like that.
+The bulk of the series involves a refactor of stage 1 domains so that
+they describe a single CD entry. On attach, stage 1 domains are inserted
+into a CD table that is now owned by the arm_smmu_master struct. This is
+a pre-requisite to the set_dev_pasid implementation but also results in
+a conceptually cleaner arm_smmu_domain. Note that this does not preclude
+from attaching domains that represent a CD table, such as for the
+proposed iommufd NESTED domains.
 
-And please update the kerneldoc for this struct.
+The last few patches of the series make drive-by cleanups to the smmu
+SVA implementation. A follow-up patch-series is planned so that the SVA
+implementation can further take advantages of the changes introduced here. See
+discussion on patch 14 of the v2 series.
 
-Regards,
-Bjorn
+This patch series is also available on gerrit with Jean's SMMU test
+engine patches cherry-picked on top:
+https://linux-review.googlesource.com/id/I0fcd9adc058d1c58a12d2599cc82fba73da7697a
+This allowed testing of basic SVA functionality (e.g.: attaching, page
+fault handling, and detaching).
 
-> +	bool remote_flow_updated;
->  };
->  
->  int rpmsg_chrdev_eptdev_destroy(struct device *dev, void *data)
-> @@ -116,6 +119,18 @@ static int rpmsg_ept_cb(struct rpmsg_device *rpdev, void *buf, int len,
->  	return 0;
->  }
->  
-> +static int rpmsg_ept_flow_cb(struct rpmsg_device *rpdev, void *priv, bool enable)
-> +{
-> +	struct rpmsg_eptdev *eptdev = priv;
-> +
-> +	eptdev->remote_flow = enable;
-> +	eptdev->remote_flow_updated = true;
-> +
-> +	wake_up_interruptible(&eptdev->readq);
-> +
-> +	return 0;
-> +}
-> +
->  static int rpmsg_eptdev_open(struct inode *inode, struct file *filp)
->  {
->  	struct rpmsg_eptdev *eptdev = cdev_to_eptdev(inode->i_cdev);
-> @@ -152,6 +167,7 @@ static int rpmsg_eptdev_open(struct inode *inode, struct file *filp)
->  		return -EINVAL;
->  	}
->  
-> +	ept->flow_cb = rpmsg_ept_flow_cb;
->  	eptdev->ept = ept;
->  	filp->private_data = eptdev;
->  	mutex_unlock(&eptdev->ept_lock);
-> @@ -172,6 +188,7 @@ static int rpmsg_eptdev_release(struct inode *inode, struct file *filp)
->  		eptdev->ept = NULL;
->  	}
->  	mutex_unlock(&eptdev->ept_lock);
-> +	eptdev->remote_flow_updated = false;
->  
->  	/* Discard all SKBs */
->  	skb_queue_purge(&eptdev->queue);
-> @@ -285,6 +302,9 @@ static __poll_t rpmsg_eptdev_poll(struct file *filp, poll_table *wait)
->  	if (!skb_queue_empty(&eptdev->queue))
->  		mask |= EPOLLIN | EPOLLRDNORM;
->  
-> +	if (eptdev->remote_flow_updated)
-> +		mask |= EPOLLPRI;
-> +
->  	mutex_lock(&eptdev->ept_lock);
->  	mask |= rpmsg_poll(eptdev->ept, filp, wait);
->  	mutex_unlock(&eptdev->ept_lock);
-> @@ -297,14 +317,31 @@ static long rpmsg_eptdev_ioctl(struct file *fp, unsigned int cmd,
->  {
->  	struct rpmsg_eptdev *eptdev = fp->private_data;
->  
-> -	if (cmd != RPMSG_DESTROY_EPT_IOCTL)
-> -		return -EINVAL;
-> +	bool set;
-> +	int ret;
->  
-> -	/* Don't allow to destroy a default endpoint. */
-> -	if (eptdev->default_ept)
-> -		return -EINVAL;
-> +	switch (cmd) {
-> +	case RPMSG_GET_OUTGOING_FLOWCONTROL:
-> +		eptdev->remote_flow_updated = false;
-> +		ret = put_user(eptdev->remote_flow, (int __user *)arg);
-> +		break;
-> +	case RPMSG_SET_INCOMING_FLOWCONTROL:
-> +		set = !!arg;
-> +		ret = rpmsg_set_flow_control(eptdev->ept, set, eptdev->chinfo.dst);
-> +		break;
-> +	case RPMSG_DESTROY_EPT_IOCTL:
-> +		/* Don't allow to destroy a default endpoint. */
-> +		if (eptdev->default_ept) {
-> +			ret = -EINVAL;
-> +			break;
-> +		}
-> +		ret = rpmsg_chrdev_eptdev_destroy(&eptdev->dev, NULL);
-> +		break;
-> +	default:
-> +		ret = -EINVAL;
-> +	}
->  
-> -	return rpmsg_chrdev_eptdev_destroy(&eptdev->dev, NULL);
-> +	return ret;
->  }
->  
->  static const struct file_operations rpmsg_eptdev_fops = {
-> diff --git a/include/uapi/linux/rpmsg.h b/include/uapi/linux/rpmsg.h
-> index 1637e68..c955e27 100644
-> --- a/include/uapi/linux/rpmsg.h
-> +++ b/include/uapi/linux/rpmsg.h
-> @@ -10,7 +10,6 @@
->  #include <linux/types.h>
->  
->  #define RPMSG_ADDR_ANY		0xFFFFFFFF
-> -
->  /**
->   * struct rpmsg_endpoint_info - endpoint info representation
->   * @name: name of service
-> @@ -43,4 +42,14 @@ struct rpmsg_endpoint_info {
->   */
->  #define RPMSG_RELEASE_DEV_IOCTL	_IOW(0xb5, 0x4, struct rpmsg_endpoint_info)
->  
-> +/**
-> + * Set the flow control for the remote rpmsg char device.
-> + */
-> +#define RPMSG_GET_OUTGOING_FLOWCONTROL _IOW(0xb5, 0x5, struct rpmsg_endpoint_info)
-> +
-> +/**
-> + * Set the flow control for the local rpmsg char device.
-> + */
-> +#define RPMSG_SET_INCOMING_FLOWCONTROL _IOW(0xb5, 0x6, struct rpmsg_endpoint_info)
-> +
->  #endif
-> -- 
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
-> 
+Thanks,
+Michael Shavit
+
+Changelog
+v3:
+ * Dropped the bulk of the SVA refactoring to re-work as a follow-up
+   series.
+ * Reworded cover letter to omit dropped changes.
+ * Rebased on 6.4 tip
+v2:
+https://lore.kernel.org/all/20230606120854.4170244-1-mshavit@google.com/
+ * Reworded cover letter and commits based on v1 feedback.
+ * Split and reworked `iommu/arm-smmu-v3: Move cdtable to arm_smmu_master`
+ * Added SVA clean-up and refactor.
+ * A few other small bug fixes and cosmetics.
+v1:
+https://lore.kernel.org/all/20230510205054.2667898-1-mshavit@google.com/
+
+
+Michael Shavit (13):
+  iommu/arm-smmu-v3: Move ctx_desc out of s1_cfg
+  iommu/arm-smmu-v3: Add smmu_s1_cfg to smmu_master
+  iommu/arm-smmu-v3: Refactor write_strtab_ent
+  iommu/arm-smmu-v3: Refactor write_ctx_desc
+  iommu/arm-smmu-v3: Use the master-owned s1_cfg
+  iommu/arm-smmu-v3: Simplify arm_smmu_enable_ats
+  iommu/arm-smmu-v3: Keep track of attached ssids
+  iommu/arm-smmu-v3: Add helper for atc invalidation
+  iommu/arm-smmu-v3: Implement set_dev_pasid
+  iommu/arm-smmu-v3-sva: Remove bond refcount
+  iommu/arm-smmu-v3-sva: Clean unused iommu_sva
+  iommu/arm-smmu-v3-sva: Remove arm_smmu_bond
+  iommu/arm-smmu-v3-sva: Add check when enabling sva
+
+ .../iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c   | 156 +++---
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c   | 447 ++++++++++++------
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h   |  49 +-
+ 3 files changed, 414 insertions(+), 238 deletions(-)
+
+
+base-commit: b6dad5178ceaf23f369c3711062ce1f2afc33644
+-- 
+2.41.0.162.gfafddb0af9-goog
+
