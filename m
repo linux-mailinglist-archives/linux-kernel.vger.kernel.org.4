@@ -2,61 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D477304D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F41B730524
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233391AbjFNQYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 12:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
+        id S236012AbjFNQhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 12:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjFNQYN (ORCPT
+        with ESMTP id S235460AbjFNQhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 12:24:13 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F19D109;
-        Wed, 14 Jun 2023 09:24:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=tL93bI0jCWhGF3WG58T3OaJIDMhjtKg7c9c3OsvljCg=; b=qpvSUqzkIvq2pf6t36jXKr2o0P
-        1Bb6JiMkPcXkWHbaeticZajm/w8h5A8KKPUZjGIRbHW1DdbuoG5p+MfHoSC4KyGHTCJbyBZ9suO+Y
-        l3/uYhPVsVfLBLNYjylwXFXfZHY644VQ5UpytE3b/DsndFToTAGZr5m2Fao8tNA2x4KTW/eg8XS2m
-        obtH625jiwihlTyS/r+/aJBLQSmUpUfWPSPEAqhgxgEIOMyMO/VjPTTlWxg+8flWGQIVe1ZsawW89
-        v6JZszuL/Hepl08MvDDCE1E/v81nXvJ0s5ZhpW4WsMhzRvVkRTyADmSpQ/jCS3jUEdnRV7fo6roLT
-        eoZnZJ4g==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:40838)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q9THx-0001yP-1A; Wed, 14 Jun 2023 17:24:05 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q9THu-0000Z3-LM; Wed, 14 Jun 2023 17:24:02 +0100
-Date:   Wed, 14 Jun 2023 17:24:02 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Wei Chin Tsai <Wei-chin.Tsai@mediatek.com>
-Cc:     lkp@intel.com, angelogioacchino.delregno@collabora.com,
-        ivan.tseng@mediatek.com, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, matthias.bgg@gmail.com,
-        mel.lee@mediatek.com, oe-kbuild-all@lists.linux.dev,
-        wsd_upstream@mediatek.com
-Subject: Re: [PATCH v3 1/1] memory: Fix export symbol twice compiler error
- for "export symbols for memory related functions" patch
-Message-ID: <ZInpooYdKnhdm3SW@shell.armlinux.org.uk>
-References: <202306142030.GjGWnIkY-lkp@intel.com>
- <20230614153902.26206-1-Wei-chin.Tsai@mediatek.com>
+        Wed, 14 Jun 2023 12:37:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A8410E9;
+        Wed, 14 Jun 2023 09:37:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E85676409C;
+        Wed, 14 Jun 2023 16:37:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2413C433C0;
+        Wed, 14 Jun 2023 16:37:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686760629;
+        bh=Bs+EyfsO2p9fJ/uqqvy28thI6wPfslvdFWG010Lc/Ns=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YefGG52yVCQf3IypRiZPtyZ7PvmCO+Kdc2xodNzcw7+v5J6HaCpn0lu1wYeVgv6B+
+         mj9gLO4vnTF99DdR2O/wyhsXvhnIm5KcwCJYE7ooevgccwXczE/2FNEYu2nCX6wPFt
+         +/yrM8HKUUV2gLoLaApRLTjJF7UE54oDIVF3nJLckn8SaO8CCR2DqFIaOBlzvYOW/5
+         hZ+eteDS3bzfgf7ql3+U1DEHXs4SrIy7t53ljQcXEi3JyVXeyL12JDz4fFg3SHkfUH
+         89LHGk6N95J2D7jn1cAXKKUyBrX/z0bL1yPQdJL8Usn7k+hhhZsvRPUDRabsB6J2qh
+         cAEiWwrW7Gc0g==
+Date:   Thu, 15 Jun 2023 00:25:49 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        Arnd Bergmann <arnd@arndb.de>, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+Message-ID: <ZInqDdXh6wNK3NHq@xhacker>
+References: <20230523165502.2592-1-jszhang@kernel.org>
+ <mhng-4483745f-f356-454c-8c2a-5f0e5b6c9739@palmer-ri-x1c9>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230614153902.26206-1-Wei-chin.Tsai@mediatek.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <mhng-4483745f-f356-454c-8c2a-5f0e5b6c9739@palmer-ri-x1c9>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,48 +57,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 11:39:02PM +0800, Wei Chin Tsai wrote:
-> User could not add the export symbol "arch_vma_name"
-> in arch/arm/kernel/process.c and kernel/signal.c both.
-> It would cause the export symbol twice compiler error
-> Reported-by: kernel test robot <lkp@intel.com>
+
+On Wed, Jun 14, 2023 at 07:49:17AM -0700, Palmer Dabbelt wrote:
+> On Tue, 23 May 2023 09:54:58 PDT (-0700), jszhang@kernel.org wrote:
+> > When trying to run linux with various opensource riscv core on
+> > resource limited FPGA platforms, for example, those FPGAs with less
+> > than 16MB SDRAM, I want to save mem as much as possible. One of the
+> > major technologies is kernel size optimizations, I found that riscv
+> > does not currently support HAVE_LD_DEAD_CODE_DATA_ELIMINATION, which
+> > passes -fdata-sections, -ffunction-sections to CFLAGS and passes the
+> > --gc-sections flag to the linker.
+> > 
+> > This not only benefits my case on FPGA but also benefits defconfigs.
+> > Here are some notable improvements from enabling this with defconfigs:
+> > 
+> > nommu_k210_defconfig:
+> >    text    data     bss     dec     hex
+> > 1112009  410288   59837 1582134  182436     before
+> >  962838  376656   51285 1390779  1538bb     after
+> > 
+> > rv32_defconfig:
+> >    text    data     bss     dec     hex
+> > 8804455 2816544  290577 11911576 b5c198     before
+> > 8692295 2779872  288977 11761144 b375f8     after
+> > 
+> > defconfig:
+> >    text    data     bss     dec     hex
+> > 9438267 3391332  485333 13314932 cb2b74     before
+> > 9285914 3350052  483349 13119315 c82f53     after
+> > 
+> > patch1 and patch2 are clean ups.
+> > patch3 fixes a typo.
+> > patch4 finally enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION for riscv.
+> > 
+> > NOTE: Zhangjin Wu firstly sent out a patch to enable dead code
+> > elimination for riscv several months ago, I didn't notice it until
+> > yesterday. Although it missed some preparations and some sections's
+> > keeping, he is the first person to enable this feature for riscv. To
+> > ease merging, this series take his patch into my entire series and
+> > makes patch4 authored by him after getting his ack to reflect
+> > the above fact.
+> > 
+> > Since v1:
+> >   - collect Reviewed-by, Tested-by tag
+> >   - Make patch4 authored by Zhangjin Wu, add my co-developed-by tag
+> > 
+> > Jisheng Zhang (3):
+> >   riscv: move options to keep entries sorted
+> >   riscv: vmlinux-xip.lds.S: remove .alternative section
+> >   vmlinux.lds.h: use correct .init.data.* section name
+> > 
+> > Zhangjin Wu (1):
+> >   riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+> > 
+> >  arch/riscv/Kconfig                  |  13 +-
+> >  arch/riscv/kernel/vmlinux-xip.lds.S |   6 -
+> >  arch/riscv/kernel/vmlinux.lds.S     |   6 +-
+> >  include/asm-generic/vmlinux.lds.h   |   2 +-
+> >  4 files changed, 11 insertions(+), 16 deletions(-)
 > 
-> Signed-off-by: Wei Chin Tsai <Wei-chin.Tsai@mediatek.com>
+> Do you have a base commit for this?  It's not applying to 6.4-rc1 and the
+> patchwork bot couldn't find one either.
 
-I'm sorry, but this patch is silly.
+Hi Palmer,
 
-> diff --git a/arch/arm/kernel/process.c b/arch/arm/kernel/process.c
-> index df91412a1069..d71a9bafb584 100644
-> --- a/arch/arm/kernel/process.c
-> +++ b/arch/arm/kernel/process.c
-> @@ -343,7 +343,10 @@ const char *arch_vma_name(struct vm_area_struct *vma)
->  {
->  	return is_gate_vma(vma) ? "[vectors]" : NULL;
->  }
-> +
-> +#ifdef CONFIG_ARM
->  EXPORT_SYMBOL_GPL(arch_vma_name);
-> +#endif
+Commit 3b90b09af5be ("riscv: Fix orphan section warnings caused by
+kernel/pi") touches vmlinux.lds.S, so to make the merge easy, this
+series is based on 6.4-rc2.
 
-CONFIG_ARM will always be set here, so adding this ifdef is useless.
-
-> diff --git a/kernel/signal.c b/kernel/signal.c
-> index a1abe77fcdc3..f7d03450781e 100644
-> --- a/kernel/signal.c
-> +++ b/kernel/signal.c
-> @@ -4700,7 +4700,10 @@ __weak const char *arch_vma_name(struct vm_area_struct *vma)
->  {
->  	return NULL;
->  }
-> +
-> +#ifdef CONFIG_ARM64
->  EXPORT_SYMBOL_GPL(arch_vma_name);
-> +#endif
-
-Sorry, but no.
-
-Please do the research I've now twice asked for.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Thanks
