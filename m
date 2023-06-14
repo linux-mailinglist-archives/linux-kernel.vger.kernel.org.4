@@ -2,90 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C90C772F87E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:59:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 776F172F886
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 11:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239976AbjFNI73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 04:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47294 "EHLO
+        id S243406AbjFNJAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 05:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243628AbjFNI71 (ORCPT
+        with ESMTP id S243948AbjFNI76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 04:59:27 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD38A1BF3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 01:59:22 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4Qgzr82nB1zBQgnx
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 16:59:20 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1686733160; x=1689325161; bh=+Pgk5Qdr4y1+ylFUEtfOc7XJIpZ
-        2V9Df0ycnSUjUwNA=; b=nJgilORUt76zkSkEJsQgKdizJ2rGsIZWtYoxDKoL4Gf
-        cLeYyL1WPols9HWOiq6LP5LMxOBWQk+EGMnZsnfQHD9pZ6bsIBK1YVVtDjQ/p89q
-        lPsYZ5KGzVXEt/I3e3IHLEYe0rggSBG5tPRsI1AB1HxWSe6CUpBOryekPRDcSK5H
-        ATi3qGsmsxiKxK53qhMas3R7ER0Dexy/yzuW+I2WuDwNDEuSRTD+gXzvfzfPMWDM
-        w0JKATqTu2ZKLvM8XB6r7aIWg2CzLrKsb6lCz6UsxFJU/8rZi9GSJc2UKeBr3iUX
-        ct0suUWmbOKEydzXjA1nZrk5Z/DlHCHaLQZI5ySRnQg==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id CiHBiuR-CCql for <linux-kernel@vger.kernel.org>;
-        Wed, 14 Jun 2023 16:59:20 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4Qgzr75SzzzBJJD0;
-        Wed, 14 Jun 2023 16:59:19 +0800 (CST)
+        Wed, 14 Jun 2023 04:59:58 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906D41BEF
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 01:59:57 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q9MM1-00014K-C3; Wed, 14 Jun 2023 10:59:49 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q9MM0-007JWG-EF; Wed, 14 Jun 2023 10:59:48 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q9MLz-00E9bd-R7; Wed, 14 Jun 2023 10:59:47 +0200
+Date:   Wed, 14 Jun 2023 10:59:47 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Clark Wang <xiaoning.wang@nxp.com>
+Cc:     thierry.reding@gmail.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com,
+        linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
+        linux-imx@nxp.com, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pwm: imx-tpm: force 'real_period' to be zero in suspend
+Message-ID: <20230614085947.d4b2iaopcbit624w@pengutronix.de>
+References: <20230505065839.3973693-1-xiaoning.wang@nxp.com>
 MIME-Version: 1.0
-Date:   Wed, 14 Jun 2023 16:59:19 +0800
-From:   baomingtong001@208suo.com
-To:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, bchihi@baylibre.com,
-        heiko@sntech.de, wenst@chromium.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drivers/thermal/mediatek/lvts_thermal: Remove unneeded
- semicolon
-In-Reply-To: <20230614084536.6911-1-luojianhong@cdjrlc.com>
-References: <20230614084536.6911-1-luojianhong@cdjrlc.com>
-User-Agent: Roundcube Webmail
-Message-ID: <f372ecd6bb8459641dfe89e3c7867237@208suo.com>
-X-Sender: baomingtong001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7kagizhkcqmlnfyb"
+Content-Disposition: inline
+In-Reply-To: <20230505065839.3973693-1-xiaoning.wang@nxp.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fix the following coccicheck warning:
 
-./drivers/thermal/mediatek/lvts_thermal.c:522:2-3: Unneeded semicolon
+--7kagizhkcqmlnfyb
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Mingtong Bao <baomingtong001@208suo.com>
----
-  drivers/thermal/mediatek/lvts_thermal.c | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, May 05, 2023 at 02:58:39PM +0800, Clark Wang wrote:
+> From: Fancy Fang <chen.fang@nxp.com>
+>=20
+> During suspend, all the tpm registers will lose values.
+> So the 'real_period' value of struct 'imx_tpm_pwm_chip'
+> should be forced to be zero to force the period update
+> code can be executed after system resume back.
+>=20
+> Signed-off-by: Fancy Fang <chen.fang@nxp.com>
+> Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
 
-diff --git a/drivers/thermal/mediatek/lvts_thermal.c 
-b/drivers/thermal/mediatek/lvts_thermal.c
-index d0a3f95b7884..1a5ae51b2c51 100644
---- a/drivers/thermal/mediatek/lvts_thermal.c
-+++ b/drivers/thermal/mediatek/lvts_thermal.c
-@@ -519,7 +519,7 @@ static int lvts_sensor_init(struct device *dev, 
-struct lvts_ctrl *lvts_ctrl,
-           */
-          lvts_sensor[i].msr = lvts_ctrl_data->mode == 
-LVTS_MSR_IMMEDIATE_MODE ?
-              imm_regs[i] : msr_regs[i];
--    };
-+    }
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+Fixes: 738a1cfec2ed ("pwm: Add i.MX TPM PWM driver support")
 
-      lvts_ctrl->num_lvts_sensor = lvts_ctrl_data->num_lvts_sensor;
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--7kagizhkcqmlnfyb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSJgYIACgkQj4D7WH0S
+/k5g7Qf+LGUIPWUN0qs0os0bldq4CY07sUjFXHnyD9Fz1VQToZnF/7iCbdGRbJ5X
+PIdn1utW5NCLVxqvtwJpIT/Se9DcejX56Nmi4TutiyqyD4gFrujzVJDFxwdJBWby
+QU7DFMrcx923Rqw8tR1kW4ClY3lIUw1tcJbDCc7CAEpjwhrXp5iSMB6Hkf9d7dqC
+9pGXRkSiJOU9oZKEhRa9sV+5YAX9DWyIMtvswGmJ+evEtP/RfETZg3Ps9U0yIf9a
+5QXe+HPLHxgRwVDfxOCcHM64jVwB0mTbCy/n+o+gBdfFdioIyaPJpbtTwlZyYFRV
+vKRgGk504ydR2Xc/YWQaBNb4uh7JXg==
+=Nhqn
+-----END PGP SIGNATURE-----
+
+--7kagizhkcqmlnfyb--
