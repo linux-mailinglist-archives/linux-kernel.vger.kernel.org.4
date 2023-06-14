@@ -2,272 +2,315 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 634DC73074D
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 20:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95B51730751
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 20:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236257AbjFNSUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 14:20:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50866 "EHLO
+        id S232237AbjFNSYL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 14 Jun 2023 14:24:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242585AbjFNST7 (ORCPT
+        with ESMTP id S234014AbjFNSYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 14:19:59 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D028DF
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:19:57 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-bc43a73ab22so1506068276.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:19:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686766797; x=1689358797;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KvolxFpSUd+UYjr2NPXt15fH6Ok7605pkk0GNP9SYg0=;
-        b=Tgqk+w3/V1gNYoOZd83Bpn7ROrRlihlUJ+5um0iGTM5GR/cbZ9uH6LlPNLQnKfLwiK
-         iFwhD7czV1ywnr2ClenU+dDWF3DutvvSZzgCAarssxiRAN47ujSFiWW7dwcNyEX0Mt5+
-         /bDiG4zGwMaS9jAez89vf8DtzUbVlQ6+qL6IcyfQqx/X9P4aJkCbIumtexw7IyG/Y0yh
-         9Lt8HVigSISC40kEJ9WFrGXl6nNO9K9kQ4G8Ap4gEfXD2NsvtBpyWE5Y6IfdHhOS2f/a
-         gGD53f05zQSfamVYOK4VKqhTPI25fnDwP7fIQl/DuvDlUmnXLSNXLjMM1W4LW5kgHOZz
-         j6UQ==
+        Wed, 14 Jun 2023 14:24:09 -0400
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3344CE3;
+        Wed, 14 Jun 2023 11:24:07 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-9786c0cbfdcso151030866b.1;
+        Wed, 14 Jun 2023 11:24:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686766797; x=1689358797;
+        d=1e100.net; s=20221208; t=1686767045; x=1689359045;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KvolxFpSUd+UYjr2NPXt15fH6Ok7605pkk0GNP9SYg0=;
-        b=UzkYWbbHKXQRixyKnGkdcr1L6Ejq3NZlk9rvkGlf2RNnJO8eAAUAiwWTJpACpp28SO
-         s/PnpL+K1jI4VvRo6OvbYkKfz7NuIHzR43eIM9WUpHe23+stYV2QZvM56DTtn9PuLQ9G
-         lvENhX9WInHCDrap1aiiDQuSZBGuo16LCUqdkjPL+Ka6wlRPjW4OTADzPAqslvPCY017
-         330AlOvixPyRQM+FHXCGMy4iQWWGf1R4StKIr/oPXCh2tp7h6PtfwHnIx3BYdpuPSbZx
-         mxzcnOTl61NU8Hjj+L/uTKEvzKd6nMXkabqhLNeY2BJWESqy3+7h2P45C/onsZ0CnauU
-         Q7uA==
-X-Gm-Message-State: AC+VfDwW60FuK64q+XY8CJhFXxZBu0WiqBPHULxgJk458x99T9p3fcdc
-        HT0BWUT70pV0JnKGNuCPFYRdyDKHA09xZIwaWq82EA==
-X-Google-Smtp-Source: ACHHUZ71r/mO+17OUlbI/yQUvzbpW2gg0ni8VB/hBmzje4ZzR42bChGdzfywTZfHqkzTUetxHqiXOuDKkAKGfqmCYXY=
-X-Received: by 2002:a25:644:0:b0:bac:bb2f:67f5 with SMTP id
- 65-20020a250644000000b00bacbb2f67f5mr2938857ybg.15.1686766796537; Wed, 14 Jun
- 2023 11:19:56 -0700 (PDT)
+        bh=spdq0N2VYY0hYc7jjAnAoKbl8HVhYtdqgkVBiNrVmUo=;
+        b=IfLvF4hf2OkW3ot7mVDvGte1eRH8f8XHBcuhgVC25ZiNDE9ylk5530oC6XAnPFVZ/o
+         2yyAJCCguG8MLqwnn1Ne02JQ8mEaSfDbQDD+nouSfMkrz2wpkT0EWTtHSFI57yhE93qb
+         mDNXQf0/qJd33ybd0/HzjJKF85UKLEfT2bYCuM+fhow45MMQhOtDkWOI/1/ukX4mPhbR
+         hDTFBn57PGH3eKF81RpRM2BKEvavGqjdDuSBCIzK7GmZJYqGA/rMYR3MEODaZrAZS13A
+         cUYk2al2nRMT7VC1170BRIRLy0m9tTPY0ipuAQlirwB6da4gEO1oezSXXPHXpi603/Iz
+         C6yg==
+X-Gm-Message-State: AC+VfDwbrrEX4jY/BcOXtxddURhujTDnTNFmRj4c1oOU4um+K1KVJyXK
+        7H9Kiy55M43n8uoLNbs5ICTUTAGtA+ynLqQ0+WQ=
+X-Google-Smtp-Source: ACHHUZ5Vgmlo2Dp4Nm1dN41Dc+3MKH2aX5EDHhRw8hYO9pCmdkyeZXnf472hN8o6RY4LcRvhZkYZvll0oQjO/aVK1YE=
+X-Received: by 2002:a17:906:739e:b0:974:5de8:b5ce with SMTP id
+ f30-20020a170906739e00b009745de8b5cemr1659444ejl.2.1686767045264; Wed, 14 Jun
+ 2023 11:24:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230614070733.113068-1-lujialin4@huawei.com> <20230614174004.GC1146@sol.localdomain>
-In-Reply-To: <20230614174004.GC1146@sol.localdomain>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 14 Jun 2023 11:19:45 -0700
-Message-ID: <CAJuCfpFROxDn-Yv48zKw5PuiLd_LQ5+b1Nt4+jEw8wHMWcRDWw@mail.gmail.com>
-Subject: Re: [PATCH v2] poll: Fix use-after-free in poll_freewait()
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Tejun Heo <tj@kernel.org>, Lu Jialin <lujialin4@huawei.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
+References: <20230614093755.88881-1-wangliupu@loongson.cn>
+In-Reply-To: <20230614093755.88881-1-wangliupu@loongson.cn>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 14 Jun 2023 20:23:53 +0200
+Message-ID: <CAJZ5v0iTKPbpskDVcsnVaWnhdvb5a-W2TVBfd0c=H2hVv8mOog@mail.gmail.com>
+Subject: Re: [PATCH] LoongArch: Add SMT (Simultaneous Multi-Threading) support
+To:     Liupu Wang <wangliupu@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Marc Zyngier <maz@kernel.org>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Binbin Zhou <zhoubinbin@loongson.cn>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 10:40=E2=80=AFAM Eric Biggers <ebiggers@kernel.org>=
- wrote:
+On Wed, Jun 14, 2023 at 11:38 AM Liupu Wang <wangliupu@loongson.cn> wrote:
 >
-> On Wed, Jun 14, 2023 at 03:07:33PM +0800, Lu Jialin wrote:
-> > We found a UAF bug in remove_wait_queue as follows:
-> >
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > BUG: KASAN: use-after-free in _raw_spin_lock_irqsave+0x71/0xe0
-> > Write of size 4 at addr ffff8881150d7b28 by task psi_trigger/15306
-> > Call Trace:
-> >  dump_stack+0x9c/0xd3
-> >  print_address_description.constprop.0+0x19/0x170
-> >  __kasan_report.cold+0x6c/0x84
-> >  kasan_report+0x3a/0x50
-> >  check_memory_region+0xfd/0x1f0
-> >  _raw_spin_lock_irqsave+0x71/0xe0
-> >  remove_wait_queue+0x26/0xc0
-> >  poll_freewait+0x6b/0x120
-> >  do_sys_poll+0x305/0x400
-> >  do_syscall_64+0x33/0x40
-> >  entry_SYSCALL_64_after_hwframe+0x61/0xc6
-> >
-> > Allocated by task 15306:
-> >  kasan_save_stack+0x1b/0x40
-> >  __kasan_kmalloc.constprop.0+0xb5/0xe0
-> >  psi_trigger_create.part.0+0xfc/0x450
-> >  cgroup_pressure_write+0xfc/0x3b0
-> >  cgroup_file_write+0x1b3/0x390
-> >  kernfs_fop_write_iter+0x224/0x2e0
-> >  new_sync_write+0x2ac/0x3a0
-> >  vfs_write+0x365/0x430
-> >  ksys_write+0xd5/0x1b0
-> >  do_syscall_64+0x33/0x40
-> >  entry_SYSCALL_64_after_hwframe+0x61/0xc6
-> >
-> > Freed by task 15850:
-> >  kasan_save_stack+0x1b/0x40
-> >  kasan_set_track+0x1c/0x30
-> >  kasan_set_free_info+0x20/0x40
-> >  __kasan_slab_free+0x151/0x180
-> >  kfree+0xba/0x680
-> >  cgroup_file_release+0x5c/0xe0
-> >  kernfs_drain_open_files+0x122/0x1e0
-> >  kernfs_drain+0xff/0x1e0
-> >  __kernfs_remove.part.0+0x1d1/0x3b0
-> >  kernfs_remove_by_name_ns+0x89/0xf0
-> >  cgroup_addrm_files+0x393/0x3d0
-> >  css_clear_dir+0x8f/0x120
-> >  kill_css+0x41/0xd0
-> >  cgroup_destroy_locked+0x166/0x300
-> >  cgroup_rmdir+0x37/0x140
-> >  kernfs_iop_rmdir+0xbb/0xf0
-> >  vfs_rmdir.part.0+0xa5/0x230
-> >  do_rmdir+0x2e0/0x320
-> >  __x64_sys_unlinkat+0x99/0xc0
-> >  do_syscall_64+0x33/0x40
-> >  entry_SYSCALL_64_after_hwframe+0x61/0xc6
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >
-> > If using epoll(), wake_up_pollfree will empty waitqueue and set
-> > wait_queue_head is NULL before free waitqueue of psi trigger. But is
-> > doesn't work when using poll(), which will lead a UAF problem in
-> > poll_freewait coms as following:
-> >
-> > (cgroup_rmdir)                      |
-> > psi_trigger_destroy                 |
-> >   wake_up_pollfree(&t->event_wait)  |
-> >    synchronize_rcu();               |
-> >     kfree(t)                        |
-> >                                   |   (poll_freewait)
-> >                                   |     free_poll_entry(pwq->inline_ent=
-ries + i)
-> >                                   |       remove_wait_queue(entry->wait=
-_address)
-> >                                   |         spin_lock_irqsave(&wq_head-=
->lock)
-> >
-> > entry->wait_address in poll_freewait() is t->event_wait in cgroup_rmdir=
-().
-> > t->event_wait is free in psi_trigger_destroy before call poll_freewait(=
-),
-> > therefore wq_head in poll_freewait() has been already freed, which woul=
-d
-> > lead to a UAF.
-> >
-> > similar problem for epoll() has been fixed commit c2dbe32d5db5
-> > ("sched/psi: Fix use-after-free in ep_remove_wait_queue()").
-> > epoll wakeup function ep_poll_callback() will empty waitqueue and set
-> > wait_queue_head is NULL when pollflags is POLLFREE and judge pwq->whead
-> > is NULL or not before remove_wait_queue in ep_remove_wait_queue(),
-> > which will fix the UAF bug in ep_remove_wait_queue.
-> >
-> > But poll wakeup function pollwake() doesn't do that. To fix the
-> > problem, we empty waitqueue and set wait_address is NULL in pollwake() =
-when
-> > key is POLLFREE. otherwise in remove_wait_queue, which is similar to
-> > epoll().
-> >
-> > Fixes: 0e94682b73bf ("psi: introduce psi monitor")
-> > Suggested-by: Suren Baghdasaryan <surenb@google.com>
-> > Link: https://lore.kernel.org/all/CAJuCfpEoCRHkJF-=3D1Go9E94wchB4BzwQ1E=
-3vHGWxNe+tEmSJoA@mail.gmail.com/#t
-> > Signed-off-by: Lu Jialin <lujialin4@huawei.com>
-> > ---
-> > v2: correct commit msg and title suggested by Suren Baghdasaryan
-> > ---
-> >  fs/select.c | 20 +++++++++++++++++++-
-> >  1 file changed, 19 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/fs/select.c b/fs/select.c
-> > index 0ee55af1a55c..e64c7b4e9959 100644
-> > --- a/fs/select.c
-> > +++ b/fs/select.c
-> > @@ -132,7 +132,17 @@ EXPORT_SYMBOL(poll_initwait);
-> >
-> >  static void free_poll_entry(struct poll_table_entry *entry)
-> >  {
-> > -     remove_wait_queue(entry->wait_address, &entry->wait);
-> > +     wait_queue_head_t *whead;
-> > +
-> > +     rcu_read_lock();
-> > +     /* If it is cleared by POLLFREE, it should be rcu-safe.
-> > +      * If we read NULL we need a barrier paired with smp_store_releas=
-e()
-> > +      * in pollwake().
-> > +      */
-> > +     whead =3D smp_load_acquire(&entry->wait_address);
-> > +     if (whead)
-> > +             remove_wait_queue(whead, &entry->wait);
-> > +     rcu_read_unlock();
-> >       fput(entry->filp);
-> >  }
-> >
-> > @@ -215,6 +225,14 @@ static int pollwake(wait_queue_entry_t *wait, unsi=
-gned mode, int sync, void *key
-> >       entry =3D container_of(wait, struct poll_table_entry, wait);
-> >       if (key && !(key_to_poll(key) & entry->key))
-> >               return 0;
-> > +     if (key_to_poll(key) & POLLFREE) {
-> > +             list_del_init(&wait->entry);
-> > +             /* wait_address !=3DNULL protects us from the race with
-> > +              * poll_freewait().
-> > +              */
-> > +             smp_store_release(&entry->wait_address, NULL);
-> > +             return 0;
-> > +     }
-> >       return __pollwake(wait, mode, sync, key);
+> From: Huacai Chen <chenhuacai@loongson.cn>
 >
-> I don't understand why this patch is needed.
+> Loongson-3A6000 has SMT (Simultaneous Multi-Threading) support, each
+> physical core has two logical cores (threads). This patch add SMT probe
+> and scheduler support via ACPI PPTT.
 >
-> The last time I looked at POLLFREE, it is only needed because of asynchro=
-nous
-> polls.  See my explanation in the commit message of commit 50252e4b5e989c=
-e6.
+> If SCHED_SMT enabled, Loongson-3A6000 is treated as 4 cores, 8 threads;
+> If SCHED_SMT disabled, Loongson-3A6000 is treated as 8 cores, 8 threads.
+>
+> Remove smp_num_siblings to support HMP (Heterogeneous Multi-Processing).
+>
+> Signed-off-by: Liupu Wang <wangliupu@loongson.cn>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>  arch/loongarch/Kconfig                |  8 +++++++
+>  arch/loongarch/include/asm/acpi.h     |  9 ++++++++
+>  arch/loongarch/include/asm/cpu-info.h |  1 +
+>  arch/loongarch/kernel/acpi.c          | 32 +++++++++++++++++++++++++++
+>  arch/loongarch/kernel/proc.c          |  1 +
+>  arch/loongarch/kernel/smp.c           | 24 +++++++++-----------
+>  drivers/acpi/Kconfig                  |  2 +-
+>  7 files changed, 62 insertions(+), 15 deletions(-)
+>
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index d38b066fc931..6d36b681068e 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -5,6 +5,7 @@ config LOONGARCH
+>         select ACPI
+>         select ACPI_GENERIC_GSI if ACPI
+>         select ACPI_MCFG if ACPI
+> +       select ACPI_PPTT if ACPI
+>         select ACPI_SYSTEM_POWER_STATES_SUPPORT if ACPI
+>         select ARCH_BINFMT_ELF_STATE
+>         select ARCH_ENABLE_MEMORY_HOTPLUG
+> @@ -372,6 +373,13 @@ config EFI_STUB
+>           This kernel feature allows the kernel to be loaded directly by
+>           EFI firmware without the use of a bootloader.
+>
+> +config SCHED_SMT
+> +       bool "SMT scheduler support"
+> +       default y
+> +       help
+> +         Improves scheduler's performance when there are multiple
+> +         threads in one physical core.
+> +
+>  config SMP
+>         bool "Multi-Processing support"
+>         help
+> diff --git a/arch/loongarch/include/asm/acpi.h b/arch/loongarch/include/asm/acpi.h
+> index 976a810352c6..5c78b5d2bfb7 100644
+> --- a/arch/loongarch/include/asm/acpi.h
+> +++ b/arch/loongarch/include/asm/acpi.h
+> @@ -13,6 +13,7 @@ extern int acpi_strict;
+>  extern int acpi_disabled;
+>  extern int acpi_pci_disabled;
+>  extern int acpi_noirq;
+> +extern int pptt_enabled;
+>
+>  #define acpi_os_ioremap acpi_os_ioremap
+>  void __iomem *acpi_os_ioremap(acpi_physical_address phys, acpi_size size);
+> @@ -30,6 +31,14 @@ static inline bool acpi_has_cpu_in_madt(void)
+>  }
+>
+>  extern struct list_head acpi_wakeup_device_list;
+> +extern struct acpi_madt_core_pic acpi_core_pic[NR_CPUS];
+> +
+> +extern int __init parse_acpi_topology(void);
+> +
+> +static inline u32 get_acpi_id_for_cpu(unsigned int cpu)
+> +{
+> +       return acpi_core_pic[cpu_logical_map(cpu)].processor_id;
+> +}
+>
+>  #endif /* !CONFIG_ACPI */
+>
+> diff --git a/arch/loongarch/include/asm/cpu-info.h b/arch/loongarch/include/asm/cpu-info.h
+> index cd73a6f57fe3..900589cb159d 100644
+> --- a/arch/loongarch/include/asm/cpu-info.h
+> +++ b/arch/loongarch/include/asm/cpu-info.h
+> @@ -54,6 +54,7 @@ struct cpuinfo_loongarch {
+>         struct cache_desc       cache_leaves[CACHE_LEAVES_MAX];
+>         int                     core;   /* physical core number in package */
+>         int                     package;/* physical package number */
+> +       int                     global_id; /* physical global thread number */
+>         int                     vabits; /* Virtual Address size in bits */
+>         int                     pabits; /* Physical Address size in bits */
+>         unsigned int            ksave_mask; /* Usable KSave mask. */
+> diff --git a/arch/loongarch/kernel/acpi.c b/arch/loongarch/kernel/acpi.c
+> index 98f431157e4c..9450e09073eb 100644
+> --- a/arch/loongarch/kernel/acpi.c
+> +++ b/arch/loongarch/kernel/acpi.c
+> @@ -33,6 +33,8 @@ u64 acpi_saved_sp;
+>
+>  #define PREFIX                 "ACPI: "
+>
+> +struct acpi_madt_core_pic acpi_core_pic[NR_CPUS];
+> +
+>  void __init __iomem * __acpi_map_table(unsigned long phys, unsigned long size)
+>  {
+>
+> @@ -99,6 +101,7 @@ acpi_parse_processor(union acpi_subtable_headers *header, const unsigned long en
+>
+>         acpi_table_print_madt_entry(&header->common);
+>  #ifdef CONFIG_SMP
+> +       acpi_core_pic[processor->core_id] = *processor;
+>         set_processor_mask(processor->core_id, processor->flags);
+>  #endif
+>
+> @@ -140,6 +143,35 @@ static void __init acpi_process_madt(void)
+>         loongson_sysconf.nr_cpus = num_processors;
+>  }
+>
+> +int pptt_enabled;
+> +
+> +int __init parse_acpi_topology(void)
+> +{
+> +       int cpu, topology_id;
+> +
+> +       for_each_possible_cpu(cpu) {
+> +               topology_id = find_acpi_cpu_topology(cpu, 0);
+> +               if (topology_id < 0) {
+> +                       pr_warn("Invalid BIOS PPTT\n");
+> +                       return -ENOENT;
+> +               }
+> +
+> +               if (acpi_pptt_cpu_is_thread(cpu) <= 0)
+> +                       cpu_data[cpu].core = topology_id;
+> +               else {
+> +                       topology_id = find_acpi_cpu_topology(cpu, 1);
+> +                       if (topology_id < 0)
+> +                               return -ENOENT;
+> +
+> +                       cpu_data[cpu].core = topology_id;
+> +               }
+> +       }
+> +
+> +       pptt_enabled = 1;
+> +
+> +       return 0;
+> +}
+> +
+>  #ifndef CONFIG_SUSPEND
+>  int (*acpi_suspend_lowlevel)(void);
+>  #else
+> diff --git a/arch/loongarch/kernel/proc.c b/arch/loongarch/kernel/proc.c
+> index 0d82907b5404..d4b270630bb5 100644
+> --- a/arch/loongarch/kernel/proc.c
+> +++ b/arch/loongarch/kernel/proc.c
+> @@ -49,6 +49,7 @@ static int show_cpuinfo(struct seq_file *m, void *v)
+>         seq_printf(m, "processor\t\t: %ld\n", n);
+>         seq_printf(m, "package\t\t\t: %d\n", cpu_data[n].package);
+>         seq_printf(m, "core\t\t\t: %d\n", cpu_data[n].core);
+> +       seq_printf(m, "global_id\t\t: %d\n", cpu_data[n].global_id);
+>         seq_printf(m, "CPU Family\t\t: %s\n", __cpu_family[n]);
+>         seq_printf(m, "Model Name\t\t: %s\n", __cpu_full_name[n]);
+>         seq_printf(m, "CPU Revision\t\t: 0x%02x\n", version);
+> diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
+> index ed167e244cda..062f3fe8df60 100644
+> --- a/arch/loongarch/kernel/smp.c
+> +++ b/arch/loongarch/kernel/smp.c
+> @@ -8,6 +8,7 @@
+>   * Copyright (C) 2000, 2001 Silicon Graphics, Inc.
+>   * Copyright (C) 2000, 2001, 2003 Broadcom Corporation
+>   */
+> +#include <linux/acpi.h>
+>  #include <linux/cpu.h>
+>  #include <linux/cpumask.h>
+>  #include <linux/init.h>
+> @@ -37,10 +38,6 @@ EXPORT_SYMBOL(__cpu_number_map);
+>  int __cpu_logical_map[NR_CPUS];                /* Map logical to physical */
+>  EXPORT_SYMBOL(__cpu_logical_map);
+>
+> -/* Number of threads (siblings) per CPU core */
+> -int smp_num_siblings = 1;
+> -EXPORT_SYMBOL(smp_num_siblings);
+> -
+>  /* Representing the threads (siblings) of each logical CPU */
+>  cpumask_t cpu_sibling_map[NR_CPUS] __read_mostly;
+>  EXPORT_SYMBOL(cpu_sibling_map);
+> @@ -228,9 +225,12 @@ void __init loongson_prepare_cpus(unsigned int max_cpus)
+>  {
+>         int i = 0;
+>
+> +       parse_acpi_topology();
+> +
+>         for (i = 0; i < loongson_sysconf.nr_cpus; i++) {
+>                 set_cpu_present(i, true);
+>                 csr_mail_send(0, __cpu_logical_map[i], 0);
+> +               cpu_data[i].global_id = __cpu_logical_map[i];
+>         }
+>
+>         per_cpu(cpu_state, smp_processor_id()) = CPU_ONLINE;
+> @@ -271,10 +271,10 @@ void loongson_init_secondary(void)
+>         numa_add_cpu(cpu);
+>  #endif
+>         per_cpu(cpu_state, cpu) = CPU_ONLINE;
+> -       cpu_data[cpu].core =
+> -                    cpu_logical_map(cpu) % loongson_sysconf.cores_per_package;
+>         cpu_data[cpu].package =
+>                      cpu_logical_map(cpu) / loongson_sysconf.cores_per_package;
+> +       cpu_data[cpu].core = pptt_enabled ? cpu_data[cpu].core :
+> +                    cpu_logical_map(cpu) % loongson_sysconf.cores_per_package;
+>  }
+>
+>  void loongson_smp_finish(void)
+> @@ -380,14 +380,10 @@ static inline void set_cpu_sibling_map(int cpu)
+>
+>         cpumask_set_cpu(cpu, &cpu_sibling_setup_map);
+>
+> -       if (smp_num_siblings <= 1)
+> -               cpumask_set_cpu(cpu, &cpu_sibling_map[cpu]);
+> -       else {
+> -               for_each_cpu(i, &cpu_sibling_setup_map) {
+> -                       if (cpus_are_siblings(cpu, i)) {
+> -                               cpumask_set_cpu(i, &cpu_sibling_map[cpu]);
+> -                               cpumask_set_cpu(cpu, &cpu_sibling_map[i]);
+> -                       }
+> +       for_each_cpu(i, &cpu_sibling_setup_map) {
+> +               if (cpus_are_siblings(cpu, i)) {
+> +                       cpumask_set_cpu(i, &cpu_sibling_map[cpu]);
+> +                       cpumask_set_cpu(cpu, &cpu_sibling_map[i]);
+>                 }
+>         }
+>  }
+> diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
+> index ccbeab9500ec..00dd309b6682 100644
+> --- a/drivers/acpi/Kconfig
+> +++ b/drivers/acpi/Kconfig
+> @@ -542,10 +542,10 @@ config ACPI_PFRUT
+>
+>  if ARM64
+>  source "drivers/acpi/arm64/Kconfig"
+> +endif
+>
+>  config ACPI_PPTT
+>         bool
+> -endif
 
-Ah, I missed that. Thanks for the correction.
+x86 doesn't use PPTT as of today.  Why do you enable it for them?
 
->
-> In summary, POLLFREE solves the problem of polled waitqueues whose lifeti=
-me is
-> tied to the current task rather than to the file being polled.  Also refe=
-r to
-> the comment above wake_up_pollfree(), which mentions this.
->
-> fs/select.c is synchronous polling, not asynchronous.  Therefore, it shou=
-ld not
-> need to handle POLLFREE.
->
-> If there's actually a bug here, most likely it's a bug in psi_trigger_pol=
-l()
-> where it is using a waitqueue whose lifetime is tied to neither the curre=
-nt task
-> nor the file being polled.  That needs to be fixed.
-
-Yeah. We discussed this issue in
-https://lore.kernel.org/all/CAJuCfpFb0J5ZwO6kncjRG0_4jQLXUy-_dicpH5uGiWP8aK=
-YEJQ@mail.gmail.com
-and the root cause is that cgroup_file_release() where
-psi_trigger_destroy() is called is not tied to the cgroup file's real
-lifetime (see my analysis here:
-https://lore.kernel.org/all/CAJuCfpFZ3B4530TgsSHqp5F_gwfrDujwRYewKReJru=3D=
-=3DMdEHQg@mail.gmail.com/#t).
-I guess it's time to do a deeper surgery and figure out a way to call
-psi_trigger_destroy() when the polled cgroup file is actually being
-destroyed. I'll take a closer look into this later today.
-A fix will likely require some cgroup or kernfs code changes, so
-CC'ing Tejun for visibility.
-Thanks,
-Suren.
-
->
-> - Eric
+>  config ACPI_PCC
+>         bool "ACPI PCC Address Space"
+> --
