@@ -2,153 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F72672FF25
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:53:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B104C72FF27
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:54:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244759AbjFNMxp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 14 Jun 2023 08:53:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51076 "EHLO
+        id S244771AbjFNMyC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 14 Jun 2023 08:54:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244757AbjFNMxn (ORCPT
+        with ESMTP id S236253AbjFNMyA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 08:53:43 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD15110EC;
-        Wed, 14 Jun 2023 05:53:42 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1a6bd78fd14so1675515fac.2;
-        Wed, 14 Jun 2023 05:53:42 -0700 (PDT)
+        Wed, 14 Jun 2023 08:54:00 -0400
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7091BF7
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:53:58 -0700 (PDT)
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-53482b44007so3517397a12.2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:53:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686747221; x=1689339221;
+        d=1e100.net; s=20221208; t=1686747238; x=1689339238;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3XWEKvAMOuR1l+m/B+1m8slMbaOUqRu1ZrBY3HpAHis=;
-        b=G+OasIuVzyG3o+cQ0PchHEXjMA0q7mNHLgSeyOzYlxFwQRkFZ1UR+kNOyI3tc8rS7/
-         VA6t6Jh789Aqiiw/5TbpVde2InRlEXBolmloPm/zbZ+HRUDjz0uUCJAfpms/iSzKyyKS
-         mGtfx3cDGnwkxac6lrHzMG2/BcbPP7kxeIMB7O3VLGSWDhS59tkVjqmm8QJ0RHmoOZ21
-         /QBOAapg3uah51yABW/Rz3xLtnMaZqZ1fMk/jU/8OX/Jb8VKwfmVaKhJ8kTcNtmrYM3x
-         TPfGPgdnUA7UuZdu3f49w4d0ylV1ZtnJATJ5sgp3uF5eDnSWTTMTzNg6gM93Ob/fGDdk
-         BBbw==
-X-Gm-Message-State: AC+VfDwxpRiQi94vWhOeKYk6S4ZJURYJ8pzpQZju2xU2+LeohMT4gllx
-        lF0njQlCl7VyOYACOji3SyrVKppLomEwvA==
-X-Google-Smtp-Source: ACHHUZ5hrll0i2MDXIkPOW4ZPUZghO1IsYfpdiPJaLb8RA3iekMg9kAqz236/pPcQYCizVWFr4xm0Q==
-X-Received: by 2002:a05:6870:5142:b0:177:ad57:cb36 with SMTP id z2-20020a056870514200b00177ad57cb36mr12505202oak.27.1686747221690;
-        Wed, 14 Jun 2023 05:53:41 -0700 (PDT)
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com. [209.85.161.45])
-        by smtp.gmail.com with ESMTPSA id na1-20020a0568706c0100b0019a291d1672sm4962145oab.26.2023.06.14.05.53.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 05:53:40 -0700 (PDT)
-Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-55b171c06dcso546464eaf.2;
-        Wed, 14 Jun 2023 05:53:39 -0700 (PDT)
-X-Received: by 2002:a05:6359:a26:b0:129:c25e:1cb0 with SMTP id
- el38-20020a0563590a2600b00129c25e1cb0mr8260221rwb.30.1686747219592; Wed, 14
- Jun 2023 05:53:39 -0700 (PDT)
+        bh=kNLStUqoRTHYUkoWELHANj0sv/i/i34CB8/DedqsBvY=;
+        b=LQimxyD+G1fu8WSlHi5HQn15VoFw8sMTOwDAwXkaC0B/BiAIWQa1CgoxZCrV82QrY1
+         9B11+VFC/pqvuHYi9T4MiEW0fjYsnEehEjwSkoPOk0IKlwckAu0i8slxYVlncgIAz+L4
+         KVoruWY7LEiJXyUIWkbpk4rXCZgD5A3AStakX87K5/5kyQtOr55XBWtxce9RuZmWh5gW
+         07J7CuifeKjjqsN5uG4sg8K3fvPaWLyTgbfzzE9sxHZAfvfU8jeNe6MB74UwhY247v/h
+         j/Iwfyd8Cy2onXD8eFCgRXisBQgm7fA+xWN7HuUEmtE0ceA+qWBQlgQgE9yYCWQWC5dN
+         Xuuw==
+X-Gm-Message-State: AC+VfDwstpmNefYT5Hu/qL3OB8JmOIZiioA3K9r5MT3ePxqrVbja8F/c
+        MYIh4/I+X1FhnYMc4EwhNK8nSjoa0JI0P6WyvtU=
+X-Google-Smtp-Source: ACHHUZ5eh85pqktayCn/s1rK/8wKCn5ax5dPWAS4Xegp8r13CWBXCddQjW8HFyK0x5dGj01YKDE0cRD6fQNeqFkUIzI=
+X-Received: by 2002:a17:90a:19c4:b0:25b:8bed:d13b with SMTP id
+ 4-20020a17090a19c400b0025b8bedd13bmr1050056pjj.39.1686747237691; Wed, 14 Jun
+ 2023 05:53:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230614104759.228372-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20230614104759.228372-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20230614104759.228372-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 14 Jun 2023 14:53:26 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWApGKsS8DU7-=6j6WaRBDZ8Amig2NtA8f8=PbGKoFQjQ@mail.gmail.com>
-Message-ID: <CAMuHMdWApGKsS8DU7-=6j6WaRBDZ8Amig2NtA8f8=PbGKoFQjQ@mail.gmail.com>
-Subject: Re: [PATCH v9 3/6] riscv: mm: dma-noncoherent: nonstandard cache
- operations support
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-riscv@lists.infradead.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20230601075333.14021-1-ihuguet@redhat.com> <87sfb1oz13.fsf@meer.lwn.net>
+ <8f27ad5f-9a9c-3db0-a934-88e1810974f3@digikod.net> <CACT4oue7DgUf+65yat+6t9VrSji1N0njxunObHbRzfjMCAPmYQ@mail.gmail.com>
+In-Reply-To: <CACT4oue7DgUf+65yat+6t9VrSji1N0njxunObHbRzfjMCAPmYQ@mail.gmail.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Wed, 14 Jun 2023 21:53:46 +0900
+Message-ID: <CAMZ6RqJ66wxVAcveVunQ3W6sYihQM43Hi44D7TAee_nUPk+ZXA@mail.gmail.com>
+Subject: Re: [PATCH v4] Add .editorconfig file for basic formatting
+To:     =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@redhat.com>
+Cc:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
+        Jonathan Corbet <corbet@lwn.net>, ojeda@kernel.org,
+        danny@kdrag0n.dev, masahiroy@kernel.org, jgg@nvidia.com,
+        linux-kernel@vger.kernel.org, joe@perches.com,
+        linux@rasmusvillemoes.dk, willy@infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
-
-On Wed, Jun 14, 2023 at 12:48 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On Wed. 14 Jun. 2023 at 20:40, Íñigo Huguet <ihuguet@redhat.com> wrote:
+> On Fri, Jun 9, 2023 at 3:23 PM Mickaël Salaün <mic@digikod.net> wrote:
+> > On 09/06/2023 09:50, Jonathan Corbet wrote:
+> > > Íñigo Huguet <ihuguet@redhat.com> writes:
+> > >
+> > >> EditorConfig is a specification to define the most basic code formatting
+> > >> stuff, and it's supported by many editors and IDEs, either directly or
+> > >> via plugins, including VSCode/VSCodium, Vim, emacs and more.
+> > >>
+> > >> It allows to define formatting style related to indentation, charset,
+> > >> end of lines and trailing whitespaces. It also allows to apply different
+> > >> formats for different files based on wildcards, so for example it is
+> > >> possible to apply different configs to *.{c,h}, *.py and *.rs.
+> > >>
+> > >> In linux project, defining a .editorconfig might help to those people
+> > >> that work on different projects with different indentation styles, so
+> > >> they cannot define a global style. Now they will directly see the
+> > >> correct indentation on every fresh clone of the project.
+> > >>
+> > >> See https://editorconfig.org
+> > >>
+> > >> Co-developed-by: Danny Lin <danny@kdrag0n.dev>
+> > >> Signed-off-by: Danny Lin <danny@kdrag0n.dev>
+> > >> Signed-off-by: Íñigo Huguet <ihuguet@redhat.com>
+> > >
+> > > So I must confess to still being really nervous about installing a file
+> > > that will silently reconfigure the editors of everybody working on the
+> > > kernel source; I wish there were a straightforward way to do this as an
+> > > opt-in thing.  We're talking about creating a flag-day behavioral change
+> > > for, potentially, thousands of kernel developers.  Something tells me
+> > > that we might just hear from a few of them.
+> > >
+> > > I wonder if we should, instead, ship a file like this as something like
+> > > Documentation/process/editorconfig, then provide a "make editorconfig"
+> > > command that installs it in the top-level directory for those who want
+> > > it?
+> > >
+> > > Or perhaps I'm worrying too much?
+> >
+> > This is a legitimate concern. :)
+> >
+> > A safe approach would be to rename the ".editorconfig" file to something
+> > like ".editorconfig.default" and create ".editorconfig" symlinks in all
+> > (parent) directories where enforcing this rules don't change anything
+> > because the children files are already correctly formatted. Again, a
+> > script (provided in another patch) to check and potentially update such
+> > links would be useful.
+> >
 >
-> Introduce support for nonstandard noncoherent systems in the RISC-V
-> architecture. It enables function pointer support to handle cache
-> management in such systems.
+> I can't think of an easy way to create that script. Formatting is done
+> by each editor using the rules from .editorconfig, but I didn't find
+> any available good script or tool to check if a file complies or not.
+> Creating that script is not trivial.
 >
-> This patch adds a new configuration option called
-> "RISCV_NONSTANDARD_CACHE_OPS." This option is a boolean flag that
-> depends on "RISCV_DMA_NONCOHERENT" and enables the function pointer
-> support for cache management in nonstandard noncoherent systems.
+> I neither think it is good to enable it for some folders and not for
+> others: developers will be surprised of having assistance in some
+> files and not in others, I would be bothered with such inconsistency.
 >
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> v8 -> v9
-> * New patch
+> Right now I see 2 possibilities:
+> - Provide an .editorconfig.default so those that want to use it, can
+> do it. But I wouldn't mess with cherry-picking directories that
+> already complies and those that don't, just the developer chooses to
+> use it or not, and that's all.
+> - Provide an .editorconfig directly, and those that don't want to use
+> it, either disable it in their editors or manually delete the file.
+>
+> Please tell me what approach you prefer.
 
-Thanks for your patch!
+Personally, I vote for the latter. My honest opinion is that we are
+putting too much consideration into the risk of rejections.
 
-> --- /dev/null
-> +++ b/arch/riscv/include/asm/dma-noncoherent.h
-> @@ -0,0 +1,28 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (C) 2023 Renesas Electronics Corp.
-> + */
-> +
-> +#ifndef __ASM_DMA_NONCOHERENT_H
-> +#define __ASM_DMA_NONCOHERENT_H
-> +
-> +#include <linux/dma-direct.h>
-> +
-> +/*
-> + * struct riscv_cache_ops - Structure for CMO function pointers
-> + *
-> + * @clean: Function pointer for clean cache
-> + * @inval: Function pointer for invalidate cache
-> + * @flush: Function pointer for flushing the cache
-> + */
-> +struct riscv_cache_ops {
-> +       void (*clean)(phys_addr_t paddr, unsigned long size);
-> +       void (*inval)(phys_addr_t paddr, unsigned long size);
-> +       void (*flush)(phys_addr_t paddr, unsigned long size);
-> +};
+Íñigo previously stated that editors such as Kate can not opt out. I
+think that the reason is simply that no one has complained about it so
+far. I did some research on the internet with the keyword "kate
+disable editorconfig", and nothing  relevant appeared. A deeper
+research made me found this:
 
-I guess the naming can be improved?
+  KatePart has support for reading configurations from
+  .editorconfig files, when the editorconfig library is
+  installed. KatePart automatically searches for a .editorconfig
+  whenever you open a file. It gives priority to .kateconfig
+  files, though.
 
-.clean() is used by arch_dma_cache_wback() / arch_wb_cache_pmem(),
-.inval() is used by arch_dma_cache_inv() / arch_invalidate_pmem(),
-.flush() is used by arch_dma_cache_wback_inv() / arch_dma_prep_coherent().
+source: https://docs.kde.org/stable5/en/kate/katepart/config-variables.html
 
-Perhaps .wback(), .inv(), .wback_inv() are more clear?
+So it appears that for Kate, installing the editorconfig lib is a
+prerequisite. I think it falls in the opt-in category.
 
-I understand this is subject to bikeshedding...
-But hey, how many innocent bits of data have already been lost due
-to cache semantic mismatches?
+Is there really an editor with default opt-in and no options to
+opt-out? I doubt...
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+I really think we should have the .editorconfig at the root and for
+the rare edge cases where the user really wants to opt-out, I
+sincerely believe that there will be solutions. I have seen many
+projects using it and I do not recall push backs or complaints.
