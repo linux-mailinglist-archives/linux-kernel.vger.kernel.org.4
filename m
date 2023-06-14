@@ -2,73 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0039872F50D
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 08:42:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC23A72F512
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 08:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234417AbjFNGm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 02:42:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51126 "EHLO
+        id S234762AbjFNGnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 02:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233721AbjFNGmx (ORCPT
+        with ESMTP id S233721AbjFNGnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 02:42:53 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C841A3;
-        Tue, 13 Jun 2023 23:42:52 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-310b631c644so512977f8f.0;
-        Tue, 13 Jun 2023 23:42:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686724970; x=1689316970;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tmdEkfLeOgGxB3Q9AIBuyne+hWdSajk51LvARVCqqic=;
-        b=bb5a5z6Jj/LuTLtvf9GgxMLUdTQKDG9xeM7fb/9DhVTvbOQKwhKhvRsQMx1mdV2EjB
-         1P1WkD89YMLWXoxF+UwharvRk/SKA7mUfMVJfNFjC4d9OUKfaXXNfIA5/Bd8uslIZsl+
-         Ws1hNMvTtkDo+0qMpEohZjQcDN8yi2ovWMhhUr/yp5mozx0+W8Skh3v4qezHtBvGCIBX
-         rHpgy+cj6mSVBcVcG4Csjd4PAdhmC9RGNvUauCMEQ9SZlSTEMrTTElvsxN1UuAylahXP
-         O4DtqU8Ua2KvLTzIUhJTmHeNjP+9uNWR1ZTTon7DfunYdZlhzhcygzd3g9c6+6uv7X1A
-         cFAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686724970; x=1689316970;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tmdEkfLeOgGxB3Q9AIBuyne+hWdSajk51LvARVCqqic=;
-        b=TeZaeLd6akPXSwsJmgC/f0+I0FDjtGBJWghA/1VPUTwyo70T1fVmp48vJHs41MMjeU
-         Qu9WL/UatFer+yzcbrNDkMZ7BqGV0tU3an6KAz2N729eEGquk2YbzLgKe+2P/at7fbx2
-         QCa8V6oZy7rYConIKeXCJx3lzdMcSXyhApBvZhbu0Hb2uAiRt0zq0NeJz2WDeUqXLj9N
-         AWKhyd1L8df8LVs0OiYgGNdwIkZJufoRSnB5Uk6ZNsR8PXrFSn+tovZhbPfwhVghbINB
-         Ex8ohdHLj0wbM4ws5Wz7ocafmnYUS0UorBLmJSRcAV/HWTqxdZmVfa2wqd0rhyHSmydM
-         34Gw==
-X-Gm-Message-State: AC+VfDw7mH6SdqRKWglSaVdVQ8KnHlsUarv3raVR6VsQ7UJ6JGkkTM5u
-        iN+AgsaT5DfMJuJdnjza9Z4=
-X-Google-Smtp-Source: ACHHUZ6TYA0Ii1kImtzYdAbRoLNit9gVczXVEMxUjSMRl8RC/73ZOWvWsBHLwgdfFVWQ0ksjSQy/xg==
-X-Received: by 2002:a05:6000:46:b0:301:8551:446a with SMTP id k6-20020a056000004600b003018551446amr10343725wrx.2.1686724970365;
-        Tue, 13 Jun 2023 23:42:50 -0700 (PDT)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id e17-20020a05600c219100b003f18b942338sm16490823wme.3.2023.06.13.23.42.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 23:42:49 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Wed, 14 Jun 2023 08:42:47 +0200
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-        bpf@vger.kernel.org
-Subject: Re: [RFC] fprobe call of rethook_try_get faults
-Message-ID: <ZIlhZ6gbhfvmZP2r@krava>
-References: <ZICzdpvp46Xk1rIv@krava>
- <20230613174844.4d50991d@gandalf.local.home>
+        Wed, 14 Jun 2023 02:43:43 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42DE41A3;
+        Tue, 13 Jun 2023 23:43:42 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35E6hRFs028347;
+        Wed, 14 Jun 2023 06:43:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=OHJVjMCHbOTg9z9Hw3Zobx6VP/+k/cKz+YRT4tNpl4A=;
+ b=ZOIfFzxycPj5wZiFJb6+A5sttY3rEjPOe55zWFuAzThhjMGOF3q2pA+Sjyhmyd9/SGWL
+ pfdWFHzaWglpRpVLS38Vo4aoLxgLfBKsF9KlO5I4zD2hltshYo0eczhC2cryw+GZZ3Cp
+ lYnosQkf+jS73nrFeNzR9A1kh3y3NexUBMCLbOWRsQywcaaOcM4uLPjiORvCGwdU0IOS
+ yNTCcz+Mt+iatSrefx9180w26sSCw093ayR6zeVBTBdZMhRxBQ4vuJ2mkDF3Lvd6X/N+
+ KtUtSmq24BrAo2CCSXulfs3SXj4/bDLib/dVZOZAw0vrYwbzZtqj99R+U/Dcnm1DaDvW Hw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r6q4r27g6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Jun 2023 06:43:39 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35E6hbc0026999
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Jun 2023 06:43:37 GMT
+Received: from [10.217.198.86] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 13 Jun
+ 2023 23:43:34 -0700
+Message-ID: <443b00b1-76b8-c31d-53d3-42e3592d26e8@quicinc.com>
+Date:   Wed, 14 Jun 2023 12:13:19 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230613174844.4d50991d@gandalf.local.home>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 0/2] Add provision to keep idle state disabled
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_lsrao@quicinc.com>,
+        <quic_mkshah@quicinc.com>
+References: <20230608085544.16211-1-quic_tnimkar@quicinc.com>
+ <CAPDyKFqhVkMH42Vz0+a62j5kFh+R_CvGrcSU7hxoW__tjOhfLw@mail.gmail.com>
+Content-Language: en-US
+From:   Tushar Nimkar <quic_tnimkar@quicinc.com>
+In-Reply-To: <CAPDyKFqhVkMH42Vz0+a62j5kFh+R_CvGrcSU7hxoW__tjOhfLw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: H5mFTQsSmriRQmg1VqrrhotXgjuuIHsw
+X-Proofpoint-ORIG-GUID: H5mFTQsSmriRQmg1VqrrhotXgjuuIHsw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-14_03,2023-06-12_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ spamscore=0 mlxscore=0 mlxlogscore=753 clxscore=1015 priorityscore=1501
+ adultscore=0 bulkscore=0 suspectscore=0 impostorscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306140057
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,63 +83,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 05:48:44PM -0400, Steven Rostedt wrote:
-> On Wed, 7 Jun 2023 09:42:30 -0700
-> Jiri Olsa <olsajiri@gmail.com> wrote:
-> 
-> > I can't really reliable reproduce this, but while checking the code, I wonder
-> > we should call rethook_free only after we call unregister_ftrace_function like
-> > in the patch below
-> 
-> Yeah, I think you're right!
-> 
-> > 
-> > jirka
-> > 
-> > 
-> > ---
-> > diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
-> > index 18d36842faf5..0121e8c0d54e 100644
-> > --- a/kernel/trace/fprobe.c
-> > +++ b/kernel/trace/fprobe.c
-> > @@ -364,19 +364,13 @@ int unregister_fprobe(struct fprobe *fp)
-> >  		    fp->ops.saved_func != fprobe_kprobe_handler))
-> >  		return -EINVAL;
-> >  
-> > -	/*
-> > -	 * rethook_free() starts disabling the rethook, but the rethook handlers
-> > -	 * may be running on other processors at this point. To make sure that all
-> > -	 * current running handlers are finished, call unregister_ftrace_function()
-> > -	 * after this.
-> > -	 */
-> > -	if (fp->rethook)
-> > -		rethook_free(fp->rethook);
-> 
-> The above only waits for RCU to finish and then starts to free rethook.
-> 
-> This also means that something could be on the trampoline already and was
-> preempted. It could be that this code path gets preempted. Anyway, I don't
-> see how freeing rethook is safe before disabling all users.
-> 
-> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Thanks for response Ulf.
 
-thanks, I'll send formal patch
+On 6/12/2023 3:56 PM, Ulf Hansson wrote:
+> On Thu, 8 Jun 2023 at 10:56, Tushar Nimkar <quic_tnimkar@quicinc.com> wrote:
+>>
+>> CPUidle already has CPUIDLE_FLAG_OFF to keep idle state disabled,
+>> Lets extend the support to set this flag using device tree.
+>>
+>> This allows to keep an idle state disabled and they can be enabled back using
+>> sysfs after certain point using below command.
+>>
+>> echo N > /sys/devices/system/cpu/cpuX/cpuidle/stateX/disable
+>>
+>> This helps in cases where vendors want to keep cpuidle off until home
+>> screen comes up. In the past attempt was done at [1] but it was not considered
+>> safe option to export cpu_idle_poll_ctrl().
+>>
+>> [1] https://patchwork.kernel.org/project/linux-arm-msm/patch/1637831676-32737-1-git-send-email-quic_mkshah@quicinc.com/
+> 
+> Before considering this, I don't recall if I ever received a reply to
+> my earlier suggestion to the above thread. So, let me repeat my
+> question.
+> 
+> I am wondering if a similar improvement can be achieved by
+> modularizing the cpuidle-psci driver. If insmodding it after the
+> homescreen, we allow only ARM WFI during boot. This should achieve the
+> similar results as we get with $subject series, right?
+> 
+> [...]
+> 
+This will not work for targets which does not have DLKM support.
 
-jirka
+>>
+>> Thanks,
+>> Tushar Nimkar.
+>>
+>> Tushar Nimkar (2):
+>>    dt-bindings: cpu: idle-states: Add idle-state-disabled property
+>>    cpuidle: dt: Add support to keep idle state disabled
+>>
+>>   Documentation/devicetree/bindings/cpu/idle-states.yaml | 8 ++++++++
+>>   drivers/cpuidle/dt_idle_states.c                       | 3 +++
+>>   2 files changed, 11 insertions(+)
+>>
+> 
+> Kind regards
+> Uffe
 
-> 
-> -- Steve
-> 
-> 
-> > -
-> >  	ret = unregister_ftrace_function(&fp->ops);
-> >  	if (ret < 0)
-> >  		return ret;
-> >  
-> > +	if (fp->rethook)
-> > +		rethook_free(fp->rethook);
-> > +
-> >  	ftrace_free_filter(&fp->ops);
-> >  
-> >  	return ret;
-> 
+Thanks,
+Tushar
