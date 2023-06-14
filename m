@@ -2,214 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAD2F730ACD
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 00:34:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 200D6730AD0
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 00:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236786AbjFNWe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 18:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36750 "EHLO
+        id S236799AbjFNWgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 18:36:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236902AbjFNWex (ORCPT
+        with ESMTP id S229864AbjFNWgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 18:34:53 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40DA4294E
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 15:34:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686782067; x=1718318067;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=X3oM/hJmuaEqQaZ7oWRy5P6KizZHbnS2lHGxv26MKBU=;
-  b=JBM34FcxQfNDUJRsXvsO5wgVCCo1cy5JLTfPfD9p5KlsZBv+lgoLslLn
-   G0guI9ielwakcyzW4SlH5RVV++2hZSvK9DAaTBQhXcT4+zYxVTtchFEte
-   Qy92i/fDR5/NOts/NxnFPkGHGY9rMrl43ff7joFN0Qf3T80k9TDlOw1Wq
-   tsqeFo6cvzzQhTnIc40UfRcAyhgnhFRM/I175BddhQM8TaKW8AtE9H+jm
-   m2fayN4SsJwdwLTJdHRKmQG0A3db/02I4av7JbUo1PLDsjXqAp/V3lRQc
-   aRrDI/Z4SF8zVc9lsk8jGLzSK8kWsM4uCF5T4DmEnJxlIdRJG40RrLWIx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="362126311"
-X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="362126311"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 15:33:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="824990104"
-X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="824990104"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga002.fm.intel.com with ESMTP; 14 Jun 2023 15:33:23 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 14 Jun 2023 15:33:22 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Wed, 14 Jun 2023 15:33:22 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.175)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Wed, 14 Jun 2023 15:33:22 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HbuAAakZSt/vkbALqrnFucbeCrXhGPkDNcHvRyiqIR84a3fVj7LeUGXWT3Ad4PUC3ZhuXw/YFlgAEKebXYBxREybx5neGUQ5sOwKYLcNOIOPJCDRG1TzPbl5S30eRhbev72pFUsHzxXfa4XbOdsp3GJcGmptFLF9jKRGAglHbKKTHDGHRgohXn+b8PNKhfe3qZiJnvZUXqrG14IXNiR48WHDRF7YWT7xodWSp7KMkZOZ/yQiyoKGaG0F5kWpfm7vNkVWCqIjXrcOYzk6EaM0qWVNK3ySvS7fc2GJYzYtETEJMsLj3Ib/iQ6MN7W7106gIXNwcQTLq3tVKJIR0SH1/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LMJN1IR42o5oCP3ceTzm+dbYKF4qxWrDNH2M95HWOFk=;
- b=nCZIert1u4iGd5TQA+SKrmC+dP6YURRBfK0IyR63PZligT57Cx3mFv5Hst3qv/ItuJQ+3X4tiNwSP3rTM6ZBDsJVeDB7R9p+WCfV07+3WgrsbR2YMRbbLa992qUnVcm+oHwAidxa+RGj53PdoKBSJj7vfZXsNprD2PzfqTAz9zyUmw2xWHyBRCoRPW/4WrvDxB5TwEcew3Ppc8ENCqP+xydtxllxE6k5dy/H8eXC+POB8It3LT8im6thp0bEI+Wiu5n7s0XiFX+PZNtlRCHnLpHy1sOXonEheStzmBu+p+Wg9u390Q+mE1AiuvUUhg8NqwhtQq8jyvwKkcsP7WIx6w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB5488.namprd11.prod.outlook.com (2603:10b6:5:39d::5) by
- SJ2PR11MB8403.namprd11.prod.outlook.com (2603:10b6:a03:53c::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.32; Wed, 14 Jun 2023 22:33:21 +0000
-Received: from DM4PR11MB5488.namprd11.prod.outlook.com
- ([fe80::daac:2cbf:e20a:4f7d]) by DM4PR11MB5488.namprd11.prod.outlook.com
- ([fe80::daac:2cbf:e20a:4f7d%4]) with mapi id 15.20.6477.037; Wed, 14 Jun 2023
- 22:33:20 +0000
-Message-ID: <143b6ba1-4ea2-cd62-ceef-5acb263a2264@intel.com>
-Date:   Wed, 14 Jun 2023 15:33:15 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH next] drm/i915/huc: Fix missing error code in
- intel_huc_init()
-Content-Language: en-US
-To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        John Harrison <John.C.Harrison@Intel.com>,
-        Alan Previn <alan.previn.teres.alexis@intel.com>,
-        Michal Wajdeczko <michal.wajdeczko@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <intel-gfx@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-CC:     <error27@gmail.com>, <dan.carpenter@linaro.org>
-References: <20230614204109.3071989-1-harshit.m.mogalapalli@oracle.com>
-From:   "Ceraolo Spurio, Daniele" <daniele.ceraolospurio@intel.com>
-In-Reply-To: <20230614204109.3071989-1-harshit.m.mogalapalli@oracle.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR07CA0008.namprd07.prod.outlook.com
- (2603:10b6:a02:bc::21) To DM4PR11MB5488.namprd11.prod.outlook.com
- (2603:10b6:5:39d::5)
+        Wed, 14 Jun 2023 18:36:45 -0400
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E24F1715;
+        Wed, 14 Jun 2023 15:36:44 -0700 (PDT)
+Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-33dae9244a1so554985ab.0;
+        Wed, 14 Jun 2023 15:36:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686782203; x=1689374203;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a8Zf94E7WQ/9wcsLl9Q+QIwfy+59Ul0REJcdYnckuKU=;
+        b=LKSRwJHFNOgKNBLdmm73cfTAN9FPD7FFI9hTl1mew1ZcgrXR6W6GWcefVTSUNzCSHO
+         NVMPj6vWJk/ytRC1uKLbXoq0KQQt0U01rLZJouLZNfniWcBz5SySU/l+4shsYyb9Ivh0
+         LigYNZW2CVgmnwmLnEDnmeDThEvpNLA/O/0OepMpxFPXQ9jUe/oInj3vL/I4ZsO0gSdB
+         JyzpbTFuBlPj3qP/40xGzlvnx+uQLnkomXCoBNSjq80L2ZZIb+wetxSqpcyYxUb8t2OQ
+         byAp8VPBY8GD34HckaikPaAF4XpDKY7AN4KqOBgInyPzijkX7HXijYCWrv6FhQPPI4Xh
+         K6CQ==
+X-Gm-Message-State: AC+VfDxDKpeXh3w5X1hD28p0tVizyNc2Qr1rOECGyax3G+GE3V+Y5lWX
+        yfTTT9QoPmD7c4vuUnW/hhzMH1GkKw==
+X-Google-Smtp-Source: ACHHUZ6JU7DCDYGAQ8/JWSyyuSrxrSNxeLDGbGaZcPHrcCorHY6KxNRpZMeRV9tKTmRrIK4JA7KNIg==
+X-Received: by 2002:a92:d6c8:0:b0:33f:c2f8:e503 with SMTP id z8-20020a92d6c8000000b0033fc2f8e503mr2224864ilp.5.1686782203533;
+        Wed, 14 Jun 2023 15:36:43 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id o27-20020a02c6bb000000b004186badba5esm5136264jan.36.2023.06.14.15.36.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 15:36:42 -0700 (PDT)
+Received: (nullmailer pid 2990560 invoked by uid 1000);
+        Wed, 14 Jun 2023 22:36:40 -0000
+Date:   Wed, 14 Jun 2023 16:36:40 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
+Cc:     "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
+Subject: Re: [PATCH v3 4/4] dt-bindings: firmware: arm,scmi: Add support for
+ pinctrl protocol
+Message-ID: <20230614223640.GA2980828-robh@kernel.org>
+References: <cover.1686063941.git.oleksii_moisieiev@epam.com>
+ <a2be28c0aec04fdc3684f56801c78bcc498c3471.1686063941.git.oleksii_moisieiev@epam.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB5488:EE_|SJ2PR11MB8403:EE_
-X-MS-Office365-Filtering-Correlation-Id: 50ac0f2d-51f9-42f6-679e-08db6d275b44
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YKv/c6CMIOkMxXbDGAbB1Ie7D4jj4XzpYwNbDFYgMwo60N4sZVFhJGua57mbPsMPE/+G2FKQDZ5Pah+rLf5Hpa73z7+zsDa7OqSgyEjHV45NcprOjtPvsiVXivMS63FgPWaDWkAY9MbB8e6/HG8k7O+ndJFXAJUdddS+bNorXFZsDm+T5yYKQhLLtzmRm5iApOLIo1rgeUM88HG2MywpjgwCK1rPWwwd3v6o0soyaqbvnpKUP4B4hcNaL5bKhwEjCwwniWK/WVMunTDqNzEDyifr9gDsYoZ1pgZucEThEeZlL1kOrneqG7YhTXMPctdB2fvztMm9iZ1V4jyiwKJj/HGa34mP3dWB2SI6R9Dp0mnV+WCvlTQT9xAVndbCQx6PpOFHRJ3RoBuSJz2D9ZiySEnDByL59sERJSVcx8uIXr2Jeq0bHZytkgEbnHF5WCnZR8p/SecoJsXe0j+mUZMsKFKGF7wcR1KY6e00KkDBQsSmekDbw/2uqI+dqoaW2rrGStp9OzcHjJMknvyT7ZHy3FlDX1t3fneIolyMgQktxg9lukDDnSjSTwPqVtx9OR4fyVIUDLeaiB80waAeHUH/hfgMl4rCd0IWfsWDZ9FMc9UfxJ1+I1l4qKsoo2d+R9YHGApHq2uA31L5wqhLJE297GLDcAbOpfKSIHnll5srs4c=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5488.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(39860400002)(136003)(376002)(396003)(346002)(451199021)(7416002)(31686004)(2906002)(2616005)(83380400001)(5660300002)(8676002)(186003)(8936002)(38100700002)(316002)(66556008)(66476007)(66946007)(82960400001)(86362001)(921005)(6486002)(6666004)(6506007)(6512007)(26005)(53546011)(36756003)(41300700001)(4326008)(31696002)(110136005)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?V0RHbGxMTnRoTzZoVENBUlVDWEtSZHZEWWpqTlM3dWpwQ2E1TEJNSC9BbmRo?=
- =?utf-8?B?STh6dUp3T1Eyc0U3VDZjTm1VMnVvN1AyOVFFRVoxMHhPUGpFSFZhTFpEZllQ?=
- =?utf-8?B?NHpHeUFrbGxBdS9RT3lxNWZjS3NJbkVlQnpSaTRKSDR6L3VxZDJ5cncwek1p?=
- =?utf-8?B?L2pGY1YxaXMwd3RMSGx6akM5QXYyeDA2TnRKaFlEUVljSEg2WUtTdFIzczY1?=
- =?utf-8?B?QzhZemhUZWUxbGlOdExPczNJYnpDVUtDRHdpZ1pmM2RVZ01uMkJKK1l6VThu?=
- =?utf-8?B?aXZQREhsb3o5eVF6bDE5SzJLZkxQRUU2NTI3RCtsdUU0RHprTzMwM1dNUTdx?=
- =?utf-8?B?MEV1WURwWE53REhraW4wUjBPZVdpTFcwNWVvcTVTSDJTUGhwWGIyZXltQ2w2?=
- =?utf-8?B?U2RVU1hRMjlUd1VwVndkQjFSeHdzdDhiaGR1ZUdmRjg2UUZyQmg0aTBvclo4?=
- =?utf-8?B?a1ZuZXA1aVpIMk1qRFJTM0R2YXhVdXhlUTl0eEgrUzNtYXJaWldhTTdsTDQ3?=
- =?utf-8?B?bE5iR3FjWThTYmk4K05rR0svZUM3amNmdTVzNzF2NDZRU0Q1SG9INldRUlEv?=
- =?utf-8?B?bjk3bVNDQjBsVzVkempxNVZBaTFveXVsTDkrRjdXa1dsOVIvcllFVExmK3Qr?=
- =?utf-8?B?QnRwMStNWGVMS1VFNFFYUGVmRkVaL3pIelRXbXZ0bnllZDlZbjRnUEZ6NTY0?=
- =?utf-8?B?aW51V29DUHZnL1J4dFpwWWc4Tk1DNSt2dCs1ZjVOZzZEcFFRdHRhQ0hCd2g3?=
- =?utf-8?B?SDR1TFJYZVMwRFlWdldjUHhOU2svRS9XeUVtR3hUTnl0Mk05T2ozbkNtZmdV?=
- =?utf-8?B?M254ejBxUHJmT3BhdHJ4a1BqWE8xeUFWSmlrbzJUTHVTK1dubGFWSzk4eDIr?=
- =?utf-8?B?V2xxRXBGTG1yWE9leW9GdERSN3ZmSEFjamxSZFJvbk83bEU3MVMxZ0crNGZi?=
- =?utf-8?B?clRtZ1lieTNHbERaZTVXRnpmNXdUOGU4MS9MN3FHOGc2ditqc1ZjdU9KbDRk?=
- =?utf-8?B?YmQrUkF2MVdkRjB6eUhKNk83SENzWVNnck1lS1lVdWRacmg5NDJkRkNjWERv?=
- =?utf-8?B?ZWVJbWd4dTNWOTcrMVh6VEx6K25NU0o0TjdOUFQ2U2Nya1lqV3h3YWUrM3Ji?=
- =?utf-8?B?dlVyTnhzWVA2a3hld3B0OGl2R0JYc1lLL1VSTTFvMTdQTVZKd2hEaWpIRUdq?=
- =?utf-8?B?dkdhazl6My96OHRDbFVwY3F5aFFBYTU5SmJ4ZjVhTlB4RkdLUCs0M1ZRSzRq?=
- =?utf-8?B?UnQzaGE5TVVJWHRmRlV2UmVvdll0RDNnM3l5azR4RFlNWXVIQk1TV3hyeURX?=
- =?utf-8?B?VzBjUWlUZFZuL0NVdFgxRVJCLzBOL21TTW8zMm9JNkcveHA3NmpQbU5UL2R5?=
- =?utf-8?B?bERiOWc1Yi93TjM5K2VaamRGZFI1SFJJb28vN3ZRNjVHQ3B3bGJnMXRLanh0?=
- =?utf-8?B?ZTVLWm85cXhrWHU0WjNteWhKcXNLaFRBdkdvZzlPZ01Wb3l6MStNbmdZb3lh?=
- =?utf-8?B?UE1WOXExUzBBTWVIdmpFMkM1L0NyeVJHSlFkUTBRRzlRUXVTaGdaeWw1SHRP?=
- =?utf-8?B?SWNiR0gwRGR2Mk5HRFlqeDIwZHB6ZHhhSGtsVlBneTFyblBOUmJ3NkFpaGlp?=
- =?utf-8?B?SitramhINUV6ZHQ5VFJuVmlOU2tvazJQTHdHQy83UGNNbWZuSXNBcFIwOXda?=
- =?utf-8?B?dFo2a1V1UVBrQWxOSXNVSE8xemJiM2V6RUpIWFQ4d3NKb3A3bnA4MDJuMHhC?=
- =?utf-8?B?VXg0dktadVhnay92NUZCTVVCS2FtaytBTlFjV1Q3T3NzdEVzWFdlZlBXWk1P?=
- =?utf-8?B?WVd2VE5SMGoxTzlsU0RVamdwaGFiRHpxL0Z5ZU8wTzFjbWl6SjFGdHpmNVhu?=
- =?utf-8?B?WU1uL2ExR2VySmdwQjlSa1VTd3lTSHljYUhFanpzTStOWmEvY25TWGxtcTNQ?=
- =?utf-8?B?MzdMcFh6R1Z0ek9OWTRQdW4xK0UwYWVvZms0eWZqVEh6cHpBc1UwUnBMZTNJ?=
- =?utf-8?B?b0pMT1YyVmIvaXcyOWhIejBYMkE3ZUJsSUtxdklCWkdoQWNLUG9VVU53OENW?=
- =?utf-8?B?TVpmdE42MzR6eTVIUk1VOG5EWGRZdG1FaExVK0M3WjRHVU13N1laSWNrMUg3?=
- =?utf-8?B?OGV6U2dDYVBQS0xPWXhuYUhaSDFLVmgydVprTis0bUt4eTVtMlhCd05vcW5k?=
- =?utf-8?B?RXc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 50ac0f2d-51f9-42f6-679e-08db6d275b44
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5488.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 22:33:20.7320
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 54vQY+5c3oFene5LAx6TTwJijg8zR4ffnxzn8QEzlAyByykrLjHCs7nCZkxPJnx2ld6421N9LIIh2//qaARAT9yfSA12FXX3cHmIoXX+hvc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR11MB8403
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a2be28c0aec04fdc3684f56801c78bcc498c3471.1686063941.git.oleksii_moisieiev@epam.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/14/2023 1:41 PM, Harshit Mogalapalli wrote:
-> Smatch warns:
-> 	drivers/gpu/drm/i915/gt/uc/intel_huc.c:388
-> 	    intel_huc_init() warn: missing error code 'err'
->
-> When the allocation of VMAs fail: The value of err is zero at this
-> point and it is passed to PTR_ERR and also finally returning zero which
-> is success instead of failure.
->
-> Fix this by adding the missing error code when VMA allocation fails.
->
-> Fixes: 08872cb13a71 ("drm/i915/mtl/huc: auth HuC via GSC")
-> Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-
-Thanks for the fix.
-
-Reviewed-by: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-
-It looks like the patch wasn't picked out by our CI, so I'm going to 
-re-send it to intel-gfx for testing and then merge it via drm-intel once 
-we get the results.
-
-Daniele
-
+On Tue, Jun 06, 2023 at 04:22:28PM +0000, Oleksii Moisieiev wrote:
+> Add new SCMI v3.2 pinctrl protocol bindings definitions and example.
+> 
+> Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
 > ---
-> Found using Static analysis with Smatch, only compile tested.
-> ---
->   drivers/gpu/drm/i915/gt/uc/intel_huc.c | 1 +
->   1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/gpu/drm/i915/gt/uc/intel_huc.c b/drivers/gpu/drm/i915/gt/uc/intel_huc.c
-> index e0afd8f89502..ddd146265beb 100644
-> --- a/drivers/gpu/drm/i915/gt/uc/intel_huc.c
-> +++ b/drivers/gpu/drm/i915/gt/uc/intel_huc.c
-> @@ -384,6 +384,7 @@ int intel_huc_init(struct intel_huc *huc)
->   
->   		vma = intel_guc_allocate_vma(&gt->uc.guc, PXP43_HUC_AUTH_INOUT_SIZE * 2);
->   		if (IS_ERR(vma)) {
-> +			err = PTR_ERR(vma);
->   			huc_info(huc, "Failed to allocate heci pkt\n");
->   			goto out;
->   		}
+>  .../bindings/firmware/arm,scmi.yaml           | 53 +++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+> index 5824c43e9893..a19aa184bbd1 100644
+> --- a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+> +++ b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+> @@ -233,6 +233,39 @@ properties:
+>        reg:
+>          const: 0x18
+>  
+> +  protocol@19:
+> +    $ref: '#/$defs/protocol-node'
 
+       unevaluatedProperties: false
+
+> +
+> +    properties:
+> +      reg:
+> +        const: 0x19
+> +
+> +      '#pinctrl-cells':
+> +        const: 0
+> +
+> +    allOf:
+> +      - $ref: /schemas/pinctrl/pinctrl.yaml#
+
+Group this and the '#/$defs/protocol-node' $ref under allOf.
+
+> +
+> +    required:
+> +      - reg
+> +
+> +    additionalProperties:
+> +      anyOf:
+
+Don't need anyOf with only 1 entry.
+
+But the use of additionalProperties is usually for existing cases where 
+the pin config nodes had no naming convention. For new bindings, define 
+a node name pattern (under patternProperties). I'd suggest '-pins$' as 
+used elsewhere.
+
+> +        - type: object
+> +          allOf:
+> +            - $ref: /schemas/pinctrl/pincfg-node.yaml#
+> +            - $ref: /schemas/pinctrl/pinmux-node.yaml#
+> +
+> +          description:
+> +            A pin multiplexing sub-node describe how to configure a
+> +            set of pins is some desired function.
+> +            A single sub-node may define several pin configurations.
+> +            This sub-node is using default pinctrl bindings to configure
+> +            pin multiplexing and using SCMI protocol to apply specified
+> +            configuration using SCMI protocol.
+> +
+> +          unevaluatedProperties: false
+> +
+>  additionalProperties: false
+>  
+>  $defs:
+> @@ -384,6 +417,26 @@ examples:
+>              scmi_powercap: protocol@18 {
+>                  reg = <0x18>;
+>              };
+> +
+> +            scmi_pinctrl: protocol@19 {
+> +                reg = <0x19>;
+> +                #pinctrl-cells = <0>;
+> +
+> +                i2c2 {
+> +                    groups = "i2c2_a", "i2c2_b";
+> +                    function = "i2c2";
+> +                };
+> +
+> +                pins_mdio {
+> +                    groups = "avb_mdio";
+> +                    drive-strength = <24>;
+> +                };
+> +
+> +                keys_pins: keys {
+> +                    pins = "GP_5_17", "GP_5_20", "GP_5_22", "GP_2_1";
+> +                    bias-pull-up;
+> +                };
+> +            };
+>          };
+>      };
+>  
+> -- 
+> 2.25.1
