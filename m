@@ -2,83 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA5E72F253
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 03:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5AB72F256
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 03:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233193AbjFNB6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 21:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52478 "EHLO
+        id S241836AbjFNB6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 21:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241664AbjFNB6N (ORCPT
+        with ESMTP id S233260AbjFNB6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 21:58:13 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620611BF9;
-        Tue, 13 Jun 2023 18:58:00 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35E1s1lI030547;
-        Wed, 14 Jun 2023 01:57:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=7IuSoxzYw9GT1ObCc/Ng+kegCxk9VlhIFuB5I2kbQ3Q=;
- b=XgcbdrvevbRN5aaN2stOACzynOrEwgKTN8c2Wy7nYD+oISBQyVPzMwaER79S3g9o40+h
- HOUsE8T3cfOc60yepif8XKWAzfLc7J3dtdZhEEv9a92W86sgtQEzs1CVx3leYUxYVMHN
- BdO0/jFd9b0hI/ZU+ucPtGB7b/31EFieqU29eb+OX5XMHIOYfuiPZZxtn5p8xv0kQCCI
- THIAKXx0T2DdolWVCysGQjyFerj5nhxSWBO3GKi9VIJN/Mmz+ewWkY18uvLzQTaEPTgQ
- 7BJ+JS8PgCzjaYJX49Sf/NNtD3RjeqVUPAUcpVzR6gyI0ZCGbZi76W01d4CHIjHIEU1v Jw== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r6s3wsgjn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Jun 2023 01:57:54 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35E1vrVB002740
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Jun 2023 01:57:53 GMT
-Received: from jesszhan-linux.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 13 Jun 2023 18:57:53 -0700
-From:   Jessica Zhang <quic_jesszhan@quicinc.com>
-To:     Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-CC:     Jessica Zhang <quic_jesszhan@quicinc.com>,
-        <quic_abhinavk@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 3/3] drm/msm/dsi: Enable DATABUS_WIDEN for DSI command mode
-Date:   Tue, 13 Jun 2023 18:57:13 -0700
-Message-ID: <20230525-add-widebus-support-v1-3-c7069f2efca1@quicinc.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
-References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
+        Tue, 13 Jun 2023 21:58:42 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17ED1FC9;
+        Tue, 13 Jun 2023 18:58:26 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QgpVR0MJpz4f3tNm;
+        Wed, 14 Jun 2023 09:58:23 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgCnD7O+HolkasWdLg--.26820S3;
+        Wed, 14 Jun 2023 09:58:23 +0800 (CST)
+Subject: Re: [PATCH 2/2] ufs: don't use the fair tag sharings
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Yu Kuai <yukuai1@huaweicloud.com>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     Ed Tsai <ed.tsai@mediatek.com>, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
+        stanley.chu@mediatek.com, peter.wang@mediatek.com,
+        chun-hung.wu@mediatek.com, alice.chao@mediatek.com,
+        powen.kao@mediatek.com, naomi.chu@mediatek.com,
+        wsd_upstream@mediatek.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230509065230.32552-1-ed.tsai@mediatek.com>
+ <20230509065230.32552-3-ed.tsai@mediatek.com>
+ <ZF0K7A6G2cYBjSgn@infradead.org>
+ <aa9af9ae-62a4-6469-244c-b5d9106bb044@acm.org>
+ <ZF5G5ztMng8Xbd1W@infradead.org>
+ <2740ee82-e35f-1cbf-f5d0-373f94eb14a5@acm.org>
+ <de3f41a0-b13d-d4f6-765a-19b857bce53e@huaweicloud.com>
+ <86065501-ab2e-09b4-71cd-c0b18ede00ed@acm.org>
+ <a26e28a6-91e0-e803-749e-2ce957711c64@huaweicloud.com>
+ <097caed2-10b3-7cd1-7c06-90f983e5c720@acm.org>
+ <f9ccab59-91a1-69d5-6d20-2c6ea0e24b5a@huaweicloud.com>
+ <66906bd5-d73f-af96-bf38-c6aee576fa73@acm.org>
+ <bef8340e-f051-db63-5c2f-a2bc94c678ac@huaweicloud.com>
+ <04a4d0db-2f2d-e2fc-5458-4ddf852ffc8a@acm.org>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <3e9e42aa-9a0d-2b73-194b-5c229e9ed533@huaweicloud.com>
+Date:   Wed, 14 Jun 2023 09:58:22 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.13-dev-c6835
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1686707625; l=3041; i=quic_jesszhan@quicinc.com; s=20230329; h=from:subject:message-id; bh=Ot5W85+n2wSTIxyhW7ySIwhaJ3NO/jx9Yep4NiTXQiA=; b=unTYKp7curlQIui91ILgtf7E8XxrRmddLFh5QbVXblSyPFSY77q7yQVlmKpdADQEchfm/ffls XekqlBYArvwBkMWQbww+HeIdL8ypjtKsGst/dF0lLJqgRW2/+qN3tl3
-X-Developer-Key: i=quic_jesszhan@quicinc.com; a=ed25519; pk=gAUCgHZ6wTJOzQa3U0GfeCDH7iZLlqIEPo4rrjfDpWE=
+In-Reply-To: <04a4d0db-2f2d-e2fc-5458-4ddf852ffc8a@acm.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: bY4MKNSQfFzApHCdzXE94bzKJIJ5kXWm
-X-Proofpoint-GUID: bY4MKNSQfFzApHCdzXE94bzKJIJ5kXWm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-13_24,2023-06-12_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
- adultscore=0 mlxscore=0 mlxlogscore=706 clxscore=1015 impostorscore=0
- lowpriorityscore=0 suspectscore=0 priorityscore=1501 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306140012
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-CM-TRANSID: gCh0CgCnD7O+HolkasWdLg--.26820S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7tF43JrWUJr4fWrykXrW3Awb_yoW8Jw4Upa
+        y8tFZIkFs7J398AwsrX3W8uayftwn3Jr97Jr1fG347Zwn09w4fZw4Ut3909rZ3Zr97Cr12
+        gay8Xr95X3s5Z37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9214x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWr
+        Zr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
+        BIdaVFxhVjvjDU0xZFpf9x0JUAxhLUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,86 +83,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DSI 6G v2.5.x+ supports a data-bus widen mode that allows DSI to send
-48 bits of compressed data per pclk instead of 24.
+Hi,
 
-For all chipsets that support this mode, enable it whenever DSC is
-enabled as recommend by the hardware programming guide.
+在 2023/06/13 22:07, Bart Van Assche 写道:
+> On 5/18/23 00:55, Yu Kuai wrote:
+>> 在 2023/05/18 10:23, Bart Van Assche 写道:
+>>> On 5/17/23 18:49, Yu Kuai wrote:
+>>>> Currently, fair share from hctx_may_queue() requires two
+>>>> atomic_read(active_queues and active_requests), I think this smoothing
+>>>> method can be placed into get_tag fail path, for example, the more 
+>>>> times
+>>>> a disk failed to get tag in a period of time, the more tag this disk 
+>>>> can
+>>>> get, and all the information can be updated here(perhaps directly
+>>>> record how many tags a disk can get, then hctx_may_queue() still only
+>>>> require 2 atomic_read()).
+>>>
+>>> That sounds interesting to me. Do you perhaps plan to implement this 
+>>> approach and to post it as a patch?
+>>
+>> Of course, I'll try to send a RFC patch.
+> 
+> Hi Kuai,
+> 
+> Has this RFC patch already been posted or did I perhaps miss it?
 
-Only enable this for command mode as we are currently unable to validate
-it for video mode.
+Sorry for the delay, I finished switch from not share to fair share
+directly verion, however, I found that it's not that simple to add a
+smoothing method, and I'm stuck here for now.
 
-Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
----
+I'll try to send a RFC verion soon, the smoothing method may not be
+flexible, but I'll make sure it can work for your simple case that
+2 device share tags, and one only issue few io while the other issue
+lots of io.
 
-Note: The dsi.xml.h changes were generated using the headergen2 script in
-envytools [1], but the changes to the copyright and rules-ng-ng source file
-paths were dropped.
-
-[1] https://github.com/freedreno/envytools/
-
- drivers/gpu/drm/msm/dsi/dsi.xml.h  |  1 +
- drivers/gpu/drm/msm/dsi/dsi_host.c | 19 ++++++++++++++++++-
- 2 files changed, 19 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/msm/dsi/dsi.xml.h b/drivers/gpu/drm/msm/dsi/dsi.xml.h
-index a4a154601114..2a7d980e12c3 100644
---- a/drivers/gpu/drm/msm/dsi/dsi.xml.h
-+++ b/drivers/gpu/drm/msm/dsi/dsi.xml.h
-@@ -664,6 +664,7 @@ static inline uint32_t DSI_CMD_MODE_MDP_CTRL2_INPUT_RGB_SWAP(enum dsi_rgb_swap v
- 	return ((val) << DSI_CMD_MODE_MDP_CTRL2_INPUT_RGB_SWAP__SHIFT) & DSI_CMD_MODE_MDP_CTRL2_INPUT_RGB_SWAP__MASK;
- }
- #define DSI_CMD_MODE_MDP_CTRL2_BURST_MODE			0x00010000
-+#define DSI_CMD_MODE_MDP_CTRL2_DATABUS_WIDEN			0x00100000
-
- #define REG_DSI_CMD_MODE_MDP_STREAM2_CTRL			0x000001b8
- #define DSI_CMD_MODE_MDP_STREAM2_CTRL_DATA_TYPE__MASK		0x0000003f
-diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-index 5d7b4409e4e9..1da5238e7105 100644
---- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-+++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-@@ -927,6 +927,9 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
- 	u32 hdisplay = mode->hdisplay;
- 	u32 wc;
- 	int ret;
-+	bool widebus_supported = msm_host->cfg_hnd->major == MSM_DSI_VER_MAJOR_6G &&
-+			msm_host->cfg_hnd->minor >= MSM_DSI_6G_VER_MINOR_V2_5_0;
-+
-
- 	DBG("");
-
-@@ -973,8 +976,15 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
- 		 *
- 		 * hdisplay will be divided by 3 here to account for the fact
- 		 * that DPU sends 3 bytes per pclk cycle to DSI.
-+		 *
-+		 * If widebus is supported, set DATABUS_WIDEN register and divide hdisplay by 6
-+		 * instead of 3
- 		 */
--		hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 3);
-+		if (!(msm_host->mode_flags & MIPI_DSI_MODE_VIDEO) && widebus_supported)
-+			hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 6);
-+		else
-+			hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 3);
-+
- 		h_total += hdisplay;
- 		ha_end = ha_start + hdisplay;
- 	}
-@@ -1027,6 +1037,13 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
- 		dsi_write(msm_host, REG_DSI_CMD_MDP_STREAM0_TOTAL,
- 			DSI_CMD_MDP_STREAM0_TOTAL_H_TOTAL(hdisplay) |
- 			DSI_CMD_MDP_STREAM0_TOTAL_V_TOTAL(mode->vdisplay));
-+
-+		if (msm_host->dsc && widebus_supported) {
-+			u32 mdp_ctrl2 = dsi_read(msm_host, REG_DSI_CMD_MODE_MDP_CTRL2);
-+
-+			mdp_ctrl2 |= DSI_CMD_MODE_MDP_CTRL2_DATABUS_WIDEN;
-+			dsi_write(msm_host, REG_DSI_CMD_MODE_MDP_CTRL2, mdp_ctrl2);
-+		}
- 	}
- }
-
-
---
-2.40.1
+Thanks,
+Kuai
+> 
+> Thanks,
+> 
+> Bart.
+> 
+> 
+> .
+> 
 
