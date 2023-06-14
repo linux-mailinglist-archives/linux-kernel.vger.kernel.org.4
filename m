@@ -2,213 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F1BD73062C
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 19:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF400730631
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 19:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234051AbjFNRkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 13:40:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54008 "EHLO
+        id S238506AbjFNRkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 13:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231743AbjFNRkI (ORCPT
+        with ESMTP id S237525AbjFNRkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 13:40:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3751119;
-        Wed, 14 Jun 2023 10:40:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 37A6B63FA7;
-        Wed, 14 Jun 2023 17:40:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51AE5C433C8;
-        Wed, 14 Jun 2023 17:40:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686764406;
-        bh=SU/H3rwdOOwaogTf9LnRB31H7CSkoH/ENX2SDq7HIIA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=icdM5+DKppVMRVKID1Dwjg1cZ+519rT1zI5/yniDcr96rTHKBpZf7R2ksTFgEtVKP
-         lFTAyGX4tOXV1CHegIwqCEb2qZnAZojydxaELC/8iz2kxX2v4N92GRxN/kbyr3dJsr
-         +B8JrYe2BqXbYO6MjZy98uTFfReBXu20g2+onNPADzgywMcJqDvrrDjz7GammH65sU
-         6eWxt5flVqa3Ovw5hVga0TDxizfXj06cT6D0hTsA+dSesIwq5nQSU5Jqx7jVZTm6fE
-         YPcuPWcxlhTs7vCplnHPGs1qyP9O7ZSlttaLFAU46ijIZ9pPmOsI9fpx+Lf12WOSze
-         SXaVJasvnzynA==
-Date:   Wed, 14 Jun 2023 10:40:04 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Lu Jialin <lujialin4@huawei.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Oleg Nesterov <oleg@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v2] poll: Fix use-after-free in poll_freewait()
-Message-ID: <20230614174004.GC1146@sol.localdomain>
-References: <20230614070733.113068-1-lujialin4@huawei.com>
+        Wed, 14 Jun 2023 13:40:14 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AD51BF0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 10:40:11 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f7deee339dso299687e87.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 10:40:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686764410; x=1689356410;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=M7ewiUSnCS3rNCPsoJCYT5f68i4M3iIUicklGo7JmxE=;
+        b=cxKWNJzbvcvHplxwGHO9tu2JAcUmf8AMQCehGwFdhHLi0QYmM951++Im7lizzvQoXR
+         lvJgfLkVO6Y1LfS4dVQotxYgdCoXpx8YFRSZCN+tCLdjjK5gMQSXZ113Yh0Lx3Pgf9jh
+         bFGM01yBa3oisci3WDjbkrJKIzh0dQquhEg2tv0SaIC6jTsFR3BjWSwTWCqr1YKozVIm
+         V2DjrHSn/p/IeW9yWsGjfgRnoWvNmwE6Q0hvWpWJ1S7CoP7Jw2a4Kzbw+bxQimGiDD0M
+         MGzTqC5GcO3PwY4xbNLLRf8NLAvjzGLCXEzZD9Y0aTZIh1YRt8ZioqGq8SdldALq9ofP
+         ubfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686764410; x=1689356410;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=M7ewiUSnCS3rNCPsoJCYT5f68i4M3iIUicklGo7JmxE=;
+        b=b8lIzDa+/r26Z9XCt54V4ODtkVZ4+OG8tOsDug4IA6JxgCD8ROzNLCYzd5OFmRX6co
+         jiNyu18z6Fd5TDa5A4H0wGgiQ1S/00/S+J/CGJoDEbe3d1SIj4KphUp/G6HBDlvHQ+il
+         EXA2QwPgOz8MBg98I0UMC9hsbZ5tjRhNt7EhOlMwUh9o2FiPtVA1fbxAbqkhpb5elKfp
+         0Q7y1uUV30LDNsVfRWKUBucJhzWmBr7O8At3NL7gAr3RbDquo7WtON10FIE7RxxsevE0
+         Mg1S2aeFw3Cfcz0Iwczqb4jWCjadc62xUrormPnSSmiMDi18qOCLxrxQVzcOJo/LRtJE
+         tI3g==
+X-Gm-Message-State: AC+VfDz4i/vCEtJ4lJwZm1zokkcS7twmXvDu1UHQXcsjVdgrxy0O/sDd
+        xhqy8Jz2Y0lFVZ4sLBuuTFrWZw==
+X-Google-Smtp-Source: ACHHUZ42uaXU6+8DZVhsw4tg5ChgANQZ7OV1TTRlzA7XRCTwEtkTBTBAp0iTmvbHQcrQ5C1tdujs/g==
+X-Received: by 2002:a19:9113:0:b0:4f7:68c6:e352 with SMTP id t19-20020a199113000000b004f768c6e352mr1218978lfd.38.1686764409711;
+        Wed, 14 Jun 2023 10:40:09 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id a8-20020a19f808000000b004f14ecc03f1sm2205264lff.100.2023.06.14.10.40.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 10:40:09 -0700 (PDT)
+Message-ID: <eb39cef0-7e1c-f0dc-12fa-6a5a746d17d1@linaro.org>
+Date:   Wed, 14 Jun 2023 19:40:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230614070733.113068-1-lujialin4@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v5 08/22] interconnect: qcom: smd-rpm: Add rpmcc handling
+ skeleton code
+Content-Language: en-US
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230526-topic-smd_icc-v5-0-eeaa09d0082e@linaro.org>
+ <20230526-topic-smd_icc-v5-8-eeaa09d0082e@linaro.org>
+ <ZInS7WZ_-02iZiKp@gerhold.net>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <ZInS7WZ_-02iZiKp@gerhold.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 03:07:33PM +0800, Lu Jialin wrote:
-> We found a UAF bug in remove_wait_queue as follows:
+On 14.06.2023 16:47, Stephan Gerhold wrote:
+> On Wed, Jun 14, 2023 at 12:22:19PM +0200, Konrad Dybcio wrote:
+>> Introduce qcom_icc_rpm_set_bus_rate() in preparation for handling RPM
+>> clock resources within the interconnect framework. This lets us greatly
+>> simplify all of the code handling, as setting the rate comes down to:
+>>
+>> u32 rate_khz = max(clk.sleep_rate, clk.active_rate, clk_a.active_rate)
+>> write_to_rpm(clock.description, rate_khz);
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>  drivers/interconnect/qcom/icc-rpm.h | 15 +++++++++++++++
+>>  drivers/interconnect/qcom/smd-rpm.c | 21 +++++++++++++++++++++
+>>  2 files changed, 36 insertions(+)
+>>
+>> diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
+>> index 9ec90e13bfbd..d857fb1efb75 100644
+>> --- a/drivers/interconnect/qcom/icc-rpm.h
+>> +++ b/drivers/interconnect/qcom/icc-rpm.h
+>> @@ -22,6 +22,18 @@ enum qcom_icc_type {
+>>  	QCOM_ICC_QNOC,
+>>  };
+>>  
+>> +/**
+>> + * struct rpm_clk_resource - RPM bus clock resource
+>> + * @resource_type: RPM resource type of the clock resource
+>> + * @clock_id: index of the clock resource of a specific resource type
+>> + * @branch: whether the resource represents a branch clock
+>> +*/
+>> +struct rpm_clk_resource {
+>> +	u32 resource_type;
+>> +	u32 clock_id;
+>> +	bool branch;
+>> +};
+>> +
+>>  #define NUM_BUS_CLKS	2
+>>  
+>>  /**
+>> @@ -47,6 +59,7 @@ struct qcom_icc_provider {
+>>  	unsigned int qos_offset;
+>>  	u64 bus_clk_rate[NUM_BUS_CLKS];
+>>  	struct clk_bulk_data bus_clks[NUM_BUS_CLKS];
+>> +	const struct rpm_clk_resource *bus_clk_desc;
+>>  	struct clk_bulk_data *intf_clks;
+>>  	bool keep_alive;
+>>  	bool is_on;
+>> @@ -104,6 +117,7 @@ struct qcom_icc_desc {
+>>  	struct qcom_icc_node * const *nodes;
+>>  	size_t num_nodes;
+>>  	const char * const *bus_clocks;
+>> +	const struct rpm_clk_resource *bus_clk_desc;
+>>  	const char * const *intf_clocks;
+>>  	size_t num_intf_clocks;
+>>  	bool keep_alive;
+>> @@ -125,5 +139,6 @@ int qnoc_remove(struct platform_device *pdev);
+>>  
+>>  bool qcom_icc_rpm_smd_available(void);
+>>  int qcom_icc_rpm_smd_send(int ctx, int rsc_type, int id, u32 val);
+>> +int qcom_icc_rpm_set_bus_rate(const struct rpm_clk_resource *clk, int rsc_type, u32 rate);
+>>  
+>>  #endif
+>> diff --git a/drivers/interconnect/qcom/smd-rpm.c b/drivers/interconnect/qcom/smd-rpm.c
+>> index b0183262ba66..b06374340eeb 100644
+>> --- a/drivers/interconnect/qcom/smd-rpm.c
+>> +++ b/drivers/interconnect/qcom/smd-rpm.c
+>> @@ -16,6 +16,7 @@
+>>  #include "icc-rpm.h"
+>>  
+>>  #define RPM_KEY_BW		0x00007762
+>> +#define QCOM_RPM_SMD_KEY_RATE	0x007a484b
+>>  
+>>  static struct qcom_smd_rpm *icc_smd_rpm;
+>>  
+>> @@ -44,6 +45,26 @@ int qcom_icc_rpm_smd_send(int ctx, int rsc_type, int id, u32 val)
+>>  }
+>>  EXPORT_SYMBOL_GPL(qcom_icc_rpm_smd_send);
+>>  
+>> +int qcom_icc_rpm_set_bus_rate(const struct rpm_clk_resource *clk, int rsc_type, u32 rate)
+>> +{
+>> +	struct clk_smd_rpm_req req = {
+>> +		.key = cpu_to_le32(QCOM_RPM_SMD_KEY_RATE),
+>> +		.nbytes = cpu_to_le32(sizeof(u32)),
+>> +	};
+>> +
+>> +	/* Branch clocks are only on/off */
+>> +	if (clk->branch)
+>> +		rate = !!rate;
+>> +
+>> +	req.value = cpu_to_le32(rate);
+>> +	return qcom_rpm_smd_write(icc_smd_rpm,
+>> +				  rsc_type,
+>> +				  clk->resource_type,
 > 
-> ==================================================================
-> BUG: KASAN: use-after-free in _raw_spin_lock_irqsave+0x71/0xe0
-> Write of size 4 at addr ffff8881150d7b28 by task psi_trigger/15306
-> Call Trace:
->  dump_stack+0x9c/0xd3
->  print_address_description.constprop.0+0x19/0x170
->  __kasan_report.cold+0x6c/0x84
->  kasan_report+0x3a/0x50
->  check_memory_region+0xfd/0x1f0
->  _raw_spin_lock_irqsave+0x71/0xe0
->  remove_wait_queue+0x26/0xc0
->  poll_freewait+0x6b/0x120
->  do_sys_poll+0x305/0x400
->  do_syscall_64+0x33/0x40
->  entry_SYSCALL_64_after_hwframe+0x61/0xc6
-> 
-> Allocated by task 15306:
->  kasan_save_stack+0x1b/0x40
->  __kasan_kmalloc.constprop.0+0xb5/0xe0
->  psi_trigger_create.part.0+0xfc/0x450
->  cgroup_pressure_write+0xfc/0x3b0
->  cgroup_file_write+0x1b3/0x390
->  kernfs_fop_write_iter+0x224/0x2e0
->  new_sync_write+0x2ac/0x3a0
->  vfs_write+0x365/0x430
->  ksys_write+0xd5/0x1b0
->  do_syscall_64+0x33/0x40
->  entry_SYSCALL_64_after_hwframe+0x61/0xc6
-> 
-> Freed by task 15850:
->  kasan_save_stack+0x1b/0x40
->  kasan_set_track+0x1c/0x30
->  kasan_set_free_info+0x20/0x40
->  __kasan_slab_free+0x151/0x180
->  kfree+0xba/0x680
->  cgroup_file_release+0x5c/0xe0
->  kernfs_drain_open_files+0x122/0x1e0
->  kernfs_drain+0xff/0x1e0
->  __kernfs_remove.part.0+0x1d1/0x3b0
->  kernfs_remove_by_name_ns+0x89/0xf0
->  cgroup_addrm_files+0x393/0x3d0
->  css_clear_dir+0x8f/0x120
->  kill_css+0x41/0xd0
->  cgroup_destroy_locked+0x166/0x300
->  cgroup_rmdir+0x37/0x140
->  kernfs_iop_rmdir+0xbb/0xf0
->  vfs_rmdir.part.0+0xa5/0x230
->  do_rmdir+0x2e0/0x320
->  __x64_sys_unlinkat+0x99/0xc0
->  do_syscall_64+0x33/0x40
->  entry_SYSCALL_64_after_hwframe+0x61/0xc6
-> ==================================================================
-> 
-> If using epoll(), wake_up_pollfree will empty waitqueue and set
-> wait_queue_head is NULL before free waitqueue of psi trigger. But is
-> doesn't work when using poll(), which will lead a UAF problem in
-> poll_freewait coms as following:
-> 
-> (cgroup_rmdir)                      |
-> psi_trigger_destroy                 |
->   wake_up_pollfree(&t->event_wait)  |
->    synchronize_rcu();               |
->     kfree(t)                        |
-> 				    |	(poll_freewait)
-> 				    |     free_poll_entry(pwq->inline_entries + i)
-> 				    |	    remove_wait_queue(entry->wait_address)
-> 				    |	      spin_lock_irqsave(&wq_head->lock)
-> 
-> entry->wait_address in poll_freewait() is t->event_wait in cgroup_rmdir().
-> t->event_wait is free in psi_trigger_destroy before call poll_freewait(),
-> therefore wq_head in poll_freewait() has been already freed, which would
-> lead to a UAF.
-> 
-> similar problem for epoll() has been fixed commit c2dbe32d5db5
-> ("sched/psi: Fix use-after-free in ep_remove_wait_queue()").
-> epoll wakeup function ep_poll_callback() will empty waitqueue and set
-> wait_queue_head is NULL when pollflags is POLLFREE and judge pwq->whead
-> is NULL or not before remove_wait_queue in ep_remove_wait_queue(),
-> which will fix the UAF bug in ep_remove_wait_queue.
-> 
-> But poll wakeup function pollwake() doesn't do that. To fix the
-> problem, we empty waitqueue and set wait_address is NULL in pollwake() when
-> key is POLLFREE. otherwise in remove_wait_queue, which is similar to
-> epoll().
-> 
-> Fixes: 0e94682b73bf ("psi: introduce psi monitor")
-> Suggested-by: Suren Baghdasaryan <surenb@google.com>
-> Link: https://lore.kernel.org/all/CAJuCfpEoCRHkJF-=1Go9E94wchB4BzwQ1E3vHGWxNe+tEmSJoA@mail.gmail.com/#t
-> Signed-off-by: Lu Jialin <lujialin4@huawei.com>
-> ---
-> v2: correct commit msg and title suggested by Suren Baghdasaryan
-> ---
->  fs/select.c | 20 +++++++++++++++++++-
->  1 file changed, 19 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/select.c b/fs/select.c
-> index 0ee55af1a55c..e64c7b4e9959 100644
-> --- a/fs/select.c
-> +++ b/fs/select.c
-> @@ -132,7 +132,17 @@ EXPORT_SYMBOL(poll_initwait);
->  
->  static void free_poll_entry(struct poll_table_entry *entry)
->  {
-> -	remove_wait_queue(entry->wait_address, &entry->wait);
-> +	wait_queue_head_t *whead;
-> +
-> +	rcu_read_lock();
-> +	/* If it is cleared by POLLFREE, it should be rcu-safe.
-> +	 * If we read NULL we need a barrier paired with smp_store_release()
-> +	 * in pollwake().
-> +	 */
-> +	whead = smp_load_acquire(&entry->wait_address);
-> +	if (whead)
-> +		remove_wait_queue(whead, &entry->wait);
-> +	rcu_read_unlock();
->  	fput(entry->filp);
->  }
->  
-> @@ -215,6 +225,14 @@ static int pollwake(wait_queue_entry_t *wait, unsigned mode, int sync, void *key
->  	entry = container_of(wait, struct poll_table_entry, wait);
->  	if (key && !(key_to_poll(key) & entry->key))
->  		return 0;
-> +	if (key_to_poll(key) & POLLFREE) {
-> +		list_del_init(&wait->entry);
-> +		/* wait_address !=NULL protects us from the race with
-> +		 * poll_freewait().
-> +		 */
-> +		smp_store_release(&entry->wait_address, NULL);
-> +		return 0;
-> +	}
->  	return __pollwake(wait, mode, sync, key);
+> Sorry to have more minor comments but as you can see here the resource
+> type is taken from the rpm_clk_resource. The parameter that you are
+> describing as "rsc_type" is actually the "ctx" in the other function. :')
+Meh I fixed it too fast.. thanks
 
-I don't understand why this patch is needed.
-
-The last time I looked at POLLFREE, it is only needed because of asynchronous
-polls.  See my explanation in the commit message of commit 50252e4b5e989ce6.
-
-In summary, POLLFREE solves the problem of polled waitqueues whose lifetime is
-tied to the current task rather than to the file being polled.  Also refer to
-the comment above wake_up_pollfree(), which mentions this.
-
-fs/select.c is synchronous polling, not asynchronous.  Therefore, it should not
-need to handle POLLFREE.
-
-If there's actually a bug here, most likely it's a bug in psi_trigger_poll()
-where it is using a waitqueue whose lifetime is tied to neither the current task
-nor the file being polled.  That needs to be fixed.
-
-- Eric
+Konrad
+> 
+> If you fix this feel free to add my:
+> 
+> Reviewed-by: Stephan Gerhold <stephan@gerhold.net>
+> 
+> Thanks,
+> Stephan
