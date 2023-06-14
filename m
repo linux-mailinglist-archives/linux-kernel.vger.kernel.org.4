@@ -2,66 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 623BE7308F7
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 22:11:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A771730901
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 22:13:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbjFNULF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 16:11:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45232 "EHLO
+        id S236179AbjFNUNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 16:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbjFNULD (ORCPT
+        with ESMTP id S229817AbjFNUNx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 16:11:03 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCD110EC
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 13:11:02 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-5185f195f05so4686901a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 13:11:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1686773461; x=1689365461;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9EkKKYYY8csgF7Nu+oj6eisL8ER/DT9CHRKdsrScRso=;
-        b=I4R5pCSu8GbE0HEGfLFdYmhgsgWTBdeF9oVGFwF23DiiiR0e4zB8EI8BhbWvoqTzbR
-         e+XmCmtvMhQd3ZqLMOPcZvb1yuRNqjYrsX82tjBq5qEtSiOARvJxxvA/FZnu49JX6ozD
-         qs19SSGyqTwD6oYfRtOGZQ4ThK9C0Nq1mlomE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686773461; x=1689365461;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9EkKKYYY8csgF7Nu+oj6eisL8ER/DT9CHRKdsrScRso=;
-        b=eW2kpAjkjkKtASS49S5DmqwYOqk5wUXEoudcmN7pco5fN3k5PUhhiyFsOO/qy+698/
-         uv64CovZLL5COdoZ9jBgNPdLSUmRJdiJIr7LzS07OMMR56KXQgLtbno/0e6OGU6i+/Ay
-         dF7RsCKcBI5BQgtueST9XHFM+2XShZ6pVOTimTSPdDhrpbuvMrtmRXeJn2+K9ccZMI9v
-         QvQ/NTpngKVAFve+G9k51C9nR93ihfu1uKEbgIfLgXlFy4Ue+M8veRfZfpIrzSp4xGqt
-         Uh3g9n0Dn5JSZni+NjIsXuvizosq7M3yn9BSLGKsyEY8gFNZOVIsZjgBbDLdmoYfBUGX
-         BwBw==
-X-Gm-Message-State: AC+VfDzKkzXekVIXalSMfmKe692Mwz7iAJ0wGcHueZsPCARV8LK9zuRH
-        ChHuAZqP2R/d1S7U9byFu5IFCdPetmzX2FU5QPF3iA==
-X-Google-Smtp-Source: ACHHUZ5tNZByS5hCdD1ZesuxVKXsxMqK69r8rkj77kxF1UAlbi5hjf2Vem9iEcj1p3b5kiWkeFDx6A==
-X-Received: by 2002:a17:907:9454:b0:973:d857:9a33 with SMTP id dl20-20020a170907945400b00973d8579a33mr16203428ejc.11.1686773460727;
-        Wed, 14 Jun 2023 13:11:00 -0700 (PDT)
-Received: from localhost.localdomain ([80.208.70.1])
-        by smtp.gmail.com with ESMTPSA id cd10-20020a170906b34a00b0094f3d700868sm8399950ejb.80.2023.06.14.13.10.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 13:11:00 -0700 (PDT)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Christian Eggers <ceggers@arri.de>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: eeprom: at25: add st,m95640 compatible
-Date:   Wed, 14 Jun 2023 22:10:56 +0200
-Message-Id: <20230614201056.379080-1-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.37.2
+        Wed, 14 Jun 2023 16:13:53 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E58C3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 13:13:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686773632; x=1718309632;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=vVKZY+8DOmXEeWJ7p8EgdE3zXkLDQvwOA7M2hUI/z+4=;
+  b=PA5PUoH3hWCCu0yHrz/etmNfGjW6FTD5OcPse6g/M9tigqLDeLUo/bcE
+   XXNek+MQaNSi87QcvbCqVYtDzOw7R55Hbytl6ow3gr6mcXIyPdWw1+y89
+   Ey8a1+8/Jj52EP6FewqnsvtnyuyLBW9RZqiRzbyckOaoyCUKWd91q2RbJ
+   sUhIhulCoxdRWHpmeh4/IqT6qFHz1hzpj04ily161jzST0LlO2SXkW7+k
+   w/VQDtPd9//OQGqTcSp4sntQwoXDEda3Cw2uDJlKSIgE4zXvo6BteiLb8
+   BKVVPiSGEKyXDbTCgrTywr+56LMfy8LAJ1XoBVt/KhX7UAQ7SqImg1DrG
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="445096125"
+X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
+   d="scan'208";a="445096125"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 13:13:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="824952540"
+X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
+   d="scan'208";a="824952540"
+Received: from sohilmeh.sc.intel.com ([172.25.103.65])
+  by fmsmga002.fm.intel.com with ESMTP; 14 Jun 2023 13:13:52 -0700
+From:   Sohil Mehta <sohil.mehta@intel.com>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sohil Mehta <sohil.mehta@intel.com>
+Subject: [PATCH] x86/smpboot: Remove a stray comment about CPU hotplug
+Date:   Wed, 14 Jun 2023 20:13:01 +0000
+Message-Id: <20230614201301.1308363-1-sohil.mehta@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,32 +60,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The st,m95640 is a 64 Kbit SPI eeprom in the same family as the two
-existing st,m95* compatibles.
+This old comment is irrelavant to the logic of disabling interrupts and
+could be misleading. Remove it.
 
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Some history - commit 'e1367daf3eed5 ("[PATCH] cpu state clean after hot
+remove")' introduced this comment a while back. However, while
+refactoring the play_dead code, commit 'a21f5d88c17a ("x86: unify x86_32
+and x86_64 play_dead into one function")' missed moving it to the
+appropriate location.
+
+Now, hlt_play_dead() resembles the code that the comment was initially
+added for, but, it doesn't make sense anymore because an offlined cpu
+could also be put into other states such as mwait.
+
+Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
 ---
+ arch/x86/kernel/smpboot.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-In case its relevant the data sheet is easily available from
-https://www.st.com/en/memories/m95640-w.html . It seems odd they chose
-right-pad with a 0, 640 instead of 064 (m02 means 2 Mbit, 256 means
-256 Kbit, so there's some logic to that), but here we are.
-
- Documentation/devicetree/bindings/eeprom/at25.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/eeprom/at25.yaml b/Documentation/devicetree/bindings/eeprom/at25.yaml
-index 11e2a95a7bcb..0e31bb36ebb1 100644
---- a/Documentation/devicetree/bindings/eeprom/at25.yaml
-+++ b/Documentation/devicetree/bindings/eeprom/at25.yaml
-@@ -33,6 +33,7 @@ properties:
-               - microchip,25lc040
-               - st,m95m02
-               - st,m95256
-+              - st,m95640
-               - cypress,fm25
+diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+index 352f0ce1ece4..64dd4703c1ff 100644
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -1734,9 +1734,6 @@ void play_dead_common(void)
+ 	/* Ack it */
+ 	(void)cpu_report_death();
  
-           - const: atmel,at25
+-	/*
+-	 * With physical CPU hotplug, we should halt the cpu
+-	 */
+ 	local_irq_disable();
+ }
+ 
 -- 
-2.37.2
+2.34.1
 
