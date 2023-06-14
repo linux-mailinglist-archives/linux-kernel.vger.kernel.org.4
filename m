@@ -2,315 +2,591 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF8A8730680
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 20:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3D0173075F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 20:36:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233638AbjFNSAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 14:00:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36390 "EHLO
+        id S234895AbjFNSgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 14:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbjFNSAe (ORCPT
+        with ESMTP id S229832AbjFNSgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 14:00:34 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF648C7
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:00:31 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-51400fa347dso1149a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:00:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686765630; x=1689357630;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GgxJlLA8wLn/M0aAHTm/1/LrgoyOzeZsPSKgsschXV8=;
-        b=PWFmQmN98IB62twE2ZU+8m/C/KOvlENeQx/4VYYwQSk4EI3Ii4ll5KzI1JKLeJ4Ef4
-         qX64TsKn9VfLtprU93X96UtDc7rwUlDkJeChFBv0tiLQQY0Hj9KrSJhLhIyl7NfI+6mM
-         9lN3g7xv7vIUXpHMoM0iOkvwU779rc7tjxg8mbTF6HTDUj5oV5O87RP6hVn7QvXm/tD3
-         3bEzTb33hGiuNA10HMvsGmWtZAi3ZRjev56jROLxTGZHNOgZT6G1VAbrK4wMHvYP8eC8
-         VI3oYYBQqo5V4zk9PYPUleqgiLkKLGvqhivf4S4ONcsjpYyoPFQ0Qyq/bVKL0RnBpdqC
-         6EpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686765630; x=1689357630;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GgxJlLA8wLn/M0aAHTm/1/LrgoyOzeZsPSKgsschXV8=;
-        b=FU3qkuE8NpMGyKZIhHCxTzdcWCXT6utQJ0TIb50OHEFtWcS/o3RuUsf0d8PdYQ63XB
-         13u8DyW0Ve+Ffoj9Bhcn44d0aAoQFrfDXTBN7YMF8GRNRQ4+J9h3Pb+4tA/eTS0h524Y
-         WneFLUGVqns3dpv6N29yywa4tQ5Tt2QjLfpDxQ5kS5QB4fvTc1E+AFD/pfNBh0313lM7
-         ytU70ULPUK0vYpBorU35xaUMq3gLTQQtZO7RKwB2BTtlCbnqL6JRTIyjg3qXGMdtxxnB
-         lYoipX3aGd8W47Dip7sAxySSwiJc5lCT0Y7ERHZQY3QHPnTgaGbM0C9jprtzAhqc42rM
-         2Inw==
-X-Gm-Message-State: AC+VfDzhFy4MnUWKwsINwd5GXUem20D8RyTAxkV7Q6L/p/t/UCYg6Y9d
-        hptziBlPStVtSZ1bkCEnx8vD2RA8yVZQocES3H9DBw==
-X-Google-Smtp-Source: ACHHUZ54WuluU7EgpzhjBSJClrf7OTSFZ7FwHmH45AFMEak4zwz7jxM7srJNVGtkYL6NsNcglFQGcHERY54JY8l3kW4=
-X-Received: by 2002:a50:9b17:0:b0:51a:1d77:e69d with SMTP id
- o23-20020a509b17000000b0051a1d77e69dmr2540edi.3.1686765630113; Wed, 14 Jun
- 2023 11:00:30 -0700 (PDT)
+        Wed, 14 Jun 2023 14:36:36 -0400
+X-Greylist: delayed 4891 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 14 Jun 2023 11:36:34 PDT
+Received: from imap5.colo.codethink.co.uk (imap5.colo.codethink.co.uk [78.40.148.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C46E69;
+        Wed, 14 Jun 2023 11:36:34 -0700 (PDT)
+Received: from [167.98.27.226] (helo=rainbowdash)
+        by imap5.colo.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
+        id 1q9U5C-008GBD-6D; Wed, 14 Jun 2023 18:14:59 +0100
+Received: from ben by rainbowdash with local (Exim 4.96)
+        (envelope-from <ben@rainbowdash>)
+        id 1q9U5C-000I0l-0s;
+        Wed, 14 Jun 2023 18:14:58 +0100
+From:   Ben Dooks <ben.dooks@sifive.com>
+To:     linux-pwm@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ben.dooks@codethink.co.uk, u.kleine-koenig@pengutronix.de,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        jarkko.nikula@linux.intel.com,
+        William Salmon <william.salmon@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
+        Ben Dooks <ben.dooks@sifive.com>
+Subject: [PATCH v8 1/5] pwm: dwc: split pci out of core driver
+Date:   Wed, 14 Jun 2023 18:14:53 +0100
+Message-Id: <20230614171457.69191-2-ben.dooks@sifive.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230614171457.69191-1-ben.dooks@sifive.com>
+References: <20230614171457.69191-1-ben.dooks@sifive.com>
 MIME-Version: 1.0
-References: <20230613102905.2808371-1-usama.anjum@collabora.com>
- <20230613102905.2808371-3-usama.anjum@collabora.com> <CABb0KFHWnbrf2ythvO0OKsd1ZS9b4D9BNzwBCbn6g9OX4n6ZOg@mail.gmail.com>
- <0db01d90-09d6-08a4-bbb8-70670d3baa94@collabora.com> <CABb0KFEn5TU480A=YiN82nLRtGyKMABi8cZjuiGUU_jFZZo+8g@mail.gmail.com>
- <34203acf-7270-7ade-a60e-ae0f729dcf70@collabora.com>
-In-Reply-To: <34203acf-7270-7ade-a60e-ae0f729dcf70@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Wed, 14 Jun 2023 20:00:18 +0200
-Message-ID: <CABb0KFFaXgJD99pWfx3MC+qrq5jUaPis_kZo6U8yL_8xdp0GJA@mail.gmail.com>
-Subject: Re: [PATCH v18 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(A quick reply to answer open questions in case they help the next version.=
-)
+Moving towards adding non-pci support for the driver, move the pci
+parts out of the core into their own module. This is partly due to
+the module_driver() code only being allowed once in a module and also
+to avoid a number of #ifdef if we build a single file in a system
+without pci support.
 
-On Wed, 14 Jun 2023 at 19:10, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
-> On 6/14/23 8:14=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> > On Wed, 14 Jun 2023 at 15:46, Muhammad Usama Anjum
-> > <usama.anjum@collabora.com> wrote:
-> >>
-> >> On 6/14/23 3:36=E2=80=AFAM, Micha=C5=82 Miros=C5=82aw wrote:
-> >>> On Tue, 13 Jun 2023 at 12:29, Muhammad Usama Anjum
-> >>> <usama.anjum@collabora.com> wrote:
-[...]
-> >>>> +       if (cur_buf->bitmap =3D=3D bitmap &&
-> >>>> +           cur_buf->start + cur_buf->len * PAGE_SIZE =3D=3D addr) {
-> >>>> +               cur_buf->len +=3D n_pages;
-> >>>> +               p->found_pages +=3D n_pages;
-> >>>> +       } else {
-> >>>> +               if (cur_buf->len && p->vec_buf_index >=3D p->vec_buf=
-_len)
-> >>>> +                       return -ENOMEM;
-> >>>
-> >>> Shouldn't this be -ENOSPC? -ENOMEM usually signifies that the kernel
-> >>> ran out of memory when allocating, not that there is no space in a
-> >>> user-provided buffer.
-> >> There are 3 kinds of return values here:
-> >> * PM_SCAN_FOUND_MAX_PAGES (1) ---> max_pages have been found. Abort th=
-e
-> >> page walk from next entry
-> >> * 0 ---> continue the page walk
-> >> * -ENOMEM --> Abort the page walk from current entry, user buffer is f=
-ull
-> >> which is not error, but only a stop signal. This -ENOMEM is just
-> >> differentiater from (1). This -ENOMEM is for internal use and isn't
-> >> returned to user.
-> >
-> > But why ENOSPC is not good here? I was used before, I think.
-> -ENOSPC is being returned in form of true error from
-> pagemap_scan_hugetlb_entry(). So I'd to remove -ENOSPC from here as it
-> wasn't true error here, it was only a way to abort the walk immediately.
-> I'm liking the following erturn code from here now:
->
-> #define PM_SCAN_BUFFER_FULL     (-256)
+Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+---
+v8:
+ - add module namespace
+ - remove compile-test for pci case, doesn't make sense
+ - fix makefile, missed config symbol changes
+v7:
+ - re-order kconfig to make dwc core be selected by PCI driver
+v6:
+ - put DWC_PERIOD_NS back to avoid bisect issues
+v4:
+ - removed DWC_PERIOD_NS as not needed
+---
+ drivers/pwm/Kconfig        |  14 ++-
+ drivers/pwm/Makefile       |   1 +
+ drivers/pwm/pwm-dwc-core.c | 176 +++++++++++++++++++++++++++++++++
+ drivers/pwm/pwm-dwc.c      | 197 +------------------------------------
+ drivers/pwm/pwm-dwc.h      |  60 +++++++++++
+ 5 files changed, 253 insertions(+), 195 deletions(-)
+ create mode 100644 drivers/pwm/pwm-dwc-core.c
+ create mode 100644 drivers/pwm/pwm-dwc.h
 
-I guess this will be reworked anyway, but I'd prefer this didn't need
-custom errors etc. If we agree to decoupling the selection and GET
-output, it could be:
+diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
+index 8df861b1f4a3..7c54cdcb97a0 100644
+--- a/drivers/pwm/Kconfig
++++ b/drivers/pwm/Kconfig
+@@ -186,9 +186,19 @@ config PWM_CROS_EC
+ 	  PWM driver for exposing a PWM attached to the ChromeOS Embedded
+ 	  Controller.
+ 
++config PWM_DWC_CORE
++	tristate
++	depends on HAS_IOMEM
++	help
++	  PWM driver for Synopsys DWC PWM Controller.
++
++	  To compile this driver as a module, build the dependecies as
++	  modules, this will be called pwm-dwc-core.
++
+ config PWM_DWC
+-	tristate "DesignWare PWM Controller"
+-	depends on PCI
++	tristate "DesignWare PWM Controller (PCI bus)"
++	depends on HAS_IOMEM && PCI
++	select PWM_DWC_CORE
+ 	help
+ 	  PWM driver for Synopsys DWC PWM Controller attached to a PCI bus.
+ 
+diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
+index 19899b912e00..de3ed77e8d7c 100644
+--- a/drivers/pwm/Makefile
++++ b/drivers/pwm/Makefile
+@@ -15,6 +15,7 @@ obj-$(CONFIG_PWM_CLK)		+= pwm-clk.o
+ obj-$(CONFIG_PWM_CLPS711X)	+= pwm-clps711x.o
+ obj-$(CONFIG_PWM_CRC)		+= pwm-crc.o
+ obj-$(CONFIG_PWM_CROS_EC)	+= pwm-cros-ec.o
++obj-$(CONFIG_PWM_DWC_CORE)	+= pwm-dwc-core.o
+ obj-$(CONFIG_PWM_DWC)		+= pwm-dwc.o
+ obj-$(CONFIG_PWM_EP93XX)	+= pwm-ep93xx.o
+ obj-$(CONFIG_PWM_FSL_FTM)	+= pwm-fsl-ftm.o
+diff --git a/drivers/pwm/pwm-dwc-core.c b/drivers/pwm/pwm-dwc-core.c
+new file mode 100644
+index 000000000000..b693cb7fa812
+--- /dev/null
++++ b/drivers/pwm/pwm-dwc-core.c
+@@ -0,0 +1,176 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * DesignWare PWM Controller driver core
++ *
++ * Copyright (C) 2018-2020 Intel Corporation
++ *
++ * Author: Felipe Balbi (Intel)
++ * Author: Jarkko Nikula <jarkko.nikula@linux.intel.com>
++ * Author: Raymond Tan <raymond.tan@intel.com>
++ */
++
++#define DEFAULT_SYMBOL_NAMESPACE dwc_pwm
++
++#include <linux/bitops.h>
++#include <linux/export.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/pci.h>
++#include <linux/pm_runtime.h>
++#include <linux/pwm.h>
++
++#include "pwm-dwc.h"
++
++static void __dwc_pwm_set_enable(struct dwc_pwm *dwc, int pwm, int enabled)
++{
++	u32 reg;
++
++	reg = dwc_pwm_readl(dwc, DWC_TIM_CTRL(pwm));
++
++	if (enabled)
++		reg |= DWC_TIM_CTRL_EN;
++	else
++		reg &= ~DWC_TIM_CTRL_EN;
++
++	dwc_pwm_writel(dwc, reg, DWC_TIM_CTRL(pwm));
++}
++
++static int __dwc_pwm_configure_timer(struct dwc_pwm *dwc,
++				     struct pwm_device *pwm,
++				     const struct pwm_state *state)
++{
++	u64 tmp;
++	u32 ctrl;
++	u32 high;
++	u32 low;
++
++	/*
++	 * Calculate width of low and high period in terms of input clock
++	 * periods and check are the result within HW limits between 1 and
++	 * 2^32 periods.
++	 */
++	tmp = DIV_ROUND_CLOSEST_ULL(state->duty_cycle, DWC_CLK_PERIOD_NS);
++	if (tmp < 1 || tmp > (1ULL << 32))
++		return -ERANGE;
++	low = tmp - 1;
++
++	tmp = DIV_ROUND_CLOSEST_ULL(state->period - state->duty_cycle,
++				    DWC_CLK_PERIOD_NS);
++	if (tmp < 1 || tmp > (1ULL << 32))
++		return -ERANGE;
++	high = tmp - 1;
++
++	/*
++	 * Specification says timer usage flow is to disable timer, then
++	 * program it followed by enable. It also says Load Count is loaded
++	 * into timer after it is enabled - either after a disable or
++	 * a reset. Based on measurements it happens also without disable
++	 * whenever Load Count is updated. But follow the specification.
++	 */
++	__dwc_pwm_set_enable(dwc, pwm->hwpwm, false);
++
++	/*
++	 * Write Load Count and Load Count 2 registers. Former defines the
++	 * width of low period and latter the width of high period in terms
++	 * multiple of input clock periods:
++	 * Width = ((Count + 1) * input clock period).
++	 */
++	dwc_pwm_writel(dwc, low, DWC_TIM_LD_CNT(pwm->hwpwm));
++	dwc_pwm_writel(dwc, high, DWC_TIM_LD_CNT2(pwm->hwpwm));
++
++	/*
++	 * Set user-defined mode, timer reloads from Load Count registers
++	 * when it counts down to 0.
++	 * Set PWM mode, it makes output to toggle and width of low and high
++	 * periods are set by Load Count registers.
++	 */
++	ctrl = DWC_TIM_CTRL_MODE_USER | DWC_TIM_CTRL_PWM;
++	dwc_pwm_writel(dwc, ctrl, DWC_TIM_CTRL(pwm->hwpwm));
++
++	/*
++	 * Enable timer. Output starts from low period.
++	 */
++	__dwc_pwm_set_enable(dwc, pwm->hwpwm, state->enabled);
++
++	return 0;
++}
++
++static int dwc_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
++			 const struct pwm_state *state)
++{
++	struct dwc_pwm *dwc = to_dwc_pwm(chip);
++
++	if (state->polarity != PWM_POLARITY_INVERSED)
++		return -EINVAL;
++
++	if (state->enabled) {
++		if (!pwm->state.enabled)
++			pm_runtime_get_sync(chip->dev);
++		return __dwc_pwm_configure_timer(dwc, pwm, state);
++	} else {
++		if (pwm->state.enabled) {
++			__dwc_pwm_set_enable(dwc, pwm->hwpwm, false);
++			pm_runtime_put_sync(chip->dev);
++		}
++	}
++
++	return 0;
++}
++
++static int dwc_pwm_get_state(struct pwm_chip *chip, struct pwm_device *pwm,
++			     struct pwm_state *state)
++{
++	struct dwc_pwm *dwc = to_dwc_pwm(chip);
++	u64 duty, period;
++
++	pm_runtime_get_sync(chip->dev);
++
++	state->enabled = !!(dwc_pwm_readl(dwc,
++				DWC_TIM_CTRL(pwm->hwpwm)) & DWC_TIM_CTRL_EN);
++
++	duty = dwc_pwm_readl(dwc, DWC_TIM_LD_CNT(pwm->hwpwm));
++	duty += 1;
++	duty *= DWC_CLK_PERIOD_NS;
++	state->duty_cycle = duty;
++
++	period = dwc_pwm_readl(dwc, DWC_TIM_LD_CNT2(pwm->hwpwm));
++	period += 1;
++	period *= DWC_CLK_PERIOD_NS;
++	period += duty;
++	state->period = period;
++
++	state->polarity = PWM_POLARITY_INVERSED;
++
++	pm_runtime_put_sync(chip->dev);
++
++	return 0;
++}
++
++static const struct pwm_ops dwc_pwm_ops = {
++	.apply = dwc_pwm_apply,
++	.get_state = dwc_pwm_get_state,
++	.owner = THIS_MODULE,
++};
++
++struct dwc_pwm *dwc_pwm_alloc(struct device *dev)
++{
++	struct dwc_pwm *dwc;
++
++	dwc = devm_kzalloc(dev, sizeof(*dwc), GFP_KERNEL);
++	if (!dwc)
++		return NULL;
++
++	dwc->chip.dev = dev;
++	dwc->chip.ops = &dwc_pwm_ops;
++	dwc->chip.npwm = DWC_TIMERS_TOTAL;
++
++	dev_set_drvdata(dev, dwc);
++	return dwc;
++}
++EXPORT_SYMBOL_GPL(dwc_pwm_alloc);
++
++MODULE_AUTHOR("Felipe Balbi (Intel)");
++MODULE_AUTHOR("Jarkko Nikula <jarkko.nikula@linux.intel.com>");
++MODULE_AUTHOR("Raymond Tan <raymond.tan@intel.com>");
++MODULE_DESCRIPTION("DesignWare PWM Controller");
++MODULE_LICENSE("GPL");
+diff --git a/drivers/pwm/pwm-dwc.c b/drivers/pwm/pwm-dwc.c
+index 3bbb26c862c3..bd9cadb497d7 100644
+--- a/drivers/pwm/pwm-dwc.c
++++ b/drivers/pwm/pwm-dwc.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+- * DesignWare PWM Controller driver
++ * DesignWare PWM Controller driver (PCI part)
+  *
+  * Copyright (C) 2018-2020 Intel Corporation
+  *
+@@ -13,6 +13,8 @@
+  *   periods are one or more input clock periods long.
+  */
+ 
++#define DEFAULT_MOUDLE_NAMESPACE dwc_pwm
++
+ #include <linux/bitops.h>
+ #include <linux/export.h>
+ #include <linux/kernel.h>
+@@ -21,198 +23,7 @@
+ #include <linux/pm_runtime.h>
+ #include <linux/pwm.h>
+ 
+-#define DWC_TIM_LD_CNT(n)	((n) * 0x14)
+-#define DWC_TIM_LD_CNT2(n)	(((n) * 4) + 0xb0)
+-#define DWC_TIM_CUR_VAL(n)	(((n) * 0x14) + 0x04)
+-#define DWC_TIM_CTRL(n)		(((n) * 0x14) + 0x08)
+-#define DWC_TIM_EOI(n)		(((n) * 0x14) + 0x0c)
+-#define DWC_TIM_INT_STS(n)	(((n) * 0x14) + 0x10)
+-
+-#define DWC_TIMERS_INT_STS	0xa0
+-#define DWC_TIMERS_EOI		0xa4
+-#define DWC_TIMERS_RAW_INT_STS	0xa8
+-#define DWC_TIMERS_COMP_VERSION	0xac
+-
+-#define DWC_TIMERS_TOTAL	8
+-#define DWC_CLK_PERIOD_NS	10
+-
+-/* Timer Control Register */
+-#define DWC_TIM_CTRL_EN		BIT(0)
+-#define DWC_TIM_CTRL_MODE	BIT(1)
+-#define DWC_TIM_CTRL_MODE_FREE	(0 << 1)
+-#define DWC_TIM_CTRL_MODE_USER	(1 << 1)
+-#define DWC_TIM_CTRL_INT_MASK	BIT(2)
+-#define DWC_TIM_CTRL_PWM	BIT(3)
+-
+-struct dwc_pwm_ctx {
+-	u32 cnt;
+-	u32 cnt2;
+-	u32 ctrl;
+-};
+-
+-struct dwc_pwm {
+-	struct pwm_chip chip;
+-	void __iomem *base;
+-	struct dwc_pwm_ctx ctx[DWC_TIMERS_TOTAL];
+-};
+-#define to_dwc_pwm(p)	(container_of((p), struct dwc_pwm, chip))
+-
+-static inline u32 dwc_pwm_readl(struct dwc_pwm *dwc, u32 offset)
+-{
+-	return readl(dwc->base + offset);
+-}
+-
+-static inline void dwc_pwm_writel(struct dwc_pwm *dwc, u32 value, u32 offset)
+-{
+-	writel(value, dwc->base + offset);
+-}
+-
+-static void __dwc_pwm_set_enable(struct dwc_pwm *dwc, int pwm, int enabled)
+-{
+-	u32 reg;
+-
+-	reg = dwc_pwm_readl(dwc, DWC_TIM_CTRL(pwm));
+-
+-	if (enabled)
+-		reg |= DWC_TIM_CTRL_EN;
+-	else
+-		reg &= ~DWC_TIM_CTRL_EN;
+-
+-	dwc_pwm_writel(dwc, reg, DWC_TIM_CTRL(pwm));
+-}
+-
+-static int __dwc_pwm_configure_timer(struct dwc_pwm *dwc,
+-				     struct pwm_device *pwm,
+-				     const struct pwm_state *state)
+-{
+-	u64 tmp;
+-	u32 ctrl;
+-	u32 high;
+-	u32 low;
+-
+-	/*
+-	 * Calculate width of low and high period in terms of input clock
+-	 * periods and check are the result within HW limits between 1 and
+-	 * 2^32 periods.
+-	 */
+-	tmp = DIV_ROUND_CLOSEST_ULL(state->duty_cycle, DWC_CLK_PERIOD_NS);
+-	if (tmp < 1 || tmp > (1ULL << 32))
+-		return -ERANGE;
+-	low = tmp - 1;
+-
+-	tmp = DIV_ROUND_CLOSEST_ULL(state->period - state->duty_cycle,
+-				    DWC_CLK_PERIOD_NS);
+-	if (tmp < 1 || tmp > (1ULL << 32))
+-		return -ERANGE;
+-	high = tmp - 1;
+-
+-	/*
+-	 * Specification says timer usage flow is to disable timer, then
+-	 * program it followed by enable. It also says Load Count is loaded
+-	 * into timer after it is enabled - either after a disable or
+-	 * a reset. Based on measurements it happens also without disable
+-	 * whenever Load Count is updated. But follow the specification.
+-	 */
+-	__dwc_pwm_set_enable(dwc, pwm->hwpwm, false);
+-
+-	/*
+-	 * Write Load Count and Load Count 2 registers. Former defines the
+-	 * width of low period and latter the width of high period in terms
+-	 * multiple of input clock periods:
+-	 * Width = ((Count + 1) * input clock period).
+-	 */
+-	dwc_pwm_writel(dwc, low, DWC_TIM_LD_CNT(pwm->hwpwm));
+-	dwc_pwm_writel(dwc, high, DWC_TIM_LD_CNT2(pwm->hwpwm));
+-
+-	/*
+-	 * Set user-defined mode, timer reloads from Load Count registers
+-	 * when it counts down to 0.
+-	 * Set PWM mode, it makes output to toggle and width of low and high
+-	 * periods are set by Load Count registers.
+-	 */
+-	ctrl = DWC_TIM_CTRL_MODE_USER | DWC_TIM_CTRL_PWM;
+-	dwc_pwm_writel(dwc, ctrl, DWC_TIM_CTRL(pwm->hwpwm));
+-
+-	/*
+-	 * Enable timer. Output starts from low period.
+-	 */
+-	__dwc_pwm_set_enable(dwc, pwm->hwpwm, state->enabled);
+-
+-	return 0;
+-}
+-
+-static int dwc_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+-			 const struct pwm_state *state)
+-{
+-	struct dwc_pwm *dwc = to_dwc_pwm(chip);
+-
+-	if (state->polarity != PWM_POLARITY_INVERSED)
+-		return -EINVAL;
+-
+-	if (state->enabled) {
+-		if (!pwm->state.enabled)
+-			pm_runtime_get_sync(chip->dev);
+-		return __dwc_pwm_configure_timer(dwc, pwm, state);
+-	} else {
+-		if (pwm->state.enabled) {
+-			__dwc_pwm_set_enable(dwc, pwm->hwpwm, false);
+-			pm_runtime_put_sync(chip->dev);
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+-static int dwc_pwm_get_state(struct pwm_chip *chip, struct pwm_device *pwm,
+-			     struct pwm_state *state)
+-{
+-	struct dwc_pwm *dwc = to_dwc_pwm(chip);
+-	u64 duty, period;
+-
+-	pm_runtime_get_sync(chip->dev);
+-
+-	state->enabled = !!(dwc_pwm_readl(dwc,
+-				DWC_TIM_CTRL(pwm->hwpwm)) & DWC_TIM_CTRL_EN);
+-
+-	duty = dwc_pwm_readl(dwc, DWC_TIM_LD_CNT(pwm->hwpwm));
+-	duty += 1;
+-	duty *= DWC_CLK_PERIOD_NS;
+-	state->duty_cycle = duty;
+-
+-	period = dwc_pwm_readl(dwc, DWC_TIM_LD_CNT2(pwm->hwpwm));
+-	period += 1;
+-	period *= DWC_CLK_PERIOD_NS;
+-	period += duty;
+-	state->period = period;
+-
+-	state->polarity = PWM_POLARITY_INVERSED;
+-
+-	pm_runtime_put_sync(chip->dev);
+-
+-	return 0;
+-}
+-
+-static const struct pwm_ops dwc_pwm_ops = {
+-	.apply = dwc_pwm_apply,
+-	.get_state = dwc_pwm_get_state,
+-	.owner = THIS_MODULE,
+-};
+-
+-static struct dwc_pwm *dwc_pwm_alloc(struct device *dev)
+-{
+-	struct dwc_pwm *dwc;
+-
+-	dwc = devm_kzalloc(dev, sizeof(*dwc), GFP_KERNEL);
+-	if (!dwc)
+-		return NULL;
+-
+-	dwc->chip.dev = dev;
+-	dwc->chip.ops = &dwc_pwm_ops;
+-	dwc->chip.npwm = DWC_TIMERS_TOTAL;
+-
+-	dev_set_drvdata(dev, dwc);
+-	return dwc;
+-}
++#include "pwm-dwc.h"
+ 
+ static int dwc_pwm_probe(struct pci_dev *pci, const struct pci_device_id *id)
+ {
+diff --git a/drivers/pwm/pwm-dwc.h b/drivers/pwm/pwm-dwc.h
+new file mode 100644
+index 000000000000..56deab4e28ec
+--- /dev/null
++++ b/drivers/pwm/pwm-dwc.h
+@@ -0,0 +1,60 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * DesignWare PWM Controller driver
++ *
++ * Copyright (C) 2018-2020 Intel Corporation
++ *
++ * Author: Felipe Balbi (Intel)
++ * Author: Jarkko Nikula <jarkko.nikula@linux.intel.com>
++ * Author: Raymond Tan <raymond.tan@intel.com>
++ */
++
++MODULE_IMPORT_NS(dwc_pwm);
++
++#define DWC_TIM_LD_CNT(n)	((n) * 0x14)
++#define DWC_TIM_LD_CNT2(n)	(((n) * 4) + 0xb0)
++#define DWC_TIM_CUR_VAL(n)	(((n) * 0x14) + 0x04)
++#define DWC_TIM_CTRL(n)		(((n) * 0x14) + 0x08)
++#define DWC_TIM_EOI(n)		(((n) * 0x14) + 0x0c)
++#define DWC_TIM_INT_STS(n)	(((n) * 0x14) + 0x10)
++
++#define DWC_TIMERS_INT_STS	0xa0
++#define DWC_TIMERS_EOI		0xa4
++#define DWC_TIMERS_RAW_INT_STS	0xa8
++#define DWC_TIMERS_COMP_VERSION	0xac
++
++#define DWC_TIMERS_TOTAL	8
++#define DWC_CLK_PERIOD_NS	10
++
++/* Timer Control Register */
++#define DWC_TIM_CTRL_EN		BIT(0)
++#define DWC_TIM_CTRL_MODE	BIT(1)
++#define DWC_TIM_CTRL_MODE_FREE	(0 << 1)
++#define DWC_TIM_CTRL_MODE_USER	(1 << 1)
++#define DWC_TIM_CTRL_INT_MASK	BIT(2)
++#define DWC_TIM_CTRL_PWM	BIT(3)
++
++struct dwc_pwm_ctx {
++	u32 cnt;
++	u32 cnt2;
++	u32 ctrl;
++};
++
++struct dwc_pwm {
++	struct pwm_chip chip;
++	void __iomem *base;
++	struct dwc_pwm_ctx ctx[DWC_TIMERS_TOTAL];
++};
++#define to_dwc_pwm(p)	(container_of((p), struct dwc_pwm, chip))
++
++static inline u32 dwc_pwm_readl(struct dwc_pwm *dwc, u32 offset)
++{
++	return readl(dwc->base + offset);
++}
++
++static inline void dwc_pwm_writel(struct dwc_pwm *dwc, u32 value, u32 offset)
++{
++	writel(value, dwc->base + offset);
++}
++
++extern struct dwc_pwm *dwc_pwm_alloc(struct device *dev);
+-- 
+2.39.2
 
-bool is_interesting_page(p, flags); // this one does the
-required/anyof/excluded match
-size_t output_range(p, start, len, flags); // this one fills the
-output vector and returns how many pages were fit
-
-In this setup, `is_interesting_page() && (n_out =3D output_range()) <
-n_pages` means this is the final range, no more will fit. And if
-`n_out =3D=3D 0` then no pages fit and no WP is needed (no other special
-cases).
-
-> >>> For flags name: PM_REQUIRE_WRITE_ACCESS?
-> >>> Or Is it intended to be checked only if doing WP (as the current name
-> >>> suggests) and so it would be redundant as WP currently requires
-> >>> `p->required_mask =3D PAGE_IS_WRITTEN`?
-> >> This is intended to indicate that if userfaultfd is needed. If
-> >> PAGE_IS_WRITTEN is mentioned in any of mask, we need to check if
-> >> userfaultfd has been initialized for this memory. I'll rename to
-> >> PM_SCAN_REQUIRE_UFFD.
-> >
-> > Why do we need that check? Wouldn't `is_written =3D false` work for vma=
-s
-> > not registered via uffd?
-> UFFD_FEATURE_WP_ASYNC and UNPOPULATED needs to be set on the memory regio=
-n
-> for it to report correct written values on the memory region. Without UFF=
-D
-> WP ASYNC and UNPOUPULATED defined on the memory, we consider UFFD_WP stat=
-e
-> undefined. If user hasn't initialized memory with UFFD, he has no right t=
-o
-> set is_written =3D false.
-
-How about calculating `is_written =3D is_uffd_registered() &&
-is_uffd_wp()`? This would enable a user to apply GET+WP for the whole
-address space of a process regardless of whether all of it is
-registered.
-
-> > While here, I wonder if we really need to fail the call if there are
-> > unknown bits in those masks set: if this bit set is expanded with
-> > another category flags, a newer userspace run on older kernel would
-> > get EINVAL even if the "treat unknown as 0" be what it requires.
-> > There is no simple way in the API to discover what bits the kernel
-> > supports. We could allow a no-op (no WP nor GET) call to help with
-> > that and then rejecting unknown bits would make sense.
-> I've not seen any examples of this. But I've seen examples of returning
-> error if kernel doesn't support a feature. Each new feature comes with a
-> kernel version, greater than this version support this feature. If user i=
-s
-> trying to use advanced feature which isn't present in a kernel, we should
-> return error and not proceed to confuse the user/kernel. In fact if we lo=
-ok
-> at userfaultfd_api(), we return error immediately if feature has some bit
-> set which kernel doesn't support.
-
-I think we should have a way of detecting the supported flags if we
-don't want a forward compatibility policy for flags here. Maybe it
-would be enough to allow all the no-op combinations for this purpose?
-
-> >>> [...]
-> >>>> --- a/include/uapi/linux/fs.h
-> >>>> +++ b/include/uapi/linux/fs.h
-> >>>> +/*
-> >>>> + * struct page_region - Page region with bitmap flags
-> >>>> + * @start:     Start of the region
-> >>>> + * @len:       Length of the region in pages
-> >>>> + * bitmap:     Bits sets for the region
-> >>>
-> >>> '@' is missing for the third field. BTW, maybe we can call it
-> >>> something like `flags` or `category` (something that hints at the
-> >>> meaning of the value instead of its data representation).
-> >> The deification of this struct says, "with bitmap flags". Bitmap was a
-> >> different name. I'll update it to flags.
-> >
-> > From the implementation and our discussions I guess the
-> > `bitmap`/`flags` field is holding a set of matching categories: a bit
-> > value 1 =3D pages are in this category, value 0 =3D pages are not in th=
-is
-> > category.
-> >
-> >>>> +/*
-> >>>> + * struct pm_scan_arg - Pagemap ioctl argument
-> >>>> + * @size:              Size of the structure
-> >>>> + * @flags:             Flags for the IOCTL
-> >>>> + * @start:             Starting address of the region
-> >>>> + * @len:               Length of the region (All the pages in this =
-length are included)
-> >>>
-> >>> Maybe `scan_start`, `scan_len` - so that there is a better distinctio=
-n
-> >>> from the structure's `size` field?
-> >> As start and len already communicate the meaning. We are making things=
- more
-> >> verbose.
-> >
-> > We are describing (in the name) only that it is a range, but not of
-> > what or what purpose. That information is only in the docstring, but
-> > it is harder to get by someone just reading the code.
-> Agreed. But I'm using same names, start and len which mincore (a historic
-> syscall) is using. I've followed mincore here.
-
-mincore() doesn't take parameters as a struct, but as three positional
-arguments (whose names don't matter nor appear at call point) - I
-wouldn't take it as a precedent for structure field naming.
-
-> >>>> + * @vec:               Address of page_region struct array for outp=
-ut
-> >>>> + * @vec_len:           Length of the page_region struct array
-> >>>> + * @max_pages:         Optional max return pages
-> >>>> + * @required_mask:     Required mask - All of these bits have to be=
- set in the PTE
-> >>>> + * @anyof_mask:                Any mask - Any of these bits are set=
- in the PTE
-> >>>> + * @excluded_mask:     Exclude mask - None of these bits are set in=
- the PTE
-> >>>> + * @return_mask:       Bits that are to be reported in page_region
-> >>>> + */
-> >>>
-> >>> I skipped most of the page walk implementation as maybe the comments
-> >>> above could make it simpler. Reading this patch and the documentation
-> >>> I still feel confused about how the filtering/limiting parameters
-> >> I'm really sad to hear this. I've been working on making this series f=
-rom
-> >> so many revisions. I was hopping that it would make complete sense to
-> >> reviewers and later to users.
-> >>
-> >> What do you think is missing which is restricting these patches gettin=
-g
-> >> accepted to upstream?
-> >>
-> >>> should affect GET, WP and WP+GET. Should they limit the pages walked
-> >>> (and WP-ed)? Or only the GET's output? How about GET+WP case?
-> >> The address range needs to be walked until max pages pages are found, =
-user
-> >> buffer is full or whole range is walked. If the page will be added to =
-user
-> >> buffer or not depends on the selection criteria (*masks). There is no
-> >> difference in case of walk for GET, WP and GET+WP. Only that WP doesn'=
-t
-> >> take any user buffer and just WPs the whole region.
-> >
-> > Ok, then this intent (if I understand correctly) does not entirely
-> > match the implementation. Let's split up the conditions:
-> >
-> > 1. The address range needs to be walked until max pages pages are found
-> >
-> > current implementation: the address range is walked until max pages
-> > matching masks (incl. return_mask) are reported by GET (or until end
-> > of range if GET is not requested).
-> > Maybe we need to describe what "found" means here?
-> Found means all the pages which are found to be fulfilling the masks and =
-we
-> have added it to the user buffer. I can add the comment on top of
-> pagemap_scan_private struct? But I don't think that it is difficult to
-> understand the meaning of found_pages and also we compare it with max_pag=
-es
-> which makes things very easy to understand.
-
-After fixing `return_mask` and the selection/action split I think
-"pages found" might work - as now the count will be exactly what pages
-match the required/anyof/excluded criteria.
-
-> > 2. user buffer is full
-> > Matches implementation except in GET+WP edge cases.
-> I'm not sure which edge case you are referring to? Probably for hugetlb
-> error return case?
-
-Yes, that one.
-
-Best Regards
-Micha=C5=82 Miros=C5=82aw
