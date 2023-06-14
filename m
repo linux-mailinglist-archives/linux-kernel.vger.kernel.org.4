@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3825172FF2F
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:56:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D72FE72FF32
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244116AbjFNM4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 08:56:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
+        id S244778AbjFNM4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 08:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236378AbjFNMz4 (ORCPT
+        with ESMTP id S244773AbjFNM4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 08:55:56 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3B81FFB;
-        Wed, 14 Jun 2023 05:55:54 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f8d2bfec9bso7632545e9.0;
-        Wed, 14 Jun 2023 05:55:54 -0700 (PDT)
+        Wed, 14 Jun 2023 08:56:09 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39C51715;
+        Wed, 14 Jun 2023 05:56:06 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f8cc04c287so5841605e9.0;
+        Wed, 14 Jun 2023 05:56:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686747352; x=1689339352;
+        d=gmail.com; s=20221208; t=1686747365; x=1689339365;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6Y8eii1r9u9BsE8Cxn/BFgcHPymaswarfpY9l4mkywE=;
-        b=EBmpjVhBuG8USId5EMZUbNdW6u+JlW25TLBTVA9pMQyCea1mEZvHL1T4pkMx2eroiz
-         O0K7NrbBzy1F5Ye+gd1WG6BETBOnQM9anZMNK8TOpHeY7qyk9drC8l5gCY0KyfFcFJSt
-         QdyXal+eegewyCBm5hwUZNQ8Fa+NT4rIMZ5qdmm5xIw2tsJX3kA0U09TjWiNakdDVxfI
-         gO6kIkAURmUIvWm7VLl9ezDGXyJwA34x/hAn2J90+Mlt8WAyM/E187pY7/CNjnoc94Di
-         DT63aDOKKJaEP46HLELW/kyqmIUXqTE5htmlauLNrIKYAEkTIkf1X6U64mHSpQeyDQgd
-         RjFQ==
+        bh=YepcUjgWrlzucwsUXaypG8Xwm55IhlbZIwruLgPvyBE=;
+        b=F51kGwChgtMam7+0FLFHEzdk+DFy/9+MlYjnFjYPdWQhHG8jv6vSd9cO+88v3BfRPw
+         BHCQwfdLUYSjub3dCSa71rl6vUYkohnDsgpoc+98YpmON1uNihUkFG4vJZiPy5O13zuf
+         kcRvqBmcbmtEVGwbSB2CdZjd4wqqDaIdfko2K2kHmFqnMsgUVNKNisAjxRGA5sMKnlnc
+         HlFGkTFVm6M6LrrHzI7yzcQzMSwaS/S4lfp1JpYzCyn2viM0dMNikN1d5nGe5Hryy9/h
+         zhKFnH/NJT/IKKGoXIrNS0rPjg8IJKIPLZf86Kj4YJ4/rjAwVIAn4ivceBv7ICw83b43
+         PFdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686747352; x=1689339352;
+        d=1e100.net; s=20221208; t=1686747365; x=1689339365;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6Y8eii1r9u9BsE8Cxn/BFgcHPymaswarfpY9l4mkywE=;
-        b=b50G9gJdjNMAAKpvg4U5mx/Omujxv9F0rvOu78mSIJOiVOETjEXN1Yx95aLWDukP4V
-         Ym7A5j+unr2bxO5RXuiqWtyMAx5V8eyxEWTjHUU136gcvLyYkvpx1LqCYN9OXMz/Kh5C
-         lp7csuKdpfDpopHOAvJcX/0WNmJYEvtVzkzSkY6eXTvN39QNR8T/zy45Al+5e8dSv7Hh
-         pJa51q2IYlKUuXC8f9cqy6024Lxyv/HxRs7ZzXAK8cYEShX78Sq8J3J+aM8toMaWGSLU
-         NrNZMgmi68ZKX1fyIPS+EpjQKWfDq+7xD5nwU7cNechYt/VVQX3JKBqllsCOAfQBiNrC
-         hKsA==
-X-Gm-Message-State: AC+VfDxgzGE4tCPxGWHfs3JalgNv022t2LF+W+L1SAUhAOb52KJogekY
-        I1Dsw9crofmQs0VtHCx0Vu8FPCYyUQWc8Qul
-X-Google-Smtp-Source: ACHHUZ7SAHgLvBtL/br477qMLUb626VlO3QGqyv4Wm6I/D/QtIR5Wjs5U48AhWp5oiSwn5abyy6svQ==
-X-Received: by 2002:a1c:7906:0:b0:3f7:e48b:974d with SMTP id l6-20020a1c7906000000b003f7e48b974dmr13047139wme.27.1686747352125;
-        Wed, 14 Jun 2023 05:55:52 -0700 (PDT)
+        bh=YepcUjgWrlzucwsUXaypG8Xwm55IhlbZIwruLgPvyBE=;
+        b=NffBKj9Z1IwffQMPKfLX2duc6VRopDZ+MaaA0QEz/o4MgmqwTTtWxq24WoPIN1ewd7
+         EmcCldxnAfi35VE8c5htO9Mguqh2gpD/s0o6woe89vaFbObleUmfZYnGVaMXnlecwQF8
+         0vCRuA0FsKBgtSxQHW/YxJ6+2EDqbWbJvux8oXimDGKpauHSoxtkzUrlzoNXuN+HDacm
+         QhIO6ZzMZD+J6jFaNlXpu/PTjIhJFR/ksb7tZCQ+jI7BQFYQlBAWkjoQLvZ5pyX2rvxW
+         CDCAOpBAAl/Yvay+UewQegDdvQlYmhNw8QEiZ1IxJ2PpO7uW1Q+0bP1buE/dEUypJV4a
+         pF+g==
+X-Gm-Message-State: AC+VfDxFY/KdGGN1LO53Ulmyi6HNmTN7ZKto86dxxbOX7wSBgGvN8+Ms
+        hMwpA4BOdtr0ceFf2qH5UyXlE7grV/FyADrG
+X-Google-Smtp-Source: ACHHUZ4jL/18v+yeoDRa6uKUlkZ94eQoDQIc/G0RPv2dXEDM634qS0fXpWbBMwLe/D9AttbkyWXPcw==
+X-Received: by 2002:a1c:6a18:0:b0:3f7:19f9:4c4f with SMTP id f24-20020a1c6a18000000b003f719f94c4fmr10721940wmc.21.1686747364978;
+        Wed, 14 Jun 2023 05:56:04 -0700 (PDT)
 Received: from user-PC.. ([92.51.95.194])
-        by smtp.gmail.com with ESMTPSA id c21-20020a05600c0ad500b003f7310a3ffasm17402522wmr.2.2023.06.14.05.55.49
+        by smtp.gmail.com with ESMTPSA id c21-20020a05600c0ad500b003f7310a3ffasm17402522wmr.2.2023.06.14.05.56.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 05:55:51 -0700 (PDT)
+        Wed, 14 Jun 2023 05:56:04 -0700 (PDT)
 From:   Maksim Kiselev <bigunclemax@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Maxim Kiselev <bigunclemax@gmail.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
         Vasily Khoruzhick <anarsoul@gmail.com>,
         Yangtao Li <tiny.windzz@gmail.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -70,13 +69,12 @@ Cc:     Maxim Kiselev <bigunclemax@gmail.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Andre Przywara <andre.przywara@arm.com>,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-riscv@lists.infradead.org
-Subject: [PATCH v5 1/3] dt-bindings: thermal: sun8i: Add binding for D1/T113s THS controller
-Date:   Wed, 14 Jun 2023 15:55:19 +0300
-Message-Id: <20230614125530.660597-2-bigunclemax@gmail.com>
+Subject: [PATCH v5 2/3] thermal: sun8i: Add D1/T113s THS controller support
+Date:   Wed, 14 Jun 2023 15:55:20 +0300
+Message-Id: <20230614125530.660597-3-bigunclemax@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230614125530.660597-1-bigunclemax@gmail.com>
 References: <20230614125530.660597-1-bigunclemax@gmail.com>
@@ -94,53 +92,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Maxim Kiselev <bigunclemax@gmail.com>
 
-Add a binding for D1/T113s thermal sensor controller.
+This patch adds a thermal sensor controller support for the D1/T113s,
+which is similar to the one on H6, but with only one sensor and
+different scale and offset values.
 
 Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- .../bindings/thermal/allwinner,sun8i-a83t-ths.yaml         | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/thermal/sun8i_thermal.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
-index fbd4212285e2..9b2272a9ec15 100644
---- a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
-+++ b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
-@@ -16,6 +16,7 @@ properties:
-       - allwinner,sun8i-a83t-ths
-       - allwinner,sun8i-h3-ths
-       - allwinner,sun8i-r40-ths
-+      - allwinner,sun20i-d1-ths
-       - allwinner,sun50i-a64-ths
-       - allwinner,sun50i-a100-ths
-       - allwinner,sun50i-h5-ths
-@@ -61,6 +62,7 @@ allOf:
-         compatible:
-           contains:
-             enum:
-+              - allwinner,sun20i-d1-ths
-               - allwinner,sun50i-a100-ths
-               - allwinner,sun50i-h6-ths
+diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
+index 793ddce72132..01cc4e130892 100644
+--- a/drivers/thermal/sun8i_thermal.c
++++ b/drivers/thermal/sun8i_thermal.c
+@@ -628,6 +628,18 @@ static const struct ths_thermal_chip sun50i_h6_ths = {
+ 	.calc_temp = sun8i_ths_calc_temp,
+ };
  
-@@ -84,7 +86,9 @@ allOf:
-       properties:
-         compatible:
-           contains:
--            const: allwinner,sun8i-h3-ths
-+            enum:
-+              - allwinner,sun8i-h3-ths
-+              - allwinner,sun20i-d1-ths
- 
-     then:
-       properties:
-@@ -103,6 +107,7 @@ allOf:
-             enum:
-               - allwinner,sun8i-h3-ths
-               - allwinner,sun8i-r40-ths
-+              - allwinner,sun20i-d1-ths
-               - allwinner,sun50i-a64-ths
-               - allwinner,sun50i-a100-ths
-               - allwinner,sun50i-h5-ths
++static const struct ths_thermal_chip sun20i_d1_ths = {
++	.sensor_num = 1,
++	.has_bus_clk_reset = true,
++	.offset = 188552,
++	.scale = 673,
++	.temp_data_base = SUN50I_H6_THS_TEMP_DATA,
++	.calibrate = sun50i_h6_ths_calibrate,
++	.init = sun50i_h6_thermal_init,
++	.irq_ack = sun50i_h6_irq_ack,
++	.calc_temp = sun8i_ths_calc_temp,
++};
++
+ static const struct of_device_id of_ths_match[] = {
+ 	{ .compatible = "allwinner,sun8i-a83t-ths", .data = &sun8i_a83t_ths },
+ 	{ .compatible = "allwinner,sun8i-h3-ths", .data = &sun8i_h3_ths },
+@@ -636,6 +648,7 @@ static const struct of_device_id of_ths_match[] = {
+ 	{ .compatible = "allwinner,sun50i-a100-ths", .data = &sun50i_a100_ths },
+ 	{ .compatible = "allwinner,sun50i-h5-ths", .data = &sun50i_h5_ths },
+ 	{ .compatible = "allwinner,sun50i-h6-ths", .data = &sun50i_h6_ths },
++	{ .compatible = "allwinner,sun20i-d1-ths", .data = &sun20i_d1_ths },
+ 	{ /* sentinel */ },
+ };
+ MODULE_DEVICE_TABLE(of, of_ths_match);
 -- 
 2.39.2
 
