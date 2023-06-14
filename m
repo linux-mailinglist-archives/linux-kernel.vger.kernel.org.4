@@ -2,129 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59A0473097C
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 22:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F05C73097E
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 22:57:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236607AbjFNU5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 16:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
+        id S236941AbjFNU5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 16:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbjFNU5b (ORCPT
+        with ESMTP id S236959AbjFNU5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 16:57:31 -0400
-Received: from sender3-op-o17.zoho.com (sender3-op-o17.zoho.com [136.143.184.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9637E19B5;
-        Wed, 14 Jun 2023 13:57:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1686776211; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=aFappWL7SsPfif8zE0D8Tfmhy4NUMvXsuamJWPTdw2rM4GmUKGoQqI5Guw9NdZHa2p2UDWih9mbJx37mXwxEOa7IAJyYz6SStmnO9PwPITPtqo0dG1TnZK3qZfLf0an0wGPe2zI7Y4gEN0YL3RtvkI0nCE8mhCZa9Tn7G0VJUBI=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1686776211; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=ElJHcwOE2MD9MomG0N24epuSaWGnZJlvFOibVGSk+nA=; 
-        b=c0hShkqBouNuIVvFnIxBqAfcPho0VvFLeLnC6A7biB3yz7ZMta8+IPRMKQWJWvk5GpRZ8KGNkN/hKm73gwFMQrA3XTUGEZ27fnkM+IIj7jR+Kew0kYRdI0yzkn0tNtDXeD069t6GUaGWgaHIm0nwZHlgMXmbeh/lj80uRn1967A=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1686776211;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=ElJHcwOE2MD9MomG0N24epuSaWGnZJlvFOibVGSk+nA=;
-        b=ShtRgEElMlF/a608D506cpQfhGjn2MqBsOZwcue1eAY2vadQ6gtCSrTh4mNIGI3m
-        iB/tQYtOAH10+JjYcHROpjXLSklOKRjAAdTHJKO8SbjmkPqYHRSzWCm1i0tPAcstm21
-        LjrERJaVFow+5miCJa4c4BbOUJIlEDOwJfF42X3c=
-Received: from [192.168.99.141] (178-147-169-233.haap.dm.cosmote.net [178.147.169.233]) by mx.zohomail.com
-        with SMTPS id 168677621095320.21150552014285; Wed, 14 Jun 2023 13:56:50 -0700 (PDT)
-Message-ID: <1e737fe9-6a2e-225b-9c0f-9a069e8fd4bc@arinc9.com>
-Date:   Wed, 14 Jun 2023 23:56:44 +0300
+        Wed, 14 Jun 2023 16:57:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E561A19B5;
+        Wed, 14 Jun 2023 13:57:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F6536290C;
+        Wed, 14 Jun 2023 20:57:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE1B7C433C0;
+        Wed, 14 Jun 2023 20:57:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686776257;
+        bh=yaH6eux2dd5ZPnp/0Ms+wfN/I0bYz4osjzUcd1uhhsA=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=WdP3bRM7h6mE2P5SUdWjJ7izyhAZasB7CVc+o7LNWnKMjN7SEgQF97ZuwGmM2/mcb
+         Ecjr952eQlCLEdgVHAECC+ciObZoF1JqUVa0J4YD4Sj8Eku61Y30a7aDbnoEeZcHXR
+         3TKxo5NSQSFk5Mo2HgGnd/MpNxhUYz5HDDz+1C4gLepSEtL1xzMF1Z9P4KETUxh77Y
+         bkQ6uelAgxR6mzqD6YPF4whoO7eQ2vuy3CqtNioIRsk0MvZGY/v6jqxeyxb13Ho5v+
+         G2ioGROyaD6EwnylVeOWJNhcbdH2dqY7CMYqEBAICoKYP1HFbK/rYul8M8m4V0ycId
+         5VAg4+600iU4g==
+Message-ID: <43b404203c07f3b00877b43abdd66311.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH net v4 1/7] net: dsa: mt7530: fix trapping frames with
- multiple CPU ports on MT7531
-Content-Language: en-US
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230612075945.16330-1-arinc.unal@arinc9.com>
- <20230612075945.16330-1-arinc.unal@arinc9.com>
- <20230612075945.16330-2-arinc.unal@arinc9.com>
- <20230612075945.16330-2-arinc.unal@arinc9.com>
- <20230614194330.qhhoxai7namrgczq@skbuf>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <20230614194330.qhhoxai7namrgczq@skbuf>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230614121059.42888-1-abel.vesa@linaro.org>
+References: <20230614121059.42888-1-abel.vesa@linaro.org>
+Subject: Re: [GIT PULL] clk: imx: Updates for v6.5
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     NXP Linux Team <linux-imx@nxp.com>, linux-clk@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+To:     Abel Vesa <abel.vesa@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>
+Date:   Wed, 14 Jun 2023 13:57:35 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.06.2023 22:43, Vladimir Oltean wrote:
-> On Mon, Jun 12, 2023 at 10:59:39AM +0300, arinc9.unal@gmail.com wrote:
->> From: Arınç ÜNAL <arinc.unal@arinc9.com>
->>
->> Every bit of the CPU port bitmap for MT7531 and the switch on the MT7988
->> SoC represents a CPU port to trap frames to. These switches trap frames
->> received from a user port to the CPU port that is affine to the user port
->> from which the frames are received.
->>
->> Currently, only the bit that corresponds to the first found CPU port is set
->> on the bitmap. When multiple CPU ports are being used, the trapped frames
->> from the user ports not affine to the first CPU port will be dropped as the
->> other CPU port is not set on the bitmap. The switch on the MT7988 SoC is
->> not affected as there's only one port to be used as a CPU port.
->>
->> To fix this, introduce the MT7531_CPU_PMAP macro to individually set the
->> bits of the CPU port bitmap. Set the CPU port bitmap for MT7531 and the
->> switch on the MT7988 SoC on mt753x_cpu_port_enable() which runs on a loop
->> for each CPU port.
->>
->> Add a comment to explain frame trapping for these switches.
->>
->> According to the document MT7531 Reference Manual for Development Board
->> v1.0, the MT7531_CPU_PMAP bits are unset after reset so no need to clear it
->> beforehand. Since there's currently no public document for the switch on
->> the MT7988 SoC, I assume this is also the case for this switch.
->>
->> Fixes: c288575f7810 ("net: dsa: mt7530: Add the support of MT7531 switch")
->> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->> ---
-> 
-> Would you agree that this is just preparatory work for change "net: dsa:
-> introduce preferred_default_local_cpu_port and use on MT7530" and not a
-> fix to an existing problem in the code base?
+Quoting Abel Vesa (2023-06-14 05:10:59)
+> The following changes since commit ac9a78681b921877518763ba0e89202254349d=
+1b:
+>=20
+>   Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+>=20
+> are available in the Git repository at:
+>=20
+>   git://git.kernel.org/pub/scm/linux/kernel/git/abelvesa/linux.git/ tags/=
+clk-imx-6.5
+>=20
+> for you to fetch changes up to 878b02d5f3b56cb090dbe2c70c89273be144087f:
+>=20
+>   clk: imx: clk-imx8mp: improve error handling in imx8mp_clocks_probe() (=
+2023-06-12 12:20:02 +0300)
+>=20
+> ----------------------------------------------------------------
 
-Makes sense. Pre-preferred_default_local_cpu_port patch, there isn't a 
-case where there's a user port affine to a CPU port that is not enabled 
-on the CPU port bitmap. So yeah, this is just preparatory work for "net: 
-dsa: introduce preferred_default_local_cpu_port and use on MT7530".
-
-So how do I change the patch to reflect this?
-
-Arınç
+Thanks. Pulled into clk-next
