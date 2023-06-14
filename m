@@ -2,146 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F9C72F187
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 03:19:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 013BB72F18F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 03:20:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241987AbjFNBTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 21:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39738 "EHLO
+        id S242066AbjFNBTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 21:19:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241935AbjFNBS6 (ORCPT
+        with ESMTP id S242002AbjFNBTq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 21:18:58 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68510123;
-        Tue, 13 Jun 2023 18:18:57 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-543d32eed7cso2730564a12.2;
-        Tue, 13 Jun 2023 18:18:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686705537; x=1689297537;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8rlEEo9ikUJaK6kPNcD1MGYGJ2duYtePI073tq2+zWU=;
-        b=oYEYcNMp5KxkPdf9UjssCKvX91RZnKPWQtliT4xkdMh6wUhLo/HgUtc6IEG9O9gWud
-         UE7s6bBVjSDQlT34wkCTUrN+n4tVKq7ty2Lvo7KEklUuhSeFPp9Ielx4042MlB7ltx8m
-         wVf3kkXSdv7HWSKG92NqsSa6cEQUbmxEfe1dI3b5QyY0K0ysT6cXzf2Sxi7Cr+/Uvh1n
-         yRWpDwsckYZTY0Mnaro9ti9D6vBNc9RUDvgp+yCwURmT6cqhkU95SrugTV9UFJoJCjfL
-         v9JwFKNBFcYVqynPfElCM7VG3G6b6bgXSQasb5wv+e5k6qDZ1ogVd6G+umOL1OBJsTSh
-         fwYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686705537; x=1689297537;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8rlEEo9ikUJaK6kPNcD1MGYGJ2duYtePI073tq2+zWU=;
-        b=SoJABvx8If0Rd14keRDrxBCXLtUHkIpKODzNVTaGtV7KYU+shYVcqHilsfJXLfeaaC
-         i1SgCR1RspIhrRPo09IJWuY3xJ4RZ+1U/1g5lituTBz8SWYYvhLwQ5Dm+6mPJNwQTbfk
-         G3MWp8DvDHGMU50iQTEhXfd4eMe2Oq68LH4wLiTMJ5o6Zvzyrbi394YOO6pOeqz4/6Nc
-         YdawNshr7DSSlJISnJUdO0cZCcUQvKoUzxnz0TSkXo0IM1YT8xz9Za8UfZmig+4b4Cji
-         xVAqhtHSS7a+F7DECyPYO7uJvs0//I7SP0aFJInPHos7S5zp2OywNI/kNiB9oIcwJD5C
-         JMeg==
-X-Gm-Message-State: AC+VfDy2RyUq5imua9GcEQzeXbGryb7jnHMKGiXjHXzmJFAMMKJGjr5e
-        9/hlEg7ifQDr4KGRyMN8QuUURs24IWw=
-X-Google-Smtp-Source: ACHHUZ6ST5lfSynOfzFpFQetsY4B3xQufhNg6RfgeefKg/BKLEcPb8+yNElTpG47QCrMvPN+Efpjzg==
-X-Received: by 2002:a17:902:e74e:b0:1b3:8865:aaae with SMTP id p14-20020a170902e74e00b001b38865aaaemr13011364plf.53.1686705536763;
-        Tue, 13 Jun 2023 18:18:56 -0700 (PDT)
-Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id r21-20020a170902ea5500b001ac8e0ea157sm10804832plg.144.2023.06.13.18.18.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 18:18:56 -0700 (PDT)
-Message-ID: <a2ff6965-e373-5bce-00cd-c8d9deb287c8@gmail.com>
-Date:   Wed, 14 Jun 2023 09:18:51 +0800
+        Tue, 13 Jun 2023 21:19:46 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28AC195;
+        Tue, 13 Jun 2023 18:19:43 -0700 (PDT)
+Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QgnX45KKjz18MCL;
+        Wed, 14 Jun 2023 09:14:44 +0800 (CST)
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 14 Jun 2023 09:19:38 +0800
+Subject: Re: [PATCH v1 01/21] kexec: consolidate kexec and crash options into
+ kernel/Kconfig.kexec
+To:     Eric DeVolder <eric.devolder@oracle.com>, <linux@armlinux.org.uk>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <chenhuacai@kernel.org>, <geert@linux-m68k.org>,
+        <tsbogend@alpha.franken.de>,
+        <James.Bottomley@HansenPartnership.com>, <deller@gmx.de>,
+        <ysato@users.sourceforge.jp>, <dalias@libc.org>,
+        <glaubitz@physik.fu-berlin.de>, <tglx@linutronix.de>,
+        <mingo@redhat.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
+        <86@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-ia64@vger.kernel.org>, <loongarch@lists.linux.dev>,
+        <linux-m68k@lists.linux-m68k.org>, <linux-mips@vger.kernel.org>,
+        <linux-parisc@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
+        <linux-sh@vger.kernel.org>
+CC:     <kernel@xen0n.name>, <mpe@ellerman.id.au>, <npiggin@gmail.com>,
+        <christophe.leroy@csgroup.eu>, <paul.walmsley@sifive.com>,
+        <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>, <hca@linux.ibm.com>,
+        <gor@linux.ibm.com>, <agordeev@linux.ibm.com>,
+        <borntraeger@linux.ibm.com>, <svens@linux.ibm.com>,
+        <hpa@zytor.com>, <keescook@chromium.org>, <paulmck@kernel.org>,
+        <peterz@infradead.org>, <frederic@kernel.org>,
+        <akpm@linux-foundation.org>, <ardb@kernel.org>,
+        <samitolvanen@google.com>, <juerg.haefliger@canonical.com>,
+        <arnd@arndb.de>, <rmk+kernel@armlinux.org.uk>,
+        <linus.walleij@linaro.org>, <sebastian.reichel@collabora.com>,
+        <rppt@kernel.org>, <kirill.shutemov@linux.intel.com>,
+        <anshuman.khandual@arm.com>, <ziy@nvidia.com>,
+        <masahiroy@kernel.org>, <ndesaulniers@google.com>,
+        <mhiramat@kernel.org>, <ojeda@kernel.org>, <xin3.li@intel.com>,
+        <tj@kernel.org>, <gregkh@linuxfoundation.org>, <tsi@tuyoix.net>,
+        <bhe@redhat.com>, <hbathini@linux.ibm.com>,
+        <sourabhjain@linux.ibm.com>, <boris.ostrovsky@oracle.com>,
+        <konrad.wilk@oracle.com>
+References: <20230612172805.681179-1-eric.devolder@oracle.com>
+ <20230612172805.681179-2-eric.devolder@oracle.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <6e362106-9d74-1e00-b94d-ce094367e939@huawei.com>
+Date:   Wed, 14 Jun 2023 09:19:38 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v14 1/1] tty: serial: Add Nuvoton ma35d1 serial driver
- support
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        p.zabel@pengutronix.de, jirislaby@kernel.org, tmaimon77@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-serial@vger.kernel.org, arnd@arndb.de, soc@kernel.org,
-        schung@nuvoton.com, mjchen@nuvoton.com,
-        Jacky Huang <ychuang3@nuvoton.com>
-References: <20230612025355.547871-1-ychuang570808@gmail.com>
- <20230612025355.547871-2-ychuang570808@gmail.com>
- <2023061325-distant-gaffe-8871@gregkh>
- <0e40cbe6-0e88-b300-3507-5fa92eadb46d@gmail.com>
- <2023061312-outsource-triumph-7dd6@gregkh>
+In-Reply-To: <20230612172805.681179-2-eric.devolder@oracle.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-From:   Jacky Huang <ychuang570808@gmail.com>
-In-Reply-To: <2023061312-outsource-triumph-7dd6@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Greg,
 
 
-On 2023/6/13 下午 10:48, Greg KH wrote:
-> On Tue, Jun 13, 2023 at 07:03:11PM +0800, Jacky Huang wrote:
->> Dear Greg,
->>
->>
->> On 2023/6/13 下午 06:29, Greg KH wrote:
->>> On Mon, Jun 12, 2023 at 02:53:55AM +0000, Jacky Huang wrote:
->>>> From: Jacky Huang <ychuang3@nuvoton.com>
->>>>
->>>> This adds UART and console driver for Nuvoton ma35d1 Soc.
->>>> It supports full-duplex communication, FIFO control, and
->>>> hardware flow control.
->>> You don't specify here what your tty device name is going to be, why?
->>>
->>> It's not written anywhere, is that intentional?
->>>
->>> Same for your tty major/minor, what numbers are you using that might
->>> also be in use by a different device in the system?
->>>
->>> thanks,
->>>
->>> greg k-h
->> I will add description about the tty name to the log.
->> In practical testing, we specified in the u-boot parameters
->> to use ttyNVT0 for the console, and it worked fine.
-> Where did you pick that name from?  Why can't you use the "default" uart
-> name instead?
->
-> I thought we had a list of tty names around somewhere, but I can't find
-> it right now...
->
-> thanks,
->
-> greg k-h
+On 2023/6/13 1:27, Eric DeVolder wrote:
+> The config options for kexec and crash features are consolidated
+> into new file kernel/Kconfig.kexec. Under the "General Setup" submenu
+> is a new submenu "Kexec and crash handling" where all the kexec and
+> crash options that were once in the arch-dependent submenu "Processor
+> type and features" are now consolidated.
+> 
+> The following options are impacted:
+> 
+>  - KEXEC
+>  - KEXEC_FILE
+>  - KEXEC_SIG
+>  - KEXEC_SIG_FORCE
+>  - KEXEC_BZIMAGE_VERIFY_SIG
+>  - KEXEC_JUMP
+>  - CRASH_DUMP
+> 
+> The three main options are KEXEC, KEXEC_FILE and CRASH_DUMP.
+> 
+> Architectures specify support of certain KEXEC and CRASH features with
+> similarly named new ARCH_HAS_<option> config options.
+> 
+> Architectures can utilize the new ARCH_SUPPORTS_<option> config
+> options to specify additional components when <option> is enabled.
+> 
+> To summarize, the ARCH_HAS_<option> permits the <option> to be
+> enabled, and the ARCH_SUPPORTS_<option> handles side effects (ie.
+> select statements).
+> 
+> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+> ---
+>  arch/Kconfig         |  13 ------
+>  init/Kconfig         |   2 +
+>  kernel/Kconfig.kexec | 103 +++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 105 insertions(+), 13 deletions(-)
+>  create mode 100644 kernel/Kconfig.kexec
+> 
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index 205fd23e0cad..a37730679730 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -11,19 +11,6 @@ source "arch/$(SRCARCH)/Kconfig"
+>  
+>  menu "General architecture-dependent options"
+>  
+> -config CRASH_CORE
+> -	bool
+> -
+> -config KEXEC_CORE
+> -	select CRASH_CORE
+> -	bool
+> -
+> -config KEXEC_ELF
+> -	bool
+> -
+> -config HAVE_IMA_KEXEC
+> -	bool
+> -
+>  config ARCH_HAS_SUBPAGE_FAULTS
+>  	bool
+>  	help
+> diff --git a/init/Kconfig b/init/Kconfig
+> index 32c24950c4ce..4424447e23a5 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -1917,6 +1917,8 @@ config BINDGEN_VERSION_TEXT
+>  config TRACEPOINTS
+>  	bool
+>  
+> +source "kernel/Kconfig.kexec"
+> +
+>  endmenu		# General setup
+>  
+>  source "arch/Kconfig"
+> diff --git a/kernel/Kconfig.kexec b/kernel/Kconfig.kexec
+> new file mode 100644
+> index 000000000000..660048099865
+> --- /dev/null
+> +++ b/kernel/Kconfig.kexec
+> @@ -0,0 +1,103 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +
+> +menu "Kexec and crash features"
+> +
+> +config CRASH_CORE
+> +	bool
+> +
+> +config KEXEC_CORE
+> +	select CRASH_CORE
+> +	bool
+> +
+> +config KEXEC_ELF
+> +	bool
+> +
+> +config HAVE_IMA_KEXEC
+> +	bool
+> +
+> +config KEXEC
+> +	bool "Enable kexec system call"
+> +	default ARCH_DEFAULT_KEXEC
+> +	depends on ARCH_HAS_KEXEC
+> +	select KEXEC_CORE
+> +	help
+> +	  kexec is a system call that implements the ability to shutdown your
+> +	  current kernel, and to start another kernel.  It is like a reboot
+> +	  but it is independent of the system firmware.   And like a reboot
+> +	  you can start any kernel with it, not just Linux.
 
-Initially, we were using the well-known ttyS, but it is used by the 8250 
-driver.
-Since the MA35D1 UART is incompatible with the 8250 driver, Andr raised
-concerns about using ttyS.
+"kernel.  It is like", "firmware.   And like"
 
-To differentiate this UART from the incompatible 8250, we defined ttyNVT.
-This name is specified in the driver's UART name and console name
-structure, and other serial drivers follow a similar approach. For example,
-we can find names like ttySA, ttySAC, ttySC, ttySIF, ttySTM, ttySUP,
-and so on.
+A few more spaces, I don't know the original author's intention, perhaps can be removed.
 
-If you believe that this UART driver can use ttyS, I am more than willing to
-make the modification. After all, some applications and scripts default to
-using ttyS, and using ttyNVT can indeed cause some inconvenience in
-certain situations.
+> +
+> +	  The name comes from the similarity to the exec system call.
+> +
+> +	  It is an ongoing process to be certain the hardware in a machine
+> +	  is properly shutdown, so do not be surprised if this code does not
+> +	  initially work for you.  As of this writing the exact hardware
+> +	  interface is strongly in flux, so no good recommendation can be
+> +	  made.
+> +
+> +config KEXEC_FILE
+> +	bool "Enable kexec file based system call"
+> +	depends on ARCH_HAS_KEXEC_FILE
+> +	select KEXEC_CORE
+> +	help
+> +	  This is new version of kexec system call. This system call is
+> +	  file based and takes file descriptors as system call argument
+> +	  for kernel and initramfs as opposed to list of segments as
+> +	  accepted by previous system call.
+> +
+> +config KEXEC_SIG
+> +	bool "Verify kernel signature during kexec_file_load() syscall"
+> +	depends on KEXEC_FILE && MODULE_SIG_FORMAT
 
-Best regards,
-Jacky Huang
+I see that there is no "depends on MODULE_SIG_FORMAT" on x86 and arm64.
 
+> +	help
+> +
 
+This blank line can be deleted.
+
+> +	  This option makes the kexec_file_load() syscall check for a valid
+> +	  signature of the kernel image.  The image can still be loaded without
+> +	  a valid signature unless you also enable KEXEC_SIG_FORCE, though if
+> +	  there's a signature that we can check, then it must be valid.
+> +
+> +	  In addition to this option, you need to enable signature
+> +	  verification for the corresponding kernel image type being
+> +	  loaded in order for this to work.
+> +
+> +config KEXEC_SIG_FORCE
+> +	bool "Require a valid signature in kexec_file_load() syscall"
+> +	depends on KEXEC_SIG
+> +	help
+> +	  This option makes kernel signature verification mandatory for
+> +	  the kexec_file_load() syscall.
+> +
+> +config KEXEC_BZIMAGE_VERIFY_SIG
+> +	bool "Enable bzImage signature verification support"
+> +	depends on KEXEC_SIG
+> +	depends on SIGNED_PE_FILE_VERIFICATION
+> +	select SYSTEM_TRUSTED_KEYRING
+> +	help
+> +	  Enable bzImage signature verification support.
+> +
+> +config KEXEC_JUMP
+> +	bool "kexec jump"
+> +	depends on KEXEC && HIBERNATION
+> +	depends on ARCH_HAS_KEXEC_JUMP
+> +	help
+> +	  Jump between original kernel and kexeced kernel and invoke
+> +	  code in physical address mode via KEXEC
+> +
+> +config CRASH_DUMP
+> +	bool "kernel crash dumps"
+> +	depends on ARCH_HAS_CRASH_DUMP
+> +	select KEXEC_CORE
+> +	select CRASH_CORE
+> +	help
+> +	  Generate crash dump after being started by kexec.
+> +	  This should be normally only set in special crash dump kernels
+> +	  which are loaded in the main kernel with kexec-tools into
+> +	  a specially reserved region and then later executed after
+> +	  a crash by kdump/kexec. The crash dump kernel must be compiled
+> +	  to a memory address not used by the main kernel or BIOS using
+> +	  PHYSICAL_START, or it must be built as a relocatable image
+> +	  (CONFIG_RELOCATABLE=y).
+> +	  For more details see Documentation/admin-guide/kdump/kdump.rst
+> +
+> +	  For s390, this option also enables zfcpdump.
+> +	  See also <file:Documentation/s390/zfcpdump.rst>
+> +
+> +endmenu
+> 
+
+-- 
+Regards,
+  Zhen Lei
