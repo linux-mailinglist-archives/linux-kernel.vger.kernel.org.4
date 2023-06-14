@@ -2,174 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C8DB72F9E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 11:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77C9972F9E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 11:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240126AbjFNJ4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 05:56:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54488 "EHLO
+        id S238505AbjFNJ5n convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 14 Jun 2023 05:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243143AbjFNJ4o (ORCPT
+        with ESMTP id S233697AbjFNJ5m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 05:56:44 -0400
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B66173C
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 02:56:38 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 655E63F2DD;
-        Wed, 14 Jun 2023 11:56:36 +0200 (CEST)
-Date:   Wed, 14 Jun 2023 11:56:35 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Jessica Zhang <quic_jesszhan@quicinc.com>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, quic_abhinavk@quicinc.com,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] drm/msm/dsi: Enable DATABUS_WIDEN for DSI command
- mode
-Message-ID: <ky7sgsaohak2pcdf6pbhedfyrwk4ea7y3ekfqlw7rn6cpk4rhe@rjuhb23n37oz>
-References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
- <20230525-add-widebus-support-v1-3-c7069f2efca1@quicinc.com>
+        Wed, 14 Jun 2023 05:57:42 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A4DC2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 02:57:40 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-318-cYKJ_jYvN-aJa4XviMzn4A-1; Wed, 14 Jun 2023 10:57:37 +0100
+X-MC-Unique: cYKJ_jYvN-aJa4XviMzn4A-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 14 Jun
+ 2023 10:57:33 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Wed, 14 Jun 2023 10:57:33 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Steven Rostedt' <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+CC:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: RE: [PATCH] tracing: Add a debug_trace_printk() function
+Thread-Topic: [PATCH] tracing: Add a debug_trace_printk() function
+Thread-Index: AQHZnYZXodJCXa8lT0+2rDQCqxMQQa+KDaeA
+Date:   Wed, 14 Jun 2023 09:57:33 +0000
+Message-ID: <e2f3ce97329d488d8ecd4fea5fbdb4f6@AcuMS.aculab.com>
+References: <20230612193337.0fb0d3ca@gandalf.local.home>
+In-Reply-To: <20230612193337.0fb0d3ca@gandalf.local.home>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230525-add-widebus-support-v1-3-c7069f2efca1@quicinc.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-13 18:57:13, Jessica Zhang wrote:
-> DSI 6G v2.5.x+ supports a data-bus widen mode that allows DSI to send
-> 48 bits of compressed data per pclk instead of 24.
+From: Steven Rostedt
+> Sent: 13 June 2023 00:34
 > 
-> For all chipsets that support this mode, enable it whenever DSC is
-> enabled as recommend by the hardware programming guide.
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 > 
-> Only enable this for command mode as we are currently unable to validate
-> it for video mode.
+> While doing some tracing and kernel debugging, I found that some of my
+> trace_printk()s were being lost in the noise of the other code that was
+> being traced. Having a way to write trace_printk() not in the top level
+> trace buffer would have been useful.
 > 
-> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
-> ---
+> There was also a time I needed to debug ftrace itself, where
+> trace_printk() did not hit the paths that were being debugged. But because
+> the trace that was being debugged, was going into the top level ring
+> buffer, it was causing issues for seeing what is to be traced.
 > 
-> Note: The dsi.xml.h changes were generated using the headergen2 script in
-> envytools [1], but the changes to the copyright and rules-ng-ng source file
-> paths were dropped.
-> 
-> [1] https://github.com/freedreno/envytools/
+> To solve both of the above, add a debug_trace_printk() that can be used
+> just like trace_printk() except that it goes into a "debug" instance
+> buffer instead. This can be used at boot up as well.
+...
+> +#ifdef CONFIG_FTRACE_DEBUG_PRINT
+> +	debug_trace = trace_array_get_by_name("debug");
+> +	if (WARN_ON(!debug_trace))
+> +		return;
+> +	trace_array_init_printk(debug_trace);
+> +#endif
 
-More interesting would be a link to the Mesa MR upstreaming this
-bitfield to dsi.xml [2] (which I have not found on my own yet).
+I was wondering if that could be done whenever the "debug"
+trace_array is created?
+(perhaps only if trace_prink() has been used?)
+Since (AFAICT) it could be created at any time??
 
-[2]: https://gitlab.freedesktop.org/mesa/mesa/-/blame/main/src/freedreno/registers/dsi/dsi.xml
+So you wouldn't really need an extra kernel knob?
+(Except to get the boot time trace diverted.)
+The trace could go to the global buffer if the debug one
+isn't created.
 
->  drivers/gpu/drm/msm/dsi/dsi.xml.h  |  1 +
->  drivers/gpu/drm/msm/dsi/dsi_host.c | 19 ++++++++++++++++++-
->  2 files changed, 19 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi.xml.h b/drivers/gpu/drm/msm/dsi/dsi.xml.h
-> index a4a154601114..2a7d980e12c3 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi.xml.h
-> +++ b/drivers/gpu/drm/msm/dsi/dsi.xml.h
-> @@ -664,6 +664,7 @@ static inline uint32_t DSI_CMD_MODE_MDP_CTRL2_INPUT_RGB_SWAP(enum dsi_rgb_swap v
->  	return ((val) << DSI_CMD_MODE_MDP_CTRL2_INPUT_RGB_SWAP__SHIFT) & DSI_CMD_MODE_MDP_CTRL2_INPUT_RGB_SWAP__MASK;
->  }
->  #define DSI_CMD_MODE_MDP_CTRL2_BURST_MODE			0x00010000
-> +#define DSI_CMD_MODE_MDP_CTRL2_DATABUS_WIDEN			0x00100000
-> 
->  #define REG_DSI_CMD_MODE_MDP_STREAM2_CTRL			0x000001b8
->  #define DSI_CMD_MODE_MDP_STREAM2_CTRL_DATA_TYPE__MASK		0x0000003f
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> index 5d7b4409e4e9..1da5238e7105 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> @@ -927,6 +927,9 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
->  	u32 hdisplay = mode->hdisplay;
->  	u32 wc;
->  	int ret;
-> +	bool widebus_supported = msm_host->cfg_hnd->major == MSM_DSI_VER_MAJOR_6G &&
-> +			msm_host->cfg_hnd->minor >= MSM_DSI_6G_VER_MINOR_V2_5_0;
-> +
-> 
->  	DBG("");
-> 
-> @@ -973,8 +976,15 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
->  		 *
->  		 * hdisplay will be divided by 3 here to account for the fact
->  		 * that DPU sends 3 bytes per pclk cycle to DSI.
-> +		 *
-> +		 * If widebus is supported, set DATABUS_WIDEN register and divide hdisplay by 6
-> +		 * instead of 3
+OTOH I'm missing what trace_array_init_prink() does?
+It seems to just call alloc_percpu_trace_buffer() with
+no arguments.
 
-So this should allow us to divide pclk by 2, or have much lower latency?
-Otherwise it'll tick enough times to transmit the data twice.
+It looks like alloc_percpu_trace_buffer() is called if there
+are any trace_printk() formats in the main kernel.
+Hopefully they aren't just in modules??
 
-Note that I brought up the exact same concerns when you used the 3:1
-ratio from dsi_bpp / dsc_bpp in your pclk reduction patch (instad of the
-number of bits/bytes that DPU sends to DSI per pclk), but no-one has
-replied to my inquiry yet.
+	David
 
->  		 */
-> -		hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 3);
-> +		if (!(msm_host->mode_flags & MIPI_DSI_MODE_VIDEO) && widebus_supported)
-> +			hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 6);
-> +		else
-> +			hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 3);
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-Nit: I wonder if this is more concise when written as:
-
-    u32 bytes_per_pclk;
-    ...
-    if (!video && widebus)
-        bytes_per_pclk = 6;
-    else
-        bytes_per_pclk = 3;
-
-    hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc),
-                            bytes_per_pclk);
-
-That is less duplication, **and** the value becomes self-documenting!
-
-> +
->  		h_total += hdisplay;
->  		ha_end = ha_start + hdisplay;
->  	}
-> @@ -1027,6 +1037,13 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
->  		dsi_write(msm_host, REG_DSI_CMD_MDP_STREAM0_TOTAL,
->  			DSI_CMD_MDP_STREAM0_TOTAL_H_TOTAL(hdisplay) |
->  			DSI_CMD_MDP_STREAM0_TOTAL_V_TOTAL(mode->vdisplay));
-> +
-> +		if (msm_host->dsc && widebus_supported) {
-
-Can we also support widebus for uncompressed streams (sending 2 pixels
-of bpp=24 per pclk), and if so, is that something you want to add in the
-future (a comment would be nice)?
-
-> +			u32 mdp_ctrl2 = dsi_read(msm_host, REG_DSI_CMD_MODE_MDP_CTRL2);
-> +
-> +			mdp_ctrl2 |= DSI_CMD_MODE_MDP_CTRL2_DATABUS_WIDEN;
-> +			dsi_write(msm_host, REG_DSI_CMD_MODE_MDP_CTRL2, mdp_ctrl2);
-> +		}
-
-Same comment as on your BURST_MODE patch (which this'll conflict with):
-does this belong to the timing setup or is it better moved to
-dsi_ctrl_config?
-
-- Marijn
-
->  	}
->  }
-> 
-> 
-> --
-> 2.40.1
-> 
