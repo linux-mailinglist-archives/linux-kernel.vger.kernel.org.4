@@ -2,110 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1583972FFD8
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 15:20:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 354EF72FFE6
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 15:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244929AbjFNNUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 09:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39174 "EHLO
+        id S244941AbjFNNW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 09:22:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234810AbjFNNUd (ORCPT
+        with ESMTP id S244934AbjFNNWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 09:20:33 -0400
-Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B211118;
-        Wed, 14 Jun 2023 06:20:32 -0700 (PDT)
+        Wed, 14 Jun 2023 09:22:25 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2110.outbound.protection.outlook.com [40.107.92.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB9F1BEF;
+        Wed, 14 Jun 2023 06:22:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ku3OYXv739DOlaDnm72v02bNtHv4cBBfXRnz6v1bFTnl7OnOuvFkVMTyagbOk/tFlrpek+ukziVdR3ZyRCsVSFVd/jfgz6vhn4eqRoTuIsdWC8ILyqPqrHNAl7DWzzfVckTiN65igb5PHbxFUmXlM2XeazW8IJvHpEW2Svjw2lxUqyFgU8W6PRcb8nV3Dok9l5aVPnHth7usk8d7iemJjjznHbisGe6rpqoFcV0EHZzQeOgfNdXAlBSqCdEdgg1ibBtZV5UHwA9H+Cpb7+XI5c/CSYWfZkhis89ZUGlHU4ZmBUt8BJR0Y4U2lvw2MV+uCakWvqRtQndY947rt7KGEQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=F5dvz9wlM4jztB25uB6NP7ymWVehJob7EcQRWfqAkzI=;
+ b=coj8XZzp83CGTkuGtIhKPg9O5ZvumPmB9TKqoqivlJYQ205la0newZ6XFXse0eg13OOvojl9TEv83MNDq3RXs4fwBY4znIaIa3H0+AmAyDPqiVQGQRUPixLVPLlYQOIMNSarhVflARXBb4mnGsp1fsw9BIQ6gPWWQ9yVzHmB5buuIz8W+4JCAoe0iRAqFtviQNMT3cki+Ika7RWrRvQpalnYOA/HH7Xc0d3e/fkZSkYA0EVmsBUu7RUX1+HxS5nnEN3/AbbndMCwUyxkuo0SXwwnS3Q0sn3LoS5hyS/e7bNodtqrQd9+ASyO665G5gINX48KtZviVw0RWOWCjpLO9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1686748832; x=1718284832;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=TTY+FiTaX7AgDqQBUwj/BsShWUwI+/hjWm+TAF5VYBA=;
-  b=YN27Qk+3Rt9C38O7udVLhG76gTVD3bg8KbsPpPAtLVM27KoJd1LzIiop
-   GA9ugURrJt4c8Hr1FVrhQga9K51irEEdyyIdB7rWt+zw/3AI5EbdV+jNs
-   x793/lN3lpRuoImm7HX7zOYhoub4AH9s+Lm1M4RXotHRaeNdTGj/qFO+o
-   s=;
-X-IronPort-AV: E=Sophos;i="6.00,242,1681171200"; 
-   d="scan'208";a="220608635"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-44b6fc51.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 13:20:30 +0000
-Received: from EX19MTAUEC001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2a-m6i4x-44b6fc51.us-west-2.amazon.com (Postfix) with ESMTPS id A6337A3E0A;
-        Wed, 14 Jun 2023 13:20:29 +0000 (UTC)
-Received: from EX19D028UEC003.ant.amazon.com (10.252.137.159) by
- EX19MTAUEC001.ant.amazon.com (10.252.135.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 14 Jun 2023 13:20:29 +0000
-Received: from [10.95.176.26] (10.95.176.26) by EX19D028UEC003.ant.amazon.com
- (10.252.137.159) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Wed, 14 Jun
- 2023 13:20:27 +0000
-Message-ID: <abf509a2-ebfd-7b5f-4f7a-fdd4ef60c1de@amazon.com>
-Date:   Wed, 14 Jun 2023 09:20:24 -0400
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=F5dvz9wlM4jztB25uB6NP7ymWVehJob7EcQRWfqAkzI=;
+ b=FbNSeCuPlo7slwpD2uv0BzxqVkwraGPVF3/6SH9fdZW7Z7jYKIB03j2CN8RK7KuWx2KeYRBBFlBUGobUyJjay8daZ//ms3GvE4D4UGd8QtoSv4U/nNTA/JH+/Txqva6O1s6hG3AlxOcL9HBxkEhdkNTTBmRPnylr2yzuPf/jjsY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by CH2PR13MB3878.namprd13.prod.outlook.com (2603:10b6:610:93::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Wed, 14 Jun
+ 2023 13:22:19 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e%4]) with mapi id 15.20.6477.028; Wed, 14 Jun 2023
+ 13:22:19 +0000
+Date:   Wed, 14 Jun 2023 15:22:13 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] ipv6: clean up some inconsistent indenting
+Message-ID: <ZIm/BVd9vUQ3E5ma@corigine.com>
+References: <20230614014959.23000-1-jiapeng.chong@linux.alibaba.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230614014959.23000-1-jiapeng.chong@linux.alibaba.com>
+X-ClientProxiedBy: AM0PR03CA0028.eurprd03.prod.outlook.com
+ (2603:10a6:208:14::41) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] KVM: x86/mmu: Add "never" option to allow sticky
- disabling of nx_huge_pages
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Li RongQing <lirongqing@baidu.com>,
-        Yong He <zhuangel570@gmail.com>,
-        Robert Hoo <robert.hoo.linux@gmail.com>,
-        Kai Huang <kai.huang@intel.com>
-References: <20230602005859.784190-1-seanjc@google.com>
- <168667299355.1927151.1998349801097712999.b4-ty@google.com>
-From:   Luiz Capitulino <luizcap@amazon.com>
-In-Reply-To: <168667299355.1927151.1998349801097712999.b4-ty@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.95.176.26]
-X-ClientProxiedBy: EX19D035UWB001.ant.amazon.com (10.13.138.33) To
- EX19D028UEC003.ant.amazon.com (10.252.137.159)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CH2PR13MB3878:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0694d582-2907-4535-049b-08db6cda614e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Lo+439glIuEGtNkwQ3SG2ZJkN74ACO4X9mBPv+ePL5NuQMhOe06/pXjQD1icUV0ThFobTQZPyXjBRpX1C1RkrpRdoskKvd6o16CBGBn60lT/rucePiYhGNtY4EZW2QIjwLYOB3TLhHAxB3/zAPFj9ZXH7o0LwWGTZWSqEXupTSnZSPfSD0DiPNaGf2uv3S75ySl4qaXg6vq2EaFouXDiRNwYkr5akMfas++1JVSEr0cRSdWjsjXbJ32+krk6yqXP+NCWgkTK6i2zzB+p2BMIBg6SoGAqx6gq8wG3qjSdY7kLmL0OnhklwclSuX0IU5zRiUx3o+3b6ygCTt+Hfqsb5VwKDfGJoWlMVCBAdAuvy9YDQdQSwkifLxhT9X27ODEG9khdeXPggfV8RiWZh74lblG/pRp7Kyj+1kJyXZUhUtisbn1elmNugo608+fkjcta7DwAGZMM5jZij/Nq85t6/IX7DqPKOanU1bU4TD0Y46XJMslR7kaIXZmSpGcktVB6CvqFn9skSxeEhieh0qkndgXG51HNoCXIVLDuLI75gQ4QAi5UQYTGwZrnro0mZYCwvzgyHweBoOhxXkbsZpaqrELwQulrkPuT6dA8Ha7XZck=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(376002)(39830400003)(396003)(366004)(451199021)(86362001)(6486002)(6666004)(316002)(966005)(8676002)(41300700001)(5660300002)(83380400001)(6512007)(38100700002)(6506007)(8936002)(44832011)(66556008)(36756003)(66946007)(6916009)(4326008)(478600001)(186003)(2906002)(66476007)(4744005)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hKfUB1AC4ESm+Y5OR5WqAgFlcWAl/gAEXMfpvm9CgEqddgIDEDJvzkT6UaCk?=
+ =?us-ascii?Q?n5vNRWYbpAJqkuj9hmjSFjLlMTbSoz3t9KUgvtzm+aLA3a2TbLIL6SZ1UwvL?=
+ =?us-ascii?Q?f5fGXJEMynk2+1v7U/rVdzhjTRw2gZYe3FqK/I4P1UBZALp9o6IGjvWt2oow?=
+ =?us-ascii?Q?lkWQ8YPQZtOlYvp6gkDgXX++HAsd81IABEazazsxWgfPkhR2MS7pbURIvcC7?=
+ =?us-ascii?Q?P6B2jr/bsmq5WFos0Xrz6vMlrS3Qctoo6jjI4BXGWl6efktu+dTwG8DDWNCF?=
+ =?us-ascii?Q?a7Ro4y9DH+FZsJKB8Oc5vG9cLzwnNOwDFr8t5lBS9wQaU/Upv0lIamGzD4Sv?=
+ =?us-ascii?Q?DHyAbY6jPSRakdE7FbD8jd4kyzjNkb07HQeyBlq+Rf1TgRJQNifFbAF0PnBD?=
+ =?us-ascii?Q?AUvzXkfqAxo0KZxwhDwopr7YOzeJwRlxqJ28+YqSlSkywEyo24LJViYN/iiH?=
+ =?us-ascii?Q?0+6BZoGlsMIVEXE4zJ1NeBpfRZk96ks8WWPgCSNrVToEtBrwp+M9YzOhVU4Q?=
+ =?us-ascii?Q?xyapdt69PAdz6/yy3pwDh+6Rtc52nlxxRdgbXu96/a/Pso9f7Jrs/kvJH8hu?=
+ =?us-ascii?Q?YOTj8Z68FmN/jqD+SA4oEl+aXRZHlwkvVLZ5Ah87yiQa0+zV5E7LnX6eK9j3?=
+ =?us-ascii?Q?/AtS0RLx0Cx1yEL3cXofAKkBLMEk86mPQYxQRvXvn6klcw06TPPeq/KnQjum?=
+ =?us-ascii?Q?7RX+XxuwhXEOLs2UxPsjWsULHeqliWIP8hd/xVg2cjJpIpz0New4aV9cs1wM?=
+ =?us-ascii?Q?AmsRAEEQ89ZOlRObdz3TNyYkcepdfo3HsDrGNWtKK1eqK1R6BLrhxDvFvQUr?=
+ =?us-ascii?Q?gJep6+EzaV3Y9fmmm98bB9dSYx3nECYHJRYUjuJFzN1tg1AULLwEhjuSmnas?=
+ =?us-ascii?Q?9x2wMY0r1hHHBhh+K0IqJn4eRWSaTZH8n93cz3C4GBZRmdIAl5hvVRZ5SXGA?=
+ =?us-ascii?Q?3+nMIaeCaaR7U9kOh15nEWxrxIHCgO7AI3PRVifLKNPzS87pz/q31kcfAjyY?=
+ =?us-ascii?Q?rc5i0D1uKjOVuk5OpoiqaNAqfPa+UEXg+pY3Vv7QE163NqgBQsJ1tcvvNDPc?=
+ =?us-ascii?Q?BWivE4ZaVIEhDPrxT3mjpx6wsejbC+rgetm5qKx0KeDUxenNhcVceZljEwtA?=
+ =?us-ascii?Q?FDazPDWlaCdqpBOfB3kDVQsdNViKeQLFZTHmGp4rujGo9S7R8A2XGm0RSwWe?=
+ =?us-ascii?Q?9hSjPWt1VPk4WbfzTSADPD/DOmaftHyjlDiBXqjMkJXhdNHVhKvANcaF8O5Z?=
+ =?us-ascii?Q?wqRE9BjW9qy+W+VB3CnnBwGdoBy5ekKArvjZMKGfP1cEqcWo93Wfsjt73Vpd?=
+ =?us-ascii?Q?rIR82PDXMWiUjKTrdLvcy78D76W2qsjq81u41R7bC7B6z7b94WWi1I3Xm30E?=
+ =?us-ascii?Q?0XDawmE3ttmJoyMibCeJwdrhrU5v+tZw1mYfD5GoxmlOE9hL9xAagWuN/gn/?=
+ =?us-ascii?Q?gVj4OVtBtbQ3WsA1YfzGneGUiUUOaZaTTYPI7FoytNhZUCO5T2jKe5X9FMaF?=
+ =?us-ascii?Q?7UfU9oMj1Lm5WalQaPz6Nv2RSuq5VIKNVQxkQ2dUtnVzOC7I547hqmwmdcg3?=
+ =?us-ascii?Q?bBDVc0stHMQwicp00XCHSPhaKpR/25fC7ZGKzHi+xdeDD+DiKWXKjouBBCGN?=
+ =?us-ascii?Q?tbrkOb8aEnbxeB5WJOv1nFGVNBrvZWZUPmsYhgKslpTs7TDwxXufeSiqCS24?=
+ =?us-ascii?Q?93aFdQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0694d582-2907-4535-049b-08db6cda614e
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 13:22:19.5676
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hiZPiDgTsVZaXB0GPx1UXEoU3OvH3oDzYoqAE8A7T0Oj8DjZW2WKQ6AQX2m/NJTGCbsSzHbtjnkqMWCMnXJsFDg5+W1h9Ib7Mgy2fPnVNSI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR13MB3878
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 14, 2023 at 09:49:59AM +0800, Jiapeng Chong wrote:
+> No functional modification involved.
+> 
+> net/ipv6/ip6_offload.c:252 ipv6_gro_receive() warn: inconsistent indenting.
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=5522
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
+Hi Jiapeng,
 
-On 2023-06-13 19:21, Sean Christopherson wrote:
+unfortunately we don't accept patches that only clean
+up code for checkpatch warnings (or similar) for
+Networking code.
 
-> 
-> 
-> 
-> On Thu, 01 Jun 2023 17:58:59 -0700, Sean Christopherson wrote:
->> Add a "never" option to the nx_huge_pages module param to allow userspace
->> to do a one-way hard disabling of the mitigation, and don't create the
->> per-VM recovery threads when the mitigation is hard disabled.  Letting
->> userspace pinky swear that userspace doesn't want to enable NX mitigation
->> (without reloading KVM) allows certain use cases to avoid the latency
->> problems associated with spawning a kthread for each VM.
->>
->> [...]
-> 
-> Applied to kvm-x86 mmu.  I kept the default as "auto" for now, as that can go on
-> top and I don't want to introduce that change this late in the cycle.  If no one
-> beats me to the punch (hint, hint ;-) ), I'll post a patch to make "never" the
-> default for unaffected hosts so that we can discuss/consider that change for 6.6.
-
-Thanks Sean, I agree with the plan. I could give a try on the patch if you'd like.
-
-- Luiz
-
-> 
-> Thanks for the reviews!
-> 
-> [1/1] KVM: x86/mmu: Add "never" option to allow sticky disabling of nx_huge_pages
->        https://github.com/kvm-x86/linux/commit/0b210faf3373
-> 
-> --
-> https://github.com/kvm-x86/linux/tree/next
-> https://github.com/kvm-x86/linux/tree/fixes
+-- 
+pw-bot: reject
