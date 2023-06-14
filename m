@@ -2,85 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BAEA72F4E2
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 08:32:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F6F72F4E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 08:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243219AbjFNGcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 02:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43564 "EHLO
+        id S243230AbjFNGdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 02:33:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233971AbjFNGbe (ORCPT
+        with ESMTP id S233971AbjFNGdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 02:31:34 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80361FF5;
-        Tue, 13 Jun 2023 23:31:10 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35E3JV7b012659;
-        Wed, 14 Jun 2023 06:31:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=JTFgRNonA1gZ9eWnyVGkswayYwhAY4igilQc1WnzJ9U=;
- b=Q8AmxSco9C63mEyC6y7SWxmkkPSQjl3iduD2/9hUFyO3VXIYhphD7OurrzIe8pg0esJR
- W4gYy5vBQ3OmDxNVi3abfZ32fgtk3MGl6QBNdBOT3GFUsAV/f9hYndLLWq16cBpAptRP
- NiAly5TMB6pO5q8IQo0jirSWnOZqSrFXwcUIg0lAdz+7W4ED/Map/ufboTFOEz8E+iea
- lv0xJMNNy75+paNib1dGItsakdUzo3bj0A+Nks+05O7RiLmtwsby1kl207i9ozajKr2M
- 3Q9eF/3k1C7TBjQWmeEVs3pFzcpfGPCgutQ1mW6aUU43Qc2NP7mzsHG+f2rBe4FfsTu3 YQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r6f7a33ur-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Jun 2023 06:31:05 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35E6V4T9001304
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Jun 2023 06:31:04 GMT
-Received: from [10.214.67.128] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 13 Jun
- 2023 23:31:01 -0700
-Message-ID: <aa12e201-f930-00ec-5a20-406a8ca52505@quicinc.com>
-Date:   Wed, 14 Jun 2023 12:00:41 +0530
+        Wed, 14 Jun 2023 02:33:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B471FC9;
+        Tue, 13 Jun 2023 23:31:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98AFA6304E;
+        Wed, 14 Jun 2023 06:31:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86A3AC433C0;
+        Wed, 14 Jun 2023 06:31:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686724313;
+        bh=U3PE7SCQ1RxmKERA37xeQi0YnSmGXq/InAGZE9u2dUg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ba63IBzLXf4v1BRJlu0Aery8nmHq4ZxH63PyyGkxlUNZSWJqBkTKv7wf/kO3KB3UG
+         2IEh8nKDRrjkjXhwUNSwp1kTIbq6fEVimy41dBu4bjRLG57V73MRcOnr/AISqi4Lux
+         EEHm4j7cSnQ2+qzYaUJfJIH+b2/ILC83y3qfsdH9zB+0d8RZHqMAKI+/7ZlmqI130L
+         WTA5mONXSvdWQ4+Xn0ZukvhF7DX9TtcYtgT2ZX3ZxndN8HIsXcB17kSng8Ee8QCRRo
+         s/FrS9aYRuvf0HbW545P1InaKsRjsvwynmBgiCSTR3ZnwQh2oDHdsCeZRdd0S9al3Z
+         X9Kcf9w1IZ7hw==
+Message-ID: <e7fce935-68ac-6e8f-072f-87e6271c2f96@kernel.org>
+Date:   Wed, 14 Jun 2023 15:31:49 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v3 06/10] soc: qcom: Add LLCC support for multi channel
- DDR
-To:     Bjorn Andersson <andersson@kernel.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-References: <20230512122134.24339-1-quic_kbajaj@quicinc.com>
- <20230512122134.24339-7-quic_kbajaj@quicinc.com>
- <20230613171110.ud2ybjpoxnwwflce@ripper>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: Fwd: Waking up from resume locks up on sr device
 Content-Language: en-US
-From:   Komal Bajaj <quic_kbajaj@quicinc.com>
-In-Reply-To: <20230613171110.ud2ybjpoxnwwflce@ripper>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: BTiZlKanvDCJZqsE3mc-dh2cBx9wSOg6
-X-Proofpoint-ORIG-GUID: BTiZlKanvDCJZqsE3mc-dh2cBx9wSOg6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-14_02,2023-06-12_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=999 clxscore=1015 priorityscore=1501 phishscore=0 adultscore=0
- impostorscore=0 bulkscore=0 malwarescore=0 mlxscore=0 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306140055
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Joe Breuer <linux-kernel@jmbreuer.net>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Linux Power Management <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Hardening <linux-hardening@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux SCSI <linux-scsi@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>
+References: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
+ <5513e29d-955a-f795-21d6-ec02a2e2e128@gmail.com>
+ <ZIQ6bkau3j6qGef8@duo.ucw.cz>
+ <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com>
+ <02e4f87a-80e8-dc5d-0d6e-46939f2c74ac@acm.org>
+ <b2cf6d96-a55a-d444-d22e-e9b3945ba43f@jmbreuer.net>
+ <84f1c51c-86f9-04b3-0cd1-f685ebee7592@kernel.org>
+ <CAAd53p665S+dfOvWZt2UwTs=VrxE=FtpqjzUrSuLKR5tBpAa9Q@mail.gmail.com>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <CAAd53p665S+dfOvWZt2UwTs=VrxE=FtpqjzUrSuLKR5tBpAa9Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,106 +88,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/13/2023 10:41 PM, Bjorn Andersson wrote:
-> On Fri, May 12, 2023 at 05:51:30PM +0530, Komal Bajaj wrote:
->> Add LLCC support for multi channel DDR configuration
->> based on a feature register.
+On 6/14/23 14:37, Kai-Heng Feng wrote:
+> On Wed, Jun 14, 2023 at 12:49 PM Damien Le Moal <dlemoal@kernel.org> wrote:
 >>
->> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
->> ---
->>   drivers/soc/qcom/llcc-qcom.c | 32 +++++++++++++++++++++++++++++---
->>   1 file changed, 29 insertions(+), 3 deletions(-)
+>> On 6/11/23 18:05, Joe Breuer wrote:
+>>> I'm the reporter of this issue.
+>>>
+>>> I just tried this patch against 6.3.4, and it completely fixes my
+>>> suspend/resume issue.
+>>>
+>>> The optical drive stays usable after resume, even suspending/resuming
+>>> during playback of CDDA content works flawlessly and playback resumes
+>>> seamlessly after system resume.
+>>>
+>>> So, from my perspective: Good one!
 >>
->> diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
->> index 6cf373da5df9..1da337e7a378 100644
->> --- a/drivers/soc/qcom/llcc-qcom.c
->> +++ b/drivers/soc/qcom/llcc-qcom.c
->> @@ -12,6 +12,7 @@
->>   #include <linux/kernel.h>
->>   #include <linux/module.h>
->>   #include <linux/mutex.h>
->> +#include <linux/nvmem-consumer.h>
->>   #include <linux/of.h>
->>   #include <linux/of_device.h>
->>   #include <linux/regmap.h>
->> @@ -943,6 +944,19 @@ static int qcom_llcc_cfg_program(struct platform_device *pdev,
->>   	return ret;
->>   }
+>> In place of Bart's fix, could you please try this patch ?
+> 
+> Issue still persists at my end, when /sys/power/pm_async is 0.
+> device_pm_wait_for_dev() in its current form is only usable for async case.
+
+OK. Thanks for checking. Let me dig further.
+
+> 
+> Kai-Heng
+> 
 >>
->> +static int qcom_llcc_get_cfg_index(struct platform_device *pdev, u8 *cfg_index)
->> +{
->> +	int ret = 0;
-> First use is an assignment, no need to initialize here.
-
-Noted.
-
->
+>> diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
+>> index b80e68000dd3..a81eb4f882ab 100644
+>> --- a/drivers/ata/libata-eh.c
+>> +++ b/drivers/ata/libata-eh.c
+>> @@ -4006,9 +4006,32 @@ static void ata_eh_handle_port_resume(struct
+>> ata_port *ap)
+>>         /* tell ACPI that we're resuming */
+>>         ata_acpi_on_resume(ap);
+>>
+>> -       /* update the flags */
+>>         spin_lock_irqsave(ap->lock, flags);
 >> +
->> +	ret = nvmem_cell_read_u8(&pdev->dev, "multi_chan_ddr", cfg_index);
->> +	if (ret == -ENOENT) {
->> +		*cfg_index = 0;
-> Does nvmem_cell_read_u8() cahnge cfg_index when it fails with -ENOENT?
-
-No, if nvmem_cell_read_u8() fails with any error, cfg_index will not be 
-changed.
-
-Thanks
-Komal
->> +		return 0;
->> +	}
+>> +       /* Update the flags */
+>>         ap->pflags &= ~(ATA_PFLAG_PM_PENDING | ATA_PFLAG_SUSPENDED);
 >> +
->> +	return ret;
->> +}
+>> +       /*
+>> +        * Resuming the port will trigger a rescan of the ATA device(s)
+>> +        * connected to it. Before scheduling the rescan, make sure that
+>> +        * the associated scsi device(s) are fully resumed as well.
+>> +        */
+>> +       ata_for_each_link(link, ap, HOST_FIRST) {
+>> +               ata_for_each_dev(dev, link, ENABLED) {
+>> +                       struct scsi_device *sdev = dev->sdev;
 >> +
->>   static int qcom_llcc_remove(struct platform_device *pdev)
->>   {
->>   	/* Set the global pointer to a error code to avoid referencing it */
->> @@ -975,11 +989,13 @@ static int qcom_llcc_probe(struct platform_device *pdev)
->>   	struct device *dev = &pdev->dev;
->>   	int ret, i;
->>   	struct platform_device *llcc_edac;
->> -	const struct qcom_llcc_config *cfg;
->> +	const struct qcom_llcc_config *cfg, *entry;
->>   	const struct llcc_slice_config *llcc_cfg;
->>   	u32 sz;
->> +	u8 cfg_index;
->>   	u32 version;
->>   	struct regmap *regmap;
->> +	u32 num_entries = 0;
->>
->>   	drv_data = devm_kzalloc(dev, sizeof(*drv_data), GFP_KERNEL);
->>   	if (!drv_data) {
->> @@ -1040,8 +1056,18 @@ static int qcom_llcc_probe(struct platform_device *pdev)
->>
->>   	drv_data->version = version;
->>
->> -	llcc_cfg = cfg[0]->sct_data;
->> -	sz = cfg[0]->size;
->> +	ret = qcom_llcc_get_cfg_index(pdev, &cfg_index);
->> +	if (ret)
->> +		goto err;
+>> +                       if (!sdev)
+>> +                               continue;
+>> +                       if (scsi_device_get(sdev))
+>> +                               continue;
 >> +
->> +	for (entry = cfg; entry->sct_data; entry++, num_entries++);
-> This is not readable, move the increment of num_entries out of there.
->
->> +	if (cfg_index >= num_entries || cfg_index < 0) {
-> How can cfg_index be negative?
->
-> Regards,
-> Bjorn
->
->> +		ret = -EINVAL;
->> +		goto err;
->> +	}
->> +
->> +	llcc_cfg = cfg[cfg_index].sct_data;
->> +	sz = cfg[cfg_index].size;
+>> +                       spin_unlock_irqrestore(ap->lock, flags);
+>> +                       device_pm_wait_for_dev(&ap->tdev,
+>> +                                              &sdev->sdev_gendev);
+>> +                       scsi_device_put(sdev);
+>> +                       spin_lock_irqsave(ap->lock, flags);
+>> +               }
+>> +       }
+>>         spin_unlock_irqrestore(ap->lock, flags);
+>>  }
+>>  #endif /* CONFIG_PM */
 >>
->>   	for (i = 0; i < sz; i++)
->>   		if (llcc_cfg[i].slice_id > drv_data->max_slices)
+>> Thanks !
+>>
 >> --
->> 2.17.1
+>> Damien Le Moal
+>> Western Digital Research
 >>
+
+-- 
+Damien Le Moal
+Western Digital Research
 
