@@ -2,88 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FE2C730501
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE16730507
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234394AbjFNQeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 12:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46844 "EHLO
+        id S233214AbjFNQgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 12:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234236AbjFNQdn (ORCPT
+        with ESMTP id S234804AbjFNQf6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 12:33:43 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 327EF1FDC;
-        Wed, 14 Jun 2023 09:33:42 -0700 (PDT)
-Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
-        by linux.microsoft.com (Postfix) with ESMTPSA id A63B320FEB2B;
-        Wed, 14 Jun 2023 09:33:41 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A63B320FEB2B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1686760421;
-        bh=L6ewCnTLmvd3IAdzmYn9pAB0e+CkfQZzUgJPoFiFoKw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HEasVLt6aR+pIq1LBr9t8DKN/CTK4zMPwQNz2URzNu/kzusgo0Or5zhpKXPVqFq0L
-         xs0ONMe7OEuXUks1Oui2TH6zEhXq6GBUoAB7K+uEalcjPQ/HkWb8MH1WcRzTPN8opn
-         1n5IU50pQ7Vrrry1XmfMjiaBtmVDT/OAowWn75hk=
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     rostedt@goodmis.org, mhiramat@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        ast@kernel.org, dcook@linux.microsoft.com
-Subject: [PATCH v3 6/6] tracing/user_events: Document auto-cleanup and remove dyn_event refs
-Date:   Wed, 14 Jun 2023 09:33:36 -0700
-Message-Id: <20230614163336.5797-7-beaub@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230614163336.5797-1-beaub@linux.microsoft.com>
-References: <20230614163336.5797-1-beaub@linux.microsoft.com>
+        Wed, 14 Jun 2023 12:35:58 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB20212D;
+        Wed, 14 Jun 2023 09:35:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=zoOW0ZiNmDtu4Zp3WTG84bXR18T6RnQ3c3NcObSn0t8=; b=Bb3i7EXg2Y5DTbLx+ObL7QLd/D
+        jgRwevR8K93fkQzVkpKNWJeuU1DV0SQJyrjUzV0paDYYP4O+no2MUy7XO/bN5wCyeIphi3BxRh+6S
+        up0KL9lrh/D405RcUMuTNH6yuU6BLYwY7GbK4L+40EMEikPibJFTVYwnSRuwQFxqMRl1ZoAx9Q+Sg
+        W+O9ol0pR8b93ga77s72wLAwkOGU8vdaaLco2KWyGet7IGTIPzFwGJD4/IHT26B4nKvDtAHffUkOM
+        jr2D8zvvqd/5T2YRLQKutIEak/K5remDMD3C7Zh2g2mcWUGi/rYxD/T8RCW8Jm1Ghilc093L3aBWy
+        48uP04Hg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:41334)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1q9TT7-0001za-L5; Wed, 14 Jun 2023 17:35:37 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1q9TT0-0000ZE-28; Wed, 14 Jun 2023 17:35:30 +0100
+Date:   Wed, 14 Jun 2023 17:35:30 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     arinc9.unal@gmail.com
+Cc:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net v4 5/7] net: dsa: mt7530: fix handling of LLDP frames
+Message-ID: <ZInsUm5M47p4ReF3@shell.armlinux.org.uk>
+References: <20230612075945.16330-1-arinc.unal@arinc9.com>
+ <20230612075945.16330-6-arinc.unal@arinc9.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230612075945.16330-6-arinc.unal@arinc9.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now user_events auto-cleanup upon the last reference by default. This
-makes it not possible to use the dynamics event file via tracefs.
+On Mon, Jun 12, 2023 at 10:59:43AM +0300, arinc9.unal@gmail.com wrote:
+> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+> index e4c169843f2e..8388b058fbe4 100644
+> --- a/drivers/net/dsa/mt7530.c
+> +++ b/drivers/net/dsa/mt7530.c
+> @@ -2261,7 +2261,11 @@ mt7530_setup(struct dsa_switch *ds)
+>  
+>  	/* Trap BPDUs to the CPU port */
+>  	mt7530_rmw(priv, MT753X_BPC, MT753X_BPDU_PORT_FW_MASK,
+> -		   MT753X_BPDU_CPU_ONLY);
+> +		   MT753X_PORT_FW_CPU_ONLY);
+> +
+> +	/* Trap LLDP frames with :0E MAC DA to the CPU port */
+> +	mt7530_rmw(priv, MT753X_RGAC2, MT753X_R0E_PORT_FW_MASK,
+> +		   MT753X_R0E_PORT_FW(MT753X_PORT_FW_CPU_ONLY));
+>  
+>  	/* Enable and reset MIB counters */
+>  	mt7530_mib_reset(ds);
+> @@ -2364,7 +2368,11 @@ mt7531_setup_common(struct dsa_switch *ds)
+>  
+>  	/* Trap BPDUs to the CPU port(s) */
+>  	mt7530_rmw(priv, MT753X_BPC, MT753X_BPDU_PORT_FW_MASK,
+> -		   MT753X_BPDU_CPU_ONLY);
+> +		   MT753X_PORT_FW_CPU_ONLY);
+> +
+> +	/* Trap LLDP frames with :0E MAC DA to the CPU port(s) */
+> +	mt7530_rmw(priv, MT753X_RGAC2, MT753X_R0E_PORT_FW_MASK,
+> +		   MT753X_R0E_PORT_FW(MT753X_PORT_FW_CPU_ONLY));
 
-Document that auto-cleanup is enabled by default and remove the refernce
-to /sys/kernel/tracing/dynamic_events file to make this clear.
+Looking at the above two hunks, they look 100% identical. Given that
+they are both setting up trapping to the CPU port, maybe they should
+be moved into their own common function called from both setup()
+functions?
 
-Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
----
- Documentation/trace/user_events.rst | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/trace/user_events.rst b/Documentation/trace/user_events.rst
-index f79987e16cf4..e7b07313550a 100644
---- a/Documentation/trace/user_events.rst
-+++ b/Documentation/trace/user_events.rst
-@@ -14,10 +14,6 @@ Programs can view status of the events via
- /sys/kernel/tracing/user_events_status and can both register and write
- data out via /sys/kernel/tracing/user_events_data.
- 
--Programs can also use /sys/kernel/tracing/dynamic_events to register and
--delete user based events via the u: prefix. The format of the command to
--dynamic_events is the same as the ioctl with the u: prefix applied.
--
- Typically programs will register a set of events that they wish to expose to
- tools that can read trace_events (such as ftrace and perf). The registration
- process tells the kernel which address and bit to reflect if any tool has
-@@ -144,6 +140,9 @@ its name. Delete will only succeed if there are no references left to the
- event (in both user and kernel space). User programs should use a separate file
- to request deletes than the one used for registration due to this.
- 
-+**NOTE:** By default events will auto-delete when there are no references left
-+to the event. Flags in the future may change this logic.
-+
- Unregistering
- -------------
- If after registering an event it is no longer wanted to be updated then it can
 -- 
-2.25.1
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
