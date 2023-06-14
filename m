@@ -2,254 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FD4372F4D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 08:31:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38E9572F4DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 08:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243226AbjFNGb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 02:31:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44090 "EHLO
+        id S241791AbjFNGbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 02:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234706AbjFNGaq (ORCPT
+        with ESMTP id S243160AbjFNGbI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 02:30:46 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F30268F
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 23:30:24 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686724223;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G/EwV9fvhxkTVfX06ik2E/XNt0KK6UdwlK2n4zvpmA8=;
-        b=LJiGsaeJLqYbqWrjDyxjDMkbMxs8VerzVfS/wkB3jcX9/7CAkYp8LJ4euYBsAfJ/qZn5/X
-        5KS4ceAy6KI2qwSaA0aS5yO8m3ESwCH8zfCoNu1rCf9SG4EMlwfTj4twJnbREovIhDDAs2
-        sFiXh800vE0DnSiAgkM2HZFctu8IefudxGK3Y0fW5hN7g+WfjKPDc//+49gKf/jcCZNFup
-        xU9WBWEnYtliqZF67GfL9rDvdg1b1R0TcQLuNFLG56UsvFvmcdHjimmTTL0Ae14ZCoYoDD
-        oLjRSp6R66lx7/BX2jekr376g5vfj0JL1dD6kZ8fcgll6xe1NXG6KCia8GMu1g==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5C881FF813;
-        Wed, 14 Jun 2023 06:30:22 +0000 (UTC)
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH v4 4/4] nvmem: core: Expose cells through sysfs
-Date:   Wed, 14 Jun 2023 08:30:18 +0200
-Message-Id: <20230614063018.2419043-5-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230614063018.2419043-1-miquel.raynal@bootlin.com>
-References: <20230614063018.2419043-1-miquel.raynal@bootlin.com>
+        Wed, 14 Jun 2023 02:31:08 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A951BF7
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 23:30:40 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-5147e8972a1so10819703a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 23:30:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686724239; x=1689316239;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cc+dxPpu8lXsZsADd1XaSw2JFjXzN4blFEsEKZHFTD8=;
+        b=qfeOtFUYHy+0ttTJcytVR9sVTi76yBJKYGUruFsPsclOXYncFnmR2a+KZ5QFJ7u0MG
+         O+uPjlQFFZud5PzW7DMkZD8zUwzmgzz1afhTunc8ERcoyzy82KvTJnaPoKv/t39Cn2Rs
+         glUcWe5jY/Obo8sSaRX0dFxf09OWOpAnfK/9IJUDHA2huuaScEpevMSQ5WMoNpPMu9kw
+         fHd1LXYv434YjhEjoVwvB+j1PKds323PDP+4w1Wj/uFSEFGBpPgXie/pYfKEhPNr3DtK
+         AUgbArtKo7c9bt9bHk7ac+OsRv2KV1qPKY/UuJ2UCg1MiqEVxRAPeLkypVQvJzTc8eZF
+         tdMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686724239; x=1689316239;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cc+dxPpu8lXsZsADd1XaSw2JFjXzN4blFEsEKZHFTD8=;
+        b=dVYccexag6N9KaRgZ6t4QbQj8KmVRHuZ70v7dWiXF7yEgrlLi5TlU1a0IYy5hyx0x8
+         v/ZSNEY0sH0kitItL189cQy3OvLHXzncmDOGF1pEgT5A2XNP47pGJTJwcVlHFr8mVYaH
+         uE68K+7L2s5jAZHaQW6dqYY+jqOaG4BAuKI4jilxUfwUyXNl1+K9bPu77MlqkZo3VEDY
+         dx9n8FqKIe77+QVtX+o5oGbXx+iOPni7+a/Ba85jvWiQZKvBOjSFLM+wS37tbk1PR67T
+         sebXjM8cC61qEHR/lBuigIt3+QBf+C3koM5Eb1oGuwMfw35UzmpdNnJsoifw7X2tucD6
+         lUlQ==
+X-Gm-Message-State: AC+VfDzbm1jRrYhwPSXIVZ6VirOaEpcAm1BH7g52noY4BpvjlX18mnFw
+        jnQN0PFt0w4/LUAdu7Gj81jnYw==
+X-Google-Smtp-Source: ACHHUZ5abd/2cZWoy7USVlJWZb32cnqcjXZa76XE9hHfo1LyM0+k06asglp308N0ZQs34+NNItEODA==
+X-Received: by 2002:a50:fb94:0:b0:509:c6e6:c002 with SMTP id e20-20020a50fb94000000b00509c6e6c002mr7851333edq.39.1686724239059;
+        Tue, 13 Jun 2023 23:30:39 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id n12-20020a05640204cc00b0051631518aabsm7211825edw.93.2023.06.13.23.30.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 23:30:38 -0700 (PDT)
+Message-ID: <46458a14-28f3-5279-f5ad-302e6edebaa5@linaro.org>
+Date:   Wed, 14 Jun 2023 08:30:36 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v6 1/2] dt-bindings: iio: adc: add max14001
+To:     Kim Seer Paller <kimseer.paller@analog.com>
+Cc:     jic23@kernel.org, lars@metafoo.de, lgirdwood@gmail.com,
+        broonie@kernel.org, Michael.Hennerich@analog.com,
+        andy.shevchenko@gmail.com, robh@kernel.org, conor+dt@kernel.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230614004857.134980-1-kimseer.paller@analog.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230614004857.134980-1-kimseer.paller@analog.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The binary content of nvmem devices is available to the user so in the
-easiest cases, finding the content of a cell is rather easy as it is
-just a matter of looking at a known and fixed offset. However, nvmem
-layouts have been recently introduced to cope with more advanced
-situations, where the offset and size of the cells is not known in
-advance or is dynamic. When using layouts, more advanced parsers are
-used by the kernel in order to give direct access to the content of each
-cell, regardless of its position/size in the underlying
-device. Unfortunately, these information are not accessible by users,
-unless by fully re-implementing the parser logic in userland.
+On 14/06/2023 02:48, Kim Seer Paller wrote:
+> The MAX14001 is a configurable, isolated 10-bit ADC for multi-range
+> binary inputs.
+> 
+> Signed-off-by: Kim Seer Paller <kimseer.paller@analog.com>
+> ---
+> V5 -> V6: Removed tags.
 
-Let's expose the cells and their content through sysfs to avoid these
-situations. Of course the relevant NVMEM sysfs Kconfig option must be
-enabled for this support to be available.
+Not the review one tag! Drop the fake reports because there was not
+report and nothing to close.
 
-Not all nvmem devices expose cells. Indeed, the .bin_attrs attribute
-group member will be filled at runtime only when relevant and will
-remain empty otherwise. In this case, as the cells attribute group will
-be empty, it will not lead to any additional folder/file creation.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Exposed cells are read-only. There is, in practice, everything in the
-core to support a write path, but as I don't see any need for that, I
-prefer to keep the interface simple (and probably safer). The interface
-is documented as being in the "testing" state which means we can later
-add a write attribute if though relevant.
-
-There is one limitation though: if a layout is built as a module but is
-not properly installed in the system and loaded manually with insmod
-while the nvmem device driver was built-in, the cells won't appear in
-sysfs. But if done like that, the cells won't be usable by the built-in
-kernel drivers anyway.
-
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
----
- drivers/nvmem/core.c | 109 +++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 105 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-index 342cd380b420..baa1f0038b28 100644
---- a/drivers/nvmem/core.c
-+++ b/drivers/nvmem/core.c
-@@ -325,6 +325,43 @@ static umode_t nvmem_bin_attr_is_visible(struct kobject *kobj,
- 	return nvmem_bin_attr_get_umode(nvmem);
- }
- 
-+static struct nvmem_cell *nvmem_create_cell(struct nvmem_cell_entry *entry,
-+					    const char *id, int index);
-+
-+static ssize_t nvmem_cell_attr_read(struct file *filp, struct kobject *kobj,
-+				    struct bin_attribute *attr, char *buf,
-+				    loff_t pos, size_t count)
-+{
-+	struct nvmem_cell_entry *entry;
-+	struct nvmem_cell *cell = NULL;
-+	size_t cell_sz, read_len;
-+	void *content;
-+
-+	entry = attr->private;
-+	cell = nvmem_create_cell(entry, entry->name, 0);
-+	if (IS_ERR(cell))
-+		return PTR_ERR(cell);
-+
-+	if (!cell)
-+		return -EINVAL;
-+
-+	content = nvmem_cell_read(cell, &cell_sz);
-+	if (IS_ERR(content)) {
-+		read_len = PTR_ERR(content);
-+		goto destroy_cell;
-+	}
-+
-+	read_len = min_t(unsigned int, cell_sz - pos, count);
-+	memcpy(buf, content + pos, read_len);
-+	kfree(content);
-+
-+destroy_cell:
-+	kfree_const(cell->id);
-+	kfree(cell);
-+
-+	return read_len;
-+}
-+
- /* default read/write permissions */
- static struct bin_attribute bin_attr_rw_nvmem = {
- 	.attr	= {
-@@ -346,8 +383,14 @@ static const struct attribute_group nvmem_bin_group = {
- 	.is_bin_visible = nvmem_bin_attr_is_visible,
- };
- 
-+/* Cell attributes will be dynamically allocated */
-+static struct attribute_group nvmem_cells_group = {
-+	.name		= "cells",
-+};
-+
- static const struct attribute_group *nvmem_dev_groups[] = {
- 	&nvmem_bin_group,
-+	&nvmem_cells_group,
- 	NULL,
- };
- 
-@@ -406,6 +449,58 @@ static void nvmem_sysfs_remove_compat(struct nvmem_device *nvmem,
- 		device_remove_bin_file(nvmem->base_dev, &nvmem->eeprom);
- }
- 
-+static int nvmem_populate_sysfs_cells(struct nvmem_device *nvmem)
-+{
-+	struct bin_attribute **cells_attrs, *attrs;
-+	struct nvmem_cell_entry *entry;
-+	unsigned int ncells = 0, i = 0;
-+	int ret = 0;
-+
-+	mutex_lock(&nvmem_mutex);
-+
-+	if (list_empty(&nvmem->cells))
-+		goto unlock_mutex;
-+
-+	/* Allocate an array of attributes with a sentinel */
-+	ncells = list_count_nodes(&nvmem->cells);
-+	cells_attrs = devm_kcalloc(&nvmem->dev, ncells + 1,
-+				   sizeof(struct bin_attribute *), GFP_KERNEL);
-+	if (!cells_attrs) {
-+		ret = -ENOMEM;
-+		goto unlock_mutex;
-+	}
-+
-+	attrs = devm_kcalloc(&nvmem->dev, ncells, sizeof(struct bin_attribute), GFP_KERNEL);
-+	if (!attrs) {
-+		ret = -ENOMEM;
-+		goto unlock_mutex;
-+	}
-+
-+	/* Initialize each attribute to take the name and size of the cell */
-+	list_for_each_entry(entry, &nvmem->cells, node) {
-+		sysfs_bin_attr_init(&attrs[i]);
-+		attrs[i].attr.name = devm_kstrdup(&nvmem->dev, entry->name, GFP_KERNEL);
-+		attrs[i].attr.mode = 0444;
-+		attrs[i].size = entry->bytes;
-+		attrs[i].read = &nvmem_cell_attr_read;
-+		attrs[i].private = entry;
-+		if (!attrs[i].attr.name) {
-+			ret = -ENOMEM;
-+			goto unlock_mutex;
-+		}
-+
-+		cells_attrs[i] = &attrs[i];
-+		i++;
-+	}
-+
-+	nvmem_cells_group.bin_attrs = cells_attrs;
-+
-+unlock_mutex:
-+	mutex_unlock(&nvmem_mutex);
-+
-+	return ret;
-+}
-+
- #else /* CONFIG_NVMEM_SYSFS */
- 
- static int nvmem_sysfs_setup_compat(struct nvmem_device *nvmem,
-@@ -976,16 +1071,22 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
- 	if (rval)
- 		goto err_remove_cells;
- 
-+	rval = nvmem_add_cells_from_layout(nvmem);
-+	if (rval)
-+		goto err_remove_cells;
-+
-+#ifdef CONFIG_NVMEM_SYSFS
-+	rval = nvmem_populate_sysfs_cells(nvmem);
-+	if (rval)
-+		goto err_remove_cells;
-+#endif
-+
- 	dev_dbg(&nvmem->dev, "Registering nvmem device %s\n", config->name);
- 
- 	rval = device_add(&nvmem->dev);
- 	if (rval)
- 		goto err_remove_cells;
- 
--	rval = nvmem_add_cells_from_layout(nvmem);
--	if (rval)
--		goto err_remove_cells;
--
- 	blocking_notifier_call_chain(&nvmem_notifier, NVMEM_ADD, nvmem);
- 
- 	return nvmem;
--- 
-2.34.1
+Best regards,
+Krzysztof
 
