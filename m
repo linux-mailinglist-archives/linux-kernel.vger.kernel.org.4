@@ -2,110 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C5F7305DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 19:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0783A7305DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 19:18:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236925AbjFNRSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 13:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
+        id S236759AbjFNRSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 13:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232157AbjFNRR4 (ORCPT
+        with ESMTP id S237065AbjFNRSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 13:17:56 -0400
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE38D26A6
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 10:17:42 -0700 (PDT)
-Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-77af8476cd4so185816239f.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 10:17:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686763062; x=1689355062;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fRPE1en485fgipWFHZePCu5grK9T3reUk/ZQQmM4jPI=;
-        b=cRReFOOT/AI2O7j/W8F+25CiythNAiNClqz6XPr2nNeLDo71QnFYgpv+6Xyr1E9B1I
-         vw3k2Bzlu52Eeb9B6/HOHYAyGpKLjXPC0whdbTRo9LYFZRWac4mff0a2vsYy0SVbmyUX
-         Wdmvj/dTGM7XeytX+r6tuxJRJlwv+BeKcfmM93sL6TeMEK2108a2vqKWLGtA9epoco0a
-         Nu6uFySOaGzp4dvFDZvjPYHWjoj3SJMMgRuPjKliXl7uAntTT9KfZWX+l0p6XkzVhzp9
-         MJ+x+4ScDD1kbQEJc7K9YRfh0K2OD1+yCE5AecDjPJdd3RHzyfsU/gaz54aIrl0Ib7ha
-         KDDA==
-X-Gm-Message-State: AC+VfDx458J0Uy4cO3byMeo4kJL2SyIFfy1AU6lFNSjVQK8IhOoxya7Z
-        GbYtNPhZw9fcviw/GL8cO3OFQSGjnA==
-X-Google-Smtp-Source: ACHHUZ5A60A7vgjjtAmIlvkG1bo3D2NjQKXfldt7NImSW743rHOfA7n43Tp86e7opfaHS6dpIfLCpQ==
-X-Received: by 2002:a5e:db0d:0:b0:77a:d862:242f with SMTP id q13-20020a5edb0d000000b0077ad862242fmr13623229iop.21.1686763062023;
-        Wed, 14 Jun 2023 10:17:42 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id w12-20020a02968c000000b0041d7ad74b36sm5144823jai.17.2023.06.14.10.17.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 10:17:40 -0700 (PDT)
-Received: (nullmailer pid 2404355 invoked by uid 1000);
-        Wed, 14 Jun 2023 17:17:39 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Anatolij Gustschin <agust@denx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     kernel test robot <lkp@intel.com>, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] powerpc: 52xx: Make immr_id DT match tables static
-Date:   Wed, 14 Jun 2023 11:17:23 -0600
-Message-Id: <20230614171724.2403982-1-robh@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Wed, 14 Jun 2023 13:18:12 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1DA2702;
+        Wed, 14 Jun 2023 10:18:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686763089; x=1718299089;
+  h=from:subject:date:message-id:mime-version:
+   content-transfer-encoding:to:cc;
+  bh=HmK7bDebbhr7b7K3cyVs1HeSpf1Lpx36fQVnTVM7V+s=;
+  b=FEca6OXJUQEI1iB7Uhr2qyUddYcsFqA6Q2dPtZOKeD68QOkrBt1iZ2hR
+   KSl6r6RqxC7s4QJyYrnRW2gSFAoJV7jiorgeTmAeUHH52Q15GexIG1nFD
+   GkAhagi9CJlQnVs1zDn/JnCpQt2TwCh9KioSOUrrSMtlBoiPllN8Bb3LC
+   7+MDuuzjdOc2Tfm2cW1/Ufp3sxKiXN5yVMFUwwjUxjikill3HtBiFGRUj
+   CMq7gcphTtJS7YWg/8/OvCFUR1E0TwLQd24aOrIgXdNgYSUo7NV362vNP
+   02qWCe7S/EDEnnaQmE+1TDrMSvvMViFtAXQLoknqKFPxONtnrltLrBVC/
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="362054355"
+X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
+   d="scan'208";a="362054355"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 10:18:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="662470727"
+X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
+   d="scan'208";a="662470727"
+Received: from mahbubu1-mobl.amr.corp.intel.com (HELO [192.168.1.200]) ([10.209.44.245])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 10:18:07 -0700
+From:   Vishal Verma <vishal.l.verma@intel.com>
+Subject: [PATCH v4 0/4] cxl: Add a firmware update mechanism and cxl_test
+ emulation
+Date:   Wed, 14 Jun 2023 11:17:39 -0600
+Message-Id: <20230602-vv-fw_update-v4-0-c6265bd7343b@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADP2iWQC/32Oy47CMAxFfwVlTSB107RhNf8xQihNXBoJWpR0P
+ CDUfycFiafE8tr3+PjMIgaPka1mZxaQfPR9l4Kcz5htTbdF7l3KDATkQgngRLz53/wdnBmQY2a
+ 1MkpYVZUsIbWJyOtgOttOENHy3p3Wh4CNP15tv+uUWx+HPpyucsqm6c0jIXv1UMYFB5BJI0tXQ
+ vPjuwF3C9vv2XSI4AF/PEmQYNRYWFcYV0v5Duff4DzBldJNBUJpq4tneBzHCxQjqVxBAQAA
+To:     Alison Schofield <alison.schofield@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>
+Cc:     linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+X-Mailer: b4 0.13-dev-02a79
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4148;
+ i=vishal.l.verma@intel.com; h=from:subject:message-id;
+ bh=HmK7bDebbhr7b7K3cyVs1HeSpf1Lpx36fQVnTVM7V+s=;
+ b=owGbwMvMwCXGf25diOft7jLG02pJDCmd3xy7U0qSzjO+W9p7e+PaCPW5kruk1649Lt8Xdrdi4
+ wu16uObO0pZGMS4GGTFFFn+7vnIeExuez5PYIIjzBxWJpAhDFycAjARxyiG/1Gys5xO+D754xwc
+ liC/JChq3hF+x5WCu43fxl/emPtE0Z6R4Yraka9vWE0WxqYrLWAL3CvOqBDXt4N1793wGZZvLFQ
+ rmQE=
+X-Developer-Key: i=vishal.l.verma@intel.com; a=openpgp;
+ fpr=F8682BE134C67A12332A2ED07AFA61BEA3B84DFF
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In some builds, the mpc52xx_pm_prepare()/lite5200_pm_prepare() functions
-generate stack size warnings. The addition of 'struct resource' in commit
-2500763dd3db ("powerpc: Use of_address_to_resource()") grew the stack size
-and is blamed for the warnings. However, the real issue is there's no
-reason the 'struct of_device_id immr_ids' DT match tables need to be on
-the stack as they are constant. Declare them as static to move them off
-the stack.
+Add firmware update capability to the CXL memdev driver, and emulation
+in cxl_test. Since the 'Transfer FW' mailbox command is a background
+command, this series depends on background command support [1].
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202306130405.uTv5yOZD-lkp@intel.com/
-Signed-off-by: Rob Herring <robh@kernel.org>
+Since Transfer FW can be a long-running background command, it is
+desirable to retain kernel control over it, so that one command doesn't
+monopolize the mailbox interface. The sysfs based firmware loader
+mechanism that was developed for FPGAs is a suitable candidate to help
+accomplish this. Patch 1 goes into more detail on this.
+
+The poll interval for the Transfer FW command is arbitrarily set at 1
+second, and a poll count of 30, giving us a total wait time of thirty
+seconds before which each slice of the transfer times out. This seems
+like a good mix of responsiveness and a total wait - the spec doesn't
+have any guidance on any upper or lower bounds for this. This likely
+does not need to be user-configurable, so for now it is just hard-coded
+in the driver.
+
+Patch 2 is a fix for the Poison commands effect population found while
+developing these.
+
+Patch 3 is a cleanup to give names to command effects.
+
+Patch 4 implements the emulation of firmware update related commands in
+the cxl_test environment to enable unit testing.
+
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/log/?h=for-6.5/cxl-background
+
+Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
 ---
- arch/powerpc/platforms/52xx/lite5200_pm.c | 2 +-
- arch/powerpc/platforms/52xx/mpc52xx_pm.c  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Changes in v4:
+- Link to v3: https://lore.kernel.org/r/20230602-vv-fw_update-v3-0-869f82069c95@intel.com
+- Collect review tags (Dave, Jonathan)
+- Remove a double free (Jonathan)
+- Remove stray whitespace (Jonathan)
 
-diff --git a/arch/powerpc/platforms/52xx/lite5200_pm.c b/arch/powerpc/platforms/52xx/lite5200_pm.c
-index ee29b63fca16..4900f5f48cce 100644
---- a/arch/powerpc/platforms/52xx/lite5200_pm.c
-+++ b/arch/powerpc/platforms/52xx/lite5200_pm.c
-@@ -47,7 +47,7 @@ static int lite5200_pm_begin(suspend_state_t state)
- static int lite5200_pm_prepare(void)
- {
- 	struct device_node *np;
--	const struct of_device_id immr_ids[] = {
-+	static const struct of_device_id immr_ids[] = {
- 		{ .compatible = "fsl,mpc5200-immr", },
- 		{ .compatible = "fsl,mpc5200b-immr", },
- 		{ .type = "soc", .compatible = "mpc5200", }, /* lite5200 */
-diff --git a/arch/powerpc/platforms/52xx/mpc52xx_pm.c b/arch/powerpc/platforms/52xx/mpc52xx_pm.c
-index 549b3629e39a..f0c31ae15da5 100644
---- a/arch/powerpc/platforms/52xx/mpc52xx_pm.c
-+++ b/arch/powerpc/platforms/52xx/mpc52xx_pm.c
-@@ -60,7 +60,7 @@ int mpc52xx_set_wakeup_gpio(u8 pin, u8 level)
- int mpc52xx_pm_prepare(void)
- {
- 	struct device_node *np;
--	const struct of_device_id immr_ids[] = {
-+	static const struct of_device_id immr_ids[] = {
- 		{ .compatible = "fsl,mpc5200-immr", },
- 		{ .compatible = "fsl,mpc5200b-immr", },
- 		{ .type = "soc", .compatible = "mpc5200", }, /* lite5200 */
+Changes in v3:
+- Link to v2: https://lore.kernel.org/r/20230602-vv-fw_update-v2-0-e9e5cd5adb44@intel.com
+- Collect review tags (Alison, Jonathan)
+- Remove unused leftover fw_name variable from the previous rev (Jonathan)
+- Add a comment to clarify cur_size calculation and alignment (Jonathan)
+- Clean up error return using dev_err_probe() (Jonathan)
+- Remove unintended error handling change leftover from v1 (Jonathan)
+- Refactor returning from the switch() in mock_activate_fw() (Jonathan)
+
+Changes in v2:
+- Link to v1: https://lore.kernel.org/r/20230421-vv-fw_update-v1-0-22468747d72f@intel.com
+- Make command field names more consistent with the spec (Jonathan)
+- Remove pointers to info/activate/transfer from fw state (Jonathan)
+- Use struct_size() insted of open coding it (Jonathan)
+- Fix a memory leak with 'transfer' in cxl_fw_write() (Jonathan)
+- Move fw setup/teardown into a devm action (Jonathan, Dan)
+- Use decimals in command struct definitions to match the spec (Alison)
+- Move fw loader registration up into cxl_pci_probe() (Dan)
+- Remove the fw_name cargo cult (Dan)
+- Change timeout for each transfer chunk to 30s (Dan)
+- Add a timeout in cxl_fw_write() as well (not just in abort)
+- Use IS_ALIGNED() instead of open coding it (Dan)
+- Clean up cur_size calculation in ->write() (Dan)
+- Remove the lock and 'clear_to_send (Dan)
+- Use atomic bitops for the cancel flag (Dan)
+- Gate fw loader setup on command availability (Dan)
+- Clean up the effects list in cxl_test using defines (Jonathan)
+- Use the sha256 routine in include/crypto/sha2.h (Jonathan)
+
+---
+Vishal Verma (4):
+      cxl: add a firmware update mechanism using the sysfs firmware loader
+      tools/testing/cxl: Fix command effects for inject/clear poison
+      tools/testing/cxl: Use named effects for the Command Effect Log
+      tools/testing/cxl: add firmware update emulation to CXL memdevs
+
+ drivers/cxl/cxlmem.h                    |  82 +++++++++
+ drivers/cxl/core/memdev.c               | 308 ++++++++++++++++++++++++++++++++
+ drivers/cxl/pci.c                       |   4 +
+ tools/testing/cxl/test/mem.c            | 192 +++++++++++++++++++-
+ Documentation/ABI/testing/sysfs-bus-cxl |  11 ++
+ drivers/cxl/Kconfig                     |   1 +
+ 6 files changed, 589 insertions(+), 9 deletions(-)
+---
+base-commit: ccadf1310fb0bc8d2cbcd14f94a6279c12ea9bee
+change-id: 20230602-vv-fw_update-e1c96a60c687
+
+Best regards,
 -- 
-2.39.2
+Vishal Verma <vishal.l.verma@intel.com>
 
