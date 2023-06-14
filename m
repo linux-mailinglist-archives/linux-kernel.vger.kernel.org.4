@@ -2,138 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B85C72F713
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 09:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BD1772F710
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 09:56:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbjFNH4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 03:56:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33592 "EHLO
+        id S233592AbjFNH4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 03:56:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238431AbjFNHze (ORCPT
+        with ESMTP id S233106AbjFNH41 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 03:55:34 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F7A19A
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 00:55:33 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4QgyQT6N9gzBQJZ2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 15:55:29 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1686729329; x=1689321330; bh=dS8vnxgH8gji4XEQkFCndZks/HB
-        FYJuzJrwrDwTtmrM=; b=M5/nEMjpHsBJXwdr954RZPBFmxqyoQgG1vDUjkZrqg9
-        1Woh99laCh/B2o5W8oACSMJ/3DdcZ2Q1j9YcAt4fK3nW4ImrC6Mr27Bj+L86Njt5
-        IXsmop9e6d8DX+wDNGPCBVPomEr1ihr/tlk7wkTtZDzv+d37dccr8RZN4vneEmLc
-        sEdvYlEfx6vD09Hag3MCiGH7Ph7yRvQzsVISvIeJ9swXV3jpf+CmDXMXu4u+lkRO
-        fY9uxdHw2TqLp02X8ylE11VUvwJ9Zw4nCG/SwGH4fBQLEx3ZL0tpalJ97PzSFuCU
-        J0jzlUhh/KX6oRNpZ5ckggYETN1MFMAoWpaXCdGrwhQ==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id kdxaCsDrVWTv for <linux-kernel@vger.kernel.org>;
-        Wed, 14 Jun 2023 15:55:29 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4QgyQT3m39zBQJYq;
-        Wed, 14 Jun 2023 15:55:29 +0800 (CST)
+        Wed, 14 Jun 2023 03:56:27 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9E0106
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 00:56:25 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <lgo@pengutronix.de>)
+        id 1q9LMY-000071-TT; Wed, 14 Jun 2023 09:56:18 +0200
+Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <lgo@pengutronix.de>)
+        id 1q9LMY-007ItU-1R; Wed, 14 Jun 2023 09:56:18 +0200
+Received: from lgo by dude03.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <lgo@pengutronix.de>)
+        id 1q9LMX-00EnXI-C0; Wed, 14 Jun 2023 09:56:17 +0200
+From:   =?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>
+To:     =?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>,
+        kernel@pengutronix.de, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1] iio: adc: add buffering support to the TI LMP92064 ADC driver
+Date:   Wed, 14 Jun 2023 09:55:36 +0200
+Message-Id: <20230614075537.3525194-1-l.goehrs@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Date:   Wed, 14 Jun 2023 15:55:29 +0800
-From:   wuyonggang001@208suo.com
-To:     Larry.Finger@lwfinger.net, kvalo@kernel.org
-Cc:     linux-wireless@vger.kernel.org, b43-dev@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] b43legacy: Remove unneeded variable
-In-Reply-To: <20230614075250.29097-1-zhanglibing@cdjrlc.com>
-References: <20230614075250.29097-1-zhanglibing@cdjrlc.com>
-User-Agent: Roundcube Webmail
-Message-ID: <194e8e87fda5f02664fcfac3717458f2@208suo.com>
-X-Sender: wuyonggang001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: lgo@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following coccicheck warning:
+Enable buffered reading of samples from the LMP92064 ADC.
+The main benefit of this change is being able to read out current and
+voltage measurements in a single transfer, allowing instantaneous power
+measurements.
 
-drivers/net/wireless/broadcom/b43legacy/debugfs.c:68:9-14: Unneeded 
-variable: "count".
+Reads into the buffer can be triggered by any software triggers, e.g.
+the iio-trig-hrtimer:
 
-Signed-off-by: Yonggang Wu <wuyonggang001@208suo.com>
+    $ mkdir /sys/kernel/config/iio/triggers/hrtimer/my-trigger
+    $ cat /sys/bus/iio/devices/iio\:device3/name
+    lmp92064
+    $ iio_readdev -t my-trigger -b 16 iio:device3 | hexdump
+    WARNING: High-speed mode not enabled
+    0000000 0000 0176 0101 0001 5507 abd5 7645 1768
+    0000010 0000 016d 0101 0001 ee1e ac6b 7645 1768
+    ...
+
+Signed-off-by: Leonard Göhrs <l.goehrs@pengutronix.de>
 ---
-  drivers/net/wireless/broadcom/b43legacy/debugfs.c | 9 +++------
-  1 file changed, 3 insertions(+), 6 deletions(-)
+ drivers/iio/adc/ti-lmp92064.c | 54 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
 
-diff --git a/drivers/net/wireless/broadcom/b43legacy/debugfs.c 
-b/drivers/net/wireless/broadcom/b43legacy/debugfs.c
-index 6b0e8d117061..184b0b4bdd94 100644
---- a/drivers/net/wireless/broadcom/b43legacy/debugfs.c
-+++ b/drivers/net/wireless/broadcom/b43legacy/debugfs.c
-@@ -65,7 +65,6 @@ struct b43legacy_dfs_file * fops_to_dfs_file(struct 
-b43legacy_wldev *dev,
-  /* wl->irq_lock is locked */
-  static ssize_t tsf_read_file(struct b43legacy_wldev *dev, char *buf, 
-size_t bufsize)
-  {
--    ssize_t count = 0;
-      u64 tsf;
+diff --git a/drivers/iio/adc/ti-lmp92064.c b/drivers/iio/adc/ti-lmp92064.c
+index c30ed824924f3..03765c4057dda 100644
+--- a/drivers/iio/adc/ti-lmp92064.c
++++ b/drivers/iio/adc/ti-lmp92064.c
+@@ -16,7 +16,10 @@
+ #include <linux/spi/spi.h>
+ 
+ #include <linux/iio/iio.h>
++#include <linux/iio/buffer.h>
+ #include <linux/iio/driver.h>
++#include <linux/iio/triggered_buffer.h>
++#include <linux/iio/trigger_consumer.h>
+ 
+ #define TI_LMP92064_REG_CONFIG_A 0x0000
+ #define TI_LMP92064_REG_CONFIG_B 0x0001
+@@ -91,6 +94,13 @@ static const struct iio_chan_spec lmp92064_adc_channels[] = {
+ 		.address = TI_LMP92064_CHAN_INC,
+ 		.info_mask_separate =
+ 			BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_SCALE),
++		.scan_index = 0,
++		.scan_type = {
++			.sign = 'u',
++			.realbits = 12,
++			.storagebits = 16,
++			.shift = 0,
++		},
+ 		.datasheet_name = "INC",
+ 	},
+ 	{
+@@ -98,8 +108,16 @@ static const struct iio_chan_spec lmp92064_adc_channels[] = {
+ 		.address = TI_LMP92064_CHAN_INV,
+ 		.info_mask_separate =
+ 			BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_SCALE),
++		.scan_index = 1,
++		.scan_type = {
++			.sign = 'u',
++			.realbits = 12,
++			.storagebits = 16,
++			.shift = 0,
++		},
+ 		.datasheet_name = "INV",
+ 	},
++	IIO_CHAN_SOFT_TIMESTAMP(2),
+ };
+ 
+ static int lmp92064_read_meas(struct lmp92064_adc_priv *priv, u16 *res)
+@@ -171,6 +189,37 @@ static int lmp92064_read_raw(struct iio_dev *indio_dev,
+ 	}
+ }
+ 
++static irqreturn_t lmp92064_trigger_handler(int irq, void *p)
++{
++	struct iio_poll_func *pf = p;
++	struct iio_dev *indio_dev = pf->indio_dev;
++	struct lmp92064_adc_priv *priv = iio_priv(indio_dev);
++	int i = 0, j, ret;
++	u16 raw[2];
++	u16 *data;
++
++	ret = lmp92064_read_meas(priv, raw);
++	if (ret < 0)
++		goto done;
++
++	data = kmalloc(indio_dev->scan_bytes, GFP_KERNEL);
++	if (!data)
++		goto done;
++
++	for_each_set_bit(j, indio_dev->active_scan_mask, indio_dev->masklength)
++		data[i++] = raw[j];
++
++	iio_push_to_buffers_with_timestamp(indio_dev, data,
++					   iio_get_time_ns(indio_dev));
++
++	kfree(data);
++
++done:
++	iio_trigger_notify_done(indio_dev->trig);
++
++	return IRQ_HANDLED;
++}
++
+ static int lmp92064_reset(struct lmp92064_adc_priv *priv,
+ 			  struct gpio_desc *gpio_reset)
+ {
+@@ -302,6 +351,11 @@ static int lmp92064_adc_probe(struct spi_device *spi)
+ 	indio_dev->num_channels = ARRAY_SIZE(lmp92064_adc_channels);
+ 	indio_dev->info = &lmp92064_adc_info;
+ 
++	ret = devm_iio_triggered_buffer_setup(dev, indio_dev, NULL,
++					      lmp92064_trigger_handler, NULL);
++	if (ret)
++		return dev_err_probe(dev, ret, "Failed to setup buffered read\n");
++
+ 	return devm_iio_device_register(dev, indio_dev);
+ }
+ 
 
-      b43legacy_tsf_read(dev, &tsf);
-@@ -73,7 +72,7 @@ static ssize_t tsf_read_file(struct b43legacy_wldev 
-*dev, char *buf, size_t bufs
-          (unsigned int)((tsf & 0xFFFFFFFF00000000ULL) >> 32),
-          (unsigned int)(tsf & 0xFFFFFFFFULL));
+base-commit: 9561de3a55bed6bdd44a12820ba81ec416e705a7
+-- 
+2.39.2
 
--    return count;
-+    return 0;
-  }
-
-  /* wl->irq_lock is locked */
-@@ -91,7 +90,6 @@ static int tsf_write_file(struct b43legacy_wldev *dev, 
-const char *buf, size_t c
-  /* wl->irq_lock is locked */
-  static ssize_t ucode_regs_read_file(struct b43legacy_wldev *dev, char 
-*buf, size_t bufsize)
-  {
--    ssize_t count = 0;
-      int i;
-
-      for (i = 0; i < 64; i++) {
-@@ -99,7 +97,7 @@ static ssize_t ucode_regs_read_file(struct 
-b43legacy_wldev *dev, char *buf, size
-              b43legacy_shm_read16(dev, B43legacy_SHM_WIRELESS, i));
-      }
-
--    return count;
-+    return 0;
-  }
-
-  /* wl->irq_lock is locked */
-@@ -125,7 +123,6 @@ static ssize_t shm_read_file(struct b43legacy_wldev 
-*dev, char *buf, size_t bufs
-  static ssize_t txstat_read_file(struct b43legacy_wldev *dev, char *buf, 
-size_t bufsize)
-  {
-      struct b43legacy_txstatus_log *log = &dev->dfsentry->txstatlog;
--    ssize_t count = 0;
-      unsigned long flags;
-      int i, idx;
-      struct b43legacy_txstatus *stat;
-@@ -166,7 +163,7 @@ static ssize_t txstat_read_file(struct 
-b43legacy_wldev *dev, char *buf, size_t b
-  out_unlock:
-      spin_unlock_irqrestore(&log->lock, flags);
-
--    return count;
-+    return 0;
-  }
-
-  /* wl->irq_lock is locked */
