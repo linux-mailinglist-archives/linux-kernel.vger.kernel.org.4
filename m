@@ -2,99 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC3E672F393
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 06:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C878572F398
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 06:35:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242375AbjFNEdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 00:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34856 "EHLO
+        id S233353AbjFNEfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 00:35:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233878AbjFNEdU (ORCPT
+        with ESMTP id S233878AbjFNEfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 00:33:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9CDD1BD2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 21:33:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F91961517
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 04:33:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58BC3C433C8;
-        Wed, 14 Jun 2023 04:33:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686717198;
-        bh=BghHSIzrtx7a2ftuKdYMzdC4PbkRSEtlZX6gQl4iCnk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FyS9RqXQo6ucwy7BZ4oWV6CYondZTwWDU7HEGm/2hkYiy0YQNMTLt5SeDjXFtrALj
-         jSesN87t5LcirgJmYig11Ecw55ZBkREW+scnawS45dkaI5lZRZVrHYMr0ZgYy1cuGC
-         7gSMuDw2WdmuNrN3lofx7SfUWc3UOwHZkcGiuqfo16ZKjwxXUOG3fEs/xTjJ4N6iru
-         pyE1H11MTsQlA6KobRb4PbXg01+hyTXLjnYYDa2HYxzclfr+nn/diC5bEgV20IegcZ
-         Y7f2dgQqeTaXzKerxoLfydt535abqbihdyluGjb+fCYrPrqzpb+RafLY2Bm+nkOBPw
-         2YXFU//Dignlg==
-Date:   Tue, 13 Jun 2023 21:33:17 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Yunsheng Lin <linyunsheng@huawei.com>
-Cc:     <davem@davemloft.net>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH net-next v4 2/5] page_pool: unify frag_count handling in
- page_pool_is_last_frag()
-Message-ID: <20230613213317.4eb4be7c@kernel.org>
-In-Reply-To: <20230612130256.4572-3-linyunsheng@huawei.com>
-References: <20230612130256.4572-1-linyunsheng@huawei.com>
-        <20230612130256.4572-3-linyunsheng@huawei.com>
+        Wed, 14 Jun 2023 00:35:50 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815131BD2;
+        Tue, 13 Jun 2023 21:35:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686717349; x=1718253349;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ejpS5yv6KiwAGP47Gkayf0WbxFj2TagAcuYgVG4W330=;
+  b=BKL8EsOuq3r+a9A2QuWj4X6VBVSw1ynp/jeoQZMkmjShtW3RzZh+fbAA
+   RqMv2cdBtrcYAR20atw8xwv/DJBYqWTCX6JYaGRPPTdR6TpHsDe3vvcxq
+   Yz7gm4aTAUHOM1MBlszRIfiYW3wYyGCpBer3ZaJ0s0/pGBIns+0/zWjOK
+   OYp7lq1bfQ2BQ6tdlQ+n6K42wC0y3cGcIuhJomHfmTyNagBXZzjTXre88
+   hwdDDSB49PAgUsA9B9eSTSSYl5zmawBvWzX2MDrJ/DOvCpcphCtnr8OIv
+   DPPN0l4ZXINvi6iFzZdryhpYDMEOxkz8fAVtqMC6Etc9rXLxlwV872mmj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="360998729"
+X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
+   d="scan'208";a="360998729"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 21:35:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="662251402"
+X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
+   d="scan'208";a="662251402"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO localhost) ([10.212.233.239])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 21:35:28 -0700
+From:   alison.schofield@intel.com
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Mike Rapoport <rppt@kernel.org>
+Cc:     Alison Schofield <alison.schofield@intel.com>, x86@kernel.org,
+        linux-cxl@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] CXL: Apply SRAT defined PXM to entire CFMWS window
+Date:   Tue, 13 Jun 2023 21:35:23 -0700
+Message-Id: <cover.1686712819.git.alison.schofield@intel.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 12 Jun 2023 21:02:53 +0800 Yunsheng Lin wrote:
->  static inline void page_pool_fragment_page(struct page *page, long nr)
->  {
-> -	atomic_long_set(&page->pp_frag_count, nr);
-> +	if (!PAGE_POOL_DMA_USE_PP_FRAG_COUNT)
-> +		atomic_long_set(&page->pp_frag_count, nr);
+From: Alison Schofield <alison.schofield@intel.com>
 
-why not let the driver take references on the page count in this case?
-I'm not saying it's worth the effort, but a comment may be useful?
+Along with the changes in v2 listed below, Dan questioned the maintenance
+burden of x86 not switching to use the memblock API. See Dan Williams &
+Mike Rapoport discuss the issue in the v1 link. [1]
 
-> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-> index 9c4118c62997..69e3c5175236 100644
-> --- a/net/core/page_pool.c
-> +++ b/net/core/page_pool.c
-> @@ -352,6 +352,14 @@ static void page_pool_set_pp_info(struct page_pool *pool,
->  {
->  	page->pp = pool;
->  	page->pp_magic |= PP_SIGNATURE;
-> +
-> +	/* Ensuring all pages have been split into one big frag initially:
+IIUC switching existing x86 meminfo usage to memblock is the pre-existing
+outstanding work, and per Mike 'that's quite some work needed to make
+that happen' and since the memblock API doesn't support something like
+numa_fill_memblks(), add that work on top.
 
-Again, I find the "one big frag" slightly confusing.
-Maybe we should rename pp_frag_cnt into pp_refcnt?
-After this series is looks even more like a page pool reference
-count rather than some form of number of fragments.
+So, with that open awaiting feedback from x86 maintainers, here's v2.
 
-> +	 * page_pool_set_pp_info() is only called once for every page when it
-> +	 * is allocated from the page allocator and page_pool_fragment_page()
-> +	 * is dirtying the same cache line as the page->pp_magic above, so
-> +	 * the overhead is negligible.
-> +	 */
-> +	page_pool_fragment_page(page, 1);
->  	if (pool->p.init_callback)
->  		pool->p.init_callback(page, pool->p.init_arg);
->  }
+
+Changes in v2:
+
+Patch 1/2: x86/numa: Introduce numa_fill_memblks()
+- Update commit log with policy description. (Dan)
+- Collect memblks with any HPA range intersect. (Dan)
+- Adjust head or tail memblk to include, not align to, HPA range.
+- Let the case of a single memblk simply fall through.
+- Simplify the sort compare function to use start only.
+- Rewrite and simplify the fill loop.
+- Add code comment for exclusive memblk->end. (Dan)
+- Add code comment for memblks being adjusted in place. (Dan)
+- Add Tags: Reported-by, Suggested-by, Tested-by
+
+Patch 2/2: ACPI: NUMA: Apply SRAT proximity domain to entire CFMWS window
+- Add Tags: Reported-by, Suggested-by, Tested-by
+- No changes in patch body.
+
+[1] v1: https://lore.kernel.org/linux-cxl/cover.1684448934.git.alison.schofield@intel.com/
+
+Cover Letter:
+
+The CXL subsystem requires the creation of NUMA nodes for CFMWS
+Windows not described in the SRAT. The existing implementation
+only addresses windows that the SRAT describes completely or
+not at all. This work addresses the case of partially described
+CFMWS Windows by extending proximity domains in a portion of
+a CFMWS window to the entire window.
+
+Introduce a NUMA helper, numa_fill_memblks(), to fill gaps in
+a numa_meminfo memblk address range. Update the CFMWS parsing
+in the ACPI driver to use numa_fill_memblks() to extend SRAT
+defined proximity domains to entire CXL windows.
+
+An RFC of this patchset was previously posted for CXL folks
+review.[2] The RFC feedback led to the implementation here,
+extending existing memblks (Dan). Also, both Jonathan and
+Dan influenced the changelog comments in the ACPI patch, with
+regards to setting expectations on this evolving heuristic.
+
+Repeating here to set reviewer expectations:
+*Note that this heuristic will evolve when CFMWS Windows present
+a wider range of characteristics. The extension of the proximity
+domain, implemented here, is likely a step in developing a more
+sophisticated performance profile in the future.
+
+[2] https://lore.kernel.org/linux-cxl/cover.1683742429.git.alison.schofield@intel.com/
+
+Alison Schofield (2):
+  x86/numa: Introduce numa_fill_memblks()
+  ACPI: NUMA: Apply SRAT proximity domain to entire CFMWS window
+
+ arch/x86/include/asm/sparsemem.h |  2 +
+ arch/x86/mm/numa.c               | 87 ++++++++++++++++++++++++++++++++
+ drivers/acpi/numa/srat.c         | 11 ++--
+ include/linux/numa.h             |  7 +++
+ 4 files changed, 104 insertions(+), 3 deletions(-)
+
+
+base-commit: 6e2e1e779912345f0b5f86ef01facc2802bd97cc
+-- 
+2.37.3
 
