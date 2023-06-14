@@ -2,43 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D425D73019B
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93F5A73021A
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:37:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245532AbjFNOVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 10:21:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47394 "EHLO
+        id S245320AbjFNOhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 10:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236943AbjFNOVC (ORCPT
+        with ESMTP id S235506AbjFNOhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 10:21:02 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDFCCD
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 07:21:00 -0700 (PDT)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Qh6yf60RmzTkfs;
-        Wed, 14 Jun 2023 22:20:26 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 14 Jun 2023 22:20:57 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>
-CC:     Johannes Weiner <hannes@cmpxchg.org>, <willy@infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH] mm: kill lock|unlock_page_memcg()
-Date:   Wed, 14 Jun 2023 22:36:12 +0800
-Message-ID: <20230614143612.62575-1-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.41.0
+        Wed, 14 Jun 2023 10:37:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC14BE4D
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 07:37:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 803DB638BD
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 14:37:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85366C433C8;
+        Wed, 14 Jun 2023 14:37:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686753457;
+        bh=XtFGXoNLr5Xg1fYKHdLT0cmLOK0PzxwD/t+GFu3PZok=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=m8AZ5oAbcpR1K0zHXSn0dRYPTOCl5sA6Ss2r0lG289q7AoxxL6fnEdmbfj7BeRnA7
+         Vnww2msQJmX4hQjhO1oP0AJRFSyYQ5/vMwK6QkgpAFHdLWFfJNk7eS7AfA6UuiRJpq
+         z96yi2Bz+X49yZaJWDi2SiaOq6079ABO9fnP+CSSoiyz20BBOxvohX22SGiVJ2UcRB
+         JL2KALmWSd9ZcYWO9JknvBMHnHugHIEDV34rN4GPaF9ZRXBBsWSKiTzjGFDL2vnVPt
+         VAJDT6hfU9faP3AiqBCy00zuvaGP2t7LE0WooXK9O2d9ha04HYgsrAPd1jbt8lIQ9u
+         1NQ++iTkHIQdg==
+Date:   Wed, 14 Jun 2023 15:37:32 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: x86: pgtable / kaslr initialisation (OOB) help
+Message-ID: <20230614143732.GW3635807@google.com>
+References: <20230614132339.GS3635807@google.com>
+ <20230614141654.GA1640123@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230614141654.GA1640123@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -47,174 +61,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit c7c3dec1c9db ("mm: rmap: remove lock_page_memcg()"),
-no more user, kill lock_page_memcg() and unlock_page_memcg().
+On Wed, 14 Jun 2023, Peter Zijlstra wrote:
 
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
----
- Documentation/admin-guide/cgroup-v1/memory.rst |  2 +-
- include/linux/memcontrol.h                     | 12 +-----------
- mm/filemap.c                                   |  2 +-
- mm/memcontrol.c                                | 18 ++++--------------
- mm/page-writeback.c                            |  6 +++---
- 5 files changed, 10 insertions(+), 30 deletions(-)
+> On Wed, Jun 14, 2023 at 02:23:39PM +0100, Lee Jones wrote:
+> > Good afternoon,
+> > 
+> > I'm looking for a little expert help with a out-of-bounds issue I've
+> > been working on.  Please let me know if my present understanding does
+> > not quite match reality.
+> > 
+> > - Report
+> > 
+> > The following highly indeterministic kernel panic was reported to occur every
+> > few hundred boots:
+> > 
+> >     Kernel panic - not syncing: Fatal exception
+> >      RIP: 0010:alloc_ucounts+0x68/0x280
+> >      RSP: 0018:ffffb53ac13dfe98 EFLAGS: 00010006
+> >      RAX: 0000000000000000 RBX: 000000015b804063 RCX: ffff9bb60d5aa500
+> >      RDX: 0000000000000001 RSI: 00000000000003fb RDI: 0000000000000001
+> >      RBP: ffffb53ac13dfec0 R08: 0000000000000000 R09: ffffd53abf600000
+> >      R10: ffff9bb60b4bdd80 R11: ffffffffbcde7bb0 R12: ffffffffbf04e710
+> >      R13: ffffffffbf405160 R14: 00000000000003fb R15: ffffffffbf1afc60
+> >      FS:  00007f5be44d5000(0000) GS:ffff9bb6b9cc0000(0000) knlGS:0000000000000000
+> >      CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> >      CR2: 000000015b80407b CR3: 00000001038ea000 CR4: 00000000000406a0
+> >      DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> >      DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> >      Call Trace:
+> >       <TASK>
+> >       __sys_setuid+0x1a0/0x290
+> >       __x64_sys_setuid+0xc/0x10
+> >       do_syscall_64+0x43/0x90
+> >       ? asm_exc_page_fault+0x8/0x30
+> >       entry_SYSCALL_64_after_hwframe+0x44/0xae
+> > 
+> > - Problem
+> > 
+> > The issue was eventually tracked down to the attempted dereference of a value
+> > located in a corrupted hash table.  ucounts_hashtable is an array of 1024
+> > struct hlists.  Each element is the head of its own linked list where previous
+> > ucount allocations are stored.  The [20]th element of ucounts_hashtable was
+> > being consistently trashed on each and every boot.  However the indeterminism
+> > comes from it being accessed only every few hundred boots.
+> > 
+> > The issue disappeared, or was at least unidentifiable when !(LTO=full) or when
+> > memory base randomisation (a.k.a. KASLR) was disabled, rending GDB all but
+> > impossible to use effectively.
+> > 
+> > The cause of the corruption was uncovered using a verity of different debugging
+> > techniques and was eventually tracked down to page table manipulation in early
+> > architecture setup.
+> > 
+> > The following line in arch/x86/realmode/init.c [0] allocates a variable, just 8
+> > Bytes in size, to "hold the pgd entry used on booting additional CPUs":
+> > 
+> >   pgd_t trampoline_pgd_entry;
+> > 
+> > The address of that variable is then passed from init_trampoline_kaslr() via a
+> > call to set_pgd() [1] to have a value (not too important here) assigned to it.
+> > Numerous abstractions take place, eventually leading to native_set_p4d(), an
+> > inline function [2] contained in arch/x86/include/asm/pgtable_64.h.
+> > 
+> > From here, intentionally or otherwise, a call to pti_set_user_pgtbl() is made.
+> > This is where the out-of-bounds write eventually occurs.  It is not known (by
+> > me) why this function is called.  The returned result is subsequently used as a
+> > value to write using the WRITE_ONCE macro.  Perhaps the premature write is not
+> > intended.  This is what I hope to find out.
+> > 
+> > A little way down in pti_set_user_pgtbl() [3] the following line occurs:
+> > 
+> >   kernel_to_user_pgdp(pgdp)->pgd = pgd.pgd
+> > 
+> > The kernel_to_user_pgdp() part takes the address of pgdp (a.k.a.
+> > trampoline_pgd_entry) and ends up flipping the 12th bit, essentially adding 4k
+> > (0x1000) to the address.  Then the part at the end assigns our value (still not
+> > important here) to it.  However, if we remember that only 8 Bytes was allocated
+> > (globally) for trampoline_pgd_entry, then means we just stored the value into
+> > the outlands (what we now know to be allocated to another global storage user
+> > ucounts_hashtable).
+> > 
+> > - Ask
+> > 
+> > Hopefully I haven't messed anything up in the explanation here.  Please let me
+> > know if this is the case.  I'm keen to understand what the intention was and
+> > what we might do to fix it, if of course this hasn't already been remedied
+> > somewhere.
+> > 
+> > As ever, any help / guidance would be gratefully received.
+> 
+> This is the PTI, or Page-Table-Isolation muck that is the Meltdown
+> mitigation. Basically we end up running with 2 sets of page-tables, a
+> kernel and user pagetable, where the user pagetable only contains the
+> bare minimum of the kernel to make the transition (and consequently
+> userspace cannot access the kernel data).
+> 
+> The way this is done is by making the PGD two consecutive pages aligned
+> to 2*PAGE_SIZE, and a switch between the two CR3 values is a simple
+> bitop. The kernel is the first (or lower address) while the user is the
+> second (or higher address).
+> 
+> This is what kernel_to_user_pgdp() is doing, and what you'll find in
+> things like SWITCH_TO_{KERNEL,USER}_CR3 from arch/x86/entry/calling.h.
+> 
+> Now the problem is that:
+> 
+> 1) this kaslr trampoline stuff does not play by the same rules, but
+> triggers it because it's about the first 1M of memory -- aka userspace
+> range.
+> 
+> 2) we've already set X86_FEATURE_PTI by the time this happens
+> 
+> I've not yet remebered enough of this crap to figure out the best way to
+> cure this. Clearly we don't need PTI to perform kalsr, but all of this
+> early setup is a giant maze so perhaps PTI is needed for something else
+> this early.
+> 
+> IFF not, the solution might be to set PTI later.
 
-diff --git a/Documentation/admin-guide/cgroup-v1/memory.rst b/Documentation/admin-guide/cgroup-v1/memory.rst
-index 47d1d7d932a8..fabaad3fd9c2 100644
---- a/Documentation/admin-guide/cgroup-v1/memory.rst
-+++ b/Documentation/admin-guide/cgroup-v1/memory.rst
-@@ -297,7 +297,7 @@ Lock order is as follows::
- 
-   Page lock (PG_locked bit of page->flags)
-     mm->page_table_lock or split pte_lock
--      lock_page_memcg (memcg->move_lock)
-+      folio_memcg_lock (memcg->move_lock)
-         mapping->i_pages lock
-           lruvec->lru_lock.
- 
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 00a88cf947e1..c3d3a0c09315 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -419,7 +419,7 @@ static inline struct obj_cgroup *__folio_objcg(struct folio *folio)
-  *
-  * - the folio lock
-  * - LRU isolation
-- * - lock_page_memcg()
-+ * - folio_memcg_lock()
-  * - exclusive reference
-  * - mem_cgroup_trylock_pages()
-  *
-@@ -949,8 +949,6 @@ void mem_cgroup_print_oom_group(struct mem_cgroup *memcg);
- 
- void folio_memcg_lock(struct folio *folio);
- void folio_memcg_unlock(struct folio *folio);
--void lock_page_memcg(struct page *page);
--void unlock_page_memcg(struct page *page);
- 
- void __mod_memcg_state(struct mem_cgroup *memcg, int idx, int val);
- 
-@@ -1438,14 +1436,6 @@ mem_cgroup_print_oom_meminfo(struct mem_cgroup *memcg)
- {
- }
- 
--static inline void lock_page_memcg(struct page *page)
--{
--}
--
--static inline void unlock_page_memcg(struct page *page)
--{
--}
--
- static inline void folio_memcg_lock(struct folio *folio)
- {
- }
-diff --git a/mm/filemap.c b/mm/filemap.c
-index 294ad6de2d09..3b73101f9f86 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -117,7 +117,7 @@
-  *    ->i_pages lock		(page_remove_rmap->set_page_dirty)
-  *    bdi.wb->list_lock		(page_remove_rmap->set_page_dirty)
-  *    ->inode->i_lock		(page_remove_rmap->set_page_dirty)
-- *    ->memcg->move_lock	(page_remove_rmap->lock_page_memcg)
-+ *    ->memcg->move_lock	(page_remove_rmap->folio_memcg_lock)
-  *    bdi.wb->list_lock		(zap_pte_range->set_page_dirty)
-  *    ->inode->i_lock		(zap_pte_range->set_page_dirty)
-  *    ->private_lock		(zap_pte_range->block_dirty_folio)
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 93056918e956..cf06b1c9b3bb 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -2148,17 +2148,12 @@ void folio_memcg_lock(struct folio *folio)
- 	 * When charge migration first begins, we can have multiple
- 	 * critical sections holding the fast-path RCU lock and one
- 	 * holding the slowpath move_lock. Track the task who has the
--	 * move_lock for unlock_page_memcg().
-+	 * move_lock for folio_memcg_unlock().
- 	 */
- 	memcg->move_lock_task = current;
- 	memcg->move_lock_flags = flags;
- }
- 
--void lock_page_memcg(struct page *page)
--{
--	folio_memcg_lock(page_folio(page));
--}
--
- static void __folio_memcg_unlock(struct mem_cgroup *memcg)
- {
- 	if (memcg && memcg->move_lock_task == current) {
-@@ -2186,11 +2181,6 @@ void folio_memcg_unlock(struct folio *folio)
- 	__folio_memcg_unlock(folio_memcg(folio));
- }
- 
--void unlock_page_memcg(struct page *page)
--{
--	folio_memcg_unlock(page_folio(page));
--}
--
- struct memcg_stock_pcp {
- 	local_lock_t stock_lock;
- 	struct mem_cgroup *cached; /* this never be root cgroup */
-@@ -2866,7 +2856,7 @@ static void commit_charge(struct folio *folio, struct mem_cgroup *memcg)
- 	 *
- 	 * - the page lock
- 	 * - LRU isolation
--	 * - lock_page_memcg()
-+	 * - folio_memcg_lock()
- 	 * - exclusive reference
- 	 * - mem_cgroup_trylock_pages()
- 	 */
-@@ -5829,7 +5819,7 @@ static int mem_cgroup_move_account(struct page *page,
- 	 * with (un)charging, migration, LRU putback, or anything else
- 	 * that would rely on a stable page's memory cgroup.
- 	 *
--	 * Note that lock_page_memcg is a memcg lock, not a page lock,
-+	 * Note that folio_memcg_lock is a memcg lock, not a page lock,
- 	 * to save space. As soon as we switch page's memory cgroup to a
- 	 * new memcg that isn't locked, the above state can change
- 	 * concurrently again. Make sure we're truly done with it.
-@@ -6320,7 +6310,7 @@ static void mem_cgroup_move_charge(void)
- {
- 	lru_add_drain_all();
- 	/*
--	 * Signal lock_page_memcg() to take the memcg's move_lock
-+	 * Signal folio_memcg_lock() to take the memcg's move_lock
- 	 * while we're moving its pages to another memcg. Then wait
- 	 * for already started RCU-only updates to finish.
- 	 */
-diff --git a/mm/page-writeback.c b/mm/page-writeback.c
-index db7943999007..1d17fb1ec863 100644
---- a/mm/page-writeback.c
-+++ b/mm/page-writeback.c
-@@ -2597,7 +2597,7 @@ EXPORT_SYMBOL(noop_dirty_folio);
- /*
-  * Helper function for set_page_dirty family.
-  *
-- * Caller must hold lock_page_memcg().
-+ * Caller must hold folio_memcg_lock().
-  *
-  * NOTE: This relies on being atomic wrt interrupts.
-  */
-@@ -2631,7 +2631,7 @@ static void folio_account_dirtied(struct folio *folio,
- /*
-  * Helper function for deaccounting dirty page without writeback.
-  *
-- * Caller must hold lock_page_memcg().
-+ * Caller must hold folio_memcg_lock().
-  */
- void folio_account_cleaned(struct folio *folio, struct bdi_writeback *wb)
- {
-@@ -2650,7 +2650,7 @@ void folio_account_cleaned(struct folio *folio, struct bdi_writeback *wb)
-  * If warn is true, then emit a warning if the folio is not uptodate and has
-  * not been truncated.
-  *
-- * The caller must hold lock_page_memcg().  Most callers have the folio
-+ * The caller must hold folio_memcg_lock().  Most callers have the folio
-  * locked.  A few have the folio blocked from truncation through other
-  * means (eg zap_vma_pages() has it mapped and is holding the page table
-  * lock).  This can also be called from mark_buffer_dirty(), which I
+I see.
+
+Still unsure how we (the kernel) can/should write to an area of memory
+that does not belong to it.  Should we allocate enough memory
+(2*PAGE_SIZE? rather than 8-Bytes) for trampoline_pgd_entry to consume
+in a more sane way?
+
 -- 
-2.41.0
-
+Lee Jones [李琼斯]
