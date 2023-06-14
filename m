@@ -2,207 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEFEE72F803
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE63B72F80B
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:40:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243682AbjFNIkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 04:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33280 "EHLO
+        id S243697AbjFNIki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 04:40:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233158AbjFNIkT (ORCPT
+        with ESMTP id S243683AbjFNIkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 04:40:19 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DF919AC
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 01:40:18 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q9M2n-0006Xo-A7; Wed, 14 Jun 2023 10:39:57 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q9M2l-007JTu-5z; Wed, 14 Jun 2023 10:39:55 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q9M2j-00E9QN-TW; Wed, 14 Jun 2023 10:39:53 +0200
-Date:   Wed, 14 Jun 2023 10:39:53 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Artur Weber <aweber.kernel@gmail.com>
-Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-pwm@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH 2/4] video: backlight: lp855x: get PWM for PWM mode
- during probe
-Message-ID: <20230614083953.e4kkweddjz7wztby@pengutronix.de>
-References: <20230429104534.28943-1-aweber.kernel@gmail.com>
- <20230429104534.28943-3-aweber.kernel@gmail.com>
+        Wed, 14 Jun 2023 04:40:32 -0400
+Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3DC1BC6
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 01:40:31 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0Vl5okOP_1686732027;
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Vl5okOP_1686732027)
+          by smtp.aliyun-inc.com;
+          Wed, 14 Jun 2023 16:40:28 +0800
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+To:     akpm@linux-foundation.org
+Cc:     mgorman@techsingularity.net, vbabka@suse.cz, david@redhat.com,
+        ying.huang@intel.com, baolin.wang@linux.alibaba.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] mm: compaction: skip memory hole rapidly when isolating migratable pages
+Date:   Wed, 14 Jun 2023 16:40:20 +0800
+Message-Id: <75b4c8ca36bf44ad8c42bf0685ac19d272e426ec.1686705221.git.baolin.wang@linux.alibaba.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ek7wuekooig4rg5c"
-Content-Disposition: inline
-In-Reply-To: <20230429104534.28943-3-aweber.kernel@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On some machines, the normal zone can have a large memory hole like
+below memory layout, and we can see the range from 0x100000000 to
+0x1800000000 is a hole. So when isolating some migratable pages, the
+scanner can meet the hole and it will take more time to skip the large
+hole. From my measurement, I can see the isolation scanner will take
+80us ~ 100us to skip the large hole [0x100000000 - 0x1800000000].
 
---ek7wuekooig4rg5c
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+So adding a new helper to fast search next online memory section
+to skip the large hole can help to find next suitable pageblock
+efficiently. With this patch, I can see the large hole scanning only
+takes < 1us.
 
-On Sat, Apr 29, 2023 at 12:45:32PM +0200, Artur Weber wrote:
-> Also deprecate the pwm-period DT property, as it is now redundant
-> (pwms property already contains period value).
->=20
-> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
-> ---
->  drivers/video/backlight/lp855x_bl.c | 48 ++++++++++++++++-------------
->  1 file changed, 26 insertions(+), 22 deletions(-)
->=20
-> diff --git a/drivers/video/backlight/lp855x_bl.c b/drivers/video/backligh=
-t/lp855x_bl.c
-> index 81012bf29baf..21eb4943ed56 100644
-> --- a/drivers/video/backlight/lp855x_bl.c
-> +++ b/drivers/video/backlight/lp855x_bl.c
-> @@ -218,23 +218,10 @@ static int lp855x_configure(struct lp855x *lp)
-> =20
->  static void lp855x_pwm_ctrl(struct lp855x *lp, int br, int max_br)
->  {
-> -	struct pwm_device *pwm;
->  	struct pwm_state state;
-> =20
-> -	/* request pwm device with the consumer name */
-> -	if (!lp->pwm) {
-> -		pwm =3D devm_pwm_get(lp->dev, lp->chipname);
-> -		if (IS_ERR(pwm))
-> -			return;
-> -
-> -		lp->pwm =3D pwm;
-> -
-> -		pwm_init_state(lp->pwm, &state);
-> -	} else {
-> -		pwm_get_state(lp->pwm, &state);
-> -	}
-> +	pwm_get_state(lp->pwm, &state);
+[    0.000000] Zone ranges:
+[    0.000000]   DMA      [mem 0x0000000040000000-0x00000000ffffffff]
+[    0.000000]   DMA32    empty
+[    0.000000]   Normal   [mem 0x0000000100000000-0x0000001fa7ffffff]
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000040000000-0x0000000fffffffff]
+[    0.000000]   node   0: [mem 0x0000001800000000-0x0000001fa3c7ffff]
+[    0.000000]   node   0: [mem 0x0000001fa3c80000-0x0000001fa3ffffff]
+[    0.000000]   node   0: [mem 0x0000001fa4000000-0x0000001fa402ffff]
+[    0.000000]   node   0: [mem 0x0000001fa4030000-0x0000001fa40effff]
+[    0.000000]   node   0: [mem 0x0000001fa40f0000-0x0000001fa73cffff]
+[    0.000000]   node   0: [mem 0x0000001fa73d0000-0x0000001fa745ffff]
+[    0.000000]   node   0: [mem 0x0000001fa7460000-0x0000001fa746ffff]
+[    0.000000]   node   0: [mem 0x0000001fa7470000-0x0000001fa758ffff]
+[    0.000000]   node   0: [mem 0x0000001fa7590000-0x0000001fa7ffffff]
 
-pwm_get_state returns an error code. Do you care if it fails? (You
-probably should.)
-> =20
-> -	state.period =3D lp->pdata->period_ns;
->  	state.duty_cycle =3D div_u64(br * state.period, max_br);
->  	state.enabled =3D state.duty_cycle;
-> =20
-> @@ -339,6 +326,7 @@ static int lp855x_parse_dt(struct lp855x *lp)
->  	of_property_read_string(node, "bl-name", &pdata->name);
->  	of_property_read_u8(node, "dev-ctrl", &pdata->device_control);
->  	of_property_read_u8(node, "init-brt", &pdata->initial_brightness);
-> +	/* Deprecated, specify period in pwms property instead */
->  	of_property_read_u32(node, "pwm-period", &pdata->period_ns);
-> =20
->  	/* Fill ROM platform data if defined */
-> @@ -399,6 +387,7 @@ static int lp855x_probe(struct i2c_client *cl)
->  	const struct i2c_device_id *id =3D i2c_client_get_device_id(cl);
->  	const struct acpi_device_id *acpi_id =3D NULL;
->  	struct device *dev =3D &cl->dev;
-> +	struct pwm_state pwmstate;
->  	struct lp855x *lp;
->  	int ret;
-> =20
-> @@ -457,11 +446,6 @@ static int lp855x_probe(struct i2c_client *cl)
->  		}
->  	}
-> =20
-> -	if (lp->pdata->period_ns > 0)
-> -		lp->mode =3D PWM_BASED;
-> -	else
-> -		lp->mode =3D REGISTER_BASED;
-> -
->  	lp->supply =3D devm_regulator_get(dev, "power");
->  	if (IS_ERR(lp->supply)) {
->  		if (PTR_ERR(lp->supply) =3D=3D -EPROBE_DEFER)
-> @@ -472,11 +456,31 @@ static int lp855x_probe(struct i2c_client *cl)
->  	lp->enable =3D devm_regulator_get_optional(dev, "enable");
->  	if (IS_ERR(lp->enable)) {
->  		ret =3D PTR_ERR(lp->enable);
-> -		if (ret =3D=3D -ENODEV) {
-> +		if (ret =3D=3D -ENODEV)
->  			lp->enable =3D NULL;
-> -		} else {
-> +		else
->  			return dev_err_probe(dev, ret, "getting enable regulator\n");
-> -		}
-> +	}
-> +
-> +	lp->pwm =3D devm_pwm_get(lp->dev, lp->chipname);
-> +	if (IS_ERR(lp->pwm)) {
-> +		ret =3D PTR_ERR(lp->pwm);
-> +		if (ret =3D=3D -ENODEV || ret =3D=3D -EINVAL)
+Suggested-by: David Hildenbrand <david@redhat.com>
+Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+Acked-by: David Hildenbrand <david@redhat.com>
+Acked-by: "Huang, Ying" <ying.huang@intel.com>
+---
+Changes from v2:
+ - Simplify the function suggested by David.
+ - Collect acked tag from David and Ying. Thanks.
+Changes from v1:
+ - Fix building errors if CONFIG_SPARSEMEM is not selected.
+ - Use NR_MEM_SECTIONS instead of '-1' per Huang Ying.
+---
+ mm/compaction.c | 35 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 34 insertions(+), 1 deletion(-)
 
-Why would you ignore EINVAL?
+diff --git a/mm/compaction.c b/mm/compaction.c
+index 3398ef3a55fe..0b2680b075fd 100644
+--- a/mm/compaction.c
++++ b/mm/compaction.c
+@@ -229,6 +229,33 @@ static void reset_cached_positions(struct zone *zone)
+ 				pageblock_start_pfn(zone_end_pfn(zone) - 1);
+ }
+ 
++#ifdef CONFIG_SPARSEMEM
++/*
++ * If the PFN falls into an offline section, return the start PFN of the
++ * next online section. If the PFN falls into an online section or if
++ * there is no next online section, return 0.
++ */
++static unsigned long skip_offline_sections(unsigned long start_pfn)
++{
++	unsigned long start_nr = pfn_to_section_nr(start_pfn);
++
++	if (online_section_nr(start_nr))
++		return 0;
++
++	while (++start_nr <= __highest_present_section_nr) {
++		if (online_section_nr(start_nr))
++			return section_nr_to_pfn(start_nr);
++	}
++
++	return 0;
++}
++#else
++static unsigned long skip_offline_sections(unsigned long start_pfn)
++{
++	return 0;
++}
++#endif
++
+ /*
+  * Compound pages of >= pageblock_order should consistently be skipped until
+  * released. It is always pointless to compact pages of such order (if they are
+@@ -1991,8 +2018,14 @@ static isolate_migrate_t isolate_migratepages(struct compact_control *cc)
+ 
+ 		page = pageblock_pfn_to_page(block_start_pfn,
+ 						block_end_pfn, cc->zone);
+-		if (!page)
++		if (!page) {
++			unsigned long next_pfn;
++
++			next_pfn = skip_offline_sections(block_start_pfn);
++			if (next_pfn)
++				block_end_pfn = next_pfn;
+ 			continue;
++		}
+ 
+ 		/*
+ 		 * If isolation recently failed, do not retry. Only check the
+-- 
+2.27.0
 
-> +			lp->pwm =3D NULL;
-> +		else
-> +			return dev_err_probe(dev, ret, "getting PWM\n");
-> +
-> +		lp->mode =3D REGISTER_BASED;
-> +		dev_dbg(dev, "mode: register based\n");
-> +	} else {
-
-pwmstate could be declared here.
-
-> +		pwm_init_state(lp->pwm, &pwmstate);
-> +		/* Legacy platform data compatibility */
-> +		if (lp->pdata->period_ns > 0)
-> +			pwmstate.period =3D lp->pdata->period_ns;
-> +		pwm_apply_state(lp->pwm, &pwmstate);
-
-This is a change in behaviour. Before lp855x_probe() didn't modify the
-state the bootloader left the backlight in. Now you're disabling it (I
-think). Is this intended?
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---ek7wuekooig4rg5c
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSJfNkACgkQj4D7WH0S
-/k5BdAgAs/Rb0sNvnazKhyxx1/2B+8B8l05A3se8y+qIfYwQkuhUfSSbRq80AX6G
-E3LMnbhe/ZeJSNWsxC27KTQfq0549+UgOrKjn6C4XgHk2hXOHTddWHmYDdwXu2WP
-Xioakfi2oNQxtyyGpx/moi+RLXGkiENoMqdoVdoXv/s4xY9vYHGOh1y6wf24yODH
-qSmd4fhumjKaqhl60wyH8n9JJJP2RFf3qIvH1Y4f421I8mZNriOjdPoou4b8ra5t
-o/MjffWe9Jx6h4IWGnl3YWM2t2c9jNnFcEnEtQKnSRBnCtFJC30WfKdGQPuxYYvh
-LF47pzLCWDJQBbJYpKZ6u02A8AOQog==
-=ZFS9
------END PGP SIGNATURE-----
-
---ek7wuekooig4rg5c--
