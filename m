@@ -2,83 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B3CB72F517
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 08:45:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ABE172F51F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 08:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234831AbjFNGpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 02:45:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51866 "EHLO
+        id S242549AbjFNGqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 02:46:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233721AbjFNGpM (ORCPT
+        with ESMTP id S233721AbjFNGqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 02:45:12 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012B91A3;
-        Tue, 13 Jun 2023 23:45:10 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35E4GfjX011094;
-        Wed, 14 Jun 2023 06:45:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : from : subject : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Jr5jIEmZwqk5/vqIbzjrfUS9+c47/9L9q13IlgbuhxI=;
- b=QDuJKcQvEg3++mOt83KenN3UHuvhVZ1+jxwRcN8/GRRDZ/d7yUFP1MLP+Nk2eG4iwp0A
- Tq4jLXOm96J5MOAKEpqmt+oXO1EF/Gy6Rt6e6ic5fHT/69O54FONmzlEwLIymrJ2+tkm
- LnAiFJQzwgBO+UC7zOGobxhWJtO3nY7be13VazhrlM0/5WVxIO2XOQRh+UmF5FFVUEJW
- XVZP+tdpZMzc6rZbP+w8RnRTbo/UbwsK1rr/RFe2gXg7TE7RKIiANQZGyPdUrxEdkVly
- EcsQ46N6eeat14vpyYyO6VhvQhYvlDRRpL75GTlrPfRV0A91eE8Ve4XcD9bdUrG/iC29 NQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r6t0bst3p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Jun 2023 06:45:07 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35E6j71O020146
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Jun 2023 06:45:07 GMT
-Received: from [10.217.198.86] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 13 Jun
- 2023 23:45:04 -0700
-Message-ID: <0b66dc99-7c88-f980-b91c-ac5d1f1301b3@quicinc.com>
-Date:   Wed, 14 Jun 2023 12:15:01 +0530
+        Wed, 14 Jun 2023 02:46:03 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B9F1A5;
+        Tue, 13 Jun 2023 23:46:02 -0700 (PDT)
+Received: from dggpemm500014.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QgwmZ4blkz18MCF;
+        Wed, 14 Jun 2023 14:41:02 +0800 (CST)
+Received: from [10.174.178.120] (10.174.178.120) by
+ dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 14 Jun 2023 14:45:58 +0800
+Message-ID: <cd9688dc-a716-3031-489e-a867df0d1ea2@huawei.com>
+Date:   Wed, 14 Jun 2023 14:45:58 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-From:   Tushar Nimkar <quic_tnimkar@quicinc.com>
-Subject: Re: [PATCH 1/2] dt-bindings: arm: idle-states: Add
- idle-state-disabled property
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_lsrao@quicinc.com>,
-        <quic_mkshah@quicinc.com>, <devicetree@vger.kernel.org>
-References: <20230608085544.16211-1-quic_tnimkar@quicinc.com>
- <20230608085544.16211-2-quic_tnimkar@quicinc.com>
- <9ae34dcc-0022-8097-7c86-8b11811ac2e1@kernel.org>
+ Thunderbird/102.10.1
+CC:     <mawupeng1@huawei.com>, <akpm@linux-foundation.org>,
+        <david@redhat.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
+        <richard.weiyang@linux.alibaba.com>, <mst@redhat.com>,
+        <jasowang@redhat.com>, <pankaj.gupta.linux@gmail.com>,
+        <mhocko@kernel.org>, <osalvador@suse.de>
+Subject: Re: [PATCH stable 5.10 1/1] mm/memory_hotplug: extend
+ offline_and_remove_memory() to handle more than one memory block
 Content-Language: en-US
-In-Reply-To: <9ae34dcc-0022-8097-7c86-8b11811ac2e1@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     <gregkh@linuxfoundation.org>
+References: <20230614061900.3296725-1-mawupeng1@huawei.com>
+ <20230614061900.3296725-2-mawupeng1@huawei.com>
+ <2023061440-showing-happiest-937e@gregkh>
+From:   mawupeng <mawupeng1@huawei.com>
+In-Reply-To: <2023061440-showing-happiest-937e@gregkh>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 7Wvuk5GCLUBVFRb4f7y2Olehcr3iZHwi
-X-Proofpoint-ORIG-GUID: 7Wvuk5GCLUBVFRb4f7y2Olehcr3iZHwi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-14_02,2023-06-12_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- priorityscore=1501 clxscore=1011 mlxlogscore=892 spamscore=0
- lowpriorityscore=0 suspectscore=0 adultscore=0 impostorscore=0
- phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306140057
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Originating-IP: [10.174.178.120]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500014.china.huawei.com (7.185.36.153)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,48 +57,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Krzysztof for reviewing,
 
-On 6/9/2023 6:44 PM, Krzysztof Kozlowski wrote:
-> On 08/06/2023 10:55, Tushar Nimkar wrote:
->> This change adds idle-state-disabled property using which certain or all
-> 
-> Please do not use "This commit/patch", but imperative mood. See longer
-> explanation here:
-> https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
-> 
-Sure, will update in next version.
->> idle-states can be kept disabled during boot-up. Once boot-up is completed
->> same can be enabled using below command.
+
+On 2023/6/14 14:35, Greg KH wrote:
+> On Wed, Jun 14, 2023 at 02:19:00PM +0800, Wupeng Ma wrote:
+>> From: David Hildenbrand <david@redhat.com>
 >>
-> 
-> I don't understand and you did not explain here, why this is useful and
-> why this is needed.
-> 
-I will update commit text to why this is useful in new version.
->> echo N > /sys/devices/system/cpu/cpuX/cpuidle/stateX/disable
-> 
-> 
+>> virtio-mem soon wants to use offline_and_remove_memory() memory that
+>> exceeds a single Linux memory block (memory_block_size_bytes()). Let's
+>> remove that restriction.
 >>
->> Cc: devicetree@vger.kernel.org
->> Signed-off-by: Tushar Nimkar <quic_tnimkar@quicinc.com>
-> 
-> Please use scripts/get_maintainers.pl to get a list of necessary people
-> and lists to CC.  It might happen, that command when run on an older
-> kernel, gives you outdated entries.  Therefore please be sure you base
-> your patches on recent Linux kernel.
-> 
-Yes, In new version will take care.
+>> Let's remember the old state and try to restore that if anything goes
+>> wrong. While re-onlining can, in general, fail, it's highly unlikely to
+>> happen (usually only when a notifier fails to allocate memory, and these
+>> are rather rare).
+>>
+>> This will be used by virtio-mem to offline+remove memory ranges that are
+>> bigger than a single memory block - for example, with a device block
+>> size of 1 GiB (e.g., gigantic pages in the hypervisor) and a Linux memory
+>> block size of 128MB.
+>>
+>> While we could compress the state into 2 bit, using 8 bit is much
+>> easier.
+>>
+>> This handling is similar, but different to acpi_scan_try_to_offline():
+>>
+>> a) We don't try to offline twice. I am not sure if this CONFIG_MEMCG
+>> optimization is still relevant - it should only apply to ZONE_NORMAL
+>> (where we have no guarantees). If relevant, we can always add it.
+>>
+>> b) acpi_scan_try_to_offline() simply onlines all memory in case
+>> something goes wrong. It doesn't restore previous online type. Let's do
+>> that, so we won't overwrite what e.g., user space configured.
+>>
+>> Reviewed-by: Wei Yang <richard.weiyang@linux.alibaba.com>
+>> Cc: "Michael S. Tsirkin" <mst@redhat.com>
+>> Cc: Jason Wang <jasowang@redhat.com>
+>> Cc: Pankaj Gupta <pankaj.gupta.linux@gmail.com>
+>> Cc: Michal Hocko <mhocko@kernel.org>
+>> Cc: Oscar Salvador <osalvador@suse.de>
+>> Cc: Wei Yang <richard.weiyang@linux.alibaba.com>
+>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>> Signed-off-by: David Hildenbrand <david@redhat.com>
+>> Link: https://lore.kernel.org/r/20201112133815.13332-28-david@redhat.com
+>> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+>> Acked-by: Andrew Morton <akpm@linux-foundation.org>
 >> ---
+>>  mm/memory_hotplug.c | 105 +++++++++++++++++++++++++++++++++++++-------
+>>  1 file changed, 89 insertions(+), 16 deletions(-)
+> 
+> As you forwarded this patch on, you too need to sign-off on it.
 
->> +          echo N > /sys/devices/system/cpu/cpuX/cpuidle/stateX/disable
-> 
-> This is Linux specific command, so does not fit the bindings.
-Will remove in new version.
-> 
-> Best regards,
-> Krzysztof
-> 
+Thanks for reminding me.
 
-Thanks,
-Tushar
+Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
+
+> 
+> Also, what is the git id of the commit in Linus's tree?
+
+Sorry, here is the commit in Linus's tree.
+
+commit 8dc4bb58a146655eb057247d7c9d19e73928715b upstream.
+
+> 
+> thanks,
+> 
+> greg k-h
