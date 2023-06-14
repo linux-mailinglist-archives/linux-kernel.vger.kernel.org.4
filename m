@@ -2,88 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D0D672F8D3
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 11:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBFA672F8D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 11:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235729AbjFNJP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 05:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55642 "EHLO
+        id S243975AbjFNJPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 05:15:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244046AbjFNJPC (ORCPT
+        with ESMTP id S244038AbjFNJO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 05:15:02 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A11F1FD7
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 02:14:54 -0700 (PDT)
-Received: from loongson.cn (unknown [10.180.13.22])
-        by gateway (Coremail) with SMTP id _____8Bx4OgMhYlkdQ8FAA--.8833S3;
-        Wed, 14 Jun 2023 17:14:52 +0800 (CST)
-Received: from [10.180.13.22] (unknown [10.180.13.22])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxduQLhYlkyW0aAA--.9439S3;
-        Wed, 14 Jun 2023 17:14:51 +0800 (CST)
-Message-ID: <978fa726-e194-2162-e10d-aed3a1c756e8@loongson.cn>
-Date:   Wed, 14 Jun 2023 17:14:27 +0800
+        Wed, 14 Jun 2023 05:14:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE7B1FE2;
+        Wed, 14 Jun 2023 02:14:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 01642636FA;
+        Wed, 14 Jun 2023 09:14:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08AD5C433C0;
+        Wed, 14 Jun 2023 09:14:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686734092;
+        bh=ktKsxwyCzGMiOE7Itoa6Qrkzgf2zcOZjEs7n5abIRvI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FNipdY7bUCwd5RVt4RwtD9G+NXmTtHIoX9Ze7xAs4LnYsyfeLgG1n8EOqrHTqwAM6
+         iNe/Ptd4L8MhBbLGO8iuHewE7VdB1EPmtlaKAwPIgcInb7qZZNeh7yPT+Sruj6rcLx
+         13KYcMDQyyfxD5F7QxsIXdVli3zfj5lGjPCejkOU=
+Date:   Wed, 14 Jun 2023 11:14:49 +0200
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     "Bhatnagar, Rishabh" <risbhat@amazon.com>
+Cc:     bigeasy@linutronix.de,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "sashal@kernel.org" <sashal@kernel.org>, luizcap@amazon.com,
+        abuehaze@amazon.com,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: Observing RCU stalls in kernel 5.4/5.10/5.15/6.1 stable trees
+Message-ID: <2023061428-compacter-economic-b648@gregkh>
+References: <12c6f9a3-d087-b824-0d05-0d18c9bc1bf3@amazon.com>
+ <c4724b40-89f6-5aa7-720d-c4a4af57cf45@amazon.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [ PATCH v2 2/3] ASoC: loongson: Add Loongson ASoC Sound Card
- Support
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     lgirdwood@gmail.com, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org, loongarch@lists.linux.dev,
-        loongson-kernel@lists.loongnix.cn
-References: <20230612090046.3039532-1-mengyingkun@loongson.cn>
- <1568e064-606e-4f56-951f-429a87a3a2d9@sirena.org.uk>
-From:   Yingkun Meng <mengyingkun@loongson.cn>
-In-Reply-To: <1568e064-606e-4f56-951f-429a87a3a2d9@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxduQLhYlkyW0aAA--.9439S3
-X-CM-SenderInfo: 5phqw55lqjy33q6o00pqjv00gofq/1tbiAQACDGSIXIIXpwABsM
-X-Coremail-Antispam: 1Uk129KBj9xXoWrurW3ZrWUJr1DWF1kGFW7trc_yoWxAFX_uF
-        4rWFn2ywnxCr4qq3yrGr4DXr4IkF1ayFn3Kw1Y93W3AF1xGa92kFykXr1ru393Za95JasI
-        v395X3say3y7ZosvyTuYvTs0mTUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvT
-        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-        cSsGvfJTRUUUbfkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-        vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-        Cr1j6rxdM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-        kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWr
-        XwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
-        k0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
-        Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67
-        AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8I
-        cVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI
-        8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v2
-        6r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4AhLUUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c4724b40-89f6-5aa7-720d-c4a4af57cf45@amazon.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 13, 2023 at 11:58:05AM -0700, Bhatnagar, Rishabh wrote:
+> 
+> On 6/13/23 11:49 AM, Bhatnagar, Rishabh wrote:
+> > Hi Sebastian/Greg
+> > 
+> > We are seeing RCU stall warnings from recent stable tree updates:
+> > 5.4.243, 5.10.180, 5.15.113, 6.1.31 onwards.
+> > This is seen in the upstream stable trees without any downstream patches.
+> > 
+> > The issue is seen few minutes after booting without any workload.
+> > We launch hundred's of virtual instances and this shows up in 1-2
+> > instances, so its hard to reproduce.
+> > Attaching a few stack traces below.
+> > 
+> > The issue can be seen on virtual and baremetal instances.
+> > Another interesting point is we only see this on x86 based instances.
+> > We also did test this on linux-mainline but were not able to reproduce
+> > the issue.
+> > So maybe there's a fixup or related commit that has gone in?
 
-On 2023/6/13 03:06, Mark Brown wrote:
-> On Mon, Jun 12, 2023 at 05:00:46PM +0800, YingKun Meng wrote:
->
->> +	if (ls_card->mclk_fs) {
->> +		mclk = ls_card->mclk_fs * params_rate(params);
->> +		ret = snd_soc_dai_set_sysclk(cpu_dai, 0, mclk,
->> +					     SND_SOC_CLOCK_OUT);
->> +		if (ret < 0) {
->> +			dev_err(codec_dai->dev, "cpu_dai clock not set\n");
->> +			return ret;
->> +		}
-> Does this need to be in the machine driver - this isn't configuring an
-> external clock, it's just within the SoC, so presumably the driver for
-> the SoC DAI can just set itself up.
+Oops, missed this.
 
+Yes, there might be, can you do 'git bisect' and track down the patch
+that fixed this?
 
-I think so. The driver for the SoC DAI cannot obtain the MCLK frequency of
-I2S bus from the clock subsystem.
+thanks,
 
+greg k-h
