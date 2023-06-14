@@ -2,105 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6716572F40B
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 07:15:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4249272F407
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 07:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242829AbjFNFO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 01:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49074 "EHLO
+        id S242807AbjFNFOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 01:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242818AbjFNFOy (ORCPT
+        with ESMTP id S242800AbjFNFOX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 01:14:54 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30F91A3;
-        Tue, 13 Jun 2023 22:14:52 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35E5ERGE019010;
-        Wed, 14 Jun 2023 00:14:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1686719667;
-        bh=f9NMbjlYWWumPMMGPp1UTUYH/PBscYjmbqd1a/TRdfg=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=U3LRbxtzXevFMfcfubOczIyWhhohFuuXhUA8vVAQ6YYI1+tPiLRfa0oAwUp3EjcUN
-         oDwQ32qIrcQqOMb6bCAVmoK3KfhrX2aN0qDj/nf8Jj5pPfK0EPUGTAoe/DKSkOzGll
-         d6DcPKJyon0vg3bD+JKgtWwsbUKck/jF3ZXCz/u4=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35E5ERnx022020
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 14 Jun 2023 00:14:27 -0500
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 14
- Jun 2023 00:14:26 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 14 Jun 2023 00:14:26 -0500
-Received: from [10.24.69.26] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35E5EMEB097229;
-        Wed, 14 Jun 2023 00:14:23 -0500
-Message-ID: <13562904-2f92-8a2f-0dcc-71fc0687d7da@ti.com>
-Date:   Wed, 14 Jun 2023 10:44:22 +0530
+        Wed, 14 Jun 2023 01:14:23 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3901A5;
+        Tue, 13 Jun 2023 22:14:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686719662; x=1718255662;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=icD36a7n6ocKgddwMxknQvdovYsG935WQbJhgnTH0s8=;
+  b=BYHtW65jdfWOVuYq878BGEJc22cVwCKhiBtJObIW+JTGvq7wOKBU/NlH
+   Htu+htd9YJ0qfiy2zEzeDoY7rmvfjzmPCen60notyhZ9mN7XIBVEAJ6Br
+   YL6AcwhsvZnYG51zyMxiCDj26LHf+dH5k0WF4URSrHSgjlKyp7SUYurwt
+   RsGKoonbjU8s4fl/xyQCAzA9wjGD+pXZxleJHR9ztDIQ1hrt/Fwz2rgdp
+   mbEnwCeuCG5jLgeNhcjlAzgS5Zlkgz/77S1VY74LXBDK3xe2AlpoxT8t/
+   p0ptnJuERXa/8kz4n/XK+5ZkIdM3lrQnOeUKdzUcN+cKek9hX68I8O9cT
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="386926239"
+X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
+   d="scan'208";a="386926239"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 22:14:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="824671047"
+X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
+   d="scan'208";a="824671047"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 13 Jun 2023 22:14:20 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 3B1A71E8; Wed, 14 Jun 2023 08:14:29 +0300 (EEST)
+Date:   Wed, 14 Jun 2023 08:14:29 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Raag Jadav <raag.jadav@intel.com>
+Cc:     linus.walleij@linaro.org, andriy.shevchenko@linux.intel.com,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mallikarjunappa.sangannavar@intel.com, pandith.n@intel.com
+Subject: Re: [PATCH v3 0/3] Minor improvements for Intel pinctrl
+Message-ID: <20230614051429.GS45886@black.fi.intel.com>
+References: <20230613085054.10976-1-raag.jadav@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] serial: 8250_omap: Use force_suspend and resume for
- system suspend
-Content-Language: en-US
-To:     Tony Lindgren <tony@atomide.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, Vignesh R <vigneshr@ti.com>
-CC:     Andy Shevchenko <andriy.shevchenko@intel.com>,
-        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        <linux-omap@vger.kernel.org>, <linux-serial@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230614045922.4798-1-tony@atomide.com>
-From:   Dhruva Gole <d-gole@ti.com>
-In-Reply-To: <20230614045922.4798-1-tony@atomide.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230613085054.10976-1-raag.jadav@intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tony,
-
-Thanks for the fix!
-
-On 14/06/23 10:29, Tony Lindgren wrote:
-> We should not rely on autosuspend timeout for system suspend. Instead,
-> let's use force_suspend and force_resume functions. Otherwise the serial
-> port controller device may not be idled on suspend.
+On Tue, Jun 13, 2023 at 02:20:51PM +0530, Raag Jadav wrote:
+> This series implements minor improvements for Intel pinctrl driver.
 > 
-> As we are doing a register write on suspend to configure the serial port,
-> we still need to runtime PM resume the port on suspend.
+> The optimizations are as tested with gcc 7.5.0 with default -O2.
 > 
-> While at it, let's switch to pm_runtime_resume_and_get() and check for
-> errors returned. And let's add the missing line break before return to the
-> suspend function while at it.
+> Changes since v2:
+> - Drop redundant patches.
+> - Update commit message.
 > 
-> Fixes: 09d8b2bdbc5c ("serial: 8250: omap: Provide ability to enable/disable UART as wakeup source")
-> Signed-off-by: Tony Lindgren <tony@atomide.com>
-> ---
+> Changes since v1:
+> - Update commit message.
+> - Specify compiler options used to measure optimizations.
+> - Drop redundant comments.
+> 
+> Raag Jadav (3):
+>   pinctrl: intel: refine ->set_mux() hook
+>   pinctrl: intel: refine ->irq_set_type() hook
+>   pinctrl: intel: simplify exit path of ->gpio_request_enable() hook
 
-Tested-by: Dhruva Gole <d-gole@ti.com>
+For the series,
 
->   drivers/tty/serial/8250/8250_omap.c | 20 +++++++++++++++-----
->   1 file changed, 15 insertions(+), 5 deletions(-)
-> [...]
-
-
--- 
-Thanks and Regards,
-Dhruva Gole
+Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
