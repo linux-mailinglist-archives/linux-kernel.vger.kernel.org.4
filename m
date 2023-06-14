@@ -2,67 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B4B57307B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 705A07307BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231459AbjFNTCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 15:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38856 "EHLO
+        id S231466AbjFNTDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 15:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233681AbjFNTC3 (ORCPT
+        with ESMTP id S230322AbjFNTDX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 15:02:29 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3651FC7
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 12:02:28 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b512309d18so2352975ad.3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 12:02:28 -0700 (PDT)
+        Wed, 14 Jun 2023 15:03:23 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576C31BCE
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 12:03:22 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id 6a1803df08f44-62de85dd962so19165386d6.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 12:03:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686769348; x=1689361348;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3YCZowOEZlyDvPFb00vEd70o77BSACcS6VLpIzsJZfs=;
-        b=UL1esWWehBszKXIe8ACxXGNCnSPB/ARM1o1PbG0kVkV4nemWgox+TZaJYs9cpXwBEG
-         0h98gqsB4/z9r4Nw7DjfLdCbyHyqk+L7nxIJn3QAQY99DdH+dOzfYBYK9rBT6k2Bcm8r
-         bYtdfgVnSA3wMgKBWkyV1x2vHFzdRyoIOMt0M=
+        d=linaro.org; s=google; t=1686769401; x=1689361401;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5KxR5s+1q8F9IZW4HFC1+utbLHDsLoQkCQDVt50jepE=;
+        b=jU14Y6Jo5XBK9x3Zp3uMHjLrpHlkpyPdyVDZ2p/7aFP5Qa+KrZHvkLVTWvulgsp0Ud
+         NpuY9Lgx+4wCzXvHRQ5wh6VoI+tzaSiIW6l2WoukZFN+BlpkzuYwLN1sQz6t1UwWcG1T
+         XE9grfTnRN/O7B55LpjlD8NsUQJhdT4kjbTT9jCGpu4I8nJ8sMvbBt/8HiJUXQyoGKHt
+         6y8PABOPUX7E16PFmRPieOEt7VOjA2XiIxD6fO/vnA3OyyVBkNvrQ80ML2Jl1s0dmXfP
+         Ppwl2t76GJnZ9pFGOPyLDxFq6ZFN25Sf/G3rLYw2l5P8hTNEUlmbPwavJy/Ukb9YahY3
+         khow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686769348; x=1689361348;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3YCZowOEZlyDvPFb00vEd70o77BSACcS6VLpIzsJZfs=;
-        b=jJoLUC/l+Xvo3L5JsCODpa9JFonaK9vLawW4BLiTvXFEhUNf/eEGu2Qplv3Mqd7pn4
-         O5ZcjFnqLunL435Xa77004UVQDWRiKDiJA5RdPo12UidT16AQmsjZjeHom6LQ8xtbT7D
-         re9jPgw8FEOuU+cfxa17zDwpBDH5iI4sm22hzaql3ItkKwjIi3xa2u6hq9fFEMyvILRd
-         e4UXXo8faFFmJ/87FiWbDXhTYtOrlFEoI4ngichmaM8G/o6ocV42ww6VRzVUxRW0t3PM
-         AuhsEk08KywdFiyWFDa3cMCK29b0FtSfIyms/gNJAWAtOGKF36Pfn99/7RDkxGK1Ld3a
-         X6zg==
-X-Gm-Message-State: AC+VfDxcMePZ1w0t1QVTVIkOm/0OAtRXSXP3cYo0zL+eWMSidElRHStK
-        CELFUl72euphmQHQ9R+qiCss6Q==
-X-Google-Smtp-Source: ACHHUZ5iJkud3crTR0HfcCGIrOI7RlnMqsNoWMWE3yB+liApSlR7CMUhT1lB2PDhQl1Imd3thY8NHQ==
-X-Received: by 2002:a17:902:900b:b0:1b1:787d:1e47 with SMTP id a11-20020a170902900b00b001b1787d1e47mr10405803plp.41.1686769347821;
-        Wed, 14 Jun 2023 12:02:27 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id q17-20020a170902bd9100b001a6dc4f4a8csm6080516pls.73.2023.06.14.12.02.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 12:02:26 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Tony Luck <tony.luck@intel.com>, gpiccoli@igalia.com,
-        jiasheng@iscas.ac.cn
-Cc:     Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pstore/ram: Add check for kstrdup
-Date:   Wed, 14 Jun 2023 12:02:22 -0700
-Message-Id: <168676933413.1964902.10975046622666156359.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230614093733.36048-1-jiasheng@iscas.ac.cn>
-References: <20230614093733.36048-1-jiasheng@iscas.ac.cn>
+        d=1e100.net; s=20221208; t=1686769401; x=1689361401;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5KxR5s+1q8F9IZW4HFC1+utbLHDsLoQkCQDVt50jepE=;
+        b=DfYWb5QW3o7gw2j5yeL3Dm5SbIOLI4RRckRnIUvlY4R60C1y55He1F1Gil0OI02mMA
+         HvPkaIeogQXbViGFQ0oc1XaCXpbIkWkQH385xLOJaKkCJ0wlPv5HJ9kpNhhssQSg/KQM
+         DNKNAfYoxP18sHQcmbwbj3c905ZyavCyif7wWzkq2CGQZEpvNoDdIhHA6CtT2KtuCIL7
+         BjbKTjve1FsqT8PTD9f9goc6CzIqyAfu15CWSKxDdhBmNfJBO0BGHnzTiIIK4eUclM/+
+         P5jaZGF0vLGxOUgG5vj1/bua16Md+XIe7ePUbti5mapxh7jOWDgMbN0rVSNiI4MD5k43
+         AJpg==
+X-Gm-Message-State: AC+VfDwA9TpJS5pPlcgkW9p4CcW3Y9C5ah44tEuGcWtPZj1Bie66ZxGs
+        n94hPQBJo5x+BR865SQiF7gQfMEqNxy8vsAp0Qg6NA==
+X-Google-Smtp-Source: ACHHUZ5JAhpNNg/DP1KXT/cJBUBpoH3nzGXm5nBrZHQB3OXKa+lcvMH9FDvBegx91mtTRmVpMFshm+RDxZ2C8IcYakU=
+X-Received: by 2002:a05:6214:f24:b0:62d:fe50:1a79 with SMTP id
+ iw4-20020a0562140f2400b0062dfe501a79mr5185509qvb.45.1686769401311; Wed, 14
+ Jun 2023 12:03:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20230324063357.1.Ifdf3625a3c5c9467bd87bfcdf726c884ad220a35@changeid>
+ <CAMi1Hd1avQDcDQf137m2auz2znov4XL8YGrLZsw5edb-NtRJRw@mail.gmail.com>
+ <552345c5-b1e9-41f6-f275-b6eeeb51df25@linaro.org> <CAMi1Hd05z8uBotO4vs7Ropmt7W2gSA__tTu_=X1t0mze7bXrhg@mail.gmail.com>
+ <CAD=FV=VSFDe445WEVTHXxU1WS_HGUV5jR5E8_Vgd4eyhn3rHyA@mail.gmail.com>
+ <CAMi1Hd28FJUjB8A-9YF7xpKOzSyNWXX3qung4aDjpLBhOvw_eA@mail.gmail.com>
+ <CAD=FV=W13L0H88G1gt8qRnXfpV-_7E9QfHufN_a23_B1bb=aww@mail.gmail.com>
+ <CAMi1Hd1WCtNvNaY_kVMx5F8T0nMVHvsjk9LsSETCMWWQyaq_Vw@mail.gmail.com>
+ <CAD=FV=W5Y_SHp0y2MEs8d1k255bm_PXdRYEmYei+g79pjnzYuA@mail.gmail.com>
+ <CAMi1Hd2OeL940r7jq0=Z_oxE8MYVioy0YnJXQC_5e0vJONd2sQ@mail.gmail.com>
+ <1bc79c48-7cba-476d-9a7e-5754a88fcdae@sirena.org.uk> <CAMi1Hd2BLB6H3QRLB5svRTkGoXaUeEsakNsmfCOjbDBcCEeqkA@mail.gmail.com>
+ <CAD=FV=UKyjRNZG-ED2meUAR9aXdco+AbUTHiKixTzjCkaJbjTg@mail.gmail.com>
+In-Reply-To: <CAD=FV=UKyjRNZG-ED2meUAR9aXdco+AbUTHiKixTzjCkaJbjTg@mail.gmail.com>
+From:   Amit Pundir <amit.pundir@linaro.org>
+Date:   Thu, 15 Jun 2023 00:32:45 +0530
+Message-ID: <CAMi1Hd12S+bKyp=CHwoioYoojtFzaA1tey19BqAFi+4DeJR__w@mail.gmail.com>
+Subject: Re: [PATCH] regulator: qcom-rpmh: Revert "regulator: qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS"
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,17 +84,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Jun 2023 17:37:33 +0800, Jiasheng Jiang wrote:
-> Add check for the return value of kstrdup() and return the error
-> if it fails in order to avoid NULL pointer dereference.
-> 
-> 
+On Wed, 7 Jun 2023 at 04:59, Doug Anderson <dianders@chromium.org> wrote:
+>
+> From a black box perspective, I guess the things I could think of
+> would be to keep poking around with things that you control. Best
+> ideas I have:
+>
+> 1. Use "bisect" style techniques to figure out how much you really
+> need to move the "lvs" regulators. Try moving it halfway up the list.
+> If that works, move it closer to the bottom. If that doesn't work,
+> move it closer to the top. Eventually you'd find out which regulator
+> it's important to be before.
 
-Applied to for-next/pstore, thanks!
+Hi, I tried this bisect style technique to move lvs regulators up in
+the list gradually and I found that they need to be enabled atleast
+before ldo12 and the ldo regulators which follow the ldo12 in the
+list.
 
-[1/1] pstore/ram: Add check for kstrdup
-      https://git.kernel.org/kees/c/d97038d5ec20
+>
+> 2. Try adding some delays to some of the regulators with
+> "regulator-enable-ramp-delay" and/or "regulator-settling-time-us".
+> Without a scope, it'll be tricky to figure out exactly which
+> regulators might need delays, but you could at least confirm if the
+> "overkill" approach of having all the regulators have some delay
+> helps... I guess you could also try putting a big delay for "ldo26".
+> If that works, you could try moving it up (again using a bisect style
+> approach) to see where the delay matters?
 
--- 
-Kees Cook
+I tried this approach as well earlier today but I don't know how big
+"the big" delay can be. The device fails to boot if I add a settling
+time of as much as 2sec per each ldo and lvs regulator too. I didn't
+try increasing the delay further.
 
+Regards,
+Amit Pundir
