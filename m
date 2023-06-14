@@ -2,99 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13BE472F534
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 08:52:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AEBF72F53F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 08:57:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242676AbjFNGv7 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 14 Jun 2023 02:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54108 "EHLO
+        id S234952AbjFNG5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 02:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234554AbjFNGv4 (ORCPT
+        with ESMTP id S229943AbjFNG5Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 02:51:56 -0400
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B59D10FE;
-        Tue, 13 Jun 2023 23:51:53 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id F1F3E63CC111;
-        Wed, 14 Jun 2023 08:51:50 +0200 (CEST)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id NhsAn0pqGJjc; Wed, 14 Jun 2023 08:51:50 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 756B4608F44F;
-        Wed, 14 Jun 2023 08:51:50 +0200 (CEST)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id tYnTmxn9hAwM; Wed, 14 Jun 2023 08:51:50 +0200 (CEST)
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 3D44C63CC111;
-        Wed, 14 Jun 2023 08:51:50 +0200 (CEST)
-Date:   Wed, 14 Jun 2023 08:51:50 +0200 (CEST)
-From:   Richard Weinberger <richard@nod.at>
-To:     tglx <tglx@linutronix.de>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>, x86 <x86@kernel.org>,
-        torvalds <torvalds@linux-foundation.org>,
-        Nikolay Borisov <nik.borisov@suse.com>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        anton ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um <linux-um@lists.infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-ia64@vger.kernel.org, Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-sh@vger.kernel.org, davem <davem@davemloft.net>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chris Zankel <chris@zankel.net>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Message-ID: <308775127.5298661.1686725510008.JavaMail.zimbra@nod.at>
-In-Reply-To: <20230613224545.493148694@linutronix.de>
-References: <20230613223827.532680283@linutronix.de> <20230613224545.493148694@linutronix.de>
-Subject: Re: [patch 10/17] um/cpu: Switch to arch_cpu_finalize_init()
+        Wed, 14 Jun 2023 02:57:16 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1B91984;
+        Tue, 13 Jun 2023 23:57:15 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 227072188D;
+        Wed, 14 Jun 2023 06:57:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1686725834; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bWmUJHf0Ey81BHg4FfOq6OnR1lg1RZH8qrzAxru/q4U=;
+        b=Ae78GTKgCZZmGqmGNhaYT00kHkTw7C22ZCo648dDhJ5Hznq86Qcl4UTSqguQZZMN1B5u2+
+        fQVBGbjxDDMK3J4Kzj8D6BBud5Y3rlLwToB8VxsOCRc7c/N6CwY8KWxXUaXM7B2YMc+n2m
+        zamjj2L8XPwxE1yYbor492aRMNRvVtg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1686725834;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bWmUJHf0Ey81BHg4FfOq6OnR1lg1RZH8qrzAxru/q4U=;
+        b=IhtnPGz1B/nlr8hDByMU5YnbQ+jLtCqO6A1zC0rheblThcV4vMvhPDAZGiCZqV2PEaAj7a
+        eyODkgpoYD5GMNDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F30541357F;
+        Wed, 14 Jun 2023 06:57:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id TXZdOshkiWS9DAAAMHmgww
+        (envelope-from <hare@suse.de>); Wed, 14 Jun 2023 06:57:12 +0000
+Message-ID: <37ed36f0-6f72-115c-85fb-62ef5ad72e76@suse.de>
+Date:   Wed, 14 Jun 2023 08:57:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [195.201.40.130]
-X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
-Thread-Topic: um/cpu: Switch to arch_cpu_finalize_init()
-Thread-Index: iSTlBjUa5Wmo5DQJGeG0TUMeIHydTg==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: Fwd: Waking up from resume locks up on sr device
+Content-Language: en-US
+To:     Damien Le Moal <dlemoal@kernel.org>,
+        Joe Breuer <linux-kernel@jmbreuer.net>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Linux Power Management <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Hardening <linux-hardening@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux SCSI <linux-scsi@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+References: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
+ <5513e29d-955a-f795-21d6-ec02a2e2e128@gmail.com>
+ <ZIQ6bkau3j6qGef8@duo.ucw.cz>
+ <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com>
+ <02e4f87a-80e8-dc5d-0d6e-46939f2c74ac@acm.org>
+ <b2cf6d96-a55a-d444-d22e-e9b3945ba43f@jmbreuer.net>
+ <84f1c51c-86f9-04b3-0cd1-f685ebee7592@kernel.org>
+From:   Hannes Reinecke <hare@suse.de>
+In-Reply-To: <84f1c51c-86f9-04b3-0cd1-f685ebee7592@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ Ursprüngliche Mail -----
-> Von: "tglx" <tglx@linutronix.de>
-> check_bugs() is about to be phased out. Switch over to the new
-> arch_cpu_finalize_init() implementation.
+On 6/14/23 06:49, Damien Le Moal wrote:
+> On 6/11/23 18:05, Joe Breuer wrote:
+>> I'm the reporter of this issue.
+>>
+>> I just tried this patch against 6.3.4, and it completely fixes my
+>> suspend/resume issue.
+>>
+>> The optical drive stays usable after resume, even suspending/resuming
+>> during playback of CDDA content works flawlessly and playback resumes
+>> seamlessly after system resume.
+>>
+>> So, from my perspective: Good one!
 > 
-> No functional change.
+> In place of Bart's fix, could you please try this patch ?
+> 
+> diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
+> index b80e68000dd3..a81eb4f882ab 100644
+> --- a/drivers/ata/libata-eh.c
+> +++ b/drivers/ata/libata-eh.c
+> @@ -4006,9 +4006,32 @@ static void ata_eh_handle_port_resume(struct
+> ata_port *ap)
+>          /* tell ACPI that we're resuming */
+>          ata_acpi_on_resume(ap);
+> 
+> -       /* update the flags */
+>          spin_lock_irqsave(ap->lock, flags);
+> +
+> +       /* Update the flags */
+>          ap->pflags &= ~(ATA_PFLAG_PM_PENDING | ATA_PFLAG_SUSPENDED);
+> +
+> +       /*
+> +        * Resuming the port will trigger a rescan of the ATA device(s)
+> +        * connected to it. Before scheduling the rescan, make sure that
+> +        * the associated scsi device(s) are fully resumed as well.
+> +        */
+> +       ata_for_each_link(link, ap, HOST_FIRST) {
+> +               ata_for_each_dev(dev, link, ENABLED) {
+> +                       struct scsi_device *sdev = dev->sdev;
+> +
+> +                       if (!sdev)
+> +                               continue;
+> +                       if (scsi_device_get(sdev))
+> +                               continue;
+> +
+> +                       spin_unlock_irqrestore(ap->lock, flags);
+> +                       device_pm_wait_for_dev(&ap->tdev,
+> +                                              &sdev->sdev_gendev);
+> +                       scsi_device_put(sdev);
+> +                       spin_lock_irqsave(ap->lock, flags);
+> +               }
+> +       }
+>          spin_unlock_irqrestore(ap->lock, flags);
+>   }
+>   #endif /* CONFIG_PM */
+> 
+> Thanks !
+> 
+Well; not sure if that'll work out.
+The whole reason why we initial a rescan is that we need to check if the 
+ports are still connected, and whether the devices react.
+So we can't iterate the ports here as this is the very thing which gets 
+checked during EH.
 
-Confirmed. :-)
- 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-> Cc: Johannes Berg <johannes@sipsolutions.net>
-> Cc: linux-um@lists.infradead.org
+We really should claim resume to be finished as soon as we can talk with 
+the HBA, and kick off EH asynchronously to let it finish the job after 
+resume has completed.
 
-Acked-by: Richard Weinberger <richard@nod.at>
+Cheers,
 
-Thanks,
-//richard
+Hannes
+-- 
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Ivo Totev, Andrew
+Myers, Andrew McDonald, Martje Boudien Moerman
+
