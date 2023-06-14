@@ -2,145 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 810DE72F283
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 04:17:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1E272F8F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 11:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242139AbjFNCQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 22:16:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57852 "EHLO
+        id S243938AbjFNJY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 05:24:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237417AbjFNCQx (ORCPT
+        with ESMTP id S235174AbjFNJYZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 22:16:53 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E6E19B6;
-        Tue, 13 Jun 2023 19:16:51 -0700 (PDT)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Qgpv5727NzTl1c;
-        Wed, 14 Jun 2023 10:16:17 +0800 (CST)
-Received: from localhost.localdomain (10.67.174.95) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 14 Jun 2023 10:16:48 +0800
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>, <irogers@google.com>,
-        <adrian.hunter@intel.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <james.clark@arm.com>
-CC:     <yangjihong1@huawei.com>
-Subject: [PATCH v3] perf stat: Add missing newline in pr_err messages
-Date:   Wed, 14 Jun 2023 02:15:05 +0000
-Message-ID: <20230614021505.59856-1-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
+        Wed, 14 Jun 2023 05:24:25 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121EA10E6;
+        Wed, 14 Jun 2023 02:24:24 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-3094910b150so6436184f8f.0;
+        Wed, 14 Jun 2023 02:24:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686734662; x=1689326662;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=7vhykEG+gmq52oSNnSPExwEhKf++8eJ31Faf/uybBvo=;
+        b=MZ/7VuHlf5M9nJ6GXXGSP1shZRtsCCaJ2g1j1OJitRZdfzuJO4bcP/WrJK9xlZx0Oo
+         hpw/s/lLqJdUEWkv2tTQCMhlLKqD+wY5oNP7anb9MBqGoYJs964f2fdBDojrxtRFaTGp
+         pJwciX0i1lH9vnHrK/eRFArcpXq/aW9x5BJicwhqtCTndYKjjgwsXAgVAh+b3Wz46Y3i
+         rO3TqSCN9HsfV0/sHavO/kdnTDIFagXodFR5Qg+JWuF7odcqYGYdOgnqbfwXGe3nCVGj
+         jCndsch5YUCIWn23HGTU8YtfqebJ1Y0dCpAqcbRK9NW5x6D/XmN4K6h8XDnSPloszexE
+         fgeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686734662; x=1689326662;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7vhykEG+gmq52oSNnSPExwEhKf++8eJ31Faf/uybBvo=;
+        b=emueV7jOFT34iW/HcegVx/asotRLuK7qHPEGxuloWDjSsS62TOHsVCs09lAbFVU2Mi
+         p/9b2katYR2zEMyYFDgQAh25HfXuUvPFwgxuupiHsdYmeUTnMjziRRRCaxHK3rHr/8fh
+         XqSawgh/T9iI6QQ4kwT0bz2E+Y/Yuwl/D/r50t4Q2yn3+CHs95OripSdrHUVr7+FYuU1
+         upVAkY9PfhCTVYhvf7bmfZF1snuCzTTCSiO1fc0x4Oc3hetx4g7josHTErVFEzRTnwpP
+         xPeUpkkF42YGFUsa3RfeULJrOOvDQFNL9h3CihRKBj/CVLZGe3CPouXL+dQ/ikj9a8ms
+         L6AQ==
+X-Gm-Message-State: AC+VfDxTWDGHb0xZVR39Pak98Nz7HFCnerJJ7APjuM5ya2gozASst7pj
+        EehBzq/E7unOMBmvLdfwySY=
+X-Google-Smtp-Source: ACHHUZ5EYjmX3Te3NRl5NRfUn4gvi77Sf9p4U7ex2tQl76NC2IloI4S7UAWui12wcDHsMggxAlCHCA==
+X-Received: by 2002:adf:fcc1:0:b0:30a:e369:5acb with SMTP id f1-20020adffcc1000000b0030ae3695acbmr10329954wrs.68.1686734662140;
+        Wed, 14 Jun 2023 02:24:22 -0700 (PDT)
+Received: from Ansuel-xps. (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
+        by smtp.gmail.com with ESMTPSA id d17-20020a5d6dd1000000b003095bd71159sm17777371wrz.7.2023.06.14.02.24.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 02:24:21 -0700 (PDT)
+Message-ID: <64898745.5d0a0220.546a.a6f1@mx.google.com>
+X-Google-Original-Message-ID: <ZIki6HMOBlgvBURh@Ansuel-xps.>
+Date:   Wed, 14 Jun 2023 04:16:08 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Jose Abreu <Jose.Abreu@synopsys.com>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [net-next PATCH v5 4/5] net: ethernet: stmicro: stmmac: generate
+ stmmac dma conf before open
+References: <20220723142933.16030-1-ansuelsmth@gmail.com>
+ <20220723142933.16030-5-ansuelsmth@gmail.com>
+ <DM4PR12MB508882D5BE351BD756A7A9A4D35AA@DM4PR12MB5088.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.95]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM4PR12MB508882D5BE351BD756A7A9A4D35AA@DM4PR12MB5088.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The newline is missing for error messages in add_default_attributes()
+On Wed, Jun 14, 2023 at 07:15:03AM +0000, Jose Abreu wrote:
+> Hi Christian,
+> 
+> From: Christian Marangi <ansuelsmth@gmail.com>
+> Date: Sat, Jul 23, 2022 at 15:29:32
+> 
+> > +static int __stmmac_open(struct net_device *dev,
+> > +			 struct stmmac_dma_conf *dma_conf)
+> >  {
+> >  	struct stmmac_priv *priv = netdev_priv(dev);
+> >  	int mode = priv->plat->phy_interface;
+> > -	int bfsize = 0;
+> >  	u32 chan;
+> >  	int ret;
+> >  
+> > @@ -3657,45 +3794,10 @@ static int stmmac_open(struct net_device *dev)
+> >  	memset(&priv->xstats, 0, sizeof(struct stmmac_extra_stats));
+> >  	priv->xstats.threshold = tc;
+> >  
+> > -	bfsize = stmmac_set_16kib_bfsize(priv, dev->mtu);
+> > -	if (bfsize < 0)
+> > -		bfsize = 0;
+> > -
+> > -	if (bfsize < BUF_SIZE_16KiB)
+> > -		bfsize = stmmac_set_bfsize(dev->mtu, priv->dma_conf.dma_buf_sz);
+> > -
+> > -	priv->dma_conf.dma_buf_sz = bfsize;
+> > -	buf_sz = bfsize;
+> > -
+> >  	priv->rx_copybreak = STMMAC_RX_COPYBREAK;
+> >  
+> > -	if (!priv->dma_conf.dma_tx_size)
+> > -		priv->dma_conf.dma_tx_size = DMA_DEFAULT_TX_SIZE;
+> > -	if (!priv->dma_conf.dma_rx_size)
+> > -		priv->dma_conf.dma_rx_size = DMA_DEFAULT_RX_SIZE;
+> > -
+> > -	/* Earlier check for TBS */
+> > -	for (chan = 0; chan < priv->plat->tx_queues_to_use; chan++) {
+> > -		struct stmmac_tx_queue *tx_q = &priv->dma_conf.tx_queue[chan];
+> > -		int tbs_en = priv->plat->tx_queues_cfg[chan].tbs_en;
+> > -
+> > -		/* Setup per-TXQ tbs flag before TX descriptor alloc */
+> > -		tx_q->tbs |= tbs_en ? STMMAC_TBS_AVAIL : 0;
+> > -	}
+> > -
+> > -	ret = alloc_dma_desc_resources(priv);
+> > -	if (ret < 0) {
+> > -		netdev_err(priv->dev, "%s: DMA descriptors allocation failed\n",
+> > -			   __func__);
+> > -		goto dma_desc_error;
+> > -	}
+> > -
+> > -	ret = init_dma_desc_rings(dev, GFP_KERNEL);
+> > -	if (ret < 0) {
+> > -		netdev_err(priv->dev, "%s: DMA descriptors initialization failed\n",
+> > -			   __func__);
+> > -		goto init_error;
+> > -	}
+> > +	buf_sz = dma_conf->dma_buf_sz;
+> > +	memcpy(&priv->dma_conf, dma_conf, sizeof(*dma_conf));
+> 
+> This memcpy() needs to be the first thing to be done on __stmmac_open(), otherwise
+> you'll leak the dma_conf when stmmac_init_phy() fails.
+>
 
-Before:
+I'm not following the meaning of leak here. If it's intended as a memory
+leak then dma_conf is correctly freed in the 2 user of __stmmac_open.
 
-  # perf stat --topdown
-  Topdown requested but the topdown metric groups aren't present.
-  (See perf list the metric groups have names like TopdownL1)#
+stmmac_init_phy also doesn't seems to use dma_conf. Am I missing
+something here?
 
-After:
+> Can you please send follow-up patch?
 
-  # perf stat --topdown
-  Topdown requested but the topdown metric groups aren't present.
-  (See perf list the metric groups have names like TopdownL1)
-  #
+Happy to push a follow-up patch with these concern cleared!
 
-In addition, perf_stat_init_aggr_mode() and perf_stat_init_aggr_mode_file()
-have the same problem, fixed by the way.
+> 
+> Thanks,
+> Jose
 
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
-Acked-by: Ian Rogers <irogers@google.com>
-Reviewed-by: James Clark <james.clark@arm.com>
----
-
-Changes since v2:
- - Add Acked-by Ian Rogers
- - Add Reviewed-by James Clark
- - Format patch based on the perf-tools-next
-
-Changes since v1:
- - Correct commit title to `pr_err`
-
- tools/perf/builtin-stat.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-index fc615bdeed4f..692de772f8ae 100644
---- a/tools/perf/builtin-stat.c
-+++ b/tools/perf/builtin-stat.c
-@@ -1594,7 +1594,7 @@ static int perf_stat_init_aggr_mode(void)
- 		stat_config.aggr_map = cpu_aggr_map__new(evsel_list->core.user_requested_cpus,
- 							 get_id, /*data=*/NULL, needs_sort);
- 		if (!stat_config.aggr_map) {
--			pr_err("cannot build %s map", aggr_mode__string[stat_config.aggr_mode]);
-+			pr_err("cannot build %s map\n", aggr_mode__string[stat_config.aggr_mode]);
- 			return -1;
- 		}
- 		stat_config.aggr_get_id = aggr_mode__get_id(stat_config.aggr_mode);
-@@ -1910,7 +1910,7 @@ static int perf_stat_init_aggr_mode_file(struct perf_stat *st)
- 	stat_config.aggr_map = cpu_aggr_map__new(evsel_list->core.user_requested_cpus,
- 						 get_id, env, needs_sort);
- 	if (!stat_config.aggr_map) {
--		pr_err("cannot build %s map", aggr_mode__string[stat_config.aggr_mode]);
-+		pr_err("cannot build %s map\n", aggr_mode__string[stat_config.aggr_mode]);
- 		return -1;
- 	}
- 	stat_config.aggr_get_id = aggr_mode__get_id_file(stat_config.aggr_mode);
-@@ -2050,7 +2050,7 @@ static int add_default_attributes(void)
- 		 * on an architecture test for such a metric name.
- 		 */
- 		if (!metricgroup__has_metric(pmu, "transaction")) {
--			pr_err("Missing transaction metrics");
-+			pr_err("Missing transaction metrics\n");
- 			return -1;
- 		}
- 		return metricgroup__parse_groups(evsel_list, pmu, "transaction",
-@@ -2066,7 +2066,7 @@ static int add_default_attributes(void)
- 		int smi;
- 
- 		if (sysfs__read_int(FREEZE_ON_SMI_PATH, &smi) < 0) {
--			pr_err("freeze_on_smi is not supported.");
-+			pr_err("freeze_on_smi is not supported.\n");
- 			return -1;
- 		}
- 
-@@ -2079,7 +2079,7 @@ static int add_default_attributes(void)
- 		}
- 
- 		if (!metricgroup__has_metric(pmu, "smi")) {
--			pr_err("Missing smi metrics");
-+			pr_err("Missing smi metrics\n");
- 			return -1;
- 		}
- 
-@@ -2104,7 +2104,7 @@ static int add_default_attributes(void)
- 
- 		if (!max_level) {
- 			pr_err("Topdown requested but the topdown metric groups aren't present.\n"
--				"(See perf list the metric groups have names like TopdownL1)");
-+				"(See perf list the metric groups have names like TopdownL1)\n");
- 			return -1;
- 		}
- 		if (stat_config.topdown_level > max_level) {
 -- 
-2.30.GIT
-
+	Ansuel
