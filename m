@@ -2,378 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B885172F4A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 08:22:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B7C72F4A9
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 08:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243091AbjFNGWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 02:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40324 "EHLO
+        id S243127AbjFNGWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 02:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231829AbjFNGWE (ORCPT
+        with ESMTP id S243106AbjFNGWO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 02:22:04 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9384C10F9;
-        Tue, 13 Jun 2023 23:22:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686723721; x=1718259721;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=QGk6S3QokXDn/IY45blEKkM0KWm8mox5nS3b9uFwNAA=;
-  b=AOXNknTIEr2nV8Ya3kmWDHJ94vzKKUatM+k1QV3jbX3pX6dQnqlyWIOE
-   Pxz97Ts/T1SffYg4cksMXwmGpviVg3Bkei6BBqwBkdTjJJ2vJyQ4lz7LS
-   n4uK7pB0WP2AFFQNIdVC4uowEr3kMTwjKOOdXR0QYXmArPkRFgNHEbQo7
-   vbRMOxDCFeqcLYz8eytSy1RHU0w40EGKB9d7IYtQ6csciiws296MLPrTE
-   ye+NHja6bW4avVX9xIBzeDfvezh7WwxdJMLYVXJmkAw9qTPqSOB0Lc6wR
-   2oiMuzA+p+704hmgk+rwQSE0A4NIAI4lniKHndB7plsTYXskwe/NDWW/g
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="424418624"
-X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
-   d="scan'208";a="424418624"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 23:22:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="715072539"
-X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
-   d="scan'208";a="715072539"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.60.240])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 23:21:57 -0700
-Message-ID: <619d3117-d8e0-6df3-c60e-a2f8859abe54@intel.com>
-Date:   Wed, 14 Jun 2023 09:21:53 +0300
+        Wed, 14 Jun 2023 02:22:14 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2069910F9
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 23:22:10 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686723729;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4bVmcHxIRgXmJnbYBqXR1nUAHLB5kLKhJ46pTEU3CMk=;
+        b=oKgwhYLLH1mYXH/1WP7LPnIagz+Rv2YhxVBVWesWUEz+iLXc3WoA9+P+llEeXhfbRocdv6
+        meJ2JbqwW4Y9V7FOcv2URgD8n/DP6vVS0WNxI+DV4+bPrdXBFh3KstJPzItoYlJt6tzIdY
+        S7KZsHMZRqT1wWz9bzG9ZJRDdVTbm8PzGCXofvYKHrSA+KDbc/3JADcT9grkFLAfPzLd1a
+        irD8G+W+DdvXa5SX32dOCAUVNRzaXVsfK8cwb9D9tx0QWaI37vOzcfgKcTqwm6CNPVwTbN
+        2JkYcJu/ynjhheQapILXReZJckXWzqbpx/vR0YDw1EBMAGKSYX5vPteMXunUUA==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 00655FF80C;
+        Wed, 14 Jun 2023 06:22:06 +0000 (UTC)
+Date:   Wed, 14 Jun 2023 08:22:05 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     William Zhang <william.zhang@broadcom.com>
+Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        Linux MTD List <linux-mtd@lists.infradead.org>,
+        f.fainelli@gmail.com, rafal@milecki.pl, kursad.oney@broadcom.com,
+        joel.peshkin@broadcom.com, computersforpeace@gmail.com,
+        anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
+        tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
+        linux-kernel@vger.kernel.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 10/12] mtd: rawnand: brcmnand: Add BCMBCA read data bus
+ interface
+Message-ID: <20230614082205.74a04de1@xps-13>
+In-Reply-To: <b4ceff9c-0126-99ba-6015-9ea9ec735dfc@broadcom.com>
+References: <20230606231252.94838-1-william.zhang@broadcom.com>
+        <20230606231252.94838-11-william.zhang@broadcom.com>
+        <20230607102232.17c4a27b@xps-13>
+        <7b393f47-4053-a8c7-f32e-3881d8130d80@broadcom.com>
+        <20230608081821.1de5a50b@xps-13>
+        <4ab08e3e-3be4-8b8b-6eb8-03a62337f46f@broadcom.com>
+        <20230609103544.0f00f799@xps-13>
+        <3d3b471b-c555-ee1c-96d6-c04d76979e76@broadcom.com>
+        <20230612194908.5465bc56@xps-13>
+        <20230612195305.4b097c46@xps-13>
+        <da4cb6a6-aa7d-3747-3f64-19b5582b15e8@broadcom.com>
+        <20230613084218.65a6da15@xps-13>
+        <b4ceff9c-0126-99ba-6015-9ea9ec735dfc@broadcom.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.12.0
-Subject: Re: [PATCH V1 1/2] mmc: sdhci-pci-o2micro: add Bayhub new chip GG8
- support
-Content-Language: en-US
-To:     Chevron Li <chevron_li@126.com>, ulf.hansson@linaro.org,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     shaper.liu@bayhubtech.com, xiaoguang.yu@bayhubtech.com,
-        shirley.her@bayhubtech.com, chevron.li@bayhubtech.com
-References: <20230607014812.30104-1-chevron_li@126.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20230607014812.30104-1-chevron_li@126.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/06/23 04:48, Chevron Li wrote:
-> From: Chevron Li <chevron.li@bayhubtech.com>
-> 
-> Add Bayhub new chip GG8 support for USHI function
-> 
-> Signed-off-by: Chevron Li <chevron.li@bayhubtech.com>
+Hi William,
 
-Some minor cosmetic comments below.
+william.zhang@broadcom.com wrote on Tue, 13 Jun 2023 17:00:19 -0700:
 
-> ---
-> Change in V1:
-> 1.Add GG8 chip IDs in sdhci-pci-core.c and sdhci-pci.h
-> 2.Add GG8 chip initialization flow at sdhci-pci-o2micro.c
-> ---
->  drivers/mmc/host/sdhci-pci-core.c    |   4 +
->  drivers/mmc/host/sdhci-pci-o2micro.c | 154 ++++++++++++++++++++-------
->  drivers/mmc/host/sdhci-pci.h         |   4 +
->  3 files changed, 126 insertions(+), 36 deletions(-)
-> 
-> diff --git a/drivers/mmc/host/sdhci-pci-core.c b/drivers/mmc/host/sdhci-pci-core.c
-> index 01975d145200..1d14300691f4 100644
-> --- a/drivers/mmc/host/sdhci-pci-core.c
-> +++ b/drivers/mmc/host/sdhci-pci-core.c
-> @@ -1898,6 +1898,10 @@ static const struct pci_device_id pci_ids[] = {
->  	SDHCI_PCI_DEVICE(O2, SDS1,     o2),
->  	SDHCI_PCI_DEVICE(O2, SEABIRD0, o2),
->  	SDHCI_PCI_DEVICE(O2, SEABIRD1, o2),
-> +	SDHCI_PCI_DEVICE(O2, GG8_9860, o2),
-> +	SDHCI_PCI_DEVICE(O2, GG8_9861, o2),
-> +	SDHCI_PCI_DEVICE(O2, GG8_9862, o2),
-> +	SDHCI_PCI_DEVICE(O2, GG8_9863, o2),
->  	SDHCI_PCI_DEVICE(ARASAN, PHY_EMMC, arasan),
->  	SDHCI_PCI_DEVICE(SYNOPSYS, DWC_MSHC, snps),
->  	SDHCI_PCI_DEVICE(GLI, 9750, gl9750),
-> diff --git a/drivers/mmc/host/sdhci-pci-o2micro.c b/drivers/mmc/host/sdhci-pci-o2micro.c
-> index 620f52ad9667..8243a63b3c81 100644
-> --- a/drivers/mmc/host/sdhci-pci-o2micro.c
-> +++ b/drivers/mmc/host/sdhci-pci-o2micro.c
-> @@ -36,6 +36,7 @@
->  #define O2_SD_INF_MOD		0xF1
->  #define O2_SD_MISC_CTRL4	0xFC
->  #define O2_SD_MISC_CTRL		0x1C0
-> +#define O2_SD_EXP_INT_REG	0x1E0
->  #define O2_SD_PWR_FORCE_L0	0x0002
->  #define O2_SD_TUNING_CTRL	0x300
->  #define O2_SD_PLL_SETTING	0x304
-> @@ -49,6 +50,9 @@
->  #define O2_SD_UHS2_L1_CTRL	0x35C
->  #define O2_SD_FUNC_REG3		0x3E0
->  #define O2_SD_FUNC_REG4		0x3E4
-> +#define O2_SD_PARA_SET_REG1 0x444
-> +#define O2_SD_VDDX_CTRL_REG 0x508
-> +#define O2_SD_GPIO_CTRL_REG1 0x510
+> Hi Miquel,
+>=20
+> On 06/12/2023 11:42 PM, Miquel Raynal wrote:
+> > Hi William,
+> >=20
+> > william.zhang@broadcom.com wrote on Mon, 12 Jun 2023 12:18:58 -0700:
+> >  =20
+> >> On 06/12/2023 10:53 AM, Miquel Raynal wrote: =20
+> >>> Hello again, =20
+> >>>    >>>>>>>>>> Perhaps we could have a single function that is statica=
+lly assigned at =20
+> >>>>>>>>>> probe time instead of a first helper with two conditions which=
+ calls in
+> >>>>>>>>>> one case another hook... This can be simplified I guess. =20
+> >>>>>>>>>>       >> Well this will need to be done at the SoC specific im=
+plementation level (bcm<xxx>_nand.c) and each SoC will need to have either =
+general data bus read func with is_param option or data_bus_read_page, data=
+_bus_read_param. =20
+> >>>>>>>>
+> >>>>>>>> You told me in case we would use exec_op we could avoid the param
+> >>>>>>>> cache. If that's true then the whole support can be simplified. =
+=20
+> >>>>>>>>      >> Correct we may possibly unified the parameter data read =
+but exec_op is long shot and we are not fully ready for that yet. It also d=
+epends on if the low level data register has endianess difference for the p=
+arameter data between difference SoCs. =20
+> >>>>>>>
+> >>>>>>> So I would like to push the current implementation and we can exp=
+lore the exec_op option late which will be a much big and complete differen=
+t implementation. =20
+> >>>>>>
+> >>>>>> I am sorry but this series is totally backwards, you're trying to =
+guess
+> >>>>>> what comes next with the 'is_param' thing, it's exactly what we are
+> >>>>>> fighting against since 2017. There are plenty of ->exec_op()
+> >>>>>> conversions out there, I don't believe this one will be harder. You
+> >>>>>> need to convert the driver to this new API and get rid of this who=
+le
+> >>>>>> endianness non-sense to simplify a lot the driver. =20
+> >>>>>>     >>> I am not guessing anything but just factor out the existin=
+g common nand cache read logic into the single default function(or one for =
+page read and another for parameter read as I mentioned in another thread) =
+and allow SoC to overrides the implementation when needed. =20
+> >>>>
+> >>>> No, you are trying to guess what type of read the core is performing,
+> >>>> either a regular data page read or a parameter page read. =20
+> >>>>   >>>>> I agree ->exec_op can possibly get rid of the parameter page=
+ read function and is the way to go. But it won't help on the page read for=
+ endianess. =20
+> >>>>
+> >>>> You told me there is no endianess issue with the data pages, so why =
+it
+> >>>> won't help on the page read? =20
+> >>>>   >>>>> It's not that I am against exec_op but I want to take one st=
+ep a time =20
+> >>>>> and I'd like to get these fixes =20
+> >>>>
+> >>>> I don't see any fix here? Let me know if I am missing something but
+> >>>> right now I see a new version of the controller being supported with
+> >>>> its own constraints. If you are fixing existing code for already
+> >>>> supported platform, then make it clear and we can discuss this. But =
+if
+> >>>> you just want to support the bcmbca flavor, then there is no risk
+> >>>> mitigation involved here, and a conversion is the right step :) =20
+> >>>>   >>> =20
+> >>> I forgot to mention: the exec_op conversion is almost ready, Boris
+> >>> worked on it but he lacked the hardware so maybe you'll just need to
+> >>> revive the few patches which target your platform and do a little bit=
+ of
+> >>> debugging?
+> >>>
+> >>> https://github.com/bbrezillon/linux/commits/nand/exec-op-conversion?a=
+fter=3D8a3cf6fd25d5e15c6667f9e95c1fc86e4cb735e6+34&branch=3Dnand%2Fexec-op-=
+conversion&qualified_name=3Drefs%2Fheads%2Fnand%2Fexec-op-conversion =20
+> >>>    >> Yes this is the patch what our exec_op work is based on. Thanks=
+ Boris! The issue with patch is that performance is very slow for anything =
+that rely on nand_read_page_op as the patch implementing it using the low l=
+evel cmd and data register to transfer the data byte by byte. =20
+> >=20
+> > You don't need to use exec_op for your read_page/write_page hooks,
+> > quite the opposite actually. exec_op is not meant for high throughput.
+> > exec_op is meant to be simple. You can have fast I/Os with a different
+> > mechanism in your read/write_page hooks.
+> >  =20
+> Right it does not impact our fast path: controller based ecc read/write. =
+But things like on-chip ecc nand driver that uses exec_op API get impacted =
+badly. We need to add nand op parser, several matching rules and other logi=
+cs to use fast path page read/write instead of the low level data register =
+read/write.
+>=20
+> >>   I actually sent out email regarding this to Boris and he cc'ed you in
+> >>   sept last year. We have to use the nand parser to match the page read
+> >>   from exec_op so we can actually match and use the brcmnand_page_read
+> >>   fast path. But there are many situations that we need to match so the
+> >>   project to migrate exce_op are still work in progress just on our
+> >>   bcmbca chip as of now.  Just forward that email again to you and I
+> >>   appreciate it if you have any inputs there. So IMHO it is just too
+> >>   risky and too big of scope to have the exec_op added to this patch
+> >>   series and definitively better to do it afterwards with a dedicated
+> >>   patch. =20
+> >=20
+> > As long as you add small and orthogonal changes to cmd_ctrl/cmd_func
+> > I don't mind, but what you want now is to force me to pull dirty
+> > changes "first", the type of change we are refusing since 2018, making
+> > me expect you'll perform the conversion after. It would have been
+> > terribly less dirty and you would have all your code already upstreamed
+> > if you had performed the exec_op conversion since September.
+> >  =20
+> I didn't work on open source 5 years ago. I am sorry that I missed the ba=
+ckground of the rejected changes since then but I do not agree that this ch=
+ange is dirty change just because I factor out the code with is_param argum=
+ent(and I offered an alternative to remove is_param with two data read func=
+tions).
 
-Values do not align with the ones above
+This _is_ dirty because you cannot know with the cmd_ctrl/cmdfunc
+API whether we read a parameter page or a page of data. So your are
+_guessing_. There are plenty ways of reading one of the others, the
+heuristics on the controller side will _always_ be wrong. That is why
+exec_op() was introduced.
 
->  #define O2_SD_LED_ENABLE	BIT(6)
->  #define O2_SD_FREG0_LEDOFF	BIT(13)
->  #define O2_SD_SEL_DLL		BIT(16)
-> @@ -334,33 +338,45 @@ static int sdhci_o2_execute_tuning(struct mmc_host *mmc, u32 opcode)
->  	scratch |= O2_SD_PWR_FORCE_L0;
->  	sdhci_writew(host, scratch, O2_SD_MISC_CTRL);
->  
-> -	/* Stop clk */
-> -	reg_val = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
-> -	reg_val &= ~SDHCI_CLOCK_CARD_EN;
-> -	sdhci_writew(host, reg_val, SDHCI_CLOCK_CONTROL);
-> -
-> -	if ((host->timing == MMC_TIMING_MMC_HS200) ||
-> -		(host->timing == MMC_TIMING_UHS_SDR104)) {
-> -		/* UnLock WP */
-> -		pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch_8);
-> -		scratch_8 &= 0x7f;
-> -		pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch_8);
-> -
-> -		/* Set pcr 0x354[16] to choose dll clock, and set the default phase */
-> -		pci_read_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH, &reg_val);
-> -		reg_val &= ~(O2_SD_SEL_DLL | O2_SD_PHASE_MASK);
-> -		reg_val |= (O2_SD_SEL_DLL | O2_SD_FIX_PHASE);
-> -		pci_write_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH, reg_val);
-> +	/* Update output phase */
-> +	switch (chip->pdev->device) {
-> +	case PCI_DEVICE_ID_O2_SDS0:
-> +	case PCI_DEVICE_ID_O2_SEABIRD0:
-> +	case PCI_DEVICE_ID_O2_SEABIRD1:
-> +	case PCI_DEVICE_ID_O2_SDS1:
-> +	case PCI_DEVICE_ID_O2_FUJIN2:
-> +		/* Stop clk */
-> +		reg_val = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
-> +		reg_val &= ~SDHCI_CLOCK_CARD_EN;
-> +		sdhci_writew(host, reg_val, SDHCI_CLOCK_CONTROL);
-> +
-> +		if ((host->timing == MMC_TIMING_MMC_HS200) ||
-> +			(host->timing == MMC_TIMING_UHS_SDR104)) {
+> I see your point with exec_op and agree that is the way to go.  We had an=
+ initial look of the Borris exec_op patch last Sept and noticed the perform=
+ance issue but we haven't got the chance to actively work on improving the =
+performance and prepare for up-streaming until recently. What if we bring i=
+n the original exec_op patch in this series so we don't need to add the par=
+ameter data read function(if we verify it works on difference SoCs without =
+endianess)?  Or better to have exec_op as separate patch first and then thi=
+s series?
 
-There are unecessary parentheses here and elsewhere.
-Have a look at the output of checkpatch.pl --strict
+This one is my favorite:
+1/ Add exec_op support
+2/ Remove legacy hooks
+3/ Add support for the bcmbca SoC
 
-There are "Alignment should match open parenthesis"
-messages also
+Then you can improve the performance for on-die ECC situations, but to
+be honest this improvement looks little a very little addition. You can
+take example from the existing hooks, how they match specific
+operations in the parser and then hook them to specific helpers.
+Nothing terribly complex, there are dozens of conversions available
+now.
 
-> +			/* UnLock WP */
-> +			pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch_8);
-> +			scratch_8 &= 0x7f;
-> +			pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch_8);
-> +
-> +			/* Set pcr 0x354[16] to choose dll clock, and set the default phase */
-> +			pci_read_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH, &reg_val);
-> +			reg_val &= ~(O2_SD_SEL_DLL | O2_SD_PHASE_MASK);
-> +			reg_val |= (O2_SD_SEL_DLL | O2_SD_FIX_PHASE);
-> +			pci_write_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH, reg_val);
-> +
-> +			/* Lock WP */
-> +			pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch_8);
-> +			scratch_8 |= 0x80;
-> +			pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch_8);
-> +		}
->  
-> -		/* Lock WP */
-> -		pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch_8);
-> -		scratch_8 |= 0x80;
-> -		pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch_8);
-> +		/* Start clk */
-> +		reg_val = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
-> +		reg_val |= SDHCI_CLOCK_CARD_EN;
-> +		sdhci_writew(host, reg_val, SDHCI_CLOCK_CONTROL);
-> +		break;
-> +	default:
-> +		break;
->  	}
-> -	/* Start clk */
-> -	reg_val = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
-> -	reg_val |= SDHCI_CLOCK_CARD_EN;
-> -	sdhci_writew(host, reg_val, SDHCI_CLOCK_CONTROL);
->  
->  	/* wait DLL lock, timeout value 5ms */
->  	if (readx_poll_timeout(sdhci_o2_pll_dll_wdt_control, host,
-> @@ -563,6 +579,7 @@ static void sdhci_pci_o2_set_clock(struct sdhci_host *host, unsigned int clock)
->  	u16 clk;
->  	u8 scratch;
->  	u32 scratch_32;
-> +	u32 dmdn_208m, dmdn_200m;
->  	struct sdhci_pci_slot *slot = sdhci_priv(host);
->  	struct sdhci_pci_chip *chip = slot->chip;
->  
-> @@ -578,16 +595,27 @@ static void sdhci_pci_o2_set_clock(struct sdhci_host *host, unsigned int clock)
->  	scratch &= 0x7f;
->  	pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch);
->  
-> +	if ((chip->pdev->device == PCI_DEVICE_ID_O2_GG8_9860) ||
-> +		(chip->pdev->device == PCI_DEVICE_ID_O2_GG8_9861) ||
-> +		(chip->pdev->device == PCI_DEVICE_ID_O2_GG8_9862) ||
-> +		(chip->pdev->device == PCI_DEVICE_ID_O2_GG8_9863)) {
-> +		dmdn_208m = 0x2c500000;
-> +		dmdn_200m = 0x25200000;
-> +	} else {
-> +		dmdn_208m = 0x2c280000;
-> +		dmdn_200m = 0x25100000;
-> +	}
-> +
->  	if ((host->timing == MMC_TIMING_UHS_SDR104) && (clock == 200000000)) {
->  		pci_read_config_dword(chip->pdev, O2_SD_PLL_SETTING, &scratch_32);
->  
-> -		if ((scratch_32 & 0xFFFF0000) != 0x2c280000)
-> -			o2_pci_set_baseclk(chip, 0x2c280000);
-> +		if ((scratch_32 & 0xFFFF0000) != dmdn_208m)
-> +			o2_pci_set_baseclk(chip, dmdn_208m);
->  	} else {
->  		pci_read_config_dword(chip->pdev, O2_SD_PLL_SETTING, &scratch_32);
->  
-> -		if ((scratch_32 & 0xFFFF0000) != 0x25100000)
-> -			o2_pci_set_baseclk(chip, 0x25100000);
-> +		if ((scratch_32 & 0xFFFF0000) != dmdn_200m)
-> +			o2_pci_set_baseclk(chip, dmdn_200m);
->  	}
->  
->  	pci_read_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH, &scratch_32);
-> @@ -624,6 +652,11 @@ static int sdhci_pci_o2_probe_slot(struct sdhci_pci_slot *slot)
->  	if (caps & SDHCI_CAN_DO_8BIT)
->  		host->mmc->caps |= MMC_CAP_8_BIT_DATA;
->  
-> +	host->quirks2 |= SDHCI_QUIRK2_BROKEN_DDR50;
-> +
-> +	sdhci_pci_o2_enable_msi(chip, host);
-> +
-> +	host->mmc_host_ops.execute_tuning = sdhci_o2_execute_tuning;
->  	switch (chip->pdev->device) {
->  	case PCI_DEVICE_ID_O2_SDS0:
->  	case PCI_DEVICE_ID_O2_SEABIRD0:
-> @@ -634,10 +667,6 @@ static int sdhci_pci_o2_probe_slot(struct sdhci_pci_slot *slot)
->  		if (reg & 0x1)
->  			host->quirks |= SDHCI_QUIRK_MULTIBLOCK_READ_ACMD12;
->  
-> -		host->quirks2 |= SDHCI_QUIRK2_BROKEN_DDR50;
-> -
-> -		sdhci_pci_o2_enable_msi(chip, host);
-> -
->  		if (chip->pdev->device == PCI_DEVICE_ID_O2_SEABIRD0) {
->  			ret = pci_read_config_dword(chip->pdev,
->  						    O2_SD_MISC_SETTING, &reg);
-> @@ -663,15 +692,21 @@ static int sdhci_pci_o2_probe_slot(struct sdhci_pci_slot *slot)
->  			host->quirks2 |= SDHCI_QUIRK2_PRESET_VALUE_BROKEN;
->  		}
->  
-> -		host->mmc_host_ops.execute_tuning = sdhci_o2_execute_tuning;
-> -
->  		if (chip->pdev->device != PCI_DEVICE_ID_O2_FUJIN2)
->  			break;
->  		/* set dll watch dog timer */
->  		reg = sdhci_readl(host, O2_SD_VENDOR_SETTING2);
->  		reg |= (1 << 12);
->  		sdhci_writel(host, reg, O2_SD_VENDOR_SETTING2);
-> -
-> +		break;
-> +	case PCI_DEVICE_ID_O2_GG8_9860:
-> +	case PCI_DEVICE_ID_O2_GG8_9861:
-> +	case PCI_DEVICE_ID_O2_GG8_9862:
-> +	case PCI_DEVICE_ID_O2_GG8_9863:
-> +		host->mmc->caps2 |= MMC_CAP2_NO_SDIO;
-> +		host->mmc->caps |= MMC_CAP_HW_RESET;
-> +		host->quirks2 |= SDHCI_QUIRK2_PRESET_VALUE_BROKEN;
-> +		slot->host->mmc_host_ops.get_cd = sdhci_o2_get_cd;
->  		break;
->  	default:
->  		break;
-> @@ -684,6 +719,7 @@ static int sdhci_pci_o2_probe(struct sdhci_pci_chip *chip)
->  {
->  	int ret;
->  	u8 scratch;
-> +	u16 scratch16;
->  	u32 scratch_32;
->  
->  	switch (chip->pdev->device) {
-> @@ -885,6 +921,52 @@ static int sdhci_pci_o2_probe(struct sdhci_pci_chip *chip)
->  		scratch_32 |= 0x00180000;
->  		pci_write_config_dword(chip->pdev, O2_SD_MISC_CTRL2, scratch_32);
->  		pci_write_config_dword(chip->pdev, O2_SD_DETECT_SETTING, 1);
-> +		/* Lock WP */
-> +		ret = pci_read_config_byte(chip->pdev,
-> +					   O2_SD_LOCK_WP, &scratch);
-> +		if (ret)
-> +			return ret;
-> +		scratch |= 0x80;
-> +		pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch);
-> +		break;
-> +	case PCI_DEVICE_ID_O2_GG8_9860:
-> +	case PCI_DEVICE_ID_O2_GG8_9861:
-> +	case PCI_DEVICE_ID_O2_GG8_9862:
-> +	case PCI_DEVICE_ID_O2_GG8_9863:
-> +		/* UnLock WP */
-> +		ret = pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch);
-> +		if (ret)
-> +			return ret;
-> +		scratch &= 0x7f;
-> +		pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch);
-> +
-> +		/* Select mode switch source as software control */
-> +		pci_read_config_word(chip->pdev,
-> +						O2_SD_PARA_SET_REG1, &scratch16);
-
-Line break is not needed above and in similar cases below.
-Wrapping at 100 columns instead of 80 is OK.
-
-> +		scratch16 &= 0xF8FF;
-> +		scratch16 |= BIT(9);
-> +		pci_write_config_word(chip->pdev,
-> +						O2_SD_PARA_SET_REG1, scratch16);
-> +
-> +		/* set VDD1 supply source */
-> +		pci_read_config_word(chip->pdev,
-> +						O2_SD_VDDX_CTRL_REG, &scratch16);
-> +		scratch16 &= 0xFFE3;
-> +		scratch16 |= BIT(3);
-> +		pci_write_config_word(chip->pdev,
-> +						O2_SD_VDDX_CTRL_REG, scratch16);
-> +
-> +		/* Set host drive strength*/
-> +		scratch16 = 0x0025;
-> +		pci_write_config_word(chip->pdev,
-> +						O2_SD_PLL_SETTING, scratch16);
-> +
-> +		/* Set output delay*/
-> +		pci_read_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH, &scratch_32);
-> +		scratch_32 &= 0xFF0FFF00;
-> +		scratch_32 |= 0x00B0003B;
-> +		pci_write_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH, scratch_32);
-> +
->  		/* Lock WP */
->  		ret = pci_read_config_byte(chip->pdev,
->  					   O2_SD_LOCK_WP, &scratch);
-> diff --git a/drivers/mmc/host/sdhci-pci.h b/drivers/mmc/host/sdhci-pci.h
-> index 3661a224fb04..d680a030f3bf 100644
-> --- a/drivers/mmc/host/sdhci-pci.h
-> +++ b/drivers/mmc/host/sdhci-pci.h
-> @@ -11,6 +11,10 @@
->  #define PCI_DEVICE_ID_O2_FUJIN2		0x8520
->  #define PCI_DEVICE_ID_O2_SEABIRD0	0x8620
->  #define PCI_DEVICE_ID_O2_SEABIRD1	0x8621
-> +#define PCI_DEVICE_ID_O2_GG8_9860	0x9860
-> +#define PCI_DEVICE_ID_O2_GG8_9861	0x9861
-> +#define PCI_DEVICE_ID_O2_GG8_9862	0x9862
-> +#define PCI_DEVICE_ID_O2_GG8_9863	0x9863
->  
->  #define PCI_DEVICE_ID_INTEL_PCH_SDIO0	0x8809
->  #define PCI_DEVICE_ID_INTEL_PCH_SDIO1	0x880a
-> 
-> base-commit: 9e87b63ed37e202c77aa17d4112da6ae0c7c097c
-
+Good luck :)
+Miqu=C3=A8l
