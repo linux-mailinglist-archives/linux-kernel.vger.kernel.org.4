@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B56872F2CC
+	by mail.lfdr.de (Postfix) with ESMTP id B71A172F2CD
 	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 04:49:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242365AbjFNCtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 22:49:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37958 "EHLO
+        id S242471AbjFNCtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 22:49:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242329AbjFNCsp (ORCPT
+        with ESMTP id S242356AbjFNCst (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 22:48:45 -0400
+        Tue, 13 Jun 2023 22:48:49 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7D01FFB
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 19:48:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA1B2112
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 19:48:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686710899; x=1718246899;
+  t=1686710900; x=1718246900;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=1Kwv1UQHKRHrV8kbWrew4OGtdP1EEr6az2+Laq0Cs7w=;
-  b=gGdyfAl9EuQOf2ibGWoHN2TA8KPQH1DBeu5qIRxTjFy5jxayKerF90qU
-   7c11gD3BoMx+5koNzfVLqBnWv37eeFoIge4rhjNOqAOM8QqGL4KuuxQLf
-   rjpGmBvweF2faVr9WMMCfLRLL65ouna/S50+88kUrNnTFCGxQJkMVR9hg
-   Di5QXpdfpQOh5G63GHy48R0otLtZMnaIzUt09yZ4FB0KrCi5F9V5Oap8j
-   zPvzN51XGkMrqtrZDfIzh0rToKOZ3wK6xkZ8dgXoEuuylB6M0lOWSCGgr
-   BEyIoiFrFqfEGWcAb6jMR6E5I0zVFmDsP0MntIQvOkB2tu1OVhVYbjJKi
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="348164455"
+  bh=WrDuSdB9iYumVVBXtypeizwCzmEr0vrCm5Dy+N+kwxM=;
+  b=lgqSQ/Nq5pVoN7RZymWTRPB3e6GlTrC65cBoX81IJlXvgQbYKxSS1+Sn
+   7BCapw+C+o0ICOsvSJnN7MKRU/GtmvzMvA3vKCjEeUgaeyrHzuZ+8jHIN
+   M8/xMgwy2BOfKQPDfUNjHQruTbLfY9H7cOblWrDvirDWdK6TZXekw3M22
+   N3k/jHpvEpZ7N3tbrzYkTkHFTDZ1Rw2vqFxlp/y7Io9jrRjE4FoH3fgU9
+   KdSho4jdRciYB33hx4EGLp3fb0GeA9spqa0EKrZ1UIzfSY+LgFc0ez9AC
+   VugGJcNmnTuUPMn4s/1AolL3m7FkHHnhWmQCGOMGY+2w/5qexVx0X4Xed
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="348164462"
 X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
-   d="scan'208";a="348164455"
+   d="scan'208";a="348164462"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 19:48:18 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 19:48:20 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="711884198"
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="711884211"
 X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
-   d="scan'208";a="711884198"
+   d="scan'208";a="711884211"
 Received: from allen-box.sh.intel.com ([10.239.159.127])
-  by orsmga002.jf.intel.com with ESMTP; 13 Jun 2023 19:48:16 -0700
+  by orsmga002.jf.intel.com with ESMTP; 13 Jun 2023 19:48:18 -0700
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     Joerg Roedel <joro@8bytes.org>
 Cc:     Yanfei Xu <yanfei.xu@intel.com>, Suhui <suhui@nfschina.com>,
         iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/4] iommu/vt-d: Handle the failure case of dmar_reenable_qi()
-Date:   Wed, 14 Jun 2023 10:47:03 +0800
-Message-Id: <20230614024705.88878-3-baolu.lu@linux.intel.com>
+Subject: [PATCH 3/4] iommu/vt-d: Remove two WARN_ON in domain_context_mapping_one()
+Date:   Wed, 14 Jun 2023 10:47:04 +0800
+Message-Id: <20230614024705.88878-4-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230614024705.88878-1-baolu.lu@linux.intel.com>
 References: <20230614024705.88878-1-baolu.lu@linux.intel.com>
@@ -64,38 +64,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yanfei Xu <yanfei.xu@intel.com>
 
-dmar_reenable_qi() may not succeed. Check and return when it fails.
+Remove the WARN_ON(did == 0) as the domain id 0 is reserved and
+set once the domain_ids is allocated. So iommu_init_domains will
+never return 0.
+
+Remove the WARN_ON(!table) as this pointer will be accessed in
+the following code, if empty "table" really happens, the kernel
+will report a NULL pointer reference warning at the first place.
 
 Signed-off-by: Yanfei Xu <yanfei.xu@intel.com>
-Link: https://lore.kernel.org/r/20230605112659.308981-2-yanfei.xu@intel.com
+Link: https://lore.kernel.org/r/20230605112659.308981-3-yanfei.xu@intel.com
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 ---
- drivers/iommu/intel/iommu.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ drivers/iommu/intel/iommu.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
 diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 323fa1a93765..e83fe243680b 100644
+index e83fe243680b..4c0b7424c45e 100644
 --- a/drivers/iommu/intel/iommu.c
 +++ b/drivers/iommu/intel/iommu.c
-@@ -2967,10 +2967,15 @@ static int init_iommu_hw(void)
- {
- 	struct dmar_drhd_unit *drhd;
- 	struct intel_iommu *iommu = NULL;
-+	int ret;
+@@ -1897,8 +1897,6 @@ static int domain_context_mapping_one(struct dmar_domain *domain,
+ 	struct context_entry *context;
+ 	int ret;
  
--	for_each_active_iommu(iommu, drhd)
--		if (iommu->qi)
--			dmar_reenable_qi(iommu);
-+	for_each_active_iommu(iommu, drhd) {
-+		if (iommu->qi) {
-+			ret = dmar_reenable_qi(iommu);
-+			if (ret)
-+				return ret;
-+		}
-+	}
+-	WARN_ON(did == 0);
+-
+ 	if (hw_pass_through && domain_type_is_si(domain))
+ 		translation = CONTEXT_TT_PASS_THROUGH;
  
- 	for_each_iommu(iommu, drhd) {
- 		if (drhd->ignored) {
+@@ -1944,8 +1942,6 @@ static int domain_context_mapping_one(struct dmar_domain *domain,
+ 	if (sm_supported(iommu)) {
+ 		unsigned long pds;
+ 
+-		WARN_ON(!table);
+-
+ 		/* Setup the PASID DIR pointer: */
+ 		pds = context_get_sm_pds(table);
+ 		context->lo = (u64)virt_to_phys(table->table) |
 -- 
 2.34.1
 
