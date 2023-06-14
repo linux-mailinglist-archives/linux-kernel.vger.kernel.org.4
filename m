@@ -2,96 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C643D730BD6
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 01:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77221730BDA
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 02:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbjFNX42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 19:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41308 "EHLO
+        id S231823AbjFOAAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 20:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230303AbjFNX4W (ORCPT
+        with ESMTP id S229516AbjFOAAJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 19:56:22 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241071FD4;
-        Wed, 14 Jun 2023 16:56:22 -0700 (PDT)
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35ENlh3V026988;
-        Wed, 14 Jun 2023 23:55:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=em1Oy/ZXJogHXMF15eFq+xLsfAk1Tg9tnkKe6mZVrbk=;
- b=KDKzgmlYEHwwvkRA5T771c4ageC8lnPTLK4j/zQ7Uaacd9fu1Q3Vk4OYyUxjx6IyucgG
- YfZAWkCOz/Na90oFKgmJg20XYd+oAPpCugMMfOZ5NWvBiX3PpImHqEN70gjpARaZDDGc
- zqy+SXe7JSrR1p1V3UEVmsAA6GSfbDnfEcM927tYRU6/HLoZKV3ARvtCwfwBA2KFzQa+
- 3omZAsIjMd6/VjazBWEP8/lpqnRHvX5CChsXfsZu9AxL4YjUX0D4VSUH29LhXCWxHFvC
- KiMRHNoQdAKJseWFhXTDruihxH12pZTgF2/WqIqf+cdBSL3FxlGIdDqecuFLRpoSQFMp ZA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r7qhf847m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Jun 2023 23:55:51 +0000
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35ENnFtF030725;
-        Wed, 14 Jun 2023 23:55:51 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r7qhf847a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Jun 2023 23:55:51 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35EKfiFC002759;
-        Wed, 14 Jun 2023 23:55:50 GMT
-Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
-        by ppma01wdc.us.ibm.com (PPS) with ESMTPS id 3r4gt5g4qe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Jun 2023 23:55:49 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35ENtmjS56295736
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 14 Jun 2023 23:55:49 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CB5B958053;
-        Wed, 14 Jun 2023 23:55:48 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E82FA58043;
-        Wed, 14 Jun 2023 23:55:46 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.19.215])
-        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 14 Jun 2023 23:55:46 +0000 (GMT)
-Message-ID: <6af688eba06f6a89632fbf4afcd47cbb8c790183.camel@linux.ibm.com>
-Subject: Re: [PATCH v12 4/4] evm: Support multiple LSMs providing an xattr
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com
-Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Wed, 14 Jun 2023 19:55:46 -0400
-In-Reply-To: <20230610075738.3273764-5-roberto.sassu@huaweicloud.com>
-References: <20230610075738.3273764-1-roberto.sassu@huaweicloud.com>
-         <20230610075738.3273764-5-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 2rTFnRN5fpu42bPG-G4_Qq-LcYHFpQSx
-X-Proofpoint-GUID: 72iNxXHhB3aam4APkdBzXTGgPwL2_OO5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-14_14,2023-06-14_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 phishscore=0 mlxlogscore=999 lowpriorityscore=0
- adultscore=0 clxscore=1015 suspectscore=0 spamscore=0 bulkscore=0
- priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306140206
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 14 Jun 2023 20:00:09 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F731BF8
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 17:00:07 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-53fbb3a013dso5283972a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 17:00:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1686787207; x=1689379207;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=12VwvcrgEKdN8aqMI+IAU5PLbg9wZ07LVlbgBSIhCA4=;
+        b=SupkW8CAI0Bw7NvXheRZO8CdV4l6XkZ7DQMfPL8I5BHIGivTFzK6TWvOGUZkkOLiz3
+         dfpnYOLk53Hcih6Thqe8/pCrKhYwQhLkNTAbS5OIrZlPgmFrVdJ+mqMPRt9YQVl92Bwk
+         3OCU/mgml8Ah/VXldLJREy9N9ldu3u8c/2Am0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686787207; x=1689379207;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=12VwvcrgEKdN8aqMI+IAU5PLbg9wZ07LVlbgBSIhCA4=;
+        b=aW4mxmLexIAYu+85Onzl6YpOEAhlPdLfm+Ke0KHSpMrm8boxV3JQ/eOEMvbfhxWSbR
+         ZH0gYg83XchZ6DdFFtI2Zep2dMMASSFN4hGVF2bqYhIIUiwhgaoDX0azKB46GoDmHWd6
+         6DDPkEcPJhoBr52141cTpurgQrwPBJt1hq+YmN0O36FxEerOa3v+DkGzPeszScddQdpl
+         HdkDVR25CmacnCx8gzqJJi/cO8nsZf2/0sLOC18e+drog4QbCobXaLWtPk5fRzCbA1yR
+         LxNchbsIr5H9oUnK9ywRQj5i+1S9TF4D+Y/p2G93YmcOwZRU3SxpsTBrlcjH9GJkZt88
+         05qA==
+X-Gm-Message-State: AC+VfDyCFoSk9cDxRQnleh5EBFghxES6fCMz+e9AUUEIHhwIAN6bEVip
+        nfxlQ6Wq4hjzgnHe+sYtabMVYw==
+X-Google-Smtp-Source: ACHHUZ7IDFd9vR4zkugOrFreU36PRCwfKzB3S7DOadFjidUUwSKtsg+FoAfmsv5OaByHRCuS5nrCag==
+X-Received: by 2002:a05:6a20:4b8a:b0:f8:1101:c074 with SMTP id fu10-20020a056a204b8a00b000f81101c074mr2310815pzb.54.1686787207415;
+        Wed, 14 Jun 2023 17:00:07 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:2e78:108:bcc:767d])
+        by smtp.gmail.com with ESMTPSA id z10-20020a170903018a00b001b1f991a4d0sm12766209plg.108.2023.06.14.17.00.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 17:00:06 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     andersson@kernel.org, amit.pundir@linaro.org,
+        linux-arm-msm@vger.kernel.org, konrad.dybcio@somainline.org,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        sumit.semwal@linaro.org, Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Revert "Revert "Revert "arm64: dma: Drop cache invalidation from arch_dma_prep_coherent()"""
+Date:   Wed, 14 Jun 2023 16:59:09 -0700
+Message-ID: <20230614165904.1.I279773c37e2c1ed8fbb622ca6d1397aea0023526@changeid>
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,28 +75,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2023-06-10 at 09:57 +0200, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> Currently, evm_inode_init_security() processes a single LSM xattr from the
-> array passed by security_inode_init_security(), and calculates the HMAC on
-> it and other inode metadata.
-> 
-> As the LSM infrastructure now can pass to EVM an array with multiple
-> xattrs, scan them until the terminator (xattr name NULL), and calculate the
-> HMAC on all of them.
-> 
-> Also, double check that the xattrs array terminator is the first non-filled
-> slot (obtained with lsm_get_xattr_slot()). Consumers of the xattrs array,
-> such as the initxattrs() callbacks, rely on the terminator.
-> 
-> Finally, change the name of the lsm_xattr parameter of evm_init_hmac() to
-> xattrs, to reflect the new type of information passed.
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+This reverts commit 7bd6680b47fa4cd53ee1047693c09825e212a6f5.
 
-Thanks, Roberto!
+When booting a sc7180-trogdor based device on mainline, I see errors
+that look like this:
 
-Acked-by: Mimi Zohar <zohar@linux.ibm.com>
+ qcom_scm firmware:scm: Assign memory protection call failed -22
+ qcom_rmtfs_mem 94600000.memory: assign memory failed
+ qcom_rmtfs_mem: probe of 94600000.memory failed with error -22
+
+The device still boots OK, but WiFi doesn't work.
+
+The failure only seems to happen when
+CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y. When I don't have that set then
+everything is peachy. Presumably something about the extra
+initialization disagrees with the change to drop cache invalidation.
+
+Fixes: 7bd6680b47fa ("Revert "Revert "arm64: dma: Drop cache invalidation from arch_dma_prep_coherent()""")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
+
+ arch/arm64/mm/dma-mapping.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/mm/dma-mapping.c b/arch/arm64/mm/dma-mapping.c
+index 3cb101e8cb29..5240f6acad64 100644
+--- a/arch/arm64/mm/dma-mapping.c
++++ b/arch/arm64/mm/dma-mapping.c
+@@ -36,7 +36,22 @@ void arch_dma_prep_coherent(struct page *page, size_t size)
+ {
+ 	unsigned long start = (unsigned long)page_address(page);
+ 
+-	dcache_clean_poc(start, start + size);
++	/*
++	 * The architecture only requires a clean to the PoC here in order to
++	 * meet the requirements of the DMA API. However, some vendors (i.e.
++	 * Qualcomm) abuse the DMA API for transferring buffers from the
++	 * non-secure to the secure world, resetting the system if a non-secure
++	 * access shows up after the buffer has been transferred:
++	 *
++	 * https://lore.kernel.org/r/20221114110329.68413-1-manivannan.sadhasivam@linaro.org
++	 *
++	 * Using clean+invalidate appears to make this issue less likely, but
++	 * the drivers themselves still need fixing as the CPU could issue a
++	 * speculative read from the buffer via the linear mapping irrespective
++	 * of the cache maintenance we use. Once the drivers are fixed, we can
++	 * relax this to a clean operation.
++	 */
++	dcache_clean_inval_poc(start, start + size);
+ }
+ 
+ #ifdef CONFIG_IOMMU_DMA
+-- 
+2.41.0.162.gfafddb0af9-goog
 
