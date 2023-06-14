@@ -2,150 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF2972FB31
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 12:37:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 001AC72FB34
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 12:37:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235544AbjFNKha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 06:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47258 "EHLO
+        id S235631AbjFNKhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 06:37:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235339AbjFNKh2 (ORCPT
+        with ESMTP id S233697AbjFNKhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 06:37:28 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2071.outbound.protection.outlook.com [40.107.93.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F77A7
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 03:37:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jLpFdeyX0wVQGWobteFLw8uRReUKgf7dmudj7THNYGy6o3/KKeff3WmeDaV388zANY4jQLcbovP9R29HQhGfVhaJ3fBxxfg/JKrAvmxRX8pPJCG0CTYyW/xFdcb6rszsK1YrbXy3P+gQxnBE8SmFPyx2SeTOi2Lg3HsCWnxtJ77d3bbCrd8tLz7EDpilhcNJPz7erd3u5Lj4O7JwLYueMgLkiT/lSFQgqsd5+u2+nBziUpReX38U++Jx/ldxaEpo5kougLW4bp4iaY9G/SxBlUvyx5PwXt5OTw3/Qw80EL3ya0iOQmnNyXutLiqZY/NiZG1QMukJAnxeTpd0dSPsNA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZiMHjPGW2Wje+Cj3oFfNZUgOCuSGvkV/UBqBNcUk8JM=;
- b=DpIPU1C063n3YxvKHCikamx4XROi08TxrpqiYEfE1Q3Wsi1Bhd0eElMwMscUnqwjz2tBlXJFlndjNPRUMING8faRO6HCC6zfcE1wfT4BejqfdPOxZHmjqsnrmp9NxQ/U7EvWau9+QvSo5ybZbi67mSykTCAWLVAfcCW7QI/HdG2lJ2k3Ze0EcP/LprgqO9LuAk70+OKD2BRPF+EaRiC8gv3wwA3vRxK55MSWEAvJNNwObhV8aROymoL3KxDEVAq8mIVhVwlFlGgMt1bMe2ao3Jho5xJnJbk85DcwfLBGFoKwl3Q74/g/QRt7jKRd6pvxhSFQeA7NgM9SQr+3IWP2pA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZiMHjPGW2Wje+Cj3oFfNZUgOCuSGvkV/UBqBNcUk8JM=;
- b=jSVxDIGtMwLAoo8gDSGjLWiFWCnmoxzOUIK6IbjL5TFK406gK909nGKyujsL29T8W/0+y3+NIH9NbnmVB25wTFI4wvH/lF7nLDUUcD0kmLZKHk9M6quDQ3dkuyZFXEzrIqlb+DlNAgsqg8DMKfTcrUBmhUCDx662Op/D8EGb4KA=
-Received: from BYAPR07CA0102.namprd07.prod.outlook.com (2603:10b6:a03:12b::43)
- by PH8PR12MB6721.namprd12.prod.outlook.com (2603:10b6:510:1cc::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.42; Wed, 14 Jun
- 2023 10:37:20 +0000
-Received: from DM6NAM11FT099.eop-nam11.prod.protection.outlook.com
- (2603:10b6:a03:12b:cafe::f0) by BYAPR07CA0102.outlook.office365.com
- (2603:10b6:a03:12b::43) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37 via Frontend
- Transport; Wed, 14 Jun 2023 10:37:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- DM6NAM11FT099.mail.protection.outlook.com (10.13.172.241) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6500.25 via Frontend Transport; Wed, 14 Jun 2023 10:37:20 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 14 Jun
- 2023 05:37:19 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 14 Jun
- 2023 05:37:19 -0500
-Received: from amd-System-Product-Name.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.23
- via Frontend Transport; Wed, 14 Jun 2023 05:37:08 -0500
-From:   Venkata Prasad Potturu <venkataprasad.potturu@amd.com>
-To:     <broonie@kernel.org>, <alsa-devel@alsa-project.org>
-CC:     <vsujithkumar.reddy@amd.com>, <Vijendar.Mukunda@amd.com>,
-        <Basavaraj.Hiregoudar@amd.com>, <Sunil-kumar.Dommati@amd.com>,
-        <syed.sabakareem@amd.com>, <mastan.katragadda@amd.com>,
-        <arungopal.kondaveeti@amd.com>,
-        Venkata Prasad Potturu <venkataprasad.potturu@amd.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
-        Iuliana Prodan <iuliana.prodan@nxp.com>,
-        "Ajit Kumar Pandey" <AjitKumar.Pandey@amd.com>,
-        "moderated list:SOUND - SOUND OPEN FIRMWARE (SOF) DRIVERS" 
-        <sound-open-firmware@alsa-project.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH] ASoC: SOF: amd: Add support for IPC with a reply_size set to zero
-Date:   Wed, 14 Jun 2023 16:07:05 +0530
-Message-ID: <20230614103707.2246296-1-venkataprasad.potturu@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 14 Jun 2023 06:37:33 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E18B196
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 03:37:32 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-517ab9a4a13so4580615a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 03:37:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686739051; x=1689331051;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0UJGMihjTj1hAjbmHZ6/JGiIPUmZ9LnZE7xgM/0VXOU=;
+        b=mvOOi2pysANY+XAjid4/FlGD4AKXH5Ah/zFubhD1VbJI2jUrrbWcZ59q2tD8Ppibpo
+         nPDCLEVGB+HMycGAfGsvRTPP6+Nxf2NinPMiL56X1sdqy6LXvtC03+nrltA6gRfMkYdP
+         L/6ZiL0Rdb+Qdtd5cJm2Qc0VEFuXu2n8RkZctsQOIJX8VrK2m4DCoxBksfKZxeJfbeqH
+         ViFmR2iPUUFufXbDpmw2raqGvoDKEu226XMRtVIe2yP7QLlqlxyKs25fVGHvLUMNpuVa
+         m9rfT0/l3EVH6a9InjY0rBimeUJJRXTkFnRf2KwN3DlcAwnsyV5OmKYBjjgICm30Mnxv
+         D81g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686739051; x=1689331051;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0UJGMihjTj1hAjbmHZ6/JGiIPUmZ9LnZE7xgM/0VXOU=;
+        b=fnKHndaI6gTtvs4qmw7sRe2wnDoy9jfhgG5gWJJ9YAepIBHKB3cvukjeOz4lNAI4EG
+         JyAHNGOIT/OtUxmCaQvuaAq6a8v5P6OZJjrKBFqbgHt6u4YxkBDkhZyRnIQAstZ55Vqc
+         +08/peAYBQ4wqVABzJ8MYq4uQoK9WzEYMKlWUp9LvSsM8GP4ffnoTm/S6O9Brc/qYt80
+         4oDmm8ucaKkaJEoafN/xhi1R6QXP1DVsRL6RaOC+zTOFCdfR3IB564n4G7Vhh/Yt0fUa
+         cMs0pvd78xkD3KVaNeCJZx6oCcVgBrT8D+Ph+cCFUnT5zq5Ls8gc8MfLOmR112iKXI8P
+         +BHA==
+X-Gm-Message-State: AC+VfDxXrp7/FBBECRZB704HF36RtV8Wkqm8jpO7s1RTFKaEJ+x+yzuB
+        VB3JV9kjiMKt4TE1e9KkrdBn2Q==
+X-Google-Smtp-Source: ACHHUZ7G6M362gZBo1XpHgAsxT45uBPwO0hp3bfI6761xauQ3K+uJ6CQ/i4/fw5QNPGONrZ2VKS58w==
+X-Received: by 2002:a17:902:6ac7:b0:1af:d724:63ed with SMTP id i7-20020a1709026ac700b001afd72463edmr11808868plt.42.1686739051243;
+        Wed, 14 Jun 2023 03:37:31 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id az4-20020a170902a58400b001b1c3542f57sm11854863plb.103.2023.06.14.03.37.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 03:37:30 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] OPP: pstate is only valid for genpd OPP tables
+Date:   Wed, 14 Jun 2023 16:07:25 +0530
+Message-Id: <5437756c65c79f9520886bc54321d39c022c8638.1686739018.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT099:EE_|PH8PR12MB6721:EE_
-X-MS-Office365-Filtering-Correlation-Id: f435a0dc-52de-4bbd-3049-08db6cc35507
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hkIbKINLp9VvJ3oJS6BJHPvzQ84CCUo185OT2Bi7Sdc1ccdjyYYpgyQGGj7uKaDK5yxE0yUWP+/IwjbStA5QKO0vFKdxiANCzXbeuprESK2x1eILuSogUGUMQLGtiwWd4iM8h1qLAGQyNJSMaRjSLaOGg3cnB6FLtJ/8JkQrCgMcdBsL6r3O6z9gqe69ciY5D6Pv0hFUFYCMipXXBHhjAp9CvZP5T3Dlqw/vBtH57yPIeWYflpxT09zsUixQpsHRNniyuL50hc1j2r793b41VJ6cUKEvz13ft0BZHfHQ5APd9G0K+uH6BziA5ozluLevleVgtlYy5G0KtA/CI+brama4steWe9F+SJnY5dKTmi7nxHPoennE2qa+PUEhYlMxdKcXCemouGePDeFOwxgl4X17fZZqtKycZeSV8Crbkv1FKGne5g5iwvmbMmpp4mqIAbA4+Ml5WfwdF9ViB0sqWS7rZwwZRhQYk4nt+aHb+AuUK+upA2j+IYt+mvrKOBOpUA6qb13vHIDVcu75B+0M6Tb6TFwTLzaeFOvQSVJytKTYYdL24S3GYoRwSepIWc/yEKt/y99u44H3Ya0lT0AAdpr2KaEH5WITBDZY14vvuowOiuEKrpAaFnSwYcAekIIdvSCMT2btQ4zJLLHBrJwru0fYEZZC+Zwl/X9PLG0Zb5e1SSb40J6v0cfeWpu4sVXAa6NpiYpCHOjVz1QAP4JVjxdIzqOQLdE8IcaJ1Lrhnkr+LhJh0G7fHrWwpnjxssHRNe9Ntnzypj2LafxPMZTw/A==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(396003)(376002)(39860400002)(451199021)(46966006)(40470700004)(36840700001)(110136005)(36756003)(41300700001)(6666004)(316002)(7696005)(5660300002)(8936002)(70586007)(478600001)(54906003)(8676002)(70206006)(4326008)(82310400005)(7416002)(86362001)(47076005)(186003)(40460700003)(26005)(1076003)(82740400003)(356005)(4744005)(2906002)(2616005)(36860700001)(81166007)(336012)(426003)(83380400001)(40480700001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 10:37:20.3076
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f435a0dc-52de-4bbd-3049-08db6cc35507
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT099.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6721
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for IPC tx_message with a reply_size set to zero,
-return zero when message reply_size is zero at acp_dsp_ipc_get_reply().
+It is not very clear right now that the `pstate` field is only valid for
+genpd OPP tables and not consumer tables. And there is no checking for
+the same at various places.
 
-Signed-off-by: Venkata Prasad Potturu <venkataprasad.potturu@amd.com>
+Add checks in place to verify that and make it clear to the reader.
+
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- sound/soc/sof/amd/acp-ipc.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/opp/core.c    | 18 ++++++++++++++++--
+ drivers/opp/debugfs.c |  4 +++-
+ drivers/opp/of.c      |  6 ++++++
+ 3 files changed, 25 insertions(+), 3 deletions(-)
 
-diff --git a/sound/soc/sof/amd/acp-ipc.c b/sound/soc/sof/amd/acp-ipc.c
-index 749e856dc601..8a0fc635a997 100644
---- a/sound/soc/sof/amd/acp-ipc.c
-+++ b/sound/soc/sof/amd/acp-ipc.c
-@@ -130,6 +130,13 @@ static void acp_dsp_ipc_get_reply(struct snd_sof_dev *sdev)
- 		memcpy(msg->reply_data, &reply, sizeof(reply));
- 		ret = reply.error;
- 	} else {
-+		/*
-+		 * To support an IPC tx_message with a
-+		 * reply_size set to zero.
-+		 */
-+		if (!msg->reply_size)
-+			goto out;
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 7290168ec806..bfb012f5383c 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -227,16 +227,24 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_get_level);
+ unsigned int dev_pm_opp_get_required_pstate(struct dev_pm_opp *opp,
+ 					    unsigned int index)
+ {
++	struct opp_table *opp_table = opp->opp_table;
 +
- 		/* reply correct size ? */
- 		if (reply.hdr.size != msg->reply_size &&
- 		    !(reply.hdr.cmd & SOF_IPC_GLB_PROBE)) {
+ 	if (IS_ERR_OR_NULL(opp) || !opp->available ||
+-	    index >= opp->opp_table->required_opp_count) {
++	    index >= opp_table->required_opp_count) {
+ 		pr_err("%s: Invalid parameters\n", __func__);
+ 		return 0;
+ 	}
+ 
+ 	/* required-opps not fully initialized yet */
+-	if (lazy_linking_pending(opp->opp_table))
++	if (lazy_linking_pending(opp_table))
+ 		return 0;
+ 
++	/* The required OPP table must belong to a genpd */
++	if (unlikely(!opp_table->required_opp_tables[index]->is_genpd)) {
++		pr_err("%s: Performance state is only valid for genpds.\n", __func__);
++		return 0;
++	}
++
+ 	return opp->required_opps[index]->pstate;
+ }
+ EXPORT_SYMBOL_GPL(dev_pm_opp_get_required_pstate);
+@@ -2686,6 +2694,12 @@ int dev_pm_opp_xlate_performance_state(struct opp_table *src_table,
+ 	int dest_pstate = -EINVAL;
+ 	int i;
+ 
++	/* Both OPP tables must belong to genpds */
++	if (unlikely(!src_table->is_genpd || !dst_table->is_genpd)) {
++		pr_err("%s: Performance state is only valid for genpds.\n", __func__);
++		return -EINVAL;
++	}
++
+ 	/*
+ 	 * Normally the src_table will have the "required_opps" property set to
+ 	 * point to one of the OPPs in the dst_table, but in some cases the
+diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
+index 2c7fb683441e..0cc21e2b42ff 100644
+--- a/drivers/opp/debugfs.c
++++ b/drivers/opp/debugfs.c
+@@ -152,11 +152,13 @@ void opp_debug_create_one(struct dev_pm_opp *opp, struct opp_table *opp_table)
+ 	debugfs_create_bool("dynamic", S_IRUGO, d, &opp->dynamic);
+ 	debugfs_create_bool("turbo", S_IRUGO, d, &opp->turbo);
+ 	debugfs_create_bool("suspend", S_IRUGO, d, &opp->suspend);
+-	debugfs_create_u32("performance_state", S_IRUGO, d, &opp->pstate);
+ 	debugfs_create_u32("level", S_IRUGO, d, &opp->level);
+ 	debugfs_create_ulong("clock_latency_ns", S_IRUGO, d,
+ 			     &opp->clock_latency_ns);
+ 
++	if (opp_table->is_genpd)
++		debugfs_create_u32("performance_state", S_IRUGO, d, &opp->pstate);
++
+ 	opp->of_name = of_node_full_name(opp->np);
+ 	debugfs_create_str("of_name", S_IRUGO, d, (char **)&opp->of_name);
+ 
+diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+index 943c7fb7402b..e23ce6e78eb6 100644
+--- a/drivers/opp/of.c
++++ b/drivers/opp/of.c
+@@ -1392,6 +1392,12 @@ int of_get_required_opp_performance_state(struct device_node *np, int index)
+ 		goto put_required_np;
+ 	}
+ 
++	/* The OPP tables must belong to a genpd */
++	if (unlikely(!opp_table->is_genpd)) {
++		pr_err("%s: Performance state is only valid for genpds.\n", __func__);
++		goto put_required_np;
++	}
++
+ 	opp = _find_opp_of_np(opp_table, required_np);
+ 	if (opp) {
+ 		pstate = opp->pstate;
 -- 
-2.25.1
+2.31.1.272.g89b43f80a514
 
