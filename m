@@ -2,36 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 887E773051E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB6F730513
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:36:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235022AbjFNQhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 12:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49736 "EHLO
+        id S235301AbjFNQgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 12:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235462AbjFNQgr (ORCPT
+        with ESMTP id S234810AbjFNQgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 12:36:47 -0400
+        Wed, 14 Jun 2023 12:36:14 -0400
 Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE92E62;
-        Wed, 14 Jun 2023 09:36:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC452132;
+        Wed, 14 Jun 2023 09:36:13 -0700 (PDT)
 Received: from [192.168.178.23] (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id BE29ACFDAF;
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 02170CFDBD;
         Wed, 14 Jun 2023 16:36:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1686760570; bh=UYXnMctzgGjbbadSnEuPjVT8RCUV5VfXXmHjVfoOibo=;
+        t=1686760571; bh=jXbcz8pgmHv7Ubvp/lgQSXeBlXJ95BLlvZUZUS9B2+o=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc;
-        b=wA+XiKeBtGN6GMSTX5e1oi7/z6XgDwt7+3jUj29l1ni6lL4w23/jqqkreDk2wcVjE
-         MMM1nUFWWd8aqIs4QOh1mPHlb7wo7fP24HvEuwKcGtTTOYCrFqRAMZUyLayI4jQWRb
-         HWN1mWmvQn5COg50iKLhBzhlAPZFyqPDpgn5vsPY=
+        b=BaQg5mJIxWMnIIGOyEkI0F9KWpoKaHfeS3sVywJmpMEr8FQ2I9J4gn0A5JW7eJk6i
+         y8//it7HtNQA0CmpiQGqxTL26F434RYyDRwDnF76jV84Fs18tgJSTgDVV9IWx9XQhK
+         6Lq7mQ9T7QBMaHBBg0b+oprD6JWdtiF1fy0qREfU=
 From:   Luca Weiss <luca@z3ntu.xyz>
-Date:   Wed, 14 Jun 2023 18:35:48 +0200
-Subject: [PATCH v3 2/6] soc: qcom: ocmem: Use dev_err_probe where
- appropriate
+Date:   Wed, 14 Jun 2023 18:35:49 +0200
+Subject: [PATCH v3 3/6] soc: qcom: ocmem: make iface clock optional
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230506-msm8226-ocmem-v3-2-79da95a2581f@z3ntu.xyz>
+Message-Id: <20230506-msm8226-ocmem-v3-3-79da95a2581f@z3ntu.xyz>
 References: <20230506-msm8226-ocmem-v3-0-79da95a2581f@z3ntu.xyz>
 In-Reply-To: <20230506-msm8226-ocmem-v3-0-79da95a2581f@z3ntu.xyz>
 To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
@@ -44,23 +43,22 @@ To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>
 Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Luca Weiss <luca@z3ntu.xyz>,
-        Caleb Connolly <caleb.connolly@linaro.org>
+        devicetree@vger.kernel.org, Luca Weiss <luca@z3ntu.xyz>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2190; i=luca@z3ntu.xyz;
- h=from:subject:message-id; bh=UYXnMctzgGjbbadSnEuPjVT8RCUV5VfXXmHjVfoOibo=;
- b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBkiex1EvDlh0l16NTUdVdGYGuATCym7G2cRt0lj
- SXH0W1bVI+JAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZInsdQAKCRBy2EO4nU3X
- Vh7rD/9CywBQ8OuCcA8kGTFpjO+zzsF4FW8sLiLeFiL/4/HUqU+0VktLnBbPSDLVS4j4GFPZbNK
- tNlPZ+IMch07xfpPyq8UmSe9K9/Uubocc2PAGhO8zkt25SL406h72GhggPchNvQCmAmpgtQmYsu
- SoBSOnO5SCA7HXFvGu01L4ju1YmA6zfdRIal62/KPNkPHQuF0c78M8hLIroGcLNvvSrPNgXmmrh
- quw7aeZq6hCRb930xBoZpErBdN84PS31VYyt6HpD5Cpkxcxdqj5LoHDoNkOspDOB6BIpBz2Hy1I
- L6uIm2/IwZrRkzp9/x1RnWHQ4xtrUkcsCKJdCptEhvzEvbZ6h1UdgSsWUS4iogm0edEEjO3xjKp
- rNl4b5y6rV1ogwC3x4NuwjATdlmuQSAEVRkCQaImFM42VyMuy5LfQXtyvLPl4Gyf1MqBqv2dA7T
- 6YLYyjA6qAjuIqsCPH7rAUSWX2AJ8+kGx19ILL5rbhvdq6exjvc113xTSUK2yIGZ6TD2iNDVwJZ
- fNww2a5gYJSBf9WYKCI1kzKLVmFimDRN+DZhu4/RC+WKinc9b2P4RbsvxWxNmyAewJlSPP3hGG4
- EBYLgafwkGVnRb0pejuWKRd1jddbvG5t//KLIXhYBIH1VFbEtsJKFjTtGV6QfuEOP37F7UKscfS
- nD1M96KnPqsNVpA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3432; i=luca@z3ntu.xyz;
+ h=from:subject:message-id; bh=jXbcz8pgmHv7Ubvp/lgQSXeBlXJ95BLlvZUZUS9B2+o=;
+ b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBkiex2CBWSebxRdei5WX11jWa9Bc/Ct8Y10OL+S
+ nL3K9VO6nGJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZInsdgAKCRBy2EO4nU3X
+ Vtn4D/4rcAZBSGRBneIhUZLF7til1eiBlWBAr3YIr/2u7eDS6s7QFWF8k/vjKrKqG4PjddeJtEA
+ QI1mlBa8WvtUmuL4SwlvlZ8P/l3GNU6Zj9VC1tNMzDXX9Qs03tdgYO7xFOiKpHUqdxCsDesNCVM
+ EDI1d1rCuX2R9DR3kJmsNH7/nnobOmG0jS//RpahTPCVhraruNGc5bgV4g9eF3jOHlw/0QMAl+L
+ Y975EhnvoqSOwbLKWuuGiPD/bdzOqZh8Z+kgnbpV2yWGKllEjViLm1qOsCPCPm0aMY6dgxvbW1K
+ OU3VmUIL9GlojlinI2nue4mB6vTnzFl+41uze13x3qDgvj39I0dInxXmtd1chuAXP00reu5V0PO
+ ObQbIFSK5kyhghEzLBpaJtcPxtn5ZeT7I0+SD/Q+TmMILRiuqp6S1HbWg40YHRROuATR5tJ1KZN
+ BeZuPFZEYWXZTh86uW2V7H7Vp4pNkfRlDtFQ1nAFhoTFDpbrn+ts6O9NvUIrgs0JHKd5TvtcKTK
+ QoVpIE2jYHjamxmMGR/BzCCwC75WuzQVRvP+22PYo7lexmzfoLJdcczp7qNHfxcRzCgfd8noCeb
+ iLRuwD2TKlhyxvm+YEEE+DUayyIS5UdZQj12sDoauWzGfyiQ4nHvkDTAE6RttIWibNrPnR5kZ02
+ hIrJxWdOjF2UaKw==
 X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
  fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,65 +71,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use dev_err_probe in the driver probe function where useful, to simplify
-getting PTR_ERR and to ensure the underlying errors are included in the
-error message.
+Some platforms such as msm8226 do not have an iface clk. Since clk_bulk
+APIs don't offer to a way to treat some clocks as optional simply add
+core_clk and iface_clk members to our drvdata.
 
-Reviewed-by: Caleb Connolly <caleb.connolly@linaro.org>
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 ---
- drivers/soc/qcom/ocmem.c | 23 ++++++++---------------
- 1 file changed, 8 insertions(+), 15 deletions(-)
+ drivers/soc/qcom/ocmem.c | 42 ++++++++++++++++++++++++------------------
+ 1 file changed, 24 insertions(+), 18 deletions(-)
 
 diff --git a/drivers/soc/qcom/ocmem.c b/drivers/soc/qcom/ocmem.c
-index ef7c1748242a..462514dfd9e3 100644
+index 462514dfd9e3..ff8d01b0ac68 100644
 --- a/drivers/soc/qcom/ocmem.c
 +++ b/drivers/soc/qcom/ocmem.c
-@@ -321,18 +321,13 @@ static int ocmem_dev_probe(struct platform_device *pdev)
+@@ -54,6 +54,8 @@ struct ocmem {
+ 	const struct ocmem_config *config;
+ 	struct resource *memory;
+ 	void __iomem *mmio;
++	struct clk *core_clk;
++	struct clk *iface_clk;
+ 	unsigned int num_ports;
+ 	unsigned int num_macros;
+ 	bool interleaved;
+@@ -95,16 +97,6 @@ struct ocmem {
+ #define OCMEM_PSGSC_CTL_MACRO2_MODE(val)	FIELD_PREP(0x00000700, (val))
+ #define OCMEM_PSGSC_CTL_MACRO3_MODE(val)	FIELD_PREP(0x00007000, (val))
+ 
+-#define OCMEM_CLK_CORE_IDX			0
+-static struct clk_bulk_data ocmem_clks[] = {
+-	{
+-		.id = "core",
+-	},
+-	{
+-		.id = "iface",
+-	},
+-};
+-
+ static inline void ocmem_write(struct ocmem *ocmem, u32 reg, u32 data)
+ {
+ 	writel(data, ocmem->mmio + reg);
+@@ -320,9 +312,15 @@ static int ocmem_dev_probe(struct platform_device *pdev)
+ 	ocmem->dev = dev;
  	ocmem->config = device_get_match_data(dev);
  
- 	ret = devm_clk_bulk_get(dev, ARRAY_SIZE(ocmem_clks), ocmem_clks);
--	if (ret) {
--		if (ret != -EPROBE_DEFER)
--			dev_err(dev, "Unable to get clocks\n");
--
--		return ret;
--	}
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Unable to get clocks\n");
+-	ret = devm_clk_bulk_get(dev, ARRAY_SIZE(ocmem_clks), ocmem_clks);
+-	if (ret)
+-		return dev_err_probe(dev, ret, "Unable to get clocks\n");
++	ocmem->core_clk = devm_clk_get(dev, "core");
++	if (IS_ERR(ocmem->core_clk))
++		return dev_err_probe(dev, PTR_ERR(ocmem->core_clk),
++				     "Unable to get core clock\n");
++
++	ocmem->iface_clk = devm_clk_get_optional(dev, "iface");
++	if (IS_ERR(ocmem->iface_clk))
++		return dev_err_probe(dev, PTR_ERR(ocmem->iface_clk),
++				     "Unable to get iface clock\n");
  
  	ocmem->mmio = devm_platform_ioremap_resource_byname(pdev, "ctrl");
--	if (IS_ERR(ocmem->mmio)) {
--		dev_err(&pdev->dev, "Failed to ioremap ocmem_ctrl resource\n");
--		return PTR_ERR(ocmem->mmio);
--	}
-+	if (IS_ERR(ocmem->mmio))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(ocmem->mmio),
-+				     "Failed to ioremap ocmem_ctrl resource\n");
+ 	if (IS_ERR(ocmem->mmio))
+@@ -337,11 +335,15 @@ static int ocmem_dev_probe(struct platform_device *pdev)
+ 	}
  
- 	ocmem->memory = platform_get_resource_byname(pdev, IORESOURCE_MEM,
- 						     "mem");
-@@ -345,16 +340,14 @@ static int ocmem_dev_probe(struct platform_device *pdev)
- 	WARN_ON(clk_set_rate(ocmem_clks[OCMEM_CLK_CORE_IDX].clk, 1000) < 0);
- 
- 	ret = clk_bulk_prepare_enable(ARRAY_SIZE(ocmem_clks), ocmem_clks);
--	if (ret) {
--		dev_info(ocmem->dev, "Failed to enable clocks\n");
--		return ret;
--	}
+ 	/* The core clock is synchronous with graphics */
+-	WARN_ON(clk_set_rate(ocmem_clks[OCMEM_CLK_CORE_IDX].clk, 1000) < 0);
++	WARN_ON(clk_set_rate(ocmem->core_clk, 1000) < 0);
++
++	ret = clk_prepare_enable(ocmem->core_clk);
 +	if (ret)
-+		return dev_err_probe(ocmem->dev, ret, "Failed to enable clocks\n");
++		return dev_err_probe(ocmem->dev, ret, "Failed to enable core clock\n");
+ 
+-	ret = clk_bulk_prepare_enable(ARRAY_SIZE(ocmem_clks), ocmem_clks);
++	ret = clk_prepare_enable(ocmem->iface_clk);
+ 	if (ret)
+-		return dev_err_probe(ocmem->dev, ret, "Failed to enable clocks\n");
++		return dev_err_probe(ocmem->dev, ret, "Failed to enable iface clock\n");
  
  	if (qcom_scm_restore_sec_cfg_available()) {
  		dev_dbg(dev, "configuring scm\n");
- 		ret = qcom_scm_restore_sec_cfg(QCOM_SCM_OCMEM_DEV_ID, 0);
- 		if (ret) {
--			dev_err(dev, "Could not enable secure configuration\n");
-+			dev_err_probe(dev, ret, "Could not enable secure configuration\n");
- 			goto err_clk_disable;
- 		}
- 	}
+@@ -406,13 +408,17 @@ static int ocmem_dev_probe(struct platform_device *pdev)
+ 	return 0;
+ 
+ err_clk_disable:
+-	clk_bulk_disable_unprepare(ARRAY_SIZE(ocmem_clks), ocmem_clks);
++	clk_disable_unprepare(ocmem->core_clk);
++	clk_disable_unprepare(ocmem->iface_clk);
+ 	return ret;
+ }
+ 
+ static int ocmem_dev_remove(struct platform_device *pdev)
+ {
+-	clk_bulk_disable_unprepare(ARRAY_SIZE(ocmem_clks), ocmem_clks);
++	struct ocmem *ocmem = platform_get_drvdata(pdev);
++
++	clk_disable_unprepare(ocmem->core_clk);
++	clk_disable_unprepare(ocmem->iface_clk);
+ 
+ 	return 0;
+ }
 
 -- 
 2.41.0
