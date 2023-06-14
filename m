@@ -2,161 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A65730ADF
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 00:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEFBA730AE8
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 00:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233333AbjFNWnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 18:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39908 "EHLO
+        id S235305AbjFNWou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 18:44:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjFNWnn (ORCPT
+        with ESMTP id S229832AbjFNWor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 18:43:43 -0400
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9A71BF9;
-        Wed, 14 Jun 2023 15:43:42 -0700 (PDT)
-Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-77ac14ff51bso286770439f.3;
-        Wed, 14 Jun 2023 15:43:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686782621; x=1689374621;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OKGcfzr/p/3/4KMXU7XbxZ/xW3lQr6BAlDHKWT9Oujc=;
-        b=Ub7jSme0+gA/G+1N4r9U8cVaA14leDdBE2l+WRCuAYc34O0LAoeuPXzliZ7QI/y3LJ
-         y3nZXb4nO8RyabdaL0Dd2ui5HFyBEQIaniss9A/fLnXh0KI13zeDnXRmV4jAuGdPCrRJ
-         O2ati0j71rY4qkfFDcg94KJWvUJw0S7vHTcNqwbA8K9uUyrB78EBkap4nJu0PNZD9gtI
-         tP2qYw7UV7AI06cWPZnwOtszrK4r9MFI65alcoS4aG7CRs9X7Zia2zYSJNhPkQf4PuD8
-         T1TWraD0z/nGZ1c5u913TPtMq3dOOL5OVgxuSpZP2tKZDVBSO/sHqFRh2+tPIwpeXLIi
-         YbjQ==
-X-Gm-Message-State: AC+VfDyXt0Johj2hnwNxKxGSHcZUfadXOjJwpAxdtG4jqiTZ2x+OF5/Z
-        wCC48bCI6k8snV/IBMFOjBbETD80Vw==
-X-Google-Smtp-Source: ACHHUZ6lygdrz16O6hhXp1oh6hsk1t75L5t3R45RyVE304fcKg+/x7h2K9VVCD3aevb1eYFkGvcjyQ==
-X-Received: by 2002:a6b:4401:0:b0:760:f795:ccdf with SMTP id r1-20020a6b4401000000b00760f795ccdfmr14226968ioa.8.1686782621260;
-        Wed, 14 Jun 2023 15:43:41 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id u19-20020a02c953000000b0041672c963b3sm5286814jao.50.2023.06.14.15.43.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 15:43:40 -0700 (PDT)
-Received: (nullmailer pid 2999712 invoked by uid 1000);
-        Wed, 14 Jun 2023 22:43:38 -0000
-Date:   Wed, 14 Jun 2023 16:43:38 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        Linux MTD List <linux-mtd@lists.infradead.org>,
-        f.fainelli@gmail.com, rafal@milecki.pl, kursad.oney@broadcom.com,
-        joel.peshkin@broadcom.com, computersforpeace@gmail.com,
-        anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
-        tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Kamal Dasu <kdasu.kdev@gmail.com>
-Subject: Re: [PATCH 05/12] dt-bindings: mtd: brcmnand: Updates for bcmbca SoCs
-Message-ID: <20230614224338.GA2990941-robh@kernel.org>
-References: <20230606231252.94838-1-william.zhang@broadcom.com>
- <20230606231252.94838-6-william.zhang@broadcom.com>
+        Wed, 14 Jun 2023 18:44:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C45C1BF7;
+        Wed, 14 Jun 2023 15:44:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B4556281D;
+        Wed, 14 Jun 2023 22:44:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5B01C433C0;
+        Wed, 14 Jun 2023 22:44:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686782685;
+        bh=lMvudJgKGP6G5z1D5G5ktPPOIHeYLAxIIf2pg1Bn6dA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Zk6bt6oVdjWME3wilTbcHVuIxYexd/ugfSoqlxQA+OKl7qFQrKmyiFMXVZXlSLBrh
+         7Jry8e84dvXNqFZPIPlrmBuZoyCRj9Y6/+vzIlZqLjR2NWK/Ahana4A/5nbZpJ+xds
+         c7GN7maBBDBmKOcMkmw2tuqPXW3rM46twikbRfrEt5C92i+eoeQbNcEOXPuJrwAEOe
+         qPfWvLRNKp0EL4+S82/uGEoYOD+Fpg8jyck9vu6YebQG1WBdkb99Gz+xlMyb2XkkyC
+         /EzMJ5NBWSplFJ1Wj39Ba6c4ldZQoyJUY+xKb3VF1YWmjkV9RicqPqmO8QnICaTDna
+         dUKeQNi4BltJQ==
+Message-ID: <bf142e7d-178e-43a8-32e8-7e9e396eeee7@kernel.org>
+Date:   Thu, 15 Jun 2023 07:44:39 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230606231252.94838-6-william.zhang@broadcom.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: Fwd: Waking up from resume locks up on sr device
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     Hannes Reinecke <hare@suse.de>,
+        Joe Breuer <linux-kernel@jmbreuer.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Linux Power Management <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Hardening <linux-hardening@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux SCSI <linux-scsi@vger.kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+References: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
+ <5513e29d-955a-f795-21d6-ec02a2e2e128@gmail.com>
+ <ZIQ6bkau3j6qGef8@duo.ucw.cz>
+ <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com>
+ <02e4f87a-80e8-dc5d-0d6e-46939f2c74ac@acm.org>
+ <b2cf6d96-a55a-d444-d22e-e9b3945ba43f@jmbreuer.net>
+ <84f1c51c-86f9-04b3-0cd1-f685ebee7592@kernel.org>
+ <37ed36f0-6f72-115c-85fb-62ef5ad72e76@suse.de>
+ <b0fdf454-b2f7-c273-66f5-efe42fbc2807@kernel.org>
+ <859f0eda-4984-4489-9851-c9f6ec454a88@rowland.harvard.edu>
+ <3f85cb4a-8b14-623f-eb4e-40baab1ed888@acm.org>
+Content-Language: en-US
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <3f85cb4a-8b14-623f-eb4e-40baab1ed888@acm.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 04:12:45PM -0700, William Zhang wrote:
-> Use new compatiable brcm,nand-bcmbca to support BCMBCA broadband
-> product. The old compatible string is still kept in the driver so old
-> dtb can still work.
-
-I don't understand why you need to change this. 
-
-
-> Add brcm,nand-use-wp property to have an option for disabling this
-> feature on broadband board design that does not use write protection.
-> Add brcm,nand-ecc-use-strap to get ecc setting from board strap for
-> broadband board designs because they do not specify ecc setting in dts
-> but rather using the strap setting.
+On 6/15/23 03:04, Bart Van Assche wrote:
+> On 6/14/23 07:26, Alan Stern wrote:
+>> On Wed, Jun 14, 2023 at 04:35:50PM +0900, Damien Le Moal wrote:
+>>> Or... Why the heck scsi_rescan_device() is calling device_lock() ? This
+>>> is the only place in scsi code I can see that takes this lock. I suspect
+>>> this is to serialize either rescans, or serialize with resume, or both.
+>>> For serializing rescans, we can use another lock. For serializing with
+>>> PM, we should wait for PM transitions...
+>>> Something is not right here.
+>>
+>> Here's what commit e27829dc92e5 ("scsi: serialize ->rescan against
+>> ->remove", written by Christoph Hellwig) says:
+>>
+>>      Lock the device embedded in the scsi_device to protect against
+>>      concurrent calls to ->remove.
+>>
+>> That's the commit which added the device_lock() call.
 > 
-> Remove the requirement of interrupts and interrupt-names properties to
-> reflect the driver code.
-> 
-> This patch also includes a few minor fixes to the BCM63xx compatibles
-> and add myself to the list of maintainers.
-> 
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> ---
-> 
->  .../bindings/mtd/brcm,brcmnand.yaml           | 64 +++++++++++++------
->  1 file changed, 43 insertions(+), 21 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml b/Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml
-> index 1571024aa119..1fe1c166a9db 100644
-> --- a/Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml
-> +++ b/Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml
-> @@ -9,6 +9,7 @@ title: Broadcom STB NAND Controller
->  maintainers:
->    - Brian Norris <computersforpeace@gmail.com>
->    - Kamal Dasu <kdasu.kdev@gmail.com>
-> +  - William Zhang <william.zhang@broadcom.com>
->  
->  description: |
->    The Broadcom Set-Top Box NAND controller supports low-level access to raw NAND
-> @@ -18,9 +19,10 @@ description: |
->    supports basic PROGRAM and READ functions, among other features.
->  
->    This controller was originally designed for STB SoCs (BCM7xxx) but is now
-> -  available on a variety of Broadcom SoCs, including some BCM3xxx, BCM63xx, and
-> -  iProc/Cygnus. Its history includes several similar (but not fully register
-> -  compatible) versions.
-> +  available on a variety of Broadcom SoCs, including some BCM3xxx, MIPS based
-> +  Broadband SoC (BCM63xx), ARM based Broadband SoC (BCMBCA) and iProc/Cygnus.
-> +  Its history includes several similar (but not fully register compatible)
-> +  versions.
->  
->    -- Additional SoC-specific NAND controller properties --
->  
-> @@ -53,9 +55,9 @@ properties:
->                - brcm,brcmnand-v7.2
->                - brcm,brcmnand-v7.3
->            - const: brcm,brcmnand
-> -      - description: BCM63138 SoC-specific NAND controller
-> +      - description: BCMBCA SoC-specific NAND controller
->          items:
-> -          - const: brcm,nand-bcm63138
-> +          - const: brcm,nand-bcmbca
->            - enum:
->                - brcm,brcmnand-v7.0
->                - brcm,brcmnand-v7.1
-> @@ -65,11 +67,15 @@ properties:
->            - const: brcm,nand-iproc
->            - const: brcm,brcmnand-v6.1
->            - const: brcm,brcmnand
-> -      - description: BCM63168 SoC-specific NAND controller
-> +      - description: BCM63xx SoC-specific NAND controller
->          items:
-> -          - const: brcm,nand-bcm63168
-> -          - const: brcm,nand-bcm6368
-> -          - const: brcm,brcmnand-v4.0
-> +          - enum:
-> +              - brcm,nand-bcm63168
-> +              - brcm,nand-bcm6368
-> +          - enum:
-> +              - brcm,brcmnand-v2.1
-> +              - brcm,brcmnand-v2.2
-> +              - brcm,brcmnand-v4.0
->            - const: brcm,brcmnand
+> Even if scsi_rescan_device() would use another mechanism for 
+> serialization against sd_remove() and sr_remove(), we still need to 
+> solve the issue that the ATA code calls scsi_rescan_device() before 
+> resuming has finished. scsi_rescan_device() issues I/O. Issuing I/O to a 
+> device is not allowed before that device has been resumed.
 
-Completely changing what's valid here too. You're breaking the ABI.
+I am not convinced of that: scsi suspend quiecse the queue, thus preventing IOs
+from the block layer, but not internale scsi ml commands, which is what
+scsi_rescan_device() issues.
 
-Rob
+In any case, I am thinking that best (and quickest) fix for this issue for now
+is to have libata define a device link to make the scsi device a "parent" of the
+ata device (which is the ata link as of now). This way, PM operation ordering
+will ensure that the scsi device resume will be done before the ata device. What
+I really do not like about this though is that the suspend side would be done in
+the reverse order: ata first and then scsi, but we really want the reverse here
+to ensure that the request queue is quiesced before we suspend ata. That said,
+there is no such synchronization right now and so this is probably happening
+already without raising issues apparently.
+
+So ideally:
+1) Make the ata device the parent of the scsi device using a device link
+2) For suspend, the scsi device suspend will be done first, followed by the ata
+device, which is what we want.
+3) For resume, ata device will be first, followed by scsi device. The call to
+scsi_rescan_device() from libata being in a work task, asynchronous from the ata
+resume context, we need to synchronize that work to wait for the scsi device
+resume to complete. (but do we really given that we are going to issue internal
+commands only ?)
+
+Alan, Rafael,
+
+For the synchronization of step (3), if I understand the pm code correctly,
+using device_pm_wait_for_dev() would work only if async resume is on. This would
+be ineffective for the sync case. How can we best deal with this ?
+
+
+-- 
+Damien Le Moal
+Western Digital Research
+
