@@ -2,86 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B225973090E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 22:17:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9597873090F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 22:17:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233833AbjFNURZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 16:17:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48240 "EHLO
+        id S236633AbjFNURl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 16:17:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232203AbjFNURX (ORCPT
+        with ESMTP id S234755AbjFNURk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 16:17:23 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7911B1BCE;
-        Wed, 14 Jun 2023 13:17:22 -0700 (PDT)
-Received: from fpc (unknown [10.10.165.2])
-        by mail.ispras.ru (Postfix) with ESMTPSA id C903D40755F4;
-        Wed, 14 Jun 2023 20:17:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru C903D40755F4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1686773839;
-        bh=U4qamVRGUE/7lnj5A2E6uk72VsqqwBoh4BujNKmSg44=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PfFc1tSsnUYTpkTrFOMKDL9XFDefo9nF9mmMA+YzekVgmNUhjkYgif4IrnYk64C+3
-         MBVCCe4euQmKS3DmyP6wARjaKSqxymXR3DjcBf5WYXT6Tsu6eqWNnzUU1fu1M5W6aL
-         i6pFA2nzj8u53T505tJNWhXh2tmpLgFPQvdl94Gw=
-Date:   Wed, 14 Jun 2023 23:17:14 +0300
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Sabrina Dubroca <sd@queasysnail.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Raed Salem <raeds@nvidia.com>,
-        Lior Nahmanson <liorna@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Hannes Frederic Sowa <hannes@stressinduktion.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org
-Subject: Re: [PATCH] net: macsec: fix double free of percpu stats
-Message-ID: <20230614201714.lgwpk4wyojribbyj@fpc>
-References: <20230613192220.159407-1-pchelkin@ispras.ru>
- <20230613200150.361bc462@kernel.org>
- <ZImx5pp98OSNnv4I@hog>
- <20230614090126.149049b1@kernel.org>
+        Wed, 14 Jun 2023 16:17:40 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3541BCE
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 13:17:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=bHxFZhGcHSdLpHTIxszs9CxuBIsMRRxsbZMR2wHn8Tc=; b=LFdFZsfrd0y1NAeGvqWlUvYTJ7
+        2H2n6r/w+mPa8rLoeP06+zkqtqKzYcl0QKIezAvkFiU8bDe+EYRt7ZYEYH5xoz321r8Lh3QXolqRN
+        b+IqR3JsCwWmU4huN8phDrN62zQWBaGwbK9E7gJadhlLJ/62no4fvoRzT91/n++WH0rTGyaaS+5hA
+        /kHnhEcvYC08g8oDNxa4fKUuDfqgM1XOk4Ohn8swIz2X/dQ+2FlUMm5okIbdHUA1JfDC8kSHa6Dip
+        3Ya3Rg4PNTm7/nNfuZrDvbXRaymlDvLxoDPkMmbQllAs2tqymDTItxxdvMiHMrCYjAVhPAqwcijzL
+        5Ilia9bQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q9Wvu-006kPi-9B; Wed, 14 Jun 2023 20:17:34 +0000
+Date:   Wed, 14 Jun 2023 21:17:34 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] mmzone: Introduce folio_migratetype()
+Message-ID: <ZIogXmFNr3MnBtjX@casper.infradead.org>
+References: <20230614021312.34085-1-vishal.moola@gmail.com>
+ <20230614021312.34085-3-vishal.moola@gmail.com>
+ <20230614131305.2939f29e4372c94a8c6a56a8@linux-foundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230614090126.149049b1@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230614131305.2939f29e4372c94a8c6a56a8@linux-foundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 09:01:26AM -0700, Jakub Kicinski wrote:
-> On Wed, 14 Jun 2023 14:26:14 +0200 Sabrina Dubroca wrote:
-> > > What prevents the device from being opened and used before
-> > > macsec_add_dev() has finished? I think we need a fix which 
-> > > would move this code before register_netdev(), instead :(  
-> > 
-> > Can the device be opened in parallel? We're under rtnl here.
-> > 
-> > If we want to move that code, then we'll also have to move the
-> > eth_hw_addr_inherit call that's currently in macsec's ndo_init: in
-> > case the user didn't give an SCI, we have to make it up based on the
-> > device's mac address (dev_to_sci(dev, ...)), whether it's set by the
-> > user or inherited. I can't remember if I had a good reason to put the
-> > inherit in ndo_init.
+On Wed, Jun 14, 2023 at 01:13:05PM -0700, Andrew Morton wrote:
+> On Tue, 13 Jun 2023 19:13:09 -0700 "Vishal Moola (Oracle)" <vishal.moola@gmail.com> wrote:
 > 
-> Ah, you're right, this is a link creation path.
+> > Introduce folio_migratetype() as a folio equivalent for
+> > get_pageblock_migratetype(). This function intends to return the
+> > migratetype the folio is located in, hence the name choice.
+> > 
+> > ...
+> >
+> > --- a/include/linux/mmzone.h
+> > +++ b/include/linux/mmzone.h
+> > @@ -105,6 +105,9 @@ extern int page_group_by_mobility_disabled;
+> >  #define get_pageblock_migratetype(page)					\
+> >  	get_pfnblock_flags_mask(page, page_to_pfn(page), MIGRATETYPE_MASK)
+> >  
+> > +#define folio_migratetype(folio)				\
+> > +	get_pfnblock_flags_mask(&folio->page, folio_pfn(folio),		\
+> > +			MIGRATETYPE_MASK)
+> 
+> Theoretically this is risky because it evaluates its argument more than
+> once.  Although folio_migratetype(folio++) seems an unlikely thing to do.
 
-My reply probably won't give any new information now but if the code of
-macsec_add_dev() and the parts from ndo_init it depends on which Sabrina
-mentioned would be moved before registering netdev then the problem will
-go away on its own.
+folio++ is always an unsafe thing to do.  folios are not consecutive
+in memory (unless we know they're order-0).
 
-Is it worth moving that code if rtnl_lock is held? Maybe it will be more
-persistent to initialize the device for as maximum as possible before
-calling register_netdevice()? Overall, it all depends on the reasons why
-the code was implemented so initially.
+> An inlined C function is always preferable.  My quick attempt at that
+> reveals that the header files are All Messed Up As Usual.
+
+The page-equivalent of this also evaluates its arguments more than once,
+so it doesn't see too risky for now?
