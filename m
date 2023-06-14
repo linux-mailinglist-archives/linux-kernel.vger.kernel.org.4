@@ -2,169 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF010730769
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 20:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 589E873076C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 20:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233095AbjFNSii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 14:38:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56474 "EHLO
+        id S234517AbjFNSjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 14:39:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237025AbjFNSib (ORCPT
+        with ESMTP id S236019AbjFNSik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 14:38:31 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E1A1BF7;
-        Wed, 14 Jun 2023 11:38:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686767909; x=1718303909;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3sI4YDTtaY0g0URvNJ8Dd8m8uuHedTrH+fP517EWAwI=;
-  b=K3cmfml30d0HytjqHGMDGR0bwY7rvhMLpYU1LiW+r8XXRdtjudCtCbYL
-   1KO7k+r/ApXqWf63E8l2UhD7dz55+awYtLqHF7ZTbSgLlYlBtWlXnciRj
-   NRc7bBE+6kqDoKdYeUt1rzJm1UxIB/rQzTM4qweKWCsVYsW2JdvBz+zZA
-   DT9XCLY2vnbIRUgvBSR/cxf/hYKe79ZtZQs1H4grcdOYKnMM+a3VCh3VT
-   1hond2Byo1gQvmd9/frfzqiWMA25ygtoBRAeqSRFSnyp8xYNQ5rQkPe5L
-   JsRPHWK/nuj+jNAKtlirhRiom8jPDSxd9yok38kHcbCGqGiD1RNT4+oAW
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="356195122"
-X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="356195122"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 11:38:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="745184234"
-X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="745184234"
-Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 14 Jun 2023 11:38:24 -0700
-Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q9VNv-0000xK-1R;
-        Wed, 14 Jun 2023 18:38:23 +0000
-Date:   Thu, 15 Jun 2023 02:38:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jisheng Zhang <jszhang@kernel.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 3/3] net: stmmac: use pcpu statistics where necessary
-Message-ID: <202306150255.k4BaJTXY-lkp@intel.com>
-References: <20230614161847.4071-4-jszhang@kernel.org>
+        Wed, 14 Jun 2023 14:38:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D381BF9;
+        Wed, 14 Jun 2023 11:38:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E7DF645B8;
+        Wed, 14 Jun 2023 18:38:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68B54C433C8;
+        Wed, 14 Jun 2023 18:38:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686767918;
+        bh=o4sh2tsX5J57t9SnUteVSlnPxszriuzVR4JOPvCpFdM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WGxU0N9YpzWhMCTaxGafbrjwTcpS0AYFJvxzsifVtvQlQ225wCpyUKAvtMwYWGVzN
+         UYPLDT/vyPj8cQWGl/UfWBfp5IydOni+gSqXOdd4ROpSToNH9x0WWuA6kMJRrZ+W3V
+         XEBsxRuxlbJU1dBxEvai658xpzWPhnafo2DtQnID9fhxebnEu0YbZ3k0QEZ/+TTRgx
+         iLpfsQ2fWb0n+BmUVQLReb+brhOEKN2+CTubJfohcIt4Kb0AwrCnDYv/zpyuD4pT5r
+         NbWrJtl0kpQ1ECFnI9+w6Yo8XaaRmmjx56z/q+3rjVj2xGN/KHVYn65bVJ8FRjCwdU
+         kKiMVr3tisYuQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id E419240692; Wed, 14 Jun 2023 15:38:35 -0300 (-03)
+Date:   Wed, 14 Jun 2023 15:38:35 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Artem Savkov <asavkov@redhat.com>
+Cc:     Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] perf tools: annotation browser from c2c tui
+Message-ID: <ZIoJK66ZrKZblkJN@kernel.org>
+References: <20230608084407.140323-1-asavkov@redhat.com>
+ <CAM9d7cgvtuqMeQx8ehLCLw_Ur9Ju-VzDrakzFJxnxvFjdsWk_g@mail.gmail.com>
+ <20230609083731.GA168559@samus.usersys.redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230614161847.4071-4-jszhang@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230609083731.GA168559@samus.usersys.redhat.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jisheng,
+Em Fri, Jun 09, 2023 at 10:37:31AM +0200, Artem Savkov escreveu:
+> On Thu, Jun 08, 2023 at 02:09:06PM -0700, Namhyung Kim wrote:
+> > Hello,
+> > 
+> > On Thu, Jun 8, 2023 at 1:44 AM Artem Savkov <asavkov@redhat.com> wrote:
+> > >
+> > > These patches add ability to start annotation browser from c2c report
+> > > tui. The idea comes from Arnaldo's "Profiling Data Structures" talk [1].
+> > 
+> > I was thinking about how it works and realized that it didn't collect
+> > samples by symbol.  Then I'm not sure if the result is meaningful.
+> > I think it'd show a random symbol that touched the cache line
+> > first.  The same cache line can be accessed from other locations
+> > but it cannot know where they are.
+> > 
+> > Also different instructions in a function (symbol) would access a
+> > different cache line.  The annotate output just shows any memory
+> > access.  So it might be good to check the instruction at the point
+> > but others should not be considered related.
+> > 
+> > Hmm.. I suspect even the same instruction will hit the different
+> > cache lines at different times.  Then probably the annotation
+> > won't work well in terms of correlating cache lines.
+> 
+> The annotation hotkey is only added to the cacheline detailed view where
+> we do have symbol instruction information. The idea is to give the user
+> ability to quickly jump to source code/disassembly directly from c2c
+> TUI.
+> 
+> The hit percentages in annotation view don't make much sense in this
+> case though, so maybe it is better to use dummy evsel so that none are
+> shown.
 
-kernel test robot noticed the following build warnings:
+Yes, the point is just to reuse the source browser, if there is no
+annotation data applicable, don't use any.
 
-[auto build test WARNING on sunxi/sunxi/for-next]
-[also build test WARNING on linus/master v6.4-rc6]
-[cannot apply to next-20230614]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jisheng-Zhang/net-stmmac-don-t-clear-network-statistics-in-ndo_open/20230615-003137
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git sunxi/for-next
-patch link:    https://lore.kernel.org/r/20230614161847.4071-4-jszhang%40kernel.org
-patch subject: [PATCH 3/3] net: stmmac: use pcpu statistics where necessary
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230615/202306150255.k4BaJTXY-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add sunxi https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git
-        git fetch sunxi sunxi/for-next
-        git checkout sunxi/sunxi/for-next
-        b4 shazam https://lore.kernel.org/r/20230614161847.4071-4-jszhang@kernel.org
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/net/
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306150255.k4BaJTXY-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c: In function 'stmmac_get_per_qstats':
->> drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c:564:26: warning: 'start' is used uninitialized [-Wuninitialized]
-     564 |                 } while (u64_stats_fetch_retry(&stats->syncp, start));
-         |                          ^~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c:551:22: note: 'start' was declared here
-     551 |         unsigned int start;
-         |                      ^~~~~
-
-
-vim +/start +564 drivers/net/ethernet/stmicro/stmmac/stmmac_ethtool.c
-
-   546	
-   547	static void stmmac_get_per_qstats(struct stmmac_priv *priv, u64 *data)
-   548	{
-   549		u32 tx_cnt = priv->plat->tx_queues_to_use;
-   550		u32 rx_cnt = priv->plat->rx_queues_to_use;
-   551		unsigned int start;
-   552		int q, stat, cpu;
-   553		char *p;
-   554		u64 *pos;
-   555	
-   556		pos = data;
-   557		for_each_possible_cpu(cpu) {
-   558			struct stmmac_pcpu_stats *stats, snapshot;
-   559	
-   560			data = pos;
-   561			stats = per_cpu_ptr(priv->xstats.pstats, cpu);
-   562			do {
-   563				snapshot = *stats;
- > 564			} while (u64_stats_fetch_retry(&stats->syncp, start));
-   565	
-   566			for (q = 0; q < tx_cnt; q++) {
-   567				p = (char *)&snapshot + offsetof(struct stmmac_pcpu_stats,
-   568							    txq_stats[q].tx_pkt_n);
-   569				for (stat = 0; stat < STMMAC_TXQ_STATS; stat++) {
-   570					*data++ = (*(u64 *)p);
-   571					p += sizeof(u64);
-   572				}
-   573			}
-   574			for (q = 0; q < rx_cnt; q++) {
-   575				p = (char *)&snapshot + offsetof(struct stmmac_pcpu_stats,
-   576							    rxq_stats[q].rx_pkt_n);
-   577				for (stat = 0; stat < STMMAC_RXQ_STATS; stat++) {
-   578					*data++ = (*(u64 *)p);
-   579					p += sizeof(u64);
-   580				}
-   581			}
-   582		}
-   583	}
-   584	
+- Arnaldo
+ 
+> > Thanks,
+> > Namhyung
+> > 
+> > >
+> > > [1]: http://vger.kernel.org/~acme/prez/linux-plumbers-2022/
+> > >
+> > > v1->v2: Addressed comments from Namhyung Kim
+> > > - No longer saving evsel for each hist entry, using evlist__first
+> > >   instead.
+> > > - Factored out preparations to call annotation browser to do_annotate()
+> > >   function
+> > > - Other small fixes and adjustments.
+> > >
+> > > Artem Savkov (2):
+> > >   perf util: move symbol__new_unresolved() to util/symbol.c
+> > >   perf tools: allow running annotation browser from c2c-report
+> > >
+> > >  tools/perf/builtin-c2c.c       | 73 +++++++++++++++++++++++++++++++---
+> > >  tools/perf/ui/browsers/hists.c | 22 ----------
+> > >  tools/perf/util/symbol.c       | 22 ++++++++++
+> > >  tools/perf/util/symbol.h       |  1 +
+> > >  4 files changed, 91 insertions(+), 27 deletions(-)
+> > >
+> > > --
+> > > 2.40.1
+> > >
+> > 
+> 
+> -- 
+>  Artem
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+- Arnaldo
