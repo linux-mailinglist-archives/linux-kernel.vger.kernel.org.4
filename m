@@ -2,113 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01D9472F7F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE4172F7FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:38:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243652AbjFNIhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 04:37:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60154 "EHLO
+        id S243655AbjFNIiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 04:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243640AbjFNIhC (ORCPT
+        with ESMTP id S233114AbjFNIiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 04:37:02 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874DD19AC;
-        Wed, 14 Jun 2023 01:37:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686731821; x=1718267821;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UMum+gjal/9wA31JowjRQ84WyffkULU6yDKWFn84QpM=;
-  b=DvOrxpXWkuBZTKZvUZrfXcx0BpI9wDyjGyPs97k72AfhMhNXUXSySKgy
-   RVXYvUAtMWOECt5XnQ22lyyqKri6pu3+qcMnaDWwSDfSs6WC17z4gwwNg
-   Ohx4NQc1fgfQ3hCST8pwq//0k0eX/54JTdk+slas3/onRY4n9irmhl2jX
-   mxpwnGmjGankEBs3SSYFD7dNqefpovu08x/bIIAC5zby1VceH4fQPVTFo
-   /qRao4w7hrtY/XA6/wKmcG5W0Ww0NtiKiUqkGD/INQUGZv4x0M8UPXaEy
-   dl0INr+/GYT/sBU/HUc0WXhXjbtBSYANtUkEBauZiOvpMSaB2K3mWXlVF
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="338909360"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="338909360"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 01:37:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="856423301"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="856423301"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 14 Jun 2023 01:36:58 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 14 Jun 2023 11:36:57 +0300
-Date:   Wed, 14 Jun 2023 11:36:57 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Prashanth K <quic_prashk@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7] usb: common: usb-conn-gpio: Set last role to unknown
- before initial detection
-Message-ID: <ZIl8KeaePdKHCnVY@kuha.fi.intel.com>
-References: <1685544074-17337-1-git-send-email-quic_prashk@quicinc.com>
- <ZIhOm5LKwn+YVGzT@kuha.fi.intel.com>
- <73854744-03ef-2c5c-a5d6-284f004a5497@quicinc.com>
+        Wed, 14 Jun 2023 04:38:08 -0400
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10ED19AC
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 01:38:07 -0700 (PDT)
+Received: by mail-vs1-xe2e.google.com with SMTP id ada2fe7eead31-43f4167d2b5so362119137.2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 01:38:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686731887; x=1689323887;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=499kRowY3ut9w2IKIu3JV66393KagO/V1ETX0vASsbc=;
+        b=LxvRjJ7JwDFLylNnpGILWNurpnw1hh/O40sM1l/wdLvZ2JJSacZ7w0qHOYb2n8s15i
+         /poP/ZQNHt8EU5R/hDkZQZMZQmasYtwXmjg0psamwdmfYjsYByxAnJ0trPXmkLP8jDhf
+         qOjWOjJvQOgOTfA5tUxysjS+CHq8ntadZUEI27D/qD74buhiKx8KkoyxVGgQzw7C1wAW
+         HpSDyWTcX0AtZ2DSpwKGudi/V4s8jzp5ujXrY8r7q/K2Gtc5ueZz3PEsnkjJVOx9GViT
+         g4GEMFtzZAa0EmnQhiAJKaWg9kPYe2L7guswYCvGB5kuGHMw5qrWATDK6v3Ph0rVWb4o
+         GUDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686731887; x=1689323887;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=499kRowY3ut9w2IKIu3JV66393KagO/V1ETX0vASsbc=;
+        b=jvbMFm/vkM4Gib0io0GyDvFnBtj5HGUACdLhe31egXsub4Z3gYp4cWE3vbVNhDmznq
+         gFpbiga2/pHk87zEt9uO3lk+uuKLI0ibOuGBYIPmXtSgGv78BpG0lHnzJ0XAQdr86Ua5
+         2pZkNlMPRAXnRll8xyUHvMAksfqjcmXS4gTqhsb+kU1SsBRSrsIUDORWOvYpRjgoGhC/
+         +96Rv/Ej5xZIpP0Js22NkmzJYyNBdcZxD7QGTOvtcDupwkHyHzqR++7fGohMk/RSnZjZ
+         pMY1os1kTGIUW87LnA/yeFbLwG5B6N/w2ziiehmKAayF0PbfVXoNycz+FX9fkNdZZ+5I
+         neNw==
+X-Gm-Message-State: AC+VfDxsbAZHn/E12yV0hN/snQUwDOu6Eoq74gZMlZ5UeWUrCxI6WU8W
+        PfbO3wxVuztdwMvwj2dgQ73hdCj9Fqn/tR22UmG5CQ==
+X-Google-Smtp-Source: ACHHUZ4WDsuhUexTCWukKx0TSGAFzdA2OXi10yxdIqOYR0kanqWSlUu8lE8c33eJwusuthaOehwbksyMtjNZf4pQRf0=
+X-Received: by 2002:a05:6102:301a:b0:43f:5036:677e with SMTP id
+ s26-20020a056102301a00b0043f5036677emr190974vsa.6.1686731886786; Wed, 14 Jun
+ 2023 01:38:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <73854744-03ef-2c5c-a5d6-284f004a5497@quicinc.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 14 Jun 2023 14:07:55 +0530
+Message-ID: <CA+G9fYu0GLCFUKsqod7cO8jku7Sp6b7gRqFo1sz7oxfpC78GGg@mail.gmail.com>
+Subject: next: drivers/char/mem.c:164:25: error: implicit declaration of
+ function 'unxlate_dev_mem_ptr';
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 09:55:10AM +0530, Prashanth K wrote:
-> 
-> 
-> On 13-06-23 04:40 pm, Heikki Krogerus wrote:
-> > Hi,
-> > 
-> > On Wed, May 31, 2023 at 08:11:14PM +0530, Prashanth K wrote:
-> > > Currently if we bootup a device without cable connected, then
-> > > usb-conn-gpio won't call set_role() since last_role is same as
-> > > current role. This happens because during probe last_role gets
-> > > initialised to zero.
-> > > 
-> > > To avoid this, added a new constant in enum usb_role, last_role
-> > > is set to USB_ROLE_UNKNOWN before performing initial detection.
-> > 
-> > So why can't you fix this by just always setting the role
-> > unconditionally to USB_ROLE_NONE in your probe function before the
-> > initial detection?
-> > 
-> Hi Heikki, thats exactly what we are doing here.
-> 
-> +	/* Set last role to unknown before performing the initial detection */
-> +	info->last_role = USB_ROLE_UNKNOWN;
+Following build regressions noticed on Linux next-20230614 and next-20230613.
 
-No, I'm asking why can't you just call set_role(USB_ROLE_NONE)
-(together with any other steps that you need to take in order to fix
-you issue) directly from your probe function?
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-That USB_ROLE_UNKNOWN as a global is not acceptable - there is no
-difference between USB_ROLE_UNKNOWN and USB_ROLE_NONE from the role
-switch PoW. So if you want to use something like that, you have to
-confine it to your driver.
+Regressions found on sh:
 
-But I honestly don't think you need it at all. You should be able to
-refactor your driver in order to solve the issue described in the
-commit message without any need for it.
+ - build/gcc-8-microdev_defconfig
+ - build/gcc-11-dreamcast_defconfig
+ - build/gcc-11-microdev_defconfig
+ - build/gcc-8-shx3_defconfig
+ - build/gcc-8-dreamcast_defconfig
+ - build/gcc-11-defconfig
+ - build/gcc-11-allnoconfig
+ - build/gcc-8-tinyconfig
+ - build/gcc-11-tinyconfig
+ - build/gcc-8-allnoconfig
+ - build/gcc-8-defconfig
+ - build/gcc-11-shx3_defconfig
 
-Note! I just realised that you are not modifying
-drivers/usb/roles/class.c, so this patch is actually broken.
 
-thanks,
+build log:
+======
+drivers/char/mem.c: In function 'read_mem':
+drivers/char/mem.c:164:25: error: implicit declaration of function
+'unxlate_dev_mem_ptr'; did you mean 'xlate_dev_mem_ptr'?
+[-Werror=implicit-function-declaration]
+  164 |                         unxlate_dev_mem_ptr(p, ptr);
+      |                         ^~~~~~~~~~~~~~~~~~~
+      |                         xlate_dev_mem_ptr
+cc1: some warnings being treated as errors
 
--- 
-heikki
+steps to reproduce:
+=========
+tuxmake --runtime podman --target-arch sh --toolchain gcc-11 --kconfig
+shx3_defconfig
+
+
+Links,
+===
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230614/testrun/17514799/suite/build/test/gcc-11-shx3_defconfig/log
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230614/testrun/17514799/suite/build/tests/
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230614/testrun/17514799/suite/build/test/gcc-11-shx3_defconfig/history/
+
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
