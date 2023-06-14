@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB85730460
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A471C730463
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245067AbjFNQAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 12:00:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52772 "EHLO
+        id S245124AbjFNQAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 12:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237326AbjFNQAS (ORCPT
+        with ESMTP id S236170AbjFNQAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 12:00:18 -0400
+        Wed, 14 Jun 2023 12:00:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833B11FC8;
-        Wed, 14 Jun 2023 09:00:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A49D1FF9;
+        Wed, 14 Jun 2023 09:00:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD00C63FB4;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0729C6441A;
+        Wed, 14 Jun 2023 16:00:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82BF2C433CC;
         Wed, 14 Jun 2023 16:00:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0954C433C9;
-        Wed, 14 Jun 2023 16:00:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686758415;
-        bh=d2ZKiMNfxVleUTrZsfi2NstNs14jaMzV1BVxwQu2lls=;
+        s=k20201202; t=1686758416;
+        bh=zPad16VQA2o+Tv/QSFx5CXwfrqAoNBmN4FNn4dNqSfE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bcJRued0xFQ23sb9smUesPf18PNs8zkg+fQkue8GUc1Gje3HxUmjHQc9yj/KaXrO7
-         jfSL7RE/jCnG/hvwRfNHmI6njQlNS9ju8+/tRy6BvGSzKjZ4vDAjzYgTu+tCCesiHl
-         03D0zX8BOjCW3PcBfu7eEwkAiaWkzYaUszGWaWE4Rq+CxuVTD6SFdJLRNeBVgkN/Uw
-         IocxE+DhLTVuNlSgw3hzMOBhr/ff79gyyEiAOEl8fUdrhUpVbWi6FdOwHHqiFNyfRP
-         CzJyTYYe/pdmneTUv+sJg5Zf8bawDAPkrQc0IAmathVgRhNTtbVUxJdEudofP/u1/c
-         QlnM+iupLkeeQ==
+        b=IqIz4aoYiZIynb4a0IkxtYp1hA3pbZdfOEr9EI/SmjMoK+97BonO9VYTXDWyARNvQ
+         gD7yeeIcvMI2ffB/UTlLDd7ftokEJwxtWJzu26+2kTVfStFkKgcIHir2V089tlk1XS
+         auPJV9J3SyvAc83wz4nRNY9mzRfvVIUtM/61LTB9PGQLSRD0nbaRU88wBXPvOihMHd
+         1Y/JpjbJwD8fRJgvo46FYW+zDjhyVL3MmYE0dm3JMiLMWT99aqB8QKEbcIkO5eR/ul
+         GUeH9O7SJpDlWvODlwG9SZPNG5VqIgw5pmgNY7x/u5j5plrzRhy+GOQFLTi9MTuApE
+         dABo0JIY+Qt/Q==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>,
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     freedreno@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>,
+        johan@kernel.org, Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        devicetree@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Marijn Suijten <marijn.suijten@somainline.org>
-Subject: Re: [PATCH] arm64: dts: qcom: qrb4210-rb2: Enable on-board buttons
-Date:   Wed, 14 Jun 2023 09:03:32 -0700
-Message-Id: <168675861182.1453524.9338443444158479247.b4-ty@kernel.org>
+        linux-kernel@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        mani@kernel.org, Sean Paul <sean@poorly.run>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 0/3] drm/msm/adreno: GPU support on SC8280XP
+Date:   Wed, 14 Jun 2023 09:03:33 -0700
+Message-Id: <168675861182.1453524.13931605500633983519.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230613-topic-rb2_-v1-1-696cd7dbda28@linaro.org>
-References: <20230613-topic-rb2_-v1-1-696cd7dbda28@linaro.org>
+In-Reply-To: <20230208034052.2047681-1-quic_bjorande@quicinc.com>
+References: <20230208034052.2047681-1-quic_bjorande@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -61,15 +62,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 13 Jun 2023 20:09:00 +0200, Konrad Dybcio wrote:
-> Enable the PMIC GPIO- and RESIN-connected buttons on the board.
+On Tue, 7 Feb 2023 19:40:49 -0800, Bjorn Andersson wrote:
+> This series introduces support for A690 in the DRM/MSM driver and
+> enables it for the two SC8280XP laptops.
 > 
+> Bjorn Andersson (3):
+>   drm/msm/adreno: Add Adreno A690 support
+>   arm64: dts: qcom: sc8280xp: Add GPU related nodes
+>   arm64: dts: qcom: sc8280xp: Enable GPU related nodes
 > 
+> [...]
 
 Applied, thanks!
 
-[1/1] arm64: dts: qcom: qrb4210-rb2: Enable on-board buttons
-      commit: d34654f54ebad11263cf7c411d8c60cd8941e2d4
+[1/3] drm/msm/adreno: Add Adreno A690 support
+      (no commit info)
+[2/3] arm64: dts: qcom: sc8280xp: Add GPU related nodes
+      commit: eec51ab2fd6f447a993c502364704d0cb5bc8cae
+[3/3] arm64: dts: qcom: sc8280xp: Enable GPU related nodes
+      commit: 598a06afca5a2ab4850ce9ff8146ec728cca570c
 
 Best regards,
 -- 
