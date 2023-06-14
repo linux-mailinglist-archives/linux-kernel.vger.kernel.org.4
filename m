@@ -2,66 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3547B72F657
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 09:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE2D72F659
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 09:31:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235165AbjFNHa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 03:30:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48212 "EHLO
+        id S235359AbjFNHbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 03:31:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234764AbjFNHaZ (ORCPT
+        with ESMTP id S234661AbjFNHbI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 03:30:25 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03CBD1B2;
-        Wed, 14 Jun 2023 00:30:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686727823; x=1718263823;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=HjFJBYBcJYWA5zv1dT/4g5HXReVbrB41cEEH1MD9Xw8=;
-  b=UCnoMT5nOJuMfIgV1NieeP4Wx6iC70x4dwTawfLwJy/zKlveMWuisEIL
-   ASeq4QXwYpPKoxY74hH6kgIjD8JujdjJWYjdK2HDP8Q3gfGJkEwaos5dX
-   brCur92Hnkdj+OvK86siUuOM8+Zw+0MkQATjm93f81CAWdQd126095xOn
-   Yqzn4y1d0lOs1C6fyejRCV9q5kg1borVTWv9M0oPI+jREVvH5Fy9Pk6aA
-   2G05x+S4AMqQMV3FwPSafDMxN24/h83PoHMvzFGNww194CdDwC/B07eos
-   owH2djD4hjNHlza9FiDAHMlHFa9cLn+jskdn1nJhGbxAw9VZbueHecd2j
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="338177154"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="338177154"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 00:30:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="689301637"
-X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
-   d="scan'208";a="689301637"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.60.240])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 00:30:05 -0700
-Message-ID: <21237298-fbb3-7fa6-0ea5-15bf3eab61b7@intel.com>
-Date:   Wed, 14 Jun 2023 10:30:01 +0300
+        Wed, 14 Jun 2023 03:31:08 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2136.outbound.protection.outlook.com [40.107.22.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8C998;
+        Wed, 14 Jun 2023 00:31:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OeEqgj7FiwFgNlRCl63yunja26e9nPh4tvg3i9+JhewkT+t7cJsATotbZJl1gd4hq/AZUqxt1pqMQ0aJDdxslFPGenOOxmH2yjC8vkcfGzK3lVkt3uBbLXjuMNLye0HcYGVfY5d3TGJmYBK3r1Wj/dfnjOVQt7eoiXPiSeia+Jiby4y/XsJwn7b9c+KwuAYK6uxdjgARtQp40wb8W0hdgsD5PvsDfrJYTzjAB89Ytw8/h/4l4hy74e7rJmhnO7CIb4Vu776UWiIqg5BKziu5Qvdaj/6Aen8iGd9c9xsEUvQrSgCRPnn6Ol6KmrDnuffBu12UzJCfVntq62S7dKxdIA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=763gNq6HC+K4L927KHAwojvCPYeNSfj/w1ElciVOHeQ=;
+ b=IHAzKZgg6aCFxGD33cqojgDFv5yQGfWhTkG0PQxV8te27gjxXtVpnX5v1x4S8FjfqXG5RfCMV7iXYMAgZ+y6M0JEObQOlyKRa+9hnC3/WV5Tj7fL9OL4OW9ziP6Sdc1L5XLuwKoYwVeVTKD4+RDd1ZTB0MNhYJhQcD+LbnBco5KzLh3kZQh0tirNW7CS/FiMJk9dyP2FwRL90+Xs8dV9kTTNqoEnM/X2DU6DDZ74Y3H98Oq2zm9jScQFBeTqwe6IRBqUdFamagmynN5pQX/WM/Xj/Q5P/o9u/2lsY/rxUZDREU/qyCnsZJYmwilKaFLOzQ52uZ5XfP85Io9NBnTTbg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mt.com; dmarc=pass action=none header.from=mt.com; dkim=pass
+ header.d=mt.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mt.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=763gNq6HC+K4L927KHAwojvCPYeNSfj/w1ElciVOHeQ=;
+ b=qlVFP4RnQuRzq1U5+xAw8vSr8NqDnMb4NqY6VQRdfSvZZUfDMMi5+biLBtTmKsZ81U34xcL7tfqs2XULNyCZ/pBXnhQyki6HDoH+WQmayGFcdQy/Rpg13t4485WE/TX0OxAd8dsWvpvXWMdVaein/gPXzduHSC0IXmm1ChCtJRvoKT7U15h5MlP4HEdxcLuvfPrMzItfKdbXXdLHrz7nLLWEQzpFKu82chId6+wwlQg9CVVrDcc1qdSBJU22Izz/4sZuOaPuNLtUjXj6x+MSb17vRTC884x9rAFVAmMgS91PM7ME2lkWEcJSPtw60CdNpA9m4u9ZR4+821dpgBtaPw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=mt.com;
+Received: from PA4PR03MB7488.eurprd03.prod.outlook.com (2603:10a6:102:bc::11)
+ by AS1PR03MB8238.eurprd03.prod.outlook.com (2603:10a6:20b:471::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37; Wed, 14 Jun
+ 2023 07:31:00 +0000
+Received: from PA4PR03MB7488.eurprd03.prod.outlook.com
+ ([fe80::fce6:c9d6:1685:4973]) by PA4PR03MB7488.eurprd03.prod.outlook.com
+ ([fe80::fce6:c9d6:1685:4973%7]) with mapi id 15.20.6477.037; Wed, 14 Jun 2023
+ 07:31:00 +0000
+From:   Markus Burri <markus.burri@mt.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Markus Burri <markus.burri@mt.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
+Subject: [PATCH v3] iio: ado: ad7192: Add error check and more debug log
+Date:   Wed, 14 Jun 2023 09:30:33 +0200
+Message-Id: <20230614073033.2497318-1-markus.burri@mt.com>
+X-Mailer: git-send-email 2.39.2
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: FR2P281CA0142.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:98::8) To PA4PR03MB7488.eurprd03.prod.outlook.com
+ (2603:10a6:102:bc::11)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.12.0
-Subject: Re: [PATCH V1 2/2] mmc: sdhci-pci-o2micro: add Bayhub new chip GG8
- support
-Content-Language: en-US
-To:     Chevron Li <chevron_li@126.com>, ulf.hansson@linaro.org,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     shaper.liu@bayhubtech.com, xiaoguang.yu@bayhubtech.com,
-        shirley.her@bayhubtech.com, chevron.li@bayhubtech.com
-References: <20230607014812.30104-1-chevron_li@126.com>
- <20230607014812.30104-2-chevron_li@126.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20230607014812.30104-2-chevron_li@126.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PA4PR03MB7488:EE_|AS1PR03MB8238:EE_
+X-MS-Office365-Filtering-Correlation-Id: 81224b9a-a8af-4a1c-733c-08db6ca94d42
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: q7XQTZRJE/s1MeVUJsnElmaefmlXJVTb7P2FcE3lafW4Uq1+0d4Jcz1G+77+WnAHD3CIOIA8eXkdkECi52Tb73Y7TTRyqxLigjT9oZYxoMdwSeua3ZMLk6xGFrqh3R2bbCyo0BS9TZ4eSJjTViHVEIIB4fyQbVzOConGkR8BIkNXzv/MeglpAIBlFAlNiEh6Usk7X/ws4CswVgQSn7iSiYTxfKBGdokf1ivBlsl9/pP3Cu0d45BX7GHZJseLGYpXCx1DMHiK/fCPhqoszpHBLjjb9Pi4bbsrYkD/EjRy5ef/aS/rsVEmHIsNTZBYbVC0HQvq04tSkXVlErohy4/qxIAhAH4lAjeibNosTlf3CROKeiJWwF/vBfiin6u5UdOa251hF28SWyfE9N4pRVUOJ/SaFcg00/sXQlW1iOuzYRBj3Q71X7WS7Sgo4da6EiKek6uuRsQYk8nIEucxmQ3/O2n609hQaWr5SsuX+2qjKuX9pUlVdNCTWysC/KHJ8yusdMd9Hu8J50P341mRyVvA8vZhEurSUvNYO34xhUfYqWjSYA4biWeTCrDczl1FhT9SXdYGp96nC81orVHJq276sAcmQo94T6N1Py8E0SlrE6W/lTauWrRj4HHg1hcCJcFU
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR03MB7488.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(39860400002)(346002)(376002)(366004)(396003)(451199021)(8676002)(8936002)(2906002)(5660300002)(316002)(66476007)(66556008)(66946007)(4326008)(6916009)(38100700002)(83380400001)(54906003)(41300700001)(2616005)(36756003)(38350700002)(478600001)(186003)(6512007)(6506007)(1076003)(26005)(6666004)(52116002)(6486002)(44832011)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6DrXQiP7BZMNjHp18bCsYS31EB7joYuB7R3rUCc5hCRhTRWADmOvUIhERB/v?=
+ =?us-ascii?Q?RLNPsJ1ojkx1UyE0IFbsTxQI4emuSBBqf2g2ytq7uFvcV92BkcZ4+IIdcpen?=
+ =?us-ascii?Q?TRj3SOqWjCWiGUlZ2Y/92Z1H/Mgr4Xq/cjZa/l0k93U9PvNxSK3DIq0uJCEK?=
+ =?us-ascii?Q?/16Z+PRaf9CH5Q/I8X6/3dA9MAMJY7SMUwDs1wIYjTG9Jt2wRipwk0EfmQKD?=
+ =?us-ascii?Q?+lwWUvn2NFqX9vkHhdCB4UXXP7s+yz1tw1wumXJkp5fHXPfp3bFHZav7iVAa?=
+ =?us-ascii?Q?+9A/jQSm0ZV+XW1U66mPjNUWNelt7vjtn8Rzm8yKpUQrSZGe0gw069CVigj5?=
+ =?us-ascii?Q?Olys30oOHEs+yDjzgqLUnkzjlL8NDRNn+UHMBe7UWoCEfmjFm19aXsxfNTws?=
+ =?us-ascii?Q?qlVx++b8WYgU1bZSjIRr8j6QKT0EBALJob759R3JtXL2Zmw6u3Y8TPixwjwj?=
+ =?us-ascii?Q?objKdsCd1/4iR3vgizS+66hLPPGdnfTkNfAFKiWFPZvjkL3/HzJDIiW1havy?=
+ =?us-ascii?Q?gGQO+5ksbUHwAJdyA85EU2hGifOh58QOBY55DcvULeEhtR60PmqAtiNJ9dUL?=
+ =?us-ascii?Q?6DSLSDrg0BhAd4gs9ClrAtc/DFz9kI7A/Pg9q9LQfFDNpF6uDStHJs3FLuzb?=
+ =?us-ascii?Q?P/eom2+hXQ4DykXZG/Qvg6WZn5PdHvKfZj1xHL9W3frNVCSlSS3fNn5xNIdU?=
+ =?us-ascii?Q?ltoskomCsBNvc2LlWXN/jf0EGmsqAMZDuQUDKF/k8ci56Luoh7ucvZMgp9Ad?=
+ =?us-ascii?Q?27k6iu8V9VtWn+GzqOa5kC0T8cA6g8wELXczJExWmx81D/97Z3tHaT3mQKUN?=
+ =?us-ascii?Q?Xic7SbQQBOyz3wVup5XQMW73BWv8yOYHl1hceCUOEuDwAR2n/LZBQGykp7yZ?=
+ =?us-ascii?Q?0yY4C57aG+hfrMR4p1sLnwXBv+eMkdzKxnjJSazdu+P7XIbwHB1HWdKs/GCx?=
+ =?us-ascii?Q?7JlxPjTbD8OGSPqnQky6P7k8eZsKg65K+4efg+cPGyH4v1CkFROytiU4RfWE?=
+ =?us-ascii?Q?fhIePWd9MMSltbst6FrNKw18Tb4enJ2xa25Z+iLfqD5KQek9O3mFBBZJ+kng?=
+ =?us-ascii?Q?7dOwNLa1pq2LN3QnHEg6hu6Bey/RJLuBkmtavB92rD1XLHfSAzcsI/5osoH6?=
+ =?us-ascii?Q?H8Whyf48FL0pyjfgFv9K0gMASXEtcWRAHOyDK6a9msEjXulGVchII7juyI+3?=
+ =?us-ascii?Q?yUCZMpMzDKdU5/DI8j7/MqoPS6BF9R9s+7Docb6bCTp+nPUyphXEb1JA8QeP?=
+ =?us-ascii?Q?7o6yYI17ROzdXC/bEDkNnfX1oiGnyfV06BpZgjTZpZTXPsF5X+JIX4HagzVj?=
+ =?us-ascii?Q?dLgfWtLCM/BvgCAlovxTzAmF0/JPpjQh5QpFiWMtGrVr+YX4WNQwHK9dgxfZ?=
+ =?us-ascii?Q?v+9UiGOLeM9Mu9MZ9snncLMo3V9E9x0uH3PoFqdvsnXoO6tJrZ/Sk0CuJRNV?=
+ =?us-ascii?Q?ZD2Ij7/jP9zWdEf62qaiN1eE3N1Zcoc+OpmqIaeDM3dv8kYtYj0FY/Bw+GIw?=
+ =?us-ascii?Q?QaYj5m68ImR8nN5e95FM8D/sAJBxub9b0qWfHQNc5/keEs64Ya0Dv7deq24b?=
+ =?us-ascii?Q?8ZSNYKNQeKRB+AXjhKgW1p+kZ6RpCU2t9BwyoNag?=
+X-OriginatorOrg: mt.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 81224b9a-a8af-4a1c-733c-08db6ca94d42
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR03MB7488.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 07:31:00.5393
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fb4c0aee-6cd2-482f-a1a5-717e7c02496b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YFSmtRHjLGNT0/bfJB9ARUGc6q4s/8tcnE8YSE2rgE+RMZ9j41G3zsrodOm+P6zwga3XHUk0thoHofwBwVslHg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR03MB8238
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,151 +113,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/06/23 04:48, Chevron Li wrote:
-> From: Chevron Li <chevron.li@bayhubtech.com>
-> 
-> Add Bayhub new chip GG8 support for SD express card.
-> This patch depends on patch 1/2.
+Print read and expected device ID as debug warning.
+Add error check for ad_sd_init() result.
 
-Patch subject should be different from patch 1
+Signed-off-by: Markus Burri <markus.burri@mt.com>
+---
+ drivers/iio/adc/ad7192.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-> 
-> Signed-off-by: Chevron Li <chevron.li@bayhubtech.com>
-
-Some comments below.
-
-> ---
-> Change in V1:
-> 1.Implement the SD express card callback routine.
-> 2.Add SD express card support for Bayhub GG8 chip.
-> ---
->  drivers/mmc/host/sdhci-pci-o2micro.c | 61 +++++++++++++++++++++++++++-
->  1 file changed, 60 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/mmc/host/sdhci-pci-o2micro.c b/drivers/mmc/host/sdhci-pci-o2micro.c
-> index 8243a63b3c81..b2d8ddbb4095 100644
-> --- a/drivers/mmc/host/sdhci-pci-o2micro.c
-> +++ b/drivers/mmc/host/sdhci-pci-o2micro.c
-> @@ -21,6 +21,7 @@
->   * O2Micro device registers
->   */
->  
-> +#define O2_SD_PCIE_SWITCH	0x54
->  #define O2_SD_MISC_REG5		0x64
->  #define O2_SD_LD0_CTRL		0x68
->  #define O2_SD_DEV_CTRL		0x88
-> @@ -631,6 +632,63 @@ static void sdhci_pci_o2_set_clock(struct sdhci_host *host, unsigned int clock)
->  	sdhci_o2_enable_clk(host, clk);
->  }
->  
-> +static u8 sdhci_o2_sd_express_clkq_assert(struct sdhci_host *host)
-> +{
-> +	return sdhci_readb(host, O2_SD_EXP_INT_REG);
-> +}
-> +
-> +static int sdhci_pci_o2_init_sd_express(struct mmc_host *mmc, struct mmc_ios *ios)
-> +{
-> +	struct sdhci_host *host = mmc_priv(mmc);
-> +	struct sdhci_pci_slot *slot = sdhci_priv(host);
-> +	struct sdhci_pci_chip *chip = slot->chip;
-> +	u8 scratch8 = 0;
-> +	u16 scratch16 = 0;
-> +	bool ret = false;
-
-ret should be an int and does not need to be initialized.
-
-> +
-> +	/* Disable clock */
-> +	sdhci_writeb(host, 0, SDHCI_CLOCK_CONTROL);
-> +
-> +	/* Set VDD2 voltage*/
-> +	scratch8 = sdhci_readb(host, SDHCI_POWER_CONTROL);
-> +	scratch8 &= 0x0F;
-> +	if ((host->mmc->ios.timing == MMC_TIMING_SD_EXP_1_2V) &&
-> +		(host->mmc->caps2 & MMC_CAP2_SD_EXP_1_2V)) {
-
-Unnecessary parentheses
-
-> +		scratch8 |= BIT(4) | BIT(7);
-> +	} else
-
-braces {} should be used on all arms of this statement
-
-Have a look at the output of checkpatch.pl --strict
-
-There are "Alignment should match open parenthesis"
-messages also
-
-> +		scratch8 |= BIT(4) | BIT(5) | BIT(7);
-
-Please use SDHCI_VDD2_POWER_ON, SDHCI_VDD2_POWER_120, SDHCI_VDD2_POWER_180
-
-
-> +	sdhci_writeb(host, scratch8, SDHCI_POWER_CONTROL);
-> +
-> +	/* UnLock WP */
-> +	pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch8);
-> +	scratch8 &= 0x7f;
-> +	pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch8);
-> +
-> +	ret = readx_poll_timeout(sdhci_o2_sd_express_clkq_assert, host,
-> +		scratch8, !(scratch8 & BIT(0)), 1, 30000) == 0 ? 0 : 1;
-
-This can use read_poll_timeout() then sdhci_o2_sd_express_clkq_assert()
-is not needed.  And the ' == 0 ? 0 : 1' does not seem needed.
-
-> +
-> +	if (!ret) {
-> +		/* switch to PCIe mode */
-> +		scratch16 = sdhci_readw(host, O2_SD_PCIE_SWITCH);
-> +		scratch16 |= BIT(8);
-> +		sdhci_writew(host, scratch16, O2_SD_PCIE_SWITCH);
-> +	} else {
-> +		/* keep mode as USHI */
-
-USHI ?
-
-Do you intend to fall back to SD mode here? Because
-returning non-zero will cause the initialization to
-fail.  To continue to initialize SD mode, it looks
-like you need to change host->ios.timing = MMC_TIMING_LEGACY
-and return 0
-
-> +		pci_read_config_word(chip->pdev,
-> +						O2_SD_PARA_SET_REG1, &scratch16);
-
-Unneeded line break
-
-> +		scratch16 &= ~BIT(11);
-> +		pci_write_config_word(chip->pdev,
-> +						O2_SD_PARA_SET_REG1, scratch16);
-
-Unneeded line break
-
-> +	}
-> +	/* Lock WP */
-> +	pci_read_config_byte(chip->pdev,
-> +					O2_SD_LOCK_WP, &scratch8);
-> +	scratch8 |= 0x80;
-> +	pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch8);
-> +
-> +	return ret;
-> +}
-> +
->  static int sdhci_pci_o2_probe_slot(struct sdhci_pci_slot *slot)
->  {
->  	struct sdhci_pci_chip *chip;
-> @@ -703,10 +761,11 @@ static int sdhci_pci_o2_probe_slot(struct sdhci_pci_slot *slot)
->  	case PCI_DEVICE_ID_O2_GG8_9861:
->  	case PCI_DEVICE_ID_O2_GG8_9862:
->  	case PCI_DEVICE_ID_O2_GG8_9863:
-> -		host->mmc->caps2 |= MMC_CAP2_NO_SDIO;
-> +		host->mmc->caps2 |= MMC_CAP2_NO_SDIO | MMC_CAP2_SD_EXP | MMC_CAP2_SD_EXP_1_2V;
->  		host->mmc->caps |= MMC_CAP_HW_RESET;
->  		host->quirks2 |= SDHCI_QUIRK2_PRESET_VALUE_BROKEN;
->  		slot->host->mmc_host_ops.get_cd = sdhci_o2_get_cd;
-> +		host->mmc_host_ops.init_sd_express = sdhci_pci_o2_init_sd_express;
->  		break;
->  	default:
->  		break;
+diff --git a/drivers/iio/adc/ad7192.c b/drivers/iio/adc/ad7192.c
+index d71977b..220c3b7 100644
+--- a/drivers/iio/adc/ad7192.c
++++ b/drivers/iio/adc/ad7192.c
+@@ -403,8 +403,8 @@ static int ad7192_setup(struct ad7192_state *st, struct device_node *np)
+ 	id &= AD7192_ID_MASK;
+ 
+ 	if (id != st->chip_info->chip_id)
+-		dev_warn(&st->sd.spi->dev, "device ID query failed (0x%X)\n",
+-			 id);
++		dev_warn(&st->sd.spi->dev, "device ID query failed (0x%X != 0x%X)\n",
++			 id, st->chip_info->chip_id);
+ 
+ 	st->mode = AD7192_MODE_SEL(AD7192_MODE_IDLE) |
+ 		AD7192_MODE_CLKSRC(st->clock_sel) |
+@@ -1049,7 +1049,9 @@ static int ad7192_probe(struct spi_device *spi)
+ 	else
+ 		indio_dev->info = &ad7192_info;
+ 
+-	ad_sd_init(&st->sd, indio_dev, spi, &ad7192_sigma_delta_info);
++	ret = ad_sd_init(&st->sd, indio_dev, spi, &ad7192_sigma_delta_info);
++	if (ret)
++		return ret;
+ 
+ 	ret = devm_ad_sd_setup_buffer_and_trigger(&spi->dev, indio_dev);
+ 	if (ret)
+-- 
+2.39.2
 
