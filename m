@@ -2,109 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B7D472FCA5
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:37:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7799D72FCA8
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:37:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243498AbjFNLhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 07:37:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49808 "EHLO
+        id S244217AbjFNLhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 07:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244197AbjFNLgX (ORCPT
+        with ESMTP id S244230AbjFNLgu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 07:36:23 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15AD1FC2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 04:36:21 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-5187a752745so2219456a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 04:36:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1686742580; x=1689334580;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NghouzrvvAU4Np30hAA7JLYG1+N2iXjSV31dAtikVDU=;
-        b=SMIO740gZgagbuJ5LtaPSK/zq+EjXWmZ5extNeo7hypKB4YbPThXWXfLm9zfqfFS9y
-         p+29EcQNvHRBxf8KmEgen3ZBRS+7bxiSTeXYqnHPo7Vqag0KHcBlF3JFcapR8o5MVd0R
-         B3y2FEmynFIB1A/fP3+h8eJZhvUiAW7qFX2pk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686742580; x=1689334580;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NghouzrvvAU4Np30hAA7JLYG1+N2iXjSV31dAtikVDU=;
-        b=JFa6Wwt6rQlUqAWoe/g/A00yqGPcQo3Dsub37+fv9/zcNTzcBP560EMd167aCp4WCq
-         TIE3E9tCqRTWOcbk1qHnOmR7Nofrzx/r/nJ/cc910Zt9Jo1c9i3+OwvsaMBu30aWMWWI
-         PgPYWE1+1qIqfD+Fx7aWO6kcNgV/yr2WCG0tuN3MMyYrMBvt6GyAC8dnWHOrrjfr/u+c
-         HLNienwABIQNXIya3cAcpnwvUwsHDSmfgM+cHUcgD3htwpofcWUPXKFGBy6bLA9j+QOR
-         J5ii5X0f7ZYFE3SCAL3H1ImM3q/55Xh8XJHZGLQu4t0VWo1CxZGPGGsMm/BxeZTzvhkW
-         z4rg==
-X-Gm-Message-State: AC+VfDyG4dclV8TdPr0XZnWiKpeTHoBkDNdkEF7m158R3OFrW03kItJn
-        NWPygHiRf0Jcxy9DNs3eZhK/HHVWkMCUpQbKcwmGLg==
-X-Google-Smtp-Source: ACHHUZ5v7bAZJEdLQvhF4G6gCt/B7YyZkVqy1clUxI9e8q237tKtb8QgJ7ONcrvtoslgp4qcxjP6Hw==
-X-Received: by 2002:a05:6402:1211:b0:51a:1df7:41c6 with SMTP id c17-20020a056402121100b0051a1df741c6mr117059edw.17.1686742580129;
-        Wed, 14 Jun 2023 04:36:20 -0700 (PDT)
-Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id b20-20020aa7d494000000b00514a3c04646sm7646020edr.73.2023.06.14.04.36.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 04:36:19 -0700 (PDT)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Giulio Benetti <giulio.benetti@benettiengineering.com>,
-        Jesse Taube <Mr.Bossman075@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] dt-bindings: timer: fsl,imxgpt: Add imx8mp-gpt compatible
-Date:   Wed, 14 Jun 2023 13:36:12 +0200
-Message-Id: <20230614113612.365199-1-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.37.2
+        Wed, 14 Jun 2023 07:36:50 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831472130;
+        Wed, 14 Jun 2023 04:36:44 -0700 (PDT)
+Received: from [192.168.10.55] (unknown [119.155.33.163])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8B57E6606F13;
+        Wed, 14 Jun 2023 12:36:34 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686742603;
+        bh=ddEWiutTf5joaQDtbE1zvdeXJT8abQOVdmfhIERBMqU=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=oZMTqtmKEycWY8eSGCy8a1JQ9ZSyl+CEMkboLQegfOkJHqo4Y/XOvr3E1CUiNYZvc
+         FBfUbyTWsZNK7+3q4tGbae2ibwAg52ED0Umao5LSbFW51MSSrewZvyuUFQBJ7s3o/Q
+         9LqazNLBNndgAEwbpuFroO0BZerTYSn5uQSRMd0cvkukk1uvepe07sqwBUYgeg//Am
+         Fq8eDR73Vi9K2Vw1baOAI3ECSTGwfNBYcG8bx5e+K1+buctKI6kkNPqQ2eNl36P5RQ
+         XCm3NE6oxIEA3V3v9ZEwW8WCKjoPJxX2dNxe3zKTECP30NLrkuZ6oo+6i+lVo5PBy1
+         MgAXIrnlrN2Bw==
+Message-ID: <28c141df-16d7-80d7-b1f4-2dcd432b1cd7@collabora.com>
+Date:   Wed, 14 Jun 2023 16:36:26 +0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v18 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
+        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
+References: <20230613102905.2808371-1-usama.anjum@collabora.com>
+ <20230613102905.2808371-3-usama.anjum@collabora.com>
+ <dacfde0b-bc72-dae7-e823-7905f27ff296@infradead.org>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <dacfde0b-bc72-dae7-e823-7905f27ff296@infradead.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SORBS_WEB,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The imx8mp has the same GPT as imx6dl. Add fsl,imx8mp-gpt to the set
-of values that can be used together with fsl,imx6dl-gpt.
+On 6/14/23 9:09 AM, Randy Dunlap wrote:
+> 
+> 
+> On 6/13/23 03:29, Muhammad Usama Anjum wrote:
+>> diff --git a/include/uapi/linux/fs.h b/include/uapi/linux/fs.h
+>> index b7b56871029c..47879c38ce2f 100644
+>> --- a/include/uapi/linux/fs.h
+>> +++ b/include/uapi/linux/fs.h
+>> @@ -305,4 +305,57 @@ typedef int __bitwise __kernel_rwf_t;
+>>  #define RWF_SUPPORTED	(RWF_HIPRI | RWF_DSYNC | RWF_SYNC | RWF_NOWAIT |\
+>>  			 RWF_APPEND)
+>>  
+>> +/* Pagemap ioctl */
+>> +#define PAGEMAP_SCAN	_IOWR('f', 16, struct pm_scan_arg)
+> 
+> Please update Documentation/userspace-api/ioctl/ioctl-number.rst also.
+I've just checked this file and found out that the range is already
+correctly mentioned:
 
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
----
-This allows what imx8mp.dtsi already does, namely
+'f'   00-0F  linux/fs.h                                        conflict!
 
-	compatible = "fsl,imx8mp-gpt", "fsl,imx6dl-gpt";
 
-Currently "make CHECK_DTBS=1 freescale/imx8mp-evk.dtb" results in
-dozens of lines, partly because the IP block appears three times in
-imx8mp.dtsi, partly because the checker lists all the ways the
-compatible string(s) do not match the binding. With this, that command
-merely produces three lines of (unrelated) warnings.
+> 
+> thanks.
 
- Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml b/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml
-index 716c6afcca1f..f5f8b297da13 100644
---- a/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml
-+++ b/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml
-@@ -31,6 +31,7 @@ properties:
-           - enum:
-               - fsl,imx6sl-gpt
-               - fsl,imx6sx-gpt
-+              - fsl,imx8mp-gpt
-               - fsl,imxrt1050-gpt
-               - fsl,imxrt1170-gpt
-           - const: fsl,imx6dl-gpt
 -- 
-2.37.2
-
+BR,
+Muhammad Usama Anjum
