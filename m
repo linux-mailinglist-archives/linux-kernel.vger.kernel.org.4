@@ -2,119 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A9E172F952
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 11:35:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25C8D72F953
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 11:35:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243944AbjFNJfj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 14 Jun 2023 05:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39658 "EHLO
+        id S243997AbjFNJfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 05:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244141AbjFNJfE (ORCPT
+        with ESMTP id S244173AbjFNJfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 05:35:04 -0400
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906042102
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 02:34:50 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-56d2b7a9465so5808457b3.3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 02:34:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686735289; x=1689327289;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lbNw7KSFt9rA0O4w0LVl8suouqVzbOa7coQNBiypPBM=;
-        b=JTDrFibA8eApskNYgHS6f8awjHwK7EsQDIetlaMN+M+9+bBWbJgQsdrpI7KOE8Gt36
-         UDDSuPxXizaBnWavOhKrsDwBuCZy46+Yi+hUBrfbwfeIeLoSUl9yAtDdOu2hl7pr84rC
-         bgaOTrLix3CN5OjIF47MDFQevIi8YQimlCBL/PxTRKdS9HAG5emsgRn5LqpVjAWBUIi1
-         J+hoz6KKfO0HetSxerGtLLVvsb4WfdOS4TQxIIc4aEvUyIelZnRFmFrQCV0bN36bh8C/
-         doWjU6FnYbqqYDp+CE14y1xgOJl1+Ylt0uPRJiN1HzPoUtVGcvsKs7U+n4twidcDUS46
-         LDfw==
-X-Gm-Message-State: AC+VfDz5dPa09sbwwjJsWM3rEOPQTaB5Pxd9OBG5tQUe4vNbpqzsKA37
-        C2BmwYRIyfLoXrCzAW/g2XDcZ6h26lqREA==
-X-Google-Smtp-Source: ACHHUZ47C5LhshIfGrtYSDPT5cBZabOhzuYpm311meyiPqrTNTZemILJOWWAwBVhjvw+Zyye8/Clqw==
-X-Received: by 2002:a81:5ac4:0:b0:56c:fe54:4183 with SMTP id o187-20020a815ac4000000b0056cfe544183mr857221ywb.52.1686735289560;
-        Wed, 14 Jun 2023 02:34:49 -0700 (PDT)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id y205-20020a817dd6000000b00565374c5962sm714494ywc.98.2023.06.14.02.34.49
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 02:34:49 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-56cfce8862aso5894257b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 02:34:49 -0700 (PDT)
-X-Received: by 2002:a25:b096:0:b0:bac:69be:9494 with SMTP id
- f22-20020a25b096000000b00bac69be9494mr1910027ybj.36.1686735289225; Wed, 14
- Jun 2023 02:34:49 -0700 (PDT)
+        Wed, 14 Jun 2023 05:35:07 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A3D2126;
+        Wed, 14 Jun 2023 02:34:54 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5AEB91FDD4;
+        Wed, 14 Jun 2023 09:34:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1686735293; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Raq4wSbTtPkjnLNJhAyMZD8KD5DkYkXU3htNdimdemQ=;
+        b=fSSCHKJRZ+Zq6h96vVBCGSq4ySljHcaC1mq9va9R3RsN0nM8806ZD9f3zWgSiqjvOuLQ1e
+        2uHg6k6nYRo+psxt5NMVR5wYAuYHvmDyWXGXwVSGCP0acuOVH2gJ/GJguCzCNHHcukvYEC
+        sTTkb7F94nZkOqH25H5ynvq9WzNw1mo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1686735293;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Raq4wSbTtPkjnLNJhAyMZD8KD5DkYkXU3htNdimdemQ=;
+        b=9vIuJbd51oRCuVxW0JAIvLpvwO2GnmPJokXbRP3x3LXtJTF7QjK71zm4vgWYEiX8tt51pI
+        WEEZbzipzMJIv0Ag==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 492F61391E;
+        Wed, 14 Jun 2023 09:34:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id k7zXEb2JiWRTXgAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 14 Jun 2023 09:34:53 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id CE94EA0755; Wed, 14 Jun 2023 11:34:52 +0200 (CEST)
+Date:   Wed, 14 Jun 2023 11:34:52 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     tytso@mit.edu, jack@suse.com, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>,
+        Zhihao Cheng <chengzhihao1@huawei.com>
+Subject: Re: [PATCH -next] jbd2: remove unused function '__cp_buffer_busy'
+Message-ID: <20230614093452.j47ntd4slhvra2yr@quack3>
+References: <20230614004443.56937-1-yang.lee@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20230614032446.8391-1-zhanglibing@cdjrlc.com> <4c81c6406707cf2e26b43bd4c5caca3a@208suo.com>
- <74ed374c5d5ec504d3bbecef656c1b37@208suo.com>
-In-Reply-To: <74ed374c5d5ec504d3bbecef656c1b37@208suo.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 14 Jun 2023 11:34:36 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVEOxVs1YOnmhbgqWMqpG-erahs8_OdpL1Jhck7KK+F0g@mail.gmail.com>
-Message-ID: <CAMuHMdVEOxVs1YOnmhbgqWMqpG-erahs8_OdpL1Jhck7KK+F0g@mail.gmail.com>
-Subject: Re: [PATCH] m68k/q40: Fix syntax error
-To:     wuyonggang001@208suo.com
-Cc:     linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230614004443.56937-1-yang.lee@linux.alibaba.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yonggang,
+On Wed 14-06-23 08:44:43, Yang Li wrote:
+> The code calling function '__cp_buffer_busy' has been removed, so the
+> function should also be removed.
+> silence the warning:
+> fs/jbd2/checkpoint.c:48:20: warning: unused function '__cp_buffer_busy'
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=5518
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 
-Thanks for your patch!
+Ted is now debugging other issues possibly caused by the patch series
+making this function unused (CCing its author). If we need to respin to the
+series, we might as well just fold this fixup into it. But otherwise the
+patch is obviously good. Feel free to add:
 
-On Wed, Jun 14, 2023 at 8:16 AM <wuyonggang001@208suo.com> wrote:
->
-> Fix the following checkpatch error:
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-The patch subject does not match the description.
+								Honza
 
->
-> ERROR: space required after that ',' (ctx:VxV)
-> ERROR: spaces required around that '<' (ctx:VxV)
->
-> Signed-off-by: Yonggang Wu <wuyonggang001@208suo.com>
-
-scripts/checkpatch.pl says:
-
-    WARNING: From:/Signed-off-by: email name mismatch: 'From:
-wuyonggang001@208suo.com' != 'Signed-off-by: Yonggang Wu
-<wuyonggang001@208suo.com>'
-
-> --- a/arch/m68k/q40/config.c
-> +++ b/arch/m68k/q40/config.c
-
-> @@ -270,7 +270,7 @@ static int q40_set_rtc_pll(struct rtc_pll_info *pll)
->       if (!pll->pll_ctrl) {
->           /* the docs are a bit unclear so I am doublesetting */
->           /* RTC_WRITE here ... */
-> -        int tmp = (pll->pll_value & 31) | (pll->pll_value<0 ? 32 : 0) |
-> +        int tmp = (pll->pll_value & 31) | (pll->pll_value < 0 ? 32 : 0)
-> |
-
-ERROR: patch seems to be corrupt (line wrapped?)
-
->                 Q40_RTC_WRITE;
->           Q40_RTC_CTRL |= Q40_RTC_WRITE;
->           Q40_RTC_CTRL = tmp;
-
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+> ---
+>  fs/jbd2/checkpoint.c | 12 ------------
+>  1 file changed, 12 deletions(-)
+> 
+> diff --git a/fs/jbd2/checkpoint.c b/fs/jbd2/checkpoint.c
+> index 9ec91017a7f3..ba4ae74c7167 100644
+> --- a/fs/jbd2/checkpoint.c
+> +++ b/fs/jbd2/checkpoint.c
+> @@ -40,18 +40,6 @@ static inline void __buffer_unlink(struct journal_head *jh)
+>  	}
+>  }
+>  
+> -/*
+> - * Check a checkpoint buffer could be release or not.
+> - *
+> - * Requires j_list_lock
+> - */
+> -static inline bool __cp_buffer_busy(struct journal_head *jh)
+> -{
+> -	struct buffer_head *bh = jh2bh(jh);
+> -
+> -	return (jh->b_transaction || buffer_locked(bh) || buffer_dirty(bh));
+> -}
+> -
+>  /*
+>   * __jbd2_log_wait_for_space: wait until there is space in the journal.
+>   *
+> -- 
+> 2.20.1.7.g153144c
+> 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
