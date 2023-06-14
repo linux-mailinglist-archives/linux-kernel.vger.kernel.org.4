@@ -2,98 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77C67730347
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:17:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E7D9730369
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:18:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343649AbjFNPRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 11:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55702 "EHLO
+        id S1343690AbjFNPST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 11:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343675AbjFNPRA (ORCPT
+        with ESMTP id S233280AbjFNPSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 11:17:00 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F21C3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:16:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686755802; x=1718291802;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ji+I7IN8dAKMbYX1GKKqZYcqdgh0ESdxQ9z1DaZT2SA=;
-  b=dltxq8orM9c1YdjTgXKo9SDadmQ+Hhg5reVlmBH5ivR3LUxBb03Dti4r
-   BpGCCqmg6ZH2tpp2TCzlObwnJ1wageI3M/dnUgIsC/Gj0JwcE/wkr1ukS
-   sIm5bVHUE6l45py+pXTWe7Q3YwcQkAAC0QpXcXR9342L93AsD5yW9chOv
-   FHuL8Xj/LdPVO9ZkUaX4IGUjd0iVj5FeDnA89gBB/ElnMziSvsGxQIfLb
-   aL/BezBXh9HINURwKiQkj5ZqmOLablb0f1yMv+j78aAmfGEhGpmtnslF7
-   X8GOKh4CDGLZP66lAqfCGfkw+5dpqNUhPlj46LQjAK3Ghc1CXihavn2TY
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="424525785"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="424525785"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 08:16:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="801948400"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="801948400"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 14 Jun 2023 08:16:38 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1q9SEe-003j9E-3D;
-        Wed, 14 Jun 2023 18:16:36 +0300
-Date:   Wed, 14 Jun 2023 18:16:36 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     hexingwei001@208suo.com, pmladek@suse.com,
-        senozhatsky@chromium.org, linux-kernel@vger.kernel.org,
-        linux@rasmusvillemoes.dk
-Subject: Re: [PATCH] lib/test_printf.c: space required after that ','
-Message-ID: <ZInZ1BcHHQbok+wg@smile.fi.intel.com>
-References: <20230614082523.63191-1-panzhiai@cdjrlc.com>
- <f2d8eb955890bc1db1b307db713d4a4a@208suo.com>
- <ZImzXhc7ZRbSvz7/@smile.fi.intel.com>
- <20230614110640.57817123@gandalf.local.home>
+        Wed, 14 Jun 2023 11:18:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6907311B
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:17:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686755838;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dJJSEeqK6QXbXzLAxpLoHNxXrX7Cx+/0FsKlU9Zst5Q=;
+        b=K1UBbJzdwTj0foxQcLKjoLUoFXbCGMb//BHKvXyNBAC22f/UhwUHBFqEbIoUjGA9IFpqHJ
+        6pmg0zNWmstHtSUdblqO+ez08EEvQyeblDn3k89Qc3IPoSeA/jz+J3vy5P7g32Ocpv8G4y
+        pQCYgAhs9IjlQXEIMs+0eNCvsC8eAOk=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-668-yUhkZ3JJME2neTYv06iuog-1; Wed, 14 Jun 2023 11:17:17 -0400
+X-MC-Unique: yUhkZ3JJME2neTYv06iuog-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f80e7e15b0so5197785e9.2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:17:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686755835; x=1689347835;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dJJSEeqK6QXbXzLAxpLoHNxXrX7Cx+/0FsKlU9Zst5Q=;
+        b=FIquESA89woqoKI5Y3RzCwsqGi8QA9MlyQZfsHjnXEtKdxjZIkH5/DVJiBMUmT9E+u
+         k7n+We2TyJ7E0pBQeCNr//IJchJ/1gz46id1NOZ6L/H5wYxUcOr/lNSlnyt1d/uL38eG
+         I8IchXgQwGa9BG4mUf8qoKNYyQ5uqUTIp8pQO09ot0Sn7T/tSHom3JlyDIkD0Ou7mLiF
+         53KxnGD83cuxuXZorCzEooR8NQepan7E04ZFVNyrPE+X6glboq79GuWlbscxRH971awa
+         qoKmUAUPZu3DcC036yrmbac0+fj9P9SNHpLFu6RhJ+OkDPqenECq1bT2mDNqYx5hR+zw
+         BJ6A==
+X-Gm-Message-State: AC+VfDwD6daD3EBB5vMveQD1zwCC9hp2jwLc08NStvpDwnSHPHdv/g+t
+        LxOEC9Pi5nVEWAu/NOMj8Dhplwgqyt3R30Vc5UMohZxu1LuOOp11SJ7SgzsnVfWJ7W0lVULarQp
+        XU84/Sqa65fyZT9odO95vU33V
+X-Received: by 2002:a05:600c:220d:b0:3f7:e443:c5b3 with SMTP id z13-20020a05600c220d00b003f7e443c5b3mr11985659wml.21.1686755835722;
+        Wed, 14 Jun 2023 08:17:15 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5vgbgSXDfygOhFoX+6Zhq//KxnkS8I2CfIy8ie18zUjYJRAARJd1KYOFZ7bR8rGHX9ZJUSng==
+X-Received: by 2002:a05:600c:220d:b0:3f7:e443:c5b3 with SMTP id z13-20020a05600c220d00b003f7e443c5b3mr11985636wml.21.1686755835391;
+        Wed, 14 Jun 2023 08:17:15 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:b200:7d03:23db:ad5:2d21? (p200300cbc704b2007d0323db0ad52d21.dip0.t-ipconnect.de. [2003:cb:c704:b200:7d03:23db:ad5:2d21])
+        by smtp.gmail.com with ESMTPSA id e16-20020adffc50000000b0030fbb834074sm10722810wrs.15.2023.06.14.08.17.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 08:17:14 -0700 (PDT)
+Message-ID: <ef0f8e0e-cbce-7c7b-1b0e-c9d52ede7e0e@redhat.com>
+Date:   Wed, 14 Jun 2023 17:17:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230614110640.57817123@gandalf.local.home>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 4/7] mm/hugetlb: Prepare hugetlb_follow_page_mask() for
+ FOLL_PIN
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        James Houghton <jthoughton@google.com>,
+        Hugh Dickins <hughd@google.com>
+References: <20230613215346.1022773-1-peterx@redhat.com>
+ <20230613215346.1022773-5-peterx@redhat.com>
+ <533c32cf-9a18-1590-4d29-f076d6bd58c1@redhat.com> <ZInYh3cVUil9R/cf@x1n>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <ZInYh3cVUil9R/cf@x1n>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 11:06:40AM -0400, Steven Rostedt wrote:
-> On Wed, 14 Jun 2023 15:32:30 +0300
-> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> > On Wed, Jun 14, 2023 at 04:30:55PM +0800, hexingwei001@208suo.com wrote:
-> > > Add missing spaces to clear checkpatch errors:
-> > > 
-> > > lib/test_printf.c:562: ERROR: space required after that ',' (ctx:VxV).
-> > > lib/test_printf.c:562: ERROR: space required after that ',' (ctx:VxV).
-> > > lib/test_printf.c:562: ERROR: space required after that ',' (ctx:VxV).
-> > > lib/test_printf.c:562: ERROR: space required after that ',' (ctx:VxV).
-> > > lib/test_printf.c:562: ERROR: space required after that ',' (ctx:VxV).
-> > > lib/test_printf.c:562: ERROR: space required after that ',' (ctx:VxV).  
-> > 
-> > Doesn't make any difference to the code, so let do this (unneeded) churn
-> > to calm checkpatch down.
-> > 
-> > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On 14.06.23 17:11, Peter Xu wrote:
+> On Wed, Jun 14, 2023 at 04:57:37PM +0200, David Hildenbrand wrote:
+>> On 13.06.23 23:53, Peter Xu wrote:
+>>> It's coming, not yet, but soon.  Loose the restriction.
+>>>
+>>> Signed-off-by: Peter Xu <peterx@redhat.com>
+>>> ---
+>>>    mm/hugetlb.c | 7 -------
+>>>    1 file changed, 7 deletions(-)
+>>>
+>>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+>>> index f037eaf9d819..31d8f18bc2e4 100644
+>>> --- a/mm/hugetlb.c
+>>> +++ b/mm/hugetlb.c
+>>> @@ -6467,13 +6467,6 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
+>>>    	spinlock_t *ptl;
+>>>    	pte_t *pte, entry;
+>>> -	/*
+>>> -	 * FOLL_PIN is not supported for follow_page(). Ordinary GUP goes via
+>>> -	 * follow_hugetlb_page().
+>>> -	 */
+>>> -	if (WARN_ON_ONCE(flags & FOLL_PIN))
+>>> -		return NULL;
+>>> -
+>>>    	hugetlb_vma_lock_read(vma);
+>>>    	pte = hugetlb_walk(vma, haddr, huge_page_size(h));
+>>>    	if (!pte)
+>> Did you fix why the warning was placed there in the first place? (IIRC, at
+>> least unsharing support needs to be added, maybe more)
 > 
-> checkpatch is for patches (new code) and should not be run on existing code.
+> Feel free to have a look at patch 2 - it should be done there, hopefully in
+> the right way.  And IIUC it could be a bug to not do that before (besides
+> CoR there was also the pgtable permission checks that was missing).  More
+> details in patch 2's commit message.  Thanks,
 
-Why does it have -f option? What do you propose to prevent people from using it?
+Oh, that slipped my eyes (unsharing is not really a permission check) -- 
+and the patch description could have been more explicit about why we can 
+now lift the restrictions.
+
+For the records: we don't use CoR terminology upstream. As suggested by 
+John, we use "GUP-triggered unsharing".
+
+As unsharing only applies to FOLL_PIN, it doesn't quite fit into patch 
+#2. Either move that to this patch or squash both.
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Cheers,
 
+David / dhildenb
 
