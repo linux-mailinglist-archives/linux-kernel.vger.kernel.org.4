@@ -2,77 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A08B673018E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:19:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F4E73018B
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:19:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245575AbjFNOT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 10:19:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46108 "EHLO
+        id S245534AbjFNOTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 10:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245551AbjFNOTV (ORCPT
+        with ESMTP id S245525AbjFNOTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 10:19:21 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D464E212B;
-        Wed, 14 Jun 2023 07:19:18 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-56cfce8862aso8801027b3.1;
-        Wed, 14 Jun 2023 07:19:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686752358; x=1689344358;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KX5YO1WYul949jFQhaP2hJUbrdTDjTdGLvHcfir61kc=;
-        b=i6gIt2eixifwvL/xKy/LTVOmXLGJXu83F20GOpWUc+DfdS9FpLot9sLufvFkUNociJ
-         SR52ir+xMVHqmu/T+1dncFHrybZWnFKA3fI2lbYco5HZgQzsLBI6JsLUJi8GfLrjMqtH
-         L80OvDo3uxbVTqLBLpyAJdL90rnuu1wHoy1VrfUWG6twpll4h4p2VSno8fC0YhCKIYkb
-         Lt4mUX/3VIr9BSFjlGv+PFuI03s0vrPwSKpwFF9RzzOH2UPpHan1BFuAQEN55v95TojU
-         TFHcdpLrJxZrFjl4PWPcV4GT9CTcpdGR1T1F25T+gfYDHVCVzR/LnJdg6DGcS+eNPXI9
-         3olw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686752358; x=1689344358;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KX5YO1WYul949jFQhaP2hJUbrdTDjTdGLvHcfir61kc=;
-        b=En3hniD8WzWEqAVa431q/FIlQIpX0kAMf6Rk6khWxRcvNzkHw3HTZmZBK1MLwOboXe
-         IGcDpaC1/XtHZ6ng2UYgz34kDy1wQ/opiQpy43T42uS6jjGl3SyCCQZR8lz7hi2Rd7AT
-         t7/0CwkptgL5fH5EjjuACCREX0GB/oxUyYVzTwPHs1bgsGMLjAUvxJknyvBOaU2GuNFw
-         Pzs/mqUF/lFyBZPN9PiWV/dB1r9L+YXstv53LSC2+yuTtEMXDtoiLJNbMM31kwRay/Av
-         JZoAg68PCaoayfOc19GFp4Aho1dW4FOWUHTZrbVS1SHiNvqxUa3KCX6lyEkfREawf1cH
-         Vhvw==
-X-Gm-Message-State: AC+VfDwnfE1GVQAZDor5Vx7vfPRAUEo0+YTsLZgCEii4pAQzVpX1PCPK
-        5OZIdNGyMAJqlvWqwzwUDnlq4aY9SoMgJUc+yOE=
-X-Google-Smtp-Source: ACHHUZ4x6WLud45wPegG2Lh8Ea6ssDXfxMlRzpQJzqGV7rINz/e9/iuzIawfj4+fKglV3jau7YuGI9MaoBNqtSycOK4=
-X-Received: by 2002:a81:6e8a:0:b0:56d:24c:8896 with SMTP id
- j132-20020a816e8a000000b0056d024c8896mr1866564ywc.7.1686752357816; Wed, 14
- Jun 2023 07:19:17 -0700 (PDT)
+        Wed, 14 Jun 2023 10:19:19 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB43E1BC6;
+        Wed, 14 Jun 2023 07:19:15 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DD86B1FB;
+        Wed, 14 Jun 2023 07:19:59 -0700 (PDT)
+Received: from [192.168.1.3] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CE5E43F64C;
+        Wed, 14 Jun 2023 07:19:13 -0700 (PDT)
+Message-ID: <d02cce4a-47b1-a776-0d3a-a6a7c9a4d8fd@arm.com>
+Date:   Wed, 14 Jun 2023 15:19:12 +0100
 MIME-Version: 1.0
-References: <20230524083153.2046084-1-s.hauer@pengutronix.de> <20230614134034.3p3p75a3jophi2eu@mercury.elektranox.org>
-In-Reply-To: <20230614134034.3p3p75a3jophi2eu@mercury.elektranox.org>
-From:   Vincent Legoll <vincent.legoll@gmail.com>
-Date:   Wed, 14 Jun 2023 14:19:06 +0000
-Message-ID: <CAEwRq=rUUatDp0JePkDPRkx81c9=sO6ZoW+V=g2S7B8_s-R3uA@mail.gmail.com>
-Subject: Re: [PATCH v5 00/25] Add perf support to the rockchip-dfi driver
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH] perf tools: Add a place to put kernel config
+ fragments for test runs
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-perf-users@vger.kernel.org, broonie@kernel.org,
+        Aishwarya.TCV@arm.com, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org
+References: <20230614140219.2335639-1-james.clark@arm.com>
+ <ZInLBt9q2F99gTg8@kernel.org>
+Content-Language: en-US
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <ZInLBt9q2F99gTg8@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,96 +56,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Sascha, Sebastian,
 
-On Wed, Jun 14, 2023 at 1:40=E2=80=AFPM Sebastian Reichel
-<sebastian.reichel@collabora.com> wrote:
-> On Wed, May 24, 2023 at 10:31:28AM +0200, Sascha Hauer wrote:
-> > This is v5 of the series adding perf support to the rockchip DFI driver=
-.
-> > [...]
-> > The RK3588 device tree changes for the DFI were not part of v4. As
-> > Vincent Legoll showed interest in testing this series the necessary
-> > device tree changes are now part of this series.
->
-> I tested the series on RK3588 EVB1. The read/write byts looks
-> sensible. Sometimes cycles reads unrealistic values, though:
-> [...]
-> Otherwise the series is
->
-> Tested-by: Sebastian Reichel <sebastian.reichel@collabora.com>
->
-> -- Sebastian
 
-I also tested this new version of the series on a Pine64 QuartzPro64 dev bo=
-ard.
+On 14/06/2023 15:13, Arnaldo Carvalho de Melo wrote:
+> Em Wed, Jun 14, 2023 at 03:02:19PM +0100, James Clark escreveu:
+>> We are currently keeping something like this in our CI because defconfig
+>> doesn't give full coverage. It's not complete yet, but is a starting
+>> point as a place to add to when a specific test needs something extra to
+>> run.
+>>
+>> The RFC is for discussion on folder placement and file naming etc.
+> 
+> Would be interesting to add the Kconfig maintainer to see if they have
+> an opinion, Masahiro?
+> 
+> - Arnaldo
+>  
 
-I applied the series on top of my local branch, which is based on Collabora=
-'s
-rockchip-3588 plus some QP64 DTS patches, and your V5 patch series.
+One concern I have is that uname -m gives a different result to the
+ARCH= option for a kernel build (ARCH=arm64). Probably the build time
+version is more useful to us so maybe that should be the file name. Not
+sure what the x86 version is or if anyone is actually doing cross x86
+builds...
 
-Looks like this is still working properly:
-
--bash-5.1# uname -a
-Linux qp64 6.4.0-rc1-00140-g658dd2200e2a #24 SMP PREEMPT Wed Jun 14
-15:50:34 CEST 2023 aarch64 GNU/Linux
-
--bash-5.1# zgrep -i _dfi /proc/config.gz
-CONFIG_DEVFREQ_EVENT_ROCKCHIP_DFI=3Dy
-
--bash-5.1# perf list | grep rockchip_ddr
-  rockchip_ddr/bytes/                                [Kernel PMU event]
-  rockchip_ddr/cycles/                               [Kernel PMU event]
-  rockchip_ddr/read-bytes/                           [Kernel PMU event]
-  rockchip_ddr/read-bytes0/                          [Kernel PMU event]
-  rockchip_ddr/read-bytes1/                          [Kernel PMU event]
-  rockchip_ddr/read-bytes2/                          [Kernel PMU event]
-  rockchip_ddr/read-bytes3/                          [Kernel PMU event]
-  rockchip_ddr/write-bytes/                          [Kernel PMU event]
-  rockchip_ddr/write-bytes0/                         [Kernel PMU event]
-  rockchip_ddr/write-bytes1/                         [Kernel PMU event]
-  rockchip_ddr/write-bytes2/                         [Kernel PMU event]
-  rockchip_ddr/write-bytes3/                         [Kernel PMU event]
-
-# With no memory load
--bash-5.1# perf stat -a -e
-rockchip_ddr/cycles/,rockchip_ddr/read-bytes/,rockchip_ddr/write-bytes/,roc=
-kchip_ddr/bytes/
-sleep 1
-
- Performance counter stats for 'system wide':
-
-        1058691047      rockchip_ddr/cycles/
-              9.35 MB   rockchip_ddr/read-bytes/
-              0.57 MB   rockchip_ddr/write-bytes/
-              9.90 MB   rockchip_ddr/bytes/
-
-       1.002616498 seconds time elapsed
-
-# With a hog
--bash-5.1# memtester 4G > /dev/null 2>&1 &
--bash-5.1# perf stat -a -e
-rockchip_ddr/cycles/,rockchip_ddr/read-bytes/,rockchip_ddr/write-bytes/,roc=
-kchip_ddr/bytes/
-sleep 10
-
- Performance counter stats for 'system wide':
-
-       10561540038      rockchip_ddr/cycles/
-          60212.59 MB   rockchip_ddr/read-bytes/
-          31313.03 MB   rockchip_ddr/write-bytes/
-          91525.60 MB   rockchip_ddr/bytes/
-
-      10.001651886 seconds time elapsed
-
-You can add my T-B, for the whole series:
-
-Tested-by: Vincent Legoll <vincent.legoll@gmail.com>
-
-Or is there something else you want me to test ?
-
-Thanks for your work
-Regards
-
---
-Vincent Legoll
+>> Signed-off-by: James Clark <james.clark@arm.com>
+>> ---
+>>  tools/perf/tests/config-fragments/README  |  7 +++++++
+>>  tools/perf/tests/config-fragments/aarch64 |  1 +
+>>  tools/perf/tests/config-fragments/config  | 11 +++++++++++
+>>  3 files changed, 19 insertions(+)
+>>  create mode 100644 tools/perf/tests/config-fragments/README
+>>  create mode 100644 tools/perf/tests/config-fragments/aarch64
+>>  create mode 100644 tools/perf/tests/config-fragments/config
+>>
+>> diff --git a/tools/perf/tests/config-fragments/README b/tools/perf/tests/config-fragments/README
+>> new file mode 100644
+>> index 000000000000..e816cfb1b96d
+>> --- /dev/null
+>> +++ b/tools/perf/tests/config-fragments/README
+>> @@ -0,0 +1,7 @@
+>> +This folder is for kernel config fragments that can be merged with
+>> +defconfig to give full test coverage of a perf test run. This is only
+>> +an optimistic set as some features require hardware support in order to
+>> +pass and not skip.
+>> +
+>> +'config' is shared across all platforms, and for arch specific files,
+>> +the file name should match that returned by 'uname -m'.
+>> diff --git a/tools/perf/tests/config-fragments/aarch64 b/tools/perf/tests/config-fragments/aarch64
+>> new file mode 100644
+>> index 000000000000..64c4ab17cd58
+>> --- /dev/null
+>> +++ b/tools/perf/tests/config-fragments/aarch64
+>> @@ -0,0 +1 @@
+>> +CONFIG_CORESIGHT_SOURCE_ETM4X=y
+>> diff --git a/tools/perf/tests/config-fragments/config b/tools/perf/tests/config-fragments/config
+>> new file mode 100644
+>> index 000000000000..c340b3195fca
+>> --- /dev/null
+>> +++ b/tools/perf/tests/config-fragments/config
+>> @@ -0,0 +1,11 @@
+>> +CONFIG_TRACEPOINTS=y
+>> +CONFIG_STACKTRACE=y
+>> +CONFIG_NOP_TRACER=y
+>> +CONFIG_RING_BUFFER=y
+>> +CONFIG_EVENT_TRACING=y
+>> +CONFIG_CONTEXT_SWITCH_TRACER=y
+>> +CONFIG_TRACING=y
+>> +CONFIG_GENERIC_TRACER=y
+>> +CONFIG_FTRACE=y
+>> +CONFIG_FTRACE_SYSCALLS=y
+>> +CONFIG_BRANCH_PROFILE_NONE=y
+>> -- 
+>> 2.34.1
+>>
+> 
