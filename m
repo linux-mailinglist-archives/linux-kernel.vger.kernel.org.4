@@ -2,183 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 780E972F28D
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 04:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBE0A72F278
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 04:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233338AbjFNCWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 22:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60456 "EHLO
+        id S230447AbjFNCMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 22:12:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231937AbjFNCWo (ORCPT
+        with ESMTP id S229499AbjFNCMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 22:22:44 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C641A7
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 19:22:42 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4QgpmT6PCmzBJL9t
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 10:10:33 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :subject:to:from:date:mime-version; s=dkim; t=1686708633; x=
-        1689300634; bh=Coxosl6j2ywY7ogLos2ae154xpI/eGkqov+EDC/rjTM=; b=A
-        YnP+ppZAg8B0DKr4ragszC6sx7+FQHxhee6NWZvIq1+7AZja/9f2xBTaBRmkKO2f
-        XGHgzSGk6ykQ5ouQF9zVcBibP/HZS0MA2zwCFjOpE8Gea2oTV8VxFmeiozHvZhXP
-        4wlamhXtPhzJLvy9XZYyQAgzGfRyAGG5FO+druc/9v7FhkwU1x1LgtSMVHgLPpux
-        uDB5rm0KdXteg9udptOHdLBs66Qpp8eh7Iu/7K5ZWUUVFBXORTX8tang4Ic7GDxj
-        DfCv3RnhwzKpXt/lkBsQysflnMayyKgV7FHRINfx52AfLClf9LCt5Oi07Qo8o/Oi
-        +lEjQTpZA++3YAz91WJEQ==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id n330S14c3w6Q for <linux-kernel@vger.kernel.org>;
-        Wed, 14 Jun 2023 10:10:33 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4QgpmT3xcVzBJL9m;
-        Wed, 14 Jun 2023 10:10:33 +0800 (CST)
+        Tue, 13 Jun 2023 22:12:13 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC9F198D;
+        Tue, 13 Jun 2023 19:12:11 -0700 (PDT)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Qgphc3R2Bz18M7s;
+        Wed, 14 Jun 2023 10:07:12 +0800 (CST)
+Received: from [10.67.111.205] (10.67.111.205) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 14 Jun 2023 10:12:08 +0800
+Subject: Re: [PATCH v2] perf stat: Add missing newline in pr_err messages
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+CC:     <peterz@infradead.org>, <mingo@redhat.com>, <mark.rutland@arm.com>,
+        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
+        <namhyung@kernel.org>, <irogers@google.com>,
+        <adrian.hunter@intel.com>, <linux-perf-users@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230610094441.221525-1-yangjihong1@huawei.com>
+ <ZIdqHeZOWCztKVe2@kernel.org>
+ <cd1d5a4b-e69c-84c9-3e27-d197042df904@huawei.com>
+ <ZIjHRfq0/IJPyhYT@kernel.org>
+From:   Yang Jihong <yangjihong1@huawei.com>
+Message-ID: <5605beaf-e6a3-8b1a-150b-7fdda76fa389@huawei.com>
+Date:   Wed, 14 Jun 2023 10:12:07 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Date:   Wed, 14 Jun 2023 10:10:33 +0800
-From:   baomingtong001@208suo.com
-To:     agk <agk@redhat.com>, snitzer <snitzer@kernel.org>,
-        dm-devel <dm-devel@redhat.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>
-Subject: [PATCH] dm: remove unneeded variable
-User-Agent: Roundcube Webmail
-Message-ID: <202306141008237478337@208suo.com>
-X-Sender: baomingtong001@208suo.com
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <ZIjHRfq0/IJPyhYT@kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fix the following coccicheck warning:
-
-
-
-=C2=A0
-
-
-
-drivers/md/dm-snap-persistent.c:909:14-16: Unneeded variable: "sz".
-
-
-
-=C2=A0
-
-
-
-Signed-off-by: Mingtong Bao <baomingtong001@208suo.com>
-
-
-
----
-
-
-
-drivers/md/dm-snap-persistent.c | 3 +--
-
-
-
-1 file changed, 1 insertion(+), 2 deletions(-)
-
-
-
-=C2=A0
-
-
-
-diff --git a/drivers/md/dm-snap-persistent.c=20
-b/drivers/md/dm-snap-persistent.c
-
-
-
-index 15649921f2a9..7ea01bceba59 100644
-
-
-
---- a/drivers/md/dm-snap-persistent.c
-
-
-
-+++ b/drivers/md/dm-snap-persistent.c
-
-
-
-@@ -906,7 +906,6 @@ static unsigned int persistent_status(struct=20
-dm_exception_store *store,
-
-
-
-=C2=A0 status_type_t status, char *result,
-
-
-
-=C2=A0 unsigned int maxlen)
-
-
-
-{
-
-
-
-- unsigned int sz =3D 0;
-
-
-
-switch (status) {
-
-
-
-case STATUSTYPE_INFO:
-
-
-
-@@ -920,7 +919,7 @@ static unsigned int persistent_status(struct=20
-dm_exception_store *store,
-
-
-
-break;
-
-
-
-}
-
-
-
-- return sz;
-
-
-
-+ return 0;
-
-
-
-}
-
-
-
-static struct dm_exception_store_type _persistent_type =3D {
-
-
-
---
-
-
-
-2.40.1
-
-
-
-=C2=A0
-
-
+Hello,
+
+On 2023/6/14 3:45, Arnaldo Carvalho de Melo wrote:
+> Em Tue, Jun 13, 2023 at 09:32:05AM +0800, Yang Jihong escreveu:
+>> On 2023/6/13 2:55, Arnaldo Carvalho de Melo wrote:
+>>> Em Sat, Jun 10, 2023 at 09:44:41AM +0000, Yang Jihong escreveu:
+>>>> The newline is missing for error messages in add_default_attributes()
+>>>>
+>>>> Before:
+>>>>
+>>>>     # perf stat --topdown
+>>>>     Topdown requested but the topdown metric groups aren't present.
+>>>>     (See perf list the metric groups have names like TopdownL1)#
+>>>>
+>>>> After:
+>>>>
+>>>>     # perf stat --topdown
+>>>>     Topdown requested but the topdown metric groups aren't present.
+>>>>     (See perf list the metric groups have names like TopdownL1)
+>>>>     #
+>>>>
+>>>> In addition, perf_stat_init_aggr_mode() and perf_stat_init_aggr_mode_file()
+>>>> have the same problem, fixed by the way.
+>>>
+>>> Wait a bit till I push what I had to perf-tools-next, as it is not
+>>> applying right now:
+>> OK, I'm doing the patch based on the mainline, and if I need to do it based
+>> on the perf-tools-next branch, I'll reissue it.
+> 
+> For patches for the currente perf development cycle the perf-tools-next
+> branch of:
+> 
+> git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git
+> 
+> Should be used.
+> 
+> Hopefully soon we will transition to:
+> 
+> git://git.kernel.org/pub/scm/linux/kernel/git/perf-tools/perf-tools-next.git
+> 
+> And also:
+> 
+> git://git.kernel.org/pub/scm/linux/kernel/git/perf-tools/perf-tools.git
+> 
+> For fixes geared to the current merge window, when we are accepting just
+> fixes.
+> 
+
+Thanks for the guidance, I'll resend the patch based on the 
+perf-tools-next branch.
+
+Thanks,
+Yang.
