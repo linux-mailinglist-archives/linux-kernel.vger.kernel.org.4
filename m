@@ -2,66 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8AF7309AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 23:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 805157309A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 23:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235939AbjFNVRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 17:17:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41630 "EHLO
+        id S233385AbjFNVRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 17:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234541AbjFNVRJ (ORCPT
+        with ESMTP id S229868AbjFNVRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 17:17:09 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEBA91BF0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 14:17:07 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-75ec7e8e826so247224685a.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 14:17:07 -0700 (PDT)
+        Wed, 14 Jun 2023 17:17:03 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709DFE6C;
+        Wed, 14 Jun 2023 14:17:02 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-97454836448so160131466b.2;
+        Wed, 14 Jun 2023 14:17:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686777427; x=1689369427;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LrLCxGP3h4zlnPwsi/7+4fkOnHUcAp0hewA5gzf9FKk=;
-        b=s88NVQV+0voSmP3DMArDzRi0rYMzK3wgn+fEX4GUrwdG6Roc/+Juh2V+CN2sy8ywdx
-         Wh1wjvOgCN+gjqlk/3N+zdYEuHzR5zKttvOevT+HIuiEBfYBNfwRwTpommo39cNdBBT4
-         GAOQQJO9vIiIDEtV6msrkWUeEBpZW3VXjVpStO0bHqmMEtuoUwqQ7+WmGLM5hjwkzyq3
-         VBEnsNr8WMIg8v2spjXSjjAxbvoNUKMjAK6FJLtliS57ZjotEo6tlfgfzfHhZ8l8Uthr
-         wott04zj+hh2z2GwYm9Pt8EpVJIksclDinqrxa9buccQTAYdgJBMMh45Qg7x8b4CTbpI
-         meYw==
+        d=gmail.com; s=20221208; t=1686777421; x=1689369421;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=xt834FEuuau+dhXyiK6Us9w6s+LXDl9lf/qHhQT3U1M=;
+        b=m/3jIuP25nI+K1ul4UlfpZ9MWiYVvcJK2XUhm5e495M9I8PhvamySyxbPEXd+vaADG
+         yu6yffQBZ+RFlOiEXnGK7hhMvXC5uzfTxC9EaLgSQUvTFyvOYa5TZCZ1gVKTie+G5Mcu
+         9y0+3B4ravEta/76EjZlL2qahQKDN0IRGz+dmzonLj/HC4Jg89zuGIB9DQdSOHBHm9Uw
+         sHoidWvEbo8Ij3fOtO0q3YtEnoxgNWyIgMaShWG+2BkiTi9CJIZxawNvv5bCHhezJts5
+         FOY9HSyuruynbBZkznitjZx3c/tmGFH/lj+QE6GQnuBbkZjMQUJhBG3VyhSyCugHA8x1
+         8hAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686777427; x=1689369427;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LrLCxGP3h4zlnPwsi/7+4fkOnHUcAp0hewA5gzf9FKk=;
-        b=BM/++GF1o++KzMJssNWgYmHBlAe7VxYjrn2JyF7N9PTS5NHW+YXeU2rqjVxbyIpXWY
-         0paILAoiA8fu6QJ7TecyQNVlqlMFHRjMUTMFK6oK0n9zjVD+0ROMgSls9chGDc6fE1KL
-         EMYw7HDw4RzrXpk7tmdPwQIDZDJ/hdbLwQmcoDVlfq7OgxxBaS7ZQnEjXpadVDK5r8kG
-         5/6uIEpICIdwjoQz7nbOO4fPWn8EyiLCPRXH//XyyjJd3j1o1gFfsbvDZ3evxeEKcRQ7
-         IzaKDCdqrWNsHEYARyLwELWGvLRLycrtCNe6XUDl3cUoaEpVHZToXEEUFQapDg9HHn5p
-         w/kw==
-X-Gm-Message-State: AC+VfDz2eEaNzM6+gppDOmbbdN+ZregDk7cnbAVzwj15axd0P6VmAify
-        XsXCdkCyCJfkBaTXdttqF2hbfnmIXvxo39sXAldWxA==
-X-Google-Smtp-Source: ACHHUZ7Z18A4KGrcwUHwViGaJHZwDogEDaPqj1WdmOZqiDG5itgrHPS6ctGVoN1GjhurXWvxhC6FKcW7e3zEyR+L5+o=
-X-Received: by 2002:a05:6214:300a:b0:5af:9276:b59d with SMTP id
- ke10-20020a056214300a00b005af9276b59dmr18797042qvb.18.1686777427098; Wed, 14
- Jun 2023 14:17:07 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686777421; x=1689369421;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xt834FEuuau+dhXyiK6Us9w6s+LXDl9lf/qHhQT3U1M=;
+        b=R1aInpnUurVKb8Cvon0mt0d/Oi+r7Zmyt/b+5V1cQCgwc7kz0xhsm/K52HvXN70Kvw
+         nZHkD3NVsK1XX8rsh08sUBYm9ItxRFN/Yh0qS2h5R4a1HQ8o8Iq+Ay+btjw1VljJXL1R
+         AfMajDMUIblwrbk+HobPruOyehhVY/aFd4u54tipYJw8xUvzZ+B5cqOR3/Y9kJ7E2f6u
+         /aIPydE0p3QIK9mcWYSbaxwt8At/OOCpm99goh/bnJ9A8TEJpi4yR1qE3PEBz76owtmi
+         lePvNq+Z4oh1fCqwX7kFKN4xwM8reZdCQbCxSUY0J12uerdJARPT2W6UkVM2GZtTnjeB
+         B6rw==
+X-Gm-Message-State: AC+VfDwKTUmLkIskuwcM5LApyj7WZ031Wr7RTHueXSrkbV7ZvewdZP+K
+        M1z2FLOhSKJCTwPApdknyRU=
+X-Google-Smtp-Source: ACHHUZ7h1ThvmhUVEqyCTIVWjGGdlqAe2bIZezMhJtsZz5zUUWOUL9Qqe1oJ6+Y8W8kcPkpT/DUWqg==
+X-Received: by 2002:a17:907:c15:b0:94e:1764:b09b with SMTP id ga21-20020a1709070c1500b0094e1764b09bmr14263413ejc.45.1686777420734;
+        Wed, 14 Jun 2023 14:17:00 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id u16-20020a1709064ad000b009828e26e519sm496960ejt.122.2023.06.14.14.16.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 14:17:00 -0700 (PDT)
+Date:   Thu, 15 Jun 2023 00:16:57 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net v4 4/7] net: dsa: mt7530: fix handling of BPDUs on
+ MT7530 switch
+Message-ID: <20230614211657.2c3ljwnlng7vxamz@skbuf>
+References: <20230612075945.16330-1-arinc.unal@arinc9.com>
+ <20230612075945.16330-5-arinc.unal@arinc9.com>
+ <20230614205008.czro45ogsc4c6sb5@skbuf>
+ <e8a0f46b-f133-c155-f0de-9046a53e6069@arinc9.com>
 MIME-Version: 1.0
-References: <20230613074931.666966-1-anders.roxell@linaro.org> <928ad485-2dc2-2e02-98a2-fa203441f463@nvidia.com>
-In-Reply-To: <928ad485-2dc2-2e02-98a2-fa203441f463@nvidia.com>
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Wed, 14 Jun 2023 23:16:56 +0200
-Message-ID: <CADYN=9KtYe6jo+MDm+3NVwfNFzsOgoRRKxu_hSJeEPMuLRGgeg@mail.gmail.com>
-Subject: Re: [PATCH] selftests: lib.mk: fix out-of-tree builds
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, usama.anjum@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e8a0f46b-f133-c155-f0de-9046a53e6069@arinc9.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,80 +95,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Jun 2023 at 04:23, John Hubbard <jhubbard@nvidia.com> wrote:
->
-> On 6/13/23 00:49, Anders Roxell wrote:
-> > Since commit ("selftests: error out if kernel header files are not yet
-> > built") got merged, the kselftest build correctly because the
-> > KBUILD_OUTPUT isn't set when building out-of-tree and specifying 'O=3D'
-> > This is the error message that pops up.
-> >
-> > make --silent --keep-going --jobs=3D32 O=3D/home/anders/.cache/tuxmake/=
-builds/1482/build INSTALL_PATH=3D/home/anders/.cache/tuxmake/builds/1482/bu=
-ild/kselftest_install ARCH=3Darm64 CROSS_COMPILE=3Daarch64-linux-gnu- V=3D1=
- CROSS_COMPILE_COMPAT=3Darm-linux-gnueabihf- kselftest-install
-> > make[3]: Entering directory '/home/anders/src/kernel/next/tools/testing=
-/selftests/alsa'
-> >
-> > -e  [1;31merror [0m: missing kernel header files.
-> > Please run this and try again:
-> >
-> >      cd /home/anders/src/kernel/next/tools/testing/selftests/../../..
-> >      make headers
-> >
-> > make[3]: Leaving directory '/home/anders/src/kernel/next/tools/testing/=
-selftests/alsa'
-> > make[3]: *** [../lib.mk:77: kernel_header_files] Error 1
-> >
-> > Fixing the issue by assigning KBUILD_OUTPUT the same way how its done i=
-n
-> > kselftest's Makefile. By adding 'KBUILD_OUTPUT :=3D $(O)' 'if $(origin =
-O)'
-> > is set to 'command line'. This will set the the BUILD dir to
-> > KBUILD_OUTPUT/kselftest when doing out-of-tree builds which makes them
-> > in its own separete output directory.
-> >
-> > Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
-> > ---
-> >   tools/testing/selftests/lib.mk | 4 ++++
-> >   1 file changed, 4 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/l=
-ib.mk
-> > index b8ea03b9a015..d17854285f2b 100644
-> > --- a/tools/testing/selftests/lib.mk
-> > +++ b/tools/testing/selftests/lib.mk
-> > @@ -44,6 +44,10 @@ endif
-> >   selfdir =3D $(realpath $(dir $(filter %/lib.mk,$(MAKEFILE_LIST))))
-> >   top_srcdir =3D $(selfdir)/../../..
-> >
-> > +ifeq ("$(origin O)", "command line")
-> > +  KBUILD_OUTPUT :=3D $(O)
-> > +endif
-> > +
->
-> Thanks for fixing this up! This looks correct.
->
-> (It's too bad that we have all this duplication between the Makefile
-> and lib.mk.)
+On Thu, Jun 15, 2023 at 12:05:44AM +0300, Arınç ÜNAL wrote:
+> On 14.06.2023 23:50, Vladimir Oltean wrote:
+> > Where have you seen the BPC register in the memory map of MT7530 or MT7621?
+> 
+> I did not somehow dump the memory map of the switch hardware and confirm the
+> BPC register is there, if that's what you're asking.
 
-I agree, also the duplication of get_sys_includes in bpf, hid and net Makef=
-ile's
-Do you have any idea how we can remove the duplication?
+I mean to say that I looked at
 
-Cheers,
-Anders
+MT7530 Giga Switch programming guide.pdf
+MT7621 Giga Switch Programming Guide.pdf
+MT7621_ProgrammingGuide_GSW_v01.pdf
 
->
-> thanks,
-> --
-> John Hubbard
-> NVIDIA
->
-> >   ifneq ($(KBUILD_OUTPUT),)
-> >     # Make's built-in functions such as $(abspath ...), $(realpath ...)=
- cannot
-> >     # expand a shell special character '~'. We use a somewhat tedious w=
-ay here.
->
->
+and I did not find this register.
+
+> However, I can confirm the register is there and identical across all MT7530
+> variants. I have tested the function of the register on the MCM MT7530 on
+> the MT7621 SoC and the standalone MT7530. The register is also described on
+> the document MT7620 Programming Guide v1.0, page 262.
+
+Interesting. I did not have that one. Hard to keep up.
