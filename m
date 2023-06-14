@@ -2,110 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 494CB72FC3B
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B974C72FC3F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:18:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243905AbjFNLSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 07:18:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38494 "EHLO
+        id S243651AbjFNLSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 07:18:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243814AbjFNLRo (ORCPT
+        with ESMTP id S234877AbjFNLR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 07:17:44 -0400
-Received: from DEU01-FR2-obe.outbound.protection.outlook.com (mail-fr2deu01on2113.outbound.protection.outlook.com [40.107.135.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F70912E;
-        Wed, 14 Jun 2023 04:17:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OKsIIVIn6rxp/C6KHxMLLwAmMga2Y9lEvVEL/T3kKu3rjivsHoqWYY71ro2+ZeiMtostCpFqBp0Q5nvbZzsJ5XQSp8jpo4z2l7fMBjUvchSv0oNCpHbLWT3jem/vHga78F4fpqrWiefA9+jwV0Gh3Hvtynm7/CWu52I+iwkgXDmrtLU9UeTfL/VfEO2B8Up3334z8jpljKUr2USQJ8ioeTEUzZHuDef2CU9J1rmZOlluPNplFfeGkdXhaxCAPRwUEayi6mkF2FeARnh6VkQqLAx6beQpSsbWZ+sMh2L54AkTy/FysLW6OOhtdpjRUMUuduLwMLZHitmmfy8AQxKOsA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BuFKAavu9Gaw8er8QX5n1p7ngeksXlmKevTZcTNhwCA=;
- b=IVBn3QJkVT0jname0oaFyT7fJJ1zBPMiO1j0ZFnlc44AFwtXbUWkMuZzDccRIBUA8hR4+QFIov2KHPGGhA6GWm0noCQwlnZyptzDUrd6TM716s75YqhRcwl9JwGueLq2Lc3awvsGwOu6PrmZqsYbLodmv+hQna/iJ+CxhDLoRUWaG98cLnXR2bkkdWxXwN1C3ScZ7ZZQ1oQ0GSmsxv36hUtKdjBRa7L6h1hUupJo+nLLX1A6UnCSSBdfKthLoeBx457Yj1Z3a3qvh+ko2ezFtRyvsgaV9lIym7C4HKVDM88GE0gpWf5EQ9Yn3k/g+zh0Yx0Ha0eyvWDyim2IjsfkJQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 20.54.238.131) smtp.rcpttodomain=davemloft.net smtp.mailfrom=chargebyte.com;
- dmarc=fail (p=none sp=none pct=100) action=none header.from=chargebyte.com;
- dkim=none (message not signed); arc=none
-Received: from FR0P281CA0100.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:a9::6) by
- BEZP281MB1976.DEUP281.PROD.OUTLOOK.COM (2603:10a6:b10:5b::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6477.29; Wed, 14 Jun 2023 11:17:26 +0000
-Received: from FR2DEU01FT025.eop-deu01.prod.protection.outlook.com
- (2603:10a6:d10:a9:cafe::a1) by FR0P281CA0100.outlook.office365.com
- (2603:10a6:d10:a9::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.25 via Frontend
- Transport; Wed, 14 Jun 2023 11:17:26 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 20.54.238.131)
- smtp.mailfrom=chargebyte.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=none header.from=chargebyte.com;
-Received-SPF: Fail (protection.outlook.com: domain of chargebyte.com does not
- designate 20.54.238.131 as permitted sender) receiver=protection.outlook.com;
- client-ip=20.54.238.131; helo=smtp.westeurope.signature365.net;
-Received: from smtp.westeurope.signature365.net (20.54.238.131) by
- FR2DEU01FT025.mail.protection.outlook.com (20.128.124.172) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6521.10 via Frontend Transport; Wed, 14 Jun 2023 11:17:26 +0000
-Received: from DEU01-FR2-obe.outbound.protection.outlook.com (10.240.0.195)
- by smtp.westeurope.signature365.net (20.54.238.131) over secure channel (protocol=Tls12, cipher=Aes256 [strength=256 bit])
- with Symprex Signature 365 SMTP Server (v2.1.1.232); Wed, 14 Jun 2023 11:17:25 +00:00
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=chargebyte.com;
-Received: from BE1P281MB2097.DEUP281.PROD.OUTLOOK.COM (2603:10a6:b10:3d::11)
- by BEZP281MB3010.DEUP281.PROD.OUTLOOK.COM (2603:10a6:b10:75::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37; Wed, 14 Jun
- 2023 11:17:24 +0000
-Received: from BE1P281MB2097.DEUP281.PROD.OUTLOOK.COM
- ([fe80::6a58:36ff:9330:d4f1]) by BE1P281MB2097.DEUP281.PROD.OUTLOOK.COM
- ([fe80::6a58:36ff:9330:d4f1%4]) with mapi id 15.20.6477.037; Wed, 14 Jun 2023
- 11:17:24 +0000
-From:   Stefan Wahren <stefan.wahren@chargebyte.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Stefan Wahren <stefan.wahren@i2se.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Stefan Wahren <stefan.wahren@chargebyte.com>
-Subject: [PATCH net resend] net: qca_spi: Avoid high load if QCA7000 is not available
-Date:   Wed, 14 Jun 2023 13:17:14 +0200
-Message-Id: <20230614111714.3612-1-stefan.wahren@chargebyte.com>
-X-Mailer: git-send-email 2.34.1
-X-ClientProxiedBy: FR3P281CA0115.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a3::10) To BE1P281MB2097.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:3d::11)
+        Wed, 14 Jun 2023 07:17:59 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41F52693
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 04:17:38 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f7378a75c0so5234205e9.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 04:17:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1686741457; x=1689333457;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZqM7S8NVl5TgVH/SCkBnKovDNoLn6CHQRP6NUvEVbFA=;
+        b=QOBvNJ4SK+SNbyk8XDYPoIiRQQGEReadorv2ByIf2r/Pgn2pEZzITLNMrdIZW4Uja1
+         FrPl+kL8JMgwnFvefo4gM4ADtDjXYBkoOJsodiAp/P4NWHr47LelPoqg5Z5eIZPbl5ed
+         W+A/T2K2m6EepXPnoOFsFcNjYboMPE6S5vb039RIEtYnbJEHi+qcmJOuHNQ9Z4kyLIDn
+         h3yI9XWwjJpwSdLsfp4+8K7SkLOYf7q8jLrVDRDO5cnHRdpbQS4PxIclh/2KWezLs+Pp
+         AEPdwu44Gi7WPkNp8s+L3l6mY+YlZ+dvDnubAgTdRxAOQJHTLNoCdo+HmjJBvjqPeCYE
+         jZmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686741457; x=1689333457;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZqM7S8NVl5TgVH/SCkBnKovDNoLn6CHQRP6NUvEVbFA=;
+        b=g28c4GOwnjbEel5nZy7Abk9bDpc1PzZ3tu2e31VSXvevDG3Yit+OzmbzbNEco56Hnl
+         qwM6BK4OKxTNAFe1FKly57Nlx5x0iDSNW8RU7hkvOE2uDefYaamX3a6BAxQfDMFxpP8N
+         tRQmJG2yfN4i8DHTPCEH1VSXpvg3pVx74CjekR5OrQezsa8CuU/UfbSRb/RvW9iBVUjP
+         Rtrlsv4OGoQBMNHj9meTgqGGYnIGURu6Ops9rzHrDXFhd4MVLdC6uXkDdlbjA01ehlFH
+         cTTd2g0D/bCX4XxRht6g0gRws8fLlYsF2QPQVtVUBaJyfDJt99lkbL+9TfCv3h0MpNL9
+         fNiA==
+X-Gm-Message-State: AC+VfDwPt/tZ1MRCIvXVfy29k+AmP2TiAoielAH3wwnhUN1kicSTdXyN
+        aCk90kQJ8T45kWNEEUnosMAsIw==
+X-Google-Smtp-Source: ACHHUZ4VV/u+wNY65vkMGqcqRpOJrnrIRBctK0IPefzUqdfJtG2Faq8wP4fbJml7xLdM6nEjARrruQ==
+X-Received: by 2002:a05:600c:2212:b0:3f7:865d:ce63 with SMTP id z18-20020a05600c221200b003f7865dce63mr10498832wml.21.1686741456811;
+        Wed, 14 Jun 2023 04:17:36 -0700 (PDT)
+Received: from [10.35.6.111] ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id x25-20020a05600c21d900b003f60faa4612sm17154520wmj.22.2023.06.14.04.17.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 04:17:36 -0700 (PDT)
+Message-ID: <f993a71b-69ff-3047-9a56-d04fd583431a@sifive.com>
+Date:   Wed, 14 Jun 2023 12:17:35 +0100
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: BE1P281MB2097:EE_|BEZP281MB3010:EE_|FR2DEU01FT025:EE_|BEZP281MB1976:EE_
-X-MS-Office365-Filtering-Correlation-Id: b8b7b394-78f8-4b17-12b6-08db6cc8ef17
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: u6/8vANtMAOKxjumihzqRtsMiNi/FEbF9wg0ziz0x2BWWQzYpeY1H3FrFzbGmudnnOquVnoXQB4A93eIAcCvkxNSFdkS81Vdvx6VsgJnANhnpLWy27pTaNF9Ji4ag+N3Fp09wc8x6uHur+OZlXpuUPSjoqaqUrhjZMB5itazIN63wLEgIfy3YHfhqsWfUw7354cTYvKDUeVIa5UaqYEvBCVr0MVuBdu8S///VO/C4gEbpufPXDh37L0GL+TIemiutv4sVLkqgAa5tSaKcKix356jjZ7HEaQWteU2fQcW8dEATvlG8hlmWIuCBgtX8BRxNBCXjDIpdIHlaJjuk3WLTk3fgaWVcuxUMRydXg+F1LjOy0u8yjyOf29L0DNIQGiIv/2vHUW0k2iNiFfuT95d+dhjAwORUp25fcs3nJr+uaV/SYy+Upimt023DQqIzygjvsgxX5zoi/kMRPHB2XU++jhOVzOSUh32UWcthFQxvCOuf18Z7Yp4evM9hnywvKmgOEdCHxXU1yPyacWG/APkveloEcEobxE1Cj501u3wv5erHnrv3RwHgHYJXVyTfs9RiWj3H2R/lI9WWVrxHnpoiJGz/4fdLDkTfZFEFuy5BlvB1puLotOqgDc9qwhctCXWpSoqCggpiEOPgjfgtrzdP+9sa79cfqCZlbGcGojyiuU=
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BE1P281MB2097.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(136003)(39840400004)(346002)(376002)(451199021)(54906003)(110136005)(6666004)(86362001)(107886003)(2616005)(26005)(1076003)(6506007)(6512007)(36756003)(186003)(83380400001)(52116002)(6486002)(478600001)(41300700001)(38100700002)(316002)(38350700002)(2906002)(5660300002)(44832011)(8936002)(8676002)(4326008)(66556008)(66946007)(66476007);DIR:OUT;SFP:1102;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BEZP281MB3010
-X-Signature365-MessageProcessed: true
-X-Signature365-MessageIdentifier: Y2hhcmdlYnl0ZS5jb20tMjAyMzA2MTQxMTE3MjUtezI2Q0NBNzNFLTI5ODMtNEI0QS1BNzk4LUQ0REExODM3RkIwNH0=
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: FR2DEU01FT025.eop-deu01.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 1658d423-e10f-4082-6a77-08db6cc8ee04
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: D2PI3RIA+tA3HFsBO9QBFavUSXTncR+YaK1j3Ob9MCtrtPBy/DYEHd8qZx6SEvFdNTgGsDqWCWBjCRyV2P7GhI31ozTwx73wFDYOxiCavKwuiXjidRtjQbH/+m0K4Gbgqb2M6aE3i/JSzTwYYhoJGf6Xc6HvJLUb8j6B/Zt11QcrUcYtBsQ+n5nTcY7FFYhYW0mT5UdYtmUBvmzaZ+jUk6mL1f4OwPJzUNocOCSypZpcD6Odeh2YZjL7pn09J6GB5JeXDKkhb3zO+nepgAVN1a6foC6PI3IrWEFRwMVJERigs0L6P+hW6qEXewb6/WZhmLbFrcEjgvM0YtjMBBh7AW/jC0dg5AuUmqSsux7+JIlBgCobvUZZUQ6xvkkB/JkjJz3Na1+mXqUZnHcNpGhEmPZGMQ30LbMvIYzumYvBbtI56sVIl/kln8DFyYe3xtZE5qYRcz73QA+zbKOpokXLF2gLfGVgaY7k93jCHbKuDWe2vQOEIJxMINNcMw314pzocWNnL6SiyXayVhLh4L2drTGtW43rsyVzli3EKQS9QasZnojaFFMk9O/jq/tpvQQSmqRrAGL0eaoXcxFrG9Jze/egGjvtG+VF4aCLDcazEvgjFL1CGMO0RNWe07X6jdVZ6Kdu4Y3jT/bep1yyF2aDVFAQSyhy/FcPbLwgbJb9++sRjIgKq9HD4JgqlU1D5Uhz5HGhSIeb42wqCO8J6w1WJg==
-X-Forefront-Antispam-Report: CIP:20.54.238.131;CTRY:NL;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:smtp.westeurope.signature365.net;PTR:smtp.westeurope.signature365.net;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(39840400004)(396003)(136003)(451199021)(46966006)(36840700001)(107886003)(6486002)(6666004)(47076005)(36860700001)(336012)(83380400001)(2616005)(82310400005)(6506007)(86362001)(7636003)(6512007)(1076003)(26005)(7596003)(356005)(40480700001)(36756003)(186003)(2906002)(54906003)(110136005)(70206006)(44832011)(4326008)(316002)(70586007)(41300700001)(5660300002)(478600001)(8936002)(8676002);DIR:OUT;SFP:1102;
-X-OriginatorOrg: chargebyte.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 11:17:26.2957
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b8b7b394-78f8-4b17-12b6-08db6cc8ef17
-X-MS-Exchange-CrossTenant-Id: 3a1fd3d7-4c50-4e64-b28d-9f824bfbfcb6
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3a1fd3d7-4c50-4e64-b28d-9f824bfbfcb6;Ip=[20.54.238.131];Helo=[smtp.westeurope.signature365.net]
-X-MS-Exchange-CrossTenant-AuthSource: FR2DEU01FT025.eop-deu01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BEZP281MB1976
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v7 10/10] pwm: dwc: use clock rate in hz to avoid rounding
+ issues
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        jarkko.nikula@linux.intel.com,
+        William Salmon <william.salmon@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>
+References: <20221223153820.404565-1-ben.dooks@sifive.com>
+ <20221223153820.404565-11-ben.dooks@sifive.com>
+ <20230216213927.r3lvjz6u7d62y4pb@pengutronix.de>
+Content-Language: en-GB
+From:   Ben Dooks <ben.dooks@sifive.com>
+In-Reply-To: <20230216213927.r3lvjz6u7d62y4pb@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -113,31 +84,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In case the QCA7000 is not available via SPI (e.g. in reset),
-the driver will cause a high load. The reason for this is
-that the synchronization is never finished and schedule()
-is never called. Since the synchronization is not timing
-critical, it's safe to drop this from the scheduling condition.
+On 16/02/2023 21:39, Uwe Kleine-König wrote:
+> On Fri, Dec 23, 2022 at 03:38:20PM +0000, Ben Dooks wrote:
+>> As noted, the clock-rate when not a nice multiple of ns is probably
+>> going to end up with inacurate caculations, as well as on a non pci
+> 
+> Given that such a non-nice ca*l*culation only happens in the of case
+> that is introduced here, it would be nice to move this patch before the
+> introduction of the of-support.
 
-Signed-off-by: Stefan Wahren <stefan.wahren@chargebyte.com>
-Fixes: 291ab06ecf67 ("net: qualcomm: new Ethernet over SPI driver for
- QCA7000")
----
- drivers/net/ethernet/qualcomm/qca_spi.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+I've moved of support to the end of the series
+you
+>> system the rate may change (although we've not put a clock rate
+>> change notifier in this code yet) so we also add some quick checks
+>> of the rate when we do any calculations with it.
+> 
+> If the clk rate changes while the PWM is on, this modifies the output.
+> This is unfortunate and so it justifies adding a call to
+> clk_rate_exclusive_get() when the PWM is on.
 
-diff --git a/drivers/net/ethernet/qualcomm/qca_spi.c
- b/drivers/net/ethernet/qualcomm/qca_spi.c
-index bba1947792ea16..90f18ea4c28ba1 100644
---- a/drivers/net/ethernet/qualcomm/qca_spi.c
-+++ b/drivers/net/ethernet/qualcomm/qca_spi.c
-@@ -582,8 +582,7 @@ qcaspi_spi_thread(void *data)
- 	while (!kthread_should_stop()) {
- 		set_current_state(TASK_INTERRUPTIBLE);
- 		if ((qca->intr_req == qca->intr_svc) &&
--		    (qca->txr.skb[qca->txr.head] == NULL) &&
--		    (qca->sync == QCASPI_SYNC_READY))
-+		    !qca->txr.skb[qca->txr.head])
- 			schedule();
- 
- 		set_current_state(TASK_RUNNING);
+I can't really test things any more as the hardware has been returned
+to the client and I'm technically off the project (and awaiting this
+email address to be closed down).
+
+Could this either be solved by the clk_rate_exclusive_get() or adding
+a clock change notifier? Either way I would prefer this to be work for
+another patch.
+
+I'll send v8 out later as it has had some re-works due to moving
+things around.
+
+Thank you for the review.
+
+--
+Ben
+
