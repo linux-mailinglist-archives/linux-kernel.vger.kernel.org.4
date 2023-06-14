@@ -2,98 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA3F672F4B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 08:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D6372F4C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 08:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242993AbjFNGZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 02:25:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41750 "EHLO
+        id S233639AbjFNG0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 02:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243074AbjFNGZh (ORCPT
+        with ESMTP id S242281AbjFNG0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 02:25:37 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20EBC10E3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 23:25:35 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4QgwQh71BBzBQgpg
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 14:25:32 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1686723932; x=1689315933; bh=7OkLxsdT95RRgQmH5i3rBRNHMZa
-        aegElai9Zs46I9AA=; b=IR3Bt/Y8GDBGdgKG/uWH/TPDaT7tm0xp9z3B1wuAubZ
-        ydvm2KioTXj+5yrA/KrJZsWrlVDIw5r1x6R5fvT22p/Fu/eOzYcJf1ekMNdZoVsT
-        ImWKw2dUkb3bI/WJ6OIKvydU7pM1zlma4UuToS4W3eKY97NsKehQA4ZQBJCTK6Q7
-        MxHP4Wbyf3B+diTCiEcFJInibiUhHZAp5+I6TfJ9+9J6OyOmaIpt1EkCiycAaC6Y
-        4+h4zVbxbM8YE1TC8Rzm9gALR7iuTGhTHUL0sgp6+Dt95q2tNV7Cg3pQkTa9v1Gq
-        SI83DHj2nKIgqBjxGrkhpX4+8FH8KIMlmhmNVkW60cg==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 9fsnAFdqoj25 for <linux-kernel@vger.kernel.org>;
-        Wed, 14 Jun 2023 14:25:32 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4QgwQh17kvzBQgp7;
-        Wed, 14 Jun 2023 14:25:32 +0800 (CST)
+        Wed, 14 Jun 2023 02:26:44 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B9E199;
+        Tue, 13 Jun 2023 23:26:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=GAL8rYu1Idr0YOdnXNBIthABV/YsGkUhTmU/DBbzch8=; b=tvDzinqkrdr5HsvTJrFz63M6uM
+        s38FyrvASnhlz58s1iCWQyO4ieh+ddqTrlYffk6YGHFCs1y5BsV1s6RdMFczPVMHrvHhofzB6IsA6
+        9hmJKz9Rz36FWYHj+a2EUqh/4KB/Xs1HARqfQZiC1PdmZAXLFwAB8tm59uVn+zNjVHLeLjvGzS5qq
+        almeyKHsarLuYOZzQKgNcw84/3bgIoydHoBeHOnrhd/OlHNFclDqtRGIJMsZR9JOP26ppFL8ZywOc
+        abpa3Ut6d7aZ2ydfYcdZSPsE0uXeonEwBnNGTID5qoVkjc2eIcbGjStZZRhS1DBkfHLemIWiyNw3G
+        JLkP8r4w==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q9JxZ-00AQvZ-0a;
+        Wed, 14 Jun 2023 06:26:25 +0000
+Date:   Tue, 13 Jun 2023 23:26:25 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Sergei Shtepa <sergei.shtepa@veeam.com>, axboe@kernel.dk,
+        hch@infradead.org, corbet@lwn.net, snitzer@kernel.org,
+        viro@zeniv.linux.org.uk, brauner@kernel.org, dchinner@redhat.com,
+        willy@infradead.org, dlemoal@kernel.org, linux@weissschuh.net,
+        jack@suse.cz, ming.lei@redhat.com, linux-block@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Donald Buczek <buczek@molgen.mpg.de>
+Subject: Re: [PATCH v5 04/11] blksnap: header file of the module interface
+Message-ID: <ZIldkb1pwhNsSlfl@infradead.org>
+References: <20230612135228.10702-1-sergei.shtepa@veeam.com>
+ <20230612135228.10702-5-sergei.shtepa@veeam.com>
+ <ZIjsywOtHM5nIhSr@dread.disaster.area>
 MIME-Version: 1.0
-Date:   Wed, 14 Jun 2023 14:25:32 +0800
-From:   baomingtong001@208suo.com
-To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
-        adrian.hunter@intel.com, anshuman.khandual@arm.com
-Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] perf tools:remove unneeded variable from
- perf_event_attr__fprintf()
-In-Reply-To: <20230614062234.24149-1-luojianhong@cdjrlc.com>
-References: <20230614062234.24149-1-luojianhong@cdjrlc.com>
-User-Agent: Roundcube Webmail
-Message-ID: <329a5b1b6e2c9061467ed6ef82247b8d@208suo.com>
-X-Sender: baomingtong001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZIjsywOtHM5nIhSr@dread.disaster.area>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fix the following coccicheck warning:
+On Wed, Jun 14, 2023 at 08:25:15AM +1000, Dave Chinner wrote:
+> > + * Return: 0 if succeeded, negative errno otherwise.
+> > + */
+> > +#define IOCTL_BLKSNAP_SNAPSHOT_APPEND_STORAGE					\
+> > +	_IOW(BLKSNAP, blksnap_ioctl_snapshot_append_storage,			\
+> > +	     struct blksnap_snapshot_append_storage)
+> 
+> That's an API I'm extremely uncomfortable with. We've learnt the
+> lesson *many times* that userspace physical mappings of underlying
+> file storage are unreliable.
+> 
+> i.e.  This is reliant on userspace telling the kernel the physical
+> mapping of the filesystem file to block device LBA space and then
+> providing a guarantee (somehow) that the mapping will always remain
+> unchanged. i.e. It's reliant on passing FIEMAP data from the
+> filesystem to userspace and then back into the kernel without it
+> becoming stale and somehow providing a guarantee that nothing (not
+> even the filesystem doing internal garbage collection) will change
+> it.
 
-tools/perf/util/perf_event_attr_fprintf.c:97:5-8: Unneeded variable: 
-"ret". Return "0".
+Hmm, I never thought of this API as used on files that somewhere
+had a logical to physical mapping applied to them.
 
-Signed-off-by: Mingtong Bao <baomingtong001@208suo.com>
----
-  tools/perf/util/perf_event_attr_fprintf.c | 3 +--
-  1 file changed, 1 insertion(+), 2 deletions(-)
+Sergey, is that the indtended use case?  If so we really should
+be going through the file system using direct I/O.
 
-diff --git a/tools/perf/util/perf_event_attr_fprintf.c 
-b/tools/perf/util/perf_event_attr_fprintf.c
-index 7e5e7b30510d..4a8f625b80c7 100644
---- a/tools/perf/util/perf_event_attr_fprintf.c
-+++ b/tools/perf/util/perf_event_attr_fprintf.c
-@@ -94,7 +94,6 @@ int perf_event_attr__fprintf(FILE *fp, struct 
-perf_event_attr *attr,
-                   attr__fprintf_f attr__fprintf, void *priv)
-  {
-      char buf[BUF_SIZE];
--    int ret = 0;
-
-      PRINT_ATTRf(type, p_unsigned);
-      PRINT_ATTRf(size, p_unsigned);
-@@ -155,5 +154,5 @@ int perf_event_attr__fprintf(FILE *fp, struct 
-perf_event_attr *attr,
-      PRINT_ATTRf(aux_sample_size, p_unsigned);
-      PRINT_ATTRf(sig_data, p_unsigned);
-
--    return ret;
-+    return 0;
-  }
