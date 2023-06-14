@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22CFA7303B9
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52294730398
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343751AbjFNPYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 11:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60888 "EHLO
+        id S1343726AbjFNPVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 11:21:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235089AbjFNPYN (ORCPT
+        with ESMTP id S1343705AbjFNPVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 11:24:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70298C7
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:23:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686756205;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=diKKv+BaeU++Kkxbt3j674MAf9bH7QKC98izjBTVV10=;
-        b=AAMQLVr3m1PhoCtp559cbosUq1+OMDwHBGKArt6XZH3bPysuTeJ8GbOooKpXLCYZp7/5QS
-        n0Ccax94VqbIdH8vI4nxli9L1huYmnuPt1+73uBZcu/NihZ9uVSXpFLILaAUeNCQ4QJtqt
-        pe4+aQySrdexpHC87yvQQtzkhpqXOOY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-589-fsSyVJ6TP-uEEan9Z80sLg-1; Wed, 14 Jun 2023 11:23:22 -0400
-X-MC-Unique: fsSyVJ6TP-uEEan9Z80sLg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 14 Jun 2023 11:21:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C29C5;
+        Wed, 14 Jun 2023 08:21:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D35513806738;
-        Wed, 14 Jun 2023 15:23:21 +0000 (UTC)
-Received: from [192.168.37.1] (ovpn-0-3.rdu2.redhat.com [10.22.0.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id DBAFE2166B25;
-        Wed, 14 Jun 2023 15:23:20 +0000 (UTC)
-From:   Benjamin Coddington <bcodding@redhat.com>
-To:     Chenyuan Mi <cymi20@fudan.edu.cn>
-Cc:     trond.myklebust@hammerspace.com, anna@kernel.org,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] nfsroot: Fix missing check for return value of strsep()
-Date:   Wed, 14 Jun 2023 11:23:19 -0400
-Message-ID: <43531410-F066-4DE9-9FA7-990D2E5D878B@redhat.com>
-In-Reply-To: <20230614143058.112300-1-cymi20@fudan.edu.cn>
-References: <20230614143058.112300-1-cymi20@fudan.edu.cn>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CACFD63A36;
+        Wed, 14 Jun 2023 15:21:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BAC5C433C8;
+        Wed, 14 Jun 2023 15:21:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686756073;
+        bh=8YsXKUXaEWCUoIrtqUUwU4kG3YB5yIZs9T+odfm5bLo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qqSdCzUlAis9bugdmCSIkRmGN7RIr/2eCjqEZWMss/YKvu0k1/oQ4ZzV93bCYnVCq
+         YzDEDO+2CjU4Jp+T2mPkRlL4G6i2GSRsfIZCB6fUmgkgL+hL8PIWjaqpLglX5/MmYn
+         11B+t2kYm0V8tNMvuDgA15hoa/c7oSTTi16j54Y97HbRgILCSr4It3u07B5TRrGsjv
+         B0pNIVKTs/ZMOfkC7HPhbdhvwh7Moa58yciHSaVUp2jPg960zAXLdnvuQwzMVO1YSy
+         ZJ9ZMHMK8RfoPFHwibI4jwtEwdJYvCim0loenTx9C+jW+LiiePJO/WhKZrpalthcYN
+         Firh4obe83YTg==
+Date:   Wed, 14 Jun 2023 08:24:35 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Cc:     Sarannya S <quic_sarannya@quicinc.com>, quic_bjorande@quicinc.com,
+        swboyd@chromium.org, quic_clew@quicinc.com,
+        mathieu.poirier@linaro.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        Deepak Kumar Singh <quic_deesin@quicinc.com>
+Subject: Re: [PATCH V7 1/3] rpmsg: core: Add signal API support
+Message-ID: <20230614152435.2quoctx6ouvw4ous@ripper>
+References: <1682160127-18103-1-git-send-email-quic_sarannya@quicinc.com>
+ <1682160127-18103-2-git-send-email-quic_sarannya@quicinc.com>
+ <c44d8942-83e5-01ec-491b-bac1fb27de99@foss.st.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c44d8942-83e5-01ec-491b-bac1fb27de99@foss.st.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,19 +60,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14 Jun 2023, at 10:30, Chenyuan Mi wrote:
+On Mon, Apr 24, 2023 at 02:49:29PM +0200, Arnaud POULIQUEN wrote:
+> Hello,
+> 
+> On 4/22/23 12:42, Sarannya S wrote:
+> > From: Deepak Kumar Singh <quic_deesin@quicinc.com>
+> > 
+> > Some transports like Glink support the state notifications between
+> > clients using flow control signals similar to serial protocol signals.
+> > Local glink client drivers can send and receive flow control status
+> > to glink clients running on remote processors.
+> > 
+> > Add APIs to support sending and receiving of flow control status by
+> > rpmsg clients.
+> > 
+> > Signed-off-by: Deepak Kumar Singh <quic_deesin@quicinc.com>
+> > Signed-off-by: Sarannya S <quic_sarannya@quicinc.com>
+> > ---
+> >  drivers/rpmsg/rpmsg_core.c     | 21 +++++++++++++++++++++
+> >  drivers/rpmsg/rpmsg_internal.h |  2 ++
+> >  include/linux/rpmsg.h          | 15 +++++++++++++++
+> >  3 files changed, 38 insertions(+)
+> > 
+> > diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
+> > index a2207c0..e8bbe05 100644
+> > --- a/drivers/rpmsg/rpmsg_core.c
+> > +++ b/drivers/rpmsg/rpmsg_core.c
+> > @@ -331,6 +331,25 @@ int rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src, u32 dst,
+> >  EXPORT_SYMBOL(rpmsg_trysend_offchannel);
+> >  
+> >  /**
+> > + * rpmsg_set_flow_control() - sets/clears serial flow control signals
+> > + * @ept:	the rpmsg endpoint
+> > + * @enable:	pause/resume incoming data flow	
+> > + * @dst:	destination address of the endpoint
+> > + *
+> > + * Return: 0 on success and an appropriate error value on failure.
+> > + */
+> > +int rpmsg_set_flow_control(struct rpmsg_endpoint *ept, bool enable, u32 dst)
+> > +{
+> > +	if (WARN_ON(!ept))
+> > +		return -EINVAL;
+> > +	if (!ept->ops->set_flow_control)
+> > +		return -ENXIO;
+> 
+> Here we return an error if the backend does not implement the ops.
+> But the set_flow_control ops is optional.
+> Should we return 0 instead with a debug message?
+> 
 
-> The strsep() function in root_nfs_parse_options() may return NULL
-> if argument 'incoming' is NULL. Since 'incoming' has Null check in
-> this function, it is also need to add Null check for return value
->  of strsep().
+It seems reasonable to allow the software to react to the absence of
+flow control support, so a debug message wouldn't help.
 
-Incoming is checked to be non-NULL *before* sending it to strsep() here.
+But advertising that more explicitly by returning something like
+EOPNOTSUPP seems better.
 
-> Found by our static analysis tool.
-
-The tool must be noticing that it is checked for NULL *after* strsep(),
-which wouldn't matter to strsep() at all.
-
-Ben
-
+Regards,
+Bjorn
