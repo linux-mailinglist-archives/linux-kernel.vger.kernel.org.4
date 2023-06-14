@@ -2,158 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B104C72FF27
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:54:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 562B772FF2C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244771AbjFNMyC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 14 Jun 2023 08:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51278 "EHLO
+        id S236662AbjFNMzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 08:55:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236253AbjFNMyA (ORCPT
+        with ESMTP id S236378AbjFNMzo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 08:54:00 -0400
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7091BF7
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:53:58 -0700 (PDT)
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-53482b44007so3517397a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:53:58 -0700 (PDT)
+        Wed, 14 Jun 2023 08:55:44 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2ED10EC;
+        Wed, 14 Jun 2023 05:55:42 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-30aea656e36so4807054f8f.1;
+        Wed, 14 Jun 2023 05:55:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686747341; x=1689339341;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=f4a+nqynai93p3DslnYapWoLBaBt6oixAJaqzvjoA2A=;
+        b=O7bqwRo9lqTLd0GymqyDJ/F7I5npZ3EjGhqdc8H3z76pJF+lG6ctgHpTwrGS13GdeJ
+         7/+hPgUpA7T81p6dBhiwsmDmSLI6YRtANIy5njh4PLpnZFxoVlEtMM2jCZpGI4ULOpws
+         lbZy49S4H5M104U/AMIj/GdKhxXCOX2/DYD03RarZYLu2D2saslnN2zqChnZIGpUUCr/
+         5laFVT1VMh6J2ECV7iqvALDhM6ApBsXH3ElHD4cuypHY2tURBT8rcE7Fe7vtBeDT6G9u
+         aByQdm+gWh963O0oAxOTS97kALwPMyubxCNNW7EGWRpz2OlqLbaNogz987Mvkv3xkHDn
+         1uag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686747238; x=1689339238;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kNLStUqoRTHYUkoWELHANj0sv/i/i34CB8/DedqsBvY=;
-        b=LQimxyD+G1fu8WSlHi5HQn15VoFw8sMTOwDAwXkaC0B/BiAIWQa1CgoxZCrV82QrY1
-         9B11+VFC/pqvuHYi9T4MiEW0fjYsnEehEjwSkoPOk0IKlwckAu0i8slxYVlncgIAz+L4
-         KVoruWY7LEiJXyUIWkbpk4rXCZgD5A3AStakX87K5/5kyQtOr55XBWtxce9RuZmWh5gW
-         07J7CuifeKjjqsN5uG4sg8K3fvPaWLyTgbfzzE9sxHZAfvfU8jeNe6MB74UwhY247v/h
-         j/Iwfyd8Cy2onXD8eFCgRXisBQgm7fA+xWN7HuUEmtE0ceA+qWBQlgQgE9yYCWQWC5dN
-         Xuuw==
-X-Gm-Message-State: AC+VfDwstpmNefYT5Hu/qL3OB8JmOIZiioA3K9r5MT3ePxqrVbja8F/c
-        MYIh4/I+X1FhnYMc4EwhNK8nSjoa0JI0P6WyvtU=
-X-Google-Smtp-Source: ACHHUZ5eh85pqktayCn/s1rK/8wKCn5ax5dPWAS4Xegp8r13CWBXCddQjW8HFyK0x5dGj01YKDE0cRD6fQNeqFkUIzI=
-X-Received: by 2002:a17:90a:19c4:b0:25b:8bed:d13b with SMTP id
- 4-20020a17090a19c400b0025b8bedd13bmr1050056pjj.39.1686747237691; Wed, 14 Jun
- 2023 05:53:57 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686747341; x=1689339341;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f4a+nqynai93p3DslnYapWoLBaBt6oixAJaqzvjoA2A=;
+        b=SpZEK14VY/hXcpE9m5lL3pZnIISay3U8nNvsDS+wz8LbByOZH7qzwrtqGvUMGwIZxH
+         mMQNb7/7+3n4dYfB0QfDDp/Urs6o1kw1Y6L9xWUVVCPA5ejJDFNjDe4/AutahOQIcwSI
+         At4c/en3uoqWqIk6ce3QJueeukfjt5lHNOFlTrACdxtNvvY316+vT1R9XSqOMZK6C5Mp
+         GMexZv38qpAnRu9oPTgazzusny6FOJKn0GhCxqTcqYGkDyqufnJrWXcsxyvKMpNjLFz6
+         Dgl+IQKqYyYKo7apdSTEAhsC1BS4Nh5sGs6550hkZ2OpZ+x0JnuaIR5pkri+NrCquC8G
+         DC7Q==
+X-Gm-Message-State: AC+VfDyqq5WxZnYeJKfAg/lxVVJDOW9gXz6k50TCMTKsKIGMrFqE6VTc
+        SSmXy+KKvhY86hZ50G13g/TMgJEzCWD6iRGD
+X-Google-Smtp-Source: ACHHUZ5CgQtLa5Ylyn328rgorrSA/Y3m894rHJvNMi4kR8Twg1Hc7ZqF2fyloHx8zTEu2k8bZ90qfw==
+X-Received: by 2002:adf:dc42:0:b0:306:28f4:963c with SMTP id m2-20020adfdc42000000b0030628f4963cmr9087095wrj.23.1686747340807;
+        Wed, 14 Jun 2023 05:55:40 -0700 (PDT)
+Received: from user-PC.. ([92.51.95.194])
+        by smtp.gmail.com with ESMTPSA id c21-20020a05600c0ad500b003f7310a3ffasm17402522wmr.2.2023.06.14.05.55.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 05:55:40 -0700 (PDT)
+From:   Maksim Kiselev <bigunclemax@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Maksim Kiselev <bigunclemax@gmail.com>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH v5 0/3] Add D1/T113s thermal sensor controller support
+Date:   Wed, 14 Jun 2023 15:55:18 +0300
+Message-Id: <20230614125530.660597-1-bigunclemax@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230601075333.14021-1-ihuguet@redhat.com> <87sfb1oz13.fsf@meer.lwn.net>
- <8f27ad5f-9a9c-3db0-a934-88e1810974f3@digikod.net> <CACT4oue7DgUf+65yat+6t9VrSji1N0njxunObHbRzfjMCAPmYQ@mail.gmail.com>
-In-Reply-To: <CACT4oue7DgUf+65yat+6t9VrSji1N0njxunObHbRzfjMCAPmYQ@mail.gmail.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 14 Jun 2023 21:53:46 +0900
-Message-ID: <CAMZ6RqJ66wxVAcveVunQ3W6sYihQM43Hi44D7TAee_nUPk+ZXA@mail.gmail.com>
-Subject: Re: [PATCH v4] Add .editorconfig file for basic formatting
-To:     =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@redhat.com>
-Cc:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
-        Jonathan Corbet <corbet@lwn.net>, ojeda@kernel.org,
-        danny@kdrag0n.dev, masahiroy@kernel.org, jgg@nvidia.com,
-        linux-kernel@vger.kernel.org, joe@perches.com,
-        linux@rasmusvillemoes.dk, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed. 14 Jun. 2023 at 20:40, Íñigo Huguet <ihuguet@redhat.com> wrote:
-> On Fri, Jun 9, 2023 at 3:23 PM Mickaël Salaün <mic@digikod.net> wrote:
-> > On 09/06/2023 09:50, Jonathan Corbet wrote:
-> > > Íñigo Huguet <ihuguet@redhat.com> writes:
-> > >
-> > >> EditorConfig is a specification to define the most basic code formatting
-> > >> stuff, and it's supported by many editors and IDEs, either directly or
-> > >> via plugins, including VSCode/VSCodium, Vim, emacs and more.
-> > >>
-> > >> It allows to define formatting style related to indentation, charset,
-> > >> end of lines and trailing whitespaces. It also allows to apply different
-> > >> formats for different files based on wildcards, so for example it is
-> > >> possible to apply different configs to *.{c,h}, *.py and *.rs.
-> > >>
-> > >> In linux project, defining a .editorconfig might help to those people
-> > >> that work on different projects with different indentation styles, so
-> > >> they cannot define a global style. Now they will directly see the
-> > >> correct indentation on every fresh clone of the project.
-> > >>
-> > >> See https://editorconfig.org
-> > >>
-> > >> Co-developed-by: Danny Lin <danny@kdrag0n.dev>
-> > >> Signed-off-by: Danny Lin <danny@kdrag0n.dev>
-> > >> Signed-off-by: Íñigo Huguet <ihuguet@redhat.com>
-> > >
-> > > So I must confess to still being really nervous about installing a file
-> > > that will silently reconfigure the editors of everybody working on the
-> > > kernel source; I wish there were a straightforward way to do this as an
-> > > opt-in thing.  We're talking about creating a flag-day behavioral change
-> > > for, potentially, thousands of kernel developers.  Something tells me
-> > > that we might just hear from a few of them.
-> > >
-> > > I wonder if we should, instead, ship a file like this as something like
-> > > Documentation/process/editorconfig, then provide a "make editorconfig"
-> > > command that installs it in the top-level directory for those who want
-> > > it?
-> > >
-> > > Or perhaps I'm worrying too much?
-> >
-> > This is a legitimate concern. :)
-> >
-> > A safe approach would be to rename the ".editorconfig" file to something
-> > like ".editorconfig.default" and create ".editorconfig" symlinks in all
-> > (parent) directories where enforcing this rules don't change anything
-> > because the children files are already correctly formatted. Again, a
-> > script (provided in another patch) to check and potentially update such
-> > links would be useful.
-> >
->
-> I can't think of an easy way to create that script. Formatting is done
-> by each editor using the rules from .editorconfig, but I didn't find
-> any available good script or tool to check if a file complies or not.
-> Creating that script is not trivial.
->
-> I neither think it is good to enable it for some folders and not for
-> others: developers will be surprised of having assistance in some
-> files and not in others, I would be bothered with such inconsistency.
->
-> Right now I see 2 possibilities:
-> - Provide an .editorconfig.default so those that want to use it, can
-> do it. But I wouldn't mess with cherry-picking directories that
-> already complies and those that don't, just the developer chooses to
-> use it or not, and that's all.
-> - Provide an .editorconfig directly, and those that don't want to use
-> it, either disable it in their editors or manually delete the file.
->
-> Please tell me what approach you prefer.
+This series adds support for Allwinner D1/T113s thermal sensor controller.
+THIS controller is similar to the one on H6, but with only one sensor and
+uses a different scale and offset values.
 
-Personally, I vote for the latter. My honest opinion is that we are
-putting too much consideration into the risk of rejections.
+v5:
+- Dropeed 'thermal-zones' node from sunxi-d1s-t113.dtsi
 
-Íñigo previously stated that editors such as Kate can not opt out. I
-think that the reason is simply that no one has complained about it so
-far. I did some research on the internet with the keyword "kate
-disable editorconfig", and nothing  relevant appeared. A deeper
-research made me found this:
+v4:
+- Dropeed DT bindings example
 
-  KatePart has support for reading configurations from
-  .editorconfig files, when the editorconfig library is
-  installed. KatePart automatically searches for a .editorconfig
-  whenever you open a file. It gives priority to .kateconfig
-  files, though.
+v3:
+- Fixed SoB tag again
 
-source: https://docs.kde.org/stable5/en/kate/katepart/config-variables.html
+v2:
+- Fixed SoB tag
+- Moved binding patch before driver changes
 
-So it appears that for Kate, installing the editorconfig lib is a
-prerequisite. I think it falls in the opt-in category.
+v1:
+- Initial version
 
-Is there really an editor with default opt-in and no options to
-opt-out? I doubt...
+Maxim Kiselev (3):
+  dt-bindings: thermal: sun8i: Add binding for D1/T113s THS controller
+  thermal: sun8i: Add D1/T113s THS controller support
+  riscv: dts: allwinner: d1: Add thermal sensor
 
-I really think we should have the .editorconfig at the root and for
-the rare edge cases where the user really wants to opt-out, I
-sincerely believe that there will be solutions. I have seen many
-projects using it and I do not recall push backs or complaints.
+ .../thermal/allwinner,sun8i-a83t-ths.yaml       |  7 ++++++-
+ .../boot/dts/allwinner/sunxi-d1s-t113.dtsi      | 17 +++++++++++++++++
+ drivers/thermal/sun8i_thermal.c                 | 13 +++++++++++++
+ 3 files changed, 36 insertions(+), 1 deletion(-)
+
+-- 
+2.39.2
+
