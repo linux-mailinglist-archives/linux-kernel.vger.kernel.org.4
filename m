@@ -2,55 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9028C72F55F
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 09:04:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C41DB72F564
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 09:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242777AbjFNHET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 03:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57788 "EHLO
+        id S243265AbjFNHEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 03:04:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243259AbjFNHEF (ORCPT
+        with ESMTP id S243261AbjFNHEI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 03:04:05 -0400
+        Wed, 14 Jun 2023 03:04:08 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C48268F
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 00:03:14 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA2571FDE
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 00:03:33 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q9KWk-0000gK-3G; Wed, 14 Jun 2023 09:02:46 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q9KWi-007IK0-Ac; Wed, 14 Jun 2023 09:02:44 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q9KWh-00E8AO-Bi; Wed, 14 Jun 2023 09:02:43 +0200
-Date:   Wed, 14 Jun 2023 09:02:43 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Ben Dooks <ben.dooks@sifive.com>
-Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
+        (envelope-from <mkl@pengutronix.de>)
+        id 1q9KWz-0000gR-KF; Wed, 14 Jun 2023 09:03:01 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 459681D919C;
+        Wed, 14 Jun 2023 07:02:57 +0000 (UTC)
+Date:   Wed, 14 Jun 2023 09:02:56 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Judith Mendez <jm@ti.com>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Schuyler Patton <spatton@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        jarkko.nikula@linux.intel.com,
-        William Salmon <william.salmon@sifive.com>,
-        Jude Onyenegecha <jude.onyenegecha@sifive.com>
-Subject: Re: [PATCH v7 06/10] pwm: dwc: split pci out of core driver
-Message-ID: <20230614070243.humqlwukw3smc5jr@pengutronix.de>
-References: <20221223153820.404565-1-ben.dooks@sifive.com>
- <20221223153820.404565-7-ben.dooks@sifive.com>
- <20230216213054.lge6ugeay3uxh2ye@pengutronix.de>
- <5fded01b-087a-48e1-6b38-2f52ddb190ea@sifive.com>
+        devicetree@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Simon Horman <simon.horman@corigine.com>,
+        Conor Dooley <conor+dt@linaro.org>,
+        Tony Lindgren <tony@atomide.com>
+Subject: Re: [PATCH v8 2/2] can: m_can: Add hrtimer to generate software
+ interrupt
+Message-ID: <20230614-creasing-moneybags-c7a9654b72b9-mkl@pengutronix.de>
+References: <20230530224820.303619-1-jm@ti.com>
+ <20230530224820.303619-3-jm@ti.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kph55iy6kwh54cyo"
+        protocol="application/pgp-signature"; boundary="phdc7smsj34rlft4"
 Content-Disposition: inline
-In-Reply-To: <5fded01b-087a-48e1-6b38-2f52ddb190ea@sifive.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
+In-Reply-To: <20230530224820.303619-3-jm@ti.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -63,537 +69,276 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---kph55iy6kwh54cyo
-Content-Type: text/plain; charset=iso-8859-1
+--phdc7smsj34rlft4
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 13, 2023 at 08:22:34PM +0100, Ben Dooks wrote:
-> On 16/02/2023 21:30, Uwe Kleine-K=F6nig wrote:
-> > Hello,
-> >=20
-> > On Fri, Dec 23, 2022 at 03:38:16PM +0000, Ben Dooks wrote:
-> > > Moving towards adding non-pci support for the driver, move the pci
-> > > parts out of the core into their own module. This is partly due to
-> > > the module_driver() code only being allowed once in a module and also
-> > > to avoid a number of #ifdef if we build a single file in a system
-> > > without pci support.
-> > >=20
-> > > Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
-> > > ---
-> > > v7:
-> > >   - re-order kconfig to make dwc core be selected by PCI driver
-> > > v6:
-> > >   - put DWC_PERIOD_NS back to avoid bisect issues
-> > > v4:
-> > >   - removed DWC_PERIOD_NS as not needed
-> > > ---
-> > >   drivers/pwm/Kconfig       |  17 +++-
-> > >   drivers/pwm/Makefile      |   1 +
-> > >   drivers/pwm/pwm-dwc-pci.c | 133 ++++++++++++++++++++++++++++++++
-> > >   drivers/pwm/pwm-dwc.c     | 158 +----------------------------------=
----
-> > >   drivers/pwm/pwm-dwc.h     |  58 ++++++++++++++
-> > >   5 files changed, 209 insertions(+), 158 deletions(-)
-> > >   create mode 100644 drivers/pwm/pwm-dwc-pci.c
-> > >   create mode 100644 drivers/pwm/pwm-dwc.h
-> > >=20
-> > > diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
-> > > index 3f3c53af4a56..8c5ef388a981 100644
-> > > --- a/drivers/pwm/Kconfig
-> > > +++ b/drivers/pwm/Kconfig
-> > > @@ -174,16 +174,25 @@ config PWM_CROS_EC
-> > >   	  PWM driver for exposing a PWM attached to the ChromeOS Embedded
-> > >   	  Controller.
-> > > -config PWM_DWC
-> > > -	tristate "DesignWare PWM Controller"
-> > > -	depends on PCI || COMPILE_TEST
-> >=20
-> > You're loosing COMPILE_TEST here, as it's not present for the new
-> > PWM_DWC.
-> >=20
-> > > +config PWM_DWC_CORE
-> > > +	tristate
-> > >   	depends on HAS_IOMEM
-> > >   	help
-> > > -	  PWM driver for Synopsys DWC PWM Controller attached to a PCI bus.
-> > > +	  PWM driver for Synopsys DWC PWM Controller.
-> > >   	  To compile this driver as a module, choose M here: the module
-> > >   	  will be called pwm-dwc.
-> > > +config PWM_DWC
-> > > +	tristate "DesignWare PWM Controller (PCI bus)"
-> > > +	depends on HAS_IOMEM && PCI
-> > > +	select PWM_DWC_CORE
-> > > +	help
-> > > +	  PWM driver for Synopsys DWC PWM Controller attached to a PCI bus.
-> > > +
-> > > +	  To compile this driver as a module, choose M here: the module
-> > > +	  will be called pwm-dwc-pci.
-> > > +
-> > >   config PWM_EP93XX
-> > >   	tristate "Cirrus Logic EP93xx PWM support"
-> > >   	depends on ARCH_EP93XX || COMPILE_TEST
-> > > diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
-> > > index 7bf1a29f02b8..a70d36623129 100644
-> > > --- a/drivers/pwm/Makefile
-> > > +++ b/drivers/pwm/Makefile
-> > > @@ -15,6 +15,7 @@ obj-$(CONFIG_PWM_CLPS711X)	+=3D pwm-clps711x.o
-> > >   obj-$(CONFIG_PWM_CRC)		+=3D pwm-crc.o
-> > >   obj-$(CONFIG_PWM_CROS_EC)	+=3D pwm-cros-ec.o
-> > >   obj-$(CONFIG_PWM_DWC)		+=3D pwm-dwc.o
-> > > +obj-$(CONFIG_PWM_DWC_PCI)	+=3D pwm-dwc-pci.o
-> > >   obj-$(CONFIG_PWM_EP93XX)	+=3D pwm-ep93xx.o
-> > >   obj-$(CONFIG_PWM_FSL_FTM)	+=3D pwm-fsl-ftm.o
-> > >   obj-$(CONFIG_PWM_HIBVT)		+=3D pwm-hibvt.o
-> > > diff --git a/drivers/pwm/pwm-dwc-pci.c b/drivers/pwm/pwm-dwc-pci.c
-> > > new file mode 100644
-> > > index 000000000000..2213d0e7f3c8
-> > > --- /dev/null
-> > > +++ b/drivers/pwm/pwm-dwc-pci.c
-> > > @@ -0,0 +1,133 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + * DesignWare PWM Controller driver (PCI part)
-> > > + *
-> > > + * Copyright (C) 2018-2020 Intel Corporation
-> > > + *
-> > > + * Author: Felipe Balbi (Intel)
-> > > + * Author: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> > > + * Author: Raymond Tan <raymond.tan@intel.com>
-> > > + *
-> > > + * Limitations:
-> > > + * - The hardware cannot generate a 0 % or 100 % duty cycle. Both hi=
-gh and low
-> > > + *   periods are one or more input clock periods long.
-> > > + */
-> > > +
-> > > +#include <linux/bitops.h>
-> > > +#include <linux/export.h>
-> > > +#include <linux/kernel.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/pci.h>
-> > > +#include <linux/pm_runtime.h>
-> > > +#include <linux/pwm.h>
-> > > +
-> > > +#include "pwm-dwc.h"
-> > > +
-> > > +static int dwc_pwm_probe(struct pci_dev *pci, const struct pci_devic=
-e_id *id)
-> > > +{
-> > > +	struct device *dev =3D &pci->dev;
-> > > +	struct dwc_pwm *dwc;
-> > > +	int ret;
-> > > +
-> > > +	dwc =3D dwc_pwm_alloc(dev);
-> > > +	if (!dwc)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	ret =3D pcim_enable_device(pci);
-> > > +	if (ret) {
-> > > +		dev_err(dev, "Failed to enable device (%pe)\n", ERR_PTR(ret));
-> > > +		return ret;
-> > > +	}
-> > > +
-> > > +	pci_set_master(pci);
-> > > +
-> > > +	ret =3D pcim_iomap_regions(pci, BIT(0), pci_name(pci));
-> > > +	if (ret) {
-> > > +		dev_err(dev, "Failed to iomap PCI BAR (%pe)\n", ERR_PTR(ret));
-> > > +		return ret;
-> > > +	}
-> > > +
-> > > +	dwc->base =3D pcim_iomap_table(pci)[0];
-> > > +	if (!dwc->base) {
-> > > +		dev_err(dev, "Base address missing\n");
-> > > +		return -ENOMEM;
-> > > +	}
-> > > +
-> > > +	ret =3D devm_pwmchip_add(dev, &dwc->chip);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	pm_runtime_put(dev);
-> > > +	pm_runtime_allow(dev);
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static void dwc_pwm_remove(struct pci_dev *pci)
-> > > +{
-> > > +	pm_runtime_forbid(&pci->dev);
-> > > +	pm_runtime_get_noresume(&pci->dev);
-> > > +}
-> > > +
-> > > +#ifdef CONFIG_PM_SLEEP
-> > > +static int dwc_pwm_suspend(struct device *dev)
-> > > +{
-> > > +	struct pci_dev *pdev =3D container_of(dev, struct pci_dev, dev);
-> > > +	struct dwc_pwm *dwc =3D pci_get_drvdata(pdev);
-> > > +	int i;
-> > > +
-> > > +	for (i =3D 0; i < DWC_TIMERS_TOTAL; i++) {
-> > > +		if (dwc->chip.pwms[i].state.enabled) {
-> > > +			dev_err(dev, "PWM %u in use by consumer (%s)\n",
-> > > +				i, dwc->chip.pwms[i].label);
-> > > +			return -EBUSY;
-> > > +		}
-> > > +		dwc->ctx[i].cnt =3D dwc_pwm_readl(dwc, DWC_TIM_LD_CNT(i));
-> > > +		dwc->ctx[i].cnt2 =3D dwc_pwm_readl(dwc, DWC_TIM_LD_CNT2(i));
-> > > +		dwc->ctx[i].ctrl =3D dwc_pwm_readl(dwc, DWC_TIM_CTRL(i));
-> > > +	}
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static int dwc_pwm_resume(struct device *dev)
-> > > +{
-> > > +	struct pci_dev *pdev =3D container_of(dev, struct pci_dev, dev);
-> > > +	struct dwc_pwm *dwc =3D pci_get_drvdata(pdev);
-> > > +	int i;
-> > > +
-> > > +	for (i =3D 0; i < DWC_TIMERS_TOTAL; i++) {
-> > > +		dwc_pwm_writel(dwc, dwc->ctx[i].cnt, DWC_TIM_LD_CNT(i));
-> > > +		dwc_pwm_writel(dwc, dwc->ctx[i].cnt2, DWC_TIM_LD_CNT2(i));
-> > > +		dwc_pwm_writel(dwc, dwc->ctx[i].ctrl, DWC_TIM_CTRL(i));
-> > > +	}
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +#endif
-> > > +
-> > > +static SIMPLE_DEV_PM_OPS(dwc_pwm_pm_ops, dwc_pwm_suspend, dwc_pwm_re=
-sume);
-> > > +
-> > > +static const struct pci_device_id dwc_pwm_id_table[] =3D {
-> > > +	{ PCI_VDEVICE(INTEL, 0x4bb7) }, /* Elkhart Lake */
-> > > +	{  }	/* Terminating Entry */
-> > > +};
-> > > +MODULE_DEVICE_TABLE(pci, dwc_pwm_id_table);
-> > > +
-> > > +static struct pci_driver dwc_pwm_driver =3D {
-> > > +	.name =3D "pwm-dwc",
-> > > +	.probe =3D dwc_pwm_probe,
-> > > +	.remove =3D dwc_pwm_remove,
-> > > +	.id_table =3D dwc_pwm_id_table,
-> > > +	.driver =3D {
-> > > +		.pm =3D &dwc_pwm_pm_ops,
-> > > +	},
-> > > +};
-> > > +
-> > > +module_pci_driver(dwc_pwm_driver);
-> > > +
-> > > +MODULE_AUTHOR("Felipe Balbi (Intel)");
-> > > +MODULE_AUTHOR("Jarkko Nikula <jarkko.nikula@linux.intel.com>");
-> > > +MODULE_AUTHOR("Raymond Tan <raymond.tan@intel.com>");
-> > > +MODULE_DESCRIPTION("DesignWare PWM Controller");
-> > > +MODULE_LICENSE("GPL");
-> > > diff --git a/drivers/pwm/pwm-dwc.c b/drivers/pwm/pwm-dwc.c
-> > > index 56cde9da2c0e..90a8ae1252a1 100644
-> > > --- a/drivers/pwm/pwm-dwc.c
-> > > +++ b/drivers/pwm/pwm-dwc.c
-> > > @@ -1,16 +1,12 @@
-> > >   // SPDX-License-Identifier: GPL-2.0
-> > >   /*
-> > > - * DesignWare PWM Controller driver
-> > > + * DesignWare PWM Controller driver core
-> > >    *
-> > >    * Copyright (C) 2018-2020 Intel Corporation
-> > >    *
-> > >    * Author: Felipe Balbi (Intel)
-> > >    * Author: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> > >    * Author: Raymond Tan <raymond.tan@intel.com>
-> > > - *
-> > > - * Limitations:
-> > > - * - The hardware cannot generate a 0 % or 100 % duty cycle. Both hi=
-gh and low
-> > > - *   periods are one or more input clock periods long.
-> > >    */
-> > >   #include <linux/bitops.h>
-> > > @@ -21,51 +17,7 @@
-> > >   #include <linux/pm_runtime.h>
-> > >   #include <linux/pwm.h>
-> > > -#define DWC_TIM_LD_CNT(n)	((n) * 0x14)
-> > > -#define DWC_TIM_LD_CNT2(n)	(((n) * 4) + 0xb0)
-> > > -#define DWC_TIM_CUR_VAL(n)	(((n) * 0x14) + 0x04)
-> > > -#define DWC_TIM_CTRL(n)		(((n) * 0x14) + 0x08)
-> > > -#define DWC_TIM_EOI(n)		(((n) * 0x14) + 0x0c)
-> > > -#define DWC_TIM_INT_STS(n)	(((n) * 0x14) + 0x10)
-> > > -
-> > > -#define DWC_TIMERS_INT_STS	0xa0
-> > > -#define DWC_TIMERS_EOI		0xa4
-> > > -#define DWC_TIMERS_RAW_INT_STS	0xa8
-> > > -#define DWC_TIMERS_COMP_VERSION	0xac
-> > > -
-> > > -#define DWC_TIMERS_TOTAL	8
-> > > -#define DWC_CLK_PERIOD_NS	10
-> > > -
-> > > -/* Timer Control Register */
-> > > -#define DWC_TIM_CTRL_EN		BIT(0)
-> > > -#define DWC_TIM_CTRL_MODE	BIT(1)
-> > > -#define DWC_TIM_CTRL_MODE_FREE	(0 << 1)
-> > > -#define DWC_TIM_CTRL_MODE_USER	(1 << 1)
-> > > -#define DWC_TIM_CTRL_INT_MASK	BIT(2)
-> > > -#define DWC_TIM_CTRL_PWM	BIT(3)
-> > > -
-> > > -struct dwc_pwm_ctx {
-> > > -	u32 cnt;
-> > > -	u32 cnt2;
-> > > -	u32 ctrl;
-> > > -};
-> > > -
-> > > -struct dwc_pwm {
-> > > -	struct pwm_chip chip;
-> > > -	void __iomem *base;
-> > > -	struct dwc_pwm_ctx ctx[DWC_TIMERS_TOTAL];
-> > > -};
-> > > -#define to_dwc_pwm(p)	(container_of((p), struct dwc_pwm, chip))
-> > > -
-> > > -static inline u32 dwc_pwm_readl(struct dwc_pwm *dwc, u32 offset)
-> > > -{
-> > > -	return readl(dwc->base + offset);
-> > > -}
-> > > -
-> > > -static inline void dwc_pwm_writel(struct dwc_pwm *dwc, u32 value, u3=
-2 offset)
-> > > -{
-> > > -	writel(value, dwc->base + offset);
-> > > -}
-> > > +#include "pwm-dwc.h"
-> > >   static void __dwc_pwm_set_enable(struct dwc_pwm *dwc, int pwm, int =
-enabled)
-> > >   {
-> > > @@ -196,7 +148,7 @@ static const struct pwm_ops dwc_pwm_ops =3D {
-> > >   	.owner =3D THIS_MODULE,
-> > >   };
-> > > -static struct dwc_pwm *dwc_pwm_alloc(struct device *dev)
-> > > +struct dwc_pwm *dwc_pwm_alloc(struct device *dev)
-> > >   {
-> > >   	struct dwc_pwm *dwc;
-> > > @@ -211,109 +163,7 @@ static struct dwc_pwm *dwc_pwm_alloc(struct dev=
-ice *dev)
-> > >   	dev_set_drvdata(dev, dwc);
-> > >   	return dwc;
-> > >   }
-> > > -
-> > > -static int dwc_pwm_probe(struct pci_dev *pci, const struct pci_devic=
-e_id *id)
-> > > -{
-> > > -	struct device *dev =3D &pci->dev;
-> > > -	struct dwc_pwm *dwc;
-> > > -	int ret;
-> > > -
-> > > -	dwc =3D dwc_pwm_alloc(dev);
-> > > -	if (!dwc)
-> > > -		return -ENOMEM;
-> > > -
-> > > -	ret =3D pcim_enable_device(pci);
-> > > -	if (ret) {
-> > > -		dev_err(dev, "Failed to enable device (%pe)\n", ERR_PTR(ret));
-> > > -		return ret;
-> > > -	}
-> > > -
-> > > -	pci_set_master(pci);
-> > > -
-> > > -	ret =3D pcim_iomap_regions(pci, BIT(0), pci_name(pci));
-> > > -	if (ret) {
-> > > -		dev_err(dev, "Failed to iomap PCI BAR (%pe)\n", ERR_PTR(ret));
-> > > -		return ret;
-> > > -	}
-> > > -
-> > > -	dwc->base =3D pcim_iomap_table(pci)[0];
-> > > -	if (!dwc->base) {
-> > > -		dev_err(dev, "Base address missing\n");
-> > > -		return -ENOMEM;
-> > > -	}
-> > > -
-> > > -	ret =3D devm_pwmchip_add(dev, &dwc->chip);
-> > > -	if (ret)
-> > > -		return ret;
-> > > -
-> > > -	pm_runtime_put(dev);
-> > > -	pm_runtime_allow(dev);
-> > > -
-> > > -	return 0;
-> > > -}
-> > > -
-> > > -static void dwc_pwm_remove(struct pci_dev *pci)
-> > > -{
-> > > -	pm_runtime_forbid(&pci->dev);
-> > > -	pm_runtime_get_noresume(&pci->dev);
-> > > -}
-> > > -
-> > > -#ifdef CONFIG_PM_SLEEP
-> > > -static int dwc_pwm_suspend(struct device *dev)
-> > > -{
-> > > -	struct pci_dev *pdev =3D container_of(dev, struct pci_dev, dev);
-> > > -	struct dwc_pwm *dwc =3D pci_get_drvdata(pdev);
-> > > -	int i;
-> > > -
-> > > -	for (i =3D 0; i < DWC_TIMERS_TOTAL; i++) {
-> > > -		if (dwc->chip.pwms[i].state.enabled) {
-> > > -			dev_err(dev, "PWM %u in use by consumer (%s)\n",
-> > > -				i, dwc->chip.pwms[i].label);
-> > > -			return -EBUSY;
-> > > -		}
-> > > -		dwc->ctx[i].cnt =3D dwc_pwm_readl(dwc, DWC_TIM_LD_CNT(i));
-> > > -		dwc->ctx[i].cnt2 =3D dwc_pwm_readl(dwc, DWC_TIM_LD_CNT2(i));
-> > > -		dwc->ctx[i].ctrl =3D dwc_pwm_readl(dwc, DWC_TIM_CTRL(i));
-> > > -	}
-> > > -
-> > > -	return 0;
-> > > -}
-> > > -
-> > > -static int dwc_pwm_resume(struct device *dev)
-> > > -{
-> > > -	struct pci_dev *pdev =3D container_of(dev, struct pci_dev, dev);
-> > > -	struct dwc_pwm *dwc =3D pci_get_drvdata(pdev);
-> > > -	int i;
-> > > -
-> > > -	for (i =3D 0; i < DWC_TIMERS_TOTAL; i++) {
-> > > -		dwc_pwm_writel(dwc, dwc->ctx[i].cnt, DWC_TIM_LD_CNT(i));
-> > > -		dwc_pwm_writel(dwc, dwc->ctx[i].cnt2, DWC_TIM_LD_CNT2(i));
-> > > -		dwc_pwm_writel(dwc, dwc->ctx[i].ctrl, DWC_TIM_CTRL(i));
-> > > -	}
-> > > -
-> > > -	return 0;
-> > > -}
-> > > -#endif
-> > > -
-> > > -static SIMPLE_DEV_PM_OPS(dwc_pwm_pm_ops, dwc_pwm_suspend, dwc_pwm_re=
-sume);
-> > > -
-> > > -static const struct pci_device_id dwc_pwm_id_table[] =3D {
-> > > -	{ PCI_VDEVICE(INTEL, 0x4bb7) }, /* Elkhart Lake */
-> > > -	{  }	/* Terminating Entry */
-> > > -};
-> > > -MODULE_DEVICE_TABLE(pci, dwc_pwm_id_table);
-> > > -
-> > > -static struct pci_driver dwc_pwm_driver =3D {
-> > > -	.name =3D "pwm-dwc",
-> > > -	.probe =3D dwc_pwm_probe,
-> > > -	.remove =3D dwc_pwm_remove,
-> > > -	.id_table =3D dwc_pwm_id_table,
-> > > -	.driver =3D {
-> > > -		.pm =3D &dwc_pwm_pm_ops,
-> > > -	},
-> > > -};
-> > > -
-> > > -module_pci_driver(dwc_pwm_driver);
-> > > +EXPORT_SYMBOL_GPL(dwc_pwm_alloc);
-> > >   MODULE_AUTHOR("Felipe Balbi (Intel)");
-> > >   MODULE_AUTHOR("Jarkko Nikula <jarkko.nikula@linux.intel.com>");
-> > > diff --git a/drivers/pwm/pwm-dwc.h b/drivers/pwm/pwm-dwc.h
-> > > new file mode 100644
-> > > index 000000000000..68f98eb76152
-> > > --- /dev/null
-> > > +++ b/drivers/pwm/pwm-dwc.h
-> > > @@ -0,0 +1,58 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + * DesignWare PWM Controller driver
-> > > + *
-> > > + * Copyright (C) 2018-2020 Intel Corporation
-> > > + *
-> > > + * Author: Felipe Balbi (Intel)
-> > > + * Author: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> > > + * Author: Raymond Tan <raymond.tan@intel.com>
-> > > + */
-> > > +
-> > > +#define DWC_TIM_LD_CNT(n)	((n) * 0x14)
-> > > +#define DWC_TIM_LD_CNT2(n)	(((n) * 4) + 0xb0)
-> > > +#define DWC_TIM_CUR_VAL(n)	(((n) * 0x14) + 0x04)
-> > > +#define DWC_TIM_CTRL(n)		(((n) * 0x14) + 0x08)
-> > > +#define DWC_TIM_EOI(n)		(((n) * 0x14) + 0x0c)
-> > > +#define DWC_TIM_INT_STS(n)	(((n) * 0x14) + 0x10)
-> > > +
-> > > +#define DWC_TIMERS_INT_STS	0xa0
-> > > +#define DWC_TIMERS_EOI		0xa4
-> > > +#define DWC_TIMERS_RAW_INT_STS	0xa8
-> > > +#define DWC_TIMERS_COMP_VERSION	0xac
-> > > +
-> > > +#define DWC_TIMERS_TOTAL	8
-> > > +#define DWC_CLK_PERIOD_NS	10
-> > > +
-> > > +/* Timer Control Register */
-> > > +#define DWC_TIM_CTRL_EN		BIT(0)
-> > > +#define DWC_TIM_CTRL_MODE	BIT(1)
-> > > +#define DWC_TIM_CTRL_MODE_FREE	(0 << 1)
-> > > +#define DWC_TIM_CTRL_MODE_USER	(1 << 1)
-> > > +#define DWC_TIM_CTRL_INT_MASK	BIT(2)
-> > > +#define DWC_TIM_CTRL_PWM	BIT(3)
-> > > +
-> > > +struct dwc_pwm_ctx {
-> > > +	u32 cnt;
-> > > +	u32 cnt2;
-> > > +	u32 ctrl;
-> > > +};
-> > > +
-> > > +struct dwc_pwm {
-> > > +	struct pwm_chip chip;
-> > > +	void __iomem *base;
-> > > +	struct dwc_pwm_ctx ctx[DWC_TIMERS_TOTAL];
-> > > +};
-> > > +#define to_dwc_pwm(p)	(container_of((p), struct dwc_pwm, chip))
-> > > +
-> > > +static inline u32 dwc_pwm_readl(struct dwc_pwm *dwc, u32 offset)
-> > > +{
-> > > +	return readl(dwc->base + offset);
-> > > +}
-> > > +
-> > > +static inline void dwc_pwm_writel(struct dwc_pwm *dwc, u32 value, u3=
-2 offset)
-> > > +{
-> > > +	writel(value, dwc->base + offset);
-> > > +}
-> > > +
-> > > +extern struct dwc_pwm *dwc_pwm_alloc(struct device *dev);
-> >=20
-> > If you respin this patch for the COMPILE_TEST issue I pointed out above,
-> > would you mind using a module namespace?
-> >=20
-> > That would work by adding e.g.
-> >=20
-> > 	#define DEFAULT_SYMBOL_NAMESPACE dwc-pwm
-> >=20
-> > to drivers/pwm/pwm-dwc.c (before the includes) and
-> >=20
-> > 	MODULE_IMPORT_NS(dwc-pwm)
-> >=20
-> > to drivers/pwm/pwm-dwc.h.
-> >=20
-> > Best regards
-> > Uwe
-> >=20
+On 30.05.2023 17:48:20, Judith Mendez wrote:
+> Introduce timer polling method to MCAN since some SoCs may not
+> have M_CAN interrupt routed to A53 Linux and do not have
+> interrupt property in device tree M_CAN node.
 >=20
-> I tried adding these, but all I get is a bunch of compile errors.
+> On AM62x SoC, MCANs on MCU domain do not have hardware interrupt
+> routed to A53 Linux, instead they will use timer polling method.
+>=20
+> Add an hrtimer to MCAN class device. Each MCAN will have its own
+> hrtimer instantiated if there is no hardware interrupt found in
+> device tree M_CAN node. The timer will generate a software
+> interrupt every 1 ms. In hrtimer callback, we check if there is
+> a transaction pending by reading a register, then process by
+> calling the isr if there is.
+>=20
+> Signed-off-by: Judith Mendez <jm@ti.com>
+> ---
+> Changelog:
+> v8:
+> - Cancel hrtimer after interrupts in m_can_stop
+> - Move assignment of hrtimer_callback to m_can_class_register()
+> - Initialize irq =3D 0 if polling mode is used
+> - Add reson for polling mode in commit msg
+> - Remove unrelated change
+> - Remove polling flag
+> v7:
+> - Clean up m_can_platform.c if/else section after removing poll-interval
+> - Remove poll-interval from patch description
+> v6:
+> - Move hrtimer stop/start function calls to m_can_open and m_can_close to
+> support power suspend/resume
+> v5:
+> - Change dev_dbg to dev_info if hardware interrupt exists and polling
+> is enabled
+> v4:
+> - No changes
+> v3:
+> - Create a define for 1 ms polling interval
+> - Change plarform_get_irq to optional to not print error msg
+> v2:
+> - Add functionality to check for 'poll-interval' property in MCAN node=20
+> - Add 'polling' flag in driver to check if device is using polling method
+> - Check for timer polling and hardware interrupt cases, default to
+> hardware interrupt method
+> - Change ns_to_ktime() to ms_to_ktime()
+> ---
+>  drivers/net/can/m_can/m_can.c          | 34 ++++++++++++++++++++++++--
+>  drivers/net/can/m_can/m_can.h          |  3 +++
+>  drivers/net/can/m_can/m_can_platform.c | 24 +++++++++++++++---
+>  3 files changed, 56 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+> index a5003435802b..d1d1de94e590 100644
+> --- a/drivers/net/can/m_can/m_can.c
+> +++ b/drivers/net/can/m_can/m_can.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/bitfield.h>
+>  #include <linux/can/dev.h>
+>  #include <linux/ethtool.h>
+> +#include <linux/hrtimer.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/io.h>
+>  #include <linux/iopoll.h>
+> @@ -308,6 +309,9 @@ enum m_can_reg {
+>  #define TX_EVENT_MM_MASK	GENMASK(31, 24)
+>  #define TX_EVENT_TXTS_MASK	GENMASK(15, 0)
+> =20
+> +/* Hrtimer polling interval */
+> +#define HRTIMER_POLL_INTERVAL		1
 
-I guess: Add a ; after MODULE_IMPORT_NS(dwc-pwm) fixes that?
+Please add _MS to the macro name.
 
-To talk code:
-https://git.pengutronix.de/cgit/ukl/linux/commit/?h=3Dpwm-dwc-for-bjdooks&i=
-d=3Df3ebe7f1b46f57afee44d42cb8ab3835e8f662c9
-works for me.
+> +
+>  /* The ID and DLC registers are adjacent in M_CAN FIFO memory,
+>   * and we can save a (potentially slow) bus round trip by combining
+>   * reads and writes to them.
+> @@ -1414,6 +1418,12 @@ static int m_can_start(struct net_device *dev)
+> =20
+>  	m_can_enable_all_interrupts(cdev);
+> =20
+> +	if (dev->irq =3D=3D 0) {
 
-Best regards
-Uwe
+        if (!dev->irq) {
+
+> +		dev_dbg(cdev->dev, "Start hrtimer\n");
+> +		hrtimer_start(&cdev->hrtimer, ms_to_ktime(HRTIMER_POLL_INTERVAL),
+> +			      HRTIMER_MODE_REL_PINNED);
+> +	}
+> +
+>  	return 0;
+>  }
+> =20
+> @@ -1568,6 +1578,11 @@ static void m_can_stop(struct net_device *dev)
+>  {
+>  	struct m_can_classdev *cdev =3D netdev_priv(dev);
+> =20
+> +	if (dev->irq =3D=3D 0) {
+
+        if (!dev->irq) {
+
+> +		dev_dbg(cdev->dev, "Stop hrtimer\n");
+> +		hrtimer_cancel(&cdev->hrtimer);
+> +	}
+> +
+>  	/* disable all interrupts */
+>  	m_can_disable_all_interrupts(cdev);
+> =20
+> @@ -1793,6 +1808,18 @@ static netdev_tx_t m_can_start_xmit(struct sk_buff=
+ *skb,
+>  	return NETDEV_TX_OK;
+>  }
+> =20
+> +static enum hrtimer_restart hrtimer_callback(struct hrtimer *timer)
+> +{
+> +	struct m_can_classdev *cdev =3D container_of(timer, struct
+> +						   m_can_classdev, hrtimer);
+> +
+> +	m_can_isr(0, cdev->net);
+> +
+> +	hrtimer_forward_now(timer, ms_to_ktime(HRTIMER_POLL_INTERVAL));
+> +
+> +	return HRTIMER_RESTART;
+> +}
+> +
+>  static int m_can_open(struct net_device *dev)
+>  {
+>  	struct m_can_classdev *cdev =3D netdev_priv(dev);
+> @@ -1831,10 +1858,10 @@ static int m_can_open(struct net_device *dev)
+>  		err =3D request_threaded_irq(dev->irq, NULL, m_can_isr,
+>  					   IRQF_ONESHOT,
+>  					   dev->name, dev);
+> -	} else {
+> +	}
+> +	if (dev->irq > 0)
+
+I think you broke the peripheral case. Should be:
+
+        } else if (dev->irq) {
+                ...
+        }
+
+>  		err =3D request_irq(dev->irq, m_can_isr, IRQF_SHARED, dev->name,
+>  				  dev);
+> -	}
+> =20
+>  	if (err < 0) {
+>  		netdev_err(dev, "failed to request interrupt\n");
+> @@ -2027,6 +2054,9 @@ int m_can_class_register(struct m_can_classdev *cde=
+v)
+>  			goto clk_disable;
+>  	}
+> =20
+> +	if (cdev->net->irq =3D=3D 0)
+
+        if (!cdev->net->irq)
+
+> +		cdev->hrtimer.function =3D &hrtimer_callback;
+> +
+>  	ret =3D m_can_dev_setup(cdev);
+>  	if (ret)
+>  		goto rx_offload_del;
+> diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
+> index a839dc71dc9b..2ac18ac867a4 100644
+> --- a/drivers/net/can/m_can/m_can.h
+> +++ b/drivers/net/can/m_can/m_can.h
+> @@ -15,6 +15,7 @@
+>  #include <linux/device.h>
+>  #include <linux/dma-mapping.h>
+>  #include <linux/freezer.h>
+> +#include <linux/hrtimer.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/io.h>
+>  #include <linux/iopoll.h>
+> @@ -93,6 +94,8 @@ struct m_can_classdev {
+>  	int is_peripheral;
+> =20
+>  	struct mram_cfg mcfg[MRAM_CFG_NUM];
+> +
+> +	struct hrtimer hrtimer;
+>  };
+> =20
+>  struct m_can_classdev *m_can_class_allocate_dev(struct device *dev, int =
+sizeof_priv);
+> diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_c=
+an/m_can_platform.c
+> index 94dc82644113..a7ab2c8b55d1 100644
+> --- a/drivers/net/can/m_can/m_can_platform.c
+> +++ b/drivers/net/can/m_can/m_can_platform.c
+> @@ -5,6 +5,7 @@
+>  //
+>  // Copyright (C) 2018-19 Texas Instruments Incorporated - http://www.ti.=
+com/
+> =20
+> +#include <linux/hrtimer.h>
+>  #include <linux/phy/phy.h>
+>  #include <linux/platform_device.h>
+> =20
+> @@ -96,12 +97,29 @@ static int m_can_plat_probe(struct platform_device *p=
+dev)
+>  		goto probe_fail;
+> =20
+>  	addr =3D devm_platform_ioremap_resource_byname(pdev, "m_can");
+> -	irq =3D platform_get_irq_byname(pdev, "int0");
+> -	if (IS_ERR(addr) || irq < 0) {
+> -		ret =3D -EINVAL;
+> +	if (IS_ERR(addr)) {
+> +		ret =3D PTR_ERR(addr);
+>  		goto probe_fail;
+>  	}
+> =20
+> +	if (device_property_present(mcan_class->dev, "interrupts") ||
+> +	    device_property_present(mcan_class->dev, "interrupt-names")) {
+> +		irq =3D platform_get_irq_byname(pdev, "int0");
+> +		if (irq =3D=3D -EPROBE_DEFER) {
+> +			ret =3D -EPROBE_DEFER;
+> +			goto probe_fail;
+> +		}
+> +		if (irq < 0) {
+> +			ret =3D -EINVAL;
+
+please return the original error value.
+
+> +			goto probe_fail;
+> +		}
+> +	} else {
+> +		irq =3D 0;
+
+Please initialize irq as 0 during declaration.
+
+> +		dev_dbg(mcan_class->dev, "Polling enabled, initialize hrtimer");
+> +		hrtimer_init(&mcan_class->hrtimer, CLOCK_MONOTONIC,
+> +			     HRTIMER_MODE_REL_PINNED);
+> +	}
+> +
+>  	/* message ram could be shared */
+>  	res =3D platform_get_resource_byname(pdev, IORESOURCE_MEM, "message_ram=
+");
+>  	if (!res) {
+> --=20
+> 2.34.1
+>=20
+>=20
+
+regards,
+Marc
 
 --=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---kph55iy6kwh54cyo
+--phdc7smsj34rlft4
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSJZhIACgkQj4D7WH0S
-/k76gwf+LFD3FNbXJU2K3dCDECtPI2s4HK7F6iQFEF1JXKp8kv6oUty5r2HtHKLE
-HByLqf1+aJIT+s6kODuuNKX8T7kjpyJmfccO/vTeRkPJ2KPPcuiWyrwHcE5bvkry
-2ycqA6mqUBDjZS7ZEcIfjnCYpXH/+/Q1ZU480ldW1yvkiBBaaNWMItguNG7cvguS
-4Svq8WOlnTeP9ZY/VdHvGbzYmWiVDMVxphMHVwmjfBzGhx8xiljgi3O85e57+x3T
-0nIaP32YHrK7SKR9N6Nd/Y1nfHWLckEiK4rg9rPxIpAhL9nXczZUMtm2L78nGfJV
-H/TwgB+uCZ1IBjoWHIbcL7nVSdKrAA==
-=xAyr
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmSJZh0ACgkQvlAcSiqK
+BOiXZAgAlfjQ3XR49L3QUorwMohaEwpMi15/PJ8fibvcgBibGEFG0nNp9p1DJM73
+4NsJqxEyBuZ1ov+C0U3fBHOUVzfJdU5ih1FTsR9ufr3gaelvzNXtoq2Sby6m0JW5
+psxpZnoIk1gHjwVAZt3CGNsMcojw556fdA2fYy0FA3BK7tVjy27YadzcGTcK/uYZ
+uA+Dey5k2uy/Drat4S8mIVXN2SYOrCX2Eo5FnsqyFkuajpriuy+axeSi1/SudgtN
+T3ATneDdIRJFVc8yhDaBHTYoNlyyaGGfl1Oy0m0wkXMST3nAq54qIdDs8DhS6qew
+ZM3U8L649h6bbXsXLMJeftNJb7w+Ow==
+=a8Iz
 -----END PGP SIGNATURE-----
 
---kph55iy6kwh54cyo--
+--phdc7smsj34rlft4--
