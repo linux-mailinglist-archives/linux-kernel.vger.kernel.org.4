@@ -2,201 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F40730498
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:09:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78CBF7304A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:12:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231187AbjFNQJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 12:09:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59330 "EHLO
+        id S231995AbjFNQMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 12:12:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbjFNQJZ (ORCPT
+        with ESMTP id S231429AbjFNQMX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 12:09:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148CD1FE2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:09:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8420364444
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 16:09:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC839C433C0;
-        Wed, 14 Jun 2023 16:09:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686758962;
-        bh=z4EO55OEov8HV8Wooyvn+q5dcyjiojnBToINyf+P/T8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H1w2SMZEqvPgnn1xshZ8ykXfYKbNxrLz/tdiJ3WsRf/xUzq6E3+WaDmKvihJeMIXX
-         2CNGO1JXYmjZdEZg2JgfbSaeIHsK0I0eTjNUo5N5UoTUUKgJ+b5uA9QVNMMRi1bsvX
-         pGLjXv7MOFt/ygIDdqZDXZlPcERrTbJlgkMCzRwDOS7vPkc1JW+Z97Blxib/WwWeVV
-         rrVdXSP99GmRxaerC7hZ5YrJqLwEZDBLe+AbIuJYkODjMYkjxqhU9TajFMWWKWurHu
-         9Ruy4U2yX3dD+KZgLBoRtEyWq7NKHgbkZx4lrw4ucCwLPRNkPBPoxB6YDyc/NMqral
-         5YWXemSe7/cyA==
-Date:   Wed, 14 Jun 2023 17:09:17 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
+        Wed, 14 Jun 2023 12:12:23 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7821F1FE5;
+        Wed, 14 Jun 2023 09:12:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686759142; x=1718295142;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fn79wtGk84t697GEvQm3SSYhtO2iiDoAWw2Q8A4P0zw=;
+  b=I+1Sqd1XUUsqkdg03ANHY585Gmx8TGM8e8S4HCzZ88EFpryG/WkWyz+R
+   3/05sSNj2O566mXuRCTnGMt2qNryakTeWZ1TOzChoy1LQ3P/Xb3QJKj7S
+   ytCzXYgtyoatha/AO/4d/Rh8Gyvc2rEHprriUV4iYazi9yrNt+BoK59A2
+   m9sZdFlcK/5EcWcsOoiBhB+GqMdiRmtwHj2kadBazm9awyErQZ3CQ2XMl
+   aeJN+kuff5hhVMM69m+2+j1lqOHOSQzmq8SoqKLnzDYQPQcM4fy1BmDfi
+   xFVzhmTKHdDBYPXG5pzcBw5PCsT/Ovp6sJ4iKAEqEYRl7/OhJ+Cd5Om0b
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="361135194"
+X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
+   d="scan'208";a="361135194"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 09:09:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="958843848"
+X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
+   d="scan'208";a="958843848"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.193.191])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 09:09:27 -0700
+Date:   Wed, 14 Jun 2023 09:09:25 -0700
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: x86: pgtable / kaslr initialisation (OOB) help
-Message-ID: <20230614160917.GA3635807@google.com>
-References: <20230614132339.GS3635807@google.com>
- <20230614141654.GA1640123@hirez.programming.kicks-ass.net>
- <20230614143732.GW3635807@google.com>
- <0cefb67a-6fae-daa2-c871-ae35b96aac08@intel.com>
- <20230614150615.GX3635807@google.com>
- <20230614151003.GY3635807@google.com>
- <20230614152632.GZ3635807@google.com>
- <e72e3246-1803-6a17-5b9c-30fb2dc078e3@intel.com>
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Mike Rapoport <rppt@kernel.org>, x86@kernel.org,
+        linux-cxl@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Derick Marks <derick.w.marks@intel.com>
+Subject: Re: [PATCH v2 1/2] x86/numa: Introduce numa_fill_memblks()
+Message-ID: <ZInmNaUM4HYnCCya@aschofie-mobl2>
+References: <cover.1686712819.git.alison.schofield@intel.com>
+ <9fcc548a6b4727cb2538e5227d7bad2e94e6adaf.1686712819.git.alison.schofield@intel.com>
+ <6489b6234a03e_142af829454@dwillia2-xfh.jf.intel.com.notmuch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e72e3246-1803-6a17-5b9c-30fb2dc078e3@intel.com>
+In-Reply-To: <6489b6234a03e_142af829454@dwillia2-xfh.jf.intel.com.notmuch>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Jun 2023, Dave Hansen wrote:
-
-> On 6/14/23 08:26, Lee Jones wrote:
-> > On Wed, 14 Jun 2023, Lee Jones wrote:
+On Wed, Jun 14, 2023 at 05:44:19AM -0700, Dan Williams wrote:
+> alison.schofield@ wrote:
+> > From: Alison Schofield <alison.schofield@intel.com>
 > > 
-> >> On Wed, 14 Jun 2023, Lee Jones wrote:
-> >>
-> >>> Thanks for chiming in Dave.  I hoped you would.
-> >>>
-> >>> On Wed, 14 Jun 2023, Dave Hansen wrote:
-> >>>
-> >>>> On 6/14/23 07:37, Lee Jones wrote:
-> >>>>> Still unsure how we (the kernel) can/should write to an area of memory
-> >>>>> that does not belong to it.  Should we allocate enough memory
-> >>>>> (2*PAGE_SIZE? rather than 8-Bytes) for trampoline_pgd_entry to consume
-> >>>>> in a more sane way?
-> >>>>
-> >>>> No.
-> >>>>
-> >>>> I think this:
-> >>>>
-> >>>>                 set_pgd(&trampoline_pgd_entry,
-> >>>>                         __pgd(_KERNPG_TABLE | __pa(p4d_page_tramp)));
-> >>>>
-> >>>> is bogus-ish.  set_pgd() wants to operate on a pgd_t inside a pgd
-> >>>> *PAGE*.  But it's just being pointed at a single  _entry_.  The address
-> >>>> of 'trampoline_pgd_entry' in your case  also just (unfortunately)
-> >>>> happens to pass the:
-> >>>>
-> >>>> 	__pti_set_user_pgtbl -> pgdp_maps_userspace()
-> >>>>
-> >>>> test.  I _think_ we want these to just be something like:
-> >>>>
-> >>>> 	trampoline_pgd_entry = __pgd(_KERNPG_TABLE |
-> >>>> 				     __pa(p4d_page_tramp);
-> >>>>
-> >>>> That'll keep us away from all of the set_pgd()-induced nastiness.
-> >>>
-> >>> Okay.  Is this what you're suggesting?
-> >>>
-> >>> diff --git a/arch/x86/mm/kaslr.c b/arch/x86/mm/kaslr.c                 v
-> >>> index d336bb0cb38b..803595c7dcc8 100644
-> >>> --- a/arch/x86/mm/kaslr.c
-> >>> +++ b/arch/x86/mm/kaslr.c
-> >>> @@ -176,7 +176,7 @@ void __meminit init_trampoline_kaslr(void)
-> >>>                 set_pgd(&trampoline_pgd_entry,
-> >>>                         __pgd(_KERNPG_TABLE | __pa(p4d_page_tramp)));
-> >>>         } else {
-> >>> -               set_pgd(&trampoline_pgd_entry,
-> >>> -                       __pgd(_KERNPG_TABLE | __pa(pud_page_tramp)));
-> >>> +               trampoline_pgd_entry =
-> >>> +                       __pgd(_KERNPG_TABLE | __pa(p4d_page_tramp);
-> >>
-> >> Note the change of *.page_tramp here.
-> >>
-> >>   s/pud/p4d/
-> >>
-> >> I'm assuming that too was intentional?
+> > numa_fill_memblks() fills in the gaps in numa_meminfo memblks
+> > over an HPA address range.
 > > 
-> > Never mind.  I can see that p4d_page_tramp is local to the if() segment.
+> > The ACPI driver will use numa_fill_memblks() to implement a new Linux
+> > policy that prescribes extending proximity domains in a portion of a
+> > CFMWS window to the entire window.
 > > 
-> > While we're at it, does the if() segment look correct to you:
+> > Dan Williams offered this explanation of the policy:
+> > A CFWMS is an ACPI data structure that indicates *potential* locations
+> > where CXL memory can be placed. It is the playground where the CXL
+> > driver has free reign to establish regions. That space can be populated
+> > by BIOS created regions, or driver created regions, after hotplug or
+> > other reconfiguration.
 > > 
-> >   if (pgtable_l5_enabled()) {
-> >         p4d_page_tramp = alloc_low_page();
+> > When BIOS creates a region in a CXL Window it additionally describes
+> > that subset of the Window range in the other typical ACPI tables SRAT,
+> > SLIT, and HMAT. The rationale for BIOS not pre-describing the entire
+> > CXL Window in SRAT, SLIT, and HMAT is that it can not predict the
+> > future. I.e. there is nothing stopping higher or lower performance
+> > devices being placed in the same Window. Compare that to ACPI memory
+> > hotplug that just onlines additional capacity in the proximity domain
+> > with little freedom for dynamic performance differentiation.
 > > 
-> >         p4d_tramp = p4d_page_tramp + p4d_index(paddr);
+> > That leaves the OS with a choice, should unpopulated window capacity
+> > match the proximity domain of an existing region, or should it allocate
+> > a new one? This patch takes the simple position of minimizing proximity
+> > domain proliferation by reusing any proximity domain intersection for
+> > the entire Window. If the Window has no intersections then allocate a
+> > new proximity domain. Note that SRAT, SLIT and HMAT information can be
+> > enumerated dynamically in a standard way from device provided data.
+> > Think of CXL as the end of ACPI needing to describe memory attributes,
+> > CXL offers a standard discovery model for performance attributes, but
+> > Linux still needs to interoperate with the old regime.
 > > 
-> >         set_p4d(p4d_tramp,
-> >                 __p4d(_KERNPG_TABLE | __pa(pud_page_tramp)));
-> > 
-> >         set_pgd(&trampoline_pgd_entry,
-> >                 __pgd(_KERNPG_TABLE | __pa(p4d_page_tramp)));
-> >   } else {
-> >         trampoline_pgd_entry =
-> >                 __pgd(_KERNPG_TABLE | __pa(pud_page_tramp));
-> >   }
-> > 
-> >  - pud_page_tramp is being passed to set_p4d()
-> >  - p4d_page_tramp is being passed to set_pgd()
-> > 
-> > Should those be the other way around, or am I missing the point?
+> > Reported-by: Derick Marks <derick.w.marks@intel.com>
+> > Suggested-by: Dan Williams <dan.j.williams@intel.com>
+> > Signed-off-by: Alison Schofield <alison.schofield@intel.com>
+> > Tested-by: Derick Marks <derick.w.marks@intel.com>
+> [..]
+> > diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
+> > index 2aadb2019b4f..fa82141d1a04 100644
+> > --- a/arch/x86/mm/numa.c
+> > +++ b/arch/x86/mm/numa.c
+> [..]
+> > @@ -961,4 +962,90 @@ int memory_add_physaddr_to_nid(u64 start)
+> >  	return nid;
+> >  }
+> >  EXPORT_SYMBOL_GPL(memory_add_physaddr_to_nid);
+> > +
+> > +static int __init cmp_memblk(const void *a, const void *b)
+> > +{
+> > +	const struct numa_memblk *ma = *(const struct numa_memblk **)a;
+> > +	const struct numa_memblk *mb = *(const struct numa_memblk **)b;
+> > +
+> > +	if (ma->start != mb->start)
+> > +		return (ma->start < mb->start) ? -1 : 1;
+> > +
+> > +	/* Caller handles duplicate start addresses */
+> > +	return 0;
 > 
-> You're missing the point. :)
-
-Super, thanks for the explanation.
- 
-> PGDs are always set up to point to the physical address of the thing at
-> one lower level than them.  A page is allocated for that level when
-> 5-level paging is in play.  No page is needed when it is not in play.
+> This can be simplified to:
 > 
-> The pattern is _almost_ always
+> static int __init cmp_memblk(const void *a, const void *b)
+> {
+> 	const struct numa_memblk *ma = *(const struct numa_memblk **)a;
+> 	const struct numa_memblk *mb = *(const struct numa_memblk **)b;
 > 
-> 	pgd = ... __pa(p4d);
+> 	return ma->start - mb->start;
+> }
+
+Got it.
+
 > 
-> In other words, point the PGD at the physical address of a p4d.  But
-> things get funky on systems without p4ds, thus the special casing here.
+> > +}
+> > +
+> > +static struct numa_memblk *numa_memblk_list[NR_NODE_MEMBLKS] __initdata;
+> > +
+> > +/**
+> > + * numa_fill_memblks - Fill gaps in numa_meminfo memblks
+> > + * @start: address to begin fill
+> > + * @end: address to end fill
+> > + *
+> > + * Find and extend numa_meminfo memblks to cover the @start-@end
+> > + * HPA address range, such that the first memblk includes @start,
+> > + * the last memblk includes @end, and any gaps in between are
+> > + * filled.
+> > + *
+> > + * RETURNS:
+> > + * 0		  : Success
+> > + * NUMA_NO_MEMBLK : No memblk exists in @start-@end range
+> > + */
+> > +
+> > +int __init numa_fill_memblks(u64 start, u64 end)
+> > +{
+> > +	struct numa_memblk **blk = &numa_memblk_list[0];
+> > +	struct numa_meminfo *mi = &numa_meminfo;
+> > +	int count = 0;
+> > +	u64 prev_end;
+> > +
+> > +	/*
+> > +	 * Create a list of pointers to numa_meminfo memblks that
+> > +	 * overlap start, end. Exclude (start == bi->end) since
+> > +	 * end addresses in both a CFMWS range and a memblk range
+> > +	 * are exclusive.
+> > +	 *
+> > +	 * This list of pointers is used to make in-place changes
+> > +	 * that fill out the numa_meminfo memblks.
+> > +	 */
 > 
-> Does the (completely untested) attached patch fix your problem?
-
-I just submitted a (tested) patch.
-
-It doesn't cover the if() segment though.  I'll do so and resubmit.
-
-> ---
+> Thanks for this comment, looks good.
 > 
->  b/arch/x86/mm/kaslr.c |    8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+> > +	for (int i = 0; i < mi->nr_blks; i++) {
+> > +		struct numa_memblk *bi = &mi->blk[i];
+> > +
+> > +		if (start < bi->end && end >= bi->start) {
+> > +			blk[count] = &mi->blk[i];
+> > +			count++;
+> > +		}
+> > +	}
+> > +	if (!count)
+> > +		return NUMA_NO_MEMBLK;
+> > +
+> > +	/* Sort the list of pointers in memblk->start order */
+> > +	sort(&blk[0], count, sizeof(blk[0]), cmp_memblk, NULL);
+> > +
+> > +	/* Make sure the first/last memblks include start/end */
+> > +	blk[0]->start = min(blk[0]->start, start);
+> > +	blk[count - 1]->end = max(blk[count - 1]->end, end);
+> > +
+> > +	/*
+> > +	 * Fill any gaps by tracking the previous memblks end address,
+> > +	 * prev_end, and backfilling to it if needed. Avoid filling
+> > +	 * overlapping memblks by making prev_end monotonically non-
+> > +	 * decreasing.
 > 
-> diff -puN arch/x86/mm/kaslr.c~trampoline_pgd_entry arch/x86/mm/kaslr.c
-> --- a/arch/x86/mm/kaslr.c~trampoline_pgd_entry	2023-06-14 08:54:08.685554094 -0700
-> +++ b/arch/x86/mm/kaslr.c	2023-06-14 08:55:36.077089793 -0700
-> @@ -172,10 +172,10 @@ void __meminit init_trampoline_kaslr(voi
->  		set_p4d(p4d_tramp,
->  			__p4d(_KERNPG_TABLE | __pa(pud_page_tramp)));
->  
-> -		set_pgd(&trampoline_pgd_entry,
-> -			__pgd(_KERNPG_TABLE | __pa(p4d_page_tramp)));
-> +		trampoline_pgd_entry =
-> +			__pgd(_KERNPG_TABLE | __pa(p4d_page_tramp));
->  	} else {
-> -		set_pgd(&trampoline_pgd_entry,
-> -			__pgd(_KERNPG_TABLE | __pa(pud_page_tramp)));
-> +		trampoline_pgd_entry =
-> +		       	__pgd(_KERNPG_TABLE | __pa(pud_page_tramp));
->  	}
->  }
-> _
+> I am not immediately understanding the use of the term monotonically
+> non-decreasing here? I think the first sentence of this comment is
+> enough, or am I missing a nuance?
+
+Not sure it's a nuance, but if we advanced prev_end to be curr_end
+at each iteration, gaps get needlessly filled, when curr is wholly
+contained in prev. So the 'monotonically non-decreasing' comment is
+emphasizing that prev-end will either stay the same or increase
+at each iteration.
+
+> 
+> > +	 */
+> > +	prev_end = blk[0]->end;
+> > +	for (int i = 1; i < count; i++) {
+> > +		struct numa_memblk *curr = blk[i];
+> > +
+> > +		if (prev_end >= curr->start) {
+> > +			if (prev_end < curr->end)
+> > +				prev_end = curr->end;
+> > +		} else {
+> > +			curr->start = prev_end;
+> > +			prev_end = curr->end;
+> > +		}
+> > +	}
+> > +	return 0;
+> > +}
+> > +EXPORT_SYMBOL_GPL(numa_fill_memblks);
+> 
+> This export is not needed. The only caller of this is
+> drivers/acpi/numa/srat.c which is only ever built-in, not a module.
+
+Got it.
+Thanks for the review Dan and for helping address other reviewer
+comments.
+
+Alison
 
 
--- 
-Lee Jones [李琼斯]
