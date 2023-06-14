@@ -2,121 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A081D72F7CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:27:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 814CE72F7D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243501AbjFNI1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 04:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55092 "EHLO
+        id S243495AbjFNI3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 04:29:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243528AbjFNI1K (ORCPT
+        with ESMTP id S235164AbjFNI3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 04:27:10 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on20714.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eaa::714])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3CD1BFB;
-        Wed, 14 Jun 2023 01:26:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JiBeS9rZdW75o+3ywMh8k8leHb9S1V0Arus27Rw8tnBnA22MS/bpf0rsnl6vmk7oHqITPciDyZzdl16t2l0mWXNahEIcJdEGv0fD2zyeRJSnWorZE3dNvKIp7m/kDdCmVIDMBekdIq6vGJQrGT2FlAVoTxqWSauoX2NQSq7Zoy+7XBa18SB+C8aBBfIqe4BQaIDK0dTSHiYtULLJJCvUVJjH+YlrAhQkYCSQU8kSdUpbDbi8Wqn7iqp/Fri2CaORf8WXL8ceVU6uFA7GMdVEti02vSdTatHn6rVHs+S+P63v8WMMcWa6ilHsLNiXA8wxvnj3CaiCAN4D/VzznvFwYw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pCKKjil58r0DFz2SbcSdYj2POnI55cwqCqmPRPzFl0c=;
- b=EXNnGcCN/YBkMzMY/ZVQbFmFQXRIfOLSrg0ggMKI2hsVQDGdWvoUE7j7g76L0sRk6ekFgmMDahhhH4eU4LYQS+oA5Qte7hGYijHHLaZ9TyE9+G7DR3vlehChrArlmAFL4NGGZ4QQozsuPPntirbxnWH9Ln5n0ZGrYTEDheYQT2J4cPQ3nAC8z8x6d1rrhnaVKG33q7Y/gMFkeJKstj8KFlPXQbu9sBwkNpNB222HdqV2vUvI6mH8FPe85ME3AtMxQWLMhXu17MHWRV4OyqIy9TZQf8zWIxBj1atyuluXkaPH6jS5P6IWqw/Fm7VeCGezKyWkBaDUm4x0GjgHd3YWxA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pCKKjil58r0DFz2SbcSdYj2POnI55cwqCqmPRPzFl0c=;
- b=or371LSx0Cjubrcv1aQQQfT89LcI5oGmmc+XAMEI7N2aL5fGGqDiKfzrbH8unpLgmcTIb/qkxEX4BDwsMlsJ8sLxeJWCXzx9JQiNsQPDE+tDY4hxluAv55l3Z/vbUcVB30R9L26rUwvvU/kiWp/inirvyJm2Q4/TiCzqPfqjCfQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by LV8PR13MB6350.namprd13.prod.outlook.com (2603:10b6:408:188::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.25; Wed, 14 Jun
- 2023 08:26:38 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e%4]) with mapi id 15.20.6477.028; Wed, 14 Jun 2023
- 08:26:38 +0000
-Date:   Wed, 14 Jun 2023 10:26:31 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Ivan Vecera <ivecera@redhat.com>
-Cc:     netdev@vger.kernel.org, Ma Yuying <yuma@redhat.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "moderated list:INTEL ETHERNET DRIVERS" 
-        <intel-wired-lan@lists.osuosl.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next 2/2] i40e: Wait for pending VF reset in VF set
- callbacks
-Message-ID: <ZIl5t3x3/BDdHyhr@corigine.com>
-References: <20230613121610.137654-1-ivecera@redhat.com>
- <20230613121610.137654-2-ivecera@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230613121610.137654-2-ivecera@redhat.com>
-X-ClientProxiedBy: AM3PR03CA0060.eurprd03.prod.outlook.com
- (2603:10a6:207:5::18) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Wed, 14 Jun 2023 04:29:01 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99814CA;
+        Wed, 14 Jun 2023 01:28:59 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Qgz935tvHz4f403P;
+        Wed, 14 Jun 2023 16:28:55 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgBn0LNHeolkEHGzLg--.64311S3;
+        Wed, 14 Jun 2023 16:28:56 +0800 (CST)
+Subject: Re: [dm-devel] [PATCH -next v2 4/6] md: refactor
+ idle/frozen_sync_thread() to fix deadlock
+To:     Xiao Ni <xni@redhat.com>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     guoqing.jiang@linux.dev, agk@redhat.com, snitzer@kernel.org,
+        dm-devel@redhat.com, song@kernel.org, linux-raid@vger.kernel.org,
+        yangerkun@huawei.com, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230529132037.2124527-1-yukuai1@huaweicloud.com>
+ <20230529132037.2124527-5-yukuai1@huaweicloud.com>
+ <05aa3b09-7bb9-a65a-6231-4707b4b078a0@redhat.com>
+ <74b404c4-4fdb-6eb3-93f1-0e640793bba6@huaweicloud.com>
+ <6e738d9b-6e92-20b7-f9d9-e1cf71d26d73@huaweicloud.com>
+ <CALTww292gwOe-WEjuBwJn0AXvJC4AbfMZXC43EvVt3GCeBoHfw@mail.gmail.com>
+ <5bf97ec5-0cb4-1163-6917-2bc98d912c2b@huaweicloud.com>
+ <CALTww28UapJnK+Xfx7O9uEd5ZH2E7ufPT_7pKY6YYuzTZ0Fbdw@mail.gmail.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <b96ec15b-6102-17bb-2c18-a487f224865b@huaweicloud.com>
+Date:   Wed, 14 Jun 2023 16:28:54 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|LV8PR13MB6350:EE_
-X-MS-Office365-Filtering-Correlation-Id: 73183385-f8a5-40e9-36d5-08db6cb11286
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 30eBGmSK42y5nLq5jK/gMBAWMid3W7a3YJdiNKByfrPxUMrqTVaj0vX9fDSHbN5+VXWGlroOzwO+l16pZJTnAWBDkJxzYHcg2x8AU80yt7Nhc9jliiUG+fNVs81lO4BnmDoOsWOCP5tfuVCp6LhSocYXqfSE0BOexBpgGyudQL5pCweXYvTr5Mt8QmrJ2px+nWN7m3BqRtb8LBBfYdP/c6oO374MHn/U84ZkKCYhsRuPVgC7L1MuT0s5BMyHj89JXSC4ABSHgfFEtG3G9KLU9PgkVdjwlOkXLotzWZ+WtCcmbHLUx6AbjOaB91n4cUYVdDDy9ocTsAjYCMfNcBsqR+rfLsfhGIy3HL0BB7yzgK8/8Oc/toH80I/juhIBIXs0bHDhqsD2qhj2WuaIiIgRzKxtBv2uxE0hpSdptHTAaxaEr2YkmrENvF3TulBXQRieHy+G+YQQxMF0kVSHD9pyuw9NKT/+NrUkesTOoR5MpSNtTSWQkyFlX1ZhrlOfR4ZmZ6v5fwHSG8mAMpyj8Cd3cunKOlGUrRp4UZKAB/TUf+1hyV4Z8fPXaU2Xoudb/yAU7Sutobhp1Kv/7gyFfqUdLXxRS2IqKbKdKm1VWqMXIv4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(39840400004)(366004)(346002)(136003)(451199021)(36756003)(2906002)(86362001)(44832011)(7416002)(6666004)(6486002)(186003)(6512007)(6506007)(5660300002)(478600001)(54906003)(66946007)(6916009)(66556008)(66476007)(4326008)(2616005)(316002)(38100700002)(8936002)(8676002)(41300700001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?H5LyY2chuz1ZDb/+p33IYg5WO12IPhl82Q+i8vYdMHQ3c2MhkR9MkQyYfpwQ?=
- =?us-ascii?Q?Zz7bHM1vwWMOac0bfNkZ82kAdxRdiRQkSYaevpI+IpCCdswTwIeSsnJNiU1f?=
- =?us-ascii?Q?JlKv8uqRa9msn3XemPOdG9maCffEIpJ7ThfrFk+rD/cQthLbcy9IbgOpMZGz?=
- =?us-ascii?Q?Qzenw2ssGVQXIA1vt+ZvOjT+KMAdHwFos4UrsfYNRc1NrCQYi9Cfk0/zpouw?=
- =?us-ascii?Q?5WWG7799wYmJlkViJlhEHBbFEbSzaAbu8hjX4cNWeEW7wVwYUdZL6sXqNMG+?=
- =?us-ascii?Q?pQDn2k4TNNUb6IQ9BzcPkqzBCwLK62czQUamRxXkXRug1etbhZJoxnkpVaN2?=
- =?us-ascii?Q?6lq1I7Nln/tOWuTuiNVhuHSjolsqULlpDfIvV/o2XHsJsYU0a2axHsdLAOtF?=
- =?us-ascii?Q?OysW10BjZL3qubIzBxkqH56qeTu9c09mvZfYWhDJSrT1RCRrtCwoHhzHKF2M?=
- =?us-ascii?Q?0ntWOPjRV87rEgYwqhuDjNZgC1cT/ng6apDZVABcPUh/5jw3eI5nQlsNfw1W?=
- =?us-ascii?Q?yLqHGSDDqnGvdTL53/pfe9ldEiUAgeYZhLllBkf0yWSdNBvcDccce1xBBjie?=
- =?us-ascii?Q?6ROceP15AuToAWjZLcZNX1wnq63Sh7zskEJxypljhnroT5YQo3y+l39zagBv?=
- =?us-ascii?Q?SHJAAPv8pUI1YNB3iHNXlZePK6fH3lf70q2FL9RkfiJUeljUmphw1aO50lBd?=
- =?us-ascii?Q?UnwoBRZZ5EDgUpWhIws7O85VLlvq5wQrmRar8kg6NoRkrFnR6WjUDqlZafPe?=
- =?us-ascii?Q?cg8jeJtbCdPzH4qnyA/wgEkNQU0CXw6eh+Ej0rSj4J4wK6nPg2kYxqG0+auq?=
- =?us-ascii?Q?VclCLXcpJMWDAhLGPsyWcFQ5ckIYf1sOyMAVuZyH69JC7bJQRL5T0ijN6ums?=
- =?us-ascii?Q?XT52ukOQ3xPRce8y2w2nPSOobWDVAA6Ao9wH2dK1hSItg1Tf8rqMEo/1PSXW?=
- =?us-ascii?Q?OlfmcEhkLX4PXT2rBRK3HiNwVubDHT/C9XFFx6KOmcpv5JvltUZIrGe2f4h/?=
- =?us-ascii?Q?x7WjNBHl5mUlUHMKoePhy6x2HszLbkdfj8oVDKWt0YOUc1VF21VirpBltkuG?=
- =?us-ascii?Q?zqOMOTVhPrrUoER9n4xc1CKw6+c2opCN1iZJ+NMZFekT3ilnhdiqnprWsg3E?=
- =?us-ascii?Q?H1CyId2IOIRsxVdO+gwa6q1mz4hgk/ApEiq0OJVmHGfyZq3NtkZxdmHOZmKP?=
- =?us-ascii?Q?WreYXkkrCtYhshrs5/chEpX0Juz41zOGeqO3/cxnr4CRsQ9NGtUbFSWpEtfV?=
- =?us-ascii?Q?0qcrf8Pls2KB/13i6kA9ZwfSvvo7zVrDXUsUmBrj75K41lBYgxYvURkxieSn?=
- =?us-ascii?Q?x4gtGFCfLCttg89pJ2aQg1weG5K8JEebwtG7LZPkSCoKVz61wPjZK/tjWIdf?=
- =?us-ascii?Q?wLHXCbAMA82O6EARRXkIOa+AslLwb9XVyvXL/O8Z+loEMtganNBSmolvT+8t?=
- =?us-ascii?Q?v2EgKJC320GplCRRFqE3MBcbpQzeFhHQwBeR1osJMu9CTobeF1VuzGT6DR3b?=
- =?us-ascii?Q?oRjDwNwx96NX2V0nzTbtsgcbyl8cf3McFkAq6CM90+qr8SUuoI/0CqgPsBUU?=
- =?us-ascii?Q?vNuUX9sc3tM5WvMbXuFa7K+4vYPHXYWKtyrXX7ZF2pU0nAlKN9emZMYoG09p?=
- =?us-ascii?Q?M4LzB5SuN2q7fJfb3z6Z4OhTif+OTfslyyM9WUh9EIwqH+1dndPzE2o+DWZJ?=
- =?us-ascii?Q?viuHxQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 73183385-f8a5-40e9-36d5-08db6cb11286
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 08:26:38.1101
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 12bCrNKcIeB5Jd04yrELmpgrc2hoq2uGPlrrjGYWIEdL4I+thbS5WH6HWTYZHxoF/h0i1eJDwN0UkPqCQCcZCaHhF/EnGIyhUHdBsgzJ+uU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR13MB6350
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CALTww28UapJnK+Xfx7O9uEd5ZH2E7ufPT_7pKY6YYuzTZ0Fbdw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgBn0LNHeolkEHGzLg--.64311S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxGrWfXw45WFyrury5GF45KFg_yoW5ur4Dpr
+        y8ZF1Utr4jyr4xZ3y0q3WjvrW0y34UXF15Xr9xJry3Jwn5Kw4ftFW7CFW5uFyDZF95Jw4j
+        k395tF4fJFZFyw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWr
+        Zr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
+        BIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -124,28 +73,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 02:16:10PM +0200, Ivan Vecera wrote:
-> Commit 028daf80117376 ("i40e: Fix attach VF to VM issue") fixed
-> a race between i40e_ndo_set_vf_mac() and i40e_reset_vf() during
-> an attachment of VF device to VM. This issue is not related to
-> setting MAC address only but also VLAN assignment to particular
-> VF because the newer libvirt sets configured MAC address as well
-> as an optional VLAN. The same behavior is also for i40e's
-> .ndo_set_vf_rate and .ndo_set_vf_spoofchk where the callbacks
-> just check if the VF was initialized but not wait for the finish
-> of pending reset.
-> 
-> Reproducer:
-> [root@host ~]# virsh attach-interface guest hostdev --managed 0000:02:02.0 --mac 52:54:00:b4:aa:bb
-> error: Failed to attach interface
-> error: Cannot set interface MAC/vlanid to 52:54:00:b4:aa:bb/0 for ifname enp2s0f0 vf 0: Resource temporarily unavailable
-> 
-> Fix this issue by using i40e_check_vf_init_timeout() helper to check
-> whether a reset of particular VF was finished in i40e's
-> .ndo_set_vf_vlan, .ndo_set_vf_rate and .ndo_set_vf_spoofchk callbacks.
-> 
-> Tested-by: Ma Yuying <yuma@redhat.com>
-> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
+Hi,
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+在 2023/06/14 15:57, Xiao Ni 写道:
+> On Wed, Jun 14, 2023 at 3:38 PM Yu Kuai <yukuai1@huaweicloud.com> wrote:
+>>
+>> Hi,
+>>
+>> 在 2023/06/14 15:12, Xiao Ni 写道:
+>>> On Wed, Jun 14, 2023 at 10:04 AM Yu Kuai <yukuai1@huaweicloud.com> wrote:
+>>>>
+>>>> Hi,
+>>>>
+>>>> 在 2023/06/14 9:48, Yu Kuai 写道:
+>>>>
+>>>>
+>>>>>>
+>>>>>> In the patch, sync_seq is added in md_reap_sync_thread. In
+>>>>>> idle_sync_thread, if sync_seq isn't equal
+>>>>>>
+>>>>>> mddev->sync_seq, it should mean there is someone that stops the sync
+>>>>>> thread already, right? Why do
+>>>>>>
+>>>>>> you say 'new started sync thread' here?
+>>>>
+>>>> If someone stops the sync thread, and new sync thread is not started,
+>>>> then this sync_seq won't make a difference, above wait_event() will not
+>>>> wait because !test_bit(MD_RECOVERY_RUNNING, &mddev->recovery) will pass.
+>>>> So 'sync_seq' is only used when the old sync thread stops and new sync
+>>>> thread starts, add 'sync_seq' will bypass this case.
+>>>
+>>> Hi
+>>>
+>>> If a new sync thread starts, why can sync_seq be different? sync_seq
+>>> is only added in md_reap_sync_thread. And when a new sync request
+>>> starts, it can't stop the sync request again?
+>>>
+>>> Af first, the sync_seq is 0
+>>>
+>>> admin1
+>>> echo idle > sync_action
+>>> idle_sync_thread(sync_seq is 1)
+>>
+>> Wait, I'm confused here, how can sync_seq to be 1 here? I suppose you
+>> mean that there is a sync_thread just finished?
+> 
+> Hi Kuai
+> 
+> Yes. Because idle_sync_thread needs to wait until md_reap_sync_thread
+> finishes. And md_reap_sync_thread adds sync_seq. Do I understand your
+> patch right?
+
+Yes, noted that idle_sync_thread() will only wait if MD_RECOVERY_RUNNING
+is set.
+
+> 
+>>
+>> Then the problem is that idle_sync_thread() read sync_seq after the old
+>> sync_thread is done, and new sync_thread start before wait_event() is
+>> called, should we wait for this new sync_thread?
+>>
+>> My answer here is that we should, but I'm also ok to not wait this new
+>> sync_thread, I don't think this behaviour matters. The key point here
+>> is that once wait_event() is called from idle_sync_thread(), this
+>> wait_event() should not wait for new sync_thread...
+> 
+> I think we should wait. If we don't wait for it, there is a problem.
+> One person echos idle to sync_action and it doesn't work sometimes.
+> It's a strange thing.
+> 
+
+Ok. I'll add new comment to emphasize that idle_sync_thread() won't wait
+for new sync_thread that is started after wait_event().
+
+>>
+>>> echo resync > sync_action (new sync)
+>>
+>> If this is behind "echo idle > sync_action", idle_sync_thread should not
+>> see that MD_RECOVERY_RUNNING is set and wait_event() won't wait at all.
+> 
+> `echo resync > sync_action` can't change the sync_seq. So 'echo idle >
+> sync_action' still waits until MD_RECOVERY_RUNNING is cleared?
+
+This is not accurate, if `echo resync > sync_action` triggers a new
+sync_thread, then sync_seq is updated when this sync_thread is done,
+during this period, MD_RECOVERY_RUNNING is still set, so `echo idle
+ >sync_action` will wait for sync_thread to be done.
+
+Thanks,
+Kuai
+> 
+> Regards
+> Xiao
+> 
+>>
+>> Thanks,
+>> Kuai
+>>>
+>>> Then admin2 echos idle > sync_action, sync_seq is still 1
+>>>
+>>> Regards
+>>> Xiao
+>>>
+>>>>
+>>>> Thanks,
+>>>> Kuai
+>>>>
+>>>
+>>> .
+>>>
+>>
+> 
+> .
+> 
 
