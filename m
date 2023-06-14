@@ -2,169 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE1E272F8F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 11:24:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF52C72F287
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 04:19:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243938AbjFNJY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 05:24:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60746 "EHLO
+        id S242209AbjFNCTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 22:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235174AbjFNJYZ (ORCPT
+        with ESMTP id S242221AbjFNCTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 05:24:25 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121EA10E6;
-        Wed, 14 Jun 2023 02:24:24 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-3094910b150so6436184f8f.0;
-        Wed, 14 Jun 2023 02:24:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686734662; x=1689326662;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=7vhykEG+gmq52oSNnSPExwEhKf++8eJ31Faf/uybBvo=;
-        b=MZ/7VuHlf5M9nJ6GXXGSP1shZRtsCCaJ2g1j1OJitRZdfzuJO4bcP/WrJK9xlZx0Oo
-         hpw/s/lLqJdUEWkv2tTQCMhlLKqD+wY5oNP7anb9MBqGoYJs964f2fdBDojrxtRFaTGp
-         pJwciX0i1lH9vnHrK/eRFArcpXq/aW9x5BJicwhqtCTndYKjjgwsXAgVAh+b3Wz46Y3i
-         rO3TqSCN9HsfV0/sHavO/kdnTDIFagXodFR5Qg+JWuF7odcqYGYdOgnqbfwXGe3nCVGj
-         jCndsch5YUCIWn23HGTU8YtfqebJ1Y0dCpAqcbRK9NW5x6D/XmN4K6h8XDnSPloszexE
-         fgeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686734662; x=1689326662;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7vhykEG+gmq52oSNnSPExwEhKf++8eJ31Faf/uybBvo=;
-        b=emueV7jOFT34iW/HcegVx/asotRLuK7qHPEGxuloWDjSsS62TOHsVCs09lAbFVU2Mi
-         p/9b2katYR2zEMyYFDgQAh25HfXuUvPFwgxuupiHsdYmeUTnMjziRRRCaxHK3rHr/8fh
-         XqSawgh/T9iI6QQ4kwT0bz2E+Y/Yuwl/D/r50t4Q2yn3+CHs95OripSdrHUVr7+FYuU1
-         upVAkY9PfhCTVYhvf7bmfZF1snuCzTTCSiO1fc0x4Oc3hetx4g7josHTErVFEzRTnwpP
-         xPeUpkkF42YGFUsa3RfeULJrOOvDQFNL9h3CihRKBj/CVLZGe3CPouXL+dQ/ikj9a8ms
-         L6AQ==
-X-Gm-Message-State: AC+VfDxTWDGHb0xZVR39Pak98Nz7HFCnerJJ7APjuM5ya2gozASst7pj
-        EehBzq/E7unOMBmvLdfwySY=
-X-Google-Smtp-Source: ACHHUZ5EYjmX3Te3NRl5NRfUn4gvi77Sf9p4U7ex2tQl76NC2IloI4S7UAWui12wcDHsMggxAlCHCA==
-X-Received: by 2002:adf:fcc1:0:b0:30a:e369:5acb with SMTP id f1-20020adffcc1000000b0030ae3695acbmr10329954wrs.68.1686734662140;
-        Wed, 14 Jun 2023 02:24:22 -0700 (PDT)
-Received: from Ansuel-xps. (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
-        by smtp.gmail.com with ESMTPSA id d17-20020a5d6dd1000000b003095bd71159sm17777371wrz.7.2023.06.14.02.24.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 02:24:21 -0700 (PDT)
-Message-ID: <64898745.5d0a0220.546a.a6f1@mx.google.com>
-X-Google-Original-Message-ID: <ZIki6HMOBlgvBURh@Ansuel-xps.>
-Date:   Wed, 14 Jun 2023 04:16:08 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Jose Abreu <Jose.Abreu@synopsys.com>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [net-next PATCH v5 4/5] net: ethernet: stmicro: stmmac: generate
- stmmac dma conf before open
-References: <20220723142933.16030-1-ansuelsmth@gmail.com>
- <20220723142933.16030-5-ansuelsmth@gmail.com>
- <DM4PR12MB508882D5BE351BD756A7A9A4D35AA@DM4PR12MB5088.namprd12.prod.outlook.com>
+        Tue, 13 Jun 2023 22:19:08 -0400
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BFA1BD2;
+        Tue, 13 Jun 2023 19:18:39 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0Vl4LWPN_1686709107;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0Vl4LWPN_1686709107)
+          by smtp.aliyun-inc.com;
+          Wed, 14 Jun 2023 10:18:36 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     jejb@linux.ibm.com
+Cc:     jarkko@kernel.org, zohar@linux.ibm.com, dhowells@redhat.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] security: keys: Modify mismatched function name
+Date:   Wed, 14 Jun 2023 10:18:25 +0800
+Message-Id: <20230614021825.64333-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM4PR12MB508882D5BE351BD756A7A9A4D35AA@DM4PR12MB5088.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 07:15:03AM +0000, Jose Abreu wrote:
-> Hi Christian,
-> 
-> From: Christian Marangi <ansuelsmth@gmail.com>
-> Date: Sat, Jul 23, 2022 at 15:29:32
-> 
-> > +static int __stmmac_open(struct net_device *dev,
-> > +			 struct stmmac_dma_conf *dma_conf)
-> >  {
-> >  	struct stmmac_priv *priv = netdev_priv(dev);
-> >  	int mode = priv->plat->phy_interface;
-> > -	int bfsize = 0;
-> >  	u32 chan;
-> >  	int ret;
-> >  
-> > @@ -3657,45 +3794,10 @@ static int stmmac_open(struct net_device *dev)
-> >  	memset(&priv->xstats, 0, sizeof(struct stmmac_extra_stats));
-> >  	priv->xstats.threshold = tc;
-> >  
-> > -	bfsize = stmmac_set_16kib_bfsize(priv, dev->mtu);
-> > -	if (bfsize < 0)
-> > -		bfsize = 0;
-> > -
-> > -	if (bfsize < BUF_SIZE_16KiB)
-> > -		bfsize = stmmac_set_bfsize(dev->mtu, priv->dma_conf.dma_buf_sz);
-> > -
-> > -	priv->dma_conf.dma_buf_sz = bfsize;
-> > -	buf_sz = bfsize;
-> > -
-> >  	priv->rx_copybreak = STMMAC_RX_COPYBREAK;
-> >  
-> > -	if (!priv->dma_conf.dma_tx_size)
-> > -		priv->dma_conf.dma_tx_size = DMA_DEFAULT_TX_SIZE;
-> > -	if (!priv->dma_conf.dma_rx_size)
-> > -		priv->dma_conf.dma_rx_size = DMA_DEFAULT_RX_SIZE;
-> > -
-> > -	/* Earlier check for TBS */
-> > -	for (chan = 0; chan < priv->plat->tx_queues_to_use; chan++) {
-> > -		struct stmmac_tx_queue *tx_q = &priv->dma_conf.tx_queue[chan];
-> > -		int tbs_en = priv->plat->tx_queues_cfg[chan].tbs_en;
-> > -
-> > -		/* Setup per-TXQ tbs flag before TX descriptor alloc */
-> > -		tx_q->tbs |= tbs_en ? STMMAC_TBS_AVAIL : 0;
-> > -	}
-> > -
-> > -	ret = alloc_dma_desc_resources(priv);
-> > -	if (ret < 0) {
-> > -		netdev_err(priv->dev, "%s: DMA descriptors allocation failed\n",
-> > -			   __func__);
-> > -		goto dma_desc_error;
-> > -	}
-> > -
-> > -	ret = init_dma_desc_rings(dev, GFP_KERNEL);
-> > -	if (ret < 0) {
-> > -		netdev_err(priv->dev, "%s: DMA descriptors initialization failed\n",
-> > -			   __func__);
-> > -		goto init_error;
-> > -	}
-> > +	buf_sz = dma_conf->dma_buf_sz;
-> > +	memcpy(&priv->dma_conf, dma_conf, sizeof(*dma_conf));
-> 
-> This memcpy() needs to be the first thing to be done on __stmmac_open(), otherwise
-> you'll leak the dma_conf when stmmac_init_phy() fails.
->
+No functional modification involved.
 
-I'm not following the meaning of leak here. If it's intended as a memory
-leak then dma_conf is correctly freed in the 2 user of __stmmac_open.
+security/keys/trusted-keys/trusted_tpm2.c:203: warning: expecting prototype for tpm_buf_append_auth(). Prototype was for tpm2_buf_append_auth() instead.
 
-stmmac_init_phy also doesn't seems to use dma_conf. Am I missing
-something here?
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=5524
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ security/keys/trusted-keys/trusted_tpm2.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Can you please send follow-up patch?
-
-Happy to push a follow-up patch with these concern cleared!
-
-> 
-> Thanks,
-> Jose
-
+diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+index 2b2c8eb258d5..bc700f85f80b 100644
+--- a/security/keys/trusted-keys/trusted_tpm2.c
++++ b/security/keys/trusted-keys/trusted_tpm2.c
+@@ -186,7 +186,7 @@ int tpm2_key_priv(void *context, size_t hdrlen,
+ }
+ 
+ /**
+- * tpm_buf_append_auth() - append TPMS_AUTH_COMMAND to the buffer.
++ * tpm2_buf_append_auth() - append TPMS_AUTH_COMMAND to the buffer.
+  *
+  * @buf: an allocated tpm_buf instance
+  * @session_handle: session handle
 -- 
-	Ansuel
+2.20.1.7.g153144c
+
