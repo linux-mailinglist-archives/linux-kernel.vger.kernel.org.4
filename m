@@ -2,301 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6E6B730389
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA46E730386
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343715AbjFNPUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 11:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58492 "EHLO
+        id S1343713AbjFNPUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 11:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343702AbjFNPU3 (ORCPT
+        with ESMTP id S1343813AbjFNPUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 11:20:29 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF7C11B;
-        Wed, 14 Jun 2023 08:20:23 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35EBRvf4013117;
-        Wed, 14 Jun 2023 15:20:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=ifo4/RG7pa8H1yKTyEa13HR1G2GwXRZM5UzIIUVP9ww=;
- b=BMZ4j9Uq6W3Mh/F9xjRzlA+XmQLH8B30xx1exi1yodSRaqJveeGgELriXvNUAG8RxNUK
- AR7OJxST1nY5g0GGbARrLk+C5JRcZkGz8n2m47VayY4RqF9TQOSl/qF2RuD5qbUl5K5S
- SpariEDQrI3EDiNZ1X0v3wUNT1EYDClqKPYBB26dnjeKVmzVdcVdPqU8YyEJuGEIIQFS
- 1uRezy4YTCcwVu1uJYkGqNyrSD1zwLZ6pucKBbj4Nbu36nJw2P+joFlcOCnLvp94+0O1
- G5sj3Cr4A44c8OZkeYInGM8ctiMhnOVRG8kb+AcV0+RTydF2aLU4EPJu7Z/m7c1ESkat nA== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r7cka0j40-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Jun 2023 15:20:02 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35EFK1pr008436
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Jun 2023 15:20:01 GMT
-Received: from [10.201.3.104] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 14 Jun
- 2023 08:19:58 -0700
-Message-ID: <94e642ff-c8eb-8938-17d6-81030516fd05@quicinc.com>
-Date:   Wed, 14 Jun 2023 20:49:55 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v3 4/5] mtd: rawnand: qcom: Add support for read, write,
- erase exec_ops
+        Wed, 14 Jun 2023 11:20:06 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2101.outbound.protection.outlook.com [40.107.92.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1DFC3;
+        Wed, 14 Jun 2023 08:20:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hP8nhVpAg6VK47K8to5As1b8hi2fYBWY77lFcOfddNRaariV9SBFAkXu5LhHgy5YVjgkWYh2e/OrKtMSJKCyT5uSbeTO5iWXKKbLRjWloBzBe3boC2vAsQ5rdLSmd8qknGoHSdewYTCYJf1/r6rTwozRnDAe/xM/WJwA+igQGvTKavf0hulEwYY78yoZuA1JLlsgL+R/tEM4SzTEeYiibEbEJerhI2dbHO7SSx0Yt/w08C771tpmy2fMDiRsQzMjjJxXlG8WArVDR8z/nLuvKi2bInlR8MXeC4PC8f3Sy22x6VQP6L3en5GOyn8jBQjbDWuvEhcziv6y38pDPLEzPw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=czvNOoAsATx6jPvID+gvhRuHI85vpOVqHqcGu5+5cm0=;
+ b=QoAcs++0FZB0aygzKG12osbO21GGTuHMXrbQloafOpRXaVem86D9Z3YMau+/un1qrzXrLoBFtUwxE18Th43evFabNj9eS4q1B00hzZhwk3Ig9C5fW/m6DbLo3YA/sAxRsewMOd44GTD1uD35UHKGUrvTxZnof7mPeWD/Q+YCd+oqnriTgb8p7DSClvRhTrjot5Fls/y/FD4w8GbcgaR2mw26QTbCe+E0+bkWT0JL5YGQWpKKzJiENeoofqjcC+PdIKwn1gaNclJuGZgmKvrqyLxIfEqR+XXqhsK9SoBU1AjUEAiyFqDnF0ir+jo6hs4mWvZ6d4sxVh2ogS7qCN6FHA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hammerspace.com; dmarc=pass action=none
+ header.from=hammerspace.com; dkim=pass header.d=hammerspace.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hammerspace.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=czvNOoAsATx6jPvID+gvhRuHI85vpOVqHqcGu5+5cm0=;
+ b=FEbZxOBfJbkvzKeKNVf8EalRjSjOB2xg3WX5UFrNwQcl+MfirJnHvQQl46WrUbJSmbEg3rl6mI3jg5btmmg5qr40yVZsB4LfKyEx7LxL9V03C5Dxv6wfuVG7E2B3tsqcQdJETejkRLiZQlHG5FJghYAUvCaq8HStyLxLnjdBg+M=
+Received: from CH0PR13MB5084.namprd13.prod.outlook.com (2603:10b6:610:111::7)
+ by DM6PR13MB3987.namprd13.prod.outlook.com (2603:10b6:5:2a5::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37; Wed, 14 Jun
+ 2023 15:19:59 +0000
+Received: from CH0PR13MB5084.namprd13.prod.outlook.com
+ ([fe80::6a2f:f437:6816:78f8]) by CH0PR13MB5084.namprd13.prod.outlook.com
+ ([fe80::6a2f:f437:6816:78f8%6]) with mapi id 15.20.6477.028; Wed, 14 Jun 2023
+ 15:19:59 +0000
+From:   Trond Myklebust <trondmy@hammerspace.com>
+To:     "cymi20@fudan.edu.cn" <cymi20@fudan.edu.cn>
+CC:     "anna@kernel.org" <anna@kernel.org>,
+        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] nfsroot: Fix missing check for return value of strsep()
+Thread-Topic: [PATCH] nfsroot: Fix missing check for return value of strsep()
+Thread-Index: AQHZnszcoTCvxuIl00GBkTwUcpZWGa+KacIA
+Date:   Wed, 14 Jun 2023 15:19:59 +0000
+Message-ID: <83fd43a8acec2d07ee7bd49afc830988354784ed.camel@hammerspace.com>
+References: <20230614143058.112300-1-cymi20@fudan.edu.cn>
+In-Reply-To: <20230614143058.112300-1-cymi20@fudan.edu.cn>
+Accept-Language: en-US, en-GB
 Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     <mani@kernel.org>, <richard@nod.at>, <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_srichara@quicinc.com>
-References: <20230531124953.21007-1-quic_mdalam@quicinc.com>
- <20230531124953.21007-4-quic_mdalam@quicinc.com>
- <20230608160303.51ea70a6@xps-13>
-From:   Md Sadre Alam <quic_mdalam@quicinc.com>
-In-Reply-To: <20230608160303.51ea70a6@xps-13>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: tIrAPDFnBNalv8xuZIjNkRsLYvzOkGtB
-X-Proofpoint-ORIG-GUID: tIrAPDFnBNalv8xuZIjNkRsLYvzOkGtB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-14_10,2023-06-14_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
- malwarescore=0 suspectscore=0 priorityscore=1501 lowpriorityscore=0
- mlxlogscore=999 adultscore=0 impostorscore=0 bulkscore=0 clxscore=1015
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306140133
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=hammerspace.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH0PR13MB5084:EE_|DM6PR13MB3987:EE_
+x-ms-office365-filtering-correlation-id: 0ad24b36-488d-4557-137c-08db6cead16f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: D8QP/tC+5G1ADhK2zX5IhL/0Fqk0EjzO0UK1lUCyW3Ih5Hd73wuJGSOw5Wmjb4gjYunW/laLyswDAoyPWf31vCnmbb7WlU4YDbwNOHmEHrKHTBYL7XcFIZ6ogxeq12QCuAOPKG3Jk0CTu3QxUuUYOF/1QNmxFgq+cSsxvnxJQNyQKcMqQXPJrHixKqhDFwXm/444qA2TmNxC2sxDd22jwJZefFd488Lx9bSKaHD0x/lORszkvlmDemoQAqns13WeznRNTVWBHKAd7nLgdoSeWiPRURx1SLuKgjVg6umuCy7KQzfwYhSMmGRGEzLxQgP4iBqmi7WJzIZcIRQmeE+pkTd9dRvI71nj/5ZFYS5jlgN/Y7nxtGFWdbmxIZWEX5WkKelpB2WqzGa4+dhyz7w5Y8lTrtW+fyfp5tYifPy22gDAyLH+B+kWohD91dJbWbMuwKLykwKgkQy80pYifMoAz/3HDF0lUzCi7FX2rjeA0N0qwXVMpihxuV2W/TDnNpZEyyL6x2rfZVJUilp1zVDcHxY8KVSZyX6kCzhAuoGTn4NGrA+LDHxK03BiZJFIcZec/f6jgP5hWjTzxwNdwvF+GY486I/u9P/ntU0LRePbROvmVrYrFoYY3yhx+bnjWGXhOt+LbR0jl7nlVmhk5xB8weuFWvut5dXv0izCG8sEg5k=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR13MB5084.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(39840400004)(376002)(136003)(366004)(346002)(451199021)(8936002)(6486002)(26005)(8676002)(6512007)(41300700001)(38100700002)(36756003)(478600001)(86362001)(71200400001)(66946007)(6916009)(66446008)(4326008)(76116006)(66476007)(66556008)(64756008)(316002)(122000001)(38070700005)(54906003)(6506007)(5660300002)(83380400001)(186003)(2616005)(966005)(2906002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SEt5SHJBSXBvOTQrSDlPUGc0Q01QYTdablI2ODh4Z0dnU1ZEdnRjVFVsMzZh?=
+ =?utf-8?B?SFpaMXE0RVFqNERUd1Q3bGJYcUREMEY4aDFlaFNpOVJWeW8xUi8yL2NsblJL?=
+ =?utf-8?B?V2tCV2FZYWpMbHNYSU9jMUJkbWZBMVZhN2ZOODFCd3dlamU1Q3JPNGE2aFUz?=
+ =?utf-8?B?L3pwNUc2dG1HdzYrU1I5eFVTUUhOM3VuVURZMnFnR21sNzZhRXdYUWJKcmhR?=
+ =?utf-8?B?QmJLNVVCU3krSTlrTnZvRGhGU0dsc3RLaDZQUkdiQnZid2lNWi9sOXRhR0RF?=
+ =?utf-8?B?SkwrczBRR3Rua05jVDlKZUF1UkpDa1dhQWNtSnB4bXB3MnhVRHJiQVVVelhk?=
+ =?utf-8?B?M3YyZCtMRTQ0QTk4SFdUTlZaSkxOWVNrTDh3UjFSZVhKR01VdGVVNXo0WXE1?=
+ =?utf-8?B?VFVXUnJQd1lMR3dNRTdqOVVYK3drM29mSytRRnJ6VzBKQnBUUUZ3amkxeGtv?=
+ =?utf-8?B?UmNXbnBHZGw3U0xVRlhiOXFpN21FMUFlTXJOcmxESXM0V0FjUzBVc0U4R2dy?=
+ =?utf-8?B?WUhLS2VzZ2VGVGdBVFRYNzNxK0xsd2hrTlVaM2I1Y05uTW1PYnlhWmozNnM4?=
+ =?utf-8?B?dGU3dVo3N1o2MTQrTEIvdCtVUmQwQjFGQjcvekc4VU5nMWFqRFpaeUUrSUgy?=
+ =?utf-8?B?TDdreEo1bGRoNG04cDRneUtYY1VKeXlEdHU4TUNvTkI3M09iU0pJV29kWDRZ?=
+ =?utf-8?B?ZENtNnRpR0FjMmI5ZWRhY1lGVTFsK2V2WUVpYmdkMDFwRHU1K3haUmgvK0o0?=
+ =?utf-8?B?SndQdkFrWWdjRnlaMHNWa0xmZkdZd1prSDNsRHNoY2txUzU1d3BHZ2JSM3hl?=
+ =?utf-8?B?TklqSGZ4L0U2emdXcUJBNVVFbG04RXQ1a0NIRWQ2bDRWbE1jNEZjNStiWmVn?=
+ =?utf-8?B?MDNKZ3FYa3JnWHRoVldWUDhSV2NzcVd4SUpuOXBYS0F5bk10M1hUVW5UaEU1?=
+ =?utf-8?B?NHV0NzRIY05yNVRFdlBQRnE4RWNJa05iTTJXVEFEN1BuQVFRNk41Z3RIZEpY?=
+ =?utf-8?B?YjRIYmlSYWo4bGZnOS85UGc2cFdDdGMvdERqRXVQSTZTb3dwUGFxbnBiK25k?=
+ =?utf-8?B?ZkZPOVlWWDhNV1k3Ly9kQlVKaEF3RXBQeFlpbjRtaXNGS1hKc3pTLyszbEQy?=
+ =?utf-8?B?WGFISVFjKzdHeSt6VGI4dU9ERDFtZ0g4UDdSVk1qb0ZlNVYyVWtnRGNWVmV0?=
+ =?utf-8?B?Sm5JdHpvNUdNd09RWXFtYkJaWVJ4OUZTTDlMcnB1SVkwTVdkKzQ5N2tnMVdQ?=
+ =?utf-8?B?WmFyYThHeXFUTjhtbHk3V0pKL3F2REt4VllFNElDRTRta25Ka3E5SXQzNXlq?=
+ =?utf-8?B?b3hmY2JlVkk1K0o5cTZRRmd1Vm84QlFyalQvSUZZRWRldGU5ZTZZbExkMjhF?=
+ =?utf-8?B?dVFFQVFSYmdqSHV6QVNnSmRDUW1QL1FXN1dhQlhWUGN3U0Z0UVFFaDhncU45?=
+ =?utf-8?B?L1VRMG13QjcyWmEzU3lJRE5ucERTcVNUZDFLK1dRUE1WNUpTVjRKL3gyNHNl?=
+ =?utf-8?B?b0ZnMXdYLzRoS09PM2oyQW5aVEtrcGF3T2o0YzkreXl1eVN3U2FSUEliWXhI?=
+ =?utf-8?B?YTdleGpWQXIwaFJJUzlIZlZIeVVYYkQxemc4L1VHNXJqeTBhaGxPdEVpWFR6?=
+ =?utf-8?B?R2Q4WjZORFkrZTd3aG5DUlhGd3dJSlVkUWRDaUJ2SGF5VjBhRVVqdWljMCtR?=
+ =?utf-8?B?dmpXc0xXUnJHeFdGd3lvbUUxUWluRXFPSzRtVjFWT0tZdHltRFg5aGVBNlgy?=
+ =?utf-8?B?NUVWKzJZdjFYVWRVRjllSWhIU3RkTldOOHRIUEJQNmljaFprcTZHZmh5dWZ5?=
+ =?utf-8?B?OGhoZS81ZW4ybE9FMmU4MHBCazROR1FHZ2J0ZDMwRGJwVHBPTXlyb0IwYWt5?=
+ =?utf-8?B?RHpwVlE1dUFBekV4cHdtUkZqd1hnK0cwcnpHTGVobkZ0T09PZ1VlRHI1V0pP?=
+ =?utf-8?B?am1NTHU5VW11dW9qZ1l0WVdVT1Q0TDM4YnR2VDA3TUtnNW1Rb2JhYmJUcmlL?=
+ =?utf-8?B?amRJTzNqb1h1WW03bUk5VDNOblRTSytKSCtlLzhhWThLYkJsb2JTZUw0YVAy?=
+ =?utf-8?B?K1FoZVk4d3hzR1Rva1MwSWZ3ZXlvTUpHNWxxYVRubmN2TlgwWkEvS2hoNnlL?=
+ =?utf-8?B?eGdUWHJkTWhQdE1DVTlOQ0p3emRmT1haVFpOQTd5WHlZVENlOUwwU0ZtamZB?=
+ =?utf-8?B?L2c9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <16F935F7A5CF264482C8B4D4E8B3FDC9@namprd13.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: hammerspace.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR13MB5084.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0ad24b36-488d-4557-137c-08db6cead16f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jun 2023 15:19:59.4750
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 0d4fed5c-3a70-46fe-9430-ece41741f59e
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: aR8DT8eYhzWOIXVne7xJnRYVq7oUpL/GHAA05NIbtJNZ43asDztUcK8PCdpPQ2w4A78BVlJdDCfbLoPb8ne9SQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR13MB3987
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/8/2023 7:33 PM, Miquel Raynal wrote:
-> Hi Md,
-> 
-> quic_mdalam@quicinc.com wrote on Wed, 31 May 2023 18:19:52 +0530:
-> 
->> This change will add exec_ops support for READ, WRITE, and ERASE
->> command.
->>
->> Co-developed-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
->> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
->> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
->> ---
->> Change in [v3]
->>
->> * Removed chip->cont_read.ongoing flag.
->>
->> * Removed pre_command from erase_etype_exec_ops.
->>
->> Change in [v2]
->>
->> * Missed to post Cover-letter, so posting v2 patch with cover-letter.
->>
->> Change in [v1]
->>
->> * Added initial support for exec_ops.
->>
->>   drivers/mtd/nand/raw/qcom_nandc.c | 97 +++++++++++++++++++++++++++++--
->>   1 file changed, 93 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qcom_nandc.c
->> index b4823b72fe73..7dc769f9e797 100644
->> --- a/drivers/mtd/nand/raw/qcom_nandc.c
->> +++ b/drivers/mtd/nand/raw/qcom_nandc.c
->> @@ -1546,8 +1546,7 @@ static void pre_command(struct qcom_nand_host *host, int command)
->>   
->>   	clear_read_regs(nandc);
->>   
->> -	if (command == NAND_CMD_ERASE1)
->> -		clear_bam_transaction(nandc);
->> +	clear_bam_transaction(nandc);
->>   }
->>   
->>   /*
->> @@ -1764,7 +1763,7 @@ qcom_nandc_read_cw_raw(struct mtd_info *mtd, struct nand_chip *chip,
->>   	int ret, reg_off = FLASH_BUF_ACC, read_loc = 0;
->>   	int raw_cw = cw;
->>   
->> -	nand_read_page_op(chip, page, 0, NULL, 0);
->> +	nand_read_page_op(chip, page, 0, data_buf, mtd->writesize);
->>   	host->use_ecc = false;
->>   
->>   	if (nandc->props->qpic_v2)
->> @@ -2181,14 +2180,23 @@ static void qcom_nandc_codeword_fixup(struct qcom_nand_host *host, int page)
->>   static int qcom_nandc_read_page(struct nand_chip *chip, uint8_t *buf,
->>   				int oob_required, int page)
->>   {
->> +	struct mtd_info *mtd = nand_to_mtd(chip);
->>   	struct qcom_nand_host *host = to_qcom_nand_host(chip);
->>   	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
->> +	struct nand_ecc_ctrl *ecc = &chip->ecc;
->>   	u8 *data_buf, *oob_buf = NULL;
->>   
->>   	if (host->nr_boot_partitions)
->>   		qcom_nandc_codeword_fixup(host, page);
->>   
->> -	nand_read_page_op(chip, page, 0, NULL, 0);
->> +	nand_read_page_op(chip, page, 0, buf, mtd->writesize);
->> +	nandc->buf_count = 0;
->> +	nandc->buf_start = 0;
->> +	host->use_ecc = true;
->> +	clear_read_regs(nandc);
->> +	set_address(host, 0, page);
->> +	update_rw_regs(host, ecc->steps, true, 0);
->> +
->>   	data_buf = buf;
->>   	oob_buf = oob_required ? chip->oob_poi : NULL;
->>   
->> @@ -2258,6 +2266,9 @@ static int qcom_nandc_write_page(struct nand_chip *chip, const uint8_t *buf,
->>   
->>   	nand_prog_page_begin_op(chip, page, 0, NULL, 0);
->>   
->> +	set_address(host, 0, page);
->> +	nandc->buf_count = 0;
->> +	nandc->buf_start = 0;
->>   	clear_read_regs(nandc);
->>   	clear_bam_transaction(nandc);
->>   
->> @@ -3274,6 +3285,67 @@ static int qcom_param_page_type_exec(struct nand_chip *chip,  const struct nand_
->>   	return ret;
->>   }
->>   
->> +static int qcom_erase_cmd_type_exec(struct nand_chip *chip, const struct nand_subop *subop)
->> +{
->> +	struct qcom_nand_host *host = to_qcom_nand_host(chip);
->> +	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
->> +	struct qcom_op q_op;
->> +	int ret = 0;
->> +
->> +	qcom_parse_instructions(chip, subop, &q_op);
->> +
->> +	q_op.cmd_reg |= PAGE_ACC | LAST_PAGE;
->> +
->> +	nandc->buf_count = 0;
->> +	nandc->buf_start = 0;
->> +	host->use_ecc = false;
->> +	clear_read_regs(nandc);
->> +	clear_bam_transaction(nandc);
->> +
->> +	nandc_set_reg(chip, NAND_FLASH_CMD, q_op.cmd_reg);
->> +	nandc_set_reg(chip, NAND_ADDR0, q_op.addr1_reg);
->> +	nandc_set_reg(chip, NAND_ADDR1, q_op.addr2_reg);
->> +	nandc_set_reg(chip, NAND_DEV0_CFG0,
->> +		      host->cfg0_raw & ~(7 << CW_PER_PAGE));
->> +	nandc_set_reg(chip, NAND_DEV0_CFG1, host->cfg1_raw);
->> +	nandc_set_reg(chip, NAND_EXEC_CMD, 1);
->> +
->> +	write_reg_dma(nandc, NAND_FLASH_CMD, 3, NAND_BAM_NEXT_SGL);
->> +	write_reg_dma(nandc, NAND_DEV0_CFG0, 2, NAND_BAM_NEXT_SGL);
->> +	write_reg_dma(nandc, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
->> +
->> +	ret = submit_descs(nandc);
->> +	if (ret) {
->> +		dev_err(nandc->dev, "failure in sbumitting erase descriptor\n");
-> 
->                                                  :)
-
-      Its spelling mistake. Will fix this in next patch V4.
-
-> 
->> +		free_descs(nandc);
->> +		goto err_out;
->> +	}
->> +	free_descs(nandc);
->> +
->> +	ret = qcom_wait_rdy_poll(chip, q_op.rdy_timeout_ms);
->> +	if (ret)
->> +		goto err_out;
->> +
->> +err_out:
->> +	return ret;
->> +}
->> +
->> +static int qcom_data_read_type_exec(struct nand_chip *chip, const struct nand_subop *subop)
->> +{
->> +	/* currently read_exec_op() return 0 , and all the read operation handle in
->> +	 * actual API itself
->> +	 */
->> +	return 0;
-> 
-> Mmmh, I don't think this is gonna work. I don't understand what you're
-> doing here. What is "actual API itself"? What is "read_exec_op"? I
-> doubt I am going to like what all this means. Please don't make any
-> assumptions on what could come next. The core asks you to do something,
-> just do it. If you can't then the parsing will fail. If the core has a
-> fallback it's fine. If the core does not, we can discuss it. But please
-> don't do any guesses like that, this is *exactly* why we introduced
-> exec_op in the first place: you have access to the whole operation, so
-> please handle it correctly.
-
-
-   Thanks, When Initailly I was started exec_op() implementation I thought
-   that nand_read_page_op() will fail, so that I added the dummy
-   qcom_data_read_type_exec() and qcom_data_write_type_exec() APIs for read/write.
-   But as you said in above comment , we have to follow whatever core ask. So I
-   removed these APIs and tested read/write working fine. So now these
-   dummy APIs not at all needed.I think I misunderstood. I will keep
-   nand_read_page_op() API in original state nand_read_page_op(chip, page, 0, NULL, 0);
-   Also removed the pattern for read_page() and write_page() since its not at all
-   needed.
-
-   Will fix these all in patch V4.
-
-
-> 
->> +}
->> +
->> +static int qcom_data_write_type_exec(struct nand_chip *chip, const struct nand_subop *subop)
->> +{
->> +	/* currently write_exec_op() return 0, and all the write operation handle in
->> +	 * actual API itself
->> +	 */
->> +	return 0;
->> +}
->> +
->>   static const struct nand_op_parser qcom_op_parser = NAND_OP_PARSER(
->>   		NAND_OP_PARSER_PATTERN(
->>   			qcom_misc_cmd_type_exec,
->> @@ -3294,6 +3366,23 @@ static const struct nand_op_parser qcom_op_parser = NAND_OP_PARSER(
->>   			NAND_OP_PARSER_PAT_ADDR_ELEM(false, MAX_ADDRESS_CYCLE),
->>   			NAND_OP_PARSER_PAT_WAITRDY_ELEM(true),
->>   			NAND_OP_PARSER_PAT_DATA_IN_ELEM(false, 512)),
->> +		NAND_OP_PARSER_PATTERN(
->> +			qcom_erase_cmd_type_exec,
->> +			NAND_OP_PARSER_PAT_CMD_ELEM(false),
->> +			NAND_OP_PARSER_PAT_ADDR_ELEM(false, MAX_ADDRESS_CYCLE),
->> +			NAND_OP_PARSER_PAT_CMD_ELEM(false),
->> +			NAND_OP_PARSER_PAT_WAITRDY_ELEM(false)),
->> +		NAND_OP_PARSER_PATTERN(
->> +			qcom_data_read_type_exec,
->> +			NAND_OP_PARSER_PAT_CMD_ELEM(false),
->> +			NAND_OP_PARSER_PAT_ADDR_ELEM(false, MAX_ADDRESS_CYCLE),
->> +			NAND_OP_PARSER_PAT_CMD_ELEM(false),
->> +			NAND_OP_PARSER_PAT_WAITRDY_ELEM(true),
->> +			NAND_OP_PARSER_PAT_DATA_IN_ELEM(false, 2048)),
->> +		NAND_OP_PARSER_PATTERN(
->> +			qcom_data_write_type_exec,
->> +			NAND_OP_PARSER_PAT_CMD_ELEM(true),
->> +			NAND_OP_PARSER_PAT_ADDR_ELEM(true, MAX_ADDRESS_CYCLE)),
->>   		);
->>   
->>   static int qcom_check_op(struct nand_chip *chip,
-> 
-> 
-> Thanks,
-> Miquèl
+T24gV2VkLCAyMDIzLTA2LTE0IGF0IDA3OjMwIC0wNzAwLCBDaGVueXVhbiBNaSB3cm90ZToNCj4g
+W1lvdSBkb24ndCBvZnRlbiBnZXQgZW1haWwgZnJvbSBjeW1pMjBAZnVkYW4uZWR1LmNuLiBMZWFy
+biB3aHkgdGhpcw0KPiBpcyBpbXBvcnRhbnQgYXQgaHR0cHM6Ly9ha2EubXMvTGVhcm5BYm91dFNl
+bmRlcklkZW50aWZpY2F0aW9uwqBdDQo+IA0KPiBUaGUgc3Ryc2VwKCkgZnVuY3Rpb24gaW4gcm9v
+dF9uZnNfcGFyc2Vfb3B0aW9ucygpIG1heSByZXR1cm4gTlVMTA0KPiBpZiBhcmd1bWVudCAnaW5j
+b21pbmcnIGlzIE5VTEwuIFNpbmNlICdpbmNvbWluZycgaGFzIE51bGwgY2hlY2sgaW4NCj4gdGhp
+cyBmdW5jdGlvbiwgaXQgaXMgYWxzbyBuZWVkIHRvIGFkZCBOdWxsIGNoZWNrIGZvciByZXR1cm4g
+dmFsdWUNCj4gwqBvZiBzdHJzZXAoKS4NCj4gDQo+IEZvdW5kIGJ5IG91ciBzdGF0aWMgYW5hbHlz
+aXMgdG9vbC4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IENoZW55dWFuIE1pIDxjeW1pMjBAZnVkYW4u
+ZWR1LmNuPg0KPiAtLS0NCj4gwqBmcy9uZnMvbmZzcm9vdC5jIHwgMiArLQ0KPiDCoDEgZmlsZSBj
+aGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBh
+L2ZzL25mcy9uZnNyb290LmMgYi9mcy9uZnMvbmZzcm9vdC5jDQo+IGluZGV4IDYyMDMyOWI3ZTZh
+ZS4uNTVjNTk0ZGVkZTlmIDEwMDY0NA0KPiAtLS0gYS9mcy9uZnMvbmZzcm9vdC5jDQo+ICsrKyBi
+L2ZzL25mcy9uZnNyb290LmMNCj4gQEAgLTE5OCw3ICsxOTgsNyBAQCBzdGF0aWMgaW50IF9faW5p
+dCByb290X25mc19wYXJzZV9vcHRpb25zKGNoYXINCj4gKmluY29taW5nLCBjaGFyICpleHBwYXRo
+LA0KPiDCoMKgwqDCoMKgwqDCoMKgICogU2V0IHRoZSBORlMgcmVtb3RlIHBhdGgNCj4gwqDCoMKg
+wqDCoMKgwqDCoCAqLw0KPiDCoMKgwqDCoMKgwqDCoCBwID0gc3Ryc2VwKCZpbmNvbWluZywgIiwi
+KTsNCj4gLcKgwqDCoMKgwqDCoCBpZiAoKnAgIT0gJ1wwJyAmJiBzdHJjbXAocCwgImRlZmF1bHQi
+KSAhPSAwKQ0KPiArwqDCoMKgwqDCoMKgIGlmIChwICE9IE5VTEwgJiYgKnAgIT0gJ1wwJyAmJiBz
+dHJjbXAocCwgImRlZmF1bHQiKSAhPSAwKQ0KPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAgaWYgKHJvb3RfbmZzX2NvcHkoZXhwcGF0aCwgcCwgZXhwcGF0aGxlbikpDQo+IMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0dXJuIC0xOw0KPiANCg0K
+SHVoPyByb290X25mc19wYXJzZV9vcHRpb25zKCkgaXMgY2FsbGVkIGZyb20gZXhhY3RseSB0d28g
+Y2FsbHNpdGVzLCBhbmQNCmluIGJvdGggY2FzZXMgJ2luY29taW5nJyBpcyBndWFyYW50ZWVkIHRv
+IGJlIG5vbi1OVUxMLg0KDQpOQUNLZWQNCi0tIA0KVHJvbmQgTXlrbGVidXN0DQpMaW51eCBORlMg
+Y2xpZW50IG1haW50YWluZXIsIEhhbW1lcnNwYWNlDQp0cm9uZC5teWtsZWJ1c3RAaGFtbWVyc3Bh
+Y2UuY29tDQoNCg0K
