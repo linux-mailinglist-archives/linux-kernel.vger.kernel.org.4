@@ -2,67 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 106E2730AF9
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 00:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14B10730AFD
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 00:51:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234231AbjFNWuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 18:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42794 "EHLO
+        id S235452AbjFNWvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 18:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237201AbjFNWt7 (ORCPT
+        with ESMTP id S231975AbjFNWve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 18:49:59 -0400
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [5.144.164.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BD61FCC
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 15:49:57 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 583333F35F;
-        Thu, 15 Jun 2023 00:49:55 +0200 (CEST)
-Date:   Thu, 15 Jun 2023 00:49:53 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, quic_abhinavk@quicinc.com,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] drm/msm/dpu: Add DPU_INTF_DATABUS_WIDEN feature flag
- for DPU >= 5.0
-Message-ID: <i5trozzoexkm7taojob4c53sajm2w6tnasj2yfzjy3a77oqvw7@wadk7g7op2kp>
-References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
- <20230525-add-widebus-support-v1-1-c7069f2efca1@quicinc.com>
- <wpjxrnhbcanbc5iatxnff25yrrdfrtmgb24sgwyo457dz2oyjz@e2docpcb6337>
- <f4fb042c-1458-6077-3c49-8cc02638b27c@linaro.org>
- <ycgei43x4kfmjk7g7gbeglehtiiinfbqmrjbdzcy56frxbtd2z@yk2f5kgrkbrt>
+        Wed, 14 Jun 2023 18:51:34 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3772A1BF9
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 15:51:33 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-34128d59c06so3068565ab.2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 15:51:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686783092; x=1689375092;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EvWGvGEYVDY0zHX9FKywaaz8rQNIa9z0Aga8elPLqso=;
+        b=k3YyuyiH9vZrKIEb/CH7lP5bUAIoHtUChbe6wycrUMejETgyHMp4W5SDUxom83kD7Q
+         DUrxorUVsbMI4YmsYs+z1ecSx/DU44VjcKfD4A8TymKYAl2swjCkRdu1mFBU3I4zer0C
+         0sQWkMrQ7qnY42th3vx8GZN17KsJUuU+x0/6VPorLrkR8DE/yKBnbf0qcbeVPKq5vGcM
+         /JlfnKnjYzao2BKdNtLfLJBM4H4mSZCyaYRMMjj8qJ96V3zcON6dmf3as+FfM7cBHe6J
+         HMyG1Hk3ksVHYwsnm+OSxd09nghxSscPEs7MoDId1BjuEVDWaX/Ru8sAI94QNag9gzNv
+         NYtg==
+X-Gm-Message-State: AC+VfDxSmfw0tVfsvvUGuHjTOjPncpdAq4Fl0rfU2l43aPnch2snGoMS
+        1/pH1w8zgVf0qU1N4v69Y6yTO6FNrtpOBwMGuVHx1/CUgrzc
+X-Google-Smtp-Source: ACHHUZ5CrMxjJAzysjfmyxYmSDBMC3q+sumWtPMCJn5LhHxYTj4gZWD8HH/6ppLUpOaHirncbQikaPSGA+Jf2kxBMEr1Tlxy+AnU
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ycgei43x4kfmjk7g7gbeglehtiiinfbqmrjbdzcy56frxbtd2z@yk2f5kgrkbrt>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:dc0e:0:b0:329:4c5e:15d8 with SMTP id
+ t14-20020a92dc0e000000b003294c5e15d8mr7285347iln.2.1686783092577; Wed, 14 Jun
+ 2023 15:51:32 -0700 (PDT)
+Date:   Wed, 14 Jun 2023 15:51:32 -0700
+In-Reply-To: <1604551.1686754324@warthog.procyon.org.uk>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000bdc3a05fe1ecb0a@google.com>
+Subject: Re: [syzbot] [crypto?] general protection fault in crypto_shash_finup
+From:   syzbot <syzbot+4e2e47f32607d0f72d43@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, dhowells@redhat.com,
+        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-14 14:23:38, Marijn Suijten wrote:
-<snip>
-> Tested this on SM8350 which actually has DSI 2.5, and it is also
-> corrupted with this series so something else on this series might be
-> broken.
+Hello,
 
-Never mind, this was a bad conflict-resolve.  Jessica's original
-BURST_MODE patch was RMW'ing MDP_CTRL2, but the upstreamed patch was
-only writing, and the way I conflict-resolved that caused the write of
-BURST_MODE to overwrite the RMW DATABUS_WIDEN.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-If both are moved to dsi_ctrl_config(), we could do a read, add both
-flags in conditionally, and write.
+Reported-and-tested-by: syzbot+4e2e47f32607d0f72d43@syzkaller.appspotmail.com
 
-- Marijn
+Tested on:
+
+commit:         fa0e21fa rtnetlink: extend RTEXT_FILTER_SKIP_STATS to ..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git main
+console output: https://syzkaller.appspot.com/x/log.txt?x=129a0837280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=526f919910d4a671
+dashboard link: https://syzkaller.appspot.com/bug?extid=4e2e47f32607d0f72d43
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=14cfedfd280000
+
+Note: testing is done by a robot and is best-effort only.
