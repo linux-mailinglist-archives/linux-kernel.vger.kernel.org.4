@@ -2,93 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D87372F80A
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:40:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1609F72F80F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243684AbjFNIkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 04:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33368 "EHLO
+        id S243689AbjFNIkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 04:40:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243683AbjFNIkZ (ORCPT
+        with ESMTP id S243683AbjFNIkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 04:40:25 -0400
+        Wed, 14 Jun 2023 04:40:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8630A1BE3;
-        Wed, 14 Jun 2023 01:40:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E4D1BD2;
+        Wed, 14 Jun 2023 01:40:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1249C63EF7;
-        Wed, 14 Jun 2023 08:40:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6463EC433AD;
-        Wed, 14 Jun 2023 08:40:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26B2A63EF7;
+        Wed, 14 Jun 2023 08:40:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3BA9C433C0;
+        Wed, 14 Jun 2023 08:40:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686732023;
-        bh=w7r/Vy2RBgUGguVLqB/vtm9DdBD26hBrdfNnOcrlkOE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=sTVizSWFb/tzgy5+wTBvprejqGJcc4Ww/FCrXSMdhUC+0j7FGaWBicvTiHvgwzTlX
-         tMQvF6uLXVhh9x8SGKUmd2LHBO5/FRNn30wzr6OXbfmLV3amJbPAJ82oV2LhIpo/1n
-         xourXznT9H9cli0svwAOkSPODn8ZcxeiiqVEiXLJhuK0ZtpE9Jr5vB4LTvlIJ+DKm2
-         hPi7VhJjCiYq4WaEJnZRxKDNU7wyBP4TgHHY5AX6NKSxcWKRj5kvrBfDQN+5CtAw/P
-         lqgEr9laYn27OOCKEM+p6r0zevQjnqc8eBpt+mK2TvIoXvWQiNzH9rFsplNgORfGjs
-         b0NQMnmfL4RVw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 449DDE2A048;
-        Wed, 14 Jun 2023 08:40:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1686732045;
+        bh=uYEr2AWlYvSrSez1pdsQpkYDnx2y4lKZqdexEQK+6U8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=knK2MtCzrVrzyJvrvvgA75tydiV4eBRkk/TX2ET8DOinPcd950irE9RenM2EXQBwk
+         KB6rv4WSeRhryajI1PdXNli6l3EWYTPbMYHWwGBaQMt6Jg/icVNitDY6CmWvgABzeN
+         fTap6F55PWRcecuaP2/7vAts9KdG849WRkKLhx99wJNZJ2w+3zo5qoIN01pt+PtBrd
+         TG96sHErHo8qOjapEqRT13m2JXyVw9CNj5ce/ZL3ntUbhrfyr2SKWtSymTWRv+/W+G
+         giT7hv3KXY4PfOc4Ia7RZd6ZrYdoEctQPkdDRAHwpXz4brshoHBGtlKIAVQfOKMnVv
+         BfPo1tYY1lNuA==
+Date:   Wed, 14 Jun 2023 10:40:42 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     ye.xingchen@zte.com.cn
+Cc:     linus.walleij@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: versatile: Use
+ devm_platform_get_and_ioremap_resource()
+Message-ID: <ZIl9CtpIfrIVgSMA@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, ye.xingchen@zte.com.cn,
+        linus.walleij@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <202301191721230148862@zte.com.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 1/1] net/sched: act_ct: Fix promotion of offloaded
- unreplied tuple
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168673202327.7814.1952400928675625882.git-patchwork-notify@kernel.org>
-Date:   Wed, 14 Jun 2023 08:40:23 +0000
-References: <1686313379-117663-1-git-send-email-paulb@nvidia.com>
-In-Reply-To: <1686313379-117663-1-git-send-email-paulb@nvidia.com>
-To:     Paul Blakey <paulb@nvidia.com>
-Cc:     vladbu@nvidia.com, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ozsh@nvidia.com, roid@nvidia.com,
-        saeedm@nvidia.com, pablo@netfilter.org, kadlec@netfilter.org,
-        fw@strlen.de, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, jhs@mojatatu.com,
-        xiyou.wangcong@gmail.com, jiri@resnulli.us
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bHCzeOfie6Gtlp6I"
+Content-Disposition: inline
+In-Reply-To: <202301191721230148862@zte.com.cn>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This patch was applied to netdev/net.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+--bHCzeOfie6Gtlp6I
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 9 Jun 2023 15:22:59 +0300 you wrote:
-> Currently UNREPLIED and UNASSURED connections are added to the nf flow
-> table. This causes the following connection packets to be processed
-> by the flow table which then skips conntrack_in(), and thus such the
-> connections will remain UNREPLIED and UNASSURED even if reply traffic
-> is then seen. Even still, the unoffloaded reply packets are the ones
-> triggering hardware update from new to established state, and if
-> there aren't any to triger an update and/or previous update was
-> missed, hardware can get out of sync with sw and still mark
-> packets as new.
-> 
-> [...]
+On Thu, Jan 19, 2023 at 05:21:23PM +0800, ye.xingchen@zte.com.cn wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+>=20
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
+>=20
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 
-Here is the summary with links:
-  - [net,1/1] net/sched: act_ct: Fix promotion of offloaded unreplied tuple
-    https://git.kernel.org/netdev/net/c/41f2c7c342d3
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Applied to for-next, thanks!
 
 
+--bHCzeOfie6Gtlp6I
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSJfQkACgkQFA3kzBSg
+KbbenQ/9F2x07scPwaUNQ8HK0yUchBwBw/zakNtSV7t82OeFy1spezRXU2wwQgL/
+Usu13NaJxkZ1Hp+33hkhougdqoYS8X3IPddYr0JEVVrTsCHisMxG7WOXs+hRtnwv
+84YPGi7ILtP6NIpVrnMVB80p5Uh7H5YwUP5/SH3osaV+A284+oN1jhBKPbJpOXnC
+hGPvV/ZM8wphTa4FV/Rd2p/MHdzuLm3HN43YfDEC5rd6Q2wwjqaRh7Gcb8a3SSYX
+hpH4gYCxpB1BGZzXoGrVfoBZUeF4smBCcBG2ajLJBKWXJmuyHjvcZKIHuautMhR8
+QxermCNhld2BMxco3KvoglWwohNB0mTuob8bXU4TmesbBN0iWQfNnzq1Sd+xY2bM
+xufNk5DQ8GNx4DsXciEdnzSD0PoRG34zkJUR1MHN4CB8B4xl9t4f5iNx3jPgXmYx
+GV0VvtOwXhz1IGblB0AchobFV7udivTqFZtAA/gI2UP7R1/H0fRomC5cstBf3Dml
+kM+Tx/smXSYcQl7O7EhqRJY7FIE5KmQmlqIibGuQGPkNyJ7DMacR8OaVrnWW0/Dl
+Vn0Zgjjo0Nv+pWkpNoPuAKS9mbKfNfsoa4oSraz81CiTqCzQNM3DVK2WJ+B1Y4YG
+hZCLb7UnrxpD2bZaoEEgHKxMxsMyfH6JhQPTzhcIhOYhF1C6Aj4=
+=Yxy+
+-----END PGP SIGNATURE-----
+
+--bHCzeOfie6Gtlp6I--
