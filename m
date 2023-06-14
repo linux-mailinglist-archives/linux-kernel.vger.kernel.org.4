@@ -2,297 +2,364 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C65F730BC4
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 01:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FF3E730BCA
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 01:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234463AbjFNXwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 19:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39840 "EHLO
+        id S232748AbjFNXyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 19:54:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233075AbjFNXwR (ORCPT
+        with ESMTP id S229759AbjFNXyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 19:52:17 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB151BF0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 16:52:15 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3f9e36e5ea8so24543961cf.3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 16:52:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1686786734; x=1689378734;
-        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
-         :cc:to:subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=kqvp8yF1yK7U+gJ28UoMarxMywv4y3SWv/Tc/xBBr6E=;
-        b=HYqgaYLORvajULMZi0Il8fEDEx/POOVkIBFCEVsTt7/T5P5wBfR1Yqyy1hye5jGVrt
-         A+EqBZyLMF1e6UHApyiuxMStE+bVxyiCI083f12KzrcBWst5fsHy299flBSGn0IX2koK
-         +iGTELCuktJuP+8e/UL/BG3Bc+2FwmgLUkV90=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686786734; x=1689378734;
-        h=in-reply-to:mime-version:user-agent:date:message-id:from:references
-         :cc:to:subject:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kqvp8yF1yK7U+gJ28UoMarxMywv4y3SWv/Tc/xBBr6E=;
-        b=Z9a5mDtmx0NklWYR0bNrTlPsZ682mKCGWfZ45EA8NqaGdh80Z0aqcXmPAouHBsP3pr
-         ah4Fs3HnfoXcehgjSC8SjYiWhoPLeDZp/F8ewEH8USla1NGBU4ZT4PkX+WUSu4m+T9nC
-         6cQ1u7gKnqDHlHQr8ZJ5Kcg7nB199RgbVdzUzUOOd/hrSULluTwNAGClar7wH8y3HskO
-         +N27nJlctqWBxaeGI2EzSCQguGSr2qWb7E+JkiSuTVXPrT4QJE8VT2SZGLTme+ftI+Px
-         YTIasJurtwiY1uxb7H8Nu++ntzOzDe5yy50kqbqlXesm/p8iDQC3OwccHk7ayClhEXGW
-         p7yg==
-X-Gm-Message-State: AC+VfDw9NLX9Ow4gZ0xYSThuQpxuKgCT+WnQBVK4ZLwjNnjSkCP/Tq4j
-        ieISYBsih7cHNg6eU9b8dfWQmA==
-X-Google-Smtp-Source: ACHHUZ4SOX+6kCept2oYuaB0UWwuwrflVpd2DU+hxA6SxDZYfsRgx1lWvUSpWZUEvrb8JyU1sUuo/w==
-X-Received: by 2002:ac8:59c7:0:b0:3f9:efa3:9e6f with SMTP id f7-20020ac859c7000000b003f9efa39e6fmr4702568qtf.27.1686786733155;
-        Wed, 14 Jun 2023 16:52:13 -0700 (PDT)
-Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id i6-20020ac84886000000b003f6bbd7863csm5495055qtq.86.2023.06.14.16.52.10
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 14 Jun 2023 16:52:12 -0700 (PDT)
-Subject: Re: [PATCH 10/12] mtd: rawnand: brcmnand: Add BCMBCA read data bus
- interface
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        Linux MTD List <linux-mtd@lists.infradead.org>,
-        f.fainelli@gmail.com, rafal@milecki.pl, kursad.oney@broadcom.com,
-        joel.peshkin@broadcom.com, computersforpeace@gmail.com,
-        anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
-        tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
-        linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-References: <20230606231252.94838-1-william.zhang@broadcom.com>
- <20230606231252.94838-11-william.zhang@broadcom.com>
- <20230607102232.17c4a27b@xps-13>
- <7b393f47-4053-a8c7-f32e-3881d8130d80@broadcom.com>
- <20230608081821.1de5a50b@xps-13>
- <4ab08e3e-3be4-8b8b-6eb8-03a62337f46f@broadcom.com>
- <20230609103544.0f00f799@xps-13>
- <3d3b471b-c555-ee1c-96d6-c04d76979e76@broadcom.com>
- <20230612194908.5465bc56@xps-13> <20230612195305.4b097c46@xps-13>
- <da4cb6a6-aa7d-3747-3f64-19b5582b15e8@broadcom.com>
- <20230613084218.65a6da15@xps-13>
- <b4ceff9c-0126-99ba-6015-9ea9ec735dfc@broadcom.com>
- <20230614082205.74a04de1@xps-13>
-From:   William Zhang <william.zhang@broadcom.com>
-Message-ID: <4f77131e-391a-16e0-5de3-cbed41360f2d@broadcom.com>
-Date:   Wed, 14 Jun 2023 16:52:09 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.4.0
+        Wed, 14 Jun 2023 19:54:44 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04olkn2050.outbound.protection.outlook.com [40.92.75.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D691BC;
+        Wed, 14 Jun 2023 16:54:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iuI+fR6XHruOdGgFcND1mXBrMPjceAzOBYNOWtpYsCU2s2VQaVBXdq2iA7atfEosalFVNzyCISycNldwRKYDJ1z7xXZRCKbrX5Oq3gyBUv63mt3dONwxaz5hPfGFC4u/UFGRWSITPpEZ/zF431XZgogD4T+7BHLZMwqkPKwYFScHsL8Z0fPQHc+rciGBsWZcCiorA2d2US06laH1CFuUCHbDXFrHzJ83PFHeyZRi6hv88nFQ3uOmoXp38Ds42VzjjowYzIKKKo2RK2LIqJu2JZy2bSCjl2AheFvV2387IWpLXRBxrhAoIqpzDDaPvlnyYPMXusYRMAc87B5zuDPh5w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=D1LDLSmfskdmSNuh/yoHOIPOPeChdqsXh+9kKgl5NSA=;
+ b=IGpxep0+gbkAMlX1XFH4lmsMWZRoAxlOO8zafkVY0x7IOGPGMz4hHf13uCsYnH6tMg38Y0Snv6h1aJeZGL+EjkxGDFGFIT9SkEp+isjfKzwunGEObhMjdOShfcuC3oEdSIdsO8RaISMAg3HyirsEZbw8LzzcwCjt5AUZ9B8Q4Pa6zPgfB4sphujuFbb1iG5TciKbAv1F1mTiwBv2XCS5cDCVCFQjCaqjF1MDLqHLQJPrOXJ+uXUxl3WrfkRKjrNpHht8A2Q8LFne+6zrB3e85CyhQ+TuVItFgRdFPVWrLFQr+uc1ZOVXDdXOgrxHsM66eJwYPmg4Xvibt3vavb8aCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=D1LDLSmfskdmSNuh/yoHOIPOPeChdqsXh+9kKgl5NSA=;
+ b=b9MB9mu5Iq1S5y3TAy7jvfLR6erIFFcs0ealVrEgJQNRru9T/YeRyI5XPnMDLS1Btc9IzNxqKw8jJHY3lZ4DBrlEmm7RV04rdNvBlRACBMWcSvArOT2eRv3elTwUhBBSsvvTe6UMCEneqTlZ7JBF6lRHyugcRaEFzmrMsuvwUILQNzQ+4P/+z2rBsjYdA3mu0Dj86SQOjrl3FWDSlUcUTk68bdILWt8dDqF2kUznf47axWTC4dd8Tqrai0hr6toypYk2br1GbeCWXHqchDH8+QBNtECWUZ06gIv3WzJjeweeGQNgTOIDlr1aIms7RL5jxHTQvGxGrviq86IsV3rCUg==
+Received: from DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:383::21)
+ by VI1PR10MB3744.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:803:135::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37; Wed, 14 Jun
+ 2023 23:54:40 +0000
+Received: from DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::628a:d617:46f:2a88]) by DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::628a:d617:46f:2a88%7]) with mapi id 15.20.6477.037; Wed, 14 Jun 2023
+ 23:54:40 +0000
+Message-ID: <DB4PR10MB6261C86DEE5F4008B20C5033925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+Date:   Thu, 15 Jun 2023 07:54:29 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/3] hwmon: (sht3x)remove sht3x_platform_data
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jdelvare@suse.com
+References: <DB4PR10MB6261D79FE16EC2BBD5316B91925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+ <6d1209e9-0d40-c2ba-b94c-6590e98070d7@roeck-us.net>
+ <DB4PR10MB626134E4213F378A430E5EED925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+ <45c8771d-47c1-c007-1cd5-97eebedef147@roeck-us.net>
+From:   JuenKit Yip <JuenKit_Yip@hotmail.com>
+In-Reply-To: <45c8771d-47c1-c007-1cd5-97eebedef147@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TMN:  [TXUOwQ+eK6eXPHAoEAMrbE7fz5cEZ9ar]
+X-ClientProxiedBy: TYWP286CA0014.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:178::20) To DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:10:383::21)
+X-Microsoft-Original-Message-ID: <aec48853-f984-4a7d-0f42-908f4e078785@hotmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20230614082205.74a04de1@xps-13>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000025899c05fe1fa4f3"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB4PR10MB6261:EE_|VI1PR10MB3744:EE_
+X-MS-Office365-Filtering-Correlation-Id: 92c6f753-20d5-4a21-fde9-08db6d32b774
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BXjmRk2mZ6D3aLuyodQOZ6LvUN0yi7/aZ16UGOCXUm8koUgamvZqPOtP2WaGfYVD8BWLIoF6SZ4UqrDNc4GhU1RThv5syXD8OA4q/E8KnbQ2mBHIJXsjBMGZHOvNltcKiBRqurTolcqFLOS5r5b2AXlj8X4Qz27mTAS7miuk23FEJ/Nb6wg1LS+oWRx+paz+i9vd4ebROxohXQLvrJJuh35FwvpwlkSAX/JEGvV28/uLtdHAshwAGG8NMqIP4m6c/rdR+KFc72/IXREbC0szvzObZ1a/PwixmQirziJZBwlsguih/bdT8iwlsk5Pgkfhht32jdDR8rNCqd2EMRR3mTblhgJPzz7PxUqHwf8jWn5E2/xGYI53dNVNw719N1JNVltOE4X/+AzBthQnyY/+dY4wd0bPxReVbCyWXl69UH2DdPY15SFdoAFAxy8SiVWlMjOVTA+44eWqWcdk4owp/9dVtEl7TB0hHBIUHiKZsxg1fG062akKcOyIF/GUBaziXMAwqnmBkHpf6ptIhIO0b04K/lFbKFG784F0qzx1SdekOt6IKEIGu1LBBzA8SqbXrj25Q5g1En2B02sngIW40BTEGWkFiBenJyLXw6IVb8JinO+ZxdRsxmODPC6Ufv0O
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TkwwSmVHM1dHOSs1R3ZJTVMyV0lUb09GNGt6WlhGNlN1UGdoL1MyR2xIcHVP?=
+ =?utf-8?B?d3JBNHdlVWlOaVVLRGI5WlMwVTlyMUVmVXpOUGE5U0wzS25mTHp6U0Evc2o5?=
+ =?utf-8?B?c1h5WmVvZ0szQU53QzU3VFlSSlNHUmtrdTliTnlpRmtOdEFPYk5LSXFUd2E0?=
+ =?utf-8?B?b1E2YUoxUWpNYjNTZzRHNFJiNUFKS2s4eDFSbWhUeUpOd0RXSWtmbmtmUmV2?=
+ =?utf-8?B?bW5hVGU2ZDhLOWpnUVI1SzVZNjFKRmxVSmhtR1Vya0JNRTVOWCt6UmNSSmxO?=
+ =?utf-8?B?NmFRYzZENUhnemZBanpnVWZCYng5QWVWRnBDN2xGdHA1SjFnYzNTY0F3V3ZC?=
+ =?utf-8?B?YVhMRXNld3JuUE8zclRNL1Bha2Z1dXRPNGcxaDBGV2tJdDBrWVZwcnZKdUVy?=
+ =?utf-8?B?U0ZpZUJ1QWxjbGFBU2s1NzVUUXRQTHk0a3lJcDlhc0FzUWowYnZxMnRvQzN4?=
+ =?utf-8?B?SDZLRDF0MVA1VzZ0MklaY2JZZ1Y0enFKYmh1aHR2NTBwWjJmSzhLTFVHMEdv?=
+ =?utf-8?B?ZDlEcnFsQ2hjM25HY3QyQXptSjdpQU96T1U3dXpwSVFzMEZIN0xERHF6OFdO?=
+ =?utf-8?B?SngwNVRtaXd1dU54L2lRM0FJekdGN1huU0IwUDA1dis4MFBPOXBqaXp6bVcz?=
+ =?utf-8?B?VzBDY1ovbit5ak1uUVB2U2tIY3ZiVXhmUUFyUzJ2WmhKRFZCcW8wQ3ZoL0VD?=
+ =?utf-8?B?OWRZL2pHRm1xWTJ6bnFMOThlK3RJOWtjRnd2LzI5SDE0VTYweHV5bVZ0ZVFt?=
+ =?utf-8?B?ejJUcm9wSksvSGVxVFZnZytTSEFCbFFLcFpqWU54RS9GSHdQMUFLektJYXdN?=
+ =?utf-8?B?WkJQN2h0MGJqN1VNc3M1RU5WRXZtWWtYaUVIZjRVSkQ5Qmk3bFpCcmd1Z1FW?=
+ =?utf-8?B?b25IU1hsV05jZk9qYjFLL0dmemwyVVhVSG50azBiWEk5Y1hyYXZyYzYyeVpO?=
+ =?utf-8?B?ZGd4WDh3QnczY01Rall1T0FYWS90eW9IcmZNRWpWZDBTUDNHV3krMWNKOUZE?=
+ =?utf-8?B?aGF2bS9rcXN6N2VnRi9rOVo0aWNKdCtCUzcrQkVVc0QxSTE3Njd2c0pjN1Rt?=
+ =?utf-8?B?M0VDUlU3U096RFNJR0lKOXZxYkpRZVhOZ3hvKzB2VjRWcGdBMTRDVWNoOWQ5?=
+ =?utf-8?B?U0REakVjRGdVYnk5K1lTWTc5b1ZEZlR5ZnJyVENDWFY0YUVDQlo1OFFYN0lv?=
+ =?utf-8?B?cjRudlB0L3phNFA1bGxZaDZDVHBFSjl2T3FJQ3BNQk9DbU1nSjZpSEhsZzd6?=
+ =?utf-8?B?NHE4UGFqTXRyaUM4SFdEWkNNbVdRMC9HSnJtWXZlZ0loSHJVUVJWMHJ1R3pI?=
+ =?utf-8?B?RXM1L3B2emxLVGFSWDBKWjZ5ZFRvMDNSWXhWUUhiT2R6ZDBWdmpMUFhzR0lw?=
+ =?utf-8?B?MkxaaHFacHJ6a2RyZ1dTL0FqVlFKQzNLNTlEQVlYSUw4RlRYVGE3Q05lRzhI?=
+ =?utf-8?B?VHdUS0pJcUtSclEwME1jMEhhd003bFVqUEZidmhqL2RXa1NGUHBYWWlTYlk2?=
+ =?utf-8?B?a1gwMW1LYVl6L3JPWTAvVis2RGlTL0wyNENJVUlIS1h1OWZFU1JKUkg5NFZo?=
+ =?utf-8?B?a2Y5L2M0ZEkzaGNmKzdHMSs1enBtTjBBNmtrWVc4a002eTNtdjVUK21sTFQv?=
+ =?utf-8?Q?7yAq81jFp4Ek6Djkpexf09WUlP0V3H1eM2HucSlN1WFc=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-6b909.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: 92c6f753-20d5-4a21-fde9-08db6d32b774
+X-MS-Exchange-CrossTenant-AuthSource: DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 23:54:40.1244
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR10MB3744
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000025899c05fe1fa4f3
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
 
-
-
-On 06/13/2023 11:22 PM, Miquel Raynal wrote:
-> Hi William,
-> 
-> william.zhang@broadcom.com wrote on Tue, 13 Jun 2023 17:00:19 -0700:
-> 
->> Hi Miquel,
+在 2023/6/15 3:15, Guenter Roeck 写道:
+> On 6/14/23 08:02, JuenKit Yip wrote:
 >>
->> On 06/12/2023 11:42 PM, Miquel Raynal wrote:
->>> Hi William,
+>> 在 2023/6/14 20:57, Guenter Roeck 写道:
+>>> On 6/13/23 23:24, JuenKit Yip wrote:
+>>>> Since no in-tree driver supports it, the sht3x_platform_data was
+>>>> removed.
+>>>>
+>>>> - "blocking_io" property and its related code have been removed, and
+>>>> Single-Shot mode should be blocking in default.
+>>>>
+>>>> - "high-precision" property has been replaced to "repeatability" for
+>>>> matching datasheet.
+>>>>
 >>>
->>> william.zhang@broadcom.com wrote on Mon, 12 Jun 2023 12:18:58 -0700:
->>>    
->>>> On 06/12/2023 10:53 AM, Miquel Raynal wrote:
->>>>> Hello again,
->>>>>     >>>>>>>>>> Perhaps we could have a single function that is statically assigned at
->>>>>>>>>>>> probe time instead of a first helper with two conditions which calls in
->>>>>>>>>>>> one case another hook... This can be simplified I guess.
->>>>>>>>>>>>        >> Well this will need to be done at the SoC specific implementation level (bcm<xxx>_nand.c) and each SoC will need to have either general data bus read func with is_param option or data_bus_read_page, data_bus_read_param.
->>>>>>>>>>
->>>>>>>>>> You told me in case we would use exec_op we could avoid the param
->>>>>>>>>> cache. If that's true then the whole support can be simplified.
->>>>>>>>>>       >> Correct we may possibly unified the parameter data read but exec_op is long shot and we are not fully ready for that yet. It also depends on if the low level data register has endianess difference for the parameter data between difference SoCs.
->>>>>>>>>
->>>>>>>>> So I would like to push the current implementation and we can explore the exec_op option late which will be a much big and complete different implementation.
->>>>>>>>
->>>>>>>> I am sorry but this series is totally backwards, you're trying to guess
->>>>>>>> what comes next with the 'is_param' thing, it's exactly what we are
->>>>>>>> fighting against since 2017. There are plenty of ->exec_op()
->>>>>>>> conversions out there, I don't believe this one will be harder. You
->>>>>>>> need to convert the driver to this new API and get rid of this whole
->>>>>>>> endianness non-sense to simplify a lot the driver.
->>>>>>>>      >>> I am not guessing anything but just factor out the existing common nand cache read logic into the single default function(or one for page read and another for parameter read as I mentioned in another thread) and allow SoC to overrides the implementation when needed.
->>>>>>
->>>>>> No, you are trying to guess what type of read the core is performing,
->>>>>> either a regular data page read or a parameter page read.
->>>>>>    >>>>> I agree ->exec_op can possibly get rid of the parameter page read function and is the way to go. But it won't help on the page read for endianess.
->>>>>>
->>>>>> You told me there is no endianess issue with the data pages, so why it
->>>>>> won't help on the page read?
->>>>>>    >>>>> It's not that I am against exec_op but I want to take one step a time
->>>>>>> and I'd like to get these fixes
->>>>>>
->>>>>> I don't see any fix here? Let me know if I am missing something but
->>>>>> right now I see a new version of the controller being supported with
->>>>>> its own constraints. If you are fixing existing code for already
->>>>>> supported platform, then make it clear and we can discuss this. But if
->>>>>> you just want to support the bcmbca flavor, then there is no risk
->>>>>> mitigation involved here, and a conversion is the right step :)
->>>>>>    >>>
->>>>> I forgot to mention: the exec_op conversion is almost ready, Boris
->>>>> worked on it but he lacked the hardware so maybe you'll just need to
->>>>> revive the few patches which target your platform and do a little bit of
->>>>> debugging?
->>>>>
->>>>> https://github.com/bbrezillon/linux/commits/nand/exec-op-conversion?after=8a3cf6fd25d5e15c6667f9e95c1fc86e4cb735e6+34&branch=nand%2Fexec-op-conversion&qualified_name=refs%2Fheads%2Fnand%2Fexec-op-conversion
->>>>>     >> Yes this is the patch what our exec_op work is based on. Thanks Boris! The issue with patch is that performance is very slow for anything that rely on nand_read_page_op as the patch implementing it using the low level cmd and data register to transfer the data byte by byte.
->>>
->>> You don't need to use exec_op for your read_page/write_page hooks,
->>> quite the opposite actually. exec_op is not meant for high throughput.
->>> exec_op is meant to be simple. You can have fast I/Os with a different
->>> mechanism in your read/write_page hooks.
->>>    
->> Right it does not impact our fast path: controller based ecc read/write. But things like on-chip ecc nand driver that uses exec_op API get impacted badly. We need to add nand op parser, several matching rules and other logics to use fast path page read/write instead of the low level data register read/write.
+>>> That needs to be three patches.
 >>
->>>>    I actually sent out email regarding this to Boris and he cc'ed you in
->>>>    sept last year. We have to use the nand parser to match the page read
->>>>    from exec_op so we can actually match and use the brcmnand_page_read
->>>>    fast path. But there are many situations that we need to match so the
->>>>    project to migrate exce_op are still work in progress just on our
->>>>    bcmbca chip as of now.  Just forward that email again to you and I
->>>>    appreciate it if you have any inputs there. So IMHO it is just too
->>>>    risky and too big of scope to have the exec_op added to this patch
->>>>    series and definitively better to do it afterwards with a dedicated
->>>>    patch.
+>> Patch 1: remove sht3x_platform_data and its header file
+>>
+>> Patch 2: move "blocking_io" to struct sht3x_data
+>>
+> Essentially merge it with update_interval==0 since (if I understand
+> correctly) blocking mode and update_interval==0 will be equivalent.
+> With that in mind, a separate "blocking_io" variable should no
+> longer be needed.
+>
+I reviewed the datasheet again, update_interval == 0 means Single-Shot
+
+mode which owns blocking(clock strench) and non-blocking(non-clock strench)
+
+options. If master supports clock-strench( I don't know how to detect it),
+
+the property may be reserved.
+
+>> Patch 3: replace "high-precision" property to "repeatability"
+>
+> precision -> reliability would apply to both high and low
+> precision. I think "low repeatability" is currently called
+> "low power mode", so you'll want to update that as well.
+> I also see "high accuracy" and "low accuracy" use in the
+> documentation, but I see you removed that already below.
+>
+>>
+>> Is it correct or I am misunderstand your statement?
+>>
+>
+> Yes, that is what I meant.
+>
+> Thanks,
+> Guenter
+>
+>> Thanks for your instruction
+>>
 >>>
->>> As long as you add small and orthogonal changes to cmd_ctrl/cmd_func
->>> I don't mind, but what you want now is to force me to pull dirty
->>> changes "first", the type of change we are refusing since 2018, making
->>> me expect you'll perform the conversion after. It would have been
->>> terribly less dirty and you would have all your code already upstreamed
->>> if you had performed the exec_op conversion since September.
->>>    
->> I didn't work on open source 5 years ago. I am sorry that I missed the background of the rejected changes since then but I do not agree that this change is dirty change just because I factor out the code with is_param argument(and I offered an alternative to remove is_param with two data read functions).
-> 
-> This _is_ dirty because you cannot know with the cmd_ctrl/cmdfunc
-> API whether we read a parameter page or a page of data. So your are
-> _guessing_. There are plenty ways of reading one of the others, the
-> heuristics on the controller side will _always_ be wrong. That is why
-> exec_op() was introduced.
-> 
-alright we have different definition of dirty ;) Understand it is not a 
-preferred way to update the code in controller cmdfunc path especially 
-for large change that can be done in exec_op.
-
->> I see your point with exec_op and agree that is the way to go.  We had an initial look of the Borris exec_op patch last Sept and noticed the performance issue but we haven't got the chance to actively work on improving the performance and prepare for up-streaming until recently. What if we bring in the original exec_op patch in this series so we don't need to add the parameter data read function(if we verify it works on difference SoCs without endianess)?  Or better to have exec_op as separate patch first and then this series?
-> 
-> This one is my favorite:
-> 1/ Add exec_op support
-> 2/ Remove legacy hooks
-> 3/ Add support for the bcmbca SoC
-> 
-Sounds good.  We will send exec_op series for 1 and 2 then another 
-series for 3.   And I will send v2 of this series to just include the 
-fixes (patch 1 to patch 4) with updates based on the comments received.
-
-> Then you can improve the performance for on-die ECC situations, but to
-> be honest this improvement looks little a very little addition. You can
-> take example from the existing hooks, how they match specific
-> operations in the parser and then hook them to specific helpers.
-> Nothing terribly complex, there are dozens of conversions available
-> now.
-> 
-> Good luck :)
-> Miquèl
-> 
-
---00000000000025899c05fe1fa4f3
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIQcAYJKoZIhvcNAQcCoIIQYTCCEF0CAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-gg3HMIIFDTCCA/WgAwIBAgIQeEqpED+lv77edQixNJMdADANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA5MTYwMDAwMDBaFw0yODA5MTYwMDAwMDBaMFsxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBS
-MyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
-vbCmXCcsbZ/a0fRIQMBxp4gJnnyeneFYpEtNydrZZ+GeKSMdHiDgXD1UnRSIudKo+moQ6YlCOu4t
-rVWO/EiXfYnK7zeop26ry1RpKtogB7/O115zultAz64ydQYLe+a1e/czkALg3sgTcOOcFZTXk38e
-aqsXsipoX1vsNurqPtnC27TWsA7pk4uKXscFjkeUE8JZu9BDKaswZygxBOPBQBwrA5+20Wxlk6k1
-e6EKaaNaNZUy30q3ArEf30ZDpXyfCtiXnupjSK8WU2cK4qsEtj09JS4+mhi0CTCrCnXAzum3tgcH
-cHRg0prcSzzEUDQWoFxyuqwiwhHu3sPQNmFOMwIDAQABo4IB2jCCAdYwDgYDVR0PAQH/BAQDAgGG
-MGAGA1UdJQRZMFcGCCsGAQUFBwMCBggrBgEFBQcDBAYKKwYBBAGCNxQCAgYKKwYBBAGCNwoDBAYJ
-KwYBBAGCNxUGBgorBgEEAYI3CgMMBggrBgEFBQcDBwYIKwYBBQUHAxEwEgYDVR0TAQH/BAgwBgEB
-/wIBADAdBgNVHQ4EFgQUljPR5lgXWzR1ioFWZNW+SN6hj88wHwYDVR0jBBgwFoAUj/BLf6guRSSu
-TVD6Y5qL3uLdG7wwegYIKwYBBQUHAQEEbjBsMC0GCCsGAQUFBzABhiFodHRwOi8vb2NzcC5nbG9i
-YWxzaWduLmNvbS9yb290cjMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5j
-b20vY2FjZXJ0L3Jvb3QtcjMuY3J0MDYGA1UdHwQvMC0wK6ApoCeGJWh0dHA6Ly9jcmwuZ2xvYmFs
-c2lnbi5jb20vcm9vdC1yMy5jcmwwWgYDVR0gBFMwUTALBgkrBgEEAaAyASgwQgYKKwYBBAGgMgEo
-CjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAN
-BgkqhkiG9w0BAQsFAAOCAQEAdAXk/XCnDeAOd9nNEUvWPxblOQ/5o/q6OIeTYvoEvUUi2qHUOtbf
-jBGdTptFsXXe4RgjVF9b6DuizgYfy+cILmvi5hfk3Iq8MAZsgtW+A/otQsJvK2wRatLE61RbzkX8
-9/OXEZ1zT7t/q2RiJqzpvV8NChxIj+P7WTtepPm9AIj0Keue+gS2qvzAZAY34ZZeRHgA7g5O4TPJ
-/oTd+4rgiU++wLDlcZYd/slFkaT3xg4qWDepEMjT4T1qFOQIL+ijUArYS4owpPg9NISTKa1qqKWJ
-jFoyms0d0GwOniIIbBvhI2MJ7BSY9MYtWVT5jJO3tsVHwj4cp92CSFuGwunFMzCCA18wggJHoAMC
-AQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUAMEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9v
-dCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWduMRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5
-MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEgMB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENB
-IC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzARBgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqG
-SIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0E
-XyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuul9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+J
-J5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJpij2aTv2y8gokeWdimFXN6x0FNx04Druci8u
-nPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTv
-riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
-QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
-UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
-M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
-Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
-14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
-a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
-XzCCBU8wggQ3oAMCAQICDDG6HZcbcVdEvVYk4TANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
-RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
-UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMTMxNDVaFw0yNTA5MTAxMTMxNDVaMIGQ
-MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
-BgNVBAoTDUJyb2FkY29tIEluYy4xFjAUBgNVBAMTDVdpbGxpYW0gWmhhbmcxKTAnBgkqhkiG9w0B
-CQEWGndpbGxpYW0uemhhbmdAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIB
-CgKCAQEAyKF+RmY29Wvfmfe3L8J4rZNmBIvRmrWKI5td5L0vlpPMCEzUkVhBdL2N9cDP0rPScvWL
-CX/9cI1a2BUy/6/ZT5j9PhcUn6A3kwKFGukLY2itfKaDrP3ANVJGhBXPVJ6sx55GF41PkiL2EMnY
-7LJGNpl9WHYrw8VqtRediPyXq8M6ZWGPZWxygsE6y1pOkEk9qLpvXTb2Epxk2JWcQFZQCDWVULue
-YDZuuBJwnyCzevMoPtVYPharioL5H3BRnQi8YoTXH7/uRo33dewYFm474yFjwwnt82TFtveVZkVq
-6h4WIQ4wTcwFfET8zMkELnGzS5SHCl8sPD+lNxxJ1JDZYwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUq65GzwZxydFHjjYEU/9h
-xHhPWlwwDQYJKoZIhvcNAQELBQADggEBAA2hGG3JPAdGPH0ZdohGUCIVjKz+U+EFuIDbS6A/5jqX
-VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
-/ppSz3WoflVyFFQ5YXniZ+eU+2/cdnYZg4aVUnFjimOF5o3NfMLzOkhQNxbaDjFUfUYD8hKmU6v4
-0vUBj8KZ9Gi1LIagLKUREn8jku0lcLsRbnJ5Ey5ScajC/FESPyYWasOW8j8/1EoJksmhbYGKNS6C
-urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEICDX3Ja/07fdQnSIxzFAXo6fGYgC
-CAZudKrlKxLKUCyHMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDYxNDIzNTIxNFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQA0ubhd10dbECovJt3+WfwpC73djYPvzKNvsqnYXPwb8Agz
-Xu+BlrtnsZNQl2ZzU8l56h2qdzl01PVqDOJ+GhU9myzYBtXnf1Iies2HXSPlm4aot4ErmjD8U6s4
-0AtwvWkeQYiAOKng7C5ckSEqPLTuKfS4DfNw/zsFeO8TnMtf/tPdI7bwK5wZCuCuDixjp39efTYA
-j9ov1eXdaRP4Rnt9DKM5MggWnOGtClxc72tSWph+mEnwuTgb/lnsLPTSbcb+DeGnsK/FoisOiZax
-YmDzp0EGl4cgvt1jjbwHuVmJw9kTsYqX4EFxfRgc5EAMO5eBIMYa6szaT1t8Zea2ky5P
---00000000000025899c05fe1fa4f3--
+>>>> Signed-off-by: JuenKit Yip <JuenKit_Yip@hotmail.com>
+>>>> ---
+>>>>   Documentation/hwmon/sht3x.rst       | 12 +++++------
+>>>>   drivers/hwmon/sht3x.c               | 32 
+>>>> ++++++++++++-----------------
+>>>>   include/linux/platform_data/sht3x.h | 15 --------------
+>>>>   3 files changed, 18 insertions(+), 41 deletions(-)
+>>>>   delete mode 100644 include/linux/platform_data/sht3x.h
+>>>>
+>>>> diff --git a/Documentation/hwmon/sht3x.rst 
+>>>> b/Documentation/hwmon/sht3x.rst
+>>>> index 95a850d5b..2c87c8f58 100644
+>>>> --- a/Documentation/hwmon/sht3x.rst
+>>>> +++ b/Documentation/hwmon/sht3x.rst
+>>>> @@ -28,28 +28,26 @@ The device communicates with the I2C protocol. 
+>>>> Sensors can have the I2C
+>>>>   addresses 0x44 or 0x45, depending on the wiring. See
+>>>>   Documentation/i2c/instantiating-devices.rst for methods to 
+>>>> instantiate the device.
+>>>>   -There are two options configurable by means of sht3x_platform_data:
+>>>> +This driver supports block and non-block mode:
+>>>>   -1. blocking (pull the I2C clock line down while performing the 
+>>>> measurement) or
+>>>> +   blocking (pull the I2C clock line down while performing the 
+>>>> measurement) or
+>>>>      non-blocking mode. Blocking mode will guarantee the fastest 
+>>>> result but
+>>>>      the I2C bus will be busy during that time. By default, 
+>>>> non-blocking mode
+>>>>      is used. Make sure clock-stretching works properly on your 
+>>>> device if you
+>>>>      want to use blocking mode.
+>>>> -2. high or low accuracy. High accuracy is used by default and 
+>>>> using it is
+>>>> -   strongly recommended.
+>>>>     The sht3x sensor supports a single shot mode as well as 5 
+>>>> periodic measure
+>>>>   modes, which can be controlled with the update_interval sysfs 
+>>>> interface.
+>>>>   The allowed update_interval in milliseconds are as follows:
+>>>>   -    ===== ======= ====================
+>>>> -       0          single shot mode
+>>>> +    ===== ======= ==========================
+>>>> +       0          single shot mode(blocking)
+>>>>       2000   0.5 Hz periodic measurement
+>>>>       1000   1   Hz periodic measurement
+>>>>        500   2   Hz periodic measurement
+>>>>        250   4   Hz periodic measurement
+>>>>        100  10   Hz periodic measurement
+>>>> -    ===== ======= ====================
+>>>> +    ===== ======= ==========================
+>>>>     In the periodic measure mode, the sensor automatically triggers 
+>>>> a measurement
+>>>>   with the configured update interval on the chip. When a 
+>>>> temperature or humidity
+>>>> diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
+>>>> index 8305e44d9..5bc0001b1 100644
+>>>> --- a/drivers/hwmon/sht3x.c
+>>>> +++ b/drivers/hwmon/sht3x.c
+>>>> @@ -20,13 +20,12 @@
+>>>>   #include <linux/module.h>
+>>>>   #include <linux/slab.h>
+>>>>   #include <linux/jiffies.h>
+>>>> -#include <linux/platform_data/sht3x.h>
+>>>>   -/* commands (high precision mode) */
+>>>> +/* commands (high repeatability mode) */
+>>>>   static const unsigned char sht3x_cmd_measure_blocking_hpm[] = { 
+>>>> 0x2c, 0x06 };
+>>>>   static const unsigned char sht3x_cmd_measure_nonblocking_hpm[] = 
+>>>> { 0x24, 0x00 };
+>>>>   -/* commands (low power mode) */
+>>>> +/* commands (low repeatability mode) */
+>>>>   static const unsigned char sht3x_cmd_measure_blocking_lpm[] = { 
+>>>> 0x2c, 0x10 };
+>>>>   static const unsigned char sht3x_cmd_measure_nonblocking_lpm[] = 
+>>>> { 0x24, 0x16 };
+>>>>   @@ -69,9 +68,14 @@ enum sht3x_limits {
+>>>>       limit_min_hyst,
+>>>>   };
+>>>>   +enum sht3x_repeatability {
+>>>> +    low_repeatability,
+>>>> +    high_repeatability,
+>>>> +};
+>>>> +
+>>>>   DECLARE_CRC8_TABLE(sht3x_crc8_table);
+>>>>   -/* periodic measure commands (high precision mode) */
+>>>> +/* periodic measure commands (high repeatability mode) */
+>>>>   static const char 
+>>>> periodic_measure_commands_hpm[][SHT3X_CMD_LENGTH] = {
+>>>>       /* 0.5 measurements per second */
+>>>>       {0x20, 0x32},
+>>>> @@ -85,7 +89,7 @@ static const char 
+>>>> periodic_measure_commands_hpm[][SHT3X_CMD_LENGTH] = {
+>>>>       {0x27, 0x37},
+>>>>   };
+>>>>   -/* periodic measure commands (low power mode) */
+>>>> +/* periodic measure commands (low repeatability mode) */
+>>>>   static const char 
+>>>> periodic_measure_commands_lpm[][SHT3X_CMD_LENGTH] = {
+>>>>       /* 0.5 measurements per second */
+>>>>       {0x20, 0x2f},
+>>>> @@ -132,12 +136,11 @@ struct sht3x_data {
+>>>>       struct mutex data_lock; /* lock for updating driver data */
+>>>>         u8 mode;
+>>>> +    enum sht3x_repeatability repeatability;
+>>>>       const unsigned char *command;
+>>>>       u32 wait_time;            /* in us*/
+>>>>       unsigned long last_update;    /* last update in periodic mode*/
+>>>>   -    struct sht3x_platform_data setup;
+>>>> -
+>>>>       /*
+>>>>        * cached values for temperature and humidity and limits
+>>>>        * the limits arrays have the following order:
+>>>> @@ -441,13 +444,8 @@ static void sht3x_select_command(struct 
+>>>> sht3x_data *data)
+>>>>       if (data->mode > 0) {
+>>>>           data->command = sht3x_cmd_measure_periodic_mode;
+>>>>           data->wait_time = 0;
+>>>> -    } else if (data->setup.blocking_io) {
+>>>> -        data->command = data->setup.high_precision ?
+>>>> -                sht3x_cmd_measure_blocking_hpm :
+>>>> -                sht3x_cmd_measure_blocking_lpm;
+>>>> -        data->wait_time = 0;
+>>>
+>>> If update_interval is 0, those would presumably still be needed.
+>>> I don't know if the current code updating the interval is wrong
+>>> (that may well be), but removing this code entirely seems wrong.
+>>
+>> update_interval "0" means Single-Shot mode and respectively 
+>> data->command
+>>
+>> should be in blocking mode.
+>>
+>> Thanks for your correctness.
+>>
+>>>
+>>>>       } else {
+>>>> -        if (data->setup.high_precision) {
+>>>> +        if (data->repeatability == high_repeatability) {
+>>>>               data->command = sht3x_cmd_measure_nonblocking_hpm;
+>>>>               data->wait_time = SHT3X_NONBLOCKING_WAIT_TIME_HPM;
+>>>>           } else {
+>>>> @@ -595,7 +593,7 @@ static ssize_t update_interval_store(struct 
+>>>> device *dev,
+>>>>       }
+>>>>         if (mode > 0) {
+>>>> -        if (data->setup.high_precision)
+>>>> +        if (data->repeatability == high_repeatability)
+>>>>               command = periodic_measure_commands_hpm[mode - 1];
+>>>>           else
+>>>>               command = periodic_measure_commands_lpm[mode - 1];
+>>>> @@ -690,16 +688,12 @@ static int sht3x_probe(struct i2c_client 
+>>>> *client)
+>>>>       if (!data)
+>>>>           return -ENOMEM;
+>>>>   -    data->setup.blocking_io = false;
+>>>> -    data->setup.high_precision = true;
+>>>> +    data->repeatability = high_repeatability;
+>>>>       data->mode = 0;
+>>>>       data->last_update = jiffies - msecs_to_jiffies(3000);
+>>>>       data->client = client;
+>>>>       crc8_populate_msb(sht3x_crc8_table, SHT3X_CRC8_POLYNOMIAL);
+>>>>   -    if (client->dev.platform_data)
+>>>> -        data->setup = *(struct sht3x_platform_data 
+>>>> *)dev->platform_data;
+>>>> -
+>>>>       sht3x_select_command(data);
+>>>>         mutex_init(&data->i2c_lock);
+>>>> diff --git a/include/linux/platform_data/sht3x.h 
+>>>> b/include/linux/platform_data/sht3x.h
+>>>> deleted file mode 100644
+>>>> index 14680d2a9..000000000
+>>>> --- a/include/linux/platform_data/sht3x.h
+>>>> +++ /dev/null
+>>>> @@ -1,15 +0,0 @@
+>>>> -/* SPDX-License-Identifier: GPL-2.0-or-later */
+>>>> -/*
+>>>> - * Copyright (C) 2016 Sensirion AG, Switzerland
+>>>> - * Author: David Frey <david.frey@sensirion.com>
+>>>> - * Author: Pascal Sachs <pascal.sachs@sensirion.com>
+>>>> - */
+>>>> -
+>>>> -#ifndef __SHT3X_H_
+>>>> -#define __SHT3X_H_
+>>>> -
+>>>> -struct sht3x_platform_data {
+>>>> -    bool blocking_io;
+>>>> -    bool high_precision;
+>>>> -};
+>>>> -#endif /* __SHT3X_H_ */
+>>>
+>
