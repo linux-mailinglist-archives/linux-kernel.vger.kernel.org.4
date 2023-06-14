@@ -2,171 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CD6C7303DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE847303E2
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:29:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244842AbjFNP1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 11:27:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34686 "EHLO
+        id S236830AbjFNP32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 11:29:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234797AbjFNP1a (ORCPT
+        with ESMTP id S235361AbjFNP30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 11:27:30 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAEFFC7
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:27:28 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f642a24568so8888639e87.2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:27:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686756447; x=1689348447;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XaodULpx93bhaMgasCg20jVwTzInKVTrlrTMvfuinVI=;
-        b=nFwS5B0lhBgtFdQVs7vOetdeXczFg68Koa9owmCGc1U4FHRTK4fATvLChYhFoFJU+r
-         1NZpXR147c3UtQZQwteqzx9aHzsgJNefC/4G5myLggcstfvPQLCkwfp6hU0mzQINCEq+
-         HWrJReOwEfcSUZwsuVo6PID/H/o+he/zGhDBXb2XGwnlMH8uPsB5o9S+HWXBzsM4wRdN
-         nNgoOCIZxpJolG43LW5yhjncFO8PypumIrn8LrkL0SjjCvsXKBzH+fvR1QmWn2CZ/r83
-         t+NEX0lYATbH5ONiaH5t3NDcw/yj9LJEkXEwsnWS9RBBuFx/ETSFi641JGjZwRkTjASB
-         60Lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686756447; x=1689348447;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XaodULpx93bhaMgasCg20jVwTzInKVTrlrTMvfuinVI=;
-        b=D0Zok/rHndflIEJz0X4OrdiSgq8cPb2+X/wID22KIQK7vxUAheV9p+gzf7sCFc+g/7
-         zEpLwRe5Ru3/cJ62ZrJL9W0oLvxQeLmDvf64U7n9XyQZLDrjnulY+ZKYrloKySHPPvi2
-         s9nz7IJjLFCXjNlkAL47etNkdFPg371ujPpOHhrLZb5GFysgq2nSodDVhw5mlcbCQyQh
-         oTdrafSR3iu+IblfHmR4OorsLnmTe6ilnjT4G+DiDJjX8WSb998zpEPhbICvomYrNw+h
-         mgcYR7By5pupu/SHKyb+L5MBCq86VkdVAGyA1IKQLwzNotrX1cbyISiPOrRbKT1UCuz5
-         oQmQ==
-X-Gm-Message-State: AC+VfDzg5JiASPhJCjzrVFBeEZijFNllw23zmlVYbwZxnQCZMKk2nPYW
-        I6wA2WftGxTxLLf+rVhHtUdVqQ==
-X-Google-Smtp-Source: ACHHUZ5qHZ0XHSvNY5Er+5xVDd9+YbHVFL6nwRBwyo0osPEjAoRpp2Lu4p+OVeu3z9RoDZuVR1cJeg==
-X-Received: by 2002:a19:6419:0:b0:4f6:1916:4170 with SMTP id y25-20020a196419000000b004f619164170mr7342197lfb.5.1686756446884;
-        Wed, 14 Jun 2023 08:27:26 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id d2-20020ac25ec2000000b004f24e797c55sm2173748lfq.25.2023.06.14.08.27.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 08:27:26 -0700 (PDT)
-Message-ID: <8f8d5e09-50a6-a83f-d4bb-3d7bc8c07162@linaro.org>
-Date:   Wed, 14 Jun 2023 17:27:24 +0200
+        Wed, 14 Jun 2023 11:29:26 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D1FC7;
+        Wed, 14 Jun 2023 08:29:24 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
+ id fa9909d605947cc3; Wed, 14 Jun 2023 17:29:22 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 31C8569DA2F;
+        Wed, 14 Jun 2023 17:29:22 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Saket Dumbre <saket.dumbre@intel.com>,
+        Xiaoming Ni <nixiaoming@huawei.com>
+Subject: [PATCH v2] ACPI: sleep: Avoid breaking S3 wakeup due to might_sleep()
+Date:   Wed, 14 Jun 2023 17:29:21 +0200
+Message-ID: <12252058.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v4 2/2] arm64: dts: qcom: sc8280xp: Enable GPU related
- nodes
-Content-Language: en-US
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, freedreno@lists.freedesktop.org,
-        johan@kernel.org, mani@kernel.org,
-        Steev Klimaszewski <steev@kali.org>,
-        Johan Hovold <johan+linaro@kernel.org>
-References: <20230614142204.2675653-1-quic_bjorande@quicinc.com>
- <20230614142204.2675653-3-quic_bjorande@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230614142204.2675653-3-quic_bjorande@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrgedvtddgledtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepkedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghl
+ rdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepfihilhhlsehkvghrnhgvlhdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=8 Fuz1=8 Fuz2=8
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.06.2023 16:22, Bjorn Andersson wrote:
-> From: Bjorn Andersson <bjorn.andersson@linaro.org>
-> 
-> Add memory reservation for the zap-shader and enable the Adreno SMMU,
-> GPU clock controller, GMU and the GPU nodes for the SC8280XP CRD and the
-> Lenovo ThinkPad X13s.
-> 
-> Tested-by: Steev Klimaszewski <steev@kali.org>
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Tested-by: Johan Hovold <johan+linaro@kernel.org>
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-one question below
->  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts          | 14 ++++++++++++++
->  .../dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts     | 14 ++++++++++++++
->  2 files changed, 28 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> index cd7e0097d8bc..b566e403d1db 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> @@ -210,6 +210,11 @@ vreg_wwan: regulator-wwan {
->  	};
->  
->  	reserved-memory {
-> +		gpu_mem: gpu-mem@8bf00000 {
-Is it ever going to differ on other platforms, including the automotive ones?
+The addition of might_sleep() to down_timeout() caused the latter to
+enable interrupts unconditionally in some cases, which in turn broke
+the ACPI S3 wakeup path in acpi_suspend_enter(), where down_timeout()
+is called by acpi_disable_all_gpes() via acpi_ut_acquire_mutex().
 
-Konrad
-> +			reg = <0 0x8bf00000 0 0x2000>;
-> +			no-map;
-> +		};
-> +
->  		linux,cma {
->  			compatible = "shared-dma-pool";
->  			size = <0x0 0x8000000>;
-> @@ -390,6 +395,15 @@ &dispcc0 {
->  	status = "okay";
->  };
->  
-> +&gpu {
-> +	status = "okay";
-> +
-> +	zap-shader {
-> +		memory-region = <&gpu_mem>;
-> +		firmware-name = "qcom/sc8280xp/qcdxkmsuc8280.mbn";
-> +	};
-> +};
-> +
->  &mdss0 {
->  	status = "okay";
->  };
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> index 5ae057ad6438..7cc3028440b6 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> @@ -264,6 +264,11 @@ vreg_wwan: regulator-wwan {
->  	};
->  
->  	reserved-memory {
-> +		gpu_mem: gpu-mem@8bf00000 {
-> +			reg = <0 0x8bf00000 0 0x2000>;
-> +			no-map;
-> +		};
-> +
->  		linux,cma {
->  			compatible = "shared-dma-pool";
->  			size = <0x0 0x8000000>;
-> @@ -518,6 +523,15 @@ &dispcc0 {
->  	status = "okay";
->  };
->  
-> +&gpu {
-> +	status = "okay";
-> +
-> +	zap-shader {
-> +		memory-region = <&gpu_mem>;
-> +		firmware-name = "qcom/sc8280xp/LENOVO/21BX/qcdxkmsuc8280.mbn";
-> +	};
-> +};
-> +
->  &mdss0 {
->  	status = "okay";
->  };
+Namely, if CONFIG_DEBUG_ATOMIC_SLEEP is set, might_sleep() causes
+might_resched() to be used and if CONFIG_PREEMPT_VOLUNTARY is set,
+this triggers __cond_resched() which may call preempt_schedule_common(),
+so __schedule() gets invoked and it ends up with enabled interrupts (in
+the prev == next case).
+
+Now, enabling interrupts early in the S3 wakeup path causes the kernel
+to crash.
+
+Address this by modifying acpi_suspend_enter() to disable GPEs without
+attempting to acquire the sleeping lock which is not needed in that code
+path anyway.
+
+Fixes: 99409b935c9a ("locking/semaphore: Add might_sleep() to down_*() family")
+Reported-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+
+v1 -> v2:
+   * Rephrase the comment in acpi_suspend_enter() (Peter)
+   * Fix up the Fixes tag (Peter)
+   * Add Peter's ACK
+
+---
+ drivers/acpi/acpica/achware.h |    2 --
+ drivers/acpi/sleep.c          |   16 ++++++++++++----
+ include/acpi/acpixf.h         |    1 +
+ 3 files changed, 13 insertions(+), 6 deletions(-)
+
+Index: linux-pm/drivers/acpi/acpica/achware.h
+===================================================================
+--- linux-pm.orig/drivers/acpi/acpica/achware.h
++++ linux-pm/drivers/acpi/acpica/achware.h
+@@ -101,8 +101,6 @@ acpi_status
+ acpi_hw_get_gpe_status(struct acpi_gpe_event_info *gpe_event_info,
+ 		       acpi_event_status *event_status);
+ 
+-acpi_status acpi_hw_disable_all_gpes(void);
+-
+ acpi_status acpi_hw_enable_all_runtime_gpes(void);
+ 
+ acpi_status acpi_hw_enable_all_wakeup_gpes(void);
+Index: linux-pm/include/acpi/acpixf.h
+===================================================================
+--- linux-pm.orig/include/acpi/acpixf.h
++++ linux-pm/include/acpi/acpixf.h
+@@ -761,6 +761,7 @@ ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_sta
+ 						     acpi_event_status
+ 						     *event_status))
+ ACPI_HW_DEPENDENT_RETURN_UINT32(u32 acpi_dispatch_gpe(acpi_handle gpe_device, u32 gpe_number))
++ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status acpi_hw_disable_all_gpes(void))
+ ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status acpi_disable_all_gpes(void))
+ ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status acpi_enable_all_runtime_gpes(void))
+ ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status acpi_enable_all_wakeup_gpes(void))
+Index: linux-pm/drivers/acpi/sleep.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/sleep.c
++++ linux-pm/drivers/acpi/sleep.c
+@@ -636,11 +636,19 @@ static int acpi_suspend_enter(suspend_st
+ 	}
+ 
+ 	/*
+-	 * Disable and clear GPE status before interrupt is enabled. Some GPEs
+-	 * (like wakeup GPE) haven't handler, this can avoid such GPE misfire.
+-	 * acpi_leave_sleep_state will reenable specific GPEs later
++	 * Disable all GPE and clear their status bits before interrupts are
++	 * enabled. Some GPEs (like wakeup GPEs) have no handlers and this can
++	 * prevent them from producing spurious interrups.
++	 *
++	 * acpi_leave_sleep_state() will reenable specific GPEs later.
++	 *
++	 * Because this code runs on one CPU with disabled interrupts (all of
++	 * the other CPUs are offline at this time), it need not acquire any
++	 * sleeping locks which may trigger an implicit preemption point even
++	 * if there is no contention, so avoid doing that by using a low-level
++	 * library routine here.
+ 	 */
+-	acpi_disable_all_gpes();
++	acpi_hw_disable_all_gpes();
+ 	/* Allow EC transactions to happen. */
+ 	acpi_ec_unblock_transactions();
+ 
+
+
+
