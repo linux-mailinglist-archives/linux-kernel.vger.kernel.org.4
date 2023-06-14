@@ -2,155 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14CE17304D2
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:22:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE0F7304D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:22:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233131AbjFNQV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 12:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39000 "EHLO
+        id S233011AbjFNQWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 12:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232936AbjFNQVw (ORCPT
+        with ESMTP id S229569AbjFNQWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 12:21:52 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E600119;
-        Wed, 14 Jun 2023 09:21:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=QWph71KWV3aPlqaV648UJHe6lbKZBpXdiDZJikc9zP8=; b=y45S5FcBhDXz+6NaXk1EUEetiF
-        Vc+jk0MdpAtlg8qedoWjj6F9Zx4e7xguW8BAmEOEp2GikxxxOl8ZPV+zZLnrJHFphEVu89yYUHoBx
-        jstoLPfDBdQt0YvbHkJXz+4agTaR9PuMcHXVI8Y2hNpO7BS0uy8Y5tjm/p1WiXvAzk8peUiqaC96g
-        xBNo9bbF9J22MdPpTtUQMn81sfT+5ZQf2AlSOLPl0F3Zz5wrboKUSmlEqBtkYxQnJbPVMTCaBSyiA
-        C4rKMZGYgpFMuo6t/mXfVKG/Hag5OHRTOMQcKuZ7x7FsbtDy91b7kpYYA/0z4gl395hb8tiN0gCEy
-        UljwbNjQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:51956)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q9TFi-0001xs-6h; Wed, 14 Jun 2023 17:21:46 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q9TFf-0000Yu-9i; Wed, 14 Jun 2023 17:21:43 +0100
-Date:   Wed, 14 Jun 2023 17:21:43 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Wei-chin Tsai =?utf-8?B?KOiUoee2reaZiSk=?= 
-        <Wei-chin.Tsai@mediatek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Mel Lee =?utf-8?B?KOadjuWlh+mMmik=?= <Mel.Lee@mediatek.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        wsd_upstream <wsd_upstream@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        Ivan Tseng =?utf-8?B?KOabvuW/l+i7kik=?= 
-        <ivan.tseng@mediatek.com>
-Subject: Re: [PATCH v2 2/3] memory: export symbols for memory related
- functions
-Message-ID: <ZInpF3aKMLFVQ3Vf@shell.armlinux.org.uk>
-References: <20230614032038.11699-1-Wei-chin.Tsai@mediatek.com>
- <20230614032038.11699-3-Wei-chin.Tsai@mediatek.com>
- <ZIlpWR6/uWwQUc6J@shell.armlinux.org.uk>
- <fef0006ced8d5e133a3bfbf4dc4353a86578b9cd.camel@mediatek.com>
- <cb7f49bc-8ed4-a916-44f4-39e360afce41@collabora.com>
+        Wed, 14 Jun 2023 12:22:44 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57EB1ED;
+        Wed, 14 Jun 2023 09:22:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686759763; x=1718295763;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=li6GYo+wwMWYVTIEewqCORPcFr5mex3K6+KDY2sj2uw=;
+  b=dp8UBQeMhSIZrvlZzLWP4V1QRetd1rrXT/aU+YXyjybWLNzIFikWk8U8
+   1Vj03sdF2wyHU23fNewKqTkFoLZMQ8ZCGHicn5dVCknxs89IglxKxyqXQ
+   08HnwCDzcyq9r1pt9U+f1HHdu+5e+zumVakXiVq2C3NkC25n3v7Plc1O7
+   /HnkqgwqZKYFX6U1H9/NedA2Vv/Lj4va00nosIzdxpDxtciYEE4sO0hn2
+   F0Mj8wNsUAruPXywtHTRzAFw1LtAaWA9tdKX0jx/VIHK+cMdOlOp0sKdt
+   co52NRlEBwIPjbi5h3etb656ZOU9QoOg3XxAQ59wCp+N0uR+E6ctNArgf
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="424549372"
+X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
+   d="scan'208";a="424549372"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 09:22:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="824876952"
+X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
+   d="scan'208";a="824876952"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP; 14 Jun 2023 09:22:39 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1q9TGZ-003jp9-1Y;
+        Wed, 14 Jun 2023 19:22:39 +0300
+Date:   Wed, 14 Jun 2023 19:22:39 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Raag Jadav <raag.jadav@intel.com>
+Cc:     linus.walleij@linaro.org, mika.westerberg@linux.intel.com,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mallikarjunappa.sangannavar@intel.com, pandith.n@intel.com
+Subject: Re: [PATCH v3 2/3] pinctrl: intel: refine ->irq_set_type() hook
+Message-ID: <ZInpT0dUUVUcKdqv@smile.fi.intel.com>
+References: <20230613085054.10976-1-raag.jadav@intel.com>
+ <20230613085054.10976-3-raag.jadav@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cb7f49bc-8ed4-a916-44f4-39e360afce41@collabora.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230613085054.10976-3-raag.jadav@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 02:11:25PM +0200, AngeloGioacchino Del Regno wrote:
-> Il 14/06/23 11:59, Wei-chin Tsai (蔡維晉) ha scritto:
-> > On Wed, 2023-06-14 at 08:16 +0100, Russell King (Oracle) wrote:
-> > >   	
-> > > External email : Please do not click links or open attachments until
-> > > you have verified the sender or the content.
-> > >   On Wed, Jun 14, 2023 at 11:20:34AM +0800, Wei Chin Tsai wrote:
-> > > > diff --git a/arch/arm/kernel/process.c b/arch/arm/kernel/process.c
-> > > > index 0e8ff85890ad..df91412a1069 100644
-> > > > --- a/arch/arm/kernel/process.c
-> > > > +++ b/arch/arm/kernel/process.c
-> > > > @@ -343,6 +343,7 @@ const char *arch_vma_name(struct vm_area_struct
-> > > *vma)
-> > > >   {
-> > > >   return is_gate_vma(vma) ? "[vectors]" : NULL;
-> > > >   }
-> > > > +EXPORT_SYMBOL_GPL(arch_vma_name);
-> > > ...
-> > > > diff --git a/kernel/signal.c b/kernel/signal.c
-> > > > index b5370fe5c198..a1abe77fcdc3 100644
-> > > > --- a/kernel/signal.c
-> > > > +++ b/kernel/signal.c
-> > > > @@ -4700,6 +4700,7 @@ __weak const char *arch_vma_name(struct
-> > > vm_area_struct *vma)
-> > > >   {
-> > > >   return NULL;
-> > > >   }
-> > > > +EXPORT_SYMBOL_GPL(arch_vma_name);
-> > > 
-> > > Have you confirmed:
-> > > 1) whether this actually builds
-> > > 2) whether this results in one or two arch_vma_name exports
-> > > 
-> > > ?
-> > > 
-> > > -- 
-> > > RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> > > FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
-> > 
-> > Hi Russell,
-> > 
-> > We did confirm that it can be built successfully in kernel 6.1 and run
-> > well in our system.
-> > 
+On Tue, Jun 13, 2023 at 02:20:53PM +0530, Raag Jadav wrote:
+> Utilize a temporary variable for common shift operation
+> in ->irq_set_type() hook and improve readability.
+> While at it, simplify if-else-if chain and save a few bytes.
 > 
-> It runs well in your system and can be built successfully because you're building
-> for ARM64, not for ARM...
-> 
-> > Actually, we only use this export symbol "arch_vma_name"
-> > from kernel/signal.c in arm64. We also export symbol for arch_vma_name
-> > in arch/arm/kernel/process.c because that, one day in the future,  we
-> > are afraid that we also need this function in arm platform.
+> add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-16 (-16)
+> Function                                     old     new   delta
+> intel_gpio_irq_type                          317     301     -16
+> Total: Before=10469, After=10453, chg -0.15%
 
-What I'm trying to get at is that we have arch_vma_name in
-arch/arm/kernel/process.c and also a weak function in kernel/signal.c.
+...
 
-Both of these end up adding an entry into the __ksymtab_strings
-section and a ___ksymtab section for this symbol. So we end up with
-two entries in each.
+>  	value = readl(reg);
+> -
+>  	value &= ~(PADCFG0_RXEVCFG_MASK | PADCFG0_RXINV);
+>  
+>  	if ((type & IRQ_TYPE_EDGE_BOTH) == IRQ_TYPE_EDGE_BOTH) {
+> -		value |= PADCFG0_RXEVCFG_EDGE_BOTH << PADCFG0_RXEVCFG_SHIFT;
+> +		rxevcfg = PADCFG0_RXEVCFG_EDGE_BOTH;
+>  	} else if (type & IRQ_TYPE_EDGE_FALLING) {
+> -		value |= PADCFG0_RXEVCFG_EDGE << PADCFG0_RXEVCFG_SHIFT;
+> -		value |= PADCFG0_RXINV;
+> +		rxevcfg = PADCFG0_RXEVCFG_EDGE;
+>  	} else if (type & IRQ_TYPE_EDGE_RISING) {
+> -		value |= PADCFG0_RXEVCFG_EDGE << PADCFG0_RXEVCFG_SHIFT;
+> +		rxevcfg = PADCFG0_RXEVCFG_EDGE;
+>  	} else if (type & IRQ_TYPE_LEVEL_MASK) {
+> -		if (type & IRQ_TYPE_LEVEL_LOW)
+> -			value |= PADCFG0_RXINV;
+> +		rxevcfg = PADCFG0_RXEVCFG_LEVEL;
+>  	} else {
+> -		value |= PADCFG0_RXEVCFG_DISABLED << PADCFG0_RXEVCFG_SHIFT;
+> +		rxevcfg = PADCFG0_RXEVCFG_DISABLED;
+>  	}
+>  
+> +	if (type == IRQ_TYPE_EDGE_FALLING || type == IRQ_TYPE_LEVEL_LOW)
+> +		value |= PADCFG0_RXINV;
+> +
+> +	value |= rxevcfg << PADCFG0_RXEVCFG_SHIFT;
+>  	writel(value, reg);
 
-Now, if the one from kernel/signal.c points at its own weak function,
-and that is found first, then that's the function that is going to be
-bound, not the function that's overriding it.
+Looking at this I realized that entire temporary variable assignments can be
+done outside of spin lock. You probably would need another one for keeping
+rxinv value.
 
-If, instead, the export in kernel/signal.c ends up pointing at the
-overriden function, then the export in arch/arm/kernel/process.c is
-entirely redundant.
-
-So, you need to get to the bottom of this... and until you do I'm
-afraid I'll have to NAK this patch.
-
-For the record, I suspect it's the latter scenario (we end up with
-two entries pointing at the same function) but that's nothing more
-than a hunch.
+Will it give us any memory reduction in comparison to the current code?
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+With Best Regards,
+Andy Shevchenko
+
+
