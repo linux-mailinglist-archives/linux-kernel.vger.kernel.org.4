@@ -2,162 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20CC672FA28
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 12:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE22372FA2C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 12:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235397AbjFNKKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 06:10:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59938 "EHLO
+        id S235722AbjFNKMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 06:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232060AbjFNKKm (ORCPT
+        with ESMTP id S235298AbjFNKMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 06:10:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED651B2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 03:09:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686737394;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=MBrjoJbmEWc/Tn6Mkt7SpycUJkuHckypR5ks5lDPTJ8=;
-        b=ETX4s1huZ3SOZStBIxcffweddGqeQ/kk6uTozwi4W1AOU4r/Fqg6ho+v7akOx46jUd/zPl
-        +Tp8obL6ulxxSOD8QW+X5baSirU2DSij0K0y/vIwuKvFocLOkySLvZEz5CcdJRZn2iRi+d
-        tknKD9Sa+FssEnZoZ29EQtVy+C/mKSA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-567-DPX2FsP-PxqlW4E_Wy1R1w-1; Wed, 14 Jun 2023 06:09:53 -0400
-X-MC-Unique: DPX2FsP-PxqlW4E_Wy1R1w-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 55518830EFD;
-        Wed, 14 Jun 2023 10:09:52 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AEA7740C6F5D;
-        Wed, 14 Jun 2023 10:09:49 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-cc:     dhowells@redhat.com,
-        syzbot+f9e28a23426ac3b24f20@syzkaller.appspotmail.com,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next] splice, net: Fix splice_to_socket() to handle pipe bufs larger than a page
+        Wed, 14 Jun 2023 06:12:03 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB53EE4A;
+        Wed, 14 Jun 2023 03:12:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1686737522; x=1718273522;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uD8/gYwMDSCsMRFNcUWFBwbUbtR8k/3vS7WndAmhn9w=;
+  b=Udac43X5jGVAfoW0ahH0WictImDDGpY5mEppdbL7bYMHOIYGIdLrMGyP
+   VvLDWojtdwQKsvYmhveS8Po+yrIm/hFd36HCKmcKnFwgsO2U4t9jcanUZ
+   jee1DQ7J8CLeHKpr6iL8pZSFfqqjZxEsNs1T8A7xC9QY7uHV/T2N1tDtr
+   fSeQG3M7jiVqJ9tPKAa4enysdpstQ/LkW7q8liQtUDPzCuT+oVLaK4eUy
+   /7/kHyTQsinKQFC1myVSEP5mkTED0t3CJayF9jX7Tac5+luEaoRmZDuw9
+   XGddwSUDzPfW/VClKX8NI2WilZHmJFd4AfXrPilAlN1TDjEarsA5uv8xR
+   w==;
+X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
+   d="asc'?scan'208";a="218425827"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Jun 2023 03:12:01 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 14 Jun 2023 03:12:00 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Wed, 14 Jun 2023 03:11:56 -0700
+Date:   Wed, 14 Jun 2023 11:11:31 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Conor Dooley <conor@kernel.org>
+CC:     Manikandan Muralidharan <manikandan.m@microchip.com>,
+        <lee@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <claudiu.beznea@microchip.com>, <sam@ravnborg.org>,
+        <bbrezillon@kernel.org>, <airlied@gmail.com>, <daniel@ffwll.ch>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <Hari.PrasathGE@microchip.com>,
+        <Balamanikandan.Gunasundar@microchip.com>,
+        <Durai.ManickamKR@microchip.com>, <Nayabbasha.Sayed@microchip.com>,
+        <Dharma.B@microchip.com>, <Varshini.Rajendran@microchip.com>,
+        <Balakrishnan.S@microchip.com>
+Subject: Re: [PATCH 1/9] dt-bindings: mfd: Add bindings for SAM9X7 LCD
+ controller
+Message-ID: <20230614-sterling-staff-5c9c03392a2c@wendy>
+References: <20230613070426.467389-1-manikandan.m@microchip.com>
+ <20230613070426.467389-2-manikandan.m@microchip.com>
+ <20230613-scouting-barricade-56cadb14657c@spud>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1428984.1686737388.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 14 Jun 2023 11:09:48 +0100
-Message-ID: <1428985.1686737388@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="MxL6TWAcPPWIl+0J"
+Content-Disposition: inline
+In-Reply-To: <20230613-scouting-barricade-56cadb14657c@spud>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-    =
+--MxL6TWAcPPWIl+0J
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-splice_to_socket() assumes that a pipe_buffer won't hold more than a singl=
-e
-page of data - but this assumption can be violated by skb_splice_bits()
-when it splices from a socket into a pipe.
+On Tue, Jun 13, 2023 at 07:18:25PM +0100, Conor Dooley wrote:
+> On Tue, Jun 13, 2023 at 12:34:18PM +0530, Manikandan Muralidharan wrote:
+> > Add new compatible string for the XLCD controller on SAM9X7 SoC.
+>=20
+> You should probably indicate here why this is not compatible with the
+> existing SoCs that are supported. To hazard a guess, it is the HLCDC IP
+> (I forget the exact letters!)?
 
-The problem is that splice_to_socket() doesn't advance the pipe_buffer
-length and offset when transcribing from the pipe buf into a bio_vec, so i=
-f
-the buf is >PAGE_SIZE, it keeps repeating the same initial chunk and
-doesn't advance the tail index.  It then subtracts this from "remain" and
-overcounts the amount of data to be sent.
+Manikandan pointed out off list that this was not clear.
+Looking at it again, I think I actually truncated my sentence - it
+should've been something like "it is the HLCDC IP ... is not a subset of
+the XLCDC IP." Sorry for that Manikandan.
 
-The cleanup phase then tries to overclean the pipe, hits an unused pipe bu=
-f
-and a NULL-pointer dereference occurs.
+> If so,
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+>=20
+> Cheers,
+> Conor.
+>=20
+> >=20
+> > Signed-off-by: Manikandan Muralidharan <manikandan.m@microchip.com>
+> > ---
+> >  Documentation/devicetree/bindings/mfd/atmel-hlcdc.txt | 1 +
+> >  1 file changed, 1 insertion(+)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/mfd/atmel-hlcdc.txt b/Do=
+cumentation/devicetree/bindings/mfd/atmel-hlcdc.txt
+> > index 5f8880cc757e..7c77b6bf4adb 100644
+> > --- a/Documentation/devicetree/bindings/mfd/atmel-hlcdc.txt
+> > +++ b/Documentation/devicetree/bindings/mfd/atmel-hlcdc.txt
+> > @@ -8,6 +8,7 @@ Required properties:
+> >     "atmel,sama5d3-hlcdc"
+> >     "atmel,sama5d4-hlcdc"
+> >     "microchip,sam9x60-hlcdc"
+> > +   "microchip,sam9x7-xlcdc"
+> >   - reg: base address and size of the HLCDC device registers.
+> >   - clock-names: the name of the 3 clocks requested by the HLCDC device.
+> >     Should contain "periph_clk", "sys_clk" and "slow_clk".
+> > --=20
+> > 2.25.1
+> >=20
 
-Fix this by not restricting the bio_vec size to PAGE_SIZE and instead
-transcribing the entirety of each pipe_buffer into a single bio_vec and
-advancing the tail index if remain hasn't hit zero yet.
 
-Large bio_vecs will then be split up by iterator functions such as
-iov_iter_extract_pages().
 
-This resulted in a KASAN report looking like:
+--MxL6TWAcPPWIl+0J
+Content-Type: application/pgp-signature; name="signature.asc"
 
-general protection fault, probably for non-canonical address 0xdffffc00000=
-00001: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
-...
-RIP: 0010:pipe_buf_release include/linux/pipe_fs_i.h:203 [inline]
-RIP: 0010:splice_to_socket+0xa91/0xe30 fs/splice.c:933
+-----BEGIN PGP SIGNATURE-----
 
-Fixes: 2dc334f1a63a ("splice, net: Use sendmsg(MSG_SPLICE_PAGES) rather th=
-an ->sendpage()")
-Reported-by: syzbot+f9e28a23426ac3b24f20@syzkaller.appspotmail.com
-Link: https://lore.kernel.org/r/0000000000000900e905fdeb8e39@google.com/
-Tested-by: syzbot+f9e28a23426ac3b24f20@syzkaller.appspotmail.com
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-cc: David Ahern <dsahern@kernel.org>
-cc: "David S. Miller" <davem@davemloft.net>
-cc: Eric Dumazet <edumazet@google.com>
-cc: Jakub Kicinski <kuba@kernel.org>
-cc: Paolo Abeni <pabeni@redhat.com>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: Christian Brauner <brauner@kernel.org>
-cc: Alexander Viro <viro@zeniv.linux.org.uk>
-cc: netdev@vger.kernel.org
-cc: linux-fsdevel@vger.kernel.org
----
- fs/splice.c |    6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZImSUwAKCRB4tDGHoIJi
+0nVyAQDnv7lrFojIn1tU/unzTD77IuY5h3hrvcCGgDe30HmP4QD8D+26ukUo6Woe
+6Krnu+i2ZCkcn7QoUXiR9c179UNQ6w8=
+=TYyE
+-----END PGP SIGNATURE-----
 
-diff --git a/fs/splice.c b/fs/splice.c
-index e337630aed64..567a1f03ea1e 100644
---- a/fs/splice.c
-+++ b/fs/splice.c
-@@ -886,7 +886,6 @@ ssize_t splice_to_socket(struct pipe_inode_info *pipe,=
- struct file *out,
- 			}
- =
-
- 			seg =3D min_t(size_t, remain, buf->len);
--			seg =3D min_t(size_t, seg, PAGE_SIZE);
- =
-
- 			ret =3D pipe_buf_confirm(pipe, buf);
- 			if (unlikely(ret)) {
-@@ -897,10 +896,9 @@ ssize_t splice_to_socket(struct pipe_inode_info *pipe=
-, struct file *out,
- =
-
- 			bvec_set_page(&bvec[bc++], buf->page, seg, buf->offset);
- 			remain -=3D seg;
--			if (seg >=3D buf->len)
--				tail++;
--			if (bc >=3D ARRAY_SIZE(bvec))
-+			if (remain =3D=3D 0 || bc >=3D ARRAY_SIZE(bvec))
- 				break;
-+			tail++;
- 		}
- =
-
- 		if (!bc)
-
+--MxL6TWAcPPWIl+0J--
