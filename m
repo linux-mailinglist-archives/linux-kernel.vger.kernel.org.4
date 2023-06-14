@@ -2,109 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A88072F91B
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 11:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F9372F8F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 11:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244053AbjFNJ2R convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 14 Jun 2023 05:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34570 "EHLO
+        id S243882AbjFNJXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 05:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243994AbjFNJ2A (ORCPT
+        with ESMTP id S235174AbjFNJXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 05:28:00 -0400
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846131FDC;
-        Wed, 14 Jun 2023 02:27:52 -0700 (PDT)
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-3f86a7f3a65so17684901cf.0;
-        Wed, 14 Jun 2023 02:27:52 -0700 (PDT)
+        Wed, 14 Jun 2023 05:23:49 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B93B10E6
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 02:23:48 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-9823de726c3so86152566b.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 02:23:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686734626; x=1689326626;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TF9DiKi27qDNuUORKCvbVYXEPKOZZECq30qh1+aywdA=;
+        b=rIjL/AuuGxm8g0I/gXXOlG7SQwCLqNVbREffXbWpNuOobfQtt3cC6VMr3Nsr1+gsh2
+         dWyZU+KmcTc8fc18xLButVlGxIIlCjRj9CbFYsi6aN4Z2Br73KPn0sZq/qxtQLTllW/5
+         J0CbgpnT2DniCfBJiDhqwtewOMOm9/Q/TthFO9+FANEulXZ5ybXSGxOAWTwObR1BubNQ
+         rwReNNTdIZBNN1tsO8jU7HWCTS1wFCP7Chwdifrxmfq94NIXTdspF3gVYOAiJDW5Ec3p
+         57VBAiHr0iSrjzHNq7emV1P931O4GHXL38qkqgAHBhJKL4IPEB4YDZxvK8BwtRz8u1gM
+         YYTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686734871; x=1689326871;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N0yjIX0KRuOC7G0fcJ6d1AuThz30GREhJw6MsawVV4o=;
-        b=X9kHcttdTeNzWzZigoxXgEXrH2/AZJGAzj6EcnqlZRvBWsqvJ2F/UfoDKYJbAPU5ez
-         2r6l57gTY2i6fuGgC48GiKvLoODNEOdaRCS64ZE+6YWpPTeBGMhM9oUmZE4x/yAdS4hT
-         mtB4vu+zHen8I7n38L9bCeA70A4cgSJ52yQwBQ21YxqV71wAuWO5SV6lsnw2hyCAYhlW
-         72GXqmTYvxO0lt6/QQocJ0acsei7GoGKeIeVeekfLOX6u6ktol/hv36dmghRkXCZeN5x
-         e76bCLVcXNC7kiX17mqWEw1PcEinnLr56ijUarsRonNTjjchT1P7M75k78dkpjbUgVR0
-         mEaQ==
-X-Gm-Message-State: AC+VfDyDk7uiZnpE79mz7H5bOnw9Oac1N5G8M2oYhg/ahn/YOCHpAAYq
-        Ww9WU5VPwkGYxpZ98f5gRIn7mQ3CqP5B5A==
-X-Google-Smtp-Source: ACHHUZ40QLD0r7FQ+oH8qzAaHXlDa7z/eF2K6G4IAvLgfS0JoGJu+LKSt3wT/icBg4DRSiSU9TKWkg==
-X-Received: by 2002:ac8:5994:0:b0:3f3:8819:67ef with SMTP id e20-20020ac85994000000b003f3881967efmr1755786qte.43.1686734871236;
-        Wed, 14 Jun 2023 02:27:51 -0700 (PDT)
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com. [209.85.219.47])
-        by smtp.gmail.com with ESMTPSA id w11-20020ac84d0b000000b003ee2fb84d0dsm4887221qtv.11.2023.06.14.02.27.51
+        d=1e100.net; s=20221208; t=1686734626; x=1689326626;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TF9DiKi27qDNuUORKCvbVYXEPKOZZECq30qh1+aywdA=;
+        b=jvY14JrbEX0rWyCXfAfSG9fD6EFEMHS9LaX4UfdkJvW5XkHe/AcDJLmSkPDdyBSEAV
+         hExoDtrhAdDQHDijKcYIWj27tPu0htpEljysSj2gjrQY9VMSgkpyiw9j3RK7ZtFg0zxB
+         VaNqWD0bI+kxcfEMDzJyD49TdKfCyos+zNOWvVem6zEVf3W1Ih9u7VQ9qY3YZVjaOusW
+         vT974mJIveRO+/IFmBtHRtSOVKmAdH2atAFK2P1PbeULJq1fUsvnZfN6RJ+A7701mb3N
+         hadiWK+P/+PJBe084JIqTgSwtpI647cowJtO5KZmpIn22NBUqgOn0/hQ471CDiyZVx+m
+         6Slg==
+X-Gm-Message-State: AC+VfDzzDKT3lOJxmlywGyZKuK0nw8DnauTNw+K2QAxV81m0g1ussyPa
+        JEa4A7JnC0kJj1DSauCr/Co=
+X-Google-Smtp-Source: ACHHUZ73ZIT1tNvI4o/D8vL9DseZfJLD3vBtHI1wqXykCmCHryA8gfFFkG3empnmjNtiii26jO5y+Q==
+X-Received: by 2002:a17:907:3681:b0:96b:e93:3aa8 with SMTP id bi1-20020a170907368100b0096b0e933aa8mr17898748ejc.21.1686734626156;
+        Wed, 14 Jun 2023 02:23:46 -0700 (PDT)
+Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id e26-20020a170906045a00b0096fc35ca733sm7696954eja.41.2023.06.14.02.23.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 02:27:51 -0700 (PDT)
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-62fe3f0903aso3329516d6.3;
-        Wed, 14 Jun 2023 02:27:51 -0700 (PDT)
-X-Received: by 2002:a25:3249:0:b0:ba8:199b:9ec2 with SMTP id
- y70-20020a253249000000b00ba8199b9ec2mr1412111yby.31.1686734566067; Wed, 14
- Jun 2023 02:22:46 -0700 (PDT)
+        Wed, 14 Jun 2023 02:23:45 -0700 (PDT)
+Message-ID: <8457ff3d-f033-8d06-42ca-d95f77ec8145@gmail.com>
+Date:   Wed, 14 Jun 2023 11:23:44 +0200
 MIME-Version: 1.0
-References: <20230613223827.532680283@linutronix.de> <20230613224545.254342916@linutronix.de>
-In-Reply-To: <20230613224545.254342916@linutronix.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 14 Jun 2023 11:22:33 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUbBs5dE_Yi+gX8MNCqduP87S+w+T4B_JjVynbDyE=Waw@mail.gmail.com>
-Message-ID: <CAMuHMdUbBs5dE_Yi+gX8MNCqduP87S+w+T4B_JjVynbDyE=Waw@mail.gmail.com>
-Subject: Re: [patch 06/17] m68k/cpu: Switch to arch_cpu_finalize_init()
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Nikolay Borisov <nik.borisov@suse.com>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>, linux-m68k@lists.linux-m68k.org,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-sh@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org,
-        Richard Henderson <richard.henderson@linaro.org>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chris Zankel <chris@zankel.net>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 3/5] mtd: nand: raw: rockchip-nand-controller: fix
+ oobfree offset and description
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     richard@nod.at, vigneshr@ti.com, heiko@sntech.de,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, yifeng.zhao@rock-chips.com
+References: <11e16c3b-6f7b-a6a9-b0ed-b7ac0cd703e3@gmail.com>
+ <f2cebf54-a16c-c849-a988-bfd98c502748@gmail.com>
+ <20230612192640.63baf3e8@xps-13>
+Content-Language: en-US
+From:   Johan Jonker <jbx6244@gmail.com>
+In-Reply-To: <20230612192640.63baf3e8@xps-13>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 1:39 AM Thomas Gleixner <tglx@linutronix.de> wrote:
-> check_bugs() is about to be phased out. Switch over to the new
-> arch_cpu_finalize_init() implementation.
->
-> No functional change.
->
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-Gr{oetje,eeting}s,
+On 6/12/23 19:26, Miquel Raynal wrote:
+> Hi Johan,
+> 
+> jbx6244@gmail.com wrote on Mon, 12 Jun 2023 17:03:18 +0200:
+> 
+>> The MTD framework reserves 1 or 2 bytes for the bad block marker
+>> depending on the bus size. The rockchip-nand-controller driver
+>> currently only supports a 8 bit bus, but reserves standard 2 bytes
+>> for the BBM.
+> 
+> We always reserve 2 bytes, no?
 
-                        Geert
+Not always used, but for consistency/simplicity the author assumes/reserves 2 bytes. 
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+>> The first free OOB byte is therefore OOB2 at offset 2.
+>> Page address(PA) bytes are moved to the last 4 positions before
+>> ECC. Update the description for Linux.
+> 
+> The description should just be:
+> 
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> Move Page Address (PA) bytes to the last 4 positions before ECC.
+
+Space is already reserved, but overwritten.
+
+> 
+> And then you should justify why this is needed. Also, this would break
+> all existing jffs2 users, right?
+
+Hi Miquel,
+
+From your comments it seems that the chip->oob_poi buffer layout is still not clear to you.
+Hope that this text below helps.
+If existing jffs2 users of free OOB are writing they are corrupting our PA data in RAW mode.
+So that must be fixed. Please advise how we split pre and post change users.
+(With a Module parameter like skipbbt renamed to "user_mode" = 0 offset 6, "user_mode" = 1 offset 2)
+Copying PA data in both RAW and HW mode has already reserved space in the layout.
+Let me know if I can help to get forward here.
+
+Johan
+
+===
+
+Given:
+
+Rockchip rk3066 MK808 with NAND:
+nand: Hynix H27UCG8T2ATR-BC 64G 3.3V 8-bit
+nand: 8192 MiB, MLC, erase size: 2048 KiB, page size: 8192, OOB size: 640
+
+===
+
+Calulations:
+
+#define NFC_SYS_DATA_SIZE		(4) /* 4 bytes sys data in oob pre 1024 data.*/
+
+So per step only 4 bytes of OOB can be read.
+
+===
+
+The NFC can read/write in 1024 data bytes per step.
+To read/write a full page it needs 8 steps.
+
+chip->ecc.size = 1024;
+chip->ecc.steps = mtd->writesize / chip->ecc.size;
+                = 8192 / 1024
+                = 8 steps
+===
+
+The total size of usefull OOB before ECC:
+
+rknand->metadata_size = NFC_SYS_DATA_SIZE * ecc->steps;
+                      = 4 * 8
+                      = 32
+===
+
+Wrong free OOB offset starts at OOB6:
+oob_region->offset = NFC_SYS_DATA_SIZE + 2;
+                   = 4 + 2
+                   = 6
+
+With a free OOB offset of 6 and a length of 26 ==> 6 + 26 = 32 we corrupt the PA address starting at offset 28.
+
+New offset OOB2:
+oob_region->offset = 2;
+
+The full range of free runs from OOB2 till/including OOB27.
+===
+
+The last 4 bytes of metadata are reserved for this Page Address(PA) for the bootrom.
+Currently only in use in RAW mode.
+The current PA calculation needed to write boot blocks for all Rockchip SoCs is however useless.
+The pattern of where the next page is written depends on the chip ID.
+As the MTD framework doesn't pass this chip ID in it's data structures,
+we must calculate that in userspace.
+
+Therefore both RAW and HW mode must pass the PA bytes.
+
+===
+
+The NFC hardware is capable for a 16 bit bus, but not implemented yet.
+Reserved are standard 2 bits for the BBM for a consistantency by the original author.
+
+===
+
+chip->oob_poi buffer layout for 8 steps:
+
+BBM0   BBM1  OOB2  OOB3  | OOB4  OOB5  OOB6  OOB7
+
+OOB8   OOB9  OOB10 OOB11 | OOB12 OOB13 OOB15 OOB15
+OOB16  OOB17 OOB18 OOB19 | OOB20 OOB21 OOB22 OOB23
+
+OOB24  OOB25 OOB26 OOB27 | PA0   PA1   PA2   PA3
+
+ECC0   ECC1  ECC2  ECC3  | ...   ...   ...   ...
+
+===
+
+rk_nfc_ooblayout_free:
+oob_region->length = rknand->metadata_size - NFC_SYS_DATA_SIZE - 2;
+                   = 32 - 4 - 2
+                   = 26
+
+oob_region->offset = 2;
+
+Free OOB should start at OOB2 to not overwrite PA data.
+
+===
+
+rk_nfc_ooblayout_ecc:
+	oob_region->length = mtd->oobsize - rknand->metadata_size;
+	                   = 640 - 32
+	                   = 608
+	oob_region->offset = rknand->metadata_size;
+	                   = 32
+
+ECC data starts at offset 32.
+
+===
+
+
+> 
+>>
+>> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+>> ---
+>>  drivers/mtd/nand/raw/rockchip-nand-controller.c | 11 ++++-------
+>>  1 file changed, 4 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/mtd/nand/raw/rockchip-nand-controller.c b/drivers/mtd/nand/raw/rockchip-nand-controller.c
+>> index 31d8c7a87..fcda4c760 100644
+>> --- a/drivers/mtd/nand/raw/rockchip-nand-controller.c
+>> +++ b/drivers/mtd/nand/raw/rockchip-nand-controller.c
+>> @@ -566,9 +566,10 @@ static int rk_nfc_write_page_raw(struct nand_chip *chip, const u8 *buf,
+>>  		 *    BBM  OOB1 OOB2 OOB3 |......|  PA0  PA1  PA2  PA3
+>>  		 *
+>>  		 * The rk_nfc_ooblayout_free() function already has reserved
+>> -		 * these 4 bytes with:
+>> +		 * these 4 bytes together with 2 bytes for BBM
+>> +		 * by reducing it's length:
+>>  		 *
+>> -		 * oob_region->offset = NFC_SYS_DATA_SIZE + 2;
+>> +		 * oob_region->length = rknand->metadata_size - NFC_SYS_DATA_SIZE - 2;
+>>  		 */
+>>  		if (!i)
+>>  			memcpy(rk_nfc_oob_ptr(chip, i),
+>> @@ -945,12 +946,8 @@ static int rk_nfc_ooblayout_free(struct mtd_info *mtd, int section,
+>>  	if (section)
+>>  		return -ERANGE;
+>>
+>> -	/*
+>> -	 * The beginning of the OOB area stores the reserved data for the NFC,
+>> -	 * the size of the reserved data is NFC_SYS_DATA_SIZE bytes.
+>> -	 */
+>>  	oob_region->length = rknand->metadata_size - NFC_SYS_DATA_SIZE - 2;
+>> -	oob_region->offset = NFC_SYS_DATA_SIZE + 2;
+>> +	oob_region->offset = 2;
+>>
+>>  	return 0;
+>>  }
+>> --
+>> 2.30.2
+>>
+> 
+> 
+> Thanks,
+> Miquèl
