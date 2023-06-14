@@ -2,84 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F5372FDE6
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F9C272FDE7
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:09:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244443AbjFNMI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 08:08:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45386 "EHLO
+        id S244382AbjFNMJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 08:09:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236519AbjFNMI5 (ORCPT
+        with ESMTP id S244141AbjFNMJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 08:08:57 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A70451BF3;
-        Wed, 14 Jun 2023 05:08:56 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-3f9b5ec058aso18571571cf.0;
-        Wed, 14 Jun 2023 05:08:56 -0700 (PDT)
+        Wed, 14 Jun 2023 08:09:02 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549201FD2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:08:58 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f649db9b25so8347580e87.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:08:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686744536; x=1689336536;
-        h=in-reply-to:references:message-id:from:subject:to:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ICyOrpP9yZ8UNQouKztYfYpCQHNzL6t2U9KVRuzbBV4=;
-        b=CVttXEgcnxek3hQKtlR8hsjF23X01S5bgOt7ZLYziuJ8d/zESBQC1GJtAryd+G6Ra8
-         NiRdZ4DJhO0E23mqq0HJk/IhAnok/2l/6yZAvMAGxW9GgWWabRYRBG47i6AvJYWc1Qst
-         dHqkHaWIqs1pHhEgq1e/5T4TPSk76zUFqpJBBdVP63mM+XCeMP8XQwM9o9HaG5Gcu0IC
-         2toIH0v5Te0+zu5iNdQxaHNPvqcxBt7nuq1pCorFshQQZvtAwvztpvAQ5KyMaPJbjTOF
-         clssKGom4EwSFfBrAKp3NKk7uXUOL6rCSExmVUQL3+NlEfZwJvOGbgTyYZTGW61Lp6Hr
-         wvIA==
+        d=rasmusvillemoes.dk; s=google; t=1686744536; x=1689336536;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yJuVpE4jMb4TfTBLTiIyFyMVUfAwRk7NmxAOLH+UOaM=;
+        b=aMCuv7D0SqlRUFsiNpgsgtg9e/NC6E10dFIoU2gUjluO7MwjZpGOkRVWXq5p10vuEZ
+         qEnpKehcMsgZerqYFPnltqCe28WfNP2sBXh0CrVpSETYif9oyBfRneYczBgkq4ceQfJB
+         uOSfO4l6TjelazoAJoqjjiFfzDN4Kdk3f3qhQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1686744536; x=1689336536;
-        h=in-reply-to:references:message-id:from:subject:to:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ICyOrpP9yZ8UNQouKztYfYpCQHNzL6t2U9KVRuzbBV4=;
-        b=F5roR1pWEcUIxklfatuiCp/RfUqW83RTCqFVxYcgs1o+VNISWY/kYXx93amc4Q36Mn
-         4lSOh6afRlbgkc/8378aSDjVq+Xhgg6kyzOCD128soSJrBMCJTnMzzWV4TdUm3PD4EAa
-         BoP7OFWvZ4Zsh10s/CC9AILtjusvJgSff/cn8w/fiNWv1ctStNIsqRuuPaAUHVHPTaAZ
-         A7zAYvT0M7OcfZGNTMesP4C892Jdz6yO4OYbfZLiz8mOC5WxnlZZZQzaKDIsEHuR2CrT
-         ttFggnY0NFv8tlf5f8FkztbHBAc/u9GU6riqTBbOkFb9Ah2wsXCOQdcam3Y1GJiT2tqu
-         Zg/g==
-X-Gm-Message-State: AC+VfDzYcjGhnqWYLh2+geotTM/K6nwfSN1xsPiRnde5ZKPDOp1iyXPf
-        Xhfvc2swvTjvgdCZbiqO1xNV5UeXp1AOkDSm
-X-Google-Smtp-Source: ACHHUZ6hxmTpEnrPsU0Ea16L7G6meCduItfLC5GnO65BPUihWPKuwA51vM4DK6qE0dZ4TkoPHD5CKw==
-X-Received: by 2002:a05:622a:1888:b0:3ef:6c09:edcc with SMTP id v8-20020a05622a188800b003ef6c09edccmr2399709qtc.22.1686744535717;
-        Wed, 14 Jun 2023 05:08:55 -0700 (PDT)
-Received: from localhost (2603-6000-8100-7fd4-0000-0000-0000-0619.res6.spectrum.com. [2603:6000:8100:7fd4::619])
-        by smtp.gmail.com with ESMTPSA id a22-20020ac844b6000000b003f6c9f8f0a8sm4931656qto.68.2023.06.14.05.08.54
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yJuVpE4jMb4TfTBLTiIyFyMVUfAwRk7NmxAOLH+UOaM=;
+        b=VagzzQeUbXKKYfEq4gUBxGNsGhcXZ3lZp6niTQUATVF1agG/jYPd8aI0p8FlBwAQME
+         r8Gz66Tw8DpcqHjJ8OeM+atKtpw9WcrIuwhz3cGgM2vctjT0O3u+XbtQoWtgQbu6wLR3
+         00m+Uohuon0jcqpr1hZRmd2Iex/irqDKs9MsHEaKKKs1jU0mSprn2x+7/9bFnDrJXi2e
+         IkS4At/tPUFwPDs6S+LaKvdG89qmjCM1NCqR7xCIvesjP2EK0LAxqWv73MJmPf9fZzxi
+         JKBX8wsbSR2U5tdZltpL4Yq2rGT2HYdNYb4RPEZXhwwbRv2eTyKoxNuzsloNCzlRltXp
+         1+Zg==
+X-Gm-Message-State: AC+VfDxDoaAu9MFyGagT9QCcPmSLikZO8HEbYbWWr4llfyYbnGX32dhh
+        yeeD9kIMkBcQg+c/l1ACCGBKbw==
+X-Google-Smtp-Source: ACHHUZ5qKjJmrWCBmlquhxEr/HQhIYAPY2mDM2OYJtUV+E5n0jUYEobZtoRxtgNxF12zQPIMIvjUNw==
+X-Received: by 2002:a19:3848:0:b0:4f6:2722:9a5a with SMTP id d8-20020a193848000000b004f627229a5amr8109230lfj.57.1686744536506;
+        Wed, 14 Jun 2023 05:08:56 -0700 (PDT)
+Received: from [172.16.11.116] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id a2-20020ac25202000000b004f60d782681sm2099015lfl.221.2023.06.14.05.08.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 05:08:55 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+        Wed, 14 Jun 2023 05:08:56 -0700 (PDT)
+Message-ID: <c17a115f-39ff-0925-c886-b34f38643b1c@rasmusvillemoes.dk>
+Date:   Wed, 14 Jun 2023 14:08:54 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4] Add .editorconfig file for basic formatting
+Content-Language: en-US, da
+To:     =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@redhat.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Cc:     Jonathan Corbet <corbet@lwn.net>, ojeda@kernel.org,
+        danny@kdrag0n.dev, masahiroy@kernel.org, jgg@nvidia.com,
+        linux-kernel@vger.kernel.org, joe@perches.com, willy@infradead.org,
+        mailhol.vincent@wanadoo.fr
+References: <20230601075333.14021-1-ihuguet@redhat.com>
+ <87sfb1oz13.fsf@meer.lwn.net>
+ <8f27ad5f-9a9c-3db0-a934-88e1810974f3@digikod.net>
+ <CACT4oue7DgUf+65yat+6t9VrSji1N0njxunObHbRzfjMCAPmYQ@mail.gmail.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <CACT4oue7DgUf+65yat+6t9VrSji1N0njxunObHbRzfjMCAPmYQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 14 Jun 2023 07:08:53 -0500
-To:     "Martin Rodriguez Reboredo" <yakoyoku@gmail.com>,
-        "Miguel Ojeda" <ojeda@kernel.org>,
-        "Alex Gaynor" <alex.gaynor@gmail.com>,
-        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
-        "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
-        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        "Benno Lossin" <benno.lossin@proton.me>,
-        "Nathan Chancellor" <nathan@kernel.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>,
-        "Tom Rix" <trix@redhat.com>, "Tiago Lam" <tiagolam@gmail.com>,
-        "Kees Cook" <keescook@chromium.org>, "Finn Behrens" <me@kloenk.de>,
-        "open list:RUST" <rust-for-linux@vger.kernel.org>,
-        "open list" <linux-kernel@vger.kernel.org>,
-        "open list:CLANG/LLVM BUILD SUPPORT" <llvm@lists.linux.dev>
-Subject: Re: [PATCH v2 1/1] scripts/rust_is_available: Fix clang version
- check
-From:   "Ethan D. Twardy" <ethan.twardy@gmail.com>
-Message-Id: <CTCD11G9NVTB.3SYR2GFA5VAB3@hackbook>
-X-Mailer: aerc 9999
-References: <20230528131802.6390-1-ethan.twardy@gmail.com>
- <20230528131802.6390-2-ethan.twardy@gmail.com>
- <525fee98-c694-6a38-cd1e-dd7efd806620@gmail.com>
-In-Reply-To: <525fee98-c694-6a38-cd1e-dd7efd806620@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,15 +78,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings, Martin!
+On 14/06/2023 13.40, Íñigo Huguet wrote:
 
-Thanks very much for your testing and review. Do I need to take any
-further action to make this patch ready for review? I sent out a v3
-version of the patch, where the only change was adding Reviewed-By and
-Tested-By tags to my git commit--since this is my first time
-contributing to this community, I wasn't sure whether I needed to do
-that. Thanks!
+> I neither think it is good to enable it for some folders and not for
+> others: developers will be surprised of having assistance in some
+> files and not in others, I would be bothered with such inconsistency.
+> 
+> Right now I see 2 possibilities:
+> - Provide an .editorconfig.default so those that want to use it, can
+> do it. But I wouldn't mess with cherry-picking directories that
+> already complies and those that don't, just the developer chooses to
+> use it or not, and that's all.
+> - Provide an .editorconfig directly, and those that don't want to use
+> it, either disable it in their editors or manually delete the file.
+> 
+> Please tell me what approach you prefer.
 
-Sincerely,
+So opting out by deleting the file would leave the developer's work-tree
+permanently dirty I think. So if there are editors where one cannot
+actually disable the editorconfig plug-in, and we worry/care about
+those, the second option seems to be a no-go.
 
-Ethan Twardy
+The first option works better; we can add an ".editorconfig" entry to
+.gitignore, and then have people who want to opt-in make .editorconfig a
+symlink to .editorconfig.default.
+
+I definitely agree that we shouldn't try to do anything per directory.
+
+Rasmus
