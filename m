@@ -2,138 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FE9772F148
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 03:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A202A72F14C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 03:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241677AbjFNBEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 21:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34464 "EHLO
+        id S231565AbjFNBEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 21:04:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230397AbjFNBEJ (ORCPT
+        with ESMTP id S230397AbjFNBE1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 21:04:09 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B086D1BE6;
-        Tue, 13 Jun 2023 18:04:08 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id e9e14a558f8ab-33cb82122c7so26158285ab.1;
-        Tue, 13 Jun 2023 18:04:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686704648; x=1689296648;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bpUdBggZnHoq1zlVFxgo8EOItQu5v4wHe2ZS06ricxs=;
-        b=WTzdcCj5MSQnTu/zcHd0iVPWIl5NVOf5nldAKrvbRskPjHibBG39iMDXeKNqqE6oH+
-         K3j0qyJ0OLZMOlNPA8nvW00jlSDw+mPRxTzK44xDPc3EpWBYVl3akqgGTKsVbny6b24q
-         Y0Zix+Jet8++eqzmp2/22PE5rlamCOPyuE50xg6XJaLU5b2cAY/3QynmS9zCFXuc9MU6
-         IqfzsqqzmUnD6dh0hG3XH2tKA6RNZkQPs7d/hJD89fLd+rLlxoUPl2/+c4jb2gy4T/jb
-         /3zVebS/7a3qBYWOHT3EyQa50JVXy2mcCOHRDN9heBOBjnJWGihaB83+w4RqSXNF68G+
-         P/vQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686704648; x=1689296648;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bpUdBggZnHoq1zlVFxgo8EOItQu5v4wHe2ZS06ricxs=;
-        b=kREInvsXXNpUyV6t0nsRscBfRtWzMGFrtRtJEkHaPDQiDW/CoNn6Uwdm6mPYC/FLdM
-         RldEGY4gLuD0DY9jzSsY/eRzTv+SCRqf8QkT3D4htqp8R429f73mGDM1KhIy7eymsmWe
-         rTPhQNdHLcvd6hMlUQnv/Mo+qAuz6wC1ufS37FM44XY1HU5iEKkDROKLlWJK/wOSxUaw
-         KvmObGGldfRHtVIzrQ+pzEbM335cXPRDKtFx1Rgjf99bp8Ves4kGStvsyxytQiU6U8O2
-         5AUPlLk0XQGPP3prmDJdHagqb30XD8DlP+HsR7uRx4XbCDYlIh7Sci6YYiMj6cW0qMIZ
-         gfhw==
-X-Gm-Message-State: AC+VfDzG6L92ZsYt/e7a0TTLsWCphiL6UUuXLQVB3/zf+Ixw6f2H2ZuO
-        C3BiGEx3kLWQkcrQakjlDmw=
-X-Google-Smtp-Source: ACHHUZ4Agytr6+ZyUd2Iuhgh5sPm4YOf7M1dnl/moE2gtA9y/bz2MI2nor/Tr+O6CBuE4kXx+4QlkA==
-X-Received: by 2002:a5e:df4a:0:b0:760:e308:107e with SMTP id g10-20020a5edf4a000000b00760e308107emr10980297ioq.0.1686704647997;
-        Tue, 13 Jun 2023 18:04:07 -0700 (PDT)
-Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
-        by smtp.gmail.com with ESMTPSA id b15-20020a029a0f000000b0041f50bf668fsm3735448jal.57.2023.06.13.18.04.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 18:04:07 -0700 (PDT)
-From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-hardening@vger.kernel.org,
-        Azeem Shaikh <azeemshaikh38@gmail.com>,
-        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Maninder Singh <maninder1.s@samsung.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        bpf@vger.kernel.org
-Subject: [PATCH] kallsyms: Replace all non-returning strlcpy with strscpy
-Date:   Wed, 14 Jun 2023 01:03:54 +0000
-Message-ID: <20230614010354.1026096-1-azeemshaikh38@gmail.com>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+        Tue, 13 Jun 2023 21:04:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA091BE6;
+        Tue, 13 Jun 2023 18:04:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0579C62E72;
+        Wed, 14 Jun 2023 01:04:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4403DC433C8;
+        Wed, 14 Jun 2023 01:04:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686704662;
+        bh=lsO1eVWZBM6MvyPnhWRML3twvD4cN5i1hHFtDXs+nXk=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=Hbko6dySTiq2eWSTr8BZvN7WscQfkrDv5setRSvi3YYEiu7/BfkJhp9wG/uU7FGuP
+         gB/hmiwi0obdbTIcJIkVwKLxmDKLOiCnIxsnNQQlqWJ2sswwIac5eEUI0q4u/1Rx7x
+         U15NrKi6VlrGUp012c5Ws+LWbqdXsSkeg6p9AU48AFe2NXy0qyusDn1MzoHvJzvKs6
+         NPX90LpZpBLIAuo6TDfcSs9xpk3dqy3lN01MCMa00YP2RYDJ/xk7v35oPoPQuVR4Hp
+         K4QI2Qr76jQAu9zbkostHoGtmeqsXRjG5fz/IIflOne34zYzroMMifoQSo/5LEX5zS
+         f+Lz3r4YU1Jtw==
+Date:   Tue, 13 Jun 2023 18:04:19 -0700
+From:   Kees Cook <kees@kernel.org>
+To:     Azeem Shaikh <azeemshaikh38@gmail.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Kees Cook <keescook@chromium.org>
+CC:     linux-hardening@vger.kernel.org, Neil Brown <neilb@suse.de>,
+        Olga Kornievskaia <kolga@netapp.com>,
+        Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Subject: Re: [PATCH v2] SUNRPC: Remove strlcpy
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20230614001246.538643-1-azeemshaikh38@gmail.com>
+References: <20230614001246.538643-1-azeemshaikh38@gmail.com>
+Message-ID: <7E4A66A6-0B58-43AF-B9E0-62087F2EA11C@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-strlcpy() reads the entire source buffer first.
-This read may exceed the destination size limit.
-This is both inefficient and can lead to linear read
-overflows if a source string is not NUL-terminated [1].
-In an effort to remove strlcpy() completely [2], replace
-strlcpy() here with strscpy().
-No return values were used, so direct replacement is safe.
+On June 13, 2023 5:12:46 PM PDT, Azeem Shaikh <azeemshaikh38@gmail=2Ecom> w=
+rote:
+>strlcpy() reads the entire source buffer first=2E
+>This read may exceed the destination size limit=2E
+>This is both inefficient and can lead to linear read
+>overflows if a source string is not NUL-terminated [1]=2E
+>In an effort to remove strlcpy() completely [2], replace
+>strlcpy() here with sysfs_emit()=2E
+>
+>Direct replacement is safe here since the getter in kernel_params_ops
+>handles -errno return [3]=2E
+>
+>[1] https://www=2Ekernel=2Eorg/doc/html/latest/process/deprecated=2Ehtml#=
+strlcpy
+>[2] https://github=2Ecom/KSPP/linux/issues/89
+>[3] https://elixir=2Ebootlin=2Ecom/linux/v6=2E4-rc6/source/include/linux/=
+moduleparam=2Eh#L52
+>
+>Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail=2Ecom>
+>---
+> net/sunrpc/svc=2Ec |    8 ++++----
+> 1 file changed, 4 insertions(+), 4 deletions(-)
+>
+>diff --git a/net/sunrpc/svc=2Ec b/net/sunrpc/svc=2Ec
+>index e6d4cec61e47=2E=2E77326f163801 100644
+>--- a/net/sunrpc/svc=2Ec
+>+++ b/net/sunrpc/svc=2Ec
+>@@ -109,13 +109,13 @@ param_get_pool_mode(char *buf, const struct kernel_=
+param *kp)
+> 	switch (*ip)
+> 	{
+> 	case SVC_POOL_AUTO:
+>-		return strlcpy(buf, "auto\n", 20);
+>+		return sysfs_emit(buf, "auto\n");
+> 	case SVC_POOL_GLOBAL:
+>-		return strlcpy(buf, "global\n", 20);
+>+		return sysfs_emit(buf, "global\n");
+> 	case SVC_POOL_PERCPU:
+>-		return strlcpy(buf, "percpu\n", 20);
+>+		return sysfs_emit(buf, "percpu\n");
+> 	case SVC_POOL_PERNODE:
+>-		return strlcpy(buf, "pernode\n", 20);
+>+		return sysfs_emit(buf, "pernode\n");
+> 	default:
+> 		return sprintf(buf, "%d\n", *ip);
 
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-[2] https://github.com/KSPP/linux/issues/89
+Please replace the sprintf too (and then the Subject could be "use sysfs_e=
+mit" or so)=2E
 
-Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
----
- kernel/kallsyms.c |    4 ++--
- kernel/params.c   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index 0f82c3d5a57d..7982cc9d497c 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -667,7 +667,7 @@ static int get_ksymbol_bpf(struct kallsym_iter *iter)
- {
- 	int ret;
- 
--	strlcpy(iter->module_name, "bpf", MODULE_NAME_LEN);
-+	strscpy(iter->module_name, "bpf", MODULE_NAME_LEN);
- 	iter->exported = 0;
- 	ret = bpf_get_kallsym(iter->pos - iter->pos_ftrace_mod_end,
- 			      &iter->value, &iter->type,
-@@ -687,7 +687,7 @@ static int get_ksymbol_bpf(struct kallsym_iter *iter)
-  */
- static int get_ksymbol_kprobe(struct kallsym_iter *iter)
- {
--	strlcpy(iter->module_name, "__builtin__kprobes", MODULE_NAME_LEN);
-+	strscpy(iter->module_name, "__builtin__kprobes", MODULE_NAME_LEN);
- 	iter->exported = 0;
- 	return kprobe_get_kallsym(iter->pos - iter->pos_bpf_end,
- 				  &iter->value, &iter->type,
-diff --git a/kernel/params.c b/kernel/params.c
-index 6a7548979aa9..07d01f6ce9a2 100644
---- a/kernel/params.c
-+++ b/kernel/params.c
-@@ -847,7 +847,7 @@ static void __init param_sysfs_builtin(void)
- 			name_len = 0;
- 		} else {
- 			name_len = dot - kp->name + 1;
--			strlcpy(modname, kp->name, name_len);
-+			strscpy(modname, kp->name, name_len);
- 		}
- 		kernel_add_sysfs_param(modname, kp, name_len);
- 	}
--- 
-2.41.0.162.gfafddb0af9-goog
+-Kees
 
 
+
+--=20
+Kees Cook
