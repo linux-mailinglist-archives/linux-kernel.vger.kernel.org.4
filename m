@@ -2,189 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C9373052D
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:41:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F46073052C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:41:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235383AbjFNQlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 12:41:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52286 "EHLO
+        id S235358AbjFNQk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 12:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235979AbjFNQkS (ORCPT
+        with ESMTP id S236014AbjFNQkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 12:40:18 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C180A199
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:40:17 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-33d928a268eso227885ab.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:40:17 -0700 (PDT)
+        Wed, 14 Jun 2023 12:40:42 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D93EEC
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:40:41 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id af79cd13be357-75d54faa03eso228338785a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:40:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686760817; x=1689352817;
+        d=google.com; s=20221208; t=1686760840; x=1689352840;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ruP+GyZYH4LxbCyC+eS55NOUZ4Djslwx0JaDdpKV0nA=;
-        b=xl+MNLTWWBgUoNFwnzqJGkdMUBpP9M39OjxechrhSjIVAXxOZN/KUacf5TY20Sv772
-         l9JBQucWaC5obuBxXoe42aeTZKU3AZlKVidoQtXzU5nWwDBeJiIDvlzYEgIrIve2qiMo
-         d3YnUOaD+JN2kdffImZ3PhuKkHGUlMCeRrMy3YGUiSM/MpxCOqdlo96bHNkuk6DjU9pF
-         u5gTdUPPOmJicj3v092hl82TpDs7lM/uCMNTk4R3Fjt5hni6+H7PyGComKNVHjVDHoXz
-         tkB3fMVTxnEXu0+mnc5EtoKfqbdJE9cVQORww7zRUut2kyixh/4pam2JINB2aYwROPw9
-         b2Sg==
+        bh=UXimn/P/5sCJZ7fCJTZ8BSazPdQnTt6zyCupGqR8k5w=;
+        b=OAoITSntNBYS+uJgf1ujmP2eeCLW9WF/FTefuiku8oybwrFBx+upKikf92RbfxXDE+
+         LnYGDbG150ZKoTMWfmq3xvUFJt8/h0GeDKE4BfhS5mPt4LFm8IFdGz0371yuNV+Z/fKH
+         BFj0AXE1/uumb9GBim7y91GR0ZrJp5EcO87efwp3wOhNFp8ZrMk82cAtVmQFn+3r6q/O
+         Rg1fgvFf/yOlmVFHUa43o0hvV3WXx27jsfTzl4CuRT9dho1R5DLVFyrR9QiIkd9mP4Mt
+         zzG27bxORvKu5rmKLtRzdL3zlEvwsqLHG5zaL7qJcVVUT6AFxL+ONDCwRBish4r8Ujgu
+         EM5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686760817; x=1689352817;
+        d=1e100.net; s=20221208; t=1686760840; x=1689352840;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ruP+GyZYH4LxbCyC+eS55NOUZ4Djslwx0JaDdpKV0nA=;
-        b=jDZSohmyGiynpHdPpN05vylBfmlH0EoOJ+4UfsyZ+Hf5/8kGoDgkKCfFdoEM89MYWG
-         hNTVbfJSSheGYnNbfScD5d0qRolhSNza8j3kc5+ctGEhciPWsrZ1auhWwEhaL5M5Vp1I
-         /9rxtuc9W+uTALdq0AhtQBoFbAREkybU099Jezpess5NzAosgqAVb1s6vR3KHbNRzeGq
-         qe3buljxDUf9UmtyptdoVSQg8rkLLD1Q49/2AX8bhbWoA0ykmFiGBubyyq5qv87KJDdE
-         RtOfM8S0EdC+14QagGNBVSfJUDAzamdQBuOPNkgG1yd/nMoj+lHy+S2UpyYwBnM8wOgF
-         rFRw==
-X-Gm-Message-State: AC+VfDzQdN2zzKhBI6fZlITEmg9CvHkG/0rUCRaW2oBUAYCxZyE3U9M9
-        0ELTXirt/4KK8n59mf0vLDOQ2aNphh+ppdruyYOM6Q==
-X-Google-Smtp-Source: ACHHUZ4ExjVj5y92ljUlZnjZOFn5rxTIFsaGIRm2Qgu5g4Tt7LrdpcwgwQ1/+kAqzKKWJz7KKHourmLP6Nfcb/+fJP8=
-X-Received: by 2002:a05:6e02:1aad:b0:33b:4a8c:2147 with SMTP id
- l13-20020a056e021aad00b0033b4a8c2147mr260935ilv.8.1686760816976; Wed, 14 Jun
- 2023 09:40:16 -0700 (PDT)
+        bh=UXimn/P/5sCJZ7fCJTZ8BSazPdQnTt6zyCupGqR8k5w=;
+        b=IRWkkkbj8O0QN6eCbOmfhm8aGQKWKcZQ4gk2RlXVJNSR6kT+1gOOvoImahNC1JmMmY
+         C3m8/6uRsxQ02sOtQs0PsdvW3wfKKh3uqN7umBytP/bDA0K4tGyi9PT65ySPyCvv1qxa
+         22vxlCgfiN0n0UwEsTrPQO11UHyCFmGsmkcExu33hoDYzaTVV0KHp6Q/exnA1ejLO0o8
+         qMTDtw1DWPc6eP1ELDyj/EKee/uw2cli4AKmT2qkWNEj9AhFaCdLJ3RzqxcEPn9hDlja
+         vcqHTxLyOqB1IRNabp66vjwaEaNOzaV4wvUJAnbJCQppAhWee6l8wG217E+yQ4/Vvhgy
+         T/7w==
+X-Gm-Message-State: AC+VfDytoTiOqokYZKvCPWaP6fZMOt6a9vEbkfkJsQAgyk0H+m/5qMWV
+        rHaG0P+2sxZBpQKvAZml2PD75NLeDTzungGayFgtOqpbUxGA4t345GU8uA==
+X-Google-Smtp-Source: ACHHUZ6nzw2pIHfANPy+oymiDmwVUSVPnDXJQ6OjIAJWySkyRIMjr8q00W31fdmz4ODSODxrNZYayP0uNr3Rvjbpr08=
+X-Received: by 2002:a05:6214:e6e:b0:628:6abe:f06e with SMTP id
+ jz14-20020a0562140e6e00b006286abef06emr17513666qvb.41.1686760840396; Wed, 14
+ Jun 2023 09:40:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230614090710.680330-1-sandipan.das@amd.com>
-In-Reply-To: <20230614090710.680330-1-sandipan.das@amd.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 14 Jun 2023 09:40:05 -0700
-Message-ID: <CAP-5=fV9Fx99QmKWSqqDK23vF0dcTS+g-r-9zr6q0A2ZXWmCBw@mail.gmail.com>
-Subject: Re: [PATCH] perf test: Retry without grouping for all metrics test
-To:     Sandipan Das <sandipan.das@amd.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, adrian.hunter@intel.com,
-        kjain@linux.ibm.com, atrajeev@linux.vnet.ibm.com,
-        barnali@linux.ibm.com, ayush.jain3@amd.com, ananth.narayan@amd.com,
-        ravi.bangoria@amd.com, santosh.shukla@amd.com
+References: <202306110855.7TlBCIzI-lkp@intel.com> <CAHVXubhKstDeRDp8n-POR_eL0vh5DdHuWKHu7pN+X_j0rtG4Dw@mail.gmail.com>
+In-Reply-To: <CAHVXubhKstDeRDp8n-POR_eL0vh5DdHuWKHu7pN+X_j0rtG4Dw@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 14 Jun 2023 12:40:28 -0400
+Message-ID: <CAKwvOd=yg5GE8eF5bFY4t2S-0Od3smH9iRB+2Ctkg=+WXM97ig@mail.gmail.com>
+Subject: Re: ld.lld: error: relocation R_RISCV_HI20 cannot be used against
+ symbol 'misaligned_access_speed'; recompile with -fPIC
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Palmer Dabbelt <palmer@rivosinc.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 2:07=E2=80=AFAM Sandipan Das <sandipan.das@amd.com>=
+On Tue, Jun 13, 2023 at 4:17=E2=80=AFAM Alexandre Ghiti <alexghiti@rivosinc=
+.com> wrote:
+>
+> On Sun, Jun 11, 2023 at 2:11=E2=80=AFAM kernel test robot <lkp@intel.com>=
  wrote:
+> >
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
+git master
+> > head:   022ce8862dff83c859089cd14bc4dca0733e2f90
+> > commit: 8dc2a7e8027fbeca0c7df81d4c82e735a59b5741 riscv: Fix relocatable=
+ kernels with early alternatives using -fno-pie
+> > date:   10 days ago
+> > config: riscv-randconfig-r022-20230611 (https://download.01.org/0day-ci=
+/archive/20230611/202306110855.7TlBCIzI-lkp@intel.com/config)
+> > compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.gi=
+t ae42196bc493ffe877a7e3dff8be32035dea4d07)
+> > reproduce (this is a W=3D1 build):
+> >         mkdir -p ~/bin
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/s=
+bin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # install riscv cross compiling tool for clang build
+> >         # apt-get install binutils-riscv64-linux-gnu
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linu=
+x.git/commit/?id=3D8dc2a7e8027fbeca0c7df81d4c82e735a59b5741
+> >         git remote add linus https://git.kernel.org/pub/scm/linux/kerne=
+l/git/torvalds/linux.git
+> >         git fetch --no-tags linus master
+> >         git checkout 8dc2a7e8027fbeca0c7df81d4c82e735a59b5741
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/make.=
+cross W=3D1 O=3Dbuild_dir ARCH=3Driscv olddefconfig
+> >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/make.=
+cross W=3D1 O=3Dbuild_dir ARCH=3Driscv SHELL=3D/bin/bash
+> >
+> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
+rsion of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202306110855.7TlBCIzI-l=
+kp@intel.com/
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> > >> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol=
+ 'misaligned_access_speed'; recompile with -fPIC
+> >    >>> defined in vmlinux.a(arch/riscv/kernel/cpufeature.o)
+> >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
+> >    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_pr=
+obe_func) in archive vmlinux.a
+> > --
+> > >> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symb=
+ol 'misaligned_access_speed'; recompile with -fPIC
+> >    >>> defined in vmlinux.a(arch/riscv/kernel/cpufeature.o)
+> >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
+> >    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_pr=
+obe_func) in archive vmlinux.a
+> > --
+> > >> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol=
+ 'riscv_cbom_block_size'; recompile with -fPIC
+> >    >>> defined in vmlinux.a(arch/riscv/mm/cacheflush.o)
+> >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
+> >    >>>               arch/riscv/errata/thead/errata.o:(thead_errata_pat=
+ch_func) in archive vmlinux.a
+> > --
+> > >> ld.lld: error: relocation R_RISCV_LO12_S cannot be used against symb=
+ol 'riscv_cbom_block_size'; recompile with -fPIC
+> >    >>> defined in vmlinux.a(arch/riscv/mm/cacheflush.o)
+> >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
+> >    >>>               arch/riscv/errata/thead/errata.o:(thead_errata_pat=
+ch_func) in archive vmlinux.a
+> > --
+> > >> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol=
+ '__per_cpu_offset'; recompile with -fPIC
+> >    >>> defined in vmlinux.a(mm/percpu.o)
+> >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
+> >    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_pr=
+obe_func) in archive vmlinux.a
+> > --
+> > >> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symb=
+ol '__per_cpu_offset'; recompile with -fPIC
+> >    >>> defined in vmlinux.a(mm/percpu.o)
+> >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
+> >    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_pr=
+obe_func) in archive vmlinux.a
+> >
 >
-> There are cases where a metric uses more events than the number of
-> counters. E.g. AMD Zen, Zen 2 and Zen 3 processors have four data fabric
-> counters but the "nps1_die_to_dram" metric has eight events. By default,
-> the constituent events are placed in a group. Since the events cannot be
-> scheduled at the same time, the metric is not computed. The all metrics
-> test also fails because of this.
+> So I looked into those errors, the config is basically =3D RELOCATABLE +
+> MEDLOW - EARLY_ALTERNATIVES. Then errata/thead is not compiled as
 
-Thanks Sandipan. So this is exposing a bug in the AMD data fabric PMU
-driver. When the events are added the driver should create a fake PMU,
-check that adding the group is valid and if not fail. The failure is
-picked up by the tool and it will remove the group.
+Thanks for taking a look.  Shouldn't CONFIG_RELOCATABLE be setting
+-fPIC? If so, why is LLD complaining about -fPIC not being used?
 
-I appreciate the need for a time machine to make such a fix work. To
-workaround the issue with the metrics add:
-"MetricConstraint": "NO_GROUP_EVENTS",
-to each metric in the json.
+arch/riscv/Makefile sets -fPIE if CONFIG_RELOCATABLE =3D=3D y.
 
-> Before announcing failure, the test can try multiple options for each
-> available metric. After system-wide mode fails, retry once again with
-> the "--metric-no-group" option.
+Is it possible that -fpie was dropped for these object files, or
+-fno-pic or -fno-pie was added to the cflags for these object files
+somehow?
+
+I've filed
+https://github.com/ClangBuiltLinux/linux/issues/1872
+to track this.
+
+> medany, which makes sense since we only need this code to be medany
+> when EARLY_ALTERNATIVES is enabled (because the code would be executed
+> with mmu off, which is not the case here).
 >
-> E.g.
+> I can fix those errors by adding the medany flag, but I'm not sure
+> actually we want to do that since we do not need it and gcc does not
+> complain: any idea?
 >
->   $ sudo perf test -v 100
+> Alex
 >
-> Before:
 >
->   100: perf all metrics test                                           :
->   --- start ---
->   test child forked, pid 672731
->   Testing branch_misprediction_ratio
->   Testing all_remote_links_outbound
->   Testing nps1_die_to_dram
->   Metric 'nps1_die_to_dram' not printed in:
->   Error:
->   Invalid event (dram_channel_data_controller_4) in per-thread mode, enab=
-le system wide with '-a'.
+>
+> > --
+> > 0-DAY CI Kernel Test Service
+> > https://github.com/intel/lkp-tests/wiki
+>
 
-This error doesn't relate to grouping, so I'm confused about having it
-in the commit message, aside from the test failure.
 
+--=20
 Thanks,
-Ian
-
->   Testing macro_ops_dispatched
->   Testing all_l2_cache_accesses
->   Testing all_l2_cache_hits
->   Testing all_l2_cache_misses
->   Testing ic_fetch_miss_ratio
->   Testing l2_cache_accesses_from_l2_hwpf
->   Testing l2_cache_misses_from_l2_hwpf
->   Testing op_cache_fetch_miss_ratio
->   Testing l3_read_miss_latency
->   Testing l1_itlb_misses
->   test child finished with -1
->   ---- end ----
->   perf all metrics test: FAILED!
->
-> After:
->
->   100: perf all metrics test                                           :
->   --- start ---
->   test child forked, pid 672887
->   Testing branch_misprediction_ratio
->   Testing all_remote_links_outbound
->   Testing nps1_die_to_dram
->   Testing macro_ops_dispatched
->   Testing all_l2_cache_accesses
->   Testing all_l2_cache_hits
->   Testing all_l2_cache_misses
->   Testing ic_fetch_miss_ratio
->   Testing l2_cache_accesses_from_l2_hwpf
->   Testing l2_cache_misses_from_l2_hwpf
->   Testing op_cache_fetch_miss_ratio
->   Testing l3_read_miss_latency
->   Testing l1_itlb_misses
->   test child finished with 0
->   ---- end ----
->   perf all metrics test: Ok
->
-> Reported-by: Ayush Jain <ayush.jain3@amd.com>
-> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
-> ---
->  tools/perf/tests/shell/stat_all_metrics.sh | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/tools/perf/tests/shell/stat_all_metrics.sh b/tools/perf/test=
-s/shell/stat_all_metrics.sh
-> index 54774525e18a..1e88ea8c5677 100755
-> --- a/tools/perf/tests/shell/stat_all_metrics.sh
-> +++ b/tools/perf/tests/shell/stat_all_metrics.sh
-> @@ -16,6 +16,13 @@ for m in $(perf list --raw-dump metrics); do
->    then
->      continue
->    fi
-> +  # Failed again, possibly there are not enough counters so retry system=
- wide
-> +  # mode but without event grouping.
-> +  result=3D$(perf stat -M "$m" --metric-no-group -a sleep 0.01 2>&1)
-> +  if [[ "$result" =3D~ ${m:0:50} ]]
-> +  then
-> +    continue
-> +  fi
->    # Failed again, possibly the workload was too small so retry with some=
-thing
->    # longer.
->    result=3D$(perf stat -M "$m" perf bench internals synthesize 2>&1)
-> --
-> 2.34.1
->
+~Nick Desaulniers
