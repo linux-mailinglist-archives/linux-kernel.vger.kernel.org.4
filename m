@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2211E72FDBA
+	by mail.lfdr.de (Postfix) with ESMTP id B9C6172FDBC
 	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243581AbjFNMAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 08:00:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39410 "EHLO
+        id S244346AbjFNMAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 08:00:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244378AbjFNL7o (ORCPT
+        with ESMTP id S244385AbjFNL7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 07:59:44 -0400
+        Wed, 14 Jun 2023 07:59:46 -0400
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DF1A51FDC
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 04:59:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4A4E1FFC;
+        Wed, 14 Jun 2023 04:59:39 -0700 (PDT)
 Received: from loongson.cn (unknown [10.20.42.116])
-        by gateway (Coremail) with SMTP id _____8Ax3eqpq4lkpx0FAA--.10865S3;
-        Wed, 14 Jun 2023 19:59:37 +0800 (CST)
+        by gateway (Coremail) with SMTP id _____8DxRumqq4lksx0FAA--.8960S3;
+        Wed, 14 Jun 2023 19:59:38 +0800 (CST)
 Received: from loongson-pc.loongson.cn (unknown [10.20.42.116])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxNeSoq4lkzJMaAA--.10424S2;
-        Wed, 14 Jun 2023 19:59:36 +0800 (CST)
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxNeSoq4lkzJMaAA--.10424S3;
+        Wed, 14 Jun 2023 19:59:37 +0800 (CST)
 From:   Jianmin Lv <lvjianmin@loongson.cn>
 To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
@@ -28,32 +28,35 @@ Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhuacai@loongson.cn>,
         WANG Xuerui <kernel@xen0n.name>,
-        loongson-kernel@lists.loongnix.cn
-Subject: [PATCH V3 0/5] irqchip/loongson: Fix some loongson irqchip drivers
-Date:   Wed, 14 Jun 2023 19:59:31 +0800
-Message-Id: <20230614115936.5950-1-lvjianmin@loongson.cn>
+        loongson-kernel@lists.loongnix.cn, stable@vger.kernel.org,
+        liuyun <liuyun@loongson.cn>
+Subject: [PATCH V3 1/5] irqchip/loongson-pch-pic: Fix initialization of HT vector register
+Date:   Wed, 14 Jun 2023 19:59:32 +0800
+Message-Id: <20230614115936.5950-2-lvjianmin@loongson.cn>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20230614115936.5950-1-lvjianmin@loongson.cn>
+References: <20230614115936.5950-1-lvjianmin@loongson.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxNeSoq4lkzJMaAA--.10424S2
+X-CM-TRANSID: AQAAf8BxNeSoq4lkzJMaAA--.10424S3
 X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBj9xXoWrZF13JFWDXFyDJF1kZF17CFX_yoWfZFb_uF
-        WI93yDCrn2gF1xXay2yr40vF9I9FWUW3Wq9FyjqF1rX3yqv3W3Cr47CwnxG3Z7JF48tFn8
-        Xrs5GryfCryIyosvyTuYvTs0mTUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvT
-        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-        cSsGvfJTRUUUb38YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-        vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-        GcCE3s1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2
-        x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1D
-        McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr4
-        1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_
-        JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17
-        CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0
-        I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I
-        8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73
-        UjIFyTuYvjxU4xR6UUUUU
+X-Coremail-Antispam: 1Uk129KBj93XoWxJr1DZFy8WFyfXr1fXF1xtFc_yoW8tw15pa
+        yaqa1avr4UJr1UKF1kGayrXFy3J39xC39rKayYyr1fXwn8C3sFkrsrA3W8ZFWxCrWUZF13
+        ZrWSyF18C3W5AFcCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUB2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r126r13M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v2
+        6rxl6s0DM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+        kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWr
+        XwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+        xGrwCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWU
+        JVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+        vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IY
+        x2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26c
+        xKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26F4j6r4UJwCI42IY6I8E87Iv6xkF7I0E
+        14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU7aZXUUUUU
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -63,31 +66,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The patch series provide some fixes for loongson-liointc and loongson-pch-pic driver.
+In an ACPI-based dual-bridge system, IRQ of each bridge's
+PCH PIC sent to CPU is always a zero-based number, which
+means that the IRQ on PCH PIC of each bridge is mapped into
+vector range from 0 to 63 of upstream irqchip(e.g. EIOINTC).
 
-V1->V2:
-1. Adjust commit log for all patchs
-2. Add some explanation for Loongson-3's polarity register
+      EIOINTC N: [0 ... 63 | 64 ... 255]
+                  --------   ----------
+                      ^          ^
+                      |          |
+                  PCH PIC N      |
+                             PCH MSI N
 
-V2->V3:
-1. Add a new patch[5] to fix irq affinity setting during resume for loongson-eiointc
+For example, the IRQ vector number of sata controller on
+PCH PIC of each bridge is 16, which is sent to upstream
+irqchip of EIOINTC when an interrupt occurs, which will set
+bit 16 of EIOINTC. Since hwirq of 16 on EIOINTC has been
+mapped to a irq_desc for sata controller during hierarchy
+irq allocation, the related mapped IRQ will be found through
+irq_resolve_mapping() in the IRQ domain of EIOINTC.
 
-Jianmin Lv (3):
-  irqchip/loongson-pch-pic: Fix initialization of HT vector register
-  irqchip/loongson-liointc: Fix IRQ trigger polarity
-  irqchip/loongson-eiointc: Fix irq affinity setting during resume
+So, the IRQ number set in HT vector register should be fixed
+to be a zero-based number.
 
-Liu Peibao (1):
-  irqchip/loongson-pch-pic: Fix potential incorrect hwirq assignment
+Cc: stable@vger.kernel.org
+Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
+Co-developed-by: liuyun <liuyun@loongson.cn>
+Signed-off-by: liuyun <liuyun@loongson.cn>
+Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+---
+ drivers/irqchip/irq-loongson-pch-pic.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-Yinbo Zhu (1):
-  irqchip/loongson-liointc: Add IRQCHIP_SKIP_SET_WAKE flag
-
- drivers/irqchip/irq-loongson-eiointc.c |  2 +-
- drivers/irqchip/irq-loongson-liointc.c | 13 +++++++++----
- drivers/irqchip/irq-loongson-pch-pic.c | 10 ++++------
- 3 files changed, 14 insertions(+), 11 deletions(-)
-
+diff --git a/drivers/irqchip/irq-loongson-pch-pic.c b/drivers/irqchip/irq-loongson-pch-pic.c
+index e5fe4d50be05..921c5c0190d1 100644
+--- a/drivers/irqchip/irq-loongson-pch-pic.c
++++ b/drivers/irqchip/irq-loongson-pch-pic.c
+@@ -401,14 +401,12 @@ static int __init acpi_cascade_irqdomain_init(void)
+ int __init pch_pic_acpi_init(struct irq_domain *parent,
+ 					struct acpi_madt_bio_pic *acpi_pchpic)
+ {
+-	int ret, vec_base;
++	int ret;
+ 	struct fwnode_handle *domain_handle;
+ 
+ 	if (find_pch_pic(acpi_pchpic->gsi_base) >= 0)
+ 		return 0;
+ 
+-	vec_base = acpi_pchpic->gsi_base - GSI_MIN_PCH_IRQ;
+-
+ 	domain_handle = irq_domain_alloc_fwnode(&acpi_pchpic->address);
+ 	if (!domain_handle) {
+ 		pr_err("Unable to allocate domain handle\n");
+@@ -416,7 +414,7 @@ int __init pch_pic_acpi_init(struct irq_domain *parent,
+ 	}
+ 
+ 	ret = pch_pic_init(acpi_pchpic->address, acpi_pchpic->size,
+-				vec_base, parent, domain_handle, acpi_pchpic->gsi_base);
++				0, parent, domain_handle, acpi_pchpic->gsi_base);
+ 
+ 	if (ret < 0) {
+ 		irq_domain_free_fwnode(domain_handle);
 -- 
 2.31.1
 
