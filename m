@@ -2,131 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E6067308A7
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1516B7308A6
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235887AbjFNToQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 15:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34904 "EHLO
+        id S235589AbjFNToE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 15:44:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237237AbjFNToF (ORCPT
+        with ESMTP id S234534AbjFNTn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 15:44:05 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03542702;
-        Wed, 14 Jun 2023 12:43:36 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-976a0a1a92bso172733766b.1;
-        Wed, 14 Jun 2023 12:43:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686771815; x=1689363815;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=wo2k8B7MGNyxmh3jaU19PWvWJJrdjMUIt4dfyXki7UM=;
-        b=hhV5dkXmdZjOD+oCwVkjm+9276XiooihM6cbKdbPUe3KqBZfH9hX+fIL0LO9xZD1bB
-         0cb6PPHnur5fU2vRZ1jDHw/SrwFRdfL5PrUBc85QzwgfqHa8BQw+63yln12/bf2tCACQ
-         cicqZPwDh0+t6LhqETb2+pabhlKhEiFqV5dhd8XDOaOAGYBrtv1X0WNns9hKBZKFh1Oz
-         pignhGM7d5IOd3g1w/4WqY3ohWlvju0/ytScdGTjAcG42Vg2V3KrlFIGFTUy4IQHt2yk
-         OmPVu7rhNN5qgRfdEVU7ihV7jHjH3v4DQlZQ/UdY8BbfE4ZKfgOuz2XvSyz9dCfFxuSj
-         b1Iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686771815; x=1689363815;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wo2k8B7MGNyxmh3jaU19PWvWJJrdjMUIt4dfyXki7UM=;
-        b=IzhloRQvWM6C2k+0yi8g+pygcX222Zr7I66/jJrtx4pbvR1DFfnW6ZVena6zpgFbF1
-         Xhhvl9134Ye8462jVsH0zW1SSaCjKfU7VFkJ+U9+ou3XbGZC4mMH+tD2naruenqtDvd5
-         bhH93lh+tivn/vTU/CRiZf1Lqg9NGzeCEhOkArvKXT8xVo8rY4nqzq1G9YPQjMmSsQR/
-         YPomctjstPBWsAYTQc1MQZMxCAGOA4bzjugg4wsV7y/O/A9dZ4hLVRh/tXuhv9x/n97N
-         qGl9MvzT4w5Dlzxr5kjeJCAXFFjuEvRyC5QcTodSUH/RjVSAmlVFkWgVbpI8vN/JxhO8
-         BMsA==
-X-Gm-Message-State: AC+VfDwFKthqPuau71AihvJZqw+HuOCow8ElzMAAA9RfN6pNZ2oLRLur
-        rsg5NtYJDMh29EIUJMtDgmE=
-X-Google-Smtp-Source: ACHHUZ4NiRdlI3efpenlQNXYrF7h5UVq223WzRqbYZ7tNAOpGXI5j/pTyx1uqiZas/x6Nhx1dWRTxA==
-X-Received: by 2002:a17:907:2684:b0:96f:45cd:6c21 with SMTP id bn4-20020a170907268400b0096f45cd6c21mr17745808ejc.30.1686771815063;
+        Wed, 14 Jun 2023 15:43:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998CB26B5;
         Wed, 14 Jun 2023 12:43:35 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id rs15-20020a170907036f00b009823e62ca91sm2517430ejb.189.2023.06.14.12.43.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 12:43:34 -0700 (PDT)
-Date:   Wed, 14 Jun 2023 22:43:30 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     arinc9.unal@gmail.com
-Cc:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net v4 1/7] net: dsa: mt7530: fix trapping frames with
- multiple CPU ports on MT7531
-Message-ID: <20230614194330.qhhoxai7namrgczq@skbuf>
-References: <20230612075945.16330-1-arinc.unal@arinc9.com>
- <20230612075945.16330-1-arinc.unal@arinc9.com>
- <20230612075945.16330-2-arinc.unal@arinc9.com>
- <20230612075945.16330-2-arinc.unal@arinc9.com>
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 35CCF62EF0;
+        Wed, 14 Jun 2023 19:43:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81F90C433C8;
+        Wed, 14 Jun 2023 19:43:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686771814;
+        bh=Kt6SJawEmJWtX3OTbjlzR1/a2xexuFr4PgAMHfuqpqc=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=WHhPJGi4JCpDvJJVFMj2VPcwyd1dt4StdWOi6o4PJtoNbC2BpPlPK2y3X158vC85D
+         i23nKtAzDelBVt/aLueNY1b/3+Ay2ilRlKZD2dCW92xnFftZnatfROwuM9V+g4TQXX
+         xJqubh6K+F6j89Y9UuAnl2CBKPsYLnMo2IOk9ly/QOw6Hfy57XfiaOekY90XvhcF1z
+         ZJ1hNMNMn9atmTQrdC14xUDP7FxW/UO6cOq3hU9fa5TygZ9Z78GFCV+qnsXFOINW6E
+         KhD7/BWp2Ew7u1TuqNQ5x7HKgxKuB5VIY6Fzryy9+Z3lEtJquqn4vqPEzpS2VmoUyH
+         su/okyOh3be5w==
+Message-ID: <cca711ac7af8208949df09b811a13c81.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230612075945.16330-2-arinc.unal@arinc9.com>
- <20230612075945.16330-2-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230613195443.1555132-1-sboyd@kernel.org>
+References: <20230613195443.1555132-1-sboyd@kernel.org>
+Subject: Re: [PATCH] clk: sprd: composite: Simplify determine_rate implementation
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        patches@lists.linux.dev,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+        Maxime Ripard <maxime@cerno.tech>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Date:   Wed, 14 Jun 2023 12:43:32 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 10:59:39AM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
-> 
-> Every bit of the CPU port bitmap for MT7531 and the switch on the MT7988
-> SoC represents a CPU port to trap frames to. These switches trap frames
-> received from a user port to the CPU port that is affine to the user port
-> from which the frames are received.
-> 
-> Currently, only the bit that corresponds to the first found CPU port is set
-> on the bitmap. When multiple CPU ports are being used, the trapped frames
-> from the user ports not affine to the first CPU port will be dropped as the
-> other CPU port is not set on the bitmap. The switch on the MT7988 SoC is
-> not affected as there's only one port to be used as a CPU port.
-> 
-> To fix this, introduce the MT7531_CPU_PMAP macro to individually set the
-> bits of the CPU port bitmap. Set the CPU port bitmap for MT7531 and the
-> switch on the MT7988 SoC on mt753x_cpu_port_enable() which runs on a loop
-> for each CPU port.
-> 
-> Add a comment to explain frame trapping for these switches.
-> 
-> According to the document MT7531 Reference Manual for Development Board
-> v1.0, the MT7531_CPU_PMAP bits are unset after reset so no need to clear it
-> beforehand. Since there's currently no public document for the switch on
-> the MT7988 SoC, I assume this is also the case for this switch.
-> 
-> Fixes: c288575f7810 ("net: dsa: mt7530: Add the support of MT7531 switch")
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+Quoting Stephen Boyd (2023-06-13 12:54:42)
+> The sprd_div_helper_round_rate() function calls divider_round_rate()
+> which calls divider_round_rate_parent() which calls
+> divider_determine_rate(). This call chain converts back and forth from
+> the rate request structure to make a determine_rate clk_op fit with a
+> round_rate clk_op. Simplify the code here by directly calling
+> divider_determine_rate() instead.
+>=20
+> This fixes a smatch warning where an unsigned long is compared to less
+> than zero, which is impossible. This makes sprd_div_helper_round_rate()
+> unnecessary as well so simply remove it and fold it into the only caller
+> left.
+>=20
+> Reported-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+> Closes: https://lore.kernel.org/r/45fdc54e-7ab6-edd6-d55a-473485608473@or=
+acle.com
+> Cc: Maxime Ripard <maxime@cerno.tech>
+> Fixes: 302d2f836d78 ("clk: sprd: composite: Switch to determine_rate")
+> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 > ---
 
-Would you agree that this is just preparatory work for change "net: dsa:
-introduce preferred_default_local_cpu_port and use on MT7530" and not a
-fix to an existing problem in the code base?
+Applied to clk-next
