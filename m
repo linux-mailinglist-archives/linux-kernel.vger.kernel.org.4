@@ -2,169 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EEC172FB15
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 12:35:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BF2972FB31
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 12:37:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234764AbjFNKfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 06:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44824 "EHLO
+        id S235544AbjFNKha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 06:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234070AbjFNKep (ORCPT
+        with ESMTP id S235339AbjFNKh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 06:34:45 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0BD2116;
-        Wed, 14 Jun 2023 03:34:36 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35E9M5D1014210;
-        Wed, 14 Jun 2023 10:34:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=4p5rvgkIAjJA/XixhCrlrbWaTQx6zhjnxIkgPoWjSA0=;
- b=pyFHimqjuWqNg/UHlYkMZtBwxNT10buV+mWUNPdUEicypK5YGmieVInGUhYBclw01+0M
- kM2Me26RiWmoc6HuVhtkAmVqKIx3ChwtSRIF55/l1IKFZ0DqFmAwHWJRFfDOwuOTs/l3
- hEpIWnG31ubk57dha8ya+khwdB2tloIfXAvRJAoMvQybhxakk/GO886K8IovLzLyaCOj
- Os/CEQcUk931p4CyEdWrDBXGDpkVyj3VQ7R+KKaahK+LXz0CareAlwoywOP9Cs22J8zK
- u0LfAt7SmdMN32LHdce86rthFVF6GVIwiGrAI5VqvKYJ4dEEfjK6+3vi8yEqZlyBdNnh VA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r7auy09kx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Jun 2023 10:34:32 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35EAYV3r031159
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Jun 2023 10:34:31 GMT
-Received: from [10.201.2.96] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 14 Jun
- 2023 03:34:28 -0700
-Message-ID: <1957b1cf-28b7-dbfc-1675-ee4534e5571b@quicinc.com>
-Date:   Wed, 14 Jun 2023 16:04:25 +0530
+        Wed, 14 Jun 2023 06:37:28 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2071.outbound.protection.outlook.com [40.107.93.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F77A7
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 03:37:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jLpFdeyX0wVQGWobteFLw8uRReUKgf7dmudj7THNYGy6o3/KKeff3WmeDaV388zANY4jQLcbovP9R29HQhGfVhaJ3fBxxfg/JKrAvmxRX8pPJCG0CTYyW/xFdcb6rszsK1YrbXy3P+gQxnBE8SmFPyx2SeTOi2Lg3HsCWnxtJ77d3bbCrd8tLz7EDpilhcNJPz7erd3u5Lj4O7JwLYueMgLkiT/lSFQgqsd5+u2+nBziUpReX38U++Jx/ldxaEpo5kougLW4bp4iaY9G/SxBlUvyx5PwXt5OTw3/Qw80EL3ya0iOQmnNyXutLiqZY/NiZG1QMukJAnxeTpd0dSPsNA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZiMHjPGW2Wje+Cj3oFfNZUgOCuSGvkV/UBqBNcUk8JM=;
+ b=DpIPU1C063n3YxvKHCikamx4XROi08TxrpqiYEfE1Q3Wsi1Bhd0eElMwMscUnqwjz2tBlXJFlndjNPRUMING8faRO6HCC6zfcE1wfT4BejqfdPOxZHmjqsnrmp9NxQ/U7EvWau9+QvSo5ybZbi67mSykTCAWLVAfcCW7QI/HdG2lJ2k3Ze0EcP/LprgqO9LuAk70+OKD2BRPF+EaRiC8gv3wwA3vRxK55MSWEAvJNNwObhV8aROymoL3KxDEVAq8mIVhVwlFlGgMt1bMe2ao3Jho5xJnJbk85DcwfLBGFoKwl3Q74/g/QRt7jKRd6pvxhSFQeA7NgM9SQr+3IWP2pA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZiMHjPGW2Wje+Cj3oFfNZUgOCuSGvkV/UBqBNcUk8JM=;
+ b=jSVxDIGtMwLAoo8gDSGjLWiFWCnmoxzOUIK6IbjL5TFK406gK909nGKyujsL29T8W/0+y3+NIH9NbnmVB25wTFI4wvH/lF7nLDUUcD0kmLZKHk9M6quDQ3dkuyZFXEzrIqlb+DlNAgsqg8DMKfTcrUBmhUCDx662Op/D8EGb4KA=
+Received: from BYAPR07CA0102.namprd07.prod.outlook.com (2603:10b6:a03:12b::43)
+ by PH8PR12MB6721.namprd12.prod.outlook.com (2603:10b6:510:1cc::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.42; Wed, 14 Jun
+ 2023 10:37:20 +0000
+Received: from DM6NAM11FT099.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:a03:12b:cafe::f0) by BYAPR07CA0102.outlook.office365.com
+ (2603:10b6:a03:12b::43) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37 via Frontend
+ Transport; Wed, 14 Jun 2023 10:37:20 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ DM6NAM11FT099.mail.protection.outlook.com (10.13.172.241) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6500.25 via Frontend Transport; Wed, 14 Jun 2023 10:37:20 +0000
+Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 14 Jun
+ 2023 05:37:19 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB06.amd.com
+ (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 14 Jun
+ 2023 05:37:19 -0500
+Received: from amd-System-Product-Name.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.23
+ via Frontend Transport; Wed, 14 Jun 2023 05:37:08 -0500
+From:   Venkata Prasad Potturu <venkataprasad.potturu@amd.com>
+To:     <broonie@kernel.org>, <alsa-devel@alsa-project.org>
+CC:     <vsujithkumar.reddy@amd.com>, <Vijendar.Mukunda@amd.com>,
+        <Basavaraj.Hiregoudar@amd.com>, <Sunil-kumar.Dommati@amd.com>,
+        <syed.sabakareem@amd.com>, <mastan.katragadda@amd.com>,
+        <arungopal.kondaveeti@amd.com>,
+        Venkata Prasad Potturu <venkataprasad.potturu@amd.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
+        Iuliana Prodan <iuliana.prodan@nxp.com>,
+        "Ajit Kumar Pandey" <AjitKumar.Pandey@amd.com>,
+        "moderated list:SOUND - SOUND OPEN FIRMWARE (SOF) DRIVERS" 
+        <sound-open-firmware@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH] ASoC: SOF: amd: Add support for IPC with a reply_size set to zero
+Date:   Wed, 14 Jun 2023 16:07:05 +0530
+Message-ID: <20230614103707.2246296-1-venkataprasad.potturu@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH] arm64: dts: qcom: ipq9574: enable the SPI NOR support in
- RDP433
-From:   Kathiravan T <quic_kathirav@quicinc.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230609081508.30982-1-quic_kathirav@quicinc.com>
- <c1c34aa4-ac7d-2c07-bf92-05d887aed3d2@linaro.org>
- <ed9d11cc-7ab4-b6c8-737b-bd89d3973e80@quicinc.com>
-Content-Language: en-US
-In-Reply-To: <ed9d11cc-7ab4-b6c8-737b-bd89d3973e80@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: tr-EuPqlMoOiDfElvDPbS9l8kGcOjPJi
-X-Proofpoint-GUID: tr-EuPqlMoOiDfElvDPbS9l8kGcOjPJi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-14_06,2023-06-12_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 spamscore=0 impostorscore=0 mlxlogscore=999
- adultscore=0 phishscore=0 suspectscore=0 bulkscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306140089
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT099:EE_|PH8PR12MB6721:EE_
+X-MS-Office365-Filtering-Correlation-Id: f435a0dc-52de-4bbd-3049-08db6cc35507
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hkIbKINLp9VvJ3oJS6BJHPvzQ84CCUo185OT2Bi7Sdc1ccdjyYYpgyQGGj7uKaDK5yxE0yUWP+/IwjbStA5QKO0vFKdxiANCzXbeuprESK2x1eILuSogUGUMQLGtiwWd4iM8h1qLAGQyNJSMaRjSLaOGg3cnB6FLtJ/8JkQrCgMcdBsL6r3O6z9gqe69ciY5D6Pv0hFUFYCMipXXBHhjAp9CvZP5T3Dlqw/vBtH57yPIeWYflpxT09zsUixQpsHRNniyuL50hc1j2r793b41VJ6cUKEvz13ft0BZHfHQ5APd9G0K+uH6BziA5ozluLevleVgtlYy5G0KtA/CI+brama4steWe9F+SJnY5dKTmi7nxHPoennE2qa+PUEhYlMxdKcXCemouGePDeFOwxgl4X17fZZqtKycZeSV8Crbkv1FKGne5g5iwvmbMmpp4mqIAbA4+Ml5WfwdF9ViB0sqWS7rZwwZRhQYk4nt+aHb+AuUK+upA2j+IYt+mvrKOBOpUA6qb13vHIDVcu75B+0M6Tb6TFwTLzaeFOvQSVJytKTYYdL24S3GYoRwSepIWc/yEKt/y99u44H3Ya0lT0AAdpr2KaEH5WITBDZY14vvuowOiuEKrpAaFnSwYcAekIIdvSCMT2btQ4zJLLHBrJwru0fYEZZC+Zwl/X9PLG0Zb5e1SSb40J6v0cfeWpu4sVXAa6NpiYpCHOjVz1QAP4JVjxdIzqOQLdE8IcaJ1Lrhnkr+LhJh0G7fHrWwpnjxssHRNe9Ntnzypj2LafxPMZTw/A==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(396003)(376002)(39860400002)(451199021)(46966006)(40470700004)(36840700001)(110136005)(36756003)(41300700001)(6666004)(316002)(7696005)(5660300002)(8936002)(70586007)(478600001)(54906003)(8676002)(70206006)(4326008)(82310400005)(7416002)(86362001)(47076005)(186003)(40460700003)(26005)(1076003)(82740400003)(356005)(4744005)(2906002)(2616005)(36860700001)(81166007)(336012)(426003)(83380400001)(40480700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 10:37:20.3076
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f435a0dc-52de-4bbd-3049-08db6cc35507
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT099.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6721
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add support for IPC tx_message with a reply_size set to zero,
+return zero when message reply_size is zero at acp_dsp_ipc_get_reply().
 
-On 6/14/2023 12:02 PM, Kathiravan T wrote:
->
-> On 6/9/2023 2:37 PM, Konrad Dybcio wrote:
->>
->> On 9.06.2023 10:15, Kathiravan T wrote:
->>> RDP433 has the support for SPI NOR, add the support for it.
->>>
->>> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
->>> ---
->>> Note: This patch was part of initial submission
->>> https://lore.kernel.org/linux-arm-msm/20230329053726.14860-1-quic_kathirav@quicinc.com/ 
->>>
->>> however this got missed in between, so sending it across again.
->>>
->>>   arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 21 
->>> +++++++++++++++++++++
->>>   1 file changed, 21 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts 
->>> b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
->>> index 2b3ed8d351f7..31ee19112157 100644
->>> --- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
->>> +++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
->>> @@ -48,6 +48,20 @@
->>>       };
->>>   };
->>>   +&blsp1_spi0 {
->>> +    pinctrl-0 = <&spi_0_pins>;
->>> +    pinctrl-names = "default";
->>> +    status = "okay";
->>> +
->>> +    flash@0 {
->>> +        compatible = "micron,n25q128a11", "jedec,spi-nor";
->>> +        reg = <0>;
->>> +        #address-cells = <1>;
->>> +        #size-cells = <1>;
->> If you're not adding a partition table, you can drop the address-
->> and size-cells properties, as they determine what the reg value of
->> the child looks like.
->
->
-> Sorry, somehow I missed this query. Will check and update it.
+Signed-off-by: Venkata Prasad Potturu <venkataprasad.potturu@amd.com>
+---
+ sound/soc/sof/amd/acp-ipc.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
+diff --git a/sound/soc/sof/amd/acp-ipc.c b/sound/soc/sof/amd/acp-ipc.c
+index 749e856dc601..8a0fc635a997 100644
+--- a/sound/soc/sof/amd/acp-ipc.c
++++ b/sound/soc/sof/amd/acp-ipc.c
+@@ -130,6 +130,13 @@ static void acp_dsp_ipc_get_reply(struct snd_sof_dev *sdev)
+ 		memcpy(msg->reply_data, &reply, sizeof(reply));
+ 		ret = reply.error;
+ 	} else {
++		/*
++		 * To support an IPC tx_message with a
++		 * reply_size set to zero.
++		 */
++		if (!msg->reply_size)
++			goto out;
++
+ 		/* reply correct size ? */
+ 		if (reply.hdr.size != msg->reply_size &&
+ 		    !(reply.hdr.cmd & SOF_IPC_GLB_PROBE)) {
+-- 
+2.25.1
 
-Currently IPQ boot loaders patches the partition information into the 
-SPI node. To parse that, we need the address-cells and size-cells 
-properties.
-
-Also, this patch is now integrated into the below series
-
-https://lore.kernel.org/linux-arm-msm/20230614085040.22071-1-quic_anusha@quicinc.com/T/#t
-
-
-Thanks,
-
-
->
->
->>
->> Konrad
->>> +        spi-max-frequency = <50000000>;
->>> +    };
->>> +};
->>> +
->>>   &sdhc_1 {
->>>       pinctrl-0 = <&sdc_default_state>;
->>>       pinctrl-names = "default";
->>> @@ -96,6 +110,13 @@
->>>               bias-pull-down;
->>>           };
->>>       };
->>> +
->>> +    spi_0_pins: spi-0-state {
->>> +        pins = "gpio11", "gpio12", "gpio13", "gpio14";
->>> +        function = "blsp0_spi";
->>> +        drive-strength = <8>;
->>> +        bias-disable;
->>> +    };
->>>   };
->>>     &xo_board_clk {
