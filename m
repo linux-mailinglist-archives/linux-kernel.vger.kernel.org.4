@@ -2,115 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CEFC72F37E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 06:25:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57E7372F3AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 06:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238340AbjFNEZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 00:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33952 "EHLO
+        id S234075AbjFNElb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 00:41:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233728AbjFNEZX (ORCPT
+        with ESMTP id S234135AbjFNElX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 00:25:23 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505EDE4;
-        Tue, 13 Jun 2023 21:25:22 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35E40mXY020013;
-        Wed, 14 Jun 2023 04:25:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=V87rXRJ0McF4e18E5pljBHXkteT2i+vavHVk1lyfqHY=;
- b=M3OFeK4AtnyDLCs97ApSegSR6kfDklgvGR/M4nf95CCFgv88eWYxABsOOy5kP/GQ2ZZ/
- 9qrRHSEH/D0pYByhRtZj0RKVy8nWx4WT9h34fCd/Eohy7YFahWsPU1e3yGUEjR9g1F93
- OxPJo5jS87RDv7+efw1OPKr2Xs5cdSANIeV+ib9HVho83HY7i9OnOaRcmNpPudsgZUk9
- jcve7CkA54Tp+X58rGZDU1F3Xxr8ORN/9c5snWCs3TZA95JyXU6POCepzL7X7vEulFw6
- Tebgi/SxkMn0yaRw9iRW8K+/F4eTZX7qnLCczzNYWqd2+MbFgSJazyZRUt8kJrwphtXE nw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r6t0bsjjn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Jun 2023 04:25:16 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35E4PFwO011470
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Jun 2023 04:25:15 GMT
-Received: from [10.217.219.52] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 13 Jun
- 2023 21:25:13 -0700
-Message-ID: <73854744-03ef-2c5c-a5d6-284f004a5497@quicinc.com>
-Date:   Wed, 14 Jun 2023 09:55:10 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v7] usb: common: usb-conn-gpio: Set last role to unknown
- before initial detection
-Content-Language: en-US
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1685544074-17337-1-git-send-email-quic_prashk@quicinc.com>
- <ZIhOm5LKwn+YVGzT@kuha.fi.intel.com>
-From:   Prashanth K <quic_prashk@quicinc.com>
-In-Reply-To: <ZIhOm5LKwn+YVGzT@kuha.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 1tvv1WEG4yY5z_MFXZesFYsRiGRwUvu2
-X-Proofpoint-ORIG-GUID: 1tvv1WEG4yY5z_MFXZesFYsRiGRwUvu2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-14_02,2023-06-12_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- priorityscore=1501 clxscore=1011 mlxlogscore=632 spamscore=0
- lowpriorityscore=0 suspectscore=0 adultscore=0 impostorscore=0
- phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306140035
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 14 Jun 2023 00:41:23 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538321BE6
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 21:41:21 -0700 (PDT)
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230614044117epoutp01364c01c66ddff7b3d494f02700fd72d5~obMqelD-x2654226542epoutp01D
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 04:41:17 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230614044117epoutp01364c01c66ddff7b3d494f02700fd72d5~obMqelD-x2654226542epoutp01D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1686717677;
+        bh=UTp2spf180fapim/QCGBMuGvcRmlmKbbwTJawClBTJo=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=VJC3EuJjQcjy53i317PUpkpAY1MwggC7HDemD9pE26ieyukonBFv5/T880+0M6+wZ
+         qp7cOSuyofo8NIrxb6hLQ+dXi0IGHaQZhmsk7xlWvGbThlVjcRGBrvcXZBeqXorvx/
+         AhX1GWCjmcwbTcGMQLfZpr+nqBqDoFqr3RYd0SxA=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20230614044117epcas2p30a32e7bdaf1e216b7d2fc05297d37c21~obMqCF2n82216722167epcas2p3p;
+        Wed, 14 Jun 2023 04:41:17 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.97]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4Qgt6N6fZMz4x9Q5; Wed, 14 Jun
+        2023 04:41:16 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        2A.19.07392.CE449846; Wed, 14 Jun 2023 13:41:16 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+        20230614044116epcas2p4174f088a892ca2d2d156944449f6823f~obMo6xLoD2937929379epcas2p4o;
+        Wed, 14 Jun 2023 04:41:16 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230614044116epsmtrp1930bd94b1ac3c8e43235cf98bb532903~obMo5Y_K13155031550epsmtrp17;
+        Wed, 14 Jun 2023 04:41:16 +0000 (GMT)
+X-AuditID: b6c32a47-157fd70000001ce0-0b-648944ecd760
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        D2.D0.27706.CE449846; Wed, 14 Jun 2023 13:41:16 +0900 (KST)
+Received: from ubuntu.dsn.sec.samsung.com (unknown [10.229.95.128]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230614044116epsmtip18a4e154b4e06e21e36d5302f731c43dd~obMorEBwJ1168811688epsmtip1b;
+        Wed, 14 Jun 2023 04:41:16 +0000 (GMT)
+From:   Kiwoong Kim <kwmad.kim@samsung.com>
+To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, beanhuo@micron.com,
+        adrian.hunter@intel.com, sc.suh@samsung.com, hy50.seo@samsung.com,
+        sh425.lee@samsung.com, kwangwon.min@samsung.com,
+        junwoo80.lee@samsung.com, wkon.kim@samsung.com
+Cc:     Kiwoong Kim <kwmad.kim@samsung.com>
+Subject: [PATCH v3 0/2] change UIC command handling
+Date:   Wed, 14 Jun 2023 13:31:54 +0900
+Message-Id: <cover.1686716811.git.kwmad.kim@samsung.com>
+X-Mailer: git-send-email 2.7.4
+X-Brightmail-Tracker: H4sIAAAAAAAAA0VSbUxbZRTOe+/lUha63BQY7+pYmhLDh4G1lJa7uTKSwdZkkxD3Q90g3R29
+        AtKv9BaFTRMUHLRTKVOKLDhkjUIQ01BLhbYIazEdJOIc4grqwuZYAoowKsMujFl6Uf+dc57n
+        nOc573s4KM+E8zlVWiNt0FJqIb4Lc/kzZFl/FJpUouVgFjlxvx8n56+6cHIxPIOT1++aMNK6
+        GkbJL2zzGHkt6EJI95MGhBwMDmPkrPNbjJx2d+LkpdtDONkT2EJI869BQH62tYyRX916hBUQ
+        iukfTyhs3kVEYbk2BhQb9mZc8XBhDlN84OwDipBjv6Jp7BJSwjldfbiSplS0QUBry3WqKm2F
+        XHjilPKoUioTibPEB8k8oUBLaWi5sPBkSdaxKnVkA6HgdUpdEymVUAwjPJB/2KCrMdKCSh1j
+        lAtpvUqtz9NnM5SGqdFWZGtp4yGxSJQjjRDPVld6/PO43orWBuy3Y+qBDzEDDgcSuXB08oIZ
+        7OLwiCEALSsejE3WALQtbKBs8gjA3xvtsWYQF+2Y6vkIsMAIgH0PP49lk78BXPbfB9ssnMiA
+        C7NtyDaQSKwi8GmPKwqgRBp0W24g23ECIYF/ekejMUY8C7uCG1EJLkHCy9P9KCu3H85OmaI+
+        IPEuB65M9AMWKIStvfM4GyfApYBzxx8fLrZcjGW3q4be7j1suRbarMsYG0vglQdNYJuCRoza
+        3QdYdiocn8NYl7ths//JzhAubL7IYxtT4ePLH+7o74Uds7/saCrgXx0LUS88ogyOvN8FLCDl
+        yv/zPwWgD+yh9YymgmZy9JL//qhcp3GA6E1mHh8CHy+vZvsAwgE+ADmoMJG7kN6k4nFVVN15
+        2qBTGmrUNOMD0shrtaL8pHJd5Ki1RqU496AoVyYT5+VIRXnCZO4z8olyHlFBGelqmtbThn/7
+        EE4cvx4p/aEutX5leHJrM79n6l5vWcDZ3s07/V6rs+tFviYcSDn7khcMxr2SVETvS4t/69xv
+        zcUyzT5/hu/UbjG3pdqSXFogGUxKeM3zOCPnKlK05rozKh3gdWSOLcVI7egb2eFvks/Hc2/c
+        Gbhwz4ql5/dJAmlH1q3eMtumo1Hc+DKFj6yvKUsRgeeo6a67eOP6J4uhN6fNxZlYaO+rbb3t
+        w/4vEzW6deOZ7psNI8dUUyffNuW3l3Y+qLXeGtcVfSc5k16HNm2eM3o9My5rqGAp3RU8/nQ4
+        /ifmhZvmQ1+DlHpqPFxrsj7naOucOxLT0iDXTM4MuEWhdxw/d8+ov3c8TwgxppISZ6IGhvoH
+        N/qBKxwEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrNLMWRmVeSWpSXmKPExsWy7bCSnO4bl84Ug61TuC1OPlnDZvFg3jY2
+        i5c/r7JZHHzYyWIx7cNPZovVix+wWCy6sY3JYtffZiaLrTd2sljc3HKUxeLyrjlsFt3Xd7BZ
+        LD/+j8mi6+4NRoul/96yWGy+9I3FQcDj8hVvj8V7XjJ5TFh0gNHj+/oONo+PT2+xePRtWcXo
+        8XmTnEf7gW6mAI4oLpuU1JzMstQifbsErozdhx+wFUxjrji+/jprA+Mhpi5GTg4JAROJc8un
+        MHYxcnEICexmlOiet4gRIiEpcWLncyhbWOJ+yxFWiKJvjBIff11hBkmwCWhKPL05lQkkISLQ
+        xCxxafZ0FpAEs4C6xK4JJ8BWCAsYS7zbsx/MZhFQlZh/4zs7iM0rYCEx6fIaZogNchI3z3Uy
+        T2DkWcDIsIpRMrWgODc9t9iwwDAvtVyvODG3uDQvXS85P3cTIzh8tTR3MG5f9UHvECMTB+Mh
+        RgkOZiUR3qca7SlCvCmJlVWpRfnxRaU5qcWHGKU5WJTEeS90nYwXEkhPLEnNTk0tSC2CyTJx
+        cEo1MLUt2v8scKPbjh83nljv4PZhu7m95eHMCz6rGlkM23rFbZ4mfl44qULuqPQH3h/8E3XS
+        ptsptf+7fXjl1qLT9i9EVF79EI3+oRWRyingWGzI9iT8MYNH97K1fw7+OnK017v+zOev055U
+        fldL+XL57t+1947ujE555LSy/MnvgsnqnFUTHGxMgnnfVfhzabqWMwteLFUpc7lY1txw+8Xt
+        xZOyJL5zG7nuDNv9w6ArQqU8aurc+f12ixVTkm66F3jLLL52x+1qddF3P5eIzFmrLq12fOzs
+        dd9C1q2SVWkDc/wRD5WbdUWfzrqqfZdIsDMxjvFbKd/wZt+KNdevb/U0s006bCXhoRSY++bH
+        A+a2i0osxRmJhlrMRcWJAJg/w+POAgAA
+X-CMS-MailID: 20230614044116epcas2p4174f088a892ca2d2d156944449f6823f
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230614044116epcas2p4174f088a892ca2d2d156944449f6823f
+References: <CGME20230614044116epcas2p4174f088a892ca2d2d156944449f6823f@epcas2p4.samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+v2 -> v3: rule out the change of polling w/ pmc from this thread.
+(I'll post the change later)
+v1 -> v2: remove an unused variable in __ufshcd_send_uic_cmd
 
+Kiwoong Kim (2):
+  ufs: make __ufshcd_send_uic_cmd not wrapped by host_lock
+  ufs: poll HCS.UCRDY before issuing a UIC command
 
-On 13-06-23 04:40 pm, Heikki Krogerus wrote:
-> Hi,
-> 
-> On Wed, May 31, 2023 at 08:11:14PM +0530, Prashanth K wrote:
->> Currently if we bootup a device without cable connected, then
->> usb-conn-gpio won't call set_role() since last_role is same as
->> current role. This happens because during probe last_role gets
->> initialised to zero.
->>
->> To avoid this, added a new constant in enum usb_role, last_role
->> is set to USB_ROLE_UNKNOWN before performing initial detection.
-> 
-> So why can't you fix this by just always setting the role
-> unconditionally to USB_ROLE_NONE in your probe function before the
-> initial detection?
-> 
-Hi Heikki, thats exactly what we are doing here.
+ drivers/ufs/core/ufshcd.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-+	/* Set last role to unknown before performing the initial detection */
-+	info->last_role = USB_ROLE_UNKNOWN;
-+
-  	/* Perform initial detection */
-  	usb_conn_queue_dwork(info, 0);
-
-Thanks,
-Prashanth K
-
+-- 
+2.7.4
 
