@@ -2,43 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F92472F46D
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 08:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0693572F46F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 08:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243020AbjFNGKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 02:10:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34566 "EHLO
+        id S243034AbjFNGKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 02:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234205AbjFNGKS (ORCPT
+        with ESMTP id S234356AbjFNGKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 02:10:18 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 19DC9E55
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 23:10:17 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 54E571FB;
-        Tue, 13 Jun 2023 23:11:01 -0700 (PDT)
-Received: from [10.162.42.149] (a077209.arm.com [10.162.42.149])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2D9093F71E;
-        Tue, 13 Jun 2023 23:10:14 -0700 (PDT)
-Message-ID: <7364a4fd-e1ad-9003-2a89-deb0c23c0edf@arm.com>
-Date:   Wed, 14 Jun 2023 11:40:11 +0530
+        Wed, 14 Jun 2023 02:10:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F4AE55;
+        Tue, 13 Jun 2023 23:10:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A107D63D8D;
+        Wed, 14 Jun 2023 06:10:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7329EC433C8;
+        Wed, 14 Jun 2023 06:10:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686723046;
+        bh=8V/Fk/7WEzGUAQBYpatFHYZXl7f2hEpMm3NyHxwcdMQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=o4ymrVeDx/Z9BoPgMy9b53mv0nv6rkNygWU8u3ClW08BJBBxrpAXpj4J7scKfq+sT
+         9Ij223+czfOKEi5lNsW7zlliUlWcYkULLVdWcFnmk1J6yzttqXsAqXYwpXHiXkrPti
+         9BJQjmA4zbAB+pcRWFs+e2buDjIU2VVUoTY41ZlI=
+Date:   Wed, 14 Jun 2023 08:10:42 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        kernel test robot <oliver.sang@intel.com>,
+        kernel test robot <lkp@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        =?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] usb: ch9: Replace 1-element array with flexible array
+Message-ID: <2023061434-scenic-observer-d1d4@gregkh>
+References: <20230613210400.never.078-kees@kernel.org>
+ <ZIjzGCMWrar3kf1L@work>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] Documentation/arm64: Add ptdump documentation
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, Anshuman.Khandual@arm.com
-References: <20230613064845.1882177-1-chaitanyas.prakash@arm.com>
- <5e003504-8224-8441-c1d5-a4e3327bdcc8@infradead.org>
-Content-Language: en-US
-From:   Chaitanya S Prakash <chaitanyas.prakash@arm.com>
-In-Reply-To: <5e003504-8224-8441-c1d5-a4e3327bdcc8@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <ZIjzGCMWrar3kf1L@work>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,155 +58,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 13, 2023 at 04:52:08PM -0600, Gustavo A. R. Silva wrote:
+> On Tue, Jun 13, 2023 at 02:04:04PM -0700, Kees Cook wrote:
+> > With "-fstrict-flex-arrays=3" enabled, UBSAN_BOUNDS no longer pretends
+> > 1-element arrays are unbounded. Walking wData will trigger a warning,
+> > so make it a proper flexible array. Add a union to keep the struct size
+> > identical for userspace in case anything was depending on the old size.
+> > 
+> > Reported-by: kernel test robot <oliver.sang@intel.com>
+> > Closes: https://lore.kernel.org/oe-lkp/202306102333.8f5a7443-oliver.sang@intel.com
+> > Fixes: df8fc4e934c1 ("kbuild: Enable -fstrict-flex-arrays=3")
+> 
+> I always have mixed feelings about a 'Fixes' tag applied to a commit
+> like this (one that enables a compiler option that avoids the introduction
+> of buggy code), when we are addressing the potentially buggy code that
+> the option is inteded to prevent. (thinkingface)
 
+Yeah, the original code here is not incorrect, it's that you added a new
+build warning, so this is more like an "update" :)
 
-On 6/14/23 04:34, Randy Dunlap wrote:
-> Hi--
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: kernel test robot <lkp@intel.com>
+> > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> > Cc: Dan Williams <dan.j.williams@intel.com>
+> > Cc: "Jó Ágila Bitsch" <jgilab@gmail.com>
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
 > 
-> On 6/12/23 23:48, Chaitanya S Prakash wrote:
->> ptdump is a debugfs interface used to dump the kernel page tables. It
->> provides a comprehensive overview about the kernel's virtual memory
->> layout, page table entries and associated page attributes. A document
->> detailing how to enable ptdump in the kernel and analyse its output has
->> been added.
->>
->> Cc: Catalin Marinas <catalin.marinas@arm.com>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: Jonathan Corbet <corbet@lwn.net>
->> CC: linux-arm-kernel@lists.infradead.org
->> Cc: linux-doc@vger.kernel.org
->> Cc: linux-kernel@vger.kernel.org
->> Signed-off-by: Chaitanya S Prakash <chaitanyas.prakash@arm.com>
->> ---
->>   Documentation/arm64/index.rst  |  1 +
->>   Documentation/arm64/ptdump.rst | 94 ++++++++++++++++++++++++++++++++++
->>   2 files changed, 95 insertions(+)
->>   create mode 100644 Documentation/arm64/ptdump.rst
->>
->> diff --git a/Documentation/arm64/index.rst b/Documentation/arm64/index.rst
->> index ae21f8118830..e0bda3ec2090 100644
->> --- a/Documentation/arm64/index.rst
->> +++ b/Documentation/arm64/index.rst
->> @@ -15,6 +15,7 @@ ARM64 Architecture
->>       cpu-feature-registers
->>       elf_hwcaps
->>       hugetlbpage
->> +    ptdump
->>       legacy_instructions
->>       memory
->>       memory-tagging-extension
->> diff --git a/Documentation/arm64/ptdump.rst b/Documentation/arm64/ptdump.rst
->> new file mode 100644
->> index 000000000000..296a5fe217b0
->> --- /dev/null
->> +++ b/Documentation/arm64/ptdump.rst
->> @@ -0,0 +1,94 @@
->> +======================
->> +Kernel page table dump
->> +======================
->> +
->> +ptdump is a debugfs interface that provides a detailed dump of the kernel's
->> +page tables. It offers a comprehensive overview of the kernelâ€™s virtual
->> +memory layout as well as the attributes associated with the various regions
->> +in a human-readable format. It is useful to dump the kernel page tables to
->> +verify permissions and memory types. Examining the page table entries and
->> +permissions helps identify potential security vulnerabilities such as
->> +mappings with overly permissive access rights or improper memory
->> +protections.
->> +
->> +Memory hotplug allows dynamic expansion or contraction of available memory
->> +without requiring a system reboot. To maintain consistency and integrity of
->> +memory management data structures, arm64 makes use of mem_hotplug_lock in
->> +write mode. Additionally, in read mode mem_hotplug_lock supports efficient
->> +implementation of get_online_mems and put_online_mems. This protects the
->> +offlining of memory being accessed by code.
->> +
->> +In order to dump the kernel page tables you will need to have the following
->> +configurations enabled and follow it up by mounting debugfs.::
->> +
->> + CONFIG_GENERIC_PTDUMP=y
->> + CONFIG_PTDUMP_CORE=y
->> + CONFIG_PTDUMP_DEBUGFS=y
->> +
->> + mount -t debugfs nodev /sys/kernel/debug
->> + cat /sys/kernel/debug/kernel_page_tables
->> +
->> +On analysing the output of cat /sys/kernel/debug/kernel_page_tables you can
-> 
-> Preferably quote the command.
-> This says kernel_page_tables but below it is 'kernel_page_table'.
-> Which is correct?
+> Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-The correct command is cat /sys/kernel/debug/kernel_page_tables. Sorry 
-for the confusion! I'll correct the one below.
-> 
->> +derive information about the virtual address range of the entry, followed
->> +by size of the memory region covered by this entry, the hierarchical
->> +structure of the page tables and finally the attributes associated with
->> +each page. The page attributes provide information about access permissions,
->> +execution capability, type of mapping such as leaf level PTE or block level
->> +PGD, PMD and PUD, and access status of a page within the kernel memory.
->> +Assessing these attributes can assist in understanding the memory layout,
->> +access patterns, and security characteristics of the kernel pages.
->> +
->> +Kernel virtual memory layout::
->> +
-> 
-> Is this memory layout arm64-specific or generic?
+Odd that checkpatch.pl doesn't cc: the usb lists for this file.  I'll go
+update the MAINTAINERS file with this location...
 
-Yes, it's arm64-specific
-> 
->> + start address        end address         size             attributes
->> + +---------------------------------------------------------------------------------------+
->> + | ---[ Linear Mapping start ]---------------------------------------------------------- |
->> + | ..................                                                                    |
->> + | 0xfff0000000000000-0xfff0000000210000  2112K PTE RW NX SHD AF  UXN  MEM/NORMAL-TAGGED |
->> + | 0xfff0000000210000-0xfff0000001c00000 26560K PTE ro NX SHD AF  UXN  MEM/NORMAL        |
->> + | ..................                                                                    |
->> + | ---[ Linear Mapping end ]------------------------------------------------------------ |
->> + +---------------------------------------------------------------------------------------+
->> + | ---[ Modules start ]----------------------------------------------------------------- |
->> + | ..................                                                                    |
->> + | 0xffff800000000000-0xffff800008000000   128M PTE                                      |
->> + | ..................                                                                    |
->> + | ---[ Modules end ]------------------------------------------------------------------- |
->> + +---------------------------------------------------------------------------------------+
->> + | ---[ vmalloc() area ]---------------------------------------------------------------- |
->> + | ..................                                                                    |
->> + | 0xffff800008010000-0xffff800008200000  1984K PTE ro x  SHD AF       UXN  MEM/NORMAL   |
->> + | 0xffff800008200000-0xffff800008e00000    12M PTE ro x  SHD AF  CON  UXN  MEM/NORMAL   |
->> + | ..................                                                                    |
->> + | ---[ vmalloc() end ]----------------------------------------------------------------- |
->> + +---------------------------------------------------------------------------------------+
->> + | ---[ Fixmap start ]------------------------------------------------------------------ |
->> + | ..................                                                                    |
->> + | 0xfffffbfffdb80000-0xfffffbfffdb90000    64K PTE ro x  SHD AF  UXN  MEM/NORMAL        |
->> + | 0xfffffbfffdb90000-0xfffffbfffdba0000    64K PTE ro NX SHD AF  UXN  MEM/NORMAL        |
->> + | ..................                                                                    |
->> + | ---[ Fixmap end ]-------------------------------------------------------------------- |
->> + +---------------------------------------------------------------------------------------+
->> + | ---[ PCI I/O start ]----------------------------------------------------------------- |
->> + | ..................                                                                    |
->> + | 0xfffffbfffe800000-0xfffffbffff800000    16M PTE                                      |
->> + | ..................                                                                    |
->> + | ---[ PCI I/O end ]------------------------------------------------------------------- |
->> + +---------------------------------------------------------------------------------------+
->> + | ---[ vmemmap start ]----------------------------------------------------------------- |
->> + | ..................                                                                    |
->> + | 0xfffffc0002000000-0xfffffc0002200000     2M PTE RW NX SHD AF  UXN  MEM/NORMAL        |
->> + | 0xfffffc0002200000-0xfffffc0020000000   478M PTE                                      |
->> + | ..................                                                                    |
->> + | ---[ vmemmap end ]------------------------------------------------------------------- |
->> + +---------------------------------------------------------------------------------------+
->> +
->> +cat /sys/kernel/debug/kernel_page_table::
->> +
->> + 0xfff0000001c00000-0xfff0000080000000     2020M PTE  RW NX SHD AF   UXN    MEM/NORMAL-TAGGED
->> + 0xfff0000080000000-0xfff0000800000000       30G PMD
->> + 0xfff0000800000000-0xfff0000800700000        7M PTE  RW NX SHD AF   UXN    MEM/NORMAL-TAGGED
->> + 0xfff0000800700000-0xfff0000800710000       64K PTE  ro NX SHD AF   UXN    MEM/NORMAL-TAGGED
->> + 0xfff0000800710000-0xfff0000880000000  2089920K PTE  RW NX SHD AF   UXN    MEM/NORMAL-TAGGED
->> + 0xfff0000880000000-0xfff0040000000000     4062G PMD
->> + 0xfff0040000000000-0xffff800000000000     3964T PGD
-> 
-> thanks.
+thanks,
+
+greg k-h
