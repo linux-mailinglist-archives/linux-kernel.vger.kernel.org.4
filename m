@@ -2,110 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB3EF72FD58
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBCD572FD5B
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244272AbjFNLrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 07:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59672 "EHLO
+        id S243810AbjFNLrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 07:47:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239824AbjFNLrC (ORCPT
+        with ESMTP id S241042AbjFNLrd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 07:47:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60918A2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 04:47:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD21F63F8D
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:47:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C5BAC433C0;
-        Wed, 14 Jun 2023 11:46:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686743220;
-        bh=hUgVO/GCrrBC8yyi34t2DrgRbyXURmTA1orcAkAe0pA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CphnQVIG1x8bMDw09c1e9AWm29ATdgRMUlx3PSedKkyJy0ap3QEs4UV+c07hXSFeO
-         0jPIssvrXAQehQdPfmilN6fdB4VSupZzo/I7vCFkRPHKQbalUvoYU1dRARwQ3JxviA
-         JZvOdzFkKBLPHa+UuEo7Qw1vPjozqA2b5c8GvnDuHOe4xkOMe0HFEWnk0cFZyFt0lz
-         8yHHvRvUDWLjYYgOnIdw/lqs4PshJeIOJY3HIJeDUIwW1u8Ry5EzhPHIplJTzlbGdk
-         g0fIh7WdFMSet/FUInjApJGDJGRJU3rlUNwRL9ceqE/Rq5wAplLeHDEKZGwYTsXEXw
-         pGtlvS18y+Nmw==
-Date:   Wed, 14 Jun 2023 14:46:27 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Peng Zhang <zhangpeng362@huawei.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, wangkefeng.wang@huawei.com,
-        sunnanyong@huawei.com
-Subject: Re: [PATCH] memblock: use the helper macro for_each_zone
-Message-ID: <20230614114627.GW52412@kernel.org>
-References: <20230612125102.1674568-1-zhangpeng362@huawei.com>
+        Wed, 14 Jun 2023 07:47:33 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A769510D8;
+        Wed, 14 Jun 2023 04:47:26 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35EBlE1E109706;
+        Wed, 14 Jun 2023 06:47:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1686743234;
+        bh=sA/wHQWGukp8xdptR9h0VboCMWUkFR4POYrWrCGHCeE=;
+        h=From:To:CC:Subject:Date;
+        b=aiOCextLJUKAYz8Ee3M6kzNTrmzmiNHam9Dn6cIopUZoWQot4zqGloswc3fGqZaX+
+         LbQSLiJO1EC0FYN3KX3uUrOzl+a5CzeOYhoP+Ym/hKPFgD178Ax/L/vqlLue456MUI
+         +i1ZFjEHWbVimurcW1nUH0U5adayfHdxWUZ0nRIo=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35EBlEvP110320
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 14 Jun 2023 06:47:14 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 14
+ Jun 2023 06:47:14 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 14 Jun 2023 06:47:14 -0500
+Received: from uda0500640.dal.design.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35EBlA24044618;
+        Wed, 14 Jun 2023 06:47:11 -0500
+From:   Ravi Gunasekaran <r-gunasekaran@ti.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <bigeasy@linutronix.de>,
+        <simon.horman@corigine.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <rogerq@kernel.org>, <r-gunasekaran@ti.com>
+Subject: [PATCH v2 net-next] net: hsr: Disable promiscuous mode in offload mode
+Date:   Wed, 14 Jun 2023 17:17:10 +0530
+Message-ID: <20230614114710.31400-1-r-gunasekaran@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612125102.1674568-1-zhangpeng362@huawei.com>
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 08:51:02PM +0800, Peng Zhang wrote:
-> From: ZhangPeng <zhangpeng362@huawei.com>
-> 
-> Let's use the helper macro for_each_zone to iterate over all memory
-> zones and reset the node managed pages. After that, we can remove the
-> unused function reset_node_managed_pages.
+When port-to-port forwarding for interfaces in HSR node is enabled,
+disable promiscuous mode since L2 frame forward happens at the
+offloaded hardware.
 
-Are you sure it's safe to use for_each_zone() in all users of
-reset_all_zones_managed_pages()?
+Signed-off-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
+---
+Changes from v1:
+===============
+* Changed the data type of "fwd_offloaded" from "unsigned int" to "bool"
+  and moved it below "net_id" struct member as per Paolo's comment.
+* Collected Reviewed-by tag from v1 patch.
+
+v1: https://lore.kernel.org/all/20230612093933.13267-1-r-gunasekaran@ti.com/
+
+ net/hsr/hsr_device.c |  5 +++++
+ net/hsr/hsr_main.h   |  1 +
+ net/hsr/hsr_slave.c  | 15 +++++++++++----
+ 3 files changed, 17 insertions(+), 4 deletions(-)
+
+diff --git a/net/hsr/hsr_device.c b/net/hsr/hsr_device.c
+index 5a236aae2366..306f942c3b28 100644
+--- a/net/hsr/hsr_device.c
++++ b/net/hsr/hsr_device.c
+@@ -531,6 +531,11 @@ int hsr_dev_finalize(struct net_device *hsr_dev, struct net_device *slave[2],
+ 	if (res)
+ 		goto err_add_master;
  
-> Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
-> ---
->  mm/memblock.c | 14 +++-----------
->  1 file changed, 3 insertions(+), 11 deletions(-)
-> 
-> diff --git a/mm/memblock.c b/mm/memblock.c
-> index da4264528e1e..af552604c3fb 100644
-> --- a/mm/memblock.c
-> +++ b/mm/memblock.c
-> @@ -2122,23 +2122,15 @@ static unsigned long __init free_low_memory_core_early(void)
->  
->  static int reset_managed_pages_done __initdata;
->  
-> -static void __init reset_node_managed_pages(pg_data_t *pgdat)
-> -{
-> -	struct zone *z;
-> -
-> -	for (z = pgdat->node_zones; z < pgdat->node_zones + MAX_NR_ZONES; z++)
-> -		atomic_long_set(&z->managed_pages, 0);
-> -}
-> -
->  void __init reset_all_zones_managed_pages(void)
->  {
-> -	struct pglist_data *pgdat;
-> +	struct zone *z;
->  
->  	if (reset_managed_pages_done)
->  		return;
->  
-> -	for_each_online_pgdat(pgdat)
-> -		reset_node_managed_pages(pgdat);
-> +	for_each_zone(z)
-> +		atomic_long_set(&z->managed_pages, 0);
->  
->  	reset_managed_pages_done = 1;
->  }
-> -- 
-> 2.25.1
-> 
-
++	/* HSR forwarding offload supported in lower device? */
++	if ((slave[0]->features & NETIF_F_HW_HSR_FWD) &&
++	    (slave[1]->features & NETIF_F_HW_HSR_FWD))
++		hsr->fwd_offloaded = true;
++
+ 	res = register_netdevice(hsr_dev);
+ 	if (res)
+ 		goto err_unregister;
+diff --git a/net/hsr/hsr_main.h b/net/hsr/hsr_main.h
+index 5584c80a5c79..6851e33df7d1 100644
+--- a/net/hsr/hsr_main.h
++++ b/net/hsr/hsr_main.h
+@@ -208,6 +208,7 @@ struct hsr_priv {
+ 	u8 net_id;		/* for PRP, it occupies most significant 3 bits
+ 				 * of lan_id
+ 				 */
++	bool fwd_offloaded;	/* Forwarding offloaded to HW */
+ 	unsigned char		sup_multicast_addr[ETH_ALEN] __aligned(sizeof(u16));
+ 				/* Align to u16 boundary to avoid unaligned access
+ 				 * in ether_addr_equal
+diff --git a/net/hsr/hsr_slave.c b/net/hsr/hsr_slave.c
+index b70e6bbf6021..e5742f2a2d52 100644
+--- a/net/hsr/hsr_slave.c
++++ b/net/hsr/hsr_slave.c
+@@ -131,9 +131,14 @@ static int hsr_portdev_setup(struct hsr_priv *hsr, struct net_device *dev,
+ 	struct hsr_port *master;
+ 	int res;
+ 
+-	res = dev_set_promiscuity(dev, 1);
+-	if (res)
+-		return res;
++	/* Don't use promiscuous mode for offload since L2 frame forward
++	 * happens at the offloaded hardware.
++	 */
++	if (!port->hsr->fwd_offloaded) {
++		res = dev_set_promiscuity(dev, 1);
++		if (res)
++			return res;
++	}
+ 
+ 	master = hsr_port_get_hsr(hsr, HSR_PT_MASTER);
+ 	hsr_dev = master->dev;
+@@ -152,7 +157,9 @@ static int hsr_portdev_setup(struct hsr_priv *hsr, struct net_device *dev,
+ fail_rx_handler:
+ 	netdev_upper_dev_unlink(dev, hsr_dev);
+ fail_upper_dev_link:
+-	dev_set_promiscuity(dev, -1);
++	if (!port->hsr->fwd_offloaded)
++		dev_set_promiscuity(dev, -1);
++
+ 	return res;
+ }
+ 
 -- 
-Sincerely yours,
-Mike.
+2.17.1
+
