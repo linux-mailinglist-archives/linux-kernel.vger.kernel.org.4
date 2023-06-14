@@ -2,234 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21343730046
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 15:40:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE076730048
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 15:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245044AbjFNNkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 09:40:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
+        id S245047AbjFNNmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 09:42:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235356AbjFNNki (ORCPT
+        with ESMTP id S235356AbjFNNmm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 09:40:38 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEEA10FE;
-        Wed, 14 Jun 2023 06:40:37 -0700 (PDT)
-Received: from mercury (dyndsl-091-248-213-214.ewe-ip-backbone.de [91.248.213.214])
+        Wed, 14 Jun 2023 09:42:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B5D180;
+        Wed, 14 Jun 2023 06:42:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DBD206606F20;
-        Wed, 14 Jun 2023 14:40:35 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686750036;
-        bh=PBYQcUFjQMg4J0fJHCjFD2l4P5QvWdlw692+eiww3G4=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EFA0860B8B;
+        Wed, 14 Jun 2023 13:42:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EA6EC433C9;
+        Wed, 14 Jun 2023 13:42:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686750160;
+        bh=Nb7CPj9aCc9W/md2YbvPak2r1D+IBPGs4lsh9DGHjqI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=arFK4HIV6P8nM46DlbdXlMJuYDrRy5fRJxQF3mPt1ytPQvXsE6J4VmNVAGwoB6KtE
-         Gl3Z7np7uwlhbbWxD6yltL2Q3M1yUNrGBrwmGSQbK/ONj8bPLvQzzkomOZMO0l4BWt
-         x2BbrB8akghj0wD7OdIlYWjv8q8e8zHllbAL6XGnoMdT/LtknA/GXfCtZ2BtxygnnR
-         rAfJWwZVz0hFRp3N20y53Trjavb0daJ19sOST6iuCTZ7TcGO4SW+hxZzZc4unCPZPh
-         v5O4bG+zKyD8UQq/6elZx39/OrQbZMnaWZ5j7JBIDt/CvMPNOukrkT46FMKat/jIl3
-         XsXhxkzE5XQ9w==
-Received: by mercury (Postfix, from userid 1000)
-        id 0F7C31060A04; Wed, 14 Jun 2023 15:40:34 +0200 (CEST)
-Date:   Wed, 14 Jun 2023 15:40:34 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Vincent Legoll <vincent.legoll@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 00/25] Add perf support to the rockchip-dfi driver
-Message-ID: <20230614134034.3p3p75a3jophi2eu@mercury.elektranox.org>
-References: <20230524083153.2046084-1-s.hauer@pengutronix.de>
+        b=tYm9xOOmyBSZSk1WWZ2/9FZecbrunSb9YwoFSkRns5bi9Jk9X95EKx9cpXdX3nfCC
+         K8+7KtxvqZWcDeRygcMXc4uqXexSvcD8PsUG5+LmJjEFlmmt/JvmmWQRnni3zAgieA
+         ZiRrtyY6qg4htrRD7MHNI0O2WOwHXr/A3m9Mx1le1hHjHl7m1dbtMFuRVXfbaRVhGk
+         cqBZs/fAVkTtgCTKyKs4pL93fwwLxXt/OivL6Tg2VUrPN+HxqwhUAcW8K3B2HZaWAU
+         wLDzqCz0AoKdw1nA8ou7+V/+JxZVGrnYIRB+TM0aeMLcTdi8tBtaejdsRi9RtMV7Rj
+         NGc7A7e4MmfOQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 87F7D40692; Wed, 14 Jun 2023 10:42:37 -0300 (-03)
+Date:   Wed, 14 Jun 2023 10:42:37 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ravi Bangoria <ravi.bangoria@amd.com>
+Cc:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] perf tool x86: Fix perf_env memory leak
+Message-ID: <ZInDzUVOyuUda7A7@kernel.org>
+References: <20230613235416.1650755-1-irogers@google.com>
+ <ZIkShy2yj1b0+GDv@kernel.org>
+ <60477a13-1b8b-5aad-b635-73b9d8e3f734@amd.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="o7ugbz6dwi4olws4"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230524083153.2046084-1-s.hauer@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <60477a13-1b8b-5aad-b635-73b9d8e3f734@amd.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Em Wed, Jun 14, 2023 at 08:52:43AM +0530, Ravi Bangoria escreveu:
+> On 14-Jun-23 6:36 AM, Arnaldo Carvalho de Melo wrote:
+> > Em Tue, Jun 13, 2023 at 04:54:16PM -0700, Ian Rogers escreveu:
+> >> Found by leak sanitizer:
+> >> ```
+> >> ==1632594==ERROR: LeakSanitizer: detected memory leaks
+> >>
+> >> Direct leak of 21 byte(s) in 1 object(s) allocated from:
+> >>     #0 0x7f2953a7077b in __interceptor_strdup ../../../../src/libsanitizer/asan/asan_interceptors.cpp:439
+> >>     #1 0x556701d6fbbf in perf_env__read_cpuid util/env.c:369
+> >>     #2 0x556701d70589 in perf_env__cpuid util/env.c:465
+> >>     #3 0x55670204bba2 in x86__is_amd_cpu arch/x86/util/env.c:14
+> >>     #4 0x5567020487a2 in arch__post_evsel_config arch/x86/util/evsel.c:83
+> >>     #5 0x556701d8f78b in evsel__config util/evsel.c:1366
+> >>     #6 0x556701ef5872 in evlist__config util/record.c:108
+> >>     #7 0x556701cd6bcd in test__PERF_RECORD tests/perf-record.c:112
+> >>     #8 0x556701cacd07 in run_test tests/builtin-test.c:236
+> >>     #9 0x556701cacfac in test_and_print tests/builtin-test.c:265
+> >>     #10 0x556701cadddb in __cmd_test tests/builtin-test.c:402
+> >>     #11 0x556701caf2aa in cmd_test tests/builtin-test.c:559
+> >>     #12 0x556701d3b557 in run_builtin tools/perf/perf.c:323
+> >>     #13 0x556701d3bac8 in handle_internal_command tools/perf/perf.c:377
+> >>     #14 0x556701d3be90 in run_argv tools/perf/perf.c:421
+> >>     #15 0x556701d3c3f8 in main tools/perf/perf.c:537
+> >>     #16 0x7f2952a46189 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58
+> >>
+> >> SUMMARY: AddressSanitizer: 21 byte(s) leaked in 1 allocation(s).
+> >> ```
+> >>
+> >> Fixes: daea405f5f06 ("perf tool x86: Consolidate is_amd check into single function")
+> > 
+> > Its a fix, yes, but it is not for this daea405f5f06 patch, he just moved the
+> > perf_mem_is_amd_cpu(), that was leaky, to a different file, the fixes is
+> > for  for:
+> > 
+> > f7b58cbdb3ff36eb ("perf mem/c2c: Add load store event mappings for
+> > AMD").
+> > 
+> > Right?
+> 
+> Yeah that's correct "Fixes" commit. Thanks for the fix Ian!
 
---o7ugbz6dwi4olws4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks, I'm taking that as an:
 
-Hi,
+Acked-by: Ravi Bangoria <ravi.bangoria@amd.com>
 
-On Wed, May 24, 2023 at 10:31:28AM +0200, Sascha Hauer wrote:
-> This is v5 of the series adding perf support to the rockchip DFI driver.
->=20
-> A lot has changed in the perf driver since v4. First of all the review
-> feedback from Robin and Jonathan has been integrated. The perf driver
-> now not only supports monitoring the total DDR utilization, but also the
-> individual channels. I also reworked the way the raw 32bit counter
-> values are summed up to 64bit perf values, so hopefully the code is
-> easier to follow now.
->=20
-> lockdep found out that that locking in the perf driver was broken, so I
-> reworked that as well. None of the perf hooks allows locking with
-> mutexes or spinlocks, so in perf it's not possible to enable the DFI
-> controller when needed. Instead I now unconditionally enable the DFI
-> controller during probe when perf is enabled.
->=20
-> Furthermore the hrtimer I use for reading out the hardware counter
-> values before they overflow race with perf. Now a seqlock is used to
-> prevent that.
->=20
-> The RK3588 device tree changes for the DFI were not part of v4. As
-> Vincent Legoll showed interest in testing this series the necessary
-> device tree changes are now part of this series.
+Ok?
 
-I tested the series on RK3588 EVB1. The read/write byts looks
-sensible. Sometimes cycles reads unrealistic values, though:
-
- Performance counter stats for 'system wide':
-
-18446744070475110400      rockchip_ddr/cycles/                             =
-                 =20
-            828.63 MB   rockchip_ddr/read-bytes/                           =
-               =20
-            207.19 MB   rockchip_ddr/read-bytes0/                          =
-               =20
-            207.15 MB   rockchip_ddr/read-bytes1/                          =
-               =20
-            207.14 MB   rockchip_ddr/read-bytes2/                          =
-               =20
-            207.15 MB   rockchip_ddr/read-bytes3/                          =
-               =20
-              1.48 MB   rockchip_ddr/write-bytes/                          =
-               =20
-              0.37 MB   rockchip_ddr/write-bytes0/                         =
-               =20
-              0.37 MB   rockchip_ddr/write-bytes1/                         =
-               =20
-              0.37 MB   rockchip_ddr/write-bytes2/                         =
-               =20
-              0.38 MB   rockchip_ddr/write-bytes3/                         =
-               =20
-            830.12 MB   rockchip_ddr/bytes/                                =
-               =20
-
-       1.004239766 seconds time elapsed
-
-(This is with memdump running in parallel)
-
-Otherwise the series is
-
-Tested-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-
--- Sebastian
-
-> Changes since v4:
-> - Add device tree changes for RK3588
-> - Use seqlock to protect perf counter values from hrtimer
-> - Unconditionally enable DFI when perf is enabled
-> - Bring back changes to dts/binding patches that were lost in v4
->=20
-> Changes since v3:
-> - Add RK3588 support
->=20
-> Changes since v2:
-> - Fix broken reference to binding
-> - Add Reviewed-by from Rob
->=20
-> Changes since v1:
-> - Fix example to actually match the binding and fix the warnings resulted=
- thereof
-> - Make addition of rockchip,rk3568-dfi an extra patch
->=20
-> Sascha Hauer (25):
->   PM / devfreq: rockchip-dfi: Make pmu regmap mandatory
->   PM / devfreq: rockchip-dfi: Embed desc into private data struct
->   PM / devfreq: rockchip-dfi: use consistent name for private data
->     struct
->   PM / devfreq: rockchip-dfi: Add SoC specific init function
->   PM / devfreq: rockchip-dfi: dfi store raw values in counter struct
->   PM / devfreq: rockchip-dfi: Use free running counter
->   PM / devfreq: rockchip-dfi: introduce channel mask
->   PM / devfreq: rk3399_dmc,dfi: generalize DDRTYPE defines
->   PM / devfreq: rockchip-dfi: Clean up DDR type register defines
->   PM / devfreq: rockchip-dfi: Add RK3568 support
->   PM / devfreq: rockchip-dfi: Handle LPDDR2 correctly
->   PM / devfreq: rockchip-dfi: Handle LPDDR4X
->   PM / devfreq: rockchip-dfi: Pass private data struct to internal
->     functions
->   PM / devfreq: rockchip-dfi: Prepare for multiple users
->   PM / devfreq: rockchip-dfi: give variable a better name
->   PM / devfreq: rockchip-dfi: Add perf support
->   PM / devfreq: rockchip-dfi: make register stride SoC specific
->   PM / devfreq: rockchip-dfi: account for multiple DDRMON_CTRL registers
->   PM / devfreq: rockchip-dfi: add support for RK3588
->   dt-bindings: devfreq: event: convert Rockchip DFI binding to yaml
->   dt-bindings: devfreq: event: rockchip,dfi: Add rk3568 support
->   dt-bindings: devfreq: event: rockchip,dfi: Add rk3588 support
->   arm64: dts: rockchip: rk3399: Enable DFI
->   arm64: dts: rockchip: rk356x: Add DFI
->   arm64: dts: rockchip: rk3588s: Add DFI
->=20
->  .../bindings/devfreq/event/rockchip,dfi.yaml  |  84 ++
->  .../bindings/devfreq/event/rockchip-dfi.txt   |  18 -
->  .../rockchip,rk3399-dmc.yaml                  |   2 +-
->  arch/arm64/boot/dts/rockchip/rk3399.dtsi      |   1 -
->  arch/arm64/boot/dts/rockchip/rk356x.dtsi      |   7 +
->  arch/arm64/boot/dts/rockchip/rk3588s.dtsi     |  16 +
->  drivers/devfreq/event/rockchip-dfi.c          | 796 +++++++++++++++---
->  drivers/devfreq/rk3399_dmc.c                  |  10 +-
->  include/soc/rockchip/rk3399_grf.h             |   9 +-
->  include/soc/rockchip/rk3568_grf.h             |  13 +
->  include/soc/rockchip/rk3588_grf.h             |  18 +
->  include/soc/rockchip/rockchip_grf.h           |  18 +
->  12 files changed, 854 insertions(+), 138 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/devfreq/event/rockc=
-hip,dfi.yaml
->  delete mode 100644 Documentation/devicetree/bindings/devfreq/event/rockc=
-hip-dfi.txt
->  create mode 100644 include/soc/rockchip/rk3568_grf.h
->  create mode 100644 include/soc/rockchip/rk3588_grf.h
->  create mode 100644 include/soc/rockchip/rockchip_grf.h
->=20
-> --=20
-> 2.39.2
->=20
-
---o7ugbz6dwi4olws4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSJw00ACgkQ2O7X88g7
-+pqqmg//ZLfOtGMx2p1VeLXg8eFmo95vhmxSFozhTnnAQYb5Zay290jo4HZyard5
-JQjWZuCa+4yxDg1H0r2i/4Ba8UT6BXGfYi0nVOM/Jc61TTYXlypIwTyb8t0O9PnW
-RwGiUF6ftkO2B+J29AvgTzDDXYCIOnUgcutXJoKChkTN25oFq5D88XPn2jy6crmg
-jXRlWQO4hi1Znh3IyQ1bY93Kui4JzrU3qXgi+06aCf8ADmDgjYxu33pJMkqXzJSx
-7EErhr77XvssrnPcJCc/EEfsGOjOOOVaAIFRUr7qhSI/us3K8/Ghnb6ZIDnvnXXp
-SEL7f2JvZknXvhAILe4xmPBfqqP7cGoh5W9IPQpTPz48sPWGhLxqZdfWfwjR+RJg
-6zycFqoOyFtZOucNR0BUQhLdj/R9ouc6Ya1uq1zupL3BoGNd815jpWqjlHV+qu/S
-2Jr8NvyTg4SwWiggYyRydLPESJka06AAwkHFFvBxajQwsRECt6DZMF46Jsfbj69l
-dzp7g5l9e79GQJ4jF8OTjQkZC05CdKLzIy7rKYsiEQt9HScCww2r6Er9mjj+i3PA
-6d3aKUZ1mf3ERcIBSHmtSGJDr2mYT0Q3wr3QBcALKcKPkb7qk5temqjI67fknOzi
-eS4cpLgRj38ZT4+0dJYsAVZe8XNbtw+i+/7ges94PAZEttg+iHk=
-=nxkL
------END PGP SIGNATURE-----
-
---o7ugbz6dwi4olws4--
+- Arnaldo
