@@ -2,110 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B237C72F65F
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 09:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3547B72F657
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 09:30:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243202AbjFNHcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 03:32:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47846 "EHLO
+        id S235165AbjFNHa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 03:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243437AbjFNH3t (ORCPT
+        with ESMTP id S234764AbjFNHaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 03:29:49 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19A910C6;
-        Wed, 14 Jun 2023 00:29:45 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f8d176396bso3045705e9.2;
-        Wed, 14 Jun 2023 00:29:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686727784; x=1689319784;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=kQh+i2qewEJ5nIFSelYX9sKtVjFZOZ+RgXX/lYenfFQ=;
-        b=S/YQ+11NAf7qreGezjRV9yfsyV7pNUapi0EPE8PP9I0aFcB/TsqJj+a/HenDT2bn1z
-         k7STkqr7yezK+s6GS1AoYcemFC1JVnkn+HCN9StZ5lc/hx253Yss7oazMT9uAXSeH+nb
-         YraIAtMvnGRb1LMlOTKyZ2h4kmu+ntNJ3YtiEBcMQAxZYoekucbmTwOmbi7Vvyrnggjr
-         9hStTPvaQRzEpEMgTvaQv9yH6Q4/DzZZycIE08YF7Dt9NfqVSQFpSjPlbRJNjzNz6Leb
-         PdZ1Yp495cJgBw/YWigzd+H6zRVDRpQuj6a9f+0b1cnbYD5+sAuweGGqduyIJ/vc25us
-         X/5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686727784; x=1689319784;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kQh+i2qewEJ5nIFSelYX9sKtVjFZOZ+RgXX/lYenfFQ=;
-        b=lez/lNluZ6f4Q82VHGut7LOFWVYYq8SNem7CuVIvym7LFrw2scgbHbMCfdkel2vHhZ
-         6nh0r79kxNJ/mmhhli+WZgXz43XDAzw0wVIuap8EGESwolvBRjh8YR7cMka4nmvmArRk
-         zYtNRBqxaSag7o9c07NRQSHqnZjeSxcmxQNxBkbHl3qqO4aGD55aQDV3ZK+1QPBq3G/m
-         wRoOIfQA9ms19PlrSaWe1ErTAOyPd0MLVooYU5KDEaadWYqgy/wxNg4A1ha/+cw8AKyD
-         OMZ6Zm0FNV+LcOYJPPJav3mIk88Omgn8LCLbVOLoap3KOlDNuLVyi/FheCLT/edb1R2T
-         Nlkw==
-X-Gm-Message-State: AC+VfDwNYF4vw3w9D65Lx2GGXyC5emWZXcMafvhuGeLO0k+bpszjoYAW
-        2EwJtYm2UKDkJ5z6Fzfy02s=
-X-Google-Smtp-Source: ACHHUZ61Q0pJnWxc3jjFrsz88PyYYxqooZdRMqUg+sTdEFjrw0hzq2gAWTF6R2U4AfzsQGJgMtcvtQ==
-X-Received: by 2002:a05:6000:88:b0:30a:bdfd:5c3c with SMTP id m8-20020a056000008800b0030abdfd5c3cmr8491423wrx.17.1686727784095;
-        Wed, 14 Jun 2023 00:29:44 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id 4-20020a05600c024400b003f60101074dsm16502798wmj.33.2023.06.14.00.29.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 00:29:43 -0700 (PDT)
-Date:   Wed, 14 Jun 2023 10:29:40 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net v2 2/7] net: dsa: mt7530: fix trapping frames with
- multiple CPU ports on MT7530
-Message-ID: <20230614072940.zd7kxu22u4snuf3n@skbuf>
-References: <20230613172402.grdpgago6in4jogq@skbuf>
- <ca78b2f9-bf98-af26-0267-60d2638f7f00@arinc9.com>
- <20230613173908.iuofbuvkanwyr7as@skbuf>
- <edcbe326-c456-06ef-373b-313e780209de@arinc9.com>
- <20230613201850.5g4u3wf2kllmlk27@skbuf>
- <4a2fb3ac-ccad-f56e-4951-e5a5cb80dd1b@arinc9.com>
- <20230613205915.rmpuqq7ahmd7taeq@skbuf>
- <dd0d716e-8fdc-b6dc-3870-e7e524e8bf49@arinc9.com>
- <20230613211432.dc66py7nh34ehiv4@skbuf>
- <ba072bab-a6af-b6bf-e3c2-de07b1003d41@arinc9.com>
+        Wed, 14 Jun 2023 03:30:25 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03CBD1B2;
+        Wed, 14 Jun 2023 00:30:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686727823; x=1718263823;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=HjFJBYBcJYWA5zv1dT/4g5HXReVbrB41cEEH1MD9Xw8=;
+  b=UCnoMT5nOJuMfIgV1NieeP4Wx6iC70x4dwTawfLwJy/zKlveMWuisEIL
+   ASeq4QXwYpPKoxY74hH6kgIjD8JujdjJWYjdK2HDP8Q3gfGJkEwaos5dX
+   brCur92Hnkdj+OvK86siUuOM8+Zw+0MkQATjm93f81CAWdQd126095xOn
+   Yqzn4y1d0lOs1C6fyejRCV9q5kg1borVTWv9M0oPI+jREVvH5Fy9Pk6aA
+   2G05x+S4AMqQMV3FwPSafDMxN24/h83PoHMvzFGNww194CdDwC/B07eos
+   owH2djD4hjNHlza9FiDAHMlHFa9cLn+jskdn1nJhGbxAw9VZbueHecd2j
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="338177154"
+X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
+   d="scan'208";a="338177154"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 00:30:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="689301637"
+X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
+   d="scan'208";a="689301637"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.60.240])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 00:30:05 -0700
+Message-ID: <21237298-fbb3-7fa6-0ea5-15bf3eab61b7@intel.com>
+Date:   Wed, 14 Jun 2023 10:30:01 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ba072bab-a6af-b6bf-e3c2-de07b1003d41@arinc9.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.12.0
+Subject: Re: [PATCH V1 2/2] mmc: sdhci-pci-o2micro: add Bayhub new chip GG8
+ support
+Content-Language: en-US
+To:     Chevron Li <chevron_li@126.com>, ulf.hansson@linaro.org,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     shaper.liu@bayhubtech.com, xiaoguang.yu@bayhubtech.com,
+        shirley.her@bayhubtech.com, chevron.li@bayhubtech.com
+References: <20230607014812.30104-1-chevron_li@126.com>
+ <20230607014812.30104-2-chevron_li@126.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230607014812.30104-2-chevron_li@126.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 10:03:04AM +0300, Arınç ÜNAL wrote:
-> Makes sense. I have prepared v5 that addresses everything so far, should I
-> send it today now that Russell has reviewed v4?
+On 7/06/23 04:48, Chevron Li wrote:
+> From: Chevron Li <chevron.li@bayhubtech.com>
 > 
-> Arınç
+> Add Bayhub new chip GG8 support for SD express card.
+> This patch depends on patch 1/2.
 
-Let's wait for Russell to ack that all discussions on v2-v4 are closed
-and that there aren't any follow-up questions there.
+Patch subject should be different from patch 1
+
+> 
+> Signed-off-by: Chevron Li <chevron.li@bayhubtech.com>
+
+Some comments below.
+
+> ---
+> Change in V1:
+> 1.Implement the SD express card callback routine.
+> 2.Add SD express card support for Bayhub GG8 chip.
+> ---
+>  drivers/mmc/host/sdhci-pci-o2micro.c | 61 +++++++++++++++++++++++++++-
+>  1 file changed, 60 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/mmc/host/sdhci-pci-o2micro.c b/drivers/mmc/host/sdhci-pci-o2micro.c
+> index 8243a63b3c81..b2d8ddbb4095 100644
+> --- a/drivers/mmc/host/sdhci-pci-o2micro.c
+> +++ b/drivers/mmc/host/sdhci-pci-o2micro.c
+> @@ -21,6 +21,7 @@
+>   * O2Micro device registers
+>   */
+>  
+> +#define O2_SD_PCIE_SWITCH	0x54
+>  #define O2_SD_MISC_REG5		0x64
+>  #define O2_SD_LD0_CTRL		0x68
+>  #define O2_SD_DEV_CTRL		0x88
+> @@ -631,6 +632,63 @@ static void sdhci_pci_o2_set_clock(struct sdhci_host *host, unsigned int clock)
+>  	sdhci_o2_enable_clk(host, clk);
+>  }
+>  
+> +static u8 sdhci_o2_sd_express_clkq_assert(struct sdhci_host *host)
+> +{
+> +	return sdhci_readb(host, O2_SD_EXP_INT_REG);
+> +}
+> +
+> +static int sdhci_pci_o2_init_sd_express(struct mmc_host *mmc, struct mmc_ios *ios)
+> +{
+> +	struct sdhci_host *host = mmc_priv(mmc);
+> +	struct sdhci_pci_slot *slot = sdhci_priv(host);
+> +	struct sdhci_pci_chip *chip = slot->chip;
+> +	u8 scratch8 = 0;
+> +	u16 scratch16 = 0;
+> +	bool ret = false;
+
+ret should be an int and does not need to be initialized.
+
+> +
+> +	/* Disable clock */
+> +	sdhci_writeb(host, 0, SDHCI_CLOCK_CONTROL);
+> +
+> +	/* Set VDD2 voltage*/
+> +	scratch8 = sdhci_readb(host, SDHCI_POWER_CONTROL);
+> +	scratch8 &= 0x0F;
+> +	if ((host->mmc->ios.timing == MMC_TIMING_SD_EXP_1_2V) &&
+> +		(host->mmc->caps2 & MMC_CAP2_SD_EXP_1_2V)) {
+
+Unnecessary parentheses
+
+> +		scratch8 |= BIT(4) | BIT(7);
+> +	} else
+
+braces {} should be used on all arms of this statement
+
+Have a look at the output of checkpatch.pl --strict
+
+There are "Alignment should match open parenthesis"
+messages also
+
+> +		scratch8 |= BIT(4) | BIT(5) | BIT(7);
+
+Please use SDHCI_VDD2_POWER_ON, SDHCI_VDD2_POWER_120, SDHCI_VDD2_POWER_180
+
+
+> +	sdhci_writeb(host, scratch8, SDHCI_POWER_CONTROL);
+> +
+> +	/* UnLock WP */
+> +	pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch8);
+> +	scratch8 &= 0x7f;
+> +	pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch8);
+> +
+> +	ret = readx_poll_timeout(sdhci_o2_sd_express_clkq_assert, host,
+> +		scratch8, !(scratch8 & BIT(0)), 1, 30000) == 0 ? 0 : 1;
+
+This can use read_poll_timeout() then sdhci_o2_sd_express_clkq_assert()
+is not needed.  And the ' == 0 ? 0 : 1' does not seem needed.
+
+> +
+> +	if (!ret) {
+> +		/* switch to PCIe mode */
+> +		scratch16 = sdhci_readw(host, O2_SD_PCIE_SWITCH);
+> +		scratch16 |= BIT(8);
+> +		sdhci_writew(host, scratch16, O2_SD_PCIE_SWITCH);
+> +	} else {
+> +		/* keep mode as USHI */
+
+USHI ?
+
+Do you intend to fall back to SD mode here? Because
+returning non-zero will cause the initialization to
+fail.  To continue to initialize SD mode, it looks
+like you need to change host->ios.timing = MMC_TIMING_LEGACY
+and return 0
+
+> +		pci_read_config_word(chip->pdev,
+> +						O2_SD_PARA_SET_REG1, &scratch16);
+
+Unneeded line break
+
+> +		scratch16 &= ~BIT(11);
+> +		pci_write_config_word(chip->pdev,
+> +						O2_SD_PARA_SET_REG1, scratch16);
+
+Unneeded line break
+
+> +	}
+> +	/* Lock WP */
+> +	pci_read_config_byte(chip->pdev,
+> +					O2_SD_LOCK_WP, &scratch8);
+> +	scratch8 |= 0x80;
+> +	pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch8);
+> +
+> +	return ret;
+> +}
+> +
+>  static int sdhci_pci_o2_probe_slot(struct sdhci_pci_slot *slot)
+>  {
+>  	struct sdhci_pci_chip *chip;
+> @@ -703,10 +761,11 @@ static int sdhci_pci_o2_probe_slot(struct sdhci_pci_slot *slot)
+>  	case PCI_DEVICE_ID_O2_GG8_9861:
+>  	case PCI_DEVICE_ID_O2_GG8_9862:
+>  	case PCI_DEVICE_ID_O2_GG8_9863:
+> -		host->mmc->caps2 |= MMC_CAP2_NO_SDIO;
+> +		host->mmc->caps2 |= MMC_CAP2_NO_SDIO | MMC_CAP2_SD_EXP | MMC_CAP2_SD_EXP_1_2V;
+>  		host->mmc->caps |= MMC_CAP_HW_RESET;
+>  		host->quirks2 |= SDHCI_QUIRK2_PRESET_VALUE_BROKEN;
+>  		slot->host->mmc_host_ops.get_cd = sdhci_o2_get_cd;
+> +		host->mmc_host_ops.init_sd_express = sdhci_pci_o2_init_sd_express;
+>  		break;
+>  	default:
+>  		break;
+
