@@ -2,176 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BD1772F710
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 09:56:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B45E572F70D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 09:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233592AbjFNH4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 03:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34054 "EHLO
+        id S231878AbjFNH4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 03:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233106AbjFNH41 (ORCPT
+        with ESMTP id S229981AbjFNH4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 03:56:27 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9E0106
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 00:56:25 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lgo@pengutronix.de>)
-        id 1q9LMY-000071-TT; Wed, 14 Jun 2023 09:56:18 +0200
-Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <lgo@pengutronix.de>)
-        id 1q9LMY-007ItU-1R; Wed, 14 Jun 2023 09:56:18 +0200
-Received: from lgo by dude03.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <lgo@pengutronix.de>)
-        id 1q9LMX-00EnXI-C0; Wed, 14 Jun 2023 09:56:17 +0200
-From:   =?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>
-To:     =?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>,
-        kernel@pengutronix.de, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1] iio: adc: add buffering support to the TI LMP92064 ADC driver
-Date:   Wed, 14 Jun 2023 09:55:36 +0200
-Message-Id: <20230614075537.3525194-1-l.goehrs@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
+        Wed, 14 Jun 2023 03:56:06 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD09CE
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 00:56:04 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f640e48bc3so7993782e87.2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 00:56:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686729363; x=1689321363;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JJPISEmPBy/fFyKK4OdqlG5gkZtasSpnLqvR/QuZsrc=;
+        b=Z7GS1eKT8nO7TxFE5M0qMwLUz+EZv2zNcpHm3JpZ8188Zt3tGihoJ40UK/M/+P7P1Z
+         1yFkhvNp50dlLGoJWKQdCtY3bQAVdBOKB0tC/+UBZfCJe3XOGO9zUEhazVVS1Iar5ZLi
+         2qX/tjowOPZyaZynAzLAI1zvmABYP3Yoo7R1s8k97vYd6unI4pNI5gj3BtdRC44m5Y5p
+         0PW7/ypl/lVieTySySLFObOe70melVrKASD+UPl0H/bucy8XP2FJMZ5HcrbRxunTW2xC
+         abDHMJScDUZwW5ZpOM4kgN1I8LsIM6ACc+5tDujmhghznXjF99QWvWY2jl6QBfRDjxsN
+         31mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686729363; x=1689321363;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JJPISEmPBy/fFyKK4OdqlG5gkZtasSpnLqvR/QuZsrc=;
+        b=NDnN4MV4SAqCWcdRaCAdOi1EGjPyn3DfSCozWNdzaLJ7SVSrktojTiTVDyLiItQ21j
+         ZT5V5PskGiviaOBj6LvlWbKxh3F5Q7DEQdoye/D2QoVEb9/WRyAStI1wjnjBqIdPuNx+
+         1ZLaxuSKLCLyOfGsK4WrZwUkSmgzuzrfFpIJwZNDD0aoQiIIi/cAS6dgXc9kI8MyP/gY
+         44KpkiPN9UerZe5VKKhhof64eHNLfdgGZOqjs++gVlxtYZkdmPZfitw8gNpiaMQXqBjV
+         n5fk+4tVTKOpwgzE8KOus5zZel4tCCpHQpsbUNQh0ufi9TuSsZPTmOcB2Iyni7sO9lOx
+         arfw==
+X-Gm-Message-State: AC+VfDzWjqVnSm68TuaJpk8ITeuuTt2D/jwBzVf+ecScqPB03rd0fozv
+        bBMlylWb6Al10U4aYIUxsO5XTg==
+X-Google-Smtp-Source: ACHHUZ6gQl+0Kjo3PkucyLQR6m9PDFEMbrbKq8jhGBsMoylSMxxqYFARW61e25BEd87a5AcAhO1Hzw==
+X-Received: by 2002:a19:5619:0:b0:4f3:8196:80cb with SMTP id k25-20020a195619000000b004f3819680cbmr6959270lfb.41.1686729363110;
+        Wed, 14 Jun 2023 00:56:03 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id x9-20020ac259c9000000b004f650b03391sm2013241lfn.91.2023.06.14.00.56.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 00:56:02 -0700 (PDT)
+Message-ID: <c74c9e0e-d059-f0e3-4350-03089c37131a@linaro.org>
+Date:   Wed, 14 Jun 2023 10:56:02 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: lgo@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 2/3] drm/msm/dpu: Set DATABUS_WIDEN on command mode
+ encoders
+Content-Language: en-GB
+To:     Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     quic_abhinavk@quicinc.com, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
+ <20230525-add-widebus-support-v1-2-c7069f2efca1@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230525-add-widebus-support-v1-2-c7069f2efca1@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable buffered reading of samples from the LMP92064 ADC.
-The main benefit of this change is being able to read out current and
-voltage measurements in a single transfer, allowing instantaneous power
-measurements.
+On 14/06/2023 04:57, Jessica Zhang wrote:
+> Add a DPU INTF op to set the DATABUS_WIDEN register to enable the
+> databus-widen mode datapath.
+> 
+> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c |  3 +++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c          | 12 ++++++++++++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h          |  3 +++
+>   3 files changed, 18 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
+> index b856c6286c85..124ba96bebda 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
+> @@ -70,6 +70,9 @@ static void _dpu_encoder_phys_cmd_update_intf_cfg(
+>   
+>   	if (intf_cfg.dsc != 0 && phys_enc->hw_intf->ops.enable_compression)
+>   		phys_enc->hw_intf->ops.enable_compression(phys_enc->hw_intf);
+> +
+> +	if (phys_enc->hw_intf->ops.enable_widebus)
+> +		phys_enc->hw_intf->ops.enable_widebus(phys_enc->hw_intf);
 
-Reads into the buffer can be triggered by any software triggers, e.g.
-the iio-trig-hrtimer:
+No. Please provide a single function which takes necessary 
+configuration, including compression and wide_bus_enable.
 
-    $ mkdir /sys/kernel/config/iio/triggers/hrtimer/my-trigger
-    $ cat /sys/bus/iio/devices/iio\:device3/name
-    lmp92064
-    $ iio_readdev -t my-trigger -b 16 iio:device3 | hexdump
-    WARNING: High-speed mode not enabled
-    0000000 0000 0176 0101 0001 5507 abd5 7645 1768
-    0000010 0000 016d 0101 0001 ee1e ac6b 7645 1768
-    ...
+Also note, that we already have dpu_encoder_is_widebus_enabled() and the 
+rest of support code. Please stick to it too.
 
-Signed-off-by: Leonard Göhrs <l.goehrs@pengutronix.de>
----
- drivers/iio/adc/ti-lmp92064.c | 54 +++++++++++++++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
+>   }
+>   
+>   static void dpu_encoder_phys_cmd_pp_tx_done_irq(void *arg, int irq_idx)
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+> index 5b0f6627e29b..03ba3a1c7a46 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+> @@ -513,6 +513,15 @@ static void dpu_hw_intf_disable_autorefresh(struct dpu_hw_intf *intf,
+>   
+>   }
+>   
+> +static void dpu_hw_intf_enable_widebus(struct dpu_hw_intf *ctx)
+> +{
+> +	u32 intf_cfg2 = DPU_REG_READ(&ctx->hw, INTF_CONFIG2);
+> +
+> +	intf_cfg2 |= INTF_CFG2_DATABUS_WIDEN;
+> +
+> +	DPU_REG_WRITE(&ctx->hw, INTF_CONFIG2, intf_cfg2);
+> +}
+> +
+>   static void dpu_hw_intf_enable_compression(struct dpu_hw_intf *ctx)
+>   {
+>   	u32 intf_cfg2 = DPU_REG_READ(&ctx->hw, INTF_CONFIG2);
+> @@ -545,6 +554,9 @@ static void _setup_intf_ops(struct dpu_hw_intf_ops *ops,
+>   
+>   	if (cap & BIT(DPU_INTF_DATA_COMPRESS))
+>   		ops->enable_compression = dpu_hw_intf_enable_compression;
+> +
+> +	if (cap & BIT(DPU_INTF_DATABUS_WIDEN))
+> +		ops->enable_widebus = dpu_hw_intf_enable_widebus;
 
-diff --git a/drivers/iio/adc/ti-lmp92064.c b/drivers/iio/adc/ti-lmp92064.c
-index c30ed824924f3..03765c4057dda 100644
---- a/drivers/iio/adc/ti-lmp92064.c
-+++ b/drivers/iio/adc/ti-lmp92064.c
-@@ -16,7 +16,10 @@
- #include <linux/spi/spi.h>
- 
- #include <linux/iio/iio.h>
-+#include <linux/iio/buffer.h>
- #include <linux/iio/driver.h>
-+#include <linux/iio/triggered_buffer.h>
-+#include <linux/iio/trigger_consumer.h>
- 
- #define TI_LMP92064_REG_CONFIG_A 0x0000
- #define TI_LMP92064_REG_CONFIG_B 0x0001
-@@ -91,6 +94,13 @@ static const struct iio_chan_spec lmp92064_adc_channels[] = {
- 		.address = TI_LMP92064_CHAN_INC,
- 		.info_mask_separate =
- 			BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_SCALE),
-+		.scan_index = 0,
-+		.scan_type = {
-+			.sign = 'u',
-+			.realbits = 12,
-+			.storagebits = 16,
-+			.shift = 0,
-+		},
- 		.datasheet_name = "INC",
- 	},
- 	{
-@@ -98,8 +108,16 @@ static const struct iio_chan_spec lmp92064_adc_channels[] = {
- 		.address = TI_LMP92064_CHAN_INV,
- 		.info_mask_separate =
- 			BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_SCALE),
-+		.scan_index = 1,
-+		.scan_type = {
-+			.sign = 'u',
-+			.realbits = 12,
-+			.storagebits = 16,
-+			.shift = 0,
-+		},
- 		.datasheet_name = "INV",
- 	},
-+	IIO_CHAN_SOFT_TIMESTAMP(2),
- };
- 
- static int lmp92064_read_meas(struct lmp92064_adc_priv *priv, u16 *res)
-@@ -171,6 +189,37 @@ static int lmp92064_read_raw(struct iio_dev *indio_dev,
- 	}
- }
- 
-+static irqreturn_t lmp92064_trigger_handler(int irq, void *p)
-+{
-+	struct iio_poll_func *pf = p;
-+	struct iio_dev *indio_dev = pf->indio_dev;
-+	struct lmp92064_adc_priv *priv = iio_priv(indio_dev);
-+	int i = 0, j, ret;
-+	u16 raw[2];
-+	u16 *data;
-+
-+	ret = lmp92064_read_meas(priv, raw);
-+	if (ret < 0)
-+		goto done;
-+
-+	data = kmalloc(indio_dev->scan_bytes, GFP_KERNEL);
-+	if (!data)
-+		goto done;
-+
-+	for_each_set_bit(j, indio_dev->active_scan_mask, indio_dev->masklength)
-+		data[i++] = raw[j];
-+
-+	iio_push_to_buffers_with_timestamp(indio_dev, data,
-+					   iio_get_time_ns(indio_dev));
-+
-+	kfree(data);
-+
-+done:
-+	iio_trigger_notify_done(indio_dev->trig);
-+
-+	return IRQ_HANDLED;
-+}
-+
- static int lmp92064_reset(struct lmp92064_adc_priv *priv,
- 			  struct gpio_desc *gpio_reset)
- {
-@@ -302,6 +351,11 @@ static int lmp92064_adc_probe(struct spi_device *spi)
- 	indio_dev->num_channels = ARRAY_SIZE(lmp92064_adc_channels);
- 	indio_dev->info = &lmp92064_adc_info;
- 
-+	ret = devm_iio_triggered_buffer_setup(dev, indio_dev, NULL,
-+					      lmp92064_trigger_handler, NULL);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to setup buffered read\n");
-+
- 	return devm_iio_device_register(dev, indio_dev);
- }
- 
+>   }
+>   
+>   struct dpu_hw_intf *dpu_hw_intf_init(const struct dpu_intf_cfg *cfg,
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
+> index 99e21c4137f9..64a17b99d3d1 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
+> @@ -71,6 +71,7 @@ struct intf_status {
+>    *                              Return: 0 on success, -ETIMEDOUT on timeout
+>    * @vsync_sel:                  Select vsync signal for tear-effect configuration
+>    * @enable_compression:         Enable data compression
+> + * @enable_widebus:             Enable widebus
+>    */
+>   struct dpu_hw_intf_ops {
+>   	void (*setup_timing_gen)(struct dpu_hw_intf *intf,
+> @@ -109,6 +110,8 @@ struct dpu_hw_intf_ops {
+>   	void (*disable_autorefresh)(struct dpu_hw_intf *intf, uint32_t encoder_id, u16 vdisplay);
+>   
+>   	void (*enable_compression)(struct dpu_hw_intf *intf);
+> +
+> +	void (*enable_widebus)(struct dpu_hw_intf *intf);
+>   };
+>   
+>   struct dpu_hw_intf {
+> 
 
-base-commit: 9561de3a55bed6bdd44a12820ba81ec416e705a7
 -- 
-2.39.2
+With best wishes
+Dmitry
 
