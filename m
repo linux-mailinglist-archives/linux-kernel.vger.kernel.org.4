@@ -2,100 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA94F72F363
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 06:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8565A72F364
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 06:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242392AbjFNEKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 00:10:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59524 "EHLO
+        id S240748AbjFNEKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 00:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242423AbjFNEJq (ORCPT
+        with ESMTP id S242308AbjFNEKN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 00:09:46 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECBD51989;
-        Tue, 13 Jun 2023 21:09:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=KDMD/K5V222tTU27qxn19y0A6GVvL5QoX6is6LqN0fE=; b=45aGLkI4kRodLhj0fUaQatQYZM
-        iXLWGkFwyCAcjzR+9r1Mtl8Ycf7fZmtnUQGxafpkulq9qkPYM87imZBPG0JGCZWN8a8pU8zV7A+5x
-        TW5JxS6qYXKzR+RLbIP+7rVRPFvMfxiZRuSHVcV5sR4x3qEDlcGq21qqoI//2Ad9zbHloZdswkjwi
-        JUmEJE+LV+yjYh7/4ZWjqU/xNhiiqIDRkSQUN+Z9WG+4e0d/oTRVFDeSDJe52wQKUtpeU1mdXR3v9
-        HLRkJCOcP4sdqHux+A1gUaqzYCGK8XshHE617DnY7YwvAUS7TT7G2M7R/DrORjdlxASiFvJh+iEd2
-        tEmk5TGw==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q9Hos-009vRc-2D;
-        Wed, 14 Jun 2023 04:09:18 +0000
-Message-ID: <dacfde0b-bc72-dae7-e823-7905f27ff296@infradead.org>
-Date:   Tue, 13 Jun 2023 21:09:17 -0700
+        Wed, 14 Jun 2023 00:10:13 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 268BF19B7
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 21:10:11 -0700 (PDT)
+Received: by gandalf.ozlabs.org (Postfix, from userid 1003)
+        id 4QgsQT3Xndz4x4G; Wed, 14 Jun 2023 14:10:09 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ozlabs.org;
+        s=201707; t=1686715809;
+        bh=wvvRc9qy6Ni7t/b7z+9GETWf6P/wewVtlrltmdxCvjw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DFfOrXRu+Zyg3+Fad0QP8M1k5KhwxTXq8rYTpjt/ZqPs1emMh/0XpTc9GFfMQTXpC
+         x1Tg15tU6Ag18OQXH0RWERG/mlTQZwCdy/qgcFkoETTyIz015+f4eMr4vsq2rOrt7N
+         qkAEVOn27CnNPfU9vby0DDO2A5+XP00l9JqBzdCOz2nygF0MTFJ43y8nxi2nkXHraF
+         /7v6wQr2btfPPr6FGm0M3oBIfqVgehn3CxNCfHugZuUnu3ApTGMxmJ68Hd6fuWQGPf
+         FeZEJDiMEvlv1oCGlooxUfOdEz9qIchWVxiOeCulNIJYhnrHxW7AJgK/nx8h55syBh
+         QRRhLB5gU9FJg==
+Date:   Wed, 14 Jun 2023 14:10:05 +1000
+From:   Paul Mackerras <paulus@ozlabs.org>
+To:     baomingtong001@208suo.com
+Cc:     mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        pbonzini@redhat.com, seanjc@google.com, thuth@redhat.com,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: PPC: remove unneeded variable
+Message-ID: <ZIk9nVjY4G2xInd1@cleo>
+References: <20230614023206.3865-1-luojianhong@cdjrlc.com>
+ <de7ae31f88510a6b04f29fc01ab44854@208suo.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v18 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-Content-Language: en-US
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-References: <20230613102905.2808371-1-usama.anjum@collabora.com>
- <20230613102905.2808371-3-usama.anjum@collabora.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230613102905.2808371-3-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <de7ae31f88510a6b04f29fc01ab44854@208suo.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 14, 2023 at 10:34:45AM +0800, baomingtong001@208suo.com wrote:
+> fix the following coccicheck warning:
+> 
+> arch/powerpc/kvm/book3s_pr.c:424:5-6: Unneeded variable: "r".
+> 
+> Signed-off-by: Mingtong Bao <baomingtong001@208suo.com>
+> ---
+>  arch/powerpc/kvm/book3s_pr.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/powerpc/kvm/book3s_pr.c b/arch/powerpc/kvm/book3s_pr.c
+> index 9118242063fb..d03b31b240d7 100644
+> --- a/arch/powerpc/kvm/book3s_pr.c
+> +++ b/arch/powerpc/kvm/book3s_pr.c
+> @@ -421,14 +421,14 @@ void kvmppc_restore_tm_pr(struct kvm_vcpu *vcpu)
+> 
+>  static int kvmppc_core_check_requests_pr(struct kvm_vcpu *vcpu)
+>  {
+> -    int r = 1; /* Indicate we want to get back into the guest */
+> +    /* Indicate we want to get back into the guest */
 
+Instead of leaving the comment here, where it makes no sense, please
+move it to the return statement below.
 
-On 6/13/23 03:29, Muhammad Usama Anjum wrote:
-> diff --git a/include/uapi/linux/fs.h b/include/uapi/linux/fs.h
-> index b7b56871029c..47879c38ce2f 100644
-> --- a/include/uapi/linux/fs.h
-> +++ b/include/uapi/linux/fs.h
-> @@ -305,4 +305,57 @@ typedef int __bitwise __kernel_rwf_t;
->  #define RWF_SUPPORTED	(RWF_HIPRI | RWF_DSYNC | RWF_SYNC | RWF_NOWAIT |\
->  			 RWF_APPEND)
->  
-> +/* Pagemap ioctl */
-> +#define PAGEMAP_SCAN	_IOWR('f', 16, struct pm_scan_arg)
+> 
+>      /* We misuse TLB_FLUSH to indicate that we want to clear
+>         all shadow cache entries */
+>      if (kvm_check_request(KVM_REQ_TLB_FLUSH, vcpu))
+>          kvmppc_mmu_pte_flush(vcpu, 0, 0);
+> 
+> -    return r;
+> +    return 1;
+>  }
+> 
+>  /************* MMU Notifiers *************/
 
-Please update Documentation/userspace-api/ioctl/ioctl-number.rst also.
-
-thanks.
--- 
-~Randy
+Paul.
