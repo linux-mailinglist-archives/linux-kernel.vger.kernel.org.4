@@ -2,350 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1702E72F338
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 05:48:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C62672F335
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 05:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237851AbjFNDse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 23:48:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53934 "EHLO
+        id S233648AbjFNDr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 23:47:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233439AbjFNDsb (ORCPT
+        with ESMTP id S231940AbjFNDr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 23:48:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D6710EC
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 20:47:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686714465;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JSPfSftC3LZ+FvSuiQG/grkOZnEfZm0c+OQx2J3gvCo=;
-        b=CXm4EKBp3HPWc15pYARArfgkvzE5v81GMzxtq0qxAmJ0GhaXgXkgTZb9/FWSJjboRtp09X
-        QrT6OWpJ1TwCuN9YPH6sYWfaajwwxEoqqpBIgTkFHPahJEtQoIKDh1rsRcMNpxf7gBR7TM
-        Gt5UED6WdGnduIduVV4gE7Ufel7vOqo=
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
- [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-604-qh9lUf6KPduBLSFIGIy_dQ-1; Tue, 13 Jun 2023 23:47:44 -0400
-X-MC-Unique: qh9lUf6KPduBLSFIGIy_dQ-1
-Received: by mail-oi1-f199.google.com with SMTP id 5614622812f47-395ff4dc3abso4670842b6e.3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 20:47:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686714463; x=1689306463;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JSPfSftC3LZ+FvSuiQG/grkOZnEfZm0c+OQx2J3gvCo=;
-        b=lDK4V/+UHsrO7UpuZ2ED6xRptXaWhABv3J6uSwJ1FrgjsVwo8pADhiukHDSpgEI/i1
-         qxzWodOUqKKCkY0ITu2+DGZx/S7J1dLnMeKigFZpSPyo+AfJetffa4aqu3zKh1adTiaD
-         psTThaCjr09CdNIQmW2U3uBAw60WzGEYzHNYd1VS5xvgu/CzXEaYfCLqRHBO5HGHL31T
-         PxA3zS6/uklNZmCMmY1ZWMh/nb6PlZaBqeCLHtIaQtKfU4PEq/SboalvAbbKZqSG0HUW
-         2WAdvtXheVKmL7OEpi6HQ9AFQaah1eDvTmdWArF4MafDJqS/HmfWQfDMCkplyJyNa3VU
-         4+Ng==
-X-Gm-Message-State: AC+VfDzdVro7YvdajLPyBMWjapZGZ2pPkbuAsjh2VAvx/oWouallVd3O
-        F3q2ySpmgxDrOmFp7VgSPZS0HeoQ9qKNx6a7bZN6vIM0i6Iwwd/Lb/VJfvC4pednMje3+XOHKzI
-        sk1dudU8EWW0+9HBpwVDRgz30iCS+t7cqFSU7jYzR
-X-Received: by 2002:a05:6808:df7:b0:39a:bdc8:d4d6 with SMTP id g55-20020a0568080df700b0039abdc8d4d6mr8543831oic.40.1686714463239;
-        Tue, 13 Jun 2023 20:47:43 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4IznyBwfBRXxLHrGmqi1P1cIvGk7bcCRWlAQAN2Ap2nwplgiEC0UOWqgnhO/UuKGjCr3ZiGcERKYGEvYu6HrA=
-X-Received: by 2002:a05:6808:df7:b0:39a:bdc8:d4d6 with SMTP id
- g55-20020a0568080df700b0039abdc8d4d6mr8543822oic.40.1686714462987; Tue, 13
- Jun 2023 20:47:42 -0700 (PDT)
+        Tue, 13 Jun 2023 23:47:56 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83A3C3;
+        Tue, 13 Jun 2023 20:47:53 -0700 (PDT)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Qgrq23GhyzqSGl;
+        Wed, 14 Jun 2023 11:42:54 +0800 (CST)
+Received: from [10.67.109.150] (10.67.109.150) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 14 Jun 2023 11:47:51 +0800
+Subject: Re: [PATCH] sched/psi: Fix use-after-free in poll_freewait()
+To:     Suren Baghdasaryan <surenb@google.com>
+CC:     Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>
+References: <20230613062306.101831-1-lujialin4@huawei.com>
+ <CAJuCfpEoCRHkJF-=1Go9E94wchB4BzwQ1E3vHGWxNe+tEmSJoA@mail.gmail.com>
+From:   "lujialin (A)" <lujialin4@huawei.com>
+Message-ID: <34f06b52-ff70-dd27-8888-e3e64966d6cd@huawei.com>
+Date:   Wed, 14 Jun 2023 11:47:39 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-References: <20230529132037.2124527-1-yukuai1@huaweicloud.com>
- <20230529132037.2124527-5-yukuai1@huaweicloud.com> <05aa3b09-7bb9-a65a-6231-4707b4b078a0@redhat.com>
- <74b404c4-4fdb-6eb3-93f1-0e640793bba6@huaweicloud.com>
-In-Reply-To: <74b404c4-4fdb-6eb3-93f1-0e640793bba6@huaweicloud.com>
-From:   Xiao Ni <xni@redhat.com>
-Date:   Wed, 14 Jun 2023 11:47:31 +0800
-Message-ID: <CALTww2_9U0Ez-NCHmzdcd48qXjWpkjvhwunSmYOfKVnX=5=HTg@mail.gmail.com>
-Subject: Re: [dm-devel] [PATCH -next v2 4/6] md: refactor idle/frozen_sync_thread()
- to fix deadlock
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     guoqing.jiang@linux.dev, agk@redhat.com, snitzer@kernel.org,
-        dm-devel@redhat.com, song@kernel.org, linux-raid@vger.kernel.org,
-        yangerkun@huawei.com, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAJuCfpEoCRHkJF-=1Go9E94wchB4BzwQ1E3vHGWxNe+tEmSJoA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.109.150]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 9:48=E2=80=AFAM Yu Kuai <yukuai1@huaweicloud.com> w=
-rote:
->
-> Hi,
->
-> =E5=9C=A8 2023/06/13 22:50, Xiao Ni =E5=86=99=E9=81=93:
-> >
-> > =E5=9C=A8 2023/5/29 =E4=B8=8B=E5=8D=889:20, Yu Kuai =E5=86=99=E9=81=93:
-> >> From: Yu Kuai <yukuai3@huawei.com>
-> >>
-> >> Our test found a following deadlock in raid10:
-> >>
-> >> 1) Issue a normal write, and such write failed:
-> >>
-> >>    raid10_end_write_request
-> >>     set_bit(R10BIO_WriteError, &r10_bio->state)
-> >>     one_write_done
-> >>      reschedule_retry
-> >>
-> >>    // later from md thread
-> >>    raid10d
-> >>     handle_write_completed
-> >>      list_add(&r10_bio->retry_list, &conf->bio_end_io_list)
-> >>
-> >>    // later from md thread
-> >>    raid10d
-> >>     if (!test_bit(MD_SB_CHANGE_PENDING, &mddev->sb_flags))
-> >>      list_move(conf->bio_end_io_list.prev, &tmp)
-> >>      r10_bio =3D list_first_entry(&tmp, struct r10bio, retry_list)
-> >>      raid_end_bio_io(r10_bio)
-> >>
-> >> Dependency chain 1: normal io is waiting for updating superblock
-> >
-> > Hi Kuai
-> >
-> > It looks like the above situation is more complex. It only needs a
-> > normal write and md_write_start needs to
-> >
-> > wait until the metadata is written to member disks, right? If so, it
-> > doesn't need to introduce raid10 write failure
-> >
-> > here. I guess, it should be your test case. It's nice, if you can put
-> > your test steps in the patch. But for the analysis
-> >
-> > of the deadlock here, it's better to be simple.
->
-> Test script can be found here, it's pretty easy to trigger:
->
-> https://patchwork.kernel.org/project/linux-raid/patch/20230529132826.2125=
-392-4-yukuai1@huaweicloud.com/
 
-Thanks for this.
->
-> While reviewing the related code, I found that io can only be added to
-> list bio_end_io_list from handle_write_completed() if such io failed, so
-> I think io failure is needed to trigger deadlock from daemon thread.
->
-> I think the key point is how MD_SB_CHANGE_PENDING is set:
->
-> 1) raid10_error() and rdev_set_badblocks(), trigger by io failure;
-> 2) raid10_write_request() related to reshape;
-> 3) md_write_start() and md_allow_write(), and mddev->in_sync is set,
-> however, I was thinking this is not a common case;
->
-> 1) is used here because it's quite easy to trigger and this is what
-> we meet in real test. 3) is possible but I will say let's keep 1), I
-> don't think it's necessary to reporduce this deadlock through another
-> path again.
 
-It makes sense. Let's go back to the first path mentioned in the patch.
-
-> 1) Issue a normal write, and such write failed:
->
->    raid10_end_write_request
->     set_bit(R10BIO_WriteError, &r10_bio->state)
->     one_write_done
->      reschedule_retry
-
-This is good.
->
->    // later from md thread
->    raid10d
->     handle_write_completed
->      list_add(&r10_bio->retry_list, &conf->bio_end_io_list)
-
-I have a question here. It should run narrow_write_error in
-handle_write_completed. In the test case, will narrow_write_error run
-successfully? Or it fails and will call rdev_set_badblocks and
-md_error. So MD_RECOVERY_PENDING will be set?
-
->
->    // later from md thread
->    raid10d
->     if (!test_bit(MD_SB_CHANGE_PENDING, &mddev->sb_flags))
->      list_move(conf->bio_end_io_list.prev, &tmp)
->      r10_bio =3D list_first_entry(&tmp, struct r10bio, retry_list)
->      raid_end_bio_io(r10_bio)
->
-> Dependency chain 1: normal io is waiting for updating superblock
-
-It's a little hard to understand. Because it doesn't show how normal
-io waits for a superblock update. And based on your last email, I
-guess you want to say rdev_set_badblock sets MD_RECOVERY_PENDING, but
-the flag can't be cleared, so the bios can't be added to
-bio_end_io_list, so the io rquests can't be finished.
-
-Regards
-Xiao
->
+在 2023/6/14 7:42, Suren Baghdasaryan 写道:
+> On Mon, Jun 12, 2023 at 11:24 PM Lu Jialin <lujialin4@huawei.com> wrote:
+>>
+>> We found a UAF bug in remove_wait_queue as follows:
+>>
+>> ==================================================================
+>> BUG: KASAN: use-after-free in _raw_spin_lock_irqsave+0x71/0xe0
+>> Write of size 4 at addr ffff8881150d7b28 by task psi_trigger/15306
+>> Call Trace:
+>>   dump_stack+0x9c/0xd3
+>>   print_address_description.constprop.0+0x19/0x170
+>>   __kasan_report.cold+0x6c/0x84
+>>   kasan_report+0x3a/0x50
+>>   check_memory_region+0xfd/0x1f0
+>>   _raw_spin_lock_irqsave+0x71/0xe0
+>>   remove_wait_queue+0x26/0xc0
+>>   poll_freewait+0x6b/0x120
+>>   do_sys_poll+0x305/0x400
+>>   do_syscall_64+0x33/0x40
+>>   entry_SYSCALL_64_after_hwframe+0x61/0xc6
+>>
+>> Allocated by task 15306:
+>>   kasan_save_stack+0x1b/0x40
+>>   __kasan_kmalloc.constprop.0+0xb5/0xe0
+>>   psi_trigger_create.part.0+0xfc/0x450
+>>   cgroup_pressure_write+0xfc/0x3b0
+>>   cgroup_file_write+0x1b3/0x390
+>>   kernfs_fop_write_iter+0x224/0x2e0
+>>   new_sync_write+0x2ac/0x3a0
+>>   vfs_write+0x365/0x430
+>>   ksys_write+0xd5/0x1b0
+>>   do_syscall_64+0x33/0x40
+>>   entry_SYSCALL_64_after_hwframe+0x61/0xc6
+>>
+>> Freed by task 15850:
+>>   kasan_save_stack+0x1b/0x40
+>>   kasan_set_track+0x1c/0x30
+>>   kasan_set_free_info+0x20/0x40
+>>   __kasan_slab_free+0x151/0x180
+>>   kfree+0xba/0x680
+>>   cgroup_file_release+0x5c/0xe0
+>>   kernfs_drain_open_files+0x122/0x1e0
+>>   kernfs_drain+0xff/0x1e0
+>>   __kernfs_remove.part.0+0x1d1/0x3b0
+>>   kernfs_remove_by_name_ns+0x89/0xf0
+>>   cgroup_addrm_files+0x393/0x3d0
+>>   css_clear_dir+0x8f/0x120
+>>   kill_css+0x41/0xd0
+>>   cgroup_destroy_locked+0x166/0x300
+>>   cgroup_rmdir+0x37/0x140
+>>   kernfs_iop_rmdir+0xbb/0xf0
+>>   vfs_rmdir.part.0+0xa5/0x230
+>>   do_rmdir+0x2e0/0x320
+>>   __x64_sys_unlinkat+0x99/0xc0
+>>   do_syscall_64+0x33/0x40
+>>   entry_SYSCALL_64_after_hwframe+0x61/0xc6
+>> ==================================================================
+>>
+>> If using epoll(), wake_up_pollfree will empty waitqueue and set
+>> wait_queue_head is NULL before free waitqueue of psi trigger. But is
+>> doesn't work when using poll(), which will lead a UAF problem in
+>> poll_freewait coms as following:
+>>
+>> (cgroup_rmdir)                      |
+>> psi_trigger_destroy                 |
+>>    wake_up_pollfree(&t->event_wait)  |
+> 
+> It's important to note that psi_trigger_destroy() calls
+> synchronize_rcu() before doing kfree(t), therefore the usage I think
+> is valid.
+> 
+> 
+>>      kfree(t)                        |
+>>                                      |   (poll_freewait)
+>>                                      |     free_poll_entry(pwq->inline_entries + i)
+>>                                      |       remove_wait_queue(entry->wait_address)
+>>                                      |         spin_lock_irqsave(&wq_head->lock)
+>>
+>> entry->wait_address in poll_freewait() is t->event_wait in cgroup_rmdir().
+>> t->event_wait is free in psi_trigger_destroy before call poll_freewait(),
+>> therefore wq_head in poll_freewait() has been already freed, which would
+>> lead to a UAF.
+>>
+>> similar problem for epoll() has been fixed commit c2dbe32d5db5
+>> ("sched/psi: Fix use-after-free in ep_remove_wait_queue()").
+>> epoll wakeup function ep_poll_callback() will empty waitqueue and set
+>> wait_queue_head is NULL when pollflags is POLLFREE and judge pwq->whead
+>> is NULL or not before remove_wait_queue in ep_remove_wait_queue(),
+>> which will fix the UAF bug in ep_remove_wait_queue.
+>>
+>> But poll wakeup function pollwake() doesn't do that. To fix the
+>> problem, we empty waitqueue and set wait_address is NULL in pollwake() when
+>> key is POLLFREE. otherwise in remove_wait_queue, which is similar to
+>> epoll().
+> 
+> Thanks for the patch!
+> This seems similar to what ep_poll_callback/ep_remove_wait_queue do,
+> which I think makes sense. CC'ing Oleg Nesterov who implemented
+> ep_poll_callback/ep_remove_wait_queue logic and Eric Biggers who
+> worked on wake_up_pollfree() - both much more knowledgeable in this
+> area than me.
+> 
+> One issue I see with this patch is that the title says "sched/psi:
+> ..." while it's fixing polling functionality. The patch is fixing the
+> mechanism used by psi triggers, not psi triggers themselves (well it
+> does but indirectly). Therefore I suggest changing that prefix to
+> something like "select: Fix use-after-free in poll_freewait()"
+> 
 > Thanks,
-> Kuai
-> >
-> >>
-> >> 2) Trigger a recovery:
-> >>
-> >>    raid10_sync_request
-> >>     raise_barrier
-> >>
-> >> Dependency chain 2: sync thread is waiting for normal io
-> >>
-> >> 3) echo idle/frozen to sync_action:
-> >>
-> >>    action_store
-> >>     mddev_lock
-> >>      md_unregister_thread
-> >>       kthread_stop
-> >>
-> >> Dependency chain 3: drop 'reconfig_mutex' is waiting for sync thread
-> >>
-> >> 4) md thread can't update superblock:
-> >>
-> >>    raid10d
-> >>     md_check_recovery
-> >>      if (mddev_trylock(mddev))
-> >>       md_update_sb
-> >>
-> >> Dependency chain 4: update superblock is waiting for 'reconfig_mutex'
-> >>
-> >> Hence cyclic dependency exist, in order to fix the problem, we must
-> >> break one of them. Dependency 1 and 2 can't be broken because they are
-> >> foundation design. Dependency 4 may be possible if it can be guarantee=
-d
-> >> that no io can be inflight, however, this requires a new mechanism whi=
-ch
-> >> seems complex. Dependency 3 is a good choice, because idle/frozen only
-> >> requires sync thread to finish, which can be done asynchronously that =
-is
-> >> already implemented, and 'reconfig_mutex' is not needed anymore.
-> >>
-> >> This patch switch 'idle' and 'frozen' to wait sync thread to be done
-> >> asynchronously, and this patch also add a sequence counter to record h=
-ow
-> >> many times sync thread is done, so that 'idle' won't keep waiting on n=
-ew
-> >> started sync thread.
-> >
-> > In the patch, sync_seq is added in md_reap_sync_thread. In
-> > idle_sync_thread, if sync_seq isn't equal
-> >
-> > mddev->sync_seq, it should mean there is someone that stops the sync
-> > thread already, right? Why do
-> >
-> > you say 'new started sync thread' here?
-> >
-> > Regards
-> >
-> > Xiao
-> >
-> >
-> >>
-> >> Noted that raid456 has similiar deadlock([1]), and it's verified[2] th=
-is
-> >> deadlock can be fixed by this patch as well.
-> >>
-> >> [1]
-> >> https://lore.kernel.org/linux-raid/5ed54ffc-ce82-bf66-4eff-390cb23bc1a=
-c@molgen.mpg.de/T/#t
-> >>
-> >> [2]
-> >> https://lore.kernel.org/linux-raid/e9067438-d713-f5f3-0d3d-9e6b0e9efa0=
-e@huaweicloud.com/
-> >>
-> >> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> >> ---
-> >>   drivers/md/md.c | 23 +++++++++++++++++++----
-> >>   drivers/md/md.h |  2 ++
-> >>   2 files changed, 21 insertions(+), 4 deletions(-)
-> >>
-> >> diff --git a/drivers/md/md.c b/drivers/md/md.c
-> >> index 63a993b52cd7..7912de0e4d12 100644
-> >> --- a/drivers/md/md.c
-> >> +++ b/drivers/md/md.c
-> >> @@ -652,6 +652,7 @@ void mddev_init(struct mddev *mddev)
-> >>       timer_setup(&mddev->safemode_timer, md_safemode_timeout, 0);
-> >>       atomic_set(&mddev->active, 1);
-> >>       atomic_set(&mddev->openers, 0);
-> >> +    atomic_set(&mddev->sync_seq, 0);
-> >>       spin_lock_init(&mddev->lock);
-> >>       atomic_set(&mddev->flush_pending, 0);
-> >>       init_waitqueue_head(&mddev->sb_wait);
-> >> @@ -4776,19 +4777,27 @@ static void stop_sync_thread(struct mddev *mdd=
-ev)
-> >>       if (work_pending(&mddev->del_work))
-> >>           flush_workqueue(md_misc_wq);
-> >> -    if (mddev->sync_thread) {
-> >> -        set_bit(MD_RECOVERY_INTR, &mddev->recovery);
-> >> -        md_reap_sync_thread(mddev);
-> >> -    }
-> >> +    set_bit(MD_RECOVERY_INTR, &mddev->recovery);
-> >> +    /*
-> >> +     * Thread might be blocked waiting for metadata update which will
-> >> now
-> >> +     * never happen
-> >> +     */
-> >> +    md_wakeup_thread_directly(mddev->sync_thread);
-> >>       mddev_unlock(mddev);
-> >>   }
-> >>   static void idle_sync_thread(struct mddev *mddev)
-> >>   {
-> >> +    int sync_seq =3D atomic_read(&mddev->sync_seq);
-> >> +
-> >>       mutex_lock(&mddev->sync_mutex);
-> >>       clear_bit(MD_RECOVERY_FROZEN, &mddev->recovery);
-> >>       stop_sync_thread(mddev);
-> >> +
-> >> +    wait_event(resync_wait, sync_seq !=3D atomic_read(&mddev->sync_se=
-q) ||
-> >> +            !test_bit(MD_RECOVERY_RUNNING, &mddev->recovery));
-> >> +
-> >>       mutex_unlock(&mddev->sync_mutex);
-> >>   }
-> >> @@ -4797,6 +4806,10 @@ static void frozen_sync_thread(struct mddev
-> >> *mddev)
-> >>       mutex_init(&mddev->delete_mutex);
-> >>       set_bit(MD_RECOVERY_FROZEN, &mddev->recovery);
-> >>       stop_sync_thread(mddev);
-> >> +
-> >> +    wait_event(resync_wait, mddev->sync_thread =3D=3D NULL &&
-> >> +            !test_bit(MD_RECOVERY_RUNNING, &mddev->recovery));
-> >> +
-> >>       mutex_unlock(&mddev->sync_mutex);
-> >>   }
-> >> @@ -9472,6 +9485,8 @@ void md_reap_sync_thread(struct mddev *mddev)
-> >>       /* resync has finished, collect result */
-> >>       md_unregister_thread(&mddev->sync_thread);
-> >> +    atomic_inc(&mddev->sync_seq);
-> >> +
-> >>       if (!test_bit(MD_RECOVERY_INTR, &mddev->recovery) &&
-> >>           !test_bit(MD_RECOVERY_REQUESTED, &mddev->recovery) &&
-> >>           mddev->degraded !=3D mddev->raid_disks) {
-> >> diff --git a/drivers/md/md.h b/drivers/md/md.h
-> >> index 2fa903de5bd0..7cab9c7c45b8 100644
-> >> --- a/drivers/md/md.h
-> >> +++ b/drivers/md/md.h
-> >> @@ -539,6 +539,8 @@ struct mddev {
-> >>       /* Used to synchronize idle and frozen for action_store() */
-> >>       struct mutex            sync_mutex;
-> >> +    /* The sequence number for sync thread */
-> >> +    atomic_t sync_seq;
-> >>       bool    has_superblocks:1;
-> >>       bool    fail_last_dev:1;
-> >
-> > --
-> > dm-devel mailing list
-> > dm-devel@redhat.com
-> > https://listman.redhat.com/mailman/listinfo/dm-devel
->
-
+> Suren.
+> 
+>>
+>> Fixes: 0e94682b73bf ("psi: introduce psi monitor")
+>> Signed-off-by: Lu Jialin <lujialin4@huawei.com>
+>> ---
+>>   fs/select.c | 20 +++++++++++++++++++-
+>>   1 file changed, 19 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/fs/select.c b/fs/select.c
+>> index 0ee55af1a55c..e64c7b4e9959 100644
+>> --- a/fs/select.c
+>> +++ b/fs/select.c
+>> @@ -132,7 +132,17 @@ EXPORT_SYMBOL(poll_initwait);
+>>
+>>   static void free_poll_entry(struct poll_table_entry *entry)
+>>   {
+>> -       remove_wait_queue(entry->wait_address, &entry->wait);
+>> +       wait_queue_head_t *whead;
+>> +
+>> +       rcu_read_lock();
+>> +       /* If it is cleared by POLLFREE, it should be rcu-safe.
+>> +        * If we read NULL we need a barrier paired with smp_store_release()
+>> +        * in pollwake().
+>> +        */
+>> +       whead = smp_load_acquire(&entry->wait_address);
+>> +       if (whead)
+>> +               remove_wait_queue(whead, &entry->wait);
+>> +       rcu_read_unlock();
+>>          fput(entry->filp);
+>>   }
+>>
+>> @@ -215,6 +225,14 @@ static int pollwake(wait_queue_entry_t *wait, unsigned mode, int sync, void *key
+>>          entry = container_of(wait, struct poll_table_entry, wait);
+>>          if (key && !(key_to_poll(key) & entry->key))
+>>                  return 0;
+>> +       if (key_to_poll(key) & POLLFREE) {
+>> +               list_del_init(&wait->entry);
+>> +               /* wait_address !=NULL protects us from the race with
+>> +                * poll_freewait().
+>> +                */
+>> +               smp_store_release(&entry->wait_address, NULL);
+>> +               return 0;
+>> +       }
+>>          return __pollwake(wait, mode, sync, key);
+>>   }
+>>
+>> --
+>> 2.17.1
+>>
+> .
+> 
+Thanks for your suggestion.I will correct the commit msg and title in 
+v2.And cc to Oleg Nesterov and Eric Biggers.
