@@ -2,198 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F46073052C
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49ECC73053D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235358AbjFNQk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 12:40:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52352 "EHLO
+        id S234974AbjFNQms convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 14 Jun 2023 12:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236014AbjFNQkm (ORCPT
+        with ESMTP id S235303AbjFNQkx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 12:40:42 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D93EEC
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:40:41 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id af79cd13be357-75d54faa03eso228338785a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:40:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686760840; x=1689352840;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UXimn/P/5sCJZ7fCJTZ8BSazPdQnTt6zyCupGqR8k5w=;
-        b=OAoITSntNBYS+uJgf1ujmP2eeCLW9WF/FTefuiku8oybwrFBx+upKikf92RbfxXDE+
-         LnYGDbG150ZKoTMWfmq3xvUFJt8/h0GeDKE4BfhS5mPt4LFm8IFdGz0371yuNV+Z/fKH
-         BFj0AXE1/uumb9GBim7y91GR0ZrJp5EcO87efwp3wOhNFp8ZrMk82cAtVmQFn+3r6q/O
-         Rg1fgvFf/yOlmVFHUa43o0hvV3WXx27jsfTzl4CuRT9dho1R5DLVFyrR9QiIkd9mP4Mt
-         zzG27bxORvKu5rmKLtRzdL3zlEvwsqLHG5zaL7qJcVVUT6AFxL+ONDCwRBish4r8Ujgu
-         EM5g==
+        Wed, 14 Jun 2023 12:40:53 -0400
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD3D1A3;
+        Wed, 14 Jun 2023 09:40:51 -0700 (PDT)
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-9827714a479so20576866b.1;
+        Wed, 14 Jun 2023 09:40:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686760840; x=1689352840;
+        d=1e100.net; s=20221208; t=1686760850; x=1689352850;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UXimn/P/5sCJZ7fCJTZ8BSazPdQnTt6zyCupGqR8k5w=;
-        b=IRWkkkbj8O0QN6eCbOmfhm8aGQKWKcZQ4gk2RlXVJNSR6kT+1gOOvoImahNC1JmMmY
-         C3m8/6uRsxQ02sOtQs0PsdvW3wfKKh3uqN7umBytP/bDA0K4tGyi9PT65ySPyCvv1qxa
-         22vxlCgfiN0n0UwEsTrPQO11UHyCFmGsmkcExu33hoDYzaTVV0KHp6Q/exnA1ejLO0o8
-         qMTDtw1DWPc6eP1ELDyj/EKee/uw2cli4AKmT2qkWNEj9AhFaCdLJ3RzqxcEPn9hDlja
-         vcqHTxLyOqB1IRNabp66vjwaEaNOzaV4wvUJAnbJCQppAhWee6l8wG217E+yQ4/Vvhgy
-         T/7w==
-X-Gm-Message-State: AC+VfDytoTiOqokYZKvCPWaP6fZMOt6a9vEbkfkJsQAgyk0H+m/5qMWV
-        rHaG0P+2sxZBpQKvAZml2PD75NLeDTzungGayFgtOqpbUxGA4t345GU8uA==
-X-Google-Smtp-Source: ACHHUZ6nzw2pIHfANPy+oymiDmwVUSVPnDXJQ6OjIAJWySkyRIMjr8q00W31fdmz4ODSODxrNZYayP0uNr3Rvjbpr08=
-X-Received: by 2002:a05:6214:e6e:b0:628:6abe:f06e with SMTP id
- jz14-20020a0562140e6e00b006286abef06emr17513666qvb.41.1686760840396; Wed, 14
- Jun 2023 09:40:40 -0700 (PDT)
+        bh=lwP8ISPxM7coZuH76hmCT9/ShjhIdsbTHWg6APCgEzg=;
+        b=XhSuRpoVqxlUxGhCr4t+J1QosQdsk1ILeKx6ouA9HpLsOV1SSEirgKee+S2lgJ+/RQ
+         mA0sDEHyz60hCdNQQZSjRvJ9ZicfkcOjH5BX7VYwfqER35BE9ePPBtHM0l7GgatLS/qC
+         YP6lUOCl6N8x3EGKzXz30K/dDIv/12a2P6XLVOQmgb3DkFtUMygMgeyypElRA4zHVNnj
+         QzXEPO+2zWQ2Tu+NTBF5LURwRVYA23Dy0BVAlxf3Z0RmNP4MsfjUeautPQtXkdjo9BX9
+         kZXVOMTq8M7ue78Cio9yqw84LLBbtzcDqT5P2zsyTsRgK0diuwgPtHswoEXxAdJeo+Sr
+         LgBA==
+X-Gm-Message-State: AC+VfDzDZSw0b/JzQmo7XMq7wx+i9uFDz3PcCya0tnoGHyAmiiGitDRJ
+        Y0QvGvjVbW31tHPtUGQBdHdyXZOLf5StFDjF0lbBk1RgFt0=
+X-Google-Smtp-Source: ACHHUZ5Fp2mU2+vCa5yHZKoCqycOljtbSUiIkTkPxOpmUPeD6y92hCOBYMiS/gN063oFxAL76FjPWL4fal9DiE4E9DE=
+X-Received: by 2002:a17:906:7791:b0:975:942b:ee43 with SMTP id
+ s17-20020a170906779100b00975942bee43mr2233469ejm.5.1686760850265; Wed, 14 Jun
+ 2023 09:40:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <202306110855.7TlBCIzI-lkp@intel.com> <CAHVXubhKstDeRDp8n-POR_eL0vh5DdHuWKHu7pN+X_j0rtG4Dw@mail.gmail.com>
-In-Reply-To: <CAHVXubhKstDeRDp8n-POR_eL0vh5DdHuWKHu7pN+X_j0rtG4Dw@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 14 Jun 2023 12:40:28 -0400
-Message-ID: <CAKwvOd=yg5GE8eF5bFY4t2S-0Od3smH9iRB+2Ctkg=+WXM97ig@mail.gmail.com>
-Subject: Re: ld.lld: error: relocation R_RISCV_HI20 cannot be used against
- symbol 'misaligned_access_speed'; recompile with -fPIC
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Palmer Dabbelt <palmer@rivosinc.com>
+References: <20230614162112.122816-1-cymi20@fudan.edu.cn>
+In-Reply-To: <20230614162112.122816-1-cymi20@fudan.edu.cn>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 14 Jun 2023 18:40:39 +0200
+Message-ID: <CAJZ5v0iZMHmgGE7ZTmOghHtWPXECx5HFt2a1NBNwABBX0CQBeg@mail.gmail.com>
+Subject: Re: [PATCH] ACPICA: Fix missing check for return value of acpi_ns_get_attached_object()
+To:     Chenyuan Mi <cymi20@fudan.edu.cn>
+Cc:     robert.moore@intel.com, rafael.j.wysocki@intel.com,
+        lenb@kernel.org, linux-acpi@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 4:17=E2=80=AFAM Alexandre Ghiti <alexghiti@rivosinc=
-.com> wrote:
+On Wed, Jun 14, 2023 at 6:21 PM Chenyuan Mi <cymi20@fudan.edu.cn> wrote:
 >
-> On Sun, Jun 11, 2023 at 2:11=E2=80=AFAM kernel test robot <lkp@intel.com>=
- wrote:
-> >
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
-git master
-> > head:   022ce8862dff83c859089cd14bc4dca0733e2f90
-> > commit: 8dc2a7e8027fbeca0c7df81d4c82e735a59b5741 riscv: Fix relocatable=
- kernels with early alternatives using -fno-pie
-> > date:   10 days ago
-> > config: riscv-randconfig-r022-20230611 (https://download.01.org/0day-ci=
-/archive/20230611/202306110855.7TlBCIzI-lkp@intel.com/config)
-> > compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.gi=
-t ae42196bc493ffe877a7e3dff8be32035dea4d07)
-> > reproduce (this is a W=3D1 build):
-> >         mkdir -p ~/bin
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/s=
-bin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install riscv cross compiling tool for clang build
-> >         # apt-get install binutils-riscv64-linux-gnu
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linu=
-x.git/commit/?id=3D8dc2a7e8027fbeca0c7df81d4c82e735a59b5741
-> >         git remote add linus https://git.kernel.org/pub/scm/linux/kerne=
-l/git/torvalds/linux.git
-> >         git fetch --no-tags linus master
-> >         git checkout 8dc2a7e8027fbeca0c7df81d4c82e735a59b5741
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/make.=
-cross W=3D1 O=3Dbuild_dir ARCH=3Driscv olddefconfig
-> >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/make.=
-cross W=3D1 O=3Dbuild_dir ARCH=3Driscv SHELL=3D/bin/bash
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202306110855.7TlBCIzI-l=
-kp@intel.com/
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> > >> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol=
- 'misaligned_access_speed'; recompile with -fPIC
-> >    >>> defined in vmlinux.a(arch/riscv/kernel/cpufeature.o)
-> >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
-> >    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_pr=
-obe_func) in archive vmlinux.a
-> > --
-> > >> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symb=
-ol 'misaligned_access_speed'; recompile with -fPIC
-> >    >>> defined in vmlinux.a(arch/riscv/kernel/cpufeature.o)
-> >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
-> >    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_pr=
-obe_func) in archive vmlinux.a
-> > --
-> > >> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol=
- 'riscv_cbom_block_size'; recompile with -fPIC
-> >    >>> defined in vmlinux.a(arch/riscv/mm/cacheflush.o)
-> >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
-> >    >>>               arch/riscv/errata/thead/errata.o:(thead_errata_pat=
-ch_func) in archive vmlinux.a
-> > --
-> > >> ld.lld: error: relocation R_RISCV_LO12_S cannot be used against symb=
-ol 'riscv_cbom_block_size'; recompile with -fPIC
-> >    >>> defined in vmlinux.a(arch/riscv/mm/cacheflush.o)
-> >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
-> >    >>>               arch/riscv/errata/thead/errata.o:(thead_errata_pat=
-ch_func) in archive vmlinux.a
-> > --
-> > >> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol=
- '__per_cpu_offset'; recompile with -fPIC
-> >    >>> defined in vmlinux.a(mm/percpu.o)
-> >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
-> >    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_pr=
-obe_func) in archive vmlinux.a
-> > --
-> > >> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symb=
-ol '__per_cpu_offset'; recompile with -fPIC
-> >    >>> defined in vmlinux.a(mm/percpu.o)
-> >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
-> >    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_pr=
-obe_func) in archive vmlinux.a
-> >
->
-> So I looked into those errors, the config is basically =3D RELOCATABLE +
-> MEDLOW - EARLY_ALTERNATIVES. Then errata/thead is not compiled as
+> The acpi_ns_get_attached_object() function may return
+> NULL, which may cause null pointer deference, and most
+> other callsites of acpi_ns_get_attached_object() do
+> Null check. Add Null check for return value of
+> acpi_ns_get_attached_object().
 
-Thanks for taking a look.  Shouldn't CONFIG_RELOCATABLE be setting
--fPIC? If so, why is LLD complaining about -fPIC not being used?
+But may acpi_ex_prep_field_value() be called in a code path where
+acpi_ns_get_attached_object(i) can return NULL?
 
-arch/riscv/Makefile sets -fPIE if CONFIG_RELOCATABLE =3D=3D y.
+I mean, if the given attached object is guaranteed to exist when this
+function is called, NULL will not be returned, so the new check will
+be redundant then.
 
-Is it possible that -fpie was dropped for these object files, or
--fno-pic or -fno-pie was added to the cflags for these object files
-somehow?
-
-I've filed
-https://github.com/ClangBuiltLinux/linux/issues/1872
-to track this.
-
-> medany, which makes sense since we only need this code to be medany
-> when EARLY_ALTERNATIVES is enabled (because the code would be executed
-> with mmu off, which is not the case here).
+> Found by our static analysis tool.
 >
-> I can fix those errors by adding the medany flag, but I'm not sure
-> actually we want to do that since we do not need it and gcc does not
-> complain: any idea?
+> Signed-off-by: Chenyuan Mi <cymi20@fudan.edu.cn>
+> ---
+>  drivers/acpi/acpica/exprep.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
 >
-> Alex
+> diff --git a/drivers/acpi/acpica/exprep.c b/drivers/acpi/acpica/exprep.c
+> index 08196fa17080..d9c006ec1ac8 100644
+> --- a/drivers/acpi/acpica/exprep.c
+> +++ b/drivers/acpi/acpica/exprep.c
+> @@ -431,6 +431,13 @@ acpi_status acpi_ex_prep_field_value(struct acpi_create_field_info *info)
+>                 obj_desc->field.region_obj =
+>                     acpi_ns_get_attached_object(info->region_node);
 >
+> +               if (!obj_desc->field.region_obj) {
+> +                       ACPI_ERROR((AE_INFO,
+> +                                   "Null Region Object during field prep"));
+> +                       acpi_ut_delete_object_desc(obj_desc);
+> +                       return_ACPI_STATUS(AE_AML_INTERNAL);
+> +               }
+> +
+>                 /* Fields specific to generic_serial_bus fields */
 >
+>                 obj_desc->field.access_length = info->access_length;
+> --
+> 2.17.1
 >
-> > --
-> > 0-DAY CI Kernel Test Service
-> > https://github.com/intel/lkp-tests/wiki
->
-
-
---=20
-Thanks,
-~Nick Desaulniers
