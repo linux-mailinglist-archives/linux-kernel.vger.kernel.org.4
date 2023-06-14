@@ -2,196 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDED0730171
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:15:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B54730178
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:16:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245477AbjFNOPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 10:15:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42430 "EHLO
+        id S245508AbjFNOQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 10:16:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245490AbjFNOOZ (ORCPT
+        with ESMTP id S245532AbjFNOQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 10:14:25 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88F2CD;
-        Wed, 14 Jun 2023 07:14:23 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-9745d99cfccso125687566b.1;
-        Wed, 14 Jun 2023 07:14:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686752062; x=1689344062;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bZcc1N+pfWDP9EyHMZ8HVe/V78CMvOZrkT7dGeTorW0=;
-        b=lRelaGos+jd5arMyCLOFQs5LM5DoQgXvA6qkSU8/8bb5j7QTCdDcjrFAzA5+09H8va
-         Vj7IxMejFnY3Wonw15taxTIZ7FhIbq4g6J/kbiKvHzZg/x4JC/Ca0ksRK9RD8k80HCFg
-         Q5CMj8tvbCuzJSrpYk+jMRlsEWw4++lg+xaXbXjG+1nEEkPAeWX3W3sWRGeKkF3q1V+S
-         FB8z7px0eY6vTAlJp8z+C5ebYA13En7kfjZ2v+lq9laZCZciEHy2MzTCdaFp4MrLMPNb
-         5pQLSkpVcFQLpacWxrwndWmA78B/d9LGuYXRtiVKpOJnapEu1A3ca41O2vDQGhbwsDgq
-         cnuQ==
+        Wed, 14 Jun 2023 10:16:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA5110CB
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 07:15:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686752118;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gs9UsFHiOqFVLHIkbMkZs+XlwUJlhoeynhzk+GnTL8Q=;
+        b=fBhNcUQ51rw06ne3TQ2VLDajj/mjFzlfFNJRPJUmDaISzu9cQlGvIbqN45bYLY8sZhdY/Q
+        3sH1wI8uS0Mf7bOpHQ7w9JoAbqmeq3R30IAgtwLTvFvQeoCe/Fx6c1UxtKYOkhfefeqmus
+        /tIoaDUfcKOXmx1OxoTHgCRIqyMzcRg=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-278-Wav4OnFRP12MaEttHWo0eg-1; Wed, 14 Jun 2023 10:15:17 -0400
+X-MC-Unique: Wav4OnFRP12MaEttHWo0eg-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-30fb1f3c30aso1813802f8f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 07:15:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686752062; x=1689344062;
+        d=1e100.net; s=20221208; t=1686752115; x=1689344115;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bZcc1N+pfWDP9EyHMZ8HVe/V78CMvOZrkT7dGeTorW0=;
-        b=goazEibIucGrvD4g52KKI/TyYL7nzrfCDo5CSjQoha75dPj5D4UUAbydLXs/YyvCrO
-         7NAL8bgw7ynwahAZWGo3KdJEXVJRl6h0/CzlCXuzGatrfeYC6VoZR6/xM41LUQ9Lu8w2
-         opEv94c/I9dHmNJAQxYoyvDF1YrNiuHU3kFpSwpCwpMdSm+KpfRACMI9DCvDOyDDcrL7
-         E+s0EpvYB0Nz39QjJr4zP2gLex3lAX/i2CylyuWd9uRQfTMFUs/QThs16fx7OOfxIwl+
-         J1SDjeK67SHvM8UrG6FagUnBScCQ0fTS1YoEDot7IPjeMAeCh1/h4qirvSe5x/MT7uk0
-         IVog==
-X-Gm-Message-State: AC+VfDyYlTFshOGXV9tmynu/oMYF3X7y1o5IA146JS+j+o5ji94KpibJ
-        uZALsxsUJjcSd+8OxpumHhE=
-X-Google-Smtp-Source: ACHHUZ5AOEghS7r/YuBm8qLG9tdWa5T4rDdMOPaDHJ4gyt0FnJMgDbUWn7gXD2yBpY+ahQw+UsIwkw==
-X-Received: by 2002:a17:907:7f93:b0:974:218d:c048 with SMTP id qk19-20020a1709077f9300b00974218dc048mr19264188ejc.26.1686752061928;
-        Wed, 14 Jun 2023 07:14:21 -0700 (PDT)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id e26-20020a1709062c1a00b00974556e50a6sm8103322ejh.114.2023.06.14.07.14.20
+        bh=gs9UsFHiOqFVLHIkbMkZs+XlwUJlhoeynhzk+GnTL8Q=;
+        b=DVVb0RE7MpibuoNgTKsZbXa0y0UIFlNJgOSDXRIYFZJsPaMowdoNOoHosVXUTxDKpe
+         qbcy5pD2LcHM//+5/4hwLqGMDqr0nlLW+5IrEUiQuJJJFA3pIj2pfFp6fYN8H6du776N
+         SKaZh/n8/G9ziyseYvhNa0PZksTWpuOvlM1s+jgCuLU3+ZQLvWDA6dGTogIGutze35Yy
+         r3zjXQF7oXmdZCTQJd1QggJQCkFTCZum53JzKlESTVlyM6zqbaE7WA8I2Q+RUJP9LOxa
+         mP4oIuGA9CsLGNFCH+DraqbkRjPutR1fPb6u/YTorjSUVrChHoq7G0ky2zmweGCnW1aa
+         m+bg==
+X-Gm-Message-State: AC+VfDx46yNUGvFLBQ0ocQiyCMyE64P86xatfwCcwyUxSUlytZLfDivU
+        fpUOnClbWPxeoi/T6f4sdeWRsu2ixZX07m2TuC1DNkN31/ZLbbMPDlfmN653zfy5jWsioqj/A7X
+        3Sgf7YnvjjPi03NeNBvMC0sE5
+X-Received: by 2002:a05:6000:100a:b0:30a:a478:f559 with SMTP id a10-20020a056000100a00b0030aa478f559mr9364248wrx.2.1686752115778;
+        Wed, 14 Jun 2023 07:15:15 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6Ughal3Ksk9mWSBNbC9/117BFdtAMq/ce7h59A0MFXhuh3csYI3NW44NB41eA0ulZ91dSNCw==
+X-Received: by 2002:a05:6000:100a:b0:30a:a478:f559 with SMTP id a10-20020a056000100a00b0030aa478f559mr9364231wrx.2.1686752115421;
+        Wed, 14 Jun 2023 07:15:15 -0700 (PDT)
+Received: from localhost.localdomain ([151.29.46.22])
+        by smtp.gmail.com with ESMTPSA id m7-20020a7bca47000000b003f80b96097esm15014202wml.31.2023.06.14.07.15.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 07:14:21 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Wed, 14 Jun 2023 16:14:19 +0200
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Yonghong Song <yhs@meta.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Jackie Liu <liu.yun@linux.dev>
-Subject: Re: [PATCHv2] ftrace: Show all functions with addresses in
- available_filter_functions_addrs
-Message-ID: <ZInLO4/xly/f+Zk3@krava>
-References: <20230611130029.1202298-1-jolsa@kernel.org>
- <53a11f31-256d-e7bc-eca5-597571076dc5@meta.com>
- <20230611225407.3e9b8ad2@gandalf.local.home>
- <20230611225754.01350a50@gandalf.local.home>
- <d5ffd64c-65b7-e28c-b8ee-0d2ff9dcd78b@meta.com>
- <20230612110222.50c254f3@gandalf.local.home>
- <ZId/UL/iujOdgel+@krava>
+        Wed, 14 Jun 2023 07:15:14 -0700 (PDT)
+Date:   Wed, 14 Jun 2023 16:15:12 +0200
+From:   Juri Lelli <juri.lelli@redhat.com>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Luca Abeni <luca.abeni@santannapisa.it>,
+        Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vineeth Pillai <vineeth@bitbyteword.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [RFC PATCH V3 6/6] sched/fair: Implement starvation monitor
+Message-ID: <ZInLcNqGpLCw8xsn@localhost.localdomain>
+References: <cover.1686239016.git.bristot@kernel.org>
+ <bd9977efff8cc3e002c4b2db02f611167905a99f.1686239016.git.bristot@kernel.org>
+ <CAEXW_YT0DmvQo_gfCq5uzpZpf36HmfzXozo9+=sYJp-hZx4qTQ@mail.gmail.com>
+ <b2cd0072-d226-4adb-ddf5-958d9635f881@kernel.org>
+ <CAEXW_YR9Tfw5KyFU7TQtYE02k+DpaMXH=osx9Ws5w_j1YpHxhg@mail.gmail.com>
+ <841849b5-1f9c-4f0e-2de8-1da278256888@kernel.org>
+ <CAEXW_YQ7vEakRcJgva_PYEnsj4ZLafH-pXQiJ5STCkM7dQAttg@mail.gmail.com>
+ <4849295d-9aef-836f-0e5f-063e2075380a@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZId/UL/iujOdgel+@krava>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <4849295d-9aef-836f-0e5f-063e2075380a@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 10:25:55PM +0200, Jiri Olsa wrote:
-> On Mon, Jun 12, 2023 at 11:02:22AM -0400, Steven Rostedt wrote:
-> > On Mon, 12 Jun 2023 07:49:53 -0700
-> > Yonghong Song <yhs@meta.com> wrote:
-> > 
-> > > I am actually interested in how available_filter_functions_addrs
-> > > will be used. For example, bpf_program__attach_kprobe_multi_opts()
-> > > can already take addresses from kallsyms. How to use
-> > > available_filter_functions_addrs to facilitate kprobe_multi?
-> 
-> the problem is that we need to do 2 passes:
-> 
->  - through available_filter_functions and find out if the function is traceable
->  - through /proc/kallsyms to get the address for traceable function
-> 
-> having available_filter_functions symbols together with addresses allow
-> us to skip the kallsyms step
-> 
-> and we are ok with the address in available_filter_functions_addr not being the
-> function entry, because kprobe_multi uses fprobe and that handles both entry and
-> patch-site address properly
-> 
-> > > Do we need to change kernel APIs? It would be great at least we
-> > > got a RFC patch to answer these questions.
-> > 
-> > I agree, having that information would also be useful to me.
-> > 
-> > Jiri? Andrii?
-> 
-> so we have 2 interfaces how to create kprobe_multi link:
-> 
->   a) passing symbols to kernel
-> 
->      1) user gathers symbols and need to ensure that they are
->         trace-able -> pass through available_filter_functions file
-> 
->      2) kernel takes those symbols and translates them to addresses
->         through kallsyms api
-> 
->      3) addresses are passed to fprobe/ftrace through:
-> 
->          register_fprobe_ips
->          -> ftrace_set_filter_ips
-> 
->   b) passing addresses to kernel
-> 
->      1) user gathers symbols and needs to ensure that they are
->         trace-able -> pass through available_filter_functions file
-> 
->      2) user takes those symbols and translates them to addresses
->        through /proc/kallsyms
-> 
->      3) addresses are passed to the kernel and kernel calls:
-> 
->          register_fprobe_ips
->          -> ftrace_set_filter_ips
-> 
-> 
-> The new available_filter_functions_addrs file helps us with option b),
-> because we can make 'b 1' and 'b 2' in one step - while filtering traceable
-> functions, we get the address directly.
-> 
-> I tested the new available_filter_functions_addrs changes with some hacked
-> selftest changes, you can check it in here [1].
-> 
-> I assume Jackie Liu will send new version of her patchset [2] based on this
-> new available_filter_functions_addrs file.
-> 
-> I think we should have these changes coming together and add some perf
-> measurements from before and after to make the benefit apparent.
+Hey,
 
-FYI I did some perf meassurements and the speedup is not substantial :-\
+So Daniel provided the gory details :) .. but please let me highlight
+one of his points below, which I think it might clarify why we might
+want to start with a special case, patch 6 improved approach, before
+possibly moving to more complex implementations.
 
-looks like the symbols resolving to addresses we do in kernel for kprobe_multi
-link is more faster/cheaper than I thought 
+On 14/06/23 15:45, Daniel Bristot de Oliveira wrote:
 
-but still there is 'some' speedup and we will get rid of the extra
-/proc/kallsyms parsing, so I think it's still worth it to have the
-new file
+...
 
+> By postponing the enqueue/replanishment of the DL server here, we are fixing the
+> problem in a practical way, that works without breaking existing useful properties &
+> use-cases.
 
-base:
+In my understanding, if we simply postpone actual activation of the DL
+server up to the point it really needs to boost/run for giving CFS tasks
+some breath (the infamous 0-laxity :), we save RT tasks from useless
+interruptions and still can keep EDF/CBS working w/o much changes.
 
- Performance counter stats for './test_progs -n 103/1':
+It looks like a low hanging fruit, small improvement on what we have today
+than doesn't prevent us for implementing more complex features (i.e., full
+blown hierarchical scheduling, alternative schedulers) in the future if
+the need arises.
 
-       103,423,103      cycles:u
-    79,279,231,029      cycles:k
-    79,382,694,663      cycles
+Thanks!
+Juri
 
-      18.627593589 seconds time elapsed
-
-       0.025999000 seconds user
-      18.323855000 seconds sys
-
-
-with fix:
-
- Performance counter stats for './test_progs -n 103/1':
-
-       126,659,572      cycles:u
-    77,951,768,179      cycles:k
-    78,078,467,451      cycles
-
-      18.651464273 seconds time elapsed
-
-       0.025001000 seconds user
-      18.243828000 seconds sys
-
-
-jirka
