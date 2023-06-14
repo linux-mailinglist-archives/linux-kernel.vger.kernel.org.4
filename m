@@ -2,125 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AAAC7302E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 293367302E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343541AbjFNPIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 11:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47680 "EHLO
+        id S1343529AbjFNPHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 11:07:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343523AbjFNPIK (ORCPT
+        with ESMTP id S1343510AbjFNPHu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 11:08:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B41189
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:07:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686755240;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wGHMe8IA6mAo0HMH3lZ/8EExV+cg7D2Uq+MQfhPcyas=;
-        b=et+NrPcIWnIxy5/Lqr5LOYhTfqlyfz74RNPIeFcedeQKy9m3RxwwCKunIUmbwRFmF4tVW/
-        BEJ/JIn/GSKEOMpH589smidNTk4oYhFCBPglj01Mu4uSf0gipeh/GBBWEm4ugjmh5XrQ7Z
-        Pas7hnAnX52XhvIQnOVMmFYkWt/jW9k=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-66-7l4Ipb7wPzmenxHuK39-gw-1; Wed, 14 Jun 2023 11:07:18 -0400
-X-MC-Unique: 7l4Ipb7wPzmenxHuK39-gw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 14 Jun 2023 11:07:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9021FC2;
+        Wed, 14 Jun 2023 08:07:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 29D573806706;
-        Wed, 14 Jun 2023 15:07:18 +0000 (UTC)
-Received: from localhost (unknown [10.39.192.206])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DF96C9E9F;
-        Wed, 14 Jun 2023 15:07:17 +0000 (UTC)
-Date:   Wed, 14 Jun 2023 16:07:17 +0100
-From:   "Richard W.M. Jones" <rjones@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Aaron Thompson <dev@aaront.org>, linux-kernel@vger.kernel.org
-Subject: Re: printk.time causes rare kernel boot hangs
-Message-ID: <20230614150717.GG7636@redhat.com>
-References: <20230613134105.GA10301@redhat.com>
- <20230614092158.GF1639749@hirez.programming.kicks-ass.net>
- <20230614094522.GA7636@redhat.com>
- <20230614103011.GL7912@redhat.com>
- <20230614103953.GM7912@redhat.com>
- <20230614113536.GJ1639749@hirez.programming.kicks-ass.net>
- <20230614125320.GA1640563@hirez.programming.kicks-ass.net>
- <20230614130348.GF7636@redhat.com>
- <20230614130945.GK1639749@hirez.programming.kicks-ass.net>
- <20230614145348.GB1640563@hirez.programming.kicks-ass.net>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6850F64274;
+        Wed, 14 Jun 2023 15:07:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DEF3C433C8;
+        Wed, 14 Jun 2023 15:07:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686755267;
+        bh=DZVt3kjkY559qmGtC1/RX3/D7SfDAvHLLqPhyTY1QmA=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=S0DbZIZOBOXRCc06oyYCeQYpKD+DnXYWEuQdGdASou6YlbntDI8b4Z1opHgZqzZqD
+         mEV9TTwkfySp1umPpHu9zAFjujdqQHDJyifbB1veIiy+WnSNS+ZrQY7hkHVkNVT5Xy
+         kXENE9vNc4BM4gmvbT83CVxXTbUyZcFcSfZXz82Mu9DzdPNf/frQvKquur3qejhzJV
+         bvKqx+bb8/cOoYeqKGe6r4TvmBJ/mNYV8thqm7KGDxit1f2gqe7Nj5SEPmXOyPHYv7
+         9vjQKA2MrhRNAhivyt5zDsn09DRJw1vSM3CeiwEz0tmgti8KvGVtgGxLrO6zgRx6SZ
+         S65HJI0fN39MQ==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8?= =?utf-8?Q?rgensen?= 
+        <toke@kernel.org>, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        regressions@lists.linux.dev
+Subject: Re: Closing down the wireless trees for a summer break?
+References: <87y1kncuh4.fsf@kernel.org> <871qifxm9b.fsf@toke.dk>
+        <20230613112834.7df36e95@kernel.org>
+        <ba933d6e3d360298e400196371e37735aef3b1eb.camel@sipsolutions.net>
+        <20230613195136.6815df9b@kernel.org>
+        <c7c9418bcd5ac1035a007d336004eff48994dde7.camel@sipsolutions.net>
+Date:   Wed, 14 Jun 2023 18:07:43 +0300
+In-Reply-To: <c7c9418bcd5ac1035a007d336004eff48994dde7.camel@sipsolutions.net>
+        (Johannes Berg's message of "Wed, 14 Jun 2023 11:56:16 +0200")
+Message-ID: <87a5x2ccao.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230614145348.GB1640563@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 04:53:48PM +0200, Peter Zijlstra wrote:
-> On Wed, Jun 14, 2023 at 03:09:45PM +0200, Peter Zijlstra wrote:
-> > On Wed, Jun 14, 2023 at 02:03:48PM +0100, Richard W.M. Jones wrote:
-> > > On Wed, Jun 14, 2023 at 02:53:20PM +0200, Peter Zijlstra wrote:
-> > > > Ooooh, what qemu version do you have? There were some really dodgy
-> > > > reports all around self modifying code, all reported on 7.2, that seems
-> > > > to have gone away with 8.
-> > > 
-> > > > Now, all of them were using TCG, and I think you're using KVM.
-> > > 
-> > > I'm using qemu-system-x86-8.0.0-4.fc39.x86_64 with KVM.  The host
-> > > kernel is 6.4.0-0.rc5.41.fc39.x86_64.
-> > > 
-> > > > I've at least 36000 cycles and still nothing :-(, let me go try your
-> > > > .config.
-> > > 
-> > > I can definitely reproduce this with your config (but AMD host), so
-> > > that's odd.  Let me try with Intel hardware and your config.  You
-> > > really should see this with only a few thousands iterations.
-> > 
-> > Yeah, I'm running on some ancient ivb-ep, let me try on the alderlake. I
-> > don't really have AMD machines at hand :-/
-> 
-> Using v6.4-rc6-37-gb6dad5178cea, and 36000+ cycles on the ADL (affine to
-> big cores) later and nothing :-(
+Johannes Berg <johannes@sipsolutions.net> writes:
 
-So I have just this minute reproduced it on Intel, after around ~2000
-iterations.
+> On Tue, 2023-06-13 at 19:51 -0700, Jakub Kicinski wrote:
+>
+>> On Tue, 13 Jun 2023 22:00:35 +0200 Johannes Berg wrote:
+>> > On Tue, 2023-06-13 at 11:28 -0700, Jakub Kicinski wrote:
+>> > > On Tue, 13 Jun 2023 20:14:40 +0200 Toke H=C3=B8iland-J=C3=B8rgensen =
+wrote:=20=20
+>> > > > I think this sounds reasonable, and I applaud the effort to take s=
+ome
+>> > > > time off during the summer :)
+>> > > >=20
+>> > > > One question that comes to mind is how would this work for patchwo=
+rk?
+>> > > > Would we keep using the wireless patchwork instance for the patches
+>> > > > going to -net in that period, or will there be some other process =
+for
+>> > > > this? I realise the setup we have for ath9k is a bit special in th=
+is
+>> > > > regard with the ack-on-list+delegation, so I'm obviously mostly
+>> > > > interested in what to do about that... :)=20=20
+>> > >=20
+>> > > Whatever's easiest :) It's probably a good idea for Kalle to write
+>> > > down all the local rules and customs and share those with us.
+>> >=20
+>> > While that's probably a good idea regardless, I'd think that patchwork
+>> > doesn't really matter that much - we'll have some catching up to do
+>> > anyway after the vacations, so looking through patchwork etc. would be
+>> > perfectly acceptable. Worst case we'd notice when a patch doesn't appl=
+y,
+>> > right? :)
+>>=20
+>> Right, I meant it more in terms of patch flow. Is looking at which
+>> drivers have a tree specified in MAINTAINERS enough to know what
+>> should be applied directly?
+>
+> Oh, right. Not really sure how well that all is reflected in
+> MAINTAINERS.
 
-On this machine I am using:
+Now that I sent some updates, the separate driver specific trees should
+be pretty well documented in MAINTAINERS:
 
-Host kernel:  6.3.7-200.fc38.x86_64
-Guest kernel: git commit fb054096aea0576f0c0a61c598e5e9676443ee86
-Guest config: defconfig + kvm_guest.config + CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
-QEMU:         qemu-system-x86-8.0.0-4.fc39.x86_64 (using kvm_intel)
-Hardware:     Intel(R) Core(TM) i7-10850H CPU @ 2.70GHz
+https://patchwork.kernel.org/project/linux-wireless/list/?series=3D757173
 
-> Clearly I'm doing something wrong.
+But do let me know if I missed something.
 
-I'm suspecting version of qemu may have something to do with it, but
-honestly I don't know.  Which qemu are you using?
+> So Gregory usually handles patches for iwlwifi, but he'll _also_ be on
+> vacation around a similar time frame.
+>
+> Toke usually reviews patches for ath9k but then asks Kalle (via
+> assigning in patchwork) to apply them.
+>
+> Felix usually picks up patches for mediatek drivers (unless specifically
+> asking Kalle for individual ones) and then sends a pull request.
+>
+> For the stack (all the bits we have under net/) that's just on me,
+> normally.
+>
+> I think that's it? But I guess Kalle will have more comments.
 
-I'll now try with upstream qemu from git in case there's something
-about the Fedora qemu.
+And for drivers/net/wireless/ath/ I have my ath.git tree for which I
+take all patches for drivers under that directory. (BTW I might be
+updating my ath.git tree some time during summer, but no promises. I
+will be mostly offline and not even checking email.)
 
-Rich.
+But do note that above is _only_ for -next patches. For patches going to
+-rc releases we apply the patches directly to wireless, no other trees
+are involved. My proposal was that net maintainers would take only fixes
+for -rc releases, my guess from history is that it would be maximum of
+10-15 patches. And once me and Johannes are back we would sort out -next
+patches before the merge window. But of course you guys can do whatever
+you think is best :)
 
--- 
-Richard Jones, Virtualization Group, Red Hat http://people.redhat.com/~rjones
-Read my programming and virtualization blog: http://rwmj.wordpress.com
-Fedora Windows cross-compiler. Compile Windows programs, test, and
-build Windows installers. Over 100 libraries supported.
-http://fedoraproject.org/wiki/MinGW
+>> > Wrt. ath9k patches I guess "delegate in patchwork" won't work anymore,
+>> > but "resend to netdev" or something perhaps?
+>>=20
+>> We can watch PW state and apply from linux-wireless, I reckon.
+>> That said I don't know how you use delegation :)
+>
+> We have auto-delegation set up for this, except iwlwifi is on me right
+> now for the upstream, and I just delegate other incoming patches to
+> Gregory.
 
+Auto-delegation is awesome, it helps our workflow quite a lot. Though it's =
+not
+perfect and some of the patches will not get delegated automatically. So
+I periodically check this link if there are patches needing for manual
+delegation:
+
+https://patchwork.kernel.org/project/linux-wireless/list/?series=3D&submitt=
+er=3D&state=3D&q=3D&archive=3D&delegate=3DNobody
+
+As an example, right now I see one pull request and one patch:
+
+https://patchwork.kernel.org/project/linux-wireless/patch/20230614075502.11=
+765-1-johannes@sipsolutions.net/
+https://patchwork.kernel.org/project/linux-wireless/patch/20230612130256.45=
+72-5-linyunsheng@huawei.com/
+
+It's a minor nuisance so I haven't bothered to even report it to
+patchwork project.
+
+--=20
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
+hes
