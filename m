@@ -2,109 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B8A730BCC
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 01:55:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0087D730BD3
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 01:56:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbjFNXzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 19:55:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40762 "EHLO
+        id S236293AbjFNX4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 19:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbjFNXzM (ORCPT
+        with ESMTP id S230298AbjFNX4W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 19:55:12 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE871FD4
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 16:55:09 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-65313d304e6so4387378b3a.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 16:55:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686786908; x=1689378908;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=/Db8KxnSVPTgowcGe/Isx7RarF8FooosNlupn6FMqKw=;
-        b=68d1A1Tig/1eII5XPEXfOHqu8vpkYRpuCsx6V036uwEMnTYmARW+qtNlVFv2rP+VWC
-         uo3W/U8U+kL4Jub3FaVUEkCksUs4NZtX/RP/E97McWOR8Hn9ATAfO1iIoNMbi7FoQeXO
-         Oj+lL7ZfXaFg0Mxk72zcyhcrDagaT/KVbr1+/vtcVgKVtwHe/E12VdTqjsHZlSN+UH56
-         AChyg27Vj4/vL+rUQdhZvLfQ1xpQmGOLlYA+/WL/QWYoctM6tR2XkuEgY8hmPF9idUfP
-         M52HcGC1uy8xT1XxvHFK9K5h+BfR3cnWBw+DZBNt9qZECy7Me42syUKKxmefvPww3pHo
-         HcFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686786908; x=1689378908;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/Db8KxnSVPTgowcGe/Isx7RarF8FooosNlupn6FMqKw=;
-        b=AVaA91cmbt/FGwEH/I1D/yXPZAtt5gZFPBrOcDiPIQh9GYoNS08Dt9VVbeCKip2AuH
-         ATzvUWrakgBNLZfJh6CFOiOy7g2+wTZo9alRh9C84lmAgna+vSkgV9tAaG3LxEklDOUe
-         Csg35u2NR9B0pKCsxWY4beYb4KVBfHZm7hbQUJ8Rjc911j97mDAsOo678R3SKuxoW7+L
-         Kf4OR6NEWDtD1hqHmQovE9KgSpNW0VHdCFjGRvw5cm1B18RQuozvkXP+eVko7T85nOgE
-         ZXO+s4lQLi2kO+/57Wo4e0y1C3VD1H3/aKLmEH5bNpH2kQ9yEIbgflFHux8zJuHGblLp
-         kzaA==
-X-Gm-Message-State: AC+VfDxafJZIE4V7GBKnKnWdkfSxrwYLVkZccs5lGsFz3EKGfrjgtzuH
-        VgpWfVzJJSPbmHEW27XJNHVyBrl/5KJAc0k=
-X-Google-Smtp-Source: ACHHUZ4yAK39q4ouqLMpS+/Pahz2jLeOi1I3Slr+1pfwmFRaJ8eG44NErNa8BnzbvcHJLnhPEQ6oL68eBiUoG8I=
-X-Received: from pceballos.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:128c])
- (user=pceballos job=sendgmr) by 2002:a05:6a00:1909:b0:64d:2cb0:c623 with SMTP
- id y9-20020a056a00190900b0064d2cb0c623mr1109527pfi.4.1686786908572; Wed, 14
- Jun 2023 16:55:08 -0700 (PDT)
-Date:   Wed, 14 Jun 2023 23:54:52 +0000
+        Wed, 14 Jun 2023 19:56:22 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4231BF8;
+        Wed, 14 Jun 2023 16:56:21 -0700 (PDT)
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35ENkwqs010614;
+        Wed, 14 Jun 2023 23:55:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=Rp5y6wdKAFFhOp75eoI6smxrxPDGYZjPfkK3i0xfTgQ=;
+ b=YwT4r+U0KU1pqlgvUjY131SMKPYOq/pKOq/gGiE5Z6Z8R+nDtANd6XgCenQycufFpCbu
+ upL8D4p4kEQH5jPpyT73jTWPEoFUnpj3BJsCn8ghHVrt99BGXK1rgdOIFRIz5/uBRZ5H
+ dQxWdxSudqEOsRTKKvj3D4kssn8zD7FpFJP97ezTxNFp0JpBmmHftrm/WA2CicEfd/AW
+ 8hJ2VMFtaffzRCtUAEj0+xUpzLJXqi4X6LnYxh7kF3dyt+3Bg8aVW1q6GCEc+ZkRg0jV
+ d6Tl6vQzypTloZalgDAF3qlGL7OvOG5s5TE69CKzqv6OiAP71/x7JtySjdtYcRemX61m Pw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r7qh783ug-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Jun 2023 23:55:46 +0000
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35ENoGVo018069;
+        Wed, 14 Jun 2023 23:55:46 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r7qh783u9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Jun 2023 23:55:46 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35ELkAmE011857;
+        Wed, 14 Jun 2023 23:55:45 GMT
+Received: from smtprelay06.wdc07v.mail.ibm.com ([9.208.129.118])
+        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3r4gt65hkk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Jun 2023 23:55:45 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+        by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35ENtild58786260
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 14 Jun 2023 23:55:44 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 08C7D58054;
+        Wed, 14 Jun 2023 23:55:44 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2E4FB58045;
+        Wed, 14 Jun 2023 23:55:42 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.19.215])
+        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 14 Jun 2023 23:55:42 +0000 (GMT)
+Message-ID: <8e59ce95a1cc100c41806ef72afe4265a1d43058.camel@linux.ibm.com>
+Subject: Re: [PATCH v12 3/4] evm: Align evm_inode_init_security() definition
+ with LSM infrastructure
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Wed, 14 Jun 2023 19:55:41 -0400
+In-Reply-To: <20230610075738.3273764-4-roberto.sassu@huaweicloud.com>
+References: <20230610075738.3273764-1-roberto.sassu@huaweicloud.com>
+         <20230610075738.3273764-4-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
 Mime-Version: 1.0
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Message-ID: <20230614235452.3765265-1-pceballos@google.com>
-Subject: [PATCH v2] drm/i915/display/lspcon: Increase LSPCON mode settle timeout
-From:   Pablo Ceballos <pceballos@google.com>
-To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        "=?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?=" 
-        <ville.syrjala@linux.intel.com>, Sam Ravnborg <sam@ravnborg.org>,
-        Pablo Ceballos <pceballos@google.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 9MmicGRGr_BY5jXpaH0qxroHoqQr9NWE
+X-Proofpoint-ORIG-GUID: MqKmAuuQ6av1wziaiH_Uwr-EakIm6oWy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-14_14,2023-06-14_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
+ impostorscore=0 mlxlogscore=999 malwarescore=0 lowpriorityscore=0
+ phishscore=0 bulkscore=0 suspectscore=0 priorityscore=1501 spamscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306140206
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is to eliminate all cases of "*ERROR* LSPCON mode hasn't settled",
-followed by link training errors. Intel engineers recommended increasing
-this timeout and that does resolve the issue.
+On Sat, 2023-06-10 at 09:57 +0200, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> Change the evm_inode_init_security() definition to align with the LSM
+> infrastructure. Keep the existing behavior of including in the HMAC
+> calculation only the first xattr provided by LSMs.
+> 
+> Changing the evm_inode_init_security() definition requires passing the
+> xattr array allocated by security_inode_init_security(), and the number of
+> xattrs filled by previously invoked LSMs.
+> 
+> Use the newly introduced lsm_get_xattr_slot() to position EVM correctly in
+> the xattrs array, like a regular LSM, and to increment the number of filled
+> slots. For now, the LSM infrastructure allocates enough xattrs slots to
+> store the EVM xattr, without using the reservation mechanism.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
-On some CometLake-based device designs the Parade PS175 takes more than
-400ms to settle in PCON mode. 100 reboot trials on one device resulted
-in a median settle time of 440ms and a maximum of 444ms. Even after
-increasing the timeout to 500ms, 2% of devices still had this error. So
-this increases the timeout to 800ms.
+Thanks, Roberto!
 
-Signed-off-by: Pablo Ceballos <pceballos@google.com>
----
-
-Changelog since v1:
-- Added more details in the commit message
-
- drivers/gpu/drm/i915/display/intel_lspcon.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/i915/display/intel_lspcon.c b/drivers/gpu/drm/i915/display/intel_lspcon.c
-index bb3b5355a0d9..d7299fdc43ad 100644
---- a/drivers/gpu/drm/i915/display/intel_lspcon.c
-+++ b/drivers/gpu/drm/i915/display/intel_lspcon.c
-@@ -167,7 +167,7 @@ static enum drm_lspcon_mode lspcon_wait_mode(struct intel_lspcon *lspcon,
- 	drm_dbg_kms(&i915->drm, "Waiting for LSPCON mode %s to settle\n",
- 		    lspcon_mode_name(mode));
- 
--	wait_for((current_mode = lspcon_get_current_mode(lspcon)) == mode, 400);
-+	wait_for((current_mode = lspcon_get_current_mode(lspcon)) == mode, 800);
- 	if (current_mode != mode)
- 		drm_err(&i915->drm, "LSPCON mode hasn't settled\n");
- 
--- 
-2.41.0.162.gfafddb0af9-goog
+Acked-by: Mimi Zohar <zohar@linux.ibm.com>
 
