@@ -2,118 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C00F572FD66
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E82E72FD74
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:53:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244194AbjFNLwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 07:52:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33512 "EHLO
+        id S244311AbjFNLxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 07:53:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbjFNLwX (ORCPT
+        with ESMTP id S244306AbjFNLxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 07:52:23 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCFA1BF3;
-        Wed, 14 Jun 2023 04:52:22 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id 6a1803df08f44-62fe6773c4fso3198736d6.2;
-        Wed, 14 Jun 2023 04:52:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686743540; x=1689335540;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RQzjvB2/E4BuxnxzFWq+E7kZcQfXoFct1LFCiMktZS8=;
-        b=GzP9YZc9Nxf4T2AW8Q8hO76zBgh47xmFmED4h1Fc+HXSmpVx+n8NbbKB2L00mXY2D7
-         G4ulS0Fpiuqz0WY+8wH1wsgkFbuNdfQ2ulDnusGqCbV3RraiFcyANdBqb7TVJYDTP2Hh
-         S1cEqXDhvbaD9uV96baRdkaLQWi9xfsyiqhyvz7l1jTEdfQ9Pwab1jk2msXSlX8Hc199
-         2S0aakpOrtNRhyMozwoon/6l++5u39dKLlAblh5zXGdqVHZ012xuNilUvE12WOw8lyjL
-         fWuFEGHzvWaEK0HZsCmjAIm2/ALSZwFhurgI9x3AlBOru0TaKvQaUd+JMvDy4NHIERl8
-         x2rA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686743540; x=1689335540;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RQzjvB2/E4BuxnxzFWq+E7kZcQfXoFct1LFCiMktZS8=;
-        b=XS0xOB87r6IzpASLSm+PjzZaxLa3ZGiGtzMefj6nU1AMm/uuiICTSQqcMjey0xF9GO
-         fVcb9pAiSMqJK8iUF5Lrs6XsOjs/of8q5wB/8C/c2qm4YPgCOdRsAZz+/VZhuI6bOxQf
-         iHF5l01IjpUxtETbcuTY4C3mRM6CL1UGCMt9LdiKjh9rDGmzv0cF2zmRnDOFtWMe8wyx
-         etwpUwN+7FWOODlPyVHtmyKjqtopaChij8HrcW5eDAkaK+tXcc7Pxs9SHxNVxBt+pMSj
-         0vwlbj++36PKc2tJGs8TPOELbblILDT9TBx1DoEmO7cYw90vhFKzuqqNfe2kqwuGjSx7
-         AqWA==
-X-Gm-Message-State: AC+VfDyr4OQJ3skkkjYBbs8JR7kvKoKOi+JKwNRM/KI06YMfl+ySOO4u
-        ZB6jco1viZQOGtUhPcowvz0+qrNziAIzS92xA1I=
-X-Google-Smtp-Source: ACHHUZ7jeIS46iA9kp2IDTdw+Yv6lPjFxYeU5SPJjDwY7dxraYGEZszXvUcZ4Ee61amfJMfv0nnVUgEVzshrVjaiU9Y=
-X-Received: by 2002:a05:6214:4018:b0:629:78ae:80f8 with SMTP id
- kd24-20020a056214401800b0062978ae80f8mr16092327qvb.10.1686743540056; Wed, 14
- Jun 2023 04:52:20 -0700 (PDT)
+        Wed, 14 Jun 2023 07:53:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD441BEF
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 04:52:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686743538;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=IbztZ9tLRVL6/DOJgUmI8+AFs+8EIklKEWPZn0/Wnkk=;
+        b=hj4UVMs0PRx/QQxxGjFkfokRx4QtaRxPDEFqzk2cNuO/UmvZhMJLafEO/YG4lENFK8HZKy
+        CzG2pPR9kdFjR70LFuzTob7N/LuREm70C+vqBJQ1jOnQ3xaQBmrojZ3lyAWBCKKd3zGtw3
+        sHOS7gWTPkVdDimQ/2tttK7h4nUQ4Rc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-446-VIR5cu0VN8-MlefhfREMng-1; Wed, 14 Jun 2023 07:52:12 -0400
+X-MC-Unique: VIR5cu0VN8-MlefhfREMng-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4213D3C0F234;
+        Wed, 14 Jun 2023 11:52:12 +0000 (UTC)
+Received: from max-t490s.redhat.com (unknown [10.39.208.37])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 519F7492B06;
+        Wed, 14 Jun 2023 11:52:09 +0000 (UTC)
+From:   Maxime Coquelin <maxime.coquelin@redhat.com>
+To:     xieyongji@bytedance.com, jasowang@redhat.com, mst@redhat.com,
+        xuanzhuo@linux.alibaba.com
+Cc:     gregkh@linuxfoundation.org, sheng.zhao@bytedance.com,
+        parav@nvidia.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        Maxime Coquelin <maxime.coquelin@redhat.com>
+Subject: [PATCH] vduse: fix NULL pointer dereference
+Date:   Wed, 14 Jun 2023 13:52:06 +0200
+Message-Id: <20230614115206.800118-1-maxime.coquelin@redhat.com>
 MIME-Version: 1.0
-References: <20230614074904.29085-1-herve.codina@bootlin.com>
- <20230614074904.29085-8-herve.codina@bootlin.com> <CAHp75Vcur=H_2mBm5Ztuvd7Jnvmr6+tvCbEkFtmaVLsEjXr8NQ@mail.gmail.com>
- <20230614114214.1371485e@bootlin.com>
-In-Reply-To: <20230614114214.1371485e@bootlin.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 14 Jun 2023 14:51:43 +0300
-Message-ID: <CAHp75VcmW2StPqb_LtKFyNyJ2+jz3c19zNRDiSuGs06Bseq04w@mail.gmail.com>
-Subject: Re: [PATCH v4 07/13] minmax: Introduce {min,max}_array()
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 12:42=E2=80=AFPM Herve Codina <herve.codina@bootlin=
-.com> wrote:
-> On Wed, 14 Jun 2023 12:02:57 +0300
-> Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> > On Wed, Jun 14, 2023 at 10:49=E2=80=AFAM Herve Codina <herve.codina@boo=
-tlin.com> wrote:
+vduse_vdpa_set_vq_affinity callback can be called
+with NULL value as cpu_mask when deleting the vduse
+device.
 
-...
+This patch clears virtqueue's IRQ affinity mask value
+instead of dereferencing NULL cpu_mask.
 
-> > > +       typeof(__array[0] + 0) __element =3D __array[--__len];    \
-> >
-> > Do we need the ' + 0' part?
->
-> Yes.
->
-> __array can be an array of const items and it is legitimate to get the
-> minimum value from const items.
->
-> typeof(__array[0]) keeps the const qualifier but we need to assign __elem=
-ent
-> in the loop.
-> One way to drop the const qualifier is to get the type from a rvalue comp=
-uted
-> from __array[0]. This rvalue has to have the exact same type with only th=
-e const
-> dropped.
-> '__array[0] + 0' was a perfect canditate.
+[ 4760.952149] BUG: kernel NULL pointer dereference, address: 0000000000000000
+[ 4760.959110] #PF: supervisor read access in kernel mode
+[ 4760.964247] #PF: error_code(0x0000) - not-present page
+[ 4760.969385] PGD 0 P4D 0
+[ 4760.971927] Oops: 0000 [#1] PREEMPT SMP PTI
+[ 4760.976112] CPU: 13 PID: 2346 Comm: vdpa Not tainted 6.4.0-rc6+ #4
+[ 4760.982291] Hardware name: Dell Inc. PowerEdge R640/0W23H8, BIOS 2.8.1 06/26/2020
+[ 4760.989769] RIP: 0010:memcpy_orig+0xc5/0x130
+[ 4760.994049] Code: 16 f8 4c 89 07 4c 89 4f 08 4c 89 54 17 f0 4c 89 5c 17 f8 c3 cc cc cc cc 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 83 fa 08 72 1b <4c> 8b 06 4c 8b 4c 16 f8 4c 89 07 4c 89 4c 17 f8 c3 cc cc cc cc 66
+[ 4761.012793] RSP: 0018:ffffb1d565abb830 EFLAGS: 00010246
+[ 4761.018020] RAX: ffff9f4bf6b27898 RBX: ffff9f4be23969c0 RCX: ffff9f4bcadf6400
+[ 4761.025152] RDX: 0000000000000008 RSI: 0000000000000000 RDI: ffff9f4bf6b27898
+[ 4761.032286] RBP: 0000000000000000 R08: 0000000000000008 R09: 0000000000000000
+[ 4761.039416] R10: 0000000000000000 R11: 0000000000000600 R12: 0000000000000000
+[ 4761.046549] R13: 0000000000000000 R14: 0000000000000080 R15: ffffb1d565abbb10
+[ 4761.053680] FS:  00007f64c2ec2740(0000) GS:ffff9f635f980000(0000) knlGS:0000000000000000
+[ 4761.061765] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 4761.067513] CR2: 0000000000000000 CR3: 0000001875270006 CR4: 00000000007706e0
+[ 4761.074645] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[ 4761.081775] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[ 4761.088909] PKRU: 55555554
+[ 4761.091620] Call Trace:
+[ 4761.094074]  <TASK>
+[ 4761.096180]  ? __die+0x1f/0x70
+[ 4761.099238]  ? page_fault_oops+0x171/0x4f0
+[ 4761.103340]  ? exc_page_fault+0x7b/0x180
+[ 4761.107265]  ? asm_exc_page_fault+0x22/0x30
+[ 4761.111460]  ? memcpy_orig+0xc5/0x130
+[ 4761.115126]  vduse_vdpa_set_vq_affinity+0x3e/0x50 [vduse]
+[ 4761.120533]  virtnet_clean_affinity.part.0+0x3d/0x90 [virtio_net]
+[ 4761.126635]  remove_vq_common+0x1a4/0x250 [virtio_net]
+[ 4761.131781]  virtnet_remove+0x5d/0x70 [virtio_net]
+[ 4761.136580]  virtio_dev_remove+0x3a/0x90
+[ 4761.140509]  device_release_driver_internal+0x19b/0x200
+[ 4761.145742]  bus_remove_device+0xc2/0x130
+[ 4761.149755]  device_del+0x158/0x3e0
+[ 4761.153245]  ? kernfs_find_ns+0x35/0xc0
+[ 4761.157086]  device_unregister+0x13/0x60
+[ 4761.161010]  unregister_virtio_device+0x11/0x20
+[ 4761.165543]  device_release_driver_internal+0x19b/0x200
+[ 4761.170770]  bus_remove_device+0xc2/0x130
+[ 4761.174782]  device_del+0x158/0x3e0
+[ 4761.178276]  ? __pfx_vdpa_name_match+0x10/0x10 [vdpa]
+[ 4761.183336]  device_unregister+0x13/0x60
+[ 4761.187260]  vdpa_nl_cmd_dev_del_set_doit+0x63/0xe0 [vdpa]
 
-Seems like this also deserves a comment. But if the series is accepted
-as is, it may be done as a follow up.
+Fixes: 28f6288eb63d ("vduse: Support set_vq_affinity callback")
+Cc: xieyongji@bytedance.com
 
---=20
-With Best Regards,
-Andy Shevchenko
+Signed-off-by: Maxime Coquelin <maxime.coquelin@redhat.com>
+---
+ drivers/vdpa/vdpa_user/vduse_dev.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
+index 5f5c21674fdc..cdca94e85762 100644
+--- a/drivers/vdpa/vdpa_user/vduse_dev.c
++++ b/drivers/vdpa/vdpa_user/vduse_dev.c
+@@ -726,7 +726,11 @@ static int vduse_vdpa_set_vq_affinity(struct vdpa_device *vdpa, u16 idx,
+ {
+ 	struct vduse_dev *dev = vdpa_to_vduse(vdpa);
+ 
+-	cpumask_copy(&dev->vqs[idx]->irq_affinity, cpu_mask);
++	if (cpu_mask)
++		cpumask_copy(&dev->vqs[idx]->irq_affinity, cpu_mask);
++	else
++		cpumask_clear(&dev->vqs[idx]->irq_affinity);
++
+ 	return 0;
+ }
+ 
+-- 
+2.40.1
+
