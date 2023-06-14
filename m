@@ -2,166 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 091FB730167
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:13:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26B6073016B
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:13:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245446AbjFNONR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 10:13:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41960 "EHLO
+        id S245462AbjFNONv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 10:13:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235340AbjFNONP (ORCPT
+        with ESMTP id S235340AbjFNONs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 10:13:15 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D255CD;
-        Wed, 14 Jun 2023 07:13:14 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E695921A27;
-        Wed, 14 Jun 2023 14:13:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1686751992; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AXWk6CUvSgl2P4YJqAhXvTVbwqxUPGzo3E+LIQWooSI=;
-        b=Uzm0HlGQ0v+BDSs40EBKzyurOvOS9Jev8U90j1YhQzVpaUHMOwQ9eQl5TsE6Ub/k1khjm0
-        I2t7De+ZDz+yghYtyxDGJDOzkkTOebOlI1zUcfJwRLkAsu0INteoflheEP6ae4I8/IP9mP
-        JvCZDVHceToTHPL3qp+24NEQHmMOFMw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1686751992;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AXWk6CUvSgl2P4YJqAhXvTVbwqxUPGzo3E+LIQWooSI=;
-        b=tyKL14vhY7af13xcxWb/qt2Bg82IxT03rMqZnPv6npmXGpKMuCWJ1p61BtBeYdFgFN72s5
-        0tJhND7fkwjTBrAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8BD461391E;
-        Wed, 14 Jun 2023 14:13:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id M+YTIfjKiWTCdAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 14 Jun 2023 14:13:12 +0000
-Message-ID: <5720dbc1-a3e4-2b23-28cd-f889d3a5a4fc@suse.de>
-Date:   Wed, 14 Jun 2023 16:13:11 +0200
+        Wed, 14 Jun 2023 10:13:48 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB271715
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 07:13:47 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b3d29cfb17so27169695ad.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 07:13:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1686752027; x=1689344027;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=atkhLsJk4kYIR051jZUJsqhyVSqD17cKG1dfd3E+c04=;
+        b=QtPPdAz8+r7dt+3azArNI+jobqYcT5F/K5n1989N0B9h/dF9O0THNdPrbOgk401sv3
+         5J4d7liK3gdJtZ9cdamd5TvGz8tspTsfmQzlUei3suVhQyLyrh3DkFHy4rVZlSHdPsr5
+         YEErmKXQc4bgS24oNRScFjmmHUyABKOtOISkA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686752027; x=1689344027;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=atkhLsJk4kYIR051jZUJsqhyVSqD17cKG1dfd3E+c04=;
+        b=XG6KApn9iuyd6vjR8SCYSO+ngjfV4HfjXILsPiZRzBfIDg4QJhgaz+8aRyZDELd1Me
+         A9EQ8/3eRZaqA+yhE5N2KOPfd6LsRxr/6Xc3+Eizm71tjztwrQigH4IS2KW8UFpajIj1
+         8DVNBwrQqIn8FEcAGXkNMO4Bv9aAM9yJl33wwA8MMrXDtq0EXNyU2EmLzoPsIFaN4byA
+         Ry5KEae3Il6cH9p+eG+sRyBLUB3W0SVCZGL9DgFmGv0crgFGt7hc1Q2CwNQ4mCj3PzSO
+         kAzTEwoezYXPVKZqdz7GkOdbbwULd9MD2hVsrZAmnlzu92O1dw0uVtGHTiA7m2PNNVGL
+         s+KA==
+X-Gm-Message-State: AC+VfDwOtC7PiRMG8ZwD15c4eaXFNH5WEZ8VwcumO0zlM7fUchKe1JJJ
+        EEXy34FBlCF20tA+whrJO4K2tg==
+X-Google-Smtp-Source: ACHHUZ7c5hnOfemkMscvWj+eorrnWGExlzE2F7LXwlInsGAGaYBz8d88ceGN6cOoTGXRuvmWq7tQGg==
+X-Received: by 2002:a17:903:124d:b0:1ac:aba5:7885 with SMTP id u13-20020a170903124d00b001acaba57885mr14900116plh.47.1686752027301;
+        Wed, 14 Jun 2023 07:13:47 -0700 (PDT)
+Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:e1a3:812:fed0:eeab])
+        by smtp.gmail.com with ESMTPSA id h18-20020a170902f55200b001b042c0939fsm12226648plf.99.2023.06.14.07.13.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 07:13:46 -0700 (PDT)
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Minchan Kim <minchan@kernel.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Brian Geffon <bgeffon@google.com>
+Subject: [PATCH] zram: further limit recompression threshold
+Date:   Wed, 14 Jun 2023 23:13:12 +0900
+Message-ID: <20230614141338.3480029-1-senozhatsky@chromium.org>
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v3 01/38] backlight/bd6107: Compare against struct
- fb_info.device
-Content-Language: en-US
-To:     Lee Jones <lee@kernel.org>
-Cc:     daniel@ffwll.ch, javierm@redhat.com, sam@ravnborg.org,
-        deller@gmx.de, geert+renesas@glider.be, daniel.thompson@linaro.org,
-        jingoohan1@gmail.com, dan.carpenter@linaro.org,
-        michael.j.ruhl@intel.com, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-sh@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        stable@vger.kernel.org
-References: <20230613110953.24176-1-tzimmermann@suse.de>
- <20230613110953.24176-2-tzimmermann@suse.de>
- <20230614135157.GU3635807@google.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230614135157.GU3635807@google.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------jFKBPLLaVKDIAocIfs4ThSlI"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------jFKBPLLaVKDIAocIfs4ThSlI
-Content-Type: multipart/mixed; boundary="------------qMR6e1eJ6r4sR49vitWQ2hp2";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Lee Jones <lee@kernel.org>
-Cc: daniel@ffwll.ch, javierm@redhat.com, sam@ravnborg.org, deller@gmx.de,
- geert+renesas@glider.be, daniel.thompson@linaro.org, jingoohan1@gmail.com,
- dan.carpenter@linaro.org, michael.j.ruhl@intel.com,
- linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-sh@vger.kernel.org, linux-omap@vger.kernel.org,
- linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
- Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
- stable@vger.kernel.org
-Message-ID: <5720dbc1-a3e4-2b23-28cd-f889d3a5a4fc@suse.de>
-Subject: Re: [PATCH v3 01/38] backlight/bd6107: Compare against struct
- fb_info.device
-References: <20230613110953.24176-1-tzimmermann@suse.de>
- <20230613110953.24176-2-tzimmermann@suse.de>
- <20230614135157.GU3635807@google.com>
-In-Reply-To: <20230614135157.GU3635807@google.com>
+Recompression threshold should be below huge-size-class
+watermark.
 
---------------qMR6e1eJ6r4sR49vitWQ2hp2
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Suggested-by: Brian Geffon <bgeffon@google.com>
+Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+---
+ drivers/block/zram/zram_drv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-SGkNCg0KQW0gMTQuMDYuMjMgdW0gMTU6NTEgc2NocmllYiBMZWUgSm9uZXM6DQo+IE9uIFR1
-ZSwgMTMgSnVuIDIwMjMsIFRob21hcyBaaW1tZXJtYW5uIHdyb3RlOg0KPiANCj4+IFN0cnVj
-dCBiZDYxMDdfcGxhdGZvcm1fZGF0YSByZWZlcnMgdG8gYSBwbGF0Zm9ybSBkZXZpY2Ugd2l0
-aGluDQo+PiB0aGUgTGludXggZGV2aWNlIGhpZXJhcmNoeS4gVGhlIHRlc3QgaW4gYmQ2MTA3
-X2JhY2tsaWdodF9jaGVja19mYigpDQo+PiBjb21wYXJlcyBpdCBhZ2FpbnN0IHRoZSBmYmRl
-diBkZXZpY2UgaW4gc3RydWN0IGZiX2luZm8uZGV2LCB3aGljaA0KPj4gaXMgZGlmZmVyZW50
-LiBGaXggdGhlIHRlc3QgYnkgY29tcGFyaW5nIHRvIHN0cnVjdCBmYl9pbmZvLmRldmljZS4N
-Cj4+DQo+PiBGaXhlcyBhIGJ1ZyBpbiB0aGUgYmFja2xpZ2h0IGRyaXZlciBhbmQgcHJlcGFy
-ZXMgZmJkZXYgZm9yIG1ha2luZw0KPj4gc3RydWN0IGZiX2luZm8uZGV2IG9wdGlvbmFsLg0K
-Pj4NCj4+IHYyOg0KPj4gCSogbW92ZSByZW5hbWVzIGludG8gc2VwYXJhdGUgcGF0Y2ggKEph
-dmllciwgU2FtLCBNaWNoYWVsKQ0KPj4NCj4+IEZpeGVzOiA2N2I0M2U1OTA0MTUgKCJiYWNr
-bGlnaHQ6IEFkZCBST0hNIEJENjEwNyBiYWNrbGlnaHQgZHJpdmVyIikNCj4+IFNpZ25lZC1v
-ZmYtYnk6IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KPj4gQ2M6
-IExhdXJlbnQgUGluY2hhcnQgPGxhdXJlbnQucGluY2hhcnQrcmVuZXNhc0BpZGVhc29uYm9h
-cmQuY29tPg0KPj4gQ2M6IExlZSBKb25lcyA8bGVlQGtlcm5lbC5vcmc+DQo+PiBDYzogRGFu
-aWVsIFRob21wc29uIDxkYW5pZWwudGhvbXBzb25AbGluYXJvLm9yZz4NCj4+IENjOiBKaW5n
-b28gSGFuIDxqaW5nb29oYW4xQGdtYWlsLmNvbT4NCj4+IENjOiBkcmktZGV2ZWxAbGlzdHMu
-ZnJlZWRlc2t0b3Aub3JnDQo+PiBDYzogPHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmc+ICMgdjMu
-MTIrDQo+PiBSZXZpZXdlZC1ieTogSmF2aWVyIE1hcnRpbmV6IENhbmlsbGFzIDxqYXZpZXJt
-QHJlZGhhdC5jb20+DQo+PiBSZXZpZXdlZC1ieTogU2FtIFJhdm5ib3JnIDxzYW1AcmF2bmJv
-cmcub3JnPg0KPj4gUmV2aWV3ZWQtYnk6IERhbmllbCBUaG9tcHNvbiA8ZGFuaWVsLnRob21w
-c29uQGxpbmFyby5vcmc+DQo+PiAtLS0NCj4+ICAgZHJpdmVycy92aWRlby9iYWNrbGlnaHQv
-YmQ2MTA3LmMgfCAyICstDQo+PiAgIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwg
-MSBkZWxldGlvbigtKQ0KPiANCj4gQ2FuIHRoZSBCYWNrbGlnaHQgcGF0Y2hlcyBiZSBhcHBs
-aWVkIHdpdGhvdXQgdGhlIG90aGVycyBhbmQgdmlzYSB2ZXJzYT8NCg0KVW5mb3J0dW5hdGVs
-eSBub3QuIFRoZSByZXN0IG9mIHRoZSBzZXJpZXMgcmVxdWlyZXMgdGhlIGJhY2tsaWdodCBw
-YXRjaGVzLg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IA0KDQotLSANClRob21hcyBa
-aW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNv
-bHV0aW9ucyBHZXJtYW55IEdtYkgNCkZyYW5rZW5zdHJhc3NlIDE0NiwgOTA0NjEgTnVlcm5i
-ZXJnLCBHZXJtYW55DQpHRjogSXZvIFRvdGV2LCBBbmRyZXcgTXllcnMsIEFuZHJldyBNY0Rv
-bmFsZCwgQm91ZGllbiBNb2VybWFuDQpIUkIgMzY4MDkgKEFHIE51ZXJuYmVyZykNCg==
+diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
+index 1867f378b319..5676e6dd5b16 100644
+--- a/drivers/block/zram/zram_drv.c
++++ b/drivers/block/zram/zram_drv.c
+@@ -1753,7 +1753,7 @@ static ssize_t recompress_store(struct device *dev,
+ 		}
+ 	}
+ 
+-	if (threshold >= PAGE_SIZE)
++	if (threshold >= huge_class_size)
+ 		return -EINVAL;
+ 
+ 	down_read(&zram->init_lock);
+-- 
+2.41.0.162.gfafddb0af9-goog
 
---------------qMR6e1eJ6r4sR49vitWQ2hp2--
-
---------------jFKBPLLaVKDIAocIfs4ThSlI
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmSJyvcFAwAAAAAACgkQlh/E3EQov+DO
-uhAAsRBpTfNB2nRslH0VsoSwy6Po5YGk5E4vLJymwShH9bCMu2X+HxfG2JUWFVz7+LXPm/MYwZze
-0NAeaWjs2ft9FCSEzYVlCnhkpjZsa2Gf1u79S3ZMJHTWuacUji/M2mL2IZZCtG+EsCJmHPqWP+oI
-RRmzkZF3VLjE4nu8AKqSUF8P9d4CjOoTy7iUHhZ/OuAYv1pdHlJ6nLUv4m0gwsizgJNcF4Z9LeCa
-oqAVidYe/TebhOgC6rv3C5gTZnMoBfT9ICYFrGhLUKublhYI+xFGkYk5sx6vQLMJXwSMNu7KK4L+
-g4uoytQwFdTF+H1IhZS3ZQ3Le+9yX3HrQ82qqzKgKcTX370CCvX+qbC+EzcRzp6C2gyVkyMMTOVm
-Rvugdp+Z5CLyMyd6YW3IrGnitajR1ZyM7oTuJNuVV6ErLbKsX0DV0pAwu5u/Ai3adOvuXcrzZV9f
-pAbMBx7lXfMdy+3vVOQDyhoS5LltgbwcPq/yBZXLJkd6KtwFLNCqPYzPu0JzeVK5/Bb+ACsnA1be
-6hq9h8Ga3DHeGNrQ9yU92vSfVF9PUC68y2Ei5sobO2WtgwtG9tG4XYexbumRo1waMuseZ9c+LS1s
-0guFuxEWPTz4Kf96yXCzDPmz8NZ+reH2c+QqTlTnspHykEdA2O3QA5EHH4BFPSku3Ya0SX+LRkBE
-Fek=
-=elwI
------END PGP SIGNATURE-----
-
---------------jFKBPLLaVKDIAocIfs4ThSlI--
