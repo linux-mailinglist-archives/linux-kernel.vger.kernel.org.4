@@ -2,151 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C62CB730429
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2A7F730433
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244637AbjFNPug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 11:50:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47332 "EHLO
+        id S244754AbjFNPwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 11:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235239AbjFNPue (ORCPT
+        with ESMTP id S235239AbjFNPwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 11:50:34 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0449E13E
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:50:33 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f64fb05a8aso8904445e87.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:50:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686757830; x=1689349830;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZBxZ/WkHsxnx/bLYGuhyu1gVFSm0iBsy0Y9Dj3gZZw4=;
-        b=NqLQAiYotvE7r3ozEcisx0d4raaLD0UAfBtKXNxW0qLB+omclg44I9cBU1S83x60Iv
-         hsm71iUUKCE9hv7hwSb3UZvWVwuhW7n8HtLbMMKB8YMrH2iWoSmoVLADH9uZmXkAHb7t
-         P59zrHOLTfv8Sle3S+jxYvOVN209AQbfAVyfA=
+        Wed, 14 Jun 2023 11:52:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89F8A1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:51:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686757892;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gx5mIGJbC2RshKNPwZeqJT3qT5qrlHQNaZU0SSca/wY=;
+        b=PDppFL9x0lA7sSA0kDBgZxRCBtzvcM7Za9gAR/SOg4oozOtno6oJST+F1JTX1y75ZSGx01
+        /rnKYVzdA1mexonF1CpG/3KYy3Z1/WcDpLG4JHBG/kdsygznfCChYuVChOvM2PTRKs6ni7
+        ZwysWeIAXYtr/m/607zqztcJ+yKgMA8=
+Received: from mail-ua1-f70.google.com (mail-ua1-f70.google.com
+ [209.85.222.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-150-IzGFfriXN-evX8R48sYipw-1; Wed, 14 Jun 2023 11:51:30 -0400
+X-MC-Unique: IzGFfriXN-evX8R48sYipw-1
+Received: by mail-ua1-f70.google.com with SMTP id a1e0cc1a2514c-78f229d2217so33977241.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:51:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686757830; x=1689349830;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZBxZ/WkHsxnx/bLYGuhyu1gVFSm0iBsy0Y9Dj3gZZw4=;
-        b=DjX995VItj5cLUKZtFj5kQYEBa0VZHlx2k9FxpZcadmPizSvan5gOso7Gr+rMApJsw
-         tio1k4sEzgW8ovRf49RUAHGZhn2+I66RCwY0qzNwEfK2qEUYNUi20HDYanFU2ajb3bcR
-         Nmkizv/eHOLOicEfn8HMsxrW7t7GPWJPtmkBbC42Iycm9K/cOCCltWsYlqwyyQ+YE1/q
-         ub5NEZzHrhP657tZOSIfjER2/x/LAvPbIMy+F9/h7/yjCKljgB+KQr1wA1UmpaTpLI6U
-         NMP3IhfMny6yOIne3aNUkOvPAVsEZmULYVCuFbmuf30Q0DVfNeOniXA5wKADMxCONqt+
-         V7Aw==
-X-Gm-Message-State: AC+VfDwWiCM8Zq8unrkFF6ggZA43p2dyYmfAkC/Gerdh33HvfTpieymS
-        f9kGjrs0XAzNyWiOu/uVY8gsDhRCsB9G1NCDCBZRpxuO
-X-Google-Smtp-Source: ACHHUZ4fWsUOzHj0+KMF6Rlwfju2VycvmjEdsJqd9aq6T7Ewmz2L7hBFg2NZuPHP4Y9XhYLs9Lv69A==
-X-Received: by 2002:ac2:465b:0:b0:4f6:1805:6080 with SMTP id s27-20020ac2465b000000b004f618056080mr9693681lfo.4.1686757829976;
-        Wed, 14 Jun 2023 08:50:29 -0700 (PDT)
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
-        by smtp.gmail.com with ESMTPSA id ot25-20020a170906ccd900b00965f5d778e3sm8105732ejb.120.2023.06.14.08.50.28
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 08:50:29 -0700 (PDT)
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-3f7359a3b78so134345e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:50:28 -0700 (PDT)
-X-Received: by 2002:a05:600c:5207:b0:3f1:9a3d:4f7f with SMTP id
- fb7-20020a05600c520700b003f19a3d4f7fmr153672wmb.1.1686757828661; Wed, 14 Jun
- 2023 08:50:28 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686757890; x=1689349890;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gx5mIGJbC2RshKNPwZeqJT3qT5qrlHQNaZU0SSca/wY=;
+        b=MArWT3McY3K1yDYyqjLMtDpQQ3qITbQnf3F4an2UHXETkt1yz3t47TwKnAr5o7Y0lU
+         NTKBQzMuDuia2vSgBJJg/NgI3r2r2444F0/525kF+TEzp8dpdSbmGVcGvCyuF4k8i0nQ
+         aFg0jpPaN2zmILH2eUYFavkM1TRsil0JOQ0nt4T4aH/LFU0/5TfV0pTTL6/CvJSnL2aE
+         tyAJcVC+HvaEZnP0HNKorpwudfTjlRYEitHC0xss7humopAKCc9m5l9eAUttpUInypaY
+         4mX2LMaFw21ojEs6pYbf7BsmlTpdJw912kB+py6T8ZDse+vvdLqUdU0RoVvbsYzU5bFA
+         WYLA==
+X-Gm-Message-State: AC+VfDyMAYZUzm6LsLrE1db7JM7Iw2e+KXRJ/bRx8acxJkQAL7Ee/4Cn
+        M6iKbfvNcrBZESmAR6XbxVpe791oxFfRvwkaYxOSsPxioBvEU8hIqEjHCRwc7vq5c1Biljxnmd1
+        xZbasods4vwPg0q4TSVMyJ9KU
+X-Received: by 2002:a05:6102:390e:b0:43d:ecba:57d3 with SMTP id e14-20020a056102390e00b0043decba57d3mr5809633vsu.3.1686757890158;
+        Wed, 14 Jun 2023 08:51:30 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6YWRXgNTEb2Dq8Ia2QatMeTechjbZLoRWlFtVHbRiS/UMriwUxzHyaITTrU68b4zQk7vMUXA==
+X-Received: by 2002:a05:6102:390e:b0:43d:ecba:57d3 with SMTP id e14-20020a056102390e00b0043decba57d3mr5809614vsu.3.1686757889866;
+        Wed, 14 Jun 2023 08:51:29 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id n9-20020a0ce489000000b006260c683bf2sm1493153qvl.53.2023.06.14.08.51.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 08:51:29 -0700 (PDT)
+Date:   Wed, 14 Jun 2023 11:51:27 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        James Houghton <jthoughton@google.com>,
+        Hugh Dickins <hughd@google.com>
+Subject: Re: [PATCH 4/7] mm/hugetlb: Prepare hugetlb_follow_page_mask() for
+ FOLL_PIN
+Message-ID: <ZInh//34yuKNuuX8@x1n>
+References: <20230613215346.1022773-1-peterx@redhat.com>
+ <20230613215346.1022773-5-peterx@redhat.com>
+ <533c32cf-9a18-1590-4d29-f076d6bd58c1@redhat.com>
+ <ZInYh3cVUil9R/cf@x1n>
+ <ef0f8e0e-cbce-7c7b-1b0e-c9d52ede7e0e@redhat.com>
+ <ZIndN9isc4pTp2zK@x1n>
+ <38574ed3-ea96-a72e-00dd-4e6204413a86@redhat.com>
 MIME-Version: 1.0
-References: <CAMi1Hd05z8uBotO4vs7Ropmt7W2gSA__tTu_=X1t0mze7bXrhg@mail.gmail.com>
- <CAD=FV=VSFDe445WEVTHXxU1WS_HGUV5jR5E8_Vgd4eyhn3rHyA@mail.gmail.com>
- <CAMi1Hd28FJUjB8A-9YF7xpKOzSyNWXX3qung4aDjpLBhOvw_eA@mail.gmail.com>
- <CAD=FV=W13L0H88G1gt8qRnXfpV-_7E9QfHufN_a23_B1bb=aww@mail.gmail.com>
- <CAMi1Hd1WCtNvNaY_kVMx5F8T0nMVHvsjk9LsSETCMWWQyaq_Vw@mail.gmail.com>
- <CAD=FV=W5Y_SHp0y2MEs8d1k255bm_PXdRYEmYei+g79pjnzYuA@mail.gmail.com>
- <CAMi1Hd2OeL940r7jq0=Z_oxE8MYVioy0YnJXQC_5e0vJONd2sQ@mail.gmail.com>
- <1bc79c48-7cba-476d-9a7e-5754a88fcdae@sirena.org.uk> <CAMi1Hd2BLB6H3QRLB5svRTkGoXaUeEsakNsmfCOjbDBcCEeqkA@mail.gmail.com>
- <CAD=FV=UKyjRNZG-ED2meUAR9aXdco+AbUTHiKixTzjCkaJbjTg@mail.gmail.com>
- <bb5c828a-b8c5-40a0-9b67-44e73abcbef0@sirena.org.uk> <CAD=FV=UXOse+yRUmZBUOkfpWXPRKBw2R-+BVzPGcuwwFV_VqQw@mail.gmail.com>
- <84110995-a99b-8b5a-cd34-8430866eb9b1@leemhuis.info>
-In-Reply-To: <84110995-a99b-8b5a-cd34-8430866eb9b1@leemhuis.info>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 14 Jun 2023 08:50:16 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=V-h4EUKHCM9UivsFHRsJPY5sAiwXV3a1hUX9DUMkkxdg@mail.gmail.com>
-Message-ID: <CAD=FV=V-h4EUKHCM9UivsFHRsJPY5sAiwXV3a1hUX9DUMkkxdg@mail.gmail.com>
-Subject: Re: [PATCH] regulator: qcom-rpmh: Revert "regulator: qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS"
-To:     Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <38574ed3-ea96-a72e-00dd-4e6204413a86@redhat.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Jun 14, 2023 at 05:47:31PM +0200, David Hildenbrand wrote:
+> Right. Then just call patch #2 "Add missing write-permission check" and this
+> patch "Support FOLL_PIN in hugetlb_follow_page_mask()" or sth. like that.
+> 
+> Regarding the backport, I really wonder if patch #2 is required at all,
+> because I didn't sport any applicable FOLL_WRITE users. Maybe there were
+> some? Hm. If it's not applicable, a single "Support FOLL_PIN in
+> hugetlb_follow_page_mask()" patch might be cleanest.
 
-On Wed, Jun 14, 2023 at 8:37=E2=80=AFAM Linux regression tracking (Thorsten
-Leemhuis) <regressions@leemhuis.info> wrote:
->
-> Hi, Thorsten here, the Linux kernel's regression tracker.
->
-> On 07.06.23 15:47, Doug Anderson wrote:
-> >
-> > On Wed, Jun 7, 2023 at 6:18=E2=80=AFAM Mark Brown <broonie@kernel.org> =
-wrote:
-> >>
-> >> On Tue, Jun 06, 2023 at 04:29:29PM -0700, Doug Anderson wrote:
-> >>
-> >>> 2. Try adding some delays to some of the regulators with
-> >>> "regulator-enable-ramp-delay" and/or "regulator-settling-time-us".
-> >>> Without a scope, it'll be tricky to figure out exactly which
-> >>> regulators might need delays, but you could at least confirm if the
-> >>> "overkill" approach of having all the regulators have some delay
-> >>> helps... I guess you could also try putting a big delay for "ldo26".
-> >>> If that works, you could try moving it up (again using a bisect style
-> >>> approach) to see where the delay matters?
-> >>
-> >> This is information which should be in the datasheets for the part.
-> >
-> > I was thinking more of something board-specific, not part specific. In
-> > theory with RPMH this is also all supposed to be abstracted out into
-> > the firmware code that sets up RPMH which magically takes care of
-> > things like this, but it certainly could be wrong.
->
-> /me waves friendly
->
-> That afaics was the last mail in this thread about a regression caused
-> by ad44ac082fd ("regulator: qcom-rpmh: Revert "regulator: qcom-rpmh: Use
-> PROBE_FORCE_SYNCHRONOUS"") from Doug; Amit's attempt to patch it (
-> https://lore.kernel.org/lkml/20230602161246.1855448-1-amit.pundir@linaro.=
-org/
-> ) also wasn't welcomed. Just like his earlier revert attempt
-> (https://lore.kernel.org/lkml/20230515145323.1693044-1-amit.pundir@linaro=
-.org/
-> ).
->
-> Does this mean this regression won't be addressed before 6.4 is
-> released? Or was there some progress and I just missed it? What should I
-> tell Linus in my next report?
+Yeah, I agree.  The code is definitely needed, not the split of patches if
+no need for a backport.  Let me merge then.
 
-Of the two proposals made (the revert vs. the reordering of the dts),
-the reordering of the dts seems better. It only affects the one buggy
-board (rather than preventing us to move to async probe for everyone)
-and it also has a chance of actually fixing something (changing the
-order that regulators probe in rpmh-regulator might legitimately work
-around the problem). That being said, just like the revert the dts
-reordering is still just papering over the problem and is fragile /
-not guaranteed to work forever.
+-- 
+Peter Xu
 
--Doug
