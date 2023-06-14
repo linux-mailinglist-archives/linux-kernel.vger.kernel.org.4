@@ -2,136 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C56072F905
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 11:26:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A713C72F91A
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 11:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243999AbjFNJ0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 05:26:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
+        id S244043AbjFNJ2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 05:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243564AbjFNJ0g (ORCPT
+        with ESMTP id S244015AbjFNJ16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 05:26:36 -0400
-Received: from mx2.veeam.com (mx2.veeam.com [64.129.123.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E946D1FD4;
-        Wed, 14 Jun 2023 02:26:33 -0700 (PDT)
-Received: from mail.veeam.com (prgmbx01.amust.local [172.24.128.102])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx2.veeam.com (Postfix) with ESMTPS id 1EFF9422C4;
-        Wed, 14 Jun 2023 05:26:28 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com;
-        s=mx2-2022; t=1686734788;
-        bh=TrwuhYcstPik75UcplGmnA0hgEPNnuFfFZc3d9G7byk=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To:From;
-        b=W3a5lkq5kxpezhv3wFI+XM203PRzZQ1+sZJij4aCENw/bd0T8yGdPVvn9vyxYmAyG
-         ek98R3IRPtJ5DB9PBJKc9YGB4YGnKoHBMBxINqgF0hSi8h1fSkwaxIu4oQ27fdXN1e
-         GKJrVLaNGB7mdnNeOuvjUeHvYuW78lKCDMGSa19LeC3vIaJ2Rt9+HARWZc6vzp/Nvq
-         PAhSFfyhuVFNGMviFWy0/2JMNQbKoFiqhxZYoVtGRg83ICXIOa3u3pp6tLTkjhEupY
-         wd6c7d6Z0lg+BZr8c53Qeb+7vfAjOSN6Mu8JNgov83tEnAErmNgyP8TXY++Oh6lwU8
-         USTS0e2ROpbBA==
-Received: from [172.24.10.107] (172.24.10.107) by prgmbx01.amust.local
- (172.24.128.102) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Wed, 14 Jun
- 2023 11:26:26 +0200
-Message-ID: <733f591e-0e8f-8668-8298-ddb11a74df81@veeam.com>
-Date:   Wed, 14 Jun 2023 11:26:20 +0200
+        Wed, 14 Jun 2023 05:27:58 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9E82101
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 02:27:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=VDebGFAjszJ5XxlaZqcuzZVx+4xABvp4FBCOBoh0wpk=; b=oVFOIK4NIs1FPvKm+/aEHyFM+j
+        cRPcx5dQiV0T+ATXpvKSOXcsGC+nbTxY4G8QZSOD6bcRDCWS8zAPo0MiwUVf0pMMh6wIfrs+GIYEU
+        dDJDfygNp1+D25051m/UJiAQyZioxKtuBBJx6xZBolTA+x1gnlB0s73TAx9kJUC/LMuqOk7qOi0s1
+        udvv48BeWmxmmFz0Aeuc4eBF80p2PHMm8O+1riUcARsspO0/pkXey7HyRfbEdgJWdOvSob66mXqL4
+        WdCusxBjVjpZkydMkpb0qgg5wDKGlajsHh5agAZp3lCK2FRS3UetZSnyq2zdYjyjz53Cvhk3/a5I9
+        s4uiLljg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q9MmT-00AfgI-1t;
+        Wed, 14 Jun 2023 09:27:10 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AB4F7300195;
+        Wed, 14 Jun 2023 11:27:07 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 64B672C676971; Wed, 14 Jun 2023 11:27:07 +0200 (CEST)
+Date:   Wed, 14 Jun 2023 11:27:07 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Aaron Lu <aaron.lu@intel.com>
+Cc:     David Vernet <void@manifault.com>, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, rostedt@goodmis.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, joshdon@google.com,
+        roman.gushchin@linux.dev, tj@kernel.org, kernel-team@meta.com
+Subject: Re: [RFC PATCH 3/3] sched: Implement shared wakequeue in CFS
+Message-ID: <20230614092707.GG1639749@hirez.programming.kicks-ass.net>
+References: <20230613052004.2836135-1-void@manifault.com>
+ <20230613052004.2836135-4-void@manifault.com>
+ <20230613083203.GR4253@hirez.programming.kicks-ass.net>
+ <20230614043529.GA1942@ziqianlu-dell>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v5 04/11] blksnap: header file of the module interface
-Content-Language: en-US
-To:     Christoph Hellwig <hch@infradead.org>,
-        Dave Chinner <david@fromorbit.com>
-CC:     <axboe@kernel.dk>, <corbet@lwn.net>, <snitzer@kernel.org>,
-        <viro@zeniv.linux.org.uk>, <brauner@kernel.org>,
-        <dchinner@redhat.com>, <willy@infradead.org>, <dlemoal@kernel.org>,
-        <linux@weissschuh.net>, <jack@suse.cz>, <ming.lei@redhat.com>,
-        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        Donald Buczek <buczek@molgen.mpg.de>
-References: <20230612135228.10702-1-sergei.shtepa@veeam.com>
- <20230612135228.10702-5-sergei.shtepa@veeam.com>
- <ZIjsywOtHM5nIhSr@dread.disaster.area> <ZIldkb1pwhNsSlfl@infradead.org>
-From:   Sergei Shtepa <sergei.shtepa@veeam.com>
-In-Reply-To: <ZIldkb1pwhNsSlfl@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.24.10.107]
-X-ClientProxiedBy: prgmbx02.amust.local (172.24.128.103) To
- prgmbx01.amust.local (172.24.128.102)
-X-EsetResult: clean, is OK
-X-EsetId: 37303A29240315546D7063
-X-Veeam-MMEX: True
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230614043529.GA1942@ziqianlu-dell>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/14/23 08:26, Christoph Hellwig wrote:
-> Subject:
-> Re: [PATCH v5 04/11] blksnap: header file of the module interface
-> From:
-> Christoph Hellwig <hch@infradead.org>
-> Date:
-> 6/14/23, 08:26
+On Wed, Jun 14, 2023 at 12:35:29PM +0800, Aaron Lu wrote:
+> On Tue, Jun 13, 2023 at 10:32:03AM +0200, Peter Zijlstra wrote:
+> > 
+> > Still gotta read it properly, however:
+> > 
+> > On Tue, Jun 13, 2023 at 12:20:04AM -0500, David Vernet wrote:
+> > > Single-socket | 32-core | 2-CCX | AMD 7950X Zen4
+> > > Single-socket | 72-core | 6-CCX | AMD Milan Zen3
+> > > Single-socket | 176-core | 11-CCX | 2-CCX per CCD | AMD Bergamo Zen4c
+> > 
+> > Could you please also benchmark on something Intel that has these stupid
+> > large LLCs ?
+> > 
+> > Because the last time I tried something like this, it came apart real
+> > quick. And AMD has these relatively small 8-core LLCs.
 > 
-> To:
-> Dave Chinner <david@fromorbit.com>
-> CC:
-> Sergei Shtepa <sergei.shtepa@veeam.com>, axboe@kernel.dk, hch@infradead.org, corbet@lwn.net, snitzer@kernel.org, viro@zeniv.linux.org.uk, brauner@kernel.org, dchinner@redhat.com, willy@infradead.org, dlemoal@kernel.org, linux@weissschuh.net, jack@suse.cz, ming.lei@redhat.com, linux-block@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, Donald Buczek <buczek@molgen.mpg.de>
-> 
-> 
-> On Wed, Jun 14, 2023 at 08:25:15AM +1000, Dave Chinner wrote:
->>> + * Return: 0 if succeeded, negative errno otherwise.
->>> + */
->>> +#define IOCTL_BLKSNAP_SNAPSHOT_APPEND_STORAGE					\
->>> +	_IOW(BLKSNAP, blksnap_ioctl_snapshot_append_storage,			\
->>> +	     struct blksnap_snapshot_append_storage)
->> That's an API I'm extremely uncomfortable with. We've learnt the
->> lesson *many times* that userspace physical mappings of underlying
->> file storage are unreliable.
->>
->> i.e.  This is reliant on userspace telling the kernel the physical
->> mapping of the filesystem file to block device LBA space and then
->> providing a guarantee (somehow) that the mapping will always remain
->> unchanged. i.e. It's reliant on passing FIEMAP data from the
->> filesystem to userspace and then back into the kernel without it
->> becoming stale and somehow providing a guarantee that nothing (not
->> even the filesystem doing internal garbage collection) will change
->> it.
-> Hmm, I never thought of this API as used on files that somewhere
-> had a logical to physical mapping applied to them.
-> 
-> Sergey, is that the indtended use case?  If so we really should
-> be going through the file system using direct I/O.
-> 
+> I tested on Intel(R) Xeon(R) Platinum 8358, which has 2 sockets and each
+> socket has a single LLC with 32 cores/64threads.
 
-Hi!
-Thank you, Dave, for such a detailed comment. 
-Yes, everything is really as you described.
+> The lock contention due to the per-LLC swqueue->lock is quite serious:
 
-This code worked quite successfully for the veeamsnap module, on the
-basis of which blksnap was created. Indeed, such an allocation of an
-area on a block device using a file does not look safe.
-
-We've already discussed this with Donald Buczek <buczek@molgen.mpg.de>.
-Link: https://github.com/veeam/blksnap/issues/57#issuecomment-1576569075
-And I have planned work on moving to a more secure ioctl in the future.
-Link: https://github.com/veeam/blksnap/issues/61
-
-Now, thanks to Dave, it becomes clear to me how to solve this problem best.
-swapfile is a good example of how to do it right.
-
-Fixing this vulnerability will entail transferring the algorithm for
-allocating the difference storage from the user-space to the blksnap code.
-The changes are quite significant. The UAPI will be changed.
-
-So I agree that the blksnap module is not good enough for upstream yet.
+Yep, that's what I was expecting -- complete meltdown that.
