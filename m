@@ -2,80 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D4572F119
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 02:43:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 556D272F11C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 02:45:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234214AbjFNAnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 20:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
+        id S240997AbjFNApD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 20:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232176AbjFNAnc (ORCPT
+        with ESMTP id S241553AbjFNAoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 20:43:32 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8867E1996
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 17:43:31 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-77b0124d7beso414552139f.2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 17:43:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686703411; x=1689295411;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2l3o9X4DUl6CHYQ2eJ/wgVXYrcJVZyyGP64Bx5hzSFo=;
-        b=OnkPH1LvYb39NzbmLiJqt7mC9bl1iHikWO4TwN6ugM0tHaCubuZFZSdluIQ7k8aXcL
-         D3XDAXKsNvvjAxyNuTBngGfBtJDaJQZLBgtP6iraS1RHwh7PAxpzOpu+3vO3CYqxM5zc
-         4nIucuhs6/mCTOLNQR7owjUOfHfJGjs6yElGQSbKAaSUI41gPX0eAsQ1Bp21N+9hEaAi
-         bwjE1mhC5PXf3ElHfxCmR/jHETEXB+ImzRGl4vYkV7vTSP2unIYRx4YbUBcBTO9KoeKl
-         GvAAl5lVLQEspkVfPoBrC024pJY3FyWL+UyRKrE1pBYHjs6sbS7BITLaQ7VqiVAgFk26
-         Nu1g==
-X-Gm-Message-State: AC+VfDztIBCW17xSFc4humt+b93G+e9LbCIW2wxv7GVmuZ5PZ0ox0yfQ
-        Ht6AE9yHHPns3P1F8OZwdX1EZfgnkfwguQe25VrI7P0AW3Ki
-X-Google-Smtp-Source: ACHHUZ7pQAFqGo+YXYn4Pp7UOHTIW0tLIJtZrgi4ompHLJQyjZVznMQSZHBldmo6gwCfDTX3d3k+ot9FDhCnEBBrs5htpNrxlKk2
+        Tue, 13 Jun 2023 20:44:54 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0091996;
+        Tue, 13 Jun 2023 17:44:47 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R301e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0Vl42ewq_1686703484;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0Vl42ewq_1686703484)
+          by smtp.aliyun-inc.com;
+          Wed, 14 Jun 2023 08:44:44 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     tytso@mit.edu
+Cc:     jack@suse.com, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] jbd2: remove unused function '__cp_buffer_busy'
+Date:   Wed, 14 Jun 2023 08:44:43 +0800
+Message-Id: <20230614004443.56937-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-X-Received: by 2002:a5d:8a18:0:b0:774:8f36:bb8e with SMTP id
- w24-20020a5d8a18000000b007748f36bb8emr5930497iod.2.1686703410910; Tue, 13 Jun
- 2023 17:43:30 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 17:43:30 -0700
-In-Reply-To: <000000000000342a9105fe052726@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a61ffe05fe0c3d08@google.com>
-Subject: Re: [syzbot] [net?] WARNING in unreserve_psock
-From:   syzbot <syzbot+dd1339599f1840e4cc65@syzkaller.appspotmail.com>
-To:     bpf@vger.kernel.org, davem@davemloft.net, dhowells@redhat.com,
-        edumazet@google.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+The code calling function '__cp_buffer_busy' has been removed, so the
+function should also be removed.
+silence the warning:
+fs/jbd2/checkpoint.c:48:20: warning: unused function '__cp_buffer_busy'
 
-commit c31a25e1db486f36a0ffe3c849b0a82cda3db7db
-Author: David Howells <dhowells@redhat.com>
-Date:   Fri Jun 9 10:02:21 2023 +0000
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=5518
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ fs/jbd2/checkpoint.c | 12 ------------
+ 1 file changed, 12 deletions(-)
 
-    kcm: Send multiple frags in one sendmsg()
+diff --git a/fs/jbd2/checkpoint.c b/fs/jbd2/checkpoint.c
+index 9ec91017a7f3..ba4ae74c7167 100644
+--- a/fs/jbd2/checkpoint.c
++++ b/fs/jbd2/checkpoint.c
+@@ -40,18 +40,6 @@ static inline void __buffer_unlink(struct journal_head *jh)
+ 	}
+ }
+ 
+-/*
+- * Check a checkpoint buffer could be release or not.
+- *
+- * Requires j_list_lock
+- */
+-static inline bool __cp_buffer_busy(struct journal_head *jh)
+-{
+-	struct buffer_head *bh = jh2bh(jh);
+-
+-	return (jh->b_transaction || buffer_locked(bh) || buffer_dirty(bh));
+-}
+-
+ /*
+  * __jbd2_log_wait_for_space: wait until there is space in the journal.
+  *
+-- 
+2.20.1.7.g153144c
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13050c75280000
-start commit:   c29e012eae29 selftests: forwarding: Fix layer 2 miss test ..
-git tree:       net-next
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=10850c75280000
-console output: https://syzkaller.appspot.com/x/log.txt?x=17050c75280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=526f919910d4a671
-dashboard link: https://syzkaller.appspot.com/bug?extid=dd1339599f1840e4cc65
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=170f2663280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12f1c5e7280000
-
-Reported-by: syzbot+dd1339599f1840e4cc65@syzkaller.appspotmail.com
-Fixes: c31a25e1db48 ("kcm: Send multiple frags in one sendmsg()")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
