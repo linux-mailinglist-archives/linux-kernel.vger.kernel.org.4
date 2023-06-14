@@ -2,236 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4B473093B
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 22:38:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF84C73093D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 22:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236988AbjFNUiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 16:38:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55366 "EHLO
+        id S237048AbjFNUir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 16:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231747AbjFNUiS (ORCPT
+        with ESMTP id S231747AbjFNUiq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 16:38:18 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476AE268A
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 13:38:16 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bd69bb4507eso1251556276.2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 13:38:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686775095; x=1689367095;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xjFmDqpqLW0HcC1b58cnyObSPX9FvJpnYK2XTM45p+o=;
-        b=0RWKAmlv+IbBEDMKDjow617VR1dRtJbYpih6AW+P1LtLyQQ4QU06PoKn502VwJwwTb
-         ziVKWVe4Mb2SKITJETJxGl8kCLuPfnB72w6UxKQOqTIutMpOkNZ9V4vLGmIbM16zNS1P
-         20s1STkQZKZW17lw8067ZXq5fLtqbropC26rtFKw2fCpAdvuwjEIlF6fXHDr8MFg8tcs
-         MYdKY6ohadhA95boezqxsY2dylYQDpF7ygzkuwwp2PK/izXs0mTN0ILfbcE8LWL6qq2o
-         009oWBH4Iv8mdIr6XfdN0r3t2LPnmpOmsB97KeUuA1p8Zzk83d4ZVfqKYt5iA0wUXEq3
-         Hv+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686775095; x=1689367095;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xjFmDqpqLW0HcC1b58cnyObSPX9FvJpnYK2XTM45p+o=;
-        b=icvEyr1TPPFu/oBrDxOgTPeMVOOuh5B1boVLz9gAfLN1P8BLqON55Ede+b4yuFZpWO
-         Ktirszb33q/haB+rshugaHORVDTmyCCyNERCi3YhpDPV0qElvp/4dW3zpDRiyBqskkWh
-         xMBYwh91HTbM5Fago145CtOrl7VUMWR6vRoLBeTZ7tMmAks5Rx8bKWMMgnUwJBUILceV
-         uk9oey4czFTU2wl3v8aszfO9Mam2/rZuUnaY8xn2elnTjgNBRazqmVkO3zERnCKMXMrX
-         JeHQrlYJveQjvYOPRbVk0znO9x4rbfGRUJut2ADTr//kIkXEXnssrdwC8SvejYYBb8pi
-         YXhw==
-X-Gm-Message-State: AC+VfDws7ZyNzqZaL0MHtVQoO6bB0mp0ompbXpW+n0oXTS5e8nULnQyP
-        o3G+wT62aR976v5hWCJvpa5Q1zOBqQZzC6o=
-X-Google-Smtp-Source: ACHHUZ6e2VRWpSJEw4jxsGLTnXcsj60gdEG1Ser3v50dEAGXD9HlO5Vf7W2I9/DNQHGLQ4fIr5+ck36a2uItX1s=
-X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
- (user=aliceryhl job=sendgmr) by 2002:a25:ab2e:0:b0:bc9:98aa:b0ec with SMTP id
- u43-20020a25ab2e000000b00bc998aab0ecmr483591ybi.1.1686775095575; Wed, 14 Jun
- 2023 13:38:15 -0700 (PDT)
-Date:   Wed, 14 Jun 2023 20:38:03 +0000
-In-Reply-To: <20230614180837.630180-6-ojeda@kernel.org>
-Mime-Version: 1.0
-References: <20230614180837.630180-6-ojeda@kernel.org>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Message-ID: <20230614203803.2910957-1-aliceryhl@google.com>
-Subject: Re: [PATCH 5/6] rust: support running Rust documentation tests as
- KUnit ones
-From:   Alice Ryhl <aliceryhl@google.com>
-To:     ojeda@kernel.org
-Cc:     alex.gaynor@gmail.com, aliceryhl@google.com,
-        benno.lossin@proton.me, bjorn3_gh@protonmail.com,
-        boqun.feng@gmail.com, brendan.higgins@linux.dev,
-        davidgow@google.com, gary@garyguo.net, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        nmi@metaspace.dk, patches@lists.linux.dev, philip.li@intel.com,
-        rust-for-linux@vger.kernel.org, wedsonaf@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 14 Jun 2023 16:38:46 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43B7268A;
+        Wed, 14 Jun 2023 13:38:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686775125; x=1718311125;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=mlc58NZmO+HCGma3munqWCePgPA+rLtK94q4D0e6VkI=;
+  b=LmG+PbXnUjWbZNTnOlKoAXVxf+/ktFOStJUDzss7gxaoCURRqvd+KldO
+   s+/OxL1//QtgKJtGQPGz+28Y57soTYxaLTDa1yZ3q/6CyCMkU5MXgLR9y
+   VS/HMVqjsatzw1kOqHADPz8FkwDMh4q2/eCsZOKwdDqUPWqW+2B3JsDiV
+   1sGmsCqng2okCpPXztAScwCQHbkaUAOuyQy3bXjJNThuENSQGdGKNWsw9
+   E08wL4eVBP/JlnwC/Ush3HHj49TBGZAqC5pqrOYN2Ng67GnpfcKaPCGp9
+   JsGXB4RJP/osOBI65fTcyBKwePOkhm5cNEx5lwNckcJdzbhm8HyYa8Pmd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="361209016"
+X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
+   d="scan'208";a="361209016"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 13:38:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="741963182"
+X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
+   d="scan'208";a="741963182"
+Received: from a0cec87da3f2.jf.intel.com (HELO worker-node-1.jf.intel.com) ([10.165.55.163])
+  by orsmga008.jf.intel.com with ESMTP; 14 Jun 2023 13:38:45 -0700
+From:   Weilin Wang <weilin.wang@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Weilin Wang <weilin.wang@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Samantha Alt <samantha.alt@intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>
+Subject: [PATCH v3 0/3] Add metric value validation test
+Date:   Wed, 14 Jun 2023 13:38:21 -0700
+Message-Id: <20230614203824.2895333-1-weilin.wang@intel.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <CAP-5=fVixzBLLiWnim8x6qcDOKH7uVfEWojTCP_H531Fhy7j-g@mail.gmail.com>
+References: <CAP-5=fVixzBLLiWnim8x6qcDOKH7uVfEWojTCP_H531Fhy7j-g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Miguel Ojeda <ojeda@kernel.org> writes:
-> Rust has documentation tests: these are typically examples of
-> usage of any item (e.g. function, struct, module...).
-> 
-> They are very convenient because they are just written
-> alongside the documentation. For instance:
-> 
->     /// Sums two numbers.
->     ///
->     /// ```
->     /// assert_eq!(mymod::f(10, 20), 30);
->     /// ```
->     pub fn f(a: i32, b: i32) -> i32 {
->         a + b
->     }
-> 
-> In userspace, the tests are collected and run via `rustdoc`.
-> Using the tool as-is would be useful already, since it allows
-> to compile-test most tests (thus enforcing they are kept
-> in sync with the code they document) and run those that do not
-> depend on in-kernel APIs.
-> 
-> However, by transforming the tests into a KUnit test suite,
-> they can also be run inside the kernel. Moreover, the tests
-> get to be compiled as other Rust kernel objects instead of
-> targeting userspace.
-> 
-> On top of that, the integration with KUnit means the Rust
-> support gets to reuse the existing testing facilities. For
-> instance, the kernel log would look like:
-> 
->     KTAP version 1
->     1..1
->         KTAP version 1
->         # Subtest: rust_doctests_kernel
->         1..59
->         # Doctest from line 13
->         ok 1 rust_doctest_kernel_build_assert_rs_0
->         # Doctest from line 56
->         ok 2 rust_doctest_kernel_build_assert_rs_1
->         # Doctest from line 122
->         ok 3 rust_doctest_kernel_init_rs_0
->         ...
->         # Doctest from line 150
->         ok 59 rust_doctest_kernel_types_rs_2
->     # rust_doctests_kernel: pass:59 fail:0 skip:0 total:59
->     # Totals: pass:59 fail:0 skip:0 total:59
->     ok 1 rust_doctests_kernel
-> 
-> Therefore, add support for running Rust documentation tests
-> in KUnit. Some other notes about the current implementation
-> and support follow.
-> 
-> The transformation is performed by a couple scripts written
-> as Rust hostprogs.
-> 
-> Tests using the `?` operator are also supported as usual, e.g.:
-> 
->     /// ```
->     /// # use kernel::{spawn_work_item, workqueue};
->     /// spawn_work_item!(workqueue::system(), || pr_info!("x"))?;
->     /// # Ok::<(), Error>(())
->     /// ```
-> 
-> The tests are also compiled with Clippy under `CLIPPY=1`, just like
-> normal code, thus also benefitting from extra linting.
-> 
-> The names of the tests are currently automatically generated.
-> This allows to reduce the burden for documentation writers,
-> while keeping them fairly stable for bisection. This is an
-> improvement over the `rustdoc`-generated names, which include
-> the line number; but ideally we would like to get `rustdoc` to
-> provide the Rust item path and a number (for multiple examples
-> in a single documented Rust item).
-> 
-> In order for developers to easily see from which original line
-> a failed doctests came from, a KTAP diagnostic line is printed
-> to the log. In the future, we may be able to use a proper KUnit
-> facility to append this sort of information instead.
-> 
-> A notable difference from KUnit C tests is that the Rust tests
-> appear to assert using the usual `assert!` and `assert_eq!`
-> macros from the Rust standard library (`core`). We provide
-> a custom version that forwards the call to KUnit instead.
-> Importantly, these macros do not require passing context,
-> unlike the KUnit C ones (i.e. `struct kunit *`). This makes
-> them easier to use, and readers of the documentation do not need
-> to care about which testing framework is used. In addition, it
-> may allow us to test third-party code more easily in the future.
-> 
-> However, a current limitation is that KUnit does not support
-> assertions in other tasks. Thus we presently simply print an
-> error to the kernel log if an assertion actually failed. This
-> should be revisited to properly fail the test, perhaps saving
-> the context somewhere else, or letting KUnit handle it.
-> 
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+This is the third version of metric value validation tests.
 
-(One nit later below.)
+We made the following changes from v2 to v3:
+ - Add explicit data type casting to float when parsing perf json output [Ian]
+ - Add an limit of rerun up to 20 failed metrics  
 
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+v2: https://lore.kernel.org/lkml/20230609162625.100897-1-weilin.wang@intel.com/ 
 
-> +fn main() {
-> +    let mut stdin = std::io::stdin().lock();
-> +    let mut body = String::new();
-> +    stdin.read_to_string(&mut body).unwrap();
-> +
-> +    // Find the generated function name looking for the inner function inside `main()`.
-> +    //
-> +    // The line we are looking for looks like one of the following:
-> +    //
-> +    // ```
-> +    // fn main() { #[allow(non_snake_case)] fn _doctest_main_rust_kernel_file_rs_28_0() {
-> +    // fn main() { #[allow(non_snake_case)] fn _doctest_main_rust_kernel_file_rs_37_0() -> Result<(), impl core::fmt::Debug> {
-> +    // ```
-> +    //
-> +    // It should be unlikely that doctest code matches such lines (when code is formatted properly).
-> +    let rustdoc_function_name = body
-> +        .lines()
-> +        .find_map(|line| {
-> +            Some(
-> +                line.split_once("fn main() {")?
-> +                    .1
-> +                    .split_once("fn ")?
-> +                    .1
-> +                    .split_once("()")?
-> +                    .0,
-> +            )
-> +            .filter(|x| x.chars().all(|c| c.is_alphanumeric() || c == '_'))
-> +        })
-> +        .expect("No test function found in `rustdoc`'s output.");
-> +
-> +    // Qualify `Result` to avoid the collision with our own `Result` coming from the prelude.
-> +    let body = body.replace(
-> +        &format!("{rustdoc_function_name}() -> Result<(), impl core::fmt::Debug> {{"),
-> +        &format!("{rustdoc_function_name}() -> core::result::Result<(), impl core::fmt::Debug> {{"),
-> +    );
-> +
-> +    // For tests that get generated with `Result`, like above, `rustdoc` generates an `unwrap()` on
-> +    // the return value to check there were no returned errors. Instead, we use our assert macro
-> +    // since we want to just fail the test, not panic the kernel.
-> +    //
-> +    // We save the result in a variable so that the failed assertion message looks nicer.
-> +    let body = body.replace(
-> +        &format!("}} {rustdoc_function_name}().unwrap() }}"),
-> +        &format!("}} let test_return_value = {rustdoc_function_name}(); assert!(test_return_value.is_ok()); }}"),
-> +    );
-> +
-> +    // Figure out a smaller test name based on the generated function name.
-> +    let name = rustdoc_function_name.split_once("_rust_kernel_").unwrap().1;
-> +
-> +    let path = format!("rust/test/doctests/kernel/{name}");
-> +
-> +    write!(BufWriter::new(File::create(path).unwrap()), "{body}").unwrap();
+Weilin Wang (3):
+  perf test: Add metric value validation test
+  perf test: Add skip list for metrics known would fail
+  perf test: Rerun failed metrics with longer workload
 
-This could just be
+ .../tests/shell/lib/perf_metric_validation.py | 574 ++++++++++++++++++
+ .../lib/perf_metric_validation_rules.json     | 398 ++++++++++++
+ tools/perf/tests/shell/stat_metrics_values.sh |  30 +
+ 3 files changed, 1002 insertions(+)
+ create mode 100644 tools/perf/tests/shell/lib/perf_metric_validation.py
+ create mode 100644 tools/perf/tests/shell/lib/perf_metric_validation_rules.json
+ create mode 100755 tools/perf/tests/shell/stat_metrics_values.sh
 
-std::fs::write(path, body.as_bytes());
 
-Alice
+base-commit: 7cdda6998ee55140e64894e25048df7157344fc9
+-- 
+2.39.1
 
