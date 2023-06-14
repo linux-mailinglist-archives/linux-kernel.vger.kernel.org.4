@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 384E772F95A
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 11:38:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE5472F95E
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 11:38:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244006AbjFNJiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 05:38:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41138 "EHLO
+        id S244088AbjFNJiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 05:38:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233840AbjFNJiH (ORCPT
+        with ESMTP id S243925AbjFNJiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 05:38:07 -0400
+        Wed, 14 Jun 2023 05:38:14 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719F0DF;
-        Wed, 14 Jun 2023 02:38:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA987DC;
+        Wed, 14 Jun 2023 02:38:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 064AE63342;
-        Wed, 14 Jun 2023 09:38:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0471EC433C8;
-        Wed, 14 Jun 2023 09:38:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3098A6363A;
+        Wed, 14 Jun 2023 09:38:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33DBEC433C9;
+        Wed, 14 Jun 2023 09:38:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686735485;
-        bh=tpW4YlEHIcX307ck/O7pP4loAlJ+EP93YGZ2HAyn1jc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=OZSmYVcDZoB4BQCAicu9RPN6uTBp8pWCinFjqcLbIeYvHXdpBUZDWiDYt3Hkqj0ak
-         l0mQxu3eP7tP4bhBy816fdsTKt1X6KCdd3vNZeiRReflFbxTKwTG+DYOpkAO1PGfrs
-         0A5607s85LYzGgEH3BU1EBVD+zqpluH5pyGopT58=
+        s=korg; t=1686735490;
+        bh=ATVo73fEHDaR86N9z5Rnr4x3Ea2e+B6nFS9LKjE6eGc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=hR3ssOXb3fo2HEQq3lNwTQp6nKm5MUezkfpdTKOxI/l1aEC7je76vb0ia9MxLd6S3
+         P2nb1f8+RnsACUIHZq+ptotnAWAyyMxIZRgmASOzugp0WeXwqjM9DK7JDXlx6gMZ1v
+         dfk5lmIcaJSjfMlo//0BODZmGwRROXW9Y9N63Ps8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
         torvalds@linux-foundation.org, stable@vger.kernel.org
 Cc:     lwn@lwn.net, jslaby@suse.cz,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Linux 4.14.318
-Date:   Wed, 14 Jun 2023 11:38:00 +0200
-Message-ID: <2023061401-retiring-volatile-d131@gregkh>
+Subject: Re: Linux 4.14.318
+Date:   Wed, 14 Jun 2023 11:38:01 +0200
+Message-ID: <2023061401-mastiff-doily-8385@gregkh>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <2023061401-retiring-volatile-d131@gregkh>
+References: <2023061401-retiring-volatile-d131@gregkh>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -52,100 +53,596 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'm announcing the release of the 4.14.318 kernel.
-
-All users of the 4.14 kernel series must upgrade.
-
-The updated 4.14.y git tree can be found at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.14.y
-and can be browsed at the normal kernel.org git web browser:
-	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
-
-thanks,
-
-greg k-h
-
-------------
-
- Makefile                                     |    2 -
- drivers/gpu/drm/amd/amdgpu/vi.c              |   11 ++++++--
- drivers/i2c/busses/i2c-sprd.c                |    6 ++--
- drivers/infiniband/hw/i40iw/i40iw.h          |    5 +--
- drivers/input/joystick/xpad.c                |    1 
- drivers/input/mouse/elantech.c               |    9 +++---
- drivers/net/ethernet/broadcom/bnxt/bnxt.c    |    3 ++
- drivers/net/ethernet/intel/i40e/i40e_alloc.h |   17 ++++--------
- drivers/spi/spi-qup.c                        |   37 +++++++++++++--------------
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c |    6 ++--
- drivers/staging/rtl8192e/rtl8192e/rtl_core.h |    5 +++
- fs/btrfs/relocation.c                        |   14 +++++++---
- fs/ceph/caps.c                               |    6 ++++
- fs/ceph/snap.c                               |    4 ++
- fs/ext4/xattr.c                              |    6 ++--
- include/linux/netdevice.h                    |    7 +++--
- include/net/pkt_sched.h                      |    2 +
- include/net/sock.h                           |   18 +++++++++----
- lib/cpu_rmap.c                               |    2 -
- net/batman-adv/distributed-arp-table.c       |    2 -
- net/bluetooth/hci_core.c                     |    8 ++---
- net/bluetooth/l2cap_core.c                   |   13 +++++++++
- net/core/dev.c                               |    6 ++--
- net/sched/cls_api.c                          |    2 -
- 24 files changed, 122 insertions(+), 70 deletions(-)
-
-Ben Hutchings (1):
-      lib: cpu_rmap: Fix potential use-after-free in irq_cpu_rmap_release()
-
-Chia-I Wu (1):
-      drm/amdgpu: fix xclk freq on CHIP_STONEY
-
-Dmitry Torokhov (1):
-      Input: psmouse - fix OOB access in Elantech protocol
-
-Eric Dumazet (3):
-      rfs: annotate lockless accesses to sk->sk_rxhash
-      rfs: annotate lockless accesses to RFS sock flow table
-      net: sched: move rtm_tca_policy declaration to include file
-
-Greg Kroah-Hartman (4):
-      i40iw: fix build warning in i40iw_manage_apbvt()
-      i40e: fix build warnings in i40e_alloc.h
-      Revert "staging: rtl8192e: Replace macro RTL_PCI_DEVICE with PCI_DEVICE"
-      Linux 4.14.318
-
-Ismael Ferreras Morezuelas (1):
-      Input: xpad - delete a Razer DeathAdder mouse VID/PID entry
-
-Josef Bacik (1):
-      btrfs: check return value of btrfs_commit_transaction in relocation
-
-Luiz Augusto von Dentz (1):
-      Bluetooth: Fix use-after-free in hci_remove_ltk/hci_remove_irk
-
-Somnath Kotur (1):
-      bnxt_en: Query default VLAN before VNIC setup on a VF
-
-Stephan Gerhold (1):
-      spi: qup: Request DMA before enabling clocks
-
-Sungwoo Kim (1):
-      Bluetooth: L2CAP: Add missing checks for invalid DCID
-
-Theodore Ts'o (1):
-      ext4: only check dquot_initialize_needed() when debugging
-
-Uwe Kleine-König (1):
-      i2c: sprd: Delete i2c adapter in .remove's error path
-
-Vladislav Efanov (1):
-      batman-adv: Broken sync while rescheduling delayed work
-
-Xiubo Li (1):
-      ceph: fix use-after-free bug for inodes when flushing capsnaps
-
-Ying Hsu (1):
-      Bluetooth: Fix l2cap_disconnect_req deadlock
-
-Zixuan Fu (1):
-      btrfs: unset reloc control if transaction commit fails in prepare_to_relocate()
-
+diff --git a/Makefile b/Makefile
+index b5b5835afcc7..0f0c0ac3c0a2 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ VERSION = 4
+ PATCHLEVEL = 14
+-SUBLEVEL = 317
++SUBLEVEL = 318
+ EXTRAVERSION =
+ NAME = Petit Gorille
+ 
+diff --git a/drivers/gpu/drm/amd/amdgpu/vi.c b/drivers/gpu/drm/amd/amdgpu/vi.c
+index 0327e0a6802b..dc061424f546 100644
+--- a/drivers/gpu/drm/amd/amdgpu/vi.c
++++ b/drivers/gpu/drm/amd/amdgpu/vi.c
+@@ -327,8 +327,15 @@ static u32 vi_get_xclk(struct amdgpu_device *adev)
+ 	u32 reference_clock = adev->clock.spll.reference_freq;
+ 	u32 tmp;
+ 
+-	if (adev->flags & AMD_IS_APU)
+-		return reference_clock;
++	if (adev->flags & AMD_IS_APU) {
++		switch (adev->asic_type) {
++		case CHIP_STONEY:
++			/* vbios says 48Mhz, but the actual freq is 100Mhz */
++			return 10000;
++		default:
++			return reference_clock;
++		}
++	}
+ 
+ 	tmp = RREG32_SMC(ixCG_CLKPIN_CNTL_2);
+ 	if (REG_GET_FIELD(tmp, CG_CLKPIN_CNTL_2, MUX_TCLK_TO_XCLK))
+diff --git a/drivers/i2c/busses/i2c-sprd.c b/drivers/i2c/busses/i2c-sprd.c
+index 1925c8938119..452b868e5c97 100644
+--- a/drivers/i2c/busses/i2c-sprd.c
++++ b/drivers/i2c/busses/i2c-sprd.c
+@@ -581,10 +581,12 @@ static int sprd_i2c_remove(struct platform_device *pdev)
+ 
+ 	ret = pm_runtime_get_sync(i2c_dev->dev);
+ 	if (ret < 0)
+-		return ret;
++		dev_err(&pdev->dev, "Failed to resume device (%pe)\n", ERR_PTR(ret));
+ 
+ 	i2c_del_adapter(&i2c_dev->adap);
+-	clk_disable_unprepare(i2c_dev->clk);
++
++	if (ret >= 0)
++		clk_disable_unprepare(i2c_dev->clk);
+ 
+ 	pm_runtime_put_noidle(i2c_dev->dev);
+ 	pm_runtime_disable(i2c_dev->dev);
+diff --git a/drivers/infiniband/hw/i40iw/i40iw.h b/drivers/infiniband/hw/i40iw/i40iw.h
+index 8cabd293fc21..8cd4fc71ee07 100644
+--- a/drivers/infiniband/hw/i40iw/i40iw.h
++++ b/drivers/infiniband/hw/i40iw/i40iw.h
+@@ -414,9 +414,8 @@ void i40iw_manage_arp_cache(struct i40iw_device *iwdev,
+ 			    bool ipv4,
+ 			    u32 action);
+ 
+-int i40iw_manage_apbvt(struct i40iw_device *iwdev,
+-		       u16 accel_local_port,
+-		       bool add_port);
++enum i40iw_status_code i40iw_manage_apbvt(struct i40iw_device *iwdev,
++					  u16 accel_local_port, bool add_port);
+ 
+ struct i40iw_cqp_request *i40iw_get_cqp_request(struct i40iw_cqp *cqp, bool wait);
+ void i40iw_free_cqp_request(struct i40iw_cqp *cqp, struct i40iw_cqp_request *cqp_request);
+diff --git a/drivers/input/joystick/xpad.c b/drivers/input/joystick/xpad.c
+index f1c2bc108fd7..9f503c1e74b4 100644
+--- a/drivers/input/joystick/xpad.c
++++ b/drivers/input/joystick/xpad.c
+@@ -279,7 +279,6 @@ static const struct xpad_device {
+ 	{ 0x1430, 0xf801, "RedOctane Controller", 0, XTYPE_XBOX360 },
+ 	{ 0x146b, 0x0601, "BigBen Interactive XBOX 360 Controller", 0, XTYPE_XBOX360 },
+ 	{ 0x146b, 0x0604, "Bigben Interactive DAIJA Arcade Stick", MAP_TRIGGERS_TO_BUTTONS, XTYPE_XBOX360 },
+-	{ 0x1532, 0x0037, "Razer Sabertooth", 0, XTYPE_XBOX360 },
+ 	{ 0x1532, 0x0a00, "Razer Atrox Arcade Stick", MAP_TRIGGERS_TO_BUTTONS, XTYPE_XBOXONE },
+ 	{ 0x1532, 0x0a03, "Razer Wildcat", 0, XTYPE_XBOXONE },
+ 	{ 0x15e4, 0x3f00, "Power A Mini Pro Elite", 0, XTYPE_XBOX360 },
+diff --git a/drivers/input/mouse/elantech.c b/drivers/input/mouse/elantech.c
+index b27a91fee7f7..5324f0a3fd73 100644
+--- a/drivers/input/mouse/elantech.c
++++ b/drivers/input/mouse/elantech.c
+@@ -595,10 +595,11 @@ static void process_packet_head_v4(struct psmouse *psmouse)
+ 	struct input_dev *dev = psmouse->dev;
+ 	struct elantech_data *etd = psmouse->private;
+ 	unsigned char *packet = psmouse->packet;
+-	int id = ((packet[3] & 0xe0) >> 5) - 1;
++	int id;
+ 	int pres, traces;
+ 
+-	if (id < 0)
++	id = ((packet[3] & 0xe0) >> 5) - 1;
++	if (id < 0 || id >= ETP_MAX_FINGERS)
+ 		return;
+ 
+ 	etd->mt[id].x = ((packet[1] & 0x0f) << 8) | packet[2];
+@@ -628,7 +629,7 @@ static void process_packet_motion_v4(struct psmouse *psmouse)
+ 	int id, sid;
+ 
+ 	id = ((packet[0] & 0xe0) >> 5) - 1;
+-	if (id < 0)
++	if (id < 0 || id >= ETP_MAX_FINGERS)
+ 		return;
+ 
+ 	sid = ((packet[3] & 0xe0) >> 5) - 1;
+@@ -649,7 +650,7 @@ static void process_packet_motion_v4(struct psmouse *psmouse)
+ 	input_report_abs(dev, ABS_MT_POSITION_X, etd->mt[id].x);
+ 	input_report_abs(dev, ABS_MT_POSITION_Y, etd->mt[id].y);
+ 
+-	if (sid >= 0) {
++	if (sid >= 0 && sid < ETP_MAX_FINGERS) {
+ 		etd->mt[sid].x += delta_x2 * weight;
+ 		etd->mt[sid].y -= delta_y2 * weight;
+ 		input_mt_slot(dev, sid);
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+index 89782e8e0b91..ee438674d6cc 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+@@ -5239,6 +5239,9 @@ static int bnxt_init_chip(struct bnxt *bp, bool irq_re_init)
+ 		goto err_out;
+ 	}
+ 
++	if (BNXT_VF(bp))
++		bnxt_hwrm_func_qcfg(bp);
++
+ 	rc = bnxt_setup_vnic(bp, 0);
+ 	if (rc)
+ 		goto err_out;
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_alloc.h b/drivers/net/ethernet/intel/i40e/i40e_alloc.h
+index 926811ad44ac..e1cbea72d6b6 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_alloc.h
++++ b/drivers/net/ethernet/intel/i40e/i40e_alloc.h
+@@ -43,16 +43,11 @@ enum i40e_memory_type {
+ };
+ 
+ /* prototype for functions used for dynamic memory allocation */
+-i40e_status i40e_allocate_dma_mem(struct i40e_hw *hw,
+-					    struct i40e_dma_mem *mem,
+-					    enum i40e_memory_type type,
+-					    u64 size, u32 alignment);
+-i40e_status i40e_free_dma_mem(struct i40e_hw *hw,
+-					struct i40e_dma_mem *mem);
+-i40e_status i40e_allocate_virt_mem(struct i40e_hw *hw,
+-					     struct i40e_virt_mem *mem,
+-					     u32 size);
+-i40e_status i40e_free_virt_mem(struct i40e_hw *hw,
+-					 struct i40e_virt_mem *mem);
++int i40e_allocate_dma_mem(struct i40e_hw *hw, struct i40e_dma_mem *mem,
++			  enum i40e_memory_type type, u64 size, u32 alignment);
++int i40e_free_dma_mem(struct i40e_hw *hw, struct i40e_dma_mem *mem);
++int i40e_allocate_virt_mem(struct i40e_hw *hw, struct i40e_virt_mem *mem,
++			   u32 size);
++int i40e_free_virt_mem(struct i40e_hw *hw, struct i40e_virt_mem *mem);
+ 
+ #endif /* _I40E_ALLOC_H_ */
+diff --git a/drivers/spi/spi-qup.c b/drivers/spi/spi-qup.c
+index 1ca678bcb527..933f9342529a 100644
+--- a/drivers/spi/spi-qup.c
++++ b/drivers/spi/spi-qup.c
+@@ -1003,23 +1003,8 @@ static int spi_qup_probe(struct platform_device *pdev)
+ 		return -ENXIO;
+ 	}
+ 
+-	ret = clk_prepare_enable(cclk);
+-	if (ret) {
+-		dev_err(dev, "cannot enable core clock\n");
+-		return ret;
+-	}
+-
+-	ret = clk_prepare_enable(iclk);
+-	if (ret) {
+-		clk_disable_unprepare(cclk);
+-		dev_err(dev, "cannot enable iface clock\n");
+-		return ret;
+-	}
+-
+ 	master = spi_alloc_master(dev, sizeof(struct spi_qup));
+ 	if (!master) {
+-		clk_disable_unprepare(cclk);
+-		clk_disable_unprepare(iclk);
+ 		dev_err(dev, "cannot allocate master\n");
+ 		return -ENOMEM;
+ 	}
+@@ -1065,6 +1050,19 @@ static int spi_qup_probe(struct platform_device *pdev)
+ 	spin_lock_init(&controller->lock);
+ 	init_completion(&controller->done);
+ 
++	ret = clk_prepare_enable(cclk);
++	if (ret) {
++		dev_err(dev, "cannot enable core clock\n");
++		goto error_dma;
++	}
++
++	ret = clk_prepare_enable(iclk);
++	if (ret) {
++		clk_disable_unprepare(cclk);
++		dev_err(dev, "cannot enable iface clock\n");
++		goto error_dma;
++	}
++
+ 	iomode = readl_relaxed(base + QUP_IO_M_MODES);
+ 
+ 	size = QUP_IO_M_OUTPUT_BLOCK_SIZE(iomode);
+@@ -1094,7 +1092,7 @@ static int spi_qup_probe(struct platform_device *pdev)
+ 	ret = spi_qup_set_state(controller, QUP_STATE_RESET);
+ 	if (ret) {
+ 		dev_err(dev, "cannot set RESET state\n");
+-		goto error_dma;
++		goto error_clk;
+ 	}
+ 
+ 	writel_relaxed(0, base + QUP_OPERATIONAL);
+@@ -1118,7 +1116,7 @@ static int spi_qup_probe(struct platform_device *pdev)
+ 	ret = devm_request_irq(dev, irq, spi_qup_qup_irq,
+ 			       IRQF_TRIGGER_HIGH, pdev->name, controller);
+ 	if (ret)
+-		goto error_dma;
++		goto error_clk;
+ 
+ 	pm_runtime_set_autosuspend_delay(dev, MSEC_PER_SEC);
+ 	pm_runtime_use_autosuspend(dev);
+@@ -1133,11 +1131,12 @@ static int spi_qup_probe(struct platform_device *pdev)
+ 
+ disable_pm:
+ 	pm_runtime_disable(&pdev->dev);
++error_clk:
++	clk_disable_unprepare(cclk);
++	clk_disable_unprepare(iclk);
+ error_dma:
+ 	spi_qup_release_dma(master);
+ error:
+-	clk_disable_unprepare(cclk);
+-	clk_disable_unprepare(iclk);
+ 	spi_master_put(master);
+ 	return ret;
+ }
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+index 8bccaf9ea700..8420bdae1a5c 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+@@ -61,9 +61,9 @@ static const struct rtl819x_ops rtl819xp_ops = {
+ };
+ 
+ static struct pci_device_id rtl8192_pci_id_tbl[] = {
+-	{PCI_DEVICE(0x10ec, 0x8192)},
+-	{PCI_DEVICE(0x07aa, 0x0044)},
+-	{PCI_DEVICE(0x07aa, 0x0047)},
++	{RTL_PCI_DEVICE(0x10ec, 0x8192, rtl819xp_ops)},
++	{RTL_PCI_DEVICE(0x07aa, 0x0044, rtl819xp_ops)},
++	{RTL_PCI_DEVICE(0x07aa, 0x0047, rtl819xp_ops)},
+ 	{}
+ };
+ 
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
+index ff9b544edf87..9d3089cb6a5a 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
+@@ -67,6 +67,11 @@
+ #define IS_HARDWARE_TYPE_8192SE(_priv)		\
+ 	(((struct r8192_priv *)rtllib_priv(dev))->card_8192 == NIC_8192SE)
+ 
++#define RTL_PCI_DEVICE(vend, dev, cfg) \
++	.vendor = (vend), .device = (dev), \
++	.subvendor = PCI_ANY_ID, .subdevice = PCI_ANY_ID, \
++	.driver_data = (kernel_ulong_t)&(cfg)
++
+ #define TOTAL_CAM_ENTRY		32
+ #define CAM_CONTENT_COUNT	8
+ 
+diff --git a/fs/btrfs/relocation.c b/fs/btrfs/relocation.c
+index 313547442a6e..fe5d6f77892e 100644
+--- a/fs/btrfs/relocation.c
++++ b/fs/btrfs/relocation.c
+@@ -2387,7 +2387,7 @@ int prepare_to_merge(struct reloc_control *rc, int err)
+ 	list_splice(&reloc_roots, &rc->reloc_roots);
+ 
+ 	if (!err)
+-		btrfs_commit_transaction(trans);
++		err = btrfs_commit_transaction(trans);
+ 	else
+ 		btrfs_end_transaction(trans);
+ 	return err;
+@@ -4014,8 +4014,12 @@ int prepare_to_relocate(struct reloc_control *rc)
+ 		 */
+ 		return PTR_ERR(trans);
+ 	}
+-	btrfs_commit_transaction(trans);
+-	return 0;
++
++	ret = btrfs_commit_transaction(trans);
++	if (ret)
++		unset_reloc_control(rc);
++
++	return ret;
+ }
+ 
+ static noinline_for_stack int relocate_block_group(struct reloc_control *rc)
+@@ -4210,7 +4214,9 @@ static noinline_for_stack int relocate_block_group(struct reloc_control *rc)
+ 		err = PTR_ERR(trans);
+ 		goto out_free;
+ 	}
+-	btrfs_commit_transaction(trans);
++	ret = btrfs_commit_transaction(trans);
++	if (ret && !err)
++		err = ret;
+ out_free:
+ 	btrfs_free_block_rsv(fs_info, rc->block_rsv);
+ 	btrfs_free_path(path);
+diff --git a/fs/ceph/caps.c b/fs/ceph/caps.c
+index a0168d9bb85d..e36786f574b8 100644
+--- a/fs/ceph/caps.c
++++ b/fs/ceph/caps.c
+@@ -1437,6 +1437,7 @@ void ceph_flush_snaps(struct ceph_inode_info *ci,
+ 	struct inode *inode = &ci->vfs_inode;
+ 	struct ceph_mds_client *mdsc = ceph_inode_to_client(inode)->mdsc;
+ 	struct ceph_mds_session *session = NULL;
++	bool need_put = false;
+ 	int mds;
+ 
+ 	dout("ceph_flush_snaps %p\n", inode);
+@@ -1490,8 +1491,13 @@ void ceph_flush_snaps(struct ceph_inode_info *ci,
+ 	}
+ 	/* we flushed them all; remove this inode from the queue */
+ 	spin_lock(&mdsc->snap_flush_lock);
++	if (!list_empty(&ci->i_snap_flush_item))
++		need_put = true;
+ 	list_del_init(&ci->i_snap_flush_item);
+ 	spin_unlock(&mdsc->snap_flush_lock);
++
++	if (need_put)
++		iput(inode);
+ }
+ 
+ /*
+diff --git a/fs/ceph/snap.c b/fs/ceph/snap.c
+index e12fa3a723db..ec917ad13595 100644
+--- a/fs/ceph/snap.c
++++ b/fs/ceph/snap.c
+@@ -623,8 +623,10 @@ int __ceph_finish_cap_snap(struct ceph_inode_info *ci,
+ 	     capsnap->size);
+ 
+ 	spin_lock(&mdsc->snap_flush_lock);
+-	if (list_empty(&ci->i_snap_flush_item))
++	if (list_empty(&ci->i_snap_flush_item)) {
++		ihold(inode);
+ 		list_add_tail(&ci->i_snap_flush_item, &mdsc->snap_flush_list);
++	}
+ 	spin_unlock(&mdsc->snap_flush_lock);
+ 	return 1;  /* caller may want to ceph_flush_snaps */
+ }
+diff --git a/fs/ext4/xattr.c b/fs/ext4/xattr.c
+index e6c3bf7ad9b9..c2117b985d4a 100644
+--- a/fs/ext4/xattr.c
++++ b/fs/ext4/xattr.c
+@@ -2021,8 +2021,9 @@ ext4_xattr_block_set(handle_t *handle, struct inode *inode,
+ 			else {
+ 				u32 ref;
+ 
++#ifdef EXT4_XATTR_DEBUG
+ 				WARN_ON_ONCE(dquot_initialize_needed(inode));
+-
++#endif
+ 				/* The old block is released after updating
+ 				   the inode. */
+ 				error = dquot_alloc_block(inode,
+@@ -2090,8 +2091,9 @@ ext4_xattr_block_set(handle_t *handle, struct inode *inode,
+ 			/* We need to allocate a new block */
+ 			ext4_fsblk_t goal, block;
+ 
++#ifdef EXT4_XATTR_DEBUG
+ 			WARN_ON_ONCE(dquot_initialize_needed(inode));
+-
++#endif
+ 			goal = ext4_group_first_block_no(sb,
+ 						EXT4_I(inode)->i_block_group);
+ 			block = ext4_new_meta_blocks(handle, inode, goal, 0,
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 2cd7eb2b9173..d2fc7e6ca9cc 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -670,8 +670,11 @@ static inline void rps_record_sock_flow(struct rps_sock_flow_table *table,
+ 		/* We only give a hint, preemption can change CPU under us */
+ 		val |= raw_smp_processor_id();
+ 
+-		if (table->ents[index] != val)
+-			table->ents[index] = val;
++		/* The following WRITE_ONCE() is paired with the READ_ONCE()
++		 * here, and another one in get_rps_cpu().
++		 */
++		if (READ_ONCE(table->ents[index]) != val)
++			WRITE_ONCE(table->ents[index], val);
+ 	}
+ }
+ 
+diff --git a/include/net/pkt_sched.h b/include/net/pkt_sched.h
+index b3869f97d37d..85e059d3bc23 100644
+--- a/include/net/pkt_sched.h
++++ b/include/net/pkt_sched.h
+@@ -126,6 +126,8 @@ static inline __be16 tc_skb_protocol(const struct sk_buff *skb)
+ 	return skb->protocol;
+ }
+ 
++extern const struct nla_policy rtm_tca_policy[TCA_MAX + 1];
++
+ /* Calculate maximal size of packet seen by hard_start_xmit
+    routine of this device.
+  */
+diff --git a/include/net/sock.h b/include/net/sock.h
+index ee1a2217a98c..eccec5df94b9 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -957,8 +957,12 @@ static inline void sock_rps_record_flow(const struct sock *sk)
+ 		 * OR	an additional socket flag
+ 		 * [1] : sk_state and sk_prot are in the same cache line.
+ 		 */
+-		if (sk->sk_state == TCP_ESTABLISHED)
+-			sock_rps_record_flow_hash(sk->sk_rxhash);
++		if (sk->sk_state == TCP_ESTABLISHED) {
++			/* This READ_ONCE() is paired with the WRITE_ONCE()
++			 * from sock_rps_save_rxhash() and sock_rps_reset_rxhash().
++			 */
++			sock_rps_record_flow_hash(READ_ONCE(sk->sk_rxhash));
++		}
+ 	}
+ #endif
+ }
+@@ -967,15 +971,19 @@ static inline void sock_rps_save_rxhash(struct sock *sk,
+ 					const struct sk_buff *skb)
+ {
+ #ifdef CONFIG_RPS
+-	if (unlikely(sk->sk_rxhash != skb->hash))
+-		sk->sk_rxhash = skb->hash;
++	/* The following WRITE_ONCE() is paired with the READ_ONCE()
++	 * here, and another one in sock_rps_record_flow().
++	 */
++	if (unlikely(READ_ONCE(sk->sk_rxhash) != skb->hash))
++		WRITE_ONCE(sk->sk_rxhash, skb->hash);
+ #endif
+ }
+ 
+ static inline void sock_rps_reset_rxhash(struct sock *sk)
+ {
+ #ifdef CONFIG_RPS
+-	sk->sk_rxhash = 0;
++	/* Paired with READ_ONCE() in sock_rps_record_flow() */
++	WRITE_ONCE(sk->sk_rxhash, 0);
+ #endif
+ }
+ 
+diff --git a/lib/cpu_rmap.c b/lib/cpu_rmap.c
+index f52389054a24..a0de1b2579f7 100644
+--- a/lib/cpu_rmap.c
++++ b/lib/cpu_rmap.c
+@@ -271,8 +271,8 @@ static void irq_cpu_rmap_release(struct kref *ref)
+ 	struct irq_glue *glue =
+ 		container_of(ref, struct irq_glue, notify.kref);
+ 
+-	cpu_rmap_put(glue->rmap);
+ 	glue->rmap->obj[glue->index] = NULL;
++	cpu_rmap_put(glue->rmap);
+ 	kfree(glue);
+ }
+ 
+diff --git a/net/batman-adv/distributed-arp-table.c b/net/batman-adv/distributed-arp-table.c
+index 1519cbf70150..8e838b6647e4 100644
+--- a/net/batman-adv/distributed-arp-table.c
++++ b/net/batman-adv/distributed-arp-table.c
+@@ -60,7 +60,6 @@ static void batadv_dat_purge(struct work_struct *work);
+  */
+ static void batadv_dat_start_timer(struct batadv_priv *bat_priv)
+ {
+-	INIT_DELAYED_WORK(&bat_priv->dat.work, batadv_dat_purge);
+ 	queue_delayed_work(batadv_event_workqueue, &bat_priv->dat.work,
+ 			   msecs_to_jiffies(10000));
+ }
+@@ -774,6 +773,7 @@ int batadv_dat_init(struct batadv_priv *bat_priv)
+ 	if (!bat_priv->dat.hash)
+ 		return -ENOMEM;
+ 
++	INIT_DELAYED_WORK(&bat_priv->dat.work, batadv_dat_purge);
+ 	batadv_dat_start_timer(bat_priv);
+ 
+ 	batadv_tvlv_handler_register(bat_priv, batadv_dat_tvlv_ogm_handler_v1,
+diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+index 1fd6498e3387..7052434c1061 100644
+--- a/net/bluetooth/hci_core.c
++++ b/net/bluetooth/hci_core.c
+@@ -2468,10 +2468,10 @@ int hci_remove_link_key(struct hci_dev *hdev, bdaddr_t *bdaddr)
+ 
+ int hci_remove_ltk(struct hci_dev *hdev, bdaddr_t *bdaddr, u8 bdaddr_type)
+ {
+-	struct smp_ltk *k;
++	struct smp_ltk *k, *tmp;
+ 	int removed = 0;
+ 
+-	list_for_each_entry_rcu(k, &hdev->long_term_keys, list) {
++	list_for_each_entry_safe(k, tmp, &hdev->long_term_keys, list) {
+ 		if (bacmp(bdaddr, &k->bdaddr) || k->bdaddr_type != bdaddr_type)
+ 			continue;
+ 
+@@ -2487,9 +2487,9 @@ int hci_remove_ltk(struct hci_dev *hdev, bdaddr_t *bdaddr, u8 bdaddr_type)
+ 
+ void hci_remove_irk(struct hci_dev *hdev, bdaddr_t *bdaddr, u8 addr_type)
+ {
+-	struct smp_irk *k;
++	struct smp_irk *k, *tmp;
+ 
+-	list_for_each_entry_rcu(k, &hdev->identity_resolving_keys, list) {
++	list_for_each_entry_safe(k, tmp, &hdev->identity_resolving_keys, list) {
+ 		if (bacmp(bdaddr, &k->bdaddr) || k->addr_type != addr_type)
+ 			continue;
+ 
+diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
+index b0bb4cf52a7e..25d88b8cfae9 100644
+--- a/net/bluetooth/l2cap_core.c
++++ b/net/bluetooth/l2cap_core.c
+@@ -4007,6 +4007,10 @@ static int l2cap_connect_create_rsp(struct l2cap_conn *conn,
+ 	result = __le16_to_cpu(rsp->result);
+ 	status = __le16_to_cpu(rsp->status);
+ 
++	if (result == L2CAP_CR_SUCCESS && (dcid < L2CAP_CID_DYN_START ||
++					   dcid > L2CAP_CID_DYN_END))
++		return -EPROTO;
++
+ 	BT_DBG("dcid 0x%4.4x scid 0x%4.4x result 0x%2.2x status 0x%2.2x",
+ 	       dcid, scid, result, status);
+ 
+@@ -4038,6 +4042,11 @@ static int l2cap_connect_create_rsp(struct l2cap_conn *conn,
+ 
+ 	switch (result) {
+ 	case L2CAP_CR_SUCCESS:
++		if (__l2cap_get_chan_by_dcid(conn, dcid)) {
++			err = -EBADSLT;
++			break;
++		}
++
+ 		l2cap_state_change(chan, BT_CONFIG);
+ 		chan->ident = 0;
+ 		chan->dcid = dcid;
+@@ -4362,7 +4371,9 @@ static inline int l2cap_disconnect_req(struct l2cap_conn *conn,
+ 
+ 	chan->ops->set_shutdown(chan);
+ 
++	l2cap_chan_unlock(chan);
+ 	mutex_lock(&conn->chan_lock);
++	l2cap_chan_lock(chan);
+ 	l2cap_chan_del(chan, ECONNRESET);
+ 	mutex_unlock(&conn->chan_lock);
+ 
+@@ -4401,7 +4412,9 @@ static inline int l2cap_disconnect_rsp(struct l2cap_conn *conn,
+ 		return 0;
+ 	}
+ 
++	l2cap_chan_unlock(chan);
+ 	mutex_lock(&conn->chan_lock);
++	l2cap_chan_lock(chan);
+ 	l2cap_chan_del(chan, 0);
+ 	mutex_unlock(&conn->chan_lock);
+ 
+diff --git a/net/core/dev.c b/net/core/dev.c
+index a4d68da68232..04c43c7ecaca 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -3696,8 +3696,10 @@ static int get_rps_cpu(struct net_device *dev, struct sk_buff *skb,
+ 		u32 next_cpu;
+ 		u32 ident;
+ 
+-		/* First check into global flow table if there is a match */
+-		ident = sock_flow_table->ents[hash & sock_flow_table->mask];
++		/* First check into global flow table if there is a match.
++		 * This READ_ONCE() pairs with WRITE_ONCE() from rps_record_sock_flow().
++		 */
++		ident = READ_ONCE(sock_flow_table->ents[hash & sock_flow_table->mask]);
+ 		if ((ident ^ hash) & ~rps_cpu_mask)
+ 			goto try_rps;
+ 
+diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
+index 32819d1e2075..8808133e78a3 100644
+--- a/net/sched/cls_api.c
++++ b/net/sched/cls_api.c
+@@ -31,8 +31,6 @@
+ #include <net/pkt_sched.h>
+ #include <net/pkt_cls.h>
+ 
+-extern const struct nla_policy rtm_tca_policy[TCA_MAX + 1];
+-
+ /* The list of all installed classifier types */
+ static LIST_HEAD(tcf_proto_base);
+ 
