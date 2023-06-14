@@ -2,83 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F27672F7B4
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E34772F7B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243411AbjFNIWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 04:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52280 "EHLO
+        id S243438AbjFNIWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 04:22:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243389AbjFNIWf (ORCPT
+        with ESMTP id S243433AbjFNIWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 04:22:35 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498851985
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 01:22:33 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4Qgz1f0DkXzBQJYv
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 16:22:30 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1686730949; x=1689322950; bh=ybW66CHsYCMw2UbPEZse4W5NxYw
-        6eFf/tb2POZswvC0=; b=Rt03H1y5STJ2RdRjE1wXL+L2EFaZlHJMoi49G7tI08A
-        rPBDUue8HG3z4Pzq8Bfl8S0g0kbOLYBBIfylk13XpGkOqKA4K3d/ElJ/FMvwGov6
-        64HtvIv8DmxIkbAmtrj9BtrusVT8E6uaA/Nb0nBI3d+BeemmXzManLblaX1ftaNH
-        NWq18RjP749y0HRXn/A/rcmFaa/wqzRZz0pqLu9wecMLj7IUU+VzGOfDEKAmepXm
-        RKqaRqG6iyWd+BReHItn38Jrs31Oq0Ip+QhnsOSVWNf7/ddIEoioEbGfU2ZV9JMh
-        rgmUMg9GfMX0f+Igk/wfSy8+r1wl68ZBD7gbJfC61NQ==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id dkCgQKW9hBXs for <linux-kernel@vger.kernel.org>;
-        Wed, 14 Jun 2023 16:22:29 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4Qgz1d3s4DzBJJCt;
-        Wed, 14 Jun 2023 16:22:29 +0800 (CST)
+        Wed, 14 Jun 2023 04:22:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7305019A7;
+        Wed, 14 Jun 2023 01:22:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0486263960;
+        Wed, 14 Jun 2023 08:22:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D22C5C433C0;
+        Wed, 14 Jun 2023 08:22:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686730969;
+        bh=ds0InahBENDkLdQRNqole1hIItw6ZE64nLpD0bN75NU=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=eqjB+1fK8Dj1m8eAaoTnhqm7ZoEqmJViiXfHP+AoFHFvWjCzzw1IdlKjNrY9jEPmB
+         XaPblsq1Jcv/yXTIlzL8Ldwh1JLNy8xPNPcAz+clV+AEC3acGc6aCbDQJAvDa7GI/r
+         8VBY2ifKyB8dK0rUzJbJbB7W4zkLdekl7rhju5Fn4yTJyMZ97Y/H26dYBbD0LQhhfv
+         B1EUDdoGokBbkk953RIBq9NrKklY37pIzGlV0JfFX3vfEA8Xh1o0gSVaG27Lv/GWc/
+         M98pGOg8Kz6andBGwbKb+vI3M0zkh3dcxoJXEr0VcZTUmwJxbv4efU2+vI4gBEGsqc
+         ZlPUs5IYR8SIQ==
+Message-ID: <ea7b94b6-37fc-1352-9849-66a49dd1b39f@kernel.org>
+Date:   Wed, 14 Jun 2023 10:22:42 +0200
 MIME-Version: 1.0
-Date:   Wed, 14 Jun 2023 16:22:29 +0800
-From:   baomingtong001@208suo.com
-To:     jstultz@google.com, tglx@linutronix.de, sboyd@kernel.org,
-        shuah@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests: timers: Remove unneeded semicolon
-In-Reply-To: <20230614082010.28632-1-luojianhong@cdjrlc.com>
-References: <20230614082010.28632-1-luojianhong@cdjrlc.com>
-User-Agent: Roundcube Webmail
-Message-ID: <1d085048fbb2fcbf2a50328d9b407d99@208suo.com>
-X-Sender: baomingtong001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 6/7] ASoC: dt-bindings: mediatek,mt79xx-wm8960: add
+ mt79xx-wm8960 document
+Content-Language: en-US
+To:     =?UTF-8?B?TWFzbyBIdWFuZyAo6buD5Yqg56u5KQ==?= 
+        <Maso.Huang@mediatek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        =?UTF-8?B?VHJldm9yIFd1ICjlkLPmlofoia8p?= <Trevor.Wu@mediatek.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        =?UTF-8?B?QWxsZW4tS0ggQ2hlbmcgKOeoi+WGoOWLsyk=?= 
+        <Allen-KH.Cheng@mediatek.com>,
+        "renzhijie2@huawei.com" <renzhijie2@huawei.com>,
+        "tiwai@suse.com" <tiwai@suse.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "arnd@arndb.de" <arnd@arndb.de>, "perex@perex.cz" <perex@perex.cz>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?B?SmlheGluIFl1ICjkv57lrrbpkasp?= <Jiaxin.Yu@mediatek.com>
+References: <20230612105250.15441-1-maso.huang@mediatek.com>
+ <20230612105250.15441-7-maso.huang@mediatek.com>
+ <7bf1395a-eba8-fe27-a359-9c50af7add2a@kernel.org>
+ <c87eadd9fc8d0ef9dc4582493e540f0b311e06eb.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <c87eadd9fc8d0ef9dc4582493e540f0b311e06eb.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tools/testing/selftests/timers/nanosleep.c:75:2-3: Unneeded semicolon
+On 14/06/2023 09:40, Maso Huang (黃加竹) wrote:
+>>> Signed-off-by: Maso Huang <maso.huang@mediatek.com>
+>>> ---
+>>>  .../sound/mediatek,mt79xx-wm8960.yaml         | 53
+>> +++++++++++++++++++
+>>>  1 file changed, 53 insertions(+)
+>>>  create mode 100644
+>> Documentation/devicetree/bindings/sound/mediatek,mt79xx-wm8960.yaml
+>>>
+>>> diff --git
+>> a/Documentation/devicetree/bindings/sound/mediatek,mt79xx-wm8960.yaml 
+>> b/Documentation/devicetree/bindings/sound/mediatek,mt79xx-wm8960.yaml
+>>> new file mode 100644
+>>> index 000000000000..26b38bb629da
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/sound/mediatek,mt79xx-
+>> wm8960.yaml
+>>> @@ -0,0 +1,53 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: 
+>> http://devicetree.org/schemas/sound/mediatek,mt79xx-wm8960.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: MediaTek MT79xx ASOC sound card with WM8960 codec
+>>
+>> What is a MT79xx ASOC? Is it some specific SoC name? What does "A"
+>> stands for in SoC? XX also looks odd, I thought Mediatek uses only
+>> numbers.
+>>
+> 
+> I'll use mt7986 instead of mt79xx in v2 patch.
+> And ASoC means ALSA SoC.
 
-Signed-off-by: Mingtong Bao <baomingtong001@208suo.com>
----
-  tools/testing/selftests/timers/nanosleep.c | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
+ALSA is Linux stuff, so does not belong to bindings. I have no clue what
+is "ALSA SoC" (as SoC means System on Chip).
 
-diff --git a/tools/testing/selftests/timers/nanosleep.c 
-b/tools/testing/selftests/timers/nanosleep.c
-index df1d03516e7b..34e61507fa1f 100644
---- a/tools/testing/selftests/timers/nanosleep.c
-+++ b/tools/testing/selftests/timers/nanosleep.c
-@@ -72,7 +72,7 @@ char *clockstring(int clockid)
-          return "CLOCK_BOOTTIME_ALARM";
-      case CLOCK_TAI:
-          return "CLOCK_TAI";
--    };
-+    }
-      return "UNKNOWN_CLOCKID";
-  }
+Please describe real hardware not Linux or your configuration or some SW.
+
+
+Best regards,
+Krzysztof
+
