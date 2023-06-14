@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2172D730571
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F17C730576
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:52:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232936AbjFNQwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 12:52:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60274 "EHLO
+        id S236375AbjFNQwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 12:52:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235826AbjFNQwS (ORCPT
+        with ESMTP id S236414AbjFNQw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 12:52:18 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1448C1FF7
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:52:16 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9745baf7c13so127562266b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:52:16 -0700 (PDT)
+        Wed, 14 Jun 2023 12:52:27 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81092132
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:52:25 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-970028cfb6cso148649966b.1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:52:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686761534; x=1689353534;
+        d=linaro.org; s=google; t=1686761544; x=1689353544;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=/4RKuZCqzW2Dlrgh/BnCWxatIsnaqixg2Yy82HrsyRc=;
-        b=ea5niOQKFslWBeiu8l8bwW2emOXzF+TZN9SXr6i6QQGhp+/Rdf7xCwSxDj4eCkhE/x
-         ixSyBRefLvGETnEw79vEBBJvw6TMiaS7seZe6l+jhYIK5aike+iFA3QzmbwqVdtGyRa3
-         Kc5CKve1Wfl9CZVQiDSwPLlShhaHSdjgc6QikaV4cOde4oTY2iB6UEe8nmdXB+ftFd6I
-         N+/h2rvuVm56oG/884rJdLharBgh6ijnN5RIeI7fyLvljOXocqTYgzB4Q+Jj3TkJiG/O
-         6fWUTFcmCCcRTJk0I0DJ/tTqqrFQN2OcylO40akZYApsIi+WCslvmTg9vyCrR1+gBH/r
-         BQZQ==
+        bh=93h10qPxQUhCWZsq9GNFwkRNOXrYmgM5sQHpq9Nnwq0=;
+        b=OcDgmVQTb39elSJQ3DLmTv08pk7LLdp8T6plF83V7J3tkb+qPgy2LiSZjXeGsmNiiV
+         e8JG+V/zDYxG4e8sU6HZlrWNeUQq0K/wPMRrabHgn+pEJpwEYSp//A13VqEo9y9aMYpL
+         yK44GTPFgMDScRFcTgS7Nb5M2aIwJyZnAfEcybwH15jCh5RQ9R+FDp1ezSOm3y3wVi8/
+         MfavcdNa8B/LUbHZQiz4zLYKJN0E7EoBfJwizELKqAiQompQ9sUNis8n8osE9hk7GNIk
+         A08pVSxAdZgKTP6K4bL1pQ4FO6k7ZcpW72OaMxceaJZHoTfZzXN3sPFhWLG1JNwRw8tV
+         fPDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686761534; x=1689353534;
+        d=1e100.net; s=20221208; t=1686761544; x=1689353544;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/4RKuZCqzW2Dlrgh/BnCWxatIsnaqixg2Yy82HrsyRc=;
-        b=gvaGJawUVp0s2lh7acVMW383lvRY+KXnI0o9ZfpzDKWYHpUwpQJX6C61Fgpn0R9/s3
-         lqyARN+bG/dn9FCn486FVO2GRBeji//4TsWuFHW07T5I3GpJcY9y6qSSocajjpCr9wVS
-         i1tUIyQFpqZ0+McJ30fcpq+dZhKn5V6yYCHlJomghoKq8LL/+vh1Mba6/9FidAHwGv3y
-         jOnA3yr5ZvHkZBINmhTqUGM+Hq/AIFpjDWCaPqaSc01dkWjAtZQArY77ZDNpiX+fM6fr
-         yyM8ySWKDcjDyISE4dyWBfkVNy9NgXb98eW06yubHerIw3YT6n9EjjeEk4xmtRcLdubW
-         zTZQ==
-X-Gm-Message-State: AC+VfDz3P5Wj+zt8zEBV2oSPW/OyHMhdU7dALRdQoTVxw0fiaf4d+ZkQ
-        Nt0exuGax8GugtxsNoex3NDUlQ==
-X-Google-Smtp-Source: ACHHUZ7E7FKxahgtG+bxV0HhVkZEyxm7yrjKAS9lo7WpJwoXEvrbR8cTx0jmapBX4FNtiJqh6VEy0w==
-X-Received: by 2002:a17:907:80c:b0:978:8e58:e1a9 with SMTP id wv12-20020a170907080c00b009788e58e1a9mr16265342ejb.15.1686761534577;
-        Wed, 14 Jun 2023 09:52:14 -0700 (PDT)
+        bh=93h10qPxQUhCWZsq9GNFwkRNOXrYmgM5sQHpq9Nnwq0=;
+        b=PXSMywRrpXqH4vKssYqVYRh5Su6WRRBmNQBXV8ihJ4GpC7mgfRJpTdLhB+w8kgM5hg
+         VtixfgCNdUR4u3fEm9H3mkGox+B+EMzmCXPd632C6EsV+qicL87nuGCsSTO141PRf3/l
+         Csss7kWAseKZg+ktQM/XhcC3kkM1LJy2Xgdv1VJ6siCwlwpkDSnzEOunT/f+hcwkRNZ6
+         ZdUD8gMS1PlMSPkLpPU+DNvmE3xx8bcYEETFbp048Ai5yK8MoMrb9TDRh5ZsgqkpTjiN
+         wZxsmtQJ9PFasbsM9HGtZ3Ape3ST/HaRykmuOFqHmvlE5H9ImQAQpi5sXTOAptUTPo55
+         8b2Q==
+X-Gm-Message-State: AC+VfDxxI+m4Wxv1wJkUD1qP3hegAgvTZGP6N00ZEoY5bihPAWu9jli5
+        Z7YPogAKFw2kpAW2xJo2PYYjHA==
+X-Google-Smtp-Source: ACHHUZ7seUtdRaPNhJcbNFjaVpjz06zUGeoXziNRnEw6XLMoz2kG5Kdg8S/1LnZd4jBEvV2JwUkP8g==
+X-Received: by 2002:a17:907:16a4:b0:974:216f:dc36 with SMTP id hc36-20020a17090716a400b00974216fdc36mr15745759ejc.17.1686761544428;
+        Wed, 14 Jun 2023 09:52:24 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id o7-20020a170906358700b00969cbd5718asm8140798ejb.48.2023.06.14.09.52.12
+        by smtp.gmail.com with ESMTPSA id a19-20020a17090682d300b009775eb0343bsm8278595ejy.79.2023.06.14.09.52.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 09:52:14 -0700 (PDT)
-Message-ID: <e12b251a-9e4d-6706-f6ba-7ca20c674587@linaro.org>
-Date:   Wed, 14 Jun 2023 18:52:11 +0200
+        Wed, 14 Jun 2023 09:52:23 -0700 (PDT)
+Message-ID: <7c7ef961-cb5a-ee70-6ec1-7c6afe22c87b@linaro.org>
+Date:   Wed, 14 Jun 2023 18:52:21 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
@@ -75,12 +75,8 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         devicetree@vger.kernel.org
 References: <20230526-topic-smd_icc-v5-0-eeaa09d0082e@linaro.org>
  <20230526-topic-smd_icc-v5-1-eeaa09d0082e@linaro.org>
- <c8573d08-d4e2-41a8-f0b1-e1d7a0c9ce17@linaro.org>
- <e7a083f6-e885-113b-bb6c-d20108777c5e@linaro.org>
- <47cfe777-45b9-6303-1374-bc96803d26d4@linaro.org>
- <c1c84eef-ee43-fcb9-de93-ba609b842d87@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <c1c84eef-ee43-fcb9-de93-ba609b842d87@linaro.org>
+In-Reply-To: <20230526-topic-smd_icc-v5-1-eeaa09d0082e@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -93,52 +89,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/06/2023 18:48, Konrad Dybcio wrote:
-> On 14.06.2023 18:47, Krzysztof Kozlowski wrote:
->> On 14/06/2023 18:43, Konrad Dybcio wrote:
->>> On 14.06.2023 18:43, Krzysztof Kozlowski wrote:
->>>> On 14/06/2023 12:22, Konrad Dybcio wrote:
->>>>> The SMD RPM interconnect driver requires different icc tags to the
->>>>> RPMh driver. Add bindings to reflect that.
->>>>>
->>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>>> ---
->>>>>  include/dt-bindings/interconnect/qcom,rpm-icc.h | 13 +++++++++++++
->>>>>  1 file changed, 13 insertions(+)
->>>>>
->>>>> diff --git a/include/dt-bindings/interconnect/qcom,rpm-icc.h b/include/dt-bindings/interconnect/qcom,rpm-icc.h
->>>>> new file mode 100644
->>>>> index 000000000000..2cd56f91e5c5
->>>>> --- /dev/null
->>>>> +++ b/include/dt-bindings/interconnect/qcom,rpm-icc.h
->>>>> @@ -0,0 +1,13 @@
->>>>> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
->>>>> +/*
->>>>> + * Copyright (c) 2023, Linaro Limited
->>>>> + */
->>>>> +
->>>>> +#ifndef __DT_BINDINGS_INTERCONNECT_QCOM_RPM_ICC_H
->>>>> +#define __DT_BINDINGS_INTERCONNECT_QCOM_RPM_ICC_H
->>>>> +
->>>>> +#define RPM_ACTIVE_TAG		(1 << 0)
->>>>> +#define RPM_SLEEP_TAG		(1 << 1)
->>>>> +#define RPM_ALWAYS_TAG		(RPM_ACTIVE_TAG | RPM_SLEEP_TAG)
->>>>
->>>> Where are these used? I don't see any DTS in your patchset. Did you send
->>>> it separately?
->>> In the driver for now, e.g. patch 19. DTS can only come after the
->>> driver is fixed or things will explode!
->>
->> You reference it in patch 19, but I still do not see the constants being
->> used.
+On 14/06/2023 12:22, Konrad Dybcio wrote:
+> The SMD RPM interconnect driver requires different icc tags to the
+> RPMh driver. Add bindings to reflect that.
 > 
-> Fragment of P19:
-> 
->  	if (!tag)
-> -		tag = QCOM_ICC_TAG_ALWAYS;
-> +		tag = RPM_ALWAYS_TAG;
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
 
-Now I see, thanks:)
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
