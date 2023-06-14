@@ -2,154 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192F5730208
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:32:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1970773020D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244158AbjFNOcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 10:32:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55092 "EHLO
+        id S245639AbjFNOdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 10:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245634AbjFNOb6 (ORCPT
+        with ESMTP id S245633AbjFNOdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 10:31:58 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540322703
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 07:31:33 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-976a0a1a92bso129881366b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 07:31:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686753092; x=1689345092;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=R6k6f2ympJcu3ns6Ija20elkW6bhMNjpeBhrfJ9xoy0=;
-        b=HjkI1d0wFayV/as5yTDNIQtDbssukoexajKlZsiuAA2dK1489xvUAe0557735bTveq
-         15L/1h78tKHmG6o5I+zlZ8/h9vEWUfRIrcCwLFAes0eFzNA077iEL8NOgo3t2NHUZb9e
-         Rqh+mfO76L1Ogl/rqrQaHRYGPG3mAH7VbHWg5cXreln2+JJD6sZTH7237wspca614BJj
-         E0qlB4jY2AHHZtCyaCm5j4jCub9IhPoAgSba6gGTyNACNPX5cCFeqWZCRry9mEBkl9yy
-         NoGljNSsMxtRaovXsjNOBc8D0q2Y4tO/7P/HGY7sOsH2HPmUBsSgZQ80khOTvqTkYRSM
-         9lWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686753092; x=1689345092;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=R6k6f2ympJcu3ns6Ija20elkW6bhMNjpeBhrfJ9xoy0=;
-        b=aZ6/yGLc04vCbIo91YSNaYZm2YEXXdKrlVQwMioDkmwcgou6Zlbbdb+CUEw13RQNG3
-         VOFuF5alUbnfhQw3DFLuSi+qt7gk0YQXRKwFkhFkYqP0iyZSPNAY5835zcfGtar+3xcG
-         PJgLRqOg28G+wg3k8TMD6YJNpeAYspMCpvR/0uIcTBeRO2syPpP/DnMGWhb0adNlK4gl
-         qQaoS4ceMjEIMU6ugHjIWa4PYmFgyCmoHh8WcqVzw8FpULNBN8EmsL2IRTUSmzsnczxA
-         4elP8lA2XCErds+lu+fY0/ZuD1GDxsEjRiTgEOeoRsL+rakOiAw2JaKDmeyCsNthcK30
-         pQ8Q==
-X-Gm-Message-State: AC+VfDyjjdo/1C9b0gShoZFVXsZK9l5/e9AsN9WhYz32NGx9rBNyQokR
-        ptPh4lt2V0jpiJL8iqmCOau8Y1ZjT82g0uTf
-X-Google-Smtp-Source: ACHHUZ43SmOvYMDVVok7GBhgV6vKwQB3xnBs5kgWIpWtJgQHOVYnpeYRlK0pBG6kvsVSP+AP9PEeqw==
-X-Received: by 2002:a17:907:971d:b0:96f:ea85:3ef6 with SMTP id jg29-20020a170907971d00b0096fea853ef6mr15466663ejc.62.1686753091312;
-        Wed, 14 Jun 2023 07:31:31 -0700 (PDT)
-Received: from lelloman-5950.homenet.telecomitalia.it (host-87-21-158-222.retail.telecomitalia.it. [87.21.158.222])
-        by smtp.gmail.com with ESMTPSA id p20-20020a170906b21400b009767c4235absm7983749ejz.219.2023.06.14.07.31.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 07:31:30 -0700 (PDT)
-From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-To:     sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com
-Cc:     yosryahmed@google.com, hannes@cmpxchg.org, nphamcs@gmail.com,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Subject: [PATCH] mm: zswap: invaldiate entry after writeback
-Date:   Wed, 14 Jun 2023 16:31:22 +0200
-Message-Id: <20230614143122.74471-1-cerasuolodomenico@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 14 Jun 2023 10:33:04 -0400
+Received: from mail-40133.protonmail.ch (mail-40133.protonmail.ch [185.70.40.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81492682
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 07:32:49 -0700 (PDT)
+Date:   Wed, 14 Jun 2023 14:32:40 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+        s=protonmail; t=1686753167; x=1687012367;
+        bh=Eym4bt3G3yI5tzMrX6NSMGd1+ikTIMtBGpmezvReHMk=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=Xkh/eR8al1uA04ta5Bbi8OPlyK6TSpuMGojkCHFCB046PABXv7MtBc39nJrrqvDTy
+         Qepc9vvN4tO/+bij/nZwQLdueaT3SnPLRnP/FLD1I/HmrFALkd8uSB0rsVZrcCaiQw
+         1e2kcXYGlxMBuyWM6bgsXqpVMYtwsafhP6BZ2Dzp0LI+sPocaXK5wpFKF/2eLlKdqh
+         lhNUHeg2KsmbSZjuOmeFdM5NC2WxV2WomqYHs9RS04xpJQd7/HaIUOlDqUqb8U7FXD
+         G3wxciegsorkG8l3wVINiAGVclJnBjNmhz36eF5qwXF/aAEuvSGrDQ2lAsfwtDn4W2
+         T9b8t2d5pNruw==
+To:     Boqun Feng <boqun.feng@gmail.com>
+From:   Benno Lossin <benno.lossin@proton.me>
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        Geoffrey Thomas <geofft@ldpreload.com>,
+        Fox Chen <foxhlchen@gmail.com>,
+        John Baublitz <john.m.baublitz@gmail.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andreas Hindborg <nmi@metaspace.dk>, stable@vger.kernel.org
+Subject: Re: [PATCH] rust: allocator: Prevents mis-aligned allocation
+Message-ID: <91XpcluPyeKjsC8_uSh1yvgcz2BoRMeih76O5-wTwQgnNiLFdOCiO3HT9kXByzZIiK-6nForUTTeo-H9cR0CWemr7dJuMgMnC0wzGDIBmlQ=@proton.me>
+In-Reply-To: <20230613164258.3831917-1-boqun.feng@gmail.com>
+References: <20230613164258.3831917-1-boqun.feng@gmail.com>
+Feedback-ID: 71780778:user:proton
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When an entry started writeback, it used to be invalidated with ref
-count logic alone, meaning that it would stay on the tree until all
-references were put. The problem with this behavior is that as soon as
-the writeback started, the ownership of the data held by the entry is
-passed to the swapcache and should not be left in zswap too.
-Currently there are no known issues because of this, but this change
-explicitly invalidates an entry that started writeback to reduce
-opportunities for future bugs.
+On 13.06.23 18:42, Boqun Feng wrote:
+> Currently the KernelAllocator simply passes the size of the type Layout
+> to krealloc(), and in theory the alignment requirement from the type
+> Layout may be larger than the guarantee provided by SLAB, which means
+> the allocated object is mis-aligned.
+>=20
+> Fixes this by adjusting the allocation size to the nearest power of two,
+> which SLAB always guarantees a size-aligned allocation. And because Rust
+> guarantees that original size must be a multiple of alignment and the
+> alignment must be a power of two, then the alignment requirement is
+> satisfied.
+>=20
+> Suggested-by: Vlastimil Babka <vbabka@suse.cz>
+> Co-developed-by: Andreas Hindborg (Samsung) <nmi@metaspace.dk>
+> Signed-off-by: Andreas Hindborg (Samsung) <nmi@metaspace.dk>
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> Cc: stable@vger.kernel.org # v6.1+
 
-This patch is a follow up on the series titled "mm: zswap: move
-writeback LRU from zpool to zswap" with message id
-<20230612093815.133504-1-cerasuolodomenico@gmail.com> in mm-unstable +
-commit f090b7949768("mm: zswap: support exclusive loads") that's in
-mm-unstable as well.
+Reviewed-by: Benno Lossin <benno.lossin@proton.me>
 
-Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
-Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
----
- mm/zswap.c | 33 +++++++++++++++++----------------
- 1 file changed, 17 insertions(+), 16 deletions(-)
+--=20
+Cheers,
+Benno
 
-diff --git a/mm/zswap.c b/mm/zswap.c
-index 02d0a6f46f4a..c122f042a49d 100644
---- a/mm/zswap.c
-+++ b/mm/zswap.c
-@@ -599,6 +599,16 @@ static struct zswap_pool *zswap_pool_find_get(char *type, char *compressor)
- 	return NULL;
- }
- 
-+static void zswap_invalidate_entry(struct zswap_tree *tree,
-+				   struct zswap_entry *entry)
-+{
-+	/* remove from rbtree */
-+	zswap_rb_erase(&tree->rbroot, entry);
-+
-+	/* drop the initial reference from entry creation */
-+	zswap_entry_put(tree, entry);
-+}
-+
- static int zswap_reclaim_entry(struct zswap_pool *pool)
- {
- 	struct zswap_entry *entry;
-@@ -644,12 +654,13 @@ static int zswap_reclaim_entry(struct zswap_pool *pool)
- 		goto put_unlock;
- 	}
- 
--	/* Check for invalidate() race */
--	if (entry != zswap_rb_search(&tree->rbroot, swpoffset))
--		goto put_unlock;
--
--	/* Drop base reference */
--	zswap_entry_put(tree, entry);
-+	/*
-+	 * Writeback started successfully, the page now belongs to the
-+	 * swapcache. Drop the entry from zswap - unless invalidate already
-+	 * took it out while we had the tree->lock released for IO.
-+	 */
-+	if (entry == zswap_rb_search(&tree->rbroot, swpoffset))
-+		zswap_invalidate_entry(tree, entry);
- 
- put_unlock:
- 	/* Drop local reference */
-@@ -1376,16 +1387,6 @@ static int zswap_frontswap_store(unsigned type, pgoff_t offset,
- 	goto reject;
- }
- 
--static void zswap_invalidate_entry(struct zswap_tree *tree,
--				   struct zswap_entry *entry)
--{
--	/* remove from rbtree */
--	zswap_rb_erase(&tree->rbroot, entry);
--
--	/* drop the initial reference from entry creation */
--	zswap_entry_put(tree, entry);
--}
--
- /*
-  * returns 0 if the page was successfully decompressed
-  * return -1 on entry not found or error
--- 
-2.34.1
-
+> ---
+> Some more explanation:
+>=20
+> * Layout is a data structure describing a particular memory layout,
+>    conceptionally it has two fields: align and size.
+>=20
+>    * align is guaranteed to be a power of two.
+>    * size can be smaller than align (only when the Layout is created via
+>      Layout::from_align_size())
+>    * After pad_to_align(), the size is guaranteed to be a multiple of
+>      align
+>=20
+> For more information, please see:
+>=20
+> =09https://doc.rust-lang.org/stable/std/alloc/struct.Layout.html
+>=20
+>   rust/bindings/bindings_helper.h |  1 +
+>   rust/kernel/allocator.rs        | 17 ++++++++++++++++-
+>   2 files changed, 17 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_hel=
+per.h
+> index 3e601ce2548d..6619ce95dd37 100644
+> --- a/rust/bindings/bindings_helper.h
+> +++ b/rust/bindings/bindings_helper.h
+> @@ -15,3 +15,4 @@
+>   /* `bindgen` gets confused at certain things. */
+>   const gfp_t BINDINGS_GFP_KERNEL =3D GFP_KERNEL;
+>   const gfp_t BINDINGS___GFP_ZERO =3D __GFP_ZERO;
+> +const size_t BINDINGS_ARCH_SLAB_MINALIGN =3D ARCH_SLAB_MINALIGN;
+> diff --git a/rust/kernel/allocator.rs b/rust/kernel/allocator.rs
+> index 397a3dd57a9b..66575cf87ce2 100644
+> --- a/rust/kernel/allocator.rs
+> +++ b/rust/kernel/allocator.rs
+> @@ -11,9 +11,24 @@
+>=20
+>   unsafe impl GlobalAlloc for KernelAllocator {
+>       unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
+> +        // Customized layouts from `Layout::from_size_align()` can have =
+size < align, so pads first.
+> +        let layout =3D layout.pad_to_align();
+> +
+> +        let mut size =3D layout.size();
+> +
+> +        if layout.align() > bindings::BINDINGS_ARCH_SLAB_MINALIGN {
+> +            // The alignment requirement exceeds the slab guarantee, the=
+n tries to enlarges the size
+> +            // to use the "power-of-two" size/alignment guarantee (see c=
+omments in kmalloc() for
+> +            // more information).
+> +            //
+> +            // Note that `layout.size()` (after padding) is guaranteed t=
+o be muliples of
+> +            // `layout.align()`, so `next_power_of_two` gives enough ali=
+gnment guarantee.
+> +            size =3D size.next_power_of_two();
+> +        }
+> +
+>           // `krealloc()` is used instead of `kmalloc()` because the latt=
+er is
+>           // an inline function and cannot be bound to as a result.
+> -        unsafe { bindings::krealloc(ptr::null(), layout.size(), bindings=
+::GFP_KERNEL) as *mut u8 }
+> +        unsafe { bindings::krealloc(ptr::null(), size, bindings::GFP_KER=
+NEL) as *mut u8 }
+>       }
+>=20
+>       unsafe fn dealloc(&self, ptr: *mut u8, _layout: Layout) {
+> --
+> 2.39.2
+> 
