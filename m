@@ -2,114 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3DA672FDFD
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6217372FE05
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244468AbjFNMMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 08:12:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47536 "EHLO
+        id S244483AbjFNMMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 08:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244467AbjFNMLs (ORCPT
+        with ESMTP id S234921AbjFNMMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 08:11:48 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA00F1BC5;
-        Wed, 14 Jun 2023 05:11:42 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id 6a1803df08f44-62884fa0e53so17994406d6.0;
-        Wed, 14 Jun 2023 05:11:42 -0700 (PDT)
+        Wed, 14 Jun 2023 08:12:06 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735702689
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:11:55 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f61d79b0f2so8786796e87.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:11:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686744702; x=1689336702;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jfeQaw+ScJyf8YtahpLruw3sSgKj9ssLSfyFkigJ6Tc=;
-        b=kkmMLHeIjxJq6WCELQ4uRlrhY0T0CqJeEg84WDKeORRX8QZg7TQxmtC2H3J1mzevUB
-         rPZnF1iZapA34xXSlA3122Wzg1nEAJ7jNXJfkV1p+11m/VNs54S4jQeUNUgO9sDDQUNF
-         E6Kf3GIXmvKqhVVhY4tu06tjGE2ylIAZjXieiUIJn105s5opLs4YpsB52GzehCcydysH
-         JGtlcn4FBB6dsF26jZFfn6ePH8pioOJg4VLlZMDDnjqAjTiAbAEyLkb2NAe/b04PtsRc
-         KMN9LdCVAAIUl/mS7ABA90MkDt2tNBt/CFzNz1KFOWR1xNwMXadXkdAYcwxF5u93/7qC
-         o2tA==
+        d=linaro.org; s=google; t=1686744713; x=1689336713;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tYyaAYoAiZPPWXaf4R2hKtCfO4zLm4oKoUYKWZFRm4I=;
+        b=hKiVZuklWK+NqGpONCdITyK0/G4UuFam+X7VxpnSUQOb0cSzVtuweZOSizin1aXpu5
+         YXqo3aoe5kakwvMHgsFLFOyznaBNV043AFcNXlw6/hfoI1oJysj+7Ru0908vxA7hVRb6
+         CwWV1MeCQlICGJAsHGEDk+6evbQsVJ8eTx/LNjxwRx7wYXJploSbcDecoKlZ8BzLlBSX
+         EdB5kHUro5ckRocl9aC1TDOo9pclvKc5s+Hd5wk3qgC8gDbQq70Hc1LMwr7jxoUQBVOI
+         OXQ/sNZYv4P922CHV4LvAdpnregUcbgz5HJjvsqEnscv85bfBfhBlntxlftMgdl+KYtQ
+         Fqhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686744702; x=1689336702;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jfeQaw+ScJyf8YtahpLruw3sSgKj9ssLSfyFkigJ6Tc=;
-        b=f8e8Ob6VO6mTuY+4wydJFUrC/kpU6OwvSwx+mg9SGoy04Zo8AN+ktxm2Rf16L6Gku0
-         Ax59taJ9+V+cbe6iYudoVEQzQujqyJY+0122pHTMCFKh2o3Q6aTL6ONc4tvYLiQsGexP
-         Vm/Z4RzrhQoo/1/NRXc/HNwVFQc2E9i5toTDjBSglknP+19sLiH0BxavIK9utW27aNI0
-         zGGd9Oc+JVbb3Jr2d+bShhXg+TAlYTpMKwoBHSTNRMvm8R1mqy/8B+eLkHy2uGToMpgP
-         DQTXBpzw8Gjy6i9MscTU/cqY+j8rhxQEShu5WvCY+A/brSBbtT5etzly/Lz+NLOt/irq
-         nHvQ==
-X-Gm-Message-State: AC+VfDy6nluGr/IMAqx/PJkhduCWi3pFcpnUx67SJDVEXuAR6JbvELX+
-        C4E+yv1oTY8tTprw4WOIgTh2dk1m3wnPzLUkt0/Dv6wA
-X-Google-Smtp-Source: ACHHUZ6q/B/k5sEOClpChlEtYK3pBtd9BcQBmAx71AC7KmstsV008dZMmCn/9srFUsKZ+ikPUFcZUWtwrLHILLfKi+0=
-X-Received: by 2002:a05:6214:501a:b0:62d:e672:2fd7 with SMTP id
- jo26-20020a056214501a00b0062de6722fd7mr13484199qvb.61.1686744702034; Wed, 14
- Jun 2023 05:11:42 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686744713; x=1689336713;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tYyaAYoAiZPPWXaf4R2hKtCfO4zLm4oKoUYKWZFRm4I=;
+        b=HYe0FTasZqsm+1M0uXgsiNg96qZ/Ypc22FI47MW5DnDXk3ShzfikPQ22D+l2Ql4mUi
+         JoHD2DpAWirgC/gvp4ip3KYGwCKX9MJAkuNHAj2zyVs1y3ojjE9jUHQI/5AQdCBoTleD
+         Fde6pOdIdwjwB7wVTh0CLHLSL2wqIqtdbBHt8zxHzka5VetraDD+ezNQGw79lly9rdI7
+         d72cXfqY/GTyrIYi+PEYRT4FYHoiOJETPh1uzD0gf4PSk4TLZ70N0zq5e03zb7aAW7fD
+         sJYgvQWmAaA4B5k/XCA8q9guF5DGuFwT0afKzDUlcI9QQ1Hk2fGPbMGH7JOUHQqspO13
+         1y4Q==
+X-Gm-Message-State: AC+VfDwvl5f9OFRtRC/4CzwB82Lc0btTcq8+rsTkOVNGiQvyFFI2zEmS
+        0AcGF5/ABFM4et1bvccyg02BxQ==
+X-Google-Smtp-Source: ACHHUZ5TJdH3ECSdMnlEzGFBheGVPe5ivU0D9N7rCttk2fTtA4W6zd7X4XTxVOxmzIVng9ufTPlKdA==
+X-Received: by 2002:a19:3814:0:b0:4f7:66cc:6c91 with SMTP id f20-20020a193814000000b004f766cc6c91mr788222lfa.51.1686744713522;
+        Wed, 14 Jun 2023 05:11:53 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id d2-20020ac25ec2000000b004f24e797c55sm2109793lfq.25.2023.06.14.05.11.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 05:11:53 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 0/4] SM8250 Edo pins, keys & pmic
+Date:   Wed, 14 Jun 2023 14:11:45 +0200
+Message-Id: <20230614-topic-edo_pinsgpiopmic-v1-0-cf88a0bac26c@linaro.org>
 MIME-Version: 1.0
-References: <20230614061130.64214-1-zhanglibing@cdjrlc.com> <5cc396aff142acbc4ba4b2541a5e4d71@208suo.com>
-In-Reply-To: <5cc396aff142acbc4ba4b2541a5e4d71@208suo.com>
-From:   Julian Calaby <julian.calaby@gmail.com>
-Date:   Wed, 14 Jun 2023 22:11:30 +1000
-Message-ID: <CAGRGNgUW30BYGyPOwwV-zteO7O4gjVgZ4NsoP-xLhuG994bL7A@mail.gmail.com>
-Subject: Re: [PATCH] sparc/kernel: Fix syntax error
-To:     wuyonggang001@208suo.com
-Cc:     davem@davemloft.net, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIGuiWQC/x2N0QrCMAwAf2Xk2cI6pYi/IiJtk26BmYZ2ijD27
+ wYf7+C4HTo1pg63YYdGH+5cxcCfBshLlJkcozFM43Qeg7+4rSpnR1ifytJn5aovE1iuCUPxKWA
+ Ci1Ps5FKLkhfL5b2uJrVR4e//dn8cxw+CUXvRfQAAAA==
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1686744712; l=924;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=i3s4AcQganFr5wJlg7d766aH6boKY+DUBCJzoCXf1wg=;
+ b=1eImbmQaN2fHFTLcnkmQCuifUuo822YJVIJvXrrG5+Z1vqkQCWWPHUxgDQMKbM6wZtRiGpqNu
+ yU4lBeB0+DLB3+OmSZyfOvZTVHnKNJQ9Fd7xfuy43j+qIHY+o3JoDRD
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yonggang,
+This series brings fixes to the GPIO buttons, adds gpio-line-names and
+introduces the SLG51000 camera on Xperia Edo devices.
 
-On Wed, Jun 14, 2023 at 4:19=E2=80=AFPM <wuyonggang001@208suo.com> wrote:
->
-> Fix the following checkpatch error:
->
-> ERROR: space required before the open parenthesis '('
-> ERROR: do not initialise statics to 0
-> ERROR: trailing whitespace
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (4):
+      arm64: dts: qcom: sm8250-edo: Add gpio line names for TLMM
+      arm64: dts: qcom: sm8250-edo: Add GPIO line names for PMIC GPIOs
+      arm64: dts: qcom: sm8250-pdx203: Configure SLG51000 PMIC
+      arm64: dts: qcom: sm8250-edo: Rectify gpio-keys
 
-While this patch is mostly correct and is fixing real issues with this
-code, it is very old code in a very old part of the kernel and the
-maintainers are unlikely to apply it as they'd prefer to leave it
-as-is and not introduce any potential for regressions.
+ .../dts/qcom/sm8250-sony-xperia-edo-pdx203.dts     | 364 +++++++++++++++++++++
+ .../dts/qcom/sm8250-sony-xperia-edo-pdx206.dts     | 243 ++++++++++++++
+ .../boot/dts/qcom/sm8250-sony-xperia-edo.dtsi      |  61 +++-
+ 3 files changed, 655 insertions(+), 13 deletions(-)
+---
+base-commit: b16049b21162bb649cdd8519642a35972b7910fe
+change-id: 20230614-topic-edo_pinsgpiopmic-df8bd6f1b6db
 
->
-> Signed-off-by: Yonggang Wu <wuyonggang001@208suo.com>
-> ---
->   arch/sparc/kernel/apc.c | 22 +++++++++++-----------
->   1 file changed, 11 insertions(+), 11 deletions(-)
->
-> diff --git a/arch/sparc/kernel/apc.c b/arch/sparc/kernel/apc.c
-> index ecd05bc0a104..40b9c72ad4d9 100644
-> --- a/arch/sparc/kernel/apc.c
-> +++ b/arch/sparc/kernel/apc.c
-> @@ -162,7 +162,7 @@ static int apc_probe(struct platform_device *op)
->       if (!apc_no_idle)
->           sparc_idle =3D apc_swift_idle;
->
-> -    printk(KERN_INFO "%s: power management initialized%s\n",
-> +    pr_info("%s: power management initialized%s\n",
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
-While this is most likely harmless, this is technically a change in
-behaviour and should have been noted in the commit message. Also, as
-this is technically a change in behaviour, it will make it even less
-likely that this will be applied.
-
-Thanks,
-
---=20
-Julian Calaby
-
-Email: julian.calaby@gmail.com
-Profile: http://www.google.com/profiles/julian.calaby/
