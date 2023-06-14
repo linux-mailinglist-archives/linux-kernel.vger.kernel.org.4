@@ -2,71 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE44572FEA6
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:28:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D10C72FEA7
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244564AbjFNM2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 08:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33362 "EHLO
+        id S244589AbjFNM2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 08:28:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244543AbjFNM2f (ORCPT
+        with ESMTP id S244562AbjFNM2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 14 Jun 2023 08:28:35 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D5A1FE8
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:28:30 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-3f9a81da5d7so238751cf.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:28:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686745709; x=1689337709;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1RWp1GSa1iVrR/gkhCLlSHzUXoyA8xu5TUgKxG/0iXE=;
-        b=XMls8vVHJsWXkcMU3k+sdL9oFwWkx7On44gyfOhi9i9Q7VO5887jHk2RKMPnicHbRA
-         Xhnq9Mz87opchiA6GKhiRdKv/ET8G7G74ZkbuyhsFas5ZT7KKnfzJbzicEcjiJGaE46T
-         7o6NiR/qKDScEy5Z3ZsdWZgFXnCV5+GioL1CIL7NOayTnpZ2djL7yo8XS0aNCnL7Z56I
-         C0PMRJBONZO7qBRSbl/6RKqgIIJZrv7rTQedTFhvR7xzgJ0VdK+xIkr/iyrNClx4htyI
-         RX5X2cmxEYo139BMcPyD/a7JJNVqsCTFZIbn9Kc1xoNKqB6alUEjpFsxKD2TDzd9FZFO
-         sazg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686745709; x=1689337709;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1RWp1GSa1iVrR/gkhCLlSHzUXoyA8xu5TUgKxG/0iXE=;
-        b=MIdqmaPj13l62LX85OzGGzJKWXu0n0HXQd6UIOMHEkbwH/oPWtODTd3KuBySN3isBs
-         ZDB50z7zOJFPPwtK4BQi/cgOUTRaV15OczwOx+WMBj7InvwUVKhbKg7kAvQbNkgfLyA8
-         bvDuP0YSL/HKVPbdUtX3eUJ3zC1UTe6K1vbVaUNp9tJhUS5l4CgHEM4GNjHHtszDiIyI
-         VOogdrWRI2zeVn4aghhFGNsTrBsHOD/1Z0IptsXmafH8f1l67b2lodUfcZwuUykYORBM
-         KcpNKJX6LrLj0H2HFPSnIh6/Zx4LJ5u+t0K3lve5OraAtDVfzk4WcjDJt8LSAkxJkbGa
-         Prrg==
-X-Gm-Message-State: AC+VfDx7LRQoj69++9LzOhOXMwvB5TA4nF38ypeCZXqTWBu1qMmVQVPR
-        0Ock6cYQoTFjURKGWnL24RBDKftvYHeqDUCgMQcRlQ==
-X-Google-Smtp-Source: ACHHUZ5dqL77liI4l+c08Guv5ROvl3QHRcpLv2NCdISXswAWjKdvZWOFuyr+PEbvd1f47DparMcXIZFsJ15tekvYmBU=
-X-Received: by 2002:a05:622a:19a7:b0:3ef:5f97:258f with SMTP id
- u39-20020a05622a19a700b003ef5f97258fmr227795qtc.16.1686745709282; Wed, 14 Jun
- 2023 05:28:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230516141531.791492-1-smostafa@google.com> <168665854178.2681974.13725664134174024912.b4-ty@linux.dev>
- <ZIiY8lrLKv4amCu7@google.com>
-In-Reply-To: <ZIiY8lrLKv4amCu7@google.com>
-From:   Mostafa Saleh <smostafa@google.com>
-Date:   Wed, 14 Jun 2023 13:28:18 +0100
-Message-ID: <CAFgf54q=hr9OoNdfDnMD3_4OHN6sz4928gYgvmz6bdSEpztUUw@mail.gmail.com>
-Subject: Re: [PATCH] KVM: arm64: Use different pointer authentication keys for pKVM
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     kvmarm@lists.linux.dev, maz@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        suzuki.poulose@arm.com, kaleshsingh@google.com, tabba@google.com,
-        yuzenghui@huawei.com, catalin.marinas@arm.com, james.morse@arm.com,
-        will@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24EB31FF0;
+        Wed, 14 Jun 2023 05:28:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686745711; x=1718281711;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=PMahPiq/RSK/pyfF+oDFP4SDFIHTsV+7kvcMBVnwMrI=;
+  b=XDYb/XKC0acNrItLcktr9nEbJqKqoFknvVQDtDJPuumLT9lv7IVas8r2
+   avO5MHd3ozFv+KWrYtxZh7PcMBbmMruIo7HLb/jcyN0jad0vKEG1ouVWq
+   ZCHBcLP7O/0PxY6In2CH+QyPDNoG6NyXFoylzfq9aDjrRi4zGnrFHYRzW
+   vL2weIcf7to2hfjjvW/8Lfxq6weq1wqJCnjnkXWlkkQ8uMNNYfgxD6BnF
+   EqqJh3WdWpu5FmWE9agbCmZ81ACgnAiT1l5OMDboGSyDTncYzAWvdT5Ad
+   n/C9ZA8R8ZILlPgDFz1WPwHAjplGMELd4MK9BvWyXloFUoBE8FnZaTneX
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="357477602"
+X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
+   d="scan'208";a="357477602"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 05:28:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="886211587"
+X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
+   d="scan'208";a="886211587"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga005.jf.intel.com with ESMTP; 14 Jun 2023 05:28:30 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 14 Jun 2023 05:28:29 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Wed, 14 Jun 2023 05:28:29 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.173)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Wed, 14 Jun 2023 05:28:29 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gXOn7+TWlbmY8uulsbqmXKypv1BQF05EIan2sAvGlQGzZRXf7YdzD5An2ui2zm/caVWN4sthU/Te0MiiPu/8pW3yvpWGYS5Wyi1TZwYFy8xRR0roVpyYapnI7c9CK/SgUqjAfj8zM0QfRvj1cg9DnY/74FrTw6gs0OYcArYW8KdQEz4WDBAUPsSG63bx20SNda5fwBgyGLpCCy/ZIczAhD1VDJyqwlR7CdTYI+Wuw0ZDkCCybm7rzQl8Yn3q9XZMwD0NLMHbcYRgLiPCf1QMIzWaiqDvDbpJRuP+poYPA89PaJOsRmhZ2m0tA/D6FiJofPlq6wEIwKuqcbmIbuM0ig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PMahPiq/RSK/pyfF+oDFP4SDFIHTsV+7kvcMBVnwMrI=;
+ b=COHRrbsz8ZV2RySi0pIhFQwt8p5MkoqdrZUmcC43SfQlquZQzTlETn4VbihPHKWu/gDovXax2I8q5eeLBCSfuwsvgWukg66Mhy4IAH1YwihVGZ6XqZOydis6iMS8O6sq0BdNqT1dbfsJGqnltXF5wQjBmmbJtz64DiDnX+4aNZlREh4a4r43FMGu82AccCug+8WTHWhrBnQHOnB8fxc6zbcpSlA5Yilt7nve7b4BGIZ74lLzE1L9FX+Ylf1R279/6832jLXIaHqh1hiHrjqUbBT2KEkJwTlGL4K88fxfBgfpbBwVrsJD+gNmWW10XzWoRzftABsWAJ1JOWlqcFjhew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from DM6PR11MB4657.namprd11.prod.outlook.com (2603:10b6:5:2a6::7) by
+ CH3PR11MB8140.namprd11.prod.outlook.com (2603:10b6:610:15b::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.44; Wed, 14 Jun
+ 2023 12:28:25 +0000
+Received: from DM6PR11MB4657.namprd11.prod.outlook.com
+ ([fe80::24bd:974b:5c01:83d6]) by DM6PR11MB4657.namprd11.prod.outlook.com
+ ([fe80::24bd:974b:5c01:83d6%3]) with mapi id 15.20.6455.045; Wed, 14 Jun 2023
+ 12:28:25 +0000
+From:   "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "chuck.lever@oracle.com" <chuck.lever@oracle.com>
+Subject: RE: [PATCH net-next] tools: ynl-gen: fix nested policy attribute type
+Thread-Topic: [PATCH net-next] tools: ynl-gen: fix nested policy attribute
+ type
+Thread-Index: AQHZnk1/UXRcaWtblku7CYhq2FDxoK+Jd+2AgADChtA=
+Date:   Wed, 14 Jun 2023 12:28:24 +0000
+Message-ID: <DM6PR11MB4657C9D29C67874FC90365EC9B5AA@DM6PR11MB4657.namprd11.prod.outlook.com>
+References: <20230613231709.150622-1-arkadiusz.kubalewski@intel.com>
+ <20230613175051.32196c59@kernel.org>
+In-Reply-To: <20230613175051.32196c59@kernel.org>
+Accept-Language: pl-PL, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM6PR11MB4657:EE_|CH3PR11MB8140:EE_
+x-ms-office365-filtering-correlation-id: 454af03b-5d6f-468a-f5ac-08db6cd2d971
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: kosr8iLZuyNX0BBdOQEvHXM7diENxnXQsh/vqFWVCHwNPS0pjPVvdqJthO3df1wzkitHDpqf/p4nkMwyYykHO2tbQ64/2N/mZiQ/7UGSbKPI3bJ6ONvXsmQm3knvtQFS5BHwpHy/vQ9WVak7pPIKXGdiPCFIyrmx06t55F7rQz7dQJhkgWblIgwgARUybU2eSEMkb+gvp6Oux2Gzbrqy1dZc1FpgjjMHuhYl0uobpgAFBPoIbql3bVwAZVbkR3xwrZ9gTLIDWrmCJsMuqql/7NgJ+k9998SR1ZSj+JCCbd2LkBmsLP069rEXJeA2fvF+Tyre/RuSOpPd9GrTdGDEjCQcKsivBGPz63Ma2XKfwdu+TT68ZZ4kxH/7FGCr1Cc3VxYn9cap02/caeq/8FbySH2upawdRV65Y38DoKCcGuKAtXp7VBdiK4fRhV9dE4TmZeaXC1DdojLeYnb8I8wqihfWRWcCtMjCCthAhnnNPvevoCk4FKd5dnVWZmCUPWMkMZWW3TIzGQcN71FKHV6u9FfeQkArmC9mV9cLW+cFmAYRrg8n6AcZGGTNCs/LEX6pZVJCzVeq7vsk2sHcnctLTHGpGNsn27gLGmF6US9D2Bo=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4657.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(396003)(346002)(39860400002)(136003)(451199021)(8676002)(8936002)(52536014)(5660300002)(66476007)(66446008)(6916009)(66556008)(66946007)(64756008)(4326008)(76116006)(316002)(54906003)(2906002)(41300700001)(71200400001)(478600001)(7696005)(122000001)(55016003)(9686003)(186003)(6506007)(33656002)(26005)(82960400001)(86362001)(38070700005)(38100700002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?hdpv9bcK3NubXkhfksZLcaORN8M17p7mGFmXehWzYy0gXRyrje8hJC26i3Zm?=
+ =?us-ascii?Q?nhTU8962O5I4j6BR9xgvImp7Aq1u02llzlTenYeP3xisJndgf2yzVEaGcHge?=
+ =?us-ascii?Q?NidEvDJV2fDJGc7tvg3vrbh9BeTOjgdo21NtUaqwPDeKkXomWbIYyOogNV69?=
+ =?us-ascii?Q?vdcPf9zQGjkPV3v1u6Y59+sJZ9/uP4pucxbwN3tFDnhsU2L9LaTp3fQ+eSFU?=
+ =?us-ascii?Q?nZhX342DADs7kM/IsHylvYw/32tGq/B6TdbOHZMHOzb4IPEQCNs4ZoOyCZF0?=
+ =?us-ascii?Q?+dqRJqZ2sGXL2bu5HsQ81hwAd520ErKdewYmc3OVNQSvg2XAOGjC03ufMSSN?=
+ =?us-ascii?Q?SWcFg3lb8mr197DhPs/S28gNhJnMsvBYX0e4VM9polBGpsL+A8TSmu8BC8Q+?=
+ =?us-ascii?Q?zAA5sdrkQ5xAt6R3dN6PSmxxlDQ84CI+CS4Zl5NVOI28vE6SLINwa3eT9PSB?=
+ =?us-ascii?Q?FYm1T5a+fT4SlFocjxVyLCenHbHherCIlAhB6uXU7LgpszE0jOYlr3FjHj2M?=
+ =?us-ascii?Q?MC4uJMy9GCywtbX3vZWSF1/BcRZWkuoS+bjUmJVp0+RTcwWifv37OcEFTQtX?=
+ =?us-ascii?Q?KcfiYHlXoOppSBtQqfOiK4bXyXFfRAG47fzavdMlm7KDP33UUq/uZFKXgYBO?=
+ =?us-ascii?Q?BiNJ0p7gy65/74LXxBVosroFFkaUWU4+15E7IWbmqNDUctYwb1IRffwP26/5?=
+ =?us-ascii?Q?1fuZssJMVGSVrg8NwJqPe1NHpFGqs7XQifrBHPgV6WiMLYLHEZvJAtq7LMYG?=
+ =?us-ascii?Q?HnImBZ9lvx7k9DTduuHa1zUaluyhMwxC1ie+AzKcSPtPWzfOcrSG1ZNdIY1Z?=
+ =?us-ascii?Q?ZHwHfbMVSjdRmDCnZ1ajGLuC4P9H1oHD5PKCxCG4R8bqs5Z6Dm+vtemYFVH+?=
+ =?us-ascii?Q?ipd5XxsfW94MnR582gLj4RHTSqcQDu0LzIDRbSvA5rxTxJN1DfgnYUxEPxAM?=
+ =?us-ascii?Q?+Gz8lU+VTKPbV1A+oK/Xj272tWSgicNCcSIlgN3Dr1JX+I6IpPnRHoEHVCBs?=
+ =?us-ascii?Q?YXxWJQ0Me4aGipbE8UXRn7dN/6krGRLFzlAWaEr0UiCMHS1DeeUIpsyEf+vV?=
+ =?us-ascii?Q?48AxZxT1+uyW5+ZOAZitTY9CaGyZRvPd6FQvQeXuySsa2s9uZp/R2qYiXwSl?=
+ =?us-ascii?Q?imu9BZXh5MXjMXGSfmqtTDXKl3qGxkQXpTMkTfxuZAfu3GExGt7I/AELEIIF?=
+ =?us-ascii?Q?+Q4DO5MqGPpo77jU2YfTyfsJIXeF8JdvMiB1qqWYo4QnLGGFY9d1hFGng+UG?=
+ =?us-ascii?Q?m9i2owxiM6m91r75DwiruoYKvlyQjZdyIz0iZjhq5dMu62gzaWp2fC/jCBAZ?=
+ =?us-ascii?Q?f/GnEy89M23yAKRi4I6xocPkfUayogmU6xAf0ekDfX9REkw3oTr4lLG6UVn/?=
+ =?us-ascii?Q?5023KB2IqlVPSDNgt71gcHmGBJf83qZgY3B8GPj3CvhiFzbi6baARlc43Soj?=
+ =?us-ascii?Q?bJtSSPW+Ma5/ipQHx1XDyviwsB4Yt6rctf/70SJ3uPy1jdNaBFAY39uugA6W?=
+ =?us-ascii?Q?yEWqt9q+bxib92wSqL1E5fyOojIc9jAdnMB7x73OFAtEzy8KqaMCEGlQWQ0/?=
+ =?us-ascii?Q?8Pre0KFKP+2S1mR5Fgx9c/scse8lZDWVkyf8JffOAjaOkGyfyIiO+q0k7dp/?=
+ =?us-ascii?Q?XQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB4657.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 454af03b-5d6f-468a-f5ac-08db6cd2d971
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jun 2023 12:28:24.9711
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: lrvnG8boQ7JZD/nCv0Kx4N+6714iEprXivTEbv5vEVoR4IiFDuhSYaY9qI431Hpdm1lpOaZc+sPgH3EBrvnSw3eXK+kB7jrTIlHp78Ki5f8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB8140
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,47 +154,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 5:27=E2=80=AFPM Mostafa Saleh <smostafa@google.com>=
- wrote:
+>From: Jakub Kicinski <kuba@kernel.org>
+>Sent: Wednesday, June 14, 2023 2:51 AM
+>To: Kubalewski, Arkadiusz <arkadiusz.kubalewski@intel.com>
+>Cc: netdev@vger.kernel.org; linux-kernel@vger.kernel.org;
+>davem@davemloft.net; pabeni@redhat.com; edumazet@google.com;
+>chuck.lever@oracle.com
+>Subject: Re: [PATCH net-next] tools: ynl-gen: fix nested policy attribute
+>type
 >
-> Hi Oliver,
+>On Wed, 14 Jun 2023 01:17:07 +0200 Arkadiusz Kubalewski wrote:
+>> When nested multi-attribute is used in yaml spec, generated type in
+>> the netlink policy is NLA_NEST, which is wrong as there is no such type.
+>> Fix be adding `ed` sufix for policy generated for 'nest' type attribute
+>> when the attribute is parsed as TypeMultiAttr class.
 >
-> On Tue, Jun 13, 2023 at 12:16:02PM +0000, Oliver Upton wrote:
-> > On Tue, 16 May 2023 14:15:31 +0000, Mostafa Saleh wrote:
-> > > When the kernel is compiled with CONFIG_ARM64_PTR_AUTH_KERNEL, it
-> > > uses Armv8.3-Pauth for return address protection for the kernel code
-> > > including nvhe code in EL2.
-> > >
-> > > Same keys are used in both kernel(EL1) and nvhe code(EL2), this is
-> > > fine for nvhe but not when running in protected mode(pKVM) as the hos=
-t
-> > > can't be trusted.
-> > >
-> > > [...]
-> >
-> > Applied to kvmarm/next, thanks!
-> >
-> > [1/1] KVM: arm64: Use different pointer authentication keys for pKVM
-> >       https://git.kernel.org/kvmarm/kvmarm/c/fb737685beee
-> >
-> > --
+>I CCed you on my changes which address the same issue, they have
+>already been merged:
 >
-> Thanks! I did more testing and I found a bug in this patch.
+>https://lore.kernel.org/all/20230612155920.1787579-1-kuba@kernel.org/
 >
-> It seems there is another entry point for the kenrel where pauth was
-> not handled properly "kvm_host_psci_cpu_entry", I will investigate this
-> further and send V2.
->
-> Sorry for the inconvenience!
->
-> Thanks,
-> Mostafa
+>I think that covers the first two patches. What am I missing? :S
 
-I investigated the problem further and actually the bug is missing
-isb() after updating
-Pauth system registers at EL2, I sent a v2 with this fix.
+Yep, sorry I missed them.
+Did rebase and it seems your changes are great, everything works,
+please drop this patch.
 
-Although when entering from kvm_host_psci_cpu_entry, the hyp keys are not u=
-sed,
-but this call directly exists to the host, so I believe this should be fine=
-.
+Thank you!
+Arkadiusz
