@@ -2,139 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0422B72FF35
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:56:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D33ED72FF38
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244786AbjFNM4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 08:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52866 "EHLO
+        id S236496AbjFNM52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 08:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234655AbjFNM4S (ORCPT
+        with ESMTP id S234018AbjFNM5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 08:56:18 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B926B1FFF;
-        Wed, 14 Jun 2023 05:56:16 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f649db9b25so8438822e87.0;
-        Wed, 14 Jun 2023 05:56:16 -0700 (PDT)
+        Wed, 14 Jun 2023 08:57:25 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B43A0;
+        Wed, 14 Jun 2023 05:57:24 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-25e83254ff5so110175a91.1;
+        Wed, 14 Jun 2023 05:57:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686747374; x=1689339374;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a1eo8xae+BqZ3lpEIIaUchjB8XrAbrJIJKlx1wdExKg=;
-        b=UvakJ7HBiMflkT+GTjEx7eUO+ZF5M/UQXd9WYOPFbdf797iEVzkTvlUo5fVxcciifz
-         frJ0ouFGcgjFa9YWRSIe+67tC6STTVHFInpiU6DWx7JycvqyFpcoN4zcnyxZ/GFmo89X
-         /Y2GtqN8ou+4m+ruSsoEkhCqka+7FAvCPT952KSysXaUeJwBgXBUdFmUmMB8ycVGJKib
-         x8AwMqtsLgjkSWGoqP5wXyMY4mlSH21j6BDJAweuFb7CYfOLbnUeujuox2T28XQw/Gwx
-         /u2kc4UMqPnUnSzPUUJ5GIcG2yoUgSfruMBIymmtuI0krA+jr/ftSfQLdD9q8VQyZ0kf
-         rPFA==
+        d=gmail.com; s=20221208; t=1686747444; x=1689339444;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1iJzPv9Ay6Ek1y03SS6k9ph0GB5GWctAQkIqUqIL6B0=;
+        b=mJIBBLYhCHDcQnC3BanLFcvF6fIUPDqtxBOsCpDZfN8lAw616OY6Yk90bSTbqZl7mY
+         13OyjZb1hPhoeDOW/NSdDM+PpcDh9K44Ht3QNnTtZdTLQncwKAIqeYN62gL36PRSsVpM
+         362h3hKT7n+nR/q1XILUdR5GINUVmFcMzycKax9M+3F8vZ5RZvMDE2u297donTjsO2bZ
+         uFEQhuFdvJ9rCGLDxbRMizlBkzuZB9j5hm32M7yvfODvuYkGiBoiuQlQUpXL0z8SfQNW
+         TEDm8vMx9XawQD2wJnZEHuK4qo2WTXF5pTDZoRUdLnD9XGWpW1iopFkgpX85WPSQ2KQP
+         DNRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686747374; x=1689339374;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a1eo8xae+BqZ3lpEIIaUchjB8XrAbrJIJKlx1wdExKg=;
-        b=eDXWOV6HuvymLs4oyoCmahteCnPAbc6RP53DlDJT9iuh3+dYpZpkNhOGAP4g/wcZrB
-         +xTYi23KiiVjemsrgizl/R03eXvh/oyH2YpeJs+52Em2O1Pk7ypQuaiSYWQ8kj1KS8Ey
-         Hc2f7Ys9sis5E78RLu6pre5vy2oX7VlMfB0Uw1svUwJc1WnhbnAvxl58ZzpqmeH0b+ok
-         JM6QYyWzS5J+pTbRT1sPWz/0pQS69tTuNhpotllEvIsRhMR7RhWrM+zTIC0zFznDKYu8
-         KAqu52/sQlxAxdbtCEsn/Ghh9XxXcjubPtSZecDRLgQzcPgaDK88c15pnLR1KMQ/FEuP
-         9itg==
-X-Gm-Message-State: AC+VfDxtODcZoJqFtd6sizbeFTF9h2nncefvHcEibdr/VwW50vT6mwRg
-        Gxh94accvxYCJzw2kX0JyX+SjeClMvC34Kt3
-X-Google-Smtp-Source: ACHHUZ6Kw6DeSi90C1pJK+Ei/gwJ7+BPa9Ig7zhSqkWiZ2L26A4A6pgW4OZlts4EVAcsqL3514sjWw==
-X-Received: by 2002:a19:f20e:0:b0:4f6:54f1:ea36 with SMTP id q14-20020a19f20e000000b004f654f1ea36mr7594684lfh.43.1686747374315;
-        Wed, 14 Jun 2023 05:56:14 -0700 (PDT)
-Received: from user-PC.. ([92.51.95.194])
-        by smtp.gmail.com with ESMTPSA id c21-20020a05600c0ad500b003f7310a3ffasm17402522wmr.2.2023.06.14.05.56.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 05:56:14 -0700 (PDT)
-From:   Maksim Kiselev <bigunclemax@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Maxim Kiselev <bigunclemax@gmail.com>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH v5 3/3] riscv: dts: allwinner: d1: Add thermal sensor
-Date:   Wed, 14 Jun 2023 15:55:21 +0300
-Message-Id: <20230614125530.660597-4-bigunclemax@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230614125530.660597-1-bigunclemax@gmail.com>
-References: <20230614125530.660597-1-bigunclemax@gmail.com>
+        d=1e100.net; s=20221208; t=1686747444; x=1689339444;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1iJzPv9Ay6Ek1y03SS6k9ph0GB5GWctAQkIqUqIL6B0=;
+        b=S8eImN220CF4sLxyKJdJJdQ8tehuvInddTfw3OKXFJlsAdE89xJltHrtf1XhS0LoKA
+         izDxICNHMyogw6okrqc26QE/FrF7V5Qqko9zgUrbiwvjoN1j7nE7tkWFJjlbOsDwKv4e
+         nE/TXR12GDx3iruP/xoU25p5CJdDFLesuIRc20PN7p8EZlkQBAet8koODNVTmxXWbYhM
+         gNB7seWfXEjl9O7vPWgPCCn5Iw2wOTk15/g3QWpt3v38gbdJfBLou8FHmKZr8XKbwA7C
+         Rg+gZ3XAdmnf7VYX+0fXwvhwWakGIYEUnual41Q/RDnRQAvOeWhgHxLef4KTkwvOa3WU
+         HVRQ==
+X-Gm-Message-State: AC+VfDyKKwmmzZXlzHmXixNWpVudVbogT1Xc6Nhl5htCGFSmXNqWirBM
+        JdVE5NSCgOP16fF9PmKFNVKLw7IIRn0=
+X-Google-Smtp-Source: ACHHUZ7ekfS3gJRE8eoPzskkvtS0OMNq9gYjRvUs10Rr8SgC0N57W4rIqwtCVdF669UB+JxQP2MvqA==
+X-Received: by 2002:a17:90a:19c4:b0:258:de1b:9dcc with SMTP id 4-20020a17090a19c400b00258de1b9dccmr2160724pjj.9.1686747443763;
+        Wed, 14 Jun 2023 05:57:23 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bk24-20020a17090b081800b0023a84911df2sm11046198pjb.7.2023.06.14.05.57.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 05:57:22 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <6d1209e9-0d40-c2ba-b94c-6590e98070d7@roeck-us.net>
+Date:   Wed, 14 Jun 2023 05:57:21 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US
+To:     JuenKit Yip <JuenKit_Yip@hotmail.com>, jdelvare@suse.com
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <DB4PR10MB6261D79FE16EC2BBD5316B91925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 1/3] hwmon: (sht3x)remove sht3x_platform_data
+In-Reply-To: <DB4PR10MB6261D79FE16EC2BBD5316B91925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxim Kiselev <bigunclemax@gmail.com>
+On 6/13/23 23:24, JuenKit Yip wrote:
+> Since no in-tree driver supports it, the sht3x_platform_data was
+> removed.
+> 
+> - "blocking_io" property and its related code have been removed, and
+> Single-Shot mode should be blocking in default.
+> 
+> - "high-precision" property has been replaced to "repeatability" for
+> matching datasheet.
+> 
 
-This patch adds a thermal sensor controller node for the D1/T113s.
-Also it adds a THS calibration data cell to efuse node.
+That needs to be three patches.
 
-Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
----
- .../boot/dts/allwinner/sunxi-d1s-t113.dtsi      | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+> Signed-off-by: JuenKit Yip <JuenKit_Yip@hotmail.com>
+> ---
+>   Documentation/hwmon/sht3x.rst       | 12 +++++------
+>   drivers/hwmon/sht3x.c               | 32 ++++++++++++-----------------
+>   include/linux/platform_data/sht3x.h | 15 --------------
+>   3 files changed, 18 insertions(+), 41 deletions(-)
+>   delete mode 100644 include/linux/platform_data/sht3x.h
+> 
+> diff --git a/Documentation/hwmon/sht3x.rst b/Documentation/hwmon/sht3x.rst
+> index 95a850d5b..2c87c8f58 100644
+> --- a/Documentation/hwmon/sht3x.rst
+> +++ b/Documentation/hwmon/sht3x.rst
+> @@ -28,28 +28,26 @@ The device communicates with the I2C protocol. Sensors can have the I2C
+>   addresses 0x44 or 0x45, depending on the wiring. See
+>   Documentation/i2c/instantiating-devices.rst for methods to instantiate the device.
+>   
+> -There are two options configurable by means of sht3x_platform_data:
+> +This driver supports block and non-block mode:
+>   
+> -1. blocking (pull the I2C clock line down while performing the measurement) or
+> +   blocking (pull the I2C clock line down while performing the measurement) or
+>      non-blocking mode. Blocking mode will guarantee the fastest result but
+>      the I2C bus will be busy during that time. By default, non-blocking mode
+>      is used. Make sure clock-stretching works properly on your device if you
+>      want to use blocking mode.
+> -2. high or low accuracy. High accuracy is used by default and using it is
+> -   strongly recommended.
+>   
+>   The sht3x sensor supports a single shot mode as well as 5 periodic measure
+>   modes, which can be controlled with the update_interval sysfs interface.
+>   The allowed update_interval in milliseconds are as follows:
+>   
+> -    ===== ======= ====================
+> -       0          single shot mode
+> +    ===== ======= ==========================
+> +       0          single shot mode(blocking)
+>       2000   0.5 Hz periodic measurement
+>       1000   1   Hz periodic measurement
+>        500   2   Hz periodic measurement
+>        250   4   Hz periodic measurement
+>        100  10   Hz periodic measurement
+> -    ===== ======= ====================
+> +    ===== ======= ==========================
+>   
+>   In the periodic measure mode, the sensor automatically triggers a measurement
+>   with the configured update interval on the chip. When a temperature or humidity
+> diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
+> index 8305e44d9..5bc0001b1 100644
+> --- a/drivers/hwmon/sht3x.c
+> +++ b/drivers/hwmon/sht3x.c
+> @@ -20,13 +20,12 @@
+>   #include <linux/module.h>
+>   #include <linux/slab.h>
+>   #include <linux/jiffies.h>
+> -#include <linux/platform_data/sht3x.h>
+>   
+> -/* commands (high precision mode) */
+> +/* commands (high repeatability mode) */
+>   static const unsigned char sht3x_cmd_measure_blocking_hpm[]    = { 0x2c, 0x06 };
+>   static const unsigned char sht3x_cmd_measure_nonblocking_hpm[] = { 0x24, 0x00 };
+>   
+> -/* commands (low power mode) */
+> +/* commands (low repeatability mode) */
+>   static const unsigned char sht3x_cmd_measure_blocking_lpm[]    = { 0x2c, 0x10 };
+>   static const unsigned char sht3x_cmd_measure_nonblocking_lpm[] = { 0x24, 0x16 };
+>   
+> @@ -69,9 +68,14 @@ enum sht3x_limits {
+>   	limit_min_hyst,
+>   };
+>   
+> +enum sht3x_repeatability {
+> +	low_repeatability,
+> +	high_repeatability,
+> +};
+> +
+>   DECLARE_CRC8_TABLE(sht3x_crc8_table);
+>   
+> -/* periodic measure commands (high precision mode) */
+> +/* periodic measure commands (high repeatability mode) */
+>   static const char periodic_measure_commands_hpm[][SHT3X_CMD_LENGTH] = {
+>   	/* 0.5 measurements per second */
+>   	{0x20, 0x32},
+> @@ -85,7 +89,7 @@ static const char periodic_measure_commands_hpm[][SHT3X_CMD_LENGTH] = {
+>   	{0x27, 0x37},
+>   };
+>   
+> -/* periodic measure commands (low power mode) */
+> +/* periodic measure commands (low repeatability mode) */
+>   static const char periodic_measure_commands_lpm[][SHT3X_CMD_LENGTH] = {
+>   	/* 0.5 measurements per second */
+>   	{0x20, 0x2f},
+> @@ -132,12 +136,11 @@ struct sht3x_data {
+>   	struct mutex data_lock; /* lock for updating driver data */
+>   
+>   	u8 mode;
+> +	enum sht3x_repeatability repeatability;
+>   	const unsigned char *command;
+>   	u32 wait_time;			/* in us*/
+>   	unsigned long last_update;	/* last update in periodic mode*/
+>   
+> -	struct sht3x_platform_data setup;
+> -
+>   	/*
+>   	 * cached values for temperature and humidity and limits
+>   	 * the limits arrays have the following order:
+> @@ -441,13 +444,8 @@ static void sht3x_select_command(struct sht3x_data *data)
+>   	if (data->mode > 0) {
+>   		data->command = sht3x_cmd_measure_periodic_mode;
+>   		data->wait_time = 0;
+> -	} else if (data->setup.blocking_io) {
+> -		data->command = data->setup.high_precision ?
+> -				sht3x_cmd_measure_blocking_hpm :
+> -				sht3x_cmd_measure_blocking_lpm;
+> -		data->wait_time = 0;
 
-diff --git a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-index 922e8e0e2c09..9da1e4ddb662 100644
---- a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-+++ b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-@@ -138,6 +138,19 @@ ccu: clock-controller@2001000 {
- 			#reset-cells = <1>;
- 		};
- 
-+		ths: thermal-sensor@2009400 {
-+			compatible = "allwinner,sun20i-d1-ths";
-+			reg = <0x02009400 0x400>;
-+			interrupts = <SOC_PERIPHERAL_IRQ(58) IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&ccu CLK_BUS_THS>;
-+			clock-names = "bus";
-+			resets = <&ccu RST_BUS_THS>;
-+			nvmem-cells = <&ths_calibration>;
-+			nvmem-cell-names = "calibration";
-+			status = "disabled";
-+			#thermal-sensor-cells = <0>;
-+		};
-+
- 		dmic: dmic@2031000 {
- 			compatible = "allwinner,sun20i-d1-dmic",
- 				     "allwinner,sun50i-h6-dmic";
-@@ -365,6 +378,10 @@ sid: efuse@3006000 {
- 			reg = <0x3006000 0x1000>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
-+
-+			ths_calibration: thermal-sensor-calibration@14 {
-+				reg = <0x14 0x4>;
-+			};
- 		};
- 
- 		crypto: crypto@3040000 {
--- 
-2.39.2
+If update_interval is 0, those would presumably still be needed.
+I don't know if the current code updating the interval is wrong
+(that may well be), but removing this code entirely seems wrong.
+
+>   	} else {
+> -		if (data->setup.high_precision) {
+> +		if (data->repeatability == high_repeatability) {
+>   			data->command = sht3x_cmd_measure_nonblocking_hpm;
+>   			data->wait_time = SHT3X_NONBLOCKING_WAIT_TIME_HPM;
+>   		} else {
+> @@ -595,7 +593,7 @@ static ssize_t update_interval_store(struct device *dev,
+>   	}
+>   
+>   	if (mode > 0) {
+> -		if (data->setup.high_precision)
+> +		if (data->repeatability == high_repeatability)
+>   			command = periodic_measure_commands_hpm[mode - 1];
+>   		else
+>   			command = periodic_measure_commands_lpm[mode - 1];
+> @@ -690,16 +688,12 @@ static int sht3x_probe(struct i2c_client *client)
+>   	if (!data)
+>   		return -ENOMEM;
+>   
+> -	data->setup.blocking_io = false;
+> -	data->setup.high_precision = true;
+> +	data->repeatability = high_repeatability;
+>   	data->mode = 0;
+>   	data->last_update = jiffies - msecs_to_jiffies(3000);
+>   	data->client = client;
+>   	crc8_populate_msb(sht3x_crc8_table, SHT3X_CRC8_POLYNOMIAL);
+>   
+> -	if (client->dev.platform_data)
+> -		data->setup = *(struct sht3x_platform_data *)dev->platform_data;
+> -
+>   	sht3x_select_command(data);
+>   
+>   	mutex_init(&data->i2c_lock);
+> diff --git a/include/linux/platform_data/sht3x.h b/include/linux/platform_data/sht3x.h
+> deleted file mode 100644
+> index 14680d2a9..000000000
+> --- a/include/linux/platform_data/sht3x.h
+> +++ /dev/null
+> @@ -1,15 +0,0 @@
+> -/* SPDX-License-Identifier: GPL-2.0-or-later */
+> -/*
+> - * Copyright (C) 2016 Sensirion AG, Switzerland
+> - * Author: David Frey <david.frey@sensirion.com>
+> - * Author: Pascal Sachs <pascal.sachs@sensirion.com>
+> - */
+> -
+> -#ifndef __SHT3X_H_
+> -#define __SHT3X_H_
+> -
+> -struct sht3x_platform_data {
+> -	bool blocking_io;
+> -	bool high_precision;
+> -};
+> -#endif /* __SHT3X_H_ */
 
