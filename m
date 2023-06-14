@@ -2,76 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE0C7309E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 23:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 901837309ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 23:41:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234083AbjFNVlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 17:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47520 "EHLO
+        id S233699AbjFNVlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 17:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbjFNVli (ORCPT
+        with ESMTP id S234282AbjFNVls (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 17:41:38 -0400
-Received: from sender3-op-o19.zoho.com (sender3-op-o19.zoho.com [136.143.184.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB03268C;
-        Wed, 14 Jun 2023 14:41:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1686778856; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=Ul326G5zKHXONSFUS+UiamL2zNH0B5M+pCy2WNtDK0n5ysXLsGDDxcwi4wumb1/C2FX9y9DF0bJvqi8ezEhLEtknk1k1anFgqTMMCuuyPQpEzyDVm7/A+9cFpqIvEgm0XGQMNhfdDPG3VotkeACpSIZmsV06elkrBl7xdHzx3tc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1686778856; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=qJJkUdB/0J8dtVErmzAQ2BEHrFf9wberlx5qBQL3ZnI=; 
-        b=WX0wi7xs/gkMuSYS46FuB4fhbMw3DOMzoyTGn6y/g9RX4gGcpvGbdQYD0yfYbwoC2e2sJTVVTV0Fro/a6oWsyl7z3X1ogFl2N4csugN+Ti+3SI2J9fKWnkJETsrQExi8EIR/E3EHsbE+P68YHUySOYhk2cZ6XDMDBWr8m2UHB74=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1686778856;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Date:Date:From:From:To:To:CC:Subject:Subject:In-Reply-To:References:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To:Cc;
-        bh=qJJkUdB/0J8dtVErmzAQ2BEHrFf9wberlx5qBQL3ZnI=;
-        b=MNQUj18m8K8Tj5BGICpC2tlZDVDm7bjh2FIYrwsyDBd4Ze6UqjtcrsWCFabFD/uI
-        wU5vvU/S4b/KjnYmUQMSVzCZUOZL1/Lboqxm4pSxKfdhmoAaCy5bcYSpF2ghvYsdff+
-        cPLeFH+60vqgl8kTqbnaZMKNlELb/6JrFfP0FywY=
-Received: from [127.0.0.1] (62.74.57.178 [62.74.57.178]) by mx.zohomail.com
-        with SMTPS id 1686778855456977.8281613933586; Wed, 14 Jun 2023 14:40:55 -0700 (PDT)
-Date:   Thu, 15 Jun 2023 00:40:47 +0300
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-CC:     Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_net_v4_1/7=5D_net=3A_dsa=3A_mt7530=3A_fix_tr?= =?US-ASCII?Q?apping_frames_with_multiple_CPU_ports_on_MT7531?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20230614211352.sls7ao5swiqjgtjz@skbuf>
-References: <20230612075945.16330-1-arinc.unal@arinc9.com> <20230612075945.16330-1-arinc.unal@arinc9.com> <20230612075945.16330-2-arinc.unal@arinc9.com> <20230612075945.16330-2-arinc.unal@arinc9.com> <20230614194330.qhhoxai7namrgczq@skbuf> <1e737fe9-6a2e-225b-9c0f-9a069e8fd4bc@arinc9.com> <20230614211352.sls7ao5swiqjgtjz@skbuf>
-Message-ID: <F03D45C7-04E9-4534-AC28-2C6F76EAF3F4@arinc9.com>
+        Wed, 14 Jun 2023 17:41:48 -0400
+Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [IPv6:2001:4b7a:2000:18::166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF502125
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 14:41:44 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id D3EAF3F841;
+        Wed, 14 Jun 2023 23:41:42 +0200 (CEST)
+Date:   Wed, 14 Jun 2023 23:41:41 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Sean Paul <sean@poorly.run>
+Subject: Re: [Freedreno] [PATCH 1/3] drm/msm/dpu: Add DPU_INTF_DATABUS_WIDEN
+ feature flag for DPU >= 5.0
+Message-ID: <udz5ij7g74zgnnwqw2q65idzzmiszhnvfieerw7izikgvotnkp@5tboohkd4t6t>
+References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
+ <20230525-add-widebus-support-v1-1-c7069f2efca1@quicinc.com>
+ <wpjxrnhbcanbc5iatxnff25yrrdfrtmgb24sgwyo457dz2oyjz@e2docpcb6337>
+ <f4fb042c-1458-6077-3c49-8cc02638b27c@linaro.org>
+ <ycgei43x4kfmjk7g7gbeglehtiiinfbqmrjbdzcy56frxbtd2z@yk2f5kgrkbrt>
+ <e23de804-060d-3278-5045-1ed03f0de80d@quicinc.com>
+ <c5cfc132-effb-8269-ac5d-ed8c988d1a16@quicinc.com>
+ <08b6aaf4-6edd-4f41-5d98-11ffc27e766e@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <08b6aaf4-6edd-4f41-5d98-11ffc27e766e@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,94 +54,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15 June 2023 00:13:52 EEST, Vladimir Oltean <olteanv@gmail=2Ecom> wrote:
->On Wed, Jun 14, 2023 at 11:56:44PM +0300, Ar=C4=B1n=C3=A7 =C3=9CNAL wrote=
-:
->> On 14=2E06=2E2023 22:43, Vladimir Oltean wrote:
->> > On Mon, Jun 12, 2023 at 10:59:39AM +0300, arinc9=2Eunal@gmail=2Ecom w=
-rote:
->> > > From: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc=2Eunal@arinc9=2Ecom>
->> > >=20
->> > > Every bit of the CPU port bitmap for MT7531 and the switch on the M=
-T7988
->> > > SoC represents a CPU port to trap frames to=2E These switches trap =
-frames
->> > > received from a user port to the CPU port that is affine to the use=
-r port
->> > > from which the frames are received=2E
->> > >=20
->> > > Currently, only the bit that corresponds to the first found CPU por=
-t is set
->> > > on the bitmap=2E When multiple CPU ports are being used, the trappe=
-d frames
->> > > from the user ports not affine to the first CPU port will be droppe=
-d as the
->> > > other CPU port is not set on the bitmap=2E The switch on the MT7988=
- SoC is
->> > > not affected as there's only one port to be used as a CPU port=2E
->> > >=20
->> > > To fix this, introduce the MT7531_CPU_PMAP macro to individually se=
-t the
->> > > bits of the CPU port bitmap=2E Set the CPU port bitmap for MT7531 a=
-nd the
->> > > switch on the MT7988 SoC on mt753x_cpu_port_enable() which runs on =
-a loop
->> > > for each CPU port=2E
->> > >=20
->> > > Add a comment to explain frame trapping for these switches=2E
->> > >=20
->> > > According to the document MT7531 Reference Manual for Development B=
-oard
->> > > v1=2E0, the MT7531_CPU_PMAP bits are unset after reset so no need t=
-o clear it
->> > > beforehand=2E Since there's currently no public document for the sw=
-itch on
->> > > the MT7988 SoC, I assume this is also the case for this switch=2E
->> > >=20
->> > > Fixes: c288575f7810 ("net: dsa: mt7530: Add the support of MT7531 s=
-witch")
->> > > Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc=2Eunal@arinc9=2Ecom=
->
->> > > ---
->> >=20
->> > Would you agree that this is just preparatory work for change "net: d=
-sa:
->> > introduce preferred_default_local_cpu_port and use on MT7530" and not=
- a
->> > fix to an existing problem in the code base?
->>=20
->> Makes sense=2E Pre-preferred_default_local_cpu_port patch, there isn't =
-a case
->> where there's a user port affine to a CPU port that is not enabled on t=
-he
->> CPU port bitmap=2E So yeah, this is just preparatory work for "net: dsa=
-:
->> introduce preferred_default_local_cpu_port and use on MT7530"=2E
->>=20
->> So how do I change the patch to reflect this?
->>=20
->> Ar=C4=B1n=C3=A7
->
->net: dsa: mt7530: set all CPU ports in MT7531_CPU_PMAP
->
->MT7531_CPU_PMAP represents the destination port mask for trapped-to-CPU
->frames (further restricted by PCR_MATRIX)=2E
->
->Currently the driver sets the first CPU port as the single port in this
->bit mask, which works fine regardless of whether the device tree defines
->port 5, 6 or 5+6 as CPU ports=2E This is because the logic coincides with
->DSA's logic of picking the first CPU port as the CPU port that all user
->ports are affine to, by default=2E
->
->An upcoming change would like to influence DSA's selection of the
->default CPU port to no longer be the first one, and in that case, this
->logic needs adaptation=2E
->
->Since there is no observed leakage or duplication of frames if all CPU
->ports are defined in this bit mask, simply include them all=2E
->
->Note that there is no Fixes tag
+On 2023-06-14 13:39:57, Abhinav Kumar wrote:
+> On 6/14/2023 12:54 PM, Abhinav Kumar wrote:
+> > On 6/14/2023 12:35 PM, Abhinav Kumar wrote:
+> >> On 6/14/2023 5:23 AM, Marijn Suijten wrote:
+> >>> On 2023-06-14 15:01:59, Dmitry Baryshkov wrote:
+> >>>> On 14/06/2023 14:42, Marijn Suijten wrote:
+> >>>>> On 2023-06-13 18:57:11, Jessica Zhang wrote:
+> >>>>>> DPU 5.x+ supports a databus widen mode that allows more data to be 
+> >>>>>> sent
+> >>>>>> per pclk. Enable this feature flag on all relevant chipsets.
+> >>>>>>
+> >>>>>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+> >>>>>> ---
+> >>>>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 3 ++-
+> >>>>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h | 2 ++
+> >>>>>>    2 files changed, 4 insertions(+), 1 deletion(-)
+> >>>>>>
+> >>>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c 
+> >>>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> >>>>>> index 36ba3f58dcdf..0be7bf0bfc41 100644
+> >>>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> >>>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> >>>>>> @@ -103,7 +103,8 @@
+> >>>>>>        (BIT(DPU_INTF_INPUT_CTRL) | \
+> >>>>>>         BIT(DPU_INTF_TE) | \
+> >>>>>>         BIT(DPU_INTF_STATUS_SUPPORTED) | \
+> >>>>>> -     BIT(DPU_DATA_HCTL_EN))
+> >>>>>> +     BIT(DPU_DATA_HCTL_EN) | \
+> >>>>>> +     BIT(DPU_INTF_DATABUS_WIDEN))
+> >>>>>
+> >>>>> This doesn't work.  DPU 5.0.0 is SM8150, which has DSI 6G 2.3.  In the
+> >>>>> last patch for DSI you state and enable widebus for DSI 6G 2.5+ only,
+> >>>>> meaning DPU and DSI are now desynced, and the output is completely
+> >>>>> corrupted.
+> >>>
+> 
+> I looked at the internal docs and also this change. This change is 
+> incorrect because this will try to enable widebus for DPU >= 5.0 and DSI 
+>  >= 2.5
+> 
+> That was not the intended right condition as thats not what the docs say.
+> 
+> We should enable for DPU >= 7.0 and DSI >= 2.5
 
-Thanks a lot for making it easier for me=2E
+That makes more sense, DSI 2.5 is SM8350 which has DPU 7.0.
 
-Ar=C4=B1n=C3=A7
+> Is there any combination where this compatibility is broken? That would 
+> be the strange thing for me ( not DPU 5.0 and DSI 2.5 as that was incorrect)
+
+No clue if there are any interim SoCs...
+
+> Part of this confusion is because of catalog macro re-use again.
+
+Somewhat agreed.  SC7180 is a DPU 6.2 SoC, and for this mask to be used
+across DPU 5.x and above it should have been renamed to SM8150 and as
+suggested by Dmitry, have DPU_5_x_` as suffix.
+
+As I've asked many times before, we should inline these masks (not just
+the macros) (disclaimer: haven't reviewed if Dmitry's series actually
+does so!).
+
+> This series is a good candidate and infact I think we should only do 
+> core_revision based check on DPU and DSI to avoid bringing the catalog 
+> mess into this.
+> 
+> >>> Tested this on SM8350 which actually has DSI 2.5, and it is also
+> >>> corrupted with this series so something else on this series might be
+> >>> broken.
+> >>>
+> > 
+> > Missed this response. That seems strange.
+
+No worries.  But don't forget to look at the comments on patch 2/3
+either.  Some of it is a continuation of pclk scaling factor for DSC
+which discussion seems to have ceased on.
+
+> > This series was tested on SM8350 HDK with a command mode panel.
+> > 
+> > We will fix the DPU-DSI handshake and post a v2 but your issue needs 
+> > investigation in parallel.
+> > 
+> > So another bug to track that would be great.
+
+Will see if I can set that up for you!
+
+> >>>>> Is the bound in dsi_host wrong, or do DPU and DSI need to communicate
+> >>>>> when widebus will be enabled, based on DPU && DSI supporting it?
+> >>>>
+> >>>> I'd prefer to follow the second approach, as we did for DP. DPU asks 
+> >>>> the
+> >>>> actual video output driver if widebus is to be enabled.
+> >>>
+> >>
+> >> I was afraid of this. This series was made on an assumption that the 
+> >> DPU version of widebus and DSI version of widebus would be compatible 
+> >> but looks like already SM8150 is an outlier.
+
+Fwiw SM8250 would have been an outlier as well :)
+
+> >> Yes, I think we have to go with second approach.
+> >>
+> >> DPU queries DSI if it supports widebus and enables it.
+> >>
+> >> Thanks for your responses. We will post a v2.
+
+No hurry, btw.  As alluded to above, let's also look at the comments on
+patch 2/3 and discuss how this affects pclk.
+
+> >>> Doesn't it seem very strange that DPU 5.x+ comes with a widebus feature,
+> >>> but the DSI does not until two revisions later?  Or is this available on
+> >>> every interface, but only for a different (probably DP) encoder block?
+> >>>
+> >>
+> >> Yes its strange.
+> >>
+> 
+> I have clarified this above. Its not strange but appeared strange 
+> because we were checking wrong conditions.
+
+Hehe :)
+
+- Marijn
