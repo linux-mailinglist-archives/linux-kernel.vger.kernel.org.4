@@ -2,132 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05FE27309B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 23:19:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E2647309D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 23:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232542AbjFNVTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 17:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43184 "EHLO
+        id S235693AbjFNV17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 17:27:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235426AbjFNVTw (ORCPT
+        with ESMTP id S229453AbjFNV15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 17:19:52 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697C4E6C;
-        Wed, 14 Jun 2023 14:19:51 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b1badb8f9bso17292631fa.1;
-        Wed, 14 Jun 2023 14:19:51 -0700 (PDT)
+        Wed, 14 Jun 2023 17:27:57 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F012101
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 14:27:52 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1b3ac2e4555so27373125ad.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 14:27:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686777589; x=1689369589;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Nemu++hPj2kZikPl1h1oFSjdDD6MXcNHrSfYyeHRBSA=;
-        b=K/lcj/WhaymrAJKwK3wCNX/IP+Uj2hQlyTWOYtbrDnna+Zn/1U/aPLNhDUFJje8ftf
-         +f4A9UMYaFallKxzRLKEjK+81Po3+R0r7WurrHsupMIiIIq7IoR7+49e2ALM6E4rKX7M
-         +Fhe1yncce3qwqj5wzdKa15Puvnt+IatDOjf4iRqxZewf0BY896aumsTH+F448y9FUwG
-         QeX+iQVCVKsgEq9ZfTEp8PQfnL9Mrj8Xp7O1Hvny5iYJER0aQXx0hG4VFB/+ug5Z9RNg
-         SUn7eWKFU7C3ZL1muAqYaoenkb4PVvRP7Wb8sPwgmgQdb+hiWdug7kBEKwfr3XjVNg2W
-         CDvQ==
+        d=google.com; s=20221208; t=1686778071; x=1689370071;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vi/7hmjTrTZ9KkULGSIwFNzyIkPs6ZSrGwYo1vsf4LY=;
+        b=TOv1Wi0OzaxGH6kqqwft5pXdVjMAM/MiDgT/EMigAP6UWlnGu7xMRdzjFEeJmPqlWL
+         RTMguNIvf07SQMEHLrmAq4s538RBa8g1hlLJBVpqAYDMU7MXO/cI0vJfKZcRp7+Lt3PP
+         rBCkWOYHX/q3klthqhVRiMb2noZUa6qOCtAC86kXBsVW/1JVqW2M55oQy089ISYIUowd
+         /0HnJnD9FuOU8/oC54Cf7PVSQQmfS1FsVszS9TBP9uGWz7cNYoT1Wjm5N9i2YrbzBWGB
+         wl3xERsZlBeaYSbULQx5juqMja79hOySYoERJKr6GgCd3cvL84OlDeYeUVp9stiYEMlN
+         Wrwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686777589; x=1689369589;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nemu++hPj2kZikPl1h1oFSjdDD6MXcNHrSfYyeHRBSA=;
-        b=YqWqFSyzMhDcGH/Bh79oze2kgjqKrYZOr/tNwE/1h4aczEi4j9X2SmiAHrnrrwRLch
-         g2WCBGSRCbDM9RlNrDRS3Pk2weLt02dFAX9jb/czWm9dCkJA7ffWedMhzmEbNvFwtetu
-         XEhaZ2/4ivArTG9Bs19gOdvYuK8nUyfl2LXLshpkowEtrOFlUKMRwKgWdDGa2fmyiL4B
-         kM8F84rF0fT4hu6E+oRMnLTZfHrsmuifcGjIvtoQ9dvjeE9kxPvritfS9iZPZh9UeWYk
-         YD//6KfCoEdh2xfsz5qn/5Uy3N5DRheybI+wLASgqzpu9SbZjfqZI8fby43WgiTTnvYE
-         jrCg==
-X-Gm-Message-State: AC+VfDyM6XJ5I9EoWVglWHlpBDsrrx83CTTC6bRoUJHg31QUBi4BRHl1
-        qk1ljh05fgxPHGujnhYsL0Q=
-X-Google-Smtp-Source: ACHHUZ45TXehjwCg06WrJDg32kyOgof1iYjc9nhggwSBO8ctiPoSkAmPEpPRJy958E5G0j8EY+3Ykg==
-X-Received: by 2002:ac2:5a0c:0:b0:4f6:2846:b1fb with SMTP id q12-20020ac25a0c000000b004f62846b1fbmr9411995lfn.18.1686777589293;
-        Wed, 14 Jun 2023 14:19:49 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id f13-20020a170906390d00b009584c5bcbc7sm8408004eje.49.2023.06.14.14.19.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 14:19:48 -0700 (PDT)
-Date:   Thu, 15 Jun 2023 00:19:45 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net v4 3/7] net: dsa: mt7530: fix trapping frames on
- non-MT7621 SoC MT7530 switch
-Message-ID: <20230614211945.frpzl56uasb3qnwp@skbuf>
-References: <20230612075945.16330-1-arinc.unal@arinc9.com>
- <20230612075945.16330-4-arinc.unal@arinc9.com>
- <20230614201336.lf5hqrp5nw7han4r@skbuf>
- <581f410d-e94f-e980-f54b-b870017ba73c@arinc9.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <581f410d-e94f-e980-f54b-b870017ba73c@arinc9.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1686778071; x=1689370071;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vi/7hmjTrTZ9KkULGSIwFNzyIkPs6ZSrGwYo1vsf4LY=;
+        b=ALPYIJhBq4QilUu0lhr3WQTnUwOVENCfECc7BFj+LgqHHTSC4LNvsvYCJApGbl+Jwp
+         fIwZ3FM6dWdKUS87/g/aaHazU0v+VUvTjIK3BDtyMiaWwDU7W7DcHIm1/yY/YJ7qbw/m
+         9gMdhpoTqv3s6dgRlncrcfIs/J7OdSweDOAQC04u6Us44rH82EFXfGZgslzfZS1awxtL
+         WSZvee+Znc0b9OGEF3d2hTYOZO6Vq56v/iHiTVb0W3uc/kqhvg3o+wavQBMtRWWBu0pr
+         2yGO8RO+G/sbNSLiW0pEPzD/9sYajHWhKiCHjz3BqR3G2oXrrBnhaRbBIxHiVUuGVWK3
+         XcDg==
+X-Gm-Message-State: AC+VfDwLFBjDd1sOok3z3qTSkwB9HdD7Wj+sWxD7Np/IaCYuPcQmVPN6
+        0Xmj/9Z9XAbAQJ8HTFyZr5m3y05A0+c=
+X-Google-Smtp-Source: ACHHUZ5UF2epLMEIrkVLE9C35fy0CnP3TmO7JnKYJ6T3BpN/XCXz9TqLP32SSuRUgyULc0pTuDBD4I0wRGo=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:f807:b0:1b5:bd8:5aaa with SMTP id
+ ix7-20020a170902f80700b001b50bd85aaamr277193plb.1.1686778071544; Wed, 14 Jun
+ 2023 14:27:51 -0700 (PDT)
+Date:   Wed, 14 Jun 2023 14:27:49 -0700
+In-Reply-To: <9ccc37a9-4f0b-f662-4d1a-467d18bbe48e@amd.com>
+Mime-Version: 1.0
+References: <20230411125718.2297768-6-aik@amd.com> <ZGv9Td4p1vtXC0Hy@google.com>
+ <719a6b42-fd91-8eb4-f773-9ed98d2fdb07@amd.com> <ZGzfWQub4FQOrEtw@google.com>
+ <fc82a8a7-af38-5037-1862-ba2315c4e5af@amd.com> <ZHDEkuaVjs/0kM6t@google.com>
+ <64336829-60c5-afe1-81ad-91b4f354aef3@amd.com> <5e7c6b3d-2c69-59ca-1b9f-2459430e2643@amd.com>
+ <ZIj5ms+DohcLyXHE@google.com> <9ccc37a9-4f0b-f662-4d1a-467d18bbe48e@amd.com>
+Message-ID: <ZIow1a0rVQ1FC4sH@google.com>
+Subject: Re: [PATCH kernel v5 5/6] KVM: SEV: Enable data breakpoints in SEV-ES
+From:   Sean Christopherson <seanjc@google.com>
+To:     Alexey Kardashevskiy <aik@amd.com>
+Cc:     kvm@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Pankaj Gupta <pankaj.gupta@amd.com>,
+        Nikunj A Dadhania <nikunj@amd.com>,
+        Santosh Shukla <santosh.shukla@amd.com>,
+        Carlos Bilbao <carlos.bilbao@amd.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 11:59:33PM +0300, Arınç ÜNAL wrote:
-> On 14.06.2023 23:13, Vladimir Oltean wrote:
-> > On Mon, Jun 12, 2023 at 10:59:41AM +0300, arinc9.unal@gmail.com wrote:
-> > > From: Arınç ÜNAL <arinc.unal@arinc9.com>
-> > > 
-> > > The check for setting the CPU_PORT bits must include the non-MT7621 SoC
-> > > MT7530 switch variants to trap frames. Expand the check to include them.
-> > > 
-> > > Fixes: b8f126a8d543 ("net-next: dsa: add dsa support for Mediatek MT7530 switch")
-> > > Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> > > ---
-> > >   drivers/net/dsa/mt7530.c | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-> > > index ef8879087932..2bde2fdb5fba 100644
-> > > --- a/drivers/net/dsa/mt7530.c
-> > > +++ b/drivers/net/dsa/mt7530.c
-> > > @@ -3073,7 +3073,7 @@ mt753x_master_state_change(struct dsa_switch *ds,
-> > >   	 * the numerically smallest CPU port which is affine to the DSA conduit
-> > >   	 * interface that is up.
-> > >   	 */
-> > > -	if (priv->id != ID_MT7621)
-> > > +	if (priv->id != ID_MT7530 && priv->id != ID_MT7621)
-> > >   		return;
+On Wed, Jun 14, 2023, Alexey Kardashevskiy wrote:
+> On 14/6/23 09:19, Sean Christopherson wrote:
+> > On Fri, Jun 02, 2023, Alexey Kardashevskiy wrote:
+> > > > > Side topic, isn't there an existing bug regarding SEV-ES NMI windows?
+> > > > > KVM can't actually single-step an SEV-ES guest, but tries to set
+> > > > > RFLAGS.TF anyways.
+> > > > =20
+> > > > Why is it a "bug" and what does the patch fix? Sound to me as it is
+> > > > pointless and the guest won't do single stepping and instead will run
+> > > > till it exits somehow, what do I miss?
 > > 
-> > This patch and 2/7 should probably be reversed, since 2/7 is not going to net.
+> > The bug is benign in the end, but it's still a bug.  I'm not worried about =
 > 
-> This patch is still necessary. It'll just modify the other location instead
-> of here.
 > 
-> https://github.com/arinc9/linux/commit/4c8b983f7a95ba637799ccd1b700ee054b030729
+> (unrelated) Your response's encoding broke somehow and I wonder if this is
+> something I did or you did. Lore got it too:
 > 
-> Arınç
+> https://lore.kernel.org/all/ZIj5ms+DohcLyXHE@google.com/
 
-That's basically what I said, sorry if I wasn't clear.
+Huh.  Guessing something I did, but I've no idea what caused it.
+
+> > fixing
+> > any behavior, but I dislike having dead, misleading code, especially for so=
+> > mething
+> > like this where both NMI virtualization and SEV-ES are already crazy comple=
+> > x and
+> > subtle.  I think it's safe to say that I've spent more time digging through=
+> >   SEV-ES
+> > and NMI virtualization than most KVM developers, and as evidenced by the nu=
+> > mber of
+> > things I got wrong below, I'm still struggling to keep track of the bigger =
+> > picture.
+> > Developers that are new to all of this need as much help as they can get.
+> > 
+> > > > > Blech, and suppressing EFER.SVME in efer_trap() is a bit gross,
+> > > > =20
+> > > > Why suppressed? svm_set_efer() sets it eventually anyway.
+> > 
+> > svm_set_efer() sets SVME in hardware, but KVM's view of the guest's value t=
+> > hat's
+> > stored in vcpu->arch.efer doesn't have SVME set.  E.g. from the guest's per=
+> > spective,
+> > EFER.SVME will have "Reserved Read As Zero" semantics.
+> 
+> It is not zero, why? From inside the guest, rdmsrl(MSR_EFER, efer) reads
+> 0x1d01 from that msr where 0x1000==(1<<_EFER_SVME),  _EFER_SVME==12.
+
+Oh, lame.  So the guest gets to see the raw value in the VMSA.  So it really comes
+down to the GHCB not providing support for STGI/CLGI.
