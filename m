@@ -2,143 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C46B973029E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 553877302AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245684AbjFNPAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 11:00:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
+        id S245729AbjFNPCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 11:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245692AbjFNO75 (ORCPT
+        with ESMTP id S245711AbjFNPBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 10:59:57 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915101FC4
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 07:59:55 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id 46e09a7af769-6b2d8b5fde6so3062130a34.2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 07:59:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1686754795; x=1689346795;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=dfTAd0/uVK+gWwVM3TF/SLIQlNoUyF/c3rvI5XRmuAQ=;
-        b=aSGtMLARzci2di/1Rpdv8xh5c1HJsKdm2H4SR6/LQjfYaNAJxKiz09SlynAzHB0I9h
-         66ICKopEL4NhcLH1nLIvsatgho0jHLzitzSn0o2zat7OzwfKAWFwwAWP1mWEVZ06YCNO
-         nGPYmmnl5OxWbuteMziKGLn0ZLpxNAkJcxUv7Uizr6qgFw9Xs4VvFAjLR+msqlKyRcKB
-         I3U19BEov3D0Km7Zhqg/PdZ7raeuwWY+nuqgsVUgYezn7iV5JXZTe866AtL5/iz/CHOL
-         NOTYaKgfoe4Yhc/OcPearfE7+6ld5wXxQrZ9WCV+5hx5+7AybxwaBp4XZ/0rlGFfxX5z
-         UwqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686754795; x=1689346795;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dfTAd0/uVK+gWwVM3TF/SLIQlNoUyF/c3rvI5XRmuAQ=;
-        b=L8cXSiVh2TF2SHQ+zMcrYlSrrBuyRpjku1cWQd4JCdHh5VfcEDt3ymr+5i/nXQ0/re
-         MPXGHtUJYHAVhrTUOS+1kQDUSrx6r637DIouGZrMDx95w2DvaKa9AtLL+PLds00hiK8m
-         jqRtOn2U51/kQJ0TsYjw3GOIKTkJhGDoKwnQwDH3wZT+1jG0kGfypG9veYEOjVRtTfc0
-         jQcbFw6rp0fqQVr1zpnMwPflQ5T3N7/nc2NfD1InttvxFx1abWJq+1RIuHLUgwsYeW9x
-         uumyCNky8Mu1BFDwB+Svk7MwlSaG3ii+Ktc89ghLwvKWCRH+Ttpl6VhXf1yO1Rbpzhdz
-         2jMg==
-X-Gm-Message-State: AC+VfDyiA3SEfXKo66oYByjtFF55GlPTwtv4evk/6Lm2R1vCU6E+SekA
-        YPDjj6fAo55dEfHgNXSIii18pg==
-X-Google-Smtp-Source: ACHHUZ7zIGFCJJU8MQqg8L9cSdY5qrNalqmf/z+VT8WF0tStfZz8Mq0+DJDKzoSCYzC6GAuN2Tasqw==
-X-Received: by 2002:a05:6359:609:b0:12b:da3f:d0e3 with SMTP id eh9-20020a056359060900b0012bda3fd0e3mr6919711rwb.10.1686754794703;
-        Wed, 14 Jun 2023 07:59:54 -0700 (PDT)
-Received: from localhost ([2601:586:4c7f:f985:f03e:5c2f:42af:384a])
-        by smtp.gmail.com with ESMTPSA id p131-20020a817489000000b00560beb1c97bsm3906768ywc.97.2023.06.14.07.59.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 07:59:54 -0700 (PDT)
-Date:   Wed, 14 Jun 2023 10:59:53 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Seth Jennings <sjenning@redhat.com>,
-        Dan Streetman <ddstreet@ieee.org>,
-        Vitaly Wool <vitaly.wool@konsulko.com>,
-        Nhat Pham <nphamcs@gmail.com>,
-        Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
-        Yu Zhao <yuzhao@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: zswap: multiple zpool support
-Message-ID: <ZInV6Wju2NdLyzC6@cmpxchg.org>
-References: <20230531022911.1168524-1-yosryahmed@google.com>
- <20230601155825.GF102494@cmpxchg.org>
- <CAJD7tkaFSfpTtB_ua_9QzR2voE1-hixv6RMJZd=WqpGmY93dSw@mail.gmail.com>
- <20230602164942.GA215355@cmpxchg.org>
- <CAJD7tkbp96S8MdrcH8y0V2G5Q-Zq6U4DAuweYhP-MjUWgcmjsQ@mail.gmail.com>
- <20230602183410.GB215355@cmpxchg.org>
- <CAJD7tka18Vw7HpA1gh6wWJcaCJ_U6jNfCC696pX=UkbiXKZMvQ@mail.gmail.com>
- <20230602202453.GA218605@cmpxchg.org>
- <CAJD7tkZBxddm1c4f99KmY+VwKU3jbYBMaNuTtfpis7a1E6242Q@mail.gmail.com>
- <CAJD7tkaraXuLKR8rsKw_8sp9YZga1caM7r0jA8DZC2Y6DxJNfQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJD7tkaraXuLKR8rsKw_8sp9YZga1caM7r0jA8DZC2Y6DxJNfQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 14 Jun 2023 11:01:50 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E861FFF;
+        Wed, 14 Jun 2023 08:01:31 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35E9PGLW021425;
+        Wed, 14 Jun 2023 15:01:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=qcppdkim1;
+ bh=EAvtlgBPpOyXVzlhYjUJb94hSE+ID641KmueiBxv2Vc=;
+ b=KZ7nuuNiMBW6ylNgosVMFCRPs8RLJc52tnnBhTzFKsBsrahDfUkYZxjU2wWTXiLf+Kqj
+ D9QaUCv71/gw+nfZJ4qsguSrJNDerHx/OYvxqfgxT0am43k3xhksR9UXQ6Zfq9yjrltd
+ o5v4SnPjS6Fo7EUcUjP4jGtW5Rne/ecNs0O07t6vNpgJzmlG5CYlC8ttj6bLa/kCecXS
+ 3ideWukyusyR+tRKwQvKmtOBbnbx6a9jzRzQF6T9ApiHFUUWXEAi11X0i92KahruTPz7
+ Gg2aZZ1/r9o3jqwRUwAeqQ3+s4Y16yoTwCl+g+9Ru89MpBZd/KMnL/WyUVqAohXU06kj Qg== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r7auy0vd3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Jun 2023 15:01:20 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 35EF0uj4018430;
+        Wed, 14 Jun 2023 15:01:07 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3r7271jay5-1;
+        Wed, 14 Jun 2023 15:01:07 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35EF17Ib018597;
+        Wed, 14 Jun 2023 15:01:07 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-krichai-hyd.qualcomm.com [10.213.110.112])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 35EF17QS018590;
+        Wed, 14 Jun 2023 15:01:07 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 4058933)
+        id DDAD845A1; Wed, 14 Jun 2023 20:31:06 +0530 (+0530)
+From:   Krishna chaitanya chundru <quic_krichai@quicinc.com>
+To:     manivannan.sadhasivam@linaro.org
+Cc:     quic_vbadigan@quicinc.com, quic_ramkri@quicinc.com,
+        linux-arm-msm@vger.kernel.org, konrad.dybcio@linaro.org,
+        Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-pci@vger.kernel.org (open list:PCI ENDPOINT SUBSYSTEM),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH RFC v1 1/3] PCI: endpoint: Add wakeup host API to EPC core
+Date:   Wed, 14 Jun 2023 20:30:47 +0530
+Message-Id: <1686754850-29817-2-git-send-email-quic_krichai@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1686754850-29817-1-git-send-email-quic_krichai@quicinc.com>
+References: <1686754850-29817-1-git-send-email-quic_krichai@quicinc.com>
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: BF0FECC41ivyOQxrc5i0x8T3TjiisACg
+X-Proofpoint-GUID: BF0FECC41ivyOQxrc5i0x8T3TjiisACg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-14_10,2023-06-14_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 mlxscore=0 mlxlogscore=654 adultscore=0 phishscore=0
+ suspectscore=0 malwarescore=0 bulkscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306140131
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 01:13:59PM -0700, Yosry Ahmed wrote:
-> On Mon, Jun 5, 2023 at 6:56 PM Yosry Ahmed <yosryahmed@google.com> wrote:
-> >
-> > On Fri, Jun 2, 2023 at 1:24 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
-> > > Sorry, I should have been more precise.
-> > >
-> > > I'm saying that using NR_CPUS pools, and replacing the hash with
-> > > smp_processor_id(), would accomplish your goal of pool concurrency.
-> > > But it would do so with a broadly-used, well-understood scaling
-> > > factor. We might not need a config option at all.
-> > >
-> > > The lock would still be there, but contention would be reduced fairly
-> > > optimally (barring preemption) for store concurrency at least. Not
-> > > fully eliminated due to frees and compaction, though, yes.
-> 
-> I thought about this again and had some internal discussions, and I am
-> more unsure about it. Beyond the memory overhead, having too many
-> zpools might result in higher fragmentation within the zpools. For
-> zsmalloc, we do not compact across multiple zpools for example.
-> 
-> We have been using a specific number of zpools in our production for
-> years now, we know it can be tuned to achieve performance gains. OTOH,
-> percpu zpools (or NR_CPUS pools) seems like too big of a hammer,
-> probably too many zpools in a lot of cases, and we wouldn't know how
-> many zpools actually fits our workloads.
+Endpoint cannot send any data/MSI when the device state is in
+D3cold or D3hot. Endpoint needs to bring the device back to D0
+to send any kind of data.
 
-Is it the same number across your entire fleet and all workloads?
+For this endpoint can send inband PME the device is in D3hot or
+toggle wake when the device is D3 cold.
 
-How large *is* the number in relation to CPUs?
+To support this adding wake up host to epc core.
 
-> I see value in allowing the number of zpools to be directly
-> configurable (it can always be left as 1), and am worried that with
-> percpu we would be throwing away years of production testing for an
-> unknown.
-> 
-> I am obviously biased, but I don't think this adds significant
-> complexity to the zswap code as-is (or as v2 is to be precise).
+Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+---
+ drivers/pci/endpoint/pci-epc-core.c | 29 +++++++++++++++++++++++++++++
+ include/linux/pci-epc.h             |  3 +++
+ 2 files changed, 32 insertions(+)
 
-I had typed out this long list of reasons why I hate this change, and
-then deleted it to suggest the per-cpu scaling factor.
+diff --git a/drivers/pci/endpoint/pci-epc-core.c b/drivers/pci/endpoint/pci-epc-core.c
+index 46c9a5c..d203947 100644
+--- a/drivers/pci/endpoint/pci-epc-core.c
++++ b/drivers/pci/endpoint/pci-epc-core.c
+@@ -167,6 +167,35 @@ const struct pci_epc_features *pci_epc_get_features(struct pci_epc *epc,
+ EXPORT_SYMBOL_GPL(pci_epc_get_features);
+ 
+ /**
++ * pci_epc_wakeup_host() - interrupt the host system
++ * @epc: the EPC device which has to interrupt the host
++ * @func_no: the physical endpoint function number in the EPC device
++ * @vfunc_no: the virtual endpoint function number in the physical function
++ *
++ * Invoke to wakeup host
++ */
++int pci_epc_wakeup_host(struct pci_epc *epc, u8 func_no, u8 vfunc_no)
++{
++	int ret;
++
++	if (IS_ERR_OR_NULL(epc) || func_no >= epc->max_functions)
++		return -EINVAL;
++
++	if (vfunc_no > 0 && (!epc->max_vfs || vfunc_no > epc->max_vfs[func_no]))
++		return -EINVAL;
++
++	if (!epc->ops->wakeup_host)
++		return 0;
++
++	mutex_lock(&epc->lock);
++	ret = epc->ops->wakeup_host(epc, func_no, vfunc_no);
++	mutex_unlock(&epc->lock);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(pci_epc_wakeup_host);
++
++/**
+  * pci_epc_stop() - stop the PCI link
+  * @epc: the link of the EPC device that has to be stopped
+  *
+diff --git a/include/linux/pci-epc.h b/include/linux/pci-epc.h
+index 301bb0e..a8496be 100644
+--- a/include/linux/pci-epc.h
++++ b/include/linux/pci-epc.h
+@@ -59,6 +59,7 @@ pci_epc_interface_string(enum pci_epc_interface_type type)
+  * @start: ops to start the PCI link
+  * @stop: ops to stop the PCI link
+  * @get_features: ops to get the features supported by the EPC
++ * @wakeup_host: ops to wakeup the host
+  * @owner: the module owner containing the ops
+  */
+ struct pci_epc_ops {
+@@ -88,6 +89,7 @@ struct pci_epc_ops {
+ 	void	(*stop)(struct pci_epc *epc);
+ 	const struct pci_epc_features* (*get_features)(struct pci_epc *epc,
+ 						       u8 func_no, u8 vfunc_no);
++	int	(*wakeup_host)(struct pci_epc *epc, u8 func_no, u8 vfunc_no);
+ 	struct module *owner;
+ };
+ 
+@@ -232,6 +234,7 @@ int pci_epc_start(struct pci_epc *epc);
+ void pci_epc_stop(struct pci_epc *epc);
+ const struct pci_epc_features *pci_epc_get_features(struct pci_epc *epc,
+ 						    u8 func_no, u8 vfunc_no);
++int pci_epc_wakeup_host(struct pci_epc *epc, u8 func_no, u8 vfunc_no);
+ enum pci_barno
+ pci_epc_get_first_free_bar(const struct pci_epc_features *epc_features);
+ enum pci_barno pci_epc_get_next_free_bar(const struct pci_epc_features
+-- 
+2.7.4
 
-But to summarize my POV, I think a user-facing config option for this
-is completely inappropriate. There are no limits, no guidance, no sane
-default. And it's very selective about micro-optimizing this one lock
-when there are several locks and datastructures of the same scope in
-the swap path. This isn't a reasonable question to ask people building
-kernels. It's writing code through the Kconfig file.
-
-Data structure scalability should be solved in code, not with config
-options.
-
-My vote on the patch as proposed is NAK.
