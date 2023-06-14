@@ -2,188 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6733E73055B
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:47:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B0C873055D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:47:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235945AbjFNQrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 12:47:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57546 "EHLO
+        id S236000AbjFNQrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 12:47:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjFNQrN (ORCPT
+        with ESMTP id S235961AbjFNQre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 12:47:13 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41674EC;
-        Wed, 14 Jun 2023 09:47:12 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1b3af7e3925so30597105ad.3;
-        Wed, 14 Jun 2023 09:47:12 -0700 (PDT)
+        Wed, 14 Jun 2023 12:47:34 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2941BC3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:47:32 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1a49716e9c5so4830436fac.1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:47:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686761231; x=1689353231;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=12MPORJYTdRaxuQWvnPe0uInIKYb4u8od8aH9jpQ52k=;
-        b=DC2zDgn1z/Yjl45gfG0Phjz8VODs0yrmxTMp6+IqxDmlZlJ7Jz/IED2WIsKnV84zwj
-         gn8rdevPHAD0ubADyIhBK93xK5txCIKo7RQSMA75eKXnMoUkw4qA6RIo/7tLRNLZ2XPy
-         UY8MhtOrlBwjafEclLoSKWDprDg4piYJAkN9MXfCvktb0r226MJ96HC32f10n29f7WZn
-         mJzFfShZQGW2Ag8Wi9EwfPoR542mz2CCr5EFYz9kKLHTHb7NZ2vKr8z03CdgIkfRrgQk
-         p0YEL5BPaGWqUDU6jjtp/WwXUJyZauS95FH2F2BtTlEeRP9UpJXrJwRCkt8C/GknA+Wf
-         I8Zg==
+        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1686761251; x=1689353251;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=R27xkHouwiZkXeja44yLdq7zfor4HSLUtt+KIbyx+eA=;
+        b=0RHF1xSpUA2vXerUR6xOhrwsroObFkLih9Bg/2FGaYvVQe76qLzXAP/kzcQ3MCM+fM
+         gO/rjG/iby8prwgBrWWN/WLD1aqCh0EhjuU6IXGR2ZRInaupamHMzYkp5lxNLVZ9SDS5
+         5/Fvnyynug9i+70msKrr0H/DkCPBgXN9aRm/c0rp04loNCjJ6nD0s3PBZYf0kmthWWUk
+         FLMvuMOYr1qg7GAuiS6wnpe7NWKhYWfUWc8ac0q+ksP9gjeHKPn1BvzQVt8YklHzfclO
+         O1CAjhtCuXTI9SZP9o/wN0u/X6cAs+3YJjuf8XZRmTEKFgU+bsPR5xuDSSKjASWBVv2P
+         5GQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686761231; x=1689353231;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=12MPORJYTdRaxuQWvnPe0uInIKYb4u8od8aH9jpQ52k=;
-        b=dAuzeAk1v3pSsHdTgWZQYIZzytzJj8bjno/qCavtkjgyf6AHP8DdxSE2xu6CH51x92
-         p5HEtmAUB0i+8eiDPCabu+SAzUp5mARrwpmGuvbHc6AoR3fiIhjyo+uV4mBkTPbf6v7i
-         vLX5bbRG/6EQCB1kTZBYoGoURLnJvV89Sdt58ZZbjTYv2TbOCznCTlpOxopKwOhm7o+E
-         jF5XfR+uplCFkekdnmXEZr0mts6kWrHfOgqxlAoubzzocqTivu7MleB0LfZq8Ml+HVig
-         SR0wdycq9rCD6rjkuj/WdGYsAad/SQgI2BuP65yplk/pt9qrZo7pXGCKtuCkIcSgUNFk
-         7E5A==
-X-Gm-Message-State: AC+VfDy18sY6KUARG/FJVv4W6+nUSpPc7j5BiqxP1XijIFwdR698cvdL
-        zzUWcV4LjpwB582jsUCedh0=
-X-Google-Smtp-Source: ACHHUZ6t8N6IBSWvdJvyRkmm0c03psAWogPX0vP/Ol0n4nnWls6/IXHJjRosLSS7EI/95vJQ1fS+Ng==
-X-Received: by 2002:a17:902:8c84:b0:1b1:a2c3:29c0 with SMTP id t4-20020a1709028c8400b001b1a2c329c0mr11199347plo.24.1686761231544;
-        Wed, 14 Jun 2023 09:47:11 -0700 (PDT)
-Received: from localhost ([192.55.54.50])
-        by smtp.gmail.com with ESMTPSA id y10-20020a17090322ca00b001ae6b4b28adsm7016713plg.130.2023.06.14.09.47.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 09:47:10 -0700 (PDT)
-Date:   Wed, 14 Jun 2023 09:47:09 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        bp@alien8.de, vbabka@suse.cz, kirill@shutemov.name,
-        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
-        nikunj.dadhania@amd.com, liam.merwick@oracle.com,
-        zhi.a.wang@intel.com, isaku.yamahata@gmail.com
-Subject: Re: [PATCH RFC v9 04/51] KVM: x86: Determine shared/private faults
- using a configurable mask
-Message-ID: <20230614164709.GT2244082@ls.amr.corp.intel.com>
-References: <20230612042559.375660-1-michael.roth@amd.com>
- <20230612042559.375660-5-michael.roth@amd.com>
+        d=1e100.net; s=20221208; t=1686761251; x=1689353251;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=R27xkHouwiZkXeja44yLdq7zfor4HSLUtt+KIbyx+eA=;
+        b=MDK/kCy5baeN3dkYxkzLuiMqaZY7TsZmAB8cMmtCYePJmnOo+g0Ke+NDEBSOlDEvSH
+         sgqLIRQ+dsdw5LgKVI3ImD/vky0XigF0AknrpWICp7E3HJIhxqmcJFvKqMs+X+N0zIn5
+         JCoTOdiy9S6bS0KKfSSLIvJmYLmLNBmQ8V/pxUjAvdq383MsxNsHDA+7A6bddA6RiagK
+         fWQ5s920jkqiS25SA07YbkKRLBPA1dcghdv2JTX3Tf/t1XG66juBNTQhcF+3qFEDxN5O
+         i0uY6Gj7j5n3sallUqqnAi1b+2TtoAIyQfuvbIgkOJHevQ2WPWTxfOl+A6Rkru8pCpwL
+         AT8g==
+X-Gm-Message-State: AC+VfDzi0RES7WGvHixKNxreYMHgW3dnJdPIoA7IA+JbAJnBQCo7Wqmw
+        E4k3xl8IfhN5dMkGkkXaq4Wv/g==
+X-Google-Smtp-Source: ACHHUZ7uxI6uPZnOCDPv1ZzF3HlzvJwVuZi0A178t64EyAqar8iHnj9X/gBEABjgp0gM9ZY+F54gtw==
+X-Received: by 2002:a05:6870:52d6:b0:1a6:4f6a:8a72 with SMTP id p22-20020a05687052d600b001a64f6a8a72mr8394370oak.37.1686761251286;
+        Wed, 14 Jun 2023 09:47:31 -0700 (PDT)
+Received: from ?IPV6:2804:14d:5c5e:44fb:90ea:5d38:822c:1759? ([2804:14d:5c5e:44fb:90ea:5d38:822c:1759])
+        by smtp.gmail.com with ESMTPSA id ne16-20020a056871449000b0019f4f5c8298sm8861346oab.56.2023.06.14.09.47.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 09:47:30 -0700 (PDT)
+Message-ID: <3b83fcf6-a5e8-26fb-8c8a-ec34ec4c3342@mojatatu.com>
+Date:   Wed, 14 Jun 2023 13:47:25 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230612042559.375660-5-michael.roth@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 net-next 0/9] Improve the taprio qdisc's relationship
+ with its children
+Content-Language: en-US
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
+        Peilin Ye <yepeilin.cs@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Zhengchao Shao <shaozhengchao@huawei.com>,
+        Maxim Georgiev <glipus@gmail.com>
+References: <20230613215440.2465708-1-vladimir.oltean@nxp.com>
+From:   Pedro Tammela <pctammela@mojatatu.com>
+In-Reply-To: <20230613215440.2465708-1-vladimir.oltean@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 11, 2023 at 11:25:12PM -0500,
-Michael Roth <michael.roth@amd.com> wrote:
+On 13/06/2023 18:54, Vladimir Oltean wrote:
+> [...]
 
-> This will be used to determine whether or not an #NPF should be serviced
-> using a normal page vs. a guarded/gmem one.
-> 
-> Signed-off-by: Michael Roth <michael.roth@amd.com>
-> ---
->  arch/x86/include/asm/kvm_host.h |  7 +++++++
->  arch/x86/kvm/mmu/mmu_internal.h | 35 ++++++++++++++++++++++++++++++++-
->  2 files changed, 41 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index b3bd24f2a390..c26f76641121 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1445,6 +1445,13 @@ struct kvm_arch {
->  	 */
->  #define SPLIT_DESC_CACHE_MIN_NR_OBJECTS (SPTE_ENT_PER_PAGE + 1)
->  	struct kvm_mmu_memory_cache split_desc_cache;
-> +
-> +	/*
-> +	 * When set, used to determine whether a fault should be treated as
-> +	 * private in the context of protected VMs which use a separate gmem
-> +	 * pool to back private guest pages.
-> +	 */
-> +	u64 mmu_private_fault_mask;
->  };
->  
->  struct kvm_vm_stat {
-> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-> index 780b91e1da9f..9b9e75aa43f4 100644
-> --- a/arch/x86/kvm/mmu/mmu_internal.h
-> +++ b/arch/x86/kvm/mmu/mmu_internal.h
-> @@ -252,6 +252,39 @@ struct kvm_page_fault {
->  
->  int kvm_tdp_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault);
->  
-> +static bool kvm_mmu_fault_is_private(struct kvm *kvm, gpa_t gpa, u64 err)
-> +{
-> +	struct kvm_memory_slot *slot;
-> +	bool private_fault = false;
-> +	gfn_t gfn = gpa_to_gfn(gpa);
-> +
-> +	slot = gfn_to_memslot(kvm, gfn);
-> +	if (!slot) {
-> +		pr_debug("%s: no slot, GFN: 0x%llx\n", __func__, gfn);
-> +		goto out;
-> +	}
-> +
-> +	if (!kvm_slot_can_be_private(slot)) {
-> +		pr_debug("%s: slot is not private, GFN: 0x%llx\n", __func__, gfn);
-> +		goto out;
-> +	}
-> +
-> +	if (kvm->arch.mmu_private_fault_mask) {
-> +		private_fault = !!(err & kvm->arch.mmu_private_fault_mask);
-> +		goto out;
-> +	}
+Hi Vladimir,
+Thanks for adding the tdc tests.
+This series seem to have broken test 8471 in taprio but I don't see it 
+fixed here.
+Do you plan to fix it in another patch?
 
-What's the convention of err? Can we abstract it by introducing a new bit
-PFERR_PRIVATE_MASK? The caller sets it based on arch specific value.
-the logic will be
-        .is_private = err & PFERR_PRIVATE_MASK;
-
-
-> +
-> +	/*
-> +	 * Handling below is for UPM self-tests and guests that treat userspace
-> +	 * as the authority on whether a fault should be private or not.
-> +	 */
-> +	private_fault = kvm_mem_is_private(kvm, gpa >> PAGE_SHIFT);
-
-This code path is sad. One extra slot lookup and xarray look up.
-Without mmu lock, the result can change by other vcpu.
-Let's find a better way.
-
-> +
-> +out:
-> +	pr_debug("%s: GFN: 0x%llx, private: %d\n", __func__, gfn, private_fault);
-> +	return private_fault;
-> +}
-> +
->  /*
->   * Return values of handle_mmio_page_fault(), mmu.page_fault(), fast_page_fault(),
->   * and of course kvm_mmu_do_page_fault().
-> @@ -301,7 +334,7 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
->  		.max_level = KVM_MAX_HUGEPAGE_LEVEL,
->  		.req_level = PG_LEVEL_4K,
->  		.goal_level = PG_LEVEL_4K,
-> -		.is_private = kvm_mem_is_private(vcpu->kvm, cr2_or_gpa >> PAGE_SHIFT),
-> +		.is_private = kvm_mmu_fault_is_private(vcpu->kvm, cr2_or_gpa, err),
->  	};
->  	int r;
->  
-> -- 
-> 2.25.1
-> 
-
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
