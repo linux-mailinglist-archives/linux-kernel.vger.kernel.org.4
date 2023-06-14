@@ -2,68 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6D6772F7E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A5672F7EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234766AbjFNIdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 04:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58332 "EHLO
+        id S243641AbjFNIdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 04:33:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234266AbjFNIdI (ORCPT
+        with ESMTP id S243263AbjFNIdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 04:33:08 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BFB19AC;
-        Wed, 14 Jun 2023 01:33:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=kfogN8xbf7/stcsXdqrLFvOjiQCC1x162a5W5DN6bEk=; b=e+2/4S4ZBZlNXOGN1LVdbSvAUZ
-        AXLgS7Ai/PPFdhlX18C4SNeStJXNyrIWQXyV5Rqbu4rhpuViH2ZUToPkyb2oWIfwqp0RH3T9zm4zb
-        MRLmBfLuo0iV0B/17KNaQNK/NWyt7MhbDY3A4IuYeUtIWO2V8boESpK61l6iCvUwkr19WSj2vlRFO
-        S7cZ9aK8Z3NWFNzIiLY1qsf+skB+uLvUxAuE178/TwZbFckYtbxy4bbANsgus0ZK9iWjCZAN5RJ2I
-        ATbvWPJ9+rRCNbbHuHyiw7WsReWdbYF8AwXnVBBP9sAVoiYBIIv0030RScqPD45Eamwi2Gn9gcY9u
-        v8W1PaSQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q9Lvl-00AcBr-0D;
-        Wed, 14 Jun 2023 08:32:41 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+        Wed, 14 Jun 2023 04:33:15 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC7B1985;
+        Wed, 14 Jun 2023 01:33:13 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7F3A73002F1;
-        Wed, 14 Jun 2023 10:32:40 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 56C6F27F86A4E; Wed, 14 Jun 2023 10:32:40 +0200 (CEST)
-Date:   Wed, 14 Jun 2023 10:32:40 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     alison.schofield@intel.com
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Mike Rapoport <rppt@kernel.org>, x86@kernel.org,
-        linux-cxl@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] CXL: Apply SRAT defined PXM to entire CFMWS window
-Message-ID: <20230614083240.GC1639749@hirez.programming.kicks-ass.net>
-References: <cover.1686712819.git.alison.schofield@intel.com>
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id EA0EB6606F13;
+        Wed, 14 Jun 2023 09:33:11 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686731592;
+        bh=O4wceCLCcU4ElsM9C74KpJfkq3+lvd+dFw6bAs1GHuI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=UabF4q/AwVwNZNBrPx33yKyXzurYBJFapho6dYnLVtDEWtAxSdHWo8zd0MbGkWVuz
+         kLNHFkQq9vPSkVS3bq6uQzKJkEN3o6Wbbjl2D6DGjm/Ha9rOGjOruUW+aieZp1CAt0
+         eP1CjrKxLJIto7O7nBt72xAiakCihCQA9bdFsJPs6mZw1+5lkad/5pdnaNNRoGt7do
+         tL8RxHK8tG0luAGntFRK7ObLFpuyxtgvsDUsGJL0qrE0dnP36XKwcsbeWDBfGc3oM+
+         TFUvyZu0fRoSCaKgurJNAarfJBlVnpgeXBTRbx2vxIQFfIq0GqafeSLEVTypJ7plkc
+         mBf618f6rVFVQ==
+Message-ID: <6daa58c7-055f-bcef-f82d-c83c0941d13c@collabora.com>
+Date:   Wed, 14 Jun 2023 10:33:09 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1686712819.git.alison.schofield@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v3 3/8] dt-bindings: leds: leds-mt6323: Support WLED
+ output
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, pavel@ucw.cz
+Cc:     lee@kernel.org, sean.wang@mediatek.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20230601110813.2373764-1-angelogioacchino.delregno@collabora.com>
+ <20230601110813.2373764-4-angelogioacchino.delregno@collabora.com>
+ <75d78713-fc8f-24a9-a422-2b4d57c5d488@linaro.org>
+ <88f37d33-6545-d307-17a9-896e86d0ed50@collabora.com>
+ <d8a09620-9891-8072-8602-403128ba8d30@linaro.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <d8a09620-9891-8072-8602-403128ba8d30@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,9 +67,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 09:35:23PM -0700, alison.schofield@intel.com wrote:
-> The CXL subsystem requires the creation of NUMA nodes for CFMWS
+Il 13/06/23 08:59, Krzysztof Kozlowski ha scritto:
+> On 09/06/2023 09:51, AngeloGioacchino Del Regno wrote:
+>> Il 02/06/23 10:32, Krzysztof Kozlowski ha scritto:
+>>> On 01/06/2023 13:08, AngeloGioacchino Del Regno wrote:
+>>>> Some PMICs have a separated WLED string output: add a property
+>>>> `mediatek,is-wled` to indicate which LED string is a WLED.
+>>>>
+>>>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>>> ---
+>>>>    Documentation/devicetree/bindings/leds/leds-mt6323.txt | 1 +
+>>>>    1 file changed, 1 insertion(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/leds/leds-mt6323.txt b/Documentation/devicetree/bindings/leds/leds-mt6323.txt
+>>>> index 052dccb8f2ce..904b2222a5fe 100644
+>>>> --- a/Documentation/devicetree/bindings/leds/leds-mt6323.txt
+>>>> +++ b/Documentation/devicetree/bindings/leds/leds-mt6323.txt
+>>>> @@ -30,6 +30,7 @@ Optional properties for the LED child node:
+>>>>    - label : See Documentation/devicetree/bindings/leds/common.txt
+>>>>    - linux,default-trigger : See Documentation/devicetree/bindings/leds/common.txt
+>>>>    - default-state: See Documentation/devicetree/bindings/leds/common.txt
+>>>> +- mediatek,is-wled: LED string is connected to WLED output
+>>>
+>>> Why would it matter to what the output is connected to?
+>>
+>> When this property is present, the MT6323 LEDs are managed through different
+>> hardware registers which are specific to WLEDs: if we have no indication of
+>> whether this is a WLED or a LED, we would program the wrong registers.
+>>
+> 
+> OK, so it is rather the choice of output in the device? What is "LED
+> string" in this context?
+> 
 
-The thing is CXL some persistent memory thing, right? But what is this
-CFMWS thing? I don't think I've ever seen that particular combination of
-letters together.
+"LED string" is a term that is commonly used to refer to an array of LEDs.
+Usually, in the context of displays (so, WLED!), it refers to the LEDs array
+that forms the backlight.
+
+And yes, it's choice of output in the HW.
+
+Cheers,
+Angelo
+
