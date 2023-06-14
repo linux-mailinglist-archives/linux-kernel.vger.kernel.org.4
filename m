@@ -2,89 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25EC472FAF5
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 12:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9374172FAF7
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 12:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243916AbjFNKbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 06:31:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40274 "EHLO
+        id S244013AbjFNKbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 06:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244377AbjFNKaQ (ORCPT
+        with ESMTP id S244493AbjFNKae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 06:30:16 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D2352D75;
-        Wed, 14 Jun 2023 03:28:58 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id A40AF32009F0;
-        Wed, 14 Jun 2023 06:28:18 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Wed, 14 Jun 2023 06:28:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1686738498; x=1686824898; bh=ZC
-        OUyt2yTF9x4FgWIQpwXhgoxss/OYhX4Xfp8kmzJBc=; b=guYsAd3fpIJyaf1wnX
-        OMgz2zWhoMC1pTGt07uVpJGxan5ur6GEq3JERg0eZtkXrTp3CUVQ47DilYqKYg6o
-        MyJbK44rzVOU2808LKQEgWv+m3HRY/pYzp2rAZSGUZxNl8YJMKbFZCkYlPB8B92W
-        VI/jxcT6g+Ro0V16RQQagdUqjrqdkHdR+XtVrC+C0u81vCNquxDKne1PocuI+Y71
-        YCOSKqmmwNwkoZFsBxfencfFgWRrQH/x3pIF5xfFSMlZzZO34X7E9Mt4J+YdP40c
-        UuNytT7EbAALC+e/GwfBglfS4Pu86nuWlBuuQsATzNcGTKDSIQohOmuDQIX4AWKF
-        giWA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1686738498; x=1686824898; bh=ZCOUyt2yTF9x4
-        FgWIQpwXhgoxss/OYhX4Xfp8kmzJBc=; b=LpNwAyqzfXhnOwPbRR76rDm1kvFUY
-        f8mBuUOga6MapZonnBq8bJQYco9En3mr0HGqordQKjDi5+yofxzgp0Z5Rjqkf9Rs
-        ewAWSMyHHvHesHJbiQZR6VIRK1EDzve6PjaINqsY8H2MSvu7kbS1kzwPBP88fdZX
-        NVEONEkBOOjiOUdKejKSlwOXmMM0rk1aXd2YFtNtqCLqQWn8Ursn0LGaYALgWG7z
-        yOVz72R4kHZWngy3NtGNibSOgYi1Qi7s0gPKQFvHu5dGYLQHYD/KOQYCp+z+sp3O
-        v4NNdqqDf7SPNxb3Xay95QFn89kN+htLSucmrjTLd3JkbQppTZNjESgMQ==
-X-ME-Sender: <xms:QZaJZABdDs-VczzLc_x-FeyIJGLC2egjBVq-qRtPRGhOXukkIyilFg>
-    <xme:QZaJZCi1oRTrWQQhORi2r7FNo4Esf-XO12yl2XjgVaJsBb99ax9qpIMjx7v5KzgFZ
-    -S0r6NDLrfIhn6QKkk>
-X-ME-Received: <xmr:QZaJZDlq3Ll-n8-e54IfQ78FYawoCkiS-4zWCFimfYWngZAVYxy0NqeqarRaxQR6UVMajPxuMUSQydLPi_Tj6g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedvtddgvdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtsfertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeeuveduheeutdekvefgudevjeeufedvvdevhfejgfelgfdtkeevueegteek
-    gfelfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:QZaJZGzct8n9AxmadmX_jBwytlWfIbvglaGNoOgBCji_PmsCCZKKTA>
-    <xmx:QZaJZFSmJSvt9agrRjA_kZQ5ztED_XwVL6gBGCn6ufsEHz9o3q4MAg>
-    <xmx:QZaJZBbmzeDokvZkO03X-vxSN7O8odWis-5JyG4mJYJPAKBL1U5yXA>
-    <xmx:QpaJZGTZAonh0DPgqmfa5YQvyapmhh21Uuh-dMnuyWpfS7l81mD8WQ>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 14 Jun 2023 06:28:17 -0400 (EDT)
-Date:   Wed, 14 Jun 2023 12:28:14 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Christopher Obbard <chris.obbard@collabora.com>,
-        David Laight <David.Laight@aculab.com>, kernel@collabora.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] clk: composite: Fix handling of high clock rates
-Message-ID: <6nihw4k2vdtmjpvbei5ahb7cmtmuyi2w5m4pwhjrmdqi2yp7v6@vdpg5kwa7trl>
-References: <20230526171057.66876-1-sebastian.reichel@collabora.com>
- <20230526171057.66876-2-sebastian.reichel@collabora.com>
- <2f3328c4be9db6feef2cc662ede70f92.sboyd@kernel.org>
- <7s2xdk43a2lhyezgj6bbwxaekbtgym2rin7t432m4pos4j6v74@qaxm3htjak4a>
- <86d58c6b131028a71964a0bcb135f01f.sboyd@kernel.org>
+        Wed, 14 Jun 2023 06:30:34 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5733AA4;
+        Wed, 14 Jun 2023 03:29:18 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 653CF21C83;
+        Wed, 14 Jun 2023 10:29:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1686738557; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rhRpOEE0FKxbTYX/Job7y10yZH4TueIGHLBhWciCR2w=;
+        b=jJ+ALNsoAPJuxj3+WmnJdYwDSPIw7fH3gY97cONrkYcvme6b6gIAlQILJQKaiEWZBDWE+y
+        +5lNxbi2GlKwyPHV7zJEe68SriHx/afjuWaMhBfIPlhAZcuY/XGLQQc91eFEcIXkoRCR8r
+        XdyKtXz+yrqwb0V6rw5zk3u7kHRIQ0E=
+Received: from suse.cz (pmladek.udp.ovpn2.prg.suse.de [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 55CB82C141;
+        Wed, 14 Jun 2023 10:29:15 +0000 (UTC)
+Date:   Wed, 14 Jun 2023 12:29:11 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        sparclinux@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH 2/7] watchdog/hardlockup: Make the config checks more
+ straightforward
+Message-ID: <ZImWd62fXjsZildv@alley>
+References: <20230607152432.5435-1-pmladek@suse.com>
+ <20230607152432.5435-3-pmladek@suse.com>
+ <CAD=FV=WRzaLbLQ65usGeFq3ya=DV8cYyHQina_721EFoSTdBGA@mail.gmail.com>
+ <ZIG1Qi0iUjTKICQM@alley>
+ <CAD=FV=XzueJia--Zv4cAofzk7yocmP-7K8wa4doAN8pzED_hZA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rvbzj4d27cgjtg4p"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <86d58c6b131028a71964a0bcb135f01f.sboyd@kernel.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAD=FV=XzueJia--Zv4cAofzk7yocmP-7K8wa4doAN8pzED_hZA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -93,68 +67,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu 2023-06-08 06:55:23, Doug Anderson wrote:
+> Hi,
+> 
+> On Thu, Jun 8, 2023 at 4:02 AM Petr Mladek <pmladek@suse.com> wrote:
+> >
+> > > >  config HARDLOCKUP_DETECTOR
+> > > >         bool "Detect Hard Lockups"
+> > > >         depends on DEBUG_KERNEL && !S390
+> > > > -       depends on HAVE_HARDLOCKUP_DETECTOR_NON_ARCH || HAVE_HARDLOCKUP_DETECTOR_ARCH
+> > > > +       depends on ((HAVE_HARDLOCKUP_DETECTOR_PERF || HAVE_HARDLOCKUP_DETECTOR_BUDDY) && !HAVE_NMI_WATCHDOG) || HAVE_HARDLOCKUP_DETECTOR_ARCH
+> > >
+> > > Adding the dependency to buddy (see ablove) would simplify the above
+> > > to just this:
+> > >
+> > > depends on HAVE_HARDLOCKUP_DETECTOR_PERF ||
+> > > HAVE_HARDLOCKUP_DETECTOR_BUDDY || HAVE_HARDLOCKUP_DETECTOR_ARCH
+> >
+> > This is exactly what I do not want. It would just move the check
+> > somewhere else. But it would make the logic harder to understand.
+> 
+> Hmmm. To me, it felt easier to understand by moving this into the
+> "HAVE_HARDLOCKUP_DETECTOR_BUDDY". To me it was pretty easy to say "if
+> an architecture defined its own arch-specific watchdog then buddy
+> can't be enabled" and that felt like it fit cleanly within the
+> "HAVE_HARDLOCKUP_DETECTOR_BUDDY" definition. It got rid of _a lot_ of
+> other special cases / checks elsewhere and felt quite a bit cleaner to
+> me. I only had to think about the conflict between the "buddy" and
+> "nmi" watchdogs once when I understood
+> "HAVE_HARDLOCKUP_DETECTOR_BUDDY".
 
---rvbzj4d27cgjtg4p
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I see. My problem with this approach was that the dependencies between
+the 4 alternative implementations were too distributed. It was
+necessary read many definitions to understand what was possible and
+what was not possible. And it is even more complicated when
+cscope does not support Kconfig.
 
-On Tue, Jun 13, 2023 at 11:25:12AM -0700, Stephen Boyd wrote:
-> Quoting Maxime Ripard (2023-06-13 05:14:25)
-> > On Mon, Jun 12, 2023 at 05:10:35PM -0700, Stephen Boyd wrote:
-> > > Quoting Sebastian Reichel (2023-05-26 10:10:56)
-> > > > diff --git a/drivers/clk/clk-composite.c b/drivers/clk/clk-composit=
-e.c
-> > > > index edfa94641bbf..66759fe28fad 100644
-> > > > --- a/drivers/clk/clk-composite.c
-> > > > +++ b/drivers/clk/clk-composite.c
-> > > > @@ -119,7 +119,10 @@ static int clk_composite_determine_rate(struct=
- clk_hw *hw,
-> > > >                         if (ret)
-> > > >                                 continue;
-> > > > =20
-> > > > -                       rate_diff =3D abs(req->rate - tmp_req.rate);
-> > > > +                       if (req->rate >=3D tmp_req.rate)
-> > > > +                               rate_diff =3D req->rate - tmp_req.r=
-ate;
-> > > > +                       else
-> > > > +                               rate_diff =3D tmp_req.rate - req->r=
-ate;
-> > >=20
-> > > This problem is widespread
-> > >=20
-> > >  $ git grep abs\(.*- -- drivers/clk/ | wc -l
-> > >  52
-> > >=20
-> > > so we may have a bigger problem here. Maybe some sort of coccinelle
-> > > script or smatch checker can be written to look for abs() usage with =
-an
-> > > unsigned long type or a subtraction expression. This may also be worse
-> > > after converting drivers to clk_hw_forward_rate_request() and
-> > > clk_hw_init_rate_request() because those set the rate to ULONG_MAX.
-> > > +Maxime for that as an FYI.
-> >=20
-> > We set max_rate to ULONG_MAX in those functions, and I don't think we
-> > have a lot of driver that will call clk_round_rate on the max rate, so
-> > we should be somewhat ok?
->=20
-> Good point. I haven't looked to see if any drivers are using the
-> max_rate directly. Hopefully they aren't.
+Also the above solves the buddy detector which is global.
 
-I had a quick grep for 'req->max_rate' under drivers/clk and there's no
-driver using abs on that field.
+The same conflict has PERF which has arch-specific dependencies.
+Maybe, it can be disabled by a conflict in the arch/Kconfig.
+But then the PERF dependencies would be split into 3 config
+files: arch/Kconfig, lib/Kconfig.debug, arch/Kconfig/.
 
-Maxime
+Anyway, HAVE_*_BUDDY and HAVE_*_PERF should behave the same.
+Both should either explicitly conflict with HAVE_*_ARCH
+and HAVE_NMI_WATCHDOG. Or they both should be enabled when
+they are supported by the architecture and just ignored when
+choosing the final implementation.
 
---rvbzj4d27cgjtg4p
-Content-Type: application/pgp-signature; name="signature.asc"
+My wish was to have consistent naming:
 
------BEGIN PGP SIGNATURE-----
+   + HAVE_HARDLOCKUP_DETECTOR_<impl> set when the the architecture
+       supports the particular implementation.
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZImWPgAKCRDj7w1vZxhR
-xWqqAQDtRJu+7X2t9w8kMiWSgFzQ9bh/myP2kVaGllLA7Ryp4gEA8nCo9oZhnPp0
-paQV2Ot+629yys6nYCty3z7AzXB2Jw4=
-=Dq2e
------END PGP SIGNATURE-----
+  + HARDLOCKUP_DETECTOR_<impl> set when the implementation will
+       be used (built).
 
---rvbzj4d27cgjtg4p--
+
+Step aside:
+
+It seems that we have entered into a bike shedding mode.
+The following questions come to my mind:
+
+   1. Does this patchset improve the current state?
+
+   2. Maybe, it is not black&white. Is it possible to summarize
+      what exactly got better and what got worse?
+
+Maybe, there is no need to do bike-shedding about every step
+if the final result is reasonable and the steps are not
+completely wrong.
+
+I just followed my intuition and tried to do some changes step
+by step. I got lost many times so maybe the steps are not
+ideal. Anyway, the steps helped me to understand the logic
+and stay reasonably confident that they did not change
+the behavior.
+
+I could rework the patchset. But I first need to know what
+exactly is bad in the result. And eventually if there is more
+logical way how to end there.
+
+Best Regards,
+Petr
