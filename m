@@ -2,83 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 011B872F3BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 06:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A746972F3C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 06:50:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242532AbjFNEtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 00:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39364 "EHLO
+        id S242611AbjFNEuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 00:50:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231937AbjFNEth (ORCPT
+        with ESMTP id S242627AbjFNEtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 00:49:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C7F10CC;
-        Tue, 13 Jun 2023 21:49:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F2D361466;
-        Wed, 14 Jun 2023 04:49:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CA4CC433C0;
-        Wed, 14 Jun 2023 04:49:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686718175;
-        bh=pbzb0xFNNW0u7m7s+rM8lFJaPjyJzD071PFKZTs/J/A=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=UM+oe/97PR4O1Hi+cZGwPwSNt6JUCfiE0bw7oltchUs+diqjB6VVn5/4KeuRMLMW5
-         eUFtHPKWelJK+r2aHwtBq09I25HiWUdOozz+lP6D5dllb/jaFQiUFmVnE4JGDX3i7O
-         V9Guu6jdin8C0KNJLS6+pY8ZRnyiuS6MPiFbSVd5tgODhFUFx4VI7awcPZHsPi5EOn
-         gY9GM4zxSgnsFeejG8HRUT5k9I8EyDII6Jb6Maxp1kYDsWXm2+ggVd3W1as3saiYXU
-         ZlG8QGUno+oWcR/VCGccifklYfE0TVqlQMWERcIFK172T/QTr44xLm54qIkWnD0EHU
-         th6NT0EiQQ/Dg==
-Message-ID: <84f1c51c-86f9-04b3-0cd1-f685ebee7592@kernel.org>
-Date:   Wed, 14 Jun 2023 13:49:31 +0900
+        Wed, 14 Jun 2023 00:49:49 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128CE1BDA;
+        Tue, 13 Jun 2023 21:49:47 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-6666b89ffaeso7006b3a.1;
+        Tue, 13 Jun 2023 21:49:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686718186; x=1689310186;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=c2bOk4R1NepPNFBwDvNUahQEGtGsBtFkPcwg9R+k3TQ=;
+        b=JNl9OPt2dRoQrG2iUdxlAZawfZUMpP/ZsEla+fPkDihi+DWW2zVZYiEFqYnYcAR0L7
+         vhSjaBsNZbKUVgFGhKg2sFbM0e2Xn1F2kS+r7AzQPftCPBMKt1nYWxXrkvUkAP4IDsxO
+         EEnhjiETEyiNSO/IqD3X41HA0rwAjh8EayIzMr8Pcd6E1jAufReRfWbnP4O9MDmjkhpb
+         OHGTuQzapAXFFq+Wa1dQhL+0sV40j/Wzo5vkv+CtUE+BGRmjmhfZpe5GrmGg5WjODr5f
+         F9QoLbTWnfeVy4+fifJtTAO7hhxSus3yg/N4CrjSs/ulIluqBEY9FJ7c+5H/Oe6rdQNw
+         1gfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686718186; x=1689310186;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c2bOk4R1NepPNFBwDvNUahQEGtGsBtFkPcwg9R+k3TQ=;
+        b=l3jVWPXBtRTOjXqvuXooFXhnusRulmhqA8NXIe7FPQZ5wvFm0/GfjbbTtTJu/JOqR8
+         gu7qoDqabcU4tQ+oeHeU0dOcjsERVtFT2eL5k3AI2UYQj1qOuEJ+MGOj9qazXMCQ21lL
+         FBVv6wNMe3yodq/gL4p/7jbPn7fwmEU+Kanpi0GEjf++ByQpFYjr1GEBLn1XnoVsDtFR
+         sIKPur0MdkBqeKDzWjvcdVxN7HohgRNwgYQecW8RSY2jkQ/eb3P4QWnM+Z3ePn8AqGkV
+         VX1W1FxMJBZd7M2Acf1/CvXD25ZA6r24wuGKQKKEX16IwEnds7vxPcXgj6A7RYQ6H2xs
+         mMYA==
+X-Gm-Message-State: AC+VfDyN5NVlBWxWRnlS6Vt0l/6+BhEkXIiObf9mxYgxCqj4arI9Bl2b
+        E7eG/jtlsxqtqYdVLYwHefg=
+X-Google-Smtp-Source: ACHHUZ6R0k9M0NnQwTsbdDJv7NzcZtrEeKsxx/WftQzVqV36MPH9Xhk6d3AZwD9BLP9W+Pn2aO5hDA==
+X-Received: by 2002:a17:903:41c2:b0:1b3:d8ac:8db3 with SMTP id u2-20020a17090341c200b001b3d8ac8db3mr7206982ple.6.1686718186520;
+        Tue, 13 Jun 2023 21:49:46 -0700 (PDT)
+Received: from hoboy.vegasvil.org ([2601:640:8200:e:e2d5:5eff:fea5:802f])
+        by smtp.gmail.com with ESMTPSA id l2-20020a170902f68200b001b3be6c08adsm5848333plg.282.2023.06.13.21.49.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 21:49:45 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 21:49:38 -0700
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Subject: Re: [PATCH net-next v2 2/2] net: micrel: Schedule work to read
+ seconds for lan8841
+Message-ID: <ZIlG4otXfQ7uhMsc@hoboy.vegasvil.org>
+References: <20230613094526.69532-1-horatiu.vultur@microchip.com>
+ <20230613094526.69532-3-horatiu.vultur@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: Fwd: Waking up from resume locks up on sr device
-To:     Joe Breuer <linux-kernel@jmbreuer.net>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Linux Power Management <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Hardening <linux-hardening@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux SCSI <linux-scsi@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-References: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
- <5513e29d-955a-f795-21d6-ec02a2e2e128@gmail.com>
- <ZIQ6bkau3j6qGef8@duo.ucw.cz>
- <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com>
- <02e4f87a-80e8-dc5d-0d6e-46939f2c74ac@acm.org>
- <b2cf6d96-a55a-d444-d22e-e9b3945ba43f@jmbreuer.net>
-Content-Language: en-US
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <b2cf6d96-a55a-d444-d22e-e9b3945ba43f@jmbreuer.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230613094526.69532-3-horatiu.vultur@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,63 +75,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/11/23 18:05, Joe Breuer wrote:
-> I'm the reporter of this issue.
-> 
-> I just tried this patch against 6.3.4, and it completely fixes my
-> suspend/resume issue.
-> 
-> The optical drive stays usable after resume, even suspending/resuming
-> during playback of CDDA content works flawlessly and playback resumes
-> seamlessly after system resume.
-> 
-> So, from my perspective: Good one!
+On Tue, Jun 13, 2023 at 11:45:26AM +0200, Horatiu Vultur wrote:
+> @@ -3840,6 +3847,12 @@ static void lan8841_ptp_enable_processing(struct kszphy_ptp_priv *ptp_priv,
+>  			       LAN8841_PTP_INSERT_TS_32BIT,
+>  			       LAN8841_PTP_INSERT_TS_EN |
+>  			       LAN8841_PTP_INSERT_TS_32BIT);
+> +
+> +		/* Schedule the work to read the seconds, which will be used in
+> +		 * the received timestamp
+> +		 */
+> +		schedule_delayed_work(&ptp_priv->seconds_work,
+> +				      nsecs_to_jiffies(LAN8841_GET_SEC_LTC_DELAY));
 
-In place of Bart's fix, could you please try this patch ?
+Why not do this in the PTP kworker thread?
 
-diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
-index b80e68000dd3..a81eb4f882ab 100644
---- a/drivers/ata/libata-eh.c
-+++ b/drivers/ata/libata-eh.c
-@@ -4006,9 +4006,32 @@ static void ata_eh_handle_port_resume(struct
-ata_port *ap)
-        /* tell ACPI that we're resuming */
-        ata_acpi_on_resume(ap);
+The thread's scheduling can be easily tuned with chrt to give it
+appropriate priority, but work can't.
 
--       /* update the flags */
-        spin_lock_irqsave(ap->lock, flags);
-+
-+       /* Update the flags */
-        ap->pflags &= ~(ATA_PFLAG_PM_PENDING | ATA_PFLAG_SUSPENDED);
-+
-+       /*
-+        * Resuming the port will trigger a rescan of the ATA device(s)
-+        * connected to it. Before scheduling the rescan, make sure that
-+        * the associated scsi device(s) are fully resumed as well.
-+        */
-+       ata_for_each_link(link, ap, HOST_FIRST) {
-+               ata_for_each_dev(dev, link, ENABLED) {
-+                       struct scsi_device *sdev = dev->sdev;
-+
-+                       if (!sdev)
-+                               continue;
-+                       if (scsi_device_get(sdev))
-+                               continue;
-+
-+                       spin_unlock_irqrestore(ap->lock, flags);
-+                       device_pm_wait_for_dev(&ap->tdev,
-+                                              &sdev->sdev_gendev);
-+                       scsi_device_put(sdev);
-+                       spin_lock_irqsave(ap->lock, flags);
-+               }
-+       }
-        spin_unlock_irqrestore(ap->lock, flags);
- }
- #endif /* CONFIG_PM */
+Also, If you have seconds thread, then you don't have to defer the
+received frames.
 
-Thanks !
-
--- 
-Damien Le Moal
-Western Digital Research
-
+Thanks,
+Richard
