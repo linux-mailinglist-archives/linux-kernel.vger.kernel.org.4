@@ -2,93 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0693572F46F
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 08:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1A272F47D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 08:14:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243034AbjFNGKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 02:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34856 "EHLO
+        id S242141AbjFNGOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 02:14:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234356AbjFNGKs (ORCPT
+        with ESMTP id S243050AbjFNGOF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 02:10:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F4AE55;
-        Tue, 13 Jun 2023 23:10:47 -0700 (PDT)
+        Wed, 14 Jun 2023 02:14:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB581BE3;
+        Tue, 13 Jun 2023 23:14:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A107D63D8D;
-        Wed, 14 Jun 2023 06:10:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7329EC433C8;
-        Wed, 14 Jun 2023 06:10:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686723046;
-        bh=8V/Fk/7WEzGUAQBYpatFHYZXl7f2hEpMm3NyHxwcdMQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o4ymrVeDx/Z9BoPgMy9b53mv0nv6rkNygWU8u3ClW08BJBBxrpAXpj4J7scKfq+sT
-         9Ij223+czfOKEi5lNsW7zlliUlWcYkULLVdWcFnmk1J6yzttqXsAqXYwpXHiXkrPti
-         9BJQjmA4zbAB+pcRWFs+e2buDjIU2VVUoTY41ZlI=
-Date:   Wed, 14 Jun 2023 08:10:42 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        kernel test robot <oliver.sang@intel.com>,
-        kernel test robot <lkp@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        =?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] usb: ch9: Replace 1-element array with flexible array
-Message-ID: <2023061434-scenic-observer-d1d4@gregkh>
-References: <20230613210400.never.078-kees@kernel.org>
- <ZIjzGCMWrar3kf1L@work>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6421A63DBD;
+        Wed, 14 Jun 2023 06:14:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F5D6C433CD;
+        Wed, 14 Jun 2023 06:14:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686723241;
+        bh=gKtrtIqzZJoEk6ijfzdhgV+HQxM5jhk7xprFoURO0JM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=H2r0vx2LGQQyw19AhfkRLBx0RW0eL1OK9TtVh3CpZGktkKfPcWjNa9Kha87oDBHYJ
+         Zhz+1dlpE7DDMG5Rk9DPdEbCXbQjz3bl7RVN4MOS7uVarXb8B1sQySCZ7B2/9YBDYy
+         bWwKoJ/OXOR+I+kcLDX8GDODGFXdxmA0nWw5lm6S7BGbqYX1l4Ur5Di8DR63q4QUxL
+         3zvODZVMEkRqeYOGt+1x7Tv6mbJ+MxBc/TkMbJXHV/MNAwSBkaKAubU433Bu7zkjA8
+         am0zD+rwOSYPg+atIZFBO6SgL9tfErJKNXsPEqxIl79QJAcs2cl00cViWXdLU+xgyu
+         ta/KvDCLhzJ3A==
+Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-786e8de85c1so503991241.1;
+        Tue, 13 Jun 2023 23:14:01 -0700 (PDT)
+X-Gm-Message-State: AC+VfDykUL3Quwvwl/Ybfn/+B7+W+n6zypZ4D9y3G72B8BL9IApbJvxu
+        cY1RulrHMFm91oEx9Y58iH8JMGMQOXXO03nsTmk=
+X-Google-Smtp-Source: ACHHUZ4vqXimisQGWZrncZnp4O3Mb6P9lJW4fWcpmyBbfqrFix7TZ+nNTuq2mkhec+rZw/J5LGOYIIEVD09ISg0wZhM=
+X-Received: by 2002:a4a:c4c4:0:b0:558:bec2:c854 with SMTP id
+ g4-20020a4ac4c4000000b00558bec2c854mr8570147ooq.5.1686723220046; Tue, 13 Jun
+ 2023 23:13:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZIjzGCMWrar3kf1L@work>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230612090713.652690195@infradead.org> <20230612093537.693926033@infradead.org>
+In-Reply-To: <20230612093537.693926033@infradead.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 14 Jun 2023 15:13:03 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARwAaw_22AjsheMtNwpVgF7FtKxh08mkg3cP=bY2016hw@mail.gmail.com>
+Message-ID: <CAK7LNARwAaw_22AjsheMtNwpVgF7FtKxh08mkg3cP=bY2016hw@mail.gmail.com>
+Subject: Re: [PATCH v3 04/57] kbuild: Drop -Wdeclaration-after-statement
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     torvalds@linux-foundation.org, keescook@chromium.org,
+        gregkh@linuxfoundation.org, pbonzini@redhat.com, nathan@kernel.org,
+        ndesaulniers@google.com, nicolas@fjasle.eu,
+        catalin.marinas@arm.com, will@kernel.org, vkoul@kernel.org,
+        trix@redhat.com, ojeda@kernel.org, mingo@redhat.com,
+        longman@redhat.com, boqun.feng@gmail.com, dennis@kernel.org,
+        tj@kernel.org, cl@linux.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
+        42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
+        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
+        john.johansen@canonical.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
+        rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
+        tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
+        luc.vanoostenryck@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 04:52:08PM -0600, Gustavo A. R. Silva wrote:
-> On Tue, Jun 13, 2023 at 02:04:04PM -0700, Kees Cook wrote:
-> > With "-fstrict-flex-arrays=3" enabled, UBSAN_BOUNDS no longer pretends
-> > 1-element arrays are unbounded. Walking wData will trigger a warning,
-> > so make it a proper flexible array. Add a union to keep the struct size
-> > identical for userspace in case anything was depending on the old size.
-> > 
-> > Reported-by: kernel test robot <oliver.sang@intel.com>
-> > Closes: https://lore.kernel.org/oe-lkp/202306102333.8f5a7443-oliver.sang@intel.com
-> > Fixes: df8fc4e934c1 ("kbuild: Enable -fstrict-flex-arrays=3")
-> 
-> I always have mixed feelings about a 'Fixes' tag applied to a commit
-> like this (one that enables a compiler option that avoids the introduction
-> of buggy code), when we are addressing the potentially buggy code that
-> the option is inteded to prevent. (thinkingface)
+On Mon, Jun 12, 2023 at 6:39=E2=80=AFPM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
+>
+> With the advent on scope-based resource management it comes really
+> tedious to abide by the contraints of -Wdeclaration-after-statement.
 
-Yeah, the original code here is not incorrect, it's that you added a new
-build warning, so this is more like an "update" :)
+Where is the context of Linus' suggested-by?
 
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: kernel test robot <lkp@intel.com>
-> > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> > Cc: Dan Williams <dan.j.williams@intel.com>
-> > Cc: "Jó Ágila Bitsch" <jgilab@gmail.com>
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> 
-> Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+I do not know where this came from.
+I suddenly got a huge v3 in my mailbox.
 
-Odd that checkpatch.pl doesn't cc: the usb lists for this file.  I'll go
-update the MAINTAINERS file with this location...
 
-thanks,
+I see an equivalent patch submitted last year:
+https://lore.kernel.org/lkml/Y1w031iI6Ld29IVT@p183/
 
-greg k-h
+Linus rejected it. Did he change his mind?
+
+
+
+> It will still be recommeneded to place declarations at the start of a
+> scope where possible, but it will no longer be enforced.
+
+If you remove the warning, we will not be able to
+detect code that opts out the recommendation
+for no good reason.
+
+
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
