@@ -2,97 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3120172F4D3
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 08:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C11A672F4D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 08:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243158AbjFNGaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 02:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42810 "EHLO
+        id S243176AbjFNGaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 02:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243148AbjFNG3f (ORCPT
+        with ESMTP id S243194AbjFNG3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 02:29:35 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178121FDD
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 23:29:27 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4QgwW86gX5zBR9Zh
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 14:29:24 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1686724164; x=1689316165; bh=klrFd4m/LXdoMGxRTnZu0esLRgA
-        FT+1tJ+pjxp3tsB0=; b=NbQNkOjN3Hq7r4uDFUsqSI0dVzvCb0dk9hFctJvCWeI
-        VXqOfnKaqGYIGG9xNCXNZ79dQ42LreK1K+PhVYD3u/hvME+RJ7yd0P0FzlzA+xPt
-        fzn39gnuhe+hXIaF+/usVbkaT1WIDc1Bi9XDZLyg7pVvn0BLayxd2cw1IWmVZsEj
-        crIhkkzGgSMonolTPg9qxR4+7zMTsRSdKhqL32i/9xI4Gwz/reWxWzk4W/cHK4uq
-        izPgoW6ICqgL+P6uA+dpIGaIUpLhFahe72fCB/nKxtTsmZWu/VF8K8p8wb1+EDVf
-        NMK6eAgG7BzeXQTSRnM4yxGvup86iKecCEmY7KU5ZhA==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id kSEH0qrAKzEz for <linux-kernel@vger.kernel.org>;
-        Wed, 14 Jun 2023 14:29:24 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4QgwW83Nz8zBQgpC;
-        Wed, 14 Jun 2023 14:29:24 +0800 (CST)
+        Wed, 14 Jun 2023 02:29:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442C31BF7;
+        Tue, 13 Jun 2023 23:29:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E979563DEF;
+        Wed, 14 Jun 2023 06:29:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D9C5C433C8;
+        Wed, 14 Jun 2023 06:29:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686724178;
+        bh=XjFkOsOx183EvSiM4yPrENjUW2d5opZ5TvQfHk7+D2E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XnX11RI911zmZAW2F67s3+Ymqh1WyrS9FAGLruYi0rzwQOXU1+S0hh65U7iPNXoq6
+         chqapxeFWuQPWe1xw5png9URTFBluyLfk4L59UjPan9xuJTRHK//t2Z5ie2yzGNTva
+         qtQi48csnlK0bKeNPyWNQ7KX8SMFwBcnhVywwMAmbDknwoN451G2FPeFgN+O75pBm3
+         WtTXZEDZE2FCRdCej0zaWKFjud0zNmD8JJuXe2p307imyZZdCdixaF6gKTcbWD0OOt
+         9+GJw+FhGue1elde/UvtQ6Neflo/LSA/woAWF7Btga+5DatyoY4t6prX187y6cupLw
+         qW86pY+AZP7aQ==
+Date:   Wed, 14 Jun 2023 08:29:29 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Jan Kara <jack@suse.cz>, Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Amir Goldstein <amir73il@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Neil Brown <neilb@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Theodore T'so <tytso@mit.edu>, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Steve French <sfrench@samba.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Tom Talpey <tom@talpey.com>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-mm@kvack.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org
+Subject: Re: [PATCH v4 2/9] fs: add infrastructure for multigrain inode
+ i_m/ctime
+Message-ID: <20230614-fanal-infamieren-b9c106e37b73@brauner>
+References: <20230518114742.128950-1-jlayton@kernel.org>
+ <20230518114742.128950-3-jlayton@kernel.org>
+ <20230523100240.mgeu4y46friv7hau@quack3>
+ <bf0065f2c9895edb66faeacc6cf77bd257088348.camel@kernel.org>
+ <20230523124606.bkkhwi6b67ieeygl@quack3>
+ <11dc42c327c243ea1def211f352cb4fc38094cc0.camel@kernel.org>
 MIME-Version: 1.0
-Date:   Wed, 14 Jun 2023 14:29:24 +0800
-From:   xuanzhenggang001@208suo.com
-To:     davem@davemloft.net, dsahern@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com
-Cc:     x86@kernel.org, hpa@zytor.com, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] bpf: Remove unneeded variable
-In-Reply-To: <e980bbb2536d4c35ce90a4666b3e8bf6@208suo.com>
-References: <20230610124403.36396-1-denghuilong@cdjrlc.com>
- <e980bbb2536d4c35ce90a4666b3e8bf6@208suo.com>
-User-Agent: Roundcube Webmail
-Message-ID: <f65f9d0caf6a315f21eb09e7a29a8189@208suo.com>
-X-Sender: xuanzhenggang001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <11dc42c327c243ea1def211f352cb4fc38094cc0.camel@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following coccicheck warning:
+On Tue, Jun 13, 2023 at 09:09:29AM -0400, Jeff Layton wrote:
+> On Tue, 2023-05-23 at 14:46 +0200, Jan Kara wrote:
+> > On Tue 23-05-23 06:40:08, Jeff Layton wrote:
+> > > On Tue, 2023-05-23 at 12:02 +0200, Jan Kara wrote:
+> > > > 
+> > > > So there are two things I dislike about this series because I think they
+> > > > are fragile:
+> > > > 
+> > > > 1) If we have a filesystem supporting multigrain ts and someone
+> > > > accidentally directly uses the value of inode->i_ctime, he can get bogus
+> > > > value (with QUERIED flag). This mistake is very easy to do. So I think we
+> > > > should rename i_ctime to something like __i_ctime and always use accessor
+> > > > function for it.
+> > > > 
+> > > 
+> > > We could do this, but it'll be quite invasive. We'd have to change any
+> > > place that touches i_ctime (and there are a lot of them), even on
+> > > filesystems that are not being converted.
+> > 
+> > Yes, that's why I suggested Coccinelle to deal with this.
+> 
+> 
+> I've done the work to convert all of the accesses of i_ctime into
+> accessor functions in the kernel. The current state of it is here:
+> 
+>    
+> https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/commit/?h=ctime
+> 
+> As expected, it touches a lot of code, all over the place. So far I have
+> most of the conversion in one giant patch, and I need to split it up
+> (probably per-subsystem).
 
-arch/x86/net/bpf_jit_comp32.c:1274:5-8: Unneeded variable: "cnt".
+Yeah, you have time since it'll be v6.6 material.
 
-Signed-off-by: Zhenggang Xuan <xuanzhenggang001@208suo.com>
----
-  arch/x86/net/bpf_jit_comp32.c | 3 +--
-  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> What's the best way to feed this change into mainline? Should I try to
+> get subsystem maintainers to pick these up, or are we better off feeding
+> this in via a separate branch?
 
-diff --git a/arch/x86/net/bpf_jit_comp32.c 
-b/arch/x86/net/bpf_jit_comp32.c
-index 429a89c5468b..bc71329ac5ed 100644
---- a/arch/x86/net/bpf_jit_comp32.c
-+++ b/arch/x86/net/bpf_jit_comp32.c
-@@ -1271,7 +1271,6 @@ static void emit_epilogue(u8 **pprog, u32 
-stack_depth)
-  static int emit_jmp_edx(u8 **pprog, u8 *ip)
-  {
-      u8 *prog = *pprog;
--    int cnt = 0;
-
-  #ifdef CONFIG_RETPOLINE
-      EMIT1_off32(0xE9, (u8 *)__x86_indirect_thunk_edx - (ip + 5));
-@@ -1280,7 +1279,7 @@ static int emit_jmp_edx(u8 **pprog, u8 *ip)
-  #endif
-      *pprog = prog;
-
--    return cnt;
-+    return 0;
-  }
-
-  /*
+I would prefer if we send them all through the vfs tree since trickle
+down conversions are otherwise very painful and potentially very slow.
