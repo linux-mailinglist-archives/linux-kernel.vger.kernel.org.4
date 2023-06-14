@@ -2,142 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E82E72FD74
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EFC272FD6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:53:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244311AbjFNLxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 07:53:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33506 "EHLO
+        id S244296AbjFNLw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 07:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244306AbjFNLxE (ORCPT
+        with ESMTP id S231313AbjFNLwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 07:53:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD441BEF
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 04:52:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686743538;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=IbztZ9tLRVL6/DOJgUmI8+AFs+8EIklKEWPZn0/Wnkk=;
-        b=hj4UVMs0PRx/QQxxGjFkfokRx4QtaRxPDEFqzk2cNuO/UmvZhMJLafEO/YG4lENFK8HZKy
-        CzG2pPR9kdFjR70LFuzTob7N/LuREm70C+vqBJQ1jOnQ3xaQBmrojZ3lyAWBCKKd3zGtw3
-        sHOS7gWTPkVdDimQ/2tttK7h4nUQ4Rc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-446-VIR5cu0VN8-MlefhfREMng-1; Wed, 14 Jun 2023 07:52:12 -0400
-X-MC-Unique: VIR5cu0VN8-MlefhfREMng-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4213D3C0F234;
-        Wed, 14 Jun 2023 11:52:12 +0000 (UTC)
-Received: from max-t490s.redhat.com (unknown [10.39.208.37])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 519F7492B06;
-        Wed, 14 Jun 2023 11:52:09 +0000 (UTC)
-From:   Maxime Coquelin <maxime.coquelin@redhat.com>
-To:     xieyongji@bytedance.com, jasowang@redhat.com, mst@redhat.com,
-        xuanzhuo@linux.alibaba.com
-Cc:     gregkh@linuxfoundation.org, sheng.zhao@bytedance.com,
-        parav@nvidia.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        Maxime Coquelin <maxime.coquelin@redhat.com>
-Subject: [PATCH] vduse: fix NULL pointer dereference
-Date:   Wed, 14 Jun 2023 13:52:06 +0200
-Message-Id: <20230614115206.800118-1-maxime.coquelin@redhat.com>
+        Wed, 14 Jun 2023 07:52:55 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2086.outbound.protection.outlook.com [40.107.243.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F4A1BF3;
+        Wed, 14 Jun 2023 04:52:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SKGjutLgHbV5Obwzh9+ZYr7Mxi0TAku/QB5ghO8lJy4VByeANhhzoVqLmPkXV/2dJznzithchbdyu+ccOMdoxHZYDRyq5+t7Xaz7FaCUKgImiRX5cYGYk6sG+cTjx4hvqYAIte8nRZNvJDp/7sQrFmB0QY/4aslWwfIP6fnnOwQE1hvT7/P/PhKpZHwFtTpANpaqQmDpUa0x+5RQDcijAP7p57fh0EodyrFhbcEHuUrHrnkdjRM+x7QUfOTIz2LCelaeL69f0WBngNnwZnixBtXlrZodPEscrqKVqp8tv2la7rswMAAkziTW1kFnC9yToQX0fyx7y08xbQjtXE/tEA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lwkUQq7bXC3QFqlS4jAf+w/NtuH95RA0DfP2hnm5J9I=;
+ b=GynbzcOxEEHzOGC0nhnuc12xo5JAoo1143yDM9WRFvUUsWu4sLEK7PWgh42bfEiE/A4m8+Ge3+eDiEPGpM+Y+/HZ/2JWT/Dfg0mCUzCBD2B/WqrjfkxRFACT1eJgYhNy8SS47a6SCn3qt19tbBf+wlQfW4CbcINaT76zQ+93uVpjEA0+C4J6Wo5XhT26nwp5Im1xZi07m7mrzOSjHSw/wFAm5M91bnZn3OwSm5mW6S0jyNVG/8fYPPj16b9i56K80u7xTU0MbZuPiGm8/5jpfFqMtWAwIt5orjLXzQ+QmTbD2adJjmqzQdgOnjGB7CP5YcTvZ2BVKDW0EyljqA4Z4g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lwkUQq7bXC3QFqlS4jAf+w/NtuH95RA0DfP2hnm5J9I=;
+ b=g3evwp6zeTT6nEuQQTE9ulwMnm4o0tRWilMJ8/ZL1TDVHQqygzSQ1p2RKUOKv/6O+d3S0Hnd5yEbL63lj1PrVj7OOht0hudFsI6PJYMHK9ICfBRTrqDYM4uzd03kvpzeEnkRHPVLs0P6daoxvDLstr3PLDwYFASg8rshG0OwLmOUNEEraohUh+G8hu6c5lE9MEptcmFQVK80/NhupR8PzIkHXY6tWrb/jVoMrbDrPuSscj6WieDVPZw1b59rS1xebF0BZi3D2O86w+mMBHSe2gGzMqBWFCa5/6DsTkdM9/Kc46G3h1N2TPYeuJeDzU4wWpBfIlKYqbOp2VYsOswpIw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by IA1PR12MB8358.namprd12.prod.outlook.com (2603:10b6:208:3fa::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Wed, 14 Jun
+ 2023 11:52:52 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab%7]) with mapi id 15.20.6477.037; Wed, 14 Jun 2023
+ 11:52:52 +0000
+Date:   Wed, 14 Jun 2023 08:52:49 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
+Subject: Re: [PATCH v3 00/10] Add Intel VT-d nested translation
+Message-ID: <ZImqERPS0UV6mBsG@nvidia.com>
+References: <20230511145110.27707-1-yi.l.liu@intel.com>
+ <BN9PR11MB52765FA8255FB8F8A1A6F11B8C419@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZHTyNgnjj/bOkIgi@nvidia.com>
+ <BN9PR11MB5276B15B4709F595B2A5A84A8C5AA@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB5276B15B4709F595B2A5A84A8C5AA@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-ClientProxiedBy: BYAPR05CA0048.namprd05.prod.outlook.com
+ (2603:10b6:a03:74::25) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|IA1PR12MB8358:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2cede1bd-078e-4a22-7d7b-08db6ccde206
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UbzHHhqDNw/hiwiKPjw/slMzHdGhcI5Jj2v/rRiQw6DPfbtSRYG0ExUYnUp146LqsZmF4cwVvllThHlTiqaqM7lsZG0gtmSpvs3lhhp3W0uWOLqGCwM6r1B0Zkg5Grkdbwxlw9232bmb7Fpib9wsoiCByXX70ACO6hmW2UV7eIa0E7rUlRabohUfFh8kRy+tpW0H9LP6ophvofMRdVkfPQ/PdbFcTtXnnrdQ/uxkXzDo8LnyIJWYPxf3OyuSEhJkCcnqcmHOikk9G7YKoG6LBD2yEkGWh78bJsSV57XfiRU8z3nIMvKkw8RaTfeNn5AvvfgywR/0qNLfeUkg/5TOyrc052VYU1WwNPkWqxSyvB0FI/Me1V232HgF98fLnhwAAW7lpESWVayHKIYHsFJtmqZdbT9DWv612W7hk72WZNG9KgYlA+NhG79xS8A5dvb7RKkxkk4Qz6xBDvWgR86dknzT3RMfHuHL3fRIXN+joT1CGkdybyqV4Tp2NFDeu1oaFQaxvqZOiwEYzcVPuqSSW0DT1jTVEgtS78L0jjCXNDG7Xu42PkFKlLEJtl0SkgE+
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(366004)(396003)(136003)(376002)(451199021)(26005)(186003)(6512007)(6506007)(38100700002)(86362001)(7416002)(2616005)(2906002)(4744005)(6486002)(66946007)(66556008)(66476007)(41300700001)(316002)(6666004)(6916009)(4326008)(36756003)(54906003)(478600001)(5660300002)(8936002)(8676002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?59D7FWtHi5QvKDstFNEIW5B7d+YNnto6hm+p1GGNLCb1nAqIQ7W0VnmqPIY2?=
+ =?us-ascii?Q?+4HySCCt0CzgCa4toV+Id53H6kIkL12l/k2cRT0BjcN26goSjK8PqR+UJOra?=
+ =?us-ascii?Q?l3nK7LeCMEnSlC0AxngzemUI+rWWlxZtj1apoQSs3mrNeY7fiy9scUhlLIwb?=
+ =?us-ascii?Q?R67V61EXXVIY3LBdBOSmCDBqe57DPuRMlj8u/j+ZjJoR9twOHvyeMgseGqqg?=
+ =?us-ascii?Q?q+UqMvFywaGv7H46zA/ASMdvQMqYozkwkHuaW7+FdLcP+A5Yrtmzk6sSzSiE?=
+ =?us-ascii?Q?XF8oxNSoJH5LD05NKuUzonYsxT181VDhHUfXWTK4asYD3sbAVH654i7kI6hF?=
+ =?us-ascii?Q?zAVdUAWeZEjyG/Ny7dYHisM1h/QsIHYfs6TVuSve2a0nFDJtwSI49YH1ZCtd?=
+ =?us-ascii?Q?ATXuZLRKHpv8poU9wxt22ZvUAa5+8v3jdBc5YnnscpJJswjcCt6o+znyvEa7?=
+ =?us-ascii?Q?PPesU8jkksqc+0j+pU+3TZWFf8PYZZ4OXT5Eslcf3QEcqUl/hox1m68jJc4X?=
+ =?us-ascii?Q?kYd6h21OsEVtcu2ebFpfD3K6xhI1A/LsH5p3aHWrneOoE2Xnk7IGsSn10TjW?=
+ =?us-ascii?Q?0vNt2x9cmsbQwKyidx9uqGlxTN5yxaTCh7sGo5HYOV8j71+CC2ERu43WRgwf?=
+ =?us-ascii?Q?1n72UYsB8S+NWTxVv6mmEaddl+OG/0dwhg3aHflu9C4jpGisU6VJNQi5yT9u?=
+ =?us-ascii?Q?FdMqB1zhmvg5NLtSm7VGGIJEImGqUwKz+JDxNhNovaY3173E98TTv8POV8pl?=
+ =?us-ascii?Q?2vvNOQjQyboAfL23COP1jdbd5v+Z3XqjnA0Es9qb4uhqOC7JOxPQP0O3lg/m?=
+ =?us-ascii?Q?bn8xflSB4A9EFp1A4Yal+jY+vvYQKGlEM9HmyktKEs8Z5dHk7yM86NGqPwny?=
+ =?us-ascii?Q?w5nae1pYbi7dc5HFM8eiDZsraP2qKKMDcYrsHeWqfZWhWtOK76OuG4pJIsvK?=
+ =?us-ascii?Q?wFx35+AbZ0hOA0EbiVGrrCnZnOnqs0xErtrSY/099qYeRptp6x8RJ/SVw3+b?=
+ =?us-ascii?Q?HRi+4xJ2XzGbemztxr+/brJpt+kq1Lnt9z1XkHfUN2SXwD6TuClgVSYK69p/?=
+ =?us-ascii?Q?/YvxEU8niE4uF1vXMZS80qrhZH0wBFdUoHEWAIRfDNNWxvW1RezVQ5iT762h?=
+ =?us-ascii?Q?NixXJwOBRA9uEPFjjBTIwEwDDYef8wtnpBw3CMvaA9JE6BHVILPVLz+79NUB?=
+ =?us-ascii?Q?IkRISfefts3uV+JUQ6nLCDQRKFdfiQqK3HRFspUIbCnhIGJL0rz/hX13Ow4g?=
+ =?us-ascii?Q?dPa/tUUqoeN/lnM6r5t3ddZiZ37b3GS0CJMXxxA7zFl80ZwX+3X+bQyl87Gm?=
+ =?us-ascii?Q?8OCRt7Cx41m7NB+hdPSTAPTuiUhoGtZ+nESGVX0nzbDK3OVt1/2CuvfVrmjv?=
+ =?us-ascii?Q?q7jMpCLei6AyduR65P3h9LnrmwmeLoGbQ10tS+CpHTojtWmIVgzJ77C/gwIO?=
+ =?us-ascii?Q?q/SgErfzlUA6A2ajbCMithgJ2EsvDZU4p6LzlqwtnQrHHgIVDqAiO6nj8nqJ?=
+ =?us-ascii?Q?wVRGf91dyKMRNQ0pxNf19SG3pcOY/kbKrxuThRLPqFR/Rp46w8pvkBP6MDpK?=
+ =?us-ascii?Q?zJ0GMAt+sXZ8VkdYTEgOaj4xsfVJLhza2Wkf6Ony?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2cede1bd-078e-4a22-7d7b-08db6ccde206
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 11:52:52.2656
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: s21TLjNjIlRhwI7c57C705+tQx/GUinN/rcgFSSxADK1YlRH+zei02LXo6EVXVta
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8358
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vduse_vdpa_set_vq_affinity callback can be called
-with NULL value as cpu_mask when deleting the vduse
-device.
+On Wed, Jun 14, 2023 at 08:07:30AM +0000, Tian, Kevin wrote:
 
-This patch clears virtqueue's IRQ affinity mask value
-instead of dereferencing NULL cpu_mask.
+> think of a scenario where the vbios memory is shared by multiple qemu
+> instances then RW allows a malicious VM to modify the shared content
+> then potentially attacking other VMs.
 
-[ 4760.952149] BUG: kernel NULL pointer dereference, address: 0000000000000000
-[ 4760.959110] #PF: supervisor read access in kernel mode
-[ 4760.964247] #PF: error_code(0x0000) - not-present page
-[ 4760.969385] PGD 0 P4D 0
-[ 4760.971927] Oops: 0000 [#1] PREEMPT SMP PTI
-[ 4760.976112] CPU: 13 PID: 2346 Comm: vdpa Not tainted 6.4.0-rc6+ #4
-[ 4760.982291] Hardware name: Dell Inc. PowerEdge R640/0W23H8, BIOS 2.8.1 06/26/2020
-[ 4760.989769] RIP: 0010:memcpy_orig+0xc5/0x130
-[ 4760.994049] Code: 16 f8 4c 89 07 4c 89 4f 08 4c 89 54 17 f0 4c 89 5c 17 f8 c3 cc cc cc cc 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 83 fa 08 72 1b <4c> 8b 06 4c 8b 4c 16 f8 4c 89 07 4c 89 4c 17 f8 c3 cc cc cc cc 66
-[ 4761.012793] RSP: 0018:ffffb1d565abb830 EFLAGS: 00010246
-[ 4761.018020] RAX: ffff9f4bf6b27898 RBX: ffff9f4be23969c0 RCX: ffff9f4bcadf6400
-[ 4761.025152] RDX: 0000000000000008 RSI: 0000000000000000 RDI: ffff9f4bf6b27898
-[ 4761.032286] RBP: 0000000000000000 R08: 0000000000000008 R09: 0000000000000000
-[ 4761.039416] R10: 0000000000000000 R11: 0000000000000600 R12: 0000000000000000
-[ 4761.046549] R13: 0000000000000000 R14: 0000000000000080 R15: ffffb1d565abbb10
-[ 4761.053680] FS:  00007f64c2ec2740(0000) GS:ffff9f635f980000(0000) knlGS:0000000000000000
-[ 4761.061765] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 4761.067513] CR2: 0000000000000000 CR3: 0000001875270006 CR4: 00000000007706e0
-[ 4761.074645] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[ 4761.081775] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[ 4761.088909] PKRU: 55555554
-[ 4761.091620] Call Trace:
-[ 4761.094074]  <TASK>
-[ 4761.096180]  ? __die+0x1f/0x70
-[ 4761.099238]  ? page_fault_oops+0x171/0x4f0
-[ 4761.103340]  ? exc_page_fault+0x7b/0x180
-[ 4761.107265]  ? asm_exc_page_fault+0x22/0x30
-[ 4761.111460]  ? memcpy_orig+0xc5/0x130
-[ 4761.115126]  vduse_vdpa_set_vq_affinity+0x3e/0x50 [vduse]
-[ 4761.120533]  virtnet_clean_affinity.part.0+0x3d/0x90 [virtio_net]
-[ 4761.126635]  remove_vq_common+0x1a4/0x250 [virtio_net]
-[ 4761.131781]  virtnet_remove+0x5d/0x70 [virtio_net]
-[ 4761.136580]  virtio_dev_remove+0x3a/0x90
-[ 4761.140509]  device_release_driver_internal+0x19b/0x200
-[ 4761.145742]  bus_remove_device+0xc2/0x130
-[ 4761.149755]  device_del+0x158/0x3e0
-[ 4761.153245]  ? kernfs_find_ns+0x35/0xc0
-[ 4761.157086]  device_unregister+0x13/0x60
-[ 4761.161010]  unregister_virtio_device+0x11/0x20
-[ 4761.165543]  device_release_driver_internal+0x19b/0x200
-[ 4761.170770]  bus_remove_device+0xc2/0x130
-[ 4761.174782]  device_del+0x158/0x3e0
-[ 4761.178276]  ? __pfx_vdpa_name_match+0x10/0x10 [vdpa]
-[ 4761.183336]  device_unregister+0x13/0x60
-[ 4761.187260]  vdpa_nl_cmd_dev_del_set_doit+0x63/0xe0 [vdpa]
+qemu would have to map the vbios as MAP_PRIVATE WRITE before the iommu
+side could map it writable, so this is not a real worry.
 
-Fixes: 28f6288eb63d ("vduse: Support set_vq_affinity callback")
-Cc: xieyongji@bytedance.com
-
-Signed-off-by: Maxime Coquelin <maxime.coquelin@redhat.com>
----
- drivers/vdpa/vdpa_user/vduse_dev.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
-index 5f5c21674fdc..cdca94e85762 100644
---- a/drivers/vdpa/vdpa_user/vduse_dev.c
-+++ b/drivers/vdpa/vdpa_user/vduse_dev.c
-@@ -726,7 +726,11 @@ static int vduse_vdpa_set_vq_affinity(struct vdpa_device *vdpa, u16 idx,
- {
- 	struct vduse_dev *dev = vdpa_to_vduse(vdpa);
- 
--	cpumask_copy(&dev->vqs[idx]->irq_affinity, cpu_mask);
-+	if (cpu_mask)
-+		cpumask_copy(&dev->vqs[idx]->irq_affinity, cpu_mask);
-+	else
-+		cpumask_clear(&dev->vqs[idx]->irq_affinity);
-+
- 	return 0;
- }
- 
--- 
-2.40.1
-
+Jason
