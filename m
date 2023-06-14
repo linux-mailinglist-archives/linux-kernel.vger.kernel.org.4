@@ -2,247 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B278730A5D
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 00:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9F72730A61
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 00:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236272AbjFNWEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 18:04:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52474 "EHLO
+        id S236405AbjFNWGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 18:06:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234331AbjFNWD6 (ORCPT
+        with ESMTP id S235020AbjFNWGT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 18:03:58 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B61C2695
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 15:03:57 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id d75a77b69052e-3f9b7de94e7so79901cf.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 15:03:57 -0700 (PDT)
+        Wed, 14 Jun 2023 18:06:19 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379792695;
+        Wed, 14 Jun 2023 15:06:18 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id 6a1803df08f44-62fd844ad58so11391706d6.2;
+        Wed, 14 Jun 2023 15:06:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686780236; x=1689372236;
+        d=gmail.com; s=20221208; t=1686780377; x=1689372377;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7hBNzsqDA+ibibh6Quql+9MMSvftWOYFNSxUTSCrW9A=;
-        b=waQ12cIx29ruzEBjWasuZPAkcbUNyESfpjzBm/sofM4Ba5fd80/qEqEH4Vtn2MnlC/
-         McZM0JA2FfDbO9D9AXqxHMs3myciAe8MfnZXprubiA76wy41vYvDD0L/Kc0b9sOVoKXc
-         2VKpI5gWnv7/meQpohmXNBqKvSUF44HRQ2y16Bm1+aShU6ECmhMNDVb1S2ox0WJAUaQE
-         EjVOmvj4B4i2OUvgw9nsc4j1YuwKCpWQaeCYYSW84FtPT66HP1QOGtVvvasaPyKdq5lA
-         dpk7wHCKKjPEeVbhGwL/uUw05HrzlVMF2FYZ7kN61ib1JlXLlREgoD0qQnEpD+k4lxVw
-         z0gQ==
+        bh=yt0E+gE2c9tWb/FVFSjcNFqAVT4Jc03x3okyqywpWl4=;
+        b=O5SLdcqpfWwpVOckirFEmrcRZlcJj77388x4poZQKK/D06VAYUEuHV2EyAt209z5+T
+         s+RSwLwuZymPaNUVfdzs1ZyQRJbv+5jAuusJig/2tVNs2h/L9rTCwYcYPNyPzK61utjK
+         gAGoSQ9k5ooGmDMNt2JxBHzOUfbPY8ezsJX4pepO8WfGUMV9MMZKCDoZRc67DbZUHMeU
+         GUSydhmVFoq1Z+91lyF3rYRzD0RWGRV3wRbb7Nt4icogluBOBeWheve7UhvyaLkwulLl
+         rHxnEFjaj4rB+e0/JkZMhK49D7gDfcBd7cyequtKtZ76x8tAxf9xfnwAX703+1K/rU/2
+         4Xxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686780236; x=1689372236;
+        d=1e100.net; s=20221208; t=1686780377; x=1689372377;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7hBNzsqDA+ibibh6Quql+9MMSvftWOYFNSxUTSCrW9A=;
-        b=gBjjYRmKIfEfzW+GkkRU5t9yaKVC4zvlVg8yOzDwlUWB95e+7qcXaQVzWME5giIxUt
-         LUJwH5bI/oRxAypRHvpbRbb/4ROIN3MG0XJPC33jnToT4gPEIT8ZPP/NPTD63YKWY+y8
-         Bm4z90ApydBN55N9mFTNRxHflNqsyNVWd9zFiUV0Dw5c52WZjSl7qTYlG07OSZQMuus8
-         6wzGwxkly3+80Jx3RtQ6p356INF1iEtRLVxUQUeDxkBl+V61LVPTJSRFnV47KZ4iKGOr
-         UnRrIAzkGyZulYdzn77ReK+F+9DJq7EtxdjedfE1tQkGLTXMBRDAGoyXx5llIo5QkMdW
-         xuRA==
-X-Gm-Message-State: AC+VfDwNnUsIgocTinHLGvei4ziNmW4FrRNyHWJRH1OB70gNEJ97E0Qi
-        rw639aV4FTyBbmfinD1I6E3ZDBHoHqd6dQHxPJkYEA==
-X-Google-Smtp-Source: ACHHUZ42EHdoeQupLHIFSGWKznpqdzVEvwG490POEyFe+l0583GQrW1UuyjwqUW9Bb3LViSR+R/UaE2LjNzK64sFqE0=
-X-Received: by 2002:a05:622a:1108:b0:3f8:5b2:aef5 with SMTP id
- e8-20020a05622a110800b003f805b2aef5mr12457qty.29.1686780235563; Wed, 14 Jun
- 2023 15:03:55 -0700 (PDT)
+        bh=yt0E+gE2c9tWb/FVFSjcNFqAVT4Jc03x3okyqywpWl4=;
+        b=CQTAZNb0coeQZAHMAaNxikU7f9SkLIZFAJtDairr9hLC3zsB5YUaMccCyTNziqfAvw
+         7NawsKVvl1brslQF8M8vG0rvKYR/SDlhrqOgPw9W+lcgEFQ+lStoIclH/rtuWciJC7Ld
+         7tDZl007Qi9PndIbJflqT16zf+lk3nPFYwcGppbIAehkyRXb9OUHKCF+72MvVF839PHg
+         4+NsIbWfZ9KmDRRnDfeJ/ebLfUFpE+EpVvjI0DLs7cNbqrogCRYsLG0mHcw7a+k/4VCA
+         LuXzHM5Vh7z0bxwsxqqEatcfrHVp4lPp+dxEyK9qh+i/9o7QVS1cJjVTs7tAg6TQCyyZ
+         eeog==
+X-Gm-Message-State: AC+VfDwoUIwbFTwcNt6ORS/Gz03ceB1sNC71jmHsu0cBdyByBgldtoeg
+        m7nQKZ0ByviaM2c833ihwZDTyG+/N4JshSdEbbPS8Y4KJAo=
+X-Google-Smtp-Source: ACHHUZ7QSUKHz6eXKVGjn16hSJRIcttn0Cs9hdfy+fflsRqL6m/Cu2KmL77E7KQyQdWpf2q+eOyHfZdmyWR1J0JjSb8=
+X-Received: by 2002:a05:6214:2a83:b0:62b:6615:22ce with SMTP id
+ jr3-20020a0562142a8300b0062b661522cemr20081429qvb.33.1686780377150; Wed, 14
+ Jun 2023 15:06:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230614151625.2077-1-yangjihong1@huawei.com> <CAP-5=fUf0+7HwZ+AHUR0nRD5QnfPn9_CPMEdJZP_5goPfrPB+Q@mail.gmail.com>
-In-Reply-To: <CAP-5=fUf0+7HwZ+AHUR0nRD5QnfPn9_CPMEdJZP_5goPfrPB+Q@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 14 Jun 2023 15:03:43 -0700
-Message-ID: <CAP-5=fVOXjjcusjv858SOGrnNgE2w2sb7zS=0sZUpdFfR1T_GA@mail.gmail.com>
-Subject: Re: [PATCH] perf top & record: Fix segfault when default cycles event
- is not supported
-To:     Yang Jihong <yangjihong1@huawei.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, adrian.hunter@intel.com,
-        kan.liang@linux.intel.com, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20230614074904.29085-1-herve.codina@bootlin.com>
+ <20230614074904.29085-8-herve.codina@bootlin.com> <CAHp75Vcur=H_2mBm5Ztuvd7Jnvmr6+tvCbEkFtmaVLsEjXr8NQ@mail.gmail.com>
+ <20230614114214.1371485e@bootlin.com> <CAHp75VcmW2StPqb_LtKFyNyJ2+jz3c19zNRDiSuGs06Bseq04w@mail.gmail.com>
+ <20230614223418.0d7e355d@bootlin.com>
+In-Reply-To: <20230614223418.0d7e355d@bootlin.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 15 Jun 2023 01:05:40 +0300
+Message-ID: <CAHp75VfFyDzr4qHNssXZ8RLy0gxMWdjBgac4JLd7grRLEG-vyw@mail.gmail.com>
+Subject: Re: [PATCH v4 07/13] minmax: Introduce {min,max}_array()
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 9:18=E2=80=AFAM Ian Rogers <irogers@google.com> wro=
-te:
->
-> On Wed, Jun 14, 2023 at 8:18=E2=80=AFAM Yang Jihong <yangjihong1@huawei.c=
-om> wrote:
-> >
-> > The perf-record and perf-top call parse_event() to add a cycles event t=
-o
-> > an empty evlist. For the system that does not support hardware cycles
-> > event, such as QEMU, the evlist is empty due to the following code proc=
-ess:
-> >
-> >   parse_event(evlist, "cycles:P" or ""cycles:Pu")
-> >     parse_events(evlist, "cycles:P")
-> >       __parse_events
-> >         ...
-> >         ret =3D parse_events__scanner(str, &parse_state);
-> >         // ret =3D 0
-> >         ...
-> >         ret2 =3D parse_events__sort_events_and_fix_groups()
-> >         if (ret2 < 0)
-> >           return ret;
-> >         // The cycles event is not supported, here ret2 =3D -EINVAL,
-> >         // Here return 0.
-> >         ...
-> >         evlist__splice_list_tail(evlist)
-> >         // The code here does not execute to, so the evlist is still em=
-pty.
-> >
-> > A null pointer occurs when the content in the evlist is accessed later.
-> >
-> > Before:
-> >
-> >   # perf list hw
-> >
-> >   List of pre-defined events (to be used in -e or -M):
-> >
-> >   # perf record true
-> >   libperf: Miscounted nr_mmaps 0 vs 1
-> >   WARNING: No sample_id_all support, falling back to unordered processi=
-ng
-> >   perf: Segmentation fault
-> >   Obtained 1 stack frames.
-> >   [0xc5beff]
-> >   Segmentation fault
-> >
-> > Solution:
-> >   If cycles event is not supported, try to fall back to cpu-clock event=
-.
-> >
-> > After:
-> >   # perf record true
-> >   [ perf record: Woken up 1 times to write data ]
-> >   [ perf record: Captured and wrote 0.006 MB perf.data ]
-> >   #
-> >
-> > Fixes: 7b100989b4f6 ("perf evlist: Remove __evlist__add_default")
-> > Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
->
-> Thanks, useful addition. The cpu-clock fall back wasn't present before
-> 7b100989b4f6 so is the fixes tag correct?
+On Wed, Jun 14, 2023 at 11:34=E2=80=AFPM Herve Codina <herve.codina@bootlin=
+.com> wrote:
+> On Wed, 14 Jun 2023 14:51:43 +0300
+> Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> > On Wed, Jun 14, 2023 at 12:42=E2=80=AFPM Herve Codina <herve.codina@boo=
+tlin.com> wrote:
+> > > On Wed, 14 Jun 2023 12:02:57 +0300
+> > > Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> > > > On Wed, Jun 14, 2023 at 10:49=E2=80=AFAM Herve Codina <herve.codina=
+@bootlin.com> wrote:
 
-Hmm... it should be coming from evsel__fallback:
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/p=
-erf/util/evsel.c?h=3Dtmp.perf-tools-next#n2840
-so we shouldn't duplicate that logic. The question is why we're not
-doing the fallback.
+...
 
-Thanks,
-Ian
+> > > > > +       typeof(__array[0] + 0) __element =3D __array[--__len];   =
+ \
+> > > >
+> > > > Do we need the ' + 0' part?
+> > >
+> > > Yes.
+> > >
+> > > __array can be an array of const items and it is legitimate to get th=
+e
+> > > minimum value from const items.
+> > >
+> > > typeof(__array[0]) keeps the const qualifier but we need to assign __=
+element
+> > > in the loop.
+> > > One way to drop the const qualifier is to get the type from a rvalue =
+computed
+> > > from __array[0]. This rvalue has to have the exact same type with onl=
+y the const
+> > > dropped.
+> > > '__array[0] + 0' was a perfect canditate.
+> >
+> > Seems like this also deserves a comment. But if the series is accepted
+> > as is, it may be done as a follow up.
+> >
+>
+> Finally not so simple ...
+> I did some deeper tests and the macros need to be fixed.
+>
+> I hope this one (with comments added) is correct:
+> --- 8 ---
+> /*
+>  * Do not check the array parameter using __must_be_array().
+>  * In the following legit use-case where the "array" passed is a simple p=
+ointer,
+>  * __must_be_array() will return a failure.
+>  * --- 8< ---
+>  * int *buff
+>  * ...
+>  * min =3D min_array(buff, nb_items);
+>  * --- 8< ---
+>  *
+>  * The first typeof(&(array)[0]) is needed in order to support arrays of =
+both
+>  * 'int *buff' and 'int buf[N]' types.
+>  *
+>  * typeof(__array[0] + 0) used for __element is needed as the array can b=
+e an
+>  * array of const items.
+>  * In order to discard the const qualifier use an arithmetic operation (r=
+value).
 
-> Wrt segv, I'm beginning to think that we should always forcibly create
-> a core PMU even if we can't find one one in sysfs, my guess is that is
-> what triggers the segv.
+
+>  * This arithmetic operation discard the const but also can lead to an in=
+teger
+
+discards
+
+>  * promotion. For instance, a const s8 __array[0] lead to an int __elemen=
+t due
+
+leads
+
+>  * to the promotion.
+>  * In this case, simple min() or max() operation fails (type mismatch).
+>  * Use min_t() or max_t() (op_t parameter) enforcing the type in order to=
+ avoid
+>  * the min() or max() failure.
+
+This part perhaps can be avoided. See below.
+
+>  */
+> #define __minmax_array(op_t, array, len) ({                     \
+>         typeof(&(array)[0]) __array =3D (array);                  \
+>         typeof(len) __len =3D (len);                              \
+>         typeof(__array[0] + 0) __element =3D __array[--__len];    \
+>         while (__len--)                                         \
+>                 __element =3D op_t(typeof(__array[0]), __element, __array=
+[__len]); \
+
+But can't we instead have typeof(+(array[0])) in the definition of __elemen=
+t?
+There are also other possible solutions: a) _Generic() with listed
+const types to move them to non-const, and b) __auto_type (which is
+supported by GCC 4.9 and clang, but not in the C11 standard).
+
+>         __element; })
+
+...
+
+> Can you give me your feedback on this last version ?
+
+Sure!
+
+> If you are ok, it will be present in the next iteration of the series.
+> Otherwise, as a last ressort, I will drop the {min,max}_array() and switc=
+h
+> back to the specific min/max computation in IIO inkern.c
 >
-> evlist__add_default doesn't really explain what the function is doing
-> and default can have >1 meaning. Perhaps, evlist__add_cycles.
->
-> Thanks,
-> Ian
->
-> > ---
-> >  tools/perf/builtin-record.c |  4 +---
-> >  tools/perf/builtin-top.c    |  3 +--
-> >  tools/perf/util/evlist.c    | 18 ++++++++++++++++++
-> >  tools/perf/util/evlist.h    |  1 +
-> >  4 files changed, 21 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> > index aec18db7ff23..29ae2b84a63a 100644
-> > --- a/tools/perf/builtin-record.c
-> > +++ b/tools/perf/builtin-record.c
-> > @@ -4161,9 +4161,7 @@ int cmd_record(int argc, const char **argv)
-> >                 record.opts.tail_synthesize =3D true;
-> >
-> >         if (rec->evlist->core.nr_entries =3D=3D 0) {
-> > -               bool can_profile_kernel =3D perf_event_paranoid_check(1=
-);
-> > -
-> > -               err =3D parse_event(rec->evlist, can_profile_kernel ? "=
-cycles:P" : "cycles:Pu");
-> > +               err =3D evlist__add_default(rec->evlist);
-> >                 if (err)
-> >                         goto out;
-> >         }
-> > diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-> > index c363c04e16df..798cb9252a5f 100644
-> > --- a/tools/perf/builtin-top.c
-> > +++ b/tools/perf/builtin-top.c
-> > @@ -1665,8 +1665,7 @@ int cmd_top(int argc, const char **argv)
-> >                 goto out_delete_evlist;
-> >
-> >         if (!top.evlist->core.nr_entries) {
-> > -               bool can_profile_kernel =3D perf_event_paranoid_check(1=
-);
-> > -               int err =3D parse_event(top.evlist, can_profile_kernel =
-? "cycles:P" : "cycles:Pu");
-> > +               int err =3D evlist__add_default(top.evlist);
-> >
-> >                 if (err)
-> >                         goto out_delete_evlist;
-> > diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-> > index 7ef43f72098e..60efa762405e 100644
-> > --- a/tools/perf/util/evlist.c
-> > +++ b/tools/perf/util/evlist.c
-> > @@ -287,6 +287,24 @@ struct evsel *evlist__add_aux_dummy(struct evlist =
-*evlist, bool system_wide)
-> >         return evsel;
-> >  }
-> >
-> > +int evlist__add_default(struct evlist *evlist)
-> > +{
-> > +       bool can_profile_kernel;
-> > +       int err;
-> > +
-> > +       can_profile_kernel =3D perf_event_paranoid_check(1);
-> > +       err =3D parse_event(evlist, can_profile_kernel ? "cycles:P" : "=
-cycles:Pu");
-> > +       if (err)
-> > +               return err;
-> > +
-> > +       if (!evlist->core.nr_entries) {
-> > +               pr_debug("The cycles event is not supported, trying to =
-fall back to cpu-clock event\n");
-> > +               return parse_event(evlist, "cpu-clock");
-> > +       }
-> > +
-> > +       return 0;
-> > +}
-> > +
-> >  #ifdef HAVE_LIBTRACEEVENT
-> >  struct evsel *evlist__add_sched_switch(struct evlist *evlist, bool sys=
-tem_wide)
-> >  {
-> > diff --git a/tools/perf/util/evlist.h b/tools/perf/util/evlist.h
-> > index 664c6bf7b3e0..47eea809ee91 100644
-> > --- a/tools/perf/util/evlist.h
-> > +++ b/tools/perf/util/evlist.h
-> > @@ -116,6 +116,7 @@ int arch_evlist__cmp(const struct evsel *lhs, const=
- struct evsel *rhs);
-> >
-> >  int evlist__add_dummy(struct evlist *evlist);
-> >  struct evsel *evlist__add_aux_dummy(struct evlist *evlist, bool system=
-_wide);
-> > +int evlist__add_default(struct evlist *evlist);
-> >  static inline struct evsel *evlist__add_dummy_on_all_cpus(struct evlis=
-t *evlist)
-> >  {
-> >         return evlist__add_aux_dummy(evlist, true);
-> > --
-> > 2.30.GIT
-> >
+> Sorry for this back and forth and this last minute detected bug.
+
+It's good that we have some tests (perhaps you can add something to
+unit test these)? Perhaps move your code to lib/test_minmax.c as KUnit
+module?
+
+--=20
+With Best Regards,
+Andy Shevchenko
