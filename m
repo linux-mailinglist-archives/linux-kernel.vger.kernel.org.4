@@ -2,118 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03743730954
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 22:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A7873095B
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 22:42:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233046AbjFNUmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 16:42:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58752 "EHLO
+        id S236520AbjFNUm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 16:42:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231852AbjFNUmN (ORCPT
+        with ESMTP id S235920AbjFNUmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 16:42:13 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD55295D;
-        Wed, 14 Jun 2023 13:41:35 -0700 (PDT)
-Received: from [192.168.1.141] ([37.4.248.58]) by mrelayeu.kundenserver.de
- (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MFKCV-1qKnhr0xDd-00FkkA; Wed, 14 Jun 2023 22:40:58 +0200
-Message-ID: <3452498b-b89c-c72d-d196-950520ed8c50@i2se.com>
-Date:   Wed, 14 Jun 2023 22:40:57 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH net resend] net: qca_spi: Avoid high load if QCA7000 is
- not available
-To:     Simon Horman <simon.horman@corigine.com>,
-        Stefan Wahren <stefan.wahren@chargebyte.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Wed, 14 Jun 2023 16:42:53 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802B9268B
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 13:42:18 -0700 (PDT)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35EJtEOa018110;
+        Wed, 14 Jun 2023 20:41:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2023-03-30; bh=PHe5HfxjOkcRnacOoCZlGZI8u+HsglkIVmO3NBIpEb8=;
+ b=Oc/Lq8ZjDXzr+arONZeMk3tXQjhxFPq2/fgtAOPLOJsmKtdo4SFaz/9zfUHcAZVPiXEj
+ nvQaLcwlWg55ZLe/gJLUCncJHmETlq56NkoTo0zInfBabGO3wdVzlqQkqnat4fkfeob9
+ NCtg1oObbGUe6PgDtVP2+ToXZR7Ib9xsROHwK1uBuEywCgglVhjUR1LhL233H1WAOxCX
+ 0FOHhFOC7jRSuR3CQ2nyVRXCXjsRgjLJs5eiNO6mrt2+FxNsJ1LySNFMIwws/5/8uC9V
+ fjAeiq0v5BcR8HwLBK+2Ee4B9vvTidC0SxeVVRFNXipvJZAA4je+xmQ4Vz27WlRM0qaX Xg== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r4h7d8jeq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 14 Jun 2023 20:41:16 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35EKYLXc008966;
+        Wed, 14 Jun 2023 20:41:15 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3r4fm6bquq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 14 Jun 2023 20:41:15 +0000
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35EKfEmi021978;
+        Wed, 14 Jun 2023 20:41:14 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3r4fm6bqtm-1;
+        Wed, 14 Jun 2023 20:41:14 +0000
+From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+        John Harrison <John.C.Harrison@Intel.com>,
+        Alan Previn <alan.previn.teres.alexis@intel.com>,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+        Michal Wajdeczko <michal.wajdeczko@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-References: <20230614111714.3612-1-stefan.wahren@chargebyte.com>
- <ZInxqMtr4Gk4Kz0V@corigine.com>
-Content-Language: en-US
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <ZInxqMtr4Gk4Kz0V@corigine.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:MBWMtSe0RlgtR4GS7ahkYpnqCeam0fqC+fQby5LzYsqtoo0yqF4
- ncMlaoZ9aYlDxv+mGIIRFh8J5sQlWn0d5tg7M847pVbskYOYfuf8el019Di08HFXPlGnXWK
- JRle2g6v/axneWk8TkuNe4z2KvQWgJezknQnOPw03Qe/XPblTenRJBG+mw5bAQCGLl2MriP
- wgcaV3uMBZjMJEF3PW5dg==
-UI-OutboundReport: notjunk:1;M01:P0:xEjrCgTC/PE=;1tcII32h7xg30xifKXCIzgP44f/
- xCFysj98luC2C009BHkWeLwsLQOmfwEJULRj51BOCDsb3UAEX6qx5cY/zeiFgR1wsVQPlnGh2
- bs8ZWjE32VtlRMSthcDmEivFhjDQtjO6ZL9lPDe7l/4XVpLq9EMcuCXFPcK0dU+vsAMv/jPMI
- R7m+Vrwh7Nt/+pr8bCAvyQm4AGdD2HW1sN6i5LsmY42Q+h1zS9i5dKjbnkMV0r4cBaC93qh2E
- gT9vgm1uPswWpvT2RhO9FS3VCaUFxbK93OINKIDqQu2AME4NCLpnGOMkLM6EjNR6I1nR0gHuT
- pSbaVaBs4LAoMuswwLwI9WN9p7hHLTHwfvl64Yi1Z91GLiSghvQooiBTs0R/2FnakEDqYpboC
- P1oriYcKBHonA+vu6VRZBVmhxynScplGRhRmyFxqMo6RPVp7poZ2zPJ+5KVs3x9js2RyeyxFw
- cHERfoCzQw9IOCsrFt6arG5OvHzi4QymzUmmVrmdsjEYq7GpAmirCzyX1gTYLwaOfBKwTQL3I
- YyTzeDhXUu1sNDQzrqF+sEGKCoxmGU2tZ3lP9hT2idHmzzHrHsj0tPCTtax9oDeD/aa6jloKd
- LtYJUFRwxmHldVy2gqoE81rkiGY/qm3Fl54RZ8C8btJgCsx50ENc/7hJd6KG38g1jyoxjRz38
- CtULlpz7GNO3WvDEDEtnrnB70EcZHlTJuBkvodIgAA==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Cc:     error27@gmail.com, dan.carpenter@linaro.org
+Subject: [PATCH next] drm/i915/huc: Fix missing error code in intel_huc_init()
+Date:   Wed, 14 Jun 2023 13:41:06 -0700
+Message-ID: <20230614204109.3071989-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.41.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-14_14,2023-06-14_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 phishscore=0
+ mlxscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306140181
+X-Proofpoint-ORIG-GUID: aW4V0k6qElqU-6NSCbtVSQLe_FsutlCL
+X-Proofpoint-GUID: aW4V0k6qElqU-6NSCbtVSQLe_FsutlCL
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Simon,
+Smatch warns:
+	drivers/gpu/drm/i915/gt/uc/intel_huc.c:388
+	    intel_huc_init() warn: missing error code 'err'
 
-Am 14.06.23 um 18:58 schrieb Simon Horman:
-> On Wed, Jun 14, 2023 at 01:17:14PM +0200, Stefan Wahren wrote:
->> In case the QCA7000 is not available via SPI (e.g. in reset),
->> the driver will cause a high load. The reason for this is
->> that the synchronization is never finished and schedule()
->> is never called. Since the synchronization is not timing
->> critical, it's safe to drop this from the scheduling condition.
->>
->> Signed-off-by: Stefan Wahren <stefan.wahren@chargebyte.com>
->> Fixes: 291ab06ecf67 ("net: qualcomm: new Ethernet over SPI driver for
->>   QCA7000")
-> 
-> Hi Stefan,
-> 
-> the Fixes should be on a single line.
-> 
-> Fixes: 291ab06ecf67 ("net: qualcomm: new Ethernet over SPI driver for QCA7000")
+When the allocation of VMAs fail: The value of err is zero at this
+point and it is passed to PTR_ERR and also finally returning zero which
+is success instead of failure.
 
-thanks for pointing out. Unfortunately this comes from the mail server, 
-which line warp here. I will try to use a different account. Sorry about 
-this mess :-(
+Fix this by adding the missing error code when VMA allocation fails.
 
-> 
->> ---
->>   drivers/net/ethernet/qualcomm/qca_spi.c | 3 +--
->>   1 file changed, 1 insertion(+), 2 deletions(-)
->>
->> diff --git a/drivers/net/ethernet/qualcomm/qca_spi.c
->>   b/drivers/net/ethernet/qualcomm/qca_spi.c
-> 
-> Likewise, the above two lines should be a single line.
-> Unfortunately it seems that because it is not git doesn't apply
-> this patch, which creates problems for automation linked to patchwork.
-> 
-> I think it would be best to repost after resolving these minor issues.
-> 
->> index bba1947792ea16..90f18ea4c28ba1 100644
->> --- a/drivers/net/ethernet/qualcomm/qca_spi.c
->> +++ b/drivers/net/ethernet/qualcomm/qca_spi.c
->> @@ -582,8 +582,7 @@ qcaspi_spi_thread(void *data)
->>   	while (!kthread_should_stop()) {
->>   		set_current_state(TASK_INTERRUPTIBLE);
->>   		if ((qca->intr_req == qca->intr_svc) &&
->> -		    (qca->txr.skb[qca->txr.head] == NULL) &&
->> -		    (qca->sync == QCASPI_SYNC_READY))
->> +		    !qca->txr.skb[qca->txr.head])
->>   			schedule();
->>   
->>   		set_current_state(TASK_RUNNING);
->>
-> 
+Fixes: 08872cb13a71 ("drm/i915/mtl/huc: auth HuC via GSC")
+Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+---
+Found using Static analysis with Smatch, only compile tested.
+---
+ drivers/gpu/drm/i915/gt/uc/intel_huc.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/gpu/drm/i915/gt/uc/intel_huc.c b/drivers/gpu/drm/i915/gt/uc/intel_huc.c
+index e0afd8f89502..ddd146265beb 100644
+--- a/drivers/gpu/drm/i915/gt/uc/intel_huc.c
++++ b/drivers/gpu/drm/i915/gt/uc/intel_huc.c
+@@ -384,6 +384,7 @@ int intel_huc_init(struct intel_huc *huc)
+ 
+ 		vma = intel_guc_allocate_vma(&gt->uc.guc, PXP43_HUC_AUTH_INOUT_SIZE * 2);
+ 		if (IS_ERR(vma)) {
++			err = PTR_ERR(vma);
+ 			huc_info(huc, "Failed to allocate heci pkt\n");
+ 			goto out;
+ 		}
+-- 
+2.41.0
+
