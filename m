@@ -2,186 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E51C72FBA8
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 12:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5672B72FBB0
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 12:52:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234687AbjFNKun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 06:50:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56204 "EHLO
+        id S235518AbjFNKv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 06:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbjFNKuk (ORCPT
+        with ESMTP id S243806AbjFNKvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 06:50:40 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1FE8E196;
-        Wed, 14 Jun 2023 03:50:36 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8DxSup7m4lkUhgFAA--.10726S3;
-        Wed, 14 Jun 2023 18:50:35 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxK8p6m4lkKIUaAA--.1634S3;
-        Wed, 14 Jun 2023 18:50:34 +0800 (CST)
-Message-ID: <dbf0d89f-717a-1f78-aef2-f30506751d4d@loongson.cn>
-Date:   Wed, 14 Jun 2023 18:50:34 +0800
+        Wed, 14 Jun 2023 06:51:52 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7481725
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 03:51:50 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f762b3227dso1160615e87.1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 03:51:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google; t=1686739909; x=1689331909;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7HcQg/AyzdVW/+cUds8z7t+ww39/I3wQ1QMKuN6hW7c=;
+        b=eqJzCvAgKola/j0t6fDI2UoVrzCQWl6xXkX2ivMDkt0FIqOrrU2DriXnqa9JMp25wh
+         o++aeyGPZmUdjZv8FvudL8c71k64fOKwLgAeiohuq/AVqJOv+0OrJ55Mk6/WKwFs87ju
+         YiYFKUq1gOZP/tXEHZJBHg+hcb3qGqNuWPLfo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686739909; x=1689331909;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7HcQg/AyzdVW/+cUds8z7t+ww39/I3wQ1QMKuN6hW7c=;
+        b=gRRKWw3zrqWDek8mnFqloU8ZF9W06fsW4HkWIY1aUIIf17i4yRI7h84K9bR3Hpt54U
+         AJvlSIRdQCYob5z04iYPw9dtpWxrh4VSAoM6yD8wHUxsX60tayLOSFAVBheCadEd5VrE
+         +z4jRzHwpbkcNNZkByBH38IivePzMwMplWTGR9eUAKKJSqKZCb/IxD0g/Y9tiAe6Liuo
+         9omQ7lQVzv1OKBwHrCiNZJf1mEwd3selFGavNcbvixHsp7G96Sk0dy6exedBE9lxdjO5
+         COGCH7LKHA5jWcsVo1VOHm9ChjOpfSSHsouCkSe6Wsr5QhvGGNMSvH2PM2ZLghHfgwws
+         hMhQ==
+X-Gm-Message-State: AC+VfDy6fEr+z0P0FjV+sF3Gr+HiADVezshzSi2rpJE2sFaMhwN442vg
+        KwogHb3TgdhTUuFD2GiX4Q4dQyVupPhOCC89LqGl9A==
+X-Google-Smtp-Source: ACHHUZ7+GAjiixypdk6QSEB77KRqd/GHKCl/WEudnKALKQynyI5F1qT0/pxh7mXd9YRJpYXe7zM8rg==
+X-Received: by 2002:a19:2d5a:0:b0:4f7:3ee8:eeda with SMTP id t26-20020a192d5a000000b004f73ee8eedamr465097lft.34.1686739908831;
+        Wed, 14 Jun 2023 03:51:48 -0700 (PDT)
+Received: from [172.16.11.116] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id q19-20020ac246f3000000b004f60d26e1d2sm2056057lfo.80.2023.06.14.03.51.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 03:51:48 -0700 (PDT)
+Message-ID: <c826b8a9-ed12-a6cc-d089-47adbc200f37@rasmusvillemoes.dk>
+Date:   Wed, 14 Jun 2023 12:51:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v7 2/8] PCI/VGA: Deal only with VGA class devices
-To:     Sui Jingfeng <15330273260@189.cn>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-fbdev@vger.kernel.org
-References: <20230613030151.216625-1-15330273260@189.cn>
- <20230613030151.216625-3-15330273260@189.cn>
-Content-Language: en-US
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <20230613030151.216625-3-15330273260@189.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxK8p6m4lkKIUaAA--.1634S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxXr43WFyxtr4ruFWDXr4xAFc_yoW5tr1xpF
-        yrGa45KrW8Ga4xW3y2qF18ZFy5ZFZ0ka4rtr42k34FkFWqkw1qqF95GFyYq343JrWkJF1I
-        qa1ayrnruanFgabCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUU9ab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
-        8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AK
-        xVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4
-        CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Y
-        z7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
-        AF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4l
-        IxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCw
-        CI42IY6I8E87Iv67AKxVWxJVW8Jr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsG
-        vfC2KfnxnUUI43ZEXa7IU88MaUUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 8/8] rtc: isl12022: implement support for the
+ #clock-cells DT property
+Content-Language: en-US, da
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
+ <20230613130011.305589-1-linux@rasmusvillemoes.dk>
+ <20230613130011.305589-9-linux@rasmusvillemoes.dk>
+ <ZIiKTXmrxBHw+gkG@smile.fi.intel.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <ZIiKTXmrxBHw+gkG@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 13/06/2023 17.25, Andy Shevchenko wrote:
+> On Tue, Jun 13, 2023 at 03:00:10PM +0200, Rasmus Villemoes wrote:
+>> If device tree implies that the chip's IRQ/F_OUT pin is used as a
+>> clock, expose that in the driver. For now, pretend it is a
+>> fixed-rate (32kHz) clock; if other use cases appear the driver can be
+>> updated to provide its own clk_ops etc.
+>>
+>> When the clock output is not used on a given board, one can prolong
+>> the battery life by ensuring that the FOx bits are 0. For the hardware
+>> I'm currently working on, the RTC draws 1.2uA with the FOx bits at
+>> their default 0001 value, dropping to 0.88uA when those bits are
+>> cleared.
+> 
+> ...
+> 
+>> +#define ISL12022_INT_FO_MASK	GENMASK(3, 0)
+>> +#define ISL12022_INT_FO_OFF	0x0
+>> +#define ISL12022_INT_FO_32K	0x1
+> 
+> A nit-pick. Are they decimal or bit fields? 
 
-On 2023/6/13 11:01, Sui Jingfeng wrote:
-> From: Sui Jingfeng <suijingfeng@loongson.cn>
->
-> Deal only with the VGA devcie(pdev->class == 0x0300), so replace the
-> pci_get_subsys() function with pci_get_class(). Filter the non-PCI display
-> device(pdev->class != 0x0300) out. There no need to process the non-display
-> PCI device.
->
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-> ---
->   drivers/pci/vgaarb.c | 22 ++++++++++++----------
->   1 file changed, 12 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/pci/vgaarb.c b/drivers/pci/vgaarb.c
-> index c1bc6c983932..22a505e877dc 100644
-> --- a/drivers/pci/vgaarb.c
-> +++ b/drivers/pci/vgaarb.c
-> @@ -754,10 +754,6 @@ static bool vga_arbiter_add_pci_device(struct pci_dev *pdev)
->   	struct pci_dev *bridge;
->   	u16 cmd;
->   
-> -	/* Only deal with VGA class devices */
-> -	if ((pdev->class >> 8) != PCI_CLASS_DISPLAY_VGA)
-> -		return false;
-> -
+-ENOPARSE. A number is a number. Its representation in C code may be
+decimal or hexadecimal (or...). And sure, 0 and 0x0 are different
+spellings of the same thing. The data sheet lists the possible values in
+terms of individual bits, so I suppose I could even do 0b0000 and
+0b0001, but that's too unusual (even if perfectly acceptable by gcc).
 
-Hi, here is probably a bug fixing.
+> To me seems like the 0x can be dropped.
 
-For an example, nvidia render only GPU typically has 0x0380.
+Can, but won't, a single hex digit is more natural way to represent a
+four-bit field.
 
-at its PCI class number, but  render only GPU should not participate in 
-the arbitration.
+>> +	ret = regmap_update_bits(regmap, ISL12022_REG_INT, ISL12022_INT_FO_MASK, ISL12022_INT_FO_32K);
+> 
+> Seems too long even for 100 limit.
+> Maybe:
+> 
+> 	ret = regmap_update_bits(regmap, ISL12022_REG_INT,
+> 				 ISL12022_INT_FO_MASK, ISL12022_INT_FO_32K);
 
-As it shouldn't snoop the legacy fixed VGA address.
+Sure.
 
-It(render only GPU) can not display anything.
-
-
-But 0x0380 >> 8 = 0x03, the filter  failed.
-
-
->   	/* Allocate structure */
->   	vgadev = kzalloc(sizeof(struct vga_device), GFP_KERNEL);
->   	if (vgadev == NULL) {
-> @@ -1500,7 +1496,9 @@ static int pci_notify(struct notifier_block *nb, unsigned long action,
->   	struct pci_dev *pdev = to_pci_dev(dev);
->   	bool notify = false;
->   
-> -	vgaarb_dbg(dev, "%s\n", __func__);
-> +	/* Only deal with VGA class devices */
-> +	if (pdev->class != PCI_CLASS_DISPLAY_VGA << 8)
-> +		return 0;
-
-So here we only care 0x0300, my initial intent is to make an optimization,
-
-nowadays sane display graphic card should all has 0x0300 as its PCI 
-class number, is this complete right?
-
-```
-
-#define PCI_BASE_CLASS_DISPLAY        0x03
-#define PCI_CLASS_DISPLAY_VGA        0x0300
-#define PCI_CLASS_DISPLAY_XGA        0x0301
-#define PCI_CLASS_DISPLAY_3D        0x0302
-#define PCI_CLASS_DISPLAY_OTHER        0x0380
-
-```
-
-Any ideas ?
-
->   	/* For now we're only intereted in devices added and removed. I didn't
->   	 * test this thing here, so someone needs to double check for the
-> @@ -1510,6 +1508,8 @@ static int pci_notify(struct notifier_block *nb, unsigned long action,
->   	else if (action == BUS_NOTIFY_DEL_DEVICE)
->   		notify = vga_arbiter_del_pci_device(pdev);
->   
-> +	vgaarb_dbg(dev, "%s: action = %lu\n", __func__, action);
-> +
->   	if (notify)
->   		vga_arbiter_notify_clients();
->   	return 0;
-> @@ -1534,8 +1534,8 @@ static struct miscdevice vga_arb_device = {
->   
->   static int __init vga_arb_device_init(void)
->   {
-> +	struct pci_dev *pdev = NULL;
->   	int rc;
-> -	struct pci_dev *pdev;
->   
->   	rc = misc_register(&vga_arb_device);
->   	if (rc < 0)
-> @@ -1545,11 +1545,13 @@ static int __init vga_arb_device_init(void)
->   
->   	/* We add all PCI devices satisfying VGA class in the arbiter by
->   	 * default */
-> -	pdev = NULL;
-> -	while ((pdev =
-> -		pci_get_subsys(PCI_ANY_ID, PCI_ANY_ID, PCI_ANY_ID,
-> -			       PCI_ANY_ID, pdev)) != NULL)
-> +	while (1) {
-> +		pdev = pci_get_class(PCI_CLASS_DISPLAY_VGA << 8, pdev);
-> +		if (!pdev)
-> +			break;
-> +
->   		vga_arbiter_add_pci_device(pdev);
-> +	}
->   
->   	pr_info("loaded\n");
->   	return rc;
-
--- 
-Jingfeng
+Rasmus
 
