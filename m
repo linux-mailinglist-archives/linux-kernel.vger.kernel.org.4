@@ -2,133 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F67A730802
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D2B673080E
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:21:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235989AbjFNTU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 15:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47188 "EHLO
+        id S233042AbjFNTVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 15:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232782AbjFNTUz (ORCPT
+        with ESMTP id S229496AbjFNTVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 15:20:55 -0400
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7D02137;
-        Wed, 14 Jun 2023 12:20:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1686770450; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=H9Used3f1rUY+MeicKUOFjtmWvhWi1ySBMGK4hWUDPfb0Ess51Zn1L0kn6oLa7KCES
-    c66bxClua+I0W/AsDuN7vDqJou5sP16oIUerksxvtAAwnCehoa1zGC3vLG0a8DSSHyAf
-    /BIjph+wwR9po5+II+ZzHDd1LG22ykP1nV/dGPvyGQirSC3k55Adm2sm2GqloUSe1Jyh
-    NB4rMBBxVDWjk+jqLQNmf6sGQgbwpJFXV7DlFm/Q40TbskPOtNx+WnWsH6CV1XwC1jVY
-    WLimTRJGQI76yJH6tL+sIs/KKXEKHMFEuPRuqVTiN7Obu2IlxT2NzirhXQ61olfVkxA8
-    AbHw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686770450;
-    s=strato-dkim-0002; d=strato.com;
-    h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
-    From:Subject:Sender;
-    bh=UluM9+M229bqxNKRVyMbYxl7B1w1kAZMQitydXUBD28=;
-    b=LX1+jTMNx6b/alGwho6Hc5NEj6rhNgW7VzcLoTy45n+tLx3E9Jd1de42Lc+YqMh17E
-    Z7PSbTJflgu4x8ax1kNF2QzDilYbbK+bkUq9ZGL1R4un3dWrAB4UHSwK/E58SWhtOsKQ
-    kL3gQCUIt8vYkMwrrVBqBYZF3YV0xmBqDxEPioYgqADH8hA1XXc5/ZGK+ebBa73/2b2T
-    hSXxmvRtxYn8YKIdWqJJDVRWkNVLd6e+K58iAEaDwejTNsEJChH/h9AjkPUHHUKxvLUz
-    YMQ6NFtNvX/RYnhfzM9skF0si3J+FKyearfD/sabWiV0OAHkA1YbRdbxaUnQdPGNTTSN
-    bjVA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686770450;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
-    From:Subject:Sender;
-    bh=UluM9+M229bqxNKRVyMbYxl7B1w1kAZMQitydXUBD28=;
-    b=g7syv8W2y35nAZX50kYrrm3tfoG++XJKz8f5p/rigy3BltRtK4vL5TMuYszF1dwtse
-    RufMsgIOEic/qkcj6bnu/5hJXDfChbQ1YUtMoyNbp5ZbOGjpxd9OkZtet9ivIrGu06eb
-    FAx4KHKGXyBQu369DaIsfZlL1KsfTSfwpA9+UktwehWNVeMpZgOTCEqi4fEyz3yF90gF
-    mn9vzsuG8Lo03aO7gBQTBYwvHyKOqF7znjlsZXi4dMnHw6dLt5YODu/4Ud3sU031qvFM
-    noCiVSW28yZqX/KCbbRKSsYpRfBFcf6wrhB72V2IzBcJFU23AHCT/BNL9KnsEFcQuyrq
-    JBdw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686770450;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
-    From:Subject:Sender;
-    bh=UluM9+M229bqxNKRVyMbYxl7B1w1kAZMQitydXUBD28=;
-    b=uujPduChBqw6UvhU+5eAOYzjNxBJui7UDaUDKg+a75Nab4ET2EAVTkP7v98EF9QCQf
-    hOP/8HcWMipJCyuAnwCw==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQjVd4CteZ/7jYgS+mLFY+H0JAn8u4xxmw=="
-Received: from [192.168.244.3]
-    by smtp.strato.de (RZmta 49.6.0 DYNA|AUTH)
-    with ESMTPSA id D0d0a8z5EJKo0ht
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 14 Jun 2023 21:20:50 +0200 (CEST)
-From:   Stephan Gerhold <stephan@gerhold.net>
-Date:   Wed, 14 Jun 2023 21:20:43 +0200
-Subject: [PATCH v2 2/2] of: reserved_mem: Use stable allocation order
+        Wed, 14 Jun 2023 15:21:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9352682
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 12:20:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686770454;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fd3UDbr2Nlwpbzx+9+5vMnQCL/akEJaw/zMcUhpGS2E=;
+        b=ZibbrmySBPKt41oh/S8uGR95Bop1+qo0YoDlN0/4BzeISsEQULpZymxz1Fm5+++lJdpRaV
+        qOBvO45Zd3JKwis0LO86feRDleIiMNAzp1KzCopdetr87+RG5jNfq4/aKU+wuyBYUAc4/P
+        Lpdoygk8bRNFz2Q9QyVx9Q48VWdnzgU=
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
+ [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-551-nRrmgRycNNSEQ89Btfic0Q-1; Wed, 14 Jun 2023 15:20:53 -0400
+X-MC-Unique: nRrmgRycNNSEQ89Btfic0Q-1
+Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-770222340cfso852921939f.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 12:20:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686770452; x=1689362452;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fd3UDbr2Nlwpbzx+9+5vMnQCL/akEJaw/zMcUhpGS2E=;
+        b=O0YZMLWUCDu1KfNXarmCQT2y7GW+R22QQKpW7m3zKk3ao8mKoDsxd6T9HizFz8HHmN
+         T4ekpX83ivw47AyZjSBdi1wDJHhnokOIN8H1qcRk8bB9Q98cmtBUsqhzkwJ9tsv9aymm
+         cv4kfjtSGy1anMNJUlj44rwPSyc4DanUKN2ccZTpK5cuhAbGCjcdAMSzR/lEJeboL85c
+         0yvVkfP4H3gBv/FbByf184Ulq7UbbzCEalyKn5u0pOrFUV9yZp+JiQskXM5UWQ5muv5f
+         jEOzO2NR7K2Nvuhh5oyq/kQMNmyQUpMJNf56nJ2rudgZ084deapo1+/7UsEb1m9CKBtV
+         TxxQ==
+X-Gm-Message-State: AC+VfDxGEsbT2PW0G99tn16xQWXRMRxult45VJln3SqTfMNRJ1ZEPfEH
+        HmMy9cQ95aPEMjd9Dt3i9IYXqk9tuKJCk1dZoN0IhSDqvpR+YXta6bw1z9goQ0YqPP3B9iSfD2v
+        F8LfLaAY/puTzC5jtCtT19ejD
+X-Received: by 2002:a92:d34f:0:b0:340:998a:e966 with SMTP id a15-20020a92d34f000000b00340998ae966mr2855913ilh.17.1686770452308;
+        Wed, 14 Jun 2023 12:20:52 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7BCoBzWr9RbpjyjV9Oy4DCDN0kg/DMXuykivi8VeCJxcD74DjrW2/UMBvab8Dw/LnY2mi/jw==
+X-Received: by 2002:a92:d34f:0:b0:340:998a:e966 with SMTP id a15-20020a92d34f000000b00340998ae966mr2855893ilh.17.1686770451956;
+        Wed, 14 Jun 2023 12:20:51 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id k8-20020a02c768000000b00416650ba62esm5153404jao.76.2023.06.14.12.20.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 12:20:50 -0700 (PDT)
+Date:   Wed, 14 Jun 2023 13:20:47 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     ankita@nvidia.com, aniketa@nvidia.com, cjia@nvidia.com,
+        kwankhede@nvidia.com, targupta@nvidia.com, vsethi@nvidia.com,
+        acurrid@nvidia.com, apopple@nvidia.com, jhubbard@nvidia.com,
+        danw@nvidia.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/1] vfio/nvgpu: Add vfio pci variant module for
+ grace hopper
+Message-ID: <20230614132047.519abe95.alex.williamson@redhat.com>
+In-Reply-To: <ZIn/EHnCg444LJ3i@nvidia.com>
+References: <ZH9RfXhbuED2IUgJ@nvidia.com>
+        <20230606110510.0f87952c.alex.williamson@redhat.com>
+        <ZH9p+giEs6bCYfw8@nvidia.com>
+        <20230606121348.670229ff.alex.williamson@redhat.com>
+        <ZH+DdVIyZ6hHCDaK@nvidia.com>
+        <20230606153057.4cbc36a0.alex.williamson@redhat.com>
+        <ZH/LzyF/uttviRnQ@nvidia.com>
+        <20230607122303.5d25c973.alex.williamson@redhat.com>
+        <ZIh+wXFrls7StWzc@nvidia.com>
+        <20230613132402.2765b6cb.alex.williamson@redhat.com>
+        <ZIn/EHnCg444LJ3i@nvidia.com>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230510-dt-resv-bottom-up-v2-2-aeb2afc8ac25@gerhold.net>
-References: <20230510-dt-resv-bottom-up-v2-0-aeb2afc8ac25@gerhold.net>
-In-Reply-To: <20230510-dt-resv-bottom-up-v2-0-aeb2afc8ac25@gerhold.net>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        devicetree@vger.kernel.org, devicetree-spec@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Stephan Gerhold <stephan@gerhold.net>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sort() in Linux is based on heapsort which is not a stable sort
-algorithm - equal elements are being reordered. For reserved memory in
-the device tree this happens mainly for dynamic allocations: They do not
-have an address to sort with, so they are reordered somewhat randomly
-when adding/removing other unrelated reserved memory nodes.
+On Wed, 14 Jun 2023 14:55:28 -0300
+Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-Functionally this is not a big problem, but it's confusing during
-development when all the addresses change after adding unrelated
-reserved memory nodes.
+> On Tue, Jun 13, 2023 at 01:24:02PM -0600, Alex Williamson wrote:
+> 
+> > I'd even forgotten about the sparse mmap solution here, that's even
+> > better than trying to do something clever with the mmap.  
+> 
+> Okay, Ankit please try this, it sounds good
+> 
+> > > You may be right, I think this patch is trying to make things
+> > > automatic for user, but a dedicated machine type might make more
+> > > sense.  
+> > 
+> > Juan and I discussed this with Ankit last week, there are a lot of down
+> > sides with another machine type, but the automatic manipulation of the
+> > machine is still problematic.  Another option we have is to use QEMU
+> > command line options for each feature.  For example we already support
+> > NUMA VM configurations and loading command line ACPI tables, hopefully
+> > also associating devices to nodes.  Do we end up with just a
+> > configuration spec for the VM to satisfy the in-guest drivers?
+> > Potentially guest driver requirements may changes over time, so a hard
+> > coded recipe built-in to QEMU might not be the best solution anyway.  
+> 
+> Let's have those discussions settle then, I know there are a few
+> different ideas here people are looking at.
+> 
+> > I think NVIDIA might have an interest in enabling Atomic Ops support in
+> > VMs as well, so please comment in the series thread if there are
+> > concerns here or if anyone can definitively says that another guest OS
+> > we might care about does cache root port capability bits.  Thanks,  
+> 
+> I expect we do - I haven't heard of atomic ops specifically yet
+> though.
+> 
+> We just did a big exercise on relaxed ordering which is similarly
+> troubled.
+> 
+> Here we deciced to just not use the VM's config space at all. The
+> device itself knows if it can do relaxed ordering and it just reports
+> this directly to the driver.
+> 
+> In many ways I would prefer to do the same for atomic.. I haven't
+> checked fully but I think we do this anyhow as you can see mlx5 simply
+> tries to enable PCI atomics but doesn't appear to do anything with the
+> result of it. I expect the actual success/fail is looped back through
+> the device interface itself.
+> 
+> So, for mlx5, it probably already works in most real cases. Passing a
+> PF might not work I guess.
+> 
+> It is not a satisfying answer from a VMM design perspective..
+> 
+> Some qemu command line to say what root ports with what atomic caps to
+> create seems like a reasonable thing to do.
 
-Make the order stable by sorting dynamic allocations according to
-the node order in the device tree. Static allocations are not affected
-by this because they are still sorted by their (fixed) address.
+The referenced QEMU proposal puts a number of restrictions on
+automatically flipping bits on the root port, ex. as exposed in the VM
+the endpoint must be directly connected to a root port (avoiding
+complications around atomic ops routing support) and must be a
+single function device at devfn 0x0 (avoiding heterogeneous paths on
+the host).  It also tests the root port bits to make sure they aren't
+otherwise set in order to be compatible with some future root port
+device switch to enable fixed atomic completer support.
 
-Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
----
- drivers/of/of_reserved_mem.c | 5 +++++
- 1 file changed, 5 insertions(+)
+This tries to balance the idea that we want to support device switches
+for these sort of fine grained VM configuration, but there are also
+isolated cases which can be automatically enabled that can potentially
+cover the vast majority of use cases.
 
-diff --git a/drivers/of/of_reserved_mem.c b/drivers/of/of_reserved_mem.c
-index 7f892c3dcc63..7ec94cfcbddb 100644
---- a/drivers/of/of_reserved_mem.c
-+++ b/drivers/of/of_reserved_mem.c
-@@ -268,6 +268,11 @@ static int __init __rmem_cmp(const void *a, const void *b)
- 	if (ra->size > rb->size)
- 		return 1;
- 
-+	if (ra->fdt_node < rb->fdt_node)
-+		return -1;
-+	if (ra->fdt_node > rb->fdt_node)
-+		return 1;
-+
- 	return 0;
- }
- 
+OTOH, trying to do something automatic for 'AtomicOps Routing Support'
+looks far more challenging and we probably would rely on command line
+device switches for that.
 
--- 
-2.40.1
+Regarding relaxed ordering, are we talking about the 'No RO-enabled
+PR-PR Passing' bit in the devcap2 register?  Unfortunately that bit is
+labeled HwInit, so we don't have the same leniency towards modifying it
+at runtime as we do for the immediately preceding AtomicOps completer
+support bits.  In my interpretation, that bit also only seems to be
+reporting whether a specific reordering is implemented, so more
+important in determining expected performance than functionality(?)
+
+In general, I think we put driver writers in an awkward place if they
+start trying things that are clearly not supported as reported by
+hardware capability bits.  Error handling can be pretty fragile,
+especially when value-add firmware thinks it knows best.  Thanks,
+
+Alex
 
