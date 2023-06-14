@@ -2,75 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D87572F9F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 12:02:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D1DF72FA07
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 12:05:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241652AbjFNKCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 06:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56482 "EHLO
+        id S235090AbjFNKFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 06:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231875AbjFNKCu (ORCPT
+        with ESMTP id S243604AbjFNKEx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 06:02:50 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5485C19F
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 03:02:46 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-7748b80141aso687367439f.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 03:02:46 -0700 (PDT)
+        Wed, 14 Jun 2023 06:04:53 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B6B195;
+        Wed, 14 Jun 2023 03:04:52 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f7ff69824dso3330455e9.1;
+        Wed, 14 Jun 2023 03:04:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686737091; x=1689329091;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CJwr6Y2umkSKUEqhWH9SvLNqVUvRLzxqfJAUFOKrvpU=;
+        b=YdnjUdn8XRrLX9Gte6D/c18JhkyLdnvJNnkeJ5RW6fLHTg3J3lJ6sZK1QrI9iIubxY
+         gG0WcqYjP1yb/aPYV5td6KD8qnUTor7LPvtrGNelMl5uX/WlXjkbNddKQD74bSeM7l5x
+         EENwEbO1aIr92Og1+L0VyHc9qozi0XA1ZqteHyuJIczLGqFBKmgUOxq76oE9+FhOrOcC
+         RczP880i3XPQYzgti3VhFDvZy/C/Oj9HMUYqOJFQZWYx3IzYlvyxLQ1TEY1xDx1DFO+O
+         oUleUj7OUcDAkAiFWoQjKdPO9MJr9CIgIviZEQOEo4z/5AARj5mYL694nEhHDoO/x/n9
+         oGVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686736965; x=1689328965;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tbry3CeL1KYS7HLNoeY59keftn8OoKLWsLCuyU0Tezc=;
-        b=C70LoQBKztMJE7KvnaxBseAboQ2ugwRhsglKVMndcpk20QNYb1sXBI+AO3dySpxfIC
-         RzTqx8cim3U4nE0r2izxNRDYo+RR+exOWTMge0LnEv2SkfVQpk/V9QxfWF2L8cJvf71z
-         W6aGcBXgI20rPJM+Jhju2FIsznJRk8ySgWhyFvQVt4wCMK1k/qfTL7U3YNIrwrmtFidE
-         04A4B8Yfrh297Gl/hitjfzQtmiWfRpkhnZSaKOS642hXCzubfk3ZGV9kwrOzGGKLBsFk
-         ZzQdh6QTNoKUIIw3FCcP8RzHLmE1RqWzic2IlP7Fi+VTaBMltmlLxI1c7Ex20zldkJl7
-         AHDQ==
-X-Gm-Message-State: AC+VfDzysBSeyy2rylHWXpsCcBJtMbDWxKSnex3sNCXVuAPfhc8TIDsw
-        CnIwIJmsTQKec1SBw2ZDfniXvhQqLhbxgmmIyAqdfw241xna
-X-Google-Smtp-Source: ACHHUZ5Cw2CSNno0VjcZXjl9srSP0mRFQ395P6uRj7Vr62OPy1ip/51NqUWt88NtV6lhr1nJJCp3EN/Z1xAkIeeMORU86TioNMQK
+        d=1e100.net; s=20221208; t=1686737091; x=1689329091;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CJwr6Y2umkSKUEqhWH9SvLNqVUvRLzxqfJAUFOKrvpU=;
+        b=f5FYvfzxyCeHqYH0lT0+MWovD/C8PJ3OZBaEVAdVjhpQh68jLnAf5Qne3od79+djrw
+         CTi6t5CAu78Nzcf+JJ6N2+kls8drV4f0J6SmFDq3+q35HlfDKz7Bc2NXi9ghJS3KRQzY
+         pMABjGuzJ/PLLUhJbyu8x7Kro1nF4+ifS5bV5s1o+848C2Ppn/c3TvrO92K1V06thbqv
+         LfOwWVLEgc6Vi+4QGX23n05wveHHb9Vr1p0T+tGEp4IrR0tvGVHBs9b1245XxHlI+A3F
+         kGxCR8TuH6zkaBTY436PViBsQvK61Pf1l3lAirwvsOKAotMpEU81aWdWQ+9v4F4ogNB+
+         3Enw==
+X-Gm-Message-State: AC+VfDwJmNGA+pzY9PgdX3f6n6uQWOTx5ficBJMlM366YjSHXAje1dMY
+        NTDiq5PHQS1l1CoHriPXDItsTizCgSA=
+X-Google-Smtp-Source: ACHHUZ7NnadrCr99c3BsF7uxz0uSZ0Xsaquj+r/MPcopBB5hGiDYUm8XgILbFGUpVTXyfm7ULZI9tg==
+X-Received: by 2002:a05:600c:21cf:b0:3f8:6934:9775 with SMTP id x15-20020a05600c21cf00b003f869349775mr1005877wmj.7.1686737090538;
+        Wed, 14 Jun 2023 03:04:50 -0700 (PDT)
+Received: from localhost.localdomain (host-95-252-166-216.retail.telecomitalia.it. [95.252.166.216])
+        by smtp.gmail.com with ESMTPSA id n26-20020a1c721a000000b003f78fd2cf5esm16949354wmc.40.2023.06.14.03.04.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 03:04:50 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     "Theodore Ts'o" <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        syzbot+4acc7d910e617b360859@syzkaller.appspotmail.com
+Subject: [PATCH] ext4: Drop the call to ext4_error() from ext4_get_group_info()
+Date:   Wed, 14 Jun 2023 12:02:55 +0200
+Message-ID: <20230614100446.14337-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-Received: by 2002:a6b:a18:0:b0:77a:e8e3:2c02 with SMTP id
- z24-20020a6b0a18000000b0077ae8e32c02mr5113965ioi.2.1686736965646; Wed, 14 Jun
- 2023 03:02:45 -0700 (PDT)
-Date:   Wed, 14 Jun 2023 03:02:45 -0700
-In-Reply-To: <1423848.1686733230@warthog.procyon.org.uk>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000aac23605fe140d6b@google.com>
-Subject: Re: [syzbot] [fs?] general protection fault in splice_to_socket
-From:   syzbot <syzbot+f9e28a23426ac3b24f20@syzkaller.appspotmail.com>
-To:     brauner@kernel.org, dhowells@redhat.com, kuba@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+A recent patch added a call to ext4_error() which is problematic since
+some callers of the ext4_get_group_info() function may be holding a
+spinlock, whereas ext4_error() must never be called in atomic context.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+This triggered a report from Syzbot: "BUG: sleeping function called from
+invalid context in ext4_update_super" (see the link below).
 
-Reported-and-tested-by: syzbot+f9e28a23426ac3b24f20@syzkaller.appspotmail.com
+Therefore, drop the call to ext4_error() from ext4_get_group_info(). In
+the meantime use eight characters tabs instead of nine characters ones.
 
-Tested on:
+Reported-by: syzbot+4acc7d910e617b360859@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/all/00000000000070575805fdc6cdb2@google.com/
+Fixes: 5354b2af3406 ("ext4: allow ext4_get_group_info() to fail")
+Suggested-by: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
+ fs/ext4/balloc.c | 20 +++++++++-----------
+ 1 file changed, 9 insertions(+), 11 deletions(-)
 
-commit:         2bddad9e ethtool: ioctl: account for sopass diff in se..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git main
-console output: https://syzkaller.appspot.com/x/log.txt?x=12d9c93b280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=526f919910d4a671
-dashboard link: https://syzkaller.appspot.com/bug?extid=f9e28a23426ac3b24f20
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=12c4f0d9280000
+diff --git a/fs/ext4/balloc.c b/fs/ext4/balloc.c
+index c1edde817be8..e8da678a0103 100644
+--- a/fs/ext4/balloc.c
++++ b/fs/ext4/balloc.c
+@@ -324,17 +324,15 @@ static ext4_fsblk_t ext4_valid_block_bitmap_padding(struct super_block *sb,
+ struct ext4_group_info *ext4_get_group_info(struct super_block *sb,
+ 					    ext4_group_t group)
+ {
+-	 struct ext4_group_info **grp_info;
+-	 long indexv, indexh;
+-
+-	 if (unlikely(group >= EXT4_SB(sb)->s_groups_count)) {
+-		 ext4_error(sb, "invalid group %u", group);
+-		 return NULL;
+-	 }
+-	 indexv = group >> (EXT4_DESC_PER_BLOCK_BITS(sb));
+-	 indexh = group & ((EXT4_DESC_PER_BLOCK(sb)) - 1);
+-	 grp_info = sbi_array_rcu_deref(EXT4_SB(sb), s_group_info, indexv);
+-	 return grp_info[indexh];
++	struct ext4_group_info **grp_info;
++	long indexv, indexh;
++
++	if (unlikely(group >= EXT4_SB(sb)->s_groups_count))
++		return NULL;
++	indexv = group >> (EXT4_DESC_PER_BLOCK_BITS(sb));
++	indexh = group & ((EXT4_DESC_PER_BLOCK(sb)) - 1);
++	grp_info = sbi_array_rcu_deref(EXT4_SB(sb), s_group_info, indexv);
++	return grp_info[indexh];
+ }
+ 
+ /*
+-- 
+2.41.0
 
-Note: testing is done by a robot and is best-effort only.
