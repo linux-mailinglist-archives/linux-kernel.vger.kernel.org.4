@@ -2,85 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 766F07305B9
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 19:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A503D7305CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 19:15:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233158AbjFNRNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 13:13:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41286 "EHLO
+        id S232479AbjFNRPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 13:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236660AbjFNRNe (ORCPT
+        with ESMTP id S235423AbjFNRPF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 13:13:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C7D193;
-        Wed, 14 Jun 2023 10:13:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 014416440C;
-        Wed, 14 Jun 2023 17:13:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EE42C433C0;
-        Wed, 14 Jun 2023 17:13:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686762812;
-        bh=DghLN/GWkWPUCJuJI14dr3JoWgkabHO9cq9SRz14ZvU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LLeipFXIhCUYnnW3nhiV2EFtGLNuwGLln398EBaW99tw+NIrOMZyNVC+EKdMIy7OG
-         /mRWJ/Em7C4FHnwfnjRd3pen55zKD4lYzAnqXQX4gZhyMNLTCgVK1fYgIvffxVWJS4
-         Gigm1CoQN6oDRp7Foa2pjDDZEUzH9txK0Ikr0lcAKadGabIyb3CNLBCveaNFTfSr1t
-         CDxk0Q9juuKm9HlbrjvVH7Hsfcnf/++Ao/fvlVM9MhX1eh8i30rZUb/KebF7huJEGI
-         1de1q4zD5I35VSo8sbAnuVTn8I+sw2RM7oQ6ZVChX2nUGNMWbsekAMVDnYjftktnJO
-         FublxFBFKH2iw==
-Date:   Wed, 14 Jun 2023 10:13:30 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Azeem Shaikh <azeemshaikh38@gmail.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH] tracing/boot: Replace strlcpy with strscpy
-Message-ID: <20230614171330.GA1146@sol.localdomain>
-References: <20230613004125.3539934-1-azeemshaikh38@gmail.com>
- <202306131227.26F90584F7@keescook>
- <CADmuW3WeRG-_WsFVCogRzRNXoqtVr+gA84ryqDZ2URUu3wh6Tg@mail.gmail.com>
+        Wed, 14 Jun 2023 13:15:05 -0400
+Received: from imap4.hz.codethink.co.uk (imap4.hz.codethink.co.uk [188.40.203.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952DFE69;
+        Wed, 14 Jun 2023 10:15:03 -0700 (PDT)
+Received: from [167.98.27.226] (helo=rainbowdash)
+        by imap4.hz.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
+        id 1q9U5D-00Exj5-EM; Wed, 14 Jun 2023 18:14:59 +0100
+Received: from ben by rainbowdash with local (Exim 4.96)
+        (envelope-from <ben@rainbowdash>)
+        id 1q9U5C-000I0h-0j;
+        Wed, 14 Jun 2023 18:14:58 +0100
+From:   Ben Dooks <ben.dooks@sifive.com>
+To:     linux-pwm@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ben.dooks@codethink.co.uk, u.kleine-koenig@pengutronix.de,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        jarkko.nikula@linux.intel.com,
+        William Salmon <william.salmon@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
+        Ben Dooks <ben.dooks@sifive.com>
+Subject: [PATCH v8 0/5] DesignWare PWM driver updates
+Date:   Wed, 14 Jun 2023 18:14:52 +0100
+Message-Id: <20230614171457.69191-1-ben.dooks@sifive.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADmuW3WeRG-_WsFVCogRzRNXoqtVr+gA84ryqDZ2URUu3wh6Tg@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 10:01:57AM -0400, Azeem Shaikh wrote:
-> On Tue, Jun 13, 2023 at 3:27 PM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > On Tue, Jun 13, 2023 at 12:41:25AM +0000, Azeem Shaikh wrote:
-> > > strlcpy() reads the entire source buffer first.
-> > > This read may exceed the destination size limit.
-> > > This is both inefficient and can lead to linear read
-> > > overflows if a source string is not NUL-terminated [1].
-> > > In an effort to remove strlcpy() completely [2], replace
-> > > strlcpy() here with strscpy().
-> > >
-> > > Direct replacement is safe here since return value of -E2BIG
-> > > is used to check for truncation instead of sizeof(dest).
-> >
-> > This looks technically correct, but I wonder if "< 0" is a better test?
-> 
-> Agreed. "< 0" might more generically represent -errno. Happy to send
-> over a v2 if you prefer that instead of sticking with this patch.
+This series is an update for the DesignWare PWM driver to add support for
+OF (and split the PCI bits out if aynone else wants them). This is mostly
+the same as the v7 series, but with code moved around and module-namespace
+added, plus review comments processed.
 
-Please go with "< 0", since it's easier to read and less error-prone.  (It would
-be easy to mistype -E2BIG as -EFBIG, or E2BIG, for example...)
+Since we no longer have the hardware, the clock code hasn't been changed to
+either lock the rate whilst the PWM is running, or to deal with any sort
+of change callback. This is left to future work (and I would rather get
+something in that does currently work) (second note, the hardware we did
+use had a fixed clock tree anyway)
 
-- Eric
+This account is probably going away soon, I have cc'd my main work
+email to catch any responses.
+
+Thank you all for the reviews.
+
+The lengthy changelog:
+
+v8:
+ - updated reviewed tags
+ - fix module name for pci version
+ - fix config symbol bug in makefile
+ - remove pci compile-test (mostly not used for pci)
+ - push the compile-test into the platform/of driver
+v7:
+ - fixup kconfig from previous pcie changes
+ - re-order kconfig to make dwc core be selected by PCI driver
+ - move clk variable to patch it is used in
+v6:
+ - fix removal ordering of DWC_PERIOD_NS
+v5:
+ - fixed kconfig string error
+ - merged pwm-nr into main of code
+ - split of code from pci code
+ - updated pwm-nr capping
+ - fix duplicate error reporting in of-code
+ - fix return in of-probe
+ - remove unecessary remove function as devm_ functions sort this
+ - fixed ordering of properties
+ - added missing reg item
+ - fixed missing split of the two clock sources.
+ - get bus clock in of code
+v4:
+ - split pci and of into new modules
+ - fixup review comments
+ - fix typos in dt-bindings
+v3:
+- change the compatible name
+- squash down pwm count patch
+- fixup patch naming
+v2:
+- fix #pwm-cells count to be 3
+- fix indetation 
+- merge the two clock patches
+- add HAS_IOMEM as a config dependency
+
+Ben Dooks (5):
+  pwm: dwc: split pci out of core driver
+  pwm: dwc: make timer clock configurable
+  pwm: dwc: add PWM bit unset in get_state call
+  pwm: dwc: use clock rate in hz to avoid rounding issues
+  pwm: dwc: add of/platform support
+
+ drivers/pwm/Kconfig        |  24 ++++-
+ drivers/pwm/Makefile       |   2 +
+ drivers/pwm/pwm-dwc-core.c | 196 ++++++++++++++++++++++++++++++++++++
+ drivers/pwm/pwm-dwc-of.c   |  78 +++++++++++++++
+ drivers/pwm/pwm-dwc.c      | 198 +------------------------------------
+ drivers/pwm/pwm-dwc.h      |  61 ++++++++++++
+ 6 files changed, 364 insertions(+), 195 deletions(-)
+ create mode 100644 drivers/pwm/pwm-dwc-core.c
+ create mode 100644 drivers/pwm/pwm-dwc-of.c
+ create mode 100644 drivers/pwm/pwm-dwc.h
+
+-- 
+2.39.2
+
