@@ -2,152 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61EB172FF9B
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 15:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CFAF72FF9E
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 15:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244896AbjFNNLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 09:11:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60958 "EHLO
+        id S244102AbjFNNLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 09:11:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244878AbjFNNL3 (ORCPT
+        with ESMTP id S244847AbjFNNLq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 09:11:29 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA8D184;
-        Wed, 14 Jun 2023 06:11:14 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id D41F33200924;
-        Wed, 14 Jun 2023 09:11:09 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 14 Jun 2023 09:11:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1686748269; x=1686834669; bh=yg
-        aeAW7Oiem/w6eWfgDKB5f6lRa+uXyAf0nyR9QWZ04=; b=fxTAGXXFTXOufJo2TO
-        mE3XjaK1s19oZ0tNxGzsTfITsX4CXJyrAw0qV8fLGW5GksN0o9ugYnAx6scimgo5
-        /tAVKpb5aIIT6wyviErJoUSHyE2cfBBTBZsRxOuqeYoriDz4pgvbitHhXlo64eei
-        RXF2CJH1Dzg3+KfdM2huW/YTr/xmGTaC6Ugq7/f1l/OBlrsayQ1TnFimBSml7tNF
-        gGevmmLslKHcCTIwwtLHYr3b0a7wBlRHxwIO8TZkoxIW/unPKf/q1Qnzt2u6EaOX
-        eSCVp/ueh6ZHZim2mp/cNidLMC/G79CSoFWI53aGOFevm+iX9R516RH6uqQkEX+d
-        xcXQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1686748269; x=1686834669; bh=ygaeAW7Oiem/w
-        6eWfgDKB5f6lRa+uXyAf0nyR9QWZ04=; b=clDQpDo3J4gwj9SNXUHNzGAT9LZOM
-        gm+ziObp9W8LHKg5Dq4xU/FkaMAX3PXBRohpj5J+7ppYpSNd5+maeh1ZsQkSsEUJ
-        puYaqexWDRZ6CkpxvMo4TSHcVu5QvtTwzhWqRBWRLhuvjN7YoX0hwx/TLfhzzY3e
-        Db6p83Pr4C/ZsyzJ3RtMdke4cnH99R07rYrHTvGYbaMhcozjytbmdkBtS9BsjNIT
-        FflKq7PHUyTu5ZESkPfBJJ5+M7+9cYnB94kLIBO7uEeDpoPQHiRSyQUjj+wto7DD
-        Kq5kc8mrdy7u09Cc2nv+vEISQ9m0INS6sRmJP3LdvRponMW6ckHopyNHw==
-X-ME-Sender: <xms:bLyJZPBEpxpI4Cm1kbP0rmAF7tPClIlganIEAFTLdUGm3AWeHQt68A>
-    <xme:bLyJZFgWXpbxPv-rc6C63v84kqGtq1m6b-nsHo22pJihrffAa4NT3-ygePUa2md0G
-    K5phChlWvIvr8hRpjo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedvtddgiedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:bLyJZKnrom6owFsuwpteY-ZLc6utfQfZPXkDJdkyH_NGvE8Xf32UdQ>
-    <xmx:bLyJZByZx406ihiY66AaiPuFvehLkP7wZ0hJEyZ2FazX4Jju8EcgbA>
-    <xmx:bLyJZEQdn1vYs5DpkodxIVd8IJealUtsKGwx0Vp5HV1KwVbbkRk2Xg>
-    <xmx:bbyJZBixDqVYetegvOr2f9iCRFLAiv0js0Ip7UoEqQxIV6AOLgaBZw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 58595B60086; Wed, 14 Jun 2023 09:11:08 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-492-g08e3be04ba-fm-20230607.003-g08e3be04
-Mime-Version: 1.0
-Message-Id: <20d4d296-14d7-467d-826c-b5c9cdf4599a@app.fastmail.com>
-In-Reply-To: <20230614104759.228372-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20230614104759.228372-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20230614104759.228372-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Date:   Wed, 14 Jun 2023 15:10:45 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     Prabhakar <prabhakar.csengg@gmail.com>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        "Geert Uytterhoeven" <geert+renesas@glider.be>,
-        guoren <guoren@kernel.org>,
-        "Andrew Jones" <ajones@ventanamicro.com>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Albert Ou" <aou@eecs.berkeley.edu>,
-        "Samuel Holland" <samuel@sholland.org>,
-        linux-riscv@lists.infradead.org,
-        "Christoph Hellwig" <hch@infradead.org>
-Cc:     "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "Biju Das" <biju.das.jz@bp.renesas.com>,
-        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v9 5/6] cache: Add L2 cache management for Andes AX45MP RISC-V core
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 14 Jun 2023 09:11:46 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB442106
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 06:11:45 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-977e83d536fso100135966b.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 06:11:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686748304; x=1689340304;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PHVpbgvRKoN6WozJ1cqg+kiNeYvG89UWqiwLlRl1pkU=;
+        b=uAlBhr6AHLRFpqdWqfW6NXeJfp6XKhTrePvF6sAgrFcnN/IYkHGX4wTfF9yMCD3pqI
+         ip1b8OcJ+adTH30jPry2Rv55YPzxuRAx5zIiifq4MwDLrdc8haKTdH2zG19BKNOuo0KE
+         GzaQzCJLG4xDpVDVOmXMxXHGUPzqiQobKaF3RomE6tXk+N7GwCba5NdHzJ/qEGJgajc1
+         ByEkNmwKoCPH3UBKHN7Jj/CDOrrzhOo2wU6LKPTqzxMqB94pYS2IC3Tn1K77c11s73Dj
+         HuphU+ODSM7BTPPDhaN6QL2mRcY3Tfl/LC7UhxRsNwrFORJirO3qIdoMxXt8UERncVb6
+         lbpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686748304; x=1689340304;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PHVpbgvRKoN6WozJ1cqg+kiNeYvG89UWqiwLlRl1pkU=;
+        b=kzQ9l2RI38gmvVLtPiURgLkbkRE8H0i+p2WNRC5b1vUdic4DFjBSDeYhMM9kssjdeM
+         CKHqzU+8zBxNSJS0JVFEMhsW1N2K9L0/CfaRK+1pQmswWs+Ey5A1cH5PWC2lFFu9zAcB
+         UxhXgEpavMNUunzEiLBGGQ4DHlvJxlCUKd/0oSiV+35XL7HlqZbuTHDzT1vwBWD9rlrU
+         VUg886+ogjyOGZ12altE0FoMNB9rrZLNL8+l40JFxOsNOkjQJhQqWf4kPsOJoskzO9+6
+         ESpY9t816KSTwQuZQHrY103B+YKHrNG2dHzyVH3zgrcfWIaOym7hH8uVbWX50lv9YFvp
+         TRKA==
+X-Gm-Message-State: AC+VfDyjS0ZnKN8E69c5eOllk2nkaJCK2S+i5ZeB+vQI5lPkXVXw60uw
+        egiTNMSxJGqkfdTv4P/o4KMbmw==
+X-Google-Smtp-Source: ACHHUZ6io8NV9CKI/2/RCobs405rIgebZrJp4ccfsvljmvWWOKsQmTR3b2ZenwQLwYikNvqc77NDEQ==
+X-Received: by 2002:a17:907:25c1:b0:978:94b1:2568 with SMTP id ae1-20020a17090725c100b0097894b12568mr13926596ejc.32.1686748303758;
+        Wed, 14 Jun 2023 06:11:43 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id b7-20020a170906038700b009787b18c253sm8062623eja.181.2023.06.14.06.11.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 06:11:43 -0700 (PDT)
+Message-ID: <fec7c59d-df2b-e10c-7eb2-235cca5b0ead@linaro.org>
+Date:   Wed, 14 Jun 2023 15:11:41 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 1/3] usb: typec: ucsi: call typec_set_mode on non-altmode
+ partner change
+Content-Language: en-US
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20230614-topic-sm8550-upstream-type-c-audio-v1-0-15a92565146b@linaro.org>
+ <20230614-topic-sm8550-upstream-type-c-audio-v1-1-15a92565146b@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230614-topic-sm8550-upstream-type-c-audio-v1-1-15a92565146b@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023, at 12:47, Prabhakar wrote:
+On 14/06/2023 15:10, Neil Armstrong wrote:
+> Add support for calling typec_set_mode() for the DEBUG, AUDIO
+> accessory modes.
+> 
+> Let's also call typec_set_mode() for USB as default and SAFE
+> when partner is disconnected.
+> 
+> The USB state is only called when ALT mode is specifically
+> not specified by the partner status flags in order
+> to leave the altmode handlers setup the proper mode to
+> switches, muxes and retimers.
+> 
 
-> +static void ax45mp_dma_cache_inv(phys_addr_t paddr, unsigned long size)
-> +{
-> +	unsigned long start = (unsigned long)phys_to_virt(paddr);
-> +	char cache_buf[2][AX45MP_CACHE_LINE_SIZE];
-> +	unsigned long end = start + size;
-> +	unsigned long old_start = start;
-> +	unsigned long old_end = end;
-> +	unsigned long line_size;
-> +	unsigned long flags;
-> +
-> +	if (unlikely(start == end))
-> +		return;
-> +
-> +	line_size = ax45mp_priv.ax45mp_cache_line_size;
-> +
-> +	memset(&cache_buf, 0x0, sizeof(cache_buf));
-> +	start = start & (~(line_size - 1));
-> +	end = ((end + line_size - 1) & (~(line_size - 1)));
-> +
-> +	local_irq_save(flags);
-> +	if (unlikely(start != old_start))
-> +		memcpy(&cache_buf[0][0], (void *)start, line_size);
-> +
-> +	if (unlikely(end != old_end))
-> +		memcpy(&cache_buf[1][0], (void *)(old_end & (~(line_size - 1))), 
-> line_size);
-> +
-> +	ax45mp_cpu_dcache_inval_range(start, end, line_size);
-> +
-> +	if (unlikely(start != old_start))
-> +		memcpy((void *)start, &cache_buf[0][0], (old_start & (line_size - 
-> 1)));
-> +
-> +	local_irq_restore(flags);
-> +}
 
-I'm not quite sure what this does, maybe some comments would help.
+Tested-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-This looks like a novel method of preserving partial cache lines
-at the beginning (but not the end?) of an unaligned area.
+Best regards,
+Krzysztof
 
-As far as I can tell, most dma_mapping implementations don't
-even try to do that at all, but the ones that do take a different
-approach by calling _wback_inv() on partial cache lines instead
-of calling _inv().
-
-I'd say this does not belong into the low-level operations
-here, especially since the ZICBOM variant doesn't do this either.
-
-      Arnd
