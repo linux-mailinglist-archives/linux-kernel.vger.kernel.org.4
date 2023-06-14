@@ -2,287 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B149773079A
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 20:49:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC79F73079C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 20:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234566AbjFNStj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 14:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33846 "EHLO
+        id S233310AbjFNSuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 14:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjFNStg (ORCPT
+        with ESMTP id S236797AbjFNSuH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 14:49:36 -0400
-Received: from GBR01-LO2-obe.outbound.protection.outlook.com (mail-lo2gbr01on2105.outbound.protection.outlook.com [40.107.10.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4647ED;
-        Wed, 14 Jun 2023 11:49:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PXLAd9CsPMCU4bgebV7MEdSQiySpAnP21wOgBRYaNl6vG6VLzhOFVbjkybUExkn+EVWjMzmNEoF9mlEAooMgW1rtyV95y0f3mupKhOeL8xnvcscSoLnR5oEjSxQdf7X/Lvwap9sZ8qdgA64/H/kX4Xf4WSqoqxFoNa3zocPEqDDgPe3F6I0DaVrn9fZKnY4wPI72OCwB5KPwW6HWBGR0gQ0QM8lD2QTUSb/rNt9Aj9v4TqHHcsNQd5pJhCZY/AtySNkyB1bGI2zvR8GQ5xoUvjoA9rb7rlp+ORIlgOscUbRygfayeZya7g9PFZsWgzMMYTTsF5miMiJ+zM2hWvuRfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+BSxCl+A8R+nPgMWRJJ3v1qwdRWDN4MAdVSFLmReVoQ=;
- b=SQtoQi+ao5vfm9yMIjNw2HWip9b7RKCIbkkffI1l8XR+tgTo/6iOY32e9/zhSQW4p4g1rPsB51/A+3IMNGhlMA5Atc2QVUU8seMvbYeNsJsMvbkbkioFeK3blKkYWzd3TYDNlz/bEyRrpA6BsxOkQwVMokxfJezazgfwGn2cNQQnOx+wx0FVhCY+1MJ8nbGhs0w+C1WF0jyxXH0xIiFbX0ekX6LhoZkgZRzZyJmE+RN67li8obFdm+XnUl/jNHErJJnpCagxvOhvyfzrlRnMB/ieD1jh+/4iczIVJNj3LB6eElXf9HHlm94MzRupEIr6QmOL+189E9iJvUhISU66iA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+BSxCl+A8R+nPgMWRJJ3v1qwdRWDN4MAdVSFLmReVoQ=;
- b=kZDIEn/f7q4ntZ7n1/eDipCRziPUXFqHT3tTPyhRNRnPSBeEBjtH5jNSohlEDH2T04rTmWoEpGZoxRakLHoYlERK7nkPFwvrOe0Em/g+/IzM9pal9FYRMinAeYkL9VfAbofsKlHyV1yjCP4nsKryN7s0jhcL83IHozsV2ED/HZw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by LO0P265MB6099.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:248::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.25; Wed, 14 Jun
- 2023 18:49:32 +0000
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::f968:901e:1398:7d22]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::f968:901e:1398:7d22%4]) with mapi id 15.20.6500.025; Wed, 14 Jun 2023
- 18:49:32 +0000
-Date:   Wed, 14 Jun 2023 19:49:30 +0100
-From:   Gary Guo <gary@garyguo.net>
-To:     Aakash Sen Sharma <aakashsensharma@gmail.com>
-Cc:     corbet@lwn.net, ojeda@kernel.org, alex.gaynor@gmail.com,
-        wedsonaf@gmail.com, boqun.feng@gmail.com, bjorn3_gh@protonmail.com,
-        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-        masahiroy@kernel.org, me@kloenk.de, aliceryhl@google.com,
-        benno.lossin@proton.me, dev@niklasmohrin.de, lina@asahilina.net,
-        hca@linux.ibm.com, rust-for-linux@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] rust: bindgen: upgrade to 0.65.1
-Message-ID: <20230614194930.5da4e418.gary@garyguo.net>
-In-Reply-To: <20230612194311.24826-1-aakashsensharma@gmail.com>
-References: <20230612194311.24826-1-aakashsensharma@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO2P123CA0016.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:a6::28) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:253::10)
+        Wed, 14 Jun 2023 14:50:07 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8425C1BDB
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:50:06 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-310b631c644so1263395f8f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:50:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686768605; x=1689360605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=27Ibbm+oRpNn4LqE//rGeaeQep+ElKzgKjwbwf1dYTI=;
+        b=rlPvuEl/jJaiH0rCfqkOGxtRGN0uAw9VtA/vPTQ1mPTbRiF10BXc2h6HoiAr7+1c5D
+         P+bQaqLycMc7aHNQDDnsY+sPC3EqTu2OP57pUnuOo54gx0Ekj04NiU6Psyh6Mlml27GJ
+         u1NuoeypugKiOx4oyOgpe2iFK/vaCl12aNFSsy/7qswrxRzpy5qvxy+H03d9XIOcagsB
+         9iP02FxwMx57BZiSbCfcEY1k2Lwbr+3bmlwUkJ38Vf3oS1Zt7nMVeOUIQA1RJdwFcDyo
+         u1ndUOcBhF+pcou5sRvQHbZ19EgKHHc2CMGCj3XfBtjzMg9Vq7cgVyhW9OqI5R6jziSg
+         C0TA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686768605; x=1689360605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=27Ibbm+oRpNn4LqE//rGeaeQep+ElKzgKjwbwf1dYTI=;
+        b=fcrkbF3a8Mh+C380AX7uQ/gSD6h5LK22OuT8AhICC59DADOeTsKxBxWyTstICc0Eeh
+         3z08IgwsIzAmpZq9VPwVIZ2HxnS31mo5evYH6hOz7/suFNCUB6odF7k+3plQC9IexlzV
+         R0ErJlAtxcdkvlltzQ3jr4ULktS2u5uVix9nw81EOePU+UF2sZ68min3ZHgDyxo2uXyU
+         514j+0H/sdhgmv+77YFqYyOrlTkH/Ivb0Zz/6e6tTsuxByewhELCzaJVlYJFN9jVdrNJ
+         KnRu+jQTwgy117NGREiZAZo+2KsxreBaQIitVj6PdXPnoAq2PM0x+CCN5T623Z2VVbk0
+         7a2g==
+X-Gm-Message-State: AC+VfDzUxzBszjMvnnRi7Pcmy9YOLmYOW6wB5ZDCoiqgQoLd8u5+4oPF
+        tNwQ4d2F/Wlsi2kEfdnVbq2YvDS3Ci3UJvBjmu4MUg==
+X-Google-Smtp-Source: ACHHUZ5rRWjGS8F+bSWT3HzGPZ4svnNt6B+OuJOD/+yunpJ8h6gygiQKlFbhDRCVM253Y59IjXAjbSrnej0eqNsh3AM=
+X-Received: by 2002:adf:dd41:0:b0:30f:c4e2:fc57 with SMTP id
+ u1-20020adfdd41000000b0030fc4e2fc57mr8656969wrm.31.1686768604863; Wed, 14 Jun
+ 2023 11:50:04 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO0P265MB6099:EE_
-X-MS-Office365-Filtering-Correlation-Id: 79af2281-f175-4517-2d8c-08db6d08176b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Z2nNEL+M8vc8nszbGLdgPmqitB5l5SDE2VO03qX3HqF0bY2NZeQQwXMyJRjgCdb9zcgDcHnaSLXyE3+CuCrkJc+v3xWAinhebZwczkZuY+Tbs02cJ9qGalkdVqY3GaGIVOkCkYvdFYoxpC9/nTk+tvnMETokiCYYM7BS/9F4CCSHL6QogKCBlv2v6k3a/AiYjPpAOew5EMbp5ds0++xiYeiZnk3rFFVaFvKUZpxmRrv3fRphi18CqGmi5nU21plJev9BGSZBD8EcrmBRxGSZM2FyH7qgu9f6zpETK37jvmR6asqBNL9wHwZqq5ApMpZ269IDu8JgrreFQmekc766HdymGxwalRy/dgSl/boN+7nbVxaB+ergMAf/z0Hgxiiy7II84fZmgJ3QYEMgE5m2P1P21snA3vqVZoyTGhYDsEmdMW4x72pmVVW3FFTA8ix42QBO8pkK7Giz9zb3OlDlAqOqgbOBlvFTQNA5GoNouTTSUlGzUKSpr+qPC3DmcmXvLBqVxxmrvQj8Uf4uSoAN5WOfX9g++KxrUDCPKPX1ze0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(136003)(346002)(366004)(376002)(39830400003)(396003)(451199021)(38100700002)(86362001)(8676002)(5660300002)(7416002)(316002)(8936002)(41300700001)(66556008)(66476007)(66946007)(6916009)(4326008)(83380400001)(2616005)(186003)(478600001)(26005)(1076003)(36756003)(6506007)(6512007)(2906002)(6486002)(966005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?aFMmYvG0NIcv7UTNzLNCmdwbK0abf0L47qbeOqAcxLxt2Ej1ZSTUe4RRJfVi?=
- =?us-ascii?Q?BGVNWsyyb4GnmusYLD8HrbRQgmF6NNbi0wBi70Kc5uMY/xv0V6aVw8QV9ANe?=
- =?us-ascii?Q?LDD7Ze33s3IPWVuZM527jhS7y6G/H/lx2rQ1g77pRxEh/p/kg3L1D4OKmqBy?=
- =?us-ascii?Q?BvJJHE0Cvic+t62BkWK1KM0imscA+x+wxJliooRMMdWYTcw5zceSqojM2j1t?=
- =?us-ascii?Q?J8DLgHL08bkBW0LEO6eTYLjmB4oZ/r+9iT9yYqjKR3f9rW80o3df4iaNdFJD?=
- =?us-ascii?Q?Ug4zspdqDd6lYacQ+6lmV6DQjEnD/nYVhbYu9J8XvYVLXl9BIkgvypp2/6nV?=
- =?us-ascii?Q?LP9M5XvPr7mjiVt8hoRPw2/LFZXB+5ICZsqdIaWp09op3vFEbpWgOYklV7u1?=
- =?us-ascii?Q?EN2IO4JWehoLZ9pBHLmQxxjAEtpxjmsm7ViqrO4oA/UbZtVffxsq3raPf01I?=
- =?us-ascii?Q?EkzCGSa4ImOUBhYAje2r0FQQUpDYqyNHjJ2tVg+jiaD+5N0heLMTCX4O/XSN?=
- =?us-ascii?Q?hZDqYGyvVg8SeIR15aTHZ8R8Ih5PH5ncllW9fiuVlLcfedMnLpNtiy79Idb/?=
- =?us-ascii?Q?hKU6GJOb0uMG9fbvuniY86n8kDm/1Zcp7B09BzjSJ5U+AtW8IAecnE7FsWd7?=
- =?us-ascii?Q?r4RzmB0Et/ypc5n5jLppFinO7NIv0LUiGMqdrZWKN8yF0lmgqkj6I3SuuS8/?=
- =?us-ascii?Q?6EDQtZ09FEIJLcLgxN+P7gmD9J1SoQ7np8mhoRHcMBF4bvO14iFlYbEc5nEn?=
- =?us-ascii?Q?+yBMcUljn+8+JIgFTlIpHcIcZ0cd/4YqD9r15LJLfWmKh0Z365AfGxtdDNNG?=
- =?us-ascii?Q?3Lf9s9Iszapw9ZPtYAoa6vwHJBzkeqsZRy64+9SDBIsYGPzdPfeZVbIXPB/1?=
- =?us-ascii?Q?4X2jZpjI9HxBvVwMiRzgaTAit/rzucFjLJmbwi/wCUJUXaRgT1WEoL6Xgt3E?=
- =?us-ascii?Q?rQb3HoAMOTIWY++5mZ60BBxRvvWIMweIVpdxBvevkaebqi3oT8ULCdl2jtAE?=
- =?us-ascii?Q?JejvOqpNdTibDEqe3WBJOegU4rTMZ+Pl2dzhPECrJqlDfT1Iw+iMPRuNET7A?=
- =?us-ascii?Q?68scEt0rln3qUQS1IVlxrZVZ/11Oeomo428FlRMKZLqKhaHYWN9h7ONre1iH?=
- =?us-ascii?Q?cnJDN4bjo1ryuJOZyPI8VkDzZqw/GJMTybma6SFd7onroJwCMuvDcqxoIDiX?=
- =?us-ascii?Q?BHX0ZKt+MsLdA/L1azOzxm22BiAfT7RTvXaVVWXtJnWwmIUQBY8pv2kKFzmW?=
- =?us-ascii?Q?J2o6AbGZ9bTvQAJ39AZbiUAPVjePCOPPIqqptbQUT8lhU74T2s60n3JKUT0U?=
- =?us-ascii?Q?FSvhxgbaaIvW6GveRKy1ZM48+VF5V2fLplBgMwf9KdFUIVzrJNOgjoBb5J3I?=
- =?us-ascii?Q?SU1pIO/PCjgfBh7+iwy3BWLKZrFpKlqntvS4TrGZ/shutnQmf3DG516wSSxl?=
- =?us-ascii?Q?xOlT8bcgitClfZB7h/8QcjcI7AqTbpxfDKv+UThf9TNNhlyjIMFiihDAzNj+?=
- =?us-ascii?Q?hg4tu0jFg/83l3bU+TdHHbxBRVwhbjlN1OV5PzHbfbu+ImhfKpSKOXXmtXTM?=
- =?us-ascii?Q?gYtT0T5GTPjJxF415QO6+UFQ8kaAiNsPhAYya1wL?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 79af2281-f175-4517-2d8c-08db6d08176b
-X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 18:49:32.4577
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ng8HD5y+NUiZzBr0C7tZvehq85bJfHFLyPS97gU6LdShYBeVgztMcqERQWXiSF/JQFiqyopkQB8Ccq76HZBpTQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P265MB6099
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230519001709.2563-1-tj@kernel.org> <20230519001709.2563-15-tj@kernel.org>
+ <CAB=BE-S=cxewXu7nqJY1DC5w9Bapar_C0cTjpZOQ-Qd5GGwYyw@mail.gmail.com>
+ <c307ba94-0d8c-3cbf-19da-44ee31751428@amd.com> <ZIEBB-A1arYKSK2P@slm.duckdns.org>
+ <fb3461cd-3fc2-189a-a86b-c638816a2440@amd.com> <ZIJbMQOu_k07jkFf@slm.duckdns.org>
+ <fd5a27de-c8a9-892c-f413-66ea41221fdd@amd.com>
+In-Reply-To: <fd5a27de-c8a9-892c-f413-66ea41221fdd@amd.com>
+From:   Sandeep Dhavale <dhavale@google.com>
+Date:   Wed, 14 Jun 2023 11:49:53 -0700
+Message-ID: <CAB=BE-QaNBn1cVK6c7LM2cLpH_Ck_9SYw-YDYEnNrtwfoyu81Q@mail.gmail.com>
+Subject: Re: [PATCH 14/24] workqueue: Generalize unbound CPU pods
+To:     Tejun Heo <tj@kernel.org>
+Cc:     jiangshanlai@gmail.com, torvalds@linux-foundation.org,
+        peterz@infradead.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, joshdon@google.com, brho@google.com,
+        briannorris@chromium.org, nhuck@google.com, agk@redhat.com,
+        snitzer@kernel.org, void@manifault.com, kernel-team@android.com,
+        Swapnil Sapkal <swapnil.sapkal@amd.com>, kprateek.nayak@amd.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 13 Jun 2023 01:13:11 +0530
-Aakash Sen Sharma <aakashsensharma@gmail.com> wrote:
+Hi Tejun,
+Thank you for your patches! I tested the affinity-scopes-v2 with app launch
+benchmarks. The numbers below are total scheduling latency for erofs kworke=
+rs
+and last column is with percpu highpri kthreads that is
+CONFIG_EROFS_FS_PCPU_KTHREAD=3Dy
+CONFIG_EROFS_FS_PCPU_KTHREAD_HIPRI=3Dy
 
-> * Rationale:
-> 
-> Upgrades bindgen to code-generation for anonymous unions, structs, and enums [7]
-> for LLVM-16 based toolchains.
-> 
-> The following upgrade also incorporates `noreturn` support from bindgen
-> allowing us to remove useless `loop` calls which was placed as a
-> workaround.
-> 
-> * Truncated build logs on using bindgen `v0.56.0` prior to LLVM-16 toolchain:
-> 
-> ```
-> $ make rustdoc LLVM=1 CLIPPY=1 -j$(nproc)
->   RUSTC L rust/core.o
->   BINDGEN rust/bindings/bindings_generated.rs
->   BINDGEN rust/bindings/bindings_helpers_generated.rs
->   BINDGEN rust/uapi/uapi_generated.rs
-> thread 'main' panicked at '"ftrace_branch_data_union_(anonymous_at__/_/include/linux/compiler_types_h_146_2)" is not a valid Ident', .../proc-macro2-1.0.24/src/fallback.rs:693:9
-> ...
-> thread 'main' panicked at '"ftrace_branch_data_union_(anonymous_at__/_/include/linux/compiler_types_h_146_2)" is not a valid Ident', .../proc-macro2-1.0.24/src/fallback.rs:693:9
-> ...
-> ```
-> 
-> * LLVM-16 Changes:
-> 
-> API changes [1] were introduced such that libclang would emit names like
-> "(unnamed union at compiler_types.h:146:2)" for unnamed unions, structs, and
-> enums whereas it previously returned an empty string.
-> 
-> * Bindgen Changes:
-> 
-> Bindgen `v0.56.0` on LLVM-16 based toolchains hence was unable to process the
-> anonymous union in `include/linux/compiler_types` `struct ftrace_branch_data`
-> and caused subsequent panics as the new `libclang` API emitted name was not
-> being handled. The following issue was fixed in Bindgen `v0.62.0` [2].
-> 
-> Bindgen `v0.58.0` changed the flags `--whitelist-*` and `--blacklist-*`
-> to `--allowlist-*` and `--blocklist-*` respectively [3].
-> 
-> Bindgen `v0.61.0` added support for `_Noreturn`, `[[noreturn]]`, `__attribute__((noreturn))` [4],
-> hence the empty `loop`s used to circumvent bindgen returning `!` in place of `()`
-> for noreturn attributes have been removed completely.
-> 
-> Bindgen `v0.61.0` also changed default functionality to bind `size_t` to `usize` [5] and
-> added the `--no-size_t-is-usize` [5] flag to not bind `size_t` as `usize`.
-> 
-> Bindgen `v0.65.0` removed `--size_t-is-usize` flag [6].
-> 
-> Link: https://github.com/llvm/llvm-project/commit/19e984ef8f49bc3ccced15621989fa9703b2cd5b [1]
-> Link: https://github.com/rust-lang/rust-bindgen/pull/2319 [2]
-> Link: https://github.com/rust-lang/rust-bindgen/pull/1990 [3]
-> Link: https://github.com/rust-lang/rust-bindgen/issues/2094 [4]
-> Link: https://github.com/rust-lang/rust-bindgen/commit/cc78b6fdb6e829e5fb8fa1639f2182cb49333569 [5]
-> Link: https://github.com/rust-lang/rust-bindgen/pull/2408 [6]
-> Closes: https://github.com/Rust-for-Linux/linux/issues/1013 [7]
-> Signed-off-by: Aakash Sen Sharma <aakashsensharma@gmail.com>
+Scheduling latency is the latency between when the task became eligible to =
+run
+to when it actually started running. The test does 50 cold app launches for=
+ each
+and aggregates the numbers.
 
-Reviewed-by: Gary Guo <gary@garyguo.net>
+| Table        | Upstream | Cache nostrict | CPU nostrict | PCPU hpri |
+|--------------+----------+----------------+--------------+-----------|
+| Average (us) | 12286    | 7440           | 4435         | 2717      |
+| Median (us)  | 12528    | 3901           | 3258         | 2476      |
+| Minimum (us) | 287      | 555            | 638          | 357       |
+| Maximum (us) | 35600    | 35911          | 13364        | 6874      |
+| Stdev (us)   | 7918     | 7503           | 3323         | 1918      |
+|--------------+----------+----------------+--------------+-----------|
 
-> ---
->  Documentation/process/changes.rst |  2 +-
->  rust/Makefile                     |  6 +++---
->  rust/helpers.c                    | 13 ++++++-------
->  rust/kernel/lib.rs                |  3 ---
->  scripts/min-tool-version.sh       |  2 +-
->  5 files changed, 11 insertions(+), 15 deletions(-)
-> 
-> diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
-> index ef540865ad22..5f21c4c6cf5c 100644
-> --- a/Documentation/process/changes.rst
-> +++ b/Documentation/process/changes.rst
-> @@ -32,7 +32,7 @@ you probably needn't concern yourself with pcmciautils.
->  GNU C                  5.1              gcc --version
->  Clang/LLVM (optional)  11.0.0           clang --version
->  Rust (optional)        1.62.0           rustc --version
-> -bindgen (optional)     0.56.0           bindgen --version
-> +bindgen (optional)     0.65.1           bindgen --version
->  GNU make               3.82             make --version
->  bash                   4.2              bash --version
->  binutils               2.25             ld -v
-> diff --git a/rust/Makefile b/rust/Makefile
-> index f88d108fbef0..c187c6f3a384 100644
-> --- a/rust/Makefile
-> +++ b/rust/Makefile
-> @@ -279,7 +279,7 @@ quiet_cmd_bindgen = BINDGEN $@
->  	$(BINDGEN) $< $(bindgen_target_flags) \
->  		--use-core --with-derive-default --ctypes-prefix core::ffi --no-layout-tests \
->  		--no-debug '.*' \
-> -		--size_t-is-usize -o $@ -- $(bindgen_c_flags_final) -DMODULE \
-> +		-o $@ -- $(bindgen_c_flags_final) -DMODULE \
->  		$(bindgen_target_cflags) $(bindgen_target_extra)
-> 
->  $(obj)/bindings/bindings_generated.rs: private bindgen_target_flags = \
-> @@ -293,8 +293,8 @@ $(obj)/bindings/bindings_generated.rs: $(src)/bindings/bindings_helper.h \
->  # given it is `libclang`; but for consistency, future Clang changes and/or
->  # a potential future GCC backend for `bindgen`, we disable it too.
->  $(obj)/bindings/bindings_helpers_generated.rs: private bindgen_target_flags = \
-> -    --blacklist-type '.*' --whitelist-var '' \
-> -    --whitelist-function 'rust_helper_.*'
-> +    --blocklist-type '.*' --allowlist-var '' \
-> +    --allowlist-function 'rust_helper_.*'
->  $(obj)/bindings/bindings_helpers_generated.rs: private bindgen_target_cflags = \
->      -I$(objtree)/$(obj) -Wno-missing-prototypes -Wno-missing-declarations
->  $(obj)/bindings/bindings_helpers_generated.rs: private bindgen_target_extra = ; \
-> diff --git a/rust/helpers.c b/rust/helpers.c
-> index 121583282976..98d9ef47225b 100644
-> --- a/rust/helpers.c
-> +++ b/rust/helpers.c
-> @@ -122,19 +122,18 @@ void rust_helper_put_task_struct(struct task_struct *t)
->  EXPORT_SYMBOL_GPL(rust_helper_put_task_struct);
-> 
->  /*
-> - * We use `bindgen`'s `--size_t-is-usize` option to bind the C `size_t` type
-> - * as the Rust `usize` type, so we can use it in contexts where Rust
-> - * expects a `usize` like slice (array) indices. `usize` is defined to be
-> - * the same as C's `uintptr_t` type (can hold any pointer) but not
-> - * necessarily the same as `size_t` (can hold the size of any single
-> + * `bindgen` binds the C `size_t` type the Rust `usize` type, so we can
-> + * use it in contexts where Rust expects a `usize` like slice (array) indices.
-> + * `usize` is defined to be the same as C's `uintptr_t` type (can hold any pointer)
-> + * but not necessarily the same as `size_t` (can hold the size of any single
->   * object). Most modern platforms use the same concrete integer type for
->   * both of them, but in case we find ourselves on a platform where
->   * that's not true, fail early instead of risking ABI or
->   * integer-overflow issues.
->   *
->   * If your platform fails this assertion, it means that you are in
-> - * danger of integer-overflow bugs (even if you attempt to remove
-> - * `--size_t-is-usize`). It may be easiest to change the kernel ABI on
-> + * danger of integer-overflow bugs (even if you attempt to add
-> + * `--no-size_t-is-usize`). It may be easiest to change the kernel ABI on
->   * your platform such that `size_t` matches `uintptr_t` (i.e., to increase
->   * `size_t`, because `uintptr_t` has to be at least as big as `size_t`).
->   */
-> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-> index ee27e10da479..1b0dcf03b9c2 100644
-> --- a/rust/kernel/lib.rs
-> +++ b/rust/kernel/lib.rs
-> @@ -95,7 +95,4 @@ fn panic(info: &core::panic::PanicInfo<'_>) -> ! {
->      pr_emerg!("{}\n", info);
->      // SAFETY: FFI call.
->      unsafe { bindings::BUG() };
-> -    // Bindgen currently does not recognize `__noreturn` so `BUG` returns `()`
-> -    // instead of `!`. See <https://github.com/rust-lang/rust-bindgen/issues/2094>.
-> -    loop {}
->  }
-> diff --git a/scripts/min-tool-version.sh b/scripts/min-tool-version.sh
-> index 20d483ec6f5f..5b80c5d3a9f8 100755
-> --- a/scripts/min-tool-version.sh
-> +++ b/scripts/min-tool-version.sh
-> @@ -30,7 +30,7 @@ rustc)
->  	echo 1.62.0
->  	;;
->  bindgen)
-> -	echo 0.56.0
-> +	echo 0.65.1
->  	;;
->  *)
->  	echo "$1: unknown tool" >&2
+We see here that with affinity-scopes-v2 (which defaults to cache nostrict)=
+,
+there is a good improvement when compared to the current codebase.
+Affinity scope "CPU nostrict" for erofs workqueue has even better numbers
+for my test launches and it resembles logically to percpu highpri kthreads
+approach. Percpu highpri kthreads has the lowest latency and variation,
+probably down to running at higher priority as those threads are set to
+sched_set_fifo_low().
+
+At high level, the app launch numbers itself improved with your series as
+entire workqueue subsystem improved across the board.
+
+Thanks,
+Sandeep.
+
+On Thu, Jun 8, 2023 at 8:43=E2=80=AFPM 'K Prateek Nayak' via kernel-team
+<kernel-team@android.com> wrote:
+>
+> Hello Tejun,
+>
+> On 6/9/2023 4:20 AM, Tejun Heo wrote:
+> > Hello,
+> >
+> > On Thu, Jun 08, 2023 at 08:31:34AM +0530, K Prateek Nayak wrote:
+> >> [..snip..]
+> >> o I consistently see a WARN_ON_ONCE() in kick_pool() being hit when I
+> >>   run "sudo ./stress-ng --iomix 96 --timeout 1m". I've seen few
+> >>   different stack traces so far. Including all below just in case:
+> > ...
+> >> This is the same WARN_ON_ONCE() you had added in the HEAD commit:
+> >>
+> >>     $ scripts/faddr2line vmlinux kick_pool+0xdb
+> >>     kick_pool+0xdb/0xe0:
+> >>     kick_pool at kernel/workqueue.c:1130 (discriminator 1)
+> >>
+> >>     $ sed -n 1130,1132p kernel/workqueue.c
+> >>     if (!WARN_ON_ONCE(wake_cpu >=3D nr_cpu_ids))
+> >>         p->wake_cpu =3D wake_cpu;
+> >>     get_work_pwq(work)->stats[PWQ_STAT_REPATRIATED]++;
+> >>
+> >> Let me know if you need any more data from my test setup.
+> >> P.S. The kernel is still up and running (~30min) despite hitting this
+> >> WARN_ON_ONCE() in my case :)
+> >
+> > Okay, that was me being stupid and not initializing the new fields for
+> > per-cpu workqueues. Can you please test the following branch? It should=
+ have
+> > both bugs fixed properly.
+> >
+> >  git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git affinity-scope=
+s-v2
+>
+> I've not run into any panics or warnings with this one. Kernel has been
+> stable for ~30min while running stress-ng iomix. We'll resume the testing
+> with v2 :)
+>
+> >
+> > If that doesn't crash, I'd love to hear how it affects the perf regress=
+ions
+> > reported over that past few months.>
+> > Thanks.
+> >
+>
 > --
-> 2.40.1
-> 
-
+> Thanks and Regards,
+> Prateek
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kernel-team+unsubscribe@android.com.
+>
