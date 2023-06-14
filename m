@@ -2,110 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A30F72FBF2
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 050DF72FC2F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:16:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236048AbjFNLJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 07:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34052 "EHLO
+        id S234692AbjFNLQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 07:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233170AbjFNLIv (ORCPT
+        with ESMTP id S236538AbjFNLJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 07:08:51 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66FDDF;
-        Wed, 14 Jun 2023 04:08:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686740930; x=1718276930;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Mm79erLzfDU1g9VPH5nKFTr67LEN6rYuyJAuFo/ZDXU=;
-  b=eOstIn05Qcbx8d6mDDVtRvz11YWnxoCAuh3K8/HrzpT2f2XnnA0iRS3r
-   ImepqkZzd2KuX2nQ5OHb5ck8vO64bEkoUCO0WUBMnrGYIg+T+MOiwwGgw
-   JlRb7qhDuPJWCefzqOmGS/VxmtsI5E4fqhbfD3cjlpVXrOi0I3aQQyEi6
-   NfFsvYwvY1ZS10Sl2e8Sook+oD7MMObDQdHA4h+E9uZ7oh9LFakD1Q5+5
-   2PB3bA7GHx8qolYq0f/nByqxw+B3wp/TpU9DCVi5UjkzpeR6URjB89GIs
-   l4NOTBYwwWzeglKrjLZV8Rkt65hZVg6fTUXoSmlH85rPye0tdc6gc3wkt
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="386993008"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="386993008"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 04:08:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="741798491"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="741798491"
-Received: from wlwpo-8.amr.corp.intel.com (HELO box.shutemov.name) ([10.251.211.89])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 04:08:38 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 7AC2910A069; Wed, 14 Jun 2023 14:08:21 +0300 (+03)
-Date:   Wed, 14 Jun 2023 14:08:21 +0300
-From:   "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-Subject: Re: [PATCH v11 18/20] x86: Handle TDX erratum to reset TDX private
- memory during kexec() and reboot
-Message-ID: <20230614110821.pf35kxd4vcwjjpb5@box>
-References: <cover.1685887183.git.kai.huang@intel.com>
- <5aa7506d4fedbf625e3fe8ceeb88af3be1ce97ea.1685887183.git.kai.huang@intel.com>
- <d3df3a9fa3075066558dd3bc84ef76ab3747185b.camel@intel.com>
- <20230614100245.3vehux365zou3ze6@box>
- <84dcc5ff896f487c95dc1602b627abef8d48432f.camel@intel.com>
+        Wed, 14 Jun 2023 07:09:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B0371BC3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 04:09:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C498F629BB
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:09:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A84C3C433C8;
+        Wed, 14 Jun 2023 11:09:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686740988;
+        bh=QlLA8ehxT/VDQBjkSwCszlwern9Sc5B23YkkiyOKqUI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2Dvsaip/e3rSwQLYF2uKMQQ0FhSwfibEEHJRzl1bxV8Kt8EBXlSKgt1vtjw5mqv6Y
+         BYEDnJ7Pjke3cJO3da1vvqKZ8sO6ZG2MJY/VvBkR5xo3po463zmUG6p7ibGRUK54g0
+         sxMVML4nymFhYW8j5jI2Wp1X1WfLKZxBP2SiFe4Y=
+Date:   Wed, 14 Jun 2023 13:09:45 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yajun Deng <yajun.deng@linux.dev>
+Cc:     rafael@kernel.org, rppt@kernel.org, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH] mm/mm_init.c: remove spinlock in early_pfn_to_nid()
+Message-ID: <2023061431-litigate-upchuck-7ed1@gregkh>
+References: <20230614110324.3839354-1-yajun.deng@linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <84dcc5ff896f487c95dc1602b627abef8d48432f.camel@intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230614110324.3839354-1-yajun.deng@linux.dev>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 10:58:13AM +0000, Huang, Kai wrote:
-> > And the platform has to
-> > handle erratum in BIOS to reset memory status on reboot anyway.
+On Wed, Jun 14, 2023 at 07:03:24PM +0800, Yajun Deng wrote:
+> When the system boots, only one cpu is enabled before smp_init().
+> So the spinlock is not needed in most cases, remove it.
 > 
-> So "handle erratum in BIOS" I think you mean "warm reset" doesn't reset TDX
-> private pages, and the BIOS needs to disable "warm reset".
-> 
-> IIUC this means the kernel needs to depend on specific BIOS setting to work
-> normally, and IIUC the kernel even cannot be aware of this setting?
-> 
-> Should the kernel just reset all TDX private pages when erratum is present
-> during reboot so the kernel doesn't depend on BIOS?
+> Add spinlock in get_nid_for_pfn() because it is after smp_init().
 
-Kernel cannot really function if we don't trust BIOS to do its job. Kernel
-depends on BIOS services anyway. We cannot try to handle everything in
-kernel just in case BIOS drops the ball.
+So this is two different things at once in the same patch?
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Or are they the same problem and both need to go in to solve it?
+
+And if a spinlock is not needed at early boot, is it really causing any
+problems?
+
+> 
+> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+> ---
+>  drivers/base/node.c | 11 +++++++++--
+>  mm/mm_init.c        | 18 +++---------------
+>  2 files changed, 12 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/base/node.c b/drivers/base/node.c
+> index 9de524e56307..844102570ff2 100644
+> --- a/drivers/base/node.c
+> +++ b/drivers/base/node.c
+> @@ -748,8 +748,15 @@ int unregister_cpu_under_node(unsigned int cpu, unsigned int nid)
+>  static int __ref get_nid_for_pfn(unsigned long pfn)
+>  {
+>  #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
+> -	if (system_state < SYSTEM_RUNNING)
+> -		return early_pfn_to_nid(pfn);
+> +	static DEFINE_SPINLOCK(early_pfn_lock);
+> +	int nid;
+> +
+> +	if (system_state < SYSTEM_RUNNING) {
+> +		spin_lock(&early_pfn_lock);
+> +		nid = early_pfn_to_nid(pfn);
+> +		spin_unlock(&early_pfn_lock);
+
+Adding an external lock for when you call a function is VERY dangerous
+as you did not document this anywhere, and there's no way to enforce it
+properly at all.
+
+Does your change actually result in any boot time changes?  How was this
+tested?
+
+thanks,
+
+greg k-h
