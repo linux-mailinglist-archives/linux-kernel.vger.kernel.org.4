@@ -2,66 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDD9730188
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:19:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A08B673018E
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:19:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245492AbjFNOTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 10:19:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
+        id S245575AbjFNOT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 10:19:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245495AbjFNOTK (ORCPT
+        with ESMTP id S245551AbjFNOTV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 10:19:10 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10AE10D8;
-        Wed, 14 Jun 2023 07:19:08 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-25e247414d9so340644a91.1;
-        Wed, 14 Jun 2023 07:19:08 -0700 (PDT)
+        Wed, 14 Jun 2023 10:19:21 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D464E212B;
+        Wed, 14 Jun 2023 07:19:18 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-56cfce8862aso8801027b3.1;
+        Wed, 14 Jun 2023 07:19:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686752348; x=1689344348;
+        d=gmail.com; s=20221208; t=1686752358; x=1689344358;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=j45S64yVRtWNmXi9+AQpAX/jaYs8Bbc2x/KQu3uuygo=;
-        b=lGNA8g/XUZhtMjdIGr5d3t83lKAAlZkr5+qkiFZuJ1870yee6pz6Ea/XZpsaogva4h
-         Ie4KxBWdz2y02qLCLW4QTnS35H0IxGzNaR7Z7CZZf7ypBiMIkRyIlI/BjqFWvqYucfiY
-         VBVsFuwHWRgxyL5m5ewLJZTN8xtU4bnccg0j3RSLnrS0qYrpYz5P+SuZvtfz5kNl1Ez8
-         j6kr7dXOXrn3PibKwXTJNtZ7DsEuPPwxnxLjLoZ0GZD2MlwLZ7DV8qfT9EySXmjKTxP/
-         pz0FGVN0MzfAQ4HlWrbCSnWvetd4/+0eGik/vTY5zezVtO+K7gEZczhkeY2ha2iWq7km
-         OAbA==
+        bh=KX5YO1WYul949jFQhaP2hJUbrdTDjTdGLvHcfir61kc=;
+        b=i6gIt2eixifwvL/xKy/LTVOmXLGJXu83F20GOpWUc+DfdS9FpLot9sLufvFkUNociJ
+         SR52ir+xMVHqmu/T+1dncFHrybZWnFKA3fI2lbYco5HZgQzsLBI6JsLUJi8GfLrjMqtH
+         L80OvDo3uxbVTqLBLpyAJdL90rnuu1wHoy1VrfUWG6twpll4h4p2VSno8fC0YhCKIYkb
+         Lt4mUX/3VIr9BSFjlGv+PFuI03s0vrPwSKpwFF9RzzOH2UPpHan1BFuAQEN55v95TojU
+         TFHcdpLrJxZrFjl4PWPcV4GT9CTcpdGR1T1F25T+gfYDHVCVzR/LnJdg6DGcS+eNPXI9
+         3olw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686752348; x=1689344348;
+        d=1e100.net; s=20221208; t=1686752358; x=1689344358;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=j45S64yVRtWNmXi9+AQpAX/jaYs8Bbc2x/KQu3uuygo=;
-        b=K7muAopsdrXsIGj4x3ZJdrMPN35Nt9zNVxzVM/1hl6fYqhMkvutCvzQNZOx1Bel2hb
-         pCRlalS+X6Tnndlf9EHbUWedxj3LX0CKBJuFiU3NTTDalj9mXdCWW7gcfHOPibH7FN34
-         +c2Fc19pA7pTWzWfuuMHNZ7qp7Pi7dld6c+qM/TeL9a4Xm6+swHOK0YI9WLReyGCK09/
-         fEwhFPd2evSH1nA2KdGpt5PnSyL8dGc+qymhFmSmNerUyRb2WxgwfBSlkcRyFH8dkK8R
-         0t9+oHvypthxKIuorg8eWD+EknumIPdDZDtJvUDbFGvkWoPfcWpfexQF8DEKvrvuG9Ao
-         lW5Q==
-X-Gm-Message-State: AC+VfDwNqMn+nRESL6CLoh98S0X7XjCww4gJI8NTvqUJJwLa6A0YCFIE
-        lo9QpL4v7zNcK1fgmVyYcZebZnKaIV+UVfJmnfQ=
-X-Google-Smtp-Source: ACHHUZ4roEXXepcOtSNdTNs0VwxnLll6tA0/2fTae80GaMgdp4nAlRuQJ/EuKIebK1XhccvRUJJiqy/YsYFns3wYIx8=
-X-Received: by 2002:a17:90b:214:b0:259:17bc:1a3c with SMTP id
- fy20-20020a17090b021400b0025917bc1a3cmr1385035pjb.7.1686752347917; Wed, 14
- Jun 2023 07:19:07 -0700 (PDT)
+        bh=KX5YO1WYul949jFQhaP2hJUbrdTDjTdGLvHcfir61kc=;
+        b=En3hniD8WzWEqAVa431q/FIlQIpX0kAMf6Rk6khWxRcvNzkHw3HTZmZBK1MLwOboXe
+         IGcDpaC1/XtHZ6ng2UYgz34kDy1wQ/opiQpy43T42uS6jjGl3SyCCQZR8lz7hi2Rd7AT
+         t7/0CwkptgL5fH5EjjuACCREX0GB/oxUyYVzTwPHs1bgsGMLjAUvxJknyvBOaU2GuNFw
+         Pzs/mqUF/lFyBZPN9PiWV/dB1r9L+YXstv53LSC2+yuTtEMXDtoiLJNbMM31kwRay/Av
+         JZoAg68PCaoayfOc19GFp4Aho1dW4FOWUHTZrbVS1SHiNvqxUa3KCX6lyEkfREawf1cH
+         Vhvw==
+X-Gm-Message-State: AC+VfDwnfE1GVQAZDor5Vx7vfPRAUEo0+YTsLZgCEii4pAQzVpX1PCPK
+        5OZIdNGyMAJqlvWqwzwUDnlq4aY9SoMgJUc+yOE=
+X-Google-Smtp-Source: ACHHUZ4x6WLud45wPegG2Lh8Ea6ssDXfxMlRzpQJzqGV7rINz/e9/iuzIawfj4+fKglV3jau7YuGI9MaoBNqtSycOK4=
+X-Received: by 2002:a81:6e8a:0:b0:56d:24c:8896 with SMTP id
+ j132-20020a816e8a000000b0056d024c8896mr1866564ywc.7.1686752357816; Wed, 14
+ Jun 2023 07:19:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230609131740.7496-1-linyunsheng@huawei.com> <20230609131740.7496-4-linyunsheng@huawei.com>
- <CAKgT0UfVwQ=ri7ZDNnsATH2RQpEz+zDBBb6YprvniMEWGdw+dQ@mail.gmail.com> <36366741-8df2-1137-0dd9-d498d0f770e4@huawei.com>
-In-Reply-To: <36366741-8df2-1137-0dd9-d498d0f770e4@huawei.com>
-From:   Alexander Duyck <alexander.duyck@gmail.com>
-Date:   Wed, 14 Jun 2023 07:18:31 -0700
-Message-ID: <CAKgT0UdXTSv1fDHBX4UC6Ok9NXKMJ_9F88CEv5TK+mpzy0N21g@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 3/4] page_pool: introduce page_pool_alloc() API
-To:     Yunsheng Lin <linyunsheng@huawei.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Eric Dumazet <edumazet@google.com>
+References: <20230524083153.2046084-1-s.hauer@pengutronix.de> <20230614134034.3p3p75a3jophi2eu@mercury.elektranox.org>
+In-Reply-To: <20230614134034.3p3p75a3jophi2eu@mercury.elektranox.org>
+From:   Vincent Legoll <vincent.legoll@gmail.com>
+Date:   Wed, 14 Jun 2023 14:19:06 +0000
+Message-ID: <CAEwRq=rUUatDp0JePkDPRkx81c9=sO6ZoW+V=g2S7B8_s-R3uA@mail.gmail.com>
+Subject: Re: [PATCH v5 00/25] Add perf support to the rockchip-dfi driver
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,81 +80,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 8:51=E2=80=AFPM Yunsheng Lin <linyunsheng@huawei.co=
-m> wrote:
->
-> On 2023/6/13 22:36, Alexander Duyck wrote:
-> > On Fri, Jun 9, 2023 at 6:20=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei=
-.com> wrote:
->
-> ...
->
-> >>
-> >> +static inline struct page *page_pool_alloc(struct page_pool *pool,
-> >> +                                          unsigned int *offset,
-> >> +                                          unsigned int *size, gfp_t g=
-fp)
-> >> +{
-> >> +       unsigned int max_size =3D PAGE_SIZE << pool->p.order;
-> >> +       struct page *page;
-> >> +
-> >> +       *size =3D ALIGN(*size, dma_get_cache_alignment());
-> >> +
-> >> +       if (WARN_ON(*size > max_size))
-> >> +               return NULL;
-> >> +
-> >> +       if ((*size << 1) > max_size || PAGE_POOL_DMA_USE_PP_FRAG_COUNT=
-) {
-> >> +               *size =3D max_size;
-> >> +               *offset =3D 0;
-> >> +               return page_pool_alloc_pages(pool, gfp);
-> >> +       }
-> >> +
-> >> +       page =3D __page_pool_alloc_frag(pool, offset, *size, gfp);
-> >> +       if (unlikely(!page))
-> >> +               return NULL;
-> >> +
-> >> +       /* There is very likely not enough space for another frag, so =
-append the
-> >> +        * remaining size to the current frag to avoid truesize undere=
-stimate
-> >> +        * problem.
-> >> +        */
-> >> +       if (pool->frag_offset + *size > max_size) {
-> >> +               *size =3D max_size - *offset;
-> >> +               pool->frag_offset =3D max_size;
-> >> +       }
-> >> +
-> >
-> > Rather than preventing a truesize underestimation this will cause one.
-> > You are adding memory to the size of the page reserved and not
-> > accounting for it anywhere as this isn't reported up to the network
-> > stack. I would suggest dropping this from your patch.
->
-> I was thinking about the driver author reporting it up to the network
-> stack using the new API as something like below:
->
-> int truesize =3D size;
-> struct page *page;
-> int offset;
->
-> page =3D page_pool_dev_alloc(pool, &offset, &truesize);
-> if (unlikely(!page))
->         goto err;
->
-> skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags, page,
->                 offset, size, truesize);
->
-> and similiar handling for *_build_skb() case too.
->
-> Does it make senses for that? or did I miss something obvious here?
+Hello Sascha, Sebastian,
 
-It is more the fact that you are creating a solution in search of a
-problem. As I said before most of the drivers will deal with these
-sorts of issues by just doing the fragmentation themselves or
-allocating fixed size frags and knowing how it will be divided into
-the page.
+On Wed, Jun 14, 2023 at 1:40=E2=80=AFPM Sebastian Reichel
+<sebastian.reichel@collabora.com> wrote:
+> On Wed, May 24, 2023 at 10:31:28AM +0200, Sascha Hauer wrote:
+> > This is v5 of the series adding perf support to the rockchip DFI driver=
+.
+> > [...]
+> > The RK3588 device tree changes for the DFI were not part of v4. As
+> > Vincent Legoll showed interest in testing this series the necessary
+> > device tree changes are now part of this series.
+>
+> I tested the series on RK3588 EVB1. The read/write byts looks
+> sensible. Sometimes cycles reads unrealistic values, though:
+> [...]
+> Otherwise the series is
+>
+> Tested-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+>
+> -- Sebastian
 
-If you are going to go down this path then you should have a consumer
-for the API and fully implement it instead of taking half measures and
-making truesize underreporting worse by evicting pages earlier.
+I also tested this new version of the series on a Pine64 QuartzPro64 dev bo=
+ard.
+
+I applied the series on top of my local branch, which is based on Collabora=
+'s
+rockchip-3588 plus some QP64 DTS patches, and your V5 patch series.
+
+Looks like this is still working properly:
+
+-bash-5.1# uname -a
+Linux qp64 6.4.0-rc1-00140-g658dd2200e2a #24 SMP PREEMPT Wed Jun 14
+15:50:34 CEST 2023 aarch64 GNU/Linux
+
+-bash-5.1# zgrep -i _dfi /proc/config.gz
+CONFIG_DEVFREQ_EVENT_ROCKCHIP_DFI=3Dy
+
+-bash-5.1# perf list | grep rockchip_ddr
+  rockchip_ddr/bytes/                                [Kernel PMU event]
+  rockchip_ddr/cycles/                               [Kernel PMU event]
+  rockchip_ddr/read-bytes/                           [Kernel PMU event]
+  rockchip_ddr/read-bytes0/                          [Kernel PMU event]
+  rockchip_ddr/read-bytes1/                          [Kernel PMU event]
+  rockchip_ddr/read-bytes2/                          [Kernel PMU event]
+  rockchip_ddr/read-bytes3/                          [Kernel PMU event]
+  rockchip_ddr/write-bytes/                          [Kernel PMU event]
+  rockchip_ddr/write-bytes0/                         [Kernel PMU event]
+  rockchip_ddr/write-bytes1/                         [Kernel PMU event]
+  rockchip_ddr/write-bytes2/                         [Kernel PMU event]
+  rockchip_ddr/write-bytes3/                         [Kernel PMU event]
+
+# With no memory load
+-bash-5.1# perf stat -a -e
+rockchip_ddr/cycles/,rockchip_ddr/read-bytes/,rockchip_ddr/write-bytes/,roc=
+kchip_ddr/bytes/
+sleep 1
+
+ Performance counter stats for 'system wide':
+
+        1058691047      rockchip_ddr/cycles/
+              9.35 MB   rockchip_ddr/read-bytes/
+              0.57 MB   rockchip_ddr/write-bytes/
+              9.90 MB   rockchip_ddr/bytes/
+
+       1.002616498 seconds time elapsed
+
+# With a hog
+-bash-5.1# memtester 4G > /dev/null 2>&1 &
+-bash-5.1# perf stat -a -e
+rockchip_ddr/cycles/,rockchip_ddr/read-bytes/,rockchip_ddr/write-bytes/,roc=
+kchip_ddr/bytes/
+sleep 10
+
+ Performance counter stats for 'system wide':
+
+       10561540038      rockchip_ddr/cycles/
+          60212.59 MB   rockchip_ddr/read-bytes/
+          31313.03 MB   rockchip_ddr/write-bytes/
+          91525.60 MB   rockchip_ddr/bytes/
+
+      10.001651886 seconds time elapsed
+
+You can add my T-B, for the whole series:
+
+Tested-by: Vincent Legoll <vincent.legoll@gmail.com>
+
+Or is there something else you want me to test ?
+
+Thanks for your work
+Regards
+
+--
+Vincent Legoll
