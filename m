@@ -2,88 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 458E372F0DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 02:17:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE1872F0E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 02:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231577AbjFNAQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 20:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51882 "EHLO
+        id S232217AbjFNAUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 20:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232518AbjFNAQl (ORCPT
+        with ESMTP id S230496AbjFNAU1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 20:16:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7561739;
-        Tue, 13 Jun 2023 17:16:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 54DCA63BEF;
-        Wed, 14 Jun 2023 00:16:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C11D8C433C8;
-        Wed, 14 Jun 2023 00:16:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686701789;
-        bh=kj9Ya7IV2GrY8S1ZmVY2sjyy1iwtpsSoYAouFrgDpLw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BUqgYQRYma4PsE5pRtQr/DfNgQmVbQwUn/N1SkJ6TNEuJE9girQHlOuLbAifF3lA7
-         Xn4JCt/UTJX2ThcxOnZUrs3jMotcUhYZ1XNitI4tg4e4r/65P4wny11o9pyHJw2yz/
-         A/KnfqscJXCVkogfi6WiI6xeooXq4MMEdId2iLG5QDJZgz6ybBVtYF3ZW6rikLUunr
-         4ndYgZnqGQmpApXdoi8MeyhxK2+k8AoDIN1lGWlcKr76SfnoVoxC7/ZHl87oZqvn1L
-         SUSfvZ3TtSamzsBuZXAxioGNqk+TZH7+HfblfrNTqp6GQb22WgG6gneZAXVtHmGZI7
-         uNyw+bRqNrb1g==
-Date:   Wed, 14 Jun 2023 02:16:21 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     heikki.krogerus@linux.intel.com, ajayg@nvidia.com,
-        andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Evan.Quan@amd.com, Lijo.Lazar@amd.com,
-        Sanket.Goswami@amd.com
-Subject: Re: [PATCH v2] usb: typec: ucsi: Mark dGPUs as DEVICE scope
-Message-ID: <20230614001621.iyxi2khz4hmcbl3x@intel.intel>
-References: <20230518161150.92959-1-mario.limonciello@amd.com>
+        Tue, 13 Jun 2023 20:20:27 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6679A10EC
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 17:20:25 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3406661e649so13661355ab.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 17:20:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686702024; x=1689294024;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vPZJuew65UVR5FFQsxCbQqGDSX7P8C2GTOs6C/LbA5k=;
+        b=YCcel+acfrTYic9py/4+GQxBeYHex8HYS6aJRETtkGDciO17WiLb3IvVVERevIS5Qj
+         ZosO2LrZqZzwUqms6q8JuoEXOzXqIKm9+8MeIAKYHXjlrIgioZM85Rh8WtgvKTblQqLQ
+         yBrNbIoZlF/iwo4RwqpB7aJAA5Tu8I0C984OWGrpAbjgZcS1mU+68r9uv2o3cuW5L9tx
+         eBV04KTKSBC36HFH9g9J06qalFuijpjox0kM/kQ7CdVCFQMqAoUPRdq+Pg2Yvmysc8ed
+         yb89hRIlte7eL036xOckp68bkVaTtXhB4xUNT1cWBMrY+gvfkW9X5L08mpd39D1zuR1P
+         XHog==
+X-Gm-Message-State: AC+VfDwJuJuXcw5AnxTbKg5g3Dx7XvuSdFbIDpXiYisf4In38rCbWWf6
+        498bStHqxCUIIUucxL1pwhbSC18QLstAqiWqqrPweQu/pJyP
+X-Google-Smtp-Source: ACHHUZ5vfao69TzkXMKSqLdZVZkQjhmYJLPV9X2girde6yyBqzjp7nQ2/UjzqGlW9LrxZhB3uLFSTTG2d/SigJlwdS0tZP7hRA/U
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230518161150.92959-1-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c98f:0:b0:33b:1445:e9cc with SMTP id
+ y15-20020a92c98f000000b0033b1445e9ccmr6377594iln.1.1686702024743; Tue, 13 Jun
+ 2023 17:20:24 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 17:20:24 -0700
+In-Reply-To: <1394611.1686700788@warthog.procyon.org.uk>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000006e58b05fe0beb6c@google.com>
+Subject: Re: [syzbot] [net?] KASAN: stack-out-of-bounds Read in skb_splice_from_iter
+From:   syzbot <syzbot+d8486855ef44506fd675@syzkaller.appspotmail.com>
+To:     bpf@vger.kernel.org, davem@davemloft.net, dhowells@redhat.com,
+        dsahern@kernel.org, edumazet@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mario,
+Hello,
 
-On Thu, May 18, 2023 at 11:11:50AM -0500, Mario Limonciello wrote:
-> power_supply_is_system_supplied() checks whether any power
-> supplies are present that aren't batteries to decide whether
-> the system is running on DC or AC.  Downstream drivers use
-> this to make performance decisions.
-> 
-> Navi dGPUs include an UCSI function that has been exported
-> since commit 17631e8ca2d3 ("i2c: designware: Add driver
-> support for AMD NAVI GPU").
-> 
-> This UCSI function registers a power supply since commit
-> 992a60ed0d5e ("usb: typec: ucsi: register with power_supply class")
-> but this is not a system power supply.
-> 
-> As the power supply for a dGPU is only for powering devices connected
-> to dGPU, create a device property to indicate that the UCSI endpoint
-> is only for the scope of `POWER_SUPPLY_SCOPE_DEVICE`.
-> 
-> Link: https://lore.kernel.org/lkml/20230516182541.5836-2-mario.limonciello@amd.com/
-> Reviewed-by: Evan Quan <evan.quan@amd.com>
-> Tested-by: Evan Quan <evan.quan@amd.com>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Acked-by: Andi Shyti <andi.shyti@kernel.org> 
+Reported-and-tested-by: syzbot+d8486855ef44506fd675@syzkaller.appspotmail.com
 
-Thanks,
-Andi
+Tested on:
+
+commit:         a9c47697 Merge branch 'tools-ynl-gen-improvements-for-..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git main
+console output: https://syzkaller.appspot.com/x/log.txt?x=145cfc8b280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=526f919910d4a671
+dashboard link: https://syzkaller.appspot.com/bug?extid=d8486855ef44506fd675
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=14ed8d2d280000
+
+Note: testing is done by a robot and is best-effort only.
