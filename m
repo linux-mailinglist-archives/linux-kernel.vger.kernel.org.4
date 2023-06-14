@@ -2,148 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE847303E2
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:29:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 952167303E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236830AbjFNP32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 11:29:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36194 "EHLO
+        id S243149AbjFNPan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 11:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235361AbjFNP30 (ORCPT
+        with ESMTP id S237016AbjFNPae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 11:29:26 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D1FC7;
-        Wed, 14 Jun 2023 08:29:24 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id fa9909d605947cc3; Wed, 14 Jun 2023 17:29:22 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 31C8569DA2F;
-        Wed, 14 Jun 2023 17:29:22 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Saket Dumbre <saket.dumbre@intel.com>,
-        Xiaoming Ni <nixiaoming@huawei.com>
-Subject: [PATCH v2] ACPI: sleep: Avoid breaking S3 wakeup due to might_sleep()
-Date:   Wed, 14 Jun 2023 17:29:21 +0200
-Message-ID: <12252058.O9o76ZdvQC@kreacher>
+        Wed, 14 Jun 2023 11:30:34 -0400
+Received: from ste-pvt-msa1.bahnhof.se (ste-pvt-msa1.bahnhof.se [213.80.101.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55987C3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:30:30 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTP id 2B49C3FF00;
+        Wed, 14 Jun 2023 17:30:28 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at bahnhof.se
+X-Spam-Score: -2.199
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
+Authentication-Results: ste-pvt-msa1.bahnhof.se (amavisd-new);
+        dkim=pass (1024-bit key) header.d=shipmail.org
+Received: from ste-pvt-msa1.bahnhof.se ([127.0.0.1])
+        by localhost (ste-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Oe7QbcaBXzJp; Wed, 14 Jun 2023 17:30:27 +0200 (CEST)
+Received: by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id 6D7533FECC;
+        Wed, 14 Jun 2023 17:30:26 +0200 (CEST)
+Received: from [192.168.0.209] (h-155-4-205-35.A357.priv.bahnhof.se [155.4.205.35])
+        by mail1.shipmail.org (Postfix) with ESMTPSA id E894D3631FF;
+        Wed, 14 Jun 2023 17:30:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=shipmail.org; s=mail;
+        t=1686756626; bh=My99GLkGvRcJlCBxLCHL4W/UQjFF1tmEmHpgRBESrnI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=QNeJaHjqVqB4HskMw/NNX9mPCz3LWemDx6Hc9IdNNAgtZlzQ4A7fWTNVmnP/xOySI
+         PLrCXXFLtVOR7+eRI+rMD7YULyQ4zzgSUKUdC3iBYdxBogO/lfZxtVmwIh4YtuX2IL
+         pJl/J1CQhbmzWiugIIF4GGiWwohPosaBmKBT/QG8=
+Message-ID: <69d7af2f-f4c2-5a7d-ce69-c38be5660c74@shipmail.org>
+Date:   Wed, 14 Jun 2023 17:30:25 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrgedvtddgledtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepkedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghl
- rdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepfihilhhlsehkvghrnhgvlhdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=8 Fuz1=8 Fuz2=8
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [Intel-gfx] [PATCH] drm/i915: Call page_address() on page
+ acquired with GFP_KERNEL flag
+Content-Language: en-US
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Sumitra Sharma <sumitraartsy@gmail.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     Deepak R Varma <drv@mailo.com>, Fabio <fmdefrancesco@gmail.com>,
+        Thomas Hellstrom <thomas.hellstrom@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Matthew Auld <matthew.auld@intel.com>
+References: <20230614123556.GA381200@sumitra.com>
+ <bebd57fc-7135-dc97-701e-54cb9c2955c0@linux.intel.com>
+From:   =?UTF-8?Q?Thomas_Hellstr=c3=b6m_=28Intel=29?= 
+        <thomas_os@shipmail.org>
+In-Reply-To: <bebd57fc-7135-dc97-701e-54cb9c2955c0@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-The addition of might_sleep() to down_timeout() caused the latter to
-enable interrupts unconditionally in some cases, which in turn broke
-the ACPI S3 wakeup path in acpi_suspend_enter(), where down_timeout()
-is called by acpi_disable_all_gpes() via acpi_ut_acquire_mutex().
+On 6/14/23 15:22, Tvrtko Ursulin wrote:
+>
+> On 14/06/2023 13:35, Sumitra Sharma wrote:
+>> Pages allocated with GFP_KERNEL cannot come from Highmem.
+>> That is why there is no need to call kmap() on them.
+>
+> Are you sure it is GFP_KERNEL backed and not tmpfs? I am not sure 
+> myself so let me copy Matt and Thomas if they happen to know off hand.
 
-Namely, if CONFIG_DEBUG_ATOMIC_SLEEP is set, might_sleep() causes
-might_resched() to be used and if CONFIG_PREEMPT_VOLUNTARY is set,
-this triggers __cond_resched() which may call preempt_schedule_common(),
-so __schedule() gets invoked and it ends up with enabled interrupts (in
-the prev == next case).
+It looks to me these are shmem pages or TTM pages. Both could be 
+highmem. So I think kmap is the correct choice here.
 
-Now, enabling interrupts early in the S3 wakeup path causes the kernel
-to crash.
-
-Address this by modifying acpi_suspend_enter() to disable GPEs without
-attempting to acquire the sleeping lock which is not needed in that code
-path anyway.
-
-Fixes: 99409b935c9a ("locking/semaphore: Add might_sleep() to down_*() family")
-Reported-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
-
-v1 -> v2:
-   * Rephrase the comment in acpi_suspend_enter() (Peter)
-   * Fix up the Fixes tag (Peter)
-   * Add Peter's ACK
-
----
- drivers/acpi/acpica/achware.h |    2 --
- drivers/acpi/sleep.c          |   16 ++++++++++++----
- include/acpi/acpixf.h         |    1 +
- 3 files changed, 13 insertions(+), 6 deletions(-)
-
-Index: linux-pm/drivers/acpi/acpica/achware.h
-===================================================================
---- linux-pm.orig/drivers/acpi/acpica/achware.h
-+++ linux-pm/drivers/acpi/acpica/achware.h
-@@ -101,8 +101,6 @@ acpi_status
- acpi_hw_get_gpe_status(struct acpi_gpe_event_info *gpe_event_info,
- 		       acpi_event_status *event_status);
- 
--acpi_status acpi_hw_disable_all_gpes(void);
--
- acpi_status acpi_hw_enable_all_runtime_gpes(void);
- 
- acpi_status acpi_hw_enable_all_wakeup_gpes(void);
-Index: linux-pm/include/acpi/acpixf.h
-===================================================================
---- linux-pm.orig/include/acpi/acpixf.h
-+++ linux-pm/include/acpi/acpixf.h
-@@ -761,6 +761,7 @@ ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_sta
- 						     acpi_event_status
- 						     *event_status))
- ACPI_HW_DEPENDENT_RETURN_UINT32(u32 acpi_dispatch_gpe(acpi_handle gpe_device, u32 gpe_number))
-+ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status acpi_hw_disable_all_gpes(void))
- ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status acpi_disable_all_gpes(void))
- ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status acpi_enable_all_runtime_gpes(void))
- ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status acpi_enable_all_wakeup_gpes(void))
-Index: linux-pm/drivers/acpi/sleep.c
-===================================================================
---- linux-pm.orig/drivers/acpi/sleep.c
-+++ linux-pm/drivers/acpi/sleep.c
-@@ -636,11 +636,19 @@ static int acpi_suspend_enter(suspend_st
- 	}
- 
- 	/*
--	 * Disable and clear GPE status before interrupt is enabled. Some GPEs
--	 * (like wakeup GPE) haven't handler, this can avoid such GPE misfire.
--	 * acpi_leave_sleep_state will reenable specific GPEs later
-+	 * Disable all GPE and clear their status bits before interrupts are
-+	 * enabled. Some GPEs (like wakeup GPEs) have no handlers and this can
-+	 * prevent them from producing spurious interrups.
-+	 *
-+	 * acpi_leave_sleep_state() will reenable specific GPEs later.
-+	 *
-+	 * Because this code runs on one CPU with disabled interrupts (all of
-+	 * the other CPUs are offline at this time), it need not acquire any
-+	 * sleeping locks which may trigger an implicit preemption point even
-+	 * if there is no contention, so avoid doing that by using a low-level
-+	 * library routine here.
- 	 */
--	acpi_disable_all_gpes();
-+	acpi_hw_disable_all_gpes();
- 	/* Allow EC transactions to happen. */
- 	acpi_ec_unblock_transactions();
- 
+/Thomas
 
 
 
+
+>
+> Regards,
+>
+> Tvrtko
+>
+>> Therefore, don't call kmap() on the page coming from
+>> vma_res->bi.pages using for_each_sgt_page() in
+>> i915_vma_coredump_create().
+>>
+>> Use a plain page_address() to get the kernel address instead.
+>>
+>> Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+>> ---
+>>   drivers/gpu/drm/i915/i915_gpu_error.c | 3 +--
+>>   1 file changed, 1 insertion(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/i915/i915_gpu_error.c 
+>> b/drivers/gpu/drm/i915/i915_gpu_error.c
+>> index f020c0086fbc..6f51cb4fc55c 100644
+>> --- a/drivers/gpu/drm/i915/i915_gpu_error.c
+>> +++ b/drivers/gpu/drm/i915/i915_gpu_error.c
+>> @@ -1164,9 +1164,8 @@ i915_vma_coredump_create(const struct intel_gt 
+>> *gt,
+>>                 drm_clflush_pages(&page, 1);
+>>   -            s = kmap(page);
+>> +            s = page_address(page);
+>>               ret = compress_page(compress, s, dst, false);
+>> -            kunmap(page);
+>>                 drm_clflush_pages(&page, 1);
