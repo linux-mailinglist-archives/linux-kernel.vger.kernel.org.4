@@ -2,67 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A83CB72F171
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 03:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A60572F174
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 03:15:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240908AbjFNBPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 21:15:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38364 "EHLO
+        id S230189AbjFNBPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 21:15:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbjFNBPN (ORCPT
+        with ESMTP id S232576AbjFNBPb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 21:15:13 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE761BE8;
-        Tue, 13 Jun 2023 18:15:11 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QgnXW2scnz4f3mVx;
-        Wed, 14 Jun 2023 09:15:07 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgAHcLOaFIlkEF+bLg--.21440S3;
-        Wed, 14 Jun 2023 09:15:08 +0800 (CST)
-Subject: Re: [dm-devel] [PATCH -next v2 3/6] md: add a mutex to synchronize
- idle and frozen in action_store()
-To:     Xiao Ni <xni@redhat.com>, Yu Kuai <yukuai1@huaweicloud.com>,
-        guoqing.jiang@linux.dev, agk@redhat.com, snitzer@kernel.org,
-        dm-devel@redhat.com, song@kernel.org
-Cc:     yi.zhang@huawei.com, yangerkun@huawei.com,
-        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230529132037.2124527-1-yukuai1@huaweicloud.com>
- <20230529132037.2124527-4-yukuai1@huaweicloud.com>
- <c96f2604-e1ef-c3ad-9d15-5e0efa5f222b@redhat.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <254fc651-aa75-074d-f567-49bafc437e9c@huaweicloud.com>
-Date:   Wed, 14 Jun 2023 09:15:06 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 13 Jun 2023 21:15:31 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CE41BEC;
+        Tue, 13 Jun 2023 18:15:29 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-652d1d3e040so4707108b3a.1;
+        Tue, 13 Jun 2023 18:15:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686705329; x=1689297329;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0Qx8m0l5OukQyzZseritYmbm+wBilDwp6PVLNmtxjoI=;
+        b=H74dI4jAg+9W8MW9L/inWX8URAO7fqd24702FyhtGOpHb2DJljdLQZjw5evS087UsE
+         WNzJIJpTmAmFXj9l0mCNHNIervudP3x4Jr1JCv2vQQTdjwfiFagzaq25CsHbIVvk9MAM
+         qlGCX8Hu/933RwtSR/3LJYSFk9RVMzciR+8o7QETLBVLmepXtGwAofv/Hc3APSrdf0Oa
+         H/kjV7zykOQzTtOwfhktyXB0QvZTuRBhpiU9kvkQYbt42vyIrAqPyKSqhoowC7mIpqoH
+         MpQ+Zh+ExjUJOktFhEZMaBPSkchSH7elhUqCpslJRF8FqoPAhIrDNqHBj9vN7hS3TVKa
+         JeIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686705329; x=1689297329;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=0Qx8m0l5OukQyzZseritYmbm+wBilDwp6PVLNmtxjoI=;
+        b=RTkjMO9ZCSIqu1hj9xhxkyOH0XadZqkalMSZddVRDnxc4DVY+DcsIvihTI9CPiFlam
+         5+AKegmSc0y/Ojqz53lC/BfhUYoESxj5sXn+Z9rOolKTI6mZIbqGYpCl/PZGc0WAhDWa
+         LYDPO0V4aGE0vYFBNN/rPeq2mZiLUWgcqwmXmwAKTFkZbaoRXNDqHw4xS15fADKHRt0s
+         Vf7hlY8+EZ6pg7KKwTDAQ1TPfu9y5+TdegeYq0e4xkq+3DBPZIWSrUBCeTTovHrPyk5o
+         j5V/9yciRWyjvzVUzlZfcwAejXnvnqKT0SLWXTXfubMQnqZckAz2eVCG80X52sSJGW4Q
+         Vfuw==
+X-Gm-Message-State: AC+VfDw7BK8+fw7lCFC9kVOzH4+k7sOkgidyui6WrSqZGBLN14F9p5JW
+        XI7DMwB0v1gr1PM2cQXOFPw=
+X-Google-Smtp-Source: ACHHUZ5DBMu8zSisl8h2f9Kwp+pIiWwmyc4Hge5VKLHTWvYmyBg/a5P6Qgx96/xwdB8jnW9DzMukCw==
+X-Received: by 2002:a05:6a20:4426:b0:11a:efaa:eb3e with SMTP id ce38-20020a056a20442600b0011aefaaeb3emr362375pzb.33.1686705328722;
+        Tue, 13 Jun 2023 18:15:28 -0700 (PDT)
+Received: from [192.168.0.103] ([103.124.138.155])
+        by smtp.gmail.com with ESMTPSA id a8-20020a170902b58800b001a988a71617sm10837354pls.192.2023.06.13.18.15.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 18:15:28 -0700 (PDT)
+Message-ID: <2db51694-aa57-cbfd-096e-4925b76232b0@gmail.com>
+Date:   Wed, 14 Jun 2023 08:15:24 +0700
 MIME-Version: 1.0
-In-Reply-To: <c96f2604-e1ef-c3ad-9d15-5e0efa5f222b@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAHcLOaFIlkEF+bLg--.21440S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxJw1kJrWfAr1xArW3JrWfGrg_yoW5CFWrpF
-        WktFWrArZ0yws3Xr1UJwsrZay5Xr18KayDKryfGa4UJF13Cr4qqF1jgF4j9FykC3y8Cr1U
-        tw18XFZ3ZF18Xr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
-        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
-        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Content-Language: en-US
+To:     Kalle Valo <kvalo@kernel.org>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Garry Williams <gtwilliams@gmail.com>
+Cc:     Linux Atheros 10K <ath10k@lists.infradead.org>,
+        Linux Wireless <linux-wireless@vger.kernel.org>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Fwd: Dell XPS 13 ath10k_pci firmware crashed!
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -71,86 +80,53 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-在 2023/06/13 22:43, Xiao Ni 写道:
-> 
-> 在 2023/5/29 下午9:20, Yu Kuai 写道:
->> From: Yu Kuai <yukuai3@huawei.com>
->>
->> Currently, for idle and frozen, action_store will hold 'reconfig_mutex'
->> and call md_reap_sync_thread() to stop sync thread, however, this will
->> cause deadlock (explained in the next patch). In order to fix the
->> problem, following patch will release 'reconfig_mutex' and wait on
->> 'resync_wait', like md_set_readonly() and do_md_stop() does.
->>
->> Consider that action_store() will set/clear 'MD_RECOVERY_FROZEN'
->> unconditionally, which might cause unexpected problems, for example,
->> frozen just set 'MD_RECOVERY_FROZEN' and is still in progress, while
->> 'idle' clear 'MD_RECOVERY_FROZEN' and new sync thread is started, which
->> might starve in progress frozen. A mutex is added to synchronize idle
->> and frozen from action_store().
->>
->> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->> ---
->>   drivers/md/md.c | 5 +++++
->>   drivers/md/md.h | 3 +++
->>   2 files changed, 8 insertions(+)
->>
->> diff --git a/drivers/md/md.c b/drivers/md/md.c
->> index 23e8e7eae062..63a993b52cd7 100644
->> --- a/drivers/md/md.c
->> +++ b/drivers/md/md.c
->> @@ -644,6 +644,7 @@ void mddev_init(struct mddev *mddev)
->>       mutex_init(&mddev->open_mutex);
->>       mutex_init(&mddev->reconfig_mutex);
->>       mutex_init(&mddev->delete_mutex);
->> +    mutex_init(&mddev->sync_mutex);
->>       mutex_init(&mddev->bitmap_info.mutex);
->>       INIT_LIST_HEAD(&mddev->disks);
->>       INIT_LIST_HEAD(&mddev->all_mddevs);
->> @@ -4785,14 +4786,18 @@ static void stop_sync_thread(struct mddev *mddev)
->>   static void idle_sync_thread(struct mddev *mddev)
->>   {
->> +    mutex_lock(&mddev->sync_mutex);
->>       clear_bit(MD_RECOVERY_FROZEN, &mddev->recovery);
->>       stop_sync_thread(mddev);
->> +    mutex_unlock(&mddev->sync_mutex);
->>   }
->>   static void frozen_sync_thread(struct mddev *mddev)
->>   {
->> +    mutex_init(&mddev->delete_mutex);
-> 
-> 
-> typo error? It should be mutex_lock(&mddev->sync_mutex); ?
-> 
+I notice a regression report on Bugzilla [1]. Quoting from it:
 
-Yes, and thanks for spotting this, this looks like I did this while
-rebasing.
+> Beginning with kernel 6.2.15-300.fc38.x86_64 and continuing through 6.3.7-200.fc38.x86_64, the wifi connection fails periodically with these log messages:
+> 
+> ath10k_pci 0000:02:00.0: firmware crashed! (guid 6c545da0-593c-4a0e-b5ad-3ef2b91cdebf)
+> ath10k_pci 0000:02:00.0: qca6174 hw3.2 target 0x05030000 chip_id 0x00340aff sub 1a56:143a
+> ath10k_pci 0000:02:00.0: kconfig debug 0 debugfs 1 tracing 0 dfs 0 testmode 0
+> ath10k_pci 0000:02:00.0: firmware ver WLAN.RM.4.4.1-00288- api 6 features wowlan,ignore-otp,mfp crc32 bf907c7c
+> ath10k_pci 0000:02:00.0: board_file api 2 bmi_id N/A crc32 d2863f91
+> ath10k_pci 0000:02:00.0: htt-ver 3.87 wmi-op 4 htt-op 3 cal otp max-sta 32 raw 0 hwcrypto 1
+> ath10k_pci 0000:02:00.0: failed to get memcpy hi address for firmware address 4: -16
+> ath10k_pci 0000:02:00.0: failed to read firmware dump area: -16
+> ath10k_pci 0000:02:00.0: Copy Engine register dump:
+> ath10k_pci 0000:02:00.0: [00]: 0x00034400  12  12   3   3
+> ath10k_pci 0000:02:00.0: [01]: 0x00034800  14  14 347 348
+> ath10k_pci 0000:02:00.0: [02]: 0x00034c00   8   2   0   1
+> ath10k_pci 0000:02:00.0: [03]: 0x00035000  16  15  16  14
+> ath10k_pci 0000:02:00.0: [04]: 0x00035400 2995 2987  22 214
+> ath10k_pci 0000:02:00.0: [05]: 0x00035800   0   0  64   0
+> ath10k_pci 0000:02:00.0: [06]: 0x00035c00   0   0  18  18
+> ath10k_pci 0000:02:00.0: [07]: 0x00036000   1   1   1   0
+> ath10k_pci 0000:02:00.0: could not request stats (-108)
+> ath10k_pci 0000:02:00.0: could not request peer stats info: -108
+> ath10k_pci 0000:02:00.0: failed to read hi_board_data address: -28
+> ieee80211 phy0: Hardware restart was requested
+> ath10k_pci 0000:02:00.0: could not request stats (-108)
+> ath10k_pci 0000:02:00.0: device successfully recovered
+> 
+> 
+> If I disconnect and reconnect using network manager, the connection is restored.  But this same failure recurs over and over after some few minutes to a few hours.
+> 
+> This is a regression.  The error was not reported with any previous kernel since 6.2.14-300.fc38.x86_64
 
-Thanks,
-Kuai
-> Regards
-> 
-> Xiao
-> 
->>       set_bit(MD_RECOVERY_FROZEN, &mddev->recovery);
->>       stop_sync_thread(mddev);
->> +    mutex_unlock(&mddev->sync_mutex);
->>   }
->>   static ssize_t
->> diff --git a/drivers/md/md.h b/drivers/md/md.h
->> index bfd2306bc750..2fa903de5bd0 100644
->> --- a/drivers/md/md.h
->> +++ b/drivers/md/md.h
->> @@ -537,6 +537,9 @@ struct mddev {
->>       /* Protect the deleting list */
->>       struct mutex            delete_mutex;
->> +    /* Used to synchronize idle and frozen for action_store() */
->> +    struct mutex            sync_mutex;
->> +
->>       bool    has_superblocks:1;
->>       bool    fail_last_dev:1;
->>       bool    serialize_policy:1;
-> 
-> .
-> 
+See Bugzilla for the full thread.
 
+Unfortunately, the reporter can't bisect this regression (he only tries
+distribution kernels instead).
+
+Anyway, I'm adding it to regzbot (as mainline regression because v6.2.x
+has already EOL):
+
+#regzbot introduced: v6.2..v6.3 https://bugzilla.kernel.org/show_bug.cgi?id=217549
+#regzbot title: ath10k_pci firmware crashed on Dell XPS 13
+
+Thanks.
+
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217549
+
+-- 
+An old man doll... just what I always wanted! - Clara
