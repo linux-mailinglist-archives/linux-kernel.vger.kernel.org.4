@@ -2,1051 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC18F72FEFC
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B65172FF04
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:48:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244701AbjFNMrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 08:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48058 "EHLO
+        id S244723AbjFNMs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 08:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236282AbjFNMq7 (ORCPT
+        with ESMTP id S244710AbjFNMsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 08:46:59 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03BF519A
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:46:57 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <l.goehrs@pengutronix.de>)
-        id 1q9Ptg-0003Qk-LP; Wed, 14 Jun 2023 14:46:48 +0200
-Message-ID: <110c7d15-82f3-faa8-75c9-63fba061fab0@pengutronix.de>
-Date:   Wed, 14 Jun 2023 14:46:45 +0200
+        Wed, 14 Jun 2023 08:48:25 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E37E79;
+        Wed, 14 Jun 2023 05:48:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686746904; x=1718282904;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=V3FU4iHEmnYLa4Mu159eLnh6B4cv+Bf+DYhynBZoU1U=;
+  b=Bykoic6wDSH8BURNjvkhLC8w404Uk0fu2pe1JFUungSmvry1B7bUg9Et
+   utC7tmnfnVOzjTy6160SrHMwmgidUApmWnpREpICTXeIk2R4sVmGZFoam
+   FltxSZQSAwppwiQBIADwkcJRx9nR97mrRgVimfCZfcahjDASnGZy/MT+9
+   wYbK3pj4I1u9DXBRnA5NOovqekj+SzM4x44g7zWyG1hUupIHphxrcQZMA
+   2F9AZC5qFWAcknza3lKcpIoiSlj87pjBBx2WZsakrZIgaJSWwHo9UzhQ3
+   BzvO0EObSqrinZRIDZFiw2RIkH4GCyPpVKOQkAtcJPKJ1/c77sctmTVz1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="358603255"
+X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
+   d="scan'208";a="358603255"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 05:48:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="1042196997"
+X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
+   d="scan'208";a="1042196997"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga005.fm.intel.com with ESMTP; 14 Jun 2023 05:48:23 -0700
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 14 Jun 2023 05:48:23 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Wed, 14 Jun 2023 05:48:23 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Wed, 14 Jun 2023 05:48:22 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MDm1seykXM4d4d1UER7jNZOgce9gz8RIP97lvQEWz9BuLbnUCGITRFK5SKcgwaZRH5s9nJW8iOvEDtkDT+oWIyLLTtwWwat4fBlJ9DaPLzM1ICGCAIHGgmSVj1c0hse6Dlmi5qWWILMJGAIJbEEbviW2G0dbBN6JBpXa8b2ZMez8+/yfUsQ0DR3FOiiP2v1IF6EaI54eocufLbIs5GInYnEzXC5R2oR0enEG17r3Ul50D3yTngJwIFNbqI3w+yBbkVu1lwyZ3KHT9ODefscIUaAai1O6S2HKdpQUMSoV+8W7lLnWWaDr9i+KbhflxXe89t/jUYmLxn8V9Ixn+VJ4Vw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TeZJvHWzXGBF/4vsnckFytbsm0WIHO8d+xmm80mj5Ic=;
+ b=PIse0NYkJFlqib717wW1m3+Z8Zpg/m95a/XE+QL5KpGgqhWwuBdLLN9EPoMdTQCX9ORf0zCC4bishCZrgvjrTtsd3mbEGMXZ6gX9lPJSIi5HxBVhHFthFHcWaPFK4IOfedbpUa2NuMmTETex+Q68QxQqqcoJ/5O7KLThQvDx4puDigSQUQozLxq84pl1gtNU09y/ysemrV9qPu+tS5CGiw7qZTPN1mwEcV+SonFava1WNfWPDLW9dIRbh9TXFmplx+IIREwkdOS0LecljD332DhWnWjzUZDycQHFIsQYLXNbsqWtOal1POn2eVuothXgkFFHyW6FBThvUcaGRAcgEA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from DM6PR11MB4657.namprd11.prod.outlook.com (2603:10b6:5:2a6::7) by
+ PH7PR11MB6556.namprd11.prod.outlook.com (2603:10b6:510:1aa::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6455.44; Wed, 14 Jun 2023 12:48:15 +0000
+Received: from DM6PR11MB4657.namprd11.prod.outlook.com
+ ([fe80::24bd:974b:5c01:83d6]) by DM6PR11MB4657.namprd11.prod.outlook.com
+ ([fe80::24bd:974b:5c01:83d6%3]) with mapi id 15.20.6455.045; Wed, 14 Jun 2023
+ 12:48:15 +0000
+From:   "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "chuck.lever@oracle.com" <chuck.lever@oracle.com>
+Subject: RE: [PATCH net-next] tools: ynl-gen: generate docs for
+ <name>_max/_mask enums
+Thread-Topic: [PATCH net-next] tools: ynl-gen: generate docs for
+ <name>_max/_mask enums
+Thread-Index: AQHZnk2DP+viVSY2G0+N2yPHRycjpq+JelUAgADC5aA=
+Date:   Wed, 14 Jun 2023 12:48:14 +0000
+Message-ID: <DM6PR11MB46570AEF7E10089E70CC1D019B5AA@DM6PR11MB4657.namprd11.prod.outlook.com>
+References: <20230613231709.150622-1-arkadiusz.kubalewski@intel.com>
+        <20230613231709.150622-3-arkadiusz.kubalewski@intel.com>
+ <20230613175928.4ea56833@kernel.org>
+In-Reply-To: <20230613175928.4ea56833@kernel.org>
+Accept-Language: pl-PL, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM6PR11MB4657:EE_|PH7PR11MB6556:EE_
+x-ms-office365-filtering-correlation-id: 5a43b121-2d23-419b-033c-08db6cd59ebc
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: LNprY7cjU7hY6lL5pdZ809tLBJcL+4xIN5GJZ+tJ8aGD5Ul/fSeIUHXFOWnAzPLWMi19J5+ySuvoMkHgWM52gfReQt7lnQ6HfgbwDi01wUAb1FDxj32YxrcV8VfQVUjfJSx8PEaQ6TuwciFbRIJVqLSDE/bNJ+nbnKyUNGFN5Xooqv+qJST6APRCCurue0nWXHZXCrJuwAnzWpMd7d7IOenQBUsBSJirobzK9s8iccS91Am5jEYGHqOniXGYZpfInsgkfpcTyPhjNCEMnqYWEF7wrxuTeqZAo4RXcqVtMkDzPEv1Dy5KjDKPjM3jFXndvvA09z7F0TIhcOTlWwvXnCHipF/8rgEglIYeDZIvM0AXU7DlidUj28fG6b9+aEjt7bcO4tAyz4nxYvz+IYlRQX0YegHtX32AMixbz8+n/s06XNb7eTzOt7azccSHZGWPyanb6PtfEBDGWXSYikbELwo99g+V8b2KdK1n3fANfphbbY4+BF+zvVIuIgeG0stoTnk0+Q5na7u6tYwCjWFG8yND8+bBpsfIwBnAeMng80h6ODEzTJ4NbXptTrbsfg1D5gly0gWgY5D4XeYxjer9vt/C50k4OcbipWtS/9Q/ZJBkRi98xodP8kKrI1Tl27Hi
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4657.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(396003)(376002)(346002)(39860400002)(366004)(451199021)(55016003)(83380400001)(82960400001)(64756008)(66476007)(66556008)(66446008)(6916009)(4326008)(66946007)(76116006)(9686003)(71200400001)(7696005)(6506007)(26005)(478600001)(186003)(54906003)(86362001)(2906002)(8936002)(8676002)(52536014)(5660300002)(316002)(33656002)(122000001)(41300700001)(38100700002)(38070700005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ByOsccwMEEbJxhiqVuhhuznFXe+0zy/hSCVudvfiL8/9gNVYccWShhvKxMeT?=
+ =?us-ascii?Q?yq1dytsUQB0DgrNgirwmVamfgkzXtIf0rcbNQYkfOWcilCrDCW2QDkF9ky7t?=
+ =?us-ascii?Q?XMUz6TaUPD1QQZTYEXxkEUv7Q7IWpEc1xqA0n2vE3313ktZ3ndHonLZRFud/?=
+ =?us-ascii?Q?0jdbXIe3huzTE4wfgN2Y5qKBxSogJ/R+/DDQv1NzV7H+mkjz5MW2kcx6DxaL?=
+ =?us-ascii?Q?9mV/QODxmlrfsoYI5bozQix0p9vfF8wWJ2ALK0Awg+A4e9OqtyAscOvdMbOm?=
+ =?us-ascii?Q?Gs6kqeOrAFF/+Qr6tx8p+fmYxj8kYw6IxkQFzgtBGXkQVdxB1Ofm9cwFDI0B?=
+ =?us-ascii?Q?Gm6k/MA7pngG9GuZhIv43BnvYfirKKPFcLzX4j3UhxbPSVoNHVLi4dyH08Zq?=
+ =?us-ascii?Q?0/TRxFTjTKRjWns7adtwla9XmXbykLAmjIEUdUIgluuATGtuqeO11qns37dN?=
+ =?us-ascii?Q?r2IG/D/AXMXfDjx7luRQptfjpUKzUGiGh/APU1hZGQwT9jhrPua/sjQ0TA6q?=
+ =?us-ascii?Q?MS/ZMhlbdtPRzt6eKVYATyVo3tZu+FwpCBT0uYJ3YC21BfDM1DdK6oPCEpGs?=
+ =?us-ascii?Q?XWLKj6PBReDubucQdtODjNSOrcrPd94R8F6fNyHYZYo2zS8FQ1+b2JEScwa2?=
+ =?us-ascii?Q?x+3oryi3D3gggBib/t68GtoPVaZ9Trmsv0qQ5ZktApHC2XdY5nMYHn9s5aBr?=
+ =?us-ascii?Q?lULbZwC9DsSzDV7fRJntJAtzuKT0lU0zF58cm8NVEXhYVou8R8JQEM472hbm?=
+ =?us-ascii?Q?pW38oBRHwODr8ZNY0uS+ovD6vU6lWfuyoSNHK8yK9aBgOjc7uP4RjOc9bJMP?=
+ =?us-ascii?Q?5jyCmK/hI1pZHNUnvsYMfinBlnHXaH4asYERiOuaV4p2Z6S6friOt7hm/ZG7?=
+ =?us-ascii?Q?wqT12A5TQHD6/+amNfb2+zYdnbTydU6qe/QSVrSWn73N8ewJFzLopZ4WEcG+?=
+ =?us-ascii?Q?0Vow3iOs4iNJRwXGyHU7yXCq7cvZK4rtsi4fAL6xyfJyhrdyraz6LXX8Rnbg?=
+ =?us-ascii?Q?jTOJwceCC2jpLrfwvFMG3uOouDoNrDI99SjnCSbjGZ4/4i2EuX2jMiWVIr9T?=
+ =?us-ascii?Q?BtmpN15t6bu39CMD3CUEKivyIhONOU3kOAWcFk+2Ym5AnS36yZPIJsR4fNhK?=
+ =?us-ascii?Q?AMTY9ekyVoPXwh6FnwoFq5LqVxy6Xqv/7ZwDW2z3uA2caHXDRfUjMH9ivCbG?=
+ =?us-ascii?Q?11zOdkNGsac/W/cK/n2KKVRq23wPny/EUm88iAQbu4BjcsZMYGr4K4XWxosv?=
+ =?us-ascii?Q?9Je8zxCQWnR2cV5qPLXuskbzyK1ufU12ZkA56G3cvZ7BYShrEcxpw9YH2EkX?=
+ =?us-ascii?Q?Q5lKPjTSFtko4YwU11+9SZJI3OK3S6RkwK1lrZ+vTwNqBBs3R1aaLoNHj/fW?=
+ =?us-ascii?Q?tbTX9A6hj7ddXNvbVqvky0FDUkQVDrkH/mORaJeoMZ1eCJZ6tnDsV9kRV+1y?=
+ =?us-ascii?Q?YVFicFeqR2K+vNyc9cyX5pOaMsl5Citdbwg6RWw9LkVPUmSEEP/WxRqMa7K9?=
+ =?us-ascii?Q?MyBtR3Ey9jEKjuX4/3JxO6/vRshiLE88dH58WTDTG0YIKOh5H6GZiaL4kipH?=
+ =?us-ascii?Q?G5e5rlwG1RfEBr5W5qnfmCQTn/dosmCWnRql8cWUKxteaWpFxF3cVc3qSAwq?=
+ =?us-ascii?Q?ZQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v1 8/8] ARM: dts: stm32: lxa-tac: add Linux Automation
- GmbH TAC
-To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>
-Cc:     kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Conor Dooley <conor+dt@kernel.org>
-References: <20230607115508.2964574-1-l.goehrs@pengutronix.de>
- <20230607115508.2964574-8-l.goehrs@pengutronix.de>
- <9e95c14b-2442-dea5-9b8e-e604abd5cdae@foss.st.com>
-Content-Language: en-US-large
-From:   =?UTF-8?Q?Leonard_G=c3=b6hrs?= <l.goehrs@pengutronix.de>
-In-Reply-To: <9e95c14b-2442-dea5-9b8e-e604abd5cdae@foss.st.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: l.goehrs@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB4657.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5a43b121-2d23-419b-033c-08db6cd59ebc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jun 2023 12:48:14.9711
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: l+mh6OiZ9pdBb9TBqz82d+ApDDIaTOBn4xMDpdoKgwJWRY3nrZ6Qh4gjFF8iVFIdXkXEaLV0eglO06gKqBT9jToS7+Y1CuShtyZxoYvJhhs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6556
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 08.06.23 15:13, Alexandre TORGUE wrote:
-> Hi Leonard
-> 
-> On 6/7/23 13:55, Leonard Göhrs wrote:
->> The Linux Automation Test Automation Controller (LXA TAC)[1] is an embedded
->> software development tool built around the Octavo Systems OSD32MP15x SiP.
+>From: Jakub Kicinski <kuba@kernel.org>
+>Sent: Wednesday, June 14, 2023 2:59 AM
+>
+>On Wed, 14 Jun 2023 01:17:09 +0200 Arkadiusz Kubalewski wrote:
+>> Including ynl generated uapi header files into source kerneldocs
+>> (rst files in Documentation/) produces warnings during documentation
+>> builds (i.e. make htmldocs)
 >>
->> The device contains an eMMC for storage, a DSA-capable on board ethernet
->> switch with two external ports, dual CAN busses, a power switch to turn
->> a device under test on or off and some other I/O.
+>> Prevent warnings by generating also description for enums where
+>> rander_max was selected.
+>
+>Do you reckon that documenting the meta-values makes sense, or should
+>we throw a:
+>
+>/* private: */
+>
+
+Most probably it doesn't..
+Tried this:
+/*
+ [ other values description ]
+ * private:
+ * @__<NAME>_MAX
+ */
+and this:
+/*
+ [ other values description ]
+ * private: @__<NAME>_MAX
+ */
+
+Both are not working as we would expect.
+
+Do you mean to have double comments for enums? like:
+/*
+ [ other values description ]
+ */
+/*
+ * private:
+ * @__<NAME>_MAX
+ */
+=20
+>comment in front of them so that kdoc ignores them? Does user space
+>have any use for those? If we want to document them...
+>
+
+Hmm, do you recall where I can find proper format of such ignore enum comme=
+nt
+for kdoc generation?
+Or maybe we need to also submit patch to some kdoc build process to actuall=
+y
+change the current behavior?
+
+>> diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
+>> index 639524b59930..d78f7ae95092 100644
+>> --- a/include/uapi/linux/netdev.h
+>> +++ b/include/uapi/linux/netdev.h
+>> @@ -24,6 +24,7 @@
+>>   *   XDP buffer support in the driver napi callback.
+>>   * @NETDEV_XDP_ACT_NDO_XMIT_SG: This feature informs if netdev implemen=
+ts
+>>   *   non-linear XDP buffer support in ndo_xdp_xmit callback.
+>> + * @NETDEV_XDP_ACT_MASK: valid values mask
+>
+>... I think we need to include some sort of indication that the value
+>will change as the uAPI is extended. Unlike the other values which are
+>set in stone, so to speak. "mask of currently defines values" ? Dunno.
+>
+
+Sure can fix this.
+
+>>   */
+>>  enum netdev_xdp_act {
+>>  	NETDEV_XDP_ACT_BASIC =3D 1,
+>> diff --git a/tools/include/uapi/linux/netdev.h
+>>b/tools/include/uapi/linux/netdev.h
+>> index 639524b59930..d78f7ae95092 100644
+>> --- a/tools/include/uapi/linux/netdev.h
+>> +++ b/tools/include/uapi/linux/netdev.h
+>> @@ -24,6 +24,7 @@
+>>   *   XDP buffer support in the driver napi callback.
+>>   * @NETDEV_XDP_ACT_NDO_XMIT_SG: This feature informs if netdev
+>>implements
+>>   *   non-linear XDP buffer support in ndo_xdp_xmit callback.
+>> + * @NETDEV_XDP_ACT_MASK: valid values mask
+>>   */
+>>  enum netdev_xdp_act {
+>>  	NETDEV_XDP_ACT_BASIC =3D 1,
+>> diff --git a/tools/net/ynl/ynl-gen-c.py b/tools/net/ynl/ynl-gen-c.py
+>> index 0b5e0802a9a7..0d396bf98c27 100755
+>> --- a/tools/net/ynl/ynl-gen-c.py
+>> +++ b/tools/net/ynl/ynl-gen-c.py
+>> @@ -2011,6 +2011,7 @@ def render_uapi(family, cw):
+>>          # Write kdoc for enum and flags (one day maybe also structs)
+>>          if const['type'] =3D=3D 'enum' or const['type'] =3D=3D 'flags':
+>>              enum =3D family.consts[const['name']]
+>> +            name_pfx =3D const.get('name-prefix', f"{family.name}-
+>>{const['name']}-")
 >>
->> As of now there are two STM32MP157 based hardware generations (Gen 1 and
->> Gen 2) that have most of their hardware config in common.
->> In the future there will also be a STM32MP153 based hardware generation.
+>>              if enum.has_doc():
+>>                  cw.p('/**')
+>> @@ -2022,10 +2023,18 @@ def render_uapi(family, cw):
+>>                      if entry.has_doc():
+>>                          doc =3D '@' + entry.c_name + ': ' + entry['doc'=
+]
+>>                          cw.write_doc_line(doc)
+>> +                if const.get('render-max', False):
+>> +                    if const['type'] =3D=3D 'flags':
+>> +                        doc =3D '@' + c_upper(name_pfx + 'mask') + ':
+>>valid values mask'
+>> +                        cw.write_doc_line(doc)
+>> +                    else:
+>> +                        doc =3D '@' + c_upper(name_pfx + 'max') + ': ma=
+x
+>>valid value'
+>> +                        cw.write_doc_line(doc)
+>> +                        doc =3D '@__' + c_upper(name_pfx + 'max') + ': =
+do
+>>not use'
+>
+>This one is definitely a candidate for /* private: */
+
+Yep, makes sense, trying to find some way...
+
+Thank you,
+Arkadiusz
+
+>
+>> +                        cw.write_doc_line(doc)
+>>                  cw.p(' */')
 >>
->> [1]: https://www.linux-automation.com/en/products/lxa-tac.html
->>
->> Signed-off-by: Leonard Göhrs <l.goehrs@pengutronix.de>
->> ---
-> 
-> There are some YAML issues reported. Some are linked to the
-> stm32mp151.dts or common bindings and are going to be fixed. But some
-> looks more linked to your board. Can you have a look on those:
-
-Most of these should be addressed by the other patches in the series,
-that add devicetree bindings for things we use in the LXA TAC devicetree.
-
-> arch/arm/boot/dts/stm32mp157c-lxa-tac-gen1.dtb: gpio@24:
-> 'gpio-line-names' does not match any of the regexes: 'pinctrl-[0-9]+'
-> 	From schema: /Documentation/devicetree/bindings/gpio/gpio-pca9570.yaml
-
-The patch to add this property is now in gpio/for-next.
-
-> arch/arm/boot/dts/stm32mp157c-lxa-tac-gen1.dtb: display@0: compatible:0:
-> 'shineworld,lh133k' is not one of ['sainsmart18']
-> 	From schema:
-> /Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml
-> 
-> arch/arm/boot/dts/stm32mp157c-lxa-tac-gen1.dtb: display@0: Unevaluated
-> properties are not allowed ('compatible', 'spi-3wire' were unexpected)
-> 	From schema:
-> /Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml> arch/arm/boot/dts/stm32mp157c-lxa-tac-gen1.dtb:
-> /soc/spi@44005000/display@0: failed to match any schema with compatible:
-> ['shineworld,lh133k', 'panel-mipi-dbi-spi']
-
-Bindings for these properties are added in previous patches in this series
-(which are not yet applied anywhere).
-
-> /arch/arm/boot/dts/stm32mp157c-lxa-tac-gen1.dtb: switch@0: Unevaluated
-> properties are not allowed ('spi-cpha', 'spi-cpol', 'interrupt-parent',
-> 'interrupts' were unexpected)
-> 	From schema: /Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml
-
-The 'spi-cpha' and 'spi-cpol' properties were not actually required, so I've
-dropped them from the devicetree for the V2 I've just sent.
-I've added a patch that adds bindings for 'interrupts' to the V2, so this should
-be addressed as well.
-
-> arch/arm/boot/dts/stm32mp157c-lxa-tac-gen2.dtb: can@4400f000:
-> 'termination-gpios', 'termination-ohms' do not match any of the regexes:
-> 'pinctrl-[0-9]+'
-> 	From schema: /Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-
-This should also be addressed in the V2.
-
-> Thanks in advance
-
-Thanks for checking out my patch!
-
-> 
-> Alex
-> 
-> 
->>    arch/arm/boot/dts/Makefile                    |   2 +
->>    .../arm/boot/dts/stm32mp157c-lxa-tac-gen1.dts |  93 +++
->>    .../arm/boot/dts/stm32mp157c-lxa-tac-gen2.dts | 172 +++++
->>    arch/arm/boot/dts/stm32mp15xc-lxa-tac.dtsi    | 612 ++++++++++++++++++
->>    4 files changed, 879 insertions(+)
->>    create mode 100644 arch/arm/boot/dts/stm32mp157c-lxa-tac-gen1.dts
->>    create mode 100644 arch/arm/boot/dts/stm32mp157c-lxa-tac-gen2.dts
->>    create mode 100644 arch/arm/boot/dts/stm32mp15xc-lxa-tac.dtsi
->>
->> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
->> index 59829fc903152..886371436bbc1 100644
->> --- a/arch/arm/boot/dts/Makefile
->> +++ b/arch/arm/boot/dts/Makefile
->> @@ -1266,6 +1266,8 @@ dtb-$(CONFIG_ARCH_STM32) += \
->>    	stm32mp157c-ev1.dtb \
->>    	stm32mp157c-ev1-scmi.dtb \
->>    	stm32mp157c-lxa-mc1.dtb \
->> +	stm32mp157c-lxa-tac-gen1.dtb \
->> +	stm32mp157c-lxa-tac-gen2.dtb \
->>    	stm32mp157c-odyssey.dtb
->>    dtb-$(CONFIG_MACH_SUN4I) += \
->>    	sun4i-a10-a1000.dtb \
->> diff --git a/arch/arm/boot/dts/stm32mp157c-lxa-tac-gen1.dts b/arch/arm/boot/dts/stm32mp157c-lxa-tac-gen1.dts
->> new file mode 100644
->> index 0000000000000..81f254fb88b0a
->> --- /dev/null
->> +++ b/arch/arm/boot/dts/stm32mp157c-lxa-tac-gen1.dts
->> @@ -0,0 +1,93 @@
->> +// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
->> +/*
->> + * Copyright (C) 2020 STMicroelectronics - All Rights Reserved
->> + * Copyright (C) 2021 Rouven Czerwinski, Pengutronix
->> + * Copyright (C) 2023 Leonard Göhrs, Pengutronix
->> + */
->> +
->> +/dts-v1/;
->> +
->> +#include "stm32mp157.dtsi"
->> +#include "stm32mp15xc-lxa-tac.dtsi"
->> +
->> +/ {
->> +	model = "Linux Automation Test Automation Controller (TAC) Gen 1";
->> +	compatible = "lxa,stm32mp157c-tac-gen1", "oct,stm32mp15xx-osd32", "st,stm32mp157";
->> +
->> +	backlight: backlight {
->> +		compatible = "pwm-backlight";
->> +		power-supply = <&v3v3>;
->> +
->> +		brightness-levels = <0 31 63 95 127 159 191 223 255>;
->> +		default-brightness-level = <7>;
->> +		pwms = <&backlight_pwm 1 1000000 0>;
->> +	};
->> +
->> +	reg_iobus_12v: regulator-iobus-12v {
->> +		compatible = "regulator-fixed";
->> +		vin-supply = <&reg_12v>;
->> +
->> +		gpio = <&gpioh 13 GPIO_ACTIVE_HIGH>;
->> +		enable-active-high;
->> +		regulator-max-microvolt = <12000000>;
->> +		regulator-min-microvolt = <12000000>;
->> +		regulator-name = "12V_IOBUS";
->> +	};
->> +};
->> +
->> +&gpioa {
->> +	gpio-line-names = "", "", "STACK_CS2", "", "STACK_CS3", /*  0 */
->> +	"ETH_GPIO1", "ETH_INT", "", "", "",                     /*  5 */
->> +	"", "", "", "BOOTROM_LED", "ETH_LAB_LEDRP",             /* 10 */
->> +	"";                                                     /* 15 */
->> +};
->> +
->> +&gpioc {
->> +	gpio-line-names = "", "STACK_CS1", "", "", "", /*  0 */
->> +	"", "", "", "", "",                            /*  5 */
->> +	"", "";                                        /* 10 */
->> +};
->> +
->> +&gpu {
->> +	status = "disabled";
->> +};
->> +
->> +&i2c1 {
->> +	powerboard_gpio: gpio@24 {
->> +		compatible = "nxp,pca9570";
->> +		reg = <0x24>;
->> +
->> +		#gpio-cells = <2>;
->> +		gpio-controller;
->> +		gpio-line-names = "DUT_PWR_EN", "DUT_PWR_DISCH", "DUT_PWR_ADCRST", "";
->> +	};
->> +};
->> +
->> +&spi2 {
->> +	adc@0 {
->> +		compatible = "ti,lmp92064";
->> +		reg = <0>;
->> +		spi-max-frequency = <5000000>;
->> +		vdd-supply = <&reg_pb_3v3>;
->> +		vdig-supply = <&reg_pb_3v3>;
->> +		reset-gpios = <&powerboard_gpio 2 GPIO_ACTIVE_HIGH>;
->> +
->> +		shunt-resistor-micro-ohms = <15000>;
->> +	};
->> +};
->> +
->> +&timers1 {
->> +	/* spare dmas for other usage */
->> +	/delete-property/dmas;
->> +	/delete-property/dma-names;
->> +
->> +	status = "okay";
->> +
->> +	backlight_pwm: pwm {
->> +		pinctrl-names = "default", "sleep";
->> +		pinctrl-0 = <&pwm1_pins_c>;
->> +		pinctrl-1 = <&pwm1_sleep_pins_c>;
->> +
->> +		status = "okay";
->> +	};
->> +};
->> diff --git a/arch/arm/boot/dts/stm32mp157c-lxa-tac-gen2.dts b/arch/arm/boot/dts/stm32mp157c-lxa-tac-gen2.dts
->> new file mode 100644
->> index 0000000000000..8a34d15e9005f
->> --- /dev/null
->> +++ b/arch/arm/boot/dts/stm32mp157c-lxa-tac-gen2.dts
->> @@ -0,0 +1,172 @@
->> +// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
->> +/*
->> + * Copyright (C) 2020 STMicroelectronics - All Rights Reserved
->> + * Copyright (C) 2021 Rouven Czerwinski, Pengutronix
->> + * Copyright (C) 2023 Leonard Göhrs, Pengutronix
->> + */
->> +
->> +/dts-v1/;
->> +
->> +#include "stm32mp157.dtsi"
->> +#include "stm32mp15xc-lxa-tac.dtsi"
->> +
->> +/ {
->> +	model = "Linux Automation Test Automation Controller (TAC) Gen 2";
->> +	compatible = "lxa,stm32mp157c-tac-gen2", "oct,stm32mp15xx-osd32", "st,stm32mp157";
->> +
->> +	backlight: backlight {
->> +		compatible = "pwm-backlight";
->> +		power-supply = <&v3v3>;
->> +
->> +		brightness-levels = <0 31 63 95 127 159 191 223 255>;
->> +		default-brightness-level = <7>;
->> +		pwms = <&led_pwm 3 1000000 0>;
->> +	};
->> +
->> +	reg_iobus_12v: regulator-iobus-12v {
->> +		compatible = "regulator-fixed";
->> +		vin-supply = <&reg_12v>;
->> +		gpio = <&gpioh 13 GPIO_ACTIVE_LOW>;
->> +		regulator-max-microvolt = <12000000>;
->> +		regulator-min-microvolt = <12000000>;
->> +		regulator-name = "12V_IOBUS";
->> +	};
->> +
->> +	led-controller-1 {
->> +		compatible = "pwm-leds-multicolor";
->> +
->> +		multi-led {
->> +			color = <LED_COLOR_ID_RGB>;
->> +			function = LED_FUNCTION_STATUS;
->> +			max-brightness = <65535>;
->> +
->> +			led-red {
->> +				active-low;
->> +				color = <LED_COLOR_ID_RED>;
->> +				pwms = <&led_pwm 0 1000000 0>;
->> +			};
->> +
->> +			led-green {
->> +				active-low;
->> +				color = <LED_COLOR_ID_GREEN>;
->> +				pwms = <&led_pwm 2 1000000 0>;
->> +			};
->> +
->> +			led-blue {
->> +				active-low;
->> +				color = <LED_COLOR_ID_BLUE>;
->> +				pwms = <&led_pwm 1 1000000 0>;
->> +			};
->> +		};
->> +	};
->> +
->> +	led-controller-2 {
->> +		compatible = "gpio-leds";
->> +
->> +		led-5 {
->> +			label = "tac:green:iobus";
->> +			gpios = <&gpiog 1 GPIO_ACTIVE_HIGH>;
->> +		};
->> +
->> +		led-6 {
->> +			label = "tac:green:can";
->> +			gpios = <&gpiof 3 GPIO_ACTIVE_HIGH>;
->> +		};
->> +
->> +		led-7 {
->> +			label = "tac:green:out0";
->> +			gpios = <&gpiob 8 GPIO_ACTIVE_HIGH>;
->> +		};
->> +
->> +		led-8 {
->> +			label = "tac:green:out1";
->> +			gpios = <&gpiog 3 GPIO_ACTIVE_HIGH>;
->> +		};
->> +
->> +		led-9 {
->> +			label = "tac:green:uarttx";
->> +			gpios = <&gpiod 3 GPIO_ACTIVE_HIGH>;
->> +		};
->> +
->> +		led-10 {
->> +			label = "tac:green:uartrx";
->> +			gpios = <&gpiof 6 GPIO_ACTIVE_HIGH>;
->> +		};
->> +
->> +		led-11 {
->> +			label = "tac:green:usbh1";
->> +			gpios = <&gpioc 8 GPIO_ACTIVE_HIGH>;
->> +		};
->> +
->> +		led-12 {
->> +			label = "tac:green:usbh2";
->> +			gpios = <&gpiod 6 GPIO_ACTIVE_HIGH>;
->> +		};
->> +
->> +		led-13 {
->> +			label = "tac:green:usbh3";
->> +			gpios = <&gpiob 9 GPIO_ACTIVE_HIGH>;
->> +		};
->> +
->> +		led-14 {
->> +			label = "tac:green:usbg";
->> +			gpios = <&gpiod 14 GPIO_ACTIVE_HIGH>;
->> +			linux,default-trigger = "usb-gadget";
->> +		};
->> +
->> +		led-15 {
->> +			label = "tac:green:dutpwr";
->> +			gpios = <&gpioa 15 GPIO_ACTIVE_HIGH>;
->> +		};
->> +	};
->> +};
->> +
->> +&gpioa {
->> +	gpio-line-names = "", "", "DUT_PWR_EN", "", "STACK_CS3", /*  0 */
->> +	"ETH_GPIO1", "ETH_INT", "", "", "",                      /*  5 */
->> +	"", "", "", "BOOTROM_LED", "ETH_LAB_LEDRP",              /* 10 */
->> +	"";                                                      /* 15 */
->> +};
->> +
->> +&gpioc {
->> +	gpio-line-names = "", "DUT_PWR_DISCH", "", "", "", /*  0 */
->> +	"", "", "", "", "",                                /*  5 */
->> +	"", "";                                            /* 10 */
->> +};
->> +
->> +&gpu {
->> +	status = "disabled";
->> +};
->> +
->> +&m_can2 {
->> +	termination-gpios = <&gpioe 4 GPIO_ACTIVE_HIGH>;
->> +	termination-ohms = <120>;
->> +};
->> +
->> +&spi2 {
->> +	adc@0 {
->> +		compatible = "ti,lmp92064";
->> +		reg = <0>;
->> +
->> +		reset-gpios = <&gpioa 4 GPIO_ACTIVE_HIGH>;
->> +		shunt-resistor-micro-ohms = <15000>;
->> +		spi-max-frequency = <5000000>;
->> +		vdd-supply = <&reg_pb_3v3>;
->> +		vdig-supply = <&reg_pb_3v3>;
->> +	};
->> +};
->> +
->> +&timers8 {
->> +	/* spare dmas for other usage */
->> +	/delete-property/dmas;
->> +	/delete-property/dma-names;
->> +
->> +	status = "okay";
->> +
->> +	led_pwm: pwm {
->> +		pinctrl-names = "default", "sleep";
->> +		pinctrl-0 = <&pwm8_pins_b>;
->> +		pinctrl-1 = <&pwm8_sleep_pins_b>;
->> +		status = "okay";
->> +	};
->> +};
->> diff --git a/arch/arm/boot/dts/stm32mp15xc-lxa-tac.dtsi b/arch/arm/boot/dts/stm32mp15xc-lxa-tac.dtsi
->> new file mode 100644
->> index 0000000000000..ca4d25f5c9b51
->> --- /dev/null
->> +++ b/arch/arm/boot/dts/stm32mp15xc-lxa-tac.dtsi
->> @@ -0,0 +1,612 @@
->> +// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
->> +/*
->> + * Copyright (C) 2020 STMicroelectronics - All Rights Reserved
->> + * Copyright (C) 2021 Rouven Czerwinski, Pengutronix
->> + * Copyright (C) 2023 Leonard Göhrs, Pengutronix
->> + */
->> +
->> +#include "stm32mp15xc.dtsi"
->> +#include "stm32mp15xx-osd32.dtsi"
->> +#include "stm32mp15xxac-pinctrl.dtsi"
->> +
->> +#include <dt-bindings/gpio/gpio.h>
->> +#include <dt-bindings/input/input.h>
->> +#include <dt-bindings/leds/common.h>
->> +#include <dt-bindings/pwm/pwm.h>
->> +
->> +/ {
->> +	aliases {
->> +		ethernet0 = &ethernet0;
->> +		ethernet1 = &port_uplink;
->> +		ethernet2 = &port_dut;
->> +		mmc1 = &sdmmc2;
->> +		serial0 = &uart4;
->> +		serial1 = &usart3;
->> +	};
->> +
->> +	chosen {
->> +		stdout-path = &uart4;
->> +	};
->> +
->> +	led-controller-0 {
->> +		compatible = "gpio-leds";
->> +
->> +		led-0 {
->> +			label = "tac:green:user1";
->> +			gpios = <&gpiof 10 GPIO_ACTIVE_HIGH>;
->> +			linux,default-trigger = "heartbeat";
->> +		};
->> +
->> +		led-1 {
->> +			label = "tac:green:user2";
->> +			gpios = <&gpiog 7 GPIO_ACTIVE_HIGH>;
->> +		};
->> +
->> +		led-2 {
->> +			label = "tac:green:statusdut";
->> +			gpios = <&gpioa 13 GPIO_ACTIVE_LOW>;
->> +		};
->> +
->> +		/* led-3 and led-4 are internally connected antiparallel to one
->> +		 * another inside the ethernet jack like this:
->> +		 * GPIOA14 ---+---|led-3|>--+--- GPIOD15
->> +		 *            +--<|led-4|---+
->> +		 * E.g. only one of the LEDs can be illuminated at a time while
->> +		 * the other output must be driven low.
->> +		 * This should likely be implemented using a multi color LED
->> +		 * driver for antiparallel LEDs.
->> +		 */
->> +		led-3 {
->> +			label = "tac:green:statuslab";
->> +			gpios = <&gpioa 14 GPIO_ACTIVE_HIGH>;
->> +		};
->> +
->> +		led-4 {
->> +			label = "tac:orange:statuslab";
->> +			gpios = <&gpiod 15 GPIO_ACTIVE_HIGH>;
->> +		};
->> +	};
->> +
->> +	gpio-keys {
->> +		compatible = "gpio-keys";
->> +
->> +		button-lower {
->> +			label = "USER_BTN2";
->> +			linux,code = <KEY_ESC>;
->> +			gpios = <&gpioe 7 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
->> +		};
->> +
->> +		button-upper {
->> +			label = "USER_BTN";
->> +			linux,code = <KEY_HOME>;
->> +			gpios = <&gpioi 11 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
->> +		};
->> +	};
->> +
->> +	/* supplied by either barrel connector or PoE */
->> +	reg_12v: regulator-12v {
->> +		compatible = "regulator-fixed";
->> +		regulator-name = "12V";
->> +		regulator-min-microvolt = <12000000>;
->> +		regulator-max-microvolt = <12000000>;
->> +		regulator-always-on;
->> +	};
->> +
->> +	reg_5v: regulator-5v {
->> +		compatible = "regulator-fixed";
->> +		regulator-name = "5V";
->> +		regulator-min-microvolt = <5000000>;
->> +		regulator-max-microvolt = <5000000>;
->> +		regulator-always-on;
->> +		vin-supply = <&reg_12v>;
->> +	};
->> +
->> +	reg_1v2: regulator-1v2 {
->> +		compatible = "regulator-fixed";
->> +		regulator-name = "1V2";
->> +		regulator-min-microvolt = <1200000>;
->> +		regulator-max-microvolt = <1200000>;
->> +		regulator-always-on;
->> +		vin-supply = <&reg_5v>;
->> +	};
->> +
->> +	reg_pb_5v: regulator-pb-5v {
->> +		compatible = "regulator-fixed";
->> +		regulator-name = "5V_POWERBOARD";
->> +		regulator-min-microvolt = <5000000>;
->> +		regulator-max-microvolt = <5000000>;
->> +		regulator-always-on;
->> +		vin-supply = <&reg_5v>;
->> +	};
->> +
->> +	reg_pb_3v3: regulator-pb-3v3 {
->> +		compatible = "regulator-fixed";
->> +		regulator-name = "3V3_POWERBOARD";
->> +		regulator-min-microvolt = <3300000>;
->> +		regulator-max-microvolt = <3300000>;
->> +		regulator-always-on;
->> +		vin-supply = <&reg_pb_5v>;
->> +	};
->> +
->> +	output-iobus-12v {
->> +		compatible = "regulator-output";
->> +		vout-supply = <&reg_iobus_12v>;
->> +	};
->> +
->> +	output-vuart {
->> +		compatible = "regulator-output";
->> +		vout-supply = <&v3v3_hdmi>;
->> +	};
->> +};
->> +
->> +baseboard_eeprom: &sip_eeprom {
->> +};
->> +
->> +&adc {
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&adc1_ain_pins_a>;
->> +	vdd-supply = <&vdd>;
->> +	vdda-supply = <&vdda>;
->> +	vref-supply = <&vrefbuf>;
->> +	status = "okay";
->> +
->> +	adc1: adc@0 {
->> +		st,adc-channels = <0 1 2 5 9 10 13 15>;
->> +		st,min-sample-time-nsecs = <5000>;
->> +		#address-cells = <1>;
->> +		#size-cells = <0>;
->> +		status = "okay";
->> +
->> +		channel@0 {
->> +			reg = <0>;
->> +			label = "HOST_2_CURR_FB";
->> +		};
->> +
->> +		channel@1 {
->> +			reg = <1>;
->> +			label = "HOST_3_CURR_FB";
->> +		};
->> +
->> +		channel@2 {
->> +			reg = <2>;
->> +			label = "OUT_0_FB";
->> +		};
->> +
->> +		channel@5 {
->> +			reg = <5>;
->> +			label = "IOBUS_CURR_FB";
->> +		};
->> +
->> +		channel@9 {
->> +			reg = <9>;
->> +			label = "IOBUS_VOLT_FB";
->> +		};
->> +
->> +		channel@10 {
->> +			reg = <10>;
->> +			label = "OUT_1_FB";
->> +		};
->> +
->> +		channel@13 {
->> +			reg = <13>;
->> +			label = "HOST_CURR_FB";
->> +		};
->> +
->> +		channel@15 {
->> +			reg = <15>;
->> +			label = "HOST_1_CURR_FB";
->> +		};
->> +	};
->> +
->> +	adc2: adc@100 {
->> +		st,adc-channels = <12>;
->> +		st,min-sample-time-nsecs = <500000>;
->> +		#address-cells = <1>;
->> +		#size-cells = <0>;
->> +		status = "okay";
->> +
->> +		channel@12 {
->> +			reg = <12>;
->> +			label = "TEMP_INTERNAL";
->> +		};
->> +	};
->> +};
->> +
->> +&crc1 {
->> +	status = "okay";
->> +};
->> +
->> +&cryp1 {
->> +	status = "okay";
->> +};
->> +
->> +&dts {
->> +	status = "okay";
->> +};
->> +
->> +&ethernet0 {
->> +	assigned-clocks = <&rcc ETHCK_K>, <&rcc PLL4_P>;
->> +	assigned-clock-parents = <&rcc PLL4_P>;
->> +	assigned-clock-rates = <125000000>; /* Clock PLL4 to 750Mhz in ATF */
->> +
->> +	pinctrl-names = "default", "sleep";
->> +	pinctrl-0 = <&ethernet0_rgmii_pins_d>;
->> +	pinctrl-1 = <&ethernet0_rgmii_sleep_pins_d>;
->> +
->> +	st,eth-clk-sel;
->> +	phy-mode = "rgmii-id";
->> +
->> +	status = "okay";
->> +
->> +	fixed-link {
->> +		speed = <1000>;
->> +		full-duplex;
->> +	};
->> +};
->> +
->> +&ethernet0_rgmii_pins_d {
->> +	pins1 {
->> +		/* Reduce EMI emission by reducing RGMII drive strength */
->> +		slew-rate = <1>;
->> +	};
->> +};
->> +
->> +&gpiob {
->> +	gpio-line-names = "", "", "", "", "", /*  0 */
->> +	"", "USB_RESET", "", "", "",          /*  5 */
->> +	"", "", "", "", "",                   /* 10 */
->> +	"";                                   /* 15 */
->> +};
->> +
->> +&gpiod {
->> +	gpio-line-names = "", "", "", "", "TP38", /*  0 */
->> +	"TP39", "", "", "TP41", "TP42",           /*  5 */
->> +	"OLED_DC", "", "", "ETH_CS", "",          /* 10 */
->> +	"ETH_LAB_LEDRN";                          /* 15 */
->> +};
->> +
->> +&gpioe {
->> +	gpio-line-names = "TP35", "", "", "", "CAN_1_120R", /*  0 */
->> +	"", "", "USER_BTN2", "TP48", "UART_TX_EN",          /*  5 */
->> +	"UART_RX_EN", "TP24", "", "TP25", "TP26",           /* 10 */
->> +	"TP27";                                             /* 15 */
->> +};
->> +
->> +&gpiof {
->> +	gpio-line-names = "TP36", "TP37", "", "", "OLED_CS", /*  0 */
->> +	"", "", "", "", "",                                  /*  5 */
->> +	"USER_LED1", "", "STACK_CS0", "", "",                /* 10 */
->> +	"";                                                  /* 15 */
->> +};
->> +
->> +&gpiog {
->> +	gpio-line-names = "ETH_RESET", "", "", "", "",               /*  0 */
->> +	"IOBUS_FLT_FB", "", "USER_LED2", "ETH1_PPS_A", "CAN_0_120R", /*  5 */
->> +	"TP49", "", "", "", "",                                      /* 10 */
->> +	"";                                                          /* 15 */
->> +};
->> +
->> +&gpioh {
->> +	gpio-line-names = "", "", "OUT_1", "OUT_0", "OLED_RESET", /*  0 */
->> +	"", "", "", "", "",                                       /*  5 */
->> +	"ETH1_PPS_B", "ETH_GPIO2", "", "IOBUS_PWR_EN", "",        /* 10 */
->> +	"TP33";                                                   /* 15 */
->> +};
->> +
->> +&gpioi {
->> +	gpio-line-names = "TIM_RTS", "", "", "", "DEVICE_DATA_EN", /*  0 */
->> +	"", "", "", "ETH_WOL", "TP43",                             /*  5 */
->> +	"", "USER_BTN";                                            /* 10 */
->> +};
->> +
->> +&gpioz {
->> +	gpio-line-names = "HWID0", "HWID1", "HWID2", "HWID3", "", /*  0 */
->> +	"", "HWID4", "HWID5";                                     /*  5 */
->> +};
->> +
->> +&hash1 {
->> +	status = "okay";
->> +};
->> +
->> +&i2c1 {
->> +	pinctrl-names = "default", "sleep";
->> +	pinctrl-0 = <&i2c1_pins_b>;
->> +	pinctrl-1 = <&i2c1_sleep_pins_b>;
->> +	status = "okay";
->> +
->> +	powerboard_eeprom: eeprom@50 {
->> +		compatible = "atmel,24c02";
->> +		reg = <0x50>;
->> +		vcc-supply = <&v3v3>;
->> +	};
->> +
->> +	temperature-sensor@48 {
->> +		compatible = "national,lm75a";
->> +		reg = <0x48>;
->> +		status = "disabled";
->> +	};
->> +};
->> +
->> +&i2c5 {
->> +	/delete-property/dmas;
->> +	/delete-property/dma-names;
->> +
->> +	pinctrl-names = "default", "sleep";
->> +	pinctrl-0 = <&i2c5_pins_b>;
->> +	pinctrl-1 = <&i2c5_sleep_pins_b>;
->> +
->> +	status = "okay";
->> +
->> +	usbhub: usbhub@2c {
->> +		compatible ="microchip,usb2514b";
->> +		reg = <0x2c>;
->> +		vdd-supply = <&v3v3>;
->> +		reset-gpios = <&gpiob 6 GPIO_ACTIVE_LOW>;
->> +	};
->> +};
->> +
->> +&iwdg2 {
->> +	timeout-sec = <8>;
->> +	status = "okay";
->> +};
->> +
->> +&m_can1 {
->> +	pinctrl-names = "default", "sleep";
->> +	pinctrl-0 = <&m_can1_pins_b>;
->> +	pinctrl-1 = <&m_can1_sleep_pins_b>;
->> +	status = "okay";
->> +};
->> +
->> +&m_can2 {
->> +	pinctrl-names = "default", "sleep";
->> +	pinctrl-0 = <&m_can2_pins_a>;
->> +	pinctrl-1 = <&m_can2_sleep_pins_a>;
->> +	status = "okay";
->> +};
->> +
->> +&pmic {
->> +	regulators {
->> +		buck1-supply = <&reg_5v>;	/* VIN */
->> +		buck2-supply = <&reg_5v>;	/* VIN */
->> +		buck3-supply = <&reg_5v>;	/* VIN */
->> +		buck4-supply = <&reg_5v>;	/* VIN */
->> +		ldo2-supply = <&reg_5v>;	/* PMIC_LDO25IN */
->> +		ldo4-supply = <&reg_5v>;	/* VIN */
->> +		ldo5-supply = <&reg_5v>;	/* PMIC_LDO25IN */
->> +		vref_ddr-supply = <&reg_5v>;	/* VIN */
->> +		boost-supply = <&reg_5v>;	/* PMIC_BSTIN */
->> +		pwr_sw2-supply = <&bst_out>;	/* PMIC_SWIN */
->> +	};
->> +};
->> +
->> +&pwr_regulators {
->> +	vdd-supply = <&vdd>;
->> +	vdd_3v3_usbfs-supply = <&vdd_usb>;
->> +};
->> +
->> +&rtc {
->> +	status = "okay";
->> +};
->> +
->> +&sdmmc2 {
->> +	pinctrl-names = "default", "opendrain", "sleep";
->> +	pinctrl-0 = <&sdmmc2_b4_pins_a &sdmmc2_d47_pins_b>;
->> +	pinctrl-1 = <&sdmmc2_b4_od_pins_a &sdmmc2_d47_pins_b>;
->> +	pinctrl-2 = <&sdmmc2_b4_sleep_pins_a &sdmmc2_d47_sleep_pins_b>;
->> +	vmmc-supply = <&v3v3>;
->> +
->> +	bus-width = <8>;
->> +	mmc-ddr-3_3v;
->> +	no-1-8-v;
->> +	non-removable;
->> +	no-sd;
->> +	no-sdio;
->> +	st,neg-edge;
->> +
->> +	status = "okay";
->> +};
->> +
->> +&spi2 {
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&spi2_pins_c>;
->> +	cs-gpios = <&gpiof 12 GPIO_ACTIVE_LOW>;
->> +	status = "okay";
->> +};
->> +
->> +&spi4 {
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&spi4_pins_a>;
->> +	cs-gpios = <&gpiof 4 GPIO_ACTIVE_LOW>;
->> +	status = "okay";
->> +
->> +	lcd: display@0 {
->> +		compatible = "shineworld,lh133k", "panel-mipi-dbi-spi";
->> +		reg = <0>;
->> +		power-supply = <&v3v3>;
->> +		io-supply = <&v3v3>;
->> +		backlight = <&backlight>;
->> +		dc-gpios = <&gpiod 10 GPIO_ACTIVE_HIGH>;
->> +		reset-gpios = <&gpioh 4 GPIO_ACTIVE_HIGH>;
->> +		spi-3wire;
->> +		spi-max-frequency = <32000000>;
->> +
->> +		width-mm = <23>;
->> +		height-mm = <23>;
->> +		rotation = <180>;
->> +
->> +		panel-timing {
->> +			hactive = <240>;
->> +			vactive = <240>;
->> +			hback-porch = <0>;
->> +			vback-porch = <0>;
->> +
->> +			clock-frequency = <0>;
->> +			hfront-porch = <0>;
->> +			hsync-len = <0>;
->> +			vfront-porch = <0>;
->> +			vsync-len = <0>;
->> +		};
->> +	};
->> +};
->> +
->> +&spi5 {
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&spi5_pins_a>;
->> +
->> +	/* spare dmas for other usage */
->> +	/delete-property/dmas;
->> +	/delete-property/dma-names;
->> +
->> +	cs-gpios = <&gpiod 13 GPIO_ACTIVE_LOW>;
->> +
->> +	status = "okay";
->> +
->> +	switch: switch@0 {
->> +		compatible = "microchip,ksz9563";
->> +		reg = <0>;
->> +
->> +		reset-gpios = <&gpiog 0 GPIO_ACTIVE_LOW>;
->> +		spi-max-frequency = <44000000>;
->> +		spi-cpha;
->> +		spi-cpol;
->> +
->> +		interrupt-parent = <&gpioa>;
->> +		interrupts = <6 IRQ_TYPE_EDGE_RISING>;
->> +
->> +		ports {
->> +			#address-cells = <1>;
->> +			#size-cells = <0>;
->> +			port_dut: port@0 {
->> +				reg = <0>;
->> +				label = "dut";
->> +			};
->> +
->> +			port_uplink: port@1 {
->> +				reg = <1>;
->> +				label = "uplink";
->> +			};
->> +
->> +			port_cpu: port@2 {
->> +				reg = <2>;
->> +				label = "cpu";
->> +
->> +				ethernet = <&ethernet0>;
->> +
->> +				phy-mode = "rgmii-id";
->> +				rx-internal-delay-ps = <2000>;
->> +				tx-internal-delay-ps = <2000>;
->> +
->> +				fixed-link {
->> +					speed = <1000>;
->> +					full-duplex;
->> +				};
->> +			};
->> +		};
->> +	};
->> +};
->> +
->> +&timers2 {
->> +	/* spare dmas for other usage */
->> +	/delete-property/dmas;
->> +	/delete-property/dma-names;
->> +
->> +	status = "okay";
->> +
->> +	timer@1 {
->> +		status = "okay";
->> +	};
->> +};
->> +
->> +&timers3 {
->> +	/* spare dmas for other usage */
->> +	/delete-property/dmas;
->> +	/delete-property/dma-names;
->> +
->> +	status = "okay";
->> +
->> +	timer@2 {
->> +		status = "okay";
->> +	};
->> +};
->> +
->> +&timers4 {
->> +	/* spare dmas for other usage */
->> +	/delete-property/dmas;
->> +	/delete-property/dma-names;
->> +
->> +	status = "okay";
->> +
->> +	timer@3 {
->> +		status = "okay";
->> +	};
->> +};
->> +
->> +&uart4 {
->> +	label = "debug";
->> +
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&uart4_pins_a>;
->> +
->> +	/* spare dmas for other usage */
->> +	/delete-property/dmas;
->> +	/delete-property/dma-names;
->> +
->> +	status = "okay";
->> +};
->> +
->> +&usart3 {
->> +	label = "dut";
->> +	uart-has-rtscts;
->> +
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&usart3_pins_f>;
->> +
->> +	/* spare dmas for other usage */
->> +	/delete-property/dmas;
->> +	/delete-property/dma-names;
->> +
->> +	status = "okay";
->> +};
->> +
->> +&usbh_ehci {
->> +	phys = <&usbphyc_port0>;
->> +	phy-names = "usb";
->> +
->> +	status = "okay";
->> +};
->> +
->> +&usbotg_hs {
->> +	phys = <&usbphyc_port1 0>;
->> +	phy-names = "usb2-phy";
->> +
->> +	vusb_d-supply = <&vdd_usb>;
->> +	vusb_a-supply = <&reg18>;
->> +
->> +	dr_mode = "peripheral";
->> +
->> +	status = "okay";
->> +};
->> +
->> +&usbphyc {
->> +	status = "okay";
->> +};
->> +
->> +&usbphyc_port0 {
->> +	phy-supply = <&vdd_usb>;
->> +};
->> +
->> +&usbphyc_port1 {
->> +	phy-supply = <&vdd_usb>;
->> +};
->> +
->> +&v3v3_hdmi {
->> +	/delete-property/regulator-always-on;
->> +};
->> +
->> +&vrefbuf {
->> +	regulator-min-microvolt = <2500000>;
->> +	regulator-max-microvolt = <2500000>;
->> +	vdda-supply = <&vdda>;
->> +
->> +	status = "okay";
->> +};
-> 
-> 
+>>              uapi_enum_start(family, cw, const, 'name')
+>> -            name_pfx =3D const.get('name-prefix', f"{family.name}-
+>{const['name']}-")
+>>              for entry in enum.entries.values():
+>>                  suffix =3D ','
+>>                  if entry.value_change:
+>
+>--
+>pw-bot: cr
