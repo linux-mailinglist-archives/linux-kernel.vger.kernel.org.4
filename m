@@ -2,141 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38CEA7303B4
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:23:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22CFA7303B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236326AbjFNPXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 11:23:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60874 "EHLO
+        id S1343751AbjFNPYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 11:24:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236842AbjFNPXT (ORCPT
+        with ESMTP id S235089AbjFNPYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 11:23:19 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE431C3;
-        Wed, 14 Jun 2023 08:23:17 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-311099fac92so846073f8f.0;
-        Wed, 14 Jun 2023 08:23:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686756196; x=1689348196;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qhf32x37vTVya41Yn/yYo21KaAVD4j09MI6p+WfuOew=;
-        b=aB7MHRSZQBZBZwM8Uy53rKUb+dAJM7WTeXpr8dYqkWfP/g5y/6m5DPRmiR4a+L0TD7
-         5EC4FVC2i9suYbmZEEwOHiIHXwinruiPw9supcH4QHObo0zu0nwk+MfKbDtAfFBfx7fj
-         vMT3KPIzhI5EhDEi/6vTpyVjIXcCTs/5EWh/M4PxFjA968BpzHTGlPUOx2h7UaeeB5Rw
-         Psrh71AulEQ/L8T2nTi8+JWjMvOyiitRQQVOs64MIfjHSeb4cFhifPfiHD9JQO7bXENt
-         5qKeqsUGTFSpC/dfAyIrxowYmwIHv5/tHdZJ02RmL3futuwo1sksttwhibK1HewEjqMb
-         K/dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686756196; x=1689348196;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Qhf32x37vTVya41Yn/yYo21KaAVD4j09MI6p+WfuOew=;
-        b=KOb/3YC2YsqQpbCNgj2sO7DtI0QPWqCYvD5//P15K9QxrE9qVazX7hNklYPbNWIhCO
-         0TL9ovm5L9Q9P6FfOVEVF9jg7cCPX0GwbsXaDjELqUrpQevkOtsQf79jTEPHYJv4UFnh
-         BliISEoJv8N+U7o3DnQm838gh9bTz+faE6eGRunzObmllsjwHWLyfqrSYlHf8GqTJj4q
-         tfSH72YEJmE/nVeaxoq2y+zZtHCKFStM0sZXt79guw4SD40TXIPMRnpuNhYUaaYtiQkN
-         B38zHEIXa9wqpogxsUrI+hkF4VRTZf6PdFSrTT3tqlVxXeiKE+9kQAM/km4J5vVhQhsO
-         kzPg==
-X-Gm-Message-State: AC+VfDxMtrvBmU28JJ5gjPSTZ03Jitiw4kZqfSg6TBZHw4FBi+gaaG/T
-        6GUmsayi/wumlc4v8VLg9GDWxgufNotRWyeY1Jg=
-X-Google-Smtp-Source: ACHHUZ4dBnhZLONvjP6mCHhadCKYEhrkmEpVxotqFkfSDi0sq67OmByiUVQzk3EBkY5MgdLJezKpJqr/cStWi6yeCcE=
-X-Received: by 2002:a5d:69ce:0:b0:30e:3d9a:9955 with SMTP id
- s14-20020a5d69ce000000b0030e3d9a9955mr9705064wrw.52.1686756195948; Wed, 14
- Jun 2023 08:23:15 -0700 (PDT)
+        Wed, 14 Jun 2023 11:24:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70298C7
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:23:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686756205;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=diKKv+BaeU++Kkxbt3j674MAf9bH7QKC98izjBTVV10=;
+        b=AAMQLVr3m1PhoCtp559cbosUq1+OMDwHBGKArt6XZH3bPysuTeJ8GbOooKpXLCYZp7/5QS
+        n0Ccax94VqbIdH8vI4nxli9L1huYmnuPt1+73uBZcu/NihZ9uVSXpFLILaAUeNCQ4QJtqt
+        pe4+aQySrdexpHC87yvQQtzkhpqXOOY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-589-fsSyVJ6TP-uEEan9Z80sLg-1; Wed, 14 Jun 2023 11:23:22 -0400
+X-MC-Unique: fsSyVJ6TP-uEEan9Z80sLg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D35513806738;
+        Wed, 14 Jun 2023 15:23:21 +0000 (UTC)
+Received: from [192.168.37.1] (ovpn-0-3.rdu2.redhat.com [10.22.0.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id DBAFE2166B25;
+        Wed, 14 Jun 2023 15:23:20 +0000 (UTC)
+From:   Benjamin Coddington <bcodding@redhat.com>
+To:     Chenyuan Mi <cymi20@fudan.edu.cn>
+Cc:     trond.myklebust@hammerspace.com, anna@kernel.org,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] nfsroot: Fix missing check for return value of strsep()
+Date:   Wed, 14 Jun 2023 11:23:19 -0400
+Message-ID: <43531410-F066-4DE9-9FA7-990D2E5D878B@redhat.com>
+In-Reply-To: <20230614143058.112300-1-cymi20@fudan.edu.cn>
+References: <20230614143058.112300-1-cymi20@fudan.edu.cn>
 MIME-Version: 1.0
-References: <20230614134956.2109252-1-azeemshaikh38@gmail.com>
- <874jnaf7fv.fsf@kernel.org> <CADmuW3WEUgnpGXg=ajpRvwON6mFLQD9cPKnhsg35CcNqwcywxA@mail.gmail.com>
- <875y7qcbxo.fsf@kernel.org>
-In-Reply-To: <875y7qcbxo.fsf@kernel.org>
-From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-Date:   Wed, 14 Jun 2023 11:23:04 -0400
-Message-ID: <CADmuW3U6WU7f0ifZun615xNoZAwvH-R8=2JMqCngp7rpeu5-GQ@mail.gmail.com>
-Subject: Re: [PATCH v3] wifi: cfg80211: replace strlcpy() with strscpy()
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     linux-hardening@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Johannes Berg <johannes@sipsolutions.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 11:15=E2=80=AFAM Kalle Valo <kvalo@kernel.org> wrot=
-e:
->
-> Azeem Shaikh <azeemshaikh38@gmail.com> writes:
->
-> > On Wed, Jun 14, 2023 at 10:24=E2=80=AFAM Kalle Valo <kvalo@kernel.org> =
-wrote:
-> >
-> >>
-> >> Azeem Shaikh <azeemshaikh38@gmail.com> writes:
-> >>
-> >> > strlcpy() reads the entire source buffer first.
-> >> > This read may exceed the destination size limit.
-> >> > This is both inefficient and can lead to linear read
-> >> > overflows if a source string is not NUL-terminated [1].
-> >> > In an effort to remove strlcpy() completely [2], replace
-> >> > strlcpy() here with strscpy().
-> >> >
-> >> > Direct replacement is safe here since WIPHY_ASSIGN is only used by
-> >> > TRACE macros and the return values are ignored.
-> >> >
-> >> > [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#s=
-trlcpy
-> >> > [2] https://github.com/KSPP/linux/issues/89
-> >> >
-> >> > Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
-> >> > ---
-> >> > v1: https://lore.kernel.org/all/20230612232301.2572316-1-azeemshaikh=
-38@gmail.com/
-> >> > v2: https://lore.kernel.org/all/20230614134552.2108471-1-azeemshaikh=
-38@gmail.com/
-> >>
-> >> In the change log (after the "---" line) you should also describe what
-> >> changes you made, more info in the wiki below. In this case it's clear
-> >> as the patch is simple but please keep this in mind for future patches=
-.
-> >>
-> >> No need to resend because of this.
-> >>
-> >
-> > Thanks Kalle. I did have the below line in my changelog. For future
-> > patches, do you mean that changelog descriptions need to be more
-> > specific than this? For example - updated title from "x" -> "y"?
-> >
-> >> Changes from v1 and v2 - updated patch title.
->
-> Ah, I missed that because the format was not what we usually use. I
-> recommend something like this:
->
-> v3:
->
-> * add bar
->
-> v2:
->
-> * https://
-> * fix foo
->
-> v1:
->
-> * https://
->
+On 14 Jun 2023, at 10:30, Chenyuan Mi wrote:
 
-Got it, thanks a lot!
+> The strsep() function in root_nfs_parse_options() may return NULL
+> if argument 'incoming' is NULL. Since 'incoming' has Null check in
+> this function, it is also need to add Null check for return value
+>  of strsep().
+
+Incoming is checked to be non-NULL *before* sending it to strsep() here.
+
+> Found by our static analysis tool.
+
+The tool must be noticing that it is checked for NULL *after* strsep(),
+which wouldn't matter to strsep() at all.
+
+Ben
+
