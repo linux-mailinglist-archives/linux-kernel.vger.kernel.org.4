@@ -2,58 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCEEA72FC7F
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:35:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5709E72FC81
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:35:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244016AbjFNLfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 07:35:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48698 "EHLO
+        id S244028AbjFNLfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 07:35:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244046AbjFNLev (ORCPT
+        with ESMTP id S244021AbjFNLfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 07:34:51 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C87D199B;
-        Wed, 14 Jun 2023 04:34:48 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id E670A1FDE8;
-        Wed, 14 Jun 2023 11:34:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1686742486; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=XUS6LnF3QcGYPv+Pi9a6q4EMakth990haEuXywcllOE=;
-        b=FqYhHe1Uv6V54jBgYPolfRKycLgOt3S0kEFiYgCnDgo68eDCEwo5Y4ZKAxcVxp0rYVfDhA
-        XH1bmEek0qGf5QxBwcEJ65xc5evf59b7aP8CzLnYoWfUnGleVCYqR1FQ9KXQAy9xtjDAXN
-        Z6JQSYMOQKucpancAkGGbryY3a7AfcY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1686742486;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=XUS6LnF3QcGYPv+Pi9a6q4EMakth990haEuXywcllOE=;
-        b=CE/8gvggVW8S5pJU0ZTwoouLIdWvKWIpOa+wb/LXvMoKopdiwRVUH/VIsXGWUUeeleyfGa
-        JtkFiJd5n/Xyk8Dw==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 14 Jun 2023 07:35:30 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D0910D5;
+        Wed, 14 Jun 2023 04:35:27 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id E46CC2C141;
-        Wed, 14 Jun 2023 11:34:45 +0000 (UTC)
-Date:   Wed, 14 Jun 2023 13:34:45 +0200 (CEST)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-cc:     joe.lawrence@redhat.com, jpoimboe@kernel.org, jikos@kernel.org,
-        pmladek@suse.com, nstange@suse.de, mpdesouza@suse.de,
-        mark.rutland@arm.com, broonie@kernel.org, ndesaulniers@google.com,
-        miguel.ojeda.sandonis@gmail.com, elena.zannoni@oracle.com,
-        indu.bhagat@oracle.com, peterz@infradead.org, jmorris@namei.org,
-        rostedt@goodmis.org, songliubraving@meta.com,
-        madvenka@linux.microsoft.com, mbenes@suse.cz
-Subject: [ANNOUNCE and CfP] Live Patching MC at LPC 2023
-Message-ID: <alpine.LSU.2.21.2306141313530.8054@pobox.suse.cz>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BF1A06606F13;
+        Wed, 14 Jun 2023 12:35:25 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686742526;
+        bh=q2K1vIsngfpFoBXIzj71OjECfV67+TJ2UobDpqFbXGE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=GldcbasR/fV8RMce3DJNEifzAY+VKBigfY/CytnwlgbGbiFZhflXLV4S290FQz0W8
+         oQaNKK6vj9xFqucXBx99x0Dr3VfGA+yoPWCo2vRnCuhQg+ZcBK/LUAyF1erhVsvZ1O
+         4idRs/mZgGhXbxSnq7LEBfU4zV6ExnORRHaOsTuVvm0ImYBfnJfz04hmDdEmjTgr/s
+         WRaWPwn9oNLoIRt6zF0C8rr9CB6wfLI7RdYGP8fQ9+s+JwyOi5bhewxwyVwtBPFyCC
+         rJ/+YxS9ykWT3ylbAniA9LecIzLJHERM3veqvRPZ0ynWWFoCum9S6yDCu5sh+ZAlvV
+         bZjE7Fdt60vVQ==
+Message-ID: <e4f98dc5-0fa6-14aa-f8d0-e4bf30ecca5c@collabora.com>
+Date:   Wed, 14 Jun 2023 13:35:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 12/15] soc: mediatek: Add MT8188 VDO1 reset bit map
+Content-Language: en-US
+To:     Hsiao Chien Sung <shawn.sung@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Singo Chang <singo.chang@mediatek.com>,
+        Nancy Lin <nancy.lin@mediatek.com>,
+        Jason-JH Lin <jason-jh.lin@mediatek.com>
+References: <20230614073125.17958-1-shawn.sung@mediatek.com>
+ <20230614073125.17958-13-shawn.sung@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230614073125.17958-13-shawn.sung@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,25 +68,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Il 14/06/23 09:31, Hsiao Chien Sung ha scritto:
+> Add MT8188 VDO1 reset bit map.
+> 
+> Signed-off-by: Hsiao Chien Sung <shawn.sung@mediatek.com>
+> ---
+>   drivers/soc/mediatek/mt8188-mmsys.h | 57 +++++++++++++++++++++++++++++
+>   drivers/soc/mediatek/mtk-mmsys.c    |  3 +-
+>   2 files changed, 59 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/soc/mediatek/mt8188-mmsys.h b/drivers/soc/mediatek/mt8188-mmsys.h
+> index c3e3c5cfe931..208d4dfedc1a 100644
+> --- a/drivers/soc/mediatek/mt8188-mmsys.h
+> +++ b/drivers/soc/mediatek/mt8188-mmsys.h
+> @@ -144,6 +144,63 @@ static const u8 mmsys_mt8188_vdo0_rst_tb[] = {
+>   	[MT8188_VDO0_RST_DISP_RSZ0]	= 31,
+>   };
+> 
+> +static const u8 mmsys_mt8188_vdo1_rst_tb[] = {
+> +	[MT8188_VDO1_RST_SMI_LARB2]			= 0,
+> +	[MT8188_VDO1_RST_SMI_LARB3]			= 1,
+> +	[MT8188_VDO1_RST_GALS]				= 2,
+> +	[MT8188_VDO1_RST_FAKE_ENG0]			= 3,
+> +	[MT8188_VDO1_RST_FAKE_ENG1]			= 4,
+> +	[MT8188_VDO1_RST_MDP_RDMA0]			= 5,
+> +	[MT8188_VDO1_RST_MDP_RDMA1]			= 6,
+> +	[MT8188_VDO1_RST_MDP_RDMA2]			= 7,
+> +	[MT8188_VDO1_RST_MDP_RDMA3]			= 8,
+> +	[MT8188_VDO1_RST_VPP_MERGE0]			= 9,
+> +	[MT8188_VDO1_RST_VPP_MERGE1]			= 10,
+> +	[MT8188_VDO1_RST_VPP_MERGE2]			= 11,
+> +	[MT8188_VDO1_RST_VPP_MERGE3]			= 32 + 0,
 
-the Live Patching Microconference for Linux Plumbers Conference 2023 has 
-been accepted.
+Works, but there's a better way.
 
-It is possible to submit topic proposals and abstracts for the 
-microconference through Indico system linked at [1]. I welcome you to do 
-so. Submissions should then be published at [2].
+32 + 0 means that you're using reset SW1 register, so you can do
 
-The rest still remains to be sorted out. Joe and I will share information 
-as it is available.
+#define MT8188_MMSYS_RST_NR_PER_BANK	32
+#define MT8188_RST_SW1_OFFSET		MT8188_MMSYS_RST_NR_PER_BANK
+#define MT8188_RST_SW2_OFFSET		MT8188_MMSYS_RST_NR_PER_BANK * 2
 
-The registration will open soon [3].
+[MT8188_VDO1_RST_VPP_MERGE3] = MT8188_RST_SW1_OFFSET + 0
+[MT8188_VDO1_RST_VPP_MERGE4] = MT8188_RST_SW1_OFFSET + 0
+.......
+[MT8188_VDO1_RST_HDR_VDO_FE0] = MT8188_RST_SW2_OFFSET + 0
+...etc
 
-See you in Richmond!
+Reading this will make it clear that a certain reset bit is in a different
+(sequential or not) register.
 
-Miroslav
+P.S.: If the RST_NR_PER_BANK is *not* MT8188 specific (as in, all reset registers
+for all SoCs are always 32 bits, which I believe is true), you could move that
+definition to mtk-mmsys.h as
+       #define MMSYS_RST_NR_PER_BANK	32
+and then define the offsets in mt8188-mmsys.h as
+       #define MT8188_RST_SW1_OFFSET MMSYS_RST_NR_PER_BANK
+       .... etc
 
-[1] https://lpc.events/event/17/abstracts/
-[2] https://lpc.events/event/17/contributions/1405/
-[3] https://lpc.events/blog/current/index.php/2023/06/14/registration-for-lpc-2023-is-almost-here/
+Thanks,
+Angelo
+
 
