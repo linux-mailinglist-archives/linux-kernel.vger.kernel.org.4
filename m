@@ -2,57 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A8F73025D
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5098F730265
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:53:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245150AbjFNOxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 10:53:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37946 "EHLO
+        id S244187AbjFNOxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 10:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245110AbjFNOw5 (ORCPT
+        with ESMTP id S236546AbjFNOxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 10:52:57 -0400
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 829301FF7
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 07:52:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fudan.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id; bh=ucBZnlh5ajBHqYFvexGp+qmzADaMW6+N4E0CS/XzLkE=; b=i
-        G2MH56mjTbvUTkBH/zx6h3P7huRwLhDMwDpqWj27Z3R70ekEFOreK+bg9Syc9UYp
-        3aZhIIkivTnWT1IJ88csiY7KjFKfnATLaSHfEPIrwF/9blA6+FfOj1GnroVAnFPV
-        PEFPX3yubkMXjzTu35QHB1/jtwjhqrIddxxa9fRG7k=
-Received: from ubuntu.localdomain (unknown [10.230.35.76])
-        by app1 (Coremail) with SMTP id XAUFCgBXxT1B1IlkOe3rAA--.37009S2;
-        Wed, 14 Jun 2023 22:52:49 +0800 (CST)
-From:   Chenyuan Mi <cymi20@fudan.edu.cn>
-To:     leo.yan@linaro.org
-Cc:     acme@redhat.com, linux-kernel@vger.kernel.org,
-        Chenyuan Mi <cymi20@fudan.edu.cn>
-Subject: [PATCH] perf subcmd: Fix missing check for return value of malloc()
-Date:   Wed, 14 Jun 2023 07:52:47 -0700
-Message-Id: <20230614145247.114100-1-cymi20@fudan.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: XAUFCgBXxT1B1IlkOe3rAA--.37009S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrurWkuw1UZrykXw17Xr4Dtwb_yoW3trc_Ga
-        s5Z34DJrZYkFZrAw4jy392yr18t3W5Zr9Yqr4ayr13CF1jgr15ury8Cws3AFy5CrZIyF45
-        JFZYvw43Ar13GjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbskFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IE
-        rcIFxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
-        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
-        6r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2
-        IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E
-        87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
-        IFyTuYvjfUOXo2UUUUU
-X-CM-SenderInfo: isqsiiisuqikmt6i3vldqovvfxof0/
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        Wed, 14 Jun 2023 10:53:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D46B5;
+        Wed, 14 Jun 2023 07:53:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D40726431E;
+        Wed, 14 Jun 2023 14:53:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EDA4C433C8;
+        Wed, 14 Jun 2023 14:53:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686754415;
+        bh=elELjTb5CnmTM2XaxI5ZmqLsRLHJSh0zLpyqDqLqeo4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=iTzA02CnNktI4jteOUeJAOBEh97nLdnvqQ0t4r6fLZx494kfNYI98Fgcg9MGcfjjb
+         V5YeSym8TiiZVP7kVWEJ3TzeWS+SvyO4ASrq9m01PHUnfo4Wneu1spNNx11ibG1yRK
+         PzBJYZaYi1emlmEKM5I2jh1I6A7MRo2ubdb+fetsHShXAvDpcI/IM5DBFU6bZlzsjA
+         KhJF4NlnseDCqmQYFk6eWxpd5i7mS0cTP+a/qkZviHmfYTDibA6FYXcoJM6Te0Y8B9
+         1YnijUlDt327FmyRnlXnJcQutNuQOgc/RUCSxkYiSgVUHJqAREUCQ8e+eFK/l0iWfJ
+         Ok1HNPkHUadZw==
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2b1a66e71f9so10741731fa.2;
+        Wed, 14 Jun 2023 07:53:35 -0700 (PDT)
+X-Gm-Message-State: AC+VfDzgsQuPzSqgCWpJzuqcG//uWIXfau1zCo5I2cW1ZlXVJ4lhAfyD
+        s6X0CnHBqUbzhLZhx47VN3blct6Gq/RWUzyi9Q==
+X-Google-Smtp-Source: ACHHUZ5aR+XP7RGKR8+NYMzGzPjE2EL3zthsqJqokval211gOAcriEHJNBqyqtqLG+07Dr56T7OrilwKEd3Dp2vZQ4g=
+X-Received: by 2002:a2e:9d15:0:b0:2b3:43e6:4335 with SMTP id
+ t21-20020a2e9d15000000b002b343e64335mr2222354lji.11.1686754413281; Wed, 14
+ Jun 2023 07:53:33 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230613201231.2826352-1-robh@kernel.org> <20230613201231.2826352-2-robh@kernel.org>
+ <20230613-sculptor-prepaid-9dc5afcc2dcc@spud>
+In-Reply-To: <20230613-sculptor-prepaid-9dc5afcc2dcc@spud>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 14 Jun 2023 08:53:20 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJFT630XJ8xOrz47w5bMbGv12koCHc1NdhQQANdTrE4ow@mail.gmail.com>
+Message-ID: <CAL_JsqJFT630XJ8xOrz47w5bMbGv12koCHc1NdhQQANdTrE4ow@mail.gmail.com>
+Subject: Re: [PATCH 2/2] dt-bindings: crypto: fsl,sec-v4.0-mon: Add
+ "linux,keycodes" and deprecate "linux,keycode"
+To:     Conor Dooley <conor@kernel.org>
+Cc:     =?UTF-8?Q?Horia_Geant=C4=83?= <horia.geanta@nxp.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Gaurav Jain <gaurav.jain@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,30 +73,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The malloc() function may return NULL when it fails,
-which may cause null pointer deference in prepare_exec_cmd(),
-add Null check for return value of malloc().
+On Tue, Jun 13, 2023 at 3:11=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
+te:
+>
+> On Tue, Jun 13, 2023 at 02:12:30PM -0600, Rob Herring wrote:
+> > The "linux,keycode" property is non-standard. Add the common property
+> > "linux,keycodes" and mark "linux,keycode" deprecated so that the mistak=
+e
+> > is not propagated.
+>
+> This is actually used in the driver for this device, should the driver
+> not also be updated to use the corrected property?
 
-Found by our static analysis tool.
+Yes, but that doesn't have to be in sync with the binding change. I
+mainly want to add this so it doesn't get propagated to new users
+rather than move this case off of linux,keycode. Also, the input
+subsystem should probably have a common function to read
+linux,keycodes as right now every driver does it.
 
-Signed-off-by: Chenyuan Mi <cymi20@fudan.edu.cn>
----
- tools/lib/subcmd/exec-cmd.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/tools/lib/subcmd/exec-cmd.c b/tools/lib/subcmd/exec-cmd.c
-index 5dbea456973e..2e45c0cd4b68 100644
---- a/tools/lib/subcmd/exec-cmd.c
-+++ b/tools/lib/subcmd/exec-cmd.c
-@@ -168,6 +168,8 @@ static const char **prepare_exec_cmd(const char **argv)
- 	for (argc = 0; argv[argc]; argc++)
- 		; /* just counting */
- 	nargv = malloc(sizeof(*nargv) * (argc + 2));
-+	if (!nargv)
-+		return NULL;
- 
- 	nargv[0] = subcmd_config.exec_name;
- 	for (argc = 0; argv[argc]; argc++)
--- 
-2.17.1
-
+Rob
