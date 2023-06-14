@@ -2,85 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 354ED730898
+	by mail.lfdr.de (Postfix) with ESMTP id CF1E9730899
 	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235367AbjFNTmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 15:42:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32948 "EHLO
+        id S236571AbjFNTmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 15:42:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbjFNTlp (ORCPT
+        with ESMTP id S235697AbjFNTmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 15:41:45 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B9FEA;
-        Wed, 14 Jun 2023 12:41:44 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35EJcrYv026511;
-        Wed, 14 Jun 2023 19:41:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=pP0pcrETfKIVeFaR4C4FJMLFibSAvaUMps0ldVVXbZ0=;
- b=cmnWCT1jupe1OTG0mRO6Gwf8sD5Taw25t1C8BPXVrDF24j15KWYJwGaQn7upjDfUTXtv
- narD8MaFZ/fRxiMxz53+K4GqVtXyVHc3dHKUTU2QQgp49WlFuzbrIzAjPNdxuzBxr903
- H/ZQYee0lcG57LgWMz4f3APN2S14LvkrGKgM5kQzKBrX5RFIzxDbByYKE4dIBDlkCNuV
- 5/HZwdk9L58wfu6JzQMxoEcMhZa2smFwOEzhDWwiHhr44oa5jTOhvv5lQMOXCFGN83O+
- OsRyU+Rf/uh+4GY4tSDMAousU9n7nZ1yfej2Y3nlwhCPXdSZ6BRBlQWNVww65oQ6oG6i cA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r7fae8q9u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Jun 2023 19:41:32 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35EJfVNw012585
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Jun 2023 19:41:31 GMT
-Received: from akhilpo-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 14 Jun 2023 12:41:26 -0700
-Date:   Thu, 15 Jun 2023 01:11:23 +0530
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-CC:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Wed, 14 Jun 2023 15:42:02 -0400
+Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8919C1B2;
+        Wed, 14 Jun 2023 12:42:01 -0700 (PDT)
+Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-33e53672aa6so39312895ab.1;
+        Wed, 14 Jun 2023 12:42:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686771721; x=1689363721;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CoR5QtDrDerfHXoKGe2GEzME6z543uT6MUP8iRSfPcM=;
+        b=VqfTKZwrF8yUIuiQkvqaT/Xyn/0ar6lo4zdKm7vXL6j2a6xcFZhzCcBU6xintDegCf
+         MYMBvfpKjKQkCIAYOHtBS3hwS4JHB2Ov7sOr80ImRFfu15/d6EBJqnrYs79+/BCEmVG1
+         7jG9VHMTGiII7qdKNN1MgT9Pds9bDAwUgpgSFa3+08La6Q+ZiJuLOUKHgbylY7uMUk/Q
+         QUXrBpJ337EZ2YfFXsXV5yhfQQscwDoKisxJQRb46WMYVS9nStLCD87MLU665mh15QbX
+         mIex75KjZqWn42F3MN945v3z/+FRmCbaZ4SW8XdZcRQxWNvMmgSToRtDedXEjPxVq4hl
+         Aqrg==
+X-Gm-Message-State: AC+VfDz8UFL0nK2/PjQZxXAQvsWcVxeGaXyLQ02avqtt4VqWO8ozxM2x
+        b5kU2DBPoshAioZqm6AAfg==
+X-Google-Smtp-Source: ACHHUZ7fLbAPBebjBVM1Qjy7KigC+9HERpITyxqAjj85fhFE7tI69JqQbf2H70N0bNnPi4eYV/A+qQ==
+X-Received: by 2002:a92:db0f:0:b0:329:bba2:781a with SMTP id b15-20020a92db0f000000b00329bba2781amr16482600iln.0.1686771720705;
+        Wed, 14 Jun 2023 12:42:00 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id m10-20020a924b0a000000b0033355fa5440sm5657425ilg.37.2023.06.14.12.41.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 12:41:59 -0700 (PDT)
+Received: (nullmailer pid 2619391 invoked by uid 1000);
+        Wed, 14 Jun 2023 19:41:56 -0000
+Date:   Wed, 14 Jun 2023 13:41:56 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc:     Conor Dooley <conor@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Varshini Rajendran <varshini.rajendran@microchip.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
         Conor Dooley <conor+dt@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Rob Clark <robdclark@chromium.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-Subject: Re: [PATCH v8 13/18] drm/msm/a6xx: Add A610 support
-Message-ID: <c23tj7vsumzpggo3qbzbf4oiwpx3v2sfdu64znqzifod5q4ngh@o7g75qt4tjm5>
-References: <20230223-topic-gmuwrapper-v8-0-69c68206609e@linaro.org>
- <20230223-topic-gmuwrapper-v8-13-69c68206609e@linaro.org>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Balamanikandan Gunasundar 
+        <balamanikandan.gunasundar@microchip.com>,
+        mihai.sain@microchip.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
+        durai.manickamkr@microchip.com, manikandan.m@microchip.com,
+        dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
+        balakrishnan.s@microchip.com
+Subject: Re: [PATCH 15/21] dt-bindings: irqchip/atmel-aic5: Add support for
+ sam9x7 aic
+Message-ID: <20230614194156.GA2618101-robh@kernel.org>
+References: <20230603200243.243878-1-varshini.rajendran@microchip.com>
+ <20230603200243.243878-16-varshini.rajendran@microchip.com>
+ <20230603-fervor-kilowatt-662c84b94853@spud>
+ <20230603-sanded-blunderer-73cdd7c290c1@spud>
+ <4d3694b3-8728-42c1-8497-ae38134db37c@app.fastmail.com>
+ <20230604-cohesive-unmoving-032da3272620@spud>
+ <add5e49e-8416-ba9f-819a-da944938c05f@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230223-topic-gmuwrapper-v8-13-69c68206609e@linaro.org>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 23KSlhW2ZvvLPHcZx2qC9PNBETZ8eeCZ
-X-Proofpoint-GUID: 23KSlhW2ZvvLPHcZx2qC9PNBETZ8eeCZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-14_14,2023-06-14_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- spamscore=0 priorityscore=1501 lowpriorityscore=0 bulkscore=0 adultscore=0
- impostorscore=0 suspectscore=0 phishscore=0 mlxscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306140173
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <add5e49e-8416-ba9f-819a-da944938c05f@microchip.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,288 +98,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 03:52:32PM +0200, Konrad Dybcio wrote:
+On Mon, Jun 05, 2023 at 02:37:16PM +0200, Nicolas Ferre wrote:
+> Arnd, Conor,
 > 
-> A610 is one of (if not the) lowest-tier SKUs in the A6XX family. It
-> features no GMU, as it's implemented solely on SoCs with SMD_RPM.
-> What's more interesting is that it does not feature a VDDGX line
-> either, being powered solely by VDDCX and has an unfortunate hardware
-> quirk that makes its reset line broken - after a couple of assert/
-> deassert cycles, it will hang for good and will not wake up again.
+> On 04/06/2023 at 23:08, Conor Dooley wrote:
+> > On Sun, Jun 04, 2023 at 11:49:48AM +0200, Arnd Bergmann wrote:
+> > > On Sat, Jun 3, 2023, at 23:23, Conor Dooley wrote:
+> > > > On Sat, Jun 03, 2023 at 10:19:50PM +0100, Conor Dooley wrote:
+> > > > > Hey Varshini,
+> > > > > 
+> > > > > On Sun, Jun 04, 2023 at 01:32:37AM +0530, Varshini Rajendran wrote:
+> > > > > > Document the support added for the Advanced interrupt controller(AIC)
+> > > > > > chip in the sam9x7 soc family
+> > > > > Please do not add new family based compatibles, but rather use per-soc
+> > > > > compatibles instead.
+> > > > These things leave me penally confused. Afaiu, sam9x60 is a particular
+> > s/penally/perennially/
+> > 
+> > > > SoC. sam9x7 is actually a family, containing sam9x70, sam9x72 and
+> > > > sam9x75. It would appear to me that each should have its own compatible,
+> > > > no?
+> > > I think the usual way this works is that the sam9x7 refers to the
+> > > SoC design as in what is actually part of the chip, whereas the 70,
+> > > 72 and 75 models are variants that have a certain subset of the
+> > > features enabled.
 > 
-> This GPU requires mesa changes for proper rendering, and lots of them
-> at that. The command streams are quite far away from any other A6XX
-> GPU and hence it needs special care. This patch was validated both
-> by running an (incomplete) downstream mesa with some hacks (frames
-> rendered correctly, though some instructions made the GPU hangcheck
-> which is expected - garbage in, garbage out) and by replaying RD
-> traces captured with the downstream KGSL driver - no crashes there,
-> ever.
+> Yes, That's the case.
+> > > If that is the case here, then referring to the on-chip parts by
+> > > the sam9x7 name makes sense, and this is similar to what we do
+> > > on TI AM-series chips.
 > 
-> Add support for this GPU on the kernel side, which comes down to
-> pretty simply adding A612 HWCG tables, altering a few values and
-> adding a special case for handling the reset line.
+> This is what we did for most of our SoCs families, indeed.
 > 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  drivers/gpu/drm/msm/adreno/a6xx_gpu.c      | 101 +++++++++++++++++++++++++----
->  drivers/gpu/drm/msm/adreno/adreno_device.c |  12 ++++
->  drivers/gpu/drm/msm/adreno/adreno_gpu.h    |   8 ++-
->  3 files changed, 108 insertions(+), 13 deletions(-)
+> > If it is the case that what differentiates them is having bits chopped
+> > off, and there's no implementation differences that seems fair.
 > 
-> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> index bb04f65e6f68..c0d5973320d9 100644
-> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> @@ -252,6 +252,56 @@ static void a6xx_submit(struct msm_gpu *gpu, struct msm_gem_submit *submit)
->  	a6xx_flush(gpu, ring);
->  }
->  
-> +const struct adreno_reglist a612_hwcg[] = {
-> +	{REG_A6XX_RBBM_CLOCK_CNTL_SP0, 0x22222222},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL2_SP0, 0x02222220},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY_SP0, 0x00000081},
-> +	{REG_A6XX_RBBM_CLOCK_HYST_SP0, 0x0000f3cf},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL_TP0, 0x22222222},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL2_TP0, 0x22222222},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL3_TP0, 0x22222222},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL4_TP0, 0x00022222},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY_TP0, 0x11111111},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY2_TP0, 0x11111111},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY3_TP0, 0x11111111},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY4_TP0, 0x00011111},
-> +	{REG_A6XX_RBBM_CLOCK_HYST_TP0, 0x77777777},
-> +	{REG_A6XX_RBBM_CLOCK_HYST2_TP0, 0x77777777},
-> +	{REG_A6XX_RBBM_CLOCK_HYST3_TP0, 0x77777777},
-> +	{REG_A6XX_RBBM_CLOCK_HYST4_TP0, 0x00077777},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL_RB0, 0x22222222},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL2_RB0, 0x01202222},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL_CCU0, 0x00002220},
-> +	{REG_A6XX_RBBM_CLOCK_HYST_RB_CCU0, 0x00040f00},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL_RAC, 0x05522022},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL2_RAC, 0x00005555},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY_RAC, 0x00000011},
-> +	{REG_A6XX_RBBM_CLOCK_HYST_RAC, 0x00445044},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL_TSE_RAS_RBBM, 0x04222222},
-> +	{REG_A6XX_RBBM_CLOCK_MODE_VFD, 0x00002222},
-> +	{REG_A6XX_RBBM_CLOCK_MODE_GPC, 0x02222222},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY_HLSQ_2, 0x00000002},
-> +	{REG_A6XX_RBBM_CLOCK_MODE_HLSQ, 0x00002222},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY_TSE_RAS_RBBM, 0x00004000},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY_VFD, 0x00002222},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY_GPC, 0x00000200},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY_HLSQ, 0x00000000},
-> +	{REG_A6XX_RBBM_CLOCK_HYST_TSE_RAS_RBBM, 0x00000000},
-> +	{REG_A6XX_RBBM_CLOCK_HYST_VFD, 0x00000000},
-> +	{REG_A6XX_RBBM_CLOCK_HYST_GPC, 0x04104004},
-> +	{REG_A6XX_RBBM_CLOCK_HYST_HLSQ, 0x00000000},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL_UCHE, 0x22222222},
-> +	{REG_A6XX_RBBM_CLOCK_HYST_UCHE, 0x00000004},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY_UCHE, 0x00000002},
-> +	{REG_A6XX_RBBM_ISDB_CNT, 0x00000182},
-> +	{REG_A6XX_RBBM_RAC_THRESHOLD_CNT, 0x00000000},
-> +	{REG_A6XX_RBBM_SP_HYST_CNT, 0x00000000},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL_GMU_GX, 0x00000222},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY_GMU_GX, 0x00000111},
-> +	{REG_A6XX_RBBM_CLOCK_HYST_GMU_GX, 0x00000555},
-> +	{},
-> +};
-> +
->  /* For a615 family (a615, a616, a618 and a619) */
->  const struct adreno_reglist a615_hwcg[] = {
->  	{REG_A6XX_RBBM_CLOCK_CNTL_SP0,  0x02222222},
-> @@ -602,6 +652,8 @@ static void a6xx_set_hwcg(struct msm_gpu *gpu, bool state)
->  
->  	if (adreno_is_a630(adreno_gpu))
->  		clock_cntl_on = 0x8aa8aa02;
-> +	else if (adreno_is_a610(adreno_gpu))
-> +		clock_cntl_on = 0xaaa8aa82;
->  	else
->  		clock_cntl_on = 0x8aa8aa82;
->  
-> @@ -612,13 +664,15 @@ static void a6xx_set_hwcg(struct msm_gpu *gpu, bool state)
->  		return;
->  
->  	/* Disable SP clock before programming HWCG registers */
-> -	gmu_rmw(gmu, REG_A6XX_GPU_GMU_GX_SPTPRAC_CLOCK_CONTROL, 1, 0);
-> +	if (!adreno_is_a610(adreno_gpu))
-> +		gmu_rmw(gmu, REG_A6XX_GPU_GMU_GX_SPTPRAC_CLOCK_CONTROL, 1, 0);
->  
->  	for (i = 0; (reg = &adreno_gpu->info->hwcg[i], reg->offset); i++)
->  		gpu_write(gpu, reg->offset, state ? reg->value : 0);
->  
->  	/* Enable SP clock */
-> -	gmu_rmw(gmu, REG_A6XX_GPU_GMU_GX_SPTPRAC_CLOCK_CONTROL, 0, 1);
-> +	if (!adreno_is_a610(adreno_gpu))
-> +		gmu_rmw(gmu, REG_A6XX_GPU_GMU_GX_SPTPRAC_CLOCK_CONTROL, 0, 1);
->  
->  	gpu_write(gpu, REG_A6XX_RBBM_CLOCK_CNTL, state ? clock_cntl_on : 0);
->  }
-> @@ -806,6 +860,13 @@ static void a6xx_set_ubwc_config(struct msm_gpu *gpu)
->  	/* Unknown, introduced with A640/680 */
->  	u32 amsbc = 0;
->  
-> +	if (adreno_is_a610(adreno_gpu)) {
-> +		/* HBB = 14 */
-> +		hbb_lo = 1;
-> +		min_acc_len = 1;
-> +		ubwc_mode = 1;
-> +	}
-> +
->  	/* a618 is using the hw default values */
->  	if (adreno_is_a618(adreno_gpu))
->  		return;
-> @@ -1073,13 +1134,13 @@ static int hw_init(struct msm_gpu *gpu)
->  	a6xx_set_hwcg(gpu, true);
->  
->  	/* VBIF/GBIF start*/
-> -	if (adreno_is_a640_family(adreno_gpu) ||
-> +	if (adreno_is_a610(adreno_gpu) ||
-> +	    adreno_is_a640_family(adreno_gpu) ||
->  	    adreno_is_a650_family(adreno_gpu)) {
->  		gpu_write(gpu, REG_A6XX_GBIF_QSB_SIDE0, 0x00071620);
->  		gpu_write(gpu, REG_A6XX_GBIF_QSB_SIDE1, 0x00071620);
->  		gpu_write(gpu, REG_A6XX_GBIF_QSB_SIDE2, 0x00071620);
->  		gpu_write(gpu, REG_A6XX_GBIF_QSB_SIDE3, 0x00071620);
-> -		gpu_write(gpu, REG_A6XX_GBIF_QSB_SIDE3, 0x00071620);
->  		gpu_write(gpu, REG_A6XX_RBBM_GBIF_CLIENT_QOS_CNTL, 0x3);
->  	} else {
->  		gpu_write(gpu, REG_A6XX_RBBM_VBIF_CLIENT_QOS_CNTL, 0x3);
-> @@ -1107,18 +1168,26 @@ static int hw_init(struct msm_gpu *gpu)
->  	gpu_write(gpu, REG_A6XX_UCHE_FILTER_CNTL, 0x804);
->  	gpu_write(gpu, REG_A6XX_UCHE_CACHE_WAYS, 0x4);
->  
-> -	if (adreno_is_a640_family(adreno_gpu) ||
-> -	    adreno_is_a650_family(adreno_gpu))
-> +	if (adreno_is_a640_family(adreno_gpu) || adreno_is_a650_family(adreno_gpu)) {
->  		gpu_write(gpu, REG_A6XX_CP_ROQ_THRESHOLDS_2, 0x02000140);
-> -	else
-> +		gpu_write(gpu, REG_A6XX_CP_ROQ_THRESHOLDS_1, 0x8040362c);
-> +	} else if (adreno_is_a610(adreno_gpu)) {
-> +		gpu_write(gpu, REG_A6XX_CP_ROQ_THRESHOLDS_2, 0x00800060);
-> +		gpu_write(gpu, REG_A6XX_CP_ROQ_THRESHOLDS_1, 0x40201b16);
-> +	} else {
->  		gpu_write(gpu, REG_A6XX_CP_ROQ_THRESHOLDS_2, 0x010000c0);
-> -	gpu_write(gpu, REG_A6XX_CP_ROQ_THRESHOLDS_1, 0x8040362c);
-> +		gpu_write(gpu, REG_A6XX_CP_ROQ_THRESHOLDS_1, 0x8040362c);
-> +	}
->  
->  	if (adreno_is_a660_family(adreno_gpu))
->  		gpu_write(gpu, REG_A6XX_CP_LPAC_PROG_FIFO_SIZE, 0x00000020);
->  
->  	/* Setting the mem pool size */
-> -	gpu_write(gpu, REG_A6XX_CP_MEM_POOL_SIZE, 128);
-> +	if (adreno_is_a610(adreno_gpu)) {
-> +		gpu_write(gpu, REG_A6XX_CP_MEM_POOL_SIZE, 48);
-> +		gpu_write(gpu, REG_A6XX_CP_MEM_POOL_DBG_ADDR, 47);
-> +	} else
-> +		gpu_write(gpu, REG_A6XX_CP_MEM_POOL_SIZE, 128);
->  
->  	/* Setting the primFifo thresholds default values,
->  	 * and vccCacheSkipDis=1 bit (0x200) for A640 and newer
-> @@ -1129,6 +1198,8 @@ static int hw_init(struct msm_gpu *gpu)
->  		gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00200200);
->  	else if (adreno_is_a650(adreno_gpu) || adreno_is_a660(adreno_gpu))
->  		gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00300200);
-> +	else if (adreno_is_a610(adreno_gpu))
-> +		gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00080000);
->  	else
->  		gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00180000);
->  
-> @@ -1144,8 +1215,10 @@ static int hw_init(struct msm_gpu *gpu)
->  	a6xx_set_ubwc_config(gpu);
->  
->  	/* Enable fault detection */
-> -	gpu_write(gpu, REG_A6XX_RBBM_INTERFACE_HANG_INT_CNTL,
-> -		(1 << 30) | 0x1fffff);
-> +	if (adreno_is_a610(adreno_gpu))
-> +		gpu_write(gpu, REG_A6XX_RBBM_INTERFACE_HANG_INT_CNTL, (1 << 30) | 0x3ffff);
-> +	else
-> +		gpu_write(gpu, REG_A6XX_RBBM_INTERFACE_HANG_INT_CNTL, (1 << 30) | 0x1fffff);
->  
->  	gpu_write(gpu, REG_A6XX_UCHE_CLIENT_PF, 1);
->  
-> @@ -1675,7 +1748,7 @@ void a6xx_bus_clear_pending_transactions(struct adreno_gpu *adreno_gpu, bool gx_
->  	struct msm_gpu *gpu = &adreno_gpu->base;
->  
->  	if (adreno_is_a619_holi(adreno_gpu)) {
-> -		gpu_write(gpu, 0x18, GPR0_GBIF_HALT_REQUEST);
-> +		gpu_write(gpu, REG_A6XX_RBBM_GPR0_CNTL, GPR0_GBIF_HALT_REQUEST);
+> Ok, thanks.
+> 
+> > > There is a remaining risk that a there would be a future
+> > > sam9x71/73/74/76/... product based on a new chip that uses
+> > > incompatible devices, but at that point we can still use the
+> > > more specific model number to identify those without being
+> > > ambiguous.
+> 
+> This is exactly what we did for sama5d29 which is not the same silicon vs.
+> the other members of the sama5d2 family. We used the more specify sama5d29
+> sub-string for describing the changing parts (CAN-FD and Ethernet).
+> 
+> > > The same thing can of course happen when a SoC
+> > > vendor reuses a specific name of a prior product with an update
+> > > chip that has software visible changes.
+> > > 
+> > > I'd just leave this up to Varshini and the other at91 maintainers
+> > > here, provided they understand the exact risks.
+> 
+> Yep, I understand the risk and will try to review the compatibility strings
+> that would need more precise description (maybe PMC or AIC).
+> 
+> > Ye, seems fair to me. Nicolas/Claudiu etc, is there a convention to use
+> > the "0" model as the compatible (like the 9x60 did) or have "random"
+> > things been done so far?
+> 
+> sam9x60 was a single SoC, not a member of a "family", so there was no
+> meaning of the "0" here. Moreover, the "0" ones are usually not the subset,
+> if it even exists.
+> So far, we used the silicon string to define the compatibility string,
+> adding a more precise string for hardware of family members that needed it
+> (as mentioned above for sama5d29).
+> 
+> > > It's different for the parts that are listed as just sam9x60
+> > > compatible in the DT, I think those clearly need to have sam9x7
+> > > in the compatible list, but could have the sam9x60 identifier
+> > > as a fallback if the hardware is compatible.
+> > Aye.
+> 
+> Yep, agreed.
 
-This looks like an unrelated change.
+Can we convert this binding to schema so all this is perfectly clear 
+what's valid or not.
 
->  		spin_until((gpu_read(gpu, REG_A6XX_RBBM_VBIF_GX_RESET_STATUS) &
->  				(VBIF_RESET_ACK_MASK)) == VBIF_RESET_ACK_MASK);
->  	} else if (!a6xx_has_gbif(adreno_gpu)) {
-> @@ -1709,6 +1782,10 @@ void a6xx_bus_clear_pending_transactions(struct adreno_gpu *adreno_gpu, bool gx_
->  
->  void a6xx_gpu_sw_reset(struct msm_gpu *gpu, bool assert)
->  {
-> +	/* 11nm chips (e.g. ones with A610) have hw issues with the reset line! */
-> +	if (adreno_is_a610(to_adreno_gpu(gpu)))
-> +		return;
-> +
->  	gpu_write(gpu, REG_A6XX_RBBM_SW_RESET_CMD, assert);
->  	/* Add a barrier to avoid bad surprises */
->  	mb();
-> diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
-> index b133755a56c4..2c2cdbdada4d 100644
-> --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
-> +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
-> @@ -253,6 +253,18 @@ static const struct adreno_info gpulist[] = {
->  		.quirks = ADRENO_QUIRK_LMLOADKILL_DISABLE,
->  		.init = a5xx_gpu_init,
->  		.zapfw = "a540_zap.mdt",
-> +	}, {
-> +		.rev = ADRENO_REV(6, 1, 0, ANY_ID),
-> +		.revn = 610,
-> +		.name = "A610",
-> +		.fw = {
-> +			[ADRENO_FW_SQE] = "a630_sqe.fw",
-> +		},
-> +		.gmem = (SZ_128K + SZ_4K),
-> +		.inactive_period = 500,
-
-You really want such a long inactive period?
-
-> +		.init = a6xx_gpu_init,
-> +		.zapfw = "a610_zap.mdt",
-> +		.hwcg = a612_hwcg,
->  	}, {
->  		.rev = ADRENO_REV(6, 1, 8, ANY_ID),
->  		.revn = 618,
-> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.h b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
-> index 432fee5c1516..7a5d595d4b99 100644
-> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.h
-> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
-> @@ -55,7 +55,8 @@ struct adreno_reglist {
->  	u32 value;
->  };
->  
-> -extern const struct adreno_reglist a615_hwcg[], a630_hwcg[], a640_hwcg[], a650_hwcg[], a660_hwcg[];
-> +extern const struct adreno_reglist a612_hwcg[], a615_hwcg[], a630_hwcg[], a640_hwcg[], a650_hwcg[];
-> +extern const struct adreno_reglist a660_hwcg[];
->  
->  struct adreno_info {
->  	struct adreno_rev rev;
-> @@ -242,6 +243,11 @@ static inline int adreno_is_a540(struct adreno_gpu *gpu)
->  	return gpu->revn == 540;
->  }
->  
-> +static inline int adreno_is_a610(struct adreno_gpu *gpu)
-> +{
-> +	return gpu->revn == 610;
-> +}
-> +
->  static inline int adreno_is_a618(struct adreno_gpu *gpu)
->  {
->  	return gpu->revn == 618;
-> 
-> -- 
-> 2.40.1
-> 
-
-Minor nits, but looks good to me.
-
--Akhil.
+Rob
