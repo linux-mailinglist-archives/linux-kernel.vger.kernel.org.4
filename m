@@ -2,138 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F0B872F402
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 07:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6716572F40B
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 07:15:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242788AbjFNFMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 01:12:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48064 "EHLO
+        id S242829AbjFNFO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 01:14:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241484AbjFNFMN (ORCPT
+        with ESMTP id S242818AbjFNFOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 01:12:13 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2078.outbound.protection.outlook.com [40.107.244.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E49F1A5;
-        Tue, 13 Jun 2023 22:12:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P3uTUDq3SxJu6xA9QL+2h6L8PYEiWu6DgUHsye23IIHeMGi42Wgx3zlX0SrVZQPZAW3IG7vUYIjXNneiFqOJsjrVZoKZMcQHO+9r4pSLJPIyCbX+rsi9v87TWYxURqQ7rW/FUA4wURTbEa26MokbEeXC2VhUQB9WHjYZQNDfnTqP0q1vMX+8j7CKA3G5OQ+akyLhlwj1OmauZWcp8hAJ+rS/2WC8JPuflOWeAeohhfVbB+SheZLW7MVs7B2KYNuug4/Epc983bPtt1u82dX9MEqG5W7ve+n9s+qwmsgmISd8xPwSfBGWhRjsCEXfICSI3zA4NWjYUI0D8SzaFBsXcQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Hm/tu4mz5Gmz2Ja041/NOVvk5LY/67kdp0CN3dLue+4=;
- b=it20rpuPqi3Vb2an61aQcCA54OZEeLhtCqXM3LOiCE6JRboFftIaPJgbvsCYef6NFzMmt0aZmP9g+gHmvXQuS6wKvLPhsysn48wG4Ctr/FvELu8vd84ivCNWQ47r7L6UAMZhoeEKvICzLDR8YSMFd4gAfSHMwAh/sppateY9+XJkKuMomHkiwgRj9XuTeGNy8fVASO/6tlha8TqSXElchWGD+hxAKJxY8Rfo4gIp+2EXgVG1n/lYDijdVwca+jvUsDzDhRr8Gz2tmMQgZ+z95xTlkIuxJoYEs6nnogjkvO+RutgzpyBSR+IekTHU/h+vBB2vwmnhu1KZo/KVfZPVgQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=gmail.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Hm/tu4mz5Gmz2Ja041/NOVvk5LY/67kdp0CN3dLue+4=;
- b=RsnUkJAxJKvizgPSrEARZMn7z0NG6P1ks1Bm5LlQgRn7/nUay9CSkFW8YpSoSGm53clk52MSnxW/4nvYpPsu1o2CroLmKBWAGk9v5ijZRW3+/ETAxYIxVSxPfDJMqQWZWcJt2oqMrBmCWcZMM2JGqdeauYd/hsMQeckvCcDjfPg=
-Received: from DM6PR02CA0074.namprd02.prod.outlook.com (2603:10b6:5:1f4::15)
- by DM4PR12MB6373.namprd12.prod.outlook.com (2603:10b6:8:a4::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.41; Wed, 14 Jun 2023 05:12:09 +0000
-Received: from CY4PEPF0000EE3A.namprd03.prod.outlook.com
- (2603:10b6:5:1f4:cafe::80) by DM6PR02CA0074.outlook.office365.com
- (2603:10b6:5:1f4::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.36 via Frontend
- Transport; Wed, 14 Jun 2023 05:12:09 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000EE3A.mail.protection.outlook.com (10.167.242.14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6500.25 via Frontend Transport; Wed, 14 Jun 2023 05:12:09 +0000
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 14 Jun
- 2023 00:12:08 -0500
-Received: from xhdsneeli40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.23 via Frontend
- Transport; Wed, 14 Jun 2023 00:12:05 -0500
-From:   Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
-To:     <richardcochran@gmail.com>, <netdev@vger.kernel.org>
-CC:     <simon.horman@corigine.com>, <andrew@lunn.ch>,
-        <linux-kernel@vger.kernel.org>, <vincent.cheng.xh@renesas.com>,
-        <harini.katakam@amd.com>, <git@amd.com>,
-        <sarath.babu.naidu.gaddam@amd.com>
-Subject: [PATCH V2] ptp: clockmatrix: Add Defer probe if firmware load fails
-Date:   Wed, 14 Jun 2023 10:42:04 +0530
-Message-ID: <20230614051204.1614722-1-sarath.babu.naidu.gaddam@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 14 Jun 2023 01:14:54 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30F91A3;
+        Tue, 13 Jun 2023 22:14:52 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35E5ERGE019010;
+        Wed, 14 Jun 2023 00:14:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1686719667;
+        bh=f9NMbjlYWWumPMMGPp1UTUYH/PBscYjmbqd1a/TRdfg=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=U3LRbxtzXevFMfcfubOczIyWhhohFuuXhUA8vVAQ6YYI1+tPiLRfa0oAwUp3EjcUN
+         oDwQ32qIrcQqOMb6bCAVmoK3KfhrX2aN0qDj/nf8Jj5pPfK0EPUGTAoe/DKSkOzGll
+         d6DcPKJyon0vg3bD+JKgtWwsbUKck/jF3ZXCz/u4=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35E5ERnx022020
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 14 Jun 2023 00:14:27 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 14
+ Jun 2023 00:14:26 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 14 Jun 2023 00:14:26 -0500
+Received: from [10.24.69.26] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35E5EMEB097229;
+        Wed, 14 Jun 2023 00:14:23 -0500
+Message-ID: <13562904-2f92-8a2f-0dcc-71fc0687d7da@ti.com>
+Date:   Wed, 14 Jun 2023 10:44:22 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE3A:EE_|DM4PR12MB6373:EE_
-X-MS-Office365-Filtering-Correlation-Id: 375ad525-3808-4360-fa2d-08db6c95e7c6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Lda0sWyNLQAYV4rdB0+/ANauYxvEIDfCY/RabtYFQm2LY+ukIzIZgrwUYdZSbjfIo38QixR5wpTMuXQH4LDTHcujaMaiQzgccccSM5Sfkwqt3NvgkJQlix+4PpgHnxvHY/c++2RXII3aPDUUee9cpf1UXnVH66a+n3xC3Ku364x4cTGELodcbvB0XNCtE17dTnJ+z48Yx5Cd10ksFYPcIhkNHy0rMJ+q8MJwb+A3V3T51Sx3l/NWqe0kSwPuUeOZX2DHCHIZf4kIlDAmR7yWm86dFfgzFROZV0SHa3tOloWEezdlVvPN5NBmhxBzmlIRpOM6QtQypnB+Mdh0dKJ8/USBjOPwQkQjzC86TRS8VY2Xio543bu6OeXg9iUOXwVMjlx1fGCK4/gEk8r3l9SwJePoZYwekyPkaiFUFP44fJxrMIAWDj4P0ExMFJojYljtuS3YWrHMFjtJ7J1VICeL1mL0p2FisL1LVsRyqWI6fC7eg1qacyjtKcsP7IIj2D2Y6d86olJQ2vteyTtQ54wYZz/yJ1xc0vz0kyaPx35QOilzEn9Xb9fG7Ohzy7dE8rSrNlBCOUkJwOLaxPem9ErqRMZeNwwaT/TD9d6ssfZBrTFaehedXi3G5wgsnnYRUfE5e5dbp87K7K9lrifS4vJgpRGxLNxJQ9dirqVedSPoZmCjY537kR0U+wLlrinMxFB0MxHFwkcvgwk3u2K92zeisb9j53MaFgsYydEnipiof5nVzPhRBIxnw3VfCV1LYu8S7m3DHxHehOL2rsUr+DDlTA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(136003)(376002)(396003)(451199021)(40470700004)(46966006)(36840700001)(86362001)(40480700001)(36756003)(103116003)(82310400005)(81166007)(356005)(82740400003)(40460700003)(478600001)(110136005)(54906003)(8936002)(8676002)(5660300002)(70206006)(4326008)(41300700001)(316002)(2906002)(36860700001)(47076005)(336012)(2616005)(426003)(83380400001)(1076003)(26005)(70586007)(186003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 05:12:09.6467
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 375ad525-3808-4360-fa2d-08db6c95e7c6
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000EE3A.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6373
-X-Spam-Status: No, score=1.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] serial: 8250_omap: Use force_suspend and resume for
+ system suspend
+Content-Language: en-US
+To:     Tony Lindgren <tony@atomide.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, Vignesh R <vigneshr@ti.com>
+CC:     Andy Shevchenko <andriy.shevchenko@intel.com>,
+        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        <linux-omap@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230614045922.4798-1-tony@atomide.com>
+From:   Dhruva Gole <d-gole@ti.com>
+In-Reply-To: <20230614045922.4798-1-tony@atomide.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clock matrix driver can be probed before the rootfs containing
-firmware/initialization .bin is available. The current driver
-throws a warning and proceeds to execute probe even when firmware
-is not ready. Instead, defer probe and wait for the .bin file to
-be available.
+Hi Tony,
 
-Signed-off-by: Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
----
-Changes in V2:
-1) Added mutex_unlock(idtcm->lock); before returning EPROBE_DEFER.
-2) Moved failure log after defer probe.
----
- drivers/ptp/ptp_clockmatrix.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Thanks for the fix!
 
-diff --git a/drivers/ptp/ptp_clockmatrix.c b/drivers/ptp/ptp_clockmatrix.c
-index c9d451bf89e2..b3cb136257e3 100644
---- a/drivers/ptp/ptp_clockmatrix.c
-+++ b/drivers/ptp/ptp_clockmatrix.c
-@@ -2424,8 +2424,13 @@ static int idtcm_probe(struct platform_device *pdev)
- 
- 	err = idtcm_load_firmware(idtcm, &pdev->dev);
- 
--	if (err)
-+	if (err) {
-+		if (err == -ENOENT) {
-+			mutex_unlock(idtcm->lock);
-+			return -EPROBE_DEFER;
-+		}
- 		dev_warn(idtcm->dev, "loading firmware failed with %d", err);
-+	}
- 
- 	wait_for_chip_ready(idtcm);
- 
+On 14/06/23 10:29, Tony Lindgren wrote:
+> We should not rely on autosuspend timeout for system suspend. Instead,
+> let's use force_suspend and force_resume functions. Otherwise the serial
+> port controller device may not be idled on suspend.
+> 
+> As we are doing a register write on suspend to configure the serial port,
+> we still need to runtime PM resume the port on suspend.
+> 
+> While at it, let's switch to pm_runtime_resume_and_get() and check for
+> errors returned. And let's add the missing line break before return to the
+> suspend function while at it.
+> 
+> Fixes: 09d8b2bdbc5c ("serial: 8250: omap: Provide ability to enable/disable UART as wakeup source")
+> Signed-off-by: Tony Lindgren <tony@atomide.com>
+> ---
+
+Tested-by: Dhruva Gole <d-gole@ti.com>
+
+>   drivers/tty/serial/8250/8250_omap.c | 20 +++++++++++++++-----
+>   1 file changed, 15 insertions(+), 5 deletions(-)
+> [...]
+
+
 -- 
-2.25.1
-
+Thanks and Regards,
+Dhruva Gole
