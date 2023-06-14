@@ -2,94 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD149730829
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 175A6730824
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:24:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236553AbjFNTYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 15:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50462 "EHLO
+        id S236314AbjFNTYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 15:24:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236376AbjFNTYR (ORCPT
+        with ESMTP id S233734AbjFNTYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 15:24:17 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E9826A6
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 12:24:04 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-6668950b6c0so212512b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 12:24:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686770643; x=1689362643;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JBFhzdyVFTFeidFRV/hzmSKzDZQEfLbMd1EOce0vowg=;
-        b=PuyEFSGBXGTrO/fhnwBpCkobIO5Jk0/+9gDFSJqGsDrc1TEiSpswv2wUEiuqy9xEcz
-         62U47wGFpFzCuFrREagC8eEbD2FxOcYrBcsQFjO62hqW5F+J1ZlWuUvYdhN5iR17064j
-         JUercQ1Lpn//9ZJX+29k81+pv2OIEEUpTYMmw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686770643; x=1689362643;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JBFhzdyVFTFeidFRV/hzmSKzDZQEfLbMd1EOce0vowg=;
-        b=UXC95346lUx/ihZWUKVm90Ri2QUByolddJX3UOwA2KXV6pxvtXs4WKPU18kluQo/p6
-         L8t/ZVWmjGhPzBhh3vLZpUHGRKVfIRNIcLfo8SVgRV4s1zj/0T7sq8eHZ+ukes5H/OnP
-         d9jg5SkOZkbswuDbcMDUKdqoxN0DNUh80OtLx8W3+O63FxU8+aA7mel9NPGgfqTYSt57
-         eC6TLBh8SlYcF4CHv8AmqY+yxEW27MbgXs31DDT5fOY/QUy016P7KmwDIKJqN8vKUlzK
-         TblknQve+4RmcQICRw3TpU/8fTnkABRpj/gxvpmaytURvoh9VDcP07gvZBM1wCUNwitO
-         TtfA==
-X-Gm-Message-State: AC+VfDzlH3CLjLyUrGau4cPILbblfR9xEtg58ZM1atdgkhlwqFoKZidc
-        96LfFmBmnQdkQ1O2XzK+RlKTfg==
-X-Google-Smtp-Source: ACHHUZ7SPmlNngLf5Yjzik1pSrgKnOJsza4hMlfEDXZnlvtwsMUHrcep3YDul2Kfpc98729xaV417w==
-X-Received: by 2002:a05:6a20:5481:b0:10c:b441:5bd0 with SMTP id i1-20020a056a20548100b0010cb4415bd0mr3078684pzk.18.1686770643711;
-        Wed, 14 Jun 2023 12:24:03 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id a17-20020a62e211000000b0063b6cccd5dfsm1619049pfi.195.2023.06.14.12.24.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 12:24:03 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     keescook@chromium.org, richard@nod.at
-Cc:     linux-um@lists.infradead.org, linux-hardening@vger.kernel.org,
-        anton.ivanov@cambridgegreys.com, Al Viro <viro@ftp.linux.org.uk>,
-        johannes@sipsolutions.net, azeemshaikh38@gmail.com,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] um: Use HOST_DIR for mrproper
-Date:   Wed, 14 Jun 2023 12:23:28 -0700
-Message-Id: <168677060698.1965769.17288786387912659034.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230606222442.never.807-kees@kernel.org>
-References: <20230606222442.never.807-kees@kernel.org>
+        Wed, 14 Jun 2023 15:24:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0132926BE;
+        Wed, 14 Jun 2023 12:23:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 87DF764562;
+        Wed, 14 Jun 2023 19:23:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEFEEC433C0;
+        Wed, 14 Jun 2023 19:23:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686770631;
+        bh=0BOdsM4cLRHTOlnYaLUt75A1t22AHk/Y2NVxpib67Lk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LzH04GlRF5zrYvxDTyooZehMnYtrAU8HDRBp7XI5z/Qeq+XvIo6isbmB/o2mdj3cn
+         NOZmbRUew3oY12cf3A2CbLChr1QB0EyKUwYE2jDdLhooiznKfJ7najj73QBEOUR6GK
+         EwRPvCT2gzouEFA9yJRyR+A4UvvCJ7RfoYr13yiXPNYP/IipZrJeEa1vvXLUoViu5g
+         d12ifIFaK8ZduX56cHNxvKhRjlpRo0Si4FScRYvU78L4X1qKmQdXlu/ujBvgj+Xxhl
+         JvQZhoDYA3x2vpl2BBkenu/HICpXzVZarXK17+kFqF3nNOBrV2EJSTO1c0x1hyOdHm
+         UGCEiVIaTAy2A==
+Date:   Wed, 14 Jun 2023 12:23:48 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>
+Cc:     Jiri Pirko <jiri@resnulli.us>, "vadfed@meta.com" <vadfed@meta.com>,
+        "jonathan.lemon@gmail.com" <jonathan.lemon@gmail.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "vadfed@fb.com" <vadfed@fb.com>,
+        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "M, Saeed" <saeedm@nvidia.com>,
+        "leon@kernel.org" <leon@kernel.org>,
+        "richardcochran@gmail.com" <richardcochran@gmail.com>,
+        "sj@kernel.org" <sj@kernel.org>,
+        "javierm@redhat.com" <javierm@redhat.com>,
+        "ricardo.canuelo@collabora.com" <ricardo.canuelo@collabora.com>,
+        "mst@redhat.com" <mst@redhat.com>,
+        "tzimmermann@suse.de" <tzimmermann@suse.de>,
+        "Michalik, Michal" <michal.michalik@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "jacek.lawrynowicz@linux.intel.com" 
+        <jacek.lawrynowicz@linux.intel.com>,
+        "airlied@redhat.com" <airlied@redhat.com>,
+        "ogabbay@kernel.org" <ogabbay@kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "nipun.gupta@amd.com" <nipun.gupta@amd.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "linux@zary.sk" <linux@zary.sk>,
+        "masahiroy@kernel.org" <masahiroy@kernel.org>,
+        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
+        "geert+renesas@glider.be" <geert+renesas@glider.be>,
+        "Olech, Milena" <milena.olech@intel.com>,
+        "kuniyu@amazon.com" <kuniyu@amazon.com>,
+        "liuhangbin@gmail.com" <liuhangbin@gmail.com>,
+        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
+        "andy.ren@getcruise.com" <andy.ren@getcruise.com>,
+        "razor@blackwall.org" <razor@blackwall.org>,
+        "idosch@nvidia.com" <idosch@nvidia.com>,
+        "lucien.xin@gmail.com" <lucien.xin@gmail.com>,
+        "nicolas.dichtel@6wind.com" <nicolas.dichtel@6wind.com>,
+        "phil@nwl.cc" <phil@nwl.cc>,
+        "claudiajkang@gmail.com" <claudiajkang@gmail.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>, poros <poros@redhat.com>,
+        mschmidt <mschmidt@redhat.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "vadim.fedorenko@linux.dev" <vadim.fedorenko@linux.dev>
+Subject: Re: [RFC PATCH v8 01/10] dpll: documentation on DPLL subsystem
+ interface
+Message-ID: <20230614122348.3e9b7e42@kernel.org>
+In-Reply-To: <20230614121514.0d038aa3@kernel.org>
+References: <20230609121853.3607724-1-arkadiusz.kubalewski@intel.com>
+        <20230609121853.3607724-2-arkadiusz.kubalewski@intel.com>
+        <20230612154329.7bd2d52f@kernel.org>
+        <ZIg8/0UJB9Lbyx2D@nanopsycho>
+        <20230613093801.735cd341@kernel.org>
+        <ZImH/6GzGdydC3U3@nanopsycho>
+        <DM6PR11MB465799A5A9BB0B8E73A073449B5AA@DM6PR11MB4657.namprd11.prod.outlook.com>
+        <20230614121514.0d038aa3@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Jun 2023 15:24:45 -0700, Kees Cook wrote:
-> When HEADER_ARCH was introduced, the MRPROPER_FILES (then MRPROPER_DIRS)
-> list wasn't adjusted, leaving SUBARCH as part of the path argument.
-> This resulted in the "mrproper" target not cleaning up arch/x86/... when
-> SUBARCH was specified. Since HOST_DIR is arch/$(HEADER_ARCH), use it
-> instead to get the correct path.
+On Wed, 14 Jun 2023 12:15:14 -0700 Jakub Kicinski wrote:
+> On Wed, 14 Jun 2023 12:21:29 +0000 Kubalewski, Arkadiusz wrote:
+> > Surely, we can skip this discussion and split the nest attr into something like:
+> > - PIN_A_PIN_PARENT_DEVICE,
+> > - PIN_A_PIN_PARENT_PIN.  
 > 
-> 
-> [...]
-
-Build tested with/with-out patch, and I can see "mrproper" target
-correctly cleaning up now.
-
-Applied to for-next/hardening, thanks!
-
-[1/1] um: Use HOST_DIR for mrproper
-      https://git.kernel.org/kees/c/48ad87a5be06
-
--- 
-Kees Cook
-
+> Yup, exactly. Should a fairly change code wise, if I'm looking right.
+                               ^ small
