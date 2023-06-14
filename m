@@ -2,119 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B57D7307D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECAF37307E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:13:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234824AbjFNTJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 15:09:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42112 "EHLO
+        id S235242AbjFNTNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 15:13:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235333AbjFNTJI (ORCPT
+        with ESMTP id S229728AbjFNTNt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 15:09:08 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4384D213F;
-        Wed, 14 Jun 2023 12:09:05 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-30fba11b1ceso4329611f8f.1;
-        Wed, 14 Jun 2023 12:09:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686769743; x=1689361743;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5u9vHxVGrzBlNg97U37WfCH1VZYMHPccfRdk0EIgi0Q=;
-        b=CpgQ+Kp063bXwmLKcP1EEsFKM93bGnY15ULSzxfxUlpJLR6gAyb4oeXYPjqoQUm1Qh
-         kHc+Ueb4SiOE+/bHeahP/YzEp4jLn6ikXcfMAlgRRiQV+sBkHYwFpjdNXjkOsMvCRpUi
-         2Jb1+Go+ysqeLQxKvH0let+oPsNKRlCFj1nQL9S5ZsjhYwW+J7uflIfyuyXjNdTLvfzG
-         0Q3jbptnO63W0s2Kp2zPcEmszKHZ4i4SAg6G7taC8/t7agm9MGmGOJWKsg0iNceDD1Yi
-         xnjkmJNOjCwEz+99cd4NwBByCBeI0xLzscMFpyO9RUZzCr2+s4nj7LRAa3JSvCc/Aohl
-         0Bfw==
+        Wed, 14 Jun 2023 15:13:49 -0400
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A571BFD;
+        Wed, 14 Jun 2023 12:13:48 -0700 (PDT)
+Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-77b6e2f0c9fso74778839f.1;
+        Wed, 14 Jun 2023 12:13:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686769743; x=1689361743;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5u9vHxVGrzBlNg97U37WfCH1VZYMHPccfRdk0EIgi0Q=;
-        b=hB8oMvaHCA/hFk8/wttd6jkFXrFhEZHC0Okhpo9R4bCPwxSAuD3DFkztGcbm5rVeM1
-         Rl8bI8vU8VD5gJPmXc5QB37AVwEe5/iD2bVeMQJbjGMO9rWraA6p1HYanTuz7jEqWCRq
-         teAsTy/coETMqpXFVaRB8aGh32AGgTpB2wtF4ToL8hrz5yXG3tvceIoMzuQHVkY9LAi5
-         e6ZwXqx3V9s5M/Q1lgZebajL2/rc3qDqEuMWiCBWzQjSrCMoMgPT8S9XA8501io8R+4Q
-         C6A1mxR8Fu6aQutk7kBFfVwPaBpu0TVlnBnuNnygDBBIjZCdC0gb0GX2xbAOpzCaD9BQ
-         SjbA==
-X-Gm-Message-State: AC+VfDxDadHYx/O98tUhhQXuw5zdYSWank2WpSHaOpqk9PzrlIQhjiD8
-        iMRmB38AACg/e8IEv8WNXnE=
-X-Google-Smtp-Source: ACHHUZ4WcZukf0p1Xe7srG7EpSfRIc8i1xLVw2rVsv9fLH+mSROtW2rbeQ6y/IwrGmrmgOtHgQBd0Q==
-X-Received: by 2002:a5d:4009:0:b0:30d:673e:1547 with SMTP id n9-20020a5d4009000000b0030d673e1547mr12367726wrp.41.1686769743534;
-        Wed, 14 Jun 2023 12:09:03 -0700 (PDT)
-Received: from [127.0.1.1] (2001-4dd6-393b-ff-f59e-4402-63f8-7ff5.ipv6dyn.netcologne.de. [2001:4dd6:393b:ff:f59e:4402:63f8:7ff5])
-        by smtp.gmail.com with ESMTPSA id e6-20020a5d5306000000b003110ab70a4fsm2341094wrv.83.2023.06.14.12.09.02
+        d=1e100.net; s=20221208; t=1686770028; x=1689362028;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=69i3gF2aa9gLEhqJ8vGcBYKwa3/nKacy0WKaQtHM3c8=;
+        b=T4mzzyzPzA1aTjPjm8me0awLWoePMHEQWh83ohM8YpEbhDCwP5N1MFca7KVz1qM9yT
+         zGAaqMSpi+ulRSFf6EWd6AjGx47xIBMDCZEPx2y7ssNnTbZ8h7rUgOFFkEmcVKmCQuW4
+         WPoBj4wTB7t6Pl8gEjWG8rpDfR75Tu4ZuFdXLR64DE2+LFyETwikKSw6+nXHi/mSA5Nw
+         /JBefYPHQJi4WNJuYcC/zTmMxTKrNoa2GZhAXCzw+3XwC8z22s24tNaEaAa9nQv3MAKd
+         9zLptYPB84IRcSbAiijBb8MSBEChgBoG9/vAWbvLWIvXF+PziCa3C0ZCtDi1ddjGPDUE
+         9WRA==
+X-Gm-Message-State: AC+VfDwY62tQSVehScMY+b+lQsJ5wg3NAKItON+d/kRkcIOCe/s8arm2
+        urMB+x2rMH5GFHnOujCmd0Y8WinrsQ==
+X-Google-Smtp-Source: ACHHUZ6fEDxxe0686b9vWNAnOOTsDBT8D+eDaFY+2OLBohxA0tNlwwAEuLob8bMoz+GfFsSeeXXv5Q==
+X-Received: by 2002:a6b:ef0b:0:b0:776:2ee:4c63 with SMTP id k11-20020a6bef0b000000b0077602ee4c63mr12117781ioh.15.1686770028056;
+        Wed, 14 Jun 2023 12:13:48 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id t13-20020a5edd0d000000b0076373f90e46sm5561234iop.33.2023.06.14.12.13.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 12:09:03 -0700 (PDT)
-From:   Maximilian Weigand <mweigand2017@gmail.com>
-Date:   Wed, 14 Jun 2023 21:08:54 +0200
-Subject: [PATCH 3/3] arm64: dts: rockchip: shift boost frequency for
- rk3566-pinenote backlight
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230602-lm3630a_boost_frequency-v1-3-076472036d1a@mweigand.net>
-References: <20230602-lm3630a_boost_frequency-v1-0-076472036d1a@mweigand.net>
-In-Reply-To: <20230602-lm3630a_boost_frequency-v1-0-076472036d1a@mweigand.net>
-To:     Lee Jones <lee@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
+        Wed, 14 Jun 2023 12:13:47 -0700 (PDT)
+Received: (nullmailer pid 2581244 invoked by uid 1000);
+        Wed, 14 Jun 2023 19:13:44 -0000
+Date:   Wed, 14 Jun 2023 13:13:44 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Abel Vesa <abelvesa@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        Maximilian Weigand <mweigand@mweigand.net>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1686769738; l=833;
- i=mweigand@mweigand.net; s=20230601; h=from:subject:message-id;
- bh=68FCYhe2/70pszTO5OdRKpvXw9/fY4xli3NXD6/hP14=;
- b=S4CP5nzsXth0E8aD8pqpP1sl8cO7kQrQEa7HRD5BrzLuryOjSI3/PCNUZyOKG9OtVCheLd/e+
- i6pmW/zckRjBf6ve1+/wKCo4UP/YGxbpdycIp3O6ibe+0ai9w0SVaYb
-X-Developer-Key: i=mweigand@mweigand.net; a=ed25519;
- pk=Tjuj6PXmCCxzGTRw+9suZuZ41q/etgDHrIbPdkAaTpM=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, kernel@pengutronix.de,
+        Peng Fan <peng.fan@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Michael Trimarchi <michael@amarulasolutions.com>,
+        Mark Brown <broonie@kernel.org>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Anson Huang <Anson.Huang@nxp.com>, Marek Vasut <marex@denx.de>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-mmc@vger.kernel.org
+Subject: Re: [PATCH v1 5/7] dt-bindings: clock: imx6ul: Support optional
+ enet*_ref_pad clocks
+Message-ID: <20230614191344.GA2579146-robh@kernel.org>
+References: <20230601101451.357662-1-o.rempel@pengutronix.de>
+ <20230601101451.357662-6-o.rempel@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230601101451.357662-6-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maximilian Weigand <mweigand@mweigand.net>
+On Thu, Jun 01, 2023 at 12:14:49PM +0200, Oleksij Rempel wrote:
+> Extend the 'clocks' and 'clock-names' properties to support optional
+> 'enet1_ref_pad' and 'enet2_ref_pad' clocks to resolve the following
+> dtbs_check warning:
+>   imx6ul-prti6g.dtb: clock-controller@20c4000: clocks: [[17], [18], [19],
+>     [20], [21]] is too long
+>   From schema: Documentation/devicetree/bindings/clock/imx6ul-clock.yaml
+> 
+>   imx6ul-prti6g.dtb: clock-controller@20c4000: clock-names: ['ckil',
+>     'osc', 'ipp_di0', 'ipp_di1', 'enet1_ref_pad'] is too long
+>   From schema: Documentation/devicetree/bindings/clock/imx6ul-clock.yaml
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  Documentation/devicetree/bindings/clock/imx6ul-clock.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/imx6ul-clock.yaml b/Documentation/devicetree/bindings/clock/imx6ul-clock.yaml
+> index be54d4df5afa..d6a36fe575d3 100644
+> --- a/Documentation/devicetree/bindings/clock/imx6ul-clock.yaml
+> +++ b/Documentation/devicetree/bindings/clock/imx6ul-clock.yaml
+> @@ -28,18 +28,24 @@ properties:
+>      const: 1
+>  
+>    clocks:
+> +    minItems: 4
+>      items:
+>        - description: 32k osc
+>        - description: 24m osc
+>        - description: ipp_di0 clock input
+>        - description: ipp_di1 clock input
+> +      - description: Optional lenet1_ref_pad or enet2_ref_pad clocks
+> +      - description: Optional lenet1_ref_pad or enet2_ref_pad clocks
+>  
+>    clock-names:
+> +    minItems: 4
+>      items:
+>        - const: ckil
+>        - const: osc
+>        - const: ipp_di0
+>        - const: ipp_di1
+> +      - enum: [enet1_ref_pad, enet2_ref_pad]
+> +      - enum: [enet1_ref_pad, enet2_ref_pad]
 
-The PineNote exhibits visible flickering of its backlight for certain
-brightness settings. Alleviate this by enabling a frequency shift from
-500 kHz to 560 kHz for the boost converter of the led driver.
+pattern: '^enet[12]_ref_pad$'
 
-Signed-off-by: Maximilian Weigand <mweigand@mweigand.net>
----
- arch/arm64/boot/dts/rockchip/rk3566-pinenote.dtsi | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm64/boot/dts/rockchip/rk3566-pinenote.dtsi b/arch/arm64/boot/dts/rockchip/rk3566-pinenote.dtsi
-index 8d61f824c12d..4e4b3bbaa157 100644
---- a/arch/arm64/boot/dts/rockchip/rk3566-pinenote.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3566-pinenote.dtsi
-@@ -453,6 +453,7 @@ led-controller@36 {
- 		pinctrl-names = "default";
- 		#address-cells = <1>;
- 		#size-cells = <0>;
-+		ti,boost_frequency_shift;
- 
- 		led@0 {
- 			reg = <0>;
-
--- 
-2.39.2
-
+Rob
