@@ -2,136 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2EF37301DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB567301E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244720AbjFNO2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 10:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51754 "EHLO
+        id S235751AbjFNO2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 10:28:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237035AbjFNO2I (ORCPT
+        with ESMTP id S232831AbjFNO2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 10:28:08 -0400
-Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61E51721;
-        Wed, 14 Jun 2023 07:28:03 -0700 (PDT)
-Date:   Wed, 14 Jun 2023 14:27:39 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-        s=protonmail; t=1686752881; x=1687012081;
-        bh=TaKHoWoduEdf1ULAdjEPdONgcWDvL8WQUMVGK+EvA5E=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=dNFrt+3gbyPbkBUmkd/PWupNZXiTiwc8CpC/mJxXuxtsM5Q49KRif7rmIGlcwbcB3
-         0U2ua19QVjj1yxzMPXN+LqqjbHN/0c89FdHjyp1Jvdl7sxw7Y+SbGQ1lk6bvn7PwlN
-         cISM1qgJIJUgPaEGIru1Bazz+keA6jbgkpK+PZYREelA15aNRu2iRuXZWja+m+sWHU
-         G6hiPXz1csLlW4AUPJVxTqGFxs1Z1KpftAdsXHn+CcCzl2Q5nYN0nGIZUb1NUyfJVS
-         SWTVn5E89b5eYGVF49+OwV6QcFqJbvorAErbeGGW4hgHPS4eS7j+9T14GYSSWB053d
-         A+C0DhIgAU7mg==
-To:     Alice Ryhl <aliceryhl@google.com>
-From:   Benno Lossin <benno.lossin@proton.me>
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH] rust: make `UnsafeCell` the outer type in `Opaque`
-Message-ID: <zirWeKUZRqFhiN23v0pXHMmvuceI7EZyVvNUiREGf-UNbIbXLrHjbC8diUNg9v802jbX1978ezQLDCl--1M5S6K8l7CVWs8JGB-znEEMRNE=@proton.me>
-In-Reply-To: <20230614115328.2825961-1-aliceryhl@google.com>
-References: <20230614115328.2825961-1-aliceryhl@google.com>
-Feedback-ID: 71780778:user:proton
+        Wed, 14 Jun 2023 10:28:10 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412C21BEC;
+        Wed, 14 Jun 2023 07:28:04 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35ECuAqQ016379;
+        Wed, 14 Jun 2023 14:27:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=7egZ/xDr+6s6Ab/jtW/skQRX649b2mJpNoO9csEkpJw=;
+ b=ieuJrTa2RNmfEmeirBU0urOTi9fJ+y21IhMGvoBPgoeW/lG6V1pHpLpWrg/NDjD2kpxR
+ EvBDYru7bA4QiHbC/KW9ZC8iDOe01X3uSjuqRiLipgKzyA2TjgunWIE9F+KUJyAqd2Ut
+ MR6S4DSbWFioXd1K75qfdgDrsJJehizgguW17veGQF0NxR3d0vegcrApV+trJ3BAACKC
+ xkK2ZUo0cqbP6U3Hed8/dV46Vjd19gNJXRa0Gq1JCkvTULrFLKPvsFpK6P1F3oj70E6C
+ /LIh+Mv6KNR7m+/8+27s7fYJdvWUurJ9yP8GFVsNZ/oWQiV9gbsN8u/nnph8rxd1S5JP Eg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r7auy0rn6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Jun 2023 14:27:54 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35EERr4d009262
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Jun 2023 14:27:53 GMT
+Received: from [10.216.59.137] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 14 Jun
+ 2023 07:27:47 -0700
+Message-ID: <b39ce1c6-d134-c1b8-4764-fd824c2a2470@quicinc.com>
+Date:   Wed, 14 Jun 2023 19:57:44 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v3 1/3] dt-bindings: PCI: qcom: ep: Add interconnects path
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+CC:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        <manivannan.sadhasivam@linaro.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        <quic_vbadigan@quicinc.com>, <quic_ramkri@quicinc.com>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        <devicetree@vger.kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+        Andy Gross <agross@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+References: <1686311249-6857-1-git-send-email-quic_krichai@quicinc.com>
+ <1686311249-6857-2-git-send-email-quic_krichai@quicinc.com>
+ <168631638078.662811.2470035951687478762.robh@kernel.org>
+From:   Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
+In-Reply-To: <168631638078.662811.2470035951687478762.robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: C9N1FKMECrTIFhkYK7rT5sWzZRyR2LRp
+X-Proofpoint-GUID: C9N1FKMECrTIFhkYK7rT5sWzZRyR2LRp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-14_10,2023-06-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 spamscore=0 impostorscore=0 mlxlogscore=945
+ adultscore=0 phishscore=0 suspectscore=0 bulkscore=0 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306140125
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.06.23 13:53, Alice Ryhl wrote:
-> When combining `UnsafeCell` with `MaybeUninit`, it is idiomatic to use
-> `UnsafeCell` as the outer type. Intuitively, this is because a
-> `MaybeUninit<T>` might not contain a `T`, but we always want the effect
-> of the `UnsafeCell`, even if the inner value is uninitialized.
->=20
-> Now, strictly speaking, this doesn't really make a difference. The
-> compiler will always apply the `UnsafeCell` effect even if the inner
-> value is uninitialized. But I think we should follow the convention
-> here.
->=20
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
 
-Small comment below, but I think it is fine the way it is.
-
-Reviewed-by: Benno Lossin <benno.lossin@proton.me>
-
-> ---
->   rust/kernel/types.rs | 10 +++++-----
->   1 file changed, 5 insertions(+), 5 deletions(-)
->=20
-> diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
-> index 1e5380b16ed5..fb41635f1e1f 100644
-> --- a/rust/kernel/types.rs
-> +++ b/rust/kernel/types.rs
-> @@ -224,17 +224,17 @@ fn drop(&mut self) {
->   ///
->   /// This is meant to be used with FFI objects that are never interprete=
-d by Rust code.
->   #[repr(transparent)]
-> -pub struct Opaque<T>(MaybeUninit<UnsafeCell<T>>);
-> +pub struct Opaque<T>(UnsafeCell<MaybeUninit<T>>);
->=20
->   impl<T> Opaque<T> {
->       /// Creates a new opaque value.
->       pub const fn new(value: T) -> Self {
-> -        Self(MaybeUninit::new(UnsafeCell::new(value)))
-> +        Self(UnsafeCell::new(MaybeUninit::new(value)))
->       }
->=20
->       /// Creates an uninitialised value.
->       pub const fn uninit() -> Self {
-> -        Self(MaybeUninit::uninit())
-> +        Self(UnsafeCell::new(MaybeUninit::uninit()))
->       }
->=20
->       /// Creates a pin-initializer from the given initializer closure.
-> @@ -258,7 +258,7 @@ pub fn ffi_init(init_func: impl FnOnce(*mut T)) -> im=
-pl PinInit<Self> {
->=20
->       /// Returns a raw pointer to the opaque data.
->       pub fn get(&self) -> *mut T {
-> -        UnsafeCell::raw_get(self.0.as_ptr())
-> +        UnsafeCell::get(&self.0).cast::<T>()
-
-Is there a reason you don't do `self.0.get().cast::<T>()`?
-
---=20
-Cheers,
-Benno
-
->       }
->=20
->       /// Gets the value behind `this`.
-> @@ -266,7 +266,7 @@ pub fn get(&self) -> *mut T {
->       /// This function is useful to get access to the value without crea=
-ting intermediate
->       /// references.
->       pub const fn raw_get(this: *const Self) -> *mut T {
-> -        UnsafeCell::raw_get(this.cast::<UnsafeCell<T>>())
-> +        UnsafeCell::raw_get(this.cast::<UnsafeCell<MaybeUninit<T>>>()).c=
-ast::<T>()
->       }
->   }
->=20
->=20
-> base-commit: d2e3115d717197cb2bc020dd1f06b06538474ac3
-> --
-> 2.41.0.162.gfafddb0af9-goog
->=20
-
+On 6/9/2023 6:43 PM, Rob Herring wrote:
+> On Fri, 09 Jun 2023 17:17:26 +0530, Krishna chaitanya chundru wrote:
+>> Some platforms may not boot if a device driver doesn't initialize
+>> the interconnect path. Mostly it is handled by the bootloader but
+>> we have starting to see cases where bootloader simply ignores them.
+>>
+>> Add the "pcie-mem" interconnect path as a required property to the
+>> bindings.
+>>
+>> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+>> ---
+>>   Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml | 11 +++++++++++
+>>   1 file changed, 11 insertions(+)
+>>
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>
+> yamllint warnings/errors:
+> ./Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml:206:1: [error] syntax error: found character '\t' that cannot start any token (syntax)
+>
+> dtschema/dtc warnings/errors:
+> make[1]: *** Deleting file 'Documentation/devicetree/bindings/pci/qcom,pcie-ep.example.dts'
+> Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml:206:1: found a tab character where an indentation space is expected
+> make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/pci/qcom,pcie-ep.example.dts] Error 1
+> make[1]: *** Waiting for unfinished jobs....
+> ./Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml:206:1: found a tab character where an indentation space is expected
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml: ignoring, error parsing file
+> make: *** [Makefile:1512: dt_binding_check] Error 2
+>
+> doc reference errors (make refcheckdocs):
+>
+> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1686311249-6857-2-git-send-email-quic_krichai@quicinc.com
+>
+> The base for the series is generally the latest rc1. A different dependency
+> should be noted in *this* patch.
+>
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+>
+> pip3 install dtschema --upgrade
+>
+> Please check and re-submit after running the above command yourself. Note
+> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> your schema. However, it must be unset to test all examples with your schema.
+>
+Sorry for sending patch without checking for errors, I fixed the errors 
+in the new patch.
