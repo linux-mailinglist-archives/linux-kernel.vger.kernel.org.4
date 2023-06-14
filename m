@@ -2,110 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 203E372FED4
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAEEE72FED8
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244628AbjFNMg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 08:36:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41726 "EHLO
+        id S244607AbjFNMh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 08:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236094AbjFNMgV (ORCPT
+        with ESMTP id S244263AbjFNMhz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 08:36:21 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFD61FD0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:36:05 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-6537d2a8c20so5259126b3a.2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:36:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686746165; x=1689338165;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4e+Pwp+021TOiqEOI55JQb3RjMEOtcdSeHsod/nYw0o=;
-        b=V+SK9acdDTnYBrQKZHF8LeRsGMn16ZHTwKjr6/V6NkXCuBoLLzDUu2M0Nfa+OFigNK
-         V4mQFdEHDLPFNGAHcke1u4x7oi0gwn+8sSer3mbHXMTPH4KzJ9EHm7s6O7S8YuK2HChJ
-         /3Z/Ndb5PEZlD/1RlJPV63dLNOflrGTYfxFYmOhTgJ6/K7qwLvsbI1BmE0URxNHCVRXo
-         9R2P0rV1z6rLJ6IfG7arZAz9VmdPMFRQ6xpVawkJQ1w+PTLcc2T9pMQa4lhz4V2yo/EW
-         +EQhBPpZFjsn/mbRUj0tN2+wlhbExNE2qB0PJFzysg1AAEeDMpDC6NSsKLyfXZ0iDzEN
-         VSnw==
+        Wed, 14 Jun 2023 08:37:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE63E101
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:37:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686746230;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iALzGBdIRz3HoCIqpIVxwdpEjosaJBnZn2PpBfVlcPs=;
+        b=WALwuvzgvkH5iS2yngLzqTo73ridoDrxR4/MZcaASUJ/865rCGEpmnfK3V3gYQeyDXIl5k
+        DQjWpHDbQ48iQgdyd25DxOBp9xJjXcPl5YL+ozXenfADHnYMv0USVJJhD7sC0qaLcATzwQ
+        VyaZMmR+SGUCjFt/W0Qbl0BqK5dchko=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-609-TkOiNhRgMpGVmQLfHcKinQ-1; Wed, 14 Jun 2023 08:37:08 -0400
+X-MC-Unique: TkOiNhRgMpGVmQLfHcKinQ-1
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-75ec325d255so89464085a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:37:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686746165; x=1689338165;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4e+Pwp+021TOiqEOI55JQb3RjMEOtcdSeHsod/nYw0o=;
-        b=iwIRPccOd1bO2emSTAa89Ztv2tdyuWkndp+XF9DwqN1DWozq4okjOOuI1rUg3FkYeW
-         LmYBy86qxue9JkExOxcjia/5zsQsWEE/J+bMHrvcMN+tmtZXd5fBfFi5IXibmJvOY0O1
-         lPrhau9GqrThAHUhjAWAyo8ZBO8Dy/+hCxBgkeKii/tnWbcEkSbxTG9t8ssWbk1TYmqT
-         r+YqxiXcRZZ53Dn69gInDR0aBRx+YMX7oFpHmCQBy1y8hPmFxYUiYrNdUcrfA5frQddo
-         tKq0FlmxrnF8Gey1yoOWG+S7N7HNTiIvHbFgEulFuBT2YEduX7mr3aHLa0fHw8lXZWix
-         kBRw==
-X-Gm-Message-State: AC+VfDwtDQfSxPB1kGzdg4Sva5kkFjaizlaHAMe3FeNOMVztoZrv9D3I
-        UNx8GCu25kh89WSYWdpJ5Ec=
-X-Google-Smtp-Source: ACHHUZ4+dJFI8HJ6v4oIutm5MrkaLnh0wkcAaLETYhTmKqSAen1q8lTzmzcujbzgFoRsU+WyzbV+Tg==
-X-Received: by 2002:a05:6a00:2352:b0:665:bd58:c948 with SMTP id j18-20020a056a00235200b00665bd58c948mr2301728pfj.8.1686746164598;
-        Wed, 14 Jun 2023 05:36:04 -0700 (PDT)
-Received: from sumitra.com ([117.245.169.18])
-        by smtp.gmail.com with ESMTPSA id j1-20020aa78001000000b00634dde2992bsm10250199pfi.132.2023.06.14.05.35.59
+        d=1e100.net; s=20221208; t=1686746228; x=1689338228;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iALzGBdIRz3HoCIqpIVxwdpEjosaJBnZn2PpBfVlcPs=;
+        b=FU1R7jZJP3OYh6c06+LwZoinYyuDzSVZgT4DTTihvdKILj5Sp6K2sNS+hHwrby9GV+
+         yh6FeiTfyGmZKISRlT8gjHG6FROM/tqtg7xpZVMYKRxg/7Twjs93SUf++r3hz0hob0sn
+         uXeFPvxR1On3NsmM+CU/Z+YuaqWUeLNqPWrVUid+Gl1qVDpp99zBAXQj4Dv1OpOF39MX
+         cSsfBwh6TrI+P5y0W5qeN9QBiAmwJI2T+FnQL5Sx7KfLf60Kye+Nj7yQ2bMy/qQO+66D
+         M8V48+eTmAyOMwtlWk5aOVJze/nWLlr+iA7DtZcY0gAd0i1200M7QlI7InEKPUKoyLXT
+         +HZA==
+X-Gm-Message-State: AC+VfDzzZwxycD4ZsSnf+Jbsk+tv+eAemPXxDQh6sSZTxKbenbKcd4m4
+        hdV+YeuxgJKonbfl3WCTMBgMh8RNCV9FOeuPD29qT/itUTy5ZlHH86FKC3fXqaMOjnvP4ESkgkU
+        2MDjIrMXeExEV2IHHmIAfxHjN
+X-Received: by 2002:a05:620a:6413:b0:75b:23a1:82a3 with SMTP id pz19-20020a05620a641300b0075b23a182a3mr15368424qkn.4.1686746228056;
+        Wed, 14 Jun 2023 05:37:08 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5MRLSiFBvqUntXv9WHfkAu4IjQ4TXsWgICsiEBUkXRkiRwo+PL31bLP4+yQAl16dnAl7/3UQ==
+X-Received: by 2002:a05:620a:6413:b0:75b:23a1:82a3 with SMTP id pz19-20020a05620a641300b0075b23a182a3mr15368413qkn.4.1686746227833;
+        Wed, 14 Jun 2023 05:37:07 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id x24-20020a05620a12b800b0075d031ba684sm2580258qki.99.2023.06.14.05.37.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 05:36:04 -0700 (PDT)
-Date:   Wed, 14 Jun 2023 05:35:56 -0700
-From:   Sumitra Sharma <sumitraartsy@gmail.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Wed, 14 Jun 2023 05:37:07 -0700 (PDT)
+Date:   Wed, 14 Jun 2023 08:37:06 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     wuyonggang001@208suo.com
+Cc:     viro@zeniv.linux.org.uk, linux-alpha@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Ira Weiny <ira.weiny@intel.com>, Fabio <fmdefrancesco@gmail.com>,
-        Deepak R Varma <drv@mailo.com>,
-        Sumitra Sharma <sumitraartsy@gmail.com>
-Subject: [PATCH] drm/i915: Call page_address() on page acquired with
- GFP_KERNEL flag
-Message-ID: <20230614123556.GA381200@sumitra.com>
+Subject: Re: [PATCH] alpha/mm: Fix comparing pointer
+Message-ID: <ZIm0cu1FdlKo5ww0@x1n>
+References: <20230614065602.29731-1-zhanglibing@cdjrlc.com>
+ <258e87a54a1dd59b4f3d62ba9fa42242@208suo.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <258e87a54a1dd59b4f3d62ba9fa42242@208suo.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pages allocated with GFP_KERNEL cannot come from Highmem.
-That is why there is no need to call kmap() on them.
+On Wed, Jun 14, 2023 at 02:59:20PM +0800, wuyonggang001@208suo.com wrote:
+> Fix the following coccicheck warning:
+> 
+> arch/alpha/mm/fault.c:200:52-53: WARNING comparing pointer to 0
+> 
+> Signed-off-by: Yonggang Wu <wuyonggang001@208suo.com>
 
-Therefore, don't call kmap() on the page coming from
-vma_res->bi.pages using for_each_sgt_page() in
-i915_vma_coredump_create().
+Acked-by: Peter Xu <peterx@redhat.com>
 
-Use a plain page_address() to get the kernel address instead.
-
-Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
----
- drivers/gpu/drm/i915/i915_gpu_error.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/i915/i915_gpu_error.c b/drivers/gpu/drm/i915/i915_gpu_error.c
-index f020c0086fbc..6f51cb4fc55c 100644
---- a/drivers/gpu/drm/i915/i915_gpu_error.c
-+++ b/drivers/gpu/drm/i915/i915_gpu_error.c
-@@ -1164,9 +1164,8 @@ i915_vma_coredump_create(const struct intel_gt *gt,
- 
- 			drm_clflush_pages(&page, 1);
- 
--			s = kmap(page);
-+			s = page_address(page);
- 			ret = compress_page(compress, s, dst, false);
--			kunmap(page);
- 
- 			drm_clflush_pages(&page, 1);
- 
 -- 
-2.25.1
+Peter Xu
 
