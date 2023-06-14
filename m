@@ -2,149 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B2037303D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:27:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 770F27303D9
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:27:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245244AbjFNP1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 11:27:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34450 "EHLO
+        id S236609AbjFNP1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 11:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343774AbjFNP0k (ORCPT
+        with ESMTP id S245099AbjFNP10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 11:26:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9821E6C
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:26:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 14 Jun 2023 11:27:26 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A7DC3;
+        Wed, 14 Jun 2023 08:27:25 -0700 (PDT)
+Received: from mercury (dyndsl-091-248-213-214.ewe-ip-backbone.de [91.248.213.214])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38267643B9
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 15:26:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E991AC433C0;
-        Wed, 14 Jun 2023 15:26:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686756398;
-        bh=1FUrBPPtTuYhiCmgJTnF19xPmAmzMqjMGMN08AUS778=;
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 43DED6606F4F;
+        Wed, 14 Jun 2023 16:27:24 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686756444;
+        bh=GZ8Sf33JazmMkxEGjgJU5duB85Yb8pBBWqBGBBUZx94=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Spmc2zDprQXdxWiUIGY8bhorL/WQL2Zx6swDV1mnoYUkk8wT0OoDVnACS9v3qsSff
-         9ZChIce1SHG4Ejj7Hz7qzzxrRGSuW4+HyT4HgJpjx5nNfb32rx52SWamd0eVazUBRU
-         CeBGw0/zrj7gNtq75bYYK14puAWnZvifpaLu1VdxTtmk+/zzZSXUIpeeV+9HObYkbx
-         4MZaDtZEXhWYmudhpjutQXOwWw9//bc9JYEcPF/MDtJaUh6HEtQ5r+uKwqmj4/trRe
-         /jPSXIOxxVkqkxqG+s42kiLbyhbp1S5S1cj2sAviuaLMRRfMTiOAyykGPPuLyNg6RF
-         87J4Cgt8Hak0g==
-Date:   Wed, 14 Jun 2023 16:26:32 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: x86: pgtable / kaslr initialisation (OOB) help
-Message-ID: <20230614152632.GZ3635807@google.com>
-References: <20230614132339.GS3635807@google.com>
- <20230614141654.GA1640123@hirez.programming.kicks-ass.net>
- <20230614143732.GW3635807@google.com>
- <0cefb67a-6fae-daa2-c871-ae35b96aac08@intel.com>
- <20230614150615.GX3635807@google.com>
- <20230614151003.GY3635807@google.com>
+        b=RaegutL4WL1b4gvUQkqIFcNre+qhwMQ6dYMcSeoDrwpk72yLm3RDAJR8IspFh0KtL
+         mYkkP3sFKEzhd3NuSc8cmgyEad5uXGDqg/6qjPGATCJ5Sjeneo69n8ET9HhtFSm1tS
+         ZBOEAjj0w8rARWE1/u0Q27E7pWDWi73CaRVM4zhrmHJm+cPqkqu6veTins9FaEqetE
+         FPZMcNqPGCq612IIKU4UQm2fSXzEf9DgHGWl11E83BSyfbaZE/P/5ICfrDLzn/MSFh
+         n9FofDXAfTomszqDsWqPcnIKrZwsNvgZhpp72DJhUVx2jnJt+yNWuIKdOpS2/YI/ZF
+         uKyQ8sKw3U2zA==
+Received: by mercury (Postfix, from userid 1000)
+        id 604561060A61; Wed, 14 Jun 2023 17:27:21 +0200 (CEST)
+Date:   Wed, 14 Jun 2023 17:27:21 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Vincent Legoll <vincent.legoll@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 00/25] Add perf support to the rockchip-dfi driver
+Message-ID: <20230614152721.eep5ip726ump2kpe@mercury.elektranox.org>
+References: <20230524083153.2046084-1-s.hauer@pengutronix.de>
+ <20230614134034.3p3p75a3jophi2eu@mercury.elektranox.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zyjzybui6e7gqjye"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230614151003.GY3635807@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230614134034.3p3p75a3jophi2eu@mercury.elektranox.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Jun 2023, Lee Jones wrote:
 
-> On Wed, 14 Jun 2023, Lee Jones wrote:
-> 
-> > Thanks for chiming in Dave.  I hoped you would.
-> > 
-> > On Wed, 14 Jun 2023, Dave Hansen wrote:
-> > 
-> > > On 6/14/23 07:37, Lee Jones wrote:
-> > > > Still unsure how we (the kernel) can/should write to an area of memory
-> > > > that does not belong to it.  Should we allocate enough memory
-> > > > (2*PAGE_SIZE? rather than 8-Bytes) for trampoline_pgd_entry to consume
-> > > > in a more sane way?
-> > > 
-> > > No.
-> > > 
-> > > I think this:
-> > > 
-> > >                 set_pgd(&trampoline_pgd_entry,
-> > >                         __pgd(_KERNPG_TABLE | __pa(p4d_page_tramp)));
-> > > 
-> > > is bogus-ish.  set_pgd() wants to operate on a pgd_t inside a pgd
-> > > *PAGE*.  But it's just being pointed at a single  _entry_.  The address
-> > > of 'trampoline_pgd_entry' in your case  also just (unfortunately)
-> > > happens to pass the:
-> > > 
-> > > 	__pti_set_user_pgtbl -> pgdp_maps_userspace()
-> > > 
-> > > test.  I _think_ we want these to just be something like:
-> > > 
-> > > 	trampoline_pgd_entry = __pgd(_KERNPG_TABLE |
-> > > 				     __pa(p4d_page_tramp);
-> > > 
-> > > That'll keep us away from all of the set_pgd()-induced nastiness.
-> > 
-> > Okay.  Is this what you're suggesting?
-> > 
-> > diff --git a/arch/x86/mm/kaslr.c b/arch/x86/mm/kaslr.c                 v
-> > index d336bb0cb38b..803595c7dcc8 100644
-> > --- a/arch/x86/mm/kaslr.c
-> > +++ b/arch/x86/mm/kaslr.c
-> > @@ -176,7 +176,7 @@ void __meminit init_trampoline_kaslr(void)
-> >                 set_pgd(&trampoline_pgd_entry,
-> >                         __pgd(_KERNPG_TABLE | __pa(p4d_page_tramp)));
-> >         } else {
-> > -               set_pgd(&trampoline_pgd_entry,
-> > -                       __pgd(_KERNPG_TABLE | __pa(pud_page_tramp)));
-> > +               trampoline_pgd_entry =
-> > +                       __pgd(_KERNPG_TABLE | __pa(p4d_page_tramp);
-> 
-> Note the change of *.page_tramp here.
-> 
->   s/pud/p4d/
-> 
-> I'm assuming that too was intentional?
+--zyjzybui6e7gqjye
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Never mind.  I can see that p4d_page_tramp is local to the if() segment.
+Hi,
 
-While we're at it, does the if() segment look correct to you:
+On Wed, Jun 14, 2023 at 03:40:34PM +0200, Sebastian Reichel wrote:
+> I tested the series on RK3588 EVB1. The read/write byts looks
+> sensible. Sometimes cycles reads unrealistic values, though:
+>=20
+> 18446744070475110400      rockchip_ddr/cycles/
 
-  if (pgtable_l5_enabled()) {
-        p4d_page_tramp = alloc_low_page();
+I have seen this going off a few times with and without memory
+pressure. If it's way off, it always seems to follow the same
+pattern: The upper 32 bits are 0xffffffff instead of 0x00000000
+with the lower 32 bits containing sensible data.
 
-        p4d_tramp = p4d_page_tramp + p4d_index(paddr);
+-- Sebastian
 
-        set_p4d(p4d_tramp,
-                __p4d(_KERNPG_TABLE | __pa(pud_page_tramp)));
+--zyjzybui6e7gqjye
+Content-Type: application/pgp-signature; name="signature.asc"
 
-        set_pgd(&trampoline_pgd_entry,
-                __pgd(_KERNPG_TABLE | __pa(p4d_page_tramp)));
-  } else {
-        trampoline_pgd_entry =
-                __pgd(_KERNPG_TABLE | __pa(pud_page_tramp));
-  }
+-----BEGIN PGP SIGNATURE-----
 
- - pud_page_tramp is being passed to set_p4d()
- - p4d_page_tramp is being passed to set_pgd()
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSJ3FQACgkQ2O7X88g7
++pp2JA//SCpiw2slHYpTU8N4bPFSUT9ITBtddLnikjBs/LlWM9rDQV08dDBqnR1o
+Eyyn11zHNQ49a145uEWthUM/j04gSR7n698ALsIJiCwEhglNB9maSJGFC2KjUISi
+XqPkAcMfTXFuxWiRjuxGdcByP1XGbt2PUEmOL3ttATV4fsa+CBOqSRRCRFubufQ0
+AVaDyNljEyMtvan5cgEq29iWXLL5LvQD15XZVWYiqhq0I8TTvZ/meQSTY7n2566G
+WuYHXFWBnUQ/UhfKcTm1EHp+E43xPjaW+OTocMcijL4CqKXdj53rITNTZl0yBb5r
+lvDlndiH2c9tgrxWtxGaEisdoeUEkc15N/OXubemWTXAnNF9Er5cImnP6H2zgc3r
+IZNgiZnxcbqVcbXRsMvv6G9x2rgR1qrT7a8gfW+6XeKiTXMxhgfCyX12n++IMUWf
+pfBezTJ9p4wa4sUW7xSNd7HL0AU0Lmb9LVDD1rFuNOEYKgeaOW+n5x3PIfjcqjgJ
+1+HCmYklpAAdki85cEUZEuyf7D7C84j27uUUuOnlO670JpxQKvYndt022J69zZB0
+UO3iDHemOx8Vwg8gkIcmCwsm7gopQOfhD4DjmOYQ6JddnuwwXlnOXRTLnBm9pzBw
+hNPrd7KmbNw1nqhTDXc7OIT7iwOVmvJm5lj1GJ1m0gCnA8ZhVjg=
+=xSXO
+-----END PGP SIGNATURE-----
 
-Should those be the other way around, or am I missing the point?
-
--- 
-Lee Jones [李琼斯]
+--zyjzybui6e7gqjye--
