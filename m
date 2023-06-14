@@ -2,376 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A23F72FAF2
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 12:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25EC472FAF5
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 12:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235172AbjFNKbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 06:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40442 "EHLO
+        id S243916AbjFNKbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 06:31:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244340AbjFNKaL (ORCPT
+        with ESMTP id S244377AbjFNKaQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 06:30:11 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D44A26B5;
-        Wed, 14 Jun 2023 03:28:52 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35E7mpw6028680;
-        Wed, 14 Jun 2023 12:27:50 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=NOFrlQ5Me3hzStdXEAgB1aazavyz618BJAIRDuOKyNE=;
- b=0bR/IGmgPJgeQONbC/L42DXmHd/fwAWdu7ogJvPdDmy2KURS9vvWvec3zGBR6wch3/Li
- aTSnpw3CsqH/hScD9xTzTZNDUadM2CBCTb2Cyd52pjDsN1LF0HQzPakXJCCnPL7jqGHO
- ZMOi7U2uxJ94TwY7ViNRSTF6qzsEH8V7IlTM6MU4whZ9Z+rpU+bepdMXojhsOBQ/IIhB
- jWC6sB9nSVFoaIdb/pvkbNyh5LnaumPPCGfmZyZpJWwZHay0yVztgQ7C3R2bAXctY/3A
- CqvEo6p4Lu3b93onJG2BBdWdYRQjOSdAieOEEXx0QJrvwktH3tZ5LxZXbNCpCUW6I7F1 ig== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3r79g59760-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Jun 2023 12:27:50 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3839B10002A;
-        Wed, 14 Jun 2023 12:27:50 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2F0192278AE;
-        Wed, 14 Jun 2023 12:27:50 +0200 (CEST)
-Received: from localhost (10.252.29.239) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 14 Jun
- 2023 12:27:49 +0200
-From:   Valentin Caron <valentin.caron@foss.st.com>
-To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>
-CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Valentin Caron <valentin.caron@foss.st.com>
-Subject: [PATCH v2 4/4] spi: stm32: introduction of stm32h7 SPI slave support
-Date:   Wed, 14 Jun 2023 12:26:27 +0200
-Message-ID: <20230614102628.202936-5-valentin.caron@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230614102628.202936-1-valentin.caron@foss.st.com>
-References: <20230614102628.202936-1-valentin.caron@foss.st.com>
+        Wed, 14 Jun 2023 06:30:16 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D2352D75;
+        Wed, 14 Jun 2023 03:28:58 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id A40AF32009F0;
+        Wed, 14 Jun 2023 06:28:18 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Wed, 14 Jun 2023 06:28:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1686738498; x=1686824898; bh=ZC
+        OUyt2yTF9x4FgWIQpwXhgoxss/OYhX4Xfp8kmzJBc=; b=guYsAd3fpIJyaf1wnX
+        OMgz2zWhoMC1pTGt07uVpJGxan5ur6GEq3JERg0eZtkXrTp3CUVQ47DilYqKYg6o
+        MyJbK44rzVOU2808LKQEgWv+m3HRY/pYzp2rAZSGUZxNl8YJMKbFZCkYlPB8B92W
+        VI/jxcT6g+Ro0V16RQQagdUqjrqdkHdR+XtVrC+C0u81vCNquxDKne1PocuI+Y71
+        YCOSKqmmwNwkoZFsBxfencfFgWRrQH/x3pIF5xfFSMlZzZO34X7E9Mt4J+YdP40c
+        UuNytT7EbAALC+e/GwfBglfS4Pu86nuWlBuuQsATzNcGTKDSIQohOmuDQIX4AWKF
+        giWA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1686738498; x=1686824898; bh=ZCOUyt2yTF9x4
+        FgWIQpwXhgoxss/OYhX4Xfp8kmzJBc=; b=LpNwAyqzfXhnOwPbRR76rDm1kvFUY
+        f8mBuUOga6MapZonnBq8bJQYco9En3mr0HGqordQKjDi5+yofxzgp0Z5Rjqkf9Rs
+        ewAWSMyHHvHesHJbiQZR6VIRK1EDzve6PjaINqsY8H2MSvu7kbS1kzwPBP88fdZX
+        NVEONEkBOOjiOUdKejKSlwOXmMM0rk1aXd2YFtNtqCLqQWn8Ursn0LGaYALgWG7z
+        yOVz72R4kHZWngy3NtGNibSOgYi1Qi7s0gPKQFvHu5dGYLQHYD/KOQYCp+z+sp3O
+        v4NNdqqDf7SPNxb3Xay95QFn89kN+htLSucmrjTLd3JkbQppTZNjESgMQ==
+X-ME-Sender: <xms:QZaJZABdDs-VczzLc_x-FeyIJGLC2egjBVq-qRtPRGhOXukkIyilFg>
+    <xme:QZaJZCi1oRTrWQQhORi2r7FNo4Esf-XO12yl2XjgVaJsBb99ax9qpIMjx7v5KzgFZ
+    -S0r6NDLrfIhn6QKkk>
+X-ME-Received: <xmr:QZaJZDlq3Ll-n8-e54IfQ78FYawoCkiS-4zWCFimfYWngZAVYxy0NqeqarRaxQR6UVMajPxuMUSQydLPi_Tj6g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedvtddgvdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtsfertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeeuveduheeutdekvefgudevjeeufedvvdevhfejgfelgfdtkeevueegteek
+    gfelfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:QZaJZGzct8n9AxmadmX_jBwytlWfIbvglaGNoOgBCji_PmsCCZKKTA>
+    <xmx:QZaJZFSmJSvt9agrRjA_kZQ5ztED_XwVL6gBGCn6ufsEHz9o3q4MAg>
+    <xmx:QZaJZBbmzeDokvZkO03X-vxSN7O8odWis-5JyG4mJYJPAKBL1U5yXA>
+    <xmx:QpaJZGTZAonh0DPgqmfa5YQvyapmhh21Uuh-dMnuyWpfS7l81mD8WQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 14 Jun 2023 06:28:17 -0400 (EDT)
+Date:   Wed, 14 Jun 2023 12:28:14 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Christopher Obbard <chris.obbard@collabora.com>,
+        David Laight <David.Laight@aculab.com>, kernel@collabora.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] clk: composite: Fix handling of high clock rates
+Message-ID: <6nihw4k2vdtmjpvbei5ahb7cmtmuyi2w5m4pwhjrmdqi2yp7v6@vdpg5kwa7trl>
+References: <20230526171057.66876-1-sebastian.reichel@collabora.com>
+ <20230526171057.66876-2-sebastian.reichel@collabora.com>
+ <2f3328c4be9db6feef2cc662ede70f92.sboyd@kernel.org>
+ <7s2xdk43a2lhyezgj6bbwxaekbtgym2rin7t432m4pos4j6v74@qaxm3htjak4a>
+ <86d58c6b131028a71964a0bcb135f01f.sboyd@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.252.29.239]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-14_06,2023-06-14_01,2023-05-22_02
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rvbzj4d27cgjtg4p"
+Content-Disposition: inline
+In-Reply-To: <86d58c6b131028a71964a0bcb135f01f.sboyd@kernel.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for stm32h7 to use SPI controller in slave role.
-In such case, the spi instance should have the spi-slave property
-defined.
 
-Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
-Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
----
- drivers/spi/Kconfig     |   1 +
- drivers/spi/spi-stm32.c | 112 ++++++++++++++++++++++++++++------------
- 2 files changed, 79 insertions(+), 34 deletions(-)
+--rvbzj4d27cgjtg4p
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index 3de2ebe8294a..14810d24733b 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -936,6 +936,7 @@ config SPI_SPRD_ADI
- config SPI_STM32
- 	tristate "STMicroelectronics STM32 SPI controller"
- 	depends on ARCH_STM32 || COMPILE_TEST
-+	select SPI_SLAVE
- 	help
- 	  SPI driver for STMicroelectronics STM32 SoCs.
- 
-diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index 82fbd20e8a96..2db6f93654d7 100644
---- a/drivers/spi/spi-stm32.c
-+++ b/drivers/spi/spi-stm32.c
-@@ -117,6 +117,7 @@
- #define STM32H7_SPI_CFG2_CPHA		BIT(24)
- #define STM32H7_SPI_CFG2_CPOL		BIT(25)
- #define STM32H7_SPI_CFG2_SSM		BIT(26)
-+#define STM32H7_SPI_CFG2_SSIOP		BIT(28)
- #define STM32H7_SPI_CFG2_AFCNTR		BIT(31)
- 
- /* STM32H7_SPI_IER bit fields */
-@@ -170,6 +171,10 @@
-  */
- #define SPI_DMA_MIN_BYTES	16
- 
-+/* STM32 SPI driver helpers */
-+#define STM32_SPI_MASTER_MODE(stm32_spi) (!(stm32_spi)->slave_mode)
-+#define STM32_SPI_SLAVE_MODE(stm32_spi) ((stm32_spi)->slave_mode)
-+
- /**
-  * struct stm32_spi_reg - stm32 SPI register & bitfield desc
-  * @reg:		register offset
-@@ -190,6 +195,7 @@ struct stm32_spi_reg {
-  * @cpol: clock polarity register and polarity bit
-  * @cpha: clock phase register and phase bit
-  * @lsb_first: LSB transmitted first register and bit
-+ * @cs_high: chips select active value
-  * @br: baud rate register and bitfields
-  * @rx: SPI RX data register
-  * @tx: SPI TX data register
-@@ -201,6 +207,7 @@ struct stm32_spi_regspec {
- 	const struct stm32_spi_reg cpol;
- 	const struct stm32_spi_reg cpha;
- 	const struct stm32_spi_reg lsb_first;
-+	const struct stm32_spi_reg cs_high;
- 	const struct stm32_spi_reg br;
- 	const struct stm32_spi_reg rx;
- 	const struct stm32_spi_reg tx;
-@@ -280,6 +287,7 @@ struct stm32_spi_cfg {
-  * @dma_tx: dma channel for TX transfer
-  * @dma_rx: dma channel for RX transfer
-  * @phys_addr: SPI registers physical base address
-+ * @slave_mode: the controller is configured as SPI slave
-  */
- struct stm32_spi {
- 	struct device *dev;
-@@ -307,6 +315,8 @@ struct stm32_spi {
- 	struct dma_chan *dma_tx;
- 	struct dma_chan *dma_rx;
- 	dma_addr_t phys_addr;
-+
-+	bool slave_mode;
- };
- 
- static const struct stm32_spi_regspec stm32f4_spi_regspec = {
-@@ -318,6 +328,7 @@ static const struct stm32_spi_regspec stm32f4_spi_regspec = {
- 	.cpol = { STM32F4_SPI_CR1, STM32F4_SPI_CR1_CPOL },
- 	.cpha = { STM32F4_SPI_CR1, STM32F4_SPI_CR1_CPHA },
- 	.lsb_first = { STM32F4_SPI_CR1, STM32F4_SPI_CR1_LSBFRST },
-+	.cs_high = {},
- 	.br = { STM32F4_SPI_CR1, STM32F4_SPI_CR1_BR, STM32F4_SPI_CR1_BR_SHIFT },
- 
- 	.rx = { STM32F4_SPI_DR },
-@@ -336,6 +347,7 @@ static const struct stm32_spi_regspec stm32h7_spi_regspec = {
- 	.cpol = { STM32H7_SPI_CFG2, STM32H7_SPI_CFG2_CPOL },
- 	.cpha = { STM32H7_SPI_CFG2, STM32H7_SPI_CFG2_CPHA },
- 	.lsb_first = { STM32H7_SPI_CFG2, STM32H7_SPI_CFG2_LSBFRST },
-+	.cs_high = { STM32H7_SPI_CFG2, STM32H7_SPI_CFG2_SSIOP },
- 	.br = { STM32H7_SPI_CFG1, STM32H7_SPI_CFG1_MBR,
- 		STM32H7_SPI_CFG1_MBR_SHIFT },
- 
-@@ -971,6 +983,11 @@ static int stm32_spi_prepare_msg(struct spi_controller *ctrl,
- 	else
- 		clrb |= spi->cfg->regs->lsb_first.mask;
- 
-+	if (STM32_SPI_SLAVE_MODE(spi) && spi_dev->mode & SPI_CS_HIGH)
-+		setb |= spi->cfg->regs->cs_high.mask;
-+	else
-+		clrb |= spi->cfg->regs->cs_high.mask;
-+
- 	dev_dbg(spi->dev, "cpol=%d cpha=%d lsb_first=%d cs_high=%d\n",
- 		!!(spi_dev->mode & SPI_CPOL),
- 		!!(spi_dev->mode & SPI_CPHA),
-@@ -1161,7 +1178,8 @@ static int stm32h7_spi_transfer_one_irq(struct stm32_spi *spi)
- 	if (spi->tx_buf)
- 		stm32h7_spi_write_txfifo(spi);
- 
--	stm32_spi_set_bits(spi, STM32H7_SPI_CR1, STM32H7_SPI_CR1_CSTART);
-+	if (STM32_SPI_MASTER_MODE(spi))
-+		stm32_spi_set_bits(spi, STM32H7_SPI_CR1, STM32H7_SPI_CR1_CSTART);
- 
- 	writel_relaxed(ier, spi->base + STM32H7_SPI_IER);
- 
-@@ -1208,7 +1226,8 @@ static void stm32h7_spi_transfer_one_dma_start(struct stm32_spi *spi)
- 
- 	stm32_spi_enable(spi);
- 
--	stm32_spi_set_bits(spi, STM32H7_SPI_CR1, STM32H7_SPI_CR1_CSTART);
-+	if (STM32_SPI_MASTER_MODE(spi))
-+		stm32_spi_set_bits(spi, STM32H7_SPI_CR1, STM32H7_SPI_CR1_CSTART);
- }
- 
- /**
-@@ -1536,16 +1555,18 @@ static int stm32_spi_transfer_one_setup(struct stm32_spi *spi,
- 	spi->cfg->set_bpw(spi);
- 
- 	/* Update spi->cur_speed with real clock speed */
--	mbr = stm32_spi_prepare_mbr(spi, transfer->speed_hz,
--				    spi->cfg->baud_rate_div_min,
--				    spi->cfg->baud_rate_div_max);
--	if (mbr < 0) {
--		ret = mbr;
--		goto out;
--	}
-+	if (STM32_SPI_MASTER_MODE(spi)) {
-+		mbr = stm32_spi_prepare_mbr(spi, transfer->speed_hz,
-+					    spi->cfg->baud_rate_div_min,
-+					    spi->cfg->baud_rate_div_max);
-+		if (mbr < 0) {
-+			ret = mbr;
-+			goto out;
-+		}
- 
--	transfer->speed_hz = spi->cur_speed;
--	stm32_spi_set_mbr(spi, mbr);
-+		transfer->speed_hz = spi->cur_speed;
-+		stm32_spi_set_mbr(spi, mbr);
-+	}
- 
- 	comm_type = stm32_spi_communication_type(spi_dev, transfer);
- 	ret = spi->cfg->set_mode(spi, comm_type);
-@@ -1554,7 +1575,7 @@ static int stm32_spi_transfer_one_setup(struct stm32_spi *spi,
- 
- 	spi->cur_comm = comm_type;
- 
--	if (spi->cfg->set_data_idleness)
-+	if (STM32_SPI_MASTER_MODE(spi) && spi->cfg->set_data_idleness)
- 		spi->cfg->set_data_idleness(spi, transfer->len);
- 
- 	if (spi->cur_bpw <= 8)
-@@ -1575,7 +1596,8 @@ static int stm32_spi_transfer_one_setup(struct stm32_spi *spi,
- 	dev_dbg(spi->dev,
- 		"data frame of %d-bit, data packet of %d data frames\n",
- 		spi->cur_bpw, spi->cur_fthlv);
--	dev_dbg(spi->dev, "speed set to %dHz\n", spi->cur_speed);
-+	if (STM32_SPI_MASTER_MODE(spi))
-+		dev_dbg(spi->dev, "speed set to %dHz\n", spi->cur_speed);
- 	dev_dbg(spi->dev, "transfer of %d bytes (%d data frames)\n",
- 		spi->cur_xferlen, nb_words);
- 	dev_dbg(spi->dev, "dma %s\n",
-@@ -1670,12 +1692,13 @@ static int stm32f4_spi_config(struct stm32_spi *spi)
- }
- 
- /**
-- * stm32h7_spi_config - Configure SPI controller as SPI master
-+ * stm32h7_spi_config - Configure SPI controller
-  * @spi: pointer to the spi controller data structure
-  */
- static int stm32h7_spi_config(struct stm32_spi *spi)
- {
- 	unsigned long flags;
-+	u32 cr1 = 0, cfg2 = 0;
- 
- 	spin_lock_irqsave(&spi->lock, flags);
- 
-@@ -1683,24 +1706,28 @@ static int stm32h7_spi_config(struct stm32_spi *spi)
- 	stm32_spi_clr_bits(spi, STM32H7_SPI_I2SCFGR,
- 			   STM32H7_SPI_I2SCFGR_I2SMOD);
- 
--	/*
--	 * - SS input value high
--	 * - transmitter half duplex direction
--	 * - automatic communication suspend when RX-Fifo is full
--	 */
--	stm32_spi_set_bits(spi, STM32H7_SPI_CR1, STM32H7_SPI_CR1_SSI |
--						 STM32H7_SPI_CR1_HDDIR |
--						 STM32H7_SPI_CR1_MASRX);
-+	if (STM32_SPI_SLAVE_MODE(spi)) {
-+		/* Use native slave select */
-+		cfg2 &= ~STM32H7_SPI_CFG2_SSM;
-+	} else {
-+		/*
-+		 * - Transmitter half duplex direction
-+		 * - Automatic communication suspend when RX-Fifo is full
-+		 * - SS input value high
-+		 */
-+		cr1 |= STM32H7_SPI_CR1_HDDIR | STM32H7_SPI_CR1_MASRX | STM32H7_SPI_CR1_SSI;
- 
--	/*
--	 * - Set the master mode (default Motorola mode)
--	 * - Consider 1 master/n slaves configuration and
--	 *   SS input value is determined by the SSI bit
--	 * - keep control of all associated GPIOs
--	 */
--	stm32_spi_set_bits(spi, STM32H7_SPI_CFG2, STM32H7_SPI_CFG2_MASTER |
--						  STM32H7_SPI_CFG2_SSM |
--						  STM32H7_SPI_CFG2_AFCNTR);
-+		/*
-+		 * - Set the master mode (default Motorola mode)
-+		 * - Consider 1 master/n slaves configuration and
-+		 *   SS input value is determined by the SSI bit
-+		 * - keep control of all associated GPIOs
-+		 */
-+		cfg2 |= STM32H7_SPI_CFG2_MASTER | STM32H7_SPI_CFG2_SSM | STM32H7_SPI_CFG2_AFCNTR;
-+	}
-+
-+	stm32_spi_set_bits(spi, STM32H7_SPI_CR1, cr1);
-+	stm32_spi_set_bits(spi, STM32H7_SPI_CFG2, cfg2);
- 
- 	spin_unlock_irqrestore(&spi->lock, flags);
- 
-@@ -1756,17 +1783,30 @@ static const struct of_device_id stm32_spi_of_match[] = {
- };
- MODULE_DEVICE_TABLE(of, stm32_spi_of_match);
- 
-+static int stm32h7_spi_slave_abort(struct spi_controller *ctrl)
-+{
-+	spi_finalize_current_transfer(ctrl);
-+	return 0;
-+}
-+
- static int stm32_spi_probe(struct platform_device *pdev)
- {
- 	struct spi_controller *ctrl;
- 	struct stm32_spi *spi;
- 	struct resource *res;
- 	struct reset_control *rst;
-+	struct device_node *np = pdev->dev.of_node;
-+	bool slave_mode;
- 	int ret;
- 
--	ctrl = devm_spi_alloc_master(&pdev->dev, sizeof(struct stm32_spi));
-+	slave_mode = of_property_read_bool(np, "spi-slave");
-+
-+	if (slave_mode)
-+		ctrl = devm_spi_alloc_slave(&pdev->dev, sizeof(struct stm32_spi));
-+	else
-+		ctrl = devm_spi_alloc_master(&pdev->dev, sizeof(struct stm32_spi));
- 	if (!ctrl) {
--		dev_err(&pdev->dev, "spi master allocation failed\n");
-+		dev_err(&pdev->dev, "spi controller allocation failed\n");
- 		return -ENOMEM;
- 	}
- 	platform_set_drvdata(pdev, ctrl);
-@@ -1774,6 +1814,7 @@ static int stm32_spi_probe(struct platform_device *pdev)
- 	spi = spi_controller_get_devdata(ctrl);
- 	spi->dev = &pdev->dev;
- 	spi->ctrl = ctrl;
-+	spi->slave_mode = slave_mode;
- 	spin_lock_init(&spi->lock);
- 
- 	spi->cfg = (const struct stm32_spi_cfg *)
-@@ -1856,6 +1897,8 @@ static int stm32_spi_probe(struct platform_device *pdev)
- 	ctrl->transfer_one = stm32_spi_transfer_one;
- 	ctrl->unprepare_message = stm32_spi_unprepare_msg;
- 	ctrl->flags = spi->cfg->flags;
-+	if (STM32_SPI_SLAVE_MODE(spi))
-+		ctrl->slave_abort = stm32h7_spi_slave_abort;
- 
- 	spi->dma_tx = dma_request_chan(spi->dev, "tx");
- 	if (IS_ERR(spi->dma_tx)) {
-@@ -1901,7 +1944,8 @@ static int stm32_spi_probe(struct platform_device *pdev)
- 	pm_runtime_mark_last_busy(&pdev->dev);
- 	pm_runtime_put_autosuspend(&pdev->dev);
- 
--	dev_info(&pdev->dev, "driver initialized\n");
-+	dev_info(&pdev->dev, "driver initialized (%s mode)\n",
-+		 STM32_SPI_MASTER_MODE(spi) ? "master" : "slave");
- 
- 	return 0;
- 
--- 
-2.25.1
+On Tue, Jun 13, 2023 at 11:25:12AM -0700, Stephen Boyd wrote:
+> Quoting Maxime Ripard (2023-06-13 05:14:25)
+> > On Mon, Jun 12, 2023 at 05:10:35PM -0700, Stephen Boyd wrote:
+> > > Quoting Sebastian Reichel (2023-05-26 10:10:56)
+> > > > diff --git a/drivers/clk/clk-composite.c b/drivers/clk/clk-composit=
+e.c
+> > > > index edfa94641bbf..66759fe28fad 100644
+> > > > --- a/drivers/clk/clk-composite.c
+> > > > +++ b/drivers/clk/clk-composite.c
+> > > > @@ -119,7 +119,10 @@ static int clk_composite_determine_rate(struct=
+ clk_hw *hw,
+> > > >                         if (ret)
+> > > >                                 continue;
+> > > > =20
+> > > > -                       rate_diff =3D abs(req->rate - tmp_req.rate);
+> > > > +                       if (req->rate >=3D tmp_req.rate)
+> > > > +                               rate_diff =3D req->rate - tmp_req.r=
+ate;
+> > > > +                       else
+> > > > +                               rate_diff =3D tmp_req.rate - req->r=
+ate;
+> > >=20
+> > > This problem is widespread
+> > >=20
+> > >  $ git grep abs\(.*- -- drivers/clk/ | wc -l
+> > >  52
+> > >=20
+> > > so we may have a bigger problem here. Maybe some sort of coccinelle
+> > > script or smatch checker can be written to look for abs() usage with =
+an
+> > > unsigned long type or a subtraction expression. This may also be worse
+> > > after converting drivers to clk_hw_forward_rate_request() and
+> > > clk_hw_init_rate_request() because those set the rate to ULONG_MAX.
+> > > +Maxime for that as an FYI.
+> >=20
+> > We set max_rate to ULONG_MAX in those functions, and I don't think we
+> > have a lot of driver that will call clk_round_rate on the max rate, so
+> > we should be somewhat ok?
+>=20
+> Good point. I haven't looked to see if any drivers are using the
+> max_rate directly. Hopefully they aren't.
 
+I had a quick grep for 'req->max_rate' under drivers/clk and there's no
+driver using abs on that field.
+
+Maxime
+
+--rvbzj4d27cgjtg4p
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZImWPgAKCRDj7w1vZxhR
+xWqqAQDtRJu+7X2t9w8kMiWSgFzQ9bh/myP2kVaGllLA7Ryp4gEA8nCo9oZhnPp0
+paQV2Ot+629yys6nYCty3z7AzXB2Jw4=
+=Dq2e
+-----END PGP SIGNATURE-----
+
+--rvbzj4d27cgjtg4p--
