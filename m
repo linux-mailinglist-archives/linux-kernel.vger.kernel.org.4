@@ -2,84 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C5827308DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:55:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C631C7308DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:57:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232161AbjFNTzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 15:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
+        id S235224AbjFNT5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 15:57:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236189AbjFNTzD (ORCPT
+        with ESMTP id S232934AbjFNT5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 15:55:03 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28872122;
-        Wed, 14 Jun 2023 12:55:02 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35EJbqLB002607;
-        Wed, 14 Jun 2023 19:54:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=3cDVGjI7IF7WuWk6MxgOMFp5nbwzmi1UtW/rdaVNM5k=;
- b=eCQ+tsa+l5gwvxMueEE+hf+p9LaZJhiT1e5AQPWbnRSVsATAhbVbfZMd2JzfwEtsssWn
- 0aN++bfPA+sd4obJzef5xmhXmmzCOegR+4HiWpxjmzRmesaG835z6x1MACnkP1zIIvsG
- xr2RVINjnYhTzUEYtgjKqRLNuf4T90NtrRLoqw2vIpC8OLr3UiiAC2NfKQ3E4rjUU3jc
- +RZLn5hD9HRAFWbSlR1V8CA7EO8JVN+H+0sAUb4QDjIOnx+XT7qkve8OssQbLb2v5dbU
- XJ6b06iOj/wXtQhsPnQu310F+p0BeyIsI3Izt7DNQ5pvTpKpYCuyz3WbgExgcH/KomVF mg== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r6t0bujwf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Jun 2023 19:54:56 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35EJstSX011821
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Jun 2023 19:54:55 GMT
-Received: from [10.134.70.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 14 Jun
- 2023 12:54:55 -0700
-Message-ID: <c5cfc132-effb-8269-ac5d-ed8c988d1a16@quicinc.com>
-Date:   Wed, 14 Jun 2023 12:54:54 -0700
+        Wed, 14 Jun 2023 15:57:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B4D1FEF;
+        Wed, 14 Jun 2023 12:57:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FB3462272;
+        Wed, 14 Jun 2023 19:57:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83A54C433C0;
+        Wed, 14 Jun 2023 19:57:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686772627;
+        bh=GZ5mggTqw3teUuvhXLevUDfehWEgkhXaVlZpI7pRM+8=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=G1FQlghZ+qpoY1+fjk1mP61XCz4qQB2uWxd18kFRsMgFVQCivvXg4WTGaEKrnvwQA
+         W3wjff3ZWKZYsUR0vO4MOIqIrOqpfvohOJlh73pUP7n9qeA0O2h04H51kKXhP2kro1
+         Sxq7NQ5aOfgzNt8VD+xDfovd2N4E96+3ERRn5yyTED3xCaNoIKdc2QVlkB9D+muWim
+         Hnks3S5h52/W8AqwZukzSlL2sbx6hlCv9XaJQ0SyKgu9Fs5/sjN4sQ+hlBgyNofLzA
+         hP/ZBtVzW3TBjKV4nwCEtAepOado/aTds3W3BAMA99eNxp0pL+fFxqWCZFfmSvhmEV
+         JNcM+uvxaCr3A==
+Message-ID: <f45dff2afd6fa0c32e79aef1b604cf0c.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/3] drm/msm/dpu: Add DPU_INTF_DATABUS_WIDEN feature flag
- for DPU >= 5.0
-Content-Language: en-US
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        "Jessica Zhang" <quic_jesszhan@quicinc.com>,
-        Sean Paul <sean@poorly.run>
-References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
- <20230525-add-widebus-support-v1-1-c7069f2efca1@quicinc.com>
- <wpjxrnhbcanbc5iatxnff25yrrdfrtmgb24sgwyo457dz2oyjz@e2docpcb6337>
- <f4fb042c-1458-6077-3c49-8cc02638b27c@linaro.org>
- <ycgei43x4kfmjk7g7gbeglehtiiinfbqmrjbdzcy56frxbtd2z@yk2f5kgrkbrt>
- <e23de804-060d-3278-5045-1ed03f0de80d@quicinc.com>
-In-Reply-To: <e23de804-060d-3278-5045-1ed03f0de80d@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: YTAxfKl1WlLCNc2S7B99tQO4PnOkS3R4
-X-Proofpoint-ORIG-GUID: YTAxfKl1WlLCNc2S7B99tQO4PnOkS3R4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-14_14,2023-06-14_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- priorityscore=1501 clxscore=1015 mlxlogscore=999 spamscore=0
- lowpriorityscore=0 suspectscore=0 adultscore=0 impostorscore=0
- phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306140175
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230614012913.122220-2-yang.lee@linux.alibaba.com>
+References: <20230614012913.122220-1-yang.lee@linux.alibaba.com> <20230614012913.122220-2-yang.lee@linux.alibaba.com>
+Subject: Re: [PATCH -next 2/3] clk: stm32: core: Fix unsigned comparison with less than zero
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     mturquette@baylibre.com, orsonzhai@gmail.com,
+        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
+        pdeschrijver@nvidia.com, pgaikwad@nvidia.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Date:   Wed, 14 Jun 2023 12:57:05 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,79 +61,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Quoting Yang Li (2023-06-13 18:29:12)
+> The return value of the divider_ro_round_rate() is long.
+> However, the return value is being assigned to an unsigned
+> long variable 'rate', so making 'rate' to long.
+>=20
+> silence the warnings:
+> ./drivers/clk/stm32/clk-stm32-core.c:451:6-10: WARNING: Unsigned expressi=
+on compared with zero: rate < 0
+> ./drivers/clk/stm32/clk-stm32-core.c:461:5-9: WARNING: Unsigned expressio=
+n compared with zero: rate < 0
+>=20
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D5519
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>  drivers/clk/stm32/clk-stm32-core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/clk/stm32/clk-stm32-core.c b/drivers/clk/stm32/clk-s=
+tm32-core.c
+> index d5aa09e9fce4..067b918a8894 100644
+> --- a/drivers/clk/stm32/clk-stm32-core.c
+> +++ b/drivers/clk/stm32/clk-stm32-core.c
+> @@ -431,7 +431,7 @@ static int clk_stm32_composite_determine_rate(struct =
+clk_hw *hw,
+>  {
+>         struct clk_stm32_composite *composite =3D to_clk_stm32_composite(=
+hw);
+>         const struct stm32_div_cfg *divider;
+> -       unsigned long rate;
+> +       long rate;
+> =20
 
-
-On 6/14/2023 12:35 PM, Abhinav Kumar wrote:
-> 
-> 
-> On 6/14/2023 5:23 AM, Marijn Suijten wrote:
->> On 2023-06-14 15:01:59, Dmitry Baryshkov wrote:
->>> On 14/06/2023 14:42, Marijn Suijten wrote:
->>>> On 2023-06-13 18:57:11, Jessica Zhang wrote:
->>>>> DPU 5.x+ supports a databus widen mode that allows more data to be 
->>>>> sent
->>>>> per pclk. Enable this feature flag on all relevant chipsets.
->>>>>
->>>>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
->>>>> ---
->>>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 3 ++-
->>>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h | 2 ++
->>>>>    2 files changed, 4 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c 
->>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>> index 36ba3f58dcdf..0be7bf0bfc41 100644
->>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>> @@ -103,7 +103,8 @@
->>>>>        (BIT(DPU_INTF_INPUT_CTRL) | \
->>>>>         BIT(DPU_INTF_TE) | \
->>>>>         BIT(DPU_INTF_STATUS_SUPPORTED) | \
->>>>> -     BIT(DPU_DATA_HCTL_EN))
->>>>> +     BIT(DPU_DATA_HCTL_EN) | \
->>>>> +     BIT(DPU_INTF_DATABUS_WIDEN))
->>>>
->>>> This doesn't work.  DPU 5.0.0 is SM8150, which has DSI 6G 2.3.  In the
->>>> last patch for DSI you state and enable widebus for DSI 6G 2.5+ only,
->>>> meaning DPU and DSI are now desynced, and the output is completely
->>>> corrupted.
->>
->> Tested this on SM8350 which actually has DSI 2.5, and it is also
->> corrupted with this series so something else on this series might be
->> broken.
->>
-
-Missed this response. That seems strange.
-
-This series was tested on SM8350 HDK with a command mode panel.
-
-We will fix the DPU-DSI handshake and post a v2 but your issue needs 
-investigation in parallel.
-
-So another bug to track that would be great.
-
->>>> Is the bound in dsi_host wrong, or do DPU and DSI need to communicate
->>>> when widebus will be enabled, based on DPU && DSI supporting it?
->>>
->>> I'd prefer to follow the second approach, as we did for DP. DPU asks the
->>> actual video output driver if widebus is to be enabled.
->>
-> 
-> I was afraid of this. This series was made on an assumption that the DPU 
-> version of widebus and DSI version of widebus would be compatible but 
-> looks like already SM8150 is an outlier.
-> 
-> Yes, I think we have to go with second approach.
-> 
-> DPU queries DSI if it supports widebus and enables it.
-> 
-> Thanks for your responses. We will post a v2.
-> 
->> Doesn't it seem very strange that DPU 5.x+ comes with a widebus feature,
->> but the DSI does not until two revisions later?  Or is this available on
->> every interface, but only for a different (probably DP) encoder block?
->>
-> 
-> Yes its strange.
-> 
->> - Marijn
+Instead of this can you convert this code to use
+divider_ro_determine_rate() and divider_determine_rate()?
