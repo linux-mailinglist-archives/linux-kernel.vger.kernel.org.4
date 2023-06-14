@@ -2,79 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0128E72FC64
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B85E72FC65
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:28:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243970AbjFNL2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 07:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45498 "EHLO
+        id S243986AbjFNL2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 07:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243985AbjFNL2h (ORCPT
+        with ESMTP id S244005AbjFNL2i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 07:28:37 -0400
-Received: from out-53.mta0.migadu.com (out-53.mta0.migadu.com [91.218.175.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CFF71BF9
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 04:28:35 -0700 (PDT)
+        Wed, 14 Jun 2023 07:28:38 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68A11FCC;
+        Wed, 14 Jun 2023 04:28:36 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AA3DB6606F13;
+        Wed, 14 Jun 2023 12:28:34 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686742115;
+        bh=fkrE5Of992m10Vkun1aGB8HdC//z3kh+8lPF7Qeb2s8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=OFQYsWJoTsjSpV+LtZudg2bSBOaso1iRfPsKRLkssfedpbD4gMCh5viSJyB2aq1LL
+         iA6h6EuvDMjNI5rj8OAKPkYA93tdsA7pXRDZmE1rE2/Ba4yUC0NsYByRyCLHNRziQw
+         CNrpDwJY1NugsfgJs4p7wpscD3lXiiKoBLmvFNonQZO3lyg/q4SakhYgeJ15I6+rVr
+         eYG0IcB8Y4klpjdF3+lgx/BnWe2Ayf5Qw+TcGP6ETiX9fDbjrRPKDjkqb2E1ddjaDQ
+         JuzAbYDYvSohEGyaY/uttcwFB8X/zuIeQv4KHkwAtm3KeTiDc8W7ylhjL8Q5wxnk4a
+         iiafja4Qz7LzA==
+Message-ID: <d2d2c421-e7e6-bd80-2a72-fa7139898cdc@collabora.com>
+Date:   Wed, 14 Jun 2023 13:28:32 +0200
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1686742113;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cTaa5bkAAsCLeUbvEbbT4RXCgahfVxUJZ2KAppeaueI=;
-        b=EjE6/y/cxxH5htYlmhMO86yXvD02DrutaaufHKu8Kjw8DC+9PZQvgzrHvEJo3ybV+HnnjJ
-        1tIEKaIPB0iBFLcX0p+yTkwNd2dfF//G5rTHgov8fNIlYlBcjH5BGtrwXuUNNKmaY5YFBh
-        8HvEwTlZJ6AkYhRWpDPkW+29HxNlcFA=
-Date:   Wed, 14 Jun 2023 11:28:32 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   "Yajun Deng" <yajun.deng@linux.dev>
-Message-ID: <ab067588892217b6ee6ce759bd569b12@linux.dev>
-Subject: Re: [PATCH] mm/mm_init.c: remove spinlock in early_pfn_to_nid()
-To:     "Greg KH" <gregkh@linuxfoundation.org>
-Cc:     rafael@kernel.org, rppt@kernel.org, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-In-Reply-To: <2023061431-litigate-upchuck-7ed1@gregkh>
-References: <2023061431-litigate-upchuck-7ed1@gregkh>
- <20230614110324.3839354-1-yajun.deng@linux.dev>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 10/15] soc: mediatek: Support reset bit mapping in
+ mmsys driver
+Content-Language: en-US
+To:     Hsiao Chien Sung <shawn.sung@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Singo Chang <singo.chang@mediatek.com>,
+        Nancy Lin <nancy.lin@mediatek.com>,
+        Jason-JH Lin <jason-jh.lin@mediatek.com>
+References: <20230614073125.17958-1-shawn.sung@mediatek.com>
+ <20230614073125.17958-11-shawn.sung@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230614073125.17958-11-shawn.sung@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-June 14, 2023 7:09 PM, "Greg KH" <gregkh@linuxfoundation.org> wrote:=0A=
-=0A> On Wed, Jun 14, 2023 at 07:03:24PM +0800, Yajun Deng wrote:=0A> =0A>=
-> When the system boots, only one cpu is enabled before smp_init().=0A>> =
-So the spinlock is not needed in most cases, remove it.=0A>> =0A>> Add sp=
-inlock in get_nid_for_pfn() because it is after smp_init().=0A> =0A> So t=
-his is two different things at once in the same patch?=0A> =0A> Or are th=
-ey the same problem and both need to go in to solve it?=0A> =0A> And if a=
- spinlock is not needed at early boot, is it really causing any=0A> probl=
-ems?=0A> =0A=0AThey are the same problem.=0AI added pr_info in early_pfn_=
-to_nid(), found get_nid_for_pfn() is the only=0Acase need to add spinlock=
-.=0AThis patch tested on my x86 system.=0A=0A=0A>> Signed-off-by: Yajun D=
-eng <yajun.deng@linux.dev>=0A>> ---=0A>> drivers/base/node.c | 11 +++++++=
-++--=0A>> mm/mm_init.c | 18 +++---------------=0A>> 2 files changed, 12 i=
-nsertions(+), 17 deletions(-)=0A>> =0A>> diff --git a/drivers/base/node.c=
- b/drivers/base/node.c=0A>> index 9de524e56307..844102570ff2 100644=0A>> =
---- a/drivers/base/node.c=0A>> +++ b/drivers/base/node.c=0A>> @@ -748,8 +=
-748,15 @@ int unregister_cpu_under_node(unsigned int cpu, unsigned int ni=
-d)=0A>> static int __ref get_nid_for_pfn(unsigned long pfn)=0A>> {=0A>> #=
-ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT=0A>> - if (system_state < SYSTEM_R=
-UNNING)=0A>> - return early_pfn_to_nid(pfn);=0A>> + static DEFINE_SPINLOC=
-K(early_pfn_lock);=0A>> + int nid;=0A>> +=0A>> + if (system_state < SYSTE=
-M_RUNNING) {=0A>> + spin_lock(&early_pfn_lock);=0A>> + nid =3D early_pfn_=
-to_nid(pfn);=0A>> + spin_unlock(&early_pfn_lock);=0A> =0A> Adding an exte=
-rnal lock for when you call a function is VERY dangerous=0A> as you did n=
-ot document this anywhere, and there's no way to enforce it=0A> properly =
-at all.=0A> =0A=0AI should add a comment before early_pfn_to_nid().=0A=0A=
-> Does your change actually result in any boot time changes? How was this=
-=0A> tested?=0A> =0A=0AJust a bit.=0A=0A> thanks,=0A> =0A> greg k-h
+Il 14/06/23 09:31, Hsiao Chien Sung ha scritto:
+> - Reset ID must starts from 0 and be consecutive, but
+>    the reset bits in our hardware design is not continuous,
+>    some bits are left unused, we need a map to solve the problem
+> - Use old style 1-to-1 mapping if .rst_tb is not defined
+> 
+> Signed-off-by: Hsiao Chien Sung <shawn.sung@mediatek.com>
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+
