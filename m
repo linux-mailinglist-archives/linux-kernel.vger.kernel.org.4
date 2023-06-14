@@ -2,110 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77C9972F9E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 11:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BDE672F9E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 11:57:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238505AbjFNJ5n convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 14 Jun 2023 05:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54950 "EHLO
+        id S235431AbjFNJ5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 05:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233697AbjFNJ5m (ORCPT
+        with ESMTP id S243399AbjFNJ5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 05:57:42 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A4DC2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 02:57:40 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-318-cYKJ_jYvN-aJa4XviMzn4A-1; Wed, 14 Jun 2023 10:57:37 +0100
-X-MC-Unique: cYKJ_jYvN-aJa4XviMzn4A-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 14 Jun
- 2023 10:57:33 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Wed, 14 Jun 2023 10:57:33 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Steven Rostedt' <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
-CC:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: RE: [PATCH] tracing: Add a debug_trace_printk() function
-Thread-Topic: [PATCH] tracing: Add a debug_trace_printk() function
-Thread-Index: AQHZnYZXodJCXa8lT0+2rDQCqxMQQa+KDaeA
-Date:   Wed, 14 Jun 2023 09:57:33 +0000
-Message-ID: <e2f3ce97329d488d8ecd4fea5fbdb4f6@AcuMS.aculab.com>
-References: <20230612193337.0fb0d3ca@gandalf.local.home>
-In-Reply-To: <20230612193337.0fb0d3ca@gandalf.local.home>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 14 Jun 2023 05:57:44 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD7D1AC
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 02:57:43 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 73ACD1FB;
+        Wed, 14 Jun 2023 02:58:27 -0700 (PDT)
+Received: from [10.57.85.233] (unknown [10.57.85.233])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 91D133F71E;
+        Wed, 14 Jun 2023 02:57:41 -0700 (PDT)
+Message-ID: <0454d58b-1de0-a4b4-6b93-8c0b99090d96@arm.com>
+Date:   Wed, 14 Jun 2023 10:57:36 +0100
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 14/18] iommu/arm-smmu-v3: Support domains with shared
+ CDs
+Content-Language: en-GB
+To:     Michael Shavit <mshavit@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Will Deacon <will@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        jean-philippe@linaro.org, nicolinc@nvidia.com,
+        baolu.lu@linux.intel.com, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20230606120854.4170244-1-mshavit@google.com>
+ <20230606120854.4170244-15-mshavit@google.com> <ZH9oQMmI8CezMCnx@nvidia.com>
+ <CAKHBV25eDNXEu+6GWDJqpw1h5N-Jq-GPzf81kNH1dyw3Z=KsZA@mail.gmail.com>
+ <ZIBxPd1/JCAle6yP@nvidia.com>
+ <CAKHBV25K4BCewMdp3HcRtaX1iNhVpxL_6dMwp1_fmcQ5RWpKBQ@mail.gmail.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <CAKHBV25K4BCewMdp3HcRtaX1iNhVpxL_6dMwp1_fmcQ5RWpKBQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt
-> Sent: 13 June 2023 00:34
+On 2023-06-14 10:17, Michael Shavit wrote:
+> On Wed, Jun 7, 2023 at 1:09 AM Jason Gunthorpe <jgg@nvidia.com> wrote:
+>>
+>> On Tue, Jun 06, 2023 at 08:07:50PM +0800, Michael Shavit wrote:
+>>> SVA may attach a CD to masters that have different upstream SMMU
+>>> devices. The arm_smmu_domain structure can only be attached to a single
+>>> upstream SMMU device however.
+>>
+>> Isn't that pretty much because we don't support replicating
+>> invalidations to each of the different SMMU instances?
 > 
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> 
-> While doing some tracing and kernel debugging, I found that some of my
-> trace_printk()s were being lost in the noise of the other code that was
-> being traced. Having a way to write trace_printk() not in the top level
-> trace buffer would have been useful.
-> 
-> There was also a time I needed to debug ftrace itself, where
-> trace_printk() did not hit the paths that were being debugged. But because
-> the trace that was being debugged, was going into the top level ring
-> buffer, it was causing issues for seeing what is to be traced.
-> 
-> To solve both of the above, add a debug_trace_printk() that can be used
-> just like trace_printk() except that it goes into a "debug" instance
-> buffer instead. This can be used at boot up as well.
-...
-> +#ifdef CONFIG_FTRACE_DEBUG_PRINT
-> +	debug_trace = trace_array_get_by_name("debug");
-> +	if (WARN_ON(!debug_trace))
-> +		return;
-> +	trace_array_init_printk(debug_trace);
-> +#endif
+> Looked into this some more, and supporting attach to multiple devices
+> is still very hard:
+> 1. When an arm_smmu_domain is first attached to a master, it
+> initializes an io_pgtable_cfg object whose properties depend on the
+> master's upstream SMMU device. This io_pgtable_cfg is then used to
+> allocate an io_pgtable object, and the arm_smmu_ctx_desc's TTBR field
+> points to that io_pgtable's TTBR (and ditto for the vttbr on stage 2
+> domains). So then arm_smmu_domain needs to be split into two,
+> arm_smmu_domain and arm_smmu_device_domain with the latter containing
+> a per-SMMU device io_pgtable, arm_smmu_ctx_desc and arm_smmu_s2_cfg.
+> Each iommu_domain_ops operation now needs to loop over each
+> arm_smmu_device_domain.
+> 2. Some of the iommu_domain fields also depend on the per-SMMU
+> io_pgtable_cfg; specifically pgsize_bitmap and geometry.aperture_end.
+> These need to be restricted as the domain is attached to more devices.
+> 3. Attaching a domain to a new SMMU device must be prohibited after
+> any call to map_pages or if iommu_domain.pgsize_bitmap and
+> iommu-domain.geometry.aperture_end have been consumed by any system.
+> The first is something the arm-smmu-v3.c driver could feasibly enforce
+> on its own, the second requires changes to the iommu framework.
 
-I was wondering if that could be done whenever the "debug"
-trace_array is created?
-(perhaps only if trace_prink() has been used?)
-Since (AFAICT) it could be created at any time??
+In practice it would be entirely reasonable to only support 
+cross-instance attach between instances with matching capabilities such 
+that they *can* share the pagetable directly.
 
-So you wouldn't really need an extra kernel knob?
-(Except to get the boot time trace diverted.)
-The trace could go to the global buffer if the debug one
-isn't created.
+> The arm-smmu-v3-sva.c implementation avoids all these problems because it
+> doesn't need to allocate an io_pgtable;
 
-OTOH I'm missing what trace_array_init_prink() does?
-It seems to just call alloc_percpu_trace_buffer() with
-no arguments.
+SVA has all the same underlying problems - pagetable sharing is still 
+pagetable sharing regardless of which code happens to allocate the 
+physical pages - they're just avoided up-front by disallowing SVA at all 
+if the relevant capabilities don't line up between SMMU and CPU.
 
-It looks like alloc_percpu_trace_buffer() is called if there
-are any trace_printk() formats in the main kernel.
-Hopefully they aren't just in modules??
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Thanks,
+Robin.
