@@ -2,156 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0579D7304AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:15:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0F867304AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232449AbjFNQPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 12:15:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
+        id S232376AbjFNQPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 12:15:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232288AbjFNQPC (ORCPT
+        with ESMTP id S232266AbjFNQPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 14 Jun 2023 12:15:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4B52101;
-        Wed, 14 Jun 2023 09:15:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE013641FA;
-        Wed, 14 Jun 2023 16:15:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D78FBC433C0;
-        Wed, 14 Jun 2023 16:14:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686759300;
-        bh=osSAHvFKMIO/cCPOuijjFPZuIw7zTc4XSarO6SeGtKM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lOZXkpqughP+6yDHDr/iXuYUQQVJN3FV81lEUSxOLXPgZr7XkgKHHFKmFC6h5hPbD
-         +stzTnoz+dtAuXrVeNO69NJyimoBs9NwtQfmOvfSOpZGi5Tpz1RHXSeLp5sTwOX5CL
-         UHEb5HYyLr5+iWPros+latdXJOEtb3kPyf9YkF8WS6rIpGviBS8f9HB/gdRBqkPaLa
-         Ol0w7bPpAbVl8IqcAQTymTp2/hiVSzUTVIRVDcVRFX7nY7Gkc3sg8kgtNbCervw3JH
-         AUjZm/1v/l5uuIc1m+wbQ7se7ZDg4ELVWsu9fjrz2i5ryUkepRCIUpo1RmDZ+tpNNk
-         dzz017m2frKFA==
-Date:   Wed, 14 Jun 2023 17:14:54 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 7/9] regulator: mt6358: Add output voltage fine tuning to
- fixed regulators
-Message-ID: <a5c00706-dc23-4561-8bcf-729fd10e74ef@sirena.org.uk>
-References: <20230609083009.2822259-1-wenst@chromium.org>
- <20230609083009.2822259-8-wenst@chromium.org>
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCC92110
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:15:01 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id ca18e2360f4ac-777a9ca9112so66626739f.1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:15:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1686759301; x=1689351301;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QqoWj6DXTQFZb+D9M2TrBVvRLV18GMfvul29IQg5Gis=;
+        b=D0rQKJvogSBcL6Ew/xXqeIOkKjP5e74xrqeBAX3dE5kr8SvhvWqE/D34hWswLn3JGD
+         +hu1n20ssaF7MldK4cZeD1JoQRfWJhgb2f58Hr2LAhHFB4BFn34+2HE64bRhv2+mT/qc
+         YFdBhceVz8T0h2gQnCaQeuC6+Zj6OXGovY/KQXy2P0y6i/PuAqW/+z7Vy8a4A8bm6NOo
+         1UDMEbuJDlpfqFkCtpjbXHNwf7sKpfvUBG5mvbghLBR+V1EsVQkCEtnfB6OnaKmTA2XL
+         83W6vBU9YkxnqN2DjDXUW75Xu/7/BwK3aKzL0OaQ5UnbT5Du34Sxhao3w4G/mxxHNiEo
+         ReJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686759301; x=1689351301;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QqoWj6DXTQFZb+D9M2TrBVvRLV18GMfvul29IQg5Gis=;
+        b=R9fMcYLE9Gib6gfy3ywtraAzj7hoKnltpakUA9J93IszoTw7wDfXc+J6QMhUbFl68l
+         Ols1BjNL6sMO03TLzNGJ+bzXN4ZGUcAPs61fdeaKPRn+HCn0p1+HZ0vMQmVzlQTwwUfz
+         nd8sU+ztTRJ5ho+lG/11pABLpSyR99V13ACNpUaIsNBW/38IfHt800Zimv8XAYmBfurI
+         f2lMBhUqNOiy7hKEaw5BvWWsumxgneXccg1ORRdNQIyzeYPOXoWt+oCoMjqyXceAMvFz
+         vOrMQVtrvE9KHgj0UZz22czFZM8PuQODFS/LAt1WZAmbhN0ol+98VZf+BW8eQ/+2LJQH
+         frcA==
+X-Gm-Message-State: AC+VfDxqKRQH2e0vpfRP4cfbbMXDI0eHdhpK/qFkEoEIDBBLeWvPp9YI
+        JStmt03DavXA3nlGsChbWt6+nhKSdq8BjmuhqVM=
+X-Google-Smtp-Source: ACHHUZ5ST2haJD41nbXw8NLonRVc10C5MxNRZnlLDvSU9Ipj0PvMrjMi2qQ4z9uyf738G/kKTadVQw==
+X-Received: by 2002:a92:440e:0:b0:33b:e24b:ca46 with SMTP id r14-20020a92440e000000b0033be24bca46mr9516858ila.3.1686759300824;
+        Wed, 14 Jun 2023 09:15:00 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id f27-20020a02cadb000000b00416789bfd70sm5112511jap.1.2023.06.14.09.15.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 09:15:00 -0700 (PDT)
+Message-ID: <eaac6a37-66bf-d244-bf08-0f717feb495c@kernel.dk>
+Date:   Wed, 14 Jun 2023 10:14:59 -0600
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="FVyTKi8Xrk+toeDA"
-Content-Disposition: inline
-In-Reply-To: <20230609083009.2822259-8-wenst@chromium.org>
-X-Cookie: MS-DOS must die!
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] io_uring/kbuf: fix missing check for return value of
+ io_buffer_get_list()
+Content-Language: en-US
+To:     Chenyuan Mi <cymi20@fudan.edu.cn>
+Cc:     asml.silence@gmail.com, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230614151246.116391-1-cymi20@fudan.edu.cn>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230614151246.116391-1-cymi20@fudan.edu.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/14/23 9:12?AM, Chenyuan Mi wrote:
+> The io_buffer_get_list() function may return NULL, which may
+> cause null pointer deference, and other callsites of
+> io_buffer_get_list() all do Null check. Add Null check for
+> return value of io_buffer_get_list().
+> 
+> Found by our static analysis tool.
 
---FVyTKi8Xrk+toeDA
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ah, was going to ask about a test case, but I guess it doesn't exist.
+I don't think this can happen, as the legacy buffer groups can only ever
+get added, and only get removed when the ring goes away.
 
-On Fri, Jun 09, 2023 at 04:30:04PM +0800, Chen-Yu Tsai wrote:
-> The "fixed" LDO regulators found on the MT6358 and MT6366 PMICs have
-> either no voltage selection register, or only one valid setting.
-> However these do have a fine voltage calibration setting that can
-> slightly boost the output voltage from 0 mV to 100 mV, in 10 mV
-> increments.
+-- 
+Jens Axboe
 
-This and the followup patch break the build on both arm64 and x86_64:
-
-/build/stage/linux/drivers/regulator/mt6358-regulator.c:127:29: error: =E2=
-=80=98MT6358_VFE28_ANA_CON0=E2=80=99 undeclared here (not in a function); d=
-id you mean =E2=80=98MT6358_VIO28_ANA_CON0=E2=80=99?
-  127 |                 .vsel_reg =3D MT6358_##vreg##_ANA_CON0,   \
-      |                             ^~~~~~~
-/build/stage/linux/drivers/regulator/mt6358-regulator.c:525:9: note: in exp=
-ansion of macro =E2=80=98MT6358_REG_FIXED=E2=80=99
-  525 |         MT6358_REG_FIXED("ldo_vfe28", VFE28, MT6358_LDO_VFE28_CON0,=
- 0, 2800000),
-      |         ^~~~~~~~~~~~~~~~
-/build/stage/linux/drivers/regulator/mt6358-regulator.c:127:29: error: =E2=
-=80=98MT6358_VCN28_ANA_CON0=E2=80=99 undeclared here (not in a function); d=
-id you mean =E2=80=98MT6358_VCN18_ANA_CON0=E2=80=99?
-  127 |                 .vsel_reg =3D MT6358_##vreg##_ANA_CON0,   \
-      |                             ^~~~~~~
-/build/stage/linux/drivers/regulator/mt6358-regulator.c:526:9: note: in exp=
-ansion of macro =E2=80=98MT6358_REG_FIXED=E2=80=99
-  526 |         MT6358_REG_FIXED("ldo_vcn28", VCN28, MT6358_LDO_VCN28_CON0,=
- 0, 2800000),
-      |         ^~~~~~~~~~~~~~~~
-/build/stage/linux/drivers/regulator/mt6358-regulator.c:127:29: error: =E2=
-=80=98MT6358_VXO22_ANA_CON0=E2=80=99 undeclared here (not in a function); d=
-id you mean =E2=80=98MT6358_VIO28_ANA_CON0=E2=80=99?
-  127 |                 .vsel_reg =3D MT6358_##vreg##_ANA_CON0,   \
-      |                             ^~~~~~~
-/build/stage/linux/drivers/regulator/mt6358-regulator.c:527:9: note: in exp=
-ansion of macro =E2=80=98MT6358_REG_FIXED=E2=80=99
-  527 |         MT6358_REG_FIXED("ldo_vxo22", VXO22, MT6358_LDO_VXO22_CON0,=
- 0, 2200000),
-      |         ^~~~~~~~~~~~~~~~
-/build/stage/linux/drivers/regulator/mt6358-regulator.c:127:29: error: =E2=
-=80=98MT6358_VAUX18_ANA_CON0=E2=80=99 undeclared here (not in a function); =
-did you mean =E2=80=98MT6358_VRF18_ANA_CON0=E2=80=99?
-  127 |                 .vsel_reg =3D MT6358_##vreg##_ANA_CON0,   \
-      |                             ^~~~~~~
-/build/stage/linux/drivers/regulator/mt6358-regulator.c:528:9: note: in exp=
-ansion of macro =E2=80=98MT6358_REG_FIXED=E2=80=99
-  528 |         MT6358_REG_FIXED("ldo_vaux18", VAUX18,
-      |         ^~~~~~~~~~~~~~~~
-/build/stage/linux/drivers/regulator/mt6358-regulator.c:127:29: error: =E2=
-=80=98MT6358_VBIF28_ANA_CON0=E2=80=99 undeclared here (not in a function); =
-did you mean =E2=80=98MT6358_VIO28_ANA_CON0=E2=80=99?
-  127 |                 .vsel_reg =3D MT6358_##vreg##_ANA_CON0,   \
-      |                             ^~~~~~~
-/build/stage/linux/drivers/regulator/mt6358-regulator.c:530:9: note: in exp=
-ansion of macro =E2=80=98MT6358_REG_FIXED=E2=80=99
-  530 |         MT6358_REG_FIXED("ldo_vbif28", VBIF28,
-      |         ^~~~~~~~~~~~~~~~
-/build/stage/linux/drivers/regulator/mt6358-regulator.c:127:29: error: =E2=
-=80=98MT6358_VAUD28_ANA_CON0=E2=80=99 undeclared here (not in a function); =
-did you mean =E2=80=98MT6358_VA12_ANA_CON0=E2=80=99?
-  127 |                 .vsel_reg =3D MT6358_##vreg##_ANA_CON0,   \
-      |                             ^~~~~~~
-/build/stage/linux/drivers/regulator/mt6358-regulator.c:535:9: note: in exp=
-ansion of macro =E2=80=98MT6358_REG_FIXED=E2=80=99
-  535 |         MT6358_REG_FIXED("ldo_vaud28", VAUD28,
-      |         ^~~~~~~~~~~~~~~~
-
---FVyTKi8Xrk+toeDA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSJ530ACgkQJNaLcl1U
-h9DhkAf9EVYQutfKyk5zzsMdyzKxxy1jBQx4nck+rXG0YrNyCWLNpIvxcyZNwDfP
-GTkol0LepOtpOfVQVKnL3keDcs/vaP+q9Wy3++ZQHszZJWn6RapeZwNNfPQh03Ah
-hS0U8RTVbgfQ2fNSdw9he638sRwNQ5nX7WOT6EcW5EIPa1hy2tIiXryQ0MX+0T0I
-g7x2RANQx+Bbo1paDbHiF/38ZpR+RcfFhi/ZuLDCmhBTzenNht40NKGPbP8ZBrR1
-xwyr1BMOyi++ISZ37nwUjpDL5o7PHdwLFYnEcXqNp2DsmeebwqbP3WXHA63dYB8r
-RXqDQFtdb7J4Dvh0ErXLr/Oj/+8bWQ==
-=w5A8
------END PGP SIGNATURE-----
-
---FVyTKi8Xrk+toeDA--
