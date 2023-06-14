@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1608972F455
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 07:56:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80C4C72F45E
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 08:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243029AbjFNF4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 01:56:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59610 "EHLO
+        id S242992AbjFNGCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 02:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243005AbjFNF4a (ORCPT
+        with ESMTP id S233669AbjFNGCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 01:56:30 -0400
+        Wed, 14 Jun 2023 02:02:19 -0400
 Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B2E1BD3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 22:56:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EB01AA
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 23:02:18 -0700 (PDT)
 Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4Qgvn44b3bzBJLB4
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 13:56:24 +0800 (CST)
+        by mail.208.org (Postfix) with ESMTP id 4Qgvvr0Kb8zBQJYT
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 14:02:16 +0800 (CST)
 Authentication-Results: mail.208.org (amavisd-new); dkim=pass
         reason="pass (just generated, assumed good)" header.d=208.org
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
         content-transfer-encoding:content-type:message-id:user-agent
         :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1686722184; x=1689314185; bh=ifq8SS92AiyQI92n55ie/vsInhk
-        9lQuSNFdLJ7tnOxs=; b=E5Ms8znZJcpeZWdiYr9w6xx4Gc0b9QuCG5AOxBAAsYV
-        in+FDR97kndTlXNXhXm8A0LwHW7cHIFU7spI/D67+cmW35V7gYRD5mJAr79SsOGG
-        kq3+4/wMeghvnlsp4zjeDb/8YA1xxRt7YnZ0yYfguaf0BR8dfUGWdGNkSCgzkQAm
-        HDG4rR79wp3wI7OHll39PrtYjE3d1/gWHKTuG+P6P/yTpB5CScQE6Hgqsa7EQIi6
-        ldBuXlBlVKBGeCuNlacZo7qpLiSDi98eVnqDyEHmsnbib6FGbukR+HTu2EWmhfWq
-        cx6sMTYnYWCqaG8g938idY55gYAIZSghZuoVnda6udg==
+        dkim; t=1686722535; x=1689314536; bh=XqnriwnpXs7hfIX4toWtqwxUQ6H
+        FLpo5W2Vp/C8l23g=; b=O0LvyOV/c9cDjESFbj7lLcJqijtT5/lo9FFgsYijr1d
+        dlj1kvij8GuLCNA+NUfHdkbSRMKL2NF7zZMbsUdLcVwkXvtDrNk1JlAvpREPLASA
+        VOIbhm9xY5SKWsj+pA91AP+d3ZqWGjQXdMsM/8AG92tvpVRSSoX+Cs6V+PNmz6SG
+        ObQryjyeYq1jIo2Nln0pbznJyqgE8qKvc+f4zObIPmkvi3tNvnq+/IqiFU0pROOX
+        W6BxMkuRXZU0CplxMmLjysEwRGIgXsUQC7fjO/oY9mNK7S3kuG+ufARbsjsM9FmC
+        +SJMco7P7ZaQm9I28YN/x4EJj4bKmcFRMO8O5TpEFMA==
 X-Virus-Scanned: amavisd-new at mail.208.org
 Received: from mail.208.org ([127.0.0.1])
         by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id vVnf2m4TxF18 for <linux-kernel@vger.kernel.org>;
-        Wed, 14 Jun 2023 13:56:24 +0800 (CST)
+        with ESMTP id yJMOgCm904qx for <linux-kernel@vger.kernel.org>;
+        Wed, 14 Jun 2023 14:02:15 +0800 (CST)
 Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4Qgvn43C3SzBJLB3;
-        Wed, 14 Jun 2023 13:56:24 +0800 (CST)
+        by mail.208.org (Postfix) with ESMTPSA id 4Qgvvq5brxzBJLB3;
+        Wed, 14 Jun 2023 14:02:15 +0800 (CST)
 MIME-Version: 1.0
-Date:   Wed, 14 Jun 2023 13:56:24 +0800
+Date:   Wed, 14 Jun 2023 14:02:15 +0800
 From:   wuyonggang001@208suo.com
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hare@kernel.org
-Subject: [PATCH] scsi: myrs: Replacing snprintf with scnprintf
-In-Reply-To: <f82ebaeda200bc172cd1764b44fa1a0a@208suo.com>
-References: <20230613065350.39003-1-zhanglibing@cdjrlc.com>
- <f82ebaeda200bc172cd1764b44fa1a0a@208suo.com>
+To:     geert@linux-m68k.org
+Cc:     linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] m68k/q40: Fix syntax error
+In-Reply-To: <4c81c6406707cf2e26b43bd4c5caca3a@208suo.com>
+References: <20230614032446.8391-1-zhanglibing@cdjrlc.com>
+ <4c81c6406707cf2e26b43bd4c5caca3a@208suo.com>
 User-Agent: Roundcube Webmail
-Message-ID: <6d2c37de23facd0cd854bbaf6913ba3e@208suo.com>
+Message-ID: <74ed374c5d5ec504d3bbecef656c1b37@208suo.com>
 X-Sender: wuyonggang001@208suo.com
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
@@ -63,118 +62,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following coccicheck warning:
+Fix the following checkpatch error:
 
-drivers/scsi/myrs.c:1411:8-16: WARNING: use scnprintf or sprintf
+ERROR: space required after that ',' (ctx:VxV)
+ERROR: spaces required around that '<' (ctx:VxV)
 
 Signed-off-by: Yonggang Wu <wuyonggang001@208suo.com>
 ---
-  drivers/scsi/myrs.c | 22 +++++++++++-----------
-  1 file changed, 11 insertions(+), 11 deletions(-)
+  arch/m68k/q40/config.c | 18 +++++++++---------
+  1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/scsi/myrs.c b/drivers/scsi/myrs.c
-index a1eec65a9713..ced1d2fbd862 100644
---- a/drivers/scsi/myrs.c
-+++ b/drivers/scsi/myrs.c
-@@ -939,7 +939,7 @@ static ssize_t raid_state_show(struct device *dev,
-      int ret;
+diff --git a/arch/m68k/q40/config.c b/arch/m68k/q40/config.c
+index c78ee709b458..79670d670ffb 100644
+--- a/arch/m68k/q40/config.c
++++ b/arch/m68k/q40/config.c
+@@ -148,12 +148,12 @@ static void q40_get_model(char *model)
 
-      if (!sdev->hostdata)
--        return snprintf(buf, 16, "Unknown\n");
-+        return scnprintf(buf, 16, "Unknown\n");
+  static unsigned int serports[] =
+  {
+-    0x3f8,0x2f8,0x3e8,0x2e8,0
++    0x3f8, 0x2f8, 0x3e8, 0x2e8, 0
+  };
 
-      if (sdev->channel >= cs->ctlr_info->physchan_present) {
-          struct myrs_ldev_info *ldev_info = sdev->hostdata;
-@@ -1058,7 +1058,7 @@ static ssize_t raid_level_show(struct device *dev,
-      const char *name = NULL;
+  static void __init q40_disable_irqs(void)
+  {
+-    unsigned i, j;
++    unsigned int i, j;
 
-      if (!sdev->hostdata)
--        return snprintf(buf, 16, "Unknown\n");
-+        return scnprintf(buf, 16, "Unknown\n");
+      j = 0;
+      while ((i = serports[j++]))
+@@ -227,12 +227,12 @@ static int q40_hwclk(int op, struct rtc_time *t)
+          /* Read....  */
+          Q40_RTC_CTRL |= Q40_RTC_READ;
 
-      if (sdev->channel >= cs->ctlr_info->physchan_present) {
-          struct myrs_ldev_info *ldev_info;
-@@ -1086,7 +1086,7 @@ static ssize_t rebuild_show(struct device *dev,
-      unsigned char status;
+-        t->tm_year = bcd2bin (Q40_RTC_YEAR);
+-        t->tm_mon  = bcd2bin (Q40_RTC_MNTH)-1;
+-        t->tm_mday = bcd2bin (Q40_RTC_DATE);
+-        t->tm_hour = bcd2bin (Q40_RTC_HOUR);
+-        t->tm_min  = bcd2bin (Q40_RTC_MINS);
+-        t->tm_sec  = bcd2bin (Q40_RTC_SECS);
++        t->tm_year = bcd2bin(Q40_RTC_YEAR);
++        t->tm_mon  = bcd2bin(Q40_RTC_MNTH)-1;
++        t->tm_mday = bcd2bin(Q40_RTC_DATE);
++        t->tm_hour = bcd2bin(Q40_RTC_HOUR);
++        t->tm_min  = bcd2bin(Q40_RTC_MINS);
++        t->tm_sec  = bcd2bin(Q40_RTC_SECS);
 
-      if (sdev->channel < cs->ctlr_info->physchan_present)
--        return snprintf(buf, 32, "physical device - not rebuilding\n");
-+        return scnprintf(buf, 32, "physical device - not 
-rebuilding\n");
+          Q40_RTC_CTRL &= ~(Q40_RTC_READ);
 
-      ldev_info = sdev->hostdata;
-      ldev_num = ldev_info->ldev_num;
-@@ -1190,7 +1190,7 @@ static ssize_t consistency_check_show(struct 
-device *dev,
-      unsigned short ldev_num;
-
-      if (sdev->channel < cs->ctlr_info->physchan_present)
--        return snprintf(buf, 32, "physical device - not checking\n");
-+        return scnprintf(buf, 32, "physical device - not checking\n");
-
-      ldev_info = sdev->hostdata;
-      if (!ldev_info)
-@@ -1303,7 +1303,7 @@ static ssize_t serial_show(struct device *dev,
-
-      memcpy(serial, cs->ctlr_info->serial_number, 16);
-      serial[16] = '\0';
--    return snprintf(buf, 16, "%s\n", serial);
-+    return scnprintf(buf, 16, "%s\n", serial);
-  }
-  static DEVICE_ATTR_RO(serial);
-
-@@ -1313,7 +1313,7 @@ static ssize_t ctlr_num_show(struct device *dev,
-      struct Scsi_Host *shost = class_to_shost(dev);
-      struct myrs_hba *cs = shost_priv(shost);
-
--    return snprintf(buf, 20, "%d\n", cs->host->host_no);
-+    return scnprintf(buf, 20, "%d\n", cs->host->host_no);
-  }
-  static DEVICE_ATTR_RO(ctlr_num);
-
-@@ -1388,7 +1388,7 @@ static ssize_t model_show(struct device *dev,
-      struct Scsi_Host *shost = class_to_shost(dev);
-      struct myrs_hba *cs = shost_priv(shost);
-
--    return snprintf(buf, 28, "%s\n", cs->model_name);
-+    return scnprintf(buf, 28, "%s\n", cs->model_name);
-  }
-  static DEVICE_ATTR_RO(model);
-
-@@ -1398,7 +1398,7 @@ static ssize_t ctlr_type_show(struct device *dev,
-      struct Scsi_Host *shost = class_to_shost(dev);
-      struct myrs_hba *cs = shost_priv(shost);
-
--    return snprintf(buf, 4, "%d\n", cs->ctlr_info->ctlr_type);
-+    return scnprintf(buf, 4, "%d\n", cs->ctlr_info->ctlr_type);
-  }
-  static DEVICE_ATTR_RO(ctlr_type);
-
-@@ -1408,7 +1408,7 @@ static ssize_t cache_size_show(struct device *dev,
-      struct Scsi_Host *shost = class_to_shost(dev);
-      struct myrs_hba *cs = shost_priv(shost);
-
--    return snprintf(buf, 8, "%d MB\n", cs->ctlr_info->cache_size_mb);
-+    return scnprintf(buf, 8, "%d MB\n", cs->ctlr_info->cache_size_mb);
-  }
-  static DEVICE_ATTR_RO(cache_size);
-
-@@ -1418,7 +1418,7 @@ static ssize_t firmware_show(struct device *dev,
-      struct Scsi_Host *shost = class_to_shost(dev);
-      struct myrs_hba *cs = shost_priv(shost);
-
--    return snprintf(buf, 16, "%d.%02d-%02d\n",
-+    return scnprintf(buf, 16, "%d.%02d-%02d\n",
-              cs->ctlr_info->fw_major_version,
-              cs->ctlr_info->fw_minor_version,
-              cs->ctlr_info->fw_turn_number);
-@@ -1488,7 +1488,7 @@ static ssize_t 
-disable_enclosure_messages_show(struct device *dev,
-      struct Scsi_Host *shost = class_to_shost(dev);
-      struct myrs_hba *cs = shost_priv(shost);
-
--    return snprintf(buf, 3, "%d\n", cs->disable_enc_msg);
-+    return scnprintf(buf, 3, "%d\n", cs->disable_enc_msg);
-  }
-
-  static ssize_t disable_enclosure_messages_store(struct device *dev,
+@@ -270,7 +270,7 @@ static int q40_set_rtc_pll(struct rtc_pll_info *pll)
+      if (!pll->pll_ctrl) {
+          /* the docs are a bit unclear so I am doublesetting */
+          /* RTC_WRITE here ... */
+-        int tmp = (pll->pll_value & 31) | (pll->pll_value<0 ? 32 : 0) |
++        int tmp = (pll->pll_value & 31) | (pll->pll_value < 0 ? 32 : 0) 
+|
+                Q40_RTC_WRITE;
+          Q40_RTC_CTRL |= Q40_RTC_WRITE;
+          Q40_RTC_CTRL = tmp;
