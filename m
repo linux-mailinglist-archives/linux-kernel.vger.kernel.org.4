@@ -2,201 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C60687301C7
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2EF37301DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236251AbjFNO00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 10:26:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51078 "EHLO
+        id S244720AbjFNO2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 10:28:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244460AbjFNO0Y (ORCPT
+        with ESMTP id S237035AbjFNO2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 10:26:24 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 486771BC6
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 07:26:22 -0700 (PDT)
-Received: (qmail 462530 invoked by uid 1000); 14 Jun 2023 10:26:20 -0400
-Date:   Wed, 14 Jun 2023 10:26:20 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Damien Le Moal <dlemoal@kernel.org>
-Cc:     Hannes Reinecke <hare@suse.de>,
-        Joe Breuer <linux-kernel@jmbreuer.net>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Linux Power Management <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Hardening <linux-hardening@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux SCSI <linux-scsi@vger.kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: Re: Fwd: Waking up from resume locks up on sr device
-Message-ID: <859f0eda-4984-4489-9851-c9f6ec454a88@rowland.harvard.edu>
-References: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
- <5513e29d-955a-f795-21d6-ec02a2e2e128@gmail.com>
- <ZIQ6bkau3j6qGef8@duo.ucw.cz>
- <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com>
- <02e4f87a-80e8-dc5d-0d6e-46939f2c74ac@acm.org>
- <b2cf6d96-a55a-d444-d22e-e9b3945ba43f@jmbreuer.net>
- <84f1c51c-86f9-04b3-0cd1-f685ebee7592@kernel.org>
- <37ed36f0-6f72-115c-85fb-62ef5ad72e76@suse.de>
- <b0fdf454-b2f7-c273-66f5-efe42fbc2807@kernel.org>
+        Wed, 14 Jun 2023 10:28:08 -0400
+Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61E51721;
+        Wed, 14 Jun 2023 07:28:03 -0700 (PDT)
+Date:   Wed, 14 Jun 2023 14:27:39 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+        s=protonmail; t=1686752881; x=1687012081;
+        bh=TaKHoWoduEdf1ULAdjEPdONgcWDvL8WQUMVGK+EvA5E=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=dNFrt+3gbyPbkBUmkd/PWupNZXiTiwc8CpC/mJxXuxtsM5Q49KRif7rmIGlcwbcB3
+         0U2ua19QVjj1yxzMPXN+LqqjbHN/0c89FdHjyp1Jvdl7sxw7Y+SbGQ1lk6bvn7PwlN
+         cISM1qgJIJUgPaEGIru1Bazz+keA6jbgkpK+PZYREelA15aNRu2iRuXZWja+m+sWHU
+         G6hiPXz1csLlW4AUPJVxTqGFxs1Z1KpftAdsXHn+CcCzl2Q5nYN0nGIZUb1NUyfJVS
+         SWTVn5E89b5eYGVF49+OwV6QcFqJbvorAErbeGGW4hgHPS4eS7j+9T14GYSSWB053d
+         A+C0DhIgAU7mg==
+To:     Alice Ryhl <aliceryhl@google.com>
+From:   Benno Lossin <benno.lossin@proton.me>
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH] rust: make `UnsafeCell` the outer type in `Opaque`
+Message-ID: <zirWeKUZRqFhiN23v0pXHMmvuceI7EZyVvNUiREGf-UNbIbXLrHjbC8diUNg9v802jbX1978ezQLDCl--1M5S6K8l7CVWs8JGB-znEEMRNE=@proton.me>
+In-Reply-To: <20230614115328.2825961-1-aliceryhl@google.com>
+References: <20230614115328.2825961-1-aliceryhl@google.com>
+Feedback-ID: 71780778:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b0fdf454-b2f7-c273-66f5-efe42fbc2807@kernel.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 04:35:50PM +0900, Damien Le Moal wrote:
-> On 6/14/23 15:57, Hannes Reinecke wrote:
-> > On 6/14/23 06:49, Damien Le Moal wrote:
-> >> On 6/11/23 18:05, Joe Breuer wrote:
-> >>> I'm the reporter of this issue.
-> >>>
-> >>> I just tried this patch against 6.3.4, and it completely fixes my
-> >>> suspend/resume issue.
-> >>>
-> >>> The optical drive stays usable after resume, even suspending/resuming
-> >>> during playback of CDDA content works flawlessly and playback resumes
-> >>> seamlessly after system resume.
-> >>>
-> >>> So, from my perspective: Good one!
-> >>
-> >> In place of Bart's fix, could you please try this patch ?
-> >>
-> >> diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
-> >> index b80e68000dd3..a81eb4f882ab 100644
-> >> --- a/drivers/ata/libata-eh.c
-> >> +++ b/drivers/ata/libata-eh.c
-> >> @@ -4006,9 +4006,32 @@ static void ata_eh_handle_port_resume(struct
-> >> ata_port *ap)
-> >>          /* tell ACPI that we're resuming */
-> >>          ata_acpi_on_resume(ap);
-> >>
-> >> -       /* update the flags */
-> >>          spin_lock_irqsave(ap->lock, flags);
-> >> +
-> >> +       /* Update the flags */
-> >>          ap->pflags &= ~(ATA_PFLAG_PM_PENDING | ATA_PFLAG_SUSPENDED);
-> >> +
-> >> +       /*
-> >> +        * Resuming the port will trigger a rescan of the ATA device(s)
-> >> +        * connected to it. Before scheduling the rescan, make sure that
-> >> +        * the associated scsi device(s) are fully resumed as well.
-> >> +        */
-> >> +       ata_for_each_link(link, ap, HOST_FIRST) {
-> >> +               ata_for_each_dev(dev, link, ENABLED) {
-> >> +                       struct scsi_device *sdev = dev->sdev;
-> >> +
-> >> +                       if (!sdev)
-> >> +                               continue;
-> >> +                       if (scsi_device_get(sdev))
-> >> +                               continue;
-> >> +
-> >> +                       spin_unlock_irqrestore(ap->lock, flags);
-> >> +                       device_pm_wait_for_dev(&ap->tdev,
-> >> +                                              &sdev->sdev_gendev);
-> >> +                       scsi_device_put(sdev);
-> >> +                       spin_lock_irqsave(ap->lock, flags);
-> >> +               }
-> >> +       }
-> >>          spin_unlock_irqrestore(ap->lock, flags);
-> >>   }
-> >>   #endif /* CONFIG_PM */
-> >>
-> >> Thanks !
-> >>
-> > Well; not sure if that'll work out.
-> > The whole reason why we initial a rescan is that we need to check if the
-> > ports are still connected, and whether the devices react.
-> > So we can't iterate the ports here as this is the very thing which gets
-> > checked during EH.
-> 
-> Hmmm... Right. So we need to move that loop into ata_scsi_dev_rescan(),
-> which itself already loops over the port devices anyway.
-> 
-> > We really should claim resume to be finished as soon as we can talk with
-> > the HBA, and kick off EH asynchronously to let it finish the job after
-> > resume has completed.
-> 
-> That is what's done already:
-> 
-> static int ata_port_pm_resume(struct device *dev)
-> {
-> 	ata_port_resume_async(to_ata_port(dev), PMSG_RESUME);
-> 	pm_runtime_disable(dev);
-> 	pm_runtime_set_active(dev);
-> 	pm_runtime_enable(dev);
-> 	return 0;
-> }
-> 
-> EH is kicked by ata_port_resume_async() -> ata_port_request_pm() and it
-> is async. There is no synchronization in EH with the PM side though. We
-> probably should have EH check that the port resume is done first, which
-> can be done in ata_eh_handle_port_resume() since that is the first thing
-> done when entering EH.
-> 
-> The problem remains though that we *must* wait for the scsi device
-> resume to be done before calling scsi_rescan_device(), which is done
-> asynchronously from EH, as a different work. So that one needs to wait
-> for the scsi side resume to be done.
-> 
-> I also thought of trigerring the rescan from the scsi side, but since
-> the resume may be asynchronous, we could endup trigerring it with the
-> ata side not yet resumed... That would only turn the problem around
-> instead of solving it.
+On 14.06.23 13:53, Alice Ryhl wrote:
+> When combining `UnsafeCell` with `MaybeUninit`, it is idiomatic to use
+> `UnsafeCell` as the outer type. Intuitively, this is because a
+> `MaybeUninit<T>` might not contain a `T`, but we always want the effect
+> of the `UnsafeCell`, even if the inner value is uninitialized.
+>=20
+> Now, strictly speaking, this doesn't really make a difference. The
+> compiler will always apply the `UnsafeCell` effect even if the inner
+> value is uninitialized. But I think we should follow the convention
+> here.
+>=20
+> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
 
-The order in which devices get resumed isn't arbitrary.  If the system 
-is set up not to use async suspends/resumes then the order is always the 
-same as the order in which the devices were originally registered (for 
-resume, that is -- suspend obviously takes place in the reverse order).
+Small comment below, but I think it is fine the way it is.
 
-So if you're trying to perform an action that requires two devices to be 
-active, you must not do it in the resume handler for the device that was 
-registered first.  I don't know how the ATA and SCSI pieces interact 
-here, but regardless, this is a pretty strict requirement.
+Reviewed-by: Benno Lossin <benno.lossin@proton.me>
 
-It should be okay to perform the action in the resume handler for the 
-device that was registered second.  But if the two devices aren't in an 
-ancestor-descendant relationship then you also have to call 
-device_pm_wait_for_dev() (or use device links as Rafael mentioned) to 
-handle the async case properly.
+> ---
+>   rust/kernel/types.rs | 10 +++++-----
+>   1 file changed, 5 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
+> index 1e5380b16ed5..fb41635f1e1f 100644
+> --- a/rust/kernel/types.rs
+> +++ b/rust/kernel/types.rs
+> @@ -224,17 +224,17 @@ fn drop(&mut self) {
+>   ///
+>   /// This is meant to be used with FFI objects that are never interprete=
+d by Rust code.
+>   #[repr(transparent)]
+> -pub struct Opaque<T>(MaybeUninit<UnsafeCell<T>>);
+> +pub struct Opaque<T>(UnsafeCell<MaybeUninit<T>>);
+>=20
+>   impl<T> Opaque<T> {
+>       /// Creates a new opaque value.
+>       pub const fn new(value: T) -> Self {
+> -        Self(MaybeUninit::new(UnsafeCell::new(value)))
+> +        Self(UnsafeCell::new(MaybeUninit::new(value)))
+>       }
+>=20
+>       /// Creates an uninitialised value.
+>       pub const fn uninit() -> Self {
+> -        Self(MaybeUninit::uninit())
+> +        Self(UnsafeCell::new(MaybeUninit::uninit()))
+>       }
+>=20
+>       /// Creates a pin-initializer from the given initializer closure.
+> @@ -258,7 +258,7 @@ pub fn ffi_init(init_func: impl FnOnce(*mut T)) -> im=
+pl PinInit<Self> {
+>=20
+>       /// Returns a raw pointer to the opaque data.
+>       pub fn get(&self) -> *mut T {
+> -        UnsafeCell::raw_get(self.0.as_ptr())
+> +        UnsafeCell::get(&self.0).cast::<T>()
 
-> Or... Why the heck scsi_rescan_device() is calling device_lock() ? This
-> is the only place in scsi code I can see that takes this lock. I suspect
-> this is to serialize either rescans, or serialize with resume, or both.
-> For serializing rescans, we can use another lock. For serializing with
-> PM, we should wait for PM transitions...
-> Something is not right here.
+Is there a reason you don't do `self.0.get().cast::<T>()`?
 
-Here's what commit e27829dc92e5 ("scsi: serialize ->rescan against 
-->remove", written by Christoph Hellwig) says:
+--=20
+Cheers,
+Benno
 
-    Lock the device embedded in the scsi_device to protect against
-    concurrent calls to ->remove.
+>       }
+>=20
+>       /// Gets the value behind `this`.
+> @@ -266,7 +266,7 @@ pub fn get(&self) -> *mut T {
+>       /// This function is useful to get access to the value without crea=
+ting intermediate
+>       /// references.
+>       pub const fn raw_get(this: *const Self) -> *mut T {
+> -        UnsafeCell::raw_get(this.cast::<UnsafeCell<T>>())
+> +        UnsafeCell::raw_get(this.cast::<UnsafeCell<MaybeUninit<T>>>()).c=
+ast::<T>()
+>       }
+>   }
+>=20
+>=20
+> base-commit: d2e3115d717197cb2bc020dd1f06b06538474ac3
+> --
+> 2.41.0.162.gfafddb0af9-goog
+>=20
 
-That's the commit which added the device_lock() call.
-
-Alan Stern
