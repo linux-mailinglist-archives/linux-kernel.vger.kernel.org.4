@@ -2,117 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8716972F31E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 05:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20A7672F321
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 05:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233537AbjFNDgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 23:36:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51260 "EHLO
+        id S241575AbjFNDiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 23:38:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231720AbjFNDge (ORCPT
+        with ESMTP id S233684AbjFNDir (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 23:36:34 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5880110C6;
-        Tue, 13 Jun 2023 20:36:32 -0700 (PDT)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Qgrc40yxfzLqJQ;
-        Wed, 14 Jun 2023 11:33:24 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 14 Jun
- 2023 11:36:28 +0800
-Subject: Re: [PATCH net-next v4 1/5] page_pool: frag API support for 32-bit
- arch with 64-bit DMA
-To:     Alexander Lobakin <aleksander.lobakin@intel.com>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        <linux-rdma@vger.kernel.org>
-References: <20230612130256.4572-1-linyunsheng@huawei.com>
- <20230612130256.4572-2-linyunsheng@huawei.com>
- <483d7a70-3377-a241-4554-212662ee3930@intel.com>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <6db097ba-c3fe-6e45-3c39-c21b4d9e16ef@huawei.com>
-Date:   Wed, 14 Jun 2023 11:36:28 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        Tue, 13 Jun 2023 23:38:47 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C21122
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 20:38:44 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4QgrkB2lhbzBL4jY
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:38:42 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1686713922; x=1689305923; bh=tAq+14JkWgMdQYu0lVo/F3Z0UD2
+        hHBzkPi2N69SZUcI=; b=IyAoRONB7rl5/O1oNq/UfSyKeRs/VeTVF3+3TnPom/1
+        7mASp7IB67ZGTbiVYeV+3JKujhB0ct/I/TGlXS49loGSHLs703Hbni++YIry7RIV
+        XXOsgJxobxKSWOht0Xne5/sDSWfTF77zzpnbKHuj2aaRe2scjPkFg1TuTECPDowp
+        jxy2dLXkSVX4HTKCjYuPd/yTj9kct1231BcGBsNZYI/y75qg4Bz5n04FUlXWKxXQ
+        q7OwQh3dozwg+BJySWDfkzKvNiMczW5elUAyuFxUi1arXY17FHA6BLfg04iHJoo0
+        k+6TALA1BFpegJd1uctq0KI9+Mb9owxbn18smzq2WSg==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 8z1ufjrNj_lD for <linux-kernel@vger.kernel.org>;
+        Wed, 14 Jun 2023 11:38:42 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4Qgrk9262zzBJ9pH;
+        Wed, 14 Jun 2023 11:38:41 +0800 (CST)
 MIME-Version: 1.0
-In-Reply-To: <483d7a70-3377-a241-4554-212662ee3930@intel.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+Date:   Wed, 14 Jun 2023 11:38:41 +0800
+From:   baomingtong001@208suo.com
+To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
+        adrian.hunter@intel.com
+Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] perf bench: remove unneeded variable
+In-Reply-To: <20230614033437.48549-1-luojianhong@cdjrlc.com>
+References: <20230614033437.48549-1-luojianhong@cdjrlc.com>
+User-Agent: Roundcube Webmail
+Message-ID: <475df60d9dd518e20ae9df396c60b69b@208suo.com>
+X-Sender: baomingtong001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/13 21:30, Alexander Lobakin wrote:
-> From: Yunsheng Lin <linyunsheng@huawei.com>
-> Date: Mon, 12 Jun 2023 21:02:52 +0800
-> 
->> Currently page_pool_alloc_frag() is not supported in 32-bit
->> arch with 64-bit DMA, which seems to be quite common, see
->> [1], which means driver may need to handle it when using
->> page_pool_alloc_frag() API.
-> 
-> [...]
-> 
->> diff --git a/include/net/page_pool.h b/include/net/page_pool.h
->> index 126f9e294389..5c7f7501f300 100644
->> --- a/include/net/page_pool.h
->> +++ b/include/net/page_pool.h
->> @@ -33,6 +33,7 @@
->>  #include <linux/mm.h> /* Needed by ptr_ring */
->>  #include <linux/ptr_ring.h>
->>  #include <linux/dma-direction.h>
-> 
-> This include is redundant now that you include dma-mapping.h.
-> 
->> +#include <linux/dma-mapping.h>
-> 
-> As Jakub previously mentioned, this involves including dma-mapping.h,
-> which is relatively heavy, to each source file which includes skbuff.h,
-> i.e. almost the whole kernel :D
+fix the following coccicheck warning:
 
-I am not sure I understand the part about 'includes skbuff.h' yet, it seems
-'skbuff.h' does not have anything related to this patch?
+tools/perf/bench/find-bit-bench.c:127:5-8: Unneeded variable: "err". 
+Return "0".
 
-> I addressed this in my series, which I hope will land soon after yours
-> (sending new revision in 24-48 hours), so you can leave it as it is. Or
-> otherwise you can pick my solution (or come up with your own :D).
+Signed-off-by: Mingtong Bao <baomingtong001@208suo.com>
+---
+  tools/perf/bench/find-bit-bench.c | 4 ++--
+  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Do you mean by removing "#include <linux/dma-direction.h>" as dma-mapping.h
-has included dma-direction.h?
-But I am not sure if there is any hard rule about not explicitly including
-a .h which is implicitly included. What if the dma-mapping.h is changed to not
-include dma-direction.h anymore?
+diff --git a/tools/perf/bench/find-bit-bench.c 
+b/tools/perf/bench/find-bit-bench.c
+index 7e25b0e413f6..70619bc73841 100644
+--- a/tools/perf/bench/find-bit-bench.c
++++ b/tools/perf/bench/find-bit-bench.c
+@@ -124,7 +124,7 @@ static int do_for_each_set_bit(unsigned int 
+num_bits)
 
-Anyway, it seems it is unlikely to not include dma-direction.h in dma-mapping.h,
-Will remove the "#include <linux/dma-direction.h>" if there is another version
-needed for this patchset:)
+  int bench_mem_find_bit(int argc, const char **argv)
+  {
+-    int err = 0, i;
++    int i;
 
-> 
->>  
->>  #define PP_FLAG_DMA_MAP		BIT(0) /* Should page_pool do the DMA
->>  					* map/unmap
-> 
-> Thanks,
-> Olek
-> 
-> .
-> 
+      argc = parse_options(argc, argv, options, bench_usage, 0);
+      if (argc) {
+@@ -135,5 +135,5 @@ int bench_mem_find_bit(int argc, const char **argv)
+      for (i = 1; i <= 2048; i <<= 1)
+          do_for_each_set_bit(i);
+
+-    return err;
++    return 0;
+  }
