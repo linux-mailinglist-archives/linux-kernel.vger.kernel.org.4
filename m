@@ -2,113 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EC8E730925
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 22:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F8A730926
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 22:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235120AbjFNU0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 16:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50858 "EHLO
+        id S236157AbjFNU0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 16:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbjFNU0K (ORCPT
+        with ESMTP id S229889AbjFNU0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 16:26:10 -0400
-Received: from smtp.smtpout.orange.fr (smtp-27.smtpout.orange.fr [80.12.242.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97C8211D
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 13:26:08 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id 9X49qJzAr4jPd9X49qRAft; Wed, 14 Jun 2023 22:26:06 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1686774366;
-        bh=K4LJUPD0skruLm7yHJrG7KQ6uvH9CtyWKlTfipvO1Lo=;
-        h=From:To:Cc:Subject:Date;
-        b=DdQVwEyCPQeNkV3XKl0QQvAdK7pKxp0g2BdKAipl5f/cV9Ov+swXrvCVzI50H+pV2
-         DUhTKxRleH6bMIrcb+6tfEZ9ysf0AR0ISujujQzZB1WVic0MmkhdrNlNRghvAwQdi7
-         42hYdVK6aCx7ilKuRy9H/uX/dgMAGqyv7nyHO2Kv/WP+Vz2ed5T65SWqq+iW8oNgqT
-         ig8Mr7jORjkQDRSCDspHH/RSX3Qa9xdPD4XpXhPcFkCPnzARJHyCWPI7c4FbD/ocfp
-         bTnzCIeO2tzMLgkgwl7Y9HnQxQ2BlAO6hO0/SzfXhBRFKksSpwTW5mCpkQyJgkLURd
-         np/nhoI2Vi4Iw==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 14 Jun 2023 22:26:06 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-iio@vger.kernel.org
-Subject: [PATCH] iio: adc: ad7192: Simplify using devm_clk_get_optional_enabled()
-Date:   Wed, 14 Jun 2023 22:26:04 +0200
-Message-Id: <7dbe973905f1fdae5d2f5ae5a3b01dd1d6a9925b.1686774340.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Wed, 14 Jun 2023 16:26:31 -0400
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2872116
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 13:26:29 -0700 (PDT)
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-62de1a3e354so22063756d6.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 13:26:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686774389; x=1689366389;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=em1IKDNT20+10FhYEXO378gTthD1d4n1/JfncF+AfPo=;
+        b=UWRqumFCWr77dO4gT+58GS23r/RmdKx3hDHfddsdEtWNjezg6XD7gOWgqk9qzjq/cC
+         miW83uFv8+POhaxkLWyYq1z9lWP07eqFuYoYyKoZRpiOmCp6/vV/cFFB6gPQGy9lbIdM
+         CuI2ttkJM9DRZrPKMDfu69bWvbhgcaoC0RhBluimcTZhkAwl0JoyOiBHRaOcl0Dh2j+r
+         Bt2f1ydSoAAglKRvXcE2dPSR1sPBj+ycboptUairUHABoULUOrj45ONndHATaXCfaW8Q
+         c2lX1izltDS9LkmAGnOItN3a95tzmNZT/j5it1lndpKus4G7CQtMFnb3uKRkbw3NVHJG
+         zKyg==
+X-Gm-Message-State: AC+VfDx4B9QF35h39m2Cqb5TfieSNRi0DhWonUuWUJaIrSTx7Rq4sh0S
+        jvE8di+kjAq1ca6dih2hCZ8=
+X-Google-Smtp-Source: ACHHUZ4IfiY76OK41ddNTg5F0tLit0fSdi0O2GTiYxzx6cPM6ASuvIjecc6U3ub1r3pgaIh1/lmhsQ==
+X-Received: by 2002:ad4:5fce:0:b0:625:a982:857 with SMTP id jq14-20020ad45fce000000b00625a9820857mr18637924qvb.50.1686774388731;
+        Wed, 14 Jun 2023 13:26:28 -0700 (PDT)
+Received: from maniforge ([24.1.27.177])
+        by smtp.gmail.com with ESMTPSA id h2-20020a0cf442000000b00623927281c2sm5002728qvm.40.2023.06.14.13.26.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 13:26:28 -0700 (PDT)
+Date:   Wed, 14 Jun 2023 15:26:25 -0500
+From:   David Vernet <void@manifault.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        rostedt@goodmis.org, dietmar.eggemann@arm.com, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        joshdon@google.com, roman.gushchin@linux.dev, tj@kernel.org,
+        kernel-team@meta.com
+Subject: Re: [RFC PATCH 3/3] sched: Implement shared wakequeue in CFS
+Message-ID: <20230614202625.GB2883716@maniforge>
+References: <20230613052004.2836135-1-void@manifault.com>
+ <20230613052004.2836135-4-void@manifault.com>
+ <20230613084111.GS4253@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230613084111.GS4253@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If st->mclk is not NULL, then st->clock_sel is either AD7192_CLK_EXT_MCLK2
-or AD7192_CLK_EXT_MCLK1_2.
+On Tue, Jun 13, 2023 at 10:41:11AM +0200, Peter Zijlstra wrote:
+> On Tue, Jun 13, 2023 at 12:20:04AM -0500, David Vernet wrote:
+> > +struct swqueue {
+> > +	struct list_head list;
+> > +	spinlock_t lock;
+> > +} ____cacheline_aligned;
+> > +
+> >  #ifdef CONFIG_SMP
+> > +static struct swqueue *rq_swqueue(struct rq *rq)
+> > +{
+> > +	return rq->cfs.swqueue;
+> > +}
+> > +
+> > +static struct task_struct *swqueue_pull_task(struct swqueue *swqueue)
+> > +{
+> > +	unsigned long flags;
+> > +
+> > +	struct task_struct *p;
+> > +
+> > +	spin_lock_irqsave(&swqueue->lock, flags);
+> > +	p = list_first_entry_or_null(&swqueue->list, struct task_struct,
+> > +				     swqueue_node);
+> > +	if (p)
+> > +		list_del_init(&p->swqueue_node);
+> > +	spin_unlock_irqrestore(&swqueue->lock, flags);
+> > +
+> > +	return p;
+> > +}
+> > +
+> > +static void swqueue_enqueue(struct rq *rq, struct task_struct *p, int enq_flags)
+> > +{
+> > +	unsigned long flags;
+> > +	struct swqueue *swqueue;
+> > +	bool task_migrated = enq_flags & ENQUEUE_MIGRATED;
+> > +	bool task_wakeup = enq_flags & ENQUEUE_WAKEUP;
+> > +
+> > +	/*
+> > +	 * Only enqueue the task in the shared wakequeue if:
+> > +	 *
+> > +	 * - SWQUEUE is enabled
+> > +	 * - The task is on the wakeup path
+> > +	 * - The task wasn't purposefully migrated to the current rq by
+> > +	 *   select_task_rq()
+> > +	 * - The task isn't pinned to a specific CPU
+> > +	 */
+> > +	if (!task_wakeup || task_migrated || p->nr_cpus_allowed == 1)
+> > +		return;
+> > +
+> > +	swqueue = rq_swqueue(rq);
+> > +	spin_lock_irqsave(&swqueue->lock, flags);
+> > +	list_add_tail(&p->swqueue_node, &swqueue->list);
+> > +	spin_unlock_irqrestore(&swqueue->lock, flags);
+> > +}
+> > +
+> >  static int swqueue_pick_next_task(struct rq *rq, struct rq_flags *rf)
+> >  {
+> > -	return 0;
+> > +	struct swqueue *swqueue;
+> > +	struct task_struct *p = NULL;
+> > +	struct rq *src_rq;
+> > +	struct rq_flags src_rf;
+> > +	int ret;
+> > +
+> > +	swqueue = rq_swqueue(rq);
+> > +	if (!list_empty(&swqueue->list))
+> > +		p = swqueue_pull_task(swqueue);
+> > +
+> > +	if (!p)
+> > +		return 0;
+> > +
+> > +	rq_unpin_lock(rq, rf);
+> > +	raw_spin_rq_unlock(rq);
+> > +
+> > +	src_rq = task_rq_lock(p, &src_rf);
+> > +
+> > +	if (task_on_rq_queued(p) && !task_on_cpu(rq, p))
+> > +		src_rq = migrate_task_to(src_rq, &src_rf, p, cpu_of(rq));
+> > +
+> > +	if (src_rq->cpu != rq->cpu)
+> > +		ret = 1;
+> > +	else
+> > +		ret = -1;
+> > +
+> > +	task_rq_unlock(src_rq, p, &src_rf);
+> > +
+> > +	raw_spin_rq_lock(rq);
+> > +	rq_repin_lock(rq, rf);
+> > +
+> > +	return ret;
+> >  }
+> >  
+> >  static void swqueue_remove_task(struct task_struct *p)
+> > -{}
+> > +{
+> > +	unsigned long flags;
+> > +	struct swqueue *swqueue;
+> > +
+> > +	if (!list_empty(&p->swqueue_node)) {
+> > +		swqueue = rq_swqueue(task_rq(p));
+> > +		spin_lock_irqsave(&swqueue->lock, flags);
+> > +		list_del_init(&p->swqueue_node);
+> > +		spin_unlock_irqrestore(&swqueue->lock, flags);
+> > +	}
+> > +}
+> >  
+> >  /*
+> >   * For asym packing, by default the lower numbered CPU has higher priority.
+> 
+> *sigh*... pretty much all, if not all of this is called with rq->lock
+> held. So why the irqsave and big fat fail for using spinlock :-(
 
-So devm_clk_get_optional_enabled() can be used instead of hand writing it.
-This saves some line of code.
+Hi Peter,
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/iio/adc/ad7192.c | 16 +---------------
- 1 file changed, 1 insertion(+), 15 deletions(-)
+Thanks for the quick review. Yeah good call about the irq's -- looks
+like we're holding an rq lock on all swqueue paths so we can just use a
+raw spinlock. I'll make that change for v2.
 
-diff --git a/drivers/iio/adc/ad7192.c b/drivers/iio/adc/ad7192.c
-index 8685e0b58a83..5dcb257ad754 100644
---- a/drivers/iio/adc/ad7192.c
-+++ b/drivers/iio/adc/ad7192.c
-@@ -972,11 +972,6 @@ static void ad7192_reg_disable(void *reg)
- 	regulator_disable(reg);
- }
- 
--static void ad7192_clk_disable(void *clk)
--{
--	clk_disable_unprepare(clk);
--}
--
- static int ad7192_probe(struct spi_device *spi)
- {
- 	struct ad7192_state *st;
-@@ -1044,7 +1039,7 @@ static int ad7192_probe(struct spi_device *spi)
- 
- 	st->fclk = AD7192_INT_FREQ_MHZ;
- 
--	st->mclk = devm_clk_get_optional(&spi->dev, "mclk");
-+	st->mclk = devm_clk_get_optional_enabled(&spi->dev, "mclk");
- 	if (IS_ERR(st->mclk))
- 		return PTR_ERR(st->mclk);
- 
-@@ -1052,15 +1047,6 @@ static int ad7192_probe(struct spi_device *spi)
- 
- 	if (st->clock_sel == AD7192_CLK_EXT_MCLK1_2 ||
- 	    st->clock_sel == AD7192_CLK_EXT_MCLK2) {
--		ret = clk_prepare_enable(st->mclk);
--		if (ret < 0)
--			return ret;
--
--		ret = devm_add_action_or_reset(&spi->dev, ad7192_clk_disable,
--					       st->mclk);
--		if (ret)
--			return ret;
--
- 		st->fclk = clk_get_rate(st->mclk);
- 		if (!ad7192_valid_external_frequency(st->fclk)) {
- 			dev_err(&spi->dev,
--- 
-2.34.1
+Regarding the per-swqueue spinlock being a potential bottleneck, I'll
+reply to Aaron's thread on [0] with some numbers I collected locally on
+a 26 core / 52 thread Cooperlake host, and a 20/40 x 2 Skylake. The
+TL;DR is that I'm not observing the spinlock be contended on either
+netperf or kernel compile workloads, with swqueue actually performing
+~1 - 2% better than non-swqueue on both of these hosts for netperf.
 
+[0]: https://lore.kernel.org/all/20230614043529.GA1942@ziqianlu-dell/
+
+Thanks,
+David
