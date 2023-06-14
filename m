@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20446730B6C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 01:18:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03CCA730B72
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 01:18:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236605AbjFNXS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 19:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53914 "EHLO
+        id S236829AbjFNXSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 19:18:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236285AbjFNXSQ (ORCPT
+        with ESMTP id S238478AbjFNXSV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 19:18:16 -0400
+        Wed, 14 Jun 2023 19:18:21 -0400
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940AE11C;
-        Wed, 14 Jun 2023 16:18:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415DE26BF;
+        Wed, 14 Jun 2023 16:18:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686784682; x=1718320682;
+  t=1686784690; x=1718320690;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=oFD2RmHp6VjqlL6UdN87B/4X3j8u5LDczmhuyuUCg2c=;
-  b=Uj3hTEYLHLDZdM7FsOo/XfRF1mYhstRcf8MAX3w1P/EC6n8z2znDPCPl
-   BzRAj9HDoxSzmk/m2AS+7GUTu7vPPrNAdV/qhvOhyKqkcJRVTXvx/aoeM
-   XRtuGvWdZjl7ACy1FC/NYvp/E2nz1pwl0x4KijfOt1qqJ6UtLG60QcJ3y
-   kvHVLJITBkT6UfXBucHkC8lwK22TvBsLMRQvRWTmZfKyL6UyieXMtaAHu
-   MKMNNcxR+tCE7AeOQhZYOqKBhIL7MkLtGVRgAQvOQgVJbe/Glm6ydTA+d
-   G5XzV+VI0g1e2dOwfSyysTUIf9bfgeGb8b8QoF/OmA9pB+HagPExGg4be
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="424648039"
+  bh=9F6zH3UDg7TGi4FkoyI+l7N5RQc/2fFZU7O2gZQCqaY=;
+  b=DVr0oNj1csSpIp5vE8S1g3fPsegZAUw7wZazosX7XtJujf1seCYTR0Md
+   89P6cP9w3WiM7d1zYfRAidTeG8N4RVDkuWpxoHB64zWvo1oj9W+FFa3LP
+   PO+beS7nPc3NDkL1rb0ZTnWwoGJSHpmdFNQVnc1xKhxeBrZ3gl8g2EtpN
+   O37VOnVZ6jv48EAAwjR43XaEgP+y4Vw8LLNDFyEgOXVfIuzgHbk+UjZuL
+   nTHOqZEAs2ChcVd2AXbFO6ESp0vXz6ciH1VmDRpP1rj6q2G+VCZX1b7KS
+   LitdLGPv2vQQsLhlwVH5THAFQge2CMJsB0PQQWr3TztSBfnwDlmDdmpC9
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="424648055"
 X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="424648039"
+   d="scan'208";a="424648055"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 16:14:45 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 16:14:46 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="715387933"
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="715387937"
 X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="715387933"
+   d="scan'208";a="715387937"
 Received: from black.fi.intel.com ([10.237.72.28])
   by fmsmga007.fm.intel.com with ESMTP; 14 Jun 2023 16:14:43 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id EB42630C; Thu, 15 Jun 2023 02:14:51 +0300 (EEST)
+        id 018B840D; Thu, 15 Jun 2023 02:14:52 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -50,9 +50,9 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
         Andy Shevchenko <andy@kernel.org>,
         Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v2 3/4] gpio: aggregator: Set up a parser of delay line parameters
-Date:   Thu, 15 Jun 2023 02:14:45 +0300
-Message-Id: <20230614231446.3687-4-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 4/4] gpio: delay: Remove duplicative functionality
+Date:   Thu, 15 Jun 2023 02:14:46 +0300
+Message-Id: <20230614231446.3687-5-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 In-Reply-To: <20230614231446.3687-1-andriy.shevchenko@linux.intel.com>
 References: <20230614231446.3687-1-andriy.shevchenko@linux.intel.com>
@@ -68,145 +68,219 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The aggregator mode can also handle properties of the platform,
-that do not belong to the GPIO controller itself. One of such
-a property is a signal delay line. Set up a parser to support it.
+Now that GPIO aggregator supports a delay line, drop the duplicative
+functionality, i.e. the entire gpio-delay driver.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/gpio/gpio-aggregator.c | 70 +++++++++++++++++++++++++++++++++-
- 1 file changed, 68 insertions(+), 2 deletions(-)
+ drivers/gpio/Kconfig      |   9 ---
+ drivers/gpio/Makefile     |   1 -
+ drivers/gpio/gpio-delay.c | 164 --------------------------------------
+ 3 files changed, 174 deletions(-)
+ delete mode 100644 drivers/gpio/gpio-delay.c
 
-diff --git a/drivers/gpio/gpio-aggregator.c b/drivers/gpio/gpio-aggregator.c
-index a74a8d86caf3..ed11aa56bc51 100644
---- a/drivers/gpio/gpio-aggregator.c
-+++ b/drivers/gpio/gpio-aggregator.c
-@@ -18,6 +18,7 @@
- #include <linux/mutex.h>
- #include <linux/overflow.h>
- #include <linux/platform_device.h>
-+#include <linux/property.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
- #include <linux/string.h>
-@@ -423,6 +424,51 @@ static int gpio_fwd_to_irq(struct gpio_chip *chip, unsigned int offset)
- 	return gpiod_to_irq(fwd->descs[offset]);
- }
+diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+index 209738ef1446..abaae68c88a4 100644
+--- a/drivers/gpio/Kconfig
++++ b/drivers/gpio/Kconfig
+@@ -1748,15 +1748,6 @@ config GPIO_AGGREGATOR
+ 	      industrial control context, to be operated from userspace using
+ 	      the GPIO chardev interface.
  
-+#ifdef CONFIG_OF_GPIO
-+static int gpiochip_fwd_delay_of_xlate(struct gpio_chip *chip,
-+				       const struct of_phandle_args *gpiospec,
-+				       u32 *flags)
-+{
-+	struct gpiochip_fwd *fwd = gpiochip_get_data(chip);
-+	struct gpiochip_fwd_timing *timings;
-+	u32 line;
-+
-+	if (gpiospec->args_count != chip->of_gpio_n_cells)
-+		return -EINVAL;
-+
-+	line = gpiospec->args[0];
-+	if (line >= chip->ngpio)
-+		return -EINVAL;
-+
-+	timings = &fwd->delay_timings[line];
-+	timings->ramp_up_us = gpiospec->args[1];
-+	timings->ramp_down_us = gpiospec->args[2];
-+
-+	return line;
-+}
-+
-+static int gpiochip_fwd_setup_delay_line(struct device *dev, struct gpio_chip *chip,
-+					 struct gpiochip_fwd *fwd)
-+{
-+	fwd->delay_timings = devm_kcalloc(dev, chip->ngpio,
-+					  sizeof(*fwd->delay_timings),
-+					  GFP_KERNEL);
-+	if (!fwd->delay_timings)
-+		return -ENOMEM;
-+
-+	chip->of_xlate = gpiochip_fwd_delay_of_xlate;
-+	chip->of_gpio_n_cells = 3;
-+
-+	return 0;
-+}
-+#else
-+static int gpiochip_fwd_setup_delay_line(struct device *dev, struct gpio_chip *chip,
-+					 struct gpiochip_fwd *fwd)
-+{
-+	return 0;
-+}
-+#endif	/* !CONFIG_OF_GPIO */
-+
- /**
-  * gpiochip_fwd_create() - Create a new GPIO forwarder
-  * @dev: Parent device pointer
-@@ -430,6 +476,7 @@ static int gpio_fwd_to_irq(struct gpio_chip *chip, unsigned int offset)
-  * @descs: Array containing the GPIO descriptors to forward to.
-  *         This array must contain @ngpios entries, and must not be deallocated
-  *         before the forwarder has been destroyed again.
-+ * @delay_line: True if the pins have an external delay line.
-  *
-  * This function creates a new gpiochip, which forwards all GPIO operations to
-  * the passed GPIO descriptors.
-@@ -439,7 +486,8 @@ static int gpio_fwd_to_irq(struct gpio_chip *chip, unsigned int offset)
-  */
- static struct gpiochip_fwd *gpiochip_fwd_create(struct device *dev,
- 						unsigned int ngpios,
--						struct gpio_desc *descs[])
-+						struct gpio_desc *descs[],
-+						bool delay_line)
- {
- 	const char *label = dev_name(dev);
- 	struct gpiochip_fwd *fwd;
-@@ -492,6 +540,12 @@ static struct gpiochip_fwd *gpiochip_fwd_create(struct device *dev,
- 	else
- 		spin_lock_init(&fwd->slock);
- 
-+	if (delay_line) {
-+		error = gpiochip_fwd_setup_delay_line(dev, chip, fwd);
-+		if (error)
-+			return ERR_PTR(error);
-+	}
-+
- 	error = devm_gpiochip_add_data(dev, chip, fwd);
- 	if (error)
- 		return ERR_PTR(error);
-@@ -509,6 +563,7 @@ static int gpio_aggregator_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct gpio_desc **descs;
- 	struct gpiochip_fwd *fwd;
-+	bool delay_line;
- 	int i, n;
- 
- 	n = gpiod_count(dev, NULL);
-@@ -525,7 +580,9 @@ static int gpio_aggregator_probe(struct platform_device *pdev)
- 			return PTR_ERR(descs[i]);
- 	}
- 
--	fwd = gpiochip_fwd_create(dev, n, descs);
-+	delay_line = fwnode_device_is_compatible(dev_fwnode(dev), "gpio-delay");
-+
-+	fwd = gpiochip_fwd_create(dev, n, descs, delay_line);
- 	if (IS_ERR(fwd))
- 		return PTR_ERR(fwd);
- 
-@@ -534,6 +591,15 @@ static int gpio_aggregator_probe(struct platform_device *pdev)
- }
- 
- static const struct of_device_id gpio_aggregator_dt_ids[] = {
-+	/*
-+	 * The GPIO delay provides a way to configure platform specific delays
-+	 * for GPIO ramp-up or ramp-down delays. This can serve the following
-+	 * purposes:
-+	 * - Open-drain output using an RC filter
-+	 */
-+	{
-+		.compatible = "gpio-delay",
-+	},
- 	/*
- 	 * Add GPIO-operated devices controlled from userspace below,
- 	 * or use "driver_override" in sysfs.
+-config GPIO_DELAY
+-	tristate "GPIO delay"
+-	depends on OF_GPIO
+-	help
+-	  Say yes here to enable the GPIO delay, which provides a way to
+-	  configure platform specific delays for GPIO ramp-up or ramp-down
+-	  delays. This can serve the following purposes:
+-	    - Open-drain output using an RC filter
+-
+ config GPIO_LATCH
+ 	tristate "GPIO latch driver"
+ 	help
+diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
+index 947c9cf9aba8..7843b16f5d59 100644
+--- a/drivers/gpio/Makefile
++++ b/drivers/gpio/Makefile
+@@ -52,7 +52,6 @@ obj-$(CONFIG_GPIO_DA9052)		+= gpio-da9052.o
+ obj-$(CONFIG_GPIO_DA9055)		+= gpio-da9055.o
+ obj-$(CONFIG_GPIO_DAVINCI)		+= gpio-davinci.o
+ obj-$(CONFIG_GPIO_DLN2)			+= gpio-dln2.o
+-obj-$(CONFIG_GPIO_DELAY)		+= gpio-delay.o
+ obj-$(CONFIG_GPIO_DWAPB)		+= gpio-dwapb.o
+ obj-$(CONFIG_GPIO_EIC_SPRD)		+= gpio-eic-sprd.o
+ obj-$(CONFIG_GPIO_ELKHARTLAKE)		+= gpio-elkhartlake.o
+diff --git a/drivers/gpio/gpio-delay.c b/drivers/gpio/gpio-delay.c
+deleted file mode 100644
+index b489b561b225..000000000000
+--- a/drivers/gpio/gpio-delay.c
++++ /dev/null
+@@ -1,164 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * Copyright 2022 TQ-Systems GmbH
+- * Author: Alexander Stein <linux@ew.tq-group.com>
+- */
+-
+-#include <linux/err.h>
+-#include <linux/gpio/consumer.h>
+-#include <linux/gpio/driver.h>
+-#include <linux/module.h>
+-#include <linux/mod_devicetable.h>
+-#include <linux/platform_device.h>
+-#include <linux/delay.h>
+-
+-#include "gpiolib.h"
+-
+-struct gpio_delay_timing {
+-	unsigned long ramp_up_delay_us;
+-	unsigned long ramp_down_delay_us;
+-};
+-
+-struct gpio_delay_priv {
+-	struct gpio_chip gc;
+-	struct gpio_descs *input_gpio;
+-	struct gpio_delay_timing *delay_timings;
+-};
+-
+-static int gpio_delay_get_direction(struct gpio_chip *gc, unsigned int offset)
+-{
+-	return GPIO_LINE_DIRECTION_OUT;
+-}
+-
+-static void gpio_delay_set(struct gpio_chip *gc, unsigned int offset, int val)
+-{
+-	struct gpio_delay_priv *priv = gpiochip_get_data(gc);
+-	struct gpio_desc *gpio_desc = priv->input_gpio->desc[offset];
+-	const struct gpio_delay_timing *delay_timings;
+-	bool ramp_up;
+-
+-	gpiod_set_value(gpio_desc, val);
+-
+-	delay_timings = &priv->delay_timings[offset];
+-	ramp_up = (!gpiod_is_active_low(gpio_desc) && val) ||
+-		  (gpiod_is_active_low(gpio_desc) && !val);
+-
+-	if (ramp_up && delay_timings->ramp_up_delay_us)
+-		udelay(delay_timings->ramp_up_delay_us);
+-	if (!ramp_up && delay_timings->ramp_down_delay_us)
+-		udelay(delay_timings->ramp_down_delay_us);
+-}
+-
+-static void gpio_delay_set_can_sleep(struct gpio_chip *gc, unsigned int offset, int val)
+-{
+-	struct gpio_delay_priv *priv = gpiochip_get_data(gc);
+-	struct gpio_desc *gpio_desc = priv->input_gpio->desc[offset];
+-	const struct gpio_delay_timing *delay_timings;
+-	bool ramp_up;
+-
+-	gpiod_set_value_cansleep(gpio_desc, val);
+-
+-	delay_timings = &priv->delay_timings[offset];
+-	ramp_up = (!gpiod_is_active_low(gpio_desc) && val) ||
+-		  (gpiod_is_active_low(gpio_desc) && !val);
+-
+-	if (ramp_up && delay_timings->ramp_up_delay_us)
+-		fsleep(delay_timings->ramp_up_delay_us);
+-	if (!ramp_up && delay_timings->ramp_down_delay_us)
+-		fsleep(delay_timings->ramp_down_delay_us);
+-}
+-
+-static int gpio_delay_of_xlate(struct gpio_chip *gc,
+-			       const struct of_phandle_args *gpiospec,
+-			       u32 *flags)
+-{
+-	struct gpio_delay_priv *priv = gpiochip_get_data(gc);
+-	struct gpio_delay_timing *timings;
+-	u32 line;
+-
+-	if (gpiospec->args_count != gc->of_gpio_n_cells)
+-		return -EINVAL;
+-
+-	line = gpiospec->args[0];
+-	if (line >= gc->ngpio)
+-		return -EINVAL;
+-
+-	timings = &priv->delay_timings[line];
+-	timings->ramp_up_delay_us = gpiospec->args[1];
+-	timings->ramp_down_delay_us = gpiospec->args[2];
+-
+-	return line;
+-}
+-
+-static bool gpio_delay_can_sleep(const struct gpio_delay_priv *priv)
+-{
+-	int i;
+-
+-	for (i = 0; i < priv->input_gpio->ndescs; i++)
+-		if (gpiod_cansleep(priv->input_gpio->desc[i]))
+-			return true;
+-
+-	return false;
+-}
+-
+-static int gpio_delay_probe(struct platform_device *pdev)
+-{
+-	struct gpio_delay_priv *priv;
+-
+-	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+-	if (!priv)
+-		return -ENOMEM;
+-
+-	priv->input_gpio = devm_gpiod_get_array(&pdev->dev, NULL, GPIOD_OUT_LOW);
+-	if (IS_ERR(priv->input_gpio))
+-		return dev_err_probe(&pdev->dev, PTR_ERR(priv->input_gpio),
+-				     "Failed to get input-gpios");
+-
+-	priv->delay_timings = devm_kcalloc(&pdev->dev,
+-					   priv->input_gpio->ndescs,
+-					   sizeof(*priv->delay_timings),
+-					   GFP_KERNEL);
+-	if (!priv->delay_timings)
+-		return -ENOMEM;
+-
+-	if (gpio_delay_can_sleep(priv)) {
+-		priv->gc.can_sleep = true;
+-		priv->gc.set = gpio_delay_set_can_sleep;
+-	} else {
+-		priv->gc.can_sleep = false;
+-		priv->gc.set = gpio_delay_set;
+-	}
+-
+-	priv->gc.get_direction = gpio_delay_get_direction;
+-	priv->gc.of_xlate = gpio_delay_of_xlate;
+-	priv->gc.of_gpio_n_cells = 3;
+-	priv->gc.ngpio = priv->input_gpio->ndescs;
+-	priv->gc.owner = THIS_MODULE;
+-	priv->gc.base = -1;
+-	priv->gc.parent = &pdev->dev;
+-
+-	platform_set_drvdata(pdev, priv);
+-
+-	return devm_gpiochip_add_data(&pdev->dev, &priv->gc, priv);
+-}
+-
+-static const struct of_device_id gpio_delay_ids[] = {
+-	{
+-		.compatible = "gpio-delay",
+-	},
+-	{ /* sentinel */ }
+-};
+-MODULE_DEVICE_TABLE(of, gpio_delay_ids);
+-
+-static struct platform_driver gpio_delay_driver = {
+-	.driver	= {
+-		.name		= "gpio-delay",
+-		.of_match_table	= gpio_delay_ids,
+-	},
+-	.probe	= gpio_delay_probe,
+-};
+-module_platform_driver(gpio_delay_driver);
+-
+-MODULE_LICENSE("GPL");
+-MODULE_AUTHOR("Alexander Stein <alexander.stein@ew.tq-group.com>");
+-MODULE_DESCRIPTION("GPIO delay driver");
 -- 
 2.40.0.1.gaa8946217a0b
 
