@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD2B730815
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:22:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F362D730818
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:23:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229496AbjFNTWi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 14 Jun 2023 15:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48836 "EHLO
+        id S236184AbjFNTXC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 14 Jun 2023 15:23:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236034AbjFNTWe (ORCPT
+        with ESMTP id S231499AbjFNTXA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 15:22:34 -0400
+        Wed, 14 Jun 2023 15:23:00 -0400
 Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27FB2688;
-        Wed, 14 Jun 2023 12:22:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A7D26AB;
+        Wed, 14 Jun 2023 12:22:37 -0700 (PDT)
 Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
           by outpost.zedat.fu-berlin.de (Exim 4.95)
           with esmtps (TLS1.3)
           tls TLS_AES_256_GCM_SHA384
           (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1q9W4J-002h2e-VO; Wed, 14 Jun 2023 21:22:11 +0200
+          id 1q9W4f-002h8x-3E; Wed, 14 Jun 2023 21:22:33 +0200
 Received: from p57bd9486.dip0.t-ipconnect.de ([87.189.148.134] helo=[192.168.178.81])
           by inpost2.zedat.fu-berlin.de (Exim 4.95)
           with esmtpsa (TLS1.3)
           tls TLS_AES_256_GCM_SHA384
           (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1q9W4J-0012VE-Ny; Wed, 14 Jun 2023 21:22:11 +0200
-Message-ID: <587a0964b4e2832840197f37a2340a6176a51738.camel@physik.fu-berlin.de>
+          id 1q9W4e-0012Wx-KO; Wed, 14 Jun 2023 21:22:33 +0200
+Message-ID: <63d247d3de5a0ca289c39dff930f83d7bbc7c4a5.camel@physik.fu-berlin.de>
 Subject: Re: [PATCH] sh: Replace all non-returning strlcpy with strscpy
 From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 To:     Azeem Shaikh <azeemshaikh38@gmail.com>,
@@ -35,7 +35,7 @@ To:     Azeem Shaikh <azeemshaikh38@gmail.com>,
         Rich Felker <dalias@libc.org>
 Cc:     linux-hardening@vger.kernel.org, linux-sh@vger.kernel.org,
         linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
-Date:   Wed, 14 Jun 2023 21:22:11 +0200
+Date:   Wed, 14 Jun 2023 21:22:31 +0200
 In-Reply-To: <20230530163041.985456-1-azeemshaikh38@gmail.com>
 References: <20230530163041.985456-1-azeemshaikh38@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
@@ -102,7 +102,7 @@ On Tue, 2023-05-30 at 16:30 +0000, Azeem Shaikh wrote:
 >  	strlcat(command_line, " ", sizeof(command_line));
 >  	strlcat(command_line, CONFIG_CMDLINE, sizeof(command_line));
 
-Acked-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Tested-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 
 -- 
  .''`.  John Paul Adrian Glaubitz
