@@ -2,91 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A1772F668
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 09:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E1DF72F66C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 09:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243358AbjFNHeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 03:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49520 "EHLO
+        id S243384AbjFNHfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 03:35:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235414AbjFNHeB (ORCPT
+        with ESMTP id S243038AbjFNHfM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 03:34:01 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6AFBE62;
-        Wed, 14 Jun 2023 00:34:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=/ux0V+hWpeqZe1y6Lv0wFsb0Uq7wh+rm8EMEdQa6UWo=;
-        t=1686728040; x=1687937640; b=XXxC/lfv3V4KdPXsq5JEyIrE7wTw1Whrk1J98ady22jRjmg
-        IlaueyK02wtP9MI6kpxIY25I+ShlX6yhThv0dDQeKa8V3lVk0L05nj9jLOYOIyvAmmh7m/zqqN4jI
-        XG789tczscFmBnN9m616m6yk19cnASCn82i9l3RQiHbHC26mhOvDj5WyzWGfYxrMjKAKdOnDE7SFf
-        z9588qNlH2EVAleKR4o1VC3NQNqDNir9J6qQKrk+9GJpQ93G2NaF7UWMisjrmtAPZtirF/S749zge
-        0WriF/r9NKn1j9UIswTsHYtQpTAv4ybPKCWPV7v1syKXYKJMfbP4FS2GohR6B9wQ==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1q9L0l-005yrq-2x;
-        Wed, 14 Jun 2023 09:33:47 +0200
-Message-ID: <bb17265969d1850462bd1d89df71d43f6d40967b.camel@sipsolutions.net>
-Subject: Re: [PATCH] b43legacy: Remove unneeded variable
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     wuyonggang001@208suo.com, Larry.Finger@lwfinger.net,
-        kvalo@kernel.org
-Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 14 Jun 2023 09:33:46 +0200
-In-Reply-To: <5e1b466986b2371f71f99d7123f1de6d@208suo.com>
-References: <20230612044742.58785-1-zhanglibing@cdjrlc.com>
-         <2caa7e16691b9cecab28aec323785a35@208suo.com>
-         <e598894f5a32c00ff905b010bd8e286f@208suo.com>
-         <5e1b466986b2371f71f99d7123f1de6d@208suo.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+        Wed, 14 Jun 2023 03:35:12 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030F8E62
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 00:35:09 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B0FB8224BD;
+        Wed, 14 Jun 2023 07:35:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1686728108; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=DKwEXvQ/TjIOVrDCEZt6GgF/0TeYMetCURbmcH31IcQ=;
+        b=g0lEzuk3UgE0XT4LICu9CQ8Y7UU4W868WxIWRYK3LfzxvongqDRrplMWTOJ0lsvMcEKsgQ
+        pQwij1boQIpk+NBk2wUrrNHBk0WoBx+9hjvNwDIltkt8JLAXBBtcgC6EfctPN/AUPFX5Kj
+        XrWGUQNod2rx8BHiEBf3fk6ZQaUr63U=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4F49D1391E;
+        Wed, 14 Jun 2023 07:35:08 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ptTrEaxtiWQoHwAAMHmgww
+        (envelope-from <jgross@suse.com>); Wed, 14 Jun 2023 07:35:08 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org
+Cc:     Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, xen-devel@lists.xenproject.org,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Subject: [PATCH v4 0/2] x86: xen: add missing prototypes
+Date:   Wed, 14 Jun 2023 09:34:59 +0200
+Message-Id: <20230614073501.10101-1-jgross@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-06-14 at 13:52 +0800, wuyonggang001@208suo.com wrote:
-> Fix the following coccicheck warning:
->=20
-> drivers/net/wireless/broadcom/b43legacy/debugfs.c:68:9-14: Unneeded=20
-> variable: "count".
+Avoid missing prototype warnings.
 
-That may be a warning that it gives.
+Arnd Bergmann (1):
+  x86: xen: add missing prototypes
 
-> Signed-off-by: Yonggang Wu <wuyonggang001@208suo.com>
-> ---
->   drivers/net/wireless/broadcom/b43legacy/debugfs.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/net/wireless/broadcom/b43legacy/debugfs.c=20
-> b/drivers/net/wireless/broadcom/b43legacy/debugfs.c
-> index 6b0e8d117061..55a067eaa52d 100644
-> --- a/drivers/net/wireless/broadcom/b43legacy/debugfs.c
-> +++ b/drivers/net/wireless/broadcom/b43legacy/debugfs.c
-> @@ -73,7 +73,7 @@ static ssize_t tsf_read_file(struct b43legacy_wldev=20
-> *dev, char *buf, size_t bufs
->           (unsigned int)((tsf & 0xFFFFFFFF00000000ULL) >> 32),
->           (unsigned int)(tsf & 0xFFFFFFFFULL));
->=20
-> -    return count;
-> +    return 0;
->=20
+Juergen Gross (1):
+  x86/xen: add prototypes for paravirt mmu functions
 
-However, that doesn't even fix the warning, and it is actually also
-completely wrong.
+ arch/x86/xen/efi.c     |  2 ++
+ arch/x86/xen/mmu_pv.c  | 16 ++++++++++++++++
+ arch/x86/xen/smp.h     |  4 ++++
+ arch/x86/xen/smp_pv.c  |  1 -
+ arch/x86/xen/xen-ops.h |  3 +++
+ include/xen/xen.h      |  3 +++
+ 6 files changed, 28 insertions(+), 1 deletion(-)
 
-Please don't submit patches where you don't even understand the code.
+-- 
+2.35.3
 
-johannes
