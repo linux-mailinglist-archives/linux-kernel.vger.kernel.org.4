@@ -2,88 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AA5E7302AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEF0F7302AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245670AbjFNPCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 11:02:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43564 "EHLO
+        id S1343505AbjFNPCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 11:02:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245708AbjFNPBt (ORCPT
+        with ESMTP id S245737AbjFNPCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 11:01:49 -0400
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B0E1F1FD2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:01:29 -0700 (PDT)
+        Wed, 14 Jun 2023 11:02:14 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33032101
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:02:12 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id ca18e2360f4ac-7748ca56133so54699239f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:02:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fudan.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id; bh=XfL1UX+No9Wu0g07WmgLH0+W8NRs8577m+8m8P/vCFs=; b=W
-        sEX5+61PH2TUJGtij4yL185d5JFwvkgRHhgDzwz5TubVbcqOVpGhLWOiaHrwdLVw
-        vC0MtuT6dCVyxM1fRIrDOvM3E36W9Qo788iAs9QJxNUJolCnP5lyNKBtXBTom18B
-        nd5OQu4Ph4PJUA2Y4yP84Pn3Ma59pd49O1cEhAt1rY=
-Received: from ubuntu.localdomain (unknown [10.230.35.76])
-        by app1 (Coremail) with SMTP id XAUFCgAHqzw_1olkAQnsAA--.39132S2;
-        Wed, 14 Jun 2023 23:01:20 +0800 (CST)
-From:   Chenyuan Mi <cymi20@fudan.edu.cn>
-To:     acme@redhat.com
-Cc:     irogers@google.com, namhyung@kernel.org, leo.yan@linaro.org,
-        linux-kernel@vger.kernel.org, Chenyuan Mi <cymi20@fudan.edu.cn>
-Subject: [PATCH] perf subcmd: Fix missing check for return value of malloc() in add_cmdname()
-Date:   Wed, 14 Jun 2023 08:01:18 -0700
-Message-Id: <20230614150118.115208-1-cymi20@fudan.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: XAUFCgAHqzw_1olkAQnsAA--.39132S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrurWkuw1kKF1kWFyrXF48Xrb_yoWxKwc_CF
-        Z7Zr1kJFyfAryvvrs0k39Ig34Sya1rXFnYvw4YyFy3ua45CF1kXryDAFn3JFy3KFyv9Fyx
-        Ca9Yyr1DJr12kjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbskFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IE
-        rcIFxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
-        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
-        6r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2
-        IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E
-        87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
-        IFyTuYvjfUOXo2UUUUU
-X-CM-SenderInfo: isqsiiisuqikmt6i3vldqovvfxof0/
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=linuxfoundation.org; s=google; t=1686754932; x=1689346932;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=p4sjlStxztTY7q6pTG+2ubizzXPZ9YpI/qMjGbH/hEU=;
+        b=iLanjjCCh+abjNsb7HzMXbgc5I4WamBdXQttBei6MT5HSLmUShwbqbXITVO/XETnpr
+         JQDj+MEPU/I86l8Ji8r1MUZzrhAk7e8As+MlrecodDfsiw7CdxGHzH7woBb3PpBhR0a9
+         6/aG7DPFkJcPpQkWV//vHLMQaBhPyLCHpoqBc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686754932; x=1689346932;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=p4sjlStxztTY7q6pTG+2ubizzXPZ9YpI/qMjGbH/hEU=;
+        b=IRdgDraKBm++CzHEwjohKw33S0/uqxSEoa25+NKrg4N8WB17mDsdsJdslk5hYtwIoy
+         OjVtf3DCpwHfTLDUbahRVJoIOASZgCUmSJ71d1GxJKsxnxdAzLVvN2fKe0ANBgjC9FCl
+         XZxE7uYCagDaRKcIOGTVrNtWi21KGno4HPWWyY56wmS2RWly4uF9M5u/IC4fMA/T0sl8
+         q86LFBRZ0fb5I6xL4EfTD0lKZLkxW/dMLIXn+Ts/R8qm+4yEsGhVIO3DlJIJQOUCqT+l
+         gjK8+DckN7UPju/tAVFmNs9OV4xExw9UqR95xUqKFEjPgvLv2DYRiWZs5CatGK32m6aH
+         UHZA==
+X-Gm-Message-State: AC+VfDxkMOL8wgpSMYYGVFiHr7l9gghw8WRwLnSYa2vKdRm6lrRxjhD4
+        aDqYws5H/t3atjDTzokaTHKTCg==
+X-Google-Smtp-Source: ACHHUZ5WZysEEpfgX9MjC6+Mfwtnk8IJSYq0wqb2ALccliUeJPDjzjDv2v/nuv/CLoitYhkkDE7zvQ==
+X-Received: by 2002:a6b:8d4b:0:b0:777:b6a9:64ba with SMTP id p72-20020a6b8d4b000000b00777b6a964bamr12074626iod.2.1686754931962;
+        Wed, 14 Jun 2023 08:02:11 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id n9-20020a056638120900b0041669a9fb62sm4963571jas.131.2023.06.14.08.02.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 08:02:11 -0700 (PDT)
+Message-ID: <785c1d49-f080-2f21-2948-d12d522c9fa7@linuxfoundation.org>
+Date:   Wed, 14 Jun 2023 09:02:10 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2] usbip: usbip_host: Replace strlcpy with strscpy
+Content-Language: en-US
+To:     Azeem Shaikh <azeemshaikh38@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Cc:     linux-hardening@vger.kernel.org, Hongren Zheng <i@zenithal.me>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230614141026.2113749-1-azeemshaikh38@gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230614141026.2113749-1-azeemshaikh38@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The malloc() function may return NULL when it fails,
-which may cause null pointer deference in add_cmdname(),
-add Null check for return value of malloc().
+On 6/14/23 08:10, Azeem Shaikh wrote:
+> strlcpy() reads the entire source buffer first.
+> This read may exceed the destination size limit.
+> This is both inefficient and can lead to linear read
+> overflows if a source string is not NUL-terminated [1].
+> In an effort to remove strlcpy() completely [2], replace
+> strlcpy() here with strscpy().
+> 
+> Direct replacement is safe here since return value of -errno
+> is used to check for truncation instead of sizeof(dest).
+> 
+> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+> [2] https://github.com/KSPP/linux/issues/89
+> 
+> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+> ---
+> v1: https://lore.kernel.org/all/20230613004402.3540432-1-azeemshaikh38@gmail.com/
+> 
+> Changes from v1 - uses "< 0" instead of "== -E2BIG".
+> 
+>   drivers/usb/usbip/stub_main.c |    3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/usbip/stub_main.c b/drivers/usb/usbip/stub_main.c
+> index e8c3131a8543..97043b4df275 100644
+> --- a/drivers/usb/usbip/stub_main.c
+> +++ b/drivers/usb/usbip/stub_main.c
+> @@ -174,8 +174,7 @@ static ssize_t match_busid_store(struct device_driver *dev, const char *buf,
+>   		return -EINVAL;
+>   
+>   	/* busid needs to include \0 termination */
+> -	len = strlcpy(busid, buf + 4, BUSID_SIZE);
+> -	if (sizeof(busid) <= len)
+> +	if (strscpy(busid, buf + 4, BUSID_SIZE) < 0)
+>   		return -EINVAL;
+>   
+>   	if (!strncmp(buf, "add ", 4)) {
 
-Found by our static analysis tool.
 
-Signed-off-by: Chenyuan Mi <cymi20@fudan.edu.cn>
----
- tools/lib/subcmd/help.c | 2 ++
- 1 file changed, 2 insertions(+)
+Than you Kees for the review.
 
-diff --git a/tools/lib/subcmd/help.c b/tools/lib/subcmd/help.c
-index bf02d62a3b2b..510a3eccb60f 100644
---- a/tools/lib/subcmd/help.c
-+++ b/tools/lib/subcmd/help.c
-@@ -16,6 +16,8 @@
- void add_cmdname(struct cmdnames *cmds, const char *name, size_t len)
- {
- 	struct cmdname *ent = malloc(sizeof(*ent) + len + 1);
-+	if (!ent)
-+		return;
- 
- 	ent->len = len;
- 	memcpy(ent->name, name, len);
--- 
-2.17.1
+If Kees is happy, I am happy :)
 
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah
