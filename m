@@ -2,68 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2D897305D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 19:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C5F7305DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 19:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236743AbjFNRRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 13:17:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
+        id S236925AbjFNRSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 13:18:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235423AbjFNRRa (ORCPT
+        with ESMTP id S232157AbjFNRR4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 13:17:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFBF5132;
-        Wed, 14 Jun 2023 10:17:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 61822644E1;
-        Wed, 14 Jun 2023 17:17:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF752C433C0;
-        Wed, 14 Jun 2023 17:17:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686763041;
-        bh=Zbb5hoog/Puebf5TpE0Zp/30wehyw5cRswSRzy0cnzw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UMAgsPU2w/Os3tuheNEwgrsYVzF0KDntSZDWhpoaIkJvdKEfreq7VkqNhB8klzELL
-         fUAty8wopY432ZG3xnDQwR7kAhMYJsfUVZbz6lJgv9AvcgtJHikfplJzltZor4P6xC
-         sf9n4FaIJe2SC0T1DOdDP8keigWyFsz/v8tTzBAMvl1F6Ov8f/dsL5uLHBYA372lx4
-         6qNiKj+BfbeMyjCqnGNszlZArKH6r8oowoDEwXW4rYoc+Z7eWW/2X3t5ef5aIAocrd
-         16AEQflZJgU7RONo4Nwi0bfbNxLNIM9R14ZipnssKpOCBoSTTLDiZCz1t01HhPZM78
-         CfGBJpzkgUBmQ==
-Date:   Wed, 14 Jun 2023 18:17:15 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Leonard =?iso-8859-1?Q?G=F6hrs?= <l.goehrs@pengutronix.de>
-Cc:     Rob Herring <robh@kernel.org>,
-        Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Marek Vasut <marex@denx.de>,
-        kernel@pengutronix.de, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 5/8] dt-bindings: net: dsa: microchip: add interrupts
- property for ksz switches
-Message-ID: <20230614-pessimism-celibate-bcd0a624b1c4@spud>
-References: <20230614123222.4167460-1-l.goehrs@pengutronix.de>
- <20230614123222.4167460-6-l.goehrs@pengutronix.de>
+        Wed, 14 Jun 2023 13:17:56 -0400
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE38D26A6
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 10:17:42 -0700 (PDT)
+Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-77af8476cd4so185816239f.1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 10:17:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686763062; x=1689355062;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fRPE1en485fgipWFHZePCu5grK9T3reUk/ZQQmM4jPI=;
+        b=cRReFOOT/AI2O7j/W8F+25CiythNAiNClqz6XPr2nNeLDo71QnFYgpv+6Xyr1E9B1I
+         vw3k2Bzlu52Eeb9B6/HOHYAyGpKLjXPC0whdbTRo9LYFZRWac4mff0a2vsYy0SVbmyUX
+         Wdmvj/dTGM7XeytX+r6tuxJRJlwv+BeKcfmM93sL6TeMEK2108a2vqKWLGtA9epoco0a
+         Nu6uFySOaGzp4dvFDZvjPYHWjoj3SJMMgRuPjKliXl7uAntTT9KfZWX+l0p6XkzVhzp9
+         MJ+x+4ScDD1kbQEJc7K9YRfh0K2OD1+yCE5AecDjPJdd3RHzyfsU/gaz54aIrl0Ib7ha
+         KDDA==
+X-Gm-Message-State: AC+VfDx458J0Uy4cO3byMeo4kJL2SyIFfy1AU6lFNSjVQK8IhOoxya7Z
+        GbYtNPhZw9fcviw/GL8cO3OFQSGjnA==
+X-Google-Smtp-Source: ACHHUZ5A60A7vgjjtAmIlvkG1bo3D2NjQKXfldt7NImSW743rHOfA7n43Tp86e7opfaHS6dpIfLCpQ==
+X-Received: by 2002:a5e:db0d:0:b0:77a:d862:242f with SMTP id q13-20020a5edb0d000000b0077ad862242fmr13623229iop.21.1686763062023;
+        Wed, 14 Jun 2023 10:17:42 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id w12-20020a02968c000000b0041d7ad74b36sm5144823jai.17.2023.06.14.10.17.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 10:17:40 -0700 (PDT)
+Received: (nullmailer pid 2404355 invoked by uid 1000);
+        Wed, 14 Jun 2023 17:17:39 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Anatolij Gustschin <agust@denx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     kernel test robot <lkp@intel.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] powerpc: 52xx: Make immr_id DT match tables static
+Date:   Wed, 14 Jun 2023 11:17:23 -0600
+Message-Id: <20230614171724.2403982-1-robh@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Pdz20o4oV1AIZJKV"
-Content-Disposition: inline
-In-Reply-To: <20230614123222.4167460-6-l.goehrs@pengutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,30 +64,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In some builds, the mpc52xx_pm_prepare()/lite5200_pm_prepare() functions
+generate stack size warnings. The addition of 'struct resource' in commit
+2500763dd3db ("powerpc: Use of_address_to_resource()") grew the stack size
+and is blamed for the warnings. However, the real issue is there's no
+reason the 'struct of_device_id immr_ids' DT match tables need to be on
+the stack as they are constant. Declare them as static to move them off
+the stack.
 
---Pdz20o4oV1AIZJKV
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202306130405.uTv5yOZD-lkp@intel.com/
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ arch/powerpc/platforms/52xx/lite5200_pm.c | 2 +-
+ arch/powerpc/platforms/52xx/mpc52xx_pm.c  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Wed, Jun 14, 2023 at 02:32:19PM +0200, Leonard G=F6hrs wrote:
-> The ksz switch driver allows specifying an interrupt line to prevent
-> having to periodically poll the switch for link ups/downs and other
-> asynchronous events.
->=20
-> Signed-off-by: Leonard G=F6hrs <l.goehrs@pengutronix.de>
+diff --git a/arch/powerpc/platforms/52xx/lite5200_pm.c b/arch/powerpc/platforms/52xx/lite5200_pm.c
+index ee29b63fca16..4900f5f48cce 100644
+--- a/arch/powerpc/platforms/52xx/lite5200_pm.c
++++ b/arch/powerpc/platforms/52xx/lite5200_pm.c
+@@ -47,7 +47,7 @@ static int lite5200_pm_begin(suspend_state_t state)
+ static int lite5200_pm_prepare(void)
+ {
+ 	struct device_node *np;
+-	const struct of_device_id immr_ids[] = {
++	static const struct of_device_id immr_ids[] = {
+ 		{ .compatible = "fsl,mpc5200-immr", },
+ 		{ .compatible = "fsl,mpc5200b-immr", },
+ 		{ .type = "soc", .compatible = "mpc5200", }, /* lite5200 */
+diff --git a/arch/powerpc/platforms/52xx/mpc52xx_pm.c b/arch/powerpc/platforms/52xx/mpc52xx_pm.c
+index 549b3629e39a..f0c31ae15da5 100644
+--- a/arch/powerpc/platforms/52xx/mpc52xx_pm.c
++++ b/arch/powerpc/platforms/52xx/mpc52xx_pm.c
+@@ -60,7 +60,7 @@ int mpc52xx_set_wakeup_gpio(u8 pin, u8 level)
+ int mpc52xx_pm_prepare(void)
+ {
+ 	struct device_node *np;
+-	const struct of_device_id immr_ids[] = {
++	static const struct of_device_id immr_ids[] = {
+ 		{ .compatible = "fsl,mpc5200-immr", },
+ 		{ .compatible = "fsl,mpc5200b-immr", },
+ 		{ .type = "soc", .compatible = "mpc5200", }, /* lite5200 */
+-- 
+2.39.2
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-
---Pdz20o4oV1AIZJKV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIn2GwAKCRB4tDGHoIJi
-0nSKAQCaRAF7G/E8L+4Tdad/M48ZtCCFwHTCF2KLVFSi85SwCAD/eEV8HMRTM4ez
-KGL/OAwHa27KLQ06AeWPKj1QNwQMCAc=
-=DQ6b
------END PGP SIGNATURE-----
-
---Pdz20o4oV1AIZJKV--
