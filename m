@@ -2,87 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D81072F5B4
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 09:14:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F37EF72F5C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 09:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243235AbjFNHOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 03:14:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36806 "EHLO
+        id S243185AbjFNHPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 03:15:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243009AbjFNHOM (ORCPT
+        with ESMTP id S243296AbjFNHPI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 03:14:12 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4FD98
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 00:14:11 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4QgxVn2SpFzBQJYP
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 15:14:09 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1686726849; x=1689318850; bh=ZkSEV9T4m9A5Dk91EECTWaD8pX/
-        puAJicguo1fQWDOc=; b=oY3pe124ZkZWhhSAIDdR0kEyqPA9r6yNz1Sja8qiKpq
-        D8grX5BG+NOgwpDYCsb9jJsaGaL+ldWbxfRqc4wtADZDDD52cQx9c+alDycRiBVn
-        UrW0egadHubKUO24mmIUM5nUjLRBlW3gNWN3E9Y4l5VPRYhtG5F/+XOGPxyYafX5
-        DeFKaOg1sIj1ngOGqm3mcoeldEh8aUa3VYrJmiFvZRguyUsJiz6W4f4SXRW/F71P
-        NK2psj2zgewl9bxboaBZ4q9XTtTkl96nAsSEy5AHalyO2iH7yYG1hmwu7uyoWgYT
-        opADniCXdiCFMr7SxfJTIVDQfOnestdoxQOYVqdrzTg==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 7Ir6jmMnpv8q for <linux-kernel@vger.kernel.org>;
-        Wed, 14 Jun 2023 15:14:09 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4QgxVn165zzBJLB3;
-        Wed, 14 Jun 2023 15:14:09 +0800 (CST)
+        Wed, 14 Jun 2023 03:15:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FAE61BDA;
+        Wed, 14 Jun 2023 00:15:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16AD762FA9;
+        Wed, 14 Jun 2023 07:15:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE7B5C433C0;
+        Wed, 14 Jun 2023 07:15:01 +0000 (UTC)
+Date:   Wed, 14 Jun 2023 08:14:59 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-doc@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/5] dt-bindings: fix dangling Documentation/arm64
+ reference
+Message-ID: <ZIlo8xW5HP3u2Sca@arm.com>
+References: <20230613094606.334687-1-corbet@lwn.net>
+ <20230613094606.334687-3-corbet@lwn.net>
 MIME-Version: 1.0
-Date:   Wed, 14 Jun 2023 15:14:09 +0800
-From:   baomingtong001@208suo.com
-To:     terrelln@fb.com
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] lib: zstd: remove unneeded variable
-In-Reply-To: <20230614071235.55955-1-luojianhong@cdjrlc.com>
-References: <20230614071235.55955-1-luojianhong@cdjrlc.com>
-User-Agent: Roundcube Webmail
-Message-ID: <8c519982c1b73dfb4aa84c8215c8a5ac@208suo.com>
-X-Sender: baomingtong001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230613094606.334687-3-corbet@lwn.net>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fix the following coccicheck warning:
+On Tue, Jun 13, 2023 at 03:46:03AM -0600, Jonathan Corbet wrote:
+> The arm64 documentation has move under Documentation/arch/ fix a reference
+> to match.
+> 
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: Conor Dooley <conor+dt@kernel.org>
+> Cc: devicetree@vger.kernel.org
+> Signed-off-by: Jonathan Corbet <corbet@lwn.net>
 
-lib/zstd/compress/zstd_cwksp.h:220:17-27: Unneeded variable: 
-"slackSpace". Return "ZSTD_CWKSP_ALIGNMENT_BYTES".
-
-Signed-off-by: Mingtong Bao <baomingtong001@208suo.com>
----
-  lib/zstd/compress/zstd_cwksp.h | 3 +--
-  1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/lib/zstd/compress/zstd_cwksp.h 
-b/lib/zstd/compress/zstd_cwksp.h
-index 349fc923c355..36c574cd3d6f 100644
---- a/lib/zstd/compress/zstd_cwksp.h
-+++ b/lib/zstd/compress/zstd_cwksp.h
-@@ -217,8 +217,7 @@ MEM_STATIC size_t 
-ZSTD_cwksp_slack_space_required(void) {
-       * n_1 + n_2 == 64 bytes if the cwksp is freshly allocated, due to 
-tables and
-       * aligneds being sized in multiples of 64 bytes.
-       */
--    size_t const slackSpace = ZSTD_CWKSP_ALIGNMENT_BYTES;
--    return slackSpace;
-+    return ZSTD_CWKSP_ALIGNMENT_BYTES;
-  }
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
