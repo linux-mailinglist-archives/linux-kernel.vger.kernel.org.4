@@ -2,58 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD9772FE76
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:24:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B301C72FE79
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244536AbjFNMXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 08:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57788 "EHLO
+        id S244571AbjFNMXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 08:23:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244601AbjFNMXk (ORCPT
+        with ESMTP id S244606AbjFNMXm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 08:23:40 -0400
-Received: from out-58.mta0.migadu.com (out-58.mta0.migadu.com [IPv6:2001:41d0:1004:224b::3a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55B519A5
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:23:39 -0700 (PDT)
-Date:   Wed, 14 Jun 2023 12:23:32 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1686745418;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wQb4z5JVMfEidGknQD3xscf32z72ie53CeaTZ4MqnRo=;
-        b=VDJHBwbnWvVpVV2I5wdZ1dSmkV4OW6DcXGB7WkRvbQbH6ER5gTv95Aul+DGOp3MA8pjOAX
-        0zLmfb5AUIxalCYMg97MGheRtghN8tPVWj5eSM3htLfyZm7zxBgdLPibhTnINAzEYZORpr
-        wAQ4FhHqgISs2x21TFI+MTTB8WH2WY8=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Wei Wang <wei.w.wang@intel.com>, pbonzini@redhat.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH RESEND v2] KVM: move KVM_CAP_DEVICE_CTRL to the generic
- check
-Message-ID: <ZImxRC3QlLbPhwsC@linux.dev>
-References: <20230315101606.10636-1-wei.w.wang@intel.com>
- <ZIjcoOaexz5YAyWT@google.com>
+        Wed, 14 Jun 2023 08:23:42 -0400
+Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C591BFB
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:23:40 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 57B7D3F403;
+        Wed, 14 Jun 2023 14:23:38 +0200 (CEST)
+Date:   Wed, 14 Jun 2023 14:23:36 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, quic_abhinavk@quicinc.com,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] drm/msm/dpu: Add DPU_INTF_DATABUS_WIDEN feature flag
+ for DPU >= 5.0
+Message-ID: <ycgei43x4kfmjk7g7gbeglehtiiinfbqmrjbdzcy56frxbtd2z@yk2f5kgrkbrt>
+References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
+ <20230525-add-widebus-support-v1-1-c7069f2efca1@quicinc.com>
+ <wpjxrnhbcanbc5iatxnff25yrrdfrtmgb24sgwyo457dz2oyjz@e2docpcb6337>
+ <f4fb042c-1458-6077-3c49-8cc02638b27c@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZIjcoOaexz5YAyWT@google.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+In-Reply-To: <f4fb042c-1458-6077-3c49-8cc02638b27c@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,53 +50,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 02:16:16PM -0700, Sean Christopherson wrote:
-> +<everyone else>
+On 2023-06-14 15:01:59, Dmitry Baryshkov wrote:
+> On 14/06/2023 14:42, Marijn Suijten wrote:
+> > On 2023-06-13 18:57:11, Jessica Zhang wrote:
+> >> DPU 5.x+ supports a databus widen mode that allows more data to be sent
+> >> per pclk. Enable this feature flag on all relevant chipsets.
+> >>
+> >> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+> >> ---
+> >>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 3 ++-
+> >>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h | 2 ++
+> >>   2 files changed, 4 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> >> index 36ba3f58dcdf..0be7bf0bfc41 100644
+> >> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> >> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> >> @@ -103,7 +103,8 @@
+> >>   	(BIT(DPU_INTF_INPUT_CTRL) | \
+> >>   	 BIT(DPU_INTF_TE) | \
+> >>   	 BIT(DPU_INTF_STATUS_SUPPORTED) | \
+> >> -	 BIT(DPU_DATA_HCTL_EN))
+> >> +	 BIT(DPU_DATA_HCTL_EN) | \
+> >> +	 BIT(DPU_INTF_DATABUS_WIDEN))
+> > 
+> > This doesn't work.  DPU 5.0.0 is SM8150, which has DSI 6G 2.3.  In the
+> > last patch for DSI you state and enable widebus for DSI 6G 2.5+ only,
+> > meaning DPU and DSI are now desynced, and the output is completely
+> > corrupted.
+
+Tested this on SM8350 which actually has DSI 2.5, and it is also
+corrupted with this series so something else on this series might be
+broken.
+
+> > Is the bound in dsi_host wrong, or do DPU and DSI need to communicate
+> > when widebus will be enabled, based on DPU && DSI supporting it?
 > 
-> Please use scripts/get_maintainer.pl to generate the To/Cc lists.  This may be
-> trivial, but it still needs eyeballs from the relevant maintainers.
+> I'd prefer to follow the second approach, as we did for DP. DPU asks the 
+> actual video output driver if widebus is to be enabled.
 
-+1000. I'd buy someone a beer if they made a bot that just ran
-get_maintainer on patches that hit the list :)
+Doesn't it seem very strange that DPU 5.x+ comes with a widebus feature,
+but the DSI does not until two revisions later?  Or is this available on
+every interface, but only for a different (probably DP) encoder block?
 
-> On Wed, Mar 15, 2023, Wei Wang wrote:
-> > KVM_CAP_DEVICE_CTRL allows userspace to check if the kvm_device
-> > framework (e.g. KVM_CREATE_DEVICE) is supported by KVM. Move
-> > KVM_CAP_DEVICE_CTRL to the generic check for the two reasons:
-> > 1) it already supports arch agnostic usages (i.e. KVM_DEV_TYPE_VFIO).
-> > For example, userspace VFIO implementation may needs to create
-> > KVM_DEV_TYPE_VFIO on x86, riscv, or arm etc. It is simpler to have it
-> > checked at the generic code than at each arch's code.
-> > 2) KVM_CREATE_DEVICE has been added to the generic code.
-> > 
-> > Link: https://lore.kernel.org/all/20221215115207.14784-1-wei.w.wang@intel.com
-> > Signed-off-by: Wei Wang <wei.w.wang@intel.com>
-> > Reviewed-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> >  arch/arm64/kvm/arm.c       | 1 -
-> >  arch/powerpc/kvm/powerpc.c | 1 -
-> >  arch/riscv/kvm/vm.c        | 1 -
-> >  arch/s390/kvm/kvm-s390.c   | 1 -
-> >  virt/kvm/kvm_main.c        | 1 +
-> >  5 files changed, 1 insertion(+), 4 deletions(-)
-> > 
-> > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> > index 3bd732eaf087..96329e675771 100644
-> > --- a/arch/arm64/kvm/arm.c
-> > +++ b/arch/arm64/kvm/arm.c
-> > @@ -202,7 +202,6 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
-> >  		r = vgic_present;
-> >  		break;
-> >  	case KVM_CAP_IOEVENTFD:
-> > -	case KVM_CAP_DEVICE_CTRL:
-> >  	case KVM_CAP_USER_MEMORY:
-> >  	case KVM_CAP_SYNC_MMU:
-> >  	case KVM_CAP_DESTROY_MEMORY_REGION_WORKS:
-
-for arm64:
-
-Reviewed-by: Oliver Upton <oliver.upton@linux.dev>
-
--- 
-Thanks,
-Oliver
+- Marijn
