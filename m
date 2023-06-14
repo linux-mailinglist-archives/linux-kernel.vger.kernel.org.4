@@ -2,195 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CD1E72FEE7
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD69A72FEEA
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:43:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244656AbjFNMm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 08:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45092 "EHLO
+        id S244678AbjFNMnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 08:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231612AbjFNMmX (ORCPT
+        with ESMTP id S231612AbjFNMnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 08:42:23 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904E6198;
-        Wed, 14 Jun 2023 05:42:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686746541; x=1718282541;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Oe4syyaRJMFWt//mJ/tNt8rB3SjG/qVLcsEsMEBdymQ=;
-  b=lATB6/DTqVSYWG97b35z0BksfAZHlYssK8DEPTgaRrFzht6E7I7J8rdF
-   KSVFfMMYlkteA1Cc5BOR0zJy2z+k2EblPR/ALG79rH4gObr5m1shgK4Th
-   PogPW4Xi9/4fz81TLcTTaaYJdU45lj9hYOdy5/C0FYIMATdK7C83fwdQS
-   8OjMo2HT4LU0H+29CbZTEHfZbsbRXAA3dVIVJZb4WAzxkDonl/Npr+rPS
-   DrsI1aFGTv47eUo0dG4x5IqHxSvY7ib1d1/Dz5hLHHdH4bC3xPpLMo9s5
-   KB/24JKzQ5sSnjONjYAsCAW5VtsPgOOGZoIoFOTQD3cIgVclvSwoSakpf
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="361079749"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="361079749"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 05:42:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="741827088"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="741827088"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga008.jf.intel.com with ESMTP; 14 Jun 2023 05:42:20 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 14 Jun 2023 05:42:20 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Wed, 14 Jun 2023 05:42:20 -0700
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.43) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Wed, 14 Jun 2023 05:42:19 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EunRRvDNreW5KZAseKptTwsxkCX1R7nmWAd3T3O5+DENwyWdgBq0WZ4AGzPmL3JylnYdQE0CDbheXtTkuAPLl+qrT1w0/YATOTR4JZ9IUXDQz8j1l+OSfSSuWw4x1esiSMoK17ffdtp1hmNX7iSThJx3B3XhsLnMmH0S2wyM+WrFnL0d9ywphfDiN8UrsvLh2x4/CZiyQo+FtQiOjA1xUpyeHyl8xgrXp6OFmh9Pcl3J1aCYnXlEjpAshIeb3tIVVs1I5IG8wdAaANdCDaxyqMm+m6RzqXTwqRT1r6WtHDAS6EA7g4eS4wMec2aClplk3yzfnNaoF7bVoZj8ZFy8cg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jMTEERwjji6qbVnbEGnX2ok9FWoHExYm1IETcLe/Hfc=;
- b=WEh/x3I9Kh+3snSnZ0eQrZ5OUEY/CmRBmxGRCdGLLB7YWC2B48DjXp3Pu/B3XC/f93VU0T1TkF9eD/4STfgvR8+YapAN8yY23zCkw07CbRrsvli0Z5uXB3FooUteuCjHOYPfc6vNzGN0whLLvm1ZohaEgjmml68ht/GOQ6MlVhHWW5JVBmFvXYlJzeLqKt3EWZoIXMHe0eiAXMNmtr468NetRXuR9lbvvY8kKY1SkTTBnnXU3uuYc5sx/xwazOquhsrRs1fEu5zSx8EjBUC7V7BmGt/bVe9KtPkxit3NmesZS5R5knMtIWoZd+Gy+q4Qn7jnBaVYUlqot5keR3ccnw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
- by IA0PR11MB7884.namprd11.prod.outlook.com (2603:10b6:208:3dc::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.36; Wed, 14 Jun
- 2023 12:42:10 +0000
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::82b6:7b9d:96ce:9325]) by DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::82b6:7b9d:96ce:9325%6]) with mapi id 15.20.6455.030; Wed, 14 Jun 2023
- 12:42:10 +0000
-Message-ID: <09842498-b3ba-320d-be8d-348b85e8d525@intel.com>
-Date:   Wed, 14 Jun 2023 14:42:04 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.1
-Subject: Re: [PATCH net-next v4 1/5] page_pool: frag API support for 32-bit
- arch with 64-bit DMA
-Content-Language: en-US
-To:     Yunsheng Lin <linyunsheng@huawei.com>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        "Saeed Mahameed" <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        "Ilias Apalodimas" <ilias.apalodimas@linaro.org>,
-        <linux-rdma@vger.kernel.org>
-References: <20230612130256.4572-1-linyunsheng@huawei.com>
- <20230612130256.4572-2-linyunsheng@huawei.com>
- <483d7a70-3377-a241-4554-212662ee3930@intel.com>
- <6db097ba-c3fe-6e45-3c39-c21b4d9e16ef@huawei.com>
- <16cc3a9d-bd05-5a9f-cb2e-7c6790ebd9fe@intel.com>
- <2eb57144-1e51-239b-07b2-b6b3737e7497@huawei.com>
-From:   Alexander Lobakin <aleksander.lobakin@intel.com>
-In-Reply-To: <2eb57144-1e51-239b-07b2-b6b3737e7497@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P265CA0213.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:33a::11) To DM6PR11MB3625.namprd11.prod.outlook.com
- (2603:10b6:5:13a::21)
+        Wed, 14 Jun 2023 08:43:14 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51ED5198
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:43:13 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f642a24568so8545808e87.2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:43:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686746591; x=1689338591;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Xr1V+LWyB4E+pek0N0wXhqnpk/YR1ub+Or3UrIkXcKI=;
+        b=PGxMzcjVZYyTBmQOF9zIRR0zm+DlJgLIlP9J0TWHajoDvdi0hI0JmUEWi7thCwJVrC
+         Q4K5+vhUdx49saBKXzfUrqGF8ujAsUAAie/VNrKdgtIrS6qga1jaM7Xyk6pDXUNT0yOf
+         HyH7B8hmCLYmvRkxrA50SR6QS2dqi1fdvcHA02dMMnTBwJDyh2ynq5GZNfVaiRSAexN6
+         NSa0h51Aa0Hpt07UiGJeQclXIC0AEaDio3FEzZlgbByyAccQneXReeXYU+l26moMhO7K
+         uokJwOH9mKG66m08DRTtmqykJFWYkh9PncTjgWci07j8iDWqNjCH4ukigoJstCABVk3k
+         5DSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686746591; x=1689338591;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xr1V+LWyB4E+pek0N0wXhqnpk/YR1ub+Or3UrIkXcKI=;
+        b=FXzLzng1A/mM+sykWg436qGwS29HNt9u9nz0mkHt0fXsCMTrol9/R5MQzl5quk9121
+         /G/k+LlRTCNyQzn3G8Wh28JF3mIhAf9Hj9MeHKsJ4OjFx2HDlzHtTcPcwMR7zFVn58JU
+         lY1iyZlkRoTlR/dE8AW1bLc8lZSjqJIOVN+gXhbdgwUp+n5RSV3Gu+9zt6qy5+55Tv6E
+         bYOiP72NwDOrlL+S/TEEFwGZGAyhzdXzgjwPPJeAt7IIosh2iMNPZAZhoTSzVKTB4TMW
+         LYuPbZM8yRPmuDp9o5uDDCyi5Ed/RfdZqvr0XZR+GmtTitl7FFor2xKVV8GqqV9L4DBd
+         AyyQ==
+X-Gm-Message-State: AC+VfDzc8VAx5hwVOsub9JpaJQqEwMoMPKA9NgGnud/Abda5PHejq6o5
+        nG2c+lgkaTo/0fi+10lH+y9EXA==
+X-Google-Smtp-Source: ACHHUZ5S2yiBeIt59h0C1TIhl4JhTlqn2abkd9/fXxKTCTRgVVrD7qbazgxRVkXsPdlmcRQj8Y5GJw==
+X-Received: by 2002:a2e:990d:0:b0:2af:bf0d:e1c8 with SMTP id v13-20020a2e990d000000b002afbf0de1c8mr6882838lji.12.1686746591578;
+        Wed, 14 Jun 2023 05:43:11 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id h8-20020a2e3a08000000b002b200d9838bsm2480460lja.104.2023.06.14.05.43.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 05:43:11 -0700 (PDT)
+Message-ID: <8d91dfc0-f6c0-813f-de9c-1befdd0ccfdf@linaro.org>
+Date:   Wed, 14 Jun 2023 14:43:09 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|IA0PR11MB7884:EE_
-X-MS-Office365-Filtering-Correlation-Id: e4311a99-3f6a-4ccc-f79e-08db6cd4c555
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: akeqyk3fB/zaCpAtJxFHjNGvaanRiXRZ1Vki4KCLVQICoXdcGitXyW/YUnwyRPIukdQrahfKhNzpnyGmwTTxDHPxIMjj4ys3uFJ+Z328hw2xRRgAy49fzZfcmHWGjAHGVvE759P7qvJE4qT/oowE+MuozBoMnipno6HyghQVFKMSy24RnYNQ1jjZ5LGT1lzhdAm0X2emE+f62/JVtmfEJvxVFwDIurync//HFBsHrNI9GEv8pHHlh6LU3uLLzuyTJwegh4VRfENw5QuSiJnQ+E54INMMXQ8HQz8lh7dxZFvxzM7ouHd+4cDH1I3r+Wy18jAmyDO3e6nEvcRow4S2OQY01/x4rQfT5G8nB2j6gkaltcOFBkzKx8jeqSQntDpkaaiagguuViiEK2Y03ARQTnEhmKzBEPvvx2ByZexjnKSWyFrfUUNBZeBomBnTc41/AT2JXJWmD0ZoJpQomJVsiWVy7eUoniTmFEk7oVE/4HBeLsR7OO6uHQKUdZbWHYMWUYUPLWHW6DVXT9x7D+oE/GTMuknbyTkKAZQW6DDfJEgOPNf505BNZ2MtAMQtvLfMJaLKwa2/JzO4EkYquG50970nkowG3566etiXSKs4QFSpBQ3bFjgAbP8HpNyOdGCcNSzmKdFZopdPa3blEVGh/Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(39860400002)(346002)(366004)(376002)(136003)(451199021)(66946007)(31686004)(5660300002)(8676002)(36756003)(8936002)(4326008)(6916009)(66476007)(66556008)(6666004)(54906003)(478600001)(41300700001)(316002)(38100700002)(82960400001)(4744005)(186003)(26005)(2616005)(86362001)(6506007)(7416002)(6512007)(31696002)(6486002)(2906002)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q0tzZ0RRWTdZelVqV1RzTjdhd2gvejhuMGpjbEpEUHFZSGlNOGhIYlBEN2V0?=
- =?utf-8?B?UElCUE1wUW9zK3ExcG1xYmVuSDhqQTUzQXZOQTg3U2ZaTWpVbytlNFRxRnNq?=
- =?utf-8?B?VHdIa2IxYXVYWERaREZGM1BBd3pmTGV5WU9YMlRkVEdZM2w4MlowbEw3U1NY?=
- =?utf-8?B?U2EweDkzbEdwTVF0ZHdZS2JHY2VBL2ttRmppTGpCQmpLeXJOQXc2RGtDb2RJ?=
- =?utf-8?B?djNJTmJnV2NWVnl3TWw2MXFpQ1RyUG9kRlJSZnJ0SnU2L2k0TzRUNVYyZXpF?=
- =?utf-8?B?U1llQkoyOUdRNFZKUUEvL3RBY3MweGg3bkVkVUFoeGhMaVlieUk4ZWFwZlho?=
- =?utf-8?B?cmRTZkF2dWM0MzkreVN6R0NZcUt4bnRpRmhxTkluYi9ZNzROTVpRZXkzdmNG?=
- =?utf-8?B?S0VES3hrT1Mwc0U5cmpOR3l1OGY4Z05HZzNnVG9GMFRZVWRab1V2dStSZHBK?=
- =?utf-8?B?dy9WRmlQNjVSVkc2dDR5SlFvMXIvaW5jYVBJcnlkVzRJSTdVWTk1d0phZ2pj?=
- =?utf-8?B?d2p0VFJrMFlRQzBibjZzQVlKQkNTYUhRVHVhWk1jNHVkTGYvaWxYWUdMazUx?=
- =?utf-8?B?TXp3WUZQYmJXbUdGOGF5cHU5STBpL2ZrVEhieGNlRkJnOThKbThHY1dITEh2?=
- =?utf-8?B?Z2FHV2dGVUNtWUlEQnlNUWZOS012NjZPRDZJSWdRS0JYaFpBbk8vc2UrZzh5?=
- =?utf-8?B?d1diL3V3QlhVa0hUelJDSlZhRzhYQlhqWUlmeXZVSzkvYzlRNDJtYTRpbUFR?=
- =?utf-8?B?RmtuR0U4aG9pU29sS1JRTTlNYzIxdkpyUjlsUDhvWFAwSDJnVmFtUGM2K1lY?=
- =?utf-8?B?TGlaeTlwT2huNlJybDZlcnhYY1RRVElmTHptQVdlU1hWeW5hSDFnS0hkSWlR?=
- =?utf-8?B?T3kyRHVSSjdHM3RhY0dVZHBmTHFySjNyTmIyWFhDdlFCaVl2S1MrUG4zNlE1?=
- =?utf-8?B?L1VmTFVzc0tBYWxBWncwR2Y2YmUwb2g2dGpsRGw4OVluU2R0SmpSNVlDOWFn?=
- =?utf-8?B?bGxud0RBNFd0c2d3S2RDUHFzMTlKY28zMVh4Wjd3cmhQb1JYU3JLMnl5bkpY?=
- =?utf-8?B?elQ1dWk3Y2JPeHVYTGlWdHFFUnpGSnR4MXAyREt0V2dNZ2hiMTBlaFpSc2xT?=
- =?utf-8?B?L2dBWHQvNkN1bmFpTkN3ak4wOVVoUEZIbnM0SmRmRXB5aDFUWHBlb2NEUnFT?=
- =?utf-8?B?UWY5RFYveCtudEd2bGlaVzM1bmY3Mjh2dENMSm9MdkQ0U0lIN3VlMFpVVkNs?=
- =?utf-8?B?cHh1TjNxL0FCSW5KdFNvU2VnOGhkems5TnhIK0g1VXMvQ0tOdVJmMWN5YnVB?=
- =?utf-8?B?T0U4U0NZRnFKd2FySkF6UlZNakZESlZFV2VueS9RSmRCNEc2cXI2L3pxeFR4?=
- =?utf-8?B?U0JvNExQM3lGT0N5d294U051WEZKU0xDY2U2bzVicUFrbHBPeHR6a2tQZG42?=
- =?utf-8?B?SmNYUzMrL0tYc1YwSlU1dy9pdlhMellObVhWSjlsLzQrOTgzOWxGSEpReVJm?=
- =?utf-8?B?QUdFUDF4d05IaUhoMnVlRVovb2lUZDR5cnI0SCtiNEFpUzdWUTFWNGJQYXlC?=
- =?utf-8?B?ZmVIaXZlNThwYVlmMW9RS3RBRDJiSlA0UnVyUVlNWGFtTWtsaWVBcjM5WnhV?=
- =?utf-8?B?cUNaVE5xNUllZ0lnMlE2QVA3SWdTZEs5Nm5DQkhCODRXZ0lNRVJhVnNwSVlY?=
- =?utf-8?B?em1OL2pCblhMKy9YaEZPZ0VNcW5IcEI5amN4blFndEx4S2VVV3M2WVZCdkl3?=
- =?utf-8?B?M3cyclFoUk01YW42WHRLRm9qZm54VHBkMjZ6ZzJFVTFLc3JuNWlRS0IwSm10?=
- =?utf-8?B?UDRHNWNrcmo0eHdXVW1FMWttbjAvSCtQVXF3b0ZMUWNva3NWb2xQNnh4WHlZ?=
- =?utf-8?B?Si9nOUh5dStROGZ6OG40SkVDRm5IZEJ4dEFhSlRpUXI3TE1mMU9NUEdHV0xX?=
- =?utf-8?B?bURYM2RmeDcvQWVGK3Uyd0NQNXhkelBVUitNRTNBeXJ4MFBUd1pValhZTmF4?=
- =?utf-8?B?eldxU3dSWFpBVWdTUHBaUk5HeGlmM094UEVNY0Z3SmpzdjM0bFBHK1JPM1JK?=
- =?utf-8?B?Y1pDajh0UVYycDRBYUhheXpIWnhtb1VRdVgxV2t0anNvZkVpZVNlanB0QzNP?=
- =?utf-8?B?N3VwZkkreXdLMDRoK3p5UkJkUXJpcllJNlZ5VE9wRzVHQ0FBT1g1OGxrWGhY?=
- =?utf-8?B?dEE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: e4311a99-3f6a-4ccc-f79e-08db6cd4c555
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 12:42:10.4897
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: G3TzpRq1DeIYHyXs36Onljfv659e/nzxz/OQ+voYhSdR5/tD5ANKL2LnF6cRK2/v90NpnrQM09PlrxJBym0uLJBKA4RCemAhCMSZVj84zTw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR11MB7884
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2] arm64: dts: qcom: sm8250-edo: Panel framebuffer is
+ 2.5k instead of 4k
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230606211418.587676-1-marijn.suijten@somainline.org>
+ <974f68dc-b667-c9a7-94c4-1023ef271fab@linaro.org>
+ <a69ddadd-8d59-e784-ddce-16c83a7f13a6@collabora.com>
+ <kdu6apwgp7nu6mwqatufhxvnbunwodr4iu2uaqjacbjgbmmy5y@zh53imtpqfgs>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <kdu6apwgp7nu6mwqatufhxvnbunwodr4iu2uaqjacbjgbmmy5y@zh53imtpqfgs>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yunsheng Lin <linyunsheng@huawei.com>
-Date: Wed, 14 Jun 2023 20:15:48 +0800
-
-> On 2023/6/14 18:52, Alexander Lobakin wrote:
->> From: Yunsheng Lin <linyunsheng@huawei.com>
->> Date: Wed, 14 Jun 2023 11:36:28 +0800
-
-[...]
-
->> By "I addressed" I meant that I dropped including page_pool.h from
->> skbuff.h, as I also had to include dma-mapping.h to page_pool.h and this
->> implied that half of the kernel started including dma-mapping.h as well
->> for no profit.
+On 14.06.2023 14:40, Marijn Suijten wrote:
+> On 2023-06-07 09:15:08, AngeloGioacchino Del Regno wrote:
+>> Il 07/06/23 00:52, Konrad Dybcio ha scritto:
+>>>
+>>>
+>>> On 6.06.2023 23:14, Marijn Suijten wrote:
+>>>> The framebuffer configuration for edo pdx203, written in edo dtsi (which
+>>>> is overwritten in pdx206 dts for its smaller panel) has to use a
+>>>> 1096x2560 configuration as this is what the panel (and framebuffer area)
+>>>> has been initialized to.  Downstream userspace also has access to (and
+>>>> uses) this 2.5k mode by default, and only switches the panel to 4k when
+>>>> requested.
+>>>>
+>>>> This is similar to commit be8de06dc397 ("arm64: dts: qcom:
+>>>> sm8150-kumano: Panel framebuffer is 2.5k instead of 4k") which fixed the
+>>>> same for the previous generation Sony platform.
+>>>>
+>>>> Fixes: 69cdb97ef652 ("arm64: dts: qcom: sm8250: Add support for SONY Xperia 1 II / 5 II (Edo platform)")
+>>>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+>>>> ---
+>>> And so I derped again.
+>>>
+>>> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>
+>> I would've liked more to see a commit saying "replace simple-framebuffer with xxxx"
+>> (where xxxx is DSI panel, etc) but that will as well do for now... :-)
 > 
-> I see, thank for the explanation.
-> I perfer that you can continue with that effort if that is ok.
+> Fwiw we could keep it around as MDSS "gracefully" takes over when it
+> probes a little bit later with fbcon over DRM/KMS, and it sometimes
+> helps reading what is up when something fails before or during MDSS
+> probe.
+I believe we should do this. Perhaps even add some early code to drm/msm
+that'd read out the address (and other configuration) from the mdp hw and
+set it up automagically.
 
-Sure. Especially since I based my series on top of yours :)
-
-Thanks,
-Olek
+Konrad
+> 
+> - Marijn
+> 
+>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>
+>>>
+>>> Konrad
+>>>>
+>>>> Changes since v2:
+>>>> - Rename griffin (copy-paste from related patch) to pdx203 in comment.
+>>>>
+>>>>   arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi | 7 ++++---
+>>>>   1 file changed, 4 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi b/arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi
+>>>> index 3d22be747f042..8f867f841cb83 100644
+>>>> --- a/arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi
+>>>> +++ b/arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi
+>>>> @@ -54,9 +54,10 @@ chosen {
+>>>>   		framebuffer: framebuffer@9c000000 {
+>>>>   			compatible = "simple-framebuffer";
+>>>>   			reg = <0 0x9c000000 0 0x2300000>;
+>>>> -			width = <1644>;
+>>>> -			height = <3840>;
+>>>> -			stride = <(1644 * 4)>;
+>>>> +			/* pdx203 BL initializes in 2.5k mode, not 4k */
+>>>> +			width = <1096>;
+>>>> +			height = <2560>;
+>>>> +			stride = <(1096 * 4)>;
+>>>>   			format = "a8r8g8b8";
+>>>>   		};
+>>>>   	};
+>>
