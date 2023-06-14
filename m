@@ -2,285 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 013BB72F18F
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 03:20:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5071B72F19A
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 03:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242066AbjFNBTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 21:19:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40376 "EHLO
+        id S242004AbjFNBVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 21:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242002AbjFNBTq (ORCPT
+        with ESMTP id S230495AbjFNBVc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 21:19:46 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28AC195;
-        Tue, 13 Jun 2023 18:19:43 -0700 (PDT)
-Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QgnX45KKjz18MCL;
-        Wed, 14 Jun 2023 09:14:44 +0800 (CST)
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 14 Jun 2023 09:19:38 +0800
-Subject: Re: [PATCH v1 01/21] kexec: consolidate kexec and crash options into
- kernel/Kconfig.kexec
-To:     Eric DeVolder <eric.devolder@oracle.com>, <linux@armlinux.org.uk>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <chenhuacai@kernel.org>, <geert@linux-m68k.org>,
-        <tsbogend@alpha.franken.de>,
-        <James.Bottomley@HansenPartnership.com>, <deller@gmx.de>,
-        <ysato@users.sourceforge.jp>, <dalias@libc.org>,
-        <glaubitz@physik.fu-berlin.de>, <tglx@linutronix.de>,
-        <mingo@redhat.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
-        <86@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-ia64@vger.kernel.org>, <loongarch@lists.linux.dev>,
-        <linux-m68k@lists.linux-m68k.org>, <linux-mips@vger.kernel.org>,
-        <linux-parisc@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-        <linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
-        <linux-sh@vger.kernel.org>
-CC:     <kernel@xen0n.name>, <mpe@ellerman.id.au>, <npiggin@gmail.com>,
-        <christophe.leroy@csgroup.eu>, <paul.walmsley@sifive.com>,
-        <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>, <hca@linux.ibm.com>,
-        <gor@linux.ibm.com>, <agordeev@linux.ibm.com>,
-        <borntraeger@linux.ibm.com>, <svens@linux.ibm.com>,
-        <hpa@zytor.com>, <keescook@chromium.org>, <paulmck@kernel.org>,
-        <peterz@infradead.org>, <frederic@kernel.org>,
-        <akpm@linux-foundation.org>, <ardb@kernel.org>,
-        <samitolvanen@google.com>, <juerg.haefliger@canonical.com>,
-        <arnd@arndb.de>, <rmk+kernel@armlinux.org.uk>,
-        <linus.walleij@linaro.org>, <sebastian.reichel@collabora.com>,
-        <rppt@kernel.org>, <kirill.shutemov@linux.intel.com>,
-        <anshuman.khandual@arm.com>, <ziy@nvidia.com>,
-        <masahiroy@kernel.org>, <ndesaulniers@google.com>,
-        <mhiramat@kernel.org>, <ojeda@kernel.org>, <xin3.li@intel.com>,
-        <tj@kernel.org>, <gregkh@linuxfoundation.org>, <tsi@tuyoix.net>,
-        <bhe@redhat.com>, <hbathini@linux.ibm.com>,
-        <sourabhjain@linux.ibm.com>, <boris.ostrovsky@oracle.com>,
-        <konrad.wilk@oracle.com>
-References: <20230612172805.681179-1-eric.devolder@oracle.com>
- <20230612172805.681179-2-eric.devolder@oracle.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <6e362106-9d74-1e00-b94d-ce094367e939@huawei.com>
-Date:   Wed, 14 Jun 2023 09:19:38 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Tue, 13 Jun 2023 21:21:32 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58EBFC3;
+        Tue, 13 Jun 2023 18:21:31 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35DGhxsi023878;
+        Wed, 14 Jun 2023 01:21:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2023-03-30;
+ bh=dMM8w9pf86PhRklwfY86e6q2rasuh+eE61w8/97jSrU=;
+ b=uObAXzBl8Mez4qvnuw0t2fx63sjfHzXtA0l0KFpcfHtQOmBzWmIcZgowZ2zT8+TRoSch
+ cgi65tTAwM2PriyA+qqztN71OyE8h1gLJnB3eEPUHRT8mlI4C5nEG8ZMOznCTqdz2mDg
+ 3FceZjRpH0ScnDY2hrNfo+YqJt9w32lzt3qbZXgd0IzhZoHMYVsopbtDuV7XoyfstWnR
+ QMLSFgtO0nweW4V38Xk6Hvq+J6c7eVKM7UBZQWYNhlsGTxKTDuSeyuthC5Fm1a6v848x
+ rP9OoS6MVRnCbiKWJSgUvcG7uWgxw5LlQxVFMo63fmLJG6z8uWNqdxqQGWI+8RAk3q6w Tw== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r4hqupgqy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 14 Jun 2023 01:21:04 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35DNjPZS008467;
+        Wed, 14 Jun 2023 01:21:03 GMT
+Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2049.outbound.protection.outlook.com [104.47.57.49])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3r4fmb694m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 14 Jun 2023 01:21:03 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Mdmk4p5JhfeXeFGdlsQ80oqmOCabqeDUtJQ794nlH2KgX+JvDlSSWeFHLFTj3N9O3/EunhK9uq4zKk/ciS0zW+6jcqVvLLl2dr6nKs2jXtioYGx11m6WJMBa+UnRsGGLs0h19MZbIuCX+xgMPu6bRYxet3bImKNs6fYMl5p8pHS65BpzgoAjLtp/97iX0chf/tyr6Ak0ldFj3I17txVHTNqLBuCeYGbEwu0Bz/ovUb6JSW+XcaBFxi3nCZNSPVk2q6lFW/AlBkKrxfbTal1JozuOlSvs+0wNLNCCKOs9tDNmkmADciRbDD9DfbB09m/m3R8ddMei+7tslCEfdDWhfw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dMM8w9pf86PhRklwfY86e6q2rasuh+eE61w8/97jSrU=;
+ b=VIzE2OeXJDHj+1E6gSNTeocnLE5HUt4VvPIMtFcKa0dcz4TN7HhbCHXFGuvg+LPRZTjoYPQVHMKMsHRJHDYeosrixAY8iueEsMJe8PN6lBCqB2D/jvxuEcz89GUNxmtnMQr2bko0+gyBW+JamNuTmB9NBSwUEoWpY6F/pxnnx+FxBNoSux7ORyVV+pJTgX9RwxyCQ8xK5UWZdvbhTKU2pbFrmAPC2QJWyJRHLdtA6+xiYn8k37idQOyYWwBn6+zl2M0/bT29+RjuNfb21PwDRHe7GMOp5Hx2NnvplDXciLMMcWzk6ni8clVo4ICeKXQWaj+62ihE+ZNF2ThQHaTq6g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dMM8w9pf86PhRklwfY86e6q2rasuh+eE61w8/97jSrU=;
+ b=Di861fCVTVST1h/RKzT3/nc03d2FaNLhlSuF6qc2FHIhdjBu5+Y+hgZD7FwhNIAHESY440TVYeJ168jM3YlFj1RDEKbfzq/nuq/8FIqyGSDbJmdvqXRNmmI6+AkXH5XDPDpVF6NEOloiZrkcjOHkqS8/NKdM1rhmoBRZ5ApTZ5s=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by BLAPR10MB4849.namprd10.prod.outlook.com (2603:10b6:208:321::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.44; Wed, 14 Jun
+ 2023 01:21:00 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::998f:d221:5fb6:c67d]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::998f:d221:5fb6:c67d%7]) with mapi id 15.20.6455.045; Wed, 14 Jun 2023
+ 01:21:00 +0000
+Date:   Tue, 13 Jun 2023 21:20:57 -0400
+From:   "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+To:     Danilo Krummrich <dakr@redhat.com>
+Cc:     airlied@gmail.com, daniel@ffwll.ch, tzimmermann@suse.de,
+        mripard@kernel.org, corbet@lwn.net, christian.koenig@amd.com,
+        bskeggs@redhat.com, matthew.brost@intel.com,
+        boris.brezillon@collabora.com, alexdeucher@gmail.com,
+        ogabbay@kernel.org, bagasdotme@gmail.com, willy@infradead.org,
+        jason@jlekstrand.net, dri-devel@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH drm-next v4 14/14] drm/nouveau: debugfs: implement DRM
+ GPU VA debugfs
+Message-ID: <20230614012057.jhyzdliloui5k7yx@revolver>
+Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        Danilo Krummrich <dakr@redhat.com>, airlied@gmail.com,
+        daniel@ffwll.ch, tzimmermann@suse.de, mripard@kernel.org,
+        corbet@lwn.net, christian.koenig@amd.com, bskeggs@redhat.com,
+        matthew.brost@intel.com, boris.brezillon@collabora.com,
+        alexdeucher@gmail.com, ogabbay@kernel.org, bagasdotme@gmail.com,
+        willy@infradead.org, jason@jlekstrand.net,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20230606223130.6132-1-dakr@redhat.com>
+ <20230606223130.6132-15-dakr@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230606223130.6132-15-dakr@redhat.com>
+User-Agent: NeoMutt/20220429
+X-ClientProxiedBy: YT4PR01CA0118.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:d7::10) To SN6PR10MB3022.namprd10.prod.outlook.com
+ (2603:10b6:805:d8::25)
 MIME-Version: 1.0
-In-Reply-To: <20230612172805.681179-2-eric.devolder@oracle.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR10MB3022:EE_|BLAPR10MB4849:EE_
+X-MS-Office365-Filtering-Correlation-Id: c31576c4-f838-4879-a34c-08db6c759d2d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Xk/ZtxaghqPLs1QIzjbo85IxTsk09UzL4oJAk+CLV0RGW2q4YRZaVXEASe59ZSRLMLdW7K9qKaYa9k2vQlm4BBMLWDqoZQX7Oud9g204+YmtGtE3AYrarb3P4QYYYuvyeXvFHYitPyxZUxFOefMCYmAKaAtiU0ky/oyg5v8BVF07wKqWpnfel2SbDQweU1qCv9YRvxgfG2LFn3nE32NO9H1na1WDzhCXV0lhPB/XlR9phbHj+WueFI/LfCPMWkmw53CAHGntT6H0KsXnturzsUSJFqN/OzGuxmZRHuJqqR+Wdwda6oVXNqQJ3+gH4D0aSzzzYWV/puH+fRGcIaMCAx63nW+/YPlp/mw7tNEVbXJdRZ9qbxPC93DgmubkeTlqDCFLQEi60Ft0ceuplmH814mGnKwbmp6v+rXVLAtDG3JQmJOc7XsDfZj2s2Sfg4JnfAU4zoWB/TQchWHpQFPVL1xRdAo7ADm68+q9qIBW2KFPlAJFyNYfu1KwOMLNNA9HsddFsbLWYGgoYnK/AY31Wal6vyAXSs8vQ6tYr1PuG11IFb3ZxE/EWj7MCIvEKO0h
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(396003)(346002)(376002)(39860400002)(136003)(366004)(451199021)(6486002)(6666004)(83380400001)(38100700002)(86362001)(33716001)(26005)(6506007)(9686003)(6512007)(1076003)(186003)(2906002)(5660300002)(8936002)(316002)(7416002)(41300700001)(8676002)(4326008)(6916009)(66946007)(66556008)(478600001)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?m+Ea8tOAKQ+Oy20gfRTtjNrkqjl7VJsGnjILWR1McOiQpuEJz+t6JgI3he6K?=
+ =?us-ascii?Q?QALNjV5lvazzde6RuqEv8ZsJ4AeuWOpcNdmtMbZ4yXtQMRT6ojcuqhlZzpEx?=
+ =?us-ascii?Q?pljzgp/WZx6ho5+uzGXkxPXxiB0vzi6QtY90rM0K1pgDm2aLdwiBLdDCMP91?=
+ =?us-ascii?Q?D8sIeyLpBrLW69C8AtK25cSYbxo77rp6qrTxiH8uzmYPOl6fjyqXbcW4VHMR?=
+ =?us-ascii?Q?Z6WgdcLIJ/XH0LyGJLFd6vnErGYvf1FSetQIBbPv5qSOObLnUy2BL7D9673H?=
+ =?us-ascii?Q?7gvW4AphykkuMj79tcnL0sjx/N+35j0dcIwBFHxoWdv2DGcESzShGxsNnR0k?=
+ =?us-ascii?Q?R33jBfYograCXIJGFhVOVXtDyuq+xMt60I8NOeKuwfljJIFelEiAVtWog9Qg?=
+ =?us-ascii?Q?NHGoxZDvGLLIu0Vx6CL8mui92atr3DlpOEC9BC8jgomvwWuDHOGGR4fauDhU?=
+ =?us-ascii?Q?oWFKUPHsyOR1884jeht7IqLgjYdVd0Ud2y8VzP9UtFgNWQFr+2vQ32HHYM4v?=
+ =?us-ascii?Q?PJIFCVKFmq51J4OLDpD91E8sOCeeBPj5b0PW2Iqbb7RIde+rWc4YcO5t9Mec?=
+ =?us-ascii?Q?tFAJKGHmeUAnUau4pj5NhGUs8p8N0RRKnEAdfhQAQPNjdavnZhiAYRYzcqvP?=
+ =?us-ascii?Q?1a2HpEbcMZErIJKT0R5pW3RlabjY0nS1djxf/Q+m4xo9OSswdQp6LiJTq/z2?=
+ =?us-ascii?Q?D1rqCCFWeSUGQOLaiy9Q4MWgO5Ws7h3gcU37+YE1wrJskRqMmD8WVLbP/yVW?=
+ =?us-ascii?Q?4WftPxt+jW1l2AN31/D6Om9xJVt2ep/0TUHyt7qG2kwjmxpL7lCCrUsE9I31?=
+ =?us-ascii?Q?eAw5v+8jzl9+3J8NzpKx6INjHFkt9mxNlfeO3gmJvVPIaYn++Md1WWjTVJVa?=
+ =?us-ascii?Q?VYsP9MkZ+kd0Cx0gK4Mz2NZBEGBMcxYIQ/z/e1tqvws45SjjBZxk7BQLbP6r?=
+ =?us-ascii?Q?zkKfi6bNsxu++iP8fLvTeHADpRKiaFqUnOpQL/zMhSve1i8MOsl5qEfi7iyJ?=
+ =?us-ascii?Q?FgINW4WkO6gjLpzcOB8g65o/ezHssC/j/26AU4eIAZzQaNgxaRSQOtVU5Hl/?=
+ =?us-ascii?Q?Ww/to7/iVfhvFHc/pw/2VseyGnr9YAAa6XddPIS2QV7DdKelVUVBlJrUMMc6?=
+ =?us-ascii?Q?8oN7ouAgp2mNcnVhp/o3Fw2g7koBtUZiQG6CTsuGxrkWNKSbaC9USplh5c4E?=
+ =?us-ascii?Q?7Kocnkx37sehpdTSwCCs9+at6+2iztmLCtEAmBipt51bsXPv5CZUSwhRZeFM?=
+ =?us-ascii?Q?hszIvaw3MebcHUELilMIohUYrPWv9gxO+/bnUmHgJUVSTO5F6hz3ghSZepPD?=
+ =?us-ascii?Q?Y+r1ffsp+uwSJbeV4wir1lHrs7fzLkWugT7NCaUV0tRVUj7q08LUKn56BrlV?=
+ =?us-ascii?Q?WMZG/xQ2BpvT58fKERWalQYRvjBv3KXz19SJ54nN3n/DkDvfnYTSZYOJdZFp?=
+ =?us-ascii?Q?aPMt4MamAk/dCoTUP0VHq5rg0z6e5DfbCrgtfEdf/WKCFohXm+j2Ybsllpy5?=
+ =?us-ascii?Q?jYy382siFnsCQ6EXPXJ3P9ShdVq+u6iPEIUw9Y6/wSLZHPbbPEoUJC4zfwSt?=
+ =?us-ascii?Q?uWhY3qwewYjHaWOjDthtNRJ9WKPmcZJKiorOLmK6yKLC42/Ty8mZJAcx1pCA?=
+ =?us-ascii?Q?Sg=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?jnGOzA4bC2g+sJnur02KbNMtglRqaaHBFtBSJKXFg81v1WFWgMEG8kPHu571?=
+ =?us-ascii?Q?unwOkNCY9a6vTpKIobB1f33NuvwcNyQCoPdioMNNm1Gpv/RZekkkJNUJcs6j?=
+ =?us-ascii?Q?O9kaJ8cnxG8OgQsjzyhVLcuko0vYj3vY5SEmD6rEdWxfmu0niDks3IXfJDF0?=
+ =?us-ascii?Q?ZgdgtyRbyX77Yjy9ad3B8+EChR7DuJrvV4Mo0YR7ehQCa9VGla8tTwRi3nCV?=
+ =?us-ascii?Q?0n8xfeWZCzBitSADNNTGu1B8QyyCvj4tz332cWXAhlVfjByCeTKXnn8n3F50?=
+ =?us-ascii?Q?o3DwZqROi9ih43WdBHOtVpTMt/BULZweOQLkk6CKMUXlb3eoZyMuKRraPPmJ?=
+ =?us-ascii?Q?noq+6VO8L2qFT7LfOIPlRCDRqhNlnmaqZPMe6SwW/qfQ2LEHgWMRl7ub3nHm?=
+ =?us-ascii?Q?tWclaI4xDh+3muliDTR5rZ9vaKk9KDFzjkGi1JXmNdlp9Cvgpo+JVZxECo4L?=
+ =?us-ascii?Q?YNSCBf0AIQzPG+iKYBQ9rnqxJfBUKZBa7fs2yJ9s47lCGFKXevd+uEmHqQdR?=
+ =?us-ascii?Q?lRABLdjZy0SKNygqzkeI9TsoHoR12kA0HiPx8rwz1InepZlEk/ByVy0VJivu?=
+ =?us-ascii?Q?mzEaXg4pQ4NQ+rYgujOj03NT31Jij7Nud5e1tJPNYz3JmFvsTek2lMLVgkp7?=
+ =?us-ascii?Q?oHRRnzmj5FRxDrZVEYbKPzwHLws9DaMixluGCW6obdYNIM+2g4f6nbu3cpP+?=
+ =?us-ascii?Q?72by4ko++Pds1y+nwl34O7yFdGcR6X9ii4JR3CslF7ryPUtyKiBSG4tbYRmb?=
+ =?us-ascii?Q?0IeVX00tbfrLpqtg0v7twyF/idpmjVt0fs8d7ZgeG2/Cmujc9GUoj6ub2IKB?=
+ =?us-ascii?Q?j8C+hTcV0IwUENQYal1MNcuyIMWlU+FMvhKeb6Am7J39zDQyerueXIN7tTMA?=
+ =?us-ascii?Q?zfeo+5E1/Ye5eK61S1oNNDr0VlFcG9kpqWQm6IVVPDPZOOblP36FkoC7ydZL?=
+ =?us-ascii?Q?x40dVjuqam6vD2691qvk1y7ALfjQlgM8Bdlfq7ZqSEsFr1xpVGM7K8L/d5za?=
+ =?us-ascii?Q?1jhgMCQv6B+lHB9vOBGZg6TkRT9WUQQr/ygPwt1WhJTDgeRmkJq/ualrIjRf?=
+ =?us-ascii?Q?d8Tyk4cELgK5R/ae9cvcpmNcAR5Uw+iPJCrdPZPQtCNKuBboLhc8iFqk6FQ0?=
+ =?us-ascii?Q?4/MhwTsc3QGs3OfD3jGFfb1BDTJxu50xdw=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c31576c4-f838-4879-a34c-08db6c759d2d
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 01:21:00.8453
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YwxY0mZQR/vMisQq7XBrQxuH6vVw/YUJkr2BIPuSO2XNMscdy/AOkU8ityMlPWF6Gk79pctORYLK+AGDEMRBzw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB4849
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-13_24,2023-06-12_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
+ malwarescore=0 mlxscore=0 adultscore=0 bulkscore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306140008
+X-Proofpoint-ORIG-GUID: rJdYf5tANraTRlwaW5hFRC3vxYssYZ8J
+X-Proofpoint-GUID: rJdYf5tANraTRlwaW5hFRC3vxYssYZ8J
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/6/13 1:27, Eric DeVolder wrote:
-> The config options for kexec and crash features are consolidated
-> into new file kernel/Kconfig.kexec. Under the "General Setup" submenu
-> is a new submenu "Kexec and crash handling" where all the kexec and
-> crash options that were once in the arch-dependent submenu "Processor
-> type and features" are now consolidated.
+* Danilo Krummrich <dakr@redhat.com> [230606 18:32]:
+> Provide the driver indirection iterating over all DRM GPU VA spaces to
+> enable the common 'gpuvas' debugfs file for dumping DRM GPU VA spaces.
 > 
-> The following options are impacted:
-> 
->  - KEXEC
->  - KEXEC_FILE
->  - KEXEC_SIG
->  - KEXEC_SIG_FORCE
->  - KEXEC_BZIMAGE_VERIFY_SIG
->  - KEXEC_JUMP
->  - CRASH_DUMP
-> 
-> The three main options are KEXEC, KEXEC_FILE and CRASH_DUMP.
-> 
-> Architectures specify support of certain KEXEC and CRASH features with
-> similarly named new ARCH_HAS_<option> config options.
-> 
-> Architectures can utilize the new ARCH_SUPPORTS_<option> config
-> options to specify additional components when <option> is enabled.
-> 
-> To summarize, the ARCH_HAS_<option> permits the <option> to be
-> enabled, and the ARCH_SUPPORTS_<option> handles side effects (ie.
-> select statements).
-> 
-> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
 > ---
->  arch/Kconfig         |  13 ------
->  init/Kconfig         |   2 +
->  kernel/Kconfig.kexec | 103 +++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 105 insertions(+), 13 deletions(-)
->  create mode 100644 kernel/Kconfig.kexec
+>  drivers/gpu/drm/nouveau/nouveau_debugfs.c | 39 +++++++++++++++++++++++
+>  1 file changed, 39 insertions(+)
 > 
-> diff --git a/arch/Kconfig b/arch/Kconfig
-> index 205fd23e0cad..a37730679730 100644
-> --- a/arch/Kconfig
-> +++ b/arch/Kconfig
-> @@ -11,19 +11,6 @@ source "arch/$(SRCARCH)/Kconfig"
+> diff --git a/drivers/gpu/drm/nouveau/nouveau_debugfs.c b/drivers/gpu/drm/nouveau/nouveau_debugfs.c
+> index 99d022a91afc..053f703f2f68 100644
+> --- a/drivers/gpu/drm/nouveau/nouveau_debugfs.c
+> +++ b/drivers/gpu/drm/nouveau/nouveau_debugfs.c
+> @@ -203,6 +203,44 @@ nouveau_debugfs_pstate_open(struct inode *inode, struct file *file)
+>  	return single_open(file, nouveau_debugfs_pstate_get, inode->i_private);
+>  }
 >  
->  menu "General architecture-dependent options"
+> +static void
+> +nouveau_debugfs_gpuva_regions(struct seq_file *m, struct nouveau_uvmm *uvmm)
+> +{
+> +	MA_STATE(mas, &uvmm->region_mt, 0, 0);
+> +	struct nouveau_uvma_region *reg;
+> +
+> +	seq_puts  (m, " VA regions  | start              | range              | end                \n");
+> +	seq_puts  (m, "----------------------------------------------------------------------------\n");
+
+rcu_read_lock();
+
+> +	mas_for_each(&mas, reg, ULONG_MAX)
+> +		seq_printf(m, "             | 0x%016llx | 0x%016llx | 0x%016llx\n",
+> +			   reg->va.addr, reg->va.range, reg->va.addr + reg->va.range);
+
+rcu_read_unlock();
+
+> +}
+> +
+> +static int
+> +nouveau_debugfs_gpuva(struct seq_file *m, void *data)
+> +{
+> +	struct drm_info_node *node = (struct drm_info_node *) m->private;
+> +	struct nouveau_drm *drm = nouveau_drm(node->minor->dev);
+> +	struct nouveau_cli *cli;
+> +
+> +	mutex_lock(&drm->clients_lock);
+> +	list_for_each_entry(cli, &drm->clients, head) {
+> +		struct nouveau_uvmm *uvmm = nouveau_cli_uvmm(cli);
+> +
+> +		if (!uvmm)
+> +			continue;
+> +
+> +		nouveau_uvmm_lock(uvmm);
+> +		drm_debugfs_gpuva_info(m, &uvmm->umgr);
+> +		seq_puts(m, "\n");
+> +		nouveau_debugfs_gpuva_regions(m, uvmm);
+> +		nouveau_uvmm_unlock(uvmm);
+> +	}
+> +	mutex_unlock(&drm->clients_lock);
+> +
+> +	return 0;
+> +}
+> +
+>  static const struct file_operations nouveau_pstate_fops = {
+>  	.owner = THIS_MODULE,
+>  	.open = nouveau_debugfs_pstate_open,
+> @@ -214,6 +252,7 @@ static const struct file_operations nouveau_pstate_fops = {
+>  static struct drm_info_list nouveau_debugfs_list[] = {
+>  	{ "vbios.rom",  nouveau_debugfs_vbios_image, 0, NULL },
+>  	{ "strap_peek", nouveau_debugfs_strap_peek, 0, NULL },
+> +	DRM_DEBUGFS_GPUVA_INFO(nouveau_debugfs_gpuva, NULL),
+>  };
+>  #define NOUVEAU_DEBUGFS_ENTRIES ARRAY_SIZE(nouveau_debugfs_list)
 >  
-> -config CRASH_CORE
-> -	bool
-> -
-> -config KEXEC_CORE
-> -	select CRASH_CORE
-> -	bool
-> -
-> -config KEXEC_ELF
-> -	bool
-> -
-> -config HAVE_IMA_KEXEC
-> -	bool
-> -
->  config ARCH_HAS_SUBPAGE_FAULTS
->  	bool
->  	help
-> diff --git a/init/Kconfig b/init/Kconfig
-> index 32c24950c4ce..4424447e23a5 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -1917,6 +1917,8 @@ config BINDGEN_VERSION_TEXT
->  config TRACEPOINTS
->  	bool
->  
-> +source "kernel/Kconfig.kexec"
-> +
->  endmenu		# General setup
->  
->  source "arch/Kconfig"
-> diff --git a/kernel/Kconfig.kexec b/kernel/Kconfig.kexec
-> new file mode 100644
-> index 000000000000..660048099865
-> --- /dev/null
-> +++ b/kernel/Kconfig.kexec
-> @@ -0,0 +1,103 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +
-> +menu "Kexec and crash features"
-> +
-> +config CRASH_CORE
-> +	bool
-> +
-> +config KEXEC_CORE
-> +	select CRASH_CORE
-> +	bool
-> +
-> +config KEXEC_ELF
-> +	bool
-> +
-> +config HAVE_IMA_KEXEC
-> +	bool
-> +
-> +config KEXEC
-> +	bool "Enable kexec system call"
-> +	default ARCH_DEFAULT_KEXEC
-> +	depends on ARCH_HAS_KEXEC
-> +	select KEXEC_CORE
-> +	help
-> +	  kexec is a system call that implements the ability to shutdown your
-> +	  current kernel, and to start another kernel.  It is like a reboot
-> +	  but it is independent of the system firmware.   And like a reboot
-> +	  you can start any kernel with it, not just Linux.
-
-"kernel.  It is like", "firmware.   And like"
-
-A few more spaces, I don't know the original author's intention, perhaps can be removed.
-
-> +
-> +	  The name comes from the similarity to the exec system call.
-> +
-> +	  It is an ongoing process to be certain the hardware in a machine
-> +	  is properly shutdown, so do not be surprised if this code does not
-> +	  initially work for you.  As of this writing the exact hardware
-> +	  interface is strongly in flux, so no good recommendation can be
-> +	  made.
-> +
-> +config KEXEC_FILE
-> +	bool "Enable kexec file based system call"
-> +	depends on ARCH_HAS_KEXEC_FILE
-> +	select KEXEC_CORE
-> +	help
-> +	  This is new version of kexec system call. This system call is
-> +	  file based and takes file descriptors as system call argument
-> +	  for kernel and initramfs as opposed to list of segments as
-> +	  accepted by previous system call.
-> +
-> +config KEXEC_SIG
-> +	bool "Verify kernel signature during kexec_file_load() syscall"
-> +	depends on KEXEC_FILE && MODULE_SIG_FORMAT
-
-I see that there is no "depends on MODULE_SIG_FORMAT" on x86 and arm64.
-
-> +	help
-> +
-
-This blank line can be deleted.
-
-> +	  This option makes the kexec_file_load() syscall check for a valid
-> +	  signature of the kernel image.  The image can still be loaded without
-> +	  a valid signature unless you also enable KEXEC_SIG_FORCE, though if
-> +	  there's a signature that we can check, then it must be valid.
-> +
-> +	  In addition to this option, you need to enable signature
-> +	  verification for the corresponding kernel image type being
-> +	  loaded in order for this to work.
-> +
-> +config KEXEC_SIG_FORCE
-> +	bool "Require a valid signature in kexec_file_load() syscall"
-> +	depends on KEXEC_SIG
-> +	help
-> +	  This option makes kernel signature verification mandatory for
-> +	  the kexec_file_load() syscall.
-> +
-> +config KEXEC_BZIMAGE_VERIFY_SIG
-> +	bool "Enable bzImage signature verification support"
-> +	depends on KEXEC_SIG
-> +	depends on SIGNED_PE_FILE_VERIFICATION
-> +	select SYSTEM_TRUSTED_KEYRING
-> +	help
-> +	  Enable bzImage signature verification support.
-> +
-> +config KEXEC_JUMP
-> +	bool "kexec jump"
-> +	depends on KEXEC && HIBERNATION
-> +	depends on ARCH_HAS_KEXEC_JUMP
-> +	help
-> +	  Jump between original kernel and kexeced kernel and invoke
-> +	  code in physical address mode via KEXEC
-> +
-> +config CRASH_DUMP
-> +	bool "kernel crash dumps"
-> +	depends on ARCH_HAS_CRASH_DUMP
-> +	select KEXEC_CORE
-> +	select CRASH_CORE
-> +	help
-> +	  Generate crash dump after being started by kexec.
-> +	  This should be normally only set in special crash dump kernels
-> +	  which are loaded in the main kernel with kexec-tools into
-> +	  a specially reserved region and then later executed after
-> +	  a crash by kdump/kexec. The crash dump kernel must be compiled
-> +	  to a memory address not used by the main kernel or BIOS using
-> +	  PHYSICAL_START, or it must be built as a relocatable image
-> +	  (CONFIG_RELOCATABLE=y).
-> +	  For more details see Documentation/admin-guide/kdump/kdump.rst
-> +
-> +	  For s390, this option also enables zfcpdump.
-> +	  See also <file:Documentation/s390/zfcpdump.rst>
-> +
-> +endmenu
+> -- 
+> 2.40.1
 > 
-
--- 
-Regards,
-  Zhen Lei
