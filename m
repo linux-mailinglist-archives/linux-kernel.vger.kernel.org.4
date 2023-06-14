@@ -2,114 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64CC972F422
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 07:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A14E472F424
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 07:30:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242641AbjFNF26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 01:28:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52050 "EHLO
+        id S242864AbjFNF30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 01:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232250AbjFNF24 (ORCPT
+        with ESMTP id S233603AbjFNF3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 01:28:56 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD878198D;
-        Tue, 13 Jun 2023 22:28:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686720535; x=1718256535;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kFYvEOf4qnpF1L29yohf4l+qA/2M0cadu9gIeKSADAc=;
-  b=QBR/C1AYeLJv92JDTEgkkoPtj6ulDRGcoQJ1PwcR3KsOTB6MWy4m2L0Z
-   ec58+Ctz0APRqbT02L1I37QvM3PPS9hf3Z3i8bbjeyom3JRP4Fx9+3sOU
-   9OPehQjUOoL7AOv+9hfps4J3HwY23Gy1fGt0dedXvbbq5+8HrJfMH2Hp9
-   vpR3obcGRYzp8HVlTu5dpwqnTJxJqCxhionqfw1Qmfutg2SWIiRGdSPSE
-   xgrJF49maBGqc8oB+yFqxD0Q0SoYCQp/7cSYNabeZcOUWMVyel4deILcI
-   Ers/LHn45TycOguCVPWiOwnRNBFYapWrtaFLYTcwiqjlBtVvvW0mjbRiw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="424409605"
-X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
-   d="scan'208";a="424409605"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 22:28:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="886081786"
-X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
-   d="scan'208";a="886081786"
-Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 13 Jun 2023 22:28:52 -0700
-Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q9J2k-0000Dh-1K;
-        Wed, 14 Jun 2023 05:28:01 +0000
-Date:   Wed, 14 Jun 2023 13:27:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 8/8] rtc: isl12022: implement support for the
- #clock-cells DT property
-Message-ID: <202306141318.xPzubJXo-lkp@intel.com>
-References: <20230613130011.305589-9-linux@rasmusvillemoes.dk>
+        Wed, 14 Jun 2023 01:29:23 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E790D19A7
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 22:29:22 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6DB311FDD6;
+        Wed, 14 Jun 2023 05:29:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1686720561; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=921SuzZTvdAstSLk1q0RSC9CkRaIHkeH523JeVvBHp4=;
+        b=ba8Cf+hYjMvjxjJHKsCm0QoHdt8/xIB1Acyku4fS3/BFzJ+zmTEFDDYXw3hw6kWbtoBNt8
+        Z+8hf+/mbPdp/9DWWS2lu57W2W8kGi7S9cZB0E/rhsWItQtLCJ0v47R1FW/dszGtpVV4dB
+        wIFN2ABRpJtpqAAZDcnVCkjreHIXVgo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1686720561;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=921SuzZTvdAstSLk1q0RSC9CkRaIHkeH523JeVvBHp4=;
+        b=W2rzTQyXADma32d7giDVTxcdoRJCm/LTf7v/fjbKXwUq9CNoJm8OYHn6pXLipDiMG1Wbur
+        sD3gb4ICxXmpqiDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 410591391D;
+        Wed, 14 Jun 2023 05:29:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id yNPtDjFQiWTqZQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 14 Jun 2023 05:29:21 +0000
+Message-ID: <b99747c5-8810-d2b6-80c7-dbc85fcefb8b@suse.de>
+Date:   Wed, 14 Jun 2023 07:29:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230613130011.305589-9-linux@rasmusvillemoes.dk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] drm/fbdev-generic: Remove a redundant assignment clause
+To:     Sui Jingfeng <suijingfeng@loongson.cn>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230614013011.750598-1-suijingfeng@loongson.cn>
+Content-Language: en-US
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230614013011.750598-1-suijingfeng@loongson.cn>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------yiDraB2DSjraoMbBPZlOORbF"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rasmus,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------yiDraB2DSjraoMbBPZlOORbF
+Content-Type: multipart/mixed; boundary="------------1OOLPT0MxuIpNlWE93TCPOQW";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Sui Jingfeng <suijingfeng@loongson.cn>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>
+Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Message-ID: <b99747c5-8810-d2b6-80c7-dbc85fcefb8b@suse.de>
+Subject: Re: [PATCH] drm/fbdev-generic: Remove a redundant assignment clause
+References: <20230614013011.750598-1-suijingfeng@loongson.cn>
+In-Reply-To: <20230614013011.750598-1-suijingfeng@loongson.cn>
 
-kernel test robot noticed the following build errors:
+--------------1OOLPT0MxuIpNlWE93TCPOQW
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-[auto build test ERROR on abelloni/rtc-next]
-[also build test ERROR on robh/for-next linus/master v6.4-rc6 next-20230613]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+SGkNCg0KQW0gMTQuMDYuMjMgdW0gMDM6MzAgc2NocmllYiBTdWkgSmluZ2Zlbmc6DQo+IFRo
+ZSBhc3NpZ25tZW50ICJkc3QgPSBtYXA7IiBpbiB0aGUgZHJtX2ZiZGV2X2dlbmVyaWNfZGFt
+YWdlX2JsaXQoKSBmdW5jdGlvbg0KPiBpcyByZWR1bmRhbnQgYmVjYXVzZSBpdCBoYXMgYWxy
+ZWFkeSBiZWVuIGNvcGllZCB3aGVuIHRoZSBjYWxsIHRvDQo+IGRybV9jbGllbnRfYnVmZmVy
+X3ZtYXAoKSBpcyBmaW5pc2hlZC4gVGhlcmVmb3JlLCB0aGlzIHBhdGNoIHNhdmVzIGEgdXNl
+bGVzcw0KPiBjb3B5LiBObyBmdW5jdGlvbmFsIGNoYW5nZS4NCg0KSXNuJ3QgdGhhdCB3aGF0
+IHdlIGRpc2N1c3NlZCBoZXJlPw0KDQpodHRwczovL2xvcmUua2VybmVsLm9yZy9kcmktZGV2
+ZWwvMjAyMzAzMjUwNzQ2MzYuMTM2ODMzLTEtMTUzMzAyNzMyNjBAMTg5LmNuLw0KDQpCZXN0
+IHJlZ2FyZHMNClRob21hcw0KDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBTdWkgSmluZ2Zlbmcg
+PHN1aWppbmdmZW5nQGxvb25nc29uLmNuPg0KPiAtLS0NCj4gICBkcml2ZXJzL2dwdS9kcm0v
+ZHJtX2ZiZGV2X2dlbmVyaWMuYyB8IDUgKystLS0NCj4gICAxIGZpbGUgY2hhbmdlZCwgMiBp
+bnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZl
+cnMvZ3B1L2RybS9kcm1fZmJkZXZfZ2VuZXJpYy5jIGIvZHJpdmVycy9ncHUvZHJtL2RybV9m
+YmRldl9nZW5lcmljLmMNCj4gaW5kZXggOThhZTcwMzg0OGEwLi5hYTY5MjRlM2E1OGMgMTAw
+NjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9kcm1fZmJkZXZfZ2VuZXJpYy5jDQo+ICsr
+KyBiL2RyaXZlcnMvZ3B1L2RybS9kcm1fZmJkZXZfZ2VuZXJpYy5jDQo+IEBAIC0xODIsNyAr
+MTgyLDcgQEAgc3RhdGljIGludCBkcm1fZmJkZXZfZ2VuZXJpY19kYW1hZ2VfYmxpdChzdHJ1
+Y3QgZHJtX2ZiX2hlbHBlciAqZmJfaGVscGVyLA0KPiAgIAkJCQkJIHN0cnVjdCBkcm1fY2xp
+cF9yZWN0ICpjbGlwKQ0KPiAgIHsNCj4gICAJc3RydWN0IGRybV9jbGllbnRfYnVmZmVyICpi
+dWZmZXIgPSBmYl9oZWxwZXItPmJ1ZmZlcjsNCj4gLQlzdHJ1Y3QgaW9zeXNfbWFwIG1hcCwg
+ZHN0Ow0KPiArCXN0cnVjdCBpb3N5c19tYXAgbWFwOw0KPiAgIAlpbnQgcmV0Ow0KPiAgIA0K
+PiAgIAkvKg0KPiBAQCAtMjAyLDggKzIwMiw3IEBAIHN0YXRpYyBpbnQgZHJtX2ZiZGV2X2dl
+bmVyaWNfZGFtYWdlX2JsaXQoc3RydWN0IGRybV9mYl9oZWxwZXIgKmZiX2hlbHBlciwNCj4g
+ICAJaWYgKHJldCkNCj4gICAJCWdvdG8gb3V0Ow0KPiAgIA0KPiAtCWRzdCA9IG1hcDsNCj4g
+LQlkcm1fZmJkZXZfZ2VuZXJpY19kYW1hZ2VfYmxpdF9yZWFsKGZiX2hlbHBlciwgY2xpcCwg
+JmRzdCk7DQo+ICsJZHJtX2ZiZGV2X2dlbmVyaWNfZGFtYWdlX2JsaXRfcmVhbChmYl9oZWxw
+ZXIsIGNsaXAsICZtYXApOw0KPiAgIA0KPiAgIAlkcm1fY2xpZW50X2J1ZmZlcl92dW5tYXAo
+YnVmZmVyKTsNCj4gICANCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJp
+dmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpG
+cmFua2Vuc3RyYXNzZSAxNDYsIDkwNDYxIE51ZXJuYmVyZywgR2VybWFueQ0KR0Y6IEl2byBU
+b3RldiwgQW5kcmV3IE15ZXJzLCBBbmRyZXcgTWNEb25hbGQsIEJvdWRpZW4gTW9lcm1hbg0K
+SFJCIDM2ODA5IChBRyBOdWVybmJlcmcpDQo=
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rasmus-Villemoes/rtc-isl12022-remove-wrong-warning-for-low-battery-level/20230613-210308
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
-patch link:    https://lore.kernel.org/r/20230613130011.305589-9-linux%40rasmusvillemoes.dk
-patch subject: [PATCH v2 8/8] rtc: isl12022: implement support for the #clock-cells DT property
-config: i386-randconfig-i012-20230612 (https://download.01.org/0day-ci/archive/20230614/202306141318.xPzubJXo-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build):
-        git remote add abelloni https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git
-        git fetch abelloni rtc-next
-        git checkout abelloni/rtc-next
-        b4 shazam https://lore.kernel.org/r/20230613130011.305589-9-linux@rasmusvillemoes.dk
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+--------------1OOLPT0MxuIpNlWE93TCPOQW--
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306141318.xPzubJXo-lkp@intel.com/
+--------------yiDraB2DSjraoMbBPZlOORbF
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+-----BEGIN PGP SIGNATURE-----
 
->> ERROR: modpost: "__clk_hw_register_fixed_rate" [drivers/rtc/rtc-isl12022.ko] undefined!
->> ERROR: modpost: "of_clk_hw_simple_get" [drivers/rtc/rtc-isl12022.ko] undefined!
->> ERROR: modpost: "devm_of_clk_add_hw_provider" [drivers/rtc/rtc-isl12022.ko] undefined!
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmSJUDAFAwAAAAAACgkQlh/E3EQov+Db
+PBAAq8I7bZsZJ6A3Nw0C6Xy/FivOzNNLra38OdTN90QNgfeMfFEy4HzGdFQtKge7gp5YaqKFEOPl
+20HPk5VLX5X40IdHE9XjHNu1yCz5a71zBpx2Mz+XRabJkqH0yjQok4mmfebxi8n8SQljab+m2LhR
+w9sId810+AHNcjRNTU39ap9na9k7tXjcnC2uobdsuSTk1zwqfNnOgdyR0I2QK3JUFuIN4LYeFmR7
+r6PGearIVTfeihrgEToSWU+AUt4OonjzCk0uamhhgKU90UHeZkA/WzSdTsGjJCpkNLP6Uvu4EK+b
+fIZPeEyH+LGff1/5BSqzhsmh1TTTrPGXeT7Jg4b7EChTfVeb2wsib/yrui5JtIp4rlnMHaEXhcvR
+FpcCzwsBofLhewIa/h9e9xbOt79m1EM5F7MvX3v14Uxu+I00mCx8piz4LQe8Eguz/+8P+IDWS3Gb
+OcCtkyd6X5XpoMIjVG8OkyYNfCUPHoX1zv3+6ph5YAyz7cwy3GzM5D5xQbw4EwxoFfY9NvTI5czL
+bTd1ZkbTqs+8Q3xS4Dq7Esq+vh9jxKARG3HY6kFMR2vtGVvDbl5MAGWhnqiSO8Nfbdm98GgHtIbO
+76RdrxZGB8KxCgk5PNH0aejqifaZE81N2Rrclc7o0+LcdpIny74rEoJOusGF+ICIFCsHDvb6P6lW
+jdY=
+=FvDz
+-----END PGP SIGNATURE-----
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--------------yiDraB2DSjraoMbBPZlOORbF--
