@@ -2,107 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CD8A7305B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 19:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 766F07305B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 19:13:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235132AbjFNRL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 13:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40598 "EHLO
+        id S233158AbjFNRNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 13:13:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233739AbjFNRLy (ORCPT
+        with ESMTP id S236660AbjFNRNe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 13:11:54 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CA8213A
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 10:11:53 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id e9e14a558f8ab-33d0c740498so4757225ab.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 10:11:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1686762712; x=1689354712;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oFGm7FqvVo6N2TIKugcE6wuGfwkXCoffvc2Z4/ZFrvk=;
-        b=lm1oNKUB9xU8Pb6XFA19Ula4qGY1HRWrLbYsGRzV5RHzhzp7pwTPNlfXwJPIVxA0nJ
-         lS2aewP3Q2LDai+BwjNnKBHv4pJ90hQ6cpZMLdko+u/M+lSkgm8XYrzzg18wpdMQ043U
-         wBroNJCPhC8P8AxxZnWkw3zjxehqUOI0ZQ2twVjawryi4NAxzlEDV0a6xQxU9ShuBt9a
-         3Pu4Vo7mbsM7bHmBYUNsE43Oa0MZDT8BOvemG5mLhkq9epAqbLyAvDmLMqCj36Mhu1JY
-         wshaZs+i0Q3UyPO29s23hrcgXtnNYkwp8E2jlL41wew88vO9pymj1H93lM6MMp4MiWaD
-         hjew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686762712; x=1689354712;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oFGm7FqvVo6N2TIKugcE6wuGfwkXCoffvc2Z4/ZFrvk=;
-        b=I2vHm+Qz/LsvVaXWKu0BwJO2BSgyO51utjE+3Wj2cO0Sw1JLqWkOMHOg5/t/Pww3Hs
-         i3tJmFsNhIw7Qk01RSkM0d3++hIn87rBtIRJil9d7yD5Pcyzf/CjR66ADeTUvUR816sk
-         i3y0SZM2EOi9qyZdxFYjFYP/C8JOBdMPkZuS0kkts/92ihe0zBhQOyZxWidVxNLhXmWp
-         sCziKPu0muxsjlcTYWsQbJBK3CnRRX5lCeSoeullU7DLu+14NYbZxhqpem6jq8B/4nD1
-         hSqXxDpzkKmpg7qT0SyI5I6+AfOKq0+Q+0LbHzz4Dqyzp2PerS4HTDW4U9djKRnO3dV+
-         mWeA==
-X-Gm-Message-State: AC+VfDxoJQ3oqlTNDs9qBIvians2n6rgKhK9cGridVaIaC5WqhxXFbg/
-        Kk/Msy2kQCsSfNcLMyF61u/6Xg==
-X-Google-Smtp-Source: ACHHUZ6yQRQ1s8D9mzXhZ3rYN6V6cthldCfEgP5WF7NRHJ5KcSo9a5YXXGXUhFA/hu1SGecsAQuqGA==
-X-Received: by 2002:a05:6e02:50f:b0:33b:1b5d:9723 with SMTP id d15-20020a056e02050f00b0033b1b5d9723mr10710356ils.3.1686762712334;
-        Wed, 14 Jun 2023 10:11:52 -0700 (PDT)
-Received: from [127.0.0.1] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id e9-20020a056638020900b00418af04e405sm4313921jaq.116.2023.06.14.10.11.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 10:11:51 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Ed Tsai <ed.tsai@mediatek.com>
-Cc:     matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kbusch@kernel.org,
-        amergnat@baylibre.com, liusong@linux.alibaba.com,
-        wsd_upstream@mediatek.com, peter.wang@mediatek.com,
-        stanley.chu@mediatek.com, powen.kao@mediatek.com,
-        alice.chao@mediatek.com, naomi.chu@mediatek.com,
-        Chun-Hung.Wu@mediatek.com
-In-Reply-To: <20230614002529.6636-1-ed.tsai@mediatek.com>
-References: <20230614002529.6636-1-ed.tsai@mediatek.com>
-Subject: Re: [PATCH v3] blk-mq: check on cpu id when there is only one ctx
- mapping
-Message-Id: <168676271101.1830690.9612621068004159159.b4-ty@kernel.dk>
-Date:   Wed, 14 Jun 2023 11:11:51 -0600
+        Wed, 14 Jun 2023 13:13:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C7D193;
+        Wed, 14 Jun 2023 10:13:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 014416440C;
+        Wed, 14 Jun 2023 17:13:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EE42C433C0;
+        Wed, 14 Jun 2023 17:13:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686762812;
+        bh=DghLN/GWkWPUCJuJI14dr3JoWgkabHO9cq9SRz14ZvU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LLeipFXIhCUYnnW3nhiV2EFtGLNuwGLln398EBaW99tw+NIrOMZyNVC+EKdMIy7OG
+         /mRWJ/Em7C4FHnwfnjRd3pen55zKD4lYzAnqXQX4gZhyMNLTCgVK1fYgIvffxVWJS4
+         Gigm1CoQN6oDRp7Foa2pjDDZEUzH9txK0Ikr0lcAKadGabIyb3CNLBCveaNFTfSr1t
+         CDxk0Q9juuKm9HlbrjvVH7Hsfcnf/++Ao/fvlVM9MhX1eh8i30rZUb/KebF7huJEGI
+         1de1q4zD5I35VSo8sbAnuVTn8I+sw2RM7oQ6ZVChX2nUGNMWbsekAMVDnYjftktnJO
+         FublxFBFKH2iw==
+Date:   Wed, 14 Jun 2023 10:13:30 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Azeem Shaikh <azeemshaikh38@gmail.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH] tracing/boot: Replace strlcpy with strscpy
+Message-ID: <20230614171330.GA1146@sol.localdomain>
+References: <20230613004125.3539934-1-azeemshaikh38@gmail.com>
+ <202306131227.26F90584F7@keescook>
+ <CADmuW3WeRG-_WsFVCogRzRNXoqtVr+gA84ryqDZ2URUu3wh6Tg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-c6835
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CADmuW3WeRG-_WsFVCogRzRNXoqtVr+gA84ryqDZ2URUu3wh6Tg@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Wed, 14 Jun 2023 08:25:29 +0800, Ed Tsai wrote:
-> commit f168420c62e7 ("blk-mq: don't redirect completion for hctx withs
-> only one ctx mapping") When nvme applies a 1:1 mapping of hctx and ctx,
-> there will be no remote request.
+On Wed, Jun 14, 2023 at 10:01:57AM -0400, Azeem Shaikh wrote:
+> On Tue, Jun 13, 2023 at 3:27 PM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > On Tue, Jun 13, 2023 at 12:41:25AM +0000, Azeem Shaikh wrote:
+> > > strlcpy() reads the entire source buffer first.
+> > > This read may exceed the destination size limit.
+> > > This is both inefficient and can lead to linear read
+> > > overflows if a source string is not NUL-terminated [1].
+> > > In an effort to remove strlcpy() completely [2], replace
+> > > strlcpy() here with strscpy().
+> > >
+> > > Direct replacement is safe here since return value of -E2BIG
+> > > is used to check for truncation instead of sizeof(dest).
+> >
+> > This looks technically correct, but I wonder if "< 0" is a better test?
 > 
-> But for ufs, the submission and completion queues could be asymmetric.
-> (e.g. Multiple SQs share one CQ) Therefore, 1:1 mapping of hctx and
-> ctx won't complete request on the submission cpu. In this situation,
-> this nr_ctx check could violate the QUEUE_FLAG_SAME_FORCE, as a result,
-> check on cpu id when there is only one ctx mapping.
-> 
-> [...]
+> Agreed. "< 0" might more generically represent -errno. Happy to send
+> over a v2 if you prefer that instead of sticking with this patch.
 
-Applied, thanks!
+Please go with "< 0", since it's easier to read and less error-prone.  (It would
+be easy to mistype -E2BIG as -EFBIG, or E2BIG, for example...)
 
-[1/1] blk-mq: check on cpu id when there is only one ctx mapping
-      commit: 30654614f3d27230200b1650f6025a2ce67900b4
-
-Best regards,
--- 
-Jens Axboe
-
-
-
+- Eric
