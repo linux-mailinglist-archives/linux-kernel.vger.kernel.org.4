@@ -2,132 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF37A72FC99
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13EBB72FC82
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243893AbjFNLgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 07:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
+        id S244044AbjFNLfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 07:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244082AbjFNLf5 (ORCPT
+        with ESMTP id S244038AbjFNLfn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 07:35:57 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5E71BF7
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 04:35:56 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f6370ddd27so8404104e87.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 04:35:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686742555; x=1689334555;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BT0FhlQTqZJwPJ3Zh5frLeDreQMYYDJ2nQ7BrmaR2ho=;
-        b=YEDYdRbkwtTcCZpnfO3XSRU5W8zNnW9TGdiUJIewFY6rzAh9+ldajb/ReUCuiVqvgu
-         Co2qOHiv+8hSJ4be6PuIo4zh6iE5g+u6w66GUdOyaeTamMB+uaKZiOVSfN/HFH6B4Rht
-         yoDKyE7W7mYYnpNSPWkRSokjT/7VqBUxxJoEUN8h9t/SMu277sLP5MzdEZnNmvwOr2em
-         zrt/O8RaX2vCiUruKiV74yzcHsYok1wJ2fpTsB/xiL+pOSH996r1YHQI7E8A/s+XHTjb
-         9phkL2s5Um4Z8wtijDyWaX8pszunlfjOCAzeJVJmh6WY+ICpALWrR8EJsPPoOYNNc2zz
-         qffA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686742555; x=1689334555;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BT0FhlQTqZJwPJ3Zh5frLeDreQMYYDJ2nQ7BrmaR2ho=;
-        b=WVxT55E+EAiQLxvXfzyHvYs1rfuZJdps+tlbTtf/4OnNTMUzXQXxSDf5a8m6FnvxuJ
-         Ve8fZ8y2kvUlX6qJoK7IDaYKkfhy+eSUeKjcRMEhKUwMcI3nWxQR8VBjgh1khtBex+0p
-         CAxuaYA2o3eVMTpV9YLaFqvS0PwykNp+VV98ykFwJWmb7dnV1zOyuTcWIlYfOO/2d6bu
-         dG8o8DSBIrEX1DJBF9ocQLaMmDcHHR8twW1Ya7B3FxQp3pncA7+PXYt6dK2wFzt2t/5A
-         EH4jQmnKUl9GQLJT0vnvd1p8MmUq3e/rBLcDBbYkrB2VKiaGi2hwGebLs+T2pUslS+aA
-         OMCQ==
-X-Gm-Message-State: AC+VfDwptWKzkq2zIZgD2drLJpiX2nWGfptfgw2cBUrCx/uGb5zJnZ6F
-        tp7iuG6gW/nfjhsQ3hRcOkKq2g==
-X-Google-Smtp-Source: ACHHUZ5muu6w2LniG99CPtvkiIdie2btUG3ZPtShEgWaaBJcDaXpYP+5e6eN9kTFS0cXrcIWIF/2CA==
-X-Received: by 2002:ac2:5f9b:0:b0:4ed:d2cf:857b with SMTP id r27-20020ac25f9b000000b004edd2cf857bmr7373622lfe.5.1686742554922;
-        Wed, 14 Jun 2023 04:35:54 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id x1-20020ac25dc1000000b004f64b8eee61sm2088406lfq.97.2023.06.14.04.35.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 04:35:54 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Wed, 14 Jun 2023 13:35:35 +0200
-Subject: [PATCH v2 4/7] arm64: dts: qcom: sm6350: Add QFPROM node
+        Wed, 14 Jun 2023 07:35:43 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797B810D5
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 04:35:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=FDiP6O9gPSQaPWMe9KEpB0x898vzzUW39aeiUbMsRBI=; b=HZm7VJAF8OKEfiMDDqIbvqSi6W
+        TxIdm6caIor7s9K353ftlUNiAH1RNWAXsMvYJkFgPGrrMgiFxlfJXeEECzL2aSipZ6cIfnvyYp3EM
+        Dbmh/Mubi97EqmmloS8uS25N/Y6bxN8/wpNcL1vh2L68RS2s2m750IEzPnVVoT9mPw/7ubKr9wJhe
+        ZWYTI9f/TZj+A4YSAP52SLWtpQXs1KzJo61exn5Xv1MWQhUADRLTG/bpDVau+fdd28FOiY5eRgmXh
+        S0ZwyMUVUiPutrxtP8uBFcZkijLbHpt54ghh+J6BbrJtZyEII1nVoHTKqyv7lgl7tLOD6B9AXSQpJ
+        6RJbmOsA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q9Omm-00Ako9-33;
+        Wed, 14 Jun 2023 11:35:37 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 921133002F0;
+        Wed, 14 Jun 2023 13:35:36 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 7957D245CC9AB; Wed, 14 Jun 2023 13:35:36 +0200 (CEST)
+Date:   Wed, 14 Jun 2023 13:35:36 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Richard W.M. Jones" <rjones@redhat.com>
+Cc:     Aaron Thompson <dev@aaront.org>, linux-kernel@vger.kernel.org
+Subject: Re: printk.time causes rare kernel boot hangs
+Message-ID: <20230614113536.GJ1639749@hirez.programming.kicks-ass.net>
+References: <20230613134105.GA10301@redhat.com>
+ <20230614092158.GF1639749@hirez.programming.kicks-ass.net>
+ <20230614094522.GA7636@redhat.com>
+ <20230614103011.GL7912@redhat.com>
+ <20230614103953.GM7912@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230315-topic-lagoon_gpu-v2-4-afcdfb18bb13@linaro.org>
-References: <20230315-topic-lagoon_gpu-v2-0-afcdfb18bb13@linaro.org>
-In-Reply-To: <20230315-topic-lagoon_gpu-v2-0-afcdfb18bb13@linaro.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Luca Weiss <luca.weiss@fairphone.com>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1686742545; l=1015;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=TggODcqRcO65aCiU+0R8QACbCdlm3fHtH5g6iGTdYXg=;
- b=eik+ywxR3TJ0062wxnoAh1itVOjRVx4cRNY4gXrs+/1XC65DLXtb0Ai5VgZ+8NbsHdhKiX2fv
- efNQbzK5jJtDtCRmhKZ7FbMXdmy4/CU6bsEIIyIZbL4xOvpJmUac82E
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230614103953.GM7912@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Konrad Dybcio <konrad.dybcio@somainline.org>
+On Wed, Jun 14, 2023 at 11:39:53AM +0100, Richard W.M. Jones wrote:
+> Got it!
+> 
+> #0  arch_static_branch (branch=false, key=<optimized out>)
+>     at ./arch/x86/include/asm/jump_label.h:27
+> #1  static_key_false (key=<optimized out>) at ./include/linux/jump_label.h:207
+> #2  native_write_msr (msr=1760, low=1876580734, high=106)
+>     at ./arch/x86/include/asm/msr.h:147
+> #3  0xffffffff8107997c in paravirt_write_msr (high=<optimized out>, 
+>     low=1876580734, msr=1760) at ./arch/x86/include/asm/paravirt.h:196
+> #4  wrmsrl (val=<optimized out>, msr=1760)
+>     at ./arch/x86/include/asm/paravirt.h:229
+> #5  lapic_next_deadline (delta=<optimized out>, evt=<optimized out>)
+>     at arch/x86/kernel/apic/apic.c:491
+> #6  0xffffffff811f7b1d in clockevents_program_event (dev=0xffff88804e820dc0, 
+>     expires=<optimized out>, force=<optimized out>)
+>     at kernel/time/clockevents.c:334
+> #7  0xffffffff811f81b0 in tick_handle_periodic (dev=0xffff88804e820dc0)
+>     at kernel/time/tick-common.c:133
+> #8  0xffffffff810796c1 in local_apic_timer_interrupt ()
+>     at arch/x86/kernel/apic/apic.c:1095
+> #9  __sysvec_apic_timer_interrupt (regs=regs@entry=0xffffc90000003ee8)
+>     at arch/x86/kernel/apic/apic.c:1112
+> #10 0xffffffff81f9cf09 in sysvec_apic_timer_interrupt (regs=0xffffc90000003ee8)
+>     at arch/x86/kernel/apic/apic.c:1106
+> #11 0xffffffff820015ca in asm_sysvec_apic_timer_interrupt ()
+>     at ./arch/x86/include/asm/idtentry.h:645
+> #12 0x0000000000000000 in ?? ()
 
-Add a node for the QFPROM NVMEM hw and define the GPU fuse.
+Uuuhh.. something is really fishy here. The thing in common between the
+fingered patch and this stacktrace is the jump_label/static_branch
+usage, but they're quite different paths.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-Reviewed-by: Luca Weiss <luca.weiss@fairphone.com>
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm6350.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+There is no printk or local_clock() in sight here.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
-index fd35810bcfb5..c0f34bc1d78c 100644
---- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
-@@ -805,6 +805,18 @@ ipcc: mailbox@408000 {
- 			#mbox-cells = <2>;
- 		};
- 
-+		qfprom: qfprom@784000 {
-+			compatible = "qcom,sm6350-qfprom", "qcom,qfprom";
-+			reg = <0 0x00784000 0 0x3000>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			gpu_speed_bin: gpu-speed-bin@2015 {
-+				reg = <0x2015 0x1>;
-+				bits = <0 8>;
-+			};
-+		};
-+
- 		rng: rng@793000 {
- 			compatible = "qcom,prng-ee";
- 			reg = <0 0x00793000 0 0x1000>;
+I've got that plain qemu thing running on:
 
--- 
-2.41.0
+  defconfig + kvm_guest.config + CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+
+and have added "nokaslr" to the -append string. Lets see if it wants to
+go wobbly for me.
+
 
