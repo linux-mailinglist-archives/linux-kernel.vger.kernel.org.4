@@ -2,315 +2,389 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95B51730751
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 20:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3CB7730752
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 20:25:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232237AbjFNSYL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 14 Jun 2023 14:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52044 "EHLO
+        id S233341AbjFNSZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 14:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234014AbjFNSYJ (ORCPT
+        with ESMTP id S230321AbjFNSZP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 14:24:09 -0400
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3344CE3;
-        Wed, 14 Jun 2023 11:24:07 -0700 (PDT)
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-9786c0cbfdcso151030866b.1;
-        Wed, 14 Jun 2023 11:24:07 -0700 (PDT)
+        Wed, 14 Jun 2023 14:25:15 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922CB171F
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:25:13 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b344476313so14704661fa.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:25:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1686767112; x=1689359112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Rw4Mbru2d9tLetsrkBreIOHJxLP6wn37Spa7xykF6sM=;
+        b=sph7ZaMEQppSYjz8c+cIOGPB+ZtzNaY+xoSqyzZzHY9z7ELJhjX3mOTGyROG/6u+Zp
+         tpM3TxkD2wKb28bZSyTuT9FLbXFpGkhEGXBvJ9yPNmom0M6QS8NPhJNOxiyb+0smrErw
+         KLlZM2SrtxpZGjG7BG6/2EG/9VUYoDdcvjll8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686767045; x=1689359045;
+        d=1e100.net; s=20221208; t=1686767112; x=1689359112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=spdq0N2VYY0hYc7jjAnAoKbl8HVhYtdqgkVBiNrVmUo=;
-        b=IfLvF4hf2OkW3ot7mVDvGte1eRH8f8XHBcuhgVC25ZiNDE9ylk5530oC6XAnPFVZ/o
-         2yyAJCCguG8MLqwnn1Ne02JQ8mEaSfDbQDD+nouSfMkrz2wpkT0EWTtHSFI57yhE93qb
-         mDNXQf0/qJd33ybd0/HzjJKF85UKLEfT2bYCuM+fhow45MMQhOtDkWOI/1/ukX4mPhbR
-         hDTFBn57PGH3eKF81RpRM2BKEvavGqjdDuSBCIzK7GmZJYqGA/rMYR3MEODaZrAZS13A
-         cUYk2al2nRMT7VC1170BRIRLy0m9tTPY0ipuAQlirwB6da4gEO1oezSXXPHXpi603/Iz
-         C6yg==
-X-Gm-Message-State: AC+VfDwbrrEX4jY/BcOXtxddURhujTDnTNFmRj4c1oOU4um+K1KVJyXK
-        7H9Kiy55M43n8uoLNbs5ICTUTAGtA+ynLqQ0+WQ=
-X-Google-Smtp-Source: ACHHUZ5Vgmlo2Dp4Nm1dN41Dc+3MKH2aX5EDHhRw8hYO9pCmdkyeZXnf472hN8o6RY4LcRvhZkYZvll0oQjO/aVK1YE=
-X-Received: by 2002:a17:906:739e:b0:974:5de8:b5ce with SMTP id
- f30-20020a170906739e00b009745de8b5cemr1659444ejl.2.1686767045264; Wed, 14 Jun
- 2023 11:24:05 -0700 (PDT)
+        bh=Rw4Mbru2d9tLetsrkBreIOHJxLP6wn37Spa7xykF6sM=;
+        b=NFy+xRXm5qeUbitM57BBTf/RIMgagEhQqVfC+iU8DTL8e/7tSN3UIDmmKbXqt6H5Yc
+         t5iK1jaMOh8Oe6yUHur2sXYj7g679TZgIEPPOiXxRUI4HLDAddjlLObqcu04CSigrhL1
+         FmczpPtPwkaqD8rEZU2d3UMThkf8Istrdoi7UrmsCDtWc2rfXAhHe9FolLMzpFVauugp
+         C+9dpWwPS82ofTgmUc7EWEmKKE/ROjp3ATOCbQp8zMWEwrYBBxXD1RKFG/oM88ElVcAH
+         v/ieJTDNnlxGpT/6ahkFGDF1QUg306DOoJRb0enjTAVgan+evqUpaLqUkMiPT4wiYM21
+         gLng==
+X-Gm-Message-State: AC+VfDx4LjHR596/l/y0+A7VaedF9cJwkE+Rj+aMq0yd7emKz7J4yGdM
+        0lMNUxtJ9nxQVoEOG2Z+/Cn1uFY89bVpFWPpD7+55Q==
+X-Google-Smtp-Source: ACHHUZ41qUOu0k6GiC5aH5VsRSs7qcQrg0sUEXw5nlpan0hUbGggsVXSixFsCJt8ZPoMoRst3GVwSu3Pe2FKyqFPkK4=
+X-Received: by 2002:a2e:360e:0:b0:2b1:a8bb:978f with SMTP id
+ d14-20020a2e360e000000b002b1a8bb978fmr7467627lja.9.1686767111434; Wed, 14 Jun
+ 2023 11:25:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230614093755.88881-1-wangliupu@loongson.cn>
-In-Reply-To: <20230614093755.88881-1-wangliupu@loongson.cn>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 14 Jun 2023 20:23:53 +0200
-Message-ID: <CAJZ5v0iTKPbpskDVcsnVaWnhdvb5a-W2TVBfd0c=H2hVv8mOog@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Add SMT (Simultaneous Multi-Threading) support
-To:     Liupu Wang <wangliupu@loongson.cn>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Marc Zyngier <maz@kernel.org>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Binbin Zhou <zhoubinbin@loongson.cn>,
-        Bibo Mao <maobibo@loongson.cn>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>
+References: <cover.1686239016.git.bristot@kernel.org> <bd9977efff8cc3e002c4b2db02f611167905a99f.1686239016.git.bristot@kernel.org>
+ <CAEXW_YT0DmvQo_gfCq5uzpZpf36HmfzXozo9+=sYJp-hZx4qTQ@mail.gmail.com>
+ <b2cd0072-d226-4adb-ddf5-958d9635f881@kernel.org> <CAEXW_YR9Tfw5KyFU7TQtYE02k+DpaMXH=osx9Ws5w_j1YpHxhg@mail.gmail.com>
+ <841849b5-1f9c-4f0e-2de8-1da278256888@kernel.org> <CAEXW_YQ7vEakRcJgva_PYEnsj4ZLafH-pXQiJ5STCkM7dQAttg@mail.gmail.com>
+ <4849295d-9aef-836f-0e5f-063e2075380a@kernel.org>
+In-Reply-To: <4849295d-9aef-836f-0e5f-063e2075380a@kernel.org>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Wed, 14 Jun 2023 14:24:59 -0400
+Message-ID: <CAEXW_YQ8Sv+bU=ngsV35yapSHETOBt-N+jYCCdZ-fnsLYOyP7w@mail.gmail.com>
+Subject: Re: [RFC PATCH V3 6/6] sched/fair: Implement starvation monitor
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Luca Abeni <luca.abeni@santannapisa.it>,
+        Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vineeth Pillai <vineeth@bitbyteword.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 11:38 AM Liupu Wang <wangliupu@loongson.cn> wrote:
->
-> From: Huacai Chen <chenhuacai@loongson.cn>
->
-> Loongson-3A6000 has SMT (Simultaneous Multi-Threading) support, each
-> physical core has two logical cores (threads). This patch add SMT probe
-> and scheduler support via ACPI PPTT.
->
-> If SCHED_SMT enabled, Loongson-3A6000 is treated as 4 cores, 8 threads;
-> If SCHED_SMT disabled, Loongson-3A6000 is treated as 8 cores, 8 threads.
->
-> Remove smp_num_siblings to support HMP (Heterogeneous Multi-Processing).
->
-> Signed-off-by: Liupu Wang <wangliupu@loongson.cn>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->  arch/loongarch/Kconfig                |  8 +++++++
->  arch/loongarch/include/asm/acpi.h     |  9 ++++++++
->  arch/loongarch/include/asm/cpu-info.h |  1 +
->  arch/loongarch/kernel/acpi.c          | 32 +++++++++++++++++++++++++++
->  arch/loongarch/kernel/proc.c          |  1 +
->  arch/loongarch/kernel/smp.c           | 24 +++++++++-----------
->  drivers/acpi/Kconfig                  |  2 +-
->  7 files changed, 62 insertions(+), 15 deletions(-)
->
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index d38b066fc931..6d36b681068e 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -5,6 +5,7 @@ config LOONGARCH
->         select ACPI
->         select ACPI_GENERIC_GSI if ACPI
->         select ACPI_MCFG if ACPI
-> +       select ACPI_PPTT if ACPI
->         select ACPI_SYSTEM_POWER_STATES_SUPPORT if ACPI
->         select ARCH_BINFMT_ELF_STATE
->         select ARCH_ENABLE_MEMORY_HOTPLUG
-> @@ -372,6 +373,13 @@ config EFI_STUB
->           This kernel feature allows the kernel to be loaded directly by
->           EFI firmware without the use of a bootloader.
->
-> +config SCHED_SMT
-> +       bool "SMT scheduler support"
-> +       default y
-> +       help
-> +         Improves scheduler's performance when there are multiple
-> +         threads in one physical core.
-> +
->  config SMP
->         bool "Multi-Processing support"
->         help
-> diff --git a/arch/loongarch/include/asm/acpi.h b/arch/loongarch/include/asm/acpi.h
-> index 976a810352c6..5c78b5d2bfb7 100644
-> --- a/arch/loongarch/include/asm/acpi.h
-> +++ b/arch/loongarch/include/asm/acpi.h
-> @@ -13,6 +13,7 @@ extern int acpi_strict;
->  extern int acpi_disabled;
->  extern int acpi_pci_disabled;
->  extern int acpi_noirq;
-> +extern int pptt_enabled;
->
->  #define acpi_os_ioremap acpi_os_ioremap
->  void __iomem *acpi_os_ioremap(acpi_physical_address phys, acpi_size size);
-> @@ -30,6 +31,14 @@ static inline bool acpi_has_cpu_in_madt(void)
->  }
->
->  extern struct list_head acpi_wakeup_device_list;
-> +extern struct acpi_madt_core_pic acpi_core_pic[NR_CPUS];
-> +
-> +extern int __init parse_acpi_topology(void);
-> +
-> +static inline u32 get_acpi_id_for_cpu(unsigned int cpu)
-> +{
-> +       return acpi_core_pic[cpu_logical_map(cpu)].processor_id;
-> +}
->
->  #endif /* !CONFIG_ACPI */
->
-> diff --git a/arch/loongarch/include/asm/cpu-info.h b/arch/loongarch/include/asm/cpu-info.h
-> index cd73a6f57fe3..900589cb159d 100644
-> --- a/arch/loongarch/include/asm/cpu-info.h
-> +++ b/arch/loongarch/include/asm/cpu-info.h
-> @@ -54,6 +54,7 @@ struct cpuinfo_loongarch {
->         struct cache_desc       cache_leaves[CACHE_LEAVES_MAX];
->         int                     core;   /* physical core number in package */
->         int                     package;/* physical package number */
-> +       int                     global_id; /* physical global thread number */
->         int                     vabits; /* Virtual Address size in bits */
->         int                     pabits; /* Physical Address size in bits */
->         unsigned int            ksave_mask; /* Usable KSave mask. */
-> diff --git a/arch/loongarch/kernel/acpi.c b/arch/loongarch/kernel/acpi.c
-> index 98f431157e4c..9450e09073eb 100644
-> --- a/arch/loongarch/kernel/acpi.c
-> +++ b/arch/loongarch/kernel/acpi.c
-> @@ -33,6 +33,8 @@ u64 acpi_saved_sp;
->
->  #define PREFIX                 "ACPI: "
->
-> +struct acpi_madt_core_pic acpi_core_pic[NR_CPUS];
-> +
->  void __init __iomem * __acpi_map_table(unsigned long phys, unsigned long size)
->  {
->
-> @@ -99,6 +101,7 @@ acpi_parse_processor(union acpi_subtable_headers *header, const unsigned long en
->
->         acpi_table_print_madt_entry(&header->common);
->  #ifdef CONFIG_SMP
-> +       acpi_core_pic[processor->core_id] = *processor;
->         set_processor_mask(processor->core_id, processor->flags);
->  #endif
->
-> @@ -140,6 +143,35 @@ static void __init acpi_process_madt(void)
->         loongson_sysconf.nr_cpus = num_processors;
->  }
->
-> +int pptt_enabled;
-> +
-> +int __init parse_acpi_topology(void)
-> +{
-> +       int cpu, topology_id;
-> +
-> +       for_each_possible_cpu(cpu) {
-> +               topology_id = find_acpi_cpu_topology(cpu, 0);
-> +               if (topology_id < 0) {
-> +                       pr_warn("Invalid BIOS PPTT\n");
-> +                       return -ENOENT;
-> +               }
-> +
-> +               if (acpi_pptt_cpu_is_thread(cpu) <= 0)
-> +                       cpu_data[cpu].core = topology_id;
-> +               else {
-> +                       topology_id = find_acpi_cpu_topology(cpu, 1);
-> +                       if (topology_id < 0)
-> +                               return -ENOENT;
-> +
-> +                       cpu_data[cpu].core = topology_id;
-> +               }
-> +       }
-> +
-> +       pptt_enabled = 1;
-> +
-> +       return 0;
-> +}
-> +
->  #ifndef CONFIG_SUSPEND
->  int (*acpi_suspend_lowlevel)(void);
->  #else
-> diff --git a/arch/loongarch/kernel/proc.c b/arch/loongarch/kernel/proc.c
-> index 0d82907b5404..d4b270630bb5 100644
-> --- a/arch/loongarch/kernel/proc.c
-> +++ b/arch/loongarch/kernel/proc.c
-> @@ -49,6 +49,7 @@ static int show_cpuinfo(struct seq_file *m, void *v)
->         seq_printf(m, "processor\t\t: %ld\n", n);
->         seq_printf(m, "package\t\t\t: %d\n", cpu_data[n].package);
->         seq_printf(m, "core\t\t\t: %d\n", cpu_data[n].core);
-> +       seq_printf(m, "global_id\t\t: %d\n", cpu_data[n].global_id);
->         seq_printf(m, "CPU Family\t\t: %s\n", __cpu_family[n]);
->         seq_printf(m, "Model Name\t\t: %s\n", __cpu_full_name[n]);
->         seq_printf(m, "CPU Revision\t\t: 0x%02x\n", version);
-> diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
-> index ed167e244cda..062f3fe8df60 100644
-> --- a/arch/loongarch/kernel/smp.c
-> +++ b/arch/loongarch/kernel/smp.c
-> @@ -8,6 +8,7 @@
->   * Copyright (C) 2000, 2001 Silicon Graphics, Inc.
->   * Copyright (C) 2000, 2001, 2003 Broadcom Corporation
->   */
-> +#include <linux/acpi.h>
->  #include <linux/cpu.h>
->  #include <linux/cpumask.h>
->  #include <linux/init.h>
-> @@ -37,10 +38,6 @@ EXPORT_SYMBOL(__cpu_number_map);
->  int __cpu_logical_map[NR_CPUS];                /* Map logical to physical */
->  EXPORT_SYMBOL(__cpu_logical_map);
->
-> -/* Number of threads (siblings) per CPU core */
-> -int smp_num_siblings = 1;
-> -EXPORT_SYMBOL(smp_num_siblings);
-> -
->  /* Representing the threads (siblings) of each logical CPU */
->  cpumask_t cpu_sibling_map[NR_CPUS] __read_mostly;
->  EXPORT_SYMBOL(cpu_sibling_map);
-> @@ -228,9 +225,12 @@ void __init loongson_prepare_cpus(unsigned int max_cpus)
->  {
->         int i = 0;
->
-> +       parse_acpi_topology();
-> +
->         for (i = 0; i < loongson_sysconf.nr_cpus; i++) {
->                 set_cpu_present(i, true);
->                 csr_mail_send(0, __cpu_logical_map[i], 0);
-> +               cpu_data[i].global_id = __cpu_logical_map[i];
->         }
->
->         per_cpu(cpu_state, smp_processor_id()) = CPU_ONLINE;
-> @@ -271,10 +271,10 @@ void loongson_init_secondary(void)
->         numa_add_cpu(cpu);
->  #endif
->         per_cpu(cpu_state, cpu) = CPU_ONLINE;
-> -       cpu_data[cpu].core =
-> -                    cpu_logical_map(cpu) % loongson_sysconf.cores_per_package;
->         cpu_data[cpu].package =
->                      cpu_logical_map(cpu) / loongson_sysconf.cores_per_package;
-> +       cpu_data[cpu].core = pptt_enabled ? cpu_data[cpu].core :
-> +                    cpu_logical_map(cpu) % loongson_sysconf.cores_per_package;
->  }
->
->  void loongson_smp_finish(void)
-> @@ -380,14 +380,10 @@ static inline void set_cpu_sibling_map(int cpu)
->
->         cpumask_set_cpu(cpu, &cpu_sibling_setup_map);
->
-> -       if (smp_num_siblings <= 1)
-> -               cpumask_set_cpu(cpu, &cpu_sibling_map[cpu]);
-> -       else {
-> -               for_each_cpu(i, &cpu_sibling_setup_map) {
-> -                       if (cpus_are_siblings(cpu, i)) {
-> -                               cpumask_set_cpu(i, &cpu_sibling_map[cpu]);
-> -                               cpumask_set_cpu(cpu, &cpu_sibling_map[i]);
-> -                       }
-> +       for_each_cpu(i, &cpu_sibling_setup_map) {
-> +               if (cpus_are_siblings(cpu, i)) {
-> +                       cpumask_set_cpu(i, &cpu_sibling_map[cpu]);
-> +                       cpumask_set_cpu(cpu, &cpu_sibling_map[i]);
->                 }
->         }
->  }
-> diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
-> index ccbeab9500ec..00dd309b6682 100644
-> --- a/drivers/acpi/Kconfig
-> +++ b/drivers/acpi/Kconfig
-> @@ -542,10 +542,10 @@ config ACPI_PFRUT
->
->  if ARM64
->  source "drivers/acpi/arm64/Kconfig"
-> +endif
->
->  config ACPI_PPTT
->         bool
-> -endif
+Before I reply, I just want to mention: I am OK with this patch 6/6 as
+such and the ideas I mentioned earlier are just alternatives just for
+patch 6/6 -- just for discussion sake. The devil is in the details as
+Daniel and Juri pointed out.
 
-x86 doesn't use PPTT as of today.  Why do you enable it for them?
+With that said...
 
->  config ACPI_PCC
->         bool "ACPI PCC Address Space"
-> --
+On Wed, Jun 14, 2023 at 9:45=E2=80=AFAM Daniel Bristot de Oliveira
+<bristot@kernel.org> wrote:
+>
+> On 6/13/23 17:32, Joel Fernandes wrote:
+> > On Tue, Jun 13, 2023 at 9:43=E2=80=AFAM Daniel Bristot de Oliveira
+> > <bristot@kernel.org> wrote:
+> > [...]
+> >>> On Mon, Jun 12, 2023 at 1:21=E2=80=AFPM Daniel Bristot de Oliveira
+> >>> <bristot@kernel.org> wrote:
+> >>> [...]
+> >>>>> On Thu, Jun 8, 2023 at 11:58=E2=80=AFAM Daniel Bristot de Oliveira
+> >>>>> <bristot@kernel.org> wrote:
+> >>>>>>
+> >>>>>> From: Juri Lelli <juri.lelli@redhat.com>
+> >>>>>>
+> >>>>>> Starting deadline server for lower priority classes right away whe=
+n
+> >>>>>> first task is enqueued might break guarantees, as tasks belonging =
+to
+> >>>>>> intermediate priority classes could be uselessly preempted. E.g., =
+a well
+> >>>>>> behaving (non hog) FIFO task can be preempted by NORMAL tasks even=
+ if
+> >>>>>> there are still CPU cycles available for NORMAL tasks to run, as t=
+hey'll
+> >>>>>> be running inside the fair deadline server for some period of time=
+.
+> >>>>>>
+> >>>>>> To prevent this issue, implement a starvation monitor mechanism th=
+at
+> >>>>>> starts the deadline server only if a (fair in this case) task hasn=
+'t
+> >>>>>> been scheduled for some interval of time after it has been enqueue=
+d.
+> >>>>>> Use pick/put functions to manage starvation monitor status.
+> >>>>>
+> >>>>> Me and Vineeth were discussing that another way of resolving this
+> >>>>> issue is to use a DL-server for RT as well, and then using a smalle=
+r
+> >>>>> deadline  for RT. That way the RT is more likely to be selected due=
+ to
+> >>>>> its earlier deadline/period.
+> >>>>
+> >>>> It would not be that different from what we have now.
+> >>>>
+> >>>> One of the problems of throttling nowadays is that it accounts for a=
+ large window
+> >>>> of time, and any "imprecision" can cause the mechanism not to work a=
+s expected.
+> >>>>
+> >>>> For example, we work on a fully-isolated CPU scenario, where some ve=
+ry sporadic
+> >>>> workload can be placed on the isolated CPU because of per-cpu kernel=
+ activities,
+> >>>> e.g., kworkers... We need to let them run, but for a minimal amount =
+of time, for
+> >>>> instance, 20 us, to bound the interference.
+> >>>>
+> >>>> The current mechanism does not give this precision because the IRQ a=
+ccounting
+> >>>> does not account for runtime for the rt throttling (which makes sens=
+e).
+> >>>
+> >>> I lost you here, "Runtime for the rt throttling" does not make much
+> >>> sense to me as a statement.
+> >>
+> >> Both update_curr_rt() and update_curr_dl() use rq_clock_task() as cloc=
+k. update_rq_clock_task()
+> >> reduces the irq_delta from task's clock (inside #ifdef CONFIG_IRQ_TIME=
+_ACCOUNTING), and this
+> >> clock is used to throttling.
+> >
+> > That was a much better description. You're basically saying that since
+> > the running time of the RT class is not accounted for in the clock, it
+> > affects the throttling and unthrottling times. I actually ran into a
+> > similar issue on Android I recall, where the RT time was showing up as
+> > CFS load if I recall.
+> >
+> > For RT throttling though, in our testing the time scales are large
+> > enough (for our usecase) that such time stealing wasn't an issue. I am
+> > going for something that is practical and that works, does not have to
+> > be perfect since it has been several years now with these problems and
+> > leaving RT throttling broken is probably not a good thing.
+>
+> By postponing the enqueue/replanishment of the DL server here, we are fix=
+ing the
+> problem in a practical way, that works without breaking existing useful p=
+roperties &
+> use-cases.
+
+Ok, that sounds good to me.
+
+> [...]
+> >>> not seeing how that is related to creation of a DL-server for the RT
+> >>> class. Maybe describe your point a bit more clearly?
+> >>
+> >> This patch is targeting a better way to avoid SCHED_OTHER starvation.
+> >> Having a DL server for RT class does not help on that. We need to boos=
+t
+> >> SCHED_OTHER.
+> >
+> > Oh, actually the problem of boosting SCHED_OTHER is a bit orthogonal
+> > to what I said. I was not saying not to boost SCHED_OTHER, I was
+> > talking more about this particular patch and using an DL-based RT
+> > server to mitigate that issue. The boosting is already handled in
+> > previous patches with the DL-server.
+>
+> The boosting of the previous patch is breaking FIFO priority. This patch =
+fixes that
+> single point without touching and or breaking SCHED_DEADLINE/EDF properti=
+es. With
+> these things in place we do not mitigate, we fix the problem.
+
+Sure, that's fine with me.
+
+[..]
+> > could you just push it out to run in the next period if it has the
+> > flag.
+>
+> The improvements on top of this patch is to postpone the enqueue/replenis=
+h to the 0-laxity
+> time. By doing so, the task receives a new period (and so deadline) a per=
+iod ahead.
+
+Yes, I understand. I was hoping for us to do that from within the DL
+class itself as a DL task property, but perhaps that's my wishful
+thinking...
+
+> >
+> > Here is the definition of 0-laxity as I understand it. Please correct
+> > me as I have not done a phD in these things like you ;-)
+> >
+> > Laxity, also known as slack time,
+>
+> laxity =3D absolute deadline - activation time - runtime.
+
+Correct.
+
+> is the amount of time that a task
+> > can be delayed without causing a missed deadline.
+>
+> If you look at the task alone! e.g, if it does not face preemption!
+> A 0-laxity task is
+> > one that has no more time to spare and must be executed immediately
+>
+> and not be preempted!
+>
+> to
+> > avoid missing its deadline.
+>
+> Again, you are looking at the task alone.
+
+Sure, that's why I mentioned running it before 0-laxity itself to
+account for that and not just preemption but also other issues as well
+like I/O, locking, sleeping etc. I don't have a formula right now and
+I need to think more about it, but that was the idea at a high-level.
+Again it is all rainbows and ponies and the devil is in the details so
+just consider it as an idea/suggestion and not something we must
+urgently do. I may find time later to go over the papers such as those
+related to the laxity-based scheduling.
+
+> > And here's where I need your input: If we take all admitted DL tasks
+> > and run it at their respective 0-laxity times or slightly earlier,
+> > then in-theory, they should all meet their deadlines correctly?
+> For all tasksets, no!
+>
+> There might be a taskset here o there that creates such timeline under ED=
+F,
+> but it is not always true that a task under EDF will wait until the 0-lax=
+ity
+> time for them to run. EDF is working conserving.
+>
+> For a working conserving scheduler to build such a timeline, it needs to
+> have no idle time. Then, lets get the classical single core assumptions
+> (these servers are per-cpu).
+>
+> - Assuming single-core/partitioned scheduler.
+> - Assuming periodic tasks with deadline =3D period
+> - Assuming a task set with the sum of each task utilization =3D 1
+> - Assuming all tasks are dispatched at the same time (critical instant)
+> - Assuming all tasks will run for their entire runtime, without blocking
+>
+> (so... the thing that EDF is optimum... fully loaded...)
+>
+> Even so you will not have EDF always creating such timeline because the
+> task with the earliest deadline will run first, still deadlines will be m=
+et.
+>
+> For example:
+>
+> t1 =3D 5/10
+> t2 =3D 5/10
+>
+> Each task you pick first will run 5 unities of time before the "0-laxity =
+time".
+>
+> If there is a scheduler that always build a timeline like you want, it wi=
+ll not
+> schedule the taskset I mentioned... thus.. it will schedule less than EDF=
+.
+
+Yes, I think you are kind of saying the same thing that I mentioned,
+which is to run it before the 0-laxity time (perhaps depending on the
+runtime of the existing admitted tasks).
+
+> > Perhaps you mean the algorithm needs to push the new period/deadline
+> > to a later time at the 0-laxity.
+>
+> This is the idea behind this patch ^^^^ This is the different between run=
+ning
+> and replenishing I mention on previous emails.
+>
+> That's also fine with me. But some
+> > variation of the idea is possible AFAICS (again could be missing
+> > something that mathematically makes this impossible).
+>
+> you are looking for a fragment of the information... "0-laxity time," wit=
+h
+> a single task in mind - not in the context of a scheduler.
+
+I should have probably not used the word 0-laxity, because I did
+mention running *before* 0-laxity arrives to account for delays,
+that's what I was saying. So like run it before you get to 0 laxity to
+account for delays, like that. But hey it is just an idea and sorry if
+it sounded like noise. It goes back to the premise I mentioned which
+is, DL task do not need to run immediately and preempt RT, it can run
+later and still meet the deadline. When to run it is a different
+question but if there was a crystal ball, DL task can still meet its
+deadline by running at a later time.
+
+> >> In the cover, I mentioned improving this patch, so maybe watchdog is n=
+ot
+> >> the appropriate name. 0-laxity server is not a good name either becaus=
+e
+> >> it might induce people to think that the server will RUN at 0-laxity
+> >> while it will actually be replenished at 0-laxity. Maybe a deferred se=
+rver
+> >> might be a better name.
+> >
+> > Yeah maybe a deferred server could be a better name.
+> >
+> >>>> In a paper, the scheduler alone is the solution. In real life, the s=
+olution
+> >>>> for problems like locking is as fundamental as the scheduler. We nee=
+d to keep
+> >>>> things simple to expand on these other topics as well.
+> >>>>
+> >>>> So, I do not think we need all the drawbacks of a mixed solution to =
+just fix
+> >>>> the throttling problem, and EDF is more capable and explored for the
+> >>>> general case.
+> >>>
+> >>> Again, I was saying making it opt-in seems like a reasonable approach
+> >>> and just enabling such property for the DL server.
+> >>
+> >> Can we have a "deferred DL server?" is that your question?
+> >>
+> >> If so, I think so. But we have other points to look first. DL servers =
+are per-cpu,
+> >> so they break global. We need to think about an interface... and there=
+ are
+> >> other points that we need to understand before trying some other more
+> >> optimized cases.
+> >
+> > You mean an interface for the DL server params? Those can be similar
+> > to other sched knobs. And then boot with a CONFIG option and boost CFS
+> > things by default if RT is active. Would that work or did you mean
+> > something else by interface?
+
+About the interface, perhaps you are referring to using this mechanism
+to replace the stalld daemon? That's what I remember from our
+conversations in OSPM. In general, I think it is a great idea to
+automatically detect "important" starving CFS tasks and boost them
+(whether they are starving because of RT, or some other reason).
+
+> >> Generalizing it requires time, but it will happen... and you know that=
+ Juri and I
+> >> care about Chromeos' use case, as I have been discussing this with you=
+ all and
+> >> even participating in Google/chrome focused meetings about sched...
+> >> at 6 pm our time ;-).
+> >
+> > I totally appreciate that, please don't get offended, we go a long way
+> > back as friends ;-)
+>
+> I did not get offended, and nothing changes on our friendship :-). I am j=
+ust
+> clarifying you things we know - even before this rebase... We are aware o=
+f
+> Chrome needs, as well as general RT Linux needs.
+>
+> The basic idea behind this patch works for all cases and is unlocking thi=
+s
+> situation. The code will be improved in the next version.
+
+Thanks for the discussions! I am looking forward to helping in any way
+I can on the series, I am going to be testing it for ChromeOS.
+
+ - Joel
