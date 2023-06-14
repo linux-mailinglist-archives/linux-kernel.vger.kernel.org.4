@@ -2,290 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D460730488
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:05:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2B373048A
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbjFNQFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 12:05:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56668 "EHLO
+        id S230043AbjFNQFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 12:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjFNQEu (ORCPT
+        with ESMTP id S229834AbjFNQFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 12:04:50 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8451BEC
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:04:49 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id 6a1803df08f44-62de0e82a07so19128506d6.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:04:49 -0700 (PDT)
+        Wed, 14 Jun 2023 12:05:12 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600E2122;
+        Wed, 14 Jun 2023 09:05:11 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-652426346bbso5347637b3a.3;
+        Wed, 14 Jun 2023 09:05:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686758688; x=1689350688;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/+yno5ZdAMwferMqd2TLytY+ZQNkjo8dJsMMhlqbl50=;
-        b=ugRUKAKSeixsT0gVxhGuCfuSlx4ItfdDqIVpDYp6ndojs3JTKj+GZeUQ9TJM2nW8YB
-         qkYG/PC7JTLLeOWc0b+EazC8Mm5x+fbtd1IrQTnwc62SFQdFa0FS0IT9CZ45HUzTefGK
-         mJCl+WHOtshwD256Zp3BwiZWdpx07r3u6WCbAmUaO5BFZdGgmiQXi1wl+nURVxlOjF8E
-         BF8cKxps+VNviA6H7SIyQFMFzDKE9Z5k4/olVeHddk9cs9MVpl8z7PR7Uy9vHi/xhNVt
-         EfQw8ozrXgCl/4bO1hTcYVlrELMjKpin6gAUF4r2IPoVeD1/pg6jcdsBke8hr5m2GGwl
-         qMiA==
+        d=gmail.com; s=20221208; t=1686758711; x=1689350711;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=iVZ7KAcLsTMz8WwXirFAGzm9Wo7TgZXbXs9ARjn0gQQ=;
+        b=c6RftKDv+j/LPMq7if5uMwQDwc/5r0ChORD87GYS7ad9Wm+a+ovqQzRxBFNjCUXPil
+         0lD3NnSs1s64RioxZBiKsZvFq064v1ddHigPmkEd4RyBfJ4l2n1EDIUqFQ6fM3/oLFLb
+         eru9RRIuO8AKeB+8Zult2SZyTi6nuFdRILuDBb8iU5OWARcQhkC0ZebSH/ElKs+2ENPn
+         WaTYAyOa3b/wLQ/NNGxgQjCqtfcurBs7JPWdOerwjB464r08yDPiTj3yHOdZWlrcuEvD
+         K+Mq4WY/6OdPKxMbaDyJoYLwakyGRBIt6mOML4Bwu1VhKEeQVFu+pCP9h6YEdunZT3Xd
+         6gIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686758688; x=1689350688;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/+yno5ZdAMwferMqd2TLytY+ZQNkjo8dJsMMhlqbl50=;
-        b=JKfRikefyarCOFzUSdwlQWkiuD0gIeJRdM5Ml6Sfjm3Z8XcpZ++2zcmiobv+vWrCIQ
-         SxHpMS2hnkRk+tZtJIX7bq/IbXZIz1z95ik43zkRFMeKZcCZcSiuWpOWeoqbit8/9Hba
-         TtIx8uQ8vWygUfmpGEV+7moz4hGXIihtjUdCsVNmk5yYjL3KK34qSv1xiV2ETh/ksYX9
-         Ioci2EVe0tkOCoZ5vvVYHmYTozRrGLqEDkRN5DVM7AoANGUGqA1XXkPBe2Ud4csWusb9
-         X55jbv0ibMvk/oxPWorCSDm3whnx6+d6614/fp/R8yAqETF0nmSRjw7D96tv5JWdrpD1
-         NAbA==
-X-Gm-Message-State: AC+VfDw2WT4847EaV46d3kJlcMIlln4+tiFLzA6iPsYu7Jv14NPfxoWr
-        3EqXstfAaDS5ehyvPNH0dK9CK4Qlyrp0JpYM0OIr6rPL0W+gjhxxLSrlyg==
-X-Google-Smtp-Source: ACHHUZ6IC1Fq+VOrxsYn33ZUZ141xkcHJ9dV9IFuBMhWgqqDPg6I6zRraY5Bybr/0hXHZ66TuDmmF24oif1TejdOGq0=
-X-Received: by 2002:ad4:5c85:0:b0:626:273e:c356 with SMTP id
- o5-20020ad45c85000000b00626273ec356mr22533723qvh.14.1686758687973; Wed, 14
- Jun 2023 09:04:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <202305230231.3Wb7Q68G-lkp@intel.com> <edf2ec88-3586-bbb1-fbf1-9451393c12ec@csgroup.eu>
-In-Reply-To: <edf2ec88-3586-bbb1-fbf1-9451393c12ec@csgroup.eu>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 14 Jun 2023 12:04:36 -0400
-Message-ID: <CAKwvOdm3vNxp9GZrxs6s4h73pHgHD=sJjaPziGzxcr+K7iGd-g@mail.gmail.com>
-Subject: Re: arch/powerpc/math-emu/fcmpu.c:13:2: warning: variable 'A_c' set
- but not used
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     kernel test robot <lkp@intel.com>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+        d=1e100.net; s=20221208; t=1686758711; x=1689350711;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iVZ7KAcLsTMz8WwXirFAGzm9Wo7TgZXbXs9ARjn0gQQ=;
+        b=Ojr4h0Of+559ijmi1sIo4UxPH7wjbe/yUlZ6p2xgkAY0a+3a6DZW+7US5swtyxkryL
+         o43uCrVeWd2rSAfpOEYnpl0uDxEHLgQDZ09ME4hytry6PpkNKRQ7cEktPuMagLyH902u
+         yjTDGImAAVQy8tEWG4hpSYhHfpioJrhV88Hcm36SZBLq+Bi1yzM1X0ice4XgIlAysQtS
+         OCK5XthGX0BYb19jfNGnRUIU3CvHD+RislHD/neKobb8q8xvdYKj7HdvlqYNvpwaH3kP
+         XVCmKu0O2AJJBBMfZM+McngfZG3pfXT2wvPEqlXFAhgOOLyOQ6JlDv52jDnkz5hGne75
+         GFOw==
+X-Gm-Message-State: AC+VfDxUZjF8wVj9AdlxffEeL1ExKuSCp/Rgsq/JiHVxXeL3QTPG1Uiy
+        ARJZksmFAATjrwOg7WHTWvs=
+X-Google-Smtp-Source: ACHHUZ4ngJrADvm4eZ2kU1VHrFA53HtwAqEQk1dPE8ObdJ5pdZUt1WAdTLbPAVbm6qOMNq/kwVa5Hw==
+X-Received: by 2002:a05:6a00:88d:b0:65a:cbf3:46a4 with SMTP id q13-20020a056a00088d00b0065acbf346a4mr2193843pfj.5.1686758709968;
+        Wed, 14 Jun 2023 09:05:09 -0700 (PDT)
+Received: from localhost ([192.55.54.50])
+        by smtp.gmail.com with ESMTPSA id j24-20020a62b618000000b00643889e30c2sm10564363pff.180.2023.06.14.09.05.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 09:05:09 -0700 (PDT)
+Date:   Wed, 14 Jun 2023 09:05:07 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Chen, Bo2" <chen.bo@intel.com>, "Shahar, Sagi" <sagis@google.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "dmatlack@google.com" <dmatlack@google.com>,
+        "zhi.wang.linux@gmail.com" <zhi.wang.linux@gmail.com>
+Subject: Re: [PATCH v14 004/113] KVM: TDX: Initialize the TDX module when
+ loading the KVM intel kernel module
+Message-ID: <20230614160507.GR2244082@ls.amr.corp.intel.com>
+References: <cover.1685333727.git.isaku.yamahata@intel.com>
+ <e628e2d235d9b6c00b9bd5d81bb69136b77d13c4.1685333727.git.isaku.yamahata@intel.com>
+ <3d8355ae582119486ac7ec129c4ba18d2cdf3ccb.camel@intel.com>
+ <20230607180616.GF2244082@ls.amr.corp.intel.com>
+ <6b60200b23fa3eac689a140abb92506410b14531.camel@intel.com>
+ <20230613173854.GP2244082@ls.amr.corp.intel.com>
+ <831f6e968e4794775c3e2adba1d550be70b01c33.camel@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <831f6e968e4794775c3e2adba1d550be70b01c33.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 10:11=E2=80=AFAM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
->
-> Hi,
->
-> Le 22/05/2023 =C3=A0 21:00, kernel test robot a =C3=A9crit :
-> > Hi Christophe,
-> >
-> > FYI, the error/warning still remains.
-> >
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
-git master
-> > head:   44c026a73be8038f03dbdeef028b642880cf1511
-> > commit: 7245fc5bb7a966852d5bd7779d1f5855530b461a powerpc/math-emu: Remo=
-ve -w build flag and fix warnings
-> > date:   9 months ago
-> > config: powerpc-randconfig-r022-20230522 (https://download.01.org/0day-=
-ci/archive/20230523/202305230231.3Wb7Q68G-lkp@intel.com/config)
-> > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0=
-fb98227c90adf2536c9ad644a74d5e92961111)
-> > reproduce (this is a W=3D1 build):
-> >          wget https://raw.githubusercontent.com/intel/lkp-tests/master/=
-sbin/make.cross -O ~/bin/make.cross
-> >          chmod +x ~/bin/make.cross
-> >          # install powerpc cross compiling tool for clang build
-> >          # apt-get install binutils-powerpc-linux-gnu
-> >          # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/lin=
-ux.git/commit/?id=3D7245fc5bb7a966852d5bd7779d1f5855530b461a
-> >          git remote add linus https://git.kernel.org/pub/scm/linux/kern=
-el/git/torvalds/linux.git
-> >          git fetch --no-tags linus master
-> >          git checkout 7245fc5bb7a966852d5bd7779d1f5855530b461a
-> >          # save the config file
-> >          mkdir build_dir && cp config build_dir/.config
-> >          COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross=
- W=3D1 O=3Dbuild_dir ARCH=3Dpowerpc olddefconfig
-> >          COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross=
- W=3D1 O=3Dbuild_dir ARCH=3Dpowerpc SHELL=3D/bin/bash arch/powerpc/math-emu=
-/
-> >
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202305230231.3Wb7Q68G-l=
-kp@intel.com/
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> >>> arch/powerpc/math-emu/fcmpu.c:13:2: warning: variable 'A_c' set but n=
-ot used [-Wunused-but-set-variable]
->
-> This code is imported, and there is no plan to make any change to it.
-> Can you desactivate that warning ?
+On Wed, Jun 14, 2023 at 09:41:58AM +0000,
+"Huang, Kai" <kai.huang@intel.com> wrote:
 
-If the code is imported, and we don't plan to push fixes upstream,
-does it make sense to just set -Wno-unusued-but-set-variable in
-arch/powerpc/math-emu/Makefile?
+> On Tue, 2023-06-13 at 10:38 -0700, Isaku Yamahata wrote:
+> > On Mon, Jun 12, 2023 at 11:55:14PM +0000,
+> > "Huang, Kai" <kai.huang@intel.com> wrote:
+> > 
+> > > On Wed, 2023-06-07 at 11:06 -0700, Isaku Yamahata wrote:
+> > > > Thanks for pointing it out. The following is the fix.
+> > > > 
+> > > > diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> > > > index 8a1d0755d275..b0d3f646afb1 100644
+> > > > --- a/arch/x86/kvm/vmx/tdx.c
+> > > > +++ b/arch/x86/kvm/vmx/tdx.c
+> > > > @@ -4499,26 +4499,39 @@ u64 tdx_non_arch_field_switch(u64 field)
+> > > >  	}
+> > > >  }
+> > > >  
+> > > > -static void __init vmx_tdx_on(void *info)
+> > > > +struct vmx_tdx_enabled {
+> > > > +	cpumask_var_t vmx_enabled;
+> > > > +	atomic_t *err;
+> > > > +};
+> > > > +
+> > > 
+> > > Sorry for late reply.
+> > > 
+> > > I think you just need to mimic hardware_enable_all() -- using a per-cpu
+> > > variable.  In this way you can get rid of this structure.
+> > > 
+> > > But again, we have listed a couple of options in the v13 discussion [1]:
+> > > 
+> > > 1) Call kvm_ops_update() twice before and after hardware_setup() in order to use
+> > > hardware_enable_all() directly.
+> > > 
+> > > 2) Expose kvm_x86_ops as symbol so VMX can set hardware_{enable|disable}()
+> > > callback before hardware_setup() in order to use hardware_enable_all().
+> > > 
+> > > 3) Implement VMX's own hardware_enable_all() logic as shown in this patch.
+> > > 
+> > > 4) ???
+> > > 
+> > > I think it would be better if Sean can provide some comments here, but until he
+> > > does, we can keep using option 3) (this patch).
+> > > 
+> > > [1]
+> > > https://lore.kernel.org/lkml/5dc84a2601a47ccc29ef43200cf3ec0d1b485d23.camel@intel.com/
+> > 
+> > Ok, makes sense. Here is the updated version with the fix for the error you
+> > pointed out.  Introduce cpu bitmap to track which cpu enable VMX(VMXON)
+> > successfully.  Disable VMX off only for cpu with bit set.
+> > 
+> > 
+> [...]
+> 
+> > +struct vmx_tdx_enabled {
+> > +	cpumask_var_t vmx_enabled;
+> > +	atomic_t err;
+> > +};
+> > +
+> 
+> Again (and again), why not just mimic hardware_enable_all() to use a per-cpu
+> variable instead of a cpumask, so that you can get rid of this structure?
 
-Wait, what?!
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arc=
-h/powerpc/math-emu/Makefile#n20
-arch/powerpc/math-emu/Makefile already has -Wunused-but-set-variable
-in ccflags-remove-y. But if KBUILD_EXTRA_WARN is set for W=3D1 builds,
--Wunused-but-set-variable is added back, but only for math.o and
-math_efp.o.  The warning above comes from building fcmpu.o.  So how
-did  -Wunused-but-set-variable get set in the first place?
+Do you mean __hardware_enable_nolock() uses per-cpu variable?
+Because hardware setup is one shot on the initialization, we don't want to
+allocate the variable statically. Anyway the following is a patch to use
+per-cpu variable with dynamic allocation.  Which version do you prefer?
 
-commit 78c73c80fd86 ("powerpc/math-emu: Inhibit W=3D1 warnings")
-seems to have cleaned up this code for W=3D1 with GCC. This report is a
-result of W=3D1 with CC=3Dclang.
 
->
-> Thanks
-> Christophe
->
-> >             FP_DECL_D(A);
-> >             ^
-> >     include/math-emu/double.h:73:23: note: expanded from macro 'FP_DECL=
-_D'
-> >     #define FP_DECL_D(X)            _FP_DECL(2,X)
-> >                                     ^
-> >     include/math-emu/op-common.h:28:14: note: expanded from macro '_FP_=
-DECL'
-> >       _FP_I_TYPE X##_c=3D0, X##_s=3D0, X##_e=3D0; \
-> >                  ^
-> >     <scratch space>:124:1: note: expanded from here
-> >     A_c
-> >     ^
-> >>> arch/powerpc/math-emu/fcmpu.c:14:2: warning: variable 'B_c' set but n=
-ot used [-Wunused-but-set-variable]
-> >             FP_DECL_D(B);
-> >             ^
-> >     include/math-emu/double.h:73:23: note: expanded from macro 'FP_DECL=
-_D'
-> >     #define FP_DECL_D(X)            _FP_DECL(2,X)
-> >                                     ^
-> >     include/math-emu/op-common.h:28:14: note: expanded from macro '_FP_=
-DECL'
-> >       _FP_I_TYPE X##_c=3D0, X##_s=3D0, X##_e=3D0; \
-> >                  ^
-> >     <scratch space>:130:1: note: expanded from here
-> >     B_c
-> >     ^
-> >>> arch/powerpc/math-emu/fcmpu.c:15:2: warning: variable '_fex' set but =
-not used [-Wunused-but-set-variable]
-> >             FP_DECL_EX;
-> >             ^
-> >     include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DEC=
-L_EX'
-> >     #define FP_DECL_EX int _fex =3D 0
-> >                            ^
-> >     arch/powerpc/math-emu/fcmpu.c:11:1: warning: no previous prototype =
-for function 'fcmpu' [-Wmissing-prototypes]
-> >     fcmpu(u32 *ccr, int crfD, void *frA, void *frB)
-> >     ^
-> >     arch/powerpc/math-emu/fcmpu.c:10:1: note: declare 'static' if the f=
-unction is not intended to be used outside of this translation unit
-> >     int
-> >     ^
-> >     static
-> >     4 warnings generated.
-> > --
-> >>> arch/powerpc/math-emu/fctiw.c:14:2: warning: variable '_fex' set but =
-not used [-Wunused-but-set-variable]
-> >             FP_DECL_EX;
-> >             ^
-> >     include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DEC=
-L_EX'
-> >     #define FP_DECL_EX int _fex =3D 0
-> >                            ^
-> >     arch/powerpc/math-emu/fctiw.c:11:1: warning: no previous prototype =
-for function 'fctiw' [-Wmissing-prototypes]
-> >     fctiw(u32 *frD, void *frB)
-> >     ^
-> >     arch/powerpc/math-emu/fctiw.c:10:1: note: declare 'static' if the f=
-unction is not intended to be used outside of this translation unit
-> >     int
-> >     ^
-> >     static
-> >     2 warnings generated.
-> > --
-> >>> arch/powerpc/math-emu/fctiwz.c:14:2: warning: variable '_fex' set but=
- not used [-Wunused-but-set-variable]
-> >             FP_DECL_EX;
-> >             ^
-> >     include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DEC=
-L_EX'
-> >     #define FP_DECL_EX int _fex =3D 0
-> >                            ^
-> >     arch/powerpc/math-emu/fctiwz.c:11:1: warning: no previous prototype=
- for function 'fctiwz' [-Wmissing-prototypes]
-> >     fctiwz(u32 *frD, void *frB)
-> >     ^
-> >     arch/powerpc/math-emu/fctiwz.c:10:1: note: declare 'static' if the =
-function is not intended to be used outside of this translation unit
-> >     int
-> >     ^
-> >     static
-> >     2 warnings generated.
-> > --
-> >>> arch/powerpc/math-emu/fsel.c:14:2: warning: variable '_fex' set but n=
-ot used [-Wunused-but-set-variable]
-> >             FP_DECL_EX;
-> >             ^
-> >     include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DEC=
-L_EX'
-> >     #define FP_DECL_EX int _fex =3D 0
-> >                            ^
-> >     arch/powerpc/math-emu/fsel.c:11:1: warning: no previous prototype f=
-or function 'fsel' [-Wmissing-prototypes]
-> >     fsel(u32 *frD, void *frA, u32 *frB, u32 *frC)
-> >     ^
-> >     arch/powerpc/math-emu/fsel.c:10:1: note: declare 'static' if the fu=
-nction is not intended to be used outside of this translation unit
-> >     int
-> >     ^
-> >     static
-> >     2 warnings generated.
-> >
-> >
-> > vim +/A_c +13 arch/powerpc/math-emu/fcmpu.c
-> >
-> > ^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16 =
-  9
-> > ^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16 =
- 10  int
-> > ^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16 =
- 11  fcmpu(u32 *ccr, int crfD, void *frA, void *frB)
-> > ^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16 =
- 12  {
-> > ^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16 =
-@13    FP_DECL_D(A);
-> > ^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16 =
-@14    FP_DECL_D(B);
-> > d2b194ed820880 arch/powerpc/math-emu/fcmpu.c Kumar Gala     2008-06-04 =
-@15    FP_DECL_EX;
-> > ^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16 =
- 16    int code[4] =3D { (1 << 3), (1 << 1), (1 << 2), (1 << 0) };
-> > ^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16 =
- 17    long cmp;
-> > ^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16 =
- 18
-> >
-> > :::::: The code at line 13 was first introduced by commit
-> > :::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-> >
-> > :::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-> > :::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
-> >
+diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+index 95be6b2fba83..40a3c9c01ac6 100644
+--- a/arch/x86/kvm/vmx/tdx.c
++++ b/arch/x86/kvm/vmx/tdx.c
+@@ -4511,38 +4511,34 @@ u64 tdx_non_arch_field_switch(u64 field)
+ }
+ 
+ struct vmx_tdx_enabled {
+-	cpumask_var_t vmx_enabled;
+-	atomic_t err;
++	bool vmx_enabled;
++	int err;
+ };
+ 
+ static void __init vmx_tdx_on(void *_vmx_tdx)
+ {
+-	struct vmx_tdx_enabled *vmx_tdx = _vmx_tdx;
+-	int r;
++	struct vmx_tdx_enabled *vmx_tdx = this_cpu_ptr(_vmx_tdx);
+ 
+-	r = vmx_hardware_enable();
+-	if (!r) {
+-		cpumask_set_cpu(smp_processor_id(), vmx_tdx->vmx_enabled);
+-		r = tdx_cpu_enable();
++	vmx_tdx->err = vmx_hardware_enable();
++	if (!vmx_tdx->err) {
++		vmx_tdx->vmx_enabled = true;
++		vmx_tdx->err = tdx_cpu_enable();
+ 	}
+-	if (r)
+-		atomic_set(&vmx_tdx->err, r);
+ }
+ 
+-static void __init vmx_off(void *_vmx_enabled)
++static void __init vmx_off(void *_vmx_tdx)
+ {
+-	cpumask_var_t *vmx_enabled = (cpumask_var_t *)_vmx_enabled;
++	struct vmx_tdx_enabled *vmx_tdx = this_cpu_ptr(_vmx_tdx);
+ 
+-	if (cpumask_test_cpu(smp_processor_id(), *vmx_enabled))
++	if (vmx_tdx->vmx_enabled)
+ 		vmx_hardware_disable();
+ }
+ 
+ int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops)
+ {
+-	struct vmx_tdx_enabled vmx_tdx = {
+-		.err = ATOMIC_INIT(0),
+-	};
++	struct vmx_tdx_enabled __percpu *vmx_tdx_enabled;
+ 	int max_pkgs;
++	int cpu;
+ 	int r = 0;
+ 	int i;
+ 
+@@ -4603,7 +4599,8 @@ int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops)
+ 	for (i = 0; i < max_pkgs; i++)
+ 		mutex_init(&tdx_mng_key_config_lock[i]);
+ 
+-	if (!zalloc_cpumask_var(&vmx_tdx.vmx_enabled, GFP_KERNEL)) {
++	vmx_tdx_enabled = alloc_percpu_gfp(struct vmx_tdx_enabled, GFP_KERNEL | __GFP_ZERO);
++	if (!vmx_tdx_enabled) {
+ 		r = -ENOMEM;
+ 		goto out;
+ 	}
+@@ -4618,15 +4615,21 @@ int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops)
+ 	 */
+ 	if (!cpumask_equal(cpu_online_mask, cpu_present_mask))
+ 		pr_warn("The old TDX module requires all present CPUs to be online to initialize.\n");
+-	on_each_cpu(vmx_tdx_on, &vmx_tdx, true);	/* TDX requires vmxon. */
+-	r = atomic_read(&vmx_tdx.err);
++	on_each_cpu(vmx_tdx_on, vmx_tdx_enabled, true);	/* TDX requires vmxon. */
++	for_each_present_cpu(cpu) {
++		struct vmx_tdx_enabled *vmx_tdx = per_cpu_ptr(vmx_tdx_enabled, cpu);
++		if (vmx_tdx->err) {
++			r = vmx_tdx->err;
++			break;
++		}
++	}
+ 	if (!r)
+ 		r = tdx_module_setup();
+ 	else
+ 		r = -EIO;
+-	on_each_cpu(vmx_off, &vmx_tdx.vmx_enabled, true);
++	on_each_cpu(vmx_off, vmx_tdx_enabled, true);
+ 	cpus_read_unlock();
+-	free_cpumask_var(vmx_tdx.vmx_enabled);
++	free_percpu(vmx_tdx_enabled);
+ 	if (r)
+ 		goto out;
+ 
+-- 
+2.25.1
 
 
 
---=20
-Thanks,
-~Nick Desaulniers
+
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
