@@ -2,155 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9915D72FA02
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 12:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B7E872FA0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 12:05:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233905AbjFNKDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 06:03:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56722 "EHLO
+        id S243807AbjFNKF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 06:05:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231875AbjFNKDn (ORCPT
+        with ESMTP id S235762AbjFNKFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 06:03:43 -0400
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [5.144.164.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55951186;
-        Wed, 14 Jun 2023 03:03:42 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 1F08B3F806;
-        Wed, 14 Jun 2023 12:03:40 +0200 (CEST)
-Date:   Wed, 14 Jun 2023 12:03:39 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, quic_abhinavk@quicinc.com,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] drm/msm/dsi: Enable DATABUS_WIDEN for DSI command
- mode
-Message-ID: <mfzmioovf54lcuiuzvk4fuz26elag6iw3ohbdhgym7k3qzirhx@dd7vu7ms6azz>
-References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
- <20230525-add-widebus-support-v1-3-c7069f2efca1@quicinc.com>
- <3a6cc492-6b54-2c70-402e-995c0b003c01@linaro.org>
+        Wed, 14 Jun 2023 06:05:39 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05461BC3;
+        Wed, 14 Jun 2023 03:05:24 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35EA5Dur087996;
+        Wed, 14 Jun 2023 05:05:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1686737113;
+        bh=MF410LMBMeG59JXPDBqpizLFwoAlbffh/y3ciO6yGFI=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=jVD8IXmbC5LCmlPw4ETT54FKZj3brrIfK7NCraM+yK5kHMF+rk3SqCkH8DIXvAbUR
+         1EFU0Q1cwiH2MVEFeQEvydntgCkj9fRteLQAW+IACI0ilRPr8KsO7tlUkJ0ikf2bv4
+         H5CD5mhagYqaOKzFq2Vri7aWQXG5bFXQ9iqJrTgQ=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35EA5DrI115110
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 14 Jun 2023 05:05:13 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 14
+ Jun 2023 05:05:13 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 14 Jun 2023 05:05:13 -0500
+Received: from [10.24.69.79] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35EA5AF9084782;
+        Wed, 14 Jun 2023 05:05:11 -0500
+Message-ID: <3a9fa101-a3f0-1982-b24d-d09a8b8d8a0e@ti.com>
+Date:   Wed, 14 Jun 2023 15:35:09 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3a6cc492-6b54-2c70-402e-995c0b003c01@linaro.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] net: hsr: Disable promiscuous mode in offload mode
+Content-Language: en-US
+To:     Paolo Abeni <pabeni@redhat.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <bigeasy@linutronix.de>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <rogerq@kernel.org>
+References: <20230612093933.13267-1-r-gunasekaran@ti.com>
+ <dffbf0474b1352f1eac63125a973c8f8cd7b3e8d.camel@redhat.com>
+From:   Ravi Gunasekaran <r-gunasekaran@ti.com>
+In-Reply-To: <dffbf0474b1352f1eac63125a973c8f8cd7b3e8d.camel@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-14 10:49:31, Dmitry Baryshkov wrote:
-> On 14/06/2023 04:57, Jessica Zhang wrote:
-> > DSI 6G v2.5.x+ supports a data-bus widen mode that allows DSI to send
-> > 48 bits of compressed data per pclk instead of 24.
-> > 
-> > For all chipsets that support this mode, enable it whenever DSC is
-> > enabled as recommend by the hardware programming guide.
-> > 
-> > Only enable this for command mode as we are currently unable to validate
-> > it for video mode.
-> > 
-> > Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
-> > ---
-> > 
-> > Note: The dsi.xml.h changes were generated using the headergen2 script in
-> > envytools [1], but the changes to the copyright and rules-ng-ng source file
-> > paths were dropped.
-> > 
-> > [1] https://github.com/freedreno/envytools/
-> > 
-> >   drivers/gpu/drm/msm/dsi/dsi.xml.h  |  1 +
-> >   drivers/gpu/drm/msm/dsi/dsi_host.c | 19 ++++++++++++++++++-
-> >   2 files changed, 19 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/gpu/drm/msm/dsi/dsi.xml.h b/drivers/gpu/drm/msm/dsi/dsi.xml.h
-> > index a4a154601114..2a7d980e12c3 100644
-> > --- a/drivers/gpu/drm/msm/dsi/dsi.xml.h
-> > +++ b/drivers/gpu/drm/msm/dsi/dsi.xml.h
-> > @@ -664,6 +664,7 @@ static inline uint32_t DSI_CMD_MODE_MDP_CTRL2_INPUT_RGB_SWAP(enum dsi_rgb_swap v
-> >   	return ((val) << DSI_CMD_MODE_MDP_CTRL2_INPUT_RGB_SWAP__SHIFT) & DSI_CMD_MODE_MDP_CTRL2_INPUT_RGB_SWAP__MASK;
-> >   }
-> >   #define DSI_CMD_MODE_MDP_CTRL2_BURST_MODE			0x00010000
-> > +#define DSI_CMD_MODE_MDP_CTRL2_DATABUS_WIDEN			0x00100000
-> > 
-> >   #define REG_DSI_CMD_MODE_MDP_STREAM2_CTRL			0x000001b8
-> >   #define DSI_CMD_MODE_MDP_STREAM2_CTRL_DATA_TYPE__MASK		0x0000003f
-> > diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> > index 5d7b4409e4e9..1da5238e7105 100644
-> > --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> > +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> > @@ -927,6 +927,9 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
-> >   	u32 hdisplay = mode->hdisplay;
-> >   	u32 wc;
-> >   	int ret;
-> > +	bool widebus_supported = msm_host->cfg_hnd->major == MSM_DSI_VER_MAJOR_6G &&
-> > +			msm_host->cfg_hnd->minor >= MSM_DSI_6G_VER_MINOR_V2_5_0;
-> > +
-> > 
-> >   	DBG("");
-> > 
-> > @@ -973,8 +976,15 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
-> >   		 *
-> >   		 * hdisplay will be divided by 3 here to account for the fact
-> >   		 * that DPU sends 3 bytes per pclk cycle to DSI.
-> > +		 *
-> > +		 * If widebus is supported, set DATABUS_WIDEN register and divide hdisplay by 6
-> > +		 * instead of 3
+
+
+On 6/14/23 3:12 PM, Paolo Abeni wrote:
+> On Mon, 2023-06-12 at 15:09 +0530, Ravi Gunasekaran wrote:
+>> When port-to-port forwarding for interfaces in HSR node is enabled,
+>> disable promiscuous mode since L2 frame forward happens at the
+>> offloaded hardware.
+>>
+>> Signed-off-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
+>> ---
+>>  net/hsr/hsr_device.c |  5 +++++
+>>  net/hsr/hsr_main.h   |  1 +
+>>  net/hsr/hsr_slave.c  | 15 +++++++++++----
+>>  3 files changed, 17 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/net/hsr/hsr_device.c b/net/hsr/hsr_device.c
+>> index 5a236aae2366..306f942c3b28 100644
+>> --- a/net/hsr/hsr_device.c
+>> +++ b/net/hsr/hsr_device.c
+>> @@ -531,6 +531,11 @@ int hsr_dev_finalize(struct net_device *hsr_dev, struct net_device *slave[2],
+>>  	if (res)
+>>  		goto err_add_master;
+>>  
+>> +	/* HSR forwarding offload supported in lower device? */
+>> +	if ((slave[0]->features & NETIF_F_HW_HSR_FWD) &&
+>> +	    (slave[1]->features & NETIF_F_HW_HSR_FWD))
+>> +		hsr->fwd_offloaded = true;
+>> +
+>>  	res = register_netdevice(hsr_dev);
+>>  	if (res)
+>>  		goto err_unregister;
+>> diff --git a/net/hsr/hsr_main.h b/net/hsr/hsr_main.h
+>> index 5584c80a5c79..0225fabbe6d1 100644
+>> --- a/net/hsr/hsr_main.h
+>> +++ b/net/hsr/hsr_main.h
+>> @@ -195,6 +195,7 @@ struct hsr_priv {
+>>  	struct hsr_self_node	__rcu *self_node;	/* MACs of slaves */
+>>  	struct timer_list	announce_timer;	/* Supervision frame dispatch */
+>>  	struct timer_list	prune_timer;
+>> +	unsigned int            fwd_offloaded : 1; /* Forwarding offloaded to HW */
 > 
-> This is useless, it is already obvious from the code below. Instead 
-> there should be something like "wide bus extends that to 6 bytes per 
-> pclk cycle"
-
-Yes please.  In general, don't paraphrase the code, but explain _why_ it
-is doing what it does.  Saying that the widebus feature doubles the
-bandwidth per pclk tick is much more clear than "divide by 6 instead of
-3" - we can read that from the code.
-
-Overall comments have been very good so far (such as the original "to
-account for the fact that DPU sends 3 bytes per pclk cycle"), though!
-
-> >   		 */
-> > -		hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 3);
-> > +		if (!(msm_host->mode_flags & MIPI_DSI_MODE_VIDEO) && widebus_supported)
-> > +			hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 6);
-> > +		else
-> > +			hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 3);
-> > +
-> >   		h_total += hdisplay;
-> >   		ha_end = ha_start + hdisplay;
-> >   	}
-> > @@ -1027,6 +1037,13 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
-> >   		dsi_write(msm_host, REG_DSI_CMD_MDP_STREAM0_TOTAL,
-> >   			DSI_CMD_MDP_STREAM0_TOTAL_H_TOTAL(hdisplay) |
-> >   			DSI_CMD_MDP_STREAM0_TOTAL_V_TOTAL(mode->vdisplay));
-> > +
-> > +		if (msm_host->dsc && widebus_supported) {
-> > +			u32 mdp_ctrl2 = dsi_read(msm_host, REG_DSI_CMD_MODE_MDP_CTRL2);
-> > +
-> > +			mdp_ctrl2 |= DSI_CMD_MODE_MDP_CTRL2_DATABUS_WIDEN;
-> > +			dsi_write(msm_host, REG_DSI_CMD_MODE_MDP_CTRL2, mdp_ctrl2);
+> Please use plain 'bool' instead.
 > 
-> Is widebus applicable only to the CMD mode, or video mode can employ it too?
+> Also there is an hole in 'struct hsr_priv' just after 'net_id', you
+> could consider moving this new field there.
+> 
 
-The patch description states that it was not tested on video-mode yet,
-so I assume it will.  But this should also be highlighted with a comment
-(e.g. /* XXX: Allow for video-mode once tested/fixed */), _especially_
-on the check for MIPI_DSI_MODE_VIDEO above.
+Sure. I will use "bool" and insert it after "net_id" and send out v2
 
-If I understand this correctly DSC is not working for video mode at all
-on these setups, right?  Or no-one was able to test it?  I'm inclined to
-request dropping these artifical guards to have as little friction as
-possible when someone starts enabling and testing this - and less
-patches removing artificial bounds in the future.
+> 
+> Thanks!
+> 
+> Paolo
+> 
 
-- Marijn
+-- 
+Regards,
+Ravi
