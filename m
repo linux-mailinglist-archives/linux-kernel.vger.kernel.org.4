@@ -2,222 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5536672FE9B
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6CB72FE9E
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235578AbjFNM1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 08:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60672 "EHLO
+        id S244394AbjFNM1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 08:27:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243263AbjFNM1L (ORCPT
+        with ESMTP id S244349AbjFNM1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 08:27:11 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988FC1715
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:27:08 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-bc43a73ab22so907432276.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:27:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686745628; x=1689337628;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=j5x6fr5aZlli+8WO85UDIDTo8toG3HYLiO6e7zSPWtQ=;
-        b=TwSw2mYy1UhWSZa59w/UT+RjmuJ5V2JXMKBFXyaE14MoUY9/MBG5t6EBp6ereoGpMy
-         /+pjca7tW7curhpkDrra70X/0XBVdKQaYzebnhHUTGAW+uUKfzsMqn5rn5Hf6tCHwNc/
-         ZNc1jMuiR3r2lLecNC4cFkE4GRjNU4z0hW0TjgUyhUS/hIc7tLu2WB79S7MJydb/PZLD
-         on/9GBLMcykD09LU3y+K0gbs0xmHUTdAbyiSf5WPSKXG+SvIilnxJYA5fdNttehNbsQ/
-         DZNcpMtNskwmg56bnRBxZQJKJ5xqPlkbV4w7WXzmKDbAToS0CZjMUI1piOge6x9a6VXW
-         Hdkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686745628; x=1689337628;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j5x6fr5aZlli+8WO85UDIDTo8toG3HYLiO6e7zSPWtQ=;
-        b=Ld5VSQGM0T5H4Iob9DsvzBmCmuE0LvQ7YX7Evk9V9v2t42IZiEBmlI12cqhX0jqqju
-         q/OofBt9G/HeKqD5NROVqkCZO5e1Ll+1TDVMujjWd6ookPDkHHaZTl0iM1lA6PmmP+7U
-         BFjAe4nQp15PbcSYztjSNT5XDqk46mFQ7H4LipKNqfHDs9Uq1bQx6Q20rfOXHGdzAHif
-         ls33uqekETghe7XDOcaxeJWPToQTPT/1qDPC+HBl/du/e/1J3tgZNgFRK2bNeOUKGf52
-         BsYWBDJbvOmS1OxCjFfV4mWnGlbJC3rkYmJBykLs9rQedjlPLchZSTizEK7l5ucJkKPC
-         lb1g==
-X-Gm-Message-State: AC+VfDzo+/bcu0vovsaI0RVYtS33n50DoYmDem6khI7qXLjCt9EmURa1
-        U+FAPvQowye9EbH4+meEQ3r7w9SK5POnAx+/O2rIIg==
-X-Google-Smtp-Source: ACHHUZ6Yz+yPX5k278RwB3vcRO1kIw8EQgvzRzZBfwAKXe6a0M2y+j79oylUsXuqJq8MYmGoMr/2m72G97EvieneTXI=
-X-Received: by 2002:a25:7484:0:b0:bb3:9001:e2fe with SMTP id
- p126-20020a257484000000b00bb39001e2femr2049141ybc.13.1686745627812; Wed, 14
- Jun 2023 05:27:07 -0700 (PDT)
+        Wed, 14 Jun 2023 08:27:35 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC4EB19BC;
+        Wed, 14 Jun 2023 05:27:32 -0700 (PDT)
+Received: from loongson.cn (unknown [10.180.13.124])
+        by gateway (Coremail) with SMTP id _____8Cx8OgzsolkSSEFAA--.8967S3;
+        Wed, 14 Jun 2023 20:27:31 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.180.13.124])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxbMoxsolkg5oaAA--.1712S4;
+        Wed, 14 Jun 2023 20:27:29 +0800 (CST)
+From:   YingKun Meng <mengyingkun@loongson.cn>
+To:     krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        conor+dt@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     devicetree@vger.kernel.org, broonie@kernel.org,
+        lgirdwood@gmail.com, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, loongarch@lists.linux.dev,
+        loongson-kernel@lists.loongnix.cn, mengyingkun@loongson.cn
+Subject: [PATCH v3 3/3] ASoC: dt-bindings: Add support for Loongson audio card
+Date:   Wed, 14 Jun 2023 20:26:59 +0800
+Message-Id: <20230614122659.3402788-1-mengyingkun@loongson.cn>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-References: <20230525172142.9039-1-quic_jkona@quicinc.com> <20230525172142.9039-4-quic_jkona@quicinc.com>
- <6e1d098d-03b9-aa63-a0bf-6cf748a0db0d@linaro.org> <7074f718-a3d5-8a03-3830-77a5a0b15500@linaro.org>
- <df7ab6f7-6c5e-9a7d-8d9b-09ff32da34d6@quicinc.com> <c60bb4d9-1b53-6c60-8b9d-13069bdff882@linaro.org>
- <1a6d46e4-7ec4-262c-dc3b-fc9c988f979e@quicinc.com> <CAA8EJprx6=QztOHi_18uqcGK9WnhkQJ_WP9TyKrsOT=WgKdRaw@mail.gmail.com>
- <695d7b39-2759-690d-5ff8-5aff6b37e39c@quicinc.com>
-In-Reply-To: <695d7b39-2759-690d-5ff8-5aff6b37e39c@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 14 Jun 2023 15:26:57 +0300
-Message-ID: <CAA8EJpp5_qG2eMQEoHqzboyi8xEbEmx2e1WsKsVQ3d6no0pp5g@mail.gmail.com>
-Subject: Re: [PATCH V2 3/6] clk: qcom: clk-alpha-pll: Remove explicit CAL_L
- configuration for EVO PLL
-To:     Jagadeesh Kona <quic_jkona@quicinc.com>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Taniya Das <quic_tdas@quicinc.com>,
-        Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
-        Imran Shaik <quic_imrashai@quicinc.com>,
-        Ajit Pandey <quic_ajipan@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxbMoxsolkg5oaAA--.1712S4
+X-CM-SenderInfo: 5phqw55lqjy33q6o00pqjv00gofq/1tbiAQACDGSIXIIYSwARs-
+X-Coremail-Antispam: 1Uk129KBj93XoW7tF4fKF4xCr4fAr4rXr4rXrc_yoW5Jry5pw
+        s3C34UGr48t3W7Cas5ZFyxAw4fZasayFsrJr42qw1UCFZ8K3WFqw1ak3WUu3W2kr1kJay7
+        uFyFkr1xGas3CwcCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUBYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+        GcCE3s1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2
+        x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5
+        McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr4
+        1lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
+        Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67
+        AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8I
+        cVAFwI0_Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI
+        8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWxJVW8Jr1lIxAIcVC2z280aVCY1x0267AK
+        xVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU00eHDUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Jun 2023 at 14:53, Jagadeesh Kona <quic_jkona@quicinc.com> wrote:
->
->
->
-> On 6/9/2023 5:55 PM, Dmitry Baryshkov wrote:
-> > On Fri, 9 Jun 2023 at 14:50, Jagadeesh Kona <quic_jkona@quicinc.com> wrote:
-> >>
-> >> Hi Dmitry,
-> >>
-> >> Thanks for your review!
-> >>
-> >> On 6/1/2023 8:13 PM, Dmitry Baryshkov wrote:
-> >>> On 01/06/2023 17:33, Jagadeesh Kona wrote:
-> >>>> Hi Dmitry, Konrad,
-> >>>>
-> >>>> On 5/26/2023 9:23 PM, Dmitry Baryshkov wrote:
-> >>>>> On 26/05/2023 12:33, Konrad Dybcio wrote:
-> >>>>>>
-> >>>>>>
-> >>>>>> On 25.05.2023 19:21, Jagadeesh Kona wrote:
-> >>>>>>> In lucid evo pll, the CAL_L field is part of L value register
-> >>>>>>> itself, and
-> >>>>>>> the l value configuration passed from clock controller driver includes
-> >>>>>>> CAL_L and L values as well. Hence remove explicit configuration of
-> >>>>>>> CAL_L
-> >>>>>>> for evo pll.
-> >>>>>>>
-> >>>>>>> Fixes: 260e36606a03 ("clk: qcom: clk-alpha-pll: add Lucid EVO PLL
-> >>>>>>> configuration interfaces")
-> >>>>>>> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
-> >>>>>>> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
-> >>>>>>> ---
-> >>>>>> Oh that isn't obvious at first sight, nice find!
-> >>>>>>
-> >>>>>> I'd suggest a different solution though:
-> >>>>>>
-> >>>>>> #define LUCID_EVO_PLL_L_LVAL    GENMASK(..
-> >>>>>> #define LUCID_EVO_PLL_L_CAL_L    GENMASK(..
-> >>>>>>
-> >>>>>> lval = FIELD_PREP(LUCID_EVO_PLL_L_LVAL, config->l) |
-> >>>>>>          FIELD_PREP(LUCID_EVO_PLL_L_CAL_L, config->cal_l);
-> >>>>>>
-> >>>>>> This would make the separation between the two parts more explicit
-> >>>>>>
-> >>>>>> however
-> >>>>>>
-> >>>>>> config->l would then represent the L value and not the end value
-> >>>>>> written to the L register
-> >>>>>
-> >>>>> Yes. I think there should be separate config->l and config->cal_l
-> >>>>> values (and probably ringosc_cal_l, basing on the comment in the
-> >>>>> source).
-> >>>>> Thanks for your suggestions. In all recent chipsets, L & CAL_L fields
-> >>>> are encapsulated in the same register, so we feel it is better to
-> >>>> directly pass the combined configuration value in config->l itself and
-> >>>> program it directly into register without any additional handling
-> >>>> required in pll driver code.
-> >>>
-> >>> My feeling is that it is better to split it, since these are the
-> >>> different fields. The value .l = 0x4444003e doesn't mean anything per se.
-> >>>
-> >>> Three values are much more meaningful:
-> >>> .l = 0x3e,
-> >>> .cal_l = 0x44,
-> >>> .ringosc_cal_l = 0x44,
-> >>>
-> >>> Not to mention that this way you don't have to touch pll configuration
-> >>> for the existing Lucid EVO PLL. Not to mention that for the Lucid ole
-> >>> PLLs the cal_l and ringosc_cal_l values seem to be static (0x44), so
-> >>> there is no need to put them to the variable data.
-> >>>
-> >>
-> >> Sure, will keep the existing code as is and will remove this patch in
-> >> the next series.
-> >>
-> >>>>
-> >>>> Also the evo pll code is currently reused for both lucid evo and ole
-> >>>> pll's. Lucid ole PLL has an additional RINGOSC_CAL_L field along with
-> >>>> L, CAL_L fields in the same L register. By passing combined
-> >>>> configuration value in config->l itself, we feel we can avoid all the
-> >>>> additional handling required in PLL code.
-> >>>>
-> >>>>> Just a question: is camcc-sm8550 using the same PLL type or is it
-> >>>>> some kind of subtype of lucid_evo PLL?
-> >>>>>
-> >>>> No, it is not the same lucid evo PLL. It uses lucid ole PLL.
-> >>>
-> >>> Then please don't reuse the clk_lucid_evo_pll_configure() call.
-> >>> You can add a new one, which will handle L/CAL_L/RINGOSC_CAL_L differences.
-> >>>
-> >>
-> >> The only difference between evo and ole pll configure is extra
-> >> RINGOSC_CAL_L programming needed only for ole pll. We can achieve the
-> >> same with clk_lucid_evo_pll_configure() itself by directly including
-> >> RINGOSC_CAL_L field in L configuration for OLE PLL's.
-> >
-> > Please don't, that's all I can say. Those are different fields. By
-> > looking at the config->l one can calculate PLL rate. If you overload
-> > the config->l with CAL_L and RINGOSC_CAL_L, the purpose of this field
-> > is gone.
-> >
-> > As the CAL_L and RINGOSC_CAL_L fields are static, just move them to
-> > the clk_lucid_ole_pll_configure().
-> >
->
-> We feel it is better to include them in config->l and reuse existing
-> code than adding separate function for lucid ole pll configure. Even the
-> other pll configurations(like .user_ctl_val) contains multiple fields
-> but are passed as a single value from driver.
+From: Yingkun Meng <mengyingkun@loongson.cn>
 
-I suppose it was done this way because these fields are pretty much
-not documented in the openly published data. And sometimes this
-strikes, one can not easily check PLL's configuration. Or tune
-it.There was a discussion whether we should start handling PLL outputs
-properly (in CCF) rather than configuring them in a static way.
+The audio card uses loongson I2S controller present in
+7axxx/2kxxx chips to transfer audio data.
 
-Also mentioned registers differ from PLL to PLL. For the RISCOSC_CAL_L
-and CAL_L the value is static, if I'm not mistaken. Having them in the
-configurable field doesn't sound correct.
+On loongson platform, the chip has only one I2S controller.
 
-Last, but not least. We are already handling CAL_L value completely in
-the clock-alpha-pll.c for triton, lucid and lucid evo PLLs. What would
-be the _reason_ to change that?
+Signed-off-by: Yingkun Meng <mengyingkun@loongson.cn>
+---
+Changes v2 -> v3
+  No change.
 
->
-> We also added a comment in code stating all the fields included in
-> config->l value, so user will be aware while calculating PLL frequency.
->
-> Thanks,
-> Jagadeesh
+Changes v1 -> v2
+  Add chip model restriction for title and descrition.
+  Add 'required' option for sound-dai property.
 
+ .../sound/loongson,ls-audio-card.yaml         | 70 +++++++++++++++++++
+ 1 file changed, 70 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/loongson,ls-audio-card.yaml
 
-
+diff --git a/Documentation/devicetree/bindings/sound/loongson,ls-audio-card.yaml b/Documentation/devicetree/bindings/sound/loongson,ls-audio-card.yaml
+new file mode 100644
+index 000000000000..61e8babed402
+--- /dev/null
++++ b/Documentation/devicetree/bindings/sound/loongson,ls-audio-card.yaml
+@@ -0,0 +1,70 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/sound/loongson,ls-audio-card.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Loongson 7axxx/2kxxx ASoC audio sound card driver
++
++maintainers:
++  - Yingkun Meng <mengyingkun@loongson.cn>
++
++description:
++  The binding describes the sound card present in loongson
++  7axxx/2kxxx platform. The sound card is an ASoC component
++  which uses Loongson I2S controller to transfer the audio data.
++
++properties:
++  compatible:
++    const: loongson,ls-audio-card
++
++  model:
++    $ref: /schemas/types.yaml#/definitions/string
++    description: User specified audio sound card name
++
++  mclk-fs:
++    $ref: simple-card.yaml#/definitions/mclk-fs
++
++  cpu:
++    description: Holds subnode which indicates cpu dai.
++    type: object
++    additionalProperties: false
++    properties:
++      sound-dai:
++        maxItems: 1
++    required:
++      - sound-dai
++
++  codec:
++    description: Holds subnode which indicates codec dai.
++    type: object
++    additionalProperties: false
++    properties:
++      sound-dai:
++        maxItems: 1
++    required:
++      - sound-dai
++
++required:
++  - compatible
++  - model
++  - mclk-fs
++  - cpu
++  - codec
++
++additionalProperties: false
++
++examples:
++  - |
++    sound {
++        compatible = "loongson,ls-audio-card";
++        model = "loongson-audio";
++        mclk-fs = <512>;
++
++        cpu {
++            sound-dai = <&i2s>;
++        };
++        codec {
++             sound-dai = <&es8323>;
++        };
++    };
 -- 
-With best wishes
-Dmitry
+2.33.0
+
