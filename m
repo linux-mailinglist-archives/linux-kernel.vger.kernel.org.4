@@ -2,163 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC0A572F289
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 04:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8623272F28F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 04:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242273AbjFNCTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 22:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59208 "EHLO
+        id S241562AbjFNCXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 22:23:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242272AbjFNCTW (ORCPT
+        with ESMTP id S231937AbjFNCXc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 22:19:22 -0400
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA7E1BD2;
-        Tue, 13 Jun 2023 19:19:19 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0Vl4LsBS_1686709155;
-Received: from 30.240.112.107(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0Vl4LsBS_1686709155)
-          by smtp.aliyun-inc.com;
-          Wed, 14 Jun 2023 10:19:17 +0800
-Message-ID: <31fdaacc-cc2b-5ea5-8a0e-e5ccfe674834@linux.alibaba.com>
-Date:   Wed, 14 Jun 2023 10:19:13 +0800
+        Tue, 13 Jun 2023 22:23:32 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on20621.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e88::621])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B0F1A7;
+        Tue, 13 Jun 2023 19:23:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ghCT8DtZ/z3ycCV45OLsbuxSPb4S6naAGpPcyXGBfiUaGBCmmq9g8aqBsAYKDJHLkvllyOaXkvN47TFhe5tMT4ALyHUe4zSieCuyhXp/bu9R9pN80FCm+CPzMI0U/rajGHQAbcC/CPxrku3waOdNAFORQOAI8IK8pZ4Yfmjz0mQjhhcIOTuK5wjb21LbDcLajztPDEp/hqarxfxrYFiuOd4G4LDU1aBEC1uzecOoY5IL/lBhCKsAl4VuChwMFHFVIK9zEIHhirCSkFVaOjbKwp25fsDL2Xdh0/PKkoo5QsehUGkXGyAcZhf0XzfbsQs/n6YyyL1l4aIZJZ6u6YJhrw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WbMYr7BNh7+hho3v2ve7qP3OgkaYtSHa4bsm0O0w/Y0=;
+ b=BNgmtuq0vc7qzbf7Hx/PriYokIYpqlITcrCA/AvuSNTQF7CsehtkACrUafWkThdpfusaQQk0Ln68RFR87faM1zvxXPfTXTNjnvvSrO7tE2AOVTSbC/j41fL5aMBiav9BdSppdupejI1Zk3KX5QmH2uPIJQKXmZ/bdVD4PoX8TPwNmdyl9uWBg+jtcdeOpd7RO5eopHazePrzIzl3pLkNKYH11QtQiRyd709nCXzSrWWzJBdXx8QEib8AlZwOIv/8njX7jtKLSpRlQSGZBGDEbGuz/qhWAYW24gYl51MsGlmSFiyHf8c3KVnlhF4GUjMxiL+JT1flVNgZSlciZvfmHg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=linaro.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WbMYr7BNh7+hho3v2ve7qP3OgkaYtSHa4bsm0O0w/Y0=;
+ b=HDxssCQTk5H3wF+lqKsMmf0CGYL/xQL8gx3HJWPABfYshzi1VQV/m9UHJOuNWkN6QRFFgTjJX+BeakZnOAAoyY9sw7Dqewt9TMHz/VMHRydljgfXt/yBZvmNd3tBle18YOuwdS3GSzao+iU+TywLq8Id0fdDD4ehjd09gQU+9CvoTLXDgw+9Qvv9P+lLEPgNdo9uJuZQpMxeYyEermRa2KwpzZdcw7hqq2FkMbTX4h7Hq8wZkyXPFGwCp92r4/UC9AtBwOC70WbSQn4xMtxrN9G03kWHn1gjUf0iQr1StE9rRVa9AUCnnfSCzXoQ56iR/5Hcuk9ubcE+U6Bkl5WUPQ==
+Received: from DM6PR11CA0010.namprd11.prod.outlook.com (2603:10b6:5:190::23)
+ by DS7PR12MB5934.namprd12.prod.outlook.com (2603:10b6:8:7d::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Wed, 14 Jun
+ 2023 02:23:27 +0000
+Received: from DM6NAM11FT031.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:190:cafe::ce) by DM6PR11CA0010.outlook.office365.com
+ (2603:10b6:5:190::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.35 via Frontend
+ Transport; Wed, 14 Jun 2023 02:23:27 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DM6NAM11FT031.mail.protection.outlook.com (10.13.172.203) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6500.23 via Frontend Transport; Wed, 14 Jun 2023 02:23:27 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 13 Jun 2023
+ 19:23:21 -0700
+Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Tue, 13 Jun
+ 2023 19:23:21 -0700
+Message-ID: <928ad485-2dc2-2e02-98a2-fa203441f463@nvidia.com>
+Date:   Tue, 13 Jun 2023 19:23:20 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.1
-Subject: Re: [PATCH 2/3] x86/mce: Define amd_mce_usable_address()
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] selftests: lib.mk: fix out-of-tree builds
+To:     Anders Roxell <anders.roxell@linaro.org>, <shuah@kernel.org>
+CC:     <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <usama.anjum@collabora.com>
+References: <20230613074931.666966-1-anders.roxell@linaro.org>
 Content-Language: en-US
-To:     Yazen Ghannam <yazen.ghannam@amd.com>, linux-edac@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, tony.luck@intel.com, x86@kernel.org,
-        muralidhara.mk@amd.com, joao.m.martins@oracle.com,
-        william.roche@oracle.com, boris.ostrovsky@oracle.com,
-        john.allen@amd.com, baolin.wang@linux.alibaba.com
-References: <20230613141142.36801-1-yazen.ghannam@amd.com>
- <20230613141142.36801-3-yazen.ghannam@amd.com>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20230613141142.36801-3-yazen.ghannam@amd.com>
-Content-Type: text/plain; charset=UTF-8
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <20230613074931.666966-1-anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.126.230.35]
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT031:EE_|DS7PR12MB5934:EE_
+X-MS-Office365-Filtering-Correlation-Id: 88593080-ec88-47fb-96e0-08db6c7e5682
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kLQKT67JuXVF+II4vnZqI5r3H4BKChZN8kZSNErx9xPYZaqz4Z0bifkaX7QfUHnt7/Mxopgm2CtAp5pVymCVbT0/+8dytdlfaNqh7IY8GpYcjaOs401ncRo+jqL4Zih7YPa8Bi+/12IjRW8PppeDSh0gJIV9jn5V/YYxFmMeQsCGpNXaYnTxUzb3GMVBn/ZeVpFeBaAf8LG64qibXvObGx64+2RHLfL/GkV9gbKjXISieHt9Fr7APKzLwYP8nn11neBWFtSlZhdDBRiQYnMNx4yjMazolcyvtL7xBbUfCNHkdX5GbR8fS5k4BEheeF1LQ6zE2Z4n2wtsFRETC+sMbIrW244KDK7aha7dx6b/ax1Fd1cfbqrPRosM2yME4IMC3O8crLm6XKqQic+EkQPUchlTf0Ol4VIhohCRxnzww2I18TGRBfbA4yhIXrvrEMmg/AZ3iDRFbwdx6KjHppoQKFLMPHpe/rq+FZDewifZl8cNTY7s5mBN25lHBQnsSDQzN1laMd4bOxnqt5iZLy2UasdzlWQzhU5+cF+Z808KuiA4+Y9N5sKksHwugyUXtKr7bLUmu/w6fMxUJhkECDfMf+emSQ8q3LbpPtByBk9iBopIvVNjJXgiR7HCYnFyE2m5n2uEnKKtmaxWoWPLeU/EKFLsH59xM4ew25i7Rgwsh5wS0vuB6hFgVo3uX712aEwb7lpWYX2JkWAWo+6rkncsaaq04+SSITtidFi4gjCVWL+wbwmGEOtnj8V+1UP6n1+rBnMPeGZDGBgeekoHIQaa5Q==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(396003)(136003)(346002)(451199021)(36840700001)(40470700004)(46966006)(47076005)(31686004)(70206006)(70586007)(4326008)(426003)(336012)(36756003)(16526019)(186003)(54906003)(478600001)(110136005)(2616005)(16576012)(2906002)(8676002)(316002)(41300700001)(31696002)(82310400005)(86362001)(40460700003)(36860700001)(356005)(53546011)(7636003)(8936002)(83380400001)(82740400003)(26005)(5660300002)(40480700001)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 02:23:27.4572
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 88593080-ec88-47fb-96e0-08db6c7e5682
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT031.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5934
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/6/13 22:11, Yazen Ghannam wrote:
-> Currently, all valid MCA_ADDR values are assumed to be usable on AMD
-> systems. However, this is not correct in most cases. Notifiers expecting
-> usable addresses may then operate on inappropriate values.
+On 6/13/23 00:49, Anders Roxell wrote:
+> Since commit ("selftests: error out if kernel header files are not yet
+> built") got merged, the kselftest build correctly because the
+> KBUILD_OUTPUT isn't set when building out-of-tree and specifying 'O='
+> This is the error message that pops up.
 > 
-> Define a helper function to do AMD-specific checks for a usable memory
-> address. List out all known cases.
+> make --silent --keep-going --jobs=32 O=/home/anders/.cache/tuxmake/builds/1482/build INSTALL_PATH=/home/anders/.cache/tuxmake/builds/1482/build/kselftest_install ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- V=1 CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- kselftest-install
+> make[3]: Entering directory '/home/anders/src/kernel/next/tools/testing/selftests/alsa'
 > 
-> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> -e [1;31merror[0m: missing kernel header files.
+> Please run this and try again:
+> 
+>      cd /home/anders/src/kernel/next/tools/testing/selftests/../../..
+>      make headers
+> 
+> make[3]: Leaving directory '/home/anders/src/kernel/next/tools/testing/selftests/alsa'
+> make[3]: *** [../lib.mk:77: kernel_header_files] Error 1
+> 
+> Fixing the issue by assigning KBUILD_OUTPUT the same way how its done in
+> kselftest's Makefile. By adding 'KBUILD_OUTPUT := $(O)' 'if $(origin O)'
+> is set to 'command line'. This will set the the BUILD dir to
+> KBUILD_OUTPUT/kselftest when doing out-of-tree builds which makes them
+> in its own separete output directory.
+> 
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 > ---
->  arch/x86/kernel/cpu/mce/amd.c      | 38 ++++++++++++++++++++++++++++++
->  arch/x86/kernel/cpu/mce/core.c     |  3 +++
->  arch/x86/kernel/cpu/mce/internal.h |  2 ++
->  3 files changed, 43 insertions(+)
+>   tools/testing/selftests/lib.mk | 4 ++++
+>   1 file changed, 4 insertions(+)
 > 
-> diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-> index 1ccfb0c9257f..ca79fa10b844 100644
-> --- a/arch/x86/kernel/cpu/mce/amd.c
-> +++ b/arch/x86/kernel/cpu/mce/amd.c
-> @@ -746,6 +746,44 @@ bool amd_mce_is_memory_error(struct mce *m)
->  	return legacy_mce_is_memory_error(m);
->  }
->  
-> +/*
-> + * AMD systems do not have an explicit indicator that the value in MCA_ADDR is
-> + * a system physical address. Therefore individual cases need to be detected.
-> + * Future cases and checks will be added as needed.
-> + *
-> + * 1) General case
-> + *	a) Assume address is not usable.
-> + * 2) "Poison" errors
-> + *	a) Indicated by MCA_STATUS[43]: POISON. Defined for all banks except legacy
-> + *	   Northbridge (bank 4).
-> + *	b) Refers to poison consumption in the Core. Does not include "no action",
-> + *	   "action optional", or "deferred" error severities.
-> + *	c) Will include a usuable address so that immediate action can be taken.
-> + * 3) Northbridge DRAM ECC errors
-> + *	a) Reported in legacy bank 4 with XEC 8.
-> + *	b) MCA_STATUS[43] is *not* defined as POISON in legacy bank 4. Therefore,
-> + *	   this bit should not be checked.
-[nit]
-
-> + *
-> + * NOTE: SMCA UMC memory errors fall into case #1.
-
-hi, Yazen
-
-The address for SMCA UMC memory error is not system physical address, it make sense
-to be not usable. But how we deal with the SMCA address? The MCE chain like
-uc_decode_notifier will do a sanity check with mce_usable_address and it will not
-handle SMCA address.
-
-Thanks.
-
-Best Regards,
-Shuai
-
-> + */
-> +bool amd_mce_usable_address(struct mce *m)
-> +{
-> +	/* Check special Northbridge case first. */
-> +	if (!mce_flags.smca) {
-> +		if (legacy_mce_is_memory_error(m))
-> +			return true;
-> +		else if (m->bank == 4)
-> +			return false;
-> +	}
+> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+> index b8ea03b9a015..d17854285f2b 100644
+> --- a/tools/testing/selftests/lib.mk
+> +++ b/tools/testing/selftests/lib.mk
+> @@ -44,6 +44,10 @@ endif
+>   selfdir = $(realpath $(dir $(filter %/lib.mk,$(MAKEFILE_LIST))))
+>   top_srcdir = $(selfdir)/../../..
+>   
+> +ifeq ("$(origin O)", "command line")
+> +  KBUILD_OUTPUT := $(O)
+> +endif
 > +
-> +	/* Check Poison bit for all other bank types. */
-> +	if (m->status & MCI_STATUS_POISON)
-> +		return true;
-> +
-> +	/* Assume address is not usable for all others. */
-> +	return false;
-> +}
-> +
->  static void __log_error(unsigned int bank, u64 status, u64 addr, u64 misc)
->  {
->  	struct mce m;
-> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-> index 89e2aab5d34d..859ce20dd730 100644
-> --- a/arch/x86/kernel/cpu/mce/core.c
-> +++ b/arch/x86/kernel/cpu/mce/core.c
-> @@ -464,6 +464,9 @@ int mce_usable_address(struct mce *m)
->  	if (!(m->status & MCI_STATUS_ADDRV))
->  		return 0;
->  
-> +	if (m->cpuvendor == X86_VENDOR_AMD)
-> +		return amd_mce_usable_address(m);
-> +
->  	/* Checks after this one are Intel/Zhaoxin-specific: */
->  	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL &&
->  	    boot_cpu_data.x86_vendor != X86_VENDOR_ZHAOXIN)
-> diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
-> index d2412ce2d312..0d4c5b83ed93 100644
-> --- a/arch/x86/kernel/cpu/mce/internal.h
-> +++ b/arch/x86/kernel/cpu/mce/internal.h
-> @@ -207,6 +207,7 @@ extern bool filter_mce(struct mce *m);
->  
->  #ifdef CONFIG_X86_MCE_AMD
->  extern bool amd_filter_mce(struct mce *m);
-> +bool amd_mce_usable_address(struct mce *m);
->  
->  /*
->   * If MCA_CONFIG[McaLsbInStatusSupported] is set, extract ErrAddr in bits
-> @@ -234,6 +235,7 @@ static __always_inline void smca_extract_err_addr(struct mce *m)
->  
->  #else
->  static inline bool amd_filter_mce(struct mce *m) { return false; }
-> +static inline bool amd_mce_usable_address(struct mce *m) { return false; }
->  static inline void smca_extract_err_addr(struct mce *m) { }
->  #endif
->  
+
+Thanks for fixing this up! This looks correct.
+
+(It's too bad that we have all this duplication between the Makefile
+and lib.mk.)
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
+
+>   ifneq ($(KBUILD_OUTPUT),)
+>     # Make's built-in functions such as $(abspath ...), $(realpath ...) cannot
+>     # expand a shell special character '~'. We use a somewhat tedious way here.
+
+
