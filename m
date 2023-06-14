@@ -2,166 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BC09730551
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46270730550
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235712AbjFNQoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 12:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55034 "EHLO
+        id S235509AbjFNQoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 12:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235298AbjFNQoF (ORCPT
+        with ESMTP id S235291AbjFNQoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 12:44:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38FFE62;
-        Wed, 14 Jun 2023 09:44:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BC94638D6;
-        Wed, 14 Jun 2023 16:44:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52EFBC433C8;
-        Wed, 14 Jun 2023 16:43:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686761042;
-        bh=AbksTDj0Cr11HjVk9ndl4fxdbz4KeyrvhEW07BZm7RE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fzMgfRjaZkDQ+FOJ6dtazBXiBUyBQCh5OuId0BfGCJL6lwjfCnuwyySZ6oF/kRRVj
-         bC28i264sOrYpVyv9CDTbe+Tj+Fb2J3UomvZo3csfGfI4QJ62D2+rxExs8Fy1WECG0
-         tK2DLmgufO1pwcMdXBcFfkQFFxYpm9Bbuv+ZU3HgyRyQuleaZb+ZKvk8kjgwp+rJ78
-         e00zb1dnuGAj3/nE4JH7iE2JEo4SfF5MPjrJ1h+KYTI83kIWY+yf61KwTDXOvo+dhd
-         gNVCTNWO0yQaHeW3KBkDeW0/IG/rw03pvu5HAdbaINuqwnNlQ4afRKvPrAvlZeW9dX
-         76SQ9ok++D/vA==
-Date:   Wed, 14 Jun 2023 17:43:57 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Prabhakar <prabhakar.csengg@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-riscv@lists.infradead.org,
-        Christoph Hellwig <hch@infradead.org>,
+        Wed, 14 Jun 2023 12:44:04 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BAD010E9
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:44:03 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f62b552751so8988178e87.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:44:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686761041; x=1689353041;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LoRkuZWKxXpO3J/KC+IKFD8g8mKdOUzqHFsg3wN8y24=;
+        b=OnQ4J+jdcEF8VPuCQDInjVYV4JwdlOb2uvVVI05qtvi/p0SU8D9rnDxfo3GRb2ZtGb
+         LXruHGFdfkWmbo6TJCvIoso9MpI4WYFMboDAMCUI0jWwpSOUFoDIpzZYP5g+eSD4aegP
+         DjIoOAHJy28Nd85oH5LylGUtrLxjdRPfYdcZfCfDaLZEE3zq/42Ome55seVJu3Q+6I6d
+         givuBku+v16WAbkT7HcmejIgL1/etgKHVdWpI1H6LEuKEKIIJh0hNOhK6IF53bOWsE1e
+         4II6o6MHxr8bjwIYBmA6+HvlEbMVmpN2jcCttVlxTpwHUNUs8Ab9Y7cAukYV3C42tBjg
+         R5Vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686761041; x=1689353041;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LoRkuZWKxXpO3J/KC+IKFD8g8mKdOUzqHFsg3wN8y24=;
+        b=leZkk321GLmOHd4S6FjKfmtD0r7yGL5NV3KK0D7nuKYSBbQD4VzW3lk4oHnjdlRmqE
+         hZE23ULi9NBo9YOVCgsZvBI4hkJvRA02oOtwIN3e0RjhuZD2BAQb0YA5nGA2wrMmOp+P
+         9wbGyhQ62yU9eH1Lqk+Sh6HzetHf2GbxSFUdF4cRZBHjXACzGdiv5ATbx3k4l7sBIr+i
+         rGxJ0nRYLW32O9RQB30X7nlvtaQTHt0Mh3Rpea7HT8MlCdq7aFSU+ET2THpELrl6JomL
+         piMBZdJXvYMzs3BJqB5VZH6zFYgW2KlNO0kswISMbwSrbk8lflN2gVf7tx2CHvQB+tbC
+         sDXg==
+X-Gm-Message-State: AC+VfDzj/noo2jcWtrug1wNmirE4g+c91LA27SnMm9vqgtBjURQoTecZ
+        WakzHxOQB0DY0QntcNujWYpfRA==
+X-Google-Smtp-Source: ACHHUZ703F8I5NcUh0f3StepCVewSGbe/tDeK2wzqjBWf/RxopRjyygwdOi2PuxGfI4iFdELFB9mHQ==
+X-Received: by 2002:a19:6d1c:0:b0:4f3:82a8:dcfc with SMTP id i28-20020a196d1c000000b004f382a8dcfcmr7433304lfc.55.1686761041289;
+        Wed, 14 Jun 2023 09:44:01 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id q28-20020ac25a1c000000b004f643664882sm2180612lfn.147.2023.06.14.09.43.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 09:44:00 -0700 (PDT)
+Message-ID: <e7a083f6-e885-113b-bb6c-d20108777c5e@linaro.org>
+Date:   Wed, 14 Jun 2023 18:43:58 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v5 01/22] dt-bindings: interconnect: Add Qcom RPM ICC
+ bindings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v9 3/6] riscv: mm: dma-noncoherent: nonstandard cache
- operations support
-Message-ID: <20230614-bundle-greedless-91581fdbdce8@spud>
-References: <20230614104759.228372-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20230614104759.228372-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdWApGKsS8DU7-=6j6WaRBDZ8Amig2NtA8f8=PbGKoFQjQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="l7qMsMb3x+g0a+Wz"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdWApGKsS8DU7-=6j6WaRBDZ8Amig2NtA8f8=PbGKoFQjQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230526-topic-smd_icc-v5-0-eeaa09d0082e@linaro.org>
+ <20230526-topic-smd_icc-v5-1-eeaa09d0082e@linaro.org>
+ <c8573d08-d4e2-41a8-f0b1-e1d7a0c9ce17@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <c8573d08-d4e2-41a8-f0b1-e1d7a0c9ce17@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 14.06.2023 18:43, Krzysztof Kozlowski wrote:
+> On 14/06/2023 12:22, Konrad Dybcio wrote:
+>> The SMD RPM interconnect driver requires different icc tags to the
+>> RPMh driver. Add bindings to reflect that.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>  include/dt-bindings/interconnect/qcom,rpm-icc.h | 13 +++++++++++++
+>>  1 file changed, 13 insertions(+)
+>>
+>> diff --git a/include/dt-bindings/interconnect/qcom,rpm-icc.h b/include/dt-bindings/interconnect/qcom,rpm-icc.h
+>> new file mode 100644
+>> index 000000000000..2cd56f91e5c5
+>> --- /dev/null
+>> +++ b/include/dt-bindings/interconnect/qcom,rpm-icc.h
+>> @@ -0,0 +1,13 @@
+>> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+>> +/*
+>> + * Copyright (c) 2023, Linaro Limited
+>> + */
+>> +
+>> +#ifndef __DT_BINDINGS_INTERCONNECT_QCOM_RPM_ICC_H
+>> +#define __DT_BINDINGS_INTERCONNECT_QCOM_RPM_ICC_H
+>> +
+>> +#define RPM_ACTIVE_TAG		(1 << 0)
+>> +#define RPM_SLEEP_TAG		(1 << 1)
+>> +#define RPM_ALWAYS_TAG		(RPM_ACTIVE_TAG | RPM_SLEEP_TAG)
+> 
+> Where are these used? I don't see any DTS in your patchset. Did you send
+> it separately?
+In the driver for now, e.g. patch 19. DTS can only come after the
+driver is fixed or things will explode!
 
---l7qMsMb3x+g0a+Wz
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Jun 14, 2023 at 02:53:26PM +0200, Geert Uytterhoeven wrote:
-> Hi Prabhakar,
->=20
-> On Wed, Jun 14, 2023 at 12:48=E2=80=AFPM Prabhakar <prabhakar.csengg@gmai=
-l.com> wrote:
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > Introduce support for nonstandard noncoherent systems in the RISC-V
-> > architecture. It enables function pointer support to handle cache
-> > management in such systems.
-> >
-> > This patch adds a new configuration option called
-> > "RISCV_NONSTANDARD_CACHE_OPS." This option is a boolean flag that
-> > depends on "RISCV_DMA_NONCOHERENT" and enables the function pointer
-> > support for cache management in nonstandard noncoherent systems.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> > v8 -> v9
-> > * New patch
->=20
-> Thanks for your patch!
->=20
-> > --- /dev/null
-> > +++ b/arch/riscv/include/asm/dma-noncoherent.h
-> > @@ -0,0 +1,28 @@
-> > +/* SPDX-License-Identifier: GPL-2.0-only */
-> > +/*
-> > + * Copyright (C) 2023 Renesas Electronics Corp.
-> > + */
-> > +
-> > +#ifndef __ASM_DMA_NONCOHERENT_H
-> > +#define __ASM_DMA_NONCOHERENT_H
-> > +
-> > +#include <linux/dma-direct.h>
-> > +
-> > +/*
-> > + * struct riscv_cache_ops - Structure for CMO function pointers
-> > + *
-> > + * @clean: Function pointer for clean cache
-> > + * @inval: Function pointer for invalidate cache
-> > + * @flush: Function pointer for flushing the cache
-> > + */
-> > +struct riscv_cache_ops {
-> > +       void (*clean)(phys_addr_t paddr, unsigned long size);
-> > +       void (*inval)(phys_addr_t paddr, unsigned long size);
-> > +       void (*flush)(phys_addr_t paddr, unsigned long size);
-> > +};
->=20
-> I guess the naming can be improved?
->=20
-> .clean() is used by arch_dma_cache_wback() / arch_wb_cache_pmem(),
-> .inval() is used by arch_dma_cache_inv() / arch_invalidate_pmem(),
-> .flush() is used by arch_dma_cache_wback_inv() / arch_dma_prep_coherent().
->=20
-> Perhaps .wback(), .inv(), .wback_inv() are more clear?
->=20
-> I understand this is subject to bikeshedding...
-> But hey, how many innocent bits of data have already been lost due
-> to cache semantic mismatches?
-
-Given this is based on Arnd's stuff, +1 on the bikeshed. The names have
-been chosen I guess to match the CBOM extensions naming.
-
-Otherwise, I had it in my head that the next revision of this was going
-to take patches 8 & 9 from Arnd's series, to align the semantics. Not
-that it really bothers me, just means this will have to wait for the
-cross-arch series, when pretty sure Arnd suggested not depending on that
-any more... Am I missing something Prabhakar?
-
-Other than the bikeshedding, no objections.
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
---l7qMsMb3x+g0a+Wz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZInuTAAKCRB4tDGHoIJi
-0mehAP0QJVAWl4QlY0rgtJuCCW2wWXiwHW7Opw7NAhq2tdzsMwD9FPKY2ISdjIAj
-wLfm2XMMYQuqT1og8iUEnl0XhGDPGgA=
-=FBZR
------END PGP SIGNATURE-----
-
---l7qMsMb3x+g0a+Wz--
+Konrad
+> 
+> Best regards,
+> Krzysztof
+> 
