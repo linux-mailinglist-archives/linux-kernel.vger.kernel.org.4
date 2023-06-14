@@ -2,215 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91AB77303E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:30:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31BF07303F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236947AbjFNPaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 11:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36690 "EHLO
+        id S236460AbjFNPgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 11:36:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231331AbjFNPaQ (ORCPT
+        with ESMTP id S235947AbjFNPgF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 11:30:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39641FDD;
-        Wed, 14 Jun 2023 08:30:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48D3460C5B;
-        Wed, 14 Jun 2023 15:30:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBEEDC433C0;
-        Wed, 14 Jun 2023 15:30:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686756613;
-        bh=v+krQLSQvy0RGcZLcqbIXiObIFKECGV3dMiU83A9I2g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r9g20ssYNKtaULjYRXWMOoLGNr8ZM6tbNo/yhpgRFFeAH8p6PmFDtGHKTP8c91vrL
-         upcsrYypir8z5EQPzaglE8dDndY5hBBuZmcnwr8xvBl1m9uaaDXKTNDv9H056Ysw7I
-         cimA9WSSdat3kpguG6RPXyi3h9+TwpPZLXbnNsGXj6bkmBj/LIli+fO0o7WbYl956E
-         Q8pJxcHqV1BHcfOmwOL9czQ7uHZpPxMrL7ZKcGECxVdlLRiKlcf5mXG3KVe+NB236q
-         g1sVSCewkPMAs1kcBDAKubnRctG5W3UhZ27ea+rO9Vm5Rl7F78rj05uVV4mKF2S7JC
-         1M++kyryhcP3g==
-Date:   Wed, 14 Jun 2023 08:33:35 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Sarannya S <quic_sarannya@quicinc.com>
-Cc:     quic_bjorande@quicinc.com, arnaud.pouliquen@foss.st.com,
-        swboyd@chromium.org, quic_clew@quicinc.com,
-        mathieu.poirier@linaro.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        Deepak Kumar Singh <quic_deesin@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: Re: [PATCH V7 2/3] rpmsg: glink: Add support to handle signals
- command
-Message-ID: <20230614153335.w7mej6mate5tki5w@ripper>
-References: <1682160127-18103-1-git-send-email-quic_sarannya@quicinc.com>
- <1682160127-18103-3-git-send-email-quic_sarannya@quicinc.com>
+        Wed, 14 Jun 2023 11:36:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED20C7
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:35:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686756922;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gmwzH0CjVLzqwLy7siJrCROCQ7j4iPuuS4OQ5spBH/E=;
+        b=exAMnlNGa1kxKj5+T3GK/yUcyMtZp12zVaDIMuL3IQm7y6eUw8Bg/9oCzS5t+cjKkd0kkG
+        21/ToNvm9AYdHh7ZkK9WEZs+jD/iEUZmcu5uKM5Ku38pcEm1foplyzP9YBIGIxKu0jno26
+        Q/pRf7Khqbk+lMPFkvea6wp0cizBBLg=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-142-53WoW33HPT-_m5obgIsd2Q-1; Wed, 14 Jun 2023 11:35:21 -0400
+X-MC-Unique: 53WoW33HPT-_m5obgIsd2Q-1
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-62fea7a5de9so583846d6.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:35:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686756920; x=1689348920;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gmwzH0CjVLzqwLy7siJrCROCQ7j4iPuuS4OQ5spBH/E=;
+        b=cyAeQPzB7ju9A4Tnj+N40NKmlrBlsBgGiOIkUq3twVNS5XqEPxmCfFXQGkjo+IDadb
+         h97Lges8R31thJYWQKIjSNxjHn9ewEObn9Qa6QMyB/gJso9rLu2OxakVzhS7X2DDYeNs
+         JiasJ+JHUhor7OYSkKfoG2dVNUpQRK26a0URcCBEDFrXCl3xV80ZA7ix7vjUYGe2P2fk
+         jKnFP9b8/kjZufBw06DINOtjdnMmrOGSM2Zlz/vVsXD22RUsQ6BDTke9AAXX6qncM7zk
+         81KqDXrmt4xIkJjMSd5fJeDs2fvx7pRgGqOmSWdRP572GFIdQlnTtx6QycbZ1iO25GHr
+         VNxw==
+X-Gm-Message-State: AC+VfDwxhSgafZUpZOmpYzwYxWz/axAJMXoB4C6cHoWWJz0RoOrYupC9
+        DbTRTFYqoC491THPVdMxDN/GZgWig9MGht5nitCmrDOIrN3q5vTdgAw6n4fgW/p6pvCw8TvJP4A
+        0D8K/l4SUcPcKDAtkEdERo6kz
+X-Received: by 2002:a05:622a:1a02:b0:3f6:ab9a:3d8e with SMTP id f2-20020a05622a1a0200b003f6ab9a3d8emr20549379qtb.4.1686756920611;
+        Wed, 14 Jun 2023 08:35:20 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7TJod/VnPoMZiUa7o/El2294sJ8GL00HWcJelg2hFCktid9sv2kfOTl6JXIqQfFSSX+RvYNw==
+X-Received: by 2002:a05:622a:1a02:b0:3f6:ab9a:3d8e with SMTP id f2-20020a05622a1a0200b003f6ab9a3d8emr20549357qtb.4.1686756920392;
+        Wed, 14 Jun 2023 08:35:20 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id j8-20020ac85c48000000b003f9b6d54b17sm5106366qtj.58.2023.06.14.08.35.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 08:35:19 -0700 (PDT)
+Date:   Wed, 14 Jun 2023 11:35:18 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        James Houghton <jthoughton@google.com>,
+        Hugh Dickins <hughd@google.com>
+Subject: Re: [PATCH 6/7] mm/gup: Accelerate thp gup even for "pages != NULL"
+Message-ID: <ZIneNhvxGGb6zLyq@x1n>
+References: <20230613215346.1022773-1-peterx@redhat.com>
+ <20230613215346.1022773-7-peterx@redhat.com>
+ <ZInVmrJdLWxOEkeD@casper.infradead.org>
+ <ZInalCeSNmAiG2K4@x1n>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1682160127-18103-3-git-send-email-quic_sarannya@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZInalCeSNmAiG2K4@x1n>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 22, 2023 at 04:12:06PM +0530, Sarannya S wrote:
-> From: Chris Lew <quic_clew@quicinc.com>
+On Wed, Jun 14, 2023 at 11:19:48AM -0400, Peter Xu wrote:
+> > > +			for (j = 0; j < page_increm; j++) {
+> > > +				subpage = nth_page(page, j);
+> > > +				pages[i+j] = subpage;
+> > > +				flush_anon_page(vma, subpage, start + j * PAGE_SIZE);
+> > > +				flush_dcache_page(subpage);
+> > 
+> > You're better off calling flush_dcache_folio() right at the end.
 > 
-> Remote peripherals send signal notifications over glink with commandID 15.
-> 
-> Add support to send and receive the signal command and based signals
-> enable or disable flow control with remote host.
-> 
-> Signed-off-by: Chris Lew <quic_clew@quicinc.com>
-> Signed-off-by: Deepak Kumar Singh <quic_deesin@quicinc.com>
-> Signed-off-by: Sarannya S <quic_sarannya@quicinc.com>
-> ---
->  drivers/rpmsg/qcom_glink_native.c | 64 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 64 insertions(+)
-> 
-> diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
-> index 01d2805..ff5e926 100644
-> --- a/drivers/rpmsg/qcom_glink_native.c
-> +++ b/drivers/rpmsg/qcom_glink_native.c
-> @@ -16,6 +16,7 @@
->  #include <linux/rpmsg.h>
->  #include <linux/sizes.h>
->  #include <linux/slab.h>
-> +#include <linux/termios.h>
->  #include <linux/workqueue.h>
->  #include <linux/mailbox_client.h>
->  
-> @@ -197,9 +198,15 @@ static const struct rpmsg_endpoint_ops glink_endpoint_ops;
->  #define GLINK_CMD_TX_DATA_CONT		12
->  #define GLINK_CMD_READ_NOTIF		13
->  #define GLINK_CMD_RX_DONE_W_REUSE	14
-> +#define GLINK_CMD_SIGNALS		15
->  
->  #define GLINK_FEATURE_INTENTLESS	BIT(1)
->  
-> +#define NATIVE_DTR_SIG			NATIVE_DSR_SIG
-> +#define NATIVE_DSR_SIG			BIT(31)
-> +#define NATIVE_RTS_SIG			NATIVE_CTS_SIG
-> +#define NATIVE_CTS_SIG			BIT(30)
-> +
->  static void qcom_glink_rx_done_work(struct work_struct *work);
->  
->  static struct glink_channel *qcom_glink_alloc_channel(struct qcom_glink *glink,
-> @@ -1014,6 +1021,58 @@ static int qcom_glink_rx_open_ack(struct qcom_glink *glink, unsigned int lcid)
->  	return 0;
->  }
->  
-> +/**
-> + * qcom_glink_set_flow_control() - convert a signal cmd to wire format and
-> + * 				   transmit
-> + * @ept:	Rpmsg endpoint for channel.
-> + * @enable:	True/False - enable or disable flow control
-> + * @dst:	destination address of the endpoint
-> + *
-> + * Return: 0 on success or standard Linux error code.
-> + */
-> +static int qcom_glink_set_flow_control(struct rpmsg_endpoint *ept, bool enable, u32 dst)
-> +{
-> +	struct glink_channel *channel = to_glink_channel(ept);
-> +	struct qcom_glink *glink = channel->glink;
-> +	struct glink_msg msg;
-> +	u32 sigs = 0;
-> +
-> +	if (enable)
-> +		sigs |= NATIVE_DTR_SIG | NATIVE_RTS_SIG;
-> +
-> +	msg.cmd = cpu_to_le16(GLINK_CMD_SIGNALS);
-> +	msg.param1 = cpu_to_le16(channel->lcid);
-> +	msg.param2 = cpu_to_le32(sigs);
-> +
-> +	return qcom_glink_tx(glink, &msg, sizeof(msg), NULL, 0, true);
-> +}
-> +
-> +static int qcom_glink_handle_signals(struct qcom_glink *glink,
-> +				     unsigned int rcid, unsigned int sigs)
-> +{
-> +	struct glink_channel *channel;
-> +	unsigned long flags;
-> +	bool enable = false;
-> +
-> +	spin_lock_irqsave(&glink->idr_lock, flags);
-> +	channel = idr_find(&glink->rcids, rcid);
-> +	spin_unlock_irqrestore(&glink->idr_lock, flags);
-> +	if (!channel) {
-> +		dev_err(glink->dev, "signal for non-existing channel\n");
-> +		return -EINVAL;
+> Will do.
 
-You don't handle this return value, so this works fine. But the other
-cases of returning an error to qcom_glink_native_rx() indicates that no
-further messages should be processed (e.g. because there's no sufficient
-data in the FIFO).
+Ah when I start to modify it I noticed it's a two-sided sword: we'll then
+also do flush dcache over the whole folio even if we gup one page.
 
-But getting a signal on a non-existing channel is not something that's
-going to be resolved until we get the next interrupt, so I think you
-shouldn't propagate this error.
+We'll start to get benefit only if some arch at least starts to impl
+flush_dcache_folio() (which seems to be none, right now..), and we'll
+already start to lose on amplifying the flush when gup on partial folio.
 
-Which means that it would be better to make the return type void of this
-function.
+Perhaps I still keep it as-is which will still be accurate, always faster
+than old code, and definitely not regress in any form?
 
-> +	}
-> +
-> +	if (!channel->ept.flow_cb)
-> +		return 0;
-> +
-> +	if (sigs & (NATIVE_DSR_SIG | NATIVE_CTS_SIG))
-> +		enable = true;
+-- 
+Peter Xu
 
-I'd find it cleaner to skip the early initialization and have a single
-point of assignment of enable, like:
-
-	enable = sigs & NATIVE_DSR_SIG || sigs & NATIVE_CTS_SIG;
-
-
-And consolidate the flow_cb query/invocation to one place:
-	if (channel->eptf.flow_cb)
-		channel->ept.flow_cb(, enable);
-
-Regards,
-Bjorn
-
-> +
-> +	channel->ept.flow_cb(channel->ept.rpdev, channel->ept.priv, enable);
-> +
-> +	return 0;
-> +}
-> +
->  void qcom_glink_native_rx(struct qcom_glink *glink)
->  {
->  	struct glink_msg msg;
-> @@ -1075,6 +1134,10 @@ void qcom_glink_native_rx(struct qcom_glink *glink)
->  			qcom_glink_handle_intent_req_ack(glink, param1, param2);
->  			qcom_glink_rx_advance(glink, ALIGN(sizeof(msg), 8));
->  			break;
-> +		case GLINK_CMD_SIGNALS:
-> +			qcom_glink_handle_signals(glink, param1, param2);
-> +			qcom_glink_rx_advance(glink, ALIGN(sizeof(msg), 8));
-> +			break;
->  		default:
->  			dev_err(glink->dev, "unhandled rx cmd: %d\n", cmd);
->  			ret = -EINVAL;
-> @@ -1449,6 +1512,7 @@ static const struct rpmsg_endpoint_ops glink_endpoint_ops = {
->  	.sendto = qcom_glink_sendto,
->  	.trysend = qcom_glink_trysend,
->  	.trysendto = qcom_glink_trysendto,
-> +	.set_flow_control = qcom_glink_set_flow_control,
->  };
->  
->  static void qcom_glink_rpdev_release(struct device *dev)
-> -- 
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
-> 
