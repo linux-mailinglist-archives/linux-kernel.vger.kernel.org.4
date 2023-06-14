@@ -2,70 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 122D572FE83
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD9772FE76
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:24:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244555AbjFNMZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 08:25:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57938 "EHLO
+        id S244536AbjFNMXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 08:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244631AbjFNMYk (ORCPT
+        with ESMTP id S244601AbjFNMXk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 08:24:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6FA19A5
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:23:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686745431;
+        Wed, 14 Jun 2023 08:23:40 -0400
+Received: from out-58.mta0.migadu.com (out-58.mta0.migadu.com [IPv6:2001:41d0:1004:224b::3a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55B519A5
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:23:39 -0700 (PDT)
+Date:   Wed, 14 Jun 2023 12:23:32 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1686745418;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=35DChW7keH1A0MG1jE0ycDQ3IFSVa8psKti14q3PpAE=;
-        b=JDTTMkYrhC96aBlXSwIY5tdkh5m4xrLHWOjJt550lmCHL5IxrMGEpYE/lndHvozdxKPoKU
-        rrJdEGnYFutLdCk+h4Ag+ioV+eT9gilKvei1xG998YB5CiM1OHbuhNMBRNaFB2uPw/5ItD
-        bSstkn8FV5dYkc+q4AE9jaDMl/E6fsA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-173-4klzjLiSM4qwKObKXbZGzA-1; Wed, 14 Jun 2023 08:23:45 -0400
-X-MC-Unique: 4klzjLiSM4qwKObKXbZGzA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F213285A5BB;
-        Wed, 14 Jun 2023 12:23:44 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.22.33.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9362A40C20F5;
-        Wed, 14 Jun 2023 12:23:41 +0000 (UTC)
-From:   Wander Lairson Costa <wander@redhat.com>
-To:     "Christian Brauner (Microsoft)" <brauner@kernel.org>,
-        Mike Christie <michael.christie@oracle.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        linux-kernel@vger.kernel.org (open list)
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Luis Goncalves <lgoncalv@redhat.com>
-Subject: [PATCH v10 2/2] sched: avoid false lockdep splat in put_task_struct()
-Date:   Wed, 14 Jun 2023 09:23:22 -0300
-Message-Id: <20230614122323.37957-3-wander@redhat.com>
-In-Reply-To: <20230614122323.37957-1-wander@redhat.com>
-References: <20230614122323.37957-1-wander@redhat.com>
+        bh=wQb4z5JVMfEidGknQD3xscf32z72ie53CeaTZ4MqnRo=;
+        b=VDJHBwbnWvVpVV2I5wdZ1dSmkV4OW6DcXGB7WkRvbQbH6ER5gTv95Aul+DGOp3MA8pjOAX
+        0zLmfb5AUIxalCYMg97MGheRtghN8tPVWj5eSM3htLfyZm7zxBgdLPibhTnINAzEYZORpr
+        wAQ4FhHqgISs2x21TFI+MTTB8WH2WY8=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Wei Wang <wei.w.wang@intel.com>, pbonzini@redhat.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH RESEND v2] KVM: move KVM_CAP_DEVICE_CTRL to the generic
+ check
+Message-ID: <ZImxRC3QlLbPhwsC@linux.dev>
+References: <20230315101606.10636-1-wei.w.wang@intel.com>
+ <ZIjcoOaexz5YAyWT@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZIjcoOaexz5YAyWT@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,63 +61,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In put_task_struct(), a spin_lock is indirectly acquired under the kernel
-stock. When running the kernel in real-time (RT) configuration, the
-operation is dispatched to a preemptible context call to ensure
-guaranteed preemption. However, if PROVE_RAW_LOCK_NESTING is enabled
-and __put_task_struct() is called while holding a raw_spinlock, lockdep
-incorrectly reports an "Invalid lock context" in the stock kernel.
+On Tue, Jun 13, 2023 at 02:16:16PM -0700, Sean Christopherson wrote:
+> +<everyone else>
+> 
+> Please use scripts/get_maintainer.pl to generate the To/Cc lists.  This may be
+> trivial, but it still needs eyeballs from the relevant maintainers.
 
-This false splat occurs because lockdep is unaware of the different
-route taken under RT. To address this issue, override the inner wait
-type to prevent the false lockdep splat.
++1000. I'd buy someone a beer if they made a bot that just ran
+get_maintainer on patches that hit the list :)
 
-Signed-off-by: Wander Lairson Costa <wander@redhat.com>
-Suggested-by: Oleg Nesterov <oleg@redhat.com>
-Suggested-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Luis Goncalves <lgoncalv@redhat.com>
----
- include/linux/sched/task.h | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+> On Wed, Mar 15, 2023, Wei Wang wrote:
+> > KVM_CAP_DEVICE_CTRL allows userspace to check if the kvm_device
+> > framework (e.g. KVM_CREATE_DEVICE) is supported by KVM. Move
+> > KVM_CAP_DEVICE_CTRL to the generic check for the two reasons:
+> > 1) it already supports arch agnostic usages (i.e. KVM_DEV_TYPE_VFIO).
+> > For example, userspace VFIO implementation may needs to create
+> > KVM_DEV_TYPE_VFIO on x86, riscv, or arm etc. It is simpler to have it
+> > checked at the generic code than at each arch's code.
+> > 2) KVM_CREATE_DEVICE has been added to the generic code.
+> > 
+> > Link: https://lore.kernel.org/all/20221215115207.14784-1-wei.w.wang@intel.com
+> > Signed-off-by: Wei Wang <wei.w.wang@intel.com>
+> > Reviewed-by: Sean Christopherson <seanjc@google.com>
+> > ---
+> >  arch/arm64/kvm/arm.c       | 1 -
+> >  arch/powerpc/kvm/powerpc.c | 1 -
+> >  arch/riscv/kvm/vm.c        | 1 -
+> >  arch/s390/kvm/kvm-s390.c   | 1 -
+> >  virt/kvm/kvm_main.c        | 1 +
+> >  5 files changed, 1 insertion(+), 4 deletions(-)
+> > 
+> > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> > index 3bd732eaf087..96329e675771 100644
+> > --- a/arch/arm64/kvm/arm.c
+> > +++ b/arch/arm64/kvm/arm.c
+> > @@ -202,7 +202,6 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+> >  		r = vgic_present;
+> >  		break;
+> >  	case KVM_CAP_IOEVENTFD:
+> > -	case KVM_CAP_DEVICE_CTRL:
+> >  	case KVM_CAP_USER_MEMORY:
+> >  	case KVM_CAP_SYNC_MMU:
+> >  	case KVM_CAP_DESTROY_MEMORY_REGION_WORKS:
 
-diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
-index d20de91e3b95..b53909027771 100644
---- a/include/linux/sched/task.h
-+++ b/include/linux/sched/task.h
-@@ -125,6 +125,19 @@ static inline void put_task_struct(struct task_struct *t)
- 	if (!refcount_dec_and_test(&t->usage))
- 		return;
- 
-+	/*
-+	 * In !RT, it is always safe to call __put_task_struct().
-+	 * Under RT, we can only call it in preemptible context.
-+	 */
-+	if (!IS_ENABLED(CONFIG_PREEMPT_RT) || preemptible()) {
-+		static DEFINE_WAIT_OVERRIDE_MAP(put_task_map, LD_WAIT_SLEEP);
-+
-+		lock_map_acquire_try(&put_task_map);
-+		__put_task_struct(t);
-+		lock_map_release(&put_task_map);
-+		return;
-+	}
-+
- 	/*
- 	 * under PREEMPT_RT, we can't call put_task_struct
- 	 * in atomic context because it will indirectly
-@@ -145,10 +158,7 @@ static inline void put_task_struct(struct task_struct *t)
- 	 * when it fails to fork a process. Therefore, there is no
- 	 * way it can conflict with put_task_struct().
- 	 */
--	if (IS_ENABLED(CONFIG_PREEMPT_RT) && !preemptible())
--		call_rcu(&t->rcu, __put_task_struct_rcu_cb);
--	else
--		__put_task_struct(t);
-+	call_rcu(&t->rcu, __put_task_struct_rcu_cb);
- }
- 
- static inline void put_task_struct_many(struct task_struct *t, int nr)
+for arm64:
+
+Reviewed-by: Oliver Upton <oliver.upton@linux.dev>
+
 -- 
-2.40.1
-
+Thanks,
+Oliver
