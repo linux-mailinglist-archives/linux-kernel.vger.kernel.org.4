@@ -2,99 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47BC37307C6
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6847307C9
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232550AbjFNTIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 15:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41270 "EHLO
+        id S234438AbjFNTIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 15:08:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231901AbjFNTIA (ORCPT
+        with ESMTP id S234225AbjFNTIw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 15:08:00 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584131BFD
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 12:07:59 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-6667643e4d6so468655b3a.2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 12:07:59 -0700 (PDT)
+        Wed, 14 Jun 2023 15:08:52 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF83C1FD5
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 12:08:50 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1a991886254so275519fac.2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 12:08:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686769679; x=1689361679;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=R4oGXHbJy0nScfl9DUrXr2aiFTxNn0y6vjEBgrD4YHY=;
-        b=nOGHX1VJJGIvmuPEYJLThOxBUNYD8p50ORrVKKbBVCFp+RH5oBFXjH+xznFg3oqCa8
-         xb8VEcdYAWoX/WXiUXIJi8x/EunCDAJ5WJvYtu55mcNKj25XFU23lbP8VgCAZeApXtPY
-         X5/5uXytYr/SprRnkU2euA+CJ1Wy4Ai+PakcLnr9/dF9E7t+tvGez4qYVYdEiAoHs5PN
-         +nMR+cQYNfByy8QinHcoI10a0LyvV9twr6lJxXo0xCg/dxjXWHjYA1wUsnYUWW/0m3XC
-         H3ksHLjWjc1yYPyaRjVle585qu30bJ7GPuqZrK+KCB6nFeXu1gM17XUjgMiHyAUYS9WQ
-         Xv8A==
+        d=linaro.org; s=google; t=1686769730; x=1689361730;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ErPDVCSBpPJlYZGqC1SD/e+jlrE1qnWfALaiFCF/cEk=;
+        b=jmbi/A02sAgtAEjnexDwofutI7SYsNKZb9DJ0918C84hfbYX6Kv2CnynHp7r9XGnlN
+         Cp8ZWWLwUdRTJFukEXwkeDOBMoNk3CTaEhN7ljsU9elXqeq1Z3RUSKYBM6GZo/WiI8KT
+         oPOMyym6zWHkxmTB3MQ07oxWD7PeJrvq0kvWw8aGJL8XSPf+dk5f+gFT67il+bzXfAN2
+         6dyi2TlnIq0Le4Z+DiAPf+P/T4s3RoflN+csQzJAHSNigY1Vh+g2sdvQ9cTB2g73o86y
+         dEVSMHa3qXDAuMKstEcmSUZb/SA6tSztZN0LSg42YapskHGdFXw2quO5rHkKRaWjd8nV
+         v5JQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686769679; x=1689361679;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R4oGXHbJy0nScfl9DUrXr2aiFTxNn0y6vjEBgrD4YHY=;
-        b=e/Jg7b8dZx7u2R4vNn948pSwZmn3HlOIEnXzgzPWug6XoMXhFZojEBoieXQnVFRuz+
-         tDQtGxGC+x+B++wbgvuEtkyS2AgGPD2C9S7rStAqayUg4rLHVAMD5ZdIkYhlEtOkyNNo
-         VQ88wgwOIIaEszLVO/CbMvzLntLOF7+XUki7ioOHiVjj8gkYQVsccrPe/951SST4gMAE
-         ZpXBFpEgpbi3jBu0ZMNK9sL5D7U9Op4+4Hf5Y3SH+rMmGqMVioF/yeUWMDYmTjYjw60d
-         TTckekWk8aF4zXYZMsaIVa1wvscgfsit0aPnrTLVyuKtBZE9dWhVD4mQUm2VPGReuc0z
-         4iJg==
-X-Gm-Message-State: AC+VfDxsM/s+DNu7dlm4tcaZddv/r3p313/pq7m7lQgECV1fY6Qzf3Yc
-        lbu6gopPhdggEyUlXWhmEWYr7TBgfVA=
-X-Google-Smtp-Source: ACHHUZ51wQ/2Dxa+sgAhbPBB11TqxtOBn8DzwfspQDh9sz2PfijpF6oDOmxPzuT9ZPQOc58r5fog9k55rDE=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:8ca:b0:665:bd58:c93e with SMTP id
- s10-20020a056a0008ca00b00665bd58c93emr798632pfu.1.1686769678715; Wed, 14 Jun
- 2023 12:07:58 -0700 (PDT)
-Date:   Wed, 14 Jun 2023 12:07:57 -0700
-In-Reply-To: <abf509a2-ebfd-7b5f-4f7a-fdd4ef60c1de@amazon.com>
-Mime-Version: 1.0
-References: <20230602005859.784190-1-seanjc@google.com> <168667299355.1927151.1998349801097712999.b4-ty@google.com>
- <abf509a2-ebfd-7b5f-4f7a-fdd4ef60c1de@amazon.com>
-Message-ID: <ZIoQDbte/uAiit9N@google.com>
-Subject: Re: [PATCH] KVM: x86/mmu: Add "never" option to allow sticky
- disabling of nx_huge_pages
-From:   Sean Christopherson <seanjc@google.com>
-To:     Luiz Capitulino <luizcap@amazon.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Li RongQing <lirongqing@baidu.com>,
-        Yong He <zhuangel570@gmail.com>,
-        Robert Hoo <robert.hoo.linux@gmail.com>,
-        Kai Huang <kai.huang@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1686769730; x=1689361730;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ErPDVCSBpPJlYZGqC1SD/e+jlrE1qnWfALaiFCF/cEk=;
+        b=LFPs1hAXkEAW37ALXuuHrXj7cbwhtHrQnZHRERZHWWzt1WAa3qWXr0Jjp7kFnQvJOC
+         CV1k7fkksxo7DAdK1SPTttu0ZsdOZGfNv2bFeqWVEAE4vwNVle2mRWl+WEe6EMCoDhU/
+         G8GsDfUC5Y0slY0FydAlS9522uImua/12DE3Zee4v1dyNHydYVMbO+zsgYj2kezDRNRf
+         gtovbMQrmW8rcaQhlqsoFOz9AY7z3BSg5FaOo8t/QMLhhkTpVO5/F8bNxP0CsOHDjBkt
+         fd4r+/8yBj2nMnnq0UImJ3PePS85lTCogn6uHjNTh59ezmHLnJvjOWLiacabTIOW1Bbc
+         AhUQ==
+X-Gm-Message-State: AC+VfDz/iUHrlqHMDB4CffcXTGQNS+X8e+JtVSyuSisNxwgjJFvDB9sf
+        k23Zk/OeYtpe75HswJ8BWqwgwK0SpkHAGwjAzzpiNA==
+X-Google-Smtp-Source: ACHHUZ7Jlx1MnAmIR2pE8OVZOOzZ43InmF1UHvxki4FXW/lgM0L0ew4VCWjHbEtlNlYpJ3qLkwuOtXyLLHY4KD09mf4=
+X-Received: by 2002:a05:6870:8447:b0:19a:ce25:6d06 with SMTP id
+ n7-20020a056870844700b0019ace256d06mr10445359oak.56.1686769729782; Wed, 14
+ Jun 2023 12:08:49 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230602161246.1855448-1-amit.pundir@linaro.org>
+ <358c69ad-fa8a-7386-fe75-92369883ee48@leemhuis.info> <0f6c9dcb-b7f6-fff9-6bed-f4585ea8e487@linaro.org>
+In-Reply-To: <0f6c9dcb-b7f6-fff9-6bed-f4585ea8e487@linaro.org>
+From:   Amit Pundir <amit.pundir@linaro.org>
+Date:   Thu, 15 Jun 2023 00:38:13 +0530
+Message-ID: <CAMi1Hd3Cv1i06NhpY6Jqu7OvMpOdzTj6nTEMJNWLrMwMLsugZA@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: qcom: sdm845-db845c: Move LVS regulator nodes up
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Mark Brown <broonie@kernel.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        dt <devicetree@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023, Luiz Capitulino wrote:
-> 
-> 
-> On 2023-06-13 19:21, Sean Christopherson wrote:
-> 
-> > 
-> > 
-> > 
-> > On Thu, 01 Jun 2023 17:58:59 -0700, Sean Christopherson wrote:
-> > > Add a "never" option to the nx_huge_pages module param to allow userspace
-> > > to do a one-way hard disabling of the mitigation, and don't create the
-> > > per-VM recovery threads when the mitigation is hard disabled.  Letting
-> > > userspace pinky swear that userspace doesn't want to enable NX mitigation
-> > > (without reloading KVM) allows certain use cases to avoid the latency
-> > > problems associated with spawning a kthread for each VM.
-> > > 
-> > > [...]
-> > 
-> > Applied to kvm-x86 mmu.  I kept the default as "auto" for now, as that can go on
-> > top and I don't want to introduce that change this late in the cycle.  If no one
-> > beats me to the punch (hint, hint ;-) ), I'll post a patch to make "never" the
-> > default for unaffected hosts so that we can discuss/consider that change for 6.6.
-> 
-> Thanks Sean, I agree with the plan. I could give a try on the patch if you'd like.
+On Thu, 15 Jun 2023 at 00:17, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 14/06/2023 20:18, Linux regression tracking (Thorsten Leemhuis) wrote:
+> > On 02.06.23 18:12, Amit Pundir wrote:
+> >> Move lvs1 and lvs2 regulator nodes up in the rpmh-regulators
+> >> list to workaround a boot regression uncovered by the upstream
+> >> commit ad44ac082fdf ("regulator: qcom-rpmh: Revert "regulator:
+> >> qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS"").
+> >>
+> >> Without this fix DB845c fail to boot at times because one of the
+> >> lvs1 or lvs2 regulators fail to turn ON in time.
+> >
+> > /me waves friendly
+> >
+> > FWIW, as it's not obvious: this...
+> >
+> >> Link: https://lore.kernel.org/all/CAMi1Hd1avQDcDQf137m2auz2znov4XL8YGrLZsw5edb-NtRJRw@mail.gmail.com/
+> >
+> > ...is a report about a regression. One that we could still solve before
+> > 6.4 is out. One I'll likely will point Linus to, unless a fix comes into
+> > sight.
+> >
+> > When I noticed the reluctant replies to this patch I earlier today asked
+> > in the thread with the report what the plan forward was:
+> > https://lore.kernel.org/all/CAD%3DFV%3DV-h4EUKHCM9UivsFHRsJPY5sAiwXV3a1hUX9DUMkkxdg@mail.gmail.com/
+> >
+> > Dough there replied:
+> >
+> > ```
+> > Of the two proposals made (the revert vs. the reordering of the dts),
+> > the reordering of the dts seems better. It only affects the one buggy
+> > board (rather than preventing us to move to async probe for everyone)
+> > and it also has a chance of actually fixing something (changing the
+> > order that regulators probe in rpmh-regulator might legitimately work
+> > around the problem). That being said, just like the revert the dts
+> > reordering is still just papering over the problem and is fragile /
+> > not guaranteed to work forever.
+> > ```
+> >
+> > Papering over obviously is not good, but has anyone a better idea to fix
+> > this? Or is "not fixing" for some reason an viable option here?
+> >
+>
+> I understand there is a regression, although kernel is not mainline
+> (hash df7443a96851 is unknown) and the only solutions were papering the
+> problem. Reverting commit is a temporary workaround. Moving nodes in DTS
+> is not acceptable because it hides actual problem and only solves this
+> one particular observed problem, while actual issue is still there. It
+> would be nice to be able to reproduce it on real mainline with normal
+> operating system (not AOSP) - with ramdiks/without/whatever. So far no
+> one did it, right?
 
-Yes please, thanks!
+No, I did not try non-AOSP system yet. I'll try it tomorrow, if that
+helps. With mainline hash.
+
+Regards,
+Amit Pundir
