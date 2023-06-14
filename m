@@ -2,87 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 565DB730012
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 15:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A4CC73001A
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 15:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245007AbjFNNaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 09:30:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43916 "EHLO
+        id S245020AbjFNNbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 09:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244187AbjFNNaL (ORCPT
+        with ESMTP id S244932AbjFNNbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 09:30:11 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4CA11BEF
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 06:30:09 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-970056276acso101765066b.2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 06:30:09 -0700 (PDT)
+        Wed, 14 Jun 2023 09:31:12 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8DE1BE8
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 06:31:11 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-3f98276f89cso191741cf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 06:31:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686749408; x=1689341408;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FANL57ecbIxqC2s7WVdfFkY/wb9kISO9tnMy6zPKsiU=;
-        b=txhaf/go51p1KpK+q8iErRvGq64ClFPXTsTwzV/xtf4DM3J/d5VanUzyzEoAhZIxeL
-         BLcZ1uzi2tf5aXjBBEfezBYP70SNdDmOfeCMxaBmLcu6Oga7uNYqrOiZLiXuQu4/IH0g
-         ubyrjSv5YxAPkZ+4LzAsdv4zqgWB6Mcoi5rTDRsF0VaZ9qSmZoQBC8mAXvs/PW5orUAz
-         Wqafo4wCZxiQ8iIO/GCE3UlfhzmDoli6/AHnncISYWtyJxmBbg3JfInTBj+n8vOTs07Y
-         f6yzWrgXw1qKSx4BU9m4B1M7E9OpzgRZZXZbH7NBGbsGUlbn5VlLnkmUqfS99+NN8WOt
-         26BA==
+        d=google.com; s=20221208; t=1686749470; x=1689341470;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nPogWzmsJ1uvTQmxk29cAdOXJbnNlr5lDiNRKRRfY+Y=;
+        b=uD0jAp/lTJTKXuircqMDJh7ibnACj3Kymu3Rc/QmTOPRqLUM7CGWWjC1/Sj8QyDl3k
+         6KXJd7yNCltiUbmlaniei7G+fyaEOirccZnQCqYu7o0UJPPBz1kt9xynZm19ACbIsrtS
+         84iJPzLYoSU9QAJarFECN+V4RAwsoVbQlB396Wrty5lS8XrwEn2eJli66e4mcGvguTiq
+         niJ/JMFW3AYlPi68nLDUWZCAAmocN6T9vZOusEaDAT7JHlT2TzQx9VK10LhFRgFYSWkX
+         rfX6DCoDTM5CBcVpJlcpStCdXCaKrOG3czdGbp6TWxqQyB2STjzyO+G8c3tuZDCtqoMG
+         xFlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686749408; x=1689341408;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FANL57ecbIxqC2s7WVdfFkY/wb9kISO9tnMy6zPKsiU=;
-        b=IhJ+WQvslXaaiG26YAwmTvjJ8xeHU0nXz0zhvrVJonBkLaTqkuYyMc1sBVnNagM4bS
-         r5WnWebE/CeO1X2Yh8h5oFTMet8Nqxw0Tsj/kltRiPaWmKx4I4dLlE/cRmqzmdptNpR+
-         Tk1PnPqyVeGlz4IC6gNxqTLHvi0XG2BMM6zzXpicCYsoG2K6/VuCLXBss/vqUbE6aD3q
-         Coon7qipoj4EaWm6DE2P4Ot3Q+1Ej+IexCzk83SupUVgCEhF/WhBp+hWmzYt00HVNuuj
-         fAXIGzqWQoZeN89O6ApxY4NvA/M6/O8KxcQhQznfB/KU7Q0ClLu4F47Eu3q6oCXTO0AY
-         ObXg==
-X-Gm-Message-State: AC+VfDwZOKp/VBW72jegT8OU/4XbpKtDK6ek+ia8vIfjnxG0P2Vdk/s/
-        Gs9nHB/99SKSrUV/g4oUVTAP/w==
-X-Google-Smtp-Source: ACHHUZ6iLbCBVSbhZKUrRJIYPwu+LuxmhaU9ojfe0LqSVK+C4pp2Gte8t2lMU7Bb5ACI02/YTHkJuQ==
-X-Received: by 2002:a17:907:728d:b0:96f:afe9:25c4 with SMTP id dt13-20020a170907728d00b0096fafe925c4mr14390331ejc.50.1686749408420;
-        Wed, 14 Jun 2023 06:30:08 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id lv16-20020a170906bc9000b00965a52d2bf6sm8013335ejb.88.2023.06.14.06.30.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 06:30:07 -0700 (PDT)
-Message-ID: <45f91d55-7a98-b300-f81c-30f9009519b0@linaro.org>
-Date:   Wed, 14 Jun 2023 15:30:05 +0200
+        d=1e100.net; s=20221208; t=1686749470; x=1689341470;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nPogWzmsJ1uvTQmxk29cAdOXJbnNlr5lDiNRKRRfY+Y=;
+        b=Jq2XxTDvohG0VRl1QlIPT/11DBC6WDbrJrUKlmN6edf0xcai/U+cOIxd+8y8ONXubw
+         mqzAnkxY45ihgRMVlifM5wRjjyZ5BEKKi7W9lMVm+u8UwkXyq1MdrrP2/ZPmotQ+IDI3
+         i+/O+i4R7d8tt+WV52fOhiQbXwCa0XcVAW1h5OPXRRNoU3RX+RMYDi7PdYiTEZJMPcDz
+         0m1nHCfG0aPHLLXNf4xZpLFB6KSbnQAZ5vkta0LTOGw+PzpdHisbMN/mzGEQhiNFj8zf
+         DP8WEMcDvXHy9xcM45Ixnfgj9Tk1dXu4St+y3c3/7qpn+pp4/+VrvoLSG+/nL4iSsFly
+         8KZw==
+X-Gm-Message-State: AC+VfDxalkQFgBM2nMg0Hn5nCPwtBttSZ19Z2Sj9Q2BT3sHia+bHwTiJ
+        FkkAZyuvp4c5PGTLnxC9V2BjHanYILBxK1MhrRyCSQ==
+X-Google-Smtp-Source: ACHHUZ459VPSubsKO+LN6a8B8Ad5v2JYGZHNAmEqMt29iXtS2IDCmjQodsu6UZ0tCBNXSEK9t6Fevh3pk7oiUFyoqVA=
+X-Received: by 2002:a05:622a:188f:b0:3f9:56c:1129 with SMTP id
+ v15-20020a05622a188f00b003f9056c1129mr174966qtc.5.1686749470220; Wed, 14 Jun
+ 2023 06:31:10 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 05/10] dt-bindings: power: reset: Add bindings for
- twl6030-power
-Content-Language: en-US
-To:     Mithil <bavishimithil@gmail.com>,
-        "robh@kernel.org" <robh@kernel.org>
-Cc:     "contact@paulk.fr" <contact@paulk.fr>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "lee@kernel.org" <lee@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "sre@kernel.org" <sre@kernel.org>,
-        "tony@atomide.com" <tony@atomide.com>
-References: <CAGzNGR=BkOMtw2PhudUs_b4ffk3B+x==9dtWuA-kcqnePaHVYA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAGzNGR=BkOMtw2PhudUs_b4ffk3B+x==9dtWuA-kcqnePaHVYA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230606120854.4170244-1-mshavit@google.com> <20230606120854.4170244-15-mshavit@google.com>
+ <ZH9oQMmI8CezMCnx@nvidia.com> <CAKHBV25eDNXEu+6GWDJqpw1h5N-Jq-GPzf81kNH1dyw3Z=KsZA@mail.gmail.com>
+ <ZIBxPd1/JCAle6yP@nvidia.com> <CAKHBV25K4BCewMdp3HcRtaX1iNhVpxL_6dMwp1_fmcQ5RWpKBQ@mail.gmail.com>
+ <ZImuIPrB2YeulNn3@nvidia.com>
+In-Reply-To: <ZImuIPrB2YeulNn3@nvidia.com>
+From:   Michael Shavit <mshavit@google.com>
+Date:   Wed, 14 Jun 2023 21:30:34 +0800
+Message-ID: <CAKHBV25g2M-35ZQ9X-mx-La7jVDgBm6rw-umOkNdgu3_jAiA-A@mail.gmail.com>
+Subject: Re: [PATCH v2 14/18] iommu/arm-smmu-v3: Support domains with shared CDs
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>, jean-philippe@linaro.org,
+        nicolinc@nvidia.com, baolu.lu@linux.intel.com,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,83 +76,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/06/2023 11:13, Mithil wrote:
-> Subject: Re: [PATCH 05/10] dt-bindings: power: reset: Add bindings for
-> twl6030-power
-> 
-> On Tue, Aug 23, 2022 at 12:54 AM Rob Herring <robh@kernel.org> wrote:
->>
->> On Sat, Aug 20, 2022 at 12:46:55PM +0530, Mithil Bavishi wrote:
->>> Adds documentation for the twl6030 power driver.
->>>
->>> Signed-off-by: Paul Kocialkowski <contact@paulk.fr>
->>> Signed-off-by: Mithil Bavishi <bavishimithil@gmail.com>
->>> ---
->>>  .../bindings/power/reset/twl6030-power.txt    | 31 +++++++++++++++++++
->>
->> New bindings must be DT schema format.
->>
->>>  1 file changed, 31 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/power/reset/twl6030-power.txt
->>>
->>> diff --git a/Documentation/devicetree/bindings/power/reset/twl6030-power.txt b/Documentation/devicetree/bindings/power/reset/twl6030-power.txt
->>> new file mode 100644
->>> index 000000000..946bb3d9f
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/power/reset/twl6030-power.txt
->>> @@ -0,0 +1,31 @@
->>> +Texas Instruments TWL family (twl6030) reset and power management module
->>> +
->>> +For now, the binding only supports the complete shutdown of the system after
->>> +poweroff.
->>> +
->>> +Required properties:
->>> +- compatible : must be
->>> +       "ti,twl6030-power"
->>> +
->>> +Optional properties:
->>> +
->>> +- ti,system-power-controller: This indicates that TWL6030 is the
->>
->> We have a generic property for this.
->>
-> 
-> What is property is that? And how would it get implemented here?
+On Wed, Jun 14, 2023 at 5:57=E2=80=AFPM Robin Murphy <robin.murphy@arm.com>=
+ wrote:
+>
+> In practice it would be entirely reasonable to only support
+> cross-instance attach between instances with matching capabilities such
+> that they *can* share the pagetable directly.
 
-Easy to guess...
+On Wed, Jun 14, 2023 at 8:10=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com> wr=
+ote:
+> When we talk about multi instance support, it means the iommu_domain -
+> in whatever fixed IO page table format it uses - can be attached to
+> any SMMU instance that supports it as a compatible page table format.
+>
+> ARM doesn't quite reach this model, but once it passes the finalize
+> step it does. The goal is to move finalize to allocate. So for your
+> purposes you can ignore the difference.
 
-git grep system-power-controller
+Got you. Failing the atach when the page table format is incompatible
+with the smmu device is a lot easier to handle. I didn't notice that
+SVA was already checking this elsewhere.
+I can give the multi-instance support a try (with the rest of these
+patches on top) and send it out as a follow-up series to this one.
 
+> I think it is good to make progress, it looked to me like the first
+> part stood alone fairly well and was an improvement on its own.
 
-
-> 
->>> +  power supply master of the system. With this flag, the chip will
->>> +  initiate an ACTIVE-to-OFF or SLEEP-to-OFF transition when the
->>> +  system poweroffs.
->>> +
->>> +Example:
->>> +&i2c1 {
->>> +       clock-frequency = <2600000>;
->>> +
->>> +       twl: twl@48 {
->>> +               reg = <0x48>;
->>> +               interrupts = <7>; /* SYS_NIRQ cascaded to intc */
->>> +               interrupt-parent = <&intc>;
->>> +
->>> +               twl_power: power {
->>> +                       compatible = "ti,twl6030-power";
->>> +                       ti,system-power-controller;
->>
->> Why do you need a child node here? There aren't any resources for the
->> sub-block.
->>
-> 
-> Just an example and how it is used on a device as well, is it fine if
-> just the block is as-is?
-
-The question is not about example. Question was why do you need child
-node at all. Children without resources are usually useless.
-
-Best regards,
-Krzysztof
-
+Sorry for the noobie question; it's not 100% obvious to me what the
+next step is here. Is there anything I should do to progress that
+first part forward?
