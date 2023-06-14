@@ -2,261 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C88D7730761
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 20:37:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F96D73069C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 20:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235859AbjFNShC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 14:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56010 "EHLO
+        id S234371AbjFNSEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 14:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbjFNSg7 (ORCPT
+        with ESMTP id S231723AbjFNSEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 14:36:59 -0400
-Received: from imap5.colo.codethink.co.uk (imap5.colo.codethink.co.uk [78.40.148.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63BC0B3;
-        Wed, 14 Jun 2023 11:36:58 -0700 (PDT)
-Received: from [167.98.27.226] (helo=rainbowdash)
-        by imap5.colo.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
-        id 1q9U5B-008GBC-Va; Wed, 14 Jun 2023 18:14:58 +0100
-Received: from ben by rainbowdash with local (Exim 4.96)
-        (envelope-from <ben@rainbowdash>)
-        id 1q9U5C-000I11-16;
-        Wed, 14 Jun 2023 18:14:58 +0100
-From:   Ben Dooks <ben.dooks@sifive.com>
-To:     linux-pwm@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ben.dooks@codethink.co.uk, u.kleine-koenig@pengutronix.de,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        jarkko.nikula@linux.intel.com,
-        William Salmon <william.salmon@sifive.com>,
-        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
-        Ben Dooks <ben.dooks@sifive.com>
-Subject: [PATCH v8 5/5] pwm: dwc: add of/platform support
-Date:   Wed, 14 Jun 2023 18:14:57 +0100
-Message-Id: <20230614171457.69191-6-ben.dooks@sifive.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230614171457.69191-1-ben.dooks@sifive.com>
-References: <20230614171457.69191-1-ben.dooks@sifive.com>
+        Wed, 14 Jun 2023 14:04:38 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4D71FCA
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:04:36 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f4b2bc1565so9035639e87.2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:04:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686765875; x=1689357875;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bog4gp9IhAVDvicWdI6GPIr4GVAQWTg0cHq5IKswNFk=;
+        b=Cj+kfzZrrM/ZWqq4BcJF4oRr0xz8aECNTiha8VP6xM8nBur/+kL7C1O1pn11SBWwxx
+         VLj0mH5B+XcgsOtbpMJIA9FRIq7T++hm0TK6/3maKHS2KnPBgEPY8WXhPRcwnljw3rCm
+         UaALuKJSlLsTHlczaIxUXd2P/kMisBkJxN63bKrXdeolnXpoIUzbYqyB88umPHNUVLJc
+         XbVOHMr9DVwz+vMZVbmg4AwhYgPGC1GFZSID2j16WHG2+er/QKY/BLJdaClykPXjTAV4
+         hJpWyTNMkTg9HELkMRL1/QG6/6yhp2De6o9AipeFDncEhl/rcJODtJhR9VAXsHaK4N3a
+         Txag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686765875; x=1689357875;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bog4gp9IhAVDvicWdI6GPIr4GVAQWTg0cHq5IKswNFk=;
+        b=a4yP+toGtptjpJv1qFFvFqfG1Kh730XkdyMYmhyyLQiIFlFf1VaXta309nbSaUH8us
+         owIZypxCAlkMSOYr3QVScpQBeGk26Jx+QJncheHGcLZaSGLCY/8As6jl0E7uuMS38iSZ
+         Zf0FK3orUts6wHTI+DVxIHlghez+uQgasYf+GySrpRghywlosZoaZLuQAs5m6hI9CwVt
+         xxV2dK4D85QlZOuJBAz2vaLtzTEEabzydo4n+DbS5Ag7NbWoJ6dVRrH1vlUhSZcdZpq+
+         6bZ+DpCHweBIu9yA3wBxGh5AYEG7cbd5YzZ2URHw0zLWPtwCUv5mplRhTiYY4hVmBThW
+         WCMg==
+X-Gm-Message-State: AC+VfDy80jwkK98/qrCVT7mMig1AzDmv6BsFRCDxbmvagmyrUkFEpARs
+        DaeLjtCkV+qHCaOdtc2kO+QReA==
+X-Google-Smtp-Source: ACHHUZ7axmEeaXNrGJVWIh8JHp3aZg1tJeDGzERk4LkPCA+q9ZmyjdjxZJoIQmV12vK+tAg3VJJSFg==
+X-Received: by 2002:a19:5f0e:0:b0:4f4:d83e:4141 with SMTP id t14-20020a195f0e000000b004f4d83e4141mr9350421lfb.50.1686765874578;
+        Wed, 14 Jun 2023 11:04:34 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id l18-20020a19c212000000b004eff1f7f206sm2224053lfc.9.2023.06.14.11.04.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 11:04:34 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v6 00/22] Restructure RPM SMD ICC
+Date:   Wed, 14 Jun 2023 20:04:19 +0200
+Message-Id: <20230526-topic-smd_icc-v6-0-263283111e66@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACMBimQC/33PTWrDMBAF4KsErauif8td9R4lFI00igWuFKTUp
+ ATfvXJ2xdTLN/C9mXmQhjVhI2+nB6m4pJZK7sG8nIifXL4gTaFnIpiQTAtDb+WaPG1f4TN5T8E
+ KLkdlncZAugHXkEJ12U9d5e957sNrxZjuzyUf556n1G6l/jx3Lnyb/le/cMooh2jRGCO9wvc5Z
+ VfLa6kXslUt4pCLzlGPUgEbguVyx+Uhl53rCEOQI9hBxR1Xh1xtHJwVYCKAEzuuD7nejkfn2Bg
+ Ys+Lv7+u6/gIc6v//vAEAAA==
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1686765872; l=6624;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=G4+hKUovQ8Bf7Uod3WWsfrhuUqaphsYJEe+4h0gILuE=;
+ b=il5VF/nWI+73x6ieMVF2AR8DQQaJa2w6T3+QYLzE6gXCwIsvcsuC6DuRQjgfze8r17qMidTk4
+ 9y0Sh9Ov4cHDzc51wMDPNCZ9xdLGlTCapljYWNX/wxqrAonqdfsAK6+
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The dwc pwm controller can be used in non-PCI systems, so allow
-either platform or OF based probing.
+This series reshuffles things around, moving the management of SMD RPM
+bus clocks to the interconnect framework where they belong. This helps
+us solve a couple of issues:
 
-Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
----
-v8:
- - add compile test for of-case
- - add module namespace
- - move later in the series
-v7:
- - fixup kconfig from previous pcie changes
-v5:
- - fix missing " in kconfig
- - remove .remove method, devm already sorts this.
- - merge pwm-number code
- - split the of code out of the core
- - get bus clock
-v4:
- - moved the compile test code earlier
- - fixed review comments
- - used NS_PER_SEC
- - use devm_clk_get_enabled
- - ensure we get the bus clock
-v3:
- - changed compatible name
----
- drivers/pwm/Kconfig        | 10 +++++
- drivers/pwm/Makefile       |  1 +
- drivers/pwm/pwm-dwc-core.c |  6 +++
- drivers/pwm/pwm-dwc-of.c   | 78 ++++++++++++++++++++++++++++++++++++++
- drivers/pwm/pwm-dwc.c      |  1 +
- drivers/pwm/pwm-dwc.h      |  1 +
- 6 files changed, 97 insertions(+)
- create mode 100644 drivers/pwm/pwm-dwc-of.c
+1. We can work towards unused clk cleanup of RPMCC without worrying
+   about it killing some NoC bus, resulting in the SoC dying.
+   Deasserting actually unused RPM clocks (among other things) will
+   let us achieve "true SoC-wide power collapse states", also known as
+   VDD_LOW and VDD_MIN.
 
-diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
-index 7c54cdcb97a0..61f5d3f30fd7 100644
---- a/drivers/pwm/Kconfig
-+++ b/drivers/pwm/Kconfig
-@@ -205,6 +205,16 @@ config PWM_DWC
- 	  To compile this driver as a module, choose M here: the module
- 	  will be called pwm-dwc.
- 
-+config PWM_DWC_OF
-+	tristate "DesignWare PWM Controller (OF bus)"
-+	depends on HAS_IOMEM && (OF || COMPILE_TEST)
-+	select PWM_DWC_CORE
-+	help
-+	  PWM driver for Synopsys DWC PWM Controller on an OF bus.
-+
-+	  To compile this driver as a module, choose M here: the module
-+	  will be called pwm-dwc-of.
-+
- config PWM_EP93XX
- 	tristate "Cirrus Logic EP93xx PWM support"
- 	depends on ARCH_EP93XX || COMPILE_TEST
-diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
-index de3ed77e8d7c..d27dfbb850b7 100644
---- a/drivers/pwm/Makefile
-+++ b/drivers/pwm/Makefile
-@@ -17,6 +17,7 @@ obj-$(CONFIG_PWM_CRC)		+= pwm-crc.o
- obj-$(CONFIG_PWM_CROS_EC)	+= pwm-cros-ec.o
- obj-$(CONFIG_PWM_DWC_CORE)	+= pwm-dwc-core.o
- obj-$(CONFIG_PWM_DWC)		+= pwm-dwc.o
-+obj-$(CONFIG_PWM_DWC_OF)	+= pwm-dwc-of.o
- obj-$(CONFIG_PWM_EP93XX)	+= pwm-ep93xx.o
- obj-$(CONFIG_PWM_FSL_FTM)	+= pwm-fsl-ftm.o
- obj-$(CONFIG_PWM_HIBVT)		+= pwm-hibvt.o
-diff --git a/drivers/pwm/pwm-dwc-core.c b/drivers/pwm/pwm-dwc-core.c
-index 0f07e26e6c30..ed102fc4b30a 100644
---- a/drivers/pwm/pwm-dwc-core.c
-+++ b/drivers/pwm/pwm-dwc-core.c
-@@ -16,6 +16,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/pci.h>
-+#include <linux/clk.h>
- #include <linux/pm_runtime.h>
- #include <linux/pwm.h>
- 
-@@ -44,6 +45,9 @@ static int __dwc_pwm_configure_timer(struct dwc_pwm *dwc,
- 	u32 high;
- 	u32 low;
- 
-+	if (dwc->clk)
-+		dwc->clk_rate = clk_get_rate(dwc->clk);
-+
- 	/*
- 	 * Calculate width of low and high period in terms of input clock
- 	 * periods and check are the result within HW limits between 1 and
-@@ -128,6 +132,8 @@ static int dwc_pwm_get_state(struct pwm_chip *chip, struct pwm_device *pwm,
- 
- 	pm_runtime_get_sync(chip->dev);
- 
-+	if (dwc->clk)
-+		dwc->clk_rate = clk_get_rate(dwc->clk);
- 	clk_rate = dwc->clk_rate;
- 
- 	ctrl = dwc_pwm_readl(dwc, DWC_TIM_CTRL(pwm->hwpwm));
-diff --git a/drivers/pwm/pwm-dwc-of.c b/drivers/pwm/pwm-dwc-of.c
-new file mode 100644
-index 000000000000..13a0b534b383
---- /dev/null
-+++ b/drivers/pwm/pwm-dwc-of.c
-@@ -0,0 +1,78 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * DesignWare PWM Controller driver OF
-+ *
-+ * Copyright (C) 2022 SiFive, Inc.
-+ */
-+
-+#define DEFAULT_MODULE_NAMESACE dwc_pwm
-+
-+#include <linux/bitops.h>
-+#include <linux/export.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/clk.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/pwm.h>
-+#include <linux/io.h>
-+
-+#include "pwm-dwc.h"
-+
-+static int dwc_pwm_plat_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct dwc_pwm *dwc;
-+	struct clk *bus;
-+	u32 nr_pwm;
-+
-+	dwc = dwc_pwm_alloc(dev);
-+	if (!dwc)
-+		return -ENOMEM;
-+
-+	if (!device_property_read_u32(dev, "snps,pwm-number", &nr_pwm)) {
-+		if (nr_pwm > DWC_TIMERS_TOTAL)
-+			dev_err(dev, "too many PWMs (%d) specified, capping at %d\n",
-+				nr_pwm, dwc->chip.npwm);
-+		else
-+			dwc->chip.npwm = nr_pwm;
-+	}
-+
-+	dwc->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(dwc->base))
-+		return PTR_ERR(dwc->base);
-+
-+	bus = devm_clk_get_enabled(dev, NULL);
-+	if (IS_ERR(bus))
-+		return dev_err_probe(dev, PTR_ERR(bus),
-+				     "failed to get clock\n");
-+
-+	dwc->clk = devm_clk_get_enabled(dev, "timer");
-+	if (IS_ERR(dwc->clk))
-+		return dev_err_probe(dev, PTR_ERR(dwc->clk),
-+				     "failed to get timer clock\n");
-+
-+	dwc->clk_rate = clk_get_rate(dwc->clk);
-+	return devm_pwmchip_add(dev, &dwc->chip);
-+}
-+
-+static const struct of_device_id dwc_pwm_dt_ids[] = {
-+	{ .compatible = "snps,dw-apb-timers-pwm2" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, dwc_pwm_dt_ids);
-+
-+static struct platform_driver dwc_pwm_plat_driver = {
-+	.driver = {
-+		.name		= "dwc-pwm",
-+		.of_match_table  = dwc_pwm_dt_ids,
-+	},
-+	.probe	= dwc_pwm_plat_probe,
-+};
-+
-+module_platform_driver(dwc_pwm_plat_driver);
-+
-+MODULE_ALIAS("platform:dwc-pwm-of");
-+MODULE_AUTHOR("Ben Dooks <ben.dooks@sifive.com>");
-+MODULE_DESCRIPTION("DesignWare PWM Controller");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/pwm/pwm-dwc.c b/drivers/pwm/pwm-dwc.c
-index bd9cadb497d7..7c32bd06ed33 100644
---- a/drivers/pwm/pwm-dwc.c
-+++ b/drivers/pwm/pwm-dwc.c
-@@ -20,6 +20,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/pci.h>
-+#include <linux/clk.h>
- #include <linux/pm_runtime.h>
- #include <linux/pwm.h>
- 
-diff --git a/drivers/pwm/pwm-dwc.h b/drivers/pwm/pwm-dwc.h
-index e0a940fd6e87..18e98c2c07d7 100644
---- a/drivers/pwm/pwm-dwc.h
-+++ b/drivers/pwm/pwm-dwc.h
-@@ -42,6 +42,7 @@ struct dwc_pwm_ctx {
- struct dwc_pwm {
- 	struct pwm_chip chip;
- 	void __iomem *base;
-+	struct clk *clk;
- 	unsigned long clk_rate;
- 	struct dwc_pwm_ctx ctx[DWC_TIMERS_TOTAL];
- };
+2. We no longer have to keep tons of quirky bus clock ifs in the icc
+   driver. You either have a RPM clock and call "rpm set rate" or you
+   have a single non-RPM clock (like AHB_CLK_SRC) or you don't have any.
+
+3. There's less overhead - instead of going through layers and layers of
+   the CCF, ratesetting comes down to calling max() and sending a single
+   RPM message. ICC is very very dynamic so that's a big plus.
+
+The clocks still need to be vaguely described in the clk-smd-rpm driver,
+as it gives them an initial kickoff, before actually telling RPM to
+enable DVFS scaling.  After RPM receives that command, all clocks that
+have not been assigned a rate are considered unused and are shut down
+in hardware, leading to the same issue as described in point 1.
+
+We can consider marking them __initconst in the future, but this series
+is very fat even without that..
+
+Apart from that, it squashes a couple of bugs that really need fixing..
+
+--- MERGING STRATEGY ---
+If Stephen and Georgi agree, it would be best to take all of this through
+the qcom tree, as it touches on heavily intertwined components and
+introduces compile-time dependencies between icc and clk drivers.
+
+Tested on SM6375 (OOT), MSM8998 (OOT), MSM8996.
+
+MSM8974 conversion to common code and modernization will be handled separately.
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Changes in v6:
+- Fix argument naming in "Add rpmcc handling skeleton code"
+- Fix missing clk.h and reorder patch "Add missing headers in icc-rpm.h",
+  drop Dmitry's rb
+- Pick up tags
+- Link to v5: https://lore.kernel.org/r/20230526-topic-smd_icc-v5-0-eeaa09d0082e@linaro.org
+
+Changes in v5:
+- Pass RPM context id to qcom_icc_rpm_set_bus_rate()
+- Fix min_t call cutting off bits 32-63 in set() path
+- Pick up tags
+- Link to v4: https://lore.kernel.org/r/20230526-topic-smd_icc-v4-0-5ba82b6fbba2@linaro.org
+
+Changes in v4:
+- Only set clk rate on a context if necessary
+- Mention qcom,icc.h is not the correct header in "Control bus rpmcc form icc"
+- Fix the bindings (BIT vs 1<<)
+- Fix one more wrong use of qcom,icc.h in "Fix bucket numer" and uninclude it
+- Drop "Allow negative QoS offset" (will be handled separately)
+- Export icc clocks descriptions to unbreak =m builds
+- Pick up tags
+- Link to v3: https://lore.kernel.org/r/20230526-topic-smd_icc-v3-0-5fb7d39b874f@linaro.org
+
+Changes in v3:
+- Use devm_clk_get_optional and only get() the clock once
+- Drop unnecessary NULL-checks for qp->bus_clk
+- Handle ARM32 CCF limitations, add an explicit comment about them
+- Use Stephan's alternative rpmcc readiness check
+- Fix one more wrong usage of QCOM_ICC_NUM_BUCKETS in icc-rpm.h
+- Introduce new dt-bindings for icc rpm tags
+- Mention the rpm tags situation in the commit message of
+  "Fix bucket number"
+- Pick up tags
+- Link to v2: https://lore.kernel.org/r/20230526-topic-smd_icc-v2-0-e5934b07d813@linaro.org
+
+Changes in v2:
+- Sort entries properly in "Add missing headers in icc-rpm.h"
+- Fix the check for no clocks on a given provider
+- Replace "Divide clk rate by src node bus width" with a proper fix
+- Add "Set correct bandwidth through RPM bw req"
+- Split "Add QCOM_SMD_RPM_STATE_NUM" into 2 logical changes
+- Move "Separate out interconnect bus clocks" a bit later in the series
+- Link to v1: https://lore.kernel.org/r/20230526-topic-smd_icc-v1-0-1bf8e6663c4e@linaro.org
+
+---
+Konrad Dybcio (21):
+      dt-bindings: interconnect: Add Qcom RPM ICC bindings
+      soc: qcom: smd-rpm: Add QCOM_SMD_RPM_STATE_NUM
+      soc: qcom: smd-rpm: Use tabs for defines
+      clk: qcom: smd-rpm: Move some RPM resources to the common header
+      interconnect: qcom: icc-rpm: Introduce keep_alive
+      interconnect: qcom: Add missing headers in icc-rpm.h
+      interconnect: qcom: Fold smd-rpm.h into icc-rpm.h
+      interconnect: qcom: smd-rpm: Add rpmcc handling skeleton code
+      interconnect: qcom: Define RPM bus clocks
+      interconnect: qcom: sdm660: Hook up RPM bus clk definitions
+      interconnect: qcom: msm8996: Hook up RPM bus clk definitions
+      interconnect: qcom: qcs404: Hook up RPM bus clk definitions
+      interconnect: qcom: msm8939: Hook up RPM bus clk definitions
+      interconnect: qcom: msm8916: Hook up RPM bus clk definitions
+      interconnect: qcom: qcm2290: Hook up RPM bus clk definitions
+      interconnect: qcom: icc-rpm: Control bus rpmcc from icc
+      clk: qcom: smd-rpm: Separate out interconnect bus clocks
+      interconnect: qcom: icc-rpm: Fix bucket number
+      interconnect: qcom: icc-rpm: Set bandwidth on both contexts
+      interconnect: qcom: icc-rpm: Set correct bandwidth through RPM bw req
+      interconnect: qcom: icc-rpm: Fix bandwidth calculations
+
+Stephan Gerhold (1):
+      soc: qcom: smd-rpm: Move icc_smd_rpm registration to clk-smd-rpm
+
+ drivers/clk/qcom/clk-smd-rpm.c                  | 312 +++++++++++-------------
+ drivers/interconnect/qcom/Makefile              |   2 +-
+ drivers/interconnect/qcom/icc-rpm-clocks.c      |  77 ++++++
+ drivers/interconnect/qcom/icc-rpm.c             | 220 +++++++++--------
+ drivers/interconnect/qcom/icc-rpm.h             |  56 ++++-
+ drivers/interconnect/qcom/msm8916.c             |   5 +-
+ drivers/interconnect/qcom/msm8939.c             |   6 +-
+ drivers/interconnect/qcom/msm8974.c             |   2 +-
+ drivers/interconnect/qcom/msm8996.c             |  10 +-
+ drivers/interconnect/qcom/qcm2290.c             |   8 +-
+ drivers/interconnect/qcom/qcs404.c              |   5 +-
+ drivers/interconnect/qcom/sdm660.c              |   8 +-
+ drivers/interconnect/qcom/smd-rpm.c             |  23 +-
+ drivers/interconnect/qcom/smd-rpm.h             |  15 --
+ drivers/soc/qcom/smd-rpm.c                      |  17 +-
+ include/dt-bindings/interconnect/qcom,rpm-icc.h |  13 +
+ include/linux/soc/qcom/smd-rpm.h                |  20 +-
+ 17 files changed, 455 insertions(+), 344 deletions(-)
+---
+base-commit: b16049b21162bb649cdd8519642a35972b7910fe
+change-id: 20230526-topic-smd_icc-b8213948a5ed
+
+Best regards,
 -- 
-2.39.2
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
