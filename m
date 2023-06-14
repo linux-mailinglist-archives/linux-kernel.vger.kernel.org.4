@@ -2,73 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC3F3730547
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:43:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BC09730551
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235417AbjFNQnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 12:43:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54498 "EHLO
+        id S235712AbjFNQoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 12:44:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235224AbjFNQn1 (ORCPT
+        with ESMTP id S235298AbjFNQoF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 12:43:27 -0400
-Received: from mx1.veeam.com (mx1.veeam.com [216.253.77.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7C81A3;
-        Wed, 14 Jun 2023 09:43:24 -0700 (PDT)
-Received: from mail.veeam.com (prgmbx01.amust.local [172.24.128.102])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 14 Jun 2023 12:44:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38FFE62;
+        Wed, 14 Jun 2023 09:44:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mx1.veeam.com (Postfix) with ESMTPS id A838441C22;
-        Wed, 14 Jun 2023 12:43:21 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com;
-        s=mx1-2022; t=1686761001;
-        bh=jNTgcvWm1vw80HHo0h776WVZUmiYhzpPLC0Z4LijRXU=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To:From;
-        b=kIebp/AY7hQOAPU7dr4d2uQksODoxH0g/Z1VW20qAjTclm2YEp/FOQMds78ngEKkK
-         X5AoTgpoN2bGr1/8zPbkNYjRImT29BknuqEfCgYsAeE+gYWJmEMEnv0DdkOLFydauT
-         a7ihjMGKq5BHyq5bAhAGErRN30NDlXD04HhOfwoJn2MeJIVC+Spr9+kVY0UDPIpMA7
-         ICWaidyXrAjvvvMeqSeLy/12zbRN7Hq5ckHeI9IQ3MD1e7IznjuXwbDArQK8V3obt1
-         XSwV2jtKL3cTAlka9tAqd3JrvElD67sQpFr9l+5T6N3FAaMVhxC/hKY7WJzDksj0v9
-         PkFEwWfHNV3PQ==
-Received: from [172.24.10.107] (172.24.10.107) by prgmbx01.amust.local
- (172.24.128.102) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Wed, 14 Jun
- 2023 18:43:20 +0200
-Message-ID: <c4c9da4f-0d82-4e35-0365-f246666f0c37@veeam.com>
-Date:   Wed, 14 Jun 2023 18:43:10 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BC94638D6;
+        Wed, 14 Jun 2023 16:44:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52EFBC433C8;
+        Wed, 14 Jun 2023 16:43:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686761042;
+        bh=AbksTDj0Cr11HjVk9ndl4fxdbz4KeyrvhEW07BZm7RE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fzMgfRjaZkDQ+FOJ6dtazBXiBUyBQCh5OuId0BfGCJL6lwjfCnuwyySZ6oF/kRRVj
+         bC28i264sOrYpVyv9CDTbe+Tj+Fb2J3UomvZo3csfGfI4QJ62D2+rxExs8Fy1WECG0
+         tK2DLmgufO1pwcMdXBcFfkQFFxYpm9Bbuv+ZU3HgyRyQuleaZb+ZKvk8kjgwp+rJ78
+         e00zb1dnuGAj3/nE4JH7iE2JEo4SfF5MPjrJ1h+KYTI83kIWY+yf61KwTDXOvo+dhd
+         gNVCTNWO0yQaHeW3KBkDeW0/IG/rw03pvu5HAdbaINuqwnNlQ4afRKvPrAvlZeW9dX
+         76SQ9ok++D/vA==
+Date:   Wed, 14 Jun 2023 17:43:57 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Prabhakar <prabhakar.csengg@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-riscv@lists.infradead.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v9 3/6] riscv: mm: dma-noncoherent: nonstandard cache
+ operations support
+Message-ID: <20230614-bundle-greedless-91581fdbdce8@spud>
+References: <20230614104759.228372-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20230614104759.228372-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdWApGKsS8DU7-=6j6WaRBDZ8Amig2NtA8f8=PbGKoFQjQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v5 04/11] blksnap: header file of the module interface
-To:     Christoph Hellwig <hch@infradead.org>
-CC:     Dave Chinner <david@fromorbit.com>, <axboe@kernel.dk>,
-        <corbet@lwn.net>, <snitzer@kernel.org>, <viro@zeniv.linux.org.uk>,
-        <brauner@kernel.org>, <dchinner@redhat.com>, <willy@infradead.org>,
-        <dlemoal@kernel.org>, <linux@weissschuh.net>, <jack@suse.cz>,
-        <ming.lei@redhat.com>, <linux-block@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>,
-        "Donald Buczek" <buczek@molgen.mpg.de>
-References: <20230612135228.10702-1-sergei.shtepa@veeam.com>
- <20230612135228.10702-5-sergei.shtepa@veeam.com>
- <ZIjsywOtHM5nIhSr@dread.disaster.area> <ZIldkb1pwhNsSlfl@infradead.org>
- <733f591e-0e8f-8668-8298-ddb11a74df81@veeam.com>
- <ZInJlD70tMKoBi7T@infradead.org>
-Content-Language: en-US
-From:   Sergei Shtepa <sergei.shtepa@veeam.com>
-In-Reply-To: <ZInJlD70tMKoBi7T@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.24.10.107]
-X-ClientProxiedBy: prgmbx02.amust.local (172.24.128.103) To
- prgmbx01.amust.local (172.24.128.102)
-X-EsetResult: clean, is OK
-X-EsetId: 37303A29240315546D7067
-X-Veeam-MMEX: True
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="l7qMsMb3x+g0a+Wz"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdWApGKsS8DU7-=6j6WaRBDZ8Amig2NtA8f8=PbGKoFQjQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -76,31 +75,93 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--l7qMsMb3x+g0a+Wz
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 6/14/23 16:07, Christoph Hellwig wrote:
-> I don't actually think swapfile is a very good idea, in fact the Linux
-> swap code in general is not a very good place to look for inspirations
-> 😄
+On Wed, Jun 14, 2023 at 02:53:26PM +0200, Geert Uytterhoeven wrote:
+> Hi Prabhakar,
+>=20
+> On Wed, Jun 14, 2023 at 12:48=E2=80=AFPM Prabhakar <prabhakar.csengg@gmai=
+l.com> wrote:
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > Introduce support for nonstandard noncoherent systems in the RISC-V
+> > architecture. It enables function pointer support to handle cache
+> > management in such systems.
+> >
+> > This patch adds a new configuration option called
+> > "RISCV_NONSTANDARD_CACHE_OPS." This option is a boolean flag that
+> > depends on "RISCV_DMA_NONCOHERENT" and enables the function pointer
+> > support for cache management in nonstandard noncoherent systems.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> > v8 -> v9
+> > * New patch
+>=20
+> Thanks for your patch!
+>=20
+> > --- /dev/null
+> > +++ b/arch/riscv/include/asm/dma-noncoherent.h
+> > @@ -0,0 +1,28 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +/*
+> > + * Copyright (C) 2023 Renesas Electronics Corp.
+> > + */
+> > +
+> > +#ifndef __ASM_DMA_NONCOHERENT_H
+> > +#define __ASM_DMA_NONCOHERENT_H
+> > +
+> > +#include <linux/dma-direct.h>
+> > +
+> > +/*
+> > + * struct riscv_cache_ops - Structure for CMO function pointers
+> > + *
+> > + * @clean: Function pointer for clean cache
+> > + * @inval: Function pointer for invalidate cache
+> > + * @flush: Function pointer for flushing the cache
+> > + */
+> > +struct riscv_cache_ops {
+> > +       void (*clean)(phys_addr_t paddr, unsigned long size);
+> > +       void (*inval)(phys_addr_t paddr, unsigned long size);
+> > +       void (*flush)(phys_addr_t paddr, unsigned long size);
+> > +};
+>=20
+> I guess the naming can be improved?
+>=20
+> .clean() is used by arch_dma_cache_wback() / arch_wb_cache_pmem(),
+> .inval() is used by arch_dma_cache_inv() / arch_invalidate_pmem(),
+> .flush() is used by arch_dma_cache_wback_inv() / arch_dma_prep_coherent().
+>=20
+> Perhaps .wback(), .inv(), .wback_inv() are more clear?
+>=20
+> I understand this is subject to bikeshedding...
+> But hey, how many innocent bits of data have already been lost due
+> to cache semantic mismatches?
 
-Perhaps. I haven't looked at the code yet. But I like the idea of
-protecting the file from any access from the user-space, as it is
-implemented for swapfile.
+Given this is based on Arnd's stuff, +1 on the bikeshed. The names have
+been chosen I guess to match the CBOM extensions naming.
 
-> 
-> IFF the usage is always to have a whole file for the diff storage the
-> over all API is very simple - just pass a fd to the kernel for the area,
-> and then use in-kernel direct I/O on it.  Now if that file should also
-> be able to reside on the same file system that the snapshot is taken
-> of things get a little more complicated, because writes to it also need
-> to automatically set the BIO_REFFED flag.
+Otherwise, I had it in my head that the next revision of this was going
+to take patches 8 & 9 from Arnd's series, to align the semantics. Not
+that it really bothers me, just means this will have to wait for the
+cross-arch series, when pretty sure Arnd suggested not depending on that
+any more... Am I missing something Prabhakar?
 
-There is definitely no task to create a difference storage file on the
-same block device for which the snapshot is being created. The file can
-be created on any block device.
+Other than the bikeshedding, no objections.
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-Still, the variant when a whole partition is allocated for the difference
-storage can also be useful.
+--l7qMsMb3x+g0a+Wz
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> I have some ideas for that and will share some draft code with you.
+-----BEGIN PGP SIGNATURE-----
 
-I'll be glad.
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZInuTAAKCRB4tDGHoIJi
+0mehAP0QJVAWl4QlY0rgtJuCCW2wWXiwHW7Opw7NAhq2tdzsMwD9FPKY2ISdjIAj
+wLfm2XMMYQuqT1og8iUEnl0XhGDPGgA=
+=FBZR
+-----END PGP SIGNATURE-----
+
+--l7qMsMb3x+g0a+Wz--
