@@ -2,218 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 560E672F239
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 03:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A133372F234
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 03:53:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240832AbjFNBxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 21:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50102 "EHLO
+        id S233366AbjFNBxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 21:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236001AbjFNBxu (ORCPT
+        with ESMTP id S229584AbjFNBxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 21:53:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457821707
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 18:53:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686707580;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+iZswuipC7JgIu9I0HN+5r5X4bKAHRprWjVrwgN5sVg=;
-        b=FJfFmKmWCsZYAOFbg1VlUD70jEkmiZXsmBqnBXkNGZL7sbSUYHchmvjnj1TnEc8LBjZhfA
-        0akt6RCxpnIF3eJGpoV69W5WIAYh9mfecgbI+iji/In3H+uHrbLsAAYn31KViLsmm4uGDD
-        Bsmw96CazHztlavROIJuIDlGZKzjNK8=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-517-iSsOL26IMpSlCyhAr2BksA-1; Tue, 13 Jun 2023 21:52:59 -0400
-X-MC-Unique: iSsOL26IMpSlCyhAr2BksA-1
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-25deb8603a5so117268a91.3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 18:52:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686707578; x=1689299578;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+iZswuipC7JgIu9I0HN+5r5X4bKAHRprWjVrwgN5sVg=;
-        b=HR/FhpOHS2cjx0C5LUKdVe0BrZoM9XzDc1TVLmSkcF+ihCVunHHxwM/U6z5mYzqh99
-         iEdH9FbDgSvZ+gORKCW5wanU6YyMI9MoHJab4TLMEMLtj/CNpOlJ6ER8rnJZObVEfaz9
-         4CdQSFzDVeFZY0DcE0iepVSVtRWkbXQIrWK9GDDVkGX7mFzQf0PcxxnDQ5t1SEHwv0d4
-         zi6CDmxAVXGZ3CmwiguY2398Nbf5jFA9YBEMDgB5PeYM4AlXNCLrP7d4clU15gw/tRCH
-         +1hcXnPux/jAo1V/fsPLgod9IX+RuwWRMq1JfIlgCSZY1euEx+B8dP/Pt+rNIYv58Eek
-         IXjg==
-X-Gm-Message-State: AC+VfDzUXPekCZtIFHLwD2alIXQ1gCebe8HoicA3I+/tTyIlb63uq/Qu
-        8OZgKwyQRtM7uqA99uOtxlBkfdYaSIsEpL8XNrQWC0rFz8KWKNeLsWFCN+gBYq/wfnymIberaaQ
-        oLaUy40tzIG3C6smaU5ndyBtm
-X-Received: by 2002:a05:6a20:12ca:b0:114:bbe5:baf4 with SMTP id v10-20020a056a2012ca00b00114bbe5baf4mr403780pzg.24.1686707577951;
-        Tue, 13 Jun 2023 18:52:57 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7sCKCX4BLLpiiKABZgtjTIRM8CXrt20k7r8K6ci2cc7bb1n3KHu3zDLW8NzAYGhQmIl0yZbg==
-X-Received: by 2002:a05:6a20:12ca:b0:114:bbe5:baf4 with SMTP id v10-20020a056a2012ca00b00114bbe5baf4mr403764pzg.24.1686707577513;
-        Tue, 13 Jun 2023 18:52:57 -0700 (PDT)
-Received: from [10.72.12.155] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id u5-20020a170902e80500b001b02162c86bsm6470254plg.80.2023.06.13.18.52.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 18:52:56 -0700 (PDT)
-Message-ID: <977d8133-a55f-0667-dc12-aa6fd7d8c3e4@redhat.com>
-Date:   Wed, 14 Jun 2023 09:52:45 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v5 00/14] ceph: support idmapped mounts
-Content-Language: en-US
-To:     Gregory Farnum <gfarnum@redhat.com>,
-        Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     stgraber@ubuntu.com, linux-fsdevel@vger.kernel.org,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230608154256.562906-1-aleksandr.mikhalitsyn@canonical.com>
- <f3864ed6-8c97-8a7a-f268-dab29eb2fb21@redhat.com>
- <CAEivzxcRsHveuW3nrPnSBK6_2-eT4XPvza3kN2oogvnbVXBKvQ@mail.gmail.com>
- <20230609-alufolie-gezaubert-f18ef17cda12@brauner>
- <CAEivzxc_LW6mTKjk46WivrisnnmVQs0UnRrh6p0KxhqyXrErBQ@mail.gmail.com>
- <ac1c6817-9838-fcf3-edc8-224ff85691e0@redhat.com>
- <CAJ4mKGby71qfb3gd696XH3AazeR0Qc_VGYupMznRH3Piky+VGA@mail.gmail.com>
-From:   Xiubo Li <xiubli@redhat.com>
-In-Reply-To: <CAJ4mKGby71qfb3gd696XH3AazeR0Qc_VGYupMznRH3Piky+VGA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 13 Jun 2023 21:53:02 -0400
+Received: from zg8tndyumtaxlji0oc4xnzya.icoremail.net (zg8tndyumtaxlji0oc4xnzya.icoremail.net [46.101.248.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27B9E106;
+        Tue, 13 Jun 2023 18:52:58 -0700 (PDT)
+Received: from localhost.localdomain (unknown [125.119.249.156])
+        by mail-app2 (Coremail) with SMTP id by_KCgCH3hh3HYlkw7S7Bg--.47750S4;
+        Wed, 14 Jun 2023 09:52:56 +0800 (CST)
+From:   Lin Ma <linma@zju.edu.cn>
+To:     kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lin Ma <linma@zju.edu.cn>
+Subject: [PATCH v1] net/handshake: remove fput() that causes use-after-free
+Date:   Wed, 14 Jun 2023 09:52:49 +0800
+Message-Id: <20230614015249.987448-1-linma@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: by_KCgCH3hh3HYlkw7S7Bg--.47750S4
+X-Coremail-Antispam: 1UD129KBjvJXoW3Xw4kZry7tF47GFykJr4Dtwb_yoW7WFyfpF
+        WYvFn8CrWrtr9YqFn7J3WkXr109F43Z3WUWryxZryrtFsxWw1kAr1UGa48WrW5Jws7ursr
+        tFnxXFyFyr1UXaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyv14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4U
+        JVW0owA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxG
+        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+        vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IY
+        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
+        xKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAF
+        wI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbrMaUUUUUU==
+X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+A reference underflow is found in TLS handshake subsystem that causes a
+direct use-after-free. Part of the crash log is like below:
 
-On 6/13/23 22:53, Gregory Farnum wrote:
-> On Mon, Jun 12, 2023 at 6:43 PM Xiubo Li <xiubli@redhat.com> wrote:
->>
->> On 6/9/23 18:12, Aleksandr Mikhalitsyn wrote:
->>> On Fri, Jun 9, 2023 at 12:00 PM Christian Brauner <brauner@kernel.org> wrote:
->>>> On Fri, Jun 09, 2023 at 10:59:19AM +0200, Aleksandr Mikhalitsyn wrote:
->>>>> On Fri, Jun 9, 2023 at 3:57 AM Xiubo Li <xiubli@redhat.com> wrote:
->>>>>> On 6/8/23 23:42, Alexander Mikhalitsyn wrote:
->>>>>>> Dear friends,
->>>>>>>
->>>>>>> This patchset was originally developed by Christian Brauner but I'll continue
->>>>>>> to push it forward. Christian allowed me to do that :)
->>>>>>>
->>>>>>> This feature is already actively used/tested with LXD/LXC project.
->>>>>>>
->>>>>>> Git tree (based on https://github.com/ceph/ceph-client.git master):
->>>>> Hi Xiubo!
->>>>>
->>>>>> Could you rebase these patches to 'testing' branch ?
->>>>> Will do in -v6.
->>>>>
->>>>>> And you still have missed several places, for example the following cases:
->>>>>>
->>>>>>
->>>>>>       1    269  fs/ceph/addr.c <<ceph_netfs_issue_op_inline>>
->>>>>>                 req = ceph_mdsc_create_request(mdsc, CEPH_MDS_OP_GETATTR,
->>>>>> mode);
->>>>> +
->>>>>
->>>>>>       2    389  fs/ceph/dir.c <<ceph_readdir>>
->>>>>>                 req = ceph_mdsc_create_request(mdsc, op, USE_AUTH_MDS);
->>>>> +
->>>>>
->>>>>>       3    789  fs/ceph/dir.c <<ceph_lookup>>
->>>>>>                 req = ceph_mdsc_create_request(mdsc, op, USE_ANY_MDS);
->>>>> We don't have an idmapping passed to lookup from the VFS layer. As I
->>>>> mentioned before, it's just impossible now.
->>>> ->lookup() doesn't deal with idmappings and really can't otherwise you
->>>> risk ending up with inode aliasing which is really not something you
->>>> want. IOW, you can't fill in inode->i_{g,u}id based on a mount's
->>>> idmapping as inode->i_{g,u}id absolutely needs to be a filesystem wide
->>>> value. So better not even risk exposing the idmapping in there at all.
->>> Thanks for adding, Christian!
->>>
->>> I agree, every time when we use an idmapping we need to be careful with
->>> what we map. AFAIU, inode->i_{g,u}id should be based on the filesystem
->>> idmapping (not mount),
->>> but in this case, Xiubo want's current_fs{u,g}id to be mapped
->>> according to an idmapping.
->>> Anyway, it's impossible at now and IMHO, until we don't have any
->>> practical use case where
->>> UID/GID-based path restriction is used in combination with idmapped
->>> mounts it's not worth to
->>> make such big changes in the VFS layer.
->>>
->>> May be I'm not right, but it seems like UID/GID-based path restriction
->>> is not a widespread
->>> feature and I can hardly imagine it to be used with the container
->>> workloads (for instance),
->>> because it will require to always keep in sync MDS permissions
->>> configuration with the
->>> possible UID/GID ranges on the client. It looks like a nightmare for sysadmin.
->>> It is useful when cephfs is used as an external storage on the host, but if you
->>> share cephfs with a few containers with different user namespaces idmapping...
->> Hmm, while this will break the MDS permission check in cephfs then in
->> lookup case. If we really couldn't support it we should make it to
->> escape the check anyway or some OPs may fail and won't work as expected.
-> I don't pretend to know the details of the VFS (or even our linux
-> client implementation), but I'm confused that this is apparently so
-> hard. It looks to me like we currently always fill in the "caller_uid"
-> with "from_kuid(&init_user_ns, req->r_cred->fsuid))". Is this actually
-> valid to begin with? If it is, why can't the uid mapping be applied on
-> that?
->
-> As both the client and the server share authority over the inode's
-> state (including things like mode bits and owners), and need to do
-> permission checking, being able to tell the server the relevant actor
-> is inherently necessary. We also let admins restrict keys to
-> particular UID/GID combinations as they wish, and it's not the most
-> popular feature but it does get deployed. I would really expect a user
-> of UID mapping to be one of the *most* likely to employ such a
-> facility...maybe not with containers, but certainly end-user homedirs
-> and shared spaces.
->
-> Disabling the MDS auth checks is really not an option. I guess we
-> could require any user employing idmapping to not be uid-restricted,
-> and set the anonymous UID (does that work, Xiubo, or was it the broken
-> one? In which case we'd have to default to root?). But that seems a
-> bit janky to me.
+[    2.022114] ------------[ cut here ]------------
+[    2.022193] refcount_t: underflow; use-after-free.
+[    2.022288] WARNING: CPU: 0 PID: 60 at lib/refcount.c:28 refcount_warn_saturate+0xbe/0x110
+[    2.022432] Modules linked in:
+[    2.022848] RIP: 0010:refcount_warn_saturate+0xbe/0x110
+[    2.023231] RSP: 0018:ffffc900001bfe18 EFLAGS: 00000286
+[    2.023325] RAX: 0000000000000000 RBX: 0000000000000007 RCX: 00000000ffffdfff
+[    2.023438] RDX: 0000000000000000 RSI: 00000000ffffffea RDI: 0000000000000001
+[    2.023555] RBP: ffff888004c20098 R08: ffffffff82b392c8 R09: 00000000ffffdfff
+[    2.023693] R10: ffffffff82a592e0 R11: ffffffff82b092e0 R12: ffff888004c200d8
+[    2.023813] R13: 0000000000000000 R14: ffff888004c20000 R15: ffffc90000013ca8
+[    2.023930] FS:  0000000000000000(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
+[    2.024062] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    2.024161] CR2: ffff888003601000 CR3: 0000000002a2e000 CR4: 00000000000006f0
+[    2.024275] Call Trace:
+[    2.024322]  <TASK>
+[    2.024367]  ? __warn+0x7f/0x130
+[    2.024430]  ? refcount_warn_saturate+0xbe/0x110
+[    2.024513]  ? report_bug+0x199/0x1b0
+[    2.024585]  ? handle_bug+0x3c/0x70
+[    2.024676]  ? exc_invalid_op+0x18/0x70
+[    2.024750]  ? asm_exc_invalid_op+0x1a/0x20
+[    2.024830]  ? refcount_warn_saturate+0xbe/0x110
+[    2.024916]  ? refcount_warn_saturate+0xbe/0x110
+[    2.024998]  __tcp_close+0x2f4/0x3d0
+[    2.025065]  ? __pfx_kunit_generic_run_threadfn_adapter+0x10/0x10
+[    2.025168]  tcp_close+0x1f/0x70
+[    2.025231]  inet_release+0x33/0x60
+[    2.025297]  sock_release+0x1f/0x80
+[    2.025361]  handshake_req_cancel_test2+0x100/0x2d0
+[    2.025457]  kunit_try_run_case+0x4c/0xa0
+[    2.025532]  kunit_generic_run_threadfn_adapter+0x15/0x20
+[    2.025644]  kthread+0xe1/0x110
+[    2.025708]  ? __pfx_kthread+0x10/0x10
+[    2.025780]  ret_from_fork+0x2c/0x50
 
-Yeah, this also seems risky.
+One can enable CONFIG_NET_HANDSHAKE_KUNIT_TEST config to reproduce above
+crash.
 
-Instead disabling the MDS auth checks there is another option, which is 
-we can prevent  the kclient to be mounted or the idmapping to be 
-applied. But this still have issues, such as what if admins set the MDS 
-auth caps after idmap applied to the kclients ?
+The root cause of this bug is that the commit 1ce77c998f04
+("net/handshake: Unpin sock->file if a handshake is cancelled") adds one
+additional fput() function. That patch claims that the fput() is used to
+enable sock->file to be freed even when user space never calls DONE.
 
-IMO there have 2 options: the best way is to fix this in VFS if 
-possible. Else to add one option to disable the corresponding MDS auth 
-caps in ceph if users want to support the idmap feature.
+However, it seems that the intended DONE routine will never give an
+additional fput() of ths sock->file. The existing two of them are just
+used to balance the reference added in sockfd_lookup().
 
-Thanks
+This patch revert the mentioned commit to avoid the use-after-free. The
+patched kernel could successfully pass the KUNIT test and boot to shell.
 
-- Xiubo
+[    0.733613]     # Subtest: Handshake API tests
+[    0.734029]     1..11
+[    0.734255]         KTAP version 1
+[    0.734542]         # Subtest: req_alloc API fuzzing
+[    0.736104]         ok 1 handshake_req_alloc NULL proto
+[    0.736114]         ok 2 handshake_req_alloc CLASS_NONE
+[    0.736559]         ok 3 handshake_req_alloc CLASS_MAX
+[    0.737020]         ok 4 handshake_req_alloc no callbacks
+[    0.737488]         ok 5 handshake_req_alloc no done callback
+[    0.737988]         ok 6 handshake_req_alloc excessive privsize
+[    0.738529]         ok 7 handshake_req_alloc all good
+[    0.739036]     # req_alloc API fuzzing: pass:7 fail:0 skip:0 total:7
+[    0.739444]     ok 1 req_alloc API fuzzing
+[    0.740065]     ok 2 req_submit NULL req arg
+[    0.740436]     ok 3 req_submit NULL sock arg
+[    0.740834]     ok 4 req_submit NULL sock->file
+[    0.741236]     ok 5 req_lookup works
+[    0.741621]     ok 6 req_submit max pending
+[    0.741974]     ok 7 req_submit multiple
+[    0.742382]     ok 8 req_cancel before accept
+[    0.742764]     ok 9 req_cancel after accept
+[    0.743151]     ok 10 req_cancel after done
+[    0.743510]     ok 11 req_destroy works
+[    0.743882] # Handshake API tests: pass:11 fail:0 skip:0 total:11
+[    0.744205] # Totals: pass:17 fail:0 skip:0 total:17
 
-> -Greg
->
->> @Greg
->>
->> For the lookup requests the idmapping couldn't get the mapped UID/GID
->> just like all the other requests, which is needed by the MDS permission
->> check. Is that okay to make it disable the check for this case ? I am
->> afraid this will break the MDS permssions logic.
->>
->> Any idea ?
->>
->> Thanks
->>
->> - Xiubo
->>
->>
->>> Kind regards,
->>> Alex
->>>
+
+Fixes: 1ce77c998f04 ("net/handshake: Unpin sock->file if a handshake is cancelled")
+Signed-off-by: Lin Ma <linma@zju.edu.cn>
+---
+ net/handshake/handshake.h | 1 -
+ net/handshake/request.c   | 4 ----
+ 2 files changed, 5 deletions(-)
+
+diff --git a/net/handshake/handshake.h b/net/handshake/handshake.h
+index 8aeaadca844f..4dac965c99df 100644
+--- a/net/handshake/handshake.h
++++ b/net/handshake/handshake.h
+@@ -31,7 +31,6 @@ struct handshake_req {
+ 	struct list_head		hr_list;
+ 	struct rhash_head		hr_rhash;
+ 	unsigned long			hr_flags;
+-	struct file			*hr_file;
+ 	const struct handshake_proto	*hr_proto;
+ 	struct sock			*hr_sk;
+ 	void				(*hr_odestruct)(struct sock *sk);
+diff --git a/net/handshake/request.c b/net/handshake/request.c
+index d78d41abb3d9..94d5cef3e048 100644
+--- a/net/handshake/request.c
++++ b/net/handshake/request.c
+@@ -239,7 +239,6 @@ int handshake_req_submit(struct socket *sock, struct handshake_req *req,
+ 	}
+ 	req->hr_odestruct = req->hr_sk->sk_destruct;
+ 	req->hr_sk->sk_destruct = handshake_sk_destruct;
+-	req->hr_file = sock->file;
+ 
+ 	ret = -EOPNOTSUPP;
+ 	net = sock_net(req->hr_sk);
+@@ -335,9 +334,6 @@ bool handshake_req_cancel(struct sock *sk)
+ 		return false;
+ 	}
+ 
+-	/* Request accepted and waiting for DONE */
+-	fput(req->hr_file);
+-
+ out_true:
+ 	trace_handshake_cancel(net, req, sk);
+ 
+-- 
+2.34.1
 
