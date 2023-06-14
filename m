@@ -2,162 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8854873099A
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 23:14:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F35A7309A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 23:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234619AbjFNVOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 17:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40284 "EHLO
+        id S235033AbjFNVPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 17:15:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbjFNVN6 (ORCPT
+        with ESMTP id S229868AbjFNVPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 17:13:58 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE671FFF;
-        Wed, 14 Jun 2023 14:13:57 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9768fd99c0cso24198066b.0;
-        Wed, 14 Jun 2023 14:13:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686777236; x=1689369236;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ipkryWTzeCn4lFAJVnAmTwSDrdS5UBblgoVYILKN5NA=;
-        b=KMm/rm5AsvMhw17jX+jPJuFJgPsp/l1qjp21KttZ02R/WZLKceIBGalUX06KEfNitv
-         OnyPaWCrjEO60M8QWKPqkGp84mluIhRr1bR9ZK+ssh//VrdlG4BVKOjQ771ILfj0wG4c
-         933QZx8Z2XkG7qxtlUYAw0Gg8qN2kIbX5A1pqu6Lc60sw+vuJz7YjRPX04N1x8pP39VS
-         IPRigyfwV+Ibsy3WjKujNmRUJ5b3FkK8GsEeTrWjsGXKqzGCLdTg2o8Wm3MiU0zbnQiu
-         n4Zps/KkZUCsNv/sjjNUghsJAOq2SeXAoohWnLCsE8TGWSDHHDg1O3tA+BIsy7y6Av3p
-         AghQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686777236; x=1689369236;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ipkryWTzeCn4lFAJVnAmTwSDrdS5UBblgoVYILKN5NA=;
-        b=L6V+tjCglw0ukhQtBc1Fz4S9vDoDy65qAvs8u8wHL+fjIf2H6XrFAv+zGM2H8GA8KZ
-         qeZTbBHjoIE6wTwEGOEvmvuhpX+hLJyhQNHFmrGAIpkWJMxeuG/QHIzp1d1MUl0x/eKE
-         NYTpBPrd0E4WtCJiSRkIUi/gc45z2kAqKWKZhVdMy3jLRq6gHj58uWXJw6ky5F/qkNr3
-         Bhr3m1n0PjVTDE9kCg8+YIgafqg+C4EURM5odBCO6kpe9mcHVqBh18Ee7AHROjZReyDh
-         /q2sqwdrVokT0lI+My9DN+SUBKKDtM/fZNgATwx1w2HgLPGgyfkKRss0YOy9sTsgl1B0
-         Y5Tw==
-X-Gm-Message-State: AC+VfDwP88fFwi3yj+55PQb1nuxcnal2J1n3Euq5t2nzDQaBypV4WheI
-        IczP1dawfDGBJwhpUW0gKn0=
-X-Google-Smtp-Source: ACHHUZ5bY3Xe8wAoc++i3xwTmoAv335BMtBiiTPZqP30EIaZjKvG5mv7LDn+0nTbxmHd07WZDNs7EA==
-X-Received: by 2002:a17:907:9615:b0:968:892b:1902 with SMTP id gb21-20020a170907961500b00968892b1902mr3056941ejc.6.1686777235923;
-        Wed, 14 Jun 2023 14:13:55 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id kt5-20020a170906aac500b00978868cb24csm8678230ejb.144.2023.06.14.14.13.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 14:13:55 -0700 (PDT)
-Date:   Thu, 15 Jun 2023 00:13:52 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        Wed, 14 Jun 2023 17:15:15 -0400
+Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5330F1FFA
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 14:15:14 -0700 (PDT)
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-154-ocnmkyXQO2yJe2Z9632gjQ-1; Wed, 14 Jun 2023 17:15:09 -0400
+X-MC-Unique: ocnmkyXQO2yJe2Z9632gjQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EBB9D811E78;
+        Wed, 14 Jun 2023 21:15:06 +0000 (UTC)
+Received: from hog (unknown [10.45.224.17])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B482B2166B28;
+        Wed, 14 Jun 2023 21:15:04 +0000 (UTC)
+Date:   Wed, 14 Jun 2023 23:15:03 +0200
+From:   Sabrina Dubroca <sd@queasysnail.net>
+To:     Fedor Pchelkin <pchelkin@ispras.ru>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net v4 1/7] net: dsa: mt7530: fix trapping frames with
- multiple CPU ports on MT7531
-Message-ID: <20230614211352.sls7ao5swiqjgtjz@skbuf>
-References: <20230612075945.16330-1-arinc.unal@arinc9.com>
- <20230612075945.16330-1-arinc.unal@arinc9.com>
- <20230612075945.16330-2-arinc.unal@arinc9.com>
- <20230612075945.16330-2-arinc.unal@arinc9.com>
- <20230614194330.qhhoxai7namrgczq@skbuf>
- <1e737fe9-6a2e-225b-9c0f-9a069e8fd4bc@arinc9.com>
+        Paolo Abeni <pabeni@redhat.com>, Raed Salem <raeds@nvidia.com>,
+        Lior Nahmanson <liorna@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Hannes Frederic Sowa <hannes@stressinduktion.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org
+Subject: Re: [PATCH] net: macsec: fix double free of percpu stats
+Message-ID: <ZIot16xcgb7l8wer@hog>
+References: <20230613192220.159407-1-pchelkin@ispras.ru>
+ <20230613200150.361bc462@kernel.org>
+ <ZImx5pp98OSNnv4I@hog>
+ <20230614090126.149049b1@kernel.org>
+ <20230614201714.lgwpk4wyojribbyj@fpc>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1e737fe9-6a2e-225b-9c0f-9a069e8fd4bc@arinc9.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230614201714.lgwpk4wyojribbyj@fpc>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 11:56:44PM +0300, Arınç ÜNAL wrote:
-> On 14.06.2023 22:43, Vladimir Oltean wrote:
-> > On Mon, Jun 12, 2023 at 10:59:39AM +0300, arinc9.unal@gmail.com wrote:
-> > > From: Arınç ÜNAL <arinc.unal@arinc9.com>
+2023-06-14, 23:17:14 +0300, Fedor Pchelkin wrote:
+> On Wed, Jun 14, 2023 at 09:01:26AM -0700, Jakub Kicinski wrote:
+> > On Wed, 14 Jun 2023 14:26:14 +0200 Sabrina Dubroca wrote:
+> > > > What prevents the device from being opened and used before
+> > > > macsec_add_dev() has finished? I think we need a fix which 
+> > > > would move this code before register_netdev(), instead :(  
 > > > 
-> > > Every bit of the CPU port bitmap for MT7531 and the switch on the MT7988
-> > > SoC represents a CPU port to trap frames to. These switches trap frames
-> > > received from a user port to the CPU port that is affine to the user port
-> > > from which the frames are received.
+> > > Can the device be opened in parallel? We're under rtnl here.
 > > > 
-> > > Currently, only the bit that corresponds to the first found CPU port is set
-> > > on the bitmap. When multiple CPU ports are being used, the trapped frames
-> > > from the user ports not affine to the first CPU port will be dropped as the
-> > > other CPU port is not set on the bitmap. The switch on the MT7988 SoC is
-> > > not affected as there's only one port to be used as a CPU port.
-> > > 
-> > > To fix this, introduce the MT7531_CPU_PMAP macro to individually set the
-> > > bits of the CPU port bitmap. Set the CPU port bitmap for MT7531 and the
-> > > switch on the MT7988 SoC on mt753x_cpu_port_enable() which runs on a loop
-> > > for each CPU port.
-> > > 
-> > > Add a comment to explain frame trapping for these switches.
-> > > 
-> > > According to the document MT7531 Reference Manual for Development Board
-> > > v1.0, the MT7531_CPU_PMAP bits are unset after reset so no need to clear it
-> > > beforehand. Since there's currently no public document for the switch on
-> > > the MT7988 SoC, I assume this is also the case for this switch.
-> > > 
-> > > Fixes: c288575f7810 ("net: dsa: mt7530: Add the support of MT7531 switch")
-> > > Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> > > ---
+> > > If we want to move that code, then we'll also have to move the
+> > > eth_hw_addr_inherit call that's currently in macsec's ndo_init: in
+> > > case the user didn't give an SCI, we have to make it up based on the
+> > > device's mac address (dev_to_sci(dev, ...)), whether it's set by the
+> > > user or inherited. I can't remember if I had a good reason to put the
+> > > inherit in ndo_init.
 > > 
-> > Would you agree that this is just preparatory work for change "net: dsa:
-> > introduce preferred_default_local_cpu_port and use on MT7530" and not a
-> > fix to an existing problem in the code base?
+> > Ah, you're right, this is a link creation path.
 > 
-> Makes sense. Pre-preferred_default_local_cpu_port patch, there isn't a case
-> where there's a user port affine to a CPU port that is not enabled on the
-> CPU port bitmap. So yeah, this is just preparatory work for "net: dsa:
-> introduce preferred_default_local_cpu_port and use on MT7530".
+> My reply probably won't give any new information now but if the code of
+> macsec_add_dev() and the parts from ndo_init it depends on which Sabrina
+> mentioned would be moved before registering netdev then the problem will
+> go away on its own.
 > 
-> So how do I change the patch to reflect this?
-> 
-> Arınç
+> Is it worth moving that code if rtnl_lock is held? Maybe it will be more
+> persistent to initialize the device for as maximum as possible before
+> calling register_netdevice()? Overall, it all depends on the reasons why
+> the code was implemented so initially.
 
-net: dsa: mt7530: set all CPU ports in MT7531_CPU_PMAP
+It's been 7 years... your guess is about as good as mine :/
 
-MT7531_CPU_PMAP represents the destination port mask for trapped-to-CPU
-frames (further restricted by PCR_MATRIX).
+I wouldn't bother reshuffling the device creation code just to make
+the handling of rare failures a bit nicer.
 
-Currently the driver sets the first CPU port as the single port in this
-bit mask, which works fine regardless of whether the device tree defines
-port 5, 6 or 5+6 as CPU ports. This is because the logic coincides with
-DSA's logic of picking the first CPU port as the CPU port that all user
-ports are affine to, by default.
+-- 
+Sabrina
 
-An upcoming change would like to influence DSA's selection of the
-default CPU port to no longer be the first one, and in that case, this
-logic needs adaptation.
-
-Since there is no observed leakage or duplication of frames if all CPU
-ports are defined in this bit mask, simply include them all.
-
-Note that there is no Fixes tag
