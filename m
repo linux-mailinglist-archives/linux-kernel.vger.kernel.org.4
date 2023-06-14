@@ -2,127 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 378EC73053E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5A06730543
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:43:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235195AbjFNQmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 12:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53792 "EHLO
+        id S232697AbjFNQnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 12:43:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232697AbjFNQmq (ORCPT
+        with ESMTP id S235367AbjFNQnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 12:42:46 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1098F1A3;
-        Wed, 14 Jun 2023 09:42:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=wuwv6R2n6vyyWA1URLZOiy/KvbTZmgcum6LrvrKQKuA=; b=FRLQvfRAZ9owE+A6TYcFTPP6sA
-        7xc+Gy5Tw5YiQ26W0GFfesvUBAw2VdDGFHxNoYgaSjVErnJKDZMTsViqd7FVmFEeZMDIw6t5suZrO
-        I2j5+ZvZtGcYhYH2gd93hMpbsvGcc1a1WHWTBHMUnbng/HumUuKtndpGZdGfpjNBJ1mKbnqa1TyuR
-        fyTSWcYtjdKUtdZ51q1V8SYajVIlrZU4jYwEKP2VCfPvWHtv9GkeGhTd6WnIF6xETRjoUJS/H4k64
-        tstEhMyUdR8FlaYl+xYe19ySassHmSauHQm/Mtn1fYKxxS6CP6C1qXWd/2SwybxVV6zdA48/31x18
-        daVpNdzA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57494)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q9TZl-00020S-NU; Wed, 14 Jun 2023 17:42:29 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q9TZi-0000aD-CA; Wed, 14 Jun 2023 17:42:26 +0100
-Date:   Wed, 14 Jun 2023 17:42:26 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     arinc9.unal@gmail.com
-Cc:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net v4 5/7] net: dsa: mt7530: fix handling of LLDP frames
-Message-ID: <ZInt8mmrZ6tCGy1N@shell.armlinux.org.uk>
-References: <20230612075945.16330-1-arinc.unal@arinc9.com>
- <20230612075945.16330-6-arinc.unal@arinc9.com>
+        Wed, 14 Jun 2023 12:43:11 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E202688
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:43:08 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-5185f195f05so4429169a12.2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:43:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686760986; x=1689352986;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LYxZyCq/Gi1HReykhrZJhQ1TogVgVoGsHy6LMM70L8w=;
+        b=FIuBtH75LaI9ryaFI5mUy3gYiBMBakvXdP6X6Ekvml1P4vgJTz7YdUbY4a/Wp7SiNA
+         noNFfrZK3LCbd1LaxblbkvU3S9quAs5U4u2L7zkXZG9CVwMc2kDitIe6X70OfAaAanov
+         77cEY6ZLUsFYpJgredh1jHzjZZxI9oJ44pOMZ+1xieFMGyqvTK6Ah20uqTIEIEYuztUL
+         w3nfY7ZUSXK1vB25NHQC4oLNm+fuDmTD6c03R44iH32aosVgHZoB+xohijBHPneBMlrF
+         kIFNXCtRkWV0e/7LnBiXEin0WYCS961zBIns0D8x/m1zg5+t7l0/I01ZFPxOea8sLePQ
+         28yQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686760986; x=1689352986;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LYxZyCq/Gi1HReykhrZJhQ1TogVgVoGsHy6LMM70L8w=;
+        b=ZSybYtX+JwGRbQiYUu55MIHXXDmxG1jV2a/DEW3ZVPgltXVyBCCZBmDsUYVDTvrpun
+         xNn176+KjGqD0+Yepyz5Z8aYiKe+8WIJJWcWJk/KPPQUzr2Yym1XjLbWPe9f0eOITess
+         fa+hreHIzS5KadAyHqf8aj9SUTuhP1U4Y5HpFxEiBm2msmblMQ+0Kx7iR30egO5dG1kJ
+         jixNXxhpgjKURC+wXT74xjRDNyCzWLijK/awmL8x8RwkRSOCHl1zp5/wxZ/qHmkBhlua
+         bPcdxwrTeFB93TBkavL7r0icGxthoCnEHdLDjBpSpjxulHSRuxtBCIWQ8+RlQtbIzlvz
+         HyLg==
+X-Gm-Message-State: AC+VfDyDg2CfGzcWky85HehSMdLLKZNLD7WoA62ew0Tcx9NLg5JytsgT
+        mTUUbQsV3aBXnvzH3ZN/t7dmHQ==
+X-Google-Smtp-Source: ACHHUZ42yJBCaEfV+oEONTiEyCMpQDPxB+8Mz3jsy4GV3UBDckUu0IrqOZ2cT1BdD0r/sqSYm5xdGw==
+X-Received: by 2002:a17:907:3e9f:b0:976:c9a6:4857 with SMTP id hs31-20020a1709073e9f00b00976c9a64857mr20032169ejc.57.1686760986667;
+        Wed, 14 Jun 2023 09:43:06 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id u16-20020a1709064ad000b009828e26e519sm255352ejt.122.2023.06.14.09.43.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 09:43:06 -0700 (PDT)
+Message-ID: <c8573d08-d4e2-41a8-f0b1-e1d7a0c9ce17@linaro.org>
+Date:   Wed, 14 Jun 2023 18:43:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230612075945.16330-6-arinc.unal@arinc9.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v5 01/22] dt-bindings: interconnect: Add Qcom RPM ICC
+ bindings
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230526-topic-smd_icc-v5-0-eeaa09d0082e@linaro.org>
+ <20230526-topic-smd_icc-v5-1-eeaa09d0082e@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230526-topic-smd_icc-v5-1-eeaa09d0082e@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 10:59:43AM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+On 14/06/2023 12:22, Konrad Dybcio wrote:
+> The SMD RPM interconnect driver requires different icc tags to the
+> RPMh driver. Add bindings to reflect that.
 > 
-> LLDP frames are link-local frames, therefore they must be trapped to the
-> CPU port. Currently, the MT753X switches treat LLDP frames as regular
-> multicast frames, therefore flooding them to user ports. To fix this, set
-> LLDP frames to be trapped to the CPU port(s).
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  include/dt-bindings/interconnect/qcom,rpm-icc.h | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
 > 
-> The mt753x_bpdu_port_fw enum is universally used for trapping frames,
-> therefore rename it and the values in it to mt753x_port_fw.
-> 
-> For MT7530, LLDP frames received from a user port will be trapped to the
-> numerically smallest CPU port which is affine to the DSA conduit interface
-> that is up.
-> 
-> For MT7531 and the switch on the MT7988 SoC, LLDP frames received from a
-> user port will be trapped to the CPU port that is affine to the user port
-> from which the frames are received.
-> 
-> The bit for R0E_MANG_FR is 27. When set, the switch regards the frames with
-> :0E MAC DA as management (LLDP) frames. This bit is set to 1 after reset on
-> MT7530 and MT7531 according to the documents MT7620 Programming Guide v1.0
-> and MT7531 Reference Manual for Development Board v1.0, so there's no need
-> to deal with this bit. Since there's currently no public document for the
-> switch on the MT7988 SoC, I assume this is also the case for this switch.
-> 
-> Fixes: b8f126a8d543 ("net-next: dsa: add dsa support for Mediatek MT7530 switch")
+> diff --git a/include/dt-bindings/interconnect/qcom,rpm-icc.h b/include/dt-bindings/interconnect/qcom,rpm-icc.h
+> new file mode 100644
+> index 000000000000..2cd56f91e5c5
+> --- /dev/null
+> +++ b/include/dt-bindings/interconnect/qcom,rpm-icc.h
+> @@ -0,0 +1,13 @@
+> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+> +/*
+> + * Copyright (c) 2023, Linaro Limited
+> + */
+> +
+> +#ifndef __DT_BINDINGS_INTERCONNECT_QCOM_RPM_ICC_H
+> +#define __DT_BINDINGS_INTERCONNECT_QCOM_RPM_ICC_H
+> +
+> +#define RPM_ACTIVE_TAG		(1 << 0)
+> +#define RPM_SLEEP_TAG		(1 << 1)
+> +#define RPM_ALWAYS_TAG		(RPM_ACTIVE_TAG | RPM_SLEEP_TAG)
 
-Patch 4 claims to be a fix for this commit, and introduces one of these
-modifications to MT753X_BPC, which this patch then changes.
+Where are these used? I don't see any DTS in your patchset. Did you send
+it separately?
 
-On the face of it, it seems this patch is actually a fix to patch 4 as
-well as the original patch, so does that mean that patch 4 only half
-fixes a problem?
+Best regards,
+Krzysztof
 
-Bah, I give up with this. IMHO it's just too much of a mess trying to
-do any sane review of it. No, I'm not going to give any acks or
-reviewed-bys to it because nothing here makes much sense to me.
-
-And I just can't be bothered trying to parse the commit messages
-anymore.
-
-Sorry but no, I'm going to be ignoring these patch sets from now on.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
