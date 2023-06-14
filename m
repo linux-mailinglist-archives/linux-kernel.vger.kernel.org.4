@@ -2,72 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD3B73012E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9FA773012F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245323AbjFNOGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 10:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36636 "EHLO
+        id S245360AbjFNOHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 10:07:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236641AbjFNOGw (ORCPT
+        with ESMTP id S233944AbjFNOHa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 10:06:52 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749A4172E
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 07:06:51 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-30af159b433so6565507f8f.3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 07:06:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1686751610; x=1689343610;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=eATVzpknI9vc12mAnk+3E8tRwnRlRtGyRp8XCmtZkaM=;
-        b=jV+FuvFr57hMTM6OFjSFLXVbjzQAfmXySdUUckZXro/5AOsBR6XEcc8i2kSttpnEJT
-         x53AGbhlgp+es3Jfipn2qsyzL1hkJX6wFEsYVQtObJ4/5i6SqhbWUL+8UA6tNlKRrumv
-         zl7xgnXzMIONm1mNdNnsK/yZSIB20bONCQPJB6/VANLqqPrjSkqQ9Zmql/b7X3U3w+2q
-         hOZ5XxQhFtTwmwLdIJKnhSIKFK4KC/Idu3x8tK3CzSvPSaHAwaLGaLib2AlStBCWWaSF
-         RBEzxVISbq5FUFDjwx7VJiZ+iL5mD9HckqTm+ErLOAEEfLZQPh3msSLthRwcBFOAa54R
-         FDMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686751610; x=1689343610;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eATVzpknI9vc12mAnk+3E8tRwnRlRtGyRp8XCmtZkaM=;
-        b=gSEtr9RdGL/g711WIQOaBQ+q9vWYOn+ypDv6crNAfVdv+whsf+S6SCeWr5TI4RS9zY
-         oJhq7JeZqBYExfp053eb2b2XbhG85PGHrCzy2Id/1xP5YChf8ZetaGABcSjToa/1DOgC
-         xorfLQJ8kg5gaWrcMdlsB6SPwe9bVwwRao66+vbd7fCFFA3URl6SECDvoZMNaYXYSiK5
-         lRf7kiOQoxel2J/Vn9+54zEw2XnIeS3PPRfWShn+C3OHgJcv3Ctnnk0hVZcbtRyd8yfy
-         ch3XUkoy2dWko/o+Lhg6Z2s1KMdpA3C00k+qBhxGMBTV8ViVB8+IRPmjuyKvl7W6WzyF
-         9pkw==
-X-Gm-Message-State: AC+VfDwmvdOBwebfgN3uU36DwUNG7hsiGebiUebBsM+AoZ9zA6H4snnF
-        3rHeA5+IrALyLu3UGvGoM76wkw==
-X-Google-Smtp-Source: ACHHUZ6a4exHUhNfyj26R+XQpCs0IWFQfsm1S2MG5jN8npheMWegY7/+qYhEIR4M6d2x6nbpM3+wkw==
-X-Received: by 2002:a05:6000:1814:b0:310:b979:d00f with SMTP id m20-20020a056000181400b00310b979d00fmr2362939wrh.45.1686751609916;
-        Wed, 14 Jun 2023 07:06:49 -0700 (PDT)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id o17-20020adfe811000000b0030fafcbbd33sm12673191wrm.50.2023.06.14.07.06.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 07:06:49 -0700 (PDT)
-References: <20230614084808.98819-1-jiapeng.chong@linux.alibaba.com>
-User-agent: mu4e 1.8.13; emacs 28.2
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        neil.armstrong@linaro.org
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, khilman@baylibre.com,
-        martin.blumenstingl@googlemail.com,
-        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] clk: meson: pll: remove unneeded semicolon
-Date:   Wed, 14 Jun 2023 16:05:30 +0200
-In-reply-to: <20230614084808.98819-1-jiapeng.chong@linux.alibaba.com>
-Message-ID: <1jr0qef893.fsf@starbuckisacylon.baylibre.com>
+        Wed, 14 Jun 2023 10:07:30 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBA0CD;
+        Wed, 14 Jun 2023 07:07:28 -0700 (PDT)
+From:   Florian Kauer <florian.kauer@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1686751646;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=EJvyE/C3PvQNTvDv0SaWnfKcEUXisJIN7Dyyhzdk0bk=;
+        b=3Q9xpOFUIfL7l3ShdTyCf/oPmQEtVietstpFXDZcC2uxcw2CO16I3QM1SI6PtPAihPoEdQ
+        WcSY4OWzi3pUEZylPYJ8dVld3HCtDHwoOV3yl4D+vBbq+xI1RlCBolQYjfUDGggqz64bxO
+        /gYjusYOQcHiRgqTxI5dVqmGtvNIN0P4DfFkYjNhS7irCxcug1B5XRZElKy1oWg5j0HNIh
+        Y84YDnr/bGYpHetH/WTZUIfR4o5AkGyL2toHMPM/xdd+Wr6wKl/1+3IBku/S5XXgT5xj4h
+        a64dKSYV7/3Bp5Krjy5xGcMKjhNQwFDD8/S62mU0/W0H37Chyh79dDKNwyoQ8A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1686751646;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=EJvyE/C3PvQNTvDv0SaWnfKcEUXisJIN7Dyyhzdk0bk=;
+        b=mJ5bM/swMdWLiQBPI6q6TyY9ppPwCbZ9rstTumP66sDYj9b1FTLJZEarsSRivBST0aS3Wm
+        YNFRVGe+ccxH+WBw==
+To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Tan Tee Min <tee.min.tan@linux.intel.com>,
+        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
+        Aravindhan Gunasekaran <aravindhan.gunasekaran@intel.com>,
+        Malli C <mallikarjuna.chilakala@intel.com>
+Cc:     intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kurt@linutronix.de,
+        florian.kauer@linutronix.de
+Subject: [PATCH net-next 0/6] igc: Fix corner cases for TSN offload
+Date:   Wed, 14 Jun 2023 16:07:08 +0200
+Message-Id: <20230614140714.14443-1-florian.kauer@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,39 +64,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The igc driver supports several different offloading capabilities
+relevant in the TSN context. Recent patches in this area introduced
+regressions for certain corner cases that are fixed in this series.
 
-On Wed 14 Jun 2023 at 16:48, Jiapeng Chong <jiapeng.chong@linux.alibaba.com> wrote:
+Each of the patches (except the first one) addresses a different
+regression that can be separately reproduced. Still, they have
+overlapping code changes so they should not be separately applied.
 
-> No functional modification involved.
->
-> ./drivers/clk/meson/clk-pll.c:373:2-3: Unneeded semicolon.
->
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=5533
+Especially #4 and #6 address the same observation,
+but both need to be applied to avoid TX hang occurrences in
+the scenario described in the patches.
 
-Not sure this tag is relevant
+Signed-off-by: Florian Kauer <florian.kauer@linutronix.de>
+Reviewed-by: Kurt Kanzenbach <kurt@linutronix.de>
 
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Florian Kauer (6):
+  igc: Rename qbv_enable to taprio_offload_enable
+  igc: Do not enable taprio offload for invalid arguments
+  igc: Handle already enabled taprio offload for basetime 0
+  igc: No strict mode in pure launchtime/CBS offload
+  igc: Fix launchtime before start of cycle
+  igc: Fix inserting of empty frame for launchtime
 
-Apart from this
+ drivers/net/ethernet/intel/igc/igc.h      |  2 +-
+ drivers/net/ethernet/intel/igc/igc_main.c | 24 ++++++++-------------
+ drivers/net/ethernet/intel/igc/igc_tsn.c  | 26 ++++++++++++++++++++---
+ 3 files changed, 33 insertions(+), 19 deletions(-)
 
-Reviewed-by: Jerome Brunet <jbrunet@baylibre.com>
-
-> ---
->  drivers/clk/meson/clk-pll.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/clk/meson/clk-pll.c b/drivers/clk/meson/clk-pll.c
-> index 56ec2210f1ad..8fef90bf962f 100644
-> --- a/drivers/clk/meson/clk-pll.c
-> +++ b/drivers/clk/meson/clk-pll.c
-> @@ -370,7 +370,7 @@ static int meson_clk_pll_enable(struct clk_hw *hw)
->  		usleep_range(10, 20);
->  		meson_parm_write(clk->map, &pll->current_en, 1);
->  		usleep_range(40, 50);
-> -	};
-> +	}
->  
->  	if (MESON_PARM_APPLICABLE(&pll->l_detect)) {
->  		meson_parm_write(clk->map, &pll->l_detect, 1);
+-- 
+2.39.2
 
