@@ -2,95 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 482FA72FC74
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 511D772FC7B
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243439AbjFNLaZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 14 Jun 2023 07:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47180 "EHLO
+        id S235869AbjFNLcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 07:32:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234041AbjFNLaY (ORCPT
+        with ESMTP id S234041AbjFNLco (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 07:30:24 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7053E55
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 04:30:21 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mtapsc-8-f8v9-c73Obe53UlMQEGF2A-1; Wed, 14 Jun 2023 12:30:18 +0100
-X-MC-Unique: f8v9-c73Obe53UlMQEGF2A-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 14 Jun
- 2023 12:30:15 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Wed, 14 Jun 2023 12:30:15 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Sven Schnelle' <svens@linux.ibm.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] tracing: fix memcpy size when copying stack entries
-Thread-Topic: [PATCH] tracing: fix memcpy size when copying stack entries
-Thread-Index: AQHZnqzKx3JbU4cZlkeCRQJzbO4XQa+KKVfQ
-Date:   Wed, 14 Jun 2023 11:30:15 +0000
-Message-ID: <a64f80ed957d430bbbf73cdc4ad5c8e2@AcuMS.aculab.com>
-References: <20230612160748.4082850-1-svens@linux.ibm.com>
-        <20230612123407.5ebcabdf@gandalf.local.home>
-        <yt9dy1koey7h.fsf@linux.ibm.com>
-        <20230613113737.1e07c892@gandalf.local.home>
- <yt9dttva8gxt.fsf@linux.ibm.com>
-In-Reply-To: <yt9dttva8gxt.fsf@linux.ibm.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 14 Jun 2023 07:32:44 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281F810CB
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 04:32:43 -0700 (PDT)
+Received: from kwepemi500009.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Qh37K3YrRzqTRl;
+        Wed, 14 Jun 2023 19:27:41 +0800 (CST)
+Received: from [10.67.110.89] (10.67.110.89) by kwepemi500009.china.huawei.com
+ (7.221.188.199) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 14 Jun
+ 2023 19:32:38 +0800
+Message-ID: <86c6040d-17ab-fb01-2b75-717d82ba9345@huawei.com>
+Date:   Wed, 14 Jun 2023 19:32:38 +0800
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v7] kobject: Fix global-out-of-bounds in
+ kobject_action_type()
+To:     <gregkh@linuxfoundation.org>, <prajnoha@redhat.com>
+CC:     <linux-kernel@vger.kernel.org>
+References: <20230518091614.137522-1-xiafukun@huawei.com>
+From:   Xia Fukun <xiafukun@huawei.com>
+In-Reply-To: <20230518091614.137522-1-xiafukun@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.110.89]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500009.china.huawei.com (7.221.188.199)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sven Schnelle
-> Sent: 14 June 2023 11:41
+
+On 2023/5/18 17:16, Xia Fukun wrote:
+> ---
+> v6 -> v7:
+> -  Move macro UEVENT_KACT_STRSIZE to the .c file to 
+> improve maintainability.
 > 
-> Steven Rostedt <rostedt@goodmis.org> writes:
+
+Gentle ping ...
+
+UEVENT_KACT_STRSIZE is defined as the maximum length of the string
+contained in kobject_actions[].
+
+At present, the maximum length of strings in this array is 7. Based on
+the actual meaning of these strings, these actions will not exceed 16
+if there are any subsequent changes.
+
+I have submitted v7 of the patch according to your suggestion and
+tested it to ensure its functionality is correct.
+
+Please take the time to review it.
+
+Thank you very much.
+
+
+> ---
+>  lib/kobject_uevent.c | 38 +++++++++++++++++++++++++-------------
+>  1 file changed, 25 insertions(+), 13 deletions(-)
 > 
-> > On Tue, 13 Jun 2023 07:19:14 +0200
-> > Sven Schnelle <svens@linux.ibm.com> wrote:
-> >
-> >> > Yes the above may be special, but your patch breaks it.
-> >>
-> >> Indeed, i'm feeling a bit stupid for sending that patch, should have
-> >> used my brain during reading the source. Thanks for the explanation.
-> >
-> > Does this quiet the fortifier?
-> > [..]
-> 
-> No, still getting the same warning:
-> 
-> [    2.302776] memcpy: detected field-spanning write (size 104) of single field "stack" at
-> kernel/trace/trace.c:3178 (size 64)
-
-What about:
-	(memcpy)(......)
-
-Or maybe:
-	(__builtin_memcpy)(....)
-
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+> diff --git a/lib/kobject_uevent.c b/lib/kobject_uevent.c
+> index 7c44b7ae4c5c..2171e1648dad 100644
+> --- a/lib/kobject_uevent.c
+> +++ b/lib/kobject_uevent.c
+> @@ -47,6 +47,14 @@ static LIST_HEAD(uevent_sock_list);
+>  /* This lock protects uevent_seqnum and uevent_sock_list */
+>  static DEFINE_MUTEX(uevent_sock_mutex);
+>  
+> +/*
+> + * The maximum length of the string contained in kobject_actions[].
+> + * If there are any actions added or modified, please ensure that
+> + * the string length does not exceed the macro, otherwise
+> + * should modify the macro definition.
+> + */
+> +#define UEVENT_KACT_STRSIZE		16
+> +
+>  /* the strings here must match the enum in include/linux/kobject.h */
+>  static const char *kobject_actions[] = {
+>  	[KOBJ_ADD] =		"add",
+> @@ -66,7 +74,8 @@ static int kobject_action_type(const char *buf, size_t count,
+>  	enum kobject_action action;
+>  	size_t count_first;
+>  	const char *args_start;
+> -	int ret = -EINVAL;
+> +	int i, ret = -EINVAL;
+> +	char kobj_act_buf[UEVENT_KACT_STRSIZE] = {0};
+>  
+>  	if (count && (buf[count-1] == '\n' || buf[count-1] == '\0'))
+>  		count--;
+> @@ -77,21 +86,24 @@ static int kobject_action_type(const char *buf, size_t count,
+>  	args_start = strnchr(buf, count, ' ');
+>  	if (args_start) {
+>  		count_first = args_start - buf;
+> +		if (count_first > UEVENT_KACT_STRSIZE)
+> +			goto out;
+> +
+>  		args_start = args_start + 1;
+> +		strncpy(kobj_act_buf, buf, count_first);
+> +		i = sysfs_match_string(kobject_actions, kobj_act_buf);
+>  	} else
+> -		count_first = count;
+> +		i = sysfs_match_string(kobject_actions, buf);
+>  
+> -	for (action = 0; action < ARRAY_SIZE(kobject_actions); action++) {
+> -		if (strncmp(kobject_actions[action], buf, count_first) != 0)
+> -			continue;
+> -		if (kobject_actions[action][count_first] != '\0')
+> -			continue;
+> -		if (args)
+> -			*args = args_start;
+> -		*type = action;
+> -		ret = 0;
+> -		break;
+> -	}
+> +	if (i < 0)
+> +		goto out;
+> +
+> +	action = i;
+> +	if (args)
+> +		*args = args_start;
+> +
+> +	*type = action;
+> +	ret = 0;
+>  out:
+>  	return ret;
+>  }
