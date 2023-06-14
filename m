@@ -2,198 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F8273004A
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 15:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB4FB73004B
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 15:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245054AbjFNNnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 09:43:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49262 "EHLO
+        id S245061AbjFNNn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 09:43:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245049AbjFNNnr (ORCPT
+        with ESMTP id S245057AbjFNNn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 09:43:47 -0400
-Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 935891BFD;
-        Wed, 14 Jun 2023 06:43:44 -0700 (PDT)
-Received: from [192.168.4.25] (unknown [62.77.71.229])
-        by mx.gpxsee.org (Postfix) with ESMTPSA id 7B677E463;
-        Wed, 14 Jun 2023 15:43:42 +0200 (CEST)
-Message-ID: <ac218118-64db-7832-f02c-a54a6a62bace@gpxsee.org>
-Date:   Wed, 14 Jun 2023 15:43:38 +0200
+        Wed, 14 Jun 2023 09:43:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D7D1FEB;
+        Wed, 14 Jun 2023 06:43:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 808A063FCE;
+        Wed, 14 Jun 2023 13:43:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66290C433C0;
+        Wed, 14 Jun 2023 13:43:55 +0000 (UTC)
+Date:   Wed, 14 Jun 2023 09:43:53 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH] tracing: Add a debug_trace_printk() function
+Message-ID: <20230614094353.2cf1bae5@gandalf.local.home>
+In-Reply-To: <e2f3ce97329d488d8ecd4fea5fbdb4f6@AcuMS.aculab.com>
+References: <20230612193337.0fb0d3ca@gandalf.local.home>
+        <e2f3ce97329d488d8ecd4fea5fbdb4f6@AcuMS.aculab.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [RESEND PATCH v6 1/1] Added Digiteq Automotive MGB4 driver
-Content-Language: en-US
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Martin_T=c5=afma?= <martin.tuma@digiteqautomotive.com>
-References: <20230524112126.2242-1-tumic@gpxsee.org>
- <20230524112126.2242-2-tumic@gpxsee.org>
- <3a7da3cd-8d03-a2c4-0534-a75565aefc13@xs4all.nl>
- <7072a8f3-5c9e-1170-e480-6fb57b95110f@gpxsee.org>
- <6b792de3-bb2c-d2b5-a652-eca6d20dad20@xs4all.nl>
- <c34db414-159a-313f-90eb-2bfc0f4496fa@gpxsee.org>
- <089e728b-0596-d3e3-39a1-651a3ac73e33@xs4all.nl>
- <f72a7380-d8bc-24bf-630c-75f8ffd6abf3@gpxsee.org>
- <72494a61-5be8-033b-5bcd-59699a226002@xs4all.nl>
- <756729ed-18d6-519c-ba61-98afeecaa0b7@gpxsee.org>
- <2e7209cf-29c4-0245-fefe-deece350bd2c@xs4all.nl>
-From:   =?UTF-8?Q?Martin_T=c5=afma?= <tumic@gpxsee.org>
-In-Reply-To: <2e7209cf-29c4-0245-fefe-deece350bd2c@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13. 06. 23 17:04, Hans Verkuil wrote:
-> Hi Martin,
-> 
-> On 13/06/2023 16:46, Martin Tůma wrote:
->> On 13. 06. 23 14:18, Hans Verkuil wrote:
->>> Hi Martin,
->>>
->>> On 12/06/2023 13:34, Martin Tůma wrote:
->>>> On 12. 06. 23 10:51, Hans Verkuil wrote:
->>>>> On 08/06/2023 17:30, Martin Tůma wrote:
->>>>>> On 08. 06. 23 12:23, Hans Verkuil wrote:
->>>>>>
->>>>>>> Can you make a list of which sysfs properties correspond to existing V4L2
->>>>>>> format or timing fields and which are 'new'?
->>>>>>>
->>>>>>
->>>>>> On the left all the current mgb4 sysfs properties (see the admin-guide doc from the patch for description), on the right v4l2 structures where they could be mapped (may not be true for all of
->>>>>> them in
->>>>>> the patch, I will check it and update the code in v7)
->>>>>>
->>>>>>
->>>>>> --- PCIE CARD ---
->>>>>>
->>>>>> module_type        -
->>>>>> module_version        -
->>>>>> fw_type            -
->>>>>> fw_version        -
->>>>>> serial_number        -
->>>>>> temperature        hwmon
->>>>>>
->>>>>> --- INPUTS ---
->>>>>>
->>>>>> input_id        -
->>>>>> oldi_lane_width        -
->>>>>> color_mapping        -
->>>>>> link_status        v4l2_input.status (V4L2_IN_ST_NO_SYNC)
->>>>>> stream_status        v4l2_input.status (V4L2_IN_ST_NO_SIGNAL)
->>>>>> video_width        v4l2_bt_timings.width
->>>>>> video_height        v4l2_bt_timings.height
->>>>>> vsync_status        v4l2_bt_timings.polarities
->>>>>> hsync_status        v4l2_bt_timings.polarities
->>>>>> vsync_gap_length    -
->>>>>> hsync_gap_length    -
->>>>>> pclk_frequency        v4l2_bt_timings.pixelclock
->>>>>> hsync_width        v4l2_bt_timings.hsync
->>>>>> vsync_width        v4l2_bt_timings.vsync
->>>>>> hback_porch        v4l2_bt_timings.hbackporch
->>>>>> hfront_porch        v4l2_bt_timings.hfrontporch
->>>>>> vback_porch        v4l2_bt_timings.vbackporch
->>>>>> vfront_porch        v4l2_bt_timings.vfrontporch
->>>>>> frequency_range        -
->>>>>> alignment        v4l2_pix_format.bytesperline
->>>>>> fpdl3_input_width    -
->>>>>> gmsl_mode        -
->>>>>> gmsl_stream_id        -
->>>>>> gmsl_fec        -
->>>>>>
->>>>>> --- OUTPUTS ---
->>>>>>
->>>>>> output_id        -
->>>>>> video_source        -
->>>>>> display_width        v4l2_bt_timings.width
->>>>>> display_height        v4l2_bt_timings.height
->>>>>> frame_rate        v4l2_frmivalenum
->>>>>
->>>>> The frame rate is a property of the width/height+blanking and the
->>>>> pixel clock frequency. IMHO it does not make sense to have this as
->>>>> a writable property. Read-only is OK.
->>>>>
->>>>>> hsync_polarity        v4l2_bt_timings.polarities
->>>>>> vsync_polarity        v4l2_bt_timings.polarities
->>>>>> de_polarity        -
->>>>>> pclk_frequency        v4l2_bt_timings.pixelclock
->>>>>> hsync_width        v4l2_bt_timings.hsync
->>>>>> vsync_width        v4l2_bt_timings.vsync
->>>>>> vsync_width        v4l2_bt_timings.vsync
->>>>>> hback_porch        v4l2_bt_timings.hbackporch
->>>>>> hfront_porch        v4l2_bt_timings.hfrontporch
->>>>>> vback_porch        v4l2_bt_timings.vbackporch
->>>>>> vfront_porch        v4l2_bt_timings.vfrontporch
->>>>>> alignment        v4l2_pix_format.bytesperline
->>>>>> fpdl3_output_width    -
->>>>>>
->>>>>>
->>>>>> M.
->>>>>
->>>>> The property I am most concerned with is alignment (both for input and output).
->>>>> But it is not clear to me what the use-case is.
->>>>>
->>>>
->>>> Hi,
->>>> The use-case is to provide the alignment required by some video processing chips. We have a product based on NVIDIA Jetson TX2 that uses the mgb4 cards and the HW video encoding needs a specific
->>>> alignment to work.
->>>
->>> OK. I would suggest that for this property it has a default value of 0 (i.e. a 1 byte alignment),
->>> and in that case VIDIOC_S_FMT allows userspace to set bytesperline to whatever they want. I.e.,
->>> this is the normal behavior for DMA engines that can deal with custom padding at the end of each
->>> line.
->>>
->>> If it is > 0, then bytesperline is fixed, based on this value.
->>>
->>> That way both methods are supported fairly cleanly.
->>>
->>> BTW, what is missing in the property documentation for writable properties is what the default
->>> value is. That must be documented as well.
->>>
->>
->> The default value is 1 (no padding, 1 byte alignment), I will add it to the documentation.
->>
->> I would really urge to stick with the "set all the properties at one place in sysfs, report them in v4l2" mechanism. Like with most of the properties, there are some special cases and HW related
->> dependencies across inputs/outputs (the output alignment has to comply with input alignment - see the documentation rst for details) and duplicating this logic together with some additional logic
->> handling changes from another source - VIDIOC_S_FMT - will make the driver much more complicated and "messy" for no benefit for the user (he will be even more confused).
-> 
-> When mainlining drivers it is important to support the standard APIs as much as possible,
-> otherwise it will become a big mess if every driver does something different. So as
-> maintainer it is my job to ensure that the standard APIs are used.
-> 
-> Looking at the properties that were introduced, most are related to timings, except
-> for alignment. That is really something for VIDIOC_S_FMT. And should be perfectly
-> fine to support as long as alignment is set to 1. If it is > 1, then bytesperline can
-> be set by the driver and userspace can't change it. It adds only very little complexity,
-> but it ensures that the default behavior is consistent with the V4L2 API.
-> 
-> I'm not very keen on all the properties at all, but given the specific nature of
-> this board I can understand it. They are to some extent similar to device tree
-> snippets to configure the device. But 'alignment' is not really part of that,
-> but I'm OK with it as long as the standard method is also supported. And in fact,
-> the property documentation should refer to the standard method as well.
-> 
+On Wed, 14 Jun 2023 09:57:33 +0000
+David Laight <David.Laight@ACULAB.COM> wrote:
 
-Ok, I see your point. I will completely drop the alignment from sysfs 
-and make it configurable only using VIDIOC_S_FMT. This "property" 
-is/will be changed by special SW that uses the v4l2 API anyway. So it is 
-not the case of all the required video stream properties where it is 
-crucial for us that they can all be configured on a single place (using 
-the same basic UDEV rules) and that generic SW like VLC or ffplay can be 
-used to work with the video devices.
-
-M.
-
-> Regards,
+> From: Steven Rostedt
+> > Sent: 13 June 2023 00:34
+> > 
+> > From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> > 
+> > While doing some tracing and kernel debugging, I found that some of my
+> > trace_printk()s were being lost in the noise of the other code that was
+> > being traced. Having a way to write trace_printk() not in the top level
+> > trace buffer would have been useful.
+> > 
+> > There was also a time I needed to debug ftrace itself, where
+> > trace_printk() did not hit the paths that were being debugged. But because
+> > the trace that was being debugged, was going into the top level ring
+> > buffer, it was causing issues for seeing what is to be traced.
+> > 
+> > To solve both of the above, add a debug_trace_printk() that can be used
+> > just like trace_printk() except that it goes into a "debug" instance
+> > buffer instead. This can be used at boot up as well.  
+> ...
+> > +#ifdef CONFIG_FTRACE_DEBUG_PRINT
+> > +	debug_trace = trace_array_get_by_name("debug");
+> > +	if (WARN_ON(!debug_trace))
+> > +		return;
+> > +	trace_array_init_printk(debug_trace);
+> > +#endif  
 > 
-> 	Hans
+> I was wondering if that could be done whenever the "debug"
+> trace_array is created?
+> (perhaps only if trace_prink() has been used?)
+> Since (AFAICT) it could be created at any time??
+> 
+> So you wouldn't really need an extra kernel knob?
+> (Except to get the boot time trace diverted.)
+> The trace could go to the global buffer if the debug one
+> isn't created.
 
+I'd rather not touch trace_printk(), that would just confuse people more.
+
+Anyway, I'm not going to apply this. I have other ideas on how to
+accomplish this. But for now, I wanted it in my patchwork to remind me to
+do those other methods. In the mean time, I can just apply this patch
+when I need to.
+
+> 
+> OTOH I'm missing what trace_array_init_prink() does?
+> It seems to just call alloc_percpu_trace_buffer() with
+> no arguments.
+> 
+> It looks like alloc_percpu_trace_buffer() is called if there
+> are any trace_printk() formats in the main kernel.
+> Hopefully they aren't just in modules??
+
+No, they are allocated if a module uses them too. Try it out. Load a module
+with trace_printk() and you'll see that banner print out.
+
+-- Steve
