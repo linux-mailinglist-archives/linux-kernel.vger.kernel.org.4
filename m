@@ -2,165 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18BC072FA18
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 12:07:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7200572FA14
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 12:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234409AbjFNKHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 06:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58002 "EHLO
+        id S243533AbjFNKG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 06:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243814AbjFNKGa (ORCPT
+        with ESMTP id S243801AbjFNKG3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 06:06:30 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230F5E52;
-        Wed, 14 Jun 2023 03:06:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686737185; x=1718273185;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=g2QfR8bmYgD+CN0RFxMr1eU3YYzbjEOX8nWdKHOLO6M=;
-  b=MFmHPI3ixsBtdNO2NJtXr6XaCBM68f6KDYOrwDZcpUYt7n2rKUgeS1x8
-   ri/iK+WiLcYgDekhyh5pBuVCImSrm0qN7Wq3PjdAkCX9EbihWSlttcrmY
-   7n642PFY9eN8r/NWbVVFP1wMUSj7fQaJWeDFEdwBzKEV4KNlmY4NF8/Al
-   K56PO/CgYHJBo5vJGA8Kx9AenIC/5+aPDr1GHstZFMXMCT6nreHfH63V+
-   2kNj6qt+Yp32/rIFYaPVoC+tcSlvq28Y7dLngmKlOR4zw7lWVtK5ZIbw5
-   xnbmSByl0tubEXQo72TDGL6PZzovxxgISpW1XTYv12tG7lsRHDDdifG7M
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="444943713"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="444943713"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 03:06:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="824753394"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="824753394"
-Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 14 Jun 2023 03:06:21 -0700
-Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q9NOP-0000Vn-06;
-        Wed, 14 Jun 2023 10:06:21 +0000
-Date:   Wed, 14 Jun 2023 18:05:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Wei Chin Tsai <Wei-chin.Tsai@mediatek.com>,
-        linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     oe-kbuild-all@lists.linux.dev, wsd_upstream@mediatek.com,
-        wei-chin.tsai@mediatek.com, mel.lee@mediatek.com,
-        ivan.tseng@mediatek.com, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v2 2/3] memory: export symbols for memory related
- functions
-Message-ID: <202306141627.fYoZPKxi-lkp@intel.com>
-References: <20230614032038.11699-3-Wei-chin.Tsai@mediatek.com>
+        Wed, 14 Jun 2023 06:06:29 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD5D18C;
+        Wed, 14 Jun 2023 03:06:23 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35EA63fU127468;
+        Wed, 14 Jun 2023 05:06:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1686737163;
+        bh=iFsvYPvQkajYLTBSl+GGXtHGsI9rPc41gAMCUtzgEHM=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=nTQcRXDu5YPj1KsBQnn2WQb2YHsKHQLRXwKOYwVpECkVYYVrzWEoIDKZoeKf71ztK
+         h31c9iUTerCplmwMWnUWKR7FxYPLXlU3Dpp1QPOgXgkg1P6ONfGiePo0nWB7bi8R7T
+         KVYM7xTVHv+GOGie5XqKqbmWRXlgI1BLFI02P6RY=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35EA62tu067285
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 14 Jun 2023 05:06:03 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 14
+ Jun 2023 05:06:02 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 14 Jun 2023 05:06:02 -0500
+Received: from [10.24.69.79] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35EA5xFf015594;
+        Wed, 14 Jun 2023 05:06:00 -0500
+Message-ID: <527454c6-7516-c226-dae6-636eea698353@ti.com>
+Date:   Wed, 14 Jun 2023 15:35:59 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230614032038.11699-3-Wei-chin.Tsai@mediatek.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] net: hsr: Disable promiscuous mode in offload mode
+Content-Language: en-US
+To:     Paolo Abeni <pabeni@redhat.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <bigeasy@linutronix.de>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <rogerq@kernel.org>
+References: <20230612093933.13267-1-r-gunasekaran@ti.com>
+ <dffbf0474b1352f1eac63125a973c8f8cd7b3e8d.camel@redhat.com>
+ <f50ad11eb5ca3cb777e7150ad6a8347e575f1667.camel@redhat.com>
+From:   Ravi Gunasekaran <r-gunasekaran@ti.com>
+In-Reply-To: <f50ad11eb5ca3cb777e7150ad6a8347e575f1667.camel@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wei,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on char-misc/char-misc-testing]
-[also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.4-rc6 next-20230614]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Wei-Chin-Tsai/kernel-process-fork-exit-export-symbol-for-fork-exit-tracing-functions/20230614-112218
-base:   char-misc/char-misc-testing
-patch link:    https://lore.kernel.org/r/20230614032038.11699-3-Wei-chin.Tsai%40mediatek.com
-patch subject: [PATCH v2 2/3] memory: export symbols for memory related functions
-config: csky-randconfig-r011-20230612 (https://download.01.org/0day-ci/archive/20230614/202306141627.fYoZPKxi-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add char-misc https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git
-        git fetch char-misc char-misc-testing
-        git checkout char-misc/char-misc-testing
-        b4 shazam https://lore.kernel.org/r/20230614032038.11699-3-Wei-chin.Tsai@mediatek.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=csky olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=csky SHELL=/bin/bash fs/proc/
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306141627.fYoZPKxi-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> fs/proc/task_mmu.c:776:6: warning: no previous prototype for 'smap_gather_stats' [-Wmissing-prototypes]
-     776 | void smap_gather_stats(struct vm_area_struct *vma,
-         |      ^~~~~~~~~~~~~~~~~
 
 
-vim +/smap_gather_stats +776 fs/proc/task_mmu.c
+On 6/14/23 3:14 PM, Paolo Abeni wrote:
+> On Wed, 2023-06-14 at 11:42 +0200, Paolo Abeni wrote:
+>> On Mon, 2023-06-12 at 15:09 +0530, Ravi Gunasekaran wrote:
+>>> When port-to-port forwarding for interfaces in HSR node is enabled,
+>>> disable promiscuous mode since L2 frame forward happens at the
+>>> offloaded hardware.
+>>>
+>>> Signed-off-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
+>>> ---
+>>>  net/hsr/hsr_device.c |  5 +++++
+>>>  net/hsr/hsr_main.h   |  1 +
+>>>  net/hsr/hsr_slave.c  | 15 +++++++++++----
+>>>  3 files changed, 17 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/net/hsr/hsr_device.c b/net/hsr/hsr_device.c
+>>> index 5a236aae2366..306f942c3b28 100644
+>>> --- a/net/hsr/hsr_device.c
+>>> +++ b/net/hsr/hsr_device.c
+>>> @@ -531,6 +531,11 @@ int hsr_dev_finalize(struct net_device *hsr_dev, struct net_device *slave[2],
+>>>  	if (res)
+>>>  		goto err_add_master;
+>>>  
+>>> +	/* HSR forwarding offload supported in lower device? */
+>>> +	if ((slave[0]->features & NETIF_F_HW_HSR_FWD) &&
+>>> +	    (slave[1]->features & NETIF_F_HW_HSR_FWD))
+>>> +		hsr->fwd_offloaded = true;
+>>> +
+>>>  	res = register_netdevice(hsr_dev);
+>>>  	if (res)
+>>>  		goto err_unregister;
+>>> diff --git a/net/hsr/hsr_main.h b/net/hsr/hsr_main.h
+>>> index 5584c80a5c79..0225fabbe6d1 100644
+>>> --- a/net/hsr/hsr_main.h
+>>> +++ b/net/hsr/hsr_main.h
+>>> @@ -195,6 +195,7 @@ struct hsr_priv {
+>>>  	struct hsr_self_node	__rcu *self_node;	/* MACs of slaves */
+>>>  	struct timer_list	announce_timer;	/* Supervision frame dispatch */
+>>>  	struct timer_list	prune_timer;
+>>> +	unsigned int            fwd_offloaded : 1; /* Forwarding offloaded to HW */
+>>
+>> Please use plain 'bool' instead.
+>>
+>> Also there is an hole in 'struct hsr_priv' just after 'net_id', you
+>> could consider moving this new field there.
+> 
+> Oops, I almost forgot! Please include the target tree (net-next in this
+> case) in the subj prefix on your next submission.
+> 
 
-   769	
-   770	/*
-   771	 * Gather mem stats from @vma with the indicated beginning
-   772	 * address @start, and keep them in @mss.
-   773	 *
-   774	 * Use vm_start of @vma as the beginning address if @start is 0.
-   775	 */
- > 776	void smap_gather_stats(struct vm_area_struct *vma,
-   777			       struct mem_size_stats *mss, unsigned long start)
-   778	{
-   779		const struct mm_walk_ops *ops = &smaps_walk_ops;
-   780	
-   781		/* Invalid start */
-   782		if (start >= vma->vm_end)
-   783			return;
-   784	
-   785		if (vma->vm_file && shmem_mapping(vma->vm_file->f_mapping)) {
-   786			/*
-   787			 * For shared or readonly shmem mappings we know that all
-   788			 * swapped out pages belong to the shmem object, and we can
-   789			 * obtain the swap value much more efficiently. For private
-   790			 * writable mappings, we might have COW pages that are
-   791			 * not affected by the parent swapped out pages of the shmem
-   792			 * object, so we have to distinguish them during the page walk.
-   793			 * Unless we know that the shmem object (or the part mapped by
-   794			 * our VMA) has no swapped out pages at all.
-   795			 */
-   796			unsigned long shmem_swapped = shmem_swap_usage(vma);
-   797	
-   798			if (!start && (!shmem_swapped || (vma->vm_flags & VM_SHARED) ||
-   799						!(vma->vm_flags & VM_WRITE))) {
-   800				mss->swap += shmem_swapped;
-   801			} else {
-   802				ops = &smaps_shmem_walk_ops;
-   803			}
-   804		}
-   805	
-   806		/* mmap_lock is held in m_start */
-   807		if (!start)
-   808			walk_page_vma(vma, ops, mss);
-   809		else
-   810			walk_page_range(vma->vm_mm, start, vma->vm_end, ops, mss);
-   811	}
-   812	EXPORT_SYMBOL_GPL(smap_gather_stats);
-   813	
+I will take care of this from next submission onwards.
+
+> Thanks,
+> 
+> Paolo
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+Ravi
