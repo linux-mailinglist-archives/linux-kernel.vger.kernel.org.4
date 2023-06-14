@@ -2,201 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D52772FC5F
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B73B72FC62
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:28:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243926AbjFNL2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 07:28:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45162 "EHLO
+        id S243976AbjFNL2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 07:28:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233227AbjFNL2P (ORCPT
+        with ESMTP id S243967AbjFNL2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 07:28:15 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BE91FC2;
-        Wed, 14 Jun 2023 04:28:06 -0700 (PDT)
-Received: from [192.168.10.55] (unknown [119.155.33.163])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C19846606F13;
-        Wed, 14 Jun 2023 12:27:58 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686742085;
-        bh=3ZWIhje+mgtyktUw0AAPttj7QyBwiUJMbO6bbWWgjTo=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=iCLsKKv3N3+2V7ZmyaHtIzM7nIF9pUY1OiggobwcMyNL4REb92Nka/WSxJgOFhUf3
-         T9Jz7j95xJNoaDUc9XbedWrwrNXoRTj/f9/EW1DWj8By3XCe5VikwnSzpg8OIamO2z
-         62ysVKpbUF5siANuApaOSqSjlXmyZpDGUhtX4v6uxVhMqeueGwooNWOKn1XUkYpSM3
-         BTSNTDq6k7XckwwcU1176GWjXCTSgvUpZ6QHZ1jcQ2MrtnQVU+MWbeWedEi71bOD9Q
-         TIC0FH/kctdyT5kmxaQ2Ag4vjWClNiwxx9s8H9Q9JQUj/3gw+y1FvLGU7UkuCCtJhP
-         n0On5qAjvr+xA==
-Message-ID: <8bf13c14-8f58-aa20-2c5e-d0a293f1686f@collabora.com>
-Date:   Wed, 14 Jun 2023 16:27:54 +0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v18 4/5] mm/pagemap: add documentation of PAGEMAP_SCAN
- IOCTL
-To:     Randy Dunlap <rdunlap@infradead.org>, Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
-References: <20230613102905.2808371-1-usama.anjum@collabora.com>
- <20230613102905.2808371-5-usama.anjum@collabora.com>
- <57358041-0e36-deaa-e2ec-06dcfc92ba4d@infradead.org>
-Content-Language: en-US
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <57358041-0e36-deaa-e2ec-06dcfc92ba4d@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SORBS_WEB,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+        Wed, 14 Jun 2023 07:28:22 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966B11BE9;
+        Wed, 14 Jun 2023 04:28:18 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35EBLDKh002031;
+        Wed, 14 Jun 2023 11:28:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=tBDdYFBw2QSwTa8jz5kx4XAg6O/UYTxpL/gTvAvEcqY=;
+ b=kkEyTziu4026yiz0GTsn2ryU+qYoz5h1NuKHDnNRxB3qYbZD9ZaA2pPmRql5E5dMCbKJ
+ h0EMtR0ZK2c+UDVt4XHl4jKg3gqbH6w5F+oQyIeyNTWQr1FxaYwAfTIbEXFQRpMlzLvc
+ 8y3RvgvNNddT5h8X+hEEQl1FPCIF1Cbn26haRMHczb4YQlYgKnx62udQ3joqfZbIeVa/
+ Zyifdgot43U+mA71tOsryRXGmHa6sAySEAnHnFf7yEVCukS19aKcZvqtw+H9cwglUdMU
+ N/5LPXLMzxCatSJbrKAyLiUewMa3pNNJ3eSypR8F7IvzdqTJokddnYD79TSgHjn4NF/u yQ== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r7cka00bb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Jun 2023 11:28:14 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 35EBSASB017409;
+        Wed, 14 Jun 2023 11:28:11 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3r7271hrex-1;
+        Wed, 14 Jun 2023 11:28:10 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35EBSAJ8017403;
+        Wed, 14 Jun 2023 11:28:10 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-vnivarth-hyd.qualcomm.com [10.213.111.166])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 35EBSAA1017402;
+        Wed, 14 Jun 2023 11:28:10 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
+        id 622404BD2; Wed, 14 Jun 2023 16:58:09 +0530 (+0530)
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
+        swboyd@chromium.org, quic_vtanuku@quicinc.com,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Subject: [PATCH v2] soc: qcom: geni-se: Do not bother about enable/disable of interrupts in secondary sequencer
+Date:   Wed, 14 Jun 2023 16:58:07 +0530
+Message-Id: <1686742087-30731-1-git-send-email-quic_vnivarth@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: -7HLvOpGYe_NcvAPym6_lTyh3OV10Xve
+X-Proofpoint-ORIG-GUID: -7HLvOpGYe_NcvAPym6_lTyh3OV10Xve
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-14_07,2023-06-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
+ malwarescore=0 suspectscore=0 priorityscore=1501 lowpriorityscore=0
+ mlxlogscore=400 adultscore=0 impostorscore=0 bulkscore=0 clxscore=1015
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306140098
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Randy,
+The select_fifo/dma_mode() functions in geni driver enable/disable
+interrupts (secondary included) conditionally for non-uart modes, while
+uart is supposed to manage this internally.
+However, only uart uses secondary IRQs while spi, i2c do not care about
+these at all making their enablement (or disablement) totally unnecessary
+for these protos.
+Similarly, select_gpi_mode() also does disable s_irq and its useless again.
 
-Thank you for your review.
+Drop enabling/disabling secondary IRQs.
+This doesn't solve any observed problem but only gets rid of code pieces
+that are not required.
 
-On 6/14/23 9:20 AM, Randy Dunlap wrote:
-> Hi--
-> 
-> On 6/13/23 03:29, Muhammad Usama Anjum wrote:
->> Add some explanation and method to use write-protection and written-to
->> on memory range.
->>
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->> ---
->> Changes in v16:
->> - Update the documentation
->>
->> Changes in v11:
->> - Add more documentation
->> ---
->>  Documentation/admin-guide/mm/pagemap.rst | 58 ++++++++++++++++++++++++
->>  1 file changed, 58 insertions(+)
->>
->> diff --git a/Documentation/admin-guide/mm/pagemap.rst b/Documentation/admin-guide/mm/pagemap.rst
->> index c8f380271cad..3b977526d4b3 100644
->> --- a/Documentation/admin-guide/mm/pagemap.rst
->> +++ b/Documentation/admin-guide/mm/pagemap.rst
->> @@ -227,3 +227,61 @@ Before Linux 3.11 pagemap bits 55-60 were used for "page-shift" (which is
->>  always 12 at most architectures). Since Linux 3.11 their meaning changes
->>  after first clear of soft-dirty bits. Since Linux 4.2 they are used for
->>  flags unconditionally.
->> +
->> +Pagemap Scan IOCTL
->> +==================
->> +
->> +The ``PAGEMAP_SCAN`` IOCTL on the pagemap file can be used to get or optionally
->> +clear the info about page table entries. The following operations are supported
->> +in this IOCTL:
->> +- Get the information if the pages have been written-to (``PAGE_IS_WRITTEN``),
-> 
->                                                 written to
-I'll make updates on all the places you have suggested.
+Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+---
+v1 -> v2:
+- apply similar changes to select_gpi_mode()
+- modified commit message accordingly
+---
+ drivers/soc/qcom/qcom-geni-se.c | 28 ++++------------------------
+ 1 file changed, 4 insertions(+), 24 deletions(-)
 
-> 
->> +  file mapped (``PAGE_IS_FILE``), present (``PAGE_IS_PRESENT``) or swapped
->> +  (``PAGE_IS_SWAPPED``).
->> +- Find pages which have been written-to and/or write protect the pages atomically
-> 
->                                 written to
-> 
->> +  (atomic ``PM_SCAN_OP_GET + PM_SCAN_OP_WP``)
->> +
->> +The ``struct pm_scan_arg`` is used as the argument of the IOCTL.
->> + 1. The size of the ``struct pm_scan_arg`` must be specified in the ``size``
->> +    field. This field will be helpful in recognizing the structure if extensions
->> +    are done later.
->> + 2. The flags can be specified in the ``flags`` field. The ``PM_SCAN_OP_GET``
->> +    and ``PM_SCAN_OP_WP`` are the only added flags at this time.
->> + 3. The range is specified through ``start`` and ``len``.
->> + 4. The output buffer of ``struct page_region`` array and size is specified in
->> +    ``vec`` and ``vec_len``.
->> + 5. The optional maximum requested pages are specified in the ``max_pages``.
->> + 6. The masks are specified in ``required_mask``, ``anyof_mask``,
->> +    ``excluded_ mask`` and ``return_mask``.
->> +    1.  To find if ``PAGE_IS_WRITTEN`` flag is set for pages which have
->> +        ``PAGE_IS_FILE`` set and ``PAGE_IS_SWAPPED`` un-set, ``required_mask``
-> 
->                                                         unset,
-> 
->> +        is set to ``PAGE_IS_FILE``, ``exclude_mask`` is set to
->> +        ``PAGE_IS_SWAPPED`` and ``return_mask`` is set to ``PAGE_IS_WRITTEN``.
->> +        The output buffer in ``vec`` and length must be specified in ``vec_len``.
->> +    2. To find pages which have either ``PAGE_IS_FILE`` or ``PAGE_IS_SWAPPED``
->> +       set, ``anyof_masks`` is set to  ``PAGE_IS_FILE | PAGE_IS_SWAPPED``.
->> +    3. To find written pages and engage write protect, ``PAGE_IS_WRITTEN`` is
->> +       specified in ``required_mask`` and ``return_mask``. In addition to
->> +       specifying the output buffer in ``vec`` and length in ``vec_len``, the
->> +       ``PM_SCAN_OP_WP`` is specified in ``flags`` to perform write protect
->> +       on the range as well.
->> +
->> +The ``PAGE_IS_WRITTEN`` flag can be considered as the better and correct
->> +alternative of soft-dirty flag. It doesn't get affected by household chores (VMA
-> 
->                                                               housekeeping ?
-> 
->> +merging) of the kernel and hence the user can find the true soft-dirty pages
->> +only. This IOCTL adds the atomic way to find which pages have been written and
->> +write protect those pages again. This kind of operation is needed to efficiently
->> +find out which pages have changed in the memory.
->> +
->> +To get information about which pages have been written-to or optionally write
-> 
->                                                   written to
-> 
->> +protect the pages, following must be performed first in order:
->> + 1. The userfaultfd file descriptor is created with ``userfaultfd`` syscall.
->> + 2. The ``UFFD_FEATURE_WP_UNPOPULATED`` and ``UFFD_FEATURE_WP_ASYNC`` features
->> +    are set by ``UFFDIO_API`` IOCTL.
->> + 3. The memory range is registered with ``UFFDIO_REGISTER_MODE_WP`` mode
->> +    through ``UFFDIO_REGISTER`` IOCTL.
->> + 4. Then the any part of the registered memory or the whole memory region must
-> 
->             "the" or "any". Probably "any". Not both.
-> 
->> +    be write protected using ``PAGEMAP_SCAN`` IOCTL with flag ``PM_SCAN_OP_WP``
->> +    or the ``UFFDIO_WRITEPROTECT`` IOCTL can be used. Both of these perform the
->> +    same operation. The former is better in terms of performance.
->> + 5. Now the ``PAGEMAP_SCAN`` IOCTL can be used to either just find pages which
->> +    have been written-to and/or optionally write protect the pages as well.
-> 
->                  written to
-> 
-> 
-
+diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
+index dd50a25..ba78876 100644
+--- a/drivers/soc/qcom/qcom-geni-se.c
++++ b/drivers/soc/qcom/qcom-geni-se.c
+@@ -281,27 +281,14 @@ static void geni_se_select_fifo_mode(struct geni_se *se)
+ 
+ 	geni_se_irq_clear(se);
+ 
+-	/*
+-	 * The RX path for the UART is asynchronous and so needs more
+-	 * complex logic for enabling / disabling its interrupts.
+-	 *
+-	 * Specific notes:
+-	 * - The done and TX-related interrupts are managed manually.
+-	 * - We don't RX from the main sequencer (we use the secondary) so
+-	 *   we don't need the RX-related interrupts enabled in the main
+-	 *   sequencer for UART.
+-	 */
++	/* UART driver manages enabling / disabling interrupts internally */
+ 	if (proto != GENI_SE_UART) {
++		/* Non-UART use only primary sequencer so dont bother about S_IRQ */
+ 		val_old = val = readl_relaxed(se->base + SE_GENI_M_IRQ_EN);
+ 		val |= M_CMD_DONE_EN | M_TX_FIFO_WATERMARK_EN;
+ 		val |= M_RX_FIFO_WATERMARK_EN | M_RX_FIFO_LAST_EN;
+ 		if (val != val_old)
+ 			writel_relaxed(val, se->base + SE_GENI_M_IRQ_EN);
+-
+-		val_old = val = readl_relaxed(se->base + SE_GENI_S_IRQ_EN);
+-		val |= S_CMD_DONE_EN;
+-		if (val != val_old)
+-			writel_relaxed(val, se->base + SE_GENI_S_IRQ_EN);
+ 	}
+ 
+ 	val_old = val = readl_relaxed(se->base + SE_GENI_DMA_MODE_EN);
+@@ -317,17 +304,14 @@ static void geni_se_select_dma_mode(struct geni_se *se)
+ 
+ 	geni_se_irq_clear(se);
+ 
++	/* UART driver manages enabling / disabling interrupts internally */
+ 	if (proto != GENI_SE_UART) {
++		/* Non-UART use only primary sequencer so dont bother about S_IRQ */
+ 		val_old = val = readl_relaxed(se->base + SE_GENI_M_IRQ_EN);
+ 		val &= ~(M_CMD_DONE_EN | M_TX_FIFO_WATERMARK_EN);
+ 		val &= ~(M_RX_FIFO_WATERMARK_EN | M_RX_FIFO_LAST_EN);
+ 		if (val != val_old)
+ 			writel_relaxed(val, se->base + SE_GENI_M_IRQ_EN);
+-
+-		val_old = val = readl_relaxed(se->base + SE_GENI_S_IRQ_EN);
+-		val &= ~S_CMD_DONE_EN;
+-		if (val != val_old)
+-			writel_relaxed(val, se->base + SE_GENI_S_IRQ_EN);
+ 	}
+ 
+ 	val_old = val = readl_relaxed(se->base + SE_GENI_DMA_MODE_EN);
+@@ -344,10 +328,6 @@ static void geni_se_select_gpi_mode(struct geni_se *se)
+ 
+ 	writel(0, se->base + SE_IRQ_EN);
+ 
+-	val = readl(se->base + SE_GENI_S_IRQ_EN);
+-	val &= ~S_CMD_DONE_EN;
+-	writel(val, se->base + SE_GENI_S_IRQ_EN);
+-
+ 	val = readl(se->base + SE_GENI_M_IRQ_EN);
+ 	val &= ~(M_CMD_DONE_EN | M_TX_FIFO_WATERMARK_EN |
+ 		 M_RX_FIFO_WATERMARK_EN | M_RX_FIFO_LAST_EN);
 -- 
-BR,
-Muhammad Usama Anjum
+Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
+
