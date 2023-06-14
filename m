@@ -2,101 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D694730790
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 20:46:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 609D3730794
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 20:47:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230411AbjFNSqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 14:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60514 "EHLO
+        id S231384AbjFNSrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 14:47:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjFNSp6 (ORCPT
+        with ESMTP id S230387AbjFNSrG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 14:45:58 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449801BF7
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:45:56 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1b3af7e3925so31668525ad.3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:45:56 -0700 (PDT)
+        Wed, 14 Jun 2023 14:47:06 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32381BDB
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:47:04 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-977d55ac17bso162891266b.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:47:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686768355; x=1689360355;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ClhXyTMCOAhGnHue/rYnwljuM17idvr3usaXpO/VYvI=;
-        b=iN5gmCcfAB7dsmep+MstonHEHRYzEhlS+IDRUeD1FVo2baBN7gE1e/6OykHCJtDM6k
-         Aiv//w+9AXJ/zy/NXNT20xnVtwfIlXKbYo/O5dPK5a9/RFmRk3PVym1cdIHem0bj4BEf
-         as7tjxepzRLn+7/UlA4gAW6PAVikEu3RC1W1I=
+        d=linaro.org; s=google; t=1686768423; x=1689360423;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/2dmijlndEPPYs5IElMJtslUllIfqF2D+1pCU/iVRps=;
+        b=RYB/dfvGhjvnwSjdBgId9QXaGPAml67loM9d/fKuSNJGk/pke4Id3mL8bttl7LJ2rt
+         asd0STpv2pxsQmmhLRwvoESTFQd7HCS+WFQgrpYwtGBFJ98SH9ZWb5Fv/IgZ0ftmT0+3
+         QNCxGhNExMqqLfP8mfkRrNO1FR0Yd+4NVi1vm20ADoOhpAhPOb4PHocDWTOyHfYsHWQS
+         UC7GFLZLZKx92SOiJ34UMAiRyGt8Iwras9MOBKmDaDC0PXHXkJXg9Ds68St81OIwN+DR
+         /0PFa/IO5ubVynX/tfN9DjCcbYX11n5s5tnyQGRR7kvEgOSTLynq7j+80zPDkTi91iNr
+         C2Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686768355; x=1689360355;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ClhXyTMCOAhGnHue/rYnwljuM17idvr3usaXpO/VYvI=;
-        b=JFwiZOSLHDy2W8T3AvP3U1aaJqLxLZeFQxHz+Lz4lKmDabEsqg1Ox6Lsx2gk/mHoAx
-         lXxz7DkspzAsJ3rMFPexXMlo+YFhVb9xz5COgDM3eQStsgycjETjbPBl2qXIM7+22QzY
-         UsxJE2EPvCPRQo5OFcRlzvKiZKwpYkSFWHlBSoURpAoJysFJ9rJNM25eA0n77RKytJlH
-         ooN2qZxj5ItNohe5SLH4iRzAc8LfGus97MTKACBKuP/J2MO96aXoDwpa50Fe6OflMVuE
-         eDuMc8O9SDXGCKxi7zxPpEOQsA0HZ58uYwBnQKiSGKqgr2gVcxAYOkMtsFeG24SmjzFG
-         71Dw==
-X-Gm-Message-State: AC+VfDy9zl2fi9cHgfQh1/D+tgS3X0ZtJcvdh7AtqGNave+UkY7KYTvt
-        o+/TF5mFFitBAKeb/m5ErutPIg==
-X-Google-Smtp-Source: ACHHUZ6J3AlNKEtdy+6aTy3emeKWFNXqfnFihyGEv/Pc0nkR+DlArJgpJPxQ9pGtGnsi+YY/88GzpA==
-X-Received: by 2002:a17:902:d389:b0:1b3:b84b:9017 with SMTP id e9-20020a170902d38900b001b3b84b9017mr10213717pld.14.1686768355338;
-        Wed, 14 Jun 2023 11:45:55 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id v3-20020a170902d68300b001b243a5a5e1sm5902905ply.298.2023.06.14.11.45.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 11:45:54 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        ysato@users.sourceforge.jp, azeemshaikh38@gmail.com,
-        dalias@libc.org
-Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
-        rdunlap@infradead.org, linux-sh@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] sh: Replace all non-returning strlcpy with strscpy
-Date:   Wed, 14 Jun 2023 11:44:29 -0700
-Message-Id: <168676826702.1963449.9061022814058323294.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230530163041.985456-1-azeemshaikh38@gmail.com>
-References: <20230530163041.985456-1-azeemshaikh38@gmail.com>
+        d=1e100.net; s=20221208; t=1686768423; x=1689360423;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/2dmijlndEPPYs5IElMJtslUllIfqF2D+1pCU/iVRps=;
+        b=CzQ45Jv/Lwu2myvC68q6Z1rK07ZHha0dfqj52OCMJ2KW6IRz6H2HaQq6YyIj44I4Km
+         jLBaCsMw/txeGscDu38F/bdKGdf/4uFbltM53gAGwfvXlPaFERDvZpvzrjSmqccRlZZm
+         kar7PSuFHi6oqgx5EmHxUKltJMoXTcqD91EoUq2JxcqwZcw594eVh+DN+GRpCUoZZv1r
+         FOeGCWG6dEjlDkDWwSSIAEYRw2F+UuJQcd+L8s5nff7QsV/0jyI75D5R/xpyE3nbnQzE
+         DVYmF3qa/6pB5nfkEWu+WHjgHXlnsjZEGKw8X5bgQhMPrH8GcoB54Os10uqOV1HRB24q
+         wKdA==
+X-Gm-Message-State: AC+VfDx3ulnOsGZB9myH4IXceRPx7GNF1YqJnWE0+uPf3qz2UUmTASHH
+        sHYUFXy1ojB1amhGoFIvYRiAXCmTDryNDHGRajI=
+X-Google-Smtp-Source: ACHHUZ6QGzBwXZPm7LGg97zkIBeIUyBNwZ3vpxzJcuCyRyUliDdiMyVINRNKkhdi4RE0ju7HAKTnSw==
+X-Received: by 2002:a17:907:6e10:b0:974:5ce6:f9ff with SMTP id sd16-20020a1709076e1000b009745ce6f9ffmr17870176ejc.32.1686768423459;
+        Wed, 14 Jun 2023 11:47:03 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id e26-20020a170906045a00b0096fc35ca733sm8258831eja.41.2023.06.14.11.47.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 11:47:02 -0700 (PDT)
+Message-ID: <0f6c9dcb-b7f6-fff9-6bed-f4585ea8e487@linaro.org>
+Date:   Wed, 14 Jun 2023 20:47:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] arm64: dts: qcom: sdm845-db845c: Move LVS regulator nodes
+ up
+Content-Language: en-US
+To:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        dt <devicetree@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+References: <20230602161246.1855448-1-amit.pundir@linaro.org>
+ <358c69ad-fa8a-7386-fe75-92369883ee48@leemhuis.info>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <358c69ad-fa8a-7386-fe75-92369883ee48@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 May 2023 16:30:41 +0000, Azeem Shaikh wrote:
-> strlcpy() reads the entire source buffer first.
-> This read may exceed the destination size limit.
-> This is both inefficient and can lead to linear read
-> overflows if a source string is not NUL-terminated [1].
-> In an effort to remove strlcpy() completely [2], replace
-> strlcpy() here with strscpy().
-> No return values were used, so direct replacement is safe.
+On 14/06/2023 20:18, Linux regression tracking (Thorsten Leemhuis) wrote:
+> On 02.06.23 18:12, Amit Pundir wrote:
+>> Move lvs1 and lvs2 regulator nodes up in the rpmh-regulators
+>> list to workaround a boot regression uncovered by the upstream
+>> commit ad44ac082fdf ("regulator: qcom-rpmh: Revert "regulator:
+>> qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS"").
+>>
+>> Without this fix DB845c fail to boot at times because one of the
+>> lvs1 or lvs2 regulators fail to turn ON in time.
 > 
-> [...]
+> /me waves friendly
+> 
+> FWIW, as it's not obvious: this...
+> 
+>> Link: https://lore.kernel.org/all/CAMi1Hd1avQDcDQf137m2auz2znov4XL8YGrLZsw5edb-NtRJRw@mail.gmail.com/
+> 
+> ...is a report about a regression. One that we could still solve before
+> 6.4 is out. One I'll likely will point Linus to, unless a fix comes into
+> sight.
+> 
+> When I noticed the reluctant replies to this patch I earlier today asked
+> in the thread with the report what the plan forward was:
+> https://lore.kernel.org/all/CAD%3DFV%3DV-h4EUKHCM9UivsFHRsJPY5sAiwXV3a1hUX9DUMkkxdg@mail.gmail.com/
+> 
+> Dough there replied:
+> 
+> ```
+> Of the two proposals made (the revert vs. the reordering of the dts),
+> the reordering of the dts seems better. It only affects the one buggy
+> board (rather than preventing us to move to async probe for everyone)
+> and it also has a chance of actually fixing something (changing the
+> order that regulators probe in rpmh-regulator might legitimately work
+> around the problem). That being said, just like the revert the dts
+> reordering is still just papering over the problem and is fragile /
+> not guaranteed to work forever.
+> ```
+> 
+> Papering over obviously is not good, but has anyone a better idea to fix
+> this? Or is "not fixing" for some reason an viable option here?
+> 
 
-Build tested with sh4 GCC 13.1 from:
-https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/13.1.0/
+I understand there is a regression, although kernel is not mainline
+(hash df7443a96851 is unknown) and the only solutions were papering the
+problem. Reverting commit is a temporary workaround. Moving nodes in DTS
+is not acceptable because it hides actual problem and only solves this
+one particular observed problem, while actual issue is still there. It
+would be nice to be able to reproduce it on real mainline with normal
+operating system (not AOSP) - with ramdiks/without/whatever. So far no
+one did it, right?
 
-with defconfig and:
-	CONFIG_CPU_SUBTYPE_SH7343=y
-	CONFIG_SH_DMA=y
-	CONFIG_SH_DMA_API=y
-
-Applied to for-next/hardening, thanks!
-
-[1/1] sh: Replace all non-returning strlcpy with strscpy
-      https://git.kernel.org/kees/c/ca64da3052be
-
--- 
-Kees Cook
+Best regards,
+Krzysztof
 
