@@ -2,112 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F45F72FE31
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF1E372FE3F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243930AbjFNMQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 08:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51978 "EHLO
+        id S244042AbjFNMRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 08:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243985AbjFNMQc (ORCPT
+        with ESMTP id S243854AbjFNMRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 08:16:32 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637101FC7;
-        Wed, 14 Jun 2023 05:16:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686744986; x=1718280986;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=lXIww3R8oE2mnyCB8FLd9dnkhHpRmtz39UaDyJ0b2qg=;
-  b=TQprOryB+Pv0WoXnwGcCEl2qeATqJjB8R19g54lS540APOs3qMOraWxP
-   p8hqMPKPxBKbfo+pM/pDfGxCqncCwproO2WMrS/VLVOl0R5Q3Rvj84cqi
-   6aejFxtKT07pX6yeQrCIXizdMiJS0dnYsPWVt5b0OYdDREAdYTavLCPf0
-   JMU8AOQKrB8d4nV8XaDnWm6vysEujJ5v+YgLygg/RK0sc3sQ+BBRhK/W4
-   inBYYKqd9Au0wAz0IZ/Tpn6cDqz8JfJF8leXfUem5EHrwN9Ww6A8kTe9V
-   NVqHVeKjvC+AGfKZJzfioUnIczcAx6HphmEwox99lQ1D1VEMwCLv8Jtpf
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="348256688"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="348256688"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 05:16:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="715176844"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="715176844"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 14 Jun 2023 05:16:15 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1q9PQ6-003hE7-0y;
-        Wed, 14 Jun 2023 15:16:14 +0300
-Date:   Wed, 14 Jun 2023 15:16:14 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 5/8] rtc: isl12022: implement RTC_VL_READ ioctl
-Message-ID: <ZImvjj34YILrNJU5@smile.fi.intel.com>
-References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
- <20230613130011.305589-1-linux@rasmusvillemoes.dk>
- <20230613130011.305589-6-linux@rasmusvillemoes.dk>
- <ZIiJWKBFojAcNCkA@smile.fi.intel.com>
- <20230613212651c8770218@mail.local>
+        Wed, 14 Jun 2023 08:17:43 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36EE1BC5
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:17:41 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-bd77424c886so627507276.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 05:17:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686745061; x=1689337061;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bwFHPYhlT3RfthlTjpPS85ddabPhpew1qG/qUrIvT/E=;
+        b=ZE7z0PBOhTN7OCLEZIYRfVxCFCP7jG7T5T8l+rJ9PWQ9FnIaqiMIQYrUHb0OS7jD5B
+         XOOz90b2gjuTDdRo5Nuxv3QNpBX19NxZAlEKkee6NhTOj3+owBXQLBKDQuKePHVIqHWH
+         Zr5cIMCeDt3B8/1TsIrIj6TJYAGcoJGmKXOCWdf1Cvx6830cJiJxOS3SzH1ydfcLAXWw
+         lrI7XOfbmOhRloHyBDgHy+iyWFCJeCZ1WmUG3UII6zFBjFJsthXvv+TGBjQ2Qr4fpV39
+         D05laDWul/NKId+FKRUgIrvvzMzs+qb1vAal5rERfMpdfxTnfpBS4rOlN5x1D5BbaMCv
+         dhAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686745061; x=1689337061;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bwFHPYhlT3RfthlTjpPS85ddabPhpew1qG/qUrIvT/E=;
+        b=FaMNmmrEaQyfqb/xVV/sk+PnN+53k2JLP2ciF7DaozuBIIAjHINXjVpsM4YV9LCam/
+         p1Bm25+9IAo1SuVVLE6CzLBUCwyu4KY4yZcmcZRAwTBpAm3Z7ixHxwGyPpbl93YWvmC/
+         wHlYREAvL1PeaKdRh2ZtyILXDjB0wHDRoeJXckXHPxkUPmTH6J8vVgIX08Bolfqt15yp
+         hENmLz/pNTRhl1RIjzE+Hiw+1sFhpCfPoXXoCXmriXWM6cuNAJN1ROFmub9wuadIt+OV
+         Ey9ztBLwE4B1bubD40yH2mdroWcJZ3rRDX2fE9DkOilSB8zl4MRNM+WQEppgrJSJ5D8C
+         TlEA==
+X-Gm-Message-State: AC+VfDyPvuI/MU0R9XEQ1kUXEfQ+y9mxEWAhl/C2z1JBo7PO8uytL9fI
+        oRvbzcPzOJEBOHq75iitXNuPsmjeBn1cVMDecYJehw==
+X-Google-Smtp-Source: ACHHUZ7BbfR2gwme9IAt2E/2MfRJmNQkjtnOv8ERZreRKQ3CY+OoH6bRLuIYMYRdkWELrelaMW6I2ZCXGS5utx7/bSk=
+X-Received: by 2002:a25:44c3:0:b0:bad:bb0:4d37 with SMTP id
+ r186-20020a2544c3000000b00bad0bb04d37mr1968881yba.31.1686745060842; Wed, 14
+ Jun 2023 05:17:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230613212651c8770218@mail.local>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230609115058.9059-1-quic_jkona@quicinc.com> <88b41c0f-e515-ce94-e4fd-befbeef53781@linaro.org>
+ <65fd51f1-56d9-7b7b-7757-229cbb65051d@quicinc.com>
+In-Reply-To: <65fd51f1-56d9-7b7b-7757-229cbb65051d@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 14 Jun 2023 15:17:30 +0300
+Message-ID: <CAA8EJpoLWm4=1J2QTfh9N55U-FjuYA7CwJeoG=Zv4mOhC1nytQ@mail.gmail.com>
+Subject: Re: [PATCH V4 0/4] Add camera clock controller support for SM8550
+To:     Jagadeesh Kona <quic_jkona@quicinc.com>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
+        Imran Shaik <quic_imrashai@quicinc.com>,
+        Ajit Pandey <quic_ajipan@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 11:26:51PM +0200, Alexandre Belloni wrote:
-> On 13/06/2023 18:20:56+0300, Andy Shevchenko wrote:
-> > On Tue, Jun 13, 2023 at 03:00:07PM +0200, Rasmus Villemoes wrote:
+On Wed, 14 Jun 2023 at 14:58, Jagadeesh Kona <quic_jkona@quicinc.com> wrote:
+>
+>
+>
+> On 6/9/2023 6:24 PM, Konrad Dybcio wrote:
+> >
+> >
+> > On 9.06.2023 13:50, Jagadeesh Kona wrote:
+> >> Add bindings, driver and devicetree node for camera clock controller on
+> >> SM8550.
+> >>
+> >> Jagadeesh Kona (4):
+> >>    dt-bindings: clock: qcom: Add SM8550 camera clock controller
+> >>    clk: qcom: camcc-sm8550: Add camera clock controller driver for SM8550
+> >>    clk: qcom: camcc-sm8550: Add support for qdss, sleep and xo clocks
+> >>    arm64: dts: qcom: sm8550: Add camera clock controller
+> > What's the final verdict on RINGOSC_L etc.?
+> >
+> > Konrad
+>
+> We would like to pass RINGOSC_CAL_L field directly in config->l value
+> itself and reuse existing code rather than adding a separate function
+> for lucid ole pll configure.
 
-...
+As I wrote in another email, it doesn't sound like a good approach.
 
-> > > +		ret = regmap_read(regmap, ISL12022_REG_SR, &val);
-> > > +		if (ret < 0)
-> > 
-> > I always feel uneasy with ' < 0' — Does positive error makes sense?
-> > Is it even possible? OTOH if the entire driver uses this idiom...
-> > oh well, let's make it consistent.
-> 
-> /**
->  * regmap_read() - Read a value from a single register
->  *
->  * @map: Register map to read from
->  * @reg: Register to be read from
->  * @val: Pointer to store read value
->  *
->  * A value of zero will be returned on success, a negative errno will
->  * be returned in error cases.
->  */
+>
+> Thanks,
+> Jagadeesh
+>
+> >>
+> >>   .../bindings/clock/qcom,sm8450-camcc.yaml     |    8 +-
+> >>   arch/arm64/boot/dts/qcom/sm8550.dtsi          |   15 +
+> >>   drivers/clk/qcom/Kconfig                      |    7 +
+> >>   drivers/clk/qcom/Makefile                     |    1 +
+> >>   drivers/clk/qcom/camcc-sm8550.c               | 3585 +++++++++++++++++
+> >>   include/dt-bindings/clock/qcom,sm8550-camcc.h |  187 +
+> >>   6 files changed, 3801 insertions(+), 2 deletions(-)
+> >>   create mode 100644 drivers/clk/qcom/camcc-sm8550.c
+> >>   create mode 100644 include/dt-bindings/clock/qcom,sm8550-camcc.h
+> >>
 
-I'm not sure what you meant by this. Yes, I know that there is no
-possibility that regmap API returns positive value. Do you mean that
-regmap API documentation is unclear?
 
-> > > +			return ret;
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+With best wishes
+Dmitry
