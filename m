@@ -2,162 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B557730A02
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 23:51:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3AEF730A08
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 23:52:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234315AbjFNVvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 17:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
+        id S230178AbjFNVwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 17:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbjFNVva (ORCPT
+        with ESMTP id S235920AbjFNVwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 17:51:30 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3ACE268A;
-        Wed, 14 Jun 2023 14:51:28 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-9828a7a39d1so81469466b.0;
-        Wed, 14 Jun 2023 14:51:28 -0700 (PDT)
+        Wed, 14 Jun 2023 17:52:36 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF412690
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 14:52:34 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-57026f4bccaso4291297b3.2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 14:52:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686779487; x=1689371487;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ojH11rOD4V92+B3RoF/GiQHE5eM6XkdZpqEdacgaeIk=;
-        b=iprfy/Irh8eDU98dt6Xe6/6txgUtuoDhr/0o0Ydowq+ptVFfNfOwlA1icUJoxQwRnl
-         56KEY7QTlfnwMjV5RMX2hi4yS2FfExhdi/Tbdy210JbR1iG1Qg5SxymmezUKtNiC82Cm
-         IDnDnyM0FcbPXixXm/T1inH0u+T9B6uX6hMIte1K4X+qXMJfom4kCDHDGJPH7mDpLG1r
-         Wmx4foF0jMS2BnKT/1G0ky9JZo78+lqui4Liv6KFonBqYoA7y5zQRSRI9mWrn5ZJfRPs
-         UERUHVNEpsdoW7CPONZeYz5rvJodiIX1qpJIaUB4Q7sxfpH1pFmbm71+4feGI92QN4xD
-         HSnw==
+        d=paul-moore.com; s=google; t=1686779553; x=1689371553;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EZdhhM2WIyksS9SFgf4otvNoFB1EwxYBOF+gAHVPmG8=;
+        b=PXcQGsEt07YObxGudBvyTcBccv2Fq4xmvl5I8Pwzb6hW5+XL6GHtreR0xSZeiFk95+
+         1klsNd4sLvF6ujNQPsQJljmBXx8XNwsGmW/XLwPKhq3qlGWRQwZwNLlxQ5MmW33JF9Qj
+         ur1nzu6EdzzCxGNuFB7WMxNOmcYad8GBFCOD7LJ6Q96GjWg6BTQfWRiRKYMWPy3Zul9k
+         o15bIaLGmgcE+DqUAJ+zHsf8bnesjOZ8UoTwzmpzp16cH4jIO3xno6ET6xXlUkrce35G
+         m3SObnctwwIBp5WEJ4Dpnqc+oE+6qiGUrUfbCB93Tgra9QrWl8S+dClrreqAnVQ7Y1Ly
+         5xfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686779487; x=1689371487;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ojH11rOD4V92+B3RoF/GiQHE5eM6XkdZpqEdacgaeIk=;
-        b=awMUZEyt7nnNShbfECzVop4PVtnKJ5ZZ+bMEAcGzk5a3gfZSjv5b14IjFkpH6ET3ea
-         QkWxFJUovwNEI4rvGQulMW5/LlxpLTCnByZvxfc1363VAR9Gx2J988chAijIE7VYMw/a
-         pYIRaCrhCenDUkyQKM1Lf6reMqt92rsFJxfs7Zvgj5CEIdXFUGZCQKBB5xy5dM9/6+E6
-         M23t4F7xoPkI/09CPiSs0t5PqPWakWHJQh3eGw0f79kLxH9jDaKBDq2bk00n0U4+N5Pn
-         0eioh9S5qjKKGYaocqG2iK0zZ/N0NykDECvdwB2vyi9jmuO/77W6+KHnVYx1QRu/t9+M
-         wycg==
-X-Gm-Message-State: AC+VfDyUtl5pKOpY1ovlRmVOIiXbNgPIsavQV5Qqbp2GupWaN4Ye9cJK
-        vzi6ZVMxzxGo6st16O9XrdA=
-X-Google-Smtp-Source: ACHHUZ6/DkqjfyfP6ofet2xwj/rhOu17T+1aVZtDjeYL7kAWWpa1Q4ys+VB8e7un8gkyU7Xi3VyMVg==
-X-Received: by 2002:a17:907:9349:b0:973:e4c2:2bcd with SMTP id bv9-20020a170907934900b00973e4c22bcdmr15216901ejc.18.1686779487092;
-        Wed, 14 Jun 2023 14:51:27 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id g18-20020a1709061c9200b00965a4350411sm1178381ejh.9.2023.06.14.14.51.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 14:51:25 -0700 (PDT)
-Date:   Thu, 15 Jun 2023 00:51:22 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     arinc9.unal@gmail.com
-Cc:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net v4 6/7] net: dsa: introduce
- preferred_default_local_cpu_port and use on MT7530
-Message-ID: <20230614215122.rzjv3ovab5nunchs@skbuf>
-References: <20230612075945.16330-1-arinc.unal@arinc9.com>
- <20230612075945.16330-7-arinc.unal@arinc9.com>
+        d=1e100.net; s=20221208; t=1686779553; x=1689371553;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EZdhhM2WIyksS9SFgf4otvNoFB1EwxYBOF+gAHVPmG8=;
+        b=ActD+xxB5sapOJHA9CfSoBaJa3bMF8UmzxRJXQFkoUyasE6Wo/NKYjspoRp5zvLKGD
+         v00BXbB7O2aFmRWlSl53Kds3yjk+xL8rjNDiWbB6Dx/xZG+Wt/EF91fIwxazrNcePNEk
+         mdawvYSquBVcVbs1SH/2XgsQSiN1cPc+L8QbLQ+rBuH+geAK7PResLy4spA2ENpo1ouz
+         DQiSdEaCfrkvze59sMM05HudzvIpioHX72t0Bs9oKqACRz1ABSmSfa+6jt8U4rbPnYY+
+         n5TJYYRHpu0OocrqcWN3GOKqhoMLIV2ZJhiKnm6c7BAZEtwWvYoCzUe/lHxc3zKOHsoI
+         BF8Q==
+X-Gm-Message-State: AC+VfDz4S5rnWiNX558XoktLJppuxvR2chaR7gLTDyOh8adX/rsks7Ds
+        JbA1StfDe2meqYR1+KJTOsAI0L5FtE1dkQk+bYGIOfl/3nkUYVk=
+X-Google-Smtp-Source: ACHHUZ4sqJvwja7uZm1iFvMQmSoLOgVR1pgw6VNNtcCP2rOQqydJR0z8aPP5tWbHLjsYAPK9c1Y1duM2yF8XSfnLyQ8=
+X-Received: by 2002:a81:8205:0:b0:565:a081:a925 with SMTP id
+ s5-20020a818205000000b00565a081a925mr3516080ywf.29.1686779553237; Wed, 14 Jun
+ 2023 14:52:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230612075945.16330-7-arinc.unal@arinc9.com>
+References: <20230614021825.64333-1-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <20230614021825.64333-1-jiapeng.chong@linux.alibaba.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 14 Jun 2023 17:52:22 -0400
+Message-ID: <CAHC9VhSUz1zXBTFjaCDMzFCuAY6t3zG4WyXyKWBjNTwjLxZS+Q@mail.gmail.com>
+Subject: Re: [PATCH] security: keys: Modify mismatched function name
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     jejb@linux.ibm.com, jarkko@kernel.org, zohar@linux.ibm.com,
+        dhowells@redhat.com, jmorris@namei.org, serge@hallyn.com,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 10:59:44AM +0300, arinc9.unal@gmail.com wrote:
-> From: Vladimir Oltean <olteanv@gmail.com>
-> 
-> Since the introduction of the OF bindings, DSA has always had a policy that
-> in case multiple CPU ports are present in the device tree, the numerically
-> smallest one is always chosen.
-> 
-> The MT7530 switch family, except the switch on the MT7988 SoC, has 2 CPU
-> ports, 5 and 6, where port 6 is preferable on the MT7531BE switch because
-> it has higher bandwidth.
-> 
-> The MT7530 driver developers had 3 options:
-> - to modify DSA when the MT7531 switch support was introduced, such as to
->   prefer the better port
-> - to declare both CPU ports in device trees as CPU ports, and live with the
->   sub-optimal performance resulting from not preferring the better port
-> - to declare just port 6 in the device tree as a CPU port
-> 
-> Of course they chose the path of least resistance (3rd option), kicking the
-> can down the road. The hardware description in the device tree is supposed
-> to be stable - developers are not supposed to adopt the strategy of
-> piecemeal hardware description, where the device tree is updated in
-> lockstep with the features that the kernel currently supports.
-> 
-> Now, as a result of the fact that they did that, any attempts to modify the
-> device tree and describe both CPU ports as CPU ports would make DSA change
-> its default selection from port 6 to 5, effectively resulting in a
-> performance degradation visible to users with the MT7531BE switch as can be
-> seen below.
-> 
-> Without preferring port 6:
-> 
-> [ ID][Role] Interval           Transfer     Bitrate         Retr
-> [  5][TX-C]   0.00-20.00  sec   374 MBytes   157 Mbits/sec  734    sender
-> [  5][TX-C]   0.00-20.00  sec   373 MBytes   156 Mbits/sec    receiver
-> [  7][RX-C]   0.00-20.00  sec  1.81 GBytes   778 Mbits/sec    0    sender
-> [  7][RX-C]   0.00-20.00  sec  1.81 GBytes   777 Mbits/sec    receiver
-> 
-> With preferring port 6:
-> 
-> [ ID][Role] Interval           Transfer     Bitrate         Retr
-> [  5][TX-C]   0.00-20.00  sec  1.99 GBytes   856 Mbits/sec  273    sender
-> [  5][TX-C]   0.00-20.00  sec  1.99 GBytes   855 Mbits/sec    receiver
-> [  7][RX-C]   0.00-20.00  sec  1.72 GBytes   737 Mbits/sec   15    sender
-> [  7][RX-C]   0.00-20.00  sec  1.71 GBytes   736 Mbits/sec    receiver
-> 
-> Using one port for WAN and the other ports for LAN is a very popular use
-> case which is what this test emulates.
-> 
-> As such, this change proposes that we retroactively modify stable kernels
-
-I keep mentally objecting to this patch and then I need to remind myself
-why this decision was taken. I believe that a key element influencing
-that decision is not sufficiently highlighted.
-
-You can add, right here, after "stable kernels":
-
-"(which don't support the modification of the CPU port assignments, so
-as to let user space fix the problem and restore the throughput)"
-
-> to keep the mt7530 driver preferring port 6 even with device trees where
-> the hardware is more fully described.
-> 
-> Fixes: c288575f7810 ("net: dsa: mt7530: Add the support of MT7531 switch")
-> Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+On Tue, Jun 13, 2023 at 10:18=E2=80=AFPM Jiapeng Chong
+<jiapeng.chong@linux.alibaba.com> wrote:
+>
+> No functional modification involved.
+>
+> security/keys/trusted-keys/trusted_tpm2.c:203: warning: expecting prototy=
+pe for tpm_buf_append_auth(). Prototype was for tpm2_buf_append_auth() inst=
+ead.
+>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D5524
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 > ---
+>  security/keys/trusted-keys/trusted_tpm2.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Reviewed-by: Paul Moore <paul@paul-moore.com>
+
+--=20
+paul-moore.com
