@@ -2,93 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D7B073049A
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F40730498
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:09:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231261AbjFNQJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 12:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59354 "EHLO
+        id S231187AbjFNQJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 12:09:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbjFNQJ2 (ORCPT
+        with ESMTP id S230516AbjFNQJZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 12:09:28 -0400
-X-Greylist: delayed 4592 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 14 Jun 2023 09:09:25 PDT
-Received: from zg8tmtu5ljg5lje1ms4xmtka.icoremail.net (zg8tmtu5ljg5lje1ms4xmtka.icoremail.net [159.89.151.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 60D2F1FC8
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:09:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fudan.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id; bh=PYg4exQBCf0Je8WHLBe48nl04iEqaJLL7nCkKkES/44=; b=E
-        OED1WVHLXOIrWnRZVvga9Xm+eDehC0D2lucFjFXZJJnP0aKRjHYLA9HRqf4rOfHt
-        WR2vb89ByHoFaKLohzoV+7AOzwRTdxOhlakKehkmVbEWqnKOOhJsrhreMjBJwSHE
-        GfbX/zyQOEMl6d7PfJH5Sm+GEmym84KiAmKhKfKwyM=
-Received: from ubuntu.localdomain (unknown [10.230.35.76])
-        by app1 (Coremail) with SMTP id XAUFCgAnLu4p5olkFszsAA--.39737S2;
-        Thu, 15 Jun 2023 00:09:14 +0800 (CST)
-From:   Chenyuan Mi <cymi20@fudan.edu.cn>
-To:     airlied@gmail.com
-Cc:     daniel@ffwll.ch, lyude@redhat.com, jani.nikula@intel.com,
-        Wayne.Lin@amd.com, imre.deak@intel.com, alexander.deucher@amd.com,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Chenyuan Mi <cymi20@fudan.edu.cn>
-Subject: [PATCH] drm/display/dp_mst: Fix missing check for return value of drm_atomic_get_mst_payload_state()
-Date:   Wed, 14 Jun 2023 09:09:11 -0700
-Message-Id: <20230614160911.121716-1-cymi20@fudan.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: XAUFCgAnLu4p5olkFszsAA--.39737S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7XF47uFWrJF4DAry8Cr18AFb_yoWDuwbEgF
-        1kZr1fWrZIk39rt3Wjyr4Fg34Fk3W2vF48Wwn3tayYkr9rC345Zry8WFyDKr17WF12qFWq
-        g3W3Cw1fZ3Z7GjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbTkFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
-        4UJwAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IE
-        rcIFxwACI402YVCY1x02628vn2kIc2xKxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I
-        8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AK
-        xVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcV
-        AFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8I
-        cIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14
-        v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUAkucUUUUU=
-X-CM-SenderInfo: isqsiiisuqikmt6i3vldqovvfxof0/
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 14 Jun 2023 12:09:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148CD1FE2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:09:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8420364444
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 16:09:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC839C433C0;
+        Wed, 14 Jun 2023 16:09:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686758962;
+        bh=z4EO55OEov8HV8Wooyvn+q5dcyjiojnBToINyf+P/T8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H1w2SMZEqvPgnn1xshZ8ykXfYKbNxrLz/tdiJ3WsRf/xUzq6E3+WaDmKvihJeMIXX
+         2CNGO1JXYmjZdEZg2JgfbSaeIHsK0I0eTjNUo5N5UoTUUKgJ+b5uA9QVNMMRi1bsvX
+         pGLjXv7MOFt/ygIDdqZDXZlPcERrTbJlgkMCzRwDOS7vPkc1JW+Z97Blxib/WwWeVV
+         rrVdXSP99GmRxaerC7hZ5YrJqLwEZDBLe+AbIuJYkODjMYkjxqhU9TajFMWWKWurHu
+         9Ruy4U2yX3dD+KZgLBoRtEyWq7NKHgbkZx4lrw4ucCwLPRNkPBPoxB6YDyc/NMqral
+         5YWXemSe7/cyA==
+Date:   Wed, 14 Jun 2023 17:09:17 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: x86: pgtable / kaslr initialisation (OOB) help
+Message-ID: <20230614160917.GA3635807@google.com>
+References: <20230614132339.GS3635807@google.com>
+ <20230614141654.GA1640123@hirez.programming.kicks-ass.net>
+ <20230614143732.GW3635807@google.com>
+ <0cefb67a-6fae-daa2-c871-ae35b96aac08@intel.com>
+ <20230614150615.GX3635807@google.com>
+ <20230614151003.GY3635807@google.com>
+ <20230614152632.GZ3635807@google.com>
+ <e72e3246-1803-6a17-5b9c-30fb2dc078e3@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e72e3246-1803-6a17-5b9c-30fb2dc078e3@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The drm_atomic_get_mst_payload_state() function may
-return NULL, which may cause null pointer deference,
-and most other callsites of drm_atomic_get_mst_payload_state()
-do Null check. Add Null check for return value of
-drm_atomic_get_mst_payload_state().
+On Wed, 14 Jun 2023, Dave Hansen wrote:
 
-Found by our static analysis tool.
+> On 6/14/23 08:26, Lee Jones wrote:
+> > On Wed, 14 Jun 2023, Lee Jones wrote:
+> > 
+> >> On Wed, 14 Jun 2023, Lee Jones wrote:
+> >>
+> >>> Thanks for chiming in Dave.  I hoped you would.
+> >>>
+> >>> On Wed, 14 Jun 2023, Dave Hansen wrote:
+> >>>
+> >>>> On 6/14/23 07:37, Lee Jones wrote:
+> >>>>> Still unsure how we (the kernel) can/should write to an area of memory
+> >>>>> that does not belong to it.  Should we allocate enough memory
+> >>>>> (2*PAGE_SIZE? rather than 8-Bytes) for trampoline_pgd_entry to consume
+> >>>>> in a more sane way?
+> >>>>
+> >>>> No.
+> >>>>
+> >>>> I think this:
+> >>>>
+> >>>>                 set_pgd(&trampoline_pgd_entry,
+> >>>>                         __pgd(_KERNPG_TABLE | __pa(p4d_page_tramp)));
+> >>>>
+> >>>> is bogus-ish.  set_pgd() wants to operate on a pgd_t inside a pgd
+> >>>> *PAGE*.  But it's just being pointed at a single  _entry_.  The address
+> >>>> of 'trampoline_pgd_entry' in your case  also just (unfortunately)
+> >>>> happens to pass the:
+> >>>>
+> >>>> 	__pti_set_user_pgtbl -> pgdp_maps_userspace()
+> >>>>
+> >>>> test.  I _think_ we want these to just be something like:
+> >>>>
+> >>>> 	trampoline_pgd_entry = __pgd(_KERNPG_TABLE |
+> >>>> 				     __pa(p4d_page_tramp);
+> >>>>
+> >>>> That'll keep us away from all of the set_pgd()-induced nastiness.
+> >>>
+> >>> Okay.  Is this what you're suggesting?
+> >>>
+> >>> diff --git a/arch/x86/mm/kaslr.c b/arch/x86/mm/kaslr.c                 v
+> >>> index d336bb0cb38b..803595c7dcc8 100644
+> >>> --- a/arch/x86/mm/kaslr.c
+> >>> +++ b/arch/x86/mm/kaslr.c
+> >>> @@ -176,7 +176,7 @@ void __meminit init_trampoline_kaslr(void)
+> >>>                 set_pgd(&trampoline_pgd_entry,
+> >>>                         __pgd(_KERNPG_TABLE | __pa(p4d_page_tramp)));
+> >>>         } else {
+> >>> -               set_pgd(&trampoline_pgd_entry,
+> >>> -                       __pgd(_KERNPG_TABLE | __pa(pud_page_tramp)));
+> >>> +               trampoline_pgd_entry =
+> >>> +                       __pgd(_KERNPG_TABLE | __pa(p4d_page_tramp);
+> >>
+> >> Note the change of *.page_tramp here.
+> >>
+> >>   s/pud/p4d/
+> >>
+> >> I'm assuming that too was intentional?
+> > 
+> > Never mind.  I can see that p4d_page_tramp is local to the if() segment.
+> > 
+> > While we're at it, does the if() segment look correct to you:
+> > 
+> >   if (pgtable_l5_enabled()) {
+> >         p4d_page_tramp = alloc_low_page();
+> > 
+> >         p4d_tramp = p4d_page_tramp + p4d_index(paddr);
+> > 
+> >         set_p4d(p4d_tramp,
+> >                 __p4d(_KERNPG_TABLE | __pa(pud_page_tramp)));
+> > 
+> >         set_pgd(&trampoline_pgd_entry,
+> >                 __pgd(_KERNPG_TABLE | __pa(p4d_page_tramp)));
+> >   } else {
+> >         trampoline_pgd_entry =
+> >                 __pgd(_KERNPG_TABLE | __pa(pud_page_tramp));
+> >   }
+> > 
+> >  - pud_page_tramp is being passed to set_p4d()
+> >  - p4d_page_tramp is being passed to set_pgd()
+> > 
+> > Should those be the other way around, or am I missing the point?
+> 
+> You're missing the point. :)
 
-Signed-off-by: Chenyuan Mi <cymi20@fudan.edu.cn>
----
- drivers/gpu/drm/display/drm_dp_mst_topology.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/gpu/drm/display/drm_dp_mst_topology.c b/drivers/gpu/drm/display/drm_dp_mst_topology.c
-index 38dab76ae69e..27f4bcf409ea 100644
---- a/drivers/gpu/drm/display/drm_dp_mst_topology.c
-+++ b/drivers/gpu/drm/display/drm_dp_mst_topology.c
-@@ -4434,6 +4434,8 @@ void drm_dp_mst_atomic_wait_for_dependencies(struct drm_atomic_state *state)
+Super, thanks for the explanation.
  
- 			new_payload = drm_atomic_get_mst_payload_state(new_mst_state,
- 								       old_payload->port);
-+			if (!new_payload)
-+				continue;
- 			new_payload->vc_start_slot = old_payload->vc_start_slot;
- 		}
- 	}
--- 
-2.17.1
+> PGDs are always set up to point to the physical address of the thing at
+> one lower level than them.  A page is allocated for that level when
+> 5-level paging is in play.  No page is needed when it is not in play.
+> 
+> The pattern is _almost_ always
+> 
+> 	pgd = ... __pa(p4d);
+> 
+> In other words, point the PGD at the physical address of a p4d.  But
+> things get funky on systems without p4ds, thus the special casing here.
+> 
+> Does the (completely untested) attached patch fix your problem?
 
+I just submitted a (tested) patch.
+
+It doesn't cover the if() segment though.  I'll do so and resubmit.
+
+> ---
+> 
+>  b/arch/x86/mm/kaslr.c |    8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff -puN arch/x86/mm/kaslr.c~trampoline_pgd_entry arch/x86/mm/kaslr.c
+> --- a/arch/x86/mm/kaslr.c~trampoline_pgd_entry	2023-06-14 08:54:08.685554094 -0700
+> +++ b/arch/x86/mm/kaslr.c	2023-06-14 08:55:36.077089793 -0700
+> @@ -172,10 +172,10 @@ void __meminit init_trampoline_kaslr(voi
+>  		set_p4d(p4d_tramp,
+>  			__p4d(_KERNPG_TABLE | __pa(pud_page_tramp)));
+>  
+> -		set_pgd(&trampoline_pgd_entry,
+> -			__pgd(_KERNPG_TABLE | __pa(p4d_page_tramp)));
+> +		trampoline_pgd_entry =
+> +			__pgd(_KERNPG_TABLE | __pa(p4d_page_tramp));
+>  	} else {
+> -		set_pgd(&trampoline_pgd_entry,
+> -			__pgd(_KERNPG_TABLE | __pa(pud_page_tramp)));
+> +		trampoline_pgd_entry =
+> +		       	__pgd(_KERNPG_TABLE | __pa(pud_page_tramp));
+>  	}
+>  }
+> _
+
+
+-- 
+Lee Jones [李琼斯]
