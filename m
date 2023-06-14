@@ -2,103 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B197A72FFB5
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 15:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 178F472FFBA
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 15:14:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244915AbjFNNN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 09:13:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35046 "EHLO
+        id S244906AbjFNNOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 09:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244795AbjFNNNz (ORCPT
+        with ESMTP id S240303AbjFNNOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 09:13:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBF7268B;
-        Wed, 14 Jun 2023 06:13:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Wed, 14 Jun 2023 09:14:12 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC22269A;
+        Wed, 14 Jun 2023 06:13:50 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C76F1639C3;
-        Wed, 14 Jun 2023 13:13:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2E57C433C0;
-        Wed, 14 Jun 2023 13:12:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686748385;
-        bh=x8Up71mCwqWQG8AsnfE4/2MdVJDUJadORPWbH0I1tuE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NmGuG1scUFZKhFQNFytyrqQs4QH8kSngMWTDWQhh/IAxUShNkfAlHA0mYatvTs83/
-         jOKmBA00V+we+EzssIXOd/Qz6QecVS5ksEJeq0J3SvWSO8bj5PSDHbZgMaN95IeN8R
-         P733m+ruVwxdOGQxxq0YxO2HZWTkeNUJANSmfjGDgbvalwxGKpo4E3gTq3Iv5L2IZO
-         zKhN1qUc4PaKfYBJnBHQfjM3sPbtik1D4+Ru3w0XxYPIZqDW9YzPa4GikNGjqHoBr8
-         valRm0kUucRd4MnoMTxBiQVaEQ6kAsOzmbiwXIMM0TI99Z7h0v4MW5wcMejZM+cOhR
-         a/QxJGFDHl0Uw==
-Date:   Wed, 14 Jun 2023 14:12:53 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "Xu, Pengfei" <pengfei.xu@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "bp@alien8.de" <bp@alien8.de>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "Torvalds, Linus" <torvalds@linux-foundation.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Eranian, Stephane" <eranian@google.com>
-Subject: Re: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack
- description
-Message-ID: <898e952a-be97-4424-b889-4f766e3e0cd4@sirena.org.uk>
-References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
- <20230613001108.3040476-24-rick.p.edgecombe@intel.com>
- <0b7cae2a-ae5b-40d8-9ae7-10aea5a57fd6@sirena.org.uk>
- <87y1knh729.fsf@oldenburg.str.redhat.com>
- <1f04fa59-6ca9-4f18-b138-6c33e164b6c2@sirena.org.uk>
- <49eabafa97032dec8ace7361bccae72c6ecf3860.camel@intel.com>
- <fc2ebfcf-8d91-4f07-a119-2aaec3aa099f@sirena.org.uk>
- <a0f1da840ad21fae99479288f5d74c7ab9095bb6.camel@intel.com>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BF9966606F20;
+        Wed, 14 Jun 2023 14:13:47 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686748428;
+        bh=K4WTi0JZ7NzreJtn6e/6oeiwkA8ObHQNkqYaWXGPEjc=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=moJB43tmRR3Wb0jBxt3y3HdKfsoko9VHoMjH60aEQvKudl12WyStjZImqLkSqXX36
+         Kucm92qM5YMyKkS+JCQWgZuqLLM1kMw+mLwhWjFC5F59O0nsSNLudU4jkdtWMeBojj
+         2sU91HWKD9B3oVkm1weJOVKwt+nk9IvfN+nLzKrutyCZan3cGkFwxCkf31aKRwGMCL
+         0SDZcyq33ssyOrywTKM8LRT1XMloROjmM3G4nCL301Y/V9V2KdmnEZ0wYF/aaJbLcM
+         cM0gFX90gzQVJzFh44XbnV9xSxkp3SiE8IxD2Lw3Km/hBB+DpaaDK7zAPH97WnnpRs
+         WDOx5dAy2H5WQ==
+Message-ID: <057386c7-a7cf-14cb-d564-1b30e79806f6@collabora.com>
+Date:   Wed, 14 Jun 2023 15:13:44 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4ibPQ7ywZvQ2KqFY"
-Content-Disposition: inline
-In-Reply-To: <a0f1da840ad21fae99479288f5d74c7ab9095bb6.camel@intel.com>
-X-Cookie: At participating locations only.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2] arm64: dts: qcom: sm8250-edo: Panel framebuffer is
+ 2.5k instead of 4k
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230606211418.587676-1-marijn.suijten@somainline.org>
+ <974f68dc-b667-c9a7-94c4-1023ef271fab@linaro.org>
+ <a69ddadd-8d59-e784-ddce-16c83a7f13a6@collabora.com>
+ <kdu6apwgp7nu6mwqatufhxvnbunwodr4iu2uaqjacbjgbmmy5y@zh53imtpqfgs>
+ <8d91dfc0-f6c0-813f-de9c-1befdd0ccfdf@linaro.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <8d91dfc0-f6c0-813f-de9c-1befdd0ccfdf@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -106,46 +72,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Il 14/06/23 14:43, Konrad Dybcio ha scritto:
+> On 14.06.2023 14:40, Marijn Suijten wrote:
+>> On 2023-06-07 09:15:08, AngeloGioacchino Del Regno wrote:
+>>> Il 07/06/23 00:52, Konrad Dybcio ha scritto:
+>>>>
+>>>>
+>>>> On 6.06.2023 23:14, Marijn Suijten wrote:
+>>>>> The framebuffer configuration for edo pdx203, written in edo dtsi (which
+>>>>> is overwritten in pdx206 dts for its smaller panel) has to use a
+>>>>> 1096x2560 configuration as this is what the panel (and framebuffer area)
+>>>>> has been initialized to.  Downstream userspace also has access to (and
+>>>>> uses) this 2.5k mode by default, and only switches the panel to 4k when
+>>>>> requested.
+>>>>>
+>>>>> This is similar to commit be8de06dc397 ("arm64: dts: qcom:
+>>>>> sm8150-kumano: Panel framebuffer is 2.5k instead of 4k") which fixed the
+>>>>> same for the previous generation Sony platform.
+>>>>>
+>>>>> Fixes: 69cdb97ef652 ("arm64: dts: qcom: sm8250: Add support for SONY Xperia 1 II / 5 II (Edo platform)")
+>>>>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+>>>>> ---
+>>>> And so I derped again.
+>>>>
+>>>> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>>
+>>> I would've liked more to see a commit saying "replace simple-framebuffer with xxxx"
+>>> (where xxxx is DSI panel, etc) but that will as well do for now... :-)
+>>
+>> Fwiw we could keep it around as MDSS "gracefully" takes over when it
+>> probes a little bit later with fbcon over DRM/KMS, and it sometimes
+>> helps reading what is up when something fails before or during MDSS
+>> probe.
+> I believe we should do this. Perhaps even add some early code to drm/msm
+> that'd read out the address (and other configuration) from the mdp hw and
+> set it up automagically.
+> 
 
---4ibPQ7ywZvQ2KqFY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+As far as I remember, some bootloaders are reading devicetrees to setup the display
+at boot with "continuous splash", that's why I would be for *replacing* the simple
+framebuffer with the mdss-dsi.
 
-On Tue, Jun 13, 2023 at 07:57:37PM +0000, Edgecombe, Rick P wrote:
+Adding early code to drm/msm to read out the address and check the state of the HW
+before pushing an early framebuffer would be a definitive solution for that corner
+case. Good call, Konrad.
 
-> For alt shadow stack's, this is what I came up with:
-> https://lore.kernel.org/lkml/20220929222936.14584-40-rick.p.edgecombe@intel.com/
+Cheers,
+Angelo
 
-> Unfortunately it can't work automatically with sigaltstack(). Since it
-> has to be a new thing anyway, it's been left for the future. I guess
-> that might have a better chance of being cross arch.
+> Konrad
+>>
+>> - Marijn
+>>
+>>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>>
+>>>>
+>>>> Konrad
+>>>>>
+>>>>> Changes since v2:
+>>>>> - Rename griffin (copy-paste from related patch) to pdx203 in comment.
+>>>>>
+>>>>>    arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi | 7 ++++---
+>>>>>    1 file changed, 4 insertions(+), 3 deletions(-)
+>>>>>
+>>>>> diff --git a/arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi b/arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi
+>>>>> index 3d22be747f042..8f867f841cb83 100644
+>>>>> --- a/arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi
+>>>>> +++ b/arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi
+>>>>> @@ -54,9 +54,10 @@ chosen {
+>>>>>    		framebuffer: framebuffer@9c000000 {
+>>>>>    			compatible = "simple-framebuffer";
+>>>>>    			reg = <0 0x9c000000 0 0x2300000>;
+>>>>> -			width = <1644>;
+>>>>> -			height = <3840>;
+>>>>> -			stride = <(1644 * 4)>;
+>>>>> +			/* pdx203 BL initializes in 2.5k mode, not 4k */
+>>>>> +			width = <1096>;
+>>>>> +			height = <2560>;
+>>>>> +			stride = <(1096 * 4)>;
+>>>>>    			format = "a8r8g8b8";
+>>>>>    		};
+>>>>>    	};
+>>>
 
-Yeah, I've not seen and can't think of anything that's entirely
-satisfactory either.  Like Szabolcs says I do think we need a story on
-this.
 
-> BTW, last time this series accidentally broke an arm config and made it
-> all the way through the robots up to Linus. Would you mind giving
-> patches 1-3 a check?
 
-I'm in the middle of importing the whole series into my development
-branch, but note that I'm only really working with arm64 not arm so
-might miss stuff the bots would hit.  Hopefully there should be some
-Tested-bys coming for arm64 anyway.
-
---4ibPQ7ywZvQ2KqFY
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSJvNQACgkQJNaLcl1U
-h9CPyQf/Y4GwjTyNGgoEGlusyMBRxull9v6onRkwCcTUbLHk6Nmd68eA186L2jZS
-kTkjXNcM67CHwcz3xw1W/1T4uXcitQqHeNznnES31wFwPnJYZzDJSF3RfyhC3WXk
-eh9so9SyTG2SO/AK4CUgdhSph0eYMo2o606r/S+4mWiThEC6sMK/5Wly6vVmM4mm
-dAHJecna4winLvCpMTb5gW/khUtn5Bc3w58b/45FoVytXFnMV65H+Q/WIsySPl2J
-pHH93UeI0zJXXKzhm6iSQBFjRmLa18i7o0k456fIKYxFYknblATaeJvSXC4YhCtA
-zVN7zhOEPqONu5RRMukB6WRZgpm3tw==
-=ErsU
------END PGP SIGNATURE-----
-
---4ibPQ7ywZvQ2KqFY--
