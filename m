@@ -2,121 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D0527304D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D477304D9
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233199AbjFNQYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 12:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40482 "EHLO
+        id S233391AbjFNQYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 12:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjFNQYK (ORCPT
+        with ESMTP id S229569AbjFNQYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 12:24:10 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E28ED
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:24:08 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-75d5051fad3so225230585a.3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:24:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686759847; x=1689351847;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qDOHQI8bWafZ1bNMq81NOk5r9CB0D7gMPZXAIEA5R7o=;
-        b=WdiRsHNlI+Fu3JtDCQm15d4yPmVYL+8VhHpUV6nnn0S2HvWTYsV4DO2PjgSg1LkVEh
-         K/3ihDzdsRCdNumVLNESn4rYZeB33/hpQwEofhUiGWmxSqVLMWXr4nmlZv5ufOB9Dd7d
-         3hY2rSL93S5jnZPFO3WmwJcFp9FP7i+6qndkw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686759847; x=1689351847;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qDOHQI8bWafZ1bNMq81NOk5r9CB0D7gMPZXAIEA5R7o=;
-        b=H3w7PEepczkrbYb44lWLZzmFIhiZp78cJAgqN3iR7d+rvfXdDqDMfswhJWMbmBvdX8
-         h95a8EEdvDEIzaFxrPh12uyO7aXayWDFXQhTw9MQ8ceyJJVRhjwRt3FVrMSVc3k/vCqr
-         I+ROPiQF4/w8+H2buczT0hHls3mMXsUoT2cw0FY00UzmI/fGJLyoe9ipVS1KYVwsMdEy
-         AtfQ5x6vJ0IZgBH+Zpd2WBw+nhaFHd2dDZLhUKe4TMw3OgevPkAh0pdIFY8eLWQ+RiLG
-         jHYooKVYdgxtfEy7tsaJ0X5lynaolu27R9IsFA5GvLntnbyNXAWlPIvfomE3l8XV3lUE
-         EqGw==
-X-Gm-Message-State: AC+VfDwD3pDd+fTs65sYJBOVtujvO9egTsGpDrIP1j2yD2MdqB1U7lrO
-        7DML3Rf2PvtmzlN4lCKDbmLV4CKs8fTk2/smPTO+qg==
-X-Google-Smtp-Source: ACHHUZ7uHWml6xAfmVf+f3BOqpSPM/LYA/UKTkIoP31VNljxT+w66KcpjSvBsgLOSCmxcA+OinxJkg==
-X-Received: by 2002:a05:620a:2694:b0:75e:9967:4007 with SMTP id c20-20020a05620a269400b0075e99674007mr16867009qkp.3.1686759847094;
-        Wed, 14 Jun 2023 09:24:07 -0700 (PDT)
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com. [209.85.160.181])
-        by smtp.gmail.com with ESMTPSA id m17-20020ae9e011000000b0075b0c1f4ad6sm4444726qkk.0.2023.06.14.09.24.04
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 09:24:04 -0700 (PDT)
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-3f9e5c011cfso20727881cf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:24:04 -0700 (PDT)
-X-Received: by 2002:a05:622a:1902:b0:3f5:c9f:1b27 with SMTP id
- w2-20020a05622a190200b003f50c9f1b27mr3883593qtc.1.1686759844040; Wed, 14 Jun
- 2023 09:24:04 -0700 (PDT)
+        Wed, 14 Jun 2023 12:24:13 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F19D109;
+        Wed, 14 Jun 2023 09:24:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=tL93bI0jCWhGF3WG58T3OaJIDMhjtKg7c9c3OsvljCg=; b=qpvSUqzkIvq2pf6t36jXKr2o0P
+        1Bb6JiMkPcXkWHbaeticZajm/w8h5A8KKPUZjGIRbHW1DdbuoG5p+MfHoSC4KyGHTCJbyBZ9suO+Y
+        l3/uYhPVsVfLBLNYjylwXFXfZHY644VQ5UpytE3b/DsndFToTAGZr5m2Fao8tNA2x4KTW/eg8XS2m
+        obtH625jiwihlTyS/r+/aJBLQSmUpUfWPSPEAqhgxgEIOMyMO/VjPTTlWxg+8flWGQIVe1ZsawW89
+        v6JZszuL/Hepl08MvDDCE1E/v81nXvJ0s5ZhpW4WsMhzRvVkRTyADmSpQ/jCS3jUEdnRV7fo6roLT
+        eoZnZJ4g==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:40838)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1q9THx-0001yP-1A; Wed, 14 Jun 2023 17:24:05 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1q9THu-0000Z3-LM; Wed, 14 Jun 2023 17:24:02 +0100
+Date:   Wed, 14 Jun 2023 17:24:02 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Wei Chin Tsai <Wei-chin.Tsai@mediatek.com>
+Cc:     lkp@intel.com, angelogioacchino.delregno@collabora.com,
+        ivan.tseng@mediatek.com, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, matthias.bgg@gmail.com,
+        mel.lee@mediatek.com, oe-kbuild-all@lists.linux.dev,
+        wsd_upstream@mediatek.com
+Subject: Re: [PATCH v3 1/1] memory: Fix export symbol twice compiler error
+ for "export symbols for memory related functions" patch
+Message-ID: <ZInpooYdKnhdm3SW@shell.armlinux.org.uk>
+References: <202306142030.GjGWnIkY-lkp@intel.com>
+ <20230614153902.26206-1-Wei-chin.Tsai@mediatek.com>
 MIME-Version: 1.0
-References: <20230328092608.523933-1-harperchen1110@gmail.com>
-In-Reply-To: <20230328092608.523933-1-harperchen1110@gmail.com>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Thu, 15 Jun 2023 01:23:52 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5CqhZgtCJ_-6M0=dYAfVs0TFeBjPURvosS_24qgour=Ow@mail.gmail.com>
-Message-ID: <CAAFQd5CqhZgtCJ_-6M0=dYAfVs0TFeBjPURvosS_24qgour=Ow@mail.gmail.com>
-Subject: Re: [PATCH] media: vcodec: Fix potential array out-of-bounds in vb2ops_venc_queue_setup
-To:     Wei Chen <harperchen1110@gmail.com>
-Cc:     tiffany.lin@mediatek.com, andrew-ct.chen@mediatek.com,
-        yunfei.dong@mediatek.com, mchehab@kernel.org,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230614153902.26206-1-Wei-chin.Tsai@mediatek.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 6:26=E2=80=AFPM Wei Chen <harperchen1110@gmail.com>=
- wrote:
->
-> variable *nplanes is provided by user via system call argument. The
-> possible value of q_data->fmt->num_planes is 1-3, while the value
-> of *nplanes can be 1-8. The array access by index i can cause array
-> out-of-bounds.
->
-> Fix this bug by checking *nplanes against the array size.
->
-> Signed-off-by: Wei Chen <harperchen1110@gmail.com>
-> ---
->  drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c b/dr=
-ivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-> index d65800a3b89d..1ea02f9136f6 100644
-> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-> @@ -821,6 +821,8 @@ static int vb2ops_venc_queue_setup(struct vb2_queue *=
-vq,
->                 return -EINVAL;
->
->         if (*nplanes) {
-> +               if (*nplanes !=3D q_data->fmt->num_planes)
-> +                       return -EINVAL;
->                 for (i =3D 0; i < *nplanes; i++)
->                         if (sizes[i] < q_data->sizeimage[i])
->                                 return -EINVAL;
-> --
-> 2.25.1
->
+On Wed, Jun 14, 2023 at 11:39:02PM +0800, Wei Chin Tsai wrote:
+> User could not add the export symbol "arch_vma_name"
+> in arch/arm/kernel/process.c and kernel/signal.c both.
+> It would cause the export symbol twice compiler error
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> Signed-off-by: Wei Chin Tsai <Wei-chin.Tsai@mediatek.com>
 
-Thanks for the patch, it makes sense indeed.
+I'm sorry, but this patch is silly.
 
-Reviewed-by: Tomasz Figa <tfiga@chromium.org>
+> diff --git a/arch/arm/kernel/process.c b/arch/arm/kernel/process.c
+> index df91412a1069..d71a9bafb584 100644
+> --- a/arch/arm/kernel/process.c
+> +++ b/arch/arm/kernel/process.c
+> @@ -343,7 +343,10 @@ const char *arch_vma_name(struct vm_area_struct *vma)
+>  {
+>  	return is_gate_vma(vma) ? "[vectors]" : NULL;
+>  }
+> +
+> +#ifdef CONFIG_ARM
+>  EXPORT_SYMBOL_GPL(arch_vma_name);
+> +#endif
 
-Best regards,
-Tomasz
+CONFIG_ARM will always be set here, so adding this ifdef is useless.
+
+> diff --git a/kernel/signal.c b/kernel/signal.c
+> index a1abe77fcdc3..f7d03450781e 100644
+> --- a/kernel/signal.c
+> +++ b/kernel/signal.c
+> @@ -4700,7 +4700,10 @@ __weak const char *arch_vma_name(struct vm_area_struct *vma)
+>  {
+>  	return NULL;
+>  }
+> +
+> +#ifdef CONFIG_ARM64
+>  EXPORT_SYMBOL_GPL(arch_vma_name);
+> +#endif
+
+Sorry, but no.
+
+Please do the research I've now twice asked for.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
