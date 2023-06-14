@@ -2,162 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3272A73078D
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 20:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D694730790
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 20:46:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbjFNSoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 14:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
+        id S230411AbjFNSqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 14:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235335AbjFNSoY (ORCPT
+        with ESMTP id S229661AbjFNSp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 14:44:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E8B2688;
-        Wed, 14 Jun 2023 11:44:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A685645BC;
-        Wed, 14 Jun 2023 18:44:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59415C433C0;
-        Wed, 14 Jun 2023 18:44:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686768259;
-        bh=u121J8cwfQKQR6Kp3TJgvgH0HaZU1kI3wvydqEX92H4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V5rBRWTrCkoJ+qTPwmGrkxzlmvUd0ZgYh2JcOrsPRzcABCjXXDlwxvB2ASEj2o1kF
-         xZvg7Xa2zElP4A1rFkO0k9DhHCQKyZUbd4eLD8FEts1vQR6QpkmkxSycoTaW3/yBv/
-         YmVkS40+HQc/+74Naz0P5MGPkYR1bGXEK0k6yS3Kf05qRihps+wvRQaXlx/Bxx/Xdj
-         jyCVWVHQqVh9R0zfI8iZZPwEzNpcUW2ofpXcqMRsr4dbnP+V3oEba+GPz+hyr200HG
-         eZsMO99GJKq7SLamPw2PwupDvtJknFL45CzR8AODF+qoN/i/fskoxGts9O0KAXD2+4
-         y+oLiMEcn9U6Q==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 0BC1340692; Wed, 14 Jun 2023 15:44:16 -0300 (-03)
-Date:   Wed, 14 Jun 2023 15:44:16 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] tools api: Add simple timeout to io read
-Message-ID: <ZIoKgEO+pz3cDgEH@kernel.org>
-References: <20230608061812.3715566-1-irogers@google.com>
- <CAP-5=fX1X=A7gkExsV917EntTdfgytNA8LBvHwTCsXfq1zHixw@mail.gmail.com>
+        Wed, 14 Jun 2023 14:45:58 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449801BF7
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:45:56 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1b3af7e3925so31668525ad.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:45:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1686768355; x=1689360355;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ClhXyTMCOAhGnHue/rYnwljuM17idvr3usaXpO/VYvI=;
+        b=iN5gmCcfAB7dsmep+MstonHEHRYzEhlS+IDRUeD1FVo2baBN7gE1e/6OykHCJtDM6k
+         Aiv//w+9AXJ/zy/NXNT20xnVtwfIlXKbYo/O5dPK5a9/RFmRk3PVym1cdIHem0bj4BEf
+         as7tjxepzRLn+7/UlA4gAW6PAVikEu3RC1W1I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686768355; x=1689360355;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ClhXyTMCOAhGnHue/rYnwljuM17idvr3usaXpO/VYvI=;
+        b=JFwiZOSLHDy2W8T3AvP3U1aaJqLxLZeFQxHz+Lz4lKmDabEsqg1Ox6Lsx2gk/mHoAx
+         lXxz7DkspzAsJ3rMFPexXMlo+YFhVb9xz5COgDM3eQStsgycjETjbPBl2qXIM7+22QzY
+         UsxJE2EPvCPRQo5OFcRlzvKiZKwpYkSFWHlBSoURpAoJysFJ9rJNM25eA0n77RKytJlH
+         ooN2qZxj5ItNohe5SLH4iRzAc8LfGus97MTKACBKuP/J2MO96aXoDwpa50Fe6OflMVuE
+         eDuMc8O9SDXGCKxi7zxPpEOQsA0HZ58uYwBnQKiSGKqgr2gVcxAYOkMtsFeG24SmjzFG
+         71Dw==
+X-Gm-Message-State: AC+VfDy9zl2fi9cHgfQh1/D+tgS3X0ZtJcvdh7AtqGNave+UkY7KYTvt
+        o+/TF5mFFitBAKeb/m5ErutPIg==
+X-Google-Smtp-Source: ACHHUZ6J3AlNKEtdy+6aTy3emeKWFNXqfnFihyGEv/Pc0nkR+DlArJgpJPxQ9pGtGnsi+YY/88GzpA==
+X-Received: by 2002:a17:902:d389:b0:1b3:b84b:9017 with SMTP id e9-20020a170902d38900b001b3b84b9017mr10213717pld.14.1686768355338;
+        Wed, 14 Jun 2023 11:45:55 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id v3-20020a170902d68300b001b243a5a5e1sm5902905ply.298.2023.06.14.11.45.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 11:45:54 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        ysato@users.sourceforge.jp, azeemshaikh38@gmail.com,
+        dalias@libc.org
+Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
+        rdunlap@infradead.org, linux-sh@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] sh: Replace all non-returning strlcpy with strscpy
+Date:   Wed, 14 Jun 2023 11:44:29 -0700
+Message-Id: <168676826702.1963449.9061022814058323294.b4-ty@chromium.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230530163041.985456-1-azeemshaikh38@gmail.com>
+References: <20230530163041.985456-1-azeemshaikh38@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fX1X=A7gkExsV917EntTdfgytNA8LBvHwTCsXfq1zHixw@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Jun 14, 2023 at 10:36:47AM -0700, Ian Rogers escreveu:
-> On Wed, Jun 7, 2023 at 11:20 PM Ian Rogers <irogers@google.com> wrote:
-> >
-> > In situations like reading from a pipe it can be useful to have a
-> > timeout so that the caller doesn't block indefinitely. Implement a
-> > simple one based on poll.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
+On Tue, 30 May 2023 16:30:41 +0000, Azeem Shaikh wrote:
+> strlcpy() reads the entire source buffer first.
+> This read may exceed the destination size limit.
+> This is both inefficient and can lead to linear read
+> overflows if a source string is not NUL-terminated [1].
+> In an effort to remove strlcpy() completely [2], replace
+> strlcpy() here with strscpy().
+> No return values were used, so direct replacement is safe.
 > 
-> There is overlap in what these patches aim to fix with the 2 submitted
-> patches making addr2line more robust:
-> https://lore.kernel.org/all/20230613034817.1356114-2-irogers@google.com/
-> 
-> I think it could be pragmatic to take both of them. Be robust but
-> timeout if addr2line doesn't respond for 1s. What do you think?
+> [...]
 
-Agreed, fixed up a minor conflict and applied.
+Build tested with sh4 GCC 13.1 from:
+https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/13.1.0/
 
-- Arnaldo
- 
-> Thanks,
-> Ian
-> 
-> > ---
-> >  tools/lib/api/io.h | 28 +++++++++++++++++++++++++++-
-> >  1 file changed, 27 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/tools/lib/api/io.h b/tools/lib/api/io.h
-> > index d5e8cf0dada0..9fc429d2852d 100644
-> > --- a/tools/lib/api/io.h
-> > +++ b/tools/lib/api/io.h
-> > @@ -8,6 +8,7 @@
-> >  #define __API_IO__
-> >
-> >  #include <errno.h>
-> > +#include <poll.h>
-> >  #include <stdlib.h>
-> >  #include <string.h>
-> >  #include <unistd.h>
-> > @@ -23,6 +24,8 @@ struct io {
-> >         char *end;
-> >         /* Currently accessed data pointer. */
-> >         char *data;
-> > +       /* Read timeout, 0 implies no timeout. */
-> > +       int timeout_ms;
-> >         /* Set true on when the end of file on read error. */
-> >         bool eof;
-> >  };
-> > @@ -35,6 +38,7 @@ static inline void io__init(struct io *io, int fd,
-> >         io->buf = buf;
-> >         io->end = buf;
-> >         io->data = buf;
-> > +       io->timeout_ms = 0;
-> >         io->eof = false;
-> >  }
-> >
-> > @@ -47,7 +51,29 @@ static inline int io__get_char(struct io *io)
-> >                 return -1;
-> >
-> >         if (ptr == io->end) {
-> > -               ssize_t n = read(io->fd, io->buf, io->buf_len);
-> > +               ssize_t n;
-> > +
-> > +               if (io->timeout_ms != 0) {
-> > +                       struct pollfd pfds[] = {
-> > +                               {
-> > +                                       .fd = io->fd,
-> > +                                       .events = POLLIN,
-> > +                               },
-> > +                       };
-> > +
-> > +                       n = poll(pfds, 1, io->timeout_ms);
-> > +                       if (n == 0)
-> > +                               errno = ETIMEDOUT;
-> > +                       if (n > 0 && !(pfds[0].revents & POLLIN)) {
-> > +                               errno = EIO;
-> > +                               n = -1;
-> > +                       }
-> > +                       if (n <= 0) {
-> > +                               io->eof = true;
-> > +                               return -1;
-> > +                       }
-> > +               }
-> > +               n = read(io->fd, io->buf, io->buf_len);
-> >
-> >                 if (n <= 0) {
-> >                         io->eof = true;
-> > --
-> > 2.41.0.rc0.172.g3f132b7071-goog
-> >
+with defconfig and:
+	CONFIG_CPU_SUBTYPE_SH7343=y
+	CONFIG_SH_DMA=y
+	CONFIG_SH_DMA_API=y
+
+Applied to for-next/hardening, thanks!
+
+[1/1] sh: Replace all non-returning strlcpy with strscpy
+      https://git.kernel.org/kees/c/ca64da3052be
 
 -- 
+Kees Cook
 
-- Arnaldo
