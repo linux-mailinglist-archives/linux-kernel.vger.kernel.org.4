@@ -2,127 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B72A730300
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:10:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11E4873032D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343573AbjFNPKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 11:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50000 "EHLO
+        id S1343621AbjFNPOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 11:14:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343734AbjFNPKV (ORCPT
+        with ESMTP id S1343599AbjFNPN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 11:10:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6691FE8
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:10:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F1AF763A74
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 15:10:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0DC1C433C8;
-        Wed, 14 Jun 2023 15:10:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686755409;
-        bh=tC8eacPvb1QHrtphp4pCjOVMIPldZgf3oShJrp8Cncc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RsV7jPB4ADmcDf3PcrZ5J0jVbNzS9Rzpswx1r6en52P4Sx6EXeyg/YWNnvvgKJlKe
-         04j8Ek/3E/TGCl0A+qqbp0yEFNHM8ugfnJuBjsksDTeKMVXU7dhFsHvnckwQmowYkd
-         7NFvFuYEXfNw1MwbRVePY8NsRnP5wc3QyuS1JIY9G+1NlsZ0Tp47j2KqCgmMgtit41
-         lveVeHunVLx3yCElYzAvtcalyZKJpvXfpmK4vHUNnX7IO36RejarQd53aOUvq402fM
-         s43EGh5+momIWeangwzsDOuWC74oqStLH9yz7UcESnVG0Rx90d3i5cktyiXD2W1b4c
-         q3zebp8iplzGw==
-Date:   Wed, 14 Jun 2023 16:10:03 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: x86: pgtable / kaslr initialisation (OOB) help
-Message-ID: <20230614151003.GY3635807@google.com>
-References: <20230614132339.GS3635807@google.com>
- <20230614141654.GA1640123@hirez.programming.kicks-ass.net>
- <20230614143732.GW3635807@google.com>
- <0cefb67a-6fae-daa2-c871-ae35b96aac08@intel.com>
- <20230614150615.GX3635807@google.com>
+        Wed, 14 Jun 2023 11:13:59 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B241FE3;
+        Wed, 14 Jun 2023 08:13:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686755637; x=1718291637;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YX4y7lBqNFFJ0PedIid4kUnTJJmVgsFKsE3ZJAbPjMQ=;
+  b=BryI6iYUlmpIaRG/PcPx/MlPS/APd8R/Gusli0ar1jTNgsQ4zPPq+U8e
+   F274GKm93y69qgnFdGhfsHPq6OBbCmXuciPqbd/MhfqKcMcwXSoQtZY13
+   n4iuvKibJn5sX+7F+02S/jJ2ttImLuJXx9UydB5v+Hi9LcRy1jpWhHY/P
+   VO/6PPtUIWbA0nhabynZImS8tqZhdGJ7+f3YNCuAA6KJb8HwZQJBQQVJc
+   9XyiKd9JYqX71OwlT/XVla8SBz9BQq0MWV7lGRMVRP6z754azAW3Vtf07
+   /Z1fvfgXWhhlP2r4rSHMvwyzrON36Zq6PdPWguIrDTat0L5pWC76lFhq7
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="361117398"
+X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
+   d="scan'208";a="361117398"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 08:13:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="745115832"
+X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
+   d="scan'208";a="745115832"
+Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 14 Jun 2023 08:13:52 -0700
+Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q9SBz-0000n5-2J;
+        Wed, 14 Jun 2023 15:13:51 +0000
+Date:   Wed, 14 Jun 2023 23:10:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Stanley Chang <stanley_chang@realtek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Stanley Chang <stanley_chang@realtek.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Douglas Anderson <dianders@chromium.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Ray Chi <raychi@google.com>, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v4 2/5] phy: realtek: usb: Add driver for the Realtek SoC
+ USB 2.0 PHY
+Message-ID: <202306142352.e4eBd3HX-lkp@intel.com>
+References: <20230614092850.21460-2-stanley_chang@realtek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230614150615.GX3635807@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230614092850.21460-2-stanley_chang@realtek.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Jun 2023, Lee Jones wrote:
+Hi Stanley,
 
-> Thanks for chiming in Dave.  I hoped you would.
-> 
-> On Wed, 14 Jun 2023, Dave Hansen wrote:
-> 
-> > On 6/14/23 07:37, Lee Jones wrote:
-> > > Still unsure how we (the kernel) can/should write to an area of memory
-> > > that does not belong to it.  Should we allocate enough memory
-> > > (2*PAGE_SIZE? rather than 8-Bytes) for trampoline_pgd_entry to consume
-> > > in a more sane way?
-> > 
-> > No.
-> > 
-> > I think this:
-> > 
-> >                 set_pgd(&trampoline_pgd_entry,
-> >                         __pgd(_KERNPG_TABLE | __pa(p4d_page_tramp)));
-> > 
-> > is bogus-ish.  set_pgd() wants to operate on a pgd_t inside a pgd
-> > *PAGE*.  But it's just being pointed at a single  _entry_.  The address
-> > of 'trampoline_pgd_entry' in your case  also just (unfortunately)
-> > happens to pass the:
-> > 
-> > 	__pti_set_user_pgtbl -> pgdp_maps_userspace()
-> > 
-> > test.  I _think_ we want these to just be something like:
-> > 
-> > 	trampoline_pgd_entry = __pgd(_KERNPG_TABLE |
-> > 				     __pa(p4d_page_tramp);
-> > 
-> > That'll keep us away from all of the set_pgd()-induced nastiness.
-> 
-> Okay.  Is this what you're suggesting?
-> 
-> diff --git a/arch/x86/mm/kaslr.c b/arch/x86/mm/kaslr.c                 v
-> index d336bb0cb38b..803595c7dcc8 100644
-> --- a/arch/x86/mm/kaslr.c
-> +++ b/arch/x86/mm/kaslr.c
-> @@ -176,7 +176,7 @@ void __meminit init_trampoline_kaslr(void)
->                 set_pgd(&trampoline_pgd_entry,
->                         __pgd(_KERNPG_TABLE | __pa(p4d_page_tramp)));
->         } else {
-> -               set_pgd(&trampoline_pgd_entry,
-> -                       __pgd(_KERNPG_TABLE | __pa(pud_page_tramp)));
-> +               trampoline_pgd_entry =
-> +                       __pgd(_KERNPG_TABLE | __pa(p4d_page_tramp);
+kernel test robot noticed the following build warnings:
 
-Note the change of *.page_tramp here.
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on usb/usb-next usb/usb-linus robh/for-next linus/master v6.4-rc6 next-20230614]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-  s/pud/p4d/
+url:    https://github.com/intel-lab-lkp/linux/commits/Stanley-Chang/phy-realtek-usb-Add-driver-for-the-Realtek-SoC-USB-2-0-PHY/20230614-173349
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20230614092850.21460-2-stanley_chang%40realtek.com
+patch subject: [PATCH v4 2/5] phy: realtek: usb: Add driver for the Realtek SoC USB 2.0 PHY
+config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230614/202306142352.e4eBd3HX-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.3.0
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
+        git fetch usb usb-testing
+        git checkout usb/usb-testing
+        b4 shazam https://lore.kernel.org/r/20230614092850.21460-2-stanley_chang@realtek.com
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=sparc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/phy/realtek/
 
-I'm assuming that too was intentional?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306142352.e4eBd3HX-lkp@intel.com/
 
->         }
->  }
-> 
-> If so, I'll take it for a spin right now.
+All warnings (new ones prefixed by >>):
+
+   drivers/phy/realtek/phy-rtk-usb2.c: In function 'parse_phy_data':
+>> drivers/phy/realtek/phy-rtk-usb2.c:1229:25: warning: variable 'phy_cfg' set but not used [-Wunused-but-set-variable]
+    1229 |         struct phy_cfg *phy_cfg;
+         |                         ^~~~~~~
+
+
+vim +/phy_cfg +1229 drivers/phy/realtek/phy-rtk-usb2.c
+
+  1224	
+  1225	static int parse_phy_data(struct rtk_phy *rtk_phy)
+  1226	{
+  1227		struct device *dev = rtk_phy->dev;
+  1228		struct device_node *node;
+> 1229		struct phy_cfg *phy_cfg;
+  1230		struct phy_parameter *phy_parameter;
+  1231		int ret = 0;
+  1232		int index;
+  1233	
+  1234		node = dev->of_node;
+  1235		phy_cfg = rtk_phy->phy_cfg;
+  1236	
+  1237		rtk_phy->phy_parameter = devm_kzalloc(dev, sizeof(struct phy_parameter) *
+  1238							rtk_phy->num_phy, GFP_KERNEL);
+  1239		if (!rtk_phy->phy_parameter)
+  1240			return -ENOMEM;
+  1241	
+  1242		for (index = 0; index < rtk_phy->num_phy; index++) {
+  1243			phy_parameter = &((struct phy_parameter *)rtk_phy->phy_parameter)[index];
+  1244	
+  1245			phy_parameter->phy_reg.reg_wrap_vstatus = of_iomap(dev->of_node, 0);
+  1246			phy_parameter->phy_reg.reg_gusb2phyacc0 = of_iomap(dev->of_node, 1) + index;
+  1247			phy_parameter->phy_reg.vstatus_index = index;
+  1248	
+  1249			if (of_property_read_bool(node, "realtek,inverse-hstx-sync-clock"))
+  1250				phy_parameter->inverse_hstx_sync_clock = true;
+  1251			else
+  1252				phy_parameter->inverse_hstx_sync_clock = false;
+  1253	
+  1254			if (of_property_read_u32_index(node, "realtek,driving-level",
+  1255						       index, &phy_parameter->driving_level))
+  1256				phy_parameter->driving_level = DEFAULT_DC_DRIVING_VALUE;
+  1257	
+  1258			if (of_property_read_u32_index(node, "realtek,driving-compensate",
+  1259						       index, &phy_parameter->driving_compensate))
+  1260				phy_parameter->driving_compensate = 0;
+  1261	
+  1262			if (of_property_read_u32_index(node, "realtek,disconnection-compensate",
+  1263						       index, &phy_parameter->disconnection_compensate))
+  1264				phy_parameter->disconnection_compensate = 0;
+  1265	
+  1266			get_phy_data_by_efuse(rtk_phy, phy_parameter, index);
+  1267	
+  1268			update_dc_driving_level(rtk_phy, phy_parameter);
+  1269	
+  1270			update_hs_clk_select(rtk_phy, phy_parameter);
+  1271		}
+  1272	
+  1273		return ret;
+  1274	}
+  1275	
 
 -- 
-Lee Jones [李琼斯]
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
