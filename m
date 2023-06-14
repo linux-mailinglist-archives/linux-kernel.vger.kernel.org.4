@@ -2,174 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2854E730970
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 22:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9F2730973
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 22:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234351AbjFNUuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 16:50:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34902 "EHLO
+        id S234921AbjFNUx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 16:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235768AbjFNUut (ORCPT
+        with ESMTP id S230042AbjFNUx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 16:50:49 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30BAF268E
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 13:50:47 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-5186a157b85so4720298a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 13:50:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686775845; x=1689367845;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FC5iC4ImBYsUmKxr7XGRCVjARJJ2KtE+ycbFfpInJ5k=;
-        b=SALkQ4t0EysnL+VaZSowgUd4PFFi/eLXn+4cmJp8WenGL6SUWlKzPNIfSxP9ZT/QGw
-         TX+Py43cYhmk9kTGEk0yrAaM2rpRgstVC4mzksGSXOUAuRu+tdE71/Qis43aJZNkH0J4
-         KI9mCQfw0TRFZ46DOBGs9ibOu3V8Pu8fP34nq+uyMXJQUolPZpG1stSxsHvwyIsUT9QN
-         AtawcXSIHrbNyf603gKKJnTMvN8PNc1hSLp9RPWrHWiaw3IJiAfFGW3EHNQes/aHcpmN
-         e4VDGvMHMc/U3UT1IdxUL1R3LeN9u6xD/HnsY7/99yR98HbngSLvn9xz6BDsX8TDhaj/
-         TXQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686775845; x=1689367845;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FC5iC4ImBYsUmKxr7XGRCVjARJJ2KtE+ycbFfpInJ5k=;
-        b=Vfmx+ZTLEeNmuI5KTU/V2Psf9Z98CNcD5x9o2qFZSSWxeU09GO+36xSCikL94TqDO7
-         MXB5jSrzBLTuTqfhahRR5DzVnDJO/4q3OJBx9KtPTcTahxlhmd20VnVtjS5kXTQ7YVLc
-         7fDwszAQWblH6GvwGM/bRZ9GXJoauRGesQM48uuQRQKv0kVVRHNlwoyGT+J5PW7fN+th
-         3zmjEUB7U+TxAG2IMtosnG73uRCfxlz/cUbw2V/RLt7UaGZzrh5LrGISkpJOvwap5hQ1
-         MiKmLbqJ+X6/U3cdw2YB0VtlAnUvbvVyC81Pn8o0nrMXcEgRYKzlY0l9YzZRPeT261in
-         VSYA==
-X-Gm-Message-State: AC+VfDz702WzniVtjg8be6sv1VyUNXKv7/GUZI6X39Q6m+FLltGb670V
-        xQzc4K4mjaerS0lYf2qpWyPQl5u+fxpnmFUBqzGtcg==
-X-Google-Smtp-Source: ACHHUZ4DNQDMUHyUAaSg0RGBtCXzTxsBnoFoo051p7yPalBI9ZAz2iwIHhdujTPQ/bNzI5jQsa3g9nJTDcretRDF59w=
-X-Received: by 2002:a17:907:961b:b0:982:9a9f:d43c with SMTP id
- gb27-20020a170907961b00b009829a9fd43cmr362564ejc.48.1686775845509; Wed, 14
- Jun 2023 13:50:45 -0700 (PDT)
+        Wed, 14 Jun 2023 16:53:26 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1CA19B5;
+        Wed, 14 Jun 2023 13:53:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686775951; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=nyOFGpzXWXbpc1xoBKwWNlhReMsnv5XqnEy/tsLyROxO0xB2PrXBc+hfIT/sAvuFVl4Dx+lddhjmMQIvrsNfXdijoCfbIvl9oIltiJWl90oOnM9ZVkhzzP4arVMo1Pk7Dn04HUDDHUHK/GeI9PHIMf7ofrExdEc4k4CKaFqlGXA=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1686775951; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=64/Oii+d8OL5qpva/X1Idla2wjT3g/qIoLmKKbrccbY=; 
+        b=NG94f/R5ZflThIAHevT7+GzSLE8l3MmL71xrX0M2hBJ+IRJMUXC6+wI6ajb+M3vCq2iG1kiA4rSZaJUTdwjNhDj/tHbjC8PFFsDuAmFNnXATFRMCMExCyOPl5d6ZooQs5w61YXUVuCvberq9VqB0o3JyD8i4Rb2ybwEUPbW4A3A=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1686775951;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=64/Oii+d8OL5qpva/X1Idla2wjT3g/qIoLmKKbrccbY=;
+        b=ZxccuiHqoBz5SNcGLX5EnfEWCcdF8Q331DTsO4KTvCqzqPIQqUHkoXM47QRNL8Lx
+        whMFk/LZYwa2p6lG4992DENJcd7QklWQZqk5/hHtO1NCMxAdQWXRilZO/HMcFy9Bkz2
+        zYF2Xiy7PilBwvuTUNUDlfxv790jHBYPMwsNoJ9U=
+Received: from [192.168.99.141] (178-147-169-233.haap.dm.cosmote.net [178.147.169.233]) by mx.zohomail.com
+        with SMTPS id 1686775950296301.39053858998864; Wed, 14 Jun 2023 13:52:30 -0700 (PDT)
+Message-ID: <3eaf5a2c-6ef2-e43a-1d0e-08ec4e1ee7e8@arinc9.com>
+Date:   Wed, 14 Jun 2023 23:52:24 +0300
 MIME-Version: 1.0
-References: <20230531022911.1168524-1-yosryahmed@google.com>
- <20230601155825.GF102494@cmpxchg.org> <CAJD7tkaFSfpTtB_ua_9QzR2voE1-hixv6RMJZd=WqpGmY93dSw@mail.gmail.com>
- <20230602164942.GA215355@cmpxchg.org> <CAJD7tkbp96S8MdrcH8y0V2G5Q-Zq6U4DAuweYhP-MjUWgcmjsQ@mail.gmail.com>
- <20230602183410.GB215355@cmpxchg.org> <CAJD7tka18Vw7HpA1gh6wWJcaCJ_U6jNfCC696pX=UkbiXKZMvQ@mail.gmail.com>
- <20230602202453.GA218605@cmpxchg.org> <CAJD7tkZBxddm1c4f99KmY+VwKU3jbYBMaNuTtfpis7a1E6242Q@mail.gmail.com>
- <CAJD7tkaraXuLKR8rsKw_8sp9YZga1caM7r0jA8DZC2Y6DxJNfQ@mail.gmail.com> <ZInV6Wju2NdLyzC6@cmpxchg.org>
-In-Reply-To: <ZInV6Wju2NdLyzC6@cmpxchg.org>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Wed, 14 Jun 2023 13:50:09 -0700
-Message-ID: <CAJD7tkZ0BS5+0P_QiLnYKjm2tV6GGwzdSSXEZX67RLM3Ft9QmA@mail.gmail.com>
-Subject: Re: [PATCH] mm: zswap: multiple zpool support
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Seth Jennings <sjenning@redhat.com>,
-        Dan Streetman <ddstreet@ieee.org>,
-        Vitaly Wool <vitaly.wool@konsulko.com>,
-        Nhat Pham <nphamcs@gmail.com>,
-        Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
-        Yu Zhao <yuzhao@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net v4 5/7] net: dsa: mt7530: fix handling of LLDP frames
+Content-Language: en-US
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230612075945.16330-1-arinc.unal@arinc9.com>
+ <20230612075945.16330-6-arinc.unal@arinc9.com>
+ <ZInt8mmrZ6tCGy1N@shell.armlinux.org.uk>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <ZInt8mmrZ6tCGy1N@shell.armlinux.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 7:59=E2=80=AFAM Johannes Weiner <hannes@cmpxchg.org=
-> wrote:
->
-> On Tue, Jun 13, 2023 at 01:13:59PM -0700, Yosry Ahmed wrote:
-> > On Mon, Jun 5, 2023 at 6:56=E2=80=AFPM Yosry Ahmed <yosryahmed@google.c=
-om> wrote:
-> > >
-> > > On Fri, Jun 2, 2023 at 1:24=E2=80=AFPM Johannes Weiner <hannes@cmpxch=
-g.org> wrote:
-> > > > Sorry, I should have been more precise.
-> > > >
-> > > > I'm saying that using NR_CPUS pools, and replacing the hash with
-> > > > smp_processor_id(), would accomplish your goal of pool concurrency.
-> > > > But it would do so with a broadly-used, well-understood scaling
-> > > > factor. We might not need a config option at all.
-> > > >
-> > > > The lock would still be there, but contention would be reduced fair=
-ly
-> > > > optimally (barring preemption) for store concurrency at least. Not
-> > > > fully eliminated due to frees and compaction, though, yes.
-> >
-> > I thought about this again and had some internal discussions, and I am
-> > more unsure about it. Beyond the memory overhead, having too many
-> > zpools might result in higher fragmentation within the zpools. For
-> > zsmalloc, we do not compact across multiple zpools for example.
-> >
-> > We have been using a specific number of zpools in our production for
-> > years now, we know it can be tuned to achieve performance gains. OTOH,
-> > percpu zpools (or NR_CPUS pools) seems like too big of a hammer,
-> > probably too many zpools in a lot of cases, and we wouldn't know how
-> > many zpools actually fits our workloads.
->
-> Is it the same number across your entire fleet and all workloads?
+On 14.06.2023 19:42, Russell King (Oracle) wrote:
+> On Mon, Jun 12, 2023 at 10:59:43AM +0300, arinc9.unal@gmail.com wrote:
+>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>
+>> LLDP frames are link-local frames, therefore they must be trapped to the
+>> CPU port. Currently, the MT753X switches treat LLDP frames as regular
+>> multicast frames, therefore flooding them to user ports. To fix this, set
+>> LLDP frames to be trapped to the CPU port(s).
+>>
+>> The mt753x_bpdu_port_fw enum is universally used for trapping frames,
+>> therefore rename it and the values in it to mt753x_port_fw.
+>>
+>> For MT7530, LLDP frames received from a user port will be trapped to the
+>> numerically smallest CPU port which is affine to the DSA conduit interface
+>> that is up.
+>>
+>> For MT7531 and the switch on the MT7988 SoC, LLDP frames received from a
+>> user port will be trapped to the CPU port that is affine to the user port
+>> from which the frames are received.
+>>
+>> The bit for R0E_MANG_FR is 27. When set, the switch regards the frames with
+>> :0E MAC DA as management (LLDP) frames. This bit is set to 1 after reset on
+>> MT7530 and MT7531 according to the documents MT7620 Programming Guide v1.0
+>> and MT7531 Reference Manual for Development Board v1.0, so there's no need
+>> to deal with this bit. Since there's currently no public document for the
+>> switch on the MT7988 SoC, I assume this is also the case for this switch.
+>>
+>> Fixes: b8f126a8d543 ("net-next: dsa: add dsa support for Mediatek MT7530 switch")
+> 
+> Patch 4 claims to be a fix for this commit, and introduces one of these
+> modifications to MT753X_BPC, which this patch then changes.
+> 
+> On the face of it, it seems this patch is actually a fix to patch 4 as
+> well as the original patch, so does that mean that patch 4 only half
+> fixes a problem?
 
-Yes.
+I should do the enum renaming on my net-next series instead, as it's not 
+useful to what this patch fixes at all.
 
->
-> How large *is* the number in relation to CPUs?
+> 
+> Bah, I give up with this. IMHO it's just too much of a mess trying to
+> do any sane review of it. No, I'm not going to give any acks or
+> reviewed-bys to it because nothing here makes much sense to me.
+> 
+> And I just can't be bothered trying to parse the commit messages
+> anymore.
+> 
+> Sorry but no, I'm going to be ignoring these patch sets from now on.
 
-It differs based on the number of cpus on the machine. We use 32
-zpools on all machines.
+... okay. I listen to your reviews and change my patches accordingly. If 
+that's not enough, I don't know what is.
 
->
-> > I see value in allowing the number of zpools to be directly
-> > configurable (it can always be left as 1), and am worried that with
-> > percpu we would be throwing away years of production testing for an
-> > unknown.
-> >
-> > I am obviously biased, but I don't think this adds significant
-> > complexity to the zswap code as-is (or as v2 is to be precise).
->
-> I had typed out this long list of reasons why I hate this change, and
-> then deleted it to suggest the per-cpu scaling factor.
->
-> But to summarize my POV, I think a user-facing config option for this
-> is completely inappropriate. There are no limits, no guidance, no sane
-> default. And it's very selective about micro-optimizing this one lock
-> when there are several locks and datastructures of the same scope in
-> the swap path. This isn't a reasonable question to ask people building
-> kernels. It's writing code through the Kconfig file.
-
-It's not just swap path, it's any contention that happens within the
-zpool between its different operations (map, alloc, compaction, etc).
-My thought was that if a user observes high contention in any of the
-zpool operations, they can increase the number of zpools -- basically
-this should be empirically decided. If unsure, the user can just leave
-it as a single zpool.
-
->
-> Data structure scalability should be solved in code, not with config
-> options.
-
-I agree, but until we have a more fundamental architectural solution,
-having multiple zpools to address scalability is a win. We can remove
-the config option later if needed.
-
->
-> My vote on the patch as proposed is NAK.
-
-I hear the argument about the config option not being ideal here, but
-NR_CPUs is also not ideal.
-
-How about if we introduce it as a constant in the kernel? We have a
-lot of other constants around the kernel that do not scale with the
-machine size (e.g. SWAP_CLUSTER_MAX). We can start with 32, which is a
-value that we have tested in our data centers for many years now and
-know to work well. We can revisit later if needed.
-
-WDYT?
+Arınç
