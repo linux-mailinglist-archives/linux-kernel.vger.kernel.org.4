@@ -2,76 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F72730A61
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 00:06:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6DA730A67
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 00:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236405AbjFNWGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 18:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53108 "EHLO
+        id S236422AbjFNWJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 18:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235020AbjFNWGT (ORCPT
+        with ESMTP id S234019AbjFNWJN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 18:06:19 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379792695;
-        Wed, 14 Jun 2023 15:06:18 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id 6a1803df08f44-62fd844ad58so11391706d6.2;
-        Wed, 14 Jun 2023 15:06:18 -0700 (PDT)
+        Wed, 14 Jun 2023 18:09:13 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFDD1A1;
+        Wed, 14 Jun 2023 15:09:12 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-bd6446528dcso1070710276.2;
+        Wed, 14 Jun 2023 15:09:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686780377; x=1689372377;
+        d=gmail.com; s=20221208; t=1686780551; x=1689372551;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yt0E+gE2c9tWb/FVFSjcNFqAVT4Jc03x3okyqywpWl4=;
-        b=O5SLdcqpfWwpVOckirFEmrcRZlcJj77388x4poZQKK/D06VAYUEuHV2EyAt209z5+T
-         s+RSwLwuZymPaNUVfdzs1ZyQRJbv+5jAuusJig/2tVNs2h/L9rTCwYcYPNyPzK61utjK
-         gAGoSQ9k5ooGmDMNt2JxBHzOUfbPY8ezsJX4pepO8WfGUMV9MMZKCDoZRc67DbZUHMeU
-         GUSydhmVFoq1Z+91lyF3rYRzD0RWGRV3wRbb7Nt4icogluBOBeWheve7UhvyaLkwulLl
-         rHxnEFjaj4rB+e0/JkZMhK49D7gDfcBd7cyequtKtZ76x8tAxf9xfnwAX703+1K/rU/2
-         4Xxw==
+        bh=1ZY8IYbBCwqFgvXl6puz847AvvCr9iy7X2X1F65i07c=;
+        b=qo4/gsWJ49ZV1RB1v9Hag7fSKofMhHFr1Yb7+yLi+CrZbmi+/fIuin5MH/8Tl4CNnz
+         4Z4+5viyR5gSk/SfWjh28CJRg2X5Rqf/91o3cpPKNlrAyhS8+kWcTkk3P+mYEC10xVb7
+         4NjuEzf/rN8Xe/iB1VoTALNNo5Auue5tlDCL2gU576oMLQMNboy+JhgiM124otpssHvs
+         UIeupf1PHsM7N/nBZXDLJXE5bzSdp6XHcNGF/6qqnmGF9y4ZD1L7f2GtkmH98pBzvRMy
+         QoChaQyLB4L2h39C2PAotdwpDz+S6fUuk/K7roJFjOV9qXwCNkfs7/HB+MvA5PxRUiOK
+         iXrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686780377; x=1689372377;
+        d=1e100.net; s=20221208; t=1686780551; x=1689372551;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yt0E+gE2c9tWb/FVFSjcNFqAVT4Jc03x3okyqywpWl4=;
-        b=CQTAZNb0coeQZAHMAaNxikU7f9SkLIZFAJtDairr9hLC3zsB5YUaMccCyTNziqfAvw
-         7NawsKVvl1brslQF8M8vG0rvKYR/SDlhrqOgPw9W+lcgEFQ+lStoIclH/rtuWciJC7Ld
-         7tDZl007Qi9PndIbJflqT16zf+lk3nPFYwcGppbIAehkyRXb9OUHKCF+72MvVF839PHg
-         4+NsIbWfZ9KmDRRnDfeJ/ebLfUFpE+EpVvjI0DLs7cNbqrogCRYsLG0mHcw7a+k/4VCA
-         LuXzHM5Vh7z0bxwsxqqEatcfrHVp4lPp+dxEyK9qh+i/9o7QVS1cJjVTs7tAg6TQCyyZ
-         eeog==
-X-Gm-Message-State: AC+VfDwoUIwbFTwcNt6ORS/Gz03ceB1sNC71jmHsu0cBdyByBgldtoeg
-        m7nQKZ0ByviaM2c833ihwZDTyG+/N4JshSdEbbPS8Y4KJAo=
-X-Google-Smtp-Source: ACHHUZ7QSUKHz6eXKVGjn16hSJRIcttn0Cs9hdfy+fflsRqL6m/Cu2KmL77E7KQyQdWpf2q+eOyHfZdmyWR1J0JjSb8=
-X-Received: by 2002:a05:6214:2a83:b0:62b:6615:22ce with SMTP id
- jr3-20020a0562142a8300b0062b661522cemr20081429qvb.33.1686780377150; Wed, 14
- Jun 2023 15:06:17 -0700 (PDT)
+        bh=1ZY8IYbBCwqFgvXl6puz847AvvCr9iy7X2X1F65i07c=;
+        b=ZeviJZ4EBXRRp7DcLwguvAa5U0P5cbEKzZDAJtQn7R1tLC/NExs/NaMfGiK47aQ6km
+         tUHo4nuWk/7xJhhmqTrtQAsRzxwkr/hTn+HMOrmerGMk5e9drPEtNqRtitBqt+W88OOA
+         2tM3rpdDS9lh43j3ad6Fn1iJr1HiD2cdIcvYwbN+fIhTTis2E+Rjgf6CQGU3t2un5KGD
+         5n1IFONCcFuR2qGIMrYszVAzpHNc+v2uTpPNpsvCKtSWtt/uRwC5QS472kRNkCBX0OIF
+         WU+e0kktCLnoud1Lx71QO/uKbj3l2KvLnYg/j95p2Fsue4/6D9XcGLVVgdUw2X7exQOO
+         oBww==
+X-Gm-Message-State: AC+VfDyezzAU7b+9bI35l/ZtvpchhVahjzbkU8rL0dGI8FCHVdvH6ufM
+        bEQOpeHo6mgRMxXuBzQuSkCEFAUZoxbq7qtspGo=
+X-Google-Smtp-Source: ACHHUZ73VU9isra/qJrbZ9eQzPjDJFWewvwYjUqCmdZqS2Lkk2a0g9gKp33Fa1FYuwamE3ks65eoCOh+SYJDegLKPVE=
+X-Received: by 2002:a25:d86:0:b0:bd5:ddcd:bc9e with SMTP id
+ 128-20020a250d86000000b00bd5ddcdbc9emr3275028ybn.17.1686780551502; Wed, 14
+ Jun 2023 15:09:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230614074904.29085-1-herve.codina@bootlin.com>
- <20230614074904.29085-8-herve.codina@bootlin.com> <CAHp75Vcur=H_2mBm5Ztuvd7Jnvmr6+tvCbEkFtmaVLsEjXr8NQ@mail.gmail.com>
- <20230614114214.1371485e@bootlin.com> <CAHp75VcmW2StPqb_LtKFyNyJ2+jz3c19zNRDiSuGs06Bseq04w@mail.gmail.com>
- <20230614223418.0d7e355d@bootlin.com>
-In-Reply-To: <20230614223418.0d7e355d@bootlin.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 15 Jun 2023 01:05:40 +0300
-Message-ID: <CAHp75VfFyDzr4qHNssXZ8RLy0gxMWdjBgac4JLd7grRLEG-vyw@mail.gmail.com>
-Subject: Re: [PATCH v4 07/13] minmax: Introduce {min,max}_array()
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20230614180837.630180-6-ojeda@kernel.org> <20230614203803.2910957-1-aliceryhl@google.com>
+In-Reply-To: <20230614203803.2910957-1-aliceryhl@google.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 15 Jun 2023 00:09:00 +0200
+Message-ID: <CANiq72n-WocEegVc2-Em6muU4pOTOh+Lf8RAwiAtjuUUjnysbQ@mail.gmail.com>
+Subject: Re: [PATCH 5/6] rust: support running Rust documentation tests as
+ KUnit ones
+To:     Alice Ryhl <aliceryhl@google.com>
+Cc:     ojeda@kernel.org, alex.gaynor@gmail.com, benno.lossin@proton.me,
+        bjorn3_gh@protonmail.com, boqun.feng@gmail.com,
+        brendan.higgins@linux.dev, davidgow@google.com, gary@garyguo.net,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, nmi@metaspace.dk,
+        patches@lists.linux.dev, philip.li@intel.com,
+        rust-for-linux@vger.kernel.org, wedsonaf@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,123 +75,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 11:34=E2=80=AFPM Herve Codina <herve.codina@bootlin=
-.com> wrote:
-> On Wed, 14 Jun 2023 14:51:43 +0300
-> Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> > On Wed, Jun 14, 2023 at 12:42=E2=80=AFPM Herve Codina <herve.codina@boo=
-tlin.com> wrote:
-> > > On Wed, 14 Jun 2023 12:02:57 +0300
-> > > Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> > > > On Wed, Jun 14, 2023 at 10:49=E2=80=AFAM Herve Codina <herve.codina=
-@bootlin.com> wrote:
-
-...
-
-> > > > > +       typeof(__array[0] + 0) __element =3D __array[--__len];   =
- \
-> > > >
-> > > > Do we need the ' + 0' part?
-> > >
-> > > Yes.
-> > >
-> > > __array can be an array of const items and it is legitimate to get th=
-e
-> > > minimum value from const items.
-> > >
-> > > typeof(__array[0]) keeps the const qualifier but we need to assign __=
-element
-> > > in the loop.
-> > > One way to drop the const qualifier is to get the type from a rvalue =
-computed
-> > > from __array[0]. This rvalue has to have the exact same type with onl=
-y the const
-> > > dropped.
-> > > '__array[0] + 0' was a perfect canditate.
-> >
-> > Seems like this also deserves a comment. But if the series is accepted
-> > as is, it may be done as a follow up.
-> >
+On Wed, Jun 14, 2023 at 10:38=E2=80=AFPM Alice Ryhl <aliceryhl@google.com> =
+wrote:
 >
-> Finally not so simple ...
-> I did some deeper tests and the macros need to be fixed.
+> This could just be
 >
-> I hope this one (with comments added) is correct:
-> --- 8 ---
-> /*
->  * Do not check the array parameter using __must_be_array().
->  * In the following legit use-case where the "array" passed is a simple p=
-ointer,
->  * __must_be_array() will return a failure.
->  * --- 8< ---
->  * int *buff
->  * ...
->  * min =3D min_array(buff, nb_items);
->  * --- 8< ---
->  *
->  * The first typeof(&(array)[0]) is needed in order to support arrays of =
-both
->  * 'int *buff' and 'int buf[N]' types.
->  *
->  * typeof(__array[0] + 0) used for __element is needed as the array can b=
-e an
->  * array of const items.
->  * In order to discard the const qualifier use an arithmetic operation (r=
-value).
+> std::fs::write(path, body.as_bytes());
 
++1, simpler, less `use`s needed and less size:
 
->  * This arithmetic operation discard the const but also can lead to an in=
-teger
+     320429      12736        368     333533      516dd
+scripts/rustdoc_test_builder
+     314701      12440        368     327509      4ff55
+scripts/rustdoc_test_builder
 
-discards
+Thanks for the review!
 
->  * promotion. For instance, a const s8 __array[0] lead to an int __elemen=
-t due
+Cheers,
+Miguel
 
-leads
+diff --git a/scripts/rustdoc_test_builder.rs b/scripts/rustdoc_test_builder=
+.rs
+index e3b7138fb4f9..e5894652f12c 100644
+--- a/scripts/rustdoc_test_builder.rs
++++ b/scripts/rustdoc_test_builder.rs
+@@ -15,8 +15,7 @@
+ //! from that. For the moment, we generate ourselves a new name,
+`{file}_{number}` instead, in
+ //! the `gen` script (done there since we need to be aware of all the
+tests in a given file).
 
->  * to the promotion.
->  * In this case, simple min() or max() operation fails (type mismatch).
->  * Use min_t() or max_t() (op_t parameter) enforcing the type in order to=
- avoid
->  * the min() or max() failure.
+-use std::fs::File;
+-use std::io::{BufWriter, Read, Write};
++use std::io::Read;
 
-This part perhaps can be avoided. See below.
+ fn main() {
+     let mut stdin =3D std::io::stdin().lock();
+@@ -69,5 +68,5 @@ fn main() {
 
->  */
-> #define __minmax_array(op_t, array, len) ({                     \
->         typeof(&(array)[0]) __array =3D (array);                  \
->         typeof(len) __len =3D (len);                              \
->         typeof(__array[0] + 0) __element =3D __array[--__len];    \
->         while (__len--)                                         \
->                 __element =3D op_t(typeof(__array[0]), __element, __array=
-[__len]); \
+     let path =3D format!("rust/test/doctests/kernel/{name}");
 
-But can't we instead have typeof(+(array[0])) in the definition of __elemen=
-t?
-There are also other possible solutions: a) _Generic() with listed
-const types to move them to non-const, and b) __auto_type (which is
-supported by GCC 4.9 and clang, but not in the C11 standard).
-
->         __element; })
-
-...
-
-> Can you give me your feedback on this last version ?
-
-Sure!
-
-> If you are ok, it will be present in the next iteration of the series.
-> Otherwise, as a last ressort, I will drop the {min,max}_array() and switc=
-h
-> back to the specific min/max computation in IIO inkern.c
->
-> Sorry for this back and forth and this last minute detected bug.
-
-It's good that we have some tests (perhaps you can add something to
-unit test these)? Perhaps move your code to lib/test_minmax.c as KUnit
-module?
-
---=20
-With Best Regards,
-Andy Shevchenko
+-    write!(BufWriter::new(File::create(path).unwrap()), "{body}").unwrap()=
+;
++    std::fs::write(path, body.as_bytes()).unwrap();
+ }
