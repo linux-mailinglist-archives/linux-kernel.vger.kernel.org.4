@@ -2,68 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F7172F74E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F68972F750
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:05:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234554AbjFNIF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 04:05:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37874 "EHLO
+        id S243018AbjFNIFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 04:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243677AbjFNIFR (ORCPT
+        with ESMTP id S243632AbjFNIE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 04:05:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64A91FDB
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 01:04:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686729863;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=AdExDkio2IavDiEBIZ3Za2q9aIwRCw4IZu4sfOZDrT0=;
-        b=HPTXjx+KDsQIRVDYcZQCobrVp9k0HiFyCxANsrScJidoq/i7Thk4No6s/2odYBpzOOVHrm
-        oUoYjt0Y4l0Hp84+SOjgrHNtO+A7wOM0rJCTjh8KN7Z9txKIND/8gtQ23HngrcoBkYnVgs
-        TzKt6g1qRY7zmrLkF9wzWjDMt2W5WO8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-111-ikdS9KTKNjSb28DFQ4X47Q-1; Wed, 14 Jun 2023 04:04:19 -0400
-X-MC-Unique: ikdS9KTKNjSb28DFQ4X47Q-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 14 Jun 2023 04:04:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78430CD;
+        Wed, 14 Jun 2023 01:04:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B5793810BB3;
-        Wed, 14 Jun 2023 08:04:18 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 080E740C6F5C;
-        Wed, 14 Jun 2023 08:04:16 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-cc:     dhowells@redhat.com,
-        syzbot+d8486855ef44506fd675@syzkaller.appspotmail.com,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next] ip, ip6: Fix splice to raw and ping sockets
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DDC663949;
+        Wed, 14 Jun 2023 08:04:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54CF5C433C8;
+        Wed, 14 Jun 2023 08:04:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686729896;
+        bh=587fmz2klRa2g4aJ3HVM7KHqlrIy3jsGHL5MkwAbBz0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Q3e/G1ZFtWdjRyuLaXw77zGwVvnjZ70w0mOlu/ssVKUfvGWvo6XYFgDkyhQFZ/iqr
+         e+/WFTbmUZLvA9EFuPXzN7QqeBtGjKJq/3CoX3yUdBhPdF7u2ZxHBd+kLy3SCoY0KL
+         TUUHfohGuQj9k/6gbsdhsJaJeHBgTwLasrbhGX+rZdTk+KAI6Op5BV4tZUhRzQNS4v
+         pYWl6DSjo3585DAXlW45T0hLCmHDSJKaUi4MM1VNexaTrdsx73trRbemTn1U0Ek8pF
+         JqserqFT0sQQF/LIKZN4u99ElP7w4QlZREtW/xhSMsd9bXCmkUd5fwIY6xXk1vbY8j
+         eyKhmtMMS/HOw==
+From:   Christian Brauner <brauner@kernel.org>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Benjamin LaHaise <bcrl@kvack.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>, linux-aio@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ira Weiny <ira.weiny@intel.com>,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [PATCH] fs/aio: Stop allocating aio rings from HIGHMEM
+Date:   Wed, 14 Jun 2023 10:04:43 +0200
+Message-Id: <20230614-langhaarig-soweit-5d3bb172559f@brauner>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230609145937.17610-1-fmdefrancesco@gmail.com>
+References: <20230609145937.17610-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1410155.1686729856.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 14 Jun 2023 09:04:16 +0100
-Message-ID: <1410156.1686729856@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=889; i=brauner@kernel.org; h=from:subject:message-id; bh=587fmz2klRa2g4aJ3HVM7KHqlrIy3jsGHL5MkwAbBz0=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaR0lky+eFtdJPeF9t4fsQEKqxb2c7/8zVXz0DTZ+l6PjflE k+8/OkpZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACbizczwzzbnqcyymY45TTv0C5VZmP cX3Xql8ih8idO7OeZnHl7/HcbIMCOFa+/bCwEzPNkFrANu3ClcYf+95qQNbzOTyIr5Tu/k+QA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,75 +62,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-    =
+On Fri, 09 Jun 2023 16:59:37 +0200, Fabio M. De Francesco wrote:
+> There is no need to allocate aio rings from HIGHMEM because of very
+> little memory needed here.
+> 
+> Therefore, use GFP_USER flag in find_or_create_page() and get rid of
+> kmap*() mappings.
+> 
+> 
+> [...]
 
-Splicing to SOCK_RAW sockets may set MSG_SPLICE_PAGES, but in such a case,
-__ip_append_data() will call skb_splice_from_iter() to access the 'from'
-data, assuming it to point to a msghdr struct with an iter, instead of
-using the provided getfrag function to access it.
+Applied to the vfs.misc branch of the vfs/vfs.git tree.
+Patches in the vfs.misc branch should appear in linux-next soon.
 
-In the case of raw_sendmsg(), however, this is not the case and 'from' wil=
-l
-point to a raw_frag_vec struct and raw_getfrag() will be the frag-getting
-function.  A similar issue may occur with rawv6_sendmsg().
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
 
-Fix this by ignoring MSG_SPLICE_PAGES if getfrag !=3D ip_generic_getfrag a=
-s
-ip_generic_getfrag() expects "from" to be a msghdr*, but the other getfrag=
-s
-don't.  Note that this will prevent MSG_SPLICE_PAGES from being effective
-for udplite.
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
 
-This likely affects ping sockets too.  udplite looks like it should be oka=
-y
-as it expects "from" to be a msghdr.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs.misc
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-Reported-by: syzbot+d8486855ef44506fd675@syzkaller.appspotmail.com
-Link: https://lore.kernel.org/r/000000000000ae4cbf05fdeb8349@google.com/
-Fixes: 2dc334f1a63a ("splice, net: Use sendmsg(MSG_SPLICE_PAGES) rather th=
-an ->sendpage()")
-Tested-by: syzbot+d8486855ef44506fd675@syzkaller.appspotmail.com
-cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-cc: David Ahern <dsahern@kernel.org>
-cc: "David S. Miller" <davem@davemloft.net>
-cc: Eric Dumazet <edumazet@google.com>
-cc: Jakub Kicinski <kuba@kernel.org>
-cc: Paolo Abeni <pabeni@redhat.com>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: netdev@vger.kernel.org
----
- net/ipv4/ip_output.c  |    3 ++-
- net/ipv6/ip6_output.c |    3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/net/ipv4/ip_output.c b/net/ipv4/ip_output.c
-index 244fb9365d87..4b39ea99f00b 100644
---- a/net/ipv4/ip_output.c
-+++ b/net/ipv4/ip_output.c
-@@ -1040,7 +1040,8 @@ static int __ip_append_data(struct sock *sk,
- 	} else if ((flags & MSG_SPLICE_PAGES) && length) {
- 		if (inet->hdrincl)
- 			return -EPERM;
--		if (rt->dst.dev->features & NETIF_F_SG)
-+		if (rt->dst.dev->features & NETIF_F_SG &&
-+		    getfrag =3D=3D ip_generic_getfrag)
- 			/* We need an empty buffer to attach stuff to */
- 			paged =3D true;
- 		else
-diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
-index c722cb881b2d..dd845139882c 100644
---- a/net/ipv6/ip6_output.c
-+++ b/net/ipv6/ip6_output.c
-@@ -1592,7 +1592,8 @@ static int __ip6_append_data(struct sock *sk,
- 	} else if ((flags & MSG_SPLICE_PAGES) && length) {
- 		if (inet_sk(sk)->hdrincl)
- 			return -EPERM;
--		if (rt->dst.dev->features & NETIF_F_SG)
-+		if (rt->dst.dev->features & NETIF_F_SG &&
-+		    getfrag =3D=3D ip_generic_getfrag)
- 			/* We need an empty buffer to attach stuff to */
- 			paged =3D true;
- 		else
-
+[1/1] fs/aio: Stop allocating aio rings from HIGHMEM
+      https://git.kernel.org/vfs/vfs/c/c9657715af76
