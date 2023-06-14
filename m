@@ -2,54 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F97730621
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 19:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3497730624
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 19:38:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237409AbjFNRhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 13:37:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
+        id S237449AbjFNRif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 13:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230388AbjFNRhD (ORCPT
+        with ESMTP id S230388AbjFNRid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 13:37:03 -0400
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06DE9119;
-        Wed, 14 Jun 2023 10:37:03 -0700 (PDT)
-Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-777ac4344f9so262076239f.0;
-        Wed, 14 Jun 2023 10:37:02 -0700 (PDT)
+        Wed, 14 Jun 2023 13:38:33 -0400
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416EF10FE;
+        Wed, 14 Jun 2023 10:38:32 -0700 (PDT)
+Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-77a62a84855so273308139f.1;
+        Wed, 14 Jun 2023 10:38:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686764222; x=1689356222;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=htWbyJD2n8RFcV5K4ncv4g5SpZeEJ2ahD8odx4XGKqw=;
-        b=MVPT+PbwEzWFtiviMuhSY1JUEs3Kq60Ul5HDK7cslzx0HUtaMguClr3ssWDfTepbtL
-         ovw71FO+uB/p10MXXU5wV+FIxm0Alg9Xfg1lqmgaPK/yDdgBhQd5vPYVh0wLIgVDZZx3
-         dPAmXJguxPARU7QCPufSpOAUCeK5cRMp0B6imZW0V4ANInZvTJ7ajB0Inm4x0EjGp6Es
-         Wbhnm26b0wmsT+fHGwEX6zAjQiYHHqHxJy3s6z89Aw7MPCfImieSNgdkVd2ObcJP/Wk8
-         /e4hxQL0Ul5uq82/NO0aycsMoBsd7TRX8K5nZ45NaS1+aftC4UtV28u1uZweZBmA1YUo
-         9jHg==
-X-Gm-Message-State: AC+VfDwcJODNBTdZeVedeemosg2fCE7nVno9zr4sK1JIqQHyCEtHpDaH
-        1c7wQsyEdYn4wtgKgzUORw==
-X-Google-Smtp-Source: ACHHUZ4vr3xNzpq9w6LSGrgva6wTJyFPGqe9G/sPXOrmaY8BYB8TJO4CxLbWsDOLGNnSMzeY3U7/Ow==
-X-Received: by 2002:a6b:db14:0:b0:777:b765:661a with SMTP id t20-20020a6bdb14000000b00777b765661amr15349944ioc.14.1686764222059;
-        Wed, 14 Jun 2023 10:37:02 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686764311; x=1689356311;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4AzIfgp2T+o1encwZlg2BP9N2PGCvG8KAxb0WUXTbaA=;
+        b=WsaDMIrpnSLwIqqldn34MWu2sKw3HindMBvKSXpBROS/Q7ZdF29tfkcMXzh5LiJV3H
+         Z8Sihnu5vkJuwegr9BO4WcCh6Zzd2p7rhdO3JTtDKUEj2EQbSbxoVX4ksYeDuYCUs/JO
+         SOj+TUukxh8tv6VYr4opnW7YR3DRTj8ZAPUMy2Mkyuag+8HbM6mHbFaYjxVw3hOGNJXq
+         xRvvnvqz9ekWc5uw0K9YiS279Pt7M7mhO+kPanBU4SLe1EpaiUIHG46FPWWb0Qm77c+y
+         iY9oxKZxvrBWKy3Zi7+uW/awMZG4M9SKSAbP1qZCaG4dEXp1+0rdtVD+ZscREXmarrRe
+         P48w==
+X-Gm-Message-State: AC+VfDxR+u1kOEyYajaNviVWAtWvB1KjCG7anS52RuMxCdDIU8ljgmAW
+        TYCLBjrGkr6q+L3ObLmxAEUxpvIVFg==
+X-Google-Smtp-Source: ACHHUZ4+zkUe4iA37124C8HV/+nPoXe1InO+Fi+eyYwXZkiDrm2NeUOpaRk5ZdFyrjJz8LtEtGs6Cg==
+X-Received: by 2002:a05:6e02:684:b0:33b:ef57:65bc with SMTP id o4-20020a056e02068400b0033bef5765bcmr13558330ils.20.1686764311406;
+        Wed, 14 Jun 2023 10:38:31 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id t13-20020a5edd0d000000b0076373f90e46sm5518847iop.33.2023.06.14.10.37.00
+        by smtp.gmail.com with ESMTPSA id p20-20020a02c814000000b004165ce4456fsm5009151jao.33.2023.06.14.10.38.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 10:37:01 -0700 (PDT)
-Received: (nullmailer pid 2431248 invoked by uid 1000);
-        Wed, 14 Jun 2023 17:36:59 -0000
+        Wed, 14 Jun 2023 10:38:30 -0700 (PDT)
+Received: (nullmailer pid 2433146 invoked by uid 1000);
+        Wed, 14 Jun 2023 17:38:29 -0000
 From:   Rob Herring <robh@kernel.org>
 To:     Damien Le Moal <dlemoal@kernel.org>,
         Sergey Shtylyov <s.shtylyov@omp.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc:     linux-ide@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] MIPS: octeon: Fix cvmx_writeq_csr/cvmx_readq_csr on 32-bit builds
-Date:   Wed, 14 Jun 2023 11:36:31 -0600
-Message-Id: <20230614173633.2430653-1-robh@kernel.org>
+Subject: [PATCH 2/2] ata: octeon: Add compile test support
+Date:   Wed, 14 Jun 2023 11:36:33 -0600
+Message-Id: <20230614173633.2430653-2-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230614173633.2430653-1-robh@kernel.org>
+References: <20230614173633.2430653-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
@@ -63,41 +65,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Test 32-bit builds have an error in cvmx_writeq_csr/cvmx_readq_csr:
-
-arch/mips/include/asm/octeon/cvmx.h:282:24: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]
-
-As the default for allyesconfig/allmodconfig is 32-bit, fixing these
-functions for 32-bit is needed to enable Cavium Octeon drivers for
-COMPILE_TEST.
+Add COMPILE_TEST to enable building Cavium Octeon drivers in MIPS
+allyesconfig/allmodconfig builds. There's a dependency on MIPS headers,
+so other arches can't be enabled.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- arch/mips/include/asm/octeon/cvmx.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Tested on allmodconfig build. Not sure if there's other MIPS configs 
+where this doesn't work. We'll see what 0-day says.
 
-diff --git a/arch/mips/include/asm/octeon/cvmx.h b/arch/mips/include/asm/octeon/cvmx.h
-index 72e775bf31e6..2265a92995a8 100644
---- a/arch/mips/include/asm/octeon/cvmx.h
-+++ b/arch/mips/include/asm/octeon/cvmx.h
-@@ -279,7 +279,7 @@ static inline void cvmx_write_csr(uint64_t csr_addr, uint64_t val)
+ drivers/ata/Kconfig          | 4 ++--
+ drivers/ata/pata_octeon_cf.c | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
+index 42b51c9812a0..4572f837e504 100644
+--- a/drivers/ata/Kconfig
++++ b/drivers/ata/Kconfig
+@@ -239,7 +239,7 @@ config AHCI_MVEBU
  
- static inline void cvmx_writeq_csr(void __iomem *csr_addr, uint64_t val)
- {
--	cvmx_write_csr((__force uint64_t)csr_addr, val);
-+	cvmx_write_csr((__force uintptr_t)csr_addr, val);
- }
+ config AHCI_OCTEON
+ 	tristate "Cavium Octeon Soc Serial ATA"
+-	depends on SATA_AHCI_PLATFORM && CAVIUM_OCTEON_SOC
++	depends on SATA_AHCI_PLATFORM && MIPS && (CAVIUM_OCTEON_SOC || COMPILE_TEST)
+ 	default y
+ 	help
+ 	  This option enables support for Cavium Octeon SoC Serial ATA.
+@@ -373,7 +373,7 @@ config PDC_ADMA
  
- static inline void cvmx_write_io(uint64_t io_addr, uint64_t val)
-@@ -296,7 +296,7 @@ static inline uint64_t cvmx_read_csr(uint64_t csr_addr)
- 
- static inline uint64_t cvmx_readq_csr(void __iomem *csr_addr)
- {
--	return cvmx_read_csr((__force uint64_t) csr_addr);
-+	return cvmx_read_csr((__force uintptr_t) csr_addr);
- }
- 
- static inline void cvmx_send_single(uint64_t data)
+ config PATA_OCTEON_CF
+ 	tristate "OCTEON Boot Bus Compact Flash support"
+-	depends on CAVIUM_OCTEON_SOC
++	depends on MIPS && (CAVIUM_OCTEON_SOC || COMPILE_TEST)
+ 	select PATA_TIMINGS
+ 	help
+ 	  This option enables a polled compact flash driver for use with
+diff --git a/drivers/ata/pata_octeon_cf.c b/drivers/ata/pata_octeon_cf.c
+index 57b2166a6d5d..cc9e4b63ded9 100644
+--- a/drivers/ata/pata_octeon_cf.c
++++ b/drivers/ata/pata_octeon_cf.c
+@@ -853,8 +853,8 @@ static int octeon_cf_probe(struct platform_device *pdev)
+ 					of_node_put(dma_node);
+ 					return -EINVAL;
+ 				}
+-				cf_port->dma_base = (u64)devm_ioremap(&pdev->dev, res_dma->start,
+-									 resource_size(res_dma));
++				cf_port->dma_base = (uintptr_t)devm_ioremap(&pdev->dev, res_dma->start,
++									    resource_size(res_dma));
+ 				if (!cf_port->dma_base) {
+ 					put_device(&dma_dev->dev);
+ 					of_node_put(dma_node);
 -- 
 2.39.2
 
