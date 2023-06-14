@@ -2,82 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E773872F872
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1370B72F879
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243822AbjFNIyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 04:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45702 "EHLO
+        id S233182AbjFNI6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 04:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243784AbjFNIyq (ORCPT
+        with ESMTP id S230303AbjFNI62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 04:54:46 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706AB10E9
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 01:54:44 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4Qgzkl6hRtzBQJZQ
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 16:54:39 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1686732879; x=1689324880; bh=NXspP6LKCH9WQXgrfGSWn0gRJXx
-        XFr3UTCp4ndLYBcE=; b=ntix1U9dhofP07tpOOOxtJetvOTL9/WbBf8pgFJUB/S
-        S1p9JEI8TN97kIQ35/a42gK4bVQ4QUO2fQqraNxvPKynxHxFMlGPpMSzmm41y9c+
-        +rU3Disa6+Td22m93DE5wBTxumqoWIBCENGRJdC4+AbixTJ8712X+v3Ryn4Pw07+
-        TSi57S4bY/iNVQ2b2hB78Xv+wWev3dnP2kDCapmmCqk+uR6dmI68VPmKkxd/i67c
-        beO/35kZNTZhv+/+FMnYANRhveb2woMLaenPRaSckDHXNfjcBg5EBzkxJNdPi3e+
-        P2KZeM0h7AwMoPtU9tat+LlC8GQawpAtkhJswsSobog==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id lySVEt3fZPUR for <linux-kernel@vger.kernel.org>;
-        Wed, 14 Jun 2023 16:54:39 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4Qgzkl45Y3zBJJDJ;
-        Wed, 14 Jun 2023 16:54:39 +0800 (CST)
+        Wed, 14 Jun 2023 04:58:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8635E1BD4
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 01:57:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686733060;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XLKEe5F6xXngYE09X9rD2VCOd+wftGw7A/Tkdmq7wYw=;
+        b=aXMWwXw8bSoJXuhhw/sgmE6MmPCGp8kp1a4mf7QwhTat9ag9lh04H11asfmpp/0glFusf6
+        +NrZ5CHBSfefX94t0Fi979tDuWBBsSo2AWdLDlzyP/yNJ7W4LFbVunqF3ATLYaEAvXj2TR
+        g+z2h+1P8h4mKRC5XhwIElxoWaQpNkY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-643-8qWeZPviMAS61fOjx3qWcA-1; Wed, 14 Jun 2023 04:57:37 -0400
+X-MC-Unique: 8qWeZPviMAS61fOjx3qWcA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4086A80067D;
+        Wed, 14 Jun 2023 08:57:36 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4784140C20F4;
+        Wed, 14 Jun 2023 08:57:32 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <0000000000000900e905fdeb8e39@google.com>
+References: <0000000000000900e905fdeb8e39@google.com>
+To:     syzbot <syzbot+f9e28a23426ac3b24f20@syzkaller.appspotmail.com>
+Cc:     dhowells@redhat.com, brauner@kernel.org, kuba@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk
+Subject: Re: [syzbot] [fs?] general protection fault in splice_to_socket
 MIME-Version: 1.0
-Date:   Wed, 14 Jun 2023 16:54:39 +0800
-From:   baomingtong001@208suo.com
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: qlogicpti: Remove unneeded semicolon
-In-Reply-To: <20230614085236.43022-1-luojianhong@cdjrlc.com>
-References: <20230614085236.43022-1-luojianhong@cdjrlc.com>
-User-Agent: Roundcube Webmail
-Message-ID: <5b703018fcab06a574c713c318df1112@208suo.com>
-X-Sender: baomingtong001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1423374.1686733050.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 14 Jun 2023 09:57:30 +0100
+Message-ID: <1423375.1686733050@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-./drivers/scsi/qlogicpti.c:1153:3-4: Unneeded semicolon
+Here's a much reduced test program.  The key is to splice more than a page
+from the pipe into the second socket (AF_ALG in this case) and more than t=
+hat
+into the pipe.
 
-Signed-off-by: Mingtong Bao <baomingtong001@208suo.com>
+David
 ---
-  drivers/scsi/qlogicpti.c | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
+// https://syzkaller.appspot.com/bug?id=3D613f5060400df25674e1b213295ef45a=
+8422b077
+// autogenerated by syzkaller (https://github.com/google/syzkaller)
+#define _GNU_SOURCE
+#include <endian.h>
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/syscall.h>
+#include <sys/socket.h>
+#include <sys/mman.h>
+#include <sys/wait.h>
+#include <netinet/in.h>
+#include <linux/if_alg.h>
 
-diff --git a/drivers/scsi/qlogicpti.c b/drivers/scsi/qlogicpti.c
-index 1e8fbd457248..52253b7da157 100644
---- a/drivers/scsi/qlogicpti.c
-+++ b/drivers/scsi/qlogicpti.c
-@@ -1150,7 +1150,7 @@ static struct scsi_cmnd 
-*qlogicpti_intr_handler(struct qlogicpti *qpti)
-          case COMMAND_ERROR:
-          case COMMAND_PARAM_ERROR:
-              break;
--        };
-+        }
-          sbus_writew(0, qpti->qregs + SBUS_SEMAPHORE);
-      }
+#define OSERROR(R, S) do { if ((long)(R) =3D=3D -1L) { perror((S)); exit(1=
+); } } while(0)
+
+static const unsigned char data[1024 * 1024] =3D {
+	"\x44\xf9\xb1\x08\xb1\xcd\xc8\x85\xc9\xc5\x33\xd2\x1f\x47\x4b\xec\x8b"
+	"\xfe\xf1\xdf\x1e\x2d\xa7\x1e\x57\x8d\xc6\xb9\x1d\x09\xf7\xab\x15\x37"
+	"\x85\x71\xd8\xe2\x75\x46\x09\x00\x00\x00\x6e\x75\x43\x69\x14\xab\x71"
+	"\x75\x28\xee\x4b\x7a\x9b\xea\xf9\x08\xd1\x11\x37\xc1\x19\x03\x06\x4e"
+	"\x83\xb4\x95\x1f\x4d\x43\x3a\x54\x04\x97\x0c\x85\xd9\x2d\x70\x83\xfd"
+	"\x38\x84\x4c\xbb\x0c\x6c\x5e\xb5\x08\xdd\xc2\xdc\x7a\x59\x0a\xa7\x94"
+	"\x1b\x1e\x9e\xeb\x5a\x68\x81\x38\xde\xa0\x9b\x77\x6c\xbf\xa7\x84\xcb"
+	"\xf5\x50\xbf\x30\x74\xfb\x0d\x77\x5d\xa4\xdf\x5a\x3f\x48\xbb\xdf\x45"
+	"\x2e\xeb\x6b\x92\x3d\xa9\xd0\xe2\x5b\x80\xf7\x6a\x87\x36\x64\xb5\x75"
+	"\x34\x44\xfe\x05\xf3\x3e\x5f\x91\x04\x55\x40\x83\x6c\x3c\xd6\xaf\x10"
+	"\xf0\xcd\x01\x8f\x0c\x6f\x57\xf9\x26\xac\x95\x9a\x56\x28\xc4\x50\x88"
+	"\xfb\xe0\xc8\x7f\xbe\x6c\xbc\xda\x46\x62\xd2\xa1\x2f\x6d\x00\x00\x00"
+	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00",
+};
+
+int main(int argc, char *argv[])
+{
+	struct sockaddr_in6 sin6;
+	struct sockaddr_alg salg;
+	int pipefd[2], ipv6fd, algfd, hashfd, res, wt;
+
+	res =3D pipe(pipefd);
+	OSERROR(res, "pipe");
+
+	ipv6fd =3D socket(AF_INET6, SOCK_STREAM, IPPROTO_IP);
+	OSERROR(ipv6fd, "socket/inet6");
+
+	memset(&sin6, 0, sizeof(sin6));
+	sin6.sin6_family =3D AF_INET6;
+	sin6.sin6_port   =3D htons(2);
+
+	res =3D bind(ipv6fd, (struct sockaddr *)&sin6, sizeof(sin6));
+	OSERROR(res, "bind/inet6");
+
+	memset(&sin6, 0, sizeof(sin6));
+	sin6.sin6_family =3D AF_INET6;
+	sin6.sin6_port   =3D htons(2);
+	sin6.sin6_addr.s6_addr[15] =3D 1;
+	res =3D sendto(ipv6fd, NULL, 0, MSG_OOB|MSG_NOSIGNAL|MSG_FASTOPEN|0x20000=
+00,
+		     (struct sockaddr *)&sin6, sizeof(sin6));
+	OSERROR(res, "sendto_1");
+
+	res =3D send(ipv6fd, data, 0xd0d0c2ac /* massive overrun */, MSG_OOB);
+	OSERROR(res, "sendto_2");
+
+	algfd =3D socket(AF_ALG, SOCK_SEQPACKET, 0);
+	OSERROR(algfd, "socket/alg");
+
+	memset(&salg, 0, sizeof(salg));
+	salg.salg_family =3D AF_ALG;
+	strcpy(salg.salg_type, "hash");
+	strcpy(salg.salg_name, "sha3-512");
+	res =3D bind(algfd, (struct sockaddr *)&salg, sizeof(salg));
+	OSERROR(res, "bind/alg");
+
+	hashfd =3D accept4(algfd, NULL, 0, 0);
+	OSERROR(hashfd, "accept/alg");
+
+	switch (fork()) {
+	case -1:
+		OSERROR(-1, "fork");
+	case 0:
+		res =3D splice(pipefd[0], 0, hashfd, 0, 65536, 0);
+		OSERROR(res, "splice/p->h");
+		return 0;
+	default:
+		sleep(1);
+		break;
+	}
+
+	res =3D splice(ipv6fd, 0, pipefd[1], 0, 32767, 0);
+	OSERROR(res, "splice/i->p");
+	wait(&wt);
+	return 0;
+}
+
