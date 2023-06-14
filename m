@@ -2,138 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A16DE72F372
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 06:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3702572F379
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 06:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242235AbjFNEQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 00:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
+        id S242520AbjFNEUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 00:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234024AbjFNEP5 (ORCPT
+        with ESMTP id S233845AbjFNEU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 00:15:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DBA11C
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 21:15:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686716109;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=R/3CnkcXc0u2eW2baOnoD8oBslXn19GAj6CnKs1pujg=;
-        b=R5IyUFyktjgEYNKBkZuicBb5bNIstrpKSispginE8IByEFN+h2tAAymXbsmEO//aZ6Dt5S
-        myQ21T9vJ3L8WNKVRdvK8TefEoDodTPbVi0yWcf9o+CyXidKSsXglgcasHZJ49UWQIEHLe
-        pVx4wgY7qzKz1/ckFEFs5tCp5ijQi1M=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-248-VOc4laaGMjCmanSQLUTLnQ-1; Wed, 14 Jun 2023 00:15:07 -0400
-X-MC-Unique: VOc4laaGMjCmanSQLUTLnQ-1
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7607b00a93eso233910185a.3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 21:15:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686716107; x=1689308107;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=R/3CnkcXc0u2eW2baOnoD8oBslXn19GAj6CnKs1pujg=;
-        b=cZ9ENY8NathHIAOs87cvW3wwz07Ek2GTMjYCgBmiZgOpSTNdxvF2BBuCclIXPTT2OU
-         i73NILgFiHYdPwH2kdYukZZNP35ZVxIIGZVTgynReA86dol9xfNUBCcq3brAPSag4d6w
-         11LMn3cFWXkmmEp9uYFlGW688PmDDhWi8k2dBzTRfw+l+n/RYfUxCAe/VVG2pKAc/yrv
-         C+TMCdwWlBPavfKs2ZqzjwvI6wNwxB+8hvo+qANv9A27lt9eb5+di+lBQhd8TPWt0mZ0
-         17JP1D1jVXTUDkE8UJ86vDpTCJgtUjxmzFJKp3Dkr19xdk2DVlp+iHzbzXYfHUxEat/y
-         e5Tw==
-X-Gm-Message-State: AC+VfDwld9YvdON6pbDuE32JIt+y91HEWlI9TprQdmMq3GyO91jrCFyq
-        xqJp0gRAJElJOCmcX7NNC1a4R5OP2P2bi7a38QLMVnVqaHhe6bUHrAUSQ2UjfrMW2mL56VS2DW1
-        kfOgj105QdBvRcIFWSQLJxlxDDy5SueLqimyKX+r/I2pE5eh6
-X-Received: by 2002:a05:622a:184:b0:3f6:83f0:c579 with SMTP id s4-20020a05622a018400b003f683f0c579mr836386qtw.28.1686716106904;
-        Tue, 13 Jun 2023 21:15:06 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7xg+bDM6k9roUSMbzRBljPnpX9s6mPbIvwhitEscS1427CcaN7Z+WGj3AaOh+RUYwuqzNPSUksif4pc576QuE=
-X-Received: by 2002:a05:622a:184:b0:3f6:83f0:c579 with SMTP id
- s4-20020a05622a018400b003f683f0c579mr836378qtw.28.1686716106730; Tue, 13 Jun
- 2023 21:15:06 -0700 (PDT)
+        Wed, 14 Jun 2023 00:20:29 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC2119B1;
+        Tue, 13 Jun 2023 21:20:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=D9e3x9i8rBKYm3toYXDRWUXq9796QOZEiqel4E9RDSQ=; b=ptry9IrRJnz/Kqmd1+0osrL1CQ
+        iSA86OAjUouPrH3MIaIdajDF8MeIKN16meKgjfkpQXUtlmG7+YfL6VwgPDRLPo2YUvfn4WZ4hGNI+
+        DzkxISScnE7H0Hm70ysbCXZkG6iQcxhJst84nH5UEwSVp4ZS/TyvG8/3/GnsTNa/Nu2+5EXlQruEz
+        GAMeK7rfui/COGK3C8/0lpbQYHJB79vqlU7aK02zJhMrzjKLaMKyWXXTnhRilEDJMxPfkuiWHaDVX
+        ED9HhmateLa2wPxWCmaSd08C2s/sflld2Y2YwrlC4Ss6MkQRCL/5T8TIGihDngwMXn5db+ottR/U6
+        aDuqAwpw==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q9HzO-009xON-2S;
+        Wed, 14 Jun 2023 04:20:10 +0000
+Message-ID: <57358041-0e36-deaa-e2ec-06dcfc92ba4d@infradead.org>
+Date:   Tue, 13 Jun 2023 21:20:09 -0700
 MIME-Version: 1.0
-References: <20230515183045.654199-1-leobras@redhat.com> <xhsmh1qiyp0m5.mognet@vschneid.remote.csb>
-In-Reply-To: <xhsmh1qiyp0m5.mognet@vschneid.remote.csb>
-From:   Leonardo Bras Soares Passos <leobras@redhat.com>
-Date:   Wed, 14 Jun 2023 01:14:55 -0300
-Message-ID: <CAJ6HWG7sXLiY76truiyKDwfNCEhy-ZqNAOn_oi0vccTm7At1Vw@mail.gmail.com>
-Subject: Re: [RFC PATCH v4 0/2] trace,smp: Add tracepoints for csd
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Nadav Amit <namit@vmware.com>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v18 4/5] mm/pagemap: add documentation of PAGEMAP_SCAN
+ IOCTL
+Content-Language: en-US
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
+        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+References: <20230613102905.2808371-1-usama.anjum@collabora.com>
+ <20230613102905.2808371-5-usama.anjum@collabora.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230613102905.2808371-5-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 7:36=E2=80=AFAM Valentin Schneider <vschneid@redhat=
-.com> wrote:
->
-> On 15/05/23 15:30, Leonardo Bras wrote:
-> > Changes since RFCv3:
-> > - Split the patch in 2: entry/exit and queue
-> > - Fix 'struct __call_single_data' & call_single_data_t alignment issue
-> > - Made all TP_printk follow the same pattern
-> >
->
-> One bikeshedding nit I have is I'd prefer to see the csd_* events in a cs=
-d
-> trace system, to have a sane nomenclature.
+Hi--
 
-Oh, here you mean the file name? (ie: trace/events/smp.h -> trace/events/cs=
-d.h)
+On 6/13/23 03:29, Muhammad Usama Anjum wrote:
+> Add some explanation and method to use write-protection and written-to
+> on memory range.
+> 
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+> Changes in v16:
+> - Update the documentation
+> 
+> Changes in v11:
+> - Add more documentation
+> ---
+>  Documentation/admin-guide/mm/pagemap.rst | 58 ++++++++++++++++++++++++
+>  1 file changed, 58 insertions(+)
+> 
+> diff --git a/Documentation/admin-guide/mm/pagemap.rst b/Documentation/admin-guide/mm/pagemap.rst
+> index c8f380271cad..3b977526d4b3 100644
+> --- a/Documentation/admin-guide/mm/pagemap.rst
+> +++ b/Documentation/admin-guide/mm/pagemap.rst
+> @@ -227,3 +227,61 @@ Before Linux 3.11 pagemap bits 55-60 were used for "page-shift" (which is
+>  always 12 at most architectures). Since Linux 3.11 their meaning changes
+>  after first clear of soft-dirty bits. Since Linux 4.2 they are used for
+>  flags unconditionally.
+> +
+> +Pagemap Scan IOCTL
+> +==================
+> +
+> +The ``PAGEMAP_SCAN`` IOCTL on the pagemap file can be used to get or optionally
+> +clear the info about page table entries. The following operations are supported
+> +in this IOCTL:
+> +- Get the information if the pages have been written-to (``PAGE_IS_WRITTEN``),
 
->
-> Other than that and the other comment on csd_do_func(), this LGTM.
->
+                                                written to
 
-Thanks!
-Other than the above question, it should be fast for me to send a v5.
+> +  file mapped (``PAGE_IS_FILE``), present (``PAGE_IS_PRESENT``) or swapped
+> +  (``PAGE_IS_SWAPPED``).
+> +- Find pages which have been written-to and/or write protect the pages atomically
 
-Best regards,
-Leo
+                                written to
+
+> +  (atomic ``PM_SCAN_OP_GET + PM_SCAN_OP_WP``)
+> +
+> +The ``struct pm_scan_arg`` is used as the argument of the IOCTL.
+> + 1. The size of the ``struct pm_scan_arg`` must be specified in the ``size``
+> +    field. This field will be helpful in recognizing the structure if extensions
+> +    are done later.
+> + 2. The flags can be specified in the ``flags`` field. The ``PM_SCAN_OP_GET``
+> +    and ``PM_SCAN_OP_WP`` are the only added flags at this time.
+> + 3. The range is specified through ``start`` and ``len``.
+> + 4. The output buffer of ``struct page_region`` array and size is specified in
+> +    ``vec`` and ``vec_len``.
+> + 5. The optional maximum requested pages are specified in the ``max_pages``.
+> + 6. The masks are specified in ``required_mask``, ``anyof_mask``,
+> +    ``excluded_ mask`` and ``return_mask``.
+> +    1.  To find if ``PAGE_IS_WRITTEN`` flag is set for pages which have
+> +        ``PAGE_IS_FILE`` set and ``PAGE_IS_SWAPPED`` un-set, ``required_mask``
+
+                                                        unset,
+
+> +        is set to ``PAGE_IS_FILE``, ``exclude_mask`` is set to
+> +        ``PAGE_IS_SWAPPED`` and ``return_mask`` is set to ``PAGE_IS_WRITTEN``.
+> +        The output buffer in ``vec`` and length must be specified in ``vec_len``.
+> +    2. To find pages which have either ``PAGE_IS_FILE`` or ``PAGE_IS_SWAPPED``
+> +       set, ``anyof_masks`` is set to  ``PAGE_IS_FILE | PAGE_IS_SWAPPED``.
+> +    3. To find written pages and engage write protect, ``PAGE_IS_WRITTEN`` is
+> +       specified in ``required_mask`` and ``return_mask``. In addition to
+> +       specifying the output buffer in ``vec`` and length in ``vec_len``, the
+> +       ``PM_SCAN_OP_WP`` is specified in ``flags`` to perform write protect
+> +       on the range as well.
+> +
+> +The ``PAGE_IS_WRITTEN`` flag can be considered as the better and correct
+> +alternative of soft-dirty flag. It doesn't get affected by household chores (VMA
+
+                                                              housekeeping ?
+
+> +merging) of the kernel and hence the user can find the true soft-dirty pages
+> +only. This IOCTL adds the atomic way to find which pages have been written and
+> +write protect those pages again. This kind of operation is needed to efficiently
+> +find out which pages have changed in the memory.
+> +
+> +To get information about which pages have been written-to or optionally write
+
+                                                  written to
+
+> +protect the pages, following must be performed first in order:
+> + 1. The userfaultfd file descriptor is created with ``userfaultfd`` syscall.
+> + 2. The ``UFFD_FEATURE_WP_UNPOPULATED`` and ``UFFD_FEATURE_WP_ASYNC`` features
+> +    are set by ``UFFDIO_API`` IOCTL.
+> + 3. The memory range is registered with ``UFFDIO_REGISTER_MODE_WP`` mode
+> +    through ``UFFDIO_REGISTER`` IOCTL.
+> + 4. Then the any part of the registered memory or the whole memory region must
+
+            "the" or "any". Probably "any". Not both.
+
+> +    be write protected using ``PAGEMAP_SCAN`` IOCTL with flag ``PM_SCAN_OP_WP``
+> +    or the ``UFFDIO_WRITEPROTECT`` IOCTL can be used. Both of these perform the
+> +    same operation. The former is better in terms of performance.
+> + 5. Now the ``PAGEMAP_SCAN`` IOCTL can be used to either just find pages which
+> +    have been written-to and/or optionally write protect the pages as well.
+
+                 written to
 
 
-> > Changes since RFCv2:
-> > - Fixed some spacing issues and trace calls
-> >
-> > Changes since RFCv1:
-> > - Implemented trace_csd_queue_cpu() as suggested by Valentin Schneider
-> > - Using EVENT_CLASS in order to avoid duplication
-> > - Introduced new helper: csd_do_func()
-> > - Name change from smp_call_function_* to csd_function_*
-> > - Rebased on top of torvalds/master
-> >
-> > Leonardo Bras (2):
-> >   trace,smp: Add tracepoints around remotelly called functions
-> >   trace,smp: Add tracepoints for scheduling remotelly called functions
-> >
-> >  include/trace/events/smp.h | 72 ++++++++++++++++++++++++++++++++++++++
-> >  kernel/smp.c               | 41 +++++++++++++---------
-> >  2 files changed, 96 insertions(+), 17 deletions(-)
-> >  create mode 100644 include/trace/events/smp.h
-> >
-> > --
-> > 2.40.1
->
-
+-- 
+~Randy
