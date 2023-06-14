@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21681730602
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 19:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C25927305FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 19:22:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237220AbjFNRXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 13:23:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48364 "EHLO
+        id S236448AbjFNRWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 13:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236814AbjFNRW7 (ORCPT
+        with ESMTP id S231969AbjFNRWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 13:22:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88ADB3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 10:22:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686763332;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HQz5NdE45oaAvzySylSACbH+ABZmOjstmJq8mz1VYQk=;
-        b=EZ11W9dqs9WVMMxmcmnBEGfO0Q5T0eH0SGWy9T1ldBeObLCBZfFn6jz3N0TfROYEDBeNZo
-        DN5dkEafh8/xdcun4VHNOdEc6mmjL00GoCkFR7+S2Xd4fsQDJ+qX7uHvn7231Q2+nzxiyN
-        o3jhLUw+myKpBzj4GDOZ0yMocDN84f4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-445-za5E70CiPiqH928GIvIN5g-1; Wed, 14 Jun 2023 13:22:08 -0400
-X-MC-Unique: za5E70CiPiqH928GIvIN5g-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 14 Jun 2023 13:22:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E011B3;
+        Wed, 14 Jun 2023 10:22:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7B60F185A78B;
-        Wed, 14 Jun 2023 17:22:04 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C25E0492CA6;
-        Wed, 14 Jun 2023 17:22:02 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <000000000000a61ffe05fe0c3d08@google.com>
-References: <000000000000a61ffe05fe0c3d08@google.com>
-To:     syzbot <syzbot+dd1339599f1840e4cc65@syzkaller.appspotmail.com>
-Cc:     dhowells@redhat.com, bpf@vger.kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [net?] WARNING in unreserve_psock
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C761C64517;
+        Wed, 14 Jun 2023 17:22:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5445C433C8;
+        Wed, 14 Jun 2023 17:22:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686763328;
+        bh=w5/LJ9VL/tOf3UMtuc4O4E9fW27si5j7tY7DpTj4pss=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CxR8M3oxJ/8tD5K4WiBXG9FURLGXMbDB+KLaO4hVqKynleUbR2BRf6KBkeaADyGz9
+         1lbBHibfKX9JBkMZEjk1Pogn6Kj8fnfsfDkp2ykJxWpLc0aZblP0DSJYP3zDyDNO1F
+         FGUw+56BiggUXhFxKiyA5RfA4ZrzZOMLM+gCmrSgl9VB6hdntTuE7YGpSd0rGdcoZ1
+         Qdl/Y0WXIHOFiVWxTwMXypMcsV+77ogcE8w+HreNHPVx5Bddq89B7q6V68bn/kiNbS
+         gsRwg54n7A8fNuHGDLyySHM5P3qiloRKc+z9uWrsrT85gW3qUfvtlACqDnr1eU0dBK
+         a0ezyBCLOWW1Q==
+Date:   Wed, 14 Jun 2023 10:22:05 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Sergei Shtepa <sergei.shtepa@veeam.com>
+Cc:     "axboe@kernel.dk" <axboe@kernel.dk>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "snitzer@kernel.org" <snitzer@kernel.org>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "dchinner@redhat.com" <dchinner@redhat.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "dlemoal@kernel.org" <dlemoal@kernel.org>,
+        "linux@weissschuh.net" <linux@weissschuh.net>,
+        "jack@suse.cz" <jack@suse.cz>,
+        "ming.lei@redhat.com" <ming.lei@redhat.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
+Subject: Re: [PATCH v5 00/11] blksnap - block devices snapshots module
+Message-ID: <20230614172205.GB1146@sol.localdomain>
+References: <20230612135228.10702-1-sergei.shtepa@veeam.com>
+ <20230612161911.GA1200@sol.localdomain>
+ <20a5802d-424d-588a-c497-1d1236c52880@veeam.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1665042.1686763322.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 14 Jun 2023 18:22:02 +0100
-Message-ID: <1665043.1686763322@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20a5802d-424d-588a-c497-1d1236c52880@veeam.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,63 +71,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.g=
-it main
+On Tue, Jun 13, 2023 at 12:12:19PM +0200, Sergei Shtepa wrote:
+> On 6/12/23 18:19, Eric Biggers wrote:
+> > This is the first time you've received an email from this sender 
+> > ebiggers@kernel.org, please exercise caution when clicking on links or opening 
+> > attachments.
+> > 
+> > 
+> > On Mon, Jun 12, 2023 at 03:52:17PM +0200, Sergei Shtepa wrote:
+> >  > Hi all.
+> >  >
+> >  > I am happy to offer a improved version of the Block Devices Snapshots
+> >  > Module. It allows to create non-persistent snapshots of any block devices.
+> >  > The main purpose of such snapshots is to provide backups of block devices.
+> >  > See more in Documentation/block/blksnap.rst.
+> > 
+> > How does blksnap interact with blk-crypto?
+> > 
+> > I.e., what happens if a bio with a ->bi_crypt_context set is submitted to a
+> > block device that has blksnap active?
+> > 
+> > If you are unfamiliar with blk-crypto, please read
+> > Documentation/block/inline-encryption.rst
+> 
+> Thank you, this is an important point. Yes, that's right.
+> The current version of blksnap can cause blk-crypto to malfunction while
+> holding a snapshot. When handling bios from the file system, the
+> ->bi_crypt_context is preserved. But the bio requests serving the snapshot
+> are executed without context. I think that the snapshot will be unreadable.
 
-    kcm: Fix unnecessary psock unreservation.
-    =
+Well not only would the resulting snapshot be unreadable, but plaintext data
+would be written to disk, contrary to the intent of the submitter of the bios.
+That would be a security vulnerability.
 
-    kcm_write_msgs() calls unreserve_psock() to release its hold on the
-    underlying TCP socket if it has run out of things to transmit, but if =
-we
-    have nothing in the write queue on entry (e.g. because someone did a
-    zero-length sendmsg), we don't actually go into the transmission loop =
-and
-    as a consequence don't call reserve_psock().
-    =
+If the initial version of blksnap isn't going to be compatible with blk-crypto,
+that is tolerable for now, but there needs to be an explicit check to cause an
+error to be returned if the two features are combined, before anything is
+written to disk.
 
-    Fix this by skipping the call to unreserve_psock() if we didn't reserv=
-e a
-    psock.
-    =
-
-    Fixes: c31a25e1db48 ("kcm: Send multiple frags in one sendmsg()")
-    Reported-by: syzbot+dd1339599f1840e4cc65@syzkaller.appspotmail.com
-    Link: https://lore.kernel.org/r/000000000000a61ffe05fe0c3d08@google.co=
-m/
-    Signed-off-by: David Howells <dhowells@redhat.com>
-    cc: Tom Herbert <tom@herbertland.com>
-    cc: Tom Herbert <tom@quantonium.net>
-    cc: "David S. Miller" <davem@davemloft.net>
-    cc: Eric Dumazet <edumazet@google.com>
-    cc: Jakub Kicinski <kuba@kernel.org>
-    cc: Paolo Abeni <pabeni@redhat.com>
-    cc: Jens Axboe <axboe@kernel.dk>
-    cc: Matthew Wilcox <willy@infradead.org>
-    cc: netdev@vger.kernel.org
-
-diff --git a/net/kcm/kcmsock.c b/net/kcm/kcmsock.c
-index d75d775e9462..d0537c1c8cd7 100644
---- a/net/kcm/kcmsock.c
-+++ b/net/kcm/kcmsock.c
-@@ -661,6 +661,7 @@ static int kcm_write_msgs(struct kcm_sock *kcm)
- 				kcm_abort_tx_psock(psock, ret ? -ret : EPIPE,
- 						   true);
- 				unreserve_psock(kcm);
-+				psock =3D NULL;
- =
-
- 				txm->started_tx =3D false;
- 				kcm_report_tx_retry(kcm);
-@@ -696,7 +697,8 @@ static int kcm_write_msgs(struct kcm_sock *kcm)
- 	if (!head) {
- 		/* Done with all queued messages. */
- 		WARN_ON(!skb_queue_empty(&sk->sk_write_queue));
--		unreserve_psock(kcm);
-+		if (psock)
-+			unreserve_psock(kcm);
- 	}
- =
-
- 	/* Check if write space is available */
-
+- Eric
