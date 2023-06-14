@@ -2,150 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6537B7307F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:18:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 519D07307FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233196AbjFNTSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 15:18:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45830 "EHLO
+        id S231723AbjFNTTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 15:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbjFNTSN (ORCPT
+        with ESMTP id S229703AbjFNTSu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 15:18:13 -0400
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4DF2682;
-        Wed, 14 Jun 2023 12:18:12 -0700 (PDT)
-Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-777a78739ccso387408039f.3;
-        Wed, 14 Jun 2023 12:18:12 -0700 (PDT)
+        Wed, 14 Jun 2023 15:18:50 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D541BFD
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 12:18:49 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-652e21cc2c4so4225794b3a.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 12:18:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686770329; x=1689362329;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wPKanxiBz67MTOGZ6C1wWD1MIN8AmxZs6PIsNaJPo/k=;
+        b=2b35H2EI2Uhr3oCVSA3dfT76JSHV79e/rRpmzBVn/NveTxgY+oQ4Z3cHntI5SMdIr+
+         H+0W3RoWD/hOHvZI6pwMDswguSTQZj9PdgfpEoY7McRYIXmG00VVYvHg2dRDA7FA1NSn
+         YonbFXUt3+Bzz6ghemncbH3Xk3PbgdMLqozOIjxaoNPcUB0IRKEVK82LgYTIW+nO/4Zj
+         D7YXN8bHLXoBKpamshrVaBYffhGY7JaOOxVuqCCkNjeQ6WhgabHlVmyeV129UISR/1Jt
+         Z6wc3AUEzSpMifiPQnLlyTxIJbeCdeK7miJ6dv0WFaeEHBiadnFKjaLoFbf0VjVVOMmw
+         4jtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686770292; x=1689362292;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YBpMMsjcbe1wo6wOZhJlr/oSYFVntydqWqDrNGep1l0=;
-        b=BqhS7xA7T6RbrmqgQMKjBoqmWZ1RQwQxUcJ1HwbrBIQpo7J1Ech+GIvw3+nrmKux5x
-         b2sWZ0FLaTadYyaKIC/J74/XRpuABvGw09cQ5gCzKp1P132FBzjblYON6ZBSa9l4rQNn
-         qCHRO3oe3fjXsYxs7yI6Jtwh7ZxkTsjrbCstJybrhFYYHMNOlinL9VN+iRWJ8kq6HLZ1
-         /Qa3DAhtPWA0pDV7E0LE5Zy6Sy7LcN3oC1U9rCUJwn+Pot7LiF18d4v/RsJ4cODUznkv
-         3g3ZzIHgGA5MuboJ/DhHQRrniU01/bcVmdO9hf5AUcoCwgDc17ccvtzOFr5oA82o8Qu8
-         8w1g==
-X-Gm-Message-State: AC+VfDzlPpeV70SVe2a8G2hR976hUdWxw3Mx7as+UNOaFLR25cHIPJv0
-        Bgw1mSnTZ0GQAExvwttTFQ==
-X-Google-Smtp-Source: ACHHUZ5c57N/o0GzC8aXwuQsvNktRZIXbCA+u83AThjFLnR3buYrBFGMs/uzsSp0OtJJ2l8Rq3rG3w==
-X-Received: by 2002:a05:6602:299a:b0:776:cfd8:b44a with SMTP id o26-20020a056602299a00b00776cfd8b44amr16111912ior.8.1686770291867;
-        Wed, 14 Jun 2023 12:18:11 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id b8-20020a02c988000000b0041f5ff08660sm5160476jap.141.2023.06.14.12.18.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 12:18:11 -0700 (PDT)
-Received: (nullmailer pid 2587113 invoked by uid 1000);
-        Wed, 14 Jun 2023 19:18:08 -0000
-Date:   Wed, 14 Jun 2023 13:18:08 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Abel Vesa <abelvesa@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>, kernel@pengutronix.de,
-        Peng Fan <peng.fan@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        Mark Brown <broonie@kernel.org>,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Anson Huang <Anson.Huang@nxp.com>, Marek Vasut <marex@denx.de>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-mmc@vger.kernel.org
-Subject: Re: [PATCH v1 6/7] dt-bindings: clock: imx6q: Allow single optional
- clock and add enet_ref_pad
-Message-ID: <20230614191808.GA2581397-robh@kernel.org>
-References: <20230601101451.357662-1-o.rempel@pengutronix.de>
- <20230601101451.357662-7-o.rempel@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230601101451.357662-7-o.rempel@pengutronix.de>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1686770329; x=1689362329;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wPKanxiBz67MTOGZ6C1wWD1MIN8AmxZs6PIsNaJPo/k=;
+        b=SX+dcAGmEm6olRJrqz8AWiaYkRcbzwiFEyr0ECOaG1WBrZjdmAb9hohgCO9AgEEyox
+         PoB9G3iFQ4BSMIV5gNADo1CFsj42IDo+S/vpNDmZsBKB3bDpINl5BZcFMUyCWoFbEj+O
+         Ka9vjio4mL4+rGrHpyJDon8TOdtdgBtwHyTBvucrc0OyVn6BfRhkEpS10MUzXYt+Vat4
+         7kqyIEBIz8eCyadBrSeE1k1OpaB2PglpY8dZik/Z1bcmi6DxiL3B6uD+20YzNamy5YlA
+         4kFgABvyyad1oomxJ5NlS+ERMZzYSol/CWW/a4UvFjWNxfc1GIsGbYpsB55pc7HPJKOO
+         hz+w==
+X-Gm-Message-State: AC+VfDxV8dABiGyZA45qX19msCa7NW6vVg5v42N9FzUWjOJVGU1T+1Rd
+        nXn5CL3X8kkMBCj+vuvZW8QNWv45Iow=
+X-Google-Smtp-Source: ACHHUZ7a0S3m57gSNG6MEVz2ngzegpGCQysuvTAMrpYS0GNy9uEmx3S5R4tyubdf4e8mNn+n8ZHyIaClQ8c=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:1a0b:b0:651:cea6:f786 with SMTP id
+ g11-20020a056a001a0b00b00651cea6f786mr878790pfv.6.1686770329209; Wed, 14 Jun
+ 2023 12:18:49 -0700 (PDT)
+Date:   Wed, 14 Jun 2023 12:18:46 -0700
+In-Reply-To: <a2510fb15553a294236646321cf1b3a4@208suo.com>
+Mime-Version: 1.0
+References: <20230614032736.13264-1-luojianhong@cdjrlc.com> <a2510fb15553a294236646321cf1b3a4@208suo.com>
+Message-ID: <ZIoSlrXifl/ikSBC@google.com>
+Subject: Re: Fwd: [PATCH] KVM: x86: remove unneeded variable
+From:   Sean Christopherson <seanjc@google.com>
+To:     baomingtong001@208suo.com
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 12:14:50PM +0200, Oleksij Rempel wrote:
-> All clocks for this driver are optional, so this change allows the
++Dave, -Ave
 
-It's not about what the driver supports, but the h/w. You are saying 
-this SoC can operate with only 1 of any of the clock inputs?
+scripts/get_maintainers.pl is your friend.  It avoids typos (well, if you wrap
+it with scripts instead of copy+pasting), and makes sures patches get routed to
+the right folks (KVM x86 patches are routed through the KVM tree, not the tip tree).
 
-> 'clocks' and 'clock-names' properties to accept a single clock.
-> Additionally, 'enet_ref_pad' clock is added. This resolves the following
-> dtbs_check warning:
->   imx6dl-alti6p.dtb: clock-controller@20c4000: clocks: [[24]] is too short
->   From schema: Documentation/devicetree/bindings/clock/imx6q-clock.yaml
+On Wed, Jun 14, 2023, baomingtong001@208suo.com wrote:
+> fix the following coccicheck warning:
 > 
->   imx6dl-alti6p.dtb: clock-controller@20c4000: clock-names:0: 'osc' was
->     expected
->   From schema: Documentation/devicetree/bindings/clock/imx6q-clock.yaml
+> arch/x86/kvm/emulate.c:1315:5-7: Unneeded variable: "rc".Return
+> "X86EMUL_CONTINUE".
+> arch/x86/kvm/emulate.c:4559:5-7: Unneeded variable: "rc".Return
+> "X86EMUL_CONTINUE".
+> arch/x86/kvm/emulate.c:1180:5-7: Unneeded variable: "rc".Return
+> "X86EMUL_CONTINUE".
 > 
->   imx6dl-alti6p.dtb: clock-controller@20c4000: clock-names:
->     ['enet_ref_pad'] is too short
->   From schema: Documentation/devicetree/bindings/clock/imx6q-clock.yaml
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> Signed-off-by: Mingtong Bao <baomingtong001@208suo.com>
 > ---
->  .../devicetree/bindings/clock/imx6q-clock.yaml    | 15 +++++++++------
->  1 file changed, 9 insertions(+), 6 deletions(-)
+>  arch/x86/kvm/emulate.c | 15 ++++++---------
+>  1 file changed, 6 insertions(+), 9 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/clock/imx6q-clock.yaml b/Documentation/devicetree/bindings/clock/imx6q-clock.yaml
-> index bae4fcb3aacc..ed65d19c2e0e 100644
-> --- a/Documentation/devicetree/bindings/clock/imx6q-clock.yaml
-> +++ b/Documentation/devicetree/bindings/clock/imx6q-clock.yaml
-> @@ -28,20 +28,23 @@ properties:
->      const: 1
->  
->    clocks:
-> +    minItems: 1
->      items:
->        - description: 24m osc
->        - description: 32k osc
->        - description: ckih1 clock input
->        - description: anaclk1 clock input
->        - description: anaclk2 clock input
-> +      - description: enet_ref_pad
->  
->    clock-names:
-> -    items:
-> -      - const: osc
-> -      - const: ckil
-> -      - const: ckih1
-> -      - const: anaclk1
-> -      - const: anaclk2
-> +    enum:
-> +      - osc
-> +      - ckil
-> +      - ckih1
-> +      - anaclk1
-> +      - anaclk2
-> +      - enet_ref_pad
->  
->    fsl,pmic-stby-poweroff:
->      $ref: /schemas/types.yaml#/definitions/flag
-> -- 
-> 2.39.2
+> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+> index 936a397a08cd..7a7e29e4e203 100644
+> --- a/arch/x86/kvm/emulate.c
+> +++ b/arch/x86/kvm/emulate.c
+> @@ -1177,7 +1177,6 @@ static int decode_modrm(struct x86_emulate_ctxt *ctxt,
+>  {
+>      u8 sib;
+>      int index_reg, base_reg, scale;
+> -    int rc = X86EMUL_CONTINUE;
+>      ulong modrm_ea = 0;
 > 
+>      ctxt->modrm_reg = ((ctxt->rex_prefix << 1) & 8); /* REX.R */
+> @@ -1199,16 +1198,16 @@ static int decode_modrm(struct x86_emulate_ctxt
+> *ctxt,
+
+Please resend, unless mine eyes deceive, this is whitespace damaged.
