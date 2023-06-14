@@ -2,63 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E26047308D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:54:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1382F7308CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234666AbjFNTym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 15:54:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40138 "EHLO
+        id S235998AbjFNTvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 15:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234621AbjFNTyP (ORCPT
+        with ESMTP id S229944AbjFNTve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 15:54:15 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09FCC10A;
-        Wed, 14 Jun 2023 12:54:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686772454; x=1718308454;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=o3obp4i2jUIjt8vzR2TGZg5v1YKLTj/rBX9LHefdqSg=;
-  b=bAAuQ/qjwD0pbsh/Wm9NO7SAZpI07Q5sUVaKamXMWGe7IF4H9za2AHzQ
-   1WQyt9LyWWJ15JzY6r7/OPv17BzcS6GWXBfGxe0WzzRpenK7p6xbvfOnC
-   LY2SYCHrrmP96pNQugsrwfPoRK+vK6UB5+HDSHdrJTC9j2HfdXSGUeYFV
-   9Afs9SlaOTABQ7wPiOn8ICSMpKiLkAqdBt0ezPD9tUhiaQYXPbFuygbcX
-   f/+MGcuSi3QmodTmYYEpadet8LqWQsvJiT78BDCbf1fPSVqzN7B67tK/J
-   VO/5TJSlc19z5nTdc6/JRHAgLiwKk8LcoDd0UhnVY7OOZD8Xqe/gKijlN
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="339070183"
-X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="339070183"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 12:54:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="706355766"
-X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="706355766"
-Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 14 Jun 2023 12:53:59 -0700
-Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q9WYh-000123-2X;
-        Wed, 14 Jun 2023 19:53:44 +0000
-Date:   Thu, 15 Jun 2023 03:51:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     JuenKit Yip <JuenKit_Yip@hotmail.com>, linux@roeck-us.net,
-        jdelvare@suse.com
-Cc:     oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, JuenKit Yip <JuenKit_Yip@hotmail.com>
-Subject: Re: [PATCH 2/3] hwmon: (sht3x) add medium repeatability support
-Message-ID: <202306150333.vy0slw1N-lkp@intel.com>
-References: <DB4PR10MB62615481D91BA8A598234A18925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+        Wed, 14 Jun 2023 15:51:34 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA2E1B2;
+        Wed, 14 Jun 2023 12:51:33 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-54fd171cedcso593303a12.3;
+        Wed, 14 Jun 2023 12:51:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686772293; x=1689364293;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Md9lJKmlQJvh1OZaUzX4DgJIrqm76TL4au4CTghcG/E=;
+        b=V9thkchiKXb6KvcRpmH/5tE9tuUGZmrVmTfS7pyVleoqsTeSmhRR9IvR8QY1biyoPp
+         U6YrtENufunf28NM775x4KZRl6ucdZDoAnzir4SoqIPQ5Nmo9EBxgxoeAJ+1R/NK0v+a
+         vOwGkkeHoPP6liCkXMt23SYxJTvokHgy0wrZjYChsit6Q019r0jGZl/BCgg7vVgcP6lQ
+         JqqyFDqfGs0ITwi5atzwRNShjy4YoybKD/k3w//ENXiFJENvXT+oBUq5QrX497nejLyD
+         QksrO3itaCMlV6msn2LA6oCa7xLMYc8Rxx0gkyR+OV0SJIBO2shoPD4wcAgva43SLzjs
+         bYSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686772293; x=1689364293;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Md9lJKmlQJvh1OZaUzX4DgJIrqm76TL4au4CTghcG/E=;
+        b=gKVSo6a86cgMG8XZyajvVNUF6mRzNneHhL/iOS/Y3g+fydrqxuq7pDmwWTUz+TZPYY
+         2jD1FDHLpUdPIlkIHDkx/Srw/NrBnjlKtp+6SpnOudnfxG0ebWIyZn4IsSU5xw4gBNkY
+         fD/NzSv6/sl8ozbJPa4H5jTRswjMy8kFyk4YqKzx1Mrlw7I0KpfBIo4nzriA0R4Bjv1h
+         P97Fmws2UgpASyn92uk1/0lF+zB/9zIYWo24g6xm1jtzQYsLJmV4s4EQFtsXSAu1euO3
+         2HW2cC4JZ6eh/LDTjixFs/8ft4qBpVvoP1vOC3hk3RvJX7j+sfGzQQk0Ed9rdoMltnq/
+         CQnw==
+X-Gm-Message-State: AC+VfDy2HkDNerwitGGaVVf4tWqWNNlXKpiqHjJPQcw5W9t9ylRVfyj4
+        0Z7+dRst0qhpgc0Y9u3XYWMdbFqnezuLhyGEe2g=
+X-Google-Smtp-Source: ACHHUZ4VBmluG6ODSEiZ+YZ6cKjQzEkNwgG2Jx/k+1Wq+rcowseSsrI8mlOimnJNxswGpbk4W/FFajCTW8uIUS7z47c=
+X-Received: by 2002:a17:90b:4b8f:b0:256:2fd4:e238 with SMTP id
+ lr15-20020a17090b4b8f00b002562fd4e238mr2401011pjb.38.1686772292745; Wed, 14
+ Jun 2023 12:51:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DB4PR10MB62615481D91BA8A598234A18925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230524083153.2046084-1-s.hauer@pengutronix.de>
+ <20230614134034.3p3p75a3jophi2eu@mercury.elektranox.org> <20230614152721.eep5ip726ump2kpe@mercury.elektranox.org>
+In-Reply-To: <20230614152721.eep5ip726ump2kpe@mercury.elektranox.org>
+From:   Vincent Legoll <vincent.legoll@gmail.com>
+Date:   Wed, 14 Jun 2023 19:51:21 +0000
+Message-ID: <CAEwRq=qufx6Y6JCD3pzA31y7mfXUxFeMLtwthE_N7rYY7k9+-A@mail.gmail.com>
+Subject: Re: [PATCH v5 00/25] Add perf support to the rockchip-dfi driver
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,58 +81,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi JuenKit,
+Hi,
 
-kernel test robot noticed the following build warnings:
+On Wed, Jun 14, 2023 at 3:27=E2=80=AFPM Sebastian Reichel
+<sebastian.reichel@collabora.com> wrote:
+> On Wed, Jun 14, 2023 at 03:40:34PM +0200, Sebastian Reichel wrote:
+> > I tested the series on RK3588 EVB1. The read/write byts looks
+> > sensible. Sometimes cycles reads unrealistic values, though:
+> >
+> > 18446744070475110400      rockchip_ddr/cycles/
+>
+> I have seen this going off a few times with and without memory
+> pressure. If it's way off, it always seems to follow the same
+> pattern: The upper 32 bits are 0xffffffff instead of 0x00000000
+> with the lower 32 bits containing sensible data.
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.4-rc6 next-20230614]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+How often is that happening ?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/JuenKit-Yip/hwmon-sht3x-add-medium-repeatability-support/20230614-143100
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/DB4PR10MB62615481D91BA8A598234A18925AA%40DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
-patch subject: [PATCH 2/3] hwmon: (sht3x) add medium repeatability support
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230615/202306150333.vy0slw1N-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build):
-        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
-        git fetch groeck-staging hwmon-next
-        git checkout groeck-staging/hwmon-next
-        b4 shazam https://lore.kernel.org/r/DB4PR10MB62615481D91BA8A598234A18925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hwmon/
+I have been running this in a loop with varying sleep duration for
+the last few hours without hitting it, with and without memtester.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306150333.vy0slw1N-lkp@intel.com/
+REPEATS=3D1000
+MAX_DURATION=3D100
 
-All warnings (new ones prefixed by >>):
+OUT=3D"/tmp/perf-dfi-rk3588-${REPEATS}x${MAX_DURATION}s.txt"
+echo -n > $OUT
 
-   drivers/hwmon/sht3x.c:33:28: warning: 'sht3x_cmd_measure_blocking_lpm' defined but not used [-Wunused-const-variable=]
-      33 | static const unsigned char sht3x_cmd_measure_blocking_lpm[]    = { 0x2c, 0x10 };
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/hwmon/sht3x.c:29:28: warning: 'sht3x_cmd_measure_blocking_mpm' defined but not used [-Wunused-const-variable=]
-      29 | static const unsigned char sht3x_cmd_measure_blocking_mpm[]    = { 0x2c, 0x0d };
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hwmon/sht3x.c:25:28: warning: 'sht3x_cmd_measure_blocking_hpm' defined but not used [-Wunused-const-variable=]
-      25 | static const unsigned char sht3x_cmd_measure_blocking_hpm[]    = { 0x2c, 0x06 };
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+for i in $(seq $REPEATS) ; do
+  DURATION=3D$(shuf -i "0-${MAX_DURATION}" -n 1)
+  echo -n "${DURATION} : " >> $OUT
+  perf stat -a -e rockchip_ddr/cycles/ sleep $DURATION 2>&1 | awk
+'/rockchip_ddr/ {printf("%X\n", int($1))}' >> $OUT
+done
 
+BTW, it's on a musl-libc arm64 void linux userspace.
 
-vim +/sht3x_cmd_measure_blocking_mpm +29 drivers/hwmon/sht3x.c
-
-    27	
-    28	/* commands (medium repeatability mode) */
-  > 29	static const unsigned char sht3x_cmd_measure_blocking_mpm[]    = { 0x2c, 0x0d };
-    30	static const unsigned char sht3x_cmd_measure_nonblocking_mpm[] = { 0x24, 0x0b };
-    31	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+Vincent Legoll
