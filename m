@@ -2,250 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B9CF72FF62
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 15:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77CEE72FF6A
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 15:04:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244807AbjFNNDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 09:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56118 "EHLO
+        id S244813AbjFNNET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 09:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244078AbjFNNDF (ORCPT
+        with ESMTP id S235964AbjFNNES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 09:03:05 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C44199C;
-        Wed, 14 Jun 2023 06:03:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686747784; x=1718283784;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=WDPEbxVFdzvoZ3lt67W/3QT8Nr5+/zJbjhuLHHdJoRo=;
-  b=Jmk8aRSzCkp1o/6x5bWqUU7ad8rft0d+LuO+kuwHvnKm4VtL9e8CdIMU
-   HcY7icrFK6woaLqnMH7Pgm3O1DVap7M8B+hs1ZCh7Ffuja7yUgx/yeDeh
-   nv1Xt2KcC4hu5tCBF5hNue6VC06s68C2CPfYRo8XAvOvuyxnEcnfiGWFV
-   o9jy65h0oST3F8deSSBxpIUf98ahVDVJesABJnfjVl9P3mPcZQZDbveXk
-   0t35vZC87/ahPZONOH9xRup4UVwm64IoJii+5OltI/BN06Q+ohoylAXQs
-   voM54L7HxNZzsx5SXkDBGox9MXDQALl+vQ68J4rD0caU3xUL1ODLlFjM7
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="343300799"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="343300799"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 06:03:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="856496471"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="856496471"
-Received: from ijarvine-mobl2.ger.corp.intel.com ([10.252.34.126])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 06:02:56 -0700
-Date:   Wed, 14 Jun 2023 16:02:43 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     "Shaopeng Tan (Fujitsu)" <tan.shaopeng@fujitsu.com>
-cc:     "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 21/24] selftests/resctrl: Read in less obvious order
- to defeat prefetch optimizations
-In-Reply-To: <TYAPR01MB6330025B5E6537F94DA49ACB8B499@TYAPR01MB6330.jpnprd01.prod.outlook.com>
-Message-ID: <b7dfc9b-74da-5fe2-9060-fd36eb636c6@linux.intel.com>
-References: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com> <20230418114506.46788-22-ilpo.jarvinen@linux.intel.com> <OSZPR01MB6328F2713E40CC7D383035A48B489@OSZPR01MB6328.jpnprd01.prod.outlook.com> <c21fb16d-d3ad-bbcb-daed-28f153b64525@linux.intel.com>
- <TYAPR01MB6330025B5E6537F94DA49ACB8B499@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+        Wed, 14 Jun 2023 09:04:18 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6786A1BC3;
+        Wed, 14 Jun 2023 06:04:17 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-66577752f05so2657962b3a.0;
+        Wed, 14 Jun 2023 06:04:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686747857; x=1689339857;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=8Sw1gB+vCV+Osid5cBqyQVazdg28STr+FplDdL8t5QI=;
+        b=efChFDGVrkrkAf8nrrUyDUFwfpKZVgwX4p7wfS2WFgAEee/AA1ZgbWvvxXVZQvMq+y
+         koHDVZ+Y2ZPakxbS8v2RoBE44fcYCO+IW1y1y5C4Ph7iwyIQzp7oRa/Xhu7f8Pg96pua
+         azQkK75cKB/lQB1I+ExajBBlsopLPPRyXLMGVRqwzDg65yECUwRnZgF68K70uAGi+l5a
+         ZoFsZtB6P8iuIkRtHrY6xdLH1Ehwp9Y5wVbu5gY/vAgmN4NwJ1IyQiovZ6muSUbVCggK
+         Zr12bGFMafMF0lj/91KueJocOPtqnu7uoUB17YZb1HO+Y1abnxy/HQxeQukd6l+f+DyB
+         lm9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686747857; x=1689339857;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8Sw1gB+vCV+Osid5cBqyQVazdg28STr+FplDdL8t5QI=;
+        b=OhCvZohWtKm/u0mIihtV4mwmvfmkFIPRyJZ7AP3VpVP2syXtMpoLPDtUugBdIB6Ds6
+         i4uM2P0sH4r/0o1ughdUYfPLMBzBDEdYSAo572xo+RP/GSaAHR2w4Msc73KQrRvKkBjY
+         P7+23pVJBdbMCVkT7CnNU4wFCR44jEe7srEQgHOKc/ikUOQc5U9z6Cps7dFd/Hw99kpN
+         9aENIa6ImV2ZtBFMqK/ZvwssAkdKCqBXryqp2MC6pvxoDzMAl6Yl8CFMRtar57nV8wmw
+         u/afw6bdxx/7a7prPxdj3zb8eVCReXXz1wp1lduMdUzaqMoNw6jwvyWVdGickOtM0AdB
+         HDcw==
+X-Gm-Message-State: AC+VfDwWQ68T6XAcgZVdeeBaQ4YxsajouujplvxITjasN6y24vfPEXkh
+        gAmTiDqJBaNgpjMNK3SZK0AMP8+bDuw=
+X-Google-Smtp-Source: ACHHUZ4T9N2RvYxZvTlMDI4bVpDD81pW5pNqQGYji3xmazcmDcuqMFG00xknptCDkzeAkUV+6wHNPw==
+X-Received: by 2002:a05:6a21:789a:b0:114:c11c:7ad5 with SMTP id bf26-20020a056a21789a00b00114c11c7ad5mr2157252pzc.52.1686747856126;
+        Wed, 14 Jun 2023 06:04:16 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x2-20020a056a00270200b005d22639b577sm2128723pfv.165.2023.06.14.06.04.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 06:04:15 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <7594a5cd-9ef1-4093-20e3-b824cb91194d@roeck-us.net>
+Date:   Wed, 14 Jun 2023 06:04:14 -0700
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-376779887-1686747778=:3473"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 3/3] hwmon: (sht3x)add new non-stardard sysfs interface
+Content-Language: en-US
+To:     JuenKit Yip <JuenKit_Yip@hotmail.com>, jdelvare@suse.com
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <DB4PR10MB6261C3FAA8B183F94B007163925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <DB4PR10MB6261C3FAA8B183F94B007163925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-376779887-1686747778=:3473
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-
-On Thu, 1 Jun 2023, Shaopeng Tan (Fujitsu) wrote:
-> > > > When reading memory in order, HW prefetching optimizations will
-> > > > interfere with measuring how caches and memory are being accessed.
-> > > > This adds noise into the results.
-> > > >
-> > > > Change the fill_buf reading loop to not use an obvious in-order
-> > > > access using multiply by a prime and modulo.
-> > > >
-> > > > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > > > ---
-> > > >  tools/testing/selftests/resctrl/fill_buf.c | 17 ++++++++++-------
-> > > >  1 file changed, 10 insertions(+), 7 deletions(-)
-> > > >
-> > > > diff --git a/tools/testing/selftests/resctrl/fill_buf.c
-> > > > b/tools/testing/selftests/resctrl/fill_buf.c
-> > > > index 7e0d3a1ea555..049a520498a9 100644
-> > > > --- a/tools/testing/selftests/resctrl/fill_buf.c
-> > > > +++ b/tools/testing/selftests/resctrl/fill_buf.c
-> > > > @@ -88,14 +88,17 @@ static void *malloc_and_init_memory(size_t s)
-> > > >
-> > > >  static int fill_one_span_read(unsigned char *start_ptr, unsigned
-> > > > char
-> > > > *end_ptr)  {
-> > > > -	unsigned char sum, *p;
-> > > > -
-> > > > +	unsigned int size = (end_ptr - start_ptr) / (CL_SIZE / 2);
-> > > > +	unsigned int count = size;
-> > > > +	unsigned char sum;
-> > > > +
-> > > > +	/*
-> > > > +	 * Read the buffer in an order that is unexpected by HW prefetching
-> > > > +	 * optimizations to prevent them interfering with the caching pattern.
-> > > > +	 */
-> > > >  	sum = 0;
-> > > > -	p = start_ptr;
-> > > > -	while (p < end_ptr) {
-> > > > -		sum += *p;
-> > > > -		p += (CL_SIZE / 2);
-> > > > -	}
-> > > > +	while (count--)
-> > > > +		sum += start_ptr[((count * 59) % size) * CL_SIZE / 2];
-> > >
-> > > Could you please elaborate why 59 is used?
-> > 
-> > The main reason is that it's a prime number ensuring the whole buffer gets read.
-> > I picked something that doesn't make it to wrap on almost every iteration.
+On 6/13/23 23:28, JuenKit Yip wrote:
+> add "repeatability" interface to sysfs, it could be
+> read or written to control the sensor.
 > 
-> Thanks for your explanation. It seems there is no problem.
+> Signed-off-by: JuenKit Yip <JuenKit_Yip@hotmail.com>
+> ---
+>   Documentation/hwmon/sht3x.rst |  7 +++++++
+>   drivers/hwmon/sht3x.c         | 29 +++++++++++++++++++++++++++++
+>   2 files changed, 36 insertions(+)
 > 
-> Perhaps you have already tested this patch in your environment and got a test result of "ok". 
-> Because HW prefetching does not work well,
-> the IMC counter fluctuates a lot in my environment,
-> and the test result is "not ok". 
-> 
-> In order to ensure this test set runs in any environments and gets "ok",
-> would you consider changing the value of MAX_DIFF_PERCENT of each test?
-> or changing something else?
-> 
-> ```
-> Environment:
->  Kernel: 6.4.0-rc2
->  CPU: Intel(R) Xeon(R) Gold 6254 CPU @ 3.10GHz
-> 
-> Test result(MBM as an example):
-> # # Starting MBM BW change ...
-> # # Mounting resctrl to "/sys/fs/resctrl"
-> # # Benchmark PID: 8671
-> # # Writing benchmark parameters to resctrl FS
-> # # Write schema "MB:0=100" to resctrl FS
-> # # Checking for pass/fail
-> # # Fail: Check MBM diff within 5%
-> # # avg_diff_per: 9%
-> # # Span in bytes: 262144000
-> # # avg_bw_imc: 6202
-> # # avg_bw_resc: 5585
-> # not ok 1 MBM: bw change
-> ```
+> diff --git a/Documentation/hwmon/sht3x.rst b/Documentation/hwmon/sht3x.rst
+> index 2c87c8f58..3dc4b9c14 100644
+> --- a/Documentation/hwmon/sht3x.rst
+> +++ b/Documentation/hwmon/sht3x.rst
+> @@ -83,4 +83,11 @@ heater_enable:      heater enable, heating element removes excess humidity from
+>   update_interval:    update interval, 0 for single shot, interval in msec
+>   		    for periodic measurement. If the interval is not supported
+>   		    by the sensor, the next faster interval is chosen
+> +repeatability:      write or read repeatability, the higher repeatability means
+> +                    the longer measurement duration, the lower noise level and
+> +                    the larger energy consumption:
 
-Could you try if the approach below works better (I think it should apply 
-cleanly on top of the fixes+cleanups v3 series which you recently tested, 
-no need to have the other CAT test changes).
+s/the//g
 
-The biggest difference in terms of result stability my tests come from 
-these factors:
-- Removed reversed index order.
-- Open-coded the modulo in the loop to subtraction.
+> +
+> +                        - 0: low repeatability
+> +                        - 1: medium repeatability
+> +                        - 2: high repeatability
+>   =================== ============================================================
+> diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
+> index eb968b9d3..209090a48 100644
+> --- a/drivers/hwmon/sht3x.c
+> +++ b/drivers/hwmon/sht3x.c
+> @@ -642,6 +642,33 @@ static ssize_t update_interval_store(struct device *dev,
+>   	return count;
+>   }
+>   
+> +static ssize_t repeatability_show(struct device *dev,
+> +				  struct device_attribute *attr,
+> +				  char *buf)
+> +{
+> +	struct sht3x_data *data = dev_get_drvdata(dev);
+> +
+> +	return sysfs_emit(buf, "%d\n", data->repeatability);
+> +}
+> +
+> +static ssize_t repeatability_store(struct device *dev,
+> +				     struct device_attribute *attr,
+> +				     const char *buf,
+> +				     size_t count)
+> +{
+> +	u8 val;
+> +	struct sht3x_data *data = dev_get_drvdata(dev);
+> +
+> +	val = kstrtou8(buf, 0, &val);
+> +	if (val)
+> +		return val;
 
-In addition, I changed the prime to one which works slightly better than 
-59. The MBM/MBA results were already <5% with 59 too due to the other two 
-changes, but using 23 lowered them further in my tests (with Platinum 
-8260L).
+You need a separate ret variable with type int.
 
----
-From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-[PATCH] selftests/resctrl: Read in less obvious order to defeat prefetch optimizations
+> +
+> +	val = clamp_val(val, low_repeatability, high_repeatability);
 
-When reading memory in order, HW prefetching optimizations will
-interfere with measuring how caches and memory are being accessed. This
-adds noise into the results.
+This should not be clamped; the accepted values are well defined,
+and this is not a range.
 
-Change the fill_buf reading loop to not use an obvious in-order access
-using multiply by a prime and modulo.
+> +	data->repeatability = val;
+> +
+> +	return count;
+> +}
+> +
+>   static SENSOR_DEVICE_ATTR_RO(temp1_input, temp1_input, 0);
+>   static SENSOR_DEVICE_ATTR_RO(humidity1_input, humidity1_input, 0);
+>   static SENSOR_DEVICE_ATTR_RW(temp1_max, temp1_limit, limit_max);
+> @@ -658,6 +685,7 @@ static SENSOR_DEVICE_ATTR_RO(temp1_alarm, temp1_alarm, 0);
+>   static SENSOR_DEVICE_ATTR_RO(humidity1_alarm, humidity1_alarm, 0);
+>   static SENSOR_DEVICE_ATTR_RW(heater_enable, heater_enable, 0);
+>   static SENSOR_DEVICE_ATTR_RW(update_interval, update_interval, 0);
+> +static SENSOR_DEVICE_ATTR_RW(repeatability, repeatability, 0);
+>   
+>   static struct attribute *sht3x_attrs[] = {
+>   	&sensor_dev_attr_temp1_input.dev_attr.attr,
+> @@ -674,6 +702,7 @@ static struct attribute *sht3x_attrs[] = {
+>   	&sensor_dev_attr_humidity1_alarm.dev_attr.attr,
+>   	&sensor_dev_attr_heater_enable.dev_attr.attr,
+>   	&sensor_dev_attr_update_interval.dev_attr.attr,
+> +	&sensor_dev_attr_repeatability.dev_attr.attr,
+>   	NULL
+>   };
+>   
 
-Using a prime multiplier with modulo ensures the entire buffer is
-eventually read. 23 is small enough that the reads are spread out but
-wrapping does not occur very frequently (wrapping too often can trigger
-L2 hits more frequently which causes noise to the test because getting
-the data from LLC is not required).
-
-It was discovered that not all primes work equally well and some can
-cause wildly unstable results (e.g., in an earlier version of this
-patch, the reads were done in reversed order and 59 was used as the
-prime resulting in unacceptably high and unstable results in MBA and
-MBM test on some architectures).
-
-Link: https://lore.kernel.org/linux-kselftest/TYAPR01MB6330025B5E6537F94DA49ACB8B499@TYAPR01MB6330.jpnprd01.prod.outlook.com/
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-
----
- tools/testing/selftests/resctrl/fill_buf.c | 38 +++++++++++++++++++++++-------
- 1 file changed, 30 insertions(+), 8 deletions(-)
-
-diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/selftests/resctrl/fill_buf.c
-index f9893edda869..afde37d3fca0 100644
---- a/tools/testing/selftests/resctrl/fill_buf.c
-+++ b/tools/testing/selftests/resctrl/fill_buf.c
-@@ -74,16 +74,38 @@ static void *malloc_and_init_memory(size_t buf_size)
- 	return p;
- }
- 
-+/*
-+ * Buffer index step advance to workaround HW prefetching interfering with
-+ * the measurements.
-+ *
-+ * Must be a prime to step through all indexes of the buffer.
-+ *
-+ * Some primes work better than others on some architectures (from MBA/MBM
-+ * result stability point of view).
-+ */
-+#define FILL_IDX_MULT	23
-+
- static int fill_one_span_read(unsigned char *buf, size_t buf_size)
- {
--	unsigned char *end_ptr = buf + buf_size;
--	unsigned char sum, *p;
--
--	sum = 0;
--	p = buf;
--	while (p < end_ptr) {
--		sum += *p;
--		p += (CL_SIZE / 2);
-+	unsigned int size = buf_size / (CL_SIZE / 2);
-+	unsigned int i, idx = 0;
-+	unsigned char sum = 0;
-+
-+	/*
-+	 * Read the buffer in an order that is unexpected by HW prefetching
-+	 * optimizations to prevent them interfering with the caching pattern.
-+	 *
-+	 * The read order is (in terms of halves of cachelines):
-+	 *	i * FILL_IDX_MULT % size
-+	 * The formula is open-coded below to avoiding modulo inside the loop
-+	 * as it improves MBA/MBM result stability on some architectures.
-+	 */
-+	for (i = 0; i < size; i++) {
-+		sum += buf[idx * (CL_SIZE / 2)];
-+
-+		idx += FILL_IDX_MULT;
-+		while (idx >= size)
-+			idx -= size;
- 	}
- 
- 	return sum;
-
--- 
-tg: (68d2d0512b91..) refactor/read-fuzzing (depends on: refactor/remove-test-globals)
---8323329-376779887-1686747778=:3473--
