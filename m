@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54DE6730647
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 19:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1208C730648
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 19:47:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231613AbjFNRrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 13:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57596 "EHLO
+        id S239940AbjFNRrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 13:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237525AbjFNRqy (ORCPT
+        with ESMTP id S239062AbjFNRq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 13:46:54 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5751FC4
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 10:46:53 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-30fceb009faso1580631f8f.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 10:46:53 -0700 (PDT)
+        Wed, 14 Jun 2023 13:46:56 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB381720
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 10:46:54 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-30fa23e106bso4179055f8f.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 10:46:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google; t=1686764812; x=1689356812;
+        d=arista.com; s=google; t=1686764813; x=1689356813;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jpKktw2GOMmJzC6I0CuPo4dMIuJ2XtzOWEy+kYSxtr4=;
-        b=Dyad7FZhMwfiAfRmBkixVnagPSVRz8eheSxTFkov/8nLIhmyyvSvWPizdtZw2nA6Zc
-         7tpNRwPGmkfEvVsbvUwBdcmN+zSoRgfuxQ58Td9Agwejb2VIMPYeZhtQXmUERcUMJ1Jt
-         yhF4MIPwGbij+iXf0/vYCmc33Kqiao8OKcfmFjWIBLixqdHLN4NZaPv45x4EQlbqzeck
-         1LsiN5o8hMlVAk6WHV8GKI+JFZT/P+37GsAWAt3BBs9z94mX6BDO1bPQOi1oE88jhJoD
-         9th/ZbrjOEsiIPXnJ1MrZQ/P8zsx6FUlFzHduq0Xlh+rfpVcP2kQjVAiOk3QNzOOlhWJ
-         l7pg==
+        bh=9Eq3cXmTlVfU7159EnlgUU5JLlIDCLN+3DHm0kLajtM=;
+        b=CgAlly5McM8RcBW6caBKl8PmBgannQmzsPYLMudUMj0xOeDQH+x9Nqgs+jzENspund
+         VHULCsNUqBJhqnKdbkn969JcJty7oua6hbzFSKhySd4S89t644fHDFgwFTFFoAAK9Beo
+         g/Fp5DZDpKtRT71DRXlaT5aXOhfev+xF+DqJ6X5ufIT/37gdpIeWUS6XWlOSfIPU4MN0
+         pMP6qBkpmS2MsqjCQkTbxSmS/85sb6A3iOPFNfEwDPiKBK9AMhPGpU05+OnH0M85v6cu
+         8FU9J1IGk2YDqJUGOXqTMFA4prrzqhtQAQF286CbLczCcOkEPaYmLLeGMhhVtj8vF6wn
+         ApyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686764812; x=1689356812;
+        d=1e100.net; s=20221208; t=1686764813; x=1689356813;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jpKktw2GOMmJzC6I0CuPo4dMIuJ2XtzOWEy+kYSxtr4=;
-        b=DMsBpYByCv3H+TJFqVbAOi5OjCGsLw5aCoIhjK7cspJmqU0d7tjPmn5Mzl2YLOul+U
-         7oEoDo6sHQYAQs5a07ZzWwR2B3evTB1DHYNdHtBMdwf+xkCeARzrI5LJ3D8K90tnEsJ6
-         KQoB5cyejywIO7my+TPN3iWVAHsnaHBsQ3+/ku2+DZeR/UaSYXz+sWwSpzZlRZniOL0o
-         CWVbU18qK4FS3BpKPEMN0K/lm4McjEuBOIcl19bjq3RSETVTbxsIkIlnu5lSihxujw7F
-         HA9H2FVlF6oNhbO/fxPcN7D90FSPhYteC97e+r7eeqSBLJViCFHLuCNoReGThY0A8gFq
-         nmaw==
-X-Gm-Message-State: AC+VfDzulHeyNGil/u6F/ieGBFb1qCWvuLI9Io6bzLfL9JM7GLKFEndy
-        teSEtSM4ZwWhW+HZJgiehXa2eg==
-X-Google-Smtp-Source: ACHHUZ4tY7VFK/WQ07OvcIDpYAn/ug8h5uEtmcneDLElzLV6ReMtEengirK7m3oS4agXI0TCC3AT0Q==
-X-Received: by 2002:a5d:4846:0:b0:30f:bde3:aa6 with SMTP id n6-20020a5d4846000000b0030fbde30aa6mr1889121wrs.15.1686764812023;
-        Wed, 14 Jun 2023 10:46:52 -0700 (PDT)
+        bh=9Eq3cXmTlVfU7159EnlgUU5JLlIDCLN+3DHm0kLajtM=;
+        b=L9EdZZgu5FAogVXNWsqaclMzmtKAretItxSW7JUOYEQ3+JmIV4tSYx236jUPi/McyC
+         8yGFRT6m7kbgxzfkPKUtCfSkxFUec7IUOKRN6y85V526YkjttIoRH8iUjy5khq6AJwIZ
+         I9AxSLiNs72QtEKXDmCOkDvKuElUSQURbiMFdtO3Dnfy2wSN1XlhQ7aHmIYXcQL46F8a
+         irPKgKAws8vqfT0D9PInmLAIamY000WjeXGt3wRWR2bMiScu9IOJ2Nqz7eatgsTkX0by
+         Ef/dTBfHmy1Nq/sNi3SjlJ7XnO5ahtzWJnkkWEPTTHMDN5PRTkizI2lKhdydRz+YivTl
+         9Q3w==
+X-Gm-Message-State: AC+VfDwzM6yU7ctv8OxmiMVVdJZ2fNtjAnWx8IUWrDa6lJsoMbZqrT9f
+        93sCCegsFTVV/toYZ+WLil38sQ==
+X-Google-Smtp-Source: ACHHUZ7OorwlC9ByO9iXEaGNKOvjYJ+8qfGIx80q4b1nqd9FAQZeMIJ4boZE8ucIPyG5JJY6DlNluQ==
+X-Received: by 2002:a5d:528e:0:b0:30f:ccca:f482 with SMTP id c14-20020a5d528e000000b0030fcccaf482mr3786136wrv.71.1686764813289;
+        Wed, 14 Jun 2023 10:46:53 -0700 (PDT)
 Received: from Mindolluin.ire.aristanetworks.com ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id m4-20020a056000180400b0030633152664sm18738740wrh.87.2023.06.14.10.46.50
+        by smtp.gmail.com with ESMTPSA id m4-20020a056000180400b0030633152664sm18738740wrh.87.2023.06.14.10.46.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 10:46:51 -0700 (PDT)
+        Wed, 14 Jun 2023 10:46:52 -0700 (PDT)
 From:   Dmitry Safonov <dima@arista.com>
 To:     Herbert Xu <herbert@gondor.apana.org.au>,
         linux-kernel@vger.kernel.org
@@ -65,9 +65,9 @@ Cc:     Dmitry Safonov <dima@arista.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Salam Noureddine <noureddine@arista.com>,
         linux-crypto@vger.kernel.org
-Subject: [PATCH-next 1/3] crypto: api - Remove crypto_init_ops()
-Date:   Wed, 14 Jun 2023 18:46:41 +0100
-Message-Id: <20230614174643.3836590-2-dima@arista.com>
+Subject: [PATCH-next 2/3] crypto: api - Provide gfp mask for tfm allocation
+Date:   Wed, 14 Jun 2023 18:46:42 +0100
+Message-Id: <20230614174643.3836590-3-dima@arista.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230614174643.3836590-1-dima@arista.com>
 References: <20230614174643.3836590-1-dima@arista.com>
@@ -76,74 +76,93 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Purge crypto_type::init() as well.
-The last user seems to be gone with commit d63007eb954e ("crypto:
-ablkcipher - remove deprecated and unused ablkcipher support").
+Use it straight away in crypto_clone_cipher(), as that is not meant to
+sleep.
 
 Signed-off-by: Dmitry Safonov <dima@arista.com>
 ---
- crypto/api.c            | 14 --------------
- include/crypto/algapi.h |  1 -
- 2 files changed, 15 deletions(-)
+ crypto/algapi.c   | 2 +-
+ crypto/api.c      | 6 +++---
+ crypto/cipher.c   | 2 +-
+ crypto/internal.h | 2 +-
+ 4 files changed, 6 insertions(+), 6 deletions(-)
 
+diff --git a/crypto/algapi.c b/crypto/algapi.c
+index 5e7cd603d489..8d7d9cc008ff 100644
+--- a/crypto/algapi.c
++++ b/crypto/algapi.c
+@@ -798,7 +798,7 @@ struct crypto_tfm *crypto_spawn_tfm(struct crypto_spawn *spawn, u32 type,
+ 	if (unlikely((alg->cra_flags ^ type) & mask))
+ 		goto out_put_alg;
+ 
+-	tfm = __crypto_alloc_tfm(alg, type, mask);
++	tfm = __crypto_alloc_tfm(alg, type, mask, GFP_KERNEL);
+ 	if (IS_ERR(tfm))
+ 		goto out_put_alg;
+ 
 diff --git a/crypto/api.c b/crypto/api.c
-index d375e8cd770d..a94bd0695719 100644
+index a94bd0695719..54bf7c71b482 100644
 --- a/crypto/api.c
 +++ b/crypto/api.c
-@@ -345,15 +345,6 @@ struct crypto_alg *crypto_alg_mod_lookup(const char *name, u32 type, u32 mask)
- }
- EXPORT_SYMBOL_GPL(crypto_alg_mod_lookup);
+@@ -387,14 +387,14 @@ void crypto_shoot_alg(struct crypto_alg *alg)
+ EXPORT_SYMBOL_GPL(crypto_shoot_alg);
  
--static int crypto_init_ops(struct crypto_tfm *tfm, u32 type, u32 mask)
--{
--	const struct crypto_type *type_obj = tfm->__crt_alg->cra_type;
--
--	if (type_obj)
--		return type_obj->init(tfm, type, mask);
--	return 0;
--}
--
- static void crypto_exit_ops(struct crypto_tfm *tfm)
+ struct crypto_tfm *__crypto_alloc_tfm(struct crypto_alg *alg, u32 type,
+-				      u32 mask)
++				      u32 mask, gfp_t gfp)
  {
- 	const struct crypto_type *type = tfm->__crt_alg->cra_type;
-@@ -410,10 +401,6 @@ struct crypto_tfm *__crypto_alloc_tfm(struct crypto_alg *alg, u32 type,
- 	tfm->__crt_alg = alg;
- 	refcount_set(&tfm->refcnt, 1);
+ 	struct crypto_tfm *tfm = NULL;
+ 	unsigned int tfm_size;
+ 	int err = -ENOMEM;
  
--	err = crypto_init_ops(tfm, type, mask);
--	if (err)
--		goto out_free_tfm;
--
- 	if (!tfm->exit && alg->cra_init && (err = alg->cra_init(tfm)))
- 		goto cra_init_failed;
+ 	tfm_size = sizeof(*tfm) + crypto_ctxsize(alg, type, mask);
+-	tfm = kzalloc(tfm_size, GFP_KERNEL);
++	tfm = kzalloc(tfm_size, gfp);
+ 	if (tfm == NULL)
+ 		goto out_err;
  
-@@ -421,7 +408,6 @@ struct crypto_tfm *__crypto_alloc_tfm(struct crypto_alg *alg, u32 type,
+@@ -454,7 +454,7 @@ struct crypto_tfm *crypto_alloc_base(const char *alg_name, u32 type, u32 mask)
+ 			goto err;
+ 		}
  
- cra_init_failed:
- 	crypto_exit_ops(tfm);
--out_free_tfm:
- 	if (err == -EAGAIN)
- 		crypto_shoot_alg(alg);
- 	kfree(tfm);
-diff --git a/include/crypto/algapi.h b/include/crypto/algapi.h
-index 016d5a302b84..6156161b181f 100644
---- a/include/crypto/algapi.h
-+++ b/include/crypto/algapi.h
-@@ -56,7 +56,6 @@ struct sk_buff;
- struct crypto_type {
- 	unsigned int (*ctxsize)(struct crypto_alg *alg, u32 type, u32 mask);
- 	unsigned int (*extsize)(struct crypto_alg *alg);
--	int (*init)(struct crypto_tfm *tfm, u32 type, u32 mask);
- 	int (*init_tfm)(struct crypto_tfm *tfm);
- 	void (*show)(struct seq_file *m, struct crypto_alg *alg);
- 	int (*report)(struct sk_buff *skb, struct crypto_alg *alg);
+-		tfm = __crypto_alloc_tfm(alg, type, mask);
++		tfm = __crypto_alloc_tfm(alg, type, mask, GFP_KERNEL);
+ 		if (!IS_ERR(tfm))
+ 			return tfm;
+ 
+diff --git a/crypto/cipher.c b/crypto/cipher.c
+index d39ef5f72ab8..184188339a4a 100644
+--- a/crypto/cipher.c
++++ b/crypto/cipher.c
+@@ -102,7 +102,7 @@ struct crypto_cipher *crypto_clone_cipher(struct crypto_cipher *cipher)
+ 		return ERR_PTR(-ENOSYS);
+ 
+ 	ntfm = __crypto_alloc_tfm(alg, CRYPTO_ALG_TYPE_CIPHER,
+-				  CRYPTO_ALG_TYPE_MASK);
++				  CRYPTO_ALG_TYPE_MASK, GFP_ATOMIC);
+ 	if (IS_ERR(ntfm))
+ 		return ERR_CAST(ntfm);
+ 
+diff --git a/crypto/internal.h b/crypto/internal.h
+index 8dd746b1130b..eba723a57689 100644
+--- a/crypto/internal.h
++++ b/crypto/internal.h
+@@ -103,7 +103,7 @@ void crypto_remove_spawns(struct crypto_alg *alg, struct list_head *list,
+ void crypto_remove_final(struct list_head *list);
+ void crypto_shoot_alg(struct crypto_alg *alg);
+ struct crypto_tfm *__crypto_alloc_tfm(struct crypto_alg *alg, u32 type,
+-				      u32 mask);
++				      u32 mask, gfp_t gfp);
+ void *crypto_create_tfm_node(struct crypto_alg *alg,
+ 			const struct crypto_type *frontend, int node);
+ void *crypto_clone_tfm(const struct crypto_type *frontend,
 -- 
 2.40.0
 
