@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CECA47307AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 20:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D9B77307AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 20:59:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235569AbjFNSzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 14:55:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36580 "EHLO
+        id S231361AbjFNS66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 14:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233686AbjFNSzs (ORCPT
+        with ESMTP id S229576AbjFNS6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 14:55:48 -0400
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED36C2132;
-        Wed, 14 Jun 2023 11:55:45 -0700 (PDT)
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
+        Wed, 14 Jun 2023 14:58:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDAF61A2;
+        Wed, 14 Jun 2023 11:58:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4QhF4G3Ny9z9snP;
-        Wed, 14 Jun 2023 20:55:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
-        s=MBO0001; t=1686768942;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CJiskTs3zCUsFmoIMCNW6HhLfedb3aaZiyeWz0SDuZ8=;
-        b=Po20gNlv394onagKErhNGJdD2+ByMWN8z32JppbB8PGF7vePu3AXS0Do3Pd5fQ+Pq4FIGU
-        IU9vJr2BPRLyc28llpXofYmf/PKaSoA1ovddCp1r7lpEUw7xFqKlXgjxwrI34tlzpR+XAL
-        jrZ13a2ZHjrZM26LNai8SHEI+8s4ph/R/ai7XlQ6ZJny6N0gSo7r+sq6Gb3xpoEk2ub6Sk
-        aNZ7zVSazUEPG8xebrnEPwzwvtmIERZrdTntJAf/lVQrP9iEU62JpamVpKw/dioq/Z9225
-        5ql21/UgzADyMagM0fC4VdvnfZ07mByA9XkV25EbIFuCu2EWrmkp9w27XWM9vA==
-From:   Frank Oltmanns <frank@oltmanns.dev>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Frank Oltmanns <frank@oltmanns.dev>,
-        "A.s. Dong" <aisheng.dong@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: [PATCH v3 2/2] clk: fractional-divider: tests: Add test suite for edge cases
-Date:   Wed, 14 Jun 2023 20:55:21 +0200
-Message-ID: <20230614185521.477924-3-frank@oltmanns.dev>
-In-Reply-To: <20230614185521.477924-1-frank@oltmanns.dev>
-References: <20230614185521.477924-1-frank@oltmanns.dev>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 836F563F97;
+        Wed, 14 Jun 2023 18:58:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B349AC433C0;
+        Wed, 14 Jun 2023 18:58:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686769133;
+        bh=MfSKiNLW05mGERHuhnhNQwVvkL/xDekK9aIDFT1YmyY=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=gITfLP0cyNOegD3RzZ0W7wpNlcNkVWbeldroFc5bQitzS9v2ZpRSYmczk4VLjIySf
+         8d4mheEHIEn2A65saVCWeacvuCvPy0nmh9Y5GhzG5buCLw9TFB4k7DwAi3uvpALylt
+         PrXUMK5fC3ygWc7BhxrkBsJILcMfRtwqChmYzy/JgJNnQWPnLZOHH7kMR9o2yYRAoY
+         +q3BW2ADxDP+XsPxReKhoFdL4+GAUQbsw6NRXi0ZL5Ppojmc0kM1go7PxV3quzdGN9
+         dJOhpep16rF6oPFN6YsJgXhz+wUMkaVs11q7BqmKgT/urfFaoBhLr3cA3omK3ANIFu
+         2U6ZT43SBeK6g==
+From:   Mark Brown <broonie@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chen-Yu Tsai <wenst@chromium.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230609083009.2822259-1-wenst@chromium.org>
+References: <20230609083009.2822259-1-wenst@chromium.org>
+Subject: Re: (subset) [PATCH 0/9] regulator: mt6358: Remove bogus
+ regulators and improvements
+Message-Id: <168676913142.240711.16106112357976617882.b4-ty@kernel.org>
+Date:   Wed, 14 Jun 2023 19:58:51 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-c6835
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,294 +64,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In light of the recent discovery that the fractional divisor
-approximation does not utilize the full available range for clocks that
-are flagged CLK_FRAC_DIVIDER_ZERO_BASED, implement tests for the edge
-cases of this clock type.
+On Fri, 09 Jun 2023 16:29:57 +0800, Chen-Yu Tsai wrote:
+> This series is a cleanup and improvement of the MT6358 regulator driver.
+> Various discrepancies were found while preparing to upstream MT8186
+> device trees, which utilize the MT6366 PMIC, that is also covered by
+> this driver.
+> 
+> Patches 1~8 should go through the regulator tree, and patch 9 through
+> the soc tree. This series (patches 7 and 8) depends on "regulator: Use
+> bitfield values for range selectors" [1] I sent out earlier.
+> 
+> [...]
 
-Signed-off-by: Frank Oltmanns <frank@oltmanns.dev>
----
+Applied to
 
-Please note: I get two checkpatch warnings for this patch:
- - Concerning the help text in Kconfig.
- - Regarding the file being added, asking if MAINTAINERS needs updating.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
-Both the help text as well as the MAINTAINERS file seem fine to me.
+Thanks!
 
-As expected, when the tests are run *without* PATCH 1, the two "zero
-based" test cases fail:
+[1/9] regulator: dt-bindings: mt6358: Merge ldo_vcn33_* regulators
+      commit: a74d4c577c60b27fc57ea734ef8275921ae8dcb2
+[2/9] regulator: dt-bindings: mt6358: Drop *_sshub regulators
+      commit: 82f305b18eb0505444eab8ac86bfa134b67cb38e
+[3/9] regulator: mt6358: Merge VCN33_* regulators
+      commit: 65bae54e08c109ddbbf121bb00058cf3b3fb7b8e
+[4/9] regulator: mt6358: Drop *_SSHUB regulators
+      commit: 04ba665248ed91576d326041108e5fc2ec2254eb
+[5/9] regulator: mt6358: Const-ify mt6358_regulator_info data structures
+      commit: 1ff35e66cae53f7090a671afddaee45d4ccd9396
+[6/9] regulator: mt6358: Use linear voltage helpers for single range regulators
+      commit: ea861df772fd8cca715d43f62fe13c09c975f7a2
+[7/9] regulator: mt6358: Add output voltage fine tuning to fixed regulators
+      (no commit info)
+[8/9] regulator: mt6358: Add output voltage fine tuning to variable LDOs
+      (no commit info)
 
-================= clk-fd-test (4 subtests) =================
-[PASSED] clk_fd_test_round_rate_max_div
-[PASSED] clk_fd_test_round_rate_max_mul
-# clk_fd_test_round_rate_max_div_zero_based: EXPECTATION FAILED at drivers/clk/clk-fractional-divider_test.c:139
-Expected rounded_rate == parent_rate / 8, but
-    rounded_rate == 342857142 (0x146f95b6)
-    parent_rate / 8 == 300000000 (0x11e1a300)
-[FAILED] clk_fd_test_round_rate_max_div_zero_based
-# clk_fd_test_round_rate_max_mul_zero_based: EXPECTATION FAILED at drivers/clk/clk-fractional-divider_test.c:172
-Expected rounded_rate == rate, but
-    rounded_rate == 252000000 (0xf053700)
-    rate == 240000000 (0xe4e1c00)
-[FAILED] clk_fd_test_round_rate_max_mul_zero_based
-# clk-fd-test: pass:2 fail:2 skip:0 total:4
-# Totals: pass:2 fail:2 skip:0 total:4
-=================== [FAILED] clk-fd-test ===================
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Best regards,
-  Frank
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
- drivers/clk/.kunitconfig                  |   1 +
- drivers/clk/Kconfig                       |   7 +
- drivers/clk/Makefile                      |   1 +
- drivers/clk/clk-fractional-divider_test.c | 196 ++++++++++++++++++++++
- 4 files changed, 205 insertions(+)
- create mode 100644 drivers/clk/clk-fractional-divider_test.c
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-diff --git a/drivers/clk/.kunitconfig b/drivers/clk/.kunitconfig
-index 2fbeb71316f8..efa12ac2b3f2 100644
-*** a/drivers/clk/.kunitconfig
---- b/drivers/clk/.kunitconfig
-***************
-*** 2,5 ****
---- 2,6 ----
-  CONFIG_COMMON_CLK=y
-  CONFIG_CLK_KUNIT_TEST=y
-  CONFIG_CLK_GATE_KUNIT_TEST=y
-+ CONFIG_CLK_FD_KUNIT_TEST=y
-  CONFIG_UML_PCI_OVER_VIRTIO=n
-diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index 016814e15536..3fbb40cb5551 100644
-*** a/drivers/clk/Kconfig
---- b/drivers/clk/Kconfig
-***************
-*** 513,516 ****
---- 513,523 ----
-  	help
-  	  Kunit test for the basic clk gate type.
-  
-+ config CLK_FD_KUNIT_TEST
-+ 	tristate "Basic fractional divider type Kunit test" if !KUNIT_ALL_TESTS
-+ 	depends on KUNIT
-+ 	default KUNIT_ALL_TESTS
-+ 	help
-+ 	  Kunit test for the clk-fractional-divider type.
-+ 
-  endif
-diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-index 0aebef17edc6..9d2337c12dd1 100644
-*** a/drivers/clk/Makefile
---- b/drivers/clk/Makefile
-@@ -12,6 +12,7 @@
- obj-$(CONFIG_COMMON_CLK)	+= clk-mux.o
- obj-$(CONFIG_COMMON_CLK)	+= clk-composite.o
- obj-$(CONFIG_COMMON_CLK)	+= clk-fractional-divider.o
-+obj-$(CONFIG_CLK_FD_KUNIT_TEST) += clk-fractional-divider_test.o
- obj-$(CONFIG_COMMON_CLK)	+= clk-gpio.o
- ifeq ($(CONFIG_OF), y)
- obj-$(CONFIG_COMMON_CLK)	+= clk-conf.o
-diff --git a/drivers/clk/clk-fractional-divider_test.c b/drivers/clk/clk-fractional-divider_test.c
-new file mode 100644
-index 000000000000..0ea6b1ae85a8
---- /dev/null
-+++ b/drivers/clk/clk-fractional-divider_test.c
-@@ -0,0 +1,196 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Kunit test for clock fractional divider
-+ */
-+#include <linux/clk.h>
-+#include <linux/clk-provider.h>
-+
-+/* Needed for clk_hw_get_clk() */
-+#include "clk.h"
-+
-+/* Needed for clk_fractional_divider_ops */
-+#include "clk-fractional-divider.h"
-+
-+#include <kunit/test.h>
-+
-+u32 fdregsim;
-+
-+static int clk_fd_test_init(struct kunit *test)
-+{
-+	struct clk_hw *hw;
-+
-+	hw = clk_hw_register_fractional_divider(NULL, "test_fd", NULL,
-+						0,     /* flags */
-+						&fdregsim,
-+						0, 2,  /* mshift, mwidth */
-+						8, 3,  /* nshift, nwidth */
-+						0,     /* clk_divider_flags */
-+						NULL); /* spinlock */
-+	if (!hw)
-+		return -ENOMEM;
-+	else if (IS_ERR_VALUE(hw))
-+		return PTR_ERR(hw);
-+
-+	test->priv = hw;
-+	return 0;
-+}
-+
-+static void clk_fd_test_exit(struct kunit *test)
-+{
-+	struct clk_hw *hw = test->priv;
-+
-+	clk_hw_unregister(hw);
-+}
-+
-+/*
-+ * Test the maximum divisor case for fd clock without flags.
-+ *
-+ * Prerequisites:
-+ * - Requested rate is 240MHz.
-+ * - Parent runs at 10 times the rate of the requested rate (2.4GHz).
-+ * - m and n are 2 and 3 bits wide respectively.
-+ * - The clock has no flags set, hence
-+ *    - the maximum value for the numerator is 3
-+ *    - the maximum value for the denominator is 7
-+ *
-+ * Expected result:
-+ * Expect the highest possible divisor to be used in order to get as close as possible to the
-+ * requested rate, resulting in the following rounded rate:
-+ *         rounded_rate = parent_rate / 7.
-+ */
-+static void clk_fd_test_round_rate_max_div(struct kunit *test)
-+{
-+	struct clk_hw *hw = test->priv;
-+	struct clk *clk = clk_hw_get_clk(hw, NULL);
-+	unsigned long rate, parent_rate, rounded_rate;
-+
-+	rate = 240000000;
-+	parent_rate = 10 * rate;
-+
-+	rounded_rate = clk_fractional_divider_ops.round_rate(hw, rate, &parent_rate);
-+	/* This test case assumes that the round_rate operation does not change the parent */
-+	KUNIT_ASSERT_EQ(test, parent_rate, 10 * rate);
-+	/* Make sure the highest possible divisor was used */
-+	KUNIT_EXPECT_EQ(test, rounded_rate, parent_rate / 7);
-+
-+	clk_put(clk);
-+}
-+
-+/*
-+ * Test the maximum multiplier case for fd clock without flags.
-+ *
-+ * Prerequisites:
-+ * - Requested rate is 240MHz.
-+ * - Parent runs at 7/4th the rate of the requested rate (420MHz).
-+ * - m and n are 2 and 3 bits wide respectively.
-+ * - The clock has no flags set, hence
-+ *    - the maximum value for the numerator is 3
-+ *    - the maximum value for the denominator is 7
-+ *
-+ * Expected result:
-+ * Ideally the parent rate must be multiplied by 4 and divided by 7. But the highest possible
-+ * multiplier is 3. So, the closest rate is not 4/7th of the parent rate, but 3/5th (252 MHz).
-+ */
-+static void clk_fd_test_round_rate_max_mul(struct kunit *test)
-+{
-+	struct clk_hw *hw = test->priv;
-+	unsigned long rate, parent_rate, rounded_rate;
-+
-+	rate = 240000000;
-+	parent_rate = 240000000 * 7 / 4;
-+
-+	rounded_rate = clk_fractional_divider_ops.round_rate(hw, rate, &parent_rate);
-+	/* This test case assumes that the round_rate operation does not change the parent */
-+	KUNIT_ASSERT_EQ(test, parent_rate, rate * 7 / 4);
-+	/* Make sure the highest possible multiplier was used */
-+	KUNIT_EXPECT_EQ(test, rounded_rate, parent_rate * 3 / 5);
-+}
-+
-+/*
-+ * Test the maximum divisor case for zero based fd clock.
-+ *
-+ * Prerequisites:
-+ * - Requested rate is 240MHz.
-+ * - Parent runs at 10 times the rate of the requested rate (2.4 GHz).
-+ * - m and n are 2 and 3 bits wide respectively.
-+ * - The clock is zero based, hence
-+ *    - the maximum value for the numerator is 4
-+ *    - the maximum value for the denominator is 8
-+ *
-+ * Expected result:
-+ * Expect the highest possible divisor to be used resulting in the following rounded rate:
-+ *         rounded_rate = parent_rate / 8.
-+ */
-+static void clk_fd_test_round_rate_max_div_zero_based(struct kunit *test)
-+{
-+	struct clk_hw *hw = test->priv;
-+	unsigned long rate, parent_rate, rounded_rate;
-+	struct clk_fractional_divider *fd = to_clk_fd(hw);
-+
-+	fd->flags = CLK_FRAC_DIVIDER_ZERO_BASED;
-+
-+	rate = 240000000;
-+	parent_rate = 10 * rate;
-+
-+	rounded_rate = clk_fractional_divider_ops.round_rate(hw, rate, &parent_rate);
-+	/* This test case assumes that the round_rate operation does not change the parent */
-+	KUNIT_ASSERT_EQ(test, parent_rate, 10 * rate);
-+	/* Make sure the highest possible divisor was used */
-+	KUNIT_EXPECT_EQ(test, rounded_rate, parent_rate / 8);
-+}
-+
-+/*
-+ * Test the maximum multiplier case for fd clock without flags.
-+ *
-+ * Prerequisites:
-+ * - Requested rate is 240MHz.
-+ * - Parent runs at 7/4th the rate of the requested rate (420MHz).
-+ * - m and n are 2 and 3 bits wide respectively.
-+ * - The clock is zero based, hence
-+ *    - the maximum value for the numerator is 4
-+ *    - the maximum value for the denominator is 8
-+ *
-+ * Expected result:
-+ * Ideally the parent rate must be multiplied by 4 and divided by seven. And since for a zero based
-+ * clock 4 is actually the highest possible multiplier the exact rate can be reached.
-+ */
-+static void clk_fd_test_round_rate_max_mul_zero_based(struct kunit *test)
-+{
-+	struct clk_hw *hw = test->priv;
-+	unsigned long rate, parent_rate, rounded_rate;
-+	struct clk_fractional_divider *fd = to_clk_fd(hw);
-+
-+	fd->flags = CLK_FRAC_DIVIDER_ZERO_BASED;
-+
-+	rate = 240000000;
-+	parent_rate = 240000000 * 7 / 4;
-+
-+	rounded_rate = clk_fractional_divider_ops.round_rate(hw, rate, &parent_rate);
-+	/* This test case assumes that the round_rate operation does not change the parent */
-+	KUNIT_ASSERT_EQ(test, parent_rate, rate * 7 / 4);
-+	/* Make sure the highest possible multiplier was used */
-+	KUNIT_EXPECT_EQ(test, rounded_rate, rate);
-+}
-+
-+static struct kunit_case clk_fd_test_cases[] = {
-+	KUNIT_CASE(clk_fd_test_round_rate_max_div),
-+	KUNIT_CASE(clk_fd_test_round_rate_max_mul),
-+	KUNIT_CASE(clk_fd_test_round_rate_max_div_zero_based),
-+	KUNIT_CASE(clk_fd_test_round_rate_max_mul_zero_based),
-+	{}
-+};
-+
-+/*
-+ * Test suite for a fractional divider clock.
-+ */
-+static struct kunit_suite clk_fd_test_suite = {
-+	.name = "clk-fd-test",
-+	.init = clk_fd_test_init,
-+	.exit = clk_fd_test_exit,
-+	.test_cases = clk_fd_test_cases,
-+};
-+
-+kunit_test_suites(
-+	&clk_fd_test_suite
-+);
-+MODULE_LICENSE("GPL");
--- 
-2.41.0
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
