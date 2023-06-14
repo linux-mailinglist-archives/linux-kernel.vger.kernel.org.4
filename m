@@ -2,115 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2038072FFE9
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 15:22:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FECC72FFED
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 15:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244954AbjFNNWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 09:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40054 "EHLO
+        id S244934AbjFNNWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 09:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244955AbjFNNWd (ORCPT
+        with ESMTP id S244945AbjFNNWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 09:22:33 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76CBA1FC4
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 06:22:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686748949; x=1718284949;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=krZlgUF812lZ1Msg1luNdv0RZ6yxrI7AK5Nw8giEATI=;
-  b=C4tJIhV0VCe4TfWi1AwrH0pLBrKS7JAJc6wzGrVZnb+2N83Gn4nUS/G2
-   q9YzV0myxKR31BOY4EVZ/Llh6FFN3MnIevi97NKniYJuY8fz10zhmi+5P
-   rc8uAAHZyyTLM+IPb8jJrJU4dEbF30isJMCTEiVsUKHj9SCi8ZBOCpm1d
-   ZN6toUbni0DDY7s4LhpDcRZ8LjByNBXL0zry8zWrUSmajyJ1mGWcLj7N9
-   9wLbCeT38xwQAH10a09DqDfkkXuK2UnPsNqtkMfee0vbGyge0axeXwpl0
-   gc8rAkhKMQJ0D3WLtgJU8JrfRmuqRjy7ZAen20/f+ddSPe15XSkzVox3U
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="444977887"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="444977887"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 06:22:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="801899074"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="801899074"
-Received: from sobyrne-mobl1.ger.corp.intel.com (HELO [10.213.224.182]) ([10.213.224.182])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 06:22:25 -0700
-Message-ID: <bebd57fc-7135-dc97-701e-54cb9c2955c0@linux.intel.com>
-Date:   Wed, 14 Jun 2023 14:22:23 +0100
+        Wed, 14 Jun 2023 09:22:36 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4BA1FC4
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 06:22:34 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b227fdda27so7994821fa.1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 06:22:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686748952; x=1689340952;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QlYwaO+z+1HnbdYgK2cE/Bmko+PlgVBi2h8p1xbV4dk=;
+        b=A0kek7FKuJeZYXzX3n1cYwa0lvyoHTGrU2sLoPUBvMFQhUKHl+ImVQEENn1mCQVN3o
+         IHkOt9XCt+o3hxOogi/E52jhmHh/Yc555zAnTu9p80pPPI8ggKKvNcsvi6YAEbcF8ANp
+         spo32vjJ2soK5HBQlDGF2E9vA3aXyfqaust6T8dbViXEPMdbTrz6EDEkdQ4rtxgjT0HU
+         dFJR7RaYI3B9CYDAbvRNad4ej3vmg14uYRiHHCe9tv2BiF/rrUOva1Xmjxuc+y56orj+
+         Ehe6WLpNZkWxA1x0mYKGGu1E8iWty9xvP+Dvsnl7i8EBk5VGhY/MPanqBYTCMdO33l2a
+         yKfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686748952; x=1689340952;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QlYwaO+z+1HnbdYgK2cE/Bmko+PlgVBi2h8p1xbV4dk=;
+        b=jgdt20Az2Hk6vzsDSgR72nIXClfMu69vbRojOMpm+eWqC8CZU5vRNHbjWUK7TSK1/E
+         k2JDOuc38qNpPdGlWVCg1TJN4QxxPBevN7TqK+nuQmMuf+zZtR+khgr+Ee+9CXU45pqU
+         d9ofK/bt7x2taZik6UEvtg2VoRh5j44NbCQmU63gtb+L4heheCMpDfm0zbiksuabE8L5
+         5u3jmjzGb2SWv5ZHmMe9CqEze/oQL05XeU73ATi0R7fcNKLl0ZerFW5UwQNje/ei30dI
+         kgW5czqd/2eG/YEKj32JylCWcubo44wfTyM/dcD5Ra7cmy1uCuq11noJJbGSKjnvKEsq
+         If0Q==
+X-Gm-Message-State: AC+VfDxFaw7R7HKzn/FMEzYeMeMke/PqVdlcuypoFsG+pBLFlleEwNZ8
+        F+rfhogwcjvRZEL8ppqjyHGRjHog7jkB/LMiB3Y=
+X-Google-Smtp-Source: ACHHUZ5MceAYLzhvgNgAKOq/h4WDwcWJHeC43W14iWYg6QWmqKN3QoW2ZYC6I4uh2nzUT2WGjAk8VQ==
+X-Received: by 2002:a2e:86cf:0:b0:2a7:7493:9966 with SMTP id n15-20020a2e86cf000000b002a774939966mr638716ljj.24.1686748952498;
+        Wed, 14 Jun 2023 06:22:32 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id v2-20020a2ea442000000b002a7899eaf9csm2514681ljn.63.2023.06.14.06.22.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 06:22:32 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Date:   Wed, 14 Jun 2023 15:22:25 +0200
+Subject: [PATCH RFC] media: camss: Intepret OF graph connections more
+ sensibly
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] drm/i915: Call page_address() on page acquired with
- GFP_KERNEL flag
-Content-Language: en-US
-To:     Sumitra Sharma <sumitraartsy@gmail.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ira Weiny <ira.weiny@intel.com>, Fabio <fmdefrancesco@gmail.com>,
-        Deepak R Varma <drv@mailo.com>,
-        Thomas Hellstrom <thomas.hellstrom@intel.com>,
-        Matthew Auld <matthew.auld@intel.com>
-References: <20230614123556.GA381200@sumitra.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <20230614123556.GA381200@sumitra.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Message-Id: <20230614-topic-camss_grpah-v1-1-5f4b516310fa@linaro.org>
+X-B4-Tracking: v=1; b=H4sIABC/iWQC/x2N0QrCMAwAf2Xk2UDXFWX+iohkNV0DsyvNFGHs3
+ w0+3sFxOyg3YYVrt0Pjj6isxaA/dRAzlZlRnsbgnR/cuQ+4rVUiRnqpPuZWKeMwppFCugTvIlg
+ 3kTJOjUrMVpb3spisjZN8/6Pb/Th+7YxuJHgAAAA=
+To:     Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1686748951; l=1403;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=EDgfg+lUIqJj9gfFzfZTgsOWNdY99vPNSeSuLOAWWhc=;
+ b=jkyOPuk8pdImD3MqXjm+SeuRsFXWWS724YWTgW7ygW9Qalf83r4qw133m+EbUOffvRW7YJkby
+ 7frUBnscmaxBx4+5REjaLG3URb8zBQQsoe6OZzzEQnxDwlxWuEsLhfH
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Not all endpoints of camss have to be populated. In fact, most of the
+time they shouldn't be as n-th auxilliary cameras are usually ewaste.
 
-On 14/06/2023 13:35, Sumitra Sharma wrote:
-> Pages allocated with GFP_KERNEL cannot come from Highmem.
-> That is why there is no need to call kmap() on them.
+Don't fail probing the entire camss even even one endpoint is not
+linked and throw an error when none is found.
 
-Are you sure it is GFP_KERNEL backed and not tmpfs? I am not sure myself 
-so let me copy Matt and Thomas if they happen to know off hand.
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ drivers/media/platform/qcom/camss/camss.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-Regards,
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index 1ef26aea3eae..3aa03fbc94e2 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -1084,9 +1084,8 @@ static int camss_of_parse_ports(struct camss *camss)
+ 
+ 		remote = of_graph_get_remote_port_parent(node);
+ 		if (!remote) {
+-			dev_err(dev, "Cannot get remote parent\n");
+-			ret = -EINVAL;
+-			goto err_cleanup;
++			of_node_put(node);
++			continue;
+ 		}
+ 
+ 		csd = v4l2_async_nf_add_fwnode(&camss->notifier,
+@@ -1105,7 +1104,7 @@ static int camss_of_parse_ports(struct camss *camss)
+ 		num_subdevs++;
+ 	}
+ 
+-	return num_subdevs;
++	return num_subdevs ? num_subdevs : -EINVAL;
+ 
+ err_cleanup:
+ 	of_node_put(node);
 
-Tvrtko
+---
+base-commit: b16049b21162bb649cdd8519642a35972b7910fe
+change-id: 20230614-topic-camss_grpah-39f9a4f7420c
 
-> Therefore, don't call kmap() on the page coming from
-> vma_res->bi.pages using for_each_sgt_page() in
-> i915_vma_coredump_create().
-> 
-> Use a plain page_address() to get the kernel address instead.
-> 
-> Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
-> ---
->   drivers/gpu/drm/i915/i915_gpu_error.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/i915_gpu_error.c b/drivers/gpu/drm/i915/i915_gpu_error.c
-> index f020c0086fbc..6f51cb4fc55c 100644
-> --- a/drivers/gpu/drm/i915/i915_gpu_error.c
-> +++ b/drivers/gpu/drm/i915/i915_gpu_error.c
-> @@ -1164,9 +1164,8 @@ i915_vma_coredump_create(const struct intel_gt *gt,
->   
->   			drm_clflush_pages(&page, 1);
->   
-> -			s = kmap(page);
-> +			s = page_address(page);
->   			ret = compress_page(compress, s, dst, false);
-> -			kunmap(page);
->   
->   			drm_clflush_pages(&page, 1);
->   
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
+
