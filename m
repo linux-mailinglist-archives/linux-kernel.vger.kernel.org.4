@@ -2,138 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6847307C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B9CC7307D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:09:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234438AbjFNTIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 15:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41840 "EHLO
+        id S235657AbjFNTJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 15:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234225AbjFNTIw (ORCPT
+        with ESMTP id S235294AbjFNTJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 15:08:52 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF83C1FD5
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 12:08:50 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1a991886254so275519fac.2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 12:08:50 -0700 (PDT)
+        Wed, 14 Jun 2023 15:09:03 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE38268B;
+        Wed, 14 Jun 2023 12:09:01 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-30fbf253dc7so7966f8f.0;
+        Wed, 14 Jun 2023 12:09:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686769730; x=1689361730;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ErPDVCSBpPJlYZGqC1SD/e+jlrE1qnWfALaiFCF/cEk=;
-        b=jmbi/A02sAgtAEjnexDwofutI7SYsNKZb9DJ0918C84hfbYX6Kv2CnynHp7r9XGnlN
-         Cp8ZWWLwUdRTJFukEXwkeDOBMoNk3CTaEhN7ljsU9elXqeq1Z3RUSKYBM6GZo/WiI8KT
-         oPOMyym6zWHkxmTB3MQ07oxWD7PeJrvq0kvWw8aGJL8XSPf+dk5f+gFT67il+bzXfAN2
-         6dyi2TlnIq0Le4Z+DiAPf+P/T4s3RoflN+csQzJAHSNigY1Vh+g2sdvQ9cTB2g73o86y
-         dEVSMHa3qXDAuMKstEcmSUZb/SA6tSztZN0LSg42YapskHGdFXw2quO5rHkKRaWjd8nV
-         v5JQ==
+        d=gmail.com; s=20221208; t=1686769739; x=1689361739;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RavBw/beXNuiIwbQf5+ADzUkWI8HXmt0ibMWsiTo/kg=;
+        b=TVPeiuttZZZiOfNszeMva/RqEkNV9mLkPCjfWkzGE55N43P6Kqkhi8UfLFK2YfNhSh
+         Zxg7vQKs0QyzrlWsmPOeBqt2A9qnO+x39f4MymaczaiKYztI+DO2OISf6CyOuBw6hFlK
+         Gszp/ppT6jRseFLlYmGh9Lp9EuqqAL4z/3y4jhf2Zr07j05Hwq7S+Qe48IgYlH8yR7VM
+         ZWrSdgHY1FkeA40c/YuO+TLcFlrj3xnAAIbcSIz1MC6L/BmI7x2k23tATKgw/aC6qVcK
+         tmePyDCJihbOMIO2is40QTj4iO0rhIHsG+myXhyGnT6FZAJov1Gc7/EUXMU0awqqBgZL
+         K/lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686769730; x=1689361730;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1686769739; x=1689361739;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ErPDVCSBpPJlYZGqC1SD/e+jlrE1qnWfALaiFCF/cEk=;
-        b=LFPs1hAXkEAW37ALXuuHrXj7cbwhtHrQnZHRERZHWWzt1WAa3qWXr0Jjp7kFnQvJOC
-         CV1k7fkksxo7DAdK1SPTttu0ZsdOZGfNv2bFeqWVEAE4vwNVle2mRWl+WEe6EMCoDhU/
-         G8GsDfUC5Y0slY0FydAlS9522uImua/12DE3Zee4v1dyNHydYVMbO+zsgYj2kezDRNRf
-         gtovbMQrmW8rcaQhlqsoFOz9AY7z3BSg5FaOo8t/QMLhhkTpVO5/F8bNxP0CsOHDjBkt
-         fd4r+/8yBj2nMnnq0UImJ3PePS85lTCogn6uHjNTh59ezmHLnJvjOWLiacabTIOW1Bbc
-         AhUQ==
-X-Gm-Message-State: AC+VfDz/iUHrlqHMDB4CffcXTGQNS+X8e+JtVSyuSisNxwgjJFvDB9sf
-        k23Zk/OeYtpe75HswJ8BWqwgwK0SpkHAGwjAzzpiNA==
-X-Google-Smtp-Source: ACHHUZ7Jlx1MnAmIR2pE8OVZOOzZ43InmF1UHvxki4FXW/lgM0L0ew4VCWjHbEtlNlYpJ3qLkwuOtXyLLHY4KD09mf4=
-X-Received: by 2002:a05:6870:8447:b0:19a:ce25:6d06 with SMTP id
- n7-20020a056870844700b0019ace256d06mr10445359oak.56.1686769729782; Wed, 14
- Jun 2023 12:08:49 -0700 (PDT)
+        bh=RavBw/beXNuiIwbQf5+ADzUkWI8HXmt0ibMWsiTo/kg=;
+        b=VhRIh2JzdjNdODrleMb3hSJqurlj+lCCMQ0gbEGju9zk7b6tPJXwDC6QqsmoStZN8V
+         DynIw090EgsrQgfx+Or3X6iJaC/hp/9DXknx9YwBoiPaFx4E5Fg+vRrIkQ9VLhKNduLq
+         D1mUDDJ1668mvk65ylbA8YU3UMEONkEcelckgL+HnB9ipCzK7dhfwQoRE/EWziMxo4ho
+         PBbNCnkGGNdVtxYS1yzl9KHamW5c0M3559uCAJiRHMtob2AkYIgA5CRvgexsL8t6zbyR
+         gwldTi9mHetCVYHrUCforgHlEpk4kMJtn4a+8CkyD0VnuBWUBZp2QaKo65NzqWl1C9Pk
+         V/Xg==
+X-Gm-Message-State: AC+VfDyflTu1lkQc737HRXdr2zeO0DvtHZWY10A7cUX6Hv3Lc8E+mNPV
+        hBal9MXfFKfIucm2pzWNgxM=
+X-Google-Smtp-Source: ACHHUZ4Gf34RQgRIjH2O/wFqMFU3nYMzpDUcaKJHfSZgyW6i9coP7PRFYh1VcfEHkOeoJxEh9vw36A==
+X-Received: by 2002:a5d:5507:0:b0:30e:56b3:60fe with SMTP id b7-20020a5d5507000000b0030e56b360femr2092719wrv.4.1686769739485;
+        Wed, 14 Jun 2023 12:08:59 -0700 (PDT)
+Received: from [127.0.1.1] (2001-4dd6-393b-ff-f59e-4402-63f8-7ff5.ipv6dyn.netcologne.de. [2001:4dd6:393b:ff:f59e:4402:63f8:7ff5])
+        by smtp.gmail.com with ESMTPSA id e6-20020a5d5306000000b003110ab70a4fsm2341094wrv.83.2023.06.14.12.08.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 12:08:58 -0700 (PDT)
+From:   Maximilian Weigand <mweigand2017@gmail.com>
+Subject: [PATCH 0/3] backlight: lm3630a: add functionality to change boost
+ converter frequency
+Date:   Wed, 14 Jun 2023 21:08:51 +0200
+Message-Id: <20230602-lm3630a_boost_frequency-v1-0-076472036d1a@mweigand.net>
 MIME-Version: 1.0
-References: <20230602161246.1855448-1-amit.pundir@linaro.org>
- <358c69ad-fa8a-7386-fe75-92369883ee48@leemhuis.info> <0f6c9dcb-b7f6-fff9-6bed-f4585ea8e487@linaro.org>
-In-Reply-To: <0f6c9dcb-b7f6-fff9-6bed-f4585ea8e487@linaro.org>
-From:   Amit Pundir <amit.pundir@linaro.org>
-Date:   Thu, 15 Jun 2023 00:38:13 +0530
-Message-ID: <CAMi1Hd3Cv1i06NhpY6Jqu7OvMpOdzTj6nTEMJNWLrMwMLsugZA@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: qcom: sdm845-db845c: Move LVS regulator nodes up
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        Mark Brown <broonie@kernel.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEMQimQC/x2N0QrCMAwAf2Xk2UJtWWX+ishIa+YCrtVkE2Xs3
+ +18PI7jVlASJoVzs4LQm5VLrnA8NJBGzHcyfKsMzjpvg3XmMfngLfaxFJ37Qei1UE5fE5G60AZ
+ Kp7aDWkdUMlEwp3HvJ9SZZBdPoYE//+Xlum0/AtvEh4IAAAA=
+To:     Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>, Pavel Machek <pavel@ucw.cz>,
         Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        dt <devicetree@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        Maximilian Weigand <mweigand@mweigand.net>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1686769738; l=2088;
+ i=mweigand@mweigand.net; s=20230601; h=from:subject:message-id;
+ bh=EEQE3qlxnzvPdxyG2oGt17X4etiM2QkOKRdSulvTDt8=;
+ b=QDW3TR3W/883zra37WNEzh+EauPKNzzRyQ0jUD+mJkih625wuoYVOam6dW69idKvEE8TnOpGi
+ voO1JiSbRG6CGLieSDFKFKTLpGGwPABCsKlTwIlwrEUtY7qvyzobyJx
+X-Developer-Key: i=mweigand@mweigand.net; a=ed25519;
+ pk=Tjuj6PXmCCxzGTRw+9suZuZ41q/etgDHrIbPdkAaTpM=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Jun 2023 at 00:17, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 14/06/2023 20:18, Linux regression tracking (Thorsten Leemhuis) wrote:
-> > On 02.06.23 18:12, Amit Pundir wrote:
-> >> Move lvs1 and lvs2 regulator nodes up in the rpmh-regulators
-> >> list to workaround a boot regression uncovered by the upstream
-> >> commit ad44ac082fdf ("regulator: qcom-rpmh: Revert "regulator:
-> >> qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS"").
-> >>
-> >> Without this fix DB845c fail to boot at times because one of the
-> >> lvs1 or lvs2 regulators fail to turn ON in time.
-> >
-> > /me waves friendly
-> >
-> > FWIW, as it's not obvious: this...
-> >
-> >> Link: https://lore.kernel.org/all/CAMi1Hd1avQDcDQf137m2auz2znov4XL8YGrLZsw5edb-NtRJRw@mail.gmail.com/
-> >
-> > ...is a report about a regression. One that we could still solve before
-> > 6.4 is out. One I'll likely will point Linus to, unless a fix comes into
-> > sight.
-> >
-> > When I noticed the reluctant replies to this patch I earlier today asked
-> > in the thread with the report what the plan forward was:
-> > https://lore.kernel.org/all/CAD%3DFV%3DV-h4EUKHCM9UivsFHRsJPY5sAiwXV3a1hUX9DUMkkxdg@mail.gmail.com/
-> >
-> > Dough there replied:
-> >
-> > ```
-> > Of the two proposals made (the revert vs. the reordering of the dts),
-> > the reordering of the dts seems better. It only affects the one buggy
-> > board (rather than preventing us to move to async probe for everyone)
-> > and it also has a chance of actually fixing something (changing the
-> > order that regulators probe in rpmh-regulator might legitimately work
-> > around the problem). That being said, just like the revert the dts
-> > reordering is still just papering over the problem and is fragile /
-> > not guaranteed to work forever.
-> > ```
-> >
-> > Papering over obviously is not good, but has anyone a better idea to fix
-> > this? Or is "not fixing" for some reason an viable option here?
-> >
->
-> I understand there is a regression, although kernel is not mainline
-> (hash df7443a96851 is unknown) and the only solutions were papering the
-> problem. Reverting commit is a temporary workaround. Moving nodes in DTS
-> is not acceptable because it hides actual problem and only solves this
-> one particular observed problem, while actual issue is still there. It
-> would be nice to be able to reproduce it on real mainline with normal
-> operating system (not AOSP) - with ramdiks/without/whatever. So far no
-> one did it, right?
+For certain brightness settings the Pine64 PineNote exhibits quite
+visible flickering of the led backlights, leading to an unpleasant user
+experience. It is understood that flickering is caused by certain power
+line ripples interacting with the led driver, inherent to the
+specific hardware. The lm3630a led driver is able to change the boost
+converter switching frequency. Among other things, changing the boost
+frequency can also greatly improve visible flickering issues.
 
-No, I did not try non-AOSP system yet. I'll try it tomorrow, if that
-helps. With mainline hash.
+This patchset enables dts control of two frequency modifications that the
+hardware is capable of: Switch from a base frequency of 500 kHz to 1
+MHz, and activate a frequency shift to 560 kHz or 1.12 MHz,
+respectively.
 
-Regards,
-Amit Pundir
+As flickering characteristics are mainly hardware dependent, this should
+warrant the inclusion of two dts entries for the lm3630a led driver to
+control the boost frequency of the chip on a per-device basis.
+
+Changes were tested on a Pine64 PineNote. The following brightness
+settings were found to exhibit serious flickering without either the
+frequency shift or the higher boost frequency:
+
+echo 186 > /sys/class/backlight/backlight_warm/brightness
+echo 255 > /sys/class/backlight/backlight_cool/brightness
+
+Signed-off-by: Maximilian Weigand <mweigand@mweigand.net>
+---
+Maximilian Weigand (3):
+      backlight: lm3630a: add support for changing the boost frequency
+      dt-bindings: backlight: lm3630a: add entries to control boost frequency
+      arm64: dts: rockchip: shift boost frequency for rk3566-pinenote backlight
+
+ .../bindings/leds/backlight/lm3630a-backlight.yaml           | 12 ++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3566-pinenote.dtsi            |  1 +
+ drivers/video/backlight/lm3630a_bl.c                         |  9 ++++++++-
+ include/linux/platform_data/lm3630a_bl.h                     |  5 +++++
+ 4 files changed, 26 insertions(+), 1 deletion(-)
+---
+base-commit: 858fd168a95c5b9669aac8db6c14a9aeab446375
+change-id: 20230602-lm3630a_boost_frequency-bae9656ec759
+
+Best regards,
+-- 
+Maximilian Weigand <mweigand@mweigand.net>
+
