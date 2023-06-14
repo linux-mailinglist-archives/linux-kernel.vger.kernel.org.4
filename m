@@ -2,150 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 246B073071A
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 20:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2512730721
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 20:11:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233685AbjFNSKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 14:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39148 "EHLO
+        id S237322AbjFNSLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 14:11:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241321AbjFNSJu (ORCPT
+        with ESMTP id S240402AbjFNSKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 14:09:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBBAE3593;
-        Wed, 14 Jun 2023 11:09:00 -0700 (PDT)
+        Wed, 14 Jun 2023 14:10:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FCD30C4;
+        Wed, 14 Jun 2023 11:10:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BBB26458E;
-        Wed, 14 Jun 2023 18:07:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AB21C433C0;
-        Wed, 14 Jun 2023 18:07:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 427A16455E;
+        Wed, 14 Jun 2023 18:09:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAA94C433C0;
+        Wed, 14 Jun 2023 18:09:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686766077;
-        bh=Uf4sTtIWxAwykiAlD6TKOwJqAz2NJsqgiC/LwUbwvjo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XARG4ZSJAarJrHn5Jaf0ASt3Qx98VTQJUyDOPFK/JIwyuJ8QaEDeZ8PGuZrUBtisz
-         3ED4S9NC1ACVqmzp3/ty8A+idvmRDWIBqrSZMXRll+zkBP6ljDFcFB6mi+Ta5+licX
-         1OcAz3WCcnxwQ2fheuT7UiUVkmeonyIXDjSHcYOZ+pYmaNIL3lflczmuDcTmSj8k72
-         uDnOUpYpMEUDSyl/Cwe06zLy4riwAwrtiqCsVBawufzl/hM7K7/NhIKNMhDby/vQwQ
-         5TKwBPlbBOxk/I/DCclB6r7JEpj8Zve0EQXeqhXt//rL/jGTzQEUCCFWOPZpQt949z
-         c5VFlJRoPnEtw==
-Date:   Wed, 14 Jun 2023 11:07:55 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     clang-built-linux <llvm@lists.linux.dev>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-stable <stable@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>
-Subject: Re: clang: Powerpc: =?utf-8?Q?clang-nightl?=
- =?utf-8?B?eS1tYXBsZV9kZWZjb25maWcg4oCU?= FAIL
-Message-ID: <20230614180755.GA2035364@dev-arch.thelio-3990X>
-References: <CA+G9fYsJq0sPC+q6vLNKUgBqCGmmjDrfeP4R1-95Eu28FJRY_A@mail.gmail.com>
- <20230612185424.GA2891387@dev-arch.thelio-3990X>
- <CA+G9fYtX6YNqmz9vxJxa5cA5Uf2rr=RNM0nkoTzRpg79Azp2tA@mail.gmail.com>
- <CA+G9fYvmqz3nQ=Cgs=7J6vtRj=OhbNzgkLPmxxN+vOBTU=9zVA@mail.gmail.com>
+        s=k20201202; t=1686766161;
+        bh=fXHMpfERvexjC1cBZRBzlkhrqEdvS6t8XukfGExQ9rE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=T0w5Clw6D4NpCHTogWpArssUXW2986IdhYro40TmZhV+LtKFz6dSaRaikAvt5XheN
+         gns0l1bPss9Nt4D/PIWJTOti/EYwrF5vvVwflkW8e5n1OccZ39RQNJ9l4K29zn/qQ0
+         Yhc31ewVSDSm5RRWPdKyHSSFaFETQYbBMr2xeZh+9eYsg5ov906SSTX52WUs38mQtF
+         AAaZlNB2T49Ix361pzTvDWu0aqP/ZDnjPAlSTdJzy3QgCUYIZaua0jK/tzd4TuS17p
+         0DRXPAM1lXrOe1bf0wqzLqcfJXNaIrXp85SBe8sLyJIgec60v35blJICTjgZAAh/Wq
+         veL2T6ul3pjPw==
+From:   Miguel Ojeda <ojeda@kernel.org>
+To:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Andreas Hindborg <nmi@metaspace.dk>,
+        Philip Li <philip.li@intel.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: [PATCH 0/6] KUnit integration for Rust doctests
+Date:   Wed, 14 Jun 2023 20:08:24 +0200
+Message-ID: <20230614180837.630180-1-ojeda@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+G9fYvmqz3nQ=Cgs=7J6vtRj=OhbNzgkLPmxxN+vOBTU=9zVA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 07:43:45PM +0530, Naresh Kamboju wrote:
-> Hi Nathan,
-> 
-> On Tue, 13 Jun 2023 at 09:57, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> >
-> > Hi Nathan,
-> >
-> > On Tue, 13 Jun 2023 at 00:24, Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > Hi Naresh,
-> > >
-> > > On Tue, Jun 13, 2023 at 12:10:30AM +0530, Naresh Kamboju wrote:
-> > > > [Please ignore if it is already reported]
-> > > >
-> > > > Following two builds failed on stable-rc 6.1.34-rc1.
-> > > >
-> > > >   - Powerpc: clang-nightly-maple_defconfig — FAIL
-> > > >   - Powerpc: clang-nightly-cell_defconfig — FAIL
-> > > >
-> 
-> > > As always, thanks for the report. This is an LLVM regression/change in
-> > > behavior caused by [1], which can break as-option and as-instr on
-> > > releases prior to commit d5c8d6e0fa61 ("kbuild: Update assembler calls
-> > > to use proper flags and language target"), as unsupported flags for the
-> > > current target ('-x') may be present (KBUILD_CFLAGS is used for these
-> > > tests instead of KBUILD_AFLAGS). Inside try-run, the macro behind
-> > > as-instr and as-option, I see
-> > >
-> > >   clang-17: error: unsupported option '-mno-prefixed' for target 'powerpc64le-linux-gnu'
-> > >   clang-17: error: unsupported option '-mno-pcrel' for target 'powerpc64le-linux-gnu'
-> > >   clang-17: error: unsupported option '-mno-altivec' for target 'powerpc64le-linux-gnu'
-> > >   clang-17: error: unsupported option '-mno-vsx' for target 'powerpc64le-linux-gnu'
-> > >   clang-17: error: unsupported option '-mno-mma' for target 'powerpc64le-linux-gnu'
-> > >   clang-17: error: unsupported option '-mno-spe' for target 'powerpc64le-linux-gnu'
-> > >
-> > > This has come up recently elsewhere in PowerPC, see
-> > > commit 2b694fc96fe3 ("powerpc/boot: Disable power10 features after
-> > > BOOTAFLAGS assignment"). While I think it is dubious that clang errors
-> > > on these flags for the assembler target, this is already fixed on the
-> > > Linux side by using KBUILD_AFLAGS for these make macros.
-> > >
-> > > I am preparing a series of d5c8d6e0fa61 and its dependencies for 6.1 but
-> > > I want to do sufficient build testing first, which is currently running
-> > > for me. Would you be able to point your matrix to [2] to make sure
-> > > everything works properly with both GCC and LLVM? It is a work in
-> > > progress as the second patch in the stack needs a proper commit message
-> > > but it is the diff I expect to ship so that it all that matters.
-> >
-> > We'll start building [2] with GCC and LLVM by using tuxplans and
-> > get back to you.
-> 
-> LKFT has been configured to run GCC and LLVM in total 205 builds
-> and all the builds have passed on your tree / branch [2]. You can find
-> the list of builds including kselftest, perf, rcutorture, kunit, kmemleak
-> and many more combinations and architectures.
-> 
-> I request you to review the list of builds results and test results on
-> projects page [3] [4]. I do not find any regressions compared with
-> mainline master as sanity testing.
+This is the initial KUnit integration for running Rust documentation
+tests within the kernel.
 
-Thanks a lot for testing!
+Thank you to the KUnit team for all the input and feedback on this
+over the months, as well as the Intel LKP 0-Day team!
 
-> Do you think LKFT should build your tree / branch often ?
-> We are happy to test anytime.
+This may be merged through either the KUnit or the Rust trees. If
+the KUnit team wants to merge it, then that would be great.
 
-No, this is an exceptional circumstance, not the norm. If I need wider
-testing done in the future, I will keep you all in mind :)
+Please see the message in the main commit for the details.
 
-> Thanks Daniel and Anders for your work.
-> 
-> build_names: that got tested and all have passed.
-> 
 
-<snip>
+Miguel Ojeda (6):
+  rust: init: make doctests compilable/testable
+  rust: str: make doctests compilable/testable
+  rust: sync: make doctests compilable/testable
+  rust: types: make doctests compilable/testable
+  rust: support running Rust documentation tests as KUnit ones
+  MAINTAINERS: add Rust KUnit files to the KUnit entry
 
-Great! I sent along the 6.1 backports now:
+ MAINTAINERS                       |   2 +
+ lib/Kconfig.debug                 |  13 +++
+ rust/.gitignore                   |   2 +
+ rust/Makefile                     |  29 ++++++
+ rust/bindings/bindings_helper.h   |   1 +
+ rust/helpers.c                    |   7 ++
+ rust/kernel/init.rs               |  25 +++--
+ rust/kernel/kunit.rs              | 156 ++++++++++++++++++++++++++++
+ rust/kernel/lib.rs                |   2 +
+ rust/kernel/str.rs                |   4 +-
+ rust/kernel/sync/arc.rs           |   9 +-
+ rust/kernel/sync/lock/mutex.rs    |   1 +
+ rust/kernel/sync/lock/spinlock.rs |   1 +
+ rust/kernel/types.rs              |   6 +-
+ scripts/.gitignore                |   2 +
+ scripts/Makefile                  |   4 +
+ scripts/rustdoc_test_builder.rs   |  73 ++++++++++++++
+ scripts/rustdoc_test_gen.rs       | 162 ++++++++++++++++++++++++++++++
+ 18 files changed, 484 insertions(+), 15 deletions(-)
+ create mode 100644 rust/kernel/kunit.rs
+ create mode 100644 scripts/rustdoc_test_builder.rs
+ create mode 100644 scripts/rustdoc_test_gen.rs
 
-https://lore.kernel.org/20230612-6-1-asssembler-target-llvm-17-v1-0-75605d553401@kernel.org/
 
-Thanks again for testing and the report, cheers!
-Nathan
+base-commit: d2e3115d717197cb2bc020dd1f06b06538474ac3
+-- 
+2.41.0
+
