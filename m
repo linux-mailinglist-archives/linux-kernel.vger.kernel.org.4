@@ -2,68 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B339872FF7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 15:08:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C98172FF6B
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 15:05:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244474AbjFNNIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 09:08:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58694 "EHLO
+        id S244509AbjFNNFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 09:05:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235231AbjFNNIA (ORCPT
+        with ESMTP id S244886AbjFNNEy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 09:08:00 -0400
-X-Greylist: delayed 902 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 14 Jun 2023 06:07:55 PDT
-Received: from mickerik.phytec.de (mickerik.phytec.de [91.26.50.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8004C184
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 06:07:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; d=phytec.de; s=a4; c=relaxed/simple;
-        q=dns/txt; i=@phytec.de; t=1686747170; x=1689339170;
-        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:CC:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=W4aY2dtVSQrTCXa8xdenfZv/tWJRpvPvBQU636eWqd0=;
-        b=CRYYAGcLHk2xIk6mNrj1F7eWN9cavT0dVv+vKrWIb7bd/s6S3Y6xMSa8TnsNK6NO
-        MjhmXjtiFo2UNKcRAbBmBN8lkbJhpBgKgQibQaYhwVePtSQSKzeIZ7oepmf9Jt5U
-        PccXiQkUOamd3I+ceQpU6NB1eRYmIUFfAxf/c0GMl3Q=;
-X-AuditID: ac14000a-917fe70000007ecb-5c-6489b822b1fe
-Received: from berlix.phytec.de (Unknown_Domain [172.25.0.12])
-        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client did not present a certificate)
-        by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id 27.84.32459.228B9846; Wed, 14 Jun 2023 14:52:50 +0200 (CEST)
-Received: from augenblix2.phytec.de (172.25.0.11) by Berlix.phytec.de
- (172.25.0.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 14 Jun
- 2023 14:52:50 +0200
-From:   Teresa Remmet <t.remmet@phytec.de>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Robin Gong <yibin.gong@nxp.com>
-CC:     <linux-kernel@vger.kernel.org>, <upstream@lists.phytec.de>
-Subject: [PATCH] regulator: pca9450: Fix LDO3OUT and LDO4OUT MASK
-Date:   Wed, 14 Jun 2023 14:52:40 +0200
-Message-ID: <20230614125240.3946519-1-t.remmet@phytec.de>
-X-Mailer: git-send-email 2.25.1
+        Wed, 14 Jun 2023 09:04:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0401727
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 06:04:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686747846;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FNbi5F9pP9v/QcQjHjJ8q0ft33Hxyw2GadgFXlOm7YQ=;
+        b=IG3Re1rQmnCPbBK38Gb8W12q4ax/H6Lau2y+6Yw00wdeM/Kq34Czx8zMnc5xhqS4U+FsLJ
+        wVb4yD5PRtWjlvJgWKdjnsIp3L/W9kwD1ib8IPAetffGCUnP8n2XCuLUA2abUHjysGqpsQ
+        zjn1HQfIVx61+iccPMwiXP5ibf+8ErI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-550-sWK7SCOjMuS-S74VF6nJUg-1; Wed, 14 Jun 2023 09:04:04 -0400
+X-MC-Unique: sWK7SCOjMuS-S74VF6nJUg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A1A2A3C108ED;
+        Wed, 14 Jun 2023 13:03:49 +0000 (UTC)
+Received: from localhost (unknown [10.39.192.206])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 687DF9E9C;
+        Wed, 14 Jun 2023 13:03:49 +0000 (UTC)
+Date:   Wed, 14 Jun 2023 14:03:48 +0100
+From:   "Richard W.M. Jones" <rjones@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Aaron Thompson <dev@aaront.org>, linux-kernel@vger.kernel.org
+Subject: Re: printk.time causes rare kernel boot hangs
+Message-ID: <20230614130348.GF7636@redhat.com>
+References: <20230613134105.GA10301@redhat.com>
+ <20230614092158.GF1639749@hirez.programming.kicks-ass.net>
+ <20230614094522.GA7636@redhat.com>
+ <20230614103011.GL7912@redhat.com>
+ <20230614103953.GM7912@redhat.com>
+ <20230614113536.GJ1639749@hirez.programming.kicks-ass.net>
+ <20230614125320.GA1640563@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.25.0.11]
-X-ClientProxiedBy: Berlix.phytec.de (172.25.0.12) To Berlix.phytec.de
- (172.25.0.12)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrJLMWRmVeSWpSXmKPExsWyRpKBR1dpR2eKwaE+K4upD5+wWfQuPcdq
-        8e1KB5PF5V1z2Cy636lbdG84y+jA5rFz1l12j02rOtk8jlxdzOrR393C6rHx3Q4mj8+b5ALY
-        orhsUlJzMstSi/TtErgyrn3fxVzQyl5xpXUXWwPjC9YuRk4OCQETiQXNT9m6GLk4hASWMEns
-        X/GOEcJ5wiix4eE6FpAqNgENiacrTjOBJEQE5jJK3Hq/HqydWcBOYuLKq0A2B4ewgKPE8ldV
-        ICaLgKrE+uPyIBW8ApYSX2Y9ZINYJi8x89J3doi4oMTJmU9YIKbISzRvnc0MYUtIHHzxAswW
-        AorvunSSEaZ32rnXzBB2qMTWL9uZJjAKzEIyahaSUbOQjFrAyLyKUSg3Mzk7tSgzW68go7Ik
-        NVkvJXUTIyi4RRi4djD2zfE4xMjEwXiIUYKDWUmE96lGe4oQb0piZVVqUX58UWlOavEhRmkO
-        FiVx3vs9TIlCAumJJanZqakFqUUwWSYOTqkGxoWqXqnKG97dPrX9xeR+FbP5IjtWh/yv/xsa
-        tlwvYzr3632HPJo+fCnSlLp4fvmh2KeXPX54nf38Y01URkN04UHZudrf1IsMu9J2OxzqfnSV
-        OVP/xKKAb7K8mset1x5IKjyalRZkKVoZlFgYPWfFQbuqNXEl+zLLeXYXX3z+8iWz1fOlV2Zt
-        UVFiKc5INNRiLipOBACL9VPIXAIAAA==
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230614125320.GA1640563@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,33 +67,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-L3_OUT and L4_OUT Bit fields range from Bit 0:4 and thus the
-mask should be 0x1F instead of 0x0F.
+On Wed, Jun 14, 2023 at 02:53:20PM +0200, Peter Zijlstra wrote:
+> Ooooh, what qemu version do you have? There were some really dodgy
+> reports all around self modifying code, all reported on 7.2, that seems
+> to have gone away with 8.
 
-Fixes: 0935ff5f1f0a ("regulator: pca9450: add pca9450 pmic driver")
-Signed-off-by: Teresa Remmet <t.remmet@phytec.de>
----
- include/linux/regulator/pca9450.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> Now, all of them were using TCG, and I think you're using KVM.
 
-diff --git a/include/linux/regulator/pca9450.h b/include/linux/regulator/pca9450.h
-index 3c01c2bf84f5..505c908dbb81 100644
---- a/include/linux/regulator/pca9450.h
-+++ b/include/linux/regulator/pca9450.h
-@@ -196,11 +196,11 @@ enum {
- 
- /* PCA9450_REG_LDO3_VOLT bits */
- #define LDO3_EN_MASK			0xC0
--#define LDO3OUT_MASK			0x0F
-+#define LDO3OUT_MASK			0x1F
- 
- /* PCA9450_REG_LDO4_VOLT bits */
- #define LDO4_EN_MASK			0xC0
--#define LDO4OUT_MASK			0x0F
-+#define LDO4OUT_MASK			0x1F
- 
- /* PCA9450_REG_LDO5_VOLT bits */
- #define LDO5L_EN_MASK			0xC0
+I'm using qemu-system-x86-8.0.0-4.fc39.x86_64 with KVM.  The host
+kernel is 6.4.0-0.rc5.41.fc39.x86_64.
+
+> I've at least 36000 cycles and still nothing :-(, let me go try your
+> .config.
+
+I can definitely reproduce this with your config (but AMD host), so
+that's odd.  Let me try with Intel hardware and your config.  You
+really should see this with only a few thousands iterations.
+
+Rich.
+
 -- 
-2.25.1
+Richard Jones, Virtualization Group, Red Hat http://people.redhat.com/~rjones
+Read my programming and virtualization blog: http://rwmj.wordpress.com
+libguestfs lets you edit virtual machines.  Supports shell scripting,
+bindings from many languages.  http://libguestfs.org
 
