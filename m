@@ -2,85 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D0777303E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:32:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED8D7303EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:32:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237016AbjFNPbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 11:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37008 "EHLO
+        id S244332AbjFNPcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 11:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243727AbjFNPbY (ORCPT
+        with ESMTP id S243752AbjFNPbs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 11:31:24 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30203C3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:31:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=zesKwNNSCYhuMX7FGbKo4AdD1/64QjsAiQXuaan3nJk=; b=FEw8Tg93j3B3Q9piggY7QVi7co
-        znyCePtb1+BzjGffUOsfXX3wgBxjPcqkDep0ZV9QUMEG6klYNOyWSl/GOT6+akN904hCxswvlpaPC
-        0ZA5hd/jF6/xY9QZ9TF4rNrLHhqiNo/chVABydxIqdOsssdpF35Be75gQDdXZI+zYwinC0WF45EZG
-        gSNl4EGGGnzrnR8SlltnrUUK6Xderi1Tbrw2beb6L6o/JrFbhlLgSsBNGgUvZ6aUxFPX8pxMv3x6l
-        tqkTi/qsl1Q+kiwRocmukIBSIMKBlUG57ueJUaQkpvtgaAYe1y7f75nMogwj5tqYeMAVEHzi4kdxy
-        9ipVAxVg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q9SSk-00AoSd-15;
-        Wed, 14 Jun 2023 15:31:10 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0B1C43002F0;
-        Wed, 14 Jun 2023 17:31:08 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BB993240FEB2C; Wed, 14 Jun 2023 17:31:08 +0200 (CEST)
-Date:   Wed, 14 Jun 2023 17:31:08 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Richard W.M. Jones" <rjones@redhat.com>
-Cc:     Aaron Thompson <dev@aaront.org>, linux-kernel@vger.kernel.org
-Subject: Re: printk.time causes rare kernel boot hangs
-Message-ID: <20230614153108.GC1640563@hirez.programming.kicks-ass.net>
-References: <20230614094522.GA7636@redhat.com>
- <20230614103011.GL7912@redhat.com>
- <20230614103953.GM7912@redhat.com>
- <20230614113536.GJ1639749@hirez.programming.kicks-ass.net>
- <20230614125320.GA1640563@hirez.programming.kicks-ass.net>
- <20230614130348.GF7636@redhat.com>
- <20230614130945.GK1639749@hirez.programming.kicks-ass.net>
- <20230614145348.GB1640563@hirez.programming.kicks-ass.net>
- <20230614150717.GG7636@redhat.com>
- <20230614151920.GN1639749@hirez.programming.kicks-ass.net>
+        Wed, 14 Jun 2023 11:31:48 -0400
+Received: from out-59.mta1.migadu.com (out-59.mta1.migadu.com [95.215.58.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B549FB6
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:31:46 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1686756704;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CYKbp9Q0BeM52+XXi3aMvjzJfNpfbqXByiTdIuieW4g=;
+        b=ejyEaxmgzfyiMYJ2Vleh7ornI7PLLaFCXL0QtoGCEzSqXZeE+aeSAHa9bGs8qcEfvN+GdI
+        6QBiDAhRREsBGwDEHb0do6SgyuATtK5gKrAL0AETuPTeqL2mRZM939ezA8/a7/MJ6DBnmu
+        hE3lVIU9tPflVcLqFu/8HdfnZ2QR9og=
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     kvmarm@lists.linux.dev, Mostafa Saleh <smostafa@google.com>,
+        maz@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Oliver Upton <oliver.upton@linux.dev>, catalin.marinas@arm.com,
+        yuzenghui@huawei.com, tabba@google.com, kaleshsingh@google.com,
+        suzuki.poulose@arm.com, will@kernel.org, james.morse@arm.com
+Subject: Re: [PATCH v2] KVM: arm64: Use different pointer authentication keys for pKVM
+Date:   Wed, 14 Jun 2023 15:31:28 +0000
+Message-ID: <168675651878.3255755.17510485264525909343.b4-ty@linux.dev>
+In-Reply-To: <20230614122600.2098901-1-smostafa@google.com>
+References: <20230614122600.2098901-1-smostafa@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230614151920.GN1639749@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 05:19:20PM +0200, Peter Zijlstra wrote:
-> On Wed, Jun 14, 2023 at 04:07:17PM +0100, Richard W.M. Jones wrote:
-> > On Wed, Jun 14, 2023 at 04:53:48PM +0200, Peter Zijlstra wrote:
+On Wed, 14 Jun 2023 12:25:59 +0000, Mostafa Saleh wrote:
+> When the use of pointer authentication is enabled in the kernel it
+> applies to both the kernel itself as well as KVM's nVHE hypervisor. The
+> same keys are used for both the kernel and the nVHE hypervisor, which is
+> less than desirable for pKVM as the host is not trusted at runtime.
 > 
-> > > Clearly I'm doing something wrong.
-> > 
-> > I'm suspecting version of qemu may have something to do with it, but
-> > honestly I don't know.  Which qemu are you using?
+> Naturally, the fix is to use a different set of keys for the hypervisor
+> when running in protected mode. Have the host generate a new set of keys
+> for the hypervisor before deprivileging the kernel. While there might be
+> other sources of random directly available at EL2, this keeps the
+> implementation simple, and the host is trusted anyways until it is
+> deprivileged.
 > 
-> ivb-ep: QEMU emulator version 7.2.0 (Debian 1:7.2+dfsg-3)
-> adl: QEMU emulator version 7.2.0 (Debian 1:7.2+dfsg-1+b2)
-> 
-> I'll try and upgrade the adl to 8.
+> [...]
 
-adl: QEMU emulator version 8.0.2 (Debian 1:8.0.2+dfsg-1)
+Applied to kvmarm/next, thanks!
 
-started it again.. 
+[1/1] KVM: arm64: Use different pointer authentication keys for pKVM
+      https://git.kernel.org/kvmarm/kvmarm/c/8c15c2a02810
+
+--
+Best,
+Oliver
