@@ -2,98 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D61672FFAF
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 15:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B197A72FFB5
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 15:14:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244803AbjFNNNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 09:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34278 "EHLO
+        id S244915AbjFNNN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 09:13:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244889AbjFNNNK (ORCPT
+        with ESMTP id S244795AbjFNNNz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 09:13:10 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D7A62122
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 06:12:41 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-5186a157b85so4076491a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 06:12:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686748360; x=1689340360;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=S08ZeNXqQP5v9xLbtyoi47QEn3XexDdtBrQiOR2aUNA=;
-        b=ygCBTdm74mYQDFjGHmbNGWaXGRjkqN/cbCWdPpx4X4Iyx5ncVTd7OAfdRM48U3lzam
-         SsJtPLYc5grKSevCx1PV9R/x5EN7c6mJYKSz1ZddrjppC358eO5NWaHYhqvWNTWrStGj
-         49MiVylg8OoetBcwOMIHrhqJa29f7qpIaLh5RoS/blIzxXtWJnFrxdbPQ86VU6O81+ig
-         ZMDHISX4z96IIYxnEQ4iTr3tLFoCEmV6kMJdba0FJ7dyY7EUNq0mw8YzZNbbzDvLsJyw
-         qV83hH6m5h+ooxdSkg4UzP7t8YpaAYWhU+TpNJbpLJOaGFedvyXxHqVkwKkVbQ7InpWj
-         qXMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686748360; x=1689340360;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=S08ZeNXqQP5v9xLbtyoi47QEn3XexDdtBrQiOR2aUNA=;
-        b=mGveGK1d3a35eW8qE1EXvmOmHliqlte45STwbaDDUAZM5WfRk9ZfBH19lq9eHt+9mE
-         OAdxdhD7OUF2h3Ok4UNCccnflhEPHcY37CW2Jhn1m7FH1+XT7+symmWVY/3K4KwHAn8F
-         tijpspKREwZpAMWwUiXiFaJMjgXJOltjxx3YvIIt9R8T4hNo2lfz/7vtLQGTK6KlGvzh
-         aLaYPE5o97g1Fk718UJpKZyL+RxqcexNdvDMukUjBgAQgh7i6CpfmakqOBtMe80Beh8u
-         i8Y8mFL+EhoGoGf9DwD7pzrGPlF8jt55wRE6gBtPUISzhV1MhHzrQNEgRq2+B/oN6AI6
-         yKcA==
-X-Gm-Message-State: AC+VfDwOiaLYklxKhW/s4ky49kWAozayRX1zgCCUzH7jNG1gpYRJAatk
-        hGmNvCftUcmdKF0ARnqt/ZZ7wYLLtn1pDijVM7k=
-X-Google-Smtp-Source: ACHHUZ6GOuDAoa4gpksMPRaoojmdo3dq1uAiUbBSCfD19wFN0HT5b/iWp+S+vfOecTCo3rv7erOUMQ==
-X-Received: by 2002:a05:6402:1202:b0:518:9174:9b5f with SMTP id c2-20020a056402120200b0051891749b5fmr1685330edw.1.1686748359872;
-        Wed, 14 Jun 2023 06:12:39 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id m7-20020aa7d347000000b005149461b1e0sm7682925edr.25.2023.06.14.06.12.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 06:12:39 -0700 (PDT)
-Message-ID: <ed54c63d-3342-a566-e12c-2b0672e89200@linaro.org>
-Date:   Wed, 14 Jun 2023 15:12:37 +0200
+        Wed, 14 Jun 2023 09:13:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBF7268B;
+        Wed, 14 Jun 2023 06:13:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C76F1639C3;
+        Wed, 14 Jun 2023 13:13:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2E57C433C0;
+        Wed, 14 Jun 2023 13:12:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686748385;
+        bh=x8Up71mCwqWQG8AsnfE4/2MdVJDUJadORPWbH0I1tuE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NmGuG1scUFZKhFQNFytyrqQs4QH8kSngMWTDWQhh/IAxUShNkfAlHA0mYatvTs83/
+         jOKmBA00V+we+EzssIXOd/Qz6QecVS5ksEJeq0J3SvWSO8bj5PSDHbZgMaN95IeN8R
+         P733m+ruVwxdOGQxxq0YxO2HZWTkeNUJANSmfjGDgbvalwxGKpo4E3gTq3Iv5L2IZO
+         zKhN1qUc4PaKfYBJnBHQfjM3sPbtik1D4+Ru3w0XxYPIZqDW9YzPa4GikNGjqHoBr8
+         valRm0kUucRd4MnoMTxBiQVaEQ6kAsOzmbiwXIMM0TI99Z7h0v4MW5wcMejZM+cOhR
+         a/QxJGFDHl0Uw==
+Date:   Wed, 14 Jun 2023 14:12:53 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "Xu, Pengfei" <pengfei.xu@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "bp@alien8.de" <bp@alien8.de>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Eranian, Stephane" <eranian@google.com>
+Subject: Re: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack
+ description
+Message-ID: <898e952a-be97-4424-b889-4f766e3e0cd4@sirena.org.uk>
+References: <20230613001108.3040476-1-rick.p.edgecombe@intel.com>
+ <20230613001108.3040476-24-rick.p.edgecombe@intel.com>
+ <0b7cae2a-ae5b-40d8-9ae7-10aea5a57fd6@sirena.org.uk>
+ <87y1knh729.fsf@oldenburg.str.redhat.com>
+ <1f04fa59-6ca9-4f18-b138-6c33e164b6c2@sirena.org.uk>
+ <49eabafa97032dec8ace7361bccae72c6ecf3860.camel@intel.com>
+ <fc2ebfcf-8d91-4f07-a119-2aaec3aa099f@sirena.org.uk>
+ <a0f1da840ad21fae99479288f5d74c7ab9095bb6.camel@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 3/3] usb: typec: fsa4480: add support for Audio Accessory
- Mode
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20230614-topic-sm8550-upstream-type-c-audio-v1-0-15a92565146b@linaro.org>
- <20230614-topic-sm8550-upstream-type-c-audio-v1-3-15a92565146b@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230614-topic-sm8550-upstream-type-c-audio-v1-3-15a92565146b@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4ibPQ7ywZvQ2KqFY"
+Content-Disposition: inline
+In-Reply-To: <a0f1da840ad21fae99479288f5d74c7ab9095bb6.camel@intel.com>
+X-Cookie: At participating locations only.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/06/2023 15:10, Neil Armstrong wrote:
-> The FSA4480 Type-C switch supports switching the Audio R/L,
-> AGND and MIC signals to the USB-C DP/DM and SBU1/2 to support
-> the Audio Accessory Mode.
-> 
-> The FSA4480 has an integrated Audio jack detection mechanism
-> to automatically mux the AGND, MIX and Sense to the correct
-> SBU lines to support 3 pole and both 4 pole TRRS pinouts.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
 
+--4ibPQ7ywZvQ2KqFY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Tested-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Tue, Jun 13, 2023 at 07:57:37PM +0000, Edgecombe, Rick P wrote:
 
-Best regards,
-Krzysztof
+> For alt shadow stack's, this is what I came up with:
+> https://lore.kernel.org/lkml/20220929222936.14584-40-rick.p.edgecombe@intel.com/
 
+> Unfortunately it can't work automatically with sigaltstack(). Since it
+> has to be a new thing anyway, it's been left for the future. I guess
+> that might have a better chance of being cross arch.
+
+Yeah, I've not seen and can't think of anything that's entirely
+satisfactory either.  Like Szabolcs says I do think we need a story on
+this.
+
+> BTW, last time this series accidentally broke an arm config and made it
+> all the way through the robots up to Linus. Would you mind giving
+> patches 1-3 a check?
+
+I'm in the middle of importing the whole series into my development
+branch, but note that I'm only really working with arm64 not arm so
+might miss stuff the bots would hit.  Hopefully there should be some
+Tested-bys coming for arm64 anyway.
+
+--4ibPQ7ywZvQ2KqFY
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSJvNQACgkQJNaLcl1U
+h9CPyQf/Y4GwjTyNGgoEGlusyMBRxull9v6onRkwCcTUbLHk6Nmd68eA186L2jZS
+kTkjXNcM67CHwcz3xw1W/1T4uXcitQqHeNznnES31wFwPnJYZzDJSF3RfyhC3WXk
+eh9so9SyTG2SO/AK4CUgdhSph0eYMo2o606r/S+4mWiThEC6sMK/5Wly6vVmM4mm
+dAHJecna4winLvCpMTb5gW/khUtn5Bc3w58b/45FoVytXFnMV65H+Q/WIsySPl2J
+pHH93UeI0zJXXKzhm6iSQBFjRmLa18i7o0k456fIKYxFYknblATaeJvSXC4YhCtA
+zVN7zhOEPqONu5RRMukB6WRZgpm3tw==
+=ErsU
+-----END PGP SIGNATURE-----
+
+--4ibPQ7ywZvQ2KqFY--
