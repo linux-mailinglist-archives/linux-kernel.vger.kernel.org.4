@@ -2,86 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF8CA72F543
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 08:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA7472F546
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 09:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237478AbjFNG7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 02:59:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56090 "EHLO
+        id S238459AbjFNHAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 03:00:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237570AbjFNG7X (ORCPT
+        with ESMTP id S237570AbjFNHAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 02:59:23 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87514198D
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 23:59:22 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4Qgx9h3LnCzBQJYj
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 14:59:20 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1686725960; x=1689317961; bh=M4zJl5qkZeh/H9ESI31UdmagVvc
-        YkNvG1PgXOWZNocs=; b=j7jCm9UZIjpsToDyjjGhSbYHS3gsT/Ks3FBlGo0ILF+
-        jVc5m3oYoPT0AVhFeiPLSJHIWFoU0osv1M9TD5Wuy3wpKsZ9lMlb8pnUIUVMe63Y
-        rPuceoFUVzgabnCUEGan2TGR/7iGAcWqOomGTBtIUM2KX1w8nm2fWrHlby13cvO8
-        PYQjGHlbU39M7iOXeZ1mPtTk+cua1x42YspLrJiqU4lPSA+6X75FQwAHiSvltk65
-        w9IeEyqHxCOzVUvDA0Zpb+70MQY8ms4aJqCFENDgxJeWMClFqMkBViC84hk4Zsn6
-        MIiHdOWAnxz5LmPFcufldr9qMv9KzaZ3RkkQ15SFF3w==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Tnkl7NdCUXck for <linux-kernel@vger.kernel.org>;
-        Wed, 14 Jun 2023 14:59:20 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4Qgx9h27QLzBJLB3;
-        Wed, 14 Jun 2023 14:59:20 +0800 (CST)
+        Wed, 14 Jun 2023 03:00:10 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B0F71984
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 00:00:09 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3A5761FB;
+        Wed, 14 Jun 2023 00:00:53 -0700 (PDT)
+Received: from a077893.arm.com (unknown [10.163.46.15])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9D5F23F663;
+        Wed, 14 Jun 2023 00:00:04 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-arm-kernel@lists.infradead.org, broonie@kernel.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        James Morse <james.morse@arm.com>, kvmarm@lists.linux.dev,
+        coresight@lists.linaro.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V3 00/14] arm64/sysreg: Convert TRBE registers to automatic generation
+Date:   Wed, 14 Jun 2023 12:29:35 +0530
+Message-Id: <20230614065949.146187-1-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Date:   Wed, 14 Jun 2023 14:59:20 +0800
-From:   wuyonggang001@208suo.com
-To:     peterx@redhat.com, viro@zeniv.linux.org.uk
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] alpha/mm: Fix comparing pointer
-In-Reply-To: <20230614065602.29731-1-zhanglibing@cdjrlc.com>
-References: <20230614065602.29731-1-zhanglibing@cdjrlc.com>
-User-Agent: Roundcube Webmail
-Message-ID: <258e87a54a1dd59b4f3d62ba9fa42242@208suo.com>
-X-Sender: wuyonggang001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following coccicheck warning:
+This series converts TRBE registers to automatic generation, after renaming
+their fields as per the auto-gen tools format. Although the following field
+still renames in arch/arm64/include/asm/sysreg.h, as it cannot be converted
+(shares bits with other fields) in the tools format.
 
-arch/alpha/mm/fault.c:200:52-53: WARNING comparing pointer to 0
+#define TRBSR_EL1_BSC_MASK		GENMASK(5, 0)
+#define TRBSR_EL1_BSC_SHIFT		0
 
-Signed-off-by: Yonggang Wu <wuyonggang001@208suo.com>
----
-  arch/alpha/mm/fault.c | 3 ++-
-  1 file changed, 2 insertions(+), 1 deletion(-)
+This series applies on v6.4-rc6.
 
-diff --git a/arch/alpha/mm/fault.c b/arch/alpha/mm/fault.c
-index 7b01ae4f3bc6..31db549ef0b5 100644
---- a/arch/alpha/mm/fault.c
-+++ b/arch/alpha/mm/fault.c
-@@ -197,7 +197,8 @@ do_page_fault(unsigned long address, unsigned long 
-mmcsr,
+Changes in V3:
 
-   no_context:
-      /* Are we prepared to handle this fault as an exception?  */
--    if ((fixup = search_exception_tables(regs->pc)) != 0) {
-+    fixup = search_exception_tables(regs->pc);
-+    if (fixup != NULL) {
-          unsigned long newpc;
-          newpc = fixup_exception(dpf_reg, fixup, regs->pc);
-          regs->pc = newpc;
+- Defined enum for both PAS and SH fields in TRBMAR_EL1
+- Defined enum for EA field in TRBIDR_EL1
+
+Changes in V2:
+
+https://lore.kernel.org/all/20230602062552.565992-1-anshuman.khandual@arm.com/
+
+- Renamed each individual TRBE register fields as per auto-gen tools
+- Converted each individual TRBE registers as per auto-gen tools
+- Added new register fields as per DDI0601 2023-03
+
+Changes in V1:
+
+https://lore.kernel.org/all/20230531055524.16562-1-anshuman.khandual@arm.com/
+
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Rob Herring <robh@kernel.org>
+Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc: James Morse <james.morse@arm.com>
+Cc: kvmarm@lists.linux.dev
+Cc: coresight@lists.linaro.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+
+Anshuman Khandual (14):
+  arm64/sysreg: Rename TRBLIMITR_EL1 fields per auto-gen tools format
+  arm64/sysreg: Rename TRBPTR_EL1 fields per auto-gen tools format
+  arm64/sysreg: Rename TRBBASER_EL1 fields per auto-gen tools format
+  arm64/sysreg: Rename TRBSR_EL1 fields per auto-gen tools format
+  arm64/sysreg: Rename TRBMAR_EL1 fields per auto-gen tools format
+  arm64/sysreg: Rename TRBTRG_EL1 fields per auto-gen tools format
+  arm64/sysreg: Rename TRBIDR_EL1 fields per auto-gen tools format
+  arm64/sysreg: Convert TRBLIMITR_EL1 register to automatic generation
+  arm64/sysreg: Convert TRBPTR_EL1 register to automatic generation
+  arm64/sysreg: Convert TRBBASER_EL1 register to automatic generation
+  arm64/sysreg: Convert TRBSR_EL1 register to automatic generation
+  arm64/sysreg: Convert TRBMAR_EL1 register to automatic generation
+  arm64/sysreg: Convert TRBTRG_EL1 register to automatic generation
+  arm64/sysreg: Convert TRBIDR_EL1 register to automatic generation
+
+ arch/arm64/include/asm/el2_setup.h           |  2 +-
+ arch/arm64/include/asm/sysreg.h              | 50 +------------
+ arch/arm64/kvm/debug.c                       |  2 +-
+ arch/arm64/kvm/hyp/nvhe/debug-sr.c           |  2 +-
+ arch/arm64/tools/sysreg                      | 77 ++++++++++++++++++++
+ drivers/hwtracing/coresight/coresight-trbe.c | 33 +++++----
+ drivers/hwtracing/coresight/coresight-trbe.h | 38 ++++------
+ 7 files changed, 114 insertions(+), 90 deletions(-)
+
+-- 
+2.25.1
+
