@@ -2,114 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 751BF730318
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A6E573031E
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343582AbjFNPMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 11:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52010 "EHLO
+        id S1343604AbjFNPNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 11:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245752AbjFNPMv (ORCPT
+        with ESMTP id S1343599AbjFNPNU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 11:12:51 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05olkn2073.outbound.protection.outlook.com [40.92.89.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A38DC1FC4;
-        Wed, 14 Jun 2023 08:12:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FtA4kQogqugUHu/HN15P3EnlA8p18svZhyEA6hD9UkFcepKbAzZUubA4TXHXtHgcGwLl4OYNNokOmGVkVK3bbDwhhhO9oYUlyGYQsM3nGox0cFSB36ibGFhryU5/zlaIjYQmCL9ZBNQSYXfxA2XIREWCqrnEKYhsMmF7bDX2YoBnwbQB16RnECJJ2mgMhnyVBW2cMZDTEOBDbUB7HqgUGfTa65j9vvIsLZgOic1r1sUPdBR5o+BqtoTMARYuThrDtFxnXfN+UPv5ElIBVB9RleVwVqX9UiluoF6YNs4+0+nhIJ3O5Up6CK4SYe7Vpoo0Mg6CGAV5yweOPjKrOPmsww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=L7zxNyDJ2GUS9xqQ8arHe7gBlhV+HhhqG1xkY2ZDhmA=;
- b=BQIxiz1LO+61ZbWjX+ngOz7u7WF7dBDLbjqWhg2pCvXHqRaSdAyFEcjB0lCuBqnriZh+k3UKGSQOm1uurIMKUv3YTlFU33g3K+xHZBloLs+UCcLxpp0KUg5D+c86CA0VDuQ1h3hnixrNoz8BE1o1CJwyNJBvenaXUAgvoq1fkP8iS8YaxVj9jHqABOr56rgHYp1TvOl7SCoY883ZnHI9I6fApUvoEqjWzibfZHGqvjdNlb5ORDoxybUpi35dCJRz86TPdPW1y+KYFi7AnUied74qbZDUDJnMGNBAzZQtVDTAzxEAhsyjwPCpzyUGrPzBzQrtI1SB7n+C5sh+hqR8sg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=L7zxNyDJ2GUS9xqQ8arHe7gBlhV+HhhqG1xkY2ZDhmA=;
- b=DLzEhD/fRNYrNBTzTu8gQUFaP9dzG7xm1GL3lEJUAyYbcjXc2UmyKo2nm5qNF1WqblGxjeHg6QE0+L7s1MpJ9+bfTWRAkXWWOVQ+LgKeta9wo7GoeL26+76MLWtYrxmSVJPk//7RnaibbQwTyOdcE/Bx1wkwCmLD0ctIkXX5OQ+xYrl9SHElLID5LzNL2Vt8Ns5rkjIHEXhKZEiHpPRksBLJ0UQ+OhhLwqooOwni2xI+9SZR1PC2ixu2bj6Xc3a2UeqE8VVW3ehqnJNmyEmyU/zxU6Q+qJBcVp/I/YWo96DJHFtAiSKtnlSbLMG701WgilEO+MwQuKbIY5UykWbasQ==
-Received: from DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:383::21)
- by VI1PR10MB3520.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:800:13a::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.44; Wed, 14 Jun
- 2023 15:12:47 +0000
-Received: from DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::628a:d617:46f:2a88]) by DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::628a:d617:46f:2a88%6]) with mapi id 15.20.6455.030; Wed, 14 Jun 2023
- 15:12:47 +0000
-Message-ID: <DB4PR10MB6261C5D6D65967462168C7E2925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
-Date:   Wed, 14 Jun 2023 23:12:34 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 1/3] hwmon: (sht3x)remove sht3x_platform_data
-From:   JuenKit Yip <JuenKit_Yip@hotmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jdelvare@suse.com
-References: <DB4PR10MB6261D79FE16EC2BBD5316B91925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
- <6d1209e9-0d40-c2ba-b94c-6590e98070d7@roeck-us.net>
- <01f88d7e-d461-8d73-6633-5b9060e42c37@hotmail.com>
-In-Reply-To: <01f88d7e-d461-8d73-6633-5b9060e42c37@hotmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TMN:  [SbRfv54WONY3uUHfnZiT1OyEn2ZfBZYrUG8MWUOBvkb5uvrQWTWKIuSIErHfaEjhhVMvT0B6dn0=]
-X-ClientProxiedBy: TYCP286CA0314.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:38b::18) To DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:10:383::21)
-X-Microsoft-Original-Message-ID: <da3ced5b-490d-e3fa-4d32-6a1e8989e141@hotmail.com>
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB4PR10MB6261:EE_|VI1PR10MB3520:EE_
-X-MS-Office365-Filtering-Correlation-Id: e3516619-c053-435d-ef66-08db6ce9cf62
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: z2UkHcsxWcqMl+S4UzP4dzHLagaYDtsIvMZZH95OyYKD6VX5ZRQXN909MtdFJwcieJHTnX9v0/V5WF2Te4HFJvmrvZHmyN7bOWCZY33TtuzpUBXSZL0nfHzizDrNGfYNXp8hwySprbsceaxgD7oqF1/j2zUkZwJu9EZpFgTTmLuSqYw/oaYAC/G3T6nXM3b4px0JogSbVJOqxTqJ4sDA0tl273CidomqA7ltjuf/HNo+16CQQ3u4UHCq3E99wAUkGwJq8n31ebYgZ94IMKWgLNiWHu+WKiK48k3OsYm2RyGjOXdmQymuzo4tvbJHo+Ce3HbBpphlhvYZbZEDWDIZPYxuvN3aS7vUKJBhG/FGslgHF/bP+KdWAqnPF7u6QQUo+9FBTPObgNuqp8lOzs4f5kltVCFmaYCb/7MfOw02sGwRQ8hG/kzkBEhUP4/8NMn15LuZKG42av8mFAk4qS7C0T9ehVPC0upncwZ9IB/9SItQtRr2maSUXy1f4v486c9tcR6sb1X7m5Mt37wUWGt0IShgAvbua1LM/rLuYrwQMODOZZn5iZxvfkA5x7xZ20jQeFLlw84DExgFYW6E14BfPks3z2mt4qxXG5FTGdZ41zFb7uKN6G9u4Rur+/hV4MtX
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R0Y5Z0VIdks5S1BHSkZDbDNsd0NGcGh3RlVLcUYyVXAva1BkU2FzSVErSXRP?=
- =?utf-8?B?TkhtNjc5UUhPMHFQelhMWTBCWXk2dTVZTytLTjNQMkFNRUxSS0hYaWVtVnNs?=
- =?utf-8?B?YWNKMkhXZ1NNTFpISEFHZEZKbzVjMEJ1N29pRlJnRlFNcDBLRWJhWjVNSVlJ?=
- =?utf-8?B?NzBFczU2QTdQUFpOTklqcGQrLzArS21Gbzh5WnNES3F3Z0tWSTgzMktDaDFo?=
- =?utf-8?B?cDVSK281bS9HT0U1TStJMDFtQ3VqaFcrT2o1Vlh3Ym1VRnNsRVBlb0VwM243?=
- =?utf-8?B?cHNIY0lTa24vUERkbmJxWDlGSkNhSmFjS0xrRERVKzZJcVByM01ZaVY5Wk9L?=
- =?utf-8?B?eHRYZFF5VlN4bi90QzJqUnp5UnNicXFXWDA2UElzLzZYeFBhYzlVM2VqdW9F?=
- =?utf-8?B?L2Z0S3pqUCtKOVBuOTlQMlEySmNidXIrRS9STFFMOExCSU9NYVpBdExuTW9I?=
- =?utf-8?B?dTRsNDE3cXF1eW1BUUZneDZ4WnhuRzFPZ3JSekdMcFBVV1d1Q25jRTdzVnUr?=
- =?utf-8?B?bktFVjRLUHRqZjlVazBVdGF2UEhnYnl2dzZtTjN5SGg3OFJuTUVVQ2hTdTRl?=
- =?utf-8?B?bm1UbDZxdnlPMkwzUnFxY2ZkcEMzbFNFb2Q1RW1VTDJUSEk0WnZRNG9hVXNz?=
- =?utf-8?B?cGNXQmV3R1RxN3YvY3J3TjByVnRKMkxSNFMwek9xQ0JhM0QveVpvVGlUekpw?=
- =?utf-8?B?MzB6bVkxQzJpVEdzRmRwZHZKdFdETFZjY1Nrckd2Y0hTN01qY2NPMnZRSXpE?=
- =?utf-8?B?c1FSU29XSHYwYlBkenhuSjVMckN1QWVMREtSZmdiZ2pSK0FLWkFWWlZieXFM?=
- =?utf-8?B?dDJTSnR3OVBKRTl2cGx4ZUM4a1hwdXBBaFpkTE9NN3RPZnE3Yzh5QjJ6ajNa?=
- =?utf-8?B?ayttS1FyOExUdUFsYVR6UVBMNHZha29aY3I4MlV6ak5pUitVRGowSXNSclFH?=
- =?utf-8?B?TllvQlBRNTVmYjJUV28zblpGLzNrUGk4NDI3S2Q3NEZ3NStQMFBiLzNsYVl2?=
- =?utf-8?B?amptZ2gzVGFNMjNodnNhR01XdjFVSnRzTHBheTBEQitDNnd6NE85QjU1WjRP?=
- =?utf-8?B?VE8xMzJJU0JQKzEwcGJ0QmlQYXdCZ3NPcDFWRFpaQU5jaGtiaHpsVEdFcFpI?=
- =?utf-8?B?QzBDYzVTMityd3VkYVZ4VG9xVHZJZEs2RVF1VVNXbkFOYkh6Zm9aNytNdW9n?=
- =?utf-8?B?QXFkc3BUeW42dmx5ckFsUW5yWllVbzFWQ0xSOHhxRmhMaWl3M09mY0NOVVJD?=
- =?utf-8?B?RzgwRE9rUG5lMkgvSUFTanV0SzhXcWMrVmZBdXI0V2VjQ293em96QVFjRmMv?=
- =?utf-8?B?UlVvNXBwVE1pelpWSFVJYjF0K01GRGFMMEtlYmJZOWR2UWh4Zm1jRlRvN2hY?=
- =?utf-8?B?S1FaYzlaVzk4aURGWDFOaTdHNlBaRjFadktONzg1OENXMkZNVTVPZUdSRm41?=
- =?utf-8?B?NmxZTldMaXFPcUYzYXhWbThNRkI1Vy9PTUlYL2lEbmVFTUk4RkFlV0xFMVll?=
- =?utf-8?B?d1lneVRwZ1hYSGorbGxjL3p6MXRBcjE5YUpHVlRyYlVUUEEzOXh2allpbTNh?=
- =?utf-8?B?SWxJbkU3YXN2SUx3dVlXckN0dzJDMU9MMEZGdTVKTE1udEtjaUtaNXczeEZl?=
- =?utf-8?B?VHY2eWFsWHFEdTN5RDJnZklEdlZzU2VGOVZYVEhFdzlkM0V6YWxjMERzQ1J3?=
- =?utf-8?B?L1BEeFM0RUdPYUE1OFVLVkxjV0l0Ly9ucG0ycHFYNHJ2M3lPQWVWOHV3Wmtt?=
- =?utf-8?Q?mK7zwoffbILkS+k+C4=3D?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-6b909.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: e3516619-c053-435d-ef66-08db6ce9cf62
-X-MS-Exchange-CrossTenant-AuthSource: DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 15:12:46.9561
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR10MB3520
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Wed, 14 Jun 2023 11:13:20 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7221FC4
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:13:19 -0700 (PDT)
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35EFBoDZ003837;
+        Wed, 14 Jun 2023 15:13:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : content-type :
+ content-transfer-encoding : mime-version : subject : message-id : date :
+ cc : to; s=pp1; bh=Mz2KQR85MA3ivsjUGKFXVR0RQZqiN2ptLegdweRusYU=;
+ b=ab1eNIDJKCN8qVhW5/RUvD0BKSr+Z3LdD7tuRoS6Rse6mGke3UpvcrWoXwuSeM0r223O
+ /uNrrPinSNvAmJYD+tt/sWftjyuohH/OIf2ZwtXcgOQ5njawqm1QwsQCZ9+Myls0VN/T
+ o4GW2ct9qJON8Xor8sRtfG82cDgM2xhBdBMU88NKzZqXJxErupbNwQKuSw7t+wBNidaD
+ JqF4x46BMQED9ELZ+0tdaH+T6CI2YdzyFom18gvNx8zCKKAIgaeWZ+oslizfEk4QJ9X9
+ 2HWYn5oPTq1dAzgY1oyOvN/O1wJr6GjD2krT4UgGZ7SaeaduyGQhjq7ZSuH5Y1sQ2b7E XA== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r7fpv8fdp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Jun 2023 15:13:07 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35DNn0Zt004159;
+        Wed, 14 Jun 2023 15:12:56 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3r4gt52y7k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Jun 2023 15:12:56 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35EFCs0D40567308
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 14 Jun 2023 15:12:54 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 626E52004B;
+        Wed, 14 Jun 2023 15:12:54 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A957020043;
+        Wed, 14 Jun 2023 15:12:53 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.43.50.25])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 14 Jun 2023 15:12:53 +0000 (GMT)
+From:   Sachin Sant <sachinp@linux.ibm.com>
+Content-Type: text/plain;
+        charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.600.7\))
+Subject: [6.4-rc6] Crash during a kexec operation (tpm_amd_is_rng_defective)
+Message-Id: <99B81401-DB46-49B9-B321-CF832B50CAC3@linux.ibm.com>
+Date:   Wed, 14 Jun 2023 20:42:42 +0530
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, jarkko@kernel.org
+To:     open list <linux-kernel@vger.kernel.org>
+X-Mailer: Apple Mail (2.3731.600.7)
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: WVqw1At0AqErYVQS9WEpJXOqsE6dqKwa
+X-Proofpoint-GUID: WVqw1At0AqErYVQS9WEpJXOqsE6dqKwa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-14_10,2023-06-14_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=905
+ phishscore=0 spamscore=0 lowpriorityscore=0 clxscore=1011 malwarescore=0
+ priorityscore=1501 suspectscore=0 impostorscore=0 mlxscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306140131
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -117,219 +82,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Following crash is observed during a kexec operation on=20
+IBM Power10 server:
 
-在 2023/6/14 23:02, JuenKit Yip 写道:
->
-> 在 2023/6/14 20:57, Guenter Roeck 写道:
->> On 6/13/23 23:24, JuenKit Yip wrote:
->>> Since no in-tree driver supports it, the sht3x_platform_data was
->>> removed.
->>>
->>> - "blocking_io" property and its related code have been removed, and
->>> Single-Shot mode should be blocking in default.
->>>
->>> - "high-precision" property has been replaced to "repeatability" for
->>> matching datasheet.
->>>
->>
->> That needs to be three patches.
->
-> Patch 1: remove sht3x_platform_data and its header file
->
-> Patch 2: move "blocking_io" to struct sht3x_data
->
-> Patch 3: replace "high-precision" property to "repeatability"
->
-> Is it correct or I am misunderstand your statement?
->
-> Thanks for your instruction
->
->>
->>> Signed-off-by: JuenKit Yip <JuenKit_Yip@hotmail.com>
->>> ---
->>>   Documentation/hwmon/sht3x.rst       | 12 +++++------
->>>   drivers/hwmon/sht3x.c               | 32 
->>> ++++++++++++-----------------
->>>   include/linux/platform_data/sht3x.h | 15 --------------
->>>   3 files changed, 18 insertions(+), 41 deletions(-)
->>>   delete mode 100644 include/linux/platform_data/sht3x.h
->>>
->>> diff --git a/Documentation/hwmon/sht3x.rst 
->>> b/Documentation/hwmon/sht3x.rst
->>> index 95a850d5b..2c87c8f58 100644
->>> --- a/Documentation/hwmon/sht3x.rst
->>> +++ b/Documentation/hwmon/sht3x.rst
->>> @@ -28,28 +28,26 @@ The device communicates with the I2C protocol. 
->>> Sensors can have the I2C
->>>   addresses 0x44 or 0x45, depending on the wiring. See
->>>   Documentation/i2c/instantiating-devices.rst for methods to 
->>> instantiate the device.
->>>   -There are two options configurable by means of sht3x_platform_data:
->>> +This driver supports block and non-block mode:
->>>   -1. blocking (pull the I2C clock line down while performing the 
->>> measurement) or
->>> +   blocking (pull the I2C clock line down while performing the 
->>> measurement) or
->>>      non-blocking mode. Blocking mode will guarantee the fastest 
->>> result but
->>>      the I2C bus will be busy during that time. By default, 
->>> non-blocking mode
->>>      is used. Make sure clock-stretching works properly on your 
->>> device if you
->>>      want to use blocking mode.
->>> -2. high or low accuracy. High accuracy is used by default and using 
->>> it is
->>> -   strongly recommended.
->>>     The sht3x sensor supports a single shot mode as well as 5 
->>> periodic measure
->>>   modes, which can be controlled with the update_interval sysfs 
->>> interface.
->>>   The allowed update_interval in milliseconds are as follows:
->>>   -    ===== ======= ====================
->>> -       0          single shot mode
->>> +    ===== ======= ==========================
->>> +       0          single shot mode(blocking)
->>>       2000   0.5 Hz periodic measurement
->>>       1000   1   Hz periodic measurement
->>>        500   2   Hz periodic measurement
->>>        250   4   Hz periodic measurement
->>>        100  10   Hz periodic measurement
->>> -    ===== ======= ====================
->>> +    ===== ======= ==========================
->>>     In the periodic measure mode, the sensor automatically triggers 
->>> a measurement
->>>   with the configured update interval on the chip. When a 
->>> temperature or humidity
->>> diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
->>> index 8305e44d9..5bc0001b1 100644
->>> --- a/drivers/hwmon/sht3x.c
->>> +++ b/drivers/hwmon/sht3x.c
->>> @@ -20,13 +20,12 @@
->>>   #include <linux/module.h>
->>>   #include <linux/slab.h>
->>>   #include <linux/jiffies.h>
->>> -#include <linux/platform_data/sht3x.h>
->>>   -/* commands (high precision mode) */
->>> +/* commands (high repeatability mode) */
->>>   static const unsigned char sht3x_cmd_measure_blocking_hpm[] = { 
->>> 0x2c, 0x06 };
->>>   static const unsigned char sht3x_cmd_measure_nonblocking_hpm[] = { 
->>> 0x24, 0x00 };
->>>   -/* commands (low power mode) */
->>> +/* commands (low repeatability mode) */
->>>   static const unsigned char sht3x_cmd_measure_blocking_lpm[] = { 
->>> 0x2c, 0x10 };
->>>   static const unsigned char sht3x_cmd_measure_nonblocking_lpm[] = { 
->>> 0x24, 0x16 };
->>>   @@ -69,9 +68,14 @@ enum sht3x_limits {
->>>       limit_min_hyst,
->>>   };
->>>   +enum sht3x_repeatability {
->>> +    low_repeatability,
->>> +    high_repeatability,
->>> +};
->>> +
->>>   DECLARE_CRC8_TABLE(sht3x_crc8_table);
->>>   -/* periodic measure commands (high precision mode) */
->>> +/* periodic measure commands (high repeatability mode) */
->>>   static const char 
->>> periodic_measure_commands_hpm[][SHT3X_CMD_LENGTH] = {
->>>       /* 0.5 measurements per second */
->>>       {0x20, 0x32},
->>> @@ -85,7 +89,7 @@ static const char 
->>> periodic_measure_commands_hpm[][SHT3X_CMD_LENGTH] = {
->>>       {0x27, 0x37},
->>>   };
->>>   -/* periodic measure commands (low power mode) */
->>> +/* periodic measure commands (low repeatability mode) */
->>>   static const char 
->>> periodic_measure_commands_lpm[][SHT3X_CMD_LENGTH] = {
->>>       /* 0.5 measurements per second */
->>>       {0x20, 0x2f},
->>> @@ -132,12 +136,11 @@ struct sht3x_data {
->>>       struct mutex data_lock; /* lock for updating driver data */
->>>         u8 mode;
->>> +    enum sht3x_repeatability repeatability;
->>>       const unsigned char *command;
->>>       u32 wait_time;            /* in us*/
->>>       unsigned long last_update;    /* last update in periodic mode*/
->>>   -    struct sht3x_platform_data setup;
->>> -
->>>       /*
->>>        * cached values for temperature and humidity and limits
->>>        * the limits arrays have the following order:
->>> @@ -441,13 +444,8 @@ static void sht3x_select_command(struct 
->>> sht3x_data *data)
->>>       if (data->mode > 0) {
->>>           data->command = sht3x_cmd_measure_periodic_mode;
->>>           data->wait_time = 0;
->>> -    } else if (data->setup.blocking_io) {
->>> -        data->command = data->setup.high_precision ?
->>> -                sht3x_cmd_measure_blocking_hpm :
->>> -                sht3x_cmd_measure_blocking_lpm;
->>> -        data->wait_time = 0;
->>
->> If update_interval is 0, those would presumably still be needed.
->> I don't know if the current code updating the interval is wrong
->> (that may well be), but removing this code entirely seems wrong.
->
-> update_interval "0" means Single-Shot mode and respectively data->command
->
-> should be in blocking mode or non-blocking mode about clock strench.
->
-> Thanks for your correctness.
->>
->>>       } else {
->>> -        if (data->setup.high_precision) {
->>> +        if (data->repeatability == high_repeatability) {
->>>               data->command = sht3x_cmd_measure_nonblocking_hpm;
->>>               data->wait_time = SHT3X_NONBLOCKING_WAIT_TIME_HPM;
->>>           } else {
->>> @@ -595,7 +593,7 @@ static ssize_t update_interval_store(struct 
->>> device *dev,
->>>       }
->>>         if (mode > 0) {
->>> -        if (data->setup.high_precision)
->>> +        if (data->repeatability == high_repeatability)
->>>               command = periodic_measure_commands_hpm[mode - 1];
->>>           else
->>>               command = periodic_measure_commands_lpm[mode - 1];
->>> @@ -690,16 +688,12 @@ static int sht3x_probe(struct i2c_client *client)
->>>       if (!data)
->>>           return -ENOMEM;
->>>   -    data->setup.blocking_io = false;
->>> -    data->setup.high_precision = true;
->>> +    data->repeatability = high_repeatability;
->>>       data->mode = 0;
->>>       data->last_update = jiffies - msecs_to_jiffies(3000);
->>>       data->client = client;
->>>       crc8_populate_msb(sht3x_crc8_table, SHT3X_CRC8_POLYNOMIAL);
->>>   -    if (client->dev.platform_data)
->>> -        data->setup = *(struct sht3x_platform_data 
->>> *)dev->platform_data;
->>> -
->>>       sht3x_select_command(data);
->>>         mutex_init(&data->i2c_lock);
->>> diff --git a/include/linux/platform_data/sht3x.h 
->>> b/include/linux/platform_data/sht3x.h
->>> deleted file mode 100644
->>> index 14680d2a9..000000000
->>> --- a/include/linux/platform_data/sht3x.h
->>> +++ /dev/null
->>> @@ -1,15 +0,0 @@
->>> -/* SPDX-License-Identifier: GPL-2.0-or-later */
->>> -/*
->>> - * Copyright (C) 2016 Sensirion AG, Switzerland
->>> - * Author: David Frey <david.frey@sensirion.com>
->>> - * Author: Pascal Sachs <pascal.sachs@sensirion.com>
->>> - */
->>> -
->>> -#ifndef __SHT3X_H_
->>> -#define __SHT3X_H_
->>> -
->>> -struct sht3x_platform_data {
->>> -    bool blocking_io;
->>> -    bool high_precision;
->>> -};
->>> -#endif /* __SHT3X_H_ */
->>
+[ 34.381548] Kernel attempted to read user page (50) - exploit attempt? =
+(uid: 0)
+[ 34.381562] BUG: Kernel NULL pointer dereference on read at 0x00000050
+[ 34.381565] Faulting instruction address: 0xc0000000009db1e4
+[ 34.381569] Oops: Kernel access of bad area, sig: 11 [#1]
+[ 34.381572] LE PAGE_SIZE=3D64K MMU=3DRadix SMP NR_CPUS=3D2048 NUMA =
+pSeries
+[ 34.381576] Modules linked in: dm_mod(E) nft_fib_inet(E) =
+nft_fib_ipv4(E) nft_fib_ipv6(E) nft_fib(E) nft_reject_inet(E) =
+nf_reject_ipv4(E) nf_reject_ipv6(E) nft_reject(E) nft_ct(E) =
+nft_chain_nat(E) nf_nat(E) nf_conntrack(E) nf_defrag_ipv6(E) =
+nf_defrag_ipv4(E) bonding(E) tls(E) rfkill(E) ip_set(E) sunrpc(E) =
+nf_tables(E) nfnetlink(E) pseries_rng(E) aes_gcm_p10_crypto(E) drm(E) =
+drm_panel_orientation_quirks(E) xfs(E) libcrc32c(E) sd_mod(E) sr_mod(E) =
+t10_pi(E) crc64_rocksoft_generic(E) cdrom(E) crc64_rocksoft(E) crc64(E) =
+sg(E) ibmvscsi(E) scsi_transport_srp(E) ibmveth(E) vmx_crypto(E) fuse(E)
+[ 34.381613] CPU: 18 PID: 5918 Comm: kexec Kdump: loaded Tainted: G E =
+6.4.0-rc6-00037-gb6dad5178cea #3
+[ 34.381618] Hardware name: IBM,9080-HEX POWER10 (raw) 0x800200 =
+0xf000006 of:IBM,FW1030.20 (NH1030_058) hv:phyp pSeries
+[ 34.381621] NIP: c0000000009db1e4 LR: c0000000009db928 CTR: =
+c0000000009eab60
+[ 34.381625] REGS: c00000009742f780 TRAP: 0300 Tainted: G E =
+(6.4.0-rc6-00037-gb6dad5178cea)
+[ 34.381628] MSR: 800000000280b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE> CR: =
+44488884 XER: 00000001
+[ 34.381638] CFAR: c0000000009db19c DAR: 0000000000000050 DSISR: =
+40000000 IRQMASK: 0=20
+[ 34.381638] GPR00: c0000000009db928 c00000009742fa20 c0000000014a1500 =
+c0000000081d0000=20
+[ 34.381638] GPR04: c00000000d842c50 c00000000d842c50 0000000000000025 =
+fffffffffffe0000=20
+[ 34.381638] GPR08: 0000000000000000 0000000000000000 0000000000000009 =
+c008000000785280=20
+[ 34.381638] GPR12: c0000000009eab60 c00000135fab7f00 0000000000000000 =
+0000000000000000=20
+[ 34.381638] GPR16: 0000000000000000 0000000000000000 0000000000000000 =
+0000000000000000=20
+[ 34.381638] GPR20: 0000000000000000 0000000000000000 0000000000000000 =
+0000000000000000=20
+[ 34.381638] GPR24: 0000000000000000 0000000000000000 0000000000000000 =
+c000000002e21e08=20
+[ 34.381638] GPR28: c00000000d842c48 c000000002a02208 c00000000321c0c0 =
+c0000000081d0000=20
+[ 34.381674] NIP [c0000000009db1e4] tpm_amd_is_rng_defective+0x74/0x240
+[ 34.381681] LR [c0000000009db928] tpm_chip_unregister+0x138/0x160
+[ 34.381685] Call Trace:
+[ 34.381686] [c00000009742faa0] [c0000000009db928] =
+tpm_chip_unregister+0x138/0x160
+[ 34.381690] [c00000009742fae0] [c0000000009eab94] =
+tpm_ibmvtpm_remove+0x34/0x130
+[ 34.381695] [c00000009742fb50] [c000000000115738] =
+vio_bus_remove+0x58/0xd0
+[ 34.381701] [c00000009742fb90] [c000000000a01ecc] =
+device_shutdown+0x21c/0x39c
+[ 34.381705] [c00000009742fc20] [c0000000001a2684] =
+kernel_restart_prepare+0x54/0x70
+[ 34.381710] [c00000009742fc40] [c000000000292c48] =
+kernel_kexec+0xa8/0x100
+[ 34.381714] [c00000009742fcb0] [c0000000001a2cd4] =
+__do_sys_reboot+0x214/0x2c0
+[ 34.381718] [c00000009742fe10] [c000000000034adc] =
+system_call_exception+0x13c/0x340
+[ 34.381723] [c00000009742fe50] [c00000000000d05c] =
+system_call_vectored_common+0x15c/0x2ec
+[ 34.381729] --- interrupt: 3000 at 0x7fff9c5459f0
+[ 34.381732] NIP: 00007fff9c5459f0 LR: 0000000000000000 CTR: =
+0000000000000000
+[ 34.381735] REGS: c00000009742fe80 TRAP: 3000 Tainted: G E =
+(6.4.0-rc6-00037-gb6dad5178cea)
+[ 34.381738] MSR: 800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE> =
+CR: 42422884 XER: 00000000
+[ 34.381747] IRQMASK: 0=20
+[ 34.381747] GPR00: 0000000000000058 00007ffffad83d70 000000012fc47f00 =
+fffffffffee1dead=20
+[ 34.381747] GPR04: 0000000028121969 0000000045584543 0000000000000000 =
+0000000000000003=20
+[ 34.381747] GPR08: 0000000000100000 0000000000000000 0000000000000000 =
+0000000000000000=20
+[ 34.381747] GPR12: 0000000000000000 00007fff9c7bb2c0 000000012fc3f598 =
+0000000000000000=20
+[ 34.381747] GPR16: ffffffffffffffff 0000000000000000 000000012fc1fcc0 =
+0000000000000000=20
+[ 34.381747] GPR20: 0000000000008913 0000000000008914 000000014b891020 =
+0000000000000003=20
+[ 34.381747] GPR24: 0000000000000000 0000000000000001 0000000000000003 =
+00007ffffad83ef0=20
+[ 34.381747] GPR28: 000000012fc19f10 00007fff9c6419c0 000000014b891080 =
+000000014b891040=20
+[ 34.381781] NIP [00007fff9c5459f0] 0x7fff9c5459f0
+[ 34.381784] LR [0000000000000000] 0x0
+[ 34.381786] --- interrupt: 3000
+[ 34.381788] Code: 5463063e 408201c8 38210080 4e800020 60000000 60000000 =
+60000000 7c0802a6 fbe10078 7c7f1b78 f8010090 e9230728 <e9890050> =
+2c2c0000 41820020 7d8903a6=20
+[ 34.381800] ---[ end trace 0000000000000000 ]---
+[ 34.384090] pstore: backend (nvram) writing error (-1)
+
+Git bisect points to following patch
+
+commit bd8621ca1510e6e802df9855bdc35a04a3cfa932
+    tpm: Add !tpm_amd_is_rng_defective() to the hwrng_unregister() call =
+site
+
+Reverting the commit allows a successful kexec operation.
+
+- Sachin
+
