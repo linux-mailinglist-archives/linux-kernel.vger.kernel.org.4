@@ -2,121 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93EF772FD7F
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:54:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A6672FD8A
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234064AbjFNLyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 07:54:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35034 "EHLO
+        id S244360AbjFNLzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 07:55:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244336AbjFNLyQ (ORCPT
+        with ESMTP id S244426AbjFNLzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 07:54:16 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A04071FE2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 04:54:13 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B55031FB;
-        Wed, 14 Jun 2023 04:54:57 -0700 (PDT)
-Received: from [10.57.25.82] (unknown [10.57.25.82])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3300E3F71E;
-        Wed, 14 Jun 2023 04:54:11 -0700 (PDT)
-Message-ID: <2874efc6-a022-c97e-7e38-ccf8b4b5938d@arm.com>
-Date:   Wed, 14 Jun 2023 13:54:09 +0200
+        Wed, 14 Jun 2023 07:55:03 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B891FE2;
+        Wed, 14 Jun 2023 04:54:59 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35EBSJRu023782;
+        Wed, 14 Jun 2023 11:54:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=xANxmMV+If5BYmTNoEXvDus8sNSdbTM5CBa8Wbky/M0=;
+ b=CfKu+OtOVlgcw0yCHJjklDFspQ1go5y/lK29RAef90APqvjJQCcmXt3XRjshPQ8MbKwd
+ OWvpIEpyBffYbVDde4hIw51nAiTjohfATOvDfs38w+8KyLOTx4NPNGHkP6V1Qi5vqBpm
+ fHQSMnSUtIXkEcEu+kETJ6ylaCIEvYJKyfSH6rJ1r6TGriddMcOdUclyJLBwUyf2Py76
+ I52xEA1pISwKPMehAKBndPHzyQIKOBIjGgfklrd/tuB/s8IiAQVmjaZ1JUtiVOejMJt2
+ aSfPWZBGJzEQoJ9Bb4cZqJogWu4DekiK1sCNAkl9vXh6oyxrwOTqVUtw19BpWHYBXN2y Yg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r71tvscgg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Jun 2023 11:54:55 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35EBst6I011482
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Jun 2023 11:54:55 GMT
+Received: from ekangupt-linux.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Wed, 14 Jun 2023 04:54:52 -0700
+From:   Ekansh Gupta <quic_ekangupt@quicinc.com>
+To:     <srinivas.kandagatla@linaro.org>, <linux-arm-msm@vger.kernel.org>
+CC:     Ekansh Gupta <quic_ekangupt@quicinc.com>,
+        <ekangupt@qti.qualcomm.com>, <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>,
+        <fastrpc.upstream@qti.qualcomm.com>, stable <stable@kernel.org>
+Subject: [PATCH v1] misc: fastrpc: Create fastrpc scalar with correct buffer count
+Date:   Wed, 14 Jun 2023 17:24:45 +0530
+Message-ID: <1686743685-21715-1-git-send-email-quic_ekangupt@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.1
-Subject: Re: [PATCH V3 00/14] arm64/sysreg: Convert TRBE registers to
- automatic generation
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-arm-kernel@lists.infradead.org, broonie@kernel.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        James Morse <james.morse@arm.com>, kvmarm@lists.linux.dev,
-        coresight@lists.linaro.org, linux-kernel@vger.kernel.org
-References: <20230614065949.146187-1-anshuman.khandual@arm.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20230614065949.146187-1-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: R4rCMNCjX4WpPIP01mKNrPOm_J0k9ZeY
+X-Proofpoint-ORIG-GUID: R4rCMNCjX4WpPIP01mKNrPOm_J0k9ZeY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-14_07,2023-06-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 mlxlogscore=990 bulkscore=0 lowpriorityscore=0 spamscore=0
+ phishscore=0 priorityscore=1501 adultscore=0 suspectscore=0 clxscore=1015
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306140102
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/06/2023 07:59, Anshuman Khandual wrote:
-> This series converts TRBE registers to automatic generation, after renaming
-> their fields as per the auto-gen tools format. Although the following field
-> still renames in arch/arm64/include/asm/sysreg.h, as it cannot be converted
-> (shares bits with other fields) in the tools format.
-> 
-> #define TRBSR_EL1_BSC_MASK		GENMASK(5, 0)
-> #define TRBSR_EL1_BSC_SHIFT		0
-> 
-> This series applies on v6.4-rc6.
-> 
-> Changes in V3:
-> 
-> - Defined enum for both PAS and SH fields in TRBMAR_EL1
-> - Defined enum for EA field in TRBIDR_EL1
-> 
-> Changes in V2:
-> 
-> https://lore.kernel.org/all/20230602062552.565992-1-anshuman.khandual@arm.com/
-> 
-> - Renamed each individual TRBE register fields as per auto-gen tools
-> - Converted each individual TRBE registers as per auto-gen tools
-> - Added new register fields as per DDI0601 2023-03
-> 
-> Changes in V1:
-> 
-> https://lore.kernel.org/all/20230531055524.16562-1-anshuman.khandual@arm.com/
-> 
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-> Cc: James Morse <james.morse@arm.com>
-> Cc: kvmarm@lists.linux.dev
-> Cc: coresight@lists.linaro.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> 
-> Anshuman Khandual (14):
->    arm64/sysreg: Rename TRBLIMITR_EL1 fields per auto-gen tools format
->    arm64/sysreg: Rename TRBPTR_EL1 fields per auto-gen tools format
->    arm64/sysreg: Rename TRBBASER_EL1 fields per auto-gen tools format
->    arm64/sysreg: Rename TRBSR_EL1 fields per auto-gen tools format
->    arm64/sysreg: Rename TRBMAR_EL1 fields per auto-gen tools format
->    arm64/sysreg: Rename TRBTRG_EL1 fields per auto-gen tools format
->    arm64/sysreg: Rename TRBIDR_EL1 fields per auto-gen tools format
->    arm64/sysreg: Convert TRBLIMITR_EL1 register to automatic generation
->    arm64/sysreg: Convert TRBPTR_EL1 register to automatic generation
->    arm64/sysreg: Convert TRBBASER_EL1 register to automatic generation
->    arm64/sysreg: Convert TRBSR_EL1 register to automatic generation
->    arm64/sysreg: Convert TRBMAR_EL1 register to automatic generation
->    arm64/sysreg: Convert TRBTRG_EL1 register to automatic generation
->    arm64/sysreg: Convert TRBIDR_EL1 register to automatic generation
-> 
->   arch/arm64/include/asm/el2_setup.h           |  2 +-
->   arch/arm64/include/asm/sysreg.h              | 50 +------------
->   arch/arm64/kvm/debug.c                       |  2 +-
->   arch/arm64/kvm/hyp/nvhe/debug-sr.c           |  2 +-
->   arch/arm64/tools/sysreg                      | 77 ++++++++++++++++++++
->   drivers/hwtracing/coresight/coresight-trbe.c | 33 +++++----
->   drivers/hwtracing/coresight/coresight-trbe.h | 38 ++++------
->   7 files changed, 114 insertions(+), 90 deletions(-)
-> 
+A process can spawn a PD on DSP with some attributes that can be
+associated with the PD during spawn and run. The invocation
+corresponding to the create request with attributes has total
+4 buffers at the DSP side implementation. If this number is not
+correct, the invocation is expected to fail on DSP. Added change
+to use correct number of buffer count for creating fastrpc scalar.
 
+Fixes: d73f71c7c6ee ("misc: fastrpc: Add support for create remote init process")
+Cc: stable <stable@kernel.org>
+Tested-by: Ekansh Gupta <quic_ekangupt@quicinc.com>
+Signed-off-by: Ekansh Gupta <quic_ekangupt@quicinc.com>
+---
+ drivers/misc/fastrpc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-For the coresight-trbe.* bits:
-
-Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+index 30d4d04..37f32d2 100644
+--- a/drivers/misc/fastrpc.c
++++ b/drivers/misc/fastrpc.c
+@@ -1437,7 +1437,7 @@ static int fastrpc_init_create_process(struct fastrpc_user *fl,
+ 
+ 	sc = FASTRPC_SCALARS(FASTRPC_RMID_INIT_CREATE, 4, 0);
+ 	if (init.attrs)
+-		sc = FASTRPC_SCALARS(FASTRPC_RMID_INIT_CREATE_ATTR, 6, 0);
++		sc = FASTRPC_SCALARS(FASTRPC_RMID_INIT_CREATE_ATTR, 4, 0);
+ 
+ 	err = fastrpc_internal_invoke(fl, true, FASTRPC_INIT_HANDLE,
+ 				      sc, args);
+-- 
+2.7.4
 
