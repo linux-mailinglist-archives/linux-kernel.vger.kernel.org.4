@@ -2,71 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C68AC7304DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:27:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 278FD73049D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:11:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233343AbjFNQ1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 12:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41934 "EHLO
+        id S231341AbjFNQLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 12:11:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232600AbjFNQ1a (ORCPT
+        with ESMTP id S231209AbjFNQK7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 12:27:30 -0400
-X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 14 Jun 2023 09:27:29 PDT
-Received: from zulu.geekplace.eu (zulu.geekplace.eu [IPv6:2a03:4000:6:3a8::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE402121;
-        Wed, 14 Jun 2023 09:27:29 -0700 (PDT)
-Received: from neo-pc.sch (unknown [62.144.54.52])
-        by zulu.geekplace.eu (Postfix) with ESMTPA id 8EEFC4A0DBC;
-        Wed, 14 Jun 2023 18:09:55 +0200 (CEST)
-From:   Florian Schmaus <flo@geekplace.eu>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Florian Schmaus <flo@geekplace.eu>
-Subject: [PATCH] docs/scheduler: fix typos in sched-bwc
-Date:   Wed, 14 Jun 2023 18:09:39 +0200
-Message-Id: <20230614160939.156850-1-flo@geekplace.eu>
-X-Mailer: git-send-email 2.39.3
+        Wed, 14 Jun 2023 12:10:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3D61FC8
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:10:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686759011;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rl6mgiOo+Ag+ttIGbzoAy2FCy5AX0T0I/OwvxTFasvA=;
+        b=JbclCWLGvgReZhTq2E3LwA+lKwffDJ+QPAzBCXivTkSgXfYyyc2ARQJx1dPwO4QBb8Jx4R
+        V9fEEYQxxXaQFyxCuklHHiMkZnk2VmNLSnDBBHAaEspPJdPeN876mYe+u4UnE9nq5QUWJh
+        9xCVYgwwGq737G1EKs0fVzAK8hBfg4w=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-85-hf3k22h9MguxekwrDDaUNQ-1; Wed, 14 Jun 2023 12:10:08 -0400
+X-MC-Unique: hf3k22h9MguxekwrDDaUNQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9FD6980879D;
+        Wed, 14 Jun 2023 16:10:07 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 39902C1603B;
+        Wed, 14 Jun 2023 16:10:04 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <000000000000a61ffe05fe0c3d08@google.com>
+References: <000000000000a61ffe05fe0c3d08@google.com>
+To:     syzbot <syzbot+dd1339599f1840e4cc65@syzkaller.appspotmail.com>
+Cc:     dhowells@redhat.com, bpf@vger.kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [net?] WARNING in unreserve_psock
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1661017.1686759001.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 14 Jun 2023 17:10:01 +0100
+Message-ID: <1661018.1686759001@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix two typos in Documentation/scheduler/sched-bwc.rst.
+Here's a reduced testcase.
 
-Signed-off-by: Florian Schmaus <flo@geekplace.eu>
+David
 ---
- Documentation/scheduler/sched-bwc.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+// https://syzkaller.appspot.com/bug?id=3D6ffe7d1ebf1efaddb7ddd04784b9b22a=
+8562b8d0
+// autogenerated by syzkaller (https://github.com/google/syzkaller)
+#define _GNU_SOURCE
+#include <endian.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <unistd.h>
+#include <linux/kcm.h>
 
-diff --git a/Documentation/scheduler/sched-bwc.rst b/Documentation/scheduler/sched-bwc.rst
-index f166b182ff95..90a6e11d4465 100644
---- a/Documentation/scheduler/sched-bwc.rst
-+++ b/Documentation/scheduler/sched-bwc.rst
-@@ -31,7 +31,7 @@ Traditional (UP-EDF) bandwidth control is something like:
- 
-   (U = \Sum u_i) <= 1
- 
--This guaranteeds both that every deadline is met and that the system is
-+This guarantees both that every deadline is met and that the system is
- stable. After all, if U were > 1, then for every second of walltime,
- we'd have to run more than a second of program time, and obviously miss
- our deadline, but the next deadline will be further out still, there is
-@@ -59,7 +59,7 @@ At the same time, we can say that the worst case deadline miss, will be
- \Sum e_i; that is, there is a bounded tardiness (under the assumption
- that x+e is indeed WCET).
- 
--The interferenece when using burst is valued by the possibilities for
-+The interference when using burst is valued by the possibilities for
- missing the deadline and the average WCET. Test results showed that when
- there many cgroups or CPU is under utilized, the interference is
- limited. More details are shown in:
--- 
-2.39.3
+#define OSERROR(R, S) do { if ((long)(R) =3D=3D -1L) { perror((S)); exit(1=
+); } } while(0)
+
+int main(void)
+{
+	struct msghdr msg;
+	int kcmfd, res;
+
+	kcmfd =3D socket(AF_KCM, SOCK_DGRAM, KCMPROTO_CONNECTED);
+	OSERROR(kcmfd, "socket");
+
+	memset(&msg, 0, sizeof(msg));
+	res =3D sendmsg(kcmfd, &msg, 0);
+	OSERROR(res, "sendmsg");
+	return 0;
+}
 
