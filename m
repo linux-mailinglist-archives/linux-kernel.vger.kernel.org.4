@@ -2,300 +2,650 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFFB972F0C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 02:02:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C9BF72F0C5
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 02:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239719AbjFNACQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 20:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
+        id S240504AbjFNAC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 20:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233470AbjFNACN (ORCPT
+        with ESMTP id S239777AbjFNACV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 20:02:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8331D101
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 17:01:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686700885;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OIxUJi3S3V13SdWktR3hCfDl7HtGJShCUEdBONYksjo=;
-        b=dRxJ/F3JsH52WsKym17O01IqQMq6seIF8uPbFf0IsA0rgkHpZwXI4UUKMYaB14VjKipElC
-        fmtOBrICRq/MI5rRhj85wLQSGTEfzlKQYyFSEE/+GY5/kSYwH+aMMtXOupt/TgtHK8cT86
-        daxGTrC+H2zDSOwwKCw31Cjy4oUCgZU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-18-pBknOAWuN_CsLynMcDgNDQ-1; Tue, 13 Jun 2023 20:01:21 -0400
-X-MC-Unique: pBknOAWuN_CsLynMcDgNDQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 13 Jun 2023 20:02:21 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4400AE5;
+        Tue, 13 Jun 2023 17:02:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686700937; x=1718236937;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=tw/g5j4tmI6skPYvE/CaffnfGNvBq/osuNSdr49Uvuo=;
+  b=Nv+Hd+NeooxPYUQ+QD0rYFKv0I2vvuZqlW7Cl1b8rDF0V7Odbb9z1HgE
+   DLBKpPiNtVrmQ9QIhOY9h77zC+XcPVc0KliiSeRtp4I+bQ+KtY9xK7SbE
+   9s38rQ3k9y4ueOk3GlBzfO49Uu3d+y+lzSyNigesTCy/oaW1Qqc5Up4yA
+   ZTGwO2WazeOX0ex7SjMV1SYeGfCVh1mU+Daee8LDwRa8GNSPi0U3HY3ZF
+   FIQT/H+Z+9XMXAL8NEI+5/ytDnutMGUkcK5s8DWBRpIif55hIRsI3pyXZ
+   UaF1Tpf2jdFaqF/z42BB2Du7TA+KDglprWF2pfmEd2WRSt5J5Sv85iEH1
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="358482283"
+X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
+   d="scan'208";a="358482283"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 17:02:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="856296090"
+X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
+   d="scan'208";a="856296090"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga001.fm.intel.com with ESMTP; 13 Jun 2023 17:02:16 -0700
+Received: from [10.251.24.95] (kliang2-mobl1.ccr.corp.intel.com [10.251.24.95])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CA6EC185A795;
-        Wed, 14 Jun 2023 00:01:20 +0000 (UTC)
-Received: from [10.64.54.118] (vpn2-54-118.bne.redhat.com [10.64.54.118])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9C76F1121314;
-        Wed, 14 Jun 2023 00:01:17 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH] KVM: Avoid illegal stage2 mapping on invalid memory slot
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvmarm@lists.linux.dev, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pbonzini@redhat.com,
-        oliver.upton@linux.dev, maz@kernel.org, hshuai@redhat.com,
-        zhenyzha@redhat.com, shan.gavin@gmail.com
-References: <20230608090348.414990-1-gshan@redhat.com>
- <ZIcujNKVosLeQEqR@google.com>
- <6e335f13-01bd-2972-ead2-3081819aa151@redhat.com>
- <ZIiEIkn1lFU7Vr1z@google.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <16d8b137-7e61-b981-e1cd-9f06f73d4300@redhat.com>
-Date:   Wed, 14 Jun 2023 10:01:14 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        by linux.intel.com (Postfix) with ESMTPS id 540E0580BEE;
+        Tue, 13 Jun 2023 17:02:14 -0700 (PDT)
+Message-ID: <2d5bb2ce-d8d5-40ca-5c5b-9eb08fa9c04f@linux.intel.com>
+Date:   Tue, 13 Jun 2023 20:02:13 -0400
 MIME-Version: 1.0
-In-Reply-To: <ZIiEIkn1lFU7Vr1z@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 3/8] perf metric: JSON flag to default metric group
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Ian Rogers <irogers@google.com>
+Cc:     ahmad.yasin@intel.com, acme@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, namhyung@kernel.org, jolsa@kernel.org,
+        adrian.hunter@intel.com, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ak@linux.intel.com,
+        eranian@google.com
+References: <20230607162700.3234712-1-kan.liang@linux.intel.com>
+ <20230607162700.3234712-4-kan.liang@linux.intel.com>
+ <CAP-5=fUSKwTd8BKYfL+mwo=JmJb2qeR+BJ+1Br83jEiXtfjn7A@mail.gmail.com>
+ <ae4ff916-5e79-0340-06d5-e4634913ba2e@linux.intel.com>
+ <CAP-5=fVTDPCeaHHt9uQWdeczOKYDFNNuWFBxN-0pcsAjjvuR6g@mail.gmail.com>
+ <46da55c7-ecb6-05af-e1b6-2100cd65b259@linux.intel.com>
+ <CAP-5=fX_Fm0oRZqVpSa4XUtAfDSHsXQH9H+0SSvJCZxTtuO9+w@mail.gmail.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <CAP-5=fX_Fm0oRZqVpSa4XUtAfDSHsXQH9H+0SSvJCZxTtuO9+w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sean,
 
-On 6/14/23 12:58 AM, Sean Christopherson wrote:
-> On Tue, Jun 13, 2023, Gavin Shan wrote:
->> On 6/13/23 12:41 AM, Sean Christopherson wrote:
->>>> Fixes: 3039bcc74498 ("KVM: Move x86's MMU notifier memslot walkers to generic code")
->>>
->>> This Fixes isn't correct.  That change only affected x86, which doesn't have this
->>> bug.  And looking at commit cd4c71835228 ("KVM: arm64: Convert to the gfn-based MMU
->>> notifier callbacks"), arm64 did NOT skip invalid slots
-> 
-> ...
-> 
->>> Unless I'm missing something, this goes all the way back to initial arm64 support
->>> added by commit d5d8184d35c9 ("KVM: ARM: Memory virtualization setup").
->>>
+
+On 2023-06-13 5:28 p.m., Ian Rogers wrote:
+> On Tue, Jun 13, 2023 at 2:00 PM Liang, Kan <kan.liang@linux.intel.com> wrote:
 >>
->> The fixes tag was sorted out based on 'git-bisect', not static code analysis. I
->> agree it should be d5d8184d35c9 ("KVM: ARM: Memory virtualization setup") from
->> the code. From the 'git-bisect', we found the issue disappears when the head is
->> commit 3039bcc74498 ("KVM: Move x86's MMU notifier memslot walkers to generic code").
->> And yes, the fixes tag should be cd4c71835228 ("KVM: arm64: Convert to the gfn-based
->> MMU notifier callbacks").
-> 
-> No, just because bisect points at a commit doesn't mean that's the commit that
-> introduced a bug.  It's not uncommon for a completely valid change to expose a
-> pre-existing bug, which is what I suspect happened here, e.g. after switching to
-> the generic framework, clean_dcache_guest_page() is called *after* retrieving the
-> memslot, versus clean_dcache_guest_page() being called before walking memslots.
-> 
-> Blaming the correct commit matters, both so that it's clear to future readers what
-> went wrong, and also so that people maintaining older kernels at least are aware
-> that there kernel may be affected.  E.g. a fix in generic KVM obviously won't
-> backport to 5.10, but someone who cares deeply about a 5.10-based kernel on arm64
-> could manually port the fix to KVM arm64 code.
-> 
-
-Yes, the change of the call site on clean_dcache_guest_page() enlarges the race
-condition window between memory slot removal and change_pte() theoretically.
-With this, we were able to reproduce the issue in a practical test. In next
-revision, lets put a note about this in the changelog, like below.
-
-   We tried a git-bisect and the first problematic commit is cd4c71835228 ("
-   KVM: arm64: Convert to the gfn-based MMU notifier callbacks"). With this,
-   clean_dcache_guest_page() is called after the memory slots are iterated
-   in kvm_mmu_notifier_change_pte(). Without this commit, clean_dcache_guest_page()
-   is called before the iteration on the memory slots. This change literally
-   enlarges the racy window between kvm_mmu_notifier_change_pte() and memory
-   slot removal so that we're able to reproduce the issue in a practical test
-   case. However, the issue exists since d5d8184d35c9 ("KVM: ARM: Memory
-   virtualization setup").
-   
-   Cc: stable@vger.kernel.org # v3.9+
-   Fixes: d5d8184d35c9 ("KVM: ARM: Memory virtualization setup")
-
->> I'm declined to fix the issue only for ARM64,
-> 
-> I never suggested that an ARM-only fix be made, in fact I explicitly suggested
-> the exact opposite.
-> 
-
-Well, the original patch ignores the invalid memory slot for all MMU notifiers.
-You suggested to have this ignorance only for change_pte(). The scope is decreased
-and I was following this direction to narrow this issue/fix to change_pte() on
-ARM64 only. Sorry that I misunderstood your suggestion.
-
->> more details are given below. If we're going to limit the issue to ARM64 and
->> fix it for ARM64 only, the fixes tag should be the one as you pointed. Lets
->> correct it in next revision with:
-> 
-> For a generic fix, just blame multiple commits, e.g. the guilty arm64, RISC-V,
-> and MIPS commits, which at a glance are the affected architectures.  At one point
-> in time, x86 was also likely affected, but that's probably not worth more than a
-> brief mention in the changelog as I don't see any value in tracking down a very
-> theoretical window of time where x86 was affected.
-> 
-
-Right. Please refer to above reply. I plan to add a section in the changelog
-in next revision.
-
->>    Cc: stable@vger.kernel.org # v3.9+
->>    Fixes: d5d8184d35c9 ("KVM: ARM: Memory virtualization setup")
 >>
->>>> Reported-by: Shuai Hu <hshuai@redhat.com>
->>>> Reported-by: Zhenyu Zhang <zhenyzha@redhat.com>
->>>> Signed-off-by: Gavin Shan <gshan@redhat.com>
->>>> ---
->>>>    virt/kvm/kvm_main.c | 3 +++
->>>>    1 file changed, 3 insertions(+)
+>>
+>> On 2023-06-13 4:28 p.m., Ian Rogers wrote:
+>>> On Tue, Jun 13, 2023 at 1:10 PM Liang, Kan <kan.liang@linux.intel.com> wrote:
 >>>>
->>>> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
->>>> index 479802a892d4..7f81a3a209b6 100644
->>>> --- a/virt/kvm/kvm_main.c
->>>> +++ b/virt/kvm/kvm_main.c
->>>> @@ -598,6 +598,9 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
->>>>    			unsigned long hva_start, hva_end;
->>>>    			slot = container_of(node, struct kvm_memory_slot, hva_node[slots->node_idx]);
->>>> +			if (slot->flags & KVM_MEMSLOT_INVALID)
->>>> +				continue;
+>>>>
+>>>>
+>>>> On 2023-06-13 3:44 p.m., Ian Rogers wrote:
+>>>>> On Wed, Jun 7, 2023 at 9:27 AM <kan.liang@linux.intel.com> wrote:
+>>>>>>
+>>>>>> From: Kan Liang <kan.liang@linux.intel.com>
+>>>>>>
+>>>>>> For the default output, the default metric group could vary on different
+>>>>>> platforms. For example, on SPR, the TopdownL1 and TopdownL2 metrics
+>>>>>> should be displayed in the default mode. On ICL, only the TopdownL1
+>>>>>> should be displayed.
+>>>>>>
+>>>>>> Add a flag so we can tag the default metric group for different
+>>>>>> platforms rather than hack the perf code.
+>>>>>>
+>>>>>> The flag is added to Intel TopdownL1 since ICL and TopdownL2 metrics
+>>>>>> since SPR.
+>>>>>>
+>>>>>> Add a new field, DefaultMetricgroupName, in the JSON file to indicate
+>>>>>> the real metric group name.
+>>>>>>
+>>>>>> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+>>>>>> ---
+>>>>>>  .../arch/x86/alderlake/adl-metrics.json       | 20 ++++---
+>>>>>>  .../arch/x86/icelake/icl-metrics.json         | 20 ++++---
+>>>>>>  .../arch/x86/icelakex/icx-metrics.json        | 20 ++++---
+>>>>>>  .../arch/x86/sapphirerapids/spr-metrics.json  | 60 +++++++++++--------
+>>>>>>  .../arch/x86/tigerlake/tgl-metrics.json       | 20 ++++---
+>>>>>>  5 files changed, 84 insertions(+), 56 deletions(-)
+>>>>>>
+>>>>>> diff --git a/tools/perf/pmu-events/arch/x86/alderlake/adl-metrics.json b/tools/perf/pmu-events/arch/x86/alderlake/adl-metrics.json
+>>>>>> index c9f7e3d4ab08..e78c85220e27 100644
+>>>>>> --- a/tools/perf/pmu-events/arch/x86/alderlake/adl-metrics.json
+>>>>>> +++ b/tools/perf/pmu-events/arch/x86/alderlake/adl-metrics.json
+>>>>>> @@ -832,22 +832,24 @@
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This category represents fraction of slots where no uops are being delivered due to a lack of required resources for accepting new uops in the Backend",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL1",
+>>>>>>          "MetricExpr": "cpu_core@topdown\\-be\\-bound@ / (cpu_core@topdown\\-fe\\-bound@ + cpu_core@topdown\\-bad\\-spec@ + cpu_core@topdown\\-retiring@ + cpu_core@topdown\\-be\\-bound@) + 0 * tma_info_thread_slots",
+>>>>>> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+>>>>>> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>>>>>>          "MetricName": "tma_backend_bound",
+>>>>>>          "MetricThreshold": "tma_backend_bound > 0.2",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL1",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>>>>>>          "PublicDescription": "This category represents fraction of slots where no uops are being delivered due to a lack of required resources for accepting new uops in the Backend. Backend is the portion of the processor core where the out-of-order scheduler dispatches ready uops into their respective execution units; and once completed these uops get retired according to program order. For example; stalls due to data-cache misses or stalls due to the divider unit being overloaded are both categorized under Backend Bound. Backend Bound is further divided into two main categories: Memory Bound and Core Bound. Sample with: TOPDOWN.BACKEND_BOUND_SLOTS",
+>>>>>>          "ScaleUnit": "100%",
+>>>>>>          "Unit": "cpu_core"
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This category represents fraction of slots wasted due to incorrect speculations",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL1",
+>>>>>>          "MetricExpr": "max(1 - (tma_frontend_bound + tma_backend_bound + tma_retiring), 0)",
+>>>>>> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+>>>>>> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>>>>>>          "MetricName": "tma_bad_speculation",
+>>>>>>          "MetricThreshold": "tma_bad_speculation > 0.15",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL1",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>>>>>>          "PublicDescription": "This category represents fraction of slots wasted due to incorrect speculations. This include slots used to issue uops that do not eventually get retired and slots for which the issue-pipeline was blocked due to recovery from earlier incorrect speculation. For example; wasted work due to miss-predicted branches are categorized under Bad Speculation category. Incorrect data speculation followed by Memory Ordering Nukes is another example.",
+>>>>>>          "ScaleUnit": "100%",
+>>>>>>          "Unit": "cpu_core"
+>>>>>> @@ -1112,11 +1114,12 @@
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This category represents fraction of slots where the processor's Frontend undersupplies its Backend",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL1",
+>>>>>>          "MetricExpr": "cpu_core@topdown\\-fe\\-bound@ / (cpu_core@topdown\\-fe\\-bound@ + cpu_core@topdown\\-bad\\-spec@ + cpu_core@topdown\\-retiring@ + cpu_core@topdown\\-be\\-bound@) - cpu_core@INT_MISC.UOP_DROPPING@ / tma_info_thread_slots",
+>>>>>> -        "MetricGroup": "PGO;TmaL1;TopdownL1;tma_L1_group",
+>>>>>> +        "MetricGroup": "Default;PGO;TmaL1;TopdownL1;tma_L1_group",
+>>>>>>          "MetricName": "tma_frontend_bound",
+>>>>>>          "MetricThreshold": "tma_frontend_bound > 0.15",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL1",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>>>>>>          "PublicDescription": "This category represents fraction of slots where the processor's Frontend undersupplies its Backend. Frontend denotes the first part of the processor core responsible to fetch operations that are executed later on by the Backend part. Within the Frontend; a branch predictor predicts the next address to fetch; cache-lines are fetched from the memory subsystem; parsed into instructions; and lastly decoded into micro-operations (uops). Ideally the Frontend can issue Pipeline_Width uops every cycle to the Backend. Frontend Bound denotes unutilized issue-slots when there is no Backend stall; i.e. bubbles where Frontend delivered no uops while Backend could have accepted them. For example; stalls due to instruction-cache misses would be categorized under Frontend Bound. Sample with: FRONTEND_RETIRED.LATENCY_GE_4_PS",
+>>>>>>          "ScaleUnit": "100%",
+>>>>>>          "Unit": "cpu_core"
+>>>>>> @@ -2316,11 +2319,12 @@
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This category represents fraction of slots utilized by useful work i.e. issued uops that eventually get retired",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL1",
+>>>>>>          "MetricExpr": "cpu_core@topdown\\-retiring@ / (cpu_core@topdown\\-fe\\-bound@ + cpu_core@topdown\\-bad\\-spec@ + cpu_core@topdown\\-retiring@ + cpu_core@topdown\\-be\\-bound@) + 0 * tma_info_thread_slots",
+>>>>>> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+>>>>>> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>>>>>>          "MetricName": "tma_retiring",
+>>>>>>          "MetricThreshold": "tma_retiring > 0.7 | tma_heavy_operations > 0.1",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL1",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>>>>>>          "PublicDescription": "This category represents fraction of slots utilized by useful work i.e. issued uops that eventually get retired. Ideally; all pipeline slots would be attributed to the Retiring category.  Retiring of 100% would indicate the maximum Pipeline_Width throughput was achieved.  Maximizing Retiring typically increases the Instructions-per-cycle (see IPC metric). Note that a high Retiring value does not necessary mean there is no room for more performance.  For example; Heavy-operations or Microcode Assists are categorized under Retiring. They often indicate suboptimal performance and can often be optimized or avoided. Sample with: UOPS_RETIRED.SLOTS",
+>>>>>>          "ScaleUnit": "100%",
+>>>>>>          "Unit": "cpu_core"
+>>>>>
+>>>>> For Alderlake the Default metric group is added for all cpu_core
+>>>>> metrics but not cpu_atom. This will lead to only getting metrics for
+>>>>> performance cores while the workload could be running on atoms. This
+>>>>> could lead to a false conclusion that the workload has no issues with
+>>>>> the metrics. I think this behavior is surprising and should be called
+>>>>> out as intentional in the commit message.
+>>>>>
+>>>>
+>>>> The e-core doesn't have enough counters to calculate all the Topdown
+>>>> events. It will trigger the multiplexing. We try to avoid it in the
+>>>> default mode.
+>>>> I will update the commit in V2.
 >>>
->>> Skipping the memslot will lead to use-after-free.  E.g. if an invalidate_range_start()
->>> comes along between installing the invalid slot and zapping SPTEs, KVM will
->>> return from kvm_mmu_notifier_invalidate_range_start() without having dropped all
->>> references to the range.
->>>
->>> I.e.
->>>
->>> 	kvm_copy_memslot(invalid_slot, old);
->>> 	invalid_slot->flags |= KVM_MEMSLOT_INVALID;
->>> 	kvm_replace_memslot(kvm, old, invalid_slot);
->>>
->>> 	/*
->>> 	 * Activate the slot that is now marked INVALID, but don't propagate
->>> 	 * the slot to the now inactive slots. The slot is either going to be
->>> 	 * deleted or recreated as a new slot.
->>> 	 */
->>> 	kvm_swap_active_memslots(kvm, old->as_id);
->>>
->>>
->>> ==> invalidate_range_start()
->>>
->>> 	/*
->>> 	 * From this point no new shadow pages pointing to a deleted, or moved,
->>> 	 * memslot will be created.  Validation of sp->gfn happens in:
->>> 	 *	- gfn_to_hva (kvm_read_guest, gfn_to_pfn)
->>> 	 *	- kvm_is_visible_gfn (mmu_check_root)
->>> 	 */
->>> 	kvm_arch_flush_shadow_memslot(kvm, old);
->>>
->>> And even for change_pte(), skipping the memslot is wrong, as KVM would then fail
->>> unmap the prior SPTE.  Of course, that can't happen in the current code base
->>> because change_pte() is wrapped with invalidate_range_{start,end}(), but that's
->>> more of a bug than a design choice (see c13fda237f08 "KVM: Assert that notifier
->>> count is elevated in .change_pte()" for details).  That's also why this doesn't
->>> show up on x86; x86 installs a SPTE for the change_pte() notifier iff an existing
->>> SPTE is present, which is never true due to the invalidation.
->>>
->>
->> Right, those architectural dependencies are really something I worried about.
-> 
-> The zap case isn't a architecture specific, that's true for all KVM architectures.
-> 
-
-Yes.
-
->> It's safe to skip the invalid memory slots for ARM64,
-> 
-> No, it's not.  The problematic window where an invalidation can be incorrectly
-> skipped is very tiny, and would have zero chance of being seen without something
-> generating invalidations, e.g. page migration.  But that doesn't mean there's no
-> bug.
-> 
-
-Yeah, Agree.
-
->> but it may be unsafe to do so for other architectures. You've listed the
->> potential risks to do so for x86. It might be risky with PowerPC's reverse
->> mapping stuff either. I didn't look into the code for the left architectures.
->> In order to escape from the architectural conflicts, I would move the check
->> and skip the invalid memory slot in arch/arm64/kvm/mmu.c::kvm_set_spte_gfn(),
->> something like below. In this way, the guest hang issue in ARM64 guest is
->> fixed. We may have similar issue on other architectures, but we can figure
->> out the fix when we have to.  Sean, please let me know if you're happy with
->> this?
->>
->> arch/arm64/kvm/mmu.c::kvm_set_spte_gfn()
->> ----------------------------------------
->>
->> bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
->> {
->>          kvm_pfn_t pfn = pte_pfn(range->pte);
->>
->>          if (!kvm->arch.mmu.pgt)
->>                  return false;
->>
->>          /*
->>           * The memory slot can become invalid temporarily or permanently
->>           * when it's being moved or deleted. Avoid the stage2 mapping so
->>           * that all the read and write requests to the region of the memory
->>           * slot can be forwarded to VMM and emulated there.
->>           */
->>           if (range->slot->flags & KVM_MEMSLOT_INVALID)
->>               return false;
-> 
-> Please no.  (a) it papers over common KVM's reliance on the SPTE being zapped by
-> invalidate_range_start(), and (b) it leaves the same bug in RISC-V (which copy+pasted
-> much of arm64's MMU code) and in MIPS (which also installs SPTEs in its callback).
-> 
-
-Ok. Now I understand your suggestion to fix the issue for architectures. I will post
-v3 with your suggested changes.
-
->>           WARN_ON(range->end - range->start != 1);
->>
->>           :
->> }
->>
->>> I'd honestly love to just delete the change_pte() callback, but my opinion is more
->>> than a bit biased since we don't use KSM.  Assuming we keep change_pte(), the best
->>> option is probably to provide a wrapper around kvm_set_spte_gfn() to skip the
->>> memslot, but with a sanity check and comment explaining the dependency on there
->>> being no SPTEs due to the invalidation.  E.g.
+>>> Is multiplexing a worse crime than only giving output for half the
+>>> cores? Both can be misleading. Perhaps the safest thing is to not use
+>>> Default on hybrid platforms.
 >>>
 >>
->> It's good idea, but I'm afraid other architectures like PowerPC will still be
->> affected.
+>> I think if we cannot give the accurate number, we shouldn't show it. I
+>> don't think it's a problem just showing the Topdown on p-core. If the
+>> user doesn't find their interested data in the default mode, they can
+>> always use the --topdown for a specific core.
 > 
-> I don't follow.  PPC unmaps in response to a PTE change, but that's effectively
-> dead code due to change_pte() being wrapped with invalidate_range_{start,end}().
+> So --topdown is just dressing to using "-M TopdownL ..." and using -M
+> is how to drill down by group. I'm not sure how useful the command
+> line flag is, especially for levels >2.
 > 
+> Playing devil's advocate somewhat on the hybrid metric, let's say I
+> configure a managed runtime like a JVM so that all garbage collector
+> threads run on atom cores the main workload runs on the p-cores. This
+> is at least done in research papers. Let's say the garbage collector
+> is backend memory bound. The result from the default metrics won't
+> show this just (from the cover letter):
+> 
+> ```
+>  Performance counter stats for 'system wide':
+> 
+>          32,154.81 msec cpu-clock                        #   31.978
+> CPUs utilized
+>                165      context-switches                 #    5.131 /sec
+>                 33      cpu-migrations                   #    1.026 /sec
+>                 72      page-faults                      #    2.239 /sec
+>          5,653,347      cpu_core/cycles/                 #    0.000 GHz
+>          4,164,114      cpu_atom/cycles/                 #    0.000 GHz
+>          3,921,839      cpu_core/instructions/           #    0.69
+> insn per cycle
+>          2,142,800      cpu_atom/instructions/           #    0.38
+> insn per cycle
+>            713,629      cpu_core/branches/               #   22.194 K/sec
+>            452,838      cpu_atom/branches/               #   14.083 K/sec
+>             26,810      cpu_core/branch-misses/          #    3.76% of
+> all branches
+>             26,029      cpu_atom/branch-misses/          #    3.65% of
+> all branches
+>              TopdownL1 (cpu_core)                 #     32.0 %
+> tma_backend_bound
+>                                                   #      8.0 %
+> tma_bad_speculation
+>                                                   #     45.5 %
+> tma_frontend_bound
+>                                                   #     14.5 %  tma_retiring
+> ```
+> 
+> As the garbage collector needs to run to free memory it can lead to
+> priority inversion where the garbage collector being slow is meaning
+> there isn't enough heap on the p-cores. Here the user has to interpret
+> the "(cpu_core)" to know that only half the metrics are shown and they
+> should run with "-M TopdownL1" to get cpu_core and cpu_atom. From this
+> they can see they have a memory bound issue on the atom cores. This
+> seems less safe than reporting nothing then the user specifying "-M
+> TopdownL1" to get the metrics on both cores.
 
-You're right. I forgot the fact that change_pte() is surrounded by invalidate_{start,end}().
+OK. I will think about it. But no matter which way we choose, I think we
+have to update the script anyway.
 
->> So I would like to limit this issue to ARM64 and fix it in its
->> kvm_set_spte_gfn() variant, as above. One question about "we don't use KSM":
->> could you please share more information about this? I'm blindly guessing
->> you're saying KSM isn't used in google cloud?
 > 
-> Yeah, we == Google/GCE.  Sorry, should have clarified that.
-> 
+> For the multiplexing problem, is it solved by removing IPC from this output?
 
-Ok, thanks for your clarification.
+No, IPC should only uses the fixed counters. The branch events share the
+GP counters with the Topdown events.
 
 Thanks,
-Gavin
+Kan
 
-
+> 
+> Thanks,
+> Ian
+> 
+>> Thanks,
+>> Kan
+>>
+>>> Thanks,
+>>> Ian
+>>>
+>>>> Thanks,
+>>>> Kan
+>>>>
+>>>>> Thanks,
+>>>>> Ian
+>>>>>
+>>>>>> diff --git a/tools/perf/pmu-events/arch/x86/icelake/icl-metrics.json b/tools/perf/pmu-events/arch/x86/icelake/icl-metrics.json
+>>>>>> index 20210742171d..cc4edf855064 100644
+>>>>>> --- a/tools/perf/pmu-events/arch/x86/icelake/icl-metrics.json
+>>>>>> +++ b/tools/perf/pmu-events/arch/x86/icelake/icl-metrics.json
+>>>>>> @@ -111,21 +111,23 @@
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This category represents fraction of slots where no uops are being delivered due to a lack of required resources for accepting new uops in the Backend",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL1",
+>>>>>>          "MetricExpr": "topdown\\-be\\-bound / (topdown\\-fe\\-bound + topdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) + 5 * cpu@INT_MISC.RECOVERY_CYCLES\\,cmask\\=1\\,edge@ / tma_info_thread_slots",
+>>>>>> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+>>>>>> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>>>>>>          "MetricName": "tma_backend_bound",
+>>>>>>          "MetricThreshold": "tma_backend_bound > 0.2",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL1",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>>>>>>          "PublicDescription": "This category represents fraction of slots where no uops are being delivered due to a lack of required resources for accepting new uops in the Backend. Backend is the portion of the processor core where the out-of-order scheduler dispatches ready uops into their respective execution units; and once completed these uops get retired according to program order. For example; stalls due to data-cache misses or stalls due to the divider unit being overloaded are both categorized under Backend Bound. Backend Bound is further divided into two main categories: Memory Bound and Core Bound. Sample with: TOPDOWN.BACKEND_BOUND_SLOTS",
+>>>>>>          "ScaleUnit": "100%"
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This category represents fraction of slots wasted due to incorrect speculations",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL1",
+>>>>>>          "MetricExpr": "max(1 - (tma_frontend_bound + tma_backend_bound + tma_retiring), 0)",
+>>>>>> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+>>>>>> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>>>>>>          "MetricName": "tma_bad_speculation",
+>>>>>>          "MetricThreshold": "tma_bad_speculation > 0.15",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL1",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>>>>>>          "PublicDescription": "This category represents fraction of slots wasted due to incorrect speculations. This include slots used to issue uops that do not eventually get retired and slots for which the issue-pipeline was blocked due to recovery from earlier incorrect speculation. For example; wasted work due to miss-predicted branches are categorized under Bad Speculation category. Incorrect data speculation followed by Memory Ordering Nukes is another example.",
+>>>>>>          "ScaleUnit": "100%"
+>>>>>>      },
+>>>>>> @@ -372,11 +374,12 @@
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This category represents fraction of slots where the processor's Frontend undersupplies its Backend",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL1",
+>>>>>>          "MetricExpr": "topdown\\-fe\\-bound / (topdown\\-fe\\-bound + topdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) - INT_MISC.UOP_DROPPING / tma_info_thread_slots",
+>>>>>> -        "MetricGroup": "PGO;TmaL1;TopdownL1;tma_L1_group",
+>>>>>> +        "MetricGroup": "Default;PGO;TmaL1;TopdownL1;tma_L1_group",
+>>>>>>          "MetricName": "tma_frontend_bound",
+>>>>>>          "MetricThreshold": "tma_frontend_bound > 0.15",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL1",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>>>>>>          "PublicDescription": "This category represents fraction of slots where the processor's Frontend undersupplies its Backend. Frontend denotes the first part of the processor core responsible to fetch operations that are executed later on by the Backend part. Within the Frontend; a branch predictor predicts the next address to fetch; cache-lines are fetched from the memory subsystem; parsed into instructions; and lastly decoded into micro-operations (uops). Ideally the Frontend can issue Pipeline_Width uops every cycle to the Backend. Frontend Bound denotes unutilized issue-slots when there is no Backend stall; i.e. bubbles where Frontend delivered no uops while Backend could have accepted them. For example; stalls due to instruction-cache misses would be categorized under Frontend Bound. Sample with: FRONTEND_RETIRED.LATENCY_GE_4_PS",
+>>>>>>          "ScaleUnit": "100%"
+>>>>>>      },
+>>>>>> @@ -1378,11 +1381,12 @@
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This category represents fraction of slots utilized by useful work i.e. issued uops that eventually get retired",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL1",
+>>>>>>          "MetricExpr": "topdown\\-retiring / (topdown\\-fe\\-bound + topdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) + 0 * tma_info_thread_slots",
+>>>>>> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+>>>>>> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>>>>>>          "MetricName": "tma_retiring",
+>>>>>>          "MetricThreshold": "tma_retiring > 0.7 | tma_heavy_operations > 0.1",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL1",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>>>>>>          "PublicDescription": "This category represents fraction of slots utilized by useful work i.e. issued uops that eventually get retired. Ideally; all pipeline slots would be attributed to the Retiring category.  Retiring of 100% would indicate the maximum Pipeline_Width throughput was achieved.  Maximizing Retiring typically increases the Instructions-per-cycle (see IPC metric). Note that a high Retiring value does not necessary mean there is no room for more performance.  For example; Heavy-operations or Microcode Assists are categorized under Retiring. They often indicate suboptimal performance and can often be optimized or avoided. Sample with: UOPS_RETIRED.SLOTS",
+>>>>>>          "ScaleUnit": "100%"
+>>>>>>      },
+>>>>>> diff --git a/tools/perf/pmu-events/arch/x86/icelakex/icx-metrics.json b/tools/perf/pmu-events/arch/x86/icelakex/icx-metrics.json
+>>>>>> index ef25cda019be..6f25b5b7aaf6 100644
+>>>>>> --- a/tools/perf/pmu-events/arch/x86/icelakex/icx-metrics.json
+>>>>>> +++ b/tools/perf/pmu-events/arch/x86/icelakex/icx-metrics.json
+>>>>>> @@ -315,21 +315,23 @@
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This category represents fraction of slots where no uops are being delivered due to a lack of required resources for accepting new uops in the Backend",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL1",
+>>>>>>          "MetricExpr": "topdown\\-be\\-bound / (topdown\\-fe\\-bound + topdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) + 5 * cpu@INT_MISC.RECOVERY_CYCLES\\,cmask\\=1\\,edge@ / tma_info_thread_slots",
+>>>>>> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+>>>>>> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>>>>>>          "MetricName": "tma_backend_bound",
+>>>>>>          "MetricThreshold": "tma_backend_bound > 0.2",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL1",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>>>>>>          "PublicDescription": "This category represents fraction of slots where no uops are being delivered due to a lack of required resources for accepting new uops in the Backend. Backend is the portion of the processor core where the out-of-order scheduler dispatches ready uops into their respective execution units; and once completed these uops get retired according to program order. For example; stalls due to data-cache misses or stalls due to the divider unit being overloaded are both categorized under Backend Bound. Backend Bound is further divided into two main categories: Memory Bound and Core Bound. Sample with: TOPDOWN.BACKEND_BOUND_SLOTS",
+>>>>>>          "ScaleUnit": "100%"
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This category represents fraction of slots wasted due to incorrect speculations",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL1",
+>>>>>>          "MetricExpr": "max(1 - (tma_frontend_bound + tma_backend_bound + tma_retiring), 0)",
+>>>>>> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+>>>>>> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>>>>>>          "MetricName": "tma_bad_speculation",
+>>>>>>          "MetricThreshold": "tma_bad_speculation > 0.15",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL1",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>>>>>>          "PublicDescription": "This category represents fraction of slots wasted due to incorrect speculations. This include slots used to issue uops that do not eventually get retired and slots for which the issue-pipeline was blocked due to recovery from earlier incorrect speculation. For example; wasted work due to miss-predicted branches are categorized under Bad Speculation category. Incorrect data speculation followed by Memory Ordering Nukes is another example.",
+>>>>>>          "ScaleUnit": "100%"
+>>>>>>      },
+>>>>>> @@ -576,11 +578,12 @@
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This category represents fraction of slots where the processor's Frontend undersupplies its Backend",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL1",
+>>>>>>          "MetricExpr": "topdown\\-fe\\-bound / (topdown\\-fe\\-bound + topdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) - INT_MISC.UOP_DROPPING / tma_info_thread_slots",
+>>>>>> -        "MetricGroup": "PGO;TmaL1;TopdownL1;tma_L1_group",
+>>>>>> +        "MetricGroup": "Default;PGO;TmaL1;TopdownL1;tma_L1_group",
+>>>>>>          "MetricName": "tma_frontend_bound",
+>>>>>>          "MetricThreshold": "tma_frontend_bound > 0.15",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL1",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>>>>>>          "PublicDescription": "This category represents fraction of slots where the processor's Frontend undersupplies its Backend. Frontend denotes the first part of the processor core responsible to fetch operations that are executed later on by the Backend part. Within the Frontend; a branch predictor predicts the next address to fetch; cache-lines are fetched from the memory subsystem; parsed into instructions; and lastly decoded into micro-operations (uops). Ideally the Frontend can issue Pipeline_Width uops every cycle to the Backend. Frontend Bound denotes unutilized issue-slots when there is no Backend stall; i.e. bubbles where Frontend delivered no uops while Backend could have accepted them. For example; stalls due to instruction-cache misses would be categorized under Frontend Bound. Sample with: FRONTEND_RETIRED.LATENCY_GE_4_PS",
+>>>>>>          "ScaleUnit": "100%"
+>>>>>>      },
+>>>>>> @@ -1674,11 +1677,12 @@
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This category represents fraction of slots utilized by useful work i.e. issued uops that eventually get retired",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL1",
+>>>>>>          "MetricExpr": "topdown\\-retiring / (topdown\\-fe\\-bound + topdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) + 0 * tma_info_thread_slots",
+>>>>>> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+>>>>>> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>>>>>>          "MetricName": "tma_retiring",
+>>>>>>          "MetricThreshold": "tma_retiring > 0.7 | tma_heavy_operations > 0.1",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL1",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>>>>>>          "PublicDescription": "This category represents fraction of slots utilized by useful work i.e. issued uops that eventually get retired. Ideally; all pipeline slots would be attributed to the Retiring category.  Retiring of 100% would indicate the maximum Pipeline_Width throughput was achieved.  Maximizing Retiring typically increases the Instructions-per-cycle (see IPC metric). Note that a high Retiring value does not necessary mean there is no room for more performance.  For example; Heavy-operations or Microcode Assists are categorized under Retiring. They often indicate suboptimal performance and can often be optimized or avoided. Sample with: UOPS_RETIRED.SLOTS",
+>>>>>>          "ScaleUnit": "100%"
+>>>>>>      },
+>>>>>> diff --git a/tools/perf/pmu-events/arch/x86/sapphirerapids/spr-metrics.json b/tools/perf/pmu-events/arch/x86/sapphirerapids/spr-metrics.json
+>>>>>> index 4f3dd85540b6..c732982f70b5 100644
+>>>>>> --- a/tools/perf/pmu-events/arch/x86/sapphirerapids/spr-metrics.json
+>>>>>> +++ b/tools/perf/pmu-events/arch/x86/sapphirerapids/spr-metrics.json
+>>>>>> @@ -340,31 +340,34 @@
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This category represents fraction of slots where no uops are being delivered due to a lack of required resources for accepting new uops in the Backend",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL1",
+>>>>>>          "MetricExpr": "topdown\\-be\\-bound / (topdown\\-fe\\-bound + topdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) + 0 * tma_info_thread_slots",
+>>>>>> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+>>>>>> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>>>>>>          "MetricName": "tma_backend_bound",
+>>>>>>          "MetricThreshold": "tma_backend_bound > 0.2",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL1",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>>>>>>          "PublicDescription": "This category represents fraction of slots where no uops are being delivered due to a lack of required resources for accepting new uops in the Backend. Backend is the portion of the processor core where the out-of-order scheduler dispatches ready uops into their respective execution units; and once completed these uops get retired according to program order. For example; stalls due to data-cache misses or stalls due to the divider unit being overloaded are both categorized under Backend Bound. Backend Bound is further divided into two main categories: Memory Bound and Core Bound. Sample with: TOPDOWN.BACKEND_BOUND_SLOTS",
+>>>>>>          "ScaleUnit": "100%"
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This category represents fraction of slots wasted due to incorrect speculations",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL1",
+>>>>>>          "MetricExpr": "max(1 - (tma_frontend_bound + tma_backend_bound + tma_retiring), 0)",
+>>>>>> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+>>>>>> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>>>>>>          "MetricName": "tma_bad_speculation",
+>>>>>>          "MetricThreshold": "tma_bad_speculation > 0.15",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL1",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>>>>>>          "PublicDescription": "This category represents fraction of slots wasted due to incorrect speculations. This include slots used to issue uops that do not eventually get retired and slots for which the issue-pipeline was blocked due to recovery from earlier incorrect speculation. For example; wasted work due to miss-predicted branches are categorized under Bad Speculation category. Incorrect data speculation followed by Memory Ordering Nukes is another example.",
+>>>>>>          "ScaleUnit": "100%"
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This metric represents fraction of slots the CPU has wasted due to Branch Misprediction",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL2",
+>>>>>>          "MetricExpr": "topdown\\-br\\-mispredict / (topdown\\-fe\\-bound + topdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) + 0 * tma_info_thread_slots",
+>>>>>> -        "MetricGroup": "BadSpec;BrMispredicts;TmaL2;TopdownL2;tma_L2_group;tma_bad_speculation_group;tma_issueBM",
+>>>>>> +        "MetricGroup": "BadSpec;BrMispredicts;Default;TmaL2;TopdownL2;tma_L2_group;tma_bad_speculation_group;tma_issueBM",
+>>>>>>          "MetricName": "tma_branch_mispredicts",
+>>>>>>          "MetricThreshold": "tma_branch_mispredicts > 0.1 & tma_bad_speculation > 0.15",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL2",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL2;Default",
+>>>>>>          "PublicDescription": "This metric represents fraction of slots the CPU has wasted due to Branch Misprediction.  These slots are either wasted by uops fetched from an incorrectly speculated program path; or stalls when the out-of-order part of the machine needs to recover its state from a speculative path. Sample with: TOPDOWN.BR_MISPREDICT_SLOTS. Related metrics: tma_info_bad_spec_branch_misprediction_cost, tma_info_bottleneck_mispredictions, tma_mispredicts_resteers",
+>>>>>>          "ScaleUnit": "100%"
+>>>>>>      },
+>>>>>> @@ -407,11 +410,12 @@
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This metric represents fraction of slots where Core non-memory issues were of a bottleneck",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL2",
+>>>>>>          "MetricExpr": "max(0, tma_backend_bound - tma_memory_bound)",
+>>>>>> -        "MetricGroup": "Backend;Compute;TmaL2;TopdownL2;tma_L2_group;tma_backend_bound_group",
+>>>>>> +        "MetricGroup": "Backend;Compute;Default;TmaL2;TopdownL2;tma_L2_group;tma_backend_bound_group",
+>>>>>>          "MetricName": "tma_core_bound",
+>>>>>>          "MetricThreshold": "tma_core_bound > 0.1 & tma_backend_bound > 0.2",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL2",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL2;Default",
+>>>>>>          "PublicDescription": "This metric represents fraction of slots where Core non-memory issues were of a bottleneck.  Shortage in hardware compute resources; or dependencies in software's instructions are both categorized under Core Bound. Hence it may indicate the machine ran out of an out-of-order resource; certain execution units are overloaded or dependencies in program's data- or instruction-flow are limiting the performance (e.g. FP-chained long-latency arithmetic operations).",
+>>>>>>          "ScaleUnit": "100%"
+>>>>>>      },
+>>>>>> @@ -509,21 +513,23 @@
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This metric represents fraction of slots the CPU was stalled due to Frontend bandwidth issues",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL2",
+>>>>>>          "MetricExpr": "max(0, tma_frontend_bound - tma_fetch_latency)",
+>>>>>> -        "MetricGroup": "FetchBW;Frontend;TmaL2;TopdownL2;tma_L2_group;tma_frontend_bound_group;tma_issueFB",
+>>>>>> +        "MetricGroup": "Default;FetchBW;Frontend;TmaL2;TopdownL2;tma_L2_group;tma_frontend_bound_group;tma_issueFB",
+>>>>>>          "MetricName": "tma_fetch_bandwidth",
+>>>>>>          "MetricThreshold": "tma_fetch_bandwidth > 0.1 & tma_frontend_bound > 0.15 & tma_info_thread_ipc / 6 > 0.35",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL2",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL2;Default",
+>>>>>>          "PublicDescription": "This metric represents fraction of slots the CPU was stalled due to Frontend bandwidth issues.  For example; inefficiencies at the instruction decoders; or restrictions for caching in the DSB (decoded uops cache) are categorized under Fetch Bandwidth. In such cases; the Frontend typically delivers suboptimal amount of uops to the Backend. Sample with: FRONTEND_RETIRED.LATENCY_GE_2_BUBBLES_GE_1_PS;FRONTEND_RETIRED.LATENCY_GE_1_PS;FRONTEND_RETIRED.LATENCY_GE_2_PS. Related metrics: tma_dsb_switches, tma_info_botlnk_l2_dsb_misses, tma_info_frontend_dsb_coverage, tma_info_inst_mix_iptb, tma_lcp",
+>>>>>>          "ScaleUnit": "100%"
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This metric represents fraction of slots the CPU was stalled due to Frontend latency issues",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL2",
+>>>>>>          "MetricExpr": "topdown\\-fetch\\-lat / (topdown\\-fe\\-bound + topdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) - INT_MISC.UOP_DROPPING / tma_info_thread_slots",
+>>>>>> -        "MetricGroup": "Frontend;TmaL2;TopdownL2;tma_L2_group;tma_frontend_bound_group",
+>>>>>> +        "MetricGroup": "Default;Frontend;TmaL2;TopdownL2;tma_L2_group;tma_frontend_bound_group",
+>>>>>>          "MetricName": "tma_fetch_latency",
+>>>>>>          "MetricThreshold": "tma_fetch_latency > 0.1 & tma_frontend_bound > 0.15",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL2",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL2;Default",
+>>>>>>          "PublicDescription": "This metric represents fraction of slots the CPU was stalled due to Frontend latency issues.  For example; instruction-cache misses; iTLB misses or fetch stalls after a branch misprediction are categorized under Frontend Latency. In such cases; the Frontend eventually delivers no uops for some period. Sample with: FRONTEND_RETIRED.LATENCY_GE_16_PS;FRONTEND_RETIRED.LATENCY_GE_8_PS",
+>>>>>>          "ScaleUnit": "100%"
+>>>>>>      },
+>>>>>> @@ -611,11 +617,12 @@
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This category represents fraction of slots where the processor's Frontend undersupplies its Backend",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL1",
+>>>>>>          "MetricExpr": "topdown\\-fe\\-bound / (topdown\\-fe\\-bound + topdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) - INT_MISC.UOP_DROPPING / tma_info_thread_slots",
+>>>>>> -        "MetricGroup": "PGO;TmaL1;TopdownL1;tma_L1_group",
+>>>>>> +        "MetricGroup": "Default;PGO;TmaL1;TopdownL1;tma_L1_group",
+>>>>>>          "MetricName": "tma_frontend_bound",
+>>>>>>          "MetricThreshold": "tma_frontend_bound > 0.15",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL1",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>>>>>>          "PublicDescription": "This category represents fraction of slots where the processor's Frontend undersupplies its Backend. Frontend denotes the first part of the processor core responsible to fetch operations that are executed later on by the Backend part. Within the Frontend; a branch predictor predicts the next address to fetch; cache-lines are fetched from the memory subsystem; parsed into instructions; and lastly decoded into micro-operations (uops). Ideally the Frontend can issue Pipeline_Width uops every cycle to the Backend. Frontend Bound denotes unutilized issue-slots when there is no Backend stall; i.e. bubbles where Frontend delivered no uops while Backend could have accepted them. For example; stalls due to instruction-cache misses would be categorized under Frontend Bound. Sample with: FRONTEND_RETIRED.LATENCY_GE_4_PS",
+>>>>>>          "ScaleUnit": "100%"
+>>>>>>      },
+>>>>>> @@ -630,11 +637,12 @@
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This metric represents fraction of slots where the CPU was retiring heavy-weight operations -- instructions that require two or more uops or micro-coded sequences",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL2",
+>>>>>>          "MetricExpr": "topdown\\-heavy\\-ops / (topdown\\-fe\\-bound + topdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) + 0 * tma_info_thread_slots",
+>>>>>> -        "MetricGroup": "Retire;TmaL2;TopdownL2;tma_L2_group;tma_retiring_group",
+>>>>>> +        "MetricGroup": "Default;Retire;TmaL2;TopdownL2;tma_L2_group;tma_retiring_group",
+>>>>>>          "MetricName": "tma_heavy_operations",
+>>>>>>          "MetricThreshold": "tma_heavy_operations > 0.1",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL2",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL2;Default",
+>>>>>>          "PublicDescription": "This metric represents fraction of slots where the CPU was retiring heavy-weight operations -- instructions that require two or more uops or micro-coded sequences. This highly-correlates with the uop length of these instructions/sequences. Sample with: UOPS_RETIRED.HEAVY",
+>>>>>>          "ScaleUnit": "100%"
+>>>>>>      },
+>>>>>> @@ -1486,11 +1494,12 @@
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This metric represents fraction of slots where the CPU was retiring light-weight operations -- instructions that require no more than one uop (micro-operation)",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL2",
+>>>>>>          "MetricExpr": "max(0, tma_retiring - tma_heavy_operations)",
+>>>>>> -        "MetricGroup": "Retire;TmaL2;TopdownL2;tma_L2_group;tma_retiring_group",
+>>>>>> +        "MetricGroup": "Default;Retire;TmaL2;TopdownL2;tma_L2_group;tma_retiring_group",
+>>>>>>          "MetricName": "tma_light_operations",
+>>>>>>          "MetricThreshold": "tma_light_operations > 0.6",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL2",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL2;Default",
+>>>>>>          "PublicDescription": "This metric represents fraction of slots where the CPU was retiring light-weight operations -- instructions that require no more than one uop (micro-operation). This correlates with total number of instructions used by the program. A uops-per-instruction (see UopPI metric) ratio of 1 or less should be expected for decently optimized software running on Intel Core/Xeon products. While this often indicates efficient X86 instructions were executed; high value does not necessarily mean better performance cannot be achieved. Sample with: INST_RETIRED.PREC_DIST",
+>>>>>>          "ScaleUnit": "100%"
+>>>>>>      },
+>>>>>> @@ -1540,11 +1549,12 @@
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This metric represents fraction of slots the CPU has wasted due to Machine Clears",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL2",
+>>>>>>          "MetricExpr": "max(0, tma_bad_speculation - tma_branch_mispredicts)",
+>>>>>> -        "MetricGroup": "BadSpec;MachineClears;TmaL2;TopdownL2;tma_L2_group;tma_bad_speculation_group;tma_issueMC;tma_issueSyncxn",
+>>>>>> +        "MetricGroup": "BadSpec;Default;MachineClears;TmaL2;TopdownL2;tma_L2_group;tma_bad_speculation_group;tma_issueMC;tma_issueSyncxn",
+>>>>>>          "MetricName": "tma_machine_clears",
+>>>>>>          "MetricThreshold": "tma_machine_clears > 0.1 & tma_bad_speculation > 0.15",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL2",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL2;Default",
+>>>>>>          "PublicDescription": "This metric represents fraction of slots the CPU has wasted due to Machine Clears.  These slots are either wasted by uops fetched prior to the clear; or stalls the out-of-order portion of the machine needs to recover its state after the clear. For example; this can happen due to memory ordering Nukes (e.g. Memory Disambiguation) or Self-Modifying-Code (SMC) nukes. Sample with: MACHINE_CLEARS.COUNT. Related metrics: tma_clears_resteers, tma_contested_accesses, tma_data_sharing, tma_false_sharing, tma_l1_bound, tma_microcode_sequencer, tma_ms_switches, tma_remote_cache",
+>>>>>>          "ScaleUnit": "100%"
+>>>>>>      },
+>>>>>> @@ -1576,11 +1586,12 @@
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This metric represents fraction of slots the Memory subsystem within the Backend was a bottleneck",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL2",
+>>>>>>          "MetricExpr": "topdown\\-mem\\-bound / (topdown\\-fe\\-bound + topdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) + 0 * tma_info_thread_slots",
+>>>>>> -        "MetricGroup": "Backend;TmaL2;TopdownL2;tma_L2_group;tma_backend_bound_group",
+>>>>>> +        "MetricGroup": "Backend;Default;TmaL2;TopdownL2;tma_L2_group;tma_backend_bound_group",
+>>>>>>          "MetricName": "tma_memory_bound",
+>>>>>>          "MetricThreshold": "tma_memory_bound > 0.2 & tma_backend_bound > 0.2",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL2",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL2;Default",
+>>>>>>          "PublicDescription": "This metric represents fraction of slots the Memory subsystem within the Backend was a bottleneck.  Memory Bound estimates fraction of slots where pipeline is likely stalled due to demand load or store instructions. This accounts mainly for (1) non-completed in-flight memory demand loads which coincides with execution units starvation; in addition to (2) cases where stores could impose backpressure on the pipeline when many of them get buffered at the same time (less common out of the two).",
+>>>>>>          "ScaleUnit": "100%"
+>>>>>>      },
+>>>>>> @@ -1784,11 +1795,12 @@
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This category represents fraction of slots utilized by useful work i.e. issued uops that eventually get retired",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL1",
+>>>>>>          "MetricExpr": "topdown\\-retiring / (topdown\\-fe\\-bound + topdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) + 0 * tma_info_thread_slots",
+>>>>>> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+>>>>>> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>>>>>>          "MetricName": "tma_retiring",
+>>>>>>          "MetricThreshold": "tma_retiring > 0.7 | tma_heavy_operations > 0.1",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL1",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>>>>>>          "PublicDescription": "This category represents fraction of slots utilized by useful work i.e. issued uops that eventually get retired. Ideally; all pipeline slots would be attributed to the Retiring category.  Retiring of 100% would indicate the maximum Pipeline_Width throughput was achieved.  Maximizing Retiring typically increases the Instructions-per-cycle (see IPC metric). Note that a high Retiring value does not necessary mean there is no room for more performance.  For example; Heavy-operations or Microcode Assists are categorized under Retiring. They often indicate suboptimal performance and can often be optimized or avoided. Sample with: UOPS_RETIRED.SLOTS",
+>>>>>>          "ScaleUnit": "100%"
+>>>>>>      },
+>>>>>> diff --git a/tools/perf/pmu-events/arch/x86/tigerlake/tgl-metrics.json b/tools/perf/pmu-events/arch/x86/tigerlake/tgl-metrics.json
+>>>>>> index d0538a754288..83346911aa63 100644
+>>>>>> --- a/tools/perf/pmu-events/arch/x86/tigerlake/tgl-metrics.json
+>>>>>> +++ b/tools/perf/pmu-events/arch/x86/tigerlake/tgl-metrics.json
+>>>>>> @@ -105,21 +105,23 @@
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This category represents fraction of slots where no uops are being delivered due to a lack of required resources for accepting new uops in the Backend",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL1",
+>>>>>>          "MetricExpr": "topdown\\-be\\-bound / (topdown\\-fe\\-bound + topdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) + 5 * cpu@INT_MISC.RECOVERY_CYCLES\\,cmask\\=1\\,edge@ / tma_info_thread_slots",
+>>>>>> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+>>>>>> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>>>>>>          "MetricName": "tma_backend_bound",
+>>>>>>          "MetricThreshold": "tma_backend_bound > 0.2",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL1",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>>>>>>          "PublicDescription": "This category represents fraction of slots where no uops are being delivered due to a lack of required resources for accepting new uops in the Backend. Backend is the portion of the processor core where the out-of-order scheduler dispatches ready uops into their respective execution units; and once completed these uops get retired according to program order. For example; stalls due to data-cache misses or stalls due to the divider unit being overloaded are both categorized under Backend Bound. Backend Bound is further divided into two main categories: Memory Bound and Core Bound. Sample with: TOPDOWN.BACKEND_BOUND_SLOTS",
+>>>>>>          "ScaleUnit": "100%"
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This category represents fraction of slots wasted due to incorrect speculations",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL1",
+>>>>>>          "MetricExpr": "max(1 - (tma_frontend_bound + tma_backend_bound + tma_retiring), 0)",
+>>>>>> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+>>>>>> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>>>>>>          "MetricName": "tma_bad_speculation",
+>>>>>>          "MetricThreshold": "tma_bad_speculation > 0.15",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL1",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>>>>>>          "PublicDescription": "This category represents fraction of slots wasted due to incorrect speculations. This include slots used to issue uops that do not eventually get retired and slots for which the issue-pipeline was blocked due to recovery from earlier incorrect speculation. For example; wasted work due to miss-predicted branches are categorized under Bad Speculation category. Incorrect data speculation followed by Memory Ordering Nukes is another example.",
+>>>>>>          "ScaleUnit": "100%"
+>>>>>>      },
+>>>>>> @@ -366,11 +368,12 @@
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This category represents fraction of slots where the processor's Frontend undersupplies its Backend",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL1",
+>>>>>>          "MetricExpr": "topdown\\-fe\\-bound / (topdown\\-fe\\-bound + topdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) - INT_MISC.UOP_DROPPING / tma_info_thread_slots",
+>>>>>> -        "MetricGroup": "PGO;TmaL1;TopdownL1;tma_L1_group",
+>>>>>> +        "MetricGroup": "Default;PGO;TmaL1;TopdownL1;tma_L1_group",
+>>>>>>          "MetricName": "tma_frontend_bound",
+>>>>>>          "MetricThreshold": "tma_frontend_bound > 0.15",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL1",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>>>>>>          "PublicDescription": "This category represents fraction of slots where the processor's Frontend undersupplies its Backend. Frontend denotes the first part of the processor core responsible to fetch operations that are executed later on by the Backend part. Within the Frontend; a branch predictor predicts the next address to fetch; cache-lines are fetched from the memory subsystem; parsed into instructions; and lastly decoded into micro-operations (uops). Ideally the Frontend can issue Pipeline_Width uops every cycle to the Backend. Frontend Bound denotes unutilized issue-slots when there is no Backend stall; i.e. bubbles where Frontend delivered no uops while Backend could have accepted them. For example; stalls due to instruction-cache misses would be categorized under Frontend Bound. Sample with: FRONTEND_RETIRED.LATENCY_GE_4_PS",
+>>>>>>          "ScaleUnit": "100%"
+>>>>>>      },
+>>>>>> @@ -1392,11 +1395,12 @@
+>>>>>>      },
+>>>>>>      {
+>>>>>>          "BriefDescription": "This category represents fraction of slots utilized by useful work i.e. issued uops that eventually get retired",
+>>>>>> +        "DefaultMetricgroupName": "TopdownL1",
+>>>>>>          "MetricExpr": "topdown\\-retiring / (topdown\\-fe\\-bound + topdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) + 0 * tma_info_thread_slots",
+>>>>>> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+>>>>>> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>>>>>>          "MetricName": "tma_retiring",
+>>>>>>          "MetricThreshold": "tma_retiring > 0.7 | tma_heavy_operations > 0.1",
+>>>>>> -        "MetricgroupNoGroup": "TopdownL1",
+>>>>>> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>>>>>>          "PublicDescription": "This category represents fraction of slots utilized by useful work i.e. issued uops that eventually get retired. Ideally; all pipeline slots would be attributed to the Retiring category.  Retiring of 100% would indicate the maximum Pipeline_Width throughput was achieved.  Maximizing Retiring typically increases the Instructions-per-cycle (see IPC metric). Note that a high Retiring value does not necessary mean there is no room for more performance.  For example; Heavy-operations or Microcode Assists are categorized under Retiring. They often indicate suboptimal performance and can often be optimized or avoided. Sample with: UOPS_RETIRED.SLOTS",
+>>>>>>          "ScaleUnit": "100%"
+>>>>>>      },
+>>>>>> --
+>>>>>> 2.35.1
+>>>>>>
