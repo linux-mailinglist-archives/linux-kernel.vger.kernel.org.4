@@ -2,168 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB7773058D
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5991730590
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234992AbjFNQ6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 12:58:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34604 "EHLO
+        id S230229AbjFNQ6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 12:58:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235059AbjFNQ63 (ORCPT
+        with ESMTP id S233267AbjFNQ6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 12:58:29 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2138.outbound.protection.outlook.com [40.107.102.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831F5213B;
-        Wed, 14 Jun 2023 09:58:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oNEgUcvt7BJwsnAvQ1uDC59XWenXiAcVuo6dc2pCiwBbaReIb6h+kJryNrr32uu4EnbbFLtI3dmJcefvs1c7tZ31xpNYVkZIEiEJTtGBiQxDsrmEMSlPrvlzLMFbiQw32A1kpjxfFSemtOe+KjNmlb88gnvZT4uV1hNkdyXbXAMBoGHGnfmJPZgQJoY6gFuijQISWCsxwkKdD2HQlAonpLCPUdJpZLcX4YUSx4++7yhHg0q6XPr+dIT3PgEq4LU+xlmdnWqbyhts8EqUADpdIt6iF6R1S34/0d6b7Hq++1HqBRUMT3qXAyLCjVf8OcU/RFIJDZbHyQ6SqeBCfQ7YAg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=exJ6nMJHLtJLI2BbsuJeaKHecKc5z1YDcbzBvWf4WrQ=;
- b=jo4GnnBQK5VUtxQzmyjhLR9z13CsoWO17tesLk4Fy2Nm57/leKZU98PBpT6Sy9pVWUKOC9n/f4hcEPwG37kNatnwgpbml5uhe8lOseJVSqdJZ9VHlCr+zFEznUhvlw41I86MOgq8VbGkOWNrad71CfkJVvO3PVr5fSwdlKMDm0isKT4s/PBmVgYhgFBEI/MxXnwjxR6Yvf02q6r+dTVnURv573lCij5uKg44hLNQsT1/vSPzfUeOjqGwmyWm4Wh9kGQbjp0h4tjTIbPiNpLVaV49vXLgTmB2cAKpAJlNt3hx0XH1798oRfASfKbG1zEV83bF2It5Uylxn3f6TJkljA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=exJ6nMJHLtJLI2BbsuJeaKHecKc5z1YDcbzBvWf4WrQ=;
- b=hoYdngyjseVhdVYa9ljiAuJRHkCQhZeaezmr//CX/1lBcxLKhfLdlzHPs1D4iXfDXRiz9Ab9MuEVpPKn8JOFWUA5LQ1orUV6z5sM098BWxhYf1RvksBvninpNQIRO25+TgZ5EefW2v6xHgP8b+bXbp2JUhJdzOTHzsSpX2wjbMo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SN7PR13MB6256.namprd13.prod.outlook.com (2603:10b6:806:2ef::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37; Wed, 14 Jun
- 2023 16:58:22 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e%4]) with mapi id 15.20.6477.028; Wed, 14 Jun 2023
- 16:58:22 +0000
-Date:   Wed, 14 Jun 2023 18:58:16 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Stefan Wahren <stefan.wahren@chargebyte.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net resend] net: qca_spi: Avoid high load if QCA7000 is
- not available
-Message-ID: <ZInxqMtr4Gk4Kz0V@corigine.com>
-References: <20230614111714.3612-1-stefan.wahren@chargebyte.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230614111714.3612-1-stefan.wahren@chargebyte.com>
-X-ClientProxiedBy: AM0PR04CA0076.eurprd04.prod.outlook.com
- (2603:10a6:208:be::17) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Wed, 14 Jun 2023 12:58:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8620268E;
+        Wed, 14 Jun 2023 09:58:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 75C3F60E8D;
+        Wed, 14 Jun 2023 16:58:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33A2AC433C8;
+        Wed, 14 Jun 2023 16:58:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686761924;
+        bh=JawmiSBEKOC8TDqGTdeR7nW44hRx2G/VByajxDBcYoo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u5irh81u/2jEaKr5V3wSgBXtD+6gwCmlrtZmd3qUH6b4HWNwVrzjUMgAFGgwjnQYf
+         UtmsVlLzyqJigA7QvNHeMiFHFX2uQsAMc2buiXNNJ7dChvtK/cWF8p9UrbtjZ9RwLv
+         2Ti++JsfAKvEuqkqeSwwwHDzLJo+yeWezMis/NnVjYZEOnmIGb7w6/P9nq3CCJ8IcV
+         5KkYiuFu73y27hsf6zvWM4aXh4W9epUP8KxUoU7TWCgGJhLFQI5q2kaQIeBZT9Aqqf
+         QrSw7yqkMaXR2g7li8La6FlkyKu7AuASGdjz/b4zUyb2kvtYPqVNKocAIrSiK5T+iy
+         Y3BG/0p7K199g==
+Date:   Wed, 14 Jun 2023 17:58:38 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Guo Ren <guoren@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-riscv@lists.infradead.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v9 0/6] Add non-coherent DMA support for AX45MP
+Message-ID: <20230614-oncoming-suspense-4104f43912ab@spud>
+References: <20230614104759.228372-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SN7PR13MB6256:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0d531f4b-4d17-44ec-f6b9-08db6cf88fc9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wRjDi/uAXu3vy1eGNE2CT598SeTbdqj3R04be+7/xm3qdTTJndWfw+MJwX8Qn0jplsNqm0pu0+B5hMyiXDPk0Tb0UnprEZaosd1RtsEsdDWqWdLEnTJD3krav9V37TnSti0ei/tCXEW4kgIsLMhMCQOREjg3oOHMExfGD4LtpEA8lBxW33fVmI/sIWnNNNe3o6KtPX2xKNXkFJyrpH7XpTQQy2DRxQ+/liDOSchbtxdntmoDf6oIekWkRXjlKmFX/6UQPD9AjbUVaVAk4PB49+YkbrmNJqfursTrKa0IUkWcgpoNHrVRLJ8XHL7B5Q+2SNBCN/r77JVwzMi8cn2xRLe1tcXCwPapcaYhQzj8xgVXlBvbfNqBtdpTQBO9YvqbMl5RFhIa+gzUNtbVJeTjZ7VCTMsuDfY4BX/STLlFQn/gH4IBHgbr/Zsmp7Lmsgfv/O7ix+y9EupTBKrxkFy1cJJaEq5SKRreIiNCiZHde4Su9YBeVRN52rCsdO0rqSfMWrKpTUqooOpk6zFQtm9un/OA12CXsaduDGnl0GL1/CffxlXJ6IYVmSm2fwBNtftXyuWlYz8PFZmu+TV3zTVlZ8yo+VaKC8lgTjHXYC6n0eg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39840400004)(376002)(136003)(366004)(346002)(451199021)(8936002)(6486002)(8676002)(6512007)(41300700001)(38100700002)(478600001)(36756003)(66946007)(6916009)(4326008)(66556008)(66476007)(86362001)(316002)(54906003)(6666004)(6506007)(44832011)(5660300002)(83380400001)(186003)(2616005)(2906002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dHKkIf0ZW0Cu12y01SASQBaGLS5IYUot/2C+FlhuT3db6dHPJXgxyOGqCR+o?=
- =?us-ascii?Q?UMdOQxB+goeY01P97OaV77MWMm/SNAWcgZXIKvw6nTFybSp0fYJEASt17Y4T?=
- =?us-ascii?Q?hZmv/kltl0JGYH3rUt65C+3Bf/tCoBT2SS+aKRyyxfpUdAkm9KJWYAq89Ww4?=
- =?us-ascii?Q?Rh0+ohWAgJ5/dDQj0UeiIvWGfijgqdyE95F9EbR1P4AeyqA6XZJikbe7t3F6?=
- =?us-ascii?Q?peRtkxFH2Rem6BfU9NuhQA7SjiS7zQuUC3wez3Tt/vzXDoq3Kl3xGISMFu5M?=
- =?us-ascii?Q?RxuxMEToOzgppOIUIaNQ1GEwa8A+WJ0vQFFiOxK6fhRDZptLkMQh5BVmkcAq?=
- =?us-ascii?Q?I0ueU83hB8mPom8PPkloPmko49SZSl4vZpI69Wspm2XCduCKEttx4lRhs1lR?=
- =?us-ascii?Q?hXiN0ynKNjVXWGI6I5Jve6L4IPGucbCdTSHmYEJUGYiOiiW2NfDV5YJiKj4q?=
- =?us-ascii?Q?WBhuo3TMPvfpTxngQrln0UVoTIFXmn+GrcyYfUFQx8f68OTn3Rg8Ml78/0zM?=
- =?us-ascii?Q?hb+myly0wRmLgPrpMjP/ULsdqapIy2jf7hHN+wucc8Rb/f9NLwhFpZlFv8XM?=
- =?us-ascii?Q?Bc6xxf1c6XfYfjN6GrSywRRz3UmtXBoIJHN1jtNu2KZ26Vnvh4IYpQhHjuAh?=
- =?us-ascii?Q?AyCUxsoaFHSmR5hJDUlKBqwCmy1nsW1h5T0Wi9mkhboXU11euC+u2MqmLx/n?=
- =?us-ascii?Q?FEU+y2q6d5l6P4LDElvl2yiHf3EcvioVzZlc3bbFinoSKKo6ds10O6sU5e+A?=
- =?us-ascii?Q?HiXxve9Xdwvr4jSVbFk/Lwvbb3G/Bbh+2K4u5zBM47IZKMy+e/pQmRtd7agb?=
- =?us-ascii?Q?lKVlOocQKLz79DUDdaI0lhG8un/MKYZ9kQMRBv1W+06lUXNsA0jVHxV8kzty?=
- =?us-ascii?Q?RGEqnkNY1fUKw5pElrNIX7+oWitjsANt5OTmYoo1W+NveZgqGbEFQ22RjCcj?=
- =?us-ascii?Q?uzC9s71T9IFFwAuIp0dL8VcMMej19XOJ94WDKC+XoZZM3DOheShddw1AmOly?=
- =?us-ascii?Q?mCPsPg0kl5s89jcaheU7YjdIx1pWSVfPLys173zgpjqgXvT8f79ByHv05qCp?=
- =?us-ascii?Q?ACj9o8MNTRZ1pc6FyL3iNNnAXoZE2tJVmOQUh34Q+X6+vwti4mniplKfYAIN?=
- =?us-ascii?Q?iqA29LvYoE8NFpx3jqQUKgL+TqsR+pacTCYsbfB5exWRTdxn0VVUvc1b/hFx?=
- =?us-ascii?Q?XzBJUajwSg6jx3nZsH0BuRF4zaEy69deg0AuDAgyWkFZQ5hz6VoD0HE8j6KG?=
- =?us-ascii?Q?QawNtJqsWQ3znXiN1bHQw/XliEPiZaZuVPL5NyL7Qa30hGC61S3eONPVXF7S?=
- =?us-ascii?Q?f4U62ldVyJUYtbzLlguybDwMJWspUACOUvmeQZEVmlsO+3rNxtX/42YFB52U?=
- =?us-ascii?Q?NOLdOL2Gsbe42fg1ssU4sjdeB/zVn2hvJeASY19iuxYMWb06xmOOzsmc3zfQ?=
- =?us-ascii?Q?VgadiCzJCLBY3us4zxQ/KJLiPe2Iw1M/efhQs0t16nbV4j/eCU3VlCoPm3qD?=
- =?us-ascii?Q?hwqPbcsfvO6RpUgr+QEc/6twO2J/7xTlsNT+hgQe8VcUAASBGesVpU+DjA3l?=
- =?us-ascii?Q?eQjSMWwxb+ajol9YL72+aisI0Wjs5jzmuOqsxBIwTaxw/M/lJz/HE0Nchvwl?=
- =?us-ascii?Q?fMtVPwiTn6IHyDNoxe+N7YLdKXG5dG92evCD/wzdKWxfhmgWqNd14kDOqTf6?=
- =?us-ascii?Q?AtX5kg=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0d531f4b-4d17-44ec-f6b9-08db6cf88fc9
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 16:58:22.6168
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nvVwcBlpfun4zM7yM8qItn65qWkG+Gf+Sq0Pra3LAnPvrE6pTI1NknwXBCbGP7aqPiBkxkvc4/vIJ9t6Vb8qg7deA0qG4qqLqNdvS+hLh/0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR13MB6256
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="dWz4qVr6/YdX432b"
+Content-Disposition: inline
+In-Reply-To: <20230614104759.228372-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 01:17:14PM +0200, Stefan Wahren wrote:
-> In case the QCA7000 is not available via SPI (e.g. in reset),
-> the driver will cause a high load. The reason for this is
-> that the synchronization is never finished and schedule()
-> is never called. Since the synchronization is not timing
-> critical, it's safe to drop this from the scheduling condition.
-> 
-> Signed-off-by: Stefan Wahren <stefan.wahren@chargebyte.com>
-> Fixes: 291ab06ecf67 ("net: qualcomm: new Ethernet over SPI driver for
->  QCA7000")
 
-Hi Stefan,
+--dWz4qVr6/YdX432b
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-the Fixes should be on a single line.
+On Wed, Jun 14, 2023 at 11:47:53AM +0100, Prabhakar wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>=20
+> Hi All,
+>=20
+> non-coherent DMA support for AX45MP
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>=20
+> On the Andes AX45MP core, cache coherency is a specification option so it
+> may not be supported. In this case DMA will fail. To get around with this
+> issue this patch series does the below:
+>=20
+> 1] Andes alternative ports is implemented as errata which checks if the I=
+OCP
+> is missing and only then applies to CMO errata. One vendor specific SBI E=
+XT
+> (ANDES_SBI_EXT_IOCP_SW_WORKAROUND) is implemented as part of errata.
+>=20
+> Below are the configs which Andes port provides (and are selected by RZ/F=
+ive):
+>       - ERRATA_ANDES
+>       - ERRATA_ANDES_CMO
+>=20
+> OpenSBI patch supporting ANDES_SBI_EXT_IOCP_SW_WORKAROUND SBI can be foun=
+d here,
+> https://patchwork.ozlabs.org/project/opensbi/patch/20230317140357.14819-1=
+-prabhakar.mahadev-lad.rj@bp.renesas.com/
+>=20
+> 2] Andes AX45MP core has a Programmable Physical Memory Attributes (PMA)
+> block that allows dynamic adjustment of memory attributes in the runtime.
+> It contains a configurable amount of PMA entries implemented as CSR
+> registers to control the attributes of memory locations in interest.
+> OpenSBI configures the PMA regions as required and creates a reserve memo=
+ry
+> node and propagates it to the higher boot stack.
+>=20
+> Currently OpenSBI (upstream) configures the required PMA region and passes
+> this a shared DMA pool to Linux.
+>=20
+>     reserved-memory {
+>         #address-cells =3D <2>;
+>         #size-cells =3D <2>;
+>         ranges;
+>=20
+>         pma_resv0@58000000 {
+>             compatible =3D "shared-dma-pool";
+>             reg =3D <0x0 0x58000000 0x0 0x08000000>;
+>             no-map;
+>             linux,dma-default;
+>         };
+>     };
+>=20
+> The above shared DMA pool gets appended to Linux DTB so the DMA memory
+> requests go through this region.
+>=20
+> 3] We provide callbacks to synchronize specific content between memory and
+> cache.
+>=20
+> 4] RZ/Five SoC selects the below configs
+>         - AX45MP_L2_CACHE
+>         - DMA_GLOBAL_POOL
+>         - ERRATA_ANDES
+>         - ERRATA_ANDES_CMO
+>=20
+> ----------x---------------------x--------------------x---------------x---=
+-----------
+>=20
+> Note,
+> - Ive used GCC 12.2.0 for compilation
+> - Tested all the IP blocks on RZ/Five which use DMA
+> - Patch series is dependent on the series from Arnd,
+>   https://patchwork.kernel.org/project/linux-riscv/cover/20230327121317.4=
+081816-1-arnd@kernel.org/.
+>   (Ive rebased Arnd's series on v6.4-rc-1)
+> - Patches applies on top of palmer/for-next (255b34d799dd)
+> - Ive pushed the complete tree here https://github.com/prabhakarlad/linux=
+/tree/rzfive-cmo-v9
+> - Previously the function pointer approach was NAKed by Christoph Hellwig=
+ but based on the discussion
+>   on #riscv Ive implemented this approach.
 
-Fixes: 291ab06ecf67 ("net: qualcomm: new Ethernet over SPI driver for QCA7000")
+Last time around you wanted someone to try this on a d1. I have done &
+seems to work just as well as it did before. For where it is relevant:
+Tested-by: Conor Dooley <conor.dooley@microchip.com> # tyre-kicking on a d1
 
-> ---
->  drivers/net/ethernet/qualcomm/qca_spi.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/qualcomm/qca_spi.c
->  b/drivers/net/ethernet/qualcomm/qca_spi.c
+Cheers,
+Conor.
 
-Likewise, the above two lines should be a single line.
-Unfortunately it seems that because it is not git doesn't apply
-this patch, which creates problems for automation linked to patchwork.
+--dWz4qVr6/YdX432b
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I think it would be best to repost after resolving these minor issues.
+-----BEGIN PGP SIGNATURE-----
 
-> index bba1947792ea16..90f18ea4c28ba1 100644
-> --- a/drivers/net/ethernet/qualcomm/qca_spi.c
-> +++ b/drivers/net/ethernet/qualcomm/qca_spi.c
-> @@ -582,8 +582,7 @@ qcaspi_spi_thread(void *data)
->  	while (!kthread_should_stop()) {
->  		set_current_state(TASK_INTERRUPTIBLE);
->  		if ((qca->intr_req == qca->intr_svc) &&
-> -		    (qca->txr.skb[qca->txr.head] == NULL) &&
-> -		    (qca->sync == QCASPI_SYNC_READY))
-> +		    !qca->txr.skb[qca->txr.head])
->  			schedule();
->  
->  		set_current_state(TASK_RUNNING);
-> 
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZInxvgAKCRB4tDGHoIJi
+0sfzAQCEjbnkO/PstIi3QY0iVd1H9kr/2JAlhfErqEE/L8IxCgEAzAvEFiNamjsn
+G75ooY9CoNzd0FPcZl23hphkNQ24xwk=
+=GlJW
+-----END PGP SIGNATURE-----
 
--- 
-pw-bot: cr
-
+--dWz4qVr6/YdX432b--
