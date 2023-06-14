@@ -2,200 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1725272F6E2
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 09:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA70C72F6D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 09:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243584AbjFNHvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 03:51:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57576 "EHLO
+        id S243499AbjFNHu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 03:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243529AbjFNHt4 (ORCPT
+        with ESMTP id S243234AbjFNHtg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 03:49:56 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32691FF5;
-        Wed, 14 Jun 2023 00:49:48 -0700 (PDT)
-X-GND-Sasl: herve.codina@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686728987;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WiCubefUJT8lqguruRQEQMdku90oEPaE9zL5TkFrvME=;
-        b=iFxV+tYN3v2+t2eWuNKrLNLcS4hLiZq1hZLuJfUb3iK26KWVn+Nt9caJC65E6kaAB+2Lz1
-        3rZvZtWxizsXeo6pJFK/pe2F2lQMmK6poyWtKVC/fvT1t44U6427ld+F3xSENDh+u/88J2
-        8Ja1yaPjJgkaxg2PxiBchb2yNWLyzjDYCni6HJcKxeoGK8kQthUzSyYWH3bahas36/N3Gj
-        onokN7ojrCLVPqlWeM50bc/Gc2jXiu2LplLah0FfpcI37RZryYm7GakwTK4r8RUSo/AyMs
-        PB7vo8etCUnlP3YbJVuB9+hgpaKoJiROh1cBUVrxtPHFPHY4UIIeU7UDIEQkDg==
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPA id DEECF1C0011;
-        Wed, 14 Jun 2023 07:49:45 +0000 (UTC)
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v4 13/13] ASoC: simple-card: Handle additional devices
-Date:   Wed, 14 Jun 2023 09:49:04 +0200
-Message-Id: <20230614074904.29085-14-herve.codina@bootlin.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230614074904.29085-1-herve.codina@bootlin.com>
-References: <20230614074904.29085-1-herve.codina@bootlin.com>
+        Wed, 14 Jun 2023 03:49:36 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0453710DA
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 00:49:35 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2b203360d93so4470321fa.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 00:49:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686728973; x=1689320973;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=27eyuKXLzSmxU9wIv8izarpbo1JvKOXSZvqxo5m+b6E=;
+        b=k7VCtEuvdXGbXRk5tm0RLthsEKEjNKDNUg9gFhXpAhEyMFq3PBJfYBfczX+OoBEhzZ
+         ydSI3Dq8EqUoW3zeQOL8l+gT6P08zgtyp7fXFrORwquAbS7V1m+r1gU9/iEvZ2BMb+XL
+         G3bmJi0XuPYhI0MIaj9pQz/aMCvRmgxG0fhTABtNWOzOufk0H+p2g2X/P1Ra5tWj/FjE
+         Mbzd9hLJk0uSEbYFu/hb+UqzdoQefvUawpoAITm7JtlTBlfM3OPyBOyH+NTst81zJR45
+         OZW3gZc66a6gq/HFamdHB0vsEsSFJtoSBt+bHzPjSqaXX8fHzjt2mci26IXpOazaOlbz
+         UXMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686728973; x=1689320973;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=27eyuKXLzSmxU9wIv8izarpbo1JvKOXSZvqxo5m+b6E=;
+        b=PeGOq1tBN8uT0M8QqCJk7qr3XNACQSoTnZGiejPsxv0SvolwE7XZByL42aFoH1sLgQ
+         jIqtUKStKFGXs29T5uYk3M1qewaoxfvN2Ts6jsqAD941gyLrxu5PY8NGYn23kCoFZu/k
+         TF4KmNDEvrYhtuEbBs8kfU+xdm3FMXOyHgoT6jY1KQcSAUSbQnNhbTc8YPWLJ13NJzyz
+         /TLDQoiuNbFKX7CfjFeJBPxNPIIuWAfXVFC7krcr8yUHeh2vmCMxppWGBQ4NTcVIhfIf
+         RVAm3wHDmcQwqR1RU9nGCv3AM0uWKyVy5Y+Xkd7grPeqt5NpSmB8UvB8oMFNPKceuMyl
+         yJLw==
+X-Gm-Message-State: AC+VfDxxN/n5EsvF/i1Pxo8SVrLZ7V1uBOEFBvfHk4HaH9FjY38MpaLJ
+        Cgs0Y6QuNz8c6Ggj5CQtbmJsQSP1rXJSzkIUgA0=
+X-Google-Smtp-Source: ACHHUZ4tX1Lru/h/k7uXYdfmiypu/83JXDIzBpvoNKDLfhESReO/fJd0wkNKt6JjhYVZuJXm0Wf8fg==
+X-Received: by 2002:a2e:83d6:0:b0:2af:8635:96a1 with SMTP id s22-20020a2e83d6000000b002af863596a1mr5395683ljh.33.1686728973188;
+        Wed, 14 Jun 2023 00:49:33 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id v2-20020a2e7a02000000b002a9eba29c39sm2430936ljc.91.2023.06.14.00.49.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 00:49:32 -0700 (PDT)
+Message-ID: <3a6cc492-6b54-2c70-402e-995c0b003c01@linaro.org>
+Date:   Wed, 14 Jun 2023 10:49:31 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 3/3] drm/msm/dsi: Enable DATABUS_WIDEN for DSI command
+ mode
+Content-Language: en-GB
+To:     Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     quic_abhinavk@quicinc.com, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
+ <20230525-add-widebus-support-v1-3-c7069f2efca1@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230525-add-widebus-support-v1-3-c7069f2efca1@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-An additional-devs subnode can be present in the simple-card top node.
-This subnode is used to declared some "virtual" additional devices.
+On 14/06/2023 04:57, Jessica Zhang wrote:
+> DSI 6G v2.5.x+ supports a data-bus widen mode that allows DSI to send
+> 48 bits of compressed data per pclk instead of 24.
+> 
+> For all chipsets that support this mode, enable it whenever DSC is
+> enabled as recommend by the hardware programming guide.
+> 
+> Only enable this for command mode as we are currently unable to validate
+> it for video mode.
+> 
+> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+> ---
+> 
+> Note: The dsi.xml.h changes were generated using the headergen2 script in
+> envytools [1], but the changes to the copyright and rules-ng-ng source file
+> paths were dropped.
+> 
+> [1] https://github.com/freedreno/envytools/
+> 
+>   drivers/gpu/drm/msm/dsi/dsi.xml.h  |  1 +
+>   drivers/gpu/drm/msm/dsi/dsi_host.c | 19 ++++++++++++++++++-
+>   2 files changed, 19 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/dsi/dsi.xml.h b/drivers/gpu/drm/msm/dsi/dsi.xml.h
+> index a4a154601114..2a7d980e12c3 100644
+> --- a/drivers/gpu/drm/msm/dsi/dsi.xml.h
+> +++ b/drivers/gpu/drm/msm/dsi/dsi.xml.h
+> @@ -664,6 +664,7 @@ static inline uint32_t DSI_CMD_MODE_MDP_CTRL2_INPUT_RGB_SWAP(enum dsi_rgb_swap v
+>   	return ((val) << DSI_CMD_MODE_MDP_CTRL2_INPUT_RGB_SWAP__SHIFT) & DSI_CMD_MODE_MDP_CTRL2_INPUT_RGB_SWAP__MASK;
+>   }
+>   #define DSI_CMD_MODE_MDP_CTRL2_BURST_MODE			0x00010000
+> +#define DSI_CMD_MODE_MDP_CTRL2_DATABUS_WIDEN			0x00100000
+> 
+>   #define REG_DSI_CMD_MODE_MDP_STREAM2_CTRL			0x000001b8
+>   #define DSI_CMD_MODE_MDP_STREAM2_CTRL_DATA_TYPE__MASK		0x0000003f
+> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> index 5d7b4409e4e9..1da5238e7105 100644
+> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> @@ -927,6 +927,9 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+>   	u32 hdisplay = mode->hdisplay;
+>   	u32 wc;
+>   	int ret;
+> +	bool widebus_supported = msm_host->cfg_hnd->major == MSM_DSI_VER_MAJOR_6G &&
+> +			msm_host->cfg_hnd->minor >= MSM_DSI_6G_VER_MINOR_V2_5_0;
+> +
+> 
+>   	DBG("");
+> 
+> @@ -973,8 +976,15 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+>   		 *
+>   		 * hdisplay will be divided by 3 here to account for the fact
+>   		 * that DPU sends 3 bytes per pclk cycle to DSI.
+> +		 *
+> +		 * If widebus is supported, set DATABUS_WIDEN register and divide hdisplay by 6
+> +		 * instead of 3
 
-Create related devices from this subnode and avoid this subnode presence
-to interfere with the already supported subnodes analysis.
+This is useless, it is already obvious from the code below. Instead 
+there should be something like "wide bus extends that to 6 bytes per 
+pclk cycle"
 
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
----
- sound/soc/generic/simple-card.c | 46 +++++++++++++++++++++++++++++++--
- 1 file changed, 44 insertions(+), 2 deletions(-)
+>   		 */
+> -		hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 3);
+> +		if (!(msm_host->mode_flags & MIPI_DSI_MODE_VIDEO) && widebus_supported)
+> +			hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 6);
+> +		else
+> +			hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 3);
+> +
+>   		h_total += hdisplay;
+>   		ha_end = ha_start + hdisplay;
+>   	}
+> @@ -1027,6 +1037,13 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+>   		dsi_write(msm_host, REG_DSI_CMD_MDP_STREAM0_TOTAL,
+>   			DSI_CMD_MDP_STREAM0_TOTAL_H_TOTAL(hdisplay) |
+>   			DSI_CMD_MDP_STREAM0_TOTAL_V_TOTAL(mode->vdisplay));
+> +
+> +		if (msm_host->dsc && widebus_supported) {
+> +			u32 mdp_ctrl2 = dsi_read(msm_host, REG_DSI_CMD_MODE_MDP_CTRL2);
+> +
+> +			mdp_ctrl2 |= DSI_CMD_MODE_MDP_CTRL2_DATABUS_WIDEN;
+> +			dsi_write(msm_host, REG_DSI_CMD_MODE_MDP_CTRL2, mdp_ctrl2);
 
-diff --git a/sound/soc/generic/simple-card.c b/sound/soc/generic/simple-card.c
-index 6f044cc8357e..ae4a47018278 100644
---- a/sound/soc/generic/simple-card.c
-+++ b/sound/soc/generic/simple-card.c
-@@ -348,6 +348,7 @@ static int __simple_for_each_link(struct asoc_simple_priv *priv,
- 	struct device *dev = simple_priv_to_dev(priv);
- 	struct device_node *top = dev->of_node;
- 	struct device_node *node;
-+	struct device_node *add_devs;
- 	uintptr_t dpcm_selectable = (uintptr_t)of_device_get_match_data(dev);
- 	bool is_top = 0;
- 	int ret = 0;
-@@ -359,6 +360,8 @@ static int __simple_for_each_link(struct asoc_simple_priv *priv,
- 		is_top = 1;
- 	}
- 
-+	add_devs = of_get_child_by_name(top, PREFIX "additional-devs");
-+
- 	/* loop for all dai-link */
- 	do {
- 		struct asoc_simple_data adata;
-@@ -367,6 +370,12 @@ static int __simple_for_each_link(struct asoc_simple_priv *priv,
- 		struct device_node *np;
- 		int num = of_get_child_count(node);
- 
-+		/* Skip additional-devs node */
-+		if (node == add_devs) {
-+			node = of_get_next_child(top, node);
-+			continue;
-+		}
-+
- 		/* get codec */
- 		codec = of_get_child_by_name(node, is_top ?
- 					     PREFIX "codec" : "codec");
-@@ -380,12 +389,15 @@ static int __simple_for_each_link(struct asoc_simple_priv *priv,
- 
- 		/* get convert-xxx property */
- 		memset(&adata, 0, sizeof(adata));
--		for_each_child_of_node(node, np)
-+		for_each_child_of_node(node, np) {
-+			if (np == add_devs)
-+				continue;
- 			simple_parse_convert(dev, np, &adata);
-+		}
- 
- 		/* loop for all CPU/Codec node */
- 		for_each_child_of_node(node, np) {
--			if (plat == np)
-+			if (plat == np || add_devs == np)
- 				continue;
- 			/*
- 			 * It is DPCM
-@@ -427,6 +439,7 @@ static int __simple_for_each_link(struct asoc_simple_priv *priv,
- 	} while (!is_top && node);
- 
-  error:
-+	of_node_put(add_devs);
- 	of_node_put(node);
- 	return ret;
- }
-@@ -464,6 +477,31 @@ static int simple_for_each_link(struct asoc_simple_priv *priv,
- 	return ret;
- }
- 
-+static void simple_depopulate_aux(void *data)
-+{
-+	struct asoc_simple_priv *priv = data;
-+
-+	of_platform_depopulate(simple_priv_to_dev(priv));
-+}
-+
-+static int simple_populate_aux(struct asoc_simple_priv *priv)
-+{
-+	struct device *dev = simple_priv_to_dev(priv);
-+	struct device_node *node;
-+	int ret;
-+
-+	node = of_get_child_by_name(dev->of_node, PREFIX "additional-devs");
-+	if (!node)
-+		return 0;
-+
-+	ret = of_platform_populate(node, NULL, NULL, dev);
-+	of_node_put(node);
-+	if (ret)
-+		return ret;
-+
-+	return devm_add_action_or_reset(dev, simple_depopulate_aux, priv);
-+}
-+
- static int simple_parse_of(struct asoc_simple_priv *priv, struct link_info *li)
- {
- 	struct snd_soc_card *card = simple_priv_to_card(priv);
-@@ -493,6 +531,10 @@ static int simple_parse_of(struct asoc_simple_priv *priv, struct link_info *li)
- 	if (ret < 0)
- 		return ret;
- 
-+	ret = simple_populate_aux(priv);
-+	if (ret < 0)
-+		return ret;
-+
- 	ret = snd_soc_of_parse_aux_devs(card, PREFIX "aux-devs");
- 
- 	return ret;
+Is widebus applicable only to the CMD mode, or video mode can employ it too?
+
+> +		}
+>   	}
+>   }
+> 
+> 
+> --
+> 2.40.1
+> 
+
 -- 
-2.40.1
+With best wishes
+Dmitry
 
