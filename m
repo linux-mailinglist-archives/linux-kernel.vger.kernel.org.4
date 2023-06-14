@@ -2,89 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2B673080E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:21:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1708E73080C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:21:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233042AbjFNTVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 15:21:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47204 "EHLO
+        id S229704AbjFNTVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 15:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjFNTVn (ORCPT
+        with ESMTP id S229496AbjFNTVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 15:21:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9352682
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 12:20:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686770454;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fd3UDbr2Nlwpbzx+9+5vMnQCL/akEJaw/zMcUhpGS2E=;
-        b=ZibbrmySBPKt41oh/S8uGR95Bop1+qo0YoDlN0/4BzeISsEQULpZymxz1Fm5+++lJdpRaV
-        qOBvO45Zd3JKwis0LO86feRDleIiMNAzp1KzCopdetr87+RG5jNfq4/aKU+wuyBYUAc4/P
-        Lpdoygk8bRNFz2Q9QyVx9Q48VWdnzgU=
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
- [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-551-nRrmgRycNNSEQ89Btfic0Q-1; Wed, 14 Jun 2023 15:20:53 -0400
-X-MC-Unique: nRrmgRycNNSEQ89Btfic0Q-1
-Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-770222340cfso852921939f.3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 12:20:53 -0700 (PDT)
+        Wed, 14 Jun 2023 15:21:35 -0400
+Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A0426B7;
+        Wed, 14 Jun 2023 12:21:16 -0700 (PDT)
+Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-33cb82122c7so29528265ab.1;
+        Wed, 14 Jun 2023 12:21:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686770452; x=1689362452;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fd3UDbr2Nlwpbzx+9+5vMnQCL/akEJaw/zMcUhpGS2E=;
-        b=O0YZMLWUCDu1KfNXarmCQT2y7GW+R22QQKpW7m3zKk3ao8mKoDsxd6T9HizFz8HHmN
-         T4ekpX83ivw47AyZjSBdi1wDJHhnokOIN8H1qcRk8bB9Q98cmtBUsqhzkwJ9tsv9aymm
-         cv4kfjtSGy1anMNJUlj44rwPSyc4DanUKN2ccZTpK5cuhAbGCjcdAMSzR/lEJeboL85c
-         0yvVkfP4H3gBv/FbByf184Ulq7UbbzCEalyKn5u0pOrFUV9yZp+JiQskXM5UWQ5muv5f
-         jEOzO2NR7K2Nvuhh5oyq/kQMNmyQUpMJNf56nJ2rudgZ084deapo1+/7UsEb1m9CKBtV
-         TxxQ==
-X-Gm-Message-State: AC+VfDxGEsbT2PW0G99tn16xQWXRMRxult45VJln3SqTfMNRJ1ZEPfEH
-        HmMy9cQ95aPEMjd9Dt3i9IYXqk9tuKJCk1dZoN0IhSDqvpR+YXta6bw1z9goQ0YqPP3B9iSfD2v
-        F8LfLaAY/puTzC5jtCtT19ejD
-X-Received: by 2002:a92:d34f:0:b0:340:998a:e966 with SMTP id a15-20020a92d34f000000b00340998ae966mr2855913ilh.17.1686770452308;
-        Wed, 14 Jun 2023 12:20:52 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7BCoBzWr9RbpjyjV9Oy4DCDN0kg/DMXuykivi8VeCJxcD74DjrW2/UMBvab8Dw/LnY2mi/jw==
-X-Received: by 2002:a92:d34f:0:b0:340:998a:e966 with SMTP id a15-20020a92d34f000000b00340998ae966mr2855893ilh.17.1686770451956;
-        Wed, 14 Jun 2023 12:20:51 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id k8-20020a02c768000000b00416650ba62esm5153404jao.76.2023.06.14.12.20.49
+        d=1e100.net; s=20221208; t=1686770476; x=1689362476;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sHiFqUH8Ns99cL4Q7Lgq6jxmGIJl/IBWeuGMsrbyXnU=;
+        b=bT5p3MIEHc53heYTrW6QWDnCa9Cf7EIJhU2CgyPBAP0G4M0EkSQxVi3bKErCD1g4cm
+         wV0oG8rlU+2mXrDq0rnZ8Y5YBiFq6pJkfrgJoSuW2oM1PuW1UyRztjqlg5G2UqcqIJAk
+         RHcZBvFOjUaKwiFlwo3aJva9HBsPElWmV//mR+qlnWvnAL3XdlLCi+NDtl99udyccLps
+         hJAy88cQOMozWCqqBJEmAcSqFzll4JR5z0Er43VfQYmg8Yo+7avQtGEPmEy3npUqMfSp
+         sqqNjD+emKSqhG/1zYLswm0aHR9HHgV0LuM0UOW0PXemC1IWtcx/PwujEJ7VJt7xwspp
+         KOXw==
+X-Gm-Message-State: AC+VfDyNPR+wwOL5pHMHIY8INXAhgqn7pJu8ep7mskZjynw3YwMdBUqM
+        XaTuvkXUA79deL1cOeCldg==
+X-Google-Smtp-Source: ACHHUZ4+oCaDJAL2TyNKe9N2ZuahMJpTVt2MjofPkLtQyNt9QOfQlpzr2x39gYaMHbPNmmJx9oNtlQ==
+X-Received: by 2002:a05:6e02:5c7:b0:33f:dfd1:fe49 with SMTP id l7-20020a056e0205c700b0033fdfd1fe49mr10449290ils.6.1686770475971;
+        Wed, 14 Jun 2023 12:21:15 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id i18-20020a02c612000000b004230e6377f3sm190722jan.177.2023.06.14.12.21.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 12:20:50 -0700 (PDT)
-Date:   Wed, 14 Jun 2023 13:20:47 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     ankita@nvidia.com, aniketa@nvidia.com, cjia@nvidia.com,
-        kwankhede@nvidia.com, targupta@nvidia.com, vsethi@nvidia.com,
-        acurrid@nvidia.com, apopple@nvidia.com, jhubbard@nvidia.com,
-        danw@nvidia.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/1] vfio/nvgpu: Add vfio pci variant module for
- grace hopper
-Message-ID: <20230614132047.519abe95.alex.williamson@redhat.com>
-In-Reply-To: <ZIn/EHnCg444LJ3i@nvidia.com>
-References: <ZH9RfXhbuED2IUgJ@nvidia.com>
-        <20230606110510.0f87952c.alex.williamson@redhat.com>
-        <ZH9p+giEs6bCYfw8@nvidia.com>
-        <20230606121348.670229ff.alex.williamson@redhat.com>
-        <ZH+DdVIyZ6hHCDaK@nvidia.com>
-        <20230606153057.4cbc36a0.alex.williamson@redhat.com>
-        <ZH/LzyF/uttviRnQ@nvidia.com>
-        <20230607122303.5d25c973.alex.williamson@redhat.com>
-        <ZIh+wXFrls7StWzc@nvidia.com>
-        <20230613132402.2765b6cb.alex.williamson@redhat.com>
-        <ZIn/EHnCg444LJ3i@nvidia.com>
-Organization: Red Hat
+        Wed, 14 Jun 2023 12:21:15 -0700 (PDT)
+Received: (nullmailer pid 2591199 invoked by uid 1000);
+        Wed, 14 Jun 2023 19:21:12 -0000
+Date:   Wed, 14 Jun 2023 13:21:12 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-mmc@vger.kernel.org, Abel Vesa <abelvesa@kernel.org>,
+        devicetree@vger.kernel.org, linux-crypto@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Fabio Estevam <festevam@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-input@vger.kernel.org,
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-clk@vger.kernel.org, Anson Huang <Anson.Huang@nxp.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        Thomas Gleixner <tglx@linutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Michael Trimarchi <michael@amarulasolutions.com>,
+        Marek Vasut <marex@denx.de>
+Subject: Re: [PATCH v1 7/7] dt-bindings: input: touchscreen: edt-ft5x06: Add
+ 'threshold' property
+Message-ID: <168677047226.2591141.8223363796946763544.robh@kernel.org>
+References: <20230601101451.357662-1-o.rempel@pengutronix.de>
+ <20230601101451.357662-8-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230601101451.357662-8-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,92 +88,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Jun 2023 14:55:28 -0300
-Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-> On Tue, Jun 13, 2023 at 01:24:02PM -0600, Alex Williamson wrote:
+On Thu, 01 Jun 2023 12:14:51 +0200, Oleksij Rempel wrote:
+> Add a new property 'threshold' to the edt-ft5x06 touchscreen binding.
+> This property allows setting the "click"-threshold in the range from 0
+> to 255. This change addresses the following dtbs_check warning:
+>   imx6dl-lanmcu.dtb: touchscreen@38: 'threshold' does not match any of the
+>     regexes: 'pinctrl-[0-9]+'
+>   From schema:
+>     Documentation/devicetree/bindings/input/touchscreen/edt-ft5x06.yaml
 > 
-> > I'd even forgotten about the sparse mmap solution here, that's even
-> > better than trying to do something clever with the mmap.  
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  .../devicetree/bindings/input/touchscreen/edt-ft5x06.yaml   | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> Okay, Ankit please try this, it sounds good
-> 
-> > > You may be right, I think this patch is trying to make things
-> > > automatic for user, but a dedicated machine type might make more
-> > > sense.  
-> > 
-> > Juan and I discussed this with Ankit last week, there are a lot of down
-> > sides with another machine type, but the automatic manipulation of the
-> > machine is still problematic.  Another option we have is to use QEMU
-> > command line options for each feature.  For example we already support
-> > NUMA VM configurations and loading command line ACPI tables, hopefully
-> > also associating devices to nodes.  Do we end up with just a
-> > configuration spec for the VM to satisfy the in-guest drivers?
-> > Potentially guest driver requirements may changes over time, so a hard
-> > coded recipe built-in to QEMU might not be the best solution anyway.  
-> 
-> Let's have those discussions settle then, I know there are a few
-> different ideas here people are looking at.
-> 
-> > I think NVIDIA might have an interest in enabling Atomic Ops support in
-> > VMs as well, so please comment in the series thread if there are
-> > concerns here or if anyone can definitively says that another guest OS
-> > we might care about does cache root port capability bits.  Thanks,  
-> 
-> I expect we do - I haven't heard of atomic ops specifically yet
-> though.
-> 
-> We just did a big exercise on relaxed ordering which is similarly
-> troubled.
-> 
-> Here we deciced to just not use the VM's config space at all. The
-> device itself knows if it can do relaxed ordering and it just reports
-> this directly to the driver.
-> 
-> In many ways I would prefer to do the same for atomic.. I haven't
-> checked fully but I think we do this anyhow as you can see mlx5 simply
-> tries to enable PCI atomics but doesn't appear to do anything with the
-> result of it. I expect the actual success/fail is looped back through
-> the device interface itself.
-> 
-> So, for mlx5, it probably already works in most real cases. Passing a
-> PF might not work I guess.
-> 
-> It is not a satisfying answer from a VMM design perspective..
-> 
-> Some qemu command line to say what root ports with what atomic caps to
-> create seems like a reasonable thing to do.
 
-The referenced QEMU proposal puts a number of restrictions on
-automatically flipping bits on the root port, ex. as exposed in the VM
-the endpoint must be directly connected to a root port (avoiding
-complications around atomic ops routing support) and must be a
-single function device at devfn 0x0 (avoiding heterogeneous paths on
-the host).  It also tests the root port bits to make sure they aren't
-otherwise set in order to be compatible with some future root port
-device switch to enable fixed atomic completer support.
-
-This tries to balance the idea that we want to support device switches
-for these sort of fine grained VM configuration, but there are also
-isolated cases which can be automatically enabled that can potentially
-cover the vast majority of use cases.
-
-OTOH, trying to do something automatic for 'AtomicOps Routing Support'
-looks far more challenging and we probably would rely on command line
-device switches for that.
-
-Regarding relaxed ordering, are we talking about the 'No RO-enabled
-PR-PR Passing' bit in the devcap2 register?  Unfortunately that bit is
-labeled HwInit, so we don't have the same leniency towards modifying it
-at runtime as we do for the immediately preceding AtomicOps completer
-support bits.  In my interpretation, that bit also only seems to be
-reporting whether a specific reordering is implemented, so more
-important in determining expected performance than functionality(?)
-
-In general, I think we put driver writers in an awkward place if they
-start trying things that are clearly not supported as reported by
-hardware capability bits.  Error handling can be pretty fragile,
-especially when value-add firmware thinks it knows best.  Thanks,
-
-Alex
+Reviewed-by: Rob Herring <robh@kernel.org>
 
