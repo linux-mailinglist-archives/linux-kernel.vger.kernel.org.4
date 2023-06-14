@@ -2,58 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0BA730224
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:45:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72E0A73022A
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:46:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236123AbjFNOpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 10:45:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33434 "EHLO
+        id S231812AbjFNOqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 10:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235889AbjFNOpA (ORCPT
+        with ESMTP id S236851AbjFNOqF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 10:45:00 -0400
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F23601BEC
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 07:44:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fudan.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id; bh=/6vr3mF6hslOrXdDeLhDz83QfJ6Uc+Wb6aSu5wFUVyc=; b=E
-        3hVm/SvG6I9dq78O+xec4RwNhDCzz7IghLm2I7a0OCSpOtFNdsLDEvy/Uh5YVBO5
-        3gDTQhZAAAa1s+rmcKgVXV087fUvnR+vqjS/4VD4YpPtElPSJiJ4Y6jPkTY3hZCb
-        1Z9zwfDZr/odI4YnF4KMQxIbKqUahzbrI0/NYkoFCE=
-Received: from ubuntu.localdomain (unknown [10.230.35.76])
-        by app1 (Coremail) with SMTP id XAUFCgC3vv5Z0olkitLrAA--.37155S2;
-        Wed, 14 Jun 2023 22:44:42 +0800 (CST)
-From:   Chenyuan Mi <cymi20@fudan.edu.cn>
-To:     andrii@kernel.org
-Cc:     daniel@iogearbox.net, ast@kernel.org, acme@redhat.com,
-        irogers@google.com, linux-kernel@vger.kernel.org,
-        Chenyuan Mi <cymi20@fudan.edu.cn>
-Subject: [PATCH] tools: Fix missing check for return value of malloc()
-Date:   Wed, 14 Jun 2023 07:44:40 -0700
-Message-Id: <20230614144440.113375-1-cymi20@fudan.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: XAUFCgC3vv5Z0olkitLrAA--.37155S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrurWkuw1kZw48ZFyxXr4rAFb_yoWxurc_GF
-        4xXwn7Gry3ArZFka13KrWqqryFka15uw4F9ay3tr13JFyjkF4rJ34qyFs5ZFW3CrW09ry3
-        C398Krn8Jr4akjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbskFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IE
-        rcIFxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
-        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
-        6r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2
-        IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E
-        87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
-        IFyTuYvjfUFYFADUUUU
-X-CM-SenderInfo: isqsiiisuqikmt6i3vldqovvfxof0/
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        Wed, 14 Jun 2023 10:46:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 188791BE5
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 07:45:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686753918;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VKzVYTJU+Kltp7JOyEJXeiIKJE1OQId0BQJZ+m/qLVY=;
+        b=ik6dJmN9HG+bWwzs7fpLh5OFGm07H1ed89erpbzrtIBQchF/eNXPqFwH41e+AQOiK4ooWu
+        JjWPYJOtWvn82qqz4Dsk5bIIVFgy3c3G9XoGoroWLLVq4C6Mdm54uPZDQotmGfmBuNkYTr
+        6ZYnxWUUcVGdzk/InZ3zhTjWSWrIZX4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-377-Bu1HHQf7POCSH_AjXKqpQw-1; Wed, 14 Jun 2023 10:45:15 -0400
+X-MC-Unique: Bu1HHQf7POCSH_AjXKqpQw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 84BC980879D;
+        Wed, 14 Jun 2023 14:45:14 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 258409E9C;
+        Wed, 14 Jun 2023 14:45:13 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <000000000000b928f705fdeb873a@google.com>
+References: <000000000000b928f705fdeb873a@google.com>
+To:     syzbot <syzbot+13a08c0bf4d212766c3c@syzkaller.appspotmail.com>
+Cc:     dhowells@redhat.com, davem@davemloft.net,
+        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [crypto?] general protection fault in shash_async_final
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1602672.1686753912.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 14 Jun 2023 15:45:12 +0100
+Message-ID: <1602673.1686753912@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,30 +68,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The malloc() function may return NULL when it fails,
-which may cause null pointer deference in kmalloc(),
-add Null check for return value of malloc().
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.g=
+it main
 
-Found by our static analysis tool.
+    crypto: af_alg/hash: Fix recvmsg() after sendmsg(MSG_MORE)
+    =
 
-Signed-off-by: Chenyuan Mi <cymi20@fudan.edu.cn>
----
- tools/lib/slab.c | 2 ++
- 1 file changed, 2 insertions(+)
+    If an AF_ALG socket bound to a hashing algorithm is sent a zero-length
+    message with MSG_MORE set and then recvmsg() is called without first
+    sending another message without MSG_MORE set to end the operation, an =
+oops
+    will occur because the crypto context and result doesn't now get set u=
+p in
+    advance because hash_sendmsg() now defers that as long as possible in =
+the
+    hope that it can use crypto_ahash_digest() - and then because the mess=
+age
+    is zero-length, it the data wrangling loop is skipped.
+    =
 
-diff --git a/tools/lib/slab.c b/tools/lib/slab.c
-index 959997fb0652..cee98eb0a6d6 100644
---- a/tools/lib/slab.c
-+++ b/tools/lib/slab.c
-@@ -19,6 +19,8 @@ void *kmalloc(size_t size, gfp_t gfp)
- 		return NULL;
- 
- 	ret = malloc(size);
-+	if (!ret)
-+		return NULL;
- 	uatomic_inc(&kmalloc_nr_allocated);
- 	if (kmalloc_verbose)
- 		printf("Allocating %p from malloc\n", ret);
--- 
-2.17.1
+    Fix this by always making a pass of the loop, even in the case that no=
+ data
+    is provided to the sendmsg().
+    =
+
+    Fix also extract_iter_to_sg() to handle a zero-length iterator by retu=
+rning
+    0 immediately.
+    =
+
+    Whilst we're at it, remove the code to create a kvmalloc'd scatterlist=
+ if
+    we get more than ALG_MAX_PAGES - this shouldn't happen.
+    =
+
+    Fixes: c662b043cdca ("crypto: af_alg/hash: Support MSG_SPLICE_PAGES")
+    Reported-by: syzbot+13a08c0bf4d212766c3c@syzkaller.appspotmail.com
+    Link: https://lore.kernel.org/r/000000000000b928f705fdeb873a@google.co=
+m/
+    Signed-off-by: David Howells <dhowells@redhat.com>
+    cc: Herbert Xu <herbert@gondor.apana.org.au>
+    cc: "David S. Miller" <davem@davemloft.net>
+    cc: Eric Dumazet <edumazet@google.com>
+    cc: Jakub Kicinski <kuba@kernel.org>
+    cc: Paolo Abeni <pabeni@redhat.com>
+    cc: Jens Axboe <axboe@kernel.dk>
+    cc: Matthew Wilcox <willy@infradead.org>
+    cc: linux-crypto@vger.kernel.org
+    cc: netdev@vger.kernel.org
+
+diff --git a/crypto/algif_hash.c b/crypto/algif_hash.c
+index dfb048cefb60..1176533a55c9 100644
+--- a/crypto/algif_hash.c
++++ b/crypto/algif_hash.c
+@@ -83,26 +83,14 @@ static int hash_sendmsg(struct socket *sock, struct ms=
+ghdr *msg,
+ =
+
+ 	ctx->more =3D false;
+ =
+
+-	while (msg_data_left(msg)) {
++	do {
+ 		ctx->sgl.sgt.sgl =3D ctx->sgl.sgl;
+ 		ctx->sgl.sgt.nents =3D 0;
+ 		ctx->sgl.sgt.orig_nents =3D 0;
+ =
+
+ 		err =3D -EIO;
+ 		npages =3D iov_iter_npages(&msg->msg_iter, max_pages);
+-		if (npages =3D=3D 0)
+-			goto unlock_free;
+-
+-		if (npages > ARRAY_SIZE(ctx->sgl.sgl)) {
+-			err =3D -ENOMEM;
+-			ctx->sgl.sgt.sgl =3D
+-				kvmalloc(array_size(npages,
+-						    sizeof(*ctx->sgl.sgt.sgl)),
+-					 GFP_KERNEL);
+-			if (!ctx->sgl.sgt.sgl)
+-				goto unlock_free;
+-		}
+-		sg_init_table(ctx->sgl.sgl, npages);
++		sg_init_table(ctx->sgl.sgl, max_t(size_t, npages, 1));
+ =
+
+ 		ctx->sgl.need_unpin =3D iov_iter_extract_will_pin(&msg->msg_iter);
+ =
+
+@@ -111,7 +99,8 @@ static int hash_sendmsg(struct socket *sock, struct msg=
+hdr *msg,
+ 		if (err < 0)
+ 			goto unlock_free;
+ 		len =3D err;
+-		sg_mark_end(ctx->sgl.sgt.sgl + ctx->sgl.sgt.nents - 1);
++		if (len > 0)
++			sg_mark_end(ctx->sgl.sgt.sgl + ctx->sgl.sgt.nents - 1);
+ =
+
+ 		if (!msg_data_left(msg)) {
+ 			err =3D hash_alloc_result(sk, ctx);
+@@ -148,7 +137,7 @@ static int hash_sendmsg(struct socket *sock, struct ms=
+ghdr *msg,
+ =
+
+ 		copied +=3D len;
+ 		af_alg_free_sg(&ctx->sgl);
+-	}
++	} while (msg_data_left(msg));
+ =
+
+ 	ctx->more =3D msg->msg_flags & MSG_MORE;
+ 	err =3D 0;
+diff --git a/lib/scatterlist.c b/lib/scatterlist.c
+index e97d7060329e..77a7b18ee751 100644
+--- a/lib/scatterlist.c
++++ b/lib/scatterlist.c
+@@ -1340,7 +1340,7 @@ ssize_t extract_iter_to_sg(struct iov_iter *iter, si=
+ze_t maxsize,
+ 			   struct sg_table *sgtable, unsigned int sg_max,
+ 			   iov_iter_extraction_t extraction_flags)
+ {
+-	if (maxsize =3D=3D 0)
++	if (!maxsize || !iter->count)
+ 		return 0;
+ =
+
+ 	switch (iov_iter_type(iter)) {
 
