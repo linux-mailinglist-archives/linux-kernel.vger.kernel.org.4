@@ -2,77 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3702572F379
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 06:20:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CEFC72F37E
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 06:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242520AbjFNEUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 00:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33408 "EHLO
+        id S238340AbjFNEZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 00:25:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233845AbjFNEU3 (ORCPT
+        with ESMTP id S233728AbjFNEZX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 00:20:29 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC2119B1;
-        Tue, 13 Jun 2023 21:20:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=D9e3x9i8rBKYm3toYXDRWUXq9796QOZEiqel4E9RDSQ=; b=ptry9IrRJnz/Kqmd1+0osrL1CQ
-        iSA86OAjUouPrH3MIaIdajDF8MeIKN16meKgjfkpQXUtlmG7+YfL6VwgPDRLPo2YUvfn4WZ4hGNI+
-        DzkxISScnE7H0Hm70ysbCXZkG6iQcxhJst84nH5UEwSVp4ZS/TyvG8/3/GnsTNa/Nu2+5EXlQruEz
-        GAMeK7rfui/COGK3C8/0lpbQYHJB79vqlU7aK02zJhMrzjKLaMKyWXXTnhRilEDJMxPfkuiWHaDVX
-        ED9HhmateLa2wPxWCmaSd08C2s/sflld2Y2YwrlC4Ss6MkQRCL/5T8TIGihDngwMXn5db+ottR/U6
-        aDuqAwpw==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q9HzO-009xON-2S;
-        Wed, 14 Jun 2023 04:20:10 +0000
-Message-ID: <57358041-0e36-deaa-e2ec-06dcfc92ba4d@infradead.org>
-Date:   Tue, 13 Jun 2023 21:20:09 -0700
+        Wed, 14 Jun 2023 00:25:23 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505EDE4;
+        Tue, 13 Jun 2023 21:25:22 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35E40mXY020013;
+        Wed, 14 Jun 2023 04:25:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=V87rXRJ0McF4e18E5pljBHXkteT2i+vavHVk1lyfqHY=;
+ b=M3OFeK4AtnyDLCs97ApSegSR6kfDklgvGR/M4nf95CCFgv88eWYxABsOOy5kP/GQ2ZZ/
+ 9qrRHSEH/D0pYByhRtZj0RKVy8nWx4WT9h34fCd/Eohy7YFahWsPU1e3yGUEjR9g1F93
+ OxPJo5jS87RDv7+efw1OPKr2Xs5cdSANIeV+ib9HVho83HY7i9OnOaRcmNpPudsgZUk9
+ jcve7CkA54Tp+X58rGZDU1F3Xxr8ORN/9c5snWCs3TZA95JyXU6POCepzL7X7vEulFw6
+ Tebgi/SxkMn0yaRw9iRW8K+/F4eTZX7qnLCczzNYWqd2+MbFgSJazyZRUt8kJrwphtXE nw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r6t0bsjjn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Jun 2023 04:25:16 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35E4PFwO011470
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Jun 2023 04:25:15 GMT
+Received: from [10.217.219.52] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 13 Jun
+ 2023 21:25:13 -0700
+Message-ID: <73854744-03ef-2c5c-a5d6-284f004a5497@quicinc.com>
+Date:   Wed, 14 Jun 2023 09:55:10 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v18 4/5] mm/pagemap: add documentation of PAGEMAP_SCAN
- IOCTL
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v7] usb: common: usb-conn-gpio: Set last role to unknown
+ before initial detection
 Content-Language: en-US
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-References: <20230613102905.2808371-1-usama.anjum@collabora.com>
- <20230613102905.2808371-5-usama.anjum@collabora.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230613102905.2808371-5-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1685544074-17337-1-git-send-email-quic_prashk@quicinc.com>
+ <ZIhOm5LKwn+YVGzT@kuha.fi.intel.com>
+From:   Prashanth K <quic_prashk@quicinc.com>
+In-Reply-To: <ZIhOm5LKwn+YVGzT@kuha.fi.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 1tvv1WEG4yY5z_MFXZesFYsRiGRwUvu2
+X-Proofpoint-ORIG-GUID: 1tvv1WEG4yY5z_MFXZesFYsRiGRwUvu2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-14_02,2023-06-12_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ priorityscore=1501 clxscore=1011 mlxlogscore=632 spamscore=0
+ lowpriorityscore=0 suspectscore=0 adultscore=0 impostorscore=0
+ phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2306140035
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,110 +84,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
 
-On 6/13/23 03:29, Muhammad Usama Anjum wrote:
-> Add some explanation and method to use write-protection and written-to
-> on memory range.
+
+On 13-06-23 04:40 pm, Heikki Krogerus wrote:
+> Hi,
 > 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
-> Changes in v16:
-> - Update the documentation
+> On Wed, May 31, 2023 at 08:11:14PM +0530, Prashanth K wrote:
+>> Currently if we bootup a device without cable connected, then
+>> usb-conn-gpio won't call set_role() since last_role is same as
+>> current role. This happens because during probe last_role gets
+>> initialised to zero.
+>>
+>> To avoid this, added a new constant in enum usb_role, last_role
+>> is set to USB_ROLE_UNKNOWN before performing initial detection.
 > 
-> Changes in v11:
-> - Add more documentation
-> ---
->  Documentation/admin-guide/mm/pagemap.rst | 58 ++++++++++++++++++++++++
->  1 file changed, 58 insertions(+)
+> So why can't you fix this by just always setting the role
+> unconditionally to USB_ROLE_NONE in your probe function before the
+> initial detection?
 > 
-> diff --git a/Documentation/admin-guide/mm/pagemap.rst b/Documentation/admin-guide/mm/pagemap.rst
-> index c8f380271cad..3b977526d4b3 100644
-> --- a/Documentation/admin-guide/mm/pagemap.rst
-> +++ b/Documentation/admin-guide/mm/pagemap.rst
-> @@ -227,3 +227,61 @@ Before Linux 3.11 pagemap bits 55-60 were used for "page-shift" (which is
->  always 12 at most architectures). Since Linux 3.11 their meaning changes
->  after first clear of soft-dirty bits. Since Linux 4.2 they are used for
->  flags unconditionally.
-> +
-> +Pagemap Scan IOCTL
-> +==================
-> +
-> +The ``PAGEMAP_SCAN`` IOCTL on the pagemap file can be used to get or optionally
-> +clear the info about page table entries. The following operations are supported
-> +in this IOCTL:
-> +- Get the information if the pages have been written-to (``PAGE_IS_WRITTEN``),
+Hi Heikki, thats exactly what we are doing here.
 
-                                                written to
++	/* Set last role to unknown before performing the initial detection */
++	info->last_role = USB_ROLE_UNKNOWN;
++
+  	/* Perform initial detection */
+  	usb_conn_queue_dwork(info, 0);
 
-> +  file mapped (``PAGE_IS_FILE``), present (``PAGE_IS_PRESENT``) or swapped
-> +  (``PAGE_IS_SWAPPED``).
-> +- Find pages which have been written-to and/or write protect the pages atomically
-
-                                written to
-
-> +  (atomic ``PM_SCAN_OP_GET + PM_SCAN_OP_WP``)
-> +
-> +The ``struct pm_scan_arg`` is used as the argument of the IOCTL.
-> + 1. The size of the ``struct pm_scan_arg`` must be specified in the ``size``
-> +    field. This field will be helpful in recognizing the structure if extensions
-> +    are done later.
-> + 2. The flags can be specified in the ``flags`` field. The ``PM_SCAN_OP_GET``
-> +    and ``PM_SCAN_OP_WP`` are the only added flags at this time.
-> + 3. The range is specified through ``start`` and ``len``.
-> + 4. The output buffer of ``struct page_region`` array and size is specified in
-> +    ``vec`` and ``vec_len``.
-> + 5. The optional maximum requested pages are specified in the ``max_pages``.
-> + 6. The masks are specified in ``required_mask``, ``anyof_mask``,
-> +    ``excluded_ mask`` and ``return_mask``.
-> +    1.  To find if ``PAGE_IS_WRITTEN`` flag is set for pages which have
-> +        ``PAGE_IS_FILE`` set and ``PAGE_IS_SWAPPED`` un-set, ``required_mask``
-
-                                                        unset,
-
-> +        is set to ``PAGE_IS_FILE``, ``exclude_mask`` is set to
-> +        ``PAGE_IS_SWAPPED`` and ``return_mask`` is set to ``PAGE_IS_WRITTEN``.
-> +        The output buffer in ``vec`` and length must be specified in ``vec_len``.
-> +    2. To find pages which have either ``PAGE_IS_FILE`` or ``PAGE_IS_SWAPPED``
-> +       set, ``anyof_masks`` is set to  ``PAGE_IS_FILE | PAGE_IS_SWAPPED``.
-> +    3. To find written pages and engage write protect, ``PAGE_IS_WRITTEN`` is
-> +       specified in ``required_mask`` and ``return_mask``. In addition to
-> +       specifying the output buffer in ``vec`` and length in ``vec_len``, the
-> +       ``PM_SCAN_OP_WP`` is specified in ``flags`` to perform write protect
-> +       on the range as well.
-> +
-> +The ``PAGE_IS_WRITTEN`` flag can be considered as the better and correct
-> +alternative of soft-dirty flag. It doesn't get affected by household chores (VMA
-
-                                                              housekeeping ?
-
-> +merging) of the kernel and hence the user can find the true soft-dirty pages
-> +only. This IOCTL adds the atomic way to find which pages have been written and
-> +write protect those pages again. This kind of operation is needed to efficiently
-> +find out which pages have changed in the memory.
-> +
-> +To get information about which pages have been written-to or optionally write
-
-                                                  written to
-
-> +protect the pages, following must be performed first in order:
-> + 1. The userfaultfd file descriptor is created with ``userfaultfd`` syscall.
-> + 2. The ``UFFD_FEATURE_WP_UNPOPULATED`` and ``UFFD_FEATURE_WP_ASYNC`` features
-> +    are set by ``UFFDIO_API`` IOCTL.
-> + 3. The memory range is registered with ``UFFDIO_REGISTER_MODE_WP`` mode
-> +    through ``UFFDIO_REGISTER`` IOCTL.
-> + 4. Then the any part of the registered memory or the whole memory region must
-
-            "the" or "any". Probably "any". Not both.
-
-> +    be write protected using ``PAGEMAP_SCAN`` IOCTL with flag ``PM_SCAN_OP_WP``
-> +    or the ``UFFDIO_WRITEPROTECT`` IOCTL can be used. Both of these perform the
-> +    same operation. The former is better in terms of performance.
-> + 5. Now the ``PAGEMAP_SCAN`` IOCTL can be used to either just find pages which
-> +    have been written-to and/or optionally write protect the pages as well.
-
-                 written to
+Thanks,
+Prashanth K
 
 
--- 
-~Randy
