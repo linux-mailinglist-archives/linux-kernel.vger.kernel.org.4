@@ -2,108 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5A60730119
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:02:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA34773017F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245321AbjFNOCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 10:02:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34746 "EHLO
+        id S245569AbjFNORM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 10:17:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245338AbjFNOCs (ORCPT
+        with ESMTP id S245526AbjFNOQ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 10:02:48 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 52B2E1FE5;
-        Wed, 14 Jun 2023 07:02:46 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 236901FB;
-        Wed, 14 Jun 2023 07:03:30 -0700 (PDT)
-Received: from localhost.localdomain (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D3AC83F64C;
-        Wed, 14 Jun 2023 07:02:43 -0700 (PDT)
-From:   James Clark <james.clark@arm.com>
-To:     linux-perf-users@vger.kernel.org
-Cc:     broonie@kernel.org, Aishwarya.TCV@arm.com,
-        James Clark <james.clark@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH] perf tools: Add a place to put kernel config fragments for test runs
-Date:   Wed, 14 Jun 2023 15:02:19 +0100
-Message-Id: <20230614140219.2335639-1-james.clark@arm.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 14 Jun 2023 10:16:57 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713B31BC6;
+        Wed, 14 Jun 2023 07:16:49 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f8ca80e889so6766425e9.3;
+        Wed, 14 Jun 2023 07:16:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686752208; x=1689344208;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zXrtZVNtigeKgJSwA8SW/6hEN8pGZI7BArpmacufnTg=;
+        b=ZvlIhWO+UbdEXvtjkfHV7Na2P16yHMVjdBcJ4rDysGC7/aPhxMv4zaZSiGm/ZhK2td
+         UwCJg/2ARuYuOw3iMAbcyZ+es5K4mrPdWEah974xwoTL51Jj7Z5nu0QlR23j2ZuQDsUJ
+         e8P/44csh3nSZRI+/nZBtYpVh3jCekSF28BWITcHCUTcFvMJJSWpgyZul8+XTPZepgSl
+         zXZZ5vAg+ylHT6Mgpke+nVaAOQuRqhkQwrT458KV0vM0lTORfTeVnTu7HM77N/lJOnVR
+         3ws8iybDCDLn/yh6cBw11r+FD2XeoxcT9eFPbqlmki5v9CsHchOL4bk7498MqGGoD62s
+         GbcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686752208; x=1689344208;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zXrtZVNtigeKgJSwA8SW/6hEN8pGZI7BArpmacufnTg=;
+        b=CYO8DHMG0DJK1lQd/ZHt8efq8mI3ckMewOg37JDkniPa4W5ErPlp2GE+ck4Wg2wj2Z
+         3UszdzJ7Bj3qglwLjqDN9vYidLr96go6NTC6jdR5xhdSF0vZ+HoRATPdQflwgDn1LJhv
+         3XALIhpfzLxjea8IxNUHwCdv4iODhAfQVrNKRaTsFkteL/jY20nw7TEUvVzuZDRUU2UY
+         4lB2didL34i7A05D9cjrcDU7qSX6dWHlOMxYv3FReV0ZRQuVXbQ/OBgWVVLA41QpM8QG
+         mc0IKQu78GIEA4DbPN3bqF1d4DJ2baVMrS1Ui8Z13o4F63HnGUX9HgikkxFueGRzr1VS
+         ykug==
+X-Gm-Message-State: AC+VfDxvH/hygvm2+vEVC/dZ4HOoQVxoQ6NkLoqGmEttb1HUdS2fWELB
+        wut5V0/Qq/Gr5sd6i2NJCGE=
+X-Google-Smtp-Source: ACHHUZ7u0M9cZqByWtISOn1h1jPvoZT7oi+IfoTVD0JOaPtyqavnoW4rP3x4WqugXE0GnbkR+7oAuw==
+X-Received: by 2002:a5d:480f:0:b0:30f:ca3f:64d4 with SMTP id l15-20020a5d480f000000b0030fca3f64d4mr4131734wrq.47.1686752207571;
+        Wed, 14 Jun 2023 07:16:47 -0700 (PDT)
+Received: from localhost.localdomain (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
+        by smtp.googlemail.com with ESMTPSA id v13-20020adfebcd000000b00309382eb047sm18509045wrn.112.2023.06.14.07.16.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 07:16:46 -0700 (PDT)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Jose Abreu <Jose.Abreu@synopsys.com>, stable@vger.kernel.org
+Subject: [net PATCH] net: ethernet: stmicro: stmmac: fix possible memory leak in __stmmac_open
+Date:   Wed, 14 Jun 2023 09:32:41 +0200
+Message-Id: <20230614073241.6382-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We are currently keeping something like this in our CI because defconfig
-doesn't give full coverage. It's not complete yet, but is a starting
-point as a place to add to when a specific test needs something extra to
-run.
+Fix a possible memory leak in __stmmac_open when stmmac_init_phy fails.
+It's also needed to free everything allocated by stmmac_setup_dma_desc
+and not just the dma_conf struct.
 
-The RFC is for discussion on folder placement and file naming etc.
+Correctly call free_dma_desc_resources on the new dma_conf passed to
+__stmmac_open on error.
 
-Signed-off-by: James Clark <james.clark@arm.com>
+Reported-by: Jose Abreu <Jose.Abreu@synopsys.com>
+Fixes: ba39b344e924 ("net: ethernet: stmicro: stmmac: generate stmmac dma conf before open")
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+Cc: stable@vger.kernel.org
 ---
- tools/perf/tests/config-fragments/README  |  7 +++++++
- tools/perf/tests/config-fragments/aarch64 |  1 +
- tools/perf/tests/config-fragments/config  | 11 +++++++++++
- 3 files changed, 19 insertions(+)
- create mode 100644 tools/perf/tests/config-fragments/README
- create mode 100644 tools/perf/tests/config-fragments/aarch64
- create mode 100644 tools/perf/tests/config-fragments/config
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/perf/tests/config-fragments/README b/tools/perf/tests/config-fragments/README
-new file mode 100644
-index 000000000000..e816cfb1b96d
---- /dev/null
-+++ b/tools/perf/tests/config-fragments/README
-@@ -0,0 +1,7 @@
-+This folder is for kernel config fragments that can be merged with
-+defconfig to give full test coverage of a perf test run. This is only
-+an optimistic set as some features require hardware support in order to
-+pass and not skip.
-+
-+'config' is shared across all platforms, and for arch specific files,
-+the file name should match that returned by 'uname -m'.
-diff --git a/tools/perf/tests/config-fragments/aarch64 b/tools/perf/tests/config-fragments/aarch64
-new file mode 100644
-index 000000000000..64c4ab17cd58
---- /dev/null
-+++ b/tools/perf/tests/config-fragments/aarch64
-@@ -0,0 +1 @@
-+CONFIG_CORESIGHT_SOURCE_ETM4X=y
-diff --git a/tools/perf/tests/config-fragments/config b/tools/perf/tests/config-fragments/config
-new file mode 100644
-index 000000000000..c340b3195fca
---- /dev/null
-+++ b/tools/perf/tests/config-fragments/config
-@@ -0,0 +1,11 @@
-+CONFIG_TRACEPOINTS=y
-+CONFIG_STACKTRACE=y
-+CONFIG_NOP_TRACER=y
-+CONFIG_RING_BUFFER=y
-+CONFIG_EVENT_TRACING=y
-+CONFIG_CONTEXT_SWITCH_TRACER=y
-+CONFIG_TRACING=y
-+CONFIG_GENERIC_TRACER=y
-+CONFIG_FTRACE=y
-+CONFIG_FTRACE_SYSCALLS=y
-+CONFIG_BRANCH_PROFILE_NONE=y
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index fa07b0d50b46..0966ab86fde2 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -3877,10 +3877,10 @@ static int __stmmac_open(struct net_device *dev,
+ 
+ 	stmmac_hw_teardown(dev);
+ init_error:
+-	free_dma_desc_resources(priv, &priv->dma_conf);
+ 	phylink_disconnect_phy(priv->phylink);
+ init_phy_error:
+ 	pm_runtime_put(priv->device);
++	free_dma_desc_resources(priv, dma_conf);
+ 	return ret;
+ }
+ 
 -- 
-2.34.1
+2.40.1
 
