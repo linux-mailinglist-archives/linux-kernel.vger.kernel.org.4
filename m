@@ -2,164 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1E387308B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:45:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C8C7308B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:45:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238536AbjFNTpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 15:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35224 "EHLO
+        id S229728AbjFNTpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 15:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240783AbjFNTox (ORCPT
+        with ESMTP id S241165AbjFNTo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 15:44:53 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE43268A
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 12:44:33 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-5147e40bbbbso10608409a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 12:44:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686771870; x=1689363870;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZqKOuOVAaHAwexq58/iM1zHwSap285S9u8+TVdomW4o=;
-        b=kIaY5Sc6qwBBLG+ByDkUjoja/JrZkWqVd5nOqeU3Z6ldCXAh9EaLQQVG3SQq91IwtM
-         Ysnm3kje3OxzxaOB5OY4jFFV84gdDLjajLKrZpgIZSO4wdCcL3IrFJlmGqhZxsrV2p5K
-         pwhBjyUp7DtsdpQc8YVOKnEqUNy5d4HkaxtI4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686771870; x=1689363870;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZqKOuOVAaHAwexq58/iM1zHwSap285S9u8+TVdomW4o=;
-        b=kl0LsffVhhx/p+/HMv6xDYmZ0RPA7j0OKSt443cUY+AAZhgG1fsWqpRoOL+PGpWLMW
-         cSZPx4iJZyb/fgwtAFbfVD6s8oImjXUubGUmhu/8ePelO109GJt+aFnJHm8VLZUGPJF0
-         cwBYdh8UbtdnbKY307D6cEioMOSBlTG3kABcliJ/SVNdEL0b4yd8CnL0J1dgKkODYtjK
-         enfAERAVVVAaYZDyCrtpwtEoH1YCJIgsvrlaPAeRQJTk6ozfnRW9H4teQxBy/dPIHjdo
-         YKs6lCAjqRfM6TJsJKy8wzxJBiRgVds/gmtcYtSpgoUjQo9iWvZbPCIIhkD+GWZzrn98
-         yjoQ==
-X-Gm-Message-State: AC+VfDxO7hH3ekMcfDAUPWCZJnb/Yy3tfdJlaq7GWQro5e2bdHgBqHU9
-        fuy/aWliNwadvfa+s5DFjdelyUiVXOyzK1A2cCM2wpad
-X-Google-Smtp-Source: ACHHUZ4ppWbrnAD+iY2hrk+VdTTaGufO6SWDZYqiCpWLFwmZb9CP7LIC3BFDmeu/iJyUdzC5DQoITg==
-X-Received: by 2002:a17:906:d54a:b0:96f:5902:8c4d with SMTP id cr10-20020a170906d54a00b0096f59028c4dmr15317003ejc.27.1686771869910;
-        Wed, 14 Jun 2023 12:44:29 -0700 (PDT)
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com. [209.85.208.50])
-        by smtp.gmail.com with ESMTPSA id ot25-20020a170906ccd900b00965f5d778e3sm8318782ejb.120.2023.06.14.12.44.28
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 12:44:29 -0700 (PDT)
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-514ad92d1e3so1978a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 12:44:28 -0700 (PDT)
-X-Received: by 2002:a50:d09c:0:b0:51a:1f15:9ddc with SMTP id
- v28-20020a50d09c000000b0051a1f159ddcmr13160edd.6.1686771868354; Wed, 14 Jun
- 2023 12:44:28 -0700 (PDT)
+        Wed, 14 Jun 2023 15:44:58 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2067.outbound.protection.outlook.com [40.107.212.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF52926AF;
+        Wed, 14 Jun 2023 12:44:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SDymoNgJYksHa/xXL3IwKvy8ZTVvaPpRbDvvfhEX3MBrzKYpOwzGYJJ2KM2Tf6PL0DUNPHwLTgSsXLqHCXVZCdxOyT36feuSnitmODRkKC3d8UyxALcnJd23Msd7PrEfcHeKQJaGBBDkPVxGkMubd1Qqr/zVO8V2ts2jR81Q1wIXNAipRUdTY6Mz0U/nCw4Y/QM3ityF4x18+DF7dc2ACzkJHfKtK8C8RS9Jgzq53cXYSWsfSYO3w+zq+srmE+VoSoAu60J/6gaSk1qV6msBcl0O6DOXyecEU0MFUDim3p2syjsPX1mjxDb2+m5rEdeDWxV5dimbo1mT1ouLQj+99A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=S8i9PPCWv5yKHSFwxnbb7Tr9Bz7VGPMZSrn7ncQRsXo=;
+ b=hG9/OAgoUSHTf6id4B/OSbMxC2ZiGIpdaqhLvSUw3ofFylePBkQ5CbzdUsk9kPM1kXJJF5yHq5G8EkzUjw+kmBNCp9kS0vVgoMUBs6Xi/A3iwVAiycIOjS3OuQPwoFNzJg8cylt2+0xPIk+9hB4j2x2YExxNaNB7Owqe5YOfKzIP06ZDgQresvi5O17OqRrtkLwBJ/ST4VF9ybGPyIYEG7v1EGdfdCadlSwoexuC+BSPmrl/lc0u4fwjvjkEq5xqKEZeU1iIXKOtwM63eKnjdUksiM+F7zMw8UXFpikYwnq3ZVwEMIrDuB3e520NxjyFXuqMvlshHhOdJhV27pISwQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=S8i9PPCWv5yKHSFwxnbb7Tr9Bz7VGPMZSrn7ncQRsXo=;
+ b=miyw0IolX7nlIFKqQH6ELWuEqiek6NQMBEr9Sj7AMAHk+kZt81Zsi02U4+ICeHFRqqMikNgggLtnlIP2f2hIPEjovZpuQBlgScGp/IQ33OxV44ZP/IDBGc8eaSoWh6SYVEeOWzRl1gs3Hmnyr55JejB4FrX6uUvjwyFsHxuuGRc=
+Received: from BY3PR05CA0039.namprd05.prod.outlook.com (2603:10b6:a03:39b::14)
+ by BY5PR12MB4113.namprd12.prod.outlook.com (2603:10b6:a03:207::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.38; Wed, 14 Jun
+ 2023 19:44:37 +0000
+Received: from DM6NAM11FT060.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:a03:39b:cafe::ab) by BY3PR05CA0039.outlook.office365.com
+ (2603:10b6:a03:39b::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.25 via Frontend
+ Transport; Wed, 14 Jun 2023 19:44:37 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT060.mail.protection.outlook.com (10.13.173.63) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6500.25 via Frontend Transport; Wed, 14 Jun 2023 19:44:37 +0000
+Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 14 Jun
+ 2023 14:44:30 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB08.amd.com
+ (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 14 Jun
+ 2023 12:44:29 -0700
+Received: from xsjlizhih40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.23 via Frontend
+ Transport; Wed, 14 Jun 2023 14:44:29 -0500
+From:   Lizhi Hou <lizhi.hou@amd.com>
+To:     <vkoul@kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Lizhi Hou <lizhi.hou@amd.com>, <nishads@amd.com>,
+        <max.zhen@amd.com>, <sonal.santan@amd.com>
+Subject: [PATCH V2 QDMA 0/1] 
+Date:   Wed, 14 Jun 2023 12:44:24 -0700
+Message-ID: <1686771865-15469-1-git-send-email-lizhi.hou@amd.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-References: <20230602161246.1855448-1-amit.pundir@linaro.org>
- <358c69ad-fa8a-7386-fe75-92369883ee48@leemhuis.info> <0f6c9dcb-b7f6-fff9-6bed-f4585ea8e487@linaro.org>
-In-Reply-To: <0f6c9dcb-b7f6-fff9-6bed-f4585ea8e487@linaro.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 14 Jun 2023 12:44:15 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Xt2KYGY15+f+nHxkzKnwhHzw1A7=o+5kgCDWvHDv0DNg@mail.gmail.com>
-Message-ID: <CAD=FV=Xt2KYGY15+f+nHxkzKnwhHzw1A7=o+5kgCDWvHDv0DNg@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: qcom: sdm845-db845c: Move LVS regulator nodes up
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        dt <devicetree@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT060:EE_|BY5PR12MB4113:EE_
+X-MS-Office365-Filtering-Correlation-Id: a2aa14db-ddc6-4246-1b8f-08db6d0fc943
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7jKDu1EODi9C7U7OSJ3VNPTsQbypbF4Uj2yiJBOcm14k5rVJ5ZbUv8HvqecEYyQkJFlDGJGfQlMHLGs30ztYveUOJsKg0n4GhJrrN1v8iwX0996VhFXkW05LcdY4PnIC3ha6J3KYKrWnswHt0ee+YbLkZAERuBh3pu2f5L4N6LUdZsgpM/kUh0JC6dwY9ANjg7/fSQMqEJ1oJ0Wpm4mpQ527zEch3jgMStYQopEBDjAeomhdk+GRqJrmw/W4DKR1ktgH+oVLBdJ/91MmodSfX8f5X3vInvXP9JgOpKNvogooQMaBKb3fZu4r6Eiln9j7381U2qolXk9sLLkmCzwf0r5EQk3YFzUXkvwFKtOXqP1Yq6sZgYoM+2sIrTAelEGcS269RGA8AeMIIfBPI1qKxt/Wck7cY3gnFGDmwAa3K8bzlwc3Q2BFrHQ7yZm9yiUXoZwbukZ8DDhqA2uAtP+unJQiDaUWWsiScvKh5ePtnn7QEg7JIf8QsSdUMgCkQupT/3kjoEzAvoD8LACUqJ865N89Ql1G6V+DsEKFOVzCFtAJiCKCGdUt/0ZZF/xPJs6aq+9qAECh/vQatTg4f2P1sEcZUVt8QKNJPlAUbpZp5xn1wsmo3JHIs16B5y6Uw9+DCWm2bXIkj4W4DRldCHQMqL0l+MbunxQd/7ymww6RDE/6DyHLF9EVarcI/YRlSFV7cDkOCA6yrqxkYLS0oW0U5BsWI/fO/9LlZi78w488uCz5ErTstAIQTJ7oE5QDDCujr3rOL/+2mq8ISwSIA+2kAdWDoO8oaK0V9A7Ip4/otqc=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(39860400002)(346002)(136003)(451199021)(40470700004)(36840700001)(46966006)(26005)(186003)(6666004)(40480700001)(4743002)(478600001)(44832011)(86362001)(40460700003)(966005)(81166007)(4326008)(70206006)(70586007)(356005)(316002)(2906002)(8936002)(8676002)(5660300002)(82310400005)(41300700001)(82740400003)(2616005)(426003)(336012)(54906003)(110136005)(36756003)(36860700001)(83380400001)(47076005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 19:44:37.0831
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a2aa14db-ddc6-4246-1b8f-08db6d0fc943
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT060.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4113
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello,
 
-On Wed, Jun 14, 2023 at 11:47=E2=80=AFAM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 14/06/2023 20:18, Linux regression tracking (Thorsten Leemhuis) wrote:
-> > On 02.06.23 18:12, Amit Pundir wrote:
-> >> Move lvs1 and lvs2 regulator nodes up in the rpmh-regulators
-> >> list to workaround a boot regression uncovered by the upstream
-> >> commit ad44ac082fdf ("regulator: qcom-rpmh: Revert "regulator:
-> >> qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS"").
-> >>
-> >> Without this fix DB845c fail to boot at times because one of the
-> >> lvs1 or lvs2 regulators fail to turn ON in time.
-> >
-> > /me waves friendly
-> >
-> > FWIW, as it's not obvious: this...
-> >
-> >> Link: https://lore.kernel.org/all/CAMi1Hd1avQDcDQf137m2auz2znov4XL8YGr=
-LZsw5edb-NtRJRw@mail.gmail.com/
-> >
-> > ...is a report about a regression. One that we could still solve before
-> > 6.4 is out. One I'll likely will point Linus to, unless a fix comes int=
-o
-> > sight.
-> >
-> > When I noticed the reluctant replies to this patch I earlier today aske=
-d
-> > in the thread with the report what the plan forward was:
-> > https://lore.kernel.org/all/CAD%3DFV%3DV-h4EUKHCM9UivsFHRsJPY5sAiwXV3a1=
-hUX9DUMkkxdg@mail.gmail.com/
-> >
-> > Dough there replied:
-> >
-> > ```
-> > Of the two proposals made (the revert vs. the reordering of the dts),
-> > the reordering of the dts seems better. It only affects the one buggy
-> > board (rather than preventing us to move to async probe for everyone)
-> > and it also has a chance of actually fixing something (changing the
-> > order that regulators probe in rpmh-regulator might legitimately work
-> > around the problem). That being said, just like the revert the dts
-> > reordering is still just papering over the problem and is fragile /
-> > not guaranteed to work forever.
-> > ```
-> >
-> > Papering over obviously is not good, but has anyone a better idea to fi=
-x
-> > this? Or is "not fixing" for some reason an viable option here?
-> >
->
-> I understand there is a regression, although kernel is not mainline
-> (hash df7443a96851 is unknown) and the only solutions were papering the
-> problem. Reverting commit is a temporary workaround. Moving nodes in DTS
-> is not acceptable because it hides actual problem and only solves this
-> one particular observed problem, while actual issue is still there. It
-> would be nice to be able to reproduce it on real mainline with normal
-> operating system (not AOSP) - with ramdiks/without/whatever. So far no
-> one did it, right?
+The QDMA subsystem is used in conjunction with the PCI Express IP block
+to provide high performance data transfer between host memory and the
+card's DMA subsystem.
 
-The worry I have about the revert here is that it will never be able
-to be undone and that doesn't seem great long term. I'm all for a
-temporary revert to fix a problem while the root cause is understood,
-but in this case I have a hard time believing that we'll make more
-progress towards a root cause once the revert lands. All the
-investigation we've done so far seems to indicate that the revert only
-fixes the problem by luck...
+            +-------+       +-------+       +-----------+
+   PCIe     |       |       |       |       |           |
+   Tx/Rx    |       |       |       |  AXI  |           |
+ <=======>  | PCIE  | <===> | QDMA  | <====>| User Logic|
+            |       |       |       |       |           |
+            +-------+       +-------+       +-----------+
 
-I completely agree that moving the nodes in the DTS is a hack and just
-hides the problem. However, it also at least limits the workaround to
-the one board showing the problem and doesn't mean we're stuck with
-synchronous probe for rpmh-regulator for all eternity because nobody
-can understand this timing issue on db845c.
+Comparing to AMD/Xilinx XDMA subsystem,
+    https://lore.kernel.org/lkml/Y+XeKt5yPr1nGGaq@matsya/
+the QDMA subsystem is a queue based, configurable scatter-gather DMA
+implementation which provides thousands of queues, support for multiple
+physical/virtual functions with single-root I/O virtualization (SR-IOV),
+and advanced interrupt support. In this mode the IP provides AXI4-MM and
+AXI4-Stream user interfaces which may be configured on a per-queue basis.
 
--Doug
+The QDMA has been used for Xilinx Alveo PCIe devices.
+    https://www.xilinx.com/applications/data-center/v70.html
+
+This patch series is to provide the platform driver for AMD QDMA subsystem
+to support AXI4-MM DMA transfers. More functions, such as AXI4-Stream
+and SR-IOV, will be supported by future patches.
+
+The device driver for any FPGA based PCIe device which leverages QDMA can
+call the standard dmaengine APIs to discover and use the QDMA subsystem
+without duplicating the QDMA driver code in its own driver.
+
+Changes since v1:
+- Minor changes from code review comments.
+- Fixed kernel robot warning.
+
+Nishad Saraf (1):
+  dmaengine: amd: qdma: Add AMD QDMA driver
+
+ MAINTAINERS                            |    9 +
+ drivers/dma/Kconfig                    |   13 +
+ drivers/dma/Makefile                   |    1 +
+ drivers/dma/amd/Makefile               |    8 +
+ drivers/dma/amd/qdma-comm-regs.c       |   66 ++
+ drivers/dma/amd/qdma.c                 | 1189 ++++++++++++++++++++++++
+ drivers/dma/amd/qdma.h                 |  269 ++++++
+ include/linux/platform_data/amd_qdma.h |   36 +
+ 8 files changed, 1591 insertions(+)
+ create mode 100644 drivers/dma/amd/Makefile
+ create mode 100644 drivers/dma/amd/qdma-comm-regs.c
+ create mode 100644 drivers/dma/amd/qdma.c
+ create mode 100644 drivers/dma/amd/qdma.h
+ create mode 100644 include/linux/platform_data/amd_qdma.h
+
+-- 
+2.34.1
+
