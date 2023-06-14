@@ -2,120 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECBCB7304E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:30:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 228767304EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:31:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233721AbjFNQaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 12:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43516 "EHLO
+        id S233980AbjFNQbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 12:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233610AbjFNQaG (ORCPT
+        with ESMTP id S234327AbjFNQa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 12:30:06 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D0FB2120
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:30:04 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 40BE01FB;
-        Wed, 14 Jun 2023 09:30:48 -0700 (PDT)
-Received: from [10.57.85.233] (unknown [10.57.85.233])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 102F13F71E;
-        Wed, 14 Jun 2023 09:30:02 -0700 (PDT)
-Message-ID: <ef78b027-d6df-c8c5-5166-097dc23c1506@arm.com>
-Date:   Wed, 14 Jun 2023 17:29:58 +0100
+        Wed, 14 Jun 2023 12:30:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8342718
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:30:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DC2064478
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 16:30:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7ED2C433C0;
+        Wed, 14 Jun 2023 16:30:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686760240;
+        bh=BTRpdtoeEYlLDtLE5Hz7bt0AbC5snDe5AP82plYvJB4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MhOQgO8G7rjuCicC7gc96DgmWWy5WmsW0DPUJAHvRFytzAflm2xm/wTrFaJiKc5QR
+         /ucL6nOYDR+QO7DpHsmcygaAaASqwz4lC+0uQAU9ylqrB88mAOD5mU4HW6+5RR3/Sq
+         BuevYHU8Rhd44fxypacea7cRdKgB0oXwbZj4qRbBBSX4+jR98pCfiebWP5P6RRR3ui
+         7woSZEChE9xIRJI8rJnXknXln3W0PtKEfujbIholja0O0vCXlrQ/P+P+8mDcpkxFwv
+         8+DnTNZ9DkBBzZh3WDvIA3fJusUpTF9on5k+Lk2ZZIRyZzq8xkxfXood8rIvnNFhfp
+         Rb0bOAtfaV5gQ==
+Date:   Wed, 14 Jun 2023 17:30:34 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+        hpa@zytor.com, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] x86/mm/KASLR: Store pud_page_tramp into entry rather
+ than page
+Message-ID: <20230614163034.GB3635807@google.com>
+References: <20230614155223.905222-1-lee@kernel.org>
+ <20230614155223.905222-2-lee@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] iommu: Fix missing check for return value of
- iommu_group_get()
-Content-Language: en-GB
-To:     Chenyuan Mi <cymi20@fudan.edu.cn>, joro@8bytes.org
-Cc:     will@kernel.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20230614154308.118783-1-cymi20@fudan.edu.cn>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20230614154308.118783-1-cymi20@fudan.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230614155223.905222-2-lee@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-14 16:43, Chenyuan Mi wrote:
-> The iommu_group_get() function may return NULL, which may
-> cause null pointer deference, and most other callsites of
-> iommu_group_get() do Null check. Add Null check for return
-> value of iommu_group_get().
+On Wed, 14 Jun 2023, Lee Jones wrote:
+
+> set_pgd() expects to be passed whole pages to operate on, whereas
+> trampoline_pgd_entry is, as the name suggests, an entry.  The
+> ramifications for using set_pgd() here are that the following thread of
+> execution will not only place the suggested value into the
+> trampoline_pgd_entry (8-Byte globally stored [.bss]) variable, PTI will
+> also attempt to replicate that value into the non-existent neighboring
+> user page (located +4k away), leading to the corruption of other global
+> [.bss] stored variables.
 > 
-> Found by our static analysis tool.
-
-Static analysis is good at highlighting areas of code that might be 
-worth looking at, but you then still need to actually look at the code 
-and understand whether there's a problem or not...
-
-> Signed-off-by: Chenyuan Mi <cymi20@fudan.edu.cn>
+> Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
+> Signed-off-by: Lee Jones <lee@kernel.org>
 > ---
->   drivers/iommu/iommu.c | 4 ++++
->   1 file changed, 4 insertions(+)
+>  arch/x86/mm/kaslr.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-> index f1dcfa3f1a1b..ef3483e75511 100644
-> --- a/drivers/iommu/iommu.c
-> +++ b/drivers/iommu/iommu.c
-> @@ -3217,6 +3217,8 @@ EXPORT_SYMBOL_GPL(iommu_group_release_dma_owner);
+> diff --git a/arch/x86/mm/kaslr.c b/arch/x86/mm/kaslr.c
+> index 557f0fe25dff4..ee6f22f3385b6 100644
+> --- a/arch/x86/mm/kaslr.c
+> +++ b/arch/x86/mm/kaslr.c
+> @@ -175,7 +175,7 @@ void __meminit init_trampoline_kaslr(void)
+>  		set_pgd(&trampoline_pgd_entry,
+>  			__pgd(_KERNPG_TABLE | __pa(p4d_page_tramp)));
 
-/**
-  * iommu_group_release_dma_owner() - Release DMA ownership of a group
-  * @dev: The device
-  *
-  * Release the DMA ownership claimed by iommu_group_claim_dma_owner().
-  */
+This needs converting too.
 
-If dev->iommu_group could have somehow disappeared since 
-iommu_group_claim_dma_owner() succeeded then something has gone so 
-catastrophically wrong that it's not worth even trying to reason about. 
-Or if the caller is passing something here that isn't the same device, 
-then why should we assume it's even a valid device pointer at all, and 
-iommu_group_get() isn't going to crash or return nonzero garbage?
+v2 in test.
 
->   void iommu_device_release_dma_owner(struct device *dev)
->   {
->   	struct iommu_group *group = iommu_group_get(dev);
-> +	if (!group)
-> +		return;
->   
->   	mutex_lock(&group->mutex);
->   	if (group->owner_cnt > 1)
-> @@ -3329,6 +3331,8 @@ void iommu_detach_device_pasid(struct iommu_domain *domain, struct device *dev,
->   			       ioasid_t pasid)
+>  	} else {
+> -		set_pgd(&trampoline_pgd_entry,
+> -			__pgd(_KERNPG_TABLE | __pa(pud_page_tramp)));
+> +		trampoline_pgd_entry =
+> +			__pgd(_KERNPG_TABLE | __pa(pud_page_tramp));
+>  	}
+>  }
 
-/*
-  * iommu_detach_device_pasid() - Detach the domain from pasid of device
-  * @domain: the iommu domain.
-  * @dev: the attached device.
-  * @pasid: the pasid of the device.
-  *
-  * The @domain must have been attached to @pasid of the @dev with
-  * iommu_attach_device_pasid().
-  */
-
-Again, iommu_attach_device_pasid() already validates that the device has 
-a group. If a caller uses the API incorrectly then all bets are off. 
-Plus, look at the callsites of iommu_detach_device_pasid() - they're 
-already holding their own reference to the same group anyway!
-
-Thanks,
-Robin.
-
->   {
->   	struct iommu_group *group = iommu_group_get(dev);
-> +	if (!group)
-> +		return;
->   
->   	mutex_lock(&group->mutex);
->   	__iommu_remove_group_pasid(group, pasid);
+-- 
+Lee Jones [李琼斯]
