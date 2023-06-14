@@ -2,354 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACAA772F351
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 05:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE9872F354
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 05:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241232AbjFND4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 23:56:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56046 "EHLO
+        id S242126AbjFND6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 23:58:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232012AbjFND4C (ORCPT
+        with ESMTP id S232012AbjFND6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 23:56:02 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD251C3;
-        Tue, 13 Jun 2023 20:55:58 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8Cx+elMOolka_MEAA--.10630S3;
-        Wed, 14 Jun 2023 11:55:56 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxauVLOolkuB4aAA--.9223S3;
-        Wed, 14 Jun 2023 11:55:56 +0800 (CST)
-Subject: Re: [PATCH v2] usb: dwc2: add pci_device_id driver_data parse support
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Minas Harutyunyan <hminas@synopsys.com>,
-        zhuyinbo <zhuyinbo@loongson.cn>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230609025047.691-1-zhuyinbo@loongson.cn>
- <2023060915-uneasy-pedicure-35f4@gregkh>
- <1e2a07a4-f81f-3672-f29c-144d1a12ea21@loongson.cn>
- <2023060958-unvocal-flattery-256a@gregkh> <2023060912-shun-work-a667@gregkh>
- <d260aae0-2ce2-ed72-e680-8ec2d50335cc@loongson.cn>
- <2023061354-rectify-delta-5dd2@gregkh>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <574ac243-18ee-9dd8-7aeb-8fe6ff1252a9@loongson.cn>
-Date:   Wed, 14 Jun 2023 11:55:55 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <2023061354-rectify-delta-5dd2@gregkh>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Tue, 13 Jun 2023 23:58:21 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2081.outbound.protection.outlook.com [40.107.92.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA33C1A5;
+        Tue, 13 Jun 2023 20:58:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZryMotZ2bVEdZCNuj4ztMj8JSobPh+o4296vx5bh6aFTmgDHU0QDDGRReAUzP9o57kRds/6eYuJ1b5sTgo+QPYoD9Ug1sDSjXfC6FS4jWgApbKzno0wmMXJ5gMLR9ELqsxfyWnlU4NYBIZZ8IvNfkg8RLehp3c08tlIlCYFeT5rGUoohNQto49cJbj//ihX0zosqaMJVwo4Vf9LuB+cYkxLQ32EOLOS+B8dcuD9A9vdkdQrS32ba/MX7zUwtQLh6dObj8CWmTpqmwnorJqwKSIlqssvfPRBUbf7jv2+DH+Oz/5zJqTuu3cNimaGHoNt1/y8Hf9RmIXluuhQxvFks9w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lYT030T6zgJkCzhD7zn4nYLqEdlTW+QVufF+VaI7OvQ=;
+ b=DMycyd5qqaEpa10TAjiO1EeV8zgTVTYdEymk1JHW98/xwF5v4ZdwxcJqYeJdGpg2ghkMFuW3DNXcp0vRLe2tppXg+T0qwE18MlUkKACbv3hN1DJbdsdwfriAKp3+4R5tDrxe+Mpa6zsuktZVQ4uxjdqpjm2Y4dlCavr2bScDOvJtoPXFkaUwc7XW0+yNjiCwBEwRCEa+329n8yymCBHIrl1IOKCdoBFjXDFTUYSmuzQZWGlXRI+8Ipe1xMFbeywcqcvskp09FclkR5fIZHjtpci6pUPDMJ44OrxwkakQ98jsLgAM6oPhpPLRTDG7+cy3WUTSQTt1HNETjGyOg6gsng==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lYT030T6zgJkCzhD7zn4nYLqEdlTW+QVufF+VaI7OvQ=;
+ b=SnoX86LGRyI8Vyw27M6IcxPlyEMSxS7p3Bm61dBKPWQojpYW5Wyws6VEfqZIAPQRF388h6xMq7EuZoIPRwAIA9nqj05vb+J+n09KTIGwkOC2LEoHujrVffflOv5AQqR32Io6FTvSvMxRa8NVw4ovWbDLIjNsyjSC/vWtziwAbt0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB2843.namprd12.prod.outlook.com (2603:10b6:5:48::24) by
+ CY5PR12MB6431.namprd12.prod.outlook.com (2603:10b6:930:39::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6455.44; Wed, 14 Jun 2023 03:58:16 +0000
+Received: from DM6PR12MB2843.namprd12.prod.outlook.com
+ ([fe80::ff22:cffa:293:5cef]) by DM6PR12MB2843.namprd12.prod.outlook.com
+ ([fe80::ff22:cffa:293:5cef%3]) with mapi id 15.20.6455.045; Wed, 14 Jun 2023
+ 03:58:16 +0000
+Message-ID: <9ccc37a9-4f0b-f662-4d1a-467d18bbe48e@amd.com>
+Date:   Wed, 14 Jun 2023 13:58:06 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.5.1
+Subject: Re: [PATCH kernel v5 5/6] KVM: SEV: Enable data breakpoints in SEV-ES
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxauVLOolkuB4aAA--.9223S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-        nUUI43ZEXa7xR_UUUUUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Pankaj Gupta <pankaj.gupta@amd.com>,
+        Nikunj A Dadhania <nikunj@amd.com>,
+        Santosh Shukla <santosh.shukla@amd.com>,
+        Carlos Bilbao <carlos.bilbao@amd.com>
+References: <20230411125718.2297768-1-aik@amd.com>
+ <20230411125718.2297768-6-aik@amd.com> <ZGv9Td4p1vtXC0Hy@google.com>
+ <719a6b42-fd91-8eb4-f773-9ed98d2fdb07@amd.com> <ZGzfWQub4FQOrEtw@google.com>
+ <fc82a8a7-af38-5037-1862-ba2315c4e5af@amd.com> <ZHDEkuaVjs/0kM6t@google.com>
+ <64336829-60c5-afe1-81ad-91b4f354aef3@amd.com>
+ <5e7c6b3d-2c69-59ca-1b9f-2459430e2643@amd.com> <ZIj5ms+DohcLyXHE@google.com>
+From:   Alexey Kardashevskiy <aik@amd.com>
+In-Reply-To: <ZIj5ms+DohcLyXHE@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SY5P282CA0134.AUSP282.PROD.OUTLOOK.COM
+ (2603:10c6:10:209::19) To DM6PR12MB2843.namprd12.prod.outlook.com
+ (2603:10b6:5:48::24)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB2843:EE_|CY5PR12MB6431:EE_
+X-MS-Office365-Filtering-Correlation-Id: a544b33f-34ad-4b10-cbb0-08db6c8b9538
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: oS4TzQbfNuGmPCJa6bbqAiiiFRvZg6SrbBMOXlrmumFSjR8TzaTm4RGHjvYSx5FoJv5FgStU/rwt9/9Jfz39Djr8VtqfWhdTw/nu1dwK5A0jnXQ+Oo8UVk5r8RYq3d8pplD/bnh0m1j5jJ1qVu1i8Xgljl4QPvsP+agPHeICyh4XEDWIkXSSu3rwuwN2Tr5N/HLUDbFGQhT8/g91uapdKM9OOf3ipQdnunWsTDB8ncPIPMKYja0+j6qQCXwQ/qwNIKXoXlaenUFsYnL0R8N7vHfJqPvYa52pt19RfhrjrRQkFys9v5uADYXbDkiQYHNsaMK9SVaHoms39BJItSo2GH7J15oSgSdDHCKZF4Z3/YlE64NldGByYm8/KS3JUYwlNZynn3cExrkxVXiCa8Tfy0LdyZUhMiRsHG3Kz3FgcCh8S4sngYzg5oIsm3kxNjRBGW4N9dXWS5TA27MH2nrcedqBpUgPXWMjb8Pi6rpOAaXX+Z9Bmk/aCWuPCvMydQ+O2L8wW0/pLBn9RXSV12LZ+G3Ky54uaWE/ccVxkUeaZt+tyv086BtI9MtVJzKP9MWeo36k31pNtFnAyb4/PYtJWDzrQHWuBzEY0G/bjm5mOTk6JIHhi16Nby8Y38ZM7QeiGjOJXv0S7nz0U3hbKM63mEhkvI/Q8/upJAhzKabpUwk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2843.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(396003)(376002)(39860400002)(136003)(451199021)(31686004)(66476007)(66556008)(66946007)(316002)(966005)(54906003)(6916009)(478600001)(4326008)(6666004)(31696002)(36756003)(6506007)(6512007)(83380400001)(26005)(186003)(53546011)(5660300002)(41300700001)(8676002)(8936002)(2906002)(6486002)(2616005)(38100700002)(45980500001)(43740500002)(299355004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dFJQc3ZzRlZ2NlFxOGg3ZjZkUk52cWR6WDkwdlVWU2haY01YVHFtUjlDR1kx?=
+ =?utf-8?B?elZKaUVodVRiek5vZHJ1Y0M1U1Erc0MySng5UHRRcUNPUlo3dTBWa0tMelRl?=
+ =?utf-8?B?dXBlTnZhc2k5SU5XMzFRWXB6RERROHZuTkJoOVlnWFNDbFRNNEw4UWN2M0RG?=
+ =?utf-8?B?b2VRL3NxQ1dxL3JxczRURkRyQjVZZzkxUUkyTWtuSjNpTTREVmx5M3pOUnlE?=
+ =?utf-8?B?ZC84L3NEQ0VxT2g3c0o0N29nSWVsMkd0eE9jeDJjWWw1RWJSTmh6L29QSXlL?=
+ =?utf-8?B?Q1FkdnRUeldwTEp2MVh0RDE1bUIya1RnbEVBdjV4OTc1N1hXVS9Jb3V3blBt?=
+ =?utf-8?B?TjdhM1pHMjQyMEV1Wm1IUXdmZ2lSUG5ub0c3c2NCYmtwdVZNcjdXWW9YRjlU?=
+ =?utf-8?B?UmNKSS9YenA3QzFITXlKVlFYVDRJbFhRUnU1MFJsWXFvUXB3V2ZmM2taU3VW?=
+ =?utf-8?B?L0J3SGowSi9iWGVWeHpaVG4zcU1YRlByQ3RvV043UWJTdTZWNVk4dVorc1pt?=
+ =?utf-8?B?dFplNnR2T0Q1ZXUybzZnZ2lHbXdzRFFtVCtwRFVKU0dRYXhnZ3JWc2RITDdk?=
+ =?utf-8?B?d3Y2VTZpNFZmWHYyZngrSGdGc2VsZk4ycU5oMVRLL3lNS0YvWXY3aEx1a2J2?=
+ =?utf-8?B?MVVxOWxEc1pFSEdla0hXbW9TNlhUZSs2a0Z2eEtWWDVRd1ZyZk8rN0greFhQ?=
+ =?utf-8?B?a0pkZ0ZNMDIxTzRiUWFudzZ2c1IyY0xDa3QwSnd6UTYva3U4VkRpdnFtLy9q?=
+ =?utf-8?B?Q29qSmgzbUQ2NlVzWEFwVUVjUHQ2N0hId08wVU5MZzd0Y0JoeGE5K1hxS1g2?=
+ =?utf-8?B?YzY4WkpaWCtCVzhLYUxnbDNhWmwvNlM3T1VhbzF5Q0V1dlBTbmFMK1lDcjBP?=
+ =?utf-8?B?Um42Z0xxa2xUdjJRdXNiVHgzR0loekFIQ1NUeGJkelNmYkoyL2RiTWE3amtL?=
+ =?utf-8?B?N2VScEFRdUVwYk83SlVFSjhkQ3dkOXUzcVBJdmdFc09yK2RyTU5oQUxYZm1U?=
+ =?utf-8?B?dTM1MGJMa2tZUGlyVi9rTGxnMkpOU0JaKzlBcmMySE9GMlRWLzdrbjNteStF?=
+ =?utf-8?B?MC9QOUdXb3NpV0duL3Y3L1lLYXNRL0tyZkZvSXoraGp2dGVYdDgzV2xtU2ZY?=
+ =?utf-8?B?dGU0Z1Fab0xSZWY1OFFPcnRmNkVXUW1iMWt0elcyYVQrRnJidXNCcGRIL1dU?=
+ =?utf-8?B?dmtKRmV3SDJvZUExR1ZpbWEyK1pTK0ZLS3k4TjdyNFJHWXdWZVNuWUhoekR2?=
+ =?utf-8?B?Q0FlRldYWmpvZ3g4OVhydzhjdTFrT0tkU0lCNml5YTU1WGZLNjM1TzQrT1li?=
+ =?utf-8?B?OFRJK3Arbi9jUjZjdUFlbFlIVDJMVC9CdCtnS0ROUG1tSWlTV2VJNWs0cFlF?=
+ =?utf-8?B?aHFNM2tsQzUySjVtVlViWlBUaXZFTTA1Wmh1d3NuUHdydlFMZy9LRFpCc3NV?=
+ =?utf-8?B?VnFRTXdiRitVZkNhNkNlSFJXMGNzd1g5amNOWEZ1cFR4Vmt4RXZ4d1J4VXJx?=
+ =?utf-8?B?eUpZdU95WTVlRG9GOUFoTGY0dFpONWdBS3oxd1Q1NytPYXo0Y1hoQnZ0NmJm?=
+ =?utf-8?B?T3NueitKelpuQWUzN2s1Zi9GYXpPQ2c4VEhKZ0loUXYvdjg4TEpKWmhQamlh?=
+ =?utf-8?B?VU5jM0JvSk93azYycVFWSjdldzkwQnhhT25oeVlXbmNUcytJd3cwa2pCWkpB?=
+ =?utf-8?B?b3VFWWR6dXQvTU5jcHk0ZmJnK1VMT0d2MVllU3hTTUl5d1JhOHhpaGZwcXUw?=
+ =?utf-8?B?eFlVeU5sNmRFdTd0U3d2YWRVaGFva1hQNkIvVE9BMXQwdERNVG5DcjFqYWcr?=
+ =?utf-8?B?a2kwSGo4NkZBMitORHRseDE1VE0xdm5Na3hqUVRaU1pUUmM5WUZPaUxMUXVN?=
+ =?utf-8?B?WWVtSk1xSDZuVHY3YzJmdUZmKzdyWkQyNVBlamNibWxzTkx6QkZyVHRsU29G?=
+ =?utf-8?B?OWhDUGxFMmpnSnlOWGFNWkg1ZUlCYWpLTEVJcmZ0eWY2eTdHSkdnMkc4YWt0?=
+ =?utf-8?B?VXF1ZERnU28wMHZMWnQ3UU4vWG0zVGg4NkwveUN4NnJkcDJMZ1NFVUh5YU9U?=
+ =?utf-8?B?OTcwZUVraDRjdUY0WjFlOXR5WkxiL1JYNUFnZTRVRUpraUFRdURmTitxeFgr?=
+ =?utf-8?Q?q5QJ473Oj81oJ8u+AF2OL0Ee4?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a544b33f-34ad-4b10-cbb0-08db6c8b9538
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2843.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 03:58:16.6724
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1K2bAsKrFtFpluGk/C2xA3c5L4A0aJTlncgtq33cLtgonwJQDznWZnyCrppcbX5kfdQroq4nnKoAl1ofVKoRVA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6431
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2023/6/13 下午6:19, Greg Kroah-Hartman 写道:
-> On Mon, Jun 12, 2023 at 02:51:05PM +0800, zhuyinbo wrote:
->>
->>
->> 在 2023/6/9 下午5:31, Greg Kroah-Hartman 写道:
->>> On Fri, Jun 09, 2023 at 11:25:15AM +0200, Greg Kroah-Hartman wrote:
->>>> On Fri, Jun 09, 2023 at 05:07:03PM +0800, zhuyinbo wrote:
->>>>>
->>>>>
->>>>> 在 2023/6/9 下午2:13, Greg Kroah-Hartman 写道:
->>>>>> On Fri, Jun 09, 2023 at 10:50:47AM +0800, Yinbo Zhu wrote:
->>>>>>> The dwc2 driver has everything we need to run in PCI mode except
->>>>>>> for pci_device_id driver_data parse.  With that to set Loongson
->>>>>>> dwc2 element and added identified as PCI_VENDOR_ID_LOONGSON
->>>>>>> and PCI_DEVICE_ID_LOONGSON_DWC2 in dwc2_pci_ids, the Loongson
->>>>>>> dwc2 controller will work.
->>>>>>>
->>>>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>>>>>> ---
->>>>>>> Change in v2:
->>>>>>> 		1. Move the dwc2 pci ID from pci_ids.h to params.c.
->>>>>>> 		2. Add some code logic to ensure that the current device is
->>>>>>> 		   a PCI device.
->>>>>>> 		3. Fix the compile issue when dwc2 pci driver as module.
->>>>>>>
->>>>>>>     drivers/usb/dwc2/core.h   |  1 +
->>>>>>>     drivers/usb/dwc2/params.c | 39 ++++++++++++++++++++++++++++++++++++++-
->>>>>>>     drivers/usb/dwc2/pci.c    | 14 +-------------
->>>>>>>     3 files changed, 40 insertions(+), 14 deletions(-)
->>>>>>>
->>>>>>> diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
->>>>>>> index 0bb4c0c845bf..c92a1da46a01 100644
->>>>>>> --- a/drivers/usb/dwc2/core.h
->>>>>>> +++ b/drivers/usb/dwc2/core.h
->>>>>>> @@ -1330,6 +1330,7 @@ irqreturn_t dwc2_handle_common_intr(int irq, void *dev);
->>>>>>>     /* The device ID match table */
->>>>>>>     extern const struct of_device_id dwc2_of_match_table[];
->>>>>>>     extern const struct acpi_device_id dwc2_acpi_match[];
->>>>>>> +extern const struct pci_device_id dwc2_pci_ids[];
->>>>>>>     int dwc2_lowlevel_hw_enable(struct dwc2_hsotg *hsotg);
->>>>>>>     int dwc2_lowlevel_hw_disable(struct dwc2_hsotg *hsotg);
->>>>>>> diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
->>>>>>> index 21d16533bd2f..6b68a8830781 100644
->>>>>>> --- a/drivers/usb/dwc2/params.c
->>>>>>> +++ b/drivers/usb/dwc2/params.c
->>>>>>> @@ -7,9 +7,14 @@
->>>>>>>     #include <linux/module.h>
->>>>>>>     #include <linux/of_device.h>
->>>>>>>     #include <linux/usb/of.h>
->>>>>>> +#include <linux/pci_ids.h>
->>>>>>> +#include <linux/pci.h>
->>>>>>>     #include "core.h"
->>>>>>> +#define PCI_PRODUCT_ID_HAPS_HSOTG	0xabc0
->>>>>>> +#define PCI_DEVICE_ID_LOONGSON_DWC2	0x7a04
->>>>>>> +
->>>>>>>     static void dwc2_set_bcm_params(struct dwc2_hsotg *hsotg)
->>>>>>>     {
->>>>>>>     	struct dwc2_core_params *p = &hsotg->params;
->>>>>>> @@ -55,6 +60,14 @@ static void dwc2_set_jz4775_params(struct dwc2_hsotg *hsotg)
->>>>>>>     		!device_property_read_bool(hsotg->dev, "disable-over-current");
->>>>>>>     }
->>>>>>> +static void dwc2_set_loongson_params(struct dwc2_hsotg *hsotg)
->>>>>>> +{
->>>>>>> +	struct dwc2_core_params *p = &hsotg->params;
->>>>>>> +
->>>>>>> +	p->phy_utmi_width = 8;
->>>>>>> +	p->power_down = DWC2_POWER_DOWN_PARAM_PARTIAL;
->>>>>>> +}
->>>>>>> +
->>>>>>>     static void dwc2_set_x1600_params(struct dwc2_hsotg *hsotg)
->>>>>>>     {
->>>>>>>     	struct dwc2_core_params *p = &hsotg->params;
->>>>>>> @@ -281,6 +294,23 @@ const struct acpi_device_id dwc2_acpi_match[] = {
->>>>>>>     };
->>>>>>>     MODULE_DEVICE_TABLE(acpi, dwc2_acpi_match);
->>>>>>> +const struct pci_device_id dwc2_pci_ids[] = {
->>>>>>> +	{
->>>>>>> +		PCI_DEVICE(PCI_VENDOR_ID_SYNOPSYS, PCI_PRODUCT_ID_HAPS_HSOTG),
->>>>>>> +	},
->>>>>>> +	{
->>>>>>> +		PCI_DEVICE(PCI_VENDOR_ID_STMICRO,
->>>>>>> +			   PCI_DEVICE_ID_STMICRO_USB_OTG),
->>>>>>> +	},
->>>>>>> +	{
->>>>>>> +		PCI_DEVICE(PCI_VENDOR_ID_LOONGSON, PCI_DEVICE_ID_LOONGSON_DWC2),
->>>>>>> +		.driver_data = (unsigned long)dwc2_set_loongson_params,
->>>>>>> +	},
->>>>>>> +	{ /* end: all zeroes */ }
->>>>>>> +};
->>>>>>> +MODULE_DEVICE_TABLE(pci, dwc2_pci_ids);
->>>>>>> +EXPORT_SYMBOL_GPL(dwc2_pci_ids);
->>>>>>> +
->>>>>>>     static void dwc2_set_param_otg_cap(struct dwc2_hsotg *hsotg)
->>>>>>>     {
->>>>>>>     	switch (hsotg->hw_params.op_mode) {
->>>>>>> @@ -927,13 +957,20 @@ int dwc2_init_params(struct dwc2_hsotg *hsotg)
->>>>>>>     	if (match && match->data) {
->>>>>>>     		set_params = match->data;
->>>>>>>     		set_params(hsotg);
->>>>>>> -	} else {
->>>>>>> +	} else if (!match) {
->>>>>>>     		const struct acpi_device_id *amatch;
->>>>>>> +		const struct pci_device_id *pmatch = NULL;
->>>>>>>     		amatch = acpi_match_device(dwc2_acpi_match, hsotg->dev);
->>>>>>>     		if (amatch && amatch->driver_data) {
->>>>>>>     			set_params = (set_params_cb)amatch->driver_data;
->>>>>>>     			set_params(hsotg);
->>>>>>> +		} else if (!amatch)
->>>>>>> +			pmatch = pci_match_id(dwc2_pci_ids, to_pci_dev(hsotg->dev->parent));
->>>>>>
->>>>>> At this point in time, how can you guarantee that the parent device
->>>>>> really is a PCI one?  This function is being called from a platform
->>>>>> device callback, and platform devices should NEVER be a child of a PCI
->>>>>> device, as that's not how PCI or platform devices work.
->>>>>>
->>>>>> So how is this even possible?
->>>>>>
->>>>>> confused,
->>>>>>
->>>>>
->>>>>
->>>>> Hi greg k-h,
->>>>>
->>>>> My current considerations are based on that the dwc2 drivers support
->>>>> three types of devices, they are Platform device / ACPI device / PCI
->>>>> device, and The dwc2/platform.c can all cover the three type dwc2
->>>>> device, no matter how it is registered.
->>>>>
->>>>> So, when a dwc2 device wasn't platform device and acpi device and It
->>>>> will be a PCI device, and the the dwc2/pci.c will register a dwc2
->>>>> platform device that dwc2 device is a device that in dwc2/platform.c's
->>>>> dwc2_driver_probe.  the "&dwc2->dev->parent" is the "hsotg->dev->parent"
->>>>> and it was also the &pci->dev.
->>>>
->>>> That's wrong, a PCI device should NEVER register a platform device under
->>>> it, as obviously it's not a platform device at all.
->>>>
->>>> So please work to fix that layering violation here, as that's not
->>>> correct and will cause problems as you are showing here.
->>>>
->>>>> So, We can use "to_pci_dev(hsotg->dev->parent)" to gain a dwc2 pci
->>>>> device.
->>>>
->>>> No, not if the parent is something else as you have no way of knowing
->>>> this at this point in time.
->>>>
->>>>>
->>>>> 1)  DWC2 PCI device driver (drivers/usb/dwc2/pci.c) :
->>>>>
->>>>> static int dwc2_pci_probe(struct pci_dev *pci,
->>>>>                             const struct pci_device_id *id)
->>>>> {
->>>>> ...
->>>>>           struct platform_device  *dwc2;
->>>>> ...
->>>>>           struct device           *dev = &pci->dev;
->>>>> ...
->>>>> 	dwc2 = platform_device_alloc("dwc2", PLATFORM_DEVID_AUTO);
->>>>> 	              //"dwc2" was used to match dwc2 platform driver
->>>>
->>>> This needs to be fixed, it's not ok at all.  Just use the real PCI
->>>> device here please.
->>>
->>> Also, to be fair, you didn't cause this problem, I missed it previously.
->>> But fixing it is essential, and will be required in order to get your
->>> changes to work properly.  Sorry about that.
->>>
->>
->>
->> Hi greg k-h,
->>
->> Actually,  the dwc2/pci.c's  platform_device_add(dwc2) was create a
->> platform device called "dwc2"  ensure dwc2/platform's dwc2_driver_probe
->> function can be called. After all, the dwc2/platform's dwc2_driver_probe
->> is the one that truly initializes the dwc2 controller. In addition, the
->> same applies to dwc3 code.
+On 14/6/23 09:19, Sean Christopherson wrote:
+> On Fri, Jun 02, 2023, Alexey Kardashevskiy wrote:
+>> Sean, ping?
+>> =20
+>> I wonder if this sev-es-not-singlestepping is a showstopper or it is alri=
+> ght
+>> to repost this patchset without it? Thanks,
 > 
-> Yes, it does create a platform device, but ALSO a real platform device
-> could be present in the system for the driver, one that is NOT a child
-> of a PCI device, right?
+> Ah, shoot, I completely lost this in my inbox.  Sorry :-/
+
+I saw the "OOO" message the other day and relaxed :)
 
 
-I don't get it that why need dwc2 was a child of pci. and I just need
-the dwc2->dev.parent's parent device was a child of dwc2 pci device.
-If my patch conditions are met (match and amatch was NULL), this always
-seems to hold true.
+>>>> Side topic, isn't there an existing bug regarding SEV-ES NMI windows?
+>>>> KVM can't actually single-step an SEV-ES guest, but tries to set
+>>>> RFLAGS.TF anyways.
+>>> =20
+>>> Why is it a "bug" and what does the patch fix? Sound to me as it is
+>>> pointless and the guest won't do single stepping and instead will run
+>>> till it exits somehow, what do I miss?
+> 
+> The bug is benign in the end, but it's still a bug.  I'm not worried about =
 
-dwc2_pci_probe ()
-{
-struct platform_device  *dwc2;
-struct device *dev = &pci->dev;
-dwc2->dev.parent = dev;
-platform_device_add(dwc2);
-}
+
+(unrelated) Your response's encoding broke somehow and I wonder if this 
+is something I did or you did. Lore got it too:
+
+https://lore.kernel.org/all/ZIj5ms+DohcLyXHE@google.com/
+
+
+> fixing
+> any behavior, but I dislike having dead, misleading code, especially for so=
+> mething
+> like this where both NMI virtualization and SEV-ES are already crazy comple=
+> x and
+> subtle.  I think it's safe to say that I've spent more time digging through=
+>   SEV-ES
+> and NMI virtualization than most KVM developers, and as evidenced by the nu=
+> mber of
+> things I got wrong below, I'm still struggling to keep track of the bigger =
+> picture.
+> Developers that are new to all of this need as much help as they can get.
+> 
+>>>> Blech, and suppressing EFER.SVME in efer_trap() is a bit gross,
+>>> =20
+>>> Why suppressed? svm_set_efer() sets it eventually anyway.
+> 
+> svm_set_efer() sets SVME in hardware, but KVM's view of the guest's value t=
+> hat's
+> stored in vcpu->arch.efer doesn't have SVME set.  E.g. from the guest's per=
+> spective,
+> EFER.SVME will have "Reserved Read As Zero" semantics.
+
+It is not zero, why? From inside the guest, rdmsrl(MSR_EFER, efer) reads 
+0x1d01 from that msr where 0x1000==(1<<_EFER_SVME),  _EFER_SVME==12.
+
 
 > 
-> It's not this way with your system, but it could be that way for many
-> others, right?  And if so, the assumption that you can just poke around
-> in the parent device and assume that you know what bus it is on is just
-> wrong and will break things.
-
-
-What you said about "system" that is unrelated to the kernel driver? I
-think it should be system independent and it depends entirely on the
-kernel driver, for the driver, everyone is the same. the behavior of the
-driver is known, and currently I have not found any other risks it
-poses.  Additionally, the key is that the issue that my patch is
-addressing is a common issue. For example, if the following devices are
-designed as PCI devices on hardware, they will always encounter the same
-problem.
-
-const struct of_device_id dwc2_of_match_table[] = {
-         { .compatible = "brcm,bcm2835-usb", .data = dwc2_set_bcm_params },
-         { .compatible = "hisilicon,hi6220-usb", .data = 
-dwc2_set_his_params },
-         { .compatible = "ingenic,jz4775-otg", .data = 
-dwc2_set_jz4775_params },
-         { .compatible = "ingenic,jz4780-otg", .data = 
-dwc2_set_jz4775_params },
-         { .compatible = "ingenic,x1000-otg", .data = 
-dwc2_set_jz4775_params },
-         { .compatible = "ingenic,x1600-otg", .data = 
-dwc2_set_x1600_params },
-         { .compatible = "ingenic,x1700-otg", .data = 
-dwc2_set_x1600_params },
-         { .compatible = "ingenic,x1830-otg", .data = 
-dwc2_set_x1600_params },
-         { .compatible = "ingenic,x2000-otg", .data = 
-dwc2_set_x2000_params },
-         { .compatible = "rockchip,rk3066-usb", .data = 
-dwc2_set_rk_params },
-         { .compatible = "lantiq,arx100-usb", .data = dwc2_set_ltq_params },
-         { .compatible = "lantiq,xrx200-usb", .data = dwc2_set_ltq_params },
-
+>>>> but I suppose since the GHCB doesn't allow for CLGI or STGI it's "fin=
+> e".
+>>> =20
+>>> GHCB does not mention this, instead these are always intercepted in
+>>> init_vmcb().
 > 
-> You should NEVER be poking around in the information for the parent
-> device, UNLESS you have just created the child device yourself and the
-> ONLY code path is one that you have full control over.
+> Right, I'm calling out that the absense of protocol support for requesting =
+> CLGI
+> or STGI emulation means dropping the guest's EFER.SVME is ok (though gross =
+> :-) ).
 > 
-> Does that make more sense?
+>>>> E.g. shouldn't KVM do this?
+>>> =20
+>>> It sure can and I am happy to include this into the series, the commit
+>>> log is what I am struggling with :)
+>>> =20
+>>>> =20
+>>>> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+>>>> index ca32389f3c36..4e4a49031efe 100644
+>>>> --- a/arch/x86/kvm/svm/svm.c
+>>>> +++ b/arch/x86/kvm/svm/svm.c
+>>>> @@ -3784,6 +3784,16 @@ static void svm_enable_nmi_window(struct
+>>>> kvm_vcpu *vcpu)
+>>>> =EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=
+> =BD if (svm_get_nmi_mask(vcpu) && !svm->awaiting_iret_completion)
+>>>> =EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=
+> =BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=
+>   return; /* IRET will cause a vm exit */
+>>>> +=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD /*
+>>>> +=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD * KV=
+> M can't single-step SEV-ES guests and instead assumes
+>>>> that IRET
+>>>> +=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD * in=
+>   the guest will always succeed,
+>>> =20
+>>> It relies on GHCB's NMI_COMPLETE (which SVM than handles is it was IRET=
+> ):
+>>> =20
+>>>   =EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD case S=
+> VM_VMGEXIT_NMI_COMPLETE:
+>>>   =EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=
+> =BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD ret =3D =
+> svm_invoke_exit_handler(vcpu, SVM_EXIT_IRET);
+>>>   =EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=
+> =BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD break;
+> 
+> Ah, right, better to say that the guest is responsible for signaling that i=
+> t's
+> ready to accept NMIs, which KVM handles by "emulating" IRET.
+> 
+>>>> i.e. clears NMI masking on the
+>>>> +=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD * ne=
+> xt VM-Exit.=EF=BF=BD Note, GIF is guaranteed to be '1' for
+>>>> SEV-ES guests
+>>>> +=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD * as=
+>   the GHCB doesn't allow for CLGI or STGI (and KVM suppresses
+>>>> +=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD * EF=
+> ER.SVME for good measure, see efer_trap()).
+>>> =20
+>>> SVM KVM seems to not enforce EFER.SVME, the guest does what it wants an=
+> d
+>>> KVM is only told the new value via EFER_WRITE_TRAP. And "writes by
+>>> SEV-ES guests to EFER.SVME are always ignored by hardware" says the APM=
+> .
+> 
+> Ahhh, that blurb in the APM is what I'm missing.
+> 
+> Actually, there's a real bug here.  KVM doesn't immediately unmask NMIs in =
+> response
+> to NMI_COMPLETE, and instead goes through the whole awaiting_iret_completio=
+> n =3D>
+> svm_complete_interrupts(), which means that KVM doesn't unmask NMIs until t=
+> he
+> *next* VM-Exit.  Theoretically, that could be never, e.g. if the host is ti=
+> ckless
+> and the guest is configured to busy wait idle CPUs.
+> 
+> Attached patches are compile tested only.
 
+Well, NMIs still get injected from QEMU so I guess it is a pass? Thanks,
 
-Yes, but it seems inappropriate for dwc2. For this, please allow me to 
-parse some of my comments in v1:
-
-
-Actually, I use pci_match_id was due to I noticed that xhci-pci.c,
-ehci-pci.c and ohci-pci.c was all use it . and I don't use it in
-dwc2/pci.c was considering set dwc2 element need dpend on elements.c and
-platform.c, and usb driver (ohci,echi,xhci) was a relatively
-indepent device driver when to operate usb controler. but dwc2 was not.
-
-If I fource the element setting of dwc2 element in dwc2/pci.c. It will 
-be following case. This will cause problems with element-initial
-function or element-check function.
-
-1. initial dwc2 element.
-2. check the setting of dwc2 element whether was suitable
-3. set dwc2 element.
-
-or
-
-1. set dwc2 element.
-2. initial dwc2 element.
-3. check the setting of dwc2 element whether was suitable
-
-The corresponding code call process as follows:
-
-1. dwc2_set_default_params(hsotg);
-2. dwc2_get_device_properties(hsotg);
-3. dwc2_check_params(hsotg);
-4. dwc2_set_loongson_params;
-
-or
-
-1. dwc2_set_loongson_params;
-2. dwc2_set_default_params(hsotg);
-3. dwc2_get_device_properties(hsotg);
-4. dwc2_check_params(hsotg);
-
-But the platform dwc2 device or acpi dwc2 device was all following case
-and It seems was correct order.
-
-1. dwc2_set_default_params(hsotg);
-2. dwc2_get_device_properties(hsotg);
-3. dwc2_set_loongson_params;
-4. dwc2_check_params(hsotg);
-
-
-Thanks,
-
-Yinbo
+-- 
+Alexey
 
