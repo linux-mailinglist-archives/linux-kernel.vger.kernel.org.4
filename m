@@ -2,130 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35C89730AD3
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 00:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0961730ADA
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 00:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232229AbjFNWkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 18:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38768 "EHLO
+        id S236482AbjFNWmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 18:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjFNWkQ (ORCPT
+        with ESMTP id S233300AbjFNWmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 18:40:16 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BBB1BC
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 15:40:13 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686782411;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1IJ3rNp43FU2Lp9lvkrrGEgS04PW2LxBh6CBSMfqEhU=;
-        b=dGWWzBaRJje6L7gdtJqb9apszHjZvRaCNpJMHDYnCObt45YEP6Olk5Js+R+FR26VnT0/SN
-        vIGZOIa5ZU/BaYwepAd912zBET6bsbktHNSeDEjIDBOhQYOPd+rUp8U1yCXjbH/pJwUqHa
-        ZHC4ocTa7GWzbXiUeC2jEwGgvbiDsxa8aazRgjbJoFcjttaqXoLIFg8GY5FjsWb9avcKDF
-        au34/0mil0KYL9Qgcv+fu04O8dDjZehIpXq1McG260X6IlWQs4VnD+XAYo2pCpRb9PrkY9
-        ljZYlzgeZkC0pHuZ3p6et/hLIrqp+vemBXLyEfuot4PRMDsn1t+WupxcNHiqeg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686782411;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1IJ3rNp43FU2Lp9lvkrrGEgS04PW2LxBh6CBSMfqEhU=;
-        b=6qZ1NmdJ6ThkdjLYK4SNt5Qm/U9VCnLYjPzLQunoBB6O1kVZr3B9Di8Zm+7hGIIKZXYtBS
-        /FolykaDkujCURCA==
-To:     Ashok Raj <ashok.raj@intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Tony Battersby <tonyb@cybernetics.com>,
-        Ashok Raj <ashok.raj@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Ashok Raj <ashok.raj@intel.com>
-Subject: Re: [patch V2 1/8] x86/smp: Make stop_other_cpus() more robust
-In-Reply-To: <ZIonT7+sxAx8IWEE@a4bf019067fa.jf.intel.com>
-References: <20230613115353.599087484@linutronix.de>
- <20230613121615.639116359@linutronix.de>
- <ZIoYMakfbAU9EOjc@a4bf019067fa.jf.intel.com> <87ilbp95xq.ffs@tglx>
- <ZIonT7+sxAx8IWEE@a4bf019067fa.jf.intel.com>
-Date:   Thu, 15 Jun 2023 00:40:10 +0200
-Message-ID: <87fs6t8y7p.ffs@tglx>
+        Wed, 14 Jun 2023 18:42:37 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1780C1BF7
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 15:42:37 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-77ac14e9bc5so789938339f.2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 15:42:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686782556; x=1689374556;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WE73eWAx50Q9c0pRDTsurXPQzo7ErFkWRWSNLKelXl8=;
+        b=lyG617a/FMYvFKgmrqe9PegKll6eC2c83/QnulxhM9Cg2xkl6rYGvaEqhJzsN8otLH
+         WeqbwXEick6zGf1/0qdm0R4domwnCKdsHlYOPFQU5tAORMRW2S1YRg3p56lzsBL6uaPS
+         oTag6V0OSr0V3lwCDqory/OStKFMwGV8DDTSBtReX+0GcACOM2/9ejfOvIYk1yY2c16k
+         zXMZP+TZPeaNopeVb41HNRxJA0Y9h1yfqlLN/XYwOIwKgfpaN7CYuU4Wa6MERWS01RNj
+         SjlDW9j7YXg6axJxFuTD6USnIqdzWn6Hr5F39zrbQkK2woJnU38Zp8E9jQb+DgmaPJ8M
+         cqKQ==
+X-Gm-Message-State: AC+VfDz+t028qIqZrGMZ0kPgfWQmeOxLS/TOcJxFG7kFpJAdI7nsUd2S
+        ITgSvacxQ2HwJZGhUO+eBV0++iZPZkSWlpHcwqqA5XoBPab6
+X-Google-Smtp-Source: ACHHUZ5d+qMhMNOUFWZyzwX1QZfMj8e4pEaKvgbexuUfTL0QemYLd2k78ajcnQjdBEvahD4oj+jPD0jc4iq5zak1PLa3SgeT60kY
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a5e:880a:0:b0:76c:7d48:d798 with SMTP id
+ l10-20020a5e880a000000b0076c7d48d798mr6300645ioj.0.1686782556283; Wed, 14 Jun
+ 2023 15:42:36 -0700 (PDT)
+Date:   Wed, 14 Jun 2023 15:42:36 -0700
+In-Reply-To: <1604628.1686754446@warthog.procyon.org.uk>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000014bf4b05fe1eabfe@google.com>
+Subject: Re: [syzbot] [crypto?] general protection fault in cryptd_hash_export
+From:   syzbot <syzbot+e79818f5c12416aba9de@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, dhowells@redhat.com,
+        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14 2023 at 13:47, Ashok Raj wrote:
-> On Wed, Jun 14, 2023 at 09:53:21PM +0200, Thomas Gleixner wrote:
->> 
->> Now let me look into this NMI cruft.
->> 
->
-> Maybe if each CPU going down can set their mask, we can simply hit NMI to
-> only the problematic ones?
->
-> The simple count doesn't capture the CPUs in trouble.
+Hello,
 
-Even a mask is not cutting it. If CPUs did not react on the reboot
-vector then there is no guarantee that they are not going to do so
-concurrently to the NMI IPI:
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-CPU0                          CPU1
-                
-IPI(BROADCAST, REBOOT);
-wait() // timeout
-                              stop_this_cpu()
-if (!all_stopped()) {
-  for_each_cpu(cpu, mask) {
-                                mark_stopped(); <- all_stopped() == true now
-       IPI(cpu, NMI);
-  }                            --> NMI()
+Reported-and-tested-by: syzbot+e79818f5c12416aba9de@syzkaller.appspotmail.com
 
-  // no wait() because all_stopped() == true
+Tested on:
 
-proceed_and_hope() ....
+commit:         fa0e21fa rtnetlink: extend RTEXT_FILTER_SKIP_STATS to ..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git main
+console output: https://syzkaller.appspot.com/x/log.txt?x=12ae3673280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=526f919910d4a671
+dashboard link: https://syzkaller.appspot.com/bug?extid=e79818f5c12416aba9de
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=172d9e8b280000
 
-On bare metal this is likely to "work" by chance, but in a guest all
-bets are off.
-
-I'm not surprised at all.
-
-The approach of piling hardware and firmware legacy on top of hardware
-and firmware legacy in the hope that we can "fix" that in software was
-wrong from the very beginning.
-
-What's surprising is that this worked for a really long time. Though
-with increasing complexity the thereby produced debris is starting to
-rear its ugly head.
-
-I'm sure the marketing departements of _all_ x86 vendors will come up
-with a brilliant slogan for that. Something like:
-
-  "We are committed to ensure that you are able to experience the
-   failures of the past forever with increasingly improved performance
-   and new exciting features which are fully backwards failure
-   compatible."
-
-TBH, the (OS) software industry has proliferated that by joining the
-'features first' choir without much thought and push back. See
-arch/x86/kernel/cpu/* for prime examples.
-
-Ranted enough. I'm going to sleep now and look at this mess tomorrow
-morning with brain awake again. Though that will not change the
-underlying problem, which is unfixable.
-
-Thanks,
-
-        tglx
-
-
+Note: testing is done by a robot and is best-effort only.
