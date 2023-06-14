@@ -2,97 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98F437304CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C82A57304D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232569AbjFNQVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 12:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38950 "EHLO
+        id S233155AbjFNQV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 12:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231700AbjFNQVg (ORCPT
+        with ESMTP id S233195AbjFNQVv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 12:21:36 -0400
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3C90A2130;
-        Wed, 14 Jun 2023 09:21:28 -0700 (PDT)
+        Wed, 14 Jun 2023 12:21:51 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36D72125
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:21:41 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1b3e3f33e33so224545ad.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:21:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fudan.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id; bh=EqZ69WEViIG68qz/W0eV6BOXBynqyp/2ao5vcAHxPoc=; b=L
-        4XKwqwOMMnXlJ/sGtIYoX7nBQWfBcnc0EoTP8IxbgWlH2UFiTsTVi/x1ANapZAnH
-        n/UfAvVT3T0Uu3wPwPJ1UflO41Ys/ehz+i7wWC01HN6b6y1ZPuANOFA8Byuibbv9
-        Nv/x2sbMjJSBn5bUa3IaKsi1Nr7bKCjHsrpa9qFOAI=
-Received: from ubuntu.localdomain (unknown [10.230.35.76])
-        by app1 (Coremail) with SMTP id XAUFCgC3v__56Ilk9+rsAA--.38427S2;
-        Thu, 15 Jun 2023 00:21:14 +0800 (CST)
-From:   Chenyuan Mi <cymi20@fudan.edu.cn>
-To:     robert.moore@intel.com, rafael.j.wysocki@intel.com,
-        lenb@kernel.org, linux-acpi@vger.kernel.org,
-        acpica-devel@lists.linuxfoundation.org,
+        d=google.com; s=20221208; t=1686759701; x=1689351701;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nPUtrT0fiELnm68AoWvfnxE4katFET0OQjBAFidn7qU=;
+        b=ELeVGt5nDa3D4i0U0B/sV1WRxjReY606KOf09X+Y7uBcTC4++0QuewNRul+2Rdo8zS
+         Ti1N3vX7QUKH/iQTJ7Ckf2CETdKLlGzslHAMXT2fJZapzlE5yDZWc7Z+IzubE5cjoaHh
+         HJNB2UPFiEwztN2dUVnBewvPacerUibpED6r9JEkT16Y3NQjr/nZGSJfkMQsCS1vt5PM
+         XJS2AnbGmVrq8lKfyp5juBW1q3/DoXLunms/FwdLRtHX0YNIyJezk27hPfFLrC4CCv3v
+         91BnFBYUsWz1tYAd6X/ljnIqYNHBcmkBo85hOTVyHpsJ/MVXr7bzzNApoAsmGT5l0D/v
+         plfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686759701; x=1689351701;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nPUtrT0fiELnm68AoWvfnxE4katFET0OQjBAFidn7qU=;
+        b=h7kw2O2kIjdUQdwknTaXfwOKifCv3miSOeOoyrjF2wjv07ehnbIRFKU1wn9Gn9g1fp
+         KYJei/fyBXZhdd0d7A02I6YqT8Q5iMkPaCb34k2SPPtBbxWRhPIVhi7CFjt01oFes2ai
+         WuIOkVLq2/yOeZQ6faWujThJzjQF47OOhL2tpaHN1emDom/K5Y2hsmOnBROUMK02Tdmv
+         5ZpBih2rSXqH1YGmJZWtS+4oow1o626uCQfaPQBCnW1IGdR5OJC6bg1mcW+vE/OJWTHo
+         O9zGxavmHc07hFbHwcG6z9mPE5v/Zf95nKX6yTUYJinZ9PrhyW5VNmTloRMYYrMqmkjM
+         3bOA==
+X-Gm-Message-State: AC+VfDx2TeEmqQwpqmLTqiuMrWxP8aR/8JgFTo+ro/JFtzrJRgHowIky
+        n3oWyGsHNGGT4fHd1PvnRioUcwGGqju4KdsWYii8ag==
+X-Google-Smtp-Source: ACHHUZ7JEUXcvsY6VNzSokeg5/wOw4hTAQZEekolk3qugMY924fpq/4OewED1s/BZJ/mlANbEdFAdmULCHH3BgWHTAU=
+X-Received: by 2002:a17:902:e88a:b0:1b0:5304:5b6b with SMTP id
+ w10-20020a170902e88a00b001b053045b6bmr259310plg.20.1686759700941; Wed, 14 Jun
+ 2023 09:21:40 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230614150118.115208-1-cymi20@fudan.edu.cn>
+In-Reply-To: <20230614150118.115208-1-cymi20@fudan.edu.cn>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 14 Jun 2023 09:21:29 -0700
+Message-ID: <CAP-5=fWQq9MM-NXL75_a_JoTVEwvS1oy8oKRefsLxU1kyjWKZg@mail.gmail.com>
+Subject: Re: [PATCH] perf subcmd: Fix missing check for return value of
+ malloc() in add_cmdname()
+To:     Chenyuan Mi <cymi20@fudan.edu.cn>
+Cc:     acme@redhat.com, namhyung@kernel.org, leo.yan@linaro.org,
         linux-kernel@vger.kernel.org
-Cc:     Chenyuan Mi <cymi20@fudan.edu.cn>
-Subject: [PATCH] ACPICA: Fix missing check for return value of acpi_ns_get_attached_object()
-Date:   Wed, 14 Jun 2023 09:21:12 -0700
-Message-Id: <20230614162112.122816-1-cymi20@fudan.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: XAUFCgC3v__56Ilk9+rsAA--.38427S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7XF47uFWrJF4rXFyxXF48tFb_yoWkCFcEga
-        s3GFn3Wr1YkF4Skr1akrWrArWayr1fXrn2vF1DtFWfCr1rZF98Jr1rJFnxZr9rZa4kKFW3
-        Ja1aya47Cr1I9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbV8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
-        0_Cr1UM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
-        Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJV
-        W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI2
-        0VAGYxC7MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
-        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
-        wI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
-        v20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvE
-        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
-        DU0xZFpf9x0JUAkucUUUUU=
-X-CM-SenderInfo: isqsiiisuqikmt6i3vldqovvfxof0/
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The acpi_ns_get_attached_object() function may return
-NULL, which may cause null pointer deference, and most
-other callsites of acpi_ns_get_attached_object() do
-Null check. Add Null check for return value of
-acpi_ns_get_attached_object().
+On Wed, Jun 14, 2023 at 8:01=E2=80=AFAM Chenyuan Mi <cymi20@fudan.edu.cn> w=
+rote:
+>
+> The malloc() function may return NULL when it fails,
+> which may cause null pointer deference in add_cmdname(),
+> add Null check for return value of malloc().
+>
+> Found by our static analysis tool.
+>
+> Signed-off-by: Chenyuan Mi <cymi20@fudan.edu.cn>
 
-Found by our static analysis tool.
+Acked-by: Ian Rogers <irogers@google.com>
 
-Signed-off-by: Chenyuan Mi <cymi20@fudan.edu.cn>
----
- drivers/acpi/acpica/exprep.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+Thanks,
+Ian
 
-diff --git a/drivers/acpi/acpica/exprep.c b/drivers/acpi/acpica/exprep.c
-index 08196fa17080..d9c006ec1ac8 100644
---- a/drivers/acpi/acpica/exprep.c
-+++ b/drivers/acpi/acpica/exprep.c
-@@ -431,6 +431,13 @@ acpi_status acpi_ex_prep_field_value(struct acpi_create_field_info *info)
- 		obj_desc->field.region_obj =
- 		    acpi_ns_get_attached_object(info->region_node);
- 
-+		if (!obj_desc->field.region_obj) {
-+			ACPI_ERROR((AE_INFO,
-+				    "Null Region Object during field prep"));
-+			acpi_ut_delete_object_desc(obj_desc);
-+			return_ACPI_STATUS(AE_AML_INTERNAL);
-+		}
-+
- 		/* Fields specific to generic_serial_bus fields */
- 
- 		obj_desc->field.access_length = info->access_length;
--- 
-2.17.1
-
+> ---
+>  tools/lib/subcmd/help.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/tools/lib/subcmd/help.c b/tools/lib/subcmd/help.c
+> index bf02d62a3b2b..510a3eccb60f 100644
+> --- a/tools/lib/subcmd/help.c
+> +++ b/tools/lib/subcmd/help.c
+> @@ -16,6 +16,8 @@
+>  void add_cmdname(struct cmdnames *cmds, const char *name, size_t len)
+>  {
+>         struct cmdname *ent =3D malloc(sizeof(*ent) + len + 1);
+> +       if (!ent)
+> +               return;
+>
+>         ent->len =3D len;
+>         memcpy(ent->name, name, len);
+> --
+> 2.17.1
+>
