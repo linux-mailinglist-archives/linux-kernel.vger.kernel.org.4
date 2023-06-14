@@ -2,140 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3CB472F85D
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:51:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C92572F855
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243815AbjFNIvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 04:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42550 "EHLO
+        id S243845AbjFNIvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 04:51:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243792AbjFNIv2 (ORCPT
+        with ESMTP id S243785AbjFNIv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 04:51:28 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD171BE3;
-        Wed, 14 Jun 2023 01:51:24 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35E4sXcD005173;
-        Wed, 14 Jun 2023 08:51:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=sUddKoBZU8PLlhROte9ETd8sGO/K/B+J/irUo1pqDwQ=;
- b=ZS/StfxKmjLWd0Aa7nrdZ2r9tLhDZQlOREmacs878J49dV9PnKVQm0OFxS81T6ps8zAB
- wHa0Tjtm2Ajm+o7ZqzrG+ih3LcLauL1VFIRFSKua8Vk55jMxpvk4vD4SLldO8K5UgbJx
- QJNpslpjcXgOzH8AVcKQbMdaqH3x3PWt/+ZT4hkcha8jyhmGMwuntsHeaKMDOa9vq92j
- Hmq7GolhSGf0lFXx2516iIyhz8PFl00WcjOxN+eUTdDRVaeJUUMxhJLtPTReFhC6l2wi
- tYZq4F18dZ3sLPE8oa8v9rnYGE8ngDYO7EP+SCsAj42RF+YkaiUXkGmdjlK8bgXqNdTv cQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r6t0bt25e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Jun 2023 08:51:15 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35E8pELk024885
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Jun 2023 08:51:14 GMT
-Received: from anusha-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 14 Jun 2023 01:51:09 -0700
-From:   Anusha Rao <quic_anusha@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_poovendh@quicinc.com>
-Subject: [PATCH 2/2] arm64: dts: qcom: ipq9574: Enable WPS buttons
-Date:   Wed, 14 Jun 2023 14:20:40 +0530
-Message-ID: <20230614085040.22071-3-quic_anusha@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230614085040.22071-1-quic_anusha@quicinc.com>
-References: <20230614085040.22071-1-quic_anusha@quicinc.com>
+        Wed, 14 Jun 2023 04:51:26 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC501FC9
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 01:51:19 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-30fbf253dc7so2548611f8f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 01:51:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google; t=1686732678; x=1689324678;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=csZv0c9LfeFqbw6cbCbu3ICvitJ0rl7602V3R2VsNxA=;
+        b=y0xvs5zH3IfzGfS8Cqi45C7XpB8PYFCfAQK61jPGRE3yj7F9qeaXocXzJP9hochIRt
+         FpAJFuSakonsiuvOaDM5hkJApquw3g8kzHAFe4sTksiO+6SDDyt/AHGSmDSLjDXwTuUt
+         xyNnWdcrSWWa3Gp4FRLr+qmFxscwzA7nKfmD1SdX4YyiM4wq2vYWeZHkrQe1tGQ0Zx8P
+         B0fIFWjY/cGY+ORGO80nZu8bFrOsNgr7UrEILVyU8yyrfaAoI304xprskGodnN7yUbDL
+         hFo+/Ph4v94TMHyUNzD6uypMMTvoa1dL5hu6jwVB11ELkwo7TAoDWiceKhCcLHXfVftE
+         fdUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686732678; x=1689324678;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=csZv0c9LfeFqbw6cbCbu3ICvitJ0rl7602V3R2VsNxA=;
+        b=e7pJZUeFnVaUo6TepZv3Mu6BPpGzz4awLX3kKHtOHdYExE3ug0DbvhlbJgZhPmN+w2
+         w2b0+cblADKlKk8XtfoAMMt+XIpnixaLSvJpPxn6DiEocJdUv7Ws8S5yPg0G6XMb2XmH
+         ydD/HocJhRRwvt6P7vcGsPVNMfkb1QYUM5ZLyHVSU+i61Gl3scPelUq1pXWkdmYwEoPu
+         LQnVPiXL/DYxezCgDgARqmSFfjCCOgE81urBSKTE1AZZdFAKfcvPyNGVeITMtQ29fwdc
+         lhxyNglhhJees7unLjiswUILs3OhX4l+VBl2fXy+Cf/8YCRLHRLLTltvspNlgn0jDvp3
+         aIiw==
+X-Gm-Message-State: AC+VfDyV3ign20za5KJbU6TaaMhF2+uVUAPH3K9HPP9fMnHo19lBoSCE
+        W4stCRAcqGQlq9weXOLZnLD4ag==
+X-Google-Smtp-Source: ACHHUZ7HWyC+8hqm8soJNvhVdmwmi6Hsvr6uxVCGpzyyBFM9Bcn+I0cxHlDDg0h52AzSzsre+piFlw==
+X-Received: by 2002:a5d:4687:0:b0:30f:ba3a:85c5 with SMTP id u7-20020a5d4687000000b0030fba3a85c5mr906084wrq.25.1686732678069;
+        Wed, 14 Jun 2023 01:51:18 -0700 (PDT)
+Received: from ?IPV6:2a02:578:8593:1200:f189:66db:5060:b402? ([2a02:578:8593:1200:f189:66db:5060:b402])
+        by smtp.gmail.com with ESMTPSA id y14-20020a5d620e000000b0030ae4350212sm17657205wru.66.2023.06.14.01.51.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 01:51:17 -0700 (PDT)
+Message-ID: <c473ffea-49c3-1c9c-b35c-cd3978369d0f@tessares.net>
+Date:   Wed, 14 Jun 2023 10:51:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: kfxdbGiaFRgg6_ZemYoax_rfGMoQjQTs
-X-Proofpoint-ORIG-GUID: kfxdbGiaFRgg6_ZemYoax_rfGMoQjQTs
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-14_05,2023-06-12_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- priorityscore=1501 clxscore=1015 mlxlogscore=928 spamscore=0
- lowpriorityscore=0 suspectscore=0 adultscore=0 impostorscore=0
- phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306140074
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: linux-next: manual merge of the net-next tree with the net tree
+Content-Language: en-GB
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>
+Cc:     Networking <netdev@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Mat Martineau <martineau@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+References: <20230614111752.74207e28@canb.auug.org.au>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <20230614111752.74207e28@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for wps buttons on GPIO 37.
+Hi Stephen,
 
-Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
----
- .../boot/dts/qcom/ipq9574-rdp-common.dtsi     | 23 +++++++++++++++++++
- 1 file changed, 23 insertions(+)
+On 14/06/2023 03:17, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the net-next tree got a conflict in:
+> 
+>   tools/testing/selftests/net/mptcp/mptcp_join.sh
+> 
+> between commits:
+> 
+>   47867f0a7e83 ("selftests: mptcp: join: skip check if MIB counter not supported")
+>   425ba803124b ("selftests: mptcp: join: support RM_ADDR for used endpoints or not")
+> 
+> from the net tree and commits:
+> 
+>   45b1a1227a7a ("mptcp: introduces more address related mibs")
+>   0639fa230a21 ("selftests: mptcp: add explicit check for new mibs")
+> 
+> from the net-next tree.
+> 
+> I fixed it up (I think - see below) and can carry the fix as necessary.
+> This is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp-common.dtsi b/arch/arm64/boot/dts/qcom/ipq9574-rdp-common.dtsi
-index 999902bc70bd..fd5326dc1773 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574-rdp-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp-common.dtsi
-@@ -8,6 +8,8 @@
- 
- /dts-v1/;
- 
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/input/input.h>
- #include "ipq9574.dtsi"
- 
- / {
-@@ -18,6 +20,20 @@
- 	chosen {
- 		stdout-path = "serial0:115200n8";
- 	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+		pinctrl-0 = <&gpio_keys_default>;
-+		pinctrl-names = "default";
-+
-+		button-wps {
-+			label = "wps";
-+			linux,code = <KEY_WPS_BUTTON>;
-+			gpios = <&tlmm 37 GPIO_ACTIVE_LOW>;
-+			linux,input-type = <1>;
-+			debounce-interval = <60>;
-+		};
-+	};
- };
- 
- &blsp1_spi0 {
-@@ -114,6 +130,13 @@
- 		drive-strength = <8>;
- 		bias-disable;
- 	};
-+
-+	gpio_keys_default: gpio-keys-default-state {
-+		pins = "gpio37";
-+		function = "gpio";
-+		drive-strength = <8>;
-+		bias-pull-up;
-+	};
- };
- 
- &xo_board_clk {
+Thank you for the conflicts resolution. If I'm not mistaken, it looks
+good except the last chunk where the new call to chk_rm_tx_nr() should
+go inside the 'if' statement. So instead of this bit you have on your side:
+
+> @@@ -2394,12 -2290,8 +2399,13 @@@ remove_tests(
+>   		pm_nl_add_endpoint $ns2 10.0.4.2 flags subflow
+>   		run_tests $ns1 $ns2 10.0.1.1 0 -8 -8 slow
+>   		chk_join_nr 3 3 3
+> + 		chk_rm_tx_nr 0
+>  -		chk_rm_nr 0 3 simult
+>  +
+>  +		if mptcp_lib_kversion_ge 5.18; then
+>  +			chk_rm_nr 0 3 simult
+>  +		else
+>  +			chk_rm_nr 3 3
+>  +		fi
+>   	fi
+>   
+>   	# addresses flush
+
+We should have:
+
+> @@@ -2394,12 -2290,8 +2399,13 @@@ remove_tests(
+>   		pm_nl_add_endpoint $ns2 10.0.4.2 flags subflow
+>   		run_tests $ns1 $ns2 10.0.1.1 0 -8 -8 slow
+>   		chk_join_nr 3 3 3
+>  -		chk_rm_tx_nr 0
+>  -		chk_rm_nr 0 3 simult
+>  +
+>  +		if mptcp_lib_kversion_ge 5.18; then
+> ++			chk_rm_tx_nr 0
+>  +			chk_rm_nr 0 3 simult
+>  +		else
+>  +			chk_rm_nr 3 3
+>  +		fi
+>   	fi
+>   
+>   	# addresses flush
+
+("chk_rm_tx_nr 0" needs to be inside the 'if')
+
+
+I added a note about the conflicts on the cover-letter:
+
+
+https://lore.kernel.org/netdev/20230609-upstream-net-20230610-mptcp-selftests-support-old-kernels-part-3-v1-0-2896fe2ee8a3@tessares.net/
+
+Maybe it was not a good place? I didn't know where to put it as there
+were multiple patches that were conflicting with each others even if the
+major conflicts were between 47867f0a7e83 ("selftests: mptcp: join: skip
+check if MIB counter not supported") and 0639fa230a21 ("selftests:
+mptcp: add explicit check for new mibs"). I guess next time I should add
+a comment referring to the cover-letter in the patches creating conflicts.
+
+Cheers,
+Matt
 -- 
-2.17.1
-
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
