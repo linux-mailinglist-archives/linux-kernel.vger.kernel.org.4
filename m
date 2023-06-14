@@ -2,52 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41131730998
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 23:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8854873099A
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 23:14:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232938AbjFNVNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 17:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39944 "EHLO
+        id S234619AbjFNVOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 17:14:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbjFNVNX (ORCPT
+        with ESMTP id S229868AbjFNVN6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 17:13:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521751FFA;
-        Wed, 14 Jun 2023 14:13:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2BB76188F;
-        Wed, 14 Jun 2023 21:13:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA3F0C433C8;
-        Wed, 14 Jun 2023 21:13:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686777201;
-        bh=L5664x2EhR80tmvLjgh0nUfR6UTHRdkmKD/8m8GpjUY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=w4F6xr+Dgm9kyWMLQVvfofUgVARTg7eZzX1uQyrdHVSIy0e0AWGVCljNO290LPaVk
-         Tc4Cnal9bFOnYtvobyXmaTOumDUP8ayMqMIcgnGYr8pnKh0+sJQPepj1cjz4p43MM3
-         INFnW9PoNC13qhXG/69ZSp+f+MDiUME6HJizdG+Q=
-Date:   Wed, 14 Jun 2023 23:13:18 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Saurabh Sengar <ssengar@linux.microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, mikelley@microsoft.com, corbet@lwn.net,
-        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] uio: Add hv_vmbus_client driver
-Message-ID: <2023061419-probe-velocity-b276@gregkh>
-References: <1686766512-2589-1-git-send-email-ssengar@linux.microsoft.com>
- <1686766512-2589-2-git-send-email-ssengar@linux.microsoft.com>
+        Wed, 14 Jun 2023 17:13:58 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE671FFF;
+        Wed, 14 Jun 2023 14:13:57 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9768fd99c0cso24198066b.0;
+        Wed, 14 Jun 2023 14:13:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686777236; x=1689369236;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ipkryWTzeCn4lFAJVnAmTwSDrdS5UBblgoVYILKN5NA=;
+        b=KMm/rm5AsvMhw17jX+jPJuFJgPsp/l1qjp21KttZ02R/WZLKceIBGalUX06KEfNitv
+         OnyPaWCrjEO60M8QWKPqkGp84mluIhRr1bR9ZK+ssh//VrdlG4BVKOjQ771ILfj0wG4c
+         933QZx8Z2XkG7qxtlUYAw0Gg8qN2kIbX5A1pqu6Lc60sw+vuJz7YjRPX04N1x8pP39VS
+         IPRigyfwV+Ibsy3WjKujNmRUJ5b3FkK8GsEeTrWjsGXKqzGCLdTg2o8Wm3MiU0zbnQiu
+         n4Zps/KkZUCsNv/sjjNUghsJAOq2SeXAoohWnLCsE8TGWSDHHDg1O3tA+BIsy7y6Av3p
+         AghQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686777236; x=1689369236;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ipkryWTzeCn4lFAJVnAmTwSDrdS5UBblgoVYILKN5NA=;
+        b=L6V+tjCglw0ukhQtBc1Fz4S9vDoDy65qAvs8u8wHL+fjIf2H6XrFAv+zGM2H8GA8KZ
+         qeZTbBHjoIE6wTwEGOEvmvuhpX+hLJyhQNHFmrGAIpkWJMxeuG/QHIzp1d1MUl0x/eKE
+         NYTpBPrd0E4WtCJiSRkIUi/gc45z2kAqKWKZhVdMy3jLRq6gHj58uWXJw6ky5F/qkNr3
+         Bhr3m1n0PjVTDE9kCg8+YIgafqg+C4EURM5odBCO6kpe9mcHVqBh18Ee7AHROjZReyDh
+         /q2sqwdrVokT0lI+My9DN+SUBKKDtM/fZNgATwx1w2HgLPGgyfkKRss0YOy9sTsgl1B0
+         Y5Tw==
+X-Gm-Message-State: AC+VfDwP88fFwi3yj+55PQb1nuxcnal2J1n3Euq5t2nzDQaBypV4WheI
+        IczP1dawfDGBJwhpUW0gKn0=
+X-Google-Smtp-Source: ACHHUZ5bY3Xe8wAoc++i3xwTmoAv335BMtBiiTPZqP30EIaZjKvG5mv7LDn+0nTbxmHd07WZDNs7EA==
+X-Received: by 2002:a17:907:9615:b0:968:892b:1902 with SMTP id gb21-20020a170907961500b00968892b1902mr3056941ejc.6.1686777235923;
+        Wed, 14 Jun 2023 14:13:55 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id kt5-20020a170906aac500b00978868cb24csm8678230ejb.144.2023.06.14.14.13.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 14:13:55 -0700 (PDT)
+Date:   Thu, 15 Jun 2023 00:13:52 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net v4 1/7] net: dsa: mt7530: fix trapping frames with
+ multiple CPU ports on MT7531
+Message-ID: <20230614211352.sls7ao5swiqjgtjz@skbuf>
+References: <20230612075945.16330-1-arinc.unal@arinc9.com>
+ <20230612075945.16330-1-arinc.unal@arinc9.com>
+ <20230612075945.16330-2-arinc.unal@arinc9.com>
+ <20230612075945.16330-2-arinc.unal@arinc9.com>
+ <20230614194330.qhhoxai7namrgczq@skbuf>
+ <1e737fe9-6a2e-225b-9c0f-9a069e8fd4bc@arinc9.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1686766512-2589-2-git-send-email-ssengar@linux.microsoft.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1e737fe9-6a2e-225b-9c0f-9a069e8fd4bc@arinc9.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,280 +97,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 11:15:08AM -0700, Saurabh Sengar wrote:
-> --- a/Documentation/ABI/stable/sysfs-bus-vmbus
-> +++ b/Documentation/ABI/stable/sysfs-bus-vmbus
-> @@ -153,6 +153,13 @@ Contact:	Stephen Hemminger <sthemmin@microsoft.com>
->  Description:	Binary file created by uio_hv_generic for ring buffer
->  Users:		Userspace drivers
->  
-> +What:		/sys/bus/vmbus/devices/<UUID>/ring_size
-> +Date:		June. 2023
+On Wed, Jun 14, 2023 at 11:56:44PM +0300, Arınç ÜNAL wrote:
+> On 14.06.2023 22:43, Vladimir Oltean wrote:
+> > On Mon, Jun 12, 2023 at 10:59:39AM +0300, arinc9.unal@gmail.com wrote:
+> > > From: Arınç ÜNAL <arinc.unal@arinc9.com>
+> > > 
+> > > Every bit of the CPU port bitmap for MT7531 and the switch on the MT7988
+> > > SoC represents a CPU port to trap frames to. These switches trap frames
+> > > received from a user port to the CPU port that is affine to the user port
+> > > from which the frames are received.
+> > > 
+> > > Currently, only the bit that corresponds to the first found CPU port is set
+> > > on the bitmap. When multiple CPU ports are being used, the trapped frames
+> > > from the user ports not affine to the first CPU port will be dropped as the
+> > > other CPU port is not set on the bitmap. The switch on the MT7988 SoC is
+> > > not affected as there's only one port to be used as a CPU port.
+> > > 
+> > > To fix this, introduce the MT7531_CPU_PMAP macro to individually set the
+> > > bits of the CPU port bitmap. Set the CPU port bitmap for MT7531 and the
+> > > switch on the MT7988 SoC on mt753x_cpu_port_enable() which runs on a loop
+> > > for each CPU port.
+> > > 
+> > > Add a comment to explain frame trapping for these switches.
+> > > 
+> > > According to the document MT7531 Reference Manual for Development Board
+> > > v1.0, the MT7531_CPU_PMAP bits are unset after reset so no need to clear it
+> > > beforehand. Since there's currently no public document for the switch on
+> > > the MT7988 SoC, I assume this is also the case for this switch.
+> > > 
+> > > Fixes: c288575f7810 ("net: dsa: mt7530: Add the support of MT7531 switch")
+> > > Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> > > ---
+> > 
+> > Would you agree that this is just preparatory work for change "net: dsa:
+> > introduce preferred_default_local_cpu_port and use on MT7530" and not a
+> > fix to an existing problem in the code base?
+> 
+> Makes sense. Pre-preferred_default_local_cpu_port patch, there isn't a case
+> where there's a user port affine to a CPU port that is not enabled on the
+> CPU port bitmap. So yeah, this is just preparatory work for "net: dsa:
+> introduce preferred_default_local_cpu_port and use on MT7530".
+> 
+> So how do I change the patch to reflect this?
+> 
+> Arınç
 
-No need for the "."
+net: dsa: mt7530: set all CPU ports in MT7531_CPU_PMAP
 
-> +KernelVersion:	6.4
+MT7531_CPU_PMAP represents the destination port mask for trapped-to-CPU
+frames (further restricted by PCR_MATRIX).
 
-6.4 will be released without this, sorry.
+Currently the driver sets the first CPU port as the single port in this
+bit mask, which works fine regardless of whether the device tree defines
+port 5, 6 or 5+6 as CPU ports. This is because the logic coincides with
+DSA's logic of picking the first CPU port as the CPU port that all user
+ports are affine to, by default.
 
-> +Contact:	Saurabh Sengar <ssengar@microsoft.com>
-> +Description:	File created by uio_hv_vmbus_client for setting device ring buffer size
-> +Users:		Userspace drivers
-> +
->  What:           /sys/bus/vmbus/devices/<UUID>/channels/<N>/intr_in_full
->  Date:           February 2019
->  KernelVersion:  5.0
-> diff --git a/Documentation/driver-api/uio-howto.rst b/Documentation/driver-api/uio-howto.rst
-> index 907ffa3b38f5..33b67f876b96 100644
-> --- a/Documentation/driver-api/uio-howto.rst
-> +++ b/Documentation/driver-api/uio-howto.rst
-> @@ -722,6 +722,52 @@ For example::
->  
->  	/sys/bus/vmbus/devices/3811fe4d-0fa0-4b62-981a-74fc1084c757/channels/21/ring
->  
-> +Generic Hyper-V driver for low speed devices
-> +============================================
-> +
-> +The generic driver is a kernel module named uio_hv_vmbus_client. It
-> +supports slow devices on the Hyper-V VMBus similar to uio_hv_generic
-> +for faster devices. This driver also gives flexibility of customized
-> +ring buffer sizes.
-> +
-> +Making the driver recognize the device
-> +--------------------------------------
-> +
-> +Since the driver does not declare any device GUID's, it will not get
-> +loaded automatically and will not automatically bind to any devices, you
-> +must load it and allocate id to the driver yourself. For example, to use
-> +the fcopy device class GUID::
-> +
-> +        DEV_UUID=eb765408-105f-49b6-b4aa-c123b64d17d4
-> +        driverctl -b vmbus set-override $DEV_UUID uio_hv_vmbus_client
+An upcoming change would like to influence DSA's selection of the
+default CPU port to no longer be the first one, and in that case, this
+logic needs adaptation.
 
-Why are you adding a dependancy on a 300 line bash script that is not
-used by most distros?
+Since there is no observed leakage or duplication of frames if all CPU
+ports are defined in this bit mask, simply include them all.
 
-Why not just show the "real" commands that you can use here that don't
-require an external tool not controlled by the kernel at all.
-
-> --- /dev/null
-> +++ b/drivers/uio/uio_hv_vmbus_client.c
-> @@ -0,0 +1,217 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * uio_hv_vmbus_client - UIO driver for low speed VMBus devices
-> + *
-> + * Copyright (c) 2023, Microsoft Corporation.
-> + *
-> + * Authors:
-> + *   Saurabh Sengar <ssengar@microsoft.com>
-> + *
-> + * Since the driver does not declare any device ids, you must allocate
-> + * id and bind the device to the driver yourself.  For example:
-> + * driverctl -b vmbus set-override <dev uuid> uio_hv_vmbus_client
-
-Again, no need to discuss driverctl.
-
-> + */
-> +
-> +#include <linux/device.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/uio_driver.h>
-> +#include <linux/hyperv.h>
-> +
-> +#define DRIVER_AUTHOR	"Saurabh Sengar <ssengar@microsoft.com>"
-> +#define DRIVER_DESC	"Generic UIO driver for low speed VMBus devices"
-
-You only use these defines in one place, so why not just spell them out
-there, no need for 2 extra lines, right?
-
-> +
-> +#define DEFAULT_HV_RING_SIZE	VMBUS_RING_SIZE(3 * HV_HYP_PAGE_SIZE)
-> +static int ring_size = DEFAULT_HV_RING_SIZE;
-
-You only use that #define in one place, why have it at all?
-
-And you are defining a "global" variable that can be modified by an
-individual sysfs file for ANY device bound to this driver, messing with
-the other device's ring buffer size, right?  This needs to be
-per-device, or explain in huge detail here why not.
-
-> +
-> +struct uio_hv_vmbus_dev {
-> +	struct uio_info info;
-> +	struct hv_device *device;
-> +};
-> +
-> +/* Sysfs API to allow mmap of the ring buffers */
-> +static int uio_hv_vmbus_mmap(struct file *filp, struct kobject *kobj,
-> +			     struct bin_attribute *attr, struct vm_area_struct *vma)
-> +{
-> +	struct device *dev = container_of(kobj, struct device, kobj);
-> +	struct hv_device *hv_dev = container_of(dev, struct hv_device, device);
-> +	struct vmbus_channel *channel = hv_dev->channel;
-> +	void *ring_buffer = page_address(channel->ringbuffer_page);
-> +
-> +	return vm_iomap_memory(vma, virt_to_phys(ring_buffer),
-> +			       channel->ringbuffer_pagecount << PAGE_SHIFT);
-> +}
-> +
-> +static const struct bin_attribute ring_buffer_bin_attr = {
-> +	.attr = {
-> +		.name = "ringbuffer",
-> +		.mode = 0600,
-> +	},
-> +	.mmap = uio_hv_vmbus_mmap,
-> +};
-> +
-> +/*
-> + * This is the irqcontrol callback to be registered to uio_info.
-> + * It can be used to disable/enable interrupt from user space processes.
-> + *
-> + * @param info
-> + *  pointer to uio_info.
-> + * @param irq_state
-> + *  state value. 1 to enable interrupt, 0 to disable interrupt.
-> + */
-> +static int uio_hv_vmbus_irqcontrol(struct uio_info *info, s32 irq_state)
-> +{
-> +	struct uio_hv_vmbus_dev *pdata = info->priv;
-> +	struct hv_device *hv_dev = pdata->device;
-> +
-> +	/* Issue a full memory barrier before triggering the notification */
-> +	virt_mb();
-> +
-> +	vmbus_setevent(hv_dev->channel);
-> +	return 0;
-> +}
-> +
-> +/*
-> + * Callback from vmbus_event when something is in inbound ring.
-> + */
-> +static void uio_hv_vmbus_channel_cb(void *context)
-> +{
-> +	struct uio_hv_vmbus_dev *pdata = context;
-> +
-> +	/* Issue a full memory barrier before sending the event to userspace */
-> +	virt_mb();
-> +
-> +	uio_event_notify(&pdata->info);
-> +}
-> +
-> +static int uio_hv_vmbus_open(struct uio_info *info, struct inode *inode)
-> +{
-> +	struct uio_hv_vmbus_dev *pdata = container_of(info, struct uio_hv_vmbus_dev, info);
-> +	struct hv_device *hv_dev = pdata->device;
-> +	struct vmbus_channel *channel = hv_dev->channel;
-> +	int ret;
-> +
-> +	ret = vmbus_open(channel, ring_size, ring_size, NULL, 0,
-> +			 uio_hv_vmbus_channel_cb, pdata);
-> +	if (ret) {
-> +		dev_err(&hv_dev->device, "error %d when opening the channel\n", ret);
-> +		return ret;
-> +	}
-> +	channel->inbound.ring_buffer->interrupt_mask = 0;
-> +	set_channel_read_mode(channel, HV_CALL_ISR);
-> +
-> +	ret = device_create_bin_file(&hv_dev->device, &ring_buffer_bin_attr);
-> +	if (ret)
-> +		dev_err(&hv_dev->device, "sysfs create ring bin file failed; %d\n", ret);
-> +
-> +	return ret;
-> +}
-> +
-> +/* VMbus primary channel is closed on last close */
-> +static int uio_hv_vmbus_release(struct uio_info *info, struct inode *inode)
-> +{
-> +	struct uio_hv_vmbus_dev *pdata = container_of(info, struct uio_hv_vmbus_dev, info);
-> +	struct hv_device *hv_dev = pdata->device;
-> +	struct vmbus_channel *channel = hv_dev->channel;
-> +
-> +	device_remove_bin_file(&hv_dev->device, &ring_buffer_bin_attr);
-> +	vmbus_close(channel);
-> +
-> +	return 0;
-> +}
-> +
-> +static ssize_t ring_size_show(struct device *dev, struct device_attribute *attr,
-> +			      char *buf)
-> +{
-> +	return sysfs_emit(buf, "%d\n", ring_size);
-> +}
-> +
-> +static ssize_t ring_size_store(struct device *dev, struct device_attribute *attr,
-> +			       const char *buf, size_t count)
-> +{
-> +	unsigned int val;
-> +
-> +	if (kstrtouint(buf, 0, &val) < 0)
-> +		return -EINVAL;
-> +
-> +	if (val < HV_HYP_PAGE_SIZE)
-> +		return -EINVAL;
-> +
-> +	ring_size = val;
-> +
-> +	return count;
-> +}
-> +
-> +static DEVICE_ATTR_RW(ring_size);
-> +
-> +static struct attribute *uio_hv_vmbus_client_attrs[] = {
-> +	&dev_attr_ring_size.attr,
-> +	NULL,
-> +};
-> +ATTRIBUTE_GROUPS(uio_hv_vmbus_client);
-> +
-> +static int uio_hv_vmbus_probe(struct hv_device *dev, const struct hv_vmbus_device_id *dev_id)
-> +{
-> +	struct uio_hv_vmbus_dev *pdata;
-> +	int ret;
-> +	char *name = NULL;
-> +
-> +	pdata = devm_kzalloc(&dev->device, sizeof(*pdata), GFP_KERNEL);
-> +	if (!pdata)
-> +		return -ENOMEM;
-> +
-> +	name = kasprintf(GFP_KERNEL, "%pUl", &dev->dev_instance);
-> +
-> +	/* Fill general uio info */
-> +	pdata->info.name = name; /* /sys/class/uio/uioX/name */
-> +	pdata->info.version = "1";
-> +	pdata->info.irqcontrol = uio_hv_vmbus_irqcontrol;
-> +	pdata->info.open = uio_hv_vmbus_open;
-> +	pdata->info.release = uio_hv_vmbus_release;
-> +	pdata->info.irq = UIO_IRQ_CUSTOM;
-> +	pdata->info.priv = pdata;
-> +	pdata->device = dev;
-> +
-> +	ret = uio_register_device(&dev->device, &pdata->info);
-> +	if (ret) {
-> +		dev_err(&dev->device, "uio_hv_vmbus register failed\n");
-> +		return ret;
-> +	}
-> +
-> +	hv_set_drvdata(dev, pdata);
-> +
-> +	return 0;
-> +}
-> +
-> +static void uio_hv_vmbus_remove(struct hv_device *dev)
-> +{
-> +	struct uio_hv_vmbus_dev *pdata = hv_get_drvdata(dev);
-> +
-> +	if (pdata)
-> +		uio_unregister_device(&pdata->info);
-> +}
-> +
-> +static struct hv_driver uio_hv_vmbus_drv = {
-> +	.driver.dev_groups = uio_hv_vmbus_client_groups,
-> +	.name = "uio_hv_vmbus_client",
-> +	.id_table = NULL, /* only dynamic id's */
-
-No need to set this if it's NULL.
-
-thanks,
-
-greg k-h
+Note that there is no Fixes tag
