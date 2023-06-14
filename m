@@ -2,70 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 814CE72F7D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1A4F72F7D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:29:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243495AbjFNI3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 04:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55648 "EHLO
+        id S243560AbjFNI32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 04:29:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235164AbjFNI3B (ORCPT
+        with ESMTP id S243527AbjFNI30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 04:29:01 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99814CA;
-        Wed, 14 Jun 2023 01:28:59 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Qgz935tvHz4f403P;
-        Wed, 14 Jun 2023 16:28:55 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgBn0LNHeolkEHGzLg--.64311S3;
-        Wed, 14 Jun 2023 16:28:56 +0800 (CST)
-Subject: Re: [dm-devel] [PATCH -next v2 4/6] md: refactor
- idle/frozen_sync_thread() to fix deadlock
-To:     Xiao Ni <xni@redhat.com>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     guoqing.jiang@linux.dev, agk@redhat.com, snitzer@kernel.org,
-        dm-devel@redhat.com, song@kernel.org, linux-raid@vger.kernel.org,
-        yangerkun@huawei.com, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230529132037.2124527-1-yukuai1@huaweicloud.com>
- <20230529132037.2124527-5-yukuai1@huaweicloud.com>
- <05aa3b09-7bb9-a65a-6231-4707b4b078a0@redhat.com>
- <74b404c4-4fdb-6eb3-93f1-0e640793bba6@huaweicloud.com>
- <6e738d9b-6e92-20b7-f9d9-e1cf71d26d73@huaweicloud.com>
- <CALTww292gwOe-WEjuBwJn0AXvJC4AbfMZXC43EvVt3GCeBoHfw@mail.gmail.com>
- <5bf97ec5-0cb4-1163-6917-2bc98d912c2b@huaweicloud.com>
- <CALTww28UapJnK+Xfx7O9uEd5ZH2E7ufPT_7pKY6YYuzTZ0Fbdw@mail.gmail.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <b96ec15b-6102-17bb-2c18-a487f224865b@huaweicloud.com>
-Date:   Wed, 14 Jun 2023 16:28:54 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Wed, 14 Jun 2023 04:29:26 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3EB111F
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 01:29:25 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0A5286606F44;
+        Wed, 14 Jun 2023 09:29:23 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686731364;
+        bh=2niJzmipKOxVV8fdLvd5hVEPIw4OFkdEI+nWQyQP7N8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=hmDd/wWky5vqJoLCfHb9uyzE+9G4PiwtGe88deFCFC8MVeiqFbbgmxyM4wzX1LEKf
+         8ZDkiVwjoifyhrG+ug6Z9RnmS+dRTgstvuP7cwapGQPfkJHCMGCHJMQdbU1HWZfL2l
+         V2EaI3WTo0QcrttxzWLbNtnFG0Bq9YKldHJThEtfR/lmCZE8a4xBw1MGmFWGlcTOim
+         QaWrGHRRZTzqX6RCnzT3Cz95AYpT2JydcB+XF1F0bNX9gvqU0PpMPqjfhmEtEyoCWZ
+         0Bo/FTdaYjJ1aUwKGgwXDoVdp/dPBisuKw6R2b79l+Nz0y7BjW0YZsbmKxVYFaoZjc
+         /IEAEh14g0Mow==
+Message-ID: <33affcd4-3fb3-e293-7ff8-3b15132fd8d8@collabora.com>
+Date:   Wed, 14 Jun 2023 10:29:21 +0200
 MIME-Version: 1.0
-In-Reply-To: <CALTww28UapJnK+Xfx7O9uEd5ZH2E7ufPT_7pKY6YYuzTZ0Fbdw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBn0LNHeolkEHGzLg--.64311S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxGrWfXw45WFyrury5GF45KFg_yoW5ur4Dpr
-        y8ZF1Utr4jyr4xZ3y0q3WjvrW0y34UXF15Xr9xJry3Jwn5Kw4ftFW7CFW5uFyDZF95Jw4j
-        k395tF4fJFZFyw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWr
-        Zr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
-        BIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v6 00/11] MediaTek DDP GAMMA - 12-bit LUT support
+Content-Language: en-US
+To:     chunkuang.hu@kernel.org
+Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
+        matthias.bgg@gmail.com, dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, wenst@chromium.org,
+        kernel@collabora.com
+References: <20230612090157.68205-1-angelogioacchino.delregno@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230612090157.68205-1-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,117 +61,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-在 2023/06/14 15:57, Xiao Ni 写道:
-> On Wed, Jun 14, 2023 at 3:38 PM Yu Kuai <yukuai1@huaweicloud.com> wrote:
->>
->> Hi,
->>
->> 在 2023/06/14 15:12, Xiao Ni 写道:
->>> On Wed, Jun 14, 2023 at 10:04 AM Yu Kuai <yukuai1@huaweicloud.com> wrote:
->>>>
->>>> Hi,
->>>>
->>>> 在 2023/06/14 9:48, Yu Kuai 写道:
->>>>
->>>>
->>>>>>
->>>>>> In the patch, sync_seq is added in md_reap_sync_thread. In
->>>>>> idle_sync_thread, if sync_seq isn't equal
->>>>>>
->>>>>> mddev->sync_seq, it should mean there is someone that stops the sync
->>>>>> thread already, right? Why do
->>>>>>
->>>>>> you say 'new started sync thread' here?
->>>>
->>>> If someone stops the sync thread, and new sync thread is not started,
->>>> then this sync_seq won't make a difference, above wait_event() will not
->>>> wait because !test_bit(MD_RECOVERY_RUNNING, &mddev->recovery) will pass.
->>>> So 'sync_seq' is only used when the old sync thread stops and new sync
->>>> thread starts, add 'sync_seq' will bypass this case.
->>>
->>> Hi
->>>
->>> If a new sync thread starts, why can sync_seq be different? sync_seq
->>> is only added in md_reap_sync_thread. And when a new sync request
->>> starts, it can't stop the sync request again?
->>>
->>> Af first, the sync_seq is 0
->>>
->>> admin1
->>> echo idle > sync_action
->>> idle_sync_thread(sync_seq is 1)
->>
->> Wait, I'm confused here, how can sync_seq to be 1 here? I suppose you
->> mean that there is a sync_thread just finished?
-> 
-> Hi Kuai
-> 
-> Yes. Because idle_sync_thread needs to wait until md_reap_sync_thread
-> finishes. And md_reap_sync_thread adds sync_seq. Do I understand your
-> patch right?
-
-Yes, noted that idle_sync_thread() will only wait if MD_RECOVERY_RUNNING
-is set.
-
-> 
->>
->> Then the problem is that idle_sync_thread() read sync_seq after the old
->> sync_thread is done, and new sync_thread start before wait_event() is
->> called, should we wait for this new sync_thread?
->>
->> My answer here is that we should, but I'm also ok to not wait this new
->> sync_thread, I don't think this behaviour matters. The key point here
->> is that once wait_event() is called from idle_sync_thread(), this
->> wait_event() should not wait for new sync_thread...
-> 
-> I think we should wait. If we don't wait for it, there is a problem.
-> One person echos idle to sync_action and it doesn't work sometimes.
-> It's a strange thing.
+Il 12/06/23 11:01, AngeloGioacchino Del Regno ha scritto:
+> Changes in v6:
+>   - Fixed smatch warning in patch 11/11, ref.:
+>     https://lore.kernel.org/all/202306101458.lRXHEE0Z-lkp@intel.com/
 > 
 
-Ok. I'll add new comment to emphasize that idle_sync_thread() won't wait
-for new sync_thread that is started after wait_event().
+This series is fully ready. CK, can we get this one and the mtk-dp series [1]
+in -next for this cycle please?
 
->>
->>> echo resync > sync_action (new sync)
->>
->> If this is behind "echo idle > sync_action", idle_sync_thread should not
->> see that MD_RECOVERY_RUNNING is set and wait_event() won't wait at all.
-> 
-> `echo resync > sync_action` can't change the sync_seq. So 'echo idle >
-> sync_action' still waits until MD_RECOVERY_RUNNING is cleared?
+Those are the last pieces that would allow enabling display on MT8195 Chromebooks.
 
-This is not accurate, if `echo resync > sync_action` triggers a new
-sync_thread, then sync_seq is updated when this sync_thread is done,
-during this period, MD_RECOVERY_RUNNING is still set, so `echo idle
- >sync_action` will wait for sync_thread to be done.
+[1]: 
+https://lore.kernel.org/lkml/20230404104800.301150-1-angelogioacchino.delregno@collabora.com/
 
 Thanks,
-Kuai
+Angelo
+
+> Changes in v5:
+>   - Removed incorrect comment on default LUT size and bits
+>   - Removed useless check for num_lut_banks
+>   - Added comment about CMDQ implementation on patch 5
+>   - Evaluated passing lut size/bits from AAL, idea discarded as
+>     the implementation would be rather tricky while bringing no
+>     benefits.
 > 
-> Regards
-> Xiao
+> Changes in v4:
+>   - Fixed assignment typo appeared in v3
 > 
->>
->> Thanks,
->> Kuai
->>>
->>> Then admin2 echos idle > sync_action, sync_seq is still 1
->>>
->>> Regards
->>> Xiao
->>>
->>>>
->>>> Thanks,
->>>> Kuai
->>>>
->>>
->>> .
->>>
->>
+> Changes in v3:
+>   - Fixed issues due to variables renaming during cleanup (oops)
+>   - This is actually the right series, since v2 was taken from the
+>     wrong kernel tree.... :-)
 > 
-> .
+> Changes in v2:
+>   - Added explicit inclusion of linux/bitfield.h in patch [06/11]
+> 
+> This series adds support for GAMMA IP requiring and/or supporting
+> a 12-bits LUT using a slightly different register layout and programming
+> sequence for multiple LUT banks: this IP version is currently found
+> on a number of SoCs, not only including the Chromebook/IoT oriented
+> Kompanio 1200/1380 MT8195/MT8195T, but also Smartphone chips such as
+> the Dimensity 9200 (MT6985) and others.
+> 
+> This series was tested on MT8195, MT8192, MT8173, MT6795:
+>   * MT6795, MT8192, MT8173: No regression, works fine.
+>   * MT8195: Color correction is finally working!
+> 
+> AngeloGioacchino Del Regno (10):
+>    drm/mediatek: gamma: Reduce indentation in mtk_gamma_set_common()
+>    drm/mediatek: gamma: Support SoC specific LUT size
+>    drm/mediatek: gamma: Improve and simplify HW LUT calculation
+>    drm/mediatek: gamma: Enable the Gamma LUT table only after programming
+>    drm/mediatek: gamma: Use bitfield macros
+>    drm/mediatek: gamma: Support specifying number of bits per LUT
+>      component
+>    drm/mediatek: gamma: Support multi-bank gamma LUT
+>    drm/mediatek: gamma: Add support for 12-bit LUT and MT8195
+>    drm/mediatek: gamma: Make sure relay mode is disabled
+>    drm/mediatek: gamma: Program gamma LUT type for descending or rising
+> 
+> Jason-JH.Lin (1):
+>    drm/mediatek: gamma: Adjust mtk_drm_gamma_set_common parameters
+> 
+>   drivers/gpu/drm/mediatek/mtk_disp_aal.c     |   2 +-
+>   drivers/gpu/drm/mediatek/mtk_disp_drv.h     |   3 +-
+>   drivers/gpu/drm/mediatek/mtk_disp_gamma.c   | 193 ++++++++++++++++----
+>   drivers/gpu/drm/mediatek/mtk_drm_crtc.c     |   4 +-
+>   drivers/gpu/drm/mediatek/mtk_drm_crtc.h     |   1 -
+>   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c |   1 +
+>   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h |   9 +
+>   7 files changed, 177 insertions(+), 36 deletions(-)
 > 
 
