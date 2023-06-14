@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4591A72F75F
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 779ED72F730
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:00:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243506AbjFNIGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 04:06:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40952 "EHLO
+        id S243479AbjFNH7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 03:59:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243245AbjFNIGJ (ORCPT
+        with ESMTP id S243368AbjFNH7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 04:06:09 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F174113E;
-        Wed, 14 Jun 2023 01:06:07 -0700 (PDT)
-X-UUID: 84396dd20a8511eeb20a276fd37b9834-20230614
+        Wed, 14 Jun 2023 03:59:33 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF431FD7;
+        Wed, 14 Jun 2023 00:59:25 -0700 (PDT)
+X-UUID: 84b29b6c0a8511ee9cb5633481061a41-20230614
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=H/H5pJJ/00kRxIWXFxV9TAThVrMzhZkTzpFWUj1MAn4=;
-        b=leJBe9YRDbZ4ImvT3ntbruyeBSP6IQ8o+2hOxOdJE866yAyh8DShamRZewLMoNtx7x1iUVlu2+T98d0P7yEDMV2/dAzZFDzKs3txAQ0ZBfI48KwJ3vCOFtuarlyx7RbJ6yT3dlep/fFlq05nwy6/wa8/2+riRd2i3T3DPtjf02Q=;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=hpLRJmYKhPB0QTpDN7lvpJRPpLMjx1ofzANUNwQ3SyY=;
+        b=I9g5i/M/4UHoc9dnIEnMG7D5RzmmmYxz/PvDu0Sb3plf1qlNPs3omhDFGrTsbU7S0dZpafDKaXx0bgTgaASo1FilC8cUGUHqHTCMXc2r3K4u3ZsyL/UBK4JF7HuaqokYwTBoX/s2J488Lk9q89ZuV70nY6+cHbSpcT6vXEuhwZA=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.26,REQID:82894c2e-a86b-4860-8175-3973b96a0513,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACT
-        ION:release,TS:75
-X-CID-INFO: VERSION:1.1.26,REQID:82894c2e-a86b-4860-8175-3973b96a0513,IP:0,URL
-        :0,TC:0,Content:-25,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACT
-        ION:quarantine,TS:75
-X-CID-META: VersionHash:cb9a4e1,CLOUDID:0649933e-7aa7-41f3-a6bd-0433bee822f3,B
-        ulkID:2306141531482ODHRWJC,BulkQuantity:0,Recheck:0,SF:17|19|48|38|29|28,T
+X-CID-O-INFO: VERSION:1.1.26,REQID:c0ff2f91-27f6-4467-ad1e-b043853f856c,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:70
+X-CID-INFO: VERSION:1.1.26,REQID:c0ff2f91-27f6-4467-ad1e-b043853f856c,IP:0,URL
+        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:70
+X-CID-META: VersionHash:cb9a4e1,CLOUDID:6109076f-2f20-4998-991c-3b78627e4938,B
+        ulkID:230614153148HF8943RA,BulkQuantity:0,Recheck:0,SF:19|48|38|29|28|17,T
         C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
         ,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
 X-CID-BVR: 0
 X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_FSD,TF_CID_SPAM_SNR,TF_CID_SPAM_SDM,TF_CID_SPAM_ASC,
-        TF_CID_SPAM_FAS
-X-UUID: 84396dd20a8511eeb20a276fd37b9834-20230614
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
+X-CID-FACTOR: TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_SNR,TF_CID_SPAM_SDM,
+        TF_CID_SPAM_ASC
+X-UUID: 84b29b6c0a8511ee9cb5633481061a41-20230614
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
         (envelope-from <shawn.sung@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 623542009; Wed, 14 Jun 2023 15:31:46 +0800
+        with ESMTP id 1491743866; Wed, 14 Jun 2023 15:31:46 +0800
 Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.2.1118.26; Wed, 14 Jun 2023 15:31:45 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
@@ -53,7 +53,7 @@ To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         <angelogioacchino.delregno@collabora.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
 CC:     <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
@@ -62,9 +62,9 @@ CC:     <linux-kernel@vger.kernel.org>,
         Nancy Lin <nancy.lin@mediatek.com>,
         Jason-JH Lin <jason-jh.lin@mediatek.com>,
         Shawn Sung <shawn.sung@mediatek.com>
-Subject: [PATCH v2 10/15] soc: mediatek: Support reset bit mapping in mmsys driver
-Date:   Wed, 14 Jun 2023 15:31:20 +0800
-Message-ID: <20230614073125.17958-11-shawn.sung@mediatek.com>
+Subject: [PATCH v2 11/15] soc: mediatek: Add MT8188 VDO0 reset bit map
+Date:   Wed, 14 Jun 2023 15:31:21 +0800
+Message-ID: <20230614073125.17958-12-shawn.sung@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20230614073125.17958-1-shawn.sung@mediatek.com>
 References: <20230614073125.17958-1-shawn.sung@mediatek.com>
@@ -72,58 +72,81 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-- Reset ID must starts from 0 and be consecutive, but
-  the reset bits in our hardware design is not continuous,
-  some bits are left unused, we need a map to solve the problem
-- Use old style 1-to-1 mapping if .rst_tb is not defined
+Add MT8188 VDO0 reset bit map.
 
 Signed-off-by: Hsiao Chien Sung <shawn.sung@mediatek.com>
 ---
- drivers/soc/mediatek/mtk-mmsys.c | 9 +++++++++
- drivers/soc/mediatek/mtk-mmsys.h | 1 +
- 2 files changed, 10 insertions(+)
+ drivers/soc/mediatek/mt8188-mmsys.h | 26 ++++++++++++++++++++++++++
+ drivers/soc/mediatek/mtk-mmsys.c    |  3 +++
+ 2 files changed, 29 insertions(+)
 
+diff --git a/drivers/soc/mediatek/mt8188-mmsys.h b/drivers/soc/mediatek/mt8188-mmsys.h
+index 447afb72d95f..c3e3c5cfe931 100644
+--- a/drivers/soc/mediatek/mt8188-mmsys.h
++++ b/drivers/soc/mediatek/mt8188-mmsys.h
+@@ -3,6 +3,10 @@
+ #ifndef __SOC_MEDIATEK_MT8188_MMSYS_H
+ #define __SOC_MEDIATEK_MT8188_MMSYS_H
+
++#include <dt-bindings/reset/mt8188-resets.h>
++
++#define MT8188_VDO0_SW0_RST_B				0x190
++
+ #define MT8188_VDO0_OVL_MOUT_EN				0xf14
+ #define MT8188_MOUT_DISP_OVL0_TO_DISP_RDMA0		BIT(0)
+ #define MT8188_MOUT_DISP_OVL0_TO_DISP_WDMA0		BIT(1)
+@@ -118,6 +122,28 @@
+ #define MT8188_MIXER_SOUT_SEL_IN_FROM_DISP_MIXER		0
+ #define MT8188_VDO1_MIXER_VSYNC_LEN				0xd5c
+
++static const u8 mmsys_mt8188_vdo0_rst_tb[] = {
++	[MT8188_VDO0_RST_DISP_OVL0]	= 0,
++	[MT8188_VDO0_RST_FAKE_ENG0]	= 2,
++	[MT8188_VDO0_RST_DISP_CCORR0]	= 4,
++	[MT8188_VDO0_RST_DISP_MUTEX0]	= 6,
++	[MT8188_VDO0_RST_DISP_GAMMA0]	= 8,
++	[MT8188_VDO0_RST_DISP_DITHER0]	= 10,
++	[MT8188_VDO0_RST_DISP_WDMA0]	= 17,
++	[MT8188_VDO0_RST_DISP_RDMA0]	= 19,
++	[MT8188_VDO0_RST_DSI0]		= 21,
++	[MT8188_VDO0_RST_DSI1]		= 22,
++	[MT8188_VDO0_RST_DSC_WRAP0]	= 23,
++	[MT8188_VDO0_RST_VPP_MERGE0]	= 24,
++	[MT8188_VDO0_RST_DP_INTF0]	= 25,
++	[MT8188_VDO0_RST_DISP_AAL0]	= 26,
++	[MT8188_VDO0_RST_INLINEROT0]	= 27,
++	[MT8188_VDO0_RST_APB_BUS]	= 28,
++	[MT8188_VDO0_RST_DISP_COLOR0]	= 29,
++	[MT8188_VDO0_RST_MDP_WROT0]	= 30,
++	[MT8188_VDO0_RST_DISP_RSZ0]	= 31,
++};
++
+ static const struct mtk_mmsys_routes mmsys_mt8188_routing_table[] = {
+ 	{
+ 		DDP_COMPONENT_OVL0, DDP_COMPONENT_RDMA0,
 diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
-index 3a81ef2bcc3c..13249658721f 100644
+index 13249658721f..88029500ed4d 100644
 --- a/drivers/soc/mediatek/mtk-mmsys.c
 +++ b/drivers/soc/mediatek/mtk-mmsys.c
-@@ -314,6 +314,15 @@ static int mtk_mmsys_reset_update(struct reset_controller_dev *rcdev, unsigned l
- 	u32 offset;
- 	u32 reg;
+@@ -87,6 +87,9 @@ static const struct mtk_mmsys_driver_data mt8188_vdosys0_driver_data = {
+ 	.clk_driver = "clk-mt8188-vdo0",
+ 	.routes = mmsys_mt8188_routing_table,
+ 	.num_routes = ARRAY_SIZE(mmsys_mt8188_routing_table),
++	.sw0_rst_offset = MT8188_VDO0_SW0_RST_B,
++	.rst_tb = mmsys_mt8188_vdo0_rst_tb,
++	.num_resets = ARRAY_SIZE(mmsys_mt8188_vdo0_rst_tb),
+ };
 
-+	if (mmsys->data->rst_tb) {
-+		if (id >= mmsys->data->num_resets) {
-+			dev_err(rcdev->dev, "Invalid reset ID: %lu (>=%u)\n",
-+				id, mmsys->data->num_resets);
-+			return -EINVAL;
-+		}
-+		id = mmsys->data->rst_tb[id];
-+	}
-+
- 	offset = (id / MMSYS_SW_RESET_PER_REG) * sizeof(u32);
- 	id = id % MMSYS_SW_RESET_PER_REG;
- 	reg = mmsys->data->sw0_rst_offset + offset;
-diff --git a/drivers/soc/mediatek/mtk-mmsys.h b/drivers/soc/mediatek/mtk-mmsys.h
-index e4ab46017430..e18b355527de 100644
---- a/drivers/soc/mediatek/mtk-mmsys.h
-+++ b/drivers/soc/mediatek/mtk-mmsys.h
-@@ -119,6 +119,7 @@ struct mtk_mmsys_driver_data {
- 	const struct mtk_mmsys_routes *routes;
- 	const unsigned int num_routes;
- 	const u16 sw0_rst_offset;
-+	const u8 *rst_tb;
- 	const u32 num_resets;
- 	const bool is_vppsys;
- 	const u8 vsync_len;
+ static const struct mtk_mmsys_driver_data mt8188_vdosys1_driver_data = {
 --
 2.18.0
 
