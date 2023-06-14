@@ -2,108 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C82A57304D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:21:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14CE17304D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233155AbjFNQV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 12:21:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39022 "EHLO
+        id S233131AbjFNQV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 12:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233195AbjFNQVv (ORCPT
+        with ESMTP id S232936AbjFNQVw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 12:21:51 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36D72125
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:21:41 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1b3e3f33e33so224545ad.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:21:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686759701; x=1689351701;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nPUtrT0fiELnm68AoWvfnxE4katFET0OQjBAFidn7qU=;
-        b=ELeVGt5nDa3D4i0U0B/sV1WRxjReY606KOf09X+Y7uBcTC4++0QuewNRul+2Rdo8zS
-         Ti1N3vX7QUKH/iQTJ7Ckf2CETdKLlGzslHAMXT2fJZapzlE5yDZWc7Z+IzubE5cjoaHh
-         HJNB2UPFiEwztN2dUVnBewvPacerUibpED6r9JEkT16Y3NQjr/nZGSJfkMQsCS1vt5PM
-         XJS2AnbGmVrq8lKfyp5juBW1q3/DoXLunms/FwdLRtHX0YNIyJezk27hPfFLrC4CCv3v
-         91BnFBYUsWz1tYAd6X/ljnIqYNHBcmkBo85hOTVyHpsJ/MVXr7bzzNApoAsmGT5l0D/v
-         plfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686759701; x=1689351701;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nPUtrT0fiELnm68AoWvfnxE4katFET0OQjBAFidn7qU=;
-        b=h7kw2O2kIjdUQdwknTaXfwOKifCv3miSOeOoyrjF2wjv07ehnbIRFKU1wn9Gn9g1fp
-         KYJei/fyBXZhdd0d7A02I6YqT8Q5iMkPaCb34k2SPPtBbxWRhPIVhi7CFjt01oFes2ai
-         WuIOkVLq2/yOeZQ6faWujThJzjQF47OOhL2tpaHN1emDom/K5Y2hsmOnBROUMK02Tdmv
-         5ZpBih2rSXqH1YGmJZWtS+4oow1o626uCQfaPQBCnW1IGdR5OJC6bg1mcW+vE/OJWTHo
-         O9zGxavmHc07hFbHwcG6z9mPE5v/Zf95nKX6yTUYJinZ9PrhyW5VNmTloRMYYrMqmkjM
-         3bOA==
-X-Gm-Message-State: AC+VfDx2TeEmqQwpqmLTqiuMrWxP8aR/8JgFTo+ro/JFtzrJRgHowIky
-        n3oWyGsHNGGT4fHd1PvnRioUcwGGqju4KdsWYii8ag==
-X-Google-Smtp-Source: ACHHUZ7JEUXcvsY6VNzSokeg5/wOw4hTAQZEekolk3qugMY924fpq/4OewED1s/BZJ/mlANbEdFAdmULCHH3BgWHTAU=
-X-Received: by 2002:a17:902:e88a:b0:1b0:5304:5b6b with SMTP id
- w10-20020a170902e88a00b001b053045b6bmr259310plg.20.1686759700941; Wed, 14 Jun
- 2023 09:21:40 -0700 (PDT)
+        Wed, 14 Jun 2023 12:21:52 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E600119;
+        Wed, 14 Jun 2023 09:21:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=QWph71KWV3aPlqaV648UJHe6lbKZBpXdiDZJikc9zP8=; b=y45S5FcBhDXz+6NaXk1EUEetiF
+        Vc+jk0MdpAtlg8qedoWjj6F9Zx4e7xguW8BAmEOEp2GikxxxOl8ZPV+zZLnrJHFphEVu89yYUHoBx
+        jstoLPfDBdQt0YvbHkJXz+4agTaR9PuMcHXVI8Y2hNpO7BS0uy8Y5tjm/p1WiXvAzk8peUiqaC96g
+        xBNo9bbF9J22MdPpTtUQMn81sfT+5ZQf2AlSOLPl0F3Zz5wrboKUSmlEqBtkYxQnJbPVMTCaBSyiA
+        C4rKMZGYgpFMuo6t/mXfVKG/Hag5OHRTOMQcKuZ7x7FsbtDy91b7kpYYA/0z4gl395hb8tiN0gCEy
+        UljwbNjQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:51956)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1q9TFi-0001xs-6h; Wed, 14 Jun 2023 17:21:46 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1q9TFf-0000Yu-9i; Wed, 14 Jun 2023 17:21:43 +0100
+Date:   Wed, 14 Jun 2023 17:21:43 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Wei-chin Tsai =?utf-8?B?KOiUoee2reaZiSk=?= 
+        <Wei-chin.Tsai@mediatek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Mel Lee =?utf-8?B?KOadjuWlh+mMmik=?= <Mel.Lee@mediatek.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        wsd_upstream <wsd_upstream@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        Ivan Tseng =?utf-8?B?KOabvuW/l+i7kik=?= 
+        <ivan.tseng@mediatek.com>
+Subject: Re: [PATCH v2 2/3] memory: export symbols for memory related
+ functions
+Message-ID: <ZInpF3aKMLFVQ3Vf@shell.armlinux.org.uk>
+References: <20230614032038.11699-1-Wei-chin.Tsai@mediatek.com>
+ <20230614032038.11699-3-Wei-chin.Tsai@mediatek.com>
+ <ZIlpWR6/uWwQUc6J@shell.armlinux.org.uk>
+ <fef0006ced8d5e133a3bfbf4dc4353a86578b9cd.camel@mediatek.com>
+ <cb7f49bc-8ed4-a916-44f4-39e360afce41@collabora.com>
 MIME-Version: 1.0
-References: <20230614150118.115208-1-cymi20@fudan.edu.cn>
-In-Reply-To: <20230614150118.115208-1-cymi20@fudan.edu.cn>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 14 Jun 2023 09:21:29 -0700
-Message-ID: <CAP-5=fWQq9MM-NXL75_a_JoTVEwvS1oy8oKRefsLxU1kyjWKZg@mail.gmail.com>
-Subject: Re: [PATCH] perf subcmd: Fix missing check for return value of
- malloc() in add_cmdname()
-To:     Chenyuan Mi <cymi20@fudan.edu.cn>
-Cc:     acme@redhat.com, namhyung@kernel.org, leo.yan@linaro.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cb7f49bc-8ed4-a916-44f4-39e360afce41@collabora.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 8:01=E2=80=AFAM Chenyuan Mi <cymi20@fudan.edu.cn> w=
-rote:
->
-> The malloc() function may return NULL when it fails,
-> which may cause null pointer deference in add_cmdname(),
-> add Null check for return value of malloc().
->
-> Found by our static analysis tool.
->
-> Signed-off-by: Chenyuan Mi <cymi20@fudan.edu.cn>
+On Wed, Jun 14, 2023 at 02:11:25PM +0200, AngeloGioacchino Del Regno wrote:
+> Il 14/06/23 11:59, Wei-chin Tsai (蔡維晉) ha scritto:
+> > On Wed, 2023-06-14 at 08:16 +0100, Russell King (Oracle) wrote:
+> > >   	
+> > > External email : Please do not click links or open attachments until
+> > > you have verified the sender or the content.
+> > >   On Wed, Jun 14, 2023 at 11:20:34AM +0800, Wei Chin Tsai wrote:
+> > > > diff --git a/arch/arm/kernel/process.c b/arch/arm/kernel/process.c
+> > > > index 0e8ff85890ad..df91412a1069 100644
+> > > > --- a/arch/arm/kernel/process.c
+> > > > +++ b/arch/arm/kernel/process.c
+> > > > @@ -343,6 +343,7 @@ const char *arch_vma_name(struct vm_area_struct
+> > > *vma)
+> > > >   {
+> > > >   return is_gate_vma(vma) ? "[vectors]" : NULL;
+> > > >   }
+> > > > +EXPORT_SYMBOL_GPL(arch_vma_name);
+> > > ...
+> > > > diff --git a/kernel/signal.c b/kernel/signal.c
+> > > > index b5370fe5c198..a1abe77fcdc3 100644
+> > > > --- a/kernel/signal.c
+> > > > +++ b/kernel/signal.c
+> > > > @@ -4700,6 +4700,7 @@ __weak const char *arch_vma_name(struct
+> > > vm_area_struct *vma)
+> > > >   {
+> > > >   return NULL;
+> > > >   }
+> > > > +EXPORT_SYMBOL_GPL(arch_vma_name);
+> > > 
+> > > Have you confirmed:
+> > > 1) whether this actually builds
+> > > 2) whether this results in one or two arch_vma_name exports
+> > > 
+> > > ?
+> > > 
+> > > -- 
+> > > RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+> > > FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+> > 
+> > Hi Russell,
+> > 
+> > We did confirm that it can be built successfully in kernel 6.1 and run
+> > well in our system.
+> > 
+> 
+> It runs well in your system and can be built successfully because you're building
+> for ARM64, not for ARM...
+> 
+> > Actually, we only use this export symbol "arch_vma_name"
+> > from kernel/signal.c in arm64. We also export symbol for arch_vma_name
+> > in arch/arm/kernel/process.c because that, one day in the future,  we
+> > are afraid that we also need this function in arm platform.
 
-Acked-by: Ian Rogers <irogers@google.com>
+What I'm trying to get at is that we have arch_vma_name in
+arch/arm/kernel/process.c and also a weak function in kernel/signal.c.
 
-Thanks,
-Ian
+Both of these end up adding an entry into the __ksymtab_strings
+section and a ___ksymtab section for this symbol. So we end up with
+two entries in each.
 
-> ---
->  tools/lib/subcmd/help.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/tools/lib/subcmd/help.c b/tools/lib/subcmd/help.c
-> index bf02d62a3b2b..510a3eccb60f 100644
-> --- a/tools/lib/subcmd/help.c
-> +++ b/tools/lib/subcmd/help.c
-> @@ -16,6 +16,8 @@
->  void add_cmdname(struct cmdnames *cmds, const char *name, size_t len)
->  {
->         struct cmdname *ent =3D malloc(sizeof(*ent) + len + 1);
-> +       if (!ent)
-> +               return;
->
->         ent->len =3D len;
->         memcpy(ent->name, name, len);
-> --
-> 2.17.1
->
+Now, if the one from kernel/signal.c points at its own weak function,
+and that is found first, then that's the function that is going to be
+bound, not the function that's overriding it.
+
+If, instead, the export in kernel/signal.c ends up pointing at the
+overriden function, then the export in arch/arm/kernel/process.c is
+entirely redundant.
+
+So, you need to get to the bottom of this... and until you do I'm
+afraid I'll have to NAK this patch.
+
+For the record, I suspect it's the latter scenario (we end up with
+two entries pointing at the same function) but that's nothing more
+than a hunch.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
