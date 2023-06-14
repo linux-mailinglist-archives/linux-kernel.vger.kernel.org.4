@@ -2,103 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F17C730576
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:52:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BDC9730578
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 18:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236375AbjFNQwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 12:52:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60404 "EHLO
+        id S236419AbjFNQxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 12:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236414AbjFNQw1 (ORCPT
+        with ESMTP id S236187AbjFNQxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 12:52:27 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81092132
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:52:25 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-970028cfb6cso148649966b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 09:52:25 -0700 (PDT)
+        Wed, 14 Jun 2023 12:53:03 -0400
+Received: from smtp-fw-80009.amazon.com (smtp-fw-80009.amazon.com [99.78.197.220])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0CA1BC6;
+        Wed, 14 Jun 2023 09:53:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686761544; x=1689353544;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=93h10qPxQUhCWZsq9GNFwkRNOXrYmgM5sQHpq9Nnwq0=;
-        b=OcDgmVQTb39elSJQ3DLmTv08pk7LLdp8T6plF83V7J3tkb+qPgy2LiSZjXeGsmNiiV
-         e8JG+V/zDYxG4e8sU6HZlrWNeUQq0K/wPMRrabHgn+pEJpwEYSp//A13VqEo9y9aMYpL
-         yK44GTPFgMDScRFcTgS7Nb5M2aIwJyZnAfEcybwH15jCh5RQ9R+FDp1ezSOm3y3wVi8/
-         MfavcdNa8B/LUbHZQiz4zLYKJN0E7EoBfJwizELKqAiQompQ9sUNis8n8osE9hk7GNIk
-         A08pVSxAdZgKTP6K4bL1pQ4FO6k7ZcpW72OaMxceaJZHoTfZzXN3sPFhWLG1JNwRw8tV
-         fPDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686761544; x=1689353544;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=93h10qPxQUhCWZsq9GNFwkRNOXrYmgM5sQHpq9Nnwq0=;
-        b=PXSMywRrpXqH4vKssYqVYRh5Su6WRRBmNQBXV8ihJ4GpC7mgfRJpTdLhB+w8kgM5hg
-         VtixfgCNdUR4u3fEm9H3mkGox+B+EMzmCXPd632C6EsV+qicL87nuGCsSTO141PRf3/l
-         Csss7kWAseKZg+ktQM/XhcC3kkM1LJy2Xgdv1VJ6siCwlwpkDSnzEOunT/f+hcwkRNZ6
-         ZdUD8gMS1PlMSPkLpPU+DNvmE3xx8bcYEETFbp048Ai5yK8MoMrb9TDRh5ZsgqkpTjiN
-         wZxsmtQJ9PFasbsM9HGtZ3Ape3ST/HaRykmuOFqHmvlE5H9ImQAQpi5sXTOAptUTPo55
-         8b2Q==
-X-Gm-Message-State: AC+VfDxxI+m4Wxv1wJkUD1qP3hegAgvTZGP6N00ZEoY5bihPAWu9jli5
-        Z7YPogAKFw2kpAW2xJo2PYYjHA==
-X-Google-Smtp-Source: ACHHUZ7seUtdRaPNhJcbNFjaVpjz06zUGeoXziNRnEw6XLMoz2kG5Kdg8S/1LnZd4jBEvV2JwUkP8g==
-X-Received: by 2002:a17:907:16a4:b0:974:216f:dc36 with SMTP id hc36-20020a17090716a400b00974216fdc36mr15745759ejc.17.1686761544428;
-        Wed, 14 Jun 2023 09:52:24 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id a19-20020a17090682d300b009775eb0343bsm8278595ejy.79.2023.06.14.09.52.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 09:52:23 -0700 (PDT)
-Message-ID: <7c7ef961-cb5a-ee70-6ec1-7c6afe22c87b@linaro.org>
-Date:   Wed, 14 Jun 2023 18:52:21 +0200
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1686761582; x=1718297582;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=eplfOdVA/Gtb1sMFHGiGQO4cWp3IaiH84feaBJgtGc8=;
+  b=vTaROZBP2k5WputhhE4s4JzQMQObZ6l8rA87stgxP7t7z++VgEZ9goK1
+   iHGjYVHjxl0/VkbkZH7UQGA922bgHQnaD1+cgH6P2eSWQEbU5oAnkd419
+   BQKTmSTwQTAX6/BDZF9putnKTloOptdSD7xo0prG9/7nU/LCFA6qbvy0L
+   Q=;
+X-IronPort-AV: E=Sophos;i="6.00,243,1681171200"; 
+   d="scan'208";a="10138159"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-7fa2de02.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80009.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 16:53:00 +0000
+Received: from EX19MTAUWC002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2b-m6i4x-7fa2de02.us-west-2.amazon.com (Postfix) with ESMTPS id C812240DF5;
+        Wed, 14 Jun 2023 16:52:58 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 14 Jun 2023 16:52:56 +0000
+Received: from 88665a182662.ant.amazon.com (10.187.170.18) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 14 Jun 2023 16:52:51 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <lmb@isovalent.com>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>, <davem@davemloft.net>,
+        <dsahern@kernel.org>, <edumazet@google.com>, <haoluo@google.com>,
+        <hemanthmalla@gmail.com>, <joe@wand.net.nz>,
+        <john.fastabend@gmail.com>, <jolsa@kernel.org>,
+        <kpsingh@kernel.org>, <kuba@kernel.org>, <kuniyu@amazon.com>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <martin.lau@linux.dev>, <mykolal@fb.com>, <netdev@vger.kernel.org>,
+        <pabeni@redhat.com>, <sdf@google.com>, <shuah@kernel.org>,
+        <song@kernel.org>, <willemdebruijn.kernel@gmail.com>, <yhs@fb.com>
+Subject: Re: [PATCH bpf-next v2 3/6] net: remove duplicate reuseport_lookup functions
+Date:   Wed, 14 Jun 2023 09:52:44 -0700
+Message-ID: <20230614165244.59782-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <CAN+4W8ijtoew8ouaN3i1NXtg0_G_HHmZyAtf5LsCBb6shCAx2Q@mail.gmail.com>
+References: <CAN+4W8ijtoew8ouaN3i1NXtg0_G_HHmZyAtf5LsCBb6shCAx2Q@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v5 01/22] dt-bindings: interconnect: Add Qcom RPM ICC
- bindings
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Evan Green <evgreen@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230526-topic-smd_icc-v5-0-eeaa09d0082e@linaro.org>
- <20230526-topic-smd_icc-v5-1-eeaa09d0082e@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230526-topic-smd_icc-v5-1-eeaa09d0082e@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.187.170.18]
+X-ClientProxiedBy: EX19D046UWB002.ant.amazon.com (10.13.139.181) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/06/2023 12:22, Konrad Dybcio wrote:
-> The SMD RPM interconnect driver requires different icc tags to the
-> RPMh driver. Add bindings to reflect that.
+From: Lorenz Bauer <lmb@isovalent.com>
+Date: Wed, 14 Jun 2023 16:25:05 +0100
+> On Tue, Jun 13, 2023 at 7:57 PM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
+> >
+> >                         else {
+> >                                 result = sk;
+> >                         }
+> >
+> > The assignment to result below is buggy.  Let's say SO_REUSEPROT group
+> > have TCP_CLOSE and TCP_ESTABLISHED sockets.
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
+> I'm not very familiar with SO_REUSEPORT, I assumed (incorrectly
+> probably) that such a group would only ever have TCP_CLOSE in UDP case
+> and TCP_LISTENING in TCP case. Can you explain how I could end up in
+> this situation?
 
+When we call conenct() for UDP socket in SO_REUSEPORT group, the state
+is changed from TCP_CLOSE to TCP_ESTABLISHED in __ip4_datagram_connect(),
+and the socket remains in the group.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+That's why we check TCP_ESTABLISHED in reuseport_select_sock_by_hash()
+that is always false for TCP but true for UDP in the case above.
