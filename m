@@ -2,214 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98DFA7308C7
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F307F7308C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 21:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235866AbjFNTu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 15:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38196 "EHLO
+        id S235153AbjFNTuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 15:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230301AbjFNTux (ORCPT
+        with ESMTP id S229630AbjFNTuj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 15:50:53 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5973E1B2;
-        Wed, 14 Jun 2023 12:50:52 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35EJohhn008327;
-        Wed, 14 Jun 2023 19:50:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=5QQGspG3g+2JaPYjv9lq5YgPV0Br5XZHNqjGJ39Hy7Y=;
- b=Bah/WaBSozLpgoUjzq94YAyWiLOSKiN4RPl1XHAsf7zLDBmqd8tPYrhig8TCeCT4QgDU
- Z9URQUkbPvXA54fk/4z0MQEiUJgPyNYg/ZLl4zAFb4L/VgSeU893YpnyGuJLQWNthXqP
- E3ihQ8m5LGdERBQhZQarCxxrRyvl5Drf/rU7V3cix9Ww+8R3mZQXHwPo4Xpj9Lqmcv1M
- I3/Uli9OkWQHIAzBNB+4ea6bMu+dqjSYbH+zSq6ToSBqJ42PI/2A1R57mHoJ8XStSifI
- zMVT0o85TfaIJLA+fA5B+Q/R8RLbD7gGG9ZOS6hHGaWDW1pncU9SNJz7pmecY3K/Rtp1 Gg== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r7ks680st-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Jun 2023 19:50:42 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35EJoHqA002831
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Jun 2023 19:50:17 GMT
-Received: from akhilpo-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 14 Jun 2023 12:50:12 -0700
-Date:   Thu, 15 Jun 2023 01:20:09 +0530
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-CC:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Rob Clark <robdclark@chromium.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-Subject: Re: [PATCH v8 16/18] drm/msm/a6xx: Use adreno_is_aXYZ macros in
- speedbin matching
-Message-ID: <u74y24z3jmklfyx7zvmiw3oakejm3t253tcs2kmrupl6l3qqpa@3rsubk6pkz5b>
-References: <20230223-topic-gmuwrapper-v8-0-69c68206609e@linaro.org>
- <20230223-topic-gmuwrapper-v8-16-69c68206609e@linaro.org>
+        Wed, 14 Jun 2023 15:50:39 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E151B2;
+        Wed, 14 Jun 2023 12:50:38 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id 98e67ed59e1d1-25e89791877so260869a91.2;
+        Wed, 14 Jun 2023 12:50:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686772237; x=1689364237;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gp+AR3/vLmcKpBmQRw80wRDt4ktiTGG+Gs0p9LJEj1M=;
+        b=KE+FkRfXXTGlRgRRQDiDF+n9tcPoR3XGPXHNurpuijBlbjcVim2wkjKIS6lApWTwnc
+         1l8eikOXUCblB49LKt846s4v+ykWC2Pi9WN3bb2o8g+X65KX0Kl5YMUdVdDUHu6eEVzN
+         uF6tWpO6EAhvbbaZhBtgfDK85D0evsz83uRN74dg/1YzDye0e1fO3tDmAS8KwmuVbOtU
+         Hs8fvl3YAz6hnYKzH2ySTDGvwkWJLNokZbaGPWM8Gzl4+HkZ8zq4ezu5OxiC2pgHL+bT
+         WdTeJo0i3imibnRbhxpFKsDOBVEFTbS48PIp/Kn4gMcX17JVkHdPJm8aI6psJnNGWz88
+         Z6hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686772237; x=1689364237;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gp+AR3/vLmcKpBmQRw80wRDt4ktiTGG+Gs0p9LJEj1M=;
+        b=BNFKHYu9vrOIXcU0JatRBsGJbzT/Vp2Tn8Jr51DJX2JYCBht41tQoJ0IWlcg+adPl5
+         satNL+pD/vgHIdPVZ66Cv7kA7gOuB5n1EDduudhtfs49x0d7WrTWcJPZXU+5Ba9ro4SI
+         lCGUlmEUD65RmLOzBUCWRGQ7wx/O+FNczqRzkFNn1McmN/8wq77OhiAvOcnBh7YHZArd
+         F1Vz7hYzUh9vaBHE7/CuZIFfkeVund7oGs9aQ1HW6j3a44uDyG3ARjZR4MBuZv9/UiNL
+         0BR5m/I4hAKYRv4v95M/OWLpOIjiaI2qjRHt8/vb7UOjQ1XKJ8W+X/yFHWmDvQu1ax/U
+         C33w==
+X-Gm-Message-State: AC+VfDxmYmybX92KmM8FQtwKdxrJtzDMA6ObckPOr1lnlUIORHfwLLTX
+        XNCebKQyR5+nXQw6vuyYQHRiLjrnjbM=
+X-Google-Smtp-Source: ACHHUZ7+ZwrH2Nffp3z5kNDqI0XxcNAaUzM5pui3u4gcrNTXNbdB2i1Q17e1VObsABYRvA6YkdJq3w==
+X-Received: by 2002:a17:90b:1c0f:b0:25b:b4c6:d13e with SMTP id oc15-20020a17090b1c0f00b0025bb4c6d13emr2189948pjb.8.1686772237423;
+        Wed, 14 Jun 2023 12:50:37 -0700 (PDT)
+Received: from ?IPV6:2a03:83e0:1156:1:c68c:b00b:182a:614f? ([2620:10d:c090:500::7:1e87])
+        by smtp.gmail.com with ESMTPSA id qa2-20020a17090b4fc200b002310ed024adsm13225677pjb.12.2023.06.14.12.50.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 12:50:36 -0700 (PDT)
+Message-ID: <12b0c61d-1270-ab34-63bf-a5c389fd45bc@gmail.com>
+Date:   Wed, 14 Jun 2023 12:50:34 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230223-topic-gmuwrapper-v8-16-69c68206609e@linaro.org>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 75qc-1zx_NpXC3zHzMSNdYL5rpXtTRQE
-X-Proofpoint-GUID: 75qc-1zx_NpXC3zHzMSNdYL5rpXtTRQE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-14_14,2023-06-14_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=878 bulkscore=0
- impostorscore=0 suspectscore=0 mlxscore=0 priorityscore=1501 adultscore=0
- spamscore=0 malwarescore=0 clxscore=1015 phishscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306140174
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] tracing/probes: Fix tracepoint event with $arg* to fetch
+ correct argument
+Content-Language: en-US
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        linux-trace-kernel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Florent Revest <revest@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        kernel test robot <lkp@intel.com>
+References: <168657113778.3038017.12245893750241701312.stgit@mhiramat.roam.corp.google.com>
+From:   Kui-Feng Lee <sinquersw@gmail.com>
+In-Reply-To: <168657113778.3038017.12245893750241701312.stgit@mhiramat.roam.corp.google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 03:52:35PM +0200, Konrad Dybcio wrote:
-> 
-> Before transitioning to using per-SoC and not per-Adreno speedbin
-> fuse values (need another patchset to land elsewhere), a good
-> improvement/stopgap solution is to use adreno_is_aXYZ macros in
-> place of explicit revision matching. Do so to allow differentiating
-> between A619 and A619_holi.
-> 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Reviewed-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
 
--Akhil
+On 6/12/23 04:58, Masami Hiramatsu (Google) wrote:
+> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> To hide the first dummy 'data' argument on the tracepoint probe events,
+> the BTF argument array was modified (skip the first argument for tracepoint),
+> but the '$arg*' meta argument parser missed that.
+> 
+> Fix to increment the argument index if it is tracepoint probe. And decrement
+> the index when searching the type of the argument.
+> 
+> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 > ---
->  drivers/gpu/drm/msm/adreno/a6xx_gpu.c   | 18 +++++++++---------
->  drivers/gpu/drm/msm/adreno/adreno_gpu.h | 14 ++++++++++++--
->  2 files changed, 21 insertions(+), 11 deletions(-)
+>   kernel/trace/trace_probe.c |   10 ++++++++--
+>   1 file changed, 8 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> index 5faa85543428..ca4ffa44097e 100644
-> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> @@ -2163,23 +2163,23 @@ static u32 adreno_7c3_get_speed_bin(u32 fuse)
->  	return UINT_MAX;
->  }
->  
-> -static u32 fuse_to_supp_hw(struct device *dev, struct adreno_rev rev, u32 fuse)
-> +static u32 fuse_to_supp_hw(struct device *dev, struct adreno_gpu *adreno_gpu, u32 fuse)
->  {
->  	u32 val = UINT_MAX;
->  
-> -	if (adreno_cmp_rev(ADRENO_REV(6, 1, 8, ANY_ID), rev))
-> +	if (adreno_is_a618(adreno_gpu))
->  		val = a618_get_speed_bin(fuse);
->  
-> -	else if (adreno_cmp_rev(ADRENO_REV(6, 1, 9, ANY_ID), rev))
-> +	else if (adreno_is_a619(adreno_gpu))
->  		val = a619_get_speed_bin(fuse);
->  
-> -	else if (adreno_cmp_rev(ADRENO_REV(6, 3, 5, ANY_ID), rev))
-> +	else if (adreno_is_7c3(adreno_gpu))
->  		val = adreno_7c3_get_speed_bin(fuse);
->  
-> -	else if (adreno_cmp_rev(ADRENO_REV(6, 4, 0, ANY_ID), rev))
-> +	else if (adreno_is_a640(adreno_gpu))
->  		val = a640_get_speed_bin(fuse);
->  
-> -	else if (adreno_cmp_rev(ADRENO_REV(6, 5, 0, ANY_ID), rev))
-> +	else if (adreno_is_a650(adreno_gpu))
->  		val = a650_get_speed_bin(fuse);
->  
->  	if (val == UINT_MAX) {
-> @@ -2192,7 +2192,7 @@ static u32 fuse_to_supp_hw(struct device *dev, struct adreno_rev rev, u32 fuse)
->  	return (1 << val);
->  }
->  
-> -static int a6xx_set_supported_hw(struct device *dev, struct adreno_rev rev)
-> +static int a6xx_set_supported_hw(struct device *dev, struct adreno_gpu *adreno_gpu)
->  {
->  	u32 supp_hw;
->  	u32 speedbin;
-> @@ -2211,7 +2211,7 @@ static int a6xx_set_supported_hw(struct device *dev, struct adreno_rev rev)
->  		return ret;
->  	}
->  
-> -	supp_hw = fuse_to_supp_hw(dev, rev, speedbin);
-> +	supp_hw = fuse_to_supp_hw(dev, adreno_gpu, speedbin);
->  
->  	ret = devm_pm_opp_set_supported_hw(dev, &supp_hw, 1);
->  	if (ret)
-> @@ -2330,7 +2330,7 @@ struct msm_gpu *a6xx_gpu_init(struct drm_device *dev)
->  
->  	a6xx_llc_slices_init(pdev, a6xx_gpu);
->  
-> -	ret = a6xx_set_supported_hw(&pdev->dev, config->rev);
-> +	ret = a6xx_set_supported_hw(&pdev->dev, adreno_gpu);
->  	if (ret) {
->  		a6xx_destroy(&(a6xx_gpu->base.base));
->  		return ERR_PTR(ret);
-> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.h b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
-> index 7a5d595d4b99..21513cec038f 100644
-> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.h
-> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
-> @@ -268,9 +268,9 @@ static inline int adreno_is_a630(struct adreno_gpu *gpu)
->  	return gpu->revn == 630;
->  }
->  
-> -static inline int adreno_is_a640_family(struct adreno_gpu *gpu)
-> +static inline int adreno_is_a640(struct adreno_gpu *gpu)
->  {
-> -	return (gpu->revn == 640) || (gpu->revn == 680);
-> +	return gpu->revn == 640;
->  }
->  
->  static inline int adreno_is_a650(struct adreno_gpu *gpu)
-> @@ -289,6 +289,11 @@ static inline int adreno_is_a660(struct adreno_gpu *gpu)
->  	return gpu->revn == 660;
->  }
->  
-> +static inline int adreno_is_a680(struct adreno_gpu *gpu)
-> +{
-> +	return gpu->revn == 680;
-> +}
-> +
->  /* check for a615, a616, a618, a619 or any derivatives */
->  static inline int adreno_is_a615_family(struct adreno_gpu *gpu)
->  {
-> @@ -306,6 +311,11 @@ static inline int adreno_is_a650_family(struct adreno_gpu *gpu)
->  	return gpu->revn == 650 || gpu->revn == 620 || adreno_is_a660_family(gpu);
->  }
->  
-> +static inline int adreno_is_a640_family(struct adreno_gpu *gpu)
-> +{
-> +	return adreno_is_a640(gpu) || adreno_is_a680(gpu);
-> +}
-> +
->  u64 adreno_private_address_space_size(struct msm_gpu *gpu);
->  int adreno_get_param(struct msm_gpu *gpu, struct msm_file_private *ctx,
->  		     uint32_t param, uint64_t *value, uint32_t *len);
+> diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+> index 473e1c43bc57..643aa3a51d5a 100644
+> --- a/kernel/trace/trace_probe.c
+> +++ b/kernel/trace/trace_probe.c
+> @@ -456,7 +456,10 @@ static int parse_btf_arg(const char *varname, struct fetch_insn *code,
+>   
+>   		if (name && !strcmp(name, varname)) {
+>   			code->op = FETCH_OP_ARG;
+> -			code->param = i;
+> +			if (ctx->flags & TPARG_FL_TPOINT)
+> +				code->param = i + 1;
+> +			else
+> +				code->param = i;
+>   			return 0;
+>   		}
+>   	}
+> @@ -470,8 +473,11 @@ static const struct fetch_type *parse_btf_arg_type(int arg_idx,
+>   	struct btf *btf = traceprobe_get_btf();
+>   	const char *typestr = NULL;
+>   
+> -	if (btf && ctx->params)
+> +	if (btf && ctx->params) {
+> +		if (ctx->flags & TPARG_FL_TPOINT)
+> +			arg_idx--;
+>   		typestr = type_from_btf_id(btf, ctx->params[arg_idx].type);
+> +	}
+>   
+>   	return find_fetch_type(typestr, ctx->flags);
+>   }
 > 
-> -- 
-> 2.40.1
 > 
+
+I failed to apply this patch.
+Would you mind to rebase this patch?
+
