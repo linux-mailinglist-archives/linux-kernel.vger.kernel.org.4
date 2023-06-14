@@ -2,99 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 805F872F1DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 03:30:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42E1E72F1E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 03:30:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241643AbjFNBa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 21:30:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
+        id S241494AbjFNBal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 21:30:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232782AbjFNBaZ (ORCPT
+        with ESMTP id S232782AbjFNBah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 21:30:25 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E7AC1BFD
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 18:30:14 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8Cx_eokGIlkrOUEAA--.10670S3;
-        Wed, 14 Jun 2023 09:30:12 +0800 (CST)
-Received: from openarena.loongson.cn (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxC8ojGIlkCvwZAA--.65253S2;
-        Wed, 14 Jun 2023 09:30:11 +0800 (CST)
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/fbdev-generic: Remove a redundant assignment clause
-Date:   Wed, 14 Jun 2023 09:30:11 +0800
-Message-Id: <20230614013011.750598-1-suijingfeng@loongson.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 13 Jun 2023 21:30:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECE91BF6;
+        Tue, 13 Jun 2023 18:30:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 664EC63621;
+        Wed, 14 Jun 2023 01:30:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 590BBC433CA;
+        Wed, 14 Jun 2023 01:30:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686706224;
+        bh=1A5KVVxyg74MwDhILMrc7YVC1sXoGN2aGyDkI3U1yBE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=K/Of8m8qr2TUrQVMpfPXNwNqCv2zlN6kheHcyvdAPkU9GAWJoWGsKTT/J4RVKEvxF
+         ptp1rv1wNXqK4RJrIHEMcFkF+v1hDcawvC4mOdZ0AA5f40I95W+xuiMKHxwk4AD94o
+         dyV6B9OpoZCzyXkD+IcvT/S3eebd9j/ZLYOWHk8jtcng42ove4BeNayzJPnVjU/Bqy
+         aEpFCBvr9RQUxLt58W2AbEVVKcCuYYpIE8flY33TcJbNT5k4l32HLk9E0deTMxq5+j
+         yxQ6vZ0Kb/hFSTqa+NABim8qfb98YFzUZ1Z9VZ4GINXcWl/+rcBXIpNUjVa8MaedN4
+         qh6476CsNMn1g==
+From:   guoren@kernel.org
+To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
+        conor.dooley@microchip.com, heiko@sntech.de, jszhang@kernel.org,
+        bjorn@kernel.org, cleger@rivosinc.com
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH -next V13 0/3] riscv: Add independent irq/softirq stacks support
+Date:   Tue, 13 Jun 2023 21:30:15 -0400
+Message-Id: <20230614013018.2168426-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxC8ojGIlkCvwZAA--.65253S2
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoWrtFWfCr1ftr4rAF48Zr4UZFc_yoW8JrWrpa
-        ySgrW5KryDta15Ga18A3ZrA343Wa9xJry0kr18C3s0vw4jy34S9F95ZF1kXF45Jw1xXF4a
-        qrnI9FWkCrn2krbCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUU90b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6F4UJVW0owAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
-        Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_
-        Jw1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
-        xGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWU
-        XVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67
-        kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY
-        6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0x
-        vEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVj
-        vjDU0xZFpf9x07jFE__UUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The assignment "dst = map;" in the drm_fbdev_generic_damage_blit() function
-is redundant because it has already been copied when the call to
-drm_client_buffer_vmap() is finished. Therefore, this patch saves a useless
-copy. No functional change.
+From: Guo Ren <guoren@linux.alibaba.com>
 
-Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
----
- drivers/gpu/drm/drm_fbdev_generic.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+This patch series adds independent irq/softirq stacks to decrease the
+press of the thread stack. Also, add a thread STACK_SIZE config for
+users to adjust the proper size during compile time.
 
-diff --git a/drivers/gpu/drm/drm_fbdev_generic.c b/drivers/gpu/drm/drm_fbdev_generic.c
-index 98ae703848a0..aa6924e3a58c 100644
---- a/drivers/gpu/drm/drm_fbdev_generic.c
-+++ b/drivers/gpu/drm/drm_fbdev_generic.c
-@@ -182,7 +182,7 @@ static int drm_fbdev_generic_damage_blit(struct drm_fb_helper *fb_helper,
- 					 struct drm_clip_rect *clip)
- {
- 	struct drm_client_buffer *buffer = fb_helper->buffer;
--	struct iosys_map map, dst;
-+	struct iosys_map map;
- 	int ret;
- 
- 	/*
-@@ -202,8 +202,7 @@ static int drm_fbdev_generic_damage_blit(struct drm_fb_helper *fb_helper,
- 	if (ret)
- 		goto out;
- 
--	dst = map;
--	drm_fbdev_generic_damage_blit_real(fb_helper, clip, &dst);
-+	drm_fbdev_generic_damage_blit_real(fb_helper, clip, &map);
- 
- 	drm_client_buffer_vunmap(buffer);
- 
+This patch series belonged to the generic entry, which has been merged
+to for-next now.
+
+v13:
+ - Rebase on riscv/for-next commit d5e45e810e0e ("Merge patch series
+   "riscv: Add vector ISA support"")
+ - Rmove unnecessary BUILD_BUG_ON(). (Thx Clément)
+
+v12:
+https://lore.kernel.org/linux-riscv/20230529084600.2878130-1-guoren@kernel.org/
+ - Rebase on palmer/for-next (20230529)
+ - Move DECLARE_PER_CPU(ulong *, irq_stack_ptr) into irq_stack.h (Thx
+   Conor)
+ - Optimize commit msg
+
+v11:
+https://lore.kernel.org/linux-riscv/20230324071239.151677-1-guoren@kernel.org/
+ - Rebase on palmer/for-next (20230324)
+ - Separate from generic entry patch series.
+
+v10:
+https://lore.kernel.org/linux-riscv/20221208025816.138712-1-guoren@kernel.org/
+ - Rebase on palmer/for-next branch (20221208)
+ - Remove unrelated patches from the series (Suggested-by: Bjorn)
+ - Fixup Typos.
+
+v9:
+https://lore.kernel.org/linux-riscv/20221130034059.826599-1-guoren@kernel.org/
+ - Fixup NR_syscalls check (by Ben Hutchings)
+ - Add Tested-by: Jisheng Zhang
+
+v8:
+https://lore.kernel.org/linux-riscv/20221103075047.1634923-1-guoren@kernel.org/
+ - Rebase on palmer/for-next branch (20221102)
+ - Add save/restore_from_x5_to_x31 .macro (JishengZhang)
+ - Consolidate ret_from_kernel_thread into ret_from_fork (JishengZhang)
+ - Optimize __noinstr_section comment (JiangshanLai)
+
+v7:
+https://lore.kernel.org/linux-riscv/20221015114702.3489989-1-guoren@kernel.org/
+ - Fixup regs_irqs_disabled with SR_PIE
+ - Optimize stackleak_erase -> stackleak_erase_on_task_stack (Thx Mark
+   Rutland)
+ - Add BUG_ON(!irqs_disabled()) in trap handlers
+ - Using regs_irqs_disabled in __do_page_fault
+ - Remove unnecessary irq disable in ret_from_exception and add comment
+
+v6:
+https://lore.kernel.org/linux-riscv/20221002012451.2351127-1-guoren@kernel.org/
+ - Use THEAD_SIZE_ORDER for thread size adjustment in kconfig (Thx Arnd)
+ - Move call_on_stack to inline style (Thx Peter Zijlstra)
+ - Fixup fp chain broken (Thx Chen Zhongjin)
+ - Remove common entry modification, and fixup page_fault entry (Thx
+   Peter Zijlstra)
+ - Treat some traps as nmi entry (Thx Peter Zijlstra)
+
+v5:
+https://lore.kernel.org/linux-riscv/20220918155246.1203293-1-guoren@kernel.org/
+ - Add riscv own stackleak patch instead of generic entry modification
+   (by Mark Rutland)
+ - Add EXPERT dependency for THREAD_SIZE (by Arnd)
+ - Add EXPERT dependency for IRQ_STACK (by Sebastian, David Laight)
+ - Corrected __trap_section (by Peter Zijlstra)
+ - Add Tested-by (Yipeng Zou)
+ - Use CONFIG_SOFTIRQ_ON_OWN_STACK replace "#ifndef CONFIG_PREEMPT_RT"
+ - Fixup systrace_enter compile error
+ - Fixup exit_to_user_mode_prepare preempt_disable warning
+
+V4:
+https://lore.kernel.org/linux-riscv/20220908022506.1275799-1-guoren@kernel.org/
+ - Fixup entry.S with "la" bug (by Conor.Dooley)
+ - Fixup missing noinstr bug (by Peter Zijlstra)
+
+V3:
+https://lore.kernel.org/linux-riscv/20220906035423.634617-1-guoren@kernel.org/
+ - Fixup CONFIG_COMPAT=n compile error
+ - Add THREAD_SIZE_ORDER config
+ - Optimize elf_kexec.c warning fixup
+ - Add static to irq_stack_ptr definition
+
+V2:
+https://lore.kernel.org/linux-riscv/20220904072637.8619-1-guoren@kernel.org/
+ - Fixup compile error by include "riscv: ptrace: Remove duplicate
+   operation"
+ - Fixup compile warning
+   Reported-by: kernel test robot <lkp@intel.com>
+ - Add test repo link in cover letter
+
+V1:
+https://lore.kernel.org/linux-riscv/20220903163808.1954131-1-guoren@kernel.org/
+
+Guo Ren (3):
+  riscv: stack: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
+  riscv: stack: Support HAVE_SOFTIRQ_ON_OWN_STACK
+  riscv: stack: Add config of thread stack size
+
+ arch/riscv/Kconfig                   | 19 ++++++++
+ arch/riscv/include/asm/irq_stack.h   | 30 ++++++++++++
+ arch/riscv/include/asm/thread_info.h | 14 ++----
+ arch/riscv/kernel/irq.c              | 68 ++++++++++++++++++++++++++++
+ arch/riscv/kernel/traps.c            | 35 +++++++++++++-
+ 5 files changed, 153 insertions(+), 13 deletions(-)
+ create mode 100644 arch/riscv/include/asm/irq_stack.h
+
 -- 
-2.25.1
+2.36.1
 
