@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D28872F223
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 03:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECBBB72F224
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 03:46:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238669AbjFNBpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 21:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48222 "EHLO
+        id S241127AbjFNBpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 21:45:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231490AbjFNBpr (ORCPT
+        with ESMTP id S232434AbjFNBps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 21:45:47 -0400
+        Tue, 13 Jun 2023 21:45:48 -0400
 Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2095.outbound.protection.outlook.com [40.107.244.95])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE81D10D8;
-        Tue, 13 Jun 2023 18:45:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B774410D5;
+        Tue, 13 Jun 2023 18:45:46 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AoVY3rLUHBAIPp2ZJWXak+RPeASpdr2w7SzM08MM33P9n5Ib/2llcYOY2q0cfQ6mfM5xshLtvnPXi5v9+S3VT9PsNC1hglxJhTSb+utlTA1fKD7QDUy64crscdMM9b8pOCqaLFcRAbz1K8vf+mPwD86OZi39TVO4Kdb39Q0Ob7313z/AMUsQ1xLqOpvBD8krdvhkymYplxUisx4F+fjNHtXsyuyH7BtO2eGwqVI7M043cOGqo+rvx7a062aZuekDsbowiGVjKvbowzfR2gNRnlyOpfmUy2RbVl+H0ARmU533zzVHVULdSdEIUc5DIkw3V5FlGOuGWtQurwGMpLyPdg==
+ b=Js7uxcInKBkry0qDrR7b8j+k47kCwhI4k0E7NPATgzBOt+602QSjBiHIU4QPC676D5eXyT+0G9Eru0q9s4VWI4G1tm5N0btcCc4GFNagpHDmYIAQkJqzXLcU7ZUK3XMOi17vHN2adalKovPvQShzUnIoYQDiHNr2WyoaPr1RbBpBXaNgM7lLTbbf6YqOyPc+ZuNzbX26mh/x+a0sneiQotapzxvqnkAON8K2E49szRkyEZz3Rd30dAbtBAtsloas+UDQqZJSgQXoCFKZwbWW7EYVsbk4sLPN3fpOMog3WbsmGbDN7q5uo96JVGlZcxRxotGz0eK1k2LvDBRrepa/Qg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wpKlicGx09PkixjnV1xXoeOWA4QqM7OHvet/FAVv8as=;
- b=WkytNtyy9GEGKiB2o7iR1crPYap/TFals3u0mjHgSUDhwJXfK8fnUjJ2jtB4pgtERZBGZBLCoJ7IiGxJF3uAurANtKQZu2+Y+Mo6IBio9+l1CJ8BYHzmSohyh2fUuBNST/LT3iLrhg1D7nz+HI3rDcGB80MNpgDA0Qf6pkMEeDk8s1Jm1RlaoXgXhMqy1IyxX5C39mAjbQM3lCIJlpHDRdUS9EaD7whZd3cQgwsX4jmomPi+zwh9ynR4ky6o4BtqowOvzdIhz4ecngYfBl/XEOWJlQO31KqLyv2YXPIEvl+2/DyuEvW89XpbKa8XcSJByrYIiE7Uw6VPgIzRlXg4yg==
+ bh=p88SClkOuUU6gwdVBYf1OL7ML2SOeam4TPTj73sXjC8=;
+ b=LJxjkvLyLJAo8MIpIPoDNl0qKn1VVK30VNsM2h/MHap482WLAaKmhhtVYr/kluSnNgJcq04W3Wqfr/4rN32I2vOUwlwMaVdAZ3j5rug8QOxPJfntYzOlERQ/JHEFCsbxAH8UvoP3RodrdLIXxBhW1DW6OVpWsXglWbeu6tivPOb8FE2zULp2y8LzgUKJXO9eft2P4MkB85EghPna7zT3r4Unxkw49xyBMYgdOzNDZA8wR9doLGImkDLYOam/P3sFRxhFjxIgEmnah1YBZpCN3W8f20PDy7/Q7WZ+QQB13RZMztwfaaV1sWmwKJsQ5RbKWx0NFkBmdw5t4wjyYqz93A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=bayhubtech.com; dmarc=pass action=none
  header.from=bayhubtech.com; dkim=pass header.d=bayhubtech.com; arc=none
@@ -29,17 +29,17 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=towerbridgetechnology.onmicrosoft.com;
  s=selector2-towerbridgetechnology-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wpKlicGx09PkixjnV1xXoeOWA4QqM7OHvet/FAVv8as=;
- b=eQ7IzawFsBkmeKCRoQj3yf8QGWuLDhWpOemEBnxLoVOB9/w84udBzNzvNh+BBKBcvf8oymcIMvCUR9bi47OZl2XWgVZLbZipW2DWH5bMQWMO2ZTl3vHIK6AgvGJmOv1bgvgXFh0idCVwGSejZpL/Trufvqut7nQg9/bu9RtirX8=
+ bh=p88SClkOuUU6gwdVBYf1OL7ML2SOeam4TPTj73sXjC8=;
+ b=ULzmb0futPhEaJyJ6MuDix4bZSdSzYqGnBwDV3OPwp2JoVPqaLGbJWQcWqkBwgEgjEy6u4VwrVWYOorCgDwE/XX9cB/GD/CpFu0etuI4lvKhnO70NfV44v9RUrWMMM/dq5RZdNH+LplAOgpEdwFpokuzEt9Zz0WvnLlfBa4vNX8=
 Received: from PH7PR16MB5010.namprd16.prod.outlook.com (2603:10b6:510:153::5)
  by CH3PR16MB5371.namprd16.prod.outlook.com (2603:10b6:610:164::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Wed, 14 Jun
- 2023 01:45:41 +0000
+ 2023 01:45:43 +0000
 Received: from PH7PR16MB5010.namprd16.prod.outlook.com
  ([fe80::97:81ad:e05d:5a20]) by PH7PR16MB5010.namprd16.prod.outlook.com
  ([fe80::97:81ad:e05d:5a20%3]) with mapi id 15.20.6455.030; Wed, 14 Jun 2023
- 01:45:40 +0000
+ 01:45:43 +0000
 From:   "Chevron Li (WH)" <chevron.li@bayhubtech.com>
 To:     Chevron Li <chevron_li@126.com>,
         "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
@@ -49,16 +49,15 @@ To:     Chevron Li <chevron_li@126.com>,
 CC:     "Shaper Liu (WH)" <shaper.liu@bayhubtech.com>,
         "XiaoGuang Yu (WH)" <xiaoguang.yu@bayhubtech.com>,
         "Shirley Her(SC)" <shirley.her@bayhubtech.com>
-Subject: RE: [PATCH V1 2/2] mmc: sdhci-pci-o2micro: add Bayhub new chip GG8
+Subject: RE: [PATCH V1 1/2] mmc: sdhci-pci-o2micro: add Bayhub new chip GG8
  support
-Thread-Topic: [PATCH V1 2/2] mmc: sdhci-pci-o2micro: add Bayhub new chip GG8
+Thread-Topic: [PATCH V1 1/2] mmc: sdhci-pci-o2micro: add Bayhub new chip GG8
  support
-Thread-Index: AQHZmOI3qtW2kpQpJU2AwcuZlT56W6+JkK3A
-Date:   Wed, 14 Jun 2023 01:45:40 +0000
-Message-ID: <PH7PR16MB50105407A5CB76FCDE2FC261EA5AA@PH7PR16MB5010.namprd16.prod.outlook.com>
+Thread-Index: AQHZmOI41cWOq07zAEuRFE2Sr5b3cK+JkbpQ
+Date:   Wed, 14 Jun 2023 01:45:42 +0000
+Message-ID: <PH7PR16MB50106EEA29A8564B2296F449EA5AA@PH7PR16MB5010.namprd16.prod.outlook.com>
 References: <20230607014812.30104-1-chevron_li@126.com>
- <20230607014812.30104-2-chevron_li@126.com>
-In-Reply-To: <20230607014812.30104-2-chevron_li@126.com>
+In-Reply-To: <20230607014812.30104-1-chevron_li@126.com>
 Accept-Language: zh-CN, en-US
 Content-Language: zh-CN
 X-MS-Has-Attach: 
@@ -67,53 +66,53 @@ authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=bayhubtech.com;
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: PH7PR16MB5010:EE_|CH3PR16MB5371:EE_
-x-ms-office365-filtering-correlation-id: d54f20d7-a890-4ff5-bdf7-08db6c790f32
+x-ms-office365-filtering-correlation-id: 49720f0a-b76d-4297-85d8-08db6c7910b2
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: aIi/fyV8helq8WQEVtf8EZlknkkuOJQlcHDnKMFylnkoiwNrtxFWfSb/XtYnnglkmRPmMrllfgZpuFzahbDDsCdIhRm0jowa5tLWbU6IZXebLc1AtJE0tZH0KksBo83aa6PR5o5E4yfrRwchxYDtTn1X5FAsiU/kXzAvyr0tUJrTWLnsGrkICsqOpEQLkalrWmXJCattiUMGkaUIMD6BTln22+hamGDrkBHnixsEsYnwQXz98V+Xw6oIL7+Cr9MB1vguEwyrhlrvHzEDm/Id+F1ht43KGoVrzlSHlXOxlr3aE86zmhdtboX7WQWRDQsPvHxp/gd/hHFIxzY7h3qggVS+D9c1EnBsVzoS+vsS6VxIyFzQoJIsnMRR1HT7Y7va+wCdLd3sOZsKEKwIEi4YvRmQMBWS0yocZZYcd2m8uFY9fJvfzPOjdL0+kGdpbKre55kk2iGdhN43CheUZ2pQO6UNtezTaP/CID8VU3ZQMPvvM5mQAun3MrTjVA2SNCQoxTr+LPLlIrAPOmB9grfWv40GXs5q2GFOFwsaDjaLobb4/MUlbPhTAKSVjUispxboiFe2qyPn6TrwcWKtZMeUgdw9M71DWfQQBNw3M6PU3Cezv3XBvzg8ZrdwS8Z5XPYk
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR16MB5010.namprd16.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(366004)(376002)(396003)(136003)(39830400003)(451199021)(64756008)(66446008)(66556008)(66476007)(66946007)(76116006)(316002)(107886003)(54906003)(478600001)(110136005)(4326008)(33656002)(86362001)(38070700005)(71200400001)(6506007)(26005)(9686003)(186003)(83380400001)(53546011)(2906002)(5660300002)(8676002)(52536014)(8936002)(7696005)(55016003)(41300700001)(38100700002)(122000001);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: f7IIQR9sjGxOQAuwBxDFBDSVvSVYhTMhFWMA6YkKYNJnbG1s9rQa2oBTMT3BqkBjMujoRvOAaps1Wd9lxvwHla0Dpd4s16S3T6MkynChEcuv+G2Hjz7CX4xOK3Qex9H9KeljUDqAJ97imptRpGQv5K2i2E+fBkNtNe3yagZGoAKFEyGvcaDmO52OYoA42aVKeXTOxlrh94hCvqmxdI/8f/rrzR8M0RVJV6Yzbc9xA/rst+Ys6sb5Louv5Pw0efQUc6lXGBgs+RnGBEQwfq/hFUfDH6P3Igl5krlZkbfbxp9OyyxKcbFjqqE3JcT33o2g0BfClowX5iUcUbuijWaknGG16pvJ887DWNjDHGdOOM1rGx7LtKVAw34VUXBnciXkRBNuXEUndNy/bO0mhmM8LRBU0PTH/H38u+z94oupT2Rx0L6mnbiOI7XjHNIjDpOSbVpZdICfZTb39Owdb/OfmCT54hzd6DPAUCbr0YfqayOKHEWcl/X8buWLuxqHU96hV+4zSX6pR5frCM78JMwSR0vN4qhBcoTon7ddku8AgBvWZATUJ573W+nHAsYDgGzOrN58B3v8qNHVjvBVMeaJPAnWgWe1dbY6cdD4qCnNZArpEIh1hyP4h5NeOqGNUhri
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR16MB5010.namprd16.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(366004)(376002)(396003)(136003)(39830400003)(451199021)(64756008)(66446008)(66556008)(66476007)(66946007)(76116006)(316002)(107886003)(54906003)(478600001)(110136005)(4326008)(33656002)(86362001)(38070700005)(71200400001)(6506007)(26005)(9686003)(186003)(83380400001)(53546011)(2906002)(5660300002)(30864003)(8676002)(52536014)(8936002)(7696005)(55016003)(41300700001)(38100700002)(122000001);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?BAzVJG+OtWaanjRUhiSgyS6UPDdJbBHbz4p9zf8hnwDg/nhsZEvm00uSCFWL?=
- =?us-ascii?Q?9sEa6qB0GdgsCXBtciyXrLuID7E/QOJnypEZ6FUau1aAa7go6ZYmTe6ukb7X?=
- =?us-ascii?Q?B4qCTqphHrrPgpu2x9GRNaNiWbX7byZPHwVGipBeRfnVCDJM87vchvlXIovn?=
- =?us-ascii?Q?weZ/bBFP/ndlHSySeOndFTl665CGQP4TjqXLJk7H4HM9aB44vQMHX3iki5Yv?=
- =?us-ascii?Q?euKyAoiJLMf3ixkOlcpCrRLumcpdGvO6f8WSSUQJNbQx6xw+DSJAftaa15/0?=
- =?us-ascii?Q?NyPXBUdCeWn6Yap2KZfjnleKBKaX271Levxqx6b5PWgrOICUoc7D4aBttWFL?=
- =?us-ascii?Q?yKp3GDz57xygoIuSjZAzAsB6BN1A571Q0Fqhl0wi0YKJIB69VnDWP53lGn3k?=
- =?us-ascii?Q?wgK4IgmSpcCdKSCi8FbWCOdFecK/ggdOcc6J/KDhvrSb42AUDbWAqwWr2skt?=
- =?us-ascii?Q?iDLn9NyUyd5hFp1dpAEZHebcIjl0DFDVPNBH/x5ueA4jQARdiju3zp1lpIft?=
- =?us-ascii?Q?p2f0wJtLnjpzU2at7K410roXI7sAVKztlQaRGHiaNOi5/ITrYgy3TG8C6xbY?=
- =?us-ascii?Q?Gj8A9FF0OIRR84LlgaYfKV4Iso4Kd4yc4l7Mq8BcJAuLVUOLXQR8w85stV2y?=
- =?us-ascii?Q?gYMGxCwA3xynah5/PqaunVud6hgTqFuJQQQB7LP5Xcxm6U1b5/o6J/J0DAXf?=
- =?us-ascii?Q?mzeaFe2y49aWYG513t0wuz0+xk3KddMjlKaniFbaHV4Q8O29pU8MlBDkZPy7?=
- =?us-ascii?Q?xigqd6HTRYj9w70sOS+r1f1CiP212eIl9AlPQJY7053dWw7JAs8uCHxPlzFn?=
- =?us-ascii?Q?o5pHisDLEaSfRMq2UFYly53uNOT/cwy9f8OptqXCDUfSgxXV9bStsImOuhNw?=
- =?us-ascii?Q?kU4LQWqyCUi1dmAfpozA+gYa/Xk4Rbxg5DhEsBcZO1xV/n1adnuiVfSkGpba?=
- =?us-ascii?Q?WVE8ZPHafKz3AClmtfXK73GMhxL5eTYn9xfieKH/BJm/cYtlRX33DE9z2615?=
- =?us-ascii?Q?4ZpWEIHhmSQvrIdF3sA4X6i1fSBaJqialZvasCC3WeaCsFClLHxeoKm1UFxm?=
- =?us-ascii?Q?06SmiEfBsnKllGhtakcR39JhNfr2r66d8mV+8L3TeJq4yZbVKiGb+XDoQBfO?=
- =?us-ascii?Q?sUUj3wj7LQMNJRq6wwL3RZzZ12siZAIMofPAAoIG570utGF22YeSRuuw9sx0?=
- =?us-ascii?Q?c8bARAhwez5lD9DkGKcaRglWTiWfa3uPZbxapE2cemZdV8JPeztnZfZxNM9+?=
- =?us-ascii?Q?jP/pNp9oCwQ+BUPFjoTUr0qbiZTLEXYgr01RUQTaUWNiujEApRfNG181WOlX?=
- =?us-ascii?Q?K49rSw/J6AtjL9lK4d3VcOuKGRuj6mEylnrRrzk4AcxARSEjOWqNMmSDtgT7?=
- =?us-ascii?Q?xpBhHqAgwztIaDwUgeam/LfEP5rE7AL6KnVgn7yi1mTQSWsgBbPPBig+UV3v?=
- =?us-ascii?Q?r5IbVYD4LaJTsrEv7iYCymPo1wpXojnoZdPLf75aKgFVZPAL1hTubQagyN9V?=
- =?us-ascii?Q?0A+c6zrf1kyDJ1HTqW2uK/gDuvNnaRFFflQvFdEEjjcTzaHmjTwu2ZLNdkpZ?=
- =?us-ascii?Q?9a/tPCCCVxiqt5venHz5cBBmqj3xDD3UzRaYYoi0?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?o+Fyqph14o+Q1usvR9nT9gxIzjrWaYWUYv4EnsTmZtZxuD9T/BdfYx+qvPjp?=
+ =?us-ascii?Q?ktvEx+r5GLjEBwD8DeNwFMdalqCzslAxSF79/zuwa47o6qmpfSoYfHm29v68?=
+ =?us-ascii?Q?Pb7WldOK5aZ9s4UwUCqxo2knIi6QbnKX7o1TAb2qF0MkqUm2JHuflQ3xYkOV?=
+ =?us-ascii?Q?az/bDwgsP8DuGuN5PIrDNiyoXSMHa33LbJWSxMRdQOQBQfZbxMzJgfFBnZHz?=
+ =?us-ascii?Q?1vAUj66Ba52cHFxAgRkqLN9jcDq5XbWP8ZgDb1u6w+u2NciIIdWWhf6epPIz?=
+ =?us-ascii?Q?wvk88TfUi8hVutHTcdQ2bu0bksZPtnPQU20PlP7S2G2Y4Wbb1LWjVYtWhRpl?=
+ =?us-ascii?Q?GtCgthoGAZixF8RARS6KZ8EjqzK+5gVYr9+CbqY00lSoBbubHuiT0p2bjWZR?=
+ =?us-ascii?Q?gkaU36ltQ6g5qw5jXsCchp/sdlEJCT9iiQx79x8C3yB2RJW1iIgZMqOcX1vG?=
+ =?us-ascii?Q?1NpCRgJGP6NLV0LyIB66nJASSIxWNlNbq3TnvLKf8g9tiYpwGLz1GjXJjOct?=
+ =?us-ascii?Q?1pFRGibKHdwSeYc4/klZZLCwarWvLsNO3h0yXwuN4YxJh2Uuht58fhTIklIR?=
+ =?us-ascii?Q?4SXwaOZL12+bPkWedcujuXBg6D7x/iNMdcX607PfAdhDEE3HDdlVdffcLm17?=
+ =?us-ascii?Q?jHQ5+VywV6ic/RtBg59bKtdqkxdMtZh9ODWRiWyxZKLsA5X0V7wItA4YBRRd?=
+ =?us-ascii?Q?6Qbkh2pA6o7Gnk2wseQ+LUEMQxeFT2kTrPSN37UAHJykbhTmUW7uDqIWXjK0?=
+ =?us-ascii?Q?UZXp/Vunp7tCrRg97hdubfO1SdFcNLFxdioCl6bG5OFZI606Kys4iq9zrLj3?=
+ =?us-ascii?Q?OnRSAe5qY8lkRvHAvpWR3e86cm1fWBXr60PqBjcZ9NQioQ4sq8pWHMsADe8q?=
+ =?us-ascii?Q?NnjYQvWclo4DPe0XCYnZkbxuJqZRvwdBpt1ZgxyCdu6YTs6PmfYhgsuzSc5z?=
+ =?us-ascii?Q?CSuH7wVhWuAfdaglhbYq97vm151ZsCUwWFjWmcsUM/HM2J5CngGIYeGU9AeE?=
+ =?us-ascii?Q?tj0nR+o/j56x6uCXj9RW/z6B8jftDAtm6YjYUbcs5QrXIZtqzzoVymXDyUKV?=
+ =?us-ascii?Q?/lY075WAu2UuYDqK5eZWz4qvhaa8kI+2KEkoIGb7I4jQA+2tZPDNdWU+3222?=
+ =?us-ascii?Q?6+gaMv+GvgoaXbsPEL2/SlfEIPDeIdXBeKx95Hd3iow/A/rnedsM+ug7Xb2k?=
+ =?us-ascii?Q?PfEKkYnJdbRe2DmykWVfcdSYyjr3O7SuBAFj0fIRpls/JgTGmk/N6WDIhB5f?=
+ =?us-ascii?Q?T5bELK0/qZsrMbaVaI4R5FBVELUcNJVOd7f0+ARe5samQEzoilml81Cmv6e9?=
+ =?us-ascii?Q?wA4xv7Dxpa6aTmzMaqpBesge1S6sMVjwRpbWo8WV95nLcaooXdrwTC1B5Nof?=
+ =?us-ascii?Q?D7p20bkalTWzknh8K1napw/7V/kP0vHBtIsqxRZBvj7Emmy/nW+C+dkTB1J5?=
+ =?us-ascii?Q?iXfBkAW0fNjDMcMfHDXU1q/PoyJfqKoJSu6LL/IcaaXYJvWBKG49PdXFU0HR?=
+ =?us-ascii?Q?SXtvaG3X5VwSVlgghw5zm9EZ+7qW1ag2R/ES8VSP19EYLX0GC2XwuJ7toXSA?=
+ =?us-ascii?Q?NPgPiKKPqSnbOLZbEMc3VBN8a301HXHA4gJ4KVxQ?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: bayhubtech.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: PH7PR16MB5010.namprd16.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d54f20d7-a890-4ff5-bdf7-08db6c790f32
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jun 2023 01:45:40.4298
+X-MS-Exchange-CrossTenant-Network-Message-Id: 49720f0a-b76d-4297-85d8-08db6c7910b2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jun 2023 01:45:42.9660
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 0a7aae2b-8f2e-44df-ba2f-42de7f93c642
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 1sFC6Wmq3y/9qC6cGBdXToDK1sFJZYj7QPLPTe7LeNn9vReg5gAAKugI6hpGakybjI16kCxri7QsYmBePa+Drqaa2OBl5Iz95npWtYsCCLk=
+X-MS-Exchange-CrossTenant-userprincipalname: ra4v910B7cEyOKT/TFj0gfSPf7J48+uASFjur+ihNAmnxRuwDdf+NOiO3qlKWB5RdOl+qDU9Qvqb1F6G2oMI4KuJen1zYB5E5xb/d5VPUDs=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR16MB5371
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
@@ -140,113 +139,314 @@ org; linux-kernel@vger.kernel.org
 Cc: Shaper Liu (WH) <shaper.liu@bayhubtech.com>; XiaoGuang Yu (WH) <xiaogua=
 ng.yu@bayhubtech.com>; Shirley Her(SC) <shirley.her@bayhubtech.com>; Chevro=
 n Li (WH) <chevron.li@bayhubtech.com>
-Subject: [PATCH V1 2/2] mmc: sdhci-pci-o2micro: add Bayhub new chip GG8 sup=
+Subject: [PATCH V1 1/2] mmc: sdhci-pci-o2micro: add Bayhub new chip GG8 sup=
 port
 
 From: Chevron Li <chevron.li@bayhubtech.com>
 
-Add Bayhub new chip GG8 support for SD express card.
-This patch depends on patch 1/2.
+Add Bayhub new chip GG8 support for USHI function
 
 Signed-off-by: Chevron Li <chevron.li@bayhubtech.com>
 ---
 Change in V1:
-1.Implement the SD express card callback routine.
-2.Add SD express card support for Bayhub GG8 chip.
+1.Add GG8 chip IDs in sdhci-pci-core.c and sdhci-pci.h 2.Add GG8 chip initi=
+alization flow at sdhci-pci-o2micro.c
 ---
- drivers/mmc/host/sdhci-pci-o2micro.c | 61 +++++++++++++++++++++++++++-
- 1 file changed, 60 insertions(+), 1 deletion(-)
+ drivers/mmc/host/sdhci-pci-core.c    |   4 +
+ drivers/mmc/host/sdhci-pci-o2micro.c | 154 ++++++++++++++++++++-------
+ drivers/mmc/host/sdhci-pci.h         |   4 +
+ 3 files changed, 126 insertions(+), 36 deletions(-)
 
+diff --git a/drivers/mmc/host/sdhci-pci-core.c b/drivers/mmc/host/sdhci-pci=
+-core.c
+index 01975d145200..1d14300691f4 100644
+--- a/drivers/mmc/host/sdhci-pci-core.c
++++ b/drivers/mmc/host/sdhci-pci-core.c
+@@ -1898,6 +1898,10 @@ static const struct pci_device_id pci_ids[] =3D {
+ 	SDHCI_PCI_DEVICE(O2, SDS1,     o2),
+ 	SDHCI_PCI_DEVICE(O2, SEABIRD0, o2),
+ 	SDHCI_PCI_DEVICE(O2, SEABIRD1, o2),
++	SDHCI_PCI_DEVICE(O2, GG8_9860, o2),
++	SDHCI_PCI_DEVICE(O2, GG8_9861, o2),
++	SDHCI_PCI_DEVICE(O2, GG8_9862, o2),
++	SDHCI_PCI_DEVICE(O2, GG8_9863, o2),
+ 	SDHCI_PCI_DEVICE(ARASAN, PHY_EMMC, arasan),
+ 	SDHCI_PCI_DEVICE(SYNOPSYS, DWC_MSHC, snps),
+ 	SDHCI_PCI_DEVICE(GLI, 9750, gl9750),
 diff --git a/drivers/mmc/host/sdhci-pci-o2micro.c b/drivers/mmc/host/sdhci-=
 pci-o2micro.c
-index 8243a63b3c81..b2d8ddbb4095 100644
+index 620f52ad9667..8243a63b3c81 100644
 --- a/drivers/mmc/host/sdhci-pci-o2micro.c
 +++ b/drivers/mmc/host/sdhci-pci-o2micro.c
-@@ -21,6 +21,7 @@
-  * O2Micro device registers
-  */
+@@ -36,6 +36,7 @@
+ #define O2_SD_INF_MOD		0xF1
+ #define O2_SD_MISC_CTRL4	0xFC
+ #define O2_SD_MISC_CTRL		0x1C0
++#define O2_SD_EXP_INT_REG	0x1E0
+ #define O2_SD_PWR_FORCE_L0	0x0002
+ #define O2_SD_TUNING_CTRL	0x300
+ #define O2_SD_PLL_SETTING	0x304
+@@ -49,6 +50,9 @@
+ #define O2_SD_UHS2_L1_CTRL	0x35C
+ #define O2_SD_FUNC_REG3		0x3E0
+ #define O2_SD_FUNC_REG4		0x3E4
++#define O2_SD_PARA_SET_REG1 0x444
++#define O2_SD_VDDX_CTRL_REG 0x508
++#define O2_SD_GPIO_CTRL_REG1 0x510
+ #define O2_SD_LED_ENABLE	BIT(6)
+ #define O2_SD_FREG0_LEDOFF	BIT(13)
+ #define O2_SD_SEL_DLL		BIT(16)
+@@ -334,33 +338,45 @@ static int sdhci_o2_execute_tuning(struct mmc_host *m=
+mc, u32 opcode)
+ 	scratch |=3D O2_SD_PWR_FORCE_L0;
+ 	sdhci_writew(host, scratch, O2_SD_MISC_CTRL);
 =20
-+#define O2_SD_PCIE_SWITCH	0x54
- #define O2_SD_MISC_REG5		0x64
- #define O2_SD_LD0_CTRL		0x68
- #define O2_SD_DEV_CTRL		0x88
-@@ -631,6 +632,63 @@ static void sdhci_pci_o2_set_clock(struct sdhci_host *=
-host, unsigned int clock)
- 	sdhci_o2_enable_clk(host, clk);
- }
+-	/* Stop clk */
+-	reg_val =3D sdhci_readw(host, SDHCI_CLOCK_CONTROL);
+-	reg_val &=3D ~SDHCI_CLOCK_CARD_EN;
+-	sdhci_writew(host, reg_val, SDHCI_CLOCK_CONTROL);
+-
+-	if ((host->timing =3D=3D MMC_TIMING_MMC_HS200) ||
+-		(host->timing =3D=3D MMC_TIMING_UHS_SDR104)) {
+-		/* UnLock WP */
+-		pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch_8);
+-		scratch_8 &=3D 0x7f;
+-		pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch_8);
+-
+-		/* Set pcr 0x354[16] to choose dll clock, and set the default phase */
+-		pci_read_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH, &reg_v=
+al);
+-		reg_val &=3D ~(O2_SD_SEL_DLL | O2_SD_PHASE_MASK);
+-		reg_val |=3D (O2_SD_SEL_DLL | O2_SD_FIX_PHASE);
+-		pci_write_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH, reg_v=
+al);
++	/* Update output phase */
++	switch (chip->pdev->device) {
++	case PCI_DEVICE_ID_O2_SDS0:
++	case PCI_DEVICE_ID_O2_SEABIRD0:
++	case PCI_DEVICE_ID_O2_SEABIRD1:
++	case PCI_DEVICE_ID_O2_SDS1:
++	case PCI_DEVICE_ID_O2_FUJIN2:
++		/* Stop clk */
++		reg_val =3D sdhci_readw(host, SDHCI_CLOCK_CONTROL);
++		reg_val &=3D ~SDHCI_CLOCK_CARD_EN;
++		sdhci_writew(host, reg_val, SDHCI_CLOCK_CONTROL);
++
++		if ((host->timing =3D=3D MMC_TIMING_MMC_HS200) ||
++			(host->timing =3D=3D MMC_TIMING_UHS_SDR104)) {
++			/* UnLock WP */
++			pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch_8);
++			scratch_8 &=3D 0x7f;
++			pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch_8);
++
++			/* Set pcr 0x354[16] to choose dll clock, and set the default phase */
++			pci_read_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH, &reg_=
+val);
++			reg_val &=3D ~(O2_SD_SEL_DLL | O2_SD_PHASE_MASK);
++			reg_val |=3D (O2_SD_SEL_DLL | O2_SD_FIX_PHASE);
++			pci_write_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH,=20
++reg_val);
++
++			/* Lock WP */
++			pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch_8);
++			scratch_8 |=3D 0x80;
++			pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch_8);
++		}
 =20
-+static u8 sdhci_o2_sd_express_clkq_assert(struct sdhci_host *host) {
-+	return sdhci_readb(host, O2_SD_EXP_INT_REG); }
-+
-+static int sdhci_pci_o2_init_sd_express(struct mmc_host *mmc, struct=20
-+mmc_ios *ios) {
-+	struct sdhci_host *host =3D mmc_priv(mmc);
-+	struct sdhci_pci_slot *slot =3D sdhci_priv(host);
-+	struct sdhci_pci_chip *chip =3D slot->chip;
-+	u8 scratch8 =3D 0;
-+	u16 scratch16 =3D 0;
-+	bool ret =3D false;
-+
-+	/* Disable clock */
-+	sdhci_writeb(host, 0, SDHCI_CLOCK_CONTROL);
-+
-+	/* Set VDD2 voltage*/
-+	scratch8 =3D sdhci_readb(host, SDHCI_POWER_CONTROL);
-+	scratch8 &=3D 0x0F;
-+	if ((host->mmc->ios.timing =3D=3D MMC_TIMING_SD_EXP_1_2V) &&
-+		(host->mmc->caps2 & MMC_CAP2_SD_EXP_1_2V)) {
-+		scratch8 |=3D BIT(4) | BIT(7);
-+	} else
-+		scratch8 |=3D BIT(4) | BIT(5) | BIT(7);
-+	sdhci_writeb(host, scratch8, SDHCI_POWER_CONTROL);
-+
-+	/* UnLock WP */
-+	pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch8);
-+	scratch8 &=3D 0x7f;
-+	pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch8);
-+
-+	ret =3D readx_poll_timeout(sdhci_o2_sd_express_clkq_assert, host,
-+		scratch8, !(scratch8 & BIT(0)), 1, 30000) =3D=3D 0 ? 0 : 1;
-+
-+	if (!ret) {
-+		/* switch to PCIe mode */
-+		scratch16 =3D sdhci_readw(host, O2_SD_PCIE_SWITCH);
-+		scratch16 |=3D BIT(8);
-+		sdhci_writew(host, scratch16, O2_SD_PCIE_SWITCH);
+-		/* Lock WP */
+-		pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch_8);
+-		scratch_8 |=3D 0x80;
+-		pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch_8);
++		/* Start clk */
++		reg_val =3D sdhci_readw(host, SDHCI_CLOCK_CONTROL);
++		reg_val |=3D SDHCI_CLOCK_CARD_EN;
++		sdhci_writew(host, reg_val, SDHCI_CLOCK_CONTROL);
++		break;
++	default:
++		break;
+ 	}
+-	/* Start clk */
+-	reg_val =3D sdhci_readw(host, SDHCI_CLOCK_CONTROL);
+-	reg_val |=3D SDHCI_CLOCK_CARD_EN;
+-	sdhci_writew(host, reg_val, SDHCI_CLOCK_CONTROL);
+=20
+ 	/* wait DLL lock, timeout value 5ms */
+ 	if (readx_poll_timeout(sdhci_o2_pll_dll_wdt_control, host, @@ -563,6 +579=
+,7 @@ static void sdhci_pci_o2_set_clock(struct sdhci_host *host, unsigned =
+int clock)
+ 	u16 clk;
+ 	u8 scratch;
+ 	u32 scratch_32;
++	u32 dmdn_208m, dmdn_200m;
+ 	struct sdhci_pci_slot *slot =3D sdhci_priv(host);
+ 	struct sdhci_pci_chip *chip =3D slot->chip;
+=20
+@@ -578,16 +595,27 @@ static void sdhci_pci_o2_set_clock(struct sdhci_host =
+*host, unsigned int clock)
+ 	scratch &=3D 0x7f;
+ 	pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch);
+=20
++	if ((chip->pdev->device =3D=3D PCI_DEVICE_ID_O2_GG8_9860) ||
++		(chip->pdev->device =3D=3D PCI_DEVICE_ID_O2_GG8_9861) ||
++		(chip->pdev->device =3D=3D PCI_DEVICE_ID_O2_GG8_9862) ||
++		(chip->pdev->device =3D=3D PCI_DEVICE_ID_O2_GG8_9863)) {
++		dmdn_208m =3D 0x2c500000;
++		dmdn_200m =3D 0x25200000;
 +	} else {
-+		/* keep mode as USHI */
-+		pci_read_config_word(chip->pdev,
-+						O2_SD_PARA_SET_REG1, &scratch16);
-+		scratch16 &=3D ~BIT(11);
-+		pci_write_config_word(chip->pdev,
-+						O2_SD_PARA_SET_REG1, scratch16);
++		dmdn_208m =3D 0x2c280000;
++		dmdn_200m =3D 0x25100000;
 +	}
-+	/* Lock WP */
-+	pci_read_config_byte(chip->pdev,
-+					O2_SD_LOCK_WP, &scratch8);
-+	scratch8 |=3D 0x80;
-+	pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch8);
 +
-+	return ret;
-+}
+ 	if ((host->timing =3D=3D MMC_TIMING_UHS_SDR104) && (clock =3D=3D 20000000=
+0)) {
+ 		pci_read_config_dword(chip->pdev, O2_SD_PLL_SETTING, &scratch_32);
+=20
+-		if ((scratch_32 & 0xFFFF0000) !=3D 0x2c280000)
+-			o2_pci_set_baseclk(chip, 0x2c280000);
++		if ((scratch_32 & 0xFFFF0000) !=3D dmdn_208m)
++			o2_pci_set_baseclk(chip, dmdn_208m);
+ 	} else {
+ 		pci_read_config_dword(chip->pdev, O2_SD_PLL_SETTING, &scratch_32);
+=20
+-		if ((scratch_32 & 0xFFFF0000) !=3D 0x25100000)
+-			o2_pci_set_baseclk(chip, 0x25100000);
++		if ((scratch_32 & 0xFFFF0000) !=3D dmdn_200m)
++			o2_pci_set_baseclk(chip, dmdn_200m);
+ 	}
+=20
+ 	pci_read_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH, &scratc=
+h_32); @@ -624,6 +652,11 @@ static int sdhci_pci_o2_probe_slot(struct sdhci=
+_pci_slot *slot)
+ 	if (caps & SDHCI_CAN_DO_8BIT)
+ 		host->mmc->caps |=3D MMC_CAP_8_BIT_DATA;
+=20
++	host->quirks2 |=3D SDHCI_QUIRK2_BROKEN_DDR50;
 +
- static int sdhci_pci_o2_probe_slot(struct sdhci_pci_slot *slot)  {
- 	struct sdhci_pci_chip *chip;
-@@ -703,10 +761,11 @@ static int sdhci_pci_o2_probe_slot(struct sdhci_pci_s=
++	sdhci_pci_o2_enable_msi(chip, host);
++
++	host->mmc_host_ops.execute_tuning =3D sdhci_o2_execute_tuning;
+ 	switch (chip->pdev->device) {
+ 	case PCI_DEVICE_ID_O2_SDS0:
+ 	case PCI_DEVICE_ID_O2_SEABIRD0:
+@@ -634,10 +667,6 @@ static int sdhci_pci_o2_probe_slot(struct sdhci_pci_sl=
+ot *slot)
+ 		if (reg & 0x1)
+ 			host->quirks |=3D SDHCI_QUIRK_MULTIBLOCK_READ_ACMD12;
+=20
+-		host->quirks2 |=3D SDHCI_QUIRK2_BROKEN_DDR50;
+-
+-		sdhci_pci_o2_enable_msi(chip, host);
+-
+ 		if (chip->pdev->device =3D=3D PCI_DEVICE_ID_O2_SEABIRD0) {
+ 			ret =3D pci_read_config_dword(chip->pdev,
+ 						    O2_SD_MISC_SETTING, &reg);
+@@ -663,15 +692,21 @@ static int sdhci_pci_o2_probe_slot(struct sdhci_pci_s=
 lot *slot)
- 	case PCI_DEVICE_ID_O2_GG8_9861:
- 	case PCI_DEVICE_ID_O2_GG8_9862:
- 	case PCI_DEVICE_ID_O2_GG8_9863:
--		host->mmc->caps2 |=3D MMC_CAP2_NO_SDIO;
-+		host->mmc->caps2 |=3D MMC_CAP2_NO_SDIO | MMC_CAP2_SD_EXP |=20
-+MMC_CAP2_SD_EXP_1_2V;
- 		host->mmc->caps |=3D MMC_CAP_HW_RESET;
- 		host->quirks2 |=3D SDHCI_QUIRK2_PRESET_VALUE_BROKEN;
- 		slot->host->mmc_host_ops.get_cd =3D sdhci_o2_get_cd;
-+		host->mmc_host_ops.init_sd_express =3D sdhci_pci_o2_init_sd_express;
+ 			host->quirks2 |=3D SDHCI_QUIRK2_PRESET_VALUE_BROKEN;
+ 		}
+=20
+-		host->mmc_host_ops.execute_tuning =3D sdhci_o2_execute_tuning;
+-
+ 		if (chip->pdev->device !=3D PCI_DEVICE_ID_O2_FUJIN2)
+ 			break;
+ 		/* set dll watch dog timer */
+ 		reg =3D sdhci_readl(host, O2_SD_VENDOR_SETTING2);
+ 		reg |=3D (1 << 12);
+ 		sdhci_writel(host, reg, O2_SD_VENDOR_SETTING2);
+-
++		break;
++	case PCI_DEVICE_ID_O2_GG8_9860:
++	case PCI_DEVICE_ID_O2_GG8_9861:
++	case PCI_DEVICE_ID_O2_GG8_9862:
++	case PCI_DEVICE_ID_O2_GG8_9863:
++		host->mmc->caps2 |=3D MMC_CAP2_NO_SDIO;
++		host->mmc->caps |=3D MMC_CAP_HW_RESET;
++		host->quirks2 |=3D SDHCI_QUIRK2_PRESET_VALUE_BROKEN;
++		slot->host->mmc_host_ops.get_cd =3D sdhci_o2_get_cd;
  		break;
  	default:
  		break;
+@@ -684,6 +719,7 @@ static int sdhci_pci_o2_probe(struct sdhci_pci_chip *ch=
+ip)  {
+ 	int ret;
+ 	u8 scratch;
++	u16 scratch16;
+ 	u32 scratch_32;
+=20
+ 	switch (chip->pdev->device) {
+@@ -885,6 +921,52 @@ static int sdhci_pci_o2_probe(struct sdhci_pci_chip *c=
+hip)
+ 		scratch_32 |=3D 0x00180000;
+ 		pci_write_config_dword(chip->pdev, O2_SD_MISC_CTRL2, scratch_32);
+ 		pci_write_config_dword(chip->pdev, O2_SD_DETECT_SETTING, 1);
++		/* Lock WP */
++		ret =3D pci_read_config_byte(chip->pdev,
++					   O2_SD_LOCK_WP, &scratch);
++		if (ret)
++			return ret;
++		scratch |=3D 0x80;
++		pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch);
++		break;
++	case PCI_DEVICE_ID_O2_GG8_9860:
++	case PCI_DEVICE_ID_O2_GG8_9861:
++	case PCI_DEVICE_ID_O2_GG8_9862:
++	case PCI_DEVICE_ID_O2_GG8_9863:
++		/* UnLock WP */
++		ret =3D pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch);
++		if (ret)
++			return ret;
++		scratch &=3D 0x7f;
++		pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch);
++
++		/* Select mode switch source as software control */
++		pci_read_config_word(chip->pdev,
++						O2_SD_PARA_SET_REG1, &scratch16);
++		scratch16 &=3D 0xF8FF;
++		scratch16 |=3D BIT(9);
++		pci_write_config_word(chip->pdev,
++						O2_SD_PARA_SET_REG1, scratch16);
++
++		/* set VDD1 supply source */
++		pci_read_config_word(chip->pdev,
++						O2_SD_VDDX_CTRL_REG, &scratch16);
++		scratch16 &=3D 0xFFE3;
++		scratch16 |=3D BIT(3);
++		pci_write_config_word(chip->pdev,
++						O2_SD_VDDX_CTRL_REG, scratch16);
++
++		/* Set host drive strength*/
++		scratch16 =3D 0x0025;
++		pci_write_config_word(chip->pdev,
++						O2_SD_PLL_SETTING, scratch16);
++
++		/* Set output delay*/
++		pci_read_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH, &scrat=
+ch_32);
++		scratch_32 &=3D 0xFF0FFF00;
++		scratch_32 |=3D 0x00B0003B;
++		pci_write_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH,=20
++scratch_32);
++
+ 		/* Lock WP */
+ 		ret =3D pci_read_config_byte(chip->pdev,
+ 					   O2_SD_LOCK_WP, &scratch);
+diff --git a/drivers/mmc/host/sdhci-pci.h b/drivers/mmc/host/sdhci-pci.h in=
+dex 3661a224fb04..d680a030f3bf 100644
+--- a/drivers/mmc/host/sdhci-pci.h
++++ b/drivers/mmc/host/sdhci-pci.h
+@@ -11,6 +11,10 @@
+ #define PCI_DEVICE_ID_O2_FUJIN2		0x8520
+ #define PCI_DEVICE_ID_O2_SEABIRD0	0x8620
+ #define PCI_DEVICE_ID_O2_SEABIRD1	0x8621
++#define PCI_DEVICE_ID_O2_GG8_9860	0x9860
++#define PCI_DEVICE_ID_O2_GG8_9861	0x9861
++#define PCI_DEVICE_ID_O2_GG8_9862	0x9862
++#define PCI_DEVICE_ID_O2_GG8_9863	0x9863
+=20
+ #define PCI_DEVICE_ID_INTEL_PCH_SDIO0	0x8809
+ #define PCI_DEVICE_ID_INTEL_PCH_SDIO1	0x880a
+
+base-commit: 9e87b63ed37e202c77aa17d4112da6ae0c7c097c
 --
 2.25.1
 
