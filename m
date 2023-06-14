@@ -2,130 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5F0D730287
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:58:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A37A730285
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245113AbjFNO63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 10:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41280 "EHLO
+        id S244742AbjFNO6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 10:58:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236638AbjFNO61 (ORCPT
+        with ESMTP id S236638AbjFNO6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 10:58:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0AAF1A7
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 07:57:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686754662;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Uppa3uWzfF5tvk9avd6pQ9IphfaAL83xnkk0Cjs6Hhk=;
-        b=QqQF3gPD/L1teKwah2+Dj9mq75Uio5rRaGQgfqonxora3y4wCGWsh0/qI8COZq2SI0Y92D
-        84WSKMHjhYiCYOandIxUL8Rl6QFRriUkSAwEZng3Da3KSoqRtIfXwtdfZWXyj2D2qkxbHX
-        VfOj8r3R42vM/SG7qydHFOxuxQ/pJmo=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-114-muitaGOlOMe62ouaprSYTw-1; Wed, 14 Jun 2023 10:57:41 -0400
-X-MC-Unique: muitaGOlOMe62ouaprSYTw-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f7f77ac6b6so5764255e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 07:57:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686754659; x=1689346659;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Uppa3uWzfF5tvk9avd6pQ9IphfaAL83xnkk0Cjs6Hhk=;
-        b=Pe3fp3RK3SuDjvFTaqcs4nxffyDy5ZKr+0r19PRz7rEP1GGW88FQ1dYwW7q7Vncw0z
-         OAqZ7qnLIewo6KBWI6PieXQA2KUHGy0vibaV0hE3flPQIatskaGNXoNDzYBsFn4cMI0Z
-         UKeqx87Ee++mEZWd43ZDME/Ohvpnl8Bt0eII/CmxqhZI82AOrpGytHHPj4CNJiV91xSj
-         nkKFZ7CXAi1ev357JIdk1MvsPpqgOJCC8+3+L8c7KjXkIHnR/bWiZ2zfEH5s0fzs5dTI
-         MdOJyRdzTQ19+yJj9CesvHbE8chy4kWBUFs31/1gxl0WCam16VYyTGeL88ayqWYS77D6
-         5aHg==
-X-Gm-Message-State: AC+VfDwatb2tdV1WSV+FerduglnfGNaLHzSvnBQupqzpd/PFYYdzp5xu
-        I/BwQK6x2Oj28Mq4RXOjkH7lKFbsC+kd+eGga9UJblsDWQSdYlmhzLnTjGVv0/WS1NrKbCL700k
-        dzpa+0fZ17QdLBnxvrV2mSgmFYEC96j/U
-X-Received: by 2002:a05:600c:2948:b0:3f7:3a11:e3ae with SMTP id n8-20020a05600c294800b003f73a11e3aemr13311863wmd.38.1686754659497;
-        Wed, 14 Jun 2023 07:57:39 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6I7h1wgATJMLGDmmkyARD4Su7DI+YrvaeE8V1DcZiJhjoRIYauvU/WmxrswjRJeCtwb2mqog==
-X-Received: by 2002:a05:600c:2948:b0:3f7:3a11:e3ae with SMTP id n8-20020a05600c294800b003f73a11e3aemr13311853wmd.38.1686754659123;
-        Wed, 14 Jun 2023 07:57:39 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:b200:7d03:23db:ad5:2d21? (p200300cbc704b2007d0323db0ad52d21.dip0.t-ipconnect.de. [2003:cb:c704:b200:7d03:23db:ad5:2d21])
-        by smtp.gmail.com with ESMTPSA id z10-20020a05600c114a00b003f7e60622f0sm17749133wmz.6.2023.06.14.07.57.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 07:57:38 -0700 (PDT)
-Message-ID: <533c32cf-9a18-1590-4d29-f076d6bd58c1@redhat.com>
-Date:   Wed, 14 Jun 2023 16:57:37 +0200
+        Wed, 14 Jun 2023 10:58:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6411FC2;
+        Wed, 14 Jun 2023 07:58:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 651C9640E7;
+        Wed, 14 Jun 2023 14:58:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4926DC433C8;
+        Wed, 14 Jun 2023 14:58:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686754692;
+        bh=M43zCogb2TgR3NGCTSmd6SWNuq1Py6JOKg+spF6oX8Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cNw9rSh1gHsTYWsp4q89nLmWouBaNxbCzQivzaKHJtgqwpcSsE+lgkPNWp8wKrMwZ
+         IudoAXC9Au7NB/nUOijeSY6I6hCPfgrhlNa0hy6ElGi89Hqis4auvEQ83VPdSARdYE
+         JgMIysObCWwdit8dOzvkIMn5tCv3DCVogL5BGymvyfOLCYPJPOwOBoZeR5nlXmpsX8
+         7uCQKipOWxka9Yjyfzr+aYrxNvRRK9Js57IT91VjpTsRpyvgcHF4L6GsdN8a9V/af5
+         dobOZ8YPTsQJElaYOC0IMMm9he/TkXny5f8xnqU0vex4yyhTg9SniWg+ppfNnMkkaZ
+         0huW+Le0XZAXg==
+Date:   Wed, 14 Jun 2023 15:58:05 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Manikandan Muralidharan <manikandan.m@microchip.com>,
+        lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        sam@ravnborg.org, bbrezillon@kernel.org, airlied@gmail.com,
+        daniel@ffwll.ch, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, Hari.PrasathGE@microchip.com,
+        Balamanikandan.Gunasundar@microchip.com,
+        Durai.ManickamKR@microchip.com, Nayabbasha.Sayed@microchip.com,
+        Dharma.B@microchip.com, Varshini.Rajendran@microchip.com,
+        Balakrishnan.S@microchip.com
+Subject: Re: [PATCH 1/9] dt-bindings: mfd: Add bindings for SAM9X7 LCD
+ controller
+Message-ID: <20230614-headset-ability-e4d90eeda5ed@spud>
+References: <20230613070426.467389-1-manikandan.m@microchip.com>
+ <20230613070426.467389-2-manikandan.m@microchip.com>
+ <a0b059d1-df4d-10ce-fb7c-7acea0a20793@linaro.org>
+ <20230613-slider-coherent-d508d67afc91@spud>
+ <423eef3c-54f0-5c88-9bc9-82c0198b6da6@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 4/7] mm/hugetlb: Prepare hugetlb_follow_page_mask() for
- FOLL_PIN
-To:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        James Houghton <jthoughton@google.com>,
-        Hugh Dickins <hughd@google.com>
-References: <20230613215346.1022773-1-peterx@redhat.com>
- <20230613215346.1022773-5-peterx@redhat.com>
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230613215346.1022773-5-peterx@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="vm86L/VjnDury6D6"
+Content-Disposition: inline
+In-Reply-To: <423eef3c-54f0-5c88-9bc9-82c0198b6da6@microchip.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13.06.23 23:53, Peter Xu wrote:
-> It's coming, not yet, but soon.  Loose the restriction.
-> 
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
->   mm/hugetlb.c | 7 -------
->   1 file changed, 7 deletions(-)
-> 
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index f037eaf9d819..31d8f18bc2e4 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -6467,13 +6467,6 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
->   	spinlock_t *ptl;
->   	pte_t *pte, entry;
->   
-> -	/*
-> -	 * FOLL_PIN is not supported for follow_page(). Ordinary GUP goes via
-> -	 * follow_hugetlb_page().
-> -	 */
-> -	if (WARN_ON_ONCE(flags & FOLL_PIN))
-> -		return NULL;
-> -
->   	hugetlb_vma_lock_read(vma);
->   	pte = hugetlb_walk(vma, haddr, huge_page_size(h));
->   	if (!pte)
-Did you fix why the warning was placed there in the first place? (IIRC, 
-at least unsharing support needs to be added, maybe more)
 
--- 
-Cheers,
+--vm86L/VjnDury6D6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-David / dhildenb
+On Wed, Jun 14, 2023 at 04:40:50PM +0200, Nicolas Ferre wrote:
+> On 13/06/2023 at 20:21, Conor Dooley wrote:
+> > On Tue, Jun 13, 2023 at 08:17:13PM +0200, Krzysztof Kozlowski wrote:
+> > > On 13/06/2023 09:04, Manikandan Muralidharan wrote:
+> > > > Add new compatible string for the XLCD controller on SAM9X7 SoC.
+> > > >=20
+> > > > Signed-off-by: Manikandan Muralidharan<manikandan.m@microchip.com>
+> > > > ---
+> > > >   Documentation/devicetree/bindings/mfd/atmel-hlcdc.txt | 1 +
+> > > >   1 file changed, 1 insertion(+)
+> > > >=20
+> > > > diff --git a/Documentation/devicetree/bindings/mfd/atmel-hlcdc.txt =
+b/Documentation/devicetree/bindings/mfd/atmel-hlcdc.txt
+> > > > index 5f8880cc757e..7c77b6bf4adb 100644
+> > > > --- a/Documentation/devicetree/bindings/mfd/atmel-hlcdc.txt
+> > > > +++ b/Documentation/devicetree/bindings/mfd/atmel-hlcdc.txt
+> > > > @@ -8,6 +8,7 @@ Required properties:
+> > > >      "atmel,sama5d3-hlcdc"
+> > > >      "atmel,sama5d4-hlcdc"
+> > > >      "microchip,sam9x60-hlcdc"
+> > > > +   "microchip,sam9x7-xlcdc"
+> > > Google says sam9x7 is a series, not a SoC. Please add compatibles for
+> > > specific SoCs, not for series.
+> > We had this one a few weeks ago, see
+> > https://lore.kernel.org/all/add5e49e-8416-ba9f-819a-da944938c05f@microc=
+hip.com/
+> > and its parents. Outcome of that seemed to be that using "sam9x7" was f=
+ine.
+>=20
+> And it's where it begins to be funny, as the LCD is precisely one aspect
+> where we differentiate between sam9x75, sam9x72 and sam9x70...
 
+Oh dear, just my luck...
+
+> So please Manikandan sort this out if difference between these chips will=
+ be
+> better handled with different compatibility string, in particular about /=
+/,
+> LVDS and MIPI-DSI variants!
+
+Yeah, providing some information about what the differences actually are
+would be good, for the same of the actually-knowledgeable-about-displays
+folk in the audience (IOW, not me).
+Probably then the display/atmel/hlcdc-dc.txt binding needs an update too?
+
+--vm86L/VjnDury6D6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZInVfQAKCRB4tDGHoIJi
+0t+QAP98ZK1V7j86/YMu7RoLTY1KeXiemdt0SzR3FdJiE/LX5wD8D7rmXmPM2Q2u
+I+1APY8ZTJDKVahjB3NLEdDAi3STkA4=
+=HLvp
+-----END PGP SIGNATURE-----
+
+--vm86L/VjnDury6D6--
