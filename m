@@ -2,67 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F92572F901
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 11:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C56072F905
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 11:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243254AbjFNJ0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 05:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33582 "EHLO
+        id S243999AbjFNJ0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 05:26:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234451AbjFNJ0P (ORCPT
+        with ESMTP id S243564AbjFNJ0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 05:26:15 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 039671FC3;
-        Wed, 14 Jun 2023 02:26:13 -0700 (PDT)
-Received: from loongson.cn (unknown [10.180.13.22])
-        by gateway (Coremail) with SMTP id _____8AxnOq0h4lkwxEFAA--.10690S3;
-        Wed, 14 Jun 2023 17:26:12 +0800 (CST)
-Received: from [10.180.13.22] (unknown [10.180.13.22])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxJeSzh4lkDnEaAA--.10205S3;
-        Wed, 14 Jun 2023 17:26:11 +0800 (CST)
-Message-ID: <75be5e57-28a7-bf3f-8b2e-a0183e54e25c@loongson.cn>
-Date:   Wed, 14 Jun 2023 17:25:47 +0800
+        Wed, 14 Jun 2023 05:26:36 -0400
+Received: from mx2.veeam.com (mx2.veeam.com [64.129.123.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E946D1FD4;
+        Wed, 14 Jun 2023 02:26:33 -0700 (PDT)
+Received: from mail.veeam.com (prgmbx01.amust.local [172.24.128.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx2.veeam.com (Postfix) with ESMTPS id 1EFF9422C4;
+        Wed, 14 Jun 2023 05:26:28 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com;
+        s=mx2-2022; t=1686734788;
+        bh=TrwuhYcstPik75UcplGmnA0hgEPNnuFfFZc3d9G7byk=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To:From;
+        b=W3a5lkq5kxpezhv3wFI+XM203PRzZQ1+sZJij4aCENw/bd0T8yGdPVvn9vyxYmAyG
+         ek98R3IRPtJ5DB9PBJKc9YGB4YGnKoHBMBxINqgF0hSi8h1fSkwaxIu4oQ27fdXN1e
+         GKJrVLaNGB7mdnNeOuvjUeHvYuW78lKCDMGSa19LeC3vIaJ2Rt9+HARWZc6vzp/Nvq
+         PAhSFfyhuVFNGMviFWy0/2JMNQbKoFiqhxZYoVtGRg83ICXIOa3u3pp6tLTkjhEupY
+         wd6c7d6Z0lg+BZr8c53Qeb+7vfAjOSN6Mu8JNgov83tEnAErmNgyP8TXY++Oh6lwU8
+         USTS0e2ROpbBA==
+Received: from [172.24.10.107] (172.24.10.107) by prgmbx01.amust.local
+ (172.24.128.102) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Wed, 14 Jun
+ 2023 11:26:26 +0200
+Message-ID: <733f591e-0e8f-8668-8298-ddb11a74df81@veeam.com>
+Date:   Wed, 14 Jun 2023 11:26:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [ PATCH v2 3/3] ASoC: dt-bindings: Add support for Loongson audio
- card
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v5 04/11] blksnap: header file of the module interface
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        conor+dt@kernel.org
-Cc:     broonie@kernel.org, lgirdwood@gmail.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org, loongarch@lists.linux.dev,
-        loongson-kernel@lists.loongnix.cn
-References: <20230612090058.3039546-1-mengyingkun@loongson.cn>
- <4f1c934c-5a68-a2cd-10d1-568d61865755@linaro.org>
-From:   Yingkun Meng <mengyingkun@loongson.cn>
-In-Reply-To: <4f1c934c-5a68-a2cd-10d1-568d61865755@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Christoph Hellwig <hch@infradead.org>,
+        Dave Chinner <david@fromorbit.com>
+CC:     <axboe@kernel.dk>, <corbet@lwn.net>, <snitzer@kernel.org>,
+        <viro@zeniv.linux.org.uk>, <brauner@kernel.org>,
+        <dchinner@redhat.com>, <willy@infradead.org>, <dlemoal@kernel.org>,
+        <linux@weissschuh.net>, <jack@suse.cz>, <ming.lei@redhat.com>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        Donald Buczek <buczek@molgen.mpg.de>
+References: <20230612135228.10702-1-sergei.shtepa@veeam.com>
+ <20230612135228.10702-5-sergei.shtepa@veeam.com>
+ <ZIjsywOtHM5nIhSr@dread.disaster.area> <ZIldkb1pwhNsSlfl@infradead.org>
+From:   Sergei Shtepa <sergei.shtepa@veeam.com>
+In-Reply-To: <ZIldkb1pwhNsSlfl@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8AxJeSzh4lkDnEaAA--.10205S3
-X-CM-SenderInfo: 5phqw55lqjy33q6o00pqjv00gofq/1tbiAQACDGSIXIIX-wABsU
-X-Coremail-Antispam: 1Uk129KBj93XoW7Kr4xAryDCrW3WrW3AF48Zrc_yoW8CrWrpF
-        s7CasrKFWxt3W7u39I9FyfJr45Z39ayanxJF42qw1UGF98K3Wru3yayF1UZanIyr1rGFW7
-        ZFyF9w48GFn0yacCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6F4UJVW0owAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
-        Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_
-        WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrw
-        CYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48J
-        MxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI
-        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y
-        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-        W8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1l
-        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0epB3UUUU
-        U==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+X-Originating-IP: [172.24.10.107]
+X-ClientProxiedBy: prgmbx02.amust.local (172.24.128.103) To
+ prgmbx01.amust.local (172.24.128.102)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A29240315546D7063
+X-Veeam-MMEX: True
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,58 +74,64 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 2023/6/13 16:36, Krzysztof Kozlowski wrote:
-> On 12/06/2023 11:00, YingKun Meng wrote:
->> From: Yingkun Meng <mengyingkun@loongson.cn>
+
+On 6/14/23 08:26, Christoph Hellwig wrote:
+> Subject:
+> Re: [PATCH v5 04/11] blksnap: header file of the module interface
+> From:
+> Christoph Hellwig <hch@infradead.org>
+> Date:
+> 6/14/23, 08:26
+> 
+> To:
+> Dave Chinner <david@fromorbit.com>
+> CC:
+> Sergei Shtepa <sergei.shtepa@veeam.com>, axboe@kernel.dk, hch@infradead.org, corbet@lwn.net, snitzer@kernel.org, viro@zeniv.linux.org.uk, brauner@kernel.org, dchinner@redhat.com, willy@infradead.org, dlemoal@kernel.org, linux@weissschuh.net, jack@suse.cz, ming.lei@redhat.com, linux-block@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, Donald Buczek <buczek@molgen.mpg.de>
+> 
+> 
+> On Wed, Jun 14, 2023 at 08:25:15AM +1000, Dave Chinner wrote:
+>>> + * Return: 0 if succeeded, negative errno otherwise.
+>>> + */
+>>> +#define IOCTL_BLKSNAP_SNAPSHOT_APPEND_STORAGE					\
+>>> +	_IOW(BLKSNAP, blksnap_ioctl_snapshot_append_storage,			\
+>>> +	     struct blksnap_snapshot_append_storage)
+>> That's an API I'm extremely uncomfortable with. We've learnt the
+>> lesson *many times* that userspace physical mappings of underlying
+>> file storage are unreliable.
 >>
->> The audio card uses loongson I2S controller present in
->> 7axxx/2kxxx chips to transfer audio data.
->>
->> On loongson platform, the chip has only one I2S controller.
->>
->> Signed-off-by: Yingkun Meng <mengyingkun@loongson.cn>
->> ---
->>   .../sound/loongson,ls-audio-card.yaml         | 70 +++++++++++++++++++
->>   1 file changed, 70 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/sound/loongson,ls-audio-card.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/sound/loongson,ls-audio-card.yaml b/Documentation/devicetree/bindings/sound/loongson,ls-audio-card.yaml
->> new file mode 100644
->> index 000000000000..61e8babed402
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/sound/loongson,ls-audio-card.yaml
->> @@ -0,0 +1,70 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/sound/loongson,ls-audio-card.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Loongson 7axxx/2kxxx ASoC audio sound card driver
->> +
->> +maintainers:
->> +  - Yingkun Meng <mengyingkun@loongson.cn>
->> +
->> +description:
->> +  The binding describes the sound card present in loongson
->> +  7axxx/2kxxx platform. The sound card is an ASoC component
->> +  which uses Loongson I2S controller to transfer the audio data.
->> +
->> +properties:
->> +  compatible:
->> +    const: loongson,ls-audio-card
-> Generic compatible does not allow you to add any quirks or differences
-> if one board is a bit different.
->
+>> i.e.  This is reliant on userspace telling the kernel the physical
+>> mapping of the filesystem file to block device LBA space and then
+>> providing a guarantee (somehow) that the mapping will always remain
+>> unchanged. i.e. It's reliant on passing FIEMAP data from the
+>> filesystem to userspace and then back into the kernel without it
+>> becoming stale and somehow providing a guarantee that nothing (not
+>> even the filesystem doing internal garbage collection) will change
+>> it.
+> Hmm, I never thought of this API as used on files that somewhere
+> had a logical to physical mapping applied to them.
+> 
+> Sergey, is that the indtended use case?  If so we really should
+> be going through the file system using direct I/O.
+> 
 
-Yeah, i know. It's okay to use a generic compatible.
+Hi!
+Thank you, Dave, for such a detailed comment. 
+Yes, everything is really as you described.
 
->
-> Best regards,
-> Krzysztof
+This code worked quite successfully for the veeamsnap module, on the
+basis of which blksnap was created. Indeed, such an allocation of an
+area on a block device using a file does not look safe.
 
+We've already discussed this with Donald Buczek <buczek@molgen.mpg.de>.
+Link: https://github.com/veeam/blksnap/issues/57#issuecomment-1576569075
+And I have planned work on moving to a more secure ioctl in the future.
+Link: https://github.com/veeam/blksnap/issues/61
 
-Thanks,
+Now, thanks to Dave, it becomes clear to me how to solve this problem best.
+swapfile is a good example of how to do it right.
 
-Yingkun
+Fixing this vulnerability will entail transferring the algorithm for
+allocating the difference storage from the user-space to the blksnap code.
+The changes are quite significant. The UAPI will be changed.
 
+So I agree that the blksnap module is not good enough for upstream yet.
