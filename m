@@ -2,121 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 299C972F342
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 05:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF4C72F34F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 05:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234396AbjFNDv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 23:51:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55426 "EHLO
+        id S240034AbjFNDzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 23:55:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231937AbjFNDvy (ORCPT
+        with ESMTP id S232012AbjFNDzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 23:51:54 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C943EC3;
-        Tue, 13 Jun 2023 20:51:53 -0700 (PDT)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QgryV6Hk2ztQdJ;
-        Wed, 14 Jun 2023 11:49:22 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 14 Jun
- 2023 11:51:51 +0800
-Subject: Re: [PATCH net-next v3 3/4] page_pool: introduce page_pool_alloc()
- API
-To:     Alexander Duyck <alexander.duyck@gmail.com>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        Tue, 13 Jun 2023 23:55:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F82C2;
+        Tue, 13 Jun 2023 20:55:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CB4F630DF;
+        Wed, 14 Jun 2023 03:55:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAFFBC433C0;
+        Wed, 14 Jun 2023 03:55:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686714919;
+        bh=PAwp8P6P+bo9ED/GohZphvO5u0BbH5QkU+e6HYEe9V8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=h1pkU99e7ldbnbGhCLIzgn4hvR9OkW0h9xABQQwEqSkKgKDwkimLQz01NWRBFGQKg
+         CA0mSiOEPJ1x0s2NsRL+Jd2Y4xcyGeHEKrYIohTwVUjz40zuUasrd5HFbuh/tdRV8H
+         kYn9lTKWs0kOY6g2+Pr6aoxdGlR8+gRQUnqwpCXzitqvn0yM6yI9DEyQs2ejFHYUYY
+         M35Alj7TaVuQkYuscsiGwDlcIxwchQfGyyFRAIchghxfvk53VztjwBs/qHPCUpWdtw
+         t9ZLh17rOtCPF4HN8qFevTf/D8KWmcgbO7DOqH0KvsghbfXpLWC2C7FGRMH1//Gyu6
+         Ja8A+5PiUJUTw==
+Date:   Tue, 13 Jun 2023 20:55:18 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Yunsheng Lin <linyunsheng@huawei.com>
+Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        <davem@davemloft.net>, <pabeni@redhat.com>,
         <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Lorenzo Bianconi <lorenzo@kernel.org>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Eric Dumazet <edumazet@google.com>
-References: <20230609131740.7496-1-linyunsheng@huawei.com>
- <20230609131740.7496-4-linyunsheng@huawei.com>
- <CAKgT0UfVwQ=ri7ZDNnsATH2RQpEz+zDBBb6YprvniMEWGdw+dQ@mail.gmail.com>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <36366741-8df2-1137-0dd9-d498d0f770e4@huawei.com>
-Date:   Wed, 14 Jun 2023 11:51:51 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        <linux-rdma@vger.kernel.org>
+Subject: Re: [PATCH net-next v4 1/5] page_pool: frag API support for 32-bit
+ arch with 64-bit DMA
+Message-ID: <20230613205518.56c61170@kernel.org>
+In-Reply-To: <6db097ba-c3fe-6e45-3c39-c21b4d9e16ef@huawei.com>
+References: <20230612130256.4572-1-linyunsheng@huawei.com>
+        <20230612130256.4572-2-linyunsheng@huawei.com>
+        <483d7a70-3377-a241-4554-212662ee3930@intel.com>
+        <6db097ba-c3fe-6e45-3c39-c21b4d9e16ef@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <CAKgT0UfVwQ=ri7ZDNnsATH2RQpEz+zDBBb6YprvniMEWGdw+dQ@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/13 22:36, Alexander Duyck wrote:
-> On Fri, Jun 9, 2023 at 6:20 AM Yunsheng Lin <linyunsheng@huawei.com> wrote:
-
-...
-
->>
->> +static inline struct page *page_pool_alloc(struct page_pool *pool,
->> +                                          unsigned int *offset,
->> +                                          unsigned int *size, gfp_t gfp)
->> +{
->> +       unsigned int max_size = PAGE_SIZE << pool->p.order;
->> +       struct page *page;
->> +
->> +       *size = ALIGN(*size, dma_get_cache_alignment());
->> +
->> +       if (WARN_ON(*size > max_size))
->> +               return NULL;
->> +
->> +       if ((*size << 1) > max_size || PAGE_POOL_DMA_USE_PP_FRAG_COUNT) {
->> +               *size = max_size;
->> +               *offset = 0;
->> +               return page_pool_alloc_pages(pool, gfp);
->> +       }
->> +
->> +       page = __page_pool_alloc_frag(pool, offset, *size, gfp);
->> +       if (unlikely(!page))
->> +               return NULL;
->> +
->> +       /* There is very likely not enough space for another frag, so append the
->> +        * remaining size to the current frag to avoid truesize underestimate
->> +        * problem.
->> +        */
->> +       if (pool->frag_offset + *size > max_size) {
->> +               *size = max_size - *offset;
->> +               pool->frag_offset = max_size;
->> +       }
->> +
+On Wed, 14 Jun 2023 11:36:28 +0800 Yunsheng Lin wrote:
+> > As Jakub previously mentioned, this involves including dma-mapping.h,
+> > which is relatively heavy, to each source file which includes skbuff.h,
+> > i.e. almost the whole kernel :D  
 > 
-> Rather than preventing a truesize underestimation this will cause one.
-> You are adding memory to the size of the page reserved and not
-> accounting for it anywhere as this isn't reported up to the network
-> stack. I would suggest dropping this from your patch.
+> I am not sure I understand the part about 'includes skbuff.h' yet, it seems
+> 'skbuff.h' does not have anything related to this patch?
 
-I was thinking about the driver author reporting it up to the network
-stack using the new API as something like below:
+$ git grep net/page_pool.h -- include/linux/skbuff.h
+include/linux/skbuff.h:#include <net/page_pool.h>
 
-int truesize = size;
-struct page *page;
-int offset;
-
-page = page_pool_dev_alloc(pool, &offset, &truesize);
-if (unlikely(!page))
-	goto err;
-
-skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags, page,
-		offset, size, truesize);
-
-and similiar handling for *_build_skb() case too.
-
-Does it make senses for that? or did I miss something obvious here?
-
-
+> > I addressed this in my series, which I hope will land soon after yours
+> > (sending new revision in 24-48 hours), so you can leave it as it is. Or
+> > otherwise you can pick my solution (or come up with your own :D).  
 > 
+> Do you mean by removing "#include <linux/dma-direction.h>" as dma-mapping.h
+> has included dma-direction.h?
+> But I am not sure if there is any hard rule about not explicitly including
+> a .h which is implicitly included. What if the dma-mapping.h is changed to not
+> include dma-direction.h anymore?
+> 
+> Anyway, it seems it is unlikely to not include dma-direction.h in dma-mapping.h,
+> Will remove the "#include <linux/dma-direction.h>" if there is another version
+> needed for this patchset:)
+
+The point is that we don't want commonly included headers to pull
+in huge dependencies. Please run the preprocessor on
+linux/dma-direction.h, you'll see how enormous it is.
