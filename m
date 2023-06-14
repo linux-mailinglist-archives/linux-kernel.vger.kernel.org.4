@@ -2,114 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31BF07303F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B40E97303F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 17:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236460AbjFNPgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 11:36:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39280 "EHLO
+        id S236790AbjFNPgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 11:36:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235947AbjFNPgF (ORCPT
+        with ESMTP id S235947AbjFNPgj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 11:36:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED20C7
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:35:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686756922;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gmwzH0CjVLzqwLy7siJrCROCQ7j4iPuuS4OQ5spBH/E=;
-        b=exAMnlNGa1kxKj5+T3GK/yUcyMtZp12zVaDIMuL3IQm7y6eUw8Bg/9oCzS5t+cjKkd0kkG
-        21/ToNvm9AYdHh7ZkK9WEZs+jD/iEUZmcu5uKM5Ku38pcEm1foplyzP9YBIGIxKu0jno26
-        Q/pRf7Khqbk+lMPFkvea6wp0cizBBLg=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-142-53WoW33HPT-_m5obgIsd2Q-1; Wed, 14 Jun 2023 11:35:21 -0400
-X-MC-Unique: 53WoW33HPT-_m5obgIsd2Q-1
-Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-62fea7a5de9so583846d6.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:35:21 -0700 (PDT)
+        Wed, 14 Jun 2023 11:36:39 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13C7C7
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:36:38 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-33fddc27743so46696395ab.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 08:36:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686756920; x=1689348920;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gmwzH0CjVLzqwLy7siJrCROCQ7j4iPuuS4OQ5spBH/E=;
-        b=cyAeQPzB7ju9A4Tnj+N40NKmlrBlsBgGiOIkUq3twVNS5XqEPxmCfFXQGkjo+IDadb
-         h97Lges8R31thJYWQKIjSNxjHn9ewEObn9Qa6QMyB/gJso9rLu2OxakVzhS7X2DDYeNs
-         JiasJ+JHUhor7OYSkKfoG2dVNUpQRK26a0URcCBEDFrXCl3xV80ZA7ix7vjUYGe2P2fk
-         jKnFP9b8/kjZufBw06DINOtjdnMmrOGSM2Zlz/vVsXD22RUsQ6BDTke9AAXX6qncM7zk
-         81KqDXrmt4xIkJjMSd5fJeDs2fvx7pRgGqOmSWdRP572GFIdQlnTtx6QycbZ1iO25GHr
-         VNxw==
-X-Gm-Message-State: AC+VfDwxhSgafZUpZOmpYzwYxWz/axAJMXoB4C6cHoWWJz0RoOrYupC9
-        DbTRTFYqoC491THPVdMxDN/GZgWig9MGht5nitCmrDOIrN3q5vTdgAw6n4fgW/p6pvCw8TvJP4A
-        0D8K/l4SUcPcKDAtkEdERo6kz
-X-Received: by 2002:a05:622a:1a02:b0:3f6:ab9a:3d8e with SMTP id f2-20020a05622a1a0200b003f6ab9a3d8emr20549379qtb.4.1686756920611;
-        Wed, 14 Jun 2023 08:35:20 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7TJod/VnPoMZiUa7o/El2294sJ8GL00HWcJelg2hFCktid9sv2kfOTl6JXIqQfFSSX+RvYNw==
-X-Received: by 2002:a05:622a:1a02:b0:3f6:ab9a:3d8e with SMTP id f2-20020a05622a1a0200b003f6ab9a3d8emr20549357qtb.4.1686756920392;
-        Wed, 14 Jun 2023 08:35:20 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id j8-20020ac85c48000000b003f9b6d54b17sm5106366qtj.58.2023.06.14.08.35.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 08:35:19 -0700 (PDT)
-Date:   Wed, 14 Jun 2023 11:35:18 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        James Houghton <jthoughton@google.com>,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH 6/7] mm/gup: Accelerate thp gup even for "pages != NULL"
-Message-ID: <ZIneNhvxGGb6zLyq@x1n>
-References: <20230613215346.1022773-1-peterx@redhat.com>
- <20230613215346.1022773-7-peterx@redhat.com>
- <ZInVmrJdLWxOEkeD@casper.infradead.org>
- <ZInalCeSNmAiG2K4@x1n>
+        d=1e100.net; s=20221208; t=1686756998; x=1689348998;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=phQ7TSdnMlVGNbVCPYRQr4PU6UmUaw+34QpLb3+bJI4=;
+        b=I80ffhCEYgP+jTAIOVoeUPSpdw4rtNKgTWhUlE07Z8F3YjacMbUJYmLqJnwQctbowj
+         98wXUYsNEPboh4kFFEeyAYB6I2NSCFHNZ7ZZsy7tuoyS3MjJODxY0ub3HCHaZAWwOzyQ
+         okdBKOg+DXlgVqNcnwkRDWYCEP0iSIhe7HUSG4SQx/MBRu0kggJJwON3iXuZdBqFcJuD
+         VssCA4ydFfZxGwSXw/6xDLuTHLg9l/9F/wFirXt/ejlnQz13x7i9WMnMnT1dsXNrbEYL
+         P8ZeXzlbzZRoh27Zoa/7rSne4rlGIqHoHjUBIWdhPPmyq5g4rNh6tomxxp32rYqGR9Q2
+         paqg==
+X-Gm-Message-State: AC+VfDxqni/F61L07K4CRqnRn2DEHaksfzWIKN2699LGQaJ3Pe9hqFez
+        wvL+SUvIQeHyo4RpTHrI13KfkUwrYfc29S22NCWJjX/4P7SH
+X-Google-Smtp-Source: ACHHUZ7Mkn9ZMRRLMYl80aZSQLcCbxjmQJ6yFASgFB/JtRpTXHcQNP4UiwWC3PuH4cNNqXMPQQRnYk8btGq1P2PL9D8qzqx2spm+
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZInalCeSNmAiG2K4@x1n>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:d442:0:b0:340:9f52:a982 with SMTP id
+ r2-20020a92d442000000b003409f52a982mr646147ilm.6.1686756997948; Wed, 14 Jun
+ 2023 08:36:37 -0700 (PDT)
+Date:   Wed, 14 Jun 2023 08:36:37 -0700
+In-Reply-To: <1602673.1686753912@warthog.procyon.org.uk>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000af6e4905fe18b762@google.com>
+Subject: Re: [syzbot] [crypto?] general protection fault in shash_async_final
+From:   syzbot <syzbot+13a08c0bf4d212766c3c@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, dhowells@redhat.com,
+        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 11:19:48AM -0400, Peter Xu wrote:
-> > > +			for (j = 0; j < page_increm; j++) {
-> > > +				subpage = nth_page(page, j);
-> > > +				pages[i+j] = subpage;
-> > > +				flush_anon_page(vma, subpage, start + j * PAGE_SIZE);
-> > > +				flush_dcache_page(subpage);
-> > 
-> > You're better off calling flush_dcache_folio() right at the end.
-> 
-> Will do.
+Hello,
 
-Ah when I start to modify it I noticed it's a two-sided sword: we'll then
-also do flush dcache over the whole folio even if we gup one page.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-We'll start to get benefit only if some arch at least starts to impl
-flush_dcache_folio() (which seems to be none, right now..), and we'll
-already start to lose on amplifying the flush when gup on partial folio.
+Reported-and-tested-by: syzbot+13a08c0bf4d212766c3c@syzkaller.appspotmail.com
 
-Perhaps I still keep it as-is which will still be accurate, always faster
-than old code, and definitely not regress in any form?
+Tested on:
 
--- 
-Peter Xu
+commit:         fa0e21fa rtnetlink: extend RTEXT_FILTER_SKIP_STATS to ..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git main
+console output: https://syzkaller.appspot.com/x/log.txt?x=17790627280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=526f919910d4a671
+dashboard link: https://syzkaller.appspot.com/bug?extid=13a08c0bf4d212766c3c
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=14c0019d280000
 
+Note: testing is done by a robot and is best-effort only.
