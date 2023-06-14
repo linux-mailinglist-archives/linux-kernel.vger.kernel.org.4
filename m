@@ -2,250 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 306F772FDB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 370BB72FDB1
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 13:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244371AbjFNL7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 07:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39076 "EHLO
+        id S244154AbjFNL7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 07:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244165AbjFNL7V (ORCPT
+        with ESMTP id S243186AbjFNL7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 07:59:21 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75AF392;
-        Wed, 14 Jun 2023 04:59:20 -0700 (PDT)
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35EAJ98Z029310;
-        Wed, 14 Jun 2023 11:58:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2023-03-30;
- bh=G28Fiw7FWAGEVIoJszLRzBC6BzQXk1+v3Djg/QP/kkg=;
- b=GszUM5jkmo20W02+X21YjR9qmVDWZzqjT1uxJ4pkGBC0fD2XJmvzrIbAUUwn5TWOtFzW
- BI+/1wN7rO8JVGubK/KKJqp6CtHXGGnk6tQ8TQCvNfruEmTCz4qSA2bDvhzlKe7yfbUC
- tQ/ZYujRIUc1ENTQU1rCpq95215KS7vkWAPoPqySqqu9ikuvezmU+XG2Zs+NbjcdH5ZW
- mCSzLi+m1V6nqn0JIAwOC+h9yyigx3xeCFzVMHPQZtbCQBJJAT/Oqob4Yu/Ese9pX4De
- gt4EHsX36tZOI9xqyeg7EWOzx9U3Z/oYKvvgsMIjtNWlTIF/aD2tuoU3kIcxMgLbwPAb 3g== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r4h7d7ck8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 14 Jun 2023 11:58:51 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35EAOYEr021668;
-        Wed, 14 Jun 2023 11:58:39 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2042.outbound.protection.outlook.com [104.47.66.42])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3r4fm5f6c9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 14 Jun 2023 11:58:39 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YO2L6my8hHZR54bNX7Bt4+gR8UBSz95A61hGSJpYLTeRtCHwZLSI7scYD0Ak5KTwda34GVUb0dLqsTt3HRa8exworiPK1LVWPTroOvK6Ug7lY2lFllZfZ9I6V8zt17dX7FqbztbxP9IDYbLZGp4uubEJRo/a857Rh1DtbZige4GLwPz+z2vDNeqUjmRmiJIQ6DQ8pUKJNKvHv1FZEv/8vyNK1uNUPtKFHUSprTpAWoYwXG36vyDqKrbU8Apf1xDptemg+BRosHifHXbHSShRuPkll5SDslso1gtvLY5lOdbRJ7zw8RWMQfCIPUBKTxWLIQbrqasmrd1YryhJKQ8PZw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=G28Fiw7FWAGEVIoJszLRzBC6BzQXk1+v3Djg/QP/kkg=;
- b=mQYmBLG4aHDQ6rotePypLHnCX2L0k3+dQfC1UK9X7ImUWMInPQ5n2u7oq6SDCLjp3dMkegxQBuvxmR4RJRz+RvCZiF6LaFtzoFFmHu9YT9sMDPMb8VKBuQ56VNK07rhrzUon7UiU2EZh5U6w0X3d3bQVDs84Oq/beA++P8io7iSik+OgelAAhoVho2RG7ftAQiBloJ+pefrRIQURJSxQZVA3vZl45RwV69D+I3avsR24U54M6/8/IHBp4gQ1e5+qcTAck8Vr9PT56e3akbRasLKV3x2ngkk3WX0XKw8zf5raE9i1/IGAUPMmuMOCccH9t40kgDvH7tVaf0cTtdHRzQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=G28Fiw7FWAGEVIoJszLRzBC6BzQXk1+v3Djg/QP/kkg=;
- b=lg2S6G9n7EzbtCIEE/DxgmjhAYaUxOXJZOeJsXwGRdaH3d94YX0wHZp0AcBakkv01vHzDEliNrQhoYTiUeEScSbY8Xx4uFZgAlyplNg66CEEfIiFCaHHwgmfNknjjbzbsqZuimpMVE7YykC/ONGGZ9mQHQIwwnlgzVAC9ZcRYyY=
-Received: from CO1PR10MB4531.namprd10.prod.outlook.com (2603:10b6:303:6c::22)
- by DM6PR10MB4204.namprd10.prod.outlook.com (2603:10b6:5:221::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Wed, 14 Jun
- 2023 11:58:35 +0000
-Received: from CO1PR10MB4531.namprd10.prod.outlook.com
- ([fe80::8b8f:b4b1:bb78:b048]) by CO1PR10MB4531.namprd10.prod.outlook.com
- ([fe80::8b8f:b4b1:bb78:b048%5]) with mapi id 15.20.6477.028; Wed, 14 Jun 2023
- 11:58:34 +0000
-Message-ID: <e2220209-edb6-740b-32eb-fc3c9651d526@oracle.com>
-Date:   Wed, 14 Jun 2023 06:58:26 -0500
+        Wed, 14 Jun 2023 07:59:18 -0400
+Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C1C1FE5;
+        Wed, 14 Jun 2023 04:59:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
+        s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=jmYeyK9Ewec8Bl9HsoUWfQccPt1bY7Wsl0n3D6SYDBo=; b=KbQS1U1iA6z42wFeCi1SsW1pUi
+        zuaiHCGLMz/0OgYzjOT6Jw6VV7UfA6l0/JBCVreDr2JKz3+gPqhiup1QacvQNZPheQGEdgLKH2FR/
+        jtqTAcpC7pW3zwYUpeeLYc5jukDRGh1ThZX7iFyFoo7hJwv+bptI7x5tZ+BpNzYriQMI18KB3WuwC
+        X0s7kYUl4/MAblvWol/kbauyUvtDLG5bmxLyTYh8FYs3nkvjGTe9dBBuGAFID6UW4Udnty7tKf+/a
+        HeClj6cuJ1gWHePYCS4R8RxqNq8mSXVDjsN73qONareoFgj5qPaHrmTVr6+xP3JOI8bpKk0Ye1b/a
+        1Z/7gPJg==;
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <lars@metafoo.de>)
+        id 1q9P9X-000FGU-62; Wed, 14 Jun 2023 13:59:07 +0200
+Received: from [136.25.87.181] (helo=[192.168.86.26])
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <lars@metafoo.de>)
+        id 1q9P9W-000U1u-NP; Wed, 14 Jun 2023 13:59:07 +0200
+Message-ID: <dd0dd53c-2ac5-a3c0-69f3-a95994b6f486@metafoo.de>
+Date:   Wed, 14 Jun 2023 04:59:04 -0700
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v1 07/21] m68k/kexec: refactor for kernel/Kconfig.kexec
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v1] iio: adc: add buffering support to the TI LMP92064 ADC
+ driver
 Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
-        chenhuacai@kernel.org, tsbogend@alpha.franken.de,
-        James.Bottomley@hansenpartnership.com, deller@gmx.de,
-        ysato@users.sourceforge.jp, dalias@libc.org,
-        glaubitz@physik.fu-berlin.de, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, kernel@xen0n.name, mpe@ellerman.id.au,
-        npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, hpa@zytor.com, keescook@chromium.org,
-        paulmck@kernel.org, peterz@infradead.org, frederic@kernel.org,
-        akpm@linux-foundation.org, ardb@kernel.org,
-        samitolvanen@google.com, juerg.haefliger@canonical.com,
-        arnd@arndb.de, rmk+kernel@armlinux.org.uk,
-        linus.walleij@linaro.org, sebastian.reichel@collabora.com,
-        rppt@kernel.org, kirill.shutemov@linux.intel.com,
-        anshuman.khandual@arm.com, ziy@nvidia.com, masahiroy@kernel.org,
-        ndesaulniers@google.com, mhiramat@kernel.org, ojeda@kernel.org,
-        thunder.leizhen@huawei.com, xin3.li@intel.com, tj@kernel.org,
-        gregkh@linuxfoundation.org, tsi@tuyoix.net, bhe@redhat.com,
-        hbathini@linux.ibm.com, sourabhjain@linux.ibm.com,
-        boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
-References: <20230612172805.681179-1-eric.devolder@oracle.com>
- <20230612172805.681179-8-eric.devolder@oracle.com>
- <CAMuHMdXAbRVALNVwFhO1S3zsOuVj7OidEF8=0K=qQ-kFn6JQiA@mail.gmail.com>
-From:   Eric DeVolder <eric.devolder@oracle.com>
-In-Reply-To: <CAMuHMdXAbRVALNVwFhO1S3zsOuVj7OidEF8=0K=qQ-kFn6JQiA@mail.gmail.com>
+To:     =?UTF-8?Q?Leonard_G=c3=b6hrs?= <l.goehrs@pengutronix.de>,
+        kernel@pengutronix.de, Jonathan Cameron <jic23@kernel.org>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230614075537.3525194-1-l.goehrs@pengutronix.de>
+From:   Lars-Peter Clausen <lars@metafoo.de>
+In-Reply-To: <20230614075537.3525194-1-l.goehrs@pengutronix.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: DM6PR07CA0098.namprd07.prod.outlook.com
- (2603:10b6:5:337::31) To CO1PR10MB4531.namprd10.prod.outlook.com
- (2603:10b6:303:6c::22)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PR10MB4531:EE_|DM6PR10MB4204:EE_
-X-MS-Office365-Filtering-Correlation-Id: 294fcafd-2f42-4cf4-9468-08db6cceae2f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Glu62sRffinB252Fwx7DGgIVIvPNWu7fULmgo1VRN++BlcxYbx3t/rR6JqqyFfSXAJsssDI0+pxOeKV3gX33ZCBEmcTwKpYFTgv7z7znDiBa49yEV0J5BEnGMo33oSfhqizjI9y42JV3HHBUfi/XK48MNm/ATsX9UzXmLP3YhBKpWBU8n/lnJTCFnhOVqblYhziVQVJ45bF+r7JEy1U07YvYo4Xr02IyhvJDLGSz1LnDMd9nMRqxhGRdz1h/Gw+awUXb78exKsya3ek4LmOkQS0+Yp/GnTQ7NGNEHi3JZOC/pWdwgJG6FHXfOCbGcPE/INh7CZ4XNg1d/5H/JY5ppA8iax8qhcTbVef0Q5R3K7HtO7+VVgKpPv5sKG2czNhvcM/j4yaMdFK6ZaGhnltgvf/XtISPDkJasU7WTVs42LHYqKTxapqLryN0oMafm7/Vop5HX2ge9IiuHIL+LjiWUxCAsbF9nH+eW+1fwmhUirgnp9+WY47odDf4qGw6VmaKpB/L4nb+j5DAu8AW4/A0cR+DwJj4EmJixPJP1bMPWwJudHgdGoRU5TGgAVbONNw22LY5nYrM42+WbtnYv8D2DyX08KSeafDCCMY3FsOYo4lJiEWPxE65NsqcL7ezPNmiLmTNt04XbfBPNqHdNQISwQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4531.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(39860400002)(136003)(346002)(396003)(376002)(451199021)(2616005)(86362001)(31696002)(38100700002)(36756003)(478600001)(8936002)(6486002)(6666004)(8676002)(2906002)(4744005)(4326008)(5660300002)(7416002)(7366002)(66476007)(7406005)(66946007)(66556008)(31686004)(316002)(186003)(53546011)(41300700001)(6916009)(107886003)(6512007)(26005)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RWF1Y2RWNXVVL3FVelhIdVpuZVVoMGZ4TWd2YmJzS0c2c3V3ejBjZEtvclNN?=
- =?utf-8?B?ZHpiOFVhWHdnRHpsczRpVGhpYURNZHVZTXN1eVJvUTBpQldRN29aSlFvby91?=
- =?utf-8?B?RHR4ZDJlUmlGYXhtU01HUzArQUl3WW1HdnpmNWRMSC94VFphbVpvVGFseU9j?=
- =?utf-8?B?bHk4MnpvTk9tOHQ0bU13RjViV2RCTFIvbDlvQXVJQzJBNFhJNkxLY2FrY2Ir?=
- =?utf-8?B?bXVGeG5zRWpoRm8valJzU0NqOEN6UDBkMGJDcEY1NlZ5YjNTZkhERm9ocFRh?=
- =?utf-8?B?SVdnejRkVjdqZmc2NGJGYUZwSFppQW1Lak9HWHV5NXk4RXNnYTFKV2M2UlFN?=
- =?utf-8?B?Q0s0Qm0vamJOK0pBOFg4TnRtcGFaYmVIMEdNSmYvTDRtbXBRWm5GbW9SR1hk?=
- =?utf-8?B?a1R2anFSS2IxUTEwVUVTR3hUYlhkQ3QwNHlaMlc3UVMrV3A1eWViVEhUaFVz?=
- =?utf-8?B?dG9yR1hEWkE5MmJPQnBXdVd5SUJYZ2tPQnNtYWZ5Rm55eXFFaWZOeVpBL2s5?=
- =?utf-8?B?dUFobkVaZGhHYk9FOTA3aVRSeDJCZngxaXp6eTRUbXUxZnBBcENETm1nSDU1?=
- =?utf-8?B?SUkvbEdweERiMkppdmdWdDQwQXQrZG5GV2F3d3Zlb09TbjVFNGllK25aUlpI?=
- =?utf-8?B?eDhzYnlaTDNsV3U1QmxmTFd5MTJoaTlVR1BOUng1c3JieFhMTnptaDVwdmlM?=
- =?utf-8?B?eW11L0NYSVBoTGFrOUl5VVZSUnNWdXducW9IY3Y1MEQvVmxJYkkwNnRGSXdU?=
- =?utf-8?B?YUFFd3JtRzR1M3NieEtNUUpoK0RkTjBia1kzLzAycnBsZUVaOC9YWmg2Yk9M?=
- =?utf-8?B?cmNZV0FqUXhvYmJ1MXBZdlhZWlNSamZHQmp1ZHVjR2xtMzZsYlc1K1krbEN2?=
- =?utf-8?B?ampxTnNBUTFjNlhkeC9UZnBkVjRQRnJJbkhxcmZuVGl6NGo3Mzk5V0JGZlFN?=
- =?utf-8?B?ZWc4RlJHR2Q4dUNVK212a29GeTZlWHM5NDNYZEQ5WnE4RFpUUFhpYkRSeHo5?=
- =?utf-8?B?Z0xTOTlwdVFKMXFsMHdLK292SHJ2YVBqaWRGTmRJcU5BRDhjTkYyOXFTTXFu?=
- =?utf-8?B?a3lON1dUZDdzYksva3FSWHFOVFJ6VkdQN1hiOW1wbDA4MGh0aUpTcDY0cHcw?=
- =?utf-8?B?dkRuMlkxVmJMcnprMzU3QmdIdmpIMUdzQXdhdURtQjhhYXdEM2VUaFdlYXRy?=
- =?utf-8?B?QXRhbU1ZVkZGaU9aVVhhZXpZZG0rRy9pemdWdjNHRXF3YVNaWkNQRVZpQWFR?=
- =?utf-8?B?RFc0S0NBdHgvVENDajArVGZxMlVqUnhpVFJnK1ZJOWYvTkZ4ZExERTBZOWF5?=
- =?utf-8?B?dXQ0VXJKcnBsWER6cC9haEQ3MDVWcWdseUEycDViaVZqakttT3dhYWF0RndO?=
- =?utf-8?B?ZGFZM2pPcjFBWWhDR0tUQ0NHQVFQbDBPcEJWaTVWY3Q3dmlodzJHNGlSN0M4?=
- =?utf-8?B?YnJoakZqdWxsNDBHWmdOUGtEWXl0U2o2cER6eGZ6MnhtbkpzOGkxWkdtaHI4?=
- =?utf-8?B?NnRQYUlyK24yTUpiR3BwSHE5RjZZeExMWm50Wm5kZ09qVUZrdUYzYUZReHZr?=
- =?utf-8?B?eUJTR3dHcVBtTnRsSlJ6dzNlbWNNOUR4SitxeDZWNXNHdHc5VTUxT2VnaE81?=
- =?utf-8?B?MVVSZmdIYmdGWmg1T1Frd1ZQS0V1by9ONFNhaTlEY2RTSTZ3d0IzNUlTeXcw?=
- =?utf-8?B?eXlWblo4SVdaSXB2Q3VYNk92M1dHM3FEU2JIVzB0WEJmcnA5aTlLRWNXUGRM?=
- =?utf-8?B?RDlrU2ZsMSt2NFpIdmRGd0V0cXVTUHk5dG5qSHhIZTQrSUI3UVFMN0xOUzB2?=
- =?utf-8?B?R3YxZlFGalRXYzdjVVQ2eXl5d1pvRXRPd21GQkYwYTZHVCsvQjlST2dqYXRG?=
- =?utf-8?B?MFRyZXpRWnNLTTZZZEluVmgvcE5mQnU4NXNKUnBRbC83NVdCWVp2V0k5bCtZ?=
- =?utf-8?B?VTdRSXJTKzVhWE9WZEo3ZXFneElYUjhzaUsrL0FIamwxMHB4N2Q1WmRReU8y?=
- =?utf-8?B?U20yRFNPWXFCS1llNE5jbm96cC9aaUdoRWlNWk1HUTNJMjJqLytlcmU1MDlh?=
- =?utf-8?B?Y1pMakhvVFJOUG51NDlFL1U1dmhtUHBnUXAzVUlIclJLaWhqaWhZZlJLR3pq?=
- =?utf-8?B?UEJFM2wySmVYeDc0Z1hKV1l1TC90T3lwYTdzcDBRZkJYYTNiWHpvVDlSaENE?=
- =?utf-8?B?RWc9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?Tkgxc3kyb3l1NEZMS3lPVExYK0I5RmM1ekVSYUY3OUNPaDVMV3NVbFlpelVm?=
- =?utf-8?B?ckxjdkFqRGlaRnhkYW91UHZQQUVQVzZrS2J4bVRnWXZ4UCtET1pUWUc4Slla?=
- =?utf-8?B?cnRpenMyMEJ4QWJCemNPaUhBZXZzRFk0YVBvSE9WTG1uelM5Z1I1ZmJRVEgv?=
- =?utf-8?B?V1VyaTdKZnNPOFdLWUdBN25YOTNER2VFRWxuNVFmTGFQaGo4RXVDNnJNRFdD?=
- =?utf-8?B?WE9jWnFuZHdXN3VnS3UyOEJ6ZWNiSlBtT1pWSHpSdUZMalczaXFxUTd3eHE1?=
- =?utf-8?B?a3ZPNzIvaElDZE5QMGhsWUZNSVJIc294Z2UrQzBma2EyUmYzalp3UHdpTDRa?=
- =?utf-8?B?cWJQZHFBcCtMUWd2SjF4ZjNzNmFCK3NGeXB1T05LUHJmNDZqT3UvaUUvMHNK?=
- =?utf-8?B?MURqcEJxYytDNXkvVDdyMVBZQVNLeTNjbXZzYWdQY2FNTzRBSHRhcWxhVlBa?=
- =?utf-8?B?ZWxDRWx0QS9ZY25uMGNBZGNzd3V6VTJXOEF2VFZ3NTJvN3I2c2U5STNmUFF0?=
- =?utf-8?B?bXFQVGprc2dOVWJRd1hQTkRmbnlMWGs3L04yckF6aDZnYzZyUG92T1JNRi9u?=
- =?utf-8?B?WGl0am02TmlEd0hUazVvR0ZuYjVsT0dnUG50ZXpIOU5kVHdwNmJCU1R1eUht?=
- =?utf-8?B?eVViTTNQMWpIbUVERkNjTCtFTUVLUHhzbUZ2YnVPKzErU1NWWkw1VEVMM1FJ?=
- =?utf-8?B?RWFyTkVOWFU2SElJVVBBcFJmWVl0MWVaampOU0hxbzVETVV4Zm9FUUVnU055?=
- =?utf-8?B?WWl6SmpoSE43ZU9oajgzSTJuWjA5bnhsT1pnWS9GbVZ4REpDS3V1bk9LNm1P?=
- =?utf-8?B?L1cxNDZCcDR3Zi9vcW5zZU9HT3poWUZtMExpTmVIZGRnRjhIWGdsQzdEclV1?=
- =?utf-8?B?UUk4TUxJODJQQjRjbkR3NWl1YlZpcGV1SmdGSFNmT0VrY2YvQlZhNHlBSjZj?=
- =?utf-8?B?TmpNMVNrUU05YlpCYUxkb1VxZ2h0Z0xvMytaaWgza0VQdDMrcko2c0FOQWNr?=
- =?utf-8?B?bDhBVS8yMFBHejl4N1Z3ZldRcVdQT0o1cjlBVUtLVXYzTnRlS21iY2oyalVx?=
- =?utf-8?B?NWxSbG1IbnBBTnlIYkNtVFlJc3R3disxajVQb0w4anhKdm9hRERGdW5BOXdE?=
- =?utf-8?B?VzN2elpnT0pBYWtIRmNPak4wQm5oUm9UQXpCR3c3SHZpK1dIekRwTEN5eVVu?=
- =?utf-8?B?YUlNWnN0aHZmQzFCMXZrLzBOU3BuU0w4ZEdNZGFRcDFXOU1aYWwxZXZLdHIv?=
- =?utf-8?B?S0d5NUdxaWJmQWh2Z3JXK1NPcVFQbXFOZ3VsK1MrVG1JQWdJNk1oS3NiMjBU?=
- =?utf-8?B?OGRGMUxST0J5YVZHRW5QYVNnQXdvMGxjWTduT1puMW14eE9QK1BPU3R6SmhU?=
- =?utf-8?B?MDNrRVZXY1M1MUZCQUFUOEx2U1FSUXZrRzVwVnF0UlArWEhIT2k1Q055SlBW?=
- =?utf-8?B?TGFWQ3Znd3llbmkxRy9HdlFOV01hRDA5dmVQNGZTcUFLV29jM3kyWGZqbkVC?=
- =?utf-8?B?ZW5ZVDZmZm4yL0RReFR2N1VPalY3bnNZWkh4dFVWYmdneVZGL1RRMkFIOXcw?=
- =?utf-8?B?aDR1TktyQkhUV1NhVnJRZlh6Rlc4UGNYV2FRcjlQK1VZaDRsOE1PM3Y3RW03?=
- =?utf-8?B?c2M3ZVJHL2ZWbitINkNXMVlTclYxVWEwcGVRYlJ4OW1UN3VZV2E1VDNjTXE1?=
- =?utf-8?B?YzNVTGUyMGY4dVd3dko0K3k2Rm1nMUY0YndFZmlFOFJVa1NKalNGTHJzMWx1?=
- =?utf-8?B?RW1zbTMwTnlGUHZMYWcvT1NXK2xsRzdoazlleDByTkhGWjk5ZVRIWnJlY1RK?=
- =?utf-8?B?ZUdXYVBaTlZXa0hBWC9SUFdrSm90cW1LRFpCY3lGMFNORWhmMUF3T2tkei9E?=
- =?utf-8?B?OHRLVkJrVUZ0blhKUTZtMzd4cXJFVW1iRFpjeWhobTRqWTJFNm42SGx1Y2lI?=
- =?utf-8?B?Ym9hR1ZyM2hDUENJK1g3dWhiYndOYm91UmNPc3JyMkJoY2gyQUhLZHZSQTk3?=
- =?utf-8?B?UStJSFZldEZlK0xzMFJqNjdZWHA2aEVyUHczWWE1YVlSSlVDTnpXV3ZaTkFQ?=
- =?utf-8?B?alM0QkJIT1pjbjVJSFppSFJNUUozSzJ5NDR3cFFnT1NocmQwenp2dnRUamI2?=
- =?utf-8?B?dUx1bXFWdmY3aDZRNXQyNHhrdUNtcENJNzdWZkVUWDc1UExWOStrenBzbk1r?=
- =?utf-8?B?WDB4OVdyNFg3MGlNL2hUbS9sOGVHQ2QySWdrekRRb200VmYrbUY4RHoxSW1s?=
- =?utf-8?B?M09FTHpvTVN5SzlqL3BpZFNCVzlaTXNLbVlHdWVBQ1p6TkJaYk1HRUMxSlpY?=
- =?utf-8?B?Ym9VWlhLeXBFVlA3TjRJYkVldmtKT3pBR1NhRkNwUjJJelNKaWZhRHhhamJi?=
- =?utf-8?Q?k6J6VHOdhxEbVHBhdkzi2iht3OaZx4+1byo+99darejW2?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-1: h3zQ2HYzwGnPLku+kRee2ePmM+gBnMNZ+4WHP0CVT8fehjcZA4bn9XxAtNbA10i5hizZvu5uzGVLzU0oWgah9snn/qCQLGpeKgIzs6gHPuMKCzSfMKosUuapYs2KdyPsWpP4fu0qv4tCW/Q0vInApxEgdGdXzI9O5RJTTVsWH8AEp0jaw6+LreZRhBlz7u9X0vJdan7hExrljOsqj0z/gRZwYSMKkHxTIJ7YESVU/C/Y4oKTYg7/JWm1Smg5oiwJ/MUS2E4g1/yrLZ3b/ZYShPuqS3DUaqkc0+Rgx+KxLXhPl+89yGndACXj6LENgVSXUTJFA/pfB6yHkhTddpRGNDA3jPzFs4fAwLg7t3Lg4ekFaTzc6KkwArUpPtyZ2cJVJEP98aIaGMa8Xc4iyMuJIXx5lTb+dKkBwq6U5xv94kRKUe/d6a6g7QXTCOlzcdA0Q44x79t9gGm/tg==
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 294fcafd-2f42-4cf4-9468-08db6cceae2f
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4531.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2023 11:58:34.6318
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AhsJCt2by+j2FqxKMEKNaMCVFjdeYg7G36MMniXrAtJ5jCVq8PXZi4qEzXR/09P4jaVEhe+pTWatkwzJ6yYvV0mjMj+XSrI0LqbOs+FUxeQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB4204
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-14_08,2023-06-14_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxscore=0 phishscore=0
- suspectscore=0 mlxlogscore=999 bulkscore=0 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306140103
-X-Proofpoint-ORIG-GUID: 2Gx-s-4chE4Uin7giX01OX7v0zYEVcyk
-X-Proofpoint-GUID: 2Gx-s-4chE4Uin7giX01OX7v0zYEVcyk
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Authenticated-Sender: lars@metafoo.de
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26939/Wed Jun 14 09:25:18 2023)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/14/23 00:55, Leonard Göhrs wrote:
+> Enable buffered reading of samples from the LMP92064 ADC.
+> The main benefit of this change is being able to read out current and
+> voltage measurements in a single transfer, allowing instantaneous power
+> measurements.
+>
+> Reads into the buffer can be triggered by any software triggers, e.g.
+> the iio-trig-hrtimer:
+>
+>      $ mkdir /sys/kernel/config/iio/triggers/hrtimer/my-trigger
+>      $ cat /sys/bus/iio/devices/iio\:device3/name
+>      lmp92064
+>      $ iio_readdev -t my-trigger -b 16 iio:device3 | hexdump
+>      WARNING: High-speed mode not enabled
+>      0000000 0000 0176 0101 0001 5507 abd5 7645 1768
+>      0000010 0000 016d 0101 0001 ee1e ac6b 7645 1768
+>      ...
+>
+> Signed-off-by: Leonard Göhrs <l.goehrs@pengutronix.de>
 
+Patch looks good. A small comment for an improvement, but not a most have.
 
-On 6/12/23 14:38, Geert Uytterhoeven wrote:
-> On Mon, Jun 12, 2023 at 7:29 PM Eric DeVolder <eric.devolder@oracle.com> wrote:
->> The kexec and crash kernel options are provided in the common
->> kernel/Kconfig.kexec. Utilize the common options and provide
->> the ARCH_HAS_ and ARCH_SUPPORTS_ entries to recreate the
->> equivalent set of KEXEC and CRASH options.
->>
->> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
-> 
-> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> 
-> Gr{oetje,eeting}s,
-> 
->                          Geert
-> 
-
-Thank you Geert!
-eric
+> ---
+>   drivers/iio/adc/ti-lmp92064.c | 54 +++++++++++++++++++++++++++++++++++
+>   1 file changed, 54 insertions(+)
+>
+> diff --git a/drivers/iio/adc/ti-lmp92064.c b/drivers/iio/adc/ti-lmp92064.c
+> index c30ed824924f3..03765c4057dda 100644
+> --- a/drivers/iio/adc/ti-lmp92064.c
+> +++ b/drivers/iio/adc/ti-lmp92064.c
+> @@ -16,7 +16,10 @@
+>   #include <linux/spi/spi.h>
+>   
+>   #include <linux/iio/iio.h>
+> +#include <linux/iio/buffer.h>
+>   #include <linux/iio/driver.h>
+> +#include <linux/iio/triggered_buffer.h>
+> +#include <linux/iio/trigger_consumer.h>
+>   
+>   #define TI_LMP92064_REG_CONFIG_A 0x0000
+>   #define TI_LMP92064_REG_CONFIG_B 0x0001
+> @@ -91,6 +94,13 @@ static const struct iio_chan_spec lmp92064_adc_channels[] = {
+>   		.address = TI_LMP92064_CHAN_INC,
+>   		.info_mask_separate =
+>   			BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_SCALE),
+> +		.scan_index = 0,
+> +		.scan_type = {
+> +			.sign = 'u',
+> +			.realbits = 12,
+> +			.storagebits = 16,
+> +			.shift = 0,
+> +		},
+>   		.datasheet_name = "INC",
+>   	},
+>   	{
+> @@ -98,8 +108,16 @@ static const struct iio_chan_spec lmp92064_adc_channels[] = {
+>   		.address = TI_LMP92064_CHAN_INV,
+>   		.info_mask_separate =
+>   			BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_SCALE),
+> +		.scan_index = 1,
+> +		.scan_type = {
+> +			.sign = 'u',
+> +			.realbits = 12,
+> +			.storagebits = 16,
+> +			.shift = 0,
+> +		},
+>   		.datasheet_name = "INV",
+>   	},
+> +	IIO_CHAN_SOFT_TIMESTAMP(2),
+>   };
+>   
+>   static int lmp92064_read_meas(struct lmp92064_adc_priv *priv, u16 *res)
+> @@ -171,6 +189,37 @@ static int lmp92064_read_raw(struct iio_dev *indio_dev,
+>   	}
+>   }
+>   
+> +static irqreturn_t lmp92064_trigger_handler(int irq, void *p)
+> +{
+> +	struct iio_poll_func *pf = p;
+> +	struct iio_dev *indio_dev = pf->indio_dev;
+> +	struct lmp92064_adc_priv *priv = iio_priv(indio_dev);
+> +	int i = 0, j, ret;
+> +	u16 raw[2];
+> +	u16 *data;
+> +
+> +	ret = lmp92064_read_meas(priv, raw);
+> +	if (ret < 0)
+> +		goto done;
+> +
+> +	data = kmalloc(indio_dev->scan_bytes, GFP_KERNEL);
+> +	if (!data)
+> +		goto done;
+If you want to avoid allocating the buffer each time a sample-set is 
+captured you can register the `update_scan_mode` callback and allocate 
+the buffer in there. Or if you know the upper limit of your buffer size, 
+base on number of channels, and its small you can also use a one time 
+allocation directly embedded in the priv struct.
+> +
+> +	for_each_set_bit(j, indio_dev->active_scan_mask, indio_dev->masklength)
+> +		data[i++] = raw[j];
+> +
+> +	iio_push_to_buffers_with_timestamp(indio_dev, data,
+> +					   iio_get_time_ns(indio_dev));
+> +
+> +	kfree(data);
+> +
+> +done:
+> +	iio_trigger_notify_done(indio_dev->trig);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+]...\
