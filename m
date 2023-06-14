@@ -2,973 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB05B72F302
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 05:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92D0972F30B
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 05:25:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242574AbjFNDV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 23:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48324 "EHLO
+        id S242221AbjFNDZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 23:25:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241554AbjFNDVP (ORCPT
+        with ESMTP id S242693AbjFNDZA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 23:21:15 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FD9171A
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 20:20:59 -0700 (PDT)
-X-UUID: 784eb9780a6211eeb20a276fd37b9834-20230614
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=U+Bcu1U0exAeQbQt9h4GQqRMREAFlpYCo+XCf4y+w9Q=;
-        b=CiaGyK7y9IPprRybLw8Cgh2xbY7NDtUeaUtyf9kI2zI0D2FJQ/EtnnOLkRguTLAJZlGNnVOSCX366uO7LWBKsdLZybRnqa2urf5P+D8o7q4bTM7cqeJM6bzpW5ZUJg056iOoFrQ064pLQn+xfcP2Bk6BaYMDJS3gIt0Q9rYUkG4=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.26,REQID:2e6ada33-1bf5-4a83-b5b9-75e9e4ed6e00,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:cb9a4e1,CLOUDID:4d64ff6e-2f20-4998-991c-3b78627e4938,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:
-        NO
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_ULN,TF_CID_SPAM_SNR
-X-UUID: 784eb9780a6211eeb20a276fd37b9834-20230614
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
-        (envelope-from <wei-chin.tsai@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1573197039; Wed, 14 Jun 2023 11:20:53 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 14 Jun 2023 11:20:52 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 14 Jun 2023 11:20:52 +0800
-From:   Wei Chin Tsai <Wei-chin.Tsai@mediatek.com>
-To:     <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     <wsd_upstream@mediatek.com>, <wei-chin.tsai@mediatek.com>,
-        <mel.lee@mediatek.com>, <ivan.tseng@mediatek.com>,
-        Wei Chin Tsai <Wei-chin.Tsai@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH v2 3/3] misc : mediatek_mbraink : Collect the system process and memory data
-Date:   Wed, 14 Jun 2023 11:20:35 +0800
-Message-ID: <20230614032038.11699-4-Wei-chin.Tsai@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230614032038.11699-1-Wei-chin.Tsai@mediatek.com>
-References: <20230614032038.11699-1-Wei-chin.Tsai@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 13 Jun 2023 23:25:00 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4400D1BE8
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 20:24:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686713093; x=1718249093;
+  h=date:from:to:cc:subject:message-id;
+  bh=hVZLNR6+5DpgDnvcasm3E9jsgZlHN/9jwN/kLJDvwWA=;
+  b=Be/DSXJqLaeO7VtwzP4DlAARbuyVDnHAAu78xNw9c/G63sWKtW2LoyAb
+   7mFUSgtzIbidcoBj4HUa0i0mnY6e1qsueIMKa4C9vEWijinFDWTUS9taM
+   3+C/WhHHn5/UckJp0vKdb0lJSnXryriJHufYoqpX7x59ftAU0PXtosvHT
+   HYXEqIF4TTn8CwUlLbR9X8KRkgzIpflMB7OEJDWfS8XSFQ2GVdn7LObpi
+   B9PNYxvtlSLEcwXeG3FaQbBlCgf6eogYJp3Q1Bk3KmKcqo20rOdUtvmx1
+   ydHGf/EDQZZQ91LANK1yNzTEHEIrwkHdbBAbYtprFu2ssRUO0I4Pn01Tk
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="424391761"
+X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
+   d="scan'208";a="424391761"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 20:24:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="781927955"
+X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
+   d="scan'208";a="781927955"
+Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 13 Jun 2023 20:24:51 -0700
+Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q9H7W-00004x-2L;
+        Wed, 14 Jun 2023 03:24:30 +0000
+Date:   Wed, 14 Jun 2023 11:22:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/fam01-next20230613] BUILD SUCCESS WITH
+ WARNING aa6560431480d8a66646dee2f0a2185073a11282
+Message-ID: <202306141124.HhfLTQK8-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In this patch, we add the mediatek_mbrain folder
-including 7 files. Apart from Makefile and Kconfig,
-the aim of the other 5 files is to collect the
-process fork/exit tracing data and process memory
-pss, uss, rss, swap, and heap usage.
-User could use these kind of data to do the system
-analysis, and detect the unexpected process/memory
-issues. Furthermore, user can make use of process
-memory data to detect the memory leak issues.
-From memory heap aspect, user could know the java
-and native layer heap usage.
-Also, user can capture those processes which run
-in a second and then terminate immediately by add
-the hook functions in "sched_process_fork" and
-"sched_process_exit".
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/fam01-next20230613
+branch HEAD: aa6560431480d8a66646dee2f0a2185073a11282  ARM: OMAP2+: Fix -Warray-bounds warning _pwrdm_state_switch()
 
-Signed-off-by: Wei Chin Tsai <Wei-chin.Tsai@mediatek.com>
----
- drivers/misc/mediatek_mbraink/Kconfig         |  15 +
- drivers/misc/mediatek_mbraink/Makefile        |   5 +
- drivers/misc/mediatek_mbraink/mbraink_data.c  | 417 ++++++++++++++++++
- drivers/misc/mediatek_mbraink/mbraink_data.h  |  66 +++
- .../mbraink_ioctl_struct_define.h             |  44 ++
- drivers/misc/mediatek_mbraink/mbraink_main.c  | 239 ++++++++++
- drivers/misc/mediatek_mbraink/mbraink_main.h  |  36 ++
- 7 files changed, 822 insertions(+)
- create mode 100644 drivers/misc/mediatek_mbraink/Kconfig
- create mode 100644 drivers/misc/mediatek_mbraink/Makefile
- create mode 100644 drivers/misc/mediatek_mbraink/mbraink_data.c
- create mode 100644 drivers/misc/mediatek_mbraink/mbraink_data.h
- create mode 100644 drivers/misc/mediatek_mbraink/mbraink_ioctl_struct_define.h
- create mode 100644 drivers/misc/mediatek_mbraink/mbraink_main.c
- create mode 100644 drivers/misc/mediatek_mbraink/mbraink_main.h
+Warning: (recently discovered and may have been fixed)
 
-diff --git a/drivers/misc/mediatek_mbraink/Kconfig b/drivers/misc/mediatek_mbraink/Kconfig
-new file mode 100644
-index 000000000000..4a96059e4c57
---- /dev/null
-+++ b/drivers/misc/mediatek_mbraink/Kconfig
-@@ -0,0 +1,15 @@
-+config MTK_MBRAINK
-+	tristate "MTK MBRAINK support"
-+	help
-+          MBRAINK is a MediaTek in-house kernel module which can
-+          communicate with android MBrain.
-+          Set Y to enable this feature.
-+          If unsure, Set N to stay with legancy feature.
-+
-+config MTK_MBRAINK_EXPORT_DEPENDED
-+	tristate "MTK MBRAINK EXPORT DEPENDED support"
-+	help
-+	  MBRAINK EXPORT DEPENDED option which
-+	  needs to export extra function in upstram kernel.
-+	  Set Y to enable this feature.
-+	  If unsure, Set N to stay with legancy feature.
-diff --git a/drivers/misc/mediatek_mbraink/Makefile b/drivers/misc/mediatek_mbraink/Makefile
-new file mode 100644
-index 000000000000..8d75b41a8097
---- /dev/null
-+++ b/drivers/misc/mediatek_mbraink/Makefile
-@@ -0,0 +1,5 @@
-+subdir-ccflags-y += -Wformat
-+
-+obj-${CONFIG_MTK_MBRAINK} += mtk_mbraink.o
-+
-+mtk_mbraink-objs += mbraink_data.o mbraink_main.o
-diff --git a/drivers/misc/mediatek_mbraink/mbraink_data.c b/drivers/misc/mediatek_mbraink/mbraink_data.c
-new file mode 100644
-index 000000000000..dad03124820a
---- /dev/null
-+++ b/drivers/misc/mediatek_mbraink/mbraink_data.c
-@@ -0,0 +1,417 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2023 MediaTek Inc.
-+ */
-+#include <linux/module.h>
-+#include <linux/fs.h>
-+#include <linux/rtc.h>
-+#include <linux/sched/clock.h>
-+#include <linux/kernel.h>
-+#include <linux/uaccess.h>
-+#include <linux/cdev.h>
-+#include <linux/proc_fs.h>
-+#include <linux/sched/signal.h>
-+#include <linux/pid_namespace.h>
-+#include <linux/mm.h>
-+#include <linux/sched/mm.h>
-+#include <linux/sched/task.h>
-+#include <linux/pagewalk.h>
-+#include <linux/shmem_fs.h>
-+#include <linux/pagemap.h>
-+#include <linux/mempolicy.h>
-+#include <linux/rmap.h>
-+#include <linux/sched/cputime.h>
-+#include <linux/math64.h>
-+#include <linux/refcount.h>
-+#include <linux/ctype.h>
-+#include <linux/stddef.h>
-+#include <linux/cred.h>
-+#include <linux/spinlock.h>
-+#include <linux/rtc.h>
-+#include <linux/sched/clock.h>
-+#include <trace/events/sched.h>
-+#include <linux/mm_inline.h>
-+
-+#include "mbraink_data.h"
-+
-+/*spinlock for mbraink tracing pidlist*/
-+static DEFINE_SPINLOCK(tracing_pidlist_lock);
-+/*Please make sure that tracing pidlist is protected by spinlock*/
-+struct mbraink_tracing_pidlist mbraink_tracing_pidlist_data[MAX_TRACE_NUM];
-+
-+#if IS_ENABLED(CONFIG_ANON_VMA_NAME)
-+struct anon_vma_name *mbraink_anon_vma_name(struct vm_area_struct *vma)
-+{
-+	if (vma->vm_file)
-+		return NULL;
-+
-+	return vma->anon_name;
-+}
-+#else
-+struct anon_vma_name *mbraink_anon_vma_name(struct vm_area_struct *vma)
-+{
-+	return NULL;
-+}
-+#endif
-+
-+void mbraink_map_vma(struct vm_area_struct *vma, unsigned long cur_pss,
-+		     unsigned long *native_heap, unsigned long *java_heap)
-+{
-+	struct mm_struct *mm = vma->vm_mm;
-+	const char *name = NULL;
-+
-+	if (vma->vm_file)
-+		return;
-+	/*
-+	 * Print the dentry name for named mappings, and a
-+	 * special [heap] marker for the heap:
-+	 */
-+
-+	if (vma->vm_ops && vma->vm_ops->name) {
-+		name = vma->vm_ops->name(vma);
-+		if (name) {
-+			if (strncmp(name, "dev/ashmem/libc malloc", 23) == 0)
-+				(*native_heap) += cur_pss;
-+			return;
-+		}
-+	}
-+
-+	name = arch_vma_name(vma);
-+	if (!name) {
-+		struct anon_vma_name *anon_name;
-+
-+		if (!mm)
-+			return;
-+
-+		if (vma->vm_start <= mm->brk && vma->vm_end >= mm->start_brk) {
-+			(*native_heap) += cur_pss;
-+			return;
-+		}
-+
-+		if (vma->vm_start <= vma->vm_mm->start_stack &&
-+		    vma->vm_end >= vma->vm_mm->start_stack)
-+			return;
-+
-+		anon_name = mbraink_anon_vma_name(vma);
-+		if (anon_name) {
-+			if (strstr(anon_name->name, "scudo"))
-+				(*native_heap) += cur_pss;
-+			else if (strstr(anon_name->name, "libc_malloc"))
-+				(*native_heap) += cur_pss;
-+			else if (strstr(anon_name->name, "GWP-ASan"))
-+				(*native_heap) += cur_pss;
-+			else if (strstr(anon_name->name, "dalvik-alloc space"))
-+				(*java_heap) += cur_pss;
-+			else if (strstr(anon_name->name, "dalvik-main space"))
-+				(*java_heap) += cur_pss;
-+			else if (strstr(anon_name->name, "dalvik-large object space"))
-+				(*java_heap) += cur_pss;
-+			else if (strstr(anon_name->name, "dalvik-free list large object space"))
-+				(*java_heap) += cur_pss;
-+			else if (strstr(anon_name->name, "dalvik-non moving space"))
-+				(*java_heap) += cur_pss;
-+			else if (strstr(anon_name->name, "dalvik-zygote space"))
-+				(*java_heap) += cur_pss;
-+		}
-+	}
-+}
-+
-+void mbraink_get_process_memory_info(pid_t current_pid,
-+				     struct mbraink_process_memory_data *process_memory_buffer)
-+{
-+	struct task_struct *t = NULL;
-+	struct mm_struct *mm = NULL;
-+	struct vm_area_struct *vma = NULL;
-+	struct mem_size_stats mss;
-+	unsigned short pid_count = 0;
-+	unsigned long pss, uss, rss, swap, cur_pss;
-+	unsigned long java_heap = 0, native_heap = 0;
-+	struct vma_iterator vmi;
-+
-+	memset(process_memory_buffer, 0, sizeof(struct mbraink_process_memory_data));
-+	process_memory_buffer->pid = 0;
-+
-+	read_lock(&tasklist_lock);
-+	for_each_process(t) {
-+		if (t->pid <= current_pid)
-+			continue;
-+
-+		mm = t->mm;
-+		if (mm) {
-+			java_heap = 0;
-+			native_heap = 0;
-+			pid_count = process_memory_buffer->pid_count;
-+
-+			process_memory_buffer->drv_data[pid_count].pid =
-+				(unsigned short)(t->pid);
-+			process_memory_buffer->pid =
-+				(unsigned short)(t->pid);
-+
-+			memset(&mss, 0, sizeof(mss));
-+			get_task_struct(t);
-+			mmgrab(mm);
-+			read_unlock(&tasklist_lock);
-+			mmap_read_lock(mm);
-+			vma_iter_init(&vmi, mm, 0);
-+			for_each_vma(vmi, vma) {
-+				cur_pss = (unsigned long)(mss.pss >> PSS_SHIFT);
-+				smap_gather_stats(vma, &mss, 0);
-+				cur_pss =
-+					((unsigned long)(mss.pss >> PSS_SHIFT)) - cur_pss;
-+				cur_pss = cur_pss / 1024;
-+				mbraink_map_vma(vma, cur_pss, &native_heap, &java_heap);
-+			}
-+			mmap_read_unlock(mm);
-+			read_lock(&tasklist_lock);
-+			mmdrop(mm);
-+			put_task_struct(t);
-+
-+			pss = (unsigned long)(mss.pss >> PSS_SHIFT) / 1024;
-+			uss = (mss.private_clean + mss.private_dirty) / 1024;
-+			rss = (mss.resident) / 1024;
-+			swap = (mss.swap) / 1024;
-+
-+			process_memory_buffer->drv_data[pid_count].pss = pss;
-+			process_memory_buffer->drv_data[pid_count].uss = uss;
-+			process_memory_buffer->drv_data[pid_count].rss = rss;
-+			process_memory_buffer->drv_data[pid_count].swap = swap;
-+			process_memory_buffer->drv_data[pid_count].java_heap =
-+									java_heap;
-+			process_memory_buffer->drv_data[pid_count].native_heap =
-+									native_heap;
-+			process_memory_buffer->pid_count++;
-+
-+			break;
-+		}
-+	}
-+	read_unlock(&tasklist_lock);
-+}
-+
-+/*****************************************************************
-+ * Note: this function can only be used during tracing function
-+ * This function is only used in tracing function so that there
-+ * is no need for task t spinlock protection
-+ *****************************************************************/
-+static u64 mbraink_get_specific_process_jiffies(struct task_struct *t)
-+{
-+	u64 stime = 0, utime = 0, cutime = 0, cstime = 0;
-+	u64 process_jiffies = 0;
-+
-+	if (t->pid == t->tgid) {
-+		cutime = t->signal->cutime;
-+		cstime = t->signal->cstime;
-+		if (t->flags & PF_KTHREAD)
-+			task_cputime_adjusted(t, &utime, &stime);
-+		else
-+			thread_group_cputime_adjusted(t, &utime, &stime);
-+
-+		process_jiffies = nsec_to_clock_t(utime) +
-+				nsec_to_clock_t(stime) +
-+				nsec_to_clock_t(cutime) +
-+				nsec_to_clock_t(cstime);
-+	} else {
-+		task_cputime_adjusted(t, &utime, &stime);
-+		process_jiffies = nsec_to_clock_t(utime) + nsec_to_clock_t(stime);
-+	}
-+
-+	return process_jiffies;
-+}
-+
-+/***************************************************************
-+ * Note: this function can only be used during tracing function
-+ * This function is only used in tracing function so that there
-+ * is no need for task t spinlock protection
-+ **************************************************************/
-+static u16 mbraink_get_specific_process_uid(struct task_struct *t)
-+{
-+	const struct cred *cred = NULL;
-+	u16 val = 0;
-+
-+	cred = get_task_cred(t);
-+	val = cred->uid.val;
-+	put_cred(cred);
-+
-+	return val;
-+}
-+
-+static void mbraink_trace_sched_process_exit(void *data, struct task_struct *t)
-+{
-+	int i = 0;
-+	struct timespec64 tv = { 0 };
-+	unsigned long flags;
-+
-+	if (t->pid == t->tgid) {
-+		spin_lock_irqsave(&tracing_pidlist_lock, flags);
-+		for (i = 0; i < MAX_TRACE_NUM; i++) {
-+			if (mbraink_tracing_pidlist_data[i].pid == (unsigned short)t->pid) {
-+				ktime_get_real_ts64(&tv);
-+				mbraink_tracing_pidlist_data[i].end =
-+					(tv.tv_sec * 1000) + (tv.tv_nsec / 1000000);
-+				mbraink_tracing_pidlist_data[i].jiffies =
-+						mbraink_get_specific_process_jiffies(t);
-+				mbraink_tracing_pidlist_data[i].dirty = true;
-+
-+				break;
-+			}
-+		}
-+		if (i == MAX_TRACE_NUM) {
-+			for (i = 0; i < MAX_TRACE_NUM; i++) {
-+				if (mbraink_tracing_pidlist_data[i].pid == 0) {
-+					mbraink_tracing_pidlist_data[i].pid =
-+							(unsigned short)(t->pid);
-+					mbraink_tracing_pidlist_data[i].tgid =
-+							(unsigned short)(t->tgid);
-+					mbraink_tracing_pidlist_data[i].uid =
-+							mbraink_get_specific_process_uid(t);
-+					mbraink_tracing_pidlist_data[i].priority =
-+							t->prio - MAX_RT_PRIO;
-+					memcpy(mbraink_tracing_pidlist_data[i].name,
-+					       t->comm, TASK_COMM_LEN);
-+					ktime_get_real_ts64(&tv);
-+					mbraink_tracing_pidlist_data[i].end =
-+							(tv.tv_sec * 1000) + (tv.tv_nsec / 1000000);
-+					mbraink_tracing_pidlist_data[i].jiffies =
-+							mbraink_get_specific_process_jiffies(t);
-+					mbraink_tracing_pidlist_data[i].dirty = true;
-+
-+					break;
-+				}
-+			}
-+			if (i == MAX_TRACE_NUM) {
-+				pr_info("%s pid=%u:%s.\n", __func__, t->pid, t->comm);
-+				memset(mbraink_tracing_pidlist_data, 0,
-+				       sizeof(struct mbraink_tracing_pidlist) * MAX_TRACE_NUM);
-+			}
-+		}
-+		spin_unlock_irqrestore(&tracing_pidlist_lock, flags);
-+	}
-+}
-+
-+static void mbraink_trace_sched_process_fork(void *data, struct task_struct *t,
-+					     struct task_struct *p)
-+{
-+	int i = 0;
-+	struct timespec64 tv = { 0 };
-+	unsigned long flags;
-+
-+	if (p->pid == p->tgid) {
-+		spin_lock_irqsave(&tracing_pidlist_lock, flags);
-+		for (i = 0; i < MAX_TRACE_NUM; i++) {
-+			if (mbraink_tracing_pidlist_data[i].pid == 0) {
-+				mbraink_tracing_pidlist_data[i].pid = (unsigned short)(p->pid);
-+				mbraink_tracing_pidlist_data[i].tgid = (unsigned short)(p->tgid);
-+				mbraink_tracing_pidlist_data[i].uid =
-+						mbraink_get_specific_process_uid(p);
-+				mbraink_tracing_pidlist_data[i].priority = p->prio - MAX_RT_PRIO;
-+				memcpy(mbraink_tracing_pidlist_data[i].name,
-+				       p->comm, TASK_COMM_LEN);
-+				ktime_get_real_ts64(&tv);
-+				mbraink_tracing_pidlist_data[i].start =
-+						(tv.tv_sec * 1000) + (tv.tv_nsec / 1000000);
-+				mbraink_tracing_pidlist_data[i].dirty = true;
-+				break;
-+			}
-+		}
-+
-+		if (i == MAX_TRACE_NUM) {
-+			pr_info("%s child_pid=%u:%s.\n", __func__, p->pid, p->comm);
-+			memset(mbraink_tracing_pidlist_data, 0,
-+			       sizeof(struct mbraink_tracing_pidlist) * MAX_TRACE_NUM);
-+		}
-+		spin_unlock_irqrestore(&tracing_pidlist_lock, flags);
-+	}
-+}
-+
-+int mbraink_process_tracer_init(void)
-+{
-+	int ret = 0;
-+
-+	memset(mbraink_tracing_pidlist_data, 0,
-+	       sizeof(struct mbraink_tracing_pidlist) * MAX_TRACE_NUM);
-+
-+	ret = register_trace_sched_process_fork(mbraink_trace_sched_process_fork, NULL);
-+	if (ret) {
-+		pr_notice("register_trace_sched_process_fork failed.\n");
-+		goto register_trace_sched_process_fork;
-+	}
-+	ret = register_trace_sched_process_exit(mbraink_trace_sched_process_exit, NULL);
-+	if (ret) {
-+		pr_notice("register register_trace_sched_process_exit failed.\n");
-+		goto register_trace_sched_process_exit;
-+	}
-+
-+	return ret;
-+
-+register_trace_sched_process_exit:
-+	unregister_trace_sched_process_fork(mbraink_trace_sched_process_fork, NULL);
-+register_trace_sched_process_fork:
-+	return ret;
-+}
-+
-+void mbraink_process_tracer_exit(void)
-+{
-+	unregister_trace_sched_process_fork(mbraink_trace_sched_process_fork, NULL);
-+	unregister_trace_sched_process_exit(mbraink_trace_sched_process_exit, NULL);
-+}
-+
-+void mbraink_get_tracing_pid_info(unsigned short current_idx,
-+				  struct mbraink_tracing_pid_data *tracing_pid_buffer)
-+{
-+	int i = 0;
-+	int ret = 0;
-+	unsigned long flags;
-+	unsigned short tracing_count = 0;
-+
-+	spin_lock_irqsave(&tracing_pidlist_lock, flags);
-+
-+	memset(tracing_pid_buffer, 0, sizeof(struct mbraink_tracing_pid_data));
-+
-+	for (i = current_idx; i < MAX_TRACE_NUM; i++) {
-+		if (mbraink_tracing_pidlist_data[i].dirty == 0) {
-+			continue;
-+		} else {
-+			tracing_count = tracing_pid_buffer->tracing_count;
-+			if (tracing_count < MAX_TRACE_PID_NUM) {
-+				tracing_pid_buffer->drv_data[tracing_count].pid =
-+						mbraink_tracing_pidlist_data[i].pid;
-+				tracing_pid_buffer->drv_data[tracing_count].tgid =
-+						mbraink_tracing_pidlist_data[i].tgid;
-+				tracing_pid_buffer->drv_data[tracing_count].uid =
-+						mbraink_tracing_pidlist_data[i].uid;
-+				tracing_pid_buffer->drv_data[tracing_count].priority =
-+						mbraink_tracing_pidlist_data[i].priority;
-+				memcpy(tracing_pid_buffer->drv_data[tracing_count].name,
-+				       mbraink_tracing_pidlist_data[i].name, TASK_COMM_LEN);
-+				tracing_pid_buffer->drv_data[tracing_count].start =
-+						mbraink_tracing_pidlist_data[i].start;
-+				tracing_pid_buffer->drv_data[tracing_count].end =
-+						mbraink_tracing_pidlist_data[i].end;
-+				tracing_pid_buffer->drv_data[tracing_count].jiffies =
-+						mbraink_tracing_pidlist_data[i].jiffies;
-+				tracing_pid_buffer->tracing_count++;
-+				/*Deal with the end process record*/
-+				if (mbraink_tracing_pidlist_data[i].end != 0) {
-+					mbraink_tracing_pidlist_data[i].pid = 0;
-+					mbraink_tracing_pidlist_data[i].tgid = 0;
-+					mbraink_tracing_pidlist_data[i].uid = 0;
-+					mbraink_tracing_pidlist_data[i].priority = 0;
-+					memset(mbraink_tracing_pidlist_data[i].name,
-+					       0, TASK_COMM_LEN);
-+					mbraink_tracing_pidlist_data[i].start = 0;
-+					mbraink_tracing_pidlist_data[i].end = 0;
-+					mbraink_tracing_pidlist_data[i].jiffies = 0;
-+					mbraink_tracing_pidlist_data[i].dirty = false;
-+				} else {
-+					mbraink_tracing_pidlist_data[i].dirty = false;
-+				}
-+			} else {
-+				ret = -1;
-+				tracing_pid_buffer->tracing_idx = i;
-+				break;
-+			}
-+		}
-+	}
-+	pr_info("%s: current_idx = %u, count = %u\n",
-+		__func__, tracing_pid_buffer->tracing_idx, tracing_pid_buffer->tracing_count);
-+	spin_unlock_irqrestore(&tracing_pidlist_lock, flags);
-+}
-diff --git a/drivers/misc/mediatek_mbraink/mbraink_data.h b/drivers/misc/mediatek_mbraink/mbraink_data.h
-new file mode 100644
-index 000000000000..2d1a6b488caa
---- /dev/null
-+++ b/drivers/misc/mediatek_mbraink/mbraink_data.h
-@@ -0,0 +1,66 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2023 MediaTek Inc.
-+ */
-+#ifndef MBRAINK_DATA_H
-+#define MBRAINK_DATA_H
-+#include <linux/string_helpers.h>
-+#include <linux/sched.h>
-+#include <linux/sched/task.h>
-+#include <linux/mm_types.h>
-+#include <linux/pid.h>
-+
-+#include "mbraink_ioctl_struct_define.h"
-+
-+#define PSS_SHIFT			12
-+#define MAX_RT_PRIO			100
-+#define MAX_TRACE_NUM			3072
-+
-+struct mbraink_tracing_pidlist {
-+	unsigned short pid;
-+	unsigned short tgid;
-+	unsigned short uid;
-+	int priority;
-+	char name[TASK_COMM_LEN];
-+	long long start;
-+	long long end;
-+	u64 jiffies;
-+	bool dirty;
-+};
-+
-+struct mem_size_stats {
-+	unsigned long resident;
-+	unsigned long shared_clean;
-+	unsigned long shared_dirty;
-+	unsigned long private_clean;
-+	unsigned long private_dirty;
-+	unsigned long referenced;
-+	unsigned long anonymous;
-+	unsigned long lazyfree;
-+	unsigned long anonymous_thp;
-+	unsigned long shmem_thp;
-+	unsigned long file_thp;
-+	unsigned long swap;
-+	unsigned long shared_hugetlb;
-+	unsigned long private_hugetlb;
-+	u64 pss;
-+	u64 pss_anon;
-+	u64 pss_file;
-+	u64 pss_shmem;
-+	u64 pss_locked;
-+	u64 swap_pss;
-+	bool check_shmem_swap;
-+};
-+
-+void mbraink_get_process_memory_info(pid_t current_pid,
-+				     struct mbraink_process_memory_data *process_memory_buffer);
-+int mbraink_process_tracer_init(void);
-+void mbraink_process_tracer_exit(void);
-+void mbraink_get_tracing_pid_info(unsigned short current_idx,
-+				  struct mbraink_tracing_pid_data *tracing_pid_buffer);
-+void smap_gather_stats(struct vm_area_struct *vma,
-+		       struct mem_size_stats *mss, unsigned long start);
-+void task_cputime_adjusted(struct task_struct *p, u64 *ut, u64 *st);
-+void thread_group_cputime_adjusted(struct task_struct *p, u64 *ut, u64 *st);
-+u64 nsec_to_clock_t(u64 x);
-+#endif
-diff --git a/drivers/misc/mediatek_mbraink/mbraink_ioctl_struct_define.h b/drivers/misc/mediatek_mbraink/mbraink_ioctl_struct_define.h
-new file mode 100644
-index 000000000000..d655d8893f0f
---- /dev/null
-+++ b/drivers/misc/mediatek_mbraink/mbraink_ioctl_struct_define.h
-@@ -0,0 +1,44 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2023 MediaTek Inc.
-+ */
-+#ifndef MBRAINK_IOCTL_STRUCT_H
-+#define MBRAINK_IOCTL_STRUCT_H
-+
-+#define MAX_MEM_STRUCT_SZ			4
-+#define MAX_TRACE_PID_NUM			16
-+
-+struct mbraink_process_memory_struct {
-+	unsigned short pid;
-+	unsigned long pss;
-+	unsigned long uss;
-+	unsigned long rss;
-+	unsigned long swap;
-+	unsigned long java_heap;
-+	unsigned long native_heap;
-+};
-+
-+struct mbraink_process_memory_data {
-+	unsigned short pid;
-+	unsigned short pid_count;
-+	struct mbraink_process_memory_struct drv_data[MAX_MEM_STRUCT_SZ];
-+};
-+
-+struct mbraink_tracing_pid {
-+	unsigned short pid;
-+	unsigned short tgid;
-+	unsigned short uid;
-+	int priority;
-+	char name[TASK_COMM_LEN];
-+	long long start;
-+	long long end;
-+	u64 jiffies;
-+};
-+
-+struct mbraink_tracing_pid_data {
-+	unsigned short tracing_idx;
-+	unsigned short tracing_count;
-+	struct mbraink_tracing_pid drv_data[MAX_TRACE_PID_NUM];
-+};
-+
-+#endif
-diff --git a/drivers/misc/mediatek_mbraink/mbraink_main.c b/drivers/misc/mediatek_mbraink/mbraink_main.c
-new file mode 100644
-index 000000000000..4e6aac51694a
---- /dev/null
-+++ b/drivers/misc/mediatek_mbraink/mbraink_main.c
-@@ -0,0 +1,239 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2023 MediaTek Inc.
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/fs.h>
-+#include <linux/uaccess.h>
-+#include <linux/compat.h>
-+#include <linux/errno.h>
-+#include <linux/slab.h>
-+#include <linux/pm_runtime.h>
-+
-+#include "mbraink_main.h"
-+#include "mbraink_data.h"
-+
-+struct mbraink_data mbraink_priv;
-+
-+static int mbraink_open(struct inode *inode, struct file *filp)
-+{
-+	return 0;
-+}
-+
-+static int mbraink_release(struct inode *inode, struct file *filp)
-+{
-+	return 0;
-+}
-+
-+static long mbraink_ioctl(struct file *filp,
-+			  unsigned int cmd,
-+			  unsigned long arg)
-+{
-+	long ret = 0;
-+
-+	switch (cmd) {
-+	case RO_PROCESS_MEMORY:
-+	{
-+		struct mbraink_process_memory_data process_memory_buffer;
-+
-+		pid_t pid = 1;
-+
-+		if (copy_from_user(&process_memory_buffer,
-+				   (struct mbraink_process_memory_data *)arg,
-+				   sizeof(process_memory_buffer))) {
-+			pr_notice("copy process memory info from user Err!\n");
-+			return -EPERM;
-+		}
-+
-+		if (process_memory_buffer.pid > PID_MAX_DEFAULT ||
-+		    process_memory_buffer.pid_count > PID_MAX_DEFAULT) {
-+			pr_notice("process memory: Invalid pid_idx %u or pid_count %u\n",
-+				  process_memory_buffer.pid, process_memory_buffer.pid_count);
-+			return -EINVAL;
-+		}
-+		pid = process_memory_buffer.pid;
-+
-+		mbraink_get_process_memory_info(pid, &process_memory_buffer);
-+
-+		if (copy_to_user((struct mbraink_process_memory_data *)arg,
-+				 &process_memory_buffer,
-+				 sizeof(process_memory_buffer))) {
-+			pr_notice("Copy process_memory_info to UserSpace error!\n");
-+			return -EPERM;
-+		}
-+		break;
-+	}
-+	case RO_TRACE_PROCESS:
-+	{
-+		struct mbraink_tracing_pid_data tracing_pid_buffer;
-+
-+		unsigned short tracing_idx = 0;
-+
-+		if (copy_from_user(&tracing_pid_buffer,
-+				   (struct mbraink_tracing_pid_data *)arg,
-+				   sizeof(tracing_pid_buffer))) {
-+			pr_notice("copy tracing_pid_buffer data from user Err!\n");
-+			return -EPERM;
-+		}
-+
-+		if (tracing_pid_buffer.tracing_idx > MAX_TRACE_NUM) {
-+			pr_notice("invalid tracing_idx %u !\n",
-+				  tracing_pid_buffer.tracing_idx);
-+			return -EINVAL;
-+		}
-+		tracing_idx = tracing_pid_buffer.tracing_idx;
-+
-+		mbraink_get_tracing_pid_info(tracing_idx, &tracing_pid_buffer);
-+
-+		if (copy_to_user((struct mbraink_tracing_pid_data *)arg,
-+				 &tracing_pid_buffer,
-+				 sizeof(tracing_pid_buffer))) {
-+			pr_notice("Copy tracing_pid_buffer to UserSpace error!\n");
-+			return -EPERM;
-+		}
-+		break;
-+	}
-+	default:
-+		pr_notice("illegal ioctl number %u.\n", cmd);
-+		return -EINVAL;
-+	}
-+
-+	return ret;
-+}
-+
-+#if IS_ENABLED(CONFIG_COMPAT)
-+static long mbraink_compat_ioctl(struct file *filp,
-+				 unsigned int cmd, unsigned long arg)
-+{
-+	return mbraink_ioctl(filp, cmd, (unsigned long)compat_ptr(arg));
-+}
-+#endif
-+
-+static const struct file_operations mbraink_fops = {
-+	.owner		= THIS_MODULE,
-+	.open		= mbraink_open,
-+	.release        = mbraink_release,
-+	.unlocked_ioctl = mbraink_ioctl,
-+#if IS_ENABLED(CONFIG_COMPAT)
-+	.compat_ioctl   = mbraink_compat_ioctl,
-+#endif
-+};
-+
-+#if IS_ENABLED(CONFIG_PM_SLEEP)
-+static int mbraink_suspend(struct device *dev)
-+{
-+	int ret;
-+
-+	pr_info("[MBK_INFO] %s\n", __func__);
-+
-+	ret = pm_generic_suspend(dev);
-+
-+	return ret;
-+}
-+
-+static int mbraink_resume(struct device *dev)
-+{
-+	int ret;
-+
-+	pr_info("[MBK_INFO] %s\n", __func__);
-+
-+	ret = pm_generic_resume(dev);
-+
-+	return ret;
-+}
-+
-+static const struct dev_pm_ops mbraink_class_dev_pm_ops = {
-+	.suspend	= mbraink_suspend,
-+	.resume	= mbraink_resume,
-+};
-+
-+#define MBRAINK_CLASS_DEV_PM_OPS (&mbraink_class_dev_pm_ops)
-+#else
-+#define MBRAINK_CLASS_DEV_PM_OPS NULL
-+#endif /*end of CONFIG_PM_SLEEP*/
-+
-+static int mbraink_dev_init(void)
-+{
-+	mbraink_priv.mbraink_dev_no = 0;
-+
-+	/*Allocating Major number*/
-+	if ((alloc_chrdev_region(&mbraink_priv.mbraink_dev_no, 0, 1, CHRDEV_NAME)) < 0) {
-+		pr_notice("Cannot allocate major number %u\n",
-+			  mbraink_priv.mbraink_dev_no);
-+		return -EBADF;
-+	}
-+
-+	/*Initialize cdev structure*/
-+	cdev_init(&mbraink_priv.mbraink_cdev, &mbraink_fops);
-+
-+	/*Adding character device to the system*/
-+	if ((cdev_add(&mbraink_priv.mbraink_cdev, mbraink_priv.mbraink_dev_no, 1)) < 0) {
-+		pr_notice("Cannot add the device to the system\n");
-+		goto r_class;
-+	}
-+
-+	mbraink_priv.mbraink_class = class_create(THIS_MODULE, "mbraink_host");
-+	/*Register mbraink class*/
-+	if (IS_ERR(mbraink_priv.mbraink_class)) {
-+		pr_notice("Cannot create the mbraink class\n");
-+		goto r_class;
-+	}
-+	mbraink_priv.mbraink_class->pm = MBRAINK_CLASS_DEV_PM_OPS;
-+
-+	/*Register mbraink device*/
-+	if (IS_ERR(device_create(mbraink_priv.mbraink_class,
-+				 NULL, mbraink_priv.mbraink_dev_no, NULL, "mbraink"))) {
-+		pr_notice("Cannot create the mbraink Device\n");
-+		goto r_device;
-+	}
-+	pr_info("[MBK_INFO] %s: Mbraink device init done.\n", __func__);
-+
-+	return 0;
-+
-+r_device:
-+	class_destroy(mbraink_priv.mbraink_class);
-+r_class:
-+	unregister_chrdev_region(mbraink_priv.mbraink_dev_no, 1);
-+
-+	return -EPERM;
-+}
-+
-+static int mbraink_init(void)
-+{
-+	int ret = 0;
-+
-+	ret = mbraink_dev_init();
-+	if (ret)
-+		pr_notice("mbraink device init failed.\n");
-+
-+	ret = mbraink_process_tracer_init();
-+	if (ret)
-+		pr_notice("mbraink tracer init failed.\n");
-+
-+	return ret;
-+}
-+
-+static void mbraink_dev_exit(void)
-+{
-+	device_destroy(mbraink_priv.mbraink_class, mbraink_priv.mbraink_dev_no);
-+	class_destroy(mbraink_priv.mbraink_class);
-+	cdev_del(&mbraink_priv.mbraink_cdev);
-+	unregister_chrdev_region(mbraink_priv.mbraink_dev_no, 1);
-+
-+	pr_info("[MBK_INFO] %s: MBraink device exit done\n", __func__);
-+}
-+
-+static void mbraink_exit(void)
-+{
-+	mbraink_dev_exit();
-+	mbraink_process_tracer_exit();
-+}
-+
-+module_init(mbraink_init);
-+module_exit(mbraink_exit);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("<Wei-chin.Tsai@mediatek.com>");
-+MODULE_DESCRIPTION("MBraink Linux Device Driver");
-+MODULE_VERSION("1.0");
-diff --git a/drivers/misc/mediatek_mbraink/mbraink_main.h b/drivers/misc/mediatek_mbraink/mbraink_main.h
-new file mode 100644
-index 000000000000..36549f0d90d1
---- /dev/null
-+++ b/drivers/misc/mediatek_mbraink/mbraink_main.h
-@@ -0,0 +1,36 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2023 MediaTek Inc.
-+ */
-+
-+#ifndef MBRAINK_MAIN_H
-+#define MBRAINK_MAIN_H
-+
-+#include <linux/ioctl.h>
-+#include <linux/cdev.h>
-+#include <linux/pid.h>
-+#include <linux/device.h>
-+#include <linux/kdev_t.h>
-+
-+#include "mbraink_ioctl_struct_define.h"
-+
-+#define IOC_MAGIC		'k'
-+
-+/*Mbrain Delegate Info List*/
-+#define PROCESS_MEMORY_INFO	'4'
-+#define TRACE_PROCESS_INFO      'a'
-+
-+/*Mbrain Delegate IOCTL List*/
-+#define RO_PROCESS_MEMORY	_IOR(IOC_MAGIC, PROCESS_MEMORY_INFO, \
-+				     struct mbraink_process_memory_data*)
-+#define RO_TRACE_PROCESS        _IOR(IOC_MAGIC, TRACE_PROCESS_INFO, \
-+				     struct mbraink_tracing_pid_data*)
-+
-+struct mbraink_data {
-+#define CHRDEV_NAME     "mbraink_chrdev"
-+	dev_t mbraink_dev_no;
-+	struct cdev mbraink_cdev;
-+	struct class *mbraink_class;
-+};
-+
-+#endif /*end of MBRAINK_MAIN_H*/
+arch/alpha/include/asm/rwonce.h:25:35: warning: array subscript 0 is outside array bounds of 'struct inode[11885788707287082]' [-Warray-bounds]
+include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'struct inode[14781044930857012]' [-Warray-bounds]
+include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'struct inode[2684354]' [-Warray-bounds]
+include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'struct inode[3314017]' [-Warray-bounds]
+include/linux/fortify-string.h:57:33: warning: '__builtin_memcpy' specified bound 4294967295 exceeds maximum object size 2147483647 [-Wstringop-overflow=]
+include/linux/fortify-string.h:59:33: warning: '__builtin_memset' specified bound 4294967295 exceeds maximum object size 2147483647 [-Wstringop-overflow=]
+
+Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   `-- arch-alpha-include-asm-rwonce.h:warning:array-subscript-is-outside-array-bounds-of-struct-inode
+|-- arc-randconfig-r043-20230612
+|   `-- include-asm-generic-rwonce.h:warning:array-subscript-is-outside-array-bounds-of-struct-inode
+|-- arm-randconfig-r005-20230612
+|   |-- include-linux-fortify-string.h:warning:__builtin_memcpy-specified-bound-exceeds-maximum-object-size
+|   `-- include-linux-fortify-string.h:warning:__builtin_memset-specified-bound-exceeds-maximum-object-size
+|-- mips-allmodconfig
+|   `-- include-asm-generic-rwonce.h:warning:array-subscript-is-outside-array-bounds-of-struct-inode
+`-- x86_64-rhel-8.3
+    `-- include-asm-generic-rwonce.h:warning:array-subscript-is-outside-array-bounds-of-struct-inode
+
+elapsed time: 729m
+
+configs tested: 105
+configs skipped: 7
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r022-20230612   gcc  
+arc                              allyesconfig   gcc  
+arc          buildonly-randconfig-r004-20230612   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r043-20230612   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r005-20230612   gcc  
+arm                  randconfig-r046-20230612   clang
+arm64                            alldefconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64        buildonly-randconfig-r003-20230612   clang
+arm64                               defconfig   gcc  
+arm64                randconfig-r002-20230612   clang
+arm64                randconfig-r011-20230612   gcc  
+arm64                randconfig-r036-20230613   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r003-20230612   gcc  
+hexagon              randconfig-r014-20230612   clang
+hexagon              randconfig-r041-20230612   clang
+hexagon              randconfig-r045-20230612   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230612   clang
+i386                 randconfig-i002-20230612   clang
+i386                 randconfig-i003-20230612   clang
+i386                 randconfig-i004-20230612   clang
+i386                 randconfig-i005-20230612   clang
+i386                 randconfig-i006-20230612   clang
+i386                 randconfig-i011-20230613   clang
+i386                 randconfig-i012-20230613   clang
+i386                 randconfig-i013-20230613   clang
+i386                 randconfig-i014-20230613   clang
+i386                 randconfig-i015-20230613   clang
+i386                 randconfig-i016-20230613   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r016-20230612   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r021-20230612   clang
+mips                          rm200_defconfig   clang
+nios2        buildonly-randconfig-r006-20230612   gcc  
+nios2                               defconfig   gcc  
+openrisc                  or1klitex_defconfig   gcc  
+openrisc             randconfig-r001-20230612   gcc  
+openrisc             randconfig-r006-20230612   gcc  
+openrisc             randconfig-r024-20230612   gcc  
+openrisc             randconfig-r035-20230613   gcc  
+parisc                           allyesconfig   gcc  
+parisc       buildonly-randconfig-r001-20230612   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r015-20230612   gcc  
+powerpc              randconfig-r034-20230613   gcc  
+powerpc                         wii_defconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230612   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r025-20230612   gcc  
+s390                 randconfig-r044-20230612   gcc  
+sh                               allmodconfig   gcc  
+sh                   randconfig-r033-20230613   gcc  
+sh                           se7724_defconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc        buildonly-randconfig-r002-20230612   gcc  
+sparc                               defconfig   gcc  
+sparc64              randconfig-r004-20230612   gcc  
+sparc64              randconfig-r032-20230613   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230613   gcc  
+x86_64               randconfig-a002-20230613   gcc  
+x86_64               randconfig-a003-20230613   gcc  
+x86_64               randconfig-a004-20230613   gcc  
+x86_64               randconfig-a005-20230613   gcc  
+x86_64               randconfig-a006-20230613   gcc  
+x86_64               randconfig-a011-20230612   gcc  
+x86_64               randconfig-a012-20230612   gcc  
+x86_64               randconfig-a013-20230612   gcc  
+x86_64               randconfig-a014-20230612   gcc  
+x86_64               randconfig-a015-20230612   gcc  
+x86_64               randconfig-a016-20230612   gcc  
+x86_64               randconfig-r012-20230612   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+
 -- 
-2.18.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
