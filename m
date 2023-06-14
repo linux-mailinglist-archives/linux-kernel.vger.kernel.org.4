@@ -2,127 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 833F272F59F
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 09:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E24C772F59B
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 09:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243293AbjFNHNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 03:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36230 "EHLO
+        id S242840AbjFNHMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 03:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243075AbjFNHNA (ORCPT
+        with ESMTP id S235249AbjFNHMr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 03:13:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7B098
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 00:12:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686726734;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y/U0BSwcxwtPDblW2SZCJPehi+/SQaSwVgJ0GDSC97g=;
-        b=e3GYzJt1zYxuVIW24Hxo6+/xODtfqizwnS5zEaexCtkWseWTEs3Xwcndzf73dlYUvKqvPc
-        20nN6NR4L88fvXrDFq3051lMGTKSlCU0kOhnvSrNAxCn9KOUuV5g3XvqlwgpWq/ZPNcKFV
-        JxjxBSmiK935Q3AXUKvKA0YkAKdzTzk=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-386-8AA848-1NMWTIuFh4u6IzQ-1; Wed, 14 Jun 2023 03:12:13 -0400
-X-MC-Unique: 8AA848-1NMWTIuFh4u6IzQ-1
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-25e0bab24aaso174047a91.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 00:12:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686726732; x=1689318732;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y/U0BSwcxwtPDblW2SZCJPehi+/SQaSwVgJ0GDSC97g=;
-        b=l8VmO6EMSy+hxK3nHjK7bYbO11nwjMsQasI/7q/hwmxSjys8HyyUw0srlvRW59h7SN
-         4MOjysXUlwNsi34ThBLLWQL1vURqk6deZY6ki4mBYKwdoeVgCOWCsRJ4QeYZ/gemlgHJ
-         C5t4hIQNGEPyyg9LGTWVLk0FyT9AQufDiU2PHNsmjI6n1JVsEmf4B3Yv4OdkmHo7hINR
-         mNO4tDp7+xnE+X1LWX6Mhzoa1rFF/qdsvEMjgwP9WgQLreA5M4pJFsJ6M51nxq4c2AeH
-         mzdLwIZfwwzUXDIDBsyCRZasYhHoXMay/TiT8OVHvfxhNuOj5nKOwEhLNWHm1fsKb81N
-         LeQg==
-X-Gm-Message-State: AC+VfDweibLFRFopsX3KftPuq/yO6iOD1RfIIbiqClZCgLCJlnOGEiE9
-        BXHyNN8CHSGDt0h2rXyZUNJ8xw7IOgOPqFz3ehUXlCboNBiEMo3FU4xVCBoKZJ4ZXHF+eCzdVwC
-        3NsksY15Nwp3bqQV88Zb8h76SVT35euJYxik/9Hh+
-X-Received: by 2002:a17:90a:1cf:b0:25b:ec4c:488b with SMTP id 15-20020a17090a01cf00b0025bec4c488bmr836265pjd.34.1686726732572;
-        Wed, 14 Jun 2023 00:12:12 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5xfVTtramTVR8uEZ8x1k3b87HRutoNm0rx85rGzKvGkxcTI2Uo0acNpC2eoMSozO2LyB1S30w8RoTHzLfhCJo=
-X-Received: by 2002:a17:90a:1cf:b0:25b:ec4c:488b with SMTP id
- 15-20020a17090a01cf00b0025bec4c488bmr836251pjd.34.1686726732274; Wed, 14 Jun
- 2023 00:12:12 -0700 (PDT)
+        Wed, 14 Jun 2023 03:12:47 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2C319B6
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 00:12:45 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4QgxT72xcdzBQJYd
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 15:12:43 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1686726763; x=1689318764; bh=c7RaFsDa5kAGNhcFOSGO7z6+FkC
+        thRmwJp7Hw4Z60gs=; b=AB1SzX7lR5CKs5uEHH8+G0KuN2jcD7M89WKDMBX6fSC
+        iiFhJLoWldyy7H6+TJn2fVidX4EYoSCzVaTRSIz+NOJkDghePBzOpbHgsRO+kkiA
+        EZmJnul1e/MWaBnGynFrSyvTyYq63eAYhfRg5oFzzdWSN0ELP4V6HE7yO15tvcze
+        hlCtOfiSpXYGHeJX4yofzl5m21aAsAHuCMYxj/z1FeVO2S1Yu2zMWbRQ6Ve4MS32
+        BUpYcDj2/oT6ogMREifncICyQuj8SmliRVbrfUbAvdPszw0Y6mJVto40gkfNo0OZ
+        7TCd6ApbJcSXgfhJNNOIYGkuYDqqn01aRUl3b92gDBQ==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id LMGfdVRyvI26 for <linux-kernel@vger.kernel.org>;
+        Wed, 14 Jun 2023 15:12:43 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4QgxT70W8GzBJLB3;
+        Wed, 14 Jun 2023 15:12:43 +0800 (CST)
 MIME-Version: 1.0
-References: <20230529132037.2124527-1-yukuai1@huaweicloud.com>
- <20230529132037.2124527-5-yukuai1@huaweicloud.com> <05aa3b09-7bb9-a65a-6231-4707b4b078a0@redhat.com>
- <74b404c4-4fdb-6eb3-93f1-0e640793bba6@huaweicloud.com> <6e738d9b-6e92-20b7-f9d9-e1cf71d26d73@huaweicloud.com>
-In-Reply-To: <6e738d9b-6e92-20b7-f9d9-e1cf71d26d73@huaweicloud.com>
-From:   Xiao Ni <xni@redhat.com>
-Date:   Wed, 14 Jun 2023 15:12:01 +0800
-Message-ID: <CALTww292gwOe-WEjuBwJn0AXvJC4AbfMZXC43EvVt3GCeBoHfw@mail.gmail.com>
-Subject: Re: [dm-devel] [PATCH -next v2 4/6] md: refactor idle/frozen_sync_thread()
- to fix deadlock
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     guoqing.jiang@linux.dev, agk@redhat.com, snitzer@kernel.org,
-        dm-devel@redhat.com, song@kernel.org, linux-raid@vger.kernel.org,
-        yangerkun@huawei.com, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Date:   Wed, 14 Jun 2023 15:12:42 +0800
+From:   wuyonggang001@208suo.com
+To:     shuah@kernel.org
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/powerpc: Remove unneeded variable
+In-Reply-To: <20230614070926.36395-1-zhanglibing@cdjrlc.com>
+References: <20230614070926.36395-1-zhanglibing@cdjrlc.com>
+User-Agent: Roundcube Webmail
+Message-ID: <553bb6053c7b7bee60eda3ca90470ac3@208suo.com>
+X-Sender: wuyonggang001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 10:04=E2=80=AFAM Yu Kuai <yukuai1@huaweicloud.com> =
-wrote:
->
-> Hi,
->
-> =E5=9C=A8 2023/06/14 9:48, Yu Kuai =E5=86=99=E9=81=93:
->
->
-> >>
-> >> In the patch, sync_seq is added in md_reap_sync_thread. In
-> >> idle_sync_thread, if sync_seq isn't equal
-> >>
-> >> mddev->sync_seq, it should mean there is someone that stops the sync
-> >> thread already, right? Why do
-> >>
-> >> you say 'new started sync thread' here?
->
-> If someone stops the sync thread, and new sync thread is not started,
-> then this sync_seq won't make a difference, above wait_event() will not
-> wait because !test_bit(MD_RECOVERY_RUNNING, &mddev->recovery) will pass.
-> So 'sync_seq' is only used when the old sync thread stops and new sync
-> thread starts, add 'sync_seq' will bypass this case.
+Fix the following coccicheck warning:
 
-Hi
+tools/testing/selftests/powerpc/alignment/alignment_handler.c:558:5-7: 
+Unneeded variable: "rc". Return "0"
 
-If a new sync thread starts, why can sync_seq be different? sync_seq
-is only added in md_reap_sync_thread. And when a new sync request
-starts, it can't stop the sync request again?
+Signed-off-by: Yonggang Wu <wuyonggang001@208suo.com>
+---
+  .../powerpc/alignment/alignment_handler.c     | 24 +++++++++----------
+  1 file changed, 12 insertions(+), 12 deletions(-)
 
-Af first, the sync_seq is 0
+diff --git 
+a/tools/testing/selftests/powerpc/alignment/alignment_handler.c 
+b/tools/testing/selftests/powerpc/alignment/alignment_handler.c
+index 33ee34fc0828..4980656c3f70 100644
+--- a/tools/testing/selftests/powerpc/alignment/alignment_handler.c
++++ b/tools/testing/selftests/powerpc/alignment/alignment_handler.c
+@@ -332,7 +332,7 @@ int test_alignment_handler_vsx_206(void)
+      STORE_VSX_XFORM_TEST(stxvd2x);
+      STORE_VSX_XFORM_TEST(stxvw4x);
+      STORE_VSX_XFORM_TEST(stxsdx);
+-    return rc;
++    return 0;
+  }
 
-admin1
-echo idle > sync_action
-idle_sync_thread(sync_seq is 1)
-echo resync > sync_action (new sync)
+  int test_alignment_handler_vsx_207(void)
+@@ -348,7 +348,7 @@ int test_alignment_handler_vsx_207(void)
+      LOAD_VSX_XFORM_TEST(lxsiwzx);
+      STORE_VSX_XFORM_TEST(stxsspx);
+      STORE_VSX_XFORM_TEST(stxsiwx);
+-    return rc;
++    return 0;
+  }
 
-Then admin2 echos idle > sync_action, sync_seq is still 1
+  int test_alignment_handler_vsx_300(void)
+@@ -380,7 +380,7 @@ int test_alignment_handler_vsx_300(void)
+      STORE_VSX_XFORM_TEST(stxvx);
+      STORE_VSX_XFORM_TEST(stxvl);
+      STORE_VSX_XFORM_TEST(stxvll);
+-    return rc;
++    return 0;
+  }
 
-Regards
-Xiao
+  int test_alignment_handler_vsx_prefix(void)
+@@ -399,7 +399,7 @@ int test_alignment_handler_vsx_prefix(void)
+      STORE_VSX_8LS_PREFIX_TEST(PSTXSSP, 0);
+      STORE_VSX_8LS_PREFIX_TEST(PSTXV0, 0);
+      STORE_VSX_8LS_PREFIX_TEST(PSTXV1, 1);
+-    return rc;
++    return 0;
+  }
 
->
-> Thanks,
-> Kuai
->
+  int test_alignment_handler_integer(void)
+@@ -458,7 +458,7 @@ int test_alignment_handler_integer(void)
+      STORE_DFORM_TEST(stmw);
+  #endif
 
+-    return rc;
++    return 0;
+  }
+
+  int test_alignment_handler_integer_206(void)
+@@ -473,7 +473,7 @@ int test_alignment_handler_integer_206(void)
+      LOAD_XFORM_TEST(ldbrx);
+      STORE_XFORM_TEST(stdbrx);
+
+-    return rc;
++    return 0;
+  }
+
+  int test_alignment_handler_integer_prefix(void)
+@@ -494,7 +494,7 @@ int test_alignment_handler_integer_prefix(void)
+      STORE_MLS_PREFIX_TEST(PSTH);
+      STORE_MLS_PREFIX_TEST(PSTW);
+      STORE_8LS_PREFIX_TEST(PSTD);
+-    return rc;
++    return 0;
+  }
+
+  int test_alignment_handler_vmx(void)
+@@ -522,7 +522,7 @@ int test_alignment_handler_vmx(void)
+      STORE_VMX_XFORM_TEST(stvehx);
+      STORE_VMX_XFORM_TEST(stvewx);
+      STORE_VMX_XFORM_TEST(stvxl);
+-    return rc;
++    return 0;
+  }
+
+  int test_alignment_handler_fp(void)
+@@ -550,7 +550,7 @@ int test_alignment_handler_fp(void)
+      STORE_FLOAT_XFORM_TEST(stfsux);
+      STORE_FLOAT_XFORM_TEST(stfiwx);
+
+-    return rc;
++    return 0;
+  }
+
+  int test_alignment_handler_fp_205(void)
+@@ -568,7 +568,7 @@ int test_alignment_handler_fp_205(void)
+      STORE_FLOAT_DFORM_TEST(stfdp);
+      STORE_FLOAT_XFORM_TEST(stfdpx);
+
+-    return rc;
++    return 0;
+  }
+
+  int test_alignment_handler_fp_206(void)
+@@ -582,7 +582,7 @@ int test_alignment_handler_fp_206(void)
+
+      LOAD_FLOAT_XFORM_TEST(lfiwzx);
+
+-    return rc;
++    return 0;
+  }
+
+@@ -599,7 +599,7 @@ int test_alignment_handler_fp_prefix(void)
+      LOAD_FLOAT_MLS_PREFIX_TEST(PLFD);
+      STORE_FLOAT_MLS_PREFIX_TEST(PSTFS);
+      STORE_FLOAT_MLS_PREFIX_TEST(PSTFD);
+-    return rc;
++    return 0;
+  }
+
+  void usage(char *prog)
