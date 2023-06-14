@@ -2,95 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B6073016B
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:13:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABE41730169
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 16:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245462AbjFNONv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 10:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42132 "EHLO
+        id S245452AbjFNONc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 10:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235340AbjFNONs (ORCPT
+        with ESMTP id S235340AbjFNONb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 10:13:48 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB271715
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 07:13:47 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b3d29cfb17so27169695ad.3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 07:13:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686752027; x=1689344027;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=atkhLsJk4kYIR051jZUJsqhyVSqD17cKG1dfd3E+c04=;
-        b=QtPPdAz8+r7dt+3azArNI+jobqYcT5F/K5n1989N0B9h/dF9O0THNdPrbOgk401sv3
-         5J4d7liK3gdJtZ9cdamd5TvGz8tspTsfmQzlUei3suVhQyLyrh3DkFHy4rVZlSHdPsr5
-         YEErmKXQc4bgS24oNRScFjmmHUyABKOtOISkA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686752027; x=1689344027;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=atkhLsJk4kYIR051jZUJsqhyVSqD17cKG1dfd3E+c04=;
-        b=XG6KApn9iuyd6vjR8SCYSO+ngjfV4HfjXILsPiZRzBfIDg4QJhgaz+8aRyZDELd1Me
-         A9EQ8/3eRZaqA+yhE5N2KOPfd6LsRxr/6Xc3+Eizm71tjztwrQigH4IS2KW8UFpajIj1
-         8DVNBwrQqIn8FEcAGXkNMO4Bv9aAM9yJl33wwA8MMrXDtq0EXNyU2EmLzoPsIFaN4byA
-         Ry5KEae3Il6cH9p+eG+sRyBLUB3W0SVCZGL9DgFmGv0crgFGt7hc1Q2CwNQ4mCj3PzSO
-         kAzTEwoezYXPVKZqdz7GkOdbbwULd9MD2hVsrZAmnlzu92O1dw0uVtGHTiA7m2PNNVGL
-         s+KA==
-X-Gm-Message-State: AC+VfDwOtC7PiRMG8ZwD15c4eaXFNH5WEZ8VwcumO0zlM7fUchKe1JJJ
-        EEXy34FBlCF20tA+whrJO4K2tg==
-X-Google-Smtp-Source: ACHHUZ7c5hnOfemkMscvWj+eorrnWGExlzE2F7LXwlInsGAGaYBz8d88ceGN6cOoTGXRuvmWq7tQGg==
-X-Received: by 2002:a17:903:124d:b0:1ac:aba5:7885 with SMTP id u13-20020a170903124d00b001acaba57885mr14900116plh.47.1686752027301;
-        Wed, 14 Jun 2023 07:13:47 -0700 (PDT)
-Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:e1a3:812:fed0:eeab])
-        by smtp.gmail.com with ESMTPSA id h18-20020a170902f55200b001b042c0939fsm12226648plf.99.2023.06.14.07.13.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 07:13:46 -0700 (PDT)
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Minchan Kim <minchan@kernel.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Brian Geffon <bgeffon@google.com>
-Subject: [PATCH] zram: further limit recompression threshold
-Date:   Wed, 14 Jun 2023 23:13:12 +0900
-Message-ID: <20230614141338.3480029-1-senozhatsky@chromium.org>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+        Wed, 14 Jun 2023 10:13:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D9910CB;
+        Wed, 14 Jun 2023 07:13:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CDAFA642B4;
+        Wed, 14 Jun 2023 14:13:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0235EC433C0;
+        Wed, 14 Jun 2023 14:13:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686752009;
+        bh=7X/7FbhsdfLkee3mZ9kgb5T8bIuZmrxVKElcUIpMAlM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HcdEj2Z9WffNM9+XinQtijiXSQ073qH+hLWAuICnJAhiUhA1kUj/Q9MvuJP26OBbv
+         P3EtDrMNeYemtaMMbZmwLl0CMo/QmwCxZeEdFFcWpgubgyTxa9Qv19AmyE4WlM2WSM
+         FFRvaZIGDiasKWMWLVmU0bNeYmsXMaKQqSnObGspkeI2+CYw/9wfzKrVCPg5unpI34
+         9qqZ4d8pRpAAG+OFfJckoPEQxGdDWCZ8e/i+JzcrW3js7CYg4cjpJBiCj4oOrv3Uhx
+         tuUbvvDVKVPUph1yrj8t7UPUvN5Y8wNoELAbo+8MVbnO7HeNfh1UPc56PYzi7Ug5uU
+         05ol+qhg55v9w==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 8EAE440692; Wed, 14 Jun 2023 11:13:26 -0300 (-03)
+Date:   Wed, 14 Jun 2023 11:13:26 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     James Clark <james.clark@arm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-perf-users@vger.kernel.org, broonie@kernel.org,
+        Aishwarya.TCV@arm.com, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] perf tools: Add a place to put kernel config
+ fragments for test runs
+Message-ID: <ZInLBt9q2F99gTg8@kernel.org>
+References: <20230614140219.2335639-1-james.clark@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230614140219.2335639-1-james.clark@arm.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recompression threshold should be below huge-size-class
-watermark.
+Em Wed, Jun 14, 2023 at 03:02:19PM +0100, James Clark escreveu:
+> We are currently keeping something like this in our CI because defconfig
+> doesn't give full coverage. It's not complete yet, but is a starting
+> point as a place to add to when a specific test needs something extra to
+> run.
+> 
+> The RFC is for discussion on folder placement and file naming etc.
 
-Suggested-by: Brian Geffon <bgeffon@google.com>
-Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
----
- drivers/block/zram/zram_drv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Would be interesting to add the Kconfig maintainer to see if they have
+an opinion, Masahiro?
 
-diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-index 1867f378b319..5676e6dd5b16 100644
---- a/drivers/block/zram/zram_drv.c
-+++ b/drivers/block/zram/zram_drv.c
-@@ -1753,7 +1753,7 @@ static ssize_t recompress_store(struct device *dev,
- 		}
- 	}
+- Arnaldo
  
--	if (threshold >= PAGE_SIZE)
-+	if (threshold >= huge_class_size)
- 		return -EINVAL;
- 
- 	down_read(&zram->init_lock);
+> Signed-off-by: James Clark <james.clark@arm.com>
+> ---
+>  tools/perf/tests/config-fragments/README  |  7 +++++++
+>  tools/perf/tests/config-fragments/aarch64 |  1 +
+>  tools/perf/tests/config-fragments/config  | 11 +++++++++++
+>  3 files changed, 19 insertions(+)
+>  create mode 100644 tools/perf/tests/config-fragments/README
+>  create mode 100644 tools/perf/tests/config-fragments/aarch64
+>  create mode 100644 tools/perf/tests/config-fragments/config
+> 
+> diff --git a/tools/perf/tests/config-fragments/README b/tools/perf/tests/config-fragments/README
+> new file mode 100644
+> index 000000000000..e816cfb1b96d
+> --- /dev/null
+> +++ b/tools/perf/tests/config-fragments/README
+> @@ -0,0 +1,7 @@
+> +This folder is for kernel config fragments that can be merged with
+> +defconfig to give full test coverage of a perf test run. This is only
+> +an optimistic set as some features require hardware support in order to
+> +pass and not skip.
+> +
+> +'config' is shared across all platforms, and for arch specific files,
+> +the file name should match that returned by 'uname -m'.
+> diff --git a/tools/perf/tests/config-fragments/aarch64 b/tools/perf/tests/config-fragments/aarch64
+> new file mode 100644
+> index 000000000000..64c4ab17cd58
+> --- /dev/null
+> +++ b/tools/perf/tests/config-fragments/aarch64
+> @@ -0,0 +1 @@
+> +CONFIG_CORESIGHT_SOURCE_ETM4X=y
+> diff --git a/tools/perf/tests/config-fragments/config b/tools/perf/tests/config-fragments/config
+> new file mode 100644
+> index 000000000000..c340b3195fca
+> --- /dev/null
+> +++ b/tools/perf/tests/config-fragments/config
+> @@ -0,0 +1,11 @@
+> +CONFIG_TRACEPOINTS=y
+> +CONFIG_STACKTRACE=y
+> +CONFIG_NOP_TRACER=y
+> +CONFIG_RING_BUFFER=y
+> +CONFIG_EVENT_TRACING=y
+> +CONFIG_CONTEXT_SWITCH_TRACER=y
+> +CONFIG_TRACING=y
+> +CONFIG_GENERIC_TRACER=y
+> +CONFIG_FTRACE=y
+> +CONFIG_FTRACE_SYSCALLS=y
+> +CONFIG_BRANCH_PROFILE_NONE=y
+> -- 
+> 2.34.1
+> 
+
 -- 
-2.41.0.162.gfafddb0af9-goog
 
+- Arnaldo
