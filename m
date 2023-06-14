@@ -2,104 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC01572F8D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 11:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47BE272F8BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 11:11:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243240AbjFNJQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 05:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56678 "EHLO
+        id S243908AbjFNJLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 05:11:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234261AbjFNJQ3 (ORCPT
+        with ESMTP id S243726AbjFNJK5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 05:16:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3852619A;
-        Wed, 14 Jun 2023 02:16:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C1FDD63DB4;
-        Wed, 14 Jun 2023 09:16:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 726EDC433C8;
-        Wed, 14 Jun 2023 09:16:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686734186;
-        bh=qCYtDEkJIsAAneLcaHdq99ShqXpvpDVAtXNVqr0abXw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=aB8IRJMAdIix0fvOi2TCSHCN8ctHlA2WEMSYaRTg8BYRvIwXAIetS7RGQHQMQUXC2
-         hjVM5AzXtA/VmXktwMtFgKZH8TvL4NzHvhhwpPJZIMB6jaVf1U7fHsrBdqTQ2gK741
-         2bk/Aruj4+5KMp56i5ohpHTgV7sPPqYD1zh+CMhwO5cylU3Wa0WwiA1v890OfId8Cy
-         7pW1K5n82/IuBDVSfJ4xvc3U62iOqrX4p2aymKE1+ESrltYlwxr6hLAbFnN9z1wg2D
-         pEDuinCPOFUhzHSjgYE+8t7wqHV8h2OKPn4moDnr7xtaGAPHkOOaqqnxztiw1ThUnJ
-         LlV2NmG/TKSVQ==
-From:   Naveen N Rao <naveen@kernel.org>
-To:     <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Subject: [PATCH] selftests/ftrace: Fix dependencies for some of the synthetic event tests
-Date:   Wed, 14 Jun 2023 14:40:46 +0530
-Message-Id: <20230614091046.2178539-1-naveen@kernel.org>
-X-Mailer: git-send-email 2.40.1
+        Wed, 14 Jun 2023 05:10:57 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A435810D5;
+        Wed, 14 Jun 2023 02:10:55 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Qh04g3LXWz6H7tc;
+        Wed, 14 Jun 2023 17:10:11 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 14 Jun
+ 2023 10:10:52 +0100
+Date:   Wed, 14 Jun 2023 10:10:51 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     <alison.schofield@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Len Brown" <lenb@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Borislav Petkov" <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Jiang <dave.jiang@intel.com>,
+        "Mike Rapoport" <rppt@kernel.org>, <x86@kernel.org>,
+        <linux-cxl@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/2] CXL: Apply SRAT defined PXM to entire CFMWS
+ window
+Message-ID: <20230614101051.00006602@Huawei.com>
+In-Reply-To: <20230614083240.GC1639749@hirez.programming.kicks-ass.net>
+References: <cover.1686712819.git.alison.schofield@intel.com>
+        <20230614083240.GC1639749@hirez.programming.kicks-ass.net>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit b81a3a100cca1b ("tracing/histogram: Add simple tests for
-stacktrace usage of synthetic events") changed the output text in
-tracefs README, but missed updating some of the dependencies specified
-in selftests. This causes some of the tests to exit as unsupported.
+On Wed, 14 Jun 2023 10:32:40 +0200
+Peter Zijlstra <peterz@infradead.org> wrote:
 
-Fix this by changing the grep pattern. Since we want these tests to work
-on older kernels, match only against the common last part of the
-pattern.
+> On Tue, Jun 13, 2023 at 09:35:23PM -0700, alison.schofield@intel.com wrote:
+> > The CXL subsystem requires the creation of NUMA nodes for CFMWS  
+> 
+> The thing is CXL some persistent memory thing, right? But what is this
+> CFMWS thing? I don't think I've ever seen that particular combination of
+> letters together.
+> 
+Hi Peter,
 
-Fixes: b81a3a100cca ("tracing/histogram: Add simple tests for stacktrace usage of synthetic events")
-Signed-off-by: Naveen N Rao <naveen@kernel.org>
----
- .../trigger/inter-event/trigger-synthetic-event-dynstring.tc    | 2 +-
- .../inter-event/trigger-synthetic_event_syntax_errors.tc        | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+To save time before the US based folk wake up.
 
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-dynstring.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-dynstring.tc
-index 213d890ed1886e..174376ddbc6c7a 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-dynstring.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-event-dynstring.tc
-@@ -1,7 +1,7 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
- # description: event trigger - test inter-event histogram trigger trace action with dynamic string param
--# requires: set_event synthetic_events events/sched/sched_process_exec/hist "char name[]' >> synthetic_events":README ping:program
-+# requires: set_event synthetic_events events/sched/sched_process_exec/hist "' >> synthetic_events":README ping:program
- 
- fail() { #msg
-     echo $1
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic_event_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic_event_syntax_errors.tc
-index 955e3ceea44b5b..b927ee54c02da5 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic_event_syntax_errors.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic_event_syntax_errors.tc
-@@ -1,7 +1,7 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
- # description: event trigger - test synthetic_events syntax parser errors
--# requires: synthetic_events error_log "char name[]' >> synthetic_events":README
-+# requires: synthetic_events error_log "' >> synthetic_events":README
- 
- check_error() { # command-with-error-pos-by-^
-     ftrace_errlog_check 'synthetic_events' "$1" 'synthetic_events'
+Both persistent and volatile memory found on CXL devices (mostly volatile on
+early devices).
 
-base-commit: dbcf76390eb9a65d5d0c37b0cd57335218564e37
--- 
-2.40.1
+CXL Fixed Memory Window (structure) (CFMWS - defined in 9.17.1.3 of CXL r3.0
+- via an ACPI table (CEDT).  CFMWS, as a term, is sometimes abused in the kernel
+(and here) for the window rather than the structure describing the window
+(the S on the end).
 
+CFMWS - A region of Host Physical Address (HPA) Space which routes accesses to CXL Host
+bridges. A CFMWS describes interleaving as well (so multiple target host bridges).
+If multiple interleave setups are available, then you'll see multiple CFMWS entries
+- so different statically regions of HPA can route to same host bridges with different
+interleave setups (decoding via the configurable part to hit different actual memory
+on the downstream devices). 
+Where accesses are routed after that depends on the configurable parts
+of the CXL topology (Host-Managed Device Memory (HDM) decoders in host bridges,
+switches etc).  Note that a CFMWS address may route to nowhere if downstream
+devices aren't available / configured yet.
+
+CFMWS is the CXL specification avoiding defining interfaces for controlling
+the host address space to CXL host bridge mapping as those vary so much across
+host implementations + not always configurable at runtime anyway. Also includes
+a bunch of other details about the region (too many details perhaps!)
+
+Who does the configuration (BIOS / kernel) varies across implementations
+and we have OS managed hotplug so the OS always has to do some of it
+(personally I prefer the kernel doing everything :)
+It's made messier by CXL 1.1 hosts where a lot less was discoverable so
+generally the BIOS has to do the heavy lifting. For CXL 2.0 onwards the OS
+'might' do everything except whatever is needed on the host to configure
+the CXL Fixed Memory Windows it is advertising.
+
+Note there is no requirement that the access characteristics of memory mapped
+into a given CFMWS should be remotely consistent across the whole window
+ - some of the window may route through switches, and to directly connected
+   devices.
+That's a simplifying assumption made today as we don't yet know the full
+scope of what people are building.
+
+Hope that helps (rather than causing confusion!)
+
+Jonathan
