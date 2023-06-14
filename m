@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2867972F4F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 08:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B9972F4F8
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 08:36:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243195AbjFNGgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 02:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47788 "EHLO
+        id S240845AbjFNGgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 02:36:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243191AbjFNGfu (ORCPT
+        with ESMTP id S234418AbjFNGgD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 02:35:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932382103;
-        Tue, 13 Jun 2023 23:35:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 273996184B;
-        Wed, 14 Jun 2023 06:35:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2430C433C0;
-        Wed, 14 Jun 2023 06:35:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686724521;
-        bh=lpzSb45cABD3n36CztUicAGwa3wNS9BkIywEDeDCmPQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=l/fHGPawM+RXJJ5TPoaR3aei/cEaulQ4HY//74WtRqRi/hPCzg9xMmDx1Tn5Y1123
-         28drRNdXkjuKLUnszYy7jSunVw5kecpuC2QuNVl2/2RgooAEaiKDMOxTN4bimigtSv
-         0/iGHgqgaNfU9IhN9J6T+Q3HQu9ns+YVjfECLZKI=
-Date:   Wed, 14 Jun 2023 08:35:18 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Wupeng Ma <mawupeng1@huawei.com>
-Cc:     akpm@linux-foundation.org, david@redhat.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Wei Yang <richard.weiyang@linux.alibaba.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Pankaj Gupta <pankaj.gupta.linux@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>
-Subject: Re: [PATCH stable 5.10 1/1] mm/memory_hotplug: extend
- offline_and_remove_memory() to handle more than one memory block
-Message-ID: <2023061440-showing-happiest-937e@gregkh>
-References: <20230614061900.3296725-1-mawupeng1@huawei.com>
- <20230614061900.3296725-2-mawupeng1@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230614061900.3296725-2-mawupeng1@huawei.com>
+        Wed, 14 Jun 2023 02:36:03 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DAA1709
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 23:35:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686724540; x=1718260540;
+  h=date:from:to:cc:subject:message-id;
+  bh=C0NUqOsBkuXNnU+VS1InojMiILX/nJeXZgaJ5Q6Pnw4=;
+  b=HZW/o/Sla5OGUakO/1gJ+bf0rJXRPo1QESX8EOM2LCG/egH39hdghcmz
+   prEwTl/amvpszZ/+GF5ffCjfT7QtQBPsQjThyuO/FNlYwgJIWbY40vEPe
+   zf0PX5u+WCBSDBHYnCjcD1lNg/QbSr9Ka5ASrnHOBvaPzDVPiIKjzUC3J
+   oqbythESTWwiGMj7FbdSHey9x1ZlrQJb/OTbyN6BqZ64zgmalWkSCyXOT
+   +zKTrBMNPXap1bEQ9NM75r4gTe6Ix+Gi8GTwv81vknWpUwJ4vO7QG6cGn
+   BGbiWP8xZrM8SQLfIaGke8qXeB4EWsbZHM68nsKjLkqt9SaAoxeWpwyJ6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="338167934"
+X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
+   d="scan'208";a="338167934"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 23:35:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="777112392"
+X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
+   d="scan'208";a="777112392"
+Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 13 Jun 2023 23:35:38 -0700
+Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q9K6T-0000Jx-37;
+        Wed, 14 Jun 2023 06:35:37 +0000
+Date:   Wed, 14 Jun 2023 14:35:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ 6e2e1e779912345f0b5f86ef01facc2802bd97cc
+Message-ID: <202306141434.Z40FUkfW-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,56 +60,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 02:19:00PM +0800, Wupeng Ma wrote:
-> From: David Hildenbrand <david@redhat.com>
-> 
-> virtio-mem soon wants to use offline_and_remove_memory() memory that
-> exceeds a single Linux memory block (memory_block_size_bytes()). Let's
-> remove that restriction.
-> 
-> Let's remember the old state and try to restore that if anything goes
-> wrong. While re-onlining can, in general, fail, it's highly unlikely to
-> happen (usually only when a notifier fails to allocate memory, and these
-> are rather rare).
-> 
-> This will be used by virtio-mem to offline+remove memory ranges that are
-> bigger than a single memory block - for example, with a device block
-> size of 1 GiB (e.g., gigantic pages in the hypervisor) and a Linux memory
-> block size of 128MB.
-> 
-> While we could compress the state into 2 bit, using 8 bit is much
-> easier.
-> 
-> This handling is similar, but different to acpi_scan_try_to_offline():
-> 
-> a) We don't try to offline twice. I am not sure if this CONFIG_MEMCG
-> optimization is still relevant - it should only apply to ZONE_NORMAL
-> (where we have no guarantees). If relevant, we can always add it.
-> 
-> b) acpi_scan_try_to_offline() simply onlines all memory in case
-> something goes wrong. It doesn't restore previous online type. Let's do
-> that, so we won't overwrite what e.g., user space configured.
-> 
-> Reviewed-by: Wei Yang <richard.weiyang@linux.alibaba.com>
-> Cc: "Michael S. Tsirkin" <mst@redhat.com>
-> Cc: Jason Wang <jasowang@redhat.com>
-> Cc: Pankaj Gupta <pankaj.gupta.linux@gmail.com>
-> Cc: Michal Hocko <mhocko@kernel.org>
-> Cc: Oscar Salvador <osalvador@suse.de>
-> Cc: Wei Yang <richard.weiyang@linux.alibaba.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-> Link: https://lore.kernel.org/r/20201112133815.13332-28-david@redhat.com
-> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-> Acked-by: Andrew Morton <akpm@linux-foundation.org>
-> ---
->  mm/memory_hotplug.c | 105 +++++++++++++++++++++++++++++++++++++-------
->  1 file changed, 89 insertions(+), 16 deletions(-)
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: 6e2e1e779912345f0b5f86ef01facc2802bd97cc  Merge branch into tip/master: 'x86/sgx'
 
-As you forwarded this patch on, you too need to sign-off on it.
+elapsed time: 729m
 
-Also, what is the git id of the commit in Linus's tree?
+configs tested: 103
+configs skipped: 4
 
-thanks,
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-greg k-h
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r026-20230612   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r021-20230612   gcc  
+arc                  randconfig-r043-20230612   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r046-20230612   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r036-20230612   clang
+csky                                defconfig   gcc  
+csky                 randconfig-r002-20230612   gcc  
+csky                 randconfig-r003-20230612   gcc  
+csky                 randconfig-r034-20230612   gcc  
+hexagon              randconfig-r031-20230612   clang
+hexagon              randconfig-r041-20230612   clang
+hexagon              randconfig-r045-20230612   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230612   clang
+i386                 randconfig-i002-20230612   clang
+i386                 randconfig-i003-20230612   clang
+i386                 randconfig-i004-20230612   clang
+i386                 randconfig-i005-20230612   clang
+i386                 randconfig-i006-20230612   clang
+i386                 randconfig-i011-20230612   gcc  
+i386                 randconfig-i012-20230612   gcc  
+i386                 randconfig-i013-20230612   gcc  
+i386                 randconfig-i014-20230612   gcc  
+i386                 randconfig-i015-20230612   gcc  
+i386                 randconfig-i016-20230612   gcc  
+i386                 randconfig-r025-20230612   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch    buildonly-randconfig-r006-20230612   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r004-20230612   gcc  
+microblaze           randconfig-r013-20230612   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips         buildonly-randconfig-r003-20230612   gcc  
+mips                 randconfig-r024-20230612   clang
+nios2                               defconfig   gcc  
+nios2                randconfig-r032-20230612   gcc  
+openrisc     buildonly-randconfig-r001-20230612   gcc  
+openrisc     buildonly-randconfig-r004-20230612   gcc  
+openrisc             randconfig-r015-20230612   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r023-20230612   gcc  
+parisc               randconfig-r035-20230612   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r006-20230612   clang
+riscv                randconfig-r033-20230612   clang
+riscv                randconfig-r042-20230612   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230612   gcc  
+sh                               allmodconfig   gcc  
+sh                   randconfig-r012-20230612   gcc  
+sparc                            allyesconfig   gcc  
+sparc        buildonly-randconfig-r005-20230612   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r001-20230612   gcc  
+sparc                randconfig-r011-20230612   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r002-20230612   clang
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230612   clang
+x86_64               randconfig-a002-20230612   clang
+x86_64               randconfig-a003-20230612   clang
+x86_64               randconfig-a004-20230612   clang
+x86_64               randconfig-a005-20230612   clang
+x86_64               randconfig-a006-20230612   clang
+x86_64               randconfig-a011-20230612   gcc  
+x86_64               randconfig-a012-20230612   gcc  
+x86_64               randconfig-a013-20230612   gcc  
+x86_64               randconfig-a014-20230612   gcc  
+x86_64               randconfig-a015-20230612   gcc  
+x86_64               randconfig-a016-20230612   gcc  
+x86_64               randconfig-r005-20230612   clang
+x86_64               randconfig-r014-20230612   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
