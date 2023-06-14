@@ -2,89 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEFBA730AE8
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 00:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07222730AEC
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 00:45:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235305AbjFNWou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 18:44:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40514 "EHLO
+        id S229955AbjFNWpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 18:45:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbjFNWor (ORCPT
+        with ESMTP id S229832AbjFNWpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 18:44:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C45C1BF7;
-        Wed, 14 Jun 2023 15:44:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B4556281D;
-        Wed, 14 Jun 2023 22:44:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5B01C433C0;
-        Wed, 14 Jun 2023 22:44:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686782685;
-        bh=lMvudJgKGP6G5z1D5G5ktPPOIHeYLAxIIf2pg1Bn6dA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Zk6bt6oVdjWME3wilTbcHVuIxYexd/ugfSoqlxQA+OKl7qFQrKmyiFMXVZXlSLBrh
-         7Jry8e84dvXNqFZPIPlrmBuZoyCRj9Y6/+vzIlZqLjR2NWK/Ahana4A/5nbZpJ+xds
-         c7GN7maBBDBmKOcMkmw2tuqPXW3rM46twikbRfrEt5C92i+eoeQbNcEOXPuJrwAEOe
-         qPfWvLRNKp0EL4+S82/uGEoYOD+Fpg8jyck9vu6YebQG1WBdkb99Gz+xlMyb2XkkyC
-         /EzMJ5NBWSplFJ1Wj39Ba6c4ldZQoyJUY+xKb3VF1YWmjkV9RicqPqmO8QnICaTDna
-         dUKeQNi4BltJQ==
-Message-ID: <bf142e7d-178e-43a8-32e8-7e9e396eeee7@kernel.org>
-Date:   Thu, 15 Jun 2023 07:44:39 +0900
+        Wed, 14 Jun 2023 18:45:08 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4485C2695
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 15:45:05 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f6170b1486so237361e87.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 15:45:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686782703; x=1689374703;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pFmEys4UP/BgwQm19UOfZJrlXyJD3pmyho65CpiqnbY=;
+        b=P0xkljwPwEIx9AiLfTQ52OF2brfwDB4iX2e7Jv+LzXTgBkI/ZnBRbTtlAc7Bh4YMqO
+         EEXq38ZzvaHMHJqQFYknBcSu1UmHdfOedsuvIeYhAjrX2BUHKUhF4JKDySzJ2dpDa4O1
+         STA9E2hLePlmYiY0a091mZSsm6CrsqbcOEAoUMjJrGOKOxZwID0WFgNlrlrZuv+7hxBp
+         nSnm2wB/3L1FKvBLMexFx0C69lhhJjibpN6Ovyg7JgXz9G6RI9jBkY8tWtHIPelfdvEb
+         aFmtko2M4jIJNuyG5LafYw9GiVLS0Be1FFpoHkLSH1Xi/ZnAWrbMpv21T9t3/VmELmeO
+         +GZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686782703; x=1689374703;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pFmEys4UP/BgwQm19UOfZJrlXyJD3pmyho65CpiqnbY=;
+        b=LXFdAsgiJ4Y7L8qbeksmOfLDyO1ZbrWGcY6pEEcE4EEaOxA3V32Ny4nfoiY8N6l1sm
+         pUqHWpA2O3TlQ3itsuETRfMfW8bGjWzj6x/kgzA2Slr8D7tn52BiVLivFLPu0x7ZEdxw
+         PBxZCeNHZG/ReVhh6s37oGRjuwV14bn74LNJujOsi2PK/OFTFRaRYnWRfVDDuBnOnxNA
+         APxu+XHuCPE0SDAROpE0bOYAf8i896+eAXkVMvjbriNOfhKSOk+IcVGao7Jcs+4HQSq8
+         zQu9U+6SwYD1vBTMe4/WOWt/CmXDAb3e4DWQHmlUszlGAxr3O0EbRiqCUa56jHlfdSWQ
+         hapw==
+X-Gm-Message-State: AC+VfDxrrCKtb7SsbIVClNf5mUZHtbJDTOf3jozYicjrrz2Ug0h6PSpX
+        9MvFm8JbzesmQw6HQAHpx5gPnA==
+X-Google-Smtp-Source: ACHHUZ41d/xGmuzPjif6jwX/W74Tm1loth6hzxERHcbhrFmHVvv22kop8/IE1XX6TbWVmyC2w1FOkQ==
+X-Received: by 2002:a05:6512:45a:b0:4f6:5473:7bf0 with SMTP id y26-20020a056512045a00b004f654737bf0mr1184339lfk.21.1686782703414;
+        Wed, 14 Jun 2023 15:45:03 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id r23-20020ac252b7000000b004f2ce4b0f2esm2288991lfm.168.2023.06.14.15.45.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 15:45:02 -0700 (PDT)
+Message-ID: <a1322d43-d1e6-059d-6428-f0da843a00b1@linaro.org>
+Date:   Thu, 15 Jun 2023 01:45:01 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: Fwd: Waking up from resume locks up on sr device
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     Hannes Reinecke <hare@suse.de>,
-        Joe Breuer <linux-kernel@jmbreuer.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Linux Power Management <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Hardening <linux-hardening@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux SCSI <linux-scsi@vger.kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-References: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
- <5513e29d-955a-f795-21d6-ec02a2e2e128@gmail.com>
- <ZIQ6bkau3j6qGef8@duo.ucw.cz>
- <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com>
- <02e4f87a-80e8-dc5d-0d6e-46939f2c74ac@acm.org>
- <b2cf6d96-a55a-d444-d22e-e9b3945ba43f@jmbreuer.net>
- <84f1c51c-86f9-04b3-0cd1-f685ebee7592@kernel.org>
- <37ed36f0-6f72-115c-85fb-62ef5ad72e76@suse.de>
- <b0fdf454-b2f7-c273-66f5-efe42fbc2807@kernel.org>
- <859f0eda-4984-4489-9851-c9f6ec454a88@rowland.harvard.edu>
- <3f85cb4a-8b14-623f-eb4e-40baab1ed888@acm.org>
-Content-Language: en-US
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <3f85cb4a-8b14-623f-eb4e-40baab1ed888@acm.org>
-Content-Type: text/plain; charset=UTF-8
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] drm/msm/dsi: Enable BURST_MODE for command mode for DSI
+ 6G v1.3+
+Content-Language: en-GB
+To:     Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     quic_abhinavk@quicinc.com, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230608-b4-add-burst-mode-v1-1-55dfbcfada55@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230608-b4-add-burst-mode-v1-1-55dfbcfada55@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,62 +81,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/15/23 03:04, Bart Van Assche wrote:
-> On 6/14/23 07:26, Alan Stern wrote:
->> On Wed, Jun 14, 2023 at 04:35:50PM +0900, Damien Le Moal wrote:
->>> Or... Why the heck scsi_rescan_device() is calling device_lock() ? This
->>> is the only place in scsi code I can see that takes this lock. I suspect
->>> this is to serialize either rescans, or serialize with resume, or both.
->>> For serializing rescans, we can use another lock. For serializing with
->>> PM, we should wait for PM transitions...
->>> Something is not right here.
->>
->> Here's what commit e27829dc92e5 ("scsi: serialize ->rescan against
->> ->remove", written by Christoph Hellwig) says:
->>
->>      Lock the device embedded in the scsi_device to protect against
->>      concurrent calls to ->remove.
->>
->> That's the commit which added the device_lock() call.
+On 13/06/2023 02:37, Jessica Zhang wrote:
+> During a frame transfer in command mode, there could be frequent
+> LP11 <-> HS transitions when multiple DCS commands are sent mid-frame or
+> if the DSI controller is running on slow clock and is throttled. To
+> minimize frame latency due to these transitions, it is recommended to
+> send the frame in a single burst.
 > 
-> Even if scsi_rescan_device() would use another mechanism for 
-> serialization against sd_remove() and sr_remove(), we still need to 
-> solve the issue that the ATA code calls scsi_rescan_device() before 
-> resuming has finished. scsi_rescan_device() issues I/O. Issuing I/O to a 
-> device is not allowed before that device has been resumed.
+> This feature is supported for DSI 6G 1.3 and above, thus enable burst
+> mode if supported.
+> 
+> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/dsi/dsi_host.c | 5 +++++
+>   1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> index 744f2398a6d6..8254b06dca85 100644
+> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> @@ -994,6 +994,11 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+>   		dsi_write(msm_host, REG_DSI_CMD_MDP_STREAM0_TOTAL,
+>   			DSI_CMD_MDP_STREAM0_TOTAL_H_TOTAL(hdisplay) |
+>   			DSI_CMD_MDP_STREAM0_TOTAL_V_TOTAL(mode->vdisplay));
+> +
+> +		if (msm_host->cfg_hnd->major == MSM_DSI_VER_MAJOR_6G &&
+> +				msm_host->cfg_hnd->minor >= MSM_DSI_6G_VER_MINOR_V1_3)
+> +			dsi_write(msm_host, REG_DSI_CMD_MODE_MDP_CTRL2,
+> +					DSI_CMD_MODE_MDP_CTRL2_BURST_MODE);
 
-I am not convinced of that: scsi suspend quiecse the queue, thus preventing IOs
-from the block layer, but not internale scsi ml commands, which is what
-scsi_rescan_device() issues.
+Please move this to dsi_ctrl_config(), the place where we set all the 
+configs. Also please change this to RMW cycle.
 
-In any case, I am thinking that best (and quickest) fix for this issue for now
-is to have libata define a device link to make the scsi device a "parent" of the
-ata device (which is the ata link as of now). This way, PM operation ordering
-will ensure that the scsi device resume will be done before the ata device. What
-I really do not like about this though is that the suspend side would be done in
-the reverse order: ata first and then scsi, but we really want the reverse here
-to ensure that the request queue is quiesced before we suspend ata. That said,
-there is no such synchronization right now and so this is probably happening
-already without raising issues apparently.
-
-So ideally:
-1) Make the ata device the parent of the scsi device using a device link
-2) For suspend, the scsi device suspend will be done first, followed by the ata
-device, which is what we want.
-3) For resume, ata device will be first, followed by scsi device. The call to
-scsi_rescan_device() from libata being in a work task, asynchronous from the ata
-resume context, we need to synchronize that work to wait for the scsi device
-resume to complete. (but do we really given that we are going to issue internal
-commands only ?)
-
-Alan, Rafael,
-
-For the synchronization of step (3), if I understand the pm code correctly,
-using device_pm_wait_for_dev() would work only if async resume is on. This would
-be ineffective for the sync case. How can we best deal with this ?
-
+>   	}
+>   }
+>   
+> 
+> ---
+> base-commit: dd969f852ba4c66938c71889e826aa8e5300d2f2
+> change-id: 20230608-b4-add-burst-mode-a5bb144069fa
+> 
+> Best regards,
 
 -- 
-Damien Le Moal
-Western Digital Research
+With best wishes
+Dmitry
 
