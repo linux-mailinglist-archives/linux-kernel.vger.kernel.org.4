@@ -2,158 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C6072F32D
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 05:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8716972F31E
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 05:36:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233749AbjFNDmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Jun 2023 23:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52926 "EHLO
+        id S233537AbjFNDgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Jun 2023 23:36:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233310AbjFNDmo (ORCPT
+        with ESMTP id S231720AbjFNDge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Jun 2023 23:42:44 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3663F1B2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Jun 2023 20:42:42 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4QgrXT1J7TzBL4jS
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 11:30:17 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1686713417; x=1689305418; bh=z5hs7QQbBqwpD+KWPgppc054WtM
-        v2RQuhhpTxrICano=; b=dED6LWw05tOhaz9hDYFLzSGCGSi9t3mVI+5Jpr/2P6E
-        kO2BjomTQ/dT2A/QWvyLnKPa7M5M1qdKpjyoJTKG9B5VcE1V5TRvuKlOmVbEilqM
-        z1sSXVywgqJ9Ut0YWnsKn/ezSUKiitsnxyHb8APKfTbOSarz/xMecfsoD0Pkn6jV
-        BNNi6a2NE8uBplE2h7J6nJTQRVAu8bPLbvHKdFRtqo2Jb/sFgEf2eSG+/vMWe0MC
-        KoyeAh2mJEyOepkGNw3Vm0pqJbzr89yLI0k8UrbdQGiY6T2gATmcPrrl5fQgQpIL
-        q7fYqk5WLOoi38in+jQZazntWV+shnBN0bmXGpb1Uow==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id kfyzxSgUNCnm for <linux-kernel@vger.kernel.org>;
-        Wed, 14 Jun 2023 11:30:17 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4QgrXS4fWGzBJLB4;
-        Wed, 14 Jun 2023 11:30:16 +0800 (CST)
+        Tue, 13 Jun 2023 23:36:34 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5880110C6;
+        Tue, 13 Jun 2023 20:36:32 -0700 (PDT)
+Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Qgrc40yxfzLqJQ;
+        Wed, 14 Jun 2023 11:33:24 +0800 (CST)
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 14 Jun
+ 2023 11:36:28 +0800
+Subject: Re: [PATCH net-next v4 1/5] page_pool: frag API support for 32-bit
+ arch with 64-bit DMA
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        <linux-rdma@vger.kernel.org>
+References: <20230612130256.4572-1-linyunsheng@huawei.com>
+ <20230612130256.4572-2-linyunsheng@huawei.com>
+ <483d7a70-3377-a241-4554-212662ee3930@intel.com>
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <6db097ba-c3fe-6e45-3c39-c21b4d9e16ef@huawei.com>
+Date:   Wed, 14 Jun 2023 11:36:28 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-Date:   Wed, 14 Jun 2023 11:30:16 +0800
-From:   baomingtong001@208suo.com
-To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        ave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Fwd: [PATCH] KVM: x86: remove unneeded variable
-In-Reply-To: <20230614032736.13264-1-luojianhong@cdjrlc.com>
-References: <20230614032736.13264-1-luojianhong@cdjrlc.com>
-User-Agent: Roundcube Webmail
-Message-ID: <a2510fb15553a294236646321cf1b3a4@208suo.com>
-X-Sender: baomingtong001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+In-Reply-To: <483d7a70-3377-a241-4554-212662ee3930@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fix the following coccicheck warning:
+On 2023/6/13 21:30, Alexander Lobakin wrote:
+> From: Yunsheng Lin <linyunsheng@huawei.com>
+> Date: Mon, 12 Jun 2023 21:02:52 +0800
+> 
+>> Currently page_pool_alloc_frag() is not supported in 32-bit
+>> arch with 64-bit DMA, which seems to be quite common, see
+>> [1], which means driver may need to handle it when using
+>> page_pool_alloc_frag() API.
+> 
+> [...]
+> 
+>> diff --git a/include/net/page_pool.h b/include/net/page_pool.h
+>> index 126f9e294389..5c7f7501f300 100644
+>> --- a/include/net/page_pool.h
+>> +++ b/include/net/page_pool.h
+>> @@ -33,6 +33,7 @@
+>>  #include <linux/mm.h> /* Needed by ptr_ring */
+>>  #include <linux/ptr_ring.h>
+>>  #include <linux/dma-direction.h>
+> 
+> This include is redundant now that you include dma-mapping.h.
+> 
+>> +#include <linux/dma-mapping.h>
+> 
+> As Jakub previously mentioned, this involves including dma-mapping.h,
+> which is relatively heavy, to each source file which includes skbuff.h,
+> i.e. almost the whole kernel :D
 
-arch/x86/kvm/emulate.c:1315:5-7: Unneeded variable: "rc".Return 
-"X86EMUL_CONTINUE".
-arch/x86/kvm/emulate.c:4559:5-7: Unneeded variable: "rc".Return 
-"X86EMUL_CONTINUE".
-arch/x86/kvm/emulate.c:1180:5-7: Unneeded variable: "rc".Return 
-"X86EMUL_CONTINUE".
+I am not sure I understand the part about 'includes skbuff.h' yet, it seems
+'skbuff.h' does not have anything related to this patch?
 
-Signed-off-by: Mingtong Bao <baomingtong001@208suo.com>
----
-  arch/x86/kvm/emulate.c | 15 ++++++---------
-  1 file changed, 6 insertions(+), 9 deletions(-)
+> I addressed this in my series, which I hope will land soon after yours
+> (sending new revision in 24-48 hours), so you can leave it as it is. Or
+> otherwise you can pick my solution (or come up with your own :D).
 
-diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-index 936a397a08cd..7a7e29e4e203 100644
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -1177,7 +1177,6 @@ static int decode_modrm(struct x86_emulate_ctxt 
-*ctxt,
-  {
-      u8 sib;
-      int index_reg, base_reg, scale;
--    int rc = X86EMUL_CONTINUE;
-      ulong modrm_ea = 0;
+Do you mean by removing "#include <linux/dma-direction.h>" as dma-mapping.h
+has included dma-direction.h?
+But I am not sure if there is any hard rule about not explicitly including
+a .h which is implicitly included. What if the dma-mapping.h is changed to not
+include dma-direction.h anymore?
 
-      ctxt->modrm_reg = ((ctxt->rex_prefix << 1) & 8); /* REX.R */
-@@ -1199,16 +1198,16 @@ static int decode_modrm(struct x86_emulate_ctxt 
-*ctxt,
-              op->bytes = 16;
-              op->addr.xmm = ctxt->modrm_rm;
-              kvm_read_sse_reg(ctxt->modrm_rm, &op->vec_val);
--            return rc;
-+            return X86EMUL_CONTINUE;
-          }
-          if (ctxt->d & Mmx) {
-              op->type = OP_MM;
-              op->bytes = 8;
-              op->addr.mm = ctxt->modrm_rm & 7;
--            return rc;
-+            return X86EMUL_CONTINUE;
-          }
-          fetch_register_operand(op);
--        return rc;
-+        return X86EMUL_CONTINUE;
-      }
+Anyway, it seems it is unlikely to not include dma-direction.h in dma-mapping.h,
+Will remove the "#include <linux/dma-direction.h>" if there is another version
+needed for this patchset:)
 
-      op->type = OP_MEM;
-@@ -1306,13 +1305,12 @@ static int decode_modrm(struct x86_emulate_ctxt 
-*ctxt,
-          ctxt->memop.addr.mem.ea = (u32)ctxt->memop.addr.mem.ea;
-
-  done:
--    return rc;
-+    return X86EMUL_CONTINUE;
-  }
-
-  static int decode_abs(struct x86_emulate_ctxt *ctxt,
-                struct operand *op)
-  {
--    int rc = X86EMUL_CONTINUE;
-
-      op->type = OP_MEM;
-      switch (ctxt->ad_bytes) {
-@@ -1327,7 +1325,7 @@ static int decode_abs(struct x86_emulate_ctxt 
-*ctxt,
-          break;
-      }
-  done:
--    return rc;
-+    return X86EMUL_CONTINUE;
-  }
-
-  static void fetch_bit_operand(struct x86_emulate_ctxt *ctxt)
-@@ -4556,7 +4554,6 @@ static unsigned imm_size(struct x86_emulate_ctxt 
-*ctxt)
-  static int decode_imm(struct x86_emulate_ctxt *ctxt, struct operand 
-*op,
-                unsigned size, bool sign_extension)
-  {
--    int rc = X86EMUL_CONTINUE;
-
-      op->type = OP_IMM;
-      op->bytes = size;
-@@ -4590,7 +4587,7 @@ static int decode_imm(struct x86_emulate_ctxt 
-*ctxt, struct operand *op,
-          }
-      }
-  done:
--    return rc;
-+    return X86EMUL_CONTINUE;
-  }
-
-  static int decode_operand(struct x86_emulate_ctxt *ctxt, struct operand 
-*op,
+> 
+>>  
+>>  #define PP_FLAG_DMA_MAP		BIT(0) /* Should page_pool do the DMA
+>>  					* map/unmap
+> 
+> Thanks,
+> Olek
+> 
+> .
+> 
