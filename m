@@ -2,106 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4CC73001A
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 15:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16C1A73001E
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 15:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245020AbjFNNbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 09:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44422 "EHLO
+        id S236709AbjFNNdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 09:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244932AbjFNNbM (ORCPT
+        with ESMTP id S230321AbjFNNdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 09:31:12 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8DE1BE8
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 06:31:11 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-3f98276f89cso191741cf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 06:31:11 -0700 (PDT)
+        Wed, 14 Jun 2023 09:33:01 -0400
+Received: from smtp-fw-9106.amazon.com (smtp-fw-9106.amazon.com [207.171.188.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315771BFD;
+        Wed, 14 Jun 2023 06:33:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686749470; x=1689341470;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nPogWzmsJ1uvTQmxk29cAdOXJbnNlr5lDiNRKRRfY+Y=;
-        b=uD0jAp/lTJTKXuircqMDJh7ibnACj3Kymu3Rc/QmTOPRqLUM7CGWWjC1/Sj8QyDl3k
-         6KXJd7yNCltiUbmlaniei7G+fyaEOirccZnQCqYu7o0UJPPBz1kt9xynZm19ACbIsrtS
-         84iJPzLYoSU9QAJarFECN+V4RAwsoVbQlB396Wrty5lS8XrwEn2eJli66e4mcGvguTiq
-         niJ/JMFW3AYlPi68nLDUWZCAAmocN6T9vZOusEaDAT7JHlT2TzQx9VK10LhFRgFYSWkX
-         rfX6DCoDTM5CBcVpJlcpStCdXCaKrOG3czdGbp6TWxqQyB2STjzyO+G8c3tuZDCtqoMG
-         xFlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686749470; x=1689341470;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nPogWzmsJ1uvTQmxk29cAdOXJbnNlr5lDiNRKRRfY+Y=;
-        b=Jq2XxTDvohG0VRl1QlIPT/11DBC6WDbrJrUKlmN6edf0xcai/U+cOIxd+8y8ONXubw
-         mqzAnkxY45ihgRMVlifM5wRjjyZ5BEKKi7W9lMVm+u8UwkXyq1MdrrP2/ZPmotQ+IDI3
-         i+/O+i4R7d8tt+WV52fOhiQbXwCa0XcVAW1h5OPXRRNoU3RX+RMYDi7PdYiTEZJMPcDz
-         0m1nHCfG0aPHLLXNf4xZpLFB6KSbnQAZ5vkta0LTOGw+PzpdHisbMN/mzGEQhiNFj8zf
-         DP8WEMcDvXHy9xcM45Ixnfgj9Tk1dXu4St+y3c3/7qpn+pp4/+VrvoLSG+/nL4iSsFly
-         8KZw==
-X-Gm-Message-State: AC+VfDxalkQFgBM2nMg0Hn5nCPwtBttSZ19Z2Sj9Q2BT3sHia+bHwTiJ
-        FkkAZyuvp4c5PGTLnxC9V2BjHanYILBxK1MhrRyCSQ==
-X-Google-Smtp-Source: ACHHUZ459VPSubsKO+LN6a8B8Ad5v2JYGZHNAmEqMt29iXtS2IDCmjQodsu6UZ0tCBNXSEK9t6Fevh3pk7oiUFyoqVA=
-X-Received: by 2002:a05:622a:188f:b0:3f9:56c:1129 with SMTP id
- v15-20020a05622a188f00b003f9056c1129mr174966qtc.5.1686749470220; Wed, 14 Jun
- 2023 06:31:10 -0700 (PDT)
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
+  t=1686749581; x=1718285581;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:mime-version:
+   content-transfer-encoding;
+  bh=KsVXSUgWvEyxPZ6XcTppAUfu9AfW7QxpE0gPbP31rmI=;
+  b=gzBzzEgm4ObxT6Xd9TVUmF0LV4OEwORmvs77zVpdEqs2bePUbGiz5GYA
+   uhEgOsfkUU6xWYi8ADg+nbu3kRuhmhXzmJ7PvwuyvyNFBEeE224RJYvlG
+   V2N4P+VnleGCZ1+6u2mfcWJBeQAyWpt55ML9IDshF4zgwDEfjh7g/kE5t
+   I=;
+X-IronPort-AV: E=Sophos;i="6.00,242,1681171200"; 
+   d="scan'208";a="654141436"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-1box-2bm6-32cf6363.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9106.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 13:32:56 +0000
+Received: from EX19D007EUA002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-1box-2bm6-32cf6363.us-west-2.amazon.com (Postfix) with ESMTPS id 40F9D80451;
+        Wed, 14 Jun 2023 13:32:54 +0000 (UTC)
+Received: from EX19D039EUC001.ant.amazon.com (10.252.61.245) by
+ EX19D007EUA002.ant.amazon.com (10.252.50.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 14 Jun 2023 13:32:51 +0000
+Received: from EX19D039EUC004.ant.amazon.com (10.252.61.190) by
+ EX19D039EUC001.ant.amazon.com (10.252.61.245) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 14 Jun 2023 13:32:51 +0000
+Received: from EX19D039EUC004.ant.amazon.com ([fe80::5319:6fc9:8bde:8a4]) by
+ EX19D039EUC004.ant.amazon.com ([fe80::5319:6fc9:8bde:8a4%3]) with mapi id
+ 15.02.1118.026; Wed, 14 Jun 2023 13:32:51 +0000
+From:   "Adam, Mahmoud" <mngyadam@amazon.de>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+CC:     Mahmoud Adam <mngyadam@amazon.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] KEYS: use kfree_sensitive with key
+Thread-Topic: [PATCH] KEYS: use kfree_sensitive with key
+Thread-Index: AQHZnhE6QjFYrnWk7EKzcHc3QmFVcK+KDvmAgAA+R4A=
+Date:   Wed, 14 Jun 2023 13:32:51 +0000
+Message-ID: <CB10C1D8-BA86-4E1B-B9B7-FDF6AFD3E089@amazon.de>
+References: <20230613160723.61729-1-mngyadam@amazon.com>
+ <ZImNO0AijmNriZuL@gondor.apana.org.au>
+In-Reply-To: <ZImNO0AijmNriZuL@gondor.apana.org.au>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.1.212.8]
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <6B0F688BB9AD664094D6610EA5B23B0D@amazon.com>
 MIME-Version: 1.0
-References: <20230606120854.4170244-1-mshavit@google.com> <20230606120854.4170244-15-mshavit@google.com>
- <ZH9oQMmI8CezMCnx@nvidia.com> <CAKHBV25eDNXEu+6GWDJqpw1h5N-Jq-GPzf81kNH1dyw3Z=KsZA@mail.gmail.com>
- <ZIBxPd1/JCAle6yP@nvidia.com> <CAKHBV25K4BCewMdp3HcRtaX1iNhVpxL_6dMwp1_fmcQ5RWpKBQ@mail.gmail.com>
- <ZImuIPrB2YeulNn3@nvidia.com>
-In-Reply-To: <ZImuIPrB2YeulNn3@nvidia.com>
-From:   Michael Shavit <mshavit@google.com>
-Date:   Wed, 14 Jun 2023 21:30:34 +0800
-Message-ID: <CAKHBV25g2M-35ZQ9X-mx-La7jVDgBm6rw-umOkNdgu3_jAiA-A@mail.gmail.com>
-Subject: Re: [PATCH v2 14/18] iommu/arm-smmu-v3: Support domains with shared CDs
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>, jean-philippe@linaro.org,
-        nicolinc@nvidia.com, baolu.lu@linux.intel.com,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 5:57=E2=80=AFPM Robin Murphy <robin.murphy@arm.com>=
- wrote:
->
-> In practice it would be entirely reasonable to only support
-> cross-instance attach between instances with matching capabilities such
-> that they *can* share the pagetable directly.
 
-On Wed, Jun 14, 2023 at 8:10=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com> wr=
-ote:
-> When we talk about multi instance support, it means the iommu_domain -
-> in whatever fixed IO page table format it uses - can be attached to
-> any SMMU instance that supports it as a compatible page table format.
->
-> ARM doesn't quite reach this model, but once it passes the finalize
-> step it does. The goal is to move finalize to allocate. So for your
-> purposes you can ignore the difference.
 
-Got you. Failing the atach when the page table format is incompatible
-with the smmu device is a lot easier to handle. I didn't notice that
-SVA was already checking this elsewhere.
-I can give the multi-instance support a try (with the rest of these
-patches on top) and send it out as a follow-up series to this one.
+> On 14. Jun 2023, at 11:49, Herbert Xu <herbert@gondor.apana.org.au> wrote:
+> =
 
-> I think it is good to make progress, it looked to me like the first
-> part stood alone fairly well and was an improvement on its own.
+> On Tue, Jun 13, 2023 at 04:07:23PM +0000, Mahmoud Adam wrote:
+>> key member might contain private part of the key, so better use
+>> kfree_sensitive to free it
+>> =
 
-Sorry for the noobie question; it's not 100% obvious to me what the
-next step is here. Is there anything I should do to progress that
-first part forward?
+>> Signed-off-by: Mahmoud Adam <mngyadam@amazon.com>
+>> ---
+>> crypto/asymmetric_keys/public_key.c | 8 ++++----
+>> 1 file changed, 4 insertions(+), 4 deletions(-)
+>> =
+
+>> diff --git a/crypto/asymmetric_keys/public_key.c b/crypto/asymmetric_key=
+s/public_key.c
+>> index eca5671ad3f2..006ae170a16f 100644
+>> --- a/crypto/asymmetric_keys/public_key.c
+>> +++ b/crypto/asymmetric_keys/public_key.c
+>> @@ -43,7 +43,7 @@ static void public_key_describe(const struct key *asym=
+metric_key,
+>> void public_key_free(struct public_key *key)
+>> {
+>> if (key) {
+>> - kfree(key->key);
+>> + kfree_sensitive(key->key);
+> =
+
+> The public key should not be freed with kfree_sensitive.
+
+I think this holds for the other lines as well, I can use pkey->key_is_priv=
+ate to check for them also
+
+Thanks.
+
+
+
+
+Amazon Development Center Germany GmbH
+Krausenstr. 38
+10117 Berlin
+Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+Sitz: Berlin
+Ust-ID: DE 289 237 879
+
+
+
