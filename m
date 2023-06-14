@@ -2,134 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF0AD72FDFB
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3DA672FDFD
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 14:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244451AbjFNMLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 08:11:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48020 "EHLO
+        id S244468AbjFNMMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 08:12:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244220AbjFNMLo (ORCPT
+        with ESMTP id S244467AbjFNMLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 08:11:44 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C981FFD;
-        Wed, 14 Jun 2023 05:11:29 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C082D6606EF9;
-        Wed, 14 Jun 2023 13:11:27 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686744688;
-        bh=vkoaLcxa/wT0Fcl73RCnDFggBDckXDJX/rwJsp2AhJg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fumlvVf4Wm/lEZCmLXxDzGTiOoPcbLOwj2ACJWCo7sCxTtT+BjF3/wqzy+n/JW6kw
-         uV7sBot9LyZHLmqwlgAw7idG6YI1BFQjVRMptqoMhpaMQfFSaWPU5x6PdhkAPkCOdV
-         Hx4wNu4MSk8K4JGUnG7xL5YbZcIa5LAtJ6C5l4yZ/rCcw+ZhltbPgNJu0Rl+vyJXuN
-         Si3FDPvlQepoRuBns23HCA2akj2zRDsqmZVIKSCXyh5P0FEKPwjyUSAX19pemHwitk
-         DfpSzb7vVJXXirGsHYd8qK7UDxhdVsFyJmhm+k5mYosPWDMuqD9BGn+CgHnMGzNANq
-         TuG5yWh7xXICQ==
-Message-ID: <cb7f49bc-8ed4-a916-44f4-39e360afce41@collabora.com>
-Date:   Wed, 14 Jun 2023 14:11:25 +0200
+        Wed, 14 Jun 2023 08:11:48 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA00F1BC5;
+        Wed, 14 Jun 2023 05:11:42 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id 6a1803df08f44-62884fa0e53so17994406d6.0;
+        Wed, 14 Jun 2023 05:11:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686744702; x=1689336702;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jfeQaw+ScJyf8YtahpLruw3sSgKj9ssLSfyFkigJ6Tc=;
+        b=kkmMLHeIjxJq6WCELQ4uRlrhY0T0CqJeEg84WDKeORRX8QZg7TQxmtC2H3J1mzevUB
+         rPZnF1iZapA34xXSlA3122Wzg1nEAJ7jNXJfkV1p+11m/VNs54S4jQeUNUgO9sDDQUNF
+         E6Kf3GIXmvKqhVVhY4tu06tjGE2ylIAZjXieiUIJn105s5opLs4YpsB52GzehCcydysH
+         JGtlcn4FBB6dsF26jZFfn6ePH8pioOJg4VLlZMDDnjqAjTiAbAEyLkb2NAe/b04PtsRc
+         KMN9LdCVAAIUl/mS7ABA90MkDt2tNBt/CFzNz1KFOWR1xNwMXadXkdAYcwxF5u93/7qC
+         o2tA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686744702; x=1689336702;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jfeQaw+ScJyf8YtahpLruw3sSgKj9ssLSfyFkigJ6Tc=;
+        b=f8e8Ob6VO6mTuY+4wydJFUrC/kpU6OwvSwx+mg9SGoy04Zo8AN+ktxm2Rf16L6Gku0
+         Ax59taJ9+V+cbe6iYudoVEQzQujqyJY+0122pHTMCFKh2o3Q6aTL6ONc4tvYLiQsGexP
+         Vm/Z4RzrhQoo/1/NRXc/HNwVFQc2E9i5toTDjBSglknP+19sLiH0BxavIK9utW27aNI0
+         zGGd9Oc+JVbb3Jr2d+bShhXg+TAlYTpMKwoBHSTNRMvm8R1mqy/8B+eLkHy2uGToMpgP
+         DQTXBpzw8Gjy6i9MscTU/cqY+j8rhxQEShu5WvCY+A/brSBbtT5etzly/Lz+NLOt/irq
+         nHvQ==
+X-Gm-Message-State: AC+VfDy6nluGr/IMAqx/PJkhduCWi3pFcpnUx67SJDVEXuAR6JbvELX+
+        C4E+yv1oTY8tTprw4WOIgTh2dk1m3wnPzLUkt0/Dv6wA
+X-Google-Smtp-Source: ACHHUZ6q/B/k5sEOClpChlEtYK3pBtd9BcQBmAx71AC7KmstsV008dZMmCn/9srFUsKZ+ikPUFcZUWtwrLHILLfKi+0=
+X-Received: by 2002:a05:6214:501a:b0:62d:e672:2fd7 with SMTP id
+ jo26-20020a056214501a00b0062de6722fd7mr13484199qvb.61.1686744702034; Wed, 14
+ Jun 2023 05:11:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 2/3] memory: export symbols for memory related
- functions
-Content-Language: en-US
-To:     =?UTF-8?B?V2VpLWNoaW4gVHNhaSAo6JSh57at5pmJKQ==?= 
-        <Wei-chin.Tsai@mediatek.com>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?TWVsIExlZSAo5p2O5aWH6YyaKQ==?= <Mel.Lee@mediatek.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        wsd_upstream <wsd_upstream@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        =?UTF-8?B?SXZhbiBUc2VuZyAo5pu+5b+X6LuSKQ==?= 
-        <ivan.tseng@mediatek.com>
-References: <20230614032038.11699-1-Wei-chin.Tsai@mediatek.com>
- <20230614032038.11699-3-Wei-chin.Tsai@mediatek.com>
- <ZIlpWR6/uWwQUc6J@shell.armlinux.org.uk>
- <fef0006ced8d5e133a3bfbf4dc4353a86578b9cd.camel@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <fef0006ced8d5e133a3bfbf4dc4353a86578b9cd.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230614061130.64214-1-zhanglibing@cdjrlc.com> <5cc396aff142acbc4ba4b2541a5e4d71@208suo.com>
+In-Reply-To: <5cc396aff142acbc4ba4b2541a5e4d71@208suo.com>
+From:   Julian Calaby <julian.calaby@gmail.com>
+Date:   Wed, 14 Jun 2023 22:11:30 +1000
+Message-ID: <CAGRGNgUW30BYGyPOwwV-zteO7O4gjVgZ4NsoP-xLhuG994bL7A@mail.gmail.com>
+Subject: Re: [PATCH] sparc/kernel: Fix syntax error
+To:     wuyonggang001@208suo.com
+Cc:     davem@davemloft.net, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 14/06/23 11:59, Wei-chin Tsai (蔡維晉) ha scritto:
-> On Wed, 2023-06-14 at 08:16 +0100, Russell King (Oracle) wrote:
->>   	
->> External email : Please do not click links or open attachments until
->> you have verified the sender or the content.
->>   On Wed, Jun 14, 2023 at 11:20:34AM +0800, Wei Chin Tsai wrote:
->>> diff --git a/arch/arm/kernel/process.c b/arch/arm/kernel/process.c
->>> index 0e8ff85890ad..df91412a1069 100644
->>> --- a/arch/arm/kernel/process.c
->>> +++ b/arch/arm/kernel/process.c
->>> @@ -343,6 +343,7 @@ const char *arch_vma_name(struct vm_area_struct
->> *vma)
->>>   {
->>>   return is_gate_vma(vma) ? "[vectors]" : NULL;
->>>   }
->>> +EXPORT_SYMBOL_GPL(arch_vma_name);
->> ...
->>> diff --git a/kernel/signal.c b/kernel/signal.c
->>> index b5370fe5c198..a1abe77fcdc3 100644
->>> --- a/kernel/signal.c
->>> +++ b/kernel/signal.c
->>> @@ -4700,6 +4700,7 @@ __weak const char *arch_vma_name(struct
->> vm_area_struct *vma)
->>>   {
->>>   return NULL;
->>>   }
->>> +EXPORT_SYMBOL_GPL(arch_vma_name);
->>
->> Have you confirmed:
->> 1) whether this actually builds
->> 2) whether this results in one or two arch_vma_name exports
->>
->> ?
->>
->> -- 
->> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
->> FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
-> 
-> Hi Russell,
-> 
-> We did confirm that it can be built successfully in kernel 6.1 and run
-> well in our system.
-> 
+Hi Yonggang,
 
-It runs well in your system and can be built successfully because you're building
-for ARM64, not for ARM...
+On Wed, Jun 14, 2023 at 4:19=E2=80=AFPM <wuyonggang001@208suo.com> wrote:
+>
+> Fix the following checkpatch error:
+>
+> ERROR: space required before the open parenthesis '('
+> ERROR: do not initialise statics to 0
+> ERROR: trailing whitespace
 
-> Actually, we only use this export symbol "arch_vma_name"
-> from kernel/signal.c in arm64. We also export symbol for arch_vma_name
-> in arch/arm/kernel/process.c because that, one day in the future,  we
-> are afraid that we also need this function in arm platform.
-> 
-> Thanks.
-> 
-> Regards,
-> 
-> Jim
-> 
+While this patch is mostly correct and is fixing real issues with this
+code, it is very old code in a very old part of the kernel and the
+maintainers are unlikely to apply it as they'd prefer to leave it
+as-is and not introduce any potential for regressions.
 
+>
+> Signed-off-by: Yonggang Wu <wuyonggang001@208suo.com>
+> ---
+>   arch/sparc/kernel/apc.c | 22 +++++++++++-----------
+>   1 file changed, 11 insertions(+), 11 deletions(-)
+>
+> diff --git a/arch/sparc/kernel/apc.c b/arch/sparc/kernel/apc.c
+> index ecd05bc0a104..40b9c72ad4d9 100644
+> --- a/arch/sparc/kernel/apc.c
+> +++ b/arch/sparc/kernel/apc.c
+> @@ -162,7 +162,7 @@ static int apc_probe(struct platform_device *op)
+>       if (!apc_no_idle)
+>           sparc_idle =3D apc_swift_idle;
+>
+> -    printk(KERN_INFO "%s: power management initialized%s\n",
+> +    pr_info("%s: power management initialized%s\n",
 
+While this is most likely harmless, this is technically a change in
+behaviour and should have been noted in the commit message. Also, as
+this is technically a change in behaviour, it will make it even less
+likely that this will be applied.
+
+Thanks,
+
+--=20
+Julian Calaby
+
+Email: julian.calaby@gmail.com
+Profile: http://www.google.com/profiles/julian.calaby/
