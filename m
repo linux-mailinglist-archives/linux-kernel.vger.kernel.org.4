@@ -2,100 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30FE972F685
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 09:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46CDD72F686
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 09:38:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243291AbjFNHid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 03:38:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52816 "EHLO
+        id S234919AbjFNHii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 03:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234592AbjFNHi0 (ORCPT
+        with ESMTP id S235148AbjFNHi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 14 Jun 2023 03:38:26 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA13E62;
-        Wed, 14 Jun 2023 00:38:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=WID80vYS4EtWRNtZsTHqjGXaq8KNYNCjE5M7eGOJcaY=;
-        t=1686728305; x=1687937905; b=XOTxWAyaYtdz0GZwilfC+Vey4F321f5F84G/nxkRMRYL9td
-        YmQV6w/Y02TNGLpfKJT9g8zbJjzTYl2TyjgE1SMSlqX4hgGc9klUS2MZTKVws853zyWPET+ikhFH1
-        Z+3EBcgnYQAvS8Eu5NFP2XGOjOSEE5nmexm0Xq/f+TxkpWegI2HTjsJfFL+clK/ge0h7ZYkbUxFEp
-        TE7HHUVn+puMndIJl+E2pUbGND9UjGQhQF8bJw8Ur6vQH2ijeg9GhU5XAlwGPXTDTyTnm2qVa0YPS
-        HKrK+kbcMf/PHzofiY7D0GFHg4ribj2B3dTxQg6hHW10qpgjTboZh3bMs2vsTj3Q==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1q9L56-005yyv-2C;
-        Wed, 14 Jun 2023 09:38:16 +0200
-Message-ID: <02650a6d4c82bce62a9625714540ea75f7b3f571.camel@sipsolutions.net>
-Subject: Re: [PATCH] wifi: ath9k: remove unneeded variable from
- ath9k_dump_legacy_btcoex()
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     baomingtong001@208suo.com, kvalo@kernel.org
-Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 14 Jun 2023 09:38:15 +0200
-In-Reply-To: <695b68601eecd648b7531f2e40561edb@208suo.com>
-References: <20230614061007.62077-1-luojianhong@cdjrlc.com>
-         <695b68601eecd648b7531f2e40561edb@208suo.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A042C1AD;
+        Wed, 14 Jun 2023 00:38:24 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Qgy2f0nfTz4f3mVb;
+        Wed, 14 Jun 2023 15:38:18 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgBn0LNpbolk9J6wLg--.62486S3;
+        Wed, 14 Jun 2023 15:38:19 +0800 (CST)
+Subject: Re: [dm-devel] [PATCH -next v2 4/6] md: refactor
+ idle/frozen_sync_thread() to fix deadlock
+To:     Xiao Ni <xni@redhat.com>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     guoqing.jiang@linux.dev, agk@redhat.com, snitzer@kernel.org,
+        dm-devel@redhat.com, song@kernel.org, linux-raid@vger.kernel.org,
+        yangerkun@huawei.com, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230529132037.2124527-1-yukuai1@huaweicloud.com>
+ <20230529132037.2124527-5-yukuai1@huaweicloud.com>
+ <05aa3b09-7bb9-a65a-6231-4707b4b078a0@redhat.com>
+ <74b404c4-4fdb-6eb3-93f1-0e640793bba6@huaweicloud.com>
+ <6e738d9b-6e92-20b7-f9d9-e1cf71d26d73@huaweicloud.com>
+ <CALTww292gwOe-WEjuBwJn0AXvJC4AbfMZXC43EvVt3GCeBoHfw@mail.gmail.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <5bf97ec5-0cb4-1163-6917-2bc98d912c2b@huaweicloud.com>
+Date:   Wed, 14 Jun 2023 15:38:17 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CALTww292gwOe-WEjuBwJn0AXvJC4AbfMZXC43EvVt3GCeBoHfw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgBn0LNpbolk9J6wLg--.62486S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7WF1DCFWDWFy5WF1rJw1UKFg_yoW8ZF4Upr
+        y0yF15Cr4jkr4Iv3s5K3WjqrW0y34UXa15Jr9xJry3Jwn5Kw4ftFy7CFW5uF98ZF95Jr4j
+        k39YqayfJFZIy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
+        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-06-14 at 14:13 +0800, baomingtong001@208suo.com wrote:
-> Fix the following coccicheck warning:
->=20
-> drivers/net/wireless/ath/ath9k/gpio.c:501:5-8: Unneeded variable: "len".
->=20
-> Signed-off-by: Mingtong Bao <baomingtong001@208suo.com>
+Hi,
 
-Same here. I'm even wondering if there are different people behind this?
+在 2023/06/14 15:12, Xiao Ni 写道:
+> On Wed, Jun 14, 2023 at 10:04 AM Yu Kuai <yukuai1@huaweicloud.com> wrote:
+>>
+>> Hi,
+>>
+>> 在 2023/06/14 9:48, Yu Kuai 写道:
+>>
+>>
+>>>>
+>>>> In the patch, sync_seq is added in md_reap_sync_thread. In
+>>>> idle_sync_thread, if sync_seq isn't equal
+>>>>
+>>>> mddev->sync_seq, it should mean there is someone that stops the sync
+>>>> thread already, right? Why do
+>>>>
+>>>> you say 'new started sync thread' here?
+>>
+>> If someone stops the sync thread, and new sync thread is not started,
+>> then this sync_seq won't make a difference, above wait_event() will not
+>> wait because !test_bit(MD_RECOVERY_RUNNING, &mddev->recovery) will pass.
+>> So 'sync_seq' is only used when the old sync thread stops and new sync
+>> thread starts, add 'sync_seq' will bypass this case.
+> 
+> Hi
+> 
+> If a new sync thread starts, why can sync_seq be different? sync_seq
+> is only added in md_reap_sync_thread. And when a new sync request
+> starts, it can't stop the sync request again?
+> 
+> Af first, the sync_seq is 0
+> 
+> admin1
+> echo idle > sync_action
+> idle_sync_thread(sync_seq is 1)
 
-Also, I'm wondering what you're up to - are you all training or
-something? I see the same kind of patches that are the same kind of
-broken from a handful of different people?
+Wait, I'm confused here, how can sync_seq to be 1 here? I suppose you
+mean that there is a sync_thread just finished?
 
-> ---
->   drivers/net/wireless/ath/ath9k/gpio.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
->=20
-> diff --git a/drivers/net/wireless/ath/ath9k/gpio.c=20
-> b/drivers/net/wireless/ath/ath9k/gpio.c
-> index b457e52dd365..f3d1bc02e633 100644
-> --- a/drivers/net/wireless/ath/ath9k/gpio.c
-> +++ b/drivers/net/wireless/ath/ath9k/gpio.c
-> @@ -498,14 +498,13 @@ static int ath9k_dump_legacy_btcoex(struct=20
-> ath_softc *sc, u8 *buf, u32 size)
->   {
->=20
->       struct ath_btcoex *btcoex =3D &sc->btcoex;
-> -    u32 len =3D 0;
->=20
->       ATH_DUMP_BTCOEX("Stomp Type", btcoex->bt_stomp_type);
->       ATH_DUMP_BTCOEX("BTCoex Period (msec)", btcoex->btcoex_period);
->       ATH_DUMP_BTCOEX("Duty Cycle", btcoex->duty_cycle);
->       ATH_DUMP_BTCOEX("BT Wait time", btcoex->bt_wait_time);
->=20
-> -    return len;
-> +    return 0;
->=20
+Then the problem is that idle_sync_thread() read sync_seq after the old
+sync_thread is done, and new sync_thread start before wait_event() is
+called, should we wait for this new sync_thread?
 
-This won't even build.
+My answer here is that we should, but I'm also ok to not wait this new
+sync_thread, I don't think this behaviour matters. The key point here
+is that once wait_event() is called from idle_sync_thread(), this
+wait_event() should not wait for new sync_thread...
 
-Please try to understand the code you're modifying before you do. And
-no, build-testing it (and fixing it) will not result anything better.
+> echo resync > sync_action (new sync)
 
-johannes
+If this is behind "echo idle > sync_action", idle_sync_thread should not
+see that MD_RECOVERY_RUNNING is set and wait_event() won't wait at all.
+
+Thanks,
+Kuai
+> 
+> Then admin2 echos idle > sync_action, sync_seq is still 1
+> 
+> Regards
+> Xiao
+> 
+>>
+>> Thanks,
+>> Kuai
+>>
+> 
+> .
+> 
+
