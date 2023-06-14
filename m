@@ -2,289 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 712C372F79E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:18:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 687F072F79C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Jun 2023 10:18:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243422AbjFNISd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 04:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49110 "EHLO
+        id S243250AbjFNISU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 04:18:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234461AbjFNISR (ORCPT
+        with ESMTP id S238639AbjFNISM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 04:18:17 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B88D1984;
-        Wed, 14 Jun 2023 01:18:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=FIzRwjiKM7SvRFy1N4h9FRGo7xOEwNJymcZ/CXggJvU=; b=jPiJRxzHMAQaXI0SS5WpBBWV/0
-        ZMINmS9g0g7iF4YhMVQS5kwtbV2cO2FE8ngADbM9tQ6tOaqrHvCwjDWI3VWwDFz6lh98bey8XF2gl
-        Jx3xKCvybrlRPZLid9VukQ9kRDr4eV3IF8E9MdJhN+kiPbYaeprGs7XIr+hy9CbguwdVFOACWUrZG
-        D480SOpWqtdyw3GBXptZctR7UCi/N0HfNClqzk6YDlZOc0Ds+C3yq4nb8uiz9uDOHvGWyIb7HrsCn
-        Yn97drpKxX0kzcSoIHAU2yxcrLQCrnzltCSeRURawGZMfkCPN1jc8Ebe5D6nT/iXV0qJULf+kKiAV
-        5FzEwZtQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q9LhX-005vmJ-1g; Wed, 14 Jun 2023 08:17:59 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 11C643002A9;
-        Wed, 14 Jun 2023 10:17:58 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id EF1B427E48343; Wed, 14 Jun 2023 10:17:57 +0200 (CEST)
-Date:   Wed, 14 Jun 2023 10:17:57 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     K Prateek Nayak <kprateek.nayak@amd.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>, x86@kernel.org,
-        Gautham Shenoy <gautham.shenoy@amd.com>, yu.c.chen@intel.com
-Subject: Re: [tip: sched/core] sched/fair: Multi-LLC select_idle_sibling()
-Message-ID: <20230614081757.GA1639749@hirez.programming.kicks-ass.net>
-References: <3de5c24f-6437-f21b-ed61-76b86a199e8c@amd.com>
- <20230601111326.GV4253@hirez.programming.kicks-ass.net>
- <20230601115643.GX4253@hirez.programming.kicks-ass.net>
- <20230601120001.GJ38236@hirez.programming.kicks-ass.net>
- <20230601144706.GA559454@hirez.programming.kicks-ass.net>
- <7bee9860-2d2a-067b-adea-04012516095c@amd.com>
- <20230602065438.GB620383@hirez.programming.kicks-ass.net>
- <bd083d8d-023a-698e-701b-725f1b15766e@amd.com>
- <20230613082536.GI83892@hirez.programming.kicks-ass.net>
- <3402dcc4-d52f-d99f-e6ce-b435478a5a59@amd.com>
+        Wed, 14 Jun 2023 04:18:12 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9D21BF8;
+        Wed, 14 Jun 2023 01:18:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686730691; x=1718266691;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=5wMWlDl9aXG3CF122rRMjo8QVfiwMPNAlWspYgZ3W44=;
+  b=HlrOOqsBJodGGVNfa7YDNlnm27B4vX6tcj8VxbqwPsxcChv1RiaV4ZBt
+   ZMNYYd2OIkw6+GysqNq/WrRGFePJGQzq8Lo7m0BArPHPYaww+DSIhSODL
+   905P3PnmHLUUG8pC7SK8ITJquNmLaj9A/3KhiqGPeGfEoTarMiUOIDXlN
+   UtU2qp7Y4AI8JLsF8SW8HyurusiwXkU4M/5sSRqdU5IcSCJVF+5KTGGFC
+   Ne7xUlrYfqpcXoggsGp9ucnSbD9a7uvylmQUM5q+ksrJGBAE+evEULaYX
+   ec3VlZkvMrEzvETCw8eiWOZnWUujIHGltJXE8MK85zxwkDVcWDp0FV9+O
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="338905864"
+X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
+   d="scan'208";a="338905864"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 01:18:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="801822274"
+X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
+   d="scan'208";a="801822274"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by FMSMGA003.fm.intel.com with ESMTP; 14 Jun 2023 01:18:10 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 14 Jun 2023 01:18:09 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 14 Jun 2023 01:18:09 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Wed, 14 Jun 2023 01:18:09 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.173)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Wed, 14 Jun 2023 01:18:08 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BOOgyLeVX9L0kEyENlAkiRkVFaqgrAcHgU5jlRkWqfWQbv/DkqRKE8VUWwBiZ05iemy6AqicsHsJ2GsVKC1ZMoN63ii8DhMJ6l5CeflIGIfiFvRLuMHZ/yHs3c9HiPPRPqv5OO65HbgalHZ7hwOwIRwv8zaN12++sbvaTw0TkaU6+XYpNPG8qj2hEy8B+oUwgzaVXeolsePbsYj4aHZYQf5Xoe87xFtljNBl6KQ03SmHz/v+GwxI6d5Zje7sUSsXhVeRV3d7G/K18bhjYKmpHXqAY9nSToTV82wo/JNcbVlf56WrZS/7FUVHMZcjqG1NNPT940bVSz8IcnGyvDok+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5wMWlDl9aXG3CF122rRMjo8QVfiwMPNAlWspYgZ3W44=;
+ b=MWkbfo5wI8NvgmdDmVzFsGSolidQKotitJH7aqSY/7o+LUI2CPWkCxfwlwvw0etO6IxgtH7S6CjM/CcLM1KT0WTaLDHIsVDTqwaWDGq/Avnx47C28AnSuRS7CpeYbU7YnQQ6Q1AQpRQZtrRFVD812iUZa6LN/8XfQysUfm22FfjoSgljunSNhSDkvVnTeticTXqSJ3x2Hlw47dqjqVoH1rqTxYVOrsWFF9nR3vAkA9oIX+4p5p7kUWs3mn6dT/iLwFEDIU85y/6CmjtYHPxYg4snrncawnkaIVXtUWtbgE4vgRwBT1r1Lk4lZHN8v6cSbWuyyw3zothisAK+Cm64Sw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by IA1PR11MB7889.namprd11.prod.outlook.com (2603:10b6:208:3fe::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.42; Wed, 14 Jun
+ 2023 08:18:01 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::4f05:6b0b:dbc8:abbb]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::4f05:6b0b:dbc8:abbb%7]) with mapi id 15.20.6477.037; Wed, 14 Jun 2023
+ 08:18:01 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>
+CC:     Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        "Zhang, Rex" <rex.zhang@intel.com>,
+        "Shen, Xiaochen" <xiaochen.shen@intel.com>,
+        "Ranganathan, Narayan" <narayan.ranganathan@intel.com>
+Subject: RE: [PATCH v8 4/7] iommu/vt-d: Remove pasid_mutex
+Thread-Topic: [PATCH v8 4/7] iommu/vt-d: Remove pasid_mutex
+Thread-Index: AQHZlX6IuvrvWQ2rqESqVCpn+rp216+KBmbg
+Date:   Wed, 14 Jun 2023 08:18:01 +0000
+Message-ID: <BN9PR11MB527656125EF570DDE2AE1D9A8C5AA@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230602182212.150825-1-jacob.jun.pan@linux.intel.com>
+ <20230602182212.150825-5-jacob.jun.pan@linux.intel.com>
+In-Reply-To: <20230602182212.150825-5-jacob.jun.pan@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|IA1PR11MB7889:EE_
+x-ms-office365-filtering-correlation-id: ab44f37c-9fd6-4f1a-e0b9-08db6cafdeeb
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 3cu0l+4b6zk4gvKuG1UPwCwhrmNCIv5s1zNHS8CUBgM2bfQxEEpBL+MQvPUdEzTv+bS+/4dafZG+Mb3dn7S5ishGzqdC/P1D9cI1J3u1qwBfS/LUk72u2WiYWHotZQksioSFOrjH6oOWmSET8Frvp2Yc+SeL+nnoinAaaDz+o7Q5eP5CYnUuN3nZvRhhmFcYdzFzdWcWC4PNj4jTnIzgz1kMu5Wt9De74apuVh32ziyFrgBH25lPme4xRGFApulyWGvD+HeT6Bz9XVfBaqf6bCUX5lcYC41TtlKqBD86IYdibDDdwWQXMGz7U8S5ATUbAOqSvSliehHVogrWX4nM3ZMRS0+6wixIJdpfiI1ZQjcthknJ/s5Y4DyGup3MRrEurQefUb3w9N6y8Emn8FVPoVGcoCGMSBo0hDKOGx0gnc1UHiTj+XJCNR16J/L+JIXq/qWZXeRvdSW6z9qFzNGWE4gwe7nzRaVrllzEUJrzi1SWl871Y7PXisxFZV3+h/2Vjzju/5gToB7qU8b2KmE+8YPk4g7whNy4j9dA+uf1SBbmYobnMoBbiIdpxBQPgolOxirRbNG6a1JWUokIXA4jLYDLV0rkEHGaheK5/Ss1JMdQIlN84Hu5SbF9LPGI+nJ798yYDUr/wqG0YzlXDWHGWA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(396003)(376002)(136003)(366004)(39860400002)(451199021)(66946007)(76116006)(66556008)(66446008)(66476007)(64756008)(4326008)(316002)(52536014)(7416002)(478600001)(8676002)(5660300002)(8936002)(41300700001)(71200400001)(2906002)(7696005)(4744005)(26005)(9686003)(6506007)(186003)(83380400001)(110136005)(54906003)(38100700002)(86362001)(122000001)(82960400001)(921005)(38070700005)(55016003)(33656002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?U3Ci93YAVcFsLOos35JFLPseYQXNVc6VmP56RouFON6Gjnov0E26gWoAigxA?=
+ =?us-ascii?Q?j0k+A2nT9hQV2U9V1GnWPgLrkWbRBSx/NYxdykRiv1Q2toxZriMu3jbofPOl?=
+ =?us-ascii?Q?1QCkBONvlia/6bd07xBHprtAKP05qEHooDon0zQkxorui/WT52eP6odHnqgg?=
+ =?us-ascii?Q?rpah/Dv6xMcdqBuwNR2BjYCS7LgJQN/lr4rEBmhpHo6uQcfRU6rFtj27JNxq?=
+ =?us-ascii?Q?B5BtF5q3sYDs0liZR6pBPJiHtclP4wg0rZS9lu1ZxVjRVYQJVFI3KX139RJQ?=
+ =?us-ascii?Q?9XKUKGtB6l9S8orRCQajoyTfQQsFS+alcjTyqEBwY+IqVmoI3//QnCSqst6v?=
+ =?us-ascii?Q?M4zmH/OkbsnuZor96N0LI2MdAyJS0oPlk7Tygo2E6wQR29b89MtltQzr8JsJ?=
+ =?us-ascii?Q?Z26vJdj6w2Ai6IwhjFflJxfWiVnScR8axIewIst5unAiZBtjL7A567FcQAjH?=
+ =?us-ascii?Q?GP+SNocLigWPhozg0n5EKFAGIrgSIc9nBpeVq+xb/fjDVEI3MT7E/fOVCiSb?=
+ =?us-ascii?Q?0W4CfcX+nqCXGVIGHAeAQzCPw0FmUZQCYc+YUX886zFgT4cpZAWZIyvSz/PA?=
+ =?us-ascii?Q?6IBEn34PqpPFHsN7jxpCIxZn/i+LskIyRnD4qga3kvyK8WaXfGtj4JHJmT8a?=
+ =?us-ascii?Q?OSFItO4rNZ7MuPirm1GqoDFGiIYaSsNNSnKsgIh/k+qirgR1ScvOYEfmLNuG?=
+ =?us-ascii?Q?3o/WWKTgNKhpPfDeagp+3mjM65NDNEdpiRnFmw5l6CBYh+Ui5gx+9SoTi5Be?=
+ =?us-ascii?Q?B6m7rWIMSSb30xBs94yjyhCwHanUR+r/rSpWVTBA21nl6+DscRvTNhN9n0ut?=
+ =?us-ascii?Q?A8uZxBHhrw42U8iqB0jmTLAZxSKKGpKc6yE5yy5aFkWbEUE2E5GEn3DMoPF7?=
+ =?us-ascii?Q?lMwP1worHY5osB0Plz6CiplfssfT+hlACT1nxBnnKG2RZodshvxksykDdEjC?=
+ =?us-ascii?Q?HKlTUt9LmMPn4u0oj+AnagbooEf++cTLqhSYVLvxYQHF9eXJDdjIoqU3u17L?=
+ =?us-ascii?Q?Y6B/QsorPigzd4wgxBdn5aLOuvAiUUhxZAhdMkKQZdn+ti8aXk4C1TN/T59d?=
+ =?us-ascii?Q?PKnZ+MyJoLTMLg2dP6ZVC+nYwxYQcy7+VecY4J7nZ1vZVQC8f3j8b5EFi83L?=
+ =?us-ascii?Q?UC5G/QtWeUeZ1xRKfqMJbhiKkLGEuqLdnCYz2cUrcm2XGWx6d5li2n/n7tF1?=
+ =?us-ascii?Q?8fROVqXBQbGHpVocm+N1gXPxAapa69YtgtKlaiBAO49YkAkmVCovFmdnjirE?=
+ =?us-ascii?Q?IXtQEfau86CMbuNd8ynkODis39kqYnw/KkmXkCtjkJi6LtdDlHem2YSYmnem?=
+ =?us-ascii?Q?lD7srpBCjybAbvhQxisRxZdmq/jcywv3Fjrzp+Qbbnste85Z8AsUSYr1FuKd?=
+ =?us-ascii?Q?+yEq9BBlBkRYMV5/nmCUUjXceoQHiczeHyqrT1kqdSP6MUHfIyw5tcGqTFIm?=
+ =?us-ascii?Q?TWiYuyFgidIikpjbLyTcYZaj0Yx8I4NShCkP/jIlgPGX+ZA5f3IO37w7p/8K?=
+ =?us-ascii?Q?WjSwftof8GeEPEDWtwOv4TOio2PK5jZjQUHHtl7W1JGGJBcVh/2YgB4Ol4S+?=
+ =?us-ascii?Q?EHkfTK+ulNW5v2K3geP8xpUUh7bWvu/2hZhANOH9?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3402dcc4-d52f-d99f-e6ce-b435478a5a59@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ab44f37c-9fd6-4f1a-e0b9-08db6cafdeeb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jun 2023 08:18:01.7670
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: AYvRYQYJFN0TRCPa/Jgp4+6Y80R48bJu2BIURtArkTnPvYCSA2ULV6O1DJVrwMns0w79o4ONpjUCrCfIZp+cLg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB7889
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 04:00:39PM +0530, K Prateek Nayak wrote:
+> From: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> Sent: Saturday, June 3, 2023 2:22 AM
+>=20
+> From: Lu Baolu <baolu.lu@linux.intel.com>
+>=20
+> The pasid_mutex was used to protect the paths of set/remove_dev_pasid().
+> It's duplicate with iommu_sva_lock. Remove it to avoid duplicate code.
+>=20
+> Reviewed-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 
-> >> - SIS_NODE_TOPOEXT - tip:sched/core + this patch
-> >>                      + new sched domain (Multi-Multi-Core or MMC)
-> >> 		     (https://lore.kernel.org/all/20230601153522.GB559993@hirez.programming.kicks-ass.net/)
-> >> 		     MMC domain groups 2 nearby CCX.
-> > 
-> > OK, so you managed to get the NPS4 topology in NPS1 mode?
-> 
-> Yup! But it is a hack. I'll leave the patch at the end.
-
-Chen Yu, could we do the reverse? Instead of building a bigger LLC
-domain, can we split our LLC based on SNC (sub-numa-cluster) topologies?
-
-Because as you know, Intel chips are having the reverse problem of the
-LLC being entirely too large, so perhaps we can break it up along the
-SNC lines.
-
-Could you see if that works?
-
-> Here you go. It is not pretty and assigning the mmc_id is a hack.
-> Below diff should apply cleanly on top of commit e2a1f85bf9f5
-> ("sched/psi: Avoid resetting the min update period when it is
-> unnecessary") with the SIS_NODE patch.
-> 
-> ---
-> diff --git a/arch/x86/include/asm/smp.h b/arch/x86/include/asm/smp.h
-> index 4e91054c84be..cca5d147d8e1 100644
-> --- a/arch/x86/include/asm/smp.h
-> +++ b/arch/x86/include/asm/smp.h
-> @@ -16,8 +16,10 @@ DECLARE_PER_CPU_READ_MOSTLY(cpumask_var_t, cpu_core_map);
->  DECLARE_PER_CPU_READ_MOSTLY(cpumask_var_t, cpu_die_map);
->  /* cpus sharing the last level cache: */
->  DECLARE_PER_CPU_READ_MOSTLY(cpumask_var_t, cpu_llc_shared_map);
-> +DECLARE_PER_CPU_READ_MOSTLY(cpumask_var_t, cpu_mc_shared_map);
->  DECLARE_PER_CPU_READ_MOSTLY(cpumask_var_t, cpu_l2c_shared_map);
->  DECLARE_PER_CPU_READ_MOSTLY(u16, cpu_llc_id);
-> +DECLARE_PER_CPU_READ_MOSTLY(u16, cpu_mc_id);
->  DECLARE_PER_CPU_READ_MOSTLY(u16, cpu_l2c_id);
->  
->  DECLARE_EARLY_PER_CPU_READ_MOSTLY(u16, x86_cpu_to_apicid);
-> @@ -166,6 +168,11 @@ static inline struct cpumask *cpu_llc_shared_mask(int cpu)
->  	return per_cpu(cpu_llc_shared_map, cpu);
->  }
->  
-> +static inline struct cpumask *cpu_mc_shared_mask(int cpu)
-> +{
-> +	return per_cpu(cpu_mc_shared_map, cpu);
-> +}
-> +
->  static inline struct cpumask *cpu_l2c_shared_mask(int cpu)
->  {
->  	return per_cpu(cpu_l2c_shared_map, cpu);
-> diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
-> index 458c891a8273..b3519d2d0b56 100644
-> --- a/arch/x86/include/asm/topology.h
-> +++ b/arch/x86/include/asm/topology.h
-> @@ -102,6 +102,7 @@ static inline void setup_node_to_cpumask_map(void) { }
->  
->  #include <asm-generic/topology.h>
->  
-> +extern const struct cpumask *cpu_mcgroup_mask(int cpu);
->  extern const struct cpumask *cpu_coregroup_mask(int cpu);
->  extern const struct cpumask *cpu_clustergroup_mask(int cpu);
->  
-> diff --git a/arch/x86/kernel/cpu/cacheinfo.c b/arch/x86/kernel/cpu/cacheinfo.c
-> index 4063e8991211..f6e3be6f2512 100644
-> --- a/arch/x86/kernel/cpu/cacheinfo.c
-> +++ b/arch/x86/kernel/cpu/cacheinfo.c
-> @@ -35,6 +35,7 @@
->  
->  /* Shared last level cache maps */
->  DEFINE_PER_CPU_READ_MOSTLY(cpumask_var_t, cpu_llc_shared_map);
-> +DEFINE_PER_CPU_READ_MOSTLY(cpumask_var_t, cpu_mc_shared_map);
->  
->  /* Shared L2 cache maps */
->  DEFINE_PER_CPU_READ_MOSTLY(cpumask_var_t, cpu_l2c_shared_map);
-> @@ -677,6 +678,7 @@ void cacheinfo_amd_init_llc_id(struct cpuinfo_x86 *c, int cpu)
->  		 * Core complex ID is ApicId[3] for these processors.
->  		 */
->  		per_cpu(cpu_llc_id, cpu) = c->apicid >> 3;
-> +		per_cpu(cpu_mc_id, cpu) = c->apicid >> 4;
->  	} else {
->  		/*
->  		 * LLC ID is calculated from the number of threads sharing the
-> @@ -693,6 +695,7 @@ void cacheinfo_amd_init_llc_id(struct cpuinfo_x86 *c, int cpu)
->  			int bits = get_count_order(num_sharing_cache);
->  
->  			per_cpu(cpu_llc_id, cpu) = c->apicid >> bits;
-> +			per_cpu(cpu_mc_id, cpu) = (c->apicid >> bits) >> 1;
->  		}
->  	}
->  }
-> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-> index 80710a68ef7d..a320516bf767 100644
-> --- a/arch/x86/kernel/cpu/common.c
-> +++ b/arch/x86/kernel/cpu/common.c
-> @@ -81,6 +81,7 @@ EXPORT_SYMBOL(smp_num_siblings);
->  
->  /* Last level cache ID of each logical CPU */
->  DEFINE_PER_CPU_READ_MOSTLY(u16, cpu_llc_id) = BAD_APICID;
-> +DEFINE_PER_CPU_READ_MOSTLY(u16, cpu_mc_id) = BAD_APICID;
->  
->  u16 get_llc_id(unsigned int cpu)
->  {
-> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-> index 28fcd292f5fd..dedf86b9e8cb 100644
-> --- a/arch/x86/kernel/smpboot.c
-> +++ b/arch/x86/kernel/smpboot.c
-> @@ -536,6 +536,23 @@ static bool match_llc(struct cpuinfo_x86 *c, struct cpuinfo_x86 *o)
->  	return topology_sane(c, o, "llc");
->  }
->  
-> +static bool match_mc(struct cpuinfo_x86 *c, struct cpuinfo_x86 *o)
-> +{
-> +	int cpu1 = c->cpu_index, cpu2 = o->cpu_index;
-> +
-> +	/*
-> +	 * Do not match if we do not have a valid APICID for cpu.
-> +	 * TODO: For non AMD processors, return topology_same_node(c, o)?
-> +	 */
-> +	if (per_cpu(cpu_mc_id, cpu1) == BAD_APICID)
-> +		return false;
-> +
-> +	/* Do not match if LLC id does not match: */
-> +	if (per_cpu(cpu_mc_id, cpu1) != per_cpu(cpu_mc_id, cpu2))
-> +		return false;
-> +
-> +	return topology_sane(c, o, "mmc");
-> +}
->  
->  #if defined(CONFIG_SCHED_SMT) || defined(CONFIG_SCHED_CLUSTER) || defined(CONFIG_SCHED_MC)
->  static inline int x86_sched_itmt_flags(void)
-> @@ -570,7 +587,7 @@ static int x86_cluster_flags(void)
->   */
->  static bool x86_has_numa_in_package;
->  
-> -static struct sched_domain_topology_level x86_topology[6];
-> +static struct sched_domain_topology_level x86_topology[7];
->  
->  static void __init build_sched_topology(void)
->  {
-> @@ -596,6 +613,16 @@ static void __init build_sched_topology(void)
->  		cpu_coregroup_mask, x86_core_flags, SD_INIT_NAME(MC)
->  	};
->  #endif
-> +
-> +	/*
-> +	 * Multi-Multi-Core Domain Experimentation
-> +	 */
-> +	if (static_cpu_has(X86_FEATURE_ZEN)) {
-> +		x86_topology[i++] = (struct sched_domain_topology_level){
-> +			cpu_mcgroup_mask, SD_INIT_NAME(MMC)
-> +		};
-> +	}
-> +
->  	/*
->  	 * When there is NUMA topology inside the package skip the DIE domain
->  	 * since the NUMA domains will auto-magically create the right spanning
-> @@ -628,6 +655,7 @@ void set_cpu_sibling_map(int cpu)
->  	if (!has_mp) {
->  		cpumask_set_cpu(cpu, topology_sibling_cpumask(cpu));
->  		cpumask_set_cpu(cpu, cpu_llc_shared_mask(cpu));
-> +		cpumask_set_cpu(cpu, cpu_mc_shared_mask(cpu));
->  		cpumask_set_cpu(cpu, cpu_l2c_shared_mask(cpu));
->  		cpumask_set_cpu(cpu, topology_core_cpumask(cpu));
->  		cpumask_set_cpu(cpu, topology_die_cpumask(cpu));
-> @@ -647,6 +675,9 @@ void set_cpu_sibling_map(int cpu)
->  		if ((i == cpu) || (has_mp && match_llc(c, o)))
->  			link_mask(cpu_llc_shared_mask, cpu, i);
->  
-> +		if ((i == cpu) || (has_mp && match_mc(c, o)))
-> +			link_mask(cpu_mc_shared_mask, cpu, i);
-> +
->  		if ((i == cpu) || (has_mp && match_l2c(c, o)))
->  			link_mask(cpu_l2c_shared_mask, cpu, i);
->  
-> @@ -700,6 +731,12 @@ const struct cpumask *cpu_coregroup_mask(int cpu)
->  	return cpu_llc_shared_mask(cpu);
->  }
->  
-> +/* maps the cpu to the sched domain representing multi-multi-core */
-> +const struct cpumask *cpu_mcgroup_mask(int cpu)
-> +{
-> +	return cpu_mc_shared_mask(cpu);
-> +}
-> +
->  const struct cpumask *cpu_clustergroup_mask(int cpu)
->  {
->  	return cpu_l2c_shared_mask(cpu);
-> @@ -1393,6 +1430,7 @@ void __init smp_prepare_cpus_common(void)
->  		zalloc_cpumask_var(&per_cpu(cpu_sibling_map, i), GFP_KERNEL);
->  		zalloc_cpumask_var(&per_cpu(cpu_core_map, i), GFP_KERNEL);
->  		zalloc_cpumask_var(&per_cpu(cpu_die_map, i), GFP_KERNEL);
-> +		zalloc_cpumask_var(&per_cpu(cpu_mc_shared_map, i), GFP_KERNEL);
->  		zalloc_cpumask_var(&per_cpu(cpu_llc_shared_map, i), GFP_KERNEL);
->  		zalloc_cpumask_var(&per_cpu(cpu_l2c_shared_map, i), GFP_KERNEL);
->  	}
-> @@ -1626,9 +1664,12 @@ static void remove_siblinginfo(int cpu)
->  
->  	for_each_cpu(sibling, cpu_llc_shared_mask(cpu))
->  		cpumask_clear_cpu(cpu, cpu_llc_shared_mask(sibling));
-> +	for_each_cpu(sibling, cpu_mc_shared_mask(cpu))
-> +		cpumask_clear_cpu(cpu, cpu_mc_shared_mask(sibling));
->  	for_each_cpu(sibling, cpu_l2c_shared_mask(cpu))
->  		cpumask_clear_cpu(cpu, cpu_l2c_shared_mask(sibling));
->  	cpumask_clear(cpu_llc_shared_mask(cpu));
-> +	cpumask_clear(cpu_mc_shared_mask(cpu));
->  	cpumask_clear(cpu_l2c_shared_mask(cpu));
->  	cpumask_clear(topology_sibling_cpumask(cpu));
->  	cpumask_clear(topology_core_cpumask(cpu));
-> --
-> 
-> I'll share the data from the reruns of SIS_NODE_LIMIT soon. In the
-> meantime, if there is anything you would like more data on, please do let
-> me know.
-> 
-> --
-> Thanks and Regards,
-> Prateek
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
