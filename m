@@ -2,253 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C621B731466
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D270731473
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245045AbjFOJs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 05:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46892 "EHLO
+        id S245601AbjFOJtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 05:49:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237827AbjFOJsX (ORCPT
+        with ESMTP id S241788AbjFOJt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 05:48:23 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB717199D;
-        Thu, 15 Jun 2023 02:48:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686822501; x=1718358501;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=aq14XFqY6qdOiLOxncCYLv73xExemdNIGrHCx+D6TSI=;
-  b=YL7NG70ACXWezRCc6uUn91bRUGVDpio1qo2ptxNEdWEn5RMhoivVZVn3
-   Iea97U037p+EK11k7dIPPtbP0fxgXLSNnaMUxBXHRJ9HQAGqOY0ExSTI5
-   5PcEfUopKlTTEkOcoUYJs4luj+0Ct11FMA3A6owuiPhemX5FFyXEbv9Db
-   SImhbhoSvj61fLUHwPfK2dVcpYOsJWFqiJScw5H54gQG2dercN0jfFK1Z
-   QFzowmf9Jd+A0ZBYEkJ88JJer1Gd/phjBOQUpr4WwBAOEMu3ObVdNhAsQ
-   tQ5uzIMC+ybtc8Lt1iLNEFICIMhXDPKYCBqa+TRYJTOXye4o6Q72YUCub
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="445234729"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="445234729"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 02:48:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="959126790"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="959126790"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga006.fm.intel.com with ESMTP; 15 Jun 2023 02:48:21 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 15 Jun 2023 02:48:21 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 15 Jun 2023 02:48:20 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Thu, 15 Jun 2023 02:48:20 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.177)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Thu, 15 Jun 2023 02:48:20 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Vomj/A93ta64gZVfVEe7FqHAicPJBjbBDnuDM24cOtxHd8cZ9aXbJsWu91RTPG/UZIoyKdQ6ovNHHbRUkmzxfpVfuf6XuPHnWTdUGh7LxhxfdTB1TZEVOXjQ0j1WOkblvQjtMwSQ/siqbWRXcgOiLWOecKzt5GNnp4tUveDL5vcCnAEg4RCu2ELUxhbLol2PjpZqThOA4gUT7oFt3vnu8l+BcX+T6p2R2+ZfAq+JNHS5Zik0QAdzKjoes1+6kZB4oVpPHObKP9WIKJgMbNyvHoOgwC+T06iE7StfubEO/EQFZKYJ7AhnUGeq3UaqHQRYLkPjW7vwjENRm01In9OJtg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=d43+q970raqoBSAaQflGlzgINTZJMLr68BkPDuc+ygU=;
- b=J65a1oRINYmFGS2M+Qditur4wh3T8yv82k/XKgPU67slJCMxg61/fMaYgw5mFA/XckZr9lmKoWEpsVQhABfG6pAmk6LM1oFwBO2RA6hOGKa4lomgW2cWyH0Cek5xGqClFvY7v8rkR/nQiWkR1s9rwJjRBYtvfE3SI0glemzRJYhwVbkrSl2K3RPgt+T4AWGYMKaSM9jx57N2+k/fSh9iGe956DDX+aIWX6gakxEoIutUEI/Ksu1XAwvCqd727jNug5jTeGXMg2d+dqm3Ck2/pEn8UuO3AMbyLUIyxbXNH9/sCHzpcw8zq8tk/qI4Nk3kzv0JeMQoArJslDihrL1Sbw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM6PR11MB2779.namprd11.prod.outlook.com (2603:10b6:5:c6::26) by
- DS0PR11MB7409.namprd11.prod.outlook.com (2603:10b6:8:153::18) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6477.29; Thu, 15 Jun 2023 09:48:13 +0000
-Received: from DM6PR11MB2779.namprd11.prod.outlook.com
- ([fe80::5c56:cdad:30cb:c3de]) by DM6PR11MB2779.namprd11.prod.outlook.com
- ([fe80::5c56:cdad:30cb:c3de%4]) with mapi id 15.20.6455.030; Thu, 15 Jun 2023
- 09:48:13 +0000
-From:   "Jadav, Raag" <raag.jadav@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Sangannavar, Mallikarjunappa" 
-        <mallikarjunappa.sangannavar@intel.com>,
-        "N, Pandith" <pandith.n@intel.com>
-Subject: RE: [PATCH v3 2/3] pinctrl: intel: refine ->irq_set_type() hook
-Thread-Topic: [PATCH v3 2/3] pinctrl: intel: refine ->irq_set_type() hook
-Thread-Index: AQHZndRGEYk7XkvCzE+g3a/tygkcuq+KfTeAgAEjDpA=
-Date:   Thu, 15 Jun 2023 09:48:12 +0000
-Message-ID: <DM6PR11MB2779F9C28712D7C25F9FB3768C5BA@DM6PR11MB2779.namprd11.prod.outlook.com>
-References: <20230613085054.10976-1-raag.jadav@intel.com>
- <20230613085054.10976-3-raag.jadav@intel.com>
- <ZInpT0dUUVUcKdqv@smile.fi.intel.com>
-In-Reply-To: <ZInpT0dUUVUcKdqv@smile.fi.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM6PR11MB2779:EE_|DS0PR11MB7409:EE_
-x-ms-office365-filtering-correlation-id: 39164cd2-194f-4cc1-c9af-08db6d85a29c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: lXlzKb6z8evX6qdMJSAtZUYWJw6uk/5gV+YTmCGxjj4Eeyjb663SqHXsgWAMKdiru0vcNFX9mMyI4gCfcRBTwvgRVWMrTCKCiEYsuCzyptZ2uqFc8kGu9km5mqtS/6ZBB+2yUgeMTas2QWy5o7Cnn9AwMZqkIYUA+OpWkkIUHTVlOl2M5XXAQLMzyjc/366SReN/Cc02fPqHLp48lJu8mPyC8CCcYBI+U6N+5zr9grQrcNbbqpUrnySzVk0gT3lTuBrLeXA2DBQRpLFDsBjk96/QwzZ1ybvFw3esPV1ja7hw/zn8EVAxsQM1z4/yKWslAZuAlGJzOvjQ0iJfCQtncrTwr8wbli6OFixKw9PgiLJf2WhpzxLVA0iX7PrbgivIHb2owhmrUOoTlwp2z8rG1sNKSATdcaRwZzX0gmQCwfAcK2GZPMYFyZJtTcE2Yj4YISR6uIt1nGn0beB7vxrjXwRsThKFS5QBnMG4RnN0PQkysy0qZWUp1G9TfY1RF0LajXjrQraSWyY+Yi252XeQoixEMEIWTWGkeDA5IiAP/Y+jvUhOiKK+t8ue9yIVbzIcUGpPCj0CNZm6/W6HRxKm+WhX+O0SPnDfmavh79BjwZKx5O6Av2hM1cS/a9gqpXOY
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB2779.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(396003)(136003)(366004)(346002)(376002)(451199021)(38070700005)(33656002)(86362001)(66556008)(66476007)(64756008)(66446008)(478600001)(4326008)(76116006)(66946007)(6916009)(54906003)(316002)(7696005)(55016003)(8676002)(5660300002)(52536014)(8936002)(41300700001)(122000001)(82960400001)(38100700002)(2906002)(186003)(26005)(71200400001)(9686003)(83380400001)(6506007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?xqBnOMEnaexh4Qv8cdYbQZxDOIKIXYGMwTvMWqyD/cQzHZAqrl+emn7p4nqd?=
- =?us-ascii?Q?6YMmdvEtEdUSnIWsHrPbCcK5tTgtpFfbPUb/BCH2GYAtdw4AbUs/lJFwXtzu?=
- =?us-ascii?Q?GUMkfO52BQttmPRENloQA8GLmKyWxqXLCIttQbEK5P2Dxc0u8ygO2fYTuf5h?=
- =?us-ascii?Q?iJFHySpPp6+DsBnvOH5w8ihz+fuMpxkukm8HgO6x3Ih1OvytWpSphFtRDulF?=
- =?us-ascii?Q?9LGFmPM9MIhQLEw6NA6iz3aMDD/oQgB3+Jfy6uFFrqDwtiD7RChCkXMDqdLw?=
- =?us-ascii?Q?eJMqWhTMcuDYKdjYKtykDjspNzfzt632sNuO8fxE0PkbP7FPUMAiKKO8gKv3?=
- =?us-ascii?Q?Eo4UhZA+1cXC+qwsBHjR9sVTpE5lGdHH1E7BNMTUuSMNWNH0vS5XJfW1ScAT?=
- =?us-ascii?Q?9QmX8Cs+2QmkIOGye9fe931+02NhlhjdAgZQzODWxTis90J1R8f6L7aJaNXb?=
- =?us-ascii?Q?1Vbcv62eUVXNJDAuIacNaMMOAVLfFIpZczOKcANU9mGYIE3N8QApha8FWHHR?=
- =?us-ascii?Q?lbduC3mEc+HrJtKyKqCz/5xpTLm4ojt/4F8U63WcL8sQtrrVeYgCaZ/vZnfW?=
- =?us-ascii?Q?p5ZXdmkEZF0iOwfP3sBkD53A0aRNx+MJoYaoi2et5XPvM0pbpTy60zXUyB4m?=
- =?us-ascii?Q?33bM0W4IIx53vGDsKGRSYH4zEPNt26+3o/oFNZxBj3ybe365dE2tjnXkqhw4?=
- =?us-ascii?Q?uwkwayJIw6LocqPq+3/0fn0xbPaOjTSJtebD8CssR7aJ6Pw3KqldiQx42H8R?=
- =?us-ascii?Q?yXRQD4FuaJxg+uhXAQtdTJUgft27qYlr3HAY/fg1giq2Gh19XsHugaxCURsn?=
- =?us-ascii?Q?4XG/a+dP5UhNjX9nam6RrnwWQlxbQdRpfks7oVB1tI+L921/NHT2PTPntfE6?=
- =?us-ascii?Q?31lS8VQ7I55VVZtR4VPKgOHsZGegNOFD+q2tWYh/nEVShJ+huLROp5OxD7uR?=
- =?us-ascii?Q?hYK6ygmHl4P1RNI3mArmRuB4q/R3WinjLCLHqNXkdtGU3AhIAKWnRmRE0hk6?=
- =?us-ascii?Q?zzbfYfY10C2c8QfoLyAxwAPPrRzaRfnfLheQ/pKZwnkr8W+Lw4T0BJBvhWRw?=
- =?us-ascii?Q?DmoucsSsH/tBVahRnH0Q0mB/G3uLRcBEEzYc52hNCLdE8PKdEBmiGZJm3LJX?=
- =?us-ascii?Q?TARric/nTuV09Ry0rlr42gDcf9vz2lTzFu1bnKxyDIzLlW7pt9Xzz8axh6vm?=
- =?us-ascii?Q?7AUVVPTtGn+qMCXg7YPJLXHgzAZ33UwLVQVbqGX/HXNCtAdrCYOgD+4hp6Nn?=
- =?us-ascii?Q?XIIEVc3e5e8/sfSIEg8+8au+ue6Gp5zRdGudTeQqN5Z+EV7vtNSxeWQZKq6/?=
- =?us-ascii?Q?sneXBl6doF/YkAYzF50YtNo8ZXGdrK3BH02sBAbbaL6ZxtW9ByEHlblf9HES?=
- =?us-ascii?Q?9psBa1U+oSI7Frmb8UiBhWiQayjlORsvTxwkL7GtqHIb0aOjZf84HBJ9U0VU?=
- =?us-ascii?Q?JY8GT8K6ZUNol4DfUGHjK/fEEQ+3AOP6hy5Dfc/peOspxpTROYO0hFeA+12t?=
- =?us-ascii?Q?/ofZKXgcqH1IScz+jguX9VAP6zuiraPkejOAPLacnCHSsBR5uvqAQG0zFGIa?=
- =?us-ascii?Q?H4fP2qpreaSkT7ffD40=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 15 Jun 2023 05:49:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5C11BF9
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 02:48:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686822520;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tFas5ce2A1vgl/Pd1KLK4gSYDaGRoYeIBhP4kavIodY=;
+        b=Rkva/9+cC8pNRv5Jh/EQ/fOlV15WLFgoiRfFrXsHvBX9gNFfG5nMHPar2DksxMtWek1nqL
+        5TXeAdxLvnO24Klk8Zfi3Mwx6rMRbRh5yBVA5lmI95bPpeBy8R2AwbsxGTAQQ/jzOnvKFI
+        IXvmI5XgUeEAJa749YxWhwqo0BQg0H4=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-623-wszj9QZnOo2Z6r8R1OzqIQ-1; Thu, 15 Jun 2023 05:48:38 -0400
+X-MC-Unique: wszj9QZnOo2Z6r8R1OzqIQ-1
+Received: by mail-lf1-f69.google.com with SMTP id 2adb3069b0e04-4f62cf0bb78so6548587e87.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 02:48:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686822517; x=1689414517;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tFas5ce2A1vgl/Pd1KLK4gSYDaGRoYeIBhP4kavIodY=;
+        b=NNk12YyFmY/d4ZHHlSwKQx3QmoGLvmf4qiHJIyDjcLmVDlM6mjr+J0m7AZUkqJL5S4
+         oL/6a0vJCbU+MB0ev15G4mVl5Ke00kGceEDUfghXkqzDN8zhGK/7Ipom9T9QUxZpTB5S
+         YxXHgm/o/Qz/g0d7z4ZdEOitEntlpawv/73Tzl7n5R4hl8L1nnOa88XKWrPQgJjTDprt
+         118Y/p8Bg6DmYuVKBeSq+W5SvVvWxluInX9Zu3606xYPxZVPDLngEEHeQM4zSvvGxIXi
+         A/wbAHU56GqWViQk8xswle8B5y0vv0434P8FWfX+NMzslOiEXM59OUxGQIzqM+u8BdMs
+         chJQ==
+X-Gm-Message-State: AC+VfDzD8FISUehCb/NZPDYZs806IwfZL/ECBg7Qf4p53Jl2Gd83sHov
+        lNvjZ2BD+JDf3Iy/UKJ5lN+O3PWcZvmlUBkCrxU3nmCdNM/3aNI/Fnrfb1rPjO5kw/NHrak6Rx7
+        5PmFyOwxhRdwTvPpuPpAAA63D
+X-Received: by 2002:a19:f205:0:b0:4dd:ce0b:7692 with SMTP id q5-20020a19f205000000b004ddce0b7692mr9513525lfh.46.1686822517133;
+        Thu, 15 Jun 2023 02:48:37 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ46ndnLtQ+lzJHNZ0kHKuZExuBXAwZ8nLK7yynFFKnsFo1JVRKjQW7nWIYv41TgUUl1IrX0NA==
+X-Received: by 2002:a19:f205:0:b0:4dd:ce0b:7692 with SMTP id q5-20020a19f205000000b004ddce0b7692mr9513496lfh.46.1686822516710;
+        Thu, 15 Jun 2023 02:48:36 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
+        by smtp.gmail.com with ESMTPSA id z15-20020a7bc7cf000000b003f6129d2e30sm20115269wmk.1.2023.06.15.02.48.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jun 2023 02:48:36 -0700 (PDT)
+Message-ID: <015062b6-2d4a-7b91-8f64-1695f526f794@redhat.com>
+Date:   Thu, 15 Jun 2023 11:48:34 +0200
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB2779.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 39164cd2-194f-4cc1-c9af-08db6d85a29c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jun 2023 09:48:12.8533
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 5of06UQcqmlVTeNl5tYrBctxbzwA0RzKE4DjLyPn3ExQEGGrw5IhAFBa3duSeqvUF9CTHpG0BzgwOIOww69bFw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7409
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Content-Language: en-US
+To:     "Kasireddy, Vivek" <vivek.kasireddy@intel.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "qemu-devel@nongnu.org" <qemu-devel@nongnu.org>,
+        Hugh Dickins <hughd@google.com>
+Cc:     "Hocko, Michal" <mhocko@suse.com>,
+        "jmarchan@redhat.com" <jmarchan@redhat.com>,
+        "Kim, Dongwon" <dongwon.kim@intel.com>,
+        "Chang, Junxiao" <junxiao.chang@intel.com>,
+        "muchun.song@linux.dev" <muchun.song@linux.dev>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        James Houghton <jthoughton@google.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
+References: <20230608204927.88711-1-mike.kravetz@oracle.com>
+ <IA0PR11MB71851B64A5E7062E3BDD8D2FF854A@IA0PR11MB7185.namprd11.prod.outlook.com>
+ <281caf4f-25da-3a73-554b-4fb252963035@redhat.com>
+ <IA0PR11MB71852D6B27C83658670CBFBDF855A@IA0PR11MB7185.namprd11.prod.outlook.com>
+ <676ee47d-8ca0-94c4-7454-46e9915ea36a@redhat.com>
+ <IA0PR11MB71850D8A446FE1342B428EA1F85AA@IA0PR11MB7185.namprd11.prod.outlook.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH] udmabuf: revert 'Add support for mapping hugepages (v4)'
+In-Reply-To: <IA0PR11MB71850D8A446FE1342B428EA1F85AA@IA0PR11MB7185.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Tue, Jun 13, 2023 at 02:20:53PM +0530, Raag Jadav wrote:
-> > Utilize a temporary variable for common shift operation in
-> > ->irq_set_type() hook and improve readability.
-> > While at it, simplify if-else-if chain and save a few bytes.
-> >
-> > add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-16 (-16)
-> > Function                                     old     new   delta
-> > intel_gpio_irq_type                          317     301     -16
-> > Total: Before=3D10469, After=3D10453, chg -0.15%
->=20
-> ...
->=20
-> >  	value =3D readl(reg);
-> > -
-> >  	value &=3D ~(PADCFG0_RXEVCFG_MASK | PADCFG0_RXINV);
-> >
-> >  	if ((type & IRQ_TYPE_EDGE_BOTH) =3D=3D IRQ_TYPE_EDGE_BOTH) {
-> > -		value |=3D PADCFG0_RXEVCFG_EDGE_BOTH <<
-> PADCFG0_RXEVCFG_SHIFT;
-> > +		rxevcfg =3D PADCFG0_RXEVCFG_EDGE_BOTH;
-> >  	} else if (type & IRQ_TYPE_EDGE_FALLING) {
-> > -		value |=3D PADCFG0_RXEVCFG_EDGE <<
-> PADCFG0_RXEVCFG_SHIFT;
-> > -		value |=3D PADCFG0_RXINV;
-> > +		rxevcfg =3D PADCFG0_RXEVCFG_EDGE;
-> >  	} else if (type & IRQ_TYPE_EDGE_RISING) {
-> > -		value |=3D PADCFG0_RXEVCFG_EDGE <<
-> PADCFG0_RXEVCFG_SHIFT;
-> > +		rxevcfg =3D PADCFG0_RXEVCFG_EDGE;
-> >  	} else if (type & IRQ_TYPE_LEVEL_MASK) {
-> > -		if (type & IRQ_TYPE_LEVEL_LOW)
-> > -			value |=3D PADCFG0_RXINV;
-> > +		rxevcfg =3D PADCFG0_RXEVCFG_LEVEL;
-> >  	} else {
-> > -		value |=3D PADCFG0_RXEVCFG_DISABLED <<
-> PADCFG0_RXEVCFG_SHIFT;
-> > +		rxevcfg =3D PADCFG0_RXEVCFG_DISABLED;
-> >  	}
-> >
-> > +	if (type =3D=3D IRQ_TYPE_EDGE_FALLING || type =3D=3D
-> IRQ_TYPE_LEVEL_LOW)
-> > +		value |=3D PADCFG0_RXINV;
-> > +
-> > +	value |=3D rxevcfg << PADCFG0_RXEVCFG_SHIFT;
-> >  	writel(value, reg);
->=20
-> Looking at this I realized that entire temporary variable assignments can=
- be
-> done outside of spin lock. You probably would need another one for keepin=
-g
-> rxinv value.
 
-Something like this?
+>> Skimming over at shmem_read_mapping_page() users, I assume most of
+>> them
+>> use a VM_PFNMAP mapping (or don't mmap them at all), where we won't be
+>> messing with the struct page at all.
+>>
+>> (That might even allow you to mmap hugetlb sub-pages, because the struct
+>> page -- and mapcount -- will be ignored completely and not touched.)
+> Oh, are you suggesting that if we do vma->vm_flags |= VM_PFNMAP
+> in the mmap handler (mmap_udmabuf) and also do
+> vmf_insert_pfn(vma, vmf->address, page_to_pfn(page))
+> instead of
+> vmf->page = ubuf->pages[pgoff];
+> get_page(vmf->page);
+> 
+> in the vma fault handler (udmabuf_vm_fault), we can avoid most of the
+> pitfalls you have identified -- including with the usage of hugetlb subpages?
 
-        u32 value, rxevcfg;
-        u32 rxinv =3D 0;
+Yes, that's my thinking, but I have to do my homework first to see if 
+that would really work for hugetlb.
 
-        if ((type & IRQ_TYPE_EDGE_BOTH) =3D=3D IRQ_TYPE_EDGE_BOTH) {
-                rxevcfg =3D PADCFG0_RXEVCFG_EDGE_BOTH;
-        } else if (type & IRQ_TYPE_EDGE_FALLING) {
-                rxevcfg =3D PADCFG0_RXEVCFG_EDGE;
-        } else if (type & IRQ_TYPE_EDGE_RISING) {
-                rxevcfg =3D PADCFG0_RXEVCFG_EDGE;
-        } else if (type & IRQ_TYPE_LEVEL_MASK) {
-                rxevcfg =3D PADCFG0_RXEVCFG_LEVEL;
-        } else {
-                rxevcfg =3D PADCFG0_RXEVCFG_DISABLED;
-        }
+The thing is, I kind-of consider what udmabuf does a layer violation: we 
+have a filesystem (shmem/hugetlb) that should handle mappings to user 
+space. Yet, a driver decides to bypass that and simply map the pages 
+ordinarily to user space. (revealed by the fact that hugetlb does never 
+map sub-pages but udmabuf decides to do so)
 
-        if (type =3D=3D IRQ_TYPE_EDGE_FALLING || type =3D=3D IRQ_TYPE_LEVEL=
-_LOW)
-                rxinv =3D PADCFG0_RXINV;
+In an ideal world everybody would simply mmap() the original memfd, but 
+thinking about offset+size configuration within the memfd that might not 
+always be desirable. As a workaround, we could mmap() only the PFNs, 
+leaving the struct page unaffected.
 
-        raw_spin_lock_irqsave(&pctrl->lock, flags);
+I'll have to look closer into that.
 
-        intel_gpio_set_gpio_mode(reg);
+-- 
+Cheers,
 
-        value =3D readl(reg);
-
-        value &=3D ~(PADCFG0_RXEVCFG_MASK | PADCFG0_RXINV);
-        value |=3D rxinv;
-        value |=3D rxevcfg << PADCFG0_RXEVCFG_SHIFT;
-
-        writel(value, reg);
-
-> Will it give us any memory reduction in comparison to the current code?
-
-add/remove: 0/0 grow/shrink: 1/0 up/down: 4/0 (4)
-Function                                     old     new   delta
-intel_gpio_irq_type                          317     321      +4
-Total: Before=3D10469, After=3D10473, chg +0.04%
-
-Unfortunately gcc doesn't seem to consider this as best of the sequence,
-and I'm not entirely sure why.
+David / dhildenb
 
