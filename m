@@ -2,100 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01F4D731C48
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 17:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA827731C4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 17:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344922AbjFOPQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 11:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51066 "EHLO
+        id S1345088AbjFOPRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 11:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344959AbjFOPQd (ORCPT
+        with ESMTP id S1344982AbjFOPRT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 11:16:33 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5822961;
-        Thu, 15 Jun 2023 08:16:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686842192; x=1718378192;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WJFD1QugEMkXGpOfUddhdXOqZp7hFpJBK+3G1BIhDVM=;
-  b=LV2rx4EiHYFCgj0OkMvCs8JQ1eMuGbSa00pGCo67moSzJRDe7Y7IkptQ
-   UYCjTh9UTuIsB+wzOkDvysTn07rc+5Wve2eQa/aTne3GXjnHuFtayACel
-   s/80ez/TRxo5rXwuu3Xu5OsYKpDg8xPN4v3kcmDdiO/h9gzoaAHj+MGok
-   wCdApC2dTh19/Eu0IJHyqOMl/z3Ic8WrD0jK0YOjBYI0OoXH1DmiuBlwB
-   CBoQeOw2LDCnAGmdI2EFJoImjrcbIQv3S2nOEjbdme4EzwOx3QAjgmsoJ
-   sWY+nX+CrdE6eAhpuhjnmmIuXJRnj5lpIUDwzCBv9k2KNshRpf05jV2hw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="387449597"
-X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="387449597"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 08:16:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="782541983"
-X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="782541983"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 15 Jun 2023 08:16:30 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1q9oi4-003yG3-34;
-        Thu, 15 Jun 2023 18:16:28 +0300
-Date:   Thu, 15 Jun 2023 18:16:28 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Jadav, Raag" <raag.jadav@intel.com>
-Cc:     "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Sangannavar, Mallikarjunappa" 
-        <mallikarjunappa.sangannavar@intel.com>,
-        "N, Pandith" <pandith.n@intel.com>
-Subject: Re: [PATCH v4] pinctrl: intel: refine ->irq_set_type() hook
-Message-ID: <ZIsrTNkW8BsUkeS9@smile.fi.intel.com>
-References: <20230615125022.27421-1-raag.jadav@intel.com>
- <ZIsOvBGLJTCo45jp@smile.fi.intel.com>
- <DM6PR11MB2779FD7F6DF3A0126DB85E4B8C5BA@DM6PR11MB2779.namprd11.prod.outlook.com>
- <ZIsbg2h0u93tCQiz@smile.fi.intel.com>
- <DM6PR11MB2779545C0ACBF833E857EBD28C5BA@DM6PR11MB2779.namprd11.prod.outlook.com>
+        Thu, 15 Jun 2023 11:17:19 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FCD2704;
+        Thu, 15 Jun 2023 08:17:14 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35FCEt7D009758;
+        Thu, 15 Jun 2023 17:16:33 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=Z8QJjun6btnvSr7lAvWu+rc8YKl642Hi51SoBVwCAcM=;
+ b=2exfU3/Ij1wcXO3yLgGGfyf9Cktxgq5hJqUym7/DAfLpoZSHchyUfpNLnvUMgBQld7ml
+ 0QqD3Onw73SbnSpdLQLfRhGTwFKWzdNrSUMcERhAQ7uHtrDeweMBvYhU8sXbBfMiKeku
+ X09d7z4vlkZXz7/cbeDM7+SQ4qifvWEHjb85JP7swmy9uWGY67esg/oo85Qmyup7WM8Z
+ w26fh6bb0yq5C8pSrcFSGy8qu3RY8/OSIab34V90OUINkCPp3cgf7btVex51yJVdtIwq
+ JbBFBUrf5NIFE98gORBZn50DEtu3+b2g4wxZpb1/YSIdolRTZuPAnkG5IjU8wMPGPxH/ jw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3r82fy93uk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 17:16:33 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4D68D10002A;
+        Thu, 15 Jun 2023 17:16:31 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 43B25231523;
+        Thu, 15 Jun 2023 17:16:31 +0200 (CEST)
+Received: from [10.201.21.210] (10.201.21.210) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 15 Jun
+ 2023 17:16:29 +0200
+Message-ID: <3b6781cb-8f59-e70a-bcf8-9fb48fa47cbf@foss.st.com>
+Date:   Thu, 15 Jun 2023 17:16:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM6PR11MB2779545C0ACBF833E857EBD28C5BA@DM6PR11MB2779.namprd11.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/6] dt-bindings: mmc: mmci: Add st,stm32mp25-sdmmc2
+ compatible
+Content-Language: en-US
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        <linux-kernel@vger.kernel.org>, Marek Vasut <marex@denx.de>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Xiang wangx <wangxiang@cdjrlc.com>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230615092001.1213132-1-yann.gautier@foss.st.com>
+ <20230615092001.1213132-2-yann.gautier@foss.st.com>
+ <CAPDyKFqJsqmNzeRg8hj55yUEMSycOWsmKVKsMWk4Qu7Y8_dNzg@mail.gmail.com>
+From:   Yann Gautier <yann.gautier@foss.st.com>
+In-Reply-To: <CAPDyKFqJsqmNzeRg8hj55yUEMSycOWsmKVKsMWk4Qu7Y8_dNzg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.210]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-15_11,2023-06-15_01,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 03:05:42PM +0000, Jadav, Raag wrote:
-> > On Thu, Jun 15, 2023 at 01:35:19PM +0000, Jadav, Raag wrote:
-
-...
-
-> > > add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-9 (-9)
-> > > Function                                     old     new   delta
-> > > intel_gpio_irq_type                          317     308      -9
-> > > Total: Before=10469, After=10460, chg -0.09%
-> > 
-> > Do I understand correctly that this is your patch + suggested above?
+On 6/15/23 15:20, Ulf Hansson wrote:
+> On Thu, 15 Jun 2023 at 11:20, Yann Gautier <yann.gautier@foss.st.com> wrote:
+>>
+>> For STM32MP25, we'll need to distinguish how is managed the delay block.
+>> This is done through a new comptible dedicated for this SoC, as the
+>> delay block registers are located in SYSCFG peripheral.
+>>
+>> Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
+>> ---
+>>   Documentation/devicetree/bindings/mmc/arm,pl18x.yaml | 6 ++++++
+>>   1 file changed, 6 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
+>> index 1c96da04f0e53..e47b3418b6c77 100644
+>> --- a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
+>> +++ b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
+>> @@ -59,6 +59,12 @@ properties:
+>>             - const: st,stm32-sdmmc2
+>>             - const: arm,pl18x
+>>             - const: arm,primecell
+>> +      - description: Entry for STMicroelectronics variant of PL18x for
+>> +          STM32MP25. This dedicated compatible is used by bootloaders.
 > 
-> Yes, this is tested with gcc 7.5.0 with default -O2.
-> I see some reordering in disassembly even with this simple change,
-> and I'm not entirely sure what kind of weird tricks gcc is pulling here.
+> What does this last sentence mean? Can we drop it?
 
-For me gcc (Debian 12.2.0-14) 12.2.0 gives the same, +4 bytes.
-I am going to apply v4 with suggested tweaks.
+Hi Ulf,
 
--- 
-With Best Regards,
-Andy Shevchenko
+I just copied (and added "for STM32MP25") what was done for STM32MP1x:
+       - description: Entry for STMicroelectronics variant of PL18x.
+           This dedicated compatible is used by bootloaders.
+         items:
+           - const: st,stm32-sdmmc2
+           - const: arm,pl18x
+           - const: arm,primecell
+       - description: Entry for STMicroelectronics variant of PL18x for
+           STM32MP25. This dedicated compatible is used by bootloaders.
+         items:
+           - const: st,stm32mp25-sdmmc2
+           - const: arm,pl18x
+           - const: arm,primecell
 
+
+Should I remove (or adapt) both descriptions?
+
+
+Best regards,
+Yann
+
+> 
+>> +        items:
+>> +          - const: st,stm32mp25-sdmmc2
+>> +          - const: arm,pl18x
+>> +          - const: arm,primecell
+>>
+>>     clocks:
+>>       description: One or two clocks, the "apb_pclk" and the "MCLK"
+>> --
+>> 2.25.1
+>>
+> 
+> Kind regards
+> Uffe
 
