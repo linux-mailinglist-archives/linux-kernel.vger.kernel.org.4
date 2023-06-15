@@ -2,139 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BD0F731D6E
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6B04731D91
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230455AbjFOQGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 12:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52344 "EHLO
+        id S233218AbjFOQRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 12:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjFOQGu (ORCPT
+        with ESMTP id S233686AbjFOQRH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 12:06:50 -0400
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F81CEC;
-        Thu, 15 Jun 2023 09:06:49 -0700 (PDT)
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-62ff12ba965so6837986d6.3;
-        Thu, 15 Jun 2023 09:06:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686845208; x=1689437208;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=om/3rexWstZ0S91L+gEIlLHFrjZY2axSUrZtEHSrgPw=;
-        b=ZZQL4xqfGZ3YLUTqzQn49CKVqPvpjrVqFazPlRVc1ueFt5k+LJsgRJOAi64aV/oT6x
-         6NtO4H78XWGqXqSfEYo/sN4zDpvSxx0j+WNIQAiylReKW+WpXqZhV5zgIen8/+Qa/Qx9
-         GYExjb6DOm1V0GGci2OMqQGe8pqGQHvzqthy+JKZTAxG4I0iepi7UBTQhHYnogAsEGHL
-         S0L9q96OKiN191tOO9b9kTbPJE6lCVlpDSzblYic2+uR14ZK1Sqh5DK+0fjxyfdsqogJ
-         3+Q+t0yn+Cr+13EDlXugxhOMcOstITWtyhCUVbq54/Hv7PZaS1OgrgF1xXe6LPc1v0+X
-         iZcg==
-X-Gm-Message-State: AC+VfDy+6zsg9cyeyOlPadUXxw8DzixtFbMsQdn9YVfTHOmvCL6LCyGX
-        kN+gVplIIb2cnkZL8gBqxeV1ISNqhqY=
-X-Google-Smtp-Source: ACHHUZ6R9f7ZOwUs11BR3qFTpaQS/APHWFr0N/VDKoHBD955SpblUzKKuZKmRKgHavagfOfZazrQmg==
-X-Received: by 2002:ad4:5b88:0:b0:5e0:3825:9ad9 with SMTP id 8-20020ad45b88000000b005e038259ad9mr12265018qvp.2.1686845208016;
-        Thu, 15 Jun 2023 09:06:48 -0700 (PDT)
-Received: from snowbird ([2600:4041:5505:2302:25d5:bdf3:65da:2bb9])
-        by smtp.gmail.com with ESMTPSA id c11-20020a0ce14b000000b0062382e1e228sm5926310qvl.49.2023.06.15.09.06.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 09:06:47 -0700 (PDT)
-Date:   Thu, 15 Jun 2023 09:06:45 -0700
-From:   Dennis Zhou <dennis@kernel.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mmc: inline the first mmc_scan() on mmc_start_host()
-Message-ID: <ZIs3FQMiU75EhT6S@snowbird>
-References: <20230329202148.71107-1-dennis@kernel.org>
- <CAPDyKFoKmWAC0V_t7WL-5OauxS-iiLxW+KhqC6RzJXD_szjPCA@mail.gmail.com>
+        Thu, 15 Jun 2023 12:17:07 -0400
+X-Greylist: delayed 532 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Jun 2023 09:17:04 PDT
+Received: from mail.holtmann.org (coyote.holtmann.net [212.227.132.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CAB77ED
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 09:17:04 -0700 (PDT)
+Received: from fedora.. (p5b3d25f5.dip0.t-ipconnect.de [91.61.37.245])
+        by mail.holtmann.org (Postfix) with ESMTPSA id 4A1AACECD7;
+        Thu, 15 Jun 2023 18:08:10 +0200 (CEST)
+From:   Marcel Holtmann <marcel@holtmann.org>
+To:     linux-cachefs@redhat.com, linux-kernel@vger.kernel.org
+Cc:     dhowells@redhat.com, arnd@arndb.de, gregkh@linuxfoundation.org
+Subject: [PATCH] cachefiles: allocate static minor for /dev/cachefiles
+Date:   Thu, 15 Jun 2023 18:08:06 +0200
+Message-Id: <20230615160806.94000-1-marcel@holtmann.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFoKmWAC0V_t7WL-5OauxS-iiLxW+KhqC6RzJXD_szjPCA@mail.gmail.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 04:25:11PM +0200, Ulf Hansson wrote:
-> On Wed, 29 Mar 2023 at 22:21, Dennis Zhou <dennis@kernel.org> wrote:
-> >
-> > When using dm-verity with a data partition on an emmc device, dm-verity
-> > races with the discovery of attached emmc devices. This is because mmc's
-> > probing code sets up the host data structure then a work item is
-> > scheduled to do discovery afterwards. To prevent this race on init,
-> > let's inline the first call to detection, __mm_scan(), and let
-> > subsequent detect calls be handled via the workqueue.
-> >
-> > Signed-off-by: Dennis Zhou <dennis@kernel.org>
-> 
-> Along with the patch for the mmci driver, this one applied too, for
-> next, thanks!
-> 
+The cachefiles misc character device uses MISC_DYNAMIC_MINOR and thus
+doesn't support module auto-loading. Assign a static minor number for it
+and provide appropriate module aliases for it. This is enough for kmod to
+create the /dev/cachefiles device node on startup and facility module
+auto-loading.
 
-Thank you Ulf! I'm good with this just being applied to for-next.
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+---
+ Documentation/admin-guide/devices.txt | 3 ++-
+ fs/cachefiles/main.c                  | 4 +++-
+ include/linux/miscdevice.h            | 1 +
+ 3 files changed, 6 insertions(+), 2 deletions(-)
 
-Thanks,
-Dennis
+diff --git a/Documentation/admin-guide/devices.txt b/Documentation/admin-guide/devices.txt
+index 06c525e01ea5..21b2dda10006 100644
+--- a/Documentation/admin-guide/devices.txt
++++ b/Documentation/admin-guide/devices.txt
+@@ -376,8 +376,9 @@
+ 		240 = /dev/userio	Serio driver testing device
+ 		241 = /dev/vhost-vsock	Host kernel driver for virtio vsock
+ 		242 = /dev/rfkill	Turning off radio transmissions (rfkill)
++		243 = /dev/cachefiles	Filesystem caching on files
+ 
+-		243-254			Reserved for local use
++		244-254			Reserved for local use
+ 		255			Reserved for MISC_DYNAMIC_MINOR
+ 
+   11 char	Raw keyboard device	(Linux/SPARC only)
+diff --git a/fs/cachefiles/main.c b/fs/cachefiles/main.c
+index 3f369c6f816d..eead7b5016a7 100644
+--- a/fs/cachefiles/main.c
++++ b/fs/cachefiles/main.c
+@@ -30,11 +30,13 @@ MODULE_PARM_DESC(cachefiles_debug, "CacheFiles debugging mask");
+ MODULE_DESCRIPTION("Mounted-filesystem based cache");
+ MODULE_AUTHOR("Red Hat, Inc.");
+ MODULE_LICENSE("GPL");
++MODULE_ALIAS("devname:cachefiles");
++MODULE_ALIAS_MISCDEV(CACHEFILES_MINOR);
+ 
+ struct kmem_cache *cachefiles_object_jar;
+ 
+ static struct miscdevice cachefiles_dev = {
+-	.minor	= MISC_DYNAMIC_MINOR,
++	.minor	= CACHEFILES_MINOR,
+ 	.name	= "cachefiles",
+ 	.fops	= &cachefiles_daemon_fops,
+ };
+diff --git a/include/linux/miscdevice.h b/include/linux/miscdevice.h
+index c0fea6ca5076..d7f989f593b0 100644
+--- a/include/linux/miscdevice.h
++++ b/include/linux/miscdevice.h
+@@ -71,6 +71,7 @@
+ #define USERIO_MINOR		240
+ #define VHOST_VSOCK_MINOR	241
+ #define RFKILL_MINOR		242
++#define CACHEFILES_MINOR	243
+ #define MISC_DYNAMIC_MINOR	255
+ 
+ struct device;
+-- 
+2.40.1
 
-> Note also that I took the liberty to clarify the commit message a bit.
-> 
-> Moreover, if we want this to be applied for stable kernels, we need to
-> manage that separately, as then the mmci patch is needed too. Please
-> ping if you need some pointers in regards to this.
-> 
-> Kind regards
-> Uffe
-> 
-> > ---
-> >  drivers/mmc/core/core.c | 15 +++++++++++----
-> >  1 file changed, 11 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
-> > index 368f10405e13..c0fdc438c882 100644
-> > --- a/drivers/mmc/core/core.c
-> > +++ b/drivers/mmc/core/core.c
-> > @@ -2185,10 +2185,8 @@ int mmc_card_alternative_gpt_sector(struct mmc_card *card, sector_t *gpt_sector)
-> >  }
-> >  EXPORT_SYMBOL(mmc_card_alternative_gpt_sector);
-> >
-> > -void mmc_rescan(struct work_struct *work)
-> > +void __mmc_rescan(struct mmc_host *host)
-> >  {
-> > -       struct mmc_host *host =
-> > -               container_of(work, struct mmc_host, detect.work);
-> >         int i;
-> >
-> >         if (host->rescan_disable)
-> > @@ -2249,6 +2247,14 @@ void mmc_rescan(struct work_struct *work)
-> >                 mmc_schedule_delayed_work(&host->detect, HZ);
-> >  }
-> >
-> > +void mmc_rescan(struct work_struct *work)
-> > +{
-> > +       struct mmc_host *host =
-> > +               container_of(work, struct mmc_host, detect.work);
-> > +
-> > +       __mmc_rescan(host);
-> > +}
-> > +
-> >  void mmc_start_host(struct mmc_host *host)
-> >  {
-> >         host->f_init = max(min(freqs[0], host->f_max), host->f_min);
-> > @@ -2261,7 +2267,8 @@ void mmc_start_host(struct mmc_host *host)
-> >         }
-> >
-> >         mmc_gpiod_request_cd_irq(host);
-> > -       _mmc_detect_change(host, 0, false);
-> > +       host->detect_change = 1;
-> > +       __mmc_rescan(host);
-> >  }
-> >
-> >  void __mmc_stop_host(struct mmc_host *host)
-> > --
-> > 2.40.0
-> >
