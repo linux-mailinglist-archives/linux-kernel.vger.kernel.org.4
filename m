@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58A58731A1B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AF1A731A1A
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344236AbjFONfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 09:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44854 "EHLO
+        id S1344203AbjFONff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 09:35:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344485AbjFONfD (ORCPT
+        with ESMTP id S1344484AbjFONfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 15 Jun 2023 09:35:03 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D2430DE
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 06:34:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5046430E0
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 06:34:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E038E63759
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 13:34:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55D1BC433CB;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 15584637DA
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 13:34:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7872DC43391;
         Thu, 15 Jun 2023 13:34:16 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1q9n79-000Tlr-0p;
+        id 1q9n79-000TmP-1U;
         Thu, 15 Jun 2023 09:34:15 -0400
-Message-ID: <20230615133415.070156632@goodmis.org>
+Message-ID: <20230615133415.275901907@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Thu, 15 Jun 2023 09:05:33 -0400
+Date:   Thu, 15 Jun 2023 09:05:34 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        sunliming <sunliming@kylinos.cn>,
-        Beau Belgrave <beaub@linux.microsoft.com>
-Subject: [for-linus][PATCH 02/15] tracing/user_events: Prevent same name but different args event
+        sunliming <sunliming@kylinos.cn>
+Subject: [for-linus][PATCH 03/15] tracing/user_events: Handle matching arguments that is null from
+ dyn_events
 References: <20230615130531.200384328@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,95 +52,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: sunliming <sunliming@kylinos.cn>
 
-User processes register name_args for events. If the same name but different
-args event are registered. The trace outputs of second event are printed
-as the first event. This is incorrect.
+When A registering user event from dyn_events has no argments, it will pass the
+matching check, regardless of whether there is a user event with the same name
+and arguments. Add the matching check when the arguments of registering user
+event is null.
 
-Return EADDRINUSE back to the user process if the same name but different args
-event has being registered.
-
-Link: https://lore.kernel.org/linux-trace-kernel/20230529032100.286534-1-sunliming@kylinos.cn
+Link: https://lore.kernel.org/linux-trace-kernel/20230529065110.303440-1-sunliming@kylinos.cn
 
 Signed-off-by: sunliming <sunliming@kylinos.cn>
-Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Acked-by: Beau Belgrave <beaub@linux.microsoft.com>
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/trace/trace_events_user.c              | 36 +++++++++++++++----
- .../selftests/user_events/ftrace_test.c       |  6 ++++
- 2 files changed, 36 insertions(+), 6 deletions(-)
+ kernel/trace/trace_events_user.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-index dbb14705d0d3..37a38496a6be 100644
+index 37a38496a6be..afe61dc86543 100644
 --- a/kernel/trace/trace_events_user.c
 +++ b/kernel/trace/trace_events_user.c
-@@ -1786,6 +1786,8 @@ static int user_event_parse(struct user_event_group *group, char *name,
- 	int ret;
- 	u32 key;
- 	struct user_event *user;
-+	int argc = 0;
-+	char **argv;
+@@ -1745,6 +1745,8 @@ static bool user_event_match(const char *system, const char *event,
  
- 	/* Prevent dyn_event from racing */
- 	mutex_lock(&event_mutex);
-@@ -1793,13 +1795,35 @@ static int user_event_parse(struct user_event_group *group, char *name,
- 	mutex_unlock(&event_mutex);
+ 	if (match && argc > 0)
+ 		match = user_fields_match(user, argc, argv);
++	else if (match && argc == 0)
++		match = list_empty(&user->fields);
  
- 	if (user) {
--		*newuser = user;
--		/*
--		 * Name is allocated by caller, free it since it already exists.
--		 * Caller only worries about failure cases for freeing.
--		 */
--		kfree(name);
-+		if (args) {
-+			argv = argv_split(GFP_KERNEL, args, &argc);
-+			if (!argv) {
-+				ret = -ENOMEM;
-+				goto error;
-+			}
-+
-+			ret = user_fields_match(user, argc, (const char **)argv);
-+			argv_free(argv);
-+
-+		} else
-+			ret = list_empty(&user->fields);
-+
-+		if (ret) {
-+			*newuser = user;
-+			/*
-+			 * Name is allocated by caller, free it since it already exists.
-+			 * Caller only worries about failure cases for freeing.
-+			 */
-+			kfree(name);
-+		} else {
-+			ret = -EADDRINUSE;
-+			goto error;
-+		}
-+
- 		return 0;
-+error:
-+		refcount_dec(&user->refcnt);
-+		return ret;
- 	}
- 
- 	user = kzalloc(sizeof(*user), GFP_KERNEL_ACCOUNT);
-diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
-index 7c99cef94a65..6e8c4b47281c 100644
---- a/tools/testing/selftests/user_events/ftrace_test.c
-+++ b/tools/testing/selftests/user_events/ftrace_test.c
-@@ -228,6 +228,12 @@ TEST_F(user, register_events) {
- 	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
- 	ASSERT_EQ(0, reg.write_index);
- 
-+	/* Multiple registers to same name but different args should fail */
-+	reg.enable_bit = 29;
-+	reg.name_args = (__u64)"__test_event u32 field1;";
-+	ASSERT_EQ(-1, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
-+	ASSERT_EQ(EADDRINUSE, errno);
-+
- 	/* Ensure disabled */
- 	self->enable_fd = open(enable_file, O_RDWR);
- 	ASSERT_NE(-1, self->enable_fd);
+ 	return match;
+ }
 -- 
 2.39.2
