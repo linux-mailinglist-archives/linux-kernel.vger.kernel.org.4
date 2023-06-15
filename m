@@ -2,98 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42BFF7323CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 01:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF8FE7323D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 01:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231481AbjFOXqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 19:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59848 "EHLO
+        id S230133AbjFOXq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 19:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjFOXqA (ORCPT
+        with ESMTP id S230138AbjFOXqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 19:46:00 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE42F2953
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:45:59 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bc9483b506fso81259276.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:45:59 -0700 (PDT)
+        Thu, 15 Jun 2023 19:46:24 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B04296E
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:46:19 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b4544200dcso415761fa.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:46:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686872759; x=1689464759;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=O1j1/CGdS8c+h0DXj7uvf0ZGWib7G67HcFTSIHLIPys=;
-        b=LzTSgFZ5bxxAUUiLZtvC+xclv52Icp8UqayoRrFg2nyTH65UyUnq4epTBd2OnueVbn
-         V88w/rVi5XSi2kuLTX5LlFb3sR1kj7qXQV1owJjt+eZFJxsbIQSVbeANDTQop3jHBv7K
-         WQXPwQVrtelf4I0ELMJWuXVmHX18uUr4oZ4h7f3c5DZUKKcWDbcl3YUnxxifWbGIFagS
-         R+0bLK34KsX1qIXN/HnJzicM5JtUwMdhySyrtLOyD4qYqafjMO32wz0dHPQJx1CUkgtH
-         4HlBeM4RKT6pQMR2zR/tqdrXu6Q2y1+io6IpcbZP9tJQvU7OnG30UKQMhOey2ZSjM8wO
-         D//w==
+        d=linaro.org; s=google; t=1686872778; x=1689464778;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nSmSYkeq+QNcZQ7h8FW75deWm/CDvZRtWyO4MTWmeIk=;
+        b=NLfcD8fqHiliXE/BMbuQEW4m9tLQzhH/jJ9uQ7w/z8TkQFHxvlrtS4zaj+RcrTZJyq
+         HtYrwbtrW3SVXth+g3CozCwYakIhmLQ7zeefXedsa/+cahWf5nlgxtPI3iMvtmQRuefz
+         YoIjg4JSp1LRwP2tBDQ9ux1AS4v3FXDBY0K8T4i44bJDAS0DyE3+L++0y1hXKW6v6FzR
+         qJIA7HaurBB9VA1VnvuDPa4putqP4mwYvcxid0W15EIgTuLkW7KcUoCo4vx65Vl+dvIE
+         jVBOzk30J2Q4FuLN+OD7afnOyI75hEGgbZ3OVQ5YVxfAbKhBMWqEJMSEDjQkTEjSx0Sp
+         ++pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686872759; x=1689464759;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O1j1/CGdS8c+h0DXj7uvf0ZGWib7G67HcFTSIHLIPys=;
-        b=T6QHsnl1EBNznLzxGzCeWe7I1kUNwFGkwLljctLpmmq4LVyUaJ+/vJCHsoAdynbDqj
-         6p2E3dbbvYv9pbCYhVbJGuYo8NGTT0YX6VHEp4OuhW6UIPhFwBQSjav8eMEM0ml9spjw
-         YBPFjp5opu9jaRWUyi5fUrKz69PbxQ79R7yIO3torcKRyu2AdyQVGl7QWRJ8ag29pTEX
-         yREFlGZPA7C10gMaWZ1YSuyTysjoVdE/uw7HWwQdsvF6FIdm2eW5yUdV7fm1KQwfekBS
-         LVJulxO1jIFmKwfKi5FluTGFBLswrH8FQ8uIUTtC81+dNMB3StO+egIRL4+l9DsUaYND
-         pmFg==
-X-Gm-Message-State: AC+VfDxZC0oZoFxvfesg4+Xzrz60i0AtYDwnFIIaLFzOJgpjRcP+siKv
-        0Vy0Ev7VsCY0w+9+y+/KGcsCifHq2Ag=
-X-Google-Smtp-Source: ACHHUZ6LzMHzbPy7MHoIXxldNV8tox62l/uAktJMqu1F8P0e185bL4dBqGBRrc+1S2ty0MyQtLPnD8ZlBwE=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:d08:0:b0:bc5:117e:d4a8 with SMTP id
- 8-20020a250d08000000b00bc5117ed4a8mr12050ybn.13.1686872758986; Thu, 15 Jun
- 2023 16:45:58 -0700 (PDT)
-Date:   Thu, 15 Jun 2023 16:45:57 -0700
-In-Reply-To: <6e1e9de9-8def-46c3-a238-c1b4ef52e331@intel.com>
-Mime-Version: 1.0
-References: <20230511040857.6094-1-weijiang.yang@intel.com>
- <20230511040857.6094-8-weijiang.yang@intel.com> <ZG77wu4PyBn1z587@chao-email>
- <23169e5f-9793-9486-fd5f-287e3317b837@intel.com> <ZHXnP5bEvxPrDg3m@chao-email>
- <6e1e9de9-8def-46c3-a238-c1b4ef52e331@intel.com>
-Message-ID: <ZIuitcH7P1JpkzFH@google.com>
-Subject: Re: [PATCH v3 07/21] KVM:x86: Refresh CPUID on write to guest MSR_IA32_XSS
-From:   Sean Christopherson <seanjc@google.com>
-To:     Weijiang Yang <weijiang.yang@intel.com>
-Cc:     Chao Gao <chao.gao@intel.com>, pbonzini@redhat.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        peterz@infradead.org, rppt@kernel.org, binbin.wu@linux.intel.com,
-        rick.p.edgecombe@intel.com, john.allen@amd.com,
-        Zhang Yi Z <yi.z.zhang@linux.intel.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1686872778; x=1689464778;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nSmSYkeq+QNcZQ7h8FW75deWm/CDvZRtWyO4MTWmeIk=;
+        b=apDX6/hJhH4M+4TYrfBe8SiVzqRUpcSuU3RnCGPTotk5GvnXBMTjqdPI0fuNU9aEAD
+         lWEi9yHJHk5zNzgEtVFqrVMUhTY4jZm97EEMpS6NiJzDSrBGDFAvPET/Ee0BUGiyEYj2
+         xC8jzZ2Mh414FaXsea+pyrTGg1ef5LUrf/6+swGxgBI2peN4pE+88dX8JP4mzrJHD6Ca
+         v6yzIEh8CV8DkSFNAIe1tOP4nLqFmRAcufjIxDD14caIOPNfoA6yjDNECplwMaFcXfG4
+         rk+0vBPhIgpRgGMmVXbFbQ1ekG7URs5Z0JocqFckVaR/6QdeK5Y66LzIpz1cdjNOU5KF
+         jLHw==
+X-Gm-Message-State: AC+VfDwdU/pAc3j3obOY+twUietaYoE7i306KZb1dPTccv8cPe58zBHQ
+        Cn8AYS/iCdY8m9AsyP96eWYkBg==
+X-Google-Smtp-Source: ACHHUZ4XsUbmUKnRxW2zlp21UO1PTkx/Pup2CEYgq1AcMTbWpRmE3jkIsEUHw5pglRHBXE2EYh1F2Q==
+X-Received: by 2002:a2e:9297:0:b0:2b3:451c:5998 with SMTP id d23-20020a2e9297000000b002b3451c5998mr572190ljh.18.1686872777858;
+        Thu, 15 Jun 2023 16:46:17 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id y16-20020a05651c021000b002ac82a995fcsm3344596ljn.23.2023.06.15.16.46.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 16:46:17 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 0/2] SC7180 BWMONs
+Date:   Fri, 16 Jun 2023 01:46:08 +0200
+Message-Id: <20230616-topic-sc7180_bwmons-v1-0-4ddb96f9a6cd@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMCii2QC/x2N0QrCMAwAf2Xk2UA7pTp/RYa0WXSBmY5GN2Hs3
+ y0+3sFxGxgXYYNrs0HhRUyyVvCHBmiM+mSUoTK0rj264AO+8yyERmd/cfe0vrIaUtcNiRwFOkW
+ oZYrGmEpUGmurn2mqci78kO9/dev3/Qe5+PtDegAAAA==
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        cros-qcom-dts-watchers@chromium.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Nikita Travkin <nikita@trvn.ru>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1686872776; l=792;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=kNYhWdb44I3voqaX2T/WN7kLO+5rpettsuRmGA3+XnY=;
+ b=YOtAevNgRb65QMjUw+sro0h2INGn0CtITRqFMUr0KJhjjYB4kMR/MHTnWR5w+RP5f0YyrDM8i
+ uhdGVFwtNpsCeo5ocL1EX9mri6RaYwVD8U6cycloep/preez+9QLS2A
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023, Weijiang Yang wrote:
-> 
-> On 5/30/2023 8:08 PM, Chao Gao wrote:
-> > > > > --- a/arch/x86/kvm/x86.c
-> > > > > +++ b/arch/x86/kvm/x86.c
-> > > > > @@ -3776,8 +3776,10 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
-> > > > > 		 */
-> > > > > 		if (data & ~kvm_caps.supported_xss)
-> > > > Shouldn't we check against the supported value of _this_ guest? similar to
-> > > > guest_supported_xcr0.
-> > > I don't think it requires an extra variable to serve per guest purpose.
-> > > 
-> > > For guest XSS settings, now we don't add extra constraints like XCR0, thus
-> > QEMU can impose constraints by configuring guest CPUID.0xd.1 to indicate
-> > certain supervisor state components cannot be managed by XSAVES, even
-> > though KVM supports them. IOW, guests may differ in the supported values
-> > for the IA32_XSS MSR.
-> 
-> OK, will change this part to align with xcr0 settings. Thanks!
+SC7180 has been using static DDR votes for the longest time. Time to
+switch to BWMON (which accidentally results in up to 50% perf gains in
+glmark2)!
 
-Please write KVM-Unit-Tests to verify KVM correctly handles the various MSRs related
-to CET, e.g. a test_cet_msrs() subtest in msr.c would do nicely.  Hmm, though testing
-the combinations of CPUID bits will require multiple x86/unittests.cfg entries.
-Might be time to split up msr.c into a library and then multiple tests.
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (2):
+      dt-bindings: interconnect: qcom,bwmon: Document SC7180 BWMONs
+      arm64: dts: qcom: sc7180: Hook up BWMONs
+
+ .../bindings/interconnect/qcom,msm8998-bwmon.yaml  |   2 +
+ arch/arm64/boot/dts/qcom/sc7180-lite.dtsi          |  10 +-
+ arch/arm64/boot/dts/qcom/sc7180.dtsi               | 161 +++++++++++++++------
+ 3 files changed, 126 insertions(+), 47 deletions(-)
+---
+base-commit: 925294c9aa184801cc0a451b69a18dd0fe7d847d
+change-id: 20230616-topic-sc7180_bwmons-c99dbc0c6c4a
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
+
