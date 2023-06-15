@@ -2,214 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E028773203F
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 21:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22314732042
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 21:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbjFOTEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 15:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49188 "EHLO
+        id S231134AbjFOTFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 15:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjFOTEW (ORCPT
+        with ESMTP id S229503AbjFOTFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 15:04:22 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A706D2137;
-        Thu, 15 Jun 2023 12:04:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 49E191FB;
-        Thu, 15 Jun 2023 12:05:03 -0700 (PDT)
-Received: from [10.57.85.251] (unknown [10.57.85.251])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C1DFC3F663;
-        Thu, 15 Jun 2023 12:04:16 -0700 (PDT)
-Message-ID: <34c7c65f-e09f-fa55-c1b9-de08d71a1ac7@arm.com>
-Date:   Thu, 15 Jun 2023 20:04:10 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] Revert "Revert "Revert "arm64: dma: Drop cache
- invalidation from arch_dma_prep_coherent()"""
-Content-Language: en-GB
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Will Deacon <will@kernel.org>, andersson@kernel.org,
-        amit.pundir@linaro.org, linux-arm-msm@vger.kernel.org,
-        konrad.dybcio@somainline.org, Sibi Sankar <quic_sibis@quicinc.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        sumit.semwal@linaro.org, Stephen Boyd <swboyd@chromium.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230614165904.1.I279773c37e2c1ed8fbb622ca6d1397aea0023526@changeid>
- <36565295-ebaa-2a66-3389-ba5eb714ab34@arm.com>
- <CAD=FV=W7HXYRJ7RUeVH0hQ7KjYtEvNABCi-F4iN_wRO6uuC34w@mail.gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <CAD=FV=W7HXYRJ7RUeVH0hQ7KjYtEvNABCi-F4iN_wRO6uuC34w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Thu, 15 Jun 2023 15:05:09 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2082.outbound.protection.outlook.com [40.107.244.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0B42137;
+        Thu, 15 Jun 2023 12:05:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NZw+xuzYpIV+7yKF0aAYMNuTKTjyaKSfZJTDbSlCjtsKEyzD8v290psPdCCmdjrcbUNVNVdIAbHOPD0OYgALhAdJ73/72Q9UDEPXI4vXDWtd88Y5+RqnSz97KXDRUsn1E+hIm4P2cHoAPYVXY4QahGuVPkGgKzO3FAlSsYd1XvXmgzuUyIHb2FHMM5f06D4AsIg4D6W14/f1+GKKhx7Zx4BIQkrsDFBNzvu5awstY0VaGSenVY1kgvFZM9zyA0/CjTbTip+1QwbOa/frN1Dvw5t/4898Y5YqUMXqaI5qcLlOFy8+3hyENaOhcwNsLmdyo9nlhFXj54Bp5n5ZrtYDJA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/SIHScrXhKrZeiy/U3K8olxZKan2QHj7mQffe37XYdo=;
+ b=QjuXEOSfsV8ZFCA/O2Lw8gkleVh7nHFWdM7bby2Uck9WZgOZ5qnlV0q6cR5kIlN+4pJ+8MO6ChCykp+0BB/AqLThk7wXBY/+GaY4jaiAeGk35MxQKb80u5gse2zOhyZ3TXpm/BbiABiozg1qZh0SUxmyYJq2cDOTnvn2zfCKnZGqrrHas95ajWzOFS8RHo2h6fx03AQxRAUomhMgCgVdwH/II66kl1sHIqTSZ6U8mq8u9ah5Ngsd4u5ktZLLwaGKmAHlw2TIZJKunQR+Vp7YcyKQhn70WvKESMeyc+TC/jcVy2LbninP/TVMw8Iz6UsdTTNB2bO1wf1iXl7hMtcs6A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/SIHScrXhKrZeiy/U3K8olxZKan2QHj7mQffe37XYdo=;
+ b=AESyWivlQmczdCRNy1rbNT4Em6/qAS4Uhp3FTmq3P4lla/QtillGIKTZBcXKkD/M7oZVMDb3vBjVRu9V4vVRUcRDHNFGtBamdmPT/6g4Fx3xVX5eK65Nndq6MsN9c3LG3Pdd6TkiTvYZAGIWOcafwuykkdbqDrXWOSmFp5bfqhc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
+ by PH7PR12MB7332.namprd12.prod.outlook.com (2603:10b6:510:20f::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37; Thu, 15 Jun
+ 2023 19:05:05 +0000
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::aeb:7ad3:2f4a:f218]) by BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::aeb:7ad3:2f4a:f218%4]) with mapi id 15.20.6477.028; Thu, 15 Jun 2023
+ 19:05:04 +0000
+Date:   Fri, 16 Jun 2023 00:34:51 +0530
+From:   Wyes Karny <wyes.karny@amd.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     ray.huang@amd.com, viresh.kumar@linaro.org, trenn@suse.com,
+        shuah@kernel.org, gautham.shenoy@amd.com,
+        Mario.Limonciello@amd.com, Perry.Yuan@amd.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 1/6] amd-pstate: Make amd-pstate epp driver name
+ hyphenated
+Message-ID: <ZItg07DCRiUet+mj@BLR-5CG13462PL.amd.com>
+References: <20230612113615.205353-1-wyes.karny@amd.com>
+ <20230612113615.205353-2-wyes.karny@amd.com>
+ <CAJZ5v0gfqGj9X=3bdf6X4HqQDxg+gCJN10DXLruYD5p3kZ59Uw@mail.gmail.com>
+ <ZItQmjQHe/I9CXJh@BLR-5CG13462PL.amd.com>
+ <CAJZ5v0iKokaEo6ANPO1cHUzM2UL3guf3WcWoVbRH0iNo8D_kDQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAJZ5v0iKokaEo6ANPO1cHUzM2UL3guf3WcWoVbRH0iNo8D_kDQ@mail.gmail.com>
+X-ClientProxiedBy: PN2PR01CA0103.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:27::18) To BY5PR12MB3876.namprd12.prod.outlook.com
+ (2603:10b6:a03:1a7::26)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|PH7PR12MB7332:EE_
+X-MS-Office365-Filtering-Correlation-Id: 571b516d-8c02-4640-962e-08db6dd36d76
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1d+x1LhOSzX/Nn6X5q8SMNDdekmUNAgiJr2RBkPlhYSg83k0pdUVw2WgQ42V5cwFHWI68EHA6Bog2+Q+80RGSX5izOiEnSW2UiVD41b0am/XlcbugSz7MHE1j4eviWV9+ekGmjTSidYFUv00Kw2icYaVYC5561MaMkZzRUyJsNRiTh8Zih+L8ShoctE5kb7jpHlYrcYmELMH6YCTEfXJ1ewIDW0ZrEMv8NTdAk4BjWy1hfbo1HFrO+5vHf1XyPUN1zNy6EcfB5v51PdNbAt3MEG7FKSOEyiqonugBlYy0667EamAT5T6d7r2jCcUxjVl/FjGDRDbp6doaR1EW7XmIVXY0mU3VnpEho9VtU2I0RBiLL/s6DSB7+DFYOvx0m6IxwNcBlFfJlrDoUk7Fu1XSdr0VHKO9XmhW7sxPg3cZnjcEtFX3DHqXspiU59wdcdHGu6W4fPY7yd0NhfRkwAu1Q5eGV/TSSABLwZAFfQP0gtrxRubiV0w878M1EftQygxtQvJ2+J+wVPGQlaUBrMDyFc8EVxr4Tae2uJa2fsXG6TyQ4yAe3jWZMDBfVGSsSYaHpIjj3rSHKyc7b797MrJjHsLmz9d1lKstd4GGe0GXQc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(376002)(136003)(346002)(366004)(451199021)(86362001)(186003)(38100700002)(53546011)(26005)(6506007)(6512007)(478600001)(5660300002)(6666004)(8936002)(8676002)(6486002)(44832011)(2906002)(316002)(6916009)(4326008)(66476007)(66946007)(66556008)(41300700001)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dzR3OEU2Q2Qwa1JTR1hWU3JjVkd3VEo2YXRjU3RPSU1QOXZHV1BDZXhrT1Z3?=
+ =?utf-8?B?SU5PTFIrSCtvM2pKVzJoaUdIRzBDZ2t6YjBKK0RvZWJzTWJQMnd4VkR2blQz?=
+ =?utf-8?B?WGRPakRrK1pNc3ZqNmlpakI1WlZHODBDRDhrS0pSZDBRM3dDUGFBZzlVWS82?=
+ =?utf-8?B?WTZMY1FxVWtzTWFNSEw5OFpSeUs5dG9Bdnp6QnNrTjhhZVVEbkdPRkFaVWRt?=
+ =?utf-8?B?UGJhQ1BrODA5aC9VYVU1ZkxGMTlad2NWVkRpZFN2MDNiRWd0WVJZVGFsdC8z?=
+ =?utf-8?B?L2FUajlwdUUxOGg0M1RERENEN2kyS2d4MksySDQvZ04zRTJmNXdTS21naTNN?=
+ =?utf-8?B?YW1UUDJ2cHpueHRqN3dVRGNQZ1UzVkdZRnBBR0NoYW5rV3g3V1dHd2crT1Ny?=
+ =?utf-8?B?cDFjTXQzdGsyUmlyb1lMYXpDbVd2Z2VlTjJpaFRSajgvc2RCc3hPdi9vM05S?=
+ =?utf-8?B?MlZGWTd2dEpkbWpHZHZoVmYwWW1PNmNzbFNKaWk0T2NoUFNDS0N4eng4cFNO?=
+ =?utf-8?B?MDF3Q29qajBmUDBTM0pCQ0wvU0F2SnovenEySjhQUzBONFhETE1DWTVHd3JQ?=
+ =?utf-8?B?M3VmV3BuRVd2RHUrQ2pwdjJGYXYzeGxxeWRsMkE4WTg1MHNJa0ZUcExRR1F1?=
+ =?utf-8?B?UkVBaktydWdISjdmNFA4cE5Mb0ZML05uMVgvaDRqT1k5U00yNDNnbzhaN3NQ?=
+ =?utf-8?B?ZUhoam11VzVHcVA4YXV5K1JWTXp2TnM4V0hxRDE1VlhyTkpHVmhMVnZ3Rjdk?=
+ =?utf-8?B?VFA4bWdHL1Z3ZlVzanJzaFVpaFpJbkZlWEVMcld0L3phRVVWWDZJdjJEMytn?=
+ =?utf-8?B?V3FFTWtWeFV4V0YyRzFMYmxobEtnWjdla0EvWkM0RlF2VmpOSTk0Vi9wZFhF?=
+ =?utf-8?B?dUQrVnExZUJHSWl0OGMxUXo4bzc3Z09UZnJqTkxCYUlueEZYdGlUTXY2YlBE?=
+ =?utf-8?B?ampYN0hRcE9ubVVpU2ovMmNsNUZHY0JhUlE3dzlWWlg2VXFZUFkrRHhBaGRO?=
+ =?utf-8?B?RWs0TTBHblNoYkJiSHAxNm9GVHJkMHdCVUtzS0wraHJ6V1NyaHpLTDdFeHpC?=
+ =?utf-8?B?Sy93Wkx1OVJJVHJjNE4rM0YyWU16bnhaQnAyMGVyWTZXVEVPVnR5OTRUQnU3?=
+ =?utf-8?B?alArZmpvcHc5RURDYzR4N216b3VlT3dQYU9vRGRzNS9mYzJVTWxMNGlkcHZN?=
+ =?utf-8?B?YUJ4S0JlaHJCL28wZGJyaUZTVTRQMmxDdndvd3JxcG5aWDc2TnplY0VuQVdO?=
+ =?utf-8?B?dUNZWVE3TFRFRkVTazJrcFY5ZUpiNjMyWjN2VnNWSzhPZlRNSW01OFF3RzhZ?=
+ =?utf-8?B?Q3Mzc09nMjRiRlc5bWd0UzQ5SjliTDU4S3RUNkl1RkFOUjdORjErYVRkS2hH?=
+ =?utf-8?B?bDhDQW44eXlUOUdQT3RrYUtYdUtlWitwRUIxeDM1SWx2eXFJQ2pFeEtsdk9M?=
+ =?utf-8?B?cUwxbmh3b2dIeSs1TjNxSjVIbVJrTGkzQ2ZISkpnakxIeWlreHM1S3kxODBK?=
+ =?utf-8?B?SENHYlpoTHJxa0J6KzJkTUoyODRrbDlwV0ZCdjRVRVliSi9YL0laSjg2SFZJ?=
+ =?utf-8?B?dEMweENvY2V6THhyaGRVSVM1VG11YlRpU0w1dk5JL0l1TjdiS1p3M2V6NkZz?=
+ =?utf-8?B?K0dTaWFhMURWZS9MYVlseSt1MnZCdE9GaUdxcW5yOGNDMzgrR3Z3aWMyMnRt?=
+ =?utf-8?B?VFcvb0dpQytyQzdZR2U5Vks0SnU5ZSt1aHdpTmMrUUxPYmh5NDhBZ0Vzb0VQ?=
+ =?utf-8?B?K25YNml1QTJQYllMdUpUREpzVVVOb2YxYjBwU2FhN2JLSHhUN1JpMVN1NGNP?=
+ =?utf-8?B?ZTZ0S1pFbDFORExTTkdGNEJLc1AzSTZGaFFKZFNLZThCSEJPRE9XMDIwVmI3?=
+ =?utf-8?B?SStOZ05yWFpPMlNPWjdLQ0p1a2Z1bVdhY2hETTBFVGpmbTlCZkJWT0Z3UnJ5?=
+ =?utf-8?B?Q0NxcStac0E2QkhVMnl2ZlVSUmJEaTBobWpWMXZDUlk5K2dzMFlOT2VNOHV3?=
+ =?utf-8?B?Z1plOWdUZ0VGWXRWalQ4aGgrV1JseHdkc2w4NzF2ODdlSGFzcDhyVTZ3TmZF?=
+ =?utf-8?B?T21jdktGanhvOExVSmVJakcrVHpMTTMvOU43WjQ0ZVp3dmpGL20wN1UweEhO?=
+ =?utf-8?Q?kyOZ9qtpW8efhRWizP2LT6dk8?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 571b516d-8c02-4640-962e-08db6dd36d76
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 19:05:04.6929
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: T/rAbRAUPVpjIuobg4gOZo5ATyhbFYTr0JH4aWl3ARuOi8aRS0JQrroeJsZbBZ58BlLl++Z9IzsV5hxgBdVVwg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7332
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-15 18:42, Doug Anderson wrote:
-> Hi,
+On 15 Jun 20:30, Rafael J. Wysocki wrote:
+> On Thu, Jun 15, 2023 at 7:55 PM Wyes Karny <wyes.karny@amd.com> wrote:
+> >
+> > Hi Rafael,
+> >
+> > On 15 Jun 19:31, Rafael J. Wysocki wrote:
+> > > On Mon, Jun 12, 2023 at 1:37 PM Wyes Karny <wyes.karny@amd.com> wrote:
+> > > >
+> > > > amd-pstate passive mode driver is hyphenated. So make amd-pstate active
+> > > > mode driver consistent with that rename "amd_pstate_epp" to
+> > > > "amd-pstate-epp".
+> > > >
+> > > > Cc: stable@vger.kernel.org
+> > > > Fixes: ffa5096a7c33 ("cpufreq: amd-pstate: implement Pstate EPP support for the AMD processors")
+> > > > Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+> > > > Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+> > >
+> > > How much does the rest of the series depend on this patch?
+> >
+> > The rest of the series is independent of this patch.
 > 
-> On Thu, Jun 15, 2023 at 3:13 AM Robin Murphy <robin.murphy@arm.com> wrote:
->>
->> On 2023-06-15 00:59, Douglas Anderson wrote:
->>> This reverts commit 7bd6680b47fa4cd53ee1047693c09825e212a6f5.
->>>
->>> When booting a sc7180-trogdor based device on mainline, I see errors
->>> that look like this:
->>>
->>>    qcom_scm firmware:scm: Assign memory protection call failed -22
->>>    qcom_rmtfs_mem 94600000.memory: assign memory failed
->>>    qcom_rmtfs_mem: probe of 94600000.memory failed with error -22
->>>
->>> The device still boots OK, but WiFi doesn't work.
->>>
->>> The failure only seems to happen when
->>> CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y. When I don't have that set then
->>> everything is peachy. Presumably something about the extra
->>> initialization disagrees with the change to drop cache invalidation.
->>
->> AFAICS init_on_alloc essentially just adds __GFP_ZERO to the page
->> allocation.
+> So it should have been posted separately as an individual fix.
 > 
-> Right, but it does so without `__GFP_ZERO` getting into the page
-> flags. That means that this removal of "__GFP_ZERO" in
-> dma_direct_alloc() doesn't actually remove the zeroing when
-> CONFIG_INIT_ON_ALLOC_DEFAULT_ON IS USED:
-> 
->    /* we always manually zero the memory once we are done */
->    page = __dma_direct_alloc_pages(dev, size, gfp & ~__GFP_ZERO, true);
-> 
-> 
->> This should make no difference to a DMA allocation given
->> that dma_alloc_attrs explicitly zeros its allocation anyway. However...
->> for the non-coherent case, the DMA API's memset will be done through the
->> non-cacheable remap, while __GFP_ZERO can leave behind cached zeros for
->> the linear map alias. Thus what I assume must be happening here is that
->> "DMA" from the firmware is still making cacheable accesses to the buffer
->> and getting those zeros instead of whatever actual data which was
->> subsequently written non-cacheably direct to RAM. So either the firmware
->> still needs fixing to make non-cacheable accesses, or the SCM driver
->> needs to correctly describe it as coherent.
-> 
-> I'm a little confused, but that's pretty normal for me. :-P Looking at
-> the SCM driver, I see it doing the allocation in qcom_scm_assign_mem()
-> as:
-> 
->    dma_alloc_coherent(__scm->dev, ptr_sz, &ptr_phys, GFP_KERNEL);
-> 
-> Isn't that the SCM driver describing it as coherent?
+> Please resend the rest of the series without it to avoid confusion and
+> I'll apply it for 6.5 tomorrow.
 
-The name of the API means that the *buffer* is coherent, i.e. both the 
-device and CPU can access it at any time without needing any special 
-synchronisation. How that is achieved depends on the device - if it is 
-capable of snooping caches (i.e. marked as "dma-coherent" in DT) then 
-that coherency is provided by hardware and the allocator doesn't need to 
-do anything special; otherwise, it achieves coherency by making the CPU 
-accesses non-cacheable.
-
-> I guess the reason that the SCM driver is doing this is that it's
-> passing a chunk of memory to the firmware but it passes it to firmware
-> via a _physical_ address, not a virtual one. I guess this makes sense
-> to do when passing a chunk of memory to firmware since you wouldn't
-> want to pass the kernel's virtual address there...
-
-Correct.
-
-> Presumably the fact that the firmware gets a physical address means
-> that the firmware needs to map this address somehow itself. I can try
-> to dig up what the firmware is doing if needed (what attributes it
-> uses to map), but I guess the hope is that it shouldn't matter.
-
-It absolutely matters. Linux has been told (by DT) that this device does 
-not snoop caches, and therefore is acting on that information by using 
-the non-cacheable remap. There is nothing inherently wrong with that, 
-even when the "device" is actually firmware running on the same CPU - 
-EL3 could well run with the MMU off, or just make a point of not 
-accessing Non-Secure memory with cacheable attributes to avoid 
-side-channels. However if in this case the SCM firmware *is* using 
-cacheable attributes, as the symptoms would suggest, then either the 
-firmware or the DT is wrong, and there is nothing Linux can do to 
-completely fix that.
-
-> As
-> long as the kernel can guarantee that the contents that it needs have
-> been flushed out to memory then I think we're supposed to be good,
-> right?
-
-Right, and that's what the cache clean does. What Linux *cannot* 
-guarantee is that said contents don't subsequently get pulled back into 
-a cache in a manner which would break coherency if anyone was actually 
-looking at the cache rather than RAM.
-
-> In any case, I dumped a stack crawl to try to show the path where the
-> init happens, since there are lots of conditionals. I see this:
-> 
->   kernel_init_pages+0x68/0x6c
->   post_alloc_hook+0x40/0x90
->   prep_new_page+0x34/0x68
->   get_page_from_freelist+0x894/0xe64
->   __alloc_pages+0x12c/0xd24
->   __dma_direct_alloc_pages+0x9c/0x170
->   dma_direct_alloc+0x254/0x4bc
->   dma_alloc_attrs+0xe4/0x1e4
->   qcom_scm_assign_mem+0xb0/0x258
-> 
-> 
-> So looking at dma_direct_alloc(), I guess:
-> 
-> 1. We call __dma_direct_alloc_pages() to allocate the page. We try to
-> turn off __GFP_ZERO but CONFIG_INIT_ON_ALLOC_DEFAULT_ON overrides us.
-> 
-> 2. As part of __dma_direct_alloc_pages(), we use the existing
-> (cachable) mapping of the page and write zeros.
-> 
-> 3. The "remap" variable is set for arm64 so we call
-> arch_dma_prep_coherent(). That used to do a "clean and invalidate" but
-> now does just a "clean" and that's what broke me.
-> 
-> 
-> Talking out of my rear end, I guess the issue here might be that it
-> _does_ matter how the firmware maps this memory because it has to
-> match how the kernel has it mapped because if you map the same
-> physical memory twice then the attributes need to match. Maybe the old
-> "invalidate" just worked around this issue?
-
-See the comment that the revert brings back - indeed it makes it less 
-likely, but it's still possible that, say, the qcom_scm_assign_mem() 
-thread gets preempted by an interrupt after dma_alloc_coherent() 
-invalidates but before the buffer is completely written, and some access 
-to an adjacent page during that period causes incomplete data to be 
-prefetched back into the cache, and you're back to square one.
-
-If Linux were actually expecting to get data back from the firmware, 
-that would likely be even more broken (presuming it would use cacheable 
-writes without a subsequent cache clean, given the implication that it's 
-already doing cacheable reads without any maintenance of its own).
-
-> If this wild guessing is
-> correct, maybe a more correct solution would be to simply unmap the
-> memory from the kernel before passing the physical address to the
-> firmware, if that's possible...
-
-Having now looked at the SCM driver, TBH it doesn't make an awful lot of 
-sense for it to be using dma_alloc_coherent() there anyway - it's not 
-using it as a coherent buffer, it's doing a one-off unidirectional 
-transfer of a relatively small amount of data in a manner which seems to 
-be exactly the usage model for the streaming DMA API. And I think using 
-the latter would happen to mitigate this problem too - with streaming 
-DMA you'd put the dma_map_page() call *after* all the buffer data has 
-been written, right before the SMC call, so even with a coherency 
-mismatch there would essentially be no opportunity for the caches to get 
-out of sync.
+Sure, I'll send rest of the series separately.
 
 Thanks,
-Robin.
+Wyes
