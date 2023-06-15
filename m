@@ -2,373 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C17C273119E
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:00:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3063B7311A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244869AbjFOH7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 03:59:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
+        id S243734AbjFOIBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 04:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244129AbjFOH7Y (ORCPT
+        with ESMTP id S239537AbjFOIBS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 03:59:24 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E1CD2137
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:59:13 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QhZRf2qbWzTkyD;
-        Thu, 15 Jun 2023 15:58:38 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+        Thu, 15 Jun 2023 04:01:18 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A66D2D4A;
+        Thu, 15 Jun 2023 01:00:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1686816055; x=1718352055;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=UlLduwuUrGmy7UyOZ6HrNNpN2hyiFcjrgVn0e6+tgEE=;
+  b=unxUVYp/rkeeA5Wk3L3lZfU9TBYlMOyoXjDOCxuZ6BleZ6r2wHgRoNip
+   HCOqyQNs5iZUXJuTqO0IpCFSrh08Ij4i8VimD02cWeQhihwnZ4usFbX7I
+   PtrgDBVft6E0aBGLsJHFa36YI60pcwmtkrvGmyfsMQuq/umwcsDXCUi9o
+   T7nern960sax0+tV9uCfvdG/747yfa0uiLvCNhvQH0w2Wz9l/XkmjkBoh
+   eKZDdinGCoYe85ZCyOsz9UX7fTvOQgYpUMUjsw6SvOe0tE8Pk5FTQjSp9
+   9hUD8fGCeYUTNvb6h6u59L1db18Qem0MMwQHAienvntUP3QZyOOMqvaPT
+   w==;
+X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
+   d="scan'208";a="230252039"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Jun 2023 01:00:54 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 15 Jun 2023 15:59:10 +0800
-CC:     <yangyicong@hisilicon.com>, Peter Zijlstra <peterz@infradead.org>,
-        <mingo@redhat.com>, <juri.lelli@redhat.com>,
-        <vincent.guittot@linaro.org>, <dietmar.eggemann@arm.com>,
-        <tim.c.chen@linux.intel.com>, <gautham.shenoy@amd.com>,
-        <mgorman@suse.de>, <vschneid@redhat.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <bristot@redhat.com>,
-        <prime.zeng@huawei.com>, <jonathan.cameron@huawei.com>,
-        <ego@linux.vnet.ibm.com>, <srikar@linux.vnet.ibm.com>,
-        <linuxarm@huawei.com>, <21cnbao@gmail.com>,
-        <kprateek.nayak@amd.com>, <wuyun.abel@bytedance.com>,
-        Barry Song <baohua@kernel.org>,
-        Tim Chen <tim.c.chen@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        Len Brown <len.brown@intel.com>
-Subject: Re: [PATCH v8 2/2] sched/fair: Scan cluster before scanning LLC in
- wake-up path
-To:     Chen Yu <yu.c.chen@intel.com>
-References: <20230530070253.33306-1-yangyicong@huawei.com>
- <20230530070253.33306-3-yangyicong@huawei.com>
- <20230530115527.GC156198@hirez.programming.kicks-ass.net>
- <8fcba5d4-eea5-d7c4-2bf7-482321b333b7@huawei.com>
- <ce714341-af58-2522-69a8-321f02c82893@huawei.com>
- <ZIFKf2PkIkiRmUaK@chenyu5-mobl2.ccr.corp.intel.com>
- <85e29dd8-60f6-1e84-b3e4-061e5a2a0037@huawei.com>
- <ZIMEEnozzC+Uyluv@chenyu5-mobl2.ccr.corp.intel.com>
- <f534ead9-56cc-d834-90a3-67f8532230ff@huawei.com>
- <be1f2bcd-fe03-2b0a-0754-1054a09663a2@huawei.com>
- <ZIhkr5xIijJG6AKF@chenyu5-mobl2.ccr.corp.intel.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <e7a0461d-fc28-b752-605c-bd8e89f5a844@huawei.com>
-Date:   Thu, 15 Jun 2023 15:59:10 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
-MIME-Version: 1.0
-In-Reply-To: <ZIhkr5xIijJG6AKF@chenyu5-mobl2.ccr.corp.intel.com>
+ 15.1.2507.21; Thu, 15 Jun 2023 01:00:48 -0700
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 15 Jun 2023 01:00:48 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LnGkrzMrGubei3znMdEzdff93MlIMb66Ga2ryraXzYlaTGeUjd/3DVcaj+ccpaFmgSwlKN/YOx46GtEHvY8w5gajxdIljuoKcXoWUcG/u2pS5rsH5Re5/xyIUtzkYpEW+D2rIySNM2hjn+kYyxBYtc/rLKuCCngMzj8ulyHuAv8q7xeoLLkTV8xX45XrIPElxOVsIGM5NW/cKeUFLYSH5jP/bT5Jwc+ZfYwG+D40VNEFyYRt1ZMsDDsx3mo9iKQMFa75IYcvLKwsmxi5Tam/fOebpEtuEL2sZbI85snwFBEovRjqg51ZibkemxMXe+h5nrC7rz+WU3rWW/XgI8/fZA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UlLduwuUrGmy7UyOZ6HrNNpN2hyiFcjrgVn0e6+tgEE=;
+ b=EpCIdaqoYgSWEySxvGr+gKqT8ePvtm/dHAK3BQqYo3aP6omqVON6eK1FZ7dIWOdL3vRdilqQfB2koeVbnQvqlQxdo6H51S+tL7evyb3z6u1wep+F22fSr6OpGOLPoYm2k/ObIHEPhurlqi047I38QeTCxDH7jrB4ON4h4MacvYwXZ5OJ0JaKopNz5vdKToppT2mtHbf5FJs1seXdN7o0yKednuPp5ADFmJnQSaCZJl/qnbhzk7IZBxGdi4QDyU38YtuAYOUU7jd7IatTQ4bSGftksxd7XSqPqjtZnkcmnppsY/6fybxW6zZFE2qu9X1MJlmlaHdzYDgO4rP/X2J7zA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UlLduwuUrGmy7UyOZ6HrNNpN2hyiFcjrgVn0e6+tgEE=;
+ b=AVKT3X67Wvp1rh6LVllFG+dGX80QyFTPTCUXtM2ighFjc14brjo6F7Uo7NJ0YOHFgyuuQiwoyo742Rr0Re26h2CYE1r+mBVSEm6hU6oAxyFAaN/37kNdFdPn2gWCDo7+MtyvxxaxA8zHXksxZXQ0f+khIAkO8DI3opwYrij75kQ=
+Received: from SJ2PR11MB7648.namprd11.prod.outlook.com (2603:10b6:a03:4c3::17)
+ by CO6PR11MB5665.namprd11.prod.outlook.com (2603:10b6:5:354::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.27; Thu, 15 Jun
+ 2023 08:00:46 +0000
+Received: from SJ2PR11MB7648.namprd11.prod.outlook.com
+ ([fe80::27bf:a69f:806f:67be]) by SJ2PR11MB7648.namprd11.prod.outlook.com
+ ([fe80::27bf:a69f:806f:67be%5]) with mapi id 15.20.6433.024; Thu, 15 Jun 2023
+ 08:00:45 +0000
+From:   <Claudiu.Beznea@microchip.com>
+To:     <Varshini.Rajendran@microchip.com>, <tglx@linutronix.de>,
+        <maz@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <gregkh@linuxfoundation.org>,
+        <linux@armlinux.org.uk>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <sre@kernel.org>, <broonie@kernel.org>,
+        <arnd@arndb.de>, <gregory.clement@bootlin.com>,
+        <sudeep.holla@arm.com>, <Balamanikandan.Gunasundar@microchip.com>,
+        <Mihai.Sain@microchip.com>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <netdev@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>
+CC:     <Hari.PrasathGE@microchip.com>, <Cristian.Birsan@microchip.com>,
+        <Durai.ManickamKR@microchip.com>, <Manikandan.M@microchip.com>,
+        <Dharma.B@microchip.com>, <Nayabbasha.Sayed@microchip.com>,
+        <Balakrishnan.S@microchip.com>
+Subject: Re: [PATCH 13/21] clk: at91: sam9x7: add support for HW PLL freq
+ dividers
+Thread-Topic: [PATCH 13/21] clk: at91: sam9x7: add support for HW PLL freq
+ dividers
+Thread-Index: AQHZn198fBB9K0qgYUecT+pwgePU7A==
+Date:   Thu, 15 Jun 2023 08:00:45 +0000
+Message-ID: <71d6e453-16bd-a5ce-bb95-8e615a944fb2@microchip.com>
+References: <20230603200243.243878-1-varshini.rajendran@microchip.com>
+ <20230603200243.243878-14-varshini.rajendran@microchip.com>
+In-Reply-To: <20230603200243.243878-14-varshini.rajendran@microchip.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ2PR11MB7648:EE_|CO6PR11MB5665:EE_
+x-ms-office365-filtering-correlation-id: 6d23e002-9ec5-4268-593e-08db6d769fdd
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: GgQi8MrdYaWgEM2W6fhhREhNkxaZ7PIY7sK74KxeyYsOCLDyEtegSxAxfUkWm1SMZJJeg8sQ5RTm2iRPDIIXWOcO5cfjSpTgr0dwA7EEeMfRnrKOh3oc988Sw2p2EyMxST1PqzE5bVKwb1/geyfjwek2O/TlThmJtJPCzIC1qVPm41SHxNzaFiPBCkfgpbf+MSSHL+6QpuynQ/u/z0zHUCxNL5FO1A9fqXd3tdtYP6FO3m2ARDfOSm95RtOTOM+o6LRSwNDruBe036QiGHv2chEDT3+ed4pOLKE+tTdjC5e8ZHYz3KyUZCUxKYsYUwmtLMp13UY3KXSbVjyxEAKIQJ0oYI3BuOP1YOFZp8gLueEew+cyVLw6hS+Rb9XCG6SzYofkqAMZUe85+UEDDqRzbza8vwkJn6kngDoqABOUxSLctgPE3HrPX97SO5ns2Gk1VyonOSZvU89A57+pY1mvjfaM+LbcEXNR07MSEZfP4x/BXj/xasA2GNZbA1mlFT6Fw5NIF9g65ki0E/6v20NsxWAZL5T1RayW/HfcQ3T6jXjWETMyCVsPCgS/cBf2lU3Rrv5XokL0cSw/QDZrDDkaTQDJQimyjo/+s8xvjNVEhvkS2kznJuMoWGKvs8NYGCAAswbUC8hmfYeBnwUHAVTucqNP7n9Q5zJLOV1L+ZuccLnshm1WfGNXG7CO4woBTy8w
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7648.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(136003)(346002)(39860400002)(396003)(451199021)(2906002)(26005)(6512007)(186003)(83380400001)(2616005)(66946007)(76116006)(66476007)(64756008)(66446008)(66556008)(71200400001)(91956017)(31686004)(4326008)(41300700001)(8936002)(8676002)(6486002)(316002)(110136005)(54906003)(31696002)(86362001)(36756003)(38100700002)(478600001)(122000001)(921005)(38070700005)(7416002)(53546011)(6506007)(966005)(5660300002)(107886003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dFBqVXFtdllzZzdJWHY4Y2Y1cHJNWWI3Kzh5blF1d09wdmxKZHpwckhZQ2tr?=
+ =?utf-8?B?VzdETVZha284ZENsdlhMdk5GVmV5RlJNQWFYSTRCTU9kTEJneUhnNEFSaGJz?=
+ =?utf-8?B?MTUyZFh5aW9VRTd4V0lVQVpxMWJ3TTJJWlhCSUc4U2xlbHBZL3l4ZHRaTWc4?=
+ =?utf-8?B?Y0NqNSs0VGQwR0NUOHp4WVc0WGRIQURhcDM3WUowWkYvaDJWczYzcXZyeFRY?=
+ =?utf-8?B?SHE0M3M1YXk0RDhBbEJKWEtVa3VTOHFNWU1LR2g4d29OK1VkVFpVcjhFem16?=
+ =?utf-8?B?WnBDWXRQWjBUQndKQ1pjVGlxWmZCOHN4WjBnR20ybkVTZG1RWlZNVkhPRUQ4?=
+ =?utf-8?B?c2p2dkdTVzJUcU13MnZBbEgveTZiV2ZLTkx4MUlFaDRmUjZZZ2hPTllBWE1M?=
+ =?utf-8?B?dmZmOG1qS1RQOGY0SUFsUVk0dnp6TzRCeTN1RlpRQ25XdjNUb25NRGpHdFE2?=
+ =?utf-8?B?dm1VbHhsYlpDY3dSa0ZhVmNZZG43ZjZxU0hpTlNHMTAvODVxMG9RZ01QU1p0?=
+ =?utf-8?B?ZFdPWE1kSGtDd2ZsbE5RWGxqNmtvUWg4VVFxZFU0dUtnckpxWS9qT1pJQkhz?=
+ =?utf-8?B?OERISkE4RGJGVHhPL25oTG5JMURRTlE2SFkwV3VBTUJ1SU5WZExZcksycVAy?=
+ =?utf-8?B?WU5NUjNZcHRIRVBWaEs2WDR1cnZiUzB6aWllb0N6R2RhQnVxUkRFVHlXaDAv?=
+ =?utf-8?B?M1VtTnpJb2pWUzJJdTlNdkhuMDMzWkFraUJwZ3FhcTdtNzF4elFmQnRKekl5?=
+ =?utf-8?B?MndnYjRzOThTdk92dDM1MHlVTlVpR1VTVHAvaVBSd2tNRXNnL0xLVVo3eitY?=
+ =?utf-8?B?cUFjejJWV0FPYkhMUXhmdGhyY1N1bGYybktROTRUQTZQTVQ4Syt1WEsvZ3U1?=
+ =?utf-8?B?dGNnNFFnRHpGK1NwT2pxakNKQlZ6WXh0ajQrajlBN0xTTjExWEdoTUVDTGlT?=
+ =?utf-8?B?SVN6VXlEWEJBdGtlajVGNE1sWUcwZ2N3TDAyeHpxMmxPR2J6RThVbllla2xP?=
+ =?utf-8?B?U1h2cm0xZFpxaXQvMFFxNkFST0dnaWpNODV2c05yMVRkaEtjYjZ3KzRqdHFB?=
+ =?utf-8?B?QVVpaVhDNTl0Q0dQcllaTWhSUW1Mc2RtU3pKYWhnMWl2ZC9SVDNiTUVQYmk2?=
+ =?utf-8?B?NzRUVHRFclBqR0JSMXRydWIyenE3YmxGamtQY3BkMCtBKzJNOGZySkgyOGY3?=
+ =?utf-8?B?R2VrVnB0b2lQclJQZGI3VU95bGdXN29rdnBkZlVmVGZUNGVpTTA2UDdOWWMr?=
+ =?utf-8?B?V1N2VmtzYW82LzlXcGJ0SHgzVGhIc3diN2FpWGNHOGZ4dlI5L2lsbkNEdXcr?=
+ =?utf-8?B?WnE5VEJFazJ5Y0tSV3BJOFVVd21UNjhkOXd6VkFPanQyTVRrMUNBSUtkV2pJ?=
+ =?utf-8?B?RkZ4WE5ERGUranluVE12V1NscG1TSTd5am8rY09lVGsxWVFPakc1VmFncERm?=
+ =?utf-8?B?T2xUNEhaK0JWZWF1cVRwY0w5ay9DNEg2UXZuWTJrcmhycGMwRUczY1RTYVFS?=
+ =?utf-8?B?c2V3TWlnOUxZUWU2ZWhiNXFkMHFwdUtEckpqVkpOY212VWkrRHNyTHpRcXAx?=
+ =?utf-8?B?QTVmWDA2Unk4S0NhL01hWnFwVFh4RUNYa3BjdGxsdFlld3p6NkF6SVpGclJl?=
+ =?utf-8?B?VEJybmMyb3hDNW1JaC9MOWwwbWRQemlVblZ4aDd6aFJjWFNWekhOcmt5T0NR?=
+ =?utf-8?B?Tm9CMVVmRlAzWHNqL0ZSL0gzNEhmTmwxVnRnZHg5SGZMaXpJTkJiRHFXcThC?=
+ =?utf-8?B?SzhqRHVpN3o2TTFYZVRLVDBqRUtDZzg0aG9pZThzQy9DWUhldmxuWjg4ZnNi?=
+ =?utf-8?B?Qk82MUhhYWIxcXhLakNmaFliN081dnVkdlQ3L1BXeTFsWnJjdDEyNXcxV0lP?=
+ =?utf-8?B?TjFabGRWZVdCNHQ3TWQwNmhQdkhWWWhXb0RhRWRFcUsyTW9yT2FWOXRTTFpZ?=
+ =?utf-8?B?cUZxQnVrU1c5ZzBMYkJjVWltSnV2d2JtcXdXS0RxdldHeWJaRjVDRUQ4c0s5?=
+ =?utf-8?B?SVF4anU3UmkzdEFQcGtYRGpyL2RBRjBRTzlDMmVqbVcyNzNSMW1CQjlTVDdy?=
+ =?utf-8?B?aFl5RXFVMVZkaXNvSFdLTzZkZEFpVDN0VHZyVmtKMFlTa3BueHVqc3BuVHVM?=
+ =?utf-8?B?UlFUUjJvakdodDdoNkxraVUxL0wxejNFUkRkRnIwR3pGYWJzZ29FcDRLZytq?=
+ =?utf-8?B?TGc9PQ==?=
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-ID: <590194D03585B34F9173E35B987003AA@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7648.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6d23e002-9ec5-4268-593e-08db6d769fdd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jun 2023 08:00:45.8159
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: SK9teYCbHir4p7fbmADzBPiK7WcXueOwlBucxRcme47D+TsMNF4SDkPiNa2kgljc0zNwrQQLKxfFIBQpTX4lXilULKKQp6eDT7qcSpnNyGg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR11MB5665
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/13 20:44, Chen Yu wrote:
-> On 2023-06-13 at 16:09:17 +0800, Yicong Yang wrote:
->> On 2023/6/13 15:36, Yicong Yang wrote:
->>> On 2023/6/9 18:50, Chen Yu wrote:
->>>> On 2023-06-08 at 14:45:54 +0800, Yicong Yang wrote:
->>>>> On 2023/6/8 11:26, Chen Yu wrote:
->>>>>> On 2023-05-31 at 16:21:00 +0800, Yicong Yang wrote:
->>>>>>> On 2023/5/30 22:39, Yicong Yang wrote:
->>>>>>>> On 2023/5/30 19:55, Peter Zijlstra wrote:
->>>>>>>>> On Tue, May 30, 2023 at 03:02:53PM +0800, Yicong Yang wrote:
->>>>>>>>>
->>>>>>>>>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->>>>>>>>>> index 373ff5f55884..b8c129ed8b47 100644
->>>>>>>>>> --- a/kernel/sched/fair.c
->>>>>>>>>> +++ b/kernel/sched/fair.c
->>>>>>>>>> @@ -6994,6 +6994,30 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
->>>>>>>>>>  		}
->>>>>>>>>>  	}
->>>>>>>>>>  
->>>>>>>>>> +	if (static_branch_unlikely(&sched_cluster_active)) {
->>>>>>>>>> +		struct sched_domain *sdc = rcu_dereference(per_cpu(sd_cluster, target));
->>>>>>>>>> +
->>>>>>>>>> +		if (sdc) {
->>>>>>>>>> +			for_each_cpu_wrap(cpu, sched_domain_span(sdc), target + 1) {
->>>>>>>>>> +				if (!cpumask_test_cpu(cpu, cpus))
->>>>>>>>>> +					continue;
->>>>>>>>>> +
->>>>>>>>>> +				if (has_idle_core) {
->>>>>>>>>> +					i = select_idle_core(p, cpu, cpus, &idle_cpu);
->>>>>>>>>> +					if ((unsigned int)i < nr_cpumask_bits)
->>>>>>>>>> +						return i;
->>>>>>>>>> +				} else {
->>>>>>>>>> +					if (--nr <= 0)
->>>>>>>>>> +						return -1;
->>>>>>>>>> +					idle_cpu = __select_idle_cpu(cpu, p);
->>>>>>>>>> +					if ((unsigned int)idle_cpu < nr_cpumask_bits)
->>>>>>>>>> +						return idle_cpu;
->>>>>>>>>> +				}
->>>>>>>>>> +			}
->>>>>>>>>> +			cpumask_andnot(cpus, cpus, sched_domain_span(sdc));
->>>>>>>>>> +		}
->>>>>>>>>> +	}
->>>>>>>>>
->>>>>>>>> Would not this:
->>>>>>>>>
->>>>>>>>> --- a/kernel/sched/fair.c
->>>>>>>>> +++ b/kernel/sched/fair.c
->>>>>>>>> @@ -6994,6 +6994,29 @@ static int select_idle_cpu(struct task_s
->>>>>>>>>  		}
->>>>>>>>>  	}
->>>>>>>>>  
->>>>>>>>> +	if (static_branch_unlikely(&sched_cluster_active)) {
->>>>>>>>> +		struct sched_group *sg = sd->groups;
->>>>>>>>> +		if (sg->flags & SD_CLUSTER) {
->>>>>>>>> +			for_each_cpu_wrap(cpu, sched_group_span(sg), target+1) {
->>>>>>>>> +				if (!cpumask_test_cpu(cpu, cpus))
->>>>>>>>> +					continue;
->>>>>>>>> +
->>>>>>>>> +				if (has_idle_core) {
->>>>>>>>> +					i = select_idle_core(p, cpu, cpus, &idle_cpu);
->>>>>>>>> +					if ((unsigned)i < nr_cpumask_bits)
->>>>>>>>> +						return 1;
->>>>>>>>> +				} else {
->>>>>>>>> +					if (--nr <= 0)
->>>>>>>>> +						return -1;
->>>>>>>>> +					idle_cpu = __select_idle_cpu(cpu, p);
->>>>>>>>> +					if ((unsigned)idle_cpu < nr_cpumask_bits)
->>>>>>>>> +						return idle_cpu;
->>>>>>>>> +				}
->>>>>>>>> +			}
->>>>>>>>> +			cpumask_andnot(cpus, cpus, sched_group_span(sg));
->>>>>>>>> +		}
->>>>>>>>> +	}
->>>>>>>>> +
->>>>>>>>>  	for_each_cpu_wrap(cpu, cpus, target + 1) {
->>>>>>>>>  		if (has_idle_core) {
->>>>>>>>>  			i = select_idle_core(p, cpu, cpus, &idle_cpu);
->>>>>>>>>
->>>>>>>>> also work? Then we can avoid the extra sd_cluster per-cpu variable.
->>>>>>>>>
->>>>>>>>
->>>>>>>> I thought it will be fine since sg->flags is derived from the child domain. But practically it doesn't.
->>>>>>>> Tested on a 2P Skylake server with no clusters, add some debug messages to see how sg->flags appears:
->>>>>>>>
->>>>>>>> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
->>>>>>>> index 69968ed9ffb9..5c443b74abf5 100644
->>>>>>>> --- a/kernel/sched/topology.c
->>>>>>>> +++ b/kernel/sched/topology.c
->>>>>>>> @@ -90,8 +90,8 @@ static int sched_domain_debug_one(struct sched_domain *sd, int cpu, int level,
->>>>>>>>
->>>>>>>>                 cpumask_or(groupmask, groupmask, sched_group_span(group));
->>>>>>>>
->>>>>>>> -               printk(KERN_CONT " %d:{ span=%*pbl",
->>>>>>>> -                               group->sgc->id,
->>>>>>>> +               printk(KERN_CONT " %d:{ cluster: %s span=%*pbl",
->>>>>>>> +                               group->sgc->id, group->flags & SD_CLUSTER ? "true" : "false",
->>>>>>>>                                 cpumask_pr_args(sched_group_span(group)));
->>>>>>>>
->>>>>>>>                 if ((sd->flags & SD_OVERLAP) &&
->>>>>>>>
->>>>>>>> Unfortunately the result doesn't match what I expected, the MC domain's sg->flags still marked
->>>>>>>> as cluster:
->>>>>>>>
->>>>>>>> [    8.886099] CPU0 attaching sched-domain(s):
->>>>>>>> [    8.889539]  domain-0: span=0,40 level=SMT
->>>>>>>> [    8.893538]   groups: 0:{ cluster: false span=0 }, 40:{ cluster: false span=40 }
->>>>>>>> [    8.897538]   domain-1: span=0-19,40-59 level=MC
->>>>>>>> [    8.901538]    groups: 0:{ cluster: true span=0,40 cap=2048 }, 1:{ cluster: true span=1,41 cap=2048 }, 2:{ cluster: true span=2,42 cap=2048 }, 3:{ cluster: true span=3,43 cap=2048 }, 4:{ cluster: true span=4,44 cap=2048 }, 5:{ cluster: true span=5,45 cap=2048 }, 6:{ cluster: true span=6,46 cap=2048 }, 7:{ cluster: true span=7,47 cap=2048 }, 8:{ cluster: true span=8,48 cap=2048 }, 9:{ cluster: true span=9,49 cap=2048 }, 10:{ cluster: true span=10,50 cap=2048 }, 11:{ cluster: true span=11,51 cap=2048 }, 12:{ cluster: true span=12,52 cap=2048 }, 13:{ cluster: true span=13,53 cap=2048 }, 14:{ cluster: true span=14,54 cap=2048 }, 15:{ cluster: true span=15,55 cap=2048 }, 16:{ cluster: true span=16,56 cap=2048 }, 17:{ cluster: true span=17,57 cap=2048 }, 18:{ cluster: true span=18,58 cap=2048 }, 19:{ cluster: true span=19,59 cap=2048 }
->>>>>>>> [    8.905538]    domain-2: span=0-79 level=NUMA
->>>>>>>> [    8.909538]     groups: 0:{ cluster: false span=0-19,40-59 cap=40960 }, 20:{ cluster: false span=20-39,60-79 cap=40960 }
->>>>>>>>
->>>>>>>> I assume we didn't handle the sg->flags correctly on the domain degeneration. Simply checked the code seems
->>>>>>>> we've already make sg->flags = 0 on degeneration, maybe I need to check where's wrong.
->>>>>>>>
->>>>>>>
->>>>>>> Currently we only update the groups' flags to 0 for the final lowest domain in [1]. The upper
->>>>>>> domains' group won't be updated if degeneration happens. So we cannot use the suggested approach
->>>>>>> for cluster scanning and sd_cluster per-cpu variable is still needed.
->>>>>>>
->>>>>>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/sched/topology.c?h=v6.4-rc4#n749
->>>>>>>
->>>>>>> Thanks.
->>>>>>>
->>>>>>>
->>>>>> Is this an issue? Suppose sched domain A's parent domain
->>>>>> is B, B's parent sched domain is C. When B degenerates, C's child domain
->>>>>> pointer is adjusted to A. However, currently the code does not adjust C's
->>>>>> sched groups' flags. Should we adjust C's sched groups flags to be the same
->>>>>> as A to keep consistency?
->>>>>
->>>>> It depends on whether we're going to use it. currently only asym_smt_can_pull_tasks() uses
->>>>> it within the SMT so I think update the lowest domain's group flag works. For correctness
->>>>> all the domain group's flag should derives from its real child. I tried to solve this at group
->>>>> building but seems hard to do, at that time we don't know whether a domain is going to degenerate
->>>>> or not since the groups it not built.
->>>>>
->>>>>>
->>>>>> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
->>>>>> index 6198fa135176..fe3fd70f2313 100644
->>>>>> --- a/kernel/sched/topology.c
->>>>>> +++ b/kernel/sched/topology.c
->>>>>> @@ -713,14 +713,13 @@ cpu_attach_domain(struct sched_domain *sd, struct root_domain *rd, int cpu)
->>>>>>  
->>>>>>  	/* Remove the sched domains which do not contribute to scheduling. */
->>>>>>  	for (tmp = sd; tmp; ) {
->>>>>> -		struct sched_domain *parent = tmp->parent;
->>>>>> +		struct sched_domain *parent = tmp->parent, *pparent;
->>>>>>  		if (!parent)
->>>>>>  			break;
->>>>>>  
->>>>>>  		if (sd_parent_degenerate(tmp, parent)) {
->>>>>> -			tmp->parent = parent->parent;
->>>>>> -			if (parent->parent)
->>>>>> -				parent->parent->child = tmp;
->>>>>> +			pparent = parent->parent;
->>>>>> +			tmp->parent = pparent;
->>>>>>  			/*
->>>>>>  			 * Transfer SD_PREFER_SIBLING down in case of a
->>>>>>  			 * degenerate parent; the spans match for this
->>>>>> @@ -728,6 +727,18 @@ cpu_attach_domain(struct sched_domain *sd, struct root_domain *rd, int cpu)
->>>>>>  			 */
->>>>>>  			if (parent->flags & SD_PREFER_SIBLING)
->>>>>>  				tmp->flags |= SD_PREFER_SIBLING;
->>>>>> +
->>>>>> +			if (pparent) {
->>>>>> +				struct sched_group *sg = pparent->groups;
->>>>>> +
->>>>>> +				do {
->>>>>> +					sg->flags = tmp->flags;
->>>>>
->>>>> May need to test on some heterogeous platforms. Does it always stand that child domain of CPU from
->>>>> remote group have the same flags with @tmp?
->>>>>
->>>> Good question, for heterogenous platforms sched groups within the same domain might not always
->>>> have the same flags, because if group1 and group2 sit in big/small-core child domain, they could
->>>> have different balance flags in theory. Maybe only update the local group's flag is accurate.
->>>>
->>>> I found Tim has proposed a fix for a similar scenario, and it is for SD_SHARE_CPUCAPACITY, and it
->>>> should be in tip:
->>>> https://lore.kernel.org/lkml/168372654916.404.6677242284447941021.tip-bot2@tip-bot2/
->>>> We could adjust it based on his change to remove SD_CLUSTER, or we can
->>>> replace groups->flag with tmp->flag directly, in case we have other flags to be
->>>> adjusted in the future.
->>>>
->>>
->>> Thanks for the reference. I think we can handle the SD_CLUSTER in the same way and only update
->>> local groups flag should satisfy our needs. I tried to use the correct child domains to build the
->>> sched groups then all the groups will have the correct flags, but it'll be a bit more complex.
->>>
->>
->> something like below, detect the sched domain degeneration first and try to rebuild the groups if
->> necessary.
-> Not sure if we need to rebuild the groups. With only
-> 
-> if (parent->flags & SD_CLUSTER)
-> 	parent->parent->groups->flags &= ~SD_CLUSTER;
-> 
-> I see the correct flags.
-> 
-> My understanding is that, although remote groups's flag might be incorrect,
-> later when other sched domain degenerates, these remote groups becomes local
-> groups for those sched domains, and the flags will be adjusted accordingly.
-
-Maybe worth a try to build the groups correctly at very beginning rather
-correct it later when needed. Considering we've used it in several places[1][2]
-and this time we're going to use it for cluster.
-
-[1] 16d364ba6ef2 ("sched/topology: Introduce sched_group::flags")
-[2] https://lore.kernel.org/lkml/168372654916.404.6677242284447941021.tip-bot2@tip-bot2/
-
->> Works on a non-cluster machine emulated with QEMU:
->>
->> qemu-system-aarch64 \
->>         -kernel ${Image} \
->>         -smp cores=16,threads=2 \
->>         -cpu host --enable-kvm \
->>         -m 32G \
->>         -object memory-backend-ram,id=node0,size=8G \
->>         -object memory-backend-ram,id=node1,size=8G \
->>         -object memory-backend-ram,id=node2,size=8G \
->>         -object memory-backend-ram,id=node3,size=8G \
->>         -numa node,memdev=node0,cpus=0-7,nodeid=0 \
->>         -numa node,memdev=node1,cpus=8-15,nodeid=1 \
->>         -numa node,memdev=node2,cpus=16-23,nodeid=2 \
->>         -numa node,memdev=node3,cpus=24-31,nodeid=3 \
->>         -numa dist,src=0,dst=1,val=12 \
->>         -numa dist,src=0,dst=2,val=20 \
->>         -numa dist,src=0,dst=3,val=22 \
->>         -numa dist,src=1,dst=2,val=22 \
->>         -numa dist,src=1,dst=3,val=24 \
->>         -numa dist,src=2,dst=3,val=12 \
->>         -machine virt,iommu=smmuv3 \
->>         -net none -initrd ${Rootfs} \
->>         -nographic -bios $(pwd)/QEMU_EFI.fd \
->>         -append "rdinit=/init console=ttyAMA0 earlycon=pl011,0x9000000 sched_verbose schedstats=enable loglevel=8"
->>
->> The flags looks correct:
->> [    4.379910] CPU0 attaching sched-domain(s):
->> [    4.380540]  domain-0: span=0-1 level=SMT
->> [    4.381130]   groups: 0:{ cluster: false span=0 cap=1023 }, 1:{ cluster: false span=1 }
->> [    4.382353]   domain-1: span=0-7 level=MC
->> [    4.382950]    groups: 0:{ cluster: false span=0-1 cap=2047 }, 2:{ cluster: false span=2-3 cap=2048 }, 4:{ cluster: false span=4-5 cap=2048 }, 6:{ cluster: false span=6-7 cap=2048 }
->> [    4.385378]    domain-2: span=0-15 level=NUMA
->> [    4.386047]     groups: 0:{ cluster: false span=0-7 cap=8191 }, 8:{ cluster: false span=8-15 cap=8192 }
->> [    4.387542]     domain-3: span=0-23 level=NUMA
->> [    4.388197]      groups: 0:{ cluster: false span=0-15 cap=16383 }, 16:{ cluster: false span=16-23 cap=8192 }
->> [    4.389661]      domain-4: span=0-31 level=NUMA
->> [    4.390358]       groups: 0:{ cluster: false span=0-23 mask=0-7 cap=24575 }, 24:{ cluster: false span=16-31 mask=24-31 cap=16384 }
->>
->>
-> 
-> I did similar test based on your config:
-> qemu-system-x86_64 \
->         -m 2G \
->         -smp 16,threads=2,cores=4,sockets=2 \
->         -numa node,mem=1G,cpus=0-7,nodeid=0 \
->         -numa node,mem=1G,cpus=8-15,nodeid=1 \
->         -kernel bzImage \
->         -drive file=./ubuntu.raw,format=raw \
->         -append "console=ttyS0 root=/dev/sda5 earlyprintk=serial ignore_loglevel sched_verbose" \
->         -cpu host \
->         -enable-kvm \
->         -nographic
-> 
-> and print the group address as well as the SD_CLUSTER flag:
-> 
-> [    0.208583] CPU0 attaching sched-domain(s):
-> [    0.208998]  domain-0: span=0-1 level=SMT
-> [    0.209393]   groups: 0:{ cluster: false group 0xffff9ed3c19e6140 span=0 }, 1:{ cluster: false group 0xffff9ed3c19e6440 span=1 }
-> [    0.212463]   domain-1: span=0-7 level=MC
-> [    0.212856]    groups: 0:{ cluster: false group 0xffff9ed3c1a8f3c0 span=0-1 cap=2048 }, 2:{ cluster: true group 0xffff9ed3c1a8fac0 span=2-3 cap=2048 },
-> 
-> Yeah, group 0xffff9ed3c1a8fac0 has SD_CLUSTER, but...
-> 
-
-Something's wrong here. 0xffff9ed3c1a8fac0 shouldn't have SD_CLUSTER. Code above should works to successfully build
-MC's groups from SMT rather than CLS, Tested with qemu version 4.2.1 (from ubuntu 20.04) and mainline v8.0.0-1358-gac84b57b4d
-with your x86 topology, it looks like:
-
-[    0.517077] CPU0 attaching sched-domain(s):
-[    0.520858]  domain-0: span=0-1 level=SMT
-[    0.524858]   groups: 0:{ cluster: false span=0 }, 1:{ cluster: false span=1 }
-[    0.528858]   domain-1: span=0-7 level=MC
-[    0.532858]    groups: 0:{ cluster: false span=0-1 cap=2048 }, 2:{ cluster: false span=2-3 cap=2048 }, 4:{ cluster: false span=4-5 cap=2048 }, 6:{ cluster: false span=6-7 cap=2048 }
-[    0.536858]    domain-2: span=0-15 level=NUMA
-[    0.540858]     groups: 0:{ cluster: false span=0-7 cap=8192 }, 8:{ cluster: false span=8-15 cap=8192 }
-
-and for CPU 2:
-
-[    0.572859] CPU2 attaching sched-domain(s):
-[    0.576858]  domain-0: span=2-3 level=SMT
-[    0.580858]   groups: 2:{ cluster: false span=2 }, 3:{ cluster: false span=3 }
-[    0.584858]   domain-1: span=0-7 level=MC
-[    0.588858]    groups: 2:{ cluster: false span=2-3 cap=2048 }, 4:{ cluster: false span=4-5 cap=2048 }, 6:{ cluster: false span=6-7 cap=2048 }, 0:{ cluster: false span=0-1 cap=2048 }
-[    0.592858]    domain-2: span=0-15 level=NUMA
-[    0.596858]     groups: 0:{ cluster: false span=0-7 cap=8192 }, 8:{ cluster: false span=8-15 cap=8192 }
-
-Thanks.
+T24gMDMuMDYuMjAyMyAyMzowMiwgVmFyc2hpbmkgUmFqZW5kcmFuIHdyb3RlOg0KPiBFWFRFUk5B
+TCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlv
+dSBrbm93IHRoZSBjb250ZW50IGlzIHNhZmUNCj4gDQo+IEFkZCBzdXBwb3J0IGZvciBoYXJkd2Fy
+ZSBkaXZpZGVycyBmb3IgUExMIElEcyBpbiBzYW05eDcgU29jDQoNCmRvdCBhdCB0aGUgZW5kIG9m
+IGxpbmUsIHByb2JhYmx5Lg0Kcy9Tb2MvU29DLiBBbHNvLCBwbGVhc2UgZXhwbGFpbiBpdCBhcyBj
+bGVhciBhcyBwb3NzaWJsZS4NCg0KPiBQTExfSURfUExMQSBhbmQgUExMX0lEX1BMTEFfRElWMiBo
+YXMgLzIgaGFyZHdhcmUgZGl2aWRlcnMgZWFjaA0KDQpBdCB0aGUgdGltZSBvZiB0aGlzIHBhdGNo
+IFBMTF9JRF9QTExBIGFuZCBQTExfSURfUExMQV9ESVYyIGRvZXMndCBleGlzdA0KdGh1cyB3b3Vs
+ZCBiZSBtb3JlIGNsZWFyIGlmIHlvdSByZWZlcmVuY2UgZGF0YXNoZWV0IG5hbWluZy4NCg0KT3Ro
+ZXIgdGhhbiB0aGlzIGNvZGUgbG9va3MgZ29vZCB0byBtZS4NCg0KVGhhbmsgeW91LA0KQ2xhdWRp
+dQ0KDQo+IA0KPiBmY29yZXBsbGFjayAtLS0tLT4gSFcgRGl2ID0gMiAtKy0tPiBmcGxsYWNrDQo+
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8DQo+ICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICArLS0+IEhXIERpdiA9IDIgLS0tPiBmcGxsYWRpdjJjaw0KPiANCj4gU2lnbmVk
+LW9mZi1ieTogVmFyc2hpbmkgUmFqZW5kcmFuIDx2YXJzaGluaS5yYWplbmRyYW5AbWljcm9jaGlw
+LmNvbT4NCj4gLS0tDQo+ICBkcml2ZXJzL2Nsay9hdDkxL2Nsay1zYW05eDYwLXBsbC5jIHwgMzgg
+KysrKysrKysrKysrKysrKysrKysrKysrKystLS0tDQo+ICBkcml2ZXJzL2Nsay9hdDkxL3BtYy5o
+ICAgICAgICAgICAgIHwgIDEgKw0KPiAgMiBmaWxlcyBjaGFuZ2VkLCAzNCBpbnNlcnRpb25zKCsp
+LCA1IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvY2xrL2F0OTEvY2xr
+LXNhbTl4NjAtcGxsLmMgYi9kcml2ZXJzL2Nsay9hdDkxL2Nsay1zYW05eDYwLXBsbC5jDQo+IGlu
+ZGV4IGIzMDEyNjQxMjE0Yy4uNzYyNzNlYTc0ZjhiIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2Ns
+ay9hdDkxL2Nsay1zYW05eDYwLXBsbC5jDQo+ICsrKyBiL2RyaXZlcnMvY2xrL2F0OTEvY2xrLXNh
+bTl4NjAtcGxsLmMNCj4gQEAgLTczLDkgKzczLDE1IEBAIHN0YXRpYyB1bnNpZ25lZCBsb25nIHNh
+bTl4NjBfZnJhY19wbGxfcmVjYWxjX3JhdGUoc3RydWN0IGNsa19odyAqaHcsDQo+ICB7DQo+ICAg
+ICAgICAgc3RydWN0IHNhbTl4NjBfcGxsX2NvcmUgKmNvcmUgPSB0b19zYW05eDYwX3BsbF9jb3Jl
+KGh3KTsNCj4gICAgICAgICBzdHJ1Y3Qgc2FtOXg2MF9mcmFjICpmcmFjID0gdG9fc2FtOXg2MF9m
+cmFjKGNvcmUpOw0KPiArICAgICAgIHVuc2lnbmVkIGxvbmcgZnJlcTsNCj4gDQo+IC0gICAgICAg
+cmV0dXJuIHBhcmVudF9yYXRlICogKGZyYWMtPm11bCArIDEpICsNCj4gKyAgICAgICBmcmVxID0g
+cGFyZW50X3JhdGUgKiAoZnJhYy0+bXVsICsgMSkgKw0KPiAgICAgICAgICAgICAgICAgRElWX1JP
+VU5EX0NMT1NFU1RfVUxMKCh1NjQpcGFyZW50X3JhdGUgKiBmcmFjLT5mcmFjLCAoMSA8PCAyMikp
+Ow0KPiArDQo+ICsgICAgICAgaWYgKGNvcmUtPmxheW91dC0+ZGl2MikNCj4gKyAgICAgICAgICAg
+ICAgIGZyZXEgPj49IDE7DQo+ICsNCj4gKyAgICAgICByZXR1cm4gZnJlcTsNCj4gIH0NCj4gDQo+
+ICBzdGF0aWMgaW50IHNhbTl4NjBfZnJhY19wbGxfc2V0KHN0cnVjdCBzYW05eDYwX3BsbF9jb3Jl
+ICpjb3JlKQ0KPiBAQCAtNDMyLDYgKzQzOCwxMiBAQCBzdGF0aWMgdW5zaWduZWQgbG9uZyBzYW05
+eDYwX2Rpdl9wbGxfcmVjYWxjX3JhdGUoc3RydWN0IGNsa19odyAqaHcsDQo+ICAgICAgICAgcmV0
+dXJuIERJVl9ST1VORF9DTE9TRVNUX1VMTChwYXJlbnRfcmF0ZSwgKGRpdi0+ZGl2ICsgMSkpOw0K
+PiAgfQ0KPiANCj4gK3N0YXRpYyB1bnNpZ25lZCBsb25nIHNhbTl4NjBfZml4ZWRfZGl2X3BsbF9y
+ZWNhbGNfcmF0ZShzdHJ1Y3QgY2xrX2h3ICpodywNCj4gKyAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHVuc2lnbmVkIGxvbmcgcGFyZW50X3JhdGUp
+DQo+ICt7DQo+ICsgICAgICAgcmV0dXJuIHBhcmVudF9yYXRlID4+IDE7DQo+ICt9DQo+ICsNCj4g
+IHN0YXRpYyBsb25nIHNhbTl4NjBfZGl2X3BsbF9jb21wdXRlX2RpdihzdHJ1Y3Qgc2FtOXg2MF9w
+bGxfY29yZSAqY29yZSwNCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IHVuc2lnbmVkIGxvbmcgKnBhcmVudF9yYXRlLA0KPiAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgdW5zaWduZWQgbG9uZyByYXRlKQ0KPiBAQCAtNjA2LDYgKzYxOCwxNiBA
+QCBzdGF0aWMgY29uc3Qgc3RydWN0IGNsa19vcHMgc2FtOXg2MF9kaXZfcGxsX29wc19jaGcgPSB7
+DQo+ICAgICAgICAgLnJlc3RvcmVfY29udGV4dCA9IHNhbTl4NjBfZGl2X3BsbF9yZXN0b3JlX2Nv
+bnRleHQsDQo+ICB9Ow0KPiANCj4gK3N0YXRpYyBjb25zdCBzdHJ1Y3QgY2xrX29wcyBzYW05eDYw
+X2ZpeGVkX2Rpdl9wbGxfb3BzID0gew0KPiArICAgICAgIC5wcmVwYXJlID0gc2FtOXg2MF9kaXZf
+cGxsX3ByZXBhcmUsDQo+ICsgICAgICAgLnVucHJlcGFyZSA9IHNhbTl4NjBfZGl2X3BsbF91bnBy
+ZXBhcmUsDQo+ICsgICAgICAgLmlzX3ByZXBhcmVkID0gc2FtOXg2MF9kaXZfcGxsX2lzX3ByZXBh
+cmVkLA0KPiArICAgICAgIC5yZWNhbGNfcmF0ZSA9IHNhbTl4NjBfZml4ZWRfZGl2X3BsbF9yZWNh
+bGNfcmF0ZSwNCj4gKyAgICAgICAucm91bmRfcmF0ZSA9IHNhbTl4NjBfZGl2X3BsbF9yb3VuZF9y
+YXRlLA0KPiArICAgICAgIC5zYXZlX2NvbnRleHQgPSBzYW05eDYwX2Rpdl9wbGxfc2F2ZV9jb250
+ZXh0LA0KPiArICAgICAgIC5yZXN0b3JlX2NvbnRleHQgPSBzYW05eDYwX2Rpdl9wbGxfcmVzdG9y
+ZV9jb250ZXh0LA0KPiArfTsNCj4gKw0KPiAgc3RydWN0IGNsa19odyAqIF9faW5pdA0KPiAgc2Ft
+OXg2MF9jbGtfcmVnaXN0ZXJfZnJhY19wbGwoc3RydWN0IHJlZ21hcCAqcmVnbWFwLCBzcGlubG9j
+a190ICpsb2NrLA0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb25zdCBjaGFyICpu
+YW1lLCBjb25zdCBjaGFyICpwYXJlbnRfbmFtZSwNCj4gQEAgLTcxOCwxMCArNzQwLDE2IEBAIHNh
+bTl4NjBfY2xrX3JlZ2lzdGVyX2Rpdl9wbGwoc3RydWN0IHJlZ21hcCAqcmVnbWFwLCBzcGlubG9j
+a190ICpsb2NrLA0KPiAgICAgICAgIGluaXQubmFtZSA9IG5hbWU7DQo+ICAgICAgICAgaW5pdC5w
+YXJlbnRfbmFtZXMgPSAmcGFyZW50X25hbWU7DQo+ICAgICAgICAgaW5pdC5udW1fcGFyZW50cyA9
+IDE7DQo+IC0gICAgICAgaWYgKGZsYWdzICYgQ0xLX1NFVF9SQVRFX0dBVEUpDQo+IC0gICAgICAg
+ICAgICAgICBpbml0Lm9wcyA9ICZzYW05eDYwX2Rpdl9wbGxfb3BzOw0KPiAtICAgICAgIGVsc2UN
+Cj4gLSAgICAgICAgICAgICAgIGluaXQub3BzID0gJnNhbTl4NjBfZGl2X3BsbF9vcHNfY2hnOw0K
+PiArDQo+ICsgICAgICAgaWYgKGxheW91dC0+ZGl2Mikgew0KPiArICAgICAgICAgICAgICAgaW5p
+dC5vcHMgPSAmc2FtOXg2MF9maXhlZF9kaXZfcGxsX29wczsNCj4gKyAgICAgICB9IGVsc2Ugew0K
+PiArICAgICAgICAgICAgICAgaWYgKGZsYWdzICYgQ0xLX1NFVF9SQVRFX0dBVEUpDQo+ICsgICAg
+ICAgICAgICAgICAgICAgICAgIGluaXQub3BzID0gJnNhbTl4NjBfZGl2X3BsbF9vcHM7DQo+ICsg
+ICAgICAgICAgICAgICBlbHNlDQo+ICsgICAgICAgICAgICAgICAgICAgICAgIGluaXQub3BzID0g
+JnNhbTl4NjBfZGl2X3BsbF9vcHNfY2hnOw0KPiArICAgICAgIH0NCj4gKw0KPiAgICAgICAgIGlu
+aXQuZmxhZ3MgPSBmbGFnczsNCj4gDQo+ICAgICAgICAgZGl2LT5jb3JlLmlkID0gaWQ7DQo+IGRp
+ZmYgLS1naXQgYS9kcml2ZXJzL2Nsay9hdDkxL3BtYy5oIGIvZHJpdmVycy9jbGsvYXQ5MS9wbWMu
+aA0KPiBpbmRleCAzZTM2ZGNjNDY0YzEuLjFkZDAxZjMwYmRlZSAxMDA2NDQNCj4gLS0tIGEvZHJp
+dmVycy9jbGsvYXQ5MS9wbWMuaA0KPiArKysgYi9kcml2ZXJzL2Nsay9hdDkxL3BtYy5oDQo+IEBA
+IC02NCw2ICs2NCw3IEBAIHN0cnVjdCBjbGtfcGxsX2xheW91dCB7DQo+ICAgICAgICAgdTggZnJh
+Y19zaGlmdDsNCj4gICAgICAgICB1OCBkaXZfc2hpZnQ7DQo+ICAgICAgICAgdTggZW5kaXZfc2hp
+ZnQ7DQo+ICsgICAgICAgdTggZGl2MjsNCj4gIH07DQo+IA0KPiAgZXh0ZXJuIGNvbnN0IHN0cnVj
+dCBjbGtfcGxsX2xheW91dCBhdDkxcm05MjAwX3BsbF9sYXlvdXQ7DQo+IC0tDQo+IDIuMjUuMQ0K
+PiANCj4gDQo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+DQo+IGxpbnV4LWFybS1rZXJuZWwgbWFpbGluZyBsaXN0DQo+IGxpbnV4LWFybS1rZXJuZWxAbGlz
+dHMuaW5mcmFkZWFkLm9yZw0KPiBodHRwOi8vbGlzdHMuaW5mcmFkZWFkLm9yZy9tYWlsbWFuL2xp
+c3RpbmZvL2xpbnV4LWFybS1rZXJuZWwNCg0K
