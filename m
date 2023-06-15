@@ -2,68 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7031A730F8C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8234C730F88
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:40:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244178AbjFOGmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 02:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49812 "EHLO
+        id S243818AbjFOGkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 02:40:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243884AbjFOGl0 (ORCPT
+        with ESMTP id S244178AbjFOGkD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 02:41:26 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E049135B8;
-        Wed, 14 Jun 2023 23:39:50 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-543c6a2aa07so4176777a12.0;
-        Wed, 14 Jun 2023 23:39:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686811190; x=1689403190;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5dr/pk1CTGpe8xWEsKJhTgU6K6RWawYjj0PJrmiMabI=;
-        b=j71V8tIoMnAkqTnlnzzM7y3ne0LUJHKP+0iSmYWbpVYC7DqsKJ4c3P5rQ5sld5JkWw
-         jEhSlL8jYe+SQ3gajlXkV5I3NNHWx5YwRtKxDcXTqiClFoiIZyUdcBVW5q+UdKqyT8x2
-         bRagHypQea3dDcmb2kvDA+4hUBAsJZ7qgOiRA1IjLYmvACI1HZfMpc2kUPyDa59tw84P
-         x4VWAGC0NXlo5MOsS+3s2bHy59bedoHboHeABypM4X84TNVATcDf8OmAi16wAt2GQfWL
-         N6lVO8I41+mJmFFhHpYUA/wET/EvYAoD57UJuXtaXyb0c7AetMLYjzyaJ5+Bh35csPYH
-         X4og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686811190; x=1689403190;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5dr/pk1CTGpe8xWEsKJhTgU6K6RWawYjj0PJrmiMabI=;
-        b=a0GPE8zj2NoGY/FJ1QOYAaarHrcgtHIWm0ztrfDoJ4p0Gv1X29KVJ6alrXVHiBlJqW
-         qEWpEoONQ16+MC3IJzVK8cnBeRzJs5qQ46dPNsPNHFGSAhPiyhb+234uFROgMqWsmc1A
-         SLGrEIH+M73UP5SDHGmDatSDc6/yB+pwIE4NIRj2Ys7O/8pg5JePhPsdp/g/C3Kw+YlT
-         cr461tCN0jk5epHaga3FjBH6O1e+zuO+Arb1MI8WwtA/W4bpqVSiXfeJeXTQGsARW4hT
-         F993zTCjecWn68sywSyVXCERULk8kf4qpN7QFO7azCLg4pHXmuYsM3jx32fzpzN2j96l
-         Qd/g==
-X-Gm-Message-State: AC+VfDzxmkw7jTvY/YYftIwPSF2TGc5t6gARi9NnZ/yGsHWq9i+Org8T
-        lPkRUk/FRwA1nVCbmQesfKbZCKQNYajQQg==
-X-Google-Smtp-Source: ACHHUZ7AQ3aMqwhakcw9+joN1EIbvod52rI078ZoK54hJ3gyiguRsgy7n/aKSDeVFyDYp8yba+iyZA==
-X-Received: by 2002:a17:90b:46c9:b0:25e:a1c0:af23 with SMTP id jx9-20020a17090b46c900b0025ea1c0af23mr59824pjb.38.1686811190294;
-        Wed, 14 Jun 2023 23:39:50 -0700 (PDT)
-Received: from oslab-pc.tsinghua.edu.cn ([166.111.139.122])
-        by smtp.gmail.com with ESMTPSA id mm23-20020a17090b359700b0025c1d5e3042sm4018845pjb.40.2023.06.14.23.39.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 23:39:49 -0700 (PDT)
-From:   Tuo Li <islituo@gmail.com>
-To:     sfrench@samba.org, pc@manguebit.com, lsahlber@redhat.com,
-        sprasad@microsoft.com, tom@talpey.com
-Cc:     linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-kernel@vger.kernel.org, baijiaju1990@outlook.com,
-        Tuo Li <islituo@gmail.com>, BassCheck <bass@buaa.edu.cn>
-Subject: [PATCH v2] smb: fix a possible data race in cifs_can_echo()
-Date:   Thu, 15 Jun 2023 14:38:53 +0800
-Message-Id: <20230615063853.15500-1-islituo@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 15 Jun 2023 02:40:03 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1660526B8;
+        Wed, 14 Jun 2023 23:39:15 -0700 (PDT)
+Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QhXZF56rCzqTbg;
+        Thu, 15 Jun 2023 14:34:13 +0800 (CST)
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 15 Jun
+ 2023 14:39:12 +0800
+Subject: Re: [PATCH net-next v3 3/4] page_pool: introduce page_pool_alloc()
+ API
+To:     Alexander Duyck <alexander.duyck@gmail.com>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Eric Dumazet <edumazet@google.com>
+References: <20230609131740.7496-1-linyunsheng@huawei.com>
+ <20230609131740.7496-4-linyunsheng@huawei.com>
+ <CAKgT0UfVwQ=ri7ZDNnsATH2RQpEz+zDBBb6YprvniMEWGdw+dQ@mail.gmail.com>
+ <36366741-8df2-1137-0dd9-d498d0f770e4@huawei.com>
+ <CAKgT0UdXTSv1fDHBX4UC6Ok9NXKMJ_9F88CEv5TK+mpzy0N21g@mail.gmail.com>
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <c06f6f59-6c35-4944-8f7a-7f6f0e076649@huawei.com>
+Date:   Thu, 15 Jun 2023 14:39:11 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
+In-Reply-To: <CAKgT0UdXTSv1fDHBX4UC6Ok9NXKMJ_9F88CEv5TK+mpzy0N21g@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,50 +59,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The struct field TCP_Server_Info.tcpStatus is often protected by the lock
-srv_lock when is accessed. Here is an example in __cifs_reconnect():
+On 2023/6/14 22:18, Alexander Duyck wrote:
+> On Tue, Jun 13, 2023 at 8:51 PM Yunsheng Lin <linyunsheng@huawei.com> wrote:
+>>
+>> On 2023/6/13 22:36, Alexander Duyck wrote:
+>>> On Fri, Jun 9, 2023 at 6:20 AM Yunsheng Lin <linyunsheng@huawei.com> wrote:
+>>
+>> ...
+>>
+>>>>
+>>>> +static inline struct page *page_pool_alloc(struct page_pool *pool,
+>>>> +                                          unsigned int *offset,
+>>>> +                                          unsigned int *size, gfp_t gfp)
+>>>> +{
+>>>> +       unsigned int max_size = PAGE_SIZE << pool->p.order;
+>>>> +       struct page *page;
+>>>> +
+>>>> +       *size = ALIGN(*size, dma_get_cache_alignment());
+>>>> +
+>>>> +       if (WARN_ON(*size > max_size))
+>>>> +               return NULL;
+>>>> +
+>>>> +       if ((*size << 1) > max_size || PAGE_POOL_DMA_USE_PP_FRAG_COUNT) {
+>>>> +               *size = max_size;
+>>>> +               *offset = 0;
+>>>> +               return page_pool_alloc_pages(pool, gfp);
+>>>> +       }
+>>>> +
+>>>> +       page = __page_pool_alloc_frag(pool, offset, *size, gfp);
+>>>> +       if (unlikely(!page))
+>>>> +               return NULL;
+>>>> +
+>>>> +       /* There is very likely not enough space for another frag, so append the
+>>>> +        * remaining size to the current frag to avoid truesize underestimate
+>>>> +        * problem.
+>>>> +        */
+>>>> +       if (pool->frag_offset + *size > max_size) {
+>>>> +               *size = max_size - *offset;
+>>>> +               pool->frag_offset = max_size;
+>>>> +       }
+>>>> +
+>>>
+>>> Rather than preventing a truesize underestimation this will cause one.
+>>> You are adding memory to the size of the page reserved and not
+>>> accounting for it anywhere as this isn't reported up to the network
+>>> stack. I would suggest dropping this from your patch.
+>>
+>> I was thinking about the driver author reporting it up to the network
+>> stack using the new API as something like below:
+>>
+>> int truesize = size;
+>> struct page *page;
+>> int offset;
+>>
+>> page = page_pool_dev_alloc(pool, &offset, &truesize);
+>> if (unlikely(!page))
+>>         goto err;
+>>
+>> skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags, page,
+>>                 offset, size, truesize);
+>>
+>> and similiar handling for *_build_skb() case too.
+>>
+>> Does it make senses for that? or did I miss something obvious here?
+> 
+> It is more the fact that you are creating a solution in search of a
+> problem. As I said before most of the drivers will deal with these
+> sorts of issues by just doing the fragmentation themselves or
+> allocating fixed size frags and knowing how it will be divided into
+> the page.
 
-  spin_lock(&server->srv_lock);
-  if (server->tcpStatus != CifsExiting)
-    server->tcpStatus = CifsNeedNegotiate;
-  spin_unlock(&server->srv_lock);
+It seems that there are already some drivers which using the page pool
+API with different frag size for almost every calling, the virtio_net
+and veth are the obvious ones.
 
-However, the variable server->tcpStatus is accessed without holding the
-lock server->srv_lock in cifs_can_echo():
+When reviewing the page frag support for virtio_net, I found that it
+was manipulating the page_pool->frag_offset directly to do something
+as this patch does, see:
 
-  if (server->tcpStatus == CifsGood)
-    return true;
+https://lore.kernel.org/lkml/CAKhg4tL9PrUebqQHL+s7A6-xqNnju3erNQejMr7UFjwTaOduZw@mail.gmail.com/
 
-To fix this possible data race, a lock and unlock pair is added when
-accessing the variable server->tcpStatus.
+I am not sure we are both agreed that drivers should not be manipulating
+the page_pool->frag_offset directly unless it is really necessary?
 
-Reported-by: BassCheck <bass@buaa.edu.cn>
-Signed-off-by: Tuo Li <islituo@gmail.com>
----
-v2:
-* Release the lock server->srv_lock in the false branch.
----
- fs/smb/client/smb1ops.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+For the specific case for virtio_net, it seems we have the below options:
+1. both the driver and page pool do not handle it.
+2. the driver handles it by manipulating the page_pool->frag_offset
+   directly.
+3. the page pool handles it as this patch does.
 
-diff --git a/fs/smb/client/smb1ops.c b/fs/smb/client/smb1ops.c
-index 7d1b3fc014d9..5120241d3c0e 100644
---- a/fs/smb/client/smb1ops.c
-+++ b/fs/smb/client/smb1ops.c
-@@ -1049,8 +1049,12 @@ cifs_dir_needs_close(struct cifsFileInfo *cfile)
- static bool
- cifs_can_echo(struct TCP_Server_Info *server)
- {
--	if (server->tcpStatus == CifsGood)
-+	spin_lock(&server->srv_lock);
-+	if (server->tcpStatus == CifsGood) {
-+		spin_unlock(&server->srv_lock);
- 		return true;
-+	}
-+	spin_unlock(&server->srv_lock);
- 
- 	return false;
- }
--- 
-2.34.1
+Is there any other options I missed for the specific case for virtio_net?
+What is your perfer option? And why?
 
+> 
+> If you are going to go down this path then you should have a consumer
+> for the API and fully implement it instead of taking half measures and
+> making truesize underreporting worse by evicting pages earlier.
+
+I am not sure I understand what do you mean by "a consumer for the API",
+Do you mean adding a new API something like page_pool_free() to do
+something ligthweight, such as decrementing the frag user and adjusting
+the frag_offset, which is corresponding to the page_pool_alloc() API
+introduced in this patch?
+If yes, I was considering about that before, but I am not sure it worth
+the effort, as for most usecase, it is a very rare case for error handling
+as my understanding.
+
+I just note that we already have page_pool_free() used by the page pool
+destroy process，we might need to do something to avoid the confusion
+between page_pool_alloc() and page_pool_free() :(
+
+> 
+> .
+> 
