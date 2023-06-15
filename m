@@ -2,51 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD6F2731E16
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 384DF731E17
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:45:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235068AbjFOQpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 12:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
+        id S236019AbjFOQpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 12:45:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235592AbjFOQod (ORCPT
+        with ESMTP id S236130AbjFOQog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 12:44:33 -0400
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0C42D68
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 09:44:27 -0700 (PDT)
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-4f764e9295dso3560527e87.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 09:44:27 -0700 (PDT)
+        Thu, 15 Jun 2023 12:44:36 -0400
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F4130C6
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 09:44:28 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-30e412a852dso6024947f8f.0
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 09:44:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686847465; x=1689439465;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZKrXpTuTUilsXuTU2ZCSebU2HevXpno2wTvArxmiD/I=;
-        b=LcO9jiu05ylVTSZzr4SU4EZgahdLYPBHHgeZTetrC4fDUqTA7NAf80UFCBdrM4ZME6
-         wohdzicshdhWcqZQOHaM4W4S5IkhVS9gcJGxnl49s2DrGH8WdF35bX/yP7RQWFRuASfN
-         ENlP8IkX2JnwDto3haQPfvQ6ClW0WXsf3LsMsp05NQJTuS+ue+nMqU4gV9jE/0bjGUCB
-         qLFsZoaUs23gb6fICZGxz225UiEiswUgpYc5v+7BmR3A9U6Yp4bxN4usqgulaiDz41y9
-         4a9KN6/MYT5mWSlY6h1nFrBzwyVnwVGHU7fs2hgN90RGamUlAkdctOCDU9cD4gEiNKWo
-         vBgg==
-X-Gm-Message-State: AC+VfDxMawcGudHlCS7BI6BH94x/xtHEZWEvZelulSNV1YsoKyBDrQqc
-        JFPlHp2dtEkCdn9ZFIIjiBM=
-X-Google-Smtp-Source: ACHHUZ7Ej3e+4lEdxGSsJ/iaN/wwADaHZ1JD3PLw1zeo3YQ8ZJe+I3Cv3xKG4vBLE3ACixNIFMkPfA==
-X-Received: by 2002:a19:7b14:0:b0:4f8:83f:babe with SMTP id w20-20020a197b14000000b004f8083fbabemr1970034lfc.62.1686847465120;
-        Thu, 15 Jun 2023 09:44:25 -0700 (PDT)
-Received: from localhost (fwdproxy-cln-007.fbsv.net. [2a03:2880:31ff:7::face:b00c])
-        by smtp.gmail.com with ESMTPSA id l16-20020a1c7910000000b003f8d770e935sm6143947wme.0.2023.06.15.09.44.24
+        d=1e100.net; s=20221208; t=1686847467; x=1689439467;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=h/iaRHbMZknbdlPyOxZE8eGdzil5wkV0A7XuLO8jEos=;
+        b=e19iUv80fm9DHni/on1OhVwGrsi36TWIKh3BdUodXdtJRIqR5uTOVColyzZw23E46l
+         H7vZyfteDVCh4PWoRIN6GB6F8gjWV+3xkJbJLJHVORYyTGi+RjJpRkCfTl2L346U+eWB
+         jBFNHt3Yl1NyiyRO6ULLe6DfS3fQAH3ZNxgLcmJejJK3KRqEpwH2IPFDSI3PN0NQTCNG
+         xAGsyZJA3keMYoGZbzn3p9f9uAQI55ROds5KXT7GrYateTi4huXWXdWwuBVK30U4ycYD
+         mz7cO7323IgsxAAwBlg5SyNxfU2qC5sCyeB2P6Y1TqN/shhZucokHwZFRMtEzTkx3dh8
+         QrtA==
+X-Gm-Message-State: AC+VfDyHJvMPeRqw+x5gpIGUfNKvb7kGBW2j21U0zLfM8cx/MpNS3vhR
+        3CotD+L9fVemd1Nfwe9NRdN7GAIyMWs=
+X-Google-Smtp-Source: ACHHUZ4Tf3U78NbDvBaXcy6pNpUoCEg1zhXEIHFBt0r8wCtMdvb9HiNSl0VLtsWo59p+6m3X7D1VUw==
+X-Received: by 2002:a5d:4cc1:0:b0:30f:c142:5330 with SMTP id c1-20020a5d4cc1000000b0030fc1425330mr7815963wrt.27.1686847467003;
+        Thu, 15 Jun 2023 09:44:27 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-020.fbsv.net. [2a03:2880:31ff:14::face:b00c])
+        by smtp.gmail.com with ESMTPSA id a8-20020a5d5088000000b0030f9c3219aasm19257509wrt.47.2023.06.15.09.44.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 09:44:24 -0700 (PDT)
+        Thu, 15 Jun 2023 09:44:26 -0700 (PDT)
 From:   Breno Leitao <leitao@debian.org>
 To:     pawan.kumar.gupta@linux.intel.com, jpoimboe@kernel.org,
-        peterz@infradead.org, tglx@linutronix.de, bp@alien8.de
-Cc:     leit@fb.com, hpa@zytor.com, x86@kernel.org, mingo@redhat.com,
-        dave.hansen@linux.intel.com, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/2] x86/bugs: Break down mitigations configurations
-Date:   Thu, 15 Jun 2023 09:44:11 -0700
-Message-Id: <20230615164417.3588162-1-leitao@debian.org>
+        peterz@infradead.org, tglx@linutronix.de, bp@alien8.de,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Cc:     leit@fb.com, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] x86/bugs: Create an option to disable MDS
+Date:   Thu, 15 Jun 2023 09:44:12 -0700
+Message-Id: <20230615164417.3588162-2-leitao@debian.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230615164417.3588162-1-leitao@debian.org>
+References: <20230615164417.3588162-1-leitao@debian.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -59,29 +63,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no way to compile a kernel today with some of the speculative
-mitigations disabled. Even if the kernel has
-CONFIG_SPECULATION_MITIGATIONS=n, some Intel mitigations, such as MDS, TAA,
-MMIO are still enabled and can only be disabled using a kernel parameter.
+There is no way to disable MDS mitigation today at compilation time. MDS
+is enabled even if CONFIG_SPECULATION_MITIGATIONS is unset.
 
-This patchset creates a way to choose what to enable or disable, and,
-get the mitigations disable if CONFIG_SPECULATION_MITIGATIONS is not
-set, as the rest of other mitigations.
+Create a new KCONFIG option that allow MDS mitigations to be disabled in
+compilation time.
 
-Also, we want to print a warning message letting users know that these
-mitigations are disabled.
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ arch/x86/Kconfig           | 11 +++++++++++
+ arch/x86/kernel/cpu/bugs.c |  9 ++++++++-
+ 2 files changed, 19 insertions(+), 1 deletion(-)
 
-This is a follow up to this discussion: https://lkml.org/lkml/2023/6/12/798
-
-Breno Leitao (3):
-  x86/bugs: Create an option to disable MDS
-  x86/bugs: Create an option to disable TAA
-  x86/bugs: Create an option to disable MMIO vulnerability
-
- arch/x86/Kconfig           | 31 +++++++++++++++++++++++++++++++
- arch/x86/kernel/cpu/bugs.c | 23 +++++++++++++++++++----
- 2 files changed, 50 insertions(+), 4 deletions(-)
-
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 53bab123a8ee..d25132b2d54f 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -2649,6 +2649,17 @@ config SLS
+ 	  against straight line speculation. The kernel image might be slightly
+ 	  larger.
+ 
++config MITIGATE_MDS
++	bool "Mitigate Microarchitectural Data Sampling (MDS) hardware bug"
++	depends on CPU_SUP_INTEL && X86_64
++	default y
++	help
++	  Enable mitigation for Microarchitectural Data Sampling (MDS). MDS is
++	  a hardware vulnerability which allows unprivileged speculative access
++	  to data which is available in various CPU internal buffer. Deeper
++	  technical information is available in the MDS specific x86 architecture
++	  section: Documentation/arch/x86/mds.rst.
++
+ endif
+ 
+ config ARCH_HAS_ADD_PAGES
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index 182af64387d0..50f12829dce9 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -269,6 +269,7 @@ static void x86_amd_ssb_disable(void)
+ /* Default mitigation for MDS-affected CPUs */
+ static enum mds_mitigations mds_mitigation __ro_after_init = MDS_MITIGATION_FULL;
+ static bool mds_nosmt __ro_after_init = false;
++#define MDS_WARN_MSG "WARNING: Microarchitectural Data Sampling (MDS) speculative mitigation disabled!\n"
+ 
+ static const char * const mds_strings[] = {
+ 	[MDS_MITIGATION_OFF]	= "Vulnerable",
+@@ -278,11 +279,17 @@ static const char * const mds_strings[] = {
+ 
+ static void __init mds_select_mitigation(void)
+ {
+-	if (!boot_cpu_has_bug(X86_BUG_MDS) || cpu_mitigations_off()) {
++	if (!boot_cpu_has_bug(X86_BUG_MDS)) {
+ 		mds_mitigation = MDS_MITIGATION_OFF;
+ 		return;
+ 	}
+ 
++	if (cpu_mitigations_off() || !IS_ENABLED(CONFIG_MITIGATE_MDS)) {
++		mds_mitigation = MDS_MITIGATION_OFF;
++		pr_err(MDS_WARN_MSG);
++		return;
++	}
++
+ 	if (mds_mitigation == MDS_MITIGATION_FULL) {
+ 		if (!boot_cpu_has(X86_FEATURE_MD_CLEAR))
+ 			mds_mitigation = MDS_MITIGATION_VMWERV;
 -- 
 2.34.1
 
