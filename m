@@ -2,144 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4E0731106
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:42:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9639731115
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:43:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245058AbjFOHlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 03:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53954 "EHLO
+        id S238973AbjFOHnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 03:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245312AbjFOHkD (ORCPT
+        with ESMTP id S238359AbjFOHnt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 03:40:03 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1112D4B
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:39:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1686814778; x=1718350778;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PyAZ+UQySht1Ggox4vj01CIS3UNR5OIbU5jcrfJvb9c=;
-  b=ukJZJukQgnKMjSsZBmtaCSlvjetmkKNMmNiqRddxEwonJck/zNc3Wfq6
-   y91GVtFQlYplsMgAuaUW413gcE5JWoNfhyBd3NR1ql9F0LCc7/YibetuW
-   mFL/bjqqXq3og6Iari3qlYTe3IPeAnUZrmppWxiBUupBerJ9vgp1g+DFe
-   3DUsa5jdLwJTrjo6XYNVa061Iwr/2FzS6NgewG/4mVo707nF1omR7eWNO
-   59PoNSKQsSkzjEEThCR1MwJVDkIdJdd2qJ26eRxR55WtNJOtY8LlWQhqT
-   R/iiu0ewzITkp5huzNF2tW94S3+yRZ3OlxVEMea4mrreq3k7v2qxkSHD4
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="asc'?scan'208";a="220398517"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Jun 2023 00:38:30 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 15 Jun 2023 00:38:27 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Thu, 15 Jun 2023 00:38:25 -0700
-Date:   Thu, 15 Jun 2023 08:37:59 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Nylon Chen <nylon.chen@sifive.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <jszhang@kernel.org>, <ajones@ventanamicro.com>,
-        <aou@eecs.berkeley.edu>, <palmer@dabbelt.com>,
-        <paul.walmsley@sifive.com>, <greentime.hu@sifive.com>,
-        <zong.li@sifive.com>, <nylon7717@gmail.com>
-Subject: Re: [PATCH v2] RISC-V: Support 32_PCREL relocation type in kernel
- module
-Message-ID: <20230615-unvisited-deceit-9beab8ce987a@wendy>
-References: <20230615072302.25638-1-nylon.chen@sifive.com>
+        Thu, 15 Jun 2023 03:43:49 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5643EC5;
+        Thu, 15 Jun 2023 00:43:46 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35F7cFHm125965;
+        Thu, 15 Jun 2023 02:38:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1686814695;
+        bh=JclRRAhzf9DqHjP9Y/7b/X8I+5HiyhTF7fpvD2bxBdQ=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=Co9DMNu3nFnjH1yxNeFq3kUiZ3gJoGFar4vZ4Sqb9fy3PWlCZ1S6cZRQMRsLFqYlN
+         JSay+RFWKhgVoHvpxMdjPJieH4zDB4KISTQETnmL3gq36HpELxoceSi+czNRtPKS9K
+         F/eyDNK+N6QueH8qrc5MJD+iOrGsw7dIIwtCldS8=
+Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35F7cFE7101934
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 15 Jun 2023 02:38:15 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 15
+ Jun 2023 02:38:15 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 15 Jun 2023 02:38:15 -0500
+Received: from [172.24.145.182] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35F7cB2K001995;
+        Thu, 15 Jun 2023 02:38:12 -0500
+Message-ID: <bf392830-c157-b819-2de3-8db952adf39b@ti.com>
+Date:   Thu, 15 Jun 2023 13:08:11 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="X3uZfQHN9blau7pK"
-Content-Disposition: inline
-In-Reply-To: <20230615072302.25638-1-nylon.chen@sifive.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 3/5] arm64: dts: ti: add verdin am62
+Content-Language: en-US
+To:     Francesco Dolcini <francesco@dolcini.it>
+CC:     Nishanth Menon <nm@ti.com>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230601131332.26877-1-francesco@dolcini.it>
+ <20230601131332.26877-4-francesco@dolcini.it>
+ <62ca6112-0aca-788e-fc9b-8a2c3ce9ba1f@ti.com>
+ <ZIq02whTEce8C1P8@francesco-nb.int.toradex.com>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+In-Reply-To: <ZIq02whTEce8C1P8@francesco-nb.int.toradex.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---X3uZfQHN9blau7pK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hey Nylon, thanks for the update.
 
-On Thu, Jun 15, 2023 at 03:23:02PM +0800, Nylon Chen wrote:
-> Fix the 'unsupported relocation type' error caused by
-> enabling the -fasynchronous-unwind-tables flag,
-> which generates relocation types that are not supported.
+On 15/06/23 12:21, Francesco Dolcini wrote:
+> On Thu, Jun 15, 2023 at 11:38:00AM +0530, Vignesh Raghavendra wrote:
+>>
+>>
+>> On 01/06/23 18:43, Francesco Dolcini wrote:
+>>
+>> [...]
+>>
+>>> +/* Verdin I2C_1 */
+>>> +&main_i2c1 {
+>>> +	status = "okay";
+>>> +
+>>> +	/* Audio Codec */
+>>> +	nau8822_1a: audio-codec@1a {
+>>> +		compatible = "nuvoton,nau8822";
+>>> +		reg = <0x1a>;
+>>> +		pinctrl-names = "default";
+>>> +		pinctrl-0 = <&pinctrl_i2s1_mclk>; /* Configure AUDIO_EXT_REFCLK1 pin as output */
+>>> +		#sound-dai-cells = <0>;
+>>> +
+>>> +		/* POSTDIV4_16FF_MAIN_2_HSDIVOUT8_CLK -> AUDIO_EXT_REFCLK1 */
+>>> +		assigned-clocks = <&k3_clks 157 10>;
+>>> +		assigned-clock-parents = <&k3_clks 157 18>;
+>>> +		assigned-clock-rates = <25000000>; /* for 48KHz ± 1.7% */
+>>> +	};
+>>> +
+>>
+>> Oops, this node fails dtbs_check
+>>
+>> make ARCH=arm64 CROSS_COMPILE=$V8_CROSS CHECK_DTBS=y ti/k3-am625-verdin-nonwifi-dev.dtb
+>>
+>> /work/linux/arch/arm64/boot/dts/ti/k3-am625-verdin-nonwifi-dev.dtb: audio-codec@1a: '#sound-dai-cells', 'assigned-clock-parents', 'assigned-clock-rates', 'assigned-clocks' do not match any of the regexes: 'pinctrl-[0-9]+'
+>> 	From schema: /home/a0132425/workspace/k3-next/Documentation/devicetree/bindings/sound/nuvoton,nau8822.yaml
+>> /work/linux/arch/arm64/boot/dts/ti/k3-am625-verdin-nonwifi-dev.dtb: audio-codec@1a: 'anyOf' conditional failed, one must be fixed:
+>> 	'clocks' is a required property
+>> 	'#clock-cells' is a required property
+>> 	From schema: /work/.local/lib/python3.10/site-packages/dtschema/schemas/clock/clock.yaml
+> 
+> This properties are needed here, it will not work without.
 
-What commit adds the -fasynchronous-unwind-tables flag?
-Should there be a Fixes: tag for that commit?
+Agree on the need. But, I cannot take the patch w/o binding update. We
+will end up with messy dts files that would have deviated from bindings.
 
-Cheers,
-Conor.
+Could you please post an update to bindings yaml? I suggest to drop
+audio codec support and add it back once bindings are updated/fixed.
 
->=20
-> Signed-off-by: Nylon Chen <nylon.chen@sifive.com>
-> Reviewed-by: Zong Li <zong.li@sifive.com>
-> ---
-> Changed in v2:
-> - add commit message.
->=20
->  arch/riscv/kernel/module.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
->=20
-> diff --git a/arch/riscv/kernel/module.c b/arch/riscv/kernel/module.c
-> index 7c651d55fcbd..65be0360a494 100644
-> --- a/arch/riscv/kernel/module.c
-> +++ b/arch/riscv/kernel/module.c
-> @@ -310,6 +310,15 @@ static int apply_r_riscv_sub64_rela(struct module *m=
-e, u32 *location,
->  	return 0;
->  }
-> =20
-> +static int apply_r_riscv_pcrel_32_rela(struct module *me, u32 *location,
-> +				       Elf_Addr v)
-> +{
-> +	ptrdiff_t offset =3D (void *)v - (void *)location;
-> +
-> +	*location =3D (*location & 0xffff0000) | (offset & 0xffff);
-> +	return 0;
-> +}
-> +
->  static int (*reloc_handlers_rela[]) (struct module *me, u32 *location,
->  				Elf_Addr v) =3D {
->  	[R_RISCV_32]			=3D apply_r_riscv_32_rela,
-> @@ -335,6 +344,7 @@ static int (*reloc_handlers_rela[]) (struct module *m=
-e, u32 *location,
->  	[R_RISCV_SUB16]			=3D apply_r_riscv_sub16_rela,
->  	[R_RISCV_SUB32]			=3D apply_r_riscv_sub32_rela,
->  	[R_RISCV_SUB64]			=3D apply_r_riscv_sub64_rela,
-> +	[R_RISCV_32_PCREL]		=3D apply_r_riscv_pcrel_32_rela,
->  };
-> =20
->  int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
-> --=20
-> 2.40.1
->=20
+> 
+> Not the expert on audio codec and sound cards DT binding, but to me this is
+> just the yaml not being correct.
+> 
+> Francesco
+> 
 
---X3uZfQHN9blau7pK
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIq/ywAKCRB4tDGHoIJi
-0keJAQDIkc/zpv4sa2yC/D7U/ZNdjXyjn1F4e5TOctnC6ykUpAD+KeZHi+Wx/6e9
-ONGjEQkKXwjDw/MTgIei7DiKwsSShAw=
-=bAj9
------END PGP SIGNATURE-----
-
---X3uZfQHN9blau7pK--
+-- 
+Regards
+Vignesh
