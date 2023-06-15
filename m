@@ -2,53 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CA9B731AA1
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:58:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57CD3731AA5
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344769AbjFON6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 09:58:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34510 "EHLO
+        id S1344809AbjFON6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 09:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344785AbjFON6a (ORCPT
+        with ESMTP id S1344227AbjFON6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 09:58:30 -0400
+        Thu, 15 Jun 2023 09:58:36 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8101FDD;
-        Thu, 15 Jun 2023 06:58:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A691BDB;
+        Thu, 15 Jun 2023 06:58:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB1F063AD8;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F126A63194;
+        Thu, 15 Jun 2023 13:58:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2C54C433C8;
         Thu, 15 Jun 2023 13:58:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFBA3C433CA;
-        Thu, 15 Jun 2023 13:58:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686837507;
-        bh=HDfK6TZ6p1z9konXBYN4xiV7FVSWRCnUgThCTPlpODE=;
+        s=k20201202; t=1686837514;
+        bh=e3VpKCzPbeixM3x4B0QVKu3+2GIDQ2j5ljGAZGiHfbk=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=MijxV188M3NQstbEsPBKj+rQV+7WTV0//Wbr3a4d9hw8Uh4EqXOfg6QCDXnAbBL3w
-         +pAhyiO0Nd5YMsZFl9bhjk0PQDxIxAWDXbE+BhfykWcGOwQ8DNQQ/Md7bB9BirALm8
-         UGFWqGhWUmu/KeTaAjC0+hOdgJ8A0F0Ygzh7ZPkV81o3IxSnB+foK4J0l78ccT1KjQ
-         yJtEqC3LtEmWDIbFo1IHk8it1Rh+JUSK+oIbMePCKvnQtwP1Irr2hBe17qwVe8U1kP
-         N/9GukHMt5b9RS/sLbuKqTNkrLStQp8A2nVjbO7weAdBsWLYqVjVDSx9DjqSUDgm9g
-         pivHGmCjswPKw==
+        b=BVPxbAVxrZptCpmaDFfQqJWSOS4K9YsBmnXB5FJCY/QuHm6yYMLSxeloirAIvT5tE
+         LgJTW5I+jVz7JishsNAnVudHcKpVwd1mrmyNtiRdd5bufP/y0p5UYEz43qYulEKvWR
+         CwVC7eCkQQLkpavOfMxJgBDrWLGdOwgPKGNVMhwO3sE/sxStwhbpfRQJ/QU0Tgw8eY
+         gN4XYivS0ZUcXb4CY3dv0aQleoluY0CtfEaHnxBM6kSya77Stu1wNOPzD06ltdxRAf
+         /+M09WcccRkonSLutPnEkLIUsbGDoIGthxr1O9n2KnAdGB6EesHMjH417GZBBfL8Zx
+         AzDw1Dnr1nHlg==
 From:   Mark Brown <broonie@kernel.org>
-To:     krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        conor+dt@kernel.org, krzysztof.kozlowski@linaro.org,
-        YingKun Meng <mengyingkun@loongson.cn>
-Cc:     devicetree@vger.kernel.org, lgirdwood@gmail.com,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn
-In-Reply-To: <20230614122659.3402788-1-mengyingkun@loongson.cn>
-References: <20230614122659.3402788-1-mengyingkun@loongson.cn>
-Subject: Re: [PATCH v3 3/3] ASoC: dt-bindings: Add support for Loongson
- audio card
-Message-Id: <168683750444.557448.16842931306884549608.b4-ty@kernel.org>
-Date:   Thu, 15 Jun 2023 14:58:24 +0100
+To:     lgirdwood@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        perex@perex.cz, tiwai@suse.com, rf@opensource.cirrus.com,
+        shumingf@realtek.com, povik+lin@cutebit.org,
+        herve.codina@bootlin.com, ryans.lee@analog.com,
+        wangweidong.a@awinic.com, ckeepax@opensource.cirrus.com,
+        ajye_huang@compal.corp-partner.google.com,
+        sebastian.reichel@collabora.com, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?utf-8?q?=E2=80=9CRyan?= <ryan.lee.analog@gmail.com>
+Cc:     venkataprasad.potturu@amd.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230613060945.183128-1-ryan.lee.analog@gmail.com>
+References: <20230613060945.183128-1-ryan.lee.analog@gmail.com>
+Subject: Re: [PATCH V3 1/2] ASoC: dt-bindings: max98388: add amplifier
+ driver
+Message-Id: <168683750761.557448.3503529701068446770.b4-ty@kernel.org>
+Date:   Thu, 15 Jun 2023 14:58:27 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Mailer: b4 0.13-dev-c6835
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -60,11 +66,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Jun 2023 20:26:59 +0800, YingKun Meng wrote:
-> The audio card uses loongson I2S controller present in
-> 7axxx/2kxxx chips to transfer audio data.
-> 
-> On loongson platform, the chip has only one I2S controller.
+On Mon, 12 Jun 2023 23:09:44 -0700, “Ryan wrote:
+> Add dt-bindings information for Analog Devices MAX98388 I2S Amplifier
 > 
 > 
 
@@ -74,8 +77,10 @@ Applied to
 
 Thanks!
 
-[3/3] ASoC: dt-bindings: Add support for Loongson audio card
-      commit: fadccca8f33959857948e279045a3757b5f21d55
+[1/2] ASoC: dt-bindings: max98388: add amplifier driver
+      commit: 4cab2d5faf7eff9896a15be3b301150b6fbfcaba
+[2/2] ASoC: max98388: add amplifier driver
+      commit: 6a8e1d46f0621c15d2993c5e847f4f264102f93d
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
