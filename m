@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAE6B73137E
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:20:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E2BA731380
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:20:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243729AbjFOJUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 05:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54056 "EHLO
+        id S244685AbjFOJUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 05:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239276AbjFOJUq (ORCPT
+        with ESMTP id S239941AbjFOJUq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 15 Jun 2023 05:20:46 -0400
 Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF671BC3;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F423D1BEC;
         Thu, 15 Jun 2023 02:20:44 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35F7tDqF022612;
-        Thu, 15 Jun 2023 11:20:09 +0200
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35F8n71N015855;
+        Thu, 15 Jun 2023 11:20:21 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=fV+MUTfMQZ55uq32Wxz0qSm4NPFewZXzm6azDpLbunA=;
- b=d5BrOOap237y2IVKM1DsnNHEdGbytRp34z96fcvZ1wj/lBTH2wUneTU+XxmbBnebqGxa
- Du7fWNtpHN2orZJHljU4Ztu1HqT8uwodqf98NiDlRq+7/gTugrbUnDXPUsLENY5He6JM
- uoTGN9AlzuttVyr/d/ocBJ5Lp+bVWdlg44UVTZH1Bs/vsdBpZip7Uv8Zp5o/CRjfwx0v
- 8eWIvNa3WAI8qeQR/s8Ky294KDQwg2z/RlanR3WLkE7oU90LYWrKbMfF4OnhKE+KOu/b
- lxZEM0ub8cVCYd5DIK6PqPQP7oaXdru0Q9mdH7BS9MPj54/V8dNIsuVx4Jghf9/1Vllf 3w== 
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=selector1;
+ bh=p2lyRTx/f/Eq2J7X5jktzbOdWXyKg7WmlkwEC2qamrQ=;
+ b=2Y0d0BgxiEhEjkhMYX79e1MhsQBqjoNVLP2ZoVRoYUgxgaaYLjPv5taBMAKkuQW1MVQc
+ BBFuSmTYFxDn2IrkC3+vhQwSt7YPt0MhpHAb8IYldW5V629tX3fnzdj1CmusnmuaeoOV
+ TB8fBKfBc6MxlmSFw5L9xylKdWNWQ2NAJG4rFpL2ykSLpuAIPFSibMh/7kZiCEdq613X
+ a209T4RieQy4ag2gawLrsMTc/K/nLfxgnQfUpc9N6GT/7KwZcd1RKMnEEsKDZdl8ESYU
+ 4TWYyFr2wLrlWI5BvXQx6z2a6uIWSl24MEcuH1+Ii7UwjeoXFDGBt3wLkAeHNXwN1IiD 7A== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3r7vkfsqb8-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3r7wgx1em6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jun 2023 11:20:09 +0200
+        Thu, 15 Jun 2023 11:20:21 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D7DB510004A;
-        Thu, 15 Jun 2023 11:20:07 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 32E8D100046;
+        Thu, 15 Jun 2023 11:20:21 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C8CF121A231;
-        Thu, 15 Jun 2023 11:20:07 +0200 (CEST)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2A5AF21A231;
+        Thu, 15 Jun 2023 11:20:21 +0200 (CEST)
 Received: from localhost (10.201.21.210) by SHFDAG1NODE2.st.com (10.75.129.70)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 15 Jun
- 2023 11:20:06 +0200
+ 2023 11:20:20 +0200
 From:   Yann Gautier <yann.gautier@foss.st.com>
 To:     Ulf Hansson <ulf.hansson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -59,10 +59,12 @@ CC:     Conor Dooley <conor+dt@kernel.org>,
         <linux-stm32@st-md-mailman.stormreply.com>,
         <linux-arm-kernel@lists.infradead.org>,
         Yann Gautier <yann.gautier@foss.st.com>
-Subject: [PATCH 0/6] Update MMCI driver for STM32MP25
-Date:   Thu, 15 Jun 2023 11:19:55 +0200
-Message-ID: <20230615092001.1213132-1-yann.gautier@foss.st.com>
+Subject: [PATCH 1/6] dt-bindings: mmc: mmci: Add st,stm32mp25-sdmmc2 compatible
+Date:   Thu, 15 Jun 2023 11:19:56 +0200
+Message-ID: <20230615092001.1213132-2-yann.gautier@foss.st.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230615092001.1213132-1-yann.gautier@foss.st.com>
+References: <20230615092001.1213132-1-yann.gautier@foss.st.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -81,37 +83,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-STM32MP25 is a new SoC from STMicroelectronics. The machine was
-pushed by Alexandre [1] in his tree.
-On this new SoC, the SDMMC peripheral, using PL18x/MMCI driver
-has been updated to v3.
-The driver has been updated to manage this new version, and the new
-features it supports:
-* FIFO size increased from 64B to 1kB
-* IDMA size alignment/mask updated
-* New block gap hardware flow control
-* Delay block updated and dependent on SoC
+For STM32MP25, we'll need to distinguish how is managed the delay block.
+This is done through a new comptible dedicated for this SoC, as the
+delay block registers are located in SYSCFG peripheral.
 
-This series was pushed on top of next branch in Ulf's mmc tree, as it
-requires feedback clock update patch [2].
+Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
+---
+ Documentation/devicetree/bindings/mmc/arm,pl18x.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-[1] https://lore.kernel.org/lkml/59f4a900-34ee-d991-c350-265d38e7c862@foss.st.com/T/
-[2] https://lore.kernel.org/r/20230613150148.429828-1-yann.gautier@foss.st.com
-
-Yann Gautier (6):
-  dt-bindings: mmc: mmci: Add st,stm32mp25-sdmmc2 compatible
-  mmc: mmci: add stm32_idmabsize_align parameter
-  mmc: mmci: Add support for sdmmc variant revision v3.0
-  mmc: mmci: stm32: manage block gap hardware flow control
-  mmc: mmci: stm32: prepare other delay block support
-  mmc: mmci: stm32: add delay block support for STM32MP25
-
- .../devicetree/bindings/mmc/arm,pl18x.yaml    |   6 +
- drivers/mmc/host/mmci.c                       |  35 ++++
- drivers/mmc/host/mmci.h                       |   8 +-
- drivers/mmc/host/mmci_stm32_sdmmc.c           | 149 ++++++++++++++++--
- 4 files changed, 181 insertions(+), 17 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
+index 1c96da04f0e53..e47b3418b6c77 100644
+--- a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
++++ b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
+@@ -59,6 +59,12 @@ properties:
+           - const: st,stm32-sdmmc2
+           - const: arm,pl18x
+           - const: arm,primecell
++      - description: Entry for STMicroelectronics variant of PL18x for
++          STM32MP25. This dedicated compatible is used by bootloaders.
++        items:
++          - const: st,stm32mp25-sdmmc2
++          - const: arm,pl18x
++          - const: arm,primecell
+ 
+   clocks:
+     description: One or two clocks, the "apb_pclk" and the "MCLK"
 -- 
 2.25.1
 
