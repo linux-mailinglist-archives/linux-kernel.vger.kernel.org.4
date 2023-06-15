@@ -2,54 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73E637315D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 12:56:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9029C7315DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 12:57:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240444AbjFOK4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 06:56:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57894 "EHLO
+        id S237522AbjFOK5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 06:57:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238074AbjFOK4p (ORCPT
+        with ESMTP id S240508AbjFOK5q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 06:56:45 -0400
+        Thu, 15 Jun 2023 06:57:46 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF381A2
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 03:56:43 -0700 (PDT)
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C1AE1FE4
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 03:57:45 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686826600;
+        s=2020; t=1686826664;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=I/QLlkP12aZg2OG62D74WUAk4h5OegU8e3v3LQUZTFk=;
-        b=ZUbs71h1JxlcirLnjh96NF0dj08tpsOtNdYeN750JN+DnI94kftP24X6Ei1sYjMuCvdbbW
-        SlaP7MRfaAWkqAxqxqKKWOagPkcxtHWl0icsRhJUnUwhBdE2VmWkhND9lO0I+HfLog5Aki
-        L8dL303ixRxZ7sFPaxPsxHoEkRj+yIWt037CFnS0ng0Cr31Rs7SHJ+OGnBTg+e55ron1Oi
-        Fd04WmRxo8H4CN+8hLRhfzzIFoy+3lba7XUqzCRVayZ4tFYodz+7Gmgg0AE51t8Xr6xA+y
-        2TAKNT42biJ7NLEHi5NyC6VJ3jky8/TOji47halPux/b0Z47Asf1vxZzzFdPLQ==
+        bh=xg+KmiB2qeRLE7ZrjzFtf6vdLQX6U7TxQqVVMe4Gw7U=;
+        b=o1LRosGxzVcv13shcC7WuDak9twSuJhZ97F4x02wv6+4s4KEtIjyjerU0nM09IqqIbcL8H
+        qoyNmx+WUcdmFKuNhJHtujb/P96a3begDsnUFTQawha2MnU9XHwBxKvo0loajFIYCmSDUs
+        vRWo1ME/txaLEh+KJy0ANzD/qmMjOtGSHG39mcHl40KKJQjJNdzSov/BGHoGpd81hHHB8u
+        TTAXQHuBiUrBu194kSVBCf4uyoZt/eOeYvzFAgPM1Oz394Nmpbx4cd34vjaK9jM35Kh8uK
+        fuNElcQMahDJh5L2ZdM6WEYXojs7f/Ym8kxqbyBL+yafijLDPIr9lpCNl0C5aw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686826600;
+        s=2020e; t=1686826664;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=I/QLlkP12aZg2OG62D74WUAk4h5OegU8e3v3LQUZTFk=;
-        b=ggyL+eW02COW//bhBK3KlTKd60ubVbq/Q6p4lXVX1rIuoTmVll0DeBr+qgdLI/EBxtSX3T
-        btBb0YyjAqniYTAA==
-To:     linux-kernel@vger.kernel.org
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [PATCH v3 2/2] signal: Don't disable preemption in ptrace_stop() on PREEMPT_RT.
-Date:   Thu, 15 Jun 2023 12:56:27 +0200
-Message-Id: <20230615105627.1311437-3-bigeasy@linutronix.de>
-In-Reply-To: <20230615105627.1311437-1-bigeasy@linutronix.de>
-References: <20230615105627.1311437-1-bigeasy@linutronix.de>
+        bh=xg+KmiB2qeRLE7ZrjzFtf6vdLQX6U7TxQqVVMe4Gw7U=;
+        b=zxM+xm/dRWYaNIGAF4wqlBFlWMDH2hI1jUxWHgXm9r2Evy1BD7K5Z+bfIu8KH4yJ7KZxMy
+        w6G22YJJO2aqaBBg==
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Tony Battersby <tonyb@cybernetics.com>,
+        Ashok Raj <ashok.raj@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Ashok Raj <ashok.raj@intel.com>
+Subject: Re: [patch V2 3/8] x86/smp: Remove pointless wmb() from
+ native_stop_other_cpus()
+In-Reply-To: <20230615085828.GC1683497@hirez.programming.kicks-ass.net>
+References: <20230613115353.599087484@linutronix.de>
+ <20230613121615.762734722@linutronix.de>
+ <20230615085828.GC1683497@hirez.programming.kicks-ass.net>
+Date:   Thu, 15 Jun 2023 12:57:43 +0200
+Message-ID: <874jn9802g.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -60,52 +65,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On PREEMPT_RT keeping preemption disabled during the invocation of
-cgroup_enter_frozen() is a problem because the function acquires css_set_lo=
-ck
-which is a sleeping lock on PREEMPT_RT and must not be acquired with disabl=
-ed
-preemption.
-The preempt-disabled section is only for performance optimisation
-reasons and can be avoided.
+On Thu, Jun 15 2023 at 10:58, Peter Zijlstra wrote:
 
-Extend the comment and don't disable preemption before scheduling on
-PREEMPT_RT.
+> On Tue, Jun 13, 2023 at 02:17:58PM +0200, Thomas Gleixner wrote:
+>> The wmb() after the successfull atomic_cmpxchg() is complete voodoo along
+>> with the comment stating "sync above data before sending IRQ".
+>> 
+>> There is no "above" data except for the atomic_t stopping_cpu which has
+>> just been acquired. The reboot IPI handler does not check any data and
+>> unconditionally disables the CPU.
+>> 
+>> Remove this cargo cult barrier.
+>> 
+>> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+>> Reviewed-by: Ashok Raj <ashok.raj@intel.com>
+>> ---
+>>  arch/x86/kernel/smp.c |    3 ---
+>>  1 file changed, 3 deletions(-)
+>> 
+>> --- a/arch/x86/kernel/smp.c
+>> +++ b/arch/x86/kernel/smp.c
+>> @@ -174,9 +174,6 @@ static void native_stop_other_cpus(int w
+>>  
+>>  		atomic_set(&stop_cpus_count, num_online_cpus() - 1);
+>>  
+>> -		/* sync above data before sending IRQ */
+>> -		wmb();
+>> -
+>>  		apic_send_IPI_allbutself(REBOOT_VECTOR);
+>
+> There's a second one a little below. That too should go.
 
-Acked-by: Oleg Nesterov <oleg@redhat.com>
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
- kernel/signal.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+Duh, yes.
 
-diff --git a/kernel/signal.c b/kernel/signal.c
-index da017a5461163..e887cd684d17a 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -2328,11 +2328,20 @@ static int ptrace_stop(int exit_code, int why, unsi=
-gned long message,
- 	 * The preempt-disable section ensures that there will be no preemption
- 	 * between unlock and schedule() and so improving the performance since
- 	 * the ptracer has no reason to sleep.
-+	 *
-+	 * On PREEMPT_RT locking tasklist_lock does not disable preemption.
-+	 * Therefore the task can be preempted (after
-+	 * do_notify_parent_cldstop()) before unlocking tasklist_lock so there
-+	 * is no benefit in doing this. The optimisation is harmful on
-+	 * PEEMPT_RT because the spinlock_t (in cgroup_enter_frozen()) must not
-+	 * be acquired with disabled preemption.
- 	 */
--	preempt_disable();
-+	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
-+		preempt_disable();
- 	read_unlock(&tasklist_lock);
- 	cgroup_enter_frozen();
--	preempt_enable_no_resched();
-+	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
-+		preempt_enable_no_resched();
- 	schedule();
- 	cgroup_leave_frozen(true);
-=20
---=20
-2.40.1
+> More to the point, the apic_send_*() functions should be the ones that
+> ensure this if required etc.. See for example weak_wrmsr_fence() for
+> x2apic.
 
+Correct.
