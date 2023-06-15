@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74F2A731AF0
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89126731AEF
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:13:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344967AbjFOONI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 10:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
+        id S1344950AbjFOONE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 10:13:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344911AbjFOOMz (ORCPT
+        with ESMTP id S1344910AbjFOOMr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 10:12:55 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D8F273E
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 07:12:47 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35FE3pF5025945;
+        Thu, 15 Jun 2023 10:12:47 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3277C2683
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 07:12:46 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35FE4O1N019435;
         Thu, 15 Jun 2023 09:12:10 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=EhJys9uuBbtQEZ3Oj5s1X5sALPRgYIm5gNpiZJZVlEY=;
- b=SEUYuhvpEVlIMtL9a036T+B+GcrI7aU8S7BT3DI254P+KskeJ+Mj0ytg44z4SeAfgN6o
- 2Mw9xXB9ZLOXrA864u95Elffgw64iG92hl3NCjtNUaID+3bxTdpnsnmG9duPd0KxSfI6
- baufsgvQ6d/W5MQGVnr/atgJpSSyi0WCqTY3HkYmgdMC7KXiRcDpwy5pGPgN+TuD4IMj
- vxH7Ysp6BVkXEYoZcbCYEQdg6BFuLYUeAXd5eZlfNHndqZbH3Pjbyr2sFBWHqdQHnYur
- zvxY6Olw0IEXWZ1j9WoEBW3/6JPYNE77bg12U5vAPVUppr0xQqwG2Fa9Gv1frZfqLRo0 5g== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3r75nu9xmp-1
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=PODMain02222019;
+ bh=AjGNsoyoK5D+RJq6nyibBF7s8NAROrXXFDradtiR7EE=;
+ b=cToN3yGLlHYejStDOuS6sTL8/BmqCwQuEn+N30FJvc6ckt8QbzGmjLMQsmFk7smlBEQN
+ 07TOSvGxCBrZwfrC7pCLx5OrnHF7Ow6LDkPOlL8lqzXfAxoCZHFlAOj01kPWqzbYpu7z
+ UdpNQ0YiybPlYaDcE3xKKouYzRPZRc9OEeiTR9cNGM6PGvAVq3PWa8N3WUQkqTVglY0j
+ D8PK+/yDt6eYhepp20pkcAQzvdWFtQy+TPly0IoDDTqaOUmSFdVvezj96XoYwmkTDFS7
+ mg7JYQXvg3ZyJtZTHlZSwmUMI+RT5IuXKbztpvbC9k0jnXQ/72BEgMPScmGScdxaMqlk fA== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3r4pk0d8fp-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jun 2023 09:12:09 -0500
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 15 Jun 2023 09:12:10 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Thu, 15 Jun
  2023 15:12:08 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
- Transport; Thu, 15 Jun 2023 15:12:08 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Thu, 15 Jun 2023 15:12:08 +0100
 Received: from edi-sw-dsktp-006.ad.cirrus.com (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.127])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 21AB911D4;
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 28DAB11DC;
         Thu, 15 Jun 2023 14:12:08 +0000 (UTC)
 From:   Richard Fitzgerald <rf@opensource.cirrus.com>
 To:     <vkoul@kernel.org>, <yung-chuan.liao@linux.intel.com>,
@@ -47,15 +47,17 @@ To:     <vkoul@kernel.org>, <yung-chuan.liao@linux.intel.com>,
 CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
         <patches@opensource.cirrus.com>,
         Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH 1/2] soundwire: bus: Prevent lockdep asserts when stream has multiple buses
-Date:   Thu, 15 Jun 2023 15:12:07 +0100
-Message-ID: <20230615141208.679011-1-rf@opensource.cirrus.com>
+Subject: [PATCH 2/2] soundwire: stream: Make master_list ordered to prevent deadlocks
+Date:   Thu, 15 Jun 2023 15:12:08 +0100
+Message-ID: <20230615141208.679011-2-rf@opensource.cirrus.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230615141208.679011-1-rf@opensource.cirrus.com>
+References: <20230615141208.679011-1-rf@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: C-MgO0yxO_bhSMFH9VvY9RiYw3ycGICJ
-X-Proofpoint-GUID: C-MgO0yxO_bhSMFH9VvY9RiYw3ycGICJ
+X-Proofpoint-ORIG-GUID: mnNUJZBw1Evo7A57D6VUzeGSGj1bzS74
+X-Proofpoint-GUID: mnNUJZBw1Evo7A57D6VUzeGSGj1bzS74
 X-Proofpoint-Spam-Reason: safe
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
@@ -66,105 +68,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Give the bus_lock and msg_lock of each bus a different unique key
-so that it is possible to acquire the locks of multiple buses
-without lockdep asserting a possible deadlock.
+Always add buses to the stream->master_list in a fixed order.
+The unique bus->id is used to order the adding of buses to the
+list.
 
-Using mutex_init() to initialize a mutex gives all those mutexes
-the same lock class. Lockdep checking treats it as an error to
-attempt to take a mutex while already holding a mutex of the same
-class. This causes a lockdep assert when sdw_acquire_bus_lock()
-attempts to lock multiple buses, and when do_bank_switch() takes
-multiple msg_lock.
+This prevents lockdep asserts and possible deadlocks on streams
+that have multiple buses.
 
-[  138.697350] WARNING: possible recursive locking detected
-[  138.697366] 6.3.0-test #1 Tainted: G            E
-[  138.697380] --------------------------------------------
-[  138.697394] play/903 is trying to acquire lock:
-[  138.697409] ffff99b8c41aa8c8 (&bus->bus_lock){+.+.}-{3:3}, at:
-sdw_prepare_stream+0x52/0x2e0
-[  138.697443]
-               but task is already holding lock:
-[  138.697468] ffff99b8c41af8c8 (&bus->bus_lock){+.+.}-{3:3}, at:
-sdw_prepare_stream+0x52/0x2e0
-[  138.697493]
-               other info that might help us debug this:
-[  138.697521]  Possible unsafe locking scenario:
+sdw_acquire_bus_lock() takes bus_lock in the order that buses
+are listed in stream->master_list. do_bank_switch() takes all
+the msg_lock in the same order.
 
-[  138.697540]        CPU0
-[  138.697550]        ----
-[  138.697559]   lock(&bus->bus_lock);
-[  138.697570]   lock(&bus->bus_lock);
-[  138.697581]
-                *** DEADLOCK ***
+To prevent a lockdep assert, and a possible real deadlock, the
+relative order of taking these mutexes must always be the same.
 
-Giving each mutex a unique key allows multiple to be held
-without triggering a lockdep assert. But note that it does not
-allow them to be taken in one order then a different order.
-If two mutexes are taken in the order A, B then they must
-always be taken in that order otherwise they could deadlock.
+For example, if a stream takes the mutexes in the order
+(bus0, bus1) lockdep will assert if another stream takes them
+in the order (bus1, bus0).
+
+More complex relative ordering will also assert, for example
+if two streams take (bus0, bus1) and (bus1, bus2), then a third
+stream takes (bus2, bus0).
+
+Previously sdw_stream_add_master() simply added the given bus
+to the end of the list, requiring the caller to guarantee that
+buses are added in a fixed order. This isn't reasonable or
+necessary - it's an internal implementation detail that should
+not be exposed by the API. It doesn't really make sense when
+there could be multiple independent calling drivers, to say
+"you must add your buses in the same order as a different driver,
+that you don't know about, added them".
 
 Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
 ---
- drivers/soundwire/bus.c       | 15 +++++++++++++--
- include/linux/soundwire/sdw.h |  3 +++
- 2 files changed, 16 insertions(+), 2 deletions(-)
+ drivers/soundwire/stream.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
-index b44f8d0affa6..dba920ec88f6 100644
---- a/drivers/soundwire/bus.c
-+++ b/drivers/soundwire/bus.c
-@@ -69,8 +69,17 @@ int sdw_bus_master_add(struct sdw_bus *bus, struct device *parent,
- 		return -EINVAL;
- 	}
+diff --git a/drivers/soundwire/stream.c b/drivers/soundwire/stream.c
+index 93baca08a0de..d77a8a0d42c8 100644
+--- a/drivers/soundwire/stream.c
++++ b/drivers/soundwire/stream.c
+@@ -1150,7 +1150,8 @@ static struct sdw_master_runtime
+ *sdw_master_rt_alloc(struct sdw_bus *bus,
+ 		     struct sdw_stream_runtime *stream)
+ {
+-	struct sdw_master_runtime *m_rt;
++	struct sdw_master_runtime *m_rt, *walk_m_rt;
++	struct list_head *insert_after;
  
--	mutex_init(&bus->msg_lock);
--	mutex_init(&bus->bus_lock);
+ 	m_rt = kzalloc(sizeof(*m_rt), GFP_KERNEL);
+ 	if (!m_rt)
+@@ -1159,7 +1160,20 @@ static struct sdw_master_runtime
+ 	/* Initialization of Master runtime handle */
+ 	INIT_LIST_HEAD(&m_rt->port_list);
+ 	INIT_LIST_HEAD(&m_rt->slave_rt_list);
+-	list_add_tail(&m_rt->stream_node, &stream->master_list);
++
 +	/*
-+	 * Give each bus_lock and msg_lock a unique key so that lockdep won't
-+	 * trigger a deadlock warning when the locks of several buses are
-+	 * grabbed during configuration of a multi-bus stream.
++	 * Add in order of bus id so that when taking the bus_lock
++	 * of multiple buses they will always be taken in the same
++	 * order to prevent a mutex deadlock.
 +	 */
-+	lockdep_register_key(&bus->msg_lock_key);
-+	__mutex_init(&bus->msg_lock, "msg_lock", &bus->msg_lock_key);
-+
-+	lockdep_register_key(&bus->bus_lock_key);
-+	__mutex_init(&bus->bus_lock, "bus_lock", &bus->bus_lock_key);
-+
- 	INIT_LIST_HEAD(&bus->slaves);
- 	INIT_LIST_HEAD(&bus->m_rt_list);
++	insert_after = &stream->master_list;
++	list_for_each_entry_reverse(walk_m_rt, &stream->master_list, stream_node) {
++		if (walk_m_rt->bus->id < bus->id) {
++			insert_after = &walk_m_rt->stream_node;
++			break;
++		}
++	}
++	list_add(&m_rt->stream_node, insert_after);
  
-@@ -181,6 +190,8 @@ void sdw_bus_master_delete(struct sdw_bus *bus)
- 	sdw_master_device_del(bus);
+ 	list_add_tail(&m_rt->bus_node, &bus->m_rt_list);
  
- 	sdw_bus_debugfs_exit(bus);
-+	lockdep_unregister_key(&bus->bus_lock_key);
-+	lockdep_unregister_key(&bus->msg_lock_key);
- 	ida_free(&sdw_bus_ida, bus->id);
- }
- EXPORT_SYMBOL(sdw_bus_master_delete);
-diff --git a/include/linux/soundwire/sdw.h b/include/linux/soundwire/sdw.h
-index c076a3f879b3..f523ceabd059 100644
---- a/include/linux/soundwire/sdw.h
-+++ b/include/linux/soundwire/sdw.h
-@@ -5,6 +5,7 @@
- #define __SOUNDWIRE_H
- 
- #include <linux/bug.h>
-+#include <linux/lockdep_types.h>
- #include <linux/mod_devicetable.h>
- #include <linux/bitfield.h>
- 
-@@ -907,7 +908,9 @@ struct sdw_bus {
- 	struct list_head slaves;
- 	DECLARE_BITMAP(assigned, SDW_MAX_DEVICES);
- 	struct mutex bus_lock;
-+	struct lock_class_key bus_lock_key;
- 	struct mutex msg_lock;
-+	struct lock_class_key msg_lock_key;
- 	int (*compute_params)(struct sdw_bus *bus);
- 	const struct sdw_master_ops *ops;
- 	const struct sdw_master_port_ops *port_ops;
 -- 
 2.30.2
 
