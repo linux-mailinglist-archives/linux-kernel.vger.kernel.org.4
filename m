@@ -2,84 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 330C773115E
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:51:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3247073115B
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245277AbjFOHvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 03:51:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
+        id S244523AbjFOHuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 03:50:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245340AbjFOHuG (ORCPT
+        with ESMTP id S245400AbjFOHuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 03:50:06 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD50C119
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:50:03 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f762b3227dso624309e87.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:50:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686815402; x=1689407402;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=J2qg/OhTZMxFrneoAf57EQq0qnVlyXa5i01t43MlX9w=;
-        b=e4u3NTu/pqU31uuPTG/eKpW/QMItHv1uBLmHN+OELfnX1s9Mil6RX5ENuCEd+YZnhG
-         7OUhGO22mHvfSKxtVEmzTjhrKYa2shwfgLFcP1F1bsr57fY9WXdGpU8PEa1qmV+/UOso
-         rmHHLXWa5BrPA+jFwFbHBl9kFvdSv6dsJlBQlBRHU5F/6UNHerM+drMF9Bn8JUFM6n8n
-         d88djVnlSmR10vM+lao15yr875PzITrl+A8BRXhuhvPs/ko0IXtMGODa7qTaaMkjRSEM
-         utKbYzRpfW42pN4JgTL7b4NDD/62ayF+SVwxOQrq4dNQFDCEldZ2/Wf7Z2pkHZgSLy5e
-         WoyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686815402; x=1689407402;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J2qg/OhTZMxFrneoAf57EQq0qnVlyXa5i01t43MlX9w=;
-        b=U+S5RvXBMzsC6ebVvHbnFeRCbuDUMSDiHWZxAZL0qlx+MM0xefwFfKuKxPA7026us7
-         1KdmGBs3fLlwklZaes62gJl5h+nCDvX9OAbyHmgI/9jQ/nyHUoOIPaUq2D484qUYmTO7
-         7VcSWAvNQKDxYKOdZ754mY2WRrNyltxBazhxO8hVJ3Ctbiie7Md5SibhNjjNeYgDrMN9
-         xT4hxPJeM7H4etiz76VcN/Ja23pcCSKibIagb1xVz1jSg1HLCG0S5mqch2z9u5S1jKOs
-         NjpvCicstahMeMsEO9vYAKXVjm0YeOKRKIaf/tuyJrA1TO2GH1HPG7+zkezHJmPHScdt
-         NOWQ==
-X-Gm-Message-State: AC+VfDyWJe/+73Hfh7EfZ3Y9+tEpLkDTFoWKJ0lM6APRUwv2wGKvFo+s
-        KOGg8HmelfO/NI+5Hglgd12+Lg==
-X-Google-Smtp-Source: ACHHUZ7U+ZUkuF8q6VsyYsmqbxyJo+bKxv0x5R1kei09Xwyk3EU60144Jc9nNsH0GhPbxK3PfwyqiQ==
-X-Received: by 2002:a19:9118:0:b0:4f2:147b:7ee with SMTP id t24-20020a199118000000b004f2147b07eemr1305042lfd.20.1686815401899;
-        Thu, 15 Jun 2023 00:50:01 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id p20-20020a19f014000000b004f749b64bbcsm1243348lfc.69.2023.06.15.00.50.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 00:50:01 -0700 (PDT)
-Message-ID: <825f06c1-cf87-c0e3-a9fc-f4ec0edaa0f8@linaro.org>
-Date:   Thu, 15 Jun 2023 09:49:59 +0200
+        Thu, 15 Jun 2023 03:50:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64CE8C7;
+        Thu, 15 Jun 2023 00:50:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0091860DFF;
+        Thu, 15 Jun 2023 07:50:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5D342C433C8;
+        Thu, 15 Jun 2023 07:50:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686815419;
+        bh=uXXz4yd7ee+6QGrv/NuvRMJeE5gSJfqC9YZGaaJo6WU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=khPEWZ0o7q7MaBPuSsXiKEQH8CeXfdRoTOLtbN1SWp3dHEOPGoIWCFLydNrd1iiaO
+         gleU9AXCQfBQelJC/Cqu4itv3ZNHzG+CvBC+Spxia8wF6Bz2aKoSlipAbQAb6Uki+G
+         WFXK7/8HE6e67lvyk27q2uuId9Dj9eRgLxLdyHji8veoUF3/9YGJE97q+MengkmFg+
+         +Qu65VFyQfqCCvZrBj1ZpCFkTGhdjuYhwep33QUsuGsRkkYnVxqtkn9/ea9u+D1t23
+         2jxxW/dZ3dY+5rofQM39KUR5A121TkCoAE85ylac7T4MTJl+Cgj9/a58Ev97bseqeI
+         MxoJ2ACnuw3+g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 33725C3274B;
+        Thu, 15 Jun 2023 07:50:19 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Evan Green <evgreen@chromium.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230526-topic-smd_icc-v6-0-263283111e66@linaro.org>
- <20230526-topic-smd_icc-v6-18-263283111e66@linaro.org>
- <e2afd4bde3e85db358d50553a60a744f.sboyd@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: Re: [PATCH v6 18/22] clk: qcom: smd-rpm: Separate out interconnect
- bus clocks
-In-Reply-To: <e2afd4bde3e85db358d50553a60a744f.sboyd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] s390/ism: Fix trying to free already-freed IRQ by repeated
+ ism_dev_exit()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168681541920.22382.10439773407681596212.git-patchwork-notify@kernel.org>
+Date:   Thu, 15 Jun 2023 07:50:19 +0000
+References: <20230613-ism-rmmod-crash-v1-1-359ac51e18c9@linux.ibm.com>
+In-Reply-To: <20230613-ism-rmmod-crash-v1-1-359ac51e18c9@linux.ibm.com>
+To:     Julian Ruess <julianr@linux.ibm.com>
+Cc:     wintera@linux.ibm.com, wenjia@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        davem@davemloft.net, jaka@linux.ibm.com, raspl@linux.ibm.com,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        schnelle@linux.ibm.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,56 +64,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15.06.2023 02:48, Stephen Boyd wrote:
-> Quoting Konrad Dybcio (2023-06-14 11:04:37)
->> The interconnect bus clocks are now handled within the ICC framework.
->> They still however need to get a kickstart *before* we call
->> clk_smd_rpm_enable_scaling(), or RPM will assume that they should all
->> be running at 0 kHz and the system will inevitably die.
->>
->> Separate them out to ensure such a kickstart can still take place.
->>
->> As a happy accident, the file got smaller:
->>
->> Total: Before=41951, After=41555, chg -0.94%
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  drivers/clk/qcom/clk-smd-rpm.c | 278 +++++++++++++++++------------------------
->>  1 file changed, 115 insertions(+), 163 deletions(-)
->>
->> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
->> index 6e7f0438e8b8..0d1d97659d59 100644
->> --- a/drivers/clk/qcom/clk-smd-rpm.c
->> +++ b/drivers/clk/qcom/clk-smd-rpm.c
->> @@ -498,13 +506,69 @@ DEFINE_CLK_SMD_RPM_XO_BUFFER(div_clk1, 11, 19200000);
->>  DEFINE_CLK_SMD_RPM_XO_BUFFER(div_clk2, 12, 19200000);
->>  DEFINE_CLK_SMD_RPM_XO_BUFFER(div_clk3, 13, 19200000);
->>  
->> +static struct clk_smd_rpm *bimc_pcnoc_icc_clks[] = {
-> 
-> Can these be const arrays?
-Sorta, look below.
+Hello:
 
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
+
+On Tue, 13 Jun 2023 14:25:37 +0200 you wrote:
+> This patch prevents the system from crashing when unloading the ISM module.
 > 
->> +       &clk_smd_rpm_bimc_clk,
->> +       &clk_smd_rpm_bus_0_pcnoc_clk,
->> +};
->> +
+> How to reproduce: Attach an ISM device and execute 'rmmod ism'.
+> 
+> Error-Log:
+> - Trying to free already-free IRQ 0
+> - WARNING: CPU: 1 PID: 966 at kernel/irq/manage.c:1890 free_irq+0x140/0x540
+> 
 > [...]
->> @@ -1332,6 +1275,15 @@ static int rpm_smd_clk_probe(struct platform_device *pdev)
->>                         goto err;
->>         }
->>  
->> +       for (i = 0; i < desc->num_icc_clks; i++) {
->> +               if (!desc->icc_clks[i])
->> +                       continue;
->> +
->> +               ret = clk_smd_rpm_handoff(desc->icc_clks[i]);
-> 
-> This API can probably take a const struct clk_smd_rpm pointer as well.
-It would be great, but ideally we want to set r->enabled in that func
-for !bus clocks (for unused clk cleanup). I could probably introduce a
-separate function for the icc clocks that takes const.
 
-Konrad
+Here is the summary with links:
+  - s390/ism: Fix trying to free already-freed IRQ by repeated ism_dev_exit()
+    https://git.kernel.org/netdev/net/c/78d0f94902af
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
