@@ -2,165 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A520C731C56
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 17:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF887731C59
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 17:20:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344670AbjFOPUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 11:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53530 "EHLO
+        id S1344831AbjFOPUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 11:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240856AbjFOPT7 (ORCPT
+        with ESMTP id S230500AbjFOPUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 11:19:59 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91326107;
-        Thu, 15 Jun 2023 08:19:58 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35FCIhx0021879;
-        Thu, 15 Jun 2023 17:19:27 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=JBhEQ1HO2ejCLfpB19AwgOlNqtqOQiA2AZp9z8Cz/1E=;
- b=Kz7aSIl0ySOWsOrs46XZZhgzfeJbL9QUl4Wam435CzpizWNt/RYmMamsl0S8WCu96vGj
- iwDNO7TF8gK+N71HgX6/9ylUTHJGKyhE43XGmaCFemfOXw7xIhOZ1aNan8l0EKDimGBQ
- sLplos3q/o8VvEqnC03HmfRvOQNzH1z7B42J1iYx43fpygidsIOHF2qko+iDUI3DbIM7
- FXmPZda05/qalAjzKXZ+IRbnhtim1uGMSTb3PiXUrm8I43cCOtI4ROYQyE8Ncmm9D7Ts
- RMTyPePi+ItanfQ/4oF2TBONq2gGzk8OSA5x1LUVBYwgFqFgDEPIcuo4iCcZZ6L/nFLJ 9w== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3r7y8sjjhe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jun 2023 17:19:27 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0522410002A;
-        Thu, 15 Jun 2023 17:19:27 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id F062223152C;
-        Thu, 15 Jun 2023 17:19:26 +0200 (CEST)
-Received: from [10.201.21.210] (10.201.21.210) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 15 Jun
- 2023 17:19:23 +0200
-Message-ID: <266de9f5-826a-c1bf-be8d-11f5e27c87dc@foss.st.com>
-Date:   Thu, 15 Jun 2023 17:19:22 +0200
+        Thu, 15 Jun 2023 11:20:51 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF69412E;
+        Thu, 15 Jun 2023 08:20:49 -0700 (PDT)
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 218571EC0858;
+        Thu, 15 Jun 2023 17:20:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1686842448;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=Fj2iR/eMNidl70OgvRwKnMRdIhxWJ2i0N+CGx9LcEN0=;
+        b=AJGPUdi61ZBaqpDqZmB3+nm7hun4kZghQhFbT0cff9mIH8Dsvs0wJPHqsbLBOLjoIKnJ6O
+        FxO+7Aas0CR5bdz4TK7sO0Yj14hlakRuA/KpJ0CCVehWITCbVn3S7RVHh+47qISimcB5ch
+        EoUey7QLdUZyYRGUEGLCaOzavVltP+g=
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+        header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id ps0FFOcVRvk4; Thu, 15 Jun 2023 15:20:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+        t=1686842445; bh=Fj2iR/eMNidl70OgvRwKnMRdIhxWJ2i0N+CGx9LcEN0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aOnMU30/kUJOo0orh+sUwrRUwzig7VEoiQIF2cg81LGer8eSjmiUCF1Y5xiAN0K0K
+         WR+0hIVvobYTJWzPvj0BhnRJ2MMhUeFFyrPNwsIhH1yRMJ4fkAPgI/BHlWjF16h2R2
+         7c/mzUNNVOl9ZP/EE9DsJ/LmNWVGVFwdTiUaW9800dL7nMlt+IJ5lFIJTkre4fG/Qu
+         horKT79iyetJvC2Bo/dC4zWyVTGIcSp6M08QOoVjST4HsC0LB26GodwsaBXzDc2Qpg
+         c9gZEq+liMntlnVXUqtiVvFSj9wvx6K88QCdqchnIDDpl+GlIfP6wq9UkBsA/AbR67
+         nV4Ccpy3ABlaFzHGNKifmbLIcp7n1fHEGEUwubFztKqc7d5B1dGKmNa1Th5Nq6kwkj
+         qsduR2e9ui0jXLwPgAytDHZS+BOxM6rRqR8BTMxBWBMidGj6ZO3T0Q/w3k6woFAcxv
+         KIZ0yYYLpURnij4cbXS6+5Qoy03w4QGKy6qMEK+A/K7EOaxw1DKBT4L+ucYgNqzTX0
+         HEwtYB8/ey9s7uiwBC71ojKUzn5o0veY0zuaimW8nGrDIFUV+uYpjLoKenGqRnsCV9
+         AB6chIt1TvHc3kSpCj43BvjUGuRxPhcW0qb+v5ln12V6c4pjMyAbaEG7UqzmdAMYj3
+         h+8cdxd5WHNrqApw84MjUImY=
+Received: from zn.tnic (p200300ea971DC500329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c500:329c:23ff:fea6:a903])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+        (No client certificate requested)
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BBE6640E018C;
+        Thu, 15 Jun 2023 15:20:40 +0000 (UTC)
+Date:   Thu, 15 Jun 2023 17:20:31 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tony.luck@intel.com, x86@kernel.org
+Subject: Re: [PATCH] x86/mce: Schedule mce_setup() on correct CPU for CPER
+ decoding
+Message-ID: <20230615152031.GCZIssPyJjGcikn9iA@fat_crate.local>
+References: <20230417162006.3292715-1-yazen.ghannam@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/6] dt-bindings: mmc: mmci: Add st,stm32mp25-sdmmc2
- compatible
-Content-Language: en-US
-From:   Yann Gautier <yann.gautier@foss.st.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        <linux-kernel@vger.kernel.org>, Marek Vasut <marex@denx.de>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Xiang wangx <wangxiang@cdjrlc.com>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230615092001.1213132-1-yann.gautier@foss.st.com>
- <20230615092001.1213132-2-yann.gautier@foss.st.com>
- <CAPDyKFqJsqmNzeRg8hj55yUEMSycOWsmKVKsMWk4Qu7Y8_dNzg@mail.gmail.com>
- <3b6781cb-8f59-e70a-bcf8-9fb48fa47cbf@foss.st.com>
-In-Reply-To: <3b6781cb-8f59-e70a-bcf8-9fb48fa47cbf@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.201.21.210]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-15_11,2023-06-15_01,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230417162006.3292715-1-yazen.ghannam@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/15/23 17:16, Yann Gautier wrote:
-> On 6/15/23 15:20, Ulf Hansson wrote:
->> On Thu, 15 Jun 2023 at 11:20, Yann Gautier <yann.gautier@foss.st.com> 
->> wrote:
->>>
->>> For STM32MP25, we'll need to distinguish how is managed the delay block.
->>> This is done through a new comptible dedicated for this SoC, as the
->>> delay block registers are located in SYSCFG peripheral.
->>>
->>> Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
->>> ---
->>>   Documentation/devicetree/bindings/mmc/arm,pl18x.yaml | 6 ++++++
->>>   1 file changed, 6 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml 
->>> b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
->>> index 1c96da04f0e53..e47b3418b6c77 100644
->>> --- a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
->>> +++ b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
->>> @@ -59,6 +59,12 @@ properties:
->>>             - const: st,stm32-sdmmc2
->>>             - const: arm,pl18x
->>>             - const: arm,primecell
->>> +      - description: Entry for STMicroelectronics variant of PL18x for
->>> +          STM32MP25. This dedicated compatible is used by bootloaders.
->>
->> What does this last sentence mean? Can we drop it?
-> 
-> Hi Ulf,
-> 
-> I just copied (and added "for STM32MP25") what was done for STM32MP1x:
->        - description: Entry for STMicroelectronics variant of PL18x.
->            This dedicated compatible is used by bootloaders.
->          items:
->            - const: st,stm32-sdmmc2
->            - const: arm,pl18x
->            - const: arm,primecell
->        - description: Entry for STMicroelectronics variant of PL18x for
->            STM32MP25. This dedicated compatible is used by bootloaders.
->          items:
->            - const: st,stm32mp25-sdmmc2
->            - const: arm,pl18x
->            - const: arm,primecell
-> 
-> 
-> Should I remove (or adapt) both descriptions?
-> 
-> 
-> Best regards,
-> Yann
-> 
+On Mon, Apr 17, 2023 at 04:20:06PM +0000, Yazen Ghannam wrote:
+> @@ -97,20 +102,13 @@ int apei_smca_report_x86_error(struct cper_ia_proc_ctx *ctx_info, u64 lapic_id)
+>  	if (ctx_info->reg_arr_size < 48)
+>  		return -EINVAL;
+>  
+> -	mce_setup(&m);
+> -
+> -	m.extcpu = -1;
+> -	m.socketid = -1;
+> -
+> -	for_each_possible_cpu(cpu) {
+> -		if (cpu_data(cpu).initial_apicid == lapic_id) {
+> -			m.extcpu = cpu;
+> -			m.socketid = cpu_data(m.extcpu).phys_proc_id;
+> +	for_each_possible_cpu(cpu)
+> +		if (cpu_data(cpu).initial_apicid == lapic_id)
+>  			break;
+> -		}
+> -	}
+>  
+> -	m.apicid = lapic_id;
+> +	if (smp_call_function_single(cpu, __mce_setup, &m, 1))
 
-At the time the patch was done it was really just used by bootloaders.
-But as it is now used in the driver for delay block, I should remove the 
-second sentence.
+I can see the following call-chain from NMI context which is a no-no:
+
+ghes_notify_nmi
+|-> ghes_in_nmi_spool_from_list
+    |-> ghes_in_nmi_queue_one_entry
+        |-> __ghes_panic
+	    |-> __ghes_print_estatus
+	        |-> cper_estatus_print
+		    |-> cper_estatus_print_section
+		        |-> cper_print_proc_ia
+			    |-> arch_apei_report_x86_error
+			        |-> apei_smca_report_x86_error
+				    |-> smp_call_function_single
 
 
-Yann
+-- 
+Regards/Gruss,
+    Boris.
 
->>
->>> +        items:
->>> +          - const: st,stm32mp25-sdmmc2
->>> +          - const: arm,pl18x
->>> +          - const: arm,primecell
->>>
->>>     clocks:
->>>       description: One or two clocks, the "apb_pclk" and the "MCLK"
->>> -- 
->>> 2.25.1
->>>
->>
->> Kind regards
->> Uffe
-> 
-
+https://people.kernel.org/tglx/notes-about-netiquette
