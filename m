@@ -2,142 +2,771 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD5C730F63
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9FE6730F65
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243817AbjFOGdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 02:33:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46170 "EHLO
+        id S229447AbjFOGdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 02:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243534AbjFOGcz (ORCPT
+        with ESMTP id S243766AbjFOGc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 02:32:55 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2048.outbound.protection.outlook.com [40.107.94.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0F826B1;
-        Wed, 14 Jun 2023 23:32:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kQYcUnJ3uFatuufn/taHfa82cRxX0hmhkC/E3i7tlHv8db4mX2Gx8Z9lLcEWUIK5lgl92ak8SwGKR1cOXkQU29sYb862TmHemPNaXeAhfo7pI5mOy219AJTT/vsd4tFRd7fU1StGxdYhYvpRvc4k7k2hwf1nsOwpBlpjaBRE2IuYVOJNn8d8tcmP81V1F20KZxQBhj/0/5W8V4ydy9i72qvDqYgtfjC5HHzCFHiLYzhIPwaY7BoYGkk9UU6N2dgZ+HiqUGwed5N9ERk/U7FAgeMcg+siJJSFx+1NwoZF5wNpRdbWoKskTiiAloQ6FnmhOO84u89ZeB4qI3PbcVNlog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pBoLV0cMdEWVDLW6LpTVgN8VA/IqVQV8nNgGK2e84qY=;
- b=g+mzXYojZM9RpstoIb927QNm/ugxk0wNEcixnAlnE7ioZ+/jHcM+41UxL5FGCYZTBtc3pyIyTFAqW0T/Io0UqI0ZRl3kcVbOUl3tv+/dZ+O5TpVQjUfApPXiuMK84CPV7Q5nP8DAQSNYeDQgPaqBKwqf6vjtzioZDbxp4WU5lv3Nw5z6YNqsUoOz4OnWrPhoMNMQH9ZdkED4egzVMsytpoGE41x+LCsne/e2pZ8aP5KG5hkUxFkF10wAYdEk5aaVoDYLWhQtkBAMux2DJwb/MdzaiXbae2tdjlGV4Ex7wRa3b8hii9Br4CYEmDkvm4No+30jsiLg9TavubCGE7vHdQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pBoLV0cMdEWVDLW6LpTVgN8VA/IqVQV8nNgGK2e84qY=;
- b=aYeOwEXesg4ftqafCw5FR+EYXeXiY/jgFgf2Tl4CjHNWbE6dB3J6sOtW4qm4y7qYZCKhIidM/Kq0w4nunXEShiA8p/yp1nzfYEStgN10yGCsc2DEluliSLa0cznp9bA+F/YNP/JOjd+vp9kqyvoMfQNNcWH6geUccqYum8eJzIA=
-Received: from MW4PR04CA0036.namprd04.prod.outlook.com (2603:10b6:303:6a::11)
- by IA1PR12MB8360.namprd12.prod.outlook.com (2603:10b6:208:3d8::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.25; Thu, 15 Jun
- 2023 06:32:46 +0000
-Received: from CO1NAM11FT102.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:6a:cafe::38) by MW4PR04CA0036.outlook.office365.com
- (2603:10b6:303:6a::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.25 via Frontend
- Transport; Thu, 15 Jun 2023 06:32:46 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT102.mail.protection.outlook.com (10.13.175.87) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6500.25 via Frontend Transport; Thu, 15 Jun 2023 06:32:45 +0000
-Received: from pyuan-Splinter.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 15 Jun
- 2023 01:32:41 -0500
-From:   Perry Yuan <perry.yuan@amd.com>
-To:     <rafael.j.wysocki@intel.com>, <viresh.kumar@linaro.org>,
-        <Ray.Huang@amd.com>, <Mario.Limonciello@amd.com>
-CC:     <Deepak.Sharma@amd.com>, <Wyes.Karny@amd.com>,
-        <gautham.shenoy@amd.com>, <Sunpeng.Li@amd.com>,
-        <Xinmei.Huang@amd.com>, <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 2/4] cpufreq: amd-pstate: Set a fallback policy based on preferred_profile
-Date:   Thu, 15 Jun 2023 02:32:25 -0400
-Message-ID: <20230615063225.4029929-1-perry.yuan@amd.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 15 Jun 2023 02:32:57 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B71F32715
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 23:32:49 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-51898b0c1a1so1984050a12.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 23:32:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20221208.gappssmtp.com; s=20221208; t=1686810768; x=1689402768;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UrKeX0brN8orSfftoPkaXAlzU6YqeCsw4OoTjSeGSpQ=;
+        b=D6kbteFJfb5OwYfPGni62o1oNeWdMTkVOlX7eQsvAjTwQzYnUYNgXdykt++mlZ4UAb
+         4BQ937rvNNEbWM5KZx3jbRv0LYRucoVekq3oleNVBjfGcVJExCXPMrdTMLQctEe4Ho1y
+         rAfQgzfA4W+cCnOeLXwkD11e9b2Ro807PmjTzgBajhjCgyThwS6db5hZQxbvmoQlz3od
+         fDPGdryZiY4VrSvx9KvTjPbzA/Enq1ZvMV6h+JCdJtx8aPAhZiIDwhnBosMdeOxJWlL3
+         +ZCrZEG7kGUmZPNF9DuStWpcWJyGG29f0/kFqW/6C9cOpukzUv3FGcPCjr7+NVHEe/EJ
+         2ZdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686810768; x=1689402768;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UrKeX0brN8orSfftoPkaXAlzU6YqeCsw4OoTjSeGSpQ=;
+        b=JxRizoZyJuHq3dFd7M/qwcIjOXhVj4RdY8tyIlKuaVzOtaQhBnMh/x0tIT+J2C10Pn
+         YvAGINMnS9yfbxdAJsFM98cjfCKG1VKp21pkueQt+YeyM+Ra172hJ/dmTrgx4r9S4aF1
+         /Mha+O3ZgD/KQCQkVeo0J+KpZg/P9ChVl9ggn8FnmpDfeRaH8X60CgwkfWo4ib4M057L
+         eMCxvfafIy/K8Oe/JDUKhV9UfvqUbOLE8tAUFUqbfhwv0wt/pXYkE8sYa2UXgZP1LBxm
+         DUlvYPbee74qEoyoZ3Draffhpxk5qR8xTOO2jYibSoyheqq9N/zJ24hYm1llVF8o9wOF
+         eaIg==
+X-Gm-Message-State: AC+VfDyxbAEheRkYC2utkexa72nl8fcAfqRUoAxgkLG9bZn/xZVHnYdq
+        C8nFOKTuUpcGTh2RjzyAqeeqfrWCa0+DHP1vJvHaTA==
+X-Google-Smtp-Source: ACHHUZ6AdwwHl1Tu0GBb3RYoS05mMi2PURY+GVOE9vxbcfFedIzfzN1AVThV7/NZWyxNbgPWSzmInmk0q70D+keg6HU=
+X-Received: by 2002:a05:6402:5147:b0:519:f2ab:d53b with SMTP id
+ n7-20020a056402514700b00519f2abd53bmr2161186edd.5.1686810767921; Wed, 14 Jun
+ 2023 23:32:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT102:EE_|IA1PR12MB8360:EE_
-X-MS-Office365-Filtering-Correlation-Id: c0078519-0d7d-49ab-c138-08db6d6a54c6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 34wXwn/Xlv2zlsOf6OC80BQEGEJNlHdardHBNjuRAfXFWenrjdn0Um2pOzfWwPw0g6HJAPn+VBKi+2goM1wn+VAbMJblIEl0vjKcut8OI/cnBhUt66QcozQiwjza9Ca4hcQsg6IPpf6tw5/okpFWORxOAZNOfwWG/kPY24wRsLWikqqKhcuWu0AgtQGfyUAQQ2T186EAj6lDVW06mDxfhTGznyOoX3l73EUNwfTDoRLWXtENPs5U/bwLizhdeSnjIXF4QR2SmBYXWOE7trhIBkaSW8b178JdH+XIEhxikDhLoolx17KH5446nH7alPk6Fuc3dgb3/aGrV1+6SUEc6ZVOyUQN3aVZfEKJA0OgZQibRQgfMQBeo673LogayP6uQhrsRIx6lrRivBSapCy7+FBxeiwwE92JCbBmC0Sv4iVoXk6ohk35gKLJ8btZsbWjxwCVjrBXc3aV5SlV++JNlekWbp+seLhcAHscgL0G71K44849s/ART4qoeSfa3YLP1I9/6OcLim+m1xOUCDhpinrdcY9HFR+03vwcqOlBOrTULrjpDrFNz/ULEeaF/GO+FBPu18aChz1pUYcE0zblaFuFcY3G8dj3BFLb/n7D1sLrFOpw8yMnhNR6gLU4P96ec2OZtSe64RnElFP/Eh0jvHr39xFUU88LKpKPUwozmvwsDr1WR+DOYJ5gzvpevqXs4b+bLVqZbf8jHVLGY8yxfjd4q4Lnc1F2MWNtg2l6M1ebHUV7nTl5LOLDZlA+KQbXVtNnD4RRGGKG/C2VauGDtw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(346002)(396003)(376002)(451199021)(36840700001)(46966006)(40470700004)(40460700003)(5660300002)(82740400003)(966005)(81166007)(356005)(336012)(2616005)(83380400001)(426003)(1076003)(186003)(16526019)(2906002)(26005)(36860700001)(47076005)(44832011)(478600001)(40480700001)(6666004)(70206006)(316002)(8936002)(8676002)(41300700001)(7696005)(86362001)(82310400005)(70586007)(36756003)(4326008)(6636002)(54906003)(110136005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 06:32:45.7923
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c0078519-0d7d-49ab-c138-08db6d6a54c6
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT102.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8360
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20230612053932.58604-1-apatel@ventanamicro.com>
+ <20230612053932.58604-8-apatel@ventanamicro.com> <CAMWQL2hJGRTPCNe-oxE4OASxLStEgOKv_PE1tzV26mWWCZj9CA@mail.gmail.com>
+In-Reply-To: <CAMWQL2hJGRTPCNe-oxE4OASxLStEgOKv_PE1tzV26mWWCZj9CA@mail.gmail.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Thu, 15 Jun 2023 12:02:35 +0530
+Message-ID: <CAAhSdy3hSJ+=LjmFqXB=Qn4V4y7sDwAuf_bDWdsg2SWjzEUwkA@mail.gmail.com>
+Subject: Re: [PATCH v2 07/10] RISC-V: KVM: Add in-kernel emulation of AIA APLIC
+To:     Yong-Xuan Wang <yongxuan.wang@sifive.com>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Andrew Jones <ajones@ventanamicro.com>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Greentime Hu <greentime.hu@sifive.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+On Thu, Jun 15, 2023 at 11:00=E2=80=AFAM Yong-Xuan Wang
+<yongxuan.wang@sifive.com> wrote:
+>
+> Hi Anup,
+>
+> On Mon, Jun 12, 2023 at 1:42=E2=80=AFPM Anup Patel <apatel@ventanamicro.c=
+om> wrote:
+> >
+> > There is no virtualization support in AIA APLIC so we add in-kernel
+> > emulation of AIA APLIC which only supports MSI-mode (i.e. wired
+> > interrupts forwarded to AIA IMSIC as MSIs).
+> >
+> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > ---
+> >  arch/riscv/include/asm/kvm_aia.h |  17 +-
+> >  arch/riscv/kvm/Makefile          |   1 +
+> >  arch/riscv/kvm/aia_aplic.c       | 574 +++++++++++++++++++++++++++++++
+> >  3 files changed, 578 insertions(+), 14 deletions(-)
+> >  create mode 100644 arch/riscv/kvm/aia_aplic.c
+> >
+> > diff --git a/arch/riscv/include/asm/kvm_aia.h b/arch/riscv/include/asm/=
+kvm_aia.h
+> > index a1281ebc9b92..f6bd8523395f 100644
+> > --- a/arch/riscv/include/asm/kvm_aia.h
+> > +++ b/arch/riscv/include/asm/kvm_aia.h
+> > @@ -129,20 +129,9 @@ static inline void kvm_riscv_vcpu_aia_imsic_cleanu=
+p(struct kvm_vcpu *vcpu)
+> >  {
+> >  }
+> >
+> > -static inline int kvm_riscv_aia_aplic_inject(struct kvm *kvm,
+> > -                                            u32 source, bool level)
+> > -{
+> > -       return 0;
+> > -}
+> > -
+> > -static inline int kvm_riscv_aia_aplic_init(struct kvm *kvm)
+> > -{
+> > -       return 0;
+> > -}
+> > -
+> > -static inline void kvm_riscv_aia_aplic_cleanup(struct kvm *kvm)
+> > -{
+> > -}
+> > +int kvm_riscv_aia_aplic_inject(struct kvm *kvm, u32 source, bool level=
+);
+> > +int kvm_riscv_aia_aplic_init(struct kvm *kvm);
+> > +void kvm_riscv_aia_aplic_cleanup(struct kvm *kvm);
+> >
+> >  #ifdef CONFIG_32BIT
+> >  void kvm_riscv_vcpu_aia_flush_interrupts(struct kvm_vcpu *vcpu);
+> > diff --git a/arch/riscv/kvm/Makefile b/arch/riscv/kvm/Makefile
+> > index dd69ebe098bd..94c43702c765 100644
+> > --- a/arch/riscv/kvm/Makefile
+> > +++ b/arch/riscv/kvm/Makefile
+> > @@ -28,3 +28,4 @@ kvm-y +=3D vcpu_timer.o
+> >  kvm-$(CONFIG_RISCV_PMU_SBI) +=3D vcpu_pmu.o vcpu_sbi_pmu.o
+> >  kvm-y +=3D aia.o
+> >  kvm-y +=3D aia_device.o
+> > +kvm-y +=3D aia_aplic.o
+> > diff --git a/arch/riscv/kvm/aia_aplic.c b/arch/riscv/kvm/aia_aplic.c
+> > new file mode 100644
+> > index 000000000000..1b0a4df64815
+> > --- /dev/null
+> > +++ b/arch/riscv/kvm/aia_aplic.c
+> > @@ -0,0 +1,574 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright (C) 2021 Western Digital Corporation or its affiliates.
+> > + * Copyright (C) 2022 Ventana Micro Systems Inc.
+> > + *
+> > + * Authors:
+> > + *     Anup Patel <apatel@ventanamicro.com>
+> > + */
+> > +
+> > +#include <linux/kvm_host.h>
+> > +#include <linux/math.h>
+> > +#include <linux/spinlock.h>
+> > +#include <linux/swab.h>
+> > +#include <kvm/iodev.h>
+> > +#include <asm/kvm_aia_aplic.h>
+> > +
+> > +struct aplic_irq {
+> > +       raw_spinlock_t lock;
+> > +       u32 sourcecfg;
+> > +       u32 state;
+> > +#define APLIC_IRQ_STATE_PENDING                BIT(0)
+> > +#define APLIC_IRQ_STATE_ENABLED                BIT(1)
+> > +#define APLIC_IRQ_STATE_ENPEND         (APLIC_IRQ_STATE_PENDING | \
+> > +                                        APLIC_IRQ_STATE_ENABLED)
+> > +#define APLIC_IRQ_STATE_INPUT          BIT(8)
+> > +       u32 target;
+> > +};
+> > +
+> > +struct aplic {
+> > +       struct kvm_io_device iodev;
+> > +
+> > +       u32 domaincfg;
+> > +       u32 genmsi;
+> > +
+> > +       u32 nr_irqs;
+> > +       u32 nr_words;
+> > +       struct aplic_irq *irqs;
+> > +};
+> > +
+> > +static u32 aplic_read_sourcecfg(struct aplic *aplic, u32 irq)
+> > +{
+> > +       u32 ret;
+> > +       unsigned long flags;
+> > +       struct aplic_irq *irqd;
+> > +
+> > +       if (!irq || aplic->nr_irqs <=3D irq)
+> > +               return 0;
+> > +       irqd =3D &aplic->irqs[irq];
+> > +
+> > +       raw_spin_lock_irqsave(&irqd->lock, flags);
+> > +       ret =3D irqd->sourcecfg;
+> > +       raw_spin_unlock_irqrestore(&irqd->lock, flags);
+> > +
+> > +       return ret;
+> > +}
+> > +
+> > +static void aplic_write_sourcecfg(struct aplic *aplic, u32 irq, u32 va=
+l)
+> > +{
+> > +       unsigned long flags;
+> > +       struct aplic_irq *irqd;
+> > +
+> > +       if (!irq || aplic->nr_irqs <=3D irq)
+> > +               return;
+> > +       irqd =3D &aplic->irqs[irq];
+> > +
+> > +       if (val & APLIC_SOURCECFG_D)
+> > +               val =3D 0;
+> > +       else
+> > +               val &=3D APLIC_SOURCECFG_SM_MASK;
+> > +
+> > +       raw_spin_lock_irqsave(&irqd->lock, flags);
+> > +       irqd->sourcecfg =3D val;
+> > +       raw_spin_unlock_irqrestore(&irqd->lock, flags);
+> > +}
+> > +
+> > +static u32 aplic_read_target(struct aplic *aplic, u32 irq)
+> > +{
+> > +       u32 ret;
+> > +       unsigned long flags;
+> > +       struct aplic_irq *irqd;
+> > +
+> > +       if (!irq || aplic->nr_irqs <=3D irq)
+> > +               return 0;
+> > +       irqd =3D &aplic->irqs[irq];
+> > +
+> > +       raw_spin_lock_irqsave(&irqd->lock, flags);
+> > +       ret =3D irqd->target;
+> > +       raw_spin_unlock_irqrestore(&irqd->lock, flags);
+> > +
+> > +       return ret;
+> > +}
+> > +
+> > +static void aplic_write_target(struct aplic *aplic, u32 irq, u32 val)
+> > +{
+> > +       unsigned long flags;
+> > +       struct aplic_irq *irqd;
+> > +
+> > +       if (!irq || aplic->nr_irqs <=3D irq)
+> > +               return;
+> > +       irqd =3D &aplic->irqs[irq];
+> > +
+> > +       val &=3D APLIC_TARGET_EIID_MASK |
+> > +              (APLIC_TARGET_HART_IDX_MASK << APLIC_TARGET_HART_IDX_SHI=
+FT) |
+> > +              (APLIC_TARGET_GUEST_IDX_MASK << APLIC_TARGET_GUEST_IDX_S=
+HIFT);
+> > +
+> > +       raw_spin_lock_irqsave(&irqd->lock, flags);
+> > +       irqd->target =3D val;
+> > +       raw_spin_unlock_irqrestore(&irqd->lock, flags);
+> > +}
+> > +
+> > +static bool aplic_read_pending(struct aplic *aplic, u32 irq)
+> > +{
+> > +       bool ret;
+> > +       unsigned long flags;
+> > +       struct aplic_irq *irqd;
+> > +
+> > +       if (!irq || aplic->nr_irqs <=3D irq)
+> > +               return false;
+> > +       irqd =3D &aplic->irqs[irq];
+> > +
+> > +       raw_spin_lock_irqsave(&irqd->lock, flags);
+> > +       ret =3D (irqd->state & APLIC_IRQ_STATE_PENDING) ? true : false;
+> > +       raw_spin_unlock_irqrestore(&irqd->lock, flags);
+> > +
+> > +       return ret;
+> > +}
+> > +
+> > +static void aplic_write_pending(struct aplic *aplic, u32 irq, bool pen=
+ding)
+> > +{
+> > +       unsigned long flags, sm;
+> > +       struct aplic_irq *irqd;
+> > +
+> > +       if (!irq || aplic->nr_irqs <=3D irq)
+> > +               return;
+> > +       irqd =3D &aplic->irqs[irq];
+> > +
+> > +       raw_spin_lock_irqsave(&irqd->lock, flags);
+> > +
+> > +       sm =3D irqd->sourcecfg & APLIC_SOURCECFG_SM_MASK;
+> > +       if (!pending &&
+> > +           ((sm =3D=3D APLIC_SOURCECFG_SM_LEVEL_HIGH) ||
+> > +            (sm =3D=3D APLIC_SOURCECFG_SM_LEVEL_LOW)))
+> > +               goto skip_write_pending;
+> > +
+> > +       if (pending)
+> > +               irqd->state |=3D APLIC_IRQ_STATE_PENDING;
+> > +       else
+> > +               irqd->state &=3D ~APLIC_IRQ_STATE_PENDING;
+> > +
+> > +skip_write_pending:
+> > +       raw_spin_unlock_irqrestore(&irqd->lock, flags);
+> > +}
+> > +
+> > +static bool aplic_read_enabled(struct aplic *aplic, u32 irq)
+> > +{
+> > +       bool ret;
+> > +       unsigned long flags;
+> > +       struct aplic_irq *irqd;
+> > +
+> > +       if (!irq || aplic->nr_irqs <=3D irq)
+> > +               return false;
+> > +       irqd =3D &aplic->irqs[irq];
+> > +
+> > +       raw_spin_lock_irqsave(&irqd->lock, flags);
+> > +       ret =3D (irqd->state & APLIC_IRQ_STATE_ENABLED) ? true : false;
+> > +       raw_spin_unlock_irqrestore(&irqd->lock, flags);
+> > +
+> > +       return ret;
+> > +}
+> > +
+> > +static void aplic_write_enabled(struct aplic *aplic, u32 irq, bool ena=
+bled)
+> > +{
+> > +       unsigned long flags;
+> > +       struct aplic_irq *irqd;
+> > +
+> > +       if (!irq || aplic->nr_irqs <=3D irq)
+> > +               return;
+> > +       irqd =3D &aplic->irqs[irq];
+> > +
+> > +       raw_spin_lock_irqsave(&irqd->lock, flags);
+> > +       if (enabled)
+> > +               irqd->state |=3D APLIC_IRQ_STATE_ENABLED;
+> > +       else
+> > +               irqd->state &=3D ~APLIC_IRQ_STATE_ENABLED;
+> > +       raw_spin_unlock_irqrestore(&irqd->lock, flags);
+> > +}
+> > +
+> > +static bool aplic_read_input(struct aplic *aplic, u32 irq)
+> > +{
+> > +       bool ret;
+> > +       unsigned long flags;
+> > +       struct aplic_irq *irqd;
+> > +
+> > +       if (!irq || aplic->nr_irqs <=3D irq)
+> > +               return false;
+> > +       irqd =3D &aplic->irqs[irq];
+> > +
+> > +       raw_spin_lock_irqsave(&irqd->lock, flags);
+> > +       ret =3D (irqd->state & APLIC_IRQ_STATE_INPUT) ? true : false;
+> > +       raw_spin_unlock_irqrestore(&irqd->lock, flags);
+> > +
+> > +       return ret;
+> > +}
+> > +
+> > +static void aplic_inject_msi(struct kvm *kvm, u32 irq, u32 target)
+> > +{
+> > +       u32 hart_idx, guest_idx, eiid;
+> > +
+> > +       hart_idx =3D target >> APLIC_TARGET_HART_IDX_SHIFT;
+> > +       hart_idx &=3D APLIC_TARGET_HART_IDX_MASK;
+> > +       guest_idx =3D target >> APLIC_TARGET_GUEST_IDX_SHIFT;
+> > +       guest_idx &=3D APLIC_TARGET_GUEST_IDX_MASK;
+> > +       eiid =3D target & APLIC_TARGET_EIID_MASK;
+> > +       kvm_riscv_aia_inject_msi_by_id(kvm, hart_idx, guest_idx, eiid);
+> > +}
+> > +
+> > +static void aplic_update_irq_range(struct kvm *kvm, u32 first, u32 las=
+t)
+> > +{
+> > +       bool inject;
+> > +       u32 irq, target;
+> > +       unsigned long flags;
+> > +       struct aplic_irq *irqd;
+> > +       struct aplic *aplic =3D kvm->arch.aia.aplic_state;
+> > +
+> > +       if (!(aplic->domaincfg & APLIC_DOMAINCFG_IE))
+> > +               return;
+> > +
+> > +       for (irq =3D first; irq <=3D last; irq++) {
+> > +               if (!irq || aplic->nr_irqs <=3D irq)
+> > +                       continue;
+> > +               irqd =3D &aplic->irqs[irq];
+> > +
+> > +               raw_spin_lock_irqsave(&irqd->lock, flags);
+> > +
+> > +               inject =3D false;
+> > +               target =3D irqd->target;
+> > +               if (irqd->state & APLIC_IRQ_STATE_ENPEND) {
+> > +                       irqd->state &=3D ~APLIC_IRQ_STATE_PENDING;
+> > +                       inject =3D true;
+> > +               }
+> > +
+> > +               raw_spin_unlock_irqrestore(&irqd->lock, flags);
+> > +
+> > +               if (inject)
+> > +                       aplic_inject_msi(kvm, irq, target);
+> > +       }
+> > +}
+> > +
+> > +int kvm_riscv_aia_aplic_inject(struct kvm *kvm, u32 source, bool level=
+)
+> > +{
+> > +       u32 target;
+> > +       bool inject =3D false, ie;
+> > +       unsigned long flags;
+> > +       struct aplic_irq *irqd;
+> > +       struct aplic *aplic =3D kvm->arch.aia.aplic_state;
+> > +
+> > +       if (!aplic || !source || (aplic->nr_irqs <=3D source))
+> > +               return -ENODEV;
+> > +       irqd =3D &aplic->irqs[source];
+> > +       ie =3D (aplic->domaincfg & APLIC_DOMAINCFG_IE) ? true : false;
+> > +
+> > +       raw_spin_lock_irqsave(&irqd->lock, flags);
+> > +
+> > +       if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+> > +               goto skip_unlock;
+> > +
+> > +       switch (irqd->sourcecfg & APLIC_SOURCECFG_SM_MASK) {
+> > +       case APLIC_SOURCECFG_SM_EDGE_RISE:
+> > +               if (level && !(irqd->state & APLIC_IRQ_STATE_INPUT) &&
+> > +                   !(irqd->state & APLIC_IRQ_STATE_PENDING))
+> > +                       irqd->state |=3D APLIC_IRQ_STATE_PENDING;
+> > +               break;
+> > +       case APLIC_SOURCECFG_SM_EDGE_FALL:
+> > +               if (!level && (irqd->state & APLIC_IRQ_STATE_INPUT) &&
+> > +                   !(irqd->state & APLIC_IRQ_STATE_PENDING))
+> > +                       irqd->state |=3D APLIC_IRQ_STATE_PENDING;
+> > +               break;
+> > +       case APLIC_SOURCECFG_SM_LEVEL_HIGH:
+> > +               if (level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
+> > +                       irqd->state |=3D APLIC_IRQ_STATE_PENDING;
+> > +               break;
+> > +       case APLIC_SOURCECFG_SM_LEVEL_LOW:
+> > +               if (!level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
+> > +                       irqd->state |=3D APLIC_IRQ_STATE_PENDING;
+> > +               break;
+> > +       }
+> > +
+> > +       if (level)
+> > +               irqd->state |=3D APLIC_IRQ_STATE_INPUT;
+> > +       else
+> > +               irqd->state &=3D ~APLIC_IRQ_STATE_INPUT;
+> > +
+> > +       target =3D irqd->target;
+> > +       if (ie && (irqd->state & APLIC_IRQ_STATE_ENPEND)) {
+>
+> I have tested these patches with QEMU as the VMM tool and observed
+> that the APLIC would continue to forward goldfish RTC interrupts even
+> when there were no pending interrupts. I made a modification to the
+> checking
+> ((irqd->state & APLIC_IRQ_STATE_ENPEND) =3D=3D APLIC_IRQ_STATE_ENPEND).
+> This resolved the problem, ensuring that interrupts are now forwarded
+> only when they are genuinely pending and enabled.
 
-If a user's configuration doesn't explicitly specify the cpufreq
-scaling governor then the code currently explicitly falls back to
-'powersave'. This default is fine for notebooks and desktops, but
-servers and undefined machines should default to 'performance'.
+Good catch. I never saw this issue on KVMTOOL. I will update
+it in the next revision.
 
-Look at the 'preferred_profile' field from the FADT to set this
-policy accordingly.
+Thanks,
+Anup
 
-Link: https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/05_ACPI_Software_Programming_Model/ACPI_Software_Programming_Model.html#fixed-acpi-description-table-fadt
-Suggested-by: Wyes Karny <Wyes.Karny@amd.com>
-Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- drivers/cpufreq/amd-pstate.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index ddd346a239e0..c9d296ebf81e 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -1102,10 +1102,13 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
- 	policy->max = policy->cpuinfo.max_freq;
- 
- 	/*
--	 * Set the policy to powersave to provide a valid fallback value in case
-+	 * Set the policy to provide a valid fallback value in case
- 	 * the default cpufreq governor is neither powersave nor performance.
- 	 */
--	policy->policy = CPUFREQ_POLICY_POWERSAVE;
-+	if (acpi_pm_profile_server() || acpi_pm_profile_undefined())
-+		policy->policy = CPUFREQ_POLICY_PERFORMANCE;
-+	else
-+		policy->policy = CPUFREQ_POLICY_POWERSAVE;
- 
- 	if (boot_cpu_has(X86_FEATURE_CPPC)) {
- 		ret = rdmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ, &value);
--- 
-2.34.1
-
+>
+> > +               irqd->state &=3D ~APLIC_IRQ_STATE_PENDING;
+> > +               inject =3D true;
+> > +       }
+> > +
+> > +skip_unlock:
+> > +       raw_spin_unlock_irqrestore(&irqd->lock, flags);
+> > +
+> > +       if (inject)
+> > +               aplic_inject_msi(kvm, source, target);
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static u32 aplic_read_input_word(struct aplic *aplic, u32 word)
+> > +{
+> > +       u32 i, ret =3D 0;
+> > +
+> > +       for (i =3D 0; i < 32; i++)
+> > +               ret |=3D aplic_read_input(aplic, word * 32 + i) ? BIT(i=
+) : 0;
+> > +
+> > +       return ret;
+> > +}
+> > +
+> > +static u32 aplic_read_pending_word(struct aplic *aplic, u32 word)
+> > +{
+> > +       u32 i, ret =3D 0;
+> > +
+> > +       for (i =3D 0; i < 32; i++)
+> > +               ret |=3D aplic_read_pending(aplic, word * 32 + i) ? BIT=
+(i) : 0;
+> > +
+> > +       return ret;
+> > +}
+> > +
+> > +static void aplic_write_pending_word(struct aplic *aplic, u32 word,
+> > +                                    u32 val, bool pending)
+> > +{
+> > +       u32 i;
+> > +
+> > +       for (i =3D 0; i < 32; i++) {
+> > +               if (val & BIT(i))
+> > +                       aplic_write_pending(aplic, word * 32 + i, pendi=
+ng);
+> > +       }
+> > +}
+> > +
+> > +static u32 aplic_read_enabled_word(struct aplic *aplic, u32 word)
+> > +{
+> > +       u32 i, ret =3D 0;
+> > +
+> > +       for (i =3D 0; i < 32; i++)
+> > +               ret |=3D aplic_read_enabled(aplic, word * 32 + i) ? BIT=
+(i) : 0;
+> > +
+> > +       return ret;
+> > +}
+> > +
+> > +static void aplic_write_enabled_word(struct aplic *aplic, u32 word,
+> > +                                    u32 val, bool enabled)
+> > +{
+> > +       u32 i;
+> > +
+> > +       for (i =3D 0; i < 32; i++) {
+> > +               if (val & BIT(i))
+> > +                       aplic_write_enabled(aplic, word * 32 + i, enabl=
+ed);
+> > +       }
+> > +}
+> > +
+> > +static int aplic_mmio_read_offset(struct kvm *kvm, gpa_t off, u32 *val=
+32)
+> > +{
+> > +       u32 i;
+> > +       struct aplic *aplic =3D kvm->arch.aia.aplic_state;
+> > +
+> > +       if ((off & 0x3) !=3D 0)
+> > +               return -EOPNOTSUPP;
+> > +
+> > +       if (off =3D=3D APLIC_DOMAINCFG) {
+> > +               *val32 =3D APLIC_DOMAINCFG_RDONLY |
+> > +                        aplic->domaincfg | APLIC_DOMAINCFG_DM;
+> > +       } else if ((off >=3D APLIC_SOURCECFG_BASE) &&
+> > +                (off < (APLIC_SOURCECFG_BASE + (aplic->nr_irqs - 1) * =
+4))) {
+> > +               i =3D ((off - APLIC_SOURCECFG_BASE) >> 2) + 1;
+> > +               *val32 =3D aplic_read_sourcecfg(aplic, i);
+> > +       } else if ((off >=3D APLIC_SETIP_BASE) &&
+> > +                  (off < (APLIC_SETIP_BASE + aplic->nr_words * 4))) {
+> > +               i =3D (off - APLIC_SETIP_BASE) >> 2;
+> > +               *val32 =3D aplic_read_pending_word(aplic, i);
+> > +       } else if (off =3D=3D APLIC_SETIPNUM) {
+> > +               *val32 =3D 0;
+> > +       } else if ((off >=3D APLIC_CLRIP_BASE) &&
+> > +                  (off < (APLIC_CLRIP_BASE + aplic->nr_words * 4))) {
+> > +               i =3D (off - APLIC_CLRIP_BASE) >> 2;
+> > +               *val32 =3D aplic_read_input_word(aplic, i);
+> > +       } else if (off =3D=3D APLIC_CLRIPNUM) {
+> > +               *val32 =3D 0;
+> > +       } else if ((off >=3D APLIC_SETIE_BASE) &&
+> > +                  (off < (APLIC_SETIE_BASE + aplic->nr_words * 4))) {
+> > +               i =3D (off - APLIC_SETIE_BASE) >> 2;
+> > +               *val32 =3D aplic_read_enabled_word(aplic, i);
+> > +       } else if (off =3D=3D APLIC_SETIENUM) {
+> > +               *val32 =3D 0;
+> > +       } else if ((off >=3D APLIC_CLRIE_BASE) &&
+> > +                  (off < (APLIC_CLRIE_BASE + aplic->nr_words * 4))) {
+> > +               *val32 =3D 0;
+> > +       } else if (off =3D=3D APLIC_CLRIENUM) {
+> > +               *val32 =3D 0;
+> > +       } else if (off =3D=3D APLIC_SETIPNUM_LE) {
+> > +               *val32 =3D 0;
+> > +       } else if (off =3D=3D APLIC_SETIPNUM_BE) {
+> > +               *val32 =3D 0;
+> > +       } else if (off =3D=3D APLIC_GENMSI) {
+> > +               *val32 =3D aplic->genmsi;
+> > +       } else if ((off >=3D APLIC_TARGET_BASE) &&
+> > +                  (off < (APLIC_TARGET_BASE + (aplic->nr_irqs - 1) * 4=
+))) {
+> > +               i =3D ((off - APLIC_TARGET_BASE) >> 2) + 1;
+> > +               *val32 =3D aplic_read_target(aplic, i);
+> > +       } else
+> > +               return -ENODEV;
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static int aplic_mmio_read(struct kvm_vcpu *vcpu, struct kvm_io_device=
+ *dev,
+> > +                          gpa_t addr, int len, void *val)
+> > +{
+> > +       if (len !=3D 4)
+> > +               return -EOPNOTSUPP;
+> > +
+> > +       return aplic_mmio_read_offset(vcpu->kvm,
+> > +                                     addr - vcpu->kvm->arch.aia.aplic_=
+addr,
+> > +                                     val);
+> > +}
+> > +
+> > +static int aplic_mmio_write_offset(struct kvm *kvm, gpa_t off, u32 val=
+32)
+> > +{
+> > +       u32 i;
+> > +       struct aplic *aplic =3D kvm->arch.aia.aplic_state;
+> > +
+> > +       if ((off & 0x3) !=3D 0)
+> > +               return -EOPNOTSUPP;
+> > +
+> > +       if (off =3D=3D APLIC_DOMAINCFG) {
+> > +               /* Only IE bit writeable */
+> > +               aplic->domaincfg =3D val32 & APLIC_DOMAINCFG_IE;
+> > +       } else if ((off >=3D APLIC_SOURCECFG_BASE) &&
+> > +                (off < (APLIC_SOURCECFG_BASE + (aplic->nr_irqs - 1) * =
+4))) {
+> > +               i =3D ((off - APLIC_SOURCECFG_BASE) >> 2) + 1;
+> > +               aplic_write_sourcecfg(aplic, i, val32);
+> > +       } else if ((off >=3D APLIC_SETIP_BASE) &&
+> > +                  (off < (APLIC_SETIP_BASE + aplic->nr_words * 4))) {
+> > +               i =3D (off - APLIC_SETIP_BASE) >> 2;
+> > +               aplic_write_pending_word(aplic, i, val32, true);
+> > +       } else if (off =3D=3D APLIC_SETIPNUM) {
+> > +               aplic_write_pending(aplic, val32, true);
+> > +       } else if ((off >=3D APLIC_CLRIP_BASE) &&
+> > +                  (off < (APLIC_CLRIP_BASE + aplic->nr_words * 4))) {
+> > +               i =3D (off - APLIC_CLRIP_BASE) >> 2;
+> > +               aplic_write_pending_word(aplic, i, val32, false);
+> > +       } else if (off =3D=3D APLIC_CLRIPNUM) {
+> > +               aplic_write_pending(aplic, val32, false);
+> > +       } else if ((off >=3D APLIC_SETIE_BASE) &&
+> > +                  (off < (APLIC_SETIE_BASE + aplic->nr_words * 4))) {
+> > +               i =3D (off - APLIC_SETIE_BASE) >> 2;
+> > +               aplic_write_enabled_word(aplic, i, val32, true);
+> > +       } else if (off =3D=3D APLIC_SETIENUM) {
+> > +               aplic_write_enabled(aplic, val32, true);
+> > +       } else if ((off >=3D APLIC_CLRIE_BASE) &&
+> > +                  (off < (APLIC_CLRIE_BASE + aplic->nr_words * 4))) {
+> > +               i =3D (off - APLIC_CLRIE_BASE) >> 2;
+> > +               aplic_write_enabled_word(aplic, i, val32, false);
+> > +       } else if (off =3D=3D APLIC_CLRIENUM) {
+> > +               aplic_write_enabled(aplic, val32, false);
+> > +       } else if (off =3D=3D APLIC_SETIPNUM_LE) {
+> > +               aplic_write_pending(aplic, val32, true);
+> > +       } else if (off =3D=3D APLIC_SETIPNUM_BE) {
+> > +               aplic_write_pending(aplic, __swab32(val32), true);
+> > +       } else if (off =3D=3D APLIC_GENMSI) {
+> > +               aplic->genmsi =3D val32 & ~(APLIC_TARGET_GUEST_IDX_MASK=
+ <<
+> > +                                         APLIC_TARGET_GUEST_IDX_SHIFT)=
+;
+> > +               kvm_riscv_aia_inject_msi_by_id(kvm,
+> > +                               val32 >> APLIC_TARGET_HART_IDX_SHIFT, 0=
+,
+> > +                               val32 & APLIC_TARGET_EIID_MASK);
+> > +       } else if ((off >=3D APLIC_TARGET_BASE) &&
+> > +                  (off < (APLIC_TARGET_BASE + (aplic->nr_irqs - 1) * 4=
+))) {
+> > +               i =3D ((off - APLIC_TARGET_BASE) >> 2) + 1;
+> > +               aplic_write_target(aplic, i, val32);
+> > +       } else
+> > +               return -ENODEV;
+> > +
+> > +       aplic_update_irq_range(kvm, 1, aplic->nr_irqs - 1);
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static int aplic_mmio_write(struct kvm_vcpu *vcpu, struct kvm_io_devic=
+e *dev,
+> > +                           gpa_t addr, int len, const void *val)
+> > +{
+> > +       if (len !=3D 4)
+> > +               return -EOPNOTSUPP;
+> > +
+> > +       return aplic_mmio_write_offset(vcpu->kvm,
+> > +                                      addr - vcpu->kvm->arch.aia.aplic=
+_addr,
+> > +                                      *((const u32 *)val));
+> > +}
+> > +
+> > +static struct kvm_io_device_ops aplic_iodoev_ops =3D {
+> > +       .read =3D aplic_mmio_read,
+> > +       .write =3D aplic_mmio_write,
+> > +};
+> > +
+> > +int kvm_riscv_aia_aplic_init(struct kvm *kvm)
+> > +{
+> > +       int i, ret =3D 0;
+> > +       struct aplic *aplic;
+> > +
+> > +       /* Do nothing if we have zero sources */
+> > +       if (!kvm->arch.aia.nr_sources)
+> > +               return 0;
+> > +
+> > +       /* Allocate APLIC global state */
+> > +       aplic =3D kzalloc(sizeof(*aplic), GFP_KERNEL);
+> > +       if (!aplic)
+> > +               return -ENOMEM;
+> > +       kvm->arch.aia.aplic_state =3D aplic;
+> > +
+> > +       /* Setup APLIC IRQs */
+> > +       aplic->nr_irqs =3D kvm->arch.aia.nr_sources + 1;
+> > +       aplic->nr_words =3D DIV_ROUND_UP(aplic->nr_irqs, 32);
+> > +       aplic->irqs =3D kcalloc(aplic->nr_irqs,
+> > +                             sizeof(*aplic->irqs), GFP_KERNEL);
+> > +       if (!aplic->irqs) {
+> > +               ret =3D -ENOMEM;
+> > +               goto fail_free_aplic;
+> > +       }
+> > +       for (i =3D 0; i < aplic->nr_irqs; i++)
+> > +               raw_spin_lock_init(&aplic->irqs[i].lock);
+> > +
+> > +       /* Setup IO device */
+> > +       kvm_iodevice_init(&aplic->iodev, &aplic_iodoev_ops);
+> > +       mutex_lock(&kvm->slots_lock);
+> > +       ret =3D kvm_io_bus_register_dev(kvm, KVM_MMIO_BUS,
+> > +                                     kvm->arch.aia.aplic_addr,
+> > +                                     KVM_DEV_RISCV_APLIC_SIZE,
+> > +                                     &aplic->iodev);
+> > +       mutex_unlock(&kvm->slots_lock);
+> > +       if (ret)
+> > +               goto fail_free_aplic_irqs;
+> > +
+> > +       /* Setup default IRQ routing */
+> > +       ret =3D kvm_riscv_setup_default_irq_routing(kvm, aplic->nr_irqs=
+);
+> > +       if (ret)
+> > +               goto fail_unreg_iodev;
+> > +
+> > +       return 0;
+> > +
+> > +fail_unreg_iodev:
+> > +       mutex_lock(&kvm->slots_lock);
+> > +       kvm_io_bus_unregister_dev(kvm, KVM_MMIO_BUS, &aplic->iodev);
+> > +       mutex_unlock(&kvm->slots_lock);
+> > +fail_free_aplic_irqs:
+> > +       kfree(aplic->irqs);
+> > +fail_free_aplic:
+> > +       kvm->arch.aia.aplic_state =3D NULL;
+> > +       kfree(aplic);
+> > +       return ret;
+> > +}
+> > +
+> > +void kvm_riscv_aia_aplic_cleanup(struct kvm *kvm)
+> > +{
+> > +       struct aplic *aplic =3D kvm->arch.aia.aplic_state;
+> > +
+> > +       if (!aplic)
+> > +               return;
+> > +
+> > +       mutex_lock(&kvm->slots_lock);
+> > +       kvm_io_bus_unregister_dev(kvm, KVM_MMIO_BUS, &aplic->iodev);
+> > +       mutex_unlock(&kvm->slots_lock);
+> > +
+> > +       kfree(aplic->irqs);
+> > +
+> > +       kvm->arch.aia.aplic_state =3D NULL;
+> > +       kfree(aplic);
+> > +}
+> > --
+> > 2.34.1
+> >
+> >
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
+>
+> Regards,
+> Yong-Xuan
