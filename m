@@ -2,182 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 373C47310F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:38:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4E0731106
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244349AbjFOHie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 03:38:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53172 "EHLO
+        id S245058AbjFOHlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 03:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231789AbjFOHiQ (ORCPT
+        with ESMTP id S245312AbjFOHkD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 03:38:16 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66372736;
-        Thu, 15 Jun 2023 00:37:49 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 431FD6606F59;
-        Thu, 15 Jun 2023 08:37:36 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686814657;
-        bh=R3fJvUlj/ctk9RC181p+elqsFdm6HvFFRA2Jl14ju8w=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DWG1cx/ySoxjCKORzCNexzZ/sg6wIhoQr4v5AsrUDOHjVl8+Zt3LsPrkGU9dN6Kcz
-         ffouyVFkWcRV3kSC64bkKm7iATOBIVPNdbhVz3eLYO2aqmNq47D75RgA2Ip5uoTfBb
-         rO+pT7JFEAsaT5/kIRasoml7ogyrgxlq9h9hfWrcR0tINbgJ4m3qnNh11xEGxvJbg8
-         rUw/aSjeWsCU9GwuP/x0MHQSnEvDB42nOcSIMErMSom4ROf9jNdoOsGkanRvo67FTs
-         KvWGRqIzuE5SZhYCpOoh8noyMoC6HUeQH50Wbd5qBAPdZeIQGIita2BO1HZeBcA2ud
-         rcHneyYNJQQ2Q==
-Message-ID: <d8dbb374-b34a-a69a-289d-d051a757bbf3@collabora.com>
-Date:   Thu, 15 Jun 2023 09:37:34 +0200
+        Thu, 15 Jun 2023 03:40:03 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1112D4B
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:39:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1686814778; x=1718350778;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PyAZ+UQySht1Ggox4vj01CIS3UNR5OIbU5jcrfJvb9c=;
+  b=ukJZJukQgnKMjSsZBmtaCSlvjetmkKNMmNiqRddxEwonJck/zNc3Wfq6
+   y91GVtFQlYplsMgAuaUW413gcE5JWoNfhyBd3NR1ql9F0LCc7/YibetuW
+   mFL/bjqqXq3og6Iari3qlYTe3IPeAnUZrmppWxiBUupBerJ9vgp1g+DFe
+   3DUsa5jdLwJTrjo6XYNVa061Iwr/2FzS6NgewG/4mVo707nF1omR7eWNO
+   59PoNSKQsSkzjEEThCR1MwJVDkIdJdd2qJ26eRxR55WtNJOtY8LlWQhqT
+   R/iiu0ewzITkp5huzNF2tW94S3+yRZ3OlxVEMea4mrreq3k7v2qxkSHD4
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
+   d="asc'?scan'208";a="220398517"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Jun 2023 00:38:30 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 15 Jun 2023 00:38:27 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 15 Jun 2023 00:38:25 -0700
+Date:   Thu, 15 Jun 2023 08:37:59 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Nylon Chen <nylon.chen@sifive.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <jszhang@kernel.org>, <ajones@ventanamicro.com>,
+        <aou@eecs.berkeley.edu>, <palmer@dabbelt.com>,
+        <paul.walmsley@sifive.com>, <greentime.hu@sifive.com>,
+        <zong.li@sifive.com>, <nylon7717@gmail.com>
+Subject: Re: [PATCH v2] RISC-V: Support 32_PCREL relocation type in kernel
+ module
+Message-ID: <20230615-unvisited-deceit-9beab8ce987a@wendy>
+References: <20230615072302.25638-1-nylon.chen@sifive.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 12/15] soc: mediatek: Add MT8188 VDO1 reset bit map
-Content-Language: en-US
-To:     =?UTF-8?B?U2hhd24gU3VuZyAo5a6L5a2d6KyZKQ==?= 
-        <Shawn.Sung@mediatek.com>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        =?UTF-8?B?U2luZ28gQ2hhbmcgKOW8teiIiOWciyk=?= 
-        <Singo.Chang@mediatek.com>,
-        =?UTF-8?B?SmFzb24tSkggTGluICjmnpfnnb/npaUp?= 
-        <Jason-JH.Lin@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        =?UTF-8?B?TmFuY3kgTGluICjmnpfmrKPonqIp?= <Nancy.Lin@mediatek.com>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230614073125.17958-1-shawn.sung@mediatek.com>
- <20230614073125.17958-13-shawn.sung@mediatek.com>
- <e4f98dc5-0fa6-14aa-f8d0-e4bf30ecca5c@collabora.com>
- <4dca96de37b4e6e3321bc304df8bad678edfebc3.camel@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <4dca96de37b4e6e3321bc304df8bad678edfebc3.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="X3uZfQHN9blau7pK"
+Content-Disposition: inline
+In-Reply-To: <20230615072302.25638-1-nylon.chen@sifive.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 15/06/23 08:01, Shawn Sung (宋孝謙) ha scritto:
-> Hi Angelo,
-> 
-> Got it. Will fix this in the next version.
-> 
-> Added a new define in mtk-mmsys.h:
-> #define MMSYS_RST_NR(bank, bit) ((bank * 32) + bit)
-> 
-> And define the reset table as:
-> static const u8 mmsys_mt8188_vdo1_rst_tb[] = {
->          [MT8188_VDO1_RST_SMI_LARB2]           = MMSYS_RST_NR(0, 0),
->          ...
->          [MT8188_VDO1_RST_VPP_MERGE2]          = MMSYS_RST_NR(0, 11),
->          [MT8188_VDO1_RST_VPP_MERGE3]          = MMSYS_RST_NR(1, 0),
->          ...
->          [MT8188_VDO1_RST_DISP_RSZ3]           = MMSYS_RST_NR(1, 31),
->          [MT8188_VDO1_RST_HDR_VDO_FE0]         = MMSYS_RST_NR(2, 0),
->      
-> ...
->          [MT8188_VDO1_RST_HDR_VDO_BE_DL_ASYNC] = MMSYS_RST_NR(2, 23),
-> };
-> 
+--X3uZfQHN9blau7pK
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Okay, that's also good. Go on!
+Hey Nylon, thanks for the update.
 
-Regards,
-Angelo
+On Thu, Jun 15, 2023 at 03:23:02PM +0800, Nylon Chen wrote:
+> Fix the 'unsupported relocation type' error caused by
+> enabling the -fasynchronous-unwind-tables flag,
+> which generates relocation types that are not supported.
 
-> Thanks,
-> Hsiao Chien Sung
-> 
-> On Wed, 2023-06-14 at 13:35 +0200, AngeloGioacchino Del Regno wrote:
->>   	
->> External email : Please do not click links or open attachments until
->> you have verified the sender or the content.
->>   Il 14/06/23 09:31, Hsiao Chien Sung ha scritto:
->>> Add MT8188 VDO1 reset bit map.
->>>
->>> Signed-off-by: Hsiao Chien Sung <shawn.sung@mediatek.com>
->>> ---
->>>    drivers/soc/mediatek/mt8188-mmsys.h | 57
->> +++++++++++++++++++++++++++++
->>>    drivers/soc/mediatek/mtk-mmsys.c    |  3 +-
->>>    2 files changed, 59 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/soc/mediatek/mt8188-mmsys.h
->> b/drivers/soc/mediatek/mt8188-mmsys.h
->>> index c3e3c5cfe931..208d4dfedc1a 100644
->>> --- a/drivers/soc/mediatek/mt8188-mmsys.h
->>> +++ b/drivers/soc/mediatek/mt8188-mmsys.h
->>> @@ -144,6 +144,63 @@ static const u8 mmsys_mt8188_vdo0_rst_tb[] = {
->>>    [MT8188_VDO0_RST_DISP_RSZ0]= 31,
->>>    };
->>>
->>> +static const u8 mmsys_mt8188_vdo1_rst_tb[] = {
->>> +[MT8188_VDO1_RST_SMI_LARB2]= 0,
->>> +[MT8188_VDO1_RST_SMI_LARB3]= 1,
->>> +[MT8188_VDO1_RST_GALS]= 2,
->>> +[MT8188_VDO1_RST_FAKE_ENG0]= 3,
->>> +[MT8188_VDO1_RST_FAKE_ENG1]= 4,
->>> +[MT8188_VDO1_RST_MDP_RDMA0]= 5,
->>> +[MT8188_VDO1_RST_MDP_RDMA1]= 6,
->>> +[MT8188_VDO1_RST_MDP_RDMA2]= 7,
->>> +[MT8188_VDO1_RST_MDP_RDMA3]= 8,
->>> +[MT8188_VDO1_RST_VPP_MERGE0]= 9,
->>> +[MT8188_VDO1_RST_VPP_MERGE1]= 10,
->>> +[MT8188_VDO1_RST_VPP_MERGE2]= 11,
->>> +[MT8188_VDO1_RST_VPP_MERGE3]= 32 + 0,
->>
->> Works, but there's a better way.
->>
->> 32 + 0 means that you're using reset SW1 register, so you can do
->>
->> #define MT8188_MMSYS_RST_NR_PER_BANK32
->> #define MT8188_RST_SW1_OFFSETMT8188_MMSYS_RST_NR_PER_BANK
->> #define MT8188_RST_SW2_OFFSETMT8188_MMSYS_RST_NR_PER_BANK * 2
->>
->> [MT8188_VDO1_RST_VPP_MERGE3] = MT8188_RST_SW1_OFFSET + 0
->> [MT8188_VDO1_RST_VPP_MERGE4] = MT8188_RST_SW1_OFFSET + 0
->> .......
->> [MT8188_VDO1_RST_HDR_VDO_FE0] = MT8188_RST_SW2_OFFSET + 0
->> ...etc
->>
->> Reading this will make it clear that a certain reset bit is in a
->> different
->> (sequential or not) register.
->>
->> P.S.: If the RST_NR_PER_BANK is *not* MT8188 specific (as in, all
->> reset registers
->> for all SoCs are always 32 bits, which I believe is true), you could
->> move that
->> definition to mtk-mmsys.h as
->>         #define MMSYS_RST_NR_PER_BANK32
->> and then define the offsets in mt8188-mmsys.h as
->>         #define MT8188_RST_SW1_OFFSET MMSYS_RST_NR_PER_BANK
->>         .... etc
->>
->> Thanks,
->> Angelo
->>
->>
+What commit adds the -fasynchronous-unwind-tables flag?
+Should there be a Fixes: tag for that commit?
 
+Cheers,
+Conor.
+
+>=20
+> Signed-off-by: Nylon Chen <nylon.chen@sifive.com>
+> Reviewed-by: Zong Li <zong.li@sifive.com>
+> ---
+> Changed in v2:
+> - add commit message.
+>=20
+>  arch/riscv/kernel/module.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>=20
+> diff --git a/arch/riscv/kernel/module.c b/arch/riscv/kernel/module.c
+> index 7c651d55fcbd..65be0360a494 100644
+> --- a/arch/riscv/kernel/module.c
+> +++ b/arch/riscv/kernel/module.c
+> @@ -310,6 +310,15 @@ static int apply_r_riscv_sub64_rela(struct module *m=
+e, u32 *location,
+>  	return 0;
+>  }
+> =20
+> +static int apply_r_riscv_pcrel_32_rela(struct module *me, u32 *location,
+> +				       Elf_Addr v)
+> +{
+> +	ptrdiff_t offset =3D (void *)v - (void *)location;
+> +
+> +	*location =3D (*location & 0xffff0000) | (offset & 0xffff);
+> +	return 0;
+> +}
+> +
+>  static int (*reloc_handlers_rela[]) (struct module *me, u32 *location,
+>  				Elf_Addr v) =3D {
+>  	[R_RISCV_32]			=3D apply_r_riscv_32_rela,
+> @@ -335,6 +344,7 @@ static int (*reloc_handlers_rela[]) (struct module *m=
+e, u32 *location,
+>  	[R_RISCV_SUB16]			=3D apply_r_riscv_sub16_rela,
+>  	[R_RISCV_SUB32]			=3D apply_r_riscv_sub32_rela,
+>  	[R_RISCV_SUB64]			=3D apply_r_riscv_sub64_rela,
+> +	[R_RISCV_32_PCREL]		=3D apply_r_riscv_pcrel_32_rela,
+>  };
+> =20
+>  int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
+> --=20
+> 2.40.1
+>=20
+
+--X3uZfQHN9blau7pK
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIq/ywAKCRB4tDGHoIJi
+0keJAQDIkc/zpv4sa2yC/D7U/ZNdjXyjn1F4e5TOctnC6ykUpAD+KeZHi+Wx/6e9
+ONGjEQkKXwjDw/MTgIei7DiKwsSShAw=
+=bAj9
+-----END PGP SIGNATURE-----
+
+--X3uZfQHN9blau7pK--
