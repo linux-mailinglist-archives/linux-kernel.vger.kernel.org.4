@@ -2,300 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C82E3732097
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 22:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC4573209C
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 22:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbjFOUGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 16:06:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34618 "EHLO
+        id S232077AbjFOUHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 16:07:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjFOUG2 (ORCPT
+        with ESMTP id S230392AbjFOUHi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 16:06:28 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8DF295D
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 13:06:27 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id af79cd13be357-75d57fdb014so985085a.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 13:06:27 -0700 (PDT)
+        Thu, 15 Jun 2023 16:07:38 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3BA1FE2
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 13:07:36 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-514ad92d1e3so317a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 13:07:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1686859586; x=1689451586;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=lRDyIOpz2b/gNydAGSVVX09M19SeCM9kBA3rfVdsGFY=;
-        b=KPTQNXulMO8nfFL/mLLDMgi7eD7VN54alFWZG0yQxnrKulKuTiVSf6LWHCG0etYhXE
-         U3tpkyQ4U+3Vhlb8xPjyQa3HlOUymzPyTZRmIZ/KxHShBCF/XCXhssXsuDLxlmLR/QrQ
-         1oW3TOEOdi10Uf/NioBVS+rJcRaPMdiSUHRwU=
+        d=google.com; s=20221208; t=1686859654; x=1689451654;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TcXKgHkINlZtkH6FcAJl31LqrUpiNimJraZYTIfEacY=;
+        b=grNeFjMFUEplWpGORmy77WwGAa6tuYg9L3WkV5mckN5vDk/zbhDik+lHM/UNgpP4pd
+         hOOm+WnJ7a4iQyAmGfMIEHtYCyEjiOB4fybvLRjQ953HrpODT7pybSJLC9oyrmvc1uAa
+         Q5t0iw3S7Cu+ZA/WqgFLv0n3V0z2Iv+BsFTHoBDgXWNu+X4LTbCrMOKZdBHMF2+Gz+9E
+         C8mezgnBZ0C8B3l28HKwJtAiDRd/qOx2CFcehRN62EOe8r6f8Izc6DyVxQ48aAB/jfzZ
+         Fbunklgz4dlOAoPmDadl7tLsJBvnhxposHcHyBr7ITs8tsH4/taorio4KkE5YTJeEn/y
+         +CYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686859586; x=1689451586;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lRDyIOpz2b/gNydAGSVVX09M19SeCM9kBA3rfVdsGFY=;
-        b=bRshQuAZazsaTbgU2fV9JU2Gik+PfWX8aY6T2sMD4Ql6bmQzMfpMpR1spx+y+hA8Wl
-         lJQbGcQ15+80RHYvinLlkH9lXOvArqVpJnU6mIJ0RR7l4gqu4djEZFYVxvJKtB1uFDL2
-         BfjEUN+Gra8Dj/rG9VgjC5H0HkthOetAc8HlE2JlbPPN4nqDGU5A+p1tt4iPjfzhl44i
-         1S8jvOkQ/oFBxlnGUBBrNEsQEFIUhfSw/td3AMBqYI7lFO/Cp82jjBP7nxPndhqfHMN5
-         MjLxCrw5qTugJzzdbu/pz7lJ1QSnah8yPqVfeWahIqFHtuXJd0fID1BxIq9rM0W0pfwF
-         o3xA==
-X-Gm-Message-State: AC+VfDyT9QN3Do8JVl1MjF1FQfSt4yNGb9tNFmv3ubMzXCKvDgX9yuE+
-        2tHjPUhcHwDIk7+DEQRdXpNSdQ==
-X-Google-Smtp-Source: ACHHUZ4nbdc+NMWLTaoFQA+gFzuMVyutwZpNyFoF6NOU3BIz13ty/29ts1p06jRmNXaSpaVrqI4aRQ==
-X-Received: by 2002:a05:620a:298e:b0:75b:23a0:d9c3 with SMTP id r14-20020a05620a298e00b0075b23a0d9c3mr25997037qkp.25.1686859586650;
-        Thu, 15 Jun 2023 13:06:26 -0700 (PDT)
-Received: from stbirv-lnx-2.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id k4-20020a05620a142400b0075ceca53e84sm5721407qkj.15.2023.06.15.13.06.25
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 15 Jun 2023 13:06:26 -0700 (PDT)
-From:   Justin Chen <justin.chen@broadcom.com>
-To:     linux-phy@lists.infradead.org
-Cc:     bcm-kernel-feedback-list@broadcom.com,
-        florian.fainelli@broadcom.com,
-        Justin Chen <justin.chen@broadcom.com>,
-        Justin Chen <justinpopo6@gmail.com>,
-        Al Cooper <alcooperx@gmail.com>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-kernel@vger.kernel.org (open list:BROADCOM BRCMSTB USB2 and USB3
-        PHY DRIVER)
-Subject: [PATCH 2/2] phy: usb: suppress OC condition for 7439b2
-Date:   Thu, 15 Jun 2023 13:06:17 -0700
-Message-Id: <1686859578-45242-3-git-send-email-justin.chen@broadcom.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1686859578-45242-1-git-send-email-justin.chen@broadcom.com>
-References: <1686859578-45242-1-git-send-email-justin.chen@broadcom.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000077a56105fe309a53"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        d=1e100.net; s=20221208; t=1686859654; x=1689451654;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TcXKgHkINlZtkH6FcAJl31LqrUpiNimJraZYTIfEacY=;
+        b=S6Lgau8uu2/5MH000tfFnyuYexavN2IZiXV5Ji4X/H6UDuo0+lspMpIiCep+A2mylH
+         fyqvlaEIavGFykvtkUD1oBwD7P5wn6AQ9O/nY9O8QL0h3VJkhzbxUiJmZytpclVzhZZz
+         7iBRkL6ZkVmkI1WQ2redNFfIWPY3K1ugVO1kUkeMaPKvN6Bh0IW9+j0FekP/6DUebJsN
+         LZWfefmcmB7SDwKJQE6dGt5eq7a54Y1sLMnP0HTBHLEZ/mgyCp7k3VK+cIHKp9MpQRoh
+         ErLKUcmk9hWTo2+im6WGbKTaQsZhOA1dKW7GF0+mzHou5pZ47IzR4Pe3yicD8nwcKNcN
+         FTdw==
+X-Gm-Message-State: AC+VfDzSrxiadoS8C0yOdoP0S03XMd7epakDruBQAi0LtD2lvqRdvBiv
+        mFFX6AhKYTn6z+oT4UWrMBmxoyELZ9a0nvgeF9x+uQ==
+X-Google-Smtp-Source: ACHHUZ4X+9erQPhmydL6aaFuWi9P+BEB8cvKp3i4+5UPNoYBQtJLxjzSx6pSUJJ8b5JUmvgtrKsHYgvI4lYLFVRURZE=
+X-Received: by 2002:a50:a6d3:0:b0:51a:1ffd:10e with SMTP id
+ f19-20020a50a6d3000000b0051a1ffd010emr133474edc.3.1686859654409; Thu, 15 Jun
+ 2023 13:07:34 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230613102905.2808371-1-usama.anjum@collabora.com>
+ <20230613102905.2808371-3-usama.anjum@collabora.com> <CABb0KFHWnbrf2ythvO0OKsd1ZS9b4D9BNzwBCbn6g9OX4n6ZOg@mail.gmail.com>
+ <0db01d90-09d6-08a4-bbb8-70670d3baa94@collabora.com> <CABb0KFEn5TU480A=YiN82nLRtGyKMABi8cZjuiGUU_jFZZo+8g@mail.gmail.com>
+ <34203acf-7270-7ade-a60e-ae0f729dcf70@collabora.com> <CABb0KFFaXgJD99pWfx3MC+qrq5jUaPis_kZo6U8yL_8xdp0GJA@mail.gmail.com>
+ <96b7cc00-d213-ad7d-1b48-b27f75b04d22@collabora.com> <CABb0KFEy_mRaT86TEOQ-BoTe_XOVw3Kp5VdzOfEEaiZJuT754g@mail.gmail.com>
+ <39bc8212-9ee8-dbc1-d468-f6be438b683b@collabora.com>
+In-Reply-To: <39bc8212-9ee8-dbc1-d468-f6be438b683b@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Thu, 15 Jun 2023 22:07:22 +0200
+Message-ID: <CABb0KFHx2hV9M7oinCdKnagRmcrGHagH9eAO3TkVTQH+o9x=5A@mail.gmail.com>
+Subject: Re: [PATCH v18 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        MIME_HEADER_CTYPE_ONLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_TVD_MIME_NO_HEADERS,UPPERCASE_50_75
-        autolearn=no autolearn_force=no version=3.4.6
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000077a56105fe309a53
+On Thu, 15 Jun 2023 at 17:11, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+> On 6/15/23 7:52=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> > On Thu, 15 Jun 2023 at 15:58, Muhammad Usama Anjum
+> > <usama.anjum@collabora.com> wrote:
+> >> I'll send next revision now.
+> >> On 6/14/23 11:00=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> >>> (A quick reply to answer open questions in case they help the next ve=
+rsion.)
+> >>>
+> >>> On Wed, 14 Jun 2023 at 19:10, Muhammad Usama Anjum
+> >>> <usama.anjum@collabora.com> wrote:
+> >>>> On 6/14/23 8:14=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> >>>>> On Wed, 14 Jun 2023 at 15:46, Muhammad Usama Anjum
+> >>>>> <usama.anjum@collabora.com> wrote:
+> >>>>>>
+> >>>>>> On 6/14/23 3:36=E2=80=AFAM, Micha=C5=82 Miros=C5=82aw wrote:
+> >>>>>>> On Tue, 13 Jun 2023 at 12:29, Muhammad Usama Anjum
+> >>>>>>> <usama.anjum@collabora.com> wrote:
+> >>> [...]
+> >>>>>>>> +       if (cur_buf->bitmap =3D=3D bitmap &&
+> >>>>>>>> +           cur_buf->start + cur_buf->len * PAGE_SIZE =3D=3D add=
+r) {
+> >>>>>>>> +               cur_buf->len +=3D n_pages;
+> >>>>>>>> +               p->found_pages +=3D n_pages;
+> >>>>>>>> +       } else {
+> >>>>>>>> +               if (cur_buf->len && p->vec_buf_index >=3D p->vec=
+_buf_len)
+> >>>>>>>> +                       return -ENOMEM;
+> >>>>>>>
+> >>>>>>> Shouldn't this be -ENOSPC? -ENOMEM usually signifies that the ker=
+nel
+> >>>>>>> ran out of memory when allocating, not that there is no space in =
+a
+> >>>>>>> user-provided buffer.
+> >>>>>> There are 3 kinds of return values here:
+> >>>>>> * PM_SCAN_FOUND_MAX_PAGES (1) ---> max_pages have been found. Abor=
+t the
+> >>>>>> page walk from next entry
+> >>>>>> * 0 ---> continue the page walk
+> >>>>>> * -ENOMEM --> Abort the page walk from current entry, user buffer =
+is full
+> >>>>>> which is not error, but only a stop signal. This -ENOMEM is just
+> >>>>>> differentiater from (1). This -ENOMEM is for internal use and isn'=
+t
+> >>>>>> returned to user.
+> >>>>>
+> >>>>> But why ENOSPC is not good here? I was used before, I think.
+> >>>> -ENOSPC is being returned in form of true error from
+> >>>> pagemap_scan_hugetlb_entry(). So I'd to remove -ENOSPC from here as =
+it
+> >>>> wasn't true error here, it was only a way to abort the walk immediat=
+ely.
+> >>>> I'm liking the following erturn code from here now:
+> >>>>
+> >>>> #define PM_SCAN_BUFFER_FULL     (-256)
+> >>>
+> >>> I guess this will be reworked anyway, but I'd prefer this didn't need
+> >>> custom errors etc. If we agree to decoupling the selection and GET
+> >>> output, it could be:
+> >>>
+> >>> bool is_interesting_page(p, flags); // this one does the
+> >>> required/anyof/excluded match
+> >>> size_t output_range(p, start, len, flags); // this one fills the
+> >>> output vector and returns how many pages were fit
+> >>>
+> >>> In this setup, `is_interesting_page() && (n_out =3D output_range()) <
+> >>> n_pages` means this is the final range, no more will fit. And if
+> >>> `n_out =3D=3D 0` then no pages fit and no WP is needed (no other spec=
+ial
+> >>> cases).
+> >> Right now, pagemap_scan_output() performs the work of both of these tw=
+o
+> >> functions. The part can be broken into is_interesting_pages() and we c=
+an
+> >> leave the remaining part as it is.
+> >>
+> >> Saying that n_out < n_pages tells us the buffer is full covers one cas=
+e.
+> >> But there is case of maximum pages have been found and walk needs to b=
+e
+> >> aborted.
+> >
+> > This case is exactly what `n_out < n_pages` will cover (if scan_output
+> > uses max_pages properly to limit n_out).
+> > Isn't it that when the buffer is full we want to abort the scan always
+> > (with WP if `n_out > 0`)?
+> Wouldn't it be duplication of condition if buffer is full inside
+> pagemap_scan_output() and just outside it. Inside pagemap_scan_output() w=
+e
+> check if we have space before putting data inside it. I'm using this same
+> condition to indicate that buffer is full.
 
-We hit a false positive OC for 7439b2 in DRD/device mode for the
-second port. So disable the OC check for this use case. Add capability
-to suppress OC condition for specific ports.
+I'm not sure what do you mean? The buffer-full conditions would be
+checked in ..scan_output() and communicated to the caller by returning
+N less than `n_pages` passed in. This is exactly how e.g. read()
+works: if you get less than requested you've hit the end of the file.
+If the file happens to have size that is equal to the provided buffer
+length, the next read() will return 0.
 
-Signed-off-by: Justin Chen <justin.chen@broadcom.com>
----
- drivers/phy/broadcom/phy-brcm-usb-init.c | 34 ++++++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+> >>>>> While here, I wonder if we really need to fail the call if there ar=
+e
+> >>>>> unknown bits in those masks set: if this bit set is expanded with
+> >>>>> another category flags, a newer userspace run on older kernel would
+> >>>>> get EINVAL even if the "treat unknown as 0" be what it requires.
+> >>>>> There is no simple way in the API to discover what bits the kernel
+> >>>>> supports. We could allow a no-op (no WP nor GET) call to help with
+> >>>>> that and then rejecting unknown bits would make sense.
+> >>>> I've not seen any examples of this. But I've seen examples of return=
+ing
+> >>>> error if kernel doesn't support a feature. Each new feature comes wi=
+th a
+> >>>> kernel version, greater than this version support this feature. If u=
+ser is
+> >>>> trying to use advanced feature which isn't present in a kernel, we s=
+hould
+> >>>> return error and not proceed to confuse the user/kernel. In fact if =
+we look
+> >>>> at userfaultfd_api(), we return error immediately if feature has som=
+e bit
+> >>>> set which kernel doesn't support.
+> >>>
+> >>> I think we should have a way of detecting the supported flags if we
+> >>> don't want a forward compatibility policy for flags here. Maybe it
+> >>> would be enough to allow all the no-op combinations for this purpose?
+> >> Again I don't think UFFD is doing anything like this.
+> >
+> > If it's cheap and easy to provide a user with a way to detect the
+> > supported features - why not do it?
+> I'm sorry. But it would bring up something new and iterations will be
+> needed to just play around. I like the UFFD way.
 
-diff --git a/drivers/phy/broadcom/phy-brcm-usb-init.c b/drivers/phy/broadcom/phy-brcm-usb-init.c
-index a1ca83308f98..39536b6d96a9 100644
---- a/drivers/phy/broadcom/phy-brcm-usb-init.c
-+++ b/drivers/phy/broadcom/phy-brcm-usb-init.c
-@@ -35,6 +35,11 @@
- #define   USB_CTRL_SETUP_STRAP_IPP_SEL_MASK		BIT(25) /* option */
- #define   USB_CTRL_SETUP_CC_DRD_MODE_ENABLE_MASK	BIT(26) /* option */
- #define   USB_CTRL_SETUP_STRAP_CC_DRD_MODE_ENABLE_SEL_MASK BIT(27) /* opt */
-+#define   USB_CTRL_SETUP_OC_DISABLE_PORT0_MASK		BIT(28)
-+#define   USB_CTRL_SETUP_OC_DISABLE_PORT1_MASK		BIT(29)
-+#define   USB_CTRL_SETUP_OC_DISABLE_MASK		GENMASK(29, 28) /* option */
-+#define   USB_CTRL_SETUP_OC3_DISABLE_PORT0_MASK		BIT(30)
-+#define   USB_CTRL_SETUP_OC3_DISABLE_PORT1_MASK		BIT(31)
- #define   USB_CTRL_SETUP_OC3_DISABLE_MASK		GENMASK(31, 30) /* option */
- #define USB_CTRL_PLL_CTL		0x04
- #define   USB_CTRL_PLL_CTL_PLL_SUSPEND_EN_MASK		BIT(27)
-@@ -114,6 +119,8 @@ enum {
- 	USB_CTRL_SETUP_SCB2_EN_SELECTOR,
- 	USB_CTRL_SETUP_SS_EHCI64BIT_EN_SELECTOR,
- 	USB_CTRL_SETUP_STRAP_IPP_SEL_SELECTOR,
-+	USB_CTRL_SETUP_OC3_DISABLE_PORT0_SELECTOR,
-+	USB_CTRL_SETUP_OC3_DISABLE_PORT1_SELECTOR,
- 	USB_CTRL_SETUP_OC3_DISABLE_SELECTOR,
- 	USB_CTRL_PLL_CTL_PLL_IDDQ_PWRDN_SELECTOR,
- 	USB_CTRL_USB_PM_BDC_SOFT_RESETB_SELECTOR,
-@@ -190,6 +197,8 @@ usb_reg_bits_map_table[BRCM_FAMILY_COUNT][USB_CTRL_SELECTOR_COUNT] = {
- 		USB_CTRL_SETUP_SCB2_EN_MASK,
- 		USB_CTRL_SETUP_SS_EHCI64BIT_EN_MASK,
- 		USB_CTRL_SETUP_STRAP_IPP_SEL_MASK,
-+		USB_CTRL_SETUP_OC3_DISABLE_PORT0_MASK,
-+		USB_CTRL_SETUP_OC3_DISABLE_PORT1_MASK,
- 		USB_CTRL_SETUP_OC3_DISABLE_MASK,
- 		0, /* USB_CTRL_PLL_CTL_PLL_IDDQ_PWRDN_MASK */
- 		0, /* USB_CTRL_USB_PM_BDC_SOFT_RESETB_MASK */
-@@ -232,6 +241,8 @@ usb_reg_bits_map_table[BRCM_FAMILY_COUNT][USB_CTRL_SELECTOR_COUNT] = {
- 		USB_CTRL_SETUP_SCB2_EN_MASK,
- 		USB_CTRL_SETUP_SS_EHCI64BIT_EN_MASK,
- 		0, /* USB_CTRL_SETUP_STRAP_IPP_SEL_MASK */
-+		USB_CTRL_SETUP_OC3_DISABLE_PORT0_MASK,
-+		USB_CTRL_SETUP_OC3_DISABLE_PORT1_MASK,
- 		USB_CTRL_SETUP_OC3_DISABLE_MASK,
- 		USB_CTRL_PLL_CTL_PLL_IDDQ_PWRDN_MASK,
- 		0, /* USB_CTRL_USB_PM_BDC_SOFT_RESETB_MASK */
-@@ -253,6 +264,8 @@ usb_reg_bits_map_table[BRCM_FAMILY_COUNT][USB_CTRL_SELECTOR_COUNT] = {
- 		0, /* USB_CTRL_SETUP_SCB2_EN_MASK */
- 		USB_CTRL_SETUP_SS_EHCI64BIT_EN_MASK,
- 		USB_CTRL_SETUP_STRAP_IPP_SEL_MASK,
-+		USB_CTRL_SETUP_OC3_DISABLE_PORT0_MASK,
-+		USB_CTRL_SETUP_OC3_DISABLE_PORT1_MASK,
- 		USB_CTRL_SETUP_OC3_DISABLE_MASK,
- 		0, /* USB_CTRL_PLL_CTL_PLL_IDDQ_PWRDN_MASK */
- 		USB_CTRL_USB_PM_BDC_SOFT_RESETB_MASK,
-@@ -274,6 +287,8 @@ usb_reg_bits_map_table[BRCM_FAMILY_COUNT][USB_CTRL_SELECTOR_COUNT] = {
- 		USB_CTRL_SETUP_SCB2_EN_MASK,
- 		USB_CTRL_SETUP_SS_EHCI64BIT_EN_MASK,
- 		0, /* USB_CTRL_SETUP_STRAP_IPP_SEL_MASK */
-+		USB_CTRL_SETUP_OC3_DISABLE_PORT0_MASK,
-+		USB_CTRL_SETUP_OC3_DISABLE_PORT1_MASK,
- 		USB_CTRL_SETUP_OC3_DISABLE_MASK,
- 		USB_CTRL_PLL_CTL_PLL_IDDQ_PWRDN_MASK,
- 		0, /* USB_CTRL_USB_PM_BDC_SOFT_RESETB_MASK */
-@@ -295,6 +310,8 @@ usb_reg_bits_map_table[BRCM_FAMILY_COUNT][USB_CTRL_SELECTOR_COUNT] = {
- 		USB_CTRL_SETUP_SCB2_EN_MASK,
- 		USB_CTRL_SETUP_SS_EHCI64BIT_EN_MASK,
- 		0, /* USB_CTRL_SETUP_STRAP_IPP_SEL_MASK */
-+		USB_CTRL_SETUP_OC3_DISABLE_PORT0_MASK,
-+		USB_CTRL_SETUP_OC3_DISABLE_PORT1_MASK,
- 		USB_CTRL_SETUP_OC3_DISABLE_MASK,
- 		0, /* USB_CTRL_PLL_CTL_PLL_IDDQ_PWRDN_MASK */
- 		0, /* USB_CTRL_USB_PM_BDC_SOFT_RESETB_MASK */
-@@ -316,6 +333,8 @@ usb_reg_bits_map_table[BRCM_FAMILY_COUNT][USB_CTRL_SELECTOR_COUNT] = {
- 		USB_CTRL_SETUP_SCB2_EN_MASK,
- 		USB_CTRL_SETUP_SS_EHCI64BIT_EN_VAR_MASK,
- 		0, /* USB_CTRL_SETUP_STRAP_IPP_SEL_MASK */
-+		0, /* USB_CTRL_SETUP_OC3_DISABLE_PORT0_MASK */
-+		0, /* USB_CTRL_SETUP_OC3_DISABLE_PORT1_MASK */
- 		0, /* USB_CTRL_SETUP_OC3_DISABLE_MASK */
- 		USB_CTRL_PLL_CTL_PLL_IDDQ_PWRDN_MASK,
- 		0, /* USB_CTRL_USB_PM_BDC_SOFT_RESETB_MASK */
-@@ -337,6 +356,8 @@ usb_reg_bits_map_table[BRCM_FAMILY_COUNT][USB_CTRL_SELECTOR_COUNT] = {
- 		USB_CTRL_SETUP_SCB2_EN_MASK,
- 		USB_CTRL_SETUP_SS_EHCI64BIT_EN_MASK,
- 		USB_CTRL_SETUP_STRAP_IPP_SEL_MASK,
-+		USB_CTRL_SETUP_OC3_DISABLE_PORT0_MASK,
-+		USB_CTRL_SETUP_OC3_DISABLE_PORT1_MASK,
- 		USB_CTRL_SETUP_OC3_DISABLE_MASK,
- 		0, /* USB_CTRL_PLL_CTL_PLL_IDDQ_PWRDN_MASK */
- 		USB_CTRL_USB_PM_BDC_SOFT_RESETB_MASK,
-@@ -358,6 +379,8 @@ usb_reg_bits_map_table[BRCM_FAMILY_COUNT][USB_CTRL_SELECTOR_COUNT] = {
- 		USB_CTRL_SETUP_SCB2_EN_MASK,
- 		USB_CTRL_SETUP_SS_EHCI64BIT_EN_VAR_MASK,
- 		0, /* USB_CTRL_SETUP_STRAP_IPP_SEL_MASK */
-+		USB_CTRL_SETUP_OC3_DISABLE_PORT0_MASK,
-+		USB_CTRL_SETUP_OC3_DISABLE_PORT1_MASK,
- 		USB_CTRL_SETUP_OC3_DISABLE_MASK,
- 		USB_CTRL_PLL_CTL_PLL_IDDQ_PWRDN_MASK,
- 		0, /* USB_CTRL_USB_PM_BDC_SOFT_RESETB_MASK */
-@@ -379,6 +402,8 @@ usb_reg_bits_map_table[BRCM_FAMILY_COUNT][USB_CTRL_SELECTOR_COUNT] = {
- 		0, /* USB_CTRL_SETUP_SCB2_EN_MASK */
- 		USB_CTRL_SETUP_SS_EHCI64BIT_EN_MASK,
- 		USB_CTRL_SETUP_STRAP_IPP_SEL_MASK,
-+		USB_CTRL_SETUP_OC3_DISABLE_PORT0_MASK,
-+		USB_CTRL_SETUP_OC3_DISABLE_PORT1_MASK,
- 		USB_CTRL_SETUP_OC3_DISABLE_MASK,
- 		0, /* USB_CTRL_PLL_CTL_PLL_IDDQ_PWRDN_MASK */
- 		USB_CTRL_USB_PM_BDC_SOFT_RESETB_MASK,
-@@ -400,6 +425,8 @@ usb_reg_bits_map_table[BRCM_FAMILY_COUNT][USB_CTRL_SELECTOR_COUNT] = {
- 		0, /* USB_CTRL_SETUP_SCB2_EN_MASK */
- 		0, /*USB_CTRL_SETUP_SS_EHCI64BIT_EN_MASK */
- 		USB_CTRL_SETUP_STRAP_IPP_SEL_MASK,
-+		USB_CTRL_SETUP_OC3_DISABLE_PORT0_MASK,
-+		USB_CTRL_SETUP_OC3_DISABLE_PORT1_MASK,
- 		USB_CTRL_SETUP_OC3_DISABLE_MASK,
- 		0, /* USB_CTRL_PLL_CTL_PLL_IDDQ_PWRDN_MASK */
- 		USB_CTRL_USB_PM_BDC_SOFT_RESETB_MASK,
-@@ -872,6 +899,13 @@ static void usb_init_common(struct brcm_usb_init_params *params)
- 
- 	brcmusb_memc_fix(params);
- 
-+	/* Workaround for false positive OC for 7439b2 in DRD/Device mode */
-+	if ((params->family_id == 0x74390012) &&
-+	    (params->supported_port_modes != USB_CTLR_MODE_HOST)) {
-+		USB_CTRL_SET(ctrl, SETUP, OC_DISABLE_PORT1);
-+		USB_CTRL_SET_FAMILY(params, SETUP, OC3_DISABLE_PORT1);
-+	}
-+
- 	if (USB_CTRL_MASK_FAMILY(params, USB_DEVICE_CTL1, PORT_MODE)) {
- 		reg = brcm_usb_readl(USB_CTRL_REG(ctrl, USB_DEVICE_CTL1));
- 		reg &= ~USB_CTRL_MASK_FAMILY(params, USB_DEVICE_CTL1,
--- 
-2.7.4
+Let's then first agree on what would have to be changed. I guess we
+could leverage that `scan_len =3D 0` doesn't make much sense otherwise
+and let it be used to check the other fields for support.
 
-
---00000000000077a56105fe309a53
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-NhTY3E+cXCB11wty89QStajwXdhGJTYEvUgvsq1h8CwJj9w/38ldAQf5WjhPmApYeJR2ewFrBMCM
-4lHkdRJ6TDc9nXoEkypUfjJkJHe7Eal06tosh6JpAgMBAAGjggHZMIIB1TAOBgNVHQ8BAf8EBAMC
-BaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJlLmdsb2JhbHNp
-Z24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYIKwYBBQUHMAGG
-NWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwME0G
-A1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxz
-aWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqGOGh0dHA6Ly9j
-cmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3JsMCMGA1UdEQQc
-MBqBGGp1c3Rpbi5jaGVuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSME
-GDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUIWGeYuaTsnIada5Xx8TR3cheUbgw
-DQYJKoZIhvcNAQELBQADggEBAHNQlMqQOFYPYFO71A+8t+qWMmtOdd2iGswSOvpSZ/pmGlfw8ZvY
-dRTkl27m37la84AxRkiVMes14JyOZJoMh/g7fbgPlU14eBc6WQWkIA6AmNkduFWTr1pRezkjpeo6
-xVmdBLM4VY1TFDYj7S8H2adPuypd62uHMY/MZi+BIUys4uAFA+N3NuUBNjcVZXYPplYxxKEuIFq6
-sDL+OV16G+F9CkNMN3txsym8Nnx5WAYZb6+rBUIhMGz70V05xsHQfzvo2s7f0J1tJ5BoRlPPhL0h
-VOnWA3h71u9TfSsv+PXVm3P21TfOS2uc1hbzEqyENCP4i5XQ0rv0TmPW42GZ0o4xggJtMIICaQIB
-ATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhH
-bG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwj8BKLXNpALfemdRAwDQYJ
-YIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJpM3SEFZBv2dV4s/fUhjsDLFwYDAz26eG66
-Xr1G38KJMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDYxNTIw
-MDYyNlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFl
-AwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATAN
-BgkqhkiG9w0BAQEFAASCAQBGPjXdOyLcCQbaKf0O4DIt66NEy2mK/vFit97YaFhyPcCo0JARsQm6
-xgdc55VdNfDzkKCOejsbvlgLZAjRps0G7kQmbqBpNsUBE7jQI1+Ywno8Zy4XOznbWGIBTg8ULl8U
-sF090tHO27zzefNkDdSR0DtyX2deoPZe8PK/EShH8DP/dooQO1crHUVxaJWLuW+76wawHjRIPrUN
-yd1HmNmbU0RAY9N/if7LymgrgV0U1mnZZASBhNAZEk8mVgvLV6mhlbtVmiZ/fHVS5agcBQAIjkSY
-bb29IZtw7RuF2gu9xTBmnIn/ZLO0nR/PF87g1UN+/dW/bWm+9lq83aM1bd5l
---00000000000077a56105fe309a53--
+Best Regards
+Micha=C5=82 Miros=C5=82aw
