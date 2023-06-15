@@ -2,221 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AB3D730DCB
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 05:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D35730DCE
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 05:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238296AbjFOD4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 23:56:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53586 "EHLO
+        id S238478AbjFOD6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 23:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbjFODzs (ORCPT
+        with ESMTP id S229711AbjFOD6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 23:55:48 -0400
-Received: from DM6FTOPR00CU001.outbound.protection.outlook.com (mail-centralusazon11020023.outbound.protection.outlook.com [52.101.61.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724E22133;
-        Wed, 14 Jun 2023 20:55:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=I4nDQLXtBrHKjc50hMe7hGXLLJTrPn//qLKoWrQNZZwpwg3qAZya7R7ccA4h0FMXS+Q9fUk5BUnRR16x88AXOJdrfAS5zTDGKRGvCpl+1SgWnva6Yn4h7VQQEtBXNUkRyqAY3FofQuHhQJWYkxiJ0lzgbBE9yUf/XbRHL+f5v2ErKT8FQ/VrwMYi0Pe+RLCUO2PX/qhZyUQWmf1b9yA2SnxwV58mQuQMA44eHaK1m00hKJctfkqfafeWMuiT6gYfVWXI/nTZZ7g6sCyYwk55gpkfYhzfs86QXBGhbDKA364t8Ikqf9czyLlx3ddTBEZJxW48vCMuHVXMUBX7mTXckQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JrichSzLPYq+YUu82LbzmuirLDiaXyTwDNkCwoFSZLE=;
- b=hB7lY8LiD981vVcLYGJlr2YYd45UF4YoDZ6pFWqUk9vWpKLe46HHxNgUT5tMr5WekA3xpAWBtMpiJ9OD/nK99lUzwT5MoWaOd+YLR9IHyOCJ8co51er8svxCkN7TLE8v/Z69CMUdPj7QT2fX4HG7NLSMZ/kI4SFXyE7Bn7MhInu22BjuKaWtof6cG9Bxcd7cQeK0PAo4sv2iLS8Gcy95IjKahmUcKD9HHRR9EF9cz8txRIgAGRpTlkRGmA9qyRRq5Dhl9VZg8Di1cKuChBa8W+TOmJq0874BiIA+kd7HohEzIcyik96PjcKjMdqBM9LkfczjuOkD4mw9n4T8p36SxA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JrichSzLPYq+YUu82LbzmuirLDiaXyTwDNkCwoFSZLE=;
- b=h4EAyzrSBD7xOhmE353to6aQb2m+sMRnhuHD4CJ70eRZUETlyY4WfzaCEjWaExLR9k9KpC/ZMeo2W00eK2qjOQSC54ryNvaoq7fLBub3ZEmAh3Txm5efU8jOdqLXgFdAVPvWskFm9lONFSApIUusmxv2xL2+XeOgEXcBPhhJNDA=
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
- by PH7PR21MB3260.namprd21.prod.outlook.com (2603:10b6:510:1d8::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.6; Thu, 15 Jun
- 2023 03:55:43 +0000
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::bb03:96fc:3397:6022]) by SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::bb03:96fc:3397:6022%4]) with mapi id 15.20.6521.009; Thu, 15 Jun 2023
- 03:55:43 +0000
-From:   Dexuan Cui <decui@microsoft.com>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
-CC:     "bhelgaas@google.com" <bhelgaas@google.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Jake Oshins <jakeo@microsoft.com>,
-        "kuba@kernel.org" <kuba@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "saeedm@nvidia.com" <saeedm@nvidia.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Long Li <longli@microsoft.com>,
-        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
-        Saurabh Singh Sengar <ssengar@microsoft.com>,
-        "helgaas@kernel.org" <helgaas@kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Jose Teuttli Carranco <josete@microsoft.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH v3 1/6] PCI: hv: Fix a race condition bug in
- hv_pci_query_relations()
-Thread-Topic: [PATCH v3 1/6] PCI: hv: Fix a race condition bug in
- hv_pci_query_relations()
-Thread-Index: AQHZjuDp3/HWlZZHlUKokFlSLFMUD6+LWp4Q
-Date:   Thu, 15 Jun 2023 03:55:43 +0000
-Message-ID: <SA1PR21MB133577C1859A3B1DCE1ACAA5BF5BA@SA1PR21MB1335.namprd21.prod.outlook.com>
-References: <20230420024037.5921-1-decui@microsoft.com>
- <20230420024037.5921-2-decui@microsoft.com> <ZG8YzuK/5+8iE8He@lpieralisi>
-In-Reply-To: <ZG8YzuK/5+8iE8He@lpieralisi>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=f554af38-df63-4f69-b441-4d0e85cb67dc;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-06-15T03:48:03Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|PH7PR21MB3260:EE_
-x-ms-office365-filtering-correlation-id: 25e9e427-70a1-47fc-b3d2-08db6d546454
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 4kkL3w+St+5wcM5U24X4JfOGqVnN2aZU0/TaGfawHY11PNTWrY3LeufcNx5fhk6Q9mGYx6miT107lZfvm8FJNfDKEnYQH5mjXTFoat5oUUv6zN8KbwLjs8dePylUhsyMoOHEghaLJl4ROVcJbPyWECZ4OqxwxwaBC9dLFWxsvPAQYPdfoRRNFqUvDozQPYH0dnYX4lIK/mLo8oM5sECiNdZiJMN9alHvohc/8qz9i+jmKM0pBRXhqnv0DYYtx8IObvgzN716tf/WoRbwm1KLAFTEOLwh/4SzhiZdEeEUO7dl6CZWpP7SWt5e9kXEt32OyCGNhd47jcCLnG4ixVql6gw5uo4ODe2ucTnF8Ql40ed4OTM6oP7Rex8Z/RADAeaVJBTiO/4iTC3F3kSlX2ls0yqz5DwFim3K3GxZtKReVpZnaL31B1n/VYEW0ckVe/ksL3rT+cYAMghCYnEACb5pn7oWpz+NCi1n6FWtiNlZmN78/D/Jith+4otkIVgrNizDHNM6DatWhcAECSXcRyJuWRiSJZ4fMBAm5UalHLQMJlo1ubMdoNtUlbAJh0tW1L2+S++/7+C6CyEsetcq8OePahJD7c+Z3OUIbMa5+ibjfEUv+ZwKDhG6Usel7tYDQ9Ql/qw1aT9QM6bL16VjJiZcLAfc597ZOLdEHyEfMo8Niuo=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(396003)(346002)(366004)(376002)(451199021)(86362001)(38070700005)(8990500004)(33656002)(7416002)(2906002)(66899021)(55016003)(38100700002)(7696005)(186003)(83380400001)(52536014)(53546011)(9686003)(6506007)(82960400001)(82950400001)(71200400001)(54906003)(122000001)(5660300002)(66476007)(10290500003)(76116006)(316002)(66556008)(6916009)(4326008)(478600001)(64756008)(66946007)(8676002)(41300700001)(66446008)(8936002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?y08mJpOX6Psi9+Nor0+EqM6W+feECnp/F1qXOrEUuDzAZmhyj5O/otfqgEkD?=
- =?us-ascii?Q?d72ee/0D6zGqZ8sFr06CcDFUKg8qyhc5G1Q/ym30JxIe7JDkB1uAe3kN90Fe?=
- =?us-ascii?Q?T6bFOIu1OPqHBhF4paHJa8ssCXEHALHAHSQfaevAQVtMyFI6NOzI/LXyEi3s?=
- =?us-ascii?Q?t6TnHqVA2yp8tUfydfLkx3UCZD+4Ws7mFGoV0sJn9E8802bZfGY6aqk0lYIV?=
- =?us-ascii?Q?AsD9n6CvrU9biXrUUQf7Jh247GYXICbFZrQyIh3wWU3CNKy2ouH01ofRw3oQ?=
- =?us-ascii?Q?jbDZtVfVVGGzVTELQrTno97nZFPMpLSjEzCQ15uO5+GRne2n1Xb4ieoR/zqY?=
- =?us-ascii?Q?IeDn2/fz/6N8CB9R7w4KNcBGoDseh80PBtne7IC9mRLfLi/z/Jd9RspZnRER?=
- =?us-ascii?Q?mTWs+8vD+qoEZvQJVExrv8N3zUaL6sQZtPpooZF1vbfH5j66pvBEsBJwgXwF?=
- =?us-ascii?Q?QlamJXaf/DPOWW0rPMrGzkY19BNV2gDY+fkeGiSpnLBPOVvEuAf/uT/ZKBe3?=
- =?us-ascii?Q?Jo6yohdPg1TIdiiglnyJUcDwhkanaTybNbmdFvhsaQtPKkvxYtQJs0d5mr7g?=
- =?us-ascii?Q?ZdrnyBfoL91yc5NkWlyqw+FvA+ixQBuv/Ya7LZWWrAOukSCMfLeAVmeXEAld?=
- =?us-ascii?Q?jvikpDCxacDpEiSjVVp/f/JFB9cDbOMTQW0DOpdPx5B3b81TY7+qaBl4Zn7j?=
- =?us-ascii?Q?1Shvv7GDkn/lELFIF+Hirawozf/AFKUpvM1NkXAdqc8kyFSb+ZJPYmkuKFwQ?=
- =?us-ascii?Q?6zAlMYLM0Um7/cw8m4ETChjqK4vB7tLMbvwAHbjxm8KN9e2z3pz1sTEBbclf?=
- =?us-ascii?Q?y8B8mPiYNibbSlqUFCPTCmmOUWjpBwC3lXemkxe/57xQwQrRGg+VYyauwzzU?=
- =?us-ascii?Q?QRtYvBcuZzpvhCXjh46oBm2neWXLautBDJ1ISEbzxRyL+0fUS06Qgv910zAG?=
- =?us-ascii?Q?AlHkVuYKYyMLmy6yyWe4b0Wn4b2q4vDQ/42LbR7lYbVitSlKNpDTTHUnpc4q?=
- =?us-ascii?Q?tC4veBlcA79HuFh9jBDherL/ewyYDD3ZFCLbgRi+tTO8FGOdhZZBWC24hntg?=
- =?us-ascii?Q?POlIDOVmWVNz3I+bAsS7xYwKiUqdaVSq0iqZHuh78WWHfgzBd3yNF+FKemaf?=
- =?us-ascii?Q?inC5IZfqDFh5RqCxcATc2JCys8aLAWMw45j+OFf2Dy/RSduW/caH41lHQElD?=
- =?us-ascii?Q?o9owJ4VYEdGbzKbfFQr4oQK3ZhKjPnag+70Sl9QRHQKKmpBUlbiLsI7zsKtx?=
- =?us-ascii?Q?i7Pe/fLAgCxgQG6GvBNE0syqQco7O0j8vnNIpC5gmL/lH1nPF4aDkM/4Z2Ox?=
- =?us-ascii?Q?Lt2fe+cESCGXTfK65/WgnCY9AUig6CL4W+n2PGykxo+1AGDHvtzMFDrWjmJV?=
- =?us-ascii?Q?s2DbRnCzeYanyjrF0X+fCnMaYJgOOs3hrsFXBknXiuJAucAyXCaIqFwnR00u?=
- =?us-ascii?Q?0dveFmgMVDP2B4SzJhx9LIATD+iNe3QjwknEWvyjR1vRFZwM3J/pagyJD9XW?=
- =?us-ascii?Q?Ij0c2xoTK9xQ8mVI5vif/hhSzzmnc5Q7eh9P+tvU5+RUbSYu7Uox+qXKpcFw?=
- =?us-ascii?Q?Sj0tyjI3M6vlj539/0JC8fBEGOhnHgqzxhG8BJO11NbUVapYzjNKVIbpf2VM?=
- =?us-ascii?Q?N86YFKePOGuhTzFT5wFnlRE=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 14 Jun 2023 23:58:45 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515802122
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 20:58:44 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0Vl8reEi_1686801520;
+Received: from 30.97.48.67(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Vl8reEi_1686801520)
+          by smtp.aliyun-inc.com;
+          Thu, 15 Jun 2023 11:58:41 +0800
+Message-ID: <5f340d98-4ee0-35a9-58ed-943834d68042@linux.alibaba.com>
+Date:   Thu, 15 Jun 2023 11:59:00 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 25e9e427-70a1-47fc-b3d2-08db6d546454
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jun 2023 03:55:43.0614
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: oQl98l7LPcQ39ZI6GSxjpYf8I0cm4BhUCl78GqJmKN03SrMtKvAa/WmFhfIxiurUypjYUy4wQuNuJx+xp96Rng==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR21MB3260
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2] mm: compaction: skip memory hole rapidly when
+ isolating migratable pages
+To:     "Huang, Ying" <ying.huang@intel.com>,
+        Mel Gorman <mgorman@techsingularity.net>, david@redhat.com
+Cc:     akpm@linux-foundation.org, vbabka@suse.cz, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <770f9f61472b24b6bc89adbd71a77d9cf62bb54f.1686646361.git.baolin.wang@linux.alibaba.com>
+ <20230614095501.m4porztaibchrgwx@techsingularity.net>
+ <87ilbpo1d9.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <87ilbpo1d9.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Lorenzo Pieralisi <lpieralisi@kernel.org>
-> Sent: Thursday, May 25, 2023 1:14 AM
-> To: Dexuan Cui <decui@microsoft.com>
->=20
-> On Wed, Apr 19, 2023 at 07:40:32PM -0700, Dexuan Cui wrote:
-> > Fix the longstanding race between hv_pci_query_relations() and
-> > survey_child_resources() by flushing the workqueue before we exit from
-> > hv_pci_query_relations().
->=20
-> "Fix the longstanding race" is vague. Please describe the race
-> succinctly at least to give an idea of what the problem is.
-Hi Lozenzo, I'm sorry for the late response -- finally I'm back on the patc=
-hset...
 
-I'll use the below commit message in v4:
-=20
- Since day 1 of the driver, there has been a race between
- hv_pci_query_relations() and survey_child_resources(): during fast
- device hotplug, hv_pci_query_relations() may error out due to
- device-remove and the stack variable 'comp' is no longer valid;
- however, pci_devices_present_work() -> survey_child_resources() ->
- complete() may be running on another CPU and accessing the no-longer-valid
- 'comp'. Fix the race by flushing the workqueue before we exit from
- hv_pci_query_relations().
 
-I'll also update the comment to share more details of the race:
+On 6/15/2023 11:22 AM, Huang, Ying wrote:
+> Hi, Mel,
+> 
+> Mel Gorman <mgorman@techsingularity.net> writes:
+> 
+>> On Tue, Jun 13, 2023 at 04:55:04PM +0800, Baolin Wang wrote:
+>>> On some machines, the normal zone can have a large memory hole like
+>>> below memory layout, and we can see the range from 0x100000000 to
+>>> 0x1800000000 is a hole. So when isolating some migratable pages, the
+>>> scanner can meet the hole and it will take more time to skip the large
+>>> hole. From my measurement, I can see the isolation scanner will take
+>>> 80us ~ 100us to skip the large hole [0x100000000 - 0x1800000000].
+>>>
+>>> So adding a new helper to fast search next online memory section
+>>> to skip the large hole can help to find next suitable pageblock
+>>> efficiently. With this patch, I can see the large hole scanning only
+>>> takes < 1us.
+>>>
+>>> [    0.000000] Zone ranges:
+>>> [    0.000000]   DMA      [mem 0x0000000040000000-0x00000000ffffffff]
+>>> [    0.000000]   DMA32    empty
+>>> [    0.000000]   Normal   [mem 0x0000000100000000-0x0000001fa7ffffff]
+>>> [    0.000000] Movable zone start for each node
+>>> [    0.000000] Early memory node ranges
+>>> [    0.000000]   node   0: [mem 0x0000000040000000-0x0000000fffffffff]
+>>> [    0.000000]   node   0: [mem 0x0000001800000000-0x0000001fa3c7ffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa3c80000-0x0000001fa3ffffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa4000000-0x0000001fa402ffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa4030000-0x0000001fa40effff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa40f0000-0x0000001fa73cffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa73d0000-0x0000001fa745ffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa7460000-0x0000001fa746ffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa7470000-0x0000001fa758ffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa7590000-0x0000001fa7ffffff]
+>>>
+>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>>
+>> This may only be necessary for non-contiguous zones so a check for
+>> zone_contiguous could be made but I suspect the saving, if any, would be
+>> marginal.
+>>
+>> However, it's subtle that block_end_pfn can end up in an arbirary location
+>> past the end of the zone or past cc->free_pfn. As the "continue" will update
+>> cc->migrate_pfn, that might lead to errors in the future. It would be a
+>> lot safer to pass in cc->free_pfn and do two things with the value. First,
+>> there is no point scanning for a valid online section past cc->free_pfn so
+>> terminating after cc->free_pfn may save some cycles. Second, cc->migrate_pfn
+>> does not end up with an arbitrary value which is a more defensive approach
+>> to any future programming errors.
+> 
+> I have thought about this before.  Originally, I had thought that we
+> were safe because cc->free_pfn should be in a online section and
+> block_end_pfn should reach cc->free_pfn before the end of zone.  But
+> after checking more code and thinking about it again, I found that the
+> underlying sections may go offline under us during compaction.  So that,
+> cc->free_pfn may be in a offline section or after the end of zone.  So,
+> you are right, we need to consider the range of block_end_pfn.
+> 
+> But, if we thought in this way (memory online/offline at any time), it
+> appears that we need to check whether the underlying section was
+> offlined.  For example, is it safe to use "pfn_to_page()" in
+> "isolate_migratepages_block()"?  Is it possible for the underlying
+> section to be offlined under us?
 
---- a/drivers/pci/controller/pci-hyperv.c
-+++ b/drivers/pci/controller/pci-hyperv.c
-@@ -3401,6 +3401,24 @@ static int hv_pci_query_relations(struct hv_device *=
-hdev)
-        if (!ret)
-                ret =3D wait_for_response(hdev, &comp);
+It is possible. There is a previous discussion[1] about the race between 
+pfn_to_online_page() and memory offline.
 
-+       /*
-+        * In the case of fast device addition/removal, it's possible that
-+        * vmbus_sendpacket() or wait_for_response() returns -ENODEV but we
-+        * already got a PCI_BUS_RELATIONS* message from the host and the
-+        * channel callback already scheduled a work to hbus->wq, which can=
- be
-+        * running pci_devices_present_work() -> survey_child_resources() -=
->
-+        * complete(&hbus->survey_event), even after hv_pci_query_relations=
-()
-+        * exits and the stack variable 'comp' is no longer valid; as a res=
-ult,
-+        * a hang or a page fault may happen when the complete() calls
-+        * raw_spin_lock_irqsave(). Flush hbus->wq before we exit from
-+        * hv_pci_query_relations() to avoid the issues. Note: if 'ret' is
-+        * -ENODEV, there can't be any more work item scheduled to hbus->wq
-+        * after the flush_workqueue(): see vmbus_onoffer_rescind() ->
-+        * vmbus_reset_channel_cb(), vmbus_rescind_cleanup() ->
-+        * channel->rescind =3D true.
-+        */
-+       flush_workqueue(hbus->wq);
-+
-        return ret;
- }
-
-> > +	 * In the case of fast device addition/removal, it's possible that
-> > +	 * vmbus_sendpacket() or wait_for_response() returns -ENODEV but we
-> > +	 * already got a PCI_BUS_RELATIONS* message from the host and the
-> > +	 * channel callback already scheduled a work to hbus->wq, which can
-> >  be
-> > +	 * running survey_child_resources() -> complete(&hbus->survey_event),
-> > +	 * even after hv_pci_query_relations() exits and the stack variable
-> > +	 * 'comp' is no longer valid. This can cause a strange hang issue
->=20
-> "A strange hang" sounds like we don't understand what's happening, it
-> does not feel like it is a solid understanding of the issue.
->=20
-> I would remove it - given that you already explain that comp is no
-> longer valid - that is already a bug that needs fixing.
-I share more details in the comment (see the above).
-=20
-> Acked-by: Lorenzo Pieralisi <lpieralisi@kernel.org>
-Thanks!
+[1] 
+https://lore.kernel.org/lkml/87zgc6buoq.fsf@nvidia.com/T/#m642d91bcc726437e1848b295bc57ce249c7ca399
