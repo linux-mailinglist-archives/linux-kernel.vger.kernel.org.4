@@ -2,183 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E1ED731591
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 12:39:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 634517314CE
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 12:05:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240641AbjFOKjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 06:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48382 "EHLO
+        id S245611AbjFOKFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 06:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbjFOKjD (ORCPT
+        with ESMTP id S245296AbjFOKE7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 06:39:03 -0400
-Received: from m126.mail.126.com (m126.mail.126.com [220.181.12.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F3BC81BC;
-        Thu, 15 Jun 2023 03:39:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id; bh=ICJ8jrZM5TZc06mcNR
-        wgdYz21JS3FDfS+zR+SSr2uX0=; b=Dm6XiM0x6u0I47bSW4ta3xriY6/hCStCi0
-        vcCYBefzLQewoAWuRc/iaV0s//rBBhRGiblekuaEufJVZJ0OkXuHYGLqJ5u6L70g
-        4mTUBrN7MAKHKRKy/eNaC4aVpkBtAd9xj0yB44qa+ywKEhpbXderXZn75672NFoK
-        niMESZ5kI=
-Received: from wh-chevronli-w10.bayhubtech.com (unknown [58.48.115.170])
-        by zwqz-smtp-mta-g3-1 (Coremail) with SMTP id _____wD3BSr43opk8WKiAA--.50068S3;
-        Thu, 15 Jun 2023 17:50:49 +0800 (CST)
-From:   Chevron Li <chevron_li@126.com>
-To:     adrian.hunter@intel.com, ulf.hansson@linaro.org,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     shaper.liu@bayhubtech.com, xiaoguang.yu@bayhubtech.com,
-        shirley.her@bayhubtech.com, chevron.li@bayhubtech.com
-Subject: [PATCH V2 2/2] mmc: sdhci-pci-o2micro: add Bayhub new chip GG8 support for express card
-Date:   Thu, 15 Jun 2023 17:50:12 +0800
-Message-Id: <20230615095012.30856-2-chevron_li@126.com>
-X-Mailer: git-send-email 2.18.0.windows.1
-In-Reply-To: <20230615095012.30856-1-chevron_li@126.com>
-References: <20230615095012.30856-1-chevron_li@126.com>
-X-CM-TRANSID: _____wD3BSr43opk8WKiAA--.50068S3
-X-Coremail-Antispam: 1Uf129KBjvJXoWxGw47JF4rJF4rAr1xKw1UGFg_yoWrZFy7pF
-        sYvas8Cr4UtFW3Z39rGw4kur1Ygr4vk3ykKFsxX3yFv3WUCr95WFn7CFy5XryUXrZ3tw1f
-        Xa1vqFyUGry5AwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jYNtxUUUUU=
-X-Originating-IP: [58.48.115.170]
-X-CM-SenderInfo: hfkh42xrqbzxa6rslhhfrp/1tbiFx6PAVpEGgA+wgAAs-
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 15 Jun 2023 06:04:59 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D52D270E
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 03:04:57 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f6283d0d84so10261960e87.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 03:04:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686823495; x=1689415495;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=w71Feb6Cuie6QHDgJApc5h5mlpn+n4W2328NsDSJrHk=;
+        b=w7TTtIbqEwS+lO03AQCyTZ5gF/Zk2bZU2d0IgH14c/dJh3aJhel2YjHeRnE99bfCc7
+         gt8DDhA6rK7TfyPkezRHrTqEDfryeY/spojWe0gahCOlH4RZe2kGHZDVECu3UJGAMD6t
+         g+iy2RVZIGYkV/ehonSR7qe/F2Gq+ySQ0R2eMK1MSSVKHB8gcqA2yKZjOS0KMIbYh2qk
+         00HhN77UmJ4pa3JDmC9DN+fttYMKw7+l1kowRYJCoqpD/FheLebFnNMsdbicsjo3kZSK
+         DyyqPs0UuBCMEUNghkg+P62eRLb0sQqIG7AtKIFiK3NMuRYHlRG4G+wJ5ikewXsxj/nf
+         FGvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686823495; x=1689415495;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=w71Feb6Cuie6QHDgJApc5h5mlpn+n4W2328NsDSJrHk=;
+        b=EbsraozH5qafkcnb05eG8azAzrIuuLZvLbUuHVZ0JZFUbTD1eL1qVPzb8nIT06a+GG
+         WGYMRr1R8z9cXoX5Abt9g/oYn2sFDx/IMaGVquGbTrXjVudVB78/mcl5mtSZJftX36OU
+         E1o9tw06svUQPWgNL/rWEIXnZF1fSUNGsp8IfmoOxPkecHvvMRuPmGUNPxFdowjIsrJQ
+         tewyV3X6cDMVdG6r6chUzwFxIhQB9k3RdNvTMXlEoAEHWYPgQCzbrEFJe4GohLdLJau3
+         OISREHL2B/iDw5D5HDfVHs+ig3TRoRC302tslGKsk46YPVMx5LTYTePTnEAmz/1VgZlX
+         fRhg==
+X-Gm-Message-State: AC+VfDyhh6P6U+K8RUA6edkstec7w33AVn0fnvT4Iw2lRJWU+31RDsyF
+        LBdhRRuuHVMFvy5LPVMHBGjiOA==
+X-Google-Smtp-Source: ACHHUZ5UBxMW0AQyojgBT4IQQWC20Ws7BKhekIK2zj1FC1TIWAJeA5VveEU90Ngd+06SYgJerxRUHg==
+X-Received: by 2002:a19:3819:0:b0:4f7:457e:a457 with SMTP id f25-20020a193819000000b004f7457ea457mr6316363lfa.53.1686823495457;
+        Thu, 15 Jun 2023 03:04:55 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id x27-20020ac259db000000b004f612780b75sm2520269lfn.49.2023.06.15.03.04.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jun 2023 03:04:55 -0700 (PDT)
+Message-ID: <f0261f2a-76d9-fcbf-2a3e-edae14f77604@linaro.org>
+Date:   Thu, 15 Jun 2023 12:04:53 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v8 18/18] drm/msm/a6xx: Add A610 speedbin support
+Content-Language: en-US
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+References: <20230223-topic-gmuwrapper-v8-0-69c68206609e@linaro.org>
+ <20230223-topic-gmuwrapper-v8-18-69c68206609e@linaro.org>
+ <ab2yzsjp65t53wp5nytjuc7eb74zklkb6i342bc5edhm45j3qm@kpyq52is7tde>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <ab2yzsjp65t53wp5nytjuc7eb74zklkb6i342bc5edhm45j3qm@kpyq52is7tde>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chevron Li <chevron.li@bayhubtech.com>
+On 14.06.2023 22:18, Akhil P Oommen wrote:
+> On Mon, May 29, 2023 at 03:52:37PM +0200, Konrad Dybcio wrote:
+>>
+>> A610 is implemented on at least three SoCs: SM6115 (bengal), SM6125
+>> (trinket) and SM6225 (khaje). Trinket does not support speed binning
+>> (only a single SKU exists) and we don't yet support khaje upstream.
+>> Hence, add a fuse mapping table for bengal to allow for per-chip
+>> frequency limiting.
+>>
+>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>  drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 27 +++++++++++++++++++++++++++
+>>  1 file changed, 27 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>> index d046af5f6de2..c304fa118cff 100644
+>> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>> @@ -2098,6 +2098,30 @@ static bool a6xx_progress(struct msm_gpu *gpu, struct msm_ringbuffer *ring)
+>>  	return progress;
+>>  }
+>>  
+>> +static u32 a610_get_speed_bin(u32 fuse)
+>> +{
+>> +	/*
+>> +	 * There are (at least) three SoCs implementing A610: SM6125 (trinket),
+>> +	 * SM6115 (bengal) and SM6225 (khaje). Trinket does not have speedbinning,
+>> +	 * as only a single SKU exists and we don't support khaje upstream yet.
+>> +	 * Hence, this matching table is only valid for bengal and can be easily
+>> +	 * expanded if need be.
+>> +	 */
+>> +
+>> +	if (fuse == 0)
+>> +		return 0;
+>> +	else if (fuse == 206)
+>> +		return 1;
+>> +	else if (fuse == 200)
+>> +		return 2;
+>> +	else if (fuse == 157)
+>> +		return 3;
+>> +	else if (fuse == 127)
+>> +		return 4;
+>> +
+>> +	return UINT_MAX;
+>> +}
+>> +
+>>  static u32 a618_get_speed_bin(u32 fuse)
+>>  {
+>>  	if (fuse == 0)
+>> @@ -2195,6 +2219,9 @@ static u32 fuse_to_supp_hw(struct device *dev, struct adreno_gpu *adreno_gpu, u3
+>>  {
+>>  	u32 val = UINT_MAX;
+>>  
+>> +	if (adreno_is_a610(adreno_gpu))
+>> +		val = a610_get_speed_bin(fuse);
+>> +
+> 
+> Didn't you update here to convert to 'else if' in one of the earlier
+> patches??
+Right, missed this one!
 
-Add Bayhub new chip GG8 support for SD express card.
-This patch depends on patch 1/2.
-
-Signed-off-by: Chevron Li <chevron.li@bayhubtech.com>
----
-Change in V1:
-1.Implement the SD express card callback routine.
-2.Add SD express card support for Bayhub GG8 chip.
-
-Change in V2:
-1.updated some typo in patch and modified title.
-2.updated patch format according to reviewer's comments.
-3.updated the logical to try UHSI when express card initializatio failed.
----
- drivers/mmc/host/sdhci-pci-o2micro.c | 65 +++++++++++++++++++++++++++-
- drivers/mmc/host/sdhci.h             |  3 ++
- 2 files changed, 67 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/mmc/host/sdhci-pci-o2micro.c b/drivers/mmc/host/sdhci-pci-o2micro.c
-index 539bbafb3ff7..ad5502f3aa95 100644
---- a/drivers/mmc/host/sdhci-pci-o2micro.c
-+++ b/drivers/mmc/host/sdhci-pci-o2micro.c
-@@ -21,6 +21,7 @@
-  * O2Micro device registers
-  */
- 
-+#define O2_SD_PCIE_SWITCH	0x54
- #define O2_SD_MISC_REG5		0x64
- #define O2_SD_LD0_CTRL		0x68
- #define O2_SD_DEV_CTRL		0x88
-@@ -631,6 +632,67 @@ static void sdhci_pci_o2_set_clock(struct sdhci_host *host, unsigned int clock)
- 	sdhci_o2_enable_clk(host, clk);
- }
- 
-+static int sdhci_pci_o2_init_sd_express(struct mmc_host *mmc, struct mmc_ios *ios)
-+{
-+	struct sdhci_host *host = mmc_priv(mmc);
-+	struct sdhci_pci_slot *slot = sdhci_priv(host);
-+	struct sdhci_pci_chip *chip = slot->chip;
-+	u8 scratch8;
-+	u16 scratch16;
-+	int ret;
-+
-+	/* Disable clock */
-+	sdhci_writeb(host, 0, SDHCI_CLOCK_CONTROL);
-+
-+	/* Set VDD2 voltage*/
-+	scratch8 = sdhci_readb(host, SDHCI_POWER_CONTROL);
-+	scratch8 &= 0x0F;
-+	if (host->mmc->ios.timing == MMC_TIMING_SD_EXP_1_2V &&
-+	    host->mmc->caps2 & MMC_CAP2_SD_EXP_1_2V) {
-+		scratch8 |= SDHCI_VDD2_POWER_ON | SDHCI_VDD2_POWER_120;
-+	} else {
-+		scratch8 |= SDHCI_VDD2_POWER_ON | SDHCI_VDD2_POWER_180;
-+	}
-+
-+	sdhci_writeb(host, scratch8, SDHCI_POWER_CONTROL);
-+
-+	/* UnLock WP */
-+	pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch8);
-+	scratch8 &= 0x7f;
-+	pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch8);
-+
-+	/* Wait for express card clkreqn assert */
-+	ret = read_poll_timeout(sdhci_readb, scratch8, !(scratch8 & BIT(0)),
-+				1, 30000, false, host, O2_SD_EXP_INT_REG);
-+
-+	if (!ret) {
-+		/* Switch to PCIe mode */
-+		scratch16 = sdhci_readw(host, O2_SD_PCIE_SWITCH);
-+		scratch16 |= BIT(8);
-+		sdhci_writew(host, scratch16, O2_SD_PCIE_SWITCH);
-+	} else {
-+		/* Power off VDD2 voltage*/
-+		scratch8 = sdhci_readb(host, SDHCI_POWER_CONTROL);
-+		scratch8 &= 0x0F;
-+		sdhci_writeb(host, scratch8, SDHCI_POWER_CONTROL);
-+
-+		/* Keep mode as UHSI */
-+		pci_read_config_word(chip->pdev, O2_SD_PARA_SET_REG1, &scratch16);
-+		scratch16 &= ~BIT(11);
-+		pci_write_config_word(chip->pdev, O2_SD_PARA_SET_REG1, scratch16);
-+
-+		host->mmc->ios.timing = MMC_TIMING_LEGACY;
-+		pr_info("%s: Express card initialization failed, falling back to Legacy\n",
-+			mmc_hostname(host->mmc));
-+	}
-+	/* Lock WP */
-+	pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch8);
-+	scratch8 |= 0x80;
-+	pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch8);
-+
-+	return 0;
-+}
-+
- static int sdhci_pci_o2_probe_slot(struct sdhci_pci_slot *slot)
- {
- 	struct sdhci_pci_chip *chip;
-@@ -703,10 +765,11 @@ static int sdhci_pci_o2_probe_slot(struct sdhci_pci_slot *slot)
- 	case PCI_DEVICE_ID_O2_GG8_9861:
- 	case PCI_DEVICE_ID_O2_GG8_9862:
- 	case PCI_DEVICE_ID_O2_GG8_9863:
--		host->mmc->caps2 |= MMC_CAP2_NO_SDIO;
-+		host->mmc->caps2 |= MMC_CAP2_NO_SDIO | MMC_CAP2_SD_EXP | MMC_CAP2_SD_EXP_1_2V;
- 		host->mmc->caps |= MMC_CAP_HW_RESET;
- 		host->quirks2 |= SDHCI_QUIRK2_PRESET_VALUE_BROKEN;
- 		slot->host->mmc_host_ops.get_cd = sdhci_o2_get_cd;
-+		host->mmc_host_ops.init_sd_express = sdhci_pci_o2_init_sd_express;
- 		break;
- 	default:
- 		break;
-diff --git a/drivers/mmc/host/sdhci.h b/drivers/mmc/host/sdhci.h
-index f4f2085c274c..d09640840171 100644
---- a/drivers/mmc/host/sdhci.h
-+++ b/drivers/mmc/host/sdhci.h
-@@ -99,6 +99,9 @@
- #define  SDHCI_POWER_180	0x0A
- #define  SDHCI_POWER_300	0x0C
- #define  SDHCI_POWER_330	0x0E
-+#define  SDHCI_VDD2_POWER_ON	0x10
-+#define  SDHCI_VDD2_POWER_180	0xA0
-+#define  SDHCI_VDD2_POWER_120	0x80
- 
- #define SDHCI_BLOCK_GAP_CONTROL	0x2A
- 
--- 
-2.25.1
-
+Konrad
+> 
+> Reviewed-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+> 
+> -Akhil.
+>>  	if (adreno_is_a618(adreno_gpu))
+>>  		val = a618_get_speed_bin(fuse);
+>>  
+>>
+>> -- 
+>> 2.40.1
+>>
