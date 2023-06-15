@@ -2,144 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE2637315B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 12:46:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2A727315B6
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 12:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245536AbjFOKqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 06:46:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52268 "EHLO
+        id S1343783AbjFOKqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 06:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245638AbjFOKqA (ORCPT
+        with ESMTP id S245751AbjFOKqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 06:46:00 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB251FE4;
-        Thu, 15 Jun 2023 03:45:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1686825957; x=1718361957;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=Hx4vjWtNoUgGVQN3qQcXeqlxmDhDgyTOOSXzVVU5UPU=;
-  b=h2tC/nYNrOOC94MlqR2KFOdA2ecvE1S9t0Ug04vz6N2+NOtQFILdzydg
-   rxa7RaBdccySoZE8VOlAa9scPE9KbV+s/cdJ6EcAsJWz3x270+6kEQtrq
-   ZzprWUkggprGup1Q/f+/eBskOmXdWc6by64jKn1NThgLsxCmYflsmMn2s
-   EjjjKJN56suRLBZOT0nyyM7Ps6ziwBRWXjOQySI7I4DKc8qLGi5l8KKAY
-   5Tw7qJKsJ04fM0HdgARtems6b1XdB2gq5xMU3dAk4xOpmpcYhbDb79pFr
-   DHhrxAmyXQ+oQOQe4PTgAKrMa9LRm1NgxS3SpddVUYoKck/M/uJy27Uci
-   A==;
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="218005591"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Jun 2023 03:45:54 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 15 Jun 2023 03:45:51 -0700
-Received: from den-dk-m31857.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Thu, 15 Jun 2023 03:45:47 -0700
-Message-ID: <255b4de132365501c6e1e97246c30d9729860546.camel@microchip.com>
-Subject: Re: [PATCH v7 01/22] net/tcp: Prepare tcp_md5sig_pool for TCP-AO
-From:   Steen Hegelund <steen.hegelund@microchip.com>
-To:     Dmitry Safonov <dima@arista.com>, David Ahern <dsahern@kernel.org>,
-        "Eric Dumazet" <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-CC:     <linux-kernel@vger.kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        "Ard Biesheuvel" <ardb@kernel.org>,
-        Bob Gilligan <gilligan@arista.com>,
-        "Dan Carpenter" <error27@gmail.com>,
-        David Laight <David.Laight@aculab.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Donald Cassidy <dcassidy@redhat.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Francesco Ruggeri <fruggeri05@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "Hideaki YOSHIFUJI" <yoshfuji@linux-ipv6.org>,
-        Ivan Delalande <colona@arista.com>,
-        Leonard Crestez <cdleonard@gmail.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        <netdev@vger.kernel.org>
-Date:   Thu, 15 Jun 2023 12:45:46 +0200
-In-Reply-To: <20230614230947.3954084-2-dima@arista.com>
-References: <20230614230947.3954084-1-dima@arista.com>
-         <20230614230947.3954084-2-dima@arista.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.48.3 
+        Thu, 15 Jun 2023 06:46:09 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B74F2130;
+        Thu, 15 Jun 2023 03:46:07 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-66615629689so2019241b3a.2;
+        Thu, 15 Jun 2023 03:46:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686825966; x=1689417966;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1ceGenVHiIhT8J4bTA/hroU5FeyMJg9le+aNbGkYaWs=;
+        b=cqkhwrEoP1Xx4HkeZu5R/+cfyAHIBHX6TaK8vAygzYjfEBnkTuPEyjb7EDM2+5xUCT
+         tewXBd4oev5wmuT8BpIT0dibvzMotcXJ3131B8zrQno0tEE/vGwiuLIcI6HPPZMh1f8E
+         KTtKk5yZe6X//wDWP7iOVG9QVMslFP/Yn/GCf5kt6ckER0YQaPn40jem+PupxfpQnk9/
+         T4RkO5Af8COpzQ4O9kqrMaxtTwr3TjBWZl61GSbaqB8dworaBA4xPEAXXzYXPGIsMVC7
+         W91xGTuaoxrWPwMcH4eOYo/DARMWkrOkcBnRkEfc4isFwxEzNOuXwy61yXgND3kppN0C
+         fXAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686825966; x=1689417966;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1ceGenVHiIhT8J4bTA/hroU5FeyMJg9le+aNbGkYaWs=;
+        b=XOy5gPgS1gYpD01yxXSBvdFPoKpC/qtahXz57hngaXZ6z1tq0onDAvieYPLJQqit3T
+         pEmVmzR0EfCo4yll1fEq6/VE6xiCCeBlf+CyXiwLVqQmJYrC3CM9P29GPNz/a96jTOYM
+         MbvTqFpnYbcb4dHTAnt4f9Y0lQwFt2Icd+zHyjWevRB2pd59w7Jh/FObwZogtCVwrj4O
+         2iHg54bkIg3vnVvDHT1MKs5BpxTqBEVxnVUT1CEikXMFyON5WrAIVHG+EEBvDhVyw1/q
+         HNYV+69PtxuiPz2QDNfNyrVgyKXu1A7zIEXr13lCqiwbgpKzc2scs3bhQGEb1MCUM572
+         SJNQ==
+X-Gm-Message-State: AC+VfDyKIq7gS/DSjEHh0rHxa3aefKpLDGmslJ4H8gddsj4kkxwmFjxJ
+        IW17nviYpUtX+1TNryq23AA=
+X-Google-Smtp-Source: ACHHUZ5KeIs+4puHmWbUL4V38X9p8iuVjK6/GwQTDrX/TdnxlKj0c4p7Y6LS7F2orDmZvyOSppxlKg==
+X-Received: by 2002:a05:6a20:2e13:b0:11e:7273:7edd with SMTP id be19-20020a056a202e1300b0011e72737eddmr693906pzb.23.1686825966256;
+        Thu, 15 Jun 2023 03:46:06 -0700 (PDT)
+Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id p3-20020a62ab03000000b00646e7d2b5a7sm1136778pff.112.2023.06.15.03.46.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jun 2023 03:46:05 -0700 (PDT)
+Message-ID: <4fd20e8d-49fd-be07-e4e5-0860fdb07125@gmail.com>
+Date:   Thu, 15 Jun 2023 18:46:01 +0800
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v14 1/1] tty: serial: Add Nuvoton ma35d1 serial driver
+ support
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, Lee Jones <lee@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        soc@kernel.org, schung@nuvoton.com, mjchen@nuvoton.com,
+        Jacky Huang <ychuang3@nuvoton.com>
+References: <20230612025355.547871-1-ychuang570808@gmail.com>
+ <20230612025355.547871-2-ychuang570808@gmail.com>
+ <2023061338-lunchbox-snorkel-e6a9@gregkh>
+ <f8eb6114-8248-8886-b301-c2886e50e016@gmail.com>
+ <2023061356-matchbook-footwear-d142@gregkh>
+ <35e768ad-7f15-48a4-9c38-09570026cf71@app.fastmail.com>
+ <2023061555-enlighten-worshiper-c92d@gregkh>
+Content-Language: en-US
+From:   Jacky Huang <ychuang570808@gmail.com>
+In-Reply-To: <2023061555-enlighten-worshiper-c92d@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgRG1pdHJ5LAoKT24gVGh1LCAyMDIzLTA2LTE1IGF0IDAwOjA5ICswMTAwLCBEbWl0cnkgU2Fm
-b25vdiB3cm90ZToKPiBFWFRFUk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4g
-YXR0YWNobWVudHMgdW5sZXNzIHlvdSBrbm93IHRoZQo+IGNvbnRlbnQgaXMgc2FmZQo+IAo+IFRD
-UC1BTywgc2ltaWxhcmx5IHRvIFRDUC1NRDUsIG5lZWRzIHRvIGFsbG9jYXRlIHRmbXMgb24gYSBz
-bG93LXBhdGgsCj4gd2hpY2ggaXMgc2V0c29ja29wdCgpIGFuZCB1c2UgY3J5cHRvIGFoYXNoIHJl
-cXVlc3RzIG9uIGZhc3QgcGF0aHMsCj4gd2hpY2ggYXJlIFJYL1RYIHNvZnRpcnFzLiBBbHNvLCBp
-dCBuZWVkcyBhIHRlbXBvcmFyeS9zY3JhdGNoIGJ1ZmZlcgo+IGZvciBwcmVwYXJpbmcgdGhlIGhh
-c2guCj4gCj4gUmV3b3JrIHRjcF9tZDVzaWdfcG9vbCBpbiBvcmRlciB0byBzdXBwb3J0IG90aGVy
-IGhhc2hpbmcgYWxnb3JpdGhtcwo+IHRoYW4gTUQ1LiBJdCB3aWxsIG1ha2UgaXQgcG9zc2libGUg
-dG8gc2hhcmUgcHJlLWFsbG9jYXRlZCBjcnlwdG9fYWhhc2gKPiBkZXNjcmlwdG9ycyBhbmQgc2Ny
-YXRjaCBhcmVhIGJldHdlZW4gYWxsIFRDUCBoYXNoIHVzZXJzLgo+IAo+IEludGVybmFsbHkgdGNw
-X3NpZ3Bvb2wgY2FsbHMgY3J5cHRvX2Nsb25lX2FoYXNoKCkgQVBJIG92ZXIgcHJlLWFsbG9jYXRl
-ZAo+IGNyeXB0byBhaGFzaCB0Zm0uIEt1ZG9zIHRvIEhlcmJlcnQsIHdobyBwcm92aWRlZCB0aGlz
-IG5ldyBjcnlwdG8gQVBJLgo+IAo+IEkgd2FzIGEgbGl0dGxlIGNvbmNlcm5lZCBvdmVyIEdGUF9B
-VE9NSUMgYWxsb2NhdGlvbnMgb2YgYWhhc2ggYW5kCj4gY3J5cHRvX3JlcXVlc3QgaW4gUlgvVFgg
-KHNlZSB0Y3Bfc2lncG9vbF9zdGFydCgpKSwgc28gSSBiZW5jaG1hcmtlZCBib3RoCj4gImJhY2tl
-bmRzIiB3aXRoIGRpZmZlcmVudCBhbGdvcml0aG1zLCB1c2luZyBwYXRjaGVkIHZlcnNpb24gb2Yg
-aXBlcmYzWzJdLgo+IE9uIG15IGxhcHRvcCB3aXRoIGk3LTc2MDBVIEAgMi44MEdIejoKPiAKCi4u
-LiBzbmlwIC4uLgoKPiArLyoqCj4gKyAqIHRjcF9zaWdwb29sX2FsbG9jX2FoYXNoIC0gYWxsb2Nh
-dGVzIHBvb2wgZm9yIGFoYXNoIHJlcXVlc3RzCj4gKyAqIEBhbGc6IG5hbWUgb2YgYXN5bmMgaGFz
-aCBhbGdvcml0aG0KPiArICogQHNjcmF0Y2hfc2l6ZTogcmVzZXJ2ZSBhIHRjcF9zaWdwb29sOjpz
-Y3JhdGNoIGJ1ZmZlciBvZiB0aGlzIHNpemUKPiArICovCj4gK2ludCB0Y3Bfc2lncG9vbF9hbGxv
-Y19haGFzaChjb25zdCBjaGFyICphbGcsIHNpemVfdCBzY3JhdGNoX3NpemUpCj4gK3sKPiArwqDC
-oMKgwqDCoMKgIGludCBpLCByZXQ7Cj4gKwo+ICvCoMKgwqDCoMKgwqAgLyogc2xvdy1wYXRoICov
-Cj4gK8KgwqDCoMKgwqDCoCBtdXRleF9sb2NrKCZjcG9vbF9tdXRleCk7Cj4gK8KgwqDCoMKgwqDC
-oCByZXQgPSBzaWdwb29sX3Jlc2VydmVfc2NyYXRjaChzY3JhdGNoX3NpemUpOwo+ICvCoMKgwqDC
-oMKgwqAgaWYgKHJldCkKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBnb3RvIG91dDsK
-PiArwqDCoMKgwqDCoMKgIGZvciAoaSA9IDA7IGkgPCBjcG9vbF9wb3B1bGF0ZWQ7IGkrKykgewo+
-ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGlmICghY3Bvb2xbaV0uYWxnKQo+ICvCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjb250aW51ZTsKPiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpZiAoc3RyY21wKGNwb29sW2ldLmFsZywgYWxnKSkK
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgY29udGludWU7
-Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGlmIChrcmVmX3JlYWQoJmNwb29s
-W2ldLmtyZWYpID4gMCkKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAga3JlZl9nZXQoJmNwb29sW2ldLmtyZWYpOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgIGVsc2UKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAga3JlZl9pbml0KCZjcG9vbFtpXS5rcmVmKTsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCByZXQgPSBpOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGdvdG8gb3V0Owo+
-ICvCoMKgwqDCoMKgwqAgfQoKSGVyZSBpdCBsb29rcyB0byBtZSBsaWtlIHlvdSB3aWxsIG5ldmVy
-IGdldCB0byB0aGlzIHBhcnQgb2YgdGhlIGNvZGUgc2luY2UgeW91CmFsd2F5cyBlbmQgdXAgZ29p
-bmcgdG8gdGhlIG91dCBsYWJlbCBpbiB0aGUgcHJldmlvdXMgbG9vcC4KCj4gKwo+ICvCoMKgwqDC
-oMKgwqAgZm9yIChpID0gMDsgaSA8IGNwb29sX3BvcHVsYXRlZDsgaSsrKSB7Cj4gK8KgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgaWYgKCFjcG9vbFtpXS5hbGcpCj4gK8KgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJyZWFrOwo+ICvCoMKgwqDCoMKgwqAgfQo+
-ICvCoMKgwqDCoMKgwqAgaWYgKGkgPj0gQ1BPT0xfU0laRSkgewo+ICvCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIHJldCA9IC1FTk9TUEM7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgZ290byBvdXQ7Cj4gK8KgwqDCoMKgwqDCoCB9Cj4gKwo+ICvCoMKgwqDCoMKgwqAgcmV0ID0g
-X19jcG9vbF9hbGxvY19haGFzaCgmY3Bvb2xbaV0sIGFsZyk7Cj4gK8KgwqDCoMKgwqDCoCBpZiAo
-IXJldCkgewo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJldCA9IGk7Cj4gK8KgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgaWYgKGkgPT0gY3Bvb2xfcG9wdWxhdGVkKQo+ICvCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjcG9vbF9wb3B1bGF0ZWQr
-KzsKPiArwqDCoMKgwqDCoMKgIH0KPiArb3V0Ogo+ICvCoMKgwqDCoMKgwqAgbXV0ZXhfdW5sb2Nr
-KCZjcG9vbF9tdXRleCk7Cj4gK8KgwqDCoMKgwqDCoCByZXR1cm4gcmV0Owo+ICt9Cj4gK0VYUE9S
-VF9TWU1CT0xfR1BMKHRjcF9zaWdwb29sX2FsbG9jX2FoYXNoKTsKPiArCgouLi4gc25pcCAuLi4K
-Cgo+IMKgY2xlYXJfaGFzaDoKPiAtwqDCoMKgwqDCoMKgIHRjcF9wdXRfbWQ1c2lnX3Bvb2woKTsK
-PiAtY2xlYXJfaGFzaF9ub3B1dDoKPiArwqDCoMKgwqDCoMKgIHRjcF9zaWdwb29sX2VuZCgmaHAp
-Owo+ICtjbGVhcl9oYXNoX25vc3RhcnQ6Cj4gwqDCoMKgwqDCoMKgwqAgbWVtc2V0KG1kNV9oYXNo
-LCAwLCAxNik7Cj4gwqDCoMKgwqDCoMKgwqAgcmV0dXJuIDE7Cj4gwqB9Cj4gLS0KPiAyLjQwLjAK
-PiAKPiAKCkJSClN0ZWVuCg==
 
+
+On 2023/6/15 下午 06:19, Greg Kroah-Hartman wrote:
+> On Tue, Jun 13, 2023 at 05:44:23PM +0200, Arnd Bergmann wrote:
+>> On Tue, Jun 13, 2023, at 16:49, Greg KH wrote:
+>>> On Tue, Jun 13, 2023 at 06:58:32PM +0800, Jacky Huang wrote:
+>>>> On 2023/6/13 下午 06:28, Greg KH wrote:
+>>>>> On Mon, Jun 12, 2023 at 02:53:55AM +0000, Jacky Huang wrote:
+>>>>>> From: Jacky Huang <ychuang3@nuvoton.com>
+>>>>>>
+>>>>>> This adds UART and console driver for Nuvoton ma35d1 Soc.
+>>>>>> It supports full-duplex communication, FIFO control, and
+>>>>>> hardware flow control.
+>>>>> You get a full 72 columns for your changelog :)
+>>>>>
+>>>>>> --- a/include/uapi/linux/serial_core.h
+>>>>>> +++ b/include/uapi/linux/serial_core.h
+>>>>>> @@ -279,4 +279,7 @@
+>>>>>>    /* Sunplus UART */
+>>>>>>    #define PORT_SUNPLUS	123
+>>>>>> +/* Nuvoton MA35 SoC */
+>>>>>> +#define PORT_MA35	124
+>>>>>> +
+>>>>> Why is this change needed?  What userspace code is going to rely on it?
+>>>>>
+>>>>> thanks,
+>>>>>
+>>>>> greg k-h
+>>>> Because the serial driver requires a port->type, and almost all serial
+>>>> drivers defined their port type here. We follow the practice of most serial
+>>>> drivers here.
+>>>> If we don't do it this way, we would have to directly assign a value to
+>>>> port->type. However, such modifications were questioned in the past,
+>>>> which is why we changed it back to defining the port type in serial_core.h.
+>>> I really really want to get rid of this list, as it's a UAPI that no one
+>>> uses.  So please don't use it, it doesn't help anything, and while the
+>>> serial driver might require it, it doesn't actually do anything with
+>>> that field, right?  So why don't we just set all of the values to the
+>>> same one?
+>> I don't see how Jacky can come up with a patch to do this correctly
+>> without more specific guidance to what exactly you are looking for,
+>> after the last 123 people that added support for a new port got
+>> that merged.
+> I keep complaining about this, when I notice it.  Just use the "default"
+> port type in the serial driver and don't add a new type here and it
+> should just work, right?
+>
+>> I checked debian codesearch and found only three obscure packages that
+>> accidentally include this header instead of including linux/serial.h,
+>> a couple of lists of all kernel headers, and none that include it on
+>> purpose. I agree that this header should really not exist in uapi,
+>> but the question is what exactly to do about it.
+>>
+>> Possible changes would be:
+>>
+>> - add a special value PORT_* constant other than PORT_UNKNOWN that
+>>    can be used by serial drivers instead of a unique value, and
+>>    ensure that the serial core can handle drivers using it.
+> Why do we need a special constant?
+>
+>> - move all values used by the 8250 driver from serial_core.h
+>>    to serial.h, as this driver actually uses the constants.
+> Makes sense.
+>
+>> - Move the remaining contents of uapi/linux/serial.h into the
+>>    non-uapi version.
+>>
+>> - Change all drivers that only reference a single PORT_*
+>>    value to use the generic one.
+> I think this is the best thing to do.
+>
+> thanks,
+>
+> greg k-h
+
+I will remove the definition of PORT_MA35 without modifying serial_core.h.
+
+However, we still need to assign a value to port->type. So, can we follow
+the approach used in the LiteUART driver and directly assign port->type = 1?
+
+
+Best regards,
+Jacky Huang
