@@ -2,244 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 234AC7311AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:02:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 099D07311B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239200AbjFOICh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 04:02:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41688 "EHLO
+        id S239138AbjFOIFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 04:05:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245222AbjFOICP (ORCPT
+        with ESMTP id S233955AbjFOIFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 04:02:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD685199D
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:01:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686816090;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yQWDXrZbWAVoRYBMaKcwwAPg+tUuAljoMwPz6OAacLc=;
-        b=EeL1g49v02Ku5U25tEwqLSdu9RpTix/ZdcNfhXw1Oh9O2VvXvAGRdpDx2NPENOPC6OIDxB
-        DWCXEzEOK9sfephKenTouiRGDitlDWiPdzks4KI8xtX6p1py2cadDkc4+aOqSDxuN/9KvQ
-        3fZv1MjwtLILWaUYOObKCUoZHSNcDMA=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-150-rBkG3XSsPemhmyUfLZ8qhQ-1; Thu, 15 Jun 2023 04:01:29 -0400
-X-MC-Unique: rBkG3XSsPemhmyUfLZ8qhQ-1
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-62de823a3aeso36373796d6.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:01:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686816089; x=1689408089;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yQWDXrZbWAVoRYBMaKcwwAPg+tUuAljoMwPz6OAacLc=;
-        b=LRxtsrEdkYjLV68eZhFQpdv7nwlKzwqEqvfn11pRw6/fuPniS8wSYv1zbX99K4U1hb
-         qz6lI4KHkwv2tNv6XEU1jmPodHlhv9swaA2sQ98D0eaGXmUuUkdKHL40DxOc0H/3Sbq7
-         SOjq+AINOKr9l7HS1uZTDKJ0VlEifIa/XVLIU6arFnEiWtyrnV7rV7Ce+gXiFEkiY0ga
-         Xy1VF1z+lV99XaRkYY4AyUt3SIqJ/10E9yDRu78/tamqUvOOAUCm9btYkgUIP1Pto4a+
-         P5qnUHE0JJAxSVUI7LnLqBoQtcQNf86ItCD1XRWqCu2S7PVoW6ykilLY72aWThYiO60k
-         ezKg==
-X-Gm-Message-State: AC+VfDyFIJ7ctRPmSvpnDWHRHX1DR9Kzoe2aclwaMa7srVBR99vpgLII
-        xE6WTFo/Vt3APKKn4Heq3UCk5N5VxBqeApLGx9eRc82rk6vu1+AH59/I1OrPOgw/CNFBhfZe8/4
-        lO+b0fWQiMMPCEp4trJa5IcU2EfwCSMjoFS+s/lWp
-X-Received: by 2002:a05:6214:b6c:b0:626:1fe8:bbc9 with SMTP id ey12-20020a0562140b6c00b006261fe8bbc9mr17232594qvb.32.1686816088997;
-        Thu, 15 Jun 2023 01:01:28 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4KCE4A+SKvSwxPT5wW/pwzpT/V0TAa+G9BMizaSX7JkXMUCmL9Ijl1gAGyeKyyyshbQxicyahmJM2R2vQgcYM=
-X-Received: by 2002:a05:6214:b6c:b0:626:1fe8:bbc9 with SMTP id
- ey12-20020a0562140b6c00b006261fe8bbc9mr17232576qvb.32.1686816088739; Thu, 15
- Jun 2023 01:01:28 -0700 (PDT)
+        Thu, 15 Jun 2023 04:05:50 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039541AA;
+        Thu, 15 Jun 2023 01:05:48 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35F6XFam007602;
+        Thu, 15 Jun 2023 10:05:39 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=rWAsqAnk1NOFfSrch2LiFEFQGq9N0Hnm6C4sCs+M3D4=;
+ b=31hrIaUG+w5OmHV87NzjL1XMuVANMHUndDS+geuV4yaGOSRyXOQRfrlPlvbdn+erMk7E
+ seB4ccjWnvillD/+0LWQqybK3wYbzQ0F/izSPJp+NRdgSK5DI4Mr6gWxIxcgZOdLuUzr
+ 2z9XHUE5ln/oMt3V24fhGcdbX0kC8U7nfGLX0K+IVs6YJZ39NXk2UAkJOWVsNjk5I516
+ GYI+lm/SOr36nXOntV77sX9+UlnVpI66N0ucc9sf7C+sNe/62ElSfEJZfQT+6cUrnIeH
+ 1FHYqTd3vTsl4+AfGLyhqFH6jw9P74Qbr16A05ZXcAY0wxa/4m5aDyF744wdhOqMPmSA KA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3r7s1maacb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 10:05:39 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 343B010002A;
+        Thu, 15 Jun 2023 10:05:39 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 27FA2216EC2;
+        Thu, 15 Jun 2023 10:05:39 +0200 (CEST)
+Received: from [10.252.8.64] (10.252.8.64) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 15 Jun
+ 2023 10:05:38 +0200
+Message-ID: <2785de74-69b2-8ebc-09c9-f834adb870c0@foss.st.com>
+Date:   Thu, 15 Jun 2023 10:05:33 +0200
 MIME-Version: 1.0
-References: <20230529132037.2124527-1-yukuai1@huaweicloud.com>
- <20230529132037.2124527-5-yukuai1@huaweicloud.com> <05aa3b09-7bb9-a65a-6231-4707b4b078a0@redhat.com>
- <74b404c4-4fdb-6eb3-93f1-0e640793bba6@huaweicloud.com> <6e738d9b-6e92-20b7-f9d9-e1cf71d26d73@huaweicloud.com>
- <CALTww292gwOe-WEjuBwJn0AXvJC4AbfMZXC43EvVt3GCeBoHfw@mail.gmail.com>
- <5bf97ec5-0cb4-1163-6917-2bc98d912c2b@huaweicloud.com> <CALTww28UapJnK+Xfx7O9uEd5ZH2E7ufPT_7pKY6YYuzTZ0Fbdw@mail.gmail.com>
- <b96ec15b-6102-17bb-2c18-a487f224865b@huaweicloud.com> <CALTww2-knHOoX35NB73X-sMn1u8EJHLA=0aOnoVqVm83+fdG5Q@mail.gmail.com>
- <04700f85-62a2-1dbd-f330-80f9a13b7d2e@huaweicloud.com>
-In-Reply-To: <04700f85-62a2-1dbd-f330-80f9a13b7d2e@huaweicloud.com>
-From:   Xiao Ni <xni@redhat.com>
-Date:   Thu, 15 Jun 2023 16:01:17 +0800
-Message-ID: <CALTww2-Wr8UbNFaLOyYv5Syh5q4J+hzRuo8Eakj_nOW+P4Cx7A@mail.gmail.com>
-Subject: Re: [dm-devel] [PATCH -next v2 4/6] md: refactor idle/frozen_sync_thread()
- to fix deadlock
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     yi.zhang@huawei.com, yangerkun@huawei.com, snitzer@kernel.org,
-        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        song@kernel.org, dm-devel@redhat.com, guoqing.jiang@linux.dev,
-        "yukuai (C)" <yukuai3@huawei.com>, agk@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 0/4] spi: stm32: add spi slave mode
+To:     Mark Brown <broonie@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230614102628.202936-1-valentin.caron@foss.st.com>
+ <d0b62ef2-5355-4c00-9ff6-4ea9995ec0e1@sirena.org.uk>
+Content-Language: en-US
+From:   Valentin CARON <valentin.caron@foss.st.com>
+In-Reply-To: <d0b62ef2-5355-4c00-9ff6-4ea9995ec0e1@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.252.8.64]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-15_04,2023-06-14_02,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 9:29=E2=80=AFAM Yu Kuai <yukuai1@huaweicloud.com> w=
-rote:
->
-> Hi,
->
-> =E5=9C=A8 2023/06/14 17:08, Xiao Ni =E5=86=99=E9=81=93:
-> > On Wed, Jun 14, 2023 at 4:29=E2=80=AFPM Yu Kuai <yukuai1@huaweicloud.co=
-m> wrote:
-> >>
-> >> Hi,
-> >>
-> >> =E5=9C=A8 2023/06/14 15:57, Xiao Ni =E5=86=99=E9=81=93:
-> >>> On Wed, Jun 14, 2023 at 3:38=E2=80=AFPM Yu Kuai <yukuai1@huaweicloud.=
-com> wrote:
-> >>>>
-> >>>> Hi,
-> >>>>
-> >>>> =E5=9C=A8 2023/06/14 15:12, Xiao Ni =E5=86=99=E9=81=93:
-> >>>>> On Wed, Jun 14, 2023 at 10:04=E2=80=AFAM Yu Kuai <yukuai1@huaweiclo=
-ud.com> wrote:
-> >>>>>>
-> >>>>>> Hi,
-> >>>>>>
-> >>>>>> =E5=9C=A8 2023/06/14 9:48, Yu Kuai =E5=86=99=E9=81=93:
-> >>>>>>
-> >>>>>>
-> >>>>>>>>
-> >>>>>>>> In the patch, sync_seq is added in md_reap_sync_thread. In
-> >>>>>>>> idle_sync_thread, if sync_seq isn't equal
-> >>>>>>>>
-> >>>>>>>> mddev->sync_seq, it should mean there is someone that stops the =
-sync
-> >>>>>>>> thread already, right? Why do
-> >>>>>>>>
-> >>>>>>>> you say 'new started sync thread' here?
-> >>>>>>
-> >>>>>> If someone stops the sync thread, and new sync thread is not start=
-ed,
-> >>>>>> then this sync_seq won't make a difference, above wait_event() wil=
-l not
-> >>>>>> wait because !test_bit(MD_RECOVERY_RUNNING, &mddev->recovery) will=
- pass.
-> >>>>>> So 'sync_seq' is only used when the old sync thread stops and new =
-sync
-> >>>>>> thread starts, add 'sync_seq' will bypass this case.
-> >>>>>
-> >>>>> Hi
-> >>>>>
-> >>>>> If a new sync thread starts, why can sync_seq be different? sync_se=
-q
-> >>>>> is only added in md_reap_sync_thread. And when a new sync request
-> >>>>> starts, it can't stop the sync request again?
-> >>>>>
-> >>>>> Af first, the sync_seq is 0
-> >>>>>
-> >>>>> admin1
-> >>>>> echo idle > sync_action
-> >>>>> idle_sync_thread(sync_seq is 1)
-> >>>>
-> >>>> Wait, I'm confused here, how can sync_seq to be 1 here? I suppose yo=
-u
-> >>>> mean that there is a sync_thread just finished?
-> >>>
-> >>> Hi Kuai
-> >>>
-> >>> Yes. Because idle_sync_thread needs to wait until md_reap_sync_thread
-> >>> finishes. And md_reap_sync_thread adds sync_seq. Do I understand your
-> >>> patch right?
-> >>
-> >> Yes, noted that idle_sync_thread() will only wait if MD_RECOVERY_RUNNI=
-NG
-> >> is set.
-> >>
-> >>>
-> >>>>
-> >>>> Then the problem is that idle_sync_thread() read sync_seq after the =
-old
-> >>>> sync_thread is done, and new sync_thread start before wait_event() i=
-s
-> >>>> called, should we wait for this new sync_thread?
-> >>>>
-> >>>> My answer here is that we should, but I'm also ok to not wait this n=
-ew
-> >>>> sync_thread, I don't think this behaviour matters. The key point her=
-e
-> >>>> is that once wait_event() is called from idle_sync_thread(), this
-> >>>> wait_event() should not wait for new sync_thread...
-> >>>
-> >>> I think we should wait. If we don't wait for it, there is a problem.
-> >>> One person echos idle to sync_action and it doesn't work sometimes.
-> >>> It's a strange thing.
-> >>>
-> >>
-> >> Ok. I'll add new comment to emphasize that idle_sync_thread() won't wa=
-it
-> >> for new sync_thread that is started after wait_event().
-> >
-> > I suggest removing this function. Without this change, it's more
-> > simple and it can work well without problem. The people that echo idle
-> > to sync_action needs to wait until the sync action finishes. The code
-> > semantic is clear and simple.
-> >>
-> >>>>
-> >>>>> echo resync > sync_action (new sync)
-> >>>>
-> >>>> If this is behind "echo idle > sync_action", idle_sync_thread should=
- not
-> >>>> see that MD_RECOVERY_RUNNING is set and wait_event() won't wait at a=
-ll.
-> >>>
-> >>> `echo resync > sync_action` can't change the sync_seq. So 'echo idle =
->
-> >>> sync_action' still waits until MD_RECOVERY_RUNNING is cleared?
-> >>
-> >> This is not accurate, if `echo resync > sync_action` triggers a new
-> >> sync_thread, then sync_seq is updated when this sync_thread is done,
-> >> during this period, MD_RECOVERY_RUNNING is still set, so `echo idle
-> >>   >sync_action` will wait for sync_thread to be done.
-> >
-> > I can understand your comment, but sorry, I still can't get how
-> > sync_seq works. Could you give a specific case that explains how it
-> > works?
->
-> Ok, the problem is that echo ilde is supposed to interrupt sync_thread
-> and stop sync_thread quickly. Now that we don't hold mutex here, we
-> can't prevent new sync_thread to start. For exapmle:
->
-> 1) a sync_thread A is runing, MD_RECOVERY_RUNNING is set;
->
-> 2) echo idle, A will be interrupted, mutex is not hold and
-> idle_sync_thread() is waiting for MD_RECOVERY_RUNNING to be cleared.
->
-> 3) A is interrupted, it'll clear MD_RECOVERY_RUNNING and try to wakeup
-> idle_sync_thread(), however, before idle_sync_thread() is woken, A can
-> be done and a new sync_thread B can be started, and MD_RECOVERY_RUNNING
-> will be set again.
->
-> 4) idle_sync_thread() finially wake up, however, MD_RECOVERY_RUNNING is
-> set and it will still waiting. And this time B won't be interrupted.
 
-Thanks for the example. I can understand the usage of it. It's the
-side effect that removes the mutex protection for idle_sync_thread.
+On 6/14/23 14:16, Mark Brown wrote:
+> On Wed, Jun 14, 2023 at 12:26:23PM +0200, Valentin Caron wrote:
+>> STM32 SPI can operate in slave mode.
+>> This series add this functionnality in spi-stm32 driver.
+> The more modern terminology here is device mode.
 
-There is a problem. New sync thread is started in md_check_recovery.
-After your patch, md_reap_sync_thread is called in md_check_recovery
-too. So it looks like they can't happen at the same time?
+Hi Mark,
 
-Regards
-Xiao
+Thanks for your review. I have resent a "v3" with this improvement.
 
->
-> Thanks,
-> Kuai
->
-> --
-> dm-devel mailing list
-> dm-devel@redhat.com
-> https://listman.redhat.com/mailman/listinfo/dm-devel
+Regards,
+Valentin
 
