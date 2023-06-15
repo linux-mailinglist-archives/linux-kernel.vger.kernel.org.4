@@ -2,283 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70323730E09
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 06:21:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE444730E0C
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 06:23:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237226AbjFOEVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 00:21:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34318 "EHLO
+        id S237854AbjFOEXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 00:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243064AbjFOEVT (ORCPT
+        with ESMTP id S234125AbjFOEXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 00:21:19 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20DB92132;
-        Wed, 14 Jun 2023 21:21:15 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35F3QGAj026798;
-        Thu, 15 Jun 2023 04:21:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=+sY6EDEo13oPoY5uS3X0Ti3bqtu4p89U+RQaEFX/62I=;
- b=Dnz6uN9pxXdwQ90WI84LEoidEYZS2PJQCvKs3HnNonG3u3ATrXC32xMPnWhLwPnfVVDS
- 6rCOOY9zQW9eyFkIrFfAK+wITzQ3Ko6T5GJRlX8QjiCI4bTQ0BtorYjnooPE48QqaYqA
- D6xLG/ook6gA991ZnvfWKd/gM0jWHLi3HK1tY0YUYMnFt31+CXACiQQcLFD5u0q/1K+M
- IX+JkFswc6g/OPHIWsW9tyaNRLoF5LbbOSuJONL4roVU+9f5doP8r/naGn+dmjlP6GXD
- 9RIFUsXXTSzQbTKL79iToTixAT0URyXvgiO88tLsJaHWCPKD7lf6QU4iJSGKcfKYg4F7 Qg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r7ecehgn1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jun 2023 04:21:02 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35F4L1Z3004586
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jun 2023 04:21:01 GMT
-Received: from [10.217.219.188] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 14 Jun
- 2023 21:20:55 -0700
-Message-ID: <acd46bb7-0708-d095-c3c6-53653f9e47d6@quicinc.com>
-Date:   Thu, 15 Jun 2023 09:50:52 +0530
+        Thu, 15 Jun 2023 00:23:04 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9DF1720
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 21:23:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Y5SnAUN5BUY1k/wrsUUDsx8RIqSiD0l0hqCjK4Q6QaGdx67vWjWdsZ+4ekv8aOvdTTUSeJ93g7CcKCXFtVZiTPgip0LlnC+9nIisz1K8DZUVrDpPedjdE93ezOZiwcrg20fjBJz0BgwqLiIe39Xz06s9pEJRMa585oBgimtKYlMgDLqRGYwvdT75IzB5XGlT3g1Reg+lM62o1K5YtHkgHegAxJfVEN8oNwJVj6ySDKg0S8uoH4ykjlNH1lumfRP0XWnfyCmwiOJGT9fkqLbm0ruZc/FYlq8hp5uToHhDjQ59a26IwajfN7EwfQV5+oVRCpsdoFVFV3NKXtG9/tYOAg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IIHeMk2ixR4lvt5PI7Rkkx9i+oWsb2KXpWH3UMk5ZSs=;
+ b=TZ1QIuNI7ecPT14YIFRVzWWVBUJlQhH80313vGLQlgAjnwt1zJm+JdVRFejJtcOf1+flOsdFxDFAzokG/l3p5IrskvuR5jBXGHc/362A/wLhFqoFppffUX50oMnitcaUZSZhBVDj7JZ6YsUIBaPYgYEtkgFhAxb2dS3JfBNYRXpgepAvO/UwdZn1T5hurZz0froRWENZyhwAIdhZzSM4CNh1lFb7VyfDH1BtIOQwdawNWYqwPtUeB9V5WZCPhXuSWhHS85o4Px9Ara0FBKvz2tfjhhGqcfRn3m4XfeUlFbkV/3qNliGECAbmSXKHxCxw8HMrR7zzqMWLTl3c+EJWIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IIHeMk2ixR4lvt5PI7Rkkx9i+oWsb2KXpWH3UMk5ZSs=;
+ b=rlhGOadmJ6VJWczzv6uzi3vu5Fb60JcOfOGwSxvO+98fkXtC2UdAtKY6B1dbV0m8O75VyNQZkmECx2UHjQ7fDWdTQcU25tabvHVWlFyMfs1DRsJpfT75CafklvpYo3msdEJw2/8dHNEZ9cmMPvLV5vEhACnjkED/WcGu0S5YlLI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BYAPR12MB3286.namprd12.prod.outlook.com (2603:10b6:a03:139::15)
+ by SA1PR12MB7342.namprd12.prod.outlook.com (2603:10b6:806:2b3::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.24; Thu, 15 Jun
+ 2023 04:22:59 +0000
+Received: from BYAPR12MB3286.namprd12.prod.outlook.com
+ ([fe80::8801:420d:4748:33b1]) by BYAPR12MB3286.namprd12.prod.outlook.com
+ ([fe80::8801:420d:4748:33b1%4]) with mapi id 15.20.6500.025; Thu, 15 Jun 2023
+ 04:22:59 +0000
+Date:   Thu, 15 Jun 2023 09:52:46 +0530
+From:   "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+To:     Chen Yu <yu.c.chen@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Tim Chen <tim.c.chen@intel.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Abel Wu <wuyun.abel@bytedance.com>,
+        Len Brown <len.brown@intel.com>,
+        Chen Yu <yu.chen.surf@gmail.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/4] Limit the scan depth to find the busiest sched
+ group during newidle balance
+Message-ID: <ZIqSFjOcDvD5WZ2F@BLR-5CG11610CF.amd.com>
+References: <cover.1686554037.git.yu.c.chen@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1686554037.git.yu.c.chen@intel.com>
+X-ClientProxiedBy: PN3PR01CA0002.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:95::22) To BYAPR12MB3286.namprd12.prod.outlook.com
+ (2603:10b6:a03:139::15)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.1
-Subject: Re: [PATCH v8 6/9] usb: dwc3: qcom: Add multiport controller support
- for qcom wrapper
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Johan Hovold <johan@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "quic_pkondeti@quicinc.com" <quic_pkondeti@quicinc.com>,
-        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
-        "quic_harshq@quicinc.com" <quic_harshq@quicinc.com>,
-        "ahalaney@redhat.com" <ahalaney@redhat.com>
-References: <20230515222730.7snn2i33gkg6ctd2@ripper>
- <bc347624-4539-4a3a-9399-9b4e272cdb32@quicinc.com>
- <ZGUCykpDFt9zgeTU@hovoldconsulting.com>
- <82553597-ce0e-48f4-44d4-9eeaaf4cb1c4@quicinc.com>
- <ZIBsDQJtgDZRe7MG@hovoldconsulting.com>
- <99cded6f-6a71-ffce-8479-c7c0726bfb8e@quicinc.com>
- <ZIGihYS5EacISEFm@hovoldconsulting.com>
- <279fff8b-57e2-cfc8-cd6d-c69d00e71799@quicinc.com>
- <20230608175705.2ajrteztdeqdrkzg@synopsys.com>
- <ZILgW5CwfSlBxzNB@hovoldconsulting.com>
- <20230609181602.ljxdchgzl7kzk73n@synopsys.com>
-Content-Language: en-US
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <20230609181602.ljxdchgzl7kzk73n@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: oHSDEarIi8d1j7eoXO90blEX3cBlLXXH
-X-Proofpoint-ORIG-GUID: oHSDEarIi8d1j7eoXO90blEX3cBlLXXH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-15_02,2023-06-14_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
- impostorscore=0 suspectscore=0 spamscore=0 mlxlogscore=999
- lowpriorityscore=0 phishscore=0 priorityscore=1501 bulkscore=0
- malwarescore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306150036
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3286:EE_|SA1PR12MB7342:EE_
+X-MS-Office365-Filtering-Correlation-Id: 18fd71c2-c164-4368-9915-08db6d583387
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nvT1Uiz6QADHv2AKhpxdDE+oYEaeH3kyKdEWkn/Fz53V2Nhg6lfG9+o3Pp6CeI335BvCKOvGHvhOa3BHpbYFOKE3q6DXbPN+bx/4kfk55KV7MCp+MXy/NTubiG81IUjRQYhCFoGSeyknp/9+t8XXZTI6mduT3f5nQ71dZEP49Ki/pa6x+vBA0O01CilwzXLruSt3d2/4IS6NsuUBTcSYd7j7W6p5vheYkeqG9XBZlppz1w2s5eKSSo7tams1YS8OjwJ4hnGHOIBXecmshtfawT23pFx6HeaZPY1we0Bvcohe9HlwJ3CtPIGwUTsczCEFIQ9VCbVhI5Pau7UIN8zySVyg/hoYnBpwlJoCL8WuVzw2w32XlXG9PoSUTx78EVHP32WWULh8PvWhHHXUUyUg7QGRQwbO/Dl/gKsODKP7APssgbW/j2nFOlnhDxpYlQGfmaxEN5BO2xmtdeErQ9sZPLCWduLPj1psgnvUa0m5KK6mvTslP2/rJSn1oXPEvhcPd2iCckeY/7O3CdY82LOD/+QNwOJoXgQTGQY0bccWqwjgqriukiYD8LwDIqck32eqT9W8Q6h+UfrlkpDCjBaHxL53isGO0IxIkCt0E3oUrGY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3286.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(136003)(396003)(346002)(39860400002)(451199021)(86362001)(2906002)(7416002)(6486002)(186003)(83380400001)(6666004)(26005)(6512007)(6506007)(54906003)(4326008)(6916009)(66556008)(66946007)(316002)(66476007)(38100700002)(478600001)(5660300002)(41300700001)(8676002)(8936002)(37363002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HcG4AkopdiwdITJa573QHXITytNmr8xUNvyKEVbbWqZOR3oxEgss+KNMfarZ?=
+ =?us-ascii?Q?cVHJTY4rJtI4hUPqZng1G/QVoYWGNGBISMlu6icI8fhQITOX83OZhC2J+Iu1?=
+ =?us-ascii?Q?Fq1oKdaCR9bPqEV+lCMRk7mhGlfQMr7VMQtNGXIO6SLhBGaf0ch9V9HMaXPr?=
+ =?us-ascii?Q?jRhJnZTynod8xpbD50lIsSHYr/D5bKhEaPGDarrFmKfx+DLQ8QnJ1WYN2JAv?=
+ =?us-ascii?Q?ZSmn4JfVHL4DAHy4JoAL/5btN7PQcQH7jay8Hrggz87oR8KV/uav/uOw8tLs?=
+ =?us-ascii?Q?Ie4E65+YOVuswj3GusIvBtIzauGRLx4uOKreGd5I8uQ0q/lfYsQYcrgwU8OZ?=
+ =?us-ascii?Q?OI/bbo96GgGDgR4GbsXXfsEAsqWd8U4M6oruZkek5iW/ipWUyN5GkG0D4FJ7?=
+ =?us-ascii?Q?PiU019nKdVx4V7/2iLqcSzIOLhFaQauqkKbpoGIWYbmRWg3vYbpsVYX2YlZ3?=
+ =?us-ascii?Q?ZHfb+JzNBfgvrWo/C6IzJr77INqVAdYbR764c6Inwk2PjTeI5zQqI35yXSfa?=
+ =?us-ascii?Q?lpGVizpukoEqf8HV75iqQIA+ZaVFjwU0tZ55hb5qZY+SDsplcHlL2MJ8rAHp?=
+ =?us-ascii?Q?qL7MjSd0DvNe1SfC+W151MNcUTrk5/4GbK6jWO+o3Dl7pJfwc23qVXfLU74p?=
+ =?us-ascii?Q?Fh07Dzf7TDjQ0/7kNbkrke4//VPYfQ+8QBPQMWVx31Q9uT7z17cM2Ssjnncr?=
+ =?us-ascii?Q?/TJoGjzWNtz6P9A+PR6KSnz5p/UvEJ3XKwq5VrpCRPvTp9jkvUIulVPIS6WH?=
+ =?us-ascii?Q?O7U6Qxu011d+HKFRFwZsQzYeVjzxDh9XCQ7kdAmPGTUY2IC3HEavHGVJJw+B?=
+ =?us-ascii?Q?34WLk74uKFwUfDgBn07Caswiq9YRmUCUBzgTa2NExojTO4JqP4J1TLEUr0ar?=
+ =?us-ascii?Q?PNa99pVl/XWuuNnbE+NVOi47fSq4IUaQHqYA2ughY6s3+K9t/ocZ9Q/x8c/+?=
+ =?us-ascii?Q?uPqxlByeOYxg+PwLZkDevd5PIqrlueeaoRah6y21VIx854O6CN4EnuymYPT+?=
+ =?us-ascii?Q?hQf3qu5BwNQjg9Da3toReGlSpvqQHkKX50ndsL7uGZYVw4rOCpp24WWPBiQT?=
+ =?us-ascii?Q?+hnmjLyFx4dGIWM8shqt64Rbd7/F8U/Kr8VJ+zBb38wHPZoBJey6XMroBHHA?=
+ =?us-ascii?Q?EEscOeaeczW3haFKQSYNobmmtGDkII5852xLWrdMweGDN5nj2ryXtB1Emt7K?=
+ =?us-ascii?Q?URHJQH2IMzrOLophbAl5gIxAIpQ/MweD3ZItBzeP5TF7V+ewSZ8QbNyHIqB1?=
+ =?us-ascii?Q?VqGjMRUYsPUxUueOV2BWizDGapWclRFG2nKT8lQxODm9JoIdRXjUGV9RQZGY?=
+ =?us-ascii?Q?5uNdXHyQNGM06bbpr0/zh22kKB99qQoj26M6qRnUYOo11qYLHo2YeNW9C9Do?=
+ =?us-ascii?Q?+KJbzGo9v08JOkr5HNPBkangGUNNOUhxQtVB5VsH2NgRec2OKt3M8+nkTv1n?=
+ =?us-ascii?Q?qhhSoKCV8otfbNyIqboMnMttMPvwLNtEPeO0Piq09167W0h0FORx9Lqxi/QN?=
+ =?us-ascii?Q?QDT0RT2dK6Mr2wEWI+cEzMBoD5I65AN6vaFgCo8/A0Ye/4rANnGsqPFsJgX2?=
+ =?us-ascii?Q?pwzw70P9kclHIvM1mGDlkXbPxlOOXSgLizK0SaJk?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 18fd71c2-c164-4368-9915-08db6d583387
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3286.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 04:22:59.4317
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RWA/an7WY1XVVa6bpLJjX56r00tPSNv+JG6jogQVgkNIEutZX0ycCn7/yxw1DNvkE39yWynS2A3L5ClckRmH6A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7342
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Chen Yu,
 
 
-On 6/9/2023 11:46 PM, Thinh Nguyen wrote:
-> On Fri, Jun 09, 2023, Johan Hovold wrote:
->> On Thu, Jun 08, 2023 at 05:57:23PM +0000, Thinh Nguyen wrote:
->>> On Thu, Jun 08, 2023, Krishna Kurapati PSSNV wrote:
->>>> On 6/8/2023 3:12 PM, Johan Hovold wrote:
->>>>> On Thu, Jun 08, 2023 at 01:21:02AM +0530, Krishna Kurapati PSSNV wrote:
->>>>>> On 6/7/2023 5:07 PM, Johan Hovold wrote:
->>>>>
->>>>>>> So there at least two issues with this series:
->>>>>>>
->>>>>>> 	1. accessing xhci registers from the dwc3 core
->>>>>>> 	2. accessing driver data of a child device
->>>>>>>
->>>>>>> 1. The first part about accessing xhci registers goes against the clear
->>>>>>> separation between glue, core and xhci that Felipe tried to maintain.
->>>>>>>
->>>>>>> I'm not entirely against doing this from the core driver before
->>>>>>> registering the xhci platform device as the registers are unmapped
->>>>>>> afterwards. But if this is to be allowed, then the implementation should
->>>>>>> be shared with xhci rather than copied verbatim.
->>>
->>> The core will just be looking at the HW capability registers and
->>> accessing the ports capability. Our programming guide also listed the
->>> host capability registers in its documentation. We're not driving the
->>> xhci controller here. We're initializing some of the core configs base
->>> on its capability.
->>>
->>> We're duplicating the logic here and not exactly doing it verbatim.
->>> Let's try not to share the whole xhci header where we should not have
->>> visibility over. Perhaps it makes sense in some other driver, but let's
->>> not do it here.
->>
->> The patch series even copied the kernel doc verbatim. This is just not
->> the way things are supposed to be done upstream. We share defines and
->> implementations all the time, but we should not be making copies of
->> them.
+On Tue, Jun 13, 2023 at 12:17:53AM +0800, Chen Yu wrote:
+> Hi,
 > 
->   We had some fixes to the kernel doc as it's incorrect description.
->   Perhaps we can fully rewrite the kernel-doc if that what makes it
->   better. We can share define implementations if they are meant to be
->   shared. However, with the current way xhci header is implemented, it's
->   not meant to be shared with dwc3. You agreed that we are violating this
->   in some driver, but you're also insistent that we should not duplicate
->   the logic to avoid this violation. Perhaps I'm not a maintainer here
->   long enough to know some violation is better kept. If sharing the xhci
->   header is what it takes to get this through, then fine.
+> This is an attempt to reduce the cost of newidle balance which is
+> found to occupy noticeable CPU cycles on some high-core count systems.
 > 
->>
->>>>>>>
->>>>>>> The alternative that avoids this issue entirely could indeed be to
->>>>>>> simply count the number of PHYs described in DT as Rob initially
->>>>>>> suggested. Why would that not work?
->>>
->>> See below.
->>>
->>>>>>>
->>>>>> The reason why I didn't want to read the Phy's from DT is explained in
->>>>>> [1]. I felt it makes the code unreadable and its very tricky to read the
->>>>>> phy's properly, so we decided we would initialize phy's for all ports
->>>>>> and if a phy is missing in DT, the corresponding member in
->>>>>> dwc->usbX_generic_phy[] would be NULL and any phy op on it would be a NOP.
->>>>>
->>>>> That doesn't sound too convincing. Can't you just iterate over the PHYs
->>>>> described in DT and determine the maximum port number used for HS and
->>>>> SS?
->>>>>> Also as per Krzysztof suggestion on [2], we can add a compatible to read
->>>>>> number of phy's / ports present. This avoids accessing xhci members
->>>>>> atleast in driver core. But the layering violations would still be present.
->>>>>
->>>>> Yes, but if the information is already available in DT it's better to use
->>>>> it rather than re-encode it in the driver.
->>
->>>>    Are you suggesting that we just do something like
->>>> num_ports = max( highest usb2 portnum, highest usb3 port num)
->>>
->>> Why do we want to do this? This makes num_ports ambiguous. Let's not
->>> sacrifice clarity for some lines of code.
->>
->> This is not about lines of code, but avoiding the bad practice of
->> copying code around and, to some degree, maintaining the separation
->> between the glue, core, and xhci which Felipe (perhaps mistakingly) has
->> fought for.
+> For example, by running sqlite on Intel Sapphire Rapids, which has
+> 2 x 56C/112T = 224 CPUs:
 > 
-> We're talking about combining num_usb3_ports and num_usb2_ports here,
-> what does that have to do with layer separation?
+> 6.69%    0.09%  sqlite3     [kernel.kallsyms]   [k] newidle_balance
+> 5.39%    4.71%  sqlite3     [kernel.kallsyms]   [k] update_sd_lb_stats
 > 
->>
->> If you just need to know how many PHYs you have in DT so that you can
->> iterate over that internal array, you can just look at the max index in
->> DT where the indexes are specified in the first place.
->>
->> Don't get hung up on the current variable names, those can be renamed to
->> match the implementation. Call it max_ports or whatever.
+> The main idea comes from the following question raised by Tim:
+> Do we always have to find the busiest group and pull from it? Would
+> a relatively busy group be enough?
 > 
-> It doesn't matter what variable name is given, it doesn't change the
-> fact that this "num_ports" or "max_ports" obfuscated usb2 vs usb3 ports
-> just for this specific implementation. So, don't do that.
-> 
->>
->>>> If so, incase the usb2 phy of quad port controller is missing in DT, we
->>>> would still read num_usb2_ports as 4 but the usb2_generic_phy[1] would be
->>>> NULL and any phy ops would still be NOP. But we would be getting rid of
->>>> reading the xhci registers compeltely in core driver.
->>>>
->>>> Thinh, Bjorn, can you also let us know your views on this.
->>>>
->>>> 1. Read:
->>>>    num_usb3_ports = highest usb3 port index in DT
->>>>    num_usb2_ports = max( highest usb2 port index, num_usb3_ports)
->>>>
->>>> 2. Read the same by parsing xhci registers as done in recent versions of
->>>> this series.
->>>
->>> DT is not reliable to get this info. As noted, the DT may skip some
->>> ports and still be fine. However, the driver doesn't know which port
->>> reflects which port config index without the exact port count.
->>
->> That's not correct. DT provides the port indexes already, for example:
->>
->> 	phy-names = "usb2-port0", "usb3-port0",
->> 		    "usb2-port1", "usb3-port1",
->> 		    "usb2-port2",
->> 		    "usb2-port3";
->>
->> So if you just need this to iterate over the PHYs all the information
->> needed is here.
->>
->> If you need to access ports which do not have a PHY described in DT,
->> then this is not going to suffice, but I have not seen anyone claim that
->> that is needed yet.
-> 
-> Perhaps I misunderstand the conversation. However, there isn't a method
-> that everyone's agree on yet regarding DT [*]. Perhaps this indicates it
-> may not be the best approach. You can resume the conversation if you
-> want to:
-> 
-> [*] https://lore.kernel.org/linux-usb/9671cade-1820-22e1-9db9-5c9836414908@quicinc.com/#t
-> 
->>   
->>> More importantly, the host controller that lives on the PCI bus will not
->>> use DT. This can be useful for some re-configurations if the controller
->>> is a PCI device and that goes through the dwc3 code path.
->>
->> Ok, this is a bit hand wavy, but if this ever turns out to be needed it
->> can also be implemented then.
-> 
-> What does hand wavy mean? We have case where it's useful outside of
-> this, and it would be useful for PCI device too:
-> 
-> https://lore.kernel.org/linux-usb/20230517233218.rjfmvptrexgkpam3@synopsys.com/
-> 
->>
->> Or just generalise the xhci implementation for parsing these registers
->> and reuse that from the start. (As a bonus you'd shrink the kernel text
->> size by getting rid of that iffy inline implementation.)
->>
-> 
-> I don't like the iffy inline function either. We changed that here. To
-> rework the xhci header and define its global header seems a bit
-> excessive just for dwc3 to get the port capability. Regardless, as I've
-> said, if we _must_, perhaps we can just import xhci-ext-caps.h instead
-> of the whole xhci.h.
+> The proposal ILB_UTIL mainly adjusts the newidle balance scan depth
+> within the current sched domain, based on the system utilization in
+> this domain. The more spare time there is in the domain, the more time
+> each newidle balance can spend on scanning for a busy group. Although
+> the newidle balance has per domain max_newidle_lb_cost to decide
+> whether to launch the balance or not, the ILB_UTIL provides a smaller
+> granularity to decide how many groups each newidle balance can scan.
 
-Hi Thinh, Johan,
+Thanks for the patchset. This is an interesting approach to minimise
+the time spent in newidle balance when the system is relatively
+busy. In the past we have seen that newly idle CPUs whose avg idle
+duration is slightly higher than the max_newidle_balance_cost spend
+quite a bit of time trying to find a busiest group/cpu only to not
+find any task to pull. But that's the opportunity lost to go idle. I
+suppose this patch is targetted towards a SMT --> MC(DIE) kind of
+topologies where we have a lot of groups in the DIE domain, but it
+would be interesting to see if this can help when there are fewer
+groups in each sched-domain.
 
-  How about we add compatible data indicating the number of usb2/usb3 
-ports. That way we needn't parse the DT or read xhci registers atleast 
-as a temporary solution to unblock other patches. Once this series is 
-merged, we can get back to fixing the port count calculation. Does it 
-seem fine ?
+Will try this on our setup.
 
-Regards,
-Krishna,
+> 
+> patch 1/4 is code cleanup.
+> 
+> patch 2/4 is to introduce a new variable in sched domain to indicate the
+>           number of groups, and will be used by patch 3 and patch 4.
+> 
+> patch 3/4 is to calculate the scan depth in each periodic load balance.
+> 
+> patch 4/4 is to limit the scan depth based on the result of patch 3,
+>           and the depth will be used by newidle_balance()->
+>           find_busiest_group() -> update_sd_lb_stats()
+> 
+> 
+> According to the test result, netperf/tbench shows some improvements
+> when the system is underloaded, while no noticeable difference from
+> hackbench/schbench. While I'm trying to run more benchmarks including
+> some macro-benchmarks, I send this draft patch out and seek for suggestion
+> from the community if this is the right thing to do and if we are in the
+> right direction.
+> 
+> [We also have other wild ideas like sorting the groups by their load
+> in the periodic load balance, later newidle_balance() can fetch the
+> corresponding group in O(1). And this change seems to get improvement
+> too according to the test result].
+> 
+> Any comments would be appreciated.
+> 
+> Chen Yu (4):
+>   sched/fair: Extract the function to get the sd_llc_shared
+>   sched/topology: Introduce nr_groups in sched_domain to indicate the
+>     number of groups
+>   sched/fair: Calculate the scan depth for idle balance based on system
+>     utilization
+>   sched/fair: Throttle the busiest group scanning in idle load balance
+> 
+>  include/linux/sched/topology.h |  5 +++
+>  kernel/sched/fair.c            | 74 +++++++++++++++++++++++++++++-----
+>  kernel/sched/features.h        |  1 +
+>  kernel/sched/topology.c        | 10 ++++-
+>  4 files changed, 79 insertions(+), 11 deletions(-)
+> 
+
+--
+Thanks and Regards
+gautham.
