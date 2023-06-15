@@ -2,97 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DBF17319AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFB107319B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:15:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240604AbjFONOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 09:14:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33536 "EHLO
+        id S1343841AbjFONPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 09:15:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343710AbjFONNu (ORCPT
+        with ESMTP id S1343697AbjFONPF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 09:13:50 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA221294D
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 06:13:33 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-657c4bcad0bso2025890b3a.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 06:13:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1686834813; x=1689426813;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=g1B1o/FLv9G0pUm1w2hOwI7VRYkKM2WCDqp7dFZZlHs=;
-        b=NxuAR8Kwlaeh/EmM1YCgCVqYyw6uo92KBbxLVItzxTFf/kOvv92ue2AYLsEwBT9uJb
-         UwLIbo4RYn5vetNgHJS1efdFP5hetZzoQ0RJ1xTF1jqSumRQ7LFHxWMvRcGX71raeM2w
-         5F7GToKM2tzpJl6DIm7fz0ROqrC8k18jzvopqmfB7aFf91epmPNpL+4BR6BsranQ4QXm
-         L4AFcQuMep4XB4CN4eBft6LJ0aTGFUB8kq6L44upxPCWlLOlZsP0Q3BPhuErKOR16kXM
-         f723VBQCousEB8mvomyvAOvsUNbUF7FURhWHCnoWA6bK9lZui2bBDM9kmgDn5o1/6rDd
-         xUzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686834813; x=1689426813;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g1B1o/FLv9G0pUm1w2hOwI7VRYkKM2WCDqp7dFZZlHs=;
-        b=brLzV5JJrOjtRns/hM5BalmH78Sm+yAg8F2HIE9TR1IV0GntbzsXq2BVoV484aC2QC
-         DhwwF3eJT5oS7h+Qq9/z4SFnK7ZFAtex5nc0KI3QH/AedMsVRqKEJbG7FpUGlDPobl9D
-         Fu0hNvZsQDc2XN6JrZ6fej4veZxPTA+NKe+VR+eChoFQp8vkO7QAYsX0+Ye9zlJm0GRG
-         Gb7Ri8u4iHzk1qq0Ii2b9UVqRDbPEOLVLBxk1fH4aMoCaJ77ZDFIreWHPCvKnTsA9gIe
-         DIFq+baFEMgrAO6HgUp0eUeiMSNnYNgqLiCz+2a5rfsPGLCS7Ea6R4YztF/MdrER8nmY
-         iNwg==
-X-Gm-Message-State: AC+VfDw4uAKlAfMXqQJV9RVJJXmtwdXR6Q3G8gbRnwrMMotDJEpIw729
-        31kivDfbuqarEXNUPVIUbF3Djw==
-X-Google-Smtp-Source: ACHHUZ6nCkovgZAgHNee1ALFg9f+niLoHWwizdqsMfP5mdeUjMGgTN+jwfaM9Dq/iz4xZ0yunDXZtw==
-X-Received: by 2002:a17:90b:3852:b0:25b:e83b:593f with SMTP id nl18-20020a17090b385200b0025be83b593fmr13345455pjb.4.1686834813160;
-        Thu, 15 Jun 2023 06:13:33 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id ga12-20020a17090b038c00b002564dc3cb60sm1881320pjb.9.2023.06.15.06.13.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 06:13:32 -0700 (PDT)
-Message-ID: <ec762677-f8d4-94ab-e7b3-adee45a052a1@kernel.dk>
-Date:   Thu, 15 Jun 2023 07:13:31 -0600
+        Thu, 15 Jun 2023 09:15:05 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2052D49;
+        Thu, 15 Jun 2023 06:14:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686834881; x=1718370881;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dSdnIrqkytXoK4h1PEhPHBhTw26jP5/ExIfFAh92pC4=;
+  b=lcA2p9sOezWFJYw+SB44bIIC2Oa19POVSX+IMhbFIsbDV16XaG+hqAzp
+   Q7+QfKZ/h2vhJvWOHgi39idDOx69bZO4I6F/tSmhNofhxQ1BGiV5eKpow
+   w5YOjOnxQOne32bFKGH6YTEtWq1kCmWHWYK3roG8Q2QL2yC6yiA0WrkIn
+   DBZpLyVBwKH2ds15Tc0UCfMhfE9Zz6hYpP7JYfE0xz/TeXckpBqQr8fMe
+   XvRLCo7y7eS7xVDsdC2u2WgCu4SHpj2rd75yKdq+wmMkKFx4OowMHnlcO
+   CkR5dyYnNH28Q9urdkRBWhhVCmYYtqDiHqzhHeH/vXDurQ05jbfhV6WEm
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="356402056"
+X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
+   d="scan'208";a="356402056"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 06:14:40 -0700
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="745544435"
+X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
+   d="scan'208";a="745544435"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 15 Jun 2023 06:14:38 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1q9mo8-003wjU-2m;
+        Thu, 15 Jun 2023 16:14:36 +0300
+Date:   Thu, 15 Jun 2023 16:14:36 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Raag Jadav <raag.jadav@intel.com>
+Cc:     linus.walleij@linaro.org, mika.westerberg@linux.intel.com,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mallikarjunappa.sangannavar@intel.com, pandith.n@intel.com
+Subject: Re: [PATCH v4] pinctrl: intel: refine ->irq_set_type() hook
+Message-ID: <ZIsOvBGLJTCo45jp@smile.fi.intel.com>
+References: <20230615125022.27421-1-raag.jadav@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] tools/io_uring: Fix missing check for return value of
- malloc()
-Content-Language: en-US
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        Chenyuan Mi <cymi20@fudan.edu.cn>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring Mailing List <io-uring@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20230615125045.125172-1-cymi20@fudan.edu.cn>
- <34898926-681e-1790-4303-e2b54e793a62@gnuweeb.org>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <34898926-681e-1790-4303-e2b54e793a62@gnuweeb.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230615125022.27421-1-raag.jadav@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/15/23 7:00?AM, Ammar Faizi wrote:
-> On 6/15/23 7:50 PM, Chenyuan Mi wrote:
->> The malloc() function may return NULL when it fails,
->> which may cause null pointer deference in kmalloc(),
+On Thu, Jun 15, 2023 at 06:20:22PM +0530, Raag Jadav wrote:
+> Refine ->irq_set_type() hook and improve its readability by:
 > 
-> It's a userspace app, there is no kmalloc(). Also, I don't think it's
-> worth to fix a missing ENOMEM handling for that old test program. But
-> anyway, let's wait for maintainers' comment on this.
+> - Reducing scope of spinlock by moving unneeded operations out of it.
+> - Dropping redundant PADCFG0_RXEVCFG_SHIFT and including it directly
+>   into PADCFG0_RXEVCFG_* definitions.
+> - Utilizing temporary variables for common operations.
+> - Simplifying if-else-if chain.
 
-Definitely not worth it, and I find it odd how the author would target
-just one of multiple allocations in that file. I'm guessing it's because
-this checker only checks for malloc(), and no thought has otherwise gone
-into a) if the patch makes any sense at all, and b) if it does make
-sense, are there potentially other cases to consider?
+Two questions out of curiosity.
+Do we gain or lose bytes with this?
+
+> Signed-off-by: Raag Jadav <raag.jadav@intel.com>
+> ---
+>  drivers/pinctrl/intel/pinctrl-intel.c | 45 ++++++++++++++-------------
+>  1 file changed, 24 insertions(+), 21 deletions(-)
+> 
+> diff --git a/drivers/pinctrl/intel/pinctrl-intel.c b/drivers/pinctrl/intel/pinctrl-intel.c
+> index e8adf2580321..036eae74c479 100644
+> --- a/drivers/pinctrl/intel/pinctrl-intel.c
+> +++ b/drivers/pinctrl/intel/pinctrl-intel.c
+> @@ -55,12 +55,11 @@
+>  
+>  /* Offset from pad_regs */
+>  #define PADCFG0				0x000
+> -#define PADCFG0_RXEVCFG_SHIFT		25
+>  #define PADCFG0_RXEVCFG_MASK		GENMASK(26, 25)
+> -#define PADCFG0_RXEVCFG_LEVEL		0
+> -#define PADCFG0_RXEVCFG_EDGE		1
+> -#define PADCFG0_RXEVCFG_DISABLED	2
+> -#define PADCFG0_RXEVCFG_EDGE_BOTH	3
+> +#define PADCFG0_RXEVCFG_LEVEL		(0 << 25)
+> +#define PADCFG0_RXEVCFG_EDGE		(1 << 25)
+> +#define PADCFG0_RXEVCFG_DISABLED	(2 << 25)
+> +#define PADCFG0_RXEVCFG_EDGE_BOTH	(3 << 25)
+>  #define PADCFG0_PREGFRXSEL		BIT(24)
+>  #define PADCFG0_RXINV			BIT(23)
+>  #define PADCFG0_GPIROUTIOXAPIC		BIT(20)
+> @@ -1127,9 +1126,9 @@ static int intel_gpio_irq_type(struct irq_data *d, unsigned int type)
+>  	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
+>  	struct intel_pinctrl *pctrl = gpiochip_get_data(gc);
+>  	unsigned int pin = intel_gpio_to_pin(pctrl, irqd_to_hwirq(d), NULL, NULL);
+> +	u32 rxevcfg, rxinv, value;
+>  	unsigned long flags;
+>  	void __iomem *reg;
+> -	u32 value;
+>  
+>  	reg = intel_get_padcfg(pctrl, pin, PADCFG0);
+>  	if (!reg)
+> @@ -1145,28 +1144,32 @@ static int intel_gpio_irq_type(struct irq_data *d, unsigned int type)
+>  		return -EPERM;
+>  	}
+>  
+> -	raw_spin_lock_irqsave(&pctrl->lock, flags);
+> -
+> -	intel_gpio_set_gpio_mode(reg);
+> -
+> -	value = readl(reg);
+> -
+> -	value &= ~(PADCFG0_RXEVCFG_MASK | PADCFG0_RXINV);
+> -
+>  	if ((type & IRQ_TYPE_EDGE_BOTH) == IRQ_TYPE_EDGE_BOTH) {
+> -		value |= PADCFG0_RXEVCFG_EDGE_BOTH << PADCFG0_RXEVCFG_SHIFT;
+> +		rxevcfg = PADCFG0_RXEVCFG_EDGE_BOTH;
+>  	} else if (type & IRQ_TYPE_EDGE_FALLING) {
+> -		value |= PADCFG0_RXEVCFG_EDGE << PADCFG0_RXEVCFG_SHIFT;
+> -		value |= PADCFG0_RXINV;
+> +		rxevcfg = PADCFG0_RXEVCFG_EDGE;
+>  	} else if (type & IRQ_TYPE_EDGE_RISING) {
+> -		value |= PADCFG0_RXEVCFG_EDGE << PADCFG0_RXEVCFG_SHIFT;
+> +		rxevcfg = PADCFG0_RXEVCFG_EDGE;
+>  	} else if (type & IRQ_TYPE_LEVEL_MASK) {
+> -		if (type & IRQ_TYPE_LEVEL_LOW)
+> -			value |= PADCFG0_RXINV;
+> +		rxevcfg = PADCFG0_RXEVCFG_LEVEL;
+>  	} else {
+> -		value |= PADCFG0_RXEVCFG_DISABLED << PADCFG0_RXEVCFG_SHIFT;
+> +		rxevcfg = PADCFG0_RXEVCFG_DISABLED;
+>  	}
+>  
+> +	if (type == IRQ_TYPE_EDGE_FALLING || type == IRQ_TYPE_LEVEL_LOW)
+> +		rxinv = PADCFG0_RXINV;
+> +	else
+> +		rxinv = 0;
+> +
+> +	raw_spin_lock_irqsave(&pctrl->lock, flags);
+> +
+> +	intel_gpio_set_gpio_mode(reg);
+> +
+> +	value = readl(reg);
+
+> +	value = (value & ~PADCFG0_RXINV) | rxinv;
+> +	value = (value & ~PADCFG0_RXEVCFG_MASK) | rxevcfg;
+
+Same question if we change this to be similar to the current code, i.e.
+
+	value = readl(reg);
+
+	value &= ~(PADCFG0_RXEVCFG_MASK | PADCFG0_RXINV);
+	value |= rxevcfg;
+	value |= rxinv;
+
+And I would keep blank lines after readl() and before writel() since we have
+more than a single line in between.
+
+>  	writel(value, reg);
+>  
+>  	if (type & IRQ_TYPE_EDGE_BOTH)
+> 
+> base-commit: e95433c367e681dc6d4613706bd74f483a25acd8
+> -- 
+> 2.17.1
+> 
 
 -- 
-Jens Axboe
+With Best Regards,
+Andy Shevchenko
+
 
