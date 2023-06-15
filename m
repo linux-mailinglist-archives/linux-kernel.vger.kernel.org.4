@@ -2,131 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A103731BF0
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A4E8731BF3
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344370AbjFOO4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 10:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38484 "EHLO
+        id S1345140AbjFOO44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 10:56:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344970AbjFOO4X (ORCPT
+        with ESMTP id S1345162AbjFOO4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 10:56:23 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8A6295E;
-        Thu, 15 Jun 2023 07:56:22 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1b3ce6607cbso38262715ad.2;
-        Thu, 15 Jun 2023 07:56:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686840981; x=1689432981;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AZDxzGx+G580mVpzt8oru30YD1LI8dedL/dXnT63ZTM=;
-        b=Dis3/aJs4NwHXZvhsDEIsKUnAKbpjHAkmQgpd4cy2WH3NTPIqurq8SH3R5tYlpikC5
-         Led3AMYDd1XcKlbh3yTh3SDCAf2C2BuvQEQ1d3PqamQdaotL8r8TPWoMGQpg6KTUwjU8
-         FbQJffUPxkehUF5/feN2Vnjup6S5cBr+v/L9X6GriAzsfScdFghJJyq6iiWvf9M6dEy1
-         zn6k3XGIZvhEjKKho5VZ0DjlbLT3RJZk/U95VYHEDtrFw5VekKvjJiIp+Ew+QfTNbSFY
-         SnLur1xOL3on6I2njwjimwaSllKJ03DizvcOCkizOuol64NzUEumTxjsJdBJAAXDgSPW
-         qQyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686840981; x=1689432981;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AZDxzGx+G580mVpzt8oru30YD1LI8dedL/dXnT63ZTM=;
-        b=hs3eNQDLHiNvMo0rCY37th1l3XY2XgBvT1bzZF8nRy8IAIQiooOfOam9qiHOoe2Oay
-         bAuNfL3hTOWboYuleTxsqhr8stH7ICd2/Av8J4LGcxPUMG2pkRx/TyAHbU5SzMmNDWS0
-         jZxv8qXuKUYmQ3u7KnHwqeYXkeESE43plKW8eXP8JNd/CyAbX3Kdzy0Q+S1AVo5WX2P2
-         kgJr2H9yFGuM5ItJzTQKCyxukD0gJSe2JAsVc/WmsYcRz4JuZ/uwxEkvjXzOr+Z3K3Y7
-         J4R8TArUsPhmwjmrOixrM9BVH8L/g+1EHkkhAiyksnhEgbDoBIqLHTJF2sduQdH8PRsL
-         VgUg==
-X-Gm-Message-State: AC+VfDxfoqpVP7JMaa0i4HRkilaVZTvmW4clwVtwAgE+jQYo8J3+BxD+
-        6ALmHTZ5VjmA2f9bDHhwhazem8RjulQ=
-X-Google-Smtp-Source: ACHHUZ7qXwcS5H6hN2QaTkV7k/UpiEXfSWvKM2CdglAb0m7vKZAARS7KxziUvCYAZsjMECb8gSg2Eg==
-X-Received: by 2002:a17:903:124d:b0:1ac:aba5:7885 with SMTP id u13-20020a170903124d00b001acaba57885mr18000926plh.47.1686840981530;
-        Thu, 15 Jun 2023 07:56:21 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b20-20020a170902d31400b001b414fae374sm3862361plc.291.2023.06.15.07.56.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 07:56:20 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <54ca1f3c-4d24-96f9-271e-30f97f5b75f4@roeck-us.net>
-Date:   Thu, 15 Jun 2023 07:56:19 -0700
+        Thu, 15 Jun 2023 10:56:32 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B6E2946;
+        Thu, 15 Jun 2023 07:56:31 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 8E8CA5C00EA;
+        Thu, 15 Jun 2023 10:56:30 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Thu, 15 Jun 2023 10:56:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1686840990; x=1686927390; bh=Hy
+        mpvAbMAmDlsKdR8DjVa+pRbRNPZ2oT5iCjFzqTR3A=; b=uKrbjIOhZVp1jYUgRn
+        f1vHjHGwkLukMQKH4LxRLHyfQwEq2ei9mCkT/yVl1JFjzETJDpfiQAtx2OLhZ+eI
+        avk4VSDE445do/Gba0+z8DTiTY0YSrkLhEhsUIYdEpfHevou/F7JhCCsj6QlaGsK
+        4t4Bsy0j6yYCi9Ep8WtjgkX7wWiIQirjWI6HpCK8acX6q0045NjznLorAshlbEyZ
+        bFRKVoPr8fdHmHRJ6PYmnTpTZOdwrfnIco+Sp6qaIiMNb19GLN+NcMzIBqYyxeRQ
+        JLR55/y6fnQWwZ8OQXEM8t2dsO4ff+XzgjtUa6n0Nv2n3AxoK8sb3sR/Mf9Ois0F
+        n5yw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1686840990; x=1686927390; bh=HympvAbMAmDls
+        KdR8DjVa+pRbRNPZ2oT5iCjFzqTR3A=; b=NJ0hJacgy1irx6Nn+CqatmljXReEY
+        XldIlSONuBxjccmQZ8J9Sb6ApE+KyxjS9tMIYBpfXAqWTNXGv1NwQIPfJorG/etD
+        NP8JlW+hvPJum+WHz13qL0RKoqMIjRxPmjZRfUhoRZedGgdNQTK0KrRaN5cJBoU/
+        /M/ebHBaKlLbQ6jrLcJY/C0YMMxBscIa1bPQtqyONVlp/ho/DKXdh45qRnRBzhR5
+        i86i49500S5j+mV9Mg/ItAK66pr3ANxACoClqXec7MVdm1XpF1PiPwnFOmrR1SVf
+        oSVWmtwtrXR8zKScamct+oGo4xKMUyp4u7pg2FjKJe46Gy2xkIJxZnn6A==
+X-ME-Sender: <xms:niaLZEWJiENINwtp_xjuWgrZ88818hZOJtgL2ASkUVcnlF3FkPf83Q>
+    <xme:niaLZImMCBYLJgSudmm6AEuFiPI5g8Ibh50D65swL8A9lqOPpXpMe-4G7y4719egi
+    n5Vy7IdRuqsBYOV-wc>
+X-ME-Received: <xmr:niaLZIZEk2N3QGeEfxxqGul504WmeAW5sOdkoy31s5Qww6t8zAehcAsbIRoSXxYPf58LKc9XYbWBjJlC4pdmTA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedvvddgjeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtsfertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeeuveduheeutdekvefgudevjeeufedvvdevhfejgfelgfdtkeevueegteek
+    gfelfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:niaLZDX9r1lKvW5rTDkpeFHwjlWRN30137-DCKYIdjBY_b2kab7OMA>
+    <xmx:niaLZOkxjOxbAAAPyjCqYQNt2ZtwDLwEFC-ByBXFbnP-5BYH1AVlKA>
+    <xmx:niaLZIcyOz6gU9H2eXVinSlRUx6W5k9BEZg7t0NfcPdyWAySYALcHQ>
+    <xmx:niaLZI5aVPPO-4zWlzu9ci8hZx1OhCza-P-e4alrdKMtTZaqXUdjcQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 15 Jun 2023 10:56:29 -0400 (EDT)
+Date:   Thu, 15 Jun 2023 16:56:28 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        m.grzeschik@pengutronix.de, windhl@126.com,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 11/11] clk: at91: sama7g5: s/ep_chg_chg_id/ep_chg_id
+Message-ID: <gzkzaixuq564oouflxr22ykvt6zqxpzukeqe2rlmao6mjpb77d@iakcgpryefii>
+References: <20230615093227.576102-1-claudiu.beznea@microchip.com>
+ <20230615093227.576102-12-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     JuenKit Yip <JuenKit_Yip@hotmail.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jdelvare@suse.com
-References: <DB4PR10MB6261D79FE16EC2BBD5316B91925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
- <6d1209e9-0d40-c2ba-b94c-6590e98070d7@roeck-us.net>
- <DB4PR10MB626134E4213F378A430E5EED925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
- <45c8771d-47c1-c007-1cd5-97eebedef147@roeck-us.net>
- <DB4PR10MB6261C86DEE5F4008B20C5033925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 1/3] hwmon: (sht3x)remove sht3x_platform_data
-In-Reply-To: <DB4PR10MB6261C86DEE5F4008B20C5033925AA@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vunwytje5gyuocfj"
+Content-Disposition: inline
+In-Reply-To: <20230615093227.576102-12-claudiu.beznea@microchip.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/14/23 16:54, JuenKit Yip wrote:
-> 
-> 在 2023/6/15 3:15, Guenter Roeck 写道:
->> On 6/14/23 08:02, JuenKit Yip wrote:
->>>
->>> 在 2023/6/14 20:57, Guenter Roeck 写道:
->>>> On 6/13/23 23:24, JuenKit Yip wrote:
->>>>> Since no in-tree driver supports it, the sht3x_platform_data was
->>>>> removed.
->>>>>
->>>>> - "blocking_io" property and its related code have been removed, and
->>>>> Single-Shot mode should be blocking in default.
->>>>>
->>>>> - "high-precision" property has been replaced to "repeatability" for
->>>>> matching datasheet.
->>>>>
->>>>
->>>> That needs to be three patches.
->>>
->>> Patch 1: remove sht3x_platform_data and its header file
->>>
->>> Patch 2: move "blocking_io" to struct sht3x_data
->>>
->> Essentially merge it with update_interval==0 since (if I understand
->> correctly) blocking mode and update_interval==0 will be equivalent.
->> With that in mind, a separate "blocking_io" variable should no
->> longer be needed.
->>
-> I reviewed the datasheet again, update_interval == 0 means Single-Shot
-> 
-> mode which owns blocking(clock strench) and non-blocking(non-clock strench)
-> 
-> options. If master supports clock-strench( I don't know how to detect it),
-> 
-> the property may be reserved.
-> 
 
-I see.
+--vunwytje5gyuocfj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-In practice, blocking mode was never really used, at least not in the
-upstream kernel, since platform data was not set from any in-kernel
-code. Given that it is pretty much untested, I would suggest to always
-use non-blocking mode. This is only relevant if the chip is in
-single-shot mode, so worst case the user would have to wait a bit longer
-for results in that mode. I find that acceptable over the risk involved
-when trying to use/support blocking mode.
+On Thu, Jun 15, 2023 at 12:32:27PM +0300, Claudiu Beznea wrote:
+> s/ep_chg_chg_id/ep_chg_id in documentation of master clock structure.
+>=20
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 
-Guenter
+Reviewed-by: Maxime Ripard <mripard@kernel.org>
 
+Maxime
+
+--vunwytje5gyuocfj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZIsmnAAKCRDj7w1vZxhR
+xY/nAQCKT8GJIFCw8Bskfsw+Xf00JI+DPpxH9hfuRtnzyRTUAgD/TdY/S5s8nC3B
+dW81ywiH/ge4UKlqLFC2y6uiey4W8Qg=
+=6cVe
+-----END PGP SIGNATURE-----
+
+--vunwytje5gyuocfj--
