@@ -2,69 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64D00731443
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D948573144F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241743AbjFOJm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 05:42:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42252 "EHLO
+        id S241639AbjFOJnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 05:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241720AbjFOJmW (ORCPT
+        with ESMTP id S240189AbjFOJnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 05:42:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5381D1A3;
-        Thu, 15 Jun 2023 02:42:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C874D62A6B;
-        Thu, 15 Jun 2023 09:42:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BE72C433D9;
-        Thu, 15 Jun 2023 09:42:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686822140;
-        bh=XQuGQJ3NoUrSQwNFP59JJLdxojYQ1TBivS0WT8/w20M=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=u8g8Ozh3mE2Snbs1cwUSb+RzROAQ6VDZetn74FhW+Lvt6kK7tuQnxhXI1q57lMD2r
-         HjDbmJrSNVgR8BdXSaF25zqfgUXCj89a1Dw1oMD26FGuC1CAPYf2MCY0KD2ODAghM5
-         Qc9++SJw+7dFtVAIW+Fhcya1X9t6JJsz0wPmfcmakfCryJs/u/0XMZKwmJj87l23o8
-         rn4/Hj+TiJimGzHM+tbpdxFNWfYKlPcQmGEGhxzEQI1NbsYeeZCL8VF+0sWbQGiUwg
-         DWy7oRzztq2Gy8xA2U9iTihhUfAniq596JyRQB19gnnlL/PJsKq0q0+H+R2oW8gHtu
-         65gdoJ4b7D0bw==
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5151934a4e3so11278570a12.1;
-        Thu, 15 Jun 2023 02:42:20 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzn2iSVkbtmzimQzbF7RTxc3UxPzbWTg0CCh98bdaGCP2WanLCu
-        4ECP/v4WA5tBN27uzNy+iQzZv6ddbtPdKuZSInY=
-X-Google-Smtp-Source: ACHHUZ5EqaWjq5vvJT3H+n50g/V85lvdiQoY7gum7sTvRKfWvo/vJxKBj7qau0xrHobkq3qsSyH3sg7fVkQhR5EYTmQ=
-X-Received: by 2002:aa7:d358:0:b0:514:9423:65a5 with SMTP id
- m24-20020aa7d358000000b00514942365a5mr12355526edr.19.1686822138291; Thu, 15
- Jun 2023 02:42:18 -0700 (PDT)
+        Thu, 15 Jun 2023 05:43:42 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1F0270E
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 02:43:40 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id 5614622812f47-39ab96e6aefso4974426b6e.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 02:43:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1686822220; x=1689414220;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vMy1Pb+TA2cOdvuxJ5yY65mwMnkTqfoyE70yJ/ynDcI=;
+        b=O0s0UoIWDNXHrwMp4wnGcpuo0BVxREa6/YH7qaGnjqb+PIRGy07hGnP7mOuBwXqVma
+         TkrG/+NU8BtcSsCk0NtZywqVM4m0RBTvKfWnUxDycBUAgwxcodeOzY/wuy7089Ax0M0e
+         J9ASl3dXR5X9jdt9rn3Q4X9BZdJaNiqX1i1DA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686822220; x=1689414220;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vMy1Pb+TA2cOdvuxJ5yY65mwMnkTqfoyE70yJ/ynDcI=;
+        b=Y+N+cU6uRiPmQ0KBV2bQGJz5+jYwvjAyxqedg5yUJgVpCZGCBfK3uwSg6VpDRVvLAU
+         l2E1z56ZnOSfx4Oqj5/REJo2S/lI0Zp1OeXjb57zXdj+Ho3Z7x9M7o4vMd4w78u+8TJ1
+         UiiKLRmBI7IPzXX5rAs6nzvajVsI19DHhT0Onjq2GQOD2VdelAXxPNQK7e5DLY2Ojnrl
+         LqyRjnd7+vxdWHqTBxJgkitB7BwDD4usm+B4ycSDxwEehjQhrtqYCn2JATK0E/nOjqpl
+         hbZRtp7bGcN3oHCE7Fc0Ko9rSzUVJPzjxi5PO+HlQnOz9oYFpV/a/f4RuuC4GV7ANRdR
+         zqRQ==
+X-Gm-Message-State: AC+VfDwcpY3c3+wKXUgjF8zWy+IbfKUxPhn7dE2bDU1TorbGhWmWZ3fc
+        g5QguG4OnUqkUwUsHv+OaoAyeDsBBTaoHj+nQWvDYQ==
+X-Google-Smtp-Source: ACHHUZ6Cif8QTBZaHh0W1Qhci6YrNAKxLJVKhT4HYFy7aFA+SE6XNAjsP43kNk2E3DEH+pOXb6zTwijhMAgZO0x3vEE=
+X-Received: by 2002:a05:6808:211b:b0:399:de83:96f2 with SMTP id
+ r27-20020a056808211b00b00399de8396f2mr15297736oiw.8.1686822219722; Thu, 15
+ Jun 2023 02:43:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230609090832.2131037-1-zhaotianrui@loongson.cn> <20230609090832.2131037-30-zhaotianrui@loongson.cn>
-In-Reply-To: <20230609090832.2131037-30-zhaotianrui@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Thu, 15 Jun 2023 17:42:05 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4rzRZQpfxFBANFJyUshsNHYqmZmLnZfHA+McPyQ3m4-w@mail.gmail.com>
-Message-ID: <CAAhV-H4rzRZQpfxFBANFJyUshsNHYqmZmLnZfHA+McPyQ3m4-w@mail.gmail.com>
-Subject: Re: [PATCH v13 29/30] LoongArch: KVM: Supplement kvm document about
- LoongArch-specific part
-To:     Tianrui Zhao <zhaotianrui@loongson.cn>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
-        Xi Ruoyao <xry111@xry111.site>, tangyouling@loongson.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230615083404.57112-1-alex.maftei@amd.com>
+In-Reply-To: <20230615083404.57112-1-alex.maftei@amd.com>
+From:   Pavan Chebbi <pavan.chebbi@broadcom.com>
+Date:   Thu, 15 Jun 2023 15:13:27 +0530
+Message-ID: <CALs4sv2+nb3i8VQKNsqLzrCR0Sq6oHPwrzxYdeAaMVX+1-Z+VA@mail.gmail.com>
+Subject: Re: [PATCH] selftests/ptp: Fix timestamp printf format for PTP_SYS_OFFSET
+To:     Alex Maftei <alex.maftei@amd.com>
+Cc:     richardcochran@gmail.com, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000003b18d905fe27e764"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,224 +66,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Tianrui,
+--0000000000003b18d905fe27e764
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 9, 2023 at 5:09=E2=80=AFPM Tianrui Zhao <zhaotianrui@loongson.c=
-n> wrote:
+On Thu, Jun 15, 2023 at 2:05=E2=80=AFPM Alex Maftei <alex.maftei@amd.com> w=
+rote:
 >
-> Supplement kvm document about LoongArch-specific part, such as add
-> api introduction for GET/SET_ONE_REG, GET/SET_FPU, GET/SET_MP_STATE,
-> etc.
+> Previously, timestamps were printed using "%lld.%u" which is incorrect
+> for nanosecond values lower than 100,000,000 as they're fractional
+> digits, therefore leading zeros are meaningful.
 >
-> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
+> This patch changes the format strings to "%lld.%09u" in order to add
+> leading zeros to the nanosecond value.
+>
+> Fixes: 568ebc5985f5 ("ptp: add the PTP_SYS_OFFSET ioctl to the testptp pr=
+ogram")
+> Fixes: 4ec54f95736f ("ptp: Fix compiler warnings in the testptp utility")
+> Fixes: 6ab0e475f1f3 ("Documentation: fix misc. warnings")
+> Signed-off-by: Alex Maftei <alex.maftei@amd.com>
 > ---
->  Documentation/virt/kvm/api.rst | 71 +++++++++++++++++++++++++++++-----
->  1 file changed, 62 insertions(+), 9 deletions(-)
+>  tools/testing/selftests/ptp/testptp.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 >
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.=
-rst
-> index add067793b90..ad8e13eab48d 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -416,6 +416,12 @@ Reads the general purpose registers from the vcpu.
->         __u64 pc;
->    };
->
-> +  /* LoongArch */
-> +  struct kvm_regs {
-Add a " /* out (KVM_GET_REGS) / in (KVM_SET_REGS) */" line as others here?
 
-> +        unsigned long gpr[32];
-> +        unsigned long pc;
-> +  };
-> +
->
->  4.12 KVM_SET_REGS
->  -----------------
-> @@ -506,7 +512,7 @@ translation mode.
->  ------------------
->
->  :Capability: basic
-> -:Architectures: x86, ppc, mips, riscv
-> +:Architectures: x86, ppc, mips, riscv, loongarch
->  :Type: vcpu ioctl
->  :Parameters: struct kvm_interrupt (in)
->  :Returns: 0 on success, negative on failure.
-> @@ -592,6 +598,14 @@ b) KVM_INTERRUPT_UNSET
->
->  This is an asynchronous vcpu ioctl and can be invoked from any thread.
->
-> +LOONGARCH:
-> +^^^^^^^^^^
-> +
-> +Queues an external interrupt to be injected into the virtual CPU. A nega=
-tive
-> +interrupt number dequeues the interrupt.
-> +
-> +This is an asynchronous vcpu ioctl and can be invoked from any thread.
-> +
->
->  4.17 KVM_DEBUG_GUEST
->  --------------------
-> @@ -737,7 +751,7 @@ signal mask.
->  ----------------
->
->  :Capability: basic
-> -:Architectures: x86
-> +:Architectures: x86, loongarch
->  :Type: vcpu ioctl
->  :Parameters: struct kvm_fpu (out)
->  :Returns: 0 on success, -1 on error
-> @@ -746,7 +760,7 @@ Reads the floating point state from the vcpu.
->
->  ::
->
-> -  /* for KVM_GET_FPU and KVM_SET_FPU */
-> +  /* x86: for KVM_GET_FPU and KVM_SET_FPU */
->    struct kvm_fpu {
->         __u8  fpr[8][16];
->         __u16 fcw;
-> @@ -761,12 +775,22 @@ Reads the floating point state from the vcpu.
->         __u32 pad2;
->    };
->
-> +  /* LoongArch: for KVM_GET_FPU and KVM_SET_FPU */
-> +  struct kvm_fpu {
-> +        __u32 fcsr;
-> +        __u32 none;
-Maybe use pad1 as x86 is better.
+Change looks good but can you mark this for "net" correctly and get
+CI/sanity checks done.
 
-Huacai
-> +        __u64 fcc;
-> +        struct kvm_fpureg {
-> +                __u64 val64[4];
-> +        }fpr[32];
-> +  };
-> +
+> diff --git a/tools/testing/selftests/ptp/testptp.c b/tools/testing/selfte=
+sts/ptp/testptp.c
+> index 198ad5f32187..cfa9562f3cd8 100644
+> --- a/tools/testing/selftests/ptp/testptp.c
+> +++ b/tools/testing/selftests/ptp/testptp.c
+> @@ -502,11 +502,11 @@ int main(int argc, char *argv[])
+>                         interval =3D t2 - t1;
+>                         offset =3D (t2 + t1) / 2 - tp;
 >
->  4.23 KVM_SET_FPU
->  ----------------
->
->  :Capability: basic
-> -:Architectures: x86
-> +:Architectures: x86, loongarch
->  :Type: vcpu ioctl
->  :Parameters: struct kvm_fpu (in)
->  :Returns: 0 on success, -1 on error
-> @@ -775,7 +799,7 @@ Writes the floating point state to the vcpu.
->
->  ::
->
-> -  /* for KVM_GET_FPU and KVM_SET_FPU */
-> +  /* x86: for KVM_GET_FPU and KVM_SET_FPU */
->    struct kvm_fpu {
->         __u8  fpr[8][16];
->         __u16 fcw;
-> @@ -790,6 +814,16 @@ Writes the floating point state to the vcpu.
->         __u32 pad2;
->    };
->
-> +  /* LoongArch: for KVM_GET_FPU and KVM_SET_FPU */
-> +  struct kvm_fpu {
-> +        __u32 fcsr;
-> +        __u32 none;
-> +        __u64 fcc;
-> +        struct kvm_fpureg {
-> +                __u64 val64[4];
-> +        }fpr[32];
-> +  };
-> +
->
->  4.24 KVM_CREATE_IRQCHIP
->  -----------------------
-> @@ -1387,7 +1421,7 @@ documentation when it pops into existence).
->  -------------------
->
->  :Capability: KVM_CAP_ENABLE_CAP
-> -:Architectures: mips, ppc, s390, x86
-> +:Architectures: mips, ppc, s390, x86, loongarch
->  :Type: vcpu ioctl
->  :Parameters: struct kvm_enable_cap (in)
->  :Returns: 0 on success; -1 on error
-> @@ -1442,7 +1476,7 @@ for vm-wide capabilities.
->  ---------------------
->
->  :Capability: KVM_CAP_MP_STATE
-> -:Architectures: x86, s390, arm64, riscv
-> +:Architectures: x86, s390, arm64, riscv, loongarch
->  :Type: vcpu ioctl
->  :Parameters: struct kvm_mp_state (out)
->  :Returns: 0 on success; -1 on error
-> @@ -1460,7 +1494,7 @@ Possible values are:
->
->     =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D    =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D
->     KVM_MP_STATE_RUNNABLE         the vcpu is currently running
-> -                                 [x86,arm64,riscv]
-> +                                 [x86,arm64,riscv,loongarch]
->     KVM_MP_STATE_UNINITIALIZED    the vcpu is an application processor (A=
-P)
->                                   which has not yet received an INIT sign=
-al [x86]
->     KVM_MP_STATE_INIT_RECEIVED    the vcpu has received an INIT signal, a=
-nd is
-> @@ -1516,11 +1550,14 @@ For riscv:
->  The only states that are valid are KVM_MP_STATE_STOPPED and
->  KVM_MP_STATE_RUNNABLE which reflect if the vcpu is paused or not.
->
-> +On LoongArch, only the KVM_MP_STATE_RUNNABLE state is used to reflect
-> +whether the vcpu is runnable.
-> +
->  4.39 KVM_SET_MP_STATE
->  ---------------------
->
->  :Capability: KVM_CAP_MP_STATE
-> -:Architectures: x86, s390, arm64, riscv
-> +:Architectures: x86, s390, arm64, riscv, loongarch
->  :Type: vcpu ioctl
->  :Parameters: struct kvm_mp_state (in)
->  :Returns: 0 on success; -1 on error
-> @@ -1538,6 +1575,9 @@ For arm64/riscv:
->  The only states that are valid are KVM_MP_STATE_STOPPED and
->  KVM_MP_STATE_RUNNABLE which reflect if the vcpu should be paused or not.
->
-> +On LoongArch, only the KVM_MP_STATE_RUNNABLE state is used to reflect
-> +whether the vcpu is runnable.
-> +
->  4.40 KVM_SET_IDENTITY_MAP_ADDR
->  ------------------------------
->
-> @@ -2839,6 +2879,19 @@ Following are the RISC-V D-extension registers:
->    0x8020 0000 0600 0020 fcsr      Floating point control and status regi=
-ster
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =
-=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
->
-> +LoongArch registers are mapped using the lower 32 bits. The upper 16 bit=
-s of
-> +that is the register group type.
-> +
-> +LoongArch csr registers are used to control guest cpu or get status of g=
-uest
-> +cpu, and they have the following id bit patterns::
-> +
-> +  0x9030 0000 0001 00 <reg:5> <sel:3>   (64-bit)
-> +
-> +LoongArch KVM control registers are used to implement some new defined f=
-unctions
-> +such as set vcpu counter or reset vcpu, and they have the following id b=
-it patterns::
-> +
-> +  0x9030 0000 0002 <reg:16>
-> +
->
->  4.69 KVM_GET_ONE_REG
->  --------------------
+> -                       printf("system time: %lld.%u\n",
+> +                       printf("system time: %lld.%09u\n",
+>                                 (pct+2*i)->sec, (pct+2*i)->nsec);
+> -                       printf("phc    time: %lld.%u\n",
+> +                       printf("phc    time: %lld.%09u\n",
+>                                 (pct+2*i+1)->sec, (pct+2*i+1)->nsec);
+> -                       printf("system time: %lld.%u\n",
+> +                       printf("system time: %lld.%09u\n",
+>                                 (pct+2*i+2)->sec, (pct+2*i+2)->nsec);
+>                         printf("system/phc clock time offset is %" PRId64=
+ " ns\n"
+>                                "system     clock time delay  is %" PRId64=
+ " ns\n",
 > --
-> 2.39.1
+> 2.28.0
 >
 >
+
+--0000000000003b18d905fe27e764
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+OltyqaGBuzv+bJTUL+bmV7E4QBLIqGt4jVr1R9hJdH6KxXwJdyfHZ9C6qXmoe2NQhiFUyBOJ0wgk
+dB9Z1IU7nCwvNKYg2JMoJs93tIgbhPJg/D7pqW8gabkCAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
+AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
+c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
+AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
+TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
+bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
+L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
+BB0wG4EZcGF2YW4uY2hlYmJpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
+HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUEV6y/89alKPoFbKUaJXsvWu5
+fdowDQYJKoZIhvcNAQELBQADggEBAEHSIB6g652wVb+r2YCmfHW47Jo+5TuCBD99Hla8PYhaWGkd
+9HIyD3NPhb6Vb6vtMWJW4MFGQF42xYRrAS4LZj072DuMotr79rI09pbOiWg0FlRRFt6R9vgUgebu
+pWSH7kmwVXcPtY94XSMMak4b7RSKig2mKbHDpD4bC7eGlwl5RxzYkgrHtMNRmHmQor5Nvqe52cFJ
+25Azqtwvjt5nbrEd81iBmboNTEnLaKuxbbCtLaMEP8xKeDjAKnNOqHUMps0AsQT8c0EGq39YHpjp
+Wn1l67VU0rMShbEFsiUf9WYgE677oinpdm0t2mdCjxr35tryxptoTZXKHDxr/Yy6l6ExggJtMIIC
+aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
+EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwV/XkICjVscn4SNZMw
+DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIKKQwEVDCoPHJ9ws5RTQ0dEqPUynTXDW
+qnIq4HmWY8ZHMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDYx
+NTA5NDM0MFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
+SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
+ATANBgkqhkiG9w0BAQEFAASCAQAY0j/krNK71Hbc+gL+TPywvfz9fImj4s2GY75ywNMBuPAoW3u9
+xuacMQVF4ZgCIarea7GdfxWGEhySdERtZevGXk0tcAGAkDEYv+IzCvaLV0uRHa9ZoDX0i8dumbcv
+De67p3Ko7/bt3YCQyJFBYpUtQO7AECMN62qb0hBus7fDyDBJ+YlZBwegXjjA+JRhx8CwPgeeKbRw
+6U7HiHEGAW7pZkctay6cPZjFJKxIhsgDA9yEWFfy2qCS4LBVOvj/VjFLbPpxH2L0Ihfn7wAI9uaW
+H9y/j7Z0mRp+4JVpFx1N0VIfF2oGYOh1GyK48FcEeeZYzLbMrN9f0HvbUhOq4x1J
+--0000000000003b18d905fe27e764--
