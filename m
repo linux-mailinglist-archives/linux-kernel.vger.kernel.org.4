@@ -2,115 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74038730F05
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A5D730F08
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243549AbjFOGEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 02:04:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34426 "EHLO
+        id S242542AbjFOGFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 02:05:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243393AbjFOGEA (ORCPT
+        with ESMTP id S243481AbjFOGEL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 02:04:00 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9915C2D67
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 23:03:34 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id d75a77b69052e-3f9d619103dso106161cf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 23:03:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686809014; x=1689401014;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=632BrejRI47KfzW94FMEls4zOiM4nWP+5ukW0DARlOU=;
-        b=m+oTFWNZgqs6EIO5/VqwGETqW4eELQmzYq1Jg6iGi9hMtFDsvo0UsRvpJgy6LUCUvK
-         Gel4HeZxnnvQFlt6kwSz6xhGsEVf/VK9eCbUnh/e5VSB9Ie/sP/UnjrVDXGrkDQe90gm
-         kJeFbT3d5LC3TBt4FfHv7eav9rFcG4CYXzpl1t6JIJHdzxeYOh/khPEfLehhBbvQhXAb
-         YNqnm4fB6H0tkphT1DJN0GCrPKUCgWuvn1jhT27KCqdzFOtajEC7bfDVjpzHzJcAtuEr
-         HjaO5R1ckggpuMKC3hVyHT6SHiiNFSMNIRBfhafZHgNSwvT2p2SYiGtHQoIr7utm8xDB
-         uwfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686809014; x=1689401014;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=632BrejRI47KfzW94FMEls4zOiM4nWP+5ukW0DARlOU=;
-        b=bAau96TBPwizXGrPgI7x9kZMIop/bi3srclPJRtTOTL2keG7LhXwYsr6AyOIUWnBNW
-         g58r1Tuoh+USoKjvdZ2OU4yBpFzD+wj0/gJARoxFAD9no9MAE8x+D/v3kzmNeJHVk6pQ
-         gWAP7uGNSIo3WchIiLc48b0BPGl0wNeBhj7awqNDTl9HTrAzIUV4DBHwz4arW92J0l9C
-         5/cbtT9XjL6y7i9pVenOvC4lcE92h/3wc+mLMgXJ+xQGOcPTcwC9ruDV75nYMdzUIFg+
-         WEa+3wHzj53uSKWt8sZ2ofc4eTY/2eMUuzLux/gGR3TtlbYX6m98ZdMXjNkxAO88owS/
-         835w==
-X-Gm-Message-State: AC+VfDz7/Sn9koniWQcLiO7O9mm6DdOAQOSt5rSX7kRAFdcvy6cNfSjj
-        hv0B6i9BQVNQVLWQL3ks/9ECMN8OU6VeCn48FD5rAw==
-X-Google-Smtp-Source: ACHHUZ7+kJky3iNdrr5l2cYfbued1qOJZc7QntwFY/5I5w5adacEl72kq7hel4wFdjGuBTFESYfj9s8zZgLsP5JuZYI=
-X-Received: by 2002:ac8:5b01:0:b0:3ef:2f55:2204 with SMTP id
- m1-20020ac85b01000000b003ef2f552204mr177771qtw.6.1686809013689; Wed, 14 Jun
- 2023 23:03:33 -0700 (PDT)
+        Thu, 15 Jun 2023 02:04:11 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA5F295B;
+        Wed, 14 Jun 2023 23:03:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=hRjaMQchwaDw51gYY0A6pzxnY9mg2ZrdZZNaLj4dZeA=; b=2hlMq+ya9mZtwNO3r77yfR79wx
+        jteAUkH60G2v+Yo4PufzKQT8JLVtKTUoRCQO1Pv3W3rJro3RDat/Gqx84gGOdEO1xgpa+c8tz6SF/
+        oiLLUuc0aE4g9+haEXR6sNQObtZTm56QUaTd3whFwOYuPNEpMe1d98L9iQEEWGptFPFKtb+3LbVCF
+        hZUZrP7OpDQRiryZRmVJCKy/rGCwv73AISmQHKFv98u66P13D3PksbofOHp/Lj1+x//HllJDN0Pje
+        DPlnLFq/lFc7t3/gbMVBFZaQxUCvWS8EGwoZEBX4rAONc7d5ffPgH6iu5nYoPoV6DOxnIqrPh51S0
+        pA/4zdpA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q9g5C-00DnhB-0u;
+        Thu, 15 Jun 2023 06:03:46 +0000
+Date:   Wed, 14 Jun 2023 23:03:46 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Ayush Jain <ayush.jain3@amd.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Karny, Wyes" <Wyes.Karny@amd.com>, Jens Axboe <axboe@kernel.dk>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "V, Narasimhan" <Narasimhan.V@amd.com>,
+        "Shetty, Kalpana" <Kalpana.Shetty@amd.com>,
+        "Shukla, Santosh" <Santosh.Shukla@amd.com>
+Subject: Re: Kernel null pointer dereference on stopping raid device
+Message-ID: <ZIqpwhu4Tfa9MDzM@infradead.org>
+References: <e78344ad-8d57-91d8-0bfb-724c740c7c72@amd.com>
+ <3c4911c4-d3d7-a93e-5f14-e97384ae4f21@amd.com>
+ <ZIlqvsZ6nMv2OT2u@infradead.org>
+ <IA1PR12MB61375A452083D65B5FB815DBBA5AA@IA1PR12MB6137.namprd12.prod.outlook.com>
+ <ZInIMLlMby2aNNr1@infradead.org>
+ <fc7b82a6-a74a-7675-7cfd-4dd9ac10543b@amd.com>
 MIME-Version: 1.0
-References: <20230615051700.1833-1-ravi.bangoria@amd.com>
-In-Reply-To: <20230615051700.1833-1-ravi.bangoria@amd.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 14 Jun 2023 23:03:22 -0700
-Message-ID: <CAP-5=fUZ+erp_cNoy4sSqPpZN8BmiPLui42o8+GtPzYj0gXmfw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] perf mem amd: Fix few logic bugs
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     acme@kernel.org, jolsa@kernel.org, namhyung@kernel.org,
-        peterz@infradead.org, james.clark@arm.com, alisaidi@amazon.com,
-        leo.yan@linaro.org, adrian.hunter@intel.com,
-        kan.liang@linux.intel.com, mark.rutland@arm.com,
-        maddy@linux.ibm.com, tmricht@linux.ibm.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandipan.das@amd.com, ananth.narayan@amd.com,
-        santosh.shukla@amd.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fc7b82a6-a74a-7675-7cfd-4dd9ac10543b@amd.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 10:17=E2=80=AFPM Ravi Bangoria <ravi.bangoria@amd.c=
-om> wrote:
->
-> Recent PMU refactoring changes[1] introduced a notion of core vs other
-> PMUs and made perf mem/c2c code depend only on core PMUs, which is
-> logically wrong for AMD as perf mem/c2c on AMD depends on IBS OP PMU,
-> not the core PMU. Although user visible perf mem/c2c functionality is
-> still working fine, internal code logic is wrong. Fix those.
->
-> [1] https://lore.kernel.org/r/20230527072210.2900565-1-irogers@google.com
->
-> v1: https://lore.kernel.org/r/20230613095506.547-1-ravi.bangoria@amd.com
-> v1->v2:
->  - Patch #2 of last version is already picked up by Arnaldo. So skip it.
->  - Scan all PMUs unconditionally in perf mem code instead of making it
->    conditional on arch.
->
-> Ravi Bangoria (3):
->   perf pmus: Describe semantics of 'core_pmus' and 'other_pmus'
->   perf mem amd: Fix perf_pmus__num_mem_pmus()
->   perf mem: Scan all PMUs instead of just core ones
+On Thu, Jun 15, 2023 at 11:14:02AM +0530, Ayush Jain wrote:
+> > That was just a quick hack to verify the problem.  I think this is
+> > the proper fix, can you try it as well?
+> > 
+> 
+> Sure, this works on my machine.
+> 
+> Tested-by: Ayush Jain <ayush.jain3@amd.com>
 
-For the series:
-Reviewed-by: Ian Rogers <irogers@google.com>
-just a nit in a comment on the 2nd patch.
+So it turns out that Jens merged the md pull request for 6.5 yesterday,
+and that includes and equivalent change in
 
-Thanks,
-Ian
+3ce94ce5d05ae89190a23f6187f64d8f4b2d3782
+Author: Yu Kuai <yukuai3@huawei.com>
+Date:   Tue May 23 09:27:27 2023 +0800
 
->
->  tools/perf/arch/x86/util/pmu.c | 12 ++++++++++++
->  tools/perf/util/mem-events.c   | 13 +++++++++----
->  tools/perf/util/pmus.c         | 17 ++++++++++++++++-
->  3 files changed, 37 insertions(+), 5 deletions(-)
->
-> --
-> 2.40.1
->
+    md: fix duplicate filename for rdev
+
+With that I think we don't need an extra fix.  Sorry for all the
+extra work.
