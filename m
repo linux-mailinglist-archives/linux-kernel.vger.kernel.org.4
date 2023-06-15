@@ -2,145 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69097731A3A
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03665731A42
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343807AbjFONkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 09:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49548 "EHLO
+        id S1344388AbjFONlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 09:41:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344038AbjFONka (ORCPT
+        with ESMTP id S1344442AbjFONkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 09:40:30 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68F3359F;
-        Thu, 15 Jun 2023 06:39:25 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35FDctqp035586;
-        Thu, 15 Jun 2023 08:38:55 -0500
+        Thu, 15 Jun 2023 09:40:37 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDBB448D;
+        Thu, 15 Jun 2023 06:39:32 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35FDdFLn016323;
+        Thu, 15 Jun 2023 08:39:15 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1686836335;
-        bh=W03GDBtsx/euIwZmFpeRvYj1DNjPr/Db4E/jxNQJQJw=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=geNB8XiLWWx0vmNoSY1KeK512Fd1z3+PRHsSRCIDMjdO0MQPREH7StixbYwKnyNk1
-         c1vrQHYmG4WMYC/OrC6beFkXIMVwGCNlpIYfPotPdBFFFguj8RNCkDHAFzyf0zuPgD
-         Do3k7w9Kulux28Djd4PguNM8sMGM3frwj0P9u8yI=
-Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35FDctFw062056
+        s=ti-com-17Q1; t=1686836355;
+        bh=2/pBkqDceYj9n0f+/NIxgpHbw2aZzs7700cTCtTWooY=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=I2yEe5Te+hrjmA64vfviScLXJJRm+nhiKTE3f41t69kH7SCz6lvowWXQYofgmNskq
+         mnwAL1efvSUGzUvV4mk5okAqek6o95VLmlHCmi3bsfDXQq2Kus3u0DXsmKoSC+J3/e
+         9exTgGEg/eB73YSbdkW6d7EASCWYV2peSNifPuWo=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35FDdFJg124047
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 15 Jun 2023 08:38:55 -0500
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 15 Jun 2023 08:39:15 -0500
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 15
- Jun 2023 08:38:55 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ Jun 2023 08:39:14 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 15 Jun 2023 08:38:55 -0500
-Received: from [172.24.145.182] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35FDcpZg030599;
-        Thu, 15 Jun 2023 08:38:52 -0500
-Message-ID: <b1a278fd-4c34-4c6c-aef6-441c22a7aa41@ti.com>
-Date:   Thu, 15 Jun 2023 19:08:51 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 6/9] arm64: dts: ti: k3-j721e-beagleboneai64: Add
- wakeup_uart pinmux
-Content-Language: en-US
-To:     Nishanth Menon <nm@ti.com>, "Kumar, Udit" <u-kumar1@ti.com>
-CC:     Conor Dooley <conor+dt@kernel.org>,
+ Frontend Transport; Thu, 15 Jun 2023 08:39:14 -0500
+Received: from uda0132425.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35FDdBpm011260;
+        Thu, 15 Jun 2023 08:39:12 -0500
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+To:     Conor Dooley <conor+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Tero Kristo <kristo@kernel.org>,
+        Tero Kristo <kristo@kernel.org>, Nishanth Menon <nm@ti.com>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
         <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
+        Udit Kumar <u-kumar1@ti.com>,
         Neha Malcom Francis <n-francis@ti.com>
+Subject: Re: [PATCH 0/9] arm64: dts: ti: k3-j721e-*: Fix up pinmux and aliases
+Date:   Thu, 15 Jun 2023 19:09:09 +0530
+Message-ID: <168683627164.2366271.3394284993273377362.b4-ty@ti.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230601183151.1000157-1-nm@ti.com>
 References: <20230601183151.1000157-1-nm@ti.com>
- <20230601183151.1000157-7-nm@ti.com>
- <22b67e80-1f5f-d8e0-3c85-c69d97ea0d39@ti.com>
- <20230614120303.5ievpixlpjb3wtdz@elective>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <20230614120303.5ievpixlpjb3wtdz@elective>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Nishanth Menon,
 
-
-On 14/06/23 17:33, Nishanth Menon wrote:
-> On 19:26-20230613, Kumar, Udit wrote:
->> Hi Nishanth,
->>
->> On 6/2/2023 12:01 AM, Nishanth Menon wrote:
->>> Define the wakeup uart pin-mux for completeness. This allows the
->>> device tree usage in bootloader and firmwares that can configure the
->>> same appropriately.
->>>
->>> Signed-off-by: Nishanth Menon <nm@ti.com>
->>> ---
->>>   arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dts | 9 +++++++++
->>>   1 file changed, 9 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dts b/arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dts
->>> index c13246a9ed8f..bc53ca566a68 100644
->>> --- a/arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dts
->>> +++ b/arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dts
->>> @@ -531,6 +531,13 @@ J721E_WKUP_IOPAD(0xfc, PIN_INPUT_PULLUP, 0) /* (H24) WKUP_I2C0_SDA */
->>>   		>;
->>>   	};
->>> +	wkup_uart0_pins_default: wkup-uart0-pins-default {
->>> +		pinctrl-single,pins = <
->>> +			J721E_WKUP_IOPAD(0xa0, PIN_INPUT, 0) /* (J29) WKUP_UART0_RXD */
->>> +			J721E_WKUP_IOPAD(0xa4, PIN_OUTPUT, 0) /* (J28) WKUP_UART0_TXD */
->>> +		>;
->>> +	};
->>> +
->>>   	mcu_usbss1_pins_default: mcu-usbss1-pins-default {
->>>   		pinctrl-single,pins = <
->>>   			J721E_WKUP_IOPAD(0x3c, PIN_OUTPUT_PULLUP, 5) /* (A23) MCU_OSPI1_LBCLKO.WKUP_GPIO0_30 */
->>> @@ -541,6 +548,8 @@ J721E_WKUP_IOPAD(0x3c, PIN_OUTPUT_PULLUP, 5) /* (A23) MCU_OSPI1_LBCLKO.WKUP_GPIO
->>>   &wkup_uart0 {
->>>   	/* Wakeup UART is used by TIFS firmware. */
->>>   	status = "reserved";
->>> +	pinctrl-names = "default";
->>> +	pinctrl-0 = <&wkup_uart0_pins_default>;
->>>   };
->>
->>
->> If you like to consider alias for wkup_uart0 for this board ,
->>
->> Just to align with other boards for this SOC family.  I understand
->> wkup_uart0 is not being used.
+On Thu, 01 Jun 2023 13:31:42 -0500, Nishanth Menon wrote:
+> This series cleansup k3-j721e platforms for pinmuxes and aliases.
+> Provide complete description of uart and i2c instead of piggy-backing on
+> bootloader configurations, ensure board detection eeproms are defined,
+> aliases be defined in the board files as well.
 > 
-> Vignesh,
-> could you squash this locally OR if you like, I can post a v2:
+> Many of these changes were maintained in u-boot tree, and this moves
+> those orphan changes to the super set definition in kernel.
 > 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dts b/arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dts
-> index 3304460f6a0b..9922d7bb061f 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dts
-> +++ b/arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dts
-> @@ -20,6 +20,7 @@ / {
->  	model = "BeagleBoard.org BeagleBone AI-64";
->  
->  	aliases {
-> +		serial0 = &wkup_uart0;
->  		serial2 = &main_uart0;
->  		mmc0 = &main_sdhci0;
->  		mmc1 = &main_sdhci1;
-> 
+> [...]
 
-Squashed locally before queuing, no need to resend
 
--- 
-Regards
+I have applied the following to branch ti-k3-dts-next on [1].
+Thank you!
+
+[1/9] arm64: dts: ti: k3-j721e-sk: Add missing uart pinmuxes
+      commit: acfb362a9c78d6708080cdd850b036225c78371b
+[2/9] arm64: dts: ti: k3-j721e-sk: Enable wakeup_i2c0 and eeprom
+      commit: 1b4b376c878b36d1a1c848ebc885487e4cad2546
+[3/9] arm64: dts: ti: j721e-som/common-proc-board: Add product links
+      commit: 26efc8d1ad0cc14e2740d310935fa146b1fc5a58
+[4/9] arm64: dts: ti: j721e-common-proc-board: Add uart pinmux
+      commit: 86718345b4d3c0d386b3f73ef43e7f72ff04cf4a
+[5/9] arm64: dts: ti: k3-j721e-som-p0: Enable wakeup_i2c0 and eeprom
+      commit: b04b18ccb3d5c19c864c10f7cc7b014218aecb22
+[6/9] arm64: dts: ti: k3-j721e-beagleboneai64: Add wakeup_uart pinmux
+      commit: 4c2c99026ca1525912b40cbc1b69306145ce7082
+[7/9] arm64: dts: ti: k3-j721e-sk: Define aliases at board level
+      commit: d1a4304c149d1a26a912d532501ead42e5952501
+[8/9] arm64: dts: ti: k3-j721e-common-proc-board: Define aliases at board level
+      commit: ff59580bf2580ec262098399aab03dfca537bec8
+[9/9] arm64: dts: ti: k3-j721e: Drop SoC level aliases
+      commit: 8be20986e0c54420e52048d20bdc31e3a8aec93f
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent up the chain during
+the next merge window (or sooner if it is a relevant bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+--
 Vignesh
+
