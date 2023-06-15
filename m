@@ -2,151 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAA9C730D4C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 04:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8232730D54
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 04:46:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242251AbjFOCkm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 14 Jun 2023 22:40:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35918 "EHLO
+        id S242306AbjFOCqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 22:46:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242178AbjFOCkg (ORCPT
+        with ESMTP id S232620AbjFOCqH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 22:40:36 -0400
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BE8269E
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 19:40:34 -0700 (PDT)
-Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-39e87ad392fso451412b6e.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 19:40:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686796833; x=1689388833;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LzJECtrl96+oShM83EMIlq/tfEMuyZFqCkDk9mCEWHo=;
-        b=cMMXn9gyB9RR6DsIJ4apQovdZFYDJXmXfP1SH/Ynsp1jdzxJiMRb4yRbRitrfBes0h
-         vD2hneb0mGhys8WUy08Ar6ztHJzpTwUeZ3QFQfs+EgZNyob5oKrYyjFeRPBhtKleLkcF
-         yg89JEvobEcip0HZTXtyq7fJTgD5REeEVDJPkN3O1na7rCmuf5kYVh7I65XhAktcqvDR
-         kpEofxNAoZsERazpQ5+Bajur4Dw7vPnvHcNOJplpjohJTjSfoA5G/MPoyoDJk3gb821g
-         x+6AvPsb/LExiFGwkFUwDWAhEqT27lep5TsNiJbNlUAvdE4tGa4oYx6vqBVdY16ffd+/
-         GNQA==
-X-Gm-Message-State: AC+VfDx54RIQhz/AiBkSLjDiAhJ3pQrrFFd2o6Y0dJseC3k69MJDK4zx
-        bb4CMrpOadofSEJKiXRI5P0QH0FOpWdlJYKv9ho=
-X-Google-Smtp-Source: ACHHUZ6f3YmYnOw3UpEAOmy5xgx6yLxVldxaJoYwZmJSQv2c8n6NHxX47lvfbl2YKC/7UqqtqHogGwEPjThVhqlOy+8=
-X-Received: by 2002:a05:6808:f06:b0:398:2b60:dbf4 with SMTP id
- m6-20020a0568080f0600b003982b60dbf4mr15280115oiw.19.1686796833538; Wed, 14
- Jun 2023 19:40:33 -0700 (PDT)
+        Wed, 14 Jun 2023 22:46:07 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B342126;
+        Wed, 14 Jun 2023 19:46:05 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QhRVy57Csz4wjF;
+        Thu, 15 Jun 2023 12:46:02 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1686797163;
+        bh=nKyzclnLPcWFjNYP7oi3eE77p75xY/56CGKsZnifZvg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=FsF1vWY5Ns92exTXpbe/LmG54Y1xUzqv54VbSdGu/EIiiKtFkmsFbzPat6VI+JVnQ
+         kK3QRe1a3dvlMAbnA1P5RE2VDTIEGDED7u6bGAKpN1fHe9ks/fk2/8hdbajlpfpOBZ
+         dVW2rNYdjivBIRCsB5YWN2xZVOCvZVBjlafMU+01e0nkZ1KzRkP9u28RTJDIuWZst8
+         iZsYSdgfviRUYDWz2//nXg/7He6xozKt2aDfIUXIOAscklFTrYxL5BWnT6uPQ3COvP
+         +aVc4+yXoc63NctDkEJO1gv2ZRbjTcjvnngk1QLCh1A0M3IF5g0HzsQylUt2p2+t6X
+         lLkSANyORFV0Q==
+Date:   Thu, 15 Jun 2023 12:45:58 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christoffer Dall <cdall@cs.columbia.edu>,
+        Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>
+Subject: linux-next: manual merge of the kvm-arm tree with the arm64 tree
+Message-ID: <20230615124558.2cea58b3@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20230601075333.14021-1-ihuguet@redhat.com> <87sfb1oz13.fsf@meer.lwn.net>
- <8f27ad5f-9a9c-3db0-a934-88e1810974f3@digikod.net> <CACT4oue7DgUf+65yat+6t9VrSji1N0njxunObHbRzfjMCAPmYQ@mail.gmail.com>
- <CAMZ6RqJ66wxVAcveVunQ3W6sYihQM43Hi44D7TAee_nUPk+ZXA@mail.gmail.com> <CACT4ouc23BYWNBrE7w0a8Huy5hrhaix3=0P3kuXFQhwk_uib1g@mail.gmail.com>
-In-Reply-To: <CACT4ouc23BYWNBrE7w0a8Huy5hrhaix3=0P3kuXFQhwk_uib1g@mail.gmail.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Thu, 15 Jun 2023 11:40:22 +0900
-Message-ID: <CAMZ6RqKHTYcGfBX=RZWqzSD+PFpOoH8A_dM0vY6yp2P3Acd=Wg@mail.gmail.com>
-Subject: Re: [PATCH v4] Add .editorconfig file for basic formatting
-To:     =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@redhat.com>
-Cc:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
-        Jonathan Corbet <corbet@lwn.net>, ojeda@kernel.org,
-        danny@kdrag0n.dev, masahiroy@kernel.org, jgg@nvidia.com,
-        linux-kernel@vger.kernel.org, joe@perches.com,
-        linux@rasmusvillemoes.dk, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/XQPD4Xdl0k8WcknO4fxyhlV";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed. 14 Jun. 2023 at 22:04, Íñigo Huguet <ihuguet@redhat.com> wrote:
-> On Wed, Jun 14, 2023 at 2:55 PM Vincent MAILHOL <mailhol.vincent@wanadoo.fr> wrote:
-> > On Wed. 14 Jun. 2023 at 20:40, Íñigo Huguet <ihuguet@redhat.com> wrote:
+--Sig_/XQPD4Xdl0k8WcknO4fxyhlV
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-(...)
+Hi all,
 
-> > > Right now I see 2 possibilities:
-> > > - Provide an .editorconfig.default so those that want to use it, can
-> > > do it. But I wouldn't mess with cherry-picking directories that
-> > > already complies and those that don't, just the developer chooses to
-> > > use it or not, and that's all.
-> > > - Provide an .editorconfig directly, and those that don't want to use
-> > > it, either disable it in their editors or manually delete the file.
-> > >
-> > > Please tell me what approach you prefer.
-> >
-> > Personally, I vote for the latter. My honest opinion is that we are
-> > putting too much consideration into the risk of rejections.
->
-> I completely agree.
->
-> > Íñigo previously stated that editors such as Kate can not opt out. I
-> > think that the reason is simply that no one has complained about it so
-> > far. I did some research on the internet with the keyword "kate
-> > disable editorconfig", and nothing  relevant appeared. A deeper
-> > research made me found this:
->
-> I have not "complained", but I have filled a request just today, that
-> I think won't reach far: https://bugs.kde.org/show_bug.cgi?id=471008
+Today's linux-next merge of the kvm-arm tree got a conflict in:
 
-Wow! That's a lot of investment on your side. Clearly, there is no
-appetite from the maintainers. But if something needs to be done
-(which I doubt), I think it should be on the editor's side rather than
-on the project using that .editorconfig file.
+  arch/arm64/kernel/kaslr.c
 
-> >   KatePart has support for reading configurations from
-> >   .editorconfig files, when the editorconfig library is
-> >   installed. KatePart automatically searches for a .editorconfig
-> >   whenever you open a file. It gives priority to .kateconfig
-> >   files, though.
-> >
-> > source: https://docs.kde.org/stable5/en/kate/katepart/config-variables.html
-> >
-> > So it appears that for Kate, installing the editorconfig lib is a
-> > prerequisite. I think it falls in the opt-in category.
->
-> I'm not 100% sure, but I think that this is a requisite at build time.
-> So unless you build Kate from source, it will be built-in without
-> opt-out choice.
+between commit:
 
-It seems you are right. On Ubuntu, the "kate" package actually depends
-on "libeditorconfig0", so indeed, that's a hard dependency. My bad.
+  6e13b6b923b3 ("arm64: kaslr: split kaslr/module initialization")
+  e46b7103aef3 ("arm64: module: move module randomization to module.c")
 
-That said, on source based distribution, it should be configurable.
-Taking gentoo as an example, you get an editorconfig USEFLAG which
-allows to choose whether or not you enable editorconfig during the
-compilation:
+from the arm64 tree and commit:
 
-  https://packages.gentoo.org/packages/kde-frameworks/ktexteditor
+  0ddc312b7c73 ("arm64: Turn kaslr_feature_override into a generic SW featu=
+re override")
 
-I continued my investigation. Here is the commit which adds
-editorconfig to ktexteditor (used by kate):
+from the kvm-arm tree.
 
-  https://github.com/KDE/ktexteditor/commit/f9f133b6ac72dfa12bdeeab1a37c5e9dc9a9354e
+I fixed it up (see below) and can carry the fix as necessary. This is
+now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your
+tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
-Looking at what the code does, it first walk through the absolute path
-in reverse and if it finds a .kateconfig file, it does an early
-return:
+--=20
+Cheers,
+Stephen Rothwell
 
-  https://github.com/KDE/ktexteditor/blob/f9f133b6ac72dfa12bdeeab1a37c5e9dc9a9354e/src/document/katedocument.cpp#L2578
+diff --cc arch/arm64/kernel/kaslr.c
+index 17f96a19781d,5d4ce7f5f157..000000000000
+--- a/arch/arm64/kernel/kaslr.c
++++ b/arch/arm64/kernel/kaslr.c
+@@@ -4,33 -4,46 +4,33 @@@
+   */
+ =20
+  #include <linux/cache.h>
+ -#include <linux/crc32.h>
+  #include <linux/init.h>
+ -#include <linux/libfdt.h>
+ -#include <linux/mm_types.h>
+ -#include <linux/sched.h>
+ -#include <linux/types.h>
+ -#include <linux/pgtable.h>
+ -#include <linux/random.h>
+ +#include <linux/printk.h>
+ =20
+ -#include <asm/fixmap.h>
+ -#include <asm/kernel-pgtable.h>
+ +#include <asm/cpufeature.h>
+  #include <asm/memory.h>
+ -#include <asm/mmu.h>
+ -#include <asm/sections.h>
+ -#include <asm/setup.h>
+ =20
+ -u64 __ro_after_init module_alloc_base;
+  u16 __initdata memstart_offset_seed;
+ =20
+- struct arm64_ftr_override kaslr_feature_override __initdata;
+-=20
+ -static int __init kaslr_init(void)
+ +bool __ro_after_init __kaslr_is_enabled =3D false;
+ +
+ +void __init kaslr_init(void)
+  {
+- 	if (kaslr_feature_override.val & kaslr_feature_override.mask & 0xf) {
+ -	u64 module_range;
+ -	u32 seed;
+ -
+ -	/*
+ -	 * Set a reasonable default for module_alloc_base in case
+ -	 * we end up running with module randomization disabled.
+ -	 */
+ -	module_alloc_base =3D (u64)_etext - MODULES_VSIZE;
+ -
++ 	if (cpuid_feature_extract_unsigned_field(arm64_sw_feature_override.val &
++ 						 arm64_sw_feature_override.mask,
++ 						 ARM64_SW_FEATURE_OVERRIDE_NOKASLR)) {
+  		pr_info("KASLR disabled on command line\n");
+ -		return 0;
+ +		return;
+  	}
+ =20
+ -	if (!kaslr_enabled()) {
+ +	/*
+ +	 * The KASLR offset modulo MIN_KIMG_ALIGN is taken from the physical
+ +	 * placement of the image rather than from the seed, so a displacement
+ +	 * of less than MIN_KIMG_ALIGN means that no seed was provided.
+ +	 */
+ +	if (kaslr_offset() < MIN_KIMG_ALIGN) {
+  		pr_warn("KASLR disabled due to lack of seed\n");
+ -		return 0;
+ +		return;
+  	}
+ =20
+  	pr_info("KASLR enabled\n");
 
-This should act as a kill switch. Not tested, but adding a .kateconfig
-seems like a valid opt out method. This is consistent with the
-paragraph I quoted in my previous message:
+--Sig_/XQPD4Xdl0k8WcknO4fxyhlV
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-  It gives priority to .kateconfig files, though.
+-----BEGIN PGP SIGNATURE-----
 
-Problem solved?
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSKe2YACgkQAVBC80lX
+0GxrjggAgJEMNlX2l1yrvVCoHIjN27l0p7hocz9bu0rH0GE3WsIE9dm6t2jGPIO3
+Y2cPzVzf7lUM2DnkLRTsOBQj9evwiLEllP6u/Lc7048yV9zz4FrUBeLIqBECk5WG
+UyZiF9XVCb0L/dmuhor8vqx3nFRcYZbK7PWII1wn4NEVa/hZfpeKqrDhH3Okee6m
+9YuFomSyGAagOTrWi4al6cz6eL3fsnc7fbaDxQL0dFTGTyzKN7/nytDGUtMIvz1i
+xxyXbAvwOu7RekcsljO4caXGPJK1b06HM1U9D5CGB/nbbBEHQIKgy/HAIiYIOgNj
+Ydi9tPUIg2vrpgzEbg2x+DD/Ay0zYw==
+=6B52
+-----END PGP SIGNATURE-----
 
-> > Is there really an editor with default opt-in and no options to
-> > opt-out? I doubt...
->
-> Kate is the only one I have seen so far, but it's difficult to know.
->
-> > I really think we should have the .editorconfig at the root and for
-> > the rare edge cases where the user really wants to opt-out, I
-> > sincerely believe that there will be solutions. I have seen many
-> > projects using it and I do not recall push backs or complaints.
+--Sig_/XQPD4Xdl0k8WcknO4fxyhlV--
