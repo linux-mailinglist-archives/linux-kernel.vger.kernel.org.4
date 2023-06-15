@@ -2,173 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 165EB731057
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88AE3731058
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244810AbjFOHRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 03:17:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39874 "EHLO
+        id S244113AbjFOHRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 03:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243103AbjFOHQR (ORCPT
+        with ESMTP id S243699AbjFOHQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 03:16:17 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2044.outbound.protection.outlook.com [40.107.243.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD8F30C5;
-        Thu, 15 Jun 2023 00:13:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j5tnx1HaBvr3BnWL4PHoZRzKk2AzFRLXllmwBclsUKokvuAucaybXCMVukD8+L6cGukwZVB4rZCFxFPQeztBOJlf/JF6UaQiJzcDcCRUiO93Zg01oa7Uil7GxOgrY7B9YuWgqbikoQyyUn81lWoxnKaoT7/Y+P/6rUlVXOKe+NOl7rmhVYWJyvpFpkpjfAQlTAiLl2khU4v+mjMpRb7tTghQc0AtaDFU6MVAecqxA1wgjyH3l5ef3i1SaMKs7Cy/oneV/hXamrwUbirMvRiG4j1/C4NNlGjSD2AFJwkq2V8Ce5v2nt48I+MCk46ucZfMtoKQ+69Psq4K0gHMqa1TrA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=C8qvLxgXdxAG4NIeCR1Lj7vzi588O4Y8bdet1z3uCh8=;
- b=Irkk5Vl1PaIi1RU676oDb72lfw8BYQglCZjBYh7lzTIJsvLLyLpXaC7zShjnMgf+bIa7mn959vuEdPSFWjWmF0zvkOc/7VZXFy8HRxGVWe4a1XL/77m6KjPZCLe69gP7H2a8h/MwwHaqqUQzI+20AXHv0JXLj5r1t5We0kmhvjtlry2llQB27vfzDQ59goeTeuvfA6V9V3ZPeaZMEJp3JtSkfaOPh2Zk7soH3nPuBRnp1re2c0h5D5zgsmbXm6wsdL4P1WwrAZ7edd9RItV+KShVnMSvMVMh9jmnhZOA95ekBb256YmBhP810+T8hEnOZ/s0GSH26bBNdWFF3VjbAQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C8qvLxgXdxAG4NIeCR1Lj7vzi588O4Y8bdet1z3uCh8=;
- b=cLBYZ4ClTzeCMp0T+RSAKJMjQp30pusciKZlHh0xbPPfNNYyspzeHLHGEuURTKsD1w6Z0ur6mm+FQF8EHXxCR7Q+CY4ZMNPBrU7HpKFGZCryPvIqMcuSFYEFNEyZyXMRhvNDVsPayQ3zIINIkMb3RJx+FsGIBIEN0aUnr/jool0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB2843.namprd12.prod.outlook.com (2603:10b6:5:48::24) by
- MW4PR12MB7238.namprd12.prod.outlook.com (2603:10b6:303:229::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.46; Thu, 15 Jun
- 2023 07:13:31 +0000
-Received: from DM6PR12MB2843.namprd12.prod.outlook.com
- ([fe80::ff22:cffa:293:5cef]) by DM6PR12MB2843.namprd12.prod.outlook.com
- ([fe80::ff22:cffa:293:5cef%3]) with mapi id 15.20.6500.025; Thu, 15 Jun 2023
- 07:13:30 +0000
-Message-ID: <a209f165-b9ae-a0b3-743c-9711f5123855@amd.com>
-Date:   Thu, 15 Jun 2023 17:13:22 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.1
-Subject: Re: [PATCH kernel 0/9 v6] KVM: SEV: Enable AMD SEV-ES DebugSwap
-Content-Language: en-US
-To:     kvm@vger.kernel.org
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <20230615063757.3039121-1-aik@amd.com>
-From:   Alexey Kardashevskiy <aik@amd.com>
-In-Reply-To: <20230615063757.3039121-1-aik@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SY6PR01CA0093.ausprd01.prod.outlook.com
- (2603:10c6:10:111::8) To DM6PR12MB2843.namprd12.prod.outlook.com
- (2603:10b6:5:48::24)
+        Thu, 15 Jun 2023 03:16:20 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D77A1BE8
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:14:19 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f60a27c4a2so9480054e87.2
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:14:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686813257; x=1689405257;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yrFsUwF67Fg92S5lQoOceMy81c5+nhthL7wyuVRyQwI=;
+        b=l7O/k6m7lZxgyJOgSVKmyFvmsyb26EbUAyLUMbruiN1aDbjnqavPDFDXwdfwJ8SJBX
+         x/KTt0Vg/K+3JKv0KCgCcANYQPhw4k9w+4COSO4JoHaWRWN/c/NB/JjXelWf/83oXqS8
+         IHNwLU9Id40IiKfC+LbXO+yWmJnH5S2XHL1H3EUVwcMEA3jVvmUvdgLTQZ/GNRXZo9xl
+         CurGeerQbdgqCo2yCUpQR69Vz081X10SJXQ6JOQHhDFV7eMj/x2W90/cDMOYQp7CsOLB
+         tXvAFFq8uAHksnGvueKfitQ6eV3qkEoBUNZNgaGADKDjngwDngIIN6ri3USBiKki4xS0
+         slzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686813257; x=1689405257;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yrFsUwF67Fg92S5lQoOceMy81c5+nhthL7wyuVRyQwI=;
+        b=fq8mb6FfJxyH2JWPZE4qkslZN9xJNy6Wdnl5OR273nOVKcok4ZKfWzE4qg/URDoN+D
+         RauuDaSuQCds6KTcWB8U3iZwr4U1MPIGgair3D2SGDLEfvG6fTizZk3dl/dnpoV5dVkO
+         zVDD48l6Ru4EMuG9nxvns0tDV/Iu3tEJ2a/EmJayzzU1Q+0AbxIs87V0S2K0oxySrnrV
+         stw32PBfuzc+jUhtuQy/3BammxqnhEmn2JbZOkh9c0r2ZEVTPwviyvQxLfe/CAKtDR5+
+         pshsiDmEg4M0rxaLydYZyq6j9argvvi22RT18MZ59ABfovvUYLYvyelZGljPiSyFfsYd
+         /iFQ==
+X-Gm-Message-State: AC+VfDyejonKWre6AgzdEgS6xFSBM4KCpCHjjWGz5+Wl+W82/rFCmM3t
+        tbAwcycX4FTTv2sqgPdTg/4=
+X-Google-Smtp-Source: ACHHUZ5RbtwEJAok/7HhXLJoZhHmPaOYEWl1U2NUdMpfWofqrKc3wvOdyWOTaOJET6g6sFwGkBanfg==
+X-Received: by 2002:a19:6602:0:b0:4f5:1ca1:30ce with SMTP id a2-20020a196602000000b004f51ca130cemr8518099lfc.47.1686813257053;
+        Thu, 15 Jun 2023 00:14:17 -0700 (PDT)
+Received: from eldfell ([194.136.85.206])
+        by smtp.gmail.com with ESMTPSA id w12-20020ac254ac000000b004db51387ad6sm2458666lfk.129.2023.06.15.00.14.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 00:14:16 -0700 (PDT)
+Date:   Thu, 15 Jun 2023 10:14:05 +0300
+From:   Pekka Paalanen <ppaalanen@gmail.com>
+To:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc:     Melissa Wen <mwen@igalia.com>, airlied@gmail.com,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        daniel@ffwll.ch, harry.wentland@amd.com,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        Rodrigo.Siqueira@amd.com, sunpeng.li@amd.com, tzimmermann@suse.de,
+        Xinhui.Pan@amd.com, laurent.pinchart+renesas@ideasonboard.com,
+        Shashank Sharma <shashank.sharma@amd.com>, alex.hung@amd.com,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, seanpaul@chromium.org,
+        kernel-dev@igalia.com, bhawanpreet.lakha@amd.com,
+        nicholas.kazlauskas@amd.com, Joshua Ashton <joshua@froggi.es>,
+        sungjoon.kim@amd.com
+Subject: Re: [RFC PATCH v2 00/18] Add DRM CRTC 3D LUT interface
+Message-ID: <20230615101405.09745e65@eldfell>
+In-Reply-To: <yevhvooznvpqbuybp7tmbo6qgrbxzqrs4y2k4onrjnfbcz42et@hmiwqw74dhgc>
+References: <20230109143846.1966301-1-mwen@igalia.com>
+        <yevhvooznvpqbuybp7tmbo6qgrbxzqrs4y2k4onrjnfbcz42et@hmiwqw74dhgc>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.24; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2843:EE_|MW4PR12MB7238:EE_
-X-MS-Office365-Filtering-Correlation-Id: b2400b16-ff0d-4758-dbf3-08db6d7005e2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rI/ZhZkEbLjOxXsjbKc02gePprkNSOztsNrUe+8p+TH+9slEgYPBOlNlCV9P9TLunO5d0/4SFIrn9aDNKvBFwBEYZVXq6IsUKO2EQ0VgXhYjl3k3lKzfnNX5ZN8Y9gGtMrAZeClj2QXbGCXI27XnPH7wvNKw6IoE13scGw+Y8V9WFMcj5aPOJ1rJFYTWHAPZqa2IQwn4PHQJyTnMrFOYoF6AZWmZk+iT24xUQXPxOvAZu/6Ro+mUnYHGb4NaRUD6netwfcZkMh5E4PTirig+0FBlts2OP97e49/ejfShYa7OnGMYEcyOFC6HvN4ic8KugTsRg8iS59xR3mQ2dzoYRFAzGWHO0FckHzBYRefdFS64zlKoqu/fSev0Gchn/jNWE5Kj6vPvpr6FV1Zl7gruO6+yFnrhYKRu0pPupzjyPjX3IgrqKJ9F/mySZeVrCnq600Y27ADrAqG8Nw9ctYip6PlQEO4EJy0G7bcMJSvVhfNonwHFCRqtl/27bfUmI2zZ5ROWExUfrtfntGOvFjrHLSxVuTI0SsyDgM+5jNKJxGg2193AnoSSY/ZU1bZzMhza6/VYYq//82KGRt7Si6nl828EqzF6KiPxpQ7XxasPLebN/5eX/CNFnifZCEAEDM1kO31D0LH/2ChsNGg+Bj0GnR6TK55ObprK7+0RyinyYw5cpwGVvAAzG4tPka/eiSHo
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2843.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(346002)(366004)(376002)(39860400002)(451199021)(5660300002)(66556008)(8676002)(2906002)(8936002)(31686004)(66476007)(66946007)(54906003)(6666004)(4326008)(6486002)(966005)(6512007)(26005)(6506007)(53546011)(6916009)(41300700001)(316002)(186003)(83380400001)(2616005)(478600001)(38100700002)(36756003)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NVRPcWt6NHgveEV3SFF1S1V4N3p0Q1pHZW1pVzBLdnJ2SEZDWjZOMzJ2Z1NF?=
- =?utf-8?B?T2l1Y05oQnJrbk8ramtzWHF6eXhiOEIycHNnUkY1UVUxSk04VkViSTRqQTVt?=
- =?utf-8?B?cXNPbU13MGxpNUw4TUNGWHJ6ZmllWW5FckNlN280M1g1WHcxN2gyY0JhUlgz?=
- =?utf-8?B?a0taanduSXpsc0k5SzhUUmZqa1hPTEtrS1drTEwwMGNMS1htZ2UxVlRwL1ZW?=
- =?utf-8?B?QWRHWGJFSjhHaTYwaWp1c252T05KV2RMS3pGR2xWMHhFZnAxTUMxY2RUNGxO?=
- =?utf-8?B?UHBFR2JRdmtlZUZjM0h5cmgwZWtEZGoyTzhDZjRqOTJqUkpRNldBNFBEZTho?=
- =?utf-8?B?NlBlTDQ2aXFKT2xPWG4xWk9OVDdxcXZ0SjBOaTFGS1F2cmhDMWZubVh5Y3la?=
- =?utf-8?B?RnIwOC9UZ0lzM0huL2NYUkVNQXVtR2ExNW55VHE2R2NuL1JDQXRnUlhDV2Zj?=
- =?utf-8?B?bVBEeWdNWDczZ2JDR0V4cTcrczlhTklOSVJSc2Z1TzUvZkcrMytSWmpDbDFP?=
- =?utf-8?B?RjNZdFNkK2s0dDVsLzE5SUpROWVzQ2JCZ1lzMGFnNnVZOXNtYUlFa0xSc1pW?=
- =?utf-8?B?K2tHYXk5N2tzeU1Zb3FkSjBiQUhPWC9IOTdHSEl5SlRqNU9YRWNYTTZFdjVV?=
- =?utf-8?B?L01QdE84QUtHR0dIRFNpUEMydFRTcWh0ZmRsVTdVZ3NXM0UyU3QvclErZkFT?=
- =?utf-8?B?elhhVWg2c3hLRkNnTytjUm15STV0eUVydmtrTGFydzFhdFFEUkY5Y2lxRTRR?=
- =?utf-8?B?V0d6K0t0ZVJlenpJN3B5UUpocUNYUnpQRXJhTkswWWVYY215VHphMlhzNzJi?=
- =?utf-8?B?RURDR0p6WnYvZU9pa2Jxc0pZOGZTdS9ibC9adUMzRVBJVkRMVldaOGZsVnhG?=
- =?utf-8?B?Q29uc2VzY25yV3YzcHVmU0hGL3VmejNxWkNwRWUvMXBUaDN2QXFxamh2SVlH?=
- =?utf-8?B?Z3ViSzAwWGUwTDhVdFRLOEZHS2NZQi84cStLMHlJbGl2ekNuSjFpNmlUR280?=
- =?utf-8?B?djQ2eWFHMzNlWGdrcnkxNlh2R2ZZWktEcWZKaVBvdndaT0k5VGpsSHphMkRI?=
- =?utf-8?B?VWxwWnkzRGZLM2cwWVQxekFZaHphR0FqUFcrdVhhT09DeFdqT0VGWU95RkF3?=
- =?utf-8?B?Q1h4TnR3THltaEJib1IvSVpuMngwSzNoMXdyT3N0SERmZk1DK3A1ZGRzOWhi?=
- =?utf-8?B?MzR2d09aWGZzb1pBV1NqK2krZjdWYmhKZCt0Y1hWbG9MMkIvTzU0aDRVWDMr?=
- =?utf-8?B?b04wYzFLdmEzR25mMU9jN0tabDU5Ykp6UGM3aE5sSjFOMS8rblBKOUpjY3Aw?=
- =?utf-8?B?T015QVh3NThFQmNEcTI4cG1Ub0RGZ0RyWk14YWRSR1BBVVMrajVVa0czUFVa?=
- =?utf-8?B?R3ZGaWoxTGk2M0JicmxrWnlkVysvQmNOc3YybmpQRGRDazBZTmswcGRucktC?=
- =?utf-8?B?ejduem0vK3ZHb3N5ZWIwazRSSkRvUHhEWkxLSzBhRXEyWmFtWjlMV0VkODA3?=
- =?utf-8?B?bWp4UVFGNjJQM3U1ekxBcTN1OERKU2lGc1p2Z3h0UmlGeUFvcy9jVXBkZFNN?=
- =?utf-8?B?cXlmd2JMOFlPdy94dkdVTkVwOG5uVlEwdFlhY2hlSWlaem5UcExudWZmU00w?=
- =?utf-8?B?cXovN0Z2cG4rSEV6VGZjUURYRzJZNTFJMUQzckh0b3FYSUl5ZnIxSGpJTFZD?=
- =?utf-8?B?TTdzTEJ4aXhyMzFOVWlBWVJxWWt2RmpMbXZOWVMrWTVWRXBtek81RFJPT0FQ?=
- =?utf-8?B?OTIrakdIM1hqN2t3eS8xckdOR251aXJrU252dkxLNTE3QzhDcGF2eU1SRGxU?=
- =?utf-8?B?Z3hhUWVLWEpnNTA5OXRMY1dvalFTb1dKcVFzd001VU5mSndMQTNreWtSWUpZ?=
- =?utf-8?B?Tmk4dmdvK0VWZFBWSE9VeGVEQ2tHVzZhUGRDVklBRnNuRm0vcUIvWE5lRE55?=
- =?utf-8?B?ZXlsUFYralVONDUvTDFaS29nL1lvSWtQS3BsdW9vb3ZIZDhCY3RJQ0FzaG1U?=
- =?utf-8?B?UGpqUlZaYTFET2h4cng2YVJwNFo4a1hvNzJyRWhzdmZPeitLaFVBZHRmbXZU?=
- =?utf-8?B?MnYxeGVKRzB2bFRrVVpqOU1IVGFPbUVFMVpkTDlqOEZFd3haZlNzT3FwUWFp?=
- =?utf-8?Q?tRUYTYnHDgXIbRl0PFtx+tHbE?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b2400b16-ff0d-4758-dbf3-08db6d7005e2
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2843.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 07:13:30.8704
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /215D3YWb+KzqFzHAXdt6J2ZjTmuTjgRJw+hVe4r0ykVwukTod2Ztj3QazZFyDhgJGp6FQhc7beKoviU4mI5lQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7238
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/rJjznHK9PsJ_u9hxzrsX5CV";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ouch, forgot to mark this as "v6". Sorry...
+--Sig_/rJjznHK9PsJ_u9hxzrsX5CV
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, 13 Jun 2023 17:43:55 +0200
+Jacopo Mondi <jacopo.mondi@ideasonboard.com> wrote:
+
+> Hello
+>=20
+>    I'm completing the support for 3D LUT on R-Car DU peripheral
+> and I have used this series as a base.
+>=20
+> I'm wondering, since quite some time has passed without any update if
+> this series is still a thing and it makes any sense for me to try to
+> bring it forward.
+>=20
+> I'm asking as I've noticed:
+> "[PATCH 00/36] drm/amd/display: add AMD driver-specific properties for co=
+lor mgmt"
+>=20
+> which seems to supersede this proposal with driver-specific
+> properties.
+>=20
+> I asked Melissa privately but I wasn't able to get an hold of her, so
+> if anyone has any clue feel free to reply :)
+
+Hi,
+
+since no-one else replied, I'll point you to the thread starting at
+https://lists.freedesktop.org/archives/dri-devel/2023-May/403173.html
+and continuing to June. That is the plan of getting a common UAPI for
+these things.
 
 
+Thanks,
+pq
 
-On 15/6/23 16:37, Alexey Kardashevskiy wrote:
-> This is to use another AMD SEV-ES hardware assisted register swap,
-> more detail in 6/9. In the process it's been suggested to fix other
-> things, here is the attempt, with the great help of amders.
-> 
-> The previous conversation is here:
-> https://lore.kernel.org/r/20230411125718.2297768-1-aik@amd.com
-> 
-> This is based on sha1
-> 6e2e1e779912 Ingo Molnar "Merge branch into tip/master: 'x86/sgx'".
-> 
-> The tree is here: https://github.com/aik/linux/tree/debugswap
-> 
-> Please comment. Thanks.
-> 
-> 
-> Alexey Kardashevskiy (6):
->    KVM: SEV: move set_dr_intercepts/clr_dr_intercepts from the header
->    KVM: SEV: Move SEV's GP_VECTOR intercept setup to SEV
->    KVM: SEV-ES: explicitly disable debug
->    KVM: SVM/SEV/SEV-ES: Rework intercepts
->    KVM: SEV: Enable data breakpoints in SEV-ES
->    KVM: SEV-ES: Eliminate #DB intercept when DebugSwap enabled
-> 
-> Sean Christopherson (3):
->    KVM: SVM: Rewrite sev_es_prepare_switch_to_guest()'s comment about
->      swap types
->    KVM: SVM: Don't defer NMI unblocking until next exit for SEV-ES guests
->    KVM: SVM: Don't try to pointlessly single-step SEV-ES guests for NMI
->      window
-> 
->   arch/x86/include/asm/cpufeatures.h       |  1 +
->   arch/x86/include/asm/svm.h               |  1 +
->   arch/x86/kvm/svm/svm.h                   | 42 ----------
->   tools/arch/x86/include/asm/cpufeatures.h |  1 +
->   arch/x86/kvm/svm/sev.c                   | 86 +++++++++++++++++---
->   arch/x86/kvm/svm/svm.c                   | 70 ++++++++++++++--
->   6 files changed, 137 insertions(+), 64 deletions(-)
-> 
 
--- 
-Alexey
+>=20
+> Thanks
+>   j
+>=20
+> On Mon, Jan 09, 2023 at 01:38:28PM -0100, Melissa Wen wrote:
+> > Hi,
+> >
+> > After collecting comments in different places, here is a second version
+> > of the work on adding DRM CRTC 3D LUT support to the current DRM color
+> > mgmt interface. In comparison to previous proposals [1][2][3], here we
+> > add 3D LUT before gamma 1D LUT, but also a shaper 1D LUT before 3D LUT,
+> > that means the following DRM CRTC color correction pipeline:
+> >
+> > Blend -> Degamma 1D LUT -> CTM -> Shaper 1D LUT -> 3D LUT -> Gamma 1D L=
+UT
+> >
+> > and we also add a DRM CRTC LUT3D_MODE property, based on Alex Hung
+> > proposal for pre-blending 3D LUT [4] (Thanks!), instead of just a
+> > LUT3D_SIZE, that allows userspace to use different supported settings of
+> > 3D LUT, fitting VA-API and new color API better. In this sense, I
+> > adjusted the pre-blending proposal for post-blending usage.
+> >
+> > Patches 1-6 targets the addition of shaper LUT and 3D LUT properties to
+> > the current DRM CRTC color mgmt pipeline. Patch 6 can be considered an
+> > extra/optional patch to define a default value for LUT3D_MODE, inspired
+> > by what we do for the plane blend mode property (pre-multiplied).
+> >
+> > Patches 7-18 targets AMD display code to enable shaper and 3D LUT usage
+> > on DCN 301 (our HW case). Patches 7-9 performs code cleanups on current
+> > AMD DM colors code, patch 10 updates AMD stream in case of user 3D LUT
+> > changes, patch 11/12 rework AMD MPC 3D LUT resource handling by context
+> > for DCN 301 (easily extendible to other DCN families). Finally, from
+> > 13-18, we wire up SHAPER LUT, LUT3D and LUT3D MODE to AMD display
+> > driver, exposing modes supported by HW and programming user shaper and
+> > 3D LUT accordingly.
+> >
+> > Our target userspace is Gamescope/SteamOS.
+> >
+> > Basic IGT tests were based on [5][6] and are available here (in-progres=
+s):
+> > https://gitlab.freedesktop.org/mwen/igt-gpu-tools/-/commits/crtc-lut3d-=
+api
+> >
+> > [1] https://lore.kernel.org/all/20201221015730.28333-1-laurent.pinchart=
++renesas@ideasonboard.com/
+> > [2] https://github.com/vsyrjala/linux/commit/4d28e8ddf2a076f30f9e5bdc17=
+cbb4656fe23e69
+> > [3] https://lore.kernel.org/amd-gfx/20220619223104.667413-1-mwen@igalia=
+.com/
+> > [4] https://lore.kernel.org/dri-devel/20221004211451.1475215-1-alex.hun=
+g@amd.com/
+> > [5] https://patchwork.freedesktop.org/series/90165/
+> > [6] https://patchwork.freedesktop.org/series/109402/
+> > [VA_API] http://intel.github.io/libva/structVAProcFilterParameterBuffer=
+3DLUT.html
+> > [KMS_pipe_API] https://gitlab.freedesktop.org/pq/color-and-hdr/-/issues=
+/11
+> >
+> > Let me know your thoughts.
+> >
+> > Thanks,
+> >
+> > Melissa
+> >
+> > Alex Hung (2):
+> >   drm: Add 3D LUT mode and its attributes
+> >   drm/amd/display: Define 3D LUT struct for HDR planes
+> >
+> > Melissa Wen (16):
+> >   drm/drm_color_mgmt: add shaper LUT to color mgmt properties
+> >   drm/drm_color_mgmt: add 3D LUT props to DRM color mgmt
+> >   drm/drm_color_mgmt: add function to create 3D LUT modes supported
+> >   drm/drm_color_mgmt: add function to attach 3D LUT props
+> >   drm/drm_color_mgmt: set first lut3d mode as default
+> >   drm/amd/display: remove unused regamma condition
+> >   drm/amd/display: add comments to describe DM crtc color mgmt behavior
+> >   drm/amd/display: encapsulate atomic regamma operation
+> >   drm/amd/display: update lut3d and shaper lut to stream
+> >   drm/amd/display: handle MPC 3D LUT resources for a given context
+> >   drm/amd/display: acquire/release 3D LUT resources for ctx on DCN301
+> >   drm/amd/display: expand array of supported 3D LUT modes
+> >   drm/amd/display: enable 3D-LUT DRM properties if supported
+> >   drm/amd/display: add user 3D LUT support to the amdgpu_dm color
+> >     pipeline
+> >   drm/amd/display: decouple steps to reuse in shaper LUT support
+> >   drm/amd/display: add user shaper LUT support to amdgpu_dm color
+> >     pipeline
+> >
+> >  .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |   6 +
+> >  .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h |   3 +
+> >  .../amd/display/amdgpu_dm/amdgpu_dm_color.c   | 370 ++++++++++++++++--
+> >  .../amd/display/amdgpu_dm/amdgpu_dm_crtc.c    |   2 +
+> >  drivers/gpu/drm/amd/display/dc/core/dc.c      |  49 ++-
+> >  drivers/gpu/drm/amd/display/dc/dc.h           |   8 +
+> >  .../amd/display/dc/dcn301/dcn301_resource.c   |  47 ++-
+> >  .../amd/display/modules/color/color_gamma.h   |  43 ++
+> >  drivers/gpu/drm/drm_atomic_state_helper.c     |   7 +
+> >  drivers/gpu/drm/drm_atomic_uapi.c             |  24 ++
+> >  drivers/gpu/drm/drm_color_mgmt.c              | 127 ++++++
+> >  drivers/gpu/drm/drm_fb_helper.c               |   5 +
+> >  drivers/gpu/drm/drm_mode_config.c             |  21 +
+> >  include/drm/drm_color_mgmt.h                  |   8 +
+> >  include/drm/drm_crtc.h                        |  32 +-
+> >  include/drm/drm_mode_config.h                 |  25 ++
+> >  include/drm/drm_mode_object.h                 |   2 +-
+> >  include/uapi/drm/drm_mode.h                   |  17 +
+> >  18 files changed, 757 insertions(+), 39 deletions(-)
+> >
+> > --
+> > 2.35.1
+> > =20
 
+
+--Sig_/rJjznHK9PsJ_u9hxzrsX5CV
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmSKuj0ACgkQI1/ltBGq
+qqe8XA//XCXGFNkvRIsziHo93leKthmBCKTNSiMFZW0hyDvtXE0HQpfYDyt9acqi
+zbR0XS9uvR2pMU1FiwD24RJ6oM6KNg3dmpAcd+Ge7CsNzthu4LqOAOw5XC6P5lDE
+R0uADPC7zYeyiQcptVYLxdbTfZHJKPgy2mylpkr98RmErYl9SCY/g8rONGLzAc0p
+tAhBKpKpqlbQXHdr+RWFheqTCe3XvPoXAUmJHOHlW11WiSmFWis5/yyEh/6qQwc5
+syBtsuyt55HWHZWtOo9ZeJzhicR163cgQdKlcJM0ybtn6+sBGoghrpyjAWy+nWEY
+WEIQDJ7USEIUMLWXR1usMklb5bIcaDhHbQW0Uu/oFzyKRRbjLgTCiryXcyzIhKqj
+wOQsdtS3xQP0WxbYLrV3CrMUIj9bxAXwefNXrfiRbqZVhJknwUUFYLVlw8FZnrbl
+mrWCZI0T9420x0i7HGFGSFNOogYdnyhLonToK1QM/yGsdwaVjS7NqrTV5N421SFT
+nr8nM8HZ6ujjnKZGhuLBeHOxOdMbqaNUFd8IzFYn7HI8NZSMq5p9LOYZRjtu/yzn
+Q/CLPzWcI4KiY/luYiG3HLk6GAqJh73lJExAeo3c9lmOhoDnpzA4rZsWdZ1aa5jI
++dBO4dOuS0JkJFW/NJ8TZpfbGB/EZjcJvvBMkuG4W1pk/j4MSps=
+=sYv9
+-----END PGP SIGNATURE-----
+
+--Sig_/rJjznHK9PsJ_u9hxzrsX5CV--
