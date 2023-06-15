@@ -2,293 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E452732398
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 01:27:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2D3732399
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 01:27:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231805AbjFOX1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 19:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50882 "EHLO
+        id S229545AbjFOX1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 19:27:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbjFOX1b (ORCPT
+        with ESMTP id S230000AbjFOX1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 19:27:31 -0400
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9A72D5D
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:27:05 -0700 (PDT)
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-62ff12ba965so1801676d6.3
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:27:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686871569; x=1689463569;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wUpnKcxX83e/42mugp3BwoOPoVyd1XEyCwaCu/itwec=;
-        b=DVZbyQBv1xioJ7PFNwMLvLIfXPmGEY+tHQAHp6uQVZET6mYH7xx0ZGe0fzsMC/Gojr
-         UDPK6200G4ff2yduLc/IysuHLBuwKHuy/nYj2MqJa+lDe9gdZ4wxKMS8P//b0DxPypbv
-         BF6jbHJe7uceOB/AQIoRPkal+rqstc8KFyiY55oi8KgJuzgrNugsJGVV4Vdr5r0U7zhF
-         hMArmAtVQVpXqVkrzlAoXRNf+CsvFn8t/edrmzI/l6WGPEIf9XCXQH/4/vm9Yw/S3mbU
-         B44UQkyRsWFM5yx3eAmdriEFZ0+AZDj0+ZeMJo/mTuqEH6JxGsFVkaxvLrYHxQzdYJy3
-         bJiA==
-X-Gm-Message-State: AC+VfDwbojsdQ3mkZABezmvkSFC0Sr4RKZ+rhgNlzhUtzqqSAbd5jNsC
-        1jMHeAKw+qFjd0EoOwGXjw4=
-X-Google-Smtp-Source: ACHHUZ4Tpiky6qHRNbX6UMpuS06Q7JWS8POE/CF8BvbTPznw1X+nSWWGUM5EqJYnvKHi7+vdKpmRpw==
-X-Received: by 2002:a05:6214:1cc7:b0:62d:feee:252e with SMTP id g7-20020a0562141cc700b0062dfeee252emr376605qvd.55.1686871568767;
-        Thu, 15 Jun 2023 16:26:08 -0700 (PDT)
-Received: from maniforge ([24.1.27.177])
-        by smtp.gmail.com with ESMTPSA id q5-20020ad45ca5000000b00623950fbe48sm6285341qvh.41.2023.06.15.16.26.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 16:26:08 -0700 (PDT)
-Date:   Thu, 15 Jun 2023 18:26:05 -0500
-From:   David Vernet <void@manifault.com>
-To:     Aaron Lu <aaron.lu@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        rostedt@goodmis.org, dietmar.eggemann@arm.com, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        joshdon@google.com, roman.gushchin@linux.dev, tj@kernel.org,
-        kernel-team@meta.com
-Subject: Re: [RFC PATCH 3/3] sched: Implement shared wakequeue in CFS
-Message-ID: <20230615232605.GB2915572@maniforge>
-References: <20230613052004.2836135-1-void@manifault.com>
- <20230613052004.2836135-4-void@manifault.com>
- <20230613083203.GR4253@hirez.programming.kicks-ass.net>
- <20230614043529.GA1942@ziqianlu-dell>
- <20230615000103.GC2883716@maniforge>
- <20230615044917.GA109334@ziqianlu-dell>
- <20230615073153.GA110814@ziqianlu-dell>
+        Thu, 15 Jun 2023 19:27:38 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2103.outbound.protection.outlook.com [40.107.94.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF0930FF
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:27:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=c9NdKAPprrIydaCwVmhTXKDMdCn5lgff2LHDUgcDCSmoNhu9kwZBh58nBZsCyaqkHLbyD5vB0n9FCeTjer1ld+CA5Qpni+uv+IjXdHVpaIdJfue4OY+ui7grqTaFOfg1wiBkrTODkWl/xRDnsEMlt0k3bVVbt/y/ON+liWSAl+3CVY0lupKVFKrUACMg53SUwuIP9GwdrFKcfPlU2grdK8v87MLZ8Bi+iK0Kbj8e0JapxI59RpUpQhKidsuUK6sb+NffRftcDRQ/kzVSDrPhZi28C4HbTLUrUAxbOLVQO+Z6eLY3ipBnQTbMIW3lndJ2CfaVLIuWsXLhYA5IdmCLSg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cMBJvzHpQMPqCss7+kGjGr4cStiyhCZJOs4f7hi7fFQ=;
+ b=gqPPP/awjRVW53ga9ey5Tpgk3zMPVmWXzwPNVMuoidi70+gZ9O9qmw5h4A+9TOn4idHXDZZ4uJejCNDH26eDhWPzj2BRyL0BB5bgJ2gmCx+Rd40cd0Y6E9LWRgPVi2uwrzqP+2byvlzhvDpCmGwMc3UYbWXenfZLhPzLZnylKetX8UmzNSGgI1sO3yeVWy4zu1kx2JRXz3T+Qy6xMa1fznCNIwrTjGEGnH2eeAGoHtIvpJaoEjGqKPrlcoGiR6iNT6kjCj+0wNINRDxXfW+vHRBWHIqPruu0bjx4un3gfrxzaRZJ0k9ifDYVRFExFlN0tWYZJoGIRXJxDCIUgml0Cg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cMBJvzHpQMPqCss7+kGjGr4cStiyhCZJOs4f7hi7fFQ=;
+ b=aUyzdQBsnQXE3vmNp8nh8qbeXNwughIwQGfTtLBJLb9fhWPnWfb/g3y9paCN96X+FqJcGJgAdbzar0jb0l05qscS/WyVrosLoj51JfZa76XEoOpG7N02Eht956/pnrXzKlaXkrKWh+KM/LW0x1BFzMlKAFoittRllbsx3dKs2Ns=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from DM5PR0102MB3590.prod.exchangelabs.com (2603:10b6:4:a4::25) by
+ CO1PR01MB7338.prod.exchangelabs.com (2603:10b6:303:155::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6500.25; Thu, 15 Jun 2023 23:27:00 +0000
+Received: from DM5PR0102MB3590.prod.exchangelabs.com
+ ([fe80::5aae:2a5e:15f5:8196]) by DM5PR0102MB3590.prod.exchangelabs.com
+ ([fe80::5aae:2a5e:15f5:8196%6]) with mapi id 15.20.6455.037; Thu, 15 Jun 2023
+ 23:27:00 +0000
+From:   Ilkka Koskinen <ilkka@os.amperecomputing.com>
+To:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Besar Wicaksono <bwicaksono@nvidia.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] perf: arm_cspmu: Add missing MODULE_DEVICE_TABLE
+Date:   Thu, 15 Jun 2023 16:26:30 -0700
+Message-Id: <20230615232630.304870-1-ilkka@os.amperecomputing.com>
+X-Mailer: git-send-email 2.40.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: CH2PR04CA0013.namprd04.prod.outlook.com
+ (2603:10b6:610:52::23) To DM5PR0102MB3590.prod.exchangelabs.com
+ (2603:10b6:4:a4::25)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230615073153.GA110814@ziqianlu-dell>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM5PR0102MB3590:EE_|CO1PR01MB7338:EE_
+X-MS-Office365-Filtering-Correlation-Id: d833ebfc-fa01-4c4d-99c2-08db6df80466
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: A7ymBQyeN6AV92YDUEXcZFwP0/pWmEMOzYC3HQIRHxjsgV5Wn2pGW+Qg5fwLmny5HBX0NiMn8o8Ga14DwovRxOPfV5yoeNS77cZAgV4iyi/yRV4ESN3RCQnwBSxTaXGwBpIFXDBfhjjbv40mukGQRAJx6EqTgSZZ9uGg5pkH8x+6XeTJ2ucmJ+mT0UJ9+08eg3nVKowAsyF0Rwnc365ky97iW0I31OAcv34mFJo2hN7FJeYKFkaMRdZM85GjyM8BZIjQh9Tynj6tEEvpbbNsXNhm1oiR1mjBwLrN3fBCWmKktRg/hnXaWDnd782E1144GDMDWLkYnNDRjQX5o3IZoi78iIDS4jq1n050nlzIiDkbg392HQNqTLk9K7kAdeE6JVLc2Qh2EGLYeQGbyJJgrLz2Tw0+7gx5be4ufjl0KZG665uOf+YaqG1s1Yk2BtHu5RhdGzzc72a/Pw58GifY1w99CZ3Z+sadRt+1AVltQuJOkqMog/qX+ItThAq0RPBr6v30sLG4gDsM8SnByEIJ+HSq7MUB0dwjTixIF9oizwKPOvZz0AEVPlRo+0wIS70OToaxcLeEaF5aau4WX9fx4TkzXHQCmz7NOUnJv6MBbSpQJJYaG1d0jBWbMEnLS9SK
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR0102MB3590.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(136003)(376002)(39860400002)(396003)(451199021)(2906002)(26005)(6512007)(186003)(2616005)(66476007)(66556008)(66946007)(4326008)(52116002)(41300700001)(6486002)(8936002)(8676002)(6666004)(316002)(110136005)(38100700002)(38350700002)(478600001)(86362001)(1076003)(6506007)(5660300002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?P4l/c7/26pcZgVvwokSgUsUgUjqk6/Yon1fy3Xnds4cS7gilL4aZyQTs6Enw?=
+ =?us-ascii?Q?v+LnTb08Ew3pjcYK8EBq5wtJkvvtIUXRRIf9j9YwV64zo7k2nVE3ZjL4FNJ4?=
+ =?us-ascii?Q?mAD+reCEL+Rlv4z4Ki4W4Wa0bwuMZ+bqxBe9j5X5kWymGLmwLFcOcRPZqcaw?=
+ =?us-ascii?Q?E8pQpIIbYMOGZ/INA58mLlPe7cTGGhSvY1nOG+ZsX0DqgGj4dk1d4zNgd8rA?=
+ =?us-ascii?Q?UmDXrc+Liq3zMaFoegADtVeCzQlbbeDYUj3OxhYA2uTootoVvByMXO5TQUMM?=
+ =?us-ascii?Q?OGxiuECvaFBjx5N9vxE7SokjEGHdebazWxAf4PH6bdTVLJzXBAtbj+2XEdW4?=
+ =?us-ascii?Q?8qKDbJ5stACR8S8HWDBZdI/Tr2mwdXqqKgYGS36OuTxMSKLO0tWKNlJRp7wm?=
+ =?us-ascii?Q?7Sud7f7yyqTt2UvX0BSNYetV0wF7igmiU1x/G8qV3HobLw50YLbw2KE6VpPk?=
+ =?us-ascii?Q?2Gqu7YhpdrKhiixTm4Ovd2uxOcbpYGrq6CtdZF3WAUa1V+pcB342O8AI+raO?=
+ =?us-ascii?Q?PHnUFNLgkfQTyga5frf2cDUpziw/PTWJZbxQY44wJyr6GKLkCZulCEq+Q/8f?=
+ =?us-ascii?Q?SNhqWdtir8mCfVfQNuBGMmhmzfo0OCmWmhYibTjzRSJQRHIfWxfpLjwqz8lW?=
+ =?us-ascii?Q?Tbxg3eSGQzcSHkzlP1Rh/9jnIWexW2ux5IzOBrwIwMzq0tTRffLprJnz2og9?=
+ =?us-ascii?Q?khJj1thJHec4lLJ4P9X66tG1NsX/yioxRJRI1ni7EI431sSaea/bf2FuNeru?=
+ =?us-ascii?Q?EjgAnnGiQa57lNQRKSj1BDdVkeR1HfDBIV9zvsW+jif2EaaNttwXleJzf9Ns?=
+ =?us-ascii?Q?usMWb735r+nWVFF7y8oNNYvccqS18YfoPY+FmugjcvFEoqP+IdbD8ssWo6eC?=
+ =?us-ascii?Q?sLF224TVFtM7EfRVyTQYdqzj7HVTuXjxc+m0aJKlDO2aZbjYQegT4Bpy+Mio?=
+ =?us-ascii?Q?uqLzatQ2afgYCafsmt8Bpl3DjRC7C0pqReFiZscYAKSNOinAwtjSakhnuhdw?=
+ =?us-ascii?Q?XIiy8J1TKACjjE4uosvtGYADkapCdMj4pUWpcStqmzHk4/mzcZ958Dsx8Pu/?=
+ =?us-ascii?Q?b15aLX5kjL+wflmk45fBk/nfOJskhC3U0MMmf2188MrujJnQIDFm3YcuRdQE?=
+ =?us-ascii?Q?qk9nmWeKG7xQ85Li/bykVlZtVgE8oW3ORe7AJJnRGt1HvLbSKTZ8zfzu3WSI?=
+ =?us-ascii?Q?3639PFkyeSgzPNpejByVKm2SGZ9LCoNhFoJ7rW18nEUdc1CJXES9YjzJbpCp?=
+ =?us-ascii?Q?agFvOBlz1w3A/qITIjmrTG9dobOSKAyFFZ5zPZEQUVjSPbJgGyCZcBlMtuNC?=
+ =?us-ascii?Q?UZkld0Xw5RBwT9daIxsdQ6psd1MZStdZP8mlTgiFjGSUhe4PzAh78lsCyYiK?=
+ =?us-ascii?Q?c5G7s54qtrXwuuX/m/Zn+DfbEwySJfp6wXlGTivRQ9yruJ9lSt/pO1LKAL2d?=
+ =?us-ascii?Q?ahn4kbzv4WpLJdifzCzGgKU4+NfjFV8g+YOmoVq3Y6NjHXrQeHPyAbSFfRqy?=
+ =?us-ascii?Q?TlMh2IDx971T+KpWJW66LtytMAswDIJ0EXM3381b12VaAi0UNYw9lZ4/0r66?=
+ =?us-ascii?Q?C/gbi935ER5pWpnf7gwVYtRTPOQsJ1taCcIavrp3sHdc0kYNtw9y+oVTzcse?=
+ =?us-ascii?Q?gA=3D=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d833ebfc-fa01-4c4d-99c2-08db6df80466
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR0102MB3590.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 23:26:59.9286
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qsmcdwGdEdsEO63NBgjTYpgN4DN5CHRH2/gk8w0QQ1pnOaJh0JA5EuFe/xiVS7/1b5zYuSLZWz1q0UrX2s/Rr1uWllgFWRvFQWLoryHhNQWn1IO/E1BXyDgMeu9CtHH6
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR01MB7338
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 03:31:53PM +0800, Aaron Lu wrote:
-> On Thu, Jun 15, 2023 at 12:49:17PM +0800, Aaron Lu wrote:
-> > I'll see if I can find a smaller machine and give it a run there too.
-> 
-> Found a Skylake with 18cores/36threads on each socket/LLC and with
-> netperf, the contention is still serious.
-> 
-> "
-> $ netserver
-> $ sudo sh -c "echo SWQUEUE > /sys/kernel/debug/sched/features"
-> $ for i in `seq 72`; do netperf -l 60 -n 72 -6 -t UDP_RR & done
-> "
-> 
->         53.61%    53.61%  [kernel.vmlinux]            [k] native_queued_spin_lock_slowpath            -      -            
->             |          
->             |--27.93%--sendto
->             |          entry_SYSCALL_64
->             |          do_syscall_64
->             |          |          
->             |           --27.93%--__x64_sys_sendto
->             |                     __sys_sendto
->             |                     sock_sendmsg
->             |                     inet6_sendmsg
->             |                     udpv6_sendmsg
->             |                     udp_v6_send_skb
->             |                     ip6_send_skb
->             |                     ip6_local_out
->             |                     ip6_output
->             |                     ip6_finish_output
->             |                     ip6_finish_output2
->             |                     __dev_queue_xmit
->             |                     __local_bh_enable_ip
->             |                     do_softirq.part.0
->             |                     __do_softirq
->             |                     net_rx_action
->             |                     __napi_poll
->             |                     process_backlog
->             |                     __netif_receive_skb
->             |                     __netif_receive_skb_one_core
->             |                     ipv6_rcv
->             |                     ip6_input
->             |                     ip6_input_finish
->             |                     ip6_protocol_deliver_rcu
->             |                     udpv6_rcv
->             |                     __udp6_lib_rcv
->             |                     udp6_unicast_rcv_skb
->             |                     udpv6_queue_rcv_skb
->             |                     udpv6_queue_rcv_one_skb
->             |                     __udp_enqueue_schedule_skb
->             |                     sock_def_readable
->             |                     __wake_up_sync_key
->             |                     __wake_up_common_lock
->             |                     |          
->             |                      --27.85%--__wake_up_common
->             |                                receiver_wake_function
->             |                                autoremove_wake_function
->             |                                default_wake_function
->             |                                try_to_wake_up
->             |                                |          
->             |                                 --27.85%--ttwu_do_activate
->             |                                           enqueue_task
->             |                                           enqueue_task_fair
->             |                                           |          
->             |                                            --27.85%--_raw_spin_lock_irqsave
->             |                                                      |          
->             |                                                       --27.85%--native_queued_spin_lock_slowpath
->             |          
->              --25.67%--recvfrom
->                        entry_SYSCALL_64
->                        do_syscall_64
->                        __x64_sys_recvfrom
->                        __sys_recvfrom
->                        sock_recvmsg
->                        inet6_recvmsg
->                        udpv6_recvmsg
->                        __skb_recv_udp
->                        |          
->                         --25.67%--__skb_wait_for_more_packets
->                                   schedule_timeout
->                                   schedule
->                                   __schedule
->                                   |          
->                                    --25.66%--pick_next_task_fair
->                                              |          
->                                               --25.65%--swqueue_remove_task
->                                                         |          
->                                                          --25.65%--_raw_spin_lock_irqsave
->                                                                    |          
->                                                                     --25.65%--native_queued_spin_lock_slowpath
-> 
-> I didn't aggregate the throughput(Trans. Rate per sec) from all these
-> clients, but a glimpse from the result showed that the throughput of
-> each client dropped from 4xxxx(NO_SWQUEUE) to 2xxxx(SWQUEUE).
-> 
-> Thanks,
-> Aaron
+Add missing MODULE_DEVICE_TABLE definition to generate modalias, which
+enables module autoloading.
 
-Ok, it seems that the issue is that I wasn't creating enough netperf
-clients. I assumed that -n $(nproc) was sufficient. I was able to repro
-the contention on my 26 core / 52 thread skylake client as well:
+Signed-off-by: Ilkka Koskinen <ilkka@os.amperecomputing.com>
+---
+ drivers/perf/arm_cspmu/arm_cspmu.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
+diff --git a/drivers/perf/arm_cspmu/arm_cspmu.c b/drivers/perf/arm_cspmu/arm_cspmu.c
+index 44a9f7e25fb2..e2b7827c4563 100644
+--- a/drivers/perf/arm_cspmu/arm_cspmu.c
++++ b/drivers/perf/arm_cspmu/arm_cspmu.c
+@@ -1213,6 +1213,12 @@ static int arm_cspmu_device_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++static const struct platform_device_id arm_cspmu_id[] = {
++	{DRVNAME, 0},
++	{ },
++};
++MODULE_DEVICE_TABLE(platform, arm_cspmu_id);
++
+ static struct platform_driver arm_cspmu_driver = {
+ 	.driver = {
+ 			.name = DRVNAME,
+@@ -1220,6 +1226,7 @@ static struct platform_driver arm_cspmu_driver = {
+ 		},
+ 	.probe = arm_cspmu_device_probe,
+ 	.remove = arm_cspmu_device_remove,
++	.id_table = arm_cspmu_id,
+ };
+ 
+ static void arm_cspmu_set_active_cpu(int cpu, struct arm_cspmu *cspmu)
+-- 
+2.40.1
 
-    41.01%  netperf          [kernel.vmlinux]                                                 [k] queued_spin_lock_slowpath
-            |          
-             --41.01%--queued_spin_lock_slowpath
-                       |          
-                        --40.63%--_raw_spin_lock_irqsave
-                                  |          
-                                  |--21.18%--enqueue_task_fair
-                                  |          |          
-                                  |           --21.09%--default_wake_function
-                                  |                     |          
-                                  |                      --21.09%--autoremove_wake_function
-                                  |                                |          
-                                  |                                 --21.09%--__wake_up_sync_key
-                                  |                                           sock_def_readable
-                                  |                                           __udp_enqueue_schedule_skb
-                                  |                                           udpv6_queue_rcv_one_skb
-                                  |                                           __udp6_lib_rcv
-                                  |                                           ip6_input
-                                  |                                           ipv6_rcv
-                                  |                                           process_backlog
-                                  |                                           net_rx_action
-                                  |                                           |          
-                                  |                                            --21.09%--__softirqentry_text_start
-                                  |                                                      __local_bh_enable_ip
-                                  |                                                      ip6_output
-                                  |                                                      ip6_local_out
-                                  |                                                      ip6_send_skb
-                                  |                                                      udp_v6_send_skb
-                                  |                                                      udpv6_sendmsg
-                                  |                                                      __sys_sendto
-                                  |                                                      __x64_sys_sendto
-                                  |                                                      do_syscall_64
-                                  |                                                      entry_SYSCALL_64
-                                  |          
-                                   --19.44%--swqueue_remove_task
-                                             |          
-                                              --19.42%--pick_next_task_fair
-                                                        |          
-                                                         --19.42%--schedule
-                                                                   |          
-                                                                    --19.21%--schedule_timeout
-                                                                              __skb_wait_for_more_packets
-                                                                              __skb_recv_udp
-                                                                              udpv6_recvmsg
-                                                                              inet6_recvmsg
-                                                                              __x64_sys_recvfrom
-                                                                              do_syscall_64
-                                                                              entry_SYSCALL_64
-    40.87%  netserver        [kernel.vmlinux]                                                 [k] queued_spin_lock_slowpath
-            |          
-             --40.87%--queued_spin_lock_slowpath
-                       |          
-                        --40.51%--_raw_spin_lock_irqsave
-                                  |          
-                                  |--21.03%--enqueue_task_fair
-                                  |          |          
-                                  |           --20.94%--default_wake_function
-                                  |                     |          
-                                  |                      --20.94%--autoremove_wake_function
-                                  |                                |          
-                                  |                                 --20.94%--__wake_up_sync_key
-                                  |                                           sock_def_readable
-                                  |                                           __udp_enqueue_schedule_skb
-                                  |                                           udpv6_queue_rcv_one_skb
-                                  |                                           __udp6_lib_rcv
-                                  |                                           ip6_input
-                                  |                                           ipv6_rcv
-                                  |                                           process_backlog
-                                  |                                           net_rx_action
-                                  |                                           |          
-                                  |                                            --20.94%--__softirqentry_text_start
-                                  |                                                      __local_bh_enable_ip
-                                  |                                                      ip6_output
-                                  |                                                      ip6_local_out
-                                  |                                                      ip6_send_skb
-                                  |                                                      udp_v6_send_skb
-                                  |                                                      udpv6_sendmsg
-                                  |                                                      __sys_sendto
-                                  |                                                      __x64_sys_sendto
-                                  |                                                      do_syscall_64
-                                  |                                                      entry_SYSCALL_64
-                                  |          
-                                   --19.48%--swqueue_remove_task
-                                             |          
-                                              --19.47%--pick_next_task_fair
-                                                        schedule
-                                                        |          
-                                                         --19.38%--schedule_timeout
-                                                                   __skb_wait_for_more_packets
-                                                                   __skb_recv_udp
-                                                                   udpv6_recvmsg
-                                                                   inet6_recvmsg
-                                                                   __x64_sys_recvfrom
-                                                                   do_syscall_64
-                                                                   entry_SYSCALL_64
-
-Thanks for the help in getting the repro on my end.
-
-So yes, there is certainly a scalability concern to bear in mind for
-swqueue for LLCs with a lot of cores. If you have a lot of tasks quickly
-e.g. blocking and waking on futexes in a tight loop, I expect a similar
-issue would be observed.
-
-On the other hand, the issue did not occur on my 7950X. I also wasn't
-able to repro the contention on the Skylake if I ran with the default
-netperf workload rather than UDP_RR (even with the additional clients).
-I didn't bother to take the mean of all of the throughput results
-between NO_SWQUEUE and SWQUEUE, but they looked roughly equal.
-
-So swqueue isn't ideal for every configuration, but I'll echo my
-sentiment from [0] that this shouldn't on its own necessarily preclude
-it from being merged given that it does help a large class of
-configurations and workloads, and it's disabled by default.
-
-[0]: https://lore.kernel.org/all/20230615000103.GC2883716@maniforge/
-
-Thanks,
-David
