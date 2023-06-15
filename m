@@ -2,191 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A0D731D66
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:04:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA7A7731D68
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237365AbjFOQEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 12:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50102 "EHLO
+        id S233573AbjFOQFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 12:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234795AbjFOQDv (ORCPT
+        with ESMTP id S229781AbjFOQFm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 12:03:51 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2064.outbound.protection.outlook.com [40.107.100.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1082949;
-        Thu, 15 Jun 2023 09:03:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VJEBnYGYkfHpsQFSP0OYJ7EBJbBHzP+K4pEF/mduHIm9d0a080EuUusR5TtFHbjx888YTnAXzS8J3s3nRXJQRjqEHG+K4P2dC/jJo16n2d+AK+eqVjDrK3S96wAl+u8+UtwELjGfykEGMSmE6L+DuwRokQz6xitbM+dUAClJWzV9dAec4nURKwG4ENnjF9pr50LaqwDS3iDLHF1MktPFpezHFIu/+giqPSa+z09Czp8xptjDaMjZlc17E4CbuYefJuqwHpjWl8rUmdZfCt+3Sx9Wu5nepTM2HOt0NXSwrjDk8wEojcRGZPuPBcGt+ZPMgxZE0xzCOiyk1oa7QB8ZZQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7p4zo5ayo+Kmd3jmSYZOOe8kuz8N+Ns8XahyJ3wyjPo=;
- b=gqOKnh46bW7FvzwwjaL5BpHgnZyhYAbdzrKCexTrJPEsgCpy17z0M5rFDogz/q8irG+CTTKdghgYXCcG6Tp5ahJDWeySGIuYgEzzGeHcQdtHOqcexqq/+GibKLlIy6a+U1mOFoEQKH+HwCFCs01KLI+x8lRUVWrp/RYa6N9B3Fq7fdlVNE1h67Vwet0GOhuFKdfR/skTx+cWSgz4Gm0/cnUUMqpZ3chKuzMcpZccH44vvw8P4pbpVNGhmsPy8Iduuire+WIu+J/xNScpFF3gVPrlFmDf81voZrjuloaPee7pZ9DIom2g/EI1Zp7sC5UX1ZuZzzSI3TSl05gBY2rhtA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7p4zo5ayo+Kmd3jmSYZOOe8kuz8N+Ns8XahyJ3wyjPo=;
- b=iYS+dmLPpmOY85TFiCyJoH4sJ0HNRHQPI1yt6nbiYCYTU5Q4pH34mm/M7TY/iY/K/kmT3EvW0r12wCRDBwTlY6r01/pX22ArjXo+FYml1tNh+ph8Z2OjQmrMC2npA5pkTr4rsqe8JuPNEnEAmkawjRMbqBmV5VxFWIkKXP3mXWo=
-Received: from MW4PR03CA0255.namprd03.prod.outlook.com (2603:10b6:303:b4::20)
- by MW3PR12MB4507.namprd12.prod.outlook.com (2603:10b6:303:2c::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37; Thu, 15 Jun
- 2023 16:03:47 +0000
-Received: from MWH0EPF000989E8.namprd02.prod.outlook.com
- (2603:10b6:303:b4:cafe::91) by MW4PR03CA0255.outlook.office365.com
- (2603:10b6:303:b4::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.25 via Frontend
- Transport; Thu, 15 Jun 2023 16:03:47 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- MWH0EPF000989E8.mail.protection.outlook.com (10.167.241.135) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6500.27 via Frontend Transport; Thu, 15 Jun 2023 16:03:46 +0000
-Received: from quartz-7b1chost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 15 Jun
- 2023 11:03:45 -0500
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     <x86@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <platform-driver-x86@vger.kernel.org>, <markgross@kernel.org>,
-        <hdegoede@redhat.com>, <Shyam-sundar.S-k@amd.com>,
-        <linux-edac@vger.kernel.org>, <clemens@ladisch.de>,
-        <jdelvare@suse.com>, <linux@roeck-us.net>,
-        <linux-hwmon@vger.kernel.org>, <mario.limonciello@amd.com>,
-        <babu.moger@amd.com>, Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: [PATCH v2 6/6] hwmon: (k10temp) Reduce k10temp_get_ccd_support() parameters
-Date:   Thu, 15 Jun 2023 11:03:28 -0500
-Message-ID: <20230615160328.419610-7-yazen.ghannam@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230615160328.419610-1-yazen.ghannam@amd.com>
-References: <20230615160328.419610-1-yazen.ghannam@amd.com>
+        Thu, 15 Jun 2023 12:05:42 -0400
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F3130F2;
+        Thu, 15 Jun 2023 09:05:08 -0700 (PDT)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4QhnDp0PwZz9skw;
+        Thu, 15 Jun 2023 18:04:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
+        s=MBO0001; t=1686845098;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aC88dsjwoSfwnwVGDU7JYpF5AgySUHYNoar1O8TxeOk=;
+        b=vXRQyeiRbKjGK4w/jCqequdEYj7ujhd0yWghYZ/qpobnURY4LIBcntA47ZkCkus/VBZTGf
+        JUWnHf8kPRTyz61jwv7vZkmPlDHfPhFzm54W/jh3zMTFqK74cVmHLhHXBjE+TAsTjlq/m0
+        LLiugb++bC872ZSlibQ4D3Es/rkF3LU+yC2mI6jn1GQ8Rtcq/DvalMvcTmTIbTGzwfcvm+
+        gmRnS1hYG4y31eXXX74YvQbaz7QHBXUClpIIsvh5lwtSArOKiH6Qb2epCimJ4XPlYQNYda
+        UAdwBHkpNW8hosS0UTI5LrCrUhzCaq82XKDy+5+2S4wBUAVjIEUmfqY4wi161w==
+Date:   Thu, 15 Jun 2023 18:04:53 +0200 (GMT+02:00)
+From:   Frank Oltmanns <frank@oltmanns.dev>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Roman Beranek <me@crly.cz>,
+        Samuel Holland <samuel@sholland.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Message-ID: <d40e94c4-9dab-4511-bd48-1d9081f4262a@oltmanns.dev>
+In-Reply-To: <wnxjbbjfcnrg7ogwkfwbnldvyqbpt23b6mnrieb2zffooaojts@sudsbfjbjt64>
+References: <20230605190745.366882-1-frank@oltmanns.dev> <20230605190745.366882-2-frank@oltmanns.dev> <2bvcukogzhcdbfsrruylgw5fbezaqjpcojqaambfoiv5fc2upy@ffumn5sevbeb> <875y7y1f0d.fsf@oltmanns.dev> <sijbhopoxuw5wodyry3smg7tm4wzoc7k6xakt4qdvxqsok32mv@u7rh4dct5ya6> <87a5x41w5r.fsf@oltmanns.dev> <unoskbtcteluxj7g3xkwc7ngcmglvcbm5ah25m7huhqxwd4dj3@nmfxbedwyu54> <87wn07zmxp.fsf@oltmanns.dev> <wnxjbbjfcnrg7ogwkfwbnldvyqbpt23b6mnrieb2zffooaojts@sudsbfjbjt64>
+Subject: Re: [PATCH 1/2] clk: sunxi-ng: nkm: consider alternative parent
+ rates when finding rate
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000989E8:EE_|MW3PR12MB4507:EE_
-X-MS-Office365-Filtering-Correlation-Id: 580ed92a-a9aa-46c1-6628-08db6dba1a09
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tRg7L7/RA1vJFmRNhWYr4C/gLSgSlrN+1va26FJrxeLBpN0M7e5Ic2BbZLXIixSDXxseQd4xdVg8c6lnWty7CQSe6BHBS04sBciA6bXKDtq+Mab/8Y7XfDn7IRN8GqiFcdGANIMblN7T5tczqzgzEDeJUINBpWGP9HGMM61y/w8WlvK7wBsrw9Gq7p6mS82s8GOcYNyq9DouhnPkOc20XKnWga+tiS93dBg+CgKE/QL4OzKdlqmXZC8tn2JvB/WWKH2KI1AwtSS845ja5yGQXvU+t3uaKKlGlCDmfQYJkug3KplMGkPgWcLsE7DKlrZI56S6Xn+OAziLQI+nIe+UY4KYwLd6SryITW1kZ7PfGMIWhBJMDeBqDMHZLwkUVrIPWP0aP6ke4MA2kk4unSUCqZDPTEN3E5+ubyHN9+JTLkUjGpLjEeYTZ323MGkeAFbwx4kG7yApxJCBvhyv6/lmgesK3jxq0KNWZDXRQ+oo23uScbk3j23BC0x7pdlAIfjlnQVx8sdQPXggtnCF7vqkTy9HWoROYA1rOT1NduElUFlrXtkQ3lDXw7dZhJPTmtRiZSbaAQBT1sDnHmQwaoa8RFULJBvistTeW8rimDyMolFEpd8mWZyvgaCm++5+5LEFLq2cpeNj0GTqLlCUgekO0PFpweqV6opbAxKRu1XaQPnIq/KXLg8zZtJWOpzt35er1RpTheyJv8b1mWx4ohrYEcc1ytfMgdYW8VbvOMVJjE6YP8myoyPSj8xhpckMCYZsbVRWEY24RWlW4VvH4Jmr3g==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(396003)(346002)(39860400002)(451199021)(46966006)(40470700004)(36840700001)(5660300002)(44832011)(7416002)(8676002)(8936002)(41300700001)(40460700003)(2906002)(82310400005)(36756003)(40480700001)(478600001)(26005)(86362001)(1076003)(2616005)(47076005)(83380400001)(336012)(966005)(7696005)(426003)(6666004)(36860700001)(356005)(81166007)(4326008)(6916009)(70586007)(70206006)(316002)(186003)(82740400003)(16526019)(54906003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 16:03:46.9819
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 580ed92a-a9aa-46c1-6628-08db6dba1a09
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: MWH0EPF000989E8.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4507
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Correlation-ID: <d40e94c4-9dab-4511-bd48-1d9081f4262a@oltmanns.dev>
+X-Rspamd-Queue-Id: 4QhnDp0PwZz9skw
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, k10temp_get_ccd_support() takes as input "pdev" and "data".
-However, "pdev" is already included in "data". Furthermore, the "pdev"
-parameter is no longer used in k10temp_get_ccd_support(), since its use
-was moved into read_ccd_temp_reg().
 
-Drop the "pdev" input parameter as it is no longer needed.
+15.06.2023 16:47:33 Maxime Ripard <maxime@cerno.tech>:
 
-No functional change is intended.
+> On Tue, Jun 13, 2023 at 12:17:06PM +0200, Frank Oltmanns wrote:
+>> Hi Maxime,
+>>
+>> I'll now only respond to one aspect of your mail, because it's the
+>> foundation for the whole behaviour.
+>>
+>> On 2023-06-13 at 11:10:08 +0200, Maxime Ripard <maxime@cerno.tech> wrote=
+:
+>> [...]
+>>>>>> =E2=80=A6
+>>>>>
+>>>>> It doesn't really matter though. The output of that function must be
+>>>>> stable and must return the same set of factors and parent rate for a
+>>>>> given target rate.
+>>>>>
+>>>>
+>>>> I'm not sure if we're talking about the same thing here. Of course the
+>>>> set of factors and parent rate for a given target rate will be differe=
+nt
+>>>> depending on the fact if we can or cannot adjust the parent rate,
+>>>> agreed?
+>>>
+>>> Yes, but here you also have a different behaviour in clk_round_rate()
+>>> and in clk_set_rate(), which isn't ok.
+>>>
+>>> Basically, clk_set_rate() + clk_get_rate() must be equal to
+>>> clk_round_rate().
+>>>
+>>> If you change if you look for parents depending on whether you're being
+>>> called in clk_round_rate() and clk_set_rate(), then you're breaking tha=
+t
+>>> expectation.
+>>>
+>>>> Let me compare my implementation to ccu_mp.
+>>>>
+>>>> ccu_mp_round_rate either calls the function ccu_mp_find_best or
+>>>> ccu_mp_find_best_with_parent_adj, depending on CLK_SET_RATE_PARENT.
+>>>
+>>> Yes, and it's fine: the flag is per-clock, and the output is the same
+>>> depending on whether we're being called by clk_round_rate() and
+>>> clk_set_rate().
+>>>
+>>
+>> The output is really not the same.
+>>
+>> ccu_mp_set_rate() always calls ccu_mp_find_best(). It never (!) consider=
+s
+>> changing the parent, independent of any flags.
+>>
+>> ccu_mp_round_rate() is calling ccu_mp_find_best() OR
+>> ccu_mp_find_best_with_parent_adj() depending on the flag.
+>>
+>> If I understand you correctly, you consider that a bug.
+>
+> No, sorry, you're right.
+>
+> clk_set_rate will call round_rate first, which will (possibly) pick up a
+> new parent, and by the time set_rate is called our parent will have been
+> changed already so we will just call find_best again considering only
+> that parent.
 
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
----
-Link:
-https://lore.kernel.org/r/20230516202430.4157216-7-yazen.ghannam@amd.com
+Ok, no worries. That was my understanding, so your previous statement shatt=
+ered my worldview. ;) That's why I may have seemed a bit alarmed.
 
-v1->v2:
-* Add Acked-by from Guenter.
+>
+> The set of factors and dividers should remain the same there, but I
+> don't think that's a concern.
 
- drivers/hwmon/k10temp.c | 17 ++++++++---------
- 1 file changed, 8 insertions(+), 9 deletions(-)
+Ack. The output is stable when called with the same rate.
 
-diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-index dfbba8b72f43..dce97aab2fa7 100644
---- a/drivers/hwmon/k10temp.c
-+++ b/drivers/hwmon/k10temp.c
-@@ -377,8 +377,7 @@ static const struct hwmon_chip_info k10temp_chip_info = {
- 	.info = k10temp_info,
- };
- 
--static void k10temp_get_ccd_support(struct pci_dev *pdev,
--				    struct k10temp_data *data, int limit)
-+static void k10temp_get_ccd_support(struct k10temp_data *data, int limit)
- {
- 	u32 regval;
- 	int i;
-@@ -443,18 +442,18 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 		case 0x11:	/* Zen APU */
- 		case 0x18:	/* Zen+ APU */
- 			data->ccd_offset = 0x154;
--			k10temp_get_ccd_support(pdev, data, 4);
-+			k10temp_get_ccd_support(data, 4);
- 			break;
- 		case 0x31:	/* Zen2 Threadripper */
- 		case 0x60:	/* Renoir */
- 		case 0x68:	/* Lucienne */
- 		case 0x71:	/* Zen2 */
- 			data->ccd_offset = 0x154;
--			k10temp_get_ccd_support(pdev, data, 8);
-+			k10temp_get_ccd_support(data, 8);
- 			break;
- 		case 0xa0 ... 0xaf:
- 			data->ccd_offset = 0x300;
--			k10temp_get_ccd_support(pdev, data, 8);
-+			k10temp_get_ccd_support(data, 8);
- 			break;
- 		}
- 	} else if (boot_cpu_data.x86 == 0x19) {
-@@ -467,21 +466,21 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 		case 0x21:		/* Zen3 Ryzen Desktop */
- 		case 0x50 ... 0x5f:	/* Green Sardine */
- 			data->ccd_offset = 0x154;
--			k10temp_get_ccd_support(pdev, data, 8);
-+			k10temp_get_ccd_support(data, 8);
- 			break;
- 		case 0x40 ... 0x4f:	/* Yellow Carp */
- 			data->ccd_offset = 0x300;
--			k10temp_get_ccd_support(pdev, data, 8);
-+			k10temp_get_ccd_support(data, 8);
- 			break;
- 		case 0x60 ... 0x6f:
- 		case 0x70 ... 0x7f:
- 			data->ccd_offset = 0x308;
--			k10temp_get_ccd_support(pdev, data, 8);
-+			k10temp_get_ccd_support(data, 8);
- 			break;
- 		case 0x10 ... 0x1f:
- 		case 0xa0 ... 0xaf:
- 			data->ccd_offset = 0x300;
--			k10temp_get_ccd_support(pdev, data, 12);
-+			k10temp_get_ccd_support(data, 12);
- 			break;
- 		}
- 	} else {
--- 
-2.34.1
+> That leaves us with the rounding stuff, and the overall function
+> arguments. I like the structure of ccu_mp better, is there a reason to
+> deviate from it?
+
+I'm still pondering the rounding stuff. I'm just not sure why you are so re=
+laxed about the fact that when calling round_rate with 449064000 we get 449=
+035712, but when we call get round_rate with 449035712 we get 449018181, an=
+d when we call round_rate with 449018181, we get 449018180.
+
+But ultimately, you have the final word, of course. But I need some time to=
+ be sure, that this does not become a problem in some cases.
+
+Regarding the arguments, I can adopt ccu_mp's style. The only reason was to=
+ avoid code duplication, no other reason.
+
+Thanks,
+=C2=A0 Frank
+
+> > Maxime
 
