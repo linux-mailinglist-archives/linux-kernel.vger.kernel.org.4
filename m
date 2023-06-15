@@ -2,135 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A04CC731304
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55D6C731310
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244850AbjFOJFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 05:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
+        id S245132AbjFOJH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 05:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244816AbjFOJFe (ORCPT
+        with ESMTP id S239094AbjFOJHY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 05:05:34 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0103C2715;
-        Thu, 15 Jun 2023 02:05:29 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Qhbwk1nCMz4f55DK;
-        Thu, 15 Jun 2023 17:05:26 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgCH77JS1IpkhGIELw--.57144S3;
-        Thu, 15 Jun 2023 17:05:23 +0800 (CST)
-Subject: Re: [dm-devel] [PATCH -next v2 4/6] md: refactor
- idle/frozen_sync_thread() to fix deadlock
-To:     Xiao Ni <xni@redhat.com>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     yi.zhang@huawei.com, yangerkun@huawei.com, snitzer@kernel.org,
-        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        song@kernel.org, dm-devel@redhat.com, guoqing.jiang@linux.dev,
-        agk@redhat.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230529132037.2124527-1-yukuai1@huaweicloud.com>
- <20230529132037.2124527-5-yukuai1@huaweicloud.com>
- <05aa3b09-7bb9-a65a-6231-4707b4b078a0@redhat.com>
- <74b404c4-4fdb-6eb3-93f1-0e640793bba6@huaweicloud.com>
- <6e738d9b-6e92-20b7-f9d9-e1cf71d26d73@huaweicloud.com>
- <CALTww292gwOe-WEjuBwJn0AXvJC4AbfMZXC43EvVt3GCeBoHfw@mail.gmail.com>
- <5bf97ec5-0cb4-1163-6917-2bc98d912c2b@huaweicloud.com>
- <CALTww28UapJnK+Xfx7O9uEd5ZH2E7ufPT_7pKY6YYuzTZ0Fbdw@mail.gmail.com>
- <b96ec15b-6102-17bb-2c18-a487f224865b@huaweicloud.com>
- <CALTww2-knHOoX35NB73X-sMn1u8EJHLA=0aOnoVqVm83+fdG5Q@mail.gmail.com>
- <04700f85-62a2-1dbd-f330-80f9a13b7d2e@huaweicloud.com>
- <CALTww2-Wr8UbNFaLOyYv5Syh5q4J+hzRuo8Eakj_nOW+P4Cx7A@mail.gmail.com>
- <CALTww2_V=KVLqVVXpXZvGyrmT0N-WG1tFC+HaSEGNfHagaLHug@mail.gmail.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <bacb3159-514c-76e2-ef2e-353cb1a0e30b@huaweicloud.com>
-Date:   Thu, 15 Jun 2023 17:05:22 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Thu, 15 Jun 2023 05:07:24 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7F41720;
+        Thu, 15 Jun 2023 02:07:23 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35F8Nwnn031685;
+        Thu, 15 Jun 2023 09:07:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=w28sBXMcKf+o5X/JU4a1Ebp6Lc1Mr59VNKpR9jp0SOc=;
+ b=AzcxLMHaEB8HoxpGijKmAixbZuzEo1NYPdZv8KmkOSvb6CnMMwXFPMp6FrwRL1uXEXmQ
+ kgng3qOnLl6xJtYzzT+DTkX/id+KEtAM5pZetlGzed7t4FDf7idZY2sRh9y3ITkymUGE
+ O8y0CzKtAuWS6jsabeUjRMT52Eaztts/iGkCwcBkpVcbUjfjECifBIvTofQIybQAwlc3
+ P9qc2VTJZynrL0ugsq+0HUjahnVqAHlZnJW9dpEtf/B0k5u2T2RIOp2nYf+pGWWr+L94
+ Zy0Rs0OmvmpO75vngMm93j9Msvcs6c6itF27l53vLKoTYVGajyARUKtMsmWgiX7s3BR5 +A== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r7va2gg0r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 09:07:04 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35F973mE008134
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 09:07:03 GMT
+Received: from win-platform-upstream01.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 15 Jun 2023 02:06:56 -0700
+From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <ulf.hansson@linaro.org>,
+        <linus.walleij@linaro.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <p.zabel@pengutronix.de>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <robimarko@gmail.com>,
+        <krzysztof.kozlowski@linaro.org>, <andy.shevchenko@gmail.com>,
+        <quic_srichara@quicinc.com>
+Subject: [v10 0/6] Add minimal boot support for IPQ5018
+Date:   Thu, 15 Jun 2023 14:36:32 +0530
+Message-ID: <20230615090638.1771245-1-quic_srichara@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <CALTww2_V=KVLqVVXpXZvGyrmT0N-WG1tFC+HaSEGNfHagaLHug@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgCH77JS1IpkhGIELw--.57144S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Aw45WFW3KF45tr43try7Wrg_yoW8WrWrpr
-        Z2k3W5KrWDGry0yFy2v3W0qFWFvrW7X345Xry3Gr13Aw15Krs0qrWUAayDuF97uFyrKw42
-        v395Ja4fJF4UKFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
-        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
-        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Ay8YkqqCH-K2_mfhOScyiulCGxVdokYl
+X-Proofpoint-ORIG-GUID: Ay8YkqqCH-K2_mfhOScyiulCGxVdokYl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-15_06,2023-06-14_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=804
+ priorityscore=1501 mlxscore=0 impostorscore=0 bulkscore=0 suspectscore=0
+ lowpriorityscore=0 clxscore=1015 phishscore=0 malwarescore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306150077
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The IPQ5018 is Qualcomm's 802.11ax SoC for Routers,
+Gateways and Access Points.
 
-在 2023/06/15 16:17, Xiao Ni 写道:
->> Thanks for the example. I can understand the usage of it. It's the
->> side effect that removes the mutex protection for idle_sync_thread.
->>
->> There is a problem. New sync thread is started in md_check_recovery.
->> After your patch, md_reap_sync_thread is called in md_check_recovery
->> too. So it looks like they can't happen at the same time?
+This series adds minimal board boot support for ipq5018-rdp432-c2 board.
 
-Of course they can't. md_check_recovery() can only do one thing at a
-time.
+[v10]  Dropped patches 3,4 for pinctrl (was picked by Linus)
+       Fixed hex number style in patch 2 as per Konrad's comments.
 
-> 
-> After thinking a while, there is still a race possibility.
-> 
-> md_reap_sync_thread is called in pers deamon (e.g. raid10d ->
-> md_check_recovery) and md_check_recovery returns. Before
-> idle_sync_thread is woken, the new sync thread can be started in
-> md_check_recovery again.
-> 
-> But it's really strange, when one people echo idle to sync_action.
-> It's better to add some messages to notify the users that they need to
-> echo idle to sync_action again to have a try. Is there a way that
-> md_reap_sync_thread can wait idle_sync_thread?
+[v9]   Change only in patch 2/8
+	   Sorted the headers and cleaned the unwanted ones
+ 	   Added trailing comma for .parent_hws member
+	   Removed the hunk touching ipq5332 kconfig  (unintentionally)
 
-I don't think this is a problem, echo idle only make sure to interupt
-current sync_thread, there is no gurantee that sync_thread is not
-running after "echo idle" is done with or without this patchset, before
-this patchset, new sync thread can still start after the mutex is
-released.
+[v8]   Changed only in patch 4/8
+                Fixed Kconfig to add COMPILE_TEST and removed header of.h.
+                Instead using mod_devicetable.h. Added Linus reviewed-by
 
-User shoud "echo forzen" instead of "echo idle" if they really what to
-avoid new sync_thread to start.
+[v7]   Fixed tz reserved region size in patch 7/8
 
-Thanks,
-Kuai
-> 
-> Regards
-> Xiao
->>
->> Regards
->> Xiao
->>
->>>
->>> Thanks,
->>> Kuai
->>>
->>> --
->>> dm-devel mailing list
->>> dm-devel@redhat.com
->>> https://listman.redhat.com/mailman/listinfo/dm-devel
-> 
-> .
-> 
+[v6]   Fixed patch [4/8] pinctrl driver for rebase issue.
+
+[v5]
+       Added Reviewed-by tags from Krzysztof Kozlowski.
+       Changed patch [6/8] with [1] since its already Acked
+       Rebased patch [4/8] on top of [2] and fixed other comments
+       Fixed commit log for patch [7/8]
+       Fixed comments for patch [2/8]
+
+[1] https://patchwork.kernel.org/project/linux-arm-msm/patch/1678164097-13247-4-git-send-email-quic_mmanikan@quicinc.com/
+[2] https://lore.kernel.org/r/1683718725-14869-1-git-send-email-quic_rohiagar@quicinc.com
+
+[v4]
+       Fixed all comments for clocks, schema, dts
+       Added Reviewed-by tags.
+
+[v3]
+        Fixed all comments for clocks, schema fixes
+        Picked up Reviewed-by from Bjorn for pinctrl driver
+
+[v2]
+        Fixed all comments and rebased for TOT.
+
+Manikanta Mylavarapu (1):
+  dt-bindings: scm: Add compatible for IPQ5018
+
+Sricharan Ramabadhran (5):
+  dt-bindings: arm64: Add IPQ5018 clock and reset
+  clk: qcom: Add Global Clock controller (GCC) driver for IPQ5018
+  dt-bindings: qcom: Add ipq5018 bindings
+  arm64: dts: Add ipq5018 SoC and rdp432-c2 board support
+  arm64: defconfig: Enable IPQ5018 SoC base configs
+
+ .../devicetree/bindings/arm/qcom.yaml         |    7 +
+ .../bindings/clock/qcom,ipq5018-gcc.yaml      |   63 +
+ .../bindings/firmware/qcom,scm.yaml           |    1 +
+ arch/arm64/boot/dts/qcom/Makefile             |    1 +
+ .../arm64/boot/dts/qcom/ipq5018-rdp432-c2.dts |   72 +
+ arch/arm64/boot/dts/qcom/ipq5018.dtsi         |  250 ++
+ arch/arm64/configs/defconfig                  |    3 +
+ drivers/clk/qcom/Kconfig                      |    8 +
+ drivers/clk/qcom/Makefile                     |    1 +
+ drivers/clk/qcom/gcc-ipq5018.c                | 3724 +++++++++++++++++
+ include/dt-bindings/clock/qcom,gcc-ipq5018.h  |  183 +
+ include/dt-bindings/reset/qcom,gcc-ipq5018.h  |  122 +
+ 12 files changed, 4435 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,ipq5018-gcc.yaml
+ create mode 100644 arch/arm64/boot/dts/qcom/ipq5018-rdp432-c2.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/ipq5018.dtsi
+ create mode 100644 drivers/clk/qcom/gcc-ipq5018.c
+ create mode 100644 include/dt-bindings/clock/qcom,gcc-ipq5018.h
+ create mode 100644 include/dt-bindings/reset/qcom,gcc-ipq5018.h
+
+-- 
+2.34.1
 
