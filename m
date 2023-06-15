@@ -2,135 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86B497312BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F4037312C2
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:53:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238228AbjFOIwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 04:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38170 "EHLO
+        id S245193AbjFOIxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 04:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245380AbjFOIvx (ORCPT
+        with ESMTP id S242925AbjFOIwl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 04:51:53 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FBC297F
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:51:33 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f764e92931so2774114e87.2
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:51:33 -0700 (PDT)
+        Thu, 15 Jun 2023 04:52:41 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A612119;
+        Thu, 15 Jun 2023 01:52:40 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id 6a1803df08f44-62fe192f7d3so13698726d6.3;
+        Thu, 15 Jun 2023 01:52:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686819092; x=1689411092;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jVja41/1k/ct/J3rnto5ByFGnWpi0ILkB3E5zOeFBKU=;
-        b=iAWk4RQm/nxvDzdZ6BD1eYHh5RQ8zwCHUi68UWG/naj28Crt/P7s58xDdOASbWXTPZ
-         cVP5W/iUktOPovnVxR5ddwuvimo5hIu4AMBjNwCRCF374U1Iu+EOysMuBYLE7woajviv
-         VN9j1TPCrKFrU5i9AXczIZodH0FlvNiIAPPgU4pIRFHOXSPwsa11zx7s8NHo6Sfzc1wo
-         hQccz3XUBitZEbvnTVVlyOQsTlH6EFLIMRswpg8/EKm2HonYQm2F9P2fhsZR+6vI8aPF
-         a1Eihgi7WFzDxZq9nzR7b4raJ3m6hFTCdDhc4xsrVhpSKp6DY3d0W68x4VsRWiab+yhp
-         fy0A==
+        d=gmail.com; s=20221208; t=1686819159; x=1689411159;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SfjnL8iZVG6Mx/ONtM8yW/3rhlvTFehEBpTE84Y2bxw=;
+        b=qGGeYP2EqA9thoMoTqi4Q2aR73Z9Dik9sLkQa+TzARg+7tVn/JOoDu0V8/33lJPPZF
+         Xcjwrqcf3ETJ6Ld6b4ms4Hq+QU1QkHdXX6SCUKy3rOLgQu8dCofOr47h15QXZ5HypUKW
+         V/X1P1CMbARCXq0esUYeMVPKvUaayQoDk9mG5JEz54wO1JP23T3CcIrUs0aLD6Tz/Jgv
+         Z8uoaHOU90lQOhk/z9k72LaRxWq5j1328uBLIwVT1SHeUZ8cwH5Q52ZspDgvhKQGMygh
+         UstTcx4BWEloyE/ijfsXwMiF4gnryCgUJNYpgJgFthNBxt697ZwxThsFgh0KCXXylWep
+         6X0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686819092; x=1689411092;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jVja41/1k/ct/J3rnto5ByFGnWpi0ILkB3E5zOeFBKU=;
-        b=D+40DIwkqGmQzs8GbnD7580KgZOTMvxKy2QPsOlHbCyJmcFI6iuvjl9rbqEGeOE57k
-         ObmjTZecBVNdep0AzfeNbzU4YfH63qQGVQzybAnYCQsCF/Xx0KuJ9UjSdDsAx7wAodMj
-         phD9ELlluWam4SiAbpXhZA1b9R6VfyKIaWaLcDi6QjX/YT4jo0u5pCVQq3pOnXlcgxEd
-         IBkuZ2yTQSCLBLN8AKx4HVJ7k+YjHJsC0nM8KIbH8feIfpQGALbgG9lqlfoAy0J/JdB6
-         V5IqhVkEnlMH31s9twXSNgvEXWDLenNpgwwqEk0N2lrUTZlXEC9LKz7ru4UOryBpxzWP
-         6Uzg==
-X-Gm-Message-State: AC+VfDzbRzER9CXaPTUaU1ULed2/AaYfD9vmTLGpT+yyUHHgukOhOHQI
-        dKtKEcqoLMZso88la8qXI61tMg==
-X-Google-Smtp-Source: ACHHUZ7VHe2WrV++iaUJtNovs1B4ZmW49QMq+JKj0mOzn5qWPGwqx0f19GlyA24CPao4Vcyy3UWVhA==
-X-Received: by 2002:a05:6512:619:b0:4f7:6b5f:e43b with SMTP id b25-20020a056512061900b004f76b5fe43bmr1890198lfe.18.1686819092039;
-        Thu, 15 Jun 2023 01:51:32 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id m14-20020a19520e000000b004eb12329053sm2480580lfb.256.2023.06.15.01.51.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 01:51:31 -0700 (PDT)
-Message-ID: <1ab63d4b-6358-ce08-818a-b5751f88cdde@linaro.org>
-Date:   Thu, 15 Jun 2023 10:51:30 +0200
+        d=1e100.net; s=20221208; t=1686819159; x=1689411159;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SfjnL8iZVG6Mx/ONtM8yW/3rhlvTFehEBpTE84Y2bxw=;
+        b=jCPlvAlLgkg36xRE/qH9GFk0DnqN7XspEwHz5XmKktolwZTsN7bfx6CW0T4K/MGgW1
+         wxym8GrFYY4C1m/GEAFQm0zV6aXyFQcA7UM8CFLwqQJJJK3fzZbhe84S94y54mFDNzuq
+         uz0Mk7RuPz46tz57KxqhZXyInl32UlVEscPOlK9VeM/Bn1jWECp7QcmZ/Mg74StXnfN4
+         dM7bjyaNAwn0ohdvPcn/PXrpL9a3NoJj8jiPC7xOiMtxCa9+2TgiOZU++gdOSOJ59zmM
+         V2kAF6rE0pifJmer6iCvs41VF5yZbQ3+vffsgE5H0o/G2hDXjcc21b7mH2vxyaLFI/MC
+         CDhA==
+X-Gm-Message-State: AC+VfDz3EpAI5zj6cAm42h+EsJOWFWoSj1LJlgOPgcyRzzYhcVxVCpW3
+        ImfBcWljrKDYqwM+fFrUq86TkV1N6eAps8b5rYw=
+X-Google-Smtp-Source: ACHHUZ6IcYdulXvN18UCcZg+7iapzcqX0Q5SI+J6hOPF0kIcL4+i2Bk+Nq3p0q7rgnUWz0P881kOqrrUqQX10SKQvDI=
+X-Received: by 2002:a05:6214:d8a:b0:62d:fa7c:6b8c with SMTP id
+ e10-20020a0562140d8a00b0062dfa7c6b8cmr7305635qve.37.1686819159644; Thu, 15
+ Jun 2023 01:52:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] arm64: dts: qcom: ipq9574: Use assigned-clock-rates for
- QUP I2C core clks
-Content-Language: en-US
-To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
-        quic_kathirav@quicinc.com, quic_anusha@quicinc.com
-References: <20230615084841.12375-1-quic_devipriy@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230615084841.12375-1-quic_devipriy@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230614231446.3687-1-andriy.shevchenko@linux.intel.com>
+ <20230614231446.3687-4-andriy.shevchenko@linux.intel.com> <CACRpkdbv=9YX145=oH88bLS4d=J1xYWc_NGEN=KW0duJ38tUVg@mail.gmail.com>
+In-Reply-To: <CACRpkdbv=9YX145=oH88bLS4d=J1xYWc_NGEN=KW0duJ38tUVg@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 15 Jun 2023 11:52:03 +0300
+Message-ID: <CAHp75Vc9Ra4_rRhtScDrNqV0SJPNf-MDF_yksbKoYnTDuYeAxg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] gpio: aggregator: Set up a parser of delay line parameters
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andy@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15.06.2023 10:48, Devi Priya wrote:
-> Use assigned-clock-rates property for configuring the QUP I2C core clocks
-> to operate at nominal frequency.
-> 
-> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
-> ---
-There's probably some logic behind this, and it almost sounds like
-it'd be fitting to introduce an OPP table for I2C hosts, especially
-given the voltage requirements.
+On Thu, Jun 15, 2023 at 9:37=E2=80=AFAM Linus Walleij <linus.walleij@linaro=
+.org> wrote:
+> On Thu, Jun 15, 2023 at 1:14=E2=80=AFAM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+>
+> > The aggregator mode can also handle properties of the platform,
+> > that do not belong to the GPIO controller itself. One of such
+> > a property is a signal delay line. Set up a parser to support it.
+> >
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>
+> I guess this is one of those instances where we actually need some OF-spe=
+cific
+> code for parsing the special case, and other HW descriptions will need
+> other special code. It's fine for non-trivial stuff I think.
 
-Konrad
->  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> index 0baeb10bbdae..78bf7f9c455a 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> @@ -361,6 +361,8 @@
->  			clocks = <&gcc GCC_BLSP1_QUP2_I2C_APPS_CLK>,
->  				 <&gcc GCC_BLSP1_AHB_CLK>;
->  			clock-names = "core", "iface";
-> +			assigned-clocks = <&gcc GCC_BLSP1_QUP2_I2C_APPS_CLK>;
-> +			assigned-clock-rates = <50000000>;
->  			dmas = <&blsp_dma 14>, <&blsp_dma 15>;
->  			dma-names = "tx", "rx";
->  			status = "disabled";
-> @@ -389,6 +391,8 @@
->  			clocks = <&gcc GCC_BLSP1_QUP3_I2C_APPS_CLK>,
->  				 <&gcc GCC_BLSP1_AHB_CLK>;
->  			clock-names = "core", "iface";
-> +			assigned-clocks = <&gcc GCC_BLSP1_QUP3_I2C_APPS_CLK>;
-> +			assigned-clock-rates = <50000000>;
->  			dmas = <&blsp_dma 16>, <&blsp_dma 17>;
->  			dma-names = "tx", "rx";
->  			status = "disabled";
-> @@ -417,6 +421,8 @@
->  			clocks = <&gcc GCC_BLSP1_QUP4_I2C_APPS_CLK>,
->  				 <&gcc GCC_BLSP1_AHB_CLK>;
->  			clock-names = "core", "iface";
-> +			assigned-clocks = <&gcc GCC_BLSP1_QUP4_I2C_APPS_CLK>;
-> +			assigned-clock-rates = <50000000>;
->  			dmas = <&blsp_dma 18>, <&blsp_dma 19>;
->  			dma-names = "tx", "rx";
->  			status = "disabled";
-> @@ -446,6 +452,8 @@
->  			clocks = <&gcc GCC_BLSP1_QUP5_I2C_APPS_CLK>,
->  				 <&gcc GCC_BLSP1_AHB_CLK>;
->  			clock-names = "core", "iface";
-> +			assigned-clocks = <&gcc GCC_BLSP1_QUP5_I2C_APPS_CLK>;
-> +			assigned-clock-rates = <50000000>;
->  			dmas = <&blsp_dma 20>, <&blsp_dma 21>;
->  			dma-names = "tx", "rx";
->  			status = "disabled";
+Actually if you look into IIO, the xlate there is fwnode specific
+nowadays and theoretically the specifics of OF can be parsed in ACPI
+as well. I would like to get rid of OF_GPIO completely, but let's
+see...
+
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+
+Thank you!
+
+--=20
+With Best Regards,
+Andy Shevchenko
