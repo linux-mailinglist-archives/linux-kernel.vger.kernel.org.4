@@ -2,145 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A41CC730D99
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 05:35:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 726C6730DA3
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 05:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237338AbjFODel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 23:34:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48396 "EHLO
+        id S238012AbjFODmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 23:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237612AbjFODec (ORCPT
+        with ESMTP id S236392AbjFODmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 23:34:32 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FFB42702;
-        Wed, 14 Jun 2023 20:34:29 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QhSZn5RL6z4wjB;
-        Thu, 15 Jun 2023 13:34:25 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1686800067;
-        bh=YpcS1BrLjvGbDxUqeoV3otHCJ3+/0YDjxYK8icm+ysA=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=eEFN1zC7xAn1Wr3Kit71RQEzhLSL4SIBGcM6Ixe1KFqmhMEDomwzMDGJd3HwTL8zN
-         Z5SzsEAPWzmB9tToxQgSaEVOZXcEQR7leaAQGQjisqMEYiBBeqWsC5xWKqS8nyBQLS
-         pZzn7lqvIK5M7QTIjRhq5k3woxwBsVmXj1ytVeSX3L8BgOr6n2Y9Xmg03KpI+lVpeE
-         ZQAqJIHwBFhFhWRd2V6IMzeNMrigU4PNW1gqmzYWbgPI4yfBONTfaDdJaTx2Ggqek4
-         HbDECZQGZ/n1t7b6XWR17o8sR8f4D6jNZpL9A5ut0u3lqw1gvXjyrzPclYoftupZAa
-         PNxDjHn73WIPw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Eric DeVolder <eric.devolder@oracle.com>, linux@armlinux.org.uk,
-        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
-        geert@linux-m68k.org, tsbogend@alpha.franken.de,
-        James.Bottomley@HansenPartnership.com, deller@gmx.de,
-        ysato@users.sourceforge.jp, dalias@libc.org,
-        glaubitz@physik.fu-berlin.de, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, 86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org
-Cc:     kernel@xen0n.name, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, hpa@zytor.com, keescook@chromium.org,
-        paulmck@kernel.org, peterz@infradead.org, frederic@kernel.org,
-        akpm@linux-foundation.org, ardb@kernel.org,
-        samitolvanen@google.com, juerg.haefliger@canonical.com,
-        arnd@arndb.de, rmk+kernel@armlinux.org.uk,
-        linus.walleij@linaro.org, sebastian.reichel@collabora.com,
-        rppt@kernel.org, kirill.shutemov@linux.intel.com,
-        anshuman.khandual@arm.com, ziy@nvidia.com, masahiroy@kernel.org,
-        ndesaulniers@google.com, mhiramat@kernel.org, ojeda@kernel.org,
-        thunder.leizhen@huawei.com, xin3.li@intel.com, tj@kernel.org,
-        gregkh@linuxfoundation.org, tsi@tuyoix.net, bhe@redhat.com,
-        hbathini@linux.ibm.com, sourabhjain@linux.ibm.com,
-        eric.devolder@oracle.com, boris.ostrovsky@oracle.com,
-        konrad.wilk@oracle.com
-Subject: Re: [PATCH v1 10/21] powerpc/kexec: refactor for kernel/Kconfig.kexec
-In-Reply-To: <20230612172805.681179-11-eric.devolder@oracle.com>
-References: <20230612172805.681179-1-eric.devolder@oracle.com>
- <20230612172805.681179-11-eric.devolder@oracle.com>
-Date:   Thu, 15 Jun 2023 13:34:25 +1000
-Message-ID: <87fs6tflfi.fsf@mail.lhotse>
+        Wed, 14 Jun 2023 23:42:07 -0400
+Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D70191;
+        Wed, 14 Jun 2023 20:42:06 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0Vl8rmkW_1686800519;
+Received: from 30.221.149.117(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0Vl8rmkW_1686800519)
+          by smtp.aliyun-inc.com;
+          Thu, 15 Jun 2023 11:42:02 +0800
+Message-ID: <c8494676-25f8-72de-3279-70d49b74a91c@linux.alibaba.com>
+Date:   Thu, 15 Jun 2023 11:41:58 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH v3 2/7] perf metric: Event "Compat" value supports
+ matching multiple identifiers
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     John Garry <john.g.garry@oracle.com>,
+        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        Zhuo Song <zhuo.song@linux.alibaba.com>
+References: <1685438374-33287-1-git-send-email-renyu.zj@linux.alibaba.com>
+ <1685438374-33287-3-git-send-email-renyu.zj@linux.alibaba.com>
+ <c1d8ee9b-4839-1011-4dad-c4777d8f8224@oracle.com>
+ <452e724b-2a2c-52fd-274b-60db7a7f730e@linux.alibaba.com>
+ <c4b2fca8-602d-9c76-90a7-3eafd92da8bc@oracle.com>
+ <76fcb062-61a8-5f90-b39d-b5fb6da35652@linux.alibaba.com>
+ <ZH452mAFn1uNo4NF@kernel.org>
+From:   Jing Zhang <renyu.zj@linux.alibaba.com>
+In-Reply-To: <ZH452mAFn1uNo4NF@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eric DeVolder <eric.devolder@oracle.com> writes:
 
-> The kexec and crash kernel options are provided in the common
-> kernel/Kconfig.kexec. Utilize the common options and provide
-> the ARCH_HAS_ and ARCH_SUPPORTS_ entries to recreate the
-> equivalent set of KEXEC and CRASH options.
->
-> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
-> Reviewed-by: Sourabh Jain <sourabhjain@linux.ibm.com>
-> ---
->  arch/powerpc/Kconfig | 55 ++++++++++++++------------------------------
->  1 file changed, 17 insertions(+), 38 deletions(-)
->
-> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> index bff5820b7cda..36f2fe0cc8a5 100644
-> --- a/arch/powerpc/Kconfig
-> +++ b/arch/powerpc/Kconfig
-> @@ -588,41 +588,21 @@ config PPC64_SUPPORTS_MEMORY_FAILURE
->  	default "y" if PPC_POWERNV
->  	select ARCH_SUPPORTS_MEMORY_FAILURE
->  
-> -config KEXEC
-> -	bool "kexec system call"
-> -	depends on PPC_BOOK3S || PPC_E500 || (44x && !SMP)
-> -	select KEXEC_CORE
-> -	help
-> -	  kexec is a system call that implements the ability to shutdown your
-> -	  current kernel, and to start another kernel.  It is like a reboot
-> -	  but it is independent of the system firmware.   And like a reboot
-> -	  you can start any kernel with it, not just Linux.
-> -
-> -	  The name comes from the similarity to the exec system call.
-> -
-> -	  It is an ongoing process to be certain the hardware in a machine
-> -	  is properly shutdown, so do not be surprised if this code does not
-> -	  initially work for you.  As of this writing the exact hardware
-> -	  interface is strongly in flux, so no good recommendation can be
-> -	  made.
-> -
-> -config KEXEC_FILE
-> -	bool "kexec file based system call"
-> -	select KEXEC_CORE
-> -	select HAVE_IMA_KEXEC if IMA
-> -	select KEXEC_ELF
-> -	depends on PPC64
-> -	depends on CRYPTO=y
-> -	depends on CRYPTO_SHA256=y
-...
-> +
-> +config ARCH_HAS_KEXEC_FILE
-> +	def_bool PPC64 && CRYPTO && CRYPTO_SHA256
 
-The =y's got lost here.
+在 2023/6/6 上午3:39, Arnaldo Carvalho de Melo 写道:
+> Em Mon, Jun 05, 2023 at 10:46:36AM +0800, Jing Zhang escreveu:
+>> 在 2023/6/3 上午12:20, John Garry 写道:
+>>> On 01/06/2023 09:58, Jing Zhang wrote:
+>>>> It can match identifiers "arm_cmn600_{0,1,2..X}" or "arm_cmn650_{0,1,2..X}" or "arm_cmn700_{0,1,2..X}" or "arm_ci700_{ 0,1,2..X}".
+>>>> In other words, it can match all identifiers prefixed with “arm_cmn600” or “arm_cmn650” or “arm_cmn700” or “arm_ci700”.
+>>>>
+>>>> If a new model arm_cmn driver with identifier "arm_cmn750_0", it will not be matched, but if a new revision arm_cmn driver with identifier
+>>>> "arm_cmn700_4", it can be matched.
+>>>
+>>> OK, I see what you mean. My confusion came about though your commit message on this same patch, which did not mention cmn650. I assumed that the example event which you were describing was supported for arm_cmn650 and you intentionally omitted it.
+>>>
+>>
+>> Yes, I didn't write cmn650 in the commit message, just because I omitted it. I will add it in a later version.
+> 
+> Ok, will wait for v4 then.
+> 
+> - Arnaldo
 
-I think they were both meaningful, because both options are tristate. So
-this previously required them to be built-in (=y), whereas after your
-patch it will allow them to be modules.
+Hi Arnaldo,
 
-I don't know for sure that those options need to be built-in, but that's
-what the code does now, so this patch shouldn't change it, at least
-without an explanation.
+Thank you for following up this patchset, maybe we can merge patch4 to patch7 into your branch first?
+They have all been reviewed/acked and there is no dispute. And patch4-7 does not depend on patch1-3,
+because patch4-7 is about the metric of ali_drw_pmu, and patch1-3 is about the metric of arm_cmn.
+It may take some time for patch1-3 to reach a consensus.
 
-cheers
+Thanks，
+Jing
