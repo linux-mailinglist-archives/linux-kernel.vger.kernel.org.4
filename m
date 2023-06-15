@@ -2,264 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C47C730C90
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 03:26:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97CF0730C93
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 03:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236068AbjFOBZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 21:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37096 "EHLO
+        id S236396AbjFOB05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 21:26:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjFOBZU (ORCPT
+        with ESMTP id S234019AbjFOB0x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 21:25:20 -0400
-Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B19A212D
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 18:25:15 -0700 (PDT)
-X-QQ-mid: bizesmtp70t1686792281tjip6eld
-Received: from localhost.localdomain ( [113.200.76.118])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 15 Jun 2023 09:24:40 +0800 (CST)
-X-QQ-SSF: 01400000000000D0H000000A0000020
-X-QQ-FEAT: iDzLjIm7mlbD7xs52j67WUD2pB0x3VsRV5ZisNLhsvuZpmeqaA5RV2ut9+ntW
-        zqllNjWbzu4wehBM9vXKTvfxsnTG9eJocR+q4nzDZkNUKBVIFRigC5rzUlPkgy60JVsglFw
-        i0Mp78Aga9YTbuni3V0G1PxTZFUJkA713T536YRZSx90bspHzSeNLpie+TL1SnSBKi2E3Bw
-        JUzOyJcurDm0MbBZykdrDRTZQrZ3CBseEfL+f0OMnI7c1ItpQ8OdphyHFDJz+NbiS0o6Nqu
-        D5O2RnTdlWx4/ZWWN3fiI5gXD/jVLDbYfkpRcm3MBNUAo8lRMTAB1HXgH1S5aah4kFlpK/n
-        hiLyOlmVItsK58QebeHolN7IQpmbMU6+VpbD3k95B3Xib9wCOsJ277a8jV2le+I2HmBIFCI
-        hmSuinntnfQ=
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 9483928106816243483
-From:   Guo Hui <guohui@uniontech.com>
-To:     peterz@infradead.org, mingo@redhat.com, will@kernel.org,
-        longman@redhat.com, boqun.feng@gmail.com
-Cc:     linux-kernel@vger.kernel.org, wangxiaohua@uniontech.com,
-        Guo Hui <guohui@uniontech.com>
-Subject: [PATCH] locking/osq_lock: Fix false sharing of optimistic_spin_node in osq_lock
-Date:   Thu, 15 Jun 2023 09:24:37 +0800
-Message-Id: <20230615012437.21087-1-guohui@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Wed, 14 Jun 2023 21:26:53 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1B426A6
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 18:26:52 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-544c0d768b9so5173013a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 18:26:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686792411; x=1689384411;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1wdQ4hMB3hMS0E+Dw9a/ZO6zl9PRKqCaZb3GUi1TdKI=;
+        b=PrHKGOCHbRXNdSaYeoH7o9qGme3TbtaEHWITt0X7F8NfAApQQkmc1dIPrkq6NfG0Do
+         YUKBoHm8rn0MpLQjL/QyQpzHhpthqRr50d0N7JBFTRL1jYIOrFckNy7CokvsdHdTyBSk
+         Jtud8z1dw9FV4rCJCF5fb0jaH4B7io+0Idw+MJ4wcsxxiLgtl7ewcUxpwUx1tAPccDci
+         Tk0dYm7I/Eg/SGeqjX7iKBx77LhcaFMkACA8MmEX+bLg+en2mZJiRuCHRF+5bU1o+TId
+         CanL0F+nDfR4nWlv8VhQAjSNm1PHtWJodEaLUyJ8lfxHubWQM1U8waxhjQn+YRahWKj1
+         GIqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686792411; x=1689384411;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1wdQ4hMB3hMS0E+Dw9a/ZO6zl9PRKqCaZb3GUi1TdKI=;
+        b=F0pg7sR6Yemn8J3oybFVrBkR6n3Y70SgykwxlRvb3DyTEdWPVCWRZRWNxeN8YB7sJH
+         B1nwtuq4bvA9ltWP3yvKjMFTV+TeYPtrWTRyrKeoutDk1SzQU+Tfvx9N9331xl0xgO+J
+         1/UiCzF/g8Qx/XenT6FS5ZigODSepcmpidnK9LgiVu9kIrtsg2xrkVlchYG+5lls2T1v
+         IUuKvMaaXlChpXRKAUD6ujHB4Dp+3HFCHn7nTVIDx00vcwTj5WnkqkQ4EgYKMAY3B86W
+         Xdya7GXLHIEqk8WXEV3din9AHKqHLqYhVGc99lP7NCwmBqwPhMey8qHy9wP77RCJOPIU
+         Kyww==
+X-Gm-Message-State: AC+VfDyN/C+Z49zYfeaJklhLRediZr1qG31ls9rr0ikoPPwMjiU+Wnam
+        SPIbORPgDq5JDGNXbaY57bYdtVmtSROb1zVPyCsjMg/1
+X-Google-Smtp-Source: ACHHUZ6X2rgbf5Oc9PcPxODJMLRh5TJDx7TL5LoTuVoB7Bt9V0A+4kfk+/VHsYVQFMPVY+tASAE7XQ==
+X-Received: by 2002:a05:6a21:6811:b0:118:b2e1:9adb with SMTP id wr17-20020a056a21681100b00118b2e19adbmr3114281pzb.61.1686792411552;
+        Wed, 14 Jun 2023 18:26:51 -0700 (PDT)
+Received: from leoy-huanghe.lan ([39.144.43.103])
+        by smtp.gmail.com with ESMTPSA id h25-20020aa786d9000000b0065055ad5754sm415054pfo.64.2023.06.14.18.26.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 18:26:51 -0700 (PDT)
+Date:   Thu, 15 Jun 2023 09:26:39 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-perf-users@vger.kernel.org, broonie@kernel.org,
+        Aishwarya.TCV@arm.com, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] perf tools: Add a place to put kernel config
+ fragments for test runs
+Message-ID: <20230615012546.GN217089@leoy-huanghe.lan>
+References: <20230614140219.2335639-1-james.clark@arm.com>
+ <ZInLBt9q2F99gTg8@kernel.org>
+ <d02cce4a-47b1-a776-0d3a-a6a7c9a4d8fd@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybglogicsvrsz:qybglogicsvrsz4a-0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d02cce4a-47b1-a776-0d3a-a6a7c9a4d8fd@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the performance of osq_lock,
-I have made a patch before:
+On Wed, Jun 14, 2023 at 03:19:12PM +0100, James Clark wrote:
+> On 14/06/2023 15:13, Arnaldo Carvalho de Melo wrote:
+> > Em Wed, Jun 14, 2023 at 03:02:19PM +0100, James Clark escreveu:
+> >> We are currently keeping something like this in our CI because defconfig
+> >> doesn't give full coverage. It's not complete yet, but is a starting
+> >> point as a place to add to when a specific test needs something extra to
+> >> run.
+> >>
+> >> The RFC is for discussion on folder placement and file naming etc.
 
-https://lore.kernel.org/lkml/20220628161251.21950-1-guohui@uniontech.com/
+I am wandering if we can put these configurations into kselftest (the
+folder tools/testing/selftests/).  You could see now kernel build has
+already provided option to merge kernel configurations for kselftests.
 
-the analysis conclusion is due to the memory access
-of the following code caused performance degradation:
+> > Would be interesting to add the Kconfig maintainer to see if they have
+> > an opinion, Masahiro?
 
-cpu = node->cpu - 1;
+Yeah, looking forward suggestions from Masahiro.
 
-The instructions corresponding to the C code are:
-mov 0x14(%rax),%edi
-sub $0x1,%edi
+> > - Arnaldo
+> >  
+> 
+> One concern I have is that uname -m gives a different result to the
+> ARCH= option for a kernel build (ARCH=arm64). Probably the build time
+> version is more useful to us so maybe that should be the file name.
 
-in the X86 operating environment,
-causing high cache-misses and degrading performance.
+If we want to fit into kernel's build system, I'd like to use "arm64"
+rather than "aarch64" as the folder name.
 
-The memory access instructions that cause performance degradation are
-further analyzed.The cache-misses of the above instructions are caused
-by a large number of cache-line false sharing
-when accessing non-local-CPU variables,as follows:
+Seems to me, it is a legacy issue for using "arm64" as ARCH variable in
+Makefile, given we cannot change this, then the folder name 'arm64' would
+be easier for us to extend kernel's Makefile for building kernel of perf
+testing?
 
-         ---------------------------------
-         |   struct optimistic_spin_node |
-         ---------------------------------
-         | next | prev | locked |  cpu   |
-         ---------------------------------
-         |        cache line             |
-         ---------------------------------
-         |          CPU0                 |
-         ---------------------------------
+> Not sure what the x86 version is or if anyone is actually doing cross x86
+> builds...
 
-When a CPU other than CPU0 reads the value of
-optimistic_spin_node->cpu of CPU0,CPU0 frequently modifies
-the data of the cache line,which will cause false sharing
-on the currently accessing CPU,and the variable of
-the structure optimistic_spin_node type will be
-defined as a cacheline alignmented per cpu variable,
-each optimistic_spin_node variable is bound to the corresponding CPU core:
+I don't understand this question and not sure if you are asking cross
+builds for kernel or perf.  Maybe a good reference for arch naming is
+the file scripts/subarch.include.
 
-    DEFINE_PER_CPU_SHARED_ALIGNED(struct optimistic_spin_node, osq_node);
+Thanks,
+Leo
 
-Therefore, the value of optimistic_spin_node->cpu is usually unchanged,
-so the false sharing caused by access to optimistic_spin_node->cpu
-is caused by frequent modification of the other three attributes
-of optimistic_spin_node.
-
-There are two solutions as follows:
-
-solution 1:
-Put the cpu attribute of optimistic_spin_node into a cacheline separately.
-The patch is as follows：
-
- struct optimistic_spin_node {
-        struct optimistic_spin_node *next, *prev;
-        int locked; /* 1 if lock acquired */
--       int cpu; /* encoded CPU # + 1 value */
-+       int cpu ____cacheline_aligned; /* encoded CPU # + 1 value */
- };
-
-Unixbench full-core performance data is as follows:
-Machine: Hygon X86, 128 cores
-                                    with patch   without patch  promote
-Dhrystone 2 using register variables   194923.07    195091      -0.09%
-Double-Precision Whetstone             79885.47     79838.87    +0.06%
-Execl Throughput                       2327.17      2272.1      +2.42%
-File Copy 1024 bufsize 2000 maxblocks  742.1        687.53      +7.94%
-File Copy 256 bufsize 500 maxblocks    462.73       428.03      +8.11%
-File Copy 4096 bufsize 8000 maxblocks  1600.37      1520.53     +5.25%
-Pipe Throughput                        79815.33     79522.13    +0.37%
-Pipe-based Context Switching           28962.9      27987.8     +3.48%
-Process Creation                       3084.4       2999.1      +2.84%
-Shell Scripts 1 concurrent             11687.1      11394.67    +2.57%
-Shell Scripts 8 concurrent             10787.1      10496.17    +2.77%
-System Call Overhead                   4322.77      4322.23     +0.01%
-System Benchmarks Index Score          8079.4       7848.37     +3.0%
-
-solution 2:
-The core idea of osq lock is that
-the lock applicant spins on the local-CPU variable
-to eliminate cache-line bouncing.Therefore,
-the same method is used for the above degradation.
-For the optimistic_spin_node of the current CPU,
-the cpu attribute of its predecessor optimistic_spin_node is
-non-local-CPU variables,the cpu attribute of
-the predecessor optimistic_spin_node is cached
-in the optimistic_spin_node of the current CPU
-to eliminate performance degradation
-caused by non-local-CPU variable access, as follows:
-
-        bool osq_lock(struct optimistic_spin_queue *lock)
-        {
-                [... ...]
-
-                node->prev = prev;
-                node->prev_cpu = prev->cpu; --------------- A
-
-                [... ...]
-
-                WRITE_ONCE(next->prev, prev);
-                WRITE_ONCE(prev->next, next);
-                WRITE_ONCE(next->prev_cpu, prev->cpu); -------------- B
-
-                [... ...]
-        }
-
-        static inline int node_cpu(struct optimistic_spin_node *node)
-        {
-                return node->prev_cpu - 1; ----------------------------- C
-        }
-
-While setting the prev attribute of the optimistic_spin_node of
-the current CPU,the current patch also caches the prev cpu attribute
-in the prev_cpu attribute of the optimistic_spin_node of the current CPU,
-as in the above code lines A and B,where node is a per cpu variable,
-so each one node corresponds to a CPU core,and the cpu attribute of
-the node corresponding to the CPU core will not change.
-Only when the prev attribute of the node is set,
-the prev_cpu of the node may change with the change of prev.
-At other times, the prev attribute of the node will not change.
-so the prev_cpu of node will not change.
-This patch greatly reduces the non-local-CPU variable
-access at code line C and improves performance.
-
-Unixbench full-core performance data is as follows:
-Machine: Hygon X86, 128 cores
-                                    with patch   without patch   promote
-Dhrystone 2 using register variables  194818.7     195091        -0.14%
-Double-Precision Whetstone            79847.57     79838.87      +0.01%
-Execl Throughput                      2372.83      2272.1        +4.43%
-File Copy 1024 bufsize 2000 maxblocks 765          687.53        +11.27%
-File Copy 256 bufsize 500 maxblocks   472.13       428.03        +10.30%
-File Copy 4096 bufsize 8000 maxblocks 1658.13      1520.53       +9.05%
-Pipe Throughput                       79634.17     79522.13      +0.14%
-Pipe-based Context Switching          28584.7      27987.8       +2.13%
-Process Creation                      3020.27      2999.1        +0.71%
-Shell Scripts 1 concurrent            11890.87     11394.67      +4.35%
-Shell Scripts 8 concurrent            10912.9      10496.17      +3.97%
-System Call Overhead                  4320.63      4322.23       -0.04%
-System Benchmarks Index Score         8144.43      7848.37       +4.0%
-
-In summary, the performance of solution 2 is better than solution 1.
-Especially use cases: execl, file copy, shell1, shell8,
-great improvement,because solution 1 still has the possibility of
-remote memory access across NUMA nodes,
-and solution 2 completely accesses local-CPU variables,
-so solution 2 is better than solution 1.
-
-Both solutions also have a great improvement in the X86 virtual machine.
-
-The current patch also uses solution 2.
-
-Signed-off-by: Guo Hui <guohui@uniontech.com>
----
- include/linux/osq_lock.h  | 1 +
- kernel/locking/osq_lock.c | 6 ++++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/include/linux/osq_lock.h b/include/linux/osq_lock.h
-index 5581dbd3bd34..8a1bb36f4a07 100644
---- a/include/linux/osq_lock.h
-+++ b/include/linux/osq_lock.h
-@@ -10,6 +10,7 @@ struct optimistic_spin_node {
- 	struct optimistic_spin_node *next, *prev;
- 	int locked; /* 1 if lock acquired */
- 	int cpu; /* encoded CPU # + 1 value */
-+	int prev_cpu; /* Only for optimizing false sharing */
- };
- 
- struct optimistic_spin_queue {
-diff --git a/kernel/locking/osq_lock.c b/kernel/locking/osq_lock.c
-index d5610ad52b92..bdcd216b73c4 100644
---- a/kernel/locking/osq_lock.c
-+++ b/kernel/locking/osq_lock.c
-@@ -24,7 +24,7 @@ static inline int encode_cpu(int cpu_nr)
- 
- static inline int node_cpu(struct optimistic_spin_node *node)
- {
--	return node->cpu - 1;
-+	return node->prev_cpu - 1;
- }
- 
- static inline struct optimistic_spin_node *decode_cpu(int encoded_cpu_val)
-@@ -110,6 +110,7 @@ bool osq_lock(struct optimistic_spin_queue *lock)
- 
- 	prev = decode_cpu(old);
- 	node->prev = prev;
-+	node->prev_cpu = prev->cpu;
- 
- 	/*
- 	 * osq_lock()			unqueue
-@@ -141,7 +142,7 @@ bool osq_lock(struct optimistic_spin_queue *lock)
- 	 * polling, be careful.
- 	 */
- 	if (smp_cond_load_relaxed(&node->locked, VAL || need_resched() ||
--				  vcpu_is_preempted(node_cpu(node->prev))))
-+				  vcpu_is_preempted(node_cpu(node))))
- 		return true;
- 
- 	/* unqueue */
-@@ -200,6 +201,7 @@ bool osq_lock(struct optimistic_spin_queue *lock)
- 
- 	WRITE_ONCE(next->prev, prev);
- 	WRITE_ONCE(prev->next, next);
-+	WRITE_ONCE(next->prev_cpu, prev->cpu);
- 
- 	return false;
- }
--- 
-2.20.1
-
+> >> Signed-off-by: James Clark <james.clark@arm.com>
+> >> ---
+> >>  tools/perf/tests/config-fragments/README  |  7 +++++++
+> >>  tools/perf/tests/config-fragments/aarch64 |  1 +
+> >>  tools/perf/tests/config-fragments/config  | 11 +++++++++++
+> >>  3 files changed, 19 insertions(+)
+> >>  create mode 100644 tools/perf/tests/config-fragments/README
+> >>  create mode 100644 tools/perf/tests/config-fragments/aarch64
+> >>  create mode 100644 tools/perf/tests/config-fragments/config
+> >>
+> >> diff --git a/tools/perf/tests/config-fragments/README b/tools/perf/tests/config-fragments/README
+> >> new file mode 100644
+> >> index 000000000000..e816cfb1b96d
+> >> --- /dev/null
+> >> +++ b/tools/perf/tests/config-fragments/README
+> >> @@ -0,0 +1,7 @@
+> >> +This folder is for kernel config fragments that can be merged with
+> >> +defconfig to give full test coverage of a perf test run. This is only
+> >> +an optimistic set as some features require hardware support in order to
+> >> +pass and not skip.
+> >> +
+> >> +'config' is shared across all platforms, and for arch specific files,
+> >> +the file name should match that returned by 'uname -m'.
+> >> diff --git a/tools/perf/tests/config-fragments/aarch64 b/tools/perf/tests/config-fragments/aarch64
+> >> new file mode 100644
+> >> index 000000000000..64c4ab17cd58
+> >> --- /dev/null
+> >> +++ b/tools/perf/tests/config-fragments/aarch64
+> >> @@ -0,0 +1 @@
+> >> +CONFIG_CORESIGHT_SOURCE_ETM4X=y
+> >> diff --git a/tools/perf/tests/config-fragments/config b/tools/perf/tests/config-fragments/config
+> >> new file mode 100644
+> >> index 000000000000..c340b3195fca
+> >> --- /dev/null
+> >> +++ b/tools/perf/tests/config-fragments/config
+> >> @@ -0,0 +1,11 @@
+> >> +CONFIG_TRACEPOINTS=y
+> >> +CONFIG_STACKTRACE=y
+> >> +CONFIG_NOP_TRACER=y
+> >> +CONFIG_RING_BUFFER=y
+> >> +CONFIG_EVENT_TRACING=y
+> >> +CONFIG_CONTEXT_SWITCH_TRACER=y
+> >> +CONFIG_TRACING=y
+> >> +CONFIG_GENERIC_TRACER=y
+> >> +CONFIG_FTRACE=y
+> >> +CONFIG_FTRACE_SYSCALLS=y
+> >> +CONFIG_BRANCH_PROFILE_NONE=y
+> >> -- 
+> >> 2.34.1
+> >>
+> > 
