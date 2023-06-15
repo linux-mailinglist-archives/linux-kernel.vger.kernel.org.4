@@ -2,89 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8E197311F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:20:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC347311FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236134AbjFOIU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 04:20:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49506 "EHLO
+        id S243960AbjFOIVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 04:21:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230382AbjFOITq (ORCPT
+        with ESMTP id S244424AbjFOIUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 04:19:46 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00DBA2705
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:19:44 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-bb15165ba06so1444305276.2
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:19:44 -0700 (PDT)
+        Thu, 15 Jun 2023 04:20:54 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7421213F;
+        Thu, 15 Jun 2023 01:20:43 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-bd744ffc263so1466018276.3;
+        Thu, 15 Jun 2023 01:20:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686817184; x=1689409184;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kPYb8xZ11ehlA8iHgxMBfKPx2ZdrMHP8TOi5kQI8lnU=;
-        b=ve02OQgvrgACzdGnixmSDsHQ/NVgFVgm+6gUgTFb4oKsHmoTL5G1a+wpvd3PrWTAuX
-         KfmwEz2o59mBkWAmxIaZXJur6yCRQbuHNFSdFaHlpbnBaw68ZRnQQOkt9zeMKyxOWOzb
-         EGBATHN0yhT05iFZPnIPOYxcAC21rLdedpsukcAeoK5CQ0Rv4nwmXrONe+M/Gx5ybODq
-         p1cksF7WAp0vL1aCwovPUEZ55JKlSN9XV8dJRffmlqWsth481T60lorRW5eO1DnT9ZQC
-         ruYia8NVX3GD0+hy24prv+NzjL6pJdB48yoH8GdTjZbjzf9VX+ts5mNtjI0D5KVs6M4B
-         yQ1w==
+        d=gmail.com; s=20221208; t=1686817243; x=1689409243;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z+g1EITlpyKqSTNS66gSjpFolTiPe57pV55f5skYdlk=;
+        b=kPeNuOVaNVXIRJd9crDCP1FTb0Cs/gxo20VHoVU4zinJgQfhdUGCgvHLXIPjx1LkuZ
+         z+CfqoYGkCRbgxUN/NrL5KQJrFtiPy688H6ADOssoN/n2PJETlRRloSpDPBwiwMJC/6I
+         n+sYBQZVxD/d+cSSusltZZKQJAIFMi34CGp/7nl1oy0pkKZ9cgvXms2FipS/uiXuff0o
+         8DP5XrYfJdVnVQkNxwL0ATqkUF9qYv9HQ1zS704VUtL7OJoqcRiWpdkLacb7ozdwAQC7
+         jMdMhTtSWkbaxmuMQ0ki2G1meDzNUUBojElAgOpJa+pqDtGwWv81D68MJQkzRC4mSg8M
+         B8kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686817184; x=1689409184;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kPYb8xZ11ehlA8iHgxMBfKPx2ZdrMHP8TOi5kQI8lnU=;
-        b=CfblT4wIa3AgcFc7pOQJaItcz/23CaDbbYYoFzAVuhCS98/5vvxG350S6AYSIn7QfV
-         dcXBuibjg34mYRqL2Lxam6WQ2kw+EjNCN85/AeVOz41/RmGDObYtVOfZuIlvba9Ahh5K
-         P06COqpjmxT70N/RCmO1QfKztBWexDYQzyzXgYT+T1Mok/uSbGsc4LO36lMc6COB/zM9
-         tJa1F3saoRiH298EfEmfXi6Qswg3punjCIDHcGw017+Q1iUQDizZotqFYiQJ/R4t0gv9
-         Qkyl1ruIMTCUMGLef4DhiJY39DO3DFDOtyOYktGrR7bHA0F5gc2JcnHweXTkHx9MXdPd
-         U/pQ==
-X-Gm-Message-State: AC+VfDyp2wa/eJUChKStf+trSl+P+U699l5kfy/NanfenbQO2b2BNr32
-        AdvrkHuiAExW3B1gckv4cs43zJkBy8CvS5Mp0xqI3A==
-X-Google-Smtp-Source: ACHHUZ6nx0i1AynMMBvmCyAARW8jRU1qGF7FkJs/G0+hdRK8KJRnbpWL7kWhQ6x5JnKoCtgDMbZjSTXXbn1nogRypaE=
-X-Received: by 2002:a25:6b47:0:b0:ba8:2009:ccbb with SMTP id
- o7-20020a256b47000000b00ba82009ccbbmr3956394ybm.46.1686817184042; Thu, 15 Jun
- 2023 01:19:44 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686817243; x=1689409243;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Z+g1EITlpyKqSTNS66gSjpFolTiPe57pV55f5skYdlk=;
+        b=NTv/8U92Yn5eGtvLfQjURynS1yPjk97+BXtgh547fqMflS6PY4EEw+U1BtiKPprnNY
+         5g0Q6Z/kWopjtYfuSqpNLcOhK+pdqwFA1A4NEGMWQamqsR7rzbsMfmR+frQOoKvc+Fhi
+         0we4t7IELMXrdwcUUlFD6emsXMN+a+AFmosK9ELdhvqE1SCj8AHzthMeTm8q7uMPohp4
+         MneYQvN1wl+RtXzD/4LsxJUQ1yST/kVosb7X36DhDHfoyW+sYh822yQMlG6TBacnECQ8
+         awr0sWrlyWr3RMX4DPOJX2RoCV/Lw9bvGNDqyQnqA9KBzBntw3JbkIC6q8XHswoiziB9
+         jKjQ==
+X-Gm-Message-State: AC+VfDwGr3ORxY7xEupoD1j1SJi33mmNMrFLNuUH/CoS5FfBZaJ42Vb+
+        qDFlMxdkSXpLF5YdkszwkgB4Jxh9ZvO4nPDVAtQ=
+X-Google-Smtp-Source: ACHHUZ5wZcHqgLWPneYowEPyb/vMtXfLcl6iVcQDr0Pg9watznu/kRbkN+YQH+842S1lRXtj9sJTCQXadFTZxb4w2rE=
+X-Received: by 2002:a25:240d:0:b0:bd5:4e6d:9159 with SMTP id
+ k13-20020a25240d000000b00bd54e6d9159mr4103388ybk.17.1686817242809; Thu, 15
+ Jun 2023 01:20:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230615-topic-8996hdmi-v1-1-39584bfd68d2@linaro.org>
-In-Reply-To: <20230615-topic-8996hdmi-v1-1-39584bfd68d2@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 15 Jun 2023 11:19:33 +0300
-Message-ID: <CAA8EJpqKNPRngiYHbXxR4MBv-V53-nmyS2t652sV_cXN49DGaQ@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: qcom: msm8996: Fix HDMI node
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20230614180837.630180-1-ojeda@kernel.org> <ZIps86MbJF/iGIzd@boqun-archlinux>
+In-Reply-To: <ZIps86MbJF/iGIzd@boqun-archlinux>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 15 Jun 2023 10:20:31 +0200
+Message-ID: <CANiq72kHEddR-D17Ykr3xtU20rDJn517fqHRUX+-kWHjYqu9PA@mail.gmail.com>
+Subject: Re: [PATCH 0/6] KUnit integration for Rust doctests
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>, David Gow <davidgow@google.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Andreas Hindborg <nmi@metaspace.dk>,
+        Philip Li <philip.li@intel.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        WEIRD_PORT autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Jun 2023 at 11:12, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+On Thu, Jun 15, 2023 at 3:44=E2=80=AFAM Boqun Feng <boqun.feng@gmail.com> w=
+rote:
 >
-> A recent commit messed up the node name and compatibles. Fix it.
+> Great work! I've played this for a while, and it's really useful ;-)
+
+Thanks!
+
+> The assertion warning only says line 35 but which file? Yes, the
+> ".._sync_lock_spinlock_rs" name does provide the lead, however since we
+> generate the test code, so we actually know the line # for each real
+> test body, so I come up a way to give us the following:
 >
-> Fixes: f43b6dc7d56e ("arm64: dts: qcom: msm8996: rename labels for HDMI nodes")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>         [..] # rust_doctest_kernel_sync_lock_spinlock_rs_0: ASSERTION FAI=
+LED at rust/kernel/sync/lock/spinlock.rs:61
+>         [..] Expected e.c =3D=3D 11 to be true, but is false
+>         [..] [FAILED] rust_doctest_kernel_sync_lock_spinlock_rs_0
+>
+> Thoughts?
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Sounds good to me. However, David/Philip, is this OK or do you really
+need/use the actual/compiled source file there? If you don't need it,
+does it need to exist / be a real file at least? If the latter answer
+is a "yes", which I guess it may be likely, then:
 
-I should use regexps more carefully.
+> +        let src_file =3D format!("rust/kernel/{}", file.replace("_rs", "=
+.rs").replace("_", "/"));
 
+This would not work for files with a `_` in their name, like
+`locked_by.rs`. I guess we could still find the real filename based on
+that information walking the dir, which is another hack I recall
+considering at some point.
 
--- 
-With best wishes
-Dmitry
+Otherwise, if "fake" filenames in the line above are OK for
+David/Philip (I suspect they may want to open them for reporting?),
+then I guess the `file` one may be good enough and eventually we
+should get `rustdoc` to give us the proper metadata anyway.
+
+Cheers,
+Miguel
