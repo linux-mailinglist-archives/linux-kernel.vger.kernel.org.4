@@ -2,192 +2,348 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B369A731F6E
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 19:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 513CE731F70
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 19:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237075AbjFORnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 13:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50626 "EHLO
+        id S229815AbjFORnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 13:43:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236688AbjFORnA (ORCPT
+        with ESMTP id S237283AbjFORnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 13:43:00 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2F8271E
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:42:57 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9829b12b80fso170869566b.2
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:42:57 -0700 (PDT)
+        Thu, 15 Jun 2023 13:43:04 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81A4272A
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:42:59 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1b3cab3a48dso39188035ad.3
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:42:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686850973; x=1689442973;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FV291qEfmONYIAqLSJalSFl+ZR8TkYiaH92vMURo0h4=;
-        b=bytVMWiI7zabvwzcVr6fjc4GRHdAi1U/4yw6a1CLMzhLX8u6kIB25Tz2ZAmZKKpCFb
-         cywkwIOXYBzw3+4OBaKaXjIZXTa7YyJUlaBsr776/UJFxWoWquHTqeEkY2yE1Bdq06lr
-         Aig6DnYlKKZn9WdqwYUikng+hlHz0d5sGoR3U=
+        d=google.com; s=20221208; t=1686850979; x=1689442979;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3VaVpYnKKIXM0ZMJBv2BahWS6rKgSDR5ikxQlp7Qm5M=;
+        b=CRqM4fJoSy0TOwQEM+dwNf4YLmN8ZNvadtNeqmejsTpkrhB3fUKCS5gVORcT3YAFGF
+         i/3D4htNDkxjLmMQr6ex9h88D9Mn3b3BcimZjQyHYDLLHrnhvGGLYYK4DnkhEsQ6CVaZ
+         cXJTMz7MEXsf3MpnUFcr6Mx0t4RSwdzHZHJMQ/Gw529RF41s9TMoKGTDzFQ40JREZYAz
+         j/q5bFPXA1TGS/pjeQnxzb2ibh5u61Yat52z5h2i3whlu/NZWmrHHKlNBlQzVnj3NGqb
+         fUd5ZYUT6Xx5VG3C07mjHJV5Ti0lFZylCk6cioTWTVk9aptHHtPLM7okEk048bn6RBzX
+         EGGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686850973; x=1689442973;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FV291qEfmONYIAqLSJalSFl+ZR8TkYiaH92vMURo0h4=;
-        b=gf1qO8Ju581i0CIPoCtQy14IFyr4uOCswpHvyXA7AFKRJd+iJWY6uF0DfhMmv/pRri
-         E77z47UpinvbVBqXY/+1+kEVcAq9t4j3di9OILf+daBpAarQkdW0pSTbTl36Go41h9I6
-         GPgdAYVv27tr/EG/vls4f1/TapHMczbnSYJZbADdcXh9rHKJFuSpl5yAhoEIC9AgAzuD
-         ZQVsziciX/ruEt8OUivddYxomirclPCZx21HpuJywU42NN3A608QyzKCJKx7hJ319NfH
-         qHK/ktbcaDXmTBb8pDosfi3BrPCWt+hkO8n2wqB2eJl+LWRehYchLwTKjMypIUsM4+IG
-         kvyA==
-X-Gm-Message-State: AC+VfDyRxva+RAAtx8kS5Fk+ycHQ39Cnj9dbPVKtg+CGnJ4GlsnxDuaA
-        9x6WIqad2W1nJuitSfCt1kY1Nw2bnfi+chsfW1cZTJxT
-X-Google-Smtp-Source: ACHHUZ4Nkwx38Ed7o6TZnv5ZGbenMhZNKb7TzISwUiG3/kQK6XY10zlpiENvjHIG/xLCtzkk350SCg==
-X-Received: by 2002:a17:907:3da0:b0:982:2278:bcef with SMTP id he32-20020a1709073da000b009822278bcefmr11897383ejc.60.1686850973286;
-        Thu, 15 Jun 2023 10:42:53 -0700 (PDT)
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
-        by smtp.gmail.com with ESMTPSA id dc18-20020a170906c7d200b0096ace7ae086sm9720596ejb.174.2023.06.15.10.42.51
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 10:42:52 -0700 (PDT)
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-513ea2990b8so929a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:42:51 -0700 (PDT)
-X-Received: by 2002:a50:9fc4:0:b0:519:6a72:aeea with SMTP id
- c62-20020a509fc4000000b005196a72aeeamr138284edf.7.1686850970853; Thu, 15 Jun
- 2023 10:42:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230614165904.1.I279773c37e2c1ed8fbb622ca6d1397aea0023526@changeid>
- <36565295-ebaa-2a66-3389-ba5eb714ab34@arm.com>
-In-Reply-To: <36565295-ebaa-2a66-3389-ba5eb714ab34@arm.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 15 Jun 2023 10:42:37 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=W7HXYRJ7RUeVH0hQ7KjYtEvNABCi-F4iN_wRO6uuC34w@mail.gmail.com>
-Message-ID: <CAD=FV=W7HXYRJ7RUeVH0hQ7KjYtEvNABCi-F4iN_wRO6uuC34w@mail.gmail.com>
-Subject: Re: [PATCH] Revert "Revert "Revert "arm64: dma: Drop cache
- invalidation from arch_dma_prep_coherent()"""
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Will Deacon <will@kernel.org>, andersson@kernel.org,
-        amit.pundir@linaro.org, linux-arm-msm@vger.kernel.org,
-        konrad.dybcio@somainline.org, Sibi Sankar <quic_sibis@quicinc.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        sumit.semwal@linaro.org, Stephen Boyd <swboyd@chromium.org>,
+        d=1e100.net; s=20221208; t=1686850979; x=1689442979;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3VaVpYnKKIXM0ZMJBv2BahWS6rKgSDR5ikxQlp7Qm5M=;
+        b=SI3UcWO6te8mNgN4Tk9xr4gKy+sRcOM/BKDVGXHAxRXrURPuBST5KdEh0WAgSYjcnC
+         6jjfN9158FQxSgGsCyTfk0DJY8qY1AK07ebohtfZgUpgEr79boVs2g6Q3ZZ4mKAw4JNs
+         adMt04jRgpa/RrM5vhqKx54qI0RtnCryyGseaiGA2xR3PMSW/1gcO0uno+NBLnBV6wD3
+         nhMRcXdZTtUP3PM6JD4olrewiqD2xKHaAG3ur8fVCSmViRZRTwGboAw2hNrxnh/cfaLB
+         vbM8NC3j/3lhz1az8d40SL4lKgquESIm+9dUVMd9ovGaeosuD6KDhwv6wOBzPua1DXLT
+         wjxw==
+X-Gm-Message-State: AC+VfDx8Rpq7rqZofqb2PpXPlwmrKacMg6H989ed1EtU4pcpM2N3LbzF
+        O87O7J6dJwjgDZJ8pg8Q1isL5ZOloP0=
+X-Google-Smtp-Source: ACHHUZ4cQlpzVe0KczazAvYqGjGYoNkXv8UVqui26XxKS9kOBWmazT/WNj+BhRRRMGskVfw0J/AilzSk6Q0=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:f7d3:b0:1b5:147f:d8d1 with SMTP id
+ h19-20020a170902f7d300b001b5147fd8d1mr547182plw.3.1686850979254; Thu, 15 Jun
+ 2023 10:42:59 -0700 (PDT)
+Date:   Thu, 15 Jun 2023 10:42:57 -0700
+In-Reply-To: <20230526234435.662652-2-yuzhao@google.com>
+Mime-Version: 1.0
+References: <20230526234435.662652-1-yuzhao@google.com> <20230526234435.662652-2-yuzhao@google.com>
+Message-ID: <ZItNoeWriZgLUaon@google.com>
+Subject: Re: [PATCH mm-unstable v2 01/10] mm/kvm: add mmu_notifier_ops->test_clear_young()
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Anup Patel <anup@brainfault.org>,
+        Ben Gardon <bgardon@google.com>,
+        Borislav Petkov <bp@alien8.de>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Gavin Shan <gshan@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
         Marc Zyngier <maz@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michael Larabel <michael@michaellarabel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Peter Xu <peterx@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
+        linux-trace-kernel@vger.kernel.org, x86@kernel.org,
+        linux-mm@google.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, May 26, 2023, Yu Zhao wrote:
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 0e571e973bc2..374262545f96 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -258,6 +258,7 @@ int kvm_async_pf_wakeup_all(struct kvm_vcpu *vcpu);
+>  #ifdef KVM_ARCH_WANT_MMU_NOTIFIER
+>  struct kvm_gfn_range {
+>  	struct kvm_memory_slot *slot;
+> +	void *args;
 
-On Thu, Jun 15, 2023 at 3:13=E2=80=AFAM Robin Murphy <robin.murphy@arm.com>=
- wrote:
->
-> On 2023-06-15 00:59, Douglas Anderson wrote:
-> > This reverts commit 7bd6680b47fa4cd53ee1047693c09825e212a6f5.
-> >
-> > When booting a sc7180-trogdor based device on mainline, I see errors
-> > that look like this:
-> >
-> >   qcom_scm firmware:scm: Assign memory protection call failed -22
-> >   qcom_rmtfs_mem 94600000.memory: assign memory failed
-> >   qcom_rmtfs_mem: probe of 94600000.memory failed with error -22
-> >
-> > The device still boots OK, but WiFi doesn't work.
-> >
-> > The failure only seems to happen when
-> > CONFIG_INIT_ON_ALLOC_DEFAULT_ON=3Dy. When I don't have that set then
-> > everything is peachy. Presumably something about the extra
-> > initialization disagrees with the change to drop cache invalidation.
->
-> AFAICS init_on_alloc essentially just adds __GFP_ZERO to the page
-> allocation.
+There's no reason to make this "void *", just declare "struct test_clear_young_args"
+in the header.  Arch code won't be able to use it regardless.  And I vote for
+something more like "test_clear_young_metadata", as there's far more information
+in there than just function arguments.
 
-Right, but it does so without `__GFP_ZERO` getting into the page
-flags. That means that this removal of "__GFP_ZERO" in
-dma_direct_alloc() doesn't actually remove the zeroing when
-CONFIG_INIT_ON_ALLOC_DEFAULT_ON IS USED:
+And to stave off the argument that "void *" would allow reuse, take this opportunity
+to unionize the test_clear_young field with the change_pte field, e.g.
 
-  /* we always manually zero the memory once we are done */
-  page =3D __dma_direct_alloc_pages(dev, size, gfp & ~__GFP_ZERO, true);
+	/* comment about these fields being callback specific. */
+	union {
+		struct test_clear_young_metadata *metadata;
+		pte_t pte;
+		unsigned long callback_arg; /* needs a better name */
+	};
 
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 51e4882d0873..31ee58754b19 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -541,6 +541,7 @@ typedef void (*on_lock_fn_t)(struct kvm *kvm, unsigned long start,
+>  typedef void (*on_unlock_fn_t)(struct kvm *kvm);
+>  
+>  struct kvm_hva_range {
+> +	void *args;
 
-> This should make no difference to a DMA allocation given
-> that dma_alloc_attrs explicitly zeros its allocation anyway. However...
-> for the non-coherent case, the DMA API's memset will be done through the
-> non-cacheable remap, while __GFP_ZERO can leave behind cached zeros for
-> the linear map alias. Thus what I assume must be happening here is that
-> "DMA" from the firmware is still making cacheable accesses to the buffer
-> and getting those zeros instead of whatever actual data which was
-> subsequently written non-cacheably direct to RAM. So either the firmware
-> still needs fixing to make non-cacheable accesses, or the SCM driver
-> needs to correctly describe it as coherent.
+Same feedback as kvm_gfn_range.
 
-I'm a little confused, but that's pretty normal for me. :-P Looking at
-the SCM driver, I see it doing the allocation in qcom_scm_assign_mem()
-as:
+>  	unsigned long start;
+>  	unsigned long end;
+>  	pte_t pte;
+> @@ -549,6 +550,7 @@ struct kvm_hva_range {
+>  	on_unlock_fn_t on_unlock;
+>  	bool flush_on_ret;
+>  	bool may_block;
+> +	bool lockless;
+>  };
+>  
+>  /*
+> @@ -602,6 +604,8 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
+>  			hva_end = min(range->end, slot->userspace_addr +
+>  						  (slot->npages << PAGE_SHIFT));
+>  
+> +			gfn_range.args = range->args;
 
-  dma_alloc_coherent(__scm->dev, ptr_sz, &ptr_phys, GFP_KERNEL);
+And this goes away because the generic callback_arg is what gets propagated.
 
-Isn't that the SCM driver describing it as coherent?
+> +
+>  			/*
+>  			 * To optimize for the likely case where the address
+>  			 * range is covered by zero or one memslots, don't
+> @@ -619,7 +623,7 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
+>  			gfn_range.end = hva_to_gfn_memslot(hva_end + PAGE_SIZE - 1, slot);
+>  			gfn_range.slot = slot;
+>  
+> -			if (!locked) {
+> +			if (!range->lockless && !locked) {
+>  				locked = true;
+>  				KVM_MMU_LOCK(kvm);
+>  				if (!IS_KVM_NULL_FN(range->on_lock))
+> @@ -628,6 +632,9 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
+>  					break;
+>  			}
+>  			ret |= range->handler(kvm, &gfn_range);
+> +
+> +			if (range->lockless && ret)
 
-I guess the reason that the SCM driver is doing this is that it's
-passing a chunk of memory to the firmware but it passes it to firmware
-via a _physical_ address, not a virtual one. I guess this makes sense
-to do when passing a chunk of memory to firmware since you wouldn't
-want to pass the kernel's virtual address there...
+I don't like overloading "lockless" to also mean "stop on ret".  Just add another
+flag, there's literally no cost for most callbacks as everything is constant at
+compile time and gets optimized away.
 
-Presumably the fact that the firmware gets a physical address means
-that the firmware needs to map this address somehow itself. I can try
-to dig up what the firmware is doing if needed (what attributes it
-uses to map), but I guess the hope is that it shouldn't matter. As
-long as the kernel can guarantee that the contents that it needs have
-been flushed out to memory then I think we're supposed to be good,
-right?
+> +		range.args = &args;
+> +		range.lockless = true;
 
-In any case, I dumped a stack crawl to try to show the path where the
-init happens, since there are lots of conditionals. I see this:
+The lockless and stop_on_ret behavior needs comments.
 
- kernel_init_pages+0x68/0x6c
- post_alloc_hook+0x40/0x90
- prep_new_page+0x34/0x68
- get_page_from_freelist+0x894/0xe64
- __alloc_pages+0x12c/0xd24
- __dma_direct_alloc_pages+0x9c/0x170
- dma_direct_alloc+0x254/0x4bc
- dma_alloc_attrs+0xe4/0x1e4
- qcom_scm_assign_mem+0xb0/0x258
+> +		range.handler = kvm_arch_test_clear_young;
+> +
+> +		if (!__kvm_handle_hva_range(kvm, &range))
+> +			return args.young ? MMU_NOTIFIER_RANGE_LOCKLESS : 0;
+> +	}
+> +
+> +	if (bitmap)
+> +		return 0;
+> +
+> +	range.args = NULL;
+> +	range.lockless = false;
 
+No need to manually clear these, they'll be zeroed by the initialization code.
 
-So looking at dma_direct_alloc(), I guess:
+E.g. all in all, something like so
 
-1. We call __dma_direct_alloc_pages() to allocate the page. We try to
-turn off __GFP_ZERO but CONFIG_INIT_ON_ALLOC_DEFAULT_ON overrides us.
+---
+ include/linux/kvm_host.h |  9 +++++++--
+ virt/kvm/kvm_main.c      | 29 +++++++++++++++++------------
+ 2 files changed, 24 insertions(+), 14 deletions(-)
 
-2. As part of __dma_direct_alloc_pages(), we use the existing
-(cachable) mapping of the page and write zeros.
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index 7a0922cbc36f..e04605061f5e 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -256,12 +256,17 @@ int kvm_async_pf_wakeup_all(struct kvm_vcpu *vcpu);
+ #endif
+ 
+ #ifdef KVM_ARCH_WANT_MMU_NOTIFIER
++struct test_clear_young_metadata;
++
+ struct kvm_gfn_range {
+ 	struct kvm_memory_slot *slot;
+-	void *args;
+ 	gfn_t start;
+ 	gfn_t end;
+-	pte_t pte;
++	union {
++		struct test_clear_young_metadata *metadata;
++		pte_t pte;
++		unsigned long callback_arg;
++	};
+ 	bool may_block;
+ };
+ 
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index ac83cfb30771..8cf4fee9cd8b 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -536,16 +536,20 @@ typedef void (*on_lock_fn_t)(struct kvm *kvm, unsigned long start,
+ typedef void (*on_unlock_fn_t)(struct kvm *kvm);
+ 
+ struct kvm_hva_range {
+-	void *args;
+ 	unsigned long start;
+ 	unsigned long end;
+-	pte_t pte;
+ 	hva_handler_t handler;
++	union {
++		struct test_clear_young_metadata *metadata;
++		pte_t pte;
++		unsigned long callback_arg;
++	};
+ 	on_lock_fn_t on_lock;
+ 	on_unlock_fn_t on_unlock;
+ 	bool flush_on_ret;
+ 	bool may_block;
+ 	bool lockless;
++	bool stop_on_ret;
+ };
+ 
+ /*
+@@ -576,6 +580,9 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
+ 	struct kvm_memslots *slots;
+ 	int i, idx;
+ 
++	BUILD_BUG_ON(sizeof(gfn_range.callback_arg) != sizeof(gfn_range.pte) ||
++		     sizeof(gfn_range.callback_arg) != sizeof(gfn_range.metadata));
++
+ 	if (WARN_ON_ONCE(range->end <= range->start))
+ 		return 0;
+ 
+@@ -599,16 +606,14 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
+ 			hva_end = min(range->end, slot->userspace_addr +
+ 						  (slot->npages << PAGE_SHIFT));
+ 
+-			gfn_range.args = range->args;
+-
+ 			/*
+ 			 * To optimize for the likely case where the address
+ 			 * range is covered by zero or one memslots, don't
+ 			 * bother making these conditional (to avoid writes on
+ 			 * the second or later invocation of the handler).
+ 			 */
+-			gfn_range.pte = range->pte;
+ 			gfn_range.may_block = range->may_block;
++			gfn_range.callback_arg = range->callback_arg;
+ 
+ 			/*
+ 			 * {gfn(page) | page intersects with [hva_start, hva_end)} =
+@@ -628,7 +633,8 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
+ 			}
+ 			ret |= range->handler(kvm, &gfn_range);
+ 
+-			if (range->lockless && ret)
++			/* comment goes here. */
++			if (range->stop_on_ret && ret)
+ 				break;
+ 		}
+ 	}
+@@ -830,7 +836,7 @@ static int kvm_mmu_notifier_clear_flush_young(struct mmu_notifier *mn,
+ 	return kvm_handle_hva_range(mn, start, end, __pte(0), kvm_age_gfn);
+ }
+ 
+-struct test_clear_young_args {
++struct test_clear_young_metadata {
+ 	unsigned long *bitmap;
+ 	unsigned long end;
+ 	bool clear;
+@@ -839,7 +845,7 @@ struct test_clear_young_args {
+ 
+ bool kvm_should_clear_young(struct kvm_gfn_range *range, gfn_t gfn)
+ {
+-	struct test_clear_young_args *args = range->args;
++	struct test_clear_young_metadata *args = range->metadata;
+ 
+ 	VM_WARN_ON_ONCE(gfn < range->start || gfn >= range->end);
+ 
+@@ -880,14 +886,15 @@ static int kvm_mmu_notifier_test_clear_young(struct mmu_notifier *mn, struct mm_
+ 	trace_kvm_age_hva(start, end);
+ 
+ 	if (kvm_test_clear_young) {
+-		struct test_clear_young_args args = {
++		struct test_clear_young_metadata args = {
+ 			.bitmap	= bitmap,
+ 			.end	= end,
+ 			.clear	= clear,
+ 		};
+ 
+-		range.args = &args;
+ 		range.lockless = true;
++		range.stop_on_ret = true;
++		range.metadata = &args;
+ 		range.handler = kvm_test_clear_young;
+ 
+ 		if (!__kvm_handle_hva_range(kvm, &range))
+@@ -897,8 +904,6 @@ static int kvm_mmu_notifier_test_clear_young(struct mmu_notifier *mn, struct mm_
+ 	if (bitmap)
+ 		return 0;
+ 
+-	range.args = NULL;
+-	range.lockless = false;
+ 	range.handler = clear ? kvm_age_gfn : kvm_test_age_gfn;
+ 
+ 	return __kvm_handle_hva_range(kvm, &range) ? MMU_NOTIFIER_RANGE_YOUNG : 0;
 
-3. The "remap" variable is set for arm64 so we call
-arch_dma_prep_coherent(). That used to do a "clean and invalidate" but
-now does just a "clean" and that's what broke me.
+base-commit: 7a5d8be2c18415b73b9380741095f439d6983a40
+-- 
 
-
-Talking out of my rear end, I guess the issue here might be that it
-_does_ matter how the firmware maps this memory because it has to
-match how the kernel has it mapped because if you map the same
-physical memory twice then the attributes need to match. Maybe the old
-"invalidate" just worked around this issue? If this wild guessing is
-correct, maybe a more correct solution would be to simply unmap the
-memory from the kernel before passing the physical address to the
-firmware, if that's possible...
-
-
-
--Doug
