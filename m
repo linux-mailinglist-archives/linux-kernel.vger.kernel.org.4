@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01CD77317CE
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 843897317C1
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344505AbjFOLqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 07:46:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58286 "EHLO
+        id S1344629AbjFOLox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 07:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344480AbjFOLoP (ORCPT
+        with ESMTP id S1344523AbjFOLn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 07:44:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B50E2D7E;
-        Thu, 15 Jun 2023 04:40:32 -0700 (PDT)
+        Thu, 15 Jun 2023 07:43:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5A223ABA;
+        Thu, 15 Jun 2023 04:40:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A9B063950;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C5E4F60F23;
+        Thu, 15 Jun 2023 11:40:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76DAFC433AB;
         Thu, 15 Jun 2023 11:40:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93E89C433C0;
-        Thu, 15 Jun 2023 11:40:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686829224;
-        bh=OUkPyFZ7YysV8myAgTggcb6E/Rexi/BkL/+tGbXZ0cE=;
+        s=k20201202; t=1686829225;
+        bh=iH5sptddWZcnlTxUPs2tB+BDolK9udB4DIFGmPbcGAE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LZtmY8tUsZ7DBjir/BjNx6GYgH2ixuQp3tjAzVgkHOktW19FFuFDKPoWUyxNTE2Pz
-         evx++E5QN88a5D9CKU/Tmxn7sjKFxNnt1I/OM+LhiHVeo0V+GBI97CFWaydvtw8dRy
-         vZquqHQIC0eQ41PEtX0GYH8xP9jY1yh9Sl3Ry0Vr5/ECcVZAH5WZNE8Vol1yLUqewv
-         LNZi+7X9j3nLfJ+TFj/huQheXrUsn49ji45n8HRJdLAlgdK5GFE7tsaQZfhTO3+yW0
-         zAwHrwh2Eo+eqrPbGQ4+p5y+7GDN6kPi2sE5WC4b6g50j69AK9GyKBuMLPe6LY3IbL
-         iR8u7yCjS4AGA==
+        b=P8iqZt8lHBeA5ebylMgG9n9qu3Bgk6Wgm60Q3gRztqU4EaGHVlT+4XNcJNCi4Iw8x
+         eticxk6oecYFD8uavTpIRCZUrMujR8ok7gELQwSRJNdyaEjDud4XTMH9FQodOLvhue
+         0/fd1UWNnysKLSXylxIR+JKmenqbTwre7bf/DnJZxqFgTeypZH3fq+3FmzhDKC1tsq
+         0ZHrpqHh6VbAaOnp89WIKLBjHpfOsIlcIK6jWlCQi21kTFc3fuVcMdpFy0zgWXK+78
+         KsTVexVwHFGRwg5Ew5kGvjw9cUEejfIkLLB2JyW+nIabCWhbCHOJ/rLg50o9VmXd4g
+         n0sfo5c/bz4og==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Marc Zyngier <maz@kernel.org>, Cornelia Huck <cohuck@redhat.com>,
-        Steven Price <steven.price@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Sasha Levin <sashal@kernel.org>, catalin.marinas@arm.com,
-        will@kernel.org, broonie@kernel.org, james.morse@arm.com,
-        kristina.martsenko@arm.com, robh@kernel.org,
-        jintack.lim@linaro.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.14 3/6] arm64: Add missing Set/Way CMO encodings
-Date:   Thu, 15 Jun 2023 07:40:11 -0400
-Message-Id: <20230615114016.649846-3-sashal@kernel.org>
+Cc:     Osama Muhammad <osmtendev@gmail.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>,
+        krzysztof.kozlowski@linaro.org, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 4/6] nfcsim.c: Fix error checking for debugfs_create_dir
+Date:   Thu, 15 Jun 2023 07:40:12 -0400
+Message-Id: <20230615114016.649846-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230615114016.649846-1-sashal@kernel.org>
 References: <20230615114016.649846-1-sashal@kernel.org>
@@ -53,8 +51,8 @@ X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 4.14.318
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,41 +61,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Zyngier <maz@kernel.org>
+From: Osama Muhammad <osmtendev@gmail.com>
 
-[ Upstream commit 8d0f019e4c4f2ee2de81efd9bf1c27e9fb3c0460 ]
+[ Upstream commit 9b9e46aa07273ceb96866b2e812b46f1ee0b8d2f ]
 
-Add the missing Set/Way CMOs that apply to tagged memory.
+This patch fixes the error checking in nfcsim.c.
+The DebugFS kernel API is developed in
+a way that the caller can safely ignore the errors that
+occur during the creation of DebugFS nodes.
 
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Reviewed-by: Cornelia Huck <cohuck@redhat.com>
-Reviewed-by: Steven Price <steven.price@arm.com>
-Reviewed-by: Oliver Upton <oliver.upton@linux.dev>
-Link: https://lore.kernel.org/r/20230515204601.1270428-2-maz@kernel.org
+Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/include/asm/sysreg.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/nfc/nfcsim.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
-index 3bbf0dc5ecad0..78d6f4bf117d6 100644
---- a/arch/arm64/include/asm/sysreg.h
-+++ b/arch/arm64/include/asm/sysreg.h
-@@ -98,8 +98,14 @@
- 				       (!!x)<<8 | 0x1f)
+diff --git a/drivers/nfc/nfcsim.c b/drivers/nfc/nfcsim.c
+index 533e3aa6275cd..cf07b366500e9 100644
+--- a/drivers/nfc/nfcsim.c
++++ b/drivers/nfc/nfcsim.c
+@@ -345,10 +345,6 @@ static struct dentry *nfcsim_debugfs_root;
+ static void nfcsim_debugfs_init(void)
+ {
+ 	nfcsim_debugfs_root = debugfs_create_dir("nfcsim", NULL);
+-
+-	if (!nfcsim_debugfs_root)
+-		pr_err("Could not create debugfs entry\n");
+-
+ }
  
- #define SYS_DC_ISW			sys_insn(1, 0, 7, 6, 2)
-+#define SYS_DC_IGSW			sys_insn(1, 0, 7, 6, 4)
-+#define SYS_DC_IGDSW			sys_insn(1, 0, 7, 6, 6)
- #define SYS_DC_CSW			sys_insn(1, 0, 7, 10, 2)
-+#define SYS_DC_CGSW			sys_insn(1, 0, 7, 10, 4)
-+#define SYS_DC_CGDSW			sys_insn(1, 0, 7, 10, 6)
- #define SYS_DC_CISW			sys_insn(1, 0, 7, 14, 2)
-+#define SYS_DC_CIGSW			sys_insn(1, 0, 7, 14, 4)
-+#define SYS_DC_CIGDSW			sys_insn(1, 0, 7, 14, 6)
- 
- #define SYS_OSDTRRX_EL1			sys_reg(2, 0, 0, 0, 2)
- #define SYS_MDCCINT_EL1			sys_reg(2, 0, 0, 2, 0)
+ static void nfcsim_debugfs_remove(void)
 -- 
 2.39.2
 
