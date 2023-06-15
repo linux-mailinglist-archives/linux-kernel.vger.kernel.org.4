@@ -2,44 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A7CF7319D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 499C97319CE
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343933AbjFONVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 09:21:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
+        id S1343936AbjFONVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 09:21:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240465AbjFONVO (ORCPT
+        with ESMTP id S1343910AbjFONVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 15 Jun 2023 09:21:14 -0400
-Received: from mail11.truemail.it (mail11.truemail.it [IPv6:2001:4b7e:0:8::81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0583270D;
-        Thu, 15 Jun 2023 06:21:10 -0700 (PDT)
-Received: from francesco-nb.int.toradex.com (31-10-206-125.static.upc.ch [31.10.206.125])
-        by mail11.truemail.it (Postfix) with ESMTPA id 82320206E1;
-        Thu, 15 Jun 2023 15:21:08 +0200 (CEST)
-Date:   Thu, 15 Jun 2023 15:21:02 +0200
-From:   Francesco Dolcini <francesco@dolcini.it>
-To:     Nishanth Menon <nm@ti.com>
-Cc:     Benjamin Bara <bbara93@gmail.com>, Wolfram Sang <wsa@kernel.org>,
-        Lee Jones <lee@kernel.org>, rafael.j.wysocki@intel.com,
-        dmitry.osipenko@collabora.com, peterz@infradead.org,
-        jonathanh@nvidia.com, richard.leitner@linux.dev,
-        treding@nvidia.com, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        Benjamin Bara <benjamin.bara@skidata.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v6 1/5] kernel/reboot: emergency_restart: set correct
- system_state
-Message-ID: <ZIsQPutiZWACawec@francesco-nb.int.toradex.com>
-References: <20230327-tegra-pmic-reboot-v6-0-af44a4cd82e9@skidata.com>
- <20230327-tegra-pmic-reboot-v6-1-af44a4cd82e9@skidata.com>
- <20230615000650.coyphnwdai7smww7@unblended>
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5567F270A;
+        Thu, 15 Jun 2023 06:21:11 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id F03FC1FE25;
+        Thu, 15 Jun 2023 13:21:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1686835269; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TrVNR5YBg7mfkrE02t70Ms3cyqfx5tB2TFuYK+7EJkI=;
+        b=x/BdWHOHkWe2WasV/pUvs6obH6QCcDJL6X4sZDdDzsGJKh2/QN5RP6/uKkrzcdxOfmGx6G
+        ZAkzuMFtKPlPuSMKANhspyGgv80chC6Ev7l+XKI6XkB0zI/872e1MTOJdpiut6a+xBa57H
+        494DAKP8zoffySmOZZw3ByypJtZqviY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1686835269;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TrVNR5YBg7mfkrE02t70Ms3cyqfx5tB2TFuYK+7EJkI=;
+        b=+xll9ijtwX96g7AzQiIdJfrQ3zYgYisepLW5uvPXb0b3Xqsa3KMdadP8uVU1OHh9Nrhjho
+        X5Mrj6byHVxCJtAQ==
+Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 279FF2C141;
+        Thu, 15 Jun 2023 13:21:09 +0000 (UTC)
+Date:   Thu, 15 Jun 2023 15:21:07 +0200
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Salvatore Bonaccorso <carnil@debian.org>,
+        Cyril Brulebois <cyril@debamax.com>,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] fbdev/offb: Update expected device name
+Message-ID: <20230615132107.GA9196@kitsune.suse.cz>
+References: <20230412095509.2196162-1-cyril@debamax.com>
+ <20230412095509.2196162-2-cyril@debamax.com>
+ <ZDvrY7X9mpJ7WZ3z@eldamar.lan>
+ <11b342dc-1a46-d1be-5fdd-c6eee661e15a@leemhuis.info>
+ <fe3b90b0-b52f-9677-0245-a201975c3e0c@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230615000650.coyphnwdai7smww7@unblended>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <fe3b90b0-b52f-9677-0245-a201975c3e0c@suse.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -48,64 +72,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Nishanth,
+Hello,
 
-On Wed, Jun 14, 2023 at 07:06:50PM -0500, Nishanth Menon wrote:
-> On 21:02-20230509, Benjamin Bara wrote:
-> > From: Benjamin Bara <benjamin.bara@skidata.com>
-> > 
-> > As the emergency restart does not call kernel_restart_prepare(), the
-> > system_state stays in SYSTEM_RUNNING.
-> > 
-> > Since bae1d3a05a8b, this hinders i2c_in_atomic_xfer_mode() from becoming
-> > active, and therefore might lead to avoidable warnings in the restart
-> > handlers, e.g.:
-> > 
-> > [   12.667612] WARNING: CPU: 1 PID: 1 at kernel/rcu/tree_plugin.h:318 rcu_note_context_switch+0x33c/0x6b0
-> > [   12.676926] Voluntary context switch within RCU read-side critical section!
-> > ...
-> > [   12.742376]  schedule_timeout from wait_for_completion_timeout+0x90/0x114
-> > [   12.749179]  wait_for_completion_timeout from tegra_i2c_wait_completion+0x40/0x70
-> > ...
-> > [   12.994527]  atomic_notifier_call_chain from machine_restart+0x34/0x58
-> > [   13.001050]  machine_restart from panic+0x2a8/0x32c
-> > 
-> > Avoid these by setting the correct system_state.
-> > 
-> > Fixes: bae1d3a05a8b ("i2c: core: remove use of in_atomic()")
-> > Cc: stable@vger.kernel.org # v5.2+
-> > Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
-> > ---
-> >  kernel/reboot.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/kernel/reboot.c b/kernel/reboot.c
-> > index 3bba88c7ffc6..6ebef11c8876 100644
-> > --- a/kernel/reboot.c
-> > +++ b/kernel/reboot.c
-> > @@ -74,6 +74,7 @@ void __weak (*pm_power_off)(void);
-> >  void emergency_restart(void)
-> >  {
-> >  	kmsg_dump(KMSG_DUMP_EMERG);
-> > +	system_state = SYSTEM_RESTART;
-> >  	machine_emergency_restart();
-> >  }
-> >  EXPORT_SYMBOL_GPL(emergency_restart);
-> > 
-> > -- 
-> > 2.34.1
-> > 
+On Thu, Jun 15, 2023 at 03:06:28PM +0200, Thomas Zimmermann wrote:
+> Hi
 > 
-> Tested-by: Nishanth Menon <nm@ti.com>
-> 
-> This in addition to a deeper bug in our driver seems to have helped
-> resolve a report we had been looking at. Tested on beagleplay platform
-> 
-> https://lore.kernel.org/all/ZGeHMjlnob2GFyHF@francesco-nb.int.toradex.com/
+> Am 15.06.23 um 15:03 schrieb Linux regression tracking (Thorsten Leemhuis):
+> > On 16.04.23 14:34, Salvatore Bonaccorso wrote:
+> > > 
+> > > On Wed, Apr 12, 2023 at 11:55:08AM +0200, Cyril Brulebois wrote:
+> > > > Since commit 241d2fb56a18 ("of: Make OF framebuffer device names unique"),
+> > > > as spotted by Frédéric Bonnard, the historical "of-display" device is
+> > > > gone: the updated logic creates "of-display.0" instead, then as many
+> > > > "of-display.N" as required.
+> > > > 
+> > > > This means that offb no longer finds the expected device, which prevents
+> > > > the Debian Installer from setting up its interface, at least on ppc64el.
+> > > > 
+> > > > It might be better to iterate on all possible nodes, but updating the
+> > > > hardcoded device from "of-display" to "of-display.0" is confirmed to fix
+> > > > the Debian Installer at the very least.
 
-Is this patch going to fix the RCU warning I reported on that email or
-it is just part of a more complex solution?
+At the time this was proposed it was said that "of-display", is wrong,
+and that "of-display.0" must be used for the first device instead, and
+if something breaks an alias can be provided.
 
-Francesco
+So how does one provide an alias so that offb can find "of-display.0" as
+"of-display"?
+
+Thanks
+
+Michal
+
+> > > [...]
+> > > #regzbot ^introduced 241d2fb56a18
+> > > #regzbot title: Open Firmware framebuffer cannot find of-display
+> > > #regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=217328
+> > > #regzbot link: https://lore.kernel.org/all/20230412095509.2196162-1-cyril@debamax.com/T/#m34493480243a2cad2ae359abfd9db5e755f41add
+> > > #regzbot link: https://bugs.debian.org/1033058
+> > 
+> > No reply to my status inquiry[1] a few weeks ago, so I have to assume
+> > nobody cares anymore. If somebody still cares, holler!
+> 
+> I'd take a look if anyone can point me to an example of Geert's proposal.
+> 
+> Best regards
+> Thomas
+> 
+> > 
+> > #regzbot inconclusive: no answer to a status inquiry
+> > #regzbot ignore-activity
+> > 
+> > [1]
+> > https://lore.kernel.org/lkml/d1aee7d3-05f6-0920-b8e1-4ed5cf3f9f70@leemhuis.info/
+> > 
+> > Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> > --
+> > Everything you wanna know about Linux kernel regression tracking:
+> > https://linux-regtracking.leemhuis.info/about/#tldr
+> > If I did something stupid, please tell me, as explained on that page.
+> 
+> -- 
+> Thomas Zimmermann
+> Graphics Driver Developer
+> SUSE Software Solutions Germany GmbH
+> Frankenstrasse 146, 90461 Nuernberg, Germany
+> GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
+> HRB 36809 (AG Nuernberg)
+
 
 
